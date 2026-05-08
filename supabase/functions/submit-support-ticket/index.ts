@@ -43,6 +43,15 @@ const OFFICIAL_EMAILS = {
 // Verified sender domain for outgoing emails
 const VERIFIED_SENDER = 'jbj@jbj.ae';
 
+// SECURITY: HTML-escape user-controlled values before interpolating into email templates
+const esc = (s: unknown): string =>
+  String(s ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
 interface TicketRequest {
   fullName: string;
   email: string;
@@ -173,24 +182,24 @@ const handler = async (req: Request): Promise<Response> => {
 <p style="color:#666;font-size:12px;margin:0 0 8px;text-transform:uppercase;letter-spacing:1px;">Ticket Summary</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr><td style="padding:7px 0;color:#666;font-size:13px;width:40%;">Ticket Number</td><td style="padding:7px 0;color:#C8A766;font-weight:700;font-size:14px;font-family:'Courier New',monospace;">${ticket.ticket_number}</td></tr>
-<tr><td style="padding:7px 0;color:#666;font-size:13px;">Service Category</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${serviceCategory}</td></tr>
-<tr><td style="padding:7px 0;color:#666;font-size:13px;">Priority</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;text-transform:capitalize;">${aiAnalyzedPriority}</td></tr>
-<tr><td style="padding:7px 0;color:#666;font-size:13px;">Submitted By</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${fullName}</td></tr>
-<tr><td style="padding:7px 0;color:#666;font-size:13px;">Email</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;"><a href="mailto:${email}" style="color:#1a1a1a;text-decoration:underline;">${email}</a></td></tr>
-${phone ? `<tr><td style="padding:7px 0;color:#666;font-size:13px;">Phone</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;"><a href="tel:${phone}" style="color:#1a1a1a;text-decoration:underline;">${phone}</a></td></tr>` : ""}
+<tr><td style="padding:7px 0;color:#666;font-size:13px;">Service Category</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${esc(serviceCategory)}</td></tr>
+<tr><td style="padding:7px 0;color:#666;font-size:13px;">Priority</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;text-transform:capitalize;">${esc(aiAnalyzedPriority)}</td></tr>
+<tr><td style="padding:7px 0;color:#666;font-size:13px;">Submitted By</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${esc(fullName)}</td></tr>
+<tr><td style="padding:7px 0;color:#666;font-size:13px;">Email</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;"><a href="mailto:${encodeURIComponent(email)}" style="color:#1a1a1a;text-decoration:underline;">${esc(email)}</a></td></tr>
+${phone ? `<tr><td style="padding:7px 0;color:#666;font-size:13px;">Phone</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;"><a href="tel:${encodeURIComponent(phone)}" style="color:#1a1a1a;text-decoration:underline;">${esc(phone)}</a></td></tr>` : ""}
 </table>
 </td></tr></table>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#F7F2EA);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;">
 <tr><td style="padding:20px;">
 <p style="margin:0 0 8px;font-size:12px;color:#C8A766;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;">Subject</p>
-<p style="margin:0;color:#333;font-size:14px;line-height:1.7;">${subject}</p>
+<p style="margin:0;color:#333;font-size:14px;line-height:1.7;">${esc(subject)}</p>
 </td></tr></table>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#F7F2EA);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;">
 <tr><td style="padding:20px;">
 <p style="margin:0 0 8px;font-size:12px;color:#C8A766;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;">Issue Description</p>
-<div style="margin:0;color:#333;font-size:14px;line-height:1.8;white-space:pre-wrap;background:#fff;padding:16px;border-radius:12px;border:1px solid #e8e8e8;">${description}</div>
+<div style="margin:0;color:#333;font-size:14px;line-height:1.8;white-space:pre-wrap;background:#fff;padding:16px;border-radius:12px;border:1px solid #e8e8e8;">${esc(description)}</div>
 </td></tr></table>
-${attachmentUrls.length > 0 ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fdfbf7;border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;"><tr><td style="padding:20px;"><p style="margin:0 0 8px;font-size:12px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Attachments</p>${attachmentUrls.map((url: string) => `<p style="margin:6px 0;"><a href="${url}" style="color:#1a1a1a;text-decoration:underline;font-size:13px;">${url}</a></p>`).join("")}</td></tr></table>` : ""}
+${attachmentUrls.length > 0 ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fdfbf7;border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;"><tr><td style="padding:20px;"><p style="margin:0 0 8px;font-size:12px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Attachments</p>${attachmentUrls.map((url: string) => `<p style="margin:6px 0;"><a href="${encodeURI(url)}" style="color:#1a1a1a;text-decoration:underline;font-size:13px;">${esc(url)}</a></p>`).join("")}</td></tr></table>` : ""}
 ${sharedSections("support ticket", "JBJ Global Real Estate Support Team")}
 </td></tr>`);
 
@@ -224,25 +233,25 @@ ${sharedSections("support ticket", "JBJ Global Real Estate Support Team")}
 
     // Send confirmation email to customer using unified shared template
     const customerEmailHtml = emailShell("Support Ticket Confirmation", `<tr><td class="content-pad" style="padding:32px;">
-${userGreetingRow(fullName)}
+${userGreetingRow(esc(fullName))}
 <p style="font-size:14px;color:#555;margin:0 0 24px;">Your support ticket has been received and our team is now reviewing it.</p>
 ${progressSteps(['Received', 'In Review', 'Resolved'], [true, false, false], [true, false, false])}
 ${ticketSummaryCard([
   { label: 'Ticket Number', value: ticket.ticket_number, highlight: true },
-  { label: 'Subject', value: subject },
-  { label: 'Category', value: serviceCategory },
-  { label: 'Priority', value: aiAnalyzedPriority },
+  { label: 'Subject', value: esc(subject) },
+  { label: 'Category', value: esc(serviceCategory) },
+  { label: 'Priority', value: esc(aiAnalyzedPriority) },
   { label: 'Submitted', value: `${formattedDate} ${formattedTime}` },
 ])}
 ${arabicDivider()}
 <div style="direction:rtl;text-align:right;">
-${userGreetingRow(fullName, true)}
+${userGreetingRow(esc(fullName), true)}
 <p style="font-size:14px;color:#555;margin:0 0 24px;">تم استلام تذكرة الدعم الخاصة بك ويقوم فريقنا حالياً بمراجعتها.</p>
 ${ticketSummaryCardAr([
   { label: 'رقم التذكرة', value: ticket.ticket_number, highlight: true },
-  { label: 'الموضوع', value: subject },
-  { label: 'الفئة', value: serviceCategory },
-  { label: 'الأولوية', value: aiAnalyzedPriority },
+  { label: 'الموضوع', value: esc(subject) },
+  { label: 'الفئة', value: esc(serviceCategory) },
+  { label: 'الأولوية', value: esc(aiAnalyzedPriority) },
   { label: 'تاريخ ووقت الإرسال', value: `${formattedDate} ${formattedTime}` },
 ])}
 </div>

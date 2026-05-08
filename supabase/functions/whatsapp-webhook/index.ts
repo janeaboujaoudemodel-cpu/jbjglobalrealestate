@@ -77,8 +77,51 @@ const handler = async (req: Request): Promise<Response> => {
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     try {
-      const payload: WhatsAppWebhookPayload = await req.json();
-      
+      // SECURITY: Verify Meta X-Hub-Signature-256 HMAC before trusting payload
+      const rawBody = await req.text();
+      const appSecret = Deno.env.get("WHATSAPP_APP_SECRET");
+      const signatureHeader = req.headers.get("x-hub-signature-256") || "";
+
+      if (!appSecret) {
+        console.error("WHATSAPP_APP_SECRET not configured");
+        return new Response(JSON.stringify({ error: "Server misconfigured" }), {
+          status: 500,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        });
+      }
+      if (!signatureHeader.startsWith("sha256=")) {
+        console.warn("[WhatsApp] Missing X-Hub-Signature-256");
+        return new Response("Unauthorized", { status: 401, headers: { ...corsHeaders } });
+      }
+
+      const expectedHex = await (async () => {
+        const enc = new TextEncoder();
+        const key = await crypto.subtle.importKey(
+          "raw",
+          enc.encode(appSecret),
+          { name: "HMAC", hash: "SHA-256" },
+          false,
+          ["sign"],
+        );
+        const sig = await crypto.subtle.sign("HMAC", key, enc.encode(rawBody));
+        return Array.from(new Uint8Array(sig))
+          .map((b) => b.toString(16).padStart(2, "0"))
+          .join("");
+      })();
+
+      const providedHex = signatureHeader.slice("sha256=".length).toLowerCase();
+      // Timing-safe compare
+      const a = new TextEncoder().encode(expectedHex);
+      const b = new TextEncoder().encode(providedHex);
+      let mismatch = a.length ^ b.length;
+      for (let i = 0; i < Math.min(a.length, b.length); i++) mismatch |= a[i] ^ b[i];
+      if (mismatch !== 0) {
+        console.warn("[WhatsApp] Invalid HMAC signature");
+        return new Response("Unauthorized", { status: 401, headers: { ...corsHeaders } });
+      }
+
+      const payload: WhatsAppWebhookPayload = JSON.parse(rawBody);
+
       console.log("Received WhatsApp webhook:", JSON.stringify(payload, null, 2));
 
       // Periodic cleanup
