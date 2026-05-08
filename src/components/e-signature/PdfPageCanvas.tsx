@@ -9,9 +9,11 @@ interface PdfPageCanvasProps {
   pdfUrl: string;
   /** Called when this component independently loads a PDF doc (when pdfDoc prop is null) */
   onDocLoaded?: (doc: any) => void;
+  /** Called whenever the rendered CSS size of the page changes */
+  onSizeChange?: (size: { w: number; h: number }) => void;
 }
 
-export default function PdfPageCanvas({ pdfDoc, pageNumber, pdfUrl, onDocLoaded }: PdfPageCanvasProps) {
+export default function PdfPageCanvas({ pdfDoc, pageNumber, pdfUrl, onDocLoaded, onSizeChange }: PdfPageCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [rendering, setRendering] = useState(false);
   const [failed, setFailed] = useState(false);
