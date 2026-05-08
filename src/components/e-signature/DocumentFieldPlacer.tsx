@@ -8,6 +8,8 @@ import {
 } from "lucide-react";
 import AdoptAndSignDialog from "./AdoptAndSignDialog";
 import DocumentEditor from "./DocumentEditor";
+import StampManagerDialog from "./StampManagerDialog";
+import { Stamp as StampIcon } from "lucide-react";
 import { useOwnerSignatureAssets, useSaveSignatureAsset } from "@/hooks/useOwnerSignatureAssets";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
