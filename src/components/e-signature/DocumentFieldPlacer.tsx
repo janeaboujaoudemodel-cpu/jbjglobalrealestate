@@ -55,6 +55,9 @@ export default function DocumentFieldPlacer({
 
   // Drag offset ref for precision dragging
   const dragOffsetRef = useRef({ x: 0, y: 0 });
+  const draggingIdRef = useRef<string | null>(null);
+  const resizingRef = useRef<{ id: string; corner: "se" | "sw" | "ne" | "nw"; startX: number; startY: number; w: number; h: number; x: number; y: number } | null>(null);
+  const [selectedFieldId, setSelectedFieldId] = useState<string | null>(null);
 
   // Thumbnail state
   const [thumbnails, setThumbnails] = useState<string[]>([]);
@@ -63,6 +66,20 @@ export default function DocumentFieldPlacer({
 
   // Brand asset picker state
   const [showAssetPicker, setShowAssetPicker] = useState(false);
+  const [showAdopt, setShowAdopt] = useState(false);
+  const [adoptForFieldId, setAdoptForFieldId] = useState<string | null>(null);
+  const [showDocEditor, setShowDocEditor] = useState(false);
+  const [workingPdfUrl, setWorkingPdfUrl] = useState<string>(pdfUrl);
+  const [workingPdfFile, setWorkingPdfFile] = useState<File | null>(pdfFile || null);
+
+  // Saved assets via owner_signature_assets — auto-apply on click
+  const { data: sigAssets } = useOwnerSignatureAssets("signature");
+  const { data: initAssets } = useOwnerSignatureAssets("initial");
+  const saveAsset = useSaveSignatureAsset();
+  const defaultSignatureUrl = sigAssets?.find((a) => a.is_default)?.image_url || sigAssets?.[0]?.image_url || null;
+  const defaultInitialsUrl = initAssets?.find((a) => a.is_default)?.image_url || initAssets?.[0]?.image_url || null;
+
+  useEffect(() => { setWorkingPdfUrl(pdfUrl); setWorkingPdfFile(pdfFile || null); }, [pdfUrl, pdfFile]);
 
   // Load stamp: prefer handoff, then brand_assets, then stamp_designs fallback
   useEffect(() => {
