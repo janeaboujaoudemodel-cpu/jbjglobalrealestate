@@ -255,38 +255,66 @@ export default function DocumentFieldPlacer({
     onFieldsChange(fields.map((f) => (f.id === fieldId ? { ...f, value } : f)));
   };
 
-  // ── Drag-to-reposition (with offset for precision) ─────────────────────
-  const handleDrop = useCallback(
-    (e: React.DragEvent<HTMLDivElement>) => {
-      e.preventDefault();
-      const fieldId = e.dataTransfer.getData("fieldId");
-      if (!fieldId || !overlayRef.current) return;
-      const rect = overlayRef.current.getBoundingClientRect();
-      const x = ((e.clientX - rect.left - dragOffsetRef.current.x) / rect.width) * 100;
-      const y = ((e.clientY - rect.top - dragOffsetRef.current.y) / rect.height) * 100;
-      onFieldsChange(
-        fields.map((f) =>
-          f.id === fieldId
-            ? { ...f, x: Math.max(0, Math.min(95, x)), y: Math.max(0, Math.min(95, y)) }
-            : f
-        )
-      );
-    },
-    [fields, onFieldsChange]
-  );
+  // ── Pointer-event drag + resize (precise, scroll-friendly) ────────────
+  const handleFieldPointerDown = (e: React.PointerEvent, fieldId: string) => {
+    if ((e.target as HTMLElement).dataset.handle) return; // resize handles handle their own
+    e.stopPropagation();
+    setSelectedFieldId(fieldId);
+    if (!overlayRef.current) return;
+    const fieldEl = (e.currentTarget as HTMLElement);
+    const fieldRect = fieldEl.getBoundingClientRect();
+    dragOffsetRef.current = { x: e.clientX - fieldRect.left, y: e.clientY - fieldRect.top };
+    draggingIdRef.current = fieldId;
+    (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
+  };
 
-  const handleDragOver = (e: React.DragEvent) => e.preventDefault();
-  const handleDragStart = (e: React.DragEvent, fieldId: string) => {
-    e.dataTransfer.setData("fieldId", fieldId);
-    // Calculate offset between cursor and field's top-left corner
-    const fieldEl = (e.target as HTMLElement).closest("[data-field]") as HTMLElement;
-    if (fieldEl) {
-      const fieldRect = fieldEl.getBoundingClientRect();
-      dragOffsetRef.current = {
-        x: e.clientX - fieldRect.left,
-        y: e.clientY - fieldRect.top,
-      };
+  const handleOverlayPointerMove = (e: React.PointerEvent) => {
+    if (!overlayRef.current) return;
+    const overlay = overlayRef.current;
+    // Auto-scroll near vertical edges so we can drag downward
+    const r = overlay.getBoundingClientRect();
+    const edge = 40;
+    if (e.clientY > r.bottom - edge) overlay.scrollTop += 12;
+    else if (e.clientY < r.top + edge) overlay.scrollTop -= 12;
+
+    if (resizingRef.current) {
+      const z = resizingRef.current;
+      const dx = e.clientX - z.startX;
+      const dy = e.clientY - z.startY;
+      let newW = z.w, newH = z.h, newX = z.x, newY = z.y;
+      const widthPct = (delta: number) => (delta / r.width) * 100;
+      const heightPct = (delta: number) => (delta / r.height) * 100;
+      if (z.corner === "se") { newW = Math.max(24, z.w + dx); newH = Math.max(20, z.h + dy); }
+      else if (z.corner === "sw") { newW = Math.max(24, z.w - dx); newH = Math.max(20, z.h + dy); newX = z.x + widthPct(dx); }
+      else if (z.corner === "ne") { newW = Math.max(24, z.w + dx); newH = Math.max(20, z.h - dy); newY = z.y + heightPct(dy); }
+      else if (z.corner === "nw") { newW = Math.max(24, z.w - dx); newH = Math.max(20, z.h - dy); newX = z.x + widthPct(dx); newY = z.y + heightPct(dy); }
+      onFieldsChange(fields.map((f) => f.id === z.id ? { ...f, width: newW, height: newH, x: newX, y: newY } : f));
+      return;
     }
+
+    const id = draggingIdRef.current;
+    if (!id) return;
+    const xPx = e.clientX - r.left + overlay.scrollLeft - dragOffsetRef.current.x;
+    const yPx = e.clientY - r.top + overlay.scrollTop - dragOffsetRef.current.y;
+    const xPct = (xPx / r.width) * 100;
+    const yPct = (yPx / r.height) * 100;
+    const fld = fields.find((f) => f.id === id);
+    if (!fld) return;
+    const maxX = 100 - (fld.width / r.width) * 100;
+    const maxY = 100 - (fld.height / r.height) * 100;
+    onFieldsChange(fields.map((f) => f.id === id ? { ...f, x: Math.max(0, Math.min(maxX, xPct)), y: Math.max(0, Math.min(maxY, yPct)) } : f));
+  };
+
+  const handleOverlayPointerUp = () => {
+    draggingIdRef.current = null;
+    resizingRef.current = null;
+  };
+
+  const startResize = (e: React.PointerEvent, fieldId: string, corner: "se" | "sw" | "ne" | "nw") => {
+    e.stopPropagation();
+    const f = fields.find((x) => x.id === fieldId);
+    if (!f) return;
+    resizingRef.current = { id: fieldId, corner, startX: e.clientX, startY: e.clientY, w: f.width, h: f.height, x: f.x, y: f.y };
   };
 
   // ── Auto-detect (send base64 if blob URL) ──────────────────────────────
