@@ -419,7 +419,32 @@ export default function EnvelopeDetail() {
           </div>
         </div>
 
-        {/* Action bar */}
+        {/* Signed banner */}
+        {envelope.status === "completed" && signedDoc && (
+          <div className="rounded-xl border border-emerald-300 bg-emerald-50/80 p-4 flex items-center gap-3 flex-wrap">
+            <CheckCircle2 className="w-6 h-6 text-emerald-700 shrink-0" />
+            <div className="min-w-0 flex-1">
+              <div className="text-sm font-semibold text-emerald-900">
+                Signed — agreement fully executed
+              </div>
+              <div className="text-xs text-emerald-800/80">
+                {clientRec?.signed_at ? `Signed by ${clientRec.name} on ${format(new Date(clientRec.signed_at), "MMM d, yyyy 'at' h:mm a")}` : "All recipients have signed"}
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                onClick={() => handleDownload(signedDoc.document_url, signedDoc.document_filename)}>
+                <Download className="w-3.5 h-3.5 mr-1.5" /> Signed PDF
+              </Button>
+              {signedDoc.certificate_url && (
+                <Button size="sm" variant="outline" className="border-emerald-300 text-emerald-800"
+                  onClick={() => handleDownload(signedDoc.certificate_url, `audit_${envelope.id}.pdf`)}>
+                  <Shield className="w-3.5 h-3.5 mr-1.5" /> Audit cert
+                </Button>
+              )}
+            </div>
+          </div>
+        )}
         <Card className="bg-[#F7F2EA] border-[#B89555]/30">
           <CardContent className="p-3 flex items-center gap-2 flex-wrap">
             {isDraft && (
