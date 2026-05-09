@@ -235,7 +235,7 @@ export default function CampaignComposer({ onSent }: { onSent?: () => void }) {
       const { data, error } = await supabase.from("crm_segments").insert({
         name: segName,
         filter: filter as any,
-        owner_user_id: user?.id ?? null,
+        created_by: user?.id ?? null,
       } as any).select("id, name, filter").single();
       if (error) throw error;
       setSegments((s) => [...s, data as any]);
