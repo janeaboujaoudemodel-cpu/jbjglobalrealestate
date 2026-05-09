@@ -11164,6 +11164,33 @@ export type Database = {
         }
         Relationships: []
       }
+      email_suppressions: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          email_lower: string
+          id: string
+          reason: string
+          source: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          email_lower: string
+          id?: string
+          reason?: string
+          source?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          email_lower?: string
+          id?: string
+          reason?: string
+          source?: string | null
+        }
+        Relationships: []
+      }
       email_verifications: {
         Row: {
           attempts: number | null
