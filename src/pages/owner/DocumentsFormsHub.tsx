@@ -21,13 +21,56 @@ function useEnvelopes(status?: string) {
   return useQuery({
     queryKey: ["esign_envelopes_hub", status ?? "all"],
     queryFn: async () => {
-      let q = supabase.from("esign_envelopes").select("id,name,status,category,created_at,signed_document_url,template_key").order("created_at", { ascending: false });
+      // Pull the fields needed for the rich card summary (client + property + doc number).
+      let q = supabase
+        .from("esign_envelopes")
+        .select("id,name,status,category,created_at,signed_document_url,template_key,template_field_values,metadata,esign_recipients(name,email,phone,metadata)")
+        .order("created_at", { ascending: false });
       if (status) q = q.eq("status", status as any);
       const { data, error } = await q;
       if (error) throw error;
       return data ?? [];
     },
   });
+}
+
+// Card summary helpers (kept local so this page does not depend on dashboard internals).
+function clientNameOf(e: any): string {
+  const v = (e?.template_field_values as any) || {};
+  if (v.landlord_name) return String(v.landlord_name);
+  const recs: any[] = e?.esign_recipients || [];
+  const client = recs.find((r) => r?.metadata?.role === "client") || recs[0];
+  return client?.name || "Unnamed client";
+}
+function clientInitials(name: string): string {
+  return name.split(/\s+/).filter(Boolean).slice(0, 2).map((p) => p[0]?.toUpperCase() || "").join("") || "—";
+}
+function propertyOf(e: any): string {
+  const v = (e?.template_field_values as any) || {};
+  const parts = [v.property_type, v.building_name || v.community || v.street_name, v.unit_number ? `Unit ${v.unit_number}` : ""].filter(Boolean);
+  return parts.join(" · ");
+}
+function sizeOf(e: any): string {
+  const v = (e?.template_field_values as any) || {};
+  const beds = v.bedrooms ? (/^stu/i.test(String(v.bedrooms)) || String(v.bedrooms) === "0" ? "Studio" : `${v.bedrooms} bed`) : "";
+  const bua = v.bua_sqft ? `${v.bua_sqft} sqft` : "";
+  return [beds, bua].filter(Boolean).join(" · ");
+}
+function docNumberOf(e: any): string {
+  return (e?.metadata as any)?.doc_number || (e?.template_field_values as any)?.doc_number || "";
+}
+function kindLabelOf(e: any): string {
+  if (e?.template_key === "jbj-property-advertising-agreement") return "Leasing";
+  if (e?.template_key === "jbj-listing-authorisation-selling") return "Selling";
+  return e?.category ? String(e.category) : "";
+}
+// "Draft" with client + property data is really "Ready for review" — not unfinished.
+function statusLabelOf(e: any): string {
+  if (e?.status !== "draft") return String(e?.status || "draft");
+  const v = (e?.template_field_values as any) || {};
+  const hasClient = !!(v.landlord_name && (v.mobile_number || v.email_address));
+  const hasProperty = !!(v.building_name || v.community || v.property_reference_no);
+  return hasClient && hasProperty ? "ready" : "draft";
 }
 
 export default function DocumentsFormsHub() {
