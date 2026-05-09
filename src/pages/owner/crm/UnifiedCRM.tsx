@@ -173,9 +173,9 @@ export default function UnifiedCRM() {
       case "relationships":
       default:
         if (sub === "investors")  return <Embed><CRMRelationships /></Embed>;
-        if (sub === "developers") return <Embed><CRMNetworkPage /></Embed>;
-        if (sub === "agencies")   return <Embed><CRMNetworkPage /></Embed>;
-        if (sub === "sales-reps") return <Embed><CRMNetworkPage /></Embed>;
+        if (sub === "developers") return <Embed><CRMNetworkPage initialRole="developers" /></Embed>;
+        if (sub === "agencies")   return <Embed><CRMNetworkPage initialRole="agencies" /></Embed>;
+        if (sub === "sales-reps") return <Embed><CRMNetworkPage initialRole="partners" /></Embed>;
         if (sub === "brokers")    return <Embed><BrokersRegistryPage /></Embed>;
         return <Embed><CRMRelationships /></Embed>;
     }
