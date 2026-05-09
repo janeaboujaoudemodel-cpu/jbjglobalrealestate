@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useEsignTemplates, useCreateEnvelopeFromTemplate, type EsignTemplate } from "@/hooks/useEsignTemplates";
 import { PAA_FIELD_GROUPS } from "@/templates/jbjPropertyAdvertisingAgreement";
@@ -10,31 +10,32 @@ import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { FileText, Send, CheckCircle2, Clock, PenTool, Stamp, FileSignature, Plus, Loader2, ExternalLink, Upload, Scale, Sparkles } from "lucide-react";
+import { FileText, Send, CheckCircle2, Clock, PenTool, Stamp, FileSignature, Plus, Loader2, ExternalLink, Upload, Scale, Trash2, RotateCcw, FileEdit } from "lucide-react";
 import { toast } from "sonner";
 import { SmartFillDropzone } from "@/components/e-signature/SmartFillDropzone";
 
 type Cat = "all" | "leasing" | "selling";
+type Bucket = "templates" | "drafts" | "generated" | "sent" | "signed" | "deleted" | "assets";
 
-function useEnvelopes(status?: string) {
+/** Single query for the entire hub — much faster than four parallel queries. */
+function useAllEnvelopes() {
   return useQuery({
-    queryKey: ["esign_envelopes_hub", status ?? "all"],
+    queryKey: ["esign_envelopes_hub_all"],
+    staleTime: 15_000,
     queryFn: async () => {
-      // Pull the fields needed for the rich card summary (client + property + doc number).
-      let q = supabase
+      const { data, error } = await supabase
         .from("esign_envelopes")
-        .select("id,name,status,category,created_at,signed_document_url,template_key,template_field_values,metadata,esign_recipients(name,email,phone,metadata)")
+        .select("id,name,status,category,created_at,deleted_at,signed_document_url,document_url,document_filename,template_key,template_field_values,metadata,esign_recipients(name,email,phone,metadata)")
         .order("created_at", { ascending: false });
-      if (status) q = q.eq("status", status as any);
-      const { data, error } = await q;
       if (error) throw error;
       return data ?? [];
     },
   });
 }
 
-// Card summary helpers (kept local so this page does not depend on dashboard internals).
+// ── Helpers ─────────────────────────────────────────────────────────────────
 function clientNameOf(e: any): string {
   const v = (e?.template_field_values as any) || {};
   if (v.landlord_name) return String(v.landlord_name);
@@ -44,6 +45,15 @@ function clientNameOf(e: any): string {
 }
 function clientInitials(name: string): string {
   return name.split(/\s+/).filter(Boolean).slice(0, 2).map((p) => p[0]?.toUpperCase() || "").join("") || "—";
+}
+function clientContactOf(e: any): { phone: string; email: string } {
+  const v = (e?.template_field_values as any) || {};
+  const recs: any[] = e?.esign_recipients || [];
+  const client = recs.find((r) => r?.metadata?.role === "client") || recs[0] || {};
+  return {
+    phone: v.mobile_number || client?.phone || "",
+    email: v.email_address || client?.email || "",
+  };
 }
 function propertyOf(e: any): string {
   const v = (e?.template_field_values as any) || {};
@@ -60,27 +70,34 @@ function docNumberOf(e: any): string {
   return (e?.metadata as any)?.doc_number || (e?.template_field_values as any)?.doc_number || "";
 }
 function kindLabelOf(e: any): string {
-  if (e?.template_key === "jbj-property-advertising-agreement") return "Leasing";
+  if (e?.template_key === "jbj-property-advertising-agreement" || e?.template_key === "jbj-paa-leasing") return "Leasing";
   if (e?.template_key === "jbj-listing-authorisation-selling") return "Selling";
   return e?.category ? String(e.category) : "";
 }
-// "Draft" with client + property data is really "Ready for review" — not unfinished.
-function statusLabelOf(e: any): string {
-  if (e?.status !== "draft") return String(e?.status || "draft");
+
+/**
+ * Classification rule:
+ *  - status=draft AND template has at least a client name = "Forms Generated"
+ *  - status=draft with no client name (truly empty) = "Draft Applications"
+ *  - status=sent / partially_signed / viewed = "Pending Signature"
+ *  - status=completed = "Signed"
+ */
+function isCompleteEnoughToBeGenerated(e: any): boolean {
   const v = (e?.template_field_values as any) || {};
-  const hasClient = !!(v.landlord_name && (v.mobile_number || v.email_address));
-  const hasProperty = !!(v.building_name || v.community || v.property_reference_no);
-  return hasClient && hasProperty ? "ready" : "draft";
+  const recs: any[] = e?.esign_recipients || [];
+  const client = recs.find((r) => r?.metadata?.role === "client") || recs[0];
+  const hasClientName = !!(v.landlord_name || client?.name);
+  const hasContact = !!(v.mobile_number || v.email_address || client?.email || client?.phone);
+  return hasClientName && hasContact;
 }
 
 export default function DocumentsFormsHub() {
   const navigate = useNavigate();
-  const [tab, setTab] = useState("templates");
+  const qc = useQueryClient();
+  const [tab, setTab] = useState<Bucket>("templates");
   const [cat, setCat] = useState<Cat>("all");
   const { data: templates = [], isLoading: tplLoading } = useEsignTemplates(cat);
-  const { data: drafts = [] } = useEnvelopes("draft");
-  const { data: sent = [] } = useEnvelopes("sent");
-  const { data: signed = [] } = useEnvelopes("completed");
+  const { data: allEnvelopes = [], isLoading: envLoading, refetch } = useAllEnvelopes();
   const { data: signatures = [] } = useOwnerSignatureAssets("signature");
   const { data: stamps = [] } = useOwnerSignatureAssets("stamp");
   const createFromTpl = useCreateEnvelopeFromTemplate();
@@ -89,16 +106,41 @@ export default function DocumentsFormsHub() {
   const [client, setClient] = useState({ name: "", email: "", phone: "" });
   const [extraValues, setExtraValues] = useState<Record<string, string>>({});
   const [showDetails, setShowDetails] = useState(false);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+
+  // Bucket envelopes
+  const buckets = useMemo(() => {
+    const drafts: any[] = [];
+    const generated: any[] = [];
+    const sent: any[] = [];
+    const signed: any[] = [];
+    const deleted: any[] = [];
+    for (const e of allEnvelopes) {
+      if ((e as any).deleted_at) { deleted.push(e); continue; }
+      const s = (e as any).status;
+      if (s === "completed") signed.push(e);
+      else if (s === "sent" || s === "viewed" || s === "partially_signed") sent.push(e);
+      else if (s === "draft") {
+        if (isCompleteEnoughToBeGenerated(e)) generated.push(e);
+        else drafts.push(e);
+      } else {
+        drafts.push(e);
+      }
+    }
+    return { drafts, generated, sent, signed, deleted };
+  }, [allEnvelopes]);
 
   const handleUseTemplate = async () => {
     if (!picker) return;
-    if (!client.name.trim() || !client.email.trim()) {
-      toast.error("Enter the client's name and email");
+    if (!client.name.trim()) {
+      toast.error("Enter at least a client name");
       return;
     }
+    // Email is optional now — required only at send-time
     try {
       const env = await createFromTpl.mutateAsync({ template: picker, client, values: extraValues });
       toast.success("Draft created — review fields and send");
+      qc.invalidateQueries({ queryKey: ["esign_envelopes_hub_all"] });
       navigate(`/e-signature/${env.id}`);
     } catch (e: any) {
       toast.error(e.message || "Failed to create envelope");
@@ -106,6 +148,150 @@ export default function DocumentsFormsHub() {
   };
 
   const filteredTemplates = templates.filter(t => cat === "all" ? true : t.category === cat);
+
+  // Bulk actions on the visible bucket
+  const visibleIds = (() => {
+    if (tab === "drafts") return buckets.drafts.map((e: any) => e.id);
+    if (tab === "generated") return buckets.generated.map((e: any) => e.id);
+    if (tab === "deleted") return buckets.deleted.map((e: any) => e.id);
+    return [];
+  })();
+
+  const toggleSelect = (id: string) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
+  const toggleSelectAll = () => {
+    if (selected.size === visibleIds.length) setSelected(new Set());
+    else setSelected(new Set(visibleIds));
+  };
+
+  const bulkSoftDelete = async () => {
+    if (!selected.size) return;
+    const ids = Array.from(selected);
+    const { error } = await supabase
+      .from("esign_envelopes")
+      .update({ deleted_at: new Date().toISOString() })
+      .in("id", ids);
+    if (error) { toast.error(error.message); return; }
+    toast.success(`${ids.length} moved to Recently Deleted`);
+    setSelected(new Set());
+    refetch();
+  };
+  const bulkRestore = async () => {
+    if (!selected.size) return;
+    const ids = Array.from(selected);
+    const { error } = await supabase
+      .from("esign_envelopes")
+      .update({ deleted_at: null })
+      .in("id", ids);
+    if (error) { toast.error(error.message); return; }
+    toast.success(`${ids.length} restored`);
+    setSelected(new Set());
+    refetch();
+  };
+
+  const renderBucketCards = (rows: any[], emptyText: string, mode: "drafts" | "generated" | "sent" | "signed" | "deleted") => {
+    if (envLoading) return <div className="text-sm text-[#1A1A1A]/60 flex items-center gap-2"><Loader2 className="w-4 h-4 animate-spin" /> Loading…</div>;
+    if (!rows.length) return <div className="text-sm text-[#1A1A1A]/60">{emptyText}</div>;
+    return (
+      <>
+        {(mode === "drafts" || mode === "generated" || mode === "deleted") && rows.length > 0 && (
+          <div className="flex items-center gap-3 mb-3 p-2 rounded-md bg-white/60 border border-[#B89555]/20">
+            <Checkbox
+              checked={selected.size > 0 && selected.size === visibleIds.length}
+              onCheckedChange={toggleSelectAll}
+              aria-label="Select all"
+            />
+            <span className="text-xs text-[#1A1A1A]/70">
+              {selected.size ? `${selected.size} selected` : `Select all (${rows.length})`}
+            </span>
+            <div className="ml-auto flex gap-2">
+              {mode === "deleted" ? (
+                <Button size="sm" variant="outline" disabled={!selected.size} onClick={bulkRestore}>
+                  <RotateCcw className="w-3.5 h-3.5 mr-1.5" /> Restore
+                </Button>
+              ) : (
+                <Button size="sm" variant="outline" disabled={!selected.size} onClick={bulkSoftDelete}>
+                  <Trash2 className="w-3.5 h-3.5 mr-1.5" /> Move to Recently Deleted
+                </Button>
+              )}
+            </div>
+          </div>
+        )}
+        <div className="grid md:grid-cols-2 gap-3">
+          {rows.map((e: any) => {
+            const cName = clientNameOf(e);
+            const initials = clientInitials(cName);
+            const property = propertyOf(e);
+            const size = sizeOf(e);
+            const dn = docNumberOf(e);
+            const kind = kindLabelOf(e);
+            const { phone, email } = clientContactOf(e);
+            const selectable = mode === "drafts" || mode === "generated" || mode === "deleted";
+            const sLabel =
+              mode === "signed" ? "Signed"
+              : mode === "sent" ? "Pending Signature"
+              : mode === "deleted" ? "Recently Deleted"
+              : mode === "generated" ? "Forms Generated"
+              : "Draft Application";
+            const sCls =
+              mode === "signed" ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+              : mode === "sent" ? "bg-blue-50 text-blue-800 border-blue-200"
+              : mode === "deleted" ? "bg-red-50 text-red-800 border-red-200"
+              : mode === "generated" ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/60"
+              : "bg-[#F7F2EA] text-[#1A1A1A]/80 border-[#B89555]/30";
+            return (
+              <Card key={e.id} className="p-4 bg-[#F7F2EA] border-[#B89555]/30">
+                <div className="flex items-start gap-3">
+                  {selectable && (
+                    <Checkbox
+                      className="mt-1"
+                      checked={selected.has(e.id)}
+                      onCheckedChange={() => toggleSelect(e.id)}
+                      aria-label={`Select ${cName}`}
+                    />
+                  )}
+                  <div className="shrink-0 w-10 h-10 rounded-full bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center text-sm font-semibold text-[#1A1A1A]">
+                    {initials}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5 flex-wrap mb-1">
+                      {dn && <span className="text-[10px] tracking-[0.16em] uppercase text-[#1A1A1A]/80 border border-[#B89555]/40 rounded px-2 py-0.5 bg-white/70">{dn}</span>}
+                      {kind && <span className="text-[10px] tracking-[0.14em] uppercase text-[#1A1A1A] border border-[#B89555]/40 rounded px-2 py-0.5 bg-[#EFE6D6]">{kind}</span>}
+                      <span className={`text-[10px] tracking-[0.14em] uppercase rounded px-2 py-0.5 border ${sCls}`}>{sLabel}</span>
+                    </div>
+                    <div className="font-semibold text-[#1A1A1A] truncate">{cName}</div>
+                    {property && <div className="text-xs text-[#1A1A1A]/80 truncate">{property}</div>}
+                    {size && <div className="text-[11px] text-[#1A1A1A]/70 truncate">{size}</div>}
+                    {(phone || email) && (
+                      <div className="text-[11px] text-[#1A1A1A]/70 mt-1 truncate">
+                        {[phone, email].filter(Boolean).join(" · ")}
+                      </div>
+                    )}
+                    <div className="text-[11px] text-[#1A1A1A]/55 mt-0.5">{new Date(e.created_at).toLocaleString()}</div>
+                  </div>
+                  <div className="flex flex-col gap-2 items-end shrink-0">
+                    <Button size="sm" variant="gold" onClick={() => navigate(`/e-signature/${e.id}`)}>Open</Button>
+                    {e.signed_document_url && (
+                      <Button size="sm" variant="outline" asChild>
+                        <a href={e.signed_document_url} target="_blank" rel="noreferrer">
+                          <ExternalLink className="w-3 h-3 mr-1" /> Download
+                        </a>
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </Card>
+            );
+          })}
+        </div>
+      </>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] p-6 lg:p-10">
@@ -121,7 +307,7 @@ export default function DocumentsFormsHub() {
           </Button>
         </header>
 
-        {/* Quick actions — clear entry points so the workflow is never hidden */}
+        {/* Quick actions */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
           <Card className="p-4 bg-[#F7F2EA] border-[#B89555]/30 cursor-pointer hover:border-[#B89555]" onClick={() => { setCat("leasing"); setTab("templates"); }}>
             <div className="flex items-start gap-3">
@@ -161,12 +347,14 @@ export default function DocumentsFormsHub() {
           </Card>
         </div>
 
-        <Tabs value={tab} onValueChange={setTab}>
-          <TabsList className="bg-[#F7F2EA] border border-[#B89555]/30">
+        <Tabs value={tab} onValueChange={(v) => { setTab(v as Bucket); setSelected(new Set()); }}>
+          <TabsList className="bg-[#F7F2EA] border border-[#B89555]/30 flex-wrap h-auto">
             <TabsTrigger value="templates"><FileText className="w-4 h-4 mr-2" />Templates</TabsTrigger>
-            <TabsTrigger value="drafts"><Clock className="w-4 h-4 mr-2" />Forms Generated ({drafts.length})</TabsTrigger>
-            <TabsTrigger value="sent"><Send className="w-4 h-4 mr-2" />Pending Signature ({sent.length})</TabsTrigger>
-            <TabsTrigger value="signed"><CheckCircle2 className="w-4 h-4 mr-2" />Signed ({signed.length})</TabsTrigger>
+            <TabsTrigger value="drafts"><FileEdit className="w-4 h-4 mr-2" />Draft Applications ({buckets.drafts.length})</TabsTrigger>
+            <TabsTrigger value="generated"><Clock className="w-4 h-4 mr-2" />Forms Generated ({buckets.generated.length})</TabsTrigger>
+            <TabsTrigger value="sent"><Send className="w-4 h-4 mr-2" />Pending Signature ({buckets.sent.length})</TabsTrigger>
+            <TabsTrigger value="signed"><CheckCircle2 className="w-4 h-4 mr-2" />Signed ({buckets.signed.length})</TabsTrigger>
+            <TabsTrigger value="deleted"><Trash2 className="w-4 h-4 mr-2" />Recently Deleted ({buckets.deleted.length})</TabsTrigger>
             <TabsTrigger value="assets"><PenTool className="w-4 h-4 mr-2" />Stamps & Signatures</TabsTrigger>
           </TabsList>
 
@@ -207,75 +395,24 @@ export default function DocumentsFormsHub() {
             )}
           </TabsContent>
 
-          {/* DRAFTS / SENT / SIGNED */}
-          {[
-            { value: "drafts", rows: drafts, empty: "No drafts yet." },
-            { value: "sent", rows: sent, empty: "Nothing awaiting signature." },
-            { value: "signed", rows: signed, empty: "No signed contracts yet." },
-          ].map(({ value, rows, empty }) => (
-            <TabsContent key={value} value={value} className="mt-4">
-              {!rows.length ? <div className="text-sm text-[#1A1A1A]/60">{empty}</div> : (
-                <div className="grid md:grid-cols-2 gap-3">
-                  {rows.map((e: any) => {
-                    const client = clientNameOf(e);
-                    const initials = clientInitials(client);
-                    const property = propertyOf(e);
-                    const size = sizeOf(e);
-                    const dn = docNumberOf(e);
-                    const kind = kindLabelOf(e);
-                    const sLabel = statusLabelOf(e);
-                    const sCls =
-                      sLabel === "completed" ? "bg-emerald-50 text-emerald-800 border-emerald-200"
-                      : sLabel === "sent" ? "bg-blue-50 text-blue-800 border-blue-200"
-                      : sLabel === "ready" ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/60"
-                      : "bg-[#F7F2EA] text-[#1A1A1A]/80 border-[#B89555]/30";
-                    return (
-                      <Card key={e.id} className="p-4 bg-[#F7F2EA] border-[#B89555]/30">
-                        <div className="flex items-start gap-3">
-                          {/* Initials chip — gives a quick visual handle per client */}
-                          <div className="shrink-0 w-10 h-10 rounded-full bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center text-sm font-semibold text-[#1A1A1A]">
-                            {initials}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-1.5 flex-wrap mb-1">
-                              {dn && (
-                                <span className="text-[10px] tracking-[0.16em] uppercase text-[#1A1A1A]/80 border border-[#B89555]/40 rounded px-2 py-0.5 bg-white/70">{dn}</span>
-                              )}
-                              {kind && (
-                                <span className="text-[10px] tracking-[0.14em] uppercase text-[#1A1A1A] border border-[#B89555]/40 rounded px-2 py-0.5 bg-[#EFE6D6]">{kind}</span>
-                              )}
-                              <span className={`text-[10px] tracking-[0.14em] uppercase rounded px-2 py-0.5 border ${sCls}`}>
-                                {sLabel === "ready" ? "Forms Generated" : sLabel === "draft" ? "Forms Generated" : sLabel === "sent" ? "Pending Signature" : sLabel === "completed" ? "Signed" : sLabel.replace(/_/g, " ")}
-                              </span>
-                            </div>
-                            <div className="font-semibold text-[#1A1A1A] truncate">{client}</div>
-                            {property && <div className="text-xs text-[#1A1A1A]/80 truncate">{property}</div>}
-                            {size && <div className="text-[11px] text-[#1A1A1A]/70 truncate">{size}</div>}
-                            <div className="text-[11px] text-[#1A1A1A]/60 mt-1 truncate">
-                              {e.name}
-                            </div>
-                            <div className="text-[11px] text-[#1A1A1A]/55 mt-0.5">
-                              {new Date(e.created_at).toLocaleString()}
-                            </div>
-                          </div>
-                          <div className="flex flex-col gap-2 items-end shrink-0">
-                            <Button size="sm" variant="gold" onClick={() => navigate(`/e-signature/${e.id}`)}>Open</Button>
-                            {e.signed_document_url && (
-                              <Button size="sm" variant="outline" asChild>
-                                <a href={e.signed_document_url} target="_blank" rel="noreferrer">
-                                  <ExternalLink className="w-3 h-3 mr-1" /> Download
-                                </a>
-                              </Button>
-                            )}
-                          </div>
-                        </div>
-                      </Card>
-                    );
-                  })}
-                </div>
-              )}
-            </TabsContent>
-          ))}
+          <TabsContent value="drafts" className="mt-4">
+            {renderBucketCards(buckets.drafts, "No draft applications. Empty templates with no client info land here.", "drafts")}
+          </TabsContent>
+          <TabsContent value="generated" className="mt-4">
+            {renderBucketCards(buckets.generated, "No completed forms yet. Once a draft has client name + contact, it lands here.", "generated")}
+          </TabsContent>
+          <TabsContent value="sent" className="mt-4">
+            {renderBucketCards(buckets.sent, "Nothing awaiting signature.", "sent")}
+          </TabsContent>
+          <TabsContent value="signed" className="mt-4">
+            {renderBucketCards(buckets.signed, "No signed contracts yet.", "signed")}
+          </TabsContent>
+          <TabsContent value="deleted" className="mt-4">
+            <div className="mb-3 p-3 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-xs">
+              Items here are permanently removed after 30 days. You can restore them anytime.
+            </div>
+            {renderBucketCards(buckets.deleted, "Nothing in Recently Deleted.", "deleted")}
+          </TabsContent>
 
           {/* ASSETS */}
           <TabsContent value="assets" className="mt-4">
@@ -315,7 +452,7 @@ export default function DocumentsFormsHub() {
         </Tabs>
       </div>
 
-      {/* Use template dialog */}
+      {/* Use template dialog — email is now optional */}
       <Dialog open={!!picker} onOpenChange={(o) => { if (!o) { setPicker(null); setExtraValues({}); setShowDetails(false); } }}>
         <DialogContent className="bg-[#FDFBF7] max-h-[85vh] overflow-y-auto">
           <DialogHeader>
@@ -323,12 +460,12 @@ export default function DocumentsFormsHub() {
           </DialogHeader>
           <div className="space-y-3">
             <div>
-              <Label>Client Name</Label>
-              <Input value={client.name} onChange={(e) => setClient({ ...client, name: e.target.value })} />
+              <Label>Client Name <span className="text-red-600">*</span></Label>
+              <Input value={client.name} onChange={(e) => setClient({ ...client, name: e.target.value })} placeholder="Required" />
             </div>
             <div>
-              <Label>Client Email</Label>
-              <Input type="email" value={client.email} onChange={(e) => setClient({ ...client, email: e.target.value })} />
+              <Label>Client Email <span className="text-[#1A1A1A]/50 text-xs">(optional — required only when sending by email)</span></Label>
+              <Input type="email" value={client.email} onChange={(e) => setClient({ ...client, email: e.target.value })} placeholder="Leave empty to share via WhatsApp / link" />
             </div>
             <div>
               <Label>Client Phone (optional)</Label>
@@ -339,7 +476,6 @@ export default function DocumentsFormsHub() {
               <SmartFillDropzone
                 schemaHint="jbj_paa_leasing"
                 onExtracted={(fields) => {
-                  // Push name/email/phone to client inputs if present
                   setClient((prev) => ({
                     name: prev.name || fields.landlord_name || "",
                     email: prev.email || fields.email_address || "",
@@ -366,7 +502,6 @@ export default function DocumentsFormsHub() {
                     <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/60 mb-2">{group.title}</div>
                     <div className="grid grid-cols-2 gap-3">
                       {group.fields.map(f => {
-                        // skip the 3 fields that are already covered by the client inputs
                         if (f.key === "landlord_name" || f.key === "email_address" || f.key === "mobile_number") return null;
                         const val = extraValues[f.key] ?? "";
                         const onChange = (v: string) => setExtraValues(prev => ({ ...prev, [f.key]: v }));
