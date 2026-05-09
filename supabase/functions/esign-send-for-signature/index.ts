@@ -123,7 +123,7 @@ Deno.serve(async (req) => {
       const emailHtml = `
 <!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500<meta name="viewport" content="width=device-width, initial-scale=1"></head>display=swap" rel="stylesheet"></head>
 <body style="margin:0;padding:0;font-family:Inter,Arial,sans-serif;background:#FDFBF7;">
   <table role="presentation" style="width:100%;border-collapse:collapse;">
     <tr><td align="center" style="padding:40px 20px;">
