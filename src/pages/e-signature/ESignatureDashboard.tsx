@@ -438,27 +438,47 @@ export default function ESignatureDashboard() {
                     const v = (envelope.template_field_values as any) || {};
                     const phoneMasked = maskPhone(v.mobile_number);
                     const emailMasked = maskEmail(v.email_address);
+                    const kind = getTemplateKind(envelope);
+                    const kindLabel = getTemplateKindLabel(kind);
                     const templateLabel =
                       envelope.template_key === "jbj-property-advertising-agreement"
                         ? "Property Advertising Agreement — Leasing"
                         : envelope.template_key === "jbj-listing-authorisation-selling"
                           ? "Listing Authorisation — Selling"
                           : envelope.name;
+                    const bedsRaw = String(v.bedrooms || "").trim();
+                    const beds = bedsRaw
+                      ? (/^stu/i.test(bedsRaw) || bedsRaw === "0" ? "Studio" : `${bedsRaw} bed`)
+                      : "";
+                    const bua = v.bua_sqft ? `${v.bua_sqft} sqft` : "";
+                    const sizeLine = [beds, bua].filter(Boolean).join(" · ");
                     return (
                       <div
                         key={envelope.id}
                         className="rounded-lg border border-gold/20 bg-white/70 hover:border-gold/60 hover:shadow-md transition p-4 flex flex-col gap-2"
                       >
                         <div className="flex items-center justify-between gap-2 flex-wrap">
-                          {docNumber ? (
-                            <span className="text-[10px] tracking-[0.16em] uppercase text-[#1A1A1A]/70 border border-[#B89555]/50 rounded px-2 py-0.5 bg-[#F7F2EA]">
-                              {docNumber}
-                            </span>
-                          ) : (
-                            <span className="text-[10px] tracking-[0.16em] uppercase text-[#1A1A1A]/40">
-                              No doc no.
-                            </span>
-                          )}
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            {docNumber ? (
+                              <span className="text-[10px] tracking-[0.16em] uppercase text-[#1A1A1A]/70 border border-[#B89555]/50 rounded px-2 py-0.5 bg-[#F7F2EA]">
+                                {docNumber}
+                              </span>
+                            ) : (
+                              <span className="text-[10px] tracking-[0.16em] uppercase text-[#1A1A1A]/40">
+                                No doc no.
+                              </span>
+                            )}
+                            {kind !== "other" && (
+                              <span className="text-[10px] tracking-[0.14em] uppercase text-[#1A1A1A] border border-[#B89555]/50 rounded px-2 py-0.5 bg-[#EFE6D6]">
+                                {kindLabel}
+                              </span>
+                            )}
+                            {v.property_reference_no && (
+                              <span className="text-[10px] tracking-[0.10em] uppercase text-[#1A1A1A]/70">
+                                Ref {v.property_reference_no}
+                              </span>
+                            )}
+                          </div>
                           <Badge className={`${config.color} border flex items-center gap-1 text-[10px]`}>
                             {config.icon}
                             {config.label}
@@ -473,6 +493,9 @@ export default function ESignatureDashboard() {
                           </div>
                           {propertyCtx && (
                             <div className="text-xs text-[#1A1A1A]/80 truncate">{propertyCtx}</div>
+                          )}
+                          {sizeLine && (
+                            <div className="text-[11px] text-[#1A1A1A]/70 truncate">{sizeLine}</div>
                           )}
                           {(phoneMasked || emailMasked) && (
                             <div className="text-[11px] text-[#1A1A1A]/60 truncate">
