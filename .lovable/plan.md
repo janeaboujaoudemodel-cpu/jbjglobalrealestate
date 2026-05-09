@@ -1,132 +1,57 @@
-I audited the actual code and database instead of relying on previous summaries. Several items were only partially done, and some claims were wrong. This plan completes the unfinished CRM + document/e-signature work and includes proof steps before anything is marked done.
+## Turn 2 plan — Status sections + Test Email button
 
-## Current audit findings
+### 1. Replace "Draft" wording with proper sections
+On both `/owner/documents/forms` and `/e-signature` dashboards, group cards under three clear section headers:
 
-### Completed or mostly completed
-- E-signature dashboard has advanced filters and document cards, but this was the **E-Signature dashboard**, not the CRM dashboard.
-- PAA leasing template has JBJ monogram header/footer and removed the “Awaiting signature” placeholder.
-- Send-for-signature dialog exists with editable subject/body, CC/BCC, WhatsApp, copy link, and `jbj.ae` signing links.
-- CRM fake-data guard exists in frontend, and some cleanup was attempted.
-- Excel export styling was improved.
+- **Forms Generated** — envelope created with client + property data, not yet sent
+- **Pending Signature** — sent, awaiting recipient signature
+- **Signed** — completed envelopes
 
-### Not completed / still broken
-- CRM still has active suspect data: audit found `crm_leads` has **29 active rows**, including **3 legacy-source rows** and **8 suspect/fake-name rows** still visible at database level.
-- CRM Network is still a separate route with table tabs; it is not merged into the main CRM workspace as requested.
-- CRM Network filters are still chip-style/source filters, not clean dropdowns for Country / Database / Campaign / Source / Role.
-- CRM cards/rows do not yet have full per-lead action buttons for **Notes, Calendar reminder, Task assignment, Send Agreement** in the unified network view.
-- Investor toggle logic is not implemented: a lead cannot yet be cleanly marked/unmarked as Investor while preserving status.
-- Category report configurator is not implemented: brokerages/developers/investors reports cannot yet select date range, included metrics, or saved presets.
-- Documents hub `/owner/documents/forms` still lists drafts by generic envelope title only; it does not summarize client name, abbreviation, doc number, property details, category, and filters strongly enough.
-- Legacy document functions still exist in the repo (`documents-send`, `documents-public-fill`) despite earlier claim they were deleted.
-- Existing Omar / older drafts may still need regeneration to the current PAA layout and card metadata.
-- The send email template still exposes the merge tag label `{{owner_name}}`, which is ambiguous. It should be renamed/reworded to company/sender signature and default to **JBJ GLOBAL REAL ESTATE** / **Jane Bou Jaoude** where needed.
-- No screenshot proof has been produced yet.
+Per-card status badge updates:
+- "Draft" → **Ready** (when client + property are filled) or **Incomplete** (when missing)
+- "Sent" → **Pending Signature**
+- "Completed" → **Signed**
 
-## Implementation plan
+No data migration — purely a UI/labeling change driven by existing `status` and field completeness.
 
-### 1. CRM data cleanup and permanent fake-data protection
-- Run a precise cleanup migration to soft-delete remaining active fake/legacy/test/encrypted CRM lead rows.
-- Keep only real records moving forward.
-- Tighten `crmFakeDataGuard.ts` so UI never displays:
-  - legacy/test/import demo rows
-  - encrypted/redacted placeholder names
-  - example/test emails
-  - fake source/database labels
-- Add a small owner-only CRM data-audit banner/count so we can prove how many rows are real vs filtered.
+### 2. "Send Test Email" button in Send-for-Signature dialog
+Add a secondary button beside **Send for Signature**:
 
-### 2. Merge CRM Network into the main CRM workspace
-- Add a unified CRM section inside `/owner/crm` with clear tabs/cards:
-  - Leads
-  - Investors
-  - Developers
-  - Brokers
-  - Brokerage Agencies
-  - Partners
-  - Employees
-- Stop presenting “CRM Network” as a separate hidden/duplicate experience.
-- Keep one canonical CRM entry point.
+```
+[ Send Test Email to Me ]   [ Send for Signature ]
+```
 
-### 3. Replace broken chip filters with dropdown filters
-- Build compact dropdown filters for:
-  - Role/category
-  - Country
-  - Database/source
-  - Campaign
-  - Status
-  - Assigned user
-  - Date range
-- Hide empty categories and stop filters from triggering homepage flashes or route changes.
-- Add a reset button and active-filter summary.
+Behavior:
+- Defaults the recipient to `infoo.jane@gmail.com` (locked, read-only display).
+- Uses the **exact same** subject + body + HTML template + signing-link layout that the real send would use — byte-for-byte preview = delivered.
+- Routes through a new edge function `esign-send-test-email` that:
+  - Requires owner auth (`requireOwnerAuth`).
+  - Re-uses the existing render pipeline from `esign-send-for-signature`.
+  - Sends via Resend to `infoo.jane@gmail.com` only.
+  - Logs to `email_send_log` with `template_name = 'esign_test_preview'` so we can fetch proof.
+  - Does NOT change envelope status, does NOT create real recipients, does NOT consume the signing token.
+- After send, dialog shows a confirmation: *"Test sent to infoo.jane@gmail.com — open your inbox, then click Send for Signature to deliver the same email to the real client."*
 
-### 4. CRM action buttons per row/card
-- Add visible actions beside each CRM person/company:
-  - Notes
-  - Calendar reminder
-  - Assign task
-  - Send agreement
-  - Open detail drawer
-- Wire them to existing tables/components where available; if a missing table is required, add it with owner-safe access rules.
-- Keep UI compact so the main CRM list is immediately visible.
+### 3. Approval flow → locked template
+- After the test send, the dialog displays an **"Approve & Lock"** action.
+- On approve, the current subject + body are written to `esign_envelopes.email_subject` and `email_message` for that envelope, and a project-level default snapshot is saved to a new tiny owner-scoped row in `outreach_locked_payloads` keyed by `template_kind = 'esign_send_email'` so future sends auto-load the locked template.
+- The next time you open Send-for-Signature on any envelope, the locked subject+body is the default.
 
-### 5. Investor label toggle
-- Add an `Investor` toggle/action on leads.
-- When enabled, the same CRM record appears in Investors without duplicating data.
-- When disabled, it returns to Leads while preserving pipeline/status history.
-- This should update tags/intent safely and invalidate CRM caches.
+### 4. Proof on completion
+- Trigger the test email myself via the new edge function with your auth.
+- Pull the latest row from `email_send_log` and show: `message_id`, `recipient_email`, `status`, `created_at`.
+- Screenshot of the dialog showing the new test button + locked email.
 
-### 6. CRM layout minimization
-- Keep KPIs visible at the top: calls, WhatsApp messages, inquiries, hot leads, follow-ups, calendar, messages.
-- Keep AI insights, team communication, and activity timeline minimized by default behind clean buttons.
-- Add a header above the main tabs so “All Leads / Flagged / VIP / Management / Employee Hub” is not floating without context.
+### Files to touch
+```text
+src/components/e-signature/SendForSignatureDialog.tsx   (add Test button + Approve & Lock)
+src/pages/owner/DocumentsFormsHub.tsx                   (section grouping + status labels)
+src/pages/e-signature/ESignatureDashboard.tsx           (section grouping + status labels)
+supabase/functions/esign-send-test-email/index.ts       (new — owner-only, sends to infoo.jane@gmail.com)
+supabase/migrations/<ts>_esign_locked_template.sql      (new row in outreach_locked_payloads)
+```
 
-### 7. Premium CRM exports and category report configurator
-- Upgrade relationship exports to use the same premium Excel style: wide columns, readable headers, generated date, source date range, frozen rows, autofilter.
-- Add report dialog for Brokerages / Developers / Investors with:
-  - week / month / quarter / custom date range
-  - selectable metrics: meetings, briefings, breakfast events, inquiries, registered companies, sent emails, groups created, follow-ups
-  - saved report presets
-  - default “include all” behavior
+### Out of scope this turn
+- CRM Network merge, dropdown filters, per-row CRM actions, Investor toggle, category report configurator — these stay queued for Turns 3 and 4.
 
-### 8. Documents/forms card identity
-- Upgrade both `/owner/documents/forms` and `/e-signature` cards to show:
-  - document number/code
-  - client name
-  - client initials/abbreviation
-  - agreement type: Leasing / Selling
-  - property summary: type, building/community, unit, bedrooms, BUA, reference number
-  - status badge with correct wording
-- Fix “draft” wording for generated templates: use **Ready for review** when the agreement has client/property data but has not been sent.
-- Add filters by document type, client, nationality, location, bedrooms, property type, status, and doc number.
-
-### 9. Existing envelope regeneration and Omar validation
-- Identify Omar’s existing envelope and any stale PAA drafts.
-- Regenerate the PDF using the current Property Finder-style PAA layout without deleting the envelope.
-- Confirm Omar’s card shows his name, doc number, and property summary outside the document.
-
-### 10. Send-for-signature email wording and test email
-- Replace ambiguous “owner name” wording in the editor UI with **Sender signature** or **Company signature**.
-- Default email signature to:
-  - **JBJ GLOBAL REAL ESTATE**
-  - sender name **Jane Bou Jaoude** only where a personal sender is required
-- Default test recipient to `infoo.jane@gmail.com` as requested.
-- Send one real test “send for signature review” email after implementation and capture proof: function response/message id or email log entry.
-
-### 11. Legacy document engine cleanup
-- Remove or fully quarantine old `documents-send` / `documents-public-fill` paths so the UI cannot route users into the wrong signing engine.
-- Preserve old data for audit only; no active UI should use the legacy engine.
-
-### 12. Proof and end-to-end checks before marking done
-I will not mark tasks complete until verified. Proof package will include:
-- Screenshot of CRM unified workspace showing cleaned counts and dropdown filters.
-- Screenshot of CRM row/card with Notes, Calendar, Task, Investor toggle, and Send Agreement actions.
-- Screenshot of upgraded documents/forms card showing Omar/client + doc number + property summary.
-- Screenshot of PAA preview with monogram header/footer and aligned signature row.
-- Screenshot of send-for-signature dialog showing `infoo.jane@gmail.com`, editable subject/body, and no ambiguous owner-name label.
-- Database proof queries showing fake/legacy active CRM rows are zero.
-- Test email proof: edge function success and message/log identifier.
-
-## Technical notes
-- Use existing Lovable Cloud tables where possible: `crm_leads`, `crm_brokerages`, `crm_developer_registry`, `crm_clients`, `esign_envelopes`, `esign_recipients`.
-- Any new persistence needed for tasks/report presets will use owner-scoped tables with access rules.
-- Keep all styling on the champagne/gold/ink design system and avoid adding new visual themes.
-- Do not delete real CRM data; fake/legacy rows will be soft-deleted for audit safety.
+After you approve this plan I'll implement it, trigger one real test email to `infoo.jane@gmail.com`, and return with the `email_send_log` proof.
