@@ -25,6 +25,7 @@ import { TemplateChromeStudio } from "@/components/e-signature/TemplateChromeStu
 import { useOwnerSignatureAssets } from "@/hooks/useOwnerSignatureAssets";
 import { SendForSignatureDialog } from "@/components/e-signature/SendForSignatureDialog";
 import ExportEnvelopeDialog from "@/components/e-signature/ExportEnvelopeDialog";
+import { isReadyDraft, computeDisplayStatus, pickClientName, pickPropertyContext, maskPhone, maskEmail } from "@/pages/e-signature/envelopeStatus";
 
 type EnvelopeStatus = 'draft' | 'sent' | 'viewed' | 'partially_signed' | 'completed' | 'declined' | 'expired' | 'voided';
 type RecipientStatus = 'pending' | 'sent' | 'delivered' | 'viewed' | 'signed' | 'declined';
@@ -394,15 +395,20 @@ export default function EnvelopeDetail() {
             </Button>
             <div className="min-w-0">
               <div className="flex items-center gap-3 flex-wrap">
-                {docNumber && (
-                  <span className="text-[10px] tracking-[0.16em] text-[#1A1A1A]/70 uppercase border border-[#B89555]/50 rounded px-2 py-0.5 bg-[#F7F2EA]">
-                    {docNumber}
-                  </span>
-                )}
-                <h1 className="text-2xl font-bold text-[#1A1A1A] truncate">{envelope.name}</h1>
-                <Badge className={`${config.color} flex items-center gap-1`}>{config.icon}{config.label}</Badge>
+                <h1 className="text-2xl font-bold text-[#1A1A1A] truncate">
+                  {docNumber || envelope.name}
+                </h1>
+                <Badge className={`${config.color} flex items-center gap-1`}>
+                  {config.icon}
+                  {envelope.status === "draft" && isReadyDraft(envelope) ? "Ready" : config.label}
+                </Badge>
               </div>
-              {envelope.description && <p className="text-[#1A1A1A]/70 mt-1 text-sm">{envelope.description}</p>}
+              <p className="text-[#1A1A1A]/70 mt-1 text-sm">
+                {envelope.template_key === "jbj-property-advertising-agreement"
+                  ? "Property Advertising Agreement — Leasing"
+                  : envelope.name}
+                {envelope.description ? ` · ${envelope.description}` : ""}
+              </p>
             </div>
           </div>
         </div>
