@@ -236,6 +236,9 @@ export function buildPAAHtml(
   const chrome: Required<TemplateChrome> = { ...DEFAULT_CHROME, ...(opts.chrome || {}) };
   const accent = chrome.accent;
   const ink = chrome.ink;
+  const hidden = new Set<string>(opts.hiddenFields || []);
+  const fu = (label: string, value: string, key: string) =>
+    fieldUnderline(label, value, key, { hidden });
 
   // Conditionals (smart fields)
   const isVacant = /vacant/i.test(get("status_vacant_tenanted"));
