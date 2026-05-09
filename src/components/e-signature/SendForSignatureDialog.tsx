@@ -14,7 +14,9 @@ import { openWhatsApp } from "@/utils/contactActions";
 const isValidEmail = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.trim());
 
 const DEFAULT_SUBJECT = "Please sign — {{doc_title}} · {{doc_number}}";
-const DEFAULT_BODY = `Dear {{landlord_name}},
+// {{sender_signature}} is the signature block at the bottom of the email — it is
+// always YOUR brand (Jane Bou Jaoude · JBJ GLOBAL REAL ESTATE), never the client.
+const DEFAULT_BODY = `Dear {{client_name}},
 
 Attached is your {{doc_title}} prepared by JBJ Global Real Estate.
 
@@ -22,15 +24,14 @@ Kindly review and digitally sign at your earliest convenience using the secure l
 
 Thank you for your continued trust.
 
-— {{owner_name}}
-JBJ GLOBAL REAL ESTATE`;
+{{sender_signature}}`;
 
 const MERGE_TAGS = [
-  { tag: "{{landlord_name}}", help: "Client name" },
+  { tag: "{{client_name}}", help: "Recipient (client) name" },
   { tag: "{{doc_number}}", help: "Document number" },
   { tag: "{{doc_title}}", help: "Document title" },
   { tag: "{{signing_link}}", help: "jbj.ae signing link" },
-  { tag: "{{owner_name}}", help: "Sender name" },
+  { tag: "{{sender_signature}}", help: "Your brand signature (Jane · JBJ GLOBAL REAL ESTATE)" },
 ];
 
 interface Props {
@@ -73,10 +74,15 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
   }, [envelope?.id, open]);
 
   const tokens = useMemo(() => ({
+    // Recipient (client) merge tags — both names are accepted for back-compat.
+    client_name: primaryRecipient?.name || (envelope?.template_field_values as any)?.landlord_name || "Client",
     landlord_name: primaryRecipient?.name || (envelope?.template_field_values as any)?.landlord_name || "Client",
     doc_number: docNumber,
     doc_title: docTitle,
-    owner_name: envelope?.sender_name || "JBJ Global Real Estate",
+    // Sender block — never the client. Always JBJ + Jane (or whoever is signed in).
+    sender_signature: `— ${envelope?.sender_name || "Jane Bou Jaoude"}\nJBJ GLOBAL REAL ESTATE`,
+    // Legacy alias kept so older drafts still interpolate cleanly.
+    owner_name: envelope?.sender_name || "Jane Bou Jaoude",
     signing_link: primaryRecipient?.signing_token ? `${PUBLIC_DOMAIN}/sign/${primaryRecipient.signing_token}` : `${PUBLIC_DOMAIN}/sign/...`,
   }), [primaryRecipient, envelope, docNumber, docTitle]);
 

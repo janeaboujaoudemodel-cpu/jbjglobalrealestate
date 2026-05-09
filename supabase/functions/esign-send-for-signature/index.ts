@@ -74,12 +74,17 @@ Deno.serve(async (req) => {
       const docNumber = (envelope.metadata as any)?.doc_number || "";
       const fieldVals = (envelope.template_field_values as any) || {};
 
-      // Build merge-tag context — use interpolated values from client if provided
+      // Build merge-tag context — use interpolated values from client if provided.
+      // {{sender_signature}} is the brand sign-off at the bottom of the email.
+      // It is always YOUR side (Jane · JBJ), never the client.
+      const senderName = envelope.sender_name || "Jane Bou Jaoude";
       const tokens: Record<string, string> = {
+        client_name: recipient.name || fieldVals.landlord_name || "Client",
         landlord_name: recipient.name || fieldVals.landlord_name || "Client",
         doc_number: docNumber,
         doc_title: envelope.name || "Property Advertising Agreement",
-        owner_name: envelope.sender_name || "JBJ Global Real Estate",
+        sender_signature: `— ${senderName}\nJBJ GLOBAL REAL ESTATE`,
+        owner_name: senderName, // legacy alias
         signing_link: signingUrl,
       };
       const interp = (s: string) =>
@@ -90,7 +95,7 @@ Deno.serve(async (req) => {
         : interp(envelope.email_subject || `Please sign — {{doc_title}} · {{doc_number}}`);
       const rawBody = interpolated_body
         ? interpolated_body
-        : (envelope.email_message || `Dear {{landlord_name}},\n\nKindly review and sign your {{doc_title}}.\n\n— {{owner_name}}`);
+        : (envelope.email_message || `Dear {{client_name}},\n\nKindly review and sign your {{doc_title}}.\n\n{{sender_signature}}`);
       const finalBodyHtml = interp(rawBody)
         .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
         .replace(/\n/g, "<br/>");

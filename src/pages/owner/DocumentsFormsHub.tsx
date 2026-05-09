@@ -21,13 +21,56 @@ function useEnvelopes(status?: string) {
   return useQuery({
     queryKey: ["esign_envelopes_hub", status ?? "all"],
     queryFn: async () => {
-      let q = supabase.from("esign_envelopes").select("id,name,status,category,created_at,signed_document_url,template_key").order("created_at", { ascending: false });
+      // Pull the fields needed for the rich card summary (client + property + doc number).
+      let q = supabase
+        .from("esign_envelopes")
+        .select("id,name,status,category,created_at,signed_document_url,template_key,template_field_values,metadata,esign_recipients(name,email,phone,metadata)")
+        .order("created_at", { ascending: false });
       if (status) q = q.eq("status", status as any);
       const { data, error } = await q;
       if (error) throw error;
       return data ?? [];
     },
   });
+}
+
+// Card summary helpers (kept local so this page does not depend on dashboard internals).
+function clientNameOf(e: any): string {
+  const v = (e?.template_field_values as any) || {};
+  if (v.landlord_name) return String(v.landlord_name);
+  const recs: any[] = e?.esign_recipients || [];
+  const client = recs.find((r) => r?.metadata?.role === "client") || recs[0];
+  return client?.name || "Unnamed client";
+}
+function clientInitials(name: string): string {
+  return name.split(/\s+/).filter(Boolean).slice(0, 2).map((p) => p[0]?.toUpperCase() || "").join("") || "—";
+}
+function propertyOf(e: any): string {
+  const v = (e?.template_field_values as any) || {};
+  const parts = [v.property_type, v.building_name || v.community || v.street_name, v.unit_number ? `Unit ${v.unit_number}` : ""].filter(Boolean);
+  return parts.join(" · ");
+}
+function sizeOf(e: any): string {
+  const v = (e?.template_field_values as any) || {};
+  const beds = v.bedrooms ? (/^stu/i.test(String(v.bedrooms)) || String(v.bedrooms) === "0" ? "Studio" : `${v.bedrooms} bed`) : "";
+  const bua = v.bua_sqft ? `${v.bua_sqft} sqft` : "";
+  return [beds, bua].filter(Boolean).join(" · ");
+}
+function docNumberOf(e: any): string {
+  return (e?.metadata as any)?.doc_number || (e?.template_field_values as any)?.doc_number || "";
+}
+function kindLabelOf(e: any): string {
+  if (e?.template_key === "jbj-property-advertising-agreement") return "Leasing";
+  if (e?.template_key === "jbj-listing-authorisation-selling") return "Selling";
+  return e?.category ? String(e.category) : "";
+}
+// "Draft" with client + property data is really "Ready for review" — not unfinished.
+function statusLabelOf(e: any): string {
+  if (e?.status !== "draft") return String(e?.status || "draft");
+  const v = (e?.template_field_values as any) || {};
+  const hasClient = !!(v.landlord_name && (v.mobile_number || v.email_address));
+  const hasProperty = !!(v.building_name || v.community || v.property_reference_no);
+  return hasClient && hasProperty ? "ready" : "draft";
 }
 
 export default function DocumentsFormsHub() {
@@ -172,26 +215,63 @@ export default function DocumentsFormsHub() {
           ].map(({ value, rows, empty }) => (
             <TabsContent key={value} value={value} className="mt-4">
               {!rows.length ? <div className="text-sm text-[#1A1A1A]/60">{empty}</div> : (
-                <div className="space-y-2">
-                  {rows.map((e: any) => (
-                    <Card key={e.id} className="p-4 bg-[#F7F2EA] border-[#B89555]/30 flex items-center justify-between">
-                      <div>
-                        <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/60">{e.category} · {e.status}</div>
-                        <div className="font-medium text-[#1A1A1A]">{e.name}</div>
-                        <div className="text-xs text-[#1A1A1A]/60">{new Date(e.created_at).toLocaleString()}</div>
-                      </div>
-                      <div className="flex gap-2">
-                        {e.signed_document_url && (
-                          <Button size="sm" variant="outline" asChild>
-                            <a href={e.signed_document_url} target="_blank" rel="noreferrer">
-                              <ExternalLink className="w-3 h-3 mr-1" /> Download
-                            </a>
-                          </Button>
-                        )}
-                        <Button size="sm" variant="gold" onClick={() => navigate(`/e-signature/${e.id}`)}>Open</Button>
-                      </div>
-                    </Card>
-                  ))}
+                <div className="grid md:grid-cols-2 gap-3">
+                  {rows.map((e: any) => {
+                    const client = clientNameOf(e);
+                    const initials = clientInitials(client);
+                    const property = propertyOf(e);
+                    const size = sizeOf(e);
+                    const dn = docNumberOf(e);
+                    const kind = kindLabelOf(e);
+                    const sLabel = statusLabelOf(e);
+                    const sCls =
+                      sLabel === "completed" ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+                      : sLabel === "sent" ? "bg-blue-50 text-blue-800 border-blue-200"
+                      : sLabel === "ready" ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/60"
+                      : "bg-[#F7F2EA] text-[#1A1A1A]/80 border-[#B89555]/30";
+                    return (
+                      <Card key={e.id} className="p-4 bg-[#F7F2EA] border-[#B89555]/30">
+                        <div className="flex items-start gap-3">
+                          {/* Initials chip — gives a quick visual handle per client */}
+                          <div className="shrink-0 w-10 h-10 rounded-full bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center text-sm font-semibold text-[#1A1A1A]">
+                            {initials}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-1.5 flex-wrap mb-1">
+                              {dn && (
+                                <span className="text-[10px] tracking-[0.16em] uppercase text-[#1A1A1A]/80 border border-[#B89555]/40 rounded px-2 py-0.5 bg-white/70">{dn}</span>
+                              )}
+                              {kind && (
+                                <span className="text-[10px] tracking-[0.14em] uppercase text-[#1A1A1A] border border-[#B89555]/40 rounded px-2 py-0.5 bg-[#EFE6D6]">{kind}</span>
+                              )}
+                              <span className={`text-[10px] tracking-[0.14em] uppercase rounded px-2 py-0.5 border ${sCls}`}>
+                                {sLabel === "ready" ? "Ready" : sLabel.replace(/_/g, " ")}
+                              </span>
+                            </div>
+                            <div className="font-semibold text-[#1A1A1A] truncate">{client}</div>
+                            {property && <div className="text-xs text-[#1A1A1A]/80 truncate">{property}</div>}
+                            {size && <div className="text-[11px] text-[#1A1A1A]/70 truncate">{size}</div>}
+                            <div className="text-[11px] text-[#1A1A1A]/60 mt-1 truncate">
+                              {e.name}
+                            </div>
+                            <div className="text-[11px] text-[#1A1A1A]/55 mt-0.5">
+                              {new Date(e.created_at).toLocaleString()}
+                            </div>
+                          </div>
+                          <div className="flex flex-col gap-2 items-end shrink-0">
+                            <Button size="sm" variant="gold" onClick={() => navigate(`/e-signature/${e.id}`)}>Open</Button>
+                            {e.signed_document_url && (
+                              <Button size="sm" variant="outline" asChild>
+                                <a href={e.signed_document_url} target="_blank" rel="noreferrer">
+                                  <ExternalLink className="w-3 h-3 mr-1" /> Download
+                                </a>
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+                      </Card>
+                    );
+                  })}
                 </div>
               )}
             </TabsContent>
