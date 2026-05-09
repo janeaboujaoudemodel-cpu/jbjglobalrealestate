@@ -1,6 +1,9 @@
 // Generates 4 alternative chrome (header + footer) variants for the JBJ
 // PAA template using the Lovable AI Gateway. No API key required from user.
-import { corsHeaders } from "@supabase/supabase-js/cors";
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
 
 interface ChromeRequest {
   current?: Record<string, unknown>;
