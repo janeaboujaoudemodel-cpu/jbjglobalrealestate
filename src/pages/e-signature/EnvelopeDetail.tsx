@@ -204,12 +204,17 @@ export default function EnvelopeDetail() {
   const handleWhatsApp = (recipient: any) => {
     if (!recipient?.signing_token) { toast.error("No signing token"); return; }
     const url = buildSigningUrl(recipient.signing_token);
-    const phoneDigits = String(recipient.phone || "").replace(/[^\d]/g, "");
-    const text = encodeURIComponent(`Hi ${recipient.name}, please review and sign "${docNumber || envelope?.name}":\n${url}`);
-    const wa = phoneDigits
-      ? `https://wa.me/${phoneDigits}?text=${text}`
-      : `https://wa.me/?text=${text}`;
-    window.open(wa, "_blank");
+    const text = `Hi ${recipient.name}, please review and sign "${docNumber || envelope?.name}":\n${url}`;
+    openWhatsApp(recipient.phone, text);
+  };
+
+  const handleQuickEmail = (recipient: any) => {
+    if (!recipient?.email) { toast.error("No email on file"); return; }
+    if (!recipient?.signing_token) { toast.error("No signing token"); return; }
+    const url = buildSigningUrl(recipient.signing_token);
+    const subject = `Please sign — ${docNumber || envelope?.name}`;
+    const body = `Dear ${recipient.name},\n\nKindly review and digitally sign "${docNumber || envelope?.name}" via the secure link below:\n\n${url}\n\nThank you,\nJBJ Global Real Estate`;
+    openEmail({ to: recipient.email, subject, body });
   };
 
   const handleSend = async () => {
