@@ -74,6 +74,11 @@ export default function ESignatureDashboard() {
   const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<EnvelopeStatus | "all">("all");
+  const [kindFilter, setKindFilter] = useState<TemplateKind | "all">("all");
+  const [bedroomsFilter, setBedroomsFilter] = useState<string>("all");
+  const [propTypeFilter, setPropTypeFilter] = useState<string>("all");
+  const [locationFilter, setLocationFilter] = useState<string>("");
+  const [nationalityFilter, setNationalityFilter] = useState<string>("");
 
   const { data: envelopes, isLoading, refetch } = useQuery({
     queryKey: ["esign-envelopes", user?.id],
@@ -104,18 +109,41 @@ export default function ESignatureDashboard() {
     expired: envelopes?.filter(e => ["expired", "declined", "voided"].includes(e.status)).length || 0,
   };
 
+  const q = searchQuery.trim().toLowerCase();
+  const loc = locationFilter.trim().toLowerCase();
+  const nat = nationalityFilter.trim().toLowerCase();
+
   const filteredEnvelopes = envelopes?.filter(envelope => {
-    const matchesSearch = 
-      envelope.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      envelope.esign_recipients.some(r => 
-        r.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        r.email.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    
-    const matchesStatus = statusFilter === "all" || envelope.status === statusFilter;
-    
-    return matchesSearch && matchesStatus;
+    const v = (envelope.template_field_values as any) || {};
+    const haystack = buildSearchHaystack(envelope);
+    if (q && !haystack.includes(q)) return false;
+    if (statusFilter !== "all" && envelope.status !== statusFilter) return false;
+    if (kindFilter !== "all" && getTemplateKind(envelope) !== kindFilter) return false;
+    if (bedroomsFilter !== "all" && normaliseBedrooms(v.bedrooms) !== bedroomsFilter) return false;
+    if (propTypeFilter !== "all") {
+      const pt = String(v.property_type || "").toLowerCase();
+      if (pt !== propTypeFilter.toLowerCase()) return false;
+    }
+    if (loc) {
+      const place = `${v.building_name || ""} ${v.community || ""} ${v.street_name || ""} ${v.unit_number || ""}`.toLowerCase();
+      if (!place.includes(loc)) return false;
+    }
+    if (nat) {
+      const blob = `${v.nationality || ""} ${v.passport_number || ""} ${v.additional_notes || ""}`.toLowerCase();
+      if (!blob.includes(nat)) return false;
+    }
+    return true;
   });
+
+  const resetFilters = () => {
+    setKindFilter("all");
+    setBedroomsFilter("all");
+    setPropTypeFilter("all");
+    setLocationFilter("");
+    setNationalityFilter("");
+  };
+  const hasActiveAdvancedFilters =
+    kindFilter !== "all" || bedroomsFilter !== "all" || propTypeFilter !== "all" || !!loc || !!nat;
 
   const handleDelete = async (id: string) => {
     try {
