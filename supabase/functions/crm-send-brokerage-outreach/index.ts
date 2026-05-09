@@ -303,16 +303,15 @@ serve(async (req: Request) => {
       }
     }
 
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    const GMAIL_API_KEY = Deno.env.get("GOOGLE_MAIL_API_KEY");
-    if (!LOVABLE_API_KEY || !GMAIL_API_KEY) {
-      throw new Error("Gmail connector not configured");
+    // Brokerage outreach is sent via Resend on the verified jbj.ae domain.
+    // No Gmail connector — Gmail rewrites the From: header to the connected
+    // mailbox (e.g. janeaboujaoudemodel@gmail.com) which is not what we want.
+    if (!Deno.env.get("RESEND_API_KEY")) {
+      return new Response(JSON.stringify({
+        error: "RESEND_NOT_CONFIGURED",
+        message: "RESEND_API_KEY is not configured for this project.",
+      }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
-
-    // Outbound sender = the connected Gmail mailbox itself
-    // (infoo.jane@gmail.com). No Send-As alias verification is required
-    // because we send directly from the authenticated account, so Gmail
-    // will not rewrite the From: header.
 
     // Sender brand = represented developer (per-row → owner default → CITI Developer)
     const representedDeveloperName: string =
@@ -320,13 +319,25 @@ serve(async (req: Request) => {
       (settings?.default_brokerage_sender_developer_name && String(settings.default_brokerage_sender_developer_name).trim()) ||
       "CITI Developer";
 
-    // HARD LOCK: brokerage outreach is always sent as Jane from infoo.jane@gmail.com
-    // (the connected Gmail mailbox — Gmail cannot rewrite this header).
-    const FORCED_FROM_EMAIL = "infoo.jane@gmail.com";
-    const FORCED_FROM_DISPLAY = "Jane Bou Jaoude";
+    // HARD LOCK: brokerage outreach is always sent from CitiDevelopers@jbj.ae
+    // (verified Resend domain). Reply-To matches so replies thread to the
+    // same branded mailbox.
+    const FORCED_FROM_EMAIL = PRIMARY_SENDER;
+    const FORCED_FROM_DISPLAY = PRIMARY_SENDER_NAME;
     const fromName = FORCED_FROM_DISPLAY;
-    const replyTo = FORCED_FROM_EMAIL;
-    const WORKFLOW_FORBIDDEN_ADDRESSES = ["janeaboujaoudemodel@gmail.com", "jane@citideveloper.com"];
+    const replyTo = DEFAULT_REPLY_TO;
+    try {
+      enforceAllowedSender(FORCED_FROM_EMAIL);
+    } catch (senderErr: any) {
+      return new Response(JSON.stringify({
+        error: "INVALID_SENDER_DOMAIN",
+        message: senderErr?.message || "Sender domain not allowed.",
+      }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+
+    // Legacy guard list: keep these forbidden in envelope addresses so a
+    // bad CC/recipient cannot leak the email back through old Gmail mailboxes.
+    const WORKFLOW_FORBIDDEN_ADDRESSES = ["janeaboujaoudemodel@gmail.com", "janeaboujaoudenails@gmail.com"];
     const brkActiveCc = Array.isArray(settings?.brokerage_active_cc_emails)
       ? settings.brokerage_active_cc_emails.filter(Boolean)
       : [];
@@ -335,8 +346,7 @@ serve(async (req: Request) => {
     const ccList = body.ccEmailOverride
       ? String(body.ccEmailOverride).split(",").map((s: string) => s.trim()).filter(Boolean)
       : [...brkActiveCc];
-    // Skip the secondary CC: From is already infoo.jane@gmail.com, so a self-CC
-    // would just duplicate the message back to the same inbox.
+    // Drop any self-CC (From == CC would just duplicate the message).
     const SECONDARY_CC = FORCED_FROM_EMAIL;
     const filteredCc = ccList.filter((c) => c.toLowerCase() !== SECONDARY_CC.toLowerCase());
     ccList.length = 0;
