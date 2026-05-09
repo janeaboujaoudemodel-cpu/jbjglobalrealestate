@@ -10,9 +10,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  ArrowLeft, Download, Bell, Clock, CheckCircle2, XCircle, Eye, Send, FileSignature,
+  ArrowLeft, Download, Bell, Clock, CheckCircle2, XCircle, Eye, Send, FileSignature, FileText,
   User, Mail, Phone, Calendar, Globe, Shield, Loader2, Link as LinkIcon, Printer,
-  ExternalLink, MessageCircle, Edit3, Save, X, Plus, Sparkles,
+  ExternalLink, MessageCircle, Edit3, Save, X, Plus,
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
