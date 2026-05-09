@@ -1,0 +1,1 @@
+ALTER TABLE public.esign_envelopes ADD COLUMN IF NOT EXISTS sender_title text DEFAULT 'Founder & Chief Executive';

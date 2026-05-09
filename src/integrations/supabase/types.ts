@@ -12434,6 +12434,7 @@ export type Database = {
           sender_email: string
           sender_id: string
           sender_name: string | null
+          sender_title: string | null
           signed_document_url: string | null
           status: Database["public"]["Enums"]["esign_envelope_status"]
           template_field_values: Json | null
@@ -12463,6 +12464,7 @@ export type Database = {
           sender_email: string
           sender_id: string
           sender_name?: string | null
+          sender_title?: string | null
           signed_document_url?: string | null
           status?: Database["public"]["Enums"]["esign_envelope_status"]
           template_field_values?: Json | null
@@ -12492,6 +12494,7 @@ export type Database = {
           sender_email?: string
           sender_id?: string
           sender_name?: string | null
+          sender_title?: string | null
           signed_document_url?: string | null
           status?: Database["public"]["Enums"]["esign_envelope_status"]
           template_field_values?: Json | null
