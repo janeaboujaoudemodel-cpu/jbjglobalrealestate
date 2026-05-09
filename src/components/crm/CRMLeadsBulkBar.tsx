@@ -435,6 +435,7 @@ export default function CRMLeadsBulkBar({
           >
             <Copy className="h-4 w-4 mr-2" />
             Duplicate
+          </Button>
 
           <Button
             type="button"
