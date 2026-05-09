@@ -1,5 +1,5 @@
 /**
- * JBJ GLOBAL REAL ESTATE — Property Advertising Agreement for Real Estate Owners
+ * JBJ GLOBAL REAL ESTATE — Property Advertising Agreement
  * Layout follows the Property Finder standard (radio chips, two-column fields,
  * EXCLUSIVE / NON-EXCLUSIVE + period chips), rendered with our champagne-gold
  * brand chrome. Header & footer are user-customisable via the `chrome` arg.
