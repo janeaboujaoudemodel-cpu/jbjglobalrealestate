@@ -450,6 +450,11 @@ export default function CRMNetwork() {
           companyName={hubTarget.companyName}
         />
       )}
+      <PersonDetailDrawer
+        open={personOpen}
+        onOpenChange={setPersonOpen}
+        leadId={personId}
+      />
     </div>
   );
 }
