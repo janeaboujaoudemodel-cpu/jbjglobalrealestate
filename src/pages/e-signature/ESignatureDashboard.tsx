@@ -437,8 +437,9 @@ export default function ESignatureDashboard() {
                     const clientName = pickClientName(envelope);
                     const propertyCtx = pickPropertyContext(envelope);
                     const v = (envelope.template_field_values as any) || {};
-                    const phoneMasked = maskPhone(v.mobile_number);
-                    const emailMasked = maskEmail(v.email_address);
+                    // Owner/admin sees full details — no masking.
+                    const phoneFull = v.mobile_number || "";
+                    const emailFull = v.email_address || "";
                     const kind = getTemplateKind(envelope);
                     const kindLabel = getTemplateKindLabel(kind);
                     const templateLabel =
