@@ -1,65 +1,87 @@
-I found the immediate cause: the hub is querying raw `status = draft` and labeling those rows as “Forms Generated”, so empty unnamed drafts are counted/generated incorrectly. The dashboard also masks phone/email by design, and the document preview only has a red hover/remove confirm instead of visible field controls.
+## Goal
 
-Plan to fix immediately:
+Replace the current scattered CRM (10+ separate routes: `/owner/crm`, `/crm/leads`, `/crm/employees`, `/crm/relationships`, `/crm/network`, `/crm/brokers`, `/crm/campaigns`, `/crm/tasks`, `/crm/calendar`, `/crm/notes`, `/crm/reminders`, `/admin/crm`) with **one unified Premium CRM** at `/owner/crm`, owner-only, with an in-page subheader that swaps sections without route changes.
 
-1. Document hub classification and speed
-- Split documents into clear buckets:
-  - Draft Applications: empty/incomplete template drafts, including the two “Unnamed client” selling forms.
-  - Forms Generated: completed template data ready for review/send.
-  - Pending Signature.
-  - Signed.
-  - Recently Deleted.
-- Exclude `deleted_at` rows from normal lists and show them only in Recently Deleted.
-- Replace multiple separate envelope queries with one optimized query and client-side bucket counts to stop the slow loading/flicker.
-- Add bulk-select checkboxes for Draft Applications / Forms Generated / Recently Deleted.
-- Add bulk actions: move to Recently Deleted, restore, and clear selection.
+## Single-page layout (`/owner/crm`)
 
-2. Correct existing document data display
-- Keep the two empty unnamed forms as Draft Applications.
-- Ensure Omar’s completed document displays correctly with full client name and full phone/email wherever owner/admin sees the card.
-- Remove masked phone/email display on owner/admin e-sign cards and show full values.
+```
+┌─ Top bar ─────────────────────────────────────────────────┐
+│ JBJ CRM · search · Reset · global add                     │
+├─ Subheader (primary tabs) ────────────────────────────────┤
+│ All Leads │ Flagged │ VIP │ Lead Mgmt │ Relationships │   │
+│ Employees │ Campaigns │ Tasks │ Calendar │ Insights      │
+├─ Secondary bar (only on Relationships) ───────────────────┤
+│ Investors │ Developers │ Dev Sales Reps │ Brokers │       │
+│ Brokerage Agencies                                        │
+├─ Content area (no navigation, in-page swap) ──────────────┤
+└───────────────────────────────────────────────────────────┘
+```
 
-3. Template creation without client email
-- Allow creating/saving a template draft without client email.
-- If no email exists, keep the client recipient out until send time and support WhatsApp/copy-link flow once recipient details are added.
-- Keep email sending protected: email channel still requires a valid recipient email at send time.
+All sections render inside the same shell as panels (no full page reloads). Existing components are reused — nothing is deleted, only re-mounted under the unified shell.
 
-4. Document preview/editor controls
-- Replace the red-only hover behavior in the preview with visible inline controls on editable fields:
-  - X/remove field.
-  - Edit field.
-  - Approve field.
-  - Clearer selected/hover state.
-- Improve placed-signature fields in the field placer so delete and resize handles are reliably visible and not hidden/clipped.
-- Keep resizing handles on all corners and allow direct field value edits from the side list.
+### Tab → component mapping (reuse existing code, no rewrites)
 
-5. “Approve” property details logic
-- Add an Approve action that applies smart visibility rules to the rendered document.
-- For Omar’s/current PAA data, property details will show Apartment, Furnished, and the correct occupancy state.
-- Because you specified it is currently tenanted with vacating date on the 24th, the approved document should show Tenanted + Vacating Date 24th, not incorrectly force Vacant before that date.
-- Hide non-applicable options from the approved render: Villa, Office, Warehouse, Unfurnished, and any irrelevant fields.
-- Always include Plot Number as a field in the template form/schema per Property Finder requirements, even when plot size is not applicable.
+| Tab | Reuses |
+|---|---|
+| All Leads | `CRMLeadsTableV2` (default filter: none) |
+| Flagged | `CRMLeadsTableV2` (filter: `is_flagged=true`) |
+| VIP | `CRMLeadsTableV2` (filter: tag `VIP`) |
+| Lead Management | `CRMEnhancedDashboard` + bulk tools |
+| Relationships → Investors | `CRMLeadsTableV2` (filter: category=investor) |
+| Relationships → Developers | `CRMNetwork` developers grid + `CompanyHub` drawer |
+| Relationships → Dev Sales Reps | new view from `crm_developer_registry` contacts (already present) |
+| Relationships → Brokers | `BrokersRegistry` |
+| Relationships → Brokerage Agencies | `CRMNetwork` brokerages grid + `CompanyHub` drawer |
+| Employees | `EmployeesHub` (DOB, leave, warnings, scoring, deals — already exists) |
+| Campaigns | `CampaignComposer` |
+| Tasks | `CRMTasks` content |
+| Calendar | `CRMCalendar` content |
+| Insights | existing analytics widgets |
 
-6. Trade license company naming
-- Ensure generated agreements use the full registered company suffix `LLC SOC` when writing the company legal name, while keeping the public brand name as `JBJ GLOBAL REAL ESTATE` where appropriate.
+### Cross-table mirroring (the user's "show same data in CRM table")
 
-7. CRM merge and dropdown filters
-- Complete the CRM contact merge path around the unified contact view/RPC standard.
-- Add requested dropdown filters for CRM lists: Stage, Source, Owner/Assignee, and Tag.
-- Keep filters URL/state-safe and compatible with bulk actions.
+Add a unified read-only DB view `vw_crm_unified_contacts` that UNIONs:
+- `crm_leads` (investors / general)
+- `crm_brokerages` (as contact rows, type=brokerage)
+- `crm_developer_registry` (as contact rows, type=developer)
+- developer/brokerage sales reps (their `contacts` JSON columns)
 
-8. Download/blank-preview hardening
-- Keep private signed-document downloads using authenticated blob fetch.
-- Replace remaining direct private-storage iframe/open links in e-signature pages with authenticated/proxied URLs so blank previews and “authentication required” errors do not recur.
+The All Leads / Investors / Brokers / Developers tabs all read from this view filtered by `entity_type`, so the same contacts appear in both Relationships and the unified CRM table without duplicating storage. RLS: owner-only via existing `requireOwnerAuth` and `has_role(...,'owner')` policies.
 
-9. E2E screenshot verification
-- Test the full flow end-to-end:
-  - Create draft without email.
-  - Fill/approve PAA fields.
-  - Confirm Draft Applications vs Forms Generated buckets.
-  - Send for signature.
-  - Sign via public signing link.
-  - Confirm signed PDF download and audit certificate download.
-  - Confirm Recently Deleted restore.
-  - Confirm CRM filters.
-- Capture screenshots for the major steps and fix any layout/data regressions found before marking complete.
+## Fake / dummy data purge
+
+Run one migration that deletes obvious seed/test rows from `crm_leads`, `crm_brokerages`, `crm_developer_registry` where:
+- `email ILIKE '%example.com'` or `'%test%'` or `'%demo%'`
+- `full_name ILIKE 'test %' or 'demo %' or 'lorem %'`
+- `source = 'seed'` (if present)
+
+Real rows visible in the screenshot (Brandlio Ai, Ubaid, minishrivastavaa17, Salim Akil, Jane Abou Jaoude, etc.) are preserved. A pre-flight `SELECT` is shown to the user for confirmation before the DELETE migration runs.
+
+## Security
+
+- Wrap unified `/owner/crm` shell in `<OwnerGuard>` (already used elsewhere) + `requireOwnerAuth` on every edge call.
+- Add `owner_only` RLS check on `vw_crm_unified_contacts` via `security_invoker=on` + `has_role(auth.uid(),'owner')`.
+- All other CRM routes (`/crm`, `/crm/*`, `/admin/crm`) become `<Navigate to="/owner/crm" replace />` so there is exactly one entrance.
+- No PII exposed publicly (per existing privacy memory).
+
+## Files touched (no deletions of features)
+
+- **New**: `src/pages/owner/crm/UnifiedCRM.tsx` (shell + tab state)
+- **New**: `src/components/crm/unified/SubHeader.tsx`, `RelationshipsSubBar.tsx`
+- **Edit**: `src/routes/OwnerRoutes.tsx` — collapse all `crm/*` child routes to redirects to `/owner/crm?tab=...`
+- **Edit**: `src/routes/AdminRoutes.tsx` — keep existing redirects
+- **Migration**: create `vw_crm_unified_contacts` view + RLS, plus targeted DELETE of dummy rows (preview first)
+- Sidebar `CRM` link already points to `/owner/crm` — no change needed
+
+## Out of scope (kept as-is)
+
+- All existing CRM logic, merge, filters, bulk bar, locked-send, single-agency rule, audit logs.
+- Campaigns / Resend / quota system.
+- Existing Company Hub drill-down at `/owner/crm/company/:type/:name` (still reachable via drawer link).
+
+## Rollout
+
+1. DB migration (view + cleanup) — preview SELECT first, user confirms.
+2. Build `UnifiedCRM.tsx` shell with tabs wired to existing components.
+3. Flip `OwnerRoutes` redirects.
+4. Verify each tab renders, no data loss, owner-only access.
