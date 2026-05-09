@@ -385,12 +385,31 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
           </div>
         </div>
 
-        <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={sending}>Cancel</Button>
-          <Button variant="gold" onClick={handleSend} disabled={sending}>
-            {sending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Send className="w-4 h-4 mr-2" />}
-            Send
-          </Button>
+        <DialogFooter className="flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-2 text-[11px] text-[#1A1A1A]/70">
+            {lockedAt ? (
+              <span className="inline-flex items-center gap-1"><ShieldCheck className="w-3.5 h-3.5 text-emerald-700" /> Locked default · approved {new Date(lockedAt).toLocaleDateString()}</span>
+            ) : lastTestId ? (
+              <span className="inline-flex items-center gap-1"><FlaskConical className="w-3.5 h-3.5" /> Test sent — review your inbox, then Approve & Lock</span>
+            ) : (
+              <span className="inline-flex items-center gap-1"><FlaskConical className="w-3.5 h-3.5" /> Send a test to infoo.jane@gmail.com first</span>
+            )}
+          </div>
+          <div className="flex flex-wrap gap-2 justify-end">
+            <Button variant="outline" onClick={() => onOpenChange(false)} disabled={sending || testing || approving}>Cancel</Button>
+            <Button variant="outline" onClick={handleSendTest} disabled={sending || testing || approving} className="border-[#B89555]/50">
+              {testing ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <FlaskConical className="w-4 h-4 mr-2" />}
+              Send Test to Me
+            </Button>
+            <Button variant="outline" onClick={handleApproveLock} disabled={sending || testing || approving || !lastTestId} className="border-emerald-600/50 text-emerald-800" title={!lastTestId ? "Send a test first" : "Lock this template as your default"}>
+              {approving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Lock className="w-4 h-4 mr-2" />}
+              Approve & Lock
+            </Button>
+            <Button variant="gold" onClick={handleSend} disabled={sending || testing || approving}>
+              {sending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Send className="w-4 h-4 mr-2" />}
+              Send for Signature
+            </Button>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>
