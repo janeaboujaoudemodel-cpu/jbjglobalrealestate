@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { formatDisplayDate } from "@/utils/formatDate";
-import { useNavigate } from "react-router-dom";
+// useNavigate no longer needed after filter refactor
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -65,18 +65,25 @@ export default function CRMLeadsTableV2({
   sourceFilter,
   isOwner = false,
 }: CRMLeadsTableV2Props) {
-  const navigate = useNavigate();
+  // navigate removed; reset clears state in-place
 
   const [loading, setLoading] = useState(true);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [assignedNames, setAssignedNames] = useState<Record<string, string>>({});
+  const [leadAssignees, setLeadAssignees] = useState<Record<string, string>>({});
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [assignLeadIds, setAssignLeadIds] = useState<string[]>([]);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [leadToDelete, setLeadToDelete] = useState<Lead | null>(null);
   const [agreementLead, setAgreementLead] = useState<Lead | null>(null);
+
+  // Inline filter dropdowns: Stage / Source / Assignee / Tag
+  const [stageFilter, setStageFilter] = useState<string>("");
+  const [sourceTypeFilter, setSourceTypeFilter] = useState<string>("");
+  const [assigneeFilter, setAssigneeFilter] = useState<string>("");
+  const [tagFilter, setTagFilter] = useState<string>(""); // "vip" | "unassigned" | ""
 
   const groupedStatuses = useMemo(() => {
     const groups: Record<string, typeof PIPELINE_STATUSES> = {
@@ -170,6 +177,7 @@ export default function CRMLeadsTableV2({
       const aRows = (assignmentRows || []) as unknown as AssignmentRow[];
       const leadToAssignee = new Map<string, string>();
       aRows.forEach((a) => leadToAssignee.set(a.lead_id, a.assigned_to_user_id));
+      setLeadAssignees(Object.fromEntries(leadToAssignee.entries()));
 
       const uniqueAssignees = Array.from(new Set(aRows.map((a) => a.assigned_to_user_id)));
       if (uniqueAssignees.length === 0) {
@@ -300,17 +308,42 @@ export default function CRMLeadsTableV2({
 
   const allVisibleSelected = leads.length > 0 && selected.size === leads.length;
 
+  const sourceTypeOptions = useMemo(() => {
+    const types = new Set<string>();
+    leads.forEach((l) => { if (l.lead_source_type) types.add(l.lead_source_type); });
+    return Array.from(types).sort();
+  }, [leads]);
+
+  const assigneeOptions = useMemo(() => {
+    const ids = new Set<string>();
+    Object.values(leadAssignees).forEach((id) => { if (id) ids.add(id); });
+    return Array.from(ids).map((id) => ({ id, name: assignedNames[id] || id.slice(0, 8) }));
+  }, [leadAssignees, assignedNames]);
+
   const filtered = useMemo(() => {
-    if (!search.trim()) return leads;
-    const q = search.toLowerCase();
+    const q = search.trim().toLowerCase();
     return leads.filter((l) => {
-      return (
-        l.full_name?.toLowerCase().includes(q) ||
-        l.phone_e164?.includes(search) ||
-        l.email_lower?.toLowerCase().includes(q)
-      );
+      if (q) {
+        const hit =
+          l.full_name?.toLowerCase().includes(q) ||
+          l.phone_e164?.includes(search) ||
+          l.email_lower?.toLowerCase().includes(q);
+        if (!hit) return false;
+      }
+      if (stageFilter && (l.state?.pipeline_status || "new") !== stageFilter) return false;
+      if (sourceTypeFilter && (l.lead_source_type || "") !== sourceTypeFilter) return false;
+      if (assigneeFilter) {
+        if (assigneeFilter === "__unassigned__") {
+          if (leadAssignees[l.id]) return false;
+        } else if (leadAssignees[l.id] !== assigneeFilter) {
+          return false;
+        }
+      }
+      if (tagFilter === "vip" && (l as any).vip !== true) return false;
+      if (tagFilter === "unassigned" && leadAssignees[l.id]) return false;
+      return true;
     });
-  }, [leads, search]);
+  }, [leads, search, stageFilter, sourceTypeFilter, assigneeFilter, tagFilter, leadAssignees]);
 
   const selectedIds = useMemo(() => Array.from(selected), [selected]);
 
@@ -345,12 +378,63 @@ export default function CRMLeadsTableV2({
             className="bg-[#FDFBF7]/80 border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:border-gold"
           />
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <select
+            value={stageFilter}
+            onChange={(e) => setStageFilter(e.target.value)}
+            className="h-9 rounded-lg border-2 border-gold/30 bg-[#FDFBF7] px-3 text-sm font-semibold text-[#1A1A1A] focus:outline-none focus:border-gold"
+            title="Filter by stage"
+          >
+            <option value="">All Stages</option>
+            {PIPELINE_STATUSES.map((s) => (
+              <option key={s.value} value={s.value}>{s.label}</option>
+            ))}
+          </select>
+          <select
+            value={sourceTypeFilter}
+            onChange={(e) => setSourceTypeFilter(e.target.value)}
+            className="h-9 rounded-lg border-2 border-gold/30 bg-[#FDFBF7] px-3 text-sm font-semibold text-[#1A1A1A] focus:outline-none focus:border-gold"
+            title="Filter by source"
+          >
+            <option value="">All Sources</option>
+            {sourceTypeOptions.map((t) => (
+              <option key={t} value={t}>{formatSourceLabel(t)}</option>
+            ))}
+          </select>
+          <select
+            value={assigneeFilter}
+            onChange={(e) => setAssigneeFilter(e.target.value)}
+            className="h-9 rounded-lg border-2 border-gold/30 bg-[#FDFBF7] px-3 text-sm font-semibold text-[#1A1A1A] focus:outline-none focus:border-gold"
+            title="Filter by owner / assigned broker"
+          >
+            <option value="">All Owners</option>
+            <option value="__unassigned__">Unassigned</option>
+            {assigneeOptions.map((a) => (
+              <option key={a.id} value={a.id}>{a.name}</option>
+            ))}
+          </select>
+          <select
+            value={tagFilter}
+            onChange={(e) => setTagFilter(e.target.value)}
+            className="h-9 rounded-lg border-2 border-gold/30 bg-[#FDFBF7] px-3 text-sm font-semibold text-[#1A1A1A] focus:outline-none focus:border-gold"
+            title="Filter by tag"
+          >
+            <option value="">All Tags</option>
+            <option value="vip">★ VIP</option>
+            <option value="unassigned">Unassigned</option>
+          </select>
           <Button
             type="button"
             variant="outline"
             size="sm"
-            onClick={() => { setSelected(new Set()); setSearch(""); navigate(0); }}
+            onClick={() => {
+              setSelected(new Set());
+              setSearch("");
+              setStageFilter("");
+              setSourceTypeFilter("");
+              setAssigneeFilter("");
+              setTagFilter("");
+            }}
             className="font-semibold border-gold/30 text-[#1A1A1A] hover:bg-gold/10"
           >
             Reset

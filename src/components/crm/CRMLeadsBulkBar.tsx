@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Copy, MessageSquare, Mail, RefreshCw, Trash2, UserPlus, X, Sparkles } from "lucide-react";
+import { Copy, MessageSquare, Mail, RefreshCw, Trash2, UserPlus, X, Sparkles, GitMerge } from "lucide-react";
 import { PIPELINE_STATUSES } from "./LeadStatusBadge";
 
 interface BrokerOption {
@@ -192,6 +192,74 @@ export default function CRMLeadsBulkBar({
     }
   };
 
+  const handleMerge = async () => {
+    if (count < 2) {
+      toast.error("Select at least 2 leads to merge");
+      return;
+    }
+    if (!confirm(`Merge ${count} leads into one? The oldest record is kept as primary; others are moved to Recently Deleted.`)) return;
+    setBusy(true);
+    try {
+      const { data: src, error: srcErr } = await supabase
+        .from("crm_leads")
+        .select("*")
+        .in("id", selectedIds)
+        .order("created_at", { ascending: true });
+      if (srcErr || !src || src.length < 2) {
+        toast.error(`Merge failed: ${srcErr?.message || "Need at least 2 leads"}`);
+        return;
+      }
+      const primary: any = src[0];
+      const dupes = src.slice(1);
+
+      // Coalesce non-null fields from duplicates into primary (don't overwrite existing values)
+      const merged: Record<string, any> = { ...primary };
+      const skipKeys = new Set([
+        "id", "created_at", "updated_at", "deleted_at",
+        "owner_user_id", "owner_type", "vip_tagged_at", "vip_tagged_by",
+      ]);
+      for (const d of dupes) {
+        for (const [k, v] of Object.entries(d)) {
+          if (skipKeys.has(k)) continue;
+          if (merged[k] == null || merged[k] === "") {
+            if (v != null && v !== "") merged[k] = v;
+          }
+        }
+      }
+      const mergeNote = `Merged ${dupes.length} duplicate(s) on ${new Date().toISOString().slice(0, 10)} (${dupes.map((d: any) => d.id.slice(0, 8)).join(", ")})`;
+      merged.notes = [primary.notes, mergeNote].filter(Boolean).join("\n");
+
+      // Update primary
+      const { id: _id, created_at: _c, ...updateFields } = merged;
+      const { error: upErr } = await supabase
+        .from("crm_leads")
+        .update(updateFields as any)
+        .eq("id", primary.id);
+      if (upErr) {
+        toast.error(`Merge failed: ${upErr.message}`);
+        return;
+      }
+
+      // Soft-delete the duplicates
+      const dupeIds = dupes.map((d: any) => d.id);
+      const { error: delErr } = await supabase.rpc("crm_soft_delete_leads", {
+        p_lead_ids: dupeIds,
+      });
+      if (delErr) {
+        toast.error(`Merge: dupes not removed: ${delErr.message}`);
+        return;
+      }
+
+      toast.success(`Merged ${dupes.length} duplicate(s) into ${primary.full_name || "primary lead"}`);
+      onClear();
+      onSuccess();
+    } catch (err: any) {
+      toast.error(`Merge failed: ${err?.message || "Unknown error"}`);
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const handleBroadcast = async () => {
     if (!broadcastMessage.trim()) {
       toast.error("Message is required");
@@ -367,6 +435,19 @@ export default function CRMLeadsBulkBar({
           >
             <Copy className="h-4 w-4 mr-2" />
             Duplicate
+          </Button>
+
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            onClick={handleMerge}
+            disabled={busy || count < 2}
+            className="font-semibold"
+            title={count < 2 ? "Select 2+ leads to merge" : "Merge selected leads into one"}
+          >
+            <GitMerge className="h-4 w-4 mr-2" />
+            Merge ({count})
           </Button>
 
           <Button
