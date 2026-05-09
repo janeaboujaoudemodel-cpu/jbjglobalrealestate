@@ -32,7 +32,7 @@ import {
 import { formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
 import { SUPABASE_URL } from "@/config/backend";
-import { computeDisplayStatus, pickClientName, pickPropertyContext, maskPhone, maskEmail } from "@/pages/e-signature/envelopeStatus";
+import { computeDisplayStatus, pickClientName, pickPropertyContext, maskPhone, maskEmail, getTemplateKind, getTemplateKindLabel, normaliseBedrooms, buildSearchHaystack, type TemplateKind } from "@/pages/e-signature/envelopeStatus";
 
 type EnvelopeStatus = 'draft' | 'sent' | 'viewed' | 'partially_signed' | 'completed' | 'declined' | 'expired' | 'voided';
 
@@ -74,6 +74,11 @@ export default function ESignatureDashboard() {
   const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<EnvelopeStatus | "all">("all");
+  const [kindFilter, setKindFilter] = useState<TemplateKind | "all">("all");
+  const [bedroomsFilter, setBedroomsFilter] = useState<string>("all");
+  const [propTypeFilter, setPropTypeFilter] = useState<string>("all");
+  const [locationFilter, setLocationFilter] = useState<string>("");
+  const [nationalityFilter, setNationalityFilter] = useState<string>("");
 
   const { data: envelopes, isLoading, refetch } = useQuery({
     queryKey: ["esign-envelopes", user?.id],
@@ -104,18 +109,41 @@ export default function ESignatureDashboard() {
     expired: envelopes?.filter(e => ["expired", "declined", "voided"].includes(e.status)).length || 0,
   };
 
+  const q = searchQuery.trim().toLowerCase();
+  const loc = locationFilter.trim().toLowerCase();
+  const nat = nationalityFilter.trim().toLowerCase();
+
   const filteredEnvelopes = envelopes?.filter(envelope => {
-    const matchesSearch = 
-      envelope.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      envelope.esign_recipients.some(r => 
-        r.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        r.email.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    
-    const matchesStatus = statusFilter === "all" || envelope.status === statusFilter;
-    
-    return matchesSearch && matchesStatus;
+    const v = (envelope.template_field_values as any) || {};
+    const haystack = buildSearchHaystack(envelope);
+    if (q && !haystack.includes(q)) return false;
+    if (statusFilter !== "all" && envelope.status !== statusFilter) return false;
+    if (kindFilter !== "all" && getTemplateKind(envelope) !== kindFilter) return false;
+    if (bedroomsFilter !== "all" && normaliseBedrooms(v.bedrooms) !== bedroomsFilter) return false;
+    if (propTypeFilter !== "all") {
+      const pt = String(v.property_type || "").toLowerCase();
+      if (pt !== propTypeFilter.toLowerCase()) return false;
+    }
+    if (loc) {
+      const place = `${v.building_name || ""} ${v.community || ""} ${v.street_name || ""} ${v.unit_number || ""}`.toLowerCase();
+      if (!place.includes(loc)) return false;
+    }
+    if (nat) {
+      const blob = `${v.nationality || ""} ${v.passport_number || ""} ${v.additional_notes || ""}`.toLowerCase();
+      if (!blob.includes(nat)) return false;
+    }
+    return true;
   });
+
+  const resetFilters = () => {
+    setKindFilter("all");
+    setBedroomsFilter("all");
+    setPropTypeFilter("all");
+    setLocationFilter("");
+    setNationalityFilter("");
+  };
+  const hasActiveAdvancedFilters =
+    kindFilter !== "all" || bedroomsFilter !== "all" || propTypeFilter !== "all" || !!loc || !!nat;
 
   const handleDelete = async (id: string) => {
     try {
@@ -291,12 +319,80 @@ export default function ESignatureDashboard() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
-                placeholder="Search envelopes or recipients..."
+                placeholder="Search by client, location, doc no., 3 bed, leasing…"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10 bg-[#FDFBF7]/80 border-gold/20 focus:border-gold"
               />
             </div>
+          </div>
+
+          {/* Advanced filter bar */}
+          <div className="rounded-lg border border-[#B89555]/30 bg-[#FDFBF7]/70 p-3">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+              <select
+                value={kindFilter}
+                onChange={(e) => setKindFilter(e.target.value as TemplateKind | "all")}
+                className="h-9 rounded-md border border-[#B89555]/30 bg-white/80 px-2 text-sm text-[#1A1A1A] focus:outline-none focus:border-[#B89555]"
+                aria-label="Agreement type"
+              >
+                <option value="all">All types</option>
+                <option value="leasing">Leasing</option>
+                <option value="selling">Selling</option>
+                <option value="other">Other</option>
+              </select>
+              <select
+                value={propTypeFilter}
+                onChange={(e) => setPropTypeFilter(e.target.value)}
+                className="h-9 rounded-md border border-[#B89555]/30 bg-white/80 px-2 text-sm text-[#1A1A1A] focus:outline-none focus:border-[#B89555]"
+                aria-label="Property type"
+              >
+                <option value="all">Any property</option>
+                <option value="Villa">Villa</option>
+                <option value="Apartment">Apartment</option>
+                <option value="Office">Office</option>
+                <option value="Warehouse">Warehouse</option>
+              </select>
+              <select
+                value={bedroomsFilter}
+                onChange={(e) => setBedroomsFilter(e.target.value)}
+                className="h-9 rounded-md border border-[#B89555]/30 bg-white/80 px-2 text-sm text-[#1A1A1A] focus:outline-none focus:border-[#B89555]"
+                aria-label="Bedrooms"
+              >
+                <option value="all">Any bedrooms</option>
+                <option value="studio">Studio</option>
+                <option value="1">1 bed</option>
+                <option value="2">2 bed</option>
+                <option value="3">3 bed</option>
+                <option value="4">4 bed</option>
+                <option value="5+">5+ bed</option>
+              </select>
+              <Input
+                placeholder="Location (building / area)"
+                value={locationFilter}
+                onChange={(e) => setLocationFilter(e.target.value)}
+                className="h-9 bg-white/80 border-[#B89555]/30 focus:border-[#B89555] text-sm"
+              />
+              <Input
+                placeholder="Nationality"
+                value={nationalityFilter}
+                onChange={(e) => setNationalityFilter(e.target.value)}
+                className="h-9 bg-white/80 border-[#B89555]/30 focus:border-[#B89555] text-sm"
+              />
+            </div>
+            {hasActiveAdvancedFilters && (
+              <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#B89555]/20">
+                <span className="text-[11px] text-[#1A1A1A]/70">
+                  Showing {filteredEnvelopes?.length ?? 0} of {envelopes?.length ?? 0}
+                </span>
+                <button
+                  onClick={resetFilters}
+                  className="text-[11px] text-[#1A1A1A] underline-offset-2 hover:underline"
+                >
+                  Reset filters
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Envelopes List */}
@@ -342,27 +438,47 @@ export default function ESignatureDashboard() {
                     const v = (envelope.template_field_values as any) || {};
                     const phoneMasked = maskPhone(v.mobile_number);
                     const emailMasked = maskEmail(v.email_address);
+                    const kind = getTemplateKind(envelope);
+                    const kindLabel = getTemplateKindLabel(kind);
                     const templateLabel =
                       envelope.template_key === "jbj-property-advertising-agreement"
                         ? "Property Advertising Agreement — Leasing"
                         : envelope.template_key === "jbj-listing-authorisation-selling"
                           ? "Listing Authorisation — Selling"
                           : envelope.name;
+                    const bedsRaw = String(v.bedrooms || "").trim();
+                    const beds = bedsRaw
+                      ? (/^stu/i.test(bedsRaw) || bedsRaw === "0" ? "Studio" : `${bedsRaw} bed`)
+                      : "";
+                    const bua = v.bua_sqft ? `${v.bua_sqft} sqft` : "";
+                    const sizeLine = [beds, bua].filter(Boolean).join(" · ");
                     return (
                       <div
                         key={envelope.id}
                         className="rounded-lg border border-gold/20 bg-white/70 hover:border-gold/60 hover:shadow-md transition p-4 flex flex-col gap-2"
                       >
                         <div className="flex items-center justify-between gap-2 flex-wrap">
-                          {docNumber ? (
-                            <span className="text-[10px] tracking-[0.16em] uppercase text-[#1A1A1A]/70 border border-[#B89555]/50 rounded px-2 py-0.5 bg-[#F7F2EA]">
-                              {docNumber}
-                            </span>
-                          ) : (
-                            <span className="text-[10px] tracking-[0.16em] uppercase text-[#1A1A1A]/40">
-                              No doc no.
-                            </span>
-                          )}
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            {docNumber ? (
+                              <span className="text-[10px] tracking-[0.16em] uppercase text-[#1A1A1A]/70 border border-[#B89555]/50 rounded px-2 py-0.5 bg-[#F7F2EA]">
+                                {docNumber}
+                              </span>
+                            ) : (
+                              <span className="text-[10px] tracking-[0.16em] uppercase text-[#1A1A1A]/40">
+                                No doc no.
+                              </span>
+                            )}
+                            {kind !== "other" && (
+                              <span className="text-[10px] tracking-[0.14em] uppercase text-[#1A1A1A] border border-[#B89555]/50 rounded px-2 py-0.5 bg-[#EFE6D6]">
+                                {kindLabel}
+                              </span>
+                            )}
+                            {v.property_reference_no && (
+                              <span className="text-[10px] tracking-[0.10em] uppercase text-[#1A1A1A]/70">
+                                Ref {v.property_reference_no}
+                              </span>
+                            )}
+                          </div>
                           <Badge className={`${config.color} border flex items-center gap-1 text-[10px]`}>
                             {config.icon}
                             {config.label}
@@ -377,6 +493,9 @@ export default function ESignatureDashboard() {
                           </div>
                           {propertyCtx && (
                             <div className="text-xs text-[#1A1A1A]/80 truncate">{propertyCtx}</div>
+                          )}
+                          {sizeLine && (
+                            <div className="text-[11px] text-[#1A1A1A]/70 truncate">{sizeLine}</div>
                           )}
                           {(phoneMasked || emailMasked) && (
                             <div className="text-[11px] text-[#1A1A1A]/60 truncate">

@@ -22,7 +22,7 @@ export const PAA_LAYOUT_VERSION = 5;
 export type PAAFieldKey =
   // Owner
   | "landlord_name" | "passport_number" | "emirates_id" | "mobile_number"
-  | "email_address" | "listing_consultant" | "property_reference_no" | "expiry_date"
+  | "email_address" | "nationality" | "listing_consultant" | "property_reference_no" | "expiry_date"
   // Property
   | "property_type" | "status_vacant_tenanted" | "furnishing" | "vacating_date"
   | "building_name" | "unit_number" | "street_name" | "community"
@@ -37,7 +37,7 @@ export type PAAFieldKey =
 export const PAA_DEFAULT_VALUES: Record<PAAFieldKey | "doc_number", string> = {
   doc_number: "",
   landlord_name: "", passport_number: "", emirates_id: "", mobile_number: "",
-  email_address: "", listing_consultant: "", property_reference_no: "", expiry_date: "",
+  email_address: "", nationality: "", listing_consultant: "", property_reference_no: "", expiry_date: "",
   property_type: "", status_vacant_tenanted: "", furnishing: "", vacating_date: "",
   building_name: "", unit_number: "", street_name: "", community: "",
   bua_sqft: "", plot_sqft: "", bedrooms: "", bathrooms: "",
@@ -314,6 +314,7 @@ export function buildPAAHtml(
     ${fu("Emirates ID", get("emirates_id"), "emirates_id")}
     ${fu("Mobile Number", get("mobile_number"), "mobile_number")}
     ${fu("Email Address", get("email_address"), "email_address")}
+    ${fu("Nationality", get("nationality"), "nationality")}
     ${fu("Listing Consultant", get("listing_consultant"), "listing_consultant")}
     ${fu("Property Reference No.", get("property_reference_no"), "property_reference_no")}
     ${!hidden.has("expiry_date") && get("expiry_date") ? `
@@ -413,6 +414,7 @@ export const PAA_FIELD_GROUPS: { title: string; fields: { key: PAAFieldKey; labe
       { key: "emirates_id", label: "Emirates ID Number" },
       { key: "mobile_number", label: "Mobile Number" },
       { key: "email_address", label: "Email Address" },
+      { key: "nationality", label: "Nationality" },
       { key: "listing_consultant", label: "Listing Consultant" },
       { key: "property_reference_no", label: "Property Reference No." },
       { key: "expiry_date", label: "Expiry Date", type: "date" },
