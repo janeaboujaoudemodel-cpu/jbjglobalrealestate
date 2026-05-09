@@ -37,7 +37,7 @@ export type PAAFieldKey =
 export const PAA_DEFAULT_VALUES: Record<PAAFieldKey | "doc_number", string> = {
   doc_number: "",
   landlord_name: "", passport_number: "", emirates_id: "", mobile_number: "",
-  email_address: "", listing_consultant: "", property_reference_no: "", expiry_date: "",
+  email_address: "", nationality: "", listing_consultant: "", property_reference_no: "", expiry_date: "",
   property_type: "", status_vacant_tenanted: "", furnishing: "", vacating_date: "",
   building_name: "", unit_number: "", street_name: "", community: "",
   bua_sqft: "", plot_sqft: "", bedrooms: "", bathrooms: "",
