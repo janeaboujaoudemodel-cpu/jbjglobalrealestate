@@ -406,6 +406,27 @@ export default function UAERegistryDetailPage({ type }: { type: RegistryRecordTy
               {r.required_next_action && <div className="text-sm"><b>Required next action:</b> {r.required_next_action}</div>}
             </Card>
           </TabsContent>
+
+          {/* RELATIONAL HUB — linked people, scanned cards, source history */}
+          <TabsContent value="relhub" className="mt-4">
+            <Card className="p-5 bg-[#FDFBF7] border-[#B89555]/30">
+              <RelationalHubTabs
+                kind={type === "developer" ? "developer" : "brokerage"}
+                entityId={r.id}
+                name={r.brand_name || r.legal_company_name}
+                aliases={[r.legal_company_name, r.brand_name]}
+                email={type === "developer" ? r.registration_email : r.outreach_email}
+                phone={r.outreach_phone || (Array.isArray(r.main_phone_numbers) ? r.main_phone_numbers[0]?.number ?? r.main_phone_numbers[0] : undefined)}
+                sourceHistory={(log.data ?? []).map((row: any) => ({
+                  id: row.id,
+                  when: row.occurred_at ?? row.created_at,
+                  who: row.actor_email ?? row.actor ?? null,
+                  what: row.action ?? row.event_type ?? "log entry",
+                  detail: row.details ?? row.note ?? row.summary ?? null,
+                }))}
+              />
+            </Card>
+          </TabsContent>
         </Tabs>
       </div>
     </OwnerGuard>
