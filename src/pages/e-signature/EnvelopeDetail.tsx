@@ -369,8 +369,8 @@ export default function EnvelopeDetail() {
         <Card className="bg-[#F7F2EA] border-[#B89555]/30">
           <CardContent className="p-3 flex items-center gap-2 flex-wrap">
             {isDraft && (
-              <Button variant="gold" onClick={handleSend} disabled={sending}>
-                {sending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Send className="w-4 h-4 mr-2" />}
+              <Button variant="gold" onClick={() => setSendOpen(true)} disabled={sending}>
+                <Send className="w-4 h-4 mr-2" />
                 Send for signature
               </Button>
             )}
