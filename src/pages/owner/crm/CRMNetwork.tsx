@@ -33,6 +33,7 @@ import {
 } from "@/components/crm/SourceFilterChips";
 import { Loader2, Search, Link2, X, Building2 } from "lucide-react";
 import { CompanyHubDrawer } from "@/components/crm/CompanyHubDrawer";
+import { PersonDetailDrawer } from "@/components/crm/PersonDetailDrawer";
 
 /* -------------------- Role definitions -------------------- */
 
@@ -147,6 +148,8 @@ export default function CRMNetwork() {
   const [cross, setCross] = useState<CrossFilter | null>(null);
   const [hubOpen, setHubOpen] = useState(false);
   const [hubTarget, setHubTarget] = useState<{ type: "brokerage" | "developer"; companyName: string } | null>(null);
+  const [personId, setPersonId] = useState<string | null>(null);
+  const [personOpen, setPersonOpen] = useState(false);
 
   function openHubFor(role: RoleKey, l: Lead) {
     const name = (l.company_name || l.full_name || "").trim();
@@ -369,9 +372,13 @@ export default function CRMNetwork() {
                         return (
                           <TableRow key={l.id}>
                             <TableCell>
-                              <div className="font-medium text-[#1A1A1A]">
+                              <button
+                                onClick={() => { setPersonId(l.id); setPersonOpen(true); }}
+                                className="font-medium text-[#1A1A1A] hover:underline text-left"
+                                title="Open person details"
+                              >
                                 {l.full_name || "—"}
-                              </div>
+                              </button>
                               <div className="text-xs text-[#1A1A1A]/60">
                                 {l.email_lower || l.phone_e164 || ""}
                               </div>
@@ -443,6 +450,11 @@ export default function CRMNetwork() {
           companyName={hubTarget.companyName}
         />
       )}
+      <PersonDetailDrawer
+        open={personOpen}
+        onOpenChange={setPersonOpen}
+        leadId={personId}
+      />
     </div>
   );
 }
