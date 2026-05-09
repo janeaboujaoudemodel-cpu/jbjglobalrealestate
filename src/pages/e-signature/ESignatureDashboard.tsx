@@ -249,7 +249,7 @@ export default function ESignatureDashboard() {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-muted-foreground">Drafts</p>
+                    <p className="text-sm text-muted-foreground">Forms Generated</p>
                     <p className="text-2xl font-bold text-foreground">{stats.draft}</p>
                   </div>
                   <Clock className="w-8 h-8 text-amber-400" />
