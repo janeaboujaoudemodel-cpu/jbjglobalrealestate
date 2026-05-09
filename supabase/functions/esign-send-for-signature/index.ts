@@ -30,7 +30,7 @@ Deno.serve(async (req) => {
       return corsErrorResponse("Unauthorized", 401, origin);
     }
 
-    const { envelope_id, channels, cc_emails: ccOverride } = await req.json();
+    const { envelope_id, channels, cc_emails: ccOverride, bcc_emails: bccOverride, interpolated_subject, interpolated_body } = await req.json();
     const channelList: string[] = Array.isArray(channels) && channels.length
       ? channels
       : ["email"];
