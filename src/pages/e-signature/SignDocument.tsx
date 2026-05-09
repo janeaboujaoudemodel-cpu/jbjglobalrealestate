@@ -55,7 +55,7 @@ export default function SignDocument() {
   const [completed, setCompleted] = useState(false);
   const [declined, setDeclined] = useState(false);
 
-  // Fetch recipient and document data
+  // Fetch recipient and document data via public edge function (bypasses RLS safely)
   useEffect(() => {
     const fetchData = async () => {
       if (!token) {
@@ -65,61 +65,34 @@ export default function SignDocument() {
       }
 
       try {
-        const { data: recipient, error: recipientError } = await supabase
-          .from("esign_recipients")
-          .select(`
-            id,
-            name,
-            email,
-            status,
-            envelope_id
-          `)
-          .eq("signing_token", token)
-          .single();
-
-        if (recipientError || !recipient) {
-          setError("This signing link is invalid or has expired");
+        const res = await fetch(`${SUPABASE_URL}/functions/v1/esign-load-document`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token }),
+        });
+        const out = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          setError(out.error || "This signing link is invalid or has expired");
           setLoading(false);
           return;
         }
+
+        const recipient = out.recipient;
+        const envelope = out.envelope;
+        const fields = out.fields || [];
 
         if (recipient.status === "signed") {
           setCompleted(true);
           setLoading(false);
           return;
         }
-
         if (recipient.status === "declined") {
           setDeclined(true);
           setLoading(false);
           return;
         }
-
-        const { data: envelope, error: envelopeError } = await supabase
-          .from("esign_envelopes")
-          .select("id, name, document_url, document_filename, sender_name, sender_email, status")
-          .eq("id", recipient.envelope_id)
-          .single();
-
-        if (envelopeError || !envelope) {
-          setError("Document not found");
-          setLoading(false);
-          return;
-        }
-
         if (["completed", "voided", "expired"].includes(envelope.status)) {
           setError(`This document has been ${envelope.status}`);
-          setLoading(false);
-          return;
-        }
-
-        const { data: fields, error: fieldsError } = await supabase
-          .from("esign_fields")
-          .select("*")
-          .eq("recipient_id", recipient.id);
-
-        if (fieldsError) {
-          setError("Failed to load signature fields");
           setLoading(false);
           return;
         }
@@ -129,27 +102,9 @@ export default function SignDocument() {
           name: recipient.name,
           email: recipient.email,
           status: recipient.status,
-          envelope: envelope,
-          fields: fields || [],
+          envelope,
+          fields,
         });
-
-        await supabase
-          .from("esign_recipients")
-          .update({ 
-            status: "viewed",
-            viewed_at: new Date().toISOString()
-          })
-          .eq("id", recipient.id);
-
-        await supabase.from("esign_audit_log").insert({
-          envelope_id: envelope.id,
-          recipient_id: recipient.id,
-          action: "viewed",
-          description: `${recipient.name} viewed the document`,
-          actor_email: recipient.email,
-          actor_name: recipient.name,
-        });
-
         setLoading(false);
       } catch (err) {
         console.error("Error fetching data:", err);
