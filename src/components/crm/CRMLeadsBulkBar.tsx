@@ -435,6 +435,18 @@ export default function CRMLeadsBulkBar({
           >
             <Copy className="h-4 w-4 mr-2" />
             Duplicate
+
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            onClick={handleMerge}
+            disabled={busy || count < 2}
+            className="font-semibold"
+            title={count < 2 ? "Select 2+ leads to merge" : "Merge selected leads into one"}
+          >
+            <GitMerge className="h-4 w-4 mr-2" />
+            Merge ({count})
           </Button>
 
           <Button
