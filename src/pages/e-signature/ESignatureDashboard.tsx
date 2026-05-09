@@ -32,7 +32,7 @@ import {
 import { formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
 import { SUPABASE_URL } from "@/config/backend";
-import { computeDisplayStatus, pickClientName, pickPropertyContext, maskPhone, maskEmail } from "@/pages/e-signature/envelopeStatus";
+import { computeDisplayStatus, pickClientName, pickPropertyContext, maskPhone, maskEmail, getTemplateKind, getTemplateKindLabel, normaliseBedrooms, buildSearchHaystack, type TemplateKind } from "@/pages/e-signature/envelopeStatus";
 
 type EnvelopeStatus = 'draft' | 'sent' | 'viewed' | 'partially_signed' | 'completed' | 'declined' | 'expired' | 'voided';
 
