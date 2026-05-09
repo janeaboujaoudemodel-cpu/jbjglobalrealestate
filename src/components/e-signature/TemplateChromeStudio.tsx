@@ -33,7 +33,7 @@ interface Props {
 
 export function TemplateChromeStudio({ value, onChange }: Props) {
   const chrome: Required<TemplateChrome> = { ...DEFAULT_CHROME, ...value };
-  const [variants, setVariants] = useState<Required<TemplateChrome>[] | null>(null);
+  const [variants, setVariants] = useState<(Required<TemplateChrome> & { name?: string })[] | null>(null);
   const [loading, setLoading] = useState(false);
 
   const set = <K extends keyof TemplateChrome>(k: K, v: TemplateChrome[K]) =>
