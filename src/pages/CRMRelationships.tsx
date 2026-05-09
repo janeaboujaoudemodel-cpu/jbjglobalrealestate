@@ -1219,6 +1219,15 @@ const BrokeragesAgenciesView = () => {
         </Button>
         <Button variant="gold" onClick={openNew} className="shadow-md"><Plus className="w-4 h-4 mr-2" />Add Brokerage</Button>
       </div>
+
+      {/* Source filter chips — upload_source / database_source / country / team / campaign */}
+      <SourceFilterChips
+        rows={data as any[]}
+        axes={["upload_source", "database_source", "country", "team", "campaign"]}
+        value={sourceFilter}
+        onChange={setSourceFilter}
+      />
+
       <BulkUploadDialog open={uploadOpen} onOpenChange={setUploadOpen} kind="brokerage" onDone={refetch} defaultListId={listView.kind === "list" ? listView.listId : null} />
 
       {sourceTab === "owner" && (
