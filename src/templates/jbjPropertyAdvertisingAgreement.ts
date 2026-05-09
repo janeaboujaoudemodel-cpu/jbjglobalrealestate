@@ -52,7 +52,7 @@ export const PAA_DEFAULT_VALUES: Record<PAAFieldKey | "doc_number", string> = {
   bua_sqft: "", plot_sqft: "", bedrooms: "", bathrooms: "",
   rental_amount: "", sales_amount: "", parking: "", additional_notes: "",
   exclusivity: "", listing_period: "", listing_period_until_date: "",
-  broker_appointee_name: "JBJ GLOBAL REAL ESTATE LLC - SOC",
+  broker_appointee_name: TRADE_LICENSE_LEGAL_NAME,
   landlord_signature_name: "", landlord_signature_date: "",
   jbj_signature_name: "", jbj_signature_date: "",
 };
