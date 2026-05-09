@@ -136,6 +136,7 @@ export default function UAERegistryDetailPage({ type }: { type: RegistryRecordTy
             <TabsTrigger value="comm">Communication</TabsTrigger>
             <TabsTrigger value="attach">Attachments ({attachments.data?.length ?? 0})</TabsTrigger>
             <TabsTrigger value="outreach">Outreach</TabsTrigger>
+            <TabsTrigger value="relhub">Relational Hub</TabsTrigger>
           </TabsList>
 
           {/* PROFILE */}
