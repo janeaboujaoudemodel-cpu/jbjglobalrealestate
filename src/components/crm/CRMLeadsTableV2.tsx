@@ -706,7 +706,7 @@ export default function CRMLeadsTableV2({
                         {assignedNames[lead.id] ? (
                           <span className="font-semibold text-[#1A1A1A] whitespace-nowrap">{assignedNames[lead.id]}</span>
                         ) : (
-                          <span className="text-[#1A1A1A]/40 italic">Unassigned</span>
+                          <span className="text-[#1A1A1A]/50 italic" title="Not yet assigned to a broker">Pool</span>
                         )}
                         {isOwner && (
                           <Button
