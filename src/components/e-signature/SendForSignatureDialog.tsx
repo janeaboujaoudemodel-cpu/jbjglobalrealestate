@@ -74,10 +74,15 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
   }, [envelope?.id, open]);
 
   const tokens = useMemo(() => ({
+    // Recipient (client) merge tags — both names are accepted for back-compat.
+    client_name: primaryRecipient?.name || (envelope?.template_field_values as any)?.landlord_name || "Client",
     landlord_name: primaryRecipient?.name || (envelope?.template_field_values as any)?.landlord_name || "Client",
     doc_number: docNumber,
     doc_title: docTitle,
-    owner_name: envelope?.sender_name || "JBJ Global Real Estate",
+    // Sender block — never the client. Always JBJ + Jane (or whoever is signed in).
+    sender_signature: `— ${envelope?.sender_name || "Jane Bou Jaoude"}\nJBJ GLOBAL REAL ESTATE`,
+    // Legacy alias kept so older drafts still interpolate cleanly.
+    owner_name: envelope?.sender_name || "Jane Bou Jaoude",
     signing_link: primaryRecipient?.signing_token ? `${PUBLIC_DOMAIN}/sign/${primaryRecipient.signing_token}` : `${PUBLIC_DOMAIN}/sign/...`,
   }), [primaryRecipient, envelope, docNumber, docTitle]);
 
