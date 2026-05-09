@@ -164,8 +164,8 @@ export default function DocumentsFormsHub() {
         <Tabs value={tab} onValueChange={setTab}>
           <TabsList className="bg-[#F7F2EA] border border-[#B89555]/30">
             <TabsTrigger value="templates"><FileText className="w-4 h-4 mr-2" />Templates</TabsTrigger>
-            <TabsTrigger value="drafts"><Clock className="w-4 h-4 mr-2" />Drafts ({drafts.length})</TabsTrigger>
-            <TabsTrigger value="sent"><Send className="w-4 h-4 mr-2" />Sent ({sent.length})</TabsTrigger>
+            <TabsTrigger value="drafts"><Clock className="w-4 h-4 mr-2" />Forms Generated ({drafts.length})</TabsTrigger>
+            <TabsTrigger value="sent"><Send className="w-4 h-4 mr-2" />Pending Signature ({sent.length})</TabsTrigger>
             <TabsTrigger value="signed"><CheckCircle2 className="w-4 h-4 mr-2" />Signed ({signed.length})</TabsTrigger>
             <TabsTrigger value="assets"><PenTool className="w-4 h-4 mr-2" />Stamps & Signatures</TabsTrigger>
           </TabsList>
@@ -245,7 +245,7 @@ export default function DocumentsFormsHub() {
                                 <span className="text-[10px] tracking-[0.14em] uppercase text-[#1A1A1A] border border-[#B89555]/40 rounded px-2 py-0.5 bg-[#EFE6D6]">{kind}</span>
                               )}
                               <span className={`text-[10px] tracking-[0.14em] uppercase rounded px-2 py-0.5 border ${sCls}`}>
-                                {sLabel === "ready" ? "Ready" : sLabel.replace(/_/g, " ")}
+                                {sLabel === "ready" ? "Forms Generated" : sLabel === "draft" ? "Forms Generated" : sLabel === "sent" ? "Pending Signature" : sLabel === "completed" ? "Signed" : sLabel.replace(/_/g, " ")}
                               </span>
                             </div>
                             <div className="font-semibold text-[#1A1A1A] truncate">{client}</div>

@@ -59,12 +59,12 @@ interface Envelope {
 }
 
 const statusConfig: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
-  draft: { label: "Draft", color: "bg-amber-50 text-amber-700 border-amber-200", icon: <FileSignature className="w-3 h-3" /> },
-  ready: { label: "Ready", color: "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/50", icon: <CheckCircle2 className="w-3 h-3" /> },
-  sent: { label: "Sent", color: "bg-blue-50 text-blue-700 border-blue-200", icon: <Send className="w-3 h-3" /> },
-  viewed: { label: "Viewed", color: "bg-yellow-50 text-yellow-700 border-yellow-200", icon: <Eye className="w-3 h-3" /> },
-  partially_signed: { label: "Partially Signed", color: "bg-orange-50 text-orange-700 border-orange-200", icon: <Clock className="w-3 h-3" /> },
-  completed: { label: "Completed", color: "bg-emerald-50 text-emerald-700 border-emerald-200", icon: <CheckCircle2 className="w-3 h-3" /> },
+  draft: { label: "Forms Generated", color: "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/50", icon: <FileSignature className="w-3 h-3" /> },
+  ready: { label: "Forms Generated", color: "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/50", icon: <CheckCircle2 className="w-3 h-3" /> },
+  sent: { label: "Pending Signature", color: "bg-blue-50 text-blue-700 border-blue-200", icon: <Send className="w-3 h-3" /> },
+  viewed: { label: "Pending Signature · Viewed", color: "bg-yellow-50 text-yellow-700 border-yellow-200", icon: <Eye className="w-3 h-3" /> },
+  partially_signed: { label: "Pending Signature · Partial", color: "bg-orange-50 text-orange-700 border-orange-200", icon: <Clock className="w-3 h-3" /> },
+  completed: { label: "Signed", color: "bg-emerald-50 text-emerald-700 border-emerald-200", icon: <CheckCircle2 className="w-3 h-3" /> },
   declined: { label: "Declined", color: "bg-red-50 text-red-700 border-red-200", icon: <XCircle className="w-3 h-3" /> },
   expired: { label: "Expired", color: "bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/30", icon: <Clock className="w-3 h-3" /> },
   voided: { label: "Voided", color: "bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/30", icon: <XCircle className="w-3 h-3" /> },
@@ -249,7 +249,7 @@ export default function ESignatureDashboard() {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-muted-foreground">Drafts</p>
+                    <p className="text-sm text-muted-foreground">Forms Generated</p>
                     <p className="text-2xl font-bold text-foreground">{stats.draft}</p>
                   </div>
                   <Clock className="w-8 h-8 text-amber-400" />
@@ -264,7 +264,7 @@ export default function ESignatureDashboard() {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-muted-foreground">Pending</p>
+                    <p className="text-sm text-muted-foreground">Pending Signature</p>
                     <p className="text-2xl font-bold text-foreground">{stats.pending}</p>
                   </div>
                   <Send className="w-8 h-8 text-blue-400" />

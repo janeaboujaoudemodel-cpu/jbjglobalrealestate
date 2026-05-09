@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Mail, MessageCircle, LinkIcon, Send, X, Plus, RotateCcw, Copy, Loader2 } from "lucide-react";
+import { Mail, MessageCircle, LinkIcon, Send, X, Plus, RotateCcw, Copy, Loader2, FlaskConical, Lock, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { SUPABASE_URL, PUBLIC_DOMAIN } from "@/config/backend";
@@ -60,16 +60,41 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
     email: true, whatsapp: false, copyLink: false,
   });
   const [sending, setSending] = useState(false);
+  const [testing, setTesting] = useState(false);
+  const [approving, setApproving] = useState(false);
+  const [lockedAt, setLockedAt] = useState<string | null>(null);
+  const [lastTestId, setLastTestId] = useState<string | null>(null);
 
-  // Hydrate from envelope
+  // Hydrate from envelope + load owner's locked default template if present
   useEffect(() => {
     if (!envelope || !open) return;
     setTo(primaryRecipient?.email ? [primaryRecipient.email] : []);
     setCcs(Array.isArray(meta.cc_emails) ? meta.cc_emails : []);
     setBccs(Array.isArray(meta.bcc_emails) ? meta.bcc_emails : []);
     setWhatsapp(primaryRecipient?.phone || "");
-    setSubject(envelope.email_subject || DEFAULT_SUBJECT);
-    setBody(envelope.email_message || DEFAULT_BODY);
+
+    // Priority: envelope-specific > owner locked default > built-in default
+    (async () => {
+      const envSubject = envelope.email_subject;
+      const envBody = envelope.email_message;
+      if (envSubject && envBody) {
+        setSubject(envSubject);
+        setBody(envBody);
+        return;
+      }
+      const { data: locked } = await supabase
+        .from("esign_email_template_defaults")
+        .select("subject, body, approved_at")
+        .maybeSingle();
+      if (locked?.subject && locked?.body) {
+        setSubject(locked.subject);
+        setBody(locked.body);
+        setLockedAt(locked.approved_at);
+      } else {
+        setSubject(envSubject || DEFAULT_SUBJECT);
+        setBody(envBody || DEFAULT_BODY);
+      }
+    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [envelope?.id, open]);
 
@@ -172,6 +197,54 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
       toast.error(e.message || "Failed to send");
     } finally {
       setSending(false);
+    }
+  };
+
+  const handleSendTest = async () => {
+    if (!envelope) return;
+    setTesting(true);
+    try {
+      const session = await supabase.auth.getSession();
+      const token = session.data.session?.access_token;
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/esign-send-test-email`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          envelope_id: envelope.id,
+          interpolated_subject: previewSubject,
+          interpolated_body: previewBody,
+          test_recipient: "infoo.jane@gmail.com",
+        }),
+      });
+      const out = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(out.error || "Failed to send test");
+      setLastTestId(out.message_id || "sent");
+      toast.success("Test sent to infoo.jane@gmail.com — check your inbox", { duration: 6000 });
+    } catch (e: any) {
+      toast.error(e.message || "Failed to send test");
+    } finally {
+      setTesting(false);
+    }
+  };
+
+  const handleApproveLock = async () => {
+    setApproving(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Not signed in");
+      const { error } = await supabase
+        .from("esign_email_template_defaults")
+        .upsert(
+          { user_id: user.id, subject, body, approved_at: new Date().toISOString() },
+          { onConflict: "user_id" }
+        );
+      if (error) throw error;
+      setLockedAt(new Date().toISOString());
+      toast.success("Template approved & locked — this is now the default for every Send-for-Signature");
+    } catch (e: any) {
+      toast.error(e.message || "Failed to lock template");
+    } finally {
+      setApproving(false);
     }
   };
 
@@ -312,12 +385,31 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
           </div>
         </div>
 
-        <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={sending}>Cancel</Button>
-          <Button variant="gold" onClick={handleSend} disabled={sending}>
-            {sending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Send className="w-4 h-4 mr-2" />}
-            Send
-          </Button>
+        <DialogFooter className="flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-2 text-[11px] text-[#1A1A1A]/70">
+            {lockedAt ? (
+              <span className="inline-flex items-center gap-1"><ShieldCheck className="w-3.5 h-3.5 text-emerald-700" /> Locked default · approved {new Date(lockedAt).toLocaleDateString()}</span>
+            ) : lastTestId ? (
+              <span className="inline-flex items-center gap-1"><FlaskConical className="w-3.5 h-3.5" /> Test sent — review your inbox, then Approve & Lock</span>
+            ) : (
+              <span className="inline-flex items-center gap-1"><FlaskConical className="w-3.5 h-3.5" /> Send a test to infoo.jane@gmail.com first</span>
+            )}
+          </div>
+          <div className="flex flex-wrap gap-2 justify-end">
+            <Button variant="outline" onClick={() => onOpenChange(false)} disabled={sending || testing || approving}>Cancel</Button>
+            <Button variant="outline" onClick={handleSendTest} disabled={sending || testing || approving} className="border-[#B89555]/50">
+              {testing ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <FlaskConical className="w-4 h-4 mr-2" />}
+              Send Test to Me
+            </Button>
+            <Button variant="outline" onClick={handleApproveLock} disabled={sending || testing || approving || !lastTestId} className="border-emerald-600/50 text-emerald-800" title={!lastTestId ? "Send a test first" : "Lock this template as your default"}>
+              {approving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Lock className="w-4 h-4 mr-2" />}
+              Approve & Lock
+            </Button>
+            <Button variant="gold" onClick={handleSend} disabled={sending || testing || approving}>
+              {sending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Send className="w-4 h-4 mr-2" />}
+              Send for Signature
+            </Button>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>
