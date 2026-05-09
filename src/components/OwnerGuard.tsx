@@ -29,6 +29,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
   } = useAuth();
   const location = useLocation();
   const [loadingTimedOut, setLoadingTimedOut] = useState(false);
+  const [showSplash, setShowSplash] = useState(false);
   const [retryStatus, setRetryStatus] = useState<"idle" | "success" | "failed">("idle");
   const autoRetryCount = useRef(0);
   const autoRetryTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
