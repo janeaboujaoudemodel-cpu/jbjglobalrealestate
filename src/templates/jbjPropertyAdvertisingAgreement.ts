@@ -9,6 +9,8 @@ import monogramUrl from "@/assets/jbj-monogram-dark-on-light.png";
 
 export const JBJ_BRAND = {
   company: "JBJ GLOBAL REAL ESTATE",
+  // Full registered name per Trade License — used in binding/legal contexts
+  legalCompany: "JBJ GLOBAL REAL ESTATE LLC - SOC",
   phone: "+971 54 716 7107",
   email: "CONTACT@JBJ.AE",
   website: "WWW.JBJ.AE",
@@ -17,7 +19,7 @@ export const JBJ_BRAND = {
   monogram: monogramUrl,
 } as const;
 
-export const PAA_LAYOUT_VERSION = 7;
+export const PAA_LAYOUT_VERSION = 8;
 
 export type PAAFieldKey =
   // Owner
@@ -25,7 +27,7 @@ export type PAAFieldKey =
   | "email_address" | "nationality" | "listing_consultant" | "property_reference_no" | "expiry_date"
   // Property
   | "property_type" | "status_vacant_tenanted" | "furnishing" | "vacating_date"
-  | "building_name" | "unit_number" | "street_name" | "community"
+  | "building_name" | "unit_number" | "plot_number" | "street_name" | "community"
   | "bua_sqft" | "plot_sqft" | "bedrooms" | "bathrooms"
   | "rental_amount" | "sales_amount" | "parking" | "additional_notes"
   // Terms
@@ -39,11 +41,11 @@ export const PAA_DEFAULT_VALUES: Record<PAAFieldKey | "doc_number", string> = {
   landlord_name: "", passport_number: "", emirates_id: "", mobile_number: "",
   email_address: "", nationality: "", listing_consultant: "", property_reference_no: "", expiry_date: "",
   property_type: "", status_vacant_tenanted: "", furnishing: "", vacating_date: "",
-  building_name: "", unit_number: "", street_name: "", community: "",
+  building_name: "", unit_number: "", plot_number: "", street_name: "", community: "",
   bua_sqft: "", plot_sqft: "", bedrooms: "", bathrooms: "",
   rental_amount: "", sales_amount: "", parking: "", additional_notes: "",
   exclusivity: "", listing_period: "", listing_period_until_date: "",
-  broker_appointee_name: "JBJ GLOBAL REAL ESTATE",
+  broker_appointee_name: "JBJ GLOBAL REAL ESTATE LLC - SOC",
   landlord_signature_name: "", landlord_signature_date: "",
   jbj_signature_name: "", jbj_signature_date: "",
 };
@@ -345,10 +347,11 @@ export function buildPAAHtml(
   <div>
     ${fu("Building Name", get("building_name"), "building_name")}
     ${fu("Unit", get("unit_number"), "unit_number")}
+    ${fu("Plot Number", get("plot_number"), "plot_number")}
     ${fu("Street Name", get("street_name"), "street_name")}
     ${fu("Community", get("community"), "community")}
     ${fu("BUA (SqFt)", get("bua_sqft"), "bua_sqft")}
-    ${showPlot ? fu("Plot (Sq.Ft)", get("plot_sqft"), "plot_sqft") : ""}
+    ${fu("Plot (Sq.Ft)", get("plot_sqft"), "plot_sqft")}
     ${fu("Bedrooms", get("bedrooms"), "bedrooms")}
     ${fu("Bathrooms", get("bathrooms"), "bathrooms")}
     ${fu("Rental Amount / Sales Amount", fmtMoney(get("rental_amount") || get("sales_amount")), "rental_amount")}
@@ -364,7 +367,7 @@ export function buildPAAHtml(
   <div style="font-size:12.5px;color:${ink};line-height:1.7;">
     <div style="margin-bottom:8px;">
       1. The landlord / legal representative has agreed to appoint
-      <span style="border-bottom:1px solid ${accent};padding:0 6px;font-weight:600;">${esc(get("broker_appointee_name") || "JBJ GLOBAL REAL ESTATE")}</span>
+      <span style="border-bottom:1px solid ${accent};padding:0 6px;font-weight:600;">${esc(get("broker_appointee_name") || JBJ_BRAND.legalCompany)}</span>
       as its:
     </div>
     <div style="margin:6px 0 10px;display:flex;flex-wrap:wrap;align-items:center;">
@@ -434,10 +437,11 @@ export const PAA_FIELD_GROUPS: { title: string; fields: { key: PAAFieldKey; labe
       { key: "vacating_date", label: "Vacating Date", type: "date", conditional: (v) => !/vacant/i.test(v.status_vacant_tenanted || "") },
       { key: "building_name", label: "Building Name" },
       { key: "unit_number", label: "Unit" },
+      { key: "plot_number", label: "Plot Number" },
       { key: "street_name", label: "Street Name" },
       { key: "community", label: "Community" },
       { key: "bua_sqft", label: "BUA (SqFt)", type: "number" },
-      { key: "plot_sqft", label: "Plot (Sq.Ft)", type: "number", conditional: (v) => /villa/i.test(v.property_type || "") },
+      { key: "plot_sqft", label: "Plot (Sq.Ft)", type: "number" },
       { key: "bedrooms", label: "Bedrooms", type: "number" },
       { key: "bathrooms", label: "Bathrooms", type: "number" },
       { key: "rental_amount", label: "Rental Amount", type: "money" },
