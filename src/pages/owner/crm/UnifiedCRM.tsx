@@ -226,17 +226,17 @@ export default function UnifiedCRM() {
       return <InvestorsDirectory ownerEmail={ownerEmail} vipOnly={view === "vip"} />;
     }
     if (entity === "developers") {
-      return <Embed><CRMNetworkPage initialRole="developers" /></Embed>;
+      return <DevelopersDirectory />;
     }
     if (entity === "sales-reps") {
-      return <Embed><CRMNetworkPage initialRole="partners" /></Embed>;
+      return <DevSalesRepsDirectory />;
     }
     if (entity === "brokers") {
       if (view === "imported") return <BrokersImported />;
       return <Embed><BrokersRegistryPage /></Embed>;
     }
     if (entity === "agencies") {
-      return <Embed><CRMNetworkPage initialRole="agencies" /></Embed>;
+      return <BrokerageAgenciesDirectory />;
     }
     if (entity === "employees") {
       return <EmployeesHub userId={userId} />;
