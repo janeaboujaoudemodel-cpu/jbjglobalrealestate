@@ -256,8 +256,11 @@ export function buildPAAHtml(
   const accent = chrome.accent;
   const ink = chrome.ink;
   const hidden = new Set<string>(opts.hiddenFields || []);
+  // Force any field that has a value to render — guarantees every edited field
+  // is reflected in the document even if it was not present in the original
+  // skeleton render.
   const fu = (label: string, value: string, key: string) =>
-    fieldUnderline(label, value, key, { hidden });
+    fieldUnderline(label, value, key, { hidden, force: !!value });
 
   // Conditionals (smart fields) — auto-infer Tenanted when a future vacating date is provided
   const rawStatus = get("status_vacant_tenanted");
