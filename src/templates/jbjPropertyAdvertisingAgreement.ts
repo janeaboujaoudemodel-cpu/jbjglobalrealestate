@@ -277,8 +277,8 @@ export function buildPAAHtml(
     ? `<img src="${esc(opts.ownerStampUrl)}" alt="Company stamp" crossorigin="anonymous" style="position:absolute;right:-6px;top:-12px;width:88px;height:88px;object-fit:contain;opacity:.85;" />`
     : "";
   const clientSigImg = opts.clientSignatureUrl
-    ? `<img src="${esc(opts.clientSignatureUrl)}" alt="Client signature" crossorigin="anonymous" style="max-height:54px;max-width:200px;object-fit:contain;display:block;" />`
-    : `<div style="font-style:italic;color:#1A1A1A99;font-size:11px;">Awaiting signature${get("landlord_name") ? ` — ${esc(get("landlord_name"))}` : ""}</div>`;
+    ? `<img src="${esc(opts.clientSignatureUrl)}" alt="Client signature" crossorigin="anonymous" style="max-height:40px;max-width:200px;object-fit:contain;display:block;" />`
+    : "";
 
   const html = `
 <div style="font-family:Inter,Arial,sans-serif;color:${ink};background:${chrome.surface};padding:44px 52px;max-width:794px;margin:0 auto;line-height:1.55;">
