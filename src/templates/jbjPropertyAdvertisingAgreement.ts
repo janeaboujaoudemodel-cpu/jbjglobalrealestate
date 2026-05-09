@@ -413,6 +413,7 @@ export const PAA_FIELD_GROUPS: { title: string; fields: { key: PAAFieldKey; labe
       { key: "emirates_id", label: "Emirates ID Number" },
       { key: "mobile_number", label: "Mobile Number" },
       { key: "email_address", label: "Email Address" },
+      { key: "nationality", label: "Nationality" },
       { key: "listing_consultant", label: "Listing Consultant" },
       { key: "property_reference_no", label: "Property Reference No." },
       { key: "expiry_date", label: "Expiry Date", type: "date" },
