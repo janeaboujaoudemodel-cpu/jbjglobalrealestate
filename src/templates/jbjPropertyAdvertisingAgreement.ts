@@ -374,8 +374,14 @@ export function buildPAAHtml(
     ${fu("Plot (Sq.Ft)", get("plot_sqft"), "plot_sqft")}
     ${fu("Bedrooms", get("bedrooms"), "bedrooms")}
     ${fu("Bathrooms", get("bathrooms"), "bathrooms")}
-    ${fu("Rental Amount / Sales Amount", fmtMoney(get("rental_amount") || get("sales_amount")), "rental_amount")}
+    ${get("rental_amount") ? fu("Rental Amount", fmtMoney(get("rental_amount")), "rental_amount") : ""}
+    ${get("sales_amount") ? fu("Sales Amount", fmtMoney(get("sales_amount")), "sales_amount") : ""}
     ${fu("Parking", get("parking"), "parking")}
+    ${!get("status_vacant_tenanted").match(/vacant/i) === false && get("vacating_date") && !showVacatingDate
+      ? `<div data-field-key="vacating_date" style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;">
+           <div style="display:inline-block;">${dateBox(get("vacating_date"))}</div>
+           <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.7;margin-top:5px;">Vacating Date</div>
+         </div>` : ""}
   </div>
   ${!hidden.has("additional_notes") && get("additional_notes") ? `
     <div data-field-key="additional_notes" style="margin:6px 0 14px;">
