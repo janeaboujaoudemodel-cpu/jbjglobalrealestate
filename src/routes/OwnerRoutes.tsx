@@ -166,5 +166,6 @@ export const OwnerRoutes = () => (
     <Route path="crm/brokerage-actions" element={<Navigate to="/owner/crm/relationships/activity" replace />} />
     <Route path="crm/brokers" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/BrokersRegistry")))}</Suspense>} />
     <Route path="crm/integrity" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/DataIntegrityCheck")))}</Suspense>} />
+    <Route path="crm/network" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/CRMNetwork")))}</Suspense>} />
   </Route>
 );
