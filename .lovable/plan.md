@@ -1,64 +1,46 @@
-I will fix the CRM as a full owner command workspace, not a nested page inside the old broken CRM.
+I’ll fix the CRM as one stable owner command workspace without removing existing data or modules.
 
-## What will be rebuilt
+Plan:
 
-1. **Make the sidebar CRM entry open the real unified hub**
-   - Keep `/owner/crm` as the single CRM route.
-   - Fix legacy links so Calendar, Tasks, Campaigns, Relationships, Brokers, Notes, Inbox, Notifications, and Contracts open inside `/owner/crm` instead of 404 or old `/crm` pages.
-   - Update sidebar/quick-action links that still point to `/crm/...` or old standalone pages.
+1. Stop the pending-task popup from repeating
+- Change `OwnerTasksPopupAlert` so closing it or clicking “View Tasks” stores a user-specific 24-hour dismissal timestamp.
+- Suppress the popup entirely on `/owner/crm` so it never covers CRM work.
+- Keep the underlying pending-task data intact; only change the alert frequency/visibility.
 
-2. **Replace the broken nested CRM layout**
-   - Stop rendering the old full `CRM.tsx` page inside the unified hub, because it brings its own sticky header, gradients, dashboard, tabs, overlays, and duplicated navigation.
-   - Create a clean CRM shell with:
-     - top CRM command header,
-     - compact KPI strip using real counts only,
-     - primary tabs: Overview, Leads, Relationships, Developers, Dev Sales Reps, Brokers, Brokerage Agencies, Employees, Campaigns, Tasks, Calendar, Notes, Inbox, Notifications, Contracts, Automation.
-   - Use contained panels with proper spacing, no overlapping sticky headers, and no cards inside cards.
+2. Fix the access-verification blinking
+- Harden the owner verification flow so repeated auth/session events do not cause repeated “Verifying access…” flashes.
+- Keep cached owner verification stable during transient refreshes.
+- Make the CRM wait for a valid user/owner state before loading CRM panels.
 
-3. **Fix the leads table visual problems**
-   - Remove blue hover/text styling from email/status interactions.
-   - Replace raw browser `<select>` dropdowns with controlled champagne popovers/selects so dropdowns don’t look ugly or overlay incorrectly.
-   - Make status dropdowns compact and scrollable; no huge “all stages/percent” looking display.
-   - Keep all actions: WhatsApp, call, email, send agreement, assign, delete, VIP, bulk merge.
+3. Rebuild the CRM layout shell so content never overlaps
+- Replace the current wrapped/flex tab bar with a boxed CRM command layout: fixed CRM header area, scroll-safe tab strip, and one content container per section.
+- Make every CRM section render inside a bordered champagne panel with `overflow-x-auto`, stable min widths, and no nested top padding/header collisions.
+- Strip legacy embedded page headers/sticky bars more aggressively inside the CRM embed wrapper.
 
-4. **Clean dummy/self-test data safely**
-   - Remove the visible Jane/self-test records and dummy/example/sample rows from `crm_leads`.
-   - Rename/display `self_registration` as a professional label: **Account Registration** or **Portal Registration** in the UI.
-   - Do not remove real leads such as `Brandlio Ai / aibrandlio@gmail.com` unless it is clearly dummy by name/email/source.
-   - Keep real names, emails, phone numbers, broker/developer/agency records intact.
+4. Reorganize CRM tabs and sub-sections
+- Primary CRM sections: Overview, Leads, Relationships, Employees, Campaigns, Tasks, Calendar, Notes, Inbox, Notifications, Contracts, Automation.
+- Relationships sub-sections: Investors, Developers, Dev Sales Reps, Brokers, Brokerage Agencies.
+- Ensure each section updates via `/owner/crm?section=...&sub=...` without 404s.
 
-5. **Relationships must be visible from the CRM header**
-   - Add first-class relationship tabs directly in the CRM hub:
-     - Investors
-     - Developers
-     - Dev Sales Reps
-     - Brokers
-     - Brokerage Agencies
-   - Reuse real data from existing CRM relationship tables/components, but present it inside the same CRM frame.
-   - Keep relationship views up, but also make those entities manageable from the CRM table-style sections.
+5. Fix sidebar navigation under correct headers
+- Move CRM-related entries into a dedicated CRM section in the owner sidebar.
+- Add reliable links for Leads, Investors, Developers, Dev Sales Reps, Brokers, Brokerage Agencies, Employees, Tasks, Calendar, Notes, Inbox, Contracts, Automation.
+- Make active highlighting include query-string tabs so the correct sidebar item is highlighted.
 
-6. **Integrate operational modules into CRM**
-   - Calendar: render inside CRM, not 404, and connect to existing calendar/call/event data.
-   - Tasks: render inside CRM and preserve add/update/delete.
-   - Notes: add a CRM Notes section using existing `crm_notes`/notes page where available.
-   - Inbox: route to the existing owner inbox/communication panel inside CRM.
-   - Notifications: show CRM notification/activity feed from real activity/task/reminder records.
-   - Contracts signed: show signed/contract records from existing contract tables, with no fake placeholders.
+6. Fix relationship panel mapping
+- Make Developers, Dev Sales Reps, Brokers, and Brokerage Agencies open the correct CRM sub-view instead of all pointing to the same default network page.
+- Pass the requested relationship sub-section into the network view so the correct tab is selected immediately.
 
-7. **Fix route consistency**
-   - `/crm`, `/crm/*`, `/owner/crm/tasks`, `/owner/crm/calendar`, `/owner/crm/notes`, `/owner/crm/reminders`, `/owner/crm/brokers`, `/owner/crm/network`, `/owner/crm/campaigns` all redirect into the correct CRM tab URL.
-   - Avoid standalone CRM pages unless they are detail pages like a lead detail or company hub.
+7. Remove blue/raw dropdown styling in CRM controls
+- Replace raw select styling in leads filters with champagne/ink controls.
+- Keep status dropdowns compact, scrollable, and boxed so menus do not visually spill over CRM content.
 
-8. **Keep security and data rules**
-   - Keep CRM owner-only behind `OwnerGuard`.
-   - Do not expose private emails publicly; this is owner/admin CRM only.
-   - Do not delete features; only reorganize and replace broken presentation.
-   - Preserve all real data and existing database-backed functionality.
+8. Route cleanup
+- Update legacy `/crm/*` and `/owner/crm/*` redirects to land on the correct unified CRM tab/sub-tab.
+- Keep detail pages that must remain standalone, such as individual lead detail and company hub.
 
-## Technical implementation notes
-
-- Create a new `UnifiedCRM` structure that uses URL params like `?section=leads` and `?section=relationships&sub=developers`.
-- Add small CRM panel wrappers for Calendar, Tasks, Notes, Inbox, Notifications, Contracts, and Automation so old pages can render without their standalone headers breaking layout.
-- Update `OwnerRoutes.tsx`, `AdminRoutes.tsx`, `OwnerSidebarNav.tsx`, and internal CRM quick links.
-- Update `CRMLeadsTableV2`, `InlineStatusSelect`, and source-label formatting.
-- Use a database migration for safe deletion/soft-deletion of confirmed dummy Jane/test/example rows from `crm_leads`.
+9. Verify in preview
+- Open `/owner/crm` at the current viewport.
+- Confirm no pending task popup appears on CRM.
+- Confirm no verifying-access blink loop.
+- Click CRM tabs and relationship sub-tabs and confirm content stays inside boxes without overlap or 404s.

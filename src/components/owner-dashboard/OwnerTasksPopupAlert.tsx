@@ -16,6 +16,22 @@ import { useQueryClient } from "@tanstack/react-query";
  *    overview route — with a `#tasks` anchor. We do NOT navigate to non-existent
  *    `/owner/dashboard` (which produced a 404).
  */
+const DISMISS_KEY_PREFIX = "owner_tasks_popup_dismissed_at_";
+const DISMISS_TTL_MS = 24 * 60 * 60 * 1000; // 24h
+// Routes where the pending-tasks popup must never appear (covers core working
+// surfaces the user actively complained about).
+const SUPPRESS_PATTERNS: RegExp[] = [
+  /^\/owner\/crm(\/|$|\?)/i,
+  /^\/owner\/inbox(\/|$|\?)/i,
+  /^\/sign\//i,
+  /^\/e-signature(\/|$)/i,
+];
+const isSuppressedRoute = () => {
+  if (typeof window === "undefined") return false;
+  const p = (window.location.pathname || "") + (window.location.search || "");
+  return SUPPRESS_PATTERNS.some((rx) => rx.test(p));
+};
+
 export function OwnerTasksPopupAlert() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -23,9 +39,33 @@ export function OwnerTasksPopupAlert() {
   const [pendingCount, setPendingCount] = useState(0);
   const [hiddenThisSession, setHiddenThisSession] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const [suppressed, setSuppressed] = useState<boolean>(() => isSuppressedRoute());
+
+  // Watch route changes (history pushState/popstate) to re-evaluate suppression.
+  useEffect(() => {
+    const update = () => setSuppressed(isSuppressedRoute());
+    window.addEventListener("popstate", update);
+    const id = window.setInterval(update, 500);
+    return () => { window.removeEventListener("popstate", update); window.clearInterval(id); };
+  }, []);
 
   useEffect(() => {
     if (!user) return;
+
+    // 24h per-user dismissal — once you close it, it stays closed for the day.
+    const key = `${DISMISS_KEY_PREFIX}${user.id}`;
+    try {
+      const ts = localStorage.getItem(key);
+      if (ts) {
+        const elapsed = Date.now() - parseInt(ts, 10);
+        if (Number.isFinite(elapsed) && elapsed < DISMISS_TTL_MS) {
+          setHiddenThisSession(true);
+          setLoaded(true);
+          return;
+        }
+        localStorage.removeItem(key);
+      }
+    } catch { /* ignore */ }
 
     const checkTasks = async () => {
       const [tasksRes, cvsRes] = await Promise.all([
