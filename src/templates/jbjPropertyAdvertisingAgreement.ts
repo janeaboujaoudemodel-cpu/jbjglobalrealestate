@@ -14,7 +14,7 @@ export const JBJ_BRAND = {
   ink: "#1A1A1A",
 } as const;
 
-export const PAA_LAYOUT_VERSION = 3;
+export const PAA_LAYOUT_VERSION = 4;
 
 export type PAAFieldKey =
   // Owner

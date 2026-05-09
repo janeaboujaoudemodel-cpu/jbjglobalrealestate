@@ -1,0 +1,322 @@
+import { useEffect, useMemo, useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { Mail, MessageCircle, LinkIcon, Send, X, Plus, RotateCcw, Copy, Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { SUPABASE_URL, PUBLIC_DOMAIN } from "@/config/backend";
+
+const isValidEmail = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.trim());
+
+const DEFAULT_SUBJECT = "Please sign — {{doc_title}} · {{doc_number}}";
+const DEFAULT_BODY = `Dear {{landlord_name}},
+
+Attached is your {{doc_title}} prepared by JBJ Global Real Estate.
+
+Kindly review and digitally sign at your earliest convenience using the secure link below. Once signed, a fully executed copy will be returned to you automatically.
+
+Thank you for your continued trust.
+
+— {{owner_name}}
+JBJ GLOBAL REAL ESTATE`;
+
+const MERGE_TAGS = [
+  { tag: "{{landlord_name}}", help: "Client name" },
+  { tag: "{{doc_number}}", help: "Document number" },
+  { tag: "{{doc_title}}", help: "Document title" },
+  { tag: "{{signing_link}}", help: "jbj.ae signing link" },
+  { tag: "{{owner_name}}", help: "Sender name" },
+];
+
+interface Props {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  envelope: any;
+  primaryRecipient: any;
+  onSent?: () => void;
+}
+
+export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRecipient, onSent }: Props) {
+  const meta = (envelope?.metadata as any) || {};
+  const docNumber = meta.doc_number || (envelope?.template_field_values as any)?.doc_number || "";
+  const docTitle = envelope?.name || "Property Advertising Agreement";
+
+  const [to, setTo] = useState<string[]>([]);
+  const [toInput, setToInput] = useState("");
+  const [ccs, setCcs] = useState<string[]>([]);
+  const [ccInput, setCcInput] = useState("");
+  const [bccs, setBccs] = useState<string[]>([]);
+  const [bccInput, setBccInput] = useState("");
+  const [whatsapp, setWhatsapp] = useState("");
+  const [subject, setSubject] = useState(DEFAULT_SUBJECT);
+  const [body, setBody] = useState(DEFAULT_BODY);
+  const [channels, setChannels] = useState<{ email: boolean; whatsapp: boolean; copyLink: boolean }>({
+    email: true, whatsapp: false, copyLink: false,
+  });
+  const [sending, setSending] = useState(false);
+
+  // Hydrate from envelope
+  useEffect(() => {
+    if (!envelope || !open) return;
+    setTo(primaryRecipient?.email ? [primaryRecipient.email] : []);
+    setCcs(Array.isArray(meta.cc_emails) ? meta.cc_emails : []);
+    setBccs(Array.isArray(meta.bcc_emails) ? meta.bcc_emails : []);
+    setWhatsapp(primaryRecipient?.phone || "");
+    setSubject(envelope.email_subject || DEFAULT_SUBJECT);
+    setBody(envelope.email_message || DEFAULT_BODY);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [envelope?.id, open]);
+
+  const tokens = useMemo(() => ({
+    landlord_name: primaryRecipient?.name || (envelope?.template_field_values as any)?.landlord_name || "Client",
+    doc_number: docNumber,
+    doc_title: docTitle,
+    owner_name: envelope?.sender_name || "JBJ Global Real Estate",
+    signing_link: primaryRecipient?.signing_token ? `${PUBLIC_DOMAIN}/sign/${primaryRecipient.signing_token}` : `${PUBLIC_DOMAIN}/sign/...`,
+  }), [primaryRecipient, envelope, docNumber, docTitle]);
+
+  const interpolate = (s: string) =>
+    s.replace(/\{\{(\w+)\}\}/g, (_, k) => (tokens as any)[k] ?? `{{${k}}}`);
+
+  const previewSubject = interpolate(subject);
+  const previewBody = interpolate(body);
+
+  const addChip = (raw: string, list: string[], setList: (v: string[]) => void, setInput: (v: string) => void) => {
+    const v = raw.trim();
+    if (!v) return;
+    // bulk paste support
+    const parts = v.split(/[\s,;]+/).filter(Boolean);
+    const valid: string[] = []; let invalid = 0;
+    parts.forEach((p) => isValidEmail(p) ? valid.push(p) : invalid++);
+    if (!valid.length) { toast.error("No valid emails"); return; }
+    setList(Array.from(new Set([...list, ...valid])));
+    setInput("");
+    if (invalid) toast.message(`Added ${valid.length}, skipped ${invalid}`);
+  };
+
+  const handleSend = async () => {
+    if (!envelope) return;
+    if (channels.email && to.length === 0) { toast.error("Add at least one recipient"); return; }
+    if (channels.whatsapp && !whatsapp) { toast.error("Add a WhatsApp number"); return; }
+    if (!channels.email && !channels.whatsapp && !channels.copyLink) { toast.error("Pick at least one channel"); return; }
+
+    setSending(true);
+    try {
+      // Persist editable subject/body + cc/bcc onto envelope
+      await supabase
+        .from("esign_envelopes")
+        .update({
+          email_subject: subject,
+          email_message: body,
+          metadata: {
+            ...meta,
+            cc_emails: ccs,
+            bcc_emails: bccs,
+            send_template: { subject, body, last_edited: new Date().toISOString() },
+          },
+        })
+        .eq("id", envelope.id);
+
+      // Update primary recipient phone if provided
+      if (primaryRecipient && whatsapp && whatsapp !== primaryRecipient.phone) {
+        await supabase.from("esign_recipients").update({ phone: whatsapp }).eq("id", primaryRecipient.id);
+      }
+
+      // Email send via edge function (uses persisted subject+body)
+      if (channels.email) {
+        const session = await supabase.auth.getSession();
+        const token = session.data.session?.access_token;
+        const res = await fetch(`${SUPABASE_URL}/functions/v1/esign-send-for-signature`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+          body: JSON.stringify({
+            envelope_id: envelope.id,
+            channels: ["email"],
+            cc_emails: ccs,
+            bcc_emails: bccs,
+            interpolated_subject: previewSubject,
+            interpolated_body: previewBody,
+          }),
+        });
+        const out = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(out.error || "Failed to send email");
+        toast.success(`Emailed to ${to.length}${ccs.length ? ` · CC ${ccs.length}` : ""}${bccs.length ? ` · BCC ${bccs.length}` : ""}`);
+      }
+
+      // WhatsApp — open wa.me with interpolated body + signing link
+      if (channels.whatsapp && whatsapp) {
+        const phoneDigits = whatsapp.replace(/[^\d]/g, "");
+        const text = encodeURIComponent(`${previewBody}\n\n${tokens.signing_link}`);
+        window.open(`https://wa.me/${phoneDigits}?text=${text}`, "_blank");
+        toast.success("WhatsApp opened");
+      }
+
+      // Copy link
+      if (channels.copyLink) {
+        await navigator.clipboard.writeText(tokens.signing_link);
+        toast.success("Signing link copied");
+      }
+
+      onSent?.();
+      onOpenChange(false);
+    } catch (e: any) {
+      toast.error(e.message || "Failed to send");
+    } finally {
+      setSending(false);
+    }
+  };
+
+  const Chip = ({ value, onRemove }: { value: string; onRemove: () => void }) => (
+    <Badge variant="outline" className="border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] gap-1 pl-2 pr-1">
+      {value}
+      <button onClick={onRemove} className="ml-1 hover:bg-[#EFE6D6] rounded-sm p-0.5"><X className="w-3 h-3" /></button>
+    </Badge>
+  );
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto bg-[#FDFBF7]">
+        <DialogHeader>
+          <DialogTitle className="text-[#1A1A1A] flex items-center gap-2">
+            <Send className="w-5 h-5" /> Send for Signature
+          </DialogTitle>
+        </DialogHeader>
+
+        <div className="space-y-5 py-2">
+          {/* Channels */}
+          <div>
+            <Label className="text-xs uppercase tracking-wider text-[#1A1A1A]/70">Channels</Label>
+            <div className="flex flex-wrap gap-2 mt-2">
+              {[
+                { key: "email" as const, icon: <Mail className="w-4 h-4" />, label: "Email" },
+                { key: "whatsapp" as const, icon: <MessageCircle className="w-4 h-4" />, label: "WhatsApp" },
+                { key: "copyLink" as const, icon: <LinkIcon className="w-4 h-4" />, label: "Copy link" },
+              ].map((c) => {
+                const active = channels[c.key];
+                return (
+                  <button
+                    key={c.key}
+                    onClick={() => setChannels((p) => ({ ...p, [c.key]: !p[c.key] }))}
+                    className={`px-3 py-1.5 rounded-lg border flex items-center gap-2 text-sm transition ${
+                      active
+                        ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]"
+                        : "bg-white border-[#B89555]/30 text-[#1A1A1A]/70 hover:border-[#B89555]"
+                    }`}
+                  >{c.icon}{c.label}</button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Recipients */}
+          {channels.email && (
+            <div className="space-y-3 p-4 rounded-xl bg-white border border-[#B89555]/30">
+              <div>
+                <Label className="text-xs uppercase tracking-wider text-[#1A1A1A]/70">To</Label>
+                <div className="flex flex-wrap gap-1.5 mt-1.5 mb-1.5 min-h-[28px]">
+                  {to.map((e) => <Chip key={e} value={e} onRemove={() => setTo((p) => p.filter((x) => x !== e))} />)}
+                </div>
+                <div className="flex gap-2">
+                  <Input value={toInput} onChange={(e) => setToInput(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === "Enter" || e.key === ",") { e.preventDefault(); addChip(toInput, to, setTo, setToInput); } }}
+                    placeholder="client@example.com" />
+                  <Button type="button" variant="outline" size="sm" onClick={() => addChip(toInput, to, setTo, setToInput)}><Plus className="w-4 h-4" /></Button>
+                </div>
+              </div>
+
+              <div>
+                <Label className="text-xs uppercase tracking-wider text-[#1A1A1A]/70">CC</Label>
+                <div className="flex flex-wrap gap-1.5 mt-1.5 mb-1.5 min-h-[28px]">
+                  {ccs.map((e) => <Chip key={e} value={e} onRemove={() => setCcs((p) => p.filter((x) => x !== e))} />)}
+                </div>
+                <div className="flex gap-2">
+                  <Input value={ccInput} onChange={(e) => setCcInput(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === "Enter" || e.key === ",") { e.preventDefault(); addChip(ccInput, ccs, setCcs, setCcInput); } }}
+                    placeholder="cc1@example.com, cc2@example.com" />
+                  <Button type="button" variant="outline" size="sm" onClick={() => addChip(ccInput, ccs, setCcs, setCcInput)}><Plus className="w-4 h-4" /></Button>
+                </div>
+              </div>
+
+              <div>
+                <Label className="text-xs uppercase tracking-wider text-[#1A1A1A]/70">BCC</Label>
+                <div className="flex flex-wrap gap-1.5 mt-1.5 mb-1.5 min-h-[28px]">
+                  {bccs.map((e) => <Chip key={e} value={e} onRemove={() => setBccs((p) => p.filter((x) => x !== e))} />)}
+                </div>
+                <div className="flex gap-2">
+                  <Input value={bccInput} onChange={(e) => setBccInput(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === "Enter" || e.key === ",") { e.preventDefault(); addChip(bccInput, bccs, setBccs, setBccInput); } }}
+                    placeholder="bcc@example.com" />
+                  <Button type="button" variant="outline" size="sm" onClick={() => addChip(bccInput, bccs, setBccs, setBccInput)}><Plus className="w-4 h-4" /></Button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {channels.whatsapp && (
+            <div>
+              <Label className="text-xs uppercase tracking-wider text-[#1A1A1A]/70">WhatsApp number</Label>
+              <Input value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} placeholder="+971 50 123 4567" className="mt-1.5" />
+            </div>
+          )}
+
+          {/* Subject */}
+          <div>
+            <div className="flex items-center justify-between">
+              <Label className="text-xs uppercase tracking-wider text-[#1A1A1A]/70">Subject (editable)</Label>
+              <button onClick={() => setSubject(DEFAULT_SUBJECT)} className="text-[11px] text-[#1A1A1A]/60 hover:text-[#1A1A1A] flex items-center gap-1">
+                <RotateCcw className="w-3 h-3" /> Reset
+              </button>
+            </div>
+            <Input value={subject} onChange={(e) => setSubject(e.target.value)} className="mt-1.5" />
+            <div className="text-[11px] text-[#1A1A1A]/60 mt-1">Preview: <span className="text-[#1A1A1A]">{previewSubject}</span></div>
+          </div>
+
+          {/* Body */}
+          <div>
+            <div className="flex items-center justify-between">
+              <Label className="text-xs uppercase tracking-wider text-[#1A1A1A]/70">Message body (editable)</Label>
+              <button onClick={() => setBody(DEFAULT_BODY)} className="text-[11px] text-[#1A1A1A]/60 hover:text-[#1A1A1A] flex items-center gap-1">
+                <RotateCcw className="w-3 h-3" /> Reset to JBJ default
+              </button>
+            </div>
+            <Textarea value={body} onChange={(e) => setBody(e.target.value)} rows={9} className="mt-1.5 font-mono text-sm" />
+            <div className="flex flex-wrap gap-1 mt-2">
+              {MERGE_TAGS.map((m) => (
+                <button key={m.tag} onClick={() => setBody((b) => b + " " + m.tag)}
+                  className="px-2 py-1 text-[11px] rounded-md bg-[#F7F2EA] border border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                  title={m.help}>{m.tag}</button>
+              ))}
+            </div>
+          </div>
+
+          {/* Live preview */}
+          <div className="p-4 rounded-xl border border-[#B89555]/30 bg-white">
+            <div className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/60 mb-1">Live preview</div>
+            <div className="text-sm font-semibold text-[#1A1A1A] mb-2">{previewSubject}</div>
+            <div className="text-sm text-[#1A1A1A]/80 whitespace-pre-wrap">{previewBody}</div>
+            <div className="mt-3 pt-3 border-t border-[#B89555]/20">
+              <button onClick={() => { navigator.clipboard.writeText(tokens.signing_link); toast.success("Link copied"); }}
+                className="text-xs text-[#1A1A1A]/70 hover:text-[#1A1A1A] flex items-center gap-1.5">
+                <Copy className="w-3 h-3" /> {tokens.signing_link}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <DialogFooter>
+          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={sending}>Cancel</Button>
+          <Button variant="gold" onClick={handleSend} disabled={sending}>
+            {sending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Send className="w-4 h-4 mr-2" />}
+            Send
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+export default SendForSignatureDialog;

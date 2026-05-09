@@ -23,6 +23,7 @@ import { renderTemplateHtml, useRegenerateEnvelopePdf } from "@/hooks/useEsignTe
 import { SmartFillDropzone } from "@/components/e-signature/SmartFillDropzone";
 import { TemplateChromeStudio } from "@/components/e-signature/TemplateChromeStudio";
 import { useOwnerSignatureAssets } from "@/hooks/useOwnerSignatureAssets";
+import { SendForSignatureDialog } from "@/components/e-signature/SendForSignatureDialog";
 
 type EnvelopeStatus = 'draft' | 'sent' | 'viewed' | 'partially_signed' | 'completed' | 'declined' | 'expired' | 'voided';
 type RecipientStatus = 'pending' | 'sent' | 'delivered' | 'viewed' | 'signed' | 'declined';
@@ -62,6 +63,7 @@ export default function EnvelopeDetail() {
   const [bulkCcs, setBulkCcs] = useState("");
   const [chrome, setChrome] = useState<TemplateChrome>({});
   const [showStudio, setShowStudio] = useState(false);
+  const [sendOpen, setSendOpen] = useState(false);
   const regenerate = useRegenerateEnvelopePdf();
   const { data: sigAssets } = useOwnerSignatureAssets("signature");
   const { data: stampAssets } = useOwnerSignatureAssets("stamp");
@@ -367,8 +369,8 @@ export default function EnvelopeDetail() {
         <Card className="bg-[#F7F2EA] border-[#B89555]/30">
           <CardContent className="p-3 flex items-center gap-2 flex-wrap">
             {isDraft && (
-              <Button variant="gold" onClick={handleSend} disabled={sending}>
-                {sending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Send className="w-4 h-4 mr-2" />}
+              <Button variant="gold" onClick={() => setSendOpen(true)} disabled={sending}>
+                <Send className="w-4 h-4 mr-2" />
                 Send for signature
               </Button>
             )}
@@ -705,6 +707,14 @@ export default function EnvelopeDetail() {
           </CardContent>
         </Card>
       </div>
+
+      <SendForSignatureDialog
+        open={sendOpen}
+        onOpenChange={setSendOpen}
+        envelope={envelope}
+        primaryRecipient={clientRec}
+        onSent={() => refetch()}
+      />
     </div>
   );
 }

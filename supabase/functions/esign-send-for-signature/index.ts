@@ -30,7 +30,7 @@ Deno.serve(async (req) => {
       return corsErrorResponse("Unauthorized", 401, origin);
     }
 
-    const { envelope_id, channels, cc_emails: ccOverride } = await req.json();
+    const { envelope_id, channels, cc_emails: ccOverride, bcc_emails: bccOverride, interpolated_subject, interpolated_body } = await req.json();
     const channelList: string[] = Array.isArray(channels) && channels.length
       ? channels
       : ["email"];
@@ -71,80 +71,70 @@ Deno.serve(async (req) => {
 
     for (const recipient of recipients) {
       const signingUrl = `${baseUrl}/sign/${recipient.signing_token}`;
-      
+      const docNumber = (envelope.metadata as any)?.doc_number || "";
+      const fieldVals = (envelope.template_field_values as any) || {};
+
+      // Build merge-tag context — use interpolated values from client if provided
+      const tokens: Record<string, string> = {
+        landlord_name: recipient.name || fieldVals.landlord_name || "Client",
+        doc_number: docNumber,
+        doc_title: envelope.name || "Property Advertising Agreement",
+        owner_name: envelope.sender_name || "JBJ Global Real Estate",
+        signing_link: signingUrl,
+      };
+      const interp = (s: string) =>
+        String(s || "").replace(/\{\{(\w+)\}\}/g, (_, k) => tokens[k] ?? `{{${k}}}`);
+
+      const finalSubject = interpolated_subject
+        ? interp(interpolated_subject)
+        : interp(envelope.email_subject || `Please sign — {{doc_title}} · {{doc_number}}`);
+      const rawBody = interpolated_body
+        ? interpolated_body
+        : (envelope.email_message || `Dear {{landlord_name}},\n\nKindly review and sign your {{doc_title}}.\n\n— {{owner_name}}`);
+      const finalBodyHtml = interp(rawBody)
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+        .replace(/\n/g, "<br/>");
+
       const emailHtml = `
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f9f6f1;">
-  <table role="presentation" style="width: 100%; border-collapse: collapse;">
-    <tr>
-      <td align="center" style="padding: 40px 20px;">
-        <table role="presentation" style="width: 100%; max-width: 600px; border-collapse: collapse;">
-          <!-- Header -->
-          <tr>
-            <td style="text-align: center; padding-bottom: 30px;">
-              <h1 style="margin: 0; color: #b8860b; font-size: 28px;">JBJ Global Real Estate</h1>
-            </td>
-          </tr>
-          
-          <!-- Main Content -->
-          <tr>
-            <td style="background: white; border-radius: 16px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
-              <h2 style="margin: 0 0 20px 0; color: #1a1a1a; font-size: 24px;">
-                Please Sign: ${envelope.name}
-              </h2>
-              
-              <p style="color: #666; line-height: 1.6; margin-bottom: 24px;">
-                Hi ${recipient.name},
-              </p>
-              
-              <p style="color: #666; line-height: 1.6; margin-bottom: 24px;">
-                <strong>${envelope.sender_name || envelope.sender_email}</strong> has requested your signature on the document:
-              </p>
-              
-              <div style="background: #f9f6f1; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
-                <p style="margin: 0; font-weight: 600; color: #1a1a1a;">
-                  📄 ${envelope.name}
-                </p>
-                ${envelope.email_message ? `<p style="margin: 12px 0 0 0; color: #666;">${envelope.email_message}</p>` : ''}
-              </div>
-              
-              <div style="text-align: center; margin: 32px 0;">
-                <a href="${signingUrl}" style="display: inline-block; background: linear-gradient(135deg, #b8860b, #d4a83a); color: white; text-decoration: none; padding: 16px 40px; border-radius: 12px; font-weight: 600; font-size: 16px;">
-                  View & Sign Document
-                </a>
-              </div>
-              
-              <p style="color: #999; font-size: 14px; text-align: center;">
-                This link expires in 7 days.
-              </p>
-            </td>
-          </tr>
-          
-          <!-- Footer -->
-          <tr>
-            <td style="padding-top: 30px; text-align: center;">
-               <p style="color: #999; font-size: 12px; margin: 0;">
-                 If you have questions, contact <a href="mailto:contact@jbj.ae" style="color: #b8860b;">contact@jbj.ae</a>
-               </p>
-              <p style="color: #999; font-size: 12px; margin: 8px 0 0 0;">
-                © ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
-              </p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head>
+<body style="margin:0;padding:0;font-family:Inter,Arial,sans-serif;background:#FDFBF7;">
+  <table role="presentation" style="width:100%;border-collapse:collapse;">
+    <tr><td align="center" style="padding:40px 20px;">
+      <table role="presentation" style="width:100%;max-width:600px;border-collapse:collapse;">
+        <!-- Premium JBJ Header -->
+        <tr><td style="background:#F7F2EA;border:1px solid #B89555;border-radius:14px 14px 0 0;padding:22px 28px;border-bottom:none;">
+          <table role="presentation" style="width:100%;border-collapse:collapse;"><tr>
+            <td style="font-size:20px;font-weight:700;letter-spacing:.18em;color:#1A1A1A;">JBJ GLOBAL REAL ESTATE</td>
+            <td align="right" style="font-size:10px;letter-spacing:.16em;color:#1A1A1A;opacity:.7;">${docNumber ? `DOC NO. <strong style="opacity:1;">${docNumber}</strong>` : ""}</td>
+          </tr></table>
+          <div style="height:1px;background:#B89555;margin-top:14px;"></div>
+        </td></tr>
+        <!-- Body -->
+        <tr><td style="background:#ffffff;border-left:1px solid #B89555;border-right:1px solid #B89555;padding:36px 36px 8px;">
+          <h2 style="margin:0 0 18px;color:#1A1A1A;font-size:20px;font-weight:700;">${finalSubject}</h2>
+          <div style="color:#1A1A1A;line-height:1.7;font-size:14px;">${finalBodyHtml}</div>
+          <div style="text-align:center;margin:32px 0 12px;">
+            <a href="${signingUrl}" style="display:inline-block;background:#1A1A1A;color:#FDFBF7;text-decoration:none;padding:14px 32px;border-radius:10px;font-weight:600;font-size:14px;letter-spacing:.06em;border:1px solid #B89555;">REVIEW &amp; SIGN DOCUMENT</a>
+          </div>
+          <p style="color:#1A1A1A;opacity:.6;font-size:12px;text-align:center;margin:0 0 8px;">Or paste this secure link in your browser:<br/><span style="color:#1A1A1A;">${signingUrl}</span></p>
+        </td></tr>
+        <!-- Premium Footer -->
+        <tr><td style="background:#F7F2EA;border:1px solid #B89555;border-top:none;border-radius:0 0 14px 14px;padding:18px 28px;">
+          <div style="height:1px;background:#B89555;margin-bottom:14px;"></div>
+          <table role="presentation" style="width:100%;border-collapse:collapse;font-size:11px;color:#1A1A1A;"><tr>
+            <td style="opacity:.85;"><strong style="letter-spacing:.14em;">JBJ GLOBAL REAL ESTATE</strong><br/><span style="opacity:.7;">Private Office · Dubai, UAE</span></td>
+            <td align="center" style="opacity:.85;">CONTACT@JBJ.AE<br/>WWW.JBJ.AE</td>
+            <td align="right" style="opacity:.85;">+971 54 716 7107</td>
+          </tr></table>
+        </td></tr>
+        <tr><td style="text-align:center;padding-top:14px;font-size:11px;color:#1A1A1A;opacity:.55;">© ${new Date().getFullYear()} JBJ Global Real Estate · Link expires in 7 days</td></tr>
+      </table>
+    </td></tr>
   </table>
-</body>
-</html>`;
+</body></html>`;
 
-      // Send email via Resend (direct fetch to global API)
-      // Compute the merged CC list: persisted on envelope.metadata.cc_emails OR override from request body
       const persistedCcs: string[] = Array.isArray((envelope.metadata as any)?.cc_emails)
         ? (envelope.metadata as any).cc_emails
         : [];
@@ -154,6 +144,14 @@ Deno.serve(async (req) => {
         .filter((e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e))
         .filter((e) => e.toLowerCase() !== String(recipient.email || "").toLowerCase())
       ));
+      const persistedBccs: string[] = Array.isArray((envelope.metadata as any)?.bcc_emails)
+        ? (envelope.metadata as any).bcc_emails
+        : [];
+      const incomingBccs: string[] = Array.isArray(bccOverride) ? bccOverride : [];
+      const bccEmails = Array.from(new Set([...persistedBccs, ...incomingBccs, "contact@jbj.ae"]
+        .map((e) => String(e || "").trim())
+        .filter((e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e))
+      ));
 
       if (channelList.includes("email") && resendApiKey) {
         try {
@@ -161,11 +159,11 @@ Deno.serve(async (req) => {
             method: "POST",
             headers: { "Authorization": `Bearer ${resendApiKey}`, "Content-Type": "application/json" },
             body: JSON.stringify({
-              from: "JBJ E-Signature <contact@jbj.ae>",
+              from: "JBJ Global Real Estate <contact@jbj.ae>",
               to: [recipient.email],
               cc: ccEmails,
-              bcc: ["contact@jbj.ae"],
-              subject: envelope.email_subject || `Please sign: ${envelope.name}`,
+              bcc: bccEmails,
+              subject: finalSubject,
               html: emailHtml,
             }),
           });
