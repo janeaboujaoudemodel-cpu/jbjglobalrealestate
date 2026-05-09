@@ -303,6 +303,13 @@ export default function SignDocument() {
                   const isInit = f.field_type === "initials";
                   const isDate = f.field_type === "date";
                   const filled = (isSig && signatureData) || (isInit && initialsData);
+                  // Legacy fields stored x/y in raw pixels on the 794×1123 reference
+                  // viewport. Modern fields store percentages 0-100. Detect and normalise.
+                  const REF_W = 794;
+                  const REF_H = 1123;
+                  const isLegacyPx = f.x_position > 100 || f.y_position > 100;
+                  const xPct = isLegacyPx ? (f.x_position / REF_W) * 100 : f.x_position;
+                  const yPct = isLegacyPx ? (f.y_position / REF_H) * 100 : f.y_position;
                   return (
                     <button
                       key={f.id}
@@ -320,8 +327,8 @@ export default function SignDocument() {
                           : "border-amber-500 bg-amber-100/80 hover:bg-amber-200 animate-pulse"
                       }`}
                       style={{
-                        left: `${f.x_position}%`,
-                        top: `${f.y_position}%`,
+                        left: `${xPct}%`,
+                        top: `${yPct}%`,
                         width: `${f.width}px`,
                         height: `${f.height}px`,
                         cursor: isDate ? "default" : "pointer",
