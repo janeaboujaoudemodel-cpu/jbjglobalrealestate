@@ -60,16 +60,41 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
     email: true, whatsapp: false, copyLink: false,
   });
   const [sending, setSending] = useState(false);
+  const [testing, setTesting] = useState(false);
+  const [approving, setApproving] = useState(false);
+  const [lockedAt, setLockedAt] = useState<string | null>(null);
+  const [lastTestId, setLastTestId] = useState<string | null>(null);
 
-  // Hydrate from envelope
+  // Hydrate from envelope + load owner's locked default template if present
   useEffect(() => {
     if (!envelope || !open) return;
     setTo(primaryRecipient?.email ? [primaryRecipient.email] : []);
     setCcs(Array.isArray(meta.cc_emails) ? meta.cc_emails : []);
     setBccs(Array.isArray(meta.bcc_emails) ? meta.bcc_emails : []);
     setWhatsapp(primaryRecipient?.phone || "");
-    setSubject(envelope.email_subject || DEFAULT_SUBJECT);
-    setBody(envelope.email_message || DEFAULT_BODY);
+
+    // Priority: envelope-specific > owner locked default > built-in default
+    (async () => {
+      const envSubject = envelope.email_subject;
+      const envBody = envelope.email_message;
+      if (envSubject && envBody) {
+        setSubject(envSubject);
+        setBody(envBody);
+        return;
+      }
+      const { data: locked } = await supabase
+        .from("esign_email_template_defaults")
+        .select("subject, body, approved_at")
+        .maybeSingle();
+      if (locked?.subject && locked?.body) {
+        setSubject(locked.subject);
+        setBody(locked.body);
+        setLockedAt(locked.approved_at);
+      } else {
+        setSubject(envSubject || DEFAULT_SUBJECT);
+        setBody(envBody || DEFAULT_BODY);
+      }
+    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [envelope?.id, open]);
 
