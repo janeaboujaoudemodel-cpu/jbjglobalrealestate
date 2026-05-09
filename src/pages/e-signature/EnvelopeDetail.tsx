@@ -17,7 +17,7 @@ import {
 import { format, formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
-import { SUPABASE_URL } from "@/config/backend";
+import { SUPABASE_URL, PUBLIC_DOMAIN } from "@/config/backend";
 import { PAA_FIELD_GROUPS } from "@/templates/jbjPropertyAdvertisingAgreement";
 import { renderTemplateHtml, useRegenerateEnvelopePdf } from "@/hooks/useEsignTemplates";
 import { SmartFillDropzone } from "@/components/e-signature/SmartFillDropzone";
@@ -159,8 +159,7 @@ export default function EnvelopeDetail() {
     w.document.close();
   };
 
-  const buildSigningUrl = (token: string) =>
-    `${typeof window !== "undefined" ? window.location.origin : "https://jbj.ae"}/sign/${token}`;
+  const buildSigningUrl = (token: string) => `${PUBLIC_DOMAIN}/sign/${token}`;
 
   const handleWhatsApp = (recipient: any) => {
     if (!recipient?.signing_token) { toast.error("No signing token"); return; }
