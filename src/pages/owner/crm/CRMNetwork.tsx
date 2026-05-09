@@ -316,9 +316,15 @@ export default function CRMNetwork() {
                 Related to: <strong>{cross.label}</strong>
                 <button onClick={() => setCross(null)} aria-label="Clear relation">
                   <X className="h-3 w-3" />
-                </button>
+              </button>
               </Badge>
             )}
+            <div className="ml-auto">
+              <ScopedExportMenu
+                currentRows={visibleRows}
+                filenameBase={`crm-${activeRole}`}
+              />
+            </div>
           </div>
           <SourceFilterChips
             rows={enrichedLeads}
