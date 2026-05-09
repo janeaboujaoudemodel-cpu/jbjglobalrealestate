@@ -6,14 +6,21 @@
  */
 
 import monogramUrl from "@/assets/jbj-monogram-dark-on-light.png";
+import {
+  TRADE_LICENSE_BRAND,
+  TRADE_LICENSE_LEGAL_NAME,
+  TRADE_LICENSE_OFFICE,
+  COMPANY_CONTACT,
+} from "@/config/companyLegal";
 
 export const JBJ_BRAND = {
-  company: "JBJ GLOBAL REAL ESTATE",
+  company: TRADE_LICENSE_BRAND,
   // Full registered name per Trade License — used in binding/legal contexts
-  legalCompany: "JBJ GLOBAL REAL ESTATE LLC - SOC",
-  phone: "+971 54 716 7107",
-  email: "CONTACT@JBJ.AE",
-  website: "WWW.JBJ.AE",
+  legalCompany: TRADE_LICENSE_LEGAL_NAME,
+  office: TRADE_LICENSE_OFFICE,
+  phone: COMPANY_CONTACT.phone,
+  email: COMPANY_CONTACT.email,
+  website: COMPANY_CONTACT.website,
   gold: "#B89555",
   ink: "#1A1A1A",
   monogram: monogramUrl,
