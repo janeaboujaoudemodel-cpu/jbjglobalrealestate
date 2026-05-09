@@ -76,3 +76,45 @@ export function pickPropertyContext(env: any): string {
   if (place) parts.push(place);
   return parts.join(" · ");
 }
+
+export type TemplateKind = "leasing" | "selling" | "other";
+
+export function getTemplateKind(env: any): TemplateKind {
+  const k = (env?.template_key || "").toString();
+  if (k === "jbj-property-advertising-agreement") return "leasing";
+  if (k === "jbj-listing-authorisation-selling") return "selling";
+  return "other";
+}
+
+export function getTemplateKindLabel(k: TemplateKind): string {
+  return k === "leasing" ? "Leasing" : k === "selling" ? "Selling" : "Other";
+}
+
+/** Normalise bedrooms to comparable string: "studio" | "1".."4" | "5+" | "" */
+export function normaliseBedrooms(raw?: string | number | null): string {
+  if (raw == null) return "";
+  const s = String(raw).trim().toLowerCase();
+  if (!s) return "";
+  if (/^stu/.test(s) || s === "0") return "studio";
+  const n = parseInt(s, 10);
+  if (!isFinite(n)) return "";
+  if (n >= 5) return "5+";
+  return String(n);
+}
+
+export function buildSearchHaystack(env: any): string {
+  const v = (env?.template_field_values as Record<string, string> | null) || {};
+  const recipients = (env?.esign_recipients || [])
+    .map((r: any) => `${r?.name || ""} ${r?.email || ""}`)
+    .join(" ");
+  const kindLabel = getTemplateKindLabel(getTemplateKind(env));
+  return [
+    env?.name, env?.description, recipients, kindLabel,
+    v.doc_number, v.landlord_name, v.mobile_number, v.email_address,
+    v.passport_number, v.emirates_id, v.nationality,
+    v.property_type, v.building_name, v.community, v.street_name, v.unit_number,
+    v.bedrooms ? `${v.bedrooms} bed` : "",
+    v.bathrooms ? `${v.bathrooms} bath` : "",
+    v.property_reference_no, v.additional_notes,
+  ].filter(Boolean).join(" • ").toLowerCase();
+}
