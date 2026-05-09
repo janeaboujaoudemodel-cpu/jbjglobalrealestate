@@ -345,6 +345,10 @@ export default function CRMLeadsTableV2({
       if (assigneeFilter) {
         if (assigneeFilter === "__unassigned__") {
           if (leadAssignees[l.id]) return false;
+        } else if (assigneeFilter === "__assigned__") {
+          if (!leadAssignees[l.id]) return false;
+        } else if (assigneeFilter === "__mine__") {
+          if (leadAssignees[l.id] !== userId) return false;
         } else if (leadAssignees[l.id] !== assigneeFilter) {
           return false;
         }
@@ -353,7 +357,7 @@ export default function CRMLeadsTableV2({
       if (tagFilter === "unassigned" && leadAssignees[l.id]) return false;
       return true;
     });
-  }, [leads, search, stageFilter, sourceTypeFilter, assigneeFilter, tagFilter, leadAssignees]);
+  }, [leads, search, stageFilter, sourceTypeFilter, assigneeFilter, tagFilter, leadAssignees, userId]);
 
   const selectedIds = useMemo(() => Array.from(selected), [selected]);
 
@@ -452,68 +456,143 @@ export default function CRMLeadsTableV2({
           </Button>
         </div>
 
+        {/* Distribution counts strip */}
+        {(() => {
+          const total = leads.length;
+          const mine = leads.filter((l) => leadAssignees[l.id] === userId).length;
+          const pool = leads.filter((l) => !leadAssignees[l.id]).length;
+          const assigned = total - pool;
+          const perBroker = new Map<string, number>();
+          leads.forEach((l) => {
+            const a = leadAssignees[l.id];
+            if (a) perBroker.set(a, (perBroker.get(a) || 0) + 1);
+          });
+          const topBrokers = Array.from(perBroker.entries())
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 6);
+          return (
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-[#1A1A1A]/80 border-t border-[#B89555]/20 pt-3">
+              <span className="font-bold uppercase tracking-wider text-[#1A1A1A]/60">Distribution:</span>
+              <span><b className="text-[#1A1A1A]">{total}</b> total</span>
+              <span className="text-[#1A1A1A]/30">·</span>
+              <span><b className="text-emerald-700">{mine}</b> with me</span>
+              <span className="text-[#1A1A1A]/30">·</span>
+              <span><b className="text-blue-700">{assigned}</b> assigned</span>
+              <span className="text-[#1A1A1A]/30">·</span>
+              <span><b className="text-amber-700">{pool}</b> in pool</span>
+              {topBrokers.length > 0 && (
+                <>
+                  <span className="text-[#1A1A1A]/30">|</span>
+                  {topBrokers.map(([id, count]) => (
+                    <button
+                      key={id}
+                      type="button"
+                      onClick={() => setAssigneeFilter(assigneeFilter === id ? "" : id)}
+                      className={`px-2 py-0.5 rounded-full border text-[11px] transition-colors ${
+                        assigneeFilter === id
+                          ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]"
+                          : "bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]/75 hover:bg-[#EFE6D6]/70"
+                      }`}
+                    >
+                      {assignedNames[id] || id.slice(0, 6)} · <b>{count}</b>
+                    </button>
+                  ))}
+                </>
+              )}
+            </div>
+          );
+        })()}
+
         {/* Dropdown row — shadcn Select, evenly spaced, no overlap */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <Select value={stageFilter || "__all__"} onValueChange={(v) => setStageFilter(v === "__all__" ? "" : v)}>
-            <SelectTrigger className="h-10 bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] font-semibold">
-              <SelectValue placeholder="All Stages" />
+            <SelectTrigger className="h-10 bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] font-semibold min-w-0">
+              <SelectValue placeholder="All Stages" className="truncate" />
             </SelectTrigger>
-            <SelectContent className="bg-[#FDFBF7] border border-gold/30 max-h-[360px]">
+            <SelectContent className="bg-[#FDFBF7] border border-[#B89555]/40 shadow-lg max-h-[360px] [&_[data-highlighted]]:bg-[#EFE6D6] [&_[data-highlighted]]:text-[#1A1A1A]">
               <SelectItem value="__all__">All Stages</SelectItem>
               <SelectGroup>
-                <SelectLabel className="text-emerald-700 font-bold">Positive</SelectLabel>
+                <SelectLabel className="text-emerald-700 font-bold bg-emerald-50/60">Positive</SelectLabel>
                 {groupedStatuses.positive.map((s) => (
-                  <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+                  <SelectItem key={s.value} value={s.value}>
+                    <span className="inline-flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: s.dotColor }} />
+                      {s.label}
+                    </span>
+                  </SelectItem>
                 ))}
               </SelectGroup>
               <SelectGroup>
-                <SelectLabel className="text-blue-700 font-bold">Neutral</SelectLabel>
+                <SelectLabel className="text-blue-700 font-bold bg-blue-50/60">Neutral</SelectLabel>
                 {groupedStatuses.neutral.map((s) => (
-                  <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+                  <SelectItem key={s.value} value={s.value}>
+                    <span className="inline-flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: s.dotColor }} />
+                      {s.label}
+                    </span>
+                  </SelectItem>
                 ))}
               </SelectGroup>
               <SelectGroup>
-                <SelectLabel className="text-red-700 font-bold">Negative</SelectLabel>
+                <SelectLabel className="text-red-700 font-bold bg-red-50/60">Negative</SelectLabel>
                 {groupedStatuses.negative.map((s) => (
-                  <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+                  <SelectItem key={s.value} value={s.value}>
+                    <span className="inline-flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: s.dotColor }} />
+                      {s.label}
+                    </span>
+                  </SelectItem>
                 ))}
               </SelectGroup>
             </SelectContent>
           </Select>
 
           <Select value={sourceTypeFilter || "__all__"} onValueChange={(v) => setSourceTypeFilter(v === "__all__" ? "" : v)}>
-            <SelectTrigger className="h-10 bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] font-semibold">
-              <SelectValue placeholder="All Sources" />
+            <SelectTrigger className="h-10 bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] font-semibold min-w-0">
+              <SelectValue placeholder="All Sources" className="truncate" />
             </SelectTrigger>
-            <SelectContent className="bg-[#FDFBF7] border border-gold/30 max-h-[360px]">
+            <SelectContent className="bg-[#FDFBF7] border border-[#B89555]/40 shadow-lg max-h-[360px] [&_[data-highlighted]]:bg-[#EFE6D6] [&_[data-highlighted]]:text-[#1A1A1A]">
               <SelectItem value="__all__">All Sources</SelectItem>
-              {sourceTypeOptions.map((t) => (
-                <SelectItem key={t} value={t}>{formatSourceLabel(t)}</SelectItem>
-              ))}
+              {sourceTypeOptions.map((t) => {
+                const count = leads.filter((l) => (l.lead_source_type || "") === t).length;
+                return (
+                  <SelectItem key={t} value={t}>
+                    <span className="inline-flex items-center gap-2">
+                      {formatSourceLabel(t)}
+                      <span className="text-[#1A1A1A]/50 text-[11px]">· {count}</span>
+                    </span>
+                  </SelectItem>
+                );
+              })}
             </SelectContent>
           </Select>
 
           <Select value={assigneeFilter || "__all__"} onValueChange={(v) => setAssigneeFilter(v === "__all__" ? "" : v)}>
-            <SelectTrigger className="h-10 bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] font-semibold">
-              <SelectValue placeholder="All Owners" />
+            <SelectTrigger className="h-10 bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] font-semibold min-w-0">
+              <SelectValue placeholder="All Owners" className="truncate" />
             </SelectTrigger>
-            <SelectContent className="bg-[#FDFBF7] border border-gold/30 max-h-[360px]">
+            <SelectContent className="bg-[#FDFBF7] border border-[#B89555]/40 shadow-lg max-h-[360px] [&_[data-highlighted]]:bg-[#EFE6D6] [&_[data-highlighted]]:text-[#1A1A1A]">
               <SelectItem value="__all__">All Owners</SelectItem>
-              <SelectItem value="__unassigned__">Unassigned</SelectItem>
-              {assigneeOptions.map((a) => (
-                <SelectItem key={a.id} value={a.id}>{a.name}</SelectItem>
-              ))}
+              <SelectItem value="__mine__">With Me</SelectItem>
+              <SelectItem value="__assigned__">Assigned to a Broker</SelectItem>
+              <SelectItem value="__unassigned__">Pool (no broker)</SelectItem>
+              <SelectGroup>
+                <SelectLabel className="text-[#1A1A1A]/70 font-bold bg-[#F7F2EA]">Brokers</SelectLabel>
+                {assigneeOptions.map((a) => (
+                  <SelectItem key={a.id} value={a.id}>{a.name}</SelectItem>
+                ))}
+              </SelectGroup>
             </SelectContent>
           </Select>
 
           <Select value={tagFilter || "__all__"} onValueChange={(v) => setTagFilter(v === "__all__" ? "" : v)}>
-            <SelectTrigger className="h-10 bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] font-semibold">
-              <SelectValue placeholder="All Tags" />
+            <SelectTrigger className="h-10 bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] font-semibold min-w-0">
+              <SelectValue placeholder="All Tags" className="truncate" />
             </SelectTrigger>
-            <SelectContent className="bg-[#FDFBF7] border border-gold/30">
+            <SelectContent className="bg-[#FDFBF7] border border-[#B89555]/40 shadow-lg [&_[data-highlighted]]:bg-[#EFE6D6] [&_[data-highlighted]]:text-[#1A1A1A]">
               <SelectItem value="__all__">All Tags</SelectItem>
               <SelectItem value="vip">★ VIP</SelectItem>
-              <SelectItem value="unassigned">Unassigned</SelectItem>
+              <SelectItem value="unassigned">Pool (no broker)</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -627,7 +706,7 @@ export default function CRMLeadsTableV2({
                         {assignedNames[lead.id] ? (
                           <span className="font-semibold text-[#1A1A1A] whitespace-nowrap">{assignedNames[lead.id]}</span>
                         ) : (
-                          <span className="text-[#1A1A1A]/40 italic">Unassigned</span>
+                          <span className="text-[#1A1A1A]/50 italic" title="Not yet assigned to a broker">Pool</span>
                         )}
                         {isOwner && (
                           <Button

@@ -9,7 +9,7 @@
  * URL state: ?entity=<...>&view=<...>
  * Legacy params (?section, ?sub) are migrated on mount.
  */
-import { lazy, Suspense, useEffect, useMemo, useState } from "react";
+import { Component, lazy, Suspense, useEffect, useMemo, useState, type ReactNode } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/contexts/AuthContext";
@@ -119,6 +119,30 @@ const Fallback = () => (
 const Embed = ({ children }: { children: React.ReactNode }) => (
   <div className="crm-embed">{children}</div>
 );
+
+class CRMBodyErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
+  state = { error: null as Error | null };
+  static getDerivedStateFromError(error: Error) { return { error }; }
+  componentDidCatch(err: Error) { console.error("[CRM body crashed]", err); }
+  render() {
+    if (this.state.error) {
+      return (
+        <div className="rounded-lg border border-red-300 bg-red-50/40 p-6 text-sm text-[#1A1A1A]">
+          <div className="font-semibold mb-1">This panel failed to load.</div>
+          <div className="text-[#1A1A1A]/70 mb-3">{this.state.error.message}</div>
+          <button
+            type="button"
+            onClick={() => { this.setState({ error: null }); window.location.reload(); }}
+            className="px-3 py-1.5 rounded-md bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555] text-xs font-semibold"
+          >
+            Reload
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 function NotificationsPanel() {
   const [items, setItems] = useState<any[]>([]);
@@ -280,9 +304,9 @@ export default function UnifiedCRM() {
         {insightsOpen && (
           <div className="px-3 md:px-6 pb-4 border-t border-[#B89555]/15 bg-[#F7F2EA]/60">
             <div className="pt-4">
-              <Suspense fallback={<Fallback />}>
+              <CRMBodyErrorBoundary><Suspense fallback={<Fallback />}>
                 <CRMEnhancedDashboard userId={userId} hasOwnerAccess />
-              </Suspense>
+              </Suspense></CRMBodyErrorBoundary>
             </div>
           </div>
         )}
@@ -319,84 +343,53 @@ export default function UnifiedCRM() {
 
       </div>
 
-      {/* Body — left rail (sub-sections) + champagne content panel */}
+      {/* Sub-section bar (horizontal, secondary) */}
+      {currentViews.length > 1 && (
+        <div className="bg-[#F7F2EA] border-b border-[#B89555]/20">
+          <nav
+            role="tablist"
+            aria-label="CRM sub-sections"
+            className="px-2 md:px-4 flex flex-wrap items-center gap-1.5 py-2 overflow-x-auto whitespace-nowrap jj-scrollbar-gold"
+          >
+            {(() => {
+              const out: React.ReactNode[] = [];
+              let lastGroup: string | undefined;
+              currentViews.forEach((t, i) => {
+                if (t.group && t.group !== lastGroup && i > 0) {
+                  out.push(
+                    <span key={`sep-${i}`} aria-hidden className="mx-1 h-4 w-px bg-[#B89555]/30 shrink-0" />
+                  );
+                }
+                lastGroup = t.group;
+                const active = t.id === view;
+                out.push(
+                  <button
+                    key={t.id}
+                    role="tab"
+                    aria-selected={active}
+                    onClick={() => setView(t.id)}
+                    className={[
+                      "shrink-0 inline-flex items-center px-3 py-1.5 rounded-full text-[13px] font-medium transition-colors border",
+                      active
+                        ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
+                        : "bg-transparent text-[#1A1A1A]/70 border-transparent hover:bg-[#EFE6D6]/70 hover:text-[#1A1A1A]",
+                    ].join(" ")}
+                  >
+                    {t.label}
+                  </button>
+                );
+              });
+              return out;
+            })()}
+          </nav>
+        </div>
+      )}
+
+      {/* Body */}
       <div className="px-3 md:px-6 py-5">
-        <div className="flex flex-col lg:flex-row gap-4">
-          {currentViews.length > 1 && (
-            <>
-              {/* Mobile / narrow: dropdown */}
-              <div className="lg:hidden">
-                <label className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/70 block mb-1">
-                  {ENTITIES.find(e => e.id === entity)?.label} · Sub-section
-                </label>
-                <select
-                  value={view}
-                  onChange={(e) => setView(e.target.value)}
-                  className="w-full h-10 px-3 rounded-lg border border-[#B89555]/40 bg-[#FDFBF7] text-sm text-[#1A1A1A]"
-                >
-                  {currentViews.map(v => (
-                    <option key={v.id} value={v.id}>{v.label}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Desktop: left rail */}
-              <aside
-                aria-label="CRM sub-sections"
-                className="hidden lg:block shrink-0 w-[212px] self-start sticky top-[96px] rounded-xl border border-[#B89555]/30 bg-[#F7F2EA] p-3"
-              >
-                <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/70 px-2 pt-1 pb-2 border-b border-[#B89555]/20">
-                  {ENTITIES.find(e => e.id === entity)?.label} · Sub-sections
-                </div>
-                {(() => {
-                  const groups = new Map<string, ViewItem[]>();
-                  currentViews.forEach((v) => {
-                    const g = v.group || "";
-                    if (!groups.has(g)) groups.set(g, []);
-                    groups.get(g)!.push(v);
-                  });
-                  return Array.from(groups.entries()).map(([groupName, items]) => (
-                    <div key={groupName || "_"} className="mt-3 first:mt-2">
-                      {groupName && (
-                        <div className="text-[9px] uppercase tracking-[0.20em] text-[#1A1A1A]/55 px-2 mb-1.5">
-                          {groupName}
-                        </div>
-                      )}
-                      <ul className="space-y-0.5">
-                        {items.map((t) => {
-                          const active = t.id === view;
-                          return (
-                            <li key={t.id}>
-                              <button
-                                role="tab"
-                                aria-selected={active}
-                                onClick={() => setView(t.id)}
-                                className={[
-                                  "w-full text-left px-3 py-1.5 rounded-md text-[13px] font-medium transition-colors flex items-center gap-2",
-                                  active
-                                    ? "bg-[#EFE6D6] text-[#1A1A1A] border-l-2 border-[#B89555] -ml-[2px] pl-[14px]"
-                                    : "text-[#1A1A1A]/75 hover:bg-[#EFE6D6]/70 hover:text-[#1A1A1A]",
-                                ].join(" ")}
-                              >
-                                {t.label}
-                              </button>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </div>
-                  ));
-                })()}
-              </aside>
-            </>
-          )}
-
-          <div className="flex-1 min-w-0">
-            <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] shadow-sm overflow-hidden">
-              <div className="p-3 md:p-5 overflow-x-auto">
-                <Suspense fallback={<Fallback />}>{Body}</Suspense>
-              </div>
-            </div>
+        <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] shadow-sm overflow-hidden">
+          <div className="p-3 md:p-5 overflow-x-auto">
+            <CRMBodyErrorBoundary><Suspense fallback={<Fallback />}>{Body}</Suspense></CRMBodyErrorBoundary>
           </div>
         </div>
       </div>
