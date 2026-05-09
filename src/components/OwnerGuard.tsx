@@ -29,6 +29,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
   } = useAuth();
   const location = useLocation();
   const [loadingTimedOut, setLoadingTimedOut] = useState(false);
+  const [showSplash, setShowSplash] = useState(false);
   const [retryStatus, setRetryStatus] = useState<"idle" | "success" | "failed">("idle");
   const autoRetryCount = useRef(0);
   const autoRetryTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -93,10 +94,16 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
   useEffect(() => {
     if (!(authLoading || ownerLoading)) {
       setLoadingTimedOut(false);
+      setShowSplash(false);
       return;
     }
+    // 250ms grace period — avoid splash flicker on fast verification
+    const grace = window.setTimeout(() => setShowSplash(true), 250);
     const timer = window.setTimeout(() => setLoadingTimedOut(true), 8000);
-    return () => window.clearTimeout(timer);
+    return () => {
+      window.clearTimeout(grace);
+      window.clearTimeout(timer);
+    };
   }, [authLoading, ownerLoading, location.pathname]);
 
   const handleRetry = async () => {
@@ -114,7 +121,12 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
     }
   }, [ownerLoading, isOwner, ownerError]);
 
-  if ((authLoading || ownerLoading) && showLoading) {
+  // During the 250ms grace window, render nothing (avoid splash flash)
+  if ((authLoading || ownerLoading) && showLoading && !showSplash) {
+    return null;
+  }
+
+  if ((authLoading || ownerLoading) && showLoading && showSplash) {
     if (!loadingTimedOut) {
       return (
         <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
