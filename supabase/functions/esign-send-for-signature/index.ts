@@ -30,7 +30,7 @@ Deno.serve(async (req) => {
       return corsErrorResponse("Unauthorized", 401, origin);
     }
 
-    const { envelope_id, channels } = await req.json();
+    const { envelope_id, channels, cc_emails: ccOverride } = await req.json();
     const channelList: string[] = Array.isArray(channels) && channels.length
       ? channels
       : ["email"];
@@ -144,6 +144,17 @@ Deno.serve(async (req) => {
 </html>`;
 
       // Send email via Resend (direct fetch to global API)
+      // Compute the merged CC list: persisted on envelope.metadata.cc_emails OR override from request body
+      const persistedCcs: string[] = Array.isArray((envelope.metadata as any)?.cc_emails)
+        ? (envelope.metadata as any).cc_emails
+        : [];
+      const incomingCcs: string[] = Array.isArray(ccOverride) ? ccOverride : [];
+      const ccEmails = Array.from(new Set([...persistedCcs, ...incomingCcs]
+        .map((e) => String(e || "").trim())
+        .filter((e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e))
+        .filter((e) => e.toLowerCase() !== String(recipient.email || "").toLowerCase())
+      ));
+
       if (channelList.includes("email") && resendApiKey) {
         try {
           const res = await quotaGuardedFetch("https://api.resend.com/emails", {
@@ -152,6 +163,7 @@ Deno.serve(async (req) => {
             body: JSON.stringify({
               from: "JBJ E-Signature <contact@jbj.ae>",
               to: [recipient.email],
+              cc: ccEmails,
               bcc: ["contact@jbj.ae"],
               subject: envelope.email_subject || `Please sign: ${envelope.name}`,
               html: emailHtml,

@@ -14,7 +14,7 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("AI service not configured");
 
-    const { file_base64, file_type, extraction_type } = await req.json();
+    const { file_base64, file_type, extraction_type, schema_hint, schema_fields } = await req.json();
 
     if (!file_base64 || !extraction_type) {
       throw new Error("Missing required fields: file_base64, extraction_type");
@@ -25,67 +25,58 @@ serve(async (req) => {
 
     const schemas: Record<string, string> = {
       business_card: `Extract all text from this business card image and return ONLY valid JSON:
-{
-  "name": "full name",
-  "title": "job title / role",
-  "company": "company or organization name",
-  "phone": "phone number",
-  "email": "email address",
-  "website": "website URL",
-  "address": "physical address if present"
-}
-Use empty string "" for fields not found. No explanation, just the JSON object.`,
-
-      cv: `Extract all information from this CV/Resume and return ONLY valid JSON:
-{
-  "name": "full name",
-  "title": "professional title",
-  "email": "email",
-  "phone": "phone number",
-  "location": "city/country",
-  "linkedin": "linkedin URL or username",
-  "website": "personal website",
-  "summary": "professional summary paragraph",
-  "experience": [
-    {"title": "job title", "company": "company name", "period": "date range", "description": "role description"}
-  ],
-  "education": [
-    {"degree": "degree name", "institution": "school name", "year": "year"}
-  ],
-  "skills": "comma-separated list of skills",
-  "languages": "comma-separated list of languages"
-}
-Use empty string "" or [] for fields not found. No explanation, just the JSON.`,
-
-      cover_letter: `Extract information from this cover letter and return ONLY valid JSON:
-{
-  "yourName": "applicant name",
-  "yourTitle": "applicant title/role",
-  "jobTitle": "position being applied for",
-  "companyName": "company being applied to",
-  "skills": "key skills mentioned",
-  "experience": "experience summary mentioned"
-}
+{"name":"","title":"","company":"","phone":"","email":"","website":"","address":""}
 Use empty string "" for fields not found. No explanation, just the JSON.`,
 
-      company_profile: `Extract all information from this company profile, brochure, or business document and return ONLY valid JSON:
+      cv: `Extract all information from this CV/Resume and return ONLY valid JSON with name,title,email,phone,location,linkedin,website,summary,experience[],education[],skills,languages.`,
+
+      cover_letter: `Extract from this cover letter and return ONLY valid JSON:
+{"yourName":"","yourTitle":"","jobTitle":"","companyName":"","skills":"","experience":""}`,
+
+      company_profile: `Extract company info as JSON: companyName, tagline, aboutUs, services[], team[], phone, email, website, address, linkedin, instagram.`,
+
+      // ---- JBJ Property Advertising Agreement (Leasing) smart-fill ----
+      jbj_paa_leasing: `You are filling a Dubai property advertising agreement. Inspect the document/photo (could be a Passport, Emirates ID, Title Deed, Ejari, unit photo, MOU, brochure or floor plan) and extract anything that fills these fields. Return ONLY valid JSON of the shape:
 {
-  "companyName": "company name",
-  "tagline": "tagline or slogan",
-  "aboutUs": "about us or company overview text",
-  "services": [{"title": "service name", "description": "service description"}],
-  "team": [{"name": "person full name", "role": "job title or role"}],
-  "phone": "phone number",
-  "email": "email address",
-  "website": "website URL",
-  "address": "physical address",
-  "linkedin": "LinkedIn URL or handle",
-  "instagram": "Instagram handle"
+  "fields": {
+    "landlord_name": "",
+    "passport_number": "",
+    "emirates_id": "",
+    "mobile_number": "",
+    "email_address": "",
+    "property_type": "",
+    "status_vacant_tenanted": "",
+    "furnishing": "",
+    "vacating_date": "",
+    "building_name": "",
+    "unit_number": "",
+    "street_name": "",
+    "community": "",
+    "bua_sqft": "",
+    "plot_sqft": "",
+    "bedrooms": "",
+    "bathrooms": "",
+    "rental_amount": "",
+    "sales_amount": "",
+    "parking": "",
+    "additional_notes": ""
+  },
+  "confidence": { "<field_key>": 0.0 },
+  "source_doc_type": "passport|emirates_id|title_deed|ejari|unit_photo|brochure|floor_plan|other"
 }
-Use empty string "" for missing text fields and [] for missing arrays. No explanation, just the JSON.`,
+Rules:
+- Only fill what you can clearly read; leave the rest as "".
+- For property_type use one of: Villa, Apartment, Office, Warehouse, Other.
+- For status_vacant_tenanted use Vacant or Tenanted.
+- For furnishing use Furnished, Unfurnished or Semi-furnished.
+- Dates as YYYY-MM-DD.
+- Numbers as plain digits (no commas, no AED, no sq ft).
+- mobile_number: include country code with +.
+- additional_notes: short summary (e.g. "Title Deed extracted; owner is X; community Y").
+No explanation, just the JSON object.`,
     };
 
-    const prompt = schemas[extraction_type];
+    const prompt = schema_hint && schemas[schema_hint] ? schemas[schema_hint] : schemas[extraction_type];
     if (!prompt) throw new Error(`Unknown extraction_type: ${extraction_type}`);
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -120,8 +111,6 @@ Use empty string "" for missing text fields and [] for missing arrays. No explan
 
     const aiData = await response.json();
     let rawContent = aiData.choices?.[0]?.message?.content?.trim() || "";
-
-    // Strip markdown code blocks if present
     rawContent = rawContent.replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/\s*```$/i, "").trim();
 
     let parsed: Record<string, unknown>;
@@ -134,7 +123,7 @@ Use empty string "" for missing text fields and [] for missing arrays. No explan
       });
     }
 
-    return new Response(JSON.stringify({ data: parsed, extraction_type }), {
+    return new Response(JSON.stringify({ data: parsed, extraction_type, schema_hint: schema_hint || null }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error: unknown) {
