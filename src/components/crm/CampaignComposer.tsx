@@ -4,7 +4,8 @@
  * Build a Resend-powered email campaign targeted at a smart segment of
  * crm_leads. Live audience preview shows deliverable count, suppressed
  * count, and the company breakdown (so the single-agency rule can be
- * verified before sending).
+ * verified before sending). Adds quota meter, sender-domain guard, and
+ * save-as-segment.
  */
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -16,8 +17,9 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2, Send, Eye, AlertTriangle } from "lucide-react";
+import { Loader2, Send, Eye, AlertTriangle, Save, ShieldAlert } from "lucide-react";
 import { toast } from "sonner";
+import { useEmailQuota } from "@/hooks/useEmailQuota";
 
 interface SegmentFilter {
   contact_type?: string[];
@@ -46,16 +48,28 @@ const DEFAULT_FILTER: SegmentFilter = {
   exclude_suppressed: true,
 };
 
+const ALLOWED_DOMAIN = "jbj.ae";
+const CONTACT_TYPES = ["investor", "broker", "developer", "client", "vendor", "other"];
+
 export default function CampaignComposer({ onSent }: { onSent?: () => void }) {
   const [segments, setSegments] = useState<{ id: string; name: string; filter: any }[]>([]);
   const [segmentId, setSegmentId] = useState<string>("");
   const [filter, setFilter] = useState<SegmentFilter>(DEFAULT_FILTER);
 
+  // Facet options pulled from the live DB so the builder reflects real data.
+  const [facets, setFacets] = useState<{
+    pipeline_stage: string[];
+    tags: string[];
+    company: string[];
+    source: string[];
+    language: string[];
+  }>({ pipeline_stage: [], tags: [], company: [], source: [], language: [] });
+
   const [name, setName] = useState("");
   const [subject, setSubject] = useState("");
   const [html, setHtml] = useState("<p>Hi {{lead.full_name}},</p>\n<p></p>");
-  const [senderEmail, setSenderEmail] = useState("noreply@jbj.ae");
-  const [senderName, setSenderName] = useState("JBJ GLOBAL REAL ESTATE");
+  const [senderEmail, setSenderEmail] = useState("CitiDevelopers@jbj.ae");
+  const [senderName, setSenderName] = useState("CITI Developers");
   const [replyTo, setReplyTo] = useState("");
   const [allowMultiCompany, setAllowMultiCompany] = useState(false);
   const [maxSend, setMaxSend] = useState(500);
@@ -64,11 +78,43 @@ export default function CampaignComposer({ onSent }: { onSent?: () => void }) {
   const [preview, setPreview] = useState<ResolveResult | null>(null);
   const [resolving, setResolving] = useState(false);
   const [sending, setSending] = useState(false);
+  const [savingSegment, setSavingSegment] = useState(false);
+
+  const quota = useEmailQuota();
 
   useEffect(() => {
     supabase.from("crm_segments").select("id, name, filter").order("name")
       .then(({ data }) => setSegments(data ?? []));
+    void loadFacets();
   }, []);
+
+  async function loadFacets() {
+    // Pull a wide-ish slice to derive distinct values cheaply.
+    const { data: leads = [] } = await supabase
+      .from("crm_leads")
+      .select("pipeline_stage, tags, company_name, source, preferred_language")
+      .is("deleted_at", null)
+      .limit(2000);
+    const u = (xs: (string | null | undefined)[]) =>
+      Array.from(new Set(xs.filter((x): x is string => !!x && x.trim() !== ""))).sort();
+    const tagAll: string[] = [];
+    for (const r of leads ?? []) for (const t of (r as any).tags ?? []) if (t) tagAll.push(t);
+    const { data: brks = [] } = await supabase
+      .from("crm_brokerages").select("company_name").limit(500);
+    const { data: devs = [] } = await supabase
+      .from("crm_developer_registry").select("developer_name").limit(500);
+    setFacets({
+      pipeline_stage: u((leads ?? []).map((r: any) => r.pipeline_stage)),
+      tags: u(tagAll),
+      company: u([
+        ...(leads ?? []).map((r: any) => r.company_name),
+        ...(brks ?? []).map((r: any) => r.company_name),
+        ...(devs ?? []).map((r: any) => r.developer_name),
+      ]),
+      source: u((leads ?? []).map((r: any) => r.source)),
+      language: u((leads ?? []).map((r: any) => r.preferred_language)),
+    });
+  }
 
   // Re-resolve preview whenever filter / segment changes (debounced)
   useEffect(() => {
@@ -97,6 +143,16 @@ export default function CampaignComposer({ onSent }: { onSent?: () => void }) {
     [allowMultiCompany, preview],
   );
 
+  const senderDomainOk = useMemo(
+    () => senderEmail.toLowerCase().endsWith(`@${ALLOWED_DOMAIN}`),
+    [senderEmail],
+  );
+
+  const quotaBlocked = !quota.unlimited && quota.sentToday >= quota.dailyLimit;
+  const quotaPct = Math.min(100, Math.round((quota.sentToday / Math.max(1, quota.dailyLimit)) * 100));
+  const quotaTone =
+    quotaPct >= 100 ? "bg-red-600" : quotaPct >= 80 ? "bg-amber-500" : "bg-emerald-600";
+
   async function createCampaignRow() {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) throw new Error("Not signed in");
@@ -119,6 +175,7 @@ export default function CampaignComposer({ onSent }: { onSent?: () => void }) {
   async function sendTest() {
     if (!testRecipient) return toast.error("Add a test recipient");
     if (!subject || !html) return toast.error("Subject and body required");
+    if (!senderDomainOk) return toast.error(`Sender must be @${ALLOWED_DOMAIN}`);
     setSending(true);
     try {
       const campaign = await createCampaignRow();
@@ -128,6 +185,7 @@ export default function CampaignComposer({ onSent }: { onSent?: () => void }) {
       if (error) throw error;
       if ((data as any).sent) toast.success(`Test sent to ${testRecipient}`);
       else toast.error(`Test failed: ${JSON.stringify((data as any).errors)}`);
+      void quota.refresh();
     } catch (e: any) {
       toast.error(e.message ?? "Send failed");
     } finally {
@@ -137,10 +195,12 @@ export default function CampaignComposer({ onSent }: { onSent?: () => void }) {
 
   async function sendCampaign() {
     if (!subject || !html) return toast.error("Subject and body required");
+    if (!senderDomainOk) return toast.error(`Sender must be @${ALLOWED_DOMAIN}`);
     if (!preview?.deliverable_count) return toast.error("Audience is empty");
     if (violatesSingleAgency) {
       return toast.error("Single-agency rule: audience spans multiple companies");
     }
+    if (quotaBlocked) return toast.error("Daily Resend quota reached");
     if (!confirm(`Send to ${preview.deliverable_count} recipients?`)) return;
     setSending(true);
     try {
@@ -157,6 +217,7 @@ export default function CampaignComposer({ onSent }: { onSent?: () => void }) {
       if (error) throw error;
       const r = data as any;
       toast.success(`Sent ${r.sent} • Failed ${r.failed}${r.quota_blocked ? " • Quota blocked" : ""}`);
+      void quota.refresh();
       onSent?.();
     } catch (e: any) {
       toast.error(e.message ?? "Send failed");
@@ -165,9 +226,72 @@ export default function CampaignComposer({ onSent }: { onSent?: () => void }) {
     }
   }
 
+  async function saveAsSegment() {
+    const segName = window.prompt("Save segment as:", name || "New segment");
+    if (!segName) return;
+    setSavingSegment(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      const { data, error } = await supabase.from("crm_segments").insert({
+        name: segName,
+        filter: filter as any,
+        owner_user_id: user?.id ?? null,
+      } as any).select("id, name, filter").single();
+      if (error) throw error;
+      setSegments((s) => [...s, data as any]);
+      setSegmentId((data as any).id);
+      toast.success("Segment saved");
+    } catch (e: any) {
+      toast.error(e.message ?? "Could not save segment");
+    } finally {
+      setSavingSegment(false);
+    }
+  }
+
   const updateArrayField = (k: keyof SegmentFilter, value: string) => {
     const arr = value.split(",").map((s) => s.trim()).filter(Boolean);
     setFilter((f) => ({ ...f, [k]: arr.length ? arr : undefined }));
+  };
+
+  const toggleInArray = (k: keyof SegmentFilter, v: string) => {
+    setFilter((f) => {
+      const cur = ((f[k] as string[] | undefined) ?? []).slice();
+      const i = cur.indexOf(v);
+      if (i >= 0) cur.splice(i, 1); else cur.push(v);
+      return { ...f, [k]: cur.length ? cur : undefined };
+    });
+  };
+
+  const ChipRow = ({
+    fkey, options, label,
+  }: { fkey: keyof SegmentFilter; options: string[]; label: string }) => {
+    const selected = (filter[fkey] as string[] | undefined) ?? [];
+    if (!options.length) return null;
+    return (
+      <div className="space-y-1">
+        <Label className="text-xs">{label}</Label>
+        <div className="flex flex-wrap gap-1">
+          {options.slice(0, 30).map((o) => {
+            const on = selected.includes(o);
+            return (
+              <button
+                key={o}
+                type="button"
+                onClick={() => toggleInArray(fkey, o)}
+                className={
+                  "text-[11px] px-2 py-0.5 rounded border transition " +
+                  (on
+                    ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]"
+                    : "bg-transparent border-[#B89555]/40 text-[#1A1A1A]/70 hover:border-[#B89555]")
+                }
+              >
+                {o}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -189,6 +313,16 @@ export default function CampaignComposer({ onSent }: { onSent?: () => void }) {
             <Input value={senderEmail} onChange={(e) => setSenderEmail(e.target.value)} />
           </div>
         </div>
+
+        {!senderDomainOk && (
+          <div className="flex items-start gap-2 text-xs text-red-700 bg-red-50 p-2 rounded border border-red-200">
+            <ShieldAlert className="w-4 h-4 shrink-0 mt-0.5" />
+            <span>
+              Sender must be on the verified <code>@{ALLOWED_DOMAIN}</code> domain
+              or Resend will reject the send.
+            </span>
+          </div>
+        )}
 
         <div className="space-y-2">
           <Label>Reply-to (optional)</Label>
@@ -222,13 +356,19 @@ export default function CampaignComposer({ onSent }: { onSent?: () => void }) {
 
       {/* Audience panel */}
       <Card className="p-5 space-y-4">
-        <div>
-          <h3 className="font-semibold text-[#1A1A1A]">Audience</h3>
-          <p className="text-xs text-[#1A1A1A]/60">From <code>crm_leads</code></p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="font-semibold text-[#1A1A1A]">Audience</h3>
+            <p className="text-xs text-[#1A1A1A]/60">From <code>crm_leads</code></p>
+          </div>
+          <Button size="sm" variant="outline" onClick={saveAsSegment} disabled={savingSegment}>
+            {savingSegment ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <Save className="w-3 h-3 mr-1" />}
+            Save segment
+          </Button>
         </div>
 
         <div className="space-y-2">
-          <Label>Saved segment</Label>
+          <Label className="text-xs">Saved segment</Label>
           <Select value={segmentId || "none"} onValueChange={(v) => setSegmentId(v === "none" ? "" : v)}>
             <SelectTrigger><SelectValue placeholder="None — use filter below" /></SelectTrigger>
             <SelectContent>
@@ -238,28 +378,25 @@ export default function CampaignComposer({ onSent }: { onSent?: () => void }) {
           </Select>
         </div>
 
-        <div className="space-y-2">
-          <Label className="text-xs">Contact type (csv)</Label>
-          <Input value={(filter.contact_type ?? []).join(", ")}
-            onChange={(e) => updateArrayField("contact_type", e.target.value)}
-            placeholder="client, broker, developer" />
+        <ChipRow fkey="contact_type" options={CONTACT_TYPES} label="Contact type" />
+        <ChipRow fkey="pipeline_stage" options={facets.pipeline_stage} label="Pipeline stage" />
+        <ChipRow fkey="tags_any" options={facets.tags} label="Tags (any of)" />
+        <ChipRow fkey="source" options={facets.source} label="Source" />
+        <ChipRow fkey="preferred_language" options={facets.language} label="Language" />
+
+        <div className="space-y-1">
+          <Label className="text-xs">Company / brokerage</Label>
+          <Input
+            list="campaign-company-options"
+            value={(filter.company_name ?? []).join(", ")}
+            onChange={(e) => updateArrayField("company_name", e.target.value)}
+            placeholder="Pick or type, comma-separated"
+          />
+          <datalist id="campaign-company-options">
+            {facets.company.slice(0, 200).map((c) => <option key={c} value={c} />)}
+          </datalist>
         </div>
-        <div className="space-y-2">
-          <Label className="text-xs">Pipeline stage (csv)</Label>
-          <Input value={(filter.pipeline_stage ?? []).join(", ")}
-            onChange={(e) => updateArrayField("pipeline_stage", e.target.value)}
-            placeholder="new, qualified" />
-        </div>
-        <div className="space-y-2">
-          <Label className="text-xs">Tags — any of (csv)</Label>
-          <Input value={(filter.tags_any ?? []).join(", ")}
-            onChange={(e) => updateArrayField("tags_any", e.target.value)} />
-        </div>
-        <div className="space-y-2">
-          <Label className="text-xs">Company / brokerage (csv)</Label>
-          <Input value={(filter.company_name ?? []).join(", ")}
-            onChange={(e) => updateArrayField("company_name", e.target.value)} />
-        </div>
+
         <div className="space-y-2">
           <Label className="text-xs">Search</Label>
           <Input value={filter.search ?? ""} onChange={(e) =>
@@ -290,9 +427,9 @@ export default function CampaignComposer({ onSent }: { onSent?: () => void }) {
             </span>
           </div>
           {!!preview?.skipped_suppressed_count && (
-            <div className="text-xs text-[#1A1A1A]/70">
+            <Badge variant="outline" className="text-[10px]">
               {preview.skipped_suppressed_count} suppressed (skipped)
-            </div>
+            </Badge>
           )}
           {!!preview?.companies?.length && (
             <div>
@@ -320,6 +457,29 @@ export default function CampaignComposer({ onSent }: { onSent?: () => void }) {
           )}
         </div>
 
+        {/* Resend quota meter */}
+        <div className="rounded-md bg-[#F7F2EA] p-3 space-y-2 border border-[#B89555]/40">
+          <div className="flex items-center justify-between text-xs">
+            <span className="font-medium">Resend quota — today</span>
+            <span className="tabular-nums">
+              {quota.sentToday} / {quota.unlimited ? "∞" : quota.dailyLimit}
+            </span>
+          </div>
+          <div className="h-1.5 w-full bg-[#EFE6D6] rounded">
+            <div
+              className={`h-full rounded transition-all ${quotaTone}`}
+              style={{ width: `${quota.unlimited ? 4 : quotaPct}%` }}
+            />
+          </div>
+          <div className="flex items-center justify-between text-[11px] text-[#1A1A1A]/70">
+            <span>Month: {quota.sentMonth} / {quota.unlimited ? "∞" : quota.monthlyLimit}</span>
+            <span>Plan: {quota.plan}</span>
+          </div>
+          {quotaBlocked && (
+            <div className="text-xs text-red-700">Daily quota reached — sends blocked until tomorrow.</div>
+          )}
+        </div>
+
         <div className="space-y-2">
           <Label className="text-xs">Max recipients (safety cap)</Label>
           <Input type="number" min={1} max={2000} value={maxSend}
@@ -328,7 +488,10 @@ export default function CampaignComposer({ onSent }: { onSent?: () => void }) {
 
         <Button
           onClick={sendCampaign}
-          disabled={sending || resolving || !preview?.deliverable_count || violatesSingleAgency}
+          disabled={
+            sending || resolving || !preview?.deliverable_count ||
+            violatesSingleAgency || !senderDomainOk || quotaBlocked
+          }
           className="w-full"
         >
           {sending ? <Loader2 className="w-4 h-4 animate-spin mr-1" /> : <Send className="w-4 h-4 mr-1" />}
