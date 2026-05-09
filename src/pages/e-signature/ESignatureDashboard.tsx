@@ -499,9 +499,9 @@ export default function ESignatureDashboard() {
                           {sizeLine && (
                             <div className="text-[11px] text-[#1A1A1A]/70 truncate">{sizeLine}</div>
                           )}
-                          {(phoneMasked || emailMasked) && (
-                            <div className="text-[11px] text-[#1A1A1A]/60 truncate">
-                              {[phoneMasked, emailMasked].filter(Boolean).join(" · ")}
+                          {(phoneFull || emailFull) && (
+                            <div className="text-[11px] text-[#1A1A1A]/70 truncate">
+                              {[phoneFull, emailFull].filter(Boolean).join(" · ")}
                             </div>
                           )}
                           <div className="text-[11px] text-muted-foreground truncate mt-0.5">
