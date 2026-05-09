@@ -1,117 +1,99 @@
-## Trade-license values (locked from your PDF)
+## CRM 2026 Upgrade — Plan
 
-I'll write these into `src/config/companyLegal.ts` as the single source of truth for the PAA, Listing Authorisation, and any legal surface:
+Address every point in your message, plus continue the queued work (developer enrichment, birthday automation, company typeahead). All in one pass.
+
+---
+
+### 1. Restore "All Leads" (the 3 leads that vanished)
+
+The lazy-loaded `CRMEnhancedDashboard.tsx` is failing to fetch (runtime error in console), which is breaking sibling lazy chunks and leaving `All Leads` empty in some sessions. Also, `CRMLeadsTableV2` filters with `isRealCRMLead` which can hide rows missing certain fields.
+
+- Force-refresh the lazy chunk hashes (touch `CRMEnhancedDashboard.tsx`) and add an error boundary so a broken Insights chunk never blanks the leads table.
+- Loosen `isRealCRMLead` to include any non-deleted `crm_leads` row that has at least one of: phone, email, full_name. Log dropped rows once for diagnostics.
+- Run a read query to confirm the 3 leads still exist; if RLS is blocking them, attach the missing `crm_lead_state_per_user` row via a one-time backfill so they appear under "all".
+- Empty state: replace silent "No leads found" with a count breakdown (`X total · Y assigned · Z unassigned`) and a "Recover from Recently Deleted" link.
+
+---
+
+### 2. Remove the vertical sub-sidebar — keep navigation horizontal
+
+Revert `UnifiedCRM` to a single horizontal context bar under the entity bar (matching the entity bar styling). Drop the 212px left rail and the mobile `<select>` block. Sub-section pills line up horizontally with horizontal scroll on overflow, grouped by visual divider (People · Workspace · Pipeline) only when 4+ items exist.
+
+---
+
+### 3. Stage / Source / Owner / Tag filter polish
+
+Inside `CRMLeadsTableV2`:
+
+- **Stage dropdown panel**: give the popover a champagne surface (`bg-[#FDFBF7]` with 1px gold hairline + soft shadow) so Positive/Neutral/Negative groups are clearly framed. Each individual stage chip gets a colored dot:
+  - Positive → emerald, neutral → blue, negative → red, junk → amber, no_answer → slate.
+- **All Sources**: currently shows `…` because long source labels overflow. Fix with `truncate min-w-0` on `SelectValue` and increase trigger width on `md:`. Also show the count next to each source ("Website · 12").
+- **All Owners**: rename "Unassigned" → "Pool (not assigned to a broker)". Add **"Assigned to Broker"** quick filter and a per-broker submenu so you can filter by any specific broker.
+- **Hover & open states**: replace the default light-gray hover (`hover:bg-accent`) with `hover:bg-[#EFE6D6]` (champagne raised) and `data-[state=open]`/`data-[highlighted]` on Radix items get `bg-[#EFE6D6]` + 1px gold left-border. Same for the Tag dropdown.
+
+---
+
+### 4. VIP & ownership labels
+
+Replace every "Unassigned" string in lead/owner pills with context-correct copy:
+
+| Where | Old | New |
+|---|---|---|
+| Owner column | "Unassigned" | "Pool" (with tooltip "Not yet assigned to a broker") |
+| VIP filter | "Unassigned" | "Not VIP" |
+| Filter dropdown | "Unassigned" | "Pool (no broker)" |
+
+---
+
+### 5. Distribution metrics + AI Next-Step strip
+
+New strip above the leads table (collapsed by default, opens with the existing Insights toggle):
 
 ```text
-TRADE_LICENSE_LEGAL_NAME   = "J B J GLOBAL REAL ESTATE L.L.C S.O.C"
-TRADE_LICENSE_BRAND        = "JBJ GLOBAL REAL ESTATE"
-TRADE_LICENSE_OFFICE       = "Office SM1-195, Port Saeed, Deira, Dubai, UAE
-                              (Owned by Mohammed Saeed Hareb, Parcel 129-417)"
-TRADE_LICENSE_NUMBER       = "1591031"           // DED License
-TRADE_LICENSE_DCCI_NO      = "666113"
-TRADE_LICENSE_REGISTER_NO  = "2789619"
-TRADE_LICENSE_ISSUE_DATE   = "2026-01-13"
-TRADE_LICENSE_EXPIRY_DATE  = "2027-01-12"
-TRADE_LICENSE_LEGAL_TYPE   = "Limited Liability Company - Single Owner (LLC-SO)"
-TRADE_LICENSE_OWNER_NAME   = "JANE ABDALLAH BOU JAOUDE"
-TRADE_LICENSE_OWNER_NATIONALITY = "Lebanese"
-TRADE_LICENSE_ACTIVITIES   = ["Leasing Property Brokerage Agents",
-                              "Real Estate Buying & Selling Brokerage"]
-COMPANY_CONTACT.phone      = "+971 56 591 1000"
-COMPANY_CONTACT.email      = "Contact@JBJ.AE"
-COMPANY_CONTACT.website    = "www.jbj.ae"
+Total 1,248 │ Mine 312 │ Pool 87 │ Assigned 849
+            └─ by broker: Sara 220 · Omar 188 · Layla 142 · …
 ```
-I will not ask for these again.
+
+- Server-side counts via a single RPC `crm_lead_distribution_for_owner()` returning `{total, mine, pool, by_broker[]}`.
+- AI strip below it calls a new edge function `crm-distribution-insights` (Lovable AI Gateway, `google/gemini-3-flash-preview`) with the metrics + last 30d touch data and returns 3–5 concrete next steps:
+  - "Reassign 18 stale leads from Sara → Omar (his close-rate is 2.4× higher this month)"
+  - "Auto-junk 42 leads with 3+ no-answer attempts and no reply in 21d"
+  - "Revive 11 'Interested' leads with no touch in 14d — draft follow-up?"
+  - Each suggestion has a one-click action button.
 
 ---
 
-## 1. CRM · Developers (JBJ CRM → Developers tab) — institutional upgrade
+### 6. Brokers Registry — vertical-letter card fix (already partly done, finish it)
 
-Replace the current sparse table with a developer command‑center, sourced first from `public.developers` and enriched on demand.
-
-**Per‑row card / drawer fields (clickable wherever sensible):**
-- Logo · Name · Slug · Founded · Headquarters · Office address (opens Google Maps)
-- CEO · License # · Parent company · Specialization · Rank · Portfolio worth
-- Completed / Off‑plan / Total units / Upcoming units · Notable projects (chips)
-- Website (↗) · Instagram (↗) · LinkedIn (↗) · Admin email (mailto:) · Office phone (tel:) · WhatsApp (wa.me) · Office location (maps)
-- Notes · Registration status · Source pill (database/uploaded/manual/scraped)
-- Tasks · Calendar events · Reminders (assignable to me / Amanda / any employee)
-- Brokers working at this developer (count + list) — derived from `crm_brokers.current_brokerage_id` join + `current_company` fallback
-
-**Schema additions (migration 1):** add to `public.developers` —
-`instagram_url`, `linkedin_url`, `office_phone`, `whatsapp`, `admin_email`, `office_address`, `google_maps_url`, `registration_status`, `notes`, `last_enriched_at`, `enrichment_source`.
-
-**Enrichment edge function `developer-enrich`:** for any developer row missing one of {`logo_url`, `headquarters`, `ceo_name`, `license_number`, `founded_year`, `website_url`, `instagram_url`, `linkedin_url`, `office_phone`, `admin_email`}, scrape Google + the developer site via Lovable AI Gateway (Gemini Flash) and persist results. Triggered on row open and via a "Refresh from web" button. Rate‑limited; logs to `developer_enrichment_log`.
-
-**Tasks / calendar / notes integration:** drawer gets three native tabs that read/write `crm_tasks`, `calendar_events`, `crm_notes` with `entity_type='developer', entity_id=<id>`. Assignee picker = me + active employees from `employees`.
+Sweep every card under Brokers Registry, Developers, Agencies, Sales Reps for missing `min-w-0` / `truncate` / `whitespace-nowrap` and grid containers without `min-w-0`. Verify at 320px, 414px, 768px, 1180px, 1440px viewports.
 
 ---
 
-## 2. CRM · Brokers — registry rework
+### 7. Queued work from previous turn — execute now
 
-**Rename + clean tabs.** Drop the misplaced "Registered / External" split. New tabs:
-`All · Sales · Leasing · Pending` (the *registration / verification* concept stays inside Brokerage Agencies, where it belongs).
-
-**Schema additions (migration 2)** to `crm_brokers`:
-`personal_email`, `company_email`, `personal_phone`, `company_phone`, `whatsapp`, `birthday DATE`, `experience_years`, `broker_type` ('sales'|'leasing'|'both'), `linkedin_url`, `bayut_url`, `pf_url`, `instagram_url`.
-
-**Drawer fields** (everything optional, fill anytime):
-Photo · Full name · Nationality · Languages · Experience · Birthday · Personal email · Company email · Personal phone · Company phone · WhatsApp · LinkedIn · Bayut/PF profiles · Current company (typeahead — see below) · Position · Tier · RERA · Notes · Source pill (database name + upload file + manual marker) · Broker type (Sales / Leasing).
-
-**Company typeahead.** When typing in "Current company", show a live dropdown of nearest matches from `crm_brokerages.name` ∪ `developers.name`. Selecting a match writes both `current_company` (text) and `current_brokerage_id` (FK) so the broker appears under that company everywhere.
-
-**Bidirectional company ↔ broker visibility:**
-- Inside a developer or brokerage drawer → "Brokers" tab lists every broker with that company.
-- Inside a broker drawer → "Companies worked for" timeline (already exists via `broker_company_history`) is preserved.
-- Counts (total brokers, brokers per company) are derived live.
-
-**LD database backfill.** Run a one‑time idempotent import (edge function `brokers-ld-backfill`) of the 33k+ LD source rows into `crm_brokers` with `database_source='LD'`, deduped on `(lower(email_lower), phone_e164)`. Source pill displays "LD database". I'll run it once you approve the migration.
+- **Developer enrichment** (`developer-enrich` edge function): on opening a developer row with missing fields, call Lovable AI + Firecrawl to fetch logo, HQ address, CEO, license, Instagram, LinkedIn, official site. Cache to `developers.last_enriched_at`. Manual "Enrich now" button on each row.
+- **Birthday dispatcher** (`birthday-dispatcher` cron, daily 08:00 Dubai): pulls `crm_brokers` where `birthday = today`, sends transactional "Happy Birthday from JBJ" via Resend, and posts a morning briefing card on the dashboard. Records run in `birthday_workflow_runs`.
+- **Company typeahead** in Add/Edit Broker: combobox sourced from `crm_brokerages.name ∪ developers.name`, fuzzy match, creates a new brokerage row inline if no match.
+- **LD 33k+ backfill**: edge function `import-ld-brokers` scaffolded; awaiting your CSV file before it runs.
 
 ---
 
-## 3. Birthday automation (workflow)
+### 8. Out of scope (will not change)
 
-**New table `birthday_workflow_runs`** (date, audience kind, sent count). **Edge function `birthday-dispatcher`** runs daily via pg_cron at 08:00 Asia/Dubai and:
-
-1. Pulls everyone with `birthday = today` from `crm_brokers`, `crm_leads`, `developer_sales_reps`, `crm_clients`, `employees`.
-2. Renders the "Happy birthday from JBJ" template (champagne‑gold, signature from Jane, monogram).
-3. Sends through the existing Resend pipeline (respects `email_quota_try_claim`).
-4. Posts a daily morning briefing card on the owner dashboard listing today's birthdays — even before send.
-
-Single editable template at `src/templates/birthdayEmail.ts`. End‑to‑end test will run with a synthetic `birthday=today` row to confirm enqueue + delivery + log row.
+- Investor / Sales Rep / Agency tab visual changes beyond bug-sweep #6.
+- Lovable's visual-edit sidebar (your editor chrome).
+- Trade-license popups — already locked from `companyLegal.ts`, will not re-prompt.
 
 ---
 
-## 4. Trade-license values flow into the document
+### Technical notes
 
-Beyond the constants above, the PAA + Listing Authorisation will print:
-- Header legal name in spaced form `J B J GLOBAL REAL ESTATE L.L.C S.O.C` (exact dotting from the license).
-- Footer: License #, DCCI #, Register #, Issue/Expiry dates, office line.
-- Activities listed in compliance footer.
+- New edge functions: `crm-distribution-insights`, `developer-enrich`, `birthday-dispatcher`, `import-ld-brokers`.
+- New RPC: `crm_lead_distribution_for_owner()` (SECURITY DEFINER, owner-only).
+- New table: `birthday_workflow_runs` (id, run_date, broker_count, sent_count, errors jsonb).
+- All AI calls go through Lovable AI Gateway with `LOVABLE_API_KEY`.
+- All edge functions use `requireOwnerAuth`.
+- Champagne theme tokens only — no raw grays, no gold fills (hairline only).
+- Responsive verified at 320 / 414 / 768 / 1180 / 1440 widths.
 
----
-
-## 5. UI / UX bug sweep (the small but visible stuff)
-
-- **Vertical letters**: every place a long word is used as a stat label inside a flex/grid card with `min-w-0` missing — apply `min-w-0`, `whitespace-nowrap`/`break-words`, `truncate` and a guaranteed `flex-1` on the text column. Audit `BrokersRegistry` stat strip (visible bug), `IconTile` rows, dashboard KPI cards. Container queries on the body so the visual‑edit sidebar opening can't compress cards into one‑letter stacks.
-- **Fake email**: remove any rendering of the auth user's email next to the brokers area / next to "owner" badge. Where an email is shown, replace with role label "Owner" only.
-- **Upload / Legacy backfill / database / campaign chips** in BrokersRegistry: wire each to its real action (Upload → ImportBrokersDialog; Legacy backfill → backfill edge function; Database → source filter; Campaign → campaign attribution). Today they only clear filters — that's the bug.
-- **JBJ Brokers chip**: make it filter `database_source='JBJ'`, not no‑op.
-- All cards in BrokersRegistry become click‑through to the broker drawer (currently only the row is).
-
----
-
-## What runs vs what waits
-
-| # | Step | Type |
-|---|------|------|
-| 1 | Write `companyLegal.ts` from license | code edit |
-| 2 | Migration: developers + crm_brokers columns + birthday workflow table + indexes | DB migration (needs your approval) |
-| 3 | Developer drawer rebuild + enrichment edge fn | code |
-| 4 | Brokers drawer + tabs + typeahead + chip wiring + UI bug sweep | code |
-| 5 | LD 33k backfill | edge fn invocation after migration |
-| 6 | Birthday cron + template + tested end‑to‑end | code + cron |
-
-Out of scope this round: redesigning Investors / Sales Reps / Agencies (they are not broken in this brief) and modifying Lovable's visual‑edits sidebar itself (we only protect against its width).
-
-After approval I push the migration immediately, then proceed through 1 → 6 without further questions.
+Reply **Approve** and I'll implement everything in one pass.
