@@ -301,64 +301,100 @@ export default function ESignatureDashboard() {
                   )}
                 </div>
               ) : (
-                <div className="divide-y divide-gold/10">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {filteredEnvelopes?.map((envelope) => {
                     const config = statusConfig[envelope.status];
+                    const docNumber =
+                      (envelope.metadata as any)?.doc_number ||
+                      (envelope.template_field_values as any)?.doc_number ||
+                      "";
+                    const clientName =
+                      (envelope.template_field_values as any)?.landlord_name ||
+                      envelope.esign_recipients?.[0]?.name ||
+                      "Unnamed client";
+                    const templateLabel =
+                      envelope.template_key === "jbj-property-advertising-agreement"
+                        ? "Property Advertising Agreement — Leasing"
+                        : envelope.template_key === "jbj-listing-authorisation-selling"
+                          ? "Listing Authorisation — Selling"
+                          : envelope.name;
                     return (
-                      <div key={envelope.id} className="py-4 flex items-center justify-between gap-4">
-                        <div className="flex-1 min-w-0">
-                          <Link 
-                            to={`/e-signature/${envelope.id}`}
-                            className="font-medium text-foreground hover:text-gold transition-colors"
-                          >
-                            {envelope.name}
-                          </Link>
-                          <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">
-                            <span>
-                              {envelope.esign_recipients.map(r => r.name).join(", ")}
+                      <div
+                        key={envelope.id}
+                        className="rounded-lg border border-gold/20 bg-white/70 hover:border-gold/60 hover:shadow-md transition p-4 flex flex-col gap-2"
+                      >
+                        <div className="flex items-center justify-between gap-2 flex-wrap">
+                          {docNumber ? (
+                            <span className="text-[10px] tracking-[0.16em] uppercase text-[#1A1A1A]/70 border border-[#B89555]/50 rounded px-2 py-0.5 bg-[#F7F2EA]">
+                              {docNumber}
                             </span>
-                            <span>•</span>
-                            <span>
-                              {formatDistanceToNow(new Date(envelope.created_at), { addSuffix: true })}
+                          ) : (
+                            <span className="text-[10px] tracking-[0.16em] uppercase text-[#1A1A1A]/40">
+                              No doc no.
                             </span>
-                          </div>
+                          )}
+                          <Badge className={`${config.color} border flex items-center gap-1 text-[10px]`}>
+                            {config.icon}
+                            {config.label}
+                          </Badge>
                         </div>
-                        
-                        <Badge className={`${config.color} border flex items-center gap-1`}>
-                          {config.icon}
-                          {config.label}
-                        </Badge>
-                        
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon">
-                              <MoreVertical className="w-4 h-4" />
+                        <Link
+                          to={`/e-signature/${envelope.id}`}
+                          className="block group"
+                        >
+                          <div className="text-base font-semibold text-foreground group-hover:text-gold transition truncate">
+                            {clientName}
+                          </div>
+                          <div className="text-xs text-muted-foreground truncate">
+                            {templateLabel}
+                          </div>
+                        </Link>
+                        <div className="flex items-center justify-between text-[11px] text-muted-foreground mt-1">
+                          <span>
+                            {envelope.esign_recipients.length} recipient
+                            {envelope.esign_recipients.length === 1 ? "" : "s"}
+                          </span>
+                          <span>
+                            {formatDistanceToNow(new Date(envelope.updated_at || envelope.created_at), { addSuffix: true })}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-end gap-1 pt-1 border-t border-[#B89555]/20">
+                          <Link to={`/e-signature/${envelope.id}`}>
+                            <Button variant="ghost" size="sm" className="h-7 text-[11px]">
+                              <Eye className="w-3 h-3 mr-1" /> Open
                             </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem asChild>
-                              <Link to={`/e-signature/${envelope.id}`}>
-                                <Eye className="w-4 h-4 mr-2" />
-                                View Details
-                              </Link>
-                            </DropdownMenuItem>
-                            {["sent", "viewed", "partially_signed"].includes(envelope.status) && (
-                              <DropdownMenuItem onClick={() => handleSendReminder(envelope.id)}>
-                                <Bell className="w-4 h-4 mr-2" />
-                                Send Reminder
+                          </Link>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="icon" className="h-7 w-7">
+                                <MoreVertical className="w-3.5 h-3.5" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem asChild>
+                                <Link to={`/e-signature/${envelope.id}`}>
+                                  <Eye className="w-4 h-4 mr-2" />
+                                  View Details
+                                </Link>
                               </DropdownMenuItem>
-                            )}
-                            {envelope.status === "draft" && (
-                              <DropdownMenuItem 
-                                onClick={() => handleDelete(envelope.id)}
-                                className="text-red-600"
-                              >
-                                <Trash2 className="w-4 h-4 mr-2" />
-                                Delete
-                              </DropdownMenuItem>
-                            )}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                              {["sent", "viewed", "partially_signed"].includes(envelope.status) && (
+                                <DropdownMenuItem onClick={() => handleSendReminder(envelope.id)}>
+                                  <Bell className="w-4 h-4 mr-2" />
+                                  Send Reminder
+                                </DropdownMenuItem>
+                              )}
+                              {envelope.status === "draft" && (
+                                <DropdownMenuItem
+                                  onClick={() => handleDelete(envelope.id)}
+                                  className="text-red-600"
+                                >
+                                  <Trash2 className="w-4 h-4 mr-2" />
+                                  Delete
+                                </DropdownMenuItem>
+                              )}
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </div>
                       </div>
                     );
                   })}

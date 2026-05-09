@@ -18,9 +18,11 @@ import { format, formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 import { SUPABASE_URL, PUBLIC_DOMAIN } from "@/config/backend";
-import { PAA_FIELD_GROUPS } from "@/templates/jbjPropertyAdvertisingAgreement";
+import { PAA_FIELD_GROUPS, PAA_LAYOUT_VERSION, type TemplateChrome } from "@/templates/jbjPropertyAdvertisingAgreement";
 import { renderTemplateHtml, useRegenerateEnvelopePdf } from "@/hooks/useEsignTemplates";
 import { SmartFillDropzone } from "@/components/e-signature/SmartFillDropzone";
+import { TemplateChromeStudio } from "@/components/e-signature/TemplateChromeStudio";
+import { useOwnerSignatureAssets } from "@/hooks/useOwnerSignatureAssets";
 
 type EnvelopeStatus = 'draft' | 'sent' | 'viewed' | 'partially_signed' | 'completed' | 'declined' | 'expired' | 'voided';
 type RecipientStatus = 'pending' | 'sent' | 'delivered' | 'viewed' | 'signed' | 'declined';
@@ -58,7 +60,13 @@ export default function EnvelopeDetail() {
   const [ccs, setCcs] = useState<string[]>([]);
   const [ccInput, setCcInput] = useState("");
   const [bulkCcs, setBulkCcs] = useState("");
+  const [chrome, setChrome] = useState<TemplateChrome>({});
+  const [showStudio, setShowStudio] = useState(false);
   const regenerate = useRegenerateEnvelopePdf();
+  const { data: sigAssets } = useOwnerSignatureAssets("signature");
+  const { data: stampAssets } = useOwnerSignatureAssets("stamp");
+  const ownerSignatureUrl = sigAssets?.find((a) => a.is_default)?.image_url || sigAssets?.[0]?.image_url || null;
+  const ownerStampUrl = stampAssets?.find((a) => a.is_default)?.image_url || stampAssets?.[0]?.image_url || null;
 
   const { data: envelope, isLoading, refetch } = useQuery({
     queryKey: ["esign-envelope", id],
@@ -74,14 +82,34 @@ export default function EnvelopeDetail() {
     enabled: !!id,
   });
 
-  // Hydrate edit + CC state when envelope loads
+  // Hydrate edit + CC + chrome state when envelope loads
   useEffect(() => {
     if (envelope) {
       setEditValues({ ...((envelope.template_field_values as any) || {}) });
-      const persisted = ((envelope.metadata as any)?.cc_emails || []) as string[];
+      const meta = (envelope.metadata as any) || {};
+      const persisted = (meta.cc_emails || []) as string[];
       setCcs(Array.isArray(persisted) ? persisted : []);
+      setChrome((meta.chrome as TemplateChrome) || {});
     }
   }, [envelope?.id]);
+
+  // Auto re-render PDF if stored layout_version is older than the current template version
+  useEffect(() => {
+    if (!envelope || !envelope.template_key || envelope.template_key !== "jbj-property-advertising-agreement") return;
+    const meta = (envelope.metadata as any) || {};
+    const stored = Number(meta.layout_version || 0);
+    if (stored < PAA_LAYOUT_VERSION && envelope.status === "draft" && !regenerate.isPending) {
+      regenerate.mutateAsync({
+        envelopeId: envelope.id,
+        templateKey: envelope.template_key,
+        values: { ...((envelope.template_field_values as any) || {}), doc_number: meta.doc_number || "" },
+        chrome: meta.chrome as TemplateChrome | undefined,
+        ownerSignatureUrl,
+        ownerStampUrl,
+      }).then(() => refetch()).catch(() => {});
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [envelope?.id, ownerSignatureUrl, ownerStampUrl]);
 
   // Realtime: refresh on recipient/envelope changes
   useEffect(() => {
@@ -114,8 +142,12 @@ export default function EnvelopeDetail() {
   const previewHtml = useMemo(() => {
     if (!envelope?.template_key) return null;
     const vals = editing ? editValues : ((envelope.template_field_values as any) || {});
-    return renderTemplateHtml(envelope.template_key, { ...vals, doc_number: vals.doc_number || docNumber });
-  }, [envelope?.template_key, envelope?.template_field_values, editing, editValues, docNumber]);
+    return renderTemplateHtml(
+      envelope.template_key,
+      { ...vals, doc_number: vals.doc_number || docNumber },
+      { chrome, ownerSignatureUrl, ownerStampUrl },
+    );
+  }, [envelope?.template_key, envelope?.template_field_values, editing, editValues, docNumber, chrome, ownerSignatureUrl, ownerStampUrl]);
 
   const sendReminder = async (recipientId?: string) => {
     const key = recipientId || "all";
@@ -229,10 +261,19 @@ export default function EnvelopeDetail() {
           .update({ status: "draft" })
           .eq("id", envelope.id);
       }
+      // Smart-clear conditional fields before persisting
+      const cleaned = { ...editValues };
+      if (/vacant/i.test(cleaned.status_vacant_tenanted || "")) cleaned.vacating_date = "";
+      if (!/villa/i.test(cleaned.property_type || "")) cleaned.plot_sqft = "";
+      if (!/until/i.test(cleaned.listing_period || "")) cleaned.listing_period_until_date = "";
+
       await regenerate.mutateAsync({
         envelopeId: envelope.id,
         templateKey: envelope.template_key,
-        values: { ...editValues, doc_number: editValues.doc_number || docNumber },
+        values: { ...cleaned, doc_number: cleaned.doc_number || docNumber },
+        chrome,
+        ownerSignatureUrl,
+        ownerStampUrl,
       });
       toast.success("Document updated");
       setEditing(false);
@@ -546,6 +587,20 @@ export default function EnvelopeDetail() {
           </div>
         </div>
 
+        {/* Header & footer studio (always available) */}
+        <div className="flex items-center justify-between gap-2">
+          <Button variant="outline" size="sm" onClick={() => setShowStudio((s) => !s)}>
+            {showStudio ? "Hide" : "Customize"} header &amp; footer
+          </Button>
+          {showStudio && (
+            <Button variant="gold" size="sm" onClick={handleSaveEdits} disabled={regenerate.isPending}>
+              {regenerate.isPending ? <Loader2 className="w-3.5 h-3.5 mr-1 animate-spin" /> : <Save className="w-3.5 h-3.5 mr-1" />}
+              Apply chrome &amp; re-render
+            </Button>
+          )}
+        </div>
+        {showStudio && <TemplateChromeStudio value={chrome} onChange={setChrome} />}
+
         {/* Edit Fields panel (full width below preview) */}
         {editing && envelope.template_key && (
           <Card className="bg-[#F7F2EA] border-[#B89555]/30">
@@ -559,42 +614,65 @@ export default function EnvelopeDetail() {
                 schemaHint="jbj_paa_leasing"
                 onExtracted={(fields) => setEditValues((prev) => ({ ...prev, ...fields }))}
               />
-              {PAA_FIELD_GROUPS.filter(g => g.title !== "Signatures").map((group) => (
-                <div key={group.title}>
-                  <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/70 mb-2">{group.title}</div>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                    {group.fields.map((f) => {
-                      const val = editValues[f.key] ?? "";
-                      const onChange = (v: string) => setEditValues((prev) => ({ ...prev, [f.key]: v }));
-                      if (f.type === "select" && f.options) {
+              {PAA_FIELD_GROUPS.filter(g => g.title !== "Signatures").map((group) => {
+                const visible = group.fields.filter((f) => !f.conditional || f.conditional(editValues));
+                if (!visible.length) return null;
+                return (
+                  <div key={group.title}>
+                    <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/70 mb-2">{group.title}</div>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                      {visible.map((f) => {
+                        const val = editValues[f.key] ?? "";
+                        const onChange = (v: string) => setEditValues((prev) => ({ ...prev, [f.key]: v }));
+                        if (f.type === "select" && f.options) {
+                          return (
+                            <div key={f.key}>
+                              <Label className="text-xs">{f.label}</Label>
+                              <select value={val} onChange={(e) => onChange(e.target.value)} className="w-full h-9 px-2 rounded border border-[#B89555]/40 bg-white text-sm text-[#1A1A1A]">
+                                <option value="">—</option>
+                                {f.options.map((o) => <option key={o} value={o}>{o}</option>)}
+                              </select>
+                            </div>
+                          );
+                        }
+                        if (f.type === "textarea") {
+                          return (
+                            <div key={f.key} className="col-span-2 md:col-span-3">
+                              <Label className="text-xs">{f.label}</Label>
+                              <Textarea value={val} onChange={(e) => onChange(e.target.value)} rows={2} />
+                            </div>
+                          );
+                        }
+                        if (f.type === "money") {
+                          return (
+                            <div key={f.key}>
+                              <Label className="text-xs">{f.label}</Label>
+                              <div className="relative">
+                                <Input
+                                  inputMode="numeric"
+                                  value={val}
+                                  onChange={(e) => onChange(e.target.value.replace(/[^\d]/g, ""))}
+                                  onBlur={(e) => {
+                                    const n = Number(e.target.value.replace(/[^\d]/g, ""));
+                                    onChange(isFinite(n) && n > 0 ? new Intl.NumberFormat("en-AE").format(n) : "");
+                                  }}
+                                />
+                                <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] tracking-[0.16em] text-[#1A1A1A]/60">AED</span>
+                              </div>
+                            </div>
+                          );
+                        }
                         return (
                           <div key={f.key}>
                             <Label className="text-xs">{f.label}</Label>
-                            <select value={val} onChange={(e) => onChange(e.target.value)} className="w-full h-9 px-2 rounded border border-[#B89555]/40 bg-white text-sm text-[#1A1A1A]">
-                              <option value="">—</option>
-                              {f.options.map((o) => <option key={o} value={o}>{o}</option>)}
-                            </select>
+                            <Input type={f.type === "date" ? "date" : f.type === "number" ? "number" : "text"} value={val} onChange={(e) => onChange(e.target.value)} />
                           </div>
                         );
-                      }
-                      if (f.type === "textarea") {
-                        return (
-                          <div key={f.key} className="col-span-2 md:col-span-3">
-                            <Label className="text-xs">{f.label}</Label>
-                            <Textarea value={val} onChange={(e) => onChange(e.target.value)} rows={2} />
-                          </div>
-                        );
-                      }
-                      return (
-                        <div key={f.key}>
-                          <Label className="text-xs">{f.label}</Label>
-                          <Input type={f.type === "date" ? "date" : f.type === "number" ? "number" : "text"} value={val} onChange={(e) => onChange(e.target.value)} />
-                        </div>
-                      );
-                    })}
+                      })}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </CardContent>
           </Card>
         )}
