@@ -591,7 +591,7 @@ export default function EnvelopeDetail() {
               ) : envelope.document_url ? (
                 <iframe
                   title="Document PDF"
-                  src={envelope.document_url}
+                  src={`${envelope.document_url}${envelope.document_url.includes("?") ? "&" : "?"}v=${encodeURIComponent(envelope.updated_at || envelope.created_at || "")}`}
                   className="w-full bg-white"
                   style={{ height: "1100px", border: 0 }}
                 />
