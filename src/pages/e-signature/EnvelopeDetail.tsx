@@ -561,6 +561,9 @@ export default function EnvelopeDetail() {
                             <Button size="sm" variant="outline" className="h-7 text-[11px]" onClick={() => handleWhatsApp(recipient)}>
                               <MessageCircle className="w-3 h-3 mr-1" /> WhatsApp
                             </Button>
+                            <Button size="sm" variant="outline" className="h-7 text-[11px]" onClick={() => handleQuickEmail(recipient)} disabled={!recipient.email}>
+                              <Mail className="w-3 h-3 mr-1" /> Email
+                            </Button>
                           </>
                         )}
                         {canRemind && (
