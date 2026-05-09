@@ -382,8 +382,11 @@ export default function EnvelopeDetail() {
             <Button variant="outline" onClick={handlePrint}>
               <Printer className="w-4 h-4 mr-2" /> Print
             </Button>
-            <Button variant="outline" onClick={() => handleDownload(envelope.document_url, envelope.document_filename)}>
+            <Button variant="gold" onClick={() => handleDownload(envelope.document_url, envelope.document_filename)}>
               <Download className="w-4 h-4 mr-2" /> Download PDF
+            </Button>
+            <Button variant="outline" onClick={() => setExportOpen(true)}>
+              <Download className="w-4 h-4 mr-2" /> Export…
             </Button>
             <Button
               variant="outline"
