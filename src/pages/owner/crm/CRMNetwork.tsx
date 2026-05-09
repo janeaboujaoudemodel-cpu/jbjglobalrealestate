@@ -291,16 +291,20 @@ export default function CRMNetwork({ initialRole }: CRMNetworkProps = {}) {
     setActiveRole(role);
   }
 
+  const embedded = !!initialRole;
+
   return (
-    <div className="min-h-screen bg-[#FDFBF7] pt-[88px] px-6 pb-12">
-      <div className="max-w-[1400px] mx-auto">
-        <div className="mb-5">
-          <h1 className="text-2xl font-semibold text-[#1A1A1A]">CRM Network</h1>
-          <p className="text-sm text-[#1A1A1A]/70 mt-1">
-            Investors, developers, brokers, agencies and partners — independent
-            views, relationally connected. Filters stack across tabs.
-          </p>
-        </div>
+    <div className={embedded ? "" : "min-h-screen bg-[#FDFBF7] pt-[88px] px-6 pb-12"}>
+      <div className={embedded ? "" : "max-w-[1400px] mx-auto"}>
+        {!embedded && (
+          <div className="mb-5">
+            <h1 className="text-2xl font-semibold text-[#1A1A1A]">CRM Network</h1>
+            <p className="text-sm text-[#1A1A1A]/70 mt-1">
+              Investors, developers, brokers, agencies and partners — independent
+              views, relationally connected. Filters stack across tabs.
+            </p>
+          </div>
+        )}
 
         <Card className="bg-[#F7F2EA] border-[#B89555]/20 p-4 mb-4">
           <div className="flex items-center gap-2 mb-3">
