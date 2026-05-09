@@ -89,7 +89,7 @@ export default function DevelopersDirectory() {
             .order("name", { ascending: true })
             .range(from, from + PAGE - 1);
           if (error) throw error;
-          const batch = (data || []) as DeveloperRow[];
+          const batch = ((data || []) as unknown) as DeveloperRow[];
           all.push(...batch);
           if (batch.length < PAGE) break;
           from += PAGE;
