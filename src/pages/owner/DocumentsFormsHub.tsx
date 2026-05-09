@@ -164,8 +164,8 @@ export default function DocumentsFormsHub() {
         <Tabs value={tab} onValueChange={setTab}>
           <TabsList className="bg-[#F7F2EA] border border-[#B89555]/30">
             <TabsTrigger value="templates"><FileText className="w-4 h-4 mr-2" />Templates</TabsTrigger>
-            <TabsTrigger value="drafts"><Clock className="w-4 h-4 mr-2" />Drafts ({drafts.length})</TabsTrigger>
-            <TabsTrigger value="sent"><Send className="w-4 h-4 mr-2" />Sent ({sent.length})</TabsTrigger>
+            <TabsTrigger value="drafts"><Clock className="w-4 h-4 mr-2" />Forms Generated ({drafts.length})</TabsTrigger>
+            <TabsTrigger value="sent"><Send className="w-4 h-4 mr-2" />Pending Signature ({sent.length})</TabsTrigger>
             <TabsTrigger value="signed"><CheckCircle2 className="w-4 h-4 mr-2" />Signed ({signed.length})</TabsTrigger>
             <TabsTrigger value="assets"><PenTool className="w-4 h-4 mr-2" />Stamps & Signatures</TabsTrigger>
           </TabsList>
