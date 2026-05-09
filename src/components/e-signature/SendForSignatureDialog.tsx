@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Mail, MessageCircle, LinkIcon, Send, X, Plus, RotateCcw, Copy, Loader2 } from "lucide-react";
+import { Mail, MessageCircle, LinkIcon, Send, X, Plus, RotateCcw, Copy, Loader2, FlaskConical, Lock, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { SUPABASE_URL, PUBLIC_DOMAIN } from "@/config/backend";
