@@ -453,8 +453,6 @@ export const PAA_FIELD_GROUPS: { title: string; fields: { key: PAAFieldKey; labe
     fields: [
       { key: "landlord_signature_name", label: "Landlord — Printed Name" },
       { key: "landlord_signature_date", label: "Landlord — Date", type: "date" },
-      { key: "jbj_signature_name", label: "JBJ Representative — Printed Name" },
-      { key: "jbj_signature_date", label: "JBJ Representative — Date", type: "date" },
     ],
   },
 ];
