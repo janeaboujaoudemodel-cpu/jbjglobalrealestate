@@ -55,9 +55,9 @@ const sectionTitle = (n: number, t: string) => `
 
 export const JBJ_PAA_TEMPLATE_ID = "jbj-property-advertising-agreement";
 
-export function buildPAAHtml(values: Partial<Record<PAAFieldKey, string>> = {}): string {
+export function buildPAAHtml(values: Partial<Record<PAAFieldKey | "doc_number", string>> = {}): string {
   const v = { ...PAA_DEFAULT_VALUES, ...values };
-  const get = (k: PAAFieldKey) => (v[k] ?? "").toString();
+  const get = (k: PAAFieldKey | "doc_number") => (v[k] ?? "").toString();
 
   const html = `
 <div style="font-family:Inter,Arial,sans-serif;color:#1A1A1A;background:#FFFFFF;padding:48px 56px;max-width:794px;margin:0 auto;line-height:1.55;">
