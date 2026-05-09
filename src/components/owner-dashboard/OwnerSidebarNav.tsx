@@ -48,10 +48,26 @@ const NAV_SECTIONS: NavSection[] = [
     label: "CORE",
     items: [
       { label: "Overview", icon: LayoutDashboard, path: "/owner" },
-      { label: "CRM", icon: Users, path: "/owner/crm" },
+      { label: "CRM Hub", icon: Users, path: "/owner/crm" },
+    ],
+  },
+  {
+    label: "CRM",
+    items: [
+      { label: "All Leads", icon: Users, path: "/owner/crm?section=leads" },
+      { label: "Investors", icon: Users, path: "/owner/crm?section=relationships&sub=investors" },
+      { label: "Developers", icon: Building2, path: "/owner/crm?section=relationships&sub=developers" },
+      { label: "Dev Sales Reps", icon: Users, path: "/owner/crm?section=relationships&sub=sales-reps" },
+      { label: "Brokers", icon: Users, path: "/owner/crm?section=relationships&sub=brokers" },
+      { label: "Brokerage Agencies", icon: Building2, path: "/owner/crm?section=relationships&sub=agencies" },
+      { label: "Employees", icon: Users, path: "/owner/crm?section=employees" },
       { label: "Campaigns", icon: Megaphone, path: "/owner/crm?section=campaigns" },
       { label: "Tasks", icon: CheckSquare, path: "/owner/crm?section=tasks" },
       { label: "Calendar", icon: Calendar, path: "/owner/crm?section=calendar" },
+      { label: "Notes", icon: FileText, path: "/owner/crm?section=notes" },
+      { label: "Inbox", icon: Mail, path: "/owner/crm?section=inbox" },
+      { label: "Contracts", icon: FileText, path: "/owner/crm?section=contracts" },
+      { label: "Automation", icon: Zap, path: "/owner/crm?section=automation" },
     ],
   },
   {
