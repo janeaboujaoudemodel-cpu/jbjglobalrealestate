@@ -15,6 +15,7 @@ import {
   sendRegistrationEmail, OUTREACH_STATUSES, EMIRATES, type RegistryRecordType,
 } from "@/hooks/useUAERegistry";
 import { toast } from "sonner";
+import { RelationalHubTabs } from "@/components/crm/RelationalHubTabs";
 
 const SERVICE_CATEGORIES = ["Sales","Leasing","Off-Plan","Secondary Market","Property Management","Commercial","Luxury","Investment Advisory","Unknown"];
 const COMPANY_TYPES = ["Private Developer","Government Developer","Semi-Government Developer","Master Developer","Holding Company","Development Arm","Unknown"];
@@ -136,6 +137,7 @@ export default function UAERegistryDetailPage({ type }: { type: RegistryRecordTy
             <TabsTrigger value="comm">Communication</TabsTrigger>
             <TabsTrigger value="attach">Attachments ({attachments.data?.length ?? 0})</TabsTrigger>
             <TabsTrigger value="outreach">Outreach</TabsTrigger>
+            <TabsTrigger value="relhub">Relational Hub</TabsTrigger>
           </TabsList>
 
           {/* PROFILE */}
@@ -403,6 +405,27 @@ export default function UAERegistryDetailPage({ type }: { type: RegistryRecordTy
               </div>
               {r.last_response_summary && <div className="text-sm pt-2"><b>Last response summary:</b> {r.last_response_summary}</div>}
               {r.required_next_action && <div className="text-sm"><b>Required next action:</b> {r.required_next_action}</div>}
+            </Card>
+          </TabsContent>
+
+          {/* RELATIONAL HUB — linked people, scanned cards, source history */}
+          <TabsContent value="relhub" className="mt-4">
+            <Card className="p-5 bg-[#FDFBF7] border-[#B89555]/30">
+              <RelationalHubTabs
+                kind={type === "developer" ? "developer" : "brokerage"}
+                entityId={r.id}
+                name={r.brand_name || r.legal_company_name}
+                aliases={[r.legal_company_name, r.brand_name]}
+                email={type === "developer" ? r.registration_email : r.outreach_email}
+                phone={r.outreach_phone || (Array.isArray(r.main_phone_numbers) ? r.main_phone_numbers[0]?.number ?? r.main_phone_numbers[0] : undefined)}
+                sourceHistory={(log.data ?? []).map((row: any) => ({
+                  id: row.id,
+                  when: row.occurred_at ?? row.created_at,
+                  who: row.added_by ?? null,
+                  what: row.summary || `${row.channel ?? "log"} ${row.direction ?? ""}`.trim(),
+                  detail: row.full_message ?? null,
+                }))}
+              />
             </Card>
           </TabsContent>
         </Tabs>
