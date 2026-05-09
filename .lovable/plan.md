@@ -1,77 +1,50 @@
-## Goal
+## What's broken
 
-Re-verify and finish the four CRM tasks from earlier in this thread, plus fix the live `Failed to create lead` 500 the preview is hitting right now.
+**1. 401 "API key is invalid" → blank screen on send**
+`crm-send-brokerage-outreach` calls Resend directly with `RESEND_API_KEY`. Both `RESEND_API_KEY` (user secret) and `RESEND_API_KEY_1` (connector-managed) exist; the project secret is stale/invalid, so every send returns 401 from `api.resend.com`. The frontend toast surfaces it as a generic non-2xx and the composer goes blank.
 
-## What's already on disk (verified)
+**2. "Call us" / "WhatsApp" tiles in the delivered test email don't open the dialer or WhatsApp**
+The DB templates (`brokerage_partnership_intro`, `brokerage_breakfast_invite`) already have correct anchors:
+```
+<a href="tel:+971547167107">Call us</a>
+<a href="https://wa.me/971547167107" target="_blank">WhatsApp</a>
+```
+The reason they don't fire is Resend's **click tracking** (enabled at the domain level on `jbj.ae`). Resend rewrites every `<a href>` to `https://*.resend-links.com/CL0/...` — including `tel:` and `wa.me/` — so the click loads an HTTPS redirect page instead of triggering the OS dialer or the WhatsApp app handler. `mailto:` is similarly broken.
 
-- `src/components/crm/CampaignComposer.tsx` (340 lines) — composer, basic CSV-style segment fields, audience preview block, send test + send.
-- `src/pages/owner/crm/CampaignsPage.tsx` — wraps the composer.
-- Route `/owner/crm/campaigns` registered in `OwnerRoutes.tsx`.
-- `supabase/functions/crm-resolve-segment/index.ts` (178 lines).
-- `supabase/functions/crm-send-campaign/index.ts` (187 lines) — Resend, owner auth, single-agency rule, suppression, quota.
-- `crm_email_campaigns` columns + `email_suppressions` table migrations applied.
-- `CompanyHub`, `CompanyHubDrawer`, `CompanyHubPage`, `PersonDetailDrawer`, `ScopedExportMenu`, `CRMNetwork` all on disk.
+Resend supports a per-link opt-out via the attribute **`data-no-link-tracking`** on the `<a>`. Once added, Resend ships the original `href` untouched and the OS handles `tel:` / `wa.me` natively.
 
-So the previous code did land — but four real gaps remain (matching your selection), plus the runtime error.
+## Fix plan
 
----
+### A. Resend API key (unblocks all sends)
+- Ask the user to update the `RESEND_API_KEY` secret with a fresh key from their Resend dashboard (the current one is rejected with `validation_error / API key is invalid`). I'll trigger the secret-update prompt.
+- No code change needed for the key itself; `sendViaResend` already reads it.
 
-## Plan
+### B. Stop Resend from rewriting tel:/wa.me/mailto: in the templates
+Run a single migration that does `UPDATE public.crm_email_templates SET html = …` for the two brokerage variants, adding `data-no-link-tracking="true"` to every anchor whose `href` starts with `tel:`, `https://wa.me/`, or `mailto:`. The subject and visible copy stay byte-identical, so the locked-send + single-agency guards still pass.
 
-### 1. Fix the runtime 500 — `register-mode-lead` "Failed to create lead"
+Concretely the rendered tile becomes:
+```
+<a href="tel:+971547167107" data-no-link-tracking="true" …>Call us</a>
+<a href="https://wa.me/971547167107" data-no-link-tracking="true" target="_blank" rel="noopener" …>WhatsApp</a>
+<a href="mailto:CitiDevelopers@jbj.ae" data-no-link-tracking="true" …>Email</a>
+```
 
-The error is firing from the mode-picker, not from campaigns. Inspect `crm_leads` schema for required columns / unique constraints the insert is missing (likely `lead_score`, `priority`, or a unique index on `email_normalized`/`owner_user_id`). Then:
-- Run a `read_query` against `information_schema` to confirm NOT-NULL and unique constraints on `crm_leads`.
-- Either (a) supply the missing defaults in the insert payload, or (b) switch the insert to the canonical `upsert_contact_with_company` RPC referenced in the Unified Relational CRM Standard memory.
-- Verify in preview by re-triggering the mode picker.
+### C. Belt-and-braces in the edge function
+In `crm-send-brokerage-outreach/index.ts`, after `renderTemplate(...)`, run a tiny post-processor that injects `data-no-link-tracking="true"` into any `<a … href="(tel:|mailto:|https://wa.me/…)" …>` that doesn't already have it. This guarantees the protection even if someone re-edits the template later and forgets the attribute. No business logic, no copy change — purely an HTML attribute pass.
 
-### 2. CampaignComposer — make it reachable
+### D. Surface the real error instead of a blank screen
+In `CampaignComposer` / brokerage outreach send handler, when `supabase.functions.invoke` returns a non-2xx, read `error.context?.body` (or the JSON `{error,message}` we already return) and show it in the toast instead of the generic "Edge Function returned a non-2xx status code". Specifically map:
+- `RESEND_NOT_CONFIGURED` → "Resend API key not configured."
+- HTTP 401 with `validation_error` → "Resend API key invalid — update it in Cloud → Secrets."
+- `LOCKED_TEMPLATE_MISSING_VAR` → list the missing vars.
 
-- Add a sidebar entry `Campaigns` under the existing `CRM` group in the owner sidebar (locate the sidebar component used by `CRMNetwork`, add an item pointing to `/owner/crm/campaigns`).
-- Add a `Campaigns` button in `CRMNetwork`'s top action bar so it's also discoverable from the Network screen.
+### Out of scope
+- No change to subject lines, copy, layout, locked-payload pipeline, single-agency guard, or quota logic.
+- No switch away from Resend.
+- No change to non-brokerage templates.
 
-### 3. Replace CSV segment inputs with a real visual builder
-
-In `CampaignComposer.tsx`, swap the textarea-style CSV inputs for proper multi-select chips driven by real DB values:
-- **Contact type**: fixed enum (`investor`, `broker`, `developer`, `client`, `lead`).
-- **Pipeline stage**: load distinct values from `crm_leads.pipeline_stage`.
-- **Tags**: combobox of existing tags (distinct from `crm_leads.tags` array).
-- **Company**: combobox sourced from `crm_brokerages` + `crm_developer_registry`.
-- **Language / source**: distinct from `crm_leads`.
-- VIP, has_email, exclude_suppressed, allow_multi_company stay as switches.
-- Add a "Save as segment" button → inserts into `crm_segments` for reuse.
-
-### 4. Quota / suppression / single-agency UI feedback
-
-Add a sticky panel above the Send button:
-- **Quota meter**: pull from `useEmailQuota` (already exists). Show `sentToday / dailyLimit` and `sentMonth / monthlyLimit` with a color band (green/amber/red). Block Send when `sentToday >= dailyLimit`.
-- **Suppression line**: already returned as `skipped_suppressed_count` — surface as a clear pill ("3 suppressed addresses will be skipped").
-- **Single-agency banner**: when `distinct_companies > 1` and `allowMultiCompany=false`, render a red `AlertTriangle` banner listing the top company names from `preview.companies` and disable Send. Add a "Why?" tooltip linking to the Single-Agency rule.
-- Show a "Send will fail" banner when `from_email` is not on `@jbj.ae` (the verified Resend domain), matching the existing outreach identity guard.
-
-### 5. End-to-end re-verification of the other thread tasks
-
-Quick audits and fixes only — no rewrites:
-- **CRMNetwork**: confirm cross-tab persistent filters survive tab switching, counters click-to-filter works, and the role tab list includes investors / developers / brokers / brokerage agencies / partners. Patch any wired-but-broken item.
-- **CompanyHub / CompanyHubDrawer**: confirm both the drawer (from CRMNetwork row click) and the route `/owner/crm/company/:type/:name` open the same Overview + per-section tabs. Confirm inline notes + follow-ups save.
-- **PersonDetailDrawer**: confirm clicking a name in CRMNetwork opens it and the timeline merges all six sources.
-- **ScopedExportMenu**: confirm CSV/XLSX/PDF buttons fire for each scope (view, company, event, segment, campaign) using a tiny smoke test.
-
-For each, fix what's broken; don't re-architect what works.
-
----
-
-## Technical details
-
-- New sidebar entry: edit whichever file owns the owner sidebar (likely `src/components/owner/OwnerSidebar.tsx` or similar — locate via rg).
-- `crm_segments` table: confirm it exists; if not, add a small migration (`id`, `name`, `filter jsonb`, `owner_user_id`, RLS owner-only).
-- Segment chip combobox: reuse existing `MultiCombobox` if present, else build a small one with shadcn `Command` + `Popover`.
-- Quota meter: reuse `useEmailQuota` hook (already in repo).
-- Single-agency banner uses `--destructive` token on champagne surface; per palette rules, no gold fills.
-- `register-mode-lead` fix: either insert missing required columns or call `upsert_contact_with_company` RPC. Do NOT touch RLS or `auth.users`.
-
-## Out of scope
-
-- No changes to Resend identity, outreach-locked-payloads, or other email functions.
-- No new tables besides (maybe) `crm_segments` if it doesn't exist.
-- No restyling — only the new banners and the segment builder will introduce new UI.
+## Files touched
+- `supabase/migrations/<new>.sql` — UPDATE both brokerage template rows.
+- `supabase/functions/crm-send-brokerage-outreach/index.ts` — add the `data-no-link-tracking` post-processor + clearer error JSON.
+- `src/components/crm/CampaignComposer.tsx` (and the brokerage outreach send hook) — better toast for 401 / known error codes.
+- Secret update prompt for `RESEND_API_KEY`.
