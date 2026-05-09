@@ -12,7 +12,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { token, signature_data, initials_data } = await req.json();
+    const { token, signature_data, initials_data, signed_date } = await req.json();
 
     if (!token) {
       return corsErrorResponse("Signing token is required", 400, origin);
