@@ -6727,7 +6727,12 @@ export type Database = {
           html_content: string
           id: string
           name: string
+          reply_to: string | null
           scheduled_at: string | null
+          segment_filter: Json | null
+          segment_id: string | null
+          sender_email: string | null
+          sender_name: string | null
           sent_at: string | null
           sent_count: number | null
           status: string | null
@@ -6746,7 +6751,12 @@ export type Database = {
           html_content: string
           id?: string
           name: string
+          reply_to?: string | null
           scheduled_at?: string | null
+          segment_filter?: Json | null
+          segment_id?: string | null
+          sender_email?: string | null
+          sender_name?: string | null
           sent_at?: string | null
           sent_count?: number | null
           status?: string | null
@@ -6765,7 +6775,12 @@ export type Database = {
           html_content?: string
           id?: string
           name?: string
+          reply_to?: string | null
           scheduled_at?: string | null
+          segment_filter?: Json | null
+          segment_id?: string | null
+          sender_email?: string | null
+          sender_name?: string | null
           sent_at?: string | null
           sent_count?: number | null
           status?: string | null
@@ -6778,7 +6793,15 @@ export type Database = {
           updated_at?: string | null
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "crm_email_campaigns_segment_id_fkey"
+            columns: ["segment_id"]
+            isOneToOne: false
+            referencedRelation: "crm_segments"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       crm_email_templates: {
         Row: {
@@ -11161,6 +11184,33 @@ export type Database = {
           stamp_url?: string | null
           updated_at?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      email_suppressions: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          email_lower: string
+          id: string
+          reason: string
+          source: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          email_lower: string
+          id?: string
+          reason?: string
+          source?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          email_lower?: string
+          id?: string
+          reason?: string
+          source?: string | null
         }
         Relationships: []
       }
