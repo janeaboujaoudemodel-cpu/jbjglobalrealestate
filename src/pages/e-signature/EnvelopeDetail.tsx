@@ -291,6 +291,43 @@ export default function EnvelopeDetail() {
     }
   };
 
+  // Toggle a field's visibility in the rendered PDF and persist to metadata.
+  const toggleHiddenField = async (key: string, hide = true) => {
+    if (!envelope?.template_key) return;
+    const next = hide
+      ? Array.from(new Set([...hiddenFields, key]))
+      : hiddenFields.filter((k) => k !== key);
+    setHiddenFields(next);
+    try {
+      await regenerate.mutateAsync({
+        envelopeId: envelope.id,
+        templateKey: envelope.template_key,
+        values: { ...((envelope.template_field_values as any) || {}), doc_number: docNumber },
+        chrome,
+        ownerSignatureUrl,
+        ownerStampUrl,
+        hiddenFields: next,
+      });
+      toast.success(hide ? "Field removed" : "Field restored");
+      refetch();
+    } catch (e: any) {
+      toast.error(e?.message || "Failed to update");
+    }
+  };
+
+  // Listen for click-to-delete messages from the preview iframe.
+  useEffect(() => {
+    const onMsg = (e: MessageEvent) => {
+      const data: any = e.data;
+      if (data?.type === "jbj-hide-field" && typeof data.key === "string") {
+        toggleHiddenField(data.key, true);
+      }
+    };
+    window.addEventListener("message", onMsg);
+    return () => window.removeEventListener("message", onMsg);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [envelope?.id, hiddenFields, chrome, ownerSignatureUrl, ownerStampUrl, docNumber]);
+
   const addCc = (raw?: string) => {
     const v = (raw ?? ccInput).trim();
     if (!v) return;
