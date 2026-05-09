@@ -1,77 +1,102 @@
-# Smart fields, smart cards & smart status
+## Goals
 
-Three connected upgrades to the Property Advertising Agreement (and any envelope reusing the JBJ template).
+1. **Add Email button** next to Copy link / WhatsApp on every recipient row in the envelope sidebar (in addition to the existing toolbar "Send via Email").
+2. **Branded "Thank you for signing" email** auto-sent to the signer (and admin notification preserved) the moment they sign — already partially in place via `esign-complete-envelope`; polish into a premium signer-specific template and add a dedicated "Signed ✓" status sync so the dashboard auto-flips to **Completed** in real time (already wired via realtime — verify and surface).
+3. **Show signed agreements as a first-class section.** Dashboard "Completed" tile already filters; add a permanent **"Signed agreements"** quick filter chip + per-card "Signed on …" timestamp + Open Signed PDF / Audit cert shortcuts. Inside the envelope detail, the "Signed Document" card stays + new green banner at top once status = `completed`.
+4. **Universal WhatsApp / Email / Phone open helper** so clicks never get blocked again, anywhere on the site.
+5. **Send a real test email now** through Resend using `esign-send-for-signature` against a draft envelope so the locked template is visually verified end-to-end.
 
-## 1. Click-to-delete + hide-empty fields in the rendered document
+---
 
-Goal: empty/non-applicable fields disappear from the PDF; any field can be hit-deleted from the live preview.
+## 1. Universal contact-action helper (site-wide fix for "api.whatsapp.com is blocked")
 
-### Template changes — `src/templates/jbjPropertyAdvertisingAgreement.ts`
+Root causes found:
+- `supabase/functions/_shared/email-html.ts:184` uses `https://api.whatsapp.com/send?phone=…` — Chrome / iOS blocks this when the user has no WhatsApp Web session, and corporate filters block `api.whatsapp.com` outright. `wa.me/<digits>?text=` is the only universally-allowed form.
+- 30+ call sites across `src/` use `window.open("https://wa.me/…")` after `await`, which trips popup blockers because the click is no longer the trusted gesture.
 
-- `fieldUnderline(label, value, key, hiddenSet)` returns `""` when:
-  - `value` is empty AND the field is not in a force-shown allow-list (only signature anchors are forced)
-  - OR the field key is present in `hiddenSet`
-- All section grids switch from rigid 2-col to a flex-wrap row so removed fields don't leave empty columns. Section headers (`sectionTitle`) only render if the section has at least one visible field.
-- Each rendered field is wrapped in `<span data-field-key="…">` so the editor can target it.
-- New `PAA_LAYOUT_VERSION = 5` to auto-rerender old PDFs.
-
-### EnvelopeDetail edit mode — `src/pages/e-signature/EnvelopeDetail.tsx`
-
-- New `hiddenFields: string[]` persisted in `esign_envelopes.metadata.hidden_fields`.
-- Live preview iframe gets a click overlay: clicking any `[data-field-key]` shows a small "Remove this field?" popover (champagne card). Confirm → adds key to `hiddenFields` → re-renders PDF.
-- New "Manage fields" panel listing each field with eye/eye-off toggle so the user can also un-hide.
-- "Edit any time": existing inline edit form already supports all fields; we lift the current `isDraft`-only gate so editing is allowed for any non-`completed`/`declined` envelope. For `completed` envelopes, edits are blocked but a "Clone & edit" action creates a new draft from the same data.
-
-## 2. Status: stop calling completed-by-user envelopes "Draft"
-
-A "draft" implies unfinished. Once the user has saved the filled fields the envelope is **Ready** even if not yet sent for signature.
-
-### Logic
-
-Introduce a virtual display status computed on the dashboard + detail header:
-
-```text
-DB status `draft` + has_required_fields filled  →  display "Ready"  (slate badge)
-DB status `draft` + missing required fields     →  display "Draft"  (amber badge)
-DB status `sent` / `viewed` / etc.              →  unchanged
+**Fix — create `src/utils/contactActions.ts`:**
+```ts
+openWhatsApp(phone?: string, text?: string)
+openEmail(to: string, subject?: string, body?: string, cc?: string[])
+openTel(phone: string)
 ```
+Each function:
+- Synchronously creates `<a href=…  target="_blank" rel="noopener noreferrer">`, appends to body, calls `.click()`, removes — preserves user gesture so popup blockers stay quiet.
+- Always uses `https://wa.me/<digits>?text=` (never `api.whatsapp.com`).
+- Strips non-digits and drops leading `+` / `00`.
+- Falls back to clipboard + toast if `phone` empty (`wa.me/?text=…`) or window.open returns null.
+- For email uses `mailto:` with proper percent-encoding; for tel uses `tel:`.
 
-`has_required_fields` = `landlord_name` + `mobile_number` + at least one property identifier (`building_name` OR `community_name` OR `property_reference_no`) are non-empty.
+**Refactor:** swap every `window.open("https://wa.me/…")`, `window.location.href = "https://wa.me/…"`, `mailto:` builders, and `tel:` links across `src/` to use the helper. Replace the one `api.whatsapp.com` occurrence in `_shared/email-html.ts` with `https://wa.me/971565911000?text=Hello%20JBJ`.
 
-This is a pure UI/derivation change — the underlying enum stays `draft` so existing send/sign flows are not disturbed. When the user clicks "Send for signature", DB transitions to `sent` exactly as today.
+---
 
-The detail page header swaps the title from generic "Draft" to the agreement number, e.g. **`JBJ-PAA-LEASING-0007 · Ready`**, with the template label as a smaller subtitle.
+## 2. E-signature dialog — add Email quick-share button per recipient
 
-## 3. Dashboard cards: show client + key context
+In `EnvelopeDetail.tsx`, recipient row currently has **Copy link** + **WhatsApp**. Add a third button **Email** (and rename existing toolbar button to keep consistency). Email button:
+- Uses `openEmail(recipient.email, subject, body)` with a pre-filled premium template:
+  - Subject: `Please sign — {{doc_title}} · {{doc_number}}`
+  - Body: branded JBJ message + signing link
+- Plus a **"Send for signature now"** secondary action that calls `esign-send-for-signature` directly so the client gets the Resend-branded email immediately without opening the full dialog.
 
-Goal: from the list view I can already tell which agreement is which.
+The existing `SendForSignatureDialog` (full editor with editable subject/body) stays and is opened from the toolbar's primary "Send for signature" — fully editable as the user requested.
 
-### `src/pages/e-signature/ESignatureDashboard.tsx`
+---
 
-Each card grows to show, in priority order:
+## 3. "Thank you for signing" — premium signer email + signed-state sync
 
-1. Doc number badge (existing) + computed status badge (Ready / Draft / Sent…)
-2. Client name (existing) — bold, primary
-3. Sub-line of context built from filled fields (each piece omitted if empty):
-   - Property type · Building / Community
-   - Mobile number (masked: `+971 5• ••• ••67`)
-   - Email (masked: `j•••@d•••.com`)
-4. Template label (existing, demoted to small text)
-5. Footer: recipient count + last updated (existing)
+`esign-complete-envelope` already sends a completion email to sender + all recipients. Two improvements:
 
-Privacy: phone/email are masked on the list view to comply with the project's "never show contact info publicly" rule; full values remain on the detail page only.
+a. **Two distinct emails** instead of one:
+   - **Signer email** (to each `recipient.email`):
+     subject `✓ Thank you — your signed copy of {{doc_title}}`
+     body emphasises **"Thank you for signing"**, attaches signed PDF link + audit certificate, JBJ champagne/gold theme.
+   - **Owner email** (to `envelope.sender_email` and `contact@jbj.ae`):
+     subject `Signed: {{doc_title}} by {{signer_name}}`
+     body lists signers + timestamps + review CTA.
 
-Search: extend the existing search-by-name to also match against `landlord_name`, `mobile_number`, `building_name`, `community_name`, and `doc_number`.
+b. **App status sync** is already realtime via `EnvelopeDetail`'s postgres_changes channel. Confirm dashboard refresh by adding a `useQuery` invalidation on `esign_envelopes` channel in `ESignatureDashboard` so a freshly-signed envelope flips to **Completed** without manual refresh.
 
-## Out of scope
+c. **Inside envelope detail**, when `status === "completed"`, render a top emerald banner: "Signed by {{signer}} on {{date}} — view signed PDF / Download audit certificate." (Signed Document card already lower in sidebar — banner just elevates it.)
 
-- New DB columns or RLS changes — `metadata.hidden_fields` reuses the existing JSONB.
-- Listing Authorisation template (separate file) — this round only updates PAA. The same hide-empty pattern can be ported in a follow-up.
-- New send/share flows — they already exist and are untouched.
+---
 
-## Files touched
+## 4. Dashboard "Signed agreements" surfacing
 
-- `src/templates/jbjPropertyAdvertisingAgreement.ts` — hide-empty + `data-field-key` + `PAA_LAYOUT_VERSION = 5`.
-- `src/pages/e-signature/EnvelopeDetail.tsx` — click-to-delete overlay, "Manage fields" panel, edit-any-time gate, header shows agreement number + computed status, "Clone & edit" for completed.
-- `src/pages/e-signature/ESignatureDashboard.tsx` — richer cards, masked contact lines, computed status, broader search.
-- New helper `src/pages/e-signature/envelopeStatus.ts` — `computeDisplayStatus(envelope)` + masking helpers, shared by both pages.
+`ESignatureDashboard.tsx` already has a Completed tile that filters by `status==="completed"`. Add:
+- A persistent chip row above the list: **All · Draft · Sent · Signed · Expired** (Signed = completed + partially_signed showing emerald check).
+- On each completed card: emerald "✓ Signed {date}" badge + inline "Signed PDF" + "Audit cert" buttons.
+- Search continues to match doc number, client name, building, etc. (already implemented in last loop).
+
+---
+
+## 5. Send a test email now (after plan approval, in build mode)
+
+Using existing test envelope (or creating a minimal draft programmatically):
+- Fetch the most-recent `draft` envelope owned by the current user via `supabase.read_query`.
+- Invoke `esign-send-for-signature` with `channels: ["email"]`, `to: <user supplies test address>`.
+- Confirm Resend 200 OK in `supabase.edge_function_logs` and report message-id back in chat.
+
+I will ask the user for the **test recipient email** before sending.
+
+---
+
+## Files Changed
+
+| File | Change |
+|------|--------|
+| `src/utils/contactActions.ts` | **new** — universal openWhatsApp/openEmail/openTel |
+| `src/pages/e-signature/EnvelopeDetail.tsx` | add per-recipient Email button; route WhatsApp/Email through helper; emerald "Signed" banner |
+| `src/pages/e-signature/ESignatureDashboard.tsx` | add Signed filter chip; per-card signed badge + signed PDF link |
+| `src/components/e-signature/SendForSignatureDialog.tsx` | route WhatsApp open through helper |
+| `supabase/functions/esign-complete-envelope/index.ts` | split into two branded emails (signer "Thank you", owner "Signed") |
+| `supabase/functions/_shared/email-html.ts` | replace `api.whatsapp.com` → `wa.me` |
+| `src/**/*.tsx,*.ts` (≈30 files) | migrate `window.open("https://wa.me/…")` and `mailto:` / `tel:` to helper |
+
+No DB migrations, no RLS changes, no new secrets — Resend already configured.
+
+---
+
+## Open question before I send the test
+
+What email address should I send the locked-template test to? (e.g. your own inbox.) After approval I'll deploy the edge functions and trigger one real send so we can lock the template visually.
