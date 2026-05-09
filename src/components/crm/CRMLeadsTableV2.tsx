@@ -345,6 +345,10 @@ export default function CRMLeadsTableV2({
       if (assigneeFilter) {
         if (assigneeFilter === "__unassigned__") {
           if (leadAssignees[l.id]) return false;
+        } else if (assigneeFilter === "__assigned__") {
+          if (!leadAssignees[l.id]) return false;
+        } else if (assigneeFilter === "__mine__") {
+          if (leadAssignees[l.id] !== userId) return false;
         } else if (leadAssignees[l.id] !== assigneeFilter) {
           return false;
         }
