@@ -14,7 +14,7 @@ export const JBJ_BRAND = {
   ink: "#1A1A1A",
 } as const;
 
-export const PAA_LAYOUT_VERSION = 4;
+export const PAA_LAYOUT_VERSION = 5;
 
 export type PAAFieldKey =
   // Owner
@@ -82,11 +82,21 @@ const radioChip = (label: string, selected: boolean) => `
     ${esc(label)}
   </span>`;
 
-const fieldUnderline = (label: string, value: string) => `
-  <div style="margin:6px 0 14px;">
+const fieldUnderline = (
+  label: string,
+  value: string,
+  key?: string,
+  opts?: { hidden?: Set<string>; force?: boolean }
+) => {
+  if (key && opts?.hidden?.has(key)) return "";
+  if (!opts?.force && !value) return "";
+  const dataAttr = key ? ` data-field-key="${key}"` : "";
+  return `
+  <div${dataAttr} style="margin:6px 0 14px;min-width:220px;flex:1 1 240px;">
     <div style="border-bottom:1px solid #B89555;min-height:18px;padding:2px 0;font-size:13px;color:#1A1A1A;">${esc(value || "")}</div>
     <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:#1A1A1A;opacity:.7;margin-top:3px;">${esc(label)}</div>
   </div>`;
+};
 
 /* ---------------------------------- chrome -------------------------------- */
 
@@ -213,6 +223,7 @@ export interface BuildPAAOptions {
   ownerSignatureUrl?: string | null;   // url to PNG of authorised representative signature
   ownerStampUrl?: string | null;       // url to PNG of company stamp
   clientSignatureUrl?: string | null;  // url to client's captured signature
+  hiddenFields?: string[];             // keys explicitly hidden by the user
 }
 
 export function buildPAAHtml(
