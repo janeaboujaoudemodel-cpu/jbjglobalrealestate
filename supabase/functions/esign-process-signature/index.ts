@@ -12,7 +12,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { token, signature_data, initials_data } = await req.json();
+    const { token, signature_data, initials_data, signed_date } = await req.json();
 
     if (!token) {
       return corsErrorResponse("Signing token is required", 400, origin);
@@ -86,6 +86,18 @@ Deno.serve(async (req) => {
         completed_at: new Date().toISOString(),
       })
       .eq("recipient_id", recipient.id);
+
+    // Auto-fill date fields with the signing date
+    const dateValue = signed_date || new Date().toLocaleDateString("en-GB");
+    await supabase
+      .from("esign_fields")
+      .update({
+        field_value: dateValue,
+        is_completed: true,
+        completed_at: new Date().toISOString(),
+      })
+      .eq("recipient_id", recipient.id)
+      .eq("field_type", "date");
 
     // Create audit log
     await supabase.from("esign_audit_log").insert({

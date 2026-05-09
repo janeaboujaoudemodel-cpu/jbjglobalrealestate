@@ -674,6 +674,35 @@ Deno.serve(async (req) => {
       }
     }
 
+    // ── In-app notification for the sender (bell + inbox + popup task) ──
+    try {
+      const signerName = envelope.esign_recipients[0]?.name || "Recipient";
+      const signerEmail = envelope.esign_recipients[0]?.email || "";
+      const { data: senderUser } = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("email", envelope.sender_email)
+        .maybeSingle();
+      const senderId = senderUser?.id;
+      if (senderId) {
+        await supabase.from("notifications").insert({
+          user_id: senderId,
+          title: `${signerName} signed ${envelope.name}`,
+          body: `Signed on ${completedDate}. Tap to view the signed document.`,
+          notification_type: "esign_signed",
+          action_url: `/e-signature/${envelope.id}`,
+          metadata: {
+            envelope_id: envelope.id,
+            signer_name: signerName,
+            signer_email: signerEmail,
+            signed_document_url: signedDocumentUrl,
+            certificate_url: certificateUrl,
+          },
+        });
+      }
+    } catch (notifErr) {
+      console.error("Failed to insert owner notification:", notifErr);
+    }
 
     return corsJsonResponse({
       success: true,
