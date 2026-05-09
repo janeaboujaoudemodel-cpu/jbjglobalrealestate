@@ -198,7 +198,7 @@ export default function UnifiedCRM() {
         <nav
           role="tablist"
           aria-label="CRM sections"
-          className="px-4 flex flex-wrap gap-1 border-t border-[#B89555]/15"
+          className="px-2 flex gap-1 border-t border-[#B89555]/15 overflow-x-auto whitespace-nowrap jj-scrollbar-gold"
         >
           {PRIMARY.map((it) => {
             const active = it.id === section;
@@ -210,7 +210,7 @@ export default function UnifiedCRM() {
                 aria-selected={active}
                 onClick={() => setSection(it.id)}
                 className={[
-                  "inline-flex items-center gap-2 px-3 py-2 text-sm font-medium",
+                  "shrink-0 inline-flex items-center gap-2 px-3 py-2 text-sm font-medium",
                   "border-b-2 -mb-px transition-colors",
                   active
                     ? "border-[#B89555] text-[#1A1A1A] bg-[#EFE6D6]/60"
