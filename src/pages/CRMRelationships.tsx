@@ -1856,14 +1856,19 @@ const ClientsTab = () => {
             {STATUS_CLIENT.map((s) => <SelectItem key={s.v} value={s.v}>{s.label}</SelectItem>)}
           </SelectContent>
         </Select>
-        <Button variant="outline" onClick={() => exportCSV(filtered, `clients-${Date.now()}.csv`, [
-          { key: "full_name", label: "Name" }, { key: "email", label: "Email" }, { key: "phone", label: "Phone" },
-          { key: "nationality", label: "Nationality" }, { key: "status", label: "Status" },
-          { key: "budget_min", label: "Budget Min" }, { key: "budget_max", label: "Budget Max" },
-          { key: "lifetime_value", label: "LTV" }, { key: "notes", label: "Notes" },
-        ])}><Download className="w-4 h-4 mr-2" />Export CSV</Button>
+        <Button variant="outline" onClick={() => setUnifiedExportOpen(true)} disabled={!filtered.length}>
+          <Download className="w-4 h-4 mr-2" />Export CSV
+        </Button>
         <Button onClick={openNew}><Plus className="w-4 h-4 mr-2" />Add Client</Button>
       </div>
+
+      <UnifiedCRMExportModal
+        open={unifiedExportOpen}
+        onOpenChange={setUnifiedExportOpen}
+        kind="leads"
+        rows={filtered as any[]}
+        filenameStem="crm-clients"
+      />
 
       {isLoading ? <Skeleton className="h-64" /> : filtered.length === 0 ? (
         <Card><CardContent className="p-8 text-center text-[#1A1A1A]/70">No clients yet.</CardContent></Card>
