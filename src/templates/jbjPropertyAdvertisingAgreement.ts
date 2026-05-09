@@ -251,10 +251,19 @@ export function buildPAAHtml(
   const fu = (label: string, value: string, key: string) =>
     fieldUnderline(label, value, key, { hidden });
 
-  // Conditionals (smart fields)
-  const isVacant = /vacant/i.test(get("status_vacant_tenanted"));
+  // Conditionals (smart fields) — auto-infer Tenanted when a future vacating date is provided
+  const rawStatus = get("status_vacant_tenanted");
+  const vacatingRaw = get("vacating_date");
+  const vacatingTs = vacatingRaw ? Date.parse(vacatingRaw) : NaN;
+  const hasFutureVacating = !!vacatingRaw && isFinite(vacatingTs) && vacatingTs > Date.now();
+  const isVacant = rawStatus
+    ? /vacant/i.test(rawStatus)
+    : !hasFutureVacating; // empty + future vacating ⇒ Tenanted
+  const isTenanted = !isVacant;
+  // expose normalised status for chip rendering below
+  if (!rawStatus && isTenanted) v.status_vacant_tenanted = "Tenanted";
   const isVilla = /villa/i.test(get("property_type"));
-  const showVacatingDate = !isVacant && get("vacating_date");
+  const showVacatingDate = isTenanted && !!vacatingRaw;
   const showPlot = isVilla;
   const period = get("listing_period");
   const showUntilDate = /until/i.test(period) && get("listing_period_until_date");
