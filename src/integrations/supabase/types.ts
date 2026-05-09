@@ -1792,6 +1792,39 @@ export type Database = {
         }
         Relationships: []
       }
+      birthday_workflow_runs: {
+        Row: {
+          audience_kind: string
+          created_at: string
+          details: Json | null
+          failed_count: number
+          id: string
+          recipients_count: number
+          run_date: string
+          sent_count: number
+        }
+        Insert: {
+          audience_kind: string
+          created_at?: string
+          details?: Json | null
+          failed_count?: number
+          id?: string
+          recipients_count?: number
+          run_date: string
+          sent_count?: number
+        }
+        Update: {
+          audience_kind?: string
+          created_at?: string
+          details?: Json | null
+          failed_count?: number
+          id?: string
+          recipients_count?: number
+          run_date?: string
+          sent_count?: number
+        }
+        Relationships: []
+      }
       blocked_email_domains: {
         Row: {
           created_at: string | null
@@ -5899,7 +5932,12 @@ export type Database = {
       }
       crm_brokers: {
         Row: {
+          bayut_url: string | null
+          birthday: string | null
+          broker_type: string | null
           city: string | null
+          company_email: string | null
+          company_phone: string | null
           country: string | null
           created_at: string
           current_brokerage_id: string | null
@@ -5908,18 +5946,24 @@ export type Database = {
           department: string | null
           email_lower: string | null
           event_source: string | null
+          experience_years: number | null
           full_name: string | null
           id: string
           imported_at: string | null
           imported_by: string | null
+          instagram_url: string | null
           is_global_broker: boolean | null
           labels: string[]
           languages: string[] | null
           last_active_at: string | null
+          linkedin_url: string | null
           nationality: string | null
           notes: string | null
           original_filename: string | null
           owner_id: string | null
+          personal_email: string | null
+          personal_phone: string | null
+          pf_url: string | null
           phone_e164: string | null
           position_title: string | null
           position_type: string | null
@@ -5930,9 +5974,15 @@ export type Database = {
           source_history: Json
           updated_at: string | null
           upload_source: string | null
+          whatsapp: string | null
         }
         Insert: {
+          bayut_url?: string | null
+          birthday?: string | null
+          broker_type?: string | null
           city?: string | null
+          company_email?: string | null
+          company_phone?: string | null
           country?: string | null
           created_at?: string
           current_brokerage_id?: string | null
@@ -5941,18 +5991,24 @@ export type Database = {
           department?: string | null
           email_lower?: string | null
           event_source?: string | null
+          experience_years?: number | null
           full_name?: string | null
           id?: string
           imported_at?: string | null
           imported_by?: string | null
+          instagram_url?: string | null
           is_global_broker?: boolean | null
           labels?: string[]
           languages?: string[] | null
           last_active_at?: string | null
+          linkedin_url?: string | null
           nationality?: string | null
           notes?: string | null
           original_filename?: string | null
           owner_id?: string | null
+          personal_email?: string | null
+          personal_phone?: string | null
+          pf_url?: string | null
           phone_e164?: string | null
           position_title?: string | null
           position_type?: string | null
@@ -5963,9 +6019,15 @@ export type Database = {
           source_history?: Json
           updated_at?: string | null
           upload_source?: string | null
+          whatsapp?: string | null
         }
         Update: {
+          bayut_url?: string | null
+          birthday?: string | null
+          broker_type?: string | null
           city?: string | null
+          company_email?: string | null
+          company_phone?: string | null
           country?: string | null
           created_at?: string
           current_brokerage_id?: string | null
@@ -5974,18 +6036,24 @@ export type Database = {
           department?: string | null
           email_lower?: string | null
           event_source?: string | null
+          experience_years?: number | null
           full_name?: string | null
           id?: string
           imported_at?: string | null
           imported_by?: string | null
+          instagram_url?: string | null
           is_global_broker?: boolean | null
           labels?: string[]
           languages?: string[] | null
           last_active_at?: string | null
+          linkedin_url?: string | null
           nationality?: string | null
           notes?: string | null
           original_filename?: string | null
           owner_id?: string | null
+          personal_email?: string | null
+          personal_phone?: string | null
+          pf_url?: string | null
           phone_e164?: string | null
           position_title?: string | null
           position_type?: string | null
@@ -5996,6 +6064,7 @@ export type Database = {
           source_history?: Json
           updated_at?: string | null
           upload_source?: string | null
+          whatsapp?: string | null
         }
         Relationships: [
           {
@@ -10495,17 +10564,23 @@ export type Database = {
       }
       developers: {
         Row: {
+          admin_email: string | null
           ceo_name: string | null
           completed_projects: number | null
           created_at: string
           description: string | null
+          enrichment_source: string | null
           expected_completion_year: number | null
           feature_image_url: string | null
           founded_year: number | null
+          google_maps_url: string | null
           headquarters: string | null
           id: string
+          instagram_url: string | null
           is_hidden: boolean | null
+          last_enriched_at: string | null
           license_number: string | null
+          linkedin_url: string | null
           logo_bg_color: string | null
           logo_locked: boolean
           logo_source: string | null
@@ -10517,29 +10592,40 @@ export type Database = {
           logo_verified_by: string | null
           name: string
           notable_projects: string | null
+          notes: string | null
+          office_address: string | null
+          office_phone: string | null
           offplan_projects: number | null
           parent_company: string | null
           portfolio_worth: number | null
           rank: number | null
+          registration_status: string | null
           slug: string
           specialization: string | null
           total_units_delivered: number | null
           upcoming_units: number | null
           updated_at: string
           website_url: string | null
+          whatsapp: string | null
         }
         Insert: {
+          admin_email?: string | null
           ceo_name?: string | null
           completed_projects?: number | null
           created_at?: string
           description?: string | null
+          enrichment_source?: string | null
           expected_completion_year?: number | null
           feature_image_url?: string | null
           founded_year?: number | null
+          google_maps_url?: string | null
           headquarters?: string | null
           id?: string
+          instagram_url?: string | null
           is_hidden?: boolean | null
+          last_enriched_at?: string | null
           license_number?: string | null
+          linkedin_url?: string | null
           logo_bg_color?: string | null
           logo_locked?: boolean
           logo_source?: string | null
@@ -10551,29 +10637,40 @@ export type Database = {
           logo_verified_by?: string | null
           name: string
           notable_projects?: string | null
+          notes?: string | null
+          office_address?: string | null
+          office_phone?: string | null
           offplan_projects?: number | null
           parent_company?: string | null
           portfolio_worth?: number | null
           rank?: number | null
+          registration_status?: string | null
           slug: string
           specialization?: string | null
           total_units_delivered?: number | null
           upcoming_units?: number | null
           updated_at?: string
           website_url?: string | null
+          whatsapp?: string | null
         }
         Update: {
+          admin_email?: string | null
           ceo_name?: string | null
           completed_projects?: number | null
           created_at?: string
           description?: string | null
+          enrichment_source?: string | null
           expected_completion_year?: number | null
           feature_image_url?: string | null
           founded_year?: number | null
+          google_maps_url?: string | null
           headquarters?: string | null
           id?: string
+          instagram_url?: string | null
           is_hidden?: boolean | null
+          last_enriched_at?: string | null
           license_number?: string | null
+          linkedin_url?: string | null
           logo_bg_color?: string | null
           logo_locked?: boolean
           logo_source?: string | null
@@ -10585,16 +10682,21 @@ export type Database = {
           logo_verified_by?: string | null
           name?: string
           notable_projects?: string | null
+          notes?: string | null
+          office_address?: string | null
+          office_phone?: string | null
           offplan_projects?: number | null
           parent_company?: string | null
           portfolio_worth?: number | null
           rank?: number | null
+          registration_status?: string | null
           slug?: string
           specialization?: string | null
           total_units_delivered?: number | null
           upcoming_units?: number | null
           updated_at?: string
           website_url?: string | null
+          whatsapp?: string | null
         }
         Relationships: []
       }
