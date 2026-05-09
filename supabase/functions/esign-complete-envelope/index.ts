@@ -286,9 +286,23 @@ async function buildAuditTrailPdf(envelope: any): Promise<Uint8Array> {
 // ---------------------------------------------------------------------------
 
 async function fetchBytes(url: string): Promise<Uint8Array> {
-  const r = await fetch(url);
-  if (!r.ok) throw new Error(`Failed to fetch ${url}: ${r.status}`);
-  return new Uint8Array(await r.arrayBuffer());
+  // Try direct fetch first (works for public buckets / external URLs).
+  try {
+    const r = await fetch(url);
+    if (r.ok) return new Uint8Array(await r.arrayBuffer());
+  } catch (_e) { /* fall through */ }
+
+  // Fall back to service-role storage download (private buckets).
+  const m = url.match(/\/storage\/v1\/object\/(?:public|sign|authenticated)\/([^/]+)\/(.+)$/);
+  if (m) {
+    const [, bucket, rawPath] = m;
+    let objectPath = rawPath;
+    try { objectPath = decodeURIComponent(rawPath); } catch { /* keep raw */ }
+    const admin = createClient(supabaseUrl, supabaseServiceKey);
+    const { data: blob, error } = await admin.storage.from(bucket).download(objectPath);
+    if (!error && blob) return new Uint8Array(await blob.arrayBuffer());
+  }
+  throw new Error(`Failed to fetch ${url}`);
 }
 
 async function embedDataUrl(pdfDoc: PDFDocument, dataUrl: string) {
