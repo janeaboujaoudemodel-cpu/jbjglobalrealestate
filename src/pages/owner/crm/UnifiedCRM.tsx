@@ -56,8 +56,8 @@ const ENTITIES: { id: Entity; label: string; icon: React.ComponentType<{ classNa
 
 const VIEWS: Record<Entity, { id: string; label: string }[]> = {
   leads: [
-    { id: "overview",      label: "Overview" },
     { id: "all",           label: "All Leads" },
+    { id: "overview",      label: "Overview" },
     { id: "flagged",       label: "Flagged" },
     { id: "vip",           label: "VIP" },
     { id: "management",    label: "Lead Mgmt" },
