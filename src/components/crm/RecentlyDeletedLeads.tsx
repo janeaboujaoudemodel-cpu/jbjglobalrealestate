@@ -50,6 +50,8 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
   const [search, setSearch] = useState("");
   const [restoring, setRestoring] = useState<string | null>(null);
   const [erasing, setErasing] = useState<string | null>(null);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [bulkBusy, setBulkBusy] = useState(false);
 
   useEffect(() => {
     fetchDeletedLeads();
