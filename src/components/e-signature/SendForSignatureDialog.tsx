@@ -416,7 +416,7 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
                       <span className="block text-[10.5px] uppercase tracking-[.16em] text-[#1A1A1A] mb-2">{senderTitle}</span>
                       <span className="block text-[11px] font-bold uppercase tracking-[.22em] text-[#1A1A1A]">JBJ GLOBAL REAL ESTATE</span>
                       <span className="block text-[10.5px] text-[#1A1A1A]/70">Downtown Dubai, UAE</span>
-                      <span className="block text-[10.5px] text-[#1A1A1A]/70">CONTACT@JBJ.AE · +971 56 591 1000</span>
+                      <span className="block text-[10.5px] text-[#1A1A1A]/70">CONTACT@JBJ.AE · +971 54 716 7107</span>
                       <span className="block text-[10.5px] text-[#1A1A1A]/70">WWW.JBJ.AE</span>
                     </span>
                   )}

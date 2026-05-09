@@ -72,7 +72,7 @@ Deno.serve(async (req) => {
   <tr><td style="font-size:10.5px;font-weight:500;letter-spacing:.16em;color:#1A1A1A;text-transform:uppercase;padding-bottom:8px;">${senderTitle}</td></tr>
   <tr><td style="font-size:11px;font-weight:700;letter-spacing:.22em;color:#1A1A1A;text-transform:uppercase;padding-bottom:3px;">JBJ GLOBAL REAL ESTATE</td></tr>
   <tr><td style="font-size:10.5px;color:#1A1A1A;opacity:.7;letter-spacing:.04em;padding-bottom:1px;">Downtown Dubai, UAE</td></tr>
-  <tr><td style="font-size:10.5px;color:#1A1A1A;opacity:.7;letter-spacing:.04em;padding-bottom:1px;">CONTACT@JBJ.AE &nbsp;·&nbsp; +971 56 591 1000</td></tr>
+  <tr><td style="font-size:10.5px;color:#1A1A1A;opacity:.7;letter-spacing:.04em;padding-bottom:1px;">CONTACT@JBJ.AE &nbsp;·&nbsp; +971 54 716 7107</td></tr>
   <tr><td style="font-size:10.5px;color:#1A1A1A;opacity:.7;letter-spacing:.04em;">WWW.JBJ.AE</td></tr>
 </table>`;
 
@@ -133,7 +133,7 @@ Deno.serve(async (req) => {
             <div style="white-space:nowrap;">WWW.JBJ.AE</div>
           </td>
           <td align="right" style="width:26%;vertical-align:top;">
-            <div style="white-space:nowrap;">+971&nbsp;56&nbsp;591&nbsp;1000</div>
+            <div style="white-space:nowrap;">+971&nbsp;54&nbsp;716&nbsp;7107</div>
           </td>
         </tr></table>
       </td></tr>
