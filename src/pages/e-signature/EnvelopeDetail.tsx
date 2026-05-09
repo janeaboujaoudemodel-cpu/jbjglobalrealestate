@@ -82,14 +82,34 @@ export default function EnvelopeDetail() {
     enabled: !!id,
   });
 
-  // Hydrate edit + CC state when envelope loads
+  // Hydrate edit + CC + chrome state when envelope loads
   useEffect(() => {
     if (envelope) {
       setEditValues({ ...((envelope.template_field_values as any) || {}) });
-      const persisted = ((envelope.metadata as any)?.cc_emails || []) as string[];
+      const meta = (envelope.metadata as any) || {};
+      const persisted = (meta.cc_emails || []) as string[];
       setCcs(Array.isArray(persisted) ? persisted : []);
+      setChrome((meta.chrome as TemplateChrome) || {});
     }
   }, [envelope?.id]);
+
+  // Auto re-render PDF if stored layout_version is older than the current template version
+  useEffect(() => {
+    if (!envelope || !envelope.template_key || envelope.template_key !== "jbj-property-advertising-agreement") return;
+    const meta = (envelope.metadata as any) || {};
+    const stored = Number(meta.layout_version || 0);
+    if (stored < PAA_LAYOUT_VERSION && envelope.status === "draft" && !regenerate.isPending) {
+      regenerate.mutateAsync({
+        envelopeId: envelope.id,
+        templateKey: envelope.template_key,
+        values: { ...((envelope.template_field_values as any) || {}), doc_number: meta.doc_number || "" },
+        chrome: meta.chrome as TemplateChrome | undefined,
+        ownerSignatureUrl,
+        ownerStampUrl,
+      }).then(() => refetch()).catch(() => {});
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [envelope?.id, ownerSignatureUrl, ownerStampUrl]);
 
   // Realtime: refresh on recipient/envelope changes
   useEffect(() => {
