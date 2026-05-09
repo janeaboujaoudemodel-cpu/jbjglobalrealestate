@@ -66,6 +66,7 @@ export default function EnvelopeDetail() {
   const [showStudio, setShowStudio] = useState(false);
   const [sendOpen, setSendOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
+  const [hiddenFields, setHiddenFields] = useState<string[]>([]);
   const regenerate = useRegenerateEnvelopePdf();
   const { data: sigAssets } = useOwnerSignatureAssets("signature");
   const { data: stampAssets } = useOwnerSignatureAssets("stamp");
