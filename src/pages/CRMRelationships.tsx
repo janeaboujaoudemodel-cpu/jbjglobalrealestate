@@ -808,10 +808,11 @@ const BrokeragesAgenciesView = () => {
       else if (sourceTab === "owner" && r.entry_source !== "owner") continue;
       else if (sourceTab === "sent" && !r.last_outreach_at) continue;
       else if (sourceTab === "inbox" && !r.last_inbound_at) continue;
+      if (!rowMatchesSourceFilter(r, sourceFilter, sourceFilterCtx)) continue;
       out.push(r);
     }
     return out;
-  }, [indexed, debouncedQ, statusFilter, emirateFilter, countryFilter, sourceTab, excludedIds, listView]);
+  }, [indexed, debouncedQ, statusFilter, emirateFilter, countryFilter, sourceTab, excludedIds, listView, sourceFilter, sourceFilterCtx]);
 
   // Sidebar counts derived from full data set
   const listCounts = useMemo(() => {
