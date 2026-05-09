@@ -357,7 +357,7 @@ export default function CRMLeadsTableV2({
       if (tagFilter === "unassigned" && leadAssignees[l.id]) return false;
       return true;
     });
-  }, [leads, search, stageFilter, sourceTypeFilter, assigneeFilter, tagFilter, leadAssignees]);
+  }, [leads, search, stageFilter, sourceTypeFilter, assigneeFilter, tagFilter, leadAssignees, userId]);
 
   const selectedIds = useMemo(() => Array.from(selected), [selected]);
 
