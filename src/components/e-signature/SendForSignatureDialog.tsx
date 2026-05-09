@@ -200,6 +200,54 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
     }
   };
 
+  const handleSendTest = async () => {
+    if (!envelope) return;
+    setTesting(true);
+    try {
+      const session = await supabase.auth.getSession();
+      const token = session.data.session?.access_token;
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/esign-send-test-email`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          envelope_id: envelope.id,
+          interpolated_subject: previewSubject,
+          interpolated_body: previewBody,
+          test_recipient: "infoo.jane@gmail.com",
+        }),
+      });
+      const out = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(out.error || "Failed to send test");
+      setLastTestId(out.message_id || "sent");
+      toast.success("Test sent to infoo.jane@gmail.com — check your inbox", { duration: 6000 });
+    } catch (e: any) {
+      toast.error(e.message || "Failed to send test");
+    } finally {
+      setTesting(false);
+    }
+  };
+
+  const handleApproveLock = async () => {
+    setApproving(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Not signed in");
+      const { error } = await supabase
+        .from("esign_email_template_defaults")
+        .upsert(
+          { user_id: user.id, subject, body, approved_at: new Date().toISOString() },
+          { onConflict: "user_id" }
+        );
+      if (error) throw error;
+      setLockedAt(new Date().toISOString());
+      toast.success("Template approved & locked — this is now the default for every Send-for-Signature");
+    } catch (e: any) {
+      toast.error(e.message || "Failed to lock template");
+    } finally {
+      setApproving(false);
+    }
+  };
+
   const Chip = ({ value, onRemove }: { value: string; onRemove: () => void }) => (
     <Badge variant="outline" className="border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] gap-1 pl-2 pr-1">
       {value}
