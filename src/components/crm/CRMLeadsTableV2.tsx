@@ -65,7 +65,7 @@ export default function CRMLeadsTableV2({
   sourceFilter,
   isOwner = false,
 }: CRMLeadsTableV2Props) {
-  const navigate = useNavigate();
+  // navigate removed; reset clears state in-place
 
   const [loading, setLoading] = useState(true);
   const [leads, setLeads] = useState<Lead[]>([]);
