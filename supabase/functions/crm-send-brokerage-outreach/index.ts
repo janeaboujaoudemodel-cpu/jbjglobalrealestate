@@ -478,7 +478,20 @@ serve(async (req: Request) => {
 
     // STRICT: always send the locked DB template — preview MUST equal sent.
     // No fallback rewriter. No AI paraphrase. No subject regeneration.
-    const html = renderTemplate(template.html, varsMap);
+    let html = renderTemplate(template.html, varsMap);
+
+    // Resend's domain-level click tracking rewrites every <a href> through a
+    // tracking redirect, which breaks tel:, mailto: and https://wa.me/* on
+    // mobile (the OS dialer / WhatsApp handler never fires). Inject the
+    // per-link opt-out attribute `data-no-link-tracking` on every anchor
+    // whose href is one of these schemes so Resend ships the original href.
+    html = html.replace(
+      /<a\b([^>]*\bhref\s*=\s*["'](?:tel:|mailto:|https:\/\/wa\.me\/|https:\/\/api\.whatsapp\.com\/|whatsapp:)[^"']*["'][^>]*)>/gi,
+      (full, attrs) => {
+        if (/\bdata-no-link-tracking\b/i.test(attrs)) return full;
+        return `<a${attrs} data-no-link-tracking="true">`;
+      },
+    );
     const subjectRendered = renderTemplate(template.subject, varsMap);
     const subject = isTest && body.subjectOverride && body.subjectOverride.trim()
       ? renderTemplate(body.subjectOverride.trim(), varsMap)
@@ -582,8 +595,14 @@ serve(async (req: Request) => {
 
     if (!resendResult.ok) {
       console.error("Resend send failed:", resendResult.status, resendResult.error, resendResult.data);
+      const isAuth = resendResult.status === 401 || /api key/i.test(String(resendResult.error || ""));
+      const friendly = isAuth
+        ? "Resend API key is invalid. Update RESEND_API_KEY in Cloud → Secrets and redeploy."
+        : (resendResult.error || "Resend send failed");
       return new Response(JSON.stringify({
-        error: resendResult.error || "Resend send failed",
+        error: friendly,
+        code: isAuth ? "RESEND_AUTH_INVALID" : "RESEND_SEND_FAILED",
+        upstream_status: resendResult.status,
         details: resendResult.data,
         quota: resendResult.quota,
       }), {
