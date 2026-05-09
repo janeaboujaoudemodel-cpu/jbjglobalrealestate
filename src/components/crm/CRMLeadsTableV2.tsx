@@ -177,6 +177,7 @@ export default function CRMLeadsTableV2({
       const aRows = (assignmentRows || []) as unknown as AssignmentRow[];
       const leadToAssignee = new Map<string, string>();
       aRows.forEach((a) => leadToAssignee.set(a.lead_id, a.assigned_to_user_id));
+      setLeadAssignees(Object.fromEntries(leadToAssignee.entries()));
 
       const uniqueAssignees = Array.from(new Set(aRows.map((a) => a.assigned_to_user_id)));
       if (uniqueAssignees.length === 0) {
