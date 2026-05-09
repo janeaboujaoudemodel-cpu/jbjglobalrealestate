@@ -374,35 +374,18 @@ export function buildPAAHtml(
     </ol>
   </div>
 
-  ${sectionTitle(4, "Landlord(s)")}
-  <div style="display:grid;grid-template-columns:1.2fr 1.2fr 1fr;gap:0 28px;margin-top:6px;">
+  ${sectionTitle(4, "Landlord")}
+  <div style="display:grid;grid-template-columns:1.2fr 1.2fr 1fr;gap:0 28px;margin-top:6px;align-items:end;">
     <div>
-      <div style="border-bottom:1px solid ${accent};min-height:24px;padding:2px 0;font-size:13px;color:${ink};">${esc(get("landlord_signature_name") || get("landlord_name"))}</div>
+      <div style="border-bottom:1px solid ${accent};height:44px;display:flex;align-items:flex-end;padding:0 0 4px;font-size:13px;color:${ink};">${esc(get("landlord_signature_name") || get("landlord_name"))}</div>
       <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:3px;">Name</div>
     </div>
     <div>
-      <div style="border-bottom:1px solid ${accent};min-height:54px;padding:4px 0;display:flex;align-items:flex-end;">${clientSigImg}</div>
+      <div style="border-bottom:1px solid ${accent};height:44px;display:flex;align-items:flex-end;padding:0 0 4px;">${clientSigImg}</div>
       <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:3px;">Signature</div>
     </div>
     <div>
-      <div style="min-height:24px;padding:2px 0;">${dateBox(get("landlord_signature_date"))}</div>
-      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:3px;">Date</div>
-    </div>
-  </div>
-
-  <!-- JBJ representative -->
-  <div style="margin-top:22px;display:grid;grid-template-columns:1.2fr 1.2fr 1fr;gap:0 28px;position:relative;">
-    <div>
-      <div style="border-bottom:1px solid ${accent};min-height:24px;padding:2px 0;font-size:13px;color:${ink};">${esc(get("jbj_signature_name") || "Authorised Representative")}</div>
-      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:3px;">JBJ Global Real Estate — Authorised Representative</div>
-    </div>
-    <div style="position:relative;">
-      <div style="border-bottom:1px solid ${accent};min-height:54px;padding:4px 0;display:flex;align-items:flex-end;">${ownerSigImg}</div>
-      ${ownerStampImg}
-      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:3px;">Signature & Stamp</div>
-    </div>
-    <div>
-      <div style="min-height:24px;padding:2px 0;">${dateBox(get("jbj_signature_date") || new Date().toISOString().slice(0,10))}</div>
+      <div style="border-bottom:1px solid ${accent};height:44px;display:flex;align-items:flex-end;padding:0 0 4px;">${dateBox(get("landlord_signature_date"))}</div>
       <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:3px;">Date</div>
     </div>
   </div>
