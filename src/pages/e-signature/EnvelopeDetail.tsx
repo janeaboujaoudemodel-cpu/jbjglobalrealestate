@@ -567,6 +567,9 @@ export default function EnvelopeDetail() {
                     onClick={() => handleDownload(signedDoc.document_url, signedDoc.document_filename)}>
                     <Download className="w-4 h-4 mr-2" /> Download Signed PDF
                   </Button>
+                  <Button size="sm" variant="outline" className="w-full" onClick={() => setExportOpen(true)}>
+                    <Download className="w-4 h-4 mr-2" /> Export…
+                  </Button>
                   {signedDoc.certificate_url && (
                     <Button size="sm" variant="outline" className="w-full"
                       onClick={() => handleDownload(signedDoc.certificate_url, `audit_${envelope.id}.pdf`)}>
@@ -719,6 +722,17 @@ export default function EnvelopeDetail() {
         envelope={envelope}
         primaryRecipient={clientRec}
         onSent={() => refetch()}
+      />
+
+      <ExportEnvelopeDialog
+        open={exportOpen}
+        onOpenChange={setExportOpen}
+        envelope={envelope}
+        signedDoc={signedDoc}
+        docNumber={docNumber}
+        landlordName={(editValues.landlord_name as string) || (envelope?.metadata?.fields?.landlord_name as string) || null}
+        signingLink={clientRec?.signing_token ? buildSigningUrl(clientRec.signing_token) : null}
+        onShareWhatsApp={() => clientRec && handleWhatsApp(clientRec)}
       />
     </div>
   );
