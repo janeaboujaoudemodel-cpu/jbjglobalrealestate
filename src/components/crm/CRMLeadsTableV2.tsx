@@ -72,11 +72,18 @@ export default function CRMLeadsTableV2({
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [assignedNames, setAssignedNames] = useState<Record<string, string>>({});
+  const [leadAssignees, setLeadAssignees] = useState<Record<string, string>>({});
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [assignLeadIds, setAssignLeadIds] = useState<string[]>([]);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [leadToDelete, setLeadToDelete] = useState<Lead | null>(null);
   const [agreementLead, setAgreementLead] = useState<Lead | null>(null);
+
+  // Inline filter dropdowns: Stage / Source / Assignee / Tag
+  const [stageFilter, setStageFilter] = useState<string>("");
+  const [sourceTypeFilter, setSourceTypeFilter] = useState<string>("");
+  const [assigneeFilter, setAssigneeFilter] = useState<string>("");
+  const [tagFilter, setTagFilter] = useState<string>(""); // "vip" | "unassigned" | ""
 
   const groupedStatuses = useMemo(() => {
     const groups: Record<string, typeof PIPELINE_STATUSES> = {
