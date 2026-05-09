@@ -270,6 +270,27 @@ export default function BrokersRegistry() {
                   <span className="text-[#1A1A1A]/60 text-xs uppercase tracking-wider">Companies worked for</span>
                   <BrokerCompanyTimeline brokerId={openBroker.id} brokerName={openBroker.full_name} history={history} currentCompany={openBroker.current_company} />
                 </div>
+
+                <div className="pt-3 border-t border-[#B89555]/20">
+                  <span className="text-[#1A1A1A]/60 text-xs uppercase tracking-wider mb-2 block">Relational hub</span>
+                  <RelationalHubTabs
+                    kind="broker"
+                    entityId={openBroker.id}
+                    name={openBroker.full_name}
+                    aliases={[openBroker.current_company]}
+                    email={openBroker.email}
+                    phone={openBroker.phone}
+                    sourceHistory={(history ?? [])
+                      .filter((h: any) => h.broker_id === openBroker.id)
+                      .map((h: any) => ({
+                        id: h.id,
+                        when: h.started_at,
+                        who: null,
+                        what: `Worked at ${h.company_name}`,
+                        detail: h.ended_at ? `Ended ${new Date(h.ended_at).toLocaleDateString()}` : "Current",
+                      }))}
+                  />
+                </div>
               </div>
             </>
           )}
