@@ -23,6 +23,7 @@ import { renderTemplateHtml, useRegenerateEnvelopePdf } from "@/hooks/useEsignTe
 import { SmartFillDropzone } from "@/components/e-signature/SmartFillDropzone";
 import { TemplateChromeStudio } from "@/components/e-signature/TemplateChromeStudio";
 import { useOwnerSignatureAssets } from "@/hooks/useOwnerSignatureAssets";
+import { SendForSignatureDialog } from "@/components/e-signature/SendForSignatureDialog";
 
 type EnvelopeStatus = 'draft' | 'sent' | 'viewed' | 'partially_signed' | 'completed' | 'declined' | 'expired' | 'voided';
 type RecipientStatus = 'pending' | 'sent' | 'delivered' | 'viewed' | 'signed' | 'declined';
