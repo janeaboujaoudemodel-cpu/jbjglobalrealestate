@@ -1153,6 +1153,14 @@ const BrokeragesAgenciesView = () => {
         </Button>
         <Button
           variant="outline"
+          onClick={() => setUnifiedExportOpen(true)}
+          disabled={!filtered.length}
+          title="Unified CSV — same columns across every CRM list page"
+        >
+          <Download className="w-4 h-4 mr-2" /> Unified CSV
+        </Button>
+        <Button
+          variant="outline"
           onClick={() => handleImportDLDBatched()}
           disabled={importingDLD}
           title="Batched import of the official DLD register — shows live progress per 500-row batch."
