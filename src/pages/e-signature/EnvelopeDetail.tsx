@@ -730,7 +730,7 @@ export default function EnvelopeDetail() {
         envelope={envelope}
         signedDoc={signedDoc}
         docNumber={docNumber}
-        landlordName={(editValues.landlord_name as string) || (envelope?.metadata?.fields?.landlord_name as string) || null}
+        landlordName={(editValues.landlord_name as string) || ((envelope?.metadata as any)?.fields?.landlord_name as string) || null}
         signingLink={clientRec?.signing_token ? buildSigningUrl(clientRec.signing_token) : null}
         onShareWhatsApp={() => clientRec && handleWhatsApp(clientRec)}
       />
