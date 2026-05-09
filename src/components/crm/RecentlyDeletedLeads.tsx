@@ -4,8 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Trash2, RotateCcw, Search, Clock, AlertTriangle } from "lucide-react";
+import { Trash2, RotateCcw, Search, Clock, AlertTriangle, CheckSquare } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import { formatDisplayDate } from "@/utils/formatDate";
 import {
   Table,
