@@ -587,6 +587,20 @@ export default function EnvelopeDetail() {
           </div>
         </div>
 
+        {/* Header & footer studio (always available) */}
+        <div className="flex items-center justify-between gap-2">
+          <Button variant="outline" size="sm" onClick={() => setShowStudio((s) => !s)}>
+            {showStudio ? "Hide" : "Customize"} header &amp; footer
+          </Button>
+          {showStudio && (
+            <Button variant="gold" size="sm" onClick={handleSaveEdits} disabled={regenerate.isPending}>
+              {regenerate.isPending ? <Loader2 className="w-3.5 h-3.5 mr-1 animate-spin" /> : <Save className="w-3.5 h-3.5 mr-1" />}
+              Apply chrome &amp; re-render
+            </Button>
+          )}
+        </div>
+        {showStudio && <TemplateChromeStudio value={chrome} onChange={setChrome} />}
+
         {/* Edit Fields panel (full width below preview) */}
         {editing && envelope.template_key && (
           <Card className="bg-[#F7F2EA] border-[#B89555]/30">
@@ -600,42 +614,65 @@ export default function EnvelopeDetail() {
                 schemaHint="jbj_paa_leasing"
                 onExtracted={(fields) => setEditValues((prev) => ({ ...prev, ...fields }))}
               />
-              {PAA_FIELD_GROUPS.filter(g => g.title !== "Signatures").map((group) => (
-                <div key={group.title}>
-                  <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/70 mb-2">{group.title}</div>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                    {group.fields.map((f) => {
-                      const val = editValues[f.key] ?? "";
-                      const onChange = (v: string) => setEditValues((prev) => ({ ...prev, [f.key]: v }));
-                      if (f.type === "select" && f.options) {
+              {PAA_FIELD_GROUPS.filter(g => g.title !== "Signatures").map((group) => {
+                const visible = group.fields.filter((f) => !f.conditional || f.conditional(editValues));
+                if (!visible.length) return null;
+                return (
+                  <div key={group.title}>
+                    <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/70 mb-2">{group.title}</div>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                      {visible.map((f) => {
+                        const val = editValues[f.key] ?? "";
+                        const onChange = (v: string) => setEditValues((prev) => ({ ...prev, [f.key]: v }));
+                        if (f.type === "select" && f.options) {
+                          return (
+                            <div key={f.key}>
+                              <Label className="text-xs">{f.label}</Label>
+                              <select value={val} onChange={(e) => onChange(e.target.value)} className="w-full h-9 px-2 rounded border border-[#B89555]/40 bg-white text-sm text-[#1A1A1A]">
+                                <option value="">—</option>
+                                {f.options.map((o) => <option key={o} value={o}>{o}</option>)}
+                              </select>
+                            </div>
+                          );
+                        }
+                        if (f.type === "textarea") {
+                          return (
+                            <div key={f.key} className="col-span-2 md:col-span-3">
+                              <Label className="text-xs">{f.label}</Label>
+                              <Textarea value={val} onChange={(e) => onChange(e.target.value)} rows={2} />
+                            </div>
+                          );
+                        }
+                        if (f.type === "money") {
+                          return (
+                            <div key={f.key}>
+                              <Label className="text-xs">{f.label}</Label>
+                              <div className="relative">
+                                <Input
+                                  inputMode="numeric"
+                                  value={val}
+                                  onChange={(e) => onChange(e.target.value.replace(/[^\d]/g, ""))}
+                                  onBlur={(e) => {
+                                    const n = Number(e.target.value.replace(/[^\d]/g, ""));
+                                    onChange(isFinite(n) && n > 0 ? new Intl.NumberFormat("en-AE").format(n) : "");
+                                  }}
+                                />
+                                <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] tracking-[0.16em] text-[#1A1A1A]/60">AED</span>
+                              </div>
+                            </div>
+                          );
+                        }
                         return (
                           <div key={f.key}>
                             <Label className="text-xs">{f.label}</Label>
-                            <select value={val} onChange={(e) => onChange(e.target.value)} className="w-full h-9 px-2 rounded border border-[#B89555]/40 bg-white text-sm text-[#1A1A1A]">
-                              <option value="">—</option>
-                              {f.options.map((o) => <option key={o} value={o}>{o}</option>)}
-                            </select>
+                            <Input type={f.type === "date" ? "date" : f.type === "number" ? "number" : "text"} value={val} onChange={(e) => onChange(e.target.value)} />
                           </div>
                         );
-                      }
-                      if (f.type === "textarea") {
-                        return (
-                          <div key={f.key} className="col-span-2 md:col-span-3">
-                            <Label className="text-xs">{f.label}</Label>
-                            <Textarea value={val} onChange={(e) => onChange(e.target.value)} rows={2} />
-                          </div>
-                        );
-                      }
-                      return (
-                        <div key={f.key}>
-                          <Label className="text-xs">{f.label}</Label>
-                          <Input type={f.type === "date" ? "date" : f.type === "number" ? "number" : "text"} value={val} onChange={(e) => onChange(e.target.value)} />
-                        </div>
-                      );
-                    })}
+                      })}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </CardContent>
           </Card>
         )}
