@@ -148,6 +148,8 @@ export default function CRMNetwork() {
   const [cross, setCross] = useState<CrossFilter | null>(null);
   const [hubOpen, setHubOpen] = useState(false);
   const [hubTarget, setHubTarget] = useState<{ type: "brokerage" | "developer"; companyName: string } | null>(null);
+  const [personId, setPersonId] = useState<string | null>(null);
+  const [personOpen, setPersonOpen] = useState(false);
 
   function openHubFor(role: RoleKey, l: Lead) {
     const name = (l.company_name || l.full_name || "").trim();
