@@ -9,6 +9,7 @@ import { Mail, MessageCircle, LinkIcon, Send, X, Plus, RotateCcw, Copy, Loader2 
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { SUPABASE_URL, PUBLIC_DOMAIN } from "@/config/backend";
+import { openWhatsApp } from "@/utils/contactActions";
 
 const isValidEmail = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.trim());
 
