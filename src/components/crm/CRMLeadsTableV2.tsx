@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { formatDisplayDate } from "@/utils/formatDate";
-import { useNavigate } from "react-router-dom";
+// useNavigate no longer needed after filter refactor
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
