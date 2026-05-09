@@ -168,7 +168,7 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
     requestAnimationFrame(() => {
       activeRef.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
     });
-  }, [location.pathname]);
+  }, [location.pathname, location.search]);
 
   const setActiveRefCallback = useCallback(
     (path: string) => (el: HTMLButtonElement | null) => {
@@ -177,7 +177,7 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [location.pathname]
+    [location.pathname, location.search]
   );
 
   const handleNavClick = (path: string) => {
