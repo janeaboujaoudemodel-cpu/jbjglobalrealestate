@@ -27,7 +27,7 @@ export type PAAFieldKey =
   | "email_address" | "nationality" | "listing_consultant" | "property_reference_no" | "expiry_date"
   // Property
   | "property_type" | "status_vacant_tenanted" | "furnishing" | "vacating_date"
-  | "building_name" | "unit_number" | "street_name" | "community"
+  | "building_name" | "unit_number" | "plot_number" | "street_name" | "community"
   | "bua_sqft" | "plot_sqft" | "bedrooms" | "bathrooms"
   | "rental_amount" | "sales_amount" | "parking" | "additional_notes"
   // Terms
@@ -41,11 +41,11 @@ export const PAA_DEFAULT_VALUES: Record<PAAFieldKey | "doc_number", string> = {
   landlord_name: "", passport_number: "", emirates_id: "", mobile_number: "",
   email_address: "", nationality: "", listing_consultant: "", property_reference_no: "", expiry_date: "",
   property_type: "", status_vacant_tenanted: "", furnishing: "", vacating_date: "",
-  building_name: "", unit_number: "", street_name: "", community: "",
+  building_name: "", unit_number: "", plot_number: "", street_name: "", community: "",
   bua_sqft: "", plot_sqft: "", bedrooms: "", bathrooms: "",
   rental_amount: "", sales_amount: "", parking: "", additional_notes: "",
   exclusivity: "", listing_period: "", listing_period_until_date: "",
-  broker_appointee_name: "JBJ GLOBAL REAL ESTATE",
+  broker_appointee_name: "JBJ GLOBAL REAL ESTATE LLC - SOC",
   landlord_signature_name: "", landlord_signature_date: "",
   jbj_signature_name: "", jbj_signature_date: "",
 };
