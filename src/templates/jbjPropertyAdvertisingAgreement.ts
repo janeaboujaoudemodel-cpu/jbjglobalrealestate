@@ -165,7 +165,7 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string) => {
       return `
         <div style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid ${accent};padding-bottom:14px;margin-bottom:24px;">
           <div style="display:flex;align-items:center;gap:12px;">
-            <div style="width:42px;height:42px;border:1px solid ${accent};display:flex;align-items:center;justify-content:center;font-weight:800;letter-spacing:.06em;color:${ink};font-size:14px;">JBJ</div>
+            <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:44px;height:44px;object-fit:contain;display:block;" />
             <div>
               <div style="font-size:18px;letter-spacing:.18em;font-weight:700;color:${ink};">${JBJ_BRAND.company}</div>
               <div style="font-size:9.5px;letter-spacing:.18em;color:${ink};opacity:.65;margin-top:2px;">PRIVATE OFFICE · DUBAI</div>
