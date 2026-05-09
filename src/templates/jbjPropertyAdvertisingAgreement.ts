@@ -5,6 +5,8 @@
  * brand chrome. Header & footer are user-customisable via the `chrome` arg.
  */
 
+import monogramUrl from "@/assets/jbj-monogram-dark-on-light.png";
+
 export const JBJ_BRAND = {
   company: "JBJ GLOBAL REAL ESTATE",
   phone: "+971 54 716 7107",
@@ -12,6 +14,7 @@ export const JBJ_BRAND = {
   website: "WWW.JBJ.AE",
   gold: "#B89555",
   ink: "#1A1A1A",
+  monogram: monogramUrl,
 } as const;
 
 export const PAA_LAYOUT_VERSION = 5;
@@ -162,7 +165,7 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string) => {
       return `
         <div style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid ${accent};padding-bottom:14px;margin-bottom:24px;">
           <div style="display:flex;align-items:center;gap:12px;">
-            <div style="width:42px;height:42px;border:1px solid ${accent};display:flex;align-items:center;justify-content:center;font-weight:800;letter-spacing:.06em;color:${ink};font-size:14px;">JBJ</div>
+            <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:44px;height:44px;object-fit:contain;display:block;" />
             <div>
               <div style="font-size:18px;letter-spacing:.18em;font-weight:700;color:${ink};">${JBJ_BRAND.company}</div>
               <div style="font-size:9.5px;letter-spacing:.18em;color:${ink};opacity:.65;margin-top:2px;">PRIVATE OFFICE · DUBAI</div>
@@ -197,10 +200,13 @@ const footerHtml = (chrome: Required<TemplateChrome>) => {
     case "three-column":
     default:
       return `
-        <div style="${base}display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;">
-          <div>
-            <div style="font-weight:700;letter-spacing:.14em;font-size:10px;opacity:.85;">${JBJ_BRAND.company}</div>
-            <div style="opacity:.7;margin-top:2px;">Private Office · Dubai, UAE</div>
+        <div style="${base}display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;align-items:center;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:20px;height:20px;object-fit:contain;display:block;flex:none;" />
+            <div>
+              <div style="font-weight:700;letter-spacing:.14em;font-size:10px;opacity:.85;">${JBJ_BRAND.company}</div>
+              <div style="opacity:.7;margin-top:2px;">Private Office · Dubai, UAE</div>
+            </div>
           </div>
           <div style="text-align:center;">
             <div>${JBJ_BRAND.email}</div>
@@ -277,8 +283,8 @@ export function buildPAAHtml(
     ? `<img src="${esc(opts.ownerStampUrl)}" alt="Company stamp" crossorigin="anonymous" style="position:absolute;right:-6px;top:-12px;width:88px;height:88px;object-fit:contain;opacity:.85;" />`
     : "";
   const clientSigImg = opts.clientSignatureUrl
-    ? `<img src="${esc(opts.clientSignatureUrl)}" alt="Client signature" crossorigin="anonymous" style="max-height:54px;max-width:200px;object-fit:contain;display:block;" />`
-    : `<div style="font-style:italic;color:#1A1A1A99;font-size:11px;">Awaiting signature${get("landlord_name") ? ` — ${esc(get("landlord_name"))}` : ""}</div>`;
+    ? `<img src="${esc(opts.clientSignatureUrl)}" alt="Client signature" crossorigin="anonymous" style="max-height:40px;max-width:200px;object-fit:contain;display:block;" />`
+    : "";
 
   const html = `
 <div style="font-family:Inter,Arial,sans-serif;color:${ink};background:${chrome.surface};padding:44px 52px;max-width:794px;margin:0 auto;line-height:1.55;">
@@ -374,35 +380,18 @@ export function buildPAAHtml(
     </ol>
   </div>
 
-  ${sectionTitle(4, "Landlord(s)")}
-  <div style="display:grid;grid-template-columns:1.2fr 1.2fr 1fr;gap:0 28px;margin-top:6px;">
+  ${sectionTitle(4, "Landlord")}
+  <div style="display:grid;grid-template-columns:1.2fr 1.2fr 1fr;gap:0 28px;margin-top:6px;align-items:end;">
     <div>
-      <div style="border-bottom:1px solid ${accent};min-height:24px;padding:2px 0;font-size:13px;color:${ink};">${esc(get("landlord_signature_name") || get("landlord_name"))}</div>
+      <div style="border-bottom:1px solid ${accent};height:44px;display:flex;align-items:flex-end;padding:0 0 4px;font-size:13px;color:${ink};">${esc(get("landlord_signature_name") || get("landlord_name"))}</div>
       <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:3px;">Name</div>
     </div>
     <div>
-      <div style="border-bottom:1px solid ${accent};min-height:54px;padding:4px 0;display:flex;align-items:flex-end;">${clientSigImg}</div>
+      <div style="border-bottom:1px solid ${accent};height:44px;display:flex;align-items:flex-end;padding:0 0 4px;">${clientSigImg}</div>
       <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:3px;">Signature</div>
     </div>
     <div>
-      <div style="min-height:24px;padding:2px 0;">${dateBox(get("landlord_signature_date"))}</div>
-      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:3px;">Date</div>
-    </div>
-  </div>
-
-  <!-- JBJ representative -->
-  <div style="margin-top:22px;display:grid;grid-template-columns:1.2fr 1.2fr 1fr;gap:0 28px;position:relative;">
-    <div>
-      <div style="border-bottom:1px solid ${accent};min-height:24px;padding:2px 0;font-size:13px;color:${ink};">${esc(get("jbj_signature_name") || "Authorised Representative")}</div>
-      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:3px;">JBJ Global Real Estate — Authorised Representative</div>
-    </div>
-    <div style="position:relative;">
-      <div style="border-bottom:1px solid ${accent};min-height:54px;padding:4px 0;display:flex;align-items:flex-end;">${ownerSigImg}</div>
-      ${ownerStampImg}
-      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:3px;">Signature & Stamp</div>
-    </div>
-    <div>
-      <div style="min-height:24px;padding:2px 0;">${dateBox(get("jbj_signature_date") || new Date().toISOString().slice(0,10))}</div>
+      <div style="border-bottom:1px solid ${accent};height:44px;display:flex;align-items:flex-end;padding:0 0 4px;">${dateBox(get("landlord_signature_date"))}</div>
       <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:3px;">Date</div>
     </div>
   </div>
@@ -464,8 +453,6 @@ export const PAA_FIELD_GROUPS: { title: string; fields: { key: PAAFieldKey; labe
     fields: [
       { key: "landlord_signature_name", label: "Landlord — Printed Name" },
       { key: "landlord_signature_date", label: "Landlord — Date", type: "date" },
-      { key: "jbj_signature_name", label: "JBJ Representative — Printed Name" },
-      { key: "jbj_signature_date", label: "JBJ Representative — Date", type: "date" },
     ],
   },
 ];
