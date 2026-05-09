@@ -78,27 +78,47 @@ Deno.serve(async (req) => {
       // {{sender_signature}} is the brand sign-off at the bottom of the email.
       // It is always YOUR side (Jane · JBJ), never the client.
       const senderName = envelope.sender_name || "Jane Bou Jaoude";
+      const senderTitle = (envelope as any).sender_title || "Founder & Chief Executive";
+      const SIG_SENTINEL = "@@JBJ_SENDER_SIGNATURE_BLOCK@@";
+      // Plain-text fallback for live-preview / non-HTML contexts
+      const sigPlain = `— ${senderName}\n${senderTitle}\nJBJ GLOBAL REAL ESTATE`;
+      // Premium HTML signature block — luxury serif name + gold hairline + title
+      const sigHtml = `
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:28px;border-collapse:collapse;font-family:Inter,Arial,sans-serif;">
+  <tr><td style="padding-bottom:6px;">
+    <span style="font-family:'Cormorant Garamond','Playfair Display',Georgia,serif;font-style:italic;font-weight:500;font-size:26px;color:#1A1A1A;letter-spacing:.01em;line-height:1;">${senderName}</span>
+  </td></tr>
+  <tr><td style="padding:4px 0 10px;"><div style="width:64px;height:1px;background:#B89555;line-height:1px;font-size:0;">&nbsp;</div></td></tr>
+  <tr><td style="font-size:11px;font-weight:700;letter-spacing:.18em;color:#1A1A1A;text-transform:uppercase;padding-bottom:2px;">${senderName}</td></tr>
+  <tr><td style="font-size:10.5px;font-weight:500;letter-spacing:.14em;color:#1A1A1A;opacity:.75;text-transform:uppercase;padding-bottom:6px;">${senderTitle}</td></tr>
+  <tr><td style="font-size:11px;font-weight:700;letter-spacing:.22em;color:#1A1A1A;text-transform:uppercase;padding-bottom:2px;">JBJ GLOBAL REAL ESTATE</td></tr>
+  <tr><td style="font-size:10.5px;color:#1A1A1A;opacity:.7;letter-spacing:.04em;padding-bottom:1px;">Private Office · Dubai, UAE</td></tr>
+  <tr><td style="font-size:10.5px;color:#1A1A1A;opacity:.7;letter-spacing:.04em;padding-bottom:1px;">contact@jbj.ae · +971 54 716 7107</td></tr>
+  <tr><td style="font-size:10.5px;color:#1A1A1A;opacity:.7;letter-spacing:.04em;">www.jbj.ae</td></tr>
+</table>`;
       const tokens: Record<string, string> = {
         client_name: recipient.name || fieldVals.landlord_name || "Client",
         landlord_name: recipient.name || fieldVals.landlord_name || "Client",
         doc_number: docNumber,
         doc_title: envelope.name || "Property Advertising Agreement",
-        sender_signature: `— ${senderName}\nJBJ GLOBAL REAL ESTATE`,
+        sender_signature: SIG_SENTINEL,
         owner_name: senderName, // legacy alias
+        sender_title: senderTitle,
         signing_link: signingUrl,
       };
       const interp = (s: string) =>
         String(s || "").replace(/\{\{(\w+)\}\}/g, (_, k) => tokens[k] ?? `{{${k}}}`);
 
       const finalSubject = interpolated_subject
-        ? interp(interpolated_subject)
-        : interp(envelope.email_subject || `Please sign — {{doc_title}} · {{doc_number}}`);
+        ? interp(interpolated_subject).replace(SIG_SENTINEL, sigPlain)
+        : interp(envelope.email_subject || `Please sign — {{doc_title}} · {{doc_number}}`).replace(SIG_SENTINEL, sigPlain);
       const rawBody = interpolated_body
         ? interpolated_body
         : (envelope.email_message || `Dear {{client_name}},\n\nKindly review and sign your {{doc_title}}.\n\n{{sender_signature}}`);
       const finalBodyHtml = interp(rawBody)
         .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-        .replace(/\n/g, "<br/>");
+        .replace(/\n/g, "<br/>")
+        .replace(SIG_SENTINEL, sigHtml);
 
       const emailHtml = `
 <!DOCTYPE html>
