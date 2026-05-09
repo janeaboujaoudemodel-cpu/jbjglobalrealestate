@@ -314,6 +314,7 @@ export function buildPAAHtml(
     ${fu("Emirates ID", get("emirates_id"), "emirates_id")}
     ${fu("Mobile Number", get("mobile_number"), "mobile_number")}
     ${fu("Email Address", get("email_address"), "email_address")}
+    ${fu("Nationality", get("nationality"), "nationality")}
     ${fu("Listing Consultant", get("listing_consultant"), "listing_consultant")}
     ${fu("Property Reference No.", get("property_reference_no"), "property_reference_no")}
     ${!hidden.has("expiry_date") && get("expiry_date") ? `
