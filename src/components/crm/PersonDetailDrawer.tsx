@@ -154,7 +154,7 @@ export function PersonDetailDrawer({ open, onOpenChange, leadId }: Props) {
             kind: "activity",
             at: a.created_at,
             title: String(a.activity_type ?? "Activity"),
-            body: a.metadata?.note ?? a.metadata?.message ?? null,
+            body: (a.metadata as any)?.note ?? (a.metadata as any)?.message ?? null,
           });
         }
 
