@@ -100,7 +100,7 @@ export function buildSellingHtml(values: Partial<Record<SellingFieldKey, string>
   </div>
 
   <div style="margin-top:36px;padding-top:14px;border-top:1px solid #B89555;display:flex;justify-content:space-between;font-size:10.5px;opacity:.7;">
-    <div>JBJ GLOBAL REAL ESTATE · Private Office · Dubai, UAE</div>
+    <div>JBJ GLOBAL REAL ESTATE · Downtown Dubai, UAE</div>
     <div>${JBJ_BRAND.phone} · ${JBJ_BRAND.email} · ${JBJ_BRAND.website}</div>
   </div>
 </div>`.trim();

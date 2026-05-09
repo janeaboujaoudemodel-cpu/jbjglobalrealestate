@@ -99,7 +99,7 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
   }, [envelope?.id, open]);
 
   const senderName = envelope?.sender_name || "Jane Bou Jaoude";
-  const senderTitle = envelope?.sender_title || "Founder & Chief Executive";
+  const senderTitle = envelope?.sender_title || "Founder & CEO";
 
   const tokens = useMemo(() => ({
     // Recipient (client) merge tags — both names are accepted for back-compat.
@@ -411,14 +411,13 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
                   {chunk}
                   {i < arr.length - 1 && (
                     <span className="block mt-7 not-italic">
-                      <span style={{ fontFamily: "'Cormorant Garamond', 'Playfair Display', Georgia, serif", fontStyle: "italic", fontWeight: 500, fontSize: "26px", color: "#1A1A1A", lineHeight: 1, letterSpacing: ".01em" }}>{senderName}</span>
-                      <span className="block mt-1 mb-2.5" style={{ width: 64, height: 1, background: "#B89555" }} />
-                      <span className="block text-[11px] font-bold uppercase tracking-[.18em] text-[#1A1A1A]">{senderName}</span>
-                      <span className="block text-[10.5px] uppercase tracking-[.14em] text-[#1A1A1A]/75 mb-1.5">{senderTitle}</span>
+                      <span style={{ fontFamily: "'Cormorant Garamond', 'Playfair Display', Georgia, serif", fontStyle: "italic", fontWeight: 500, fontSize: "28px", color: "#1A1A1A", lineHeight: 1, letterSpacing: ".01em" }}>{senderName}</span>
+                      <span className="block mt-1.5 mb-3" style={{ width: 72, height: 1, background: "#B89555" }} />
+                      <span className="block text-[10.5px] uppercase tracking-[.16em] text-[#1A1A1A] mb-2">{senderTitle}</span>
                       <span className="block text-[11px] font-bold uppercase tracking-[.22em] text-[#1A1A1A]">JBJ GLOBAL REAL ESTATE</span>
-                      <span className="block text-[10.5px] text-[#1A1A1A]/70">Private Office · Dubai, UAE</span>
-                      <span className="block text-[10.5px] text-[#1A1A1A]/70">contact@jbj.ae · +971 54 716 7107</span>
-                      <span className="block text-[10.5px] text-[#1A1A1A]/70">www.jbj.ae</span>
+                      <span className="block text-[10.5px] text-[#1A1A1A]/70">Downtown Dubai, UAE</span>
+                      <span className="block text-[10.5px] text-[#1A1A1A]/70">CONTACT@JBJ.AE · +971 56 591 1000</span>
+                      <span className="block text-[10.5px] text-[#1A1A1A]/70">WWW.JBJ.AE</span>
                     </span>
                   )}
                 </span>

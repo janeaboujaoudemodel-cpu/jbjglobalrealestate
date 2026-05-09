@@ -78,23 +78,21 @@ Deno.serve(async (req) => {
       // {{sender_signature}} is the brand sign-off at the bottom of the email.
       // It is always YOUR side (Jane · JBJ), never the client.
       const senderName = envelope.sender_name || "Jane Bou Jaoude";
-      const senderTitle = (envelope as any).sender_title || "Founder & Chief Executive";
+      const senderTitle = (envelope as any).sender_title || "Founder & CEO";
       const SIG_SENTINEL = "@@JBJ_SENDER_SIGNATURE_BLOCK@@";
-      // Plain-text fallback for live-preview / non-HTML contexts
       const sigPlain = `— ${senderName}\n${senderTitle}\nJBJ GLOBAL REAL ESTATE`;
-      // Premium HTML signature block — luxury serif name + gold hairline + title
+      // Premium HTML signature: ONE name (luxury serif italic) + gold hairline + title + brand
       const sigHtml = `
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:28px;border-collapse:collapse;font-family:Inter,Arial,sans-serif;">
   <tr><td style="padding-bottom:6px;">
-    <span style="font-family:'Cormorant Garamond','Playfair Display',Georgia,serif;font-style:italic;font-weight:500;font-size:26px;color:#1A1A1A;letter-spacing:.01em;line-height:1;">${senderName}</span>
+    <span style="font-family:'Cormorant Garamond','Playfair Display',Georgia,serif;font-style:italic;font-weight:500;font-size:28px;color:#1A1A1A;letter-spacing:.01em;line-height:1;">${senderName}</span>
   </td></tr>
-  <tr><td style="padding:4px 0 10px;"><div style="width:64px;height:1px;background:#B89555;line-height:1px;font-size:0;">&nbsp;</div></td></tr>
-  <tr><td style="font-size:11px;font-weight:700;letter-spacing:.18em;color:#1A1A1A;text-transform:uppercase;padding-bottom:2px;">${senderName}</td></tr>
-  <tr><td style="font-size:10.5px;font-weight:500;letter-spacing:.14em;color:#1A1A1A;opacity:.75;text-transform:uppercase;padding-bottom:6px;">${senderTitle}</td></tr>
-  <tr><td style="font-size:11px;font-weight:700;letter-spacing:.22em;color:#1A1A1A;text-transform:uppercase;padding-bottom:2px;">JBJ GLOBAL REAL ESTATE</td></tr>
-  <tr><td style="font-size:10.5px;color:#1A1A1A;opacity:.7;letter-spacing:.04em;padding-bottom:1px;">Private Office · Dubai, UAE</td></tr>
-  <tr><td style="font-size:10.5px;color:#1A1A1A;opacity:.7;letter-spacing:.04em;padding-bottom:1px;">contact@jbj.ae · +971 54 716 7107</td></tr>
-  <tr><td style="font-size:10.5px;color:#1A1A1A;opacity:.7;letter-spacing:.04em;">www.jbj.ae</td></tr>
+  <tr><td style="padding:6px 0 12px;"><div style="width:72px;height:1px;background:#B89555;line-height:1px;font-size:0;">&nbsp;</div></td></tr>
+  <tr><td style="font-size:10.5px;font-weight:500;letter-spacing:.16em;color:#1A1A1A;text-transform:uppercase;padding-bottom:8px;">${senderTitle}</td></tr>
+  <tr><td style="font-size:11px;font-weight:700;letter-spacing:.22em;color:#1A1A1A;text-transform:uppercase;padding-bottom:3px;">JBJ GLOBAL REAL ESTATE</td></tr>
+  <tr><td style="font-size:10.5px;color:#1A1A1A;opacity:.7;letter-spacing:.04em;padding-bottom:1px;">Downtown Dubai, UAE</td></tr>
+  <tr><td style="font-size:10.5px;color:#1A1A1A;opacity:.7;letter-spacing:.04em;padding-bottom:1px;">CONTACT@JBJ.AE &nbsp;·&nbsp; +971 56 591 1000</td></tr>
+  <tr><td style="font-size:10.5px;color:#1A1A1A;opacity:.7;letter-spacing:.04em;">WWW.JBJ.AE</td></tr>
 </table>`;
       const tokens: Record<string, string> = {
         client_name: recipient.name || fieldVals.landlord_name || "Client",
@@ -120,16 +118,13 @@ Deno.serve(async (req) => {
         .replace(/\n/g, "<br/>")
         .replace(SIG_SENTINEL, sigHtml);
 
-      const emailHtml = `
-<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500<meta name="viewport" content="width=device-width, initial-scale=1"></head>display=swap" rel="stylesheet"></head>
+      const emailHtml = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"></head>
 <body style="margin:0;padding:0;font-family:Inter,Arial,sans-serif;background:#FDFBF7;">
   <table role="presentation" style="width:100%;border-collapse:collapse;">
     <tr><td align="center" style="padding:40px 20px;">
-      <table role="presentation" style="width:100%;max-width:600px;border-collapse:collapse;">
-        <!-- Premium JBJ Header -->
-        <tr><td style="background:#F7F2EA;border:1px solid #B89555;border-radius:14px 14px 0 0;padding:22px 28px;border-bottom:none;">
+      <table role="presentation" style="width:100%;max-width:620px;border-collapse:collapse;">
+        <!-- Premium JBJ Header (sharp corners to match document chrome) -->
+        <tr><td style="background:#F7F2EA;border:1px solid #B89555;padding:22px 28px;border-bottom:none;">
           <table role="presentation" style="width:100%;border-collapse:collapse;"><tr>
             <td style="font-size:20px;font-weight:700;letter-spacing:.18em;color:#1A1A1A;">JBJ GLOBAL REAL ESTATE</td>
             <td align="right" style="font-size:10px;letter-spacing:.16em;color:#1A1A1A;opacity:.7;">${docNumber ? `DOC NO. <strong style="opacity:1;">${docNumber}</strong>` : ""}</td>
@@ -141,17 +136,25 @@ Deno.serve(async (req) => {
           <h2 style="margin:0 0 18px;color:#1A1A1A;font-size:20px;font-weight:700;">${finalSubject}</h2>
           <div style="color:#1A1A1A;line-height:1.7;font-size:14px;">${finalBodyHtml}</div>
           <div style="text-align:center;margin:32px 0 12px;">
-            <a href="${signingUrl}" style="display:inline-block;background:#1A1A1A;color:#FDFBF7;text-decoration:none;padding:14px 32px;border-radius:10px;font-weight:600;font-size:14px;letter-spacing:.06em;border:1px solid #B89555;">REVIEW &amp; SIGN DOCUMENT</a>
+            <a href="${signingUrl}" style="display:inline-block;background:#1A1A1A;color:#FDFBF7;text-decoration:none;padding:14px 32px;font-weight:600;font-size:14px;letter-spacing:.06em;border:1px solid #B89555;">REVIEW &amp; SIGN DOCUMENT</a>
           </div>
-          <p style="color:#1A1A1A;opacity:.6;font-size:12px;text-align:center;margin:0 0 8px;">Or paste this secure link in your browser:<br/><span style="color:#1A1A1A;">${signingUrl}</span></p>
+          <p style="color:#1A1A1A;opacity:.6;font-size:12px;text-align:center;margin:0 0 8px;">Or paste this secure link in your browser:<br/><span style="color:#1A1A1A;word-break:break-all;">${signingUrl}</span></p>
         </td></tr>
-        <!-- Premium Footer -->
-        <tr><td style="background:#F7F2EA;border:1px solid #B89555;border-top:none;border-radius:0 0 14px 14px;padding:18px 28px;">
+        <!-- Premium Footer (single row, no wraps; sharp corners) -->
+        <tr><td style="background:#F7F2EA;border:1px solid #B89555;border-top:none;padding:18px 28px;">
           <div style="height:1px;background:#B89555;margin-bottom:14px;"></div>
-          <table role="presentation" style="width:100%;border-collapse:collapse;font-size:11px;color:#1A1A1A;"><tr>
-            <td style="opacity:.85;"><strong style="letter-spacing:.14em;">JBJ GLOBAL REAL ESTATE</strong><br/><span style="opacity:.7;">Private Office · Dubai, UAE</span></td>
-            <td align="center" style="opacity:.85;">CONTACT@JBJ.AE<br/>WWW.JBJ.AE</td>
-            <td align="right" style="opacity:.85;">+971 54 716 7107</td>
+          <table role="presentation" style="width:100%;border-collapse:collapse;font-size:11px;color:#1A1A1A;line-height:1.55;"><tr>
+            <td style="width:42%;vertical-align:top;">
+              <div style="font-weight:700;letter-spacing:.14em;white-space:nowrap;">JBJ GLOBAL REAL ESTATE</div>
+              <div style="opacity:.7;white-space:nowrap;">Downtown Dubai, UAE</div>
+            </td>
+            <td align="center" style="width:32%;vertical-align:top;">
+              <div style="white-space:nowrap;">CONTACT@JBJ.AE</div>
+              <div style="white-space:nowrap;">WWW.JBJ.AE</div>
+            </td>
+            <td align="right" style="width:26%;vertical-align:top;">
+              <div style="white-space:nowrap;">+971&nbsp;56&nbsp;591&nbsp;1000</div>
+            </td>
           </tr></table>
         </td></tr>
         <tr><td style="text-align:center;padding-top:14px;font-size:11px;color:#1A1A1A;opacity:.55;">© ${new Date().getFullYear()} JBJ Global Real Estate · Link expires in 7 days</td></tr>
