@@ -255,8 +255,8 @@ export default function DocumentFieldPlacer({
       const yPct = (yPx / rect.height) * 100;
       const maxXPct = 100 - (wPx / rect.width) * 100;
       const maxYPct = 100 - (hPx / rect.height) * 100;
-      const today = new Date().toLocaleDateString("en-AE");
-
+      // Date fields stay BLANK at placement time — the recipient's signing
+      // date is auto-filled when they actually sign the document.
       const newField: SignatureField = {
         id: crypto.randomUUID(),
         recipientId: selectedRecipient,
@@ -267,9 +267,7 @@ export default function DocumentFieldPlacer({
         width: wPx,
         height: hPx,
         value:
-          selectedFieldType === "date"
-            ? today
-            : selectedFieldType === "text"
+          selectedFieldType === "text"
             ? ""
             : selectedFieldType === "signature" && savedSignatureUrl
             ? savedSignatureUrl
@@ -464,12 +462,11 @@ export default function DocumentFieldPlacer({
     } catch (err: any) {
       console.error("Auto-detect error:", err);
       toast.error("Auto-detect failed. Placing smart defaults instead.");
-      const today = new Date().toLocaleDateString("en-AE");
       const recipientName = recipients.find((r) => r.id === selectedRecipient)?.name || "";
       const fallbackFields: SignatureField[] = [
         { id: crypto.randomUUID(), recipientId: selectedRecipient, type: "text", pageNumber: currentPage, x: 10, y: 8, width: 160, height: 36, value: recipientName, label: "Name" },
         { id: crypto.randomUUID(), recipientId: selectedRecipient, type: "text", pageNumber: currentPage, x: 55, y: 8, width: 160, height: 36, value: "", label: "Title" },
-        { id: crypto.randomUUID(), recipientId: selectedRecipient, type: "date", pageNumber: currentPage, x: 10, y: 88, width: 140, height: 36, value: today, label: "Date" },
+        { id: crypto.randomUUID(), recipientId: selectedRecipient, type: "date", pageNumber: currentPage, x: 10, y: 88, width: 140, height: 36, value: "", label: "Date (auto on sign)" },
         { id: crypto.randomUUID(), recipientId: selectedRecipient, type: "signature", pageNumber: currentPage, x: 55, y: 85, width: 180, height: 52, label: "Signature" },
         { id: crypto.randomUUID(), recipientId: selectedRecipient, type: "initials", pageNumber: currentPage, x: 88, y: 88, width: 90, height: 40, label: "Initials" },
       ];

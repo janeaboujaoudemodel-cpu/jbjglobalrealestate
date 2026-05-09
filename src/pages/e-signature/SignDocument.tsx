@@ -1,21 +1,31 @@
-import { useState, useEffect, useCallback } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { 
-  FileSignature, 
-  CheckCircle2, 
-  XCircle,
-  AlertTriangle,
-  Loader2,
-  Download
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  FileSignature, CheckCircle2, XCircle, AlertTriangle, Loader2, Download, Pencil,
+  ChevronLeft, ChevronRight, PenTool,
 } from "lucide-react";
 import { toast } from "sonner";
 import ESignaturePad from "@/components/e-signature/ESignaturePad";
+import PdfPageCanvas from "@/components/e-signature/PdfPageCanvas";
+import { loadPdfJs } from "@/components/e-signature/documentFieldTypes";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 import { SUPABASE_URL } from "@/config/backend";
+
+interface SignField {
+  id: string;
+  field_type: string;
+  page_number: number;
+  x_position: number; // percent (0-100)
+  y_position: number; // percent (0-100)
+  width: number;       // px @ pdf scale 1
+  height: number;
+  is_required: boolean;
+  is_completed: boolean;
+}
 
 interface RecipientData {
   id: string;
@@ -30,40 +40,31 @@ interface RecipientData {
     sender_name: string | null;
     sender_email: string;
   };
-  fields: {
-    id: string;
-    field_type: string;
-    page_number: number;
-    x_position: number;
-    y_position: number;
-    width: number;
-    height: number;
-    is_required: boolean;
-    is_completed: boolean;
-  }[];
+  fields: SignField[];
 }
 
 export default function SignDocument() {
   const { token } = useParams();
-  const [searchParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [recipientData, setRecipientData] = useState<RecipientData | null>(null);
+  const [data, setData] = useState<RecipientData | null>(null);
   const [signatureData, setSignatureData] = useState<string | null>(null);
   const [initialsData, setInitialsData] = useState<string | null>(null);
   const [completed, setCompleted] = useState(false);
   const [declined, setDeclined] = useState(false);
+  const [drawOpen, setDrawOpen] = useState<null | "signature" | "initials">(null);
 
-  // Fetch recipient and document data via public edge function (bypasses RLS safely)
+  // PDF state
+  const [pdfDoc, setPdfDoc] = useState<any>(null);
+  const [pageNum, setPageNum] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const pageRef = useRef<HTMLDivElement>(null);
+
+  // Load envelope/recipient/fields
   useEffect(() => {
     const fetchData = async () => {
-      if (!token) {
-        setError("Invalid signing link");
-        setLoading(false);
-        return;
-      }
-
+      if (!token) { setError("Invalid signing link"); setLoading(false); return; }
       try {
         const res = await fetch(`${SUPABASE_URL}/functions/v1/esign-load-document`, {
           method: "POST",
@@ -71,39 +72,19 @@ export default function SignDocument() {
           body: JSON.stringify({ token }),
         });
         const out = await res.json().catch(() => ({}));
-        if (!res.ok) {
-          setError(out.error || "This signing link is invalid or has expired");
-          setLoading(false);
-          return;
+        if (!res.ok) { setError(out.error || "This signing link is invalid or has expired"); setLoading(false); return; }
+        if (out.recipient.status === "signed") { setCompleted(true); setLoading(false); return; }
+        if (out.recipient.status === "declined") { setDeclined(true); setLoading(false); return; }
+        if (["completed", "voided", "expired"].includes(out.envelope.status)) {
+          setError(`This document has been ${out.envelope.status}`); setLoading(false); return;
         }
-
-        const recipient = out.recipient;
-        const envelope = out.envelope;
-        const fields = out.fields || [];
-
-        if (recipient.status === "signed") {
-          setCompleted(true);
-          setLoading(false);
-          return;
-        }
-        if (recipient.status === "declined") {
-          setDeclined(true);
-          setLoading(false);
-          return;
-        }
-        if (["completed", "voided", "expired"].includes(envelope.status)) {
-          setError(`This document has been ${envelope.status}`);
-          setLoading(false);
-          return;
-        }
-
-        setRecipientData({
-          id: recipient.id,
-          name: recipient.name,
-          email: recipient.email,
-          status: recipient.status,
-          envelope,
-          fields,
+        setData({
+          id: out.recipient.id,
+          name: out.recipient.name,
+          email: out.recipient.email,
+          status: out.recipient.status,
+          envelope: out.envelope,
+          fields: out.fields || [],
         });
         setLoading(false);
       } catch (err) {
@@ -112,45 +93,56 @@ export default function SignDocument() {
         setLoading(false);
       }
     };
-
     fetchData();
   }, [token]);
 
-  const handleSubmitSignature = async () => {
-    if (!recipientData || !signatureData) {
-      toast.error("Please provide your signature");
-      return;
-    }
+  // Load PDF document for inline rendering
+  useEffect(() => {
+    if (!data?.envelope.document_url) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const lib = await loadPdfJs();
+        const docUrl = maybeProxyStorageUrl(data.envelope.document_url, data.envelope.document_filename);
+        const doc = await lib.getDocument(docUrl).promise;
+        if (cancelled) return;
+        setPdfDoc(doc);
+        setTotalPages(doc.numPages);
+        // Jump to the first page that has fields for this signer
+        const firstFieldPage = data.fields[0]?.page_number || 1;
+        setPageNum(firstFieldPage);
+      } catch (e) {
+        console.warn("PDF preload failed:", e);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [data?.envelope.document_url, data?.envelope.document_filename, data?.fields]);
 
-    const hasInitialsField = recipientData.fields.some(f => f.field_type === "initials");
-    if (hasInitialsField && !initialsData) {
-      toast.error("Please provide your initials");
-      return;
-    }
+  const docUrl = data?.envelope.document_url
+    ? maybeProxyStorageUrl(data.envelope.document_url, data.envelope.document_filename)
+    : null;
 
+  const submit = async () => {
+    if (!data) return;
+    if (!signatureData) { toast.error("Please draw your signature"); return; }
+    const needsInitials = data.fields.some(f => f.field_type === "initials");
+    if (needsInitials && !initialsData) { toast.error("Please provide your initials"); return; }
     setSubmitting(true);
     try {
-      const response = await fetch(
-        `${SUPABASE_URL}/functions/v1/esign-process-signature`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            token,
-            signature_data: signatureData,
-            initials_data: initialsData,
-            signed_date: new Date().toLocaleDateString("en-GB"),
-          }),
-        }
-      );
-
+      const response = await fetch(`${SUPABASE_URL}/functions/v1/esign-process-signature`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token,
+          signature_data: signatureData,
+          initials_data: initialsData,
+          signed_date: new Date().toLocaleDateString("en-GB"),
+        }),
+      });
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to process signature");
+        const err = await response.json();
+        throw new Error(err.error || "Failed to process signature");
       }
-
       setCompleted(true);
       toast.success("Document signed successfully!");
     } catch (err: any) {
@@ -161,45 +153,30 @@ export default function SignDocument() {
     }
   };
 
-  const handleDecline = async () => {
-    if (!recipientData) return;
-
+  const decline = async () => {
+    if (!data) return;
     const reason = prompt("Please provide a reason for declining (optional):");
-    
     setSubmitting(true);
     try {
-      await supabase
-        .from("esign_recipients")
-        .update({
-          status: "declined",
-          declined_at: new Date().toISOString(),
-          decline_reason: reason || null,
-        })
-        .eq("id", recipientData.id);
-
-      await supabase
-        .from("esign_envelopes")
-        .update({ status: "declined" })
-        .eq("id", recipientData.envelope.id);
-
+      await supabase.from("esign_recipients").update({
+        status: "declined",
+        declined_at: new Date().toISOString(),
+        decline_reason: reason || null,
+      }).eq("id", data.id);
+      await supabase.from("esign_envelopes").update({ status: "declined" }).eq("id", data.envelope.id);
       await supabase.from("esign_audit_log").insert({
-        envelope_id: recipientData.envelope.id,
-        recipient_id: recipientData.id,
+        envelope_id: data.envelope.id,
+        recipient_id: data.id,
         action: "declined",
-        description: `${recipientData.name} declined to sign${reason ? `: ${reason}` : ""}`,
-        actor_email: recipientData.email,
-        actor_name: recipientData.name,
+        description: `${data.name} declined to sign${reason ? `: ${reason}` : ""}`,
+        actor_email: data.email,
+        actor_name: data.name,
       });
-
       setDeclined(true);
-    } catch (err) {
-      toast.error("Failed to decline");
-    } finally {
-      setSubmitting(false);
-    }
+    } catch { toast.error("Failed to decline"); } finally { setSubmitting(false); }
   };
 
-  // Loading state
+  // ── Loading/error/done/declined states ────────────────────────────────────
   if (loading) {
     return (
       <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-4">
@@ -212,8 +189,6 @@ export default function SignDocument() {
       </div>
     );
   }
-
-  // Error state
   if (error) {
     return (
       <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-4">
@@ -223,15 +198,14 @@ export default function SignDocument() {
             <h2 className="text-xl font-bold mb-2 text-[#1A1A1A]">Unable to Load Document</h2>
             <p className="text-[#1A1A1A]/70">{error}</p>
             <p className="text-xs text-[#1A1A1A]/60 mt-4">
-              If you reached this page from a search bar, signing links require a real token sent by email. Open the link in your inbox or contact <a href="mailto:contact@jbj.ae" className="underline">contact@jbj.ae</a>.
+              Signing links require a real token sent by email. Open the link in your inbox or contact{" "}
+              <a href="mailto:contact@jbj.ae" className="underline">contact@jbj.ae</a>.
             </p>
           </CardContent>
         </Card>
       </div>
     );
   }
-
-  // Completed state
   if (completed) {
     return (
       <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-4">
@@ -239,22 +213,12 @@ export default function SignDocument() {
           <CardContent className="p-8 text-center">
             <CheckCircle2 className="w-20 h-20 text-emerald-600 mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-2 text-[#1A1A1A]">Document Signed!</h2>
-            <p className="text-[#1A1A1A]/70 mb-6">
-              Thank you for signing. A confirmation email will be sent to you shortly.
-            </p>
-            <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-lg text-sm text-emerald-900">
-              <p className="font-medium">What happens next?</p>
-              <p className="mt-1">
-                You will receive an email with the completed document once all parties have signed.
-              </p>
-            </div>
+            <p className="text-[#1A1A1A]/70 mb-6">A confirmation email will be sent to you shortly.</p>
           </CardContent>
         </Card>
       </div>
     );
   }
-
-  // Declined state
   if (declined) {
     return (
       <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-4">
@@ -262,161 +226,210 @@ export default function SignDocument() {
           <CardContent className="p-8 text-center">
             <XCircle className="w-20 h-20 text-red-600 mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-2 text-[#1A1A1A]">Signing Declined</h2>
-            <p className="text-[#1A1A1A]/70">
-              You have declined to sign this document. The sender has been notified.
-            </p>
+            <p className="text-[#1A1A1A]/70">You have declined to sign this document. The sender has been notified.</p>
           </CardContent>
         </Card>
       </div>
     );
   }
 
-  const docUrl = recipientData?.envelope.document_url
-    ? maybeProxyStorageUrl(recipientData.envelope.document_url, recipientData.envelope.document_filename)
-    : null;
+  const pageFields = data?.fields.filter(f => f.page_number === pageNum) || [];
+  const today = new Date().toLocaleDateString("en-GB");
 
-  // Main signing view
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-50 py-8 px-4">
-      <div className="max-w-4xl mx-auto space-y-6">
+    <div className="min-h-screen bg-[#FDFBF7] py-6 px-3">
+      <div className="max-w-5xl mx-auto space-y-5">
         {/* Header */}
         <div className="text-center">
-          <FileSignature className="w-12 h-12 text-gold mx-auto mb-4" />
-          <h1 className="text-2xl font-bold">Sign Document</h1>
-          <p className="text-muted-foreground">
-            {recipientData?.envelope.sender_name || recipientData?.envelope.sender_email} has requested your signature
+          <FileSignature className="w-10 h-10 text-[#B89555] mx-auto mb-2" />
+          <h1 className="text-2xl font-bold text-[#1A1A1A]">Sign Document</h1>
+          <p className="text-[#1A1A1A]/70 text-sm">
+            {data?.envelope.sender_name || data?.envelope.sender_email} has requested your signature
           </p>
         </div>
 
-        {/* Signer Info Card */}
-        <Card className="border-[hsl(var(--gold)/.3)] bg-gradient-to-r from-amber-50 to-orange-50">
-          <CardContent className="p-6">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-full bg-[hsl(var(--gold)/.15)] flex items-center justify-center text-xl font-bold text-[hsl(var(--gold))]">
-                {recipientData?.name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)}
-              </div>
-              <div className="flex-1">
-                <p className="font-semibold text-lg text-foreground">{recipientData?.name}</p>
-                <p className="text-sm text-muted-foreground">{recipientData?.email}</p>
-              </div>
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => {
-                  if (docUrl) window.open(docUrl, "_blank");
-                }}
-              >
-                <Download className="w-4 h-4 mr-2" />
-                Download PDF
-              </Button>
+        {/* Signer card */}
+        <Card className="bg-[#F7F2EA] border-[#B89555]/30">
+          <CardContent className="p-4 flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center text-base font-bold text-[#1A1A1A]">
+              {data?.name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)}
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Document Info & Preview */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">{recipientData?.envelope.name}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-sm text-muted-foreground">
-              From: <span className="font-medium text-foreground">{recipientData?.envelope.sender_name || recipientData?.envelope.sender_email}</span>
-            </p>
-
-            {/* Inline centered PDF preview */}
+            <div className="flex-1 min-w-0">
+              <p className="font-semibold text-[#1A1A1A] truncate">{data?.name}</p>
+              <p className="text-sm text-[#1A1A1A]/70 truncate">{data?.envelope.name}</p>
+            </div>
             {docUrl && (
-              <div className="w-full flex justify-center">
-                <iframe
-                  src={`${docUrl}#toolbar=0&navpanes=0`}
-                  className="w-full max-w-3xl h-[60vh] border border-border rounded-xl mx-auto"
-                  title="Document Preview"
-                />
-              </div>
+              <Button variant="outline" size="sm" onClick={() => window.open(docUrl, "_blank")}>
+                <Download className="w-4 h-4 mr-2" /> PDF
+              </Button>
             )}
           </CardContent>
         </Card>
 
-        {/* Signature Section */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Your Signature</CardTitle>
+        {/* Document with field overlays */}
+        <Card className="bg-white border-[#B89555]/30 overflow-hidden">
+          <CardHeader className="bg-[#F7F2EA] border-b border-[#B89555]/30 py-3">
+            <CardTitle className="text-sm flex items-center justify-between text-[#1A1A1A]">
+              <span>Document — click "Sign Here" to add your signature</span>
+              {totalPages > 1 && (
+                <span className="flex items-center gap-2">
+                  <Button variant="ghost" size="icon" className="h-7 w-7"
+                    onClick={() => setPageNum(p => Math.max(1, p - 1))} disabled={pageNum <= 1}>
+                    <ChevronLeft className="w-4 h-4" />
+                  </Button>
+                  <span className="text-xs">Page {pageNum} of {totalPages}</span>
+                  <Button variant="ghost" size="icon" className="h-7 w-7"
+                    onClick={() => setPageNum(p => Math.min(totalPages, p + 1))} disabled={pageNum >= totalPages}>
+                    <ChevronRight className="w-4 h-4" />
+                  </Button>
+                </span>
+              )}
+            </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium mb-2">
-                Draw your signature below *
-              </label>
-              <ESignaturePad
-                onSignatureChange={setSignatureData}
-                height={150}
-              />
-            </div>
-
-            {recipientData?.fields.some(f => f.field_type === "initials") && (
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Your Initials: <span className="text-[hsl(var(--gold))] font-bold text-lg ml-2">{recipientData?.name?.split(' ').map(n => n[0]).join('').toUpperCase()}</span>
-                </label>
-                <p className="text-xs text-muted-foreground mb-2">Draw your initials below, or use the auto-generated ones above as reference.</p>
-                <ESignaturePad
-                  onSignatureChange={setInitialsData}
-                  height={100}
-                />
-              </div>
-            )}
-
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-sm">
-              <p className="font-medium text-amber-800 mb-1">
-                Legal Notice
-              </p>
-              <p className="text-amber-700">
-                By clicking "Sign Document", you agree that your electronic signature is the legal 
-                equivalent of your manual signature on this document.
-              </p>
-            </div>
-
-            <div className="flex gap-4">
-              <Button
-                variant="outline"
-                onClick={handleDecline}
-                disabled={submitting}
-                className="flex-1"
-              >
-                <XCircle className="w-4 h-4 mr-2" />
-                Decline
-              </Button>
-              <Button
-                onClick={handleSubmitSignature}
-                disabled={submitting || !signatureData}
-                className="flex-1 bg-gold hover:bg-gold/90"
-              >
-                {submitting ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Processing...
-                  </>
-                ) : (
-                  <>
-                    <CheckCircle2 className="w-4 h-4 mr-2" />
-                    Sign Document
-                  </>
+          <CardContent className="p-3 bg-[#FDFBF7]">
+            <div className="w-full overflow-auto flex justify-center">
+              <div ref={pageRef} className="relative" style={{ display: "inline-block" }}>
+                {docUrl && (
+                  <PdfPageCanvas
+                    pdfDoc={pdfDoc}
+                    pageNumber={pageNum}
+                    pdfUrl={docUrl}
+                    onDocLoaded={(d) => { setPdfDoc(d); setTotalPages(d.numPages); }}
+                  />
                 )}
-              </Button>
+                {/* Field overlays — clickable Sign Here / Initials / Date */}
+                {pageFields.map((f) => {
+                  const isSig = f.field_type === "signature";
+                  const isInit = f.field_type === "initials";
+                  const isDate = f.field_type === "date";
+                  const filled = (isSig && signatureData) || (isInit && initialsData);
+                  return (
+                    <button
+                      key={f.id}
+                      type="button"
+                      onClick={() => {
+                        if (isSig) setDrawOpen("signature");
+                        else if (isInit) setDrawOpen("initials");
+                      }}
+                      disabled={isDate}
+                      className={`absolute rounded border-2 transition-colors ${
+                        filled
+                          ? "border-emerald-500 bg-emerald-50/60"
+                          : isDate
+                          ? "border-[#B89555]/60 bg-[#FDF6E9]/80"
+                          : "border-amber-500 bg-amber-100/80 hover:bg-amber-200 animate-pulse"
+                      }`}
+                      style={{
+                        left: `${f.x_position}%`,
+                        top: `${f.y_position}%`,
+                        width: `${f.width}px`,
+                        height: `${f.height}px`,
+                        cursor: isDate ? "default" : "pointer",
+                      }}
+                      title={isSig ? "Click to sign" : isInit ? "Click to add initials" : "Auto-filled with signing date"}
+                    >
+                      {isSig && signatureData && (
+                        <img src={signatureData} alt="Signature" className="w-full h-full object-contain" draggable={false} />
+                      )}
+                      {isInit && initialsData && (
+                        <img src={initialsData} alt="Initials" className="w-full h-full object-contain" draggable={false} />
+                      )}
+                      {isSig && !signatureData && (
+                        <span className="flex items-center justify-center gap-1.5 h-full text-amber-900 text-xs font-bold uppercase tracking-wider">
+                          <Pencil className="w-3.5 h-3.5" /> Sign Here
+                        </span>
+                      )}
+                      {isInit && !initialsData && (
+                        <span className="flex items-center justify-center gap-1.5 h-full text-amber-900 text-xs font-bold uppercase tracking-wider">
+                          <PenTool className="w-3.5 h-3.5" /> Initials
+                        </span>
+                      )}
+                      {isDate && (
+                        <span className="flex items-center justify-center h-full text-[#1A1A1A]/80 text-xs font-medium px-2">
+                          {today}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Footer */}
-        <div className="text-center text-sm text-muted-foreground">
-          <p>Powered by JBJ Global Real Estate E-Signature</p>
-          <p className="mt-1">
-            Questions? Contact{" "}
-            <a href="mailto:contact@jbj.ae" className="text-gold hover:underline">
-              contact@jbj.ae
-            </a>
-          </p>
+        {/* Signature pad fallback (still allow drawing if no fields placed) */}
+        {data && data.fields.length === 0 && (
+          <Card className="bg-white border-[#B89555]/30">
+            <CardHeader><CardTitle className="text-base text-[#1A1A1A]">Your Signature</CardTitle></CardHeader>
+            <CardContent>
+              <ESignaturePad onSignatureChange={setSignatureData} height={150} />
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Legal notice + actions */}
+        <Card className="bg-amber-50 border-amber-200">
+          <CardContent className="p-4 text-sm text-amber-900">
+            <strong>Legal Notice:</strong> By clicking "Sign Document", you agree that your electronic signature is the legal equivalent of your manual signature.
+          </CardContent>
+        </Card>
+
+        <div className="flex gap-3">
+          <Button variant="outline" onClick={decline} disabled={submitting} className="flex-1">
+            <XCircle className="w-4 h-4 mr-2" /> Decline
+          </Button>
+          <Button
+            variant="gold"
+            onClick={submit}
+            disabled={submitting || !signatureData}
+            className="flex-1"
+          >
+            {submitting ? (
+              <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Processing...</>
+            ) : (
+              <><CheckCircle2 className="w-4 h-4 mr-2" /> Sign Document</>
+            )}
+          </Button>
+        </div>
+
+        <div className="text-center text-xs text-[#1A1A1A]/60">
+          Powered by JBJ Global Real Estate · Questions? <a href="mailto:contact@jbj.ae" className="underline">contact@jbj.ae</a>
         </div>
       </div>
+
+      {/* Draw signature / initials dialog */}
+      <Dialog open={!!drawOpen} onOpenChange={(o) => !o && setDrawOpen(null)}>
+        <DialogContent className="sm:max-w-md bg-[#FDFBF7]">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
+              <Pencil className="w-5 h-5" />
+              {drawOpen === "initials" ? "Draw Your Initials" : "Draw Your Signature"}
+            </DialogTitle>
+          </DialogHeader>
+          <ESignaturePad
+            onSignatureChange={(dataUrl) => {
+              if (!dataUrl) return;
+              if (drawOpen === "initials") setInitialsData(dataUrl);
+              else setSignatureData(dataUrl);
+            }}
+            height={180}
+          />
+          <div className="flex justify-end gap-2 mt-3">
+            <Button variant="outline" onClick={() => setDrawOpen(null)}>Cancel</Button>
+            <Button
+              variant="gold"
+              onClick={() => {
+                if (drawOpen === "initials" && !initialsData) { toast.error("Please draw your initials"); return; }
+                if (drawOpen === "signature" && !signatureData) { toast.error("Please draw your signature"); return; }
+                setDrawOpen(null);
+                toast.success("Applied");
+              }}
+            >
+              Apply
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
