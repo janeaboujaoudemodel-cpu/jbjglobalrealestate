@@ -12327,6 +12327,27 @@ export type Database = {
           },
         ]
       }
+      esign_doc_counters: {
+        Row: {
+          last_seq: number
+          prefix: string
+          template_key: string
+          updated_at: string
+        }
+        Insert: {
+          last_seq?: number
+          prefix: string
+          template_key: string
+          updated_at?: string
+        }
+        Update: {
+          last_seq?: number
+          prefix?: string
+          template_key?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       esign_documents: {
         Row: {
           created_at: string | null
@@ -33022,6 +33043,7 @@ export type Database = {
       mask_email: { Args: { email: string }; Returns: string }
       mask_iban: { Args: { iban: string }; Returns: string }
       mask_phone: { Args: { phone: string }; Returns: string }
+      next_doc_number: { Args: { _template_key: string }; Returns: string }
       redact_expired_vapi_recordings: { Args: never; Returns: number }
       redact_sensitive_transcript: {
         Args: { p_transcript: string }
