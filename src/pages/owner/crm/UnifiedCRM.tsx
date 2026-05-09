@@ -77,9 +77,7 @@ const Fallback = () => (
 // Strip page-level chrome from re-used legacy pages so we don't get
 // double headers / sticky bars / extra top-padding inside the unified shell.
 const Embed = ({ children }: { children: React.ReactNode }) => (
-  <div className="crm-embed [&_header]:hidden [&_.sticky]:!static [&_.min-h-screen]:!min-h-0 [&_[class*='pt-[88px]']]:!pt-0 [&_[class*='pt-[104px]']]:!pt-0">
-    {children}
-  </div>
+  <div className="crm-embed">{children}</div>
 );
 
 function NotificationsPanel({ userId }: { userId: string }) {
