@@ -49,9 +49,9 @@ const NAV_SECTIONS: NavSection[] = [
     items: [
       { label: "Overview", icon: LayoutDashboard, path: "/owner" },
       { label: "CRM", icon: Users, path: "/owner/crm" },
-      { label: "Campaigns", icon: Megaphone, path: "/owner/crm/campaigns" },
-      { label: "Tasks", icon: CheckSquare, path: "/owner/crm/tasks" },
-      { label: "Calendar", icon: Calendar, path: "/owner/crm/calendar" },
+      { label: "Campaigns", icon: Megaphone, path: "/owner/crm?section=campaigns" },
+      { label: "Tasks", icon: CheckSquare, path: "/owner/crm?section=tasks" },
+      { label: "Calendar", icon: Calendar, path: "/owner/crm?section=calendar" },
     ],
   },
   {

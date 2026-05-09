@@ -354,6 +354,8 @@ export default function CRMLeadsTableV2({
       newsletter: "Newsletter", ai_chat_support: "AI Chat", market_report_download: "Market Report",
       register_interest: "Register Interest", matchmaker: "Matchmaker", contact_form: "Contact Form",
       ai_phone: "AI Phone", referral: "Referral", broker: "Broker", manual: "Manual Entry", website: "Website",
+      self_registration: "Account Registration", mode_selection: "Account Registration",
+      market_report: "Market Report", homepage: "Homepage", "property-evaluation": "Property Evaluation",
     };
     return map[raw] || raw.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
   };
@@ -514,7 +516,7 @@ export default function CRMLeadsTableV2({
                       {lead.email_lower ? (
                         <button
                           onClick={() => handleEmail(lead)}
-                          className="text-sm text-blue-700 hover:text-blue-900 hover:underline font-medium break-all text-left"
+                          className="text-sm text-[#1A1A1A] hover:text-[#1A1A1A] hover:underline decoration-[#B89555]/60 underline-offset-2 font-medium break-all text-left"
                           title="Click to send email"
                         >
                           {lead.email_lower}
