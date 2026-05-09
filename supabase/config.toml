@@ -229,6 +229,9 @@ verify_jwt = false
 [functions.esign-send-for-signature]
 verify_jwt = false
 
+[functions.esign-load-document]
+verify_jwt = false
+
 [functions.esign-process-signature]
 verify_jwt = false
 
