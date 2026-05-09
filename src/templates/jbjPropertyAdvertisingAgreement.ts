@@ -200,10 +200,13 @@ const footerHtml = (chrome: Required<TemplateChrome>) => {
     case "three-column":
     default:
       return `
-        <div style="${base}display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;">
-          <div>
-            <div style="font-weight:700;letter-spacing:.14em;font-size:10px;opacity:.85;">${JBJ_BRAND.company}</div>
-            <div style="opacity:.7;margin-top:2px;">Private Office · Dubai, UAE</div>
+        <div style="${base}display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;align-items:center;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:20px;height:20px;object-fit:contain;display:block;flex:none;" />
+            <div>
+              <div style="font-weight:700;letter-spacing:.14em;font-size:10px;opacity:.85;">${JBJ_BRAND.company}</div>
+              <div style="opacity:.7;margin-top:2px;">Private Office · Dubai, UAE</div>
+            </div>
           </div>
           <div style="text-align:center;">
             <div>${JBJ_BRAND.email}</div>
