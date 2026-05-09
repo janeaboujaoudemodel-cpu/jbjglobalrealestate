@@ -347,10 +347,11 @@ export function buildPAAHtml(
   <div>
     ${fu("Building Name", get("building_name"), "building_name")}
     ${fu("Unit", get("unit_number"), "unit_number")}
+    ${fu("Plot Number", get("plot_number"), "plot_number")}
     ${fu("Street Name", get("street_name"), "street_name")}
     ${fu("Community", get("community"), "community")}
     ${fu("BUA (SqFt)", get("bua_sqft"), "bua_sqft")}
-    ${showPlot ? fu("Plot (Sq.Ft)", get("plot_sqft"), "plot_sqft") : ""}
+    ${fu("Plot (Sq.Ft)", get("plot_sqft"), "plot_sqft")}
     ${fu("Bedrooms", get("bedrooms"), "bedrooms")}
     ${fu("Bathrooms", get("bathrooms"), "bathrooms")}
     ${fu("Rental Amount / Sales Amount", fmtMoney(get("rental_amount") || get("sales_amount")), "rental_amount")}
