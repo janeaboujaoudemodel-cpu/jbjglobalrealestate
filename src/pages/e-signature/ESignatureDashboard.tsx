@@ -60,8 +60,9 @@ interface Envelope {
   }[];
 }
 
-const statusConfig: Record<EnvelopeStatus, { label: string; color: string; icon: React.ReactNode }> = {
+const statusConfig: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
   draft: { label: "Draft", color: "bg-amber-50 text-amber-700 border-amber-200", icon: <FileSignature className="w-3 h-3" /> },
+  ready: { label: "Ready", color: "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/50", icon: <CheckCircle2 className="w-3 h-3" /> },
   sent: { label: "Sent", color: "bg-blue-50 text-blue-700 border-blue-200", icon: <Send className="w-3 h-3" /> },
   viewed: { label: "Viewed", color: "bg-yellow-50 text-yellow-700 border-yellow-200", icon: <Eye className="w-3 h-3" /> },
   partially_signed: { label: "Partially Signed", color: "bg-orange-50 text-orange-700 border-orange-200", icon: <Clock className="w-3 h-3" /> },
