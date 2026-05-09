@@ -305,15 +305,17 @@ export default function ESignatureDashboard() {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {filteredEnvelopes?.map((envelope) => {
-                    const config = statusConfig[envelope.status];
+                    const displayStatus = computeDisplayStatus(envelope as any);
+                    const config = statusConfig[displayStatus] || statusConfig.draft;
                     const docNumber =
                       (envelope.metadata as any)?.doc_number ||
                       (envelope.template_field_values as any)?.doc_number ||
                       "";
-                    const clientName =
-                      (envelope.template_field_values as any)?.landlord_name ||
-                      envelope.esign_recipients?.[0]?.name ||
-                      "Unnamed client";
+                    const clientName = pickClientName(envelope);
+                    const propertyCtx = pickPropertyContext(envelope);
+                    const v = (envelope.template_field_values as any) || {};
+                    const phoneMasked = maskPhone(v.mobile_number);
+                    const emailMasked = maskEmail(v.email_address);
                     const templateLabel =
                       envelope.template_key === "jbj-property-advertising-agreement"
                         ? "Property Advertising Agreement — Leasing"
