@@ -319,12 +319,80 @@ export default function ESignatureDashboard() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
-                placeholder="Search envelopes or recipients..."
+                placeholder="Search by client, location, doc no., 3 bed, leasing…"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10 bg-[#FDFBF7]/80 border-gold/20 focus:border-gold"
               />
             </div>
+          </div>
+
+          {/* Advanced filter bar */}
+          <div className="rounded-lg border border-[#B89555]/30 bg-[#FDFBF7]/70 p-3">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+              <select
+                value={kindFilter}
+                onChange={(e) => setKindFilter(e.target.value as TemplateKind | "all")}
+                className="h-9 rounded-md border border-[#B89555]/30 bg-white/80 px-2 text-sm text-[#1A1A1A] focus:outline-none focus:border-[#B89555]"
+                aria-label="Agreement type"
+              >
+                <option value="all">All types</option>
+                <option value="leasing">Leasing</option>
+                <option value="selling">Selling</option>
+                <option value="other">Other</option>
+              </select>
+              <select
+                value={propTypeFilter}
+                onChange={(e) => setPropTypeFilter(e.target.value)}
+                className="h-9 rounded-md border border-[#B89555]/30 bg-white/80 px-2 text-sm text-[#1A1A1A] focus:outline-none focus:border-[#B89555]"
+                aria-label="Property type"
+              >
+                <option value="all">Any property</option>
+                <option value="Villa">Villa</option>
+                <option value="Apartment">Apartment</option>
+                <option value="Office">Office</option>
+                <option value="Warehouse">Warehouse</option>
+              </select>
+              <select
+                value={bedroomsFilter}
+                onChange={(e) => setBedroomsFilter(e.target.value)}
+                className="h-9 rounded-md border border-[#B89555]/30 bg-white/80 px-2 text-sm text-[#1A1A1A] focus:outline-none focus:border-[#B89555]"
+                aria-label="Bedrooms"
+              >
+                <option value="all">Any bedrooms</option>
+                <option value="studio">Studio</option>
+                <option value="1">1 bed</option>
+                <option value="2">2 bed</option>
+                <option value="3">3 bed</option>
+                <option value="4">4 bed</option>
+                <option value="5+">5+ bed</option>
+              </select>
+              <Input
+                placeholder="Location (building / area)"
+                value={locationFilter}
+                onChange={(e) => setLocationFilter(e.target.value)}
+                className="h-9 bg-white/80 border-[#B89555]/30 focus:border-[#B89555] text-sm"
+              />
+              <Input
+                placeholder="Nationality"
+                value={nationalityFilter}
+                onChange={(e) => setNationalityFilter(e.target.value)}
+                className="h-9 bg-white/80 border-[#B89555]/30 focus:border-[#B89555] text-sm"
+              />
+            </div>
+            {hasActiveAdvancedFilters && (
+              <div className="flex items-center justify-between mt-2 pt-2 border-t border-[#B89555]/20">
+                <span className="text-[11px] text-[#1A1A1A]/70">
+                  Showing {filteredEnvelopes?.length ?? 0} of {envelopes?.length ?? 0}
+                </span>
+                <button
+                  onClick={resetFilters}
+                  className="text-[11px] text-[#1A1A1A] underline-offset-2 hover:underline"
+                >
+                  Reset filters
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Envelopes List */}
