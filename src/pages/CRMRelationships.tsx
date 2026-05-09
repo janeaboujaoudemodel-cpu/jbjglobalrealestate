@@ -67,6 +67,13 @@ import { BrokerageDealModal } from "@/components/crm/BrokerageDealModal";
 import { BrokerageLedgerDialog } from "@/components/crm/BrokerageLedgerDialog";
 import { DirectoryToolsPanel, BrokerageDirectoryPanel, DeveloperDirectoryPanel } from "@/components/crm/DirectoryToolsPanel";
 import { CRMFiltersPopover, type FilterChip } from "@/components/crm/CRMFiltersPopover";
+import {
+  SourceFilterChips,
+  EMPTY_SOURCE_FILTER,
+  rowMatchesSourceFilter,
+  useSourceFilterContext,
+  type SourceFilterValue,
+} from "@/components/crm/SourceFilterChips";
 import { CRMListSidebar, type CRMListView } from "@/components/crm/CRMListSidebar";
 import { CRMBulkActionsBar } from "@/components/crm/CRMBulkActionsBar";
 import IndividualBrokersTab from "@/components/crm/IndividualBrokersTab";
@@ -569,6 +576,8 @@ const BrokeragesAgenciesView = () => {
   const [emirateFilter, setEmirateFilterRaw] = useState("all");
   const [sourceTab, setSourceTabRaw] = useState<"all" | "directory" | "owner" | "sent" | "inbox">("all");
   const [countryFilter, setCountryFilterRaw] = useState<string>("all");
+  const [sourceFilter, setSourceFilter] = useState<SourceFilterValue>(EMPTY_SOURCE_FILTER);
+  const sourceFilterCtx = useSourceFilterContext(sourceFilter);
   const [, startTransition] = useTransition();
   const setStatusFilter = (v: string) => startTransition(() => setStatusFilterRaw(v));
   const setEmirateFilter = (v: string) => startTransition(() => setEmirateFilterRaw(v));
@@ -799,10 +808,11 @@ const BrokeragesAgenciesView = () => {
       else if (sourceTab === "owner" && r.entry_source !== "owner") continue;
       else if (sourceTab === "sent" && !r.last_outreach_at) continue;
       else if (sourceTab === "inbox" && !r.last_inbound_at) continue;
+      if (!rowMatchesSourceFilter(r, sourceFilter, sourceFilterCtx)) continue;
       out.push(r);
     }
     return out;
-  }, [indexed, debouncedQ, statusFilter, emirateFilter, countryFilter, sourceTab, excludedIds, listView]);
+  }, [indexed, debouncedQ, statusFilter, emirateFilter, countryFilter, sourceTab, excludedIds, listView, sourceFilter, sourceFilterCtx]);
 
   // Sidebar counts derived from full data set
   const listCounts = useMemo(() => {
@@ -1209,6 +1219,15 @@ const BrokeragesAgenciesView = () => {
         </Button>
         <Button variant="gold" onClick={openNew} className="shadow-md"><Plus className="w-4 h-4 mr-2" />Add Brokerage</Button>
       </div>
+
+      {/* Source filter chips — upload_source / database_source / country / team / campaign */}
+      <SourceFilterChips
+        rows={data as any[]}
+        axes={["upload_source", "database_source", "country", "team", "campaign"]}
+        value={sourceFilter}
+        onChange={setSourceFilter}
+      />
+
       <BulkUploadDialog open={uploadOpen} onOpenChange={setUploadOpen} kind="brokerage" onDone={refetch} defaultListId={listView.kind === "list" ? listView.listId : null} />
 
       {sourceTab === "owner" && (

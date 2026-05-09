@@ -16,6 +16,13 @@ import { Label } from "@/components/ui/label";
 import { Users, Search, Plus, Building2, BadgeCheck, Clock, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { RelationalHubTabs } from "@/components/crm/RelationalHubTabs";
+import {
+  SourceFilterChips,
+  EMPTY_SOURCE_FILTER,
+  rowMatchesSourceFilter,
+  useSourceFilterContext,
+  type SourceFilterValue,
+} from "@/components/crm/SourceFilterChips";
 
 type BrokerRow = {
   source: "registered" | "external";
@@ -39,6 +46,8 @@ export default function BrokersRegistry() {
   const [companyFilter, setCompanyFilter] = useState<string>("");
   const [openBroker, setOpenBroker] = useState<BrokerRow | null>(null);
   const [addOpen, setAddOpen] = useState(false);
+  const [sourceFilter, setSourceFilter] = useState<SourceFilterValue>(EMPTY_SOURCE_FILTER);
+  const sourceFilterCtx = useSourceFilterContext(sourceFilter);
 
   const { data: registered = [], isLoading: loading1 } = useQuery({
     queryKey: ["brokers-registered"],
@@ -115,11 +124,21 @@ export default function BrokersRegistry() {
     return Array.from(set).sort();
   }, [allRows, history]);
 
+  const externalById = useMemo(() => {
+    const m = new Map<string, any>();
+    for (const e of (external as any[])) m.set(e.id, e);
+    return m;
+  }, [external]);
+
   const filtered = useMemo(() => {
     const term = q.trim().toLowerCase();
     return allRows.filter((r) => {
       if (tab !== "all" && r.source !== tab) return false;
       if (companyFilter && r.current_company !== companyFilter) return false;
+      // Source-axis predicate uses the raw external row when available so the
+      // upload_source / database_source / country fields resolve correctly.
+      const raw = r.source === "external" ? externalById.get(r.id) ?? r : r;
+      if (!rowMatchesSourceFilter(raw, sourceFilter, sourceFilterCtx)) return false;
       if (!term) return true;
       return (
         r.full_name?.toLowerCase().includes(term) ||
@@ -128,7 +147,7 @@ export default function BrokersRegistry() {
         r.current_company?.toLowerCase().includes(term)
       );
     });
-  }, [allRows, q, tab, companyFilter]);
+  }, [allRows, q, tab, companyFilter, sourceFilter, sourceFilterCtx, externalById]);
 
   const counts = useMemo(() => ({
     total: allRows.length,
@@ -199,6 +218,13 @@ export default function BrokersRegistry() {
           </select>
         </div>
 
+        {/* Source filter chips — upload_source / database_source / country / team / campaign */}
+        <SourceFilterChips
+          rows={external as any[]}
+          axes={["upload_source", "database_source", "country", "team", "campaign"]}
+          value={sourceFilter}
+          onChange={setSourceFilter}
+        />
         <Tabs value={tab} onValueChange={(v) => setTab(v as any)}>
           <TabsList className="bg-[#EFE6D6]">
             <TabsTrigger value="all">All ({counts.total})</TabsTrigger>
