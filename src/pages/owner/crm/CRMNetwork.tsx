@@ -435,6 +435,14 @@ export default function CRMNetwork() {
           ))}
         </Tabs>
       </div>
+      {hubTarget && (
+        <CompanyHubDrawer
+          open={hubOpen}
+          onOpenChange={setHubOpen}
+          type={hubTarget.type}
+          companyName={hubTarget.companyName}
+        />
+      )}
     </div>
   );
 }
