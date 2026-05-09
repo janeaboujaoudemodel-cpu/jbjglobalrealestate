@@ -759,7 +759,7 @@ export default function DocumentFieldPlacer({
                         >
                           {/* Always-visible action bar (delete + edit) */}
                           <div className="absolute -top-3 -right-3 z-40 flex items-center gap-1">
-                            {(field.type === "signature" || field.type === "initial") && (
+                            {(field.type === "signature" || field.type === "initials" || field.type === "stamp") && (
                               <button
                                 type="button"
                                 aria-label="Edit / draw signature"
