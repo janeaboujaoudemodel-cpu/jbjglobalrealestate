@@ -273,25 +273,35 @@ export default function BrokersRegistry() {
                         <th className="text-left px-4 py-3 font-semibold">Email</th>
                         <th className="text-left px-4 py-3 font-semibold">Phone</th>
                         <th className="text-left px-4 py-3 font-semibold">Company</th>
+                        <th className="text-left px-4 py-3 font-semibold">Type</th>
                         <th className="text-left px-4 py-3 font-semibold">RERA / Tier</th>
                         <th className="text-left px-4 py-3 font-semibold">Source</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {filtered.map((r) => (
-                        <tr key={`${r.source}:${r.id}`} className="border-t border-[#B89555]/15 hover:bg-[#FDFBF7] cursor-pointer" onClick={() => setOpenBroker(r)}>
-                          <td className="px-4 py-3 text-[#1A1A1A] font-medium">{r.full_name}</td>
-                          <td className="px-4 py-3 text-[#1A1A1A]/80">{r.email || "—"}</td>
-                          <td className="px-4 py-3 text-[#1A1A1A]/80">{r.phone || "—"}</td>
-                          <td className="px-4 py-3 text-[#1A1A1A]/80">{r.current_company || "—"}</td>
-                          <td className="px-4 py-3 text-[#1A1A1A]/80">{r.rera || r.tier || "—"}</td>
-                          <td className="px-4 py-3">
-                            <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A]">
-                              {r.source === "registered" ? "Registered" : "External"}
-                            </Badge>
-                          </td>
-                        </tr>
-                      ))}
+                      {filtered.map((r) => {
+                        const raw = r.source === "external" ? externalById.get(r.id) : null;
+                        const dbSource = raw?.database_source || raw?.upload_source || (r.source === "registered" ? "Registered" : "Manual");
+                        return (
+                          <tr key={`${r.source}:${r.id}`} className="border-t border-[#B89555]/15 hover:bg-[#FDFBF7] cursor-pointer" onClick={() => setOpenBroker(r)}>
+                            <td className="px-4 py-3 text-[#1A1A1A] font-medium">{r.full_name}</td>
+                            <td className="px-4 py-3 text-[#1A1A1A]/80">
+                              {r.email ? <a href={`mailto:${r.email}`} onClick={(e) => e.stopPropagation()} className="hover:underline">{r.email}</a> : "—"}
+                            </td>
+                            <td className="px-4 py-3 text-[#1A1A1A]/80">
+                              {r.phone ? <a href={`tel:${r.phone}`} onClick={(e) => e.stopPropagation()} className="hover:underline">{r.phone}</a> : "—"}
+                            </td>
+                            <td className="px-4 py-3 text-[#1A1A1A]/80">{r.current_company || "—"}</td>
+                            <td className="px-4 py-3 text-[#1A1A1A]/80 capitalize">{r.broker_type || "—"}</td>
+                            <td className="px-4 py-3 text-[#1A1A1A]/80">{r.rera || r.tier || "—"}</td>
+                            <td className="px-4 py-3">
+                              <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] capitalize">
+                                {dbSource}
+                              </Badge>
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </CardContent>
