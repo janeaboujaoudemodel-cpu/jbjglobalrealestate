@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { 
-  Users, FileText, Plus, Upload, Download, LogOut, Shuffle, LayoutGrid, List, Zap, Briefcase, PanelLeftOpen, PanelLeftClose, Crown, Flag, CheckSquare, Calendar, Search, Bell, Settings, Brain, Inbox
+  Users, FileText, Plus, Upload, Download, LogOut, Shuffle, LayoutGrid, List, Zap, Briefcase, PanelLeftOpen, PanelLeftClose, Crown, Flag, CheckSquare, Calendar, Search, Bell, Settings, Brain, Inbox, MessageSquare
 } from "lucide-react";
 import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
 import { useForcePasswordChange } from "@/hooks/useForcePasswordChange";
@@ -79,7 +79,9 @@ const CRM = () => {
   const [viewMode, setViewMode] = useState<"table" | "kanban">("table");
   const [showToolsSidebar, setShowToolsSidebar] = useState(false);
   const [showCommandPalette, setShowCommandPalette] = useState(false);
-  const [showAIInsights, setShowAIInsights] = useState(true);
+  const [showAIInsights, setShowAIInsights] = useState(false);
+  const [showTeamComms, setShowTeamComms] = useState(false);
+  const [showActivityTimeline, setShowActivityTimeline] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   
   // Force password change hook
@@ -355,23 +357,55 @@ const CRM = () => {
       const sheet = workbook.addWorksheet('CRM Leads');
 
       sheet.columns = [
-        { header: 'Full Name', key: 'full_name', width: 25 },
-        { header: 'Email', key: 'email', width: 30 },
-        { header: 'Phone', key: 'phone', width: 18 },
-        { header: 'Nationality', key: 'nationality', width: 15 },
-        { header: 'Language', key: 'language', width: 15 },
-        { header: 'Country', key: 'country', width: 15 },
-        { header: 'Source', key: 'source', width: 15 },
-        { header: 'Pipeline Stage', key: 'stage', width: 18 },
-        { header: 'AI Score', key: 'score', width: 10 },
-        { header: 'Tags', key: 'tags', width: 25 },
-        { header: 'Created', key: 'created', width: 15 },
+        { header: 'Full Name', key: 'full_name', width: 32 },
+        { header: 'Email', key: 'email', width: 38 },
+        { header: 'Phone', key: 'phone', width: 22 },
+        { header: 'Nationality', key: 'nationality', width: 20 },
+        { header: 'Language', key: 'language', width: 18 },
+        { header: 'Country', key: 'country', width: 22 },
+        { header: 'Source', key: 'source', width: 24 },
+        { header: 'Pipeline Stage', key: 'stage', width: 22 },
+        { header: 'AI Score', key: 'score', width: 14 },
+        { header: 'Tags', key: 'tags', width: 32 },
+        { header: 'Created', key: 'created', width: 18 },
       ];
 
-      // Style header row
-      const headerRow = sheet.getRow(1);
-      headerRow.font = { bold: true, color: { argb: 'FF000000' } };
-      headerRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFD4AF37' } };
+      // Insert branded title block above the column headers
+      sheet.insertRow(1, []);
+      sheet.insertRow(1, [`Total records: ${leads.length}`]);
+      sheet.insertRow(1, [`Generated: ${new Date().toLocaleString()}`]);
+      sheet.insertRow(1, ['CRM Leads — Premium Export']);
+      sheet.insertRow(1, ['JBJ GLOBAL REAL ESTATE']);
+
+      sheet.mergeCells('A1:K1');
+      sheet.mergeCells('A2:K2');
+      sheet.mergeCells('A3:K3');
+      sheet.mergeCells('A4:K4');
+      sheet.mergeCells('A5:K5');
+
+      sheet.getCell('A1').font = { bold: true, size: 20, color: { argb: 'FF1A1A1A' } };
+      sheet.getCell('A1').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFEFE6D6' } };
+      sheet.getCell('A1').alignment = { vertical: 'middle' };
+      sheet.getRow(1).height = 32;
+
+      sheet.getCell('A2').font = { bold: true, size: 14, color: { argb: 'FF1A1A1A' } };
+      sheet.getCell('A2').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF7F2EA' } };
+      sheet.getRow(2).height = 22;
+
+      sheet.getCell('A3').font = { size: 11, color: { argb: 'FF555555' } };
+      sheet.getCell('A4').font = { size: 11, color: { argb: 'FF555555' } };
+
+      // Style header row (now row 6 after insertions)
+      const headerRow = sheet.getRow(6);
+      headerRow.font = { bold: true, size: 12, color: { argb: 'FF1A1A1A' } };
+      headerRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFEFE6D6' } };
+      headerRow.alignment = { vertical: 'middle', wrapText: true };
+      headerRow.height = 26;
+      headerRow.border = { bottom: { style: 'medium', color: { argb: 'FFB89555' } } };
+
+      // Freeze panes below the header row, enable autofilter on data range
+      sheet.views = [{ state: 'frozen', ySplit: 6 }];
+      sheet.autoFilter = { from: { row: 6, column: 1 }, to: { row: 6, column: 11 } };
 
       for (const lead of leads) {
         sheet.addRow({
@@ -795,18 +829,54 @@ const CRM = () => {
                 </Card>
               </div>
               
-              {/* Team Communication - Full Width Edge-to-Edge */}
-              <div className="w-full">
-                <Suspense fallback={<Skeleton className="h-24 w-full" />}>
-                <CRMCommunicationPanel />
-                </Suspense>
+
+              {/* Compact toggles for heavy panels — collapsed by default to keep the workspace minimal */}
+              <div className="flex flex-wrap items-center gap-2">
+                <Button
+                  variant={showTeamComms ? "secondary" : "outline"}
+                  size="sm"
+                  onClick={() => setShowTeamComms(v => !v)}
+                  className="text-xs"
+                >
+                  <MessageSquare className="h-4 w-4 mr-1.5" />
+                  Team Communication {showTeamComms ? "▾" : "▸"}
+                </Button>
+                <Button
+                  variant={showActivityTimeline ? "secondary" : "outline"}
+                  size="sm"
+                  onClick={() => setShowActivityTimeline(v => !v)}
+                  className="text-xs"
+                >
+                  <Bell className="h-4 w-4 mr-1.5" />
+                  Activity Timeline {showActivityTimeline ? "▾" : "▸"}
+                </Button>
+                <Button
+                  variant={showAIInsights ? "secondary" : "outline"}
+                  size="sm"
+                  onClick={() => setShowAIInsights(v => !v)}
+                  className="text-xs"
+                >
+                  <Brain className="h-4 w-4 mr-1.5" />
+                  AI Insights {showAIInsights ? "▾" : "▸"}
+                </Button>
               </div>
-              
-              {/* Activity Timeline - Full Width */}
-              <Suspense fallback={<Skeleton className="h-24 w-full" />}>
-              <ActivityTimeline userId={user?.id || ""} limit={8} />
-              </Suspense>
-              
+
+              {/* Team Communication - hidden by default */}
+              {showTeamComms && (
+                <div className="w-full">
+                  <Suspense fallback={<Skeleton className="h-24 w-full" />}>
+                    <CRMCommunicationPanel />
+                  </Suspense>
+                </div>
+              )}
+
+              {/* Activity Timeline - hidden by default */}
+              {showActivityTimeline && (
+                <Suspense fallback={<Skeleton className="h-24 w-full" />}>
+                  <ActivityTimeline userId={user?.id || ""} limit={8} />
+                </Suspense>
+              )}
+
               {/* Leads Update Section with shortcuts */}
               <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
                 <CardHeader className="pb-3">

@@ -21,6 +21,7 @@ import CRMLeadsBulkBar from "./CRMLeadsBulkBar";
 import LeadAssignModal from "./LeadAssignModal";
 import DeleteLeadDialog from "./DeleteLeadDialog";
 import SendAgreementDialog from "./SendAgreementDialog";
+import { isRealCRMLead } from "@/utils/crmFakeDataGuard";
 
 interface LeadSource {
   source_group: string;
@@ -134,10 +135,12 @@ export default function CRMLeadsTableV2({
 
       const statesMap = new Map((statesData || []).map((s: any) => [s.lead_id, s]));
 
-      let rows: Lead[] = (leadsData || []).map((l: any) => ({
-        ...l,
-        state: statesMap.get(l.id) || null,
-      }));
+      let rows: Lead[] = (leadsData || [])
+        .filter(isRealCRMLead as (l: any) => boolean)
+        .map((l: any) => ({
+          ...l,
+          state: statesMap.get(l.id) || null,
+        }));
 
       if (statusFilters.length > 0) {
         rows = rows.filter((l) => statusFilters.includes(l.state?.pipeline_status || "new"));
