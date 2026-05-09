@@ -38,12 +38,13 @@ type BrokerRow = {
   user_id: string | null;
   photo_url?: string | null;
   verification_status?: string | null;
+  broker_type?: "sales" | "leasing" | "both" | null;
 };
 
 export default function BrokersRegistry() {
   const qc = useQueryClient();
   const [q, setQ] = useState("");
-  const [tab, setTab] = useState<"all" | "registered" | "external">("all");
+  const [tab, setTab] = useState<"all" | "sales" | "leasing" | "pending">("all");
   const [companyFilter, setCompanyFilter] = useState<string>("");
   const [openBroker, setOpenBroker] = useState<BrokerRow | null>(null);
   const [addOpen, setAddOpen] = useState(false);
@@ -115,7 +116,8 @@ export default function BrokersRegistry() {
       tier: null,
       last_active_at: b.last_active_at,
       user_id: null,
-    }));
+      broker_type: b.broker_type ?? null,
+    } as BrokerRow));
     return [...r, ...e];
   }, [registered, external]);
 
@@ -135,7 +137,9 @@ export default function BrokersRegistry() {
   const filtered = useMemo(() => {
     const term = q.trim().toLowerCase();
     return allRows.filter((r) => {
-      if (tab !== "all" && r.source !== tab) return false;
+      if (tab === "sales" && !(r.broker_type === "sales" || r.broker_type === "both")) return false;
+      if (tab === "leasing" && !(r.broker_type === "leasing" || r.broker_type === "both")) return false;
+      if (tab === "pending" && !(r.source === "registered" && r.verification_status === "pending")) return false;
       if (companyFilter && r.current_company !== companyFilter) return false;
       // Source-axis predicate uses the raw external row when available so the
       // upload_source / database_source / country fields resolve correctly.
@@ -153,19 +157,22 @@ export default function BrokersRegistry() {
 
   const counts = useMemo(() => ({
     total: allRows.length,
-    registered: registered.length,
-    external: external.length,
+    sales: allRows.filter(r => r.broker_type === "sales" || r.broker_type === "both").length,
+    leasing: allRows.filter(r => r.broker_type === "leasing" || r.broker_type === "both").length,
     pending: registered.filter((b: any) => b.verification_status === "pending").length,
     companies: companies.length,
-  }), [allRows, registered, external, companies]);
+  }), [allRows, registered, companies]);
 
-  const Stat = ({ icon: Icon, label, value }: any) => (
-    <Card className="bg-[#F7F2EA] border-[#B89555]/20">
-      <CardContent className="p-4 flex items-center gap-3">
-        <IconTile icon={Icon} tone="gold" />
-        <div>
-          <div className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/70">{label}</div>
-          <div className="text-2xl font-bold text-[#1A1A1A]">{value}</div>
+  const Stat = ({ icon: Icon, label, value, onClick, active }: any) => (
+    <Card
+      onClick={onClick}
+      className={`bg-[#F7F2EA] border-[#B89555]/20 ${onClick ? "cursor-pointer hover:bg-[#EFE6D6] transition-colors" : ""} ${active ? "ring-1 ring-[#B89555]" : ""}`}
+    >
+      <CardContent className="p-4 flex items-center gap-3 min-w-0">
+        <div className="flex-none"><IconTile icon={Icon} tone="gold" /></div>
+        <div className="min-w-0 flex-1">
+          <div className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/70 truncate whitespace-nowrap">{label}</div>
+          <div className="text-2xl font-bold text-[#1A1A1A] leading-tight">{value}</div>
         </div>
       </CardContent>
     </Card>
@@ -203,11 +210,15 @@ export default function BrokersRegistry() {
           filenameStem="crm-brokers"
         />
 
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-          <Stat icon={Users} label="Total brokers" value={counts.total} />
-          <Stat icon={BadgeCheck} label="Registered" value={counts.registered} />
-          <Stat icon={Users} label="External / CRM" value={counts.external} />
-          <Stat icon={Clock} label="Pending" value={counts.pending} />
+        <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-3">
+          <Stat icon={Users} label="Total brokers" value={counts.total}
+            onClick={() => setTab("all")} active={tab === "all"} />
+          <Stat icon={BadgeCheck} label="Sales" value={counts.sales}
+            onClick={() => setTab("sales")} active={tab === "sales"} />
+          <Stat icon={Users} label="Leasing" value={counts.leasing}
+            onClick={() => setTab("leasing")} active={tab === "leasing"} />
+          <Stat icon={Clock} label="Pending" value={counts.pending}
+            onClick={() => setTab("pending")} active={tab === "pending"} />
           <Stat icon={Building2} label="Companies" value={counts.companies} />
         </div>
 
@@ -241,8 +252,9 @@ export default function BrokersRegistry() {
         <Tabs value={tab} onValueChange={(v) => setTab(v as any)}>
           <TabsList className="bg-[#EFE6D6]">
             <TabsTrigger value="all">All ({counts.total})</TabsTrigger>
-            <TabsTrigger value="registered">Registered ({counts.registered})</TabsTrigger>
-            <TabsTrigger value="external">External ({counts.external})</TabsTrigger>
+            <TabsTrigger value="sales">Sales ({counts.sales})</TabsTrigger>
+            <TabsTrigger value="leasing">Leasing ({counts.leasing})</TabsTrigger>
+            <TabsTrigger value="pending">Pending ({counts.pending})</TabsTrigger>
           </TabsList>
           <TabsContent value={tab} className="mt-3">
             {isLoading ? (
