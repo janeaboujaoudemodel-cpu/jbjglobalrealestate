@@ -14,7 +14,9 @@ import { openWhatsApp } from "@/utils/contactActions";
 const isValidEmail = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.trim());
 
 const DEFAULT_SUBJECT = "Please sign — {{doc_title}} · {{doc_number}}";
-const DEFAULT_BODY = `Dear {{landlord_name}},
+// {{sender_signature}} is the signature block at the bottom of the email — it is
+// always YOUR brand (Jane Bou Jaoude · JBJ GLOBAL REAL ESTATE), never the client.
+const DEFAULT_BODY = `Dear {{client_name}},
 
 Attached is your {{doc_title}} prepared by JBJ Global Real Estate.
 
@@ -22,15 +24,14 @@ Kindly review and digitally sign at your earliest convenience using the secure l
 
 Thank you for your continued trust.
 
-— {{owner_name}}
-JBJ GLOBAL REAL ESTATE`;
+{{sender_signature}}`;
 
 const MERGE_TAGS = [
-  { tag: "{{landlord_name}}", help: "Client name" },
+  { tag: "{{client_name}}", help: "Recipient (client) name" },
   { tag: "{{doc_number}}", help: "Document number" },
   { tag: "{{doc_title}}", help: "Document title" },
   { tag: "{{signing_link}}", help: "jbj.ae signing link" },
-  { tag: "{{owner_name}}", help: "Sender name" },
+  { tag: "{{sender_signature}}", help: "Your brand signature (Jane · JBJ GLOBAL REAL ESTATE)" },
 ];
 
 interface Props {
