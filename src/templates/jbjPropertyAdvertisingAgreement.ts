@@ -9,6 +9,8 @@ import monogramUrl from "@/assets/jbj-monogram-dark-on-light.png";
 
 export const JBJ_BRAND = {
   company: "JBJ GLOBAL REAL ESTATE",
+  // Full registered name per Trade License — used in binding/legal contexts
+  legalCompany: "JBJ GLOBAL REAL ESTATE LLC - SOC",
   phone: "+971 54 716 7107",
   email: "CONTACT@JBJ.AE",
   website: "WWW.JBJ.AE",
@@ -17,7 +19,7 @@ export const JBJ_BRAND = {
   monogram: monogramUrl,
 } as const;
 
-export const PAA_LAYOUT_VERSION = 7;
+export const PAA_LAYOUT_VERSION = 8;
 
 export type PAAFieldKey =
   // Owner
