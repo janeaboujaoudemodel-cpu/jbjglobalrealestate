@@ -13,9 +13,10 @@ import {
 } from "@/components/ui/sheet";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
-import { Users, Search, Plus, Building2, BadgeCheck, Clock, Loader2 } from "lucide-react";
+import { Users, Search, Plus, Building2, BadgeCheck, Clock, Loader2, Download } from "lucide-react";
 import { toast } from "sonner";
 import { RelationalHubTabs } from "@/components/crm/RelationalHubTabs";
+import { UnifiedCRMExportModal } from "@/components/crm/UnifiedCRMExportModal";
 import {
   SourceFilterChips,
   EMPTY_SOURCE_FILTER,
@@ -47,6 +48,7 @@ export default function BrokersRegistry() {
   const [openBroker, setOpenBroker] = useState<BrokerRow | null>(null);
   const [addOpen, setAddOpen] = useState(false);
   const [sourceFilter, setSourceFilter] = useState<SourceFilterValue>(EMPTY_SOURCE_FILTER);
+  const [exportOpen, setExportOpen] = useState(false);
   const sourceFilterCtx = useSourceFilterContext(sourceFilter);
 
   const { data: registered = [], isLoading: loading1 } = useQuery({
@@ -185,10 +187,21 @@ export default function BrokersRegistry() {
             <h1 className="text-2xl font-bold">Brokers Registry</h1>
             <p className="text-sm text-[#1A1A1A]/70">Every broker, every company they work for.</p>
           </div>
+          <Button variant="outline" onClick={() => setExportOpen(true)} disabled={!filtered.length}>
+            <Download className="w-4 h-4 mr-1" /> Export
+          </Button>
           <Button variant="gold" onClick={() => setAddOpen(true)}>
             <Plus className="w-4 h-4 mr-1" /> Add broker
           </Button>
         </div>
+
+        <UnifiedCRMExportModal
+          open={exportOpen}
+          onOpenChange={setExportOpen}
+          kind="brokers"
+          rows={filtered}
+          filenameStem="crm-brokers"
+        />
 
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
           <Stat icon={Users} label="Total brokers" value={counts.total} />

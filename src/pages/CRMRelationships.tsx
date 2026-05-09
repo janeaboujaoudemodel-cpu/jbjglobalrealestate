@@ -49,6 +49,7 @@ import { sortBrokeragesForDirectory, normalizeForSearch } from "@/utils/brokerag
 import { FileSpreadsheet, FileText as FileTextIcon } from "lucide-react";
 import { ExportMenu, type ExportFormat } from "@/components/crm/ExportMenu";
 import { ExportConfigurator } from "@/components/crm/ExportConfigurator";
+import { UnifiedCRMExportModal } from "@/components/crm/UnifiedCRMExportModal";
 import { BROKERAGE_EXPORT_COLUMNS, BROKERAGE_EXPORT_PRESETS } from "@/utils/exportBrokerages";
 import { BrokerageAgentsEditor, type BrokerageAgentDraft } from "@/components/crm/BrokerageAgentsEditor";
 import { BrokerageContactPhotoImporter } from "@/components/crm/BrokerageContactPhotoImporter";
@@ -609,6 +610,7 @@ const BrokeragesAgenciesView = () => {
   const [testSendOpen, setTestSendOpen] = useState(false);
   const [excludedIds, setExcludedIds] = useState<Set<string>>(new Set());
   const [exportOpen, setExportOpen] = useState(false);
+  const [unifiedExportOpen, setUnifiedExportOpen] = useState(false);
   const [uploadOpen, setUploadOpen] = useState(false);
   const [importingDLD, setImportingDLD] = useState(false);
   const [listView, setListView] = useState<CRMListView>({ kind: "active", listId: null });
@@ -1148,6 +1150,14 @@ const BrokeragesAgenciesView = () => {
           title="Configure export — pick format, scope, and which columns (admin/broker contacts) to include"
         >
           <Download className="w-4 h-4 mr-2" /> Export
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => setUnifiedExportOpen(true)}
+          disabled={!filtered.length}
+          title="Unified CSV — same columns across every CRM list page"
+        >
+          <Download className="w-4 h-4 mr-2" /> Unified CSV
         </Button>
         <Button
           variant="outline"
@@ -1787,6 +1797,14 @@ const BrokeragesAgenciesView = () => {
         ]}
         onExport={handleExportConfigured}
       />
+
+      <UnifiedCRMExportModal
+        open={unifiedExportOpen}
+        onOpenChange={setUnifiedExportOpen}
+        kind="brokerages"
+        rows={filtered as any[]}
+        filenameStem="crm-brokerages"
+      />
     </div>
     </TooltipProvider>
   );
@@ -1804,6 +1822,7 @@ const ClientsTab = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<any>(null);
+  const [unifiedExportOpen, setUnifiedExportOpen] = useState(false);
 
   const filtered = useMemo(() => data.filter((r: any) => {
     const matchesQ = !q || r.full_name?.toLowerCase().includes(q.toLowerCase()) || r.email?.toLowerCase()?.includes(q.toLowerCase());
@@ -1837,14 +1856,19 @@ const ClientsTab = () => {
             {STATUS_CLIENT.map((s) => <SelectItem key={s.v} value={s.v}>{s.label}</SelectItem>)}
           </SelectContent>
         </Select>
-        <Button variant="outline" onClick={() => exportCSV(filtered, `clients-${Date.now()}.csv`, [
-          { key: "full_name", label: "Name" }, { key: "email", label: "Email" }, { key: "phone", label: "Phone" },
-          { key: "nationality", label: "Nationality" }, { key: "status", label: "Status" },
-          { key: "budget_min", label: "Budget Min" }, { key: "budget_max", label: "Budget Max" },
-          { key: "lifetime_value", label: "LTV" }, { key: "notes", label: "Notes" },
-        ])}><Download className="w-4 h-4 mr-2" />Export CSV</Button>
+        <Button variant="outline" onClick={() => setUnifiedExportOpen(true)} disabled={!filtered.length}>
+          <Download className="w-4 h-4 mr-2" />Export CSV
+        </Button>
         <Button onClick={openNew}><Plus className="w-4 h-4 mr-2" />Add Client</Button>
       </div>
+
+      <UnifiedCRMExportModal
+        open={unifiedExportOpen}
+        onOpenChange={setUnifiedExportOpen}
+        kind="leads"
+        rows={filtered as any[]}
+        filenameStem="crm-clients"
+      />
 
       {isLoading ? <Skeleton className="h-64" /> : filtered.length === 0 ? (
         <Card><CardContent className="p-8 text-center text-[#1A1A1A]/70">No clients yet.</CardContent></Card>
@@ -2135,6 +2159,7 @@ const DeveloperRegistryTab = () => {
   const navigate = useNavigate();
   const [testSendOpen, setTestSendOpen] = useState(false);
   const [uploadOpen, setUploadOpen] = useState(false);
+  const [unifiedExportOpen, setUnifiedExportOpen] = useState(false);
   const [statusView, setStatusView] = useState<"all" | "contracts">("all");
   const { data = [], isLoading, refetch } = useDeveloperRegistry();
   const { data: settings } = useOwnerSettings();
@@ -2629,6 +2654,21 @@ const DeveloperRegistryTab = () => {
             await exportDevelopers(rows, f);
             toast.success(`Exported ${rows.length} developers as ${f.toUpperCase()}`);
           }}
+        />
+        <Button
+          variant="outline"
+          onClick={() => setUnifiedExportOpen(true)}
+          disabled={!filtered.length}
+          title="Unified CSV — same columns across every CRM list page"
+        >
+          <Download className="w-4 h-4 mr-2" /> Unified CSV
+        </Button>
+        <UnifiedCRMExportModal
+          open={unifiedExportOpen}
+          onOpenChange={setUnifiedExportOpen}
+          kind="developers"
+          rows={filtered as any[]}
+          filenameStem="crm-developers"
         />
         <Button variant="outline" onClick={() => seed.mutate()} disabled={seed.isPending}>
           {seed.isPending ? "Seeding…" : "Pre-fill"}
