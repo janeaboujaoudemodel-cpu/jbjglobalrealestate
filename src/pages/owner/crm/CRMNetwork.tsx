@@ -34,6 +34,7 @@ import {
 import { Loader2, Search, Link2, X, Building2 } from "lucide-react";
 import { CompanyHubDrawer } from "@/components/crm/CompanyHubDrawer";
 import { PersonDetailDrawer } from "@/components/crm/PersonDetailDrawer";
+import { ScopedExportMenu } from "@/components/crm/ScopedExportMenu";
 
 /* -------------------- Role definitions -------------------- */
 
@@ -316,9 +317,15 @@ export default function CRMNetwork() {
                 Related to: <strong>{cross.label}</strong>
                 <button onClick={() => setCross(null)} aria-label="Clear relation">
                   <X className="h-3 w-3" />
-                </button>
+              </button>
               </Badge>
             )}
+            <div className="ml-auto">
+              <ScopedExportMenu
+                currentRows={visibleRows}
+                filenameBase={`crm-${activeRole}`}
+              />
+            </div>
           </div>
           <SourceFilterChips
             rows={enrichedLeads}
