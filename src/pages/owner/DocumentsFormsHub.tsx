@@ -108,7 +108,10 @@ export default function DocumentsFormsHub() {
   const [showDetails, setShowDetails] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
 
-  // Bucket envelopes
+  // Bucket envelopes.
+  // RULE: an envelope that has a client filled in is ALWAYS a "Forms Generated"
+  // entry, regardless of whether it is later sent / signed. Pending and Signed
+  // tabs additionally surface the same envelope based on lifecycle status.
   const buckets = useMemo(() => {
     const drafts: any[] = [];
     const generated: any[] = [];
@@ -118,14 +121,15 @@ export default function DocumentsFormsHub() {
     for (const e of allEnvelopes) {
       if ((e as any).deleted_at) { deleted.push(e); continue; }
       const s = (e as any).status;
+      const generatedReady = isCompleteEnoughToBeGenerated(e);
+
       if (s === "completed") signed.push(e);
       else if (s === "sent" || s === "viewed" || s === "partially_signed") sent.push(e);
-      else if (s === "draft") {
-        if (isCompleteEnoughToBeGenerated(e)) generated.push(e);
-        else drafts.push(e);
-      } else {
-        drafts.push(e);
-      }
+      else if (s === "draft" && !generatedReady) drafts.push(e);
+
+      // Generated bucket is purely "client-ready", independent of status —
+      // includes drafts, sent, partially-signed and completed envelopes.
+      if (generatedReady) generated.push(e);
     }
     return { drafts, generated, sent, signed, deleted };
   }, [allEnvelopes]);
@@ -281,6 +285,24 @@ export default function DocumentsFormsHub() {
                         <a href={e.signed_document_url} target="_blank" rel="noreferrer">
                           <ExternalLink className="w-3 h-3 mr-1" /> Download
                         </a>
+                      </Button>
+                    )}
+                    {mode === "signed" && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={async () => {
+                          if (!confirm("Mark this envelope as NOT signed and return it to drafts?\n\nUse this only for test signatures. The signed copy reference will be cleared.")) return;
+                          const { error } = await supabase
+                            .from("esign_envelopes")
+                            .update({ status: "draft", signed_document_url: null })
+                            .eq("id", e.id);
+                          if (error) { toast.error(error.message); return; }
+                          toast.success("Reverted to draft");
+                          refetch();
+                        }}
+                      >
+                        <RotateCcw className="w-3 h-3 mr-1" /> Mark not signed
                       </Button>
                     )}
                   </div>

@@ -6,14 +6,21 @@
  */
 
 import monogramUrl from "@/assets/jbj-monogram-dark-on-light.png";
+import {
+  TRADE_LICENSE_BRAND,
+  TRADE_LICENSE_LEGAL_NAME,
+  TRADE_LICENSE_OFFICE,
+  COMPANY_CONTACT,
+} from "@/config/companyLegal";
 
 export const JBJ_BRAND = {
-  company: "JBJ GLOBAL REAL ESTATE",
+  company: TRADE_LICENSE_BRAND,
   // Full registered name per Trade License — used in binding/legal contexts
-  legalCompany: "JBJ GLOBAL REAL ESTATE LLC - SOC",
-  phone: "+971 54 716 7107",
-  email: "CONTACT@JBJ.AE",
-  website: "WWW.JBJ.AE",
+  legalCompany: TRADE_LICENSE_LEGAL_NAME,
+  office: TRADE_LICENSE_OFFICE,
+  phone: COMPANY_CONTACT.phone,
+  email: COMPANY_CONTACT.email,
+  website: COMPANY_CONTACT.website,
   gold: "#B89555",
   ink: "#1A1A1A",
   monogram: monogramUrl,
@@ -45,7 +52,7 @@ export const PAA_DEFAULT_VALUES: Record<PAAFieldKey | "doc_number", string> = {
   bua_sqft: "", plot_sqft: "", bedrooms: "", bathrooms: "",
   rental_amount: "", sales_amount: "", parking: "", additional_notes: "",
   exclusivity: "", listing_period: "", listing_period_until_date: "",
-  broker_appointee_name: "JBJ GLOBAL REAL ESTATE LLC - SOC",
+  broker_appointee_name: TRADE_LICENSE_LEGAL_NAME,
   landlord_signature_name: "", landlord_signature_date: "",
   jbj_signature_name: "", jbj_signature_date: "",
 };
@@ -169,11 +176,12 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string) => {
     default:
       return `
         <div style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid ${accent};padding-bottom:14px;margin-bottom:24px;">
-          <div style="display:flex;align-items:center;gap:12px;">
-            <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:44px;height:44px;object-fit:contain;display:block;" />
+          <div style="display:flex;align-items:center;gap:14px;">
+            <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:80px;height:80px;object-fit:contain;display:block;" />
             <div>
               <div style="font-size:18px;letter-spacing:.18em;font-weight:700;color:${ink};">${JBJ_BRAND.company}</div>
-              <div style="font-size:9.5px;letter-spacing:.18em;color:${ink};opacity:.65;margin-top:2px;">DOWNTOWN DUBAI, UAE</div>
+              <div style="font-size:10px;letter-spacing:.16em;color:${ink};opacity:.75;margin-top:3px;">${esc(JBJ_BRAND.legalCompany)}</div>
+              ${JBJ_BRAND.office ? `<div style="font-size:9.5px;letter-spacing:.14em;color:${ink};opacity:.65;margin-top:2px;">${esc(JBJ_BRAND.office)}</div>` : ""}
             </div>
           </div>
           <div style="text-align:right;font-size:11px;color:${ink};opacity:.85;">
@@ -207,10 +215,10 @@ const footerHtml = (chrome: Required<TemplateChrome>) => {
       return `
         <div style="${base}display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;align-items:center;">
           <div style="display:flex;align-items:center;gap:8px;">
-            <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:20px;height:20px;object-fit:contain;display:block;flex:none;" />
+            <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:36px;height:36px;object-fit:contain;display:block;flex:none;" />
             <div>
-              <div style="font-weight:700;letter-spacing:.14em;font-size:10px;opacity:.85;">${JBJ_BRAND.company}</div>
-              <div style="opacity:.7;margin-top:2px;">Downtown Dubai, UAE</div>
+              <div style="font-weight:700;letter-spacing:.14em;font-size:10px;opacity:.85;">${esc(JBJ_BRAND.legalCompany)}</div>
+              ${JBJ_BRAND.office ? `<div style="opacity:.7;margin-top:2px;">${esc(JBJ_BRAND.office)}</div>` : ""}
             </div>
           </div>
           <div style="text-align:center;">

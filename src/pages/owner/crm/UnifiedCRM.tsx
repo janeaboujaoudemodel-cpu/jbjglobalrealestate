@@ -24,8 +24,10 @@ const CRMLeadsTableV2     = lazy(() => import("@/components/crm/CRMLeadsTableV2"
 const FlaggedLeadsView    = lazy(() => import("@/components/crm/FlaggedLeadsView"));
 const RecentlyDeletedLeads= lazy(() => import("@/components/crm/RecentlyDeletedLeads"));
 const CRMRelationships    = lazy(() => import("@/pages/CRMRelationships"));
-const CRMNetworkPage      = lazy(() => import("@/pages/owner/crm/CRMNetwork"));
 const BrokersRegistryPage = lazy(() => import("@/pages/owner/crm/BrokersRegistry"));
+const DevelopersDirectory       = lazy(() => import("@/components/crm/entity/DevelopersDirectory"));
+const BrokerageAgenciesDirectory= lazy(() => import("@/components/crm/entity/BrokerageAgenciesDirectory"));
+const DevSalesRepsDirectory     = lazy(() => import("@/components/crm/entity/DevSalesRepsDirectory"));
 const EmployeesHub        = lazy(() => import("@/components/crm/EmployeesHub"));
 const CampaignsPage       = lazy(() => import("@/pages/owner/crm/CampaignsPage"));
 const CRMTasks            = lazy(() => import("@/pages/CRMTasks"));
@@ -54,8 +56,8 @@ const ENTITIES: { id: Entity; label: string; icon: React.ComponentType<{ classNa
 
 const VIEWS: Record<Entity, { id: string; label: string }[]> = {
   leads: [
-    { id: "overview",      label: "Overview" },
     { id: "all",           label: "All Leads" },
+    { id: "overview",      label: "Overview" },
     { id: "flagged",       label: "Flagged" },
     { id: "vip",           label: "VIP" },
     { id: "management",    label: "Lead Mgmt" },
@@ -224,17 +226,17 @@ export default function UnifiedCRM() {
       return <InvestorsDirectory ownerEmail={ownerEmail} vipOnly={view === "vip"} />;
     }
     if (entity === "developers") {
-      return <Embed><CRMNetworkPage initialRole="developers" /></Embed>;
+      return <DevelopersDirectory />;
     }
     if (entity === "sales-reps") {
-      return <Embed><CRMNetworkPage initialRole="partners" /></Embed>;
+      return <DevSalesRepsDirectory />;
     }
     if (entity === "brokers") {
       if (view === "imported") return <BrokersImported />;
       return <Embed><BrokersRegistryPage /></Embed>;
     }
     if (entity === "agencies") {
-      return <Embed><CRMNetworkPage initialRole="agencies" /></Embed>;
+      return <BrokerageAgenciesDirectory />;
     }
     if (entity === "employees") {
       return <EmployeesHub userId={userId} />;
