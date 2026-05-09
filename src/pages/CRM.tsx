@@ -829,18 +829,54 @@ const CRM = () => {
                 </Card>
               </div>
               
-              {/* Team Communication - Full Width Edge-to-Edge */}
-              <div className="w-full">
-                <Suspense fallback={<Skeleton className="h-24 w-full" />}>
-                <CRMCommunicationPanel />
-                </Suspense>
+
+              {/* Compact toggles for heavy panels — collapsed by default to keep the workspace minimal */}
+              <div className="flex flex-wrap items-center gap-2">
+                <Button
+                  variant={showTeamComms ? "secondary" : "outline"}
+                  size="sm"
+                  onClick={() => setShowTeamComms(v => !v)}
+                  className="text-xs"
+                >
+                  <MessageSquare className="h-4 w-4 mr-1.5" />
+                  Team Communication {showTeamComms ? "▾" : "▸"}
+                </Button>
+                <Button
+                  variant={showActivityTimeline ? "secondary" : "outline"}
+                  size="sm"
+                  onClick={() => setShowActivityTimeline(v => !v)}
+                  className="text-xs"
+                >
+                  <Bell className="h-4 w-4 mr-1.5" />
+                  Activity Timeline {showActivityTimeline ? "▾" : "▸"}
+                </Button>
+                <Button
+                  variant={showAIInsights ? "secondary" : "outline"}
+                  size="sm"
+                  onClick={() => setShowAIInsights(v => !v)}
+                  className="text-xs"
+                >
+                  <Brain className="h-4 w-4 mr-1.5" />
+                  AI Insights {showAIInsights ? "▾" : "▸"}
+                </Button>
               </div>
-              
-              {/* Activity Timeline - Full Width */}
-              <Suspense fallback={<Skeleton className="h-24 w-full" />}>
-              <ActivityTimeline userId={user?.id || ""} limit={8} />
-              </Suspense>
-              
+
+              {/* Team Communication - hidden by default */}
+              {showTeamComms && (
+                <div className="w-full">
+                  <Suspense fallback={<Skeleton className="h-24 w-full" />}>
+                    <CRMCommunicationPanel />
+                  </Suspense>
+                </div>
+              )}
+
+              {/* Activity Timeline - hidden by default */}
+              {showActivityTimeline && (
+                <Suspense fallback={<Skeleton className="h-24 w-full" />}>
+                  <ActivityTimeline userId={user?.id || ""} limit={8} />
+                </Suspense>
+              )}
+
               {/* Leads Update Section with shortcuts */}
               <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
                 <CardHeader className="pb-3">
