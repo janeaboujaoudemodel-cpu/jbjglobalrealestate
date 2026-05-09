@@ -2159,6 +2159,7 @@ const DeveloperRegistryTab = () => {
   const navigate = useNavigate();
   const [testSendOpen, setTestSendOpen] = useState(false);
   const [uploadOpen, setUploadOpen] = useState(false);
+  const [unifiedExportOpen, setUnifiedExportOpen] = useState(false);
   const [statusView, setStatusView] = useState<"all" | "contracts">("all");
   const { data = [], isLoading, refetch } = useDeveloperRegistry();
   const { data: settings } = useOwnerSettings();
