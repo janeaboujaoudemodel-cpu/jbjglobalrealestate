@@ -24,6 +24,7 @@ import { SmartFillDropzone } from "@/components/e-signature/SmartFillDropzone";
 import { TemplateChromeStudio } from "@/components/e-signature/TemplateChromeStudio";
 import { useOwnerSignatureAssets } from "@/hooks/useOwnerSignatureAssets";
 import { SendForSignatureDialog } from "@/components/e-signature/SendForSignatureDialog";
+import ExportEnvelopeDialog from "@/components/e-signature/ExportEnvelopeDialog";
 
 type EnvelopeStatus = 'draft' | 'sent' | 'viewed' | 'partially_signed' | 'completed' | 'declined' | 'expired' | 'voided';
 type RecipientStatus = 'pending' | 'sent' | 'delivered' | 'viewed' | 'signed' | 'declined';
@@ -64,6 +65,7 @@ export default function EnvelopeDetail() {
   const [chrome, setChrome] = useState<TemplateChrome>({});
   const [showStudio, setShowStudio] = useState(false);
   const [sendOpen, setSendOpen] = useState(false);
+  const [exportOpen, setExportOpen] = useState(false);
   const regenerate = useRegenerateEnvelopePdf();
   const { data: sigAssets } = useOwnerSignatureAssets("signature");
   const { data: stampAssets } = useOwnerSignatureAssets("stamp");
