@@ -259,6 +259,8 @@ export default function CRMLeadsBulkBar({
       setBusy(false);
     }
   };
+
+  const handleBroadcast = async () => {
     if (!broadcastMessage.trim()) {
       toast.error("Message is required");
       return;
