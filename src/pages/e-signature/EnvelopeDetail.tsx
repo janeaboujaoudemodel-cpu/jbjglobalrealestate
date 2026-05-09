@@ -545,7 +545,21 @@ export default function EnvelopeDetail() {
                   title="Document preview"
                   srcDoc={previewSrcDoc}
                   className="w-full bg-white"
-                  style={{ height: "1100px", border: 0 }}
+                  style={{ height: "min(1180px, calc(100vh - 200px))", border: 0 }}
+                  onLoad={(e) => {
+                    // Shrink iframe height to actual content so we don't get a
+                    // huge empty area beneath the footer.
+                    try {
+                      const f = e.currentTarget as HTMLIFrameElement;
+                      const doc = f.contentDocument;
+                      if (!doc) return;
+                      const h = Math.max(
+                        doc.documentElement.scrollHeight,
+                        doc.body.scrollHeight,
+                      );
+                      if (h > 200) f.style.height = `${h + 24}px`;
+                    } catch {}
+                  }}
                 />
               ) : envelope.document_url ? (
                 <iframe
