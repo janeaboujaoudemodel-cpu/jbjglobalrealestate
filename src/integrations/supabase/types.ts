@@ -12381,6 +12381,36 @@ export type Database = {
         }
         Relationships: []
       }
+      esign_email_template_defaults: {
+        Row: {
+          approved_at: string
+          body: string
+          created_at: string
+          id: string
+          subject: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          approved_at?: string
+          body: string
+          created_at?: string
+          id?: string
+          subject: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          approved_at?: string
+          body?: string
+          created_at?: string
+          id?: string
+          subject?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       esign_envelopes: {
         Row: {
           category: string | null
