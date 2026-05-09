@@ -218,6 +218,13 @@ export default function BrokersRegistry() {
           </select>
         </div>
 
+        {/* Source filter chips — upload_source / database_source / country / team / campaign */}
+        <SourceFilterChips
+          rows={external as any[]}
+          axes={["upload_source", "database_source", "country", "team", "campaign"]}
+          value={sourceFilter}
+          onChange={setSourceFilter}
+        />
         <Tabs value={tab} onValueChange={(v) => setTab(v as any)}>
           <TabsList className="bg-[#EFE6D6]">
             <TabsTrigger value="all">All ({counts.total})</TabsTrigger>
