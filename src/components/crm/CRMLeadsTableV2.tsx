@@ -378,12 +378,63 @@ export default function CRMLeadsTableV2({
             className="bg-[#FDFBF7]/80 border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:border-gold"
           />
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <select
+            value={stageFilter}
+            onChange={(e) => setStageFilter(e.target.value)}
+            className="h-9 rounded-lg border-2 border-gold/30 bg-[#FDFBF7] px-3 text-sm font-semibold text-[#1A1A1A] focus:outline-none focus:border-gold"
+            title="Filter by stage"
+          >
+            <option value="">All Stages</option>
+            {PIPELINE_STATUSES.map((s) => (
+              <option key={s.value} value={s.value}>{s.label}</option>
+            ))}
+          </select>
+          <select
+            value={sourceTypeFilter}
+            onChange={(e) => setSourceTypeFilter(e.target.value)}
+            className="h-9 rounded-lg border-2 border-gold/30 bg-[#FDFBF7] px-3 text-sm font-semibold text-[#1A1A1A] focus:outline-none focus:border-gold"
+            title="Filter by source"
+          >
+            <option value="">All Sources</option>
+            {sourceTypeOptions.map((t) => (
+              <option key={t} value={t}>{formatSourceLabel(t)}</option>
+            ))}
+          </select>
+          <select
+            value={assigneeFilter}
+            onChange={(e) => setAssigneeFilter(e.target.value)}
+            className="h-9 rounded-lg border-2 border-gold/30 bg-[#FDFBF7] px-3 text-sm font-semibold text-[#1A1A1A] focus:outline-none focus:border-gold"
+            title="Filter by owner / assigned broker"
+          >
+            <option value="">All Owners</option>
+            <option value="__unassigned__">Unassigned</option>
+            {assigneeOptions.map((a) => (
+              <option key={a.id} value={a.id}>{a.name}</option>
+            ))}
+          </select>
+          <select
+            value={tagFilter}
+            onChange={(e) => setTagFilter(e.target.value)}
+            className="h-9 rounded-lg border-2 border-gold/30 bg-[#FDFBF7] px-3 text-sm font-semibold text-[#1A1A1A] focus:outline-none focus:border-gold"
+            title="Filter by tag"
+          >
+            <option value="">All Tags</option>
+            <option value="vip">★ VIP</option>
+            <option value="unassigned">Unassigned</option>
+          </select>
           <Button
             type="button"
             variant="outline"
             size="sm"
-            onClick={() => { setSelected(new Set()); setSearch(""); navigate(0); }}
+            onClick={() => {
+              setSelected(new Set());
+              setSearch("");
+              setStageFilter("");
+              setSourceTypeFilter("");
+              setAssigneeFilter("");
+              setTagFilter("");
+            }}
             className="font-semibold border-gold/30 text-[#1A1A1A] hover:bg-gold/10"
           >
             Reset
