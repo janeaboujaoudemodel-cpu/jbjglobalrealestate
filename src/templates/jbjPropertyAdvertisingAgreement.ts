@@ -22,7 +22,7 @@ export const PAA_LAYOUT_VERSION = 5;
 export type PAAFieldKey =
   // Owner
   | "landlord_name" | "passport_number" | "emirates_id" | "mobile_number"
-  | "email_address" | "listing_consultant" | "property_reference_no" | "expiry_date"
+  | "email_address" | "nationality" | "listing_consultant" | "property_reference_no" | "expiry_date"
   // Property
   | "property_type" | "status_vacant_tenanted" | "furnishing" | "vacating_date"
   | "building_name" | "unit_number" | "street_name" | "community"
