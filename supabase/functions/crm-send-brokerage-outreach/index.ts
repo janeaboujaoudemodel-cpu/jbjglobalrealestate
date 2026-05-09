@@ -632,7 +632,7 @@ serve(async (req: Request) => {
       sent_at: new Date().toISOString(),
     });
 
-    return new Response(JSON.stringify({ ok: true, recipient, messageId, threadId, variant }), {
+    return new Response(JSON.stringify({ ok: true, recipient, messageId, threadId, variant, from_email: replyTo, sent_via: "resend", quota: resendResult.quota }), {
       status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e: any) {
