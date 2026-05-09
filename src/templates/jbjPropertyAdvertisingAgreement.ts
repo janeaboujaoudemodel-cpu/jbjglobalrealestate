@@ -1,17 +1,20 @@
 /**
  * JBJ GLOBAL REAL ESTATE — Property Advertising Agreement for Real Estate Owners
- * Branded letterhead template. Pure white, black titles, champagne hairlines.
- * Tokens are replaced via simple `{{key}}` substitution in the renderer.
+ * Layout follows the Property Finder standard (radio chips, two-column fields,
+ * EXCLUSIVE / NON-EXCLUSIVE + period chips), rendered with our champagne-gold
+ * brand chrome. Header & footer are user-customisable via the `chrome` arg.
  */
 
 export const JBJ_BRAND = {
   company: "JBJ GLOBAL REAL ESTATE",
-  phone: "+971 5471 67107",
-  email: "contact@jbj.ae",
-  website: "jbj.ae",
+  phone: "+971 54 716 7107",
+  email: "CONTACT@JBJ.AE",
+  website: "WWW.JBJ.AE",
   gold: "#B89555",
   ink: "#1A1A1A",
 } as const;
+
+export const PAA_LAYOUT_VERSION = 3;
 
 export type PAAFieldKey =
   // Owner
@@ -23,7 +26,7 @@ export type PAAFieldKey =
   | "bua_sqft" | "plot_sqft" | "bedrooms" | "bathrooms"
   | "rental_amount" | "sales_amount" | "parking" | "additional_notes"
   // Terms
-  | "exclusivity" | "listing_period" | "listing_period_until_date"
+  | "exclusivity" | "listing_period" | "listing_period_until_date" | "broker_appointee_name"
   // Sign
   | "landlord_signature_name" | "landlord_signature_date"
   | "jbj_signature_name" | "jbj_signature_date";
@@ -37,170 +40,367 @@ export const PAA_DEFAULT_VALUES: Record<PAAFieldKey | "doc_number", string> = {
   bua_sqft: "", plot_sqft: "", bedrooms: "", bathrooms: "",
   rental_amount: "", sales_amount: "", parking: "", additional_notes: "",
   exclusivity: "", listing_period: "", listing_period_until_date: "",
+  broker_appointee_name: "JBJ GLOBAL REAL ESTATE",
   landlord_signature_name: "", landlord_signature_date: "",
   jbj_signature_name: "", jbj_signature_date: "",
 };
 
-const fill = (label: string, key: PAAFieldKey) =>
-  `<div style="margin:6px 0 14px;">
-     <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:#1A1A1A;opacity:.7;">${label}</div>
-     <div style="border-bottom:1px solid #B89555;min-height:18px;padding:2px 0;font-size:13px;color:#1A1A1A;">{{${key}}}</div>
-   </div>`;
+/* ----------------------------- formatting helpers ------------------------- */
 
-const sectionTitle = (n: number, t: string) => `
-  <div style="display:flex;align-items:center;gap:10px;margin:22px 0 10px;">
-    <div style="font-size:13px;font-weight:700;letter-spacing:.08em;color:#1A1A1A;">${n}. ${t.toUpperCase()}</div>
-    <div style="flex:1;height:1px;background:#B89555;"></div>
+const esc = (s: string) =>
+  String(s ?? "").replace(/[<>&]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;" }[c]!));
+
+const fmtMoney = (raw: string) => {
+  if (!raw) return "";
+  const n = Number(String(raw).replace(/[^\d.]/g, ""));
+  if (!isFinite(n) || n <= 0) return esc(raw);
+  return `AED ${new Intl.NumberFormat("en-AE", { maximumFractionDigits: 0 }).format(n)}`;
+};
+
+const fmtDateDDMMYYYY = (raw: string) => {
+  if (!raw) return ["", "", ""];
+  // accept yyyy-mm-dd or dd/mm/yyyy
+  const isoMatch = /^(\d{4})-(\d{2})-(\d{2})/.exec(raw);
+  if (isoMatch) return [isoMatch[3], isoMatch[2], isoMatch[1]];
+  const dmy = /^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})/.exec(raw);
+  if (dmy) return [dmy[1].padStart(2, "0"), dmy[2].padStart(2, "0"), dmy[3].length === 2 ? `20${dmy[3]}` : dmy[3]];
+  return ["", "", ""];
+};
+
+const dateBox = (raw: string) => {
+  const [d, m, y] = fmtDateDDMMYYYY(raw);
+  const cell = (v: string, ph: string) =>
+    `<span style="display:inline-block;min-width:32px;text-align:center;border-bottom:1px solid #B89555;padding:1px 4px;font-size:12px;color:${v ? "#1A1A1A" : "#1A1A1A66"};">${v || ph}</span>`;
+  return `${cell(d, "DD")}<span style="opacity:.4;margin:0 4px;">/</span>${cell(m, "MM")}<span style="opacity:.4;margin:0 4px;">/</span>${cell(y, "YYYY")}`;
+};
+
+const radioChip = (label: string, selected: boolean) => `
+  <span style="display:inline-flex;align-items:center;gap:6px;margin-right:18px;font-size:12px;color:#1A1A1A;">
+    <span style="width:11px;height:11px;border:1px solid #B89555;border-radius:999px;display:inline-block;position:relative;${selected ? "background:#FFFFFF;" : ""}">
+      ${selected ? `<span style="position:absolute;inset:2px;border-radius:999px;background:#1A1A1A;"></span>` : ""}
+    </span>
+    ${esc(label)}
+  </span>`;
+
+const fieldUnderline = (label: string, value: string) => `
+  <div style="margin:6px 0 14px;">
+    <div style="border-bottom:1px solid #B89555;min-height:18px;padding:2px 0;font-size:13px;color:#1A1A1A;">${esc(value || "")}</div>
+    <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:#1A1A1A;opacity:.7;margin-top:3px;">${esc(label)}</div>
   </div>`;
+
+/* ---------------------------------- chrome -------------------------------- */
+
+export type ChromeHeaderStyle = "monogram-wordmark" | "wordmark-only" | "crest-address" | "minimal-hairline";
+export type ChromeFooterStyle = "three-column" | "centered-tagline" | "compliance-bar";
+
+export interface TemplateChrome {
+  accent?: string;            // gold hairline
+  ink?: string;               // text colour
+  surface?: string;           // page background
+  headerStyle?: ChromeHeaderStyle;
+  footerStyle?: ChromeFooterStyle;
+  tagline?: string;           // for centered-tagline footer
+  trn?: string;               // tax registration #
+  license?: string;           // RERA / DED license #
+}
+
+export const DEFAULT_CHROME: Required<TemplateChrome> = {
+  accent: "#B89555",
+  ink: "#1A1A1A",
+  surface: "#FFFFFF",
+  headerStyle: "monogram-wordmark",
+  footerStyle: "three-column",
+  tagline: "PRIVATE OFFICE · DUBAI · INSTITUTIONAL REAL ESTATE",
+  trn: "",
+  license: "",
+};
+
+const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string) => {
+  const { accent, ink, headerStyle } = chrome;
+  const docBadge = docNumber
+    ? `<div style="font-size:10px;letter-spacing:.16em;color:${ink};opacity:.7;">DOC&nbsp;NO.&nbsp;<strong style="opacity:1;">${esc(docNumber)}</strong></div>`
+    : "";
+  switch (headerStyle) {
+    case "wordmark-only":
+      return `
+        <div style="text-align:center;border-bottom:1px solid ${accent};padding-bottom:14px;margin-bottom:24px;">
+          <div style="font-size:22px;letter-spacing:.24em;font-weight:700;color:${ink};">${JBJ_BRAND.company}</div>
+          ${docBadge ? `<div style="margin-top:6px;">${docBadge}</div>` : ""}
+        </div>`;
+    case "crest-address":
+      return `
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid ${accent};padding-bottom:14px;margin-bottom:24px;">
+          <div>
+            <div style="width:38px;height:38px;border:1px solid ${accent};display:flex;align-items:center;justify-content:center;font-weight:800;letter-spacing:.06em;color:${ink};font-size:14px;">JBJ</div>
+            <div style="font-size:18px;letter-spacing:.18em;font-weight:700;margin-top:8px;color:${ink};">${JBJ_BRAND.company}</div>
+          </div>
+          <div style="text-align:right;font-size:11px;color:${ink};opacity:.85;">
+            ${docBadge}
+            <div>One Central · DIFC · Dubai, UAE</div>
+            <div>${JBJ_BRAND.phone}</div>
+            <div>${JBJ_BRAND.email}</div>
+          </div>
+        </div>`;
+    case "minimal-hairline":
+      return `
+        <div style="border-bottom:1px solid ${accent};padding-bottom:8px;margin-bottom:22px;display:flex;justify-content:space-between;align-items:flex-end;">
+          <div style="font-size:14px;letter-spacing:.28em;font-weight:600;color:${ink};">${JBJ_BRAND.company}</div>
+          ${docBadge}
+        </div>`;
+    case "monogram-wordmark":
+    default:
+      return `
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid ${accent};padding-bottom:14px;margin-bottom:24px;">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:42px;height:42px;border:1px solid ${accent};display:flex;align-items:center;justify-content:center;font-weight:800;letter-spacing:.06em;color:${ink};font-size:14px;">JBJ</div>
+            <div>
+              <div style="font-size:18px;letter-spacing:.18em;font-weight:700;color:${ink};">${JBJ_BRAND.company}</div>
+              <div style="font-size:9.5px;letter-spacing:.18em;color:${ink};opacity:.65;margin-top:2px;">PRIVATE OFFICE · DUBAI</div>
+            </div>
+          </div>
+          <div style="text-align:right;font-size:11px;color:${ink};opacity:.85;">
+            ${docBadge}
+            <div style="margin-top:4px;">${JBJ_BRAND.phone}</div>
+            <div>${JBJ_BRAND.email}</div>
+            <div>${JBJ_BRAND.website}</div>
+          </div>
+        </div>`;
+  }
+};
+
+const footerHtml = (chrome: Required<TemplateChrome>) => {
+  const { accent, ink, footerStyle, tagline, trn, license } = chrome;
+  const base = `margin-top:36px;padding-top:14px;border-top:1px solid ${accent};font-size:10.5px;color:${ink};opacity:.78;`;
+  switch (footerStyle) {
+    case "centered-tagline":
+      return `
+        <div style="${base}text-align:center;letter-spacing:.18em;text-transform:uppercase;">
+          <div style="font-weight:600;">${esc(tagline)}</div>
+          <div style="margin-top:4px;">${JBJ_BRAND.email} · ${JBJ_BRAND.website} · ${JBJ_BRAND.phone}</div>
+        </div>`;
+    case "compliance-bar":
+      return `
+        <div style="${base}display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <div>${JBJ_BRAND.company}</div>
+          <div>${trn ? `TRN ${esc(trn)} · ` : ""}${license ? `LIC ${esc(license)} · ` : ""}${JBJ_BRAND.email} · ${JBJ_BRAND.website}</div>
+        </div>`;
+    case "three-column":
+    default:
+      return `
+        <div style="${base}display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;">
+          <div>
+            <div style="font-weight:700;letter-spacing:.14em;font-size:10px;opacity:.85;">${JBJ_BRAND.company}</div>
+            <div style="opacity:.7;margin-top:2px;">Private Office · Dubai, UAE</div>
+          </div>
+          <div style="text-align:center;">
+            <div>${JBJ_BRAND.email}</div>
+            <div>${JBJ_BRAND.website}</div>
+          </div>
+          <div style="text-align:right;">
+            <div>${JBJ_BRAND.phone}</div>
+            <div style="opacity:.7;">${trn ? `TRN ${esc(trn)}` : ""}${trn && license ? " · " : ""}${license ? `LIC ${esc(license)}` : ""}</div>
+          </div>
+        </div>`;
+  }
+};
+
+/* ----------------------------- builder API -------------------------------- */
 
 export const JBJ_PAA_TEMPLATE_ID = "jbj-property-advertising-agreement";
 
-export function buildPAAHtml(values: Partial<Record<PAAFieldKey | "doc_number", string>> = {}): string {
+export interface BuildPAAOptions {
+  chrome?: TemplateChrome;
+  ownerSignatureUrl?: string | null;   // url to PNG of authorised representative signature
+  ownerStampUrl?: string | null;       // url to PNG of company stamp
+  clientSignatureUrl?: string | null;  // url to client's captured signature
+}
+
+export function buildPAAHtml(
+  values: Partial<Record<PAAFieldKey | "doc_number", string>> = {},
+  opts: BuildPAAOptions = {},
+): string {
   const v = { ...PAA_DEFAULT_VALUES, ...values };
   const get = (k: PAAFieldKey | "doc_number") => (v[k] ?? "").toString();
 
+  const chrome: Required<TemplateChrome> = { ...DEFAULT_CHROME, ...(opts.chrome || {}) };
+  const accent = chrome.accent;
+  const ink = chrome.ink;
+
+  // Conditionals (smart fields)
+  const isVacant = /vacant/i.test(get("status_vacant_tenanted"));
+  const isVilla = /villa/i.test(get("property_type"));
+  const showVacatingDate = !isVacant && get("vacating_date");
+  const showPlot = isVilla;
+  const period = get("listing_period");
+  const showUntilDate = /until/i.test(period) && get("listing_period_until_date");
+
+  const periodChip = (label: string, key: string) =>
+    radioChip(label, period.toLowerCase().startsWith(key.toLowerCase()));
+
+  const exclusivityChip = (label: string) =>
+    radioChip(label, get("exclusivity").toLowerCase().includes(label.toLowerCase().split(" ")[0]));
+
+  const propTypeChip = (label: string) =>
+    radioChip(label, get("property_type").toLowerCase() === label.toLowerCase());
+
+  const furnChip = (label: string) =>
+    radioChip(label, get("furnishing").toLowerCase().startsWith(label.toLowerCase().split("-")[0]));
+
+  const statusChip = (label: string) =>
+    radioChip(label, get("status_vacant_tenanted").toLowerCase() === label.toLowerCase());
+
+  const sectionTitle = (n: number, t: string) => `
+    <div style="display:flex;align-items:center;gap:10px;margin:22px 0 12px;">
+      <div style="font-size:13px;font-weight:700;letter-spacing:.10em;color:${ink};">${n}. ${t.toUpperCase()}</div>
+      <div style="flex:1;height:6px;background:${accent}22;border-bottom:1px solid ${accent};"></div>
+    </div>`;
+
+  // Signature blocks
+  const ownerSigImg = opts.ownerSignatureUrl
+    ? `<img src="${esc(opts.ownerSignatureUrl)}" alt="Authorised signature" crossorigin="anonymous" style="max-height:54px;max-width:200px;object-fit:contain;display:block;" />`
+    : "";
+  const ownerStampImg = opts.ownerStampUrl
+    ? `<img src="${esc(opts.ownerStampUrl)}" alt="Company stamp" crossorigin="anonymous" style="position:absolute;right:-6px;top:-12px;width:88px;height:88px;object-fit:contain;opacity:.85;" />`
+    : "";
+  const clientSigImg = opts.clientSignatureUrl
+    ? `<img src="${esc(opts.clientSignatureUrl)}" alt="Client signature" crossorigin="anonymous" style="max-height:54px;max-width:200px;object-fit:contain;display:block;" />`
+    : `<div style="font-style:italic;color:#1A1A1A99;font-size:11px;">Awaiting signature${get("landlord_name") ? ` — ${esc(get("landlord_name"))}` : ""}</div>`;
+
   const html = `
-<div style="font-family:Inter,Arial,sans-serif;color:#1A1A1A;background:#FFFFFF;padding:48px 56px;max-width:794px;margin:0 auto;line-height:1.55;">
-  <!-- Letterhead -->
-  <div style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid #B89555;padding-bottom:14px;margin-bottom:8px;">
-    <div>
-      <div style="font-size:22px;letter-spacing:.18em;font-weight:700;">JBJ GLOBAL REAL ESTATE</div>
-      <div style="font-size:10px;letter-spacing:.18em;color:#1A1A1A;opacity:.65;margin-top:2px;">PRIVATE OFFICE · DUBAI</div>
-    </div>
-    <div style="text-align:right;font-size:11px;color:#1A1A1A;opacity:.8;">
-      <div style="font-size:10px;letter-spacing:.16em;color:#1A1A1A;opacity:.55;margin-bottom:4px;">DOC&nbsp;NO.&nbsp;<strong style="color:#1A1A1A;opacity:1;">{{doc_number}}</strong></div>
-      <div>${JBJ_BRAND.phone}</div>
-      <div>${JBJ_BRAND.email}</div>
-      <div>${JBJ_BRAND.website}</div>
-    </div>
-  </div>
-  <div style="height:2px;background:transparent;border-top:1px solid #B89555;opacity:.4;margin-bottom:28px;"></div>
+<div style="font-family:Inter,Arial,sans-serif;color:${ink};background:${chrome.surface};padding:44px 52px;max-width:794px;margin:0 auto;line-height:1.55;">
 
-  <!-- Title -->
-  <h1 style="font-size:22px;font-weight:800;letter-spacing:.02em;margin:0 0 4px;color:#1A1A1A;">
-    PROPERTY ADVERTISING AGREEMENT
+  ${headerHtml(chrome, get("doc_number"))}
+
+  <h1 style="font-size:22px;font-weight:800;letter-spacing:.02em;margin:0 0 4px;color:${ink};">
+    PROPERTY ADVERTISING AGREEMENT<br/><span style="font-weight:700;">FOR REAL ESTATE OWNERS</span>
   </h1>
-  <h2 style="font-size:14px;font-weight:600;letter-spacing:.04em;margin:0 0 18px;color:#1A1A1A;opacity:.7;">
-    For Real Estate Owners
-  </h2>
-
-  <p style="font-size:12.5px;color:#1A1A1A;opacity:.85;margin:0 0 6px;">
-    As a property owner or landlord, you are partnering with JBJ Global Real Estate — a private office offering maximum exposure
-    and trusted representation to sell or lease your property at the best possible terms in the shortest time.
+  <p style="font-size:12px;color:${ink};opacity:.78;margin:8px 0 4px;">
+    As a property owner or landlord, you are partnering with <strong>JBJ Global Real Estate</strong> — a private office offering
+    maximum exposure and trusted representation to sell or lease your property at the best terms in the shortest time.
   </p>
-  <p style="font-size:12.5px;color:#1A1A1A;opacity:.85;margin:0 0 6px;">
-    By signing this document and providing the details below, your property will be advertised across JBJ's premium channels —
-    portals, website, social media, partner brokerages, CRM, WhatsApp and email — and will receive enhanced positioning where applicable.
+  <p style="font-size:12px;color:${ink};opacity:.78;margin:0 0 4px;">
+    By signing this document and providing the details below, your property will be advertised across JBJ's premium portals,
+    website, social media, partner brokerages, CRM and direct outreach channels with enhanced positioning where applicable.
+  </p>
+  <p style="font-size:12px;color:${ink};opacity:.78;margin:0 0 4px;">
+    Submitting further documents for verification ranks your listing higher in search results with the official Verified Listing badge —
+    consumers are 5× more likely to enquire about verified properties.
   </p>
 
   ${sectionTitle(1, "Landlord / Owner Details")}
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 32px;">
-    ${fill("Landlord's Name", "landlord_name")}
-    ${fill("Passport Number", "passport_number")}
-    ${fill("Emirates ID Number", "emirates_id")}
-    ${fill("Mobile Number", "mobile_number")}
-    ${fill("Email Address", "email_address")}
-    ${fill("Listing Consultant", "listing_consultant")}
-    ${fill("Property Reference No.", "property_reference_no")}
-    ${fill("Expiry Date", "expiry_date")}
+    ${fieldUnderline("Landlord's Name", get("landlord_name"))}
+    ${fieldUnderline("Passport Number", get("passport_number"))}
+    ${fieldUnderline("Emirates ID", get("emirates_id"))}
+    ${fieldUnderline("Mobile Number", get("mobile_number"))}
+    ${fieldUnderline("Email Address", get("email_address"))}
+    ${fieldUnderline("Listing Consultant", get("listing_consultant"))}
+    ${fieldUnderline("Property Reference No.", get("property_reference_no"))}
+    <div style="margin:6px 0 14px;">
+      <div>${dateBox(get("expiry_date"))}</div>
+      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.7;margin-top:5px;">Expiry Date</div>
+    </div>
   </div>
 
   ${sectionTitle(2, "Property Details")}
-  <div style="margin:6px 0 14px;font-size:12.5px;">
-    <span style="opacity:.7;text-transform:uppercase;letter-spacing:.08em;font-size:10px;">Property Type:</span>
-    <span style="margin-left:8px;">{{property_type}}</span>
-    &nbsp;·&nbsp;
-    <span style="opacity:.7;text-transform:uppercase;letter-spacing:.08em;font-size:10px;">Status:</span>
-    <span style="margin-left:8px;">{{status_vacant_tenanted}}</span>
-    &nbsp;·&nbsp;
-    <span style="opacity:.7;text-transform:uppercase;letter-spacing:.08em;font-size:10px;">Furnishing:</span>
-    <span style="margin-left:8px;">{{furnishing}}</span>
+  <div style="margin:4px 0 10px;display:flex;flex-wrap:wrap;align-items:center;">
+    ${propTypeChip("Villa")}${propTypeChip("Apartment")}${propTypeChip("Office")}${propTypeChip("Warehouse")}
+    <span style="opacity:.3;margin:0 8px;">|</span>
+    ${furnChip("Furnished")}${furnChip("Unfurnished")}
   </div>
+  <div style="margin:4px 0 14px;display:flex;flex-wrap:wrap;align-items:center;">
+    ${statusChip("Vacant")}${statusChip("Tenanted")}
+    ${showVacatingDate ? `
+      <span style="margin-left:18px;font-size:11px;color:${ink};opacity:.7;letter-spacing:.06em;text-transform:uppercase;margin-right:8px;">Vacating Date:</span>
+      ${dateBox(get("vacating_date"))}` : ""}
+  </div>
+
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 32px;">
-    ${fill("Vacating Date", "vacating_date")}
-    ${fill("Parking", "parking")}
-    ${fill("Building Name", "building_name")}
-    ${fill("Unit Number", "unit_number")}
-    ${fill("Street Name", "street_name")}
-    ${fill("Community", "community")}
-    ${fill("BUA (Sq.Ft)", "bua_sqft")}
-    ${fill("Plot (Sq.Ft)", "plot_sqft")}
-    ${fill("Bedrooms", "bedrooms")}
-    ${fill("Bathrooms", "bathrooms")}
-    ${fill("Rental Amount (AED)", "rental_amount")}
-    ${fill("Sales Amount (AED)", "sales_amount")}
+    ${fieldUnderline("Building Name", get("building_name"))}
+    ${fieldUnderline("Unit", get("unit_number"))}
+    ${fieldUnderline("Street Name", get("street_name"))}
+    ${fieldUnderline("Community", get("community"))}
+    ${fieldUnderline("BUA (SqFt)", get("bua_sqft"))}
+    ${showPlot ? fieldUnderline("Plot (Sq.Ft)", get("plot_sqft")) : `<div></div>`}
+    ${fieldUnderline("Bedrooms", get("bedrooms"))}
+    ${fieldUnderline("Bathrooms", get("bathrooms"))}
+    ${fieldUnderline("Rental Amount / Sales Amount", fmtMoney(get("rental_amount") || get("sales_amount")))}
+    ${fieldUnderline("Parking", get("parking"))}
   </div>
-  <div style="margin:6px 0 14px;">
-    <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:#1A1A1A;opacity:.7;">Additional Notes</div>
-    <div style="border:1px solid #B89555;border-radius:4px;min-height:54px;padding:8px 10px;font-size:12.5px;color:#1A1A1A;white-space:pre-wrap;">{{additional_notes}}</div>
+  ${get("additional_notes") ? `
+    <div style="margin:6px 0 14px;">
+      <div style="border:1px solid ${accent};border-radius:4px;min-height:54px;padding:8px 10px;font-size:12px;color:${ink};white-space:pre-wrap;">${esc(get("additional_notes"))}</div>
+      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.7;margin-top:3px;">Additional Notes</div>
+    </div>` : ""}
+
+  ${sectionTitle(3, "Terms and Conditions")}
+  <div style="font-size:12.5px;color:${ink};line-height:1.7;">
+    <div style="margin-bottom:8px;">
+      1. The landlord / legal representative has agreed to appoint
+      <span style="border-bottom:1px solid ${accent};padding:0 6px;font-weight:600;">${esc(get("broker_appointee_name") || "JBJ GLOBAL REAL ESTATE")}</span>
+      as its:
+    </div>
+    <div style="margin:6px 0 10px;display:flex;flex-wrap:wrap;align-items:center;">
+      ${exclusivityChip("EXCLUSIVE")}${exclusivityChip("NON EXCLUSIVE")}
+      <span style="font-size:12px;opacity:.85;margin-left:6px;">Broker to list and advertise the above property for a period of:</span>
+    </div>
+    <div style="margin:6px 0 14px;display:flex;flex-wrap:wrap;align-items:center;">
+      ${periodChip("1 Month", "1")}${periodChip("2 Months", "2")}
+      ${periodChip("3 Months", "3")}
+      <span style="margin:0 6px 0 -8px;font-size:11px;opacity:.7;">OR UNTIL:</span>
+      ${dateBox(get("listing_period_until_date"))}
+      <span style="display:block;width:100%;height:6px;"></span>
+      ${periodChip("6 Months  (Residential Sale or Commercial only)", "6")}
+    </div>
+    <ol style="padding-left:18px;margin:6px 0 0;">
+      <li style="margin-bottom:6px;">I, the undersigned, confirm that I am the owner of the above property and / or have the legal authority to sign on behalf of the named owner(s).</li>
+      <li style="margin-bottom:6px;">Should this property be subject to an offer I/we will notify the brokerage of this.</li>
+      <li style="margin-bottom:6px;">This Agreement may be terminated by either party at any time upon seven (7) days written notice to the other party.</li>
+    </ol>
   </div>
 
-  ${sectionTitle(3, "Terms & Conditions")}
-  <ol style="font-size:12.5px;color:#1A1A1A;padding-left:18px;margin:8px 0 14px;">
-    <li style="margin-bottom:6px;">
-      The landlord / legal representative hereby appoints <strong>JBJ Global Real Estate</strong> on an
-      <strong>{{exclusivity}}</strong> basis to list and advertise the above property for a period of
-      <strong>{{listing_period}}</strong>${get("listing_period_until_date") ? `, until <strong>{{listing_period_until_date}}</strong>` : ""}.
-    </li>
-    <li style="margin-bottom:6px;">
-      The undersigned confirms that they are the owner of the above property and / or have the legal authority to sign on behalf of the named owner(s).
-    </li>
-    <li style="margin-bottom:6px;">
-      The brokerage is authorised to advertise this property through portals, the JBJ website, social media,
-      CRM outreach, WhatsApp, email campaigns and partner brokerage channels.
-    </li>
-    <li style="margin-bottom:6px;">
-      The owner agrees that all information provided herein is accurate to the best of their knowledge,
-      and shall promptly notify JBJ of any change in availability, price or status.
-    </li>
-    <li style="margin-bottom:6px;">
-      Should the property be subject to an offer at any point, the owner shall notify the brokerage immediately.
-    </li>
-    <li style="margin-bottom:6px;">
-      This Agreement may be terminated by either party at any time upon seven (7) days' written notice to the other party.
-    </li>
-  </ol>
-
-  ${sectionTitle(4, "Signatures")}
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 40px;margin-top:6px;">
+  ${sectionTitle(4, "Landlord(s)")}
+  <div style="display:grid;grid-template-columns:1.2fr 1.2fr 1fr;gap:0 28px;margin-top:6px;">
     <div>
-      <div style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;opacity:.7;">Landlord / Owner</div>
-      <div style="height:64px;border-bottom:1px solid #B89555;margin:6px 0 4px;position:relative;">
-        <!-- {{client_signature_image}} -->
-      </div>
-      <div style="display:grid;grid-template-columns:2fr 1fr;gap:14px;">
-        ${fill("Name", "landlord_signature_name")}
-        ${fill("Date", "landlord_signature_date")}
-      </div>
+      <div style="border-bottom:1px solid ${accent};min-height:24px;padding:2px 0;font-size:13px;color:${ink};">${esc(get("landlord_signature_name") || get("landlord_name"))}</div>
+      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:3px;">Name</div>
     </div>
     <div>
-      <div style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;opacity:.7;">JBJ Global Real Estate — Authorised Representative</div>
-      <div style="height:64px;border-bottom:1px solid #B89555;margin:6px 0 4px;position:relative;">
-        <!-- {{owner_signature_image}} -->
-      </div>
-      <div style="display:grid;grid-template-columns:2fr 1fr;gap:14px;">
-        ${fill("Name", "jbj_signature_name")}
-        ${fill("Date", "jbj_signature_date")}
-      </div>
+      <div style="border-bottom:1px solid ${accent};min-height:54px;padding:4px 0;display:flex;align-items:flex-end;">${clientSigImg}</div>
+      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:3px;">Signature</div>
+    </div>
+    <div>
+      <div style="min-height:24px;padding:2px 0;">${dateBox(get("landlord_signature_date"))}</div>
+      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:3px;">Date</div>
     </div>
   </div>
 
-  <!-- Footer -->
-  <div style="margin-top:36px;padding-top:14px;border-top:1px solid #B89555;display:flex;justify-content:space-between;font-size:10.5px;color:#1A1A1A;opacity:.7;">
-    <div>JBJ GLOBAL REAL ESTATE · Private Office · Dubai, UAE</div>
-    <div>${JBJ_BRAND.phone} · ${JBJ_BRAND.email} · ${JBJ_BRAND.website}</div>
+  <!-- JBJ representative -->
+  <div style="margin-top:22px;display:grid;grid-template-columns:1.2fr 1.2fr 1fr;gap:0 28px;position:relative;">
+    <div>
+      <div style="border-bottom:1px solid ${accent};min-height:24px;padding:2px 0;font-size:13px;color:${ink};">${esc(get("jbj_signature_name") || "Authorised Representative")}</div>
+      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:3px;">JBJ Global Real Estate — Authorised Representative</div>
+    </div>
+    <div style="position:relative;">
+      <div style="border-bottom:1px solid ${accent};min-height:54px;padding:4px 0;display:flex;align-items:flex-end;">${ownerSigImg}</div>
+      ${ownerStampImg}
+      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:3px;">Signature & Stamp</div>
+    </div>
+    <div>
+      <div style="min-height:24px;padding:2px 0;">${dateBox(get("jbj_signature_date") || new Date().toISOString().slice(0,10))}</div>
+      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:3px;">Date</div>
+    </div>
   </div>
-</div>
-`.trim();
 
-  // simple {{key}} replace
-  return html.replace(/\{\{(\w+)\}\}/g, (_m, k: string) => {
-    const val = (v as any)[k];
-    return val ? String(val).replace(/[<>&]/g, c => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;" }[c]!)) : "";
-  });
+  ${footerHtml(chrome)}
+</div>`.trim();
+
+  return html;
 }
 
-export const PAA_FIELD_GROUPS: { title: string; fields: { key: PAAFieldKey; label: string; type?: "text" | "date" | "textarea" | "select" | "number"; options?: string[] }[] }[] = [
+/* ----------------------------- form schema -------------------------------- */
+
+export const PAA_FIELD_GROUPS: { title: string; fields: { key: PAAFieldKey; label: string; type?: "text" | "date" | "textarea" | "select" | "number" | "money"; options?: string[]; conditional?: (vals: Record<string, string>) => boolean }[] }[] = [
   {
     title: "Landlord / Owner Details",
     fields: [
@@ -217,20 +417,20 @@ export const PAA_FIELD_GROUPS: { title: string; fields: { key: PAAFieldKey; labe
   {
     title: "Property Details",
     fields: [
-      { key: "property_type", label: "Property Type", type: "select", options: ["Villa", "Apartment", "Office", "Warehouse", "Other"] },
+      { key: "property_type", label: "Property Type", type: "select", options: ["Villa", "Apartment", "Office", "Warehouse"] },
       { key: "status_vacant_tenanted", label: "Status", type: "select", options: ["Vacant", "Tenanted"] },
-      { key: "furnishing", label: "Furnishing", type: "select", options: ["Furnished", "Unfurnished", "Semi-furnished"] },
-      { key: "vacating_date", label: "Vacating Date", type: "date" },
+      { key: "furnishing", label: "Furnishing", type: "select", options: ["Furnished", "Unfurnished"] },
+      { key: "vacating_date", label: "Vacating Date", type: "date", conditional: (v) => !/vacant/i.test(v.status_vacant_tenanted || "") },
       { key: "building_name", label: "Building Name" },
-      { key: "unit_number", label: "Unit Number" },
+      { key: "unit_number", label: "Unit" },
       { key: "street_name", label: "Street Name" },
       { key: "community", label: "Community" },
-      { key: "bua_sqft", label: "BUA (Sq.Ft)", type: "number" },
-      { key: "plot_sqft", label: "Plot (Sq.Ft)", type: "number" },
+      { key: "bua_sqft", label: "BUA (SqFt)", type: "number" },
+      { key: "plot_sqft", label: "Plot (Sq.Ft)", type: "number", conditional: (v) => /villa/i.test(v.property_type || "") },
       { key: "bedrooms", label: "Bedrooms", type: "number" },
       { key: "bathrooms", label: "Bathrooms", type: "number" },
-      { key: "rental_amount", label: "Rental Amount (AED)", type: "number" },
-      { key: "sales_amount", label: "Sales Amount (AED)", type: "number" },
+      { key: "rental_amount", label: "Rental Amount", type: "money" },
+      { key: "sales_amount", label: "Sales Amount", type: "money" },
       { key: "parking", label: "Parking" },
       { key: "additional_notes", label: "Additional Notes", type: "textarea" },
     ],
@@ -238,9 +438,10 @@ export const PAA_FIELD_GROUPS: { title: string; fields: { key: PAAFieldKey; labe
   {
     title: "Terms & Conditions",
     fields: [
-      { key: "exclusivity", label: "Exclusivity", type: "select", options: ["Exclusive", "Non-Exclusive"] },
+      { key: "broker_appointee_name", label: "Broker Appointee" },
+      { key: "exclusivity", label: "Exclusivity", type: "select", options: ["EXCLUSIVE", "NON EXCLUSIVE"] },
       { key: "listing_period", label: "Listing Period", type: "select", options: ["1 Month", "2 Months", "3 Months", "6 Months", "Until Date"] },
-      { key: "listing_period_until_date", label: "Until Date (if applicable)", type: "date" },
+      { key: "listing_period_until_date", label: "Until Date (if applicable)", type: "date", conditional: (v) => /until/i.test(v.listing_period || "") },
     ],
   },
   {

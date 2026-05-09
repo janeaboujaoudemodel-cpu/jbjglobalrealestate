@@ -15,6 +15,18 @@ const FALLBACK_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kYWZyZXd5cGtrcmlsZGpndGV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc0NTA1NzgsImV4cCI6MjA4MzAyNjU3OH0.-9fLSEsMVLS38f9ca197UVYgXQGxb8g-BPrJv4ZvTp0";
 const FALLBACK_PROJECT_ID = "mdafrewypkkrildjgtey";
 
+/**
+ * Public-facing domain used when building shareable links (signing URLs,
+ * email CTAs, WhatsApp share text). Always prefer this over
+ * `window.location.origin` which leaks `*.lovable.app` from preview/sandbox.
+ */
+export const PUBLIC_DOMAIN: string = "https://jbj.ae";
+
+export function buildPublicUrl(path: string): string {
+  const p = path.startsWith("/") ? path : `/${path}`;
+  return `${PUBLIC_DOMAIN}${p}`;
+}
+
 export const SUPABASE_URL: string =
   (typeof import.meta !== "undefined" && import.meta.env?.VITE_SUPABASE_URL) || FALLBACK_URL;
 

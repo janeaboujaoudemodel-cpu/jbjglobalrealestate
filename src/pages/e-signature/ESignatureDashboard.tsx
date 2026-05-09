@@ -46,6 +46,9 @@ interface Envelope {
   completed_at: string | null;
   sender_email: string;
   sender_name: string | null;
+  template_key: string | null;
+  template_field_values: Record<string, string> | null;
+  metadata: Record<string, any> | null;
   esign_recipients: {
     id: string;
     name: string;
