@@ -421,9 +421,9 @@ export default function UAERegistryDetailPage({ type }: { type: RegistryRecordTy
                 sourceHistory={(log.data ?? []).map((row: any) => ({
                   id: row.id,
                   when: row.occurred_at ?? row.created_at,
-                  who: row.actor_email ?? row.actor ?? null,
-                  what: row.action ?? row.event_type ?? "log entry",
-                  detail: row.details ?? row.note ?? row.summary ?? null,
+                  who: row.added_by ?? null,
+                  what: row.summary || `${row.channel ?? "log"} ${row.direction ?? ""}`.trim(),
+                  detail: row.full_message ?? null,
                 }))}
               />
             </Card>
