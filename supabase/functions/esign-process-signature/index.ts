@@ -87,6 +87,18 @@ Deno.serve(async (req) => {
       })
       .eq("recipient_id", recipient.id);
 
+    // Auto-fill date fields with the signing date
+    const dateValue = signed_date || new Date().toLocaleDateString("en-GB");
+    await supabase
+      .from("esign_fields")
+      .update({
+        field_value: dateValue,
+        is_completed: true,
+        completed_at: new Date().toISOString(),
+      })
+      .eq("recipient_id", recipient.id)
+      .eq("field_type", "date");
+
     // Create audit log
     await supabase.from("esign_audit_log").insert({
       envelope_id: envelope.id,
