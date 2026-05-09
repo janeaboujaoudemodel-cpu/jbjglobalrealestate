@@ -98,18 +98,21 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [envelope?.id, open]);
 
+  const senderName = envelope?.sender_name || "Jane Bou Jaoude";
+  const senderTitle = envelope?.sender_title || "Founder & Chief Executive";
+
   const tokens = useMemo(() => ({
     // Recipient (client) merge tags — both names are accepted for back-compat.
     client_name: primaryRecipient?.name || (envelope?.template_field_values as any)?.landlord_name || "Client",
     landlord_name: primaryRecipient?.name || (envelope?.template_field_values as any)?.landlord_name || "Client",
     doc_number: docNumber,
     doc_title: docTitle,
-    // Sender block — never the client. Always JBJ + Jane (or whoever is signed in).
-    sender_signature: `— ${envelope?.sender_name || "Jane Bou Jaoude"}\nJBJ GLOBAL REAL ESTATE`,
-    // Legacy alias kept so older drafts still interpolate cleanly.
-    owner_name: envelope?.sender_name || "Jane Bou Jaoude",
+    // Plain-text preview of the premium signature (delivered email renders this as styled HTML)
+    sender_signature: `— ${senderName}\n${senderTitle}\nJBJ GLOBAL REAL ESTATE`,
+    sender_title: senderTitle,
+    owner_name: senderName,
     signing_link: primaryRecipient?.signing_token ? `${PUBLIC_DOMAIN}/sign/${primaryRecipient.signing_token}` : `${PUBLIC_DOMAIN}/sign/...`,
-  }), [primaryRecipient, envelope, docNumber, docTitle]);
+  }), [primaryRecipient, envelope, docNumber, docTitle, senderName, senderTitle]);
 
   const interpolate = (s: string) =>
     s.replace(/\{\{(\w+)\}\}/g, (_, k) => (tokens as any)[k] ?? `{{${k}}}`);
