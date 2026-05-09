@@ -17,7 +17,7 @@ export const JBJ_BRAND = {
   monogram: monogramUrl,
 } as const;
 
-export const PAA_LAYOUT_VERSION = 5;
+export const PAA_LAYOUT_VERSION = 6;
 
 export type PAAFieldKey =
   // Owner
