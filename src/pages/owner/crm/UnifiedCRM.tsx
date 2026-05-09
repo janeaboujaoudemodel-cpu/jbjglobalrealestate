@@ -54,21 +54,23 @@ const ENTITIES: { id: Entity; label: string; icon: React.ComponentType<{ classNa
   { id: "employees",   label: "Employees",          icon: Briefcase },
 ];
 
-const VIEWS: Record<Entity, { id: string; label: string }[]> = {
+type ViewItem = { id: string; label: string; group?: string };
+
+const VIEWS: Record<Entity, ViewItem[]> = {
   leads: [
-    { id: "all",           label: "All Leads" },
-    { id: "overview",      label: "Overview" },
-    { id: "flagged",       label: "Flagged" },
-    { id: "vip",           label: "VIP" },
-    { id: "management",    label: "Lead Mgmt" },
-    { id: "tasks",         label: "Tasks" },
-    { id: "calendar",      label: "Calendar" },
-    { id: "notes",         label: "Notes" },
-    { id: "inbox",         label: "Inbox" },
-    { id: "notifications", label: "Notifications" },
-    { id: "contracts",     label: "Contracts" },
-    { id: "campaigns",     label: "Campaigns" },
-    { id: "automation",    label: "Automation" },
+    { id: "all",           label: "All Leads",     group: "People" },
+    { id: "overview",      label: "Overview",      group: "People" },
+    { id: "flagged",       label: "Flagged",       group: "People" },
+    { id: "vip",           label: "VIP",           group: "People" },
+    { id: "management",    label: "Lead Mgmt",     group: "People" },
+    { id: "tasks",         label: "Tasks",         group: "Workspace" },
+    { id: "calendar",      label: "Calendar",      group: "Workspace" },
+    { id: "notes",         label: "Notes",         group: "Workspace" },
+    { id: "inbox",         label: "Inbox",         group: "Workspace" },
+    { id: "notifications", label: "Notifications", group: "Workspace" },
+    { id: "contracts",     label: "Contracts",     group: "Pipeline" },
+    { id: "campaigns",     label: "Campaigns",     group: "Pipeline" },
+    { id: "automation",    label: "Automation",    group: "Pipeline" },
   ],
   investors:  [{ id: "directory", label: "Directory" }, { id: "vip", label: "VIP" }],
   developers: [{ id: "registry",  label: "Registry"  }],
@@ -315,41 +317,86 @@ export default function UnifiedCRM() {
           })}
         </nav>
 
-        {/* Context bar (secondary) */}
-        {currentViews.length > 1 && (
-          <nav
-            role="tablist"
-            aria-label="CRM views"
-            className="px-4 py-2 flex flex-wrap gap-2 border-t border-[#B89555]/15 bg-[#F7F2EA]"
-          >
-            {currentViews.map((t) => {
-              const active = t.id === view;
-              return (
-                <button
-                  key={t.id}
-                  role="tab"
-                  aria-selected={active}
-                  onClick={() => setView(t.id)}
-                  className={[
-                    "px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors",
-                    active
-                      ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
-                      : "bg-transparent text-[#1A1A1A]/70 border-[#B89555]/30 hover:bg-[#EFE6D6]/60 hover:text-[#1A1A1A]",
-                  ].join(" ")}
-                >
-                  {t.label}
-                </button>
-              );
-            })}
-          </nav>
-        )}
       </div>
 
-      {/* Body — boxed champagne panel */}
+      {/* Body — left rail (sub-sections) + champagne content panel */}
       <div className="px-3 md:px-6 py-5">
-        <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] shadow-sm overflow-hidden">
-          <div className="p-3 md:p-5 overflow-x-auto">
-            <Suspense fallback={<Fallback />}>{Body}</Suspense>
+        <div className="flex flex-col lg:flex-row gap-4">
+          {currentViews.length > 1 && (
+            <>
+              {/* Mobile / narrow: dropdown */}
+              <div className="lg:hidden">
+                <label className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/70 block mb-1">
+                  {ENTITIES.find(e => e.id === entity)?.label} · Sub-section
+                </label>
+                <select
+                  value={view}
+                  onChange={(e) => setView(e.target.value)}
+                  className="w-full h-10 px-3 rounded-lg border border-[#B89555]/40 bg-[#FDFBF7] text-sm text-[#1A1A1A]"
+                >
+                  {currentViews.map(v => (
+                    <option key={v.id} value={v.id}>{v.label}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Desktop: left rail */}
+              <aside
+                aria-label="CRM sub-sections"
+                className="hidden lg:block shrink-0 w-[212px] self-start sticky top-[96px] rounded-xl border border-[#B89555]/30 bg-[#F7F2EA] p-3"
+              >
+                <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/70 px-2 pt-1 pb-2 border-b border-[#B89555]/20">
+                  {ENTITIES.find(e => e.id === entity)?.label} · Sub-sections
+                </div>
+                {(() => {
+                  const groups = new Map<string, ViewItem[]>();
+                  currentViews.forEach((v) => {
+                    const g = v.group || "";
+                    if (!groups.has(g)) groups.set(g, []);
+                    groups.get(g)!.push(v);
+                  });
+                  return Array.from(groups.entries()).map(([groupName, items]) => (
+                    <div key={groupName || "_"} className="mt-3 first:mt-2">
+                      {groupName && (
+                        <div className="text-[9px] uppercase tracking-[0.20em] text-[#1A1A1A]/55 px-2 mb-1.5">
+                          {groupName}
+                        </div>
+                      )}
+                      <ul className="space-y-0.5">
+                        {items.map((t) => {
+                          const active = t.id === view;
+                          return (
+                            <li key={t.id}>
+                              <button
+                                role="tab"
+                                aria-selected={active}
+                                onClick={() => setView(t.id)}
+                                className={[
+                                  "w-full text-left px-3 py-1.5 rounded-md text-[13px] font-medium transition-colors flex items-center gap-2",
+                                  active
+                                    ? "bg-[#EFE6D6] text-[#1A1A1A] border-l-2 border-[#B89555] -ml-[2px] pl-[14px]"
+                                    : "text-[#1A1A1A]/75 hover:bg-[#EFE6D6]/70 hover:text-[#1A1A1A]",
+                                ].join(" ")}
+                              >
+                                {t.label}
+                              </button>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  ));
+                })()}
+              </aside>
+            </>
+          )}
+
+          <div className="flex-1 min-w-0">
+            <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] shadow-sm overflow-hidden">
+              <div className="p-3 md:p-5 overflow-x-auto">
+                <Suspense fallback={<Fallback />}>{Body}</Suspense>
+              </div>
+            </div>
           </div>
         </div>
       </div>
