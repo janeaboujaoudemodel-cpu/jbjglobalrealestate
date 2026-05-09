@@ -291,9 +291,12 @@ export function buildPAAHtml(
 
   ${headerHtml(chrome, get("doc_number"))}
 
-  <h1 style="font-size:22px;font-weight:800;letter-spacing:.02em;margin:0 0 4px;color:${ink};">
-    PROPERTY ADVERTISING AGREEMENT<br/><span style="font-weight:700;">FOR REAL ESTATE OWNERS</span>
-  </h1>
+  <div style="text-align:center;margin:8px 0 18px;">
+    <h1 style="font-size:22px;font-weight:800;letter-spacing:.22em;margin:0;color:${ink};text-transform:uppercase;">
+      Property Advertising Agreement
+    </h1>
+    <div style="width:64px;height:1px;background:#B89555;margin:10px auto 0;"></div>
+  </div>
   <p style="font-size:12px;color:${ink};opacity:.78;margin:8px 0 4px;">
     As a property owner or landlord, you are partnering with <strong>JBJ Global Real Estate</strong> — a private office offering
     maximum exposure and trusted representation to sell or lease your property at the best terms in the shortest time.
