@@ -17,7 +17,7 @@ export const JBJ_BRAND = {
   monogram: monogramUrl,
 } as const;
 
-export const PAA_LAYOUT_VERSION = 6;
+export const PAA_LAYOUT_VERSION = 7;
 
 export type PAAFieldKey =
   // Owner
@@ -397,7 +397,7 @@ export function buildPAAHtml(
       <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:3px;">Signature</div>
     </div>
     <div>
-      <div style="border-bottom:1px solid ${accent};height:44px;display:flex;align-items:flex-end;padding:0 0 4px;">${dateBox(get("landlord_signature_date"))}</div>
+      <div style="border-bottom:1px solid ${accent};height:44px;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 4px;font-size:13px;color:${ink};">${esc(get("landlord_signature_date") || "")}</div>
       <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:3px;">Date</div>
     </div>
   </div>
