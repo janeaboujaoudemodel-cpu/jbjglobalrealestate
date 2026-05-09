@@ -1,96 +1,124 @@
-## Honest audit of what's broken right now
+## Goal
 
-I checked the database, the dashboard, the envelope page and the PAA template. You're right — several pieces never worked. Here's exactly what's wrong and what I'll fix.
+Make the JBJ Property Advertising Agreement match the Property Finder PDF **field-for-field, section-for-section, signature-for-signature** — but wrapped in a JBJ-branded premium header/footer (champagne + gold + black, JBJ monogram), with AI smart-fill, and a built-in send flow (email + WhatsApp + copy link) that uses an editable branded message template.
 
-### 1. Dashboard only shows "draft three" — Omar is missing visually
+No fields are added or removed from the body of the agreement. The body is locked to the Property Finder layout. Only the header, footer, signature styling, and surrounding actions are JBJ-premium.
 
-DB has 4 envelopes, including Omar's `JBJ-PAA-LEASING-0001` (draft). They all load, but `ESignatureDashboard.tsx` shows them as a flat list using only `envelope.name`. There is **no doc number badge, no client name, no template type, no thumbnail**. Two `JBJ-LA-SELLING-0001/0002` drafts have no field values, so they look identical and Omar's row blends in. Fix:
+---
 
-- Replace the flat list with a card grid: each card shows
-  - **Doc number badge** (`JBJ-PAA-LEASING-0001`) — pulled from `metadata.doc_number`.
-  - **Client name** (`Omar Allam Niazi Shadid`) — from `template_field_values.landlord_name` or first recipient.
-  - **Template label** (Property Advertising Agreement — Leasing).
-  - Status pill, last-updated, recipients chips.
-  - A small **mini-preview thumbnail** rendered from the same HTML used inside (scaled-down iframe) so you instantly recognise the doc.
-- Add filters: by template, by client name, by doc-number search.
-- Remove the dark hero band so the page matches the rest of the suite (you said the homepage logo flashes — see #2).
+## 1. Lock the body to the Property Finder layout (exact)
 
-### 2. Click on envelope flashes the homepage / logo, then opens
+Rewrite `src/templates/jbjPropertyAdvertisingAgreement.ts` so the rendered document mirrors the PDF you uploaded, in this exact order:
 
-The `/e-signature/:id` route is wrapped behind a guard that briefly mounts the public landing while auth resolves, so you see the JBJ home logo for ~400 ms. Fix:
+**Intro paragraph** (verbatim wording from the PDF, just with `propertyfinder.ae` replaced by JBJ language about "the UAE's leading property network").
 
-- Replace the loading state with the `EnvelopeDetail` skeleton directly (same layout, no re-mount of `App` shell).
-- Use `<Suspense>` boundary around the page, not the layout.
-- Pre-warm the envelope query on hover from the dashboard card so the click is instant.
+**1. LANDLORD / OWNER DETAILS** — two columns, exactly:
+- Landlord's Name · Passport Number
+- Listing Consultant · Property Reference No
+- Expiry date (DD / MM / YYYY split boxes)
 
-### 3. "Copy signing link" still contains `*.lovable.app`
+**2. PROPERTY DETAILS** — one row of inline radio chips:
+`☐ Villa  ☐ Apartment  ☐ Office  ☐ Warehouse   ☐ Furnished  ☐ Unfurnished`
+then `☐ Vacant  ☐ Tenanted   Vacating Date: DD / MM / YYYY`
+then 2-col fields: Building Name · Unit · Street Name · Community · BUA (SqFt) · Plot (SqFt) · Bedrooms · Bathrooms · Rental / Sales Amount · Parking.
 
-`buildSigningUrl()` in `EnvelopeDetail.tsx` uses `window.location.origin`. On the preview that's the `lovable.app` URL. Fix:
+**3. TERMS AND CONDITIONS** — clauses 1-4 verbatim:
+- Clause 1 with broker-name underline + `☐ EXCLUSIVE  ☐ NON EXCLUSIVE` + `☐ 1 MONTH  ☐ 2 MONTHS  ☐ 3 MONTHS OR UNTIL: __/__/__  ☐ 6 MONTHS (RESIDENTIAL SALE OR COMMERCIAL ONLY)`
+- Clauses 2, 3, 4 verbatim from the PDF.
 
-- Hard-route signing URLs to `https://jbj.ae/sign/<token>` using `PUBLIC_DOMAIN` from `src/config/backend.ts`.
-- Apply the same to the WhatsApp share text and the email composer prefill.
-- Add a copy button next to the doc number badge that copies `https://jbj.ae/sign/<token>` directly.
+**LANDLORD(S)** — single row: Name · Signature · Date (DD / MM / YYYY), styled the same as the PDF.
 
-### 4. PAA fields don't match the Property Finder layout
+Existing `template_field_values` keys are preserved so Omar's draft re-hydrates cleanly. `PAA_LAYOUT_VERSION` bumps to `4`; older drafts auto re-render on open.
 
-Your reference uses **radio chips** (Villa / Apartment / Office / Warehouse, Furnished / Unfurnished, Vacant / Tenanted) **inline on one row**, then property fields in two columns, then T&Cs with **EXCLUSIVE / NON-EXCLUSIVE chips** and a row of **1 / 2 / 3 / 6 month** chips. My current template uses generic underlined fields. Fix without removing Omar's data:
+## 2. JBJ premium chrome (header + footer)
 
-- Rewrite `buildPAAHtml()` to mirror the Property Finder structure exactly:
-  - **Section 1** Landlord / Owner Details (left col: Landlord's Name, Listing Consultant, Expiry date with DD/MM/YYYY split; right col: Passport Number, Property Reference No.).
-  - **Section 2** Property Details — first row of **radio chips** for type (Villa/Apartment/Office/Warehouse) + **Furnished/Unfurnished** + **Vacant/Tenanted** + Vacating Date (DD/MM/YYYY), then 2-col fields exactly as in the PDF.
-  - **Section 3** Terms & Conditions — sentence with the broker name underlined, then EXCLUSIVE/NON-EXCLUSIVE chips, then 1/2/3 Months chips with date slot, then **6 MONTHS (Residential Sale or Commercial only)** as its own chip; numbered clauses 2-4 verbatim.
-  - **Landlord(s)** signature row with Name / Signature / Date columns plus DD/MM/YYYY.
-- Keep all existing `template_field_values` keys so Omar's draft re-hydrates with no data loss.
+This is the only place the design diverges from Property Finder.
 
-### 5. Smart conditional fields & number formatting
+**Header** (every page):
+- Champagne band `#F7F2EA`, 1px gold hairline `#B89555` bottom border (no gold fills).
+- Left: JBJ monogram (existing transparent PNG from brand assets) + wordmark "JBJ GLOBAL REAL ESTATE" in black `#1A1A1A`, Inter.
+- Right: doc number badge (e.g., `JBJ-PAA-LEASING-0001`) + ISO date, small caps gold tracking.
+- Title row: `PROPERTY ADVERTISING AGREEMENT — REAL ESTATE OWNERS`, black, with a thin gold underline.
 
-In the **Edit fields** panel and the rendered HTML:
+**Footer** (every page):
+- Champagne band, 1px gold hairline top.
+- Three columns: address block · `CONTACT@JBJ.AE · WWW.JBJ.AE · +971 54 716 7107` · TRN / RERA / ORN compliance line.
+- Page `n / N`, gold hairline divider.
+- Replaces the Property Finder footer entirely.
 
-- If `status_vacant_tenanted === "Vacant"` → hide `vacating_date` from both form and PDF, and clear it on save.
-- If `property_type !== "Villa"` and not "Other" → hide `plot_sqft`.
-- If `listing_period !== "Until Date"` → hide `listing_period_until_date`.
-- **Rental Amount / Sales Amount** inputs:
-  - Format with thousand separators on blur ( `195000` → `195,000` ) using `Intl.NumberFormat('en-AE')`.
-  - Show currency suffix as a non-editable trailing chip (`AED`) so "AED" never gets typed into the value.
-  - In the PDF render: `AED 195,000` right-aligned.
-- Phone formatted as `+971 50 363 4224`, Emirates ID as `784-1996-9538594-0` (display only — raw value preserved).
+Header/footer are reused by the Listing Authorisation template later (same chrome engine, different body).
 
-### 6. Premium customizable header / footer
+## 3. Premium signature block (same shape as PDF, upgraded styling)
 
-- Build a **`<TemplateChromeStudio />`** panel inside the envelope page (collapsible, gold pill button "Customize header & footer"). It stores chrome settings in `esign_envelopes.metadata.chrome`.
-- Settings:
-  - Header style: **Monogram + Wordmark · Wordmark only · Crest + Address block · Minimal hairline** (4 presets, all champagne/gold compliant).
-  - Footer style: **Three-column contact · Centered tagline · Compliance bar with TRN/license**.
-  - Color overrides limited to 3 tokens: `accent` (defaults to `#B89555`), `ink` (`#1A1A1A`), `surface` (`#FFFFFF`). Other JBJ brand rules stay locked (no faded gold, no gold fills — per memory).
-  - "Generate variations with AI" button → calls Lovable AI Gateway (`google/gemini-2.5-flash`) with the chrome JSON + brand guidelines and returns 4 alternative chrome configs you can preview live in the iframe and one-click apply.
-- Footer copy is enforced uppercase per your rule:  
-  `CONTACT@JBJ.AE  ·  WWW.JBJ.AE  ·  +971 54 716 7107`  
-  Body text on the document stays sentence-case.
+Same row layout as the PDF (Name · Signature · Date) but:
+- **JBJ side** (auto-applied): pre-loads `owner_signature_assets` → renders the saved owner signature image + company stamp, with a faint "JBJ • Authorised Representative" caption in gold.
+- **Landlord side**: dotted gold underline on the signature line. Before signing it shows italic "Awaiting signature — {{landlord_name}}". After signing it shows the captured signature image + printed name + ISO date + `Signed on … · IP …` caption.
+- Identical in iframe preview, exported PDF, and emailed PDF.
 
-### 7. Auto signature + company stamp + elegant client signature block
+## 4. AI Smart-Fill (Dubai-aware)
 
-- New table `owner_signature_assets` already exists (`useOwnerSignatureAssets` hook). Pre-load the **owner's signature image** and **company stamp PNG** on every PAA render and inject them into the JBJ side of the signature block with a faint "JBJ • Authorised" caption.
-- Client side renders an **elegant placeholder**: dotted gold underline, italic "Awaiting signature — {{landlord_name}}" until signed; once signed, shows the captured signature image + printed name + ISO date in a small caption (`Signed on 9 May 2026 · IP: ###`).
-- Both blocks render identically in the iframe preview, the printed PDF, and the email PDF — no more cropped name.
+The existing `SmartFillDropzone` + `document-extractor` edge function are upgraded so the user can drop **any** Dubai document and it pre-fills the right fields:
 
-### 8. Cleanup — no removal
+- Passport / Emirates ID → `landlord_name`, `passport_number`, formatted as `784-XXXX-XXXXXXX-X`.
+- Title Deed (DLD) → `building_name`, `unit`, `community`, `bua_sqft`, `plot_sqft`, `property_reference_no`, infers Villa/Apartment from "Property Type".
+- Ejari → `tenanted` status + `vacating_date` from contract end, `rental_amount`.
+- Floor plan / brochure → `bedrooms`, `bathrooms`, `bua_sqft`.
+- MOU / Form A / Form F → `sales_amount`, exclusivity flag.
 
-- Existing `voiceover`, `Smart-Fill`, `Adopt & Sign`, `audit log`, `realtime sync` features stay untouched.
-- Omar's envelope (`810df24a…`) is migrated in-place: doc number stays `JBJ-PAA-LEASING-0001`, all field values preserved, just re-rendered with the new layout/header/footer when you next open it (auto-runs on first load if the layout version differs from `metadata.layout_version`).
+The extractor prompt is rewritten with Dubai-specific schema hints (RERA, DLD, Ejari, Form A/F/I, Trakheesi). Confidence scores stay; low-confidence values are highlighted gold for review.
+
+## 5. Send flow: email + WhatsApp + copy link, with editable branded template
+
+A new **"Send for signature"** dialog replaces the current single button. Inside:
+
+**Recipients**
+- To · CC · BCC fields with chips, add/delete/bulk-paste, primary recipient toggle.
+- WhatsApp number (auto-formatted `+971 50 363 4224`).
+
+**Message template (fully editable per envelope, persisted to `esign_envelopes.metadata.send_template`)**
+- Editable **Subject** (default: `Please sign — Property Advertising Agreement · {{doc_number}}`).
+- Editable **Body** (rich text, brand-styled), with merge tags: `{{landlord_name}}`, `{{property_address}}`, `{{doc_number}}`, `{{signing_link}}`, `{{owner_name}}`.
+- Default body is a JBJ-branded paragraph asking the client to review and sign; user can save edits and they stick for that envelope.
+- "Reset to JBJ default" button.
+
+**Channels** (multi-select)
+- ✉️ **Email** — sent through the existing locked-send pipeline, branded JBJ HTML wrapper, signing link → `https://jbj.ae/sign/<token>`, PDF attached.
+- 💬 **WhatsApp** — opens `wa.me` with the same message body + signing link, or copies it.
+- 🔗 **Copy link** — `https://jbj.ae/sign/<token>` (no `*.lovable.app` ever).
+- 📱 **SMS** (optional, behind an "Other channels" disclosure).
+
+All sends are logged on the envelope timeline.
+
+## 6. Status tracking & follow-up
+
+The dashboard card and envelope detail page show a clear status pill per envelope:
+`Draft → Sent → Viewed → Signed → Completed` (plus `Declined`, `Expired`).
+
+- Auto-sync from existing webhook events (`viewed`, `signed`) — no polling needed.
+- Per-envelope timeline: who, when, channel, IP.
+- "Needs follow-up" badge appears if `Sent` > 48h with no view, or `Viewed` > 24h with no signature.
+- One-click "Resend" reuses the same editable template.
+
+## 7. Always editable
+
+Every field on the agreement remains editable at any stage before signing — the form on the right of the envelope page already drives this; the new layout keeps every existing input wired to the same `template_field_values` keys. Post-signature, fields lock but the user can clone the envelope into a new draft with one click ("Duplicate as new draft").
+
+---
 
 ## Files to change
 
-- **edit** `src/pages/e-signature/ESignatureDashboard.tsx` — card grid, doc-number badge, client name, mini-preview, search/filters, remove dark hero band.
-- **edit** `src/pages/e-signature/EnvelopeDetail.tsx` — `jbj.ae` signing URLs, smart conditionals on form, number formatters, mount `TemplateChromeStudio`, attach signature+stamp, fix loading skeleton (no homepage flash).
-- **edit** `src/templates/jbjPropertyAdvertisingAgreement.ts` — restructure to Property Finder layout, radio chips, conditional rendering, AED suffix, signature/stamp slots, chrome injection.
-- **new** `src/components/e-signature/TemplateChromeStudio.tsx` — header/footer presets + AI variations + color tokens.
-- **new** `supabase/functions/template-chrome-ai/index.ts` — Lovable AI Gateway call returning 4 chrome variants (no API key needed).
-- **edit** `src/hooks/useEsignTemplates.ts` — pass chrome + signature/stamp URLs into render, bump `layout_version`, re-render on open if stale.
-- **edit** `src/components/e-signature/SmartFillDropzone.tsx` — only behaviour change: smart-cleared fields when conditional rules apply.
-- **migration** — add `chrome jsonb` and `layout_version int` defaults to `esign_envelopes.metadata`; backfill nothing (read with fallbacks).
+- **edit** `src/templates/jbjPropertyAdvertisingAgreement.ts` — lock body to Property Finder layout, bump `PAA_LAYOUT_VERSION` to 4, premium signature block, chrome injection.
+- **new** `src/components/e-signature/JBJDocumentChrome.tsx` — header/footer renderer, JBJ monogram + wordmark, gold hairline, page numbering.
+- **edit** `src/pages/e-signature/EnvelopeDetail.tsx` — mount new SendForSignatureDialog, status pill, timeline, follow-up badge, auto re-render on stale layout version.
+- **new** `src/components/e-signature/SendForSignatureDialog.tsx` — recipients (To/CC/BCC/WhatsApp), editable Subject + Body with merge tags, channel multi-select, preview pane.
+- **edit** `src/pages/e-signature/ESignatureDashboard.tsx` — status pill, follow-up badge, last-activity timestamp.
+- **edit** `supabase/functions/document-extractor/index.ts` — Dubai-aware schema (Passport/EID/Title Deed/Ejari/Form A-F-I/MOU/Trakheesi), confidence per field.
+- **edit** `supabase/functions/esign-send-for-signature/index.ts` — accept editable subject + body + channels array, branded HTML wrapper, jbj.ae links, PDF attach.
+- **edit** `src/hooks/useEsignTemplates.ts` — pass chrome + signature/stamp + send_template into render, re-render on stale version.
+- **migration** — add `send_template jsonb` (subject/body/last_edited) to `esign_envelopes.metadata`; no destructive changes.
 
-## Out of scope
+## Out of scope (next pass)
 
-- Listing Authorisation template restyle (next pass — same engine will apply once chrome is shared).
-- Signing-page UX (`/sign/<token>`) — only the URL host changes.
+- Listing Authorisation template restyle (will reuse the same `JBJDocumentChrome` once approved).
 - New auth/role logic.
+- Public signing page UX redesign — only the URL host changes to `jbj.ae`.
