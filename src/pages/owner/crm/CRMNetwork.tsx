@@ -31,7 +31,8 @@ import {
   useSourceFilterContext,
   type SourceFilterValue,
 } from "@/components/crm/SourceFilterChips";
-import { Loader2, Search, Link2, X } from "lucide-react";
+import { Loader2, Search, Link2, X, Building2 } from "lucide-react";
+import { CompanyHubDrawer } from "@/components/crm/CompanyHubDrawer";
 
 /* -------------------- Role definitions -------------------- */
 
