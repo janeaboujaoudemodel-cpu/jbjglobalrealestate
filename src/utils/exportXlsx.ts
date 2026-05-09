@@ -97,7 +97,7 @@ export function exportPremiumXlsx(
   const ws = XLSX.utils.aoa_to_sheet(aoa);
 
   // Column widths — generous defaults so titles/values are readable without resizing.
-  ws["!cols"] = cols.map((c) => ({ wch: Math.max(18, c.width ?? 22) }));
+  ws["!cols"] = cols.map((c) => ({ wch: Math.max(18, (c as any).width ?? 22) }));
 
   // Merge brand/title rows across all columns.
   const lastCol = Math.max(0, cols.length - 1);
