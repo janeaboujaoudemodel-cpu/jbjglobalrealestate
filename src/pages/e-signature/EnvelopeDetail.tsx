@@ -261,10 +261,19 @@ export default function EnvelopeDetail() {
           .update({ status: "draft" })
           .eq("id", envelope.id);
       }
+      // Smart-clear conditional fields before persisting
+      const cleaned = { ...editValues };
+      if (/vacant/i.test(cleaned.status_vacant_tenanted || "")) cleaned.vacating_date = "";
+      if (!/villa/i.test(cleaned.property_type || "")) cleaned.plot_sqft = "";
+      if (!/until/i.test(cleaned.listing_period || "")) cleaned.listing_period_until_date = "";
+
       await regenerate.mutateAsync({
         envelopeId: envelope.id,
         templateKey: envelope.template_key,
-        values: { ...editValues, doc_number: editValues.doc_number || docNumber },
+        values: { ...cleaned, doc_number: cleaned.doc_number || docNumber },
+        chrome,
+        ownerSignatureUrl,
+        ownerStampUrl,
       });
       toast.success("Document updated");
       setEditing(false);
