@@ -54,21 +54,23 @@ const ENTITIES: { id: Entity; label: string; icon: React.ComponentType<{ classNa
   { id: "employees",   label: "Employees",          icon: Briefcase },
 ];
 
-const VIEWS: Record<Entity, { id: string; label: string }[]> = {
+type ViewItem = { id: string; label: string; group?: string };
+
+const VIEWS: Record<Entity, ViewItem[]> = {
   leads: [
-    { id: "all",           label: "All Leads" },
-    { id: "overview",      label: "Overview" },
-    { id: "flagged",       label: "Flagged" },
-    { id: "vip",           label: "VIP" },
-    { id: "management",    label: "Lead Mgmt" },
-    { id: "tasks",         label: "Tasks" },
-    { id: "calendar",      label: "Calendar" },
-    { id: "notes",         label: "Notes" },
-    { id: "inbox",         label: "Inbox" },
-    { id: "notifications", label: "Notifications" },
-    { id: "contracts",     label: "Contracts" },
-    { id: "campaigns",     label: "Campaigns" },
-    { id: "automation",    label: "Automation" },
+    { id: "all",           label: "All Leads",     group: "People" },
+    { id: "overview",      label: "Overview",      group: "People" },
+    { id: "flagged",       label: "Flagged",       group: "People" },
+    { id: "vip",           label: "VIP",           group: "People" },
+    { id: "management",    label: "Lead Mgmt",     group: "People" },
+    { id: "tasks",         label: "Tasks",         group: "Workspace" },
+    { id: "calendar",      label: "Calendar",      group: "Workspace" },
+    { id: "notes",         label: "Notes",         group: "Workspace" },
+    { id: "inbox",         label: "Inbox",         group: "Workspace" },
+    { id: "notifications", label: "Notifications", group: "Workspace" },
+    { id: "contracts",     label: "Contracts",     group: "Pipeline" },
+    { id: "campaigns",     label: "Campaigns",     group: "Pipeline" },
+    { id: "automation",    label: "Automation",    group: "Pipeline" },
   ],
   investors:  [{ id: "directory", label: "Directory" }, { id: "vip", label: "VIP" }],
   developers: [{ id: "registry",  label: "Registry"  }],
