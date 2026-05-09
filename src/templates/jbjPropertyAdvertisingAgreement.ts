@@ -94,9 +94,12 @@ const fieldUnderline = (
   if (key && opts?.hidden?.has(key)) return "";
   if (!opts?.force && !value) return "";
   const dataAttr = key ? ` data-field-key="${key}"` : "";
+  // Underline width hugs the actual content; label sits below the value, sized
+  // to the visible text so empty space never stretches into a long blank line.
+  const safe = esc(value || "");
   return `
-  <div${dataAttr} style="margin:6px 0 14px;min-width:220px;flex:1 1 240px;">
-    <div style="border-bottom:1px solid #B89555;min-height:18px;padding:2px 0;font-size:13px;color:#1A1A1A;">${esc(value || "")}</div>
+  <div${dataAttr} style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;">
+    <div style="display:inline-block;border-bottom:1px solid #B89555;min-width:120px;padding:2px 6px 2px 0;font-size:13px;color:#1A1A1A;">${safe || "&nbsp;"}</div>
     <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:#1A1A1A;opacity:.7;margin-top:3px;">${esc(label)}</div>
   </div>`;
 };
@@ -131,7 +134,7 @@ export const DEFAULT_CHROME: Required<TemplateChrome> = {
 const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string) => {
   const { accent, ink, headerStyle } = chrome;
   const docBadge = docNumber
-    ? `<div style="font-size:10px;letter-spacing:.16em;color:${ink};opacity:.7;">DOC&nbsp;NO.&nbsp;<strong style="opacity:1;">${esc(docNumber)}</strong></div>`
+    ? `<div style="font-size:10.5px;letter-spacing:.18em;color:${ink};font-weight:600;">${esc(docNumber)}</div>`
     : "";
   switch (headerStyle) {
     case "wordmark-only":
@@ -270,9 +273,8 @@ export function buildPAAHtml(
     radioChip(label, get("status_vacant_tenanted").toLowerCase() === label.toLowerCase());
 
   const sectionTitle = (n: number, t: string) => `
-    <div style="display:flex;align-items:center;gap:10px;margin:22px 0 12px;">
+    <div style="margin:22px 0 12px;">
       <div style="font-size:13px;font-weight:700;letter-spacing:.10em;color:${ink};">${n}. ${t.toUpperCase()}</div>
-      <div style="flex:1;height:6px;background:${accent}22;border-bottom:1px solid ${accent};"></div>
     </div>`;
 
   // Signature blocks
