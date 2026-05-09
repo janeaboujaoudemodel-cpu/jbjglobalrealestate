@@ -372,9 +372,13 @@ export default function CRMNetwork() {
                         return (
                           <TableRow key={l.id}>
                             <TableCell>
-                              <div className="font-medium text-[#1A1A1A]">
+                              <button
+                                onClick={() => { setPersonId(l.id); setPersonOpen(true); }}
+                                className="font-medium text-[#1A1A1A] hover:underline text-left"
+                                title="Open person details"
+                              >
                                 {l.full_name || "—"}
-                              </div>
+                              </button>
                               <div className="text-xs text-[#1A1A1A]/60">
                                 {l.email_lower || l.phone_e164 || ""}
                               </div>
