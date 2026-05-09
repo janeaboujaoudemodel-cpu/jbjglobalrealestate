@@ -31,7 +31,8 @@ import {
   useSourceFilterContext,
   type SourceFilterValue,
 } from "@/components/crm/SourceFilterChips";
-import { Loader2, Search, Link2, X } from "lucide-react";
+import { Loader2, Search, Link2, X, Building2 } from "lucide-react";
+import { CompanyHubDrawer } from "@/components/crm/CompanyHubDrawer";
 
 /* -------------------- Role definitions -------------------- */
 
@@ -144,6 +145,16 @@ export default function CRMNetwork() {
   // Cross-tab persistent filter state
   const [filter, setFilter] = useState<SourceFilterValue>(EMPTY_SOURCE_FILTER);
   const [cross, setCross] = useState<CrossFilter | null>(null);
+  const [hubOpen, setHubOpen] = useState(false);
+  const [hubTarget, setHubTarget] = useState<{ type: "brokerage" | "developer"; companyName: string } | null>(null);
+
+  function openHubFor(role: RoleKey, l: Lead) {
+    const name = (l.company_name || l.full_name || "").trim();
+    if (!name) return;
+    const type: "brokerage" | "developer" = role === "developers" ? "developer" : "brokerage";
+    setHubTarget({ type, companyName: name });
+    setHubOpen(true);
+  }
 
   useEffect(() => {
     (async () => {
@@ -366,7 +377,18 @@ export default function CRMNetwork() {
                               </div>
                             </TableCell>
                             <TableCell className="text-sm text-[#1A1A1A]/80">
-                              {l.company_name || "—"}
+                              {(t.key === "agencies" || t.key === "developers") && l.company_name ? (
+                                <button
+                                  onClick={() => openHubFor(t.key, l)}
+                                  className="inline-flex items-center gap-1 text-[#1A1A1A] hover:underline"
+                                  title="Open company hub"
+                                >
+                                  <Building2 className="h-3.5 w-3.5" />
+                                  {l.company_name}
+                                </button>
+                              ) : (
+                                l.company_name || "—"
+                              )}
                             </TableCell>
                             <TableCell className="text-sm text-[#1A1A1A]/80">
                               {(l as any).country || "—"}
@@ -413,6 +435,14 @@ export default function CRMNetwork() {
           ))}
         </Tabs>
       </div>
+      {hubTarget && (
+        <CompanyHubDrawer
+          open={hubOpen}
+          onOpenChange={setHubOpen}
+          type={hubTarget.type}
+          companyName={hubTarget.companyName}
+        />
+      )}
     </div>
   );
 }
