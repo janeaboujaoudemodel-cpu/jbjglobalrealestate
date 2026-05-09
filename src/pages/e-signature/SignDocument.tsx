@@ -141,6 +141,7 @@ export default function SignDocument() {
             token,
             signature_data: signatureData,
             initials_data: initialsData,
+            signed_date: new Date().toLocaleDateString("en-GB"),
           }),
         }
       );
