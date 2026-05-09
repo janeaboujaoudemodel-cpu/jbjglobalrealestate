@@ -230,7 +230,8 @@ export default function UnifiedCRM() {
       return <Embed><CRMNetworkPage initialRole="partners" /></Embed>;
     }
     if (entity === "brokers") {
-      return <Embed><BrokersRegistryPage initialTab={view === "imported" ? "imported" : "directory"} /></Embed>;
+      if (view === "imported") return <BrokersImported />;
+      return <Embed><BrokersRegistryPage /></Embed>;
     }
     if (entity === "agencies") {
       return <Embed><CRMNetworkPage initialRole="agencies" /></Embed>;
