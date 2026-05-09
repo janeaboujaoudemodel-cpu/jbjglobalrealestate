@@ -5,6 +5,8 @@
  * brand chrome. Header & footer are user-customisable via the `chrome` arg.
  */
 
+import monogramUrl from "@/assets/jbj-monogram-dark-on-light.png";
+
 export const JBJ_BRAND = {
   company: "JBJ GLOBAL REAL ESTATE",
   phone: "+971 54 716 7107",
@@ -12,6 +14,7 @@ export const JBJ_BRAND = {
   website: "WWW.JBJ.AE",
   gold: "#B89555",
   ink: "#1A1A1A",
+  monogram: monogramUrl,
 } as const;
 
 export const PAA_LAYOUT_VERSION = 5;
