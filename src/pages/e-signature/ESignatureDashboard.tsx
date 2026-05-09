@@ -260,6 +260,32 @@ export default function ESignatureDashboard() {
             </Card>
           </div>
 
+          {/* Quick filter chips */}
+          <div className="flex flex-wrap gap-2">
+            {([
+              { key: "all", label: "All" },
+              { key: "draft", label: "Draft" },
+              { key: "sent", label: "Sent" },
+              { key: "completed", label: "Signed" },
+              { key: "expired", label: "Expired" },
+            ] as { key: EnvelopeStatus | "all"; label: string }[]).map((c) => {
+              const active = statusFilter === c.key;
+              return (
+                <button
+                  key={c.key}
+                  onClick={() => setStatusFilter(c.key)}
+                  className={`px-3 py-1.5 rounded-full text-xs border transition ${
+                    active
+                      ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A] font-medium"
+                      : "bg-[#FDFBF7]/80 border-[#B89555]/30 text-[#1A1A1A]/80 hover:border-[#B89555]"
+                  }`}
+                >
+                  {c.label}
+                </button>
+              );
+            })}
+          </div>
+
           {/* Search */}
           <div className="flex gap-4">
             <div className="relative flex-1">
