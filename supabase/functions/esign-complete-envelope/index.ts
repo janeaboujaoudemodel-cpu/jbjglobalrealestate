@@ -163,7 +163,7 @@ async function buildAuditTrailPdf(envelope: any): Promise<Uint8Array> {
     page.drawText(`Signer ${idx + 1}: ${r.name}`, {
       x: MARGIN + 8, y: y - 10, size: 9, font: fontBold, color: DARK,
     });
-    const statusLabel = r.status === "signed" ? "✔  SIGNED" : r.status?.toUpperCase() || "PENDING";
+    const statusLabel = r.status === "signed" ? "[SIGNED]" : (r.status?.toUpperCase() || "PENDING");
     page.drawText(statusLabel, {
       x: MARGIN + CONTENT_W - 70, y: y - 10, size: 9, font: fontBold,
       color: r.status === "signed" ? GREEN : GRAY,
