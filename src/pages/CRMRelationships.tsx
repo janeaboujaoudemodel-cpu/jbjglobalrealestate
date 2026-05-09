@@ -1797,6 +1797,14 @@ const BrokeragesAgenciesView = () => {
         ]}
         onExport={handleExportConfigured}
       />
+
+      <UnifiedCRMExportModal
+        open={unifiedExportOpen}
+        onOpenChange={setUnifiedExportOpen}
+        kind="brokerages"
+        rows={filtered as any[]}
+        filenameStem="crm-brokerages"
+      />
     </div>
     </TooltipProvider>
   );
