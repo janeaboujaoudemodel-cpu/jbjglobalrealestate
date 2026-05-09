@@ -106,8 +106,11 @@ export const OwnerRoutes = () => (
     <Route path="crm/leads" element={<Navigate to="/owner/crm?section=leads" replace />} />
     <Route path="crm/tasks" element={<Navigate to="/owner/crm?section=tasks" replace />} />
     <Route path="crm/calendar" element={<Navigate to="/owner/crm?section=calendar" replace />} />
-    <Route path="crm/notes" element={<CRMNotes />} />
-    <Route path="crm/reminders" element={<CRMReminders />} />
+    <Route path="crm/notes" element={<Navigate to="/owner/crm?section=notes" replace />} />
+    <Route path="crm/reminders" element={<Navigate to="/owner/crm?section=notifications" replace />} />
+    <Route path="crm/inbox" element={<Navigate to="/owner/crm?section=inbox" replace />} />
+    <Route path="crm/contracts" element={<Navigate to="/owner/crm?section=contracts" replace />} />
+    <Route path="crm/automation" element={<Navigate to="/owner/crm?section=automation" replace />} />
     <Route path="crm/employees" element={<Navigate to="/owner/crm?section=employees" replace />} />
     <Route path="crm/relationships" element={<Navigate to="/owner/crm?section=relationships&sub=investors" replace />} />
     <Route path="admin" element={<Admin />} />

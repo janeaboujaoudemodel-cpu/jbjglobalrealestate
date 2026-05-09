@@ -1,44 +1,48 @@
 /**
  * UnifiedCRM — single owner-only CRM hub.
- * Replaces the previously scattered /owner/crm/* sub-routes with one shell
- * driven by a horizontal subheader. Each section renders the underlying
- * existing page/component inline (no removals, no data loss).
- *
- * Sections:
- *   - All Leads · Flagged · VIP · Lead Mgmt
- *   - Relationships  → Investors · Developers · Sales Reps · Brokers · Agencies
- *   - Employees · Campaigns · Tasks · Calendar
- *
- * Section state is kept in URL `?section=...&sub=...` so deep links + the
- * legacy redirects still work.
+ * Single horizontal subheader. Each section renders inside the same shell
+ * (no nested page headers, no overlapping sticky bars).
  */
-import { lazy, Suspense, useMemo } from "react";
+import { lazy, Suspense, useMemo, useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Users, Flag, Crown, Briefcase, Network, UserCog,
   Megaphone, ListTodo, Calendar as CalendarIcon,
+  StickyNote, Inbox, Bell, FileSignature, Zap, LayoutDashboard,
 } from "lucide-react";
 
-// --- Lazy section content (existing pages reused as-is) -------------------
-const CRMPage              = lazy(() => import("@/pages/CRM"));                       // All / Flagged / VIP / Mgmt (already has internal tabs)
-const CRMRelationships     = lazy(() => import("@/pages/CRMRelationships"));          // Investors view
-const CRMNetworkPage       = lazy(() => import("@/pages/owner/crm/CRMNetwork"));      // Developers + Agencies
-const BrokersRegistryPage  = lazy(() => import("@/pages/owner/crm/BrokersRegistry")); // Brokers
-const CRMEmployees         = lazy(() => import("@/pages/CRMEmployees"));
-const CampaignsPage        = lazy(() => import("@/pages/owner/crm/CampaignsPage"));
-const CRMTasks             = lazy(() => import("@/pages/CRMTasks"));
-const CRMCalendar          = lazy(() => import("@/pages/CRMCalendar"));
+// --- Lazy section content -------------------------------------------------
+const CRMLeadsTableV2     = lazy(() => import("@/components/crm/CRMLeadsTableV2"));
+const FlaggedLeadsView    = lazy(() => import("@/components/crm/FlaggedLeadsView"));
+const RecentlyDeletedLeads= lazy(() => import("@/components/crm/RecentlyDeletedLeads"));
+const CRMRelationships    = lazy(() => import("@/pages/CRMRelationships"));
+const CRMNetworkPage      = lazy(() => import("@/pages/owner/crm/CRMNetwork"));
+const BrokersRegistryPage = lazy(() => import("@/pages/owner/crm/BrokersRegistry"));
+const EmployeesHub        = lazy(() => import("@/components/crm/EmployeesHub"));
+const CampaignsPage       = lazy(() => import("@/pages/owner/crm/CampaignsPage"));
+const CRMTasks            = lazy(() => import("@/pages/CRMTasks"));
+const CRMCalendar         = lazy(() => import("@/pages/CRMCalendar"));
+const CRMNotes            = lazy(() => import("@/pages/CRMNotes"));
+const OwnerInbox          = lazy(() => import("@/pages/OwnerInbox"));
+const ContractVault       = lazy(() => import("@/pages/owner/contracts/ContractVault"));
+const AutomationRules     = lazy(() => import("@/components/crm/AutomationRules"));
+const CRMEnhancedDashboard= lazy(() => import("@/components/crm/CRMEnhancedDashboard"));
 
 type SectionId =
-  | "leads" | "flagged" | "vip" | "management"
-  | "relationships" | "employees" | "campaigns" | "tasks" | "calendar";
+  | "overview" | "leads" | "flagged" | "vip" | "management"
+  | "relationships" | "employees" | "campaigns"
+  | "tasks" | "calendar" | "notes" | "inbox"
+  | "notifications" | "contracts" | "automation";
 
 type RelSubId = "investors" | "developers" | "sales-reps" | "brokers" | "agencies";
 
 interface NavItem { id: SectionId; label: string; icon: React.ComponentType<{ className?: string }>; }
 
 const PRIMARY: NavItem[] = [
+  { id: "overview",      label: "Overview",       icon: LayoutDashboard },
   { id: "leads",         label: "All Leads",      icon: Users },
   { id: "flagged",       label: "Flagged",        icon: Flag },
   { id: "vip",           label: "VIP",            icon: Crown },
@@ -48,6 +52,11 @@ const PRIMARY: NavItem[] = [
   { id: "campaigns",     label: "Campaigns",      icon: Megaphone },
   { id: "tasks",         label: "Tasks",          icon: ListTodo },
   { id: "calendar",      label: "Calendar",       icon: CalendarIcon },
+  { id: "notes",         label: "Notes",          icon: StickyNote },
+  { id: "inbox",         label: "Inbox",          icon: Inbox },
+  { id: "notifications", label: "Notifications",  icon: Bell },
+  { id: "contracts",     label: "Contracts",      icon: FileSignature },
+  { id: "automation",    label: "Automation",     icon: Zap },
 ];
 
 const REL_TABS: { id: RelSubId; label: string }[] = [
@@ -65,9 +74,57 @@ const Fallback = () => (
   </div>
 );
 
+// Strip <header> / sticky toolbars from re-used legacy pages so we don't get
+// double headers inside the unified shell.
+const Embed = ({ children }: { children: React.ReactNode }) => (
+  <div className="crm-embed [&_header]:hidden [&_.sticky]:!static">
+    {children}
+  </div>
+);
+
+function NotificationsPanel({ userId }: { userId: string }) {
+  const [items, setItems] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await supabase
+          .from("crm_activities")
+          .select("id, activity_type, description, created_at, lead_id")
+          .order("created_at", { ascending: false })
+          .limit(60);
+        setItems(data || []);
+      } finally { setLoading(false); }
+    })();
+  }, [userId]);
+  if (loading) return <Fallback />;
+  if (items.length === 0) {
+    return <div className="p-8 text-center text-[#1A1A1A]/60">No recent notifications.</div>;
+  }
+  return (
+    <div className="divide-y divide-[#B89555]/15 rounded-lg border border-[#B89555]/30 bg-[#FDFBF7]">
+      {items.map((a) => (
+        <div key={a.id} className="px-4 py-3 flex items-start gap-3">
+          <Bell className="h-4 w-4 mt-0.5 text-[#1A1A1A]/60" />
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-medium text-[#1A1A1A] truncate">
+              {a.description || a.activity_type?.replace(/_/g, " ")}
+            </div>
+            <div className="text-[11px] text-[#1A1A1A]/60">
+              {new Date(a.created_at).toLocaleString()}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function UnifiedCRM() {
+  const { user } = useAuth();
+  const userId = user?.id || "";
   const [params, setParams] = useSearchParams();
-  const section: SectionId = (params.get("section") as SectionId) || "leads";
+  const section: SectionId = (params.get("section") as SectionId) || "overview";
   const sub: RelSubId      = (params.get("sub") as RelSubId)      || "investors";
 
   const setSection = (id: SectionId) => {
@@ -84,32 +141,55 @@ export default function UnifiedCRM() {
   };
 
   const Body = useMemo(() => {
-    if (section === "leads")       return <CRMPage />;
-    if (section === "flagged")     return <CRMPage />;
-    if (section === "vip")         return <CRMPage />;
-    if (section === "management")  return <CRMPage />;
-    if (section === "employees")   return <CRMEmployees />;
-    if (section === "campaigns")   return <CampaignsPage />;
-    if (section === "tasks")       return <CRMTasks />;
-    if (section === "calendar")    return <CRMCalendar />;
-    // relationships
-    if (sub === "investors")            return <CRMRelationships />;
-    if (sub === "developers")           return <CRMNetworkPage />;
-    if (sub === "agencies")             return <CRMNetworkPage />;
-    if (sub === "sales-reps")           return <CRMNetworkPage />;
-    if (sub === "brokers")              return <BrokersRegistryPage />;
-    return <CRMRelationships />;
-  }, [section, sub]);
+    switch (section) {
+      case "overview":
+        return <CRMEnhancedDashboard userId={userId} hasOwnerAccess />;
+      case "leads":
+        return <CRMLeadsTableV2 userId={userId} filterType="all" onRefresh={() => {}} isOwner />;
+      case "flagged":
+        return <FlaggedLeadsView userId={userId} onRefresh={() => {}} />;
+      case "vip":
+        return <CRMLeadsTableV2 userId={userId} filterType="vip" onRefresh={() => {}} isOwner />;
+      case "management":
+        return <RecentlyDeletedLeads userId={userId} onRefresh={() => {}} isOwner />;
+      case "employees":
+        return <EmployeesHub userId={userId} />;
+      case "campaigns":
+        return <Embed><CampaignsPage /></Embed>;
+      case "tasks":
+        return <Embed><CRMTasks /></Embed>;
+      case "calendar":
+        return <Embed><CRMCalendar /></Embed>;
+      case "notes":
+        return <Embed><CRMNotes /></Embed>;
+      case "inbox":
+        return <Embed><OwnerInbox /></Embed>;
+      case "notifications":
+        return <NotificationsPanel userId={userId} />;
+      case "contracts":
+        return <Embed><ContractVault /></Embed>;
+      case "automation":
+        return <AutomationRules userId={userId} isOwner />;
+      case "relationships":
+      default:
+        if (sub === "investors")  return <Embed><CRMRelationships /></Embed>;
+        if (sub === "developers") return <Embed><CRMNetworkPage /></Embed>;
+        if (sub === "agencies")   return <Embed><CRMNetworkPage /></Embed>;
+        if (sub === "sales-reps") return <Embed><CRMNetworkPage /></Embed>;
+        if (sub === "brokers")    return <Embed><BrokersRegistryPage /></Embed>;
+        return <Embed><CRMRelationships /></Embed>;
+    }
+  }, [section, sub, userId]);
 
   return (
     <div className="min-h-screen bg-[#FDFBF7]">
-      {/* In-page header */}
-      <div className="sticky top-0 z-30 bg-[#FDFBF7]/95 backdrop-blur border-b border-[#B89555]/30">
+      {/* In-page CRM header */}
+      <div className="bg-[#FDFBF7] border-b border-[#B89555]/30">
         <div className="px-6 pt-5 pb-3 flex items-baseline justify-between gap-4">
           <div>
             <h1 className="text-2xl font-semibold tracking-tight text-[#1A1A1A]">JBJ CRM</h1>
             <p className="text-xs text-[#1A1A1A]/70">
-              Unified relationship hub — leads, partners, employees, campaigns. Owner-only.
+              Unified relationship hub — leads, partners, employees, campaigns, calendar, contracts. Owner-only.
             </p>
           </div>
         </div>
@@ -174,8 +254,8 @@ export default function UnifiedCRM() {
         )}
       </div>
 
-      {/* Body — existing pages render inline */}
-      <div className="relative">
+      {/* Body */}
+      <div className="px-4 md:px-6 py-6">
         <Suspense fallback={<Fallback />}>{Body}</Suspense>
       </div>
     </div>
