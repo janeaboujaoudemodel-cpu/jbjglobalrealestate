@@ -46,6 +46,8 @@ export default function BrokersRegistry() {
   const [companyFilter, setCompanyFilter] = useState<string>("");
   const [openBroker, setOpenBroker] = useState<BrokerRow | null>(null);
   const [addOpen, setAddOpen] = useState(false);
+  const [sourceFilter, setSourceFilter] = useState<SourceFilterValue>(EMPTY_SOURCE_FILTER);
+  const sourceFilterCtx = useSourceFilterContext(sourceFilter);
 
   const { data: registered = [], isLoading: loading1 } = useQuery({
     queryKey: ["brokers-registered"],
