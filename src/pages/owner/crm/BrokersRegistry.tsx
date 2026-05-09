@@ -187,10 +187,21 @@ export default function BrokersRegistry() {
             <h1 className="text-2xl font-bold">Brokers Registry</h1>
             <p className="text-sm text-[#1A1A1A]/70">Every broker, every company they work for.</p>
           </div>
+          <Button variant="outline" onClick={() => setExportOpen(true)} disabled={!filtered.length}>
+            <Download className="w-4 h-4 mr-1" /> Export
+          </Button>
           <Button variant="gold" onClick={() => setAddOpen(true)}>
             <Plus className="w-4 h-4 mr-1" /> Add broker
           </Button>
         </div>
+
+        <UnifiedCRMExportModal
+          open={exportOpen}
+          onOpenChange={setExportOpen}
+          kind="brokers"
+          rows={filtered}
+          filenameStem="crm-brokers"
+        />
 
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
           <Stat icon={Users} label="Total brokers" value={counts.total} />
