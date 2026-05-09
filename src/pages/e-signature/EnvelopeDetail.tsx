@@ -95,6 +95,7 @@ export default function EnvelopeDetail() {
       const persisted = (meta.cc_emails || []) as string[];
       setCcs(Array.isArray(persisted) ? persisted : []);
       setChrome((meta.chrome as TemplateChrome) || {});
+      setHiddenFields(Array.isArray(meta.hidden_fields) ? meta.hidden_fields : []);
     }
   }, [envelope?.id]);
 
@@ -150,9 +151,9 @@ export default function EnvelopeDetail() {
     return renderTemplateHtml(
       envelope.template_key,
       { ...vals, doc_number: vals.doc_number || docNumber },
-      { chrome, ownerSignatureUrl, ownerStampUrl },
+      { chrome, ownerSignatureUrl, ownerStampUrl, hiddenFields },
     );
-  }, [envelope?.template_key, envelope?.template_field_values, editing, editValues, docNumber, chrome, ownerSignatureUrl, ownerStampUrl]);
+  }, [envelope?.template_key, envelope?.template_field_values, editing, editValues, docNumber, chrome, ownerSignatureUrl, ownerStampUrl, hiddenFields]);
 
   const sendReminder = async (recipientId?: string) => {
     const key = recipientId || "all";
