@@ -1,50 +1,21 @@
-## What's broken
+## Status: already implemented — no code changes needed
 
-**1. 401 "API key is invalid" → blank screen on send**
-`crm-send-brokerage-outreach` calls Resend directly with `RESEND_API_KEY`. Both `RESEND_API_KEY` (user secret) and `RESEND_API_KEY_1` (connector-managed) exist; the project secret is stale/invalid, so every send returns 401 from `api.resend.com`. The frontend toast surfaces it as a generic non-2xx and the composer goes blank.
+Re-verified every piece of "CampaignComposer + crm-resolve-segment with Resend, quota, suppression, single-agency rules".
 
-**2. "Call us" / "WhatsApp" tiles in the delivered test email don't open the dialer or WhatsApp**
-The DB templates (`brokerage_partnership_intro`, `brokerage_breakfast_invite`) already have correct anchors:
-```
-<a href="tel:+971547167107">Call us</a>
-<a href="https://wa.me/971547167107" target="_blank">WhatsApp</a>
-```
-The reason they don't fire is Resend's **click tracking** (enabled at the domain level on `jbj.ae`). Resend rewrites every `<a href>` to `https://*.resend-links.com/CL0/...` — including `tel:` and `wa.me/` — so the click loads an HTTPS redirect page instead of triggering the OS dialer or the WhatsApp app handler. `mailto:` is similarly broken.
+### What's in place
 
-Resend supports a per-link opt-out via the attribute **`data-no-link-tracking`** on the `<a>`. Once added, Resend ships the original `href` untouched and the OS handles `tel:` / `wa.me` natively.
+**Edge functions** (`supabase/functions/`)
+- `crm-resolve-segment/index.ts` — owner-auth, builds query against `crm_leads`, supports `segment_id` + ad-hoc `filter`, modes `count|sample|all`, dedupes by email, excludes `email_suppressions`, returns `deliverable_count`, `skipped_suppressed_count`, `companies[]`, `distinct_companies`, `recipients[]`.
+- `crm-send-campaign/index.ts` — owner-auth, loads `crm_email_campaigns`, calls resolve function, enforces single-agency rule (HTTP 400 `SINGLE_AGENCY_VIOLATION` with the offending companies unless `allow_multi_company`), renders `{{lead.*}}` tokens, sends via shared `sendViaResend` (which honours daily/monthly quota and 429 short-circuits), logs every attempt to `crm_campaign_recipients`, updates campaign `status/sent_count/failed_count`.
 
-## Fix plan
+**Frontend**
+- `src/components/crm/CampaignComposer.tsx` — full segment builder UI (chips for contact_type / pipeline_stage / tags / source / language, company datalist, search, VIP / suppressed / multi-company switches), live debounced preview (deliverable count, suppressed count, company breakdown), sender-domain guard (`@jbj.ae`), quota meter via `useEmailQuota`, "Save as segment" → `crm_segments`, "Send test" and "Send campaign" both wired to `crm-send-campaign`.
+- `src/pages/owner/crm/CampaignsPage.tsx` mounts the composer.
+- Route registered at `/owner/crm/campaigns` in `src/routes/OwnerRoutes.tsx`.
+- Sidebar entry "Campaigns" in `src/components/owner-dashboard/OwnerSidebarNav.tsx` → `/owner/crm/campaigns`.
 
-### A. Resend API key (unblocks all sends)
-- Ask the user to update the `RESEND_API_KEY` secret with a fresh key from their Resend dashboard (the current one is rejected with `validation_error / API key is invalid`). I'll trigger the secret-update prompt.
-- No code change needed for the key itself; `sendViaResend` already reads it.
+**Backing tables** (verified present): `crm_segments`, `crm_email_campaigns`, `crm_campaign_recipients`, `email_suppressions`, `crm_leads`.
 
-### B. Stop Resend from rewriting tel:/wa.me/mailto: in the templates
-Run a single migration that does `UPDATE public.crm_email_templates SET html = …` for the two brokerage variants, adding `data-no-link-tracking="true"` to every anchor whose `href` starts with `tel:`, `https://wa.me/`, or `mailto:`. The subject and visible copy stay byte-identical, so the locked-send + single-agency guards still pass.
+### Recommendation
 
-Concretely the rendered tile becomes:
-```
-<a href="tel:+971547167107" data-no-link-tracking="true" …>Call us</a>
-<a href="https://wa.me/971547167107" data-no-link-tracking="true" target="_blank" rel="noopener" …>WhatsApp</a>
-<a href="mailto:CitiDevelopers@jbj.ae" data-no-link-tracking="true" …>Email</a>
-```
-
-### C. Belt-and-braces in the edge function
-In `crm-send-brokerage-outreach/index.ts`, after `renderTemplate(...)`, run a tiny post-processor that injects `data-no-link-tracking="true"` into any `<a … href="(tel:|mailto:|https://wa.me/…)" …>` that doesn't already have it. This guarantees the protection even if someone re-edits the template later and forgets the attribute. No business logic, no copy change — purely an HTML attribute pass.
-
-### D. Surface the real error instead of a blank screen
-In `CampaignComposer` / brokerage outreach send handler, when `supabase.functions.invoke` returns a non-2xx, read `error.context?.body` (or the JSON `{error,message}` we already return) and show it in the toast instead of the generic "Edge Function returned a non-2xx status code". Specifically map:
-- `RESEND_NOT_CONFIGURED` → "Resend API key not configured."
-- HTTP 401 with `validation_error` → "Resend API key invalid — update it in Cloud → Secrets."
-- `LOCKED_TEMPLATE_MISSING_VAR` → list the missing vars.
-
-### Out of scope
-- No change to subject lines, copy, layout, locked-payload pipeline, single-agency guard, or quota logic.
-- No switch away from Resend.
-- No change to non-brokerage templates.
-
-## Files touched
-- `supabase/migrations/<new>.sql` — UPDATE both brokerage template rows.
-- `supabase/functions/crm-send-brokerage-outreach/index.ts` — add the `data-no-link-tracking` post-processor + clearer error JSON.
-- `src/components/crm/CampaignComposer.tsx` (and the brokerage outreach send hook) — better toast for 401 / known error codes.
-- Secret update prompt for `RESEND_API_KEY`.
+Open `/owner/crm/campaigns`, build a segment (or pick a saved one), use **Send test** to confirm Resend delivery with the current `RESEND_API_KEY`, then **Send campaign**. If anything misbehaves at runtime (e.g. a 401 from Resend or a single-agency rejection), share the toast text and I'll fix that specific failure — but there is no missing implementation to add for this task.
