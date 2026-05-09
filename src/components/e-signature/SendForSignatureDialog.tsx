@@ -99,7 +99,7 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
   }, [envelope?.id, open]);
 
   const senderName = envelope?.sender_name || "Jane Bou Jaoude";
-  const senderTitle = envelope?.sender_title || "Founder & Chief Executive";
+  const senderTitle = envelope?.sender_title || "Founder & CEO";
 
   const tokens = useMemo(() => ({
     // Recipient (client) merge tags — both names are accepted for back-compat.
