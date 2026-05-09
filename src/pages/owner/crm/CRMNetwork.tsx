@@ -238,7 +238,7 @@ export default function CRMNetwork() {
           n++;
         }
       }
-      counts[tab] = n; // typescript narrowing trick avoided below
+      counts[tab.key] = n;
     }
     return counts;
   }
