@@ -15,6 +15,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { Users, Search, Plus, Building2, BadgeCheck, Clock, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { RelationalHubTabs } from "@/components/crm/RelationalHubTabs";
 
 type BrokerRow = {
   source: "registered" | "external";
