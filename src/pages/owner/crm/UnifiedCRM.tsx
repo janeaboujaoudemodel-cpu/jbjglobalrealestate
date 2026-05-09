@@ -9,7 +9,7 @@
  * URL state: ?entity=<...>&view=<...>
  * Legacy params (?section, ?sub) are migrated on mount.
  */
-import { lazy, Suspense, useEffect, useMemo, useState } from "react";
+import { Component, lazy, Suspense, useEffect, useMemo, useState, type ReactNode } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/contexts/AuthContext";
@@ -119,6 +119,30 @@ const Fallback = () => (
 const Embed = ({ children }: { children: React.ReactNode }) => (
   <div className="crm-embed">{children}</div>
 );
+
+class CRMBodyErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
+  state = { error: null as Error | null };
+  static getDerivedStateFromError(error: Error) { return { error }; }
+  componentDidCatch(err: Error) { console.error("[CRM body crashed]", err); }
+  render() {
+    if (this.state.error) {
+      return (
+        <div className="rounded-lg border border-red-300 bg-red-50/40 p-6 text-sm text-[#1A1A1A]">
+          <div className="font-semibold mb-1">This panel failed to load.</div>
+          <div className="text-[#1A1A1A]/70 mb-3">{this.state.error.message}</div>
+          <button
+            type="button"
+            onClick={() => { this.setState({ error: null }); window.location.reload(); }}
+            className="px-3 py-1.5 rounded-md bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555] text-xs font-semibold"
+          >
+            Reload
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 function NotificationsPanel() {
   const [items, setItems] = useState<any[]>([]);
