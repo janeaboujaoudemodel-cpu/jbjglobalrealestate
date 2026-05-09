@@ -561,38 +561,46 @@ serve(async (req: Request) => {
       }
     }
 
-    const raw = buildRawMime({
+    // Send via Resend (verified jbj.ae domain). Quota + 2 req/s throttle
+    // are enforced inside sendViaResend.
+    const resendResult = await sendViaResend({
       from: `${fromName} <${replyTo}>`,
       to: recipient,
-      cc,
+      cc: cc.length ? cc : undefined,
+      reply_to: replyTo,
       subject,
       html,
-      replyTo,
-    });
-
-    const gmailRes = await fetch(`${GMAIL_GATEWAY}/users/me/messages/send`, {
-      method: "POST",
       headers: {
-        "Authorization": `Bearer ${LOVABLE_API_KEY}`,
-        "X-Connection-Api-Key": GMAIL_API_KEY,
-        "Content-Type": "application/json",
+        "X-JBJ-Outreach": "brokerage",
+        "X-JBJ-Variant": variant,
       },
-      body: JSON.stringify({ raw }),
+      tags: [
+        { name: "variant", value: variant },
+        { name: "mode", value: isTest ? "test" : "production" },
+      ],
     });
 
-    const gmailJson = await gmailRes.json();
-    if (!gmailRes.ok) {
-      console.error("Gmail send failed:", gmailRes.status, gmailJson);
-      return new Response(JSON.stringify({ error: gmailJson?.error?.message || "Gmail send failed", details: gmailJson }), {
-        status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    if (!resendResult.ok) {
+      console.error("Resend send failed:", resendResult.status, resendResult.error, resendResult.data);
+      return new Response(JSON.stringify({
+        error: resendResult.error || "Resend send failed",
+        details: resendResult.data,
+        quota: resendResult.quota,
+      }), {
+        status: resendResult.status >= 400 && resendResult.status < 600 ? resendResult.status : 502,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    const messageId: string | null = gmailJson?.id || null;
-    const threadId: string | null = gmailJson?.threadId || null;
+    const messageId: string | null = resendResult.data?.id || null;
+    const threadId: string | null = null;
 
     if (isTest) {
-      return new Response(JSON.stringify({ ok: true, test: true, recipient, messageId, threadId }), {
+      return new Response(JSON.stringify({
+        ok: true, test: true, recipient, messageId, threadId,
+        from_email: replyTo, sent_via: "resend",
+        quota: resendResult.quota,
+      }), {
         status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
