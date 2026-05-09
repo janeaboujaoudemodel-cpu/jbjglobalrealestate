@@ -1,92 +1,97 @@
+
 ## Goal
 
-Polish the CRM into the "international big-CRM" feel the user expects: redesign the leads filter bar (no cramped boxes, no native blue-hover dropdowns), add inline Calendar/Notes/Tasks per lead, add quick status chips for hot/interested/junk/already-bought/closed-won, add bulk delete-all/restore-all in Lead Mgmt, expand the contract vault into typed contract folders with developer drill-down, kill the "Verifying access…" flash on intra-CRM navigation, and confirm the entity bar (Leads · Investors · Developers · Sales Reps · Brokers · Agencies · Employees) renders as the primary header.
+Make every CRM entity tab show its **own** content (no shared "CRM Network" duplicate header, no duplicate role tabs), wired to the real database table for that entity. Remove the on-page Insights block (it lives only in the toggle). Fix the Forms & Agreements hub so signed documents still appear in "Forms Generated" and the Omar test signature can be reverted to draft. Fix the PAA template (legal name dotting, office address from trade license, larger monogram in header/footer). Add a Deeds source column.
 
-## 1. Leads filter bar redesign
+---
 
-In `src/components/crm/CRMLeadsTableV2.tsx`:
+## 1. Per-entity CRM views — kill the duplicate "CRM Network" header
 
-- Replace all four native `<select>` (Stage / Source / Owner / Tag) with the shadcn `<Select>` component so dropdowns no longer overlay with the OS blue hover.
-- Lift them into a 2-row toolbar inside a single champagne card:
-  - Row 1: search input (full-width) + clear-filters button.
-  - Row 2: Stage · Source · Owner · Tag · Date range — each `min-w-[160px]`, `h-10`, even `gap-3`, never touching borders. `bg-[#FDFBF7] border border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#F7F2EA]`.
-- Above the filters, add a horizontal "quick chips" strip with one-click pre-built filters: Hot · Interested · VIP · Already Bought · Deal Closed · Negotiation · Junk · No Response. Clicking a chip sets the matching `stageFilter`/`tagFilter` so the user does not need to open a dropdown.
-- Group the Stage dropdown options under category labels (Positive / Neutral / Negative) using `<SelectGroup>` so the 20-stage list scans cleanly.
+Today `UnifiedCRM` reuses `CRMNetwork` for Developers / Sales Reps / Agencies. That page renders its own `<h1>CRM Network</h1>` plus its own 5-tab role bar (Investors · Developers · Brokers · Agencies · Partners) — that is exactly the duplicated header the user sees.
 
-## 2. Inline Calendar / Notes / Tasks per lead row
+Action — replace the embed with **dedicated, single-entity components** that share styling but render only their own table. New components under `src/components/crm/entity/`:
 
-In `CRMLeadsTableV2.tsx` row actions:
+- `DevelopersDirectory.tsx` — sourced from `public.developers` (633 rows). Columns: logo · name · headquarters · license_number · website · CEO · projects (completed/offplan) · rank. Search across name/slug/headquarters. Click row → `CompanyHubDrawer` (type="developer", companyName=name).
+- `BrokerageAgenciesDirectory.tsx` — sourced from `public.crm_brokerages` (10,613 rows), ordered with `sortBrokeragesForDirectory`. Columns: logo · company_name · emirate · country · office_location · phone · email · website · agent_count · rating · source · entry_source. Search across name/emirate/country. Click row → `CompanyHubDrawer` (type="brokerage").
+- `DevSalesRepsDirectory.tsx` — sourced from `public.developer_sales_reps` joined to `developers(name, logo_url)`. Columns: full_name · title · developer · phone · email · whatsapp · is_primary. (Currently 0 rows; component must show an empty-state with an "Import" CTA pointing at the existing `developer_sales_contacts`/`developer_representatives` flow rather than fake data.)
+- Each component gets its own `<SourceFilterChips>` instance scoped to its own rows so the country/source/database/team filter UX is preserved per tab — no cross-tab role bar.
 
-- Add three icon buttons next to the existing actions: `CalendarPlus`, `StickyNote`, `ListTodo`.
-- Each opens a small popover (`<Popover>`) anchored to the row:
-  - Calendar: title + datetime-local + duration; inserts into `crm_calendar_events` with `lead_id`.
-  - Notes: textarea; inserts into `crm_notes` (or `crm_activities` typed `note`) with `lead_id`.
-  - Tasks: title + due date + priority; inserts into `crm_tasks` with `lead_id`.
-- Show counts on each icon (small badge) when items exist for that lead.
-- Keep existing per-lead detail drawer untouched — these popovers are quick-add only.
+Wire-up in `src/pages/owner/crm/UnifiedCRM.tsx`:
 
-## 3. Lead Mgmt — bulk Delete All / Restore All
+```text
+entity = developers   →  <DevelopersDirectory />
+entity = sales-reps   →  <DevSalesRepsDirectory />
+entity = agencies     →  <BrokerageAgenciesDirectory />
+entity = brokers      →  <BrokersRegistryPage />          (already correct)
+entity = investors    →  <InvestorsDirectory … />          (already correct)
+entity = leads/views  →  unchanged
+```
 
-In `src/components/crm/RecentlyDeletedLeads.tsx`:
+`CRMNetwork.tsx` stays available at `/owner/crm/network` for the cross-relationship matrix view but is **no longer embedded** under any single-entity tab. Inside `CRMNetwork`, when `initialRole` is passed we hide its `<h1>` block and its role-tabs row to avoid the duplication if it is ever embedded again.
 
-- Add a sticky toolbar with: `Select all on page` checkbox, `Select across all results` link, then two buttons:
-  - `Restore selected` (green) → bulk update `deleted_at = NULL`.
-  - `Permanently delete selected` (red, requires typed-confirm "DELETE") → bulk delete row.
-- Add `Restore all (N)` and `Empty trash (N)` buttons that operate on the entire filtered set, not just current page.
-- Confirm modals always show the count and warn that `Empty trash` is irreversible.
+## 2. Remove on-page Insights block from main CRM screen
 
-## 4. Contract Vault — typed folders + developer drill-down
+`UnifiedCRM` already has the Insights toggle in the title row, but the embedded entity views render separate "Overview/Insights" panels too. Action:
 
-In `src/pages/owner/contracts/ContractVault.tsx`:
+- Make the leads default view `all` (was `overview`) so the first thing the user sees on `/owner/crm` is the leads table.
+- Keep "Overview" as a sub-view only inside the leads context bar (still reachable, just not default).
+- Confirm `CRMEnhancedDashboard` is rendered **only** inside the collapsible Insights drawer and the explicit Overview view — not anywhere else.
 
-- Replace the single "All Developers" dropdown with a left-side rail of contract types (champagne pills, vertical):
-  - All
-  - Developer Registration
-  - Developer–Agency (A↔A)
-  - Client Sales Contracts
-  - Client Reservation / Booking Forms
-  - Leasing Contracts
-  - Property Advertising Agreements
-  - NDAs
-  - Service / Consulting Agreements
-  - Other
-- Folder taxonomy stored in a column `contract_type` on the existing contracts table; if missing, infer from `template`/`title` patterns until a migration adds it. Default to `Other`.
-- When the user picks `Developer Registration`, the right pane shows a developer-name dropdown (searchable combobox) listing only developers who have at least one registration contract; selecting a developer filters the list to that developer's contracts.
-- When the user picks any other type that has a natural sub-key (e.g. Client Contracts → client name, Leasing → property), expose the matching searchable combobox in the right pane header.
-- Performance fix for "stuck on click": defer the heavy developer list to a separate query, render the type pane immediately, and load the developer combobox lazily when its tab is opened. Cache developer list with React Query (`staleTime: 5min`).
+## 3. Forms & Agreements hub — keep generated forms visible after signing; allow revert
 
-## 5. Stop the "Verifying access" flash on intra-CRM nav
+In `src/pages/owner/DocumentsFormsHub.tsx`:
 
-Root cause: `OwnerGuard` re-shows the splash whenever `ownerLoading` flickers on route/search-param change.
+- Change bucketing so an envelope counts as **Forms Generated** whenever `isCompleteEnoughToBeGenerated(e)` is true, regardless of status (draft / sent / partially_signed / completed). The Pending and Signed tabs continue to show their own subset (sent/viewed/partially_signed → Pending; completed → Signed). Net effect: a generated form is **always** in Forms Generated, plus appears in Pending or Signed depending on lifecycle. This satisfies "always a form generated, even if it's signed, you need to keep it there."
+- The bucket counts in the tab headers update accordingly so Omar's envelope shows ≥ 1 in Forms Generated.
+- Add a per-row **"Mark as not signed (revert to draft)"** action visible only on completed envelopes in the Signed tab. It updates `esign_envelopes.status = 'draft'` and clears `signed_document_url`. AlertDialog confirms first ("This removes the signed copy and returns the form to drafts. Use only for test signatures."). After the revert, Omar will appear in Forms Generated as a draft and not in Signed.
+- Empty-state copy on Forms Generated changes from "0 forms" to "No client-ready forms yet" (the count was misleading the user).
 
-Fix in `src/components/OwnerGuard.tsx` (and `useAuth`):
+## 4. Property Advertising Agreement template — legal name, address, monogram
 
-- Cache the verified `isOwner === true` result for the session in a ref. Once we have ever resolved owner=true for this user, never show the splash again — only show it on the very first verification.
-- Bump the grace period from 250 ms to 600 ms but only on the very first check.
-- Ignore `ownerLoading` toggles caused by `refreshOwnerVerification` calls triggered by intra-page navigation (don't reset `showSplash`).
-- Verify by clicking Leads → All Leads → Flagged → VIP repeatedly: no splash should appear.
+In `src/templates/jbjPropertyAdvertisingAgreement.ts` and `src/templates/jbjListingAuthorisation.ts`:
 
-## 6. Entity bar visibility
+- Pull both `legalCompany` and the office-address line from a single new constant in `src/config/companyLegal.ts`:
+  ```text
+  TRADE_LICENSE_LEGAL_NAME  = "JBJ GLOBAL REAL ESTATE L.L.C - S.O.C"     // dotted, exactly as on the trade license
+  TRADE_LICENSE_OFFICE      = "<the address printed on the trade license>"
+  TRADE_LICENSE_NUMBER      = "<the license number>"
+  ```
+  Values come from the trade-license document on file. If the dotted spelling on the actual license differs from `L.L.C - S.O.C`, the constant is the only place to update — every PAA / Listing Authorisation header, footer, signature block and broker_appointee_name reads from it.
+- Replace every hard-coded `"JBJ GLOBAL REAL ESTATE LLC - SOC"` and `"Downtown Dubai, UAE"` literal in the two template files with imports from this constant.
+- Bump the header monogram size in the PAA template from its current ~44 px to **96 px tall** in `chrome-monogram-wordmark` and **80 px tall** in the footer band of the document so it reads as a proper letterhead crest, matching the on-screen `<BrandMonogram size="lg">` proportions. Wordmark next to it stays at `tracking-[0.22em]` uppercase Inter.
+- Same constant is referenced by `src/components/Footer.tsx` corporate footer copy so the displayed legal name and address never drift from the trade license.
 
-Confirm `UnifiedCRM` renders these tabs at the top header on `/owner/crm`: Leads · Investors · Developers · Dev Sales Reps · Brokers · Brokerage Agencies · Employees. If the user still does not see them, hard-refresh and verify in the running preview. If they remain hidden behind the global app header, increase the title row's top padding so the entity bar is not occluded by the 88px fixed header.
+## 5. Deeds — show source column in CRM Documents
 
-## 7. Update memory
+`src/integrations/supabase/types.ts` already exposes a `crm_documents` table used elsewhere; the existing Documents Hub lists deeds without a source. Action:
 
-Refresh `mem://features/crm/unified-owner-hub-standard` to describe the new toolbar, quick chips, inline lead actions, contract folders, and the once-per-session owner verification cache.
+- Add a `source_label` column to the deeds list, computed as: `database_source` if present, else `upload_source`, else `"Uploaded via website form"` if the doc references a `forms_submissions.id`, else `"Manually uploaded"`.
+- Display the source as a small champagne pill next to each deed row.
+- No schema change required — uses existing fields. (If the deeds list is missing `database_source`/`upload_source`, the migration in step 6 covers it.)
 
-## Verification
+## 6. Optional small migration
 
-After implementation, navigate to `/owner/crm` in the preview and confirm:
-- Filter dropdowns are roomy, champagne-themed, and never overlay with blue.
-- Quick-status chips filter the table instantly.
-- Each lead row exposes Calendar / Notes / Tasks popovers that persist data.
-- Lead Mgmt has bulk Restore/Empty-trash with confirmation.
-- Contracts section opens immediately; type pills + developer combobox work; no spinner stall.
-- No "Verifying access" splash when switching tabs inside the CRM.
-- Entity bar (Leads · Investors · …) is visible above the context bar.
+If `developer_sales_reps` is empty and the user wants real data, add a one-off backfill from `developer_sales_contacts` + `developer_representatives` (both currently 0). Skip until the user uploads sales-rep data.
+
+## 7. Memory update
+
+Refresh `mem://features/crm/unified-owner-hub-standard` to record:
+- Per-entity dedicated components (no shared role-tab bar).
+- Forms Generated includes signed envelopes; Signed has a revert-to-draft action.
+- Legal name + office address come from `src/config/companyLegal.ts`, sourced from the trade license.
+
+## Verification (manual, in preview)
+
+1. `/owner/crm?entity=developers` shows Developers table (633 rows, columns above), no "CRM Network" h1, no role-tabs above the table.
+2. `/owner/crm?entity=agencies` shows ~10,613 brokerage agencies with emirate/country/phone/email/office.
+3. `/owner/crm?entity=sales-reps` shows the dedicated sales-reps table with empty-state CTA, not the cross-relationship view.
+4. `/owner/crm` lands on Leads → All Leads. Insights only opens via the corner toggle.
+5. Forms hub: Omar visible in Forms Generated AND in Signed. Click "Mark as not signed" → he disappears from Signed and stays in Forms Generated.
+6. Generate a fresh PAA: header crest is large; legal name renders with dots from the trade license; address line shows the trade-license office, not "Downtown Dubai, UAE".
+7. CRM Documents → deeds: each row shows a source pill (database / website form / manual).
 
 ## Out of scope
 
-- No changes to lead schema beyond optional `contract_type` inference helper.
-- No backend logic changes to authentication itself — just the splash gating in `OwnerGuard`.
-- Existing CRM features, panels, and routes remain — restyled and reorganized, never deleted.
+- No changes to `crm_leads`, RLS, or auth. No deletion of any existing component. `CRMNetwork.tsx` is preserved at its own route.
+- No new database tables (only an optional config file + read-side bucketing changes + one revert-status mutation on `esign_envelopes`).
+
