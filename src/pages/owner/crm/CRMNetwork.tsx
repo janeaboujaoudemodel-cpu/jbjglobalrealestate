@@ -343,20 +343,22 @@ export default function CRMNetwork({ initialRole }: CRMNetworkProps = {}) {
         </Card>
 
         <Tabs value={activeRole} onValueChange={(v) => setActiveRole(v as RoleKey)}>
-          <TabsList className="bg-[#F7F2EA] border border-[#B89555]/20">
-            {ROLE_TABS.map((t) => (
-              <TabsTrigger
-                key={t.key}
-                value={t.key}
-                className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]"
-              >
-                {t.label}
-                <span className="ml-2 text-[11px] text-[#1A1A1A]/60">
-                  {byRole[t.key].length}
-                </span>
-              </TabsTrigger>
-            ))}
-          </TabsList>
+          {!embedded && (
+            <TabsList className="bg-[#F7F2EA] border border-[#B89555]/20">
+              {ROLE_TABS.map((t) => (
+                <TabsTrigger
+                  key={t.key}
+                  value={t.key}
+                  className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]"
+                >
+                  {t.label}
+                  <span className="ml-2 text-[11px] text-[#1A1A1A]/60">
+                    {byRole[t.key].length}
+                  </span>
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          )}
 
           {ROLE_TABS.map((t) => (
             <TabsContent key={t.key} value={t.key} className="mt-4">
