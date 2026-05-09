@@ -121,7 +121,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
     }
   }, [ownerLoading, isOwner, ownerError]);
 
-  if ((authLoading || ownerLoading) && showLoading) {
+  if ((authLoading || ownerLoading) && showLoading && showSplash) {
     if (!loadingTimedOut) {
       return (
         <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
