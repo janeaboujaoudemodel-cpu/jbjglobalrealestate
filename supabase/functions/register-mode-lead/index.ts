@@ -25,9 +25,11 @@ function modeToContactType(mode: Mode): 'investor' | 'broker' | 'developer' {
 }
 
 function modeToIntent(mode: Mode): string {
-  if (mode === 'broker' || mode === 'investor_broker') return 'sell_side';
-  if (mode === 'developer') return 'project_launch';
-  return 'buy_side';
+  // Must satisfy crm_leads_lead_intent_check:
+  // ('buy','sell','rent_lease','broker_registration','partner_services')
+  if (mode === 'broker' || mode === 'investor_broker') return 'broker_registration';
+  if (mode === 'developer') return 'partner_services';
+  return 'buy';
 }
 
 Deno.serve(async (req) => {
