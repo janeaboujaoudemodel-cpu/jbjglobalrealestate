@@ -13,9 +13,10 @@ import {
 } from "@/components/ui/sheet";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
-import { Users, Search, Plus, Building2, BadgeCheck, Clock, Loader2 } from "lucide-react";
+import { Users, Search, Plus, Building2, BadgeCheck, Clock, Loader2, Download } from "lucide-react";
 import { toast } from "sonner";
 import { RelationalHubTabs } from "@/components/crm/RelationalHubTabs";
+import { UnifiedCRMExportModal } from "@/components/crm/UnifiedCRMExportModal";
 import {
   SourceFilterChips,
   EMPTY_SOURCE_FILTER,
