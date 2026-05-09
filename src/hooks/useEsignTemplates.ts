@@ -232,13 +232,14 @@ export function useRegenerateEnvelopePdf() {
       ownerSignatureUrl?: string | null;
       ownerStampUrl?: string | null;
       clientSignatureUrl?: string | null;
+      hiddenFields?: string[];
     }) => {
-      const { envelopeId, templateKey, values, chrome, ownerSignatureUrl, ownerStampUrl, clientSignatureUrl } = input;
+      const { envelopeId, templateKey, values, chrome, ownerSignatureUrl, ownerStampUrl, clientSignatureUrl, hiddenFields } = input;
       const { data: userData } = await supabase.auth.getUser();
       const user = userData.user;
       if (!user) throw new Error("Not signed in");
 
-      const html = renderTemplateHtml(templateKey, values, { chrome, ownerSignatureUrl, ownerStampUrl, clientSignatureUrl });
+      const html = renderTemplateHtml(templateKey, values, { chrome, ownerSignatureUrl, ownerStampUrl, clientSignatureUrl, hiddenFields });
       const { blob } = await renderHtmlToPdfBlob(html);
 
       const docNumber = values.doc_number || "JBJ-DOC";
@@ -259,6 +260,7 @@ export function useRegenerateEnvelopePdf() {
       const nextMeta = {
         ...prevMeta,
         ...(chrome ? { chrome } : {}),
+        ...(hiddenFields ? { hidden_fields: hiddenFields } : {}),
         layout_version: PAA_LAYOUT_VERSION,
       };
 

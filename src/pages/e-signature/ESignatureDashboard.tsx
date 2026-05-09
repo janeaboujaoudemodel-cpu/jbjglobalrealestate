@@ -32,6 +32,7 @@ import {
 import { formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
 import { SUPABASE_URL } from "@/config/backend";
+import { computeDisplayStatus, pickClientName, pickPropertyContext, maskPhone, maskEmail } from "@/pages/e-signature/envelopeStatus";
 
 type EnvelopeStatus = 'draft' | 'sent' | 'viewed' | 'partially_signed' | 'completed' | 'declined' | 'expired' | 'voided';
 
@@ -57,8 +58,9 @@ interface Envelope {
   }[];
 }
 
-const statusConfig: Record<EnvelopeStatus, { label: string; color: string; icon: React.ReactNode }> = {
+const statusConfig: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
   draft: { label: "Draft", color: "bg-amber-50 text-amber-700 border-amber-200", icon: <FileSignature className="w-3 h-3" /> },
+  ready: { label: "Ready", color: "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/50", icon: <CheckCircle2 className="w-3 h-3" /> },
   sent: { label: "Sent", color: "bg-blue-50 text-blue-700 border-blue-200", icon: <Send className="w-3 h-3" /> },
   viewed: { label: "Viewed", color: "bg-yellow-50 text-yellow-700 border-yellow-200", icon: <Eye className="w-3 h-3" /> },
   partially_signed: { label: "Partially Signed", color: "bg-orange-50 text-orange-700 border-orange-200", icon: <Clock className="w-3 h-3" /> },
@@ -303,15 +305,17 @@ export default function ESignatureDashboard() {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {filteredEnvelopes?.map((envelope) => {
-                    const config = statusConfig[envelope.status];
+                    const displayStatus = computeDisplayStatus(envelope as any);
+                    const config = statusConfig[displayStatus] || statusConfig.draft;
                     const docNumber =
                       (envelope.metadata as any)?.doc_number ||
                       (envelope.template_field_values as any)?.doc_number ||
                       "";
-                    const clientName =
-                      (envelope.template_field_values as any)?.landlord_name ||
-                      envelope.esign_recipients?.[0]?.name ||
-                      "Unnamed client";
+                    const clientName = pickClientName(envelope);
+                    const propertyCtx = pickPropertyContext(envelope);
+                    const v = (envelope.template_field_values as any) || {};
+                    const phoneMasked = maskPhone(v.mobile_number);
+                    const emailMasked = maskEmail(v.email_address);
                     const templateLabel =
                       envelope.template_key === "jbj-property-advertising-agreement"
                         ? "Property Advertising Agreement — Leasing"
@@ -345,7 +349,15 @@ export default function ESignatureDashboard() {
                           <div className="text-base font-semibold text-foreground group-hover:text-gold transition truncate">
                             {clientName}
                           </div>
-                          <div className="text-xs text-muted-foreground truncate">
+                          {propertyCtx && (
+                            <div className="text-xs text-[#1A1A1A]/80 truncate">{propertyCtx}</div>
+                          )}
+                          {(phoneMasked || emailMasked) && (
+                            <div className="text-[11px] text-[#1A1A1A]/60 truncate">
+                              {[phoneMasked, emailMasked].filter(Boolean).join(" · ")}
+                            </div>
+                          )}
+                          <div className="text-[11px] text-muted-foreground truncate mt-0.5">
                             {templateLabel}
                           </div>
                         </Link>

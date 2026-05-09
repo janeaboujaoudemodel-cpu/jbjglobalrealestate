@@ -25,6 +25,7 @@ import { TemplateChromeStudio } from "@/components/e-signature/TemplateChromeStu
 import { useOwnerSignatureAssets } from "@/hooks/useOwnerSignatureAssets";
 import { SendForSignatureDialog } from "@/components/e-signature/SendForSignatureDialog";
 import ExportEnvelopeDialog from "@/components/e-signature/ExportEnvelopeDialog";
+import { isReadyDraft, computeDisplayStatus, pickClientName, pickPropertyContext, maskPhone, maskEmail } from "@/pages/e-signature/envelopeStatus";
 
 type EnvelopeStatus = 'draft' | 'sent' | 'viewed' | 'partially_signed' | 'completed' | 'declined' | 'expired' | 'voided';
 type RecipientStatus = 'pending' | 'sent' | 'delivered' | 'viewed' | 'signed' | 'declined';
@@ -66,6 +67,7 @@ export default function EnvelopeDetail() {
   const [showStudio, setShowStudio] = useState(false);
   const [sendOpen, setSendOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
+  const [hiddenFields, setHiddenFields] = useState<string[]>([]);
   const regenerate = useRegenerateEnvelopePdf();
   const { data: sigAssets } = useOwnerSignatureAssets("signature");
   const { data: stampAssets } = useOwnerSignatureAssets("stamp");
@@ -94,6 +96,7 @@ export default function EnvelopeDetail() {
       const persisted = (meta.cc_emails || []) as string[];
       setCcs(Array.isArray(persisted) ? persisted : []);
       setChrome((meta.chrome as TemplateChrome) || {});
+      setHiddenFields(Array.isArray(meta.hidden_fields) ? meta.hidden_fields : []);
     }
   }, [envelope?.id]);
 
@@ -149,9 +152,9 @@ export default function EnvelopeDetail() {
     return renderTemplateHtml(
       envelope.template_key,
       { ...vals, doc_number: vals.doc_number || docNumber },
-      { chrome, ownerSignatureUrl, ownerStampUrl },
+      { chrome, ownerSignatureUrl, ownerStampUrl, hiddenFields },
     );
-  }, [envelope?.template_key, envelope?.template_field_values, editing, editValues, docNumber, chrome, ownerSignatureUrl, ownerStampUrl]);
+  }, [envelope?.template_key, envelope?.template_field_values, editing, editValues, docNumber, chrome, ownerSignatureUrl, ownerStampUrl, hiddenFields]);
 
   const sendReminder = async (recipientId?: string) => {
     const key = recipientId || "all";
@@ -278,6 +281,7 @@ export default function EnvelopeDetail() {
         chrome,
         ownerSignatureUrl,
         ownerStampUrl,
+        hiddenFields,
       });
       toast.success("Document updated");
       setEditing(false);
@@ -287,6 +291,43 @@ export default function EnvelopeDetail() {
       toast.error(e.message || "Failed to update");
     }
   };
+
+  // Toggle a field's visibility in the rendered PDF and persist to metadata.
+  const toggleHiddenField = async (key: string, hide = true) => {
+    if (!envelope?.template_key) return;
+    const next = hide
+      ? Array.from(new Set([...hiddenFields, key]))
+      : hiddenFields.filter((k) => k !== key);
+    setHiddenFields(next);
+    try {
+      await regenerate.mutateAsync({
+        envelopeId: envelope.id,
+        templateKey: envelope.template_key,
+        values: { ...((envelope.template_field_values as any) || {}), doc_number: docNumber },
+        chrome,
+        ownerSignatureUrl,
+        ownerStampUrl,
+        hiddenFields: next,
+      });
+      toast.success(hide ? "Field removed" : "Field restored");
+      refetch();
+    } catch (e: any) {
+      toast.error(e?.message || "Failed to update");
+    }
+  };
+
+  // Listen for click-to-delete messages from the preview iframe.
+  useEffect(() => {
+    const onMsg = (e: MessageEvent) => {
+      const data: any = e.data;
+      if (data?.type === "jbj-hide-field" && typeof data.key === "string") {
+        toggleHiddenField(data.key, true);
+      }
+    };
+    window.addEventListener("message", onMsg);
+    return () => window.removeEventListener("message", onMsg);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [envelope?.id, hiddenFields, chrome, ownerSignatureUrl, ownerStampUrl, docNumber]);
 
   const addCc = (raw?: string) => {
     const v = (raw ?? ccInput).trim();
@@ -340,7 +381,7 @@ export default function EnvelopeDetail() {
   const clientRec = (envelope.esign_recipients || []).find((r: any) => r.metadata?.role === "client") || envelope.esign_recipients?.[0];
   const isDraft = envelope.status === "draft";
   const previewSrcDoc = previewHtml
-    ? `<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;padding:0;background:#fff;}</style></head><body>${previewHtml}</body></html>`
+    ? `<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;padding:0;background:#fff;}[data-field-key]{cursor:pointer;transition:background .15s,outline .15s;border-radius:4px;}[data-field-key]:hover{background:#FDECEC;outline:1px dashed #d33;outline-offset:2px;}</style></head><body>${previewHtml}<script>document.addEventListener('click',function(e){var t=e.target;while(t&&t!==document.body){if(t.dataset&&t.dataset.fieldKey){e.preventDefault();e.stopPropagation();var label=(t.querySelector('div:last-child')||{}).textContent||t.dataset.fieldKey;if(confirm('Remove field "'+label.trim()+'" from the document?')){parent.postMessage({type:'jbj-hide-field',key:t.dataset.fieldKey},'*');}return;}t=t.parentNode;}});<\/script></body></html>`
     : null;
 
   return (
@@ -354,15 +395,20 @@ export default function EnvelopeDetail() {
             </Button>
             <div className="min-w-0">
               <div className="flex items-center gap-3 flex-wrap">
-                {docNumber && (
-                  <span className="text-[10px] tracking-[0.16em] text-[#1A1A1A]/70 uppercase border border-[#B89555]/50 rounded px-2 py-0.5 bg-[#F7F2EA]">
-                    {docNumber}
-                  </span>
-                )}
-                <h1 className="text-2xl font-bold text-[#1A1A1A] truncate">{envelope.name}</h1>
-                <Badge className={`${config.color} flex items-center gap-1`}>{config.icon}{config.label}</Badge>
+                <h1 className="text-2xl font-bold text-[#1A1A1A] truncate">
+                  {docNumber || envelope.name}
+                </h1>
+                <Badge className={`${config.color} flex items-center gap-1`}>
+                  {config.icon}
+                  {envelope.status === "draft" && isReadyDraft(envelope) ? "Ready" : config.label}
+                </Badge>
               </div>
-              {envelope.description && <p className="text-[#1A1A1A]/70 mt-1 text-sm">{envelope.description}</p>}
+              <p className="text-[#1A1A1A]/70 mt-1 text-sm">
+                {envelope.template_key === "jbj-property-advertising-agreement"
+                  ? "Property Advertising Agreement — Leasing"
+                  : envelope.name}
+                {envelope.description ? ` · ${envelope.description}` : ""}
+              </p>
             </div>
           </div>
         </div>

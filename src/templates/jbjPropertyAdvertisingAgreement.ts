@@ -14,7 +14,7 @@ export const JBJ_BRAND = {
   ink: "#1A1A1A",
 } as const;
 
-export const PAA_LAYOUT_VERSION = 4;
+export const PAA_LAYOUT_VERSION = 5;
 
 export type PAAFieldKey =
   // Owner
@@ -82,11 +82,21 @@ const radioChip = (label: string, selected: boolean) => `
     ${esc(label)}
   </span>`;
 
-const fieldUnderline = (label: string, value: string) => `
-  <div style="margin:6px 0 14px;">
+const fieldUnderline = (
+  label: string,
+  value: string,
+  key?: string,
+  opts?: { hidden?: Set<string>; force?: boolean }
+) => {
+  if (key && opts?.hidden?.has(key)) return "";
+  if (!opts?.force && !value) return "";
+  const dataAttr = key ? ` data-field-key="${key}"` : "";
+  return `
+  <div${dataAttr} style="margin:6px 0 14px;min-width:220px;flex:1 1 240px;">
     <div style="border-bottom:1px solid #B89555;min-height:18px;padding:2px 0;font-size:13px;color:#1A1A1A;">${esc(value || "")}</div>
     <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:#1A1A1A;opacity:.7;margin-top:3px;">${esc(label)}</div>
   </div>`;
+};
 
 /* ---------------------------------- chrome -------------------------------- */
 
@@ -213,6 +223,7 @@ export interface BuildPAAOptions {
   ownerSignatureUrl?: string | null;   // url to PNG of authorised representative signature
   ownerStampUrl?: string | null;       // url to PNG of company stamp
   clientSignatureUrl?: string | null;  // url to client's captured signature
+  hiddenFields?: string[];             // keys explicitly hidden by the user
 }
 
 export function buildPAAHtml(
@@ -225,6 +236,9 @@ export function buildPAAHtml(
   const chrome: Required<TemplateChrome> = { ...DEFAULT_CHROME, ...(opts.chrome || {}) };
   const accent = chrome.accent;
   const ink = chrome.ink;
+  const hidden = new Set<string>(opts.hiddenFields || []);
+  const fu = (label: string, value: string, key: string) =>
+    fieldUnderline(label, value, key, { hidden });
 
   // Conditionals (smart fields)
   const isVacant = /vacant/i.test(get("status_vacant_tenanted"));
@@ -288,18 +302,19 @@ export function buildPAAHtml(
   </p>
 
   ${sectionTitle(1, "Landlord / Owner Details")}
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 32px;">
-    ${fieldUnderline("Landlord's Name", get("landlord_name"))}
-    ${fieldUnderline("Passport Number", get("passport_number"))}
-    ${fieldUnderline("Emirates ID", get("emirates_id"))}
-    ${fieldUnderline("Mobile Number", get("mobile_number"))}
-    ${fieldUnderline("Email Address", get("email_address"))}
-    ${fieldUnderline("Listing Consultant", get("listing_consultant"))}
-    ${fieldUnderline("Property Reference No.", get("property_reference_no"))}
-    <div style="margin:6px 0 14px;">
+  <div style="display:flex;flex-wrap:wrap;gap:0 32px;">
+    ${fu("Landlord's Name", get("landlord_name"), "landlord_name")}
+    ${fu("Passport Number", get("passport_number"), "passport_number")}
+    ${fu("Emirates ID", get("emirates_id"), "emirates_id")}
+    ${fu("Mobile Number", get("mobile_number"), "mobile_number")}
+    ${fu("Email Address", get("email_address"), "email_address")}
+    ${fu("Listing Consultant", get("listing_consultant"), "listing_consultant")}
+    ${fu("Property Reference No.", get("property_reference_no"), "property_reference_no")}
+    ${!hidden.has("expiry_date") && get("expiry_date") ? `
+    <div data-field-key="expiry_date" style="margin:6px 0 14px;min-width:220px;flex:1 1 240px;">
       <div>${dateBox(get("expiry_date"))}</div>
       <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.7;margin-top:5px;">Expiry Date</div>
-    </div>
+    </div>` : ""}
   </div>
 
   ${sectionTitle(2, "Property Details")}
@@ -315,20 +330,20 @@ export function buildPAAHtml(
       ${dateBox(get("vacating_date"))}` : ""}
   </div>
 
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 32px;">
-    ${fieldUnderline("Building Name", get("building_name"))}
-    ${fieldUnderline("Unit", get("unit_number"))}
-    ${fieldUnderline("Street Name", get("street_name"))}
-    ${fieldUnderline("Community", get("community"))}
-    ${fieldUnderline("BUA (SqFt)", get("bua_sqft"))}
-    ${showPlot ? fieldUnderline("Plot (Sq.Ft)", get("plot_sqft")) : `<div></div>`}
-    ${fieldUnderline("Bedrooms", get("bedrooms"))}
-    ${fieldUnderline("Bathrooms", get("bathrooms"))}
-    ${fieldUnderline("Rental Amount / Sales Amount", fmtMoney(get("rental_amount") || get("sales_amount")))}
-    ${fieldUnderline("Parking", get("parking"))}
+  <div style="display:flex;flex-wrap:wrap;gap:0 32px;">
+    ${fu("Building Name", get("building_name"), "building_name")}
+    ${fu("Unit", get("unit_number"), "unit_number")}
+    ${fu("Street Name", get("street_name"), "street_name")}
+    ${fu("Community", get("community"), "community")}
+    ${fu("BUA (SqFt)", get("bua_sqft"), "bua_sqft")}
+    ${showPlot ? fu("Plot (Sq.Ft)", get("plot_sqft"), "plot_sqft") : ""}
+    ${fu("Bedrooms", get("bedrooms"), "bedrooms")}
+    ${fu("Bathrooms", get("bathrooms"), "bathrooms")}
+    ${fu("Rental Amount / Sales Amount", fmtMoney(get("rental_amount") || get("sales_amount")), "rental_amount")}
+    ${fu("Parking", get("parking"), "parking")}
   </div>
-  ${get("additional_notes") ? `
-    <div style="margin:6px 0 14px;">
+  ${!hidden.has("additional_notes") && get("additional_notes") ? `
+    <div data-field-key="additional_notes" style="margin:6px 0 14px;">
       <div style="border:1px solid ${accent};border-radius:4px;min-height:54px;padding:8px 10px;font-size:12px;color:${ink};white-space:pre-wrap;">${esc(get("additional_notes"))}</div>
       <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.7;margin-top:3px;">Additional Notes</div>
     </div>` : ""}

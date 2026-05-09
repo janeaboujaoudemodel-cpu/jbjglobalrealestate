@@ -1,66 +1,77 @@
-# Exportable Property Advertising Agreement
+# Smart fields, smart cards & smart status
 
-Currently `EnvelopeDetail.tsx` exposes a single "Download PDF" button. Replace it with a flexible export dialog that lets you tick what you want and share to the client.
+Three connected upgrades to the Property Advertising Agreement (and any envelope reusing the JBJ template).
 
-## UX
+## 1. Click-to-delete + hide-empty fields in the rendered document
 
-Replace the single "Download PDF" button with a split control:
+Goal: empty/non-applicable fields disappear from the PDF; any field can be hit-deleted from the live preview.
 
-- Primary button: **Download PDF** (one click, default behaviour — most common path).
-- Adjacent button: **Export…** opens a champagne-themed dialog.
+### Template changes — `src/templates/jbjPropertyAdvertisingAgreement.ts`
 
-### Export dialog contents
+- `fieldUnderline(label, value, key, hiddenSet)` returns `""` when:
+  - `value` is empty AND the field is not in a force-shown allow-list (only signature anchors are forced)
+  - OR the field key is present in `hiddenSet`
+- All section grids switch from rigid 2-col to a flex-wrap row so removed fields don't leave empty columns. Section headers (`sectionTitle`) only render if the section has at least one visible field.
+- Each rendered field is wrapped in `<span data-field-key="…">` so the editor can target it.
+- New `PAA_LAYOUT_VERSION = 5` to auto-rerender old PDFs.
 
-Checkbox list (all default-checked = PDF only; user can tick more):
+### EnvelopeDetail edit mode — `src/pages/e-signature/EnvelopeDetail.tsx`
 
-- [x] PDF document (`.pdf`) — default, always available
-- [ ] Page images (`.png`, one per page) — high-res 2x render
-- [ ] Single long image (`.jpg`) — vertical strip of all pages, easy WhatsApp share
-- [ ] ZIP bundle — when 2+ formats selected, auto-bundle as `JBJ-PAA-<doc_number>.zip`
+- New `hiddenFields: string[]` persisted in `esign_envelopes.metadata.hidden_fields`.
+- Live preview iframe gets a click overlay: clicking any `[data-field-key]` shows a small "Remove this field?" popover (champagne card). Confirm → adds key to `hiddenFields` → re-renders PDF.
+- New "Manage fields" panel listing each field with eye/eye-off toggle so the user can also un-hide.
+- "Edit any time": existing inline edit form already supports all fields; we lift the current `isDraft`-only gate so editing is allowed for any non-`completed`/`declined` envelope. For `completed` envelopes, edits are blocked but a "Clone & edit" action creates a new draft from the same data.
 
-Below the checkboxes:
+## 2. Status: stop calling completed-by-user envelopes "Draft"
 
-- Quality selector for image exports: Standard (1.5x) / High (2x) / Ultra (3x)
-- "Include audit certificate (if signed)" toggle — appended into PDF/ZIP
-- Filename preview (auto-built from `doc_number` + `landlord_name`)
+A "draft" implies unfinished. Once the user has saved the filled fields the envelope is **Ready** even if not yet sent for signature.
 
-Footer actions:
+### Logic
 
-- **Download** — triggers the selected formats
-- **Share to client** — opens a small share sheet:
-  - Copy public download link (signed Supabase storage URL, 24h)
-  - WhatsApp (pre-filled message + link)
-  - Email (uses existing `SendForSignatureDialog` plumbing but in "share copy" mode — no signing request)
+Introduce a virtual display status computed on the dashboard + detail header:
 
-## Technical
+```text
+DB status `draft` + has_required_fields filled  →  display "Ready"  (slate badge)
+DB status `draft` + missing required fields     →  display "Draft"  (amber badge)
+DB status `sent` / `viewed` / etc.              →  unchanged
+```
 
-### New file: `src/components/e-signature/ExportEnvelopeDialog.tsx`
+`has_required_fields` = `landlord_name` + `mobile_number` + at least one property identifier (`building_name` OR `community_name` OR `property_reference_no`) are non-empty.
 
-- Uses `pdfjs-dist` (already a transitive dep via existing PDF preview) to rasterise pages of `envelope.document_url` to canvases at requested DPR.
-- PNG export: each canvas → `toBlob('image/png')` → individual files.
-- Long JPG: stitch all page canvases vertically onto one canvas → `toBlob('image/jpeg', 0.92)`.
-- ZIP: use `jszip` (lightweight, add as dep if not present) when multiple formats are checked.
-- PDF: just fetch the existing `document_url` (or signed PDF if status = completed) — no re-render.
-- Saves via `file-saver` or a small anchor-click helper consistent with existing `handleDownload`.
+This is a pure UI/derivation change — the underlying enum stays `draft` so existing send/sign flows are not disturbed. When the user clicks "Send for signature", DB transitions to `sent` exactly as today.
 
-### Edit: `src/pages/e-signature/EnvelopeDetail.tsx`
+The detail page header swaps the title from generic "Draft" to the agreement number, e.g. **`JBJ-PAA-LEASING-0007 · Ready`**, with the template label as a smaller subtitle.
 
-- Import the new dialog, add state `exportOpen`.
-- Replace toolbar buttons with: `Download PDF` (existing one-click) + `Export…` (opens dialog).
-- In the signed-document footer, also add the same `Export…` to the signed PDF.
+## 3. Dashboard cards: show client + key context
 
-### Share helpers
+Goal: from the list view I can already tell which agreement is which.
 
-- Add `buildShareLink(envelope)` util that returns `https://jbj.ae/sign/<id>` for unsigned, or a 24h signed storage URL for the signed PDF.
-- WhatsApp message template (editable later, defaults to):
-  > "Hello {{landlord_name}}, please find attached the Property Advertising Agreement {{doc_number}} from JBJ Global Real Estate. {{link}}"
+### `src/pages/e-signature/ESignatureDashboard.tsx`
 
-### No backend/schema changes
+Each card grows to show, in priority order:
 
-All export work is client-side from the already-stored `document_url`. No migration, no new edge function. Status, audit, and signature flows are untouched.
+1. Doc number badge (existing) + computed status badge (Ready / Draft / Sent…)
+2. Client name (existing) — bold, primary
+3. Sub-line of context built from filled fields (each piece omitted if empty):
+   - Property type · Building / Community
+   - Mobile number (masked: `+971 5• ••• ••67`)
+   - Email (masked: `j•••@d•••.com`)
+4. Template label (existing, demoted to small text)
+5. Footer: recipient count + last updated (existing)
+
+Privacy: phone/email are masked on the list view to comply with the project's "never show contact info publicly" rule; full values remain on the detail page only.
+
+Search: extend the existing search-by-name to also match against `landlord_name`, `mobile_number`, `building_name`, `community_name`, and `doc_number`.
 
 ## Out of scope
 
-- Re-rendering the PDF on export (already handled by existing `PAA_LAYOUT_VERSION` auto-rerender).
-- Changes to template content, signature flow, or `SendForSignatureDialog`.
-- New permissions / RLS work.
+- New DB columns or RLS changes — `metadata.hidden_fields` reuses the existing JSONB.
+- Listing Authorisation template (separate file) — this round only updates PAA. The same hide-empty pattern can be ported in a follow-up.
+- New send/share flows — they already exist and are untouched.
+
+## Files touched
+
+- `src/templates/jbjPropertyAdvertisingAgreement.ts` — hide-empty + `data-field-key` + `PAA_LAYOUT_VERSION = 5`.
+- `src/pages/e-signature/EnvelopeDetail.tsx` — click-to-delete overlay, "Manage fields" panel, edit-any-time gate, header shows agreement number + computed status, "Clone & edit" for completed.
+- `src/pages/e-signature/ESignatureDashboard.tsx` — richer cards, masked contact lines, computed status, broader search.
+- New helper `src/pages/e-signature/envelopeStatus.ts` — `computeDisplayStatus(envelope)` + masking helpers, shared by both pages.
