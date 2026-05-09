@@ -94,6 +94,7 @@ export default function ESignatureDashboard() {
             status
           )
         `)
+        .is("deleted_at", null)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
@@ -436,8 +437,9 @@ export default function ESignatureDashboard() {
                     const clientName = pickClientName(envelope);
                     const propertyCtx = pickPropertyContext(envelope);
                     const v = (envelope.template_field_values as any) || {};
-                    const phoneMasked = maskPhone(v.mobile_number);
-                    const emailMasked = maskEmail(v.email_address);
+                    // Owner/admin sees full details — no masking.
+                    const phoneFull = v.mobile_number || "";
+                    const emailFull = v.email_address || "";
                     const kind = getTemplateKind(envelope);
                     const kindLabel = getTemplateKindLabel(kind);
                     const templateLabel =
@@ -497,9 +499,9 @@ export default function ESignatureDashboard() {
                           {sizeLine && (
                             <div className="text-[11px] text-[#1A1A1A]/70 truncate">{sizeLine}</div>
                           )}
-                          {(phoneMasked || emailMasked) && (
-                            <div className="text-[11px] text-[#1A1A1A]/60 truncate">
-                              {[phoneMasked, emailMasked].filter(Boolean).join(" · ")}
+                          {(phoneFull || emailFull) && (
+                            <div className="text-[11px] text-[#1A1A1A]/70 truncate">
+                              {[phoneFull, emailFull].filter(Boolean).join(" · ")}
                             </div>
                           )}
                           <div className="text-[11px] text-muted-foreground truncate mt-0.5">
