@@ -87,21 +87,26 @@ export function OwnerTasksPopupAlert() {
     checkTasks();
   }, [user]);
 
+  const persistDismiss = () => {
+    try {
+      if (user?.id) localStorage.setItem(`${DISMISS_KEY_PREFIX}${user.id}`, Date.now().toString());
+    } catch { /* ignore */ }
+  };
+
   const handleClose = () => {
-    // Hide for this in-memory session only — never persist dismissal.
+    persistDismiss();
     setHiddenThisSession(true);
     queryClient.invalidateQueries({ queryKey: ['user-alert-counts'] });
     queryClient.invalidateQueries({ queryKey: ['notifications-preview'] });
   };
 
   const handleViewTasks = () => {
+    persistDismiss();
     setHiddenThisSession(true);
-    // Canonical owner dashboard route is `/owner` (index). `#tasks` lets the
-    // overview scroll to / open the tasks panel.
     navigate("/owner#tasks");
   };
 
-  if (!loaded || hiddenThisSession || pendingCount === 0) return null;
+  if (suppressed || !loaded || hiddenThisSession || pendingCount === 0) return null;
 
   return (
     <div
