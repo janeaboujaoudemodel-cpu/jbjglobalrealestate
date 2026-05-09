@@ -18,9 +18,11 @@ import { format, formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 import { SUPABASE_URL, PUBLIC_DOMAIN } from "@/config/backend";
-import { PAA_FIELD_GROUPS } from "@/templates/jbjPropertyAdvertisingAgreement";
+import { PAA_FIELD_GROUPS, PAA_LAYOUT_VERSION, type TemplateChrome } from "@/templates/jbjPropertyAdvertisingAgreement";
 import { renderTemplateHtml, useRegenerateEnvelopePdf } from "@/hooks/useEsignTemplates";
 import { SmartFillDropzone } from "@/components/e-signature/SmartFillDropzone";
+import { TemplateChromeStudio } from "@/components/e-signature/TemplateChromeStudio";
+import { useOwnerSignatureAssets } from "@/hooks/useOwnerSignatureAssets";
 
 type EnvelopeStatus = 'draft' | 'sent' | 'viewed' | 'partially_signed' | 'completed' | 'declined' | 'expired' | 'voided';
 type RecipientStatus = 'pending' | 'sent' | 'delivered' | 'viewed' | 'signed' | 'declined';
