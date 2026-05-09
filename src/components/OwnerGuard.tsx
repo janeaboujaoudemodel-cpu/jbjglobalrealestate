@@ -121,6 +121,11 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
     }
   }, [ownerLoading, isOwner, ownerError]);
 
+  // During the 250ms grace window, render nothing (avoid splash flash)
+  if ((authLoading || ownerLoading) && showLoading && !showSplash) {
+    return null;
+  }
+
   if ((authLoading || ownerLoading) && showLoading && showSplash) {
     if (!loadingTimedOut) {
       return (
