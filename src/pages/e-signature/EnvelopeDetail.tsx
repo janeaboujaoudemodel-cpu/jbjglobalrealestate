@@ -26,6 +26,7 @@ import { useOwnerSignatureAssets } from "@/hooks/useOwnerSignatureAssets";
 import { SendForSignatureDialog } from "@/components/e-signature/SendForSignatureDialog";
 import ExportEnvelopeDialog from "@/components/e-signature/ExportEnvelopeDialog";
 import { isReadyDraft, computeDisplayStatus, pickClientName, pickPropertyContext, maskPhone, maskEmail } from "@/pages/e-signature/envelopeStatus";
+import { openWhatsApp, openEmail } from "@/utils/contactActions";
 
 type EnvelopeStatus = 'draft' | 'sent' | 'viewed' | 'partially_signed' | 'completed' | 'declined' | 'expired' | 'voided';
 type RecipientStatus = 'pending' | 'sent' | 'delivered' | 'viewed' | 'signed' | 'declined';
@@ -203,12 +204,17 @@ export default function EnvelopeDetail() {
   const handleWhatsApp = (recipient: any) => {
     if (!recipient?.signing_token) { toast.error("No signing token"); return; }
     const url = buildSigningUrl(recipient.signing_token);
-    const phoneDigits = String(recipient.phone || "").replace(/[^\d]/g, "");
-    const text = encodeURIComponent(`Hi ${recipient.name}, please review and sign "${docNumber || envelope?.name}":\n${url}`);
-    const wa = phoneDigits
-      ? `https://wa.me/${phoneDigits}?text=${text}`
-      : `https://wa.me/?text=${text}`;
-    window.open(wa, "_blank");
+    const text = `Hi ${recipient.name}, please review and sign "${docNumber || envelope?.name}":\n${url}`;
+    openWhatsApp(recipient.phone, text);
+  };
+
+  const handleQuickEmail = (recipient: any) => {
+    if (!recipient?.email) { toast.error("No email on file"); return; }
+    if (!recipient?.signing_token) { toast.error("No signing token"); return; }
+    const url = buildSigningUrl(recipient.signing_token);
+    const subject = `Please sign — ${docNumber || envelope?.name}`;
+    const body = `Dear ${recipient.name},\n\nKindly review and digitally sign "${docNumber || envelope?.name}" via the secure link below:\n\n${url}\n\nThank you,\nJBJ Global Real Estate`;
+    openEmail({ to: recipient.email, subject, body });
   };
 
   const handleSend = async () => {
@@ -413,7 +419,32 @@ export default function EnvelopeDetail() {
           </div>
         </div>
 
-        {/* Action bar */}
+        {/* Signed banner */}
+        {envelope.status === "completed" && signedDoc && (
+          <div className="rounded-xl border border-emerald-300 bg-emerald-50/80 p-4 flex items-center gap-3 flex-wrap">
+            <CheckCircle2 className="w-6 h-6 text-emerald-700 shrink-0" />
+            <div className="min-w-0 flex-1">
+              <div className="text-sm font-semibold text-emerald-900">
+                Signed — agreement fully executed
+              </div>
+              <div className="text-xs text-emerald-800/80">
+                {clientRec?.signed_at ? `Signed by ${clientRec.name} on ${format(new Date(clientRec.signed_at), "MMM d, yyyy 'at' h:mm a")}` : "All recipients have signed"}
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                onClick={() => handleDownload(signedDoc.document_url, signedDoc.document_filename)}>
+                <Download className="w-3.5 h-3.5 mr-1.5" /> Signed PDF
+              </Button>
+              {signedDoc.certificate_url && (
+                <Button size="sm" variant="outline" className="border-emerald-300 text-emerald-800"
+                  onClick={() => handleDownload(signedDoc.certificate_url, `audit_${envelope.id}.pdf`)}>
+                  <Shield className="w-3.5 h-3.5 mr-1.5" /> Audit cert
+                </Button>
+              )}
+            </div>
+          </div>
+        )}
         <Card className="bg-[#F7F2EA] border-[#B89555]/30">
           <CardContent className="p-3 flex items-center gap-2 flex-wrap">
             {isDraft && (
@@ -554,6 +585,9 @@ export default function EnvelopeDetail() {
                             </Button>
                             <Button size="sm" variant="outline" className="h-7 text-[11px]" onClick={() => handleWhatsApp(recipient)}>
                               <MessageCircle className="w-3 h-3 mr-1" /> WhatsApp
+                            </Button>
+                            <Button size="sm" variant="outline" className="h-7 text-[11px]" onClick={() => handleQuickEmail(recipient)} disabled={!recipient.email}>
+                              <Mail className="w-3 h-3 mr-1" /> Email
                             </Button>
                           </>
                         )}

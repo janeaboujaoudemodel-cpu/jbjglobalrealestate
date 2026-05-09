@@ -9,6 +9,7 @@ import { Mail, MessageCircle, LinkIcon, Send, X, Plus, RotateCcw, Copy, Loader2 
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { SUPABASE_URL, PUBLIC_DOMAIN } from "@/config/backend";
+import { openWhatsApp } from "@/utils/contactActions";
 
 const isValidEmail = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.trim());
 
@@ -147,11 +148,9 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
         toast.success(`Emailed to ${to.length}${ccs.length ? ` · CC ${ccs.length}` : ""}${bccs.length ? ` · BCC ${bccs.length}` : ""}`);
       }
 
-      // WhatsApp — open wa.me with interpolated body + signing link
+      // WhatsApp — open via universal helper (never api.whatsapp.com, popup-safe)
       if (channels.whatsapp && whatsapp) {
-        const phoneDigits = whatsapp.replace(/[^\d]/g, "");
-        const text = encodeURIComponent(`${previewBody}\n\n${tokens.signing_link}`);
-        window.open(`https://wa.me/${phoneDigits}?text=${text}`, "_blank");
+        openWhatsApp(whatsapp, `${previewBody}\n\n${tokens.signing_link}`);
         toast.success("WhatsApp opened");
       }
 

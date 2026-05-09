@@ -559,89 +559,104 @@ Deno.serve(async (req) => {
       })
       .eq("id", envelope.id);
 
-    // ── Send completion emails ─────────────────────────────────────────────
-    // Use direct fetch to Resend global API
+    // ── Send completion emails (premium JBJ champagne/gold) ──────────────
     const baseUrl = Deno.env.get("SITE_URL") || "https://jbj.ae";
+    const docNumber = (envelope.metadata as any)?.doc_number || "";
+    const completedDate = new Date(envelope.completed_at || Date.now())
+      .toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" });
 
-    const completionEmailHtml = `
+    const premiumShell = (innerHtml: string) => `
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f9f6f1;">
-  <table role="presentation" style="width: 100%; border-collapse: collapse;">
-    <tr>
-      <td align="center" style="padding: 40px 20px;">
-        <table role="presentation" style="width: 100%; max-width: 600px; border-collapse: collapse;">
-          <tr>
-            <td style="text-align: center; padding-bottom: 30px;">
-              <h1 style="margin: 0; color: #b8860b; font-size: 28px;">JBJ Global Real Estate</h1>
-            </td>
-          </tr>
-          <tr>
-            <td style="background: white; border-radius: 16px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
-              <div style="text-align: center; margin-bottom: 24px;">
-                <div style="width: 64px; height: 64px; background: #22c55e; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;">
-                  <span style="font-size: 32px;">✓</span>
-                </div>
-              </div>
-              <h2 style="margin: 0 0 20px 0; color: #1a1a1a; font-size: 24px; text-align: center;">Document Signed!</h2>
-              <p style="color: #666; line-height: 1.6; margin-bottom: 24px; text-align: center;">
-                All parties have signed the document. Your signed copy is now ready.
-              </p>
-              <div style="background: #f0fdf4; border: 1px solid #86efac; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
-                <p style="margin: 0; font-weight: 600; color: #1a1a1a;">📄 ${envelope.name}</p>
-                <p style="margin: 8px 0 0 0; color: #666; font-size: 14px;">
-                  Completed on ${new Date(envelope.completed_at || Date.now()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                </p>
-              </div>
-              <div style="margin-bottom: 24px;">
-                <h3 style="margin: 0 0 12px 0; color: #1a1a1a; font-size: 16px;">Signers:</h3>
-                ${envelope.esign_recipients.map((r: any) => `
-                  <div style="display: flex; align-items: center; padding: 8px 0; border-bottom: 1px solid #eee;">
-                    <span style="color: #22c55e; margin-right: 8px;">✓</span>
-                    <span style="color: #1a1a1a;">${r.name}</span>
-                    <span style="color: #999; margin-left: 8px;">(${r.email})</span>
-                  </div>
-                `).join('')}
-              </div>
-              <div style="text-align: center; margin: 32px 0;">
-                <a href="${baseUrl}/e-signature/${envelope.id}" style="display: inline-block; background: linear-gradient(135deg, #b8860b, #d4a83a); color: white; text-decoration: none; padding: 16px 40px; border-radius: 12px; font-weight: 600; font-size: 16px;">
-                  View Signed Document
-                </a>
-              </div>
-              ${certificateUrl ? `
-              <div style="text-align: center; margin-top: 16px;">
-                <a href="${certificateUrl}" style="display: inline-block; background: white; border: 2px solid #b8860b; color: #b8860b; text-decoration: none; padding: 12px 32px; border-radius: 12px; font-weight: 600; font-size: 14px;">
-                  📋 Download Audit Certificate
-                </a>
-              </div>
-              ` : ''}
-            </td>
-          </tr>
-          <tr>
-            <td style="padding-top: 30px; text-align: center;">
-              <p style="color: #999; font-size: 12px; margin: 0;">If you have questions, contact <a href="mailto:contact@jbj.ae" style="color: #b8860b;">contact@jbj.ae</a></p>
-              <p style="color: #999; font-size: 12px; margin: 8px 0 0 0;">This document has been electronically signed and is legally binding.</p>
-              <p style="color: #999; font-size: 12px; margin: 8px 0 0 0;">© ${new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head>
+<body style="margin:0;padding:0;font-family:Inter,Arial,sans-serif;background:#FDFBF7;">
+  <table role="presentation" style="width:100%;border-collapse:collapse;">
+    <tr><td align="center" style="padding:40px 20px;">
+      <table role="presentation" style="width:100%;max-width:600px;border-collapse:collapse;">
+        <tr><td style="background:#F7F2EA;border:1px solid #B89555;border-radius:14px 14px 0 0;padding:22px 28px;border-bottom:none;">
+          <table role="presentation" style="width:100%;border-collapse:collapse;"><tr>
+            <td style="font-size:20px;font-weight:700;letter-spacing:.18em;color:#1A1A1A;">JBJ GLOBAL REAL ESTATE</td>
+            <td align="right" style="font-size:10px;letter-spacing:.16em;color:#1A1A1A;opacity:.7;">${docNumber ? `DOC NO. <strong style="opacity:1;">${docNumber}</strong>` : ""}</td>
+          </tr></table>
+          <div style="height:1px;background:#B89555;margin-top:14px;"></div>
+        </td></tr>
+        <tr><td style="background:#ffffff;border-left:1px solid #B89555;border-right:1px solid #B89555;padding:36px;">${innerHtml}</td></tr>
+        <tr><td style="background:#F7F2EA;border:1px solid #B89555;border-top:none;border-radius:0 0 14px 14px;padding:18px 28px;">
+          <div style="height:1px;background:#B89555;margin-bottom:14px;"></div>
+          <table role="presentation" style="width:100%;border-collapse:collapse;font-size:11px;color:#1A1A1A;"><tr>
+            <td style="opacity:.85;"><strong style="letter-spacing:.14em;">JBJ GLOBAL REAL ESTATE</strong><br/><span style="opacity:.7;">Private Office · Dubai, UAE</span></td>
+            <td align="center" style="opacity:.85;">CONTACT@JBJ.AE<br/>WWW.JBJ.AE</td>
+            <td align="right" style="opacity:.85;">+971 54 716 7107</td>
+          </tr></table>
+        </td></tr>
+        <tr><td style="text-align:center;padding-top:14px;font-size:11px;color:#1A1A1A;opacity:.55;">© ${new Date().getFullYear()} JBJ Global Real Estate · Electronically signed &amp; legally binding</td></tr>
+      </table>
+    </td></tr>
   </table>
-</body>
-</html>`;
+</body></html>`;
 
-    const allEmails = [
-      envelope.sender_email,
-      ...envelope.esign_recipients.map((r: any) => r.email),
-    ];
+    const buttons = `
+      <div style="text-align:center;margin:32px 0 12px;">
+        <a href="${baseUrl}/e-signature/${envelope.id}" style="display:inline-block;background:#1A1A1A;color:#FDFBF7;text-decoration:none;padding:14px 32px;border-radius:10px;font-weight:600;font-size:14px;letter-spacing:.06em;border:1px solid #B89555;">VIEW SIGNED DOCUMENT</a>
+      </div>
+      ${certificateUrl ? `<div style="text-align:center;margin-top:8px;">
+        <a href="${certificateUrl}" style="display:inline-block;background:#FDFBF7;color:#1A1A1A;text-decoration:none;padding:10px 24px;border-radius:10px;font-weight:600;font-size:12px;letter-spacing:.06em;border:1px solid #B89555;">📋 DOWNLOAD AUDIT CERTIFICATE</a>
+      </div>` : ""}`;
 
     if (resendApiKey) {
-      for (const email of allEmails) {
+      // 1) Premium "Thank you" email — to each signer
+      for (const r of envelope.esign_recipients) {
+        const signerInner = `
+          <div style="text-align:center;margin-bottom:20px;">
+            <div style="display:inline-block;width:56px;height:56px;background:#10b981;border-radius:50%;line-height:56px;color:#fff;font-size:28px;">✓</div>
+          </div>
+          <h2 style="margin:0 0 12px;color:#1A1A1A;font-size:22px;font-weight:700;text-align:center;">Thank you for signing</h2>
+          <p style="color:#1A1A1A;line-height:1.7;font-size:14px;text-align:center;margin:0 0 8px;">Dear ${r.name},</p>
+          <p style="color:#1A1A1A;line-height:1.7;font-size:14px;margin:0 0 18px;">
+            We have received your signature on <strong>${envelope.name}</strong>. The fully executed document is now legally binding and a signed copy is attached for your records below.
+          </p>
+          <p style="color:#1A1A1A;line-height:1.7;font-size:14px;margin:0 0 18px;">
+            Our team will review the agreement and reach out shortly should anything require your attention. Should you have any questions, simply reply to this email or contact us at <a href="mailto:contact@jbj.ae" style="color:#1A1A1A;">contact@jbj.ae</a>.
+          </p>
+          <div style="background:#F7F2EA;border:1px solid #B89555;border-radius:10px;padding:16px;margin:20px 0;">
+            <p style="margin:0;font-weight:600;color:#1A1A1A;font-size:13px;">📄 ${envelope.name}${docNumber ? ` · ${docNumber}` : ""}</p>
+            <p style="margin:6px 0 0;color:#1A1A1A;opacity:.75;font-size:12px;">Completed ${completedDate}</p>
+          </div>
+          ${buttons}
+          <p style="color:#1A1A1A;opacity:.6;font-size:12px;text-align:center;margin:24px 0 0;">With appreciation,<br/><strong>JBJ Global Real Estate</strong></p>`;
+        try {
+          const res = await quotaGuardedFetch("https://api.resend.com/emails", {
+            method: "POST",
+            headers: { "Authorization": `Bearer ${resendApiKey}`, "Content-Type": "application/json" },
+            body: JSON.stringify({
+              from: "JBJ Global Real Estate <contact@jbj.ae>",
+              to: [r.email],
+              subject: `✓ Thank you — your signed copy of ${envelope.name}`,
+              html: premiumShell(signerInner),
+            }),
+          });
+          const resData = await res.json();
+          if (!res.ok) console.error("Resend signer email error:", JSON.stringify(resData));
+        } catch (e) { console.error("Failed signer email", r.email, e); }
+      }
+
+      // 2) Owner notification — to sender + contact@jbj.ae
+      const signerName = envelope.esign_recipients[0]?.name || "Recipient";
+      const ownerInner = `
+        <h2 style="margin:0 0 16px;color:#1A1A1A;font-size:20px;font-weight:700;">Document signed</h2>
+        <p style="color:#1A1A1A;line-height:1.7;font-size:14px;margin:0 0 16px;">
+          <strong>${envelope.name}</strong>${docNumber ? ` · ${docNumber}` : ""} has been signed by <strong>${signerName}</strong> on ${completedDate}.
+        </p>
+        <div style="background:#F7F2EA;border:1px solid #B89555;border-radius:10px;padding:16px;margin:16px 0;">
+          <p style="margin:0 0 8px;font-weight:600;color:#1A1A1A;font-size:13px;">Signers</p>
+          ${envelope.esign_recipients.map((r: any) => `
+            <div style="padding:6px 0;border-bottom:1px solid #B89555;border-bottom-style:dotted;color:#1A1A1A;font-size:13px;">
+              <span style="color:#10b981;">✓</span> <strong>${r.name}</strong> <span style="opacity:.6;">${r.email}</span>
+            </div>`).join("")}
+        </div>
+        ${buttons}`;
+      const ownerRecipients = Array.from(new Set([envelope.sender_email, "contact@jbj.ae"].filter(Boolean)));
+      for (const email of ownerRecipients) {
         try {
           const res = await quotaGuardedFetch("https://api.resend.com/emails", {
             method: "POST",
@@ -649,17 +664,16 @@ Deno.serve(async (req) => {
             body: JSON.stringify({
               from: "JBJ E-Signature <contact@jbj.ae>",
               to: [email],
-              subject: `Signed: ${envelope.name}`,
-              html: completionEmailHtml,
+              subject: `Signed: ${envelope.name} by ${signerName}`,
+              html: premiumShell(ownerInner),
             }),
           });
           const resData = await res.json();
-          if (!res.ok) console.error("Resend API error:", JSON.stringify(resData));
-        } catch (emailError) {
-          console.error("Failed to send completion email to", email, emailError);
-        }
+          if (!res.ok) console.error("Resend owner email error:", JSON.stringify(resData));
+        } catch (e) { console.error("Failed owner email", email, e); }
       }
     }
+
 
     return corsJsonResponse({
       success: true,
