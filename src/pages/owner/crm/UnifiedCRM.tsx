@@ -304,9 +304,9 @@ export default function UnifiedCRM() {
         {insightsOpen && (
           <div className="px-3 md:px-6 pb-4 border-t border-[#B89555]/15 bg-[#F7F2EA]/60">
             <div className="pt-4">
-              <Suspense fallback={<Fallback />}>
+              <CRMBodyErrorBoundary><Suspense fallback={<Fallback />}>
                 <CRMEnhancedDashboard userId={userId} hasOwnerAccess />
-              </Suspense>
+              </Suspense></CRMBodyErrorBoundary>
             </div>
           </div>
         )}
@@ -389,7 +389,7 @@ export default function UnifiedCRM() {
       <div className="px-3 md:px-6 py-5">
         <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] shadow-sm overflow-hidden">
           <div className="p-3 md:p-5 overflow-x-auto">
-            <Suspense fallback={<Fallback />}>{Body}</Suspense>
+            <CRMBodyErrorBoundary><Suspense fallback={<Fallback />}>{Body}</Suspense></CRMBodyErrorBoundary>
           </div>
         </div>
       </div>
