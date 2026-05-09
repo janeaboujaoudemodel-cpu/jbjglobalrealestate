@@ -140,11 +140,13 @@ function relatedKeys(l: Lead) {
 
 /* -------------------- Page -------------------- */
 
-export default function CRMNetwork() {
+interface CRMNetworkProps { initialRole?: RoleKey }
+export default function CRMNetwork({ initialRole }: CRMNetworkProps = {}) {
   const [loading, setLoading] = useState(true);
   const [leads, setLeads] = useState<Lead[]>([]);
-  const [activeRole, setActiveRole] = useState<RoleKey>("investors");
+  const [activeRole, setActiveRole] = useState<RoleKey>(initialRole || "investors");
   const [search, setSearch] = useState("");
+  useEffect(() => { if (initialRole) setActiveRole(initialRole); }, [initialRole]);
   // Cross-tab persistent filter state
   const [filter, setFilter] = useState<SourceFilterValue>(EMPTY_SOURCE_FILTER);
   const [cross, setCross] = useState<CrossFilter | null>(null);
