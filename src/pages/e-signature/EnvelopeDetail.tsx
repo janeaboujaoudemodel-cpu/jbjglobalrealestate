@@ -343,7 +343,7 @@ export default function EnvelopeDetail() {
   const clientRec = (envelope.esign_recipients || []).find((r: any) => r.metadata?.role === "client") || envelope.esign_recipients?.[0];
   const isDraft = envelope.status === "draft";
   const previewSrcDoc = previewHtml
-    ? `<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;padding:0;background:#fff;}</style></head><body>${previewHtml}</body></html>`
+    ? `<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;padding:0;background:#fff;}[data-field-key]{cursor:pointer;transition:background .15s,outline .15s;border-radius:4px;}[data-field-key]:hover{background:#FDECEC;outline:1px dashed #d33;outline-offset:2px;}</style></head><body>${previewHtml}<script>document.addEventListener('click',function(e){var t=e.target;while(t&&t!==document.body){if(t.dataset&&t.dataset.fieldKey){e.preventDefault();e.stopPropagation();var label=(t.querySelector('div:last-child')||{}).textContent||t.dataset.fieldKey;if(confirm('Remove field "'+label.trim()+'" from the document?')){parent.postMessage({type:'jbj-hide-field',key:t.dataset.fieldKey},'*');}return;}t=t.parentNode;}});<\/script></body></html>`
     : null;
 
   return (
