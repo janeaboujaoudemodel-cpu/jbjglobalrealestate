@@ -1822,6 +1822,7 @@ const ClientsTab = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<any>(null);
+  const [unifiedExportOpen, setUnifiedExportOpen] = useState(false);
 
   const filtered = useMemo(() => data.filter((r: any) => {
     const matchesQ = !q || r.full_name?.toLowerCase().includes(q.toLowerCase()) || r.email?.toLowerCase()?.includes(q.toLowerCase());
