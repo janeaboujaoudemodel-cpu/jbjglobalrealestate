@@ -595,8 +595,14 @@ serve(async (req: Request) => {
 
     if (!resendResult.ok) {
       console.error("Resend send failed:", resendResult.status, resendResult.error, resendResult.data);
+      const isAuth = resendResult.status === 401 || /api key/i.test(String(resendResult.error || ""));
+      const friendly = isAuth
+        ? "Resend API key is invalid. Update RESEND_API_KEY in Cloud → Secrets and redeploy."
+        : (resendResult.error || "Resend send failed");
       return new Response(JSON.stringify({
-        error: resendResult.error || "Resend send failed",
+        error: friendly,
+        code: isAuth ? "RESEND_AUTH_INVALID" : "RESEND_SEND_FAILED",
+        upstream_status: resendResult.status,
         details: resendResult.data,
         quota: resendResult.quota,
       }), {
