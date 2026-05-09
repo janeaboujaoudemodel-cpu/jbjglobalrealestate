@@ -46,7 +46,7 @@ export function TemplateChromeStudio({ value, onChange }: Props) {
         body: { current: chrome },
       });
       if (error) throw error;
-      const list = (data?.variants || []) as Required<TemplateChrome>[];
+      const list = (data?.variants || []) as (Required<TemplateChrome> & { name?: string })[];
       if (!list.length) throw new Error("No variants returned");
       setVariants(list);
     } catch (e: any) {
