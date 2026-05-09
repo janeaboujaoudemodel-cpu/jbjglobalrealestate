@@ -1,3 +1,4 @@
+// v2.1 — chunk-bust 2026-05-09
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
