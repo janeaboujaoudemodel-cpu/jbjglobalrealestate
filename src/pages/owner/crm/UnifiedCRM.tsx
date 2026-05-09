@@ -24,8 +24,10 @@ const CRMLeadsTableV2     = lazy(() => import("@/components/crm/CRMLeadsTableV2"
 const FlaggedLeadsView    = lazy(() => import("@/components/crm/FlaggedLeadsView"));
 const RecentlyDeletedLeads= lazy(() => import("@/components/crm/RecentlyDeletedLeads"));
 const CRMRelationships    = lazy(() => import("@/pages/CRMRelationships"));
-const CRMNetworkPage      = lazy(() => import("@/pages/owner/crm/CRMNetwork"));
 const BrokersRegistryPage = lazy(() => import("@/pages/owner/crm/BrokersRegistry"));
+const DevelopersDirectory       = lazy(() => import("@/components/crm/entity/DevelopersDirectory"));
+const BrokerageAgenciesDirectory= lazy(() => import("@/components/crm/entity/BrokerageAgenciesDirectory"));
+const DevSalesRepsDirectory     = lazy(() => import("@/components/crm/entity/DevSalesRepsDirectory"));
 const EmployeesHub        = lazy(() => import("@/components/crm/EmployeesHub"));
 const CampaignsPage       = lazy(() => import("@/pages/owner/crm/CampaignsPage"));
 const CRMTasks            = lazy(() => import("@/pages/CRMTasks"));
