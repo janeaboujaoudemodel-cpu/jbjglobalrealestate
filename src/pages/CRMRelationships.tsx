@@ -610,6 +610,7 @@ const BrokeragesAgenciesView = () => {
   const [testSendOpen, setTestSendOpen] = useState(false);
   const [excludedIds, setExcludedIds] = useState<Set<string>>(new Set());
   const [exportOpen, setExportOpen] = useState(false);
+  const [unifiedExportOpen, setUnifiedExportOpen] = useState(false);
   const [uploadOpen, setUploadOpen] = useState(false);
   const [importingDLD, setImportingDLD] = useState(false);
   const [listView, setListView] = useState<CRMListView>({ kind: "active", listId: null });
