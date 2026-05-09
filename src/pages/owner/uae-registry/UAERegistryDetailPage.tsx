@@ -15,6 +15,7 @@ import {
   sendRegistrationEmail, OUTREACH_STATUSES, EMIRATES, type RegistryRecordType,
 } from "@/hooks/useUAERegistry";
 import { toast } from "sonner";
+import { RelationalHubTabs } from "@/components/crm/RelationalHubTabs";
 
 const SERVICE_CATEGORIES = ["Sales","Leasing","Off-Plan","Secondary Market","Property Management","Commercial","Luxury","Investment Advisory","Unknown"];
 const COMPANY_TYPES = ["Private Developer","Government Developer","Semi-Government Developer","Master Developer","Holding Company","Development Arm","Unknown"];
