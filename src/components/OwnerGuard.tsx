@@ -137,6 +137,12 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
     return null;
   }
 
+  // If owner was already verified once this session, skip the splash entirely on
+  // subsequent (re)verifications — render children optimistically.
+  if ((authLoading || ownerLoading) && showLoading && ownerVerifiedOnce.current && !!user) {
+    return <>{children}</>;
+  }
+
   if ((authLoading || ownerLoading) && showLoading && showSplash) {
     if (!loadingTimedOut) {
       return (
