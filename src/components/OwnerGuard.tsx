@@ -34,6 +34,17 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
   const autoRetryCount = useRef(0);
   const autoRetryTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const intendedRoute = useRef(location.pathname + location.search);
+  // Once we've verified owner=true for this session, never show the splash again.
+  // Persist across in-app navigation so clicking CRM tabs never re-flashes "Verifying access…".
+  const ownerVerifiedOnce = useRef<boolean>(
+    typeof window !== "undefined" && sessionStorage.getItem("owner_verified_once") === "1"
+  );
+  useEffect(() => {
+    if (isOwner) {
+      ownerVerifiedOnce.current = true;
+      try { sessionStorage.setItem("owner_verified_once", "1"); } catch {}
+    }
+  }, [isOwner]);
 
   // Auditor suspend check
   const [isSuspended, setIsSuspended] = useState(false);
