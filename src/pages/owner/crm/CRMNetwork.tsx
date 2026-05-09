@@ -35,6 +35,7 @@ import { Loader2, Search, Link2, X, Building2 } from "lucide-react";
 import { CompanyHubDrawer } from "@/components/crm/CompanyHubDrawer";
 import { PersonDetailDrawer } from "@/components/crm/PersonDetailDrawer";
 import { ScopedExportMenu } from "@/components/crm/ScopedExportMenu";
+import { isRealCRMLead } from "@/utils/crmFakeDataGuard";
 
 /* -------------------- Role definitions -------------------- */
 
@@ -178,7 +179,7 @@ export default function CRMNetwork() {
           console.error(error);
           break;
         }
-        const rows = (data as unknown as Lead[]) ?? [];
+        const rows = ((data as unknown as Lead[]) ?? []).filter(isRealCRMLead as (l: any) => boolean);
         all.push(...rows);
         if (rows.length < PAGE) break;
         from += PAGE;
