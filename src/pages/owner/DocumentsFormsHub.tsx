@@ -108,7 +108,10 @@ export default function DocumentsFormsHub() {
   const [showDetails, setShowDetails] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
 
-  // Bucket envelopes
+  // Bucket envelopes.
+  // RULE: an envelope that has a client filled in is ALWAYS a "Forms Generated"
+  // entry, regardless of whether it is later sent / signed. Pending and Signed
+  // tabs additionally surface the same envelope based on lifecycle status.
   const buckets = useMemo(() => {
     const drafts: any[] = [];
     const generated: any[] = [];
@@ -118,14 +121,15 @@ export default function DocumentsFormsHub() {
     for (const e of allEnvelopes) {
       if ((e as any).deleted_at) { deleted.push(e); continue; }
       const s = (e as any).status;
+      const generatedReady = isCompleteEnoughToBeGenerated(e);
+
       if (s === "completed") signed.push(e);
       else if (s === "sent" || s === "viewed" || s === "partially_signed") sent.push(e);
-      else if (s === "draft") {
-        if (isCompleteEnoughToBeGenerated(e)) generated.push(e);
-        else drafts.push(e);
-      } else {
-        drafts.push(e);
-      }
+      else if (s === "draft" && !generatedReady) drafts.push(e);
+
+      // Generated bucket is purely "client-ready", independent of status —
+      // includes drafts, sent, partially-signed and completed envelopes.
+      if (generatedReady) generated.push(e);
     }
     return { drafts, generated, sent, signed, deleted };
   }, [allEnvelopes]);
