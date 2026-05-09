@@ -4183,6 +4183,14 @@ a[class*="bg-red-"]:hover {
   color: #1A1A1A !important;
 }
 
+/* CRM embed wrapper — neutralize legacy page chrome inside unified CRM hub */
+.crm-embed header,
+.crm-embed [data-crm-page-header] { display: none !important; }
+.crm-embed .sticky { position: static !important; }
+.crm-embed .min-h-screen { min-height: 0 !important; }
+.crm-embed .pt-\[88px\],
+.crm-embed .pt-\[104px\] { padding-top: 0 !important; }
+
 /* ============================================================
    PREMIUM PRICE PILL — square, transparent core, orange border.
    Used on property cards (ProjectCard / ReellyProjectCard /

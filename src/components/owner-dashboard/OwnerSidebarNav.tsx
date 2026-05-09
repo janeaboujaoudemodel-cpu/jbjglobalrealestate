@@ -48,10 +48,26 @@ const NAV_SECTIONS: NavSection[] = [
     label: "CORE",
     items: [
       { label: "Overview", icon: LayoutDashboard, path: "/owner" },
-      { label: "CRM", icon: Users, path: "/owner/crm" },
+      { label: "CRM Hub", icon: Users, path: "/owner/crm" },
+    ],
+  },
+  {
+    label: "CRM",
+    items: [
+      { label: "All Leads", icon: Users, path: "/owner/crm?section=leads" },
+      { label: "Investors", icon: Users, path: "/owner/crm?section=relationships&sub=investors" },
+      { label: "Developers", icon: Building2, path: "/owner/crm?section=relationships&sub=developers" },
+      { label: "Dev Sales Reps", icon: Users, path: "/owner/crm?section=relationships&sub=sales-reps" },
+      { label: "Brokers", icon: Users, path: "/owner/crm?section=relationships&sub=brokers" },
+      { label: "Brokerage Agencies", icon: Building2, path: "/owner/crm?section=relationships&sub=agencies" },
+      { label: "Employees", icon: Users, path: "/owner/crm?section=employees" },
       { label: "Campaigns", icon: Megaphone, path: "/owner/crm?section=campaigns" },
       { label: "Tasks", icon: CheckSquare, path: "/owner/crm?section=tasks" },
       { label: "Calendar", icon: Calendar, path: "/owner/crm?section=calendar" },
+      { label: "Notes", icon: FileText, path: "/owner/crm?section=notes" },
+      { label: "Inbox", icon: Mail, path: "/owner/crm?section=inbox" },
+      { label: "Contracts", icon: FileText, path: "/owner/crm?section=contracts" },
+      { label: "Automation", icon: Zap, path: "/owner/crm?section=automation" },
     ],
   },
   {
@@ -126,10 +142,25 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
   const activeRef = useRef<HTMLButtonElement | null>(null);
 
   const isActivePath = (path: string) => {
-    if (path === "/owner") {
-      return location.pathname === "/owner" || location.pathname === "/owner/";
+    const [pathOnly, query] = path.split("?");
+    if (pathOnly === "/owner") {
+      return (location.pathname === "/owner" || location.pathname === "/owner/") && !location.search;
     }
-    return location.pathname.startsWith(path);
+    if (query) {
+      // Query-based CRM sub-pages: require pathname AND key params to match
+      if (location.pathname !== pathOnly && !location.pathname.startsWith(pathOnly + "/")) return false;
+      const want = new URLSearchParams(query);
+      const have = new URLSearchParams(location.search);
+      for (const [k, v] of want.entries()) {
+        if (have.get(k) !== v) return false;
+      }
+      return true;
+    }
+    // Plain /owner/crm should only highlight when no CRM section is selected
+    if (pathOnly === "/owner/crm") {
+      return location.pathname.startsWith("/owner/crm") && !location.search;
+    }
+    return location.pathname.startsWith(pathOnly);
   };
 
   // Scroll the active nav item into view on route change without disturbing the page
@@ -137,7 +168,7 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
     requestAnimationFrame(() => {
       activeRef.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
     });
-  }, [location.pathname]);
+  }, [location.pathname, location.search]);
 
   const setActiveRefCallback = useCallback(
     (path: string) => (el: HTMLButtonElement | null) => {
@@ -146,7 +177,7 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [location.pathname]
+    [location.pathname, location.search]
   );
 
   const handleNavClick = (path: string) => {

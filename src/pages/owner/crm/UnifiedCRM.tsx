@@ -74,12 +74,10 @@ const Fallback = () => (
   </div>
 );
 
-// Strip <header> / sticky toolbars from re-used legacy pages so we don't get
-// double headers inside the unified shell.
+// Strip page-level chrome from re-used legacy pages so we don't get
+// double headers / sticky bars / extra top-padding inside the unified shell.
 const Embed = ({ children }: { children: React.ReactNode }) => (
-  <div className="crm-embed [&_header]:hidden [&_.sticky]:!static">
-    {children}
-  </div>
+  <div className="crm-embed">{children}</div>
 );
 
 function NotificationsPanel({ userId }: { userId: string }) {
@@ -173,9 +171,9 @@ export default function UnifiedCRM() {
       case "relationships":
       default:
         if (sub === "investors")  return <Embed><CRMRelationships /></Embed>;
-        if (sub === "developers") return <Embed><CRMNetworkPage /></Embed>;
-        if (sub === "agencies")   return <Embed><CRMNetworkPage /></Embed>;
-        if (sub === "sales-reps") return <Embed><CRMNetworkPage /></Embed>;
+        if (sub === "developers") return <Embed><CRMNetworkPage initialRole="developers" /></Embed>;
+        if (sub === "agencies")   return <Embed><CRMNetworkPage initialRole="agencies" /></Embed>;
+        if (sub === "sales-reps") return <Embed><CRMNetworkPage initialRole="partners" /></Embed>;
         if (sub === "brokers")    return <Embed><BrokersRegistryPage /></Embed>;
         return <Embed><CRMRelationships /></Embed>;
     }
@@ -198,7 +196,7 @@ export default function UnifiedCRM() {
         <nav
           role="tablist"
           aria-label="CRM sections"
-          className="px-4 flex flex-wrap gap-1 border-t border-[#B89555]/15"
+          className="px-2 flex gap-1 border-t border-[#B89555]/15 overflow-x-auto whitespace-nowrap jj-scrollbar-gold"
         >
           {PRIMARY.map((it) => {
             const active = it.id === section;
@@ -210,7 +208,7 @@ export default function UnifiedCRM() {
                 aria-selected={active}
                 onClick={() => setSection(it.id)}
                 className={[
-                  "inline-flex items-center gap-2 px-3 py-2 text-sm font-medium",
+                  "shrink-0 inline-flex items-center gap-2 px-3 py-2 text-sm font-medium",
                   "border-b-2 -mb-px transition-colors",
                   active
                     ? "border-[#B89555] text-[#1A1A1A] bg-[#EFE6D6]/60"
@@ -254,9 +252,13 @@ export default function UnifiedCRM() {
         )}
       </div>
 
-      {/* Body */}
-      <div className="px-4 md:px-6 py-6">
-        <Suspense fallback={<Fallback />}>{Body}</Suspense>
+      {/* Body — boxed champagne panel so embedded sections never overlap the CRM header/tabs */}
+      <div className="px-3 md:px-6 py-5">
+        <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] shadow-sm overflow-hidden">
+          <div className="p-3 md:p-5 overflow-x-auto">
+            <Suspense fallback={<Fallback />}>{Body}</Suspense>
+          </div>
+        </div>
       </div>
     </div>
   );
