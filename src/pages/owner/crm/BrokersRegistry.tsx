@@ -124,11 +124,21 @@ export default function BrokersRegistry() {
     return Array.from(set).sort();
   }, [allRows, history]);
 
+  const externalById = useMemo(() => {
+    const m = new Map<string, any>();
+    for (const e of (external as any[])) m.set(e.id, e);
+    return m;
+  }, [external]);
+
   const filtered = useMemo(() => {
     const term = q.trim().toLowerCase();
     return allRows.filter((r) => {
       if (tab !== "all" && r.source !== tab) return false;
       if (companyFilter && r.current_company !== companyFilter) return false;
+      // Source-axis predicate uses the raw external row when available so the
+      // upload_source / database_source / country fields resolve correctly.
+      const raw = r.source === "external" ? externalById.get(r.id) ?? r : r;
+      if (!rowMatchesSourceFilter(raw, sourceFilter, sourceFilterCtx)) return false;
       if (!term) return true;
       return (
         r.full_name?.toLowerCase().includes(term) ||
@@ -137,7 +147,7 @@ export default function BrokersRegistry() {
         r.current_company?.toLowerCase().includes(term)
       );
     });
-  }, [allRows, q, tab, companyFilter]);
+  }, [allRows, q, tab, companyFilter, sourceFilter, sourceFilterCtx, externalById]);
 
   const counts = useMemo(() => ({
     total: allRows.length,
