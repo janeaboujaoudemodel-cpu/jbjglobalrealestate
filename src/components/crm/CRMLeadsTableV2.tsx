@@ -308,17 +308,42 @@ export default function CRMLeadsTableV2({
 
   const allVisibleSelected = leads.length > 0 && selected.size === leads.length;
 
+  const sourceTypeOptions = useMemo(() => {
+    const types = new Set<string>();
+    leads.forEach((l) => { if (l.lead_source_type) types.add(l.lead_source_type); });
+    return Array.from(types).sort();
+  }, [leads]);
+
+  const assigneeOptions = useMemo(() => {
+    const ids = new Set<string>();
+    Object.values(leadAssignees).forEach((id) => { if (id) ids.add(id); });
+    return Array.from(ids).map((id) => ({ id, name: assignedNames[id] || id.slice(0, 8) }));
+  }, [leadAssignees, assignedNames]);
+
   const filtered = useMemo(() => {
-    if (!search.trim()) return leads;
-    const q = search.toLowerCase();
+    const q = search.trim().toLowerCase();
     return leads.filter((l) => {
-      return (
-        l.full_name?.toLowerCase().includes(q) ||
-        l.phone_e164?.includes(search) ||
-        l.email_lower?.toLowerCase().includes(q)
-      );
+      if (q) {
+        const hit =
+          l.full_name?.toLowerCase().includes(q) ||
+          l.phone_e164?.includes(search) ||
+          l.email_lower?.toLowerCase().includes(q);
+        if (!hit) return false;
+      }
+      if (stageFilter && (l.state?.pipeline_status || "new") !== stageFilter) return false;
+      if (sourceTypeFilter && (l.lead_source_type || "") !== sourceTypeFilter) return false;
+      if (assigneeFilter) {
+        if (assigneeFilter === "__unassigned__") {
+          if (leadAssignees[l.id]) return false;
+        } else if (leadAssignees[l.id] !== assigneeFilter) {
+          return false;
+        }
+      }
+      if (tagFilter === "vip" && (l as any).vip !== true) return false;
+      if (tagFilter === "unassigned" && leadAssignees[l.id]) return false;
+      return true;
     });
-  }, [leads, search]);
+  }, [leads, search, stageFilter, sourceTypeFilter, assigneeFilter, tagFilter, leadAssignees]);
 
   const selectedIds = useMemo(() => Array.from(selected), [selected]);
 
