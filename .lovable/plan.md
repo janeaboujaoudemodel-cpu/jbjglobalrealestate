@@ -1,97 +1,92 @@
 ## Goal
 
-Make the CRM feel like one premium hub. Collapse the sidebar to a single "CRM" entry. Restructure the in-page navigation into two stacked subheaders: a top entity-bar (Leads, Investors, Developers, Dev Sales Reps, Brokers, Brokerage Agencies, Employees) and a contextual sub-bar that changes per entity (e.g. Leads → Overview / All / Flagged / VIP / Mgmt). Move the gold "Insights" KPI strip into a collapsible drawer pinned to the top-right of the JBJ CRM title row. Wire each entity to its real data source so brokers (~10k+ agencies, 33k staged broker individuals), developers (633), and developer registry (775) actually show. Convert "Investors" from a leads-list into a real investor profile view (portfolio, units owned, VIP, birthday). Remove owner's own email and any test rows. Harden access-verification and clean up filter dropdowns.
+Polish the CRM into the "international big-CRM" feel the user expects: redesign the leads filter bar (no cramped boxes, no native blue-hover dropdowns), add inline Calendar/Notes/Tasks per lead, add quick status chips for hot/interested/junk/already-bought/closed-won, add bulk delete-all/restore-all in Lead Mgmt, expand the contract vault into typed contract folders with developer drill-down, kill the "Verifying access…" flash on intra-CRM navigation, and confirm the entity bar (Leads · Investors · Developers · Sales Reps · Brokers · Agencies · Employees) renders as the primary header.
 
-## Sidebar (collapse to one entry)
+## 1. Leads filter bar redesign
 
-In `src/components/owner-dashboard/OwnerSidebarNav.tsx`:
-- Delete the entire `CRM` group (All Leads, Investors, Developers, Dev Sales Reps, Brokers, Brokerage Agencies, Employees, Campaigns, Tasks, Calendar, Notes, Inbox, Contracts, Automation).
-- Keep only one item under CORE: `CRM` → `/owner/crm` (no children, no sub-paths, no query strings).
-- All navigation between leads / investors / brokers etc. happens inside the CRM page.
+In `src/components/crm/CRMLeadsTableV2.tsx`:
 
-## In-page navigation (two stacked subheaders)
+- Replace all four native `<select>` (Stage / Source / Owner / Tag) with the shadcn `<Select>` component so dropdowns no longer overlay with the OS blue hover.
+- Lift them into a 2-row toolbar inside a single champagne card:
+  - Row 1: search input (full-width) + clear-filters button.
+  - Row 2: Stage · Source · Owner · Tag · Date range — each `min-w-[160px]`, `h-10`, even `gap-3`, never touching borders. `bg-[#FDFBF7] border border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#F7F2EA]`.
+- Above the filters, add a horizontal "quick chips" strip with one-click pre-built filters: Hot · Interested · VIP · Already Bought · Deal Closed · Negotiation · Junk · No Response. Clicking a chip sets the matching `stageFilter`/`tagFilter` so the user does not need to open a dropdown.
+- Group the Stage dropdown options under category labels (Positive / Neutral / Negative) using `<SelectGroup>` so the 20-stage list scans cleanly.
 
-Rewrite the header of `src/pages/owner/crm/UnifiedCRM.tsx` into three stacked rows inside one champagne-bordered shell:
+## 2. Inline Calendar / Notes / Tasks per lead row
 
-```text
-┌───────────────────────────────────────────────────────────┐
-│ JBJ CRM                                  [ ▾ Insights ]   │  Title row
-├───────────────────────────────────────────────────────────┤
-│ Leads | Investors | Developers | Sales Reps | Brokers |   │  Entity bar
-│ Brokerage Agencies | Employees                            │
-├───────────────────────────────────────────────────────────┤
-│ Overview · All Leads · Flagged · VIP · Lead Mgmt          │  Context bar
-└───────────────────────────────────────────────────────────┘
-```
+In `CRMLeadsTableV2.tsx` row actions:
 
-URL state: `?entity=<leads|investors|developers|sales-reps|brokers|agencies|employees>&view=<contextual>`. Legacy `?section=` and `?sub=` redirect to this new model on mount.
+- Add three icon buttons next to the existing actions: `CalendarPlus`, `StickyNote`, `ListTodo`.
+- Each opens a small popover (`<Popover>`) anchored to the row:
+  - Calendar: title + datetime-local + duration; inserts into `crm_calendar_events` with `lead_id`.
+  - Notes: textarea; inserts into `crm_notes` (or `crm_activities` typed `note`) with `lead_id`.
+  - Tasks: title + due date + priority; inserts into `crm_tasks` with `lead_id`.
+- Show counts on each icon (small badge) when items exist for that lead.
+- Keep existing per-lead detail drawer untouched — these popovers are quick-add only.
 
-Per-entity context bar:
-- Leads → Overview, All, Flagged, VIP, Lead Mgmt, Tasks, Calendar, Notes, Inbox, Notifications, Contracts, Campaigns, Automation
-- Investors → Directory, VIP, Portfolio Analytics
-- Developers → Registry, Project Submissions, Sales Reps
-- Sales Reps → Directory, Performance
-- Brokers → Directory, Imported (staging), Verifications
-- Brokerage Agencies → Directory, Deals, Events
-- Employees → Roster, Roles, Activity
+## 3. Lead Mgmt — bulk Delete All / Restore All
 
-## Insights drawer (collapsed by default)
+In `src/components/crm/RecentlyDeletedLeads.tsx`:
 
-The current gold KPI strip (WhatsApp / total / conversion etc.) currently sits above the tabs. Move it into a popover anchored to a `▾ Insights` button on the title row (top-right of "JBJ CRM"). Closed by default. Opening it slides a panel down above the entity bar without pushing content outside the boxed shell. Persist last open/closed state in `localStorage`.
+- Add a sticky toolbar with: `Select all on page` checkbox, `Select across all results` link, then two buttons:
+  - `Restore selected` (green) → bulk update `deleted_at = NULL`.
+  - `Permanently delete selected` (red, requires typed-confirm "DELETE") → bulk delete row.
+- Add `Restore all (N)` and `Empty trash (N)` buttons that operate on the entire filtered set, not just current page.
+- Confirm modals always show the count and warn that `Empty trash` is irreversible.
 
-## Data wiring (fix the zero counts)
+## 4. Contract Vault — typed folders + developer drill-down
 
-Update the relationship panels to read from the actual populated tables:
+In `src/pages/owner/contracts/ContractVault.tsx`:
 
-- Brokerage Agencies: `crm_brokerages` (10,613 rows). Already correct in `useCRMRelationships.ts`; verify the panel renders pagination so all rows are reachable (current 1000-row Supabase cap → add range pagination).
-- Brokers: switch `BrokersRegistry.tsx` to read from `crm_broker_import_staging` (33,873 rows) as the primary source, with `crm_brokers` and `jbj_brokers` merged on top. Show staging rows as "Imported" sub-tab, curated rows as "Directory".
-- Developers: keep `crm_developer_registry` (775) plus `developers` (633) merged by name, deduped. Already partially done in `useCRMRelationships.ts`; confirm the result hits the UI.
-- Dev Sales Reps: read from `developer_sales_reps` + `developer_representatives` + `developer_sales_contacts` (currently empty `developer_sales_reps` is why count is 0; merge the three).
-- Investors: stop showing `crm_leads` here. Read from `client_investors` + `investor_intake` + `investor_documents` + `investor_analytics` joined to `crm_leads` only when a lead has been explicitly converted (lead.converted_to_investor flag or presence in `client_investors`).
+- Replace the single "All Developers" dropdown with a left-side rail of contract types (champagne pills, vertical):
+  - All
+  - Developer Registration
+  - Developer–Agency (A↔A)
+  - Client Sales Contracts
+  - Client Reservation / Booking Forms
+  - Leasing Contracts
+  - Property Advertising Agreements
+  - NDAs
+  - Service / Consulting Agreements
+  - Other
+- Folder taxonomy stored in a column `contract_type` on the existing contracts table; if missing, infer from `template`/`title` patterns until a migration adds it. Default to `Other`.
+- When the user picks `Developer Registration`, the right pane shows a developer-name dropdown (searchable combobox) listing only developers who have at least one registration contract; selecting a developer filters the list to that developer's contracts.
+- When the user picks any other type that has a natural sub-key (e.g. Client Contracts → client name, Leasing → property), expose the matching searchable combobox in the right pane header.
+- Performance fix for "stuck on click": defer the heavy developer list to a separate query, render the type pane immediately, and load the developer combobox lazily when its tab is opened. Cache developer list with React Query (`staleTime: 5min`).
 
-Add a server-side count query so the entity tabs can show real totals (e.g. "Brokerage Agencies · 10,613") instead of just the loaded page size.
+## 5. Stop the "Verifying access" flash on intra-CRM nav
 
-## Investor profile view
+Root cause: `OwnerGuard` re-shows the splash whenever `ownerLoading` flickers on route/search-param change.
 
-When the user clicks an investor row, open a profile drawer showing:
-- Header: name, VIP badge, lifetime portfolio value (sum of `client_investors.investment_amount` or equivalent).
-- Sections: Portfolio (units owned, project, purchase date, value), Activity (calls, meetings, notes), Personal (birthday, anniversary, preferred channel), Documents, Linked deals.
-- Source: `client_investors`, `investor_documents`, `investor_analytics`, `investor_behavior_insights`, plus `crm_activities` filtered by the linked lead/contact id.
-- "Convert lead → investor" action on a lead row inserts into `client_investors` and tags the lead so it stops appearing under Leads/Investors duplication.
+Fix in `src/components/OwnerGuard.tsx` (and `useAuth`):
 
-## Data hygiene
+- Cache the verified `isOwner === true` result for the session in a ref. Once we have ever resolved owner=true for this user, never show the splash again — only show it on the very first verification.
+- Bump the grace period from 250 ms to 600 ms but only on the very first check.
+- Ignore `ownerLoading` toggles caused by `refreshOwnerVerification` calls triggered by intra-page navigation (don't reset `showSplash`).
+- Verify by clicking Leads → All Leads → Flagged → VIP repeatedly: no splash should appear.
 
-Run a one-time data cleanup migration:
-- Soft-delete any `crm_leads` row whose `email` matches the owner's auth email.
-- Soft-delete rows where `email ILIKE '%@example.com'` or `name ILIKE 'jane%' OR 'test%' OR 'demo%'` (already partially done — re-run to be safe).
-- The owner's own email must never render in any CRM list. Add a UI filter in the leads/investors fetch hooks: `eq("is_self", false)` or filter `email !== currentUser.email` client-side as a belt-and-braces guard.
+## 6. Entity bar visibility
 
-## Stability fixes
+Confirm `UnifiedCRM` renders these tabs at the top header on `/owner/crm`: Leads · Investors · Developers · Dev Sales Reps · Brokers · Brokerage Agencies · Employees. If the user still does not see them, hard-refresh and verify in the running preview. If they remain hidden behind the global app header, increase the title row's top padding so the entity bar is not occluded by the 88px fixed header.
 
-1. Verifying-access blink: in `OwnerGuard` / `AuthContext`, only show the "Verifying access…" splash when `loading === true && user === null`. Memoize the owner check so re-renders triggered by query refetches don't flip the splash back on. Add a 250 ms grace period before showing the splash to avoid flashes on fast loads.
-2. Pending-tasks popup: confirm the 24h per-user dismissal added previously is honored on `/owner/crm` (already suppressed via `SUPPRESS_PATTERNS`); add `/owner` and any nested CRM query-string routes to the suppression list.
-3. Filter dropdowns: in `CRMLeadsTableV2.tsx` and `FlaggedLeadsView.tsx`, replace raw `<select>` with the shadcn `<Select>` component using champagne tokens (`bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]`) and remove the blue focus ring (`focus:ring-[#B89555]/40`). Apply to status, source, owner, and date filters.
-4. Network error on brokerages (`Failed to fetch` from `useCRMRelationships`): add retry with exponential backoff and a visible empty-state error card so the panel never renders blank.
+## 7. Update memory
 
-## Routing
+Refresh `mem://features/crm/unified-owner-hub-standard` to describe the new toolbar, quick chips, inline lead actions, contract folders, and the once-per-session owner verification cache.
 
-In `src/routes/OwnerRoutes.tsx`:
-- `/owner/crm` → `UnifiedCRM` (only entry).
-- All `/owner/crm/*`, `/crm/*`, `/owner/crm?section=...` legacy URLs redirect to `/owner/crm?entity=...&view=...` mapping (compatibility shim) so existing links keep working.
-
-## Verification pass
+## Verification
 
 After implementation, navigate to `/owner/crm` in the preview and confirm:
-- Sidebar shows a single "CRM" entry (no sub-items).
-- Entity bar shows the 7 entities; clicking each switches the context bar.
-- Insights button on title row opens/closes the KPI drawer; default is closed.
-- Brokers tab shows ~33k rows (paginated). Brokerage Agencies shows ~10k. Developers shows ~775+633 merged. Sales Reps no longer shows 0.
-- Investors tab shows real investors (not the 4 leads that were there before); owner's email is absent everywhere.
-- No "Verifying access" blink on refresh; no pending-tasks popup on the CRM page.
-- All filter dropdowns are champagne-styled, not raw blue.
+- Filter dropdowns are roomy, champagne-themed, and never overlay with blue.
+- Quick-status chips filter the table instantly.
+- Each lead row exposes Calendar / Notes / Tasks popovers that persist data.
+- Lead Mgmt has bulk Restore/Empty-trash with confirmation.
+- Contracts section opens immediately; type pills + developer combobox work; no spinner stall.
+- No "Verifying access" splash when switching tabs inside the CRM.
+- Entity bar (Leads · Investors · …) is visible above the context bar.
 
 ## Out of scope
 
-- No backend logic changes beyond the cleanup migration and additional read queries.
-- No edits to design tokens — uses existing champagne palette.
-- Does not delete any existing CRM features; restructures their entry points only.
+- No changes to lead schema beyond optional `contract_type` inference helper.
+- No backend logic changes to authentication itself — just the splash gating in `OwnerGuard`.
+- Existing CRM features, panels, and routes remain — restyled and reorganized, never deleted.

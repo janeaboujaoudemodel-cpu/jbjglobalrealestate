@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -7,9 +7,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { IconTile } from "@/components/ui/icon-tile";
-import { Archive, Search, Download, FileSignature, Stamp, Upload, Sparkles, FileText } from "lucide-react";
+import { Archive, Search, Download, FileSignature, Stamp, Upload, Sparkles, FileText, Building2, Users, Home, FileCheck, Megaphone, Lock, Briefcase, Folder } from "lucide-react";
 import { AgreementUploadDrawer } from "@/components/owner/contracts/AgreementUploadDrawer";
-import DeveloperSelectDropdown from "@/components/developer-portal/DeveloperSelectDropdown";
+
+// Lazy-load the heavy developer combobox so the page renders instantly
+const DeveloperSelectDropdown = lazy(() => import("@/components/developer-portal/DeveloperSelectDropdown"));
 
 interface SignedRow {
   signed_document_id: string;
@@ -26,10 +28,61 @@ interface SignedRow {
   area: string | null;
 }
 
+type ContractType =
+  | "all"
+  | "developer_registration"
+  | "developer_agency"
+  | "client_sales"
+  | "client_reservation"
+  | "leasing"
+  | "advertising"
+  | "nda"
+  | "service"
+  | "other";
+
+const TYPES: { key: ContractType; label: string; icon: typeof Folder; description: string }[] = [
+  { key: "all", label: "All Contracts", icon: Folder, description: "Every signed agreement" },
+  { key: "developer_registration", label: "Developer Registration", icon: Building2, description: "Brokerage ↔ Developer registration" },
+  { key: "developer_agency", label: "Developer ↔ Agency (A↔A)", icon: Users, description: "Agency-to-agency cooperation" },
+  { key: "client_sales", label: "Client Sales Contracts", icon: FileSignature, description: "Sales & purchase agreements" },
+  { key: "client_reservation", label: "Reservation / Booking", icon: FileCheck, description: "Client reservation forms" },
+  { key: "leasing", label: "Leasing Contracts", icon: Home, description: "Tenancy / Ejari contracts" },
+  { key: "advertising", label: "Property Advertising", icon: Megaphone, description: "Listing & marketing permits" },
+  { key: "nda", label: "NDAs", icon: Lock, description: "Confidentiality agreements" },
+  { key: "service", label: "Service / Consulting", icon: Briefcase, description: "Service & vendor agreements" },
+  { key: "other", label: "Other", icon: FileText, description: "Uncategorised" },
+];
+
+// Infer a contract type when the row has no explicit contract_type column.
+function inferType(raw: any): ContractType {
+  const explicit = (raw?.contract_type || "").toString().toLowerCase();
+  if (explicit) {
+    if (explicit.includes("registration")) return "developer_registration";
+    if (explicit.includes("a2a") || explicit.includes("agency")) return "developer_agency";
+    if (explicit.includes("sales") || explicit.includes("spa")) return "client_sales";
+    if (explicit.includes("reserv") || explicit.includes("booking")) return "client_reservation";
+    if (explicit.includes("lease") || explicit.includes("ejari") || explicit.includes("tenancy")) return "leasing";
+    if (explicit.includes("advert") || explicit.includes("marketing") || explicit.includes("listing")) return "advertising";
+    if (explicit.includes("nda") || explicit.includes("confidential")) return "nda";
+    if (explicit.includes("service") || explicit.includes("consult")) return "service";
+  }
+  const name = `${raw?.envelope_name || raw?.file_name || ""}`.toLowerCase();
+  if (name.includes("registration")) return "developer_registration";
+  if (name.includes("a2a") || name.includes("agency")) return "developer_agency";
+  if (name.includes("lease") || name.includes("ejari") || name.includes("tenancy")) return "leasing";
+  if (name.includes("nda")) return "nda";
+  if (name.includes("advert") || name.includes("listing")) return "advertising";
+  if (name.includes("reserv") || name.includes("booking")) return "client_reservation";
+  if (name.includes("sales") || name.includes("spa") || name.includes("purchase")) return "client_sales";
+  if (name.includes("service") || name.includes("consult")) return "service";
+  return "other";
+}
+
 export default function ContractVault() {
   const [q, setQ] = useState("");
   const [developerName, setDeveloperName] = useState<string>("");
   const [uploadOpen, setUploadOpen] = useState(false);
+  const [activeType, setActiveType] = useState<ContractType>("all");
 
   const { data: agreements = [] } = useQuery({
     queryKey: ["external_agreements"],
@@ -42,6 +95,7 @@ export default function ContractVault() {
       if (error) throw error;
       return (data ?? []) as any[];
     },
+    staleTime: 5 * 60 * 1000,
   });
 
   const { data = [], isLoading } = useQuery({
@@ -55,18 +109,45 @@ export default function ContractVault() {
       if (error) throw error;
       return (data ?? []) as unknown as SignedRow[];
     },
+    staleTime: 5 * 60 * 1000,
   });
 
   const devLower = developerName.trim().toLowerCase();
 
+  // Counts per type for sidebar badges (combine both sources)
+  const typeCounts = useMemo(() => {
+    const counts: Record<ContractType, number> = {
+      all: 0,
+      developer_registration: 0,
+      developer_agency: 0,
+      client_sales: 0,
+      client_reservation: 0,
+      leasing: 0,
+      advertising: 0,
+      nda: 0,
+      service: 0,
+      other: 0,
+    };
+    [...agreements, ...data].forEach((row: any) => {
+      const t = inferType(row);
+      counts[t] += 1;
+      counts.all += 1;
+    });
+    return counts;
+  }, [agreements, data]);
+
   const filteredAgreements = useMemo(() => {
-    if (!devLower) return agreements;
-    return agreements.filter((a) => (a.developer_name_raw || "").toLowerCase() === devLower);
-  }, [agreements, devLower]);
+    return agreements.filter((a) => {
+      if (activeType !== "all" && inferType(a) !== activeType) return false;
+      if (devLower && (a.developer_name_raw || "").toLowerCase() !== devLower) return false;
+      return true;
+    });
+  }, [agreements, devLower, activeType]);
 
   const filtered = useMemo(() => {
     const term = q.trim().toLowerCase();
     return data.filter((r) => {
+      if (activeType !== "all" && inferType(r) !== activeType) return false;
       if (devLower && (r.developer_name || "").toLowerCase() !== devLower) return false;
       if (!term) return true;
       return (
@@ -77,7 +158,14 @@ export default function ContractVault() {
         r.area?.toLowerCase().includes(term)
       );
     });
-  }, [data, q, devLower]);
+  }, [data, q, devLower, activeType]);
+
+  // Show developer combobox only for types where it makes sense
+  const showDeveloperPicker =
+    activeType === "all" ||
+    activeType === "developer_registration" ||
+    activeType === "developer_agency" ||
+    activeType === "advertising";
 
   return (
     <div className="p-6 space-y-6 bg-[#FDFBF7] min-h-screen">
@@ -86,7 +174,7 @@ export default function ContractVault() {
           <IconTile icon={Archive} tone="gold" />
           <div>
             <h1 className="text-2xl font-bold text-[#1A1A1A]">Contract Vault</h1>
-            <p className="text-sm text-[#1A1A1A]/70">Every signed contract — searchable by developer, emirate, area.</p>
+            <p className="text-sm text-[#1A1A1A]/70">Every signed contract — filed by type, searchable by developer, area, recipient.</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -103,166 +191,221 @@ export default function ContractVault() {
         </div>
       </div>
 
-      {/* External agreements (uploaded developer contracts) */}
-      <Card className="bg-[#F7F2EA] border-gold/20">
-        <CardHeader className="pb-3 flex flex-row items-center justify-between">
-          <CardTitle className="text-[#1A1A1A] text-base flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-[hsl(var(--gold))]" />
-            Developer Agreements
-            <Badge variant="outline" className="border-gold/40 text-[#1A1A1A] ml-2">
-              {filteredAgreements.length}
-            </Badge>
-          </CardTitle>
-          <p className="text-xs text-[#1A1A1A]/60">AI-matched, filed by developer</p>
-        </CardHeader>
-        <CardContent className="p-0">
-          {filteredAgreements.length === 0 ? (
-            <div className="p-8 text-center text-sm text-[#1A1A1A]/60">
-              <FileText className="h-8 w-8 mx-auto mb-2 text-[#1A1A1A]/30" />
-              No agreements uploaded yet. Drop a Sobha / Emaar / Damac contract — AI will file it for you.
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="bg-[#EFE6D6] text-[#1A1A1A]">
-                  <tr>
-                    <th className="text-left px-4 py-3 font-semibold">Developer</th>
-                    <th className="text-left px-4 py-3 font-semibold">Type</th>
-                    <th className="text-left px-4 py-3 font-semibold">Effective</th>
-                    <th className="text-left px-4 py-3 font-semibold">Expires</th>
-                    <th className="text-left px-4 py-3 font-semibold">Status</th>
-                    <th className="text-right px-4 py-3 font-semibold">File</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredAgreements.map((a) => (
-                    <tr key={a.id} className="border-t border-gold/15 hover:bg-[#FDFBF7]">
-                      <td className="px-4 py-3 text-[#1A1A1A] font-medium">
-                        {a.developer_name_raw ?? "—"}
-                        {a.ai_confidence != null && (
-                          <span className="ml-2 text-[10px] text-[#1A1A1A]/50">
-                            {Math.round(a.ai_confidence * 100)}%
-                          </span>
-                        )}
-                      </td>
-                      <td className="px-4 py-3 text-[#1A1A1A]/80">{a.contract_type ?? "—"}</td>
-                      <td className="px-4 py-3 text-[#1A1A1A]/80">{a.effective_date ?? "—"}</td>
-                      <td className="px-4 py-3 text-[#1A1A1A]/80">{a.expiry_date ?? "—"}</td>
-                      <td className="px-4 py-3">
-                        <Badge variant="outline" className={a.status === "filed" ? "border-emerald-600/40 text-emerald-700" : "border-amber-500/50 text-amber-700"}>
-                          {a.status.replace("_", " ")}
-                        </Badge>
-                      </td>
-                      <td className="px-4 py-3 text-right">
-                        <Button asChild size="sm" variant="outline" className="border-gold/40 text-[#1A1A1A]">
-                          <a href={a.file_url} target="_blank" rel="noreferrer">
-                            <Download className="h-3 w-3 mr-1" />
-                            Open
-                          </a>
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+      <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-4">
+        {/* Type sidebar */}
+        <Card className="bg-[#F7F2EA] border-gold/20 h-fit lg:sticky lg:top-[104px]">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-[#1A1A1A] text-sm uppercase tracking-wider font-bold">
+              Contract Types
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-2">
+            <nav className="flex flex-col gap-1">
+              {TYPES.map((t) => {
+                const Icon = t.icon;
+                const active = activeType === t.key;
+                const count = typeCounts[t.key];
+                return (
+                  <button
+                    key={t.key}
+                    onClick={() => setActiveType(t.key)}
+                    className={
+                      "flex items-center gap-2 w-full text-left px-3 py-2 rounded-lg text-sm transition-colors border " +
+                      (active
+                        ? "bg-[#EFE6D6] text-[#1A1A1A] border-gold font-semibold"
+                        : "bg-transparent text-[#1A1A1A]/80 border-transparent hover:bg-[#EFE6D6]/60")
+                    }
+                  >
+                    <Icon className="h-4 w-4 shrink-0" />
+                    <span className="flex-1 truncate">{t.label}</span>
+                    {count > 0 && (
+                      <Badge variant="outline" className="border-gold/40 text-[#1A1A1A] text-[10px] h-5 px-1.5">
+                        {count}
+                      </Badge>
+                    )}
+                  </button>
+                );
+              })}
+            </nav>
+          </CardContent>
+        </Card>
 
-      <Card className="bg-[#F7F2EA] border-gold/20">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-[#1A1A1A] text-base">Filters</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-wrap items-center gap-3">
-          <div className="relative flex-1 min-w-[240px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/50" />
-            <Input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Search developer, area, recipient…"
-              className="pl-9 bg-[#FDFBF7] border-gold/25 text-[#1A1A1A]"
-            />
-          </div>
-          <div className="min-w-[260px]">
-            <DeveloperSelectDropdown
-              value={developerName}
-              onChange={setDeveloperName}
-              placeholder="All developers"
-            />
-          </div>
-          {developerName && (
-            <Button variant="outline" size="sm" className="border-gold/40 text-[#1A1A1A]" onClick={() => setDeveloperName("")}>
-              Clear
-            </Button>
-          )}
-          <Badge variant="outline" className="border-gold/40 text-[#1A1A1A]">
-            {filtered.length} contract{filtered.length === 1 ? "" : "s"}
-          </Badge>
-        </CardContent>
-      </Card>
+        <div className="space-y-4">
+          {/* Filters */}
+          <Card className="bg-[#F7F2EA] border-gold/20">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-[#1A1A1A] text-base flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-[hsl(var(--gold))]" />
+                {TYPES.find((t) => t.key === activeType)?.label}
+                <span className="text-xs font-normal text-[#1A1A1A]/60 ml-2">
+                  {TYPES.find((t) => t.key === activeType)?.description}
+                </span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-wrap items-center gap-3">
+              <div className="relative flex-1 min-w-[240px]">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/50" />
+                <Input
+                  value={q}
+                  onChange={(e) => setQ(e.target.value)}
+                  placeholder="Search developer, area, recipient…"
+                  className="pl-9 bg-[#FDFBF7] border-gold/25 text-[#1A1A1A]"
+                />
+              </div>
+              {showDeveloperPicker && (
+                <div className="min-w-[260px]">
+                  <Suspense fallback={
+                    <div className="h-10 px-3 flex items-center text-sm text-[#1A1A1A]/60 bg-[#FDFBF7] border border-gold/25 rounded-md">
+                      Loading developers…
+                    </div>
+                  }>
+                    <DeveloperSelectDropdown
+                      value={developerName}
+                      onChange={setDeveloperName}
+                      placeholder="All developers"
+                    />
+                  </Suspense>
+                </div>
+              )}
+              {developerName && (
+                <Button variant="outline" size="sm" className="border-gold/40 text-[#1A1A1A]" onClick={() => setDeveloperName("")}>
+                  Clear
+                </Button>
+              )}
+              <Badge variant="outline" className="border-gold/40 text-[#1A1A1A]">
+                {filtered.length + filteredAgreements.length} match{(filtered.length + filteredAgreements.length) === 1 ? "" : "es"}
+              </Badge>
+            </CardContent>
+          </Card>
 
-      <Card className="bg-[#F7F2EA] border-gold/20">
-        <CardContent className="p-0">
-          {isLoading && <p className="p-6 text-sm text-[#1A1A1A]/60">Loading…</p>}
-          {!isLoading && filtered.length === 0 && (
-            <div className="p-12 text-center">
-              <FileSignature className="h-10 w-10 mx-auto text-[#1A1A1A]/30 mb-2" />
-              <p className="text-sm text-[#1A1A1A]/70">No signed contracts yet.</p>
-            </div>
+          {/* External agreements (uploaded developer contracts) */}
+          {filteredAgreements.length > 0 && (
+            <Card className="bg-[#F7F2EA] border-gold/20">
+              <CardHeader className="pb-3 flex flex-row items-center justify-between">
+                <CardTitle className="text-[#1A1A1A] text-base flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 text-[hsl(var(--gold))]" />
+                  Uploaded Agreements
+                  <Badge variant="outline" className="border-gold/40 text-[#1A1A1A] ml-2">
+                    {filteredAgreements.length}
+                  </Badge>
+                </CardTitle>
+                <p className="text-xs text-[#1A1A1A]/60">AI-matched, filed by type</p>
+              </CardHeader>
+              <CardContent className="p-0">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead className="bg-[#EFE6D6] text-[#1A1A1A]">
+                      <tr>
+                        <th className="text-left px-4 py-3 font-semibold">Developer</th>
+                        <th className="text-left px-4 py-3 font-semibold">Type</th>
+                        <th className="text-left px-4 py-3 font-semibold">Effective</th>
+                        <th className="text-left px-4 py-3 font-semibold">Expires</th>
+                        <th className="text-left px-4 py-3 font-semibold">Status</th>
+                        <th className="text-right px-4 py-3 font-semibold">File</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredAgreements.map((a) => (
+                        <tr key={a.id} className="border-t border-gold/15 hover:bg-[#FDFBF7]">
+                          <td className="px-4 py-3 text-[#1A1A1A] font-medium">
+                            {a.developer_name_raw ?? "—"}
+                            {a.ai_confidence != null && (
+                              <span className="ml-2 text-[10px] text-[#1A1A1A]/50">
+                                {Math.round(a.ai_confidence * 100)}%
+                              </span>
+                            )}
+                          </td>
+                          <td className="px-4 py-3 text-[#1A1A1A]/80">{a.contract_type ?? "—"}</td>
+                          <td className="px-4 py-3 text-[#1A1A1A]/80">{a.effective_date ?? "—"}</td>
+                          <td className="px-4 py-3 text-[#1A1A1A]/80">{a.expiry_date ?? "—"}</td>
+                          <td className="px-4 py-3">
+                            <Badge variant="outline" className={a.status === "filed" ? "border-emerald-600/40 text-emerald-700" : "border-amber-500/50 text-amber-700"}>
+                              {a.status?.replace("_", " ") ?? "—"}
+                            </Badge>
+                          </td>
+                          <td className="px-4 py-3 text-right">
+                            <Button asChild size="sm" variant="outline" className="border-gold/40 text-[#1A1A1A]">
+                              <a href={a.file_url} target="_blank" rel="noreferrer">
+                                <Download className="h-3 w-3 mr-1" />
+                                Open
+                              </a>
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </CardContent>
+            </Card>
           )}
-          {filtered.length > 0 && (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="bg-[#EFE6D6] text-[#1A1A1A]">
-                  <tr>
-                    <th className="text-left px-4 py-3 font-semibold">Document</th>
-                    <th className="text-left px-4 py-3 font-semibold">Developer / Recipient</th>
-                    <th className="text-left px-4 py-3 font-semibold">Emirate</th>
-                    <th className="text-left px-4 py-3 font-semibold">Area</th>
-                    <th className="text-left px-4 py-3 font-semibold">Signed</th>
-                    <th className="text-right px-4 py-3 font-semibold">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filtered.map((row) => (
-                    <tr key={row.signed_document_id} className="border-t border-gold/15 hover:bg-[#FDFBF7]">
-                      <td className="px-4 py-3 text-[#1A1A1A] font-medium">
-                        {row.envelope_name}
-                        <div className="text-xs text-[#1A1A1A]/60">{row.document_filename}</div>
-                      </td>
-                      <td className="px-4 py-3 text-[#1A1A1A]">
-                        {row.developer_name ?? row.primary_recipient_name ?? "—"}
-                      </td>
-                      <td className="px-4 py-3 text-[#1A1A1A]/80">{row.emirate ?? "—"}</td>
-                      <td className="px-4 py-3 text-[#1A1A1A]/80">{row.area ?? "—"}</td>
-                      <td className="px-4 py-3 text-[#1A1A1A]/80">
-                        {new Date(row.signed_at).toLocaleDateString()}
-                      </td>
-                      <td className="px-4 py-3 text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          <Button asChild size="sm" variant="outline" className="border-gold/40 text-[#1A1A1A]">
-                            <a href={row.document_url} target="_blank" rel="noreferrer">
-                              <Download className="h-3 w-3 mr-1" />
-                              Open
-                            </a>
-                          </Button>
-                          <Button asChild size="sm" variant="gold">
-                            <Link to={`/owner/sign/${row.envelope_id}`}>
-                              <Stamp className="h-3 w-3 mr-1" />
-                              Sign again
-                            </Link>
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+
+          {/* Signed contracts */}
+          <Card className="bg-[#F7F2EA] border-gold/20">
+            <CardContent className="p-0">
+              {isLoading && <p className="p-6 text-sm text-[#1A1A1A]/60">Loading…</p>}
+              {!isLoading && filtered.length === 0 && filteredAgreements.length === 0 && (
+                <div className="p-12 text-center">
+                  <FileSignature className="h-10 w-10 mx-auto text-[#1A1A1A]/30 mb-2" />
+                  <p className="text-sm text-[#1A1A1A]/70">
+                    No contracts in <strong>{TYPES.find((t) => t.key === activeType)?.label}</strong> yet.
+                  </p>
+                </div>
+              )}
+              {filtered.length > 0 && (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead className="bg-[#EFE6D6] text-[#1A1A1A]">
+                      <tr>
+                        <th className="text-left px-4 py-3 font-semibold">Document</th>
+                        <th className="text-left px-4 py-3 font-semibold">Developer / Recipient</th>
+                        <th className="text-left px-4 py-3 font-semibold">Emirate</th>
+                        <th className="text-left px-4 py-3 font-semibold">Area</th>
+                        <th className="text-left px-4 py-3 font-semibold">Signed</th>
+                        <th className="text-right px-4 py-3 font-semibold">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filtered.map((row) => (
+                        <tr key={row.signed_document_id} className="border-t border-gold/15 hover:bg-[#FDFBF7]">
+                          <td className="px-4 py-3 text-[#1A1A1A] font-medium">
+                            {row.envelope_name}
+                            <div className="text-xs text-[#1A1A1A]/60">{row.document_filename}</div>
+                          </td>
+                          <td className="px-4 py-3 text-[#1A1A1A]">
+                            {row.developer_name ?? row.primary_recipient_name ?? "—"}
+                          </td>
+                          <td className="px-4 py-3 text-[#1A1A1A]/80">{row.emirate ?? "—"}</td>
+                          <td className="px-4 py-3 text-[#1A1A1A]/80">{row.area ?? "—"}</td>
+                          <td className="px-4 py-3 text-[#1A1A1A]/80">
+                            {new Date(row.signed_at).toLocaleDateString()}
+                          </td>
+                          <td className="px-4 py-3 text-right">
+                            <div className="flex items-center justify-end gap-2">
+                              <Button asChild size="sm" variant="outline" className="border-gold/40 text-[#1A1A1A]">
+                                <a href={row.document_url} target="_blank" rel="noreferrer">
+                                  <Download className="h-3 w-3 mr-1" />
+                                  Open
+                                </a>
+                              </Button>
+                              <Button asChild size="sm" variant="gold">
+                                <Link to={`/owner/sign/${row.envelope_id}`}>
+                                  <Stamp className="h-3 w-3 mr-1" />
+                                  Sign again
+                                </Link>
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </div>
 
       <AgreementUploadDrawer open={uploadOpen} onOpenChange={setUploadOpen} />
     </div>

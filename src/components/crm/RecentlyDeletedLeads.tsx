@@ -4,8 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Trash2, RotateCcw, Search, Clock, AlertTriangle } from "lucide-react";
+import { Trash2, RotateCcw, Search, Clock, AlertTriangle, CheckSquare } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import { formatDisplayDate } from "@/utils/formatDate";
 import {
   Table,
@@ -49,6 +50,8 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
   const [search, setSearch] = useState("");
   const [restoring, setRestoring] = useState<string | null>(null);
   const [erasing, setErasing] = useState<string | null>(null);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [bulkBusy, setBulkBusy] = useState(false);
 
   useEffect(() => {
     fetchDeletedLeads();
@@ -136,6 +139,67 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
       )
     : leads;
 
+  const allFilteredSelected = filtered.length > 0 && filtered.every((l) => selected.has(l.id));
+  const toggleSelectAll = (checked: boolean) => {
+    if (checked) setSelected(new Set(filtered.map((l) => l.id)));
+    else setSelected(new Set());
+  };
+  const toggleOne = (id: string) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
+
+  const bulkRestore = async (ids: string[]) => {
+    if (ids.length === 0) return;
+    setBulkBusy(true);
+    try {
+      const { error } = await supabase
+        .from("crm_leads")
+        .update({ deleted_at: null })
+        .in("id", ids);
+      if (error) throw error;
+      toast.success(`Restored ${ids.length} lead${ids.length === 1 ? "" : "s"}`);
+      setLeads((prev) => prev.filter((l) => !ids.includes(l.id)));
+      setSelected(new Set());
+      onRefresh();
+    } catch (err: any) {
+      toast.error(`Bulk restore failed: ${err?.message || "Unknown error"}`);
+    } finally {
+      setBulkBusy(false);
+    }
+  };
+
+  const bulkErase = async (ids: string[]) => {
+    if (ids.length === 0 || !isOwner) return;
+    setBulkBusy(true);
+    try {
+      const { error } = await supabase
+        .from("crm_leads")
+        .delete()
+        .in("id", ids);
+      if (error) throw error;
+      await supabase.from("audit_logs").insert({
+        user_id: userId,
+        action_type: 'delete' as any,
+        resource_type: 'lead' as any,
+        resource_id: ids[0],
+        description: `Permanently erased ${ids.length} lead(s) in bulk`,
+        details: { action: 'bulk_permanent_erase', count: ids.length, ids },
+      });
+      toast.success(`Permanently erased ${ids.length} lead${ids.length === 1 ? "" : "s"}`);
+      setLeads((prev) => prev.filter((l) => !ids.includes(l.id)));
+      setSelected(new Set());
+      onRefresh();
+    } catch (err: any) {
+      toast.error(`Bulk erase failed: ${err?.message || "Unknown error"}`);
+    } finally {
+      setBulkBusy(false);
+    }
+  };
+
   return (
     <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-sm">
       <CardHeader>
@@ -168,6 +232,121 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
           </Button>
         </div>
 
+        {/* Bulk action toolbar */}
+        {filtered.length > 0 && (
+          <div className="flex flex-wrap items-center gap-2 rounded-lg border border-gold/30 bg-[#FDFBF7] px-3 py-2">
+            <Checkbox
+              checked={allFilteredSelected}
+              onCheckedChange={(c) => toggleSelectAll(!!c)}
+              aria-label="Select all"
+            />
+            <span className="text-xs font-semibold text-[#1A1A1A]/80">
+              {selected.size > 0 ? `${selected.size} selected` : "Select all on page"}
+            </span>
+            <div className="flex-1" />
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={bulkBusy || selected.size === 0}
+              onClick={() => bulkRestore(Array.from(selected))}
+              className="border-emerald-600/40 text-emerald-700 hover:bg-emerald-50"
+            >
+              <RotateCcw className="h-3.5 w-3.5 mr-1" />
+              Restore selected
+            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={bulkBusy || filtered.length === 0}
+                  className="border-emerald-600/60 text-emerald-700 hover:bg-emerald-50"
+                >
+                  <CheckSquare className="h-3.5 w-3.5 mr-1" />
+                  Restore all ({filtered.length})
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Restore all visible leads?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will restore <strong>{filtered.length}</strong> lead{filtered.length === 1 ? "" : "s"} back into your active CRM.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={() => bulkRestore(filtered.map((l) => l.id))}>
+                    Restore all
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+            {isOwner && (
+              <>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      disabled={bulkBusy || selected.size === 0}
+                    >
+                      <Trash2 className="h-3.5 w-3.5 mr-1" />
+                      Erase selected
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Permanently erase {selected.size} lead{selected.size === 1 ? "" : "s"}?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action <strong>cannot be undone</strong>. Selected leads and all associated data will be permanently removed.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={() => bulkErase(Array.from(selected))}
+                        className="bg-red-600 hover:bg-red-700"
+                      >
+                        Permanently erase
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      disabled={bulkBusy || filtered.length === 0}
+                      className="bg-red-700 hover:bg-red-800"
+                    >
+                      <AlertTriangle className="h-3.5 w-3.5 mr-1" />
+                      Empty trash ({filtered.length})
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Empty the trash?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This will <strong>permanently erase {filtered.length}</strong> lead{filtered.length === 1 ? "" : "s"} and all associated data. This action cannot be undone.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={() => bulkErase(filtered.map((l) => l.id))}
+                        className="bg-red-700 hover:bg-red-800"
+                      >
+                        Yes, empty trash
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </>
+            )}
+          </div>
+        )}
+
         {/* Table */}
         {loading ? (
           <div className="text-center py-12 text-[#1A1A1A]/70">Loading...</div>
@@ -181,6 +360,13 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead className="w-10">
+                    <Checkbox
+                      checked={allFilteredSelected}
+                      onCheckedChange={(c) => toggleSelectAll(!!c)}
+                      aria-label="Select all"
+                    />
+                  </TableHead>
                   <TableHead>Name</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Phone</TableHead>
@@ -191,7 +377,14 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
               </TableHeader>
               <TableBody>
                 {filtered.map((lead) => (
-                  <TableRow key={lead.id} className="hover:bg-gold/5">
+                  <TableRow key={lead.id} data-state={selected.has(lead.id) ? "selected" : undefined} className="hover:bg-gold/5">
+                    <TableCell className="w-10">
+                      <Checkbox
+                        checked={selected.has(lead.id)}
+                        onCheckedChange={() => toggleOne(lead.id)}
+                        aria-label={`Select ${lead.full_name}`}
+                      />
+                    </TableCell>
                     <TableCell className="font-medium text-[#1A1A1A]">{lead.full_name}</TableCell>
                     <TableCell className="text-[#1A1A1A]/70 text-sm">{lead.email_lower || "—"}</TableCell>
                     <TableCell className="text-[#1A1A1A]/70 text-sm">{lead.phone_e164 || "—"}</TableCell>

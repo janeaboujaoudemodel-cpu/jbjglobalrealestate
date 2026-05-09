@@ -14,7 +14,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { toast } from "sonner";
-import { FileSignature, Mail, MessageSquare, PhoneCall, Trash2 } from "lucide-react";
+import { FileSignature, Mail, MessageSquare, PhoneCall, Trash2, Flame, Star, CheckCircle2, XCircle, Clock, Ban } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { PIPELINE_STATUSES, STATUS_GROUPS } from "./LeadStatusBadge";
 import InlineStatusSelect from "./InlineStatusSelect";
 import CRMLeadsBulkBar from "./CRMLeadsBulkBar";
@@ -369,62 +378,61 @@ export default function CRMLeadsTableV2({
     return lead.lead_source_type || "Manual Entry";
   };
 
+  // Quick filter chips for one-click status filtering
+  const quickChips: { key: string; label: string; icon: typeof Flame; stage?: string; tag?: string }[] = [
+    { key: "hot", label: "Hot", icon: Flame, stage: "negotiation" },
+    { key: "interested", label: "Interested", icon: CheckCircle2, stage: "interested" },
+    { key: "vip", label: "VIP", icon: Star, tag: "vip" },
+    { key: "already_bought", label: "Already Bought", icon: CheckCircle2, stage: "already_bought" },
+    { key: "closed_won", label: "Deal Closed", icon: CheckCircle2, stage: "closed_won" },
+    { key: "no_answer", label: "No Response", icon: Clock, stage: "no_answer" },
+    { key: "junk", label: "Junk", icon: Ban, stage: "junk" },
+    { key: "closed_lost", label: "Lost", icon: XCircle, stage: "closed_lost" },
+  ];
+
   return (
-    <div className="space-y-3">
-      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <div className="flex-1">
-          <Input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search name, phone, email…"
-            className="bg-[#FDFBF7]/80 border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:border-gold"
-          />
-        </div>
+    <div className="space-y-4">
+      {/* Filter card — champagne-themed, no native dropdowns */}
+      <div className="rounded-xl border border-gold/30 bg-[#F7F2EA] p-4 space-y-3">
+        {/* Quick chips strip */}
         <div className="flex flex-wrap items-center gap-2">
-          <select
-            value={stageFilter}
-            onChange={(e) => setStageFilter(e.target.value)}
-            className="h-9 rounded-lg border-2 border-gold/30 bg-[#FDFBF7] px-3 text-sm font-semibold text-[#1A1A1A] focus:outline-none focus:border-gold"
-            title="Filter by stage"
-          >
-            <option value="">All Stages</option>
-            {PIPELINE_STATUSES.map((s) => (
-              <option key={s.value} value={s.value}>{s.label}</option>
-            ))}
-          </select>
-          <select
-            value={sourceTypeFilter}
-            onChange={(e) => setSourceTypeFilter(e.target.value)}
-            className="h-9 rounded-lg border-2 border-gold/30 bg-[#FDFBF7] px-3 text-sm font-semibold text-[#1A1A1A] focus:outline-none focus:border-gold"
-            title="Filter by source"
-          >
-            <option value="">All Sources</option>
-            {sourceTypeOptions.map((t) => (
-              <option key={t} value={t}>{formatSourceLabel(t)}</option>
-            ))}
-          </select>
-          <select
-            value={assigneeFilter}
-            onChange={(e) => setAssigneeFilter(e.target.value)}
-            className="h-9 rounded-lg border-2 border-gold/30 bg-[#FDFBF7] px-3 text-sm font-semibold text-[#1A1A1A] focus:outline-none focus:border-gold"
-            title="Filter by owner / assigned broker"
-          >
-            <option value="">All Owners</option>
-            <option value="__unassigned__">Unassigned</option>
-            {assigneeOptions.map((a) => (
-              <option key={a.id} value={a.id}>{a.name}</option>
-            ))}
-          </select>
-          <select
-            value={tagFilter}
-            onChange={(e) => setTagFilter(e.target.value)}
-            className="h-9 rounded-lg border-2 border-gold/30 bg-[#FDFBF7] px-3 text-sm font-semibold text-[#1A1A1A] focus:outline-none focus:border-gold"
-            title="Filter by tag"
-          >
-            <option value="">All Tags</option>
-            <option value="vip">★ VIP</option>
-            <option value="unassigned">Unassigned</option>
-          </select>
+          <span className="text-xs font-bold uppercase tracking-wider text-[#1A1A1A]/60 mr-1">Quick:</span>
+          {quickChips.map((c) => {
+            const active =
+              (c.stage && stageFilter === c.stage) || (c.tag && tagFilter === c.tag);
+            const Icon = c.icon;
+            return (
+              <button
+                key={c.key}
+                type="button"
+                onClick={() => {
+                  if (c.stage) setStageFilter(active ? "" : c.stage);
+                  if (c.tag) setTagFilter(active ? "" : c.tag);
+                }}
+                className={
+                  "inline-flex items-center gap-1.5 h-8 px-3 rounded-full text-xs font-semibold border transition-colors " +
+                  (active
+                    ? "bg-[#EFE6D6] text-[#1A1A1A] border-gold"
+                    : "bg-[#FDFBF7] text-[#1A1A1A]/80 border-gold/30 hover:bg-[#EFE6D6]")
+                }
+              >
+                <Icon className="h-3.5 w-3.5" />
+                {c.label}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Search row */}
+        <div className="flex flex-col gap-3 md:flex-row md:items-center">
+          <div className="flex-1">
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search name, phone, email…"
+              className="h-10 bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus-visible:ring-1 focus-visible:ring-gold focus-visible:border-gold"
+            />
+          </div>
           <Button
             type="button"
             variant="outline"
@@ -437,10 +445,76 @@ export default function CRMLeadsTableV2({
               setAssigneeFilter("");
               setTagFilter("");
             }}
-            className="font-semibold border-gold/30 text-[#1A1A1A] hover:bg-gold/10"
+            className="h-10 font-semibold border-gold/30 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#EFE6D6]"
           >
-            Reset
+            Clear filters
           </Button>
+        </div>
+
+        {/* Dropdown row — shadcn Select, evenly spaced, no overlap */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <Select value={stageFilter || "__all__"} onValueChange={(v) => setStageFilter(v === "__all__" ? "" : v)}>
+            <SelectTrigger className="h-10 bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] font-semibold">
+              <SelectValue placeholder="All Stages" />
+            </SelectTrigger>
+            <SelectContent className="bg-[#FDFBF7] border border-gold/30 max-h-[360px]">
+              <SelectItem value="__all__">All Stages</SelectItem>
+              <SelectGroup>
+                <SelectLabel className="text-emerald-700 font-bold">Positive</SelectLabel>
+                {groupedStatuses.positive.map((s) => (
+                  <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+                ))}
+              </SelectGroup>
+              <SelectGroup>
+                <SelectLabel className="text-blue-700 font-bold">Neutral</SelectLabel>
+                {groupedStatuses.neutral.map((s) => (
+                  <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+                ))}
+              </SelectGroup>
+              <SelectGroup>
+                <SelectLabel className="text-red-700 font-bold">Negative</SelectLabel>
+                {groupedStatuses.negative.map((s) => (
+                  <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+
+          <Select value={sourceTypeFilter || "__all__"} onValueChange={(v) => setSourceTypeFilter(v === "__all__" ? "" : v)}>
+            <SelectTrigger className="h-10 bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] font-semibold">
+              <SelectValue placeholder="All Sources" />
+            </SelectTrigger>
+            <SelectContent className="bg-[#FDFBF7] border border-gold/30 max-h-[360px]">
+              <SelectItem value="__all__">All Sources</SelectItem>
+              {sourceTypeOptions.map((t) => (
+                <SelectItem key={t} value={t}>{formatSourceLabel(t)}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select value={assigneeFilter || "__all__"} onValueChange={(v) => setAssigneeFilter(v === "__all__" ? "" : v)}>
+            <SelectTrigger className="h-10 bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] font-semibold">
+              <SelectValue placeholder="All Owners" />
+            </SelectTrigger>
+            <SelectContent className="bg-[#FDFBF7] border border-gold/30 max-h-[360px]">
+              <SelectItem value="__all__">All Owners</SelectItem>
+              <SelectItem value="__unassigned__">Unassigned</SelectItem>
+              {assigneeOptions.map((a) => (
+                <SelectItem key={a.id} value={a.id}>{a.name}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select value={tagFilter || "__all__"} onValueChange={(v) => setTagFilter(v === "__all__" ? "" : v)}>
+            <SelectTrigger className="h-10 bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] font-semibold">
+              <SelectValue placeholder="All Tags" />
+            </SelectTrigger>
+            <SelectContent className="bg-[#FDFBF7] border border-gold/30">
+              <SelectItem value="__all__">All Tags</SelectItem>
+              <SelectItem value="vip">★ VIP</SelectItem>
+              <SelectItem value="unassigned">Unassigned</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
