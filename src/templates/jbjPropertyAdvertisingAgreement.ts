@@ -123,7 +123,7 @@ export const DEFAULT_CHROME: Required<TemplateChrome> = {
   surface: "#FFFFFF",
   headerStyle: "monogram-wordmark",
   footerStyle: "three-column",
-  tagline: "PRIVATE OFFICE · DUBAI · INSTITUTIONAL REAL ESTATE",
+  tagline: "DOWNTOWN DUBAI · INSTITUTIONAL REAL ESTATE",
   trn: "",
   license: "",
 };
@@ -168,7 +168,7 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string) => {
             <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:44px;height:44px;object-fit:contain;display:block;" />
             <div>
               <div style="font-size:18px;letter-spacing:.18em;font-weight:700;color:${ink};">${JBJ_BRAND.company}</div>
-              <div style="font-size:9.5px;letter-spacing:.18em;color:${ink};opacity:.65;margin-top:2px;">PRIVATE OFFICE · DUBAI</div>
+              <div style="font-size:9.5px;letter-spacing:.18em;color:${ink};opacity:.65;margin-top:2px;">DOWNTOWN DUBAI, UAE</div>
             </div>
           </div>
           <div style="text-align:right;font-size:11px;color:${ink};opacity:.85;">
@@ -205,7 +205,7 @@ const footerHtml = (chrome: Required<TemplateChrome>) => {
             <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:20px;height:20px;object-fit:contain;display:block;flex:none;" />
             <div>
               <div style="font-weight:700;letter-spacing:.14em;font-size:10px;opacity:.85;">${JBJ_BRAND.company}</div>
-              <div style="opacity:.7;margin-top:2px;">Private Office · Dubai, UAE</div>
+              <div style="opacity:.7;margin-top:2px;">Downtown Dubai, UAE</div>
             </div>
           </div>
           <div style="text-align:center;">
