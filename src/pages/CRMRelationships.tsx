@@ -576,6 +576,8 @@ const BrokeragesAgenciesView = () => {
   const [emirateFilter, setEmirateFilterRaw] = useState("all");
   const [sourceTab, setSourceTabRaw] = useState<"all" | "directory" | "owner" | "sent" | "inbox">("all");
   const [countryFilter, setCountryFilterRaw] = useState<string>("all");
+  const [sourceFilter, setSourceFilter] = useState<SourceFilterValue>(EMPTY_SOURCE_FILTER);
+  const sourceFilterCtx = useSourceFilterContext(sourceFilter);
   const [, startTransition] = useTransition();
   const setStatusFilter = (v: string) => startTransition(() => setStatusFilterRaw(v));
   const setEmirateFilter = (v: string) => startTransition(() => setEmirateFilterRaw(v));
