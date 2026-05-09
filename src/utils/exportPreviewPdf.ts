@@ -122,9 +122,8 @@ export async function exportPreviewPdf(
         });
         drawnContent = true;
       }
-    } else if (f.type === "date") {
-      const value = f.value || new Date().toLocaleDateString("en-GB");
-      page.drawText(String(value), {
+    } else if (f.type === "date" && f.value) {
+      page.drawText(String(f.value), {
         x: x + 4, y: y + h / 2 - 5, size: 11, font, color: rgb(0.05, 0.05, 0.05),
       });
       drawnContent = true;
