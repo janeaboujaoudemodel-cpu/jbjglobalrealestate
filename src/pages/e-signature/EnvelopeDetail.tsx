@@ -193,9 +193,6 @@ export default function EnvelopeDetail() {
       if (envelope?.document_url) window.open(envelope.document_url, "_blank");
       return;
     }
-    const w = window.open("", "_blank", "width=900,height=1100");
-    if (!w) { toast.error("Pop-ups blocked"); return; }
-    // Branded title (DOC NO. only) — kills "property" from the browser-injected page header.
     const printTitle = docNumber ? String(docNumber) : "JBJ Document";
     // @page rules + print-color-adjust suppress browser-injected URL/date/time chrome.
     const printStyles = `
@@ -214,8 +211,14 @@ export default function EnvelopeDetail() {
         body > .doc-shell { padding: 0; }
       </style>
     `;
-    w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${printTitle}</title><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">${printStyles}</head><body><div class="doc-shell">${previewHtml}</div><script>window.onload=()=>{setTimeout(()=>window.print(),400)}</script></body></html>`);
-    w.document.close();
+    // Render via Blob URL — this gives the new tab a real URL (no "about:blank"
+    // address-bar text) and a clean document title for the browser print chrome.
+    const html = `<!doctype html><html><head><meta charset="utf-8"><title>${printTitle}</title><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">${printStyles}</head><body><div class="doc-shell">${previewHtml}</div><script>window.onload=function(){setTimeout(function(){window.print()},400)}<\/script></body></html>`;
+    const blob = new Blob([html], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    const w = window.open(url, "_blank");
+    if (!w) { URL.revokeObjectURL(url); toast.error("Pop-ups blocked"); return; }
+    setTimeout(() => URL.revokeObjectURL(url), 60_000);
   };
 
   const buildSigningUrl = (token: string) => `${PUBLIC_DOMAIN}/sign/${token}`;
