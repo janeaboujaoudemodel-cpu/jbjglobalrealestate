@@ -179,11 +179,38 @@ export default function EnvelopeDetail() {
     }
   };
 
-  const handleDownload = (url: string, filename: string) => {
+  const handleDownload = async (url: string, filename: string) => {
+    if (!url) { toast.error("No file available"); return; }
     try {
-      window.open(maybeProxyStorageUrl(url, filename), "_blank");
-    } catch {
-      toast.error("Failed to download document");
+      // Private storage objects need an Authorization header. Fetch via the
+      // download-file proxy with the user's session token, then save the blob.
+      const proxied = maybeProxyStorageUrl(url, { filename, disposition: "attachment" });
+      const session = await supabase.auth.getSession();
+      const accessToken = session.data.session?.access_token;
+      const res = await fetch(proxied, {
+        headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
+      });
+      if (!res.ok) {
+        // Fall back to opening directly (works for public URLs)
+        if (res.status === 401 || res.status === 403) {
+          toast.error("Please sign in again to download this file");
+        } else {
+          throw new Error(`Download failed (${res.status})`);
+        }
+        return;
+      }
+      const blob = await res.blob();
+      const objectUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = objectUrl;
+      a.download = filename || "document.pdf";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(objectUrl), 60_000);
+    } catch (e: any) {
+      console.error("Download failed:", e);
+      toast.error(e?.message || "Failed to download document");
     }
   };
 
