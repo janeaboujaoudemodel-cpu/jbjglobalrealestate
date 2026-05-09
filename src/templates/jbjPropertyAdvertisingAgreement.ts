@@ -313,7 +313,7 @@ export function buildPAAHtml(
   </p>
 
   ${sectionTitle(1, "Landlord / Owner Details")}
-  <div style="display:flex;flex-wrap:wrap;gap:0 32px;">
+  <div>
     ${fu("Landlord's Name", get("landlord_name"), "landlord_name")}
     ${fu("Passport Number", get("passport_number"), "passport_number")}
     ${fu("Emirates ID", get("emirates_id"), "emirates_id")}
@@ -323,8 +323,8 @@ export function buildPAAHtml(
     ${fu("Listing Consultant", get("listing_consultant"), "listing_consultant")}
     ${fu("Property Reference No.", get("property_reference_no"), "property_reference_no")}
     ${!hidden.has("expiry_date") && get("expiry_date") ? `
-    <div data-field-key="expiry_date" style="margin:6px 0 14px;min-width:220px;flex:1 1 240px;">
-      <div>${dateBox(get("expiry_date"))}</div>
+    <div data-field-key="expiry_date" style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;">
+      <div style="display:inline-block;">${dateBox(get("expiry_date"))}</div>
       <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.7;margin-top:5px;">Expiry Date</div>
     </div>` : ""}
   </div>
@@ -342,7 +342,7 @@ export function buildPAAHtml(
       ${dateBox(get("vacating_date"))}` : ""}
   </div>
 
-  <div style="display:flex;flex-wrap:wrap;gap:0 32px;">
+  <div>
     ${fu("Building Name", get("building_name"), "building_name")}
     ${fu("Unit", get("unit_number"), "unit_number")}
     ${fu("Street Name", get("street_name"), "street_name")}
