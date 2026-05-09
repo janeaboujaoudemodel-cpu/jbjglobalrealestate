@@ -195,7 +195,26 @@ export default function EnvelopeDetail() {
     }
     const w = window.open("", "_blank", "width=900,height=1100");
     if (!w) { toast.error("Pop-ups blocked"); return; }
-    w.document.write(`<!doctype html><html><head><title>${envelope?.name || "Document"}</title></head><body style="margin:0;background:#fff;">${previewHtml}<script>window.onload=()=>{setTimeout(()=>window.print(),300)}</script></body></html>`);
+    // Branded title (DOC NO. only) — kills "property" from the browser-injected page header.
+    const printTitle = docNumber ? String(docNumber) : "JBJ Document";
+    // @page rules + print-color-adjust suppress browser-injected URL/date/time chrome.
+    const printStyles = `
+      <style>
+        @page { size: A4; margin: 16mm 14mm 18mm 14mm; }
+        @media print {
+          html, body {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
+            background: #ffffff !important;
+          }
+          .no-print, header, nav, footer.app-footer { display: none !important; }
+        }
+        html, body { margin: 0; padding: 0; background: #ffffff; font-family: Inter, Arial, sans-serif; color: #1A1A1A; }
+        body > .doc-shell { padding: 0; }
+      </style>
+    `;
+    w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${printTitle}</title><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">${printStyles}</head><body><div class="doc-shell">${previewHtml}</div><script>window.onload=()=>{setTimeout(()=>window.print(),400)}</script></body></html>`);
     w.document.close();
   };
 
