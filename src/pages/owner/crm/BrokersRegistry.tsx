@@ -377,9 +377,16 @@ function BrokerCompanyTimeline({ brokerId, brokerName, history, currentCompany }
 
 function AddBrokerSheet({ open, onOpenChange, onAdded }: { open: boolean; onOpenChange: (o: boolean) => void; onAdded: () => void }) {
   const [saving, setSaving] = useState(false);
-  const [form, setForm] = useState({ full_name: "", email: "", phone: "", current_company: "", rera_license: "", notes: "" });
-
-  const reset = () => setForm({ full_name: "", email: "", phone: "", current_company: "", rera_license: "", notes: "" });
+  const initial = {
+    full_name: "", email: "", phone: "", whatsapp: "",
+    personal_email: "", company_email: "", personal_phone: "", company_phone: "",
+    current_company: "", rera_license: "", nationality: "", languages: "",
+    experience_years: "", broker_type: "" as "" | "sales" | "leasing" | "both",
+    birthday: "", linkedin_url: "", bayut_url: "", pf_url: "", instagram_url: "",
+    notes: "",
+  };
+  const [form, setForm] = useState(initial);
+  const reset = () => setForm(initial);
 
   const submit = async () => {
     if (!form.full_name.trim()) { toast.error("Name is required"); return; }
@@ -387,15 +394,35 @@ function AddBrokerSheet({ open, onOpenChange, onAdded }: { open: boolean; onOpen
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Not signed in");
-      const { error } = await (supabase as any).from("crm_brokers").insert({
+      const langs = form.languages
+        .split(",").map(s => s.trim()).filter(Boolean);
+      const exp = form.experience_years.trim() ? Number(form.experience_years) : null;
+      const payload: any = {
         owner_id: user.id,
         full_name: form.full_name.trim(),
         email_lower: form.email.trim().toLowerCase() || null,
         phone_e164: form.phone.trim() || null,
+        whatsapp: form.whatsapp.trim() || null,
+        personal_email: form.personal_email.trim().toLowerCase() || null,
+        company_email: form.company_email.trim().toLowerCase() || null,
+        personal_phone: form.personal_phone.trim() || null,
+        company_phone: form.company_phone.trim() || null,
         current_company: form.current_company.trim() || null,
         rera_license: form.rera_license.trim() || null,
+        nationality: form.nationality.trim() || null,
+        languages: langs.length ? langs : null,
+        experience_years: Number.isFinite(exp as number) ? exp : null,
+        broker_type: form.broker_type || null,
+        birthday: form.birthday || null,
+        linkedin_url: form.linkedin_url.trim() || null,
+        bayut_url: form.bayut_url.trim() || null,
+        pf_url: form.pf_url.trim() || null,
+        instagram_url: form.instagram_url.trim() || null,
         notes: form.notes.trim() || null,
-      });
+        upload_source: "manual",
+        database_source: "manual",
+      };
+      const { error } = await (supabase as any).from("crm_brokers").insert(payload);
       if (error) throw error;
       toast.success("Broker added");
       reset();
@@ -408,31 +435,62 @@ function AddBrokerSheet({ open, onOpenChange, onAdded }: { open: boolean; onOpen
     }
   };
 
+  const Field = ({ k, label, type = "text" }: { k: keyof typeof initial; label: string; type?: string }) => (
+    <div>
+      <Label className="text-xs text-[#1A1A1A]/70">{label}</Label>
+      <Input
+        type={type}
+        value={(form as any)[k]}
+        onChange={(e) => setForm((f) => ({ ...f, [k]: e.target.value }))}
+        className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] mt-1"
+      />
+    </div>
+  );
+
   return (
     <Sheet open={open} onOpenChange={(o) => { onOpenChange(o); if (!o) reset(); }}>
-      <SheetContent className="bg-[#FDFBF7] sm:max-w-md">
+      <SheetContent className="bg-[#FDFBF7] sm:max-w-lg overflow-y-auto">
         <SheetHeader>
           <SheetTitle className="text-[#1A1A1A]">Add broker manually</SheetTitle>
-          <SheetDescription className="text-[#1A1A1A]/70">External broker — added to your CRM only.</SheetDescription>
+          <SheetDescription className="text-[#1A1A1A]/70">All fields except name are optional — fill what you have, update later.</SheetDescription>
         </SheetHeader>
         <div className="mt-4 space-y-3">
-          {([
-            ["full_name", "Full name *"],
-            ["email", "Email"],
-            ["phone", "Phone"],
-            ["current_company", "Current company"],
-            ["rera_license", "RERA license"],
-            ["notes", "Notes"],
-          ] as const).map(([k, label]) => (
-            <div key={k}>
-              <Label className="text-xs text-[#1A1A1A]/70">{label}</Label>
-              <Input
-                value={(form as any)[k]}
-                onChange={(e) => setForm((f) => ({ ...f, [k]: e.target.value }))}
-                className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] mt-1"
-              />
-            </div>
-          ))}
+          <Field k="full_name" label="Full name *" />
+          <div className="grid grid-cols-2 gap-3">
+            <Field k="email" label="Primary email" />
+            <Field k="phone" label="Primary phone" />
+            <Field k="personal_email" label="Personal email" />
+            <Field k="company_email" label="Company email" />
+            <Field k="personal_phone" label="Personal phone" />
+            <Field k="company_phone" label="Company phone" />
+            <Field k="whatsapp" label="WhatsApp" />
+            <Field k="birthday" label="Birthday" type="date" />
+            <Field k="nationality" label="Nationality" />
+            <Field k="experience_years" label="Experience (years)" type="number" />
+          </div>
+          <Field k="languages" label="Languages (comma-separated)" />
+          <div>
+            <Label className="text-xs text-[#1A1A1A]/70">Broker type</Label>
+            <select
+              value={form.broker_type}
+              onChange={(e) => setForm((f) => ({ ...f, broker_type: e.target.value as any }))}
+              className="mt-1 w-full h-10 rounded-md border border-[#B89555]/30 bg-[#FDFBF7] text-[#1A1A1A] px-3 text-sm"
+            >
+              <option value="">— select —</option>
+              <option value="sales">Sales</option>
+              <option value="leasing">Leasing</option>
+              <option value="both">Both</option>
+            </select>
+          </div>
+          <Field k="current_company" label="Current company" />
+          <Field k="rera_license" label="RERA license" />
+          <div className="grid grid-cols-2 gap-3">
+            <Field k="linkedin_url" label="LinkedIn URL" />
+            <Field k="instagram_url" label="Instagram URL" />
+            <Field k="bayut_url" label="Bayut profile" />
+            <Field k="pf_url" label="Property Finder profile" />
+          </div>
+          <Field k="notes" label="Notes" />
           <Button onClick={submit} disabled={saving} variant="gold" className="w-full">
             {saving ? (<><Loader2 className="w-4 h-4 mr-2 animate-spin" />Saving…</>) : "Add broker"}
           </Button>
