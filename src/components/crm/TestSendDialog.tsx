@@ -176,8 +176,23 @@ export const TestSendDialog = ({
         },
       });
       const v = data as any;
-      if (error) throw new Error(error.message);
-      if (v?.error) throw new Error(v.error.message || v.error);
+      // Surface real edge-function error payload (it's returned in error.context.body)
+      if (error) {
+        let detail = error.message || "Edge function error";
+        try {
+          const ctx: any = (error as any).context;
+          if (ctx?.body) {
+            const text = typeof ctx.body === "string" ? ctx.body : await new Response(ctx.body).text();
+            const parsed = JSON.parse(text);
+            if (parsed?.error) detail = typeof parsed.error === "string" ? parsed.error : (parsed.error.message || detail);
+            if (parsed?.code === "RESEND_AUTH_INVALID") {
+              detail = "Resend API key is invalid. Update RESEND_API_KEY in Cloud → Secrets.";
+            }
+          }
+        } catch { /* ignore */ }
+        throw new Error(detail);
+      }
+      if (v?.error) throw new Error(typeof v.error === "string" ? v.error : (v.error.message || "Send failed"));
       toast.success(`Test email sent to ${profile.to}`);
       onOpenChange(false);
     } catch (err: any) {
