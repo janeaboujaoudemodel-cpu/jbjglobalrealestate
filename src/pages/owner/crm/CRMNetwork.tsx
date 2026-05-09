@@ -145,6 +145,16 @@ export default function CRMNetwork() {
   // Cross-tab persistent filter state
   const [filter, setFilter] = useState<SourceFilterValue>(EMPTY_SOURCE_FILTER);
   const [cross, setCross] = useState<CrossFilter | null>(null);
+  const [hubOpen, setHubOpen] = useState(false);
+  const [hubTarget, setHubTarget] = useState<{ type: "brokerage" | "developer"; companyName: string } | null>(null);
+
+  function openHubFor(role: RoleKey, l: Lead) {
+    const name = (l.company_name || l.full_name || "").trim();
+    if (!name) return;
+    const type: "brokerage" | "developer" = role === "developers" ? "developer" : "brokerage";
+    setHubTarget({ type, companyName: name });
+    setHubOpen(true);
+  }
 
   useEffect(() => {
     (async () => {
