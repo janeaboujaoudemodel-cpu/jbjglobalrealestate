@@ -1,99 +1,72 @@
-## CRM 2026 Upgrade — Plan
+# Batch Implementation Plan
 
-Address every point in your message, plus continue the queued work (developer enrichment, birthday automation, company typeahead). All in one pass.
+Five tracks executed in one pass. LD 33k import is gated on the user uploading the CSV — everything else ships now.
 
----
+## 1. `developer-enrich` edge function
 
-### 1. Restore "All Leads" (the 3 leads that vanished)
+Goal: fill missing `logo_url`, `ceo_name`, `trade_license_number`, `headquarters`, social handles on `developers` rows.
 
-The lazy-loaded `CRMEnhancedDashboard.tsx` is failing to fetch (runtime error in console), which is breaking sibling lazy chunks and leaving `All Leads` empty in some sessions. Also, `CRMLeadsTableV2` filters with `isRealCRMLead` which can hide rows missing certain fields.
+- New function `supabase/functions/developer-enrich/index.ts`
+  - Input: `{ developer_ids?: string[], limit?: number, dry_run?: boolean }`
+  - Auth: `requireOwnerAuth` (per Zero Trust standard)
+  - For each developer with any null target field:
+    1. Google CSE search (`<name> Dubai developer official site`) → top domain
+    2. Firecrawl `scrape` (formats: `markdown`, `branding`) on root + `/about`, `/leadership`, `/contact`
+    3. Lovable AI Gateway (`google/gemini-3-flash-preview`) with strict JSON schema → `{logo_url, ceo_name, trade_license_number, headquarters, instagram, linkedin, x, facebook, youtube, website}`
+    4. Sanity-check logo URL (HEAD 200 + image content-type), fall back to `branding.logo`
+    5. Upsert ONLY null/empty columns (never overwrite human edits); write `developer_enrichment_log` row with diff + sources
+- Migration: `developer_enrichment_log` table (developer_id, source_urls jsonb, fields_filled jsonb, model, created_at) + RLS owner-only.
+- UI: "Enrich missing data" button on `DevelopersDirectory` (owner only) → calls function with current filter scope, toast with N updated.
 
-- Force-refresh the lazy chunk hashes (touch `CRMEnhancedDashboard.tsx`) and add an error boundary so a broken Insights chunk never blanks the leads table.
-- Loosen `isRealCRMLead` to include any non-deleted `crm_leads` row that has at least one of: phone, email, full_name. Log dropped rows once for diagnostics.
-- Run a read query to confirm the 3 leads still exist; if RLS is blocking them, attach the missing `crm_lead_state_per_user` row via a one-time backfill so they appear under "all".
-- Empty state: replace silent "No leads found" with a count breakdown (`X total · Y assigned · Z unassigned`) and a "Recover from Recently Deleted" link.
+## 2. Company typeahead in broker drawer
 
----
+Goal: when editing/creating a broker, the "Current company" field is a combobox that writes both `current_company` (text, free-form fallback) and `current_brokerage_id` (FK to `brokerages`).
 
-### 2. Remove the vertical sub-sidebar — keep navigation horizontal
+- Component `src/components/crm/BrokerageCombobox.tsx`
+  - shadcn `Command` + `Popover`, champagne tokens, IconTile gold
+  - Debounced query `brokerages` by `name ilike` + trade_license, top 8
+  - "Create new brokerage…" inline action if no exact match → opens mini-form (name, license #, city) → inserts and selects
+- Wire into `BrokerEditDrawer` (or equivalent — confirm exact filename when implementing): on select set `current_brokerage_id = row.id` and `current_company = row.name`; on free-text fallback clear FK.
+- Migration: ensure `crm_brokers.current_brokerage_id uuid references public.brokerages(id) on delete set null` + index.
 
-Revert `UnifiedCRM` to a single horizontal context bar under the entity bar (matching the entity bar styling). Drop the 212px left rail and the mobile `<select>` block. Sub-section pills line up horizontally with horizontal scroll on overflow, grouped by visual divider (People · Workspace · Pipeline) only when 4+ items exist.
+## 3. `birthday-dispatcher` edge function + cron
 
----
+- Function `supabase/functions/birthday-dispatcher/index.ts`
+  - Reads `crm_contacts` where `extract(month from birthday)=extract(month from now() at time zone 'Asia/Dubai')` and same day
+  - For each: render branded HTML template (champagne + gold hairline, JBJ monogram, no faded gold text), respect single-agency rule, push through `quotaGuardedFetch` → `email_quota_try_claim` → Resend gateway
+  - Idempotency: `email_send_log` unique on `(contact_id, kind='birthday', sent_on::date)`
+  - Returns `{queued, sent, skipped_quota, skipped_already_sent}`
+- Template: `supabase/functions/_shared/templates/birthdayEmail.ts` — Inter, ink on champagne, executive signature "Amanda Clarke, Executive Assistant" (never "AI"), unsubscribe footer.
+- pg_cron via `supabase--insert` (not migration — contains project URL + anon key) at 08:00 Asia/Dubai = `0 4 * * *` UTC.
+- E2E test: `index.test.ts` seeds a contact with today's birthday in a temp schema, calls function, asserts log row + Resend gateway mock 200.
 
-### 3. Stage / Source / Owner / Tag filter polish
+## 4. Owner-badge email scrub
 
-Inside `CRMLeadsTableV2`:
+- Search `rg "user\\.email|session\\.user\\.email" src/` and audit every render adjacent to an Owner / role badge.
+- Replace with role-only text: `"Owner"` / `"Executive"` / `"Broker"` per current mode; keep email visible only inside the Account Settings page.
+- Add ESLint custom rule `no-email-near-role-badge` (regex on JSX) to CI to prevent regression — registered in `eslint.config.js` plus `scripts/contrast/`-style guard script.
+- No DB change; this is presentation-only per the user's rule.
 
-- **Stage dropdown panel**: give the popover a champagne surface (`bg-[#FDFBF7]` with 1px gold hairline + soft shadow) so Positive/Neutral/Negative groups are clearly framed. Each individual stage chip gets a colored dot:
-  - Positive → emerald, neutral → blue, negative → red, junk → amber, no_answer → slate.
-- **All Sources**: currently shows `…` because long source labels overflow. Fix with `truncate min-w-0` on `SelectValue` and increase trigger width on `md:`. Also show the count next to each source ("Website · 12").
-- **All Owners**: rename "Unassigned" → "Pool (not assigned to a broker)". Add **"Assigned to Broker"** quick filter and a per-broker submenu so you can filter by any specific broker.
-- **Hover & open states**: replace the default light-gray hover (`hover:bg-accent`) with `hover:bg-[#EFE6D6]` (champagne raised) and `data-[state=open]`/`data-[highlighted]` on Radix items get `bg-[#EFE6D6]` + 1px gold left-border. Same for the Tag dropdown.
+## 5. LD 33k import — awaiting file
 
----
+- Backfill script + idempotent loader are already drafted in `scripts/import/ld-brokers.ts`.
+- Action required from user: drop the LD CSV/XLSX into chat. On receipt next turn:
+  1. Copy upload → `/tmp/ld.csv`
+  2. Dry-run: row count, column map, dedupe key (email||phone||license)
+  3. Chunked insert into `crm_brokers` via `import-ld-brokers` edge function with `on conflict do update` on the dedupe key
+  4. Report inserted / updated / skipped
 
-### 4. VIP & ownership labels
+## Out of scope this batch
 
-Replace every "Unassigned" string in lead/owner pills with context-correct copy:
+- CRM Insights AI strip (queued, separate pass)
+- Investor / Sales Rep / Agency tabs
+- Trade-license popups (already removed earlier)
 
-| Where | Old | New |
-|---|---|---|
-| Owner column | "Unassigned" | "Pool" (with tooltip "Not yet assigned to a broker") |
-| VIP filter | "Unassigned" | "Not VIP" |
-| Filter dropdown | "Unassigned" | "Pool (no broker)" |
+## Technical notes
 
----
+- All new edge functions: `verify_jwt = false` default + in-code `requireOwnerAuth`; CORS from `@supabase/supabase-js/cors`; Zod validation.
+- All new UI: champagne tokens only, IconTile gold, no solid gold fills, no faded gold text, `<AdaptiveHairline />` for dividers.
+- Single-agency email rule enforced in birthday dispatcher before send.
+- Resend quota guard: `quotaGuardedFetch` + `email_quota_try_claim` RPC on every outbound.
 
-### 5. Distribution metrics + AI Next-Step strip
-
-New strip above the leads table (collapsed by default, opens with the existing Insights toggle):
-
-```text
-Total 1,248 │ Mine 312 │ Pool 87 │ Assigned 849
-            └─ by broker: Sara 220 · Omar 188 · Layla 142 · …
-```
-
-- Server-side counts via a single RPC `crm_lead_distribution_for_owner()` returning `{total, mine, pool, by_broker[]}`.
-- AI strip below it calls a new edge function `crm-distribution-insights` (Lovable AI Gateway, `google/gemini-3-flash-preview`) with the metrics + last 30d touch data and returns 3–5 concrete next steps:
-  - "Reassign 18 stale leads from Sara → Omar (his close-rate is 2.4× higher this month)"
-  - "Auto-junk 42 leads with 3+ no-answer attempts and no reply in 21d"
-  - "Revive 11 'Interested' leads with no touch in 14d — draft follow-up?"
-  - Each suggestion has a one-click action button.
-
----
-
-### 6. Brokers Registry — vertical-letter card fix (already partly done, finish it)
-
-Sweep every card under Brokers Registry, Developers, Agencies, Sales Reps for missing `min-w-0` / `truncate` / `whitespace-nowrap` and grid containers without `min-w-0`. Verify at 320px, 414px, 768px, 1180px, 1440px viewports.
-
----
-
-### 7. Queued work from previous turn — execute now
-
-- **Developer enrichment** (`developer-enrich` edge function): on opening a developer row with missing fields, call Lovable AI + Firecrawl to fetch logo, HQ address, CEO, license, Instagram, LinkedIn, official site. Cache to `developers.last_enriched_at`. Manual "Enrich now" button on each row.
-- **Birthday dispatcher** (`birthday-dispatcher` cron, daily 08:00 Dubai): pulls `crm_brokers` where `birthday = today`, sends transactional "Happy Birthday from JBJ" via Resend, and posts a morning briefing card on the dashboard. Records run in `birthday_workflow_runs`.
-- **Company typeahead** in Add/Edit Broker: combobox sourced from `crm_brokerages.name ∪ developers.name`, fuzzy match, creates a new brokerage row inline if no match.
-- **LD 33k+ backfill**: edge function `import-ld-brokers` scaffolded; awaiting your CSV file before it runs.
-
----
-
-### 8. Out of scope (will not change)
-
-- Investor / Sales Rep / Agency tab visual changes beyond bug-sweep #6.
-- Lovable's visual-edit sidebar (your editor chrome).
-- Trade-license popups — already locked from `companyLegal.ts`, will not re-prompt.
-
----
-
-### Technical notes
-
-- New edge functions: `crm-distribution-insights`, `developer-enrich`, `birthday-dispatcher`, `import-ld-brokers`.
-- New RPC: `crm_lead_distribution_for_owner()` (SECURITY DEFINER, owner-only).
-- New table: `birthday_workflow_runs` (id, run_date, broker_count, sent_count, errors jsonb).
-- All AI calls go through Lovable AI Gateway with `LOVABLE_API_KEY`.
-- All edge functions use `requireOwnerAuth`.
-- Champagne theme tokens only — no raw grays, no gold fills (hairline only).
-- Responsive verified at 320 / 414 / 768 / 1180 / 1440 widths.
-
-Reply **Approve** and I'll implement everything in one pass.
+Approve to execute tracks 1–4 immediately; track 5 waits on the CSV.
