@@ -31,6 +31,7 @@ import LeadAssignModal from "./LeadAssignModal";
 import DeleteLeadDialog from "./DeleteLeadDialog";
 import SendAgreementDialog from "./SendAgreementDialog";
 import { isRealCRMLead } from "@/utils/crmFakeDataGuard";
+import LeadQuickActions from "./LeadQuickActions";
 
 interface LeadSource {
   source_group: string;
@@ -643,7 +644,8 @@ export default function CRMLeadsTableV2({
                       </div>
                     </TableCell>
                     <TableCell className="text-right">
-                      <div className="inline-flex items-center justify-end gap-1">
+                      <div className="inline-flex items-center justify-end gap-1 flex-wrap">
+                        <LeadQuickActions leadId={lead.id} leadName={lead.full_name} userId={userId} />
                         <Button
                           type="button"
                           size="icon"
