@@ -349,7 +349,15 @@ export default function ESignatureDashboard() {
                           <div className="text-base font-semibold text-foreground group-hover:text-gold transition truncate">
                             {clientName}
                           </div>
-                          <div className="text-xs text-muted-foreground truncate">
+                          {propertyCtx && (
+                            <div className="text-xs text-[#1A1A1A]/80 truncate">{propertyCtx}</div>
+                          )}
+                          {(phoneMasked || emailMasked) && (
+                            <div className="text-[11px] text-[#1A1A1A]/60 truncate">
+                              {[phoneMasked, emailMasked].filter(Boolean).join(" · ")}
+                            </div>
+                          )}
+                          <div className="text-[11px] text-muted-foreground truncate mt-0.5">
                             {templateLabel}
                           </div>
                         </Link>
