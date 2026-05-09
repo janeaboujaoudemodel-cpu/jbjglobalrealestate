@@ -228,13 +228,17 @@ export function useRegenerateEnvelopePdf() {
       envelopeId: string;
       templateKey: string;
       values: Record<string, string>;
+      chrome?: BuildPAAOptions["chrome"];
+      ownerSignatureUrl?: string | null;
+      ownerStampUrl?: string | null;
+      clientSignatureUrl?: string | null;
     }) => {
-      const { envelopeId, templateKey, values } = input;
+      const { envelopeId, templateKey, values, chrome, ownerSignatureUrl, ownerStampUrl, clientSignatureUrl } = input;
       const { data: userData } = await supabase.auth.getUser();
       const user = userData.user;
       if (!user) throw new Error("Not signed in");
 
-      const html = renderTemplateHtml(templateKey, values);
+      const html = renderTemplateHtml(templateKey, values, { chrome, ownerSignatureUrl, ownerStampUrl, clientSignatureUrl });
       const { blob } = await renderHtmlToPdfBlob(html);
 
       const docNumber = values.doc_number || "JBJ-DOC";
@@ -245,6 +249,19 @@ export function useRegenerateEnvelopePdf() {
       if (upErr) throw upErr;
       const { data: urlData } = supabase.storage.from("esign-documents").getPublicUrl(filename);
 
+      // Persist chrome + layout_version inside metadata; preserve existing fields.
+      const { data: existing } = await supabase
+        .from("esign_envelopes")
+        .select("metadata")
+        .eq("id", envelopeId)
+        .single();
+      const prevMeta = (existing?.metadata as any) || {};
+      const nextMeta = {
+        ...prevMeta,
+        ...(chrome ? { chrome } : {}),
+        layout_version: PAA_LAYOUT_VERSION,
+      };
+
       const { data, error } = await supabase
         .from("esign_envelopes")
         .update({
@@ -253,6 +270,7 @@ export function useRegenerateEnvelopePdf() {
           document_size_bytes: blob.size,
           template_html: html,
           template_field_values: values,
+          metadata: nextMeta,
         })
         .eq("id", envelopeId)
         .select()
