@@ -215,10 +215,10 @@ const footerHtml = (chrome: Required<TemplateChrome>) => {
       return `
         <div style="${base}display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;align-items:center;">
           <div style="display:flex;align-items:center;gap:8px;">
-            <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:20px;height:20px;object-fit:contain;display:block;flex:none;" />
+            <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:36px;height:36px;object-fit:contain;display:block;flex:none;" />
             <div>
-              <div style="font-weight:700;letter-spacing:.14em;font-size:10px;opacity:.85;">${JBJ_BRAND.company}</div>
-              <div style="opacity:.7;margin-top:2px;">Downtown Dubai, UAE</div>
+              <div style="font-weight:700;letter-spacing:.14em;font-size:10px;opacity:.85;">${esc(JBJ_BRAND.legalCompany)}</div>
+              ${JBJ_BRAND.office ? `<div style="opacity:.7;margin-top:2px;">${esc(JBJ_BRAND.office)}</div>` : ""}
             </div>
           </div>
           <div style="text-align:center;">
