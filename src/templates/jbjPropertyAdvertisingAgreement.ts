@@ -28,7 +28,8 @@ export type PAAFieldKey =
   | "landlord_signature_name" | "landlord_signature_date"
   | "jbj_signature_name" | "jbj_signature_date";
 
-export const PAA_DEFAULT_VALUES: Record<PAAFieldKey, string> = {
+export const PAA_DEFAULT_VALUES: Record<PAAFieldKey | "doc_number", string> = {
+  doc_number: "",
   landlord_name: "", passport_number: "", emirates_id: "", mobile_number: "",
   email_address: "", listing_consultant: "", property_reference_no: "", expiry_date: "",
   property_type: "", status_vacant_tenanted: "", furnishing: "", vacating_date: "",
@@ -67,6 +68,7 @@ export function buildPAAHtml(values: Partial<Record<PAAFieldKey, string>> = {}):
       <div style="font-size:10px;letter-spacing:.18em;color:#1A1A1A;opacity:.65;margin-top:2px;">PRIVATE OFFICE · DUBAI</div>
     </div>
     <div style="text-align:right;font-size:11px;color:#1A1A1A;opacity:.8;">
+      <div style="font-size:10px;letter-spacing:.16em;color:#1A1A1A;opacity:.55;margin-bottom:4px;">DOC&nbsp;NO.&nbsp;<strong style="color:#1A1A1A;opacity:1;">{{doc_number}}</strong></div>
       <div>${JBJ_BRAND.phone}</div>
       <div>${JBJ_BRAND.email}</div>
       <div>${JBJ_BRAND.website}</div>
