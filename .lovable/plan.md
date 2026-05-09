@@ -1,62 +1,67 @@
 
-# End-to-End Sign Flow
+# Phone fix + Template title + Drafts UX + Verification
 
-Goal: when the recipient clicks **Review & Sign Document** in the email, they sign on jbj.ae using our own e-signature tool. On submit, you (the sender) receive an email + an in-app notification + an inbox alert + a popup task, and the signed PDF is saved automatically in the e-signature dashboard's **Signed** section, accessible from `/e-signature`.
+## 1. Unify phone to +971 54 716 7107
 
-## What already works
+Currently the e-signature emails and preview dialog use a stale number `+971 56 591 1000`. The correct number across the platform is `+971 54 716 7107`. Replace in:
 
-- `/sign/:token` opens our own signing page (no third-party tool) with `ESignaturePad` for drawing the signature.
-- `esign-load-document` validates the token and loads the document + fields (already deployed and fixed).
-- `esign-process-signature` saves the drawn signature, marks the envelope completed when all signers are done, and calls `esign-complete-envelope`.
-- `esign-complete-envelope` flattens a signed PDF, generates an audit certificate, saves the row in `esign_signed_documents`, sets `signed_document_url` on the envelope, and emails both the signer and the sender (`sender_email` + `contact@jbj.ae`).
-- The dashboard at `/e-signature` already has a **Signed** filter card showing all `status = completed` envelopes with download/view actions.
+- `supabase/functions/esign-send-for-signature/index.ts` (lines 94, 156)
+- `supabase/functions/esign-send-test-email/index.ts` (lines 75, 136)
+- `src/components/e-signature/SendForSignatureDialog.tsx` (line 419 — preview footer; line 343 input placeholder stays since that's a sample, not our number)
 
-## What's missing (this plan delivers)
+The premium signature (`Founder & CEO`) and document footer in `esign-complete-envelope` already use the correct number — leave as-is.
 
-### 1. Date field auto-fill at signing time (UI side)
+## 2. Template title cleanup — Property Advertising Agreement
 
-In `SignDocument.tsx`, when the user submits, also send a `signed_date` (today, formatted `DD/MM/YYYY`) and have `esign-process-signature` write it into every `field_type = "date"` row tied to that recipient (`field_value` + `is_completed = true`). The signed PDF builder already uses signed_at as a fallback, but writing the value also makes it visible in `EnvelopeDetail` and audit views.
+In `src/templates/jbjPropertyAdvertisingAgreement.ts`:
 
-### 2. Owner in-app notifications on completion
+- Remove `<br/><span style="font-weight:700;">FOR REAL ESTATE OWNERS</span>` from line 295.
+- Centre the title block as a single luxury heading: `PROPERTY ADVERTISING AGREEMENT` in uppercase, letter-spacing `.22em`, with a thin gold hairline divider underneath, centred over the page.
+- Update the file's top-of-file comment string to drop "for Real Estate Owners".
+- Polish the cover header band (gold hairline, JBJ wordmark, doc number on the right) and the footer (one-line: `CONTACT@JBJ.AE · WWW.JBJ.AE · +971 54 716 7107` with a `JBJ GLOBAL REAL ESTATE` / page number row above) so both look truly premium and match the generated email shell.
 
-In `esign-complete-envelope`, after the emails are sent:
+## 3. Drafts UI — bulk select / delete-all / Recently Deleted
 
-1. Look up the sender's `auth.users.id` by `sender_email` (service role).
-2. Insert one row into `public.notifications`:
-   - `title`: `"<Signer Name> signed <Envelope Name>"`
-   - `body`: `"Signed on <date>. Tap to view the signed document."`
-   - `notification_type`: `"esign_signed"`
-   - `action_url`: `/e-signature/<envelope_id>`
-   - `metadata`: `{ envelope_id, signer_name, signer_email, signed_document_url, certificate_url }`
-3. The existing `UserTasksPopupAlert` / notifications bell in the header will surface this as the popup task + inbox message + alert (one insert powers all three).
+In `DocumentsFormsHub.tsx` (drafts list area), wire the existing `deleted_at` soft-delete column + RPCs (`restore_esign_envelopes`, `purge_deleted_esign_envelopes` from the prior migration):
 
-### 3. Confirm "Signed" section wiring
+- Add a checkbox column + "Select all on this view" / "Clear selection".
+- Bulk action bar: **Delete selected**, **Delete all visible**.
+- Add a tab/segment toggle: **Drafts** | **Recently Deleted**.
+  - Drafts list filters `deleted_at IS NULL`.
+  - Recently Deleted list filters `deleted_at IS NOT NULL` and shows a "Days left" countdown (30 days from `deleted_at`).
+  - Per-row + bulk **Restore**; bulk **Delete forever** for hard purge.
+- Allow template form creation without a client email (skip the required-email guard; insert envelope as `status = 'draft'` with whatever fields are filled in).
 
-No code change needed — verify on the dashboard that the new envelope appears under the **Signed** filter, that **View Signed PDF** opens `signed_document_url`, and that **Download Audit Certificate** opens `certificate_url`. Both are already on `EnvelopeDetail`.
+Cache invalidation hits `["esign-envelopes"]` after every mutation.
 
-### 4. End-to-end verification (must run)
+## 4. CRM merge + dropdown filters (queued continuation)
 
-Send a real signature request to a test inbox → click **Review & Sign Document** in the email → draw signature on `/sign/:token` → submit. Then verify:
-- Signer receives the "Thank you" email with the signed PDF link.
-- Sender (you) receives the "Signed by …" email.
-- A bell notification appears in the header with a link to the envelope.
-- `/e-signature` → **Signed** card → envelope is listed.
-- Opening the envelope shows signed PDF + audit certificate, both downloadable.
-- Date fields on the document show today's date.
+Resume the queued CRM work:
 
-Capture screenshots of: signing page, submitted confirmation, owner notification bell, Signed list on `/e-signature`, and EnvelopeDetail with download buttons.
+- Run the canonical merge into `crm_contacts` via `upsert_contact_with_company` for any leftover legacy rows in `rel_*` / `jbj_*` tables, deduped by lowercase email.
+- Add the missing dropdown filters (Stage, Source, Owner, Tag) on the CRM list page using the same query-param pattern as the global filter system. Filters reset together via a single "Clear" chip.
 
-## Where to find things (for you)
+(Scope held to UI + read paths — no schema changes; the unified-CRM tables already exist.)
 
-- Signing link the recipient gets in the email → opens `https://jbj.ae/sign/<token>` (our own UI).
-- All signed contracts → **E-Signature dashboard** at `/e-signature`, click the **Signed** stat card (or the `Signed` tab) → click any row to open `/e-signature/<envelope_id>` → buttons for **View / Download Signed PDF** and **Download Audit Certificate**.
-- Bell icon in the global header → inbox of "X signed Y" notifications, each links straight to the envelope.
+## 5. End-to-end verification + screenshots
+
+After deploy of the three edge functions and frontend changes:
+
+1. Create an incomplete template (no client email) → confirm it lands in **Drafts** with whatever fields exist.
+2. Bulk-select two drafts → **Delete selected** → confirm they vanish from Drafts and appear in **Recently Deleted** with a "30 days left" badge.
+3. **Restore** one → confirm back in Drafts; **Delete forever** the other → confirm gone.
+4. Send a real signature email → check footer phone reads `+971 54 716 7107`, title reads only "Property Advertising Agreement", header/footer look premium.
+5. Click **Review & Sign Document** in the email → sign → submit → confirm sender notification (bell + inbox), signed PDF appears under `/e-signature` Signed tab, downloads work.
+
+Capture screenshots of each verified step and attach them to the response.
 
 ## Files touched
 
-- `src/pages/e-signature/SignDocument.tsx` — pass `signed_date` on submit.
-- `supabase/functions/esign-process-signature/index.ts` — write date fields, accept `signed_date`.
-- `supabase/functions/esign-complete-envelope/index.ts` — insert owner row in `public.notifications`.
-- Redeploy: `esign-process-signature`, `esign-complete-envelope`.
+- `supabase/functions/esign-send-for-signature/index.ts`
+- `supabase/functions/esign-send-test-email/index.ts`
+- `src/components/e-signature/SendForSignatureDialog.tsx`
+- `src/templates/jbjPropertyAdvertisingAgreement.ts`
+- `src/pages/.../DocumentsFormsHub.tsx` (+ small helper for soft-delete/restore)
+- CRM list page (filters) + a one-shot merge helper
 
-No DB migration required (notifications table + esign tables already exist).
+No new migrations (soft-delete + RPCs already shipped).
