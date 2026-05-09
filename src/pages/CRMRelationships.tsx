@@ -2655,6 +2655,21 @@ const DeveloperRegistryTab = () => {
             toast.success(`Exported ${rows.length} developers as ${f.toUpperCase()}`);
           }}
         />
+        <Button
+          variant="outline"
+          onClick={() => setUnifiedExportOpen(true)}
+          disabled={!filtered.length}
+          title="Unified CSV — same columns across every CRM list page"
+        >
+          <Download className="w-4 h-4 mr-2" /> Unified CSV
+        </Button>
+        <UnifiedCRMExportModal
+          open={unifiedExportOpen}
+          onOpenChange={setUnifiedExportOpen}
+          kind="developers"
+          rows={filtered as any[]}
+          filenameStem="crm-developers"
+        />
         <Button variant="outline" onClick={() => seed.mutate()} disabled={seed.isPending}>
           {seed.isPending ? "Seeding…" : "Pre-fill"}
         </Button>
