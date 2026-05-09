@@ -707,6 +707,14 @@ export default function EnvelopeDetail() {
           </CardContent>
         </Card>
       </div>
+
+      <SendForSignatureDialog
+        open={sendOpen}
+        onOpenChange={setSendOpen}
+        envelope={envelope}
+        primaryRecipient={clientRec}
+        onSent={() => refetch()}
+      />
     </div>
   );
 }
