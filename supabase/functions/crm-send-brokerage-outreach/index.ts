@@ -621,7 +621,7 @@ serve(async (req: Request) => {
       entity_type: "brokerage",
       entity_id: brk.id,
       direction: "outbound",
-      sent_via: "gmail",
+      sent_via: "resend",
       external_message_id: messageId,
       thread_id: threadId,
       from_email: replyTo,
