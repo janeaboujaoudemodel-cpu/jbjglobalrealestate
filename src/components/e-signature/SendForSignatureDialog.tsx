@@ -98,18 +98,21 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [envelope?.id, open]);
 
+  const senderName = envelope?.sender_name || "Jane Bou Jaoude";
+  const senderTitle = envelope?.sender_title || "Founder & Chief Executive";
+
   const tokens = useMemo(() => ({
     // Recipient (client) merge tags — both names are accepted for back-compat.
     client_name: primaryRecipient?.name || (envelope?.template_field_values as any)?.landlord_name || "Client",
     landlord_name: primaryRecipient?.name || (envelope?.template_field_values as any)?.landlord_name || "Client",
     doc_number: docNumber,
     doc_title: docTitle,
-    // Sender block — never the client. Always JBJ + Jane (or whoever is signed in).
-    sender_signature: `— ${envelope?.sender_name || "Jane Bou Jaoude"}\nJBJ GLOBAL REAL ESTATE`,
-    // Legacy alias kept so older drafts still interpolate cleanly.
-    owner_name: envelope?.sender_name || "Jane Bou Jaoude",
+    // Plain-text preview of the premium signature (delivered email renders this as styled HTML)
+    sender_signature: `— ${senderName}\n${senderTitle}\nJBJ GLOBAL REAL ESTATE`,
+    sender_title: senderTitle,
+    owner_name: senderName,
     signing_link: primaryRecipient?.signing_token ? `${PUBLIC_DOMAIN}/sign/${primaryRecipient.signing_token}` : `${PUBLIC_DOMAIN}/sign/...`,
-  }), [primaryRecipient, envelope, docNumber, docTitle]);
+  }), [primaryRecipient, envelope, docNumber, docTitle, senderName, senderTitle]);
 
   const interpolate = (s: string) =>
     s.replace(/\{\{(\w+)\}\}/g, (_, k) => (tokens as any)[k] ?? `{{${k}}}`);
@@ -341,6 +344,33 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
             </div>
           )}
 
+          {/* TEST EMAIL BANNER — impossible to miss */}
+          <div className="p-4 rounded-xl border border-[#B89555] bg-[#FBE9C8]/40">
+            <div className="flex items-start gap-3">
+              <div className="w-9 h-9 rounded-lg bg-white border border-[#B89555] flex items-center justify-center shrink-0">
+                <FlaskConical className="w-4 h-4 text-[#1A1A1A]" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-[13px] font-semibold text-[#1A1A1A]">Preview before you send</div>
+                <div className="text-[11px] text-[#1A1A1A]/70 mt-0.5">
+                  Send a test copy to <strong>infoo.jane@gmail.com</strong> first — same template, same signature, no client impact.
+                </div>
+                {lockedAt && <div className="text-[11px] text-emerald-800 mt-1 inline-flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> Template locked as your default</div>}
+                {lastTestId && !lockedAt && <div className="text-[11px] text-[#1A1A1A]/80 mt-1">Test sent — check your inbox, then click <strong>Approve & Lock</strong> below.</div>}
+              </div>
+              <div className="flex flex-col gap-1.5 shrink-0">
+                <Button size="sm" variant="outline" onClick={handleSendTest} disabled={sending || testing || approving} className="border-[#B89555] bg-white">
+                  {testing ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : <FlaskConical className="w-3.5 h-3.5 mr-1.5" />}
+                  Send Test to Me
+                </Button>
+                <Button size="sm" variant="outline" onClick={handleApproveLock} disabled={sending || testing || approving || !lastTestId} className="border-emerald-700/50 text-emerald-800 bg-white" title={!lastTestId ? "Send a test first" : "Lock as default"}>
+                  {approving ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : <Lock className="w-3.5 h-3.5 mr-1.5" />}
+                  Approve & Lock
+                </Button>
+              </div>
+            </div>
+          </div>
+
           {/* Subject */}
           <div>
             <div className="flex items-center justify-between">
@@ -371,18 +401,37 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
             </div>
           </div>
 
-          {/* Live preview */}
-          <div className="p-4 rounded-xl border border-[#B89555]/30 bg-white">
-            <div className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/60 mb-1">Live preview</div>
-            <div className="text-sm font-semibold text-[#1A1A1A] mb-2">{previewSubject}</div>
-            <div className="text-sm text-[#1A1A1A]/80 whitespace-pre-wrap">{previewBody}</div>
-            <div className="mt-3 pt-3 border-t border-[#B89555]/20">
+          {/* Live preview — renders premium signature block exactly as the email will */}
+          <div className="p-5 rounded-xl border border-[#B89555]/30 bg-white">
+            <div className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/60 mb-2">Live preview · what the recipient will see</div>
+            <div className="text-base font-semibold text-[#1A1A1A] mb-3">{previewSubject}</div>
+            <div className="text-sm text-[#1A1A1A]/85 whitespace-pre-wrap leading-relaxed">
+              {previewBody.split(tokens.sender_signature).map((chunk, i, arr) => (
+                <span key={i}>
+                  {chunk}
+                  {i < arr.length - 1 && (
+                    <span className="block mt-7 not-italic">
+                      <span style={{ fontFamily: "'Cormorant Garamond', 'Playfair Display', Georgia, serif", fontStyle: "italic", fontWeight: 500, fontSize: "26px", color: "#1A1A1A", lineHeight: 1, letterSpacing: ".01em" }}>{senderName}</span>
+                      <span className="block mt-1 mb-2.5" style={{ width: 64, height: 1, background: "#B89555" }} />
+                      <span className="block text-[11px] font-bold uppercase tracking-[.18em] text-[#1A1A1A]">{senderName}</span>
+                      <span className="block text-[10.5px] uppercase tracking-[.14em] text-[#1A1A1A]/75 mb-1.5">{senderTitle}</span>
+                      <span className="block text-[11px] font-bold uppercase tracking-[.22em] text-[#1A1A1A]">JBJ GLOBAL REAL ESTATE</span>
+                      <span className="block text-[10.5px] text-[#1A1A1A]/70">Private Office · Dubai, UAE</span>
+                      <span className="block text-[10.5px] text-[#1A1A1A]/70">contact@jbj.ae · +971 54 716 7107</span>
+                      <span className="block text-[10.5px] text-[#1A1A1A]/70">www.jbj.ae</span>
+                    </span>
+                  )}
+                </span>
+              ))}
+            </div>
+            <div className="mt-4 pt-3 border-t border-[#B89555]/20">
               <button onClick={() => { navigator.clipboard.writeText(tokens.signing_link); toast.success("Link copied"); }}
                 className="text-xs text-[#1A1A1A]/70 hover:text-[#1A1A1A] flex items-center gap-1.5">
                 <Copy className="w-3 h-3" /> {tokens.signing_link}
               </button>
             </div>
           </div>
+
         </div>
 
         <DialogFooter className="flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
