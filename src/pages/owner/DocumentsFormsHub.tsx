@@ -11,8 +11,9 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { FileText, Send, CheckCircle2, Clock, PenTool, Stamp, FileSignature, Plus, Loader2, ExternalLink, Upload, Scale } from "lucide-react";
+import { FileText, Send, CheckCircle2, Clock, PenTool, Stamp, FileSignature, Plus, Loader2, ExternalLink, Upload, Scale, Sparkles } from "lucide-react";
 import { toast } from "sonner";
+import { SmartFillDropzone } from "@/components/e-signature/SmartFillDropzone";
 
 type Cat = "all" | "leasing" | "selling";
 
@@ -253,6 +254,22 @@ export default function DocumentsFormsHub() {
               <Label>Client Phone (optional)</Label>
               <Input value={client.phone} onChange={(e) => setClient({ ...client, phone: e.target.value })} />
             </div>
+
+            {picker?.category === "leasing" && (
+              <SmartFillDropzone
+                schemaHint="jbj_paa_leasing"
+                onExtracted={(fields) => {
+                  // Push name/email/phone to client inputs if present
+                  setClient((prev) => ({
+                    name: prev.name || fields.landlord_name || "",
+                    email: prev.email || fields.email_address || "",
+                    phone: prev.phone || fields.mobile_number || "",
+                  }));
+                  setExtraValues((prev) => ({ ...prev, ...fields }));
+                  setShowDetails(true);
+                }}
+              />
+            )}
 
             <button
               type="button"
