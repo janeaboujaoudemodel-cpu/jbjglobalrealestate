@@ -194,13 +194,16 @@ export function useCreateEnvelopeFromTemplate() {
         .map((f) => {
           const recipient = f.role === "client" ? clientRec : ownerRec;
           if (!recipient) return null;
+          // x_position / y_position are stored as percentages (0-100) so the
+          // signed-pdf flatten + signing UI overlay can both use the same
+          // coordinate space regardless of page dimensions.
           return {
             envelope_id: envelope.id,
             recipient_id: recipient.id,
             field_type: f.type as any,
             page_number: f.page,
-            x_position: Math.round(f.x * pdfWidth),
-            y_position: Math.round(f.y * pdfHeight),
+            x_position: Math.round(f.x * 100),
+            y_position: Math.round(f.y * 100),
             width: Math.round(f.w * pdfWidth),
             height: Math.round(f.h * pdfHeight),
           };
