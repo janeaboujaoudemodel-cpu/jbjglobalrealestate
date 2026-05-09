@@ -377,7 +377,14 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
               </TableHeader>
               <TableBody>
                 {filtered.map((lead) => (
-                  <TableRow key={lead.id} className="hover:bg-gold/5">
+                  <TableRow key={lead.id} data-state={selected.has(lead.id) ? "selected" : undefined} className="hover:bg-gold/5">
+                    <TableCell className="w-10">
+                      <Checkbox
+                        checked={selected.has(lead.id)}
+                        onCheckedChange={() => toggleOne(lead.id)}
+                        aria-label={`Select ${lead.full_name}`}
+                      />
+                    </TableCell>
                     <TableCell className="font-medium text-[#1A1A1A]">{lead.full_name}</TableCell>
                     <TableCell className="text-[#1A1A1A]/70 text-sm">{lead.email_lower || "—"}</TableCell>
                     <TableCell className="text-[#1A1A1A]/70 text-sm">{lead.phone_e164 || "—"}</TableCell>
