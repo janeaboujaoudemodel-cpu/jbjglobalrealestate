@@ -331,17 +331,32 @@ async function buildSignedPdf(
     const recipientById = new Map(recipients.map((r: any) => [r.id, r]));
     const pages = pdfDoc.getPages();
 
+    // Reference HTML viewport used by the renderer (html2canvas @ 794px wide, A4 ratio).
+    const REF_W = 794;
+    const REF_H = 1123;
+
     for (const f of fields) {
       const pageIdx = Math.max(0, (f.page_number || 1) - 1);
       if (pageIdx >= pages.length) continue;
       const page = pages[pageIdx];
       const { width: pageW, height: pageH } = page.getSize();
 
-      const w = Number(f.width) || 160;
-      const h = Number(f.height) || 36;
-      // Convert percent (top-left origin) → PDF points (bottom-left origin)
-      const xPct = Number(f.x_position) || 0;
-      const yPct = Number(f.y_position) || 0;
+      const rawX = Number(f.x_position) || 0;
+      const rawY = Number(f.y_position) || 0;
+      const rawW = Number(f.width) || 160;
+      const rawH = Number(f.height) || 36;
+
+      // Legacy fields stored x/y as raw pixels on the reference viewport (values
+      // typically > 100). Modern fields store them as percentages 0-100. Detect
+      // and normalise so both render in the right place.
+      const isLegacyPx = rawX > 100 || rawY > 100;
+      const xPct = isLegacyPx ? (rawX / REF_W) * 100 : rawX;
+      const yPct = isLegacyPx ? (rawY / REF_H) * 100 : rawY;
+
+      // Width/height stored in CSS px on the reference viewport — scale to PDF points.
+      const w = (rawW / REF_W) * pageW;
+      const h = (rawH / REF_H) * pageH;
+
       const x = (xPct / 100) * pageW;
       const yTop = (yPct / 100) * pageH;
       const y = pageH - yTop - h;
