@@ -125,11 +125,11 @@ export function TemplateChromeStudio({ value, onChange }: Props) {
               <button
                 key={i}
                 type="button"
-                onClick={() => onChange(v)}
+                onClick={() => { const { name, ...rest } = v; onChange(rest); }}
                 className="text-left rounded border border-[#B89555]/40 bg-white p-3 hover:border-[#B89555] transition"
               >
                 <div className="flex items-center justify-between">
-                  <div className="text-sm font-medium text-[#1A1A1A]">{v.name}</div>
+                  <div className="text-sm font-medium text-[#1A1A1A]">{v.name || `Variant ${i + 1}`}</div>
                   <Check className="w-3.5 h-3.5 text-[#B89555]" />
                 </div>
                 <div className="text-[11px] text-[#1A1A1A]/70 mt-1">
