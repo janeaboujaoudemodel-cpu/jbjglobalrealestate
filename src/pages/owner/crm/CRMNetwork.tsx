@@ -377,7 +377,18 @@ export default function CRMNetwork() {
                               </div>
                             </TableCell>
                             <TableCell className="text-sm text-[#1A1A1A]/80">
-                              {l.company_name || "—"}
+                              {(t.key === "agencies" || t.key === "developers") && l.company_name ? (
+                                <button
+                                  onClick={() => openHubFor(t.key, l)}
+                                  className="inline-flex items-center gap-1 text-[#1A1A1A] hover:underline"
+                                  title="Open company hub"
+                                >
+                                  <Building2 className="h-3.5 w-3.5" />
+                                  {l.company_name}
+                                </button>
+                              ) : (
+                                l.company_name || "—"
+                              )}
                             </TableCell>
                             <TableCell className="text-sm text-[#1A1A1A]/80">
                               {(l as any).country || "—"}
