@@ -26,6 +26,7 @@ import { useOwnerSignatureAssets } from "@/hooks/useOwnerSignatureAssets";
 import { SendForSignatureDialog } from "@/components/e-signature/SendForSignatureDialog";
 import ExportEnvelopeDialog from "@/components/e-signature/ExportEnvelopeDialog";
 import { isReadyDraft, computeDisplayStatus, pickClientName, pickPropertyContext, maskPhone, maskEmail } from "@/pages/e-signature/envelopeStatus";
+import { openWhatsApp, openEmail } from "@/utils/contactActions";
 
 type EnvelopeStatus = 'draft' | 'sent' | 'viewed' | 'partially_signed' | 'completed' | 'declined' | 'expired' | 'voided';
 type RecipientStatus = 'pending' | 'sent' | 'delivered' | 'viewed' | 'signed' | 'declined';
