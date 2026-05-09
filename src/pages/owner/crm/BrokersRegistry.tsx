@@ -48,6 +48,7 @@ export default function BrokersRegistry() {
   const [openBroker, setOpenBroker] = useState<BrokerRow | null>(null);
   const [addOpen, setAddOpen] = useState(false);
   const [sourceFilter, setSourceFilter] = useState<SourceFilterValue>(EMPTY_SOURCE_FILTER);
+  const [exportOpen, setExportOpen] = useState(false);
   const sourceFilterCtx = useSourceFilterContext(sourceFilter);
 
   const { data: registered = [], isLoading: loading1 } = useQuery({
