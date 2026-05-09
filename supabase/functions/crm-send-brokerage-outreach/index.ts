@@ -11,6 +11,13 @@
  */
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import {
+  PRIMARY_SENDER,
+  PRIMARY_SENDER_NAME,
+  DEFAULT_REPLY_TO,
+  enforceAllowedSender,
+} from "../_shared/outreachIdentity.ts";
+import { sendViaResend } from "../_shared/resendClient.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
