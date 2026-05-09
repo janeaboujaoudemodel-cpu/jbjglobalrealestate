@@ -757,19 +757,37 @@ export default function DocumentFieldPlacer({
                             touchAction: "none",
                           }}
                         >
-                          {/* Always-visible delete button (no longer clipped by border) */}
-                          <button
-                            type="button"
-                            aria-label="Delete field"
-                            onPointerDown={(e) => e.stopPropagation()}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              removeField(field.id);
-                            }}
-                            className="absolute -top-3 -right-3 z-40 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center shadow-md ring-2 ring-white"
-                          >
-                            <X className="w-3.5 h-3.5" />
-                          </button>
+                          {/* Always-visible action bar (delete + edit) */}
+                          <div className="absolute -top-3 -right-3 z-40 flex items-center gap-1">
+                            {(field.type === "signature" || field.type === "initials" || field.type === "stamp") && (
+                              <button
+                                type="button"
+                                aria-label="Edit / draw signature"
+                                onPointerDown={(e) => e.stopPropagation()}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleSignatureFieldClick(field.id);
+                                }}
+                                className="w-6 h-6 bg-[#1A1A1A] hover:bg-[#1A1A1A]/85 text-white rounded-full flex items-center justify-center shadow-md ring-2 ring-white"
+                                title="Draw / edit signature"
+                              >
+                                <Pencil className="w-3 h-3" />
+                              </button>
+                            )}
+                            <button
+                              type="button"
+                              aria-label="Delete field"
+                              onPointerDown={(e) => e.stopPropagation()}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                removeField(field.id);
+                              }}
+                              className="w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center shadow-md ring-2 ring-white"
+                              title="Remove field"
+                            >
+                              <X className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
 
                           {/* Field content */}
                           <FieldContentRenderer
