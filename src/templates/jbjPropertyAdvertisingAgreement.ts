@@ -367,7 +367,7 @@ export function buildPAAHtml(
   <div style="font-size:12.5px;color:${ink};line-height:1.7;">
     <div style="margin-bottom:8px;">
       1. The landlord / legal representative has agreed to appoint
-      <span style="border-bottom:1px solid ${accent};padding:0 6px;font-weight:600;">${esc(get("broker_appointee_name") || "JBJ GLOBAL REAL ESTATE")}</span>
+      <span style="border-bottom:1px solid ${accent};padding:0 6px;font-weight:600;">${esc(get("broker_appointee_name") || JBJ_BRAND.legalCompany)}</span>
       as its:
     </div>
     <div style="margin:6px 0 10px;display:flex;flex-wrap:wrap;align-items:center;">
