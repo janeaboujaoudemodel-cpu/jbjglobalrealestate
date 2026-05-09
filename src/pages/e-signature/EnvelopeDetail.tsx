@@ -63,6 +63,7 @@ export default function EnvelopeDetail() {
   const [bulkCcs, setBulkCcs] = useState("");
   const [chrome, setChrome] = useState<TemplateChrome>({});
   const [showStudio, setShowStudio] = useState(false);
+  const [sendOpen, setSendOpen] = useState(false);
   const regenerate = useRegenerateEnvelopePdf();
   const { data: sigAssets } = useOwnerSignatureAssets("signature");
   const { data: stampAssets } = useOwnerSignatureAssets("stamp");
