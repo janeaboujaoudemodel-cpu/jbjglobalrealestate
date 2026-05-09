@@ -254,9 +254,13 @@ export default function UnifiedCRM() {
         )}
       </div>
 
-      {/* Body */}
-      <div className="px-4 md:px-6 py-6">
-        <Suspense fallback={<Fallback />}>{Body}</Suspense>
+      {/* Body — boxed champagne panel so embedded sections never overlap the CRM header/tabs */}
+      <div className="px-3 md:px-6 py-5">
+        <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] shadow-sm overflow-hidden">
+          <div className="p-3 md:p-5 overflow-x-auto">
+            <Suspense fallback={<Fallback />}>{Body}</Suspense>
+          </div>
+        </div>
       </div>
     </div>
   );
