@@ -245,7 +245,7 @@ export default function DocumentsFormsHub() {
                                 <span className="text-[10px] tracking-[0.14em] uppercase text-[#1A1A1A] border border-[#B89555]/40 rounded px-2 py-0.5 bg-[#EFE6D6]">{kind}</span>
                               )}
                               <span className={`text-[10px] tracking-[0.14em] uppercase rounded px-2 py-0.5 border ${sCls}`}>
-                                {sLabel === "ready" ? "Ready" : sLabel.replace(/_/g, " ")}
+                                {sLabel === "ready" ? "Forms Generated" : sLabel === "draft" ? "Forms Generated" : sLabel === "sent" ? "Pending Signature" : sLabel === "completed" ? "Signed" : sLabel.replace(/_/g, " ")}
                               </span>
                             </div>
                             <div className="font-semibold text-[#1A1A1A] truncate">{client}</div>
