@@ -142,8 +142,12 @@ export default function EnvelopeDetail() {
   const previewHtml = useMemo(() => {
     if (!envelope?.template_key) return null;
     const vals = editing ? editValues : ((envelope.template_field_values as any) || {});
-    return renderTemplateHtml(envelope.template_key, { ...vals, doc_number: vals.doc_number || docNumber });
-  }, [envelope?.template_key, envelope?.template_field_values, editing, editValues, docNumber]);
+    return renderTemplateHtml(
+      envelope.template_key,
+      { ...vals, doc_number: vals.doc_number || docNumber },
+      { chrome, ownerSignatureUrl, ownerStampUrl },
+    );
+  }, [envelope?.template_key, envelope?.template_field_values, editing, editValues, docNumber, chrome, ownerSignatureUrl, ownerStampUrl]);
 
   const sendReminder = async (recipientId?: string) => {
     const key = recipientId || "all";
