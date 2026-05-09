@@ -80,19 +80,14 @@ export function PersonDetailDrawer({ open, onOpenChange, leadId }: Props) {
     (async () => {
       setLoading(true);
       try {
-        const { data: l } = await supabase
+        const { data: lRaw } = await supabase
           .from("crm_leads")
-          .select(
-            "id, full_name, email_lower, phone_e164, contact_type, company_name, " +
-            "department, role_title, seniority, position_type, " +
-            "languages, preferred_language, nationality, " +
-            "current_location_city, current_location_country, country_of_residence, region, " +
-            "vip, tags, created_at, last_contacted_at"
-          )
+          .select("*")
           .eq("id", leadId)
           .maybeSingle();
+        const l = (lRaw as any) ?? null;
         if (cancelled) return;
-        setLead(l ?? null);
+        setLead(l);
 
         const email = l?.email_lower ? lower(l.email_lower) : null;
         const phone = l?.phone_e164 || null;
