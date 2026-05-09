@@ -12417,6 +12417,7 @@ export type Database = {
           client_lead_id: string | null
           completed_at: string | null
           created_at: string
+          deleted_at: string | null
           description: string | null
           document_filename: string
           document_size_bytes: number | null
@@ -12447,6 +12448,7 @@ export type Database = {
           client_lead_id?: string | null
           completed_at?: string | null
           created_at?: string
+          deleted_at?: string | null
           description?: string | null
           document_filename: string
           document_size_bytes?: number | null
@@ -12477,6 +12479,7 @@ export type Database = {
           client_lead_id?: string | null
           completed_at?: string | null
           created_at?: string
+          deleted_at?: string | null
           description?: string | null
           document_filename?: string
           document_size_bytes?: number | null
@@ -33077,6 +33080,7 @@ export type Database = {
       mask_iban: { Args: { iban: string }; Returns: string }
       mask_phone: { Args: { phone: string }; Returns: string }
       next_doc_number: { Args: { _template_key: string }; Returns: string }
+      purge_deleted_esign_envelopes: { Args: never; Returns: Json }
       redact_expired_vapi_recordings: { Args: never; Returns: number }
       redact_sensitive_transcript: {
         Args: { p_transcript: string }
@@ -33094,6 +33098,7 @@ export type Database = {
         Args: { p_duration_ms?: number; p_function_name: string }
         Returns: undefined
       }
+      restore_esign_envelopes: { Args: { p_ids: string[] }; Returns: Json }
       seed_crm_developer_registry: {
         Args: { p_owner_id: string }
         Returns: number
