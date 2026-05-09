@@ -280,6 +280,7 @@ export default function EnvelopeDetail() {
         chrome,
         ownerSignatureUrl,
         ownerStampUrl,
+        hiddenFields,
       });
       toast.success("Document updated");
       setEditing(false);
