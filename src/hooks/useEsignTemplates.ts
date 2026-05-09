@@ -21,7 +21,6 @@ export interface TemplateFieldSpec {
   role: "owner" | "client";
   type: "signature" | "initials" | "date" | "text" | "stamp" | "checkbox";
   page: number;
-  /** 0..1 fractional positions on the rendered page */
   x: number;
   y: number;
   w: number;
@@ -42,9 +41,52 @@ export function useEsignTemplates(category?: "leasing" | "selling" | "all") {
   });
 }
 
-/** Renders a template's HTML to a single-page PDF, uploads it,
- *  creates a draft envelope + recipient + fields from schema,
- *  and returns the envelope id. */
+/** Renders template HTML for a given key + values (incl. doc_number). */
+export function renderTemplateHtml(
+  templateKey: string,
+  values: Record<string, string>,
+): string {
+  if (templateKey === "jbj-listing-authorisation-selling") {
+    return buildSellingHtml(values as any);
+  }
+  return buildPAAHtml(values as any);
+}
+
+/** Renders an HTML string into a single-page A4 PDF blob (client-side). */
+export async function renderHtmlToPdfBlob(html: string): Promise<{ blob: Blob; pdfWidth: number; pdfHeight: number }> {
+  const container = document.createElement("div");
+  container.style.position = "fixed";
+  container.style.top = "-10000px";
+  container.style.left = "0";
+  container.style.width = "794px";
+  container.style.background = "#ffffff";
+  container.innerHTML = html;
+  document.body.appendChild(container);
+  try {
+    const html2canvas = (await import("html2canvas")).default;
+    const { jsPDF } = await import("jspdf");
+    const canvas = await html2canvas(container, { scale: 2, backgroundColor: "#ffffff" });
+    const img = canvas.toDataURL("image/jpeg", 0.92);
+    const pdfWidth = 595;
+    const pdfHeight = (canvas.height / canvas.width) * pdfWidth;
+    const pdf = new jsPDF({ unit: "pt", format: [pdfWidth, pdfHeight], orientation: "portrait" });
+    pdf.addImage(img, "JPEG", 0, 0, pdfWidth, pdfHeight);
+    return { blob: pdf.output("blob"), pdfWidth, pdfHeight };
+  } finally {
+    document.body.removeChild(container);
+  }
+}
+
+/** Allocate the next branded document number for a template (e.g. JBJ-PAA-LEASING-0001). */
+export async function allocateDocNumber(templateKey: string): Promise<string> {
+  const { data, error } = await supabase.rpc("next_doc_number" as any, { _template_key: templateKey });
+  if (error) {
+    console.warn("next_doc_number RPC failed; falling back", error);
+    return `JBJ-DOC-${Date.now().toString().slice(-6)}`;
+  }
+  return String(data || "");
+}
+
 export function useCreateEnvelopeFromTemplate() {
   return useMutation({
     mutationFn: async (input: {
@@ -58,41 +100,23 @@ export function useCreateEnvelopeFromTemplate() {
       const user = userData.user;
       if (!user) throw new Error("Not signed in");
 
-      // Merge client info into template values so the rendered PDF is pre-filled
+      // 1. Allocate document number first so it appears on the rendered PDF
+      const docNumber = await allocateDocNumber(template.key);
+
+      // 2. Merge client info into template values so the rendered PDF is pre-filled
       const mergedValues: Record<string, string> = {
+        doc_number: docNumber,
         ...(client?.name ? { landlord_name: client.name } : {}),
         ...(client?.email ? { email_address: client.email } : {}),
         ...(client?.phone ? { mobile_number: client.phone } : {}),
         ...values,
       };
 
-      // 1. Render HTML
-      const html =
-        template.key === "jbj-listing-authorisation-selling"
-          ? buildSellingHtml(mergedValues as any)
-          : buildPAAHtml(mergedValues as any);
+      // 3. Render HTML + PDF
+      const html = renderTemplateHtml(template.key, mergedValues);
+      const { blob, pdfWidth, pdfHeight } = await renderHtmlToPdfBlob(html);
 
-      // 2. Render to PDF using html2canvas + jsPDF
-      const container = document.createElement("div");
-      container.style.position = "fixed";
-      container.style.top = "-10000px";
-      container.style.left = "0";
-      container.style.width = "794px";
-      container.style.background = "#ffffff";
-      container.innerHTML = html;
-      document.body.appendChild(container);
-      const html2canvas = (await import("html2canvas")).default;
-      const { jsPDF } = await import("jspdf");
-      const canvas = await html2canvas(container, { scale: 2, backgroundColor: "#ffffff" });
-      document.body.removeChild(container);
-      const img = canvas.toDataURL("image/jpeg", 0.92);
-      const pdfWidth = 595; // A4 pt
-      const pdfHeight = (canvas.height / canvas.width) * pdfWidth;
-      const pdf = new jsPDF({ unit: "pt", format: [pdfWidth, pdfHeight], orientation: "portrait" });
-      pdf.addImage(img, "JPEG", 0, 0, pdfWidth, pdfHeight);
-      const blob = pdf.output("blob");
-
-      // 3. Upload PDF
+      // 4. Upload PDF
       const filename = `${user.id}/${crypto.randomUUID()}.pdf`;
       const { error: upErr } = await supabase.storage
         .from("esign-documents")
@@ -100,39 +124,40 @@ export function useCreateEnvelopeFromTemplate() {
       if (upErr) throw upErr;
       const { data: urlData } = supabase.storage.from("esign-documents").getPublicUrl(filename);
 
-      // 4. Create envelope
+      // 5. Create envelope
       const { data: envelope, error: envErr } = await supabase
         .from("esign_envelopes")
         .insert({
-          name: template.name,
+          name: `${docNumber} — ${template.name}`,
           description: `Generated from template: ${template.name}`,
           document_url: urlData.publicUrl,
-          document_filename: `${template.key}.pdf`,
+          document_filename: `${docNumber}.pdf`,
           document_size_bytes: blob.size,
           page_count: 1,
           sender_id: user.id,
           sender_email: user.email!,
           sender_name: (user.user_metadata as any)?.full_name || user.email,
           status: "draft",
-          email_subject: `Please sign: ${template.name}`,
+          email_subject: `Please sign: ${docNumber} — ${template.name}`,
           category: template.category,
           template_key: template.key,
           template_html: html,
           template_field_values: mergedValues,
           client_lead_id: clientLeadId ?? null,
+          metadata: { doc_number: docNumber, cc_emails: [] },
           expires_at: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
         })
         .select()
         .single();
       if (envErr) throw envErr;
 
-      // 5. Create owner + (optional) client recipients
+      // 6. Recipients
       const recipientsToInsert: any[] = [
         {
           envelope_id: envelope.id,
           name: (user.user_metadata as any)?.full_name || user.email,
           email: user.email,
-          signing_order: 2, // owner signs after client
+          signing_order: 2,
           metadata: { role: "owner" },
           token_expires_at: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
         },
@@ -153,7 +178,6 @@ export function useCreateEnvelopeFromTemplate() {
         .insert(recipientsToInsert)
         .select();
       if (recErr) {
-        // rollback envelope so we don't leave orphan drafts
         await supabase.from("esign_envelopes").delete().eq("id", envelope.id);
         throw recErr;
       }
@@ -161,7 +185,7 @@ export function useCreateEnvelopeFromTemplate() {
       const ownerRec = createdRecipients.find((r: any) => r.metadata?.role === "owner") ?? createdRecipients[createdRecipients.length - 1];
       const clientRec = createdRecipients.find((r: any) => r.metadata?.role === "client");
 
-      // 6. Create fields from schema (positions are fractional → convert to PDF-pt)
+      // 7. Fields
       const schema = Array.isArray(template.field_schema) ? template.field_schema : [];
       const fieldInserts = schema
         .map((f) => {
@@ -191,5 +215,47 @@ export function useCreateEnvelopeFromTemplate() {
       return envelope;
     },
     onError: (e: Error) => toast.error(e.message),
+  });
+}
+
+/** Re-render the envelope's PDF from current template_field_values and overwrite the storage object. */
+export function useRegenerateEnvelopePdf() {
+  return useMutation({
+    mutationFn: async (input: {
+      envelopeId: string;
+      templateKey: string;
+      values: Record<string, string>;
+    }) => {
+      const { envelopeId, templateKey, values } = input;
+      const { data: userData } = await supabase.auth.getUser();
+      const user = userData.user;
+      if (!user) throw new Error("Not signed in");
+
+      const html = renderTemplateHtml(templateKey, values);
+      const { blob } = await renderHtmlToPdfBlob(html);
+
+      const docNumber = values.doc_number || "JBJ-DOC";
+      const filename = `${user.id}/${crypto.randomUUID()}.pdf`;
+      const { error: upErr } = await supabase.storage
+        .from("esign-documents")
+        .upload(filename, blob, { contentType: "application/pdf", upsert: false });
+      if (upErr) throw upErr;
+      const { data: urlData } = supabase.storage.from("esign-documents").getPublicUrl(filename);
+
+      const { data, error } = await supabase
+        .from("esign_envelopes")
+        .update({
+          document_url: urlData.publicUrl,
+          document_filename: `${docNumber}.pdf`,
+          document_size_bytes: blob.size,
+          template_html: html,
+          template_field_values: values,
+        })
+        .eq("id", envelopeId)
+        .select()
+        .single();
+      if (error) throw error;
+      return data;
+    },
   });
 }
