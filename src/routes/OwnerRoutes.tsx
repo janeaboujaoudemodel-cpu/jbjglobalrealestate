@@ -14,6 +14,7 @@ import OwnerInbox from "@/pages/OwnerInbox";
 import CRM from "@/pages/CRM";
 import CRMRelationships from "@/pages/CRMRelationships";
 import CRMLeadsInbox from "@/pages/CRMLeadsInbox";
+import UnifiedCRM from "@/pages/owner/crm/UnifiedCRM";
 
 const OwnerTemplates = lazy(() => import("@/pages/OwnerTemplates"));
 const OwnerCommSettings = lazy(() => import("@/pages/OwnerCommSettings"));
@@ -99,15 +100,16 @@ export const OwnerRoutes = () => (
     <Route path="documents" element={<Documents />} />
     <Route path="documents/forms" element={<DocumentsFormsHub />} />
     <Route path="settings" element={<OwnerCommSettings />} />
-    <Route path="crm" element={<CRM />} />
+    {/* Unified CRM — single owner-only hub. All legacy sub-routes redirect into it. */}
+    <Route path="crm" element={<UnifiedCRM />} />
     <Route path="crm/leads/:id" element={<CRMLeadDetail />} />
-    <Route path="crm/leads" element={<CRMLeadsInbox />} />
-    <Route path="crm/tasks" element={<CRMTasks />} />
-    <Route path="crm/calendar" element={<CRMCalendar />} />
+    <Route path="crm/leads" element={<Navigate to="/owner/crm?section=leads" replace />} />
+    <Route path="crm/tasks" element={<Navigate to="/owner/crm?section=tasks" replace />} />
+    <Route path="crm/calendar" element={<Navigate to="/owner/crm?section=calendar" replace />} />
     <Route path="crm/notes" element={<CRMNotes />} />
     <Route path="crm/reminders" element={<CRMReminders />} />
-    <Route path="crm/employees" element={<CRMEmployees />} />
-    <Route path="crm/relationships" element={<CRMRelationships />} />
+    <Route path="crm/employees" element={<Navigate to="/owner/crm?section=employees" replace />} />
+    <Route path="crm/relationships" element={<Navigate to="/owner/crm?section=relationships&sub=investors" replace />} />
     <Route path="admin" element={<Admin />} />
     <Route path="admin/leads" element={<AdminLeads />} />
     <Route path="marketing-hub" element={<MarketingHub />} />
@@ -164,10 +166,10 @@ export const OwnerRoutes = () => (
     <Route path="media-ingest" element={<OwnerMediaIngest />} />
     <Route path="crm/relationships/activity" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/AgencyActivityLog")))}</Suspense>} />
     <Route path="crm/brokerage-actions" element={<Navigate to="/owner/crm/relationships/activity" replace />} />
-    <Route path="crm/brokers" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/BrokersRegistry")))}</Suspense>} />
+    <Route path="crm/brokers" element={<Navigate to="/owner/crm?section=relationships&sub=brokers" replace />} />
     <Route path="crm/integrity" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/DataIntegrityCheck")))}</Suspense>} />
-    <Route path="crm/network" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/CRMNetwork")))}</Suspense>} />
-    <Route path="crm/campaigns" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/CampaignsPage")))}</Suspense>} />
+    <Route path="crm/network" element={<Navigate to="/owner/crm?section=relationships&sub=developers" replace />} />
+    <Route path="crm/campaigns" element={<Navigate to="/owner/crm?section=campaigns" replace />} />
    <Route path="crm/company/:type/:name" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/CompanyHubPage")))}</Suspense>} />
   </Route>
 );
