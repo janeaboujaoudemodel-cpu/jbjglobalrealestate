@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Copy, MessageSquare, Mail, RefreshCw, Trash2, UserPlus, X, Sparkles } from "lucide-react";
+import { Copy, MessageSquare, Mail, RefreshCw, Trash2, UserPlus, X, Sparkles, GitMerge } from "lucide-react";
 import { PIPELINE_STATUSES } from "./LeadStatusBadge";
 
 interface BrokerOption {
