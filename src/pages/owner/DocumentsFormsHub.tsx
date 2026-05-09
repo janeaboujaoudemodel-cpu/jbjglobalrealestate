@@ -287,6 +287,24 @@ export default function DocumentsFormsHub() {
                         </a>
                       </Button>
                     )}
+                    {mode === "signed" && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={async () => {
+                          if (!confirm("Mark this envelope as NOT signed and return it to drafts?\n\nUse this only for test signatures. The signed copy reference will be cleared.")) return;
+                          const { error } = await supabase
+                            .from("esign_envelopes")
+                            .update({ status: "draft", signed_document_url: null })
+                            .eq("id", e.id);
+                          if (error) { toast.error(error.message); return; }
+                          toast.success("Reverted to draft");
+                          refetch();
+                        }}
+                      >
+                        <RotateCcw className="w-3 h-3 mr-1" /> Mark not signed
+                      </Button>
+                    )}
                   </div>
                 </div>
               </Card>
