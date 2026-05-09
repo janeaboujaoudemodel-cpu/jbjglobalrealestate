@@ -139,6 +139,67 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
       )
     : leads;
 
+  const allFilteredSelected = filtered.length > 0 && filtered.every((l) => selected.has(l.id));
+  const toggleSelectAll = (checked: boolean) => {
+    if (checked) setSelected(new Set(filtered.map((l) => l.id)));
+    else setSelected(new Set());
+  };
+  const toggleOne = (id: string) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
+
+  const bulkRestore = async (ids: string[]) => {
+    if (ids.length === 0) return;
+    setBulkBusy(true);
+    try {
+      const { error } = await supabase
+        .from("crm_leads")
+        .update({ deleted_at: null })
+        .in("id", ids);
+      if (error) throw error;
+      toast.success(`Restored ${ids.length} lead${ids.length === 1 ? "" : "s"}`);
+      setLeads((prev) => prev.filter((l) => !ids.includes(l.id)));
+      setSelected(new Set());
+      onRefresh();
+    } catch (err: any) {
+      toast.error(`Bulk restore failed: ${err?.message || "Unknown error"}`);
+    } finally {
+      setBulkBusy(false);
+    }
+  };
+
+  const bulkErase = async (ids: string[]) => {
+    if (ids.length === 0 || !isOwner) return;
+    setBulkBusy(true);
+    try {
+      const { error } = await supabase
+        .from("crm_leads")
+        .delete()
+        .in("id", ids);
+      if (error) throw error;
+      await supabase.from("audit_logs").insert({
+        user_id: userId,
+        action_type: 'delete' as any,
+        resource_type: 'lead' as any,
+        resource_id: ids[0],
+        description: `Permanently erased ${ids.length} lead(s) in bulk`,
+        details: { action: 'bulk_permanent_erase', count: ids.length, ids },
+      });
+      toast.success(`Permanently erased ${ids.length} lead${ids.length === 1 ? "" : "s"}`);
+      setLeads((prev) => prev.filter((l) => !ids.includes(l.id)));
+      setSelected(new Set());
+      onRefresh();
+    } catch (err: any) {
+      toast.error(`Bulk erase failed: ${err?.message || "Unknown error"}`);
+    } finally {
+      setBulkBusy(false);
+    }
+  };
+
   return (
     <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-sm">
       <CardHeader>
