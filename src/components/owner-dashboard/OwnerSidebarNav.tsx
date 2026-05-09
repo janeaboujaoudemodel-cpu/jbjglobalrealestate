@@ -142,10 +142,25 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
   const activeRef = useRef<HTMLButtonElement | null>(null);
 
   const isActivePath = (path: string) => {
-    if (path === "/owner") {
-      return location.pathname === "/owner" || location.pathname === "/owner/";
+    const [pathOnly, query] = path.split("?");
+    if (pathOnly === "/owner") {
+      return (location.pathname === "/owner" || location.pathname === "/owner/") && !location.search;
     }
-    return location.pathname.startsWith(path);
+    if (query) {
+      // Query-based CRM sub-pages: require pathname AND key params to match
+      if (location.pathname !== pathOnly && !location.pathname.startsWith(pathOnly + "/")) return false;
+      const want = new URLSearchParams(query);
+      const have = new URLSearchParams(location.search);
+      for (const [k, v] of want.entries()) {
+        if (have.get(k) !== v) return false;
+      }
+      return true;
+    }
+    // Plain /owner/crm should only highlight when no CRM section is selected
+    if (pathOnly === "/owner/crm") {
+      return location.pathname.startsWith("/owner/crm") && !location.search;
+    }
+    return location.pathname.startsWith(pathOnly);
   };
 
   // Scroll the active nav item into view on route change without disturbing the page
