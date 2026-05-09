@@ -1,7 +1,7 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { buildPAAHtml } from "@/templates/jbjPropertyAdvertisingAgreement";
+import { buildPAAHtml, type BuildPAAOptions, PAA_LAYOUT_VERSION } from "@/templates/jbjPropertyAdvertisingAgreement";
 import { buildSellingHtml } from "@/templates/jbjListingAuthorisation";
 
 export interface EsignTemplate {
@@ -28,6 +28,8 @@ export interface TemplateFieldSpec {
   label?: string;
 }
 
+export { PAA_LAYOUT_VERSION };
+
 export function useEsignTemplates(category?: "leasing" | "selling" | "all") {
   return useQuery({
     queryKey: ["esign_templates", category ?? "all"],
@@ -41,15 +43,16 @@ export function useEsignTemplates(category?: "leasing" | "selling" | "all") {
   });
 }
 
-/** Renders template HTML for a given key + values (incl. doc_number). */
+/** Renders template HTML for a given key + values, with optional chrome/signature assets (PAA only). */
 export function renderTemplateHtml(
   templateKey: string,
   values: Record<string, string>,
+  opts: BuildPAAOptions = {},
 ): string {
   if (templateKey === "jbj-listing-authorisation-selling") {
     return buildSellingHtml(values as any);
   }
-  return buildPAAHtml(values as any);
+  return buildPAAHtml(values as any, opts);
 }
 
 /** Renders an HTML string into a single-page A4 PDF blob (client-side). */
