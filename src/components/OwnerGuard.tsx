@@ -94,10 +94,16 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
   useEffect(() => {
     if (!(authLoading || ownerLoading)) {
       setLoadingTimedOut(false);
+      setShowSplash(false);
       return;
     }
+    // 250ms grace period — avoid splash flicker on fast verification
+    const grace = window.setTimeout(() => setShowSplash(true), 250);
     const timer = window.setTimeout(() => setLoadingTimedOut(true), 8000);
-    return () => window.clearTimeout(timer);
+    return () => {
+      window.clearTimeout(grace);
+      window.clearTimeout(timer);
+    };
   }, [authLoading, ownerLoading, location.pathname]);
 
   const handleRetry = async () => {
