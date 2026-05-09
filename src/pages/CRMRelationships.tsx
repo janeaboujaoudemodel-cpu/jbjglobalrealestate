@@ -67,6 +67,13 @@ import { BrokerageDealModal } from "@/components/crm/BrokerageDealModal";
 import { BrokerageLedgerDialog } from "@/components/crm/BrokerageLedgerDialog";
 import { DirectoryToolsPanel, BrokerageDirectoryPanel, DeveloperDirectoryPanel } from "@/components/crm/DirectoryToolsPanel";
 import { CRMFiltersPopover, type FilterChip } from "@/components/crm/CRMFiltersPopover";
+import {
+  SourceFilterChips,
+  EMPTY_SOURCE_FILTER,
+  rowMatchesSourceFilter,
+  useSourceFilterContext,
+  type SourceFilterValue,
+} from "@/components/crm/SourceFilterChips";
 import { CRMListSidebar, type CRMListView } from "@/components/crm/CRMListSidebar";
 import { CRMBulkActionsBar } from "@/components/crm/CRMBulkActionsBar";
 import IndividualBrokersTab from "@/components/crm/IndividualBrokersTab";
