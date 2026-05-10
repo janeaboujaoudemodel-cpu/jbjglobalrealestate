@@ -580,6 +580,7 @@ export default function CRMLeadsTableV2({
               <SelectItem value="__all__">All Tags</SelectItem>
               <SelectItem value="vip">★ VIP</SelectItem>
               <SelectItem value="unassigned">Pool (no broker)</SelectItem>
+              <SelectItem value="investor">👑 Investor</SelectItem>
             </SelectContent>
           </Select>
         </div>
