@@ -2759,7 +2759,7 @@ html [data-surface="dark"][data-surface="dark"] :is(input, textarea, select, opt
 /* 2c. Borders on dark surfaces — visible */
 :where(
   .bg-black, .bg-[#FDFBF7], .bg-[#FDFBF7], .bg-gray-900, .bg-gray-950
-) :is(.border-gray-700, .border-[#B89555]/30, .border-gray-800, .border-[#B89555]/30) {
+) :is(.border-gray-700, .border-[#B89555]\/30, .border-gray-800, .border-[#B89555]\/30) {
   border-color: rgb(255 255 255 / 0.18) !important;
 }
 
@@ -3900,7 +3900,7 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
 :root:not(.dark) :is(
   .border-neutral-100, .border-neutral-200, .border-neutral-300,
   .border-gray-100, .border-gray-200, .border-gray-300,
-  .border-zinc-100, .border-[#B89555]/30, .border-[#B89555]/30,
+  .border-zinc-100, .border-[#B89555]\/30, .border-[#B89555]\/30,
   .border-slate-100, .border-slate-200
 ) {
   border-color: rgba(184, 149, 85, 0.40) !important;
