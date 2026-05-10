@@ -303,14 +303,25 @@ export default function EmailCenter() {
                             )}
                           </>
                         )}
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          className="h-7 text-xs text-[#1A1A1A]/60 hover:text-[#1A1A1A]"
-                          onClick={() => archive.mutate(it.id)}
-                        >
-                          <Archive className="h-3 w-3 mr-1" /> Archive
-                        </Button>
+                        {showArchived ? (
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-7 text-xs text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
+                            onClick={() => unarchive.mutate(it.id)}
+                          >
+                            Restore to inbox
+                          </Button>
+                        ) : (
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-7 text-xs text-[#1A1A1A]/60 hover:text-[#1A1A1A]"
+                            onClick={() => archive.mutate(it.id)}
+                          >
+                            <Archive className="h-3 w-3 mr-1" /> Archive
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>
