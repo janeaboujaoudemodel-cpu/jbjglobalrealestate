@@ -23,27 +23,20 @@ export default function CRMSideRail() {
 
   return (
     <>
-      {/* Edge dock — fixed right rail, three premium pills */}
+      {/* Edge dock — single Shortcuts pill */}
       <div
-        aria-label="CRM workspace dock"
+        aria-label="CRM workspace shortcuts"
         className="fixed right-0 top-1/2 -translate-y-1/2 z-40 flex flex-col gap-2 pr-1"
       >
-        {[
-          { id: "calendar" as const, label: "Calendar", Icon: CalendarDays },
-          { id: "notes" as const,    label: "Notes",    Icon: NotebookPen },
-          { id: "tasks" as const,    label: "Tasks",    Icon: ListChecks },
-        ].map(({ id, label, Icon }) => (
-          <button
-            key={id}
-            type="button"
-            onClick={() => openWith(id)}
-            title={label}
-            className="group inline-flex items-center gap-2 px-3 py-2 rounded-l-xl bg-[#FDFBF7] border border-r-0 border-[#B89555]/40 shadow-sm hover:bg-[#EFE6D6] transition-colors text-[#1A1A1A]"
-          >
-            <Icon className="h-4 w-4" />
-            <span className="text-xs font-semibold tracking-wide hidden md:inline">{label}</span>
-          </button>
-        ))}
+        <button
+          type="button"
+          onClick={() => openWith(tab)}
+          title="Workspace shortcuts — Calendar, Notes, Tasks"
+          className="group inline-flex items-center gap-2 px-3 py-2.5 rounded-l-xl bg-[#FDFBF7] border border-r-0 border-[#B89555]/40 shadow-md hover:bg-[#EFE6D6] transition-colors text-[#1A1A1A]"
+        >
+          <LayoutGrid className="h-4 w-4" />
+          <span className="text-xs font-semibold tracking-wide hidden md:inline">Shortcuts</span>
+        </button>
       </div>
 
       <Sheet open={open} onOpenChange={setOpen}>
