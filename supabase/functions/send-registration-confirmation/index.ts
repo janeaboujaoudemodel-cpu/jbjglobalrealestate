@@ -1,6 +1,6 @@
 // Sends an automated "please confirm we are registered with you" email to a
 // developer via the connected Gmail (using the same gateway). BCCs the founder
-// at drjane@gmail.com on every send. Logs to email_send_log and
+// at infoo.jane@gmail.com on every send. Logs to email_send_log and
 // developer_registration_sync_logs.
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
