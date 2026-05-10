@@ -11533,6 +11533,69 @@ export type Database = {
         }
         Relationships: []
       }
+      email_signature_presets: {
+        Row: {
+          address_line: string | null
+          company_line: string | null
+          created_at: string
+          email: string | null
+          html: string | null
+          id: string
+          is_default: boolean
+          is_system: boolean
+          logo_url: string | null
+          name: string
+          name_line: string | null
+          owner_user_id: string | null
+          phone: string | null
+          role_label: string | null
+          socials: Json | null
+          title_line: string | null
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          address_line?: string | null
+          company_line?: string | null
+          created_at?: string
+          email?: string | null
+          html?: string | null
+          id?: string
+          is_default?: boolean
+          is_system?: boolean
+          logo_url?: string | null
+          name: string
+          name_line?: string | null
+          owner_user_id?: string | null
+          phone?: string | null
+          role_label?: string | null
+          socials?: Json | null
+          title_line?: string | null
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          address_line?: string | null
+          company_line?: string | null
+          created_at?: string
+          email?: string | null
+          html?: string | null
+          id?: string
+          is_default?: boolean
+          is_system?: boolean
+          logo_url?: string | null
+          name?: string
+          name_line?: string | null
+          owner_user_id?: string | null
+          phone?: string | null
+          role_label?: string | null
+          socials?: Json | null
+          title_line?: string | null
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
       email_signatures: {
         Row: {
           created_at: string
@@ -11601,6 +11664,77 @@ export type Database = {
           source?: string | null
         }
         Relationships: []
+      }
+      email_template_library: {
+        Row: {
+          audience: string
+          body_html: string | null
+          body_text: string
+          category: string
+          created_at: string
+          id: string
+          is_default_for_audience: boolean
+          is_system: boolean
+          language: string
+          name: string
+          owner_user_id: string | null
+          signature_preset_id: string | null
+          slug: string
+          subject: string
+          tags: string[] | null
+          updated_at: string
+          usage_count: number
+          variables: Json | null
+        }
+        Insert: {
+          audience?: string
+          body_html?: string | null
+          body_text: string
+          category: string
+          created_at?: string
+          id?: string
+          is_default_for_audience?: boolean
+          is_system?: boolean
+          language?: string
+          name: string
+          owner_user_id?: string | null
+          signature_preset_id?: string | null
+          slug: string
+          subject: string
+          tags?: string[] | null
+          updated_at?: string
+          usage_count?: number
+          variables?: Json | null
+        }
+        Update: {
+          audience?: string
+          body_html?: string | null
+          body_text?: string
+          category?: string
+          created_at?: string
+          id?: string
+          is_default_for_audience?: boolean
+          is_system?: boolean
+          language?: string
+          name?: string
+          owner_user_id?: string | null
+          signature_preset_id?: string | null
+          slug?: string
+          subject?: string
+          tags?: string[] | null
+          updated_at?: string
+          usage_count?: number
+          variables?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_template_library_signature_preset_id_fkey"
+            columns: ["signature_preset_id"]
+            isOneToOne: false
+            referencedRelation: "email_signature_presets"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       email_verifications: {
         Row: {
