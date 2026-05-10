@@ -60,7 +60,7 @@ const NAV_SECTIONS: NavSection[] = [
         icon: Users,
         path: "/owner/crm",
         children: [
-          { label: "Relationship Hub",              icon: Network,    path: "/owner/relationships" },
+          { label: "Relationship Hub",              icon: Network,    path: "/owner/crm?section=relationships" },
           {
             label: "Leads",
             icon: Users,
