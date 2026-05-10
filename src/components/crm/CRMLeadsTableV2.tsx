@@ -652,14 +652,29 @@ export default function CRMLeadsTableV2({
                         }}
                       />
                     </TableCell>
-                    <TableCell className="font-semibold text-[#1A1A1A] whitespace-nowrap">
+                    <TableCell className={`font-semibold text-[#1A1A1A] whitespace-nowrap ${(lead as any).is_investor ? "border-l-2 border-[#B89555]" : ""}`}>
                       <span className="inline-flex items-center gap-1.5">
                         {(lead as any).is_investor && (
-                          <span title="Investor" className="inline-flex items-center justify-center h-5 w-5 rounded-full bg-[#B89555]/15 border border-[#B89555]/40 text-[#B89555]">
-                            <Crown className="h-3 w-3" />
+                          <span
+                            title="Investor"
+                            className="inline-flex items-center justify-center h-5 w-5 rounded-full bg-[#EFE6D6] border border-[#B89555] text-[#B89555] shadow-[0_0_0_2px_rgba(184,149,85,0.18)]"
+                          >
+                            <Crown className="h-3 w-3 fill-[#B89555]" />
                           </span>
                         )}
-                        {lead.full_name || "—"}
+                        <a
+                          href={`/owner/crm/leads/${lead.id}`}
+                          onClick={(e) => e.stopPropagation()}
+                          className="hover:underline decoration-[#B89555] underline-offset-2"
+                          title="Open lead in CRM"
+                        >
+                          {lead.full_name || "—"}
+                        </a>
+                        {(lead as any).is_investor && (
+                          <span className="ml-1 inline-flex items-center px-1.5 py-0.5 rounded-sm text-[10px] font-semibold uppercase tracking-wide bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]">
+                            Investor
+                          </span>
+                        )}
                       </span>
                     </TableCell>
                     <TableCell className="font-mono text-sm text-[#1A1A1A]/80 whitespace-nowrap">{lead.phone_e164 || "—"}</TableCell>
