@@ -197,16 +197,16 @@ export default function BrokersRegistry() {
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-[#1A1A1A]">
       <SEOHead
-        title="Brokers Registry | JBJ Global"
-        description="Every broker, every company they work for. Searchable, filterable, exportable."
+        title="Brokers | JBJ Global"
+        description="Every broker in the market, every company they work for. Searchable, filterable, exportable."
         canonicalPath="/owner/crm/brokers"
       />
       <div className="max-w-7xl mx-auto px-4 py-6 space-y-4">
         <div className="flex items-center gap-3 flex-wrap">
           <IconTile icon={Users} tone="gold" />
           <div className="flex-1 min-w-0">
-            <h1 className="text-2xl font-bold">Brokers Registry</h1>
-            <p className="text-sm text-[#1A1A1A]/70">Every broker, every company they work for.</p>
+            <h1 className="text-2xl font-bold">Brokers</h1>
+            <p className="text-sm text-[#1A1A1A]/70">Every broker in the market, every company they work for.</p>
           </div>
           <Button variant="outline" onClick={() => setExportOpen(true)} disabled={!filtered.length}>
             <Download className="w-4 h-4 mr-1" /> Export
