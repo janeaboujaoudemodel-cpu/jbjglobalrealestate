@@ -478,16 +478,16 @@ All colors MUST be HSL.
   [data-surface="light"] svg.lucide[class*="text-white/"],
   [data-surface="light"] svg.lucide.text-gray-200,
   [data-surface="light"] svg.lucide.text-gray-100,
-  [data-surface="light"] svg.lucide.text-[#1A1A1A],
-  [data-surface="light"] svg.lucide.text-[#1A1A1A] {
+  [data-surface="light"] svg.lucide.text-\[\#1A1A1A\],
+  [data-surface="light"] svg.lucide.text-\[\#1A1A1A\] {
     color: hsl(0 0% 28%) !important;
     opacity: 1 !important;
   }
 
   /* Icons sitting directly on white/very-light cards must never be white */
-  :where(.bg-white, .bg-card, .bg-background, .bg-gray-50, .bg-[#FDFBF7], .bg-[#F7F2EA])
+  :where(.bg-white, .bg-card, .bg-background, .bg-gray-50, .bg-\[\#FDFBF7\], .bg-\[\#F7F2EA\])
     > svg.lucide.text-white,
-  :where(.bg-white, .bg-card, .bg-background, .bg-gray-50, .bg-[#FDFBF7], .bg-[#F7F2EA])
+  :where(.bg-white, .bg-card, .bg-background, .bg-gray-50, .bg-\[\#FDFBF7\], .bg-\[\#F7F2EA\])
     > svg.lucide[class*="text-white/"] {
     color: hsl(0 0% 12%) !important;
     opacity: 1 !important;
@@ -524,11 +524,11 @@ All colors MUST be HSL.
   .bg-black svg.lucide,
   .bg-gray-900 svg.lucide,
   .bg-gray-950 svg.lucide,
-  .bg-[#1A1A1A] svg.lucide,
-  .bg-[#1A1A1A] svg.lucide,
-  .bg-[#FDFBF7] svg.lucide,
-  .bg-[#FDFBF7] svg.lucide,
-  .bg-[#1A1A1A] svg.lucide,
+  .bg-\[\#1A1A1A\] svg.lucide,
+  .bg-\[\#1A1A1A\] svg.lucide,
+  .bg-\[\#FDFBF7\] svg.lucide,
+  .bg-\[\#FDFBF7\] svg.lucide,
+  .bg-\[\#1A1A1A\] svg.lucide,
   [class*="bg-[#0"] svg.lucide,
   [style*="#0D0D0D"] svg.lucide,
   [style*="#0A0908"] svg.lucide {
@@ -555,10 +555,10 @@ All colors MUST be HSL.
   .bg-black .text-gray-600,
   .bg-gray-900 .text-gray-500,
   .bg-gray-900 .text-gray-600,
-  .bg-[#1A1A1A] .text-gray-500,
-  .bg-[#1A1A1A] .text-gray-600,
-  .bg-[#FDFBF7] .text-gray-500,
-  .bg-[#FDFBF7] .text-gray-600,
+  .bg-\[\#1A1A1A\] .text-gray-500,
+  .bg-\[\#1A1A1A\] .text-gray-600,
+  .bg-\[\#FDFBF7\] .text-gray-500,
+  .bg-\[\#FDFBF7\] .text-gray-600,
   [class*="bg-[#0"] .text-gray-500,
   [class*="bg-[#0"] .text-gray-600,
   [style*="#0D0D0D"] .text-gray-500,
@@ -599,7 +599,7 @@ All colors MUST be HSL.
   }
 
   /* Mirror of the existing white-on-light guard: black text on dark surfaces */
-  [data-surface="dark"] :is(.text-black, [class*="text-black/"], .text-[#1A1A1A], .text-[#1A1A1A]/70, .text-[#1A1A1A]/70, .text-[#1A1A1A]/70) {
+  [data-surface="dark"] :is(.text-black, [class*="text-black/"], .text-\[\#1A1A1A\], .text-\[\#1A1A1A\]\/70, .text-\[\#1A1A1A\]\/70, .text-\[\#1A1A1A\]\/70) {
     color: hsl(var(--foreground)) !important;
   }
 
@@ -2830,9 +2830,9 @@ a[class*="bg-gray-900"] *, a[class*="bg-gray-900"] span {
 }
 
 /* Kill gold/champagne text inside ANY button — it's never readable */
-button .text-[#1A1A1A], button [class*="text-[#1A1A1A]"],
+button .text-\[\#1A1A1A\], button [class*="text-[#1A1A1A]"],
 button [class*="text-amber"], button [class*="text-yellow"],
-a .text-[#1A1A1A], a [class*="text-[#1A1A1A]"] {
+a .text-\[\#1A1A1A\], a [class*="text-[#1A1A1A]"] {
   color: inherit !important;
 }
 
@@ -2857,7 +2857,7 @@ button[style*="background"] [class*="text-[#1A1A1A]"] {
   [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#F7F1E6]"],
   [class*="bg-[#EFE6D6]"], [class*="bg-[#ECE2D2]"]
 ):not([data-surface="dark"])
-:is(button, a, [role="button"], [role="option"], [role="menuitem"], label, span, p, h1, h2, h3, h4, h5, h6):is(.text-white, [class*="text-white/"]):not(.bg-black):not([class~="bg-[#1A1A1A]"]):not(.bg-[#EFE6D6]):not([class~="bg-[#B89555]"]):not([class*="bg-red-5"]):not([class*="bg-red-6"]):not([class*="bg-red-7"]):not([class*="bg-emerald-6"]):not([class*="bg-blue-6"]):not([data-surface="dark"]):not([data-surface="dark"] *):not(.jj-hero-fullscreen *) {
+:is(button, a, [role="button"], [role="option"], [role="menuitem"], label, span, p, h1, h2, h3, h4, h5, h6):is(.text-white, [class*="text-white/"]):not(.bg-black):not([class~="bg-[#1A1A1A]"]):not(.bg-\[\#EFE6D6\]):not([class~="bg-[#B89555]"]):not([class*="bg-red-5"]):not([class*="bg-red-6"]):not([class*="bg-red-7"]):not([class*="bg-emerald-6"]):not([class*="bg-blue-6"]):not([data-surface="dark"]):not([data-surface="dark"] *):not(.jj-hero-fullscreen *) {
   color: hsl(var(--foreground)) !important;
   --tw-text-opacity: 1 !important;
 }
@@ -2904,7 +2904,7 @@ button[style*="background"] [class*="text-[#1A1A1A]"] {
 }
 
 /* Gold / champagne / amber accents → bright amber on dark */
-[data-surface="dark"] .text-[#1A1A1A],
+[data-surface="dark"] .text-\[\#1A1A1A\],
 [data-surface="dark"] [class*="text-[#1A1A1A]\/"],
 [data-surface="dark"] [class*="text-[#1A1A1A]/"],
 [data-surface="dark"] [class*="text-[#D4AF37]"],
@@ -2913,7 +2913,7 @@ button[style*="background"] [class*="text-[#1A1A1A]"] {
 [data-surface="dark"] [class*="text-[#E8D5A8]"],
 [data-surface="dark"] [class*="text-amber-"],
 [data-surface="dark"] [class*="text-yellow-"],
-.on-dark .text-[#1A1A1A],
+.on-dark .text-\[\#1A1A1A\],
 .on-dark [class*="text-[#1A1A1A]/"],
 .on-dark [class*="text-amber-"] {
   color: #FDE68A !important;
@@ -2937,7 +2937,7 @@ button[style*="background"] [class*="text-[#1A1A1A]"] {
 }
 
 /* SVG icons inside dark surfaces */
-[data-surface="dark"] svg.text-[#1A1A1A],
+[data-surface="dark"] svg.text-\[\#1A1A1A\],
 [data-surface="dark"] svg[class*="text-[#1A1A1A]"],
 [data-surface="dark"] svg[class*="text-amber"],
 [data-surface="dark"] svg[class*="text-yellow"] {
@@ -3622,37 +3622,37 @@ button:disabled:has(.lucide),
      Anywhere `text-[#1A1A1A]` lands inside a dark/black surface, force
      white so labels never vanish; and gold-on-gold flips to black.
      ============================================================ */
-  .bg-black .text-[#1A1A1A],
-  .bg-gray-900 .text-[#1A1A1A],
-  .bg-[#FDFBF7] .text-[#1A1A1A],
-  .bg-[#1A1A1A] .text-[#1A1A1A],
-  .bg-foreground .text-[#1A1A1A],
-  .bg-primary .text-[#1A1A1A],
-  [data-surface="dark"] .text-[#1A1A1A],
-  .bg-black svg.text-[#1A1A1A],
-  .bg-gray-900 svg.text-[#1A1A1A],
-  [data-surface="dark"] svg.text-[#1A1A1A] {
+  .bg-black .text-\[\#1A1A1A\],
+  .bg-gray-900 .text-\[\#1A1A1A\],
+  .bg-\[\#FDFBF7\] .text-\[\#1A1A1A\],
+  .bg-\[\#1A1A1A\] .text-\[\#1A1A1A\],
+  .bg-foreground .text-\[\#1A1A1A\],
+  .bg-primary .text-\[\#1A1A1A\],
+  [data-surface="dark"] .text-\[\#1A1A1A\],
+  .bg-black svg.text-\[\#1A1A1A\],
+  .bg-gray-900 svg.text-\[\#1A1A1A\],
+  [data-surface="dark"] svg.text-\[\#1A1A1A\] {
     color: #ffffff !important;
   }
-  .bg-[#EFE6D6] .text-[#1A1A1A],
-  .bg-[#EFE6D6]\/10 .text-[#1A1A1A],
-  .bg-[#EFE6D6]\/20 .text-[#1A1A1A],
-  .bg-[#EFE6D6]\/30 .text-[#1A1A1A] {
+  .bg-\[\#EFE6D6\] .text-\[\#1A1A1A\],
+  .bg-\[\#EFE6D6\]\/10 .text-\[\#1A1A1A\],
+  .bg-\[\#EFE6D6\]\/20 .text-\[\#1A1A1A\],
+  .bg-\[\#EFE6D6\]\/30 .text-\[\#1A1A1A\] {
     color: #111 !important;
   }
 
   /* PASS 5 — Gold-on-light/champagne guard.
      The champagne section + cream cards make `text-[#1A1A1A]` (~#111 already)
      still look faded next to neutral grays. Force pure black for max legibility. */
-  .jj-section-champagne .text-[#1A1A1A],
-  .jj-box-active .text-[#1A1A1A],
-  .bg-white .text-[#1A1A1A],
-  .bg-card .text-[#1A1A1A],
-  .bg-background .text-[#1A1A1A],
-  [class*="bg-cream"] .text-[#1A1A1A],
-  [class*="from-white"] .text-[#1A1A1A],
-  [class*="from-gray-50"] .text-[#1A1A1A],
-  [class*="from-gray-100"] .text-[#1A1A1A] {
+  .jj-section-champagne .text-\[\#1A1A1A\],
+  .jj-box-active .text-\[\#1A1A1A\],
+  .bg-white .text-\[\#1A1A1A\],
+  .bg-card .text-\[\#1A1A1A\],
+  .bg-background .text-\[\#1A1A1A\],
+  [class*="bg-cream"] .text-\[\#1A1A1A\],
+  [class*="from-white"] .text-\[\#1A1A1A\],
+  [class*="from-gray-50"] .text-\[\#1A1A1A\],
+  [class*="from-gray-100"] .text-\[\#1A1A1A\] {
     color: #000 !important;
   }
   /* Faded helper text in cards — ensure description rows remain readable */
