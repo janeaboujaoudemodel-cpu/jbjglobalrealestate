@@ -60,6 +60,7 @@ const NAV_SECTIONS: NavSection[] = [
         icon: Users,
         path: "/owner/crm",
         children: [
+          { label: "Relationship Hub",              icon: Network,    path: "/owner/crm?section=relationships" },
           {
             label: "Leads",
             icon: Users,
@@ -211,11 +212,11 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
   };
   const isOpen = (item: NavItem) => {
     if (openMap[item.path] !== undefined) return openMap[item.path];
-    // Auto-expand when the parent itself is active or any descendant is active,
-    // OR when the user is anywhere under that section (e.g. /owner/crm).
+    // Auto-expand when the parent itself is the active route, or a descendant
+    // matches the current route. Do NOT auto-expand just because the URL is
+    // somewhere under the parent's pathname — keeps Leads collapsed on /owner/crm.
     if (isActivePath(item.path)) return true;
     if (isAnyChildActive(item)) return true;
-    if (location.pathname.startsWith(item.path.split("?")[0])) return true;
     return false;
   };
   const toggleOpen = (path: string) => {

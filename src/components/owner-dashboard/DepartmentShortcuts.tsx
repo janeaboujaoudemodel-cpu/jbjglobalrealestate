@@ -5,6 +5,7 @@ import {
   ShieldAlert,
   ChevronRight,
   Building,
+  Network,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -30,6 +31,13 @@ const DEPARTMENTS: DepartmentCard[] = [
     icon: Users, 
     path: "/owner/crm", 
     color: "text-emerald-600" 
+  },
+  { 
+    label: "Relationship Hub", 
+    description: "Investors, developers, brokers & agencies", 
+    icon: Network, 
+    path: "/owner/crm?section=relationships", 
+    color: "text-purple-600" 
   },
   { 
     label: "Listing Admin", 
