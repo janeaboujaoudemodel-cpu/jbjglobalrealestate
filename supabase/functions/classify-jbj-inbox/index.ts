@@ -461,7 +461,7 @@ Deno.serve(async (req) => {
       }
     }
 
-    return new Response(JSON.stringify({ ok: true, scanned, inserted, skipped }), {
+    return new Response(JSON.stringify({ ok: true, scanned, inserted, skipped, archived }), {
       status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e) {
