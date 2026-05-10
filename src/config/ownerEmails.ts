@@ -9,7 +9,6 @@ export const OWNER_EMAILS: string[] = [
   "janeaboujaoudenails@gmail.com",
   "contact@janeaboujaoude.net",
   "infoo.jane@gmail.com",
-  "drjane@gmail.com",
 ];
 
 export const OWNER_EMAILS_LC = OWNER_EMAILS.map((e) => e.toLowerCase());
