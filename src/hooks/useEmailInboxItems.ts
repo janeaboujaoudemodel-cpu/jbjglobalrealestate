@@ -93,7 +93,7 @@ export function useSendRegistrationConfirmation() {
       return data;
     },
     onSuccess: () => {
-      toast.success("Confirmation email sent (BCC: drjane@gmail.com)");
+      toast.success("Confirmation email sent (BCC: infoo.jane@gmail.com)");
       qc.invalidateQueries({ queryKey: ["developer_registry"] });
     },
     onError: (e: Error) => toast.error(`Send failed: ${e.message}`),
