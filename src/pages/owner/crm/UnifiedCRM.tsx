@@ -408,6 +408,7 @@ export default function UnifiedCRM() {
                 }
                 lastGroup = t.group;
                 const active = t.id === view;
+                const c = viewCount(entity, t.id);
                 out.push(
                   <button
                     key={t.id}
@@ -415,13 +416,25 @@ export default function UnifiedCRM() {
                     aria-selected={active}
                     onClick={() => setView(t.id)}
                     className={[
-                      "shrink-0 inline-flex items-center px-3 py-1.5 rounded-full text-[13px] font-medium transition-colors border",
+                      "shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-medium transition-colors border",
                       active
                         ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
                         : "bg-transparent text-[#1A1A1A]/70 border-transparent hover:bg-[#EFE6D6]/70 hover:text-[#1A1A1A]",
                     ].join(" ")}
                   >
                     {t.label}
+                    {c !== null && c > 0 && (
+                      <span
+                        className={[
+                          "inline-flex items-center justify-center min-w-[1.125rem] h-[18px] px-1 rounded-full text-[10px] font-semibold tabular-nums",
+                          active
+                            ? "bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/40"
+                            : "bg-[#EFE6D6] text-[#1A1A1A]/80 border border-[#B89555]/25",
+                        ].join(" ")}
+                      >
+                        {fmt(c)}
+                      </span>
+                    )}
                   </button>
                 );
               });
