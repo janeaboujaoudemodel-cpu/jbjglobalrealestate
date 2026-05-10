@@ -6532,7 +6532,11 @@ export type Database = {
           owner_id: string
           phone: string | null
           priority: string | null
+          registered_at: string | null
+          registration_confirmation_message_id: string | null
+          registration_confirmation_sent_at: string | null
           registration_date: string | null
+          registration_status: string | null
           registration_url: string | null
           required_docs_complete: boolean
           response_count: number
@@ -6627,7 +6631,11 @@ export type Database = {
           owner_id: string
           phone?: string | null
           priority?: string | null
+          registered_at?: string | null
+          registration_confirmation_message_id?: string | null
+          registration_confirmation_sent_at?: string | null
           registration_date?: string | null
+          registration_status?: string | null
           registration_url?: string | null
           required_docs_complete?: boolean
           response_count?: number
@@ -6722,7 +6730,11 @@ export type Database = {
           owner_id?: string
           phone?: string | null
           priority?: string | null
+          registered_at?: string | null
+          registration_confirmation_message_id?: string | null
+          registration_confirmation_sent_at?: string | null
           registration_date?: string | null
+          registration_status?: string | null
           registration_url?: string | null
           required_docs_complete?: boolean
           response_count?: number
@@ -10121,6 +10133,45 @@ export type Database = {
           },
         ]
       }
+      developer_registration_sync_logs: {
+        Row: {
+          created_at: string
+          detail: Json
+          developer_id: string | null
+          direction: string
+          gmail_message_id: string | null
+          gmail_thread_id: string | null
+          id: string
+          outcome: string
+          parsed_intent: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          detail?: Json
+          developer_id?: string | null
+          direction?: string
+          gmail_message_id?: string | null
+          gmail_thread_id?: string | null
+          id?: string
+          outcome?: string
+          parsed_intent?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          detail?: Json
+          developer_id?: string | null
+          direction?: string
+          gmail_message_id?: string | null
+          gmail_thread_id?: string | null
+          id?: string
+          outcome?: string
+          parsed_intent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       developer_registrations: {
         Row: {
           admin_notes: string | null
@@ -11520,6 +11571,78 @@ export type Database = {
           setting_key?: string
           setting_value?: string | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      email_inbox_items: {
+        Row: {
+          action_required: string | null
+          archived_at: string | null
+          attachments: Json
+          category: string
+          confidence: number
+          created_at: string
+          from_email: string | null
+          from_name: string | null
+          gmail_message_id: string
+          gmail_thread_id: string | null
+          id: string
+          is_jbj_related: boolean
+          linked_contract_url: string | null
+          linked_developer_id: string | null
+          raw_subject: string | null
+          received_at: string | null
+          snippet: string | null
+          status: string
+          suggested_reply: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          action_required?: string | null
+          archived_at?: string | null
+          attachments?: Json
+          category?: string
+          confidence?: number
+          created_at?: string
+          from_email?: string | null
+          from_name?: string | null
+          gmail_message_id: string
+          gmail_thread_id?: string | null
+          id?: string
+          is_jbj_related?: boolean
+          linked_contract_url?: string | null
+          linked_developer_id?: string | null
+          raw_subject?: string | null
+          received_at?: string | null
+          snippet?: string | null
+          status?: string
+          suggested_reply?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          action_required?: string | null
+          archived_at?: string | null
+          attachments?: Json
+          category?: string
+          confidence?: number
+          created_at?: string
+          from_email?: string | null
+          from_name?: string | null
+          gmail_message_id?: string
+          gmail_thread_id?: string | null
+          id?: string
+          is_jbj_related?: boolean
+          linked_contract_url?: string | null
+          linked_developer_id?: string | null
+          raw_subject?: string | null
+          received_at?: string | null
+          snippet?: string | null
+          status?: string
+          suggested_reply?: string | null
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
