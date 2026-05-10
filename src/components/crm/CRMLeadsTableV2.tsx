@@ -652,7 +652,16 @@ export default function CRMLeadsTableV2({
                         }}
                       />
                     </TableCell>
-                    <TableCell className="font-semibold text-[#1A1A1A] whitespace-nowrap">{lead.full_name || "—"}</TableCell>
+                    <TableCell className="font-semibold text-[#1A1A1A] whitespace-nowrap">
+                      <span className="inline-flex items-center gap-1.5">
+                        {(lead as any).is_investor && (
+                          <span title="Investor" className="inline-flex items-center justify-center h-5 w-5 rounded-full bg-[#B89555]/15 border border-[#B89555]/40 text-[#B89555]">
+                            <Crown className="h-3 w-3" />
+                          </span>
+                        )}
+                        {lead.full_name || "—"}
+                      </span>
+                    </TableCell>
                     <TableCell className="font-mono text-sm text-[#1A1A1A]/80 whitespace-nowrap">{lead.phone_e164 || "—"}</TableCell>
                     <TableCell>
                       {lead.email_lower ? (
