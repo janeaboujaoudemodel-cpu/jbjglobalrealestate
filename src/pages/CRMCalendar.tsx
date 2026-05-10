@@ -94,12 +94,12 @@ const CRMCalendar = () => {
     }
   };
 
-  const getEventColor = (type: string) => {
+  const getEventTone = (type: string) => {
     switch (type) {
-      case 'viewing': return 'bg-purple-500';
-      case 'call': return 'bg-green-500';
-      case 'meeting': return 'bg-blue-500';
-      default: return 'bg-amber-500';
+      case 'viewing': return { pill: 'bg-purple-500/15 text-purple-800 border-purple-500/30', dot: 'bg-purple-500', icon: 'text-purple-700', tile: 'bg-purple-500/10 border-purple-500/25' };
+      case 'call':    return { pill: 'bg-emerald-500/15 text-emerald-800 border-emerald-500/30', dot: 'bg-emerald-500', icon: 'text-emerald-700', tile: 'bg-emerald-500/10 border-emerald-500/25' };
+      case 'meeting': return { pill: 'bg-blue-500/15 text-blue-800 border-blue-500/30', dot: 'bg-blue-500', icon: 'text-blue-700', tile: 'bg-blue-500/10 border-blue-500/25' };
+      default:        return { pill: 'bg-amber-500/15 text-amber-800 border-amber-500/30', dot: 'bg-amber-500', icon: 'text-amber-700', tile: 'bg-amber-500/10 border-amber-500/25' };
     }
   };
 
@@ -130,8 +130,8 @@ const CRMCalendar = () => {
             </Link>
             <div className="h-6 w-px bg-[#EFE6D6]" />
             <div className="flex items-center gap-2">
-              <div className="p-2 rounded-lg bg-purple-500/20">
-                <CalendarIcon className="h-5 w-5 text-purple-500" />
+              <div className="p-2 rounded-lg bg-[#EFE6D6] border border-[#B89555]/40">
+                <CalendarIcon className="h-5 w-5 text-[#1A1A1A]" />
               </div>
               <div>
                 <h1 className="text-lg font-bold text-[#1A1A1A]">Calendar</h1>
@@ -204,30 +204,33 @@ const CRMCalendar = () => {
                     <button
                       key={day.toISOString()}
                       onClick={() => setSelectedDate(day)}
-                      className={`h-24 p-1 rounded-lg border transition-all text-left ${
-                        isToday(day) 
-                          ? 'border-gold bg-gold/5' 
-                          : isSelected 
-                            ? 'border-blue-500 bg-blue-50' 
-                            : 'border-transparent hover:bg-[#F7F2EA]'
+                      className={`h-24 p-1.5 rounded-lg border transition-all text-left ${
+                        isSelected
+                          ? 'border-[#B89555] bg-[#EFE6D6]'
+                          : isToday(day)
+                            ? 'border-[#B89555]/50 bg-[#F7F2EA] ring-1 ring-[#B89555]/30'
+                            : 'border-[#B89555]/15 bg-[#FDFBF7] hover:bg-[#F7F2EA]'
                       }`}
                     >
-                      <span className={`text-sm font-medium ${
-                        isToday(day) ? 'text-gold' : 'text-[#1A1A1A]'
+                      <span className={`text-sm tabular-nums ${
+                        isToday(day) ? 'font-bold text-[#1A1A1A]' : 'font-medium text-[#1A1A1A]'
                       }`}>
                         {format(day, 'd')}
                       </span>
                       <div className="mt-1 space-y-0.5">
-                        {dayEvents.slice(0, 2).map(event => (
-                          <div 
-                            key={event.id}
-                            className={`text-xs px-1 py-0.5 rounded truncate text-white ${getEventColor(event.type)}`}
-                          >
-                            {event.time} {event.title}
-                          </div>
-                        ))}
+                        {dayEvents.slice(0, 2).map(event => {
+                          const tone = getEventTone(event.type);
+                          return (
+                            <div
+                              key={event.id}
+                              className={`text-[10px] leading-tight px-1.5 py-0.5 rounded border truncate ${tone.pill}`}
+                            >
+                              <span className="font-semibold tabular-nums">{event.time}</span> {event.title}
+                            </div>
+                          );
+                        })}
                         {dayEvents.length > 2 && (
-                          <span className="text-xs text-[#1A1A1A]/70">+{dayEvents.length - 2} more</span>
+                          <span className="text-[10px] text-[#1A1A1A]/60">+{dayEvents.length - 2} more</span>
                         )}
                       </div>
                     </button>
@@ -253,17 +256,18 @@ const CRMCalendar = () => {
               ) : (
                 todayEvents.map(event => {
                   const Icon = getEventIcon(event.type);
+                  const tone = getEventTone(event.type);
                   return (
                     <div key={event.id} className="p-3 rounded-lg bg-[#F7F2EA] border border-[#B89555]/30">
                       <div className="flex items-start gap-3">
-                        <div className={`p-2 rounded-lg ${getEventColor(event.type)}/20`}>
-                          <Icon className={`h-4 w-4 ${getEventColor(event.type).replace('bg-', 'text-')}`} />
+                        <div className={`p-2 rounded-lg border ${tone.tile}`}>
+                          <Icon className={`h-4 w-4 ${tone.icon}`} />
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="font-medium text-[#1A1A1A] truncate">{event.title}</p>
-                          <p className="text-xs text-[#1A1A1A]/70">{event.time}</p>
+                          <p className="text-xs text-[#1A1A1A]/70 tabular-nums">{event.time}</p>
                           {event.leadName && (
-                            <Badge variant="outline" className="mt-1 text-xs">
+                            <Badge variant="outline" className="mt-1 text-xs border-[#B89555]/40 text-[#1A1A1A]">
                               {event.leadName}
                             </Badge>
                           )}
