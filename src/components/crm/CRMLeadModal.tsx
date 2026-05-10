@@ -33,9 +33,11 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, Crown, Users2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { COUNTRIES, LANGUAGES_WITH_FLAGS, ALL_NATIONALITIES, getCitiesForCountry } from "@/data/countries";
+import { BrokerCombobox } from "@/components/crm/BrokerCombobox";
+import { PIPELINE_STATUSES } from "@/components/crm/LeadStatusBadge";
 
 interface CRMLeadModalProps {
   open: boolean;
@@ -45,13 +47,34 @@ interface CRMLeadModalProps {
 }
 
 const LEAD_TYPES = ["Buyer", "Investor", "Seller", "Tenant", "Landlord", "Broker", "Other"];
-const LEAD_SOURCES = ["Instagram", "WhatsApp", "Website", "Referral", "Event", "Brokerage", "Developer", "Other"];
+// Unified premium source list — must match LeadSourceFilter
+const LEAD_SOURCES = [
+  { value: "manual", label: "Manual Entry" },
+  { value: "imported", label: "Database (DLD)" },
+  { value: "website", label: "Website Form" },
+  { value: "whatsapp", label: "WhatsApp" },
+  { value: "phone", label: "Phone Call" },
+  { value: "walkin", label: "Walk-in" },
+  { value: "referral", label: "Referral" },
+  { value: "broker", label: "Broker" },
+  { value: "bayut", label: "Bayut" },
+  { value: "propertyfinder", label: "Property Finder" },
+  { value: "dubizzle", label: "Dubizzle" },
+  { value: "facebook", label: "Facebook" },
+  { value: "instagram", label: "Instagram" },
+  { value: "google_ads", label: "Google Ads" },
+  { value: "linkedin", label: "LinkedIn" },
+  { value: "campaign", label: "Email Campaign" },
+  { value: "event", label: "Event" },
+  { value: "partner", label: "Partner" },
+  { value: "third_party", label: "Third-party Platform" },
+  { value: "other", label: "Other" },
+];
 const PROPERTY_TYPES = ["Apartment", "Villa", "Townhouse", "Penthouse", "Commercial", "Land", "Other"];
 const BEDROOMS = ["Studio", "1", "2", "3", "4", "5+"];
 const BUYING_PURPOSE = ["Investment", "End Use", "Holiday Home", "Other"];
 const PRIORITY = ["low", "medium", "high"];
 const SCORE_BAND = ["hot", "warm", "cold"];
-const PIPELINE_STATUS = ["new", "contacted", "qualified", "viewing", "negotiation", "offer", "closed_won", "closed_lost"];
 
 const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) => {
   const [loading, setLoading] = useState(false);
@@ -82,6 +105,10 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
     notes: "",
     internal_comments: "",
     tags: "",
+    broker_name_text: "",
+    assigned_broker_id: null as string | null,
+    tier: "standard" as "standard" | "vip",
+    pool: "nonpool" as "pool" | "nonpool",
   };
   const [formData, setFormData] = useState(initial);
   const [nationalityOpen, setNationalityOpen] = useState(false);
@@ -164,7 +191,14 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
         next_followup_at: formData.next_followup_at || null,
         notes: formData.notes || null,
         internal_comments: formData.internal_comments || null,
-        tags: formData.tags ? formData.tags.split(",").map((t) => t.trim()).filter(Boolean) : [],
+        tags: (() => {
+          const base = formData.tags ? formData.tags.split(",").map((t) => t.trim()).filter(Boolean) : [];
+          // Independent tier and pool tags
+          if (formData.tier === "vip") base.push("tier:vip"); else base.push("tier:standard");
+          if (formData.pool === "pool") base.push("pool:pool"); else base.push("pool:nonpool");
+          return Array.from(new Set(base));
+        })(),
+        assigned_broker_id: formData.assigned_broker_id,
         owner_type: "broker_owned",
         owner_user_id: userId,
         created_by_user_id: userId,
@@ -461,8 +495,10 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                   <Label>Lead Source</Label>
                   <Select value={formData.source} onValueChange={(v) => setFormData({ ...formData, source: v })}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent className="bg-[#FDFBF7] z-[200]">
-                      {LEAD_SOURCES.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                    <SelectContent className="bg-[#FDFBF7] z-[200] max-h-80">
+                      {LEAD_SOURCES.map((s) => (
+                        <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
@@ -470,10 +506,103 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                   <Label>Status</Label>
                   <Select value={formData.pipeline_stage} onValueChange={(v) => setFormData({ ...formData, pipeline_stage: v })}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent className="bg-[#FDFBF7] z-[200]">
-                      {PIPELINE_STATUS.map((s) => <SelectItem key={s} value={s}>{s.replace(/_/g, " ")}</SelectItem>)}
+                    <SelectContent
+                      position="popper"
+                      side="bottom"
+                      align="start"
+                      sideOffset={6}
+                      avoidCollisions={false}
+                      className="bg-[#FDFBF7] z-[200] max-h-96 border border-[#B89555]/30 rounded-xl"
+                    >
+                      {(['positive','neutral','negative'] as const).map((cat) => {
+                        const items = PIPELINE_STATUSES.filter(s => s.category === cat);
+                        if (!items.length) return null;
+                        const dot = cat === 'positive' ? 'bg-emerald-500' : cat === 'negative' ? 'bg-red-500' : 'bg-blue-500';
+                        const label = cat === 'positive' ? 'Positive' : cat === 'negative' ? 'Negative' : 'Neutral';
+                        return (
+                          <div key={cat}>
+                            <div className="px-2 py-1.5 text-[10px] font-bold text-[#1A1A1A]/60 uppercase tracking-wider border-t border-[#B89555]/20 first:border-t-0 mt-1 first:mt-0 flex items-center gap-2">
+                              <span className={cn("w-2 h-2 rounded-full", dot)} />
+                              {label}
+                            </div>
+                            {items.map(s => (
+                              <SelectItem key={s.value} value={s.value} className="pl-4">
+                                <div className="flex items-center gap-2">
+                                  <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: s.dotColor }} />
+                                  {s.label}
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </div>
+                        );
+                      })}
                     </SelectContent>
                   </Select>
+                </div>
+              </div>
+
+              {/* Broker assignment */}
+              <BrokerCombobox
+                label="Assigned Broker"
+                placeholder="Search or type broker name…"
+                value={formData.broker_name_text}
+                brokerId={formData.assigned_broker_id}
+                onChange={({ value, brokerId }) =>
+                  setFormData({ ...formData, broker_name_text: value, assigned_broker_id: brokerId })
+                }
+              />
+
+              {/* Tier (Standard / VIP) and Pool (Pool / Non-pool) — independent */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label className="flex items-center gap-1.5">
+                    <Crown className="h-3.5 w-3.5 text-amber-500" />
+                    Tier
+                  </Label>
+                  <div className="inline-flex w-full rounded-lg border border-[#1A1A1A]/15 overflow-hidden bg-[#FDFBF7]">
+                    {(['standard','vip'] as const).map(t => (
+                      <button
+                        key={t}
+                        type="button"
+                        onClick={() => setFormData({ ...formData, tier: t })}
+                        className={cn(
+                          "flex-1 px-3 py-2 text-xs font-bold uppercase tracking-wide transition-colors",
+                          formData.tier === t
+                            ? t === 'vip'
+                              ? "bg-amber-400/25 text-amber-900 border-r border-[#B89555]/40"
+                              : "bg-[#EFE6D6] text-[#1A1A1A] border-r border-[#B89555]/40"
+                            : "text-[#1A1A1A]/60 hover:bg-[#F7F2EA] border-r border-[#1A1A1A]/10 last:border-r-0"
+                        )}
+                      >
+                        {t === 'vip' ? 'VIP' : 'Standard'}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <Label className="flex items-center gap-1.5">
+                    <Users2 className="h-3.5 w-3.5 text-blue-500" />
+                    Pool
+                  </Label>
+                  <div className="inline-flex w-full rounded-lg border border-[#1A1A1A]/15 overflow-hidden bg-[#FDFBF7]">
+                    {(['pool','nonpool'] as const).map(p => (
+                      <button
+                        key={p}
+                        type="button"
+                        onClick={() => setFormData({ ...formData, pool: p })}
+                        className={cn(
+                          "flex-1 px-3 py-2 text-xs font-bold uppercase tracking-wide transition-colors",
+                          formData.pool === p
+                            ? p === 'pool'
+                              ? "bg-blue-500/15 text-blue-800 border-r border-[#B89555]/40"
+                              : "bg-[#EFE6D6] text-[#1A1A1A] border-r border-[#B89555]/40"
+                            : "text-[#1A1A1A]/60 hover:bg-[#F7F2EA] border-r border-[#1A1A1A]/10 last:border-r-0"
+                        )}
+                      >
+                        {p === 'pool' ? 'Pool' : 'Non-pool'}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
 
