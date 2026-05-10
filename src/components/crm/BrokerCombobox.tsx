@@ -12,7 +12,7 @@ export interface BrokerOption {
   id: string;
   full_name: string;
   current_company: string | null;
-  email: string | null;
+  email_lower: string | null;
   phone_e164: string | null;
 }
 
