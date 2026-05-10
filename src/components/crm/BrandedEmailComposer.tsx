@@ -213,6 +213,12 @@ export function BrandedEmailComposer() {
     }
   };
 
+  const composedHtml = useMemo(() => {
+    if (!bodyHtml.trim()) return "";
+    const sig = selectedSignature ? renderSignatureHtml(selectedSignature) : "";
+    return sig ? `${bodyHtml}\n${sig}` : bodyHtml;
+  }, [bodyHtml, selectedSignature]);
+
   const lockAndSend = async (target: "test" | "live") => {
     if (!subject.trim() || !bodyHtml.trim()) { toast.error("Subject and body required."); return; }
     const to = target === "test" ? ownerEmail : recipient.trim();
