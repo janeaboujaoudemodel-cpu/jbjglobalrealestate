@@ -509,47 +509,30 @@ export default function CRMLeadsTableV2({
 
         {/* Dropdown row — shadcn Select, evenly spaced, no overlap */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <Select value={stageFilter || "__all__"} onValueChange={(v) => setStageFilter(v === "__all__" ? "" : v)}>
-            <SelectTrigger className="h-10 bg-[#FDFBF7] border border-[#B89555]/30 text-[#1A1A1A] font-semibold min-w-0">
-              <SelectValue placeholder="All Stages" className="truncate" />
-            </SelectTrigger>
-            <SelectContent className="bg-[#FDFBF7] border border-[#B89555]/40 shadow-lg max-h-[360px] [&_[data-highlighted]]:bg-[#EFE6D6] [&_[data-highlighted]]:text-[#1A1A1A]">
-              <SelectItem value="__all__">All Stages</SelectItem>
-              <SelectGroup>
-                <SelectLabel className="text-emerald-700 font-bold bg-emerald-50/60">Positive</SelectLabel>
-                {groupedStatuses.positive.map((s) => (
-                  <SelectItem key={s.value} value={s.value}>
-                    <span className="inline-flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: s.dotColor }} />
-                      {s.label}
-                    </span>
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-              <SelectGroup>
-                <SelectLabel className="text-blue-700 font-bold bg-blue-50/60">Neutral</SelectLabel>
-                {groupedStatuses.neutral.map((s) => (
-                  <SelectItem key={s.value} value={s.value}>
-                    <span className="inline-flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: s.dotColor }} />
-                      {s.label}
-                    </span>
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-              <SelectGroup>
-                <SelectLabel className="text-red-700 font-bold bg-red-50/60">Negative</SelectLabel>
-                {groupedStatuses.negative.map((s) => (
-                  <SelectItem key={s.value} value={s.value}>
-                    <span className="inline-flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: s.dotColor }} />
-                      {s.label}
-                    </span>
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          <SearchableMultiSelect
+            label="All Statuses"
+            placeholder="Search statuses…"
+            className="h-10 w-full justify-between"
+            selected={stageMulti}
+            onChange={setStageMulti}
+            options={[
+              ...groupedStatuses.positive.map((s) => ({
+                value: s.value,
+                label: `🟢 ${s.label}`,
+                count: leads.filter((l) => (l.state?.pipeline_status || "new") === s.value).length,
+              })),
+              ...groupedStatuses.neutral.map((s) => ({
+                value: s.value,
+                label: `🔵 ${s.label}`,
+                count: leads.filter((l) => (l.state?.pipeline_status || "new") === s.value).length,
+              })),
+              ...groupedStatuses.negative.map((s) => ({
+                value: s.value,
+                label: `🔴 ${s.label}`,
+                count: leads.filter((l) => (l.state?.pipeline_status || "new") === s.value).length,
+              })),
+            ]}
+          />
 
           <Select value={sourceTypeFilter || "__all__"} onValueChange={(v) => setSourceTypeFilter(v === "__all__" ? "" : v)}>
             <SelectTrigger className="h-10 bg-[#FDFBF7] border border-[#B89555]/30 text-[#1A1A1A] font-semibold min-w-0">
