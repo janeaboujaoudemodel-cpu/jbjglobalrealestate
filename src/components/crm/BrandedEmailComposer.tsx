@@ -103,7 +103,7 @@ export function BrandedEmailComposer() {
     setBusy("ai");
     try {
       const { data, error } = await supabase.functions.invoke("compose-branded-email", {
-        body: { brief, recipient_name: recipientName, tone: "warm executive" },
+        body: { brief, recipient_name: recipientName, tone: "warm executive", language },
       });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
