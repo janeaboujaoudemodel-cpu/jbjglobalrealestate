@@ -2,8 +2,20 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-export type InboxCategory = "overview" | "contracts" | "registrations" | "opportunities" | "partnerships" | "careers" | "other";
-export type InboxStatus = "awaiting_you" | "awaiting_them" | "signed" | "registered" | "info_only" | "needs_review";
+export type InboxCategory =
+  | "overview"
+  | "contracts"
+  | "registrations"
+  | "brokerages"
+  | "new_launches"
+  | "projects_inventory"
+  | "commission"
+  | "events"
+  | "opportunities"
+  | "partnerships"
+  | "careers"
+  | "other";
+export type InboxStatus = "awaiting_you" | "awaiting_them" | "signed" | "registered" | "info_only" | "needs_review" | "needs_document";
 
 export interface EmailInboxItem {
   id: string;
@@ -56,7 +68,12 @@ export function useInboxCategoryCounts() {
         .is("archived_at", null)
         .limit(1000);
       if (error) throw error;
-      const counts: Record<string, number> = { overview: 0, contracts: 0, registrations: 0, opportunities: 0, partnerships: 0, careers: 0, other: 0, awaiting_you: 0 };
+      const counts: Record<string, number> = {
+        overview: 0, contracts: 0, registrations: 0, brokerages: 0,
+        new_launches: 0, projects_inventory: 0, commission: 0, events: 0,
+        opportunities: 0, partnerships: 0, careers: 0, other: 0,
+        awaiting_you: 0,
+      };
       for (const r of (data ?? []) as any[]) {
         counts.overview++;
         counts[r.category] = (counts[r.category] ?? 0) + 1;
@@ -93,7 +110,7 @@ export function useSendRegistrationConfirmation() {
       return data;
     },
     onSuccess: () => {
-      toast.success("Confirmation email sent (BCC: drjane@gmail.com)");
+      toast.success("Confirmation email sent (BCC: infoo.jane@gmail.com)");
       qc.invalidateQueries({ queryKey: ["developer_registry"] });
     },
     onError: (e: Error) => toast.error(`Send failed: ${e.message}`),

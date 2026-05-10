@@ -1,10 +1,9 @@
 /**
  * EmailCenter — JBJ-related inbox command center.
- * Pulls classified emails from email_inbox_items, organized by category
- * (Overview, Contracts, Registrations, Opportunities, Partnerships, Careers,
- * Other) with action chips and one-click follow-ups.
+ * Real-estate only mail from the connected Gmail, classified into
+ * actionable categories with one-click follow-ups and CRM auto-sync.
  *
- * Every automated send BCCs drjane@gmail.com.
+ * Every automated send BCCs infoo.jane@gmail.com.
  */
 import { useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
@@ -16,7 +15,6 @@ import {
   RefreshCw,
   Inbox,
   FileSignature,
-  Building2,
   Handshake,
   Briefcase,
   FileQuestion,
@@ -26,6 +24,11 @@ import {
   ExternalLink,
   Archive,
   Send,
+  Rocket,
+  Banknote,
+  CalendarRange,
+  FolderOpen,
+  Users,
 } from "lucide-react";
 import {
   useEmailInboxItems,
@@ -34,36 +37,59 @@ import {
   useSendRegistrationConfirmation,
   useArchiveInboxItem,
   type InboxCategory,
+  type InboxStatus,
 } from "@/hooks/useEmailInboxItems";
 
-const CATEGORIES: Array<{ id: InboxCategory; label: string; tone: "gold" | "purple" | "blue" | "amber" | "emerald" | "rose" | "ink"; icon: typeof Mail }> = [
-  { id: "overview",       label: "Overview",       tone: "gold",    icon: Inbox },
-  { id: "contracts",      label: "Contracts",      tone: "purple",  icon: FileSignature },
-  { id: "registrations",  label: "Registrations",  tone: "blue",    icon: ShieldCheck },
-  { id: "opportunities",  label: "Opportunities",  tone: "amber",   icon: Sparkles },
-  { id: "partnerships",   label: "Partnerships",   tone: "emerald", icon: Handshake },
-  { id: "careers",        label: "Careers",        tone: "rose",    icon: Briefcase },
-  { id: "other",          label: "Other",          tone: "ink",     icon: FileQuestion },
+type Tone = "gold" | "purple" | "blue" | "amber" | "emerald" | "rose" | "ink";
+
+const CATEGORIES: Array<{ id: InboxCategory; label: string; tone: Tone; icon: typeof Mail }> = [
+  { id: "overview",           label: "Overview",            tone: "gold",    icon: Inbox },
+  { id: "contracts",          label: "Signed Contracts",    tone: "purple",  icon: FileSignature },
+  { id: "registrations",      label: "Registrations",       tone: "blue",    icon: ShieldCheck },
+  { id: "brokerages",         label: "Brokerages",          tone: "emerald", icon: Users },
+  { id: "new_launches",       label: "New Launches",        tone: "rose",    icon: Rocket },
+  { id: "projects_inventory", label: "Projects & Inventory",tone: "amber",   icon: FolderOpen },
+  { id: "commission",         label: "Commission",          tone: "emerald", icon: Banknote },
+  { id: "events",             label: "Events",              tone: "amber",   icon: CalendarRange },
+  { id: "opportunities",      label: "Opportunities",       tone: "amber",   icon: Sparkles },
+  { id: "partnerships",       label: "Partnerships",        tone: "emerald", icon: Handshake },
+  { id: "careers",            label: "Careers",             tone: "rose",    icon: Briefcase },
+  { id: "other",              label: "Other",               tone: "ink",     icon: FileQuestion },
 ];
 
 const STATUS_CHIP: Record<string, { label: string; cls: string }> = {
-  awaiting_you:  { label: "Awaiting you",  cls: "bg-amber-100 text-amber-900 border-amber-300" },
-  awaiting_them: { label: "Awaiting them", cls: "bg-blue-100 text-blue-900 border-blue-300" },
-  signed:        { label: "Signed",        cls: "bg-emerald-100 text-emerald-900 border-emerald-300" },
-  registered:    { label: "Registered",    cls: "bg-emerald-100 text-emerald-900 border-emerald-300" },
-  needs_review:  { label: "Needs review",  cls: "bg-rose-100 text-rose-900 border-rose-300" },
-  info_only:     { label: "Info",          cls: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/30" },
+  awaiting_you:   { label: "Awaiting you",   cls: "bg-amber-100 text-amber-900 border-amber-300" },
+  awaiting_them:  { label: "Awaiting them",  cls: "bg-blue-100 text-blue-900 border-blue-300" },
+  signed:         { label: "Signed",         cls: "bg-emerald-100 text-emerald-900 border-emerald-300" },
+  registered:     { label: "Registered",     cls: "bg-emerald-100 text-emerald-900 border-emerald-300" },
+  needs_review:   { label: "Needs review",   cls: "bg-rose-100 text-rose-900 border-rose-300" },
+  needs_document: { label: "Needs document", cls: "bg-rose-100 text-rose-900 border-rose-300" },
+  info_only:      { label: "Info",           cls: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/30" },
 };
+
+const STATUS_FILTERS: Array<{ id: "all" | InboxStatus; label: string }> = [
+  { id: "all",            label: "All" },
+  { id: "awaiting_you",   label: "Awaiting you" },
+  { id: "awaiting_them",  label: "Awaiting them" },
+  { id: "signed",         label: "Signed" },
+  { id: "registered",     label: "Registered" },
+  { id: "needs_document", label: "Needs document" },
+  { id: "needs_review",   label: "Needs review" },
+];
 
 export default function EmailCenter() {
   const [active, setActive] = useState<InboxCategory>("overview");
+  const [statusFilter, setStatusFilter] = useState<"all" | InboxStatus>("all");
   const { data: items = [], isLoading } = useEmailInboxItems(active);
   const { data: counts = {} } = useInboxCategoryCounts();
   const sync = useSyncJbjInbox();
   const sendConfirm = useSendRegistrationConfirmation();
   const archive = useArchiveInboxItem();
 
-  const grouped = useMemo(() => items, [items]);
+  const grouped = useMemo(
+    () => (statusFilter === "all" ? items : items.filter((i) => i.status === statusFilter)),
+    [items, statusFilter],
+  );
 
   return (
     <div className="space-y-4">
@@ -75,7 +101,7 @@ export default function EmailCenter() {
               <IconTile icon={Mail} tone="gold" size="sm" />
               Email Command Center
               <span className="text-xs font-normal text-[#1A1A1A]/60">
-                JBJ-related mail from the connected inbox · auto-BCC drjane@gmail.com on every send
+                Real-estate only · auto-BCC infoo.jane@gmail.com on every send
               </span>
             </CardTitle>
             <Button
@@ -120,6 +146,29 @@ export default function EmailCenter() {
               );
             })}
           </div>
+
+          {/* Status sub-filter */}
+          <div className="mt-3 pt-3 border-t border-[#B89555]/15 flex flex-wrap items-center gap-1.5">
+            <span className="text-[11px] uppercase tracking-wide text-[#1A1A1A]/55 mr-1">Filter</span>
+            {STATUS_FILTERS.map((f) => {
+              const isActive = statusFilter === f.id;
+              return (
+                <button
+                  key={f.id}
+                  type="button"
+                  onClick={() => setStatusFilter(f.id)}
+                  className={[
+                    "inline-flex items-center px-2.5 py-1 rounded-full text-[12px] font-medium border transition-colors",
+                    isActive
+                      ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
+                      : "bg-transparent text-[#1A1A1A]/70 border-[#B89555]/20 hover:bg-[#EFE6D6]/60",
+                  ].join(" ")}
+                >
+                  {f.label}
+                </button>
+              );
+            })}
+          </div>
         </CardContent>
       </Card>
 
@@ -141,7 +190,7 @@ export default function EmailCenter() {
             const Icon = cat.icon;
             const isRegistration = it.category === "registrations" || it.category === "contracts";
             return (
-              <Card key={it.id} className="bg-[#FDFBF7] border-[#B89555]/20">
+              <Card key={it.id} className="bg-[#FDFBF7] border border-[#B89555]/60 shadow-[0_1px_0_rgba(184,149,85,0.15),0_2px_8px_rgba(26,26,26,0.04)] hover:shadow-[0_2px_0_rgba(184,149,85,0.25),0_4px_16px_rgba(26,26,26,0.06)] transition-shadow">
                 <CardContent className="p-3">
                   <div className="flex items-start gap-3">
                     <IconTile icon={Icon} tone={cat.tone} size="sm" />

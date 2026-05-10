@@ -30,14 +30,26 @@ const JBJ_TOKENS = [
   "jbj.ae",
 ];
 
-type Category = "contracts" | "registrations" | "opportunities" | "partnerships" | "careers" | "other";
+type Category =
+  | "contracts"
+  | "registrations"
+  | "brokerages"
+  | "new_launches"
+  | "projects_inventory"
+  | "commission"
+  | "events"
+  | "opportunities"
+  | "partnerships"
+  | "careers"
+  | "other";
 
+// Order matters — first match wins. More specific buckets come first.
 const CATEGORY_RULES: Array<{ category: Category; patterns: RegExp[] }> = [
   {
     category: "contracts",
     patterns: [
-      /^\s*signed\s*[:\-–]/i,                          // "Signed: ..." subject prefix
-      /\bsigned\b[^.\n]{0,40}\b(agreement|contract|mou|addendum)\b/i,
+      /^\s*signed\s*[:\-–]/i,
+      /\bsigned\b[^.\n]{0,40}\b(agreement|contract|mou|addendum|authori[sz]ation)\b/i,
       /\b(agreement|contract|mou|addendum)\b[^.\n]{0,40}\bsigned\b/i,
       /\bfully executed\b/i,
       /\bexecuted (agreement|contract)\b/i,
@@ -49,6 +61,48 @@ const CATEGORY_RULES: Array<{ category: Category; patterns: RegExp[] }> = [
     ],
   },
   {
+    category: "commission",
+    patterns: [
+      /\bcommission (structure|sheet|slab|breakdown|payout|update)\b/i,
+      /\b(\d+(\.\d+)?\s?%)\s*commission\b/i,
+      /\bcommission\b[^.\n]{0,40}\b(approved|paid|invoice|claim)\b/i,
+      /\bpayout (statement|schedule)\b/i,
+    ],
+  },
+  {
+    category: "events",
+    patterns: [
+      /\b(invite|invitation) to\b[^.\n]{0,40}\b(launch|event|site visit|preview|broker event)\b/i,
+      /\bbroker event\b/i,
+      /\bsite visit\b/i,
+      /\bproject preview\b/i,
+      /\bsales gallery (visit|tour)\b/i,
+      /\brsvp\b[^.\n]{0,40}\b(launch|event)\b/i,
+    ],
+  },
+  {
+    category: "new_launches",
+    patterns: [
+      /\bnew (launch|tower|phase|release)\b/i,
+      /\bpre[- ]launch\b/i,
+      /\bgrand launch\b/i,
+      /\boff[- ]plan launch\b/i,
+      /\bcoming soon\b[^.\n]{0,40}\b(project|tower|phase)\b/i,
+    ],
+  },
+  {
+    category: "projects_inventory",
+    patterns: [
+      /\b(inventory|availability) (sheet|list|update)\b/i,
+      /\b(price|payment) plan\b/i,
+      /\bbrochure\b/i,
+      /\bfact ?sheet\b/i,
+      /\bunit (mix|list|availability)\b/i,
+      /\bfloor ?plan(s)?\b/i,
+      /\bmaster ?plan\b/i,
+    ],
+  },
+  {
     category: "registrations",
     patterns: [
       /\b(broker|agency|agent) registration\b/i,
@@ -57,18 +111,27 @@ const CATEGORY_RULES: Array<{ category: Category; patterns: RegExp[] }> = [
       /\bprincipal broker\b/i,
       /\brera\b/i,
       /\bregistered (with|as)\b/i,
+      /\bonboarded\b/i,
+      /\bchannel partner\b/i,
+    ],
+  },
+  {
+    category: "brokerages",
+    patterns: [
+      /\b(brokerage|agency)\b[^.\n]{0,60}\b(register|registration|partner|onboard|cooperat)/i,
+      /\bco[- ]?brok(e|ing)\b/i,
+      /\bsub[- ]?broker\b/i,
+      /\bagency cooperation\b/i,
     ],
   },
   {
     category: "opportunities",
     patterns: [
-      /\bnew (launch|project|tower|development)\b/i,
       /\beoi\b/i,
       /\ballocation\b/i,
-      /\binventory (sheet|list|update)\b/i,
       /\bproject brief\b/i,
-      /\b(off[- ]plan)\b/i,
-      /\bpre[- ]launch\b/i,
+      /\boff[- ]plan opportunity\b/i,
+      /\bexclusive (deal|allocation|inventory)\b/i,
     ],
   },
   {
@@ -77,7 +140,6 @@ const CATEGORY_RULES: Array<{ category: Category; patterns: RegExp[] }> = [
       /\bpartnership\b/i,
       /\bcollaborat(e|ion)\b/i,
       /\bmou\b/i,
-      /\bco[- ]?brokin?g\b/i,
       /\bjoint venture\b/i,
       /\breferral (program|agreement)\b/i,
     ],
@@ -132,11 +194,54 @@ function collectAttachments(p: GmailPart | undefined): Array<{ filename: string;
   return out;
 }
 
-function isJbjRelated(haystack: string, knownDeveloperDomains: Set<string>, fromDomain: string): boolean {
+// Real-estate positive signals — any one is enough.
+const RE_SIGNALS: RegExp[] = [
+  /\b(real ?estate|property|properties|listing|listings)\b/i,
+  /\b(developer|agency|brokerage|broker)\b/i,
+  /\b(project|tower|community|villa|apartment|penthouse|townhouse)\b/i,
+  /\b(launch|pre[- ]launch|off[- ]plan|inventory|allocation|eoi|payment plan)\b/i,
+  /\b(brochure|fact ?sheet|floor ?plan|master ?plan|unit mix)\b/i,
+  /\b(commission|payout|registration|mou|agreement|contract|addendum|authori[sz]ation)\b/i,
+  /\b(rera|dld|adrec|dubai land department|trakheesi)\b/i,
+  /\b(handover|service charge|escrow)\b/i,
+  /\b(site visit|sales gallery|broker event)\b/i,
+];
+
+// Domains / sender patterns that are never real-estate.
+const NOISE_DOMAINS = new Set([
+  "linkedin.com", "google.com", "googlemail.com", "accounts.google.com",
+  "apple.com", "microsoft.com", "office365.com", "amazon.com", "amazonses.com",
+  "facebook.com", "facebookmail.com", "instagram.com", "tiktok.com", "x.com", "twitter.com",
+  "youtube.com", "spotify.com", "netflix.com",
+  "uber.com", "careem.com", "talabat.com", "noon.com", "amazon.ae",
+  "paypal.com", "stripe.com", "intuit.com", "revolut.com",
+  "github.com", "gitlab.com", "atlassian.com", "notion.so", "figma.com",
+  "openai.com", "anthropic.com",
+]);
+const NOISE_SUBJECT = [
+  /\b(newsletter|unsubscribe|verify your email|password reset|security alert|sign[- ]in (attempt|alert))\b/i,
+  /\b(receipt|invoice number|your order|shipment|tracking)\b/i,
+  /\b(weekly digest|monthly digest|daily digest)\b/i,
+  /\b(promo code|coupon|black friday|sale ends)\b/i,
+];
+
+function isJbjRelated(
+  haystack: string,
+  knownDeveloperDomains: Set<string>,
+  fromDomain: string,
+  subject: string,
+): boolean {
   const h = haystack.toLowerCase();
+  // Hard blocklist first.
+  if (fromDomain && NOISE_DOMAINS.has(fromDomain)) return false;
+  if (NOISE_SUBJECT.some((p) => p.test(subject))) return false;
+
+  // Strong signals: JBJ tokens OR known developer domain (always pass).
   if (JBJ_TOKENS.some((t) => h.includes(t))) return true;
   if (fromDomain && knownDeveloperDomains.has(fromDomain)) return true;
-  return false;
+
+  // Otherwise require an explicit real-estate signal in subject/snippet.
+  return RE_SIGNALS.some((p) => p.test(h));
 }
 
 function classify(subject: string, snippet: string, attachments: Array<{ filename: string }>): Category {
@@ -255,11 +360,16 @@ Deno.serve(async (req) => {
       const receivedAt = det.internalDate ? new Date(parseInt(det.internalDate, 10)).toISOString() : new Date().toISOString();
 
       const haystack = `${subject}\n${snippet}\n${name} ${email}`;
-      const jbj = isJbjRelated(haystack, devDomains, fromDomain);
+      const jbj = isJbjRelated(haystack, devDomains, fromDomain, subject);
       if (!jbj) { continue; }
 
       const category = classify(subject, snippet, attachments);
-      const { status, action_required } = inferStatus(subject, snippet, category);
+      let { status, action_required } = inferStatus(subject, snippet, category);
+      // Signed contract email but no attachment → request the document.
+      if (category === "contracts" && status === "signed" && attachments.length === 0) {
+        status = "needs_document";
+        action_required = "Request signed document";
+      }
 
       // Match developer (token overlap + email/domain)
       let linkedDev: string | null = null;
