@@ -12,8 +12,8 @@ import { formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
 
 const NotifIcon = () => (
-  <div className="w-8 h-8 rounded-full border border-gold/50 flex items-center justify-center flex-shrink-0">
-    <Headphones className="w-4 h-4 text-gold" />
+  <div className="w-8 h-8 rounded-full border border-[#B89555]/50 flex items-center justify-center flex-shrink-0">
+    <Headphones className="w-4 h-4 text-[#1A1A1A]" />
   </div>
 );
 
@@ -142,8 +142,8 @@ const NotificationsPreview = () => {
     <Card className="border border-border bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))]">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="flex items-center gap-2 text-lg">
-          <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center relative">
-            <Bell className="w-4 h-4 text-gold" />
+          <div className="w-8 h-8 rounded-lg bg-[#EFE6D6]/10 border border-[#B89555]/30 flex items-center justify-center relative">
+            <Bell className="w-4 h-4 text-[#1A1A1A]" />
             {unreadCount > 0 && (
               <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
                 {unreadCount}
@@ -154,7 +154,7 @@ const NotificationsPreview = () => {
         </CardTitle>
         <div className="flex items-center gap-1">
           {unreadCount > 0 && (
-            <Button variant="ghost" size="sm" onClick={markAllRead} className="text-xs text-gold h-7 px-2">
+            <Button variant="ghost" size="sm" onClick={markAllRead} className="text-xs text-[#1A1A1A] h-7 px-2">
               Mark all read
             </Button>
           )}
@@ -229,7 +229,7 @@ const NotificationsPreview = () => {
                   className={`w-full text-left flex items-start gap-3 p-3 rounded-lg border transition-colors duration-150 ${
                     notification.is_read 
                       ? 'border-border/50 bg-transparent hover:bg-muted/30' 
-                      : 'border-gold/30 bg-gold/5 hover:bg-gold/10'
+                      : 'border-[#B89555]/30 bg-[#EFE6D6]/5 hover:bg-[#EFE6D6]/10'
                   }`}
                 >
                   <div className="mt-0.5">
@@ -241,7 +241,7 @@ const NotificationsPreview = () => {
                         {notification.title}
                       </p>
                       {!notification.is_read && (
-                        <Badge className="bg-gold/20 text-gold border-gold/40 text-[10px] px-1 py-0">
+                        <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/40 text-[10px] px-1 py-0">
                           New
                         </Badge>
                       )}
@@ -258,7 +258,7 @@ const NotificationsPreview = () => {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-7 w-7 text-muted-foreground hover:text-gold"
+                        className="h-7 w-7 text-muted-foreground hover:text-[#1A1A1A]"
                         title="Mark as Unread"
                         onClick={() => markAsUnread(notification)}
                       >
@@ -268,7 +268,7 @@ const NotificationsPreview = () => {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-7 w-7 text-muted-foreground hover:text-gold"
+                        className="h-7 w-7 text-muted-foreground hover:text-[#1A1A1A]"
                         title="Mark as Read"
                         onClick={() => markAsRead(notification)}
                       >
@@ -280,7 +280,7 @@ const NotificationsPreview = () => {
               ))}
             </div>
 
-            <Button variant="link" className="w-full text-gold mt-4 p-0" asChild>
+            <Button variant="link" className="w-full text-[#1A1A1A] mt-4 p-0" asChild>
               <Link to="/profile?tab=settings">
                 Manage Notifications
                 <ChevronRight className="w-4 h-4 ml-1" />

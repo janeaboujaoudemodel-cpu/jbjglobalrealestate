@@ -103,17 +103,17 @@ export function DeveloperVisibilityPanel() {
 
   if (isLoading) {
     return (
-      <Card className="border-gold/30">
+      <Card className="border-[#B89555]/30">
         <CardContent className="p-8 text-center text-muted-foreground">Loading developers...</CardContent>
       </Card>
     );
   }
 
   return (
-    <Card className="border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+    <Card className="border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-foreground">
-          <Building2 className="w-5 h-5 text-gold" />
+          <Building2 className="w-5 h-5 text-[#1A1A1A]" />
           Developer Visibility
         </CardTitle>
         <p className="text-sm text-muted-foreground">
@@ -129,7 +129,7 @@ export function DeveloperVisibilityPanel() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search developers..."
-              className="pl-9 bg-[#FDFBF7] border-gold/30"
+              className="pl-9 bg-[#FDFBF7] border-[#B89555]/30"
             />
           </div>
           <div className="flex items-center gap-2 flex-wrap">
@@ -137,7 +137,7 @@ export function DeveloperVisibilityPanel() {
               variant="outline"
               size="sm"
               onClick={selectAll}
-              className="border-gold/30 text-foreground"
+              className="border-[#B89555]/30 text-foreground"
             >
               <CheckSquare className="w-4 h-4 mr-1" />
               {selectedIds.size === filtered.length && filtered.length > 0 ? "Deselect All" : "Select All"}
@@ -180,7 +180,7 @@ export function DeveloperVisibilityPanel() {
             <div
               key={dev.id}
               className={`flex items-center justify-between p-3 rounded-lg border bg-[#FDFBF7]/50 transition-colors cursor-pointer ${
-                selectedIds.has(dev.id) ? "border-gold ring-2 ring-gold/20" : "border-gold/20"
+                selectedIds.has(dev.id) ? "border-[#B89555] ring-2 ring-gold/20" : "border-[#B89555]/20"
               }`}
               onClick={() => toggleSelect(dev.id)}
             >
@@ -190,7 +190,7 @@ export function DeveloperVisibilityPanel() {
                   checked={selectedIds.has(dev.id)}
                   onChange={() => toggleSelect(dev.id)}
                   onClick={(e) => e.stopPropagation()}
-                  className="w-4 h-4 rounded border-gold/40 accent-gold cursor-pointer"
+                  className="w-4 h-4 rounded border-[#B89555]/40 accent-gold cursor-pointer"
                 />
                 {dev.is_hidden ? (
                   <EyeOff className="w-4 h-4 text-muted-foreground shrink-0" />

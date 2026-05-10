@@ -29,7 +29,7 @@ export function TestResults({
   const incorrectAnswers = latestAttempt ? getIncorrectAnswers(latestAttempt.id) : [];
 
   return (
-    <Card className={cn("bg-[#1A1A1A]/40 border-gold/20", className)}>
+    <Card className={cn("bg-[#1A1A1A]/40 border-[#B89555]/20", className)}>
       <CardHeader className="text-center pb-4">
         <div className={cn(
           "w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center",
@@ -79,7 +79,7 @@ export function TestResults({
         {!passed && incorrectAnswers.length > 0 && (
           <div className="space-y-4">
             <h4 className="text-white font-medium flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-amber-400" />
+              <AlertTriangle className="w-4 h-4 text-[#1A1A1A]" />
               Questions You Missed ({incorrectAnswers.length})
             </h4>
             
@@ -118,7 +118,7 @@ export function TestResults({
               <p className="text-white/90 text-sm text-center">
                 Correct answers are hidden. Review the material and try again.
                 {attempts.filter(a => !a.passed).length < 3 && (
-                  <span className="block mt-1 text-amber-400/70">
+                  <span className="block mt-1 text-[#1A1A1A]/70">
                     Answers will be revealed after {3 - attempts.filter(a => !a.passed).length} more failed attempt(s).
                   </span>
                 )}
@@ -127,7 +127,7 @@ export function TestResults({
 
             {showAnswers && (
               <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-4 text-center">
-                <AlertTriangle className="w-6 h-6 text-amber-400 mx-auto mb-2" />
+                <AlertTriangle className="w-6 h-6 text-[#1A1A1A] mx-auto mb-2" />
                 <p className="text-amber-300 text-sm">
                   When you fail three times, we give you the answers of the test, 
                   and you will have to study and pass the test again.
@@ -140,7 +140,7 @@ export function TestResults({
         {/* Actions */}
         <div className="flex flex-col sm:flex-row gap-3 pt-4">
           {passed ? (
-            <Button className="flex-1 bg-gold hover:bg-gold/90 text-[#1A1A1A]">
+            <Button className="flex-1 bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
               Continue to Next Module
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
@@ -154,7 +154,7 @@ export function TestResults({
                 <RotateCcw className="w-4 h-4 mr-2" />
                 Retake Test
               </Button>
-              <Button className="flex-1 bg-gold/20 text-gold hover:bg-gold/30">
+              <Button className="flex-1 bg-[#EFE6D6]/20 text-[#1A1A1A] hover:bg-[#EFE6D6]/30">
                 Review Material
               </Button>
             </>

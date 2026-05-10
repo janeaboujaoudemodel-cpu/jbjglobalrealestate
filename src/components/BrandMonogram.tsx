@@ -80,7 +80,7 @@ export function BrandMonogram({
             JBJ GLOBAL REAL ESTATE
           </span>
           {subline && layout === "stacked" && (
-            <span className="mt-2 block text-gold text-xs tracking-[0.2em] uppercase">
+            <span className="mt-2 block text-[#1A1A1A] text-xs tracking-[0.2em] uppercase">
               {subline}
             </span>
           )}

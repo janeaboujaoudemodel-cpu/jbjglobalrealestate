@@ -123,7 +123,7 @@ export function AIBrokerStatsDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-zinc-900 border-[#1A1A1A] sm:max-w-4xl">
+      <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A] sm:max-w-4xl">
         <DialogHeader>
           <DialogTitle className="text-white text-xl">
             Analytics: {brokerName}
@@ -132,11 +132,11 @@ export function AIBrokerStatsDialog({
 
         {loading ? (
           <div className="flex items-center justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-gold" />
+            <Loader2 className="h-8 w-8 animate-spin text-[#1A1A1A]" />
           </div>
         ) : (
           <Tabs defaultValue="overview" className="mt-4">
-            <TabsList className="bg-zinc-800 border-[#1A1A1A]">
+            <TabsList className="bg-[#1A1A1A] border-[#1A1A1A]">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="activity">Activity</TabsTrigger>
               <TabsTrigger value="performance">Performance</TabsTrigger>
@@ -145,7 +145,7 @@ export function AIBrokerStatsDialog({
             <TabsContent value="overview" className="space-y-6 mt-4">
               {/* Summary Cards */}
               <div className="grid grid-cols-4 gap-4">
-                <div className="bg-zinc-800/50 rounded-lg p-4">
+                <div className="bg-[#1A1A1A]/50 rounded-lg p-4">
                   <div className="flex items-center gap-2 text-[#1A1A1A]/70 mb-2">
                     <Users className="h-4 w-4" />
                     <span className="text-sm">Leads Contacted</span>
@@ -154,7 +154,7 @@ export function AIBrokerStatsDialog({
                     {totals.leads_contacted}
                   </p>
                 </div>
-                <div className="bg-zinc-800/50 rounded-lg p-4">
+                <div className="bg-[#1A1A1A]/50 rounded-lg p-4">
                   <div className="flex items-center gap-2 text-[#1A1A1A]/70 mb-2">
                     <TrendingUp className="h-4 w-4" />
                     <span className="text-sm">Conversions</span>
@@ -164,7 +164,7 @@ export function AIBrokerStatsDialog({
                   </p>
                   <p className="text-emerald-500 text-sm">{conversionRate}% rate</p>
                 </div>
-                <div className="bg-zinc-800/50 rounded-lg p-4">
+                <div className="bg-[#1A1A1A]/50 rounded-lg p-4">
                   <div className="flex items-center gap-2 text-[#1A1A1A]/70 mb-2">
                     <MessageSquare className="h-4 w-4" />
                     <span className="text-sm">Messages Sent</span>
@@ -173,7 +173,7 @@ export function AIBrokerStatsDialog({
                     {totals.messages_sent}
                   </p>
                 </div>
-                <div className="bg-zinc-800/50 rounded-lg p-4">
+                <div className="bg-[#1A1A1A]/50 rounded-lg p-4">
                   <div className="flex items-center gap-2 text-[#1A1A1A]/70 mb-2">
                     <Mail className="h-4 w-4" />
                     <span className="text-sm">Emails Sent</span>
@@ -185,7 +185,7 @@ export function AIBrokerStatsDialog({
               </div>
 
               {/* Channel Distribution */}
-              <div className="bg-zinc-800/30 rounded-lg p-4">
+              <div className="bg-[#1A1A1A]/30 rounded-lg p-4">
                 <h3 className="text-white font-medium mb-4">Channel Distribution</h3>
                 <div className="h-64">
                   <ResponsiveContainer width="100%" height="100%">
@@ -223,7 +223,7 @@ export function AIBrokerStatsDialog({
 
             <TabsContent value="activity" className="space-y-6 mt-4">
               {/* Daily Activity Chart */}
-              <div className="bg-zinc-800/30 rounded-lg p-4">
+              <div className="bg-[#1A1A1A]/30 rounded-lg p-4">
                 <h3 className="text-white font-medium mb-4">
                   Daily Activity (Last 30 Days)
                 </h3>
@@ -259,7 +259,7 @@ export function AIBrokerStatsDialog({
 
             <TabsContent value="performance" className="space-y-6 mt-4">
               {/* Conversion Trend */}
-              <div className="bg-zinc-800/30 rounded-lg p-4">
+              <div className="bg-[#1A1A1A]/30 rounded-lg p-4">
                 <h3 className="text-white font-medium mb-4">Conversion Trend</h3>
                 <div className="h-72">
                   <ResponsiveContainer width="100%" height="100%">
@@ -295,7 +295,7 @@ export function AIBrokerStatsDialog({
               </div>
 
               {/* Response Time Trend */}
-              <div className="bg-zinc-800/30 rounded-lg p-4">
+              <div className="bg-[#1A1A1A]/30 rounded-lg p-4">
                 <h3 className="text-white font-medium mb-4">
                   Average Response Time (minutes)
                 </h3>

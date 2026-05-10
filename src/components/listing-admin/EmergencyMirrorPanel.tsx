@@ -58,8 +58,8 @@ export const EmergencyMirrorPanel = () => {
   return (
     <div className="space-y-6">
       {/* Warning Banner — Champagne */}
-      <div className="bg-amber-50/80 border-2 border-gold/40 rounded-xl p-4 flex items-start gap-3">
-        <AlertTriangle className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+      <div className="bg-amber-50/80 border-2 border-[#B89555]/40 rounded-xl p-4 flex items-start gap-3">
+        <AlertTriangle className="w-5 h-5 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
         <div>
           <p className="text-[#1A1A1A] font-semibold text-sm">Emergency Data Mirror — Use Before API Key Expires</p>
           <p className="text-[#1A1A1A]/70 text-xs mt-1">
@@ -70,22 +70,22 @@ export const EmergencyMirrorPanel = () => {
       </div>
 
       {/* Status Check */}
-      <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-sm">
+      <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 shadow-sm">
         <CardHeader className="pb-3">
           <CardTitle className="text-[#1A1A1A] text-base flex items-center gap-2">
-            <Database className="w-4 h-4 text-gold" />
+            <Database className="w-4 h-4 text-[#1A1A1A]" />
             Current Data Status
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Button onClick={checkStatus} disabled={isCheckingStatus} className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-[#1A1A1A] hover:border-gold hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
+          <Button onClick={checkStatus} disabled={isCheckingStatus} className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50 text-[#1A1A1A] hover:border-[#B89555] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
             {isCheckingStatus ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <RefreshCw className="w-4 h-4 mr-2" />}
             Check Current Status
           </Button>
 
           {status && (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-              <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20 rounded-lg p-4 text-center">
+              <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/20 rounded-lg p-4 text-center">
                 <p className="text-[#1A1A1A]/70 text-xs mb-1">Total Reelly Projects</p>
                 <p className="text-[#1A1A1A] text-2xl font-bold">{status.total_reelly_projects?.toLocaleString()}</p>
               </div>
@@ -133,10 +133,10 @@ export const EmergencyMirrorPanel = () => {
       </Card>
 
       {/* Start Mirror */}
-      <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-sm">
+      <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 shadow-sm">
         <CardHeader className="pb-3">
           <CardTitle className="text-[#1A1A1A] text-base flex items-center gap-2">
-            <Play className="w-4 h-4 text-gold" />
+            <Play className="w-4 h-4 text-[#1A1A1A]" />
             Start Emergency Mirror
           </CardTitle>
         </CardHeader>
@@ -149,7 +149,7 @@ export const EmergencyMirrorPanel = () => {
           <Button 
             onClick={startMirror} 
             disabled={isRunning}
-            className="bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold border-0"
+            className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-semibold border-0"
           >
             {isRunning ? (
               <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Starting Mirror...</>
@@ -159,7 +159,7 @@ export const EmergencyMirrorPanel = () => {
           </Button>
 
           {lastResult && (
-            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20 rounded-lg p-4 space-y-2">
+            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/20 rounded-lg p-4 space-y-2">
               <p className="text-emerald-700 text-sm font-semibold">Mirror Dispatched Successfully</p>
               <div className="text-[#1A1A1A]/70 text-xs space-y-1">
                 <p>Projects queued: <span className="text-[#1A1A1A] font-medium">{lastResult.projects_queued}</span></p>

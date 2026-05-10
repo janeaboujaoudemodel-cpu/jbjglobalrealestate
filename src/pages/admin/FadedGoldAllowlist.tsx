@@ -172,7 +172,7 @@ export default function FadedGoldAllowlist() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] pt-[88px] text-zinc-900">
+    <div className="min-h-screen bg-[#FDFBF7] pt-[88px] text-[#1A1A1A]">
       <div className="mx-auto max-w-6xl px-6 py-10 space-y-10">
         {/* Header */}
         <header className="flex flex-wrap items-start justify-between gap-4">
@@ -193,11 +193,11 @@ export default function FadedGoldAllowlist() {
               </h1>
               <p className="mt-2 max-w-2xl text-sm leading-relaxed text-zinc-600">
                 Files listed here are exempt from the faded-gold guard
-                (<code className="rounded bg-zinc-100 px-1.5 py-0.5 text-xs">text-[#1A1A1A]/XX</code> where{" "}
-                <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-xs">XX &lt; 80</code>). Only add
+                (<code className="rounded bg-[#F7F2EA] px-1.5 py-0.5 text-xs">text-[#1A1A1A]/XX</code> where{" "}
+                <code className="rounded bg-[#F7F2EA] px-1.5 py-0.5 text-xs">XX &lt; 80</code>). Only add
                 legitimate branded watermarks. After saving, export the JSON and
                 commit{" "}
-                <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-xs">
+                <code className="rounded bg-[#F7F2EA] px-1.5 py-0.5 text-xs">
                   scripts/contrast/faded-gold-allowlist.json
                 </code>{" "}
                 so CI picks it up.
@@ -270,7 +270,7 @@ export default function FadedGoldAllowlist() {
             <div>
               <h2 className="text-lg font-semibold text-zinc-950">
                 Current allowlist
-                <span className="ml-2 rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-600">
+                <span className="ml-2 rounded-full bg-[#F7F2EA] px-2 py-0.5 text-xs font-medium text-zinc-600">
                   {rows.length}
                 </span>
               </h2>
@@ -341,7 +341,7 @@ export default function FadedGoldAllowlist() {
               <Button
                 size="sm"
                 onClick={downloadJson}
-                className="gap-2 bg-[#FDFBF7] text-zinc-900 hover:bg-zinc-200"
+                className="gap-2 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#EFE6D6]"
               >
                 <Download className="h-3.5 w-3.5" />
                 Download
@@ -370,7 +370,7 @@ function Row({
   const dirty = reason !== entry.reason;
   return (
     <tr className="border-b border-zinc-100 last:border-0 align-top">
-      <td className="px-4 py-3 font-mono text-xs text-zinc-900">{entry.file_path}</td>
+      <td className="px-4 py-3 font-mono text-xs text-[#1A1A1A]">{entry.file_path}</td>
       <td className="px-4 py-3">
         <Textarea
           value={reason}

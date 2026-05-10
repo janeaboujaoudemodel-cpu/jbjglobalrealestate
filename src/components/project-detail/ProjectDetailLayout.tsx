@@ -693,14 +693,14 @@ export default function ProjectDetailLayout({
         }`}
       >
         {/* Row 1: Filter Shortcut Bar */}
-        <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-b border-gold/20 py-2 px-2 transition-all duration-300">
+        <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-b border-[#B89555]/20 py-2 px-2 transition-all duration-300">
           <div className="max-w-full overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
             <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
           </div>
         </div>
 
         {/* Row 2: Curated Shortcuts — gold bottom border for visibility */}
-        <div className="bg-gradient-to-r from-[#EDE0C8] via-[#E2D4B8] to-[#D8C7A6] border-b-2 border-gold shadow-[0_4px_12px_rgba(200,167,102,0.25)]">
+        <div className="bg-gradient-to-r from-[#EDE0C8] via-[#E2D4B8] to-[#D8C7A6] border-b-2 border-[#B89555] shadow-[0_4px_12px_rgba(200,167,102,0.25)]">
           <div className="container mx-auto px-4">
             <div ref={tabNavRef} className="overflow-x-auto scrollbar-hide" style={{ touchAction: 'pan-x', WebkitOverflowScrolling: 'touch', overscrollBehaviorX: 'contain', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
               <div className="flex items-center gap-1 py-1.5">
@@ -711,8 +711,8 @@ export default function ProjectDetailLayout({
                     onClick={() => handleTabClick(tab.id)}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium whitespace-nowrap min-w-fit transition-all relative ${
                       activeTab === tab.id
-                        ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F1E6] to-[#ECE2D2] text-[#1A1A1A] border-2 border-gold font-bold shadow-[0_0_12px_rgba(200,167,102,0.4)]"
-                        : "text-[#1A1A1A]/70 hover:text-gold hover:bg-gold/10 border border-transparent"
+                        ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F1E6] to-[#ECE2D2] text-[#1A1A1A] border-2 border-[#B89555] font-bold shadow-[0_0_12px_rgba(200,167,102,0.4)]"
+                        : "text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10 border border-transparent"
                     }`}
                   >
                     <tab.icon className="w-3.5 h-3.5" />
@@ -726,7 +726,7 @@ export default function ProjectDetailLayout({
                     setCaptureDocUrl(undefined);
                     setLeadCaptureOpen(true);
                   }}
-                  className="flex items-center gap-1.5 ml-auto px-4 py-1.5 rounded-lg text-xs md:text-sm font-bold whitespace-nowrap min-w-fit transition-all bg-gradient-to-r from-[#F7F1E6] via-[#EDE0C8] to-[#D8C7A6] text-[#1A1A1A] border-2 border-gold/50 hover:brightness-105"
+                  className="flex items-center gap-1.5 ml-auto px-4 py-1.5 rounded-lg text-xs md:text-sm font-bold whitespace-nowrap min-w-fit transition-all bg-gradient-to-r from-[#F7F1E6] via-[#EDE0C8] to-[#D8C7A6] text-[#1A1A1A] border-2 border-[#B89555]/50 hover:brightness-105"
                   style={{ boxShadow: '0 0 15px rgba(200,167,102,0.3)' }}
                 >
                   <UserPlus className="w-3.5 h-3.5" />
@@ -744,7 +744,7 @@ export default function ProjectDetailLayout({
         <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-16" style={{ margin: '0 auto', border: 'none', borderRadius: 0, background: 'transparent' }}>
           {/* Quick Stats Grid - Premium gold border visible */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-            <div className="rounded-xl border-2 border-gold bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
+            <div className="rounded-xl border-2 border-[#B89555] bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
               <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Starting Price</p>
               <p className="mt-2 text-xl font-bold text-price-orange">
                 {typeof project.price_from === "number" && project.price_from > 0 
@@ -752,17 +752,17 @@ export default function ProjectDetailLayout({
                   : "Price TBA"}
               </p>
             </div>
-            <div className="rounded-xl border-2 border-gold bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
+            <div className="rounded-xl border-2 border-[#B89555] bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
               <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Handover</p>
               <p className="mt-2 text-xl font-bold handover-orange">{(project.handover_date && formatDisplayDate(project.handover_date)) || deriveHandover(project) || HANDOVER_FALLBACK}</p>
             </div>
-            <div className="rounded-xl border-2 border-gold bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
+            <div className="rounded-xl border-2 border-[#B89555] bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
               <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Bedrooms</p>
               <p className="mt-2 text-xl font-bold text-foreground">
                 {bedroomsText || deriveBedroomsFromUnitTypes(project.unit_types) || "TBA"}
               </p>
             </div>
-            <div className="rounded-xl border-2 border-gold bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
+            <div className="rounded-xl border-2 border-[#B89555] bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
               <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Size</p>
               <p className="mt-2 text-xl font-bold text-foreground">
                 {sizeText || deriveSizeFromUnitTypes(project.unit_types) || "TBA"}
@@ -814,7 +814,7 @@ export default function ProjectDetailLayout({
                   {(project.description?.length ?? 0) > 500 && (
                     <button
                       onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
-                      className="flex items-center gap-1 text-gold text-sm font-medium mt-3 hover:underline"
+                      className="flex items-center gap-1 text-[#1A1A1A] text-sm font-medium mt-3 hover:underline"
                     >
                       {isDescriptionExpanded ? (
                         <><ChevronUp className="w-4 h-4" /> Show Less</>
@@ -900,14 +900,14 @@ export default function ProjectDetailLayout({
              <div ref={uspRef} id="usp" className="mb-14 scroll-mt-40">
                <div className="jj-card-inner">
                   <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-6">
-                    <Star className="w-5 h-5 text-gold" />
+                    <Star className="w-5 h-5 text-[#1A1A1A]" />
                     Unique Selling Points
                   </h3>
 
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   {/* USP Image - fallback to first gallery image if no USP image */}
                   {(project.usp_image_url || images[0]?.url) && (
-                    <div className="rounded-xl overflow-hidden border border-gold/30">
+                    <div className="rounded-xl overflow-hidden border border-[#B89555]/30">
                       <SafeImage 
                         src={project.usp_image_url || images[0]?.url || ""} 
                         alt={`${project.name} Highlights`} 
@@ -923,8 +923,8 @@ export default function ProjectDetailLayout({
                     <ul className="space-y-3">
                       {project.usp_bullets.map((bullet, idx) => (
                         <li key={idx} className="flex items-start gap-3">
-                          <span className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                            <Star className="w-3.5 h-3.5 text-gold" />
+                          <span className="w-6 h-6 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <Star className="w-3.5 h-3.5 text-[#1A1A1A]" />
                           </span>
                           <span className="text-foreground">{bullet}</span>
                         </li>
@@ -984,7 +984,7 @@ export default function ProjectDetailLayout({
               <div ref={amenitiesRef} id="amenities" className="mb-14 scroll-mt-40">
                 <div className="jj-card-inner">
                    <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-6">
-                     <Building2 className="w-5 h-5 text-gold" />
+                     <Building2 className="w-5 h-5 text-[#1A1A1A]" />
                      Amenities & Features
                    </h3>
                    <AmenitiesWithPhotos amenities={project.amenities!} amenityImages={project.amenity_images} />
@@ -1008,7 +1008,7 @@ export default function ProjectDetailLayout({
             <div className="jj-card-inner">
               <div className="flex items-center justify-between gap-4 flex-wrap mb-4">
                 <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2">
-                  <MapIcon className="w-5 h-5 text-gold" />
+                  <MapIcon className="w-5 h-5 text-[#1A1A1A]" />
                   Project Location
                 </h3>
                 <a
@@ -1042,7 +1042,7 @@ export default function ProjectDetailLayout({
 
               {/* Location Image */}
               {project.location_image_url && (
-                <div className="mb-6 rounded-xl overflow-hidden border border-gold/30">
+                <div className="mb-6 rounded-xl overflow-hidden border border-[#B89555]/30">
                   <SafeImage 
                     src={project.location_image_url} 
                     alt={`${project.name} Location`} 
@@ -1139,13 +1139,13 @@ export default function ProjectDetailLayout({
                   </p>
                   <ul className="space-y-2 text-sm text-muted-foreground mb-6">
                     <li className="flex items-center gap-2">
-                      <Star className="w-4 h-4 text-gold" /> Full floor plan layouts
+                      <Star className="w-4 h-4 text-[#1A1A1A]" /> Full floor plan layouts
                     </li>
                     <li className="flex items-center gap-2">
-                      <Star className="w-4 h-4 text-gold" /> Detailed specifications
+                      <Star className="w-4 h-4 text-[#1A1A1A]" /> Detailed specifications
                     </li>
                     <li className="flex items-center gap-2">
-                      <Star className="w-4 h-4 text-gold" /> Payment plan breakdown
+                      <Star className="w-4 h-4 text-[#1A1A1A]" /> Payment plan breakdown
                     </li>
                   </ul>
                 </div>
@@ -1213,7 +1213,7 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
            <div className="py-6">
               <div className="flex items-center justify-center gap-6">
                 <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-                <div className="w-2 h-2 rotate-45 bg-gold/40" />
+                <div className="w-2 h-2 rotate-45 bg-[#EFE6D6]/40" />
                 <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
               </div>
             </div>
@@ -1239,7 +1239,7 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
              <div ref={faqRef} id="faq" className="mb-14 scroll-mt-40">
                <div className="jj-card-inner">
                  <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-6">
-                   <HelpCircle className="w-5 h-5 text-gold" />
+                   <HelpCircle className="w-5 h-5 text-[#1A1A1A]" />
                    Useful information about {project.name}
                  </h3>
                  <Accordion type="single" collapsible className="w-full">

@@ -148,7 +148,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
 
   const getStatusBadge = (status: Task['status']) => {
     const configs = {
-      pending_approval: { icon: Clock, label: 'Pending Approval', className: 'bg-amber-500/20 text-amber-400' },
+      pending_approval: { icon: Clock, label: 'Pending Approval', className: 'bg-amber-500/20 text-[#1A1A1A]' },
       approved: { icon: CheckCircle, label: 'Approved', className: 'bg-green-500/20 text-green-400' },
       in_progress: { icon: Code2, label: 'In Progress', className: 'bg-blue-500/20 text-blue-400' },
       completed: { icon: CheckCircle, label: 'Completed', className: 'bg-emerald-500/20 text-emerald-400' },
@@ -167,12 +167,12 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
   return (
     <div className="space-y-6">
       {/* Persona Header */}
-      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/20 shadow-lg overflow-hidden">
+      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/20 shadow-lg overflow-hidden">
         <CardContent className="p-6">
           <div className="flex items-start gap-6">
             {/* Photo */}
             <div className="relative">
-              <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-gold/30 shadow-lg">
+              <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-[#B89555]/30 shadow-lg">
                 <img 
                   src={webDevPhoto} 
                   alt="Marcus Chen - AI Web Developer"
@@ -191,7 +191,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2">
                 <h2 className="text-2xl font-bold text-[#1A1A1A]">Marcus Chen</h2>
-                <Badge className="bg-gold/20 text-gold border border-gold/30">
+                <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border border-[#B89555]/30">
                   <Code2 className="w-3 h-3 mr-1" />
                   AI Web Developer
                 </Badge>
@@ -214,7 +214,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
 
               {/* Languages */}
               <div className="flex items-center gap-2">
-                <Languages className="w-4 h-4 text-gold" />
+                <Languages className="w-4 h-4 text-[#1A1A1A]" />
                 <span className="text-sm text-[#1A1A1A]/70">
                   {LANGUAGES.join(' • ')}
                 </span>
@@ -238,10 +238,10 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
 
       <div className="grid lg:grid-cols-2 gap-6">
         {/* Task Queue */}
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/20">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/20">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg font-semibold text-[#1A1A1A] flex items-center gap-2">
-              <FileCode className="w-5 h-5 text-gold" />
+              <FileCode className="w-5 h-5 text-[#1A1A1A]" />
               Development Tasks
               <Badge className="ml-auto bg-[#F7F2EA] text-[#1A1A1A]/70">
                 {tasks.filter(t => t.status !== 'completed').length} Active
@@ -283,7 +283,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
                             <Button 
                               size="sm"
                               onClick={() => handleApproveTask(task.id)}
-                              className="bg-gold hover:bg-gold/90 text-[#1A1A1A]"
+                              className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]"
                             >
                               Approve
                             </Button>
@@ -332,10 +332,10 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
         </Card>
 
         {/* Version History */}
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/20">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/20">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg font-semibold text-[#1A1A1A] flex items-center gap-2">
-              <GitBranch className="w-5 h-5 text-gold" />
+              <GitBranch className="w-5 h-5 text-[#1A1A1A]" />
               Version History
               <Badge className="ml-auto bg-[#F7F2EA] text-[#1A1A1A]/70">
                 {versions.length} Versions
@@ -355,7 +355,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
                   >
                     <div className="flex items-start justify-between gap-3 mb-2">
                       <div className="flex items-center gap-2">
-                        <History className="w-4 h-4 text-gold" />
+                        <History className="w-4 h-4 text-[#1A1A1A]" />
                         <span className="font-mono font-medium text-[#1A1A1A]">{version.id}</span>
                         {index === 0 && (
                           <Badge className="bg-green-500/20 text-green-600">Current</Badge>
@@ -374,7 +374,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
                           onRestoreVersion?.(version.id);
                           toast.success(`Restored to ${version.id}`);
                         }}
-                        className="text-gold border-gold/30 hover:bg-gold/10"
+                        className="text-[#1A1A1A] border-[#B89555]/30 hover:bg-[#EFE6D6]/10"
                       >
                         <History className="w-3 h-3 mr-1" />
                         Restore
@@ -400,10 +400,10 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
       </div>
 
       {/* Connected Tools */}
-      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/20">
+      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/20">
         <CardHeader className="pb-3">
           <CardTitle className="text-lg font-semibold text-[#1A1A1A] flex items-center gap-2">
-            <Layers className="w-5 h-5 text-gold" />
+            <Layers className="w-5 h-5 text-[#1A1A1A]" />
             Connected AI Tools
           </CardTitle>
           <p className="text-sm text-[#1A1A1A]/70">
@@ -420,7 +420,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
             ].map((tool) => (
               <div
                 key={tool.name}
-                className="p-3 bg-[#FDFBF7] rounded-xl border border-[#B89555]/30 flex items-center gap-3 hover:border-gold/50 hover:shadow-md transition-all cursor-pointer"
+                className="p-3 bg-[#FDFBF7] rounded-xl border border-[#B89555]/30 flex items-center gap-3 hover:border-[#B89555]/50 hover:shadow-md transition-all cursor-pointer"
               >
                 <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${tool.color} flex items-center justify-center`}>
                   <tool.icon className="w-5 h-5 text-white" />

@@ -54,7 +54,7 @@ export default function MarketReportHeroBook({ className, pageSource = "homepage
           >
             {/* Book Cover */}
             <div
-              className="relative bg-gradient-to-br from-zinc-900 via-black to-zinc-900 rounded-lg overflow-hidden shadow-2xl border border-gold/30"
+              className="relative bg-gradient-to-br from-zinc-900 via-black to-zinc-900 rounded-lg overflow-hidden shadow-2xl border border-[#B89555]/30"
               style={{
                 boxShadow:
                   "20px 20px 60px rgba(0,0,0,0.8), -5px -5px 20px rgba(168, 146, 90, 0.1)",
@@ -62,7 +62,7 @@ export default function MarketReportHeroBook({ className, pageSource = "homepage
             >
               {/* Book Spine Effect */}
               <div
-                className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-zinc-800 via-zinc-700 to-zinc-900 border-r border-gold/30"
+                className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-zinc-800 via-zinc-700 to-zinc-900 border-r border-[#B89555]/30"
                 style={{
                   transformStyle: "preserve-3d",
                   transform: "rotateY(-90deg) translateX(-16px)",
@@ -71,7 +71,7 @@ export default function MarketReportHeroBook({ className, pageSource = "homepage
               >
                 <div className="absolute inset-0 flex items-center justify-center">
                   <span
-                    className="text-gold text-[9px] font-bold tracking-[0.15em] uppercase whitespace-nowrap"
+                    className="text-[#1A1A1A] text-[9px] font-bold tracking-[0.15em] uppercase whitespace-nowrap"
                     style={{ transform: "rotate(-90deg)", textShadow: "0 0 10px rgba(200,167,102,0.5)" }}
                   >
                     JBJ Global Real Estate 2026
@@ -96,7 +96,7 @@ export default function MarketReportHeroBook({ className, pageSource = "homepage
               <div className="p-6 md:p-8 relative">
                 <div className="w-16 h-1 bg-gradient-to-r from-gold to-gold-dark mb-4" />
 
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gold/10 border border-gold/30 text-gold text-[10px] uppercase tracking-[0.2em] mb-4">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#EFE6D6]/10 border border-[#B89555]/30 text-[#1A1A1A] text-[10px] uppercase tracking-[0.2em] mb-4">
                   <Sparkles className="w-3 h-3" />
                   Latest Edition 2026
                 </div>
@@ -105,7 +105,7 @@ export default function MarketReportHeroBook({ className, pageSource = "homepage
                   className="text-white text-xl md:text-2xl font-bold leading-tight mb-2"
                 >
                   UAE Real Estate
-                  <span className="block text-gold">Market Intelligence</span>
+                  <span className="block text-[#1A1A1A]">Market Intelligence</span>
                 </h3>
 
                 <FounderContent fallback={null}>
@@ -130,7 +130,7 @@ export default function MarketReportHeroBook({ className, pageSource = "homepage
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="absolute -bottom-2 -right-4 md:right-8 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-gold/50 px-4 py-2 rounded-full shadow-lg"
+            className="absolute -bottom-2 -right-4 md:right-8 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/50 px-4 py-2 rounded-full shadow-lg"
           >
             <span className="text-xs font-bold uppercase tracking-wider">Free Download</span>
           </motion.div>

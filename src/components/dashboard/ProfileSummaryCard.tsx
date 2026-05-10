@@ -81,8 +81,8 @@ const ProfileSummaryCard = () => {
     <Card className="border border-border bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))]">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="flex items-center gap-2 text-lg">
-          <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center">
-            <User className="w-4 h-4 text-gold" />
+          <div className="w-8 h-8 rounded-lg bg-[#EFE6D6]/10 border border-[#B89555]/30 flex items-center justify-center">
+            <User className="w-4 h-4 text-[#1A1A1A]" />
           </div>
           My Profile
         </CardTitle>
@@ -110,7 +110,7 @@ const ProfileSummaryCard = () => {
               <div className="flex-1 min-w-0">
                 <p className="text-lg font-semibold text-foreground truncate">{displayName}</p>
                 <div className="flex flex-wrap items-center gap-2 mt-1">
-                  <Badge variant="outline" className="border-gold/40 text-foreground bg-gold/10 text-xs">
+                  <Badge variant="outline" className="border-[#B89555]/40 text-foreground bg-[#EFE6D6]/10 text-xs">
                     {roleLabel}
                   </Badge>
                   
@@ -125,7 +125,7 @@ const ProfileSummaryCard = () => {
                       </Badge>
                     </>
                   ) : (
-                    <Badge className="bg-gold/20 text-gold border-gold/40 text-xs">
+                    <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/40 text-xs">
                       {singleTierName}
                     </Badge>
                   )}
@@ -136,7 +136,7 @@ const ProfileSummaryCard = () => {
               </div>
             </div>
 
-            <Button variant="link" className="w-full text-gold mt-4 p-0" asChild>
+            <Button variant="link" className="w-full text-[#1A1A1A] mt-4 p-0" asChild>
               <Link to="/profile">
                 Edit Profile
                 <ChevronRight className="w-4 h-4 ml-1" />

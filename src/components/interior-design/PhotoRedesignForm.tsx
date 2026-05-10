@@ -98,7 +98,7 @@ const PhotoRedesignForm = ({
   return (
     <div className="w-full space-y-6">
       {/* Photo Upload */}
-      <div className="bg-zinc-900/60 border border-blue-500/30 rounded-2xl p-6">
+      <div className="bg-[#FDFBF7]/60 border border-blue-500/30 rounded-2xl p-6">
         <div className="flex items-center gap-3 mb-5">
           <Camera className="w-5 h-5 text-blue-400" />
           <h3 className="text-lg font-semibold text-white">Upload Your Room Photos</h3>
@@ -151,7 +151,7 @@ const PhotoRedesignForm = ({
       </div>
 
       {/* Design Style */}
-      <div className="bg-zinc-900/60 border border-blue-500/30 rounded-2xl p-6">
+      <div className="bg-[#FDFBF7]/60 border border-blue-500/30 rounded-2xl p-6">
         <div className="flex items-center gap-3 mb-5">
           <Wand2 className="w-5 h-5 text-blue-400" />
           <h3 className="text-lg font-semibold text-white">Target Design Style</h3>
@@ -169,7 +169,7 @@ const PhotoRedesignForm = ({
                   p-4 rounded-xl border text-center transition-all
                   ${isSelected
                     ? 'bg-blue-500/20 border-blue-500/50 text-white'
-                    : 'bg-zinc-800/50 border-[#1A1A1A] text-white/70 hover:border-[#1A1A1A] hover:text-white/85'
+                    : 'bg-[#1A1A1A]/50 border-[#1A1A1A] text-white/70 hover:border-[#1A1A1A] hover:text-white/85'
                   }
                 `}
               >
@@ -182,7 +182,7 @@ const PhotoRedesignForm = ({
       </div>
 
       {/* Color Palette */}
-      <div className="bg-zinc-900/60 border border-blue-500/30 rounded-2xl p-6">
+      <div className="bg-[#FDFBF7]/60 border border-blue-500/30 rounded-2xl p-6">
         <div className="flex items-center gap-3 mb-5">
           <div className="w-5 h-5 rounded-full bg-gradient-to-r from-blue-500 via-cyan-500 to-teal-500" />
           <h3 className="text-lg font-semibold text-white">Color Palette</h3>
@@ -200,7 +200,7 @@ const PhotoRedesignForm = ({
                   p-4 rounded-xl border transition-all
                   ${isSelected
                     ? 'bg-blue-500/20 border-blue-500/50'
-                    : 'bg-zinc-800/50 border-[#1A1A1A] hover:border-[#1A1A1A]'
+                    : 'bg-[#1A1A1A]/50 border-[#1A1A1A] hover:border-[#1A1A1A]'
                   }
                 `}
               >
@@ -221,17 +221,17 @@ const PhotoRedesignForm = ({
       </div>
 
       {/* Custom Notes */}
-      <div className="bg-zinc-900/60 border border-blue-500/30 rounded-2xl p-6">
+      <div className="bg-[#FDFBF7]/60 border border-blue-500/30 rounded-2xl p-6">
         <div className="flex items-center gap-3 mb-5">
           <h3 className="text-lg font-semibold text-white">Redesign Instructions</h3>
-          <Badge className="bg-zinc-700 text-white/85">Optional</Badge>
+          <Badge className="bg-[#1A1A1A] text-white/85">Optional</Badge>
         </div>
         
         <Textarea
           value={customNotes}
           onChange={(e) => onCustomNotesChange(e.target.value)}
           placeholder="Describe what you'd like to change: remove furniture, add plants, change lighting, update color scheme..."
-          className="bg-zinc-800/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 min-h-[100px] focus:border-blue-500/50"
+          className="bg-[#1A1A1A]/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 min-h-[100px] focus:border-blue-500/50"
           maxLength={1000}
         />
       </div>

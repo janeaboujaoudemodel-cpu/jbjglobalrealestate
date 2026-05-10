@@ -118,7 +118,7 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
           {/* Spine Text - Vertical - Extra readable on thicker spine */}
           <div className="absolute inset-0 flex items-center justify-center">
             <span 
-              className="text-gold font-bold tracking-[0.35em] uppercase whitespace-nowrap"
+              className="text-[#1A1A1A] font-bold tracking-[0.35em] uppercase whitespace-nowrap"
               style={{ 
                 writingMode: "vertical-rl", 
                 textOrientation: "mixed",
@@ -184,7 +184,7 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
             <div className="mb-3 md:mb-4">
               <div className="flex flex-col items-center">
                 <span 
-                  className="text-gold font-bold tracking-[0.3em] uppercase"
+                  className="text-[#1A1A1A] font-bold tracking-[0.3em] uppercase"
                   style={{ 
                     fontSize: size === "sm" ? "28px" : size === "md" ? "36px" : "44px",
                     textShadow: "0 2px 8px rgba(168,146,90,0.4)",
@@ -208,7 +208,7 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
             >
               UAE Real Estate
             </h3>
-            <p className={`text-gold font-medium ${fontSize} tracking-wide`}>
+            <p className={`text-[#1A1A1A] font-medium ${fontSize} tracking-wide`}>
               Market Intelligence
             </p>
 
@@ -216,8 +216,8 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
             <div className="w-8 md:w-10 h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent my-2 md:my-3" />
 
             {/* Edition badge */}
-            <div className="px-3 md:px-4 py-1.5 border border-gold/40 rounded bg-[#1A1A1A]/60 backdrop-blur-sm">
-              <span className="text-gold text-[7px] md:text-[9px] font-medium tracking-[0.15em] uppercase">
+            <div className="px-3 md:px-4 py-1.5 border border-[#B89555]/40 rounded bg-[#1A1A1A]/60 backdrop-blur-sm">
+              <span className="text-[#1A1A1A] text-[7px] md:text-[9px] font-medium tracking-[0.15em] uppercase">
                 {new Date().getFullYear()}–{new Date().getFullYear() + 1} Edition
               </span>
             </div>
@@ -301,7 +301,7 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
           }}
         >
           {/* Back cover minimal design */}
-          <div className="absolute inset-0 border border-gold/20 rounded-l-md" />
+          <div className="absolute inset-0 border border-[#B89555]/20 rounded-l-md" />
           <div className="absolute inset-0 flex items-center justify-center">
             <span className="text-[#1A1A1A]/70 text-xs uppercase tracking-[0.2em]">
               JBJ Global

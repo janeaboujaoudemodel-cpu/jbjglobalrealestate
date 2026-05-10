@@ -65,7 +65,7 @@ export function CongratulationsModal({
               }}
               className={cn(
                 'absolute w-2 h-2 rounded-full',
-                i % 4 === 0 ? 'bg-gold' :
+                i % 4 === 0 ? 'bg-[#EFE6D6]' :
                 i % 4 === 1 ? 'bg-green-500' :
                 i % 4 === 2 ? 'bg-champagne' :
                 'bg-amber-400'
@@ -95,11 +95,11 @@ export function CongratulationsModal({
             className="text-center space-y-2 mb-6"
           >
             <div className="flex items-center justify-center gap-2">
-              <Sparkles className="h-5 w-5 text-gold" />
+              <Sparkles className="h-5 w-5 text-[#1A1A1A]" />
               <h2 className="text-2xl font-bold bg-gradient-to-r from-gold via-amber-500 to-champagne bg-clip-text text-transparent">
                 Congratulations!
               </h2>
-              <Sparkles className="h-5 w-5 text-gold" />
+              <Sparkles className="h-5 w-5 text-[#1A1A1A]" />
             </div>
             <p className="text-muted-foreground">
               Your listing is now live on JBJ Global Real Estate

@@ -165,35 +165,35 @@ const ReellyEnrichmentPanel = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-        <Card className="bg-card border border-gold/20">
+        <Card className="bg-card border border-[#B89555]/20">
           <CardContent className="p-4 text-center">
-            <Database className="w-5 h-5 text-gold mx-auto mb-1" />
+            <Database className="w-5 h-5 text-[#1A1A1A] mx-auto mb-1" />
             <p className="text-xs text-muted-foreground">Total Projects</p>
             <p className="text-2xl font-bold text-foreground">{stats?.total_projects?.toLocaleString() ?? "—"}</p>
           </CardContent>
         </Card>
-        <Card className="bg-card border border-gold/20">
+        <Card className="bg-card border border-[#B89555]/20">
           <CardContent className="p-4 text-center">
             <CheckCircle2 className="w-5 h-5 text-emerald-600 mx-auto mb-1" />
             <p className="text-xs text-muted-foreground">Enriched</p>
             <p className="text-2xl font-bold text-emerald-600">{stats?.enriched?.toLocaleString() ?? "—"}</p>
           </CardContent>
         </Card>
-        <Card className="bg-card border border-gold/20">
+        <Card className="bg-card border border-[#B89555]/20">
           <CardContent className="p-4 text-center">
             <AlertCircle className="w-5 h-5 text-amber-600 mx-auto mb-1" />
             <p className="text-xs text-muted-foreground">Remaining</p>
             <p className="text-2xl font-bold text-amber-600">{stats?.remaining?.toLocaleString() ?? "—"}</p>
           </CardContent>
         </Card>
-        <Card className="bg-card border border-gold/20">
+        <Card className="bg-card border border-[#B89555]/20">
           <CardContent className="p-4 text-center">
             <Image className="w-5 h-5 text-blue-600 mx-auto mb-1" />
             <p className="text-xs text-muted-foreground">Total Images</p>
             <p className="text-2xl font-bold text-blue-600">{stats?.total_images?.toLocaleString() ?? "—"}</p>
           </CardContent>
         </Card>
-        <Card className="bg-card border border-gold/20">
+        <Card className="bg-card border border-[#B89555]/20">
           <CardContent className="p-4 text-center">
             <FileText className="w-5 h-5 text-purple-600 mx-auto mb-1" />
             <p className="text-xs text-muted-foreground">Total Docs</p>
@@ -219,7 +219,7 @@ const ReellyEnrichmentPanel = () => {
           <Button
             onClick={startBackgroundEnrich}
             disabled={isStarting}
-            className="bg-gold hover:bg-gold/90 text-foreground font-semibold"
+            className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-foreground font-semibold"
           >
             {isStarting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Play className="w-4 h-4 mr-2" />}
             Start Background Enrichment
@@ -229,7 +229,7 @@ const ReellyEnrichmentPanel = () => {
             <Pause className="w-4 h-4 mr-2" /> Stop After Current
           </Button>
         )}
-        <Button onClick={fetchStats} disabled={isLoadingStats} variant="outline" className="border-gold/30">
+        <Button onClick={fetchStats} disabled={isLoadingStats} variant="outline" className="border-[#B89555]/30">
           {isLoadingStats ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <RefreshCw className="w-4 h-4 mr-2" />}
           Refresh Stats
         </Button>
@@ -237,9 +237,9 @@ const ReellyEnrichmentPanel = () => {
 
       {/* Job progress stats */}
       {job && (job.status === "running" || job.status === "completed" || job.status === "stopped") && (
-        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20 rounded-lg p-4">
+        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/20 rounded-lg p-4">
           <div className="flex items-center gap-2 mb-3">
-            {isActive && <Loader2 className="w-4 h-4 animate-spin text-gold" />}
+            {isActive && <Loader2 className="w-4 h-4 animate-spin text-[#1A1A1A]" />}
             {job.status === "completed" && <CheckCircle2 className="w-4 h-4 text-emerald-600" />}
             {job.status === "stopped" && <CloudOff className="w-4 h-4 text-amber-600" />}
             <span className="text-foreground font-semibold text-sm">
@@ -262,7 +262,7 @@ const ReellyEnrichmentPanel = () => {
 
       {/* Live log */}
       {job?.log && job.log.length > 0 && (
-        <Card className="bg-zinc-950 border border-[#1A1A1A]">
+        <Card className="bg-[#FDFBF7] border border-[#1A1A1A]">
           <CardHeader className="pb-2">
             <CardTitle className="text-[#1A1A1A]/70 text-sm flex items-center gap-2">
               <Layers className="w-4 h-4" />
@@ -276,7 +276,7 @@ const ReellyEnrichmentPanel = () => {
                   entry.msg.includes("[ERROR]") ? "text-red-400" :
                   entry.msg.includes("[OK]") ? "text-emerald-400" :
                   entry.msg.includes("[COMPLETE]") ? "text-yellow-300" :
-                  entry.msg.includes("[WARN]") ? "text-amber-400" :
+                  entry.msg.includes("[WARN]") ? "text-[#1A1A1A]" :
                   "text-[#1A1A1A]/70"
                 }`}>
                   <span className="text-[#1A1A1A]/70">[{new Date(entry.time).toLocaleTimeString()}]</span> {entry.msg}
@@ -415,15 +415,15 @@ const ProvidentEnrichmentPanel = () => {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-        <Card className="bg-card border border-gold/20">
+        <Card className="bg-card border border-[#B89555]/20">
           <CardContent className="p-4 text-center">
-            <Database className="w-5 h-5 text-gold mx-auto mb-1" />
+            <Database className="w-5 h-5 text-[#1A1A1A] mx-auto mb-1" />
             <p className="text-xs text-muted-foreground">Published Projects</p>
             <p className="text-2xl font-bold text-foreground">{gapStats?.total?.toLocaleString() ?? "—"}</p>
           </CardContent>
         </Card>
         <Card
-          className="bg-card border border-gold/20 cursor-pointer hover:border-amber-400 hover:shadow-md transition-all"
+          className="bg-card border border-[#B89555]/20 cursor-pointer hover:border-amber-400 hover:shadow-md transition-all"
           onClick={() => navigate('/owner/listing-admin?view=projects&statusFilter=needs-work')}
         >
           <CardContent className="p-4 text-center">
@@ -434,7 +434,7 @@ const ProvidentEnrichmentPanel = () => {
           </CardContent>
         </Card>
         <Card
-          className="bg-card border border-gold/20 cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all"
+          className="bg-card border border-[#B89555]/20 cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all"
           onClick={() => navigate('/owner/listing-admin?view=projects&statusFilter=enriched')}
         >
           <CardContent className="p-4 text-center">
@@ -463,7 +463,7 @@ const ProvidentEnrichmentPanel = () => {
 
       <div className="flex items-center gap-3">
         {!isRunning ? (
-          <Button onClick={startProvidentEnrich} className="bg-gold hover:bg-gold/90 text-foreground font-semibold">
+          <Button onClick={startProvidentEnrich} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-foreground font-semibold">
             <Play className="w-4 h-4 mr-2" />
             Start Provident Enrichment
           </Button>
@@ -473,16 +473,16 @@ const ProvidentEnrichmentPanel = () => {
             Stop
           </Button>
         )}
-        <Button onClick={fetchGapStats} disabled={isLoadingStats} variant="outline" className="border-gold/30">
+        <Button onClick={fetchGapStats} disabled={isLoadingStats} variant="outline" className="border-[#B89555]/30">
           {isLoadingStats ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <RefreshCw className="w-4 h-4 mr-2" />}
           Refresh
         </Button>
       </div>
 
       {(isRunning || batchCount > 0) && (
-        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20 rounded-lg p-4">
+        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/20 rounded-lg p-4">
           <div className="flex items-center gap-2 mb-3">
-            {isRunning && <Loader2 className="w-4 h-4 animate-spin text-gold" />}
+            {isRunning && <Loader2 className="w-4 h-4 animate-spin text-[#1A1A1A]" />}
             <span className="text-foreground font-semibold text-sm">
               {isRunning ? "Running..." : "Completed"} — Batch #{batchCount}
             </span>
@@ -498,7 +498,7 @@ const ProvidentEnrichmentPanel = () => {
       )}
 
       {log.length > 0 && (
-        <Card className="bg-zinc-950 border border-[#1A1A1A]">
+        <Card className="bg-[#FDFBF7] border border-[#1A1A1A]">
           <CardHeader className="pb-2">
             <CardTitle className="text-[#1A1A1A]/70 text-sm flex items-center gap-2">
               <Layers className="w-4 h-4" />
@@ -512,7 +512,7 @@ const ProvidentEnrichmentPanel = () => {
                   line.includes("[ERROR]") ? "text-red-400" :
                   line.includes("[OK]") || line.includes("[COMPLETE]") ? "text-emerald-400" :
                   line.includes("[START]") ? "text-yellow-300" :
-                  line.includes("[WARN]") ? "text-amber-400" :
+                  line.includes("[WARN]") ? "text-[#1A1A1A]" :
                   line.includes("[BATCH]") ? "text-blue-400" :
                   "text-[#1A1A1A]/70"
                 }`}>{line}</div>
@@ -536,9 +536,9 @@ export const EnrichmentCenter = ({ activeSource = "provident" }: EnrichmentCente
   
   return (
     <div className="space-y-6">
-      <div className="bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/30 rounded-xl p-5">
+      <div className="bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] border-2 border-[#B89555]/30 rounded-xl p-5">
         <h2 className="text-foreground font-bold text-lg flex items-center gap-2">
-          <Zap className="w-5 h-5 text-gold" />
+          <Zap className="w-5 h-5 text-[#1A1A1A]" />
           Project Enrichment & Extraction
         </h2>
         <p className="text-muted-foreground text-sm mt-1">
@@ -550,17 +550,17 @@ export const EnrichmentCenter = ({ activeSource = "provident" }: EnrichmentCente
       <HandoverBackfillCard />
 
       <Tabs defaultValue={defaultTab} className="space-y-4">
-        <TabsList className="bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/30 p-1">
+        <TabsList className="bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] border-2 border-[#B89555]/30 p-1">
           <TabsTrigger
             value="provident"
-            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:text-foreground"
           >
             <Database className="w-4 h-4 mr-2" />
             Source Enrichment
           </TabsTrigger>
           <TabsTrigger
             value="audit"
-            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:text-foreground"
           >
             <Eye className="w-4 h-4 mr-2" />
             Audit & Diff Viewer
@@ -568,7 +568,7 @@ export const EnrichmentCenter = ({ activeSource = "provident" }: EnrichmentCente
           {activeSource === "reelly" && (
             <TabsTrigger
               value="reelly"
-              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:text-foreground"
             >
               <Globe className="w-4 h-4 mr-2" />
               Reelly API Enrichment
@@ -577,10 +577,10 @@ export const EnrichmentCenter = ({ activeSource = "provident" }: EnrichmentCente
         </TabsList>
 
         <TabsContent value="provident" className="mt-0">
-          <Card className="bg-card border-2 border-gold/30">
+          <Card className="bg-card border-2 border-[#B89555]/30">
             <CardHeader className="pb-3">
               <CardTitle className="text-foreground text-base flex items-center gap-2">
-                <Database className="w-5 h-5 text-gold" />
+                <Database className="w-5 h-5 text-[#1A1A1A]" />
                 Provident Enrichment
               </CardTitle>
               <p className="text-muted-foreground text-sm">
@@ -595,10 +595,10 @@ export const EnrichmentCenter = ({ activeSource = "provident" }: EnrichmentCente
         </TabsContent>
 
         <TabsContent value="audit" className="mt-0">
-          <Card className="bg-card border-2 border-gold/30">
+          <Card className="bg-card border-2 border-[#B89555]/30">
             <CardHeader className="pb-3">
               <CardTitle className="text-foreground text-base flex items-center gap-2">
-                <Eye className="w-5 h-5 text-gold" />
+                <Eye className="w-5 h-5 text-[#1A1A1A]" />
                 Enrichment Audit & Evidence
               </CardTitle>
               <p className="text-muted-foreground text-sm">
@@ -613,10 +613,10 @@ export const EnrichmentCenter = ({ activeSource = "provident" }: EnrichmentCente
 
         {activeSource === "reelly" && (
           <TabsContent value="reelly" className="mt-0">
-            <Card className="bg-card border-2 border-gold/30">
+            <Card className="bg-card border-2 border-[#B89555]/30">
               <CardHeader className="pb-3">
                 <CardTitle className="text-foreground text-base flex items-center gap-2">
-                  <Globe className="w-5 h-5 text-gold" />
+                  <Globe className="w-5 h-5 text-[#1A1A1A]" />
                   Reelly API Auto-Enrichment (Background)
                 </CardTitle>
                 <p className="text-muted-foreground text-sm">

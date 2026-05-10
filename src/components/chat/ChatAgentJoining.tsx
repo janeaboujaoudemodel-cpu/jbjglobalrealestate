@@ -43,7 +43,7 @@ const ChatAgentJoining = ({ agent, userFirstName, onAgentReady }: ChatAgentJoini
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8"
         >
-          <h3 className="text-gold text-lg font-semibold">JBJ GLOBAL REAL ESTATE</h3>
+          <h3 className="text-[#1A1A1A] text-lg font-semibold">JBJ GLOBAL REAL ESTATE</h3>
           <p className="text-[#1A1A1A]/70 text-sm"><T>Chat Support</T></p>
         </motion.div>
 
@@ -83,7 +83,7 @@ const ChatAgentJoining = ({ agent, userFirstName, onAgentReady }: ChatAgentJoini
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="text-gold text-sm font-medium"
+                className="text-[#1A1A1A] text-sm font-medium"
               >
                 <T>Starting conversation...</T>
               </motion.p>
@@ -101,7 +101,7 @@ const ChatAgentJoining = ({ agent, userFirstName, onAgentReady }: ChatAgentJoini
           {/* Agent Photo */}
           <div className="relative">
             <div className={`w-24 h-24 rounded-full overflow-hidden border-4 ${
-              stage === 'connecting' ? 'border-gold/30' : 'border-gold'
+              stage === 'connecting' ? 'border-[#B89555]/30' : 'border-[#B89555]'
             } transition-colors duration-500 shadow-xl`}>
               <img 
                 src={agent.photo} 
@@ -112,8 +112,8 @@ const ChatAgentJoining = ({ agent, userFirstName, onAgentReady }: ChatAgentJoini
             
             {/* Status Indicator */}
             <div className={`absolute -bottom-1 -right-1 w-8 h-8 rounded-full flex items-center justify-center ${
-              stage === 'connecting' ? 'bg-gold/20' : 'bg-emerald-500'
-            } transition-colors duration-500 border-2 border-gold/40`}>
+              stage === 'connecting' ? 'bg-[#EFE6D6]/20' : 'bg-emerald-500'
+            } transition-colors duration-500 border-2 border-[#B89555]/40`}>
               {stage === 'connecting' ? (
                 <Loader2 className="w-4 h-4 text-[#1A1A1A]/60 animate-spin" />
               ) : (
@@ -130,7 +130,7 @@ const ChatAgentJoining = ({ agent, userFirstName, onAgentReady }: ChatAgentJoini
             className="text-center mt-4"
           >
             <h4 className="text-[#1A1A1A] font-semibold text-lg">{agent.fullName}</h4>
-            <p className="text-gold text-sm">{agent.title}</p>
+            <p className="text-[#1A1A1A] text-sm">{agent.title}</p>
           </motion.div>
         </motion.div>
 
@@ -146,17 +146,17 @@ const ChatAgentJoining = ({ agent, userFirstName, onAgentReady }: ChatAgentJoini
               <motion.span
                 animate={{ opacity: [0.4, 1, 0.4] }}
                 transition={{ duration: 1.2, repeat: Infinity, delay: 0 }}
-                className="w-1.5 h-1.5 bg-gold rounded-full"
+                className="w-1.5 h-1.5 bg-[#EFE6D6] rounded-full"
               />
               <motion.span
                 animate={{ opacity: [0.4, 1, 0.4] }}
                 transition={{ duration: 1.2, repeat: Infinity, delay: 0.2 }}
-                className="w-1.5 h-1.5 bg-gold rounded-full"
+                className="w-1.5 h-1.5 bg-[#EFE6D6] rounded-full"
               />
               <motion.span
                 animate={{ opacity: [0.4, 1, 0.4] }}
                 transition={{ duration: 1.2, repeat: Infinity, delay: 0.4 }}
-                className="w-1.5 h-1.5 bg-gold rounded-full"
+                className="w-1.5 h-1.5 bg-[#EFE6D6] rounded-full"
               />
             </div>
           </motion.div>

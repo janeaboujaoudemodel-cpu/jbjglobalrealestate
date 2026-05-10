@@ -128,7 +128,7 @@ export function CardLookup() {
     if (type.includes("deal")) return <FileCheck className="h-3 w-3 text-emerald-400" />;
     if (type.includes("visit")) return <MapPin className="h-3 w-3 text-blue-400" />;
     if (type.includes("training")) return <Trophy className="h-3 w-3 text-purple-400" />;
-    return <Star className="h-3 w-3 text-amber-400" />;
+    return <Star className="h-3 w-3 text-[#1A1A1A]" />;
   };
 
   return (

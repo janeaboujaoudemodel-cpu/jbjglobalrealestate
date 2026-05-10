@@ -42,7 +42,7 @@ export default function ReportHistoryArchive({
       market: "bg-blue-500/10 text-blue-600 border-blue-500/30",
       area: "bg-emerald-500/10 text-emerald-600 border-emerald-500/30",
       asset: "bg-purple-500/10 text-purple-600 border-purple-500/30",
-      advisory: "bg-gold/10 text-gold border-gold/30",
+      advisory: "bg-[#EFE6D6]/10 text-[#1A1A1A] border-[#B89555]/30",
     };
     const labels = {
       market: "Market",
@@ -56,20 +56,20 @@ export default function ReportHistoryArchive({
   return (
     <section className="space-y-4">
       <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
-        <History className="w-5 h-5 text-gold" />
+        <History className="w-5 h-5 text-[#1A1A1A]" />
         Report History & Archive
       </h2>
       <p className="text-muted-foreground text-sm">
         Previously accessed reports for your account. This is your personal history.
       </p>
 
-      <Card className="border-2 border-gold/30">
+      <Card className="border-2 border-[#B89555]/30">
         <CardHeader className="pb-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <CardTitle className="text-base font-medium">Access History</CardTitle>
             <div className="flex gap-2">
               <Select value={filterType} onValueChange={(v) => setFilterType(v as typeof filterType)}>
-                <SelectTrigger className="w-[140px] border-gold/30">
+                <SelectTrigger className="w-[140px] border-[#B89555]/30">
                   <SelectValue placeholder="Filter type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -83,7 +83,7 @@ export default function ReportHistoryArchive({
               <Button
                 variant="outline"
                 size="sm"
-                className="gap-1 border-gold/30"
+                className="gap-1 border-[#B89555]/30"
                 onClick={() => setSortOrder(sortOrder === "newest" ? "oldest" : "newest")}
               >
                 <ArrowUpDown className="w-4 h-4" />

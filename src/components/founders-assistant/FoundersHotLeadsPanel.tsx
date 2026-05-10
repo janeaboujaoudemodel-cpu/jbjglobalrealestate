@@ -164,7 +164,7 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="w-8 h-8 animate-spin text-gold" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#1A1A1A]" />
       </div>
     );
   }
@@ -172,11 +172,11 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
   return (
     <div className="space-y-6">
       {/* Personal Hot Leads Notice */}
-      <Card className="bg-gradient-to-r from-gold/10 to-amber-500/10 border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+      <Card className="bg-gradient-to-r from-gold/10 to-amber-500/10 border-2 border-[#B89555]/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
         <CardContent className="p-4">
           <div className="flex items-start gap-3">
-            <div className="p-2 rounded-lg bg-gold/20 border border-gold/30">
-              <Bell className="w-5 h-5 text-gold" />
+            <div className="p-2 rounded-lg bg-[#EFE6D6]/20 border border-[#B89555]/30">
+              <Bell className="w-5 h-5 text-[#1A1A1A]" />
             </div>
             <div>
               <h4 className="text-[#1A1A1A] font-semibold">Your Personal Hot Leads</h4>
@@ -191,10 +191,10 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
 
       {/* Stats Overview - White Pearl/Gold Champagne */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
           <CardContent className="p-4 text-center">
-            <Flame className="w-6 h-6 text-gold mx-auto mb-2" />
-            <p className="text-2xl font-bold text-gold">{leads.length}</p>
+            <Flame className="w-6 h-6 text-[#1A1A1A] mx-auto mb-2" />
+            <p className="text-2xl font-bold text-[#1A1A1A]">{leads.length}</p>
             <p className="text-xs text-[#1A1A1A]/70">Total Hot Leads</p>
           </CardContent>
         </Card>
@@ -266,7 +266,7 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
       <ScrollArea className="h-[400px]">
         <div className="space-y-3">
           {leads.length === 0 ? (
-            <Card className="bg-[#FDFBF7] border-2 border-gold/20 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+            <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/20 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
               <CardContent className="p-8 text-center">
                 <Flame className="w-16 h-16 text-[#1A1A1A]/70 mx-auto mb-4" />
                 <h4 className="text-[#1A1A1A] font-semibold mb-2">No Hot Leads</h4>
@@ -322,7 +322,7 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
                               <div className="flex items-center gap-2 flex-wrap">
                                 <h4 className="text-[#1A1A1A] font-semibold truncate">{lead.full_name || 'Unknown'}</h4>
                                 {lead.vip && (
-                                  <Badge className="bg-gold/10 text-gold border border-gold/30">⭐ VIP</Badge>
+                                  <Badge className="bg-[#EFE6D6]/10 text-[#1A1A1A] border border-[#B89555]/30">⭐ VIP</Badge>
                                 )}
                                 <Badge className={`border ${
                                   urgency.level === 'critical' ? 'bg-red-50 text-red-600 border-red-200' :

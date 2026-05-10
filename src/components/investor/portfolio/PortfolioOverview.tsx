@@ -47,15 +47,15 @@ export default function PortfolioOverview({ stats }: PortfolioOverviewProps) {
       label: "Reports Available",
       value: stats.reportsAvailable,
       icon: FileText,
-      color: "text-gold",
-      bg: "bg-gold/10",
+      color: "text-[#1A1A1A]",
+      bg: "bg-[#EFE6D6]/10",
     },
   ];
 
   return (
     <section className="space-y-4">
       <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
-        <Building2 className="w-5 h-5 text-gold" />
+        <Building2 className="w-5 h-5 text-[#1A1A1A]" />
         Portfolio Overview
       </h2>
       <p className="text-muted-foreground text-sm">

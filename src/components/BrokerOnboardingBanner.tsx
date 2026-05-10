@@ -133,14 +133,14 @@ const BrokerOnboardingBanner = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
-        className="bg-gradient-to-r from-zinc-900 via-black to-zinc-900 border-b border-gold/30"
+        className="bg-gradient-to-r from-zinc-900 via-black to-zinc-900 border-b border-[#B89555]/30"
       >
         <div className="container mx-auto px-4 py-4">
           {/* Header Row */}
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gold/30 to-amber-500/20 border border-gold/40 flex items-center justify-center">
-                <Award className="w-5 h-5 text-gold" />
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gold/30 to-amber-500/20 border border-[#B89555]/40 flex items-center justify-center">
+                <Award className="w-5 h-5 text-[#1A1A1A]" />
               </div>
               <div>
                 <h3 className="text-white font-semibold text-lg">Welcome to the Broker Circle</h3>
@@ -159,9 +159,9 @@ const BrokerOnboardingBanner = () => {
           <div className="mb-4">
             <div className="flex items-center justify-between text-sm mb-2">
               <span className="text-white/70">Onboarding Progress</span>
-              <span className="text-gold font-semibold">{completedCount}/{steps.length} Complete</span>
+              <span className="text-[#1A1A1A] font-semibold">{completedCount}/{steps.length} Complete</span>
             </div>
-            <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
+            <div className="h-2 bg-[#1A1A1A] rounded-full overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${progress}%` }}
@@ -182,7 +182,7 @@ const BrokerOnboardingBanner = () => {
                   className={`relative p-3 rounded-xl border transition-all ${
                     step.completed 
                       ? 'bg-emerald-500/10 border-emerald-500/30' 
-                      : 'bg-zinc-800/50 border-[#1A1A1A] hover:border-gold/50 hover:bg-[#1A1A1A]'
+                      : 'bg-[#1A1A1A]/50 border-[#1A1A1A] hover:border-[#B89555]/50 hover:bg-[#1A1A1A]'
                   }`}
                 >
                   <div className="flex items-center gap-2 mb-1">
@@ -194,7 +194,7 @@ const BrokerOnboardingBanner = () => {
                     <span className="text-xs text-white/90">Step {idx + 1}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Icon className={`w-4 h-4 ${step.completed ? 'text-emerald-400' : 'text-gold'}`} />
+                    <Icon className={`w-4 h-4 ${step.completed ? 'text-emerald-400' : 'text-[#1A1A1A]'}`} />
                     <span className={`text-sm font-medium ${step.completed ? 'text-emerald-400' : 'text-white'}`}>
                       {step.title}
                     </span>

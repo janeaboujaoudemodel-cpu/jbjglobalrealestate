@@ -1566,7 +1566,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
           <Card className="bg-card border-border shadow-sm">
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg text-foreground">
-                <RefreshCw className="w-5 h-5 text-gold" />
+                <RefreshCw className="w-5 h-5 text-[#1A1A1A]" />
                 Source Portal Sync Control
                 {isSyncing && !isPaused && (
                   <Badge variant="outline" className="ml-auto bg-blue-100 text-blue-700 border-blue-300">

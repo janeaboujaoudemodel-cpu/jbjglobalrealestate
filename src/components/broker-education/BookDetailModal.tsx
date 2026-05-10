@@ -39,7 +39,7 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
         <DialogHeader>
           <div className="flex items-start gap-5">
             {/* 3D Mini Book Cover */}
@@ -48,7 +48,7 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
               style={{ perspective: '500px' }}
             >
               <div 
-                className="w-28 h-36 rounded-lg bg-gradient-to-br from-zinc-900 via-black to-zinc-900 border border-gold/40 flex items-center justify-center relative overflow-hidden"
+                className="w-28 h-36 rounded-lg bg-gradient-to-br from-zinc-900 via-black to-zinc-900 border border-[#B89555]/40 flex items-center justify-center relative overflow-hidden"
                 style={{
                   transform: 'rotateY(-8deg) rotateX(3deg)',
                   boxShadow: '8px 8px 25px rgba(0,0,0,0.4), -2px -2px 10px rgba(200,167,102,0.15)',
@@ -58,8 +58,8 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
                 <div className="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-gold/30 via-gold/15 to-transparent" />
                 
                 {/* Book number */}
-                <div className="w-12 h-12 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center">
-                  <span className="text-gold text-xl font-bold">{book.book_number}</span>
+                <div className="w-12 h-12 rounded-full bg-[#EFE6D6]/20 border border-[#B89555]/40 flex items-center justify-center">
+                  <span className="text-[#1A1A1A] text-xl font-bold">{book.book_number}</span>
                 </div>
                 
                 {/* Page edges */}
@@ -88,17 +88,17 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
 
         {/* Learning Objective */}
         {book.learning_objective && (
-          <div className="bg-gold/10 border border-gold/30 rounded-lg p-4 mt-4">
+          <div className="bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-lg p-4 mt-4">
             <div className="flex items-center gap-2 mb-2">
-              <Target className="w-4 h-4 text-gold" />
-              <span className="text-gold font-medium text-sm">Learning Objective</span>
+              <Target className="w-4 h-4 text-[#1A1A1A]" />
+              <span className="text-[#1A1A1A] font-medium text-sm">Learning Objective</span>
             </div>
             <p className="text-foreground/70 text-sm">{book.learning_objective}</p>
           </div>
         )}
 
         {/* Progress Bar */}
-        <div className="mt-4 p-4 bg-[#FDFBF7]/50 rounded-lg border border-gold/20">
+        <div className="mt-4 p-4 bg-[#FDFBF7]/50 rounded-lg border border-[#B89555]/20">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium text-foreground">Your Progress</span>
             <span className="text-xs text-muted-foreground">{completedModules} of {modules.length} modules completed</span>
@@ -121,13 +121,13 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
         {/* Modules List */}
         <div className="mt-6">
           <h4 className="text-foreground font-semibold mb-4 flex items-center gap-2">
-            <BookOpen className="w-4 h-4 text-gold" />
+            <BookOpen className="w-4 h-4 text-[#1A1A1A]" />
             Training Modules
           </h4>
           
           {loading ? (
             <div className="flex items-center justify-center py-8">
-              <div className="animate-spin w-6 h-6 border-2 border-gold border-t-transparent rounded-full" />
+              <div className="animate-spin w-6 h-6 border-2 border-[#B89555] border-t-transparent rounded-full" />
             </div>
           ) : (
             <Accordion type="single" collapsible className="space-y-2">
@@ -140,18 +140,18 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
                   <AccordionItem 
                     key={module.id} 
                     value={module.id}
-                    className="border-2 border-gold/30 rounded-lg bg-gradient-to-br from-white/80 via-[#F7F1E6]/50 to-[#ECE2D2]/30 overflow-hidden"
+                    className="border-2 border-[#B89555]/30 rounded-lg bg-gradient-to-br from-white/80 via-[#F7F1E6]/50 to-[#ECE2D2]/30 overflow-hidden"
                   >
-                    <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-gold/10">
+                    <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-[#EFE6D6]/10">
                       <div className="flex items-center gap-3 text-left w-full">
                         {/* Status Icon */}
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                           isLocked
-                            ? 'bg-gold/10 border border-gold/30 text-[#1A1A1A]/70'
+                            ? 'bg-[#EFE6D6]/10 border border-[#B89555]/30 text-[#1A1A1A]/70'
                             : isCompleted 
                               ? 'bg-emerald-500 text-white' 
                               : isCurrentModule 
-                                ? 'bg-gold/20 border-2 border-gold text-gold' 
+                                ? 'bg-[#EFE6D6]/20 border-2 border-[#B89555] text-[#1A1A1A]' 
                                 : 'bg-muted border border-border text-muted-foreground'
                         }`}>
                           {isLocked ? (
@@ -169,12 +169,12 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
                             <Clock className="w-3 h-3" />
                             {module.estimated_minutes} min
                             {isLocked && (
-                              <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-gold/30 text-[#1A1A1A]/70">
+                              <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-[#B89555]/30 text-[#1A1A1A]/70">
                                 Locked
                               </Badge>
                             )}
                             {!isLocked && isCurrentModule && !isCompleted && (
-                              <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-gold text-gold">
+                              <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-[#B89555] text-[#1A1A1A]">
                                 Continue
                               </Badge>
                             )}
@@ -196,7 +196,7 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
                           <Button 
                             size="sm"
                             variant="secondary"
-                            className="bg-gold hover:bg-gold-dark text-[#1A1A1A]"
+                            className="bg-[#EFE6D6] hover:bg-[#EFE6D6]-dark text-[#1A1A1A]"
                           >
                             <Play className="w-3 h-3 mr-2" />
                             {isCompleted ? 'Review Module' : 'Start Module'}
@@ -213,11 +213,11 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
 
         {/* Locked CTA or Internal Notice */}
         {isLocked ? (
-          <div className="mt-6 bg-gold/10 border border-gold/30 rounded-lg p-5 text-center">
-            <Lock className="w-6 h-6 text-gold mx-auto mb-2" />
+          <div className="mt-6 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-lg p-5 text-center">
+            <Lock className="w-6 h-6 text-[#1A1A1A] mx-auto mb-2" />
             <p className="text-foreground font-medium mb-1">Content Locked</p>
             <p className="text-muted-foreground text-xs mb-3">Join the JBJ Broker Circle to access all training modules.</p>
-            <Button size="sm" variant="secondary" className="bg-gold hover:bg-gold/90 text-[#1A1A1A]" asChild>
+            <Button size="sm" variant="secondary" className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]" asChild>
               <Link to="/join">
                 <ArrowRight className="w-3 h-3 mr-2" />
                 Apply to Join
@@ -225,7 +225,7 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
             </Button>
           </div>
         ) : (
-          <div className="mt-6 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/30 rounded-lg p-4">
+          <div className="mt-6 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/30 rounded-lg p-4">
             <p className="text-muted-foreground text-xs text-center">
               This content is proprietary to JBJ Global Real Estate. Internal recognition only — not for external certification.
             </p>

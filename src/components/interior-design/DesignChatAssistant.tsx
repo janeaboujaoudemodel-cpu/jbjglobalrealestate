@@ -133,7 +133,7 @@ What would you like to create today?`,
 
   return (
     <div className="w-full">
-      <div className="bg-zinc-900/60 border border-orange-500/30 rounded-2xl overflow-hidden">
+      <div className="bg-[#FDFBF7]/60 border border-orange-500/30 rounded-2xl overflow-hidden">
         {/* Header */}
         <div className="p-4 border-b border-[#1A1A1A] flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center">
@@ -169,7 +169,7 @@ What would you like to create today?`,
                 max-w-[80%] rounded-2xl p-4
                 ${message.role === 'user' 
                   ? 'bg-orange-500/20 text-white' 
-                  : 'bg-zinc-800/80 text-gray-200'
+                  : 'bg-[#1A1A1A]/80 text-gray-200'
                 }
               `}>
                 {message.image && (
@@ -195,7 +195,7 @@ What would you like to create today?`,
                 <button
                   key={index}
                   onClick={() => setInput(prompt)}
-                  className="text-xs bg-zinc-800 hover:bg-[#1A1A1A] text-white/85 px-3 py-1.5 rounded-full transition-colors"
+                  className="text-xs bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white/85 px-3 py-1.5 rounded-full transition-colors"
                 >
                   {prompt.slice(0, 50)}...
                 </button>
@@ -249,7 +249,7 @@ What would you like to create today?`,
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Describe your dream interior..."
-              className="bg-zinc-800/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 min-h-[44px] max-h-[120px] resize-none flex-1 focus:border-orange-500/50"
+              className="bg-[#1A1A1A]/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 min-h-[44px] max-h-[120px] resize-none flex-1 focus:border-orange-500/50"
               disabled={isProcessing}
             />
             

@@ -26,7 +26,7 @@ export function CertificationSection({ className, isLocked = false }: Certificat
     return (
       <div className={cn("py-12", className)}>
         <div className="flex items-center justify-center">
-          <Loader2 className="w-8 h-8 text-gold animate-spin" />
+          <Loader2 className="w-8 h-8 text-[#1A1A1A] animate-spin" />
         </div>
       </div>
     );
@@ -40,7 +40,7 @@ export function CertificationSection({ className, isLocked = false }: Certificat
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-10">
-          <Badge className="mb-4 bg-gold/20 text-gold border-gold/30">
+          <Badge className="mb-4 bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30">
             <Award className="w-3 h-3 mr-1" />
             Professional Certification
           </Badge>
@@ -65,7 +65,7 @@ export function CertificationSection({ className, isLocked = false }: Certificat
                   {certified ? (
                     <CheckCircle className="w-7 h-7 text-emerald-600" />
                   ) : (
-                    <Award className="w-7 h-7 text-gold" />
+                    <Award className="w-7 h-7 text-[#1A1A1A]" />
                   )}
                 </div>
                 <div>
@@ -85,7 +85,7 @@ export function CertificationSection({ className, isLocked = false }: Certificat
                 </div>
                 <Progress 
                   value={overallProgress.percent} 
-                  className="h-3 bg-gold/10"
+                  className="h-3 bg-[#EFE6D6]/10"
                 />
               </div>
             </div>
@@ -94,8 +94,8 @@ export function CertificationSection({ className, isLocked = false }: Certificat
 
         {/* Locked Banner */}
         {isLocked && (
-          <div className="mb-8 p-4 bg-gold/10 border border-gold/30 rounded-xl flex items-center gap-4">
-            <Lock className="w-6 h-6 text-gold flex-shrink-0" />
+          <div className="mb-8 p-4 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-xl flex items-center gap-4">
+            <Lock className="w-6 h-6 text-[#1A1A1A] flex-shrink-0" />
             <p className="text-[#1A1A1A]/70 text-sm">
               Certification phases are visible for preview. Join the JBJ Broker Circle to start your certification journey.
             </p>

@@ -139,7 +139,7 @@ export default function AddonSelector({
   if (loading) {
     return (
       <div className="flex items-center justify-center py-8">
-        <Loader2 className="w-6 h-6 animate-spin text-gold" />
+        <Loader2 className="w-6 h-6 animate-spin text-[#1A1A1A]" />
       </div>
     );
   }
@@ -160,7 +160,7 @@ export default function AddonSelector({
         return (
           <div key={category} className="space-y-3">
             <div className="flex items-center gap-2 text-white font-medium">
-              <CategoryIcon className="w-4 h-4 text-gold" />
+              <CategoryIcon className="w-4 h-4 text-[#1A1A1A]" />
               {categoryInfo.label}
             </div>
             
@@ -178,7 +178,7 @@ export default function AddonSelector({
                       isIncluded
                         ? "border-green-500/30 bg-green-500/5 cursor-default"
                         : isSelected
-                        ? "border-gold/50 bg-gold/5 cursor-pointer"
+                        ? "border-[#B89555]/50 bg-[#EFE6D6]/5 cursor-pointer"
                         : "border-[#1A1A1A] hover:border-[#1A1A1A] cursor-pointer"
                     }`}
                     onClick={() => !isIncluded && toggleAddon(addon.id)}
@@ -207,7 +207,7 @@ export default function AddonSelector({
                       </div>
                     </div>
                     {!isIncluded && (
-                      <span className="text-gold font-medium text-sm">
+                      <span className="text-[#1A1A1A] font-medium text-sm">
                         +{getCurrencySymbol()}{getPrice(addon)}
                       </span>
                     )}
@@ -223,7 +223,7 @@ export default function AddonSelector({
         <div className="border-t border-[#1A1A1A] pt-4 mt-4">
           <div className="flex items-center justify-between text-lg">
             <span className="text-[#1A1A1A]/70">Add-ons Total:</span>
-            <span className="text-gold font-bold">
+            <span className="text-[#1A1A1A] font-bold">
               +{getCurrencySymbol()}{calculateTotal()}
             </span>
           </div>

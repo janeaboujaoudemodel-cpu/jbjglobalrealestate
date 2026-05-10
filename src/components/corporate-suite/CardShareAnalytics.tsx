@@ -18,7 +18,7 @@ const LINK_TYPE_CONFIG: Record<string, { icon: React.ElementType; label: string;
   phone: { icon: Phone, label: "Phone Calls", color: "text-green-400" },
   email: { icon: Mail, label: "Email Clicks", color: "text-blue-400" },
   website: { icon: Globe, label: "Website Visits", color: "text-purple-400" },
-  save_contact: { icon: Download, label: "Contact Saves", color: "text-amber-400" },
+  save_contact: { icon: Download, label: "Contact Saves", color: "text-[#1A1A1A]" },
   qr_scan: { icon: QrCode, label: "QR Scans", color: "text-cyan-400" },
 };
 

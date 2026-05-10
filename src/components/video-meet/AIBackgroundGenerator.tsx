@@ -60,10 +60,10 @@ const AIBackgroundGenerator = ({
   };
 
   return (
-    <Card className="bg-zinc-900 border-[#1A1A1A] w-96">
+    <Card className="bg-[#FDFBF7] border-[#1A1A1A] w-96">
       <CardHeader className="pb-2 flex flex-row items-center justify-between">
         <CardTitle className="text-white text-lg flex items-center gap-2">
-          <Image className="w-5 h-5 text-gold" />
+          <Image className="w-5 h-5 text-[#1A1A1A]" />
           Virtual Backgrounds
         </CardTitle>
         <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 text-white/70 hover:text-white">
@@ -81,12 +81,12 @@ const AIBackgroundGenerator = ({
                 onClick={() => onSelectBackground(bg.id)}
                 className={`relative aspect-video rounded-lg border-2 transition-all overflow-hidden ${
                   selectedBackground === bg.id 
-                    ? 'border-gold ring-2 ring-gold/50' 
+                    ? 'border-[#B89555] ring-2 ring-gold/50' 
                     : 'border-[#1A1A1A] hover:border-[#B89555]/30'
                 }`}
               >
                 {bg.type === 'none' ? (
-                  <div className="absolute inset-0 bg-zinc-800 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-[#1A1A1A] flex items-center justify-center">
                     <X className="h-4 w-4 text-white/70" />
                   </div>
                 ) : bg.type === 'blur' ? (
@@ -104,8 +104,8 @@ const AIBackgroundGenerator = ({
                   />
                 )}
                 {selectedBackground === bg.id && (
-                  <div className="absolute inset-0 bg-gold/20 flex items-center justify-center">
-                    <Check className="h-4 w-4 text-gold" />
+                  <div className="absolute inset-0 bg-[#EFE6D6]/20 flex items-center justify-center">
+                    <Check className="h-4 w-4 text-[#1A1A1A]" />
                   </div>
                 )}
               </button>
@@ -116,14 +116,14 @@ const AIBackgroundGenerator = ({
         {/* AI Background Generator */}
         <div className="pt-4 border-t border-[#1A1A1A]">
           <Label className="text-white/85 text-sm mb-2 flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-gold" />
+            <Sparkles className="w-4 h-4 text-[#1A1A1A]" />
             AI Background Generator
           </Label>
           <Textarea
             value={aiPrompt}
             onChange={(e) => setAiPrompt(e.target.value)}
             placeholder="Describe your ideal background...&#10;e.g., 'A modern glass office with Dubai skyline view at sunset'"
-            className="bg-zinc-800 border-[#1A1A1A] text-white min-h-[80px] text-sm resize-none"
+            className="bg-[#1A1A1A] border-[#1A1A1A] text-white min-h-[80px] text-sm resize-none"
           />
           <Button
             onClick={handleGenerateBackground}
@@ -155,7 +155,7 @@ const AIBackgroundGenerator = ({
                   onClick={() => onSelectBackground(bg)}
                   className={`relative aspect-video rounded-lg border-2 transition-all overflow-hidden ${
                     selectedBackground === bg 
-                      ? 'border-gold ring-2 ring-gold/50' 
+                      ? 'border-[#B89555] ring-2 ring-gold/50' 
                       : 'border-[#1A1A1A] hover:border-[#B89555]/30'
                   }`}
                 >
@@ -163,8 +163,8 @@ const AIBackgroundGenerator = ({
                     <Sparkles className="h-4 w-4 text-white" />
                   </div>
                   {selectedBackground === bg && (
-                    <div className="absolute inset-0 bg-gold/20 flex items-center justify-center">
-                      <Check className="h-4 w-4 text-gold" />
+                    <div className="absolute inset-0 bg-[#EFE6D6]/20 flex items-center justify-center">
+                      <Check className="h-4 w-4 text-[#1A1A1A]" />
                     </div>
                   )}
                 </button>

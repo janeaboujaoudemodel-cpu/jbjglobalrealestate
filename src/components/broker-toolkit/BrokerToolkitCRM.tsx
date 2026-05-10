@@ -96,19 +96,19 @@ export function BrokerToolkitCRM() {
       <section id="section-crm" className="py-8 md:py-10 bg-[#1A1A1A]">
         <div className="container mx-auto px-4">
           {/* Active Gold/Amber Premium Layer */}
-          <div className="bg-gradient-to-br from-amber-900/90 via-amber-900/80 to-amber-950/90 border border-gold/30 rounded-2xl p-6 md:p-8 shadow-lg">
+          <div className="bg-gradient-to-br from-amber-900/90 via-amber-900/80 to-amber-950/90 border border-[#B89555]/30 rounded-2xl p-6 md:p-8 shadow-lg">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="text-center mb-12"
             >
-              <Badge className="bg-gold/30 text-gold border-gold/50 mb-4">
+              <Badge className="bg-[#EFE6D6]/30 text-[#1A1A1A] border-[#B89555]/50 mb-4">
                 <Target className="w-3 h-3 mr-1" />
                 CRM & Lead Management
               </Badge>
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                Manage Leads <span className="text-gold">Like a Pro</span>
+                Manage Leads <span className="text-[#1A1A1A]">Like a Pro</span>
               </h2>
               <p className="text-white/70 max-w-2xl mx-auto">
                 Our built-in CRM helps you track every lead, automate follow-ups, and close more deals.
@@ -124,11 +124,11 @@ export function BrokerToolkitCRM() {
                   transition={{ delay: i * 0.1 }}
                   viewport={{ once: true }}
                 >
-                  <Card className="bg-amber-900/60 border border-gold/30 hover:border-gold hover:bg-amber-900/80 transition-all h-full shadow-lg shadow-gold/10">
+                  <Card className="bg-amber-900/60 border border-[#B89555]/30 hover:border-[#B89555] hover:bg-amber-900/80 transition-all h-full shadow-lg shadow-gold/10">
                     <CardContent className="p-5">
                       <div className="flex items-start gap-4">
-                        <div className="w-12 h-12 bg-gold/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                          <feature.icon className="w-6 h-6 text-gold" />
+                        <div className="w-12 h-12 bg-[#EFE6D6]/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                          <feature.icon className="w-6 h-6 text-[#1A1A1A]" />
                         </div>
                         <div>
                           <h3 className="text-white font-semibold mb-1">{feature.title}</h3>
@@ -148,9 +148,9 @@ export function BrokerToolkitCRM() {
               viewport={{ once: true }}
               className="max-w-4xl mx-auto"
             >
-              <Card className="bg-gradient-to-br from-gold/80 via-gold/70 to-amber-600/80 border-2 border-gold/50 shadow-xl shadow-gold/30">
+              <Card className="bg-gradient-to-br from-gold/80 via-gold/70 to-amber-600/80 border-2 border-[#B89555]/50 shadow-xl shadow-gold/30">
                 <CardContent className="p-8 text-center">
-                  <div className="w-16 h-16 bg-[#1A1A1A]/30 rounded-full flex items-center justify-center mx-auto mb-4 shadow-[0_0_25px_rgba(200,167,102,0.5)] border-2 border-gold/60">
+                  <div className="w-16 h-16 bg-[#1A1A1A]/30 rounded-full flex items-center justify-center mx-auto mb-4 shadow-[0_0_25px_rgba(200,167,102,0.5)] border-2 border-[#B89555]/60">
                     <Lock className="w-8 h-8 text-white drop-shadow-[0_0_8px_rgba(200,167,102,0.8)]" />
                   </div>
                   <h3 className="text-2xl font-bold text-[#1A1A1A] mb-4">
@@ -183,10 +183,10 @@ export function BrokerToolkitCRM() {
                       <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
                       <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                       <span className="relative flex items-center justify-center gap-2">
-                        <Target className="w-5 h-5 text-gold" />
-                        <span className="text-gold">Open</span>
+                        <Target className="w-5 h-5 text-[#1A1A1A]" />
+                        <span className="text-[#1A1A1A]">Open</span>
                         <span className="text-white">CRM Dashboard</span>
-                        <ArrowUpRight className="w-5 h-5 text-gold" />
+                        <ArrowUpRight className="w-5 h-5 text-[#1A1A1A]" />
                       </span>
                     </button>
                   </div>

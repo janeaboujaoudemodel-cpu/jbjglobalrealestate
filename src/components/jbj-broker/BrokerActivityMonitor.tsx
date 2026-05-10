@@ -133,9 +133,9 @@ export function BrokerActivityMonitor() {
 
   if (loading) {
     return (
-      <Card className="bg-zinc-900 border-[#1A1A1A]">
+      <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
         <CardContent className="p-8 text-center">
-          <RefreshCw className="h-8 w-8 text-gold animate-spin mx-auto" />
+          <RefreshCw className="h-8 w-8 text-[#1A1A1A] animate-spin mx-auto" />
           <p className="text-[#1A1A1A]/70 mt-4">Loading activity monitor...</p>
         </CardContent>
       </Card>
@@ -143,7 +143,7 @@ export function BrokerActivityMonitor() {
   }
 
   return (
-    <Card className="bg-zinc-900 border-[#1A1A1A]">
+    <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -171,7 +171,7 @@ export function BrokerActivityMonitor() {
             <Button
               size="sm"
               onClick={sendDailyReport}
-              className="bg-gold hover:bg-gold-dark text-[#1A1A1A]"
+              className="bg-[#EFE6D6] hover:bg-[#EFE6D6]-dark text-[#1A1A1A]"
             >
               <Send className="h-4 w-4 mr-2" />
               Send Report
@@ -182,24 +182,24 @@ export function BrokerActivityMonitor() {
       <CardContent className="space-y-6">
         {/* Today's Overview */}
         <div className="grid grid-cols-4 gap-4">
-          <div className="p-4 rounded-lg bg-zinc-800 border border-[#1A1A1A] text-center">
+          <div className="p-4 rounded-lg bg-[#1A1A1A] border border-[#1A1A1A] text-center">
             <Users className="h-6 w-6 text-blue-400 mx-auto mb-2" />
             <div className="text-2xl font-bold text-white">{todayTotals.totalLeads}</div>
             <div className="text-xs text-[#1A1A1A]/70">Leads Contacted</div>
           </div>
-          <div className="p-4 rounded-lg bg-zinc-800 border border-[#1A1A1A] text-center">
+          <div className="p-4 rounded-lg bg-[#1A1A1A] border border-[#1A1A1A] text-center">
             <MessageSquare className="h-6 w-6 text-emerald-400 mx-auto mb-2" />
             <div className="text-2xl font-bold text-white">{todayTotals.totalMessages}</div>
             <div className="text-xs text-[#1A1A1A]/70">Messages Sent</div>
           </div>
-          <div className="p-4 rounded-lg bg-zinc-800 border border-[#1A1A1A] text-center">
+          <div className="p-4 rounded-lg bg-[#1A1A1A] border border-[#1A1A1A] text-center">
             <Phone className="h-6 w-6 text-purple-400 mx-auto mb-2" />
             <div className="text-2xl font-bold text-white">{todayTotals.totalCalls}</div>
             <div className="text-xs text-[#1A1A1A]/70">Calls Made</div>
           </div>
-          <div className="p-4 rounded-lg bg-zinc-800 border border-[#1A1A1A] text-center">
-            <TrendingUp className="h-6 w-6 text-gold mx-auto mb-2" />
-            <div className="text-2xl font-bold text-gold">{todayTotals.avgConversion}%</div>
+          <div className="p-4 rounded-lg bg-[#1A1A1A] border border-[#1A1A1A] text-center">
+            <TrendingUp className="h-6 w-6 text-[#1A1A1A] mx-auto mb-2" />
+            <div className="text-2xl font-bold text-[#1A1A1A]">{todayTotals.avgConversion}%</div>
             <div className="text-xs text-[#1A1A1A]/70">Conversion Rate</div>
           </div>
         </div>
@@ -211,7 +211,7 @@ export function BrokerActivityMonitor() {
           {stats.map((stat) => (
             <div
               key={stat.brokerId}
-              className="p-4 rounded-lg bg-zinc-800 border border-[#1A1A1A]"
+              className="p-4 rounded-lg bg-[#1A1A1A] border border-[#1A1A1A]"
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-3">
@@ -225,7 +225,7 @@ export function BrokerActivityMonitor() {
                         Active
                       </Badge>
                       {stat.missedLeads > 0 && (
-                        <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-xs">
+                        <Badge className="bg-amber-500/20 text-[#1A1A1A] border-amber-500/30 text-xs">
                           <AlertTriangle className="h-3 w-3 mr-1" />
                           {stat.missedLeads} escalated
                         </Badge>
@@ -253,7 +253,7 @@ export function BrokerActivityMonitor() {
                   <div className="text-xs text-[#1A1A1A]/70">Calls</div>
                 </div>
                 <div>
-                  <div className="text-lg font-semibold text-gold">{stat.conversionRate}%</div>
+                  <div className="text-lg font-semibold text-[#1A1A1A]">{stat.conversionRate}%</div>
                   <div className="text-xs text-[#1A1A1A]/70">Conversion</div>
                 </div>
               </div>
@@ -268,10 +268,10 @@ export function BrokerActivityMonitor() {
         </div>
 
         {/* Schedule Info */}
-        <div className="p-3 rounded-lg bg-gold/10 border border-gold/20">
+        <div className="p-3 rounded-lg bg-[#EFE6D6]/10 border border-[#B89555]/20">
           <div className="flex items-center gap-2">
-            <Clock className="h-4 w-4 text-gold" />
-            <span className="text-sm text-gold">
+            <Clock className="h-4 w-4 text-[#1A1A1A]" />
+            <span className="text-sm text-[#1A1A1A]">
               Daily reports are automatically sent at 8:00 PM GST
             </span>
           </div>

@@ -120,10 +120,10 @@ export const ShortlistRequestForm = ({
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold rounded-2xl p-8 text-center ${className}`}
+        className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] rounded-2xl p-8 text-center ${className}`}
       >
-        <div className="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-4">
-          <CheckCircle className="w-8 h-8 text-gold" />
+        <div className="w-16 h-16 bg-[#EFE6D6]/20 rounded-full flex items-center justify-center mx-auto mb-4">
+          <CheckCircle className="w-8 h-8 text-[#1A1A1A]" />
         </div>
         <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">
           Request Received!
@@ -140,16 +140,16 @@ export const ShortlistRequestForm = ({
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold rounded-2xl p-6 md:p-8 shadow-[0_8px_30px_rgba(200,167,102,0.35),0_4px_15px_rgba(0,0,0,0.15)] ${className}`}
+      className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] rounded-2xl p-6 md:p-8 shadow-[0_8px_30px_rgba(200,167,102,0.35),0_4px_15px_rgba(0,0,0,0.15)] ${className}`}
     >
       {/* Header */}
       <div className="text-center mb-6">
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/30 rounded-full text-xs uppercase tracking-wider text-gold mb-3">
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full text-xs uppercase tracking-wider text-[#1A1A1A] mb-3">
           <Sparkles className="w-3 h-3" />
           {transactionType === 'buy' ? 'Property Shortlist' : 'Rental Shortlist'}
         </div>
         <h3 className="text-xl md:text-2xl font-semibold text-[#1A1A1A]">
-          Get a <span className="text-gold">Curated Shortlist</span>
+          Get a <span className="text-[#1A1A1A]">Curated Shortlist</span>
         </h3>
         <p className="text-[#1A1A1A]/70 text-sm mt-2">
           Tell us what you're looking for and we'll send you matching properties.
@@ -206,7 +206,7 @@ export const ShortlistRequestForm = ({
           </SelectTrigger>
           <SelectContent className="bg-[#FDFBF7] border-[#B89555]/30">
             {TIMELINE_OPTIONS.map((opt) => (
-              <SelectItem key={opt.value} value={opt.value} className="text-[#1A1A1A] hover:bg-gold/10">
+              <SelectItem key={opt.value} value={opt.value} className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                 {opt.label}
               </SelectItem>
             ))}
@@ -220,10 +220,10 @@ export const ShortlistRequestForm = ({
               id="privacy"
               checked={formData.privacyAccepted}
               onCheckedChange={(checked) => setFormData({ ...formData, privacyAccepted: !!checked })}
-              className="border-[#B89555]/30 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+              className="border-[#B89555]/30 data-[state=checked]:bg-[#EFE6D6] data-[state=checked]:border-[#B89555] mt-0.5"
             />
             <label htmlFor="privacy" className="text-[#1A1A1A] text-sm leading-tight">
-              I agree to the <a href="/privacy" className="text-gold underline">Privacy Policy</a> *
+              I agree to the <a href="/privacy" className="text-[#1A1A1A] underline">Privacy Policy</a> *
             </label>
           </div>
           <div className="flex items-start gap-3">
@@ -231,7 +231,7 @@ export const ShortlistRequestForm = ({
               id="marketing"
               checked={formData.marketingOptIn}
               onCheckedChange={(checked) => setFormData({ ...formData, marketingOptIn: !!checked })}
-              className="border-[#B89555]/30 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+              className="border-[#B89555]/30 data-[state=checked]:bg-[#EFE6D6] data-[state=checked]:border-[#B89555] mt-0.5"
             />
             <label htmlFor="marketing" className="text-[#1A1A1A] text-sm leading-tight">
               Send me property updates and market insights
@@ -257,9 +257,9 @@ export const ShortlistRequestForm = ({
             </span>
           ) : (
             <span className="flex items-center gap-2">
-              <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">Request</span>
-              <span className="text-gold group-hover:text-[#1A1A1A] transition-colors">Shortlist</span>
-              <Send className="w-4 h-4 text-gold group-hover:text-[#1A1A1A] transition-colors" />
+              <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">Request</span>
+              <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">Shortlist</span>
+              <Send className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
             </span>
           )}
         </Button>

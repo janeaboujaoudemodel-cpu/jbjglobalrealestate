@@ -73,9 +73,9 @@ export function DropZone({ onFiles, onLinks, busy }: DropZoneProps) {
         </Button>
       </div>
 
-      <div className="rounded-xl border border-gold/30 bg-[#F7F2EA] p-4">
+      <div className="rounded-xl border border-[#B89555]/30 bg-[#F7F2EA] p-4">
         <div className="flex items-center gap-2 mb-2 text-sm font-medium text-foreground">
-          <Link2 className="w-4 h-4 text-gold" />
+          <Link2 className="w-4 h-4 text-[#1A1A1A]" />
           Or paste links (Drive, Dropbox, YouTube, developer portals — one per line)
         </div>
         <textarea
@@ -83,7 +83,7 @@ export function DropZone({ onFiles, onLinks, busy }: DropZoneProps) {
           onChange={(e) => setLinkText(e.target.value)}
           rows={3}
           placeholder="https://drive.google.com/...&#10;https://youtube.com/..."
-          className="w-full rounded-lg border border-gold/30 bg-white p-2 text-sm text-foreground"
+          className="w-full rounded-lg border border-[#B89555]/30 bg-white p-2 text-sm text-foreground"
         />
         <div className="flex justify-end mt-2">
           <Button

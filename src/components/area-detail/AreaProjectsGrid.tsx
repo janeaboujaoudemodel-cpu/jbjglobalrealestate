@@ -67,15 +67,15 @@ export const AreaProjectsGrid = ({ areaName, areaSlug, shortcutFilters, searchQu
     return (
       <section className="py-16 bg-[#1A1A1A]">
         <div className="container mx-auto px-4">
-          <div className="h-8 w-64 bg-zinc-800 animate-pulse rounded mb-8" />
+          <div className="h-8 w-64 bg-[#1A1A1A] animate-pulse rounded mb-8" />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="rounded-xl overflow-hidden border border-gold/20">
-                <div className="aspect-[16/10] bg-zinc-800 animate-pulse" />
-                <div className="p-4 bg-zinc-900 space-y-2">
-                  <div className="h-4 w-3/4 bg-zinc-800 animate-pulse rounded" />
-                  <div className="h-3 w-1/2 bg-zinc-800 animate-pulse rounded" />
-                  <div className="h-4 w-1/3 bg-zinc-800 animate-pulse rounded mt-4" />
+              <div key={i} className="rounded-xl overflow-hidden border border-[#B89555]/20">
+                <div className="aspect-[16/10] bg-[#1A1A1A] animate-pulse" />
+                <div className="p-4 bg-[#FDFBF7] space-y-2">
+                  <div className="h-4 w-3/4 bg-[#1A1A1A] animate-pulse rounded" />
+                  <div className="h-3 w-1/2 bg-[#1A1A1A] animate-pulse rounded" />
+                  <div className="h-4 w-1/3 bg-[#1A1A1A] animate-pulse rounded mt-4" />
                 </div>
               </div>
             ))}
@@ -117,7 +117,7 @@ export const AreaProjectsGrid = ({ areaName, areaSlug, shortcutFilters, searchQu
             <div className="text-center py-16">
               <Search className="w-10 h-10 text-[#1A1A1A]/20 mx-auto mb-3" />
               <p className="text-[#1A1A1A]/50 text-sm font-medium">No projects match your filters</p>
-              <button onClick={onClearFilters} className="mt-3 text-gold text-sm font-semibold hover:underline">
+              <button onClick={onClearFilters} className="mt-3 text-[#1A1A1A] text-sm font-semibold hover:underline">
                 Clear all filters
               </button>
             </div>
@@ -126,7 +126,7 @@ export const AreaProjectsGrid = ({ areaName, areaSlug, shortcutFilters, searchQu
           {filteredProjects.length > 0 && (
             <div className="text-center mt-8">
               <Link to={`/properties?area=${areaSlug}`}>
-                <Button className="px-8 py-6 text-base bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] font-bold border-2 border-gold hover:from-gold hover:to-amber-500 hover:text-[#1A1A1A] transition-all">
+                <Button className="px-8 py-6 text-base bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] font-bold border-2 border-[#B89555] hover:from-gold hover:to-amber-500 hover:text-[#1A1A1A] transition-all">
                   View All Projects in {areaName}
                   <ArrowUpRight className="w-5 h-5 ml-2" />
                 </Button>

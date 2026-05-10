@@ -48,7 +48,7 @@ const DesignModeSelector = ({ selectedMode, onSelectMode }: DesignModeSelectorPr
   return (
     <div className="w-full">
       <Tabs value={selectedMode} onValueChange={(value) => onSelectMode(value as DesignMode)} className="w-full">
-        <TabsList className="w-full bg-zinc-900/80 border border-[#1A1A1A] rounded-xl p-1.5 h-auto flex gap-2">
+        <TabsList className="w-full bg-[#FDFBF7]/80 border border-[#1A1A1A] rounded-xl p-1.5 h-auto flex gap-2">
           {modes.map((mode) => {
             const Icon = mode.icon;
             return (

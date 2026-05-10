@@ -22,10 +22,10 @@ const CommunitySearchModal = ({ isOpen, onClose }: CommunitySearchModalProps) =>
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-zinc-950 border-[#1A1A1A] text-white sm:max-w-2xl">
+      <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A] text-white sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold flex items-center gap-3">
-            <MapPin className="w-6 h-6 text-gold" />
+            <MapPin className="w-6 h-6 text-[#1A1A1A]" />
             Search by Community
           </DialogTitle>
           <p className="text-white/70 text-sm">Browse all UAE property communities</p>
@@ -37,7 +37,7 @@ const CommunitySearchModal = ({ isOpen, onClose }: CommunitySearchModalProps) =>
             placeholder="Search communities..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-12 h-12 bg-zinc-900 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 focus:border-gold rounded-xl"
+            className="pl-12 h-12 bg-[#FDFBF7] border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] rounded-xl"
           />
           {searchQuery && (
             <button
@@ -53,7 +53,7 @@ const CommunitySearchModal = ({ isOpen, onClose }: CommunitySearchModalProps) =>
           {isLoading ? (
             <div className="grid grid-cols-1 gap-3">
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="h-16 bg-zinc-900 animate-pulse rounded-xl" />
+                <div key={i} className="h-16 bg-[#FDFBF7] animate-pulse rounded-xl" />
               ))}
             </div>
           ) : filteredCommunities?.length === 0 ? (
@@ -68,9 +68,9 @@ const CommunitySearchModal = ({ isOpen, onClose }: CommunitySearchModalProps) =>
                   key={community.id}
                   to={`/community/${community.slug}`}
                   onClick={onClose}
-                  className="flex items-center gap-4 p-4 bg-zinc-900/50 hover:bg-[#1A1A1A] border border-[#1A1A1A] hover:border-gold/50 rounded-xl transition-all group"
+                  className="flex items-center gap-4 p-4 bg-[#FDFBF7]/50 hover:bg-[#1A1A1A] border border-[#1A1A1A] hover:border-[#B89555]/50 rounded-xl transition-all group"
                 >
-                  <div className="w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center overflow-hidden flex-shrink-0">
+                  <div className="w-12 h-12 rounded-lg bg-[#1A1A1A] flex items-center justify-center overflow-hidden flex-shrink-0">
                     {community.image_url ? (
                       <img
                         src={community.image_url}
@@ -78,11 +78,11 @@ const CommunitySearchModal = ({ isOpen, onClose }: CommunitySearchModalProps) =>
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <MapPin className="w-5 h-5 text-gold" />
+                      <MapPin className="w-5 h-5 text-[#1A1A1A]" />
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-white font-medium truncate group-hover:text-gold transition-colors">
+                    <h3 className="text-white font-medium truncate group-hover:text-[#1A1A1A] transition-colors">
                       {community.name}
                     </h3>
                     {community.location && (

@@ -13,7 +13,7 @@ export const TrustpilotWidget = ({ className = '' }: TrustpilotWidgetProps) => {
       href={trustpilotUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className={`inline-flex items-center gap-3 bg-zinc-800/50 hover:bg-[#1A1A1A] border border-[#1A1A1A]/50 rounded-xl px-4 py-3 transition-all group ${className}`}
+      className={`inline-flex items-center gap-3 bg-[#1A1A1A]/50 hover:bg-[#1A1A1A] border border-[#1A1A1A]/50 rounded-xl px-4 py-3 transition-all group ${className}`}
     >
       <div className="flex items-center gap-1">
         {[1, 2, 3, 4, 5].map((i) => (
@@ -24,7 +24,7 @@ export const TrustpilotWidget = ({ className = '' }: TrustpilotWidgetProps) => {
         ))}
       </div>
       <div className="text-left">
-        <p className="text-white text-sm font-medium group-hover:text-gold transition-colors">
+        <p className="text-white text-sm font-medium group-hover:text-[#1A1A1A] transition-colors">
           Excellent on Trustpilot
         </p>
         <p className="text-white/90 text-xs">Read our reviews</p>

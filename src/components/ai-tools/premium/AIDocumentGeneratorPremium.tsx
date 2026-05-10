@@ -281,7 +281,7 @@ const AIDocumentGeneratorPremium = () => {
   const renderField = (field: FieldConfig) => {
     const value = typeFields[field.key] || "";
     const baseInputClass =
-      "bg-zinc-900/50 border-lime-500/30 text-white hover:border-lime-500/50 focus:border-lime-400 transition-colors placeholder:text-[#1A1A1A]/70";
+      "bg-[#FDFBF7]/50 border-lime-500/30 text-white hover:border-lime-500/50 focus:border-lime-400 transition-colors placeholder:text-[#1A1A1A]/70";
 
     if (field.type === "input") {
       return (
@@ -334,7 +334,7 @@ const AIDocumentGeneratorPremium = () => {
               className={`px-3 py-1.5 rounded-full text-xs border transition-all ${
                 value === opt
                   ? "bg-lime-500/20 border-lime-500 text-lime-400"
-                  : "bg-zinc-800 border-[#1A1A1A] text-white/70 hover:border-[#B89555]/30"
+                  : "bg-[#1A1A1A] border-[#1A1A1A] text-white/70 hover:border-[#B89555]/30"
               }`}
             >
               {opt}
@@ -370,7 +370,7 @@ const AIDocumentGeneratorPremium = () => {
                     <div className="flex items-center gap-2">
                       <MessageSquare className="h-4 w-4 text-lime-400" />
                       <span className="text-sm font-semibold text-white">SMS Version</span>
-                      <Badge className="bg-zinc-700 text-white/85 border-0 text-xs">
+                      <Badge className="bg-[#1A1A1A] text-white/85 border-0 text-xs">
                         {response.smsVersion.length} / 160 chars
                       </Badge>
                     </div>
@@ -378,7 +378,7 @@ const AIDocumentGeneratorPremium = () => {
                       {copied === "sms" ? <Check className="h-4 w-4 text-lime-400" /> : <Copy className="h-4 w-4" />}
                     </Button>
                   </div>
-                  <div className="bg-zinc-800/60 p-3 rounded-lg text-gray-200 text-sm">
+                  <div className="bg-[#1A1A1A]/60 p-3 rounded-lg text-gray-200 text-sm">
                     {response.smsVersion}
                   </div>
                 </CardContent>
@@ -391,7 +391,7 @@ const AIDocumentGeneratorPremium = () => {
                     <div className="flex items-center gap-2">
                       <MessageSquare className="h-4 w-4 text-green-400" />
                       <span className="text-sm font-semibold text-white">WhatsApp Version</span>
-                      <Badge className="bg-zinc-700 text-white/85 border-0 text-xs">
+                      <Badge className="bg-[#1A1A1A] text-white/85 border-0 text-xs">
                         {response.whatsappVersion.length} / 320 chars
                       </Badge>
                     </div>
@@ -399,7 +399,7 @@ const AIDocumentGeneratorPremium = () => {
                       {copied === "wa" ? <Check className="h-4 w-4 text-lime-400" /> : <Copy className="h-4 w-4" />}
                     </Button>
                   </div>
-                  <div className="bg-zinc-800/60 p-3 rounded-lg text-gray-200 text-sm">
+                  <div className="bg-[#1A1A1A]/60 p-3 rounded-lg text-gray-200 text-sm">
                     {response.whatsappVersion}
                   </div>
                 </CardContent>
@@ -479,7 +479,7 @@ const AIDocumentGeneratorPremium = () => {
                   </Button>
                 </div>
               </div>
-              <div className="bg-zinc-800/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[450px] overflow-y-auto leading-relaxed">
+              <div className="bg-[#1A1A1A]/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[450px] overflow-y-auto leading-relaxed">
                 {response.document}
               </div>
             </CardContent>
@@ -598,7 +598,7 @@ const AIDocumentGeneratorPremium = () => {
                       className={`p-3 rounded-lg border text-left transition-all ${
                         documentType === typeKey
                           ? "bg-lime-500/20 border-lime-500/60 text-white"
-                          : "bg-zinc-800 border-[#1A1A1A] text-white/70 hover:border-[#1A1A1A]"
+                          : "bg-[#1A1A1A] border-[#1A1A1A] text-white/70 hover:border-[#1A1A1A]"
                       }`}
                     >
                       <TypeIcon className="h-4 w-4 mb-1" />
@@ -702,7 +702,7 @@ const AIDocumentGeneratorPremium = () => {
         {/* ── Brand Assets Section ── */}
         <Collapsible open={brandAssetsOpen} onOpenChange={setBrandAssetsOpen}>
           <CollapsibleTrigger asChild>
-            <button className="w-full flex items-center justify-between p-4 rounded-lg bg-zinc-800/50 border border-[#1A1A1A] hover:border-lime-500/30 transition-all">
+            <button className="w-full flex items-center justify-between p-4 rounded-lg bg-[#1A1A1A]/50 border border-[#1A1A1A] hover:border-lime-500/30 transition-all">
               <div className="flex items-center gap-2 text-white/85">
                 <Package className="h-4 w-4 text-lime-400" />
                 <span className="text-sm font-medium">Brand Assets</span>
@@ -714,7 +714,7 @@ const AIDocumentGeneratorPremium = () => {
             </button>
           </CollapsibleTrigger>
           <CollapsibleContent className="pt-3">
-            <div className="rounded-lg bg-zinc-800/30 border border-[#1A1A1A]/50 p-4 space-y-3">
+            <div className="rounded-lg bg-[#1A1A1A]/30 border border-[#1A1A1A]/50 p-4 space-y-3">
               <p className="text-xs text-white/90">Select a saved logo, stamp, or signature to include in your document.</p>
               {loadingAssets ? (
                 <div className="flex justify-center py-6">

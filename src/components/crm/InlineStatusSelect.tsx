@@ -91,7 +91,7 @@ export default function InlineStatusSelect({
         
         {/* NEUTRAL */}
         <div className="px-2 py-1.5 text-xs font-bold text-[#1A1A1A]/70 uppercase tracking-wide mt-1 flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-zinc-400" />
+          <span className="w-2 h-2 rounded-full bg-[#B89555]" />
           Neutral
         </div>
         {PIPELINE_STATUSES.filter(s => s.category === 'neutral').map(status => (
@@ -101,7 +101,7 @@ export default function InlineStatusSelect({
             className="text-[#1A1A1A] hover:bg-[#B89555]/10 pl-4 focus:bg-[#B89555]/15 focus:text-[#1A1A1A]"
           >
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-zinc-400 flex-shrink-0" />
+              <span className="w-2 h-2 rounded-full bg-[#B89555] flex-shrink-0" />
               {status.label}
             </div>
           </SelectItem>

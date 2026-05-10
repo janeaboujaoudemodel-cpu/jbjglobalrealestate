@@ -53,7 +53,7 @@ export default function UnitInventorySection({
     <div className="jj-card-inner">
       <div className="flex items-center justify-between gap-4 flex-wrap mb-6">
         <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2">
-          <Bed className="w-5 h-5 text-gold" />
+          <Bed className="w-5 h-5 text-[#1A1A1A]" />
           Unit Types{availabilityVisible ? ' & Availability' : ''}
         </h3>
         
@@ -63,7 +63,7 @@ export default function UnitInventorySection({
             {typeof availableUnits === "number" && (
               <div className="text-right">
                 <p className="text-xs text-muted-foreground">Available Units</p>
-                <p className="text-lg font-bold text-gold">{availableUnits.toLocaleString()}</p>
+                <p className="text-lg font-bold text-[#1A1A1A]">{availableUnits.toLocaleString()}</p>
               </div>
             )}
             {typeof totalUnits === "number" && (
@@ -81,13 +81,13 @@ export default function UnitInventorySection({
         {unitTypes.map((unit, idx) => (
           <div 
             key={idx}
-            className="rounded-xl border-2 border-gold/30 bg-card p-5 hover:border-gold/60 hover:shadow-lg hover:shadow-gold/10 transition-all"
+            className="rounded-xl border-2 border-[#B89555]/30 bg-card p-5 hover:border-[#B89555]/60 hover:shadow-lg hover:shadow-gold/10 transition-all"
           >
             {/* Unit Type Header */}
             <div className="flex items-center justify-between gap-2 mb-4">
               <div className="flex items-center gap-2">
-                <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center">
-                  <Bed className="w-5 h-5 text-gold" />
+                <div className="w-10 h-10 rounded-full bg-[#EFE6D6]/10 flex items-center justify-center">
+                  <Bed className="w-5 h-5 text-[#1A1A1A]" />
                 </div>
                 <h4 className="text-lg font-bold text-foreground">{unit.type}</h4>
               </div>
@@ -110,8 +110,8 @@ export default function UnitInventorySection({
             {/* Price */}
             {(unit.price_from || unit.price_to) && (
               <div className="flex items-center gap-2 mb-4">
-                <TrendingUp className="w-4 h-4 text-gold" />
-                <span className="text-base font-semibold text-gold">
+                <TrendingUp className="w-4 h-4 text-[#1A1A1A]" />
+                <span className="text-base font-semibold text-[#1A1A1A]">
                   {unit.price_from === unit.price_to 
                     ? formatPriceUtil(unit.price_from || 0)
                     : `${formatPriceUtil(unit.price_from || 0)} - ${formatPriceUtil(unit.price_to || 0)}`

@@ -581,7 +581,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
             {testResult.project && (
               <div className="space-y-4">
                 {/* SMALL CARD PREVIEW (Provident style) */}
-                <Card className="bg-[#FDFBF7] border-gold shadow-lg overflow-hidden">
+                <Card className="bg-[#FDFBF7] border-[#B89555] shadow-lg overflow-hidden">
                   <div className="flex flex-col md:flex-row">
                     {/* Main Image */}
                     <div className="relative w-full md:w-64 h-48 md:h-auto flex-shrink-0 bg-muted">
@@ -609,7 +609,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                       <div>
                         <h3 className="font-semibold text-lg text-foreground">{testResult.project.name}</h3>
                         {testResult.project.developer_name && (
-                          <p className="text-sm text-gold">by {testResult.project.developer_name}</p>
+                          <p className="text-sm text-[#1A1A1A]">by {testResult.project.developer_name}</p>
                         )}
                       </div>
 
@@ -857,17 +857,17 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                           </div>
                           <div className="flex flex-wrap gap-2">
                             {testResult.project.payment_breakdown.down_payment && (
-                              <Badge className="text-xs bg-gold/10 text-gold border border-gold/30">
+                              <Badge className="text-xs bg-[#EFE6D6]/10 text-[#1A1A1A] border border-[#B89555]/30">
                                 {testResult.project.payment_breakdown.down_payment} Down Payment
                               </Badge>
                             )}
                             {testResult.project.payment_breakdown.during_construction && (
-                              <Badge className="text-xs bg-gold/10 text-gold border border-gold/30">
+                              <Badge className="text-xs bg-[#EFE6D6]/10 text-[#1A1A1A] border border-[#B89555]/30">
                                 {testResult.project.payment_breakdown.during_construction} During Construction
                               </Badge>
                             )}
                             {testResult.project.payment_breakdown.on_completion && (
-                              <Badge className="text-xs bg-gold/10 text-gold border border-gold/30">
+                              <Badge className="text-xs bg-[#EFE6D6]/10 text-[#1A1A1A] border border-[#B89555]/30">
                                 {testResult.project.payment_breakdown.on_completion} On Completion
                               </Badge>
                             )}

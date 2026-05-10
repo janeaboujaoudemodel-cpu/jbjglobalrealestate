@@ -46,12 +46,12 @@ export default function DeveloperHubSidebarNav({ collapsed, onNavigate }: Props)
               className={cn(
                 "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200",
                 isActive
-                  ? "bg-gold/15 text-gold font-semibold border-l-2 border-gold"
-                  : "text-[#ECE2D2]/70 hover:text-gold hover:bg-gold/10"
+                  ? "bg-[#EFE6D6]/15 text-[#1A1A1A] font-semibold border-l-2 border-[#B89555]"
+                  : "text-[#ECE2D2]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
               )}
               title={collapsed ? item.label : undefined}
             >
-              <item.icon className={cn("w-5 h-5 flex-shrink-0", isActive && "text-gold")} />
+              <item.icon className={cn("w-5 h-5 flex-shrink-0", isActive && "text-[#1A1A1A]")} />
               {!collapsed && <span className="truncate">{item.label}</span>}
             </button>
           );

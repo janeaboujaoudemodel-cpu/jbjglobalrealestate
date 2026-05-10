@@ -95,7 +95,7 @@ export function VisitorActivityHeatmap() {
 
   if (isLoading) {
     return (
-      <Card className="bg-zinc-900 border-[#1A1A1A]">
+      <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
         <CardHeader>
           <CardTitle className="text-white">Visitor Activity Heatmap</CardTitle>
           <CardDescription>Loading activity data...</CardDescription>
@@ -108,7 +108,7 @@ export function VisitorActivityHeatmap() {
   }
 
   return (
-    <Card className="bg-zinc-900 border-[#1A1A1A]">
+    <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
       <CardHeader>
         <CardTitle className="text-white">Visitor Activity Heatmap</CardTitle>
         <CardDescription>Peak engagement times over the last 30 days</CardDescription>

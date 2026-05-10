@@ -27,7 +27,7 @@ export default function ReportCard({ report, onView, onDownload }: ReportCardPro
       market: "bg-blue-500/10 text-blue-600 border-blue-500/30",
       area: "bg-emerald-500/10 text-emerald-600 border-emerald-500/30",
       asset: "bg-purple-500/10 text-purple-600 border-purple-500/30",
-      advisory: "bg-gold/10 text-gold border-gold/30",
+      advisory: "bg-[#EFE6D6]/10 text-[#1A1A1A] border-[#B89555]/30",
     };
     const labels = {
       market: "Market Report",
@@ -45,7 +45,7 @@ export default function ReportCard({ report, onView, onDownload }: ReportCardPro
       "abu-dhabi": "bg-emerald-500/10 text-emerald-600 border-emerald-500/30",
       sharjah: "bg-amber-500/10 text-amber-600 border-amber-500/30",
       area: "bg-purple-500/10 text-purple-600 border-purple-500/30",
-      project: "bg-gold/10 text-gold border-gold/30",
+      project: "bg-[#EFE6D6]/10 text-[#1A1A1A] border-[#B89555]/30",
     };
     return (
       <Badge variant="outline" className={styles[scope]}>
@@ -68,12 +68,12 @@ export default function ReportCard({ report, onView, onDownload }: ReportCardPro
   };
 
   return (
-    <Card className="border-2 border-gold/30 hover:border-gold transition-colors">
+    <Card className="border-2 border-[#B89555]/30 hover:border-[#B89555] transition-colors">
       <CardContent className="p-5 space-y-4">
         {/* Header */}
         <div className="flex items-start justify-between gap-3">
-          <div className="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center flex-shrink-0">
-            <FileText className="w-6 h-6 text-gold" />
+          <div className="w-12 h-12 bg-[#EFE6D6]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+            <FileText className="w-6 h-6 text-[#1A1A1A]" />
           </div>
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-foreground line-clamp-2 mb-2">{report.title}</h3>

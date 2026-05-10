@@ -240,7 +240,7 @@ const VisitorInsightsDashboard = () => {
       case 'click': return <MousePointer className="h-3 w-3 text-green-600" />;
       case 'download': return <Download className="h-3 w-3 text-purple-600" />;
       case 'upload': return <Upload className="h-3 w-3 text-orange-600" />;
-      case 'form_submit': return <FileText className="h-3 w-3 text-gold" />;
+      case 'form_submit': return <FileText className="h-3 w-3 text-[#1A1A1A]" />;
       default: return <Activity className="h-3 w-3 text-[#1A1A1A]/50" />;
     }
   };
@@ -251,14 +251,14 @@ const VisitorInsightsDashboard = () => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-[#1A1A1A] flex items-center gap-3">
-            <Eye className="h-7 w-7 text-gold" />
+            <Eye className="h-7 w-7 text-[#1A1A1A]" />
             Visitor Insights
           </h2>
           <p className="text-[#1A1A1A]/60 mt-1">
             {stats.totalVisitors} unique visitors across {stats.totalSessions} sessions
           </p>
         </div>
-        <Button onClick={fetchData} variant="outline" className="border-gold/30 text-[#1A1A1A] hover:bg-gold/10">
+        <Button onClick={fetchData} variant="outline" className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
           <RefreshCw className="h-4 w-4 mr-2" />
           Refresh
         </Button>
@@ -292,12 +292,12 @@ const VisitorInsightsDashboard = () => {
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)}>
-        <TabsList className="bg-[#FDFBF7]/50 border border-gold/20">
-          <TabsTrigger value="visitors" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]">
+        <TabsList className="bg-[#FDFBF7]/50 border border-[#B89555]/20">
+          <TabsTrigger value="visitors" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
             <Users className="h-4 w-4 mr-2" />
             Visitors ({groupedVisitors.length})
           </TabsTrigger>
-          <TabsTrigger value="contacts" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]">
+          <TabsTrigger value="contacts" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
             <Mail className="h-4 w-4 mr-2" />
             Contacts ({contacts.length})
           </TabsTrigger>
@@ -311,7 +311,7 @@ const VisitorInsightsDashboard = () => {
               placeholder="Search by name, email, phone..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-[#FDFBF7] border-gold/20 text-[#1A1A1A]"
+              className="pl-10 bg-[#FDFBF7] border-[#B89555]/20 text-[#1A1A1A]"
             />
           </div>
           {activeTab === 'visitors' && (
@@ -319,7 +319,7 @@ const VisitorInsightsDashboard = () => {
               {['all', 'desktop', 'mobile', 'tablet'].map((device) => (
                 <Button key={device} variant={filterDevice === device ? 'default' : 'outline'} size="sm"
                   onClick={() => setFilterDevice(device)}
-                  className={filterDevice === device ? 'bg-gold text-[#1A1A1A]' : 'border-gold/30 text-[#1A1A1A]/70'}>
+                  className={filterDevice === device ? 'bg-[#EFE6D6] text-[#1A1A1A]' : 'border-[#B89555]/30 text-[#1A1A1A]/70'}>
                   {device === 'all' ? 'All' : device.charAt(0).toUpperCase() + device.slice(1)}
                 </Button>
               ))}
@@ -329,14 +329,14 @@ const VisitorInsightsDashboard = () => {
 
         <TabsContent value="visitors">
           <Card className="jj-card-inner mt-4">
-            <CardHeader className="border-b border-gold/20">
+            <CardHeader className="border-b border-[#B89555]/20">
               <CardTitle className="text-[#1A1A1A]">Visitors ({filteredVisitors.length})</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <ScrollArea className="h-[500px]">
                 {loading ? (
                   <div className="flex items-center justify-center h-32">
-                    <RefreshCw className="h-6 w-6 animate-spin text-gold" />
+                    <RefreshCw className="h-6 w-6 animate-spin text-[#1A1A1A]" />
                   </div>
                 ) : filteredVisitors.length === 0 ? (
                   <div className="text-center text-[#1A1A1A]/50 py-8">No visitors found</div>
@@ -357,12 +357,12 @@ const VisitorInsightsDashboard = () => {
                     <tbody>
                       {filteredVisitors.map((visitor) => (
                         <tr key={visitor.key}
-                          className="border-t border-gold/10 hover:bg-gold/5 cursor-pointer transition-colors"
+                          className="border-t border-[#B89555]/10 hover:bg-[#EFE6D6]/5 cursor-pointer transition-colors"
                           onClick={() => openVisitorDetail(visitor)}>
                           <td className="p-4">
                             <div className="flex items-center gap-3">
-                              <div className={`w-9 h-9 rounded-full flex items-center justify-center ${visitor.isConverted ? 'bg-green-100' : 'bg-gold/20'}`}>
-                                <Users className={`h-4 w-4 ${visitor.isConverted ? 'text-green-600' : 'text-gold'}`} />
+                              <div className={`w-9 h-9 rounded-full flex items-center justify-center ${visitor.isConverted ? 'bg-green-100' : 'bg-[#EFE6D6]/20'}`}>
+                                <Users className={`h-4 w-4 ${visitor.isConverted ? 'text-green-600' : 'text-[#1A1A1A]'}`} />
                               </div>
                               <div>
                                 <p className="text-[#1A1A1A] font-medium text-sm">{visitor.displayName}</p>
@@ -390,7 +390,7 @@ const VisitorInsightsDashboard = () => {
                             <span className="text-[#1A1A1A] font-medium">{formatTimeSpent(visitor.totalTimeSpent)}</span>
                           </td>
                           <td className="p-4">
-                            <Badge variant="secondary" className="bg-gold/10 text-[#1A1A1A]/70">
+                            <Badge variant="secondary" className="bg-[#EFE6D6]/10 text-[#1A1A1A]/70">
                               {visitor.totalPages} pages
                             </Badge>
                           </td>
@@ -406,7 +406,7 @@ const VisitorInsightsDashboard = () => {
                             </div>
                           </td>
                           <td className="p-4">
-                            <Button size="sm" variant="ghost" className="text-gold hover:text-[#1A1A1A]">
+                            <Button size="sm" variant="ghost" className="text-[#1A1A1A] hover:text-[#1A1A1A]">
                               <ChevronRight className="h-4 w-4" />
                             </Button>
                           </td>
@@ -422,14 +422,14 @@ const VisitorInsightsDashboard = () => {
 
         <TabsContent value="contacts">
           <Card className="jj-card-inner mt-4">
-            <CardHeader className="border-b border-gold/20">
+            <CardHeader className="border-b border-[#B89555]/20">
               <CardTitle className="text-[#1A1A1A]">Contact Submissions</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <ScrollArea className="h-[500px]">
                 {loading ? (
                   <div className="flex items-center justify-center h-32">
-                    <RefreshCw className="h-6 w-6 animate-spin text-gold" />
+                    <RefreshCw className="h-6 w-6 animate-spin text-[#1A1A1A]" />
                   </div>
                 ) : filteredContacts.length === 0 ? (
                   <div className="text-center text-[#1A1A1A]/50 py-8">No contact submissions found</div>
@@ -447,12 +447,12 @@ const VisitorInsightsDashboard = () => {
                     </thead>
                     <tbody>
                       {filteredContacts.map((contact) => (
-                        <tr key={contact.id} className="border-t border-gold/10 hover:bg-gold/5">
+                        <tr key={contact.id} className="border-t border-[#B89555]/10 hover:bg-[#EFE6D6]/5">
                           <td className="p-4"><p className="text-[#1A1A1A] font-medium">{contact.full_name}</p></td>
-                          <td className="p-4"><a href={`mailto:${contact.email}`} className="text-gold hover:underline text-sm">{contact.email}</a></td>
-                          <td className="p-4"><a href={`tel:${contact.phone}`} className="text-[#1A1A1A]/70 hover:text-gold text-sm">{contact.phone}</a></td>
+                          <td className="p-4"><a href={`mailto:${contact.email}`} className="text-[#1A1A1A] hover:underline text-sm">{contact.email}</a></td>
+                          <td className="p-4"><a href={`tel:${contact.phone}`} className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] text-sm">{contact.phone}</a></td>
                           <td className="p-4"><span className="text-[#1A1A1A]/60 text-sm">{contact.nationality || 'N/A'}</span></td>
-                          <td className="p-4"><Badge className="bg-gold/20 text-[#1A1A1A]/80 border-gold/30">{contact.service_interest || 'General'}</Badge></td>
+                          <td className="p-4"><Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A]/80 border-[#B89555]/30">{contact.service_interest || 'General'}</Badge></td>
                           <td className="p-4"><div className="text-sm text-[#1A1A1A]/60">{format(new Date(contact.created_at), 'MMM d, yyyy')}</div></td>
                         </tr>
                       ))}
@@ -467,10 +467,10 @@ const VisitorInsightsDashboard = () => {
 
       {/* Visitor Detail Dialog - Drill-down */}
       <Dialog open={showDetailDialog} onOpenChange={setShowDetailDialog}>
-        <DialogContent className="max-w-4xl bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-gold/30 max-h-[90vh] overflow-hidden flex flex-col">
+        <DialogContent className="max-w-4xl bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-[#B89555]/30 max-h-[90vh] overflow-hidden flex flex-col">
           <DialogHeader className="flex-shrink-0">
             <DialogTitle className="text-[#1A1A1A] flex items-center gap-2">
-              <Users className="h-5 w-5 text-gold" />
+              <Users className="h-5 w-5 text-[#1A1A1A]" />
               {selectedVisitor?.displayName}
               {selectedVisitor?.isConverted && (
                 <Badge className="bg-green-100 text-green-700 border-green-300 ml-2">Converted</Badge>
@@ -501,7 +501,7 @@ const VisitorInsightsDashboard = () => {
               </div>
 
               {/* Sessions list */}
-              <Card className="bg-[#FDFBF7]/50 border-gold/20">
+              <Card className="bg-[#FDFBF7]/50 border-[#B89555]/20">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm text-[#1A1A1A]/60">
                     Sessions ({selectedVisitor.sessions.length})
@@ -513,8 +513,8 @@ const VisitorInsightsDashboard = () => {
                       onClick={() => loadSessionDetails(session.session_id)}
                       className={`p-3 rounded-lg border cursor-pointer transition-all ${
                         selectedSessionId === session.session_id
-                          ? 'bg-gold/10 border-gold/40'
-                          : 'bg-[#FDFBF7]/30 border-gold/10 hover:border-gold/30'
+                          ? 'bg-[#EFE6D6]/10 border-[#B89555]/40'
+                          : 'bg-[#FDFBF7]/30 border-[#B89555]/10 hover:border-[#B89555]/30'
                       }`}>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
@@ -546,7 +546,7 @@ const VisitorInsightsDashboard = () => {
               {/* Session detail: events + documents */}
               {selectedSessionId && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Card className="bg-[#FDFBF7]/50 border-gold/20">
+                  <Card className="bg-[#FDFBF7]/50 border-[#B89555]/20">
                     <CardHeader className="pb-2">
                       <CardTitle className="text-sm text-[#1A1A1A]/60">Event Timeline</CardTitle>
                     </CardHeader>
@@ -571,7 +571,7 @@ const VisitorInsightsDashboard = () => {
                       </ScrollArea>
                     </CardContent>
                   </Card>
-                  <Card className="bg-[#FDFBF7]/50 border-gold/20">
+                  <Card className="bg-[#FDFBF7]/50 border-[#B89555]/20">
                     <CardHeader className="pb-2">
                       <CardTitle className="text-sm text-[#1A1A1A]/60">Documents Accessed</CardTitle>
                     </CardHeader>
@@ -582,7 +582,7 @@ const VisitorInsightsDashboard = () => {
                         <div className="space-y-2">
                           {selectedSessionDocs.map((doc) => (
                             <div key={doc.id} className="flex items-center gap-2 text-sm">
-                              <FileText className="h-4 w-4 text-gold" />
+                              <FileText className="h-4 w-4 text-[#1A1A1A]" />
                               <span className="text-[#1A1A1A]">{doc.document_name}</span>
                               <Badge variant="outline" className="text-xs">{doc.action}</Badge>
                             </div>

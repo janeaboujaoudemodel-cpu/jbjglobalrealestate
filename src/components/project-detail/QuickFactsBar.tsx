@@ -52,10 +52,10 @@ export default function QuickFactsBar({
     if (!status) return "bg-red-50 text-red-600 border-red-200";
     const s = status.toLowerCase();
     if (s.includes("available") || s.includes("selling")) return "bg-emerald-500/20 text-emerald-400 border-emerald-500/30";
-    if (s.includes("limited") || s.includes("few")) return "bg-amber-500/20 text-amber-400 border-amber-500/30";
+    if (s.includes("limited") || s.includes("few")) return "bg-amber-500/20 text-[#1A1A1A] border-amber-500/30";
     if (s.includes("sold") || s.includes("out")) return "bg-red-500/20 text-red-400 border-red-500/30";
     if (s.includes("launch") || s.includes("soon") || s.includes("new")) return "bg-blue-500/20 text-blue-400 border-blue-500/30";
-    return "bg-gold/20 text-gold border-gold/30";
+    return "bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30";
   };
 
   const formatDate = (dateStr?: string | null) => {
@@ -93,9 +93,9 @@ export default function QuickFactsBar({
         {facts.map((fact, idx) => (
           <div 
             key={idx} 
-            className="flex items-center gap-2 px-3 py-2 rounded-lg border border-gold/20 bg-card"
+            className="flex items-center gap-2 px-3 py-2 rounded-lg border border-[#B89555]/20 bg-card"
           >
-            <fact.icon className="w-4 h-4 text-gold flex-shrink-0" />
+            <fact.icon className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
             <div className="flex flex-col">
               <span className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/80 font-medium leading-none">{fact.label}</span>
               <span className="text-sm font-medium text-foreground">{fact.value}</span>

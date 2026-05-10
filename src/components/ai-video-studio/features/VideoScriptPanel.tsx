@@ -81,7 +81,7 @@ export function VideoScriptPanel() {
   return (
     <ScrollArea className="h-full">
       <div className="p-3 space-y-3">
-        <div className="flex items-center gap-2 text-amber-400 mb-1">
+        <div className="flex items-center gap-2 text-[#1A1A1A] mb-1">
           <Film className="w-4 h-4" />
           <span className="text-xs font-semibold uppercase tracking-wider">Video Script Generator</span>
         </div>
@@ -188,7 +188,7 @@ export function VideoScriptPanel() {
 
             {response.hook && (
               <div className="bg-amber-500/10 border border-amber-500/30 rounded p-2">
-                <span className="text-[10px] text-amber-400 uppercase font-bold">Hook</span>
+                <span className="text-[10px] text-[#1A1A1A] uppercase font-bold">Hook</span>
                 <p className="text-slate-300 text-xs italic">"{response.hook}"</p>
               </div>
             )}

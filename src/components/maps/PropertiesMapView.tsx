@@ -64,13 +64,13 @@ function DynamicTileLayer({ mapView, language }: { mapView: MapViewType; languag
 function MapViewToggle({ mapView, onViewChange, t }: { mapView: MapViewType; onViewChange: (v: MapViewType) => void; t: (key: string) => string }) {
   return (
     <div className="absolute top-4 left-4 z-[1000] flex flex-col gap-2">
-      <div className="bg-card/95 backdrop-blur-sm rounded-lg border border-gold/40 shadow-lg p-1 flex flex-col gap-1">
+      <div className="bg-card/95 backdrop-blur-sm rounded-lg border border-[#B89555]/40 shadow-lg p-1 flex flex-col gap-1">
         {(["satellite", "street", "terrain"] as MapViewType[]).map((view) => (
           <button
             key={view}
             onClick={() => onViewChange(view)}
             className={`px-3 py-2 text-xs font-medium rounded transition-all ${
-              mapView === view ? "bg-gold text-foreground" : "hover:bg-gold/20 text-muted-foreground"
+              mapView === view ? "bg-[#EFE6D6] text-foreground" : "hover:bg-[#EFE6D6]/20 text-muted-foreground"
             }`}
           >
             {t(`map.${view}`)}
@@ -124,7 +124,7 @@ export default function PropertiesMapView({ projects, hoveredProjectId, onProjec
 
   return (
     <MapErrorBoundary>
-      <div className="h-full w-full rounded-xl overflow-hidden border border-gold/30" style={{ touchAction: "pan-y" }}>
+      <div className="h-full w-full rounded-xl overflow-hidden border border-[#B89555]/30" style={{ touchAction: "pan-y" }}>
         <MapContainer
           center={center}
           zoom={11}

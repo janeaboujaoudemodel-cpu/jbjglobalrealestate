@@ -247,7 +247,7 @@ const LeadFormModule = ({
   }
 
   return (
-    <div className={compact ? '' : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl border-2 border-gold/30 p-6 md:p-8'}>
+    <div className={compact ? '' : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl border-2 border-[#B89555]/30 p-6 md:p-8'}>
       {title && (
         <div className="text-center mb-6">
           <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">
@@ -272,7 +272,7 @@ const LeadFormModule = ({
                 value={formData[field.name] || ''}
                 onValueChange={(value) => handleInputChange(field.name, value)}
               >
-                <SelectTrigger className="mt-1.5 bg-[#FDFBF7] border-gold/30 focus:border-gold">
+                <SelectTrigger className="mt-1.5 bg-[#FDFBF7] border-[#B89555]/30 focus:border-[#B89555]">
                   <SelectValue placeholder={field.placeholder || `Select ${field.label}`} />
                 </SelectTrigger>
                 <SelectContent>
@@ -289,7 +289,7 @@ const LeadFormModule = ({
                 value={formData[field.name] || ''}
                 onChange={(e) => handleInputChange(field.name, e.target.value)}
                 placeholder={field.placeholder}
-                className="mt-1.5 bg-[#FDFBF7] border-gold/30 focus:border-gold min-h-[100px]"
+                className="mt-1.5 bg-[#FDFBF7] border-[#B89555]/30 focus:border-[#B89555] min-h-[100px]"
               />
             ) : (
               <Input
@@ -298,7 +298,7 @@ const LeadFormModule = ({
                 value={formData[field.name] || ''}
                 onChange={(e) => handleInputChange(field.name, e.target.value)}
                 placeholder={field.placeholder}
-                className="mt-1.5 bg-[#FDFBF7] border-gold/30 focus:border-gold"
+                className="mt-1.5 bg-[#FDFBF7] border-[#B89555]/30 focus:border-[#B89555]"
               />
             )}
             
@@ -319,7 +319,7 @@ const LeadFormModule = ({
             />
             <label htmlFor="privacy" className="text-xs text-[#1A1A1A]/70 leading-tight cursor-pointer">
               {t('form.privacyConsent', 'I agree to the')}{' '}
-              <a href="/privacy" target="_blank" className="text-gold hover:underline">
+              <a href="/privacy" target="_blank" className="text-[#1A1A1A] hover:underline">
                 {t('form.privacyPolicy', 'Privacy Policy')}
               </a>
               <span className="text-red-500 ml-1">*</span>
@@ -346,7 +346,7 @@ const LeadFormModule = ({
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-gold hover:bg-gold-dark text-[#1A1A1A] font-medium py-3 rounded-lg transition-all duration-300"
+          className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]-dark text-[#1A1A1A] font-medium py-3 rounded-lg transition-all duration-300"
         >
           {isSubmitting ? (
             <>

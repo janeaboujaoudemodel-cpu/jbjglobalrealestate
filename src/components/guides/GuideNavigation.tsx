@@ -29,7 +29,7 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
       <div className="max-w-4xl mx-auto">
         {/* Start Here Block */}
         {showStartHere && (
-          <div className="mb-8 jj-card-inner border-2 border-gold/50 rounded-2xl p-8 text-center shadow-[0_8px_30px_rgba(200,167,102,0.2)]">
+          <div className="mb-8 jj-card-inner border-2 border-[#B89555]/50 rounded-2xl p-8 text-center shadow-[0_8px_30px_rgba(200,167,102,0.2)]">
             {/* Active color icon box */}
             <div className="jj-icon-box-active w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
               <Home className="w-7 h-7 text-[#1A1A1A]" />
@@ -40,9 +40,9 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
             </p>
             <Link 
               to="/buyer-guide"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 rounded-xl transition-all text-sm font-semibold shadow-[0_8px_25px_rgba(200,167,102,0.3),0_4px_15px_rgba(0,0,0,0.12)] hover:shadow-[0_12px_35px_rgba(200,167,102,0.45),0_8px_25px_rgba(0,0,0,0.18)] hover:-translate-y-1"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50 rounded-xl transition-all text-sm font-semibold shadow-[0_8px_25px_rgba(200,167,102,0.3),0_4px_15px_rgba(0,0,0,0.12)] hover:shadow-[0_12px_35px_rgba(200,167,102,0.45),0_8px_25px_rgba(0,0,0,0.18)] hover:-translate-y-1"
             >
-              <span className="text-gold">Start Here:</span>
+              <span className="text-[#1A1A1A]">Start Here:</span>
               <span className="text-[#1A1A1A]">Buyer Guide</span>
               <ArrowRight className="w-4 h-4 text-[#1A1A1A]" />
             </Link>
@@ -54,7 +54,7 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
           {prevGuide ? (
             <Link 
               to={prevGuide.path}
-              className="flex-1 group jj-card-inner border-2 border-gold/50 hover:border-gold rounded-2xl p-6 md:p-8 transition-all duration-300 hover:shadow-[0_12px_40px_rgba(200,167,102,0.35),0_8px_25px_rgba(0,0,0,0.15)] hover:-translate-y-1"
+              className="flex-1 group jj-card-inner border-2 border-[#B89555]/50 hover:border-[#B89555] rounded-2xl p-6 md:p-8 transition-all duration-300 hover:shadow-[0_12px_40px_rgba(200,167,102,0.35),0_8px_25px_rgba(0,0,0,0.15)] hover:-translate-y-1"
             >
               <div className="flex items-center gap-4 md:gap-6">
                 {/* Active color icon box */}
@@ -63,7 +63,7 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
                 </div>
                 <div className="flex-1">
                   <p className="text-[#1A1A1A]/70 text-xs md:text-sm uppercase tracking-wider mb-1 md:mb-2 font-semibold">Previous Guide</p>
-                  <p className="text-[#1A1A1A] font-bold group-hover:text-gold transition-colors text-lg md:text-xl lg:text-2xl">{prevGuide.title}</p>
+                  <p className="text-[#1A1A1A] font-bold group-hover:text-[#1A1A1A] transition-colors text-lg md:text-xl lg:text-2xl">{prevGuide.title}</p>
                   {prevGuide.description && (
                     <p className="text-[#1A1A1A]/70 text-sm mt-1 md:mt-2 hidden md:block">{prevGuide.description}</p>
                   )}
@@ -77,12 +77,12 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
           {nextGuide ? (
             <Link 
               to={nextGuide.path}
-              className="flex-1 group jj-card-inner border-2 border-gold/50 hover:border-gold rounded-2xl p-6 md:p-8 transition-all duration-300 hover:shadow-[0_12px_40px_rgba(200,167,102,0.35),0_8px_25px_rgba(0,0,0,0.15)] hover:-translate-y-1 text-right"
+              className="flex-1 group jj-card-inner border-2 border-[#B89555]/50 hover:border-[#B89555] rounded-2xl p-6 md:p-8 transition-all duration-300 hover:shadow-[0_12px_40px_rgba(200,167,102,0.35),0_8px_25px_rgba(0,0,0,0.15)] hover:-translate-y-1 text-right"
             >
               <div className="flex items-center justify-end gap-4 md:gap-6">
                 <div className="flex-1">
-                  <p className="text-gold text-xs md:text-sm uppercase tracking-wider mb-1 md:mb-2 font-semibold">Next Guide</p>
-                  <p className="text-[#1A1A1A] font-bold group-hover:text-gold transition-colors text-lg md:text-xl lg:text-2xl">{nextGuide.title}</p>
+                  <p className="text-[#1A1A1A] text-xs md:text-sm uppercase tracking-wider mb-1 md:mb-2 font-semibold">Next Guide</p>
+                  <p className="text-[#1A1A1A] font-bold group-hover:text-[#1A1A1A] transition-colors text-lg md:text-xl lg:text-2xl">{nextGuide.title}</p>
                   {nextGuide.description && (
                     <p className="text-[#1A1A1A]/70 text-sm mt-1 md:mt-2 hidden md:block">{nextGuide.description}</p>
                   )}
@@ -99,7 +99,7 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
         </div>
 
         {/* All Guides Links */}
-        <div className="mt-8 pt-6 border-t border-gold/30">
+        <div className="mt-8 pt-6 border-t border-[#B89555]/30">
           <p className="text-center text-sm text-[#1A1A1A]/70 font-medium uppercase tracking-wider mb-4">All Guides</p>
           <div className="flex flex-wrap justify-center gap-3">
             {guides.map((guide) => (
@@ -108,8 +108,8 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
                 to={guide.path}
                 className={`px-4 md:px-5 py-2 md:py-2.5 rounded-xl text-xs md:text-sm font-semibold transition-all duration-300 border-2 ${
                   guide.path === current
-                    ? "bg-gradient-to-br from-[#D8C7A6] via-[#C8B89A] to-[#B8A888] text-[#1A1A1A] border-gold shadow-[0_6px_20px_rgba(200,167,102,0.35)]"
-                    : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]/70 hover:text-[#1A1A1A] border-gold/50 hover:border-gold shadow-[0_4px_15px_rgba(200,167,102,0.2)] hover:shadow-[0_8px_25px_rgba(200,167,102,0.35)] hover:-translate-y-0.5"
+                    ? "bg-gradient-to-br from-[#D8C7A6] via-[#C8B89A] to-[#B8A888] text-[#1A1A1A] border-[#B89555] shadow-[0_6px_20px_rgba(200,167,102,0.35)]"
+                    : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]/70 hover:text-[#1A1A1A] border-[#B89555]/50 hover:border-[#B89555] shadow-[0_4px_15px_rgba(200,167,102,0.2)] hover:shadow-[0_8px_25px_rgba(200,167,102,0.35)] hover:-translate-y-0.5"
                 }`}
               >
                 {guide.title}

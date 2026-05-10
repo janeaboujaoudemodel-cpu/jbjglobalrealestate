@@ -86,8 +86,8 @@ export function NewsletterSection() {
     <section className="py-12 md:py-16 bg-premium-bg">
       <div className="container mx-auto px-4">
         <div className="max-w-2xl mx-auto text-center">
-          <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center mx-auto mb-4">
-            <Mail className="w-6 h-6 text-gold" />
+          <div className="w-12 h-12 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center mx-auto mb-4">
+            <Mail className="w-6 h-6 text-[#1A1A1A]" />
           </div>
           
           <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
@@ -117,7 +117,7 @@ export function NewsletterSection() {
                           <Input 
                             placeholder="Full Name *"
                             {...field}
-                            className="bg-zinc-900 border-2 border-gold/50 hover:border-gold focus:border-gold h-12 text-white placeholder:text-[#1A1A1A]/70 pl-10"
+                            className="bg-[#FDFBF7] border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555] h-12 text-white placeholder:text-[#1A1A1A]/70 pl-10"
                           />
                         </div>
                       </FormControl>
@@ -139,7 +139,7 @@ export function NewsletterSection() {
                             type="email"
                             placeholder="Email Address *"
                             {...field}
-                            className="bg-zinc-900 border-2 border-gold/50 hover:border-gold focus:border-gold h-12 text-white placeholder:text-[#1A1A1A]/70 pl-10"
+                            className="bg-[#FDFBF7] border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555] h-12 text-white placeholder:text-[#1A1A1A]/70 pl-10"
                           />
                         </div>
                       </FormControl>
@@ -177,9 +177,9 @@ export function NewsletterSection() {
 
           <p className="text-xs text-muted-foreground mt-4">
             By subscribing, you agree to our{" "}
-            <Link to="/terms" className="text-gold hover:underline">Terms of Service</Link>
+            <Link to="/terms" className="text-[#1A1A1A] hover:underline">Terms of Service</Link>
             {" "}and{" "}
-            <Link to="/privacy" className="text-gold hover:underline">Privacy Policy</Link>.
+            <Link to="/privacy" className="text-[#1A1A1A] hover:underline">Privacy Policy</Link>.
           </p>
         </div>
       </div>

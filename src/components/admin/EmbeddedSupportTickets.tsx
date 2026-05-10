@@ -152,7 +152,7 @@ export function EmbeddedSupportTickets() {
       {/* Stats - Make all cards clickable */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <Card 
-          className="bg-[#FDFBF7] border-2 border-gold/30 cursor-pointer hover:border-gold/60 active:scale-95 transition-all"
+          className="bg-[#FDFBF7] border-2 border-[#B89555]/30 cursor-pointer hover:border-[#B89555]/60 active:scale-95 transition-all"
           onClick={() => setFilters(prev => ({ ...prev, status: "all" }))}
         >
           <CardContent className="pt-4">
@@ -161,8 +161,8 @@ export function EmbeddedSupportTickets() {
                 <p className="text-[#1A1A1A]/70 text-xs">Total Tickets</p>
                 <p className="text-2xl font-bold text-[#1A1A1A]">{ticketCounts.total}</p>
               </div>
-              <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center">
-                <Ticket className="w-5 h-5 text-gold" />
+              <div className="w-10 h-10 bg-[#EFE6D6]/10 rounded-lg flex items-center justify-center">
+                <Ticket className="w-5 h-5 text-[#1A1A1A]" />
               </div>
             </div>
           </CardContent>
@@ -235,7 +235,7 @@ export function EmbeddedSupportTickets() {
       </div>
 
       {/* Filters */}
-      <Card className="bg-[#FDFBF7] border-2 border-gold/30">
+      <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
         <CardContent className="p-4">
           <div className="flex flex-col md:flex-row items-center gap-4">
             <div className="relative flex-1 max-w-md">
@@ -245,7 +245,7 @@ export function EmbeddedSupportTickets() {
                 value={filters.search}
                 onChange={(e) => handleSearchChange(e.target.value)}
                 placeholder="Search by ticket #, email, name, or subject..."
-                className="w-full h-10 pl-10 pr-4 rounded-lg bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all"
+                className="w-full h-10 pl-10 pr-4 rounded-lg bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-[#B89555] transition-all"
               />
             </div>
 
@@ -255,7 +255,7 @@ export function EmbeddedSupportTickets() {
                 value={filters.status}
                 onValueChange={(value) => setFilters((prev) => ({ ...prev, status: value }))}
               >
-                <SelectTrigger className="w-[140px] h-10 border-2 border-gold/30">
+                <SelectTrigger className="w-[140px] h-10 border-2 border-[#B89555]/30">
                   <SelectValue placeholder="All Status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -271,7 +271,7 @@ export function EmbeddedSupportTickets() {
                 value={filters.priority}
                 onValueChange={(value) => setFilters((prev) => ({ ...prev, priority: value }))}
               >
-                <SelectTrigger className="w-[140px] h-10 border-2 border-gold/30">
+                <SelectTrigger className="w-[140px] h-10 border-2 border-[#B89555]/30">
                   <SelectValue placeholder="All Priority" />
                 </SelectTrigger>
                 <SelectContent>
@@ -296,9 +296,9 @@ export function EmbeddedSupportTickets() {
 
           {/* Bulk Actions Bar */}
           {isSomeSelected && (
-            <div className="mt-4 flex items-center gap-3 p-3 bg-gold/10 border border-gold/30 rounded-lg">
-              <span className="text-gold font-medium text-sm">{selectedTicketIds.size} selected</span>
-              <div className="h-4 w-px bg-gold/30" />
+            <div className="mt-4 flex items-center gap-3 p-3 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-lg">
+              <span className="text-[#1A1A1A] font-medium text-sm">{selectedTicketIds.size} selected</span>
+              <div className="h-4 w-px bg-[#EFE6D6]/30" />
               <Button
                 size="sm"
                 onClick={() => handleBulkStatusChange("in_progress")}
@@ -343,7 +343,7 @@ export function EmbeddedSupportTickets() {
       <div className="flex gap-6 min-h-[500px]">
         {/* Ticket List */}
         <div className="flex-1 min-w-0">
-          <Card className="bg-[#FDFBF7] border-2 border-gold/30 h-full">
+          <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 h-full">
             {isLoading ? (
               <CardContent className="p-6 space-y-4">
                 {[...Array(5)].map((_, i) => (
@@ -356,7 +356,7 @@ export function EmbeddedSupportTickets() {
                 <p className="text-red-600 font-medium">Failed to load tickets</p>
                 <Button
                   onClick={() => refetch()}
-                  className="mt-4 bg-gold text-[#1A1A1A] hover:bg-gold/90"
+                  className="mt-4 bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
                 >
                   <RefreshCw className="w-4 h-4 mr-2" />
                   Retry
@@ -366,20 +366,20 @@ export function EmbeddedSupportTickets() {
               <div className="overflow-auto max-h-[600px]">
                 <Table className="min-w-[700px]">
                   <TableHeader>
-                    <TableRow className="border-gold/20 hover:bg-transparent">
+                    <TableRow className="border-[#B89555]/20 hover:bg-transparent">
                       <TableHead className="w-10 min-w-[40px]">
                         <Checkbox
                           checked={isAllSelected}
                           onCheckedChange={handleSelectAll}
-                          className="border-gold/50"
+                          className="border-[#B89555]/50"
                         />
                       </TableHead>
-                      <TableHead className="text-gold font-semibold text-xs whitespace-nowrap min-w-[100px]">Ticket #</TableHead>
-                      <TableHead className="text-gold font-semibold text-xs whitespace-nowrap min-w-[120px]">Customer</TableHead>
-                      <TableHead className="text-gold font-semibold text-xs whitespace-nowrap min-w-[140px]">Subject</TableHead>
-                      <TableHead className="text-gold font-semibold text-xs whitespace-nowrap min-w-[90px]">Priority</TableHead>
-                      <TableHead className="text-gold font-semibold text-xs whitespace-nowrap min-w-[90px]">Status</TableHead>
-                      <TableHead className="text-gold font-semibold text-xs whitespace-nowrap min-w-[90px]">
+                      <TableHead className="text-[#1A1A1A] font-semibold text-xs whitespace-nowrap min-w-[100px]">Ticket #</TableHead>
+                      <TableHead className="text-[#1A1A1A] font-semibold text-xs whitespace-nowrap min-w-[120px]">Customer</TableHead>
+                      <TableHead className="text-[#1A1A1A] font-semibold text-xs whitespace-nowrap min-w-[140px]">Subject</TableHead>
+                      <TableHead className="text-[#1A1A1A] font-semibold text-xs whitespace-nowrap min-w-[90px]">Priority</TableHead>
+                      <TableHead className="text-[#1A1A1A] font-semibold text-xs whitespace-nowrap min-w-[90px]">Status</TableHead>
+                      <TableHead className="text-[#1A1A1A] font-semibold text-xs whitespace-nowrap min-w-[90px]">
                         <button
                           onClick={() => setSortAscending(!sortAscending)}
                           className="flex items-center gap-1 hover:text-[#1A1A1A] transition-colors"
@@ -402,12 +402,12 @@ export function EmbeddedSupportTickets() {
                           key={ticket.id}
                           onClick={() => setSelectedTicketId(ticket.id)}
                           className={cn(
-                            "border-gold/10 cursor-pointer transition-all duration-200",
+                            "border-[#B89555]/10 cursor-pointer transition-all duration-200",
                             selectedTicketId === ticket.id
-                              ? "bg-gold/15 border-l-4 border-l-gold"
+                              ? "bg-[#EFE6D6]/15 border-l-4 border-l-gold"
                               : isSelected
-                              ? "bg-gold/10"
-                              : "hover:bg-gold/5"
+                              ? "bg-[#EFE6D6]/10"
+                              : "hover:bg-[#EFE6D6]/5"
                           )}
                         >
                           <TableCell onClick={(e) => e.stopPropagation()}>
@@ -415,7 +415,7 @@ export function EmbeddedSupportTickets() {
                               checked={isSelected}
                               onCheckedChange={() => {}}
                               onClick={(e) => handleSelectTicket(ticket.id, e as any)}
-                              className="border-gold/50"
+                              className="border-[#B89555]/50"
                             />
                           </TableCell>
                           <TableCell className="font-mono text-xs font-semibold text-[#1A1A1A] whitespace-nowrap">
@@ -497,7 +497,7 @@ export function EmbeddedSupportTickets() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="border-2 border-gold text-gold hover:bg-gold/20 font-semibold">Cancel</AlertDialogCancel>
+            <AlertDialogCancel className="border-2 border-[#B89555] text-[#1A1A1A] hover:bg-[#EFE6D6]/20 font-semibold">Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleBulkDelete}
               className="bg-red-600 hover:bg-red-700"

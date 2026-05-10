@@ -321,7 +321,7 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
                     </div>
                     <div className="flex justify-center gap-2 mt-2">
                       {(["blink", "turn-left", "turn-right"] as LivenessStage[]).map((s, i) => (
-                        <div key={s} className={`w-2 h-2 rounded-full ${i < livenessFrames.length ? "bg-emerald-500" : s === livenessStage ? "bg-[hsl(var(--gold))] animate-pulse" : "bg-zinc-600"}`} />
+                        <div key={s} className={`w-2 h-2 rounded-full ${i < livenessFrames.length ? "bg-emerald-500" : s === livenessStage ? "bg-[hsl(var(--gold))] animate-pulse" : "bg-[#1A1A1A]"}`} />
                       ))}
                     </div>
                   </div>

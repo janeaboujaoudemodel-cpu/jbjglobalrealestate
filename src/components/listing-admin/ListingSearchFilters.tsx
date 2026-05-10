@@ -93,13 +93,13 @@ const ListingSearchFilters = ({
             <Button
               variant="outline"
               size="sm"
-              className={`bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white hover:border-[#1A1A1A] transition-all duration-300 ${
-                developerValue !== "all" ? "border-gold bg-gold/10" : ""
+              className={`bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white hover:border-[#1A1A1A] transition-all duration-300 ${
+                developerValue !== "all" ? "border-[#B89555] bg-[#EFE6D6]/10" : ""
               }`}
             >
-              <Building2 className="w-4 h-4 mr-1.5 text-gold" />
+              <Building2 className="w-4 h-4 mr-1.5 text-[#1A1A1A]" />
               {t('listingAdmin.developer')}
-              {developerValue !== "all" && <span className="ml-1 text-gold">•</span>}
+              {developerValue !== "all" && <span className="ml-1 text-[#1A1A1A]">•</span>}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-64 p-3 bg-[#FDFBF7] border-[#B89555]/30" align="start">
@@ -124,13 +124,13 @@ const ListingSearchFilters = ({
             <Button
               variant="outline"
               size="sm"
-              className={`bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white hover:border-[#1A1A1A] transition-all duration-300 ${
-                searchValue ? "border-gold bg-gold/10" : ""
+              className={`bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white hover:border-[#1A1A1A] transition-all duration-300 ${
+                searchValue ? "border-[#B89555] bg-[#EFE6D6]/10" : ""
               }`}
             >
-              <FolderOpen className="w-4 h-4 mr-1.5 text-gold" />
+              <FolderOpen className="w-4 h-4 mr-1.5 text-[#1A1A1A]" />
               {t('listingAdmin.project')}
-              {searchValue && <span className="ml-1 text-gold">•</span>}
+              {searchValue && <span className="ml-1 text-[#1A1A1A]">•</span>}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-64 p-3 bg-[#FDFBF7] border-[#B89555]/30" align="start">
@@ -152,13 +152,13 @@ const ListingSearchFilters = ({
             <Button
               variant="outline"
               size="sm"
-              className={`bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white hover:border-[#1A1A1A] transition-all duration-300 ${
-                emirateValue !== "all" ? "border-gold bg-gold/10" : ""
+              className={`bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white hover:border-[#1A1A1A] transition-all duration-300 ${
+                emirateValue !== "all" ? "border-[#B89555] bg-[#EFE6D6]/10" : ""
               }`}
             >
-              <MapPin className="w-4 h-4 mr-1.5 text-gold" />
+              <MapPin className="w-4 h-4 mr-1.5 text-[#1A1A1A]" />
               {t('listingAdmin.emirate')}
-              {emirateValue !== "all" && <span className="ml-1 text-gold">•</span>}
+              {emirateValue !== "all" && <span className="ml-1 text-[#1A1A1A]">•</span>}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-64 p-3 bg-[#FDFBF7] border-[#B89555]/30" align="start">
@@ -182,13 +182,13 @@ const ListingSearchFilters = ({
             <Button
               variant="outline"
               size="sm"
-              className={`bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white hover:border-[#1A1A1A] transition-all duration-300 ${
-                locationValue ? "border-gold bg-gold/10" : ""
+              className={`bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white hover:border-[#1A1A1A] transition-all duration-300 ${
+                locationValue ? "border-[#B89555] bg-[#EFE6D6]/10" : ""
               }`}
             >
-              <Filter className="w-4 h-4 mr-1.5 text-gold" />
+              <Filter className="w-4 h-4 mr-1.5 text-[#1A1A1A]" />
               {t('listingAdmin.area')}
-              {locationValue && <span className="ml-1 text-gold">•</span>}
+              {locationValue && <span className="ml-1 text-[#1A1A1A]">•</span>}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-64 p-3 bg-[#FDFBF7] border-[#B89555]/30" align="start">
@@ -219,33 +219,33 @@ const ListingSearchFilters = ({
       {hasActiveFilters && (
         <div className="flex flex-wrap gap-2">
           {searchValue && (
-            <span className="inline-flex items-center gap-1 px-2 py-1 bg-gold/10 border border-gold/30 rounded-full text-xs text-[#1A1A1A]">
+            <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full text-xs text-[#1A1A1A]">
               Project: {searchValue}
-              <button onClick={() => onSearchChange("")} className="hover:text-gold">
+              <button onClick={() => onSearchChange("")} className="hover:text-[#1A1A1A]">
                 <X className="w-3 h-3" />
               </button>
             </span>
           )}
           {developerValue !== "all" && (
-            <span className="inline-flex items-center gap-1 px-2 py-1 bg-gold/10 border border-gold/30 rounded-full text-xs text-[#1A1A1A]">
+            <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full text-xs text-[#1A1A1A]">
               Developer: {developers.find((d) => d.id === developerValue)?.name}
-              <button onClick={() => onDeveloperChange("all")} className="hover:text-gold">
+              <button onClick={() => onDeveloperChange("all")} className="hover:text-[#1A1A1A]">
                 <X className="w-3 h-3" />
               </button>
             </span>
           )}
           {emirateValue !== "all" && (
-            <span className="inline-flex items-center gap-1 px-2 py-1 bg-gold/10 border border-gold/30 rounded-full text-xs text-[#1A1A1A]">
+            <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full text-xs text-[#1A1A1A]">
               Emirate: {emirateValue}
-              <button onClick={() => onEmirateChange("all")} className="hover:text-gold">
+              <button onClick={() => onEmirateChange("all")} className="hover:text-[#1A1A1A]">
                 <X className="w-3 h-3" />
               </button>
             </span>
           )}
           {locationValue && (
-            <span className="inline-flex items-center gap-1 px-2 py-1 bg-gold/10 border border-gold/30 rounded-full text-xs text-[#1A1A1A]">
+            <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full text-xs text-[#1A1A1A]">
               Area: {locationValue}
-              <button onClick={() => onLocationChange("")} className="hover:text-gold">
+              <button onClick={() => onLocationChange("")} className="hover:text-[#1A1A1A]">
                 <X className="w-3 h-3" />
               </button>
             </span>

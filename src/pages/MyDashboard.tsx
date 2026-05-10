@@ -154,9 +154,9 @@ function UsefulLinksCard() {
                 {/* Page edge (right side thickness) */}
                 <div className="absolute right-0 top-0 bottom-0 w-[6px] z-10">
                   <div className="h-full bg-gradient-to-l from-zinc-200/15 via-zinc-300/10 to-transparent" style={{ clipPath: 'polygon(100% 0, 100% 100%, 0 95%, 0 5%)' }} />
-                  <div className="absolute right-0 top-[4%] bottom-[4%] w-[2px] bg-zinc-400/15" />
-                  <div className="absolute right-[3px] top-[5%] bottom-[5%] w-[1px] bg-zinc-400/10" />
-                  <div className="absolute right-[5px] top-[6%] bottom-[6%] w-[1px] bg-zinc-400/5" />
+                  <div className="absolute right-0 top-[4%] bottom-[4%] w-[2px] bg-[#B89555]/15" />
+                  <div className="absolute right-[3px] top-[5%] bottom-[5%] w-[1px] bg-[#B89555]/10" />
+                  <div className="absolute right-[5px] top-[6%] bottom-[6%] w-[1px] bg-[#B89555]/5" />
                 </div>
               </div>
 

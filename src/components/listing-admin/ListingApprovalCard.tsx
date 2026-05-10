@@ -104,13 +104,13 @@ export function ListingApprovalCard({
             <>
               <button
                 onClick={(e) => { e.stopPropagation(); prevImage(); }}
-                className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#FDFBF7] border-2 border-gold hover:bg-gold/10 text-[#1A1A1A]/70 flex items-center justify-center shadow-lg transition-all z-10"
+                className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#FDFBF7] border-2 border-[#B89555] hover:bg-[#EFE6D6]/10 text-[#1A1A1A]/70 flex items-center justify-center shadow-lg transition-all z-10"
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
               <button
                 onClick={(e) => { e.stopPropagation(); nextImage(); }}
-                className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#FDFBF7] border-2 border-gold hover:bg-gold/10 text-[#1A1A1A]/70 flex items-center justify-center shadow-lg transition-all z-10"
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#FDFBF7] border-2 border-[#B89555] hover:bg-[#EFE6D6]/10 text-[#1A1A1A]/70 flex items-center justify-center shadow-lg transition-all z-10"
               >
                 <ChevronRight className="w-5 h-5" />
               </button>
@@ -134,7 +134,7 @@ export function ListingApprovalCard({
           
           {/* Property Type - Top Left (dark) */}
           {project.property_type_label && (
-            <div className="absolute top-2 left-2 bg-zinc-800/90 text-white px-2.5 py-1 rounded text-xs font-medium">
+            <div className="absolute top-2 left-2 bg-[#1A1A1A]/90 text-white px-2.5 py-1 rounded text-xs font-medium">
               {project.property_type_label}
             </div>
           )}
@@ -194,7 +194,7 @@ export function ListingApprovalCard({
           {(project.price_from || project.price_text) && (
             <div className="flex items-center gap-2 text-[#1A1A1A]/70">
               <DollarSign className="w-4 h-4 text-[#1A1A1A]/70" />
-              <span className="truncate font-medium text-gold">
+              <span className="truncate font-medium text-[#1A1A1A]">
                 {project.price_from ? formatPrice(project.price_from) : project.price_text}
               </span>
             </div>

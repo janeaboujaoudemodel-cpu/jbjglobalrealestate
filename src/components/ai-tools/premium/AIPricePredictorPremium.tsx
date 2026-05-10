@@ -71,7 +71,7 @@ const AIPricePredictorPremium = () => {
     if (trend?.toLowerCase().includes("down") || trend?.toLowerCase().includes("decrease")) {
       return <ArrowDown className="h-5 w-5 text-red-400" />;
     }
-    return <Minus className="h-5 w-5 text-amber-400" />;
+    return <Minus className="h-5 w-5 text-[#1A1A1A]" />;
   };
 
   return (
@@ -113,7 +113,7 @@ const AIPricePredictorPremium = () => {
               placeholder="Dubai Marina, Downtown..."
               value={formData.location}
               onChange={(e) => handleChange("location", e.target.value)}
-              className="bg-zinc-900/50 border-blue-500/30 text-white h-12 rounded-xl hover:border-blue-500/50 focus:border-blue-400 transition-colors"
+              className="bg-[#FDFBF7]/50 border-blue-500/30 text-white h-12 rounded-xl hover:border-blue-500/50 focus:border-blue-400 transition-colors"
             />
           </div>
 
@@ -167,7 +167,7 @@ const AIPricePredictorPremium = () => {
               placeholder="1200"
               value={formData.size}
               onChange={(e) => handleChange("size", e.target.value)}
-              className="bg-zinc-900/50 border-blue-500/30 text-white h-12 rounded-xl hover:border-blue-500/50 focus:border-blue-400 transition-colors"
+              className="bg-[#FDFBF7]/50 border-blue-500/30 text-white h-12 rounded-xl hover:border-blue-500/50 focus:border-blue-400 transition-colors"
             />
           </div>
 
@@ -180,7 +180,7 @@ const AIPricePredictorPremium = () => {
               placeholder="Emaar, DAMAC..."
               value={formData.developerName}
               onChange={(e) => handleChange("developerName", e.target.value)}
-              className="bg-zinc-900/50 border-blue-500/30 text-white h-12 rounded-xl hover:border-blue-500/50 focus:border-blue-400 transition-colors"
+              className="bg-[#FDFBF7]/50 border-blue-500/30 text-white h-12 rounded-xl hover:border-blue-500/50 focus:border-blue-400 transition-colors"
             />
           </div>
 
@@ -194,7 +194,7 @@ const AIPricePredictorPremium = () => {
               placeholder="2025"
               value={formData.completionYear}
               onChange={(e) => handleChange("completionYear", e.target.value)}
-              className="bg-zinc-900/50 border-blue-500/30 text-white h-12 rounded-xl hover:border-blue-500/50 focus:border-blue-400 transition-colors"
+              className="bg-[#FDFBF7]/50 border-blue-500/30 text-white h-12 rounded-xl hover:border-blue-500/50 focus:border-blue-400 transition-colors"
             />
           </div>
         </div>
@@ -209,7 +209,7 @@ const AIPricePredictorPremium = () => {
             placeholder="2,500,000"
             value={formData.currentPrice}
             onChange={(e) => handleChange("currentPrice", e.target.value)}
-            className="bg-zinc-900/50 border-blue-500/30 text-white h-12 rounded-xl hover:border-blue-500/50 focus:border-blue-400 transition-colors"
+            className="bg-[#FDFBF7]/50 border-blue-500/30 text-white h-12 rounded-xl hover:border-blue-500/50 focus:border-blue-400 transition-colors"
           />
         </div>
 
@@ -281,7 +281,7 @@ const AIPricePredictorPremium = () => {
               {/* Key Metrics */}
               <div className="grid md:grid-cols-3 gap-4 mb-6">
                 {response.confidenceScore && (
-                  <div className="bg-zinc-900/60 border border-blue-500/20 rounded-xl p-4">
+                  <div className="bg-[#FDFBF7]/60 border border-blue-500/20 rounded-xl p-4">
                     <Target className="h-5 w-5 mb-2 text-blue-400" />
                     <p className="text-blue-400/70 text-xs uppercase tracking-wider mb-1">Confidence</p>
                     <p className="text-white text-2xl font-bold">{response.confidenceScore}%</p>
@@ -289,7 +289,7 @@ const AIPricePredictorPremium = () => {
                   </div>
                 )}
                 {response.marketTrend && (
-                  <div className="bg-zinc-900/60 border border-blue-500/20 rounded-xl p-4">
+                  <div className="bg-[#FDFBF7]/60 border border-blue-500/20 rounded-xl p-4">
                     <TrendingUp className="h-5 w-5 mb-2 text-blue-400" />
                     <p className="text-blue-400/70 text-xs uppercase tracking-wider mb-1">Market Trend</p>
                     <p className="text-white text-2xl font-bold capitalize">{response.marketTrend}</p>
@@ -305,18 +305,18 @@ const AIPricePredictorPremium = () => {
                   }`}>
                     {response.comparison === 'overpriced' && <AlertTriangle className="h-5 w-5 mb-2 text-red-400" />}
                     {response.comparison === 'underpriced' && <CheckCircle className="h-5 w-5 mb-2 text-emerald-400" />}
-                    {response.comparison === 'fairly-priced' && <Target className="h-5 w-5 mb-2 text-amber-400" />}
+                    {response.comparison === 'fairly-priced' && <Target className="h-5 w-5 mb-2 text-[#1A1A1A]" />}
                     <p className="text-xs uppercase tracking-wider mb-1 text-white/70">Valuation</p>
                     <p className={`text-lg font-bold capitalize ${
                       response.comparison === 'overpriced' ? 'text-red-400' :
-                      response.comparison === 'underpriced' ? 'text-emerald-400' : 'text-amber-400'
+                      response.comparison === 'underpriced' ? 'text-emerald-400' : 'text-[#1A1A1A]'
                     }`}>{response.comparison}</p>
                   </div>
                 )}
               </div>
 
               {/* Full Analysis */}
-              <div className="bg-zinc-900/60 border border-blue-500/20 rounded-xl p-6">
+              <div className="bg-[#FDFBF7]/60 border border-blue-500/20 rounded-xl p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">
                     <Sparkles className="w-5 h-5 text-blue-400" />
@@ -326,14 +326,14 @@ const AIPricePredictorPremium = () => {
                     {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                   </Button>
                 </div>
-                <div className="bg-zinc-800/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
+                <div className="bg-[#1A1A1A]/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
                   {response.prediction}
                 </div>
               </div>
             </div>
 
             {/* Disclaimer */}
-            <div className="bg-zinc-800/50 border border-[#1A1A1A] rounded-2xl p-6">
+            <div className="bg-[#1A1A1A]/50 border border-[#1A1A1A] rounded-2xl p-6">
               <div className="flex items-start gap-3">
                 <AlertTriangle className="w-6 h-6 text-white/70 flex-shrink-0" />
                 <div>

@@ -85,9 +85,9 @@ export const ModeSelectionModal = () => {
           </div>,
           {
             duration: 8000,
-            icon: <CheckCircle2 className="w-5 h-5 text-gold" />,
+            icon: <CheckCircle2 className="w-5 h-5 text-[#1A1A1A]" />,
             position: 'bottom-center',
-            className: 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 text-[#1A1A1A] shadow-xl rounded-xl',
+            className: 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30 text-[#1A1A1A] shadow-xl rounded-xl',
           }
         );
       } else {
@@ -117,13 +117,13 @@ export const ModeSelectionModal = () => {
     <Dialog open={isVisible} onOpenChange={handleOpenChange}>
       <DialogContent
         className={cn(
-          "w-[calc(100vw-2rem)] max-w-lg sm:max-w-xl p-0 overflow-hidden border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]",
+          "w-[calc(100vw-2rem)] max-w-lg sm:max-w-xl p-0 overflow-hidden border-2 border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]",
           isForcedOpen && "[&>button]:hidden" // Hide the X close button when forced
         )}
         onPointerDownOutside={isForcedOpen ? (e) => e.preventDefault() : undefined}
         onEscapeKeyDown={isForcedOpen ? (e) => e.preventDefault() : undefined}
       >
-        <DialogHeader className="p-6 pb-4 border-b border-gold/20">
+        <DialogHeader className="p-6 pb-4 border-b border-[#B89555]/20">
           <DialogTitle className="text-xl sm:text-2xl font-bold text-center text-[#1A1A1A]">
             Welcome to JBJ Global
           </DialogTitle>
@@ -147,29 +147,29 @@ export const ModeSelectionModal = () => {
                   "w-full p-4 rounded-xl border-2 transition-all duration-300 text-left",
                   "hover:shadow-lg hover:scale-[1.01]",
                   isSelected
-                    ? "bg-gold/10 border-gold shadow-md"
-                    : "bg-[#FDFBF7]/80 backdrop-blur-sm border-gold/20 hover:border-gold/50"
+                    ? "bg-[#EFE6D6]/10 border-[#B89555] shadow-md"
+                    : "bg-[#FDFBF7]/80 backdrop-blur-sm border-[#B89555]/20 hover:border-[#B89555]/50"
                 )}
               >
                 <div className="flex items-start gap-4">
                   <div className={cn(
                     "w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border",
                     isSelected
-                      ? "bg-gold/20 border-gold"
-                      : "bg-gold/5 border-gold/20"
+                      ? "bg-[#EFE6D6]/20 border-[#B89555]"
+                      : "bg-[#EFE6D6]/5 border-[#B89555]/20"
                   )}>
-                    <Icon className={cn("w-6 h-6", isSelected ? "text-gold" : "text-[#1A1A1A]/70")} />
+                    <Icon className={cn("w-6 h-6", isSelected ? "text-[#1A1A1A]" : "text-[#1A1A1A]/70")} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <h3 className={cn(
                         "font-bold text-base",
-                        isSelected ? "text-gold" : "text-[#1A1A1A]"
+                        isSelected ? "text-[#1A1A1A]" : "text-[#1A1A1A]"
                       )}>
                         {option.label}
                       </h3>
                       {isSelected && (
-                        <CheckCircle2 className="w-5 h-5 text-gold" />
+                        <CheckCircle2 className="w-5 h-5 text-[#1A1A1A]" />
                       )}
                     </div>
                     <p className="text-sm text-[#1A1A1A]/70 mt-1">
@@ -182,7 +182,7 @@ export const ModeSelectionModal = () => {
           })}
         </div>
 
-        <div className="p-6 pt-2 border-t border-gold/20 bg-gradient-to-r from-gold/5 to-transparent">
+        <div className="p-6 pt-2 border-t border-[#B89555]/20 bg-gradient-to-r from-gold/5 to-transparent">
           <Button
             onClick={handleSelectMode}
             disabled={!selectedMode || isSubmitting}
@@ -207,7 +207,7 @@ export const ModeSelectionModal = () => {
               Already have an account?{' '}
               <button
                 onClick={() => { dismiss(); navigate('/auth'); }}
-                className="text-gold font-semibold hover:underline"
+                className="text-[#1A1A1A] font-semibold hover:underline"
               >
                 Sign In
               </button>

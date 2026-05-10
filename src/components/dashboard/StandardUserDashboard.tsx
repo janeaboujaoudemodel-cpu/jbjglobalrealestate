@@ -171,11 +171,11 @@ const StandardUserDashboard = () => {
         >
           {/* Header */}
           <motion.div variants={fadeInUp} className="text-center mb-12">
-            <Badge className="bg-gold/20 text-gold border-gold/30 mb-4">
+            <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30 mb-4">
               Welcome Back
             </Badge>
             <h1 className="text-3xl md:text-4xl font-bold mb-4">
-              How would you like to use <span className="text-gold">JBJ Global Real Estate</span>?
+              How would you like to use <span className="text-[#1A1A1A]">JBJ Global Real Estate</span>?
             </h1>
             <p className="text-lg text-[#1A1A1A]/70 max-w-2xl mx-auto">
               Select your role to customize your experience. You can change this anytime in your profile settings.
@@ -193,9 +193,9 @@ const StandardUserDashboard = () => {
                 <Card 
                   key={role.id}
                   onClick={() => !isSubmitting && handleRoleSelect(role.id)}
-                  className={`bg-zinc-900/50 border-2 transition-all duration-300 cursor-pointer group ${
+                  className={`bg-[#FDFBF7]/50 border-2 transition-all duration-300 cursor-pointer group ${
                     isSelected 
-                      ? 'border-gold bg-gold/5 shadow-lg shadow-gold/20' 
+                      ? 'border-[#B89555] bg-[#EFE6D6]/5 shadow-lg shadow-gold/20' 
                       : 'border-[#1A1A1A] hover:border-[#1A1A1A]'
                   } ${isSubmitting && !isSelected ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
@@ -203,16 +203,16 @@ const StandardUserDashboard = () => {
                     <div className="flex items-start justify-between">
                       <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${role.bgGradient} flex items-center justify-center group-hover:scale-110 transition-transform`}>
                         {isLoading ? (
-                          <Loader2 className="w-7 h-7 text-gold animate-spin" />
+                          <Loader2 className="w-7 h-7 text-[#1A1A1A] animate-spin" />
                         ) : (
                           <Icon className={`w-7 h-7 ${role.color}`} />
                         )}
                       </div>
                       {isSelected && !isLoading && (
-                        <CheckCircle2 className="w-6 h-6 text-gold" />
+                        <CheckCircle2 className="w-6 h-6 text-[#1A1A1A]" />
                       )}
                     </div>
-                    <CardTitle className={`text-xl mt-4 ${isSelected ? 'text-gold' : 'text-white group-hover:text-gold'} transition-colors`}>
+                    <CardTitle className={`text-xl mt-4 ${isSelected ? 'text-[#1A1A1A]' : 'text-white group-hover:text-[#1A1A1A]'} transition-colors`}>
                       {role.title}
                     </CardTitle>
                     <CardDescription className="text-[#1A1A1A]/70">
@@ -223,14 +223,14 @@ const StandardUserDashboard = () => {
                     <ul className="space-y-2">
                       {role.benefits.map((benefit, idx) => (
                         <li key={idx} className="flex items-center gap-2 text-sm text-[#1A1A1A]/70">
-                          <div className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-gold' : 'bg-zinc-600'}`} />
+                          <div className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-[#EFE6D6]' : 'bg-[#1A1A1A]'}`} />
                           {benefit}
                         </li>
                       ))}
                     </ul>
                     
                     <div className="mt-4 pt-4 border-t border-[#1A1A1A]">
-                      <span className={`text-sm flex items-center gap-2 ${isSelected ? 'text-gold' : 'text-[#1A1A1A]/70 group-hover:text-gold'} transition-colors`}>
+                      <span className={`text-sm flex items-center gap-2 ${isSelected ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/70 group-hover:text-[#1A1A1A]'} transition-colors`}>
                         {isLoading ? 'Setting up...' : 'Select this role'} 
                         <ArrowRight className={`w-4 h-4 transition-transform ${!isLoading && 'group-hover:translate-x-1'}`} />
                       </span>

@@ -136,7 +136,7 @@ const ReellyProjectCard = ({
    return (
       <div
         className={
-          "group relative overflow-hidden rounded-xl border-[3px] border-gold transition-all duration-200 flex flex-col " +
+          "group relative overflow-hidden rounded-xl border-[3px] border-[#B89555] transition-all duration-200 flex flex-col " +
           "bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))] " +
           "shadow-[0_8px_32px_rgba(200,167,102,0.25),0_4px_16px_rgba(0,0,0,0.15)] " +
           "hover:shadow-[0_12px_40px_rgba(200,167,102,0.3),0_8px_24px_rgba(0,0,0,0.2)] " +
@@ -186,9 +186,9 @@ const ReellyProjectCard = ({
                  className={
                    "absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full z-10 flex items-center justify-center transition-all " +
                    "bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))] " +
-                   "border border-gold/70 text-gold " +
+                   "border border-[#B89555]/70 text-[#1A1A1A] " +
                    "shadow-[0_10px_24px_hsl(0_0%_0%/0.20),inset_0_1px_0_hsl(0_0%_100%/0.55)] " +
-                   "hover:bg-gold hover:text-[#1A1A1A] hover:border-gold"
+                   "hover:bg-[#EFE6D6] hover:text-[#1A1A1A] hover:border-[#B89555]"
                  }
                >
                  <ChevronLeft className="w-4 h-4" />
@@ -198,9 +198,9 @@ const ReellyProjectCard = ({
                  className={
                    "absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full z-10 flex items-center justify-center transition-all " +
                    "bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))] " +
-                   "border border-gold/70 text-gold " +
+                   "border border-[#B89555]/70 text-[#1A1A1A] " +
                    "shadow-[0_10px_24px_hsl(0_0%_0%/0.20),inset_0_1px_0_hsl(0_0%_100%/0.55)] " +
-                   "hover:bg-gold hover:text-[#1A1A1A] hover:border-gold"
+                   "hover:bg-[#EFE6D6] hover:text-[#1A1A1A] hover:border-[#B89555]"
                  }
                >
                  <ChevronRight className="w-4 h-4" />
@@ -213,8 +213,8 @@ const ReellyProjectCard = ({
                      key={idx}
                      className={`w-1.5 h-1.5 rounded-full transition-colors ${
                        idx === currentImageIndex
-                         ? 'bg-gold shadow-[0_0_10px_hsl(var(--gold)/0.55)]'
-                         : 'bg-gold/35'
+                         ? 'bg-[#EFE6D6] shadow-[0_0_10px_hsl(var(--gold)/0.55)]'
+                         : 'bg-[#EFE6D6]/35'
                      }`}
                    />
                  ))}
@@ -252,7 +252,7 @@ const ReellyProjectCard = ({
          {/* Content */}
          <div className="p-4 flex-1 flex flex-col">
            {/* Project Name */}
-           <h4 className="text-[#1A1A1A] text-lg font-bold mb-1 whitespace-normal break-words leading-tight hover:text-gold transition-colors">
+           <h4 className="text-[#1A1A1A] text-lg font-bold mb-1 whitespace-normal break-words leading-tight hover:text-[#1A1A1A] transition-colors">
              {project.name}
            </h4>
            
@@ -265,7 +265,7 @@ const ReellyProjectCard = ({
            )}
            
            {/* Divider */}
-           <div className="h-px bg-gold/20 my-2" />
+           <div className="h-px bg-[#EFE6D6]/20 my-2" />
            
           {/* Handover line — black label, orange date */}
           {(() => {
@@ -320,7 +320,7 @@ const ReellyProjectCard = ({
            {!compact && (
              <p className="text-muted-foreground text-sm leading-relaxed mb-3 flex-1">
                 {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
-                 <span className="text-gold font-bold hover:text-[#1A1A1A] cursor-pointer ml-1">
+                 <span className="text-[#1A1A1A] font-bold hover:text-[#1A1A1A] cursor-pointer ml-1">
                    ...more
                  </span>
              </p>
@@ -331,7 +331,7 @@ const ReellyProjectCard = ({
        {/* CTA Buttons - hidden in compact mode */}
        {!compact && (
          <div className="px-4 pb-4 pt-0">
-           <div className="grid grid-cols-3 gap-2 border-t border-gold/20 pt-3">
+           <div className="grid grid-cols-3 gap-2 border-t border-[#B89555]/20 pt-3">
              <Button asChild variant="secondary" size="sm" className="w-full">
                <a
                  href={`mailto:${CONTACT_INFO.email}?subject=Inquiry: ${encodeURIComponent(project.name)}&body=${encodeURIComponent(`Hello JBJ Global Real Estate,\n\nI am interested in ${project.name}${project.location ? ` located in ${project.location}` : ''}.\n\nPlease provide more details.\n\nThank you.`)}`}

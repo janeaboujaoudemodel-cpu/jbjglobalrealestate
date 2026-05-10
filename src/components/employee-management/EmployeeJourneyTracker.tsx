@@ -87,7 +87,7 @@ const EmployeeJourneyTracker: React.FC<EmployeeJourneyTrackerProps> = ({ searchQ
   const getEventColor = (type: string) => {
     switch (type) {
       case 'hired': return 'bg-green-500/20 text-green-700 border-green-500/30';
-      case 'promoted': return 'bg-gold/20 text-gold border-gold/30';
+      case 'promoted': return 'bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30';
       case 'department_change': return 'bg-blue-500/20 text-blue-700 border-blue-500/30';
       case 'probation_passed': return 'bg-emerald-500/20 text-emerald-700 border-emerald-500/30';
       case 'warning_issued': return 'bg-red-500/20 text-red-700 border-red-500/30';
@@ -105,10 +105,10 @@ const EmployeeJourneyTracker: React.FC<EmployeeJourneyTrackerProps> = ({ searchQ
   return (
     <div className="grid lg:grid-cols-3 gap-6">
       {/* Employee List */}
-      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
         <CardHeader>
           <CardTitle className="text-[#1A1A1A] text-sm flex items-center gap-2">
-            <Activity className="w-4 h-4 text-gold" />
+            <Activity className="w-4 h-4 text-[#1A1A1A]" />
             Select Employee
           </CardTitle>
         </CardHeader>
@@ -121,8 +121,8 @@ const EmployeeJourneyTracker: React.FC<EmployeeJourneyTrackerProps> = ({ searchQ
                   onClick={() => setSelectedEmployee(emp.user_id)}
                   className={`w-full text-left p-3 rounded-lg border transition-all ${
                     selectedEmployee === emp.user_id 
-                      ? 'bg-gold/20 border-gold' 
-                      : 'bg-[#FDFBF7]/50 border-gold/20 hover:border-gold/40'
+                      ? 'bg-[#EFE6D6]/20 border-[#B89555]' 
+                      : 'bg-[#FDFBF7]/50 border-[#B89555]/20 hover:border-[#B89555]/40'
                   }`}
                 >
                   <p className="font-medium text-[#1A1A1A] text-sm">{emp.display_name}</p>
@@ -135,10 +135,10 @@ const EmployeeJourneyTracker: React.FC<EmployeeJourneyTrackerProps> = ({ searchQ
       </Card>
 
       {/* Journey Timeline */}
-      <Card className="lg:col-span-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+      <Card className="lg:col-span-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
         <CardHeader>
           <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-gold" />
+            <Calendar className="w-5 h-5 text-[#1A1A1A]" />
             {selectedEmp ? `${selectedEmp.display_name}'s Journey` : 'Employee Journey'}
           </CardTitle>
         </CardHeader>
@@ -153,7 +153,7 @@ const EmployeeJourneyTracker: React.FC<EmployeeJourneyTrackerProps> = ({ searchQ
             <ScrollArea className="h-[400px]">
               <div className="relative pl-8">
                 {/* Timeline line */}
-                <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-gold/30" />
+                <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-[#EFE6D6]/30" />
                 
                 <div className="space-y-6">
                   {events.map((event, idx) => (
@@ -161,7 +161,7 @@ const EmployeeJourneyTracker: React.FC<EmployeeJourneyTrackerProps> = ({ searchQ
                       {/* Timeline dot */}
                       <div className={`absolute -left-5 w-4 h-4 rounded-full border-2 ${getEventColor(event.event_type)} bg-[#FDFBF7]`} />
                       
-                      <div className="bg-[#FDFBF7]/50 border border-gold/20 rounded-lg p-4">
+                      <div className="bg-[#FDFBF7]/50 border border-[#B89555]/20 rounded-lg p-4">
                         <div className="flex items-start justify-between mb-2">
                           <div className="flex items-center gap-2">
                             {getEventIcon(event.event_type)}
@@ -178,7 +178,7 @@ const EmployeeJourneyTracker: React.FC<EmployeeJourneyTrackerProps> = ({ searchQ
                         {event.previous_value && event.new_value && (
                           <div className="flex items-center gap-2 text-sm mt-2">
                             <span className="text-[#1A1A1A]/70">{JSON.stringify(event.previous_value)}</span>
-                            <ArrowRight className="w-4 h-4 text-gold" />
+                            <ArrowRight className="w-4 h-4 text-[#1A1A1A]" />
                             <span className="text-[#1A1A1A] font-medium">{JSON.stringify(event.new_value)}</span>
                           </div>
                         )}

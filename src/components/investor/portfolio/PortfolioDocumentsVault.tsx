@@ -32,7 +32,7 @@ export default function PortfolioDocumentsVault({ documentCounts }: PortfolioDoc
     <section className="space-y-4">
       <div>
         <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
-          <FolderOpen className="w-5 h-5 text-gold" />
+          <FolderOpen className="w-5 h-5 text-[#1A1A1A]" />
           Portfolio Documents Vault
         </h2>
         <p className="text-muted-foreground text-sm mt-1">
@@ -40,7 +40,7 @@ export default function PortfolioDocumentsVault({ documentCounts }: PortfolioDoc
         </p>
       </div>
 
-      <Card className="border-2 border-gold/30">
+      <Card className="border-2 border-[#B89555]/30">
         <CardContent className="p-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             {categories.map((category) => (

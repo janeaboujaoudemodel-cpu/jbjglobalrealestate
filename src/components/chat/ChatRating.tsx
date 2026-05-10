@@ -47,7 +47,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
   return (
     <div className="flex-1 p-4 flex flex-col overflow-y-auto">
       <div className="w-14 h-14 rounded-full bg-gradient-to-r from-gold/20 to-gold/10 flex items-center justify-center mb-3 mx-auto">
-        <Star className="w-7 h-7 text-gold" />
+        <Star className="w-7 h-7 text-[#1A1A1A]" />
       </div>
       
       {step === 'main' ? (
@@ -68,7 +68,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
                 <Star
                   className={`w-6 h-6 ${
                     star <= (hoveredRating || rating)
-                      ? 'text-gold fill-gold'
+                      ? 'text-[#1A1A1A] fill-gold'
                       : 'text-[#1A1A1A]/70'
                   }`}
                 />
@@ -76,7 +76,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
             ))}
           </div>
           {(hoveredRating || rating) > 0 && (
-            <p className="text-gold text-xs text-center mb-4">{ratingLabels[(hoveredRating || rating) - 1]}</p>
+            <p className="text-[#1A1A1A] text-xs text-center mb-4">{ratingLabels[(hoveredRating || rating) - 1]}</p>
           )}
 
           {/* Was it helpful */}
@@ -112,7 +112,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
           <div className="mb-4">
             <p className="text-[#1A1A1A]/70 text-xs mb-2 text-center">How did you hear about us?</p>
             <Select value={howHeardAboutUs} onValueChange={setHowHeardAboutUs}>
-              <SelectTrigger className="bg-[#FDFBF7]/10 border-gold/20 text-white text-xs h-9">
+              <SelectTrigger className="bg-[#FDFBF7]/10 border-[#B89555]/20 text-white text-xs h-9">
                 <SelectValue placeholder="Select an option" />
               </SelectTrigger>
               <SelectContent>
@@ -143,7 +143,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
               onClick={() => setStep('details')}
               disabled={rating === 0}
               size="sm"
-              className="flex-1 bg-gold hover:bg-gold/90 text-[#1A1A1A]"
+              className="flex-1 bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]"
             >
               Continue
             </Button>
@@ -157,7 +157,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
           <div className="mb-3">
             <div className="flex items-center justify-between mb-1">
               <p className="text-[#1A1A1A]/70 text-xs flex items-center gap-1">
-                <MessageCircle className="w-3 h-3 text-gold" />
+                <MessageCircle className="w-3 h-3 text-[#1A1A1A]" />
                 Assistant behavior
               </p>
             </div>
@@ -173,7 +173,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
                   <Star
                     className={`w-5 h-5 ${
                       star <= (hoveredAgentBehavior || agentBehavior)
-                        ? 'text-gold fill-gold'
+                        ? 'text-[#1A1A1A] fill-gold'
                         : 'text-[#1A1A1A]/70'
                     }`}
                   />
@@ -186,7 +186,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
           <div className="mb-3">
             <div className="flex items-center justify-between mb-1">
               <p className="text-[#1A1A1A]/70 text-xs flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-gold" />
+                <Sparkles className="w-3 h-3 text-[#1A1A1A]" />
                 Response speed
               </p>
             </div>
@@ -202,7 +202,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
                   <Star
                     className={`w-5 h-5 ${
                       star <= (hoveredResponseSpeed || responseSpeed)
-                        ? 'text-gold fill-gold'
+                        ? 'text-[#1A1A1A] fill-gold'
                         : 'text-[#1A1A1A]/70'
                     }`}
                   />
@@ -219,7 +219,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
                 value={whatDidntWork}
                 onChange={(e) => setWhatDidntWork(e.target.value)}
                 placeholder="Tell us what went wrong..."
-                className="bg-[#FDFBF7]/10 border-gold/20 text-white placeholder:text-white/85 text-xs h-16 resize-none"
+                className="bg-[#FDFBF7]/10 border-[#B89555]/20 text-white placeholder:text-white/85 text-xs h-16 resize-none"
               />
             </div>
           )}
@@ -231,7 +231,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
               value={whatImprove}
               onChange={(e) => setWhatImprove(e.target.value)}
               placeholder="Your suggestions help us get better..."
-              className="bg-[#FDFBF7]/10 border-gold/20 text-white placeholder:text-white/85 text-xs h-16 resize-none"
+              className="bg-[#FDFBF7]/10 border-[#B89555]/20 text-white placeholder:text-white/85 text-xs h-16 resize-none"
             />
           </div>
 
@@ -240,7 +240,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
             value={feedback}
             onChange={(e) => setFeedback(e.target.value)}
             placeholder="Any additional comments? (optional)"
-            className="bg-[#FDFBF7]/10 border-gold/20 text-white placeholder:text-white/85 mb-3 text-xs h-9"
+            className="bg-[#FDFBF7]/10 border-[#B89555]/20 text-white placeholder:text-white/85 mb-3 text-xs h-9"
           />
 
           <div className="flex gap-3 mt-auto">
@@ -255,7 +255,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
             <Button
               onClick={handleSubmit}
               size="sm"
-              className="flex-1 bg-gold hover:bg-gold/90 text-[#1A1A1A]"
+              className="flex-1 bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]"
             >
               Submit Feedback
             </Button>

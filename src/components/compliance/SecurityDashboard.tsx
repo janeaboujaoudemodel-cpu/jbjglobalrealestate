@@ -145,7 +145,7 @@ const SecurityDashboard: React.FC = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <div className="h-14 w-14 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center">
-            <Shield className="h-7 w-7 text-gold" />
+            <Shield className="h-7 w-7 text-[#1A1A1A]" />
           </div>
           <div>
             <h1 className="text-2xl font-bold">Security & Compliance Console</h1>
@@ -276,7 +276,7 @@ const SecurityDashboard: React.FC = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-gold" />
+                  <FileText className="h-5 w-5 text-[#1A1A1A]" />
                   Daily Security Summary
                 </CardTitle>
                 <CardDescription>Automated report from Amanda Clarke</CardDescription>
@@ -292,7 +292,7 @@ const SecurityDashboard: React.FC = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Activity className="h-5 w-5 text-gold" />
+                  <Activity className="h-5 w-5 text-[#1A1A1A]" />
                   Real-time Activity
                 </CardTitle>
                 <CardDescription>Latest security events</CardDescription>
@@ -543,7 +543,7 @@ const SecurityDashboard: React.FC = () => {
             </Card>
             <Card className="p-6">
               <h3 className="font-semibold flex items-center gap-2">
-                <Shield className="h-5 w-5 text-gold" />
+                <Shield className="h-5 w-5 text-[#1A1A1A]" />
                 ISO 27001
               </h3>
               <p className="text-sm text-muted-foreground mt-2">Security Practices</p>
@@ -599,7 +599,7 @@ const SecurityDashboard: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <FileText className="h-5 w-5 text-gold" />
+                <FileText className="h-5 w-5 text-[#1A1A1A]" />
                 File Provenance Tracking
               </CardTitle>
               <CardDescription>

@@ -176,7 +176,7 @@ export default function ResearchUsersPanel() {
       {/* Header */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 flex items-center justify-center">
             <Users className="w-5 h-5 text-[#8A7356]" />
           </div>
           <div>
@@ -185,13 +185,13 @@ export default function ResearchUsersPanel() {
           </div>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" size="sm" onClick={() => refetch()} className="border-gold/40 text-[#1A1A1A] hover:bg-gold/10">
+          <Button variant="outline" size="sm" onClick={() => refetch()} className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
             <RefreshCw className="w-4 h-4 mr-1" /> Refresh
           </Button>
-          <Button variant="outline" size="sm" onClick={exportCSV} className="border-gold/40 text-[#1A1A1A] hover:bg-gold/10">
+          <Button variant="outline" size="sm" onClick={exportCSV} className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
             <Download className="w-4 h-4 mr-1" /> CSV
           </Button>
-          <Button size="sm" onClick={exportExcel} className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-gold/40 hover:shadow-md">
+          <Button size="sm" onClick={exportExcel} className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/40 hover:shadow-md">
             <Download className="w-4 h-4 mr-1" /> Excel
           </Button>
         </div>
@@ -205,11 +205,11 @@ export default function ResearchUsersPanel() {
             placeholder="Search by email, name, phone..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 bg-[#FDFBF7]/80 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
+            className="pl-9 bg-[#FDFBF7]/80 border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
           />
         </div>
         <Select value={segmentFilter} onValueChange={setSegmentFilter}>
-          <SelectTrigger className="w-[180px] bg-[#FDFBF7]/80 border-gold/40 text-[#1A1A1A]">
+          <SelectTrigger className="w-[180px] bg-[#FDFBF7]/80 border-[#B89555]/40 text-[#1A1A1A]">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -219,7 +219,7 @@ export default function ResearchUsersPanel() {
           </SelectContent>
         </Select>
         <Select value={intentFilter} onValueChange={setIntentFilter}>
-          <SelectTrigger className="w-[140px] bg-[#FDFBF7]/80 border-gold/40 text-[#1A1A1A]">
+          <SelectTrigger className="w-[140px] bg-[#FDFBF7]/80 border-[#B89555]/40 text-[#1A1A1A]">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -231,7 +231,7 @@ export default function ResearchUsersPanel() {
       </div>
 
       {/* Table */}
-      <div className="rounded-xl border-2 border-gold/30 overflow-hidden bg-[#FDFBF7]/60">
+      <div className="rounded-xl border-2 border-[#B89555]/30 overflow-hidden bg-[#FDFBF7]/60">
         <ScrollArea className="h-[600px]">
           <div className="overflow-x-auto">
             <Table>
@@ -262,7 +262,7 @@ export default function ResearchUsersPanel() {
                   </TableRow>
                 ) : (
                   filtered.map((u) => (
-                    <TableRow key={u.id} className="hover:bg-gold/5 border-b border-gold/10">
+                    <TableRow key={u.id} className="hover:bg-[#EFE6D6]/5 border-b border-[#B89555]/10">
                       <TableCell className="text-[#1A1A1A] text-sm">{u.email}</TableCell>
                       <TableCell className="text-[#1A1A1A]/70 text-sm">{u.full_name || "—"}</TableCell>
                       <TableCell>

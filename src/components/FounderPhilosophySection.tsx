@@ -44,9 +44,9 @@ export const FounderPhilosophySection = () => {
             {/* Left - Portrait with gold champagne card on mobile */}
             <motion.div variants={fadeInUp} className="flex flex-col items-center">
               {/* Gold champagne card wrapper for mobile separation */}
-              <div className="bg-gradient-to-r from-[#EFE6D6] via-[#F7F1E6] to-[#EFE6D6] md:bg-transparent rounded-2xl p-4 md:p-0 border border-gold/30 md:border-0 shadow-xl md:shadow-none">
+              <div className="bg-gradient-to-r from-[#EFE6D6] via-[#F7F1E6] to-[#EFE6D6] md:bg-transparent rounded-2xl p-4 md:p-0 border border-[#B89555]/30 md:border-0 shadow-xl md:shadow-none">
                 <Link to="/founder" className="block relative group">
-                  <div className="relative w-64 h-80 md:w-80 md:h-96 rounded-2xl overflow-hidden border-2 border-gold/30 shadow-2xl shadow-gold/20 group-hover:border-gold transition-all duration-300">
+                  <div className="relative w-64 h-80 md:w-80 md:h-96 rounded-2xl overflow-hidden border-2 border-[#B89555]/30 shadow-2xl shadow-gold/20 group-hover:border-[#B89555] transition-all duration-300">
                     <img 
                       src={founderPremium} 
                       alt="Jane Bou Jaoude - Founder" 
@@ -58,7 +58,7 @@ export const FounderPhilosophySection = () => {
                 
                 {/* Founder name label on mobile */}
                 <div className="text-center mt-4 md:hidden">
-                  <Link to="/founder" className="text-gold font-semibold text-lg hover:underline">
+                  <Link to="/founder" className="text-[#1A1A1A] font-semibold text-lg hover:underline">
                     Jane Bou Jaoude
                   </Link>
                   <p className="text-[#1A1A1A]/70 text-sm">Founder &amp; CEO</p>
@@ -85,24 +85,24 @@ export const FounderPhilosophySection = () => {
             {/* Right - Content */}
             <motion.div variants={fadeInUp} className="space-y-6">
               <div>
-                <span className="inline-block text-gold text-xs uppercase tracking-[0.3em] mb-4">Philosophy</span>
+                <span className="inline-block text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4">Philosophy</span>
                 <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                  <span className="text-[#1A1A1A]">A Founder-Led</span> <span className="text-gold">Vision</span>
+                  <span className="text-[#1A1A1A]">A Founder-Led</span> <span className="text-[#1A1A1A]">Vision</span>
                 </h2>
               </div>
               
               {/* Card with Gold Champagne background - matching Developer Marquee logos area */}
-              <div className="bg-gradient-to-r from-[#EFE6D6] via-[#F7F1E6] to-[#EFE6D6] rounded-2xl p-6 md:p-8 border border-gold/30">
+              <div className="bg-gradient-to-r from-[#EFE6D6] via-[#F7F1E6] to-[#EFE6D6] rounded-2xl p-6 md:p-8 border border-[#B89555]/30">
                 <p className="text-[#1A1A1A] text-base leading-relaxed mb-4">
-                  <Link to="/about" className="text-gold hover:underline">JBJ Global Real Estate</Link> is a founder-led brokerage built on unwavering standards, discretion, and long-term vision.
+                  <Link to="/about" className="text-[#1A1A1A] hover:underline">JBJ Global Real Estate</Link> is a founder-led brokerage built on unwavering standards, discretion, and long-term vision.
                 </p>
                 <p className="text-[#1A1A1A]/70 text-sm leading-relaxed">
-                  Founded by <Link to="/founder" className="text-gold hover:underline">Jane Bou Jaoude</Link>, our approach combines deep market expertise with personalized service, ensuring every client receives the attention and insight they deserve.
+                  Founded by <Link to="/founder" className="text-[#1A1A1A] hover:underline">Jane Bou Jaoude</Link>, our approach combines deep market expertise with personalized service, ensuring every client receives the attention and insight they deserve.
                 </p>
               </div>
               
               <p className="text-[#1A1A1A]/70 text-xs">
-                Learn more about our <Link to="/about" className="text-gold hover:underline">company values</Link> and <Link to="/founder" className="text-gold hover:underline">leadership</Link>.
+                Learn more about our <Link to="/about" className="text-[#1A1A1A] hover:underline">company values</Link> and <Link to="/founder" className="text-[#1A1A1A] hover:underline">leadership</Link>.
               </p>
             </motion.div>
           </motion.div>

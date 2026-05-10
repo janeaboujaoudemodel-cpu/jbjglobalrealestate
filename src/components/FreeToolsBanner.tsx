@@ -149,7 +149,7 @@ export default function FreeToolsBanner() {
                     <Gift className="w-6 h-6 text-[#1A1A1A]" />
                   </div>
                   <div className="flex gap-2">
-                    <span className="px-3 py-1.5 bg-gold/20 text-gold text-xs font-bold rounded-full flex items-center gap-1.5 border border-gold/40 shadow-sm shadow-gold/20">
+                    <span className="px-3 py-1.5 bg-[#EFE6D6]/20 text-[#1A1A1A] text-xs font-bold rounded-full flex items-center gap-1.5 border border-[#B89555]/40 shadow-sm shadow-gold/20">
                       <Sparkles className="w-3.5 h-3.5" />
                       FREE
                     </span>
@@ -213,7 +213,7 @@ export default function FreeToolsBanner() {
                 </motion.div>
 
                 {/* Footer note */}
-                <p className="text-gold text-xs text-center mt-4 font-medium opacity-90">
+                <p className="text-[#1A1A1A] text-xs text-center mt-4 font-medium opacity-90">
                   No credit card required · Join 5,000+ members already using JBJ tools daily
                 </p>
 
@@ -222,7 +222,7 @@ export default function FreeToolsBanner() {
                   {!canClose ? (
                     <p className="text-white/90 text-xs">
                       You can close this window in{" "}
-                      <span className="text-gold font-bold">{countdown}</span>{" "}
+                      <span className="text-[#1A1A1A] font-bold">{countdown}</span>{" "}
                       {countdown === 1 ? "second" : "seconds"}…
                     </p>
                   ) : (

@@ -125,7 +125,7 @@ ${response.report}
                     placeholder="Dubai Marina, Palm Jumeirah, Downtown..."
                     value={formData.location}
                     onChange={(e) => handleChange("location", e.target.value)}
-                    className="bg-zinc-900/50 border-indigo-500/30 text-white hover:border-indigo-500/50 focus:border-indigo-400 transition-colors"
+                    className="bg-[#FDFBF7]/50 border-indigo-500/30 text-white hover:border-indigo-500/50 focus:border-indigo-400 transition-colors"
                   />
                 </div>
 
@@ -243,13 +243,13 @@ ${response.report}
                       ) : response.outlook === "bearish" ? (
                         <TrendingDown className="h-6 w-6 text-red-400" />
                       ) : (
-                        <BarChart3 className="h-6 w-6 text-amber-400" />
+                        <BarChart3 className="h-6 w-6 text-[#1A1A1A]" />
                       )}
                       <div>
                         <p className="text-xs text-white/70">Market Outlook</p>
                         <p className={`text-lg font-bold capitalize ${
                           response.outlook === "bullish" ? "text-emerald-400" :
-                          response.outlook === "bearish" ? "text-red-400" : "text-amber-400"
+                          response.outlook === "bearish" ? "text-red-400" : "text-[#1A1A1A]"
                         }`}>
                           {response.outlook}
                         </p>
@@ -285,7 +285,7 @@ ${response.report}
                         </Button>
                       </div>
                     </div>
-                    <div className="bg-zinc-800/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[500px] overflow-y-auto">
+                    <div className="bg-[#1A1A1A]/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[500px] overflow-y-auto">
                       {response.report}
                     </div>
                   </CardContent>

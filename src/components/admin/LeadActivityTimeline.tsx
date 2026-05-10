@@ -43,14 +43,14 @@ const EVENT_CONFIG: Record<
   },
   book_download: {
     icon: Download,
-    color: "text-gold",
+    color: "text-[#1A1A1A]",
     bg: "bg-amber-500/10 border-amber-500/30",
     label: "Downloaded book",
   },
   time_on_page: {
     icon: Clock,
     color: "text-white/70",
-    bg: "bg-zinc-700/30 border-[#1A1A1A]/30",
+    bg: "bg-[#1A1A1A]/30 border-[#1A1A1A]/30",
     label: "Time on page",
   },
   tool_use: {
@@ -86,7 +86,7 @@ const EVENT_CONFIG: Record<
   click: {
     icon: MousePointer,
     color: "text-white/85",
-    bg: "bg-zinc-700/30 border-[#1A1A1A]/30",
+    bg: "bg-[#1A1A1A]/30 border-[#1A1A1A]/30",
     label: "Clicked",
   },
   form_submission: {
@@ -106,7 +106,7 @@ const EVENT_CONFIG: Record<
 const DEFAULT_EVENT = {
   icon: Activity,
   color: "text-white/70",
-  bg: "bg-zinc-700/30 border-[#1A1A1A]/30",
+  bg: "bg-[#1A1A1A]/30 border-[#1A1A1A]/30",
   label: "Activity",
 };
 
@@ -220,13 +220,13 @@ export default function LeadActivityTimeline({ email }: LeadActivityTimelineProp
       <div className="grid grid-cols-4 gap-2">
         {[
           { label: "Page Views", value: summary.pageViews, sub: `${uniquePages} unique`, color: "border-blue-500/40 text-blue-400" },
-          { label: "Downloads", value: summary.downloads, sub: "Book", color: "border-amber-500/40 text-amber-400" },
+          { label: "Downloads", value: summary.downloads, sub: "Book", color: "border-amber-500/40 text-[#1A1A1A]" },
           { label: "AI Tools", value: summary.aiTools, sub: "Used", color: "border-purple-500/40 text-purple-400" },
           { label: "Inquiries", value: summary.inquiries, sub: "Submitted", color: "border-emerald-500/40 text-emerald-400" },
         ].map((stat) => (
           <div
             key={stat.label}
-            className={`bg-zinc-950 border rounded-xl p-3 text-center ${stat.color}`}
+            className={`bg-[#FDFBF7] border rounded-xl p-3 text-center ${stat.color}`}
           >
             <p className="text-2xl font-bold">{stat.value}</p>
             <p className="text-xs text-white/70 mt-0.5">{stat.label}</p>
@@ -240,10 +240,10 @@ export default function LeadActivityTimeline({ email }: LeadActivityTimelineProp
         <div className="space-y-3 pt-2">
           {[...Array(6)].map((_, i) => (
             <div key={i} className="flex items-start gap-3">
-              <Skeleton className="w-8 h-8 rounded-full bg-zinc-800 flex-shrink-0" />
+              <Skeleton className="w-8 h-8 rounded-full bg-[#1A1A1A] flex-shrink-0" />
               <div className="flex-1 space-y-1.5">
-                <Skeleton className="h-4 w-48 bg-zinc-800" />
-                <Skeleton className="h-3 w-32 bg-zinc-800" />
+                <Skeleton className="h-4 w-48 bg-[#1A1A1A]" />
+                <Skeleton className="h-3 w-32 bg-[#1A1A1A]" />
               </div>
             </div>
           ))}
@@ -263,7 +263,7 @@ export default function LeadActivityTimeline({ email }: LeadActivityTimelineProp
         <ScrollArea className="h-[380px] pr-2">
           <div className="relative">
             {/* Vertical connector line */}
-            <div className="absolute left-[15px] top-4 bottom-4 w-px bg-zinc-800" />
+            <div className="absolute left-[15px] top-4 bottom-4 w-px bg-[#1A1A1A]" />
 
             <div className="space-y-2">
               {events.map((event, idx) => {
@@ -284,7 +284,7 @@ export default function LeadActivityTimeline({ email }: LeadActivityTimelineProp
 
                     {/* Content */}
                     <div
-                      className={`flex-1 bg-zinc-900/60 border border-[#1A1A1A] rounded-lg px-3 py-2 ${
+                      className={`flex-1 bg-[#FDFBF7]/60 border border-[#1A1A1A] rounded-lg px-3 py-2 ${
                         isLast ? "" : "mb-0"
                       }`}
                     >

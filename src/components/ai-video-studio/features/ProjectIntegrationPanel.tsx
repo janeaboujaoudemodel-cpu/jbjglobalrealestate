@@ -476,8 +476,8 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
       <div className="h-full flex flex-col bg-slate-900 text-white overflow-hidden">
         {/* Header */}
         <div className="px-3 py-2.5 border-b border-slate-700 flex items-center gap-2">
-          <Building2 className="w-4 h-4 text-amber-400 shrink-0" />
-          <span className="text-xs font-bold text-amber-400 uppercase tracking-wide flex-1">
+          <Building2 className="w-4 h-4 text-[#1A1A1A] shrink-0" />
+          <span className="text-xs font-bold text-[#1A1A1A] uppercase tracking-wide flex-1">
             AI Video Ad Generator
           </span>
           <button onClick={loadProjects} className="text-slate-500 hover:text-slate-300 transition-colors" title="Refresh">
@@ -490,7 +490,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
           <div className="flex gap-1.5">
             <div className="flex-1 relative">
               {scraping
-                ? <Loader2 className="w-3.5 h-3.5 absolute left-2 top-1/2 -translate-y-1/2 text-amber-400 animate-spin" />
+                ? <Loader2 className="w-3.5 h-3.5 absolute left-2 top-1/2 -translate-y-1/2 text-[#1A1A1A] animate-spin" />
                 : <Link2 className="w-3.5 h-3.5 absolute left-2 top-1/2 -translate-y-1/2 text-slate-500" />
               }
               <input
@@ -570,7 +570,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
           <div className="p-3">
             {loading ? (
               <div className="flex items-center justify-center h-32">
-                <Loader2 className="w-5 h-5 animate-spin text-amber-400" />
+                <Loader2 className="w-5 h-5 animate-spin text-[#1A1A1A]" />
               </div>
             ) : filtered.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-32 gap-2 text-center">
@@ -622,7 +622,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
                       {(proj.price_from || proj.bedrooms_min !== null) && (
                         <div className="flex items-center gap-2 mt-1">
                           {proj.price_from && (
-                            <span className="text-[10px] text-amber-400/90 font-medium">
+                            <span className="text-[10px] text-[#1A1A1A]/90 font-medium">
                               {formatPrice(proj.price_from, null)}
                             </span>
                           )}
@@ -668,8 +668,8 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
           <button onClick={backToGrid} className="text-slate-500 hover:text-white transition-colors">
             <ArrowLeft className="w-4 h-4" />
           </button>
-          <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
-          <span className="text-xs font-bold text-amber-400 uppercase tracking-wide flex-1 truncate">
+          <Sparkles className="w-4 h-4 text-[#1A1A1A] shrink-0" />
+          <span className="text-xs font-bold text-[#1A1A1A] uppercase tracking-wide flex-1 truncate">
             Generate Video Ad
           </span>
         </div>
@@ -680,7 +680,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
             <div className="bg-slate-800 border border-slate-700 rounded-lg overflow-hidden">
               {externalProperty && (
                 <div className="px-3 py-1 bg-amber-500/15 border-b border-amber-400/30 flex items-center gap-1.5">
-                  <ExternalLink className="w-3 h-3 text-amber-400" />
+                  <ExternalLink className="w-3 h-3 text-[#1A1A1A]" />
                   <span className="text-[10px] text-amber-300 font-medium truncate">Imported from external URL</span>
                 </div>
               )}
@@ -702,7 +702,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
               </div>
               <div className="px-3 py-2 flex items-center gap-3 flex-wrap">
                 {(wizardPriceFrom || externalProperty?.price_text) && (
-                  <span className="text-[10px] text-amber-400 font-semibold">
+                  <span className="text-[10px] text-[#1A1A1A] font-semibold">
                     {wizardPriceFrom ? formatPrice(wizardPriceFrom, wizardPriceTo) : externalProperty?.price_text}
                   </span>
                 )}
@@ -720,7 +720,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
             {/* Voice & Language Settings */}
             <div className="space-y-3">
               <p className="text-[11px] font-bold text-slate-300 uppercase tracking-wide flex items-center gap-1.5">
-                <Mic className="w-3.5 h-3.5 text-amber-400" />
+                <Mic className="w-3.5 h-3.5 text-[#1A1A1A]" />
                 Voice & Language
               </p>
 
@@ -764,7 +764,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
             {/* Ad Style */}
             <div className="space-y-3">
               <p className="text-[11px] font-bold text-slate-300 uppercase tracking-wide flex items-center gap-1.5">
-                <Film className="w-3.5 h-3.5 text-amber-400" />
+                <Film className="w-3.5 h-3.5 text-[#1A1A1A]" />
                 Ad Style
               </p>
 
@@ -874,7 +874,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
             {/* Audio Player */}
             <div className="bg-slate-800 border border-slate-700 rounded-lg p-3">
               <div className="flex items-center gap-2 mb-2">
-                <Volume2 className="w-3.5 h-3.5 text-amber-400" />
+                <Volume2 className="w-3.5 h-3.5 text-[#1A1A1A]" />
                 <span className="text-xs font-semibold text-white">Voiceover Preview</span>
                 <span className="ml-auto text-[10px] text-slate-500">~{result.duration}s</span>
               </div>

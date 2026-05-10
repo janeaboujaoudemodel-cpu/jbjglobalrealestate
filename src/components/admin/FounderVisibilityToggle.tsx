@@ -64,9 +64,9 @@ export const FounderVisibilityToggle = () => {
 
   if (isLoading) {
     return (
-      <Card className="border-gold/30 bg-gradient-to-br from-champagne-light to-champagne">
+      <Card className="border-[#B89555]/30 bg-gradient-to-br from-champagne-light to-champagne">
         <CardContent className="flex items-center justify-center py-8">
-          <Loader2 className="w-6 h-6 animate-spin text-gold" />
+          <Loader2 className="w-6 h-6 animate-spin text-[#1A1A1A]" />
         </CardContent>
       </Card>
     );
@@ -74,11 +74,11 @@ export const FounderVisibilityToggle = () => {
 
   return (
     <>
-      <Card className="border-gold/30 bg-gradient-to-br from-champagne-light to-champagne">
+      <Card className="border-[#B89555]/30 bg-gradient-to-br from-champagne-light to-champagne">
         <CardHeader>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-[#1A1A1A] flex items-center justify-center">
-              <Shield className="w-5 h-5 text-gold" />
+              <Shield className="w-5 h-5 text-[#1A1A1A]" />
             </div>
             <div>
               <CardTitle className="text-[#1A1A1A] text-lg">Founder Visibility Control</CardTitle>
@@ -90,7 +90,7 @@ export const FounderVisibilityToggle = () => {
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Current Status */}
-          <div className="flex items-center justify-between p-4 rounded-xl bg-[#FDFBF7]/50 border border-gold/20">
+          <div className="flex items-center justify-between p-4 rounded-xl bg-[#FDFBF7]/50 border border-[#B89555]/20">
             <div className="flex items-center gap-3">
               {isFounderVisible ? (
                 <Eye className="w-5 h-5 text-green-600" />
@@ -158,7 +158,7 @@ export const FounderVisibilityToggle = () => {
 
       {/* Confirmation Dialog */}
       <AlertDialog open={isConfirmOpen} onOpenChange={setIsConfirmOpen}>
-        <AlertDialogContent className="bg-[#FDFBF7] border-gold/30">
+        <AlertDialogContent className="bg-[#FDFBF7] border-[#B89555]/30">
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
               {pendingValue ? (

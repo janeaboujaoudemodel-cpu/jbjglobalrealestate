@@ -74,10 +74,10 @@ export function CompanyProfileBrochure({
         {showDownload && (
           <div className="absolute inset-0 flex items-center justify-center bg-[#1A1A1A]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg z-30">
             {isGenerating ? (
-              <div className="w-10 h-10 border-3 border-gold/30 border-t-gold rounded-full animate-spin" />
+              <div className="w-10 h-10 border-3 border-[#B89555]/30 border-t-gold rounded-full animate-spin" />
             ) : (
               <div className="text-center">
-                <Download className="w-10 h-10 text-gold mx-auto mb-1" />
+                <Download className="w-10 h-10 text-[#1A1A1A] mx-auto mb-1" />
                 <p className="text-white text-xs font-semibold">Download PDF</p>
               </div>
             )}
@@ -88,14 +88,14 @@ export function CompanyProfileBrochure({
       {/* Text description */}
       {!compact && (
         <div className="text-center">
-          <h3 className="text-gold text-lg md:text-xl font-bold" style={{ fontFamily: "'Playfair Display', serif" }}>
+          <h3 className="text-[#1A1A1A] text-lg md:text-xl font-bold" style={{ fontFamily: "'Playfair Display', serif" }}>
             JBJ Global Real Estate
           </h3>
           <p className="text-[#ECE2D2] text-sm font-semibold mb-2">Company Profile</p>
           <p className="text-white/70 text-xs leading-relaxed mb-3 max-w-xs mx-auto">
             Our comprehensive company profile — vision, leadership, portfolio, awards, and investment track record.
           </p>
-          <span className="inline-flex items-center gap-1.5 text-gold text-xs font-semibold group-hover:gap-2 transition-all">
+          <span className="inline-flex items-center gap-1.5 text-[#1A1A1A] text-xs font-semibold group-hover:gap-2 transition-all">
             {showDownload ? 'Download Profile' : 'View Company Profile'} <ArrowRight className="w-3.5 h-3.5" />
           </span>
         </div>

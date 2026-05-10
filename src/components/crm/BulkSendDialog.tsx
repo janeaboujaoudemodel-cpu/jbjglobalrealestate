@@ -55,11 +55,11 @@ const STATUS_PILL: Record<string, string> = {
   under_review: "bg-blue-100 text-blue-900 border-blue-300",
   registered: "bg-emerald-100 text-emerald-900 border-emerald-300",
   rejected: "bg-red-100 text-red-900 border-red-300",
-  expired: "bg-zinc-200 text-[#1A1A1A] border-zinc-300",
+  expired: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/30",
   prospect: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/30",
   introduced: "bg-blue-100 text-blue-900 border-blue-300",
   active: "bg-emerald-100 text-emerald-900 border-emerald-300",
-  paused: "bg-zinc-200 text-[#1A1A1A] border-zinc-300",
+  paused: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/30",
 };
 
 const GROUP_STATUS_OPTIONS: Array<{ value: BrokerageGroupStatus; label: string }> = [
@@ -511,7 +511,7 @@ export const BulkSendDialog = ({
                 <Lock className="w-3 h-3" />Locked
               </span>
             ) : (
-              <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-800 border border-zinc-300 flex items-center gap-1">
+              <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-[#F7F2EA] text-[#1A1A1A] border border-[#B89555]/30 flex items-center gap-1">
                 <Unlock className="w-3 h-3" />Draft
               </span>
             )}

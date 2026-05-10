@@ -264,10 +264,10 @@ export default function ReportsManagementPanel() {
       </div>
 
       {/* Filters */}
-      <Card className="bg-[#0E0E0E] border-gold/20">
+      <Card className="bg-[#0E0E0E] border-[#B89555]/20">
         <CardHeader>
           <CardTitle className="text-white flex items-center gap-2">
-            <Filter className="h-5 w-5 text-gold" />
+            <Filter className="h-5 w-5 text-[#1A1A1A]" />
             Filters
           </CardTitle>
         </CardHeader>
@@ -280,7 +280,7 @@ export default function ReportsManagementPanel() {
                 type="date"
                 value={filters.dateFrom}
                 onChange={(e) => setFilters(f => ({ ...f, dateFrom: e.target.value }))}
-                className="bg-[#1A1A1A] border-gold/20 text-white"
+                className="bg-[#1A1A1A] border-[#B89555]/20 text-white"
               />
             </div>
 
@@ -291,7 +291,7 @@ export default function ReportsManagementPanel() {
                 type="date"
                 value={filters.dateTo}
                 onChange={(e) => setFilters(f => ({ ...f, dateTo: e.target.value }))}
-                className="bg-[#1A1A1A] border-gold/20 text-white"
+                className="bg-[#1A1A1A] border-[#B89555]/20 text-white"
               />
             </div>
 
@@ -302,7 +302,7 @@ export default function ReportsManagementPanel() {
                 value={filters.department}
                 onValueChange={(v) => setFilters(f => ({ ...f, department: v }))}
               >
-                <SelectTrigger className="bg-[#1A1A1A] border-gold/20 text-white">
+                <SelectTrigger className="bg-[#1A1A1A] border-[#B89555]/20 text-white">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -322,7 +322,7 @@ export default function ReportsManagementPanel() {
                   placeholder="Search by name..."
                   value={filters.employeeName}
                   onChange={(e) => setFilters(f => ({ ...f, employeeName: e.target.value }))}
-                  className="pl-10 bg-[#1A1A1A] border-gold/20 text-white"
+                  className="pl-10 bg-[#1A1A1A] border-[#B89555]/20 text-white"
                 />
               </div>
             </div>
@@ -334,7 +334,7 @@ export default function ReportsManagementPanel() {
                 value={filters.month}
                 onValueChange={(v) => setFilters(f => ({ ...f, month: v }))}
               >
-                <SelectTrigger className="bg-[#1A1A1A] border-gold/20 text-white">
+                <SelectTrigger className="bg-[#1A1A1A] border-[#B89555]/20 text-white">
                   <SelectValue placeholder="All Months" />
                 </SelectTrigger>
                 <SelectContent>
@@ -355,7 +355,7 @@ export default function ReportsManagementPanel() {
                 value={filters.year}
                 onValueChange={(v) => setFilters(f => ({ ...f, year: v }))}
               >
-                <SelectTrigger className="bg-[#1A1A1A] border-gold/20 text-white">
+                <SelectTrigger className="bg-[#1A1A1A] border-[#B89555]/20 text-white">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -370,7 +370,7 @@ export default function ReportsManagementPanel() {
           {/* Results Count */}
           <div className="mt-4 flex items-center justify-between">
             <p className="text-[#1A1A1A]/70 text-sm">
-              Showing <span className="text-gold font-semibold">{filteredReports.length}</span> of {reports.length} reports
+              Showing <span className="text-[#1A1A1A] font-semibold">{filteredReports.length}</span> of {reports.length} reports
             </p>
             <Button
               variant="ghost"
@@ -392,12 +392,12 @@ export default function ReportsManagementPanel() {
       </Card>
 
       {/* Reports Table */}
-      <Card className="bg-[#0E0E0E] border-gold/20">
+      <Card className="bg-[#0E0E0E] border-[#B89555]/20">
         <CardContent className="p-0">
           <ScrollArea className="h-[500px]">
             <Table>
               <TableHeader>
-                <TableRow className="border-gold/20 hover:bg-transparent">
+                <TableRow className="border-[#B89555]/20 hover:bg-transparent">
                   <TableHead className="text-[#1A1A1A]/70">Date & Time</TableHead>
                   <TableHead className="text-[#1A1A1A]/70">Employee</TableHead>
                   <TableHead className="text-[#1A1A1A]/70">Department</TableHead>
@@ -410,12 +410,12 @@ export default function ReportsManagementPanel() {
                 {filteredReports.map((report) => (
                   <TableRow 
                     key={report.id} 
-                    className="border-gold/10 hover:bg-gold/5 cursor-pointer"
+                    className="border-[#B89555]/10 hover:bg-[#EFE6D6]/5 cursor-pointer"
                     onClick={() => setSelectedReport(report)}
                   >
                     <TableCell className="text-white">
                       <div className="flex items-center gap-2">
-                        <Calendar className="h-4 w-4 text-gold" />
+                        <Calendar className="h-4 w-4 text-[#1A1A1A]" />
                         {format(new Date(report.submitted_at), 'MMM dd, yyyy HH:mm')}
                       </div>
                     </TableCell>
@@ -432,7 +432,7 @@ export default function ReportsManagementPanel() {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Badge variant="outline" className="border-gold/30 text-gold">
+                      <Badge variant="outline" className="border-[#B89555]/30 text-[#1A1A1A]">
                         {report.report_type}
                       </Badge>
                     </TableCell>
@@ -453,7 +453,7 @@ export default function ReportsManagementPanel() {
                       <Button
                         size="sm"
                         variant="ghost"
-                        className="text-gold hover:text-[#1A1A1A]"
+                        className="text-[#1A1A1A] hover:text-[#1A1A1A]"
                         onClick={(e) => {
                           e.stopPropagation();
                           setSelectedReport(report);
@@ -483,8 +483,8 @@ export default function ReportsManagementPanel() {
       {/* Report Detail Modal */}
       {selectedReport && (
         <div className="fixed inset-0 bg-[#1A1A1A]/80 flex items-center justify-center z-50 p-4">
-          <Card className="bg-[#0E0E0E] border-gold/30 w-full max-w-2xl max-h-[80vh] overflow-auto">
-            <CardHeader className="border-b border-gold/20">
+          <Card className="bg-[#0E0E0E] border-[#B89555]/30 w-full max-w-2xl max-h-[80vh] overflow-auto">
+            <CardHeader className="border-b border-[#B89555]/20">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-white">Report Details</CardTitle>
                 <Button
@@ -531,7 +531,7 @@ export default function ReportsManagementPanel() {
                 </div>
               </div>
 
-              <div className="border-t border-gold/20 pt-4">
+              <div className="border-t border-[#B89555]/20 pt-4">
                 <Label className="text-[#1A1A1A]/70">Report Content</Label>
                 <div className="mt-2 bg-[#1A1A1A] rounded-lg p-4 space-y-2">
                   {Object.entries(selectedReport.content || {}).map(([key, value]) => (
@@ -545,7 +545,7 @@ export default function ReportsManagementPanel() {
 
               <div className="flex gap-2 pt-4">
                 <Button
-                  className="flex-1 bg-gold text-[#1A1A1A] hover:bg-gold/90"
+                  className="flex-1 bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
                   onClick={() => {
                     toast.success('Report marked as reviewed');
                     setSelectedReport(null);
@@ -556,7 +556,7 @@ export default function ReportsManagementPanel() {
                 </Button>
                 <Button
                   variant="outline"
-                  className="border-gold/30 text-gold"
+                  className="border-[#B89555]/30 text-[#1A1A1A]"
                   onClick={() => {
                     toast.info('Note added to report');
                   }}

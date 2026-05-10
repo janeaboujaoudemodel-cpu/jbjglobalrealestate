@@ -64,11 +64,11 @@ export const DeveloperSelectDropdown: React.FC<DeveloperSelectDropdownProps> = (
       <PopoverTrigger asChild>
         <button
           type="button"
-          className={`flex items-center gap-3 w-full h-12 px-4 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,30%,95%)] to-[hsl(36,28%,91%)] text-left hover:border-gold transition-colors ${className}`}
+          className={`flex items-center gap-3 w-full h-12 px-4 rounded-xl border-2 border-[#B89555]/30 bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,30%,95%)] to-[hsl(36,28%,91%)] text-left hover:border-[#B89555] transition-colors ${className}`}
         >
           {selectedDev ? (
             <>
-              <div className="w-7 h-7 rounded-md bg-[#FDFBF7] border border-gold/20 flex items-center justify-center overflow-hidden shrink-0">
+              <div className="w-7 h-7 rounded-md bg-[#FDFBF7] border border-[#B89555]/20 flex items-center justify-center overflow-hidden shrink-0">
                 {getLogoUrl(selectedDev) ? (
                   <SafeImage
                     src={getLogoUrl(selectedDev)!}
@@ -91,14 +91,14 @@ export const DeveloperSelectDropdown: React.FC<DeveloperSelectDropdownProps> = (
         </button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-[var(--radix-popover-trigger-width)] p-0 border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,30%,95%)] to-[hsl(36,28%,91%)]"
+        className="w-[var(--radix-popover-trigger-width)] p-0 border-2 border-[#B89555]/30 bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,30%,95%)] to-[hsl(36,28%,91%)]"
         align="start"
         sideOffset={4}
       >
         {/* Search */}
-        <div className="p-3 border-b border-gold/20">
+        <div className="p-3 border-b border-[#B89555]/20">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gold" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]" />
             <Input
               ref={searchRef}
               value={search}
@@ -127,11 +127,11 @@ export const DeveloperSelectDropdown: React.FC<DeveloperSelectDropdownProps> = (
                     onChange(dev.name);
                     setOpen(false);
                   }}
-                  className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-gold/10 ${
-                    isSelected ? 'bg-gold/15 border-l-2 border-gold' : ''
+                  className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-[#EFE6D6]/10 ${
+                    isSelected ? 'bg-[#EFE6D6]/15 border-l-2 border-[#B89555]' : ''
                   }`}
                 >
-                  <div className="w-8 h-8 rounded-md bg-[#FDFBF7] border border-gold/20 flex items-center justify-center overflow-hidden shrink-0">
+                  <div className="w-8 h-8 rounded-md bg-[#FDFBF7] border border-[#B89555]/20 flex items-center justify-center overflow-hidden shrink-0">
                     {logo ? (
                       <SafeImage
                         src={logo}

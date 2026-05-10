@@ -111,8 +111,8 @@ const BadgesLevelCard = () => {
     <Card className="border border-border bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))]">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="flex items-center gap-2 text-lg">
-          <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center">
-            <Award className="w-4 h-4 text-gold" />
+          <div className="w-8 h-8 rounded-lg bg-[#EFE6D6]/10 border border-[#B89555]/30 flex items-center justify-center">
+            <Award className="w-4 h-4 text-[#1A1A1A]" />
           </div>
           Level & Badges
           {isCombinedMode ? (
@@ -163,11 +163,11 @@ const BadgesLevelCard = () => {
             {/* Shared total points */}
             <div className="text-center py-2 border-t border-border">
               <p className="text-sm text-muted-foreground">
-                Total Points: <span className="font-bold text-gold">{totalPoints.toLocaleString()}</span>
+                Total Points: <span className="font-bold text-[#1A1A1A]">{totalPoints.toLocaleString()}</span>
               </p>
             </div>
 
-            <Button variant="link" className="w-full text-gold mt-2 p-0" asChild>
+            <Button variant="link" className="w-full text-[#1A1A1A] mt-2 p-0" asChild>
               <Link to="/my-dashboard/progress">
                 View Full Progress
                 <ChevronRight className="w-4 h-4 ml-1" />
@@ -178,12 +178,12 @@ const BadgesLevelCard = () => {
           // Single Mode: Show one tier path
           <>
             {/* Current Level Badge */}
-            <div className="flex items-center gap-4 p-4 rounded-xl border border-gold/30 bg-gold/5 mb-4">
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gold/30 to-gold/10 border-2 border-gold/50 flex items-center justify-center">
-                {(currentTierType === 'broker' ? brokerTierIcons : investorTierIcons)[currentTierName.toLowerCase()] || <Star className="w-6 h-6 text-gold" />}
+            <div className="flex items-center gap-4 p-4 rounded-xl border border-[#B89555]/30 bg-[#EFE6D6]/5 mb-4">
+              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gold/30 to-gold/10 border-2 border-[#B89555]/50 flex items-center justify-center">
+                {(currentTierType === 'broker' ? brokerTierIcons : investorTierIcons)[currentTierName.toLowerCase()] || <Star className="w-6 h-6 text-[#1A1A1A]" />}
               </div>
               <div className="flex-1">
-                <Badge className="bg-gold/20 text-gold border-gold/40 mb-1">
+                <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/40 mb-1">
                   {currentTierName}
                 </Badge>
                 <p className="text-2xl font-bold text-foreground">
@@ -197,14 +197,14 @@ const BadgesLevelCard = () => {
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">Next: {nextTierName}</span>
-                  <span className="text-gold font-medium">{pointsToNext} pts to go</span>
+                  <span className="text-[#1A1A1A] font-medium">{pointsToNext} pts to go</span>
                 </div>
                 <Progress value={progressPercent} className="h-2" />
               </div>
             )}
 
             {/* View Full Progress */}
-            <Button variant="link" className="w-full text-gold mt-4 p-0" asChild>
+            <Button variant="link" className="w-full text-[#1A1A1A] mt-4 p-0" asChild>
               <Link to="/my-dashboard/progress">
                 View Full Progress
                 <ChevronRight className="w-4 h-4 ml-1" />

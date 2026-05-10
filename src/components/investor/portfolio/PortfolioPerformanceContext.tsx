@@ -22,7 +22,7 @@ export default function PortfolioPerformanceContext({ contextItems }: PortfolioP
     <section className="space-y-4">
       <div>
         <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
-          <TrendingUp className="w-5 h-5 text-gold" />
+          <TrendingUp className="w-5 h-5 text-[#1A1A1A]" />
           Performance Context
         </h2>
         <p className="text-muted-foreground text-sm mt-1">
@@ -41,7 +41,7 @@ export default function PortfolioPerformanceContext({ contextItems }: PortfolioP
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
         {contextItems.map((item) => (
-          <Card key={item.assetId} className="border-2 border-gold/30">
+          <Card key={item.assetId} className="border-2 border-[#B89555]/30">
             <CardHeader className="pb-2">
               <CardTitle className="text-base font-medium">{item.assetName}</CardTitle>
               <CardDescription>Contextual performance indicators</CardDescription>

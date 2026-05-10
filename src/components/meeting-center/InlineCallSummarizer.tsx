@@ -111,7 +111,7 @@ const InlineCallSummarizer = ({ onSuccess }: InlineCallSummarizerProps) => {
 
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-      <div className="bg-zinc-900/80 border border-orange-500/50 rounded-xl overflow-hidden">
+      <div className="bg-[#FDFBF7]/80 border border-orange-500/50 rounded-xl overflow-hidden">
         <CollapsibleTrigger asChild>
           <Button
             variant="ghost"
@@ -143,7 +143,7 @@ const InlineCallSummarizer = ({ onSuccess }: InlineCallSummarizerProps) => {
                 value={clientName}
                 onChange={(e) => setClientName(e.target.value)}
                 placeholder="Enter client name"
-                className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70"
+                className="bg-[#1A1A1A] border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70"
               />
             </div>
 
@@ -206,7 +206,7 @@ const InlineCallSummarizer = ({ onSuccess }: InlineCallSummarizerProps) => {
                 value={callNotes}
                 onChange={(e) => setCallNotes(e.target.value)}
                 placeholder="Enter key discussion points..."
-                className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 min-h-[100px]"
+                className="bg-[#1A1A1A] border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 min-h-[100px]"
               />
             </div>
 

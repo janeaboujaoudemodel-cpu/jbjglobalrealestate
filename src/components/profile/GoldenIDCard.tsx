@@ -190,7 +190,7 @@ export function GoldenIDCard() {
         {/* Stats Row */}
         <div className="flex items-center justify-between mb-4 py-3 border-t border-b border-amber-600/30">
           <div className="flex items-center gap-1">
-            <Star className="h-4 w-4 text-amber-400" />
+            <Star className="h-4 w-4 text-[#1A1A1A]" />
             <span className="text-amber-100 font-semibold">{totalPoints.toLocaleString()}</span>
             <span className="text-amber-300/70 text-xs">pts</span>
           </div>

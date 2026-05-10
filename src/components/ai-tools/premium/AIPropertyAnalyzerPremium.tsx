@@ -204,7 +204,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                     placeholder="Enter area name..."
                     value={customArea}
                     onChange={(e) => setCustomArea(e.target.value)}
-                    className="bg-zinc-900/50 border-sky-500/30 text-white hover:border-sky-500/50 focus:border-sky-400 transition-colors"
+                    className="bg-[#FDFBF7]/50 border-sky-500/30 text-white hover:border-sky-500/50 focus:border-sky-400 transition-colors"
                   />
                 </div>
               )}
@@ -341,7 +341,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                 {response.sections && (
                   <Accordion type="single" collapsible defaultValue="overview" className="space-y-2">
                     {response.sections.areaOverview && (
-                      <AccordionItem value="overview" className="border-[#1A1A1A] bg-zinc-900/50 rounded-lg px-4">
+                      <AccordionItem value="overview" className="border-[#1A1A1A] bg-[#FDFBF7]/50 rounded-lg px-4">
                         <AccordionTrigger className="text-white hover:no-underline">
                           <span className="flex items-center gap-2">
                             <MapPin className="w-4 h-4 text-sky-400" />
@@ -355,7 +355,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                     )}
 
                     {response.sections.priceAnalysis && (
-                      <AccordionItem value="price" className="border-[#1A1A1A] bg-zinc-900/50 rounded-lg px-4">
+                      <AccordionItem value="price" className="border-[#1A1A1A] bg-[#FDFBF7]/50 rounded-lg px-4">
                         <AccordionTrigger className="text-white hover:no-underline">
                           <span className="flex items-center gap-2">
                             <DollarSign className="w-4 h-4 text-sky-400" />
@@ -369,7 +369,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                     )}
 
                     {response.sections.investmentMetrics && (
-                      <AccordionItem value="investment" className="border-[#1A1A1A] bg-zinc-900/50 rounded-lg px-4">
+                      <AccordionItem value="investment" className="border-[#1A1A1A] bg-[#FDFBF7]/50 rounded-lg px-4">
                         <AccordionTrigger className="text-white hover:no-underline">
                           <span className="flex items-center gap-2">
                             <TrendingUp className="w-4 h-4 text-sky-400" />
@@ -383,7 +383,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                     )}
 
                     {response.sections.recommendation && (
-                      <AccordionItem value="recommendation" className="border-[#1A1A1A] bg-zinc-900/50 rounded-lg px-4">
+                      <AccordionItem value="recommendation" className="border-[#1A1A1A] bg-[#FDFBF7]/50 rounded-lg px-4">
                         <AccordionTrigger className="text-white hover:no-underline">
                           <span className="flex items-center gap-2">
                             <Award className="w-4 h-4 text-sky-400" />
@@ -400,10 +400,10 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
 
                 {/* Full Analysis Fallback */}
                 {response.fullAnalysis && !response.sections && (
-                  <Card className="bg-zinc-900/50 border-[#1A1A1A]">
+                  <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
                     <CardContent className="p-4">
                       <h4 className="font-semibold text-white mb-3">Full Analysis</h4>
-                      <div className="bg-zinc-800/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[400px] overflow-y-auto">
+                      <div className="bg-[#1A1A1A]/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[400px] overflow-y-auto">
                         {response.fullAnalysis}
                       </div>
                     </CardContent>

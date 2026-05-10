@@ -271,14 +271,14 @@ const CompanyCommunicationHub = () => {
   };
 
   return (
-    <div className="h-[calc(100vh-120px)] bg-zinc-950 text-white flex rounded-xl overflow-hidden border border-[#1A1A1A]">
+    <div className="h-[calc(100vh-120px)] bg-[#FDFBF7] text-white flex rounded-xl overflow-hidden border border-[#1A1A1A]">
       {/* Sidebar */}
-      <div className="w-72 bg-zinc-900 border-r border-[#1A1A1A] flex flex-col">
+      <div className="w-72 bg-[#FDFBF7] border-r border-[#1A1A1A] flex flex-col">
         {/* Workspace Header */}
         <div className="p-4 border-b border-[#1A1A1A]">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gold rounded-lg flex items-center justify-center text-[#1A1A1A] font-bold text-sm">
+              <div className="w-8 h-8 bg-[#EFE6D6] rounded-lg flex items-center justify-center text-[#1A1A1A] font-bold text-sm">
                 JJ
               </div>
               <div>
@@ -300,7 +300,7 @@ const CompanyCommunicationHub = () => {
               placeholder="Search messages..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 bg-zinc-800 border-[#1A1A1A] text-sm h-9"
+              className="pl-9 bg-[#1A1A1A] border-[#1A1A1A] text-sm h-9"
             />
           </div>
         </div>
@@ -319,7 +319,7 @@ const CompanyCommunicationHub = () => {
                   <ChevronDown className="w-3 h-3 ml-1" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-zinc-800 border-[#1A1A1A]">
+              <DropdownMenuContent align="end" className="bg-[#1A1A1A] border-[#1A1A1A]">
                 <DropdownMenuItem 
                   onClick={() => setTranslation({ enabled: false, targetLanguage: 'en' })}
                   className="text-xs"
@@ -327,7 +327,7 @@ const CompanyCommunicationHub = () => {
                   <X className="w-3 h-3 mr-2" />
                   Disable Translation
                 </DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-zinc-700" />
+                <DropdownMenuSeparator className="bg-[#1A1A1A]" />
                 {AVAILABLE_LANGUAGES.map(lang => (
                   <DropdownMenuItem
                     key={lang.code}
@@ -364,7 +364,7 @@ const CompanyCommunicationHub = () => {
                 key={channel.id}
                 className={`w-full flex items-center justify-between px-2 py-1.5 rounded text-sm transition-colors ${
                   activeChannel === channel.id && !activeDM
-                    ? 'bg-gold/20 text-gold' 
+                    ? 'bg-[#EFE6D6]/20 text-[#1A1A1A]' 
                     : 'text-white/70 hover:bg-[#1A1A1A] hover:text-white'
                 }`}
                 onClick={() => handleChannelSwitch(channel.id)}
@@ -399,7 +399,7 @@ const CompanyCommunicationHub = () => {
                 key={member.id}
                 className={`w-full flex items-center gap-2 px-2 py-1.5 rounded text-sm transition-colors ${
                   activeDM === member.id
-                    ? 'bg-gold/20 text-gold'
+                    ? 'bg-[#EFE6D6]/20 text-[#1A1A1A]'
                     : 'text-white/70 hover:bg-[#1A1A1A] hover:text-white'
                 }`}
                 onClick={() => handleDMSwitch(member.id)}
@@ -407,7 +407,7 @@ const CompanyCommunicationHub = () => {
                 <div className="relative flex-shrink-0">
                   <Avatar className="h-6 w-6">
                     <AvatarImage src={member.avatar} alt={member.name} />
-                    <AvatarFallback className="text-[10px] bg-zinc-700">
+                    <AvatarFallback className="text-[10px] bg-[#1A1A1A]">
                       {member.name.split(' ').map(n => n[0]).join('')}
                     </AvatarFallback>
                   </Avatar>
@@ -415,7 +415,7 @@ const CompanyCommunicationHub = () => {
                 </div>
                 <span className="truncate flex-1 text-left">{member.name}</span>
                 {member.isAI && (
-                  <Badge variant="outline" className="text-[9px] px-1 py-0 h-4 border-gold/50 text-gold">
+                  <Badge variant="outline" className="text-[9px] px-1 py-0 h-4 border-[#B89555]/50 text-[#1A1A1A]">
                     AI
                   </Badge>
                 )}
@@ -434,7 +434,7 @@ const CompanyCommunicationHub = () => {
               <>
                 <Avatar className="h-8 w-8">
                   <AvatarImage src={activeDMUser?.avatar} alt={activeDMUser?.name} />
-                  <AvatarFallback className="bg-zinc-700">
+                  <AvatarFallback className="bg-[#1A1A1A]">
                     {activeDMUser?.name.split(' ').map(n => n[0]).join('')}
                   </AvatarFallback>
                 </Avatar>
@@ -443,7 +443,7 @@ const CompanyCommunicationHub = () => {
                   <p className="text-xs text-white/70">{activeDMUser?.role}</p>
                 </div>
                 {activeDMUser?.isAI && (
-                  <Badge variant="outline" className="text-[10px] border-gold/50 text-gold">AI Assistant</Badge>
+                  <Badge variant="outline" className="text-[10px] border-[#B89555]/50 text-[#1A1A1A]">AI Assistant</Badge>
                 )}
               </>
             ) : (
@@ -506,7 +506,7 @@ const CompanyCommunicationHub = () => {
                   >
                     <Avatar className="h-9 w-9 mt-0.5 flex-shrink-0">
                       <AvatarImage src={sender?.avatar} alt={sender?.name} />
-                      <AvatarFallback className="bg-gold/20 text-gold text-sm">
+                      <AvatarFallback className="bg-[#EFE6D6]/20 text-[#1A1A1A] text-sm">
                         {sender?.name.split(' ').map(n => n[0]).join('')}
                       </AvatarFallback>
                     </Avatar>
@@ -514,7 +514,7 @@ const CompanyCommunicationHub = () => {
                       <div className="flex items-baseline gap-2">
                         <span className="font-semibold text-sm">{sender?.name}</span>
                         {sender?.isAI && (
-                          <Badge variant="outline" className="text-[9px] px-1 py-0 h-4 border-gold/50 text-gold">
+                          <Badge variant="outline" className="text-[9px] px-1 py-0 h-4 border-[#B89555]/50 text-[#1A1A1A]">
                             AI
                           </Badge>
                         )}
@@ -532,8 +532,8 @@ const CompanyCommunicationHub = () => {
                               key={i}
                               className={`flex items-center gap-1 rounded-full px-2 py-0.5 text-sm transition-colors ${
                                 reaction.userIds.includes(currentUser.id)
-                                  ? 'bg-gold/20 border border-gold/50'
-                                  : 'bg-zinc-800 hover:bg-[#1A1A1A]'
+                                  ? 'bg-[#EFE6D6]/20 border border-[#B89555]/50'
+                                  : 'bg-[#1A1A1A] hover:bg-[#1A1A1A]'
                               }`}
                               onClick={() => addReaction(message.id, reaction.emoji)}
                             >
@@ -546,7 +546,7 @@ const CompanyCommunicationHub = () => {
 
                       {/* Quick Actions */}
                       <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute right-4 -mt-8">
-                        <div className="flex gap-1 bg-zinc-800 rounded-lg p-1 shadow-lg border border-[#1A1A1A]">
+                        <div className="flex gap-1 bg-[#1A1A1A] rounded-lg p-1 shadow-lg border border-[#1A1A1A]">
                           {['👍', '❤️', '😂', '🎉', '🔥'].map((emoji) => (
                             <button
                               key={emoji}
@@ -576,9 +576,9 @@ const CompanyCommunicationHub = () => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
-              className="mx-4 mb-2 bg-zinc-800 rounded-lg border border-[#1A1A1A] shadow-xl max-h-64 overflow-y-auto"
+              className="mx-4 mb-2 bg-[#1A1A1A] rounded-lg border border-[#1A1A1A] shadow-xl max-h-64 overflow-y-auto"
             >
-              <div className="sticky top-0 bg-zinc-800 px-3 py-2 border-b border-[#1A1A1A]">
+              <div className="sticky top-0 bg-[#1A1A1A] px-3 py-2 border-b border-[#1A1A1A]">
                 <p className="text-xs text-white/70">{filteredMembers.length} team members</p>
               </div>
               {filteredMembers.map((member) => (
@@ -589,7 +589,7 @@ const CompanyCommunicationHub = () => {
                 >
                   <Avatar className="h-8 w-8">
                     <AvatarImage src={member.avatar} alt={member.name} />
-                    <AvatarFallback className="bg-zinc-600 text-xs">
+                    <AvatarFallback className="bg-[#1A1A1A] text-xs">
                       {member.name.split(' ').map(n => n[0]).join('')}
                     </AvatarFallback>
                   </Avatar>
@@ -598,7 +598,7 @@ const CompanyCommunicationHub = () => {
                     <p className="text-xs text-white/70 truncate">{member.role} • {member.department}</p>
                   </div>
                   {member.isAI && (
-                    <Badge variant="outline" className="ml-auto text-[9px] border-gold/50 text-gold flex-shrink-0">AI</Badge>
+                    <Badge variant="outline" className="ml-auto text-[9px] border-[#B89555]/50 text-[#1A1A1A] flex-shrink-0">AI</Badge>
                   )}
                 </button>
               ))}
@@ -608,7 +608,7 @@ const CompanyCommunicationHub = () => {
 
         {/* Message Input */}
         <div className="p-4 border-t border-[#1A1A1A] flex-shrink-0">
-          <div className="flex items-center gap-2 bg-zinc-800 rounded-lg px-3 py-2">
+          <div className="flex items-center gap-2 bg-[#1A1A1A] rounded-lg px-3 py-2">
             <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
               <Plus className="w-4 h-4" />
             </Button>
@@ -644,7 +644,7 @@ const CompanyCommunicationHub = () => {
             <Button 
               size="icon" 
               type="button"
-              className="h-8 w-8 bg-gold hover:bg-gold-light text-[#1A1A1A] flex-shrink-0"
+              className="h-8 w-8 bg-[#EFE6D6] hover:bg-[#EFE6D6]-light text-[#1A1A1A] flex-shrink-0"
               onClick={(e) => sendMessage(e)}
               disabled={!newMessage.trim()}
             >
@@ -655,7 +655,7 @@ const CompanyCommunicationHub = () => {
       </div>
 
       {/* Members Sidebar */}
-      <div className="w-60 bg-zinc-900 border-l border-[#1A1A1A] hidden xl:flex flex-col">
+      <div className="w-60 bg-[#FDFBF7] border-l border-[#1A1A1A] hidden xl:flex flex-col">
         <div className="p-4 border-b border-[#1A1A1A]">
           <h3 className="text-sm font-semibold text-white/70">
             {activeDM ? 'User Info' : `Members — ${activeChannelData?.members.length || 0}`}
@@ -668,14 +668,14 @@ const CompanyCommunicationHub = () => {
               <div className="text-center">
                 <Avatar className="h-20 w-20 mx-auto mb-3">
                   <AvatarImage src={activeDMUser?.avatar} alt={activeDMUser?.name} />
-                  <AvatarFallback className="bg-gold/20 text-gold text-xl">
+                  <AvatarFallback className="bg-[#EFE6D6]/20 text-[#1A1A1A] text-xl">
                     {activeDMUser?.name.split(' ').map(n => n[0]).join('')}
                   </AvatarFallback>
                 </Avatar>
                 <h4 className="font-semibold">{activeDMUser?.name}</h4>
                 <p className="text-sm text-white/70">{activeDMUser?.role}</p>
                 {activeDMUser?.isAI && (
-                  <Badge className="mt-2 bg-gold/20 text-gold border-gold/50">AI Assistant</Badge>
+                  <Badge className="mt-2 bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/50">AI Assistant</Badge>
                 )}
               </div>
               <div className="space-y-2 text-sm">
@@ -685,7 +685,7 @@ const CompanyCommunicationHub = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-white/70">Email</span>
-                  <span className="text-gold truncate max-w-[120px]">{activeDMUser?.email}</span>
+                  <span className="text-[#1A1A1A] truncate max-w-[120px]">{activeDMUser?.email}</span>
                 </div>
                 {activeDMUser?.languages && (
                   <div className="flex justify-between">
@@ -706,7 +706,7 @@ const CompanyCommunicationHub = () => {
                     <div className="relative">
                       <Avatar className="h-8 w-8">
                         <AvatarImage src={member.avatar} alt={member.name} />
-                        <AvatarFallback className="bg-zinc-700 text-xs">
+                        <AvatarFallback className="bg-[#1A1A1A] text-xs">
                           {member.name.split(' ').map(n => n[0]).join('')}
                         </AvatarFallback>
                       </Avatar>

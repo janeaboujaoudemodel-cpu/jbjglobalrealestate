@@ -126,7 +126,7 @@ export const AmandaAssistantWidget: React.FC<AmandaAssistantWidgetProps> = ({
       >
         <Avatar className="h-10 w-10 border-2 border-white">
           <AvatarImage src={amandaClarkePhoto} alt="Amanda Clarke" className="object-cover object-top" />
-          <AvatarFallback className="bg-[#FDFBF7] text-gold font-bold">AC</AvatarFallback>
+          <AvatarFallback className="bg-[#FDFBF7] text-[#1A1A1A] font-bold">AC</AvatarFallback>
         </Avatar>
         <div className="text-left">
           <p className="font-semibold text-sm">Amanda is here</p>
@@ -144,13 +144,13 @@ export const AmandaAssistantWidget: React.FC<AmandaAssistantWidgetProps> = ({
       exit={{ opacity: 0, y: 100, scale: 0.9 }}
       className="fixed bottom-6 right-6 z-50 w-80 max-w-[calc(100vw-3rem)]"
     >
-      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl shadow-2xl shadow-gold/20 border border-gold/30 overflow-hidden">
+      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl shadow-2xl shadow-gold/20 border border-[#B89555]/30 overflow-hidden">
         {/* Header */}
         <div className="bg-gradient-to-r from-gold to-gold-dark p-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Avatar className="h-12 w-12 border-2 border-white shadow-lg">
               <AvatarImage src={amandaClarkePhoto} alt="Amanda Clarke" className="object-cover object-top" />
-              <AvatarFallback className="bg-[#FDFBF7] text-gold font-bold">AC</AvatarFallback>
+              <AvatarFallback className="bg-[#FDFBF7] text-[#1A1A1A] font-bold">AC</AvatarFallback>
             </Avatar>
             <div>
               <h3 className="font-bold text-[#1A1A1A] text-sm">Amanda Clarke</h3>
@@ -186,13 +186,13 @@ export const AmandaAssistantWidget: React.FC<AmandaAssistantWidgetProps> = ({
               exit={{ height: 0 }}
               className="overflow-hidden"
             >
-              <div className="p-4 border-b border-gold/10">
+              <div className="p-4 border-b border-[#B89555]/10">
                 <div className="flex items-center gap-2 text-sm text-[#1A1A1A]/70">
-                  <Sparkles className="w-4 h-4 text-gold" />
+                  <Sparkles className="w-4 h-4 text-[#1A1A1A]" />
                   <span>Currently monitoring: <strong className="text-[#1A1A1A]">{toolName}</strong></span>
                 </div>
                 {projectContext?.name && (
-                  <Badge className="mt-2 bg-gold/10 text-gold border-gold/30">
+                  <Badge className="mt-2 bg-[#EFE6D6]/10 text-[#1A1A1A] border-[#B89555]/30">
                     Project: {projectContext.name}
                   </Badge>
                 )}
@@ -220,7 +220,7 @@ export const AmandaAssistantWidget: React.FC<AmandaAssistantWidgetProps> = ({
               </ScrollArea>
 
               {/* Input */}
-              <div className="p-4 bg-[#F7F2EA]/50 border-t border-gold/10">
+              <div className="p-4 bg-[#F7F2EA]/50 border-t border-[#B89555]/10">
                 <div className="flex gap-2">
                   <Textarea
                     placeholder="Leave a note for Amanda..."
@@ -237,7 +237,7 @@ export const AmandaAssistantWidget: React.FC<AmandaAssistantWidgetProps> = ({
                   <Button
                     onClick={handleSendMessage}
                     disabled={isSending || !message.trim()}
-                    className="bg-gold hover:bg-gold-dark text-[#1A1A1A] self-end"
+                    className="bg-[#EFE6D6] hover:bg-[#EFE6D6]-dark text-[#1A1A1A] self-end"
                   >
                     {isSending ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
@@ -255,7 +255,7 @@ export const AmandaAssistantWidget: React.FC<AmandaAssistantWidgetProps> = ({
         {!isExpanded && (
           <div className="px-4 py-3 flex items-center justify-between text-sm">
             <div className="flex items-center gap-2 text-[#1A1A1A]/70">
-              <NotebookPen className="w-4 h-4 text-gold" />
+              <NotebookPen className="w-4 h-4 text-[#1A1A1A]" />
               <span>Notes: {notes.length}</span>
             </div>
             <Badge className="bg-green-100 text-green-700 border-0 text-xs">

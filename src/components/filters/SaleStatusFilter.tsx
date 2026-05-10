@@ -3,7 +3,7 @@
  *
  * Uses the canonical filter tokens from `filterStyles.ts` so triggers,
  * popovers, checkboxes and clear-button all match the rest of the filter UI
- * and meet the accessibility / faded-gold rules (no text-gold/XX, no
+ * and meet the accessibility / faded-gold rules (no text-[#1A1A1A]/XX, no
  * placeholder below /70).
  */
 

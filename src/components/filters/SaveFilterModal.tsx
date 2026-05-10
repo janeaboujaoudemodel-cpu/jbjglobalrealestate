@@ -28,7 +28,7 @@ const SaveFilterModal = ({ open, onOpenChange, onSave }: SaveFilterModalProps) =
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[440px] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+      <DialogContent className="sm:max-w-[440px] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
         <DialogHeader>
           <DialogTitle className="text-[#1A1A1A] text-lg font-bold">
             Give name for your saved filter
@@ -40,7 +40,7 @@ const SaveFilterModal = ({ open, onOpenChange, onSave }: SaveFilterModalProps) =
               value={filterName}
               onChange={(e) => setFilterName(e.target.value)}
               placeholder="Enter filter name..."
-              className="h-12 pr-10 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold"
+              className="h-12 pr-10 bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]"
               onKeyDown={(e) => e.key === "Enter" && handleSave()}
             />
             {filterName && (
@@ -59,7 +59,7 @@ const SaveFilterModal = ({ open, onOpenChange, onSave }: SaveFilterModalProps) =
             <Button
               variant="outline"
               onClick={() => onOpenChange(false)}
-              className="flex-1 h-11 border-gold/30 text-[#1A1A1A] hover:bg-[#FDFBF7]/50"
+              className="flex-1 h-11 border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#FDFBF7]/50"
             >
               Cancel
             </Button>

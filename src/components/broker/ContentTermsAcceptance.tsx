@@ -38,34 +38,34 @@ export default function ContentTermsAcceptance({
 
   return (
     <div className="space-y-4">
-      <div className="bg-zinc-900/80 border border-amber-500/30 rounded-xl p-4">
+      <div className="bg-[#FDFBF7]/80 border border-amber-500/30 rounded-xl p-4">
         <div className="flex items-start gap-3">
           <AlertTriangle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
           <div className="space-y-3 flex-1">
             <h4 className="font-semibold text-white">Content Protection Notice</h4>
             <p className="text-sm text-white/70">
               All materials, courses, and content provided through the Broker Toolkit are 
-              <span className="text-amber-400 font-medium"> exclusively licensed for your personal use</span>.
+              <span className="text-[#1A1A1A] font-medium"> exclusively licensed for your personal use</span>.
             </p>
 
             <div className="grid gap-2 text-xs text-white/70">
               <div className="flex items-center gap-2">
-                <Lock className="w-4 h-4 text-gold" />
+                <Lock className="w-4 h-4 text-[#1A1A1A]" />
                 <span>Content is encrypted and watermarked with your unique ID</span>
               </div>
               <div className="flex items-center gap-2">
-                <Shield className="w-4 h-4 text-gold" />
+                <Shield className="w-4 h-4 text-[#1A1A1A]" />
                 <span>Access restricted to one device per account</span>
               </div>
               <div className="flex items-center gap-2">
-                <Scale className="w-4 h-4 text-gold" />
+                <Scale className="w-4 h-4 text-[#1A1A1A]" />
                 <span>Violations subject to UAE Federal Law No. 38 of 2021</span>
               </div>
             </div>
 
             <button
               onClick={() => setTermsExpanded(!termsExpanded)}
-              className="text-gold text-sm underline hover:no-underline"
+              className="text-[#1A1A1A] text-sm underline hover:no-underline"
             >
               {termsExpanded ? "Hide full terms" : "Read full terms and conditions"}
             </button>
@@ -74,7 +74,7 @@ export default function ContentTermsAcceptance({
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
-                className="bg-zinc-800/50 rounded-lg p-4 text-xs text-white/70 space-y-3 max-h-60 overflow-y-auto"
+                className="bg-[#1A1A1A]/50 rounded-lg p-4 text-xs text-white/70 space-y-3 max-h-60 overflow-y-auto"
               >
                 <h5 className="font-semibold text-white">CONTENT LICENSE AGREEMENT</h5>
                 
@@ -145,7 +145,7 @@ export default function ContentTermsAcceptance({
         </div>
       </div>
 
-      <label className="flex items-start gap-3 cursor-pointer p-4 rounded-xl border-2 transition-all bg-zinc-900/50 border-[#1A1A1A] hover:border-[#1A1A1A]">
+      <label className="flex items-start gap-3 cursor-pointer p-4 rounded-xl border-2 transition-all bg-[#FDFBF7]/50 border-[#1A1A1A] hover:border-[#1A1A1A]">
         <Checkbox
           checked={isAccepted}
           onCheckedChange={async (checked) => {

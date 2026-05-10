@@ -121,7 +121,7 @@ export default function BookStyleDocuments({
             <motion.button
               key={doc.id}
               onClick={() => handleBookClick(doc, title, filename)}
-              className="snap-start flex-shrink-0 group relative rounded-lg overflow-hidden border border-gold/30 hover:border-gold/60 transition-all"
+              className="snap-start flex-shrink-0 group relative rounded-lg overflow-hidden border border-[#B89555]/30 hover:border-[#B89555]/60 transition-all"
               style={{ width: 160, height: 220 }}
               whileHover={{ y: -4, scale: 1.03 }}
               transition={{ type: "spring", stiffness: 300 }}
@@ -174,11 +174,11 @@ export default function BookStyleDocuments({
 
       {/* PDF Viewer Modal */}
       <Dialog open={!!viewerUrl} onOpenChange={(open) => !open && setViewerUrl(null)}>
-        <DialogContent className="max-w-5xl h-[85vh] p-0 bg-card border-gold/30 rounded-xl overflow-hidden">
+        <DialogContent className="max-w-5xl h-[85vh] p-0 bg-card border-[#B89555]/30 rounded-xl overflow-hidden">
           <DialogTitle className="sr-only">{viewerTitle}</DialogTitle>
           <div className="flex flex-col h-full">
             {/* Header bar */}
-            <div className="flex items-center justify-between px-4 py-3 bg-card border-b border-gold/20">
+            <div className="flex items-center justify-between px-4 py-3 bg-card border-b border-[#B89555]/20">
               <p className="text-sm font-semibold text-foreground truncate">{viewerTitle}</p>
               <button
                 onClick={async () => {
@@ -199,14 +199,14 @@ export default function BookStyleDocuments({
                     onDownload(viewerUrl, viewerFilename);
                   }
                 }}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-br from-[hsl(var(--gold)/0.9)] to-[hsl(var(--gold)/0.7)] text-[#1A1A1A] text-sm font-semibold border border-gold/60 hover:border-gold shadow-sm transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-br from-[hsl(var(--gold)/0.9)] to-[hsl(var(--gold)/0.7)] text-[#1A1A1A] text-sm font-semibold border border-[#B89555]/60 hover:border-[#B89555] shadow-sm transition-colors"
               >
                 <Download className="w-4 h-4" />
                 Download
               </button>
             </div>
             {/* PDF iframe */}
-            <div className="flex-1 bg-zinc-900 rounded-b-xl overflow-hidden">
+            <div className="flex-1 bg-[#FDFBF7] rounded-b-xl overflow-hidden">
               {viewerUrl && (
                 <iframe
                   src={viewerUrl}

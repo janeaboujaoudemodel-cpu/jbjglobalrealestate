@@ -473,7 +473,7 @@ export const SecurityDashboardSummary = () => {
     switch (severity) {
       case 'critical': return 'bg-red-500/20 text-red-400 border-red-500/30';
       case 'high': return 'bg-orange-500/20 text-orange-400 border-orange-500/30';
-      case 'medium': return 'bg-amber-500/20 text-amber-400 border-amber-500/30';
+      case 'medium': return 'bg-amber-500/20 text-[#1A1A1A] border-amber-500/30';
       default: return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
     }
   };
@@ -499,7 +499,7 @@ export const SecurityDashboardSummary = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold" />
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#B89555]" />
       </div>
     );
   }
@@ -510,7 +510,7 @@ export const SecurityDashboardSummary = () => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-[#1A1A1A] text-xl font-semibold flex items-center gap-2">
-            <Shield className="w-5 h-5 text-gold" />
+            <Shield className="w-5 h-5 text-[#1A1A1A]" />
             Security Overview
           </h2>
           <p className="text-[#1A1A1A]/70 text-sm mt-1">
@@ -522,18 +522,18 @@ export const SecurityDashboardSummary = () => {
             variant="outline"
             size="sm"
             onClick={exportToCSV}
-            className="bg-[#FDFBF7] border-gold/40 text-[#1A1A1A] hover:bg-gold/10 hover:border-gold"
+            className="bg-[#FDFBF7] border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 hover:border-[#B89555]"
           >
-            <FileSpreadsheet className="w-4 h-4 mr-1.5 text-gold" />
+            <FileSpreadsheet className="w-4 h-4 mr-1.5 text-[#1A1A1A]" />
             CSV
           </Button>
           <Button
             variant="outline"
             size="sm"
             onClick={exportToPDF}
-            className="bg-[#FDFBF7] border-gold/40 text-[#1A1A1A] hover:bg-gold/10 hover:border-gold"
+            className="bg-[#FDFBF7] border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 hover:border-[#B89555]"
           >
-            <FileText className="w-4 h-4 mr-1.5 text-gold" />
+            <FileText className="w-4 h-4 mr-1.5 text-[#1A1A1A]" />
             PDF
           </Button>
           <Badge 
@@ -600,7 +600,7 @@ export const SecurityDashboardSummary = () => {
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Blocked IPs Over Time */}
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30 p-6 shadow-lg">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 p-6 shadow-lg">
           <h3 className="text-[#1A1A1A] font-medium mb-4 flex items-center gap-2">
             <BarChart3 className="w-4 h-4 text-red-500" />
             Blocked IPs (Last 7 Days)
@@ -661,7 +661,7 @@ export const SecurityDashboardSummary = () => {
         </Card>
 
         {/* Rate Limit Violations Per Hour */}
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30 p-6 shadow-lg">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 p-6 shadow-lg">
           <h3 className="text-[#1A1A1A] font-medium mb-4 flex items-center gap-2">
             <Activity className="w-4 h-4 text-amber-500" />
             Rate Limit Activity (Last 24 Hours)
@@ -712,7 +712,7 @@ export const SecurityDashboardSummary = () => {
 
       {/* Violations by Function Pie Chart */}
       {violationsByFunctionData.length > 0 && (
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30 p-6 shadow-lg">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 p-6 shadow-lg">
           <h3 className="text-[#1A1A1A] font-medium mb-4 flex items-center gap-2">
             <Ban className="w-4 h-4 text-orange-500" />
             Rate Limit Violations by Function
@@ -774,13 +774,13 @@ export const SecurityDashboardSummary = () => {
       )}
 
       {/* Recent Security Events */}
-      <Card className="bg-[#FDFBF7] border-2 border-gold/30 overflow-hidden shadow-lg">
-        <div className="p-4 border-b border-gold/20 flex items-center justify-between bg-gradient-to-r from-[#FDFBF7] to-white">
+      <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 overflow-hidden shadow-lg">
+        <div className="p-4 border-b border-[#B89555]/20 flex items-center justify-between bg-gradient-to-r from-[#FDFBF7] to-white">
           <h3 className="text-[#1A1A1A] font-medium flex items-center gap-2">
-            <Activity className="w-4 h-4 text-gold" />
+            <Activity className="w-4 h-4 text-[#1A1A1A]" />
             Recent Security Events
           </h3>
-          <Badge variant="outline" className="text-[#1A1A1A]/70 border-gold/40">
+          <Badge variant="outline" className="text-[#1A1A1A]/70 border-[#B89555]/40">
             Last 20 events
           </Badge>
         </div>
@@ -799,7 +799,7 @@ export const SecurityDashboardSummary = () => {
               {securityEvents.map((event) => (
                 <div 
                   key={event.id} 
-                  className="p-4 hover:bg-gold/5 transition-colors flex items-center gap-4"
+                  className="p-4 hover:bg-[#EFE6D6]/5 transition-colors flex items-center gap-4"
                 >
                   <div className={`p-2 rounded-lg ${getSeverityColor(event.severity)}`}>
                     {getEventIcon(event.type)}
@@ -813,7 +813,7 @@ export const SecurityDashboardSummary = () => {
                         {getEventLabel(event.type)}
                       </Badge>
                       {event.function_name && (
-                        <Badge variant="outline" className="text-xs text-[#1A1A1A]/70 border-gold/40">
+                        <Badge variant="outline" className="text-xs text-[#1A1A1A]/70 border-[#B89555]/40">
                           {event.function_name}
                         </Badge>
                       )}
@@ -844,7 +844,7 @@ export const SecurityDashboardSummary = () => {
 
       {/* Top Offenders */}
       {blockedIPs.length > 0 && (
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30 p-4 shadow-lg">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 p-4 shadow-lg">
           <h3 className="text-[#1A1A1A] font-medium mb-4 flex items-center gap-2">
             <ShieldBan className="w-4 h-4 text-red-500" />
             Top Blocked IPs

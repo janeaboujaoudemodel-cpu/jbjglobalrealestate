@@ -240,7 +240,7 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="w-8 h-8 animate-spin text-gold" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#1A1A1A]" />
       </div>
     );
   }
@@ -248,30 +248,30 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
   return (
     <div className="space-y-6">
       {/* Progress Overview - White Card */}
-      <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-[0_0_20px_rgba(200,167,102,0.15)]">
+      <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 shadow-[0_0_20px_rgba(200,167,102,0.15)]">
         <CardContent className="p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="text-lg font-semibold text-[#1A1A1A] flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-gold" />
+                <TrendingUp className="w-5 h-5 text-[#1A1A1A]" />
                 Task Progress Overview
               </h3>
               <p className="text-sm text-[#1A1A1A]/70">Synced with CRM • Your productivity dashboard</p>
             </div>
             <div className="text-right">
-              <p className="text-4xl font-bold text-gold">{completionRate}%</p>
+              <p className="text-4xl font-bold text-[#1A1A1A]">{completionRate}%</p>
               <p className="text-xs text-[#1A1A1A]/70">{stats.completed} of {stats.total} tasks completed</p>
             </div>
           </div>
-          <Progress value={completionRate} className="h-3 bg-gold/20" />
+          <Progress value={completionRate} className="h-3 bg-[#EFE6D6]/20" />
           
           {/* Clickable Mini Stats */}
           <div className="grid grid-cols-4 gap-4 mt-6">
             <button 
               onClick={() => handleCardClick('active')}
-              className="text-center p-3 rounded-lg bg-gold/5 border-2 border-gold/20 hover:border-gold/40 hover:shadow-[0_0_15px_rgba(200,167,102,0.2)] transition-all cursor-pointer"
+              className="text-center p-3 rounded-lg bg-[#EFE6D6]/5 border-2 border-[#B89555]/20 hover:border-[#B89555]/40 hover:shadow-[0_0_15px_rgba(200,167,102,0.2)] transition-all cursor-pointer"
             >
-              <p className="text-2xl font-bold text-gold">{stats.total}</p>
+              <p className="text-2xl font-bold text-[#1A1A1A]">{stats.total}</p>
               <p className="text-xs text-[#1A1A1A]/70">🧭 Active</p>
             </button>
             <button 
@@ -320,7 +320,7 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
         <Button
           size="sm"
           onClick={() => navigate('/crm-tasks')}
-          className="bg-[#FDFBF7] text-gold border-2 border-gold/30 hover:bg-transparent hover:border-gold/50 ml-auto"
+          className="bg-[#FDFBF7] text-[#1A1A1A] border-2 border-[#B89555]/30 hover:bg-transparent hover:border-[#B89555]/50 ml-auto"
         >
           <Filter className="w-4 h-4 mr-2" />
           Open CRM Tasks
@@ -331,7 +331,7 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
       <ScrollArea className="h-[450px]">
         <div className="space-y-3">
           {filteredTasks.length === 0 ? (
-            <Card className="bg-[#FDFBF7] border-2 border-gold/20">
+            <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/20">
               <CardContent className="p-8 text-center">
                 <CheckCircle2 className="w-16 h-16 text-[#1A1A1A]/70 mx-auto mb-4" />
                 <h4 className="text-[#1A1A1A] font-semibold mb-2">No Tasks Found</h4>
@@ -354,7 +354,7 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
                   transition={{ delay: index * 0.05 }}
                 >
                   <Card className={`bg-[#FDFBF7] border-2 transition-all ${config.bgColor} ${
-                    isExpanded ? 'ring-2 ring-gold/30 shadow-[0_0_20px_rgba(200,167,102,0.2)]' : 'hover:border-gold/40'
+                    isExpanded ? 'ring-2 ring-gold/30 shadow-[0_0_20px_rgba(200,167,102,0.2)]' : 'hover:border-[#B89555]/40'
                   }`}>
                     <CardContent className="p-4">
                       <div className="flex items-start justify-between">
@@ -372,7 +372,7 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
                                 </Badge>
                               )}
                               {'ai_created' in task && task.ai_created && (
-                                <Badge className="bg-gold/10 text-gold border-gold/30 border">
+                                <Badge className="bg-[#EFE6D6]/10 text-[#1A1A1A] border-[#B89555]/30 border">
                                   <Sparkles className="w-3 h-3 mr-1" />
                                   Auto
                                 </Badge>
@@ -415,7 +415,7 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
                             size="sm"
                             variant="ghost"
                             onClick={() => setExpandedTask(isExpanded ? null : task.id)}
-                            className="text-[#1A1A1A]/70 hover:text-gold"
+                            className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
                           >
                             <Eye className="w-4 h-4" />
                           </Button>
@@ -444,7 +444,7 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
                             <Button
                               size="sm"
                               onClick={() => updateTaskStatus(task.id, isCrmTask ? 'done' : 'completed', isCrmTask)}
-                              className="bg-[#FDFBF7] text-gold border-2 border-gold/30 hover:border-gold hover:bg-gold/5"
+                              className="bg-[#FDFBF7] text-[#1A1A1A] border-2 border-[#B89555]/30 hover:border-[#B89555] hover:bg-[#EFE6D6]/5"
                             >
                               Approve
                             </Button>
@@ -457,7 +457,7 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
                         <motion.div
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: 'auto' }}
-                          className="mt-4 pt-4 border-t border-gold/10"
+                          className="mt-4 pt-4 border-t border-[#B89555]/10"
                         >
                           <div className="grid grid-cols-2 gap-4 text-sm">
                             <div>

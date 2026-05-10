@@ -104,7 +104,7 @@ export function ShortcutCheatSheet({ open, onClose }: ShortcutCheatSheetProps) {
         <div className="flex items-center justify-between px-5 py-4 border-b" style={{ borderColor: 'rgba(255,255,255,0.07)' }}>
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'rgba(245,158,11,0.15)', border: '1px solid rgba(245,158,11,0.3)' }}>
-              <Keyboard className="w-4 h-4 text-amber-400" />
+              <Keyboard className="w-4 h-4 text-[#1A1A1A]" />
             </div>
             <div>
               <h2 className="text-white text-sm font-bold leading-tight">Keyboard Shortcuts</h2>

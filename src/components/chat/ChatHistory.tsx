@@ -26,7 +26,7 @@ const HighlightText = ({ text, search }: { text: string; search: string }) => {
     <>
       {parts.map((part, i) => 
         regex.test(part) ? (
-          <span key={i} className="bg-gold/40 text-gold font-medium rounded px-0.5">{part}</span>
+          <span key={i} className="bg-[#EFE6D6]/40 text-[#1A1A1A] font-medium rounded px-0.5">{part}</span>
         ) : (
           <span key={i}>{part}</span>
         )
@@ -60,7 +60,7 @@ const ChatHistory = ({
     <div className="flex-1 p-4 overflow-y-auto">
       <div className="text-center mb-4">
         <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-gradient-to-r from-gold/20 to-gold/10 flex items-center justify-center">
-          <History className="w-7 h-7 text-gold" />
+          <History className="w-7 h-7 text-[#1A1A1A]" />
         </div>
         <h4 className="text-white text-lg font-semibold mb-1"><T>{`Welcome back, ${userFirstName}!`}</T></h4>
         <p className="text-[#1A1A1A]/70 text-sm"><T>Continue a conversation or start fresh</T></p>
@@ -69,14 +69,14 @@ const ChatHistory = ({
       {/* New Conversation Button */}
       <button
         onClick={onNewConversation}
-        className="w-full p-4 mb-4 bg-gradient-to-r from-gold/10 to-gold/5 hover:from-gold/20 hover:to-gold/10 border border-gold/30 hover:border-gold/50 rounded-xl text-left transition-all duration-300 group flex items-center gap-3"
+        className="w-full p-4 mb-4 bg-gradient-to-r from-gold/10 to-gold/5 hover:from-gold/20 hover:to-gold/10 border border-[#B89555]/30 hover:border-[#B89555]/50 rounded-xl text-left transition-all duration-300 group flex items-center gap-3"
       >
-        <div className="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center">
-          <Plus className="w-5 h-5 text-gold" />
+        <div className="w-10 h-10 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center">
+          <Plus className="w-5 h-5 text-[#1A1A1A]" />
         </div>
         <div>
           <h5 className="text-white text-sm font-semibold"><T>Start New Conversation</T></h5>
-          <p className="text-gold text-xs"><T>Ask me anything about properties & services</T></p>
+          <p className="text-[#1A1A1A] text-xs"><T>Ask me anything about properties & services</T></p>
         </div>
       </button>
 
@@ -121,7 +121,7 @@ const ChatHistory = ({
       {/* Previous Conversations */}
       {isLoading ? (
         <div className="flex items-center justify-center py-8">
-          <Loader2 className="w-6 h-6 text-gold animate-spin" />
+          <Loader2 className="w-6 h-6 text-[#1A1A1A] animate-spin" />
         </div>
       ) : chatHistory.length > 0 ? (
         <div className="space-y-2">
@@ -141,11 +141,11 @@ const ChatHistory = ({
               <button
                 key={conv.id}
                 onClick={() => onContinueConversation(conv)}
-                className="w-full p-3 bg-[#FDFBF7]/5 hover:bg-[#FDFBF7]/10 border border-[#1A1A1A] hover:border-gold/30 rounded-lg text-left transition-all duration-200 group"
+                className="w-full p-3 bg-[#FDFBF7]/5 hover:bg-[#FDFBF7]/10 border border-[#1A1A1A] hover:border-[#B89555]/30 rounded-lg text-left transition-all duration-200 group"
               >
                 <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-full bg-gold/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <ServiceIcon className="w-4 h-4 text-gold" />
+                  <div className="w-8 h-8 rounded-full bg-[#EFE6D6]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <ServiceIcon className="w-4 h-4 text-[#1A1A1A]" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1">
@@ -163,7 +163,7 @@ const ChatHistory = ({
                           ? 'bg-green-500/20 text-green-400' 
                           : conv.status === 'submitted_to_team'
                           ? 'bg-blue-500/20 text-blue-400'
-                          : 'bg-zinc-700 text-[#1A1A1A]/70'
+                          : 'bg-[#1A1A1A] text-[#1A1A1A]/70'
                       }`}>
                         {conv.status === 'submitted_to_team' ? <T>With Team</T> : <T>{conv.status}</T>}
                       </span>
@@ -182,7 +182,7 @@ const ChatHistory = ({
         </div>
       ) : (
         <div className="text-center py-6">
-          <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-zinc-800 flex items-center justify-center">
+          <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-[#1A1A1A] flex items-center justify-center">
             <MessageCircle className="w-6 h-6 text-[#1A1A1A]/70" />
           </div>
           <p className="text-[#1A1A1A]/70 text-sm"><T>No previous conversations</T></p>

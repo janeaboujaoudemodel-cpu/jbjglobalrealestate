@@ -189,10 +189,10 @@ export function RentalListingForm({ onSuccess, className }: RentalListingFormPro
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
             >
-              <Card className="border-gold/20">
+              <Card className="border-[#B89555]/20">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Building className="h-5 w-5 text-gold" />
+                    <Building className="h-5 w-5 text-[#1A1A1A]" />
                     Property Details
                   </CardTitle>
                   <CardDescription>
@@ -400,10 +400,10 @@ export function RentalListingForm({ onSuccess, className }: RentalListingFormPro
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
             >
-              <Card className="border-gold/20">
+              <Card className="border-[#B89555]/20">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <MapPin className="h-5 w-5 text-gold" />
+                    <MapPin className="h-5 w-5 text-[#1A1A1A]" />
                     Location
                   </CardTitle>
                   <CardDescription>
@@ -489,10 +489,10 @@ export function RentalListingForm({ onSuccess, className }: RentalListingFormPro
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
             >
-              <Card className="border-gold/20">
+              <Card className="border-[#B89555]/20">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <DollarSign className="h-5 w-5 text-gold" />
+                    <DollarSign className="h-5 w-5 text-[#1A1A1A]" />
                     Pricing & Terms
                   </CardTitle>
                   <CardDescription>
@@ -582,10 +582,10 @@ export function RentalListingForm({ onSuccess, className }: RentalListingFormPro
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
             >
-              <Card className="border-gold/20">
+              <Card className="border-[#B89555]/20">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <User className="h-5 w-5 text-gold" />
+                    <User className="h-5 w-5 text-[#1A1A1A]" />
                     Your Information
                   </CardTitle>
                   <CardDescription>

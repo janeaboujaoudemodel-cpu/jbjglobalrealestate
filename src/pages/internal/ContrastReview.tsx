@@ -257,7 +257,7 @@ export default function ContrastReview() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] text-zinc-900">
+    <div className="min-h-screen bg-[#FDFBF7] text-[#1A1A1A]">
       {/* Header */}
       <header className="sticky top-0 z-20 border-b border-zinc-200 bg-[#FDFBF7]/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
@@ -319,7 +319,7 @@ export default function ContrastReview() {
               href={active.path}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-zinc-300 bg-[#FDFBF7] px-4 py-2 text-xs font-semibold text-zinc-900 transition hover:bg-zinc-100"
+              className="inline-flex items-center gap-2 rounded-full border border-[#B89555]/30 bg-[#FDFBF7] px-4 py-2 text-xs font-semibold text-[#1A1A1A] transition hover:bg-[#F7F2EA]"
             >
               Open in new tab <ExternalLink className="h-3.5 w-3.5" />
             </a>
@@ -333,7 +333,7 @@ export default function ContrastReview() {
                 className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
                   r.path === active.path
                     ? "border-zinc-900 bg-[#FDFBF7] text-white"
-                    : "border-zinc-300 bg-[#FDFBF7] text-zinc-700 hover:bg-zinc-100"
+                    : "border-[#B89555]/30 bg-[#FDFBF7] text-zinc-700 hover:bg-[#F7F2EA]"
                 }`}
               >
                 {r.label}

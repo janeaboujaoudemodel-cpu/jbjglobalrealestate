@@ -75,16 +75,16 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         {isMobile ? (
-          <button className="flex flex-col items-center justify-center gap-1.5 text-[#1A1A1A] hover:text-gold py-2 w-16 transition-colors">
+          <button className="flex flex-col items-center justify-center gap-1.5 text-[#1A1A1A] hover:text-[#1A1A1A] py-2 w-16 transition-colors">
             <DollarSign className="w-5 h-5" />
             <span className="text-[9px] font-medium text-center">Currency</span>
           </button>
         ) : isIconOnly ? (
-          <button className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gold/10 group">
-            <DollarSign className="w-4 h-4 text-gold group-hover:text-white group-hover:scale-110 transition-all" />
+          <button className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#EFE6D6]/10 group">
+            <DollarSign className="w-4 h-4 text-[#1A1A1A] group-hover:text-white group-hover:scale-110 transition-all" />
           </button>
         ) : (
-          <button className="h-10 px-3 text-gold hover:text-gold-light rounded-full border border-gold/20 hover:border-gold/50 hover:bg-gold/10 flex items-center gap-2">
+          <button className="h-10 px-3 text-[#1A1A1A] hover:text-[#1A1A1A]-light rounded-full border border-[#B89555]/20 hover:border-[#B89555]/50 hover:bg-[#EFE6D6]/10 flex items-center gap-2">
             <DollarSign className="w-4 h-4" />
             <span className="text-xs font-medium">{currentCurrency.code}</span>
           </button>
@@ -93,11 +93,11 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
       <DropdownMenuContent 
         align="end" 
         sideOffset={12}
-        className="z-[9999] min-w-[280px] rounded-xl shadow-2xl p-0 border-2 border-gold/40"
+        className="z-[9999] min-w-[280px] rounded-xl shadow-2xl p-0 border-2 border-[#B89555]/40"
         style={{ background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)' }}
       >
         <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
-        <div className="px-4 py-3 border-b border-gold/20">
+        <div className="px-4 py-3 border-b border-[#B89555]/20">
           <p className="text-xs font-semibold text-[#1A1A1A]/60 uppercase tracking-wider">Select Currency</p>
         </div>
         <div className="p-2 max-h-80 overflow-y-auto">
@@ -107,19 +107,19 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
               onClick={() => setCurrency(curr.code)}
               className={`flex items-center justify-between cursor-pointer rounded-lg px-4 py-3 my-0.5 ${
                 currency === curr.code 
-                  ? 'bg-gold/15 border border-gold/30' 
+                  ? 'bg-[#EFE6D6]/15 border border-[#B89555]/30' 
                   : 'hover:bg-gradient-to-r hover:from-[#F7F1E6] hover:to-[#ECE2D2]'
               }`}
             >
               <span className="flex items-center gap-3">
                 <span className="text-lg">{curr.flag}</span>
                 <span className={`text-sm font-semibold ${
-                  currency === curr.code ? 'text-gold' : 'text-[#1A1A1A]'
+                  currency === curr.code ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]'
                 }`}>{curr.name}</span>
               </span>
               <span className="flex items-center gap-2">
                 <span className="text-[#1A1A1A]/50 text-sm">{curr.symbol}</span>
-                {currency === curr.code && <Check className="w-4 h-4 text-gold" />}
+                {currency === curr.code && <Check className="w-4 h-4 text-[#1A1A1A]" />}
               </span>
             </DropdownMenuItem>
           ))}

@@ -101,7 +101,7 @@ export function TodaysMarketSignals() {
       case "high":
         return <Badge className="bg-red-500/20 text-red-400 border-red-500/30 text-xs">High</Badge>;
       case "medium":
-        return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-xs">Medium</Badge>;
+        return <Badge className="bg-amber-500/20 text-[#1A1A1A] border-amber-500/30 text-xs">Medium</Badge>;
       case "low":
         return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-xs">Low</Badge>;
     }
@@ -114,18 +114,18 @@ export function TodaysMarketSignals() {
       case "price_momentum":
         return <Badge variant="outline" className="text-emerald-400 border-emerald-400/30 text-xs">Price</Badge>;
       case "supply_alert":
-        return <Badge variant="outline" className="text-amber-400 border-amber-400/30 text-xs">Supply</Badge>;
+        return <Badge variant="outline" className="text-[#1A1A1A] border-amber-400/30 text-xs">Supply</Badge>;
       case "opportunity":
-        return <Badge variant="outline" className="text-gold border-gold/30 text-xs">Opportunity</Badge>;
+        return <Badge variant="outline" className="text-[#1A1A1A] border-[#B89555]/30 text-xs">Opportunity</Badge>;
     }
   };
 
   return (
-    <Card className="bg-zinc-900/50 border-[#1A1A1A]">
+    <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-white text-lg flex items-center gap-2">
-            <Activity className="w-5 h-5 text-gold" />
+            <Activity className="w-5 h-5 text-[#1A1A1A]" />
             Today's Market Signals
           </CardTitle>
           <div className="flex items-center gap-2 text-white/90 text-xs">
@@ -144,13 +144,13 @@ export function TodaysMarketSignals() {
           signals.map((signal, index) => (
             <div
               key={index}
-              className="bg-zinc-800/50 rounded-lg p-3 border border-[#1A1A1A]/50 hover:border-gold/20 transition-colors"
+              className="bg-[#1A1A1A]/50 rounded-lg p-3 border border-[#1A1A1A]/50 hover:border-[#B89555]/20 transition-colors"
             >
               <div className="flex items-start justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <div className={`p-1.5 rounded-lg ${
-                    signal.signalType === "opportunity" ? "bg-gold/10 text-gold" :
-                    signal.signalType === "supply_alert" ? "bg-amber-500/10 text-amber-400" :
+                    signal.signalType === "opportunity" ? "bg-[#EFE6D6]/10 text-[#1A1A1A]" :
+                    signal.signalType === "supply_alert" ? "bg-amber-500/10 text-[#1A1A1A]" :
                     signal.signalType === "rent_demand" ? "bg-blue-500/10 text-blue-400" :
                     "bg-emerald-500/10 text-emerald-400"
                   }`}>

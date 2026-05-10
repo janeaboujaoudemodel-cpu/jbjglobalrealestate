@@ -135,7 +135,7 @@ export function AIBrokerCallDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-zinc-900 border-[#1A1A1A] max-w-md">
+      <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A] max-w-md">
         <DialogHeader>
           <DialogTitle className="text-white flex items-center gap-2">
             <Phone className="h-5 w-5 text-purple-500" />
@@ -147,13 +147,13 @@ export function AIBrokerCallDialog({
           {/* Phone Number Display */}
           <div>
             <Label className="text-[#1A1A1A]/70">Phone Number</Label>
-            <div className="bg-zinc-800 border border-[#1A1A1A] rounded-md px-3 py-2 mt-1 text-white font-mono">
+            <div className="bg-[#1A1A1A] border border-[#1A1A1A] rounded-md px-3 py-2 mt-1 text-white font-mono">
               {lead.phone || "N/A"}
             </div>
           </div>
 
           {/* Call Timer */}
-          <div className="bg-zinc-800 rounded-lg p-6 text-center">
+          <div className="bg-[#1A1A1A] rounded-lg p-6 text-center">
             <div className="flex items-center justify-center gap-2 text-[#1A1A1A]/70 mb-2">
               <Clock className="h-4 w-4" />
               <span className="text-sm">Call Duration</span>
@@ -189,10 +189,10 @@ export function AIBrokerCallDialog({
           <div>
             <Label className="text-[#1A1A1A]/70">Call Outcome</Label>
             <Select value={callStatus} onValueChange={setCallStatus}>
-              <SelectTrigger className="bg-zinc-800 border-[#1A1A1A] text-white mt-1">
+              <SelectTrigger className="bg-[#1A1A1A] border-[#1A1A1A] text-white mt-1">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-zinc-900 border-[#1A1A1A]">
+              <SelectContent className="bg-[#FDFBF7] border-[#1A1A1A]">
                 <SelectItem value="completed">Completed</SelectItem>
                 <SelectItem value="no_answer">No Answer</SelectItem>
                 <SelectItem value="busy">Busy</SelectItem>
@@ -209,7 +209,7 @@ export function AIBrokerCallDialog({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Summary of the call discussion..."
-              className="bg-zinc-800 border-[#1A1A1A] text-white mt-1 min-h-[100px]"
+              className="bg-[#1A1A1A] border-[#1A1A1A] text-white mt-1 min-h-[100px]"
             />
           </div>
 

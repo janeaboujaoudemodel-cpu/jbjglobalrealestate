@@ -114,13 +114,13 @@ const ShortlistBadgeButton = ({
         <DropdownMenuTrigger asChild>
           <button
             onClick={(e) => e.stopPropagation()}
-            className={`${sizeClasses[size]} flex items-center gap-1.5 rounded-full bg-[#FDFBF7] border border-gold/30 text-gold hover:bg-[#FDFBF7]/90 transition-all cursor-pointer whitespace-nowrap ${className}`}
+            className={`${sizeClasses[size]} flex items-center gap-1.5 rounded-full bg-[#FDFBF7] border border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#FDFBF7]/90 transition-all cursor-pointer whitespace-nowrap ${className}`}
           >
             <Award className={iconSizes[size]} />
             <span className="hidden sm:inline">{currentBadge ? "Change" : "Add Badge"}</span>
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="bg-zinc-900 border-[#1A1A1A]" onClick={(e) => e.stopPropagation()}>
+        <DropdownMenuContent className="bg-[#FDFBF7] border-[#1A1A1A]" onClick={(e) => e.stopPropagation()}>
           <DropdownMenuItem
             onClick={(e) => {
               e.stopPropagation();

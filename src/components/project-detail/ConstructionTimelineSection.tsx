@@ -55,7 +55,7 @@ export default function ConstructionTimelineSection({
     if (progress < 60) return { label: "Superstructure", color: "bg-amber-500" };
     if (progress < 90) return { label: "Finishing", color: "bg-emerald-500" };
     if (progress < 100) return { label: "Final Touches", color: "bg-blue-500" };
-    return { label: "Complete", color: "bg-gold" };
+    return { label: "Complete", color: "bg-[#EFE6D6]" };
   };
 
   const stage = getConstructionStage(validatedProgress);
@@ -63,7 +63,7 @@ export default function ConstructionTimelineSection({
   return (
     <div className="jj-card-inner">
       <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-6">
-        <HardHat className="w-5 h-5 text-gold" />
+        <HardHat className="w-5 h-5 text-[#1A1A1A]" />
         Construction Progress
       </h3>
 
@@ -76,7 +76,7 @@ export default function ConstructionTimelineSection({
                 {stage.label}
               </span>
             </div>
-            <span className="text-2xl font-bold text-gold">{validatedProgress}%</span>
+            <span className="text-2xl font-bold text-[#1A1A1A]">{validatedProgress}%</span>
           </div>
           <Progress 
             value={validatedProgress} 
@@ -94,7 +94,7 @@ export default function ConstructionTimelineSection({
       {/* Timeline Milestones */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {constructionStartDate && (
-          <div className="rounded-xl border border-gold/30 bg-card p-4">
+          <div className="rounded-xl border border-[#B89555]/30 bg-card p-4">
             <div className="flex items-center gap-3 mb-2">
               <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center">
                 <Flag className="w-5 h-5 text-emerald-500" />
@@ -108,7 +108,7 @@ export default function ConstructionTimelineSection({
         )}
 
         {expectedCompletion && (
-          <div className="rounded-xl border border-gold/30 bg-card p-4">
+          <div className="rounded-xl border border-[#B89555]/30 bg-card p-4">
             <div className="flex items-center gap-3 mb-2">
               <div className="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center">
                 <Clock className="w-5 h-5 text-amber-500" />
@@ -122,10 +122,10 @@ export default function ConstructionTimelineSection({
         )}
 
         {handoverDate && (
-          <div className="rounded-xl border border-gold/30 bg-card p-4">
+          <div className="rounded-xl border border-[#B89555]/30 bg-card p-4">
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center">
-                <Home className="w-5 h-5 text-gold" />
+              <div className="w-10 h-10 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center">
+                <Home className="w-5 h-5 text-[#1A1A1A]" />
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Handover Date</p>
@@ -150,7 +150,7 @@ export default function ConstructionTimelineSection({
           <div className="flex justify-between relative">
             <div className="flex flex-col items-center">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center z-10 ${
-                validatedProgress > 0 ? "bg-gold text-[#1A1A1A]" : "bg-muted text-muted-foreground"
+                validatedProgress > 0 ? "bg-[#EFE6D6] text-[#1A1A1A]" : "bg-muted text-muted-foreground"
               }`}>
                 <Flag className="w-4 h-4" />
               </div>
@@ -159,7 +159,7 @@ export default function ConstructionTimelineSection({
             
             <div className="flex flex-col items-center">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center z-10 ${
-                validatedProgress >= 50 ? "bg-gold text-[#1A1A1A]" : "bg-muted text-muted-foreground"
+                validatedProgress >= 50 ? "bg-[#EFE6D6] text-[#1A1A1A]" : "bg-muted text-muted-foreground"
               }`}>
                 <HardHat className="w-4 h-4" />
               </div>
@@ -168,7 +168,7 @@ export default function ConstructionTimelineSection({
             
             <div className="flex flex-col items-center">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center z-10 ${
-                validatedProgress >= 100 ? "bg-gold text-[#1A1A1A]" : "bg-muted text-muted-foreground"
+                validatedProgress >= 100 ? "bg-[#EFE6D6] text-[#1A1A1A]" : "bg-muted text-muted-foreground"
               }`}>
                 <Home className="w-4 h-4" />
               </div>

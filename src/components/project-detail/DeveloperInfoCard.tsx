@@ -54,7 +54,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
     <div className="w-full py-6 md:py-8 rounded-2xl">
       <div className="container mx-auto px-4 md:px-8">
         <div 
-          className="rounded-2xl border-2 border-gold/40 p-6 md:p-8"
+          className="rounded-2xl border-2 border-[#B89555]/40 p-6 md:p-8"
           style={{
             background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)',
             boxShadow: '0 8px 32px rgba(200,167,102,0.25), inset 0 1px 2px rgba(255,255,255,0.4)',
@@ -88,19 +88,19 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
               {/* Header */}
               <div className="flex items-center gap-3 mb-3">
                 <h3 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">{developer.name}</h3>
-                <Award className="w-6 h-6 text-gold" />
+                <Award className="w-6 h-6 text-[#1A1A1A]" />
               </div>
 
               {/* Quick meta line */}
               <div className="flex flex-wrap items-center gap-3 mb-5 text-sm text-[#1A1A1A]/70">
                 {developer.specialization && (
-                  <span className="px-3 py-1 rounded-full bg-gold/10 border border-gold/30 text-xs font-semibold text-[#1A1A1A]">
+                  <span className="px-3 py-1 rounded-full bg-[#EFE6D6]/10 border border-[#B89555]/30 text-xs font-semibold text-[#1A1A1A]">
                     {developer.specialization}
                   </span>
                 )}
                 {developer.ceo_name && (
                   <span className="flex items-center gap-1.5">
-                    <User className="w-3.5 h-3.5 text-gold" />
+                    <User className="w-3.5 h-3.5 text-[#1A1A1A]" />
                     {developer.ceo_name}
                   </span>
                 )}
@@ -112,7 +112,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                     href={developer.website_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1 text-gold hover:underline"
+                    className="flex items-center gap-1 text-[#1A1A1A] hover:underline"
                   >
                     <Globe className="w-3.5 h-3.5" />
                     Website
@@ -126,14 +126,14 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                   {stats.map((stat, idx) => (
                     <div 
                       key={idx} 
-                      className="flex items-center gap-3 px-5 py-3 rounded-xl border-2 border-gold/30"
+                      className="flex items-center gap-3 px-5 py-3 rounded-xl border-2 border-[#B89555]/30"
                       style={{
                         background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 100%)',
                         boxShadow: '0 2px 8px rgba(200,167,102,0.15)'
                       }}
                     >
-                      <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center">
-                        <stat.icon className="w-5 h-5 text-gold" />
+                      <div className="w-10 h-10 rounded-full bg-[#EFE6D6]/10 flex items-center justify-center">
+                        <stat.icon className="w-5 h-5 text-[#1A1A1A]" />
                       </div>
                       <div>
                         <span className="text-xl font-bold text-[#1A1A1A]">{stat.value}</span>
@@ -147,7 +147,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
               {/* Notable Projects */}
               {developer.notable_projects && (
                 <div className="mb-5">
-                  <span className="text-xs font-semibold text-gold uppercase tracking-wider">Notable Projects: </span>
+                  <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wider">Notable Projects: </span>
                   <span className="text-sm text-[#1A1A1A]/70">{developer.notable_projects}</span>
                 </div>
               )}
@@ -156,11 +156,11 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
               {developer.description && (
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-3">
-                    <Sparkles className="w-4 h-4 text-gold" />
-                    <span className="text-xs font-semibold text-gold uppercase tracking-wider">About the Developer</span>
+                    <Sparkles className="w-4 h-4 text-[#1A1A1A]" />
+                    <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wider">About the Developer</span>
                   </div>
                   <div 
-                    className="rounded-xl p-4 border border-gold/20"
+                    className="rounded-xl p-4 border border-[#B89555]/20"
                     style={{
                       background: 'linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(253,251,247,0.6) 100%)',
                     }}
@@ -175,7 +175,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                   {hasLongDescription && (
                     <button
                       onClick={() => setIsExpanded(!isExpanded)}
-                      className="flex items-center gap-1 text-gold text-sm font-medium mt-3 hover:underline"
+                      className="flex items-center gap-1 text-[#1A1A1A] text-sm font-medium mt-3 hover:underline"
                     >
                       {isExpanded ? (
                         <>
@@ -196,8 +196,8 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
               {!developer.description && (
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-3">
-                    <Sparkles className="w-4 h-4 text-gold" />
-                    <span className="text-xs font-semibold text-gold uppercase tracking-wider">About the Developer</span>
+                    <Sparkles className="w-4 h-4 text-[#1A1A1A]" />
+                    <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wider">About the Developer</span>
                   </div>
                   <p className="text-[#1A1A1A]/70 text-sm">
                     {projectName} is developed by {developer.name}, a trusted name in UAE real estate development.

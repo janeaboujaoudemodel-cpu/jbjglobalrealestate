@@ -161,7 +161,7 @@ export function VoiceoverRecorder({ onRecordingComplete, onAIVoiceGenerated }: V
                   <Button size="sm" variant="ghost" onClick={deleteRecording} className="text-red-400 hover:text-red-300">
                     <Trash2 className="w-4 h-4" />
                   </Button>
-                  <Button size="sm" onClick={addToTimeline} className="bg-gold text-[#1A1A1A] hover:bg-gold/90">
+                  <Button size="sm" onClick={addToTimeline} className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90">
                     Add to Timeline
                   </Button>
                 </div>

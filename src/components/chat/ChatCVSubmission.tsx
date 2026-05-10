@@ -203,7 +203,7 @@ const ChatCVSubmission = ({
       <div className="mb-4">
         <button
           onClick={onBack}
-          className="flex items-center gap-2 text-gold hover:text-gold-dark transition-colors text-sm"
+          className="flex items-center gap-2 text-[#1A1A1A] hover:text-[#1A1A1A]-dark transition-colors text-sm"
         >
           <ArrowLeft className="w-4 h-4" />
           <T>Back to options</T>
@@ -229,7 +229,7 @@ const ChatCVSubmission = ({
               placeholder="First"
               inputMode="text"
               autoComplete="off"
-              className={`w-full bg-[#FDFBF7] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.firstName ? 'border-red-500' : ''}`}
+              className={`w-full bg-[#FDFBF7] border-2 border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-[#B89555] ${formErrors.firstName ? 'border-red-500' : ''}`}
             />
             {formErrors.firstName && <p className="text-red-500 text-xs mt-0.5">{formErrors.firstName}</p>}
           </div>
@@ -241,7 +241,7 @@ const ChatCVSubmission = ({
               placeholder="Last"
               inputMode="text"
               autoComplete="off"
-              className={`w-full bg-[#FDFBF7] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.lastName ? 'border-red-500' : ''}`}
+              className={`w-full bg-[#FDFBF7] border-2 border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-[#B89555] ${formErrors.lastName ? 'border-red-500' : ''}`}
             />
             {formErrors.lastName && <p className="text-red-500 text-xs mt-0.5">{formErrors.lastName}</p>}
           </div>
@@ -257,7 +257,7 @@ const ChatCVSubmission = ({
             placeholder="your@email.com"
             inputMode="email"
             autoComplete="off"
-            className={`w-full bg-[#FDFBF7] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.email ? 'border-red-500' : ''}`}
+            className={`w-full bg-[#FDFBF7] border-2 border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-[#B89555] ${formErrors.email ? 'border-red-500' : ''}`}
           />
           {formErrors.email && <p className="text-red-500 text-xs mt-0.5">{formErrors.email}</p>}
         </div>
@@ -272,7 +272,7 @@ const ChatCVSubmission = ({
             placeholder="+971 50 123 4567"
             inputMode="tel"
             autoComplete="off"
-            className={`w-full bg-[#FDFBF7] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.phone ? 'border-red-500' : ''}`}
+            className={`w-full bg-[#FDFBF7] border-2 border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-[#B89555] ${formErrors.phone ? 'border-red-500' : ''}`}
           />
           {formErrors.phone && <p className="text-red-500 text-xs mt-0.5">{formErrors.phone}</p>}
         </div>
@@ -294,7 +294,7 @@ const ChatCVSubmission = ({
                 ? 'border-green-500 bg-green-50' 
                 : formErrors.cv 
                   ? 'border-red-500 bg-red-50'
-                  : 'border-gold/40 hover:border-gold bg-[#FDFBF7]'
+                  : 'border-[#B89555]/40 hover:border-[#B89555] bg-[#FDFBF7]'
             }`}
           >
             {cvFile ? (
@@ -305,7 +305,7 @@ const ChatCVSubmission = ({
               </>
             ) : (
               <>
-                <Upload className="w-6 h-6 text-gold" />
+                <Upload className="w-6 h-6 text-[#1A1A1A]" />
                 <span className="text-[#1A1A1A] text-sm font-medium"><T>Click to upload</T></span>
                 <span className="text-[#1A1A1A]/70 text-xs">PDF or Word (max 5MB)</span>
               </>
@@ -322,7 +322,7 @@ const ChatCVSubmission = ({
         {/* Indeterminate spinner during upload */}
         {isUploading && (
           <div className="flex items-center justify-center gap-2 py-2">
-            <Loader2 className="w-5 h-5 text-gold animate-spin" />
+            <Loader2 className="w-5 h-5 text-[#1A1A1A] animate-spin" />
             <span className="text-sm text-[#1A1A1A]/70 font-medium">Uploading your CV...</span>
           </div>
         )}
@@ -330,7 +330,7 @@ const ChatCVSubmission = ({
         <Button
           onClick={handleSubmit}
           disabled={isUploading}
-          className="w-full bg-gold hover:bg-gold-light text-[#1A1A1A] font-bold py-3 rounded-xl shadow-lg shadow-gold/20"
+          className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]-light text-[#1A1A1A] font-bold py-3 rounded-xl shadow-lg shadow-gold/20"
         >
           {isUploading ? (
             <><Loader2 className="w-4 h-4 mr-2 animate-spin" /><T>Uploading...</T></>

@@ -30,11 +30,11 @@ export function BrokerPerformanceCard({ broker, onToggleStatus }: BrokerPerforma
     <div className="jj-card-inner">
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
-          <Avatar className="h-14 w-14 border-2 border-gold/40">
+          <Avatar className="h-14 w-14 border-2 border-[#B89555]/40">
             {broker.avatar_url ? (
               <AvatarImage src={broker.avatar_url} alt={broker.name} />
             ) : (
-              <AvatarFallback className="bg-gold/20 text-gold font-bold text-lg">
+              <AvatarFallback className="bg-[#EFE6D6]/20 text-[#1A1A1A] font-bold text-lg">
                 {getInitials(broker.name)}
               </AvatarFallback>
             )}
@@ -43,7 +43,7 @@ export function BrokerPerformanceCard({ broker, onToggleStatus }: BrokerPerforma
             <h3 className="text-[#1A1A1A] font-semibold text-lg">{broker.name}</h3>
             <p className="text-[#1A1A1A]/60 text-sm">{broker.email}</p>
             {broker.specialization && (
-              <p className="text-gold text-xs mt-1">{broker.specialization}</p>
+              <p className="text-[#1A1A1A] text-xs mt-1">{broker.specialization}</p>
             )}
           </div>
         </div>

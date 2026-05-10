@@ -44,21 +44,21 @@ export function JBJSidebar({ brokerProfile, activePage }: JBJSidebarProps) {
   };
 
   return (
-    <aside className="w-64 bg-gradient-to-b from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] fixed h-screen flex flex-col border-r border-gold/30">
+    <aside className="w-64 bg-gradient-to-b from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] fixed h-screen flex flex-col border-r border-[#B89555]/30">
       {/* Header - Company Name on ONE LINE */}
-      <div className="p-4 border-b border-gold/30">
-        <h1 className="text-gold font-bold tracking-wide text-lg">
+      <div className="p-4 border-b border-[#B89555]/30">
+        <h1 className="text-[#1A1A1A] font-bold tracking-wide text-lg">
           JBJ Global Real Estate
         </h1>
       </div>
 
       {/* Broker Profile */}
       {brokerProfile && (
-        <div className="p-4 border-b border-gold/30">
+        <div className="p-4 border-b border-[#B89555]/30">
           <div className="flex items-center gap-3">
-            <Avatar className="h-12 w-12 border-2 border-gold/40">
+            <Avatar className="h-12 w-12 border-2 border-[#B89555]/40">
               <AvatarImage src={brokerProfile.avatar_url || undefined} />
-              <AvatarFallback className="bg-gold/20 text-gold font-bold">
+              <AvatarFallback className="bg-[#EFE6D6]/20 text-[#1A1A1A] font-bold">
                 {brokerProfile.name.charAt(0)}
               </AvatarFallback>
             </Avatar>
@@ -90,7 +90,7 @@ export function JBJSidebar({ brokerProfile, activePage }: JBJSidebarProps) {
             </div>
             <div className="h-1.5 bg-[#1A1A1A]/10 rounded-full overflow-hidden">
               <div
-                className="h-full bg-gold rounded-full transition-all"
+                className="h-full bg-[#EFE6D6] rounded-full transition-all"
                 style={{
                   width: `${Math.min(
                     (brokerProfile.active_leads / brokerProfile.capacity) * 100,
@@ -112,8 +112,8 @@ export function JBJSidebar({ brokerProfile, activePage }: JBJSidebarProps) {
             onClick={() => navigate(item.path)}
             className={`w-full justify-start gap-3 ${
               activePage === item.id
-                ? "bg-gold/20 text-gold hover:bg-gold/30"
-                : "text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-gold/10"
+                ? "bg-[#EFE6D6]/20 text-[#1A1A1A] hover:bg-[#EFE6D6]/30"
+                : "text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
             }`}
           >
             <item.icon className="h-5 w-5" />
@@ -123,11 +123,11 @@ export function JBJSidebar({ brokerProfile, activePage }: JBJSidebarProps) {
       </nav>
 
       {/* Footer Actions */}
-      <div className="p-3 border-t border-gold/30 space-y-1">
+      <div className="p-3 border-t border-[#B89555]/30 space-y-1">
         <Button
           variant="ghost"
           onClick={() => navigate("/jbj-broker-admin")}
-          className="w-full justify-start gap-3 text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-gold/10"
+          className="w-full justify-start gap-3 text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
         >
           <Settings className="h-5 w-5" />
           Owner Panel
@@ -135,7 +135,7 @@ export function JBJSidebar({ brokerProfile, activePage }: JBJSidebarProps) {
         <Button
           variant="ghost"
           onClick={() => navigate("/")}
-          className="w-full justify-start gap-3 text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-gold/10"
+          className="w-full justify-start gap-3 text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
         >
           <Home className="h-5 w-5" />
           Back to Site
@@ -143,7 +143,7 @@ export function JBJSidebar({ brokerProfile, activePage }: JBJSidebarProps) {
         <Button
           variant="ghost"
           onClick={handleLogout}
-          className="w-full justify-start gap-3 text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-gold/10"
+          className="w-full justify-start gap-3 text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
         >
           <LogOut className="h-5 w-5" />
           Sign Out

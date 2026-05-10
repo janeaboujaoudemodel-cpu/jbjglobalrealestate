@@ -114,17 +114,17 @@ export default function RecommendedProjects({
   if (recommendedProjects.length === 0) return null;
 
   return (
-    <section className="py-12 mx-4 md:mx-8 rounded-3xl bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/15 shadow-sm">
+    <section className="py-12 mx-4 md:mx-8 rounded-3xl bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/15 shadow-sm">
       <div className="container mx-auto px-4 md:px-8">
         {/* Section Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <Sparkles className="w-6 h-6 text-gold" />
+            <Sparkles className="w-6 h-6 text-[#1A1A1A]" />
             <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">Recommended Projects</h2>
           </div>
           <Link
             to="/properties"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#C8A766]/60 text-[#1A1A1A] font-semibold text-sm shadow-md hover:shadow-lg hover:border-gold transition-all"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#C8A766]/60 text-[#1A1A1A] font-semibold text-sm shadow-md hover:shadow-lg hover:border-[#B89555] transition-all"
           >
             View All <ChevronRight className="w-4 h-4" />
           </Link>
@@ -160,7 +160,7 @@ export default function RecommendedProjects({
               <Link
                 key={project.id}
                 to={`/project/${project.slug}`}
-                className="group relative overflow-hidden rounded-xl border border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:border-gold/60 transition-all shadow-sm flex flex-col h-full"
+                className="group relative overflow-hidden rounded-xl border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:border-[#B89555]/60 transition-all shadow-sm flex flex-col h-full"
               >
                 {/* Image */}
                 <div className="aspect-[16/10] overflow-hidden relative flex-shrink-0">
@@ -210,7 +210,7 @@ export default function RecommendedProjects({
 
                 {/* Content — flex-col flex-1 so it fills remaining card height */}
                 <div className="p-4 flex flex-col flex-1">
-                  <h3 className="text-lg font-semibold text-[#1A1A1A] group-hover:text-gold transition-colors whitespace-normal break-words leading-tight mb-1">
+                  <h3 className="text-lg font-semibold text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors whitespace-normal break-words leading-tight mb-1">
                     {project.name}
                   </h3>
 
@@ -240,7 +240,7 @@ export default function RecommendedProjects({
                   <div className="flex-1 min-h-[8px]" />
 
                   {/* Divider + Price + Handover — always pinned to bottom */}
-                  <div className="border-t border-gold/20 pt-3 mt-3 flex items-center justify-between gap-2">
+                  <div className="border-t border-[#B89555]/20 pt-3 mt-3 flex items-center justify-between gap-2">
                     {/* Price — orange */}
                     <p className="text-orange-500 font-bold text-sm">
                       {project.price_from
@@ -251,7 +251,7 @@ export default function RecommendedProjects({
 
                     {/* Payment Plan Badge */}
                     {paymentLabel && (
-                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-gold bg-gold/10 border border-gold/30 rounded-full px-2.5 py-1">
+                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#1A1A1A] bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full px-2.5 py-1">
                         <CreditCard className="w-3 h-3" />
                         {paymentLabel}
                       </span>

@@ -211,7 +211,7 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
 
           {/* Address Search */}
           <div>
-            <p className="text-[10px] text-amber-400 font-bold uppercase tracking-widest mb-1.5">📍 Location</p>
+            <p className="text-[10px] text-[#1A1A1A] font-bold uppercase tracking-widest mb-1.5">📍 Location</p>
             <div className="flex gap-1.5">
               <input
                 value={address}
@@ -237,7 +237,7 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
               className="w-full flex items-center justify-between text-xs text-slate-300 font-semibold py-1.5 px-2.5 rounded-lg bg-slate-800 border border-slate-700 hover:border-amber-400/50 transition-colors"
             >
               <span className="flex items-center gap-1.5">
-                <Building2 className="w-3.5 h-3.5 text-amber-400" />
+                <Building2 className="w-3.5 h-3.5 text-[#1A1A1A]" />
                 Real Estate Projects
               </span>
               {isLoadingProjects ? <Loader2 className="w-3 h-3 animate-spin" />
@@ -292,7 +292,7 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
               className="w-full flex items-center justify-between text-xs text-slate-300 font-semibold py-1.5 px-2.5 rounded-lg bg-slate-800 border border-slate-700 hover:border-amber-400/50 transition-colors"
             >
               <span className="flex items-center gap-1.5">
-                <Clapperboard className="w-3.5 h-3.5 text-amber-400" />
+                <Clapperboard className="w-3.5 h-3.5 text-[#1A1A1A]" />
                 {selectedAnimation.name}
                 <span className="text-slate-500 font-normal">· {selectedAnimation.duration}s</span>
               </span>
@@ -338,7 +338,7 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
               </MapContainer>
 
               <div className="absolute top-1 left-1 bg-[#1A1A1A]/75 text-white text-[9px] px-1.5 py-0.5 rounded flex items-center gap-1 z-10 max-w-[75%] truncate">
-                <Navigation className="w-2 h-2 text-amber-400 shrink-0" />
+                <Navigation className="w-2 h-2 text-[#1A1A1A] shrink-0" />
                 <span className="truncate">{address}</span>
               </div>
 
@@ -346,7 +346,7 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
                 <div className="absolute inset-0 flex items-center justify-center bg-[#1A1A1A]/50 z-20 pointer-events-none">
                   <div className="flex items-center gap-1.5 bg-[#1A1A1A]/90 px-2 py-1 rounded-full border border-amber-400/40">
                     <div className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-                    <span className="text-amber-400 text-[9px] font-bold">Previewing…</span>
+                    <span className="text-[#1A1A1A] text-[9px] font-bold">Previewing…</span>
                   </div>
                 </div>
               )}

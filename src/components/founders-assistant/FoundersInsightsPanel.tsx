@@ -197,7 +197,7 @@ const FoundersInsightsPanel: React.FC = () => {
 
       {/* Main Content Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="flex w-full max-w-3xl mx-auto bg-[#FDFBF7]/80 border-2 border-gold/30 p-1 rounded-xl shadow-[0_4px_20px_rgba(200,167,102,0.1)] justify-center gap-1">
+        <TabsList className="flex w-full max-w-3xl mx-auto bg-[#FDFBF7]/80 border-2 border-[#B89555]/30 p-1 rounded-xl shadow-[0_4px_20px_rgba(200,167,102,0.1)] justify-center gap-1">
           <TabsTrigger value="overview" className="tab-trigger-champagne text-[#1A1A1A] flex items-center gap-2 px-4 py-2 rounded-lg transition-all">
             <BarChart3 className="h-4 w-4" />
             <span className="hidden sm:inline">Overview</span>

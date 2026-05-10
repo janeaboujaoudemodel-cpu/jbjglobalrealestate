@@ -627,7 +627,7 @@ export function VideoPreviewCanvas({
               {isDragOver && (
                 <div className="absolute inset-0 bg-amber-500/20 flex items-center justify-center">
                   <div className="text-center">
-                    <Upload className="w-10 h-10 text-amber-400 mx-auto mb-2" />
+                    <Upload className="w-10 h-10 text-[#1A1A1A] mx-auto mb-2" />
                     <p className="text-amber-300 font-semibold">Drop to add to timeline</p>
                   </div>
                 </div>
@@ -644,7 +644,7 @@ export function VideoPreviewCanvas({
                     className="w-20 h-20 rounded-full flex items-center justify-center"
                     style={{ background: 'rgba(245,158,11,0.18)', border: '2.5px dashed #F59E0B' }}
                   >
-                    <CloudUpload className="w-9 h-9 text-amber-400 animate-bounce" />
+                    <CloudUpload className="w-9 h-9 text-[#1A1A1A] animate-bounce" />
                   </div>
                   <p className="text-amber-300 text-base font-bold">Drop your file here</p>
                   <p className="text-amber-200/50 text-xs">Video, audio or image</p>
@@ -655,7 +655,7 @@ export function VideoPreviewCanvas({
                   {/* Left – Carousel */}
                   <div className="flex-1 min-w-0 max-w-xs">
                     <div className="flex items-center gap-2 mb-1">
-                      <Film className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                      <Film className="w-3.5 h-3.5 text-[#1A1A1A] shrink-0" />
                       <h2 className="text-white text-xs font-bold tracking-tight">AI Video Studio</h2>
                     </div>
                     <InspirationCarousel />
@@ -678,7 +678,7 @@ export function VideoPreviewCanvas({
                       }}
                     >
                       <div className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: 'rgba(245,158,11,0.15)' }}>
-                        <CloudUpload className="w-4 h-4 text-amber-400" />
+                        <CloudUpload className="w-4 h-4 text-[#1A1A1A]" />
                       </div>
                       <p className="text-white text-[11px] font-semibold">Drop or click to browse</p>
                       <p className="text-slate-500 text-[10px]">MP4, MOV, AVI · up to 2GB</p>
@@ -704,7 +704,7 @@ export function VideoPreviewCanvas({
                             }}
                           >
                             <div className="w-7 h-7 rounded-md flex items-center justify-center shrink-0" style={{ background: 'rgba(245,158,11,0.12)' }}>
-                              <Icon className="w-3.5 h-3.5 text-amber-400" />
+                              <Icon className="w-3.5 h-3.5 text-[#1A1A1A]" />
                             </div>
                             <div>
                               <p className="text-white text-[11px] font-semibold leading-tight">{action.label}</p>

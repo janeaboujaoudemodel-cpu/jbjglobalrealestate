@@ -116,7 +116,7 @@ export function TrendingAudioPanel({ platform, onSelectAudio }: TrendingAudioPan
     <div className="bg-slate-800/50 rounded-xl border border-slate-700 overflow-hidden">
       <div className="p-4 border-b border-slate-700">
         <div className="flex items-center gap-2 mb-4">
-          <TrendingUp className="w-5 h-5 text-gold" />
+          <TrendingUp className="w-5 h-5 text-[#1A1A1A]" />
           <h3 className="font-semibold text-white">Trending Audio</h3>
         </div>
 
@@ -156,7 +156,7 @@ export function TrendingAudioPanel({ platform, onSelectAudio }: TrendingAudioPan
       <ScrollArea className="h-[300px]">
         {isLoading ? (
           <div className="flex items-center justify-center py-10">
-            <Loader2 className="w-6 h-6 text-gold animate-spin" />
+            <Loader2 className="w-6 h-6 text-[#1A1A1A] animate-spin" />
           </div>
         ) : filteredAudios.length === 0 ? (
           <div className="text-center py-10 text-slate-400">
@@ -171,17 +171,17 @@ export function TrendingAudioPanel({ platform, onSelectAudio }: TrendingAudioPan
                 className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-700/50 transition-colors"
               >
                 <div className="w-6 text-center">
-                  <span className={`text-sm font-bold ${index < 3 ? 'text-gold' : 'text-slate-500'}`}>
+                  <span className={`text-sm font-bold ${index < 3 ? 'text-[#1A1A1A]' : 'text-slate-500'}`}>
                     {index + 1}
                   </span>
                 </div>
 
                 <button
                   onClick={() => togglePlay(audio.id)}
-                  className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center hover:bg-gold/20 transition-colors"
+                  className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center hover:bg-[#EFE6D6]/20 transition-colors"
                 >
                   {playingId === audio.id ? (
-                    <Pause className="w-4 h-4 text-gold" />
+                    <Pause className="w-4 h-4 text-[#1A1A1A]" />
                   ) : (
                     <Play className="w-4 h-4 text-white ml-0.5" />
                   )}
@@ -205,7 +205,7 @@ export function TrendingAudioPanel({ platform, onSelectAudio }: TrendingAudioPan
                 <Button
                   size="sm"
                   onClick={() => onSelectAudio(audio)}
-                  className="bg-gold/20 hover:bg-gold/30 text-gold"
+                  className="bg-[#EFE6D6]/20 hover:bg-[#EFE6D6]/30 text-[#1A1A1A]"
                 >
                   <Plus className="w-4 h-4" />
                 </Button>

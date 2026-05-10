@@ -246,14 +246,14 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 20 }}
-      className="fixed inset-y-0 right-0 w-full sm:w-[400px] bg-zinc-950 border-l border-[#1A1A1A] z-50 flex flex-col"
+      className="fixed inset-y-0 right-0 w-full sm:w-[400px] bg-[#FDFBF7] border-l border-[#1A1A1A] z-50 flex flex-col"
     >
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-[#1A1A1A] bg-zinc-900">
+      <div className="flex items-center justify-between p-4 border-b border-[#1A1A1A] bg-[#FDFBF7]">
         <div className="flex items-center gap-3">
-          <Avatar className="w-10 h-10 border-2 border-gold/30">
+          <Avatar className="w-10 h-10 border-2 border-[#B89555]/30">
             <AvatarImage src={employee.avatar} alt={employee.name} />
-            <AvatarFallback className="bg-gold/20 text-gold">
+            <AvatarFallback className="bg-[#EFE6D6]/20 text-[#1A1A1A]">
               {employee.name.split(' ').map(n => n[0]).join('')}
             </AvatarFallback>
           </Avatar>
@@ -280,10 +280,10 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
       </div>
 
       {/* Employee Info Banner */}
-      <div className="p-3 bg-zinc-900/50 border-b border-[#1A1A1A]">
+      <div className="p-3 bg-[#FDFBF7]/50 border-b border-[#1A1A1A]">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-gold text-xs font-medium">{employee.role}</p>
+            <p className="text-[#1A1A1A] text-xs font-medium">{employee.role}</p>
             <p className="text-white/90 text-xs">{employee.department}</p>
           </div>
           <Badge variant="outline" className="text-xs border-[#1A1A1A] text-white/70">
@@ -307,8 +307,8 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
                 <div 
                   className={`max-w-[80%] rounded-2xl px-4 py-2 ${
                     message.role === 'user' 
-                      ? 'bg-gold text-[#1A1A1A] rounded-br-sm' 
-                      : 'bg-zinc-800 text-white rounded-bl-sm'
+                      ? 'bg-[#EFE6D6] text-[#1A1A1A] rounded-br-sm' 
+                      : 'bg-[#1A1A1A] text-white rounded-bl-sm'
                   }`}
                 >
                   <p className="text-sm whitespace-pre-wrap">{message.content}</p>
@@ -338,7 +338,7 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
               animate={{ opacity: 1 }}
               className="flex justify-start"
             >
-              <div className="bg-zinc-800 rounded-2xl rounded-bl-sm px-4 py-3">
+              <div className="bg-[#1A1A1A] rounded-2xl rounded-bl-sm px-4 py-3">
                 <div className="flex gap-1">
                   <span className="w-2 h-2 bg-[#B89555] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                   <span className="w-2 h-2 bg-[#B89555] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
@@ -353,7 +353,7 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
       </ScrollArea>
 
       {/* Input Area */}
-      <div className="p-4 border-t border-[#1A1A1A] bg-zinc-900">
+      <div className="p-4 border-t border-[#1A1A1A] bg-[#FDFBF7]">
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon" className="text-white/70 hover:text-white shrink-0">
             <Paperclip className="h-4 w-4" />
@@ -366,7 +366,7 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Type a message..."
-              className="bg-zinc-800 border-[#1A1A1A] pr-10"
+              className="bg-[#1A1A1A] border-[#1A1A1A] pr-10"
               disabled={isLoading}
             />
             <Button 
@@ -390,7 +390,7 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
             onClick={sendMessage}
             disabled={!inputValue.trim() || isLoading}
             size="icon"
-            className="bg-gold hover:bg-gold/90 text-[#1A1A1A] shrink-0"
+            className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] shrink-0"
           >
             <Send className="h-4 w-4" />
           </Button>

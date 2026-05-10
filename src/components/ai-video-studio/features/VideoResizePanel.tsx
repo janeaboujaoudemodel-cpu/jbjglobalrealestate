@@ -100,7 +100,7 @@ export function VideoResizePanel() {
       {/* Header */}
       <div className="p-3 border-b border-slate-800">
         <div className="flex items-center gap-2">
-          <Video className="h-4 w-4 text-amber-400" />
+          <Video className="h-4 w-4 text-[#1A1A1A]" />
           <h3 className="text-sm font-semibold text-white">Video Resize</h3>
         </div>
         <p className="text-xs text-slate-500 mt-0.5">Select formats — applies to the active clip on your timeline</p>
@@ -126,13 +126,13 @@ export function VideoResizePanel() {
                   disabled={isLoading}
                   className="data-[state=checked]:bg-amber-500 data-[state=checked]:border-amber-500"
                 />
-                <format.icon className={`h-4 w-4 ${selectedFormats.includes(format.id) ? 'text-amber-400' : 'text-slate-400'}`} />
+                <format.icon className={`h-4 w-4 ${selectedFormats.includes(format.id) ? 'text-[#1A1A1A]' : 'text-slate-400'}`} />
                 <div className="flex-1">
                   <p className="text-xs font-semibold text-white">{format.name}</p>
                   <p className="text-[10px] text-slate-500">{format.aspect} · {format.width}×{format.height}px</p>
                 </div>
                 {selectedFormats.includes(format.id) && (
-                  <CheckCircle2 className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#1A1A1A] shrink-0" />
                 )}
               </div>
             ))}
@@ -187,7 +187,7 @@ export function VideoResizePanel() {
         {isLoading && progress && (
           <div className="p-3 bg-slate-800 rounded-lg border border-slate-700 space-y-2">
             <div className="flex items-center gap-2">
-              <Loader2 className="w-4 h-4 text-amber-400 animate-spin" />
+              <Loader2 className="w-4 h-4 text-[#1A1A1A] animate-spin" />
               <span className="text-xs text-white">{progress.message}</span>
             </div>
             <Progress value={progress.percent} className="h-1.5" />
@@ -211,14 +211,14 @@ export function VideoResizePanel() {
                   <div className="flex items-center gap-2">
                     {job.status === 'completed' && <CheckCircle2 className="w-3.5 h-3.5 text-green-500" />}
                     {job.status === 'failed'    && <AlertCircle   className="w-3.5 h-3.5 text-red-500"   />}
-                    {job.status === 'processing'&& <Loader2        className="w-3.5 h-3.5 text-amber-400 animate-spin" />}
+                    {job.status === 'processing'&& <Loader2        className="w-3.5 h-3.5 text-[#1A1A1A] animate-spin" />}
                     <span className="text-xs text-white font-medium">{job.aspectRatio}</span>
                     <span className="text-[10px] text-slate-500">{job.targetWidth}×{job.targetHeight}</span>
                   </div>
                   {job.status === 'completed' && job.outputUrl && (
                     <button
                       onClick={() => downloadResult(job)}
-                      className="flex items-center gap-1 text-[10px] text-amber-400 hover:text-amber-300 font-semibold"
+                      className="flex items-center gap-1 text-[10px] text-[#1A1A1A] hover:text-amber-300 font-semibold"
                     >
                       <Download className="w-3 h-3" />
                       Download

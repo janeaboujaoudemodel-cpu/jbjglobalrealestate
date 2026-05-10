@@ -278,7 +278,7 @@ export const AdminOverviewDashboard = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold" />
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#B89555]" />
       </div>
     );
   }
@@ -305,10 +305,10 @@ export const AdminOverviewDashboard = () => {
       </div>
 
       {/* System Health Panel - Champagne theme */}
-      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 shadow-xl">
+      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 shadow-xl">
         <CardHeader className="pb-2">
           <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
-            <Activity className="w-5 h-5 text-gold" />
+            <Activity className="w-5 h-5 text-[#1A1A1A]" />
             System Health
           </CardTitle>
         </CardHeader>
@@ -324,7 +324,7 @@ export const AdminOverviewDashboard = () => {
                 key={service.name}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`p-4 rounded-xl bg-[#FDFBF7] border-2 border-gold/20 shadow-sm`}
+                className={`p-4 rounded-xl bg-[#FDFBF7] border-2 border-[#B89555]/20 shadow-sm`}
               >
                 <div className="flex items-center gap-3">
                   <div className={getHealthColor(service.status)}>{service.icon}</div>
@@ -357,12 +357,12 @@ export const AdminOverviewDashboard = () => {
             transition={{ delay: index * 0.05 }}
           >
             <Card 
-              className="bg-[#FDFBF7] border-2 border-gold/20 hover:border-gold/40 transition-all cursor-pointer group shadow-lg hover:shadow-xl"
+              className="bg-[#FDFBF7] border-2 border-[#B89555]/20 hover:border-[#B89555]/40 transition-all cursor-pointer group shadow-lg hover:shadow-xl"
               onClick={() => stat.href?.startsWith("/") ? navigate(stat.href) : undefined}
             >
               <CardContent className="p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <div className="p-2 rounded-lg bg-gold/10 text-gold group-hover:bg-gold group-hover:text-[#1A1A1A] transition-colors">
+                  <div className="p-2 rounded-lg bg-[#EFE6D6]/10 text-[#1A1A1A] group-hover:bg-[#EFE6D6] group-hover:text-[#1A1A1A] transition-colors">
                     {stat.icon}
                   </div>
                   {stat.trend && stat.change && (
@@ -387,10 +387,10 @@ export const AdminOverviewDashboard = () => {
       {/* Two Column Layout: Quick Actions + Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Quick Actions */}
-        <Card className="bg-[#FDFBF7] border-2 border-gold/20 shadow-lg">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/20 shadow-lg">
           <CardHeader>
             <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
-              <Zap className="w-5 h-5 text-gold" />
+              <Zap className="w-5 h-5 text-[#1A1A1A]" />
               Quick Actions
             </CardTitle>
           </CardHeader>
@@ -412,7 +412,7 @@ export const AdminOverviewDashboard = () => {
                   className="justify-start h-auto py-3 px-3 min-w-0 overflow-hidden"
                   onClick={() => navigate(action.href)}
                 >
-                  <span className="p-1.5 rounded bg-gold/10 text-gold mr-2 flex-shrink-0">
+                  <span className="p-1.5 rounded bg-[#EFE6D6]/10 text-[#1A1A1A] mr-2 flex-shrink-0">
                     {action.icon}
                   </span>
                   <span className="text-sm font-medium truncate">{action.label}</span>
@@ -424,10 +424,10 @@ export const AdminOverviewDashboard = () => {
         </Card>
 
         {/* Recent Activity Feed */}
-        <Card className="bg-[#FDFBF7] border-2 border-gold/20 shadow-lg">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/20 shadow-lg">
           <CardHeader>
             <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
-              <Activity className="w-5 h-5 text-gold" />
+              <Activity className="w-5 h-5 text-[#1A1A1A]" />
               Recent Activity
             </CardTitle>
           </CardHeader>

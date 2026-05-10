@@ -36,15 +36,15 @@ function MapViewToggle({
 }) {
   return (
     <div className="absolute top-4 left-4 z-[1000] flex flex-col gap-2">
-      <div className="bg-card/95 backdrop-blur-sm rounded-lg border border-gold/40 shadow-lg p-1 flex flex-col gap-1">
+      <div className="bg-card/95 backdrop-blur-sm rounded-lg border border-[#B89555]/40 shadow-lg p-1 flex flex-col gap-1">
         {(["satellite", "street", "terrain"] as MapViewType[]).map((view) => (
           <button
             key={view}
             onClick={() => onViewChange(view)}
             className={`px-3 py-2 text-xs font-medium rounded transition-all ${
               mapView === view 
-                ? "bg-gold text-foreground" 
-                : "hover:bg-gold/20 text-muted-foreground"
+                ? "bg-[#EFE6D6] text-foreground" 
+                : "hover:bg-[#EFE6D6]/20 text-muted-foreground"
             }`}
           >
             {t(`map.${view}`)}
@@ -55,7 +55,7 @@ function MapViewToggle({
         href={externalUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="w-11 h-11 flex items-center justify-center rounded-lg bg-card/95 backdrop-blur-sm border border-gold/40 shadow-lg hover:bg-gold/20 active:bg-gold/30 transition-all"
+        className="w-11 h-11 flex items-center justify-center rounded-lg bg-card/95 backdrop-blur-sm border border-[#B89555]/40 shadow-lg hover:bg-[#EFE6D6]/20 active:bg-[#EFE6D6]/30 transition-all"
         aria-label={t('map.openInGoogleMaps')}
       >
         <Maximize className="w-5 h-5 text-foreground" />

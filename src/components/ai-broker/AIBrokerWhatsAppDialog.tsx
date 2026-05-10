@@ -232,7 +232,7 @@ export function AIBrokerWhatsAppDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-zinc-900 border-[#1A1A1A] max-w-lg">
+      <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A] max-w-lg">
         <DialogHeader>
           <DialogTitle className="text-white flex items-center gap-2">
             <MessageSquare className="h-5 w-5 text-emerald-500" />
@@ -251,10 +251,10 @@ export function AIBrokerWhatsAppDialog({
           <div>
             <Label className="text-[#1A1A1A]/70">Use Template (Optional)</Label>
             <Select value={selectedTemplate} onValueChange={handleTemplateSelect}>
-              <SelectTrigger className="bg-zinc-800 border-[#1A1A1A] text-white mt-1">
+              <SelectTrigger className="bg-[#1A1A1A] border-[#1A1A1A] text-white mt-1">
                 <SelectValue placeholder="Select a template..." />
               </SelectTrigger>
-              <SelectContent className="bg-zinc-900 border-[#1A1A1A]">
+              <SelectContent className="bg-[#FDFBF7] border-[#1A1A1A]">
                 {templates.map((template) => (
                   <SelectItem key={template.id} value={template.id}>
                     {template.template_name}
@@ -266,7 +266,7 @@ export function AIBrokerWhatsAppDialog({
 
           <div>
             <Label className="text-[#1A1A1A]/70">Phone</Label>
-            <div className="bg-zinc-800 border border-[#1A1A1A] rounded-md px-3 py-2 mt-1 text-[#1A1A1A]/70">
+            <div className="bg-[#1A1A1A] border border-[#1A1A1A] rounded-md px-3 py-2 mt-1 text-[#1A1A1A]/70">
               {lead.phone || "N/A"}
             </div>
           </div>
@@ -277,7 +277,7 @@ export function AIBrokerWhatsAppDialog({
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Enter your message..."
-              className="bg-zinc-800 border-[#1A1A1A] text-white mt-1 min-h-[150px]"
+              className="bg-[#1A1A1A] border-[#1A1A1A] text-white mt-1 min-h-[150px]"
             />
           </div>
 

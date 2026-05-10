@@ -399,7 +399,7 @@ const SupportTicketBox = () => {
     const status = uploadStatuses[index];
     switch (status) {
       case 'uploading':
-        return <Loader2 className="w-4 h-4 text-gold animate-spin" />;
+        return <Loader2 className="w-4 h-4 text-[#1A1A1A] animate-spin" />;
       case 'done':
         return <CheckCircle className="w-4 h-4 text-green-500" />;
       case 'error':
@@ -425,10 +425,10 @@ const SupportTicketBox = () => {
           transition={{ duration: 0.6 }}
         >
           {/* Main Card - Full width inside champagne layer, no max-w constraint */}
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl md:rounded-2xl border border-gold/40 md:border-2 md:border-gold shadow-[0_8px_30px_rgba(200,167,102,0.35),0_4px_15px_rgba(0,0,0,0.15)] overflow-hidden relative">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl md:rounded-2xl border border-[#B89555]/40 md:border-2 md:border-[#B89555] shadow-[0_8px_30px_rgba(200,167,102,0.35),0_4px_15px_rgba(0,0,0,0.15)] overflow-hidden relative">
             {/* Decorative elements */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-gold/10 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#EFE6D6]/10 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
 
             <div className="p-8 md:p-12 relative z-10">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
@@ -457,24 +457,24 @@ const SupportTicketBox = () => {
                     <div className="absolute inset-0 bg-gradient-to-r from-gold/10 to-transparent" />
                     <div className="relative z-10">
                       <div className="flex items-center gap-2 mb-3">
-                        <AlertCircle className="w-5 h-5 text-gold" />
-                        <span className="text-gold font-semibold">Our Commitment</span>
+                        <AlertCircle className="w-5 h-5 text-[#1A1A1A]" />
+                        <span className="text-[#1A1A1A] font-semibold">Our Commitment</span>
                       </div>
                       <ul className="space-y-2 text-sm text-[#1A1A1A]/70">
                         <li className="flex items-center gap-2">
-                          <span className="text-gold">✓</span>
+                          <span className="text-[#1A1A1A]">✓</span>
                           Response within 24 hours
                         </li>
                         <li className="flex items-center gap-2">
-                          <span className="text-gold">✓</span>
+                          <span className="text-[#1A1A1A]">✓</span>
                           Unique ticket number for tracking
                         </li>
                         <li className="flex items-center gap-2">
-                          <span className="text-gold">✓</span>
+                          <span className="text-[#1A1A1A]">✓</span>
                           Email confirmation with updates
                         </li>
                         <li className="flex items-center gap-2">
-                          <span className="text-gold">✓</span>
+                          <span className="text-[#1A1A1A]">✓</span>
                           Voice note support for convenience
                         </li>
                       </ul>
@@ -500,8 +500,8 @@ const SupportTicketBox = () => {
                       </Button>
                     </DialogTrigger>
 
-                      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold max-w-2xl max-h-[90vh] z-[10050] flex flex-col overflow-hidden shadow-[0_8px_40px_rgba(200,167,102,0.4),0_4px_20px_rgba(0,0,0,0.2)] p-0 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                      <DialogHeader className="flex-shrink-0 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] z-10 pb-4 px-6 pt-6 border-b border-gold/20">
+                      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] max-w-2xl max-h-[90vh] z-[10050] flex flex-col overflow-hidden shadow-[0_8px_40px_rgba(200,167,102,0.4),0_4px_20px_rgba(0,0,0,0.2)] p-0 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                      <DialogHeader className="flex-shrink-0 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] z-10 pb-4 px-6 pt-6 border-b border-[#B89555]/20">
                         <DialogTitle className="text-[#1A1A1A] text-xl font-bold flex items-center gap-2">
                           <PremiumHeadsetIcon size={20} color="#dc2626" />
                           {isSubmitted ? "Ticket Created!" : "Create Support Ticket"}
@@ -565,23 +565,23 @@ const SupportTicketBox = () => {
                                  initial={{ opacity: 0, y: 10 }}
                                  animate={{ opacity: 1, y: 0 }}
                                  transition={{ delay: 0.5 }}
-                                 className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border border-gold/40 rounded-xl px-5 py-4 mb-4"
+                                 className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border border-[#B89555]/40 rounded-xl px-5 py-4 mb-4"
                                >
                                  <div className="flex items-center justify-center gap-3 flex-wrap">
                                    <span className="text-sm text-[#1A1A1A]/70">Your Ticket Number</span>
                                    <span className="text-sm text-[#1A1A1A]/70">|</span>
                                    <span className="text-sm text-[#1A1A1A]/70" dir="rtl">رقم التذكرة</span>
                                    <span className="text-sm text-[#1A1A1A]/70">—</span>
-                                   <span className="text-xl font-bold text-gold tracking-wider font-mono">{ticketNumber}</span>
+                                   <span className="text-xl font-bold text-[#1A1A1A] tracking-wider font-mono">{ticketNumber}</span>
                                    <button
                                      onClick={copyTicketNumber}
-                                     className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gold/10 transition-colors"
+                                     className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#EFE6D6]/10 transition-colors"
                                      title="Copy ticket number"
                                    >
                                      {copied ? (
                                        <Check className="w-4 h-4 text-green-500" />
                                      ) : (
-                                       <Copy className="w-4 h-4 text-gold" />
+                                       <Copy className="w-4 h-4 text-[#1A1A1A]" />
                                      )}
                                    </button>
                                  </div>
@@ -592,10 +592,10 @@ const SupportTicketBox = () => {
                                  initial={{ opacity: 0, y: 10 }}
                                  animate={{ opacity: 1, y: 0 }}
                                  transition={{ delay: 0.55 }}
-                                 className="bg-[#FDFBF7] border border-gold/30 rounded-xl p-4 mb-4 text-left"
+                                 className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-xl p-4 mb-4 text-left"
                                >
                                  <p className="text-sm font-bold text-[#1A1A1A] mb-3 flex items-center gap-2">
-                                   <FileText className="w-4 h-4 text-gold" />
+                                   <FileText className="w-4 h-4 text-[#1A1A1A]" />
                                    Ticket Summary
                                  </p>
                                  <div className="space-y-2 text-xs">
@@ -640,7 +640,7 @@ const SupportTicketBox = () => {
                                      navigator.clipboard.writeText(summary);
                                      toast.success("Ticket summary copied!");
                                    }}
-                                   className="mt-3 w-full text-gold hover:bg-gold/10 text-xs"
+                                   className="mt-3 w-full text-[#1A1A1A] hover:bg-[#EFE6D6]/10 text-xs"
                                  >
                                    <Copy className="w-3 h-3 mr-1" /> Copy Full Summary
                                  </Button>
@@ -700,20 +700,20 @@ const SupportTicketBox = () => {
                                  initial={{ opacity: 0, y: 10 }}
                                  animate={{ opacity: 1, y: 0 }}
                                  transition={{ delay: 0.65 }}
-                                 className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/30 rounded-xl p-4 mb-4"
+                                 className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/30 rounded-xl p-4 mb-4"
                                >
                                  <p className="text-sm font-bold text-[#1A1A1A] mb-3 text-center">Explore While You Wait</p>
                                  <div className="grid grid-cols-2 gap-2">
-                                    <a href="/properties" className="flex items-center justify-center gap-1 px-3 py-2.5 border border-gold/30 rounded-lg text-xs font-semibold text-[#1A1A1A] hover:border-gold transition-colors">
+                                    <a href="/properties" className="flex items-center justify-center gap-1 px-3 py-2.5 border border-[#B89555]/30 rounded-lg text-xs font-semibold text-[#1A1A1A] hover:border-[#B89555] transition-colors">
                                       Properties
                                     </a>
-                                    <a href="/ai-hub" className="flex items-center justify-center gap-1 px-3 py-2.5 border border-gold/30 rounded-lg text-xs font-semibold text-[#1A1A1A] hover:border-gold transition-colors">
+                                    <a href="/ai-hub" className="flex items-center justify-center gap-1 px-3 py-2.5 border border-[#B89555]/30 rounded-lg text-xs font-semibold text-[#1A1A1A] hover:border-[#B89555] transition-colors">
                                       AI Tools
                                     </a>
-                                    <a href="/buyer-guide" className="flex items-center justify-center gap-1 px-3 py-2.5 border border-gold/30 rounded-lg text-xs font-semibold text-[#1A1A1A] hover:border-gold transition-colors">
+                                    <a href="/buyer-guide" className="flex items-center justify-center gap-1 px-3 py-2.5 border border-[#B89555]/30 rounded-lg text-xs font-semibold text-[#1A1A1A] hover:border-[#B89555] transition-colors">
                                       Guides
                                     </a>
-                                    <a href="/careers" className="flex items-center justify-center gap-1 px-3 py-2.5 border border-gold/30 rounded-lg text-xs font-semibold text-[#1A1A1A] hover:border-gold transition-colors">
+                                    <a href="/careers" className="flex items-center justify-center gap-1 px-3 py-2.5 border border-[#B89555]/30 rounded-lg text-xs font-semibold text-[#1A1A1A] hover:border-[#B89555] transition-colors">
                                       Careers
                                     </a>
                                  </div>
@@ -764,7 +764,7 @@ const SupportTicketBox = () => {
                                     <motion.div
                                       initial={{ scale: 0.8, opacity: 0 }}
                                       animate={{ scale: 1, opacity: 1 }}
-                                      className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl p-10 shadow-[0_8px_40px_rgba(200,167,102,0.4)] border-2 border-gold text-center flex flex-col items-center max-w-sm mx-4"
+                                      className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl p-10 shadow-[0_8px_40px_rgba(200,167,102,0.4)] border-2 border-[#B89555] text-center flex flex-col items-center max-w-sm mx-4"
                                     >
                                       <img 
                                         src="/jbj-monogram-dark-on-light.png" 
@@ -796,7 +796,7 @@ const SupportTicketBox = () => {
                                       <p className="text-sm text-[#1A1A1A]/70 mt-2">Please wait...</p>
                                       
                                       {/* Animated progress bar */}
-                                      <div className="w-full mt-4 h-1.5 bg-gold/20 rounded-full overflow-hidden">
+                                      <div className="w-full mt-4 h-1.5 bg-[#EFE6D6]/20 rounded-full overflow-hidden">
                                         <motion.div
                                           className="h-full bg-gradient-to-r from-gold to-gold/70 rounded-full"
                                           animate={{ width: ['0%', '100%'] }}
@@ -812,20 +812,20 @@ const SupportTicketBox = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div>
                                 <Label className="text-[#1A1A1A]/70 flex items-center gap-2">
-                                  <User className="w-4 h-4 text-gold" />
+                                  <User className="w-4 h-4 text-[#1A1A1A]" />
                                   Full Name *
                                 </Label>
                                 <Input
                                   placeholder="John Doe"
                                   value={formData.fullName}
                                   onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                                  className="mt-1 bg-[#FDFBF7] border-2 border-gold/40 focus:border-gold text-[#1A1A1A] rounded-lg"
+                                  className="mt-1 bg-[#FDFBF7] border-2 border-[#B89555]/40 focus:border-[#B89555] text-[#1A1A1A] rounded-lg"
                                   required
                                 />
                               </div>
                               <div>
                                 <Label className="text-[#1A1A1A]/70 flex items-center gap-2">
-                                  <Mail className="w-4 h-4 text-gold" />
+                                  <Mail className="w-4 h-4 text-[#1A1A1A]" />
                                   Email *
                                 </Label>
                                 <Input
@@ -833,7 +833,7 @@ const SupportTicketBox = () => {
                                   placeholder="john@example.com"
                                   value={formData.email}
                                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                  className="mt-1 bg-[#FDFBF7] border-2 border-gold/40 focus:border-gold text-[#1A1A1A] rounded-lg"
+                                  className="mt-1 bg-[#FDFBF7] border-2 border-[#B89555]/40 focus:border-[#B89555] text-[#1A1A1A] rounded-lg"
                                   required
                                 />
                               </div>
@@ -841,7 +841,7 @@ const SupportTicketBox = () => {
 
                             <div>
                               <Label className="text-[#1A1A1A]/70 flex items-center gap-2">
-                                <Phone className="w-4 h-4 text-gold" />
+                                <Phone className="w-4 h-4 text-[#1A1A1A]" />
                                 Phone Number (Optional)
                               </Label>
                               <Input
@@ -849,7 +849,7 @@ const SupportTicketBox = () => {
                                 placeholder="+971 50 123 4567"
                                 value={formData.phone}
                                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                                className="mt-1 bg-[#FDFBF7] border-2 border-gold/40 focus:border-gold text-[#1A1A1A] rounded-lg"
+                                className="mt-1 bg-[#FDFBF7] border-2 border-[#B89555]/40 focus:border-[#B89555] text-[#1A1A1A] rounded-lg"
                               />
                             </div>
 
@@ -868,7 +868,7 @@ const SupportTicketBox = () => {
                                   }
                                 }}
                               >
-                                <SelectTrigger className={`mt-1 bg-[#FDFBF7] border-2 ${fieldErrors.serviceCategory ? 'border-red-500' : 'border-gold/40'} focus:border-gold text-[#1A1A1A] rounded-lg cursor-pointer`}>
+                                <SelectTrigger className={`mt-1 bg-[#FDFBF7] border-2 ${fieldErrors.serviceCategory ? 'border-red-500' : 'border-[#B89555]/40'} focus:border-[#B89555] text-[#1A1A1A] rounded-lg cursor-pointer`}>
                                   <SelectValue placeholder="Select the service" />
                                 </SelectTrigger>
                                 <SelectContent className="max-h-60">
@@ -890,10 +890,10 @@ const SupportTicketBox = () => {
                                 initial={{ opacity: 0, height: 0 }}
                                 animate={{ opacity: 1, height: "auto" }}
                                 exit={{ opacity: 0, height: 0 }}
-                                className="bg-gradient-to-br from-gold/5 to-gold/10 border border-gold/30 rounded-xl p-4 space-y-3"
+                                className="bg-gradient-to-br from-gold/5 to-gold/10 border border-[#B89555]/30 rounded-xl p-4 space-y-3"
                               >
                                 <p className="text-sm font-semibold text-[#1A1A1A] flex items-center gap-2">
-                                  <MessageCircle className="w-4 h-4 text-gold" />
+                                  <MessageCircle className="w-4 h-4 text-[#1A1A1A]" />
                                   Inquiry Details
                                 </p>
                                 <p className="text-xs text-[#1A1A1A]/70">
@@ -910,14 +910,14 @@ const SupportTicketBox = () => {
                                 exit={{ opacity: 0, height: 0 }}
                               >
                                 <Label className="text-[#1A1A1A]/70 flex items-center gap-2">
-                                  <FileText className="w-4 h-4 text-gold" />
+                                  <FileText className="w-4 h-4 text-[#1A1A1A]" />
                                   Please Specify Your Issue *
                                 </Label>
                                 <Input
                                   placeholder="Describe what service or feature the issue relates to..."
                                   value={formData.otherCategoryDetail}
                                   onChange={(e) => setFormData({ ...formData, otherCategoryDetail: e.target.value })}
-                                  className="mt-1 bg-[#FDFBF7] border-2 border-gold/40 focus:border-gold text-[#1A1A1A] rounded-lg"
+                                  className="mt-1 bg-[#FDFBF7] border-2 border-[#B89555]/40 focus:border-[#B89555] text-[#1A1A1A] rounded-lg"
                                   required
                                 />
                                 <p className="text-xs text-[#1A1A1A]/70 mt-1">
@@ -929,7 +929,7 @@ const SupportTicketBox = () => {
                             {/* Subject with Voice Note */}
                             <div>
                               <Label className="text-[#1A1A1A]/70 flex items-center gap-2">
-                                <FileText className="w-4 h-4 text-gold" />
+                                <FileText className="w-4 h-4 text-[#1A1A1A]" />
                                 Subject *
                               </Label>
                               <div className="flex gap-2 mt-1">
@@ -937,7 +937,7 @@ const SupportTicketBox = () => {
                                   placeholder="Brief description of the issue"
                                   value={formData.subject}
                                   onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                                  className="flex-1 bg-[#FDFBF7] border-2 border-gold/40 focus:border-gold text-[#1A1A1A] rounded-lg"
+                                  className="flex-1 bg-[#FDFBF7] border-2 border-[#B89555]/40 focus:border-[#B89555] text-[#1A1A1A] rounded-lg"
                                   required
                                 />
                                 <VoiceNoteRecorder
@@ -965,7 +965,7 @@ const SupportTicketBox = () => {
                                 value={formData.priority}
                                 onValueChange={(value) => setFormData({ ...formData, priority: value })}
                               >
-                                <SelectTrigger className="mt-1 bg-[#FDFBF7] border-2 border-gold/40 focus:border-gold text-[#1A1A1A] rounded-lg cursor-pointer">
+                                <SelectTrigger className="mt-1 bg-[#FDFBF7] border-2 border-[#B89555]/40 focus:border-[#B89555] text-[#1A1A1A] rounded-lg cursor-pointer">
                                   <SelectValue placeholder="Select priority" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -1003,7 +1003,7 @@ const SupportTicketBox = () => {
                                 placeholder="Please describe the issue in detail. Include steps to reproduce, expected behavior, and what actually happened..."
                                 value={formData.description}
                                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                className="mt-1 min-h-[120px] bg-[#FDFBF7] border-2 border-gold/40 focus:border-gold text-[#1A1A1A] rounded-lg"
+                                className="mt-1 min-h-[120px] bg-[#FDFBF7] border-2 border-[#B89555]/40 focus:border-[#B89555] text-[#1A1A1A] rounded-lg"
                                 required
                               />
                               <p className="text-xs text-[#1A1A1A]/70 mt-1 flex items-center gap-1">
@@ -1016,10 +1016,10 @@ const SupportTicketBox = () => {
                             {/* File Upload */}
                             <div>
                               <Label className="text-[#1A1A1A]/70 flex items-center gap-2">
-                                <Upload className="w-4 h-4 text-gold" />
+                                <Upload className="w-4 h-4 text-[#1A1A1A]" />
                                 Attachments (Optional)
                               </Label>
-                              <div className="mt-1 border-2 border-dashed border-[#B89555]/30 rounded-lg p-4 text-center hover:border-gold transition-colors">
+                              <div className="mt-1 border-2 border-dashed border-[#B89555]/30 rounded-lg p-4 text-center hover:border-[#B89555] transition-colors">
                                 <input
                                   type="file"
                                   id="file-upload"
@@ -1084,7 +1084,7 @@ const SupportTicketBox = () => {
                                                 type="button"
                                                 variant="ghost"
                                                 size="icon"
-                                                className="h-7 w-7 text-gold hover:bg-gold/10"
+                                                className="h-7 w-7 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                                                 title="Quick View"
                                               >
                                                 <FileText className="w-4 h-4" />
@@ -1208,7 +1208,7 @@ const SupportTicketBox = () => {
                               <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                               
                               {isSubmitting ? (
-                                <span className="relative flex items-center justify-center gap-3 text-gold">
+                                <span className="relative flex items-center justify-center gap-3 text-[#1A1A1A]">
                                   <Loader2 className="w-5 h-5 animate-spin" />
                                   <motion.span
                                     key={submissionStep}
@@ -1221,9 +1221,9 @@ const SupportTicketBox = () => {
                                 </span>
                               ) : (
                                 <span className="relative flex items-center justify-center gap-2">
-                                  <Send className="w-5 h-5 text-gold group-hover:text-[#1A1A1A] transition-colors" />
-                                  <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">Create Ticket</span>
-                                  <span className="text-gold group-hover:text-[#1A1A1A] transition-colors">& Notify Support</span>
+                                  <Send className="w-5 h-5 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
+                                  <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">Create Ticket</span>
+                                  <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">& Notify Support</span>
                                 </span>
                               )}
                             </button>
@@ -1238,7 +1238,7 @@ const SupportTicketBox = () => {
                     Email:{" "}
                     <a
                       href={`mailto:${CONTACT_INFO.supportEmail}`}
-                      className="text-gold font-medium hover:underline"
+                      className="text-[#1A1A1A] font-medium hover:underline"
                     >
                       {CONTACT_INFO.supportEmail}
                     </a>

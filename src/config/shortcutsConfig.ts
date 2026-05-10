@@ -92,7 +92,7 @@ export const SHORTCUT_GROUPS: ShortcutGroup[] = [
     label: "Owner Command Center",
     colorBorder: "border-l-[#B89555]",
     colorText: "text-[#B89555]",
-    colorBg: "bg-gold/5",
+    colorBg: "bg-[#EFE6D6]/5",
     visibility: ['owner'],
     items: [
       { label: 'Owner Dashboard', icon: Shield, href: '/owner' },

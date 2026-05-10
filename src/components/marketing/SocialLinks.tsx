@@ -48,18 +48,18 @@ export const SocialLinks = React.forwardRef<HTMLDivElement, SocialLinksProps>(({
   const getColorClasses = () => {
     switch (variant) {
       case 'gold':
-        return 'text-gold hover:text-gold-light';
+        return 'text-[#1A1A1A] hover:text-[#1A1A1A]-light';
       case 'white':
-        return 'text-white hover:text-gold';
+        return 'text-white hover:text-[#1A1A1A]';
       case 'glow':
-        return 'text-gold hover:text-white drop-shadow-[0_0_8px_rgba(200,167,102,0.8)] hover:drop-shadow-[0_0_12px_rgba(255,255,255,0.8)] hover:scale-110 transition-all duration-300';
+        return 'text-[#1A1A1A] hover:text-white drop-shadow-[0_0_8px_rgba(200,167,102,0.8)] hover:drop-shadow-[0_0_12px_rgba(255,255,255,0.8)] hover:scale-110 transition-all duration-300';
       case 'premium':
         // Unified circle chip — black glyph on champagne-tinted gold border,
         // fills to solid gold on hover (matches YouTube/TikTok hover style
         // applied uniformly to all social icons).
         return 'inline-flex items-center justify-center w-9 h-9 rounded-full bg-[hsl(var(--gold))]/15 border border-[hsl(var(--gold))] text-[#1A1A1A] hover:bg-[hsl(var(--gold))] hover:text-[#1A1A1A] hover:border-[hsl(var(--gold))] hover:scale-[1.06] hover:shadow-[0_0_18px_rgba(200,167,102,0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--gold))]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7F2EA] transition-all duration-200';
       default:
-        return 'text-[#1A1A1A]/70 hover:text-gold';
+        return 'text-[#1A1A1A]/70 hover:text-[#1A1A1A]';
     }
   };
 

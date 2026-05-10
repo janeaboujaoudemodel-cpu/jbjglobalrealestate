@@ -88,7 +88,7 @@ interface NationalitySelectProps {
 export const NationalitySelect: React.FC<NationalitySelectProps> = ({ value, onChange, className = '' }) => {
   return (
     <Select value={value} onValueChange={onChange}>
-      <SelectTrigger className={`border-2 border-gold/30 ${className}`}>
+      <SelectTrigger className={`border-2 border-[#B89555]/30 ${className}`}>
         <SelectValue placeholder="Select nationality">
           {value && (
             <span className="flex items-center gap-2">
@@ -98,12 +98,12 @@ export const NationalitySelect: React.FC<NationalitySelectProps> = ({ value, onC
           )}
         </SelectValue>
       </SelectTrigger>
-      <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 max-h-[300px] overflow-y-auto z-[9999]">
+      <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 max-h-[300px] overflow-y-auto z-[9999]">
         {NATIONALITIES.map(nat => (
           <SelectItem
             key={nat.value}
             value={nat.value}
-            className="text-[#1A1A1A] hover:bg-gold/20 focus:bg-gold/20"
+            className="text-[#1A1A1A] hover:bg-[#EFE6D6]/20 focus:bg-[#EFE6D6]/20"
           >
             <span className="flex items-center gap-2">
               <span className="text-lg">{nat.flag}</span>

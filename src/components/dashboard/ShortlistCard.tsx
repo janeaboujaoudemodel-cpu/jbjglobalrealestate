@@ -34,15 +34,15 @@ const ShortlistCard = () => {
   const designShortCount = designShorts?.length || 0;
 
   return (
-    <Card className="border border-gold/40 bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))] overflow-hidden">
+    <Card className="border border-[#B89555]/40 bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))] overflow-hidden">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="flex items-center gap-2 text-lg">
-          <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center">
-            <ClipboardList className="w-4 h-4 text-gold" />
+          <div className="w-8 h-8 rounded-lg bg-[#EFE6D6]/10 border border-[#B89555]/30 flex items-center justify-center">
+            <ClipboardList className="w-4 h-4 text-[#1A1A1A]" />
           </div>
           My Shortlists
         </CardTitle>
-        <Badge variant="outline" className="border-gold/40 text-gold bg-gold/10">
+        <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] bg-[#EFE6D6]/10">
           {count + designShortCount} items
         </Badge>
       </CardHeader>
@@ -57,7 +57,7 @@ const ShortlistCard = () => {
           <div className="text-center py-6">
             <ClipboardList className="w-10 h-10 text-muted-foreground/30 mx-auto mb-2" />
             <p className="text-sm text-muted-foreground">No shortlists yet</p>
-            <Button variant="link" className="text-gold mt-2" asChild>
+            <Button variant="link" className="text-[#1A1A1A] mt-2" asChild>
               <Link to="/properties">Start Building Your List</Link>
             </Button>
           </div>
@@ -68,23 +68,23 @@ const ShortlistCard = () => {
                 <Link 
                   key={project.id}
                   to={`/project/${project.slug || project.id}`}
-                  className="flex items-center gap-3 p-3 rounded-lg border border-gold/20 hover:border-gold/40 hover:bg-gold/5 transition-all group"
+                  className="flex items-center gap-3 p-3 rounded-lg border border-[#B89555]/20 hover:border-[#B89555]/40 hover:bg-[#EFE6D6]/5 transition-all group"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
-                    <Building2 className="w-5 h-5 text-gold" />
+                  <div className="w-10 h-10 rounded-lg bg-[#EFE6D6]/10 flex items-center justify-center">
+                    <Building2 className="w-5 h-5 text-[#1A1A1A]" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-foreground truncate group-hover:text-gold transition-colors">
+                    <p className="text-sm font-medium text-foreground truncate group-hover:text-[#1A1A1A] transition-colors">
                       {project.name}
                     </p>
                     <p className="text-xs text-muted-foreground truncate">{project.location}</p>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-gold transition-colors" />
+                  <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-[#1A1A1A] transition-colors" />
                 </Link>
               ))}
             </div>
             {count > 3 && (
-              <Button variant="link" className="w-full text-gold mt-2" asChild>
+              <Button variant="link" className="w-full text-[#1A1A1A] mt-2" asChild>
                 <Link to="/favorites?tab=shortlist">
                   View All {count} Shortlisted
                   <ChevronRight className="w-4 h-4 ml-1" />
@@ -95,7 +95,7 @@ const ShortlistCard = () => {
         )}
 
         {/* Always-visible portal CTA */}
-        <div className="mt-4 pt-4 border-t border-gold/20 space-y-2">
+        <div className="mt-4 pt-4 border-t border-[#B89555]/20 space-y-2">
           <Link
             to="/compare"
             className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#C8A766]/15 to-[#C8A766]/5 border border-[#C8A766]/30 hover:border-[#C8A766]/60 hover:from-[#C8A766]/25 hover:to-[#C8A766]/10 transition-all duration-300 group"
@@ -107,7 +107,7 @@ const ShortlistCard = () => {
           {designShortCount > 0 && (
             <Link
               to="/favorites?tab=designs"
-              className="flex items-center justify-center gap-2 w-full px-4 py-2 rounded-xl border border-gold/20 hover:border-gold/40 hover:bg-gold/5 transition-all duration-300 group"
+              className="flex items-center justify-center gap-2 w-full px-4 py-2 rounded-xl border border-[#B89555]/20 hover:border-[#B89555]/40 hover:bg-[#EFE6D6]/5 transition-all duration-300 group"
             >
               <PenTool className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
               <span className="text-xs font-medium text-[#1A1A1A]/70">{designShortCount} Shortlisted Design{designShortCount !== 1 ? 's' : ''}</span>

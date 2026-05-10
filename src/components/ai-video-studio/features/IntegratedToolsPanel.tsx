@@ -50,7 +50,7 @@ export function IntegratedToolsPanel({ onAddVoiceover, onAddAIVoice }: Integrate
             <TabsTrigger
               key={tab.id}
               value={tab.id}
-              className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-amber-400 data-[state=active]:text-amber-400 py-2 px-1 text-xs gap-1"
+              className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-amber-400 data-[state=active]:text-[#1A1A1A] py-2 px-1 text-xs gap-1"
             >
               <tab.icon className="w-3 h-3" />
               <span className="hidden sm:inline">{tab.label}</span>

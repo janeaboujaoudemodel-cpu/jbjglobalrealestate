@@ -291,7 +291,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
 
   const scoreColor = (score: number) => {
     if (score >= 0.8) return 'text-green-400';
-    if (score >= 0.6) return 'text-amber-400';
+    if (score >= 0.6) return 'text-[#1A1A1A]';
     return 'text-slate-400';
   };
 
@@ -337,11 +337,11 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
                 {/* Summary */}
                 <div className="bg-slate-800 rounded-lg p-3 text-xs text-slate-300 border border-amber-400/30 leading-relaxed">
                   <div className="flex items-start gap-2">
-                    <Sparkles className="w-3.5 h-3.5 text-amber-400 mt-0.5 shrink-0" />
+                    <Sparkles className="w-3.5 h-3.5 text-[#1A1A1A] mt-0.5 shrink-0" />
                     <span>{analysisResult.analysis}</span>
                   </div>
                   {analysisResult.totalRecommendedDuration > 0 && (
-                    <div className="flex items-center gap-1 mt-2 text-amber-400/80">
+                    <div className="flex items-center gap-1 mt-2 text-[#1A1A1A]/80">
                       <Clock className="w-3 h-3" />
                       <span>Recommended: {analysisResult.totalRecommendedDuration}s edit</span>
                     </div>
@@ -356,7 +356,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
                       onClick={() => setShowHighlights(v => !v)}
                     >
                       <span className="flex items-center gap-1.5">
-                        <Star className="w-3.5 h-3.5 text-amber-400" />
+                        <Star className="w-3.5 h-3.5 text-[#1A1A1A]" />
                         Highlight Moments ({analysisResult.highlights.length})
                       </span>
                       {showHighlights ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
@@ -467,7 +467,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
           {assembleResult && (
             <div className="bg-slate-800 rounded-lg border border-amber-400/40 p-3 space-y-2">
               <div className="flex items-center gap-2">
-                <Film className="w-4 h-4 text-amber-400" />
+                <Film className="w-4 h-4 text-[#1A1A1A]" />
                 <span className="text-xs font-semibold text-amber-300">Edit Plan Ready</span>
                 <span className="text-xs text-slate-500 ml-auto">{assembleResult.totalDuration}s</span>
               </div>
@@ -478,7 +478,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
               <div className="space-y-1">
                 {assembleResult.editPlan.map((step, i) => (
                   <div key={i} className="flex items-center gap-2 text-xs text-slate-400">
-                    <span className="w-4 h-4 rounded bg-slate-700 flex items-center justify-center text-amber-400 font-bold text-[10px] shrink-0">
+                    <span className="w-4 h-4 rounded bg-slate-700 flex items-center justify-center text-[#1A1A1A] font-bold text-[10px] shrink-0">
                       {i + 1}
                     </span>
                     <span className="flex-1 truncate">Clip #{step.clipIndex + 1} — {step.duration}s</span>
@@ -490,7 +490,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
               {!showSaveForm ? (
                 <button
                   onClick={() => setShowSaveForm(true)}
-                  className="flex items-center gap-1.5 text-xs text-amber-400/80 hover:text-amber-400 mt-1"
+                  className="flex items-center gap-1.5 text-xs text-[#1A1A1A]/80 hover:text-[#1A1A1A] mt-1"
                 >
                   <Save className="w-3 h-3" /> Save as custom template
                 </button>
@@ -551,7 +551,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
                     <div className="flex items-center gap-1 ml-2 shrink-0">
                       <button
                         onClick={() => handleApplyCustomTemplate(t)}
-                        className="text-amber-400/70 hover:text-amber-400 p-1"
+                        className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] p-1"
                         title="Apply template"
                       >
                         <Wand2 className="w-3.5 h-3.5" />

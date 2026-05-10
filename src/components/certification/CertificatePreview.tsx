@@ -24,10 +24,10 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
       transition={{ duration: 0.5 }}
       className="relative"
     >
-      <Card className="bg-gradient-to-br from-gold/10 via-black/40 to-gold/5 border-gold/30 overflow-hidden">
+      <Card className="bg-gradient-to-br from-gold/10 via-black/40 to-gold/5 border-[#B89555]/30 overflow-hidden">
         <CardContent className="p-8">
           <div className="text-center mb-6">
-            <Award className="w-12 h-12 text-gold mx-auto mb-4" />
+            <Award className="w-12 h-12 text-[#1A1A1A] mx-auto mb-4" />
             <h3 className="text-2xl font-bold text-white">
               {isLocked ? 'Certificate Preview' : 'Congratulations!'}
             </h3>
@@ -40,16 +40,16 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
 
           {/* Certificate Preview */}
           <div 
-            className="bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-xl p-8 border-2 border-gold/50 relative overflow-hidden mb-6"
+            className="bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-xl p-8 border-2 border-[#B89555]/50 relative overflow-hidden mb-6"
             style={{
               backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4af37' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
             }}
           >
             {/* Corner Decorations */}
-            <div className="absolute top-4 left-4 w-12 h-12 border-t-2 border-l-2 border-gold/60 rounded-tl-lg" />
-            <div className="absolute top-4 right-4 w-12 h-12 border-t-2 border-r-2 border-gold/60 rounded-tr-lg" />
-            <div className="absolute bottom-4 left-4 w-12 h-12 border-b-2 border-l-2 border-gold/60 rounded-bl-lg" />
-            <div className="absolute bottom-4 right-4 w-12 h-12 border-b-2 border-r-2 border-gold/60 rounded-br-lg" />
+            <div className="absolute top-4 left-4 w-12 h-12 border-t-2 border-l-2 border-[#B89555]/60 rounded-tl-lg" />
+            <div className="absolute top-4 right-4 w-12 h-12 border-t-2 border-r-2 border-[#B89555]/60 rounded-tr-lg" />
+            <div className="absolute bottom-4 left-4 w-12 h-12 border-b-2 border-l-2 border-[#B89555]/60 rounded-bl-lg" />
+            <div className="absolute bottom-4 right-4 w-12 h-12 border-b-2 border-r-2 border-[#B89555]/60 rounded-br-lg" />
 
             <div className="text-center relative z-10">
               <div 
@@ -100,11 +100,11 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
 
               <div className="flex justify-center items-center gap-8 text-white/90 text-xs">
                 <div>
-                  <div className="w-24 h-px bg-gold/40 mb-2" />
+                  <div className="w-24 h-px bg-[#EFE6D6]/40 mb-2" />
                   <span>Date: {currentDate}</span>
                 </div>
                 <div>
-                  <div className="w-24 h-px bg-gold/40 mb-2" />
+                  <div className="w-24 h-px bg-[#EFE6D6]/40 mb-2" />
                   <span>Certificate ID</span>
                 </div>
               </div>
@@ -114,17 +114,17 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
           {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             {isLocked ? (
-              <Button disabled className="bg-gold/50 text-[#1A1A1A]/50 cursor-not-allowed">
+              <Button disabled className="bg-[#EFE6D6]/50 text-[#1A1A1A]/50 cursor-not-allowed">
                 <Lock className="w-4 h-4 mr-2" />
                 Complete Certification to Download
               </Button>
             ) : (
               <>
-                <Button className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
+                <Button className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
                   <Download className="w-4 h-4 mr-2" />
                   Download Certificate
                 </Button>
-                <Button variant="outline" className="border-gold/50 text-gold hover:bg-gold/10">
+                <Button variant="outline" className="border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                   <Share2 className="w-4 h-4 mr-2" />
                   Share Achievement
                 </Button>

@@ -53,10 +53,10 @@ const ChatServiceSelector = ({ userFirstName, isExistingUser, onSelectService }:
             <button
               key={service.id}
               onClick={() => onSelectService(service.id)}
-              className="p-3 bg-[#FDFBF7]/5 hover:bg-gold/10 border border-[#1A1A1A] hover:border-gold/50 rounded-xl text-left transition-all duration-300 group"
+              className="p-3 bg-[#FDFBF7]/5 hover:bg-[#EFE6D6]/10 border border-[#1A1A1A] hover:border-[#B89555]/50 rounded-xl text-left transition-all duration-300 group"
             >
-              <div className="w-8 h-8 rounded-lg bg-gold/10 group-hover:bg-gold/20 flex items-center justify-center mb-2">
-                <Icon className="w-4 h-4 text-gold" />
+              <div className="w-8 h-8 rounded-lg bg-[#EFE6D6]/10 group-hover:bg-[#EFE6D6]/20 flex items-center justify-center mb-2">
+                <Icon className="w-4 h-4 text-[#1A1A1A]" />
               </div>
               <h5 className="text-white text-xs font-medium mb-0.5"><T>{service.label}</T></h5>
               <p className="text-[#1A1A1A]/70 text-[10px] leading-tight"><T>{service.description}</T></p>

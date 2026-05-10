@@ -221,7 +221,7 @@ const NewJoinerApplicationsList: React.FC<NewJoinerApplicationsListProps> = ({
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="w-8 h-8 text-gold animate-spin" />
+        <Loader2 className="w-8 h-8 text-[#1A1A1A] animate-spin" />
       </div>
     );
   }
@@ -235,13 +235,13 @@ const NewJoinerApplicationsList: React.FC<NewJoinerApplicationsListProps> = ({
           <span className="text-[#1A1A1A]/60 text-sm">Filter by status:</span>
         </div>
         <Select value={filterStatus} onValueChange={setFilterStatus}>
-          <SelectTrigger className="w-48 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A]">
+          <SelectTrigger className="w-48 bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A]">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent className="bg-[#FDFBF7] border-2 border-gold/30 z-50">
-            <SelectItem value="all" className="text-[#1A1A1A] hover:bg-gold/10">All Applications</SelectItem>
+          <SelectContent className="bg-[#FDFBF7] border-2 border-[#B89555]/30 z-50">
+            <SelectItem value="all" className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10">All Applications</SelectItem>
             {Object.entries(STATUS_CONFIG).map(([key, config]) => (
-              <SelectItem key={key} value={key} className="text-[#1A1A1A] hover:bg-gold/10">
+              <SelectItem key={key} value={key} className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                 {config.label}
               </SelectItem>
             ))}
@@ -251,9 +251,9 @@ const NewJoinerApplicationsList: React.FC<NewJoinerApplicationsListProps> = ({
 
       {/* Applications Grid */}
       {filteredApplications.length === 0 ? (
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
           <CardContent className="py-12 text-center">
-            <User className="w-12 h-12 text-gold mx-auto mb-4" />
+            <User className="w-12 h-12 text-[#1A1A1A] mx-auto mb-4" />
             <p className="text-[#1A1A1A]/60">No applications found</p>
           </CardContent>
         </Card>
@@ -272,11 +272,11 @@ const NewJoinerApplicationsList: React.FC<NewJoinerApplicationsListProps> = ({
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ delay: index * 0.05 }}
                 >
-                  <Card className="bg-[#FDFBF7] border-2 border-gold/30 hover:border-gold/50 transition-all group">
+                  <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 hover:border-[#B89555]/50 transition-all group">
                     <CardContent className="pt-6">
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-12 h-12 rounded-full bg-gold/10 overflow-hidden border border-gold/30">
+                          <div className="w-12 h-12 rounded-full bg-[#EFE6D6]/10 overflow-hidden border border-[#B89555]/30">
                             {application.photo_url ? (
                               <img 
                                 src={application.photo_url} 
@@ -285,13 +285,13 @@ const NewJoinerApplicationsList: React.FC<NewJoinerApplicationsListProps> = ({
                               />
                             ) : (
                               <div className="w-full h-full flex items-center justify-center">
-                                <User className="w-6 h-6 text-gold" />
+                                <User className="w-6 h-6 text-[#1A1A1A]" />
                               </div>
                             )}
                           </div>
                           <div>
                             <h3 className="font-semibold text-[#1A1A1A]">{application.full_name}</h3>
-                            <p className="text-sm text-gold">{application.job_title}</p>
+                            <p className="text-sm text-[#1A1A1A]">{application.job_title}</p>
                           </div>
                         </div>
                         <DropdownMenu>
@@ -300,9 +300,9 @@ const NewJoinerApplicationsList: React.FC<NewJoinerApplicationsListProps> = ({
                               <MoreVertical className="w-4 h-4" />
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent className="bg-[#FDFBF7] border-2 border-gold/30 z-50">
+                          <DropdownMenuContent className="bg-[#FDFBF7] border-2 border-[#B89555]/30 z-50">
                             <DropdownMenuItem 
-                              className="text-[#1A1A1A] hover:bg-gold/10"
+                              className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                               onClick={() => {
                                 setSelectedApplication(application);
                                 setShowDetailsDialog(true);
@@ -312,7 +312,7 @@ const NewJoinerApplicationsList: React.FC<NewJoinerApplicationsListProps> = ({
                             </DropdownMenuItem>
                             {application.status === 'pending_review' && (
                               <DropdownMenuItem 
-                                className="text-[#1A1A1A] hover:bg-gold/10"
+                                className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                                 onClick={() => handleProcessApplication(application)}
                               >
                                 <Key className="w-4 h-4 mr-2" /> Create CRM Account
@@ -320,7 +320,7 @@ const NewJoinerApplicationsList: React.FC<NewJoinerApplicationsListProps> = ({
                             )}
                             {application.status === 'webdev_update' && (
                               <DropdownMenuItem 
-                                className="text-green-600 hover:bg-gold/10"
+                                className="text-green-600 hover:bg-[#EFE6D6]/10"
                                 onClick={() => handleStatusChange(application.id, 'completed')}
                               >
                                 <CheckCircle className="w-4 h-4 mr-2" /> Mark Complete
@@ -340,14 +340,14 @@ const NewJoinerApplicationsList: React.FC<NewJoinerApplicationsListProps> = ({
                           <span>{application.nationality}</span>
                         </div>
                         {application.generated_company_id && (
-                          <div className="flex items-center gap-2 text-gold">
+                          <div className="flex items-center gap-2 text-[#1A1A1A]">
                             <IdCard className="w-4 h-4" />
                             <span className="font-mono">{application.generated_company_id}</span>
                           </div>
                         )}
                       </div>
 
-                      <div className="mt-4 pt-4 border-t border-gold/10 flex items-center justify-between">
+                      <div className="mt-4 pt-4 border-t border-[#B89555]/10 flex items-center justify-between">
                         <Badge className={`${statusConfig?.color} text-white`}>
                           <StatusIcon className="w-3 h-3 mr-1" />
                           {statusConfig?.label}
@@ -367,14 +367,14 @@ const NewJoinerApplicationsList: React.FC<NewJoinerApplicationsListProps> = ({
 
       {/* Details Dialog */}
       <Dialog open={showDetailsDialog} onOpenChange={setShowDetailsDialog}>
-        <DialogContent className="bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] max-w-2xl">
+        <DialogContent className="bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A] max-w-2xl">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-gold">Application Details</DialogTitle>
+            <DialogTitle className="text-xl font-bold text-[#1A1A1A]">Application Details</DialogTitle>
           </DialogHeader>
           {selectedApplication && (
             <div className="space-y-6">
               <div className="flex items-center gap-4">
-                <div className="w-20 h-20 rounded-full bg-gold/10 overflow-hidden border-2 border-gold/30">
+                <div className="w-20 h-20 rounded-full bg-[#EFE6D6]/10 overflow-hidden border-2 border-[#B89555]/30">
                   {selectedApplication.photo_url ? (
                     <img 
                       src={selectedApplication.photo_url} 
@@ -383,13 +383,13 @@ const NewJoinerApplicationsList: React.FC<NewJoinerApplicationsListProps> = ({
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <User className="w-10 h-10 text-gold" />
+                      <User className="w-10 h-10 text-[#1A1A1A]" />
                     </div>
                   )}
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold text-[#1A1A1A]">{selectedApplication.full_name}</h2>
-                  <p className="text-gold">{selectedApplication.job_title}</p>
+                  <p className="text-[#1A1A1A]">{selectedApplication.job_title}</p>
                   {selectedApplication.generated_company_id && (
                     <p className="text-sm text-[#1A1A1A]/60 font-mono mt-1">
                       ID: {selectedApplication.generated_company_id}
@@ -428,7 +428,7 @@ const NewJoinerApplicationsList: React.FC<NewJoinerApplicationsListProps> = ({
               {selectedApplication.it_notes && (
                 <div>
                   <Label className="text-[#1A1A1A]/60">IT Notes</Label>
-                  <p className="text-[#1A1A1A] bg-gold/5 border border-gold/20 p-3 rounded-lg mt-1">
+                  <p className="text-[#1A1A1A] bg-[#EFE6D6]/5 border border-[#B89555]/20 p-3 rounded-lg mt-1">
                     {selectedApplication.it_notes}
                   </p>
                 </div>
@@ -440,50 +440,50 @@ const NewJoinerApplicationsList: React.FC<NewJoinerApplicationsListProps> = ({
 
       {/* Create Credentials Dialog */}
       <Dialog open={showCredentialsDialog} onOpenChange={setShowCredentialsDialog}>
-        <DialogContent className="bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] max-w-lg">
+        <DialogContent className="bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A] max-w-lg">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-gold flex items-center gap-2">
+            <DialogTitle className="text-xl font-bold text-[#1A1A1A] flex items-center gap-2">
               <Key className="w-5 h-5" />
               Create CRM Credentials
             </DialogTitle>
           </DialogHeader>
           {selectedApplication && (
             <div className="space-y-6">
-              <div className="text-center p-4 bg-gold/5 border border-gold/20 rounded-lg">
+              <div className="text-center p-4 bg-[#EFE6D6]/5 border border-[#B89555]/20 rounded-lg">
                 <p className="text-[#1A1A1A]/60">Creating account for</p>
                 <p className="text-xl font-bold text-[#1A1A1A]">{selectedApplication.full_name}</p>
-                <p className="text-gold">{selectedApplication.job_title} - {selectedApplication.department}</p>
+                <p className="text-[#1A1A1A]">{selectedApplication.job_title} - {selectedApplication.department}</p>
               </div>
 
               <div className="space-y-4">
                 <div className="space-y-2">
                   <Label className="text-[#1A1A1A]/60 flex items-center gap-2">
-                    <Mail className="w-4 h-4 text-gold" />
+                    <Mail className="w-4 h-4 text-[#1A1A1A]" />
                     Email Address
                   </Label>
                   <Input
                     value={credentials.email}
                     onChange={(e) => setCredentials(prev => ({ ...prev, email: e.target.value }))}
-                    className="bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] font-mono"
+                    className="bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A] font-mono"
                   />
                 </div>
 
                 <div className="space-y-2">
                   <Label className="text-[#1A1A1A]/60 flex items-center gap-2">
-                    <Key className="w-4 h-4 text-gold" />
+                    <Key className="w-4 h-4 text-[#1A1A1A]" />
                     Temporary Password
                   </Label>
                   <div className="flex gap-2">
                     <Input
                       value={credentials.password}
                       onChange={(e) => setCredentials(prev => ({ ...prev, password: e.target.value }))}
-                      className="bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] font-mono"
+                      className="bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A] font-mono"
                     />
                     <Button
                       type="button"
                       variant="outline"
                       onClick={() => setCredentials(prev => ({ ...prev, password: generateSecurePassword() }))}
-                      className="border-gold/30 text-[#1A1A1A] hover:bg-gold/10"
+                      className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                     >
                       Generate
                     </Button>
@@ -494,18 +494,18 @@ const NewJoinerApplicationsList: React.FC<NewJoinerApplicationsListProps> = ({
                 </div>
               </div>
 
-              <div className="flex justify-end gap-3 pt-4 border-t border-gold/20">
+              <div className="flex justify-end gap-3 pt-4 border-t border-[#B89555]/20">
                 <Button
                   variant="outline"
                   onClick={() => setShowCredentialsDialog(false)}
-                  className="border-gold/30 text-[#1A1A1A] hover:bg-gold/10"
+                  className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                 >
                   Cancel
                 </Button>
                 <Button
                   onClick={handleCreateCRMAccount}
                   disabled={isProcessing}
-                  className="bg-gold text-[#1A1A1A] hover:bg-gold/90"
+                  className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
                 >
                   {isProcessing ? (
                     <>

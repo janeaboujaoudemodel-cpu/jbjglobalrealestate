@@ -46,7 +46,7 @@ export function DisplayModeToggle({
         "inline-flex rounded-xl p-1",
         isDark 
           ? "bg-[#1a1a1a] border border-[#2a2a2a]"
-          : "bg-[#FDFBF7]/80 border border-gold/30",
+          : "bg-[#FDFBF7]/80 border border-[#B89555]/30",
         className
       )}
     >
@@ -62,7 +62,7 @@ export function DisplayModeToggle({
               "flex items-center gap-2 rounded-lg transition-all",
               isSmall ? "px-3 py-1.5 text-xs" : "px-4 py-2 text-sm",
               isActive
-                ? "bg-gold text-[#1A1A1A] font-medium shadow-sm"
+                ? "bg-[#EFE6D6] text-[#1A1A1A] font-medium shadow-sm"
                 : isDark
                   ? "text-[#1A1A1A]/70 hover:text-white hover:bg-[#2a2a2a]"
                   : "text-[#1A1A1A]/60 hover:text-[#1A1A1A] hover:bg-champagne-light"
@@ -103,7 +103,7 @@ export function DisplayModeIconToggle({
         "inline-flex rounded-lg p-0.5",
         isDark 
           ? "bg-[#1a1a1a] border border-[#2a2a2a]"
-          : "bg-[#FDFBF7]/80 border border-gold/30",
+          : "bg-[#FDFBF7]/80 border border-[#B89555]/30",
         className
       )}
     >
@@ -112,7 +112,7 @@ export function DisplayModeIconToggle({
         className={cn(
           "p-2 rounded-md transition-all",
           value === 'investor'
-            ? "bg-gold text-[#1A1A1A]"
+            ? "bg-[#EFE6D6] text-[#1A1A1A]"
             : isDark
               ? "text-[#1A1A1A]/70 hover:text-white"
               : "text-[#1A1A1A]/60 hover:text-[#1A1A1A]"
@@ -126,7 +126,7 @@ export function DisplayModeIconToggle({
         className={cn(
           "p-2 rounded-md transition-all",
           value === 'broker'
-            ? "bg-gold text-[#1A1A1A]"
+            ? "bg-[#EFE6D6] text-[#1A1A1A]"
             : isDark
               ? "text-[#1A1A1A]/70 hover:text-white"
               : "text-[#1A1A1A]/60 hover:text-[#1A1A1A]"

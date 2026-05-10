@@ -17,10 +17,10 @@ interface FormDraftBarProps {
 
 const themeMap = {
   gold: {
-    bar: 'bg-[#FDFBF7]/40 border border-gold/30',
-    icon: 'text-gold',
-    save: 'bg-gold text-[#1A1A1A] hover:bg-gold/90',
-    newBtn: 'border-gold/40 text-foreground hover:bg-gold/10',
+    bar: 'bg-[#FDFBF7]/40 border border-[#B89555]/30',
+    icon: 'text-[#1A1A1A]',
+    save: 'bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90',
+    newBtn: 'border-[#B89555]/40 text-foreground hover:bg-[#EFE6D6]/10',
   },
   blue: {
     bar: 'bg-[#FDFBF7]/40 border border-blue-300/30',
@@ -35,9 +35,9 @@ const themeMap = {
     newBtn: 'border-purple-400/40 text-foreground hover:bg-purple-50',
   },
   dark: {
-    bar: 'bg-zinc-900/60 border border-[#1A1A1A]/50',
-    icon: 'text-gold',
-    save: 'bg-gold text-[#1A1A1A] hover:bg-gold/90',
+    bar: 'bg-[#FDFBF7]/60 border border-[#1A1A1A]/50',
+    icon: 'text-[#1A1A1A]',
+    save: 'bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90',
     newBtn: 'border-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-[#1A1A1A]',
   },
 };

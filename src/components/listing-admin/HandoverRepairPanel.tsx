@@ -90,7 +90,7 @@ export function HandoverRepairPanel() {
   };
 
   return (
-    <Card className="border-gold/20">
+    <Card className="border-[#B89555]/20">
       <CardHeader className="pb-3">
         <CardTitle className="text-base flex items-center gap-2">
           <IconTile icon={CalendarClock} tone="gold" size="sm" />
@@ -185,7 +185,7 @@ function Stat({
 }) {
   const color = tone === "warn" ? "text-[#B45309]" : tone === "ok" ? "text-[#047857]" : "text-[#1A1A1A]";
   return (
-    <div className="rounded-md border border-gold/20 bg-[#F7F2EA] px-3 py-2">
+    <div className="rounded-md border border-[#B89555]/20 bg-[#F7F2EA] px-3 py-2">
       <div className="text-xs text-[#1A1A1A]/70">{label}</div>
       <div className={`text-lg font-semibold tabular-nums ${color}`}>
         {value === undefined ? "—" : value.toLocaleString()}

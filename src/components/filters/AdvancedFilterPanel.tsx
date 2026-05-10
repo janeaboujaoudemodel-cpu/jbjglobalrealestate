@@ -216,10 +216,10 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="max-w-3xl w-[calc(100vw-3rem)] max-h-[calc(100dvh-4rem)] p-0 bg-gradient-to-br from-[#FEFCF9] via-[#FAF6EE] to-[#F3EDD9] border-2 border-gold/50 flex flex-col overflow-hidden shadow-[0_25px_80px_-12px_rgba(0,0,0,0.35),0_0_0_1px_rgba(200,167,102,0.2)]"
+        className="max-w-3xl w-[calc(100vw-3rem)] max-h-[calc(100dvh-4rem)] p-0 bg-gradient-to-br from-[#FEFCF9] via-[#FAF6EE] to-[#F3EDD9] border-2 border-[#B89555]/50 flex flex-col overflow-hidden shadow-[0_25px_80px_-12px_rgba(0,0,0,0.35),0_0_0_1px_rgba(200,167,102,0.2)]"
       >
         {/* Header */}
-        <div className="px-6 pt-6 pb-4 border-b border-gold/30 flex-shrink-0 bg-gradient-to-r from-transparent via-gold/[0.04] to-transparent">
+        <div className="px-6 pt-6 pb-4 border-b border-[#B89555]/30 flex-shrink-0 bg-gradient-to-r from-transparent via-gold/[0.04] to-transparent">
           <div className="flex items-center justify-between mb-3">
             <div>
               <DialogTitle className="text-xl font-bold text-[#1A1A1A] tracking-tight">New Off Plan Projects</DialogTitle>
@@ -275,7 +275,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                         <button
                           key={em.value}
                           onClick={() => update({ emirates: toggleArray(localFilters.emirates, em.value) })}
-                          className="flex items-center gap-3 w-full px-3 py-2 rounded-lg hover:bg-gold/10 transition-colors"
+                          className="flex items-center gap-3 w-full px-3 py-2 rounded-lg hover:bg-[#EFE6D6]/10 transition-colors"
                         >
                           <div className={cn(
                             "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
@@ -323,7 +323,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                         <div key={emirate}>
                           <div className="flex items-center gap-2 mb-1 px-1">
                             <span className="text-[10px] font-bold text-[#1A1A1A]/70 uppercase tracking-wider">{emirate}</span>
-                            <div className="flex-1 h-px bg-gold/20" />
+                            <div className="flex-1 h-px bg-[#EFE6D6]/20" />
                             <span className="text-[10px] text-[#1A1A1A]/70">{areaNames.length}</span>
                           </div>
                           <div className="space-y-0.5">
@@ -333,7 +333,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                                 <button
                                   key={areaName}
                                   onClick={() => update({ areas: toggleArray(localFilters.areas || [], areaName) })}
-                                  className="flex items-center gap-3 w-full px-3 py-1.5 rounded-lg hover:bg-gold/10 transition-colors"
+                                  className="flex items-center gap-3 w-full px-3 py-1.5 rounded-lg hover:bg-[#EFE6D6]/10 transition-colors"
                                 >
                                   <div className={cn(
                                     "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
@@ -382,7 +382,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                         <button
                           key={dev.name}
                           onClick={() => update({ developers: toggleArray(localFilters.developers, dev.name) })}
-                          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg hover:bg-gold/10 transition-colors"
+                          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg hover:bg-[#EFE6D6]/10 transition-colors"
                         >
                           <div className={cn(
                             "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
@@ -390,7 +390,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                           )}>
                             {isSelected && <Check className="w-3 h-3 text-white" />}
                           </div>
-                          <div className="w-8 h-8 rounded-lg bg-[#FDFBF7] border border-gold/20 p-0.5 flex items-center justify-center flex-shrink-0 overflow-hidden shadow-sm">
+                          <div className="w-8 h-8 rounded-lg bg-[#FDFBF7] border border-[#B89555]/20 p-0.5 flex items-center justify-center flex-shrink-0 overflow-hidden shadow-sm">
                             {dev.logo_url ? (
                               <img
                                 src={dev.logo_url}
@@ -427,7 +427,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-[#1A1A1A]/70">Maximum pre-handover</span>
-                  <span className="text-xs font-bold text-[#1A1A1A] bg-[#FDFBF7]/80 px-2 py-0.5 rounded border border-gold/30">
+                  <span className="text-xs font-bold text-[#1A1A1A] bg-[#FDFBF7]/80 px-2 py-0.5 rounded border border-[#B89555]/30">
                     {localFilters.paymentPlanMax}%
                   </span>
                 </div>
@@ -609,7 +609,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                   <select
                     value={localFilters.handoverFrom.year}
                     onChange={(e) => update({ handoverFrom: { ...localFilters.handoverFrom, year: e.target.value } })}
-                    className="w-full h-9 px-3 bg-[#FDFBF7] border border-gold/30 rounded-lg text-sm text-[#1A1A1A] font-medium appearance-none cursor-pointer"
+                    className="w-full h-9 px-3 bg-[#FDFBF7] border border-[#B89555]/30 rounded-lg text-sm text-[#1A1A1A] font-medium appearance-none cursor-pointer"
                     style={{ WebkitAppearance: 'none' }}
                   >
                     {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
@@ -636,7 +636,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                   <select
                     value={localFilters.handoverTo.year}
                     onChange={(e) => update({ handoverTo: { ...localFilters.handoverTo, year: e.target.value } })}
-                    className="w-full h-9 px-3 bg-[#FDFBF7] border border-gold/30 rounded-lg text-sm text-[#1A1A1A] font-medium appearance-none cursor-pointer"
+                    className="w-full h-9 px-3 bg-[#FDFBF7] border border-[#B89555]/30 rounded-lg text-sm text-[#1A1A1A] font-medium appearance-none cursor-pointer"
                     style={{ WebkitAppearance: 'none' }}
                   >
                     {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
@@ -664,14 +664,14 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
         </ScrollArea>
 
         {/* Sticky Footer */}
-        <div className="px-6 py-4 border-t border-gold/30 flex-shrink-0 flex items-center gap-3 bg-gradient-to-r from-transparent via-gold/[0.04] to-transparent">
+        <div className="px-6 py-4 border-t border-[#B89555]/30 flex-shrink-0 flex items-center gap-3 bg-gradient-to-r from-transparent via-gold/[0.04] to-transparent">
           <button
             onClick={handleClearAll}
             className="px-5 py-2.5 rounded-full border border-[#B89555]/60 bg-[#FDFBF7] text-xs font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-1 focus-visible:ring-offset-[#FDFBF7]"
           >
             Clear all
           </button>
-          <button className="p-2.5 rounded-full border border-gold/40 hover:bg-gold/10 hover:border-gold/60 transition-all">
+          <button className="p-2.5 rounded-full border border-[#B89555]/40 hover:bg-[#EFE6D6]/10 hover:border-[#B89555]/60 transition-all">
             <Heart className="w-4 h-4 text-red-500 fill-red-500" />
           </button>
           <button

@@ -70,8 +70,8 @@ const ActivityOverviewCard = () => {
     <Card className="border border-border bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))]">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="flex items-center gap-2 text-lg">
-          <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center">
-            <Activity className="w-4 h-4 text-gold" />
+          <div className="w-8 h-8 rounded-lg bg-[#EFE6D6]/10 border border-[#B89555]/30 flex items-center justify-center">
+            <Activity className="w-4 h-4 text-[#1A1A1A]" />
           </div>
           Activity Overview
         </CardTitle>
@@ -87,28 +87,28 @@ const ActivityOverviewCard = () => {
           <>
             <div className="grid grid-cols-3 gap-3">
               {/* Days Active */}
-              <div className="text-center p-3 rounded-xl border border-gold/20 bg-gold/5">
-                <Calendar className="w-5 h-5 text-gold mx-auto mb-1" />
+              <div className="text-center p-3 rounded-xl border border-[#B89555]/20 bg-[#EFE6D6]/5">
+                <Calendar className="w-5 h-5 text-[#1A1A1A] mx-auto mb-1" />
                 <p className="text-2xl font-bold text-foreground">{stats.daysActive}</p>
                 <p className="text-xs text-muted-foreground">Days Active</p>
               </div>
 
               {/* Current Streak */}
-              <div className="text-center p-3 rounded-xl border border-gold/20 bg-gold/5">
-                <Flame className="w-5 h-5 text-gold mx-auto mb-1" />
+              <div className="text-center p-3 rounded-xl border border-[#B89555]/20 bg-[#EFE6D6]/5">
+                <Flame className="w-5 h-5 text-[#1A1A1A] mx-auto mb-1" />
                 <p className="text-2xl font-bold text-foreground">{stats.currentStreak}</p>
                 <p className="text-xs text-muted-foreground">Day Streak</p>
               </div>
 
               {/* Weekly Points */}
-              <div className="text-center p-3 rounded-xl border border-gold/20 bg-gold/5">
-                <TrendingUp className="w-5 h-5 text-gold mx-auto mb-1" />
+              <div className="text-center p-3 rounded-xl border border-[#B89555]/20 bg-[#EFE6D6]/5">
+                <TrendingUp className="w-5 h-5 text-[#1A1A1A] mx-auto mb-1" />
                 <p className="text-2xl font-bold text-foreground">{stats.weeklyPoints}</p>
                 <p className="text-xs text-muted-foreground">This Week</p>
               </div>
             </div>
 
-            <Button variant="link" className="w-full text-gold mt-4 p-0" asChild>
+            <Button variant="link" className="w-full text-[#1A1A1A] mt-4 p-0" asChild>
               <Link to="/my-dashboard/activity">
                 View Full Activity
                 <ChevronRight className="w-4 h-4 ml-1" />

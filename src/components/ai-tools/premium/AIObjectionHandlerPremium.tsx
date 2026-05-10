@@ -84,7 +84,7 @@ const AIObjectionHandlerPremium = () => {
                     value={objection}
                     onChange={(e) => setObjection(e.target.value)}
                     rows={4}
-                    className="bg-zinc-900/50 border-rose-500/30 text-white hover:border-rose-500/50 focus:border-rose-400 transition-colors"
+                    className="bg-[#FDFBF7]/50 border-rose-500/30 text-white hover:border-rose-500/50 focus:border-rose-400 transition-colors"
                   />
                 </div>
 
@@ -131,7 +131,7 @@ const AIObjectionHandlerPremium = () => {
                     value={context}
                     onChange={(e) => setContext(e.target.value)}
                     rows={2}
-                    className="bg-zinc-900/50 border-rose-500/30 text-white hover:border-rose-500/50 focus:border-rose-400 transition-colors"
+                    className="bg-[#FDFBF7]/50 border-rose-500/30 text-white hover:border-rose-500/50 focus:border-rose-400 transition-colors"
                   />
                 </div>
               </div>
@@ -212,7 +212,7 @@ const AIObjectionHandlerPremium = () => {
                       <p className="text-xl font-bold text-rose-400">{response.confidenceScore}%</p>
                     </Card>
                     {response.difficulty && (
-                      <Card className="bg-zinc-900/50 border-[#1A1A1A] p-4">
+                      <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A] p-4">
                         <p className="text-xs text-white/70">Objection Difficulty</p>
                         <p className="text-xl font-bold text-white capitalize">{response.difficulty}</p>
                       </Card>
@@ -249,7 +249,7 @@ const AIObjectionHandlerPremium = () => {
                         {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                       </Button>
                     </div>
-                    <div className="bg-zinc-800/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[400px] overflow-y-auto">
+                    <div className="bg-[#1A1A1A]/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[400px] overflow-y-auto">
                       {response.response}
                     </div>
                   </CardContent>
@@ -261,7 +261,7 @@ const AIObjectionHandlerPremium = () => {
                     <h4 className="font-semibold text-white mb-3">Alternative Approaches</h4>
                     <div className="space-y-2">
                       {response.alternatives.map((alt: string, i: number) => (
-                        <div key={i} className="bg-zinc-800/50 p-3 rounded-lg text-sm text-white/85">
+                        <div key={i} className="bg-[#1A1A1A]/50 p-3 rounded-lg text-sm text-white/85">
                           <span className="text-xs text-white/90">Option {i + 1}:</span>
                           <p className="mt-1">{alt}</p>
                         </div>

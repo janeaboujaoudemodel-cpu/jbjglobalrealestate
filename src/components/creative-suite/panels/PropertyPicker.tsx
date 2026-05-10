@@ -48,10 +48,10 @@ export function PropertyPicker({ isOpen, onClose, onSelect, selectedPropertyId }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[80vh] bg-slate-900 border-gold/30">
+      <DialogContent className="max-w-4xl max-h-[80vh] bg-slate-900 border-[#B89555]/30">
         <DialogHeader>
           <DialogTitle className="text-white flex items-center gap-2">
-            <Building2 className="w-5 h-5 text-gold" />
+            <Building2 className="w-5 h-5 text-[#1A1A1A]" />
             Select Property
           </DialogTitle>
         </DialogHeader>
@@ -66,7 +66,7 @@ export function PropertyPicker({ isOpen, onClose, onSelect, selectedPropertyId }
               className="pl-10 bg-slate-800 border-slate-700 text-white"
             />
           </div>
-          <Button type="submit" className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
+          <Button type="submit" className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
             Search
           </Button>
         </form>
@@ -74,7 +74,7 @@ export function PropertyPicker({ isOpen, onClose, onSelect, selectedPropertyId }
         <ScrollArea className="h-[500px] pr-4">
           {isLoading ? (
             <div className="flex items-center justify-center py-20">
-              <Loader2 className="w-8 h-8 text-gold animate-spin" />
+              <Loader2 className="w-8 h-8 text-[#1A1A1A] animate-spin" />
             </div>
           ) : properties.length === 0 ? (
             <div className="text-center py-20 text-slate-400">
@@ -89,8 +89,8 @@ export function PropertyPicker({ isOpen, onClose, onSelect, selectedPropertyId }
                   onClick={() => handleSelect(property)}
                   className={`flex gap-4 p-4 rounded-xl border transition-all text-left ${
                     selectedPropertyId === property.id
-                      ? 'bg-gold/10 border-gold'
-                      : 'bg-slate-800/50 border-slate-700 hover:border-gold/50'
+                      ? 'bg-[#EFE6D6]/10 border-[#B89555]'
+                      : 'bg-slate-800/50 border-slate-700 hover:border-[#B89555]/50'
                   }`}
                 >
                   <div className="w-24 h-24 rounded-lg bg-slate-700 flex-shrink-0 overflow-hidden">
@@ -111,12 +111,12 @@ export function PropertyPicker({ isOpen, onClose, onSelect, selectedPropertyId }
                     <div className="flex items-start justify-between gap-2">
                       <h3 className="font-semibold text-white truncate">{property.name}</h3>
                       {selectedPropertyId === property.id && (
-                        <Check className="w-5 h-5 text-gold flex-shrink-0" />
+                        <Check className="w-5 h-5 text-[#1A1A1A] flex-shrink-0" />
                       )}
                     </div>
 
                     {property.developer_name && (
-                      <p className="text-sm text-gold truncate">by {property.developer_name}</p>
+                      <p className="text-sm text-[#1A1A1A] truncate">by {property.developer_name}</p>
                     )}
 
                     <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 text-xs text-slate-400">

@@ -247,7 +247,7 @@ export const AIDesignAssistant: React.FC<AIDesignAssistantProps> = ({
             <button
               key={index}
               onClick={() => handleQuickPrompt(prompt.prompt)}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-zinc-800/80 hover:bg-gold/20 text-white hover:text-gold border border-[#1A1A1A] hover:border-gold/50 transition-all"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-[#1A1A1A]/80 hover:bg-[#EFE6D6]/20 text-white hover:text-[#1A1A1A] border border-[#1A1A1A] hover:border-[#B89555]/50 transition-all"
             >
               <prompt.icon className="w-3 h-3" />
               {prompt.label}
@@ -269,7 +269,7 @@ export const AIDesignAssistant: React.FC<AIDesignAssistantProps> = ({
               >
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                   message.role === 'user' 
-                    ? 'bg-gold' 
+                    ? 'bg-[#EFE6D6]' 
                     : 'bg-gradient-to-br from-purple-500 to-fuchsia-500'
                 }`}>
                   {message.role === 'user' ? (
@@ -281,8 +281,8 @@ export const AIDesignAssistant: React.FC<AIDesignAssistantProps> = ({
                 <div className={`flex-1 max-w-[85%] ${message.role === 'user' ? 'text-right' : ''}`}>
                   <div className={`inline-block p-3 rounded-2xl ${
                     message.role === 'user'
-                      ? 'bg-gold text-[#1A1A1A] rounded-tr-none'
-                      : 'bg-zinc-800 text-white rounded-tl-none'
+                      ? 'bg-[#EFE6D6] text-[#1A1A1A] rounded-tr-none'
+                      : 'bg-[#1A1A1A] text-white rounded-tl-none'
                   }`}>
                     <p className="text-sm whitespace-pre-wrap">{message.content}</p>
                     {message.imageUrl && (
@@ -310,7 +310,7 @@ export const AIDesignAssistant: React.FC<AIDesignAssistantProps> = ({
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-fuchsia-500 flex items-center justify-center">
                 <Loader2 className="w-4 h-4 text-white animate-spin" />
               </div>
-              <div className="bg-zinc-800 rounded-2xl rounded-tl-none p-3">
+              <div className="bg-[#1A1A1A] rounded-2xl rounded-tl-none p-3">
                 <p className="text-white/70 text-sm">Creating your design...</p>
               </div>
             </motion.div>
@@ -364,7 +364,7 @@ export const AIDesignAssistant: React.FC<AIDesignAssistantProps> = ({
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             placeholder="Describe your design or ask for changes..."
-            className="flex-1 bg-zinc-800 border-[#1A1A1A] text-white resize-none min-h-[44px] max-h-[120px]"
+            className="flex-1 bg-[#1A1A1A] border-[#1A1A1A] text-white resize-none min-h-[44px] max-h-[120px]"
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();

@@ -269,7 +269,7 @@ function TextPreviewThumbnail({ preset, isActive, onClick }: {
       {/* Label bar */}
       <div className="flex items-center justify-between px-1.5 py-1 bg-slate-800">
         <span className="text-[10px] font-semibold text-slate-200 truncate">{preset.label}</span>
-        <Plus className="w-3 h-3 text-slate-500 group-hover:text-amber-400 transition-colors shrink-0" />
+        <Plus className="w-3 h-3 text-slate-500 group-hover:text-[#1A1A1A] transition-colors shrink-0" />
       </div>
     </button>
   );
@@ -423,7 +423,7 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
                   <p className="text-xs text-slate-500">No presets match your search</p>
                   <button
                     onClick={() => { setPresetSearch(''); setActiveCategory(null); }}
-                    className="mt-2 text-[10px] text-amber-400 hover:text-amber-300 transition-colors"
+                    className="mt-2 text-[10px] text-[#1A1A1A] hover:text-amber-300 transition-colors"
                   >
                     Clear filters
                   </button>

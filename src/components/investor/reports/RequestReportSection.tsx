@@ -7,11 +7,11 @@ export default function RequestReportSection() {
   return (
     <section className="space-y-4">
       <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
-        <FileEdit className="w-5 h-5 text-gold" />
+        <FileEdit className="w-5 h-5 text-[#1A1A1A]" />
         Request a Report
       </h2>
 
-      <Card className="border-2 border-gold/30 bg-gradient-to-br from-zinc-900/95 via-zinc-900/90 to-black text-white">
+      <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-zinc-900/95 via-zinc-900/90 to-black text-white">
         <CardContent className="p-8">
           <div className="flex flex-col md:flex-row items-center gap-8">
             <div className="flex-1 text-center md:text-left">
@@ -39,8 +39,8 @@ export default function RequestReportSection() {
                 </Link>
               </div>
             </div>
-            <div className="hidden md:flex w-32 h-32 bg-gold/10 rounded-full items-center justify-center flex-shrink-0">
-              <FileEdit className="w-16 h-16 text-gold" />
+            <div className="hidden md:flex w-32 h-32 bg-[#EFE6D6]/10 rounded-full items-center justify-center flex-shrink-0">
+              <FileEdit className="w-16 h-16 text-[#1A1A1A]" />
             </div>
           </div>
         </CardContent>

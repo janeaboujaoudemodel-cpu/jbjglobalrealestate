@@ -164,7 +164,7 @@ ${generatedEmail.signature}`;
           AI Email Generator
         </Button>
       </DialogTrigger>
-      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-[#1A1A1A] flex items-center gap-2">
             <div className="p-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-600">
@@ -185,8 +185,8 @@ ${generatedEmail.signature}`;
                   onClick={() => setEmailType(type.id)}
                   className={`p-3 rounded-lg border-2 text-left transition-all ${
                     emailType === type.id
-                      ? 'border-gold bg-gold/10'
-                      : 'border-gold/30 bg-[#FDFBF7] hover:border-gold/50'
+                      ? 'border-[#B89555] bg-[#EFE6D6]/10'
+                      : 'border-[#B89555]/30 bg-[#FDFBF7] hover:border-[#B89555]/50'
                   }`}
                 >
                   <p className="text-[#1A1A1A] text-sm font-medium">{type.name}</p>
@@ -203,7 +203,7 @@ ${generatedEmail.signature}`;
               value={recipientName}
               onChange={(e) => setRecipientName(e.target.value)}
               placeholder="e.g., John Smith"
-              className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] mt-1"
+              className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] mt-1"
             />
           </div>
 
@@ -214,7 +214,7 @@ ${generatedEmail.signature}`;
               value={propertyDetails}
               onChange={(e) => setPropertyDetails(e.target.value)}
               placeholder="e.g., 3BR apartment in Downtown Dubai, 1,500 sqft..."
-              className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] mt-1"
+              className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] mt-1"
               rows={2}
             />
           </div>
@@ -227,18 +227,18 @@ ${generatedEmail.signature}`;
                 value={purpose}
                 onChange={(e) => setPurpose(e.target.value)}
                 placeholder="e.g., Schedule a viewing"
-                className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] mt-1"
+                className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] mt-1"
               />
             </div>
             <div>
               <Label className="text-[#1A1A1A]">Tone</Label>
               <Select value={tone} onValueChange={setTone}>
-                <SelectTrigger className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] mt-1">
+                <SelectTrigger className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] mt-1">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-[#FDFBF7] border-gold/30">
+                <SelectContent className="bg-[#FDFBF7] border-[#B89555]/30">
                   {TONE_OPTIONS.map(t => (
-                    <SelectItem key={t} value={t} className="text-[#1A1A1A] hover:bg-gold/10">
+                    <SelectItem key={t} value={t} className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                       {t}
                     </SelectItem>
                   ))}
@@ -254,7 +254,7 @@ ${generatedEmail.signature}`;
               value={additionalContext}
               onChange={(e) => setAdditionalContext(e.target.value)}
               placeholder="Any specific details to include..."
-              className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] mt-1"
+              className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] mt-1"
             />
           </div>
 
@@ -282,11 +282,11 @@ ${generatedEmail.signature}`;
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mt-6 p-4 bg-[#FDFBF7] border-2 border-gold/30 rounded-xl"
+              className="mt-6 p-4 bg-[#FDFBF7] border-2 border-[#B89555]/30 rounded-xl"
             >
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
-                  <Mail className="w-5 h-5 text-gold" />
+                  <Mail className="w-5 h-5 text-[#1A1A1A]" />
                   <span className="font-semibold text-[#1A1A1A]">Generated Email</span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -294,7 +294,7 @@ ${generatedEmail.signature}`;
                     size="sm"
                     variant="outline"
                     onClick={handleRegenerate}
-                    className="border-gold/40 text-[#1A1A1A] hover:bg-gold/10"
+                    className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                   >
                     <RefreshCw className="w-4 h-4 mr-1" />
                     Regenerate
@@ -303,7 +303,7 @@ ${generatedEmail.signature}`;
                     size="sm"
                     variant="outline"
                     onClick={handleCopy}
-                    className="border-gold/40 text-[#1A1A1A] hover:bg-gold/10"
+                    className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                   >
                     {copied ? (
                       <Check className="w-4 h-4 mr-1" />
@@ -323,7 +323,7 @@ ${generatedEmail.signature}`;
                   <div className="flex gap-2 mt-2 flex-wrap">
                     <span className="text-xs text-[#1A1A1A]/70">Alternatives:</span>
                     {generatedEmail.alternativeSubjects.map((alt, i) => (
-                      <Badge key={i} variant="outline" className="text-xs border-gold/40 text-[#1A1A1A]">
+                      <Badge key={i} variant="outline" className="text-xs border-[#B89555]/40 text-[#1A1A1A]">
                         {alt}
                       </Badge>
                     ))}
@@ -332,7 +332,7 @@ ${generatedEmail.signature}`;
               </div>
 
               {/* Email Body */}
-              <div className="p-4 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-lg border border-gold/20">
+              <div className="p-4 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-lg border border-[#B89555]/20">
                 <p className="text-[#1A1A1A] mb-4">{generatedEmail.greeting}</p>
                 <p className="text-[#1A1A1A] whitespace-pre-line mb-4">{generatedEmail.body}</p>
                 <p className="text-[#1A1A1A] mb-4">{generatedEmail.callToAction}</p>

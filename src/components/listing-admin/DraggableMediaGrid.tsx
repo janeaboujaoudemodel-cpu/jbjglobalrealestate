@@ -102,10 +102,10 @@ const DraggableMediaGrid = ({ items, onReorder, onDelete, type }: DraggableMedia
           className={cn(
             "relative group rounded-lg border-2 transition-all duration-200 cursor-move",
             draggedIndex === index 
-              ? "opacity-50 border-gold scale-95" 
+              ? "opacity-50 border-[#B89555] scale-95" 
               : dragOverIndex === index
-              ? "border-gold bg-gold/10"
-              : "border-muted hover:border-gold/50",
+              ? "border-[#B89555] bg-[#EFE6D6]/10"
+              : "border-muted hover:border-[#B89555]/50",
             type === "images" ? "aspect-square" : "p-3"
           )}
         >
@@ -118,7 +118,7 @@ const DraggableMediaGrid = ({ items, onReorder, onDelete, type }: DraggableMedia
 
           {/* Order Badge */}
           <div className="absolute top-2 right-8 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-            <div className="bg-gold text-[#1A1A1A] text-xs font-bold px-2 py-0.5 rounded">
+            <div className="bg-[#EFE6D6] text-[#1A1A1A] text-xs font-bold px-2 py-0.5 rounded">
               #{index + 1}
             </div>
           </div>
@@ -150,8 +150,8 @@ const DraggableMediaGrid = ({ items, onReorder, onDelete, type }: DraggableMedia
             />
           ) : (
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                <FileText className="w-5 h-5 text-gold" />
+              <div className="w-10 h-10 bg-[#EFE6D6]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                <FileText className="w-5 h-5 text-[#1A1A1A]" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-[#1A1A1A] truncate">

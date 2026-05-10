@@ -16,17 +16,17 @@ export default function PointsOfInterest({ points, className = "" }: PointsOfInt
   return (
     <div className={className}>
       <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4 flex items-center gap-2">
-        <MapPin className="w-4 h-4 text-gold" />
+        <MapPin className="w-4 h-4 text-[#1A1A1A]" />
         Nearby Points of Interest
       </h4>
       <div className="space-y-1">
         {points.map((point, idx) => (
           <div
             key={idx}
-            className="flex items-center justify-between py-3 px-4 rounded-lg hover:bg-gold/5 transition-colors border-b border-border last:border-b-0"
+            className="flex items-center justify-between py-3 px-4 rounded-lg hover:bg-[#EFE6D6]/5 transition-colors border-b border-border last:border-b-0"
           >
             <div className="flex items-center gap-3">
-              <Navigation className="w-4 h-4 text-gold flex-shrink-0" />
+              <Navigation className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
               <span className="text-sm text-foreground">{point.label}</span>
             </div>
             <span className="text-sm font-medium text-muted-foreground whitespace-nowrap ml-4">

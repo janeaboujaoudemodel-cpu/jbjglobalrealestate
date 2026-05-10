@@ -139,12 +139,12 @@ export function CapacityAutomation({ brokers, onReassign }: CapacityAutomationPr
   const warningAlerts = alerts.filter((a) => a.severity === "warning");
 
   return (
-    <Card className="bg-zinc-900 border-[#1A1A1A]">
+    <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg bg-amber-500/20">
-              <Zap className="h-5 w-5 text-amber-400" />
+              <Zap className="h-5 w-5 text-[#1A1A1A]" />
             </div>
             <div>
               <CardTitle className="text-white">Capacity Automation</CardTitle>
@@ -160,7 +160,7 @@ export function CapacityAutomation({ brokers, onReassign }: CapacityAutomationPr
               <Switch
                 checked={autoReassign}
                 onCheckedChange={setAutoReassign}
-                className="data-[state=checked]:bg-gold"
+                className="data-[state=checked]:bg-[#EFE6D6]"
               />
             </div>
             <Button
@@ -184,19 +184,19 @@ export function CapacityAutomation({ brokers, onReassign }: CapacityAutomationPr
       <CardContent className="space-y-4">
         {/* Status Summary */}
         <div className="grid grid-cols-3 gap-4">
-          <div className="bg-zinc-800 rounded-lg p-4 text-center">
+          <div className="bg-[#1A1A1A] rounded-lg p-4 text-center">
             <p className="text-[#1A1A1A]/70 text-xs mb-1">ACTIVE BROKERS</p>
             <p className="text-white text-2xl font-bold">
               {brokers.filter((b) => b.status === "active").length}
             </p>
           </div>
-          <div className="bg-zinc-800 rounded-lg p-4 text-center">
-            <p className="text-amber-400 text-xs mb-1">WARNINGS</p>
-            <p className="text-amber-400 text-2xl font-bold">
+          <div className="bg-[#1A1A1A] rounded-lg p-4 text-center">
+            <p className="text-[#1A1A1A] text-xs mb-1">WARNINGS</p>
+            <p className="text-[#1A1A1A] text-2xl font-bold">
               {warningAlerts.length}
             </p>
           </div>
-          <div className="bg-zinc-800 rounded-lg p-4 text-center">
+          <div className="bg-[#1A1A1A] rounded-lg p-4 text-center">
             <p className="text-red-400 text-xs mb-1">CRITICAL</p>
             <p className="text-red-400 text-2xl font-bold">
               {criticalAlerts.length}
@@ -208,7 +208,7 @@ export function CapacityAutomation({ brokers, onReassign }: CapacityAutomationPr
         {alerts.length > 0 ? (
           <div className="space-y-3">
             <h4 className="text-white font-medium flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4 text-amber-400" />
+              <AlertTriangle className="h-4 w-4 text-[#1A1A1A]" />
               Capacity Alerts
             </h4>
 
@@ -230,7 +230,7 @@ export function CapacityAutomation({ brokers, onReassign }: CapacityAutomationPr
                         className={
                           alert.severity === "critical"
                             ? "bg-red-500/20 text-red-400 border-red-500/30"
-                            : "bg-amber-500/20 text-amber-400 border-amber-500/30"
+                            : "bg-amber-500/20 text-[#1A1A1A] border-amber-500/30"
                         }
                       >
                         {alert.severity === "critical" ? "CRITICAL" : "WARNING"}
@@ -252,7 +252,7 @@ export function CapacityAutomation({ brokers, onReassign }: CapacityAutomationPr
                           size="sm"
                           onClick={() => handleAutoReassign(alert)}
                           disabled={reassigning === alert.brokerId}
-                          className="bg-gold hover:bg-gold-dark text-[#1A1A1A]"
+                          className="bg-[#EFE6D6] hover:bg-[#EFE6D6]-dark text-[#1A1A1A]"
                         >
                           {reassigning === alert.brokerId ? (
                             <RefreshCw className="h-4 w-4 animate-spin mr-2" />
@@ -284,7 +284,7 @@ export function CapacityAutomation({ brokers, onReassign }: CapacityAutomationPr
         )}
 
         {/* Default Capacity Info */}
-        <div className="mt-4 p-4 bg-zinc-800/50 rounded-lg border border-[#1A1A1A]">
+        <div className="mt-4 p-4 bg-[#1A1A1A]/50 rounded-lg border border-[#1A1A1A]">
           <div className="flex items-center gap-2 text-[#1A1A1A]/70 text-sm">
             <Settings className="h-4 w-4" />
             <span>

@@ -24,7 +24,7 @@ const ChatCVConfirmation = ({ userFirstName, onStartNewChat, onGoToShortcuts }: 
       <div className="space-y-3 w-full max-w-xs">
         <Button
           onClick={onGoToShortcuts}
-          className="w-full bg-gold hover:bg-gold-light hover:shadow-[0_6px_20px_rgba(200,167,102,0.5)] text-[#1A1A1A] font-bold py-3 rounded-xl transition-all duration-200"
+          className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]-light hover:shadow-[0_6px_20px_rgba(200,167,102,0.5)] text-[#1A1A1A] font-bold py-3 rounded-xl transition-all duration-200"
         >
           <Home className="w-5 h-5 mr-2" />
           <T>Back to Main Menu</T>

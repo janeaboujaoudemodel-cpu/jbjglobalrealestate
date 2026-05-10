@@ -156,7 +156,7 @@ ${response.script}
                     placeholder="Sunset Bay Residences"
                     value={formData.propertyName}
                     onChange={(e) => handleChange("propertyName", e.target.value)}
-                    className="bg-zinc-900/50 border-pink-500/30 text-white hover:border-pink-500/50 focus:border-pink-400 transition-colors"
+                    className="bg-[#FDFBF7]/50 border-pink-500/30 text-white hover:border-pink-500/50 focus:border-pink-400 transition-colors"
                   />
                 </div>
                 <div className="space-y-2">
@@ -165,7 +165,7 @@ ${response.script}
                     placeholder="Palm Jumeirah, Dubai"
                     value={formData.location}
                     onChange={(e) => handleChange("location", e.target.value)}
-                    className="bg-zinc-900/50 border-pink-500/30 text-white hover:border-pink-500/50 focus:border-pink-400 transition-colors"
+                    className="bg-[#FDFBF7]/50 border-pink-500/30 text-white hover:border-pink-500/50 focus:border-pink-400 transition-colors"
                   />
                 </div>
               </div>
@@ -181,7 +181,7 @@ ${response.script}
                       className={`p-2 rounded-lg border text-center transition-all ${
                         formData.targetAudience === audience.value
                           ? "bg-pink-500/20 border-pink-500/50 text-white"
-                          : "bg-zinc-800 border-[#1A1A1A] text-white/70 hover:border-[#1A1A1A]"
+                          : "bg-[#1A1A1A] border-[#1A1A1A] text-white/70 hover:border-[#1A1A1A]"
                       }`}
                     >
                       <span className="text-xs font-medium">{audience.label}</span>
@@ -240,7 +240,7 @@ ${response.script}
                   placeholder="Bedrooms, features, views, amenities, unique selling points..."
                   value={formData.propertyDetails}
                   onChange={(e) => handleChange("propertyDetails", e.target.value)}
-                  className="bg-zinc-900/50 border-pink-500/30 text-white hover:border-pink-500/50 focus:border-pink-400 transition-colors min-h-[100px]"
+                  className="bg-[#FDFBF7]/50 border-pink-500/30 text-white hover:border-pink-500/50 focus:border-pink-400 transition-colors min-h-[100px]"
                 />
               </div>
 
@@ -314,7 +314,7 @@ ${response.script}
                         </Button>
                       </div>
                     </div>
-                    <div className="bg-zinc-800/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[400px] overflow-y-auto">
+                    <div className="bg-[#1A1A1A]/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[400px] overflow-y-auto">
                       {response.script}
                     </div>
                   </CardContent>

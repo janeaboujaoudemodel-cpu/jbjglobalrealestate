@@ -186,7 +186,7 @@ const News = () => {
               </div>
             </div>
             <div className="w-full bg-[#EFE6D6] rounded-full h-2">
-              <div className="bg-zinc-400 rounded-full h-2" style={{ width: `${secondaryPct}%` }} />
+              <div className="bg-[#B89555] rounded-full h-2" style={{ width: `${secondaryPct}%` }} />
             </div>
           </div>
         </div>
@@ -217,7 +217,7 @@ const News = () => {
               </div>
             </div>
             <div className="w-full bg-[#EFE6D6] rounded-full h-2">
-              <div className="bg-zinc-400 rounded-full h-2" style={{ width: `${mortgagePct}%` }} />
+              <div className="bg-[#B89555] rounded-full h-2" style={{ width: `${mortgagePct}%` }} />
             </div>
           </div>
         </div>

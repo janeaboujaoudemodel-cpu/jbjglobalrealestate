@@ -167,13 +167,13 @@ export default function LeadIntentModal() {
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
-            className="w-full max-w-lg bg-zinc-900 border border-[#1A1A1A] rounded-2xl overflow-hidden relative"
+            className="w-full max-w-lg bg-[#FDFBF7] border border-[#1A1A1A] rounded-2xl overflow-hidden relative"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close button */}
             <button
               onClick={handleSkip}
-              className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-zinc-800 hover:bg-[#1A1A1A] text-white/70 hover:text-white transition-colors"
+              className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white/70 hover:text-white transition-colors"
               aria-label="Close"
             >
               <X className="w-4 h-4" />
@@ -202,23 +202,23 @@ export default function LeadIntentModal() {
                     onClick={() => toggleIntent(option.id)}
                     className={`w-full p-4 rounded-xl border transition-all text-left flex items-start gap-4 ${
                       isSelected
-                        ? "border-gold bg-gold/10"
-                        : "border-[#1A1A1A] bg-zinc-800/50 hover:border-[#1A1A1A]"
+                        ? "border-[#B89555] bg-[#EFE6D6]/10"
+                        : "border-[#1A1A1A] bg-[#1A1A1A]/50 hover:border-[#1A1A1A]"
                     }`}
                   >
                     <div
                       className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                        isSelected ? "bg-gold text-[#1A1A1A]" : "bg-zinc-700 text-white/85"
+                        isSelected ? "bg-[#EFE6D6] text-[#1A1A1A]" : "bg-[#1A1A1A] text-white/85"
                       }`}
                     >
                       <option.icon className="w-5 h-5" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
-                        <span className={`font-medium ${isSelected ? "text-gold" : "text-white"}`}>
+                        <span className={`font-medium ${isSelected ? "text-[#1A1A1A]" : "text-white"}`}>
                           {option.label}
                         </span>
-                        {isSelected && <Check className="w-5 h-5 text-gold" />}
+                        {isSelected && <Check className="w-5 h-5 text-[#1A1A1A]" />}
                       </div>
                       <p className="text-white/90 text-sm mt-0.5">{option.description}</p>
                     </div>
@@ -233,7 +233,7 @@ export default function LeadIntentModal() {
                 <Checkbox
                   checked={marketingConsent}
                   onCheckedChange={(checked) => setMarketingConsent(checked === true)}
-                  className="mt-0.5 border-[#1A1A1A] data-[state=checked]:bg-gold data-[state=checked]:border-gold"
+                  className="mt-0.5 border-[#1A1A1A] data-[state=checked]:bg-[#EFE6D6] data-[state=checked]:border-[#B89555]"
                 />
                 <span className="text-white/70 text-sm leading-relaxed">
                   I agree to receive updates, property alerts, and marketing communications from JBJ Global Real Estate. 

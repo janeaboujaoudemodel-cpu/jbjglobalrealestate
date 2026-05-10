@@ -252,10 +252,10 @@ const MortgageCalculator = ({
     <div className="bg-card border border-border rounded-2xl overflow-hidden shadow-lg">
       {/* Header - Gold Premium Style - Centered & Bigger */}
       {!compact && (
-        <div className="bg-gradient-to-r from-gold/20 via-gold/10 to-gold/20 border-b border-gold/30 p-6 lg:p-8">
+        <div className="bg-gradient-to-r from-gold/20 via-gold/10 to-gold/20 border-b border-[#B89555]/30 p-6 lg:p-8">
           <div className="flex flex-col items-center text-center">
-            <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-xl bg-gradient-to-br from-gold/30 to-gold/10 border border-gold/30 flex items-center justify-center mb-4">
-              <Calculator className="w-7 h-7 lg:w-8 lg:h-8 text-gold" />
+            <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-xl bg-gradient-to-br from-gold/30 to-gold/10 border border-[#B89555]/30 flex items-center justify-center mb-4">
+              <Calculator className="w-7 h-7 lg:w-8 lg:h-8 text-[#1A1A1A]" />
             </div>
             <h3 className="text-2xl lg:text-3xl font-bold text-foreground">
               Mortgage Calculator
@@ -273,16 +273,16 @@ const MortgageCalculator = ({
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <Label className="text-foreground flex items-center gap-2">
-                  <DollarSign className="w-4 h-4 text-gold" />
+                  <DollarSign className="w-4 h-4 text-[#1A1A1A]" />
                   Property Price
                 </Label>
-                <span className="text-gold font-semibold">{formatCurrency(propertyPrice)}</span>
+                <span className="text-[#1A1A1A] font-semibold">{formatCurrency(propertyPrice)}</span>
               </div>
               <Input
                 type="text"
                 value={formatNumberWithCommas(propertyPrice)}
                 onChange={(e) => setPropertyPrice(parseFormattedNumber(e.target.value))}
-                className="bg-background border-border text-foreground focus:border-gold"
+                className="bg-background border-border text-foreground focus:border-[#B89555]"
               />
               <div className="py-4">
                 <Slider
@@ -304,7 +304,7 @@ const MortgageCalculator = ({
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <Label className="text-foreground flex items-center gap-2">
-                  <Percent className="w-4 h-4 text-gold" />
+                  <Percent className="w-4 h-4 text-[#1A1A1A]" />
                   Down Payment
                   <TooltipProvider>
                     <Tooltip>
@@ -317,7 +317,7 @@ const MortgageCalculator = ({
                     </Tooltip>
                   </TooltipProvider>
                 </Label>
-                <span className="text-gold font-semibold">{downPaymentPercent}%</span>
+                <span className="text-[#1A1A1A] font-semibold">{downPaymentPercent}%</span>
               </div>
               <div className="py-4">
                 <Slider
@@ -340,10 +340,10 @@ const MortgageCalculator = ({
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <Label className="text-foreground flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4 text-gold" />
+                  <TrendingUp className="w-4 h-4 text-[#1A1A1A]" />
                   Interest Rate (Annual)
                 </Label>
-                <span className="text-gold font-semibold">{interestRate}%</span>
+                <span className="text-[#1A1A1A] font-semibold">{interestRate}%</span>
               </div>
               <div className="py-4">
                 <Slider
@@ -365,10 +365,10 @@ const MortgageCalculator = ({
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <Label className="text-foreground flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-gold" />
+                  <Calendar className="w-4 h-4 text-[#1A1A1A]" />
                   Loan Term
                 </Label>
-                <span className="text-gold font-semibold">{loanTermYears} Years</span>
+                <span className="text-[#1A1A1A] font-semibold">{loanTermYears} Years</span>
               </div>
               <div className="py-4">
                 <Slider
@@ -390,10 +390,10 @@ const MortgageCalculator = ({
           {/* Results Section */}
           <div className="space-y-4 lg:space-y-6">
             {/* Monthly Payment - Featured Gold Style - Responsive sizing */}
-            <div className="bg-gradient-to-br from-gold/20 via-gold/10 to-transparent border border-gold/30 rounded-xl p-3 lg:p-6 text-center">
+            <div className="bg-gradient-to-br from-gold/20 via-gold/10 to-transparent border border-[#B89555]/30 rounded-xl p-3 lg:p-6 text-center">
               <p className="text-muted-foreground text-xs lg:text-sm mb-1 lg:mb-2">Estimated Monthly Payment</p>
               <p 
-                className="text-xl sm:text-2xl lg:text-4xl xl:text-5xl font-bold text-gold break-words"
+                className="text-xl sm:text-2xl lg:text-4xl xl:text-5xl font-bold text-[#1A1A1A] break-words"
               >
                 {formatCurrency(calculations.monthlyPayment)}
               </p>
@@ -402,44 +402,44 @@ const MortgageCalculator = ({
 
             {/* 6 Champagne Summary Cards - 3x2 Grid */}
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-5">
-              <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0">
+              <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0">
                 <div className="w-8 h-8 mx-auto mb-2 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
-                  <Building2 className="w-4 h-4 text-gold" />
+                  <Building2 className="w-4 h-4 text-[#1A1A1A]" />
                 </div>
                 <p className="text-[#1A1A1A]/60 text-[10px] lg:text-xs mb-2 uppercase tracking-wider">Property Price (100%)</p>
                 <p className="text-[#1A1A1A] font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap">{formatCurrency(propertyPrice)}</p>
               </div>
-              <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0">
+              <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0">
                 <div className="w-8 h-8 mx-auto mb-2 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
-                  <Percent className="w-4 h-4 text-gold" />
+                  <Percent className="w-4 h-4 text-[#1A1A1A]" />
                 </div>
                 <p className="text-[#1A1A1A]/60 text-[10px] lg:text-xs mb-2 uppercase tracking-wider">Down Payment ({downPaymentPercent}%)</p>
                 <p className="text-[#1A1A1A] font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap">{formatCurrency(calculations.downPayment)}</p>
               </div>
-              <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0">
+              <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0">
                 <div className="w-8 h-8 mx-auto mb-2 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
-                  <DollarSign className="w-4 h-4 text-gold" />
+                  <DollarSign className="w-4 h-4 text-[#1A1A1A]" />
                 </div>
                 <p className="text-[#1A1A1A]/60 text-[10px] lg:text-xs mb-2 uppercase tracking-wider">Loan Amount ({100 - downPaymentPercent}%)</p>
                 <p className="text-[#1A1A1A] font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap">{formatCurrency(calculations.loanAmount)}</p>
               </div>
-              <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0">
+              <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0">
                 <div className="w-8 h-8 mx-auto mb-2 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
-                  <Calculator className="w-4 h-4 text-gold" />
+                  <Calculator className="w-4 h-4 text-[#1A1A1A]" />
                 </div>
                 <p className="text-[#1A1A1A]/60 text-[10px] lg:text-xs mb-2 uppercase tracking-wider">Monthly Payment</p>
                 <p className="text-[#1A1A1A] font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap">{formatCurrency(calculations.monthlyPayment)}</p>
               </div>
-              <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0">
+              <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0">
                 <div className="w-8 h-8 mx-auto mb-2 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
-                  <TrendingUp className="w-4 h-4 text-gold" />
+                  <TrendingUp className="w-4 h-4 text-[#1A1A1A]" />
                 </div>
                 <p className="text-[#1A1A1A]/60 text-[10px] lg:text-xs mb-2 uppercase tracking-wider">Interest ({interestRate}% · {loanTermYears}yr)</p>
                 <p className="text-[#1A1A1A] font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap">{formatCurrency(calculations.totalInterest)}</p>
               </div>
-              <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0">
+              <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0">
                 <div className="w-8 h-8 mx-auto mb-2 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
-                  <Wallet className="w-4 h-4 text-gold" />
+                  <Wallet className="w-4 h-4 text-[#1A1A1A]" />
                 </div>
                 <p className="text-[#1A1A1A]/60 text-[10px] lg:text-xs mb-2 uppercase tracking-wider">Total Cost (All-In)</p>
                 <p className="text-[#1A1A1A] font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap">{formatCurrency(calculations.totalPayment)}</p>
@@ -449,7 +449,7 @@ const MortgageCalculator = ({
             {/* Payment Visualization */}
             <div className="space-y-2 pt-2">
               <p className="text-muted-foreground text-sm">Payment Breakdown</p>
-              <div className="h-4 rounded-full overflow-hidden bg-muted/30 flex border border-gold/20">
+              <div className="h-4 rounded-full overflow-hidden bg-muted/30 flex border border-[#B89555]/20">
                 <div 
                   className="transition-all duration-500"
                   style={{ 
@@ -458,20 +458,20 @@ const MortgageCalculator = ({
                   }}
                 />
                 <div 
-                  className="transition-all duration-500 bg-gold/40"
+                  className="transition-all duration-500 bg-[#EFE6D6]/40"
                   style={{ width: `${(calculations.totalInterest / calculations.totalPayment) * 100}%` }}
                 />
               </div>
               <div className="flex justify-between text-xs">
                 <span className="flex items-center gap-1.5">
                   <span 
-                    className="w-2.5 h-2.5 rounded-full border border-gold/30" 
+                    className="w-2.5 h-2.5 rounded-full border border-[#B89555]/30" 
                     style={{ background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)' }}
                   />
                   <span className="text-muted-foreground">Principal ({((calculations.loanAmount / calculations.totalPayment) * 100).toFixed(0)}%)</span>
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-gold/40 border border-gold/30" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#EFE6D6]/40 border border-[#B89555]/30" />
                   <span className="text-muted-foreground">Interest ({((calculations.totalInterest / calculations.totalPayment) * 100).toFixed(0)}%)</span>
                 </span>
               </div>
@@ -482,7 +482,7 @@ const MortgageCalculator = ({
             </p>
 
             {/* Request Mortgage Introduction CTA */}
-            <div className="mt-6 pt-4 border-t border-gold/20">
+            <div className="mt-6 pt-4 border-t border-[#B89555]/20">
               <p className="text-center text-muted-foreground text-sm mb-3">Prefer a Mortgage Advisor Through Our Licensed Partners?</p>
               <Button 
                 variant="primary" 

@@ -72,7 +72,7 @@ const ExecutiveAccessGate = ({ children }: ExecutiveAccessGateProps) => {
     return (
       <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
         <div className="text-center">
-          <Shield className="w-12 h-12 text-gold animate-pulse mx-auto mb-4" />
+          <Shield className="w-12 h-12 text-[#1A1A1A] animate-pulse mx-auto mb-4" />
           <p className="text-white/70">Verifying executive access...</p>
         </div>
       </div>
@@ -103,7 +103,7 @@ const ExecutiveAccessGate = ({ children }: ExecutiveAccessGateProps) => {
           </div>
           <Button
             onClick={() => navigate("/")}
-            className="bg-gold hover:bg-gold/90 text-[#1A1A1A]"
+            className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]"
           >
             Return to Home
           </Button>

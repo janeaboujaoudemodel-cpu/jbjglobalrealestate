@@ -98,7 +98,7 @@ export function AdminNotificationBell() {
         <Button
           variant="ghost"
           size="icon"
-          className="relative text-[#1A1A1A] hover:text-gold hover:bg-gold/10 h-9 w-9"
+          className="relative text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10 h-9 w-9"
         >
           <Bell className="h-4 w-4" />
           {unreadCount > 0 && (
@@ -109,13 +109,13 @@ export function AdminNotificationBell() {
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-96 p-0 bg-[#FDFBF7] border-2 border-gold/30 shadow-xl"
+        className="w-96 p-0 bg-[#FDFBF7] border-2 border-[#B89555]/30 shadow-xl"
         align="end"
         sideOffset={8}
       >
-        <div className="flex items-center justify-between p-3 border-b border-gold/20 bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA]">
+        <div className="flex items-center justify-between p-3 border-b border-[#B89555]/20 bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA]">
           <h3 className="text-[#1A1A1A] font-semibold text-sm flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4 text-gold" />
+            <AlertTriangle className="w-4 h-4 text-[#1A1A1A]" />
             System Alerts
           </h3>
           {alerts.length > 0 && (
@@ -140,7 +140,7 @@ export function AdminNotificationBell() {
           ) : (
             <div className="divide-y divide-gold/10">
               {alerts.map((alert) => (
-                <div key={alert.id} className="p-3 hover:bg-gold/5 transition-colors">
+                <div key={alert.id} className="p-3 hover:bg-[#EFE6D6]/5 transition-colors">
                   <div className="flex items-start gap-2">
                     <XCircle className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
                     <div className="flex-1 min-w-0">
@@ -165,7 +165,7 @@ export function AdminNotificationBell() {
                       </div>
                       
                       {/* Fix action */}
-                      <div className="mt-1.5 flex items-center gap-1 text-xs text-gold">
+                      <div className="mt-1.5 flex items-center gap-1 text-xs text-[#1A1A1A]">
                         <Wrench className="w-3 h-3" />
                         <span>{alert.fixAction}</span>
                       </div>

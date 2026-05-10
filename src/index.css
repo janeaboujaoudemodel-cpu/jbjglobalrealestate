@@ -255,7 +255,7 @@ All colors MUST be HSL.
  * rebind theme tokens. Any descendant using semantic classes
  * (bg-card, text-foreground, text-muted-foreground, border-border,
  * bg-muted, etc.) will adapt automatically — eliminating the need
- * to hardcode `text-gold`/`text-black` on `bg-black` and similar.
+ * to hardcode `text-[#1A1A1A]`/`text-black` on `bg-black` and similar.
  * ============================================================ */
 @layer base {
   .surface-light {
@@ -353,8 +353,8 @@ All colors MUST be HSL.
   }
 
   /* Fix faded gold opacity text */
-  [class*="text-gold\/6"],
-  [class*="text-gold\/7"] {
+  [class*="text-[#1A1A1A]\/6"],
+  [class*="text-[#1A1A1A]\/7"] {
     color: hsl(0 0% 10%) !important;
   }
 
@@ -414,7 +414,7 @@ All colors MUST be HSL.
   .bg-black > svg,
   .bg-neutral-900 > svg,
   .bg-gray-900 > svg,
-  .bg-zinc-900 > svg,
+  .bg-[#FDFBF7] > svg,
   .bg-stone-900 > svg,
   [class*="bg-black"] > svg.lucide,
   .jj-icon-keep > svg {
@@ -485,9 +485,9 @@ All colors MUST be HSL.
   }
 
   /* Icons sitting directly on white/very-light cards must never be white */
-  :where(.bg-white, .bg-card, .bg-background, .bg-gray-50, .bg-zinc-50, .bg-neutral-50)
+  :where(.bg-white, .bg-card, .bg-background, .bg-gray-50, .bg-[#FDFBF7], .bg-neutral-50)
     > svg.lucide.text-white,
-  :where(.bg-white, .bg-card, .bg-background, .bg-gray-50, .bg-zinc-50, .bg-neutral-50)
+  :where(.bg-white, .bg-card, .bg-background, .bg-gray-50, .bg-[#FDFBF7], .bg-neutral-50)
     > svg.lucide[class*="text-white/"] {
     color: hsl(0 0% 12%) !important;
     opacity: 1 !important;
@@ -526,8 +526,8 @@ All colors MUST be HSL.
   .bg-gray-950 svg.lucide,
   .bg-neutral-900 svg.lucide,
   .bg-neutral-950 svg.lucide,
-  .bg-zinc-900 svg.lucide,
-  .bg-zinc-950 svg.lucide,
+  .bg-[#FDFBF7] svg.lucide,
+  .bg-[#FDFBF7] svg.lucide,
   .bg-stone-900 svg.lucide,
   [class*="bg-[#0"] svg.lucide,
   [style*="#0D0D0D"] svg.lucide,
@@ -557,8 +557,8 @@ All colors MUST be HSL.
   .bg-gray-900 .text-gray-600,
   .bg-neutral-900 .text-gray-500,
   .bg-neutral-900 .text-gray-600,
-  .bg-zinc-900 .text-gray-500,
-  .bg-zinc-900 .text-gray-600,
+  .bg-[#FDFBF7] .text-gray-500,
+  .bg-[#FDFBF7] .text-gray-600,
   [class*="bg-[#0"] .text-gray-500,
   [class*="bg-[#0"] .text-gray-600,
   [style*="#0D0D0D"] .text-gray-500,
@@ -599,7 +599,7 @@ All colors MUST be HSL.
   }
 
   /* Mirror of the existing white-on-light guard: black text on dark surfaces */
-  [data-surface="dark"] :is(.text-black, [class*="text-black/"], .text-zinc-900, .text-zinc-950, .text-neutral-900, .text-neutral-950) {
+  [data-surface="dark"] :is(.text-black, [class*="text-black/"], .text-[#1A1A1A], .text-zinc-950, .text-neutral-900, .text-neutral-950) {
     color: hsl(var(--foreground)) !important;
   }
 
@@ -709,7 +709,7 @@ All colors MUST be HSL.
     --surface-icon: 36 33% 43%;
   }
   :where([class*="rounded-"]):is(
-    .bg-black, .bg-zinc-900, .bg-zinc-950, .bg-neutral-900, .bg-neutral-950,
+    .bg-black, .bg-[#FDFBF7], .bg-[#FDFBF7], .bg-neutral-900, .bg-neutral-950,
     .bg-gray-900, .bg-gray-950, .bg-stone-900, .bg-\[\#1A1A1A\], .bg-\[\#1a1a1a\]
   ):not([data-surface]) {
     --surface-bg: 0 0% 10%;
@@ -727,8 +727,8 @@ All colors MUST be HSL.
   [data-surface="champagne"] :is(.text-white, [class*="text-white/"]):not([data-no-contrast-guard]) {
     color: hsl(var(--surface-fg)) !important;
   }
-  [data-surface="ink"] :is(.text-black, [class*="text-black/"], .text-zinc-900, .text-zinc-950, .text-neutral-900, .text-neutral-950):not([data-no-contrast-guard]),
-  [data-surface="gold"] :is(.text-black, [class*="text-black/"], .text-zinc-900, .text-zinc-950, .text-neutral-900, .text-neutral-950):not([data-no-contrast-guard]) {
+  [data-surface="ink"] :is(.text-black, [class*="text-black/"], .text-[#1A1A1A], .text-zinc-950, .text-neutral-900, .text-neutral-950):not([data-no-contrast-guard]),
+  [data-surface="gold"] :is(.text-black, [class*="text-black/"], .text-[#1A1A1A], .text-zinc-950, .text-neutral-900, .text-neutral-950):not([data-no-contrast-guard]) {
     color: hsl(var(--surface-fg)) !important;
   }
 
@@ -900,7 +900,7 @@ All colors MUST be HSL.
   /* ============================================================
    * GLOBAL TAB TRIGGER ACTIVE STATE (CHAMPAGNE GRADIENT)
    * Use: className="tab-trigger-champagne text-black"
-   * Replaces: data-[state=active]:bg-gold
+   * Replaces: data-[state=active]:bg-[#EFE6D6]
    * ============================================================ */
   .tab-trigger-champagne[data-state="active"] {
     background: linear-gradient(135deg, #F5F5F5 0%, #FAFAFA 50%, #FFFFFF 100%);
@@ -1619,7 +1619,7 @@ All colors MUST be HSL.
   .jj-profile-card .jj-profile-image {
     object-fit: contain !important;
     object-position: center 15% !important;
-    @apply rounded-full bg-zinc-950;
+    @apply rounded-full bg-[#FDFBF7];
   }
   
   .jj-profile-card .jj-profile-name {
@@ -1873,11 +1873,11 @@ All colors MUST be HSL.
    * ============================================================ */
   
   .jj-premium-surface {
-    @apply bg-zinc-950 border border-zinc-800/50;
+    @apply bg-[#FDFBF7] border border-[#B89555]/30/50;
   }
   
   .jj-premium-card {
-    @apply bg-zinc-900/80 border border-zinc-800/60 rounded-xl;
+    @apply bg-[#FDFBF7]/80 border border-[#B89555]/30/60 rounded-xl;
     padding: 2rem; /* 32px - card internal padding */
   }
   
@@ -1899,7 +1899,7 @@ All colors MUST be HSL.
   }
   
   .filter-chip-inactive {
-    @apply bg-zinc-900 text-zinc-300 hover:bg-zinc-800 border border-zinc-800;
+    @apply bg-[#FDFBF7] text-[#1A1A1A]/80 hover:bg-[#1A1A1A] border border-[#B89555]/30;
   }
 
   /* Services section background — monochrome */
@@ -2309,12 +2309,12 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
 /* Dark theme variant for SelectTrigger */
 [data-radix-select-trigger].dark-select,
 .dark-select-trigger {
-  @apply bg-zinc-800 border-white/10 text-white;
+  @apply bg-[#1A1A1A] border-white/10 text-white;
 }
 
 /* Dark theme variant for SelectContent */
 [data-radix-select-content].dark-select-content {
-  @apply bg-zinc-800 border-white/10 text-white;
+  @apply bg-[#1A1A1A] border-white/10 text-white;
   box-shadow: 0 10px 40px rgba(0,0,0,0.5);
 }
 
@@ -2537,7 +2537,7 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
  *
  *   1. Icons inside SOLID-INK tiles  → white
  *   2. Icons inside SOLID-GOLD tiles → white
- *   3. Faded gold text (text-gold/05..50) on default surface
+ *   3. Faded gold text (text-[#1A1A1A]/05..50) on default surface
  *      → upgrade to ink #1A1A1A so it stays readable
  *      (matches the "Faded Gold Prohibition" memory rule)
  * ============================================================ */
@@ -2549,7 +2549,7 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
    on champagne (#F7F2EA) surfaces. We use [class~="…"] which matches the bare
    class as a whole word, EXCLUDING any /<alpha> suffix. */
 .bg-black > svg,
-.bg-zinc-900 > svg, .bg-zinc-950 > svg,
+.bg-[#FDFBF7] > svg, .bg-[#FDFBF7] > svg,
 .bg-neutral-900 > svg, .bg-neutral-950 > svg,
 .bg-gray-900 > svg, .bg-gray-950 > svg,
 .bg-stone-900 > svg, .bg-stone-950 > svg,
@@ -2563,7 +2563,7 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
 
 /* 2. Icons on SOLID-gold tiles → white. Same exact-token logic as above so
    translucent gold tiles (bg-[#B89555]/10, /15…) keep their authored gold icon. */
-.bg-gold > svg,
+.bg-[#EFE6D6] > svg,
 [class~="bg-[#B89555]"] > svg,
 [class~="bg-[#A68444]"] > svg,
 [class~="bg-[#C8A766]"] > svg {
@@ -2573,12 +2573,12 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
 /* 3. Faded gold text on default (champagne) surface → solid ink.
    Dark surfaces are exempt; their own block (data-surface="dark") wins. */
 :root:not(.dark) :is(:not([data-surface="dark"])) :is(
-  [class*="text-gold\/0"],
-  [class*="text-gold\/1"],
-  [class*="text-gold\/2"],
-  [class*="text-gold\/3"],
-  [class*="text-gold\/4"],
-  [class*="text-gold\/5"]
+  [class*="text-[#1A1A1A]\/0"],
+  [class*="text-[#1A1A1A]\/1"],
+  [class*="text-[#1A1A1A]\/2"],
+  [class*="text-[#1A1A1A]\/3"],
+  [class*="text-[#1A1A1A]\/4"],
+  [class*="text-[#1A1A1A]\/5"]
 ) {
   color: #1A1A1A !important;
 }
@@ -2616,7 +2616,7 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
   .bg-gray-50, .bg-gray-100,
   .jj-layer-2, .jj-layer-1,
   [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"]
-):not([data-surface="dark"]) :is(.text-gray-300, .text-gray-400, .text-zinc-300, .text-zinc-400) {
+):not([data-surface="dark"]) :is(.text-gray-300, .text-gray-400, .text-[#1A1A1A]\/80, .text-[#1A1A1A]\/70) {
   color: #6b7280 !important; /* gray-500 — 4.6:1 on white */
   opacity: 1 !important;
   --tw-text-opacity: 1 !important;
@@ -2628,7 +2628,7 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
   .bg-gray-50, .bg-gray-100,
   .jj-layer-2, .jj-layer-1,
   [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"]
-):not([data-surface="dark"]) :is(.text-gray-500, .text-zinc-500, .text-gray-600, .text-zinc-600) {
+):not([data-surface="dark"]) :is(.text-gray-500, .text-[#1A1A1A]\/60, .text-gray-600, .text-[#1A1A1A]\/70) {
   color: #374151 !important; /* gray-700 — 9.7:1 on white */
   opacity: 1 !important;
   --tw-text-opacity: 1 !important;
@@ -2645,7 +2645,7 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
   [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#F7F1E6]"],
   [class*="bg-[#FFFFFF]"]
 ):not([data-surface="dark"])
-:is(.text-white, [class*="text-white/"]):not(.bg-black):not([class*="bg-black"]):not(.bg-gold):not([class*="bg-gold"]):not(.bg-primary):not([class*="bg-primary"]):not([class*="bg-gray-900"]):not([class*="bg-gray-800"]):not([data-surface="dark"]) {
+:is(.text-white, [class*="text-white/"]):not(.bg-black):not([class*="bg-black"]):not(.bg-[#EFE6D6]):not([class*="bg-[#EFE6D6]"]):not(.bg-primary):not([class*="bg-primary"]):not([class*="bg-gray-900"]):not([class*="bg-gray-800"]):not([data-surface="dark"]) {
   color: hsl(var(--foreground)) !important;
   opacity: 1 !important;
   --tw-text-opacity: 1 !important;
@@ -2666,7 +2666,7 @@ html [data-surface="dark"] :is(h1, h2, h3, h4, h5, h6, p, span, a, label, div, b
 :root:not(.dark) :is(
   .bg-black, [class*="bg-black"],
   .bg-gray-800, .bg-gray-900, .bg-gray-950,
-  .bg-zinc-800, .bg-zinc-900, .bg-zinc-950,
+  .bg-[#1A1A1A], .bg-[#FDFBF7], .bg-[#FDFBF7],
   .bg-slate-800, .bg-slate-900, .bg-slate-950,
   .bg-neutral-800, .bg-neutral-900, .bg-neutral-950,
   .bg-primary, .bg-foreground,
@@ -2682,11 +2682,11 @@ html [data-surface="dark"] :is(h1, h2, h3, h4, h5, h6, p, span, a, label, div, b
 :root:not(.dark) :is(
   .bg-black, [class*="bg-black"],
   .bg-gray-800, .bg-gray-900, .bg-gray-950,
-  .bg-zinc-800, .bg-zinc-900, .bg-zinc-950,
+  .bg-[#1A1A1A], .bg-[#FDFBF7], .bg-[#FDFBF7],
   .bg-slate-900, .bg-slate-950,
   .bg-primary, .bg-foreground,
   [data-surface="dark"]
-) :is(.text-gold, [class*="text-gold/"], svg.text-gold, svg[class*="text-gold"]) {
+) :is(.text-[#1A1A1A], [class*="text-[#1A1A1A]/"], svg.text-[#1A1A1A], svg[class*="text-[#1A1A1A]"]) {
   color: hsl(var(--gold)) !important;
   opacity: 1 !important;
 }
@@ -2716,7 +2716,7 @@ html [data-surface="dark"][data-surface="dark"] :is(input, textarea, select, opt
 /* Dark surface selector */
 :where(
   .bg-black, .bg-primary, .bg-foreground,
-  .bg-zinc-800, .bg-zinc-900, .bg-zinc-950,
+  .bg-[#1A1A1A], .bg-[#FDFBF7], .bg-[#FDFBF7],
   .bg-gray-800, .bg-gray-900, .bg-gray-950,
   .bg-slate-800, .bg-slate-900, .bg-slate-950,
   [class*="bg-black"],
@@ -2728,13 +2728,13 @@ html [data-surface="dark"][data-surface="dark"] :is(input, textarea, select, opt
 
 /* 2a. Low-contrast grays on dark → readable white */
 :where(
-  .bg-black, .bg-zinc-900, .bg-zinc-950, .bg-gray-900, .bg-gray-950,
-  .bg-gray-800, .bg-zinc-800, .bg-slate-900,
+  .bg-black, .bg-[#FDFBF7], .bg-[#FDFBF7], .bg-gray-900, .bg-gray-950,
+  .bg-gray-800, .bg-[#1A1A1A], .bg-slate-900,
   [class*="bg-black"],
   [class*="from-[hsl(32,28%,13%)]"], [class*="bg-[hsl(32,28%,13%)]"],
   [class*="from-[hsl(38,35%,12%)]"], [class*="bg-[hsl(38,35%,12%)]"]
 ) :is(
-  .text-gray-400, .text-gray-500, .text-zinc-400, .text-zinc-500,
+  .text-gray-400, .text-gray-500, .text-[#1A1A1A]\/70, .text-[#1A1A1A]\/60,
   .text-slate-400, .text-slate-500
 ) {
   color: rgb(255 255 255 / 0.78) !important;
@@ -2744,11 +2744,11 @@ html [data-surface="dark"][data-surface="dark"] :is(input, textarea, select, opt
 
 /* 2b. Darker grays on dark surfaces → bright white */
 :where(
-  .bg-black, .bg-zinc-900, .bg-zinc-950, .bg-gray-900, .bg-gray-950,
+  .bg-black, .bg-[#FDFBF7], .bg-[#FDFBF7], .bg-gray-900, .bg-gray-950,
   [class*="bg-black"]
 ) :is(
   .text-gray-600, .text-gray-700, .text-gray-800, .text-gray-900,
-  .text-zinc-600, .text-zinc-700, .text-zinc-800,
+  .text-[#1A1A1A]\/70, .text-[#1A1A1A]\/80, .text-[#1A1A1A],
   .text-black, .text-foreground, .text-muted-foreground
 ) {
   color: rgb(255 255 255 / 0.92) !important;
@@ -2758,45 +2758,45 @@ html [data-surface="dark"][data-surface="dark"] :is(input, textarea, select, opt
 
 /* 2c. Borders on dark surfaces — visible */
 :where(
-  .bg-black, .bg-zinc-900, .bg-zinc-950, .bg-gray-900, .bg-gray-950
-) :is(.border-gray-700, .border-zinc-700, .border-gray-800, .border-zinc-800) {
+  .bg-black, .bg-[#FDFBF7], .bg-[#FDFBF7], .bg-gray-900, .bg-gray-950
+) :is(.border-gray-700, .border-[#B89555]\/30, .border-gray-800, .border-[#B89555]\/30) {
   border-color: rgb(255 255 255 / 0.18) !important;
 }
 
 /* 2d. Dialogs & modals on dark backgrounds */
-.dark [role="dialog"] :is(.text-gray-400, .text-gray-500, .text-zinc-400, .text-zinc-500) {
+.dark [role="dialog"] :is(.text-gray-400, .text-gray-500, .text-[#1A1A1A]\/70, .text-[#1A1A1A]\/60) {
   color: rgb(255 255 255 / 0.78) !important;
 }
 
 /* ── 3. Gold accent text preserved on dark surfaces ── */
 :where(
-  .bg-black, .bg-zinc-900, .bg-zinc-950, .bg-gray-900,
+  .bg-black, .bg-[#FDFBF7], .bg-[#FDFBF7], .bg-gray-900,
   [class*="from-[hsl(32,28%,13%)]"], [class*="bg-[hsl(32,28%,13%)]"],
   [class*="from-[hsl(38,35%,12%)]"], [class*="bg-[hsl(38,35%,12%)]"]
-) .text-gold,
+) .text-[#1A1A1A],
 :where(
-  .bg-black, .bg-zinc-900, .bg-zinc-950, .bg-gray-900,
+  .bg-black, .bg-[#FDFBF7], .bg-[#FDFBF7], .bg-gray-900,
   [class*="from-[hsl(32,28%,13%)]"], [class*="bg-[hsl(32,28%,13%)]"],
   [class*="from-[hsl(38,35%,12%)]"], [class*="bg-[hsl(38,35%,12%)]"]
-) [class*="text-gold"] {
+) [class*="text-[#1A1A1A]"] {
   color: #C8A766 !important;
 }
 
 /* ── 4. Gold text on gold bg → white ── */
-.bg-gold .text-gold, .bg-gold [class*="text-gold"] {
+.bg-[#EFE6D6] .text-[#1A1A1A], .bg-[#EFE6D6] [class*="text-[#1A1A1A]"] {
   color: #FFFFFF !important;
 }
 
 /* ── 5. Buttons & links on dark/gold backgrounds ── */
 button.bg-black, a.bg-black,
-button.bg-gold, a.bg-gold,
+button.bg-[#EFE6D6], a.bg-[#EFE6D6],
 button[class*="bg-gray-900"], a[class*="bg-gray-900"],
 .bg-black button, .bg-black a {
   color: #FFFFFF !important;
 }
 
 button.bg-black *, a.bg-black *,
-button.bg-gold *, a.bg-gold *,
+button.bg-[#EFE6D6] *, a.bg-[#EFE6D6] *,
 button.bg-black span, a.bg-black span {
   color: inherit !important;
 }
@@ -2830,15 +2830,15 @@ a[class*="bg-gray-900"] *, a[class*="bg-gray-900"] span {
 }
 
 /* Kill gold/champagne text inside ANY button — it's never readable */
-button .text-gold, button [class*="text-gold"],
+button .text-[#1A1A1A], button [class*="text-[#1A1A1A]"],
 button [class*="text-amber"], button [class*="text-yellow"],
-a .text-gold, a [class*="text-gold"] {
+a .text-[#1A1A1A], a [class*="text-[#1A1A1A]"] {
   color: inherit !important;
 }
 
 /* Buttons on light/champagne gradient backgrounds: force black text */
 button[style*="linear-gradient"] *,
-button[style*="background"] [class*="text-gold"] {
+button[style*="background"] [class*="text-[#1A1A1A]"] {
   color: #111111 !important;
   opacity: 1 !important;
 }
@@ -2857,7 +2857,7 @@ button[style*="background"] [class*="text-gold"] {
   [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#F7F1E6]"],
   [class*="bg-[#EFE6D6]"], [class*="bg-[#ECE2D2]"]
 ):not([data-surface="dark"])
-:is(button, a, [role="button"], [role="option"], [role="menuitem"], label, span, p, h1, h2, h3, h4, h5, h6):is(.text-white, [class*="text-white/"]):not(.bg-black):not([class~="bg-[#1A1A1A]"]):not(.bg-gold):not([class~="bg-[#B89555]"]):not([class*="bg-red-5"]):not([class*="bg-red-6"]):not([class*="bg-red-7"]):not([class*="bg-emerald-6"]):not([class*="bg-blue-6"]):not([data-surface="dark"]):not([data-surface="dark"] *):not(.jj-hero-fullscreen *) {
+:is(button, a, [role="button"], [role="option"], [role="menuitem"], label, span, p, h1, h2, h3, h4, h5, h6):is(.text-white, [class*="text-white/"]):not(.bg-black):not([class~="bg-[#1A1A1A]"]):not(.bg-[#EFE6D6]):not([class~="bg-[#B89555]"]):not([class*="bg-red-5"]):not([class*="bg-red-6"]):not([class*="bg-red-7"]):not([class*="bg-emerald-6"]):not([class*="bg-blue-6"]):not([data-surface="dark"]):not([data-surface="dark"] *):not(.jj-hero-fullscreen *) {
   color: hsl(var(--foreground)) !important;
   --tw-text-opacity: 1 !important;
 }
@@ -2904,17 +2904,17 @@ button[style*="background"] [class*="text-gold"] {
 }
 
 /* Gold / champagne / amber accents → bright amber on dark */
-[data-surface="dark"] .text-gold,
-[data-surface="dark"] [class*="text-gold\/"],
-[data-surface="dark"] [class*="text-gold/"],
+[data-surface="dark"] .text-[#1A1A1A],
+[data-surface="dark"] [class*="text-[#1A1A1A]\/"],
+[data-surface="dark"] [class*="text-[#1A1A1A]/"],
 [data-surface="dark"] [class*="text-[#D4AF37]"],
 [data-surface="dark"] [class*="text-[#C8A766]"],
 [data-surface="dark"] [class*="text-[#F5E6C8]"],
 [data-surface="dark"] [class*="text-[#E8D5A8]"],
 [data-surface="dark"] [class*="text-amber-"],
 [data-surface="dark"] [class*="text-yellow-"],
-.on-dark .text-gold,
-.on-dark [class*="text-gold/"],
+.on-dark .text-[#1A1A1A],
+.on-dark [class*="text-[#1A1A1A]/"],
 .on-dark [class*="text-amber-"] {
   color: #FDE68A !important;
   opacity: 1 !important;
@@ -2937,8 +2937,8 @@ button[style*="background"] [class*="text-gold"] {
 }
 
 /* SVG icons inside dark surfaces */
-[data-surface="dark"] svg.text-gold,
-[data-surface="dark"] svg[class*="text-gold"],
+[data-surface="dark"] svg.text-[#1A1A1A],
+[data-surface="dark"] svg[class*="text-[#1A1A1A]"],
 [data-surface="dark"] svg[class*="text-amber"],
 [data-surface="dark"] svg[class*="text-yellow"] {
   color: #FDE68A !important;
@@ -2953,16 +2953,16 @@ button[style*="background"] [class*="text-gold"] {
 }
 
 /* ── Buttons inside dark surfaces ──
-   Override the global "button .text-gold → inherit" and dark-text rules.
+   Override the global "button .text-[#1A1A1A] → inherit" and dark-text rules.
    Ensures hero CTAs (Download Brochure, Register Interest, etc.) keep white
    text on transparent borders and amber on gold accents. */
-[data-surface="dark"] button:not(.bg-white):not([class*="bg-gold"]):not(.bg-gray-100):not(.bg-gray-50),
-[data-surface="dark"] a.btn:not(.bg-white):not([class*="bg-gold"]),
-[data-surface="dark"] [role="button"]:not(.bg-white):not([class*="bg-gold"]) {
+[data-surface="dark"] button:not(.bg-white):not([class*="bg-[#EFE6D6]"]):not(.bg-gray-100):not(.bg-gray-50),
+[data-surface="dark"] a.btn:not(.bg-white):not([class*="bg-[#EFE6D6]"]),
+[data-surface="dark"] [role="button"]:not(.bg-white):not([class*="bg-[#EFE6D6]"]) {
   color: #FFFFFF !important;
 }
 
-[data-surface="dark"] button:not(.bg-white):not([class*="bg-gold"]):not(.bg-gray-100):not(.bg-gray-50) :is(span, svg, p, div),
+[data-surface="dark"] button:not(.bg-white):not([class*="bg-[#EFE6D6]"]):not(.bg-gray-100):not(.bg-gray-50) :is(span, svg, p, div),
 [data-surface="dark"] a.btn :is(span, svg) {
   color: inherit !important;
   opacity: 1 !important;
@@ -3248,7 +3248,7 @@ textarea::placeholder {
 
 /* Explicit light surface override — opt-in via data-surface="light" */
 [data-surface="light"],
-[data-surface="light"] :is(label, h1, h2, h3, h4, h5, h6, p, span, li, a):not([class*="text-white"]):not([class*="text-gold"]):not([class*="text-price"]) {
+[data-surface="light"] :is(label, h1, h2, h3, h4, h5, h6, p, span, li, a):not([class*="text-white"]):not([class*="text-[#1A1A1A]"]):not([class*="text-price"]) {
   color: #111111 !important;
 }
 [data-surface="light"] :is(input, textarea, select) {
@@ -3619,40 +3619,40 @@ button:disabled:has(.lucide),
   /* ============================================================
      PASS 4 — Gold-token visibility guard (2026-04-29)
      `--gold` resolves to near-black in this monochrome theme.
-     Anywhere `text-gold` lands inside a dark/black surface, force
+     Anywhere `text-[#1A1A1A]` lands inside a dark/black surface, force
      white so labels never vanish; and gold-on-gold flips to black.
      ============================================================ */
-  .bg-black .text-gold,
-  .bg-gray-900 .text-gold,
-  .bg-zinc-900 .text-gold,
-  .bg-neutral-900 .text-gold,
-  .bg-foreground .text-gold,
-  .bg-primary .text-gold,
-  [data-surface="dark"] .text-gold,
-  .bg-black svg.text-gold,
-  .bg-gray-900 svg.text-gold,
-  [data-surface="dark"] svg.text-gold {
+  .bg-black .text-[#1A1A1A],
+  .bg-gray-900 .text-[#1A1A1A],
+  .bg-[#FDFBF7] .text-[#1A1A1A],
+  .bg-neutral-900 .text-[#1A1A1A],
+  .bg-foreground .text-[#1A1A1A],
+  .bg-primary .text-[#1A1A1A],
+  [data-surface="dark"] .text-[#1A1A1A],
+  .bg-black svg.text-[#1A1A1A],
+  .bg-gray-900 svg.text-[#1A1A1A],
+  [data-surface="dark"] svg.text-[#1A1A1A] {
     color: #ffffff !important;
   }
-  .bg-gold .text-gold,
-  .bg-gold\/10 .text-gold,
-  .bg-gold\/20 .text-gold,
-  .bg-gold\/30 .text-gold {
+  .bg-[#EFE6D6] .text-[#1A1A1A],
+  .bg-[#EFE6D6]\/10 .text-[#1A1A1A],
+  .bg-[#EFE6D6]\/20 .text-[#1A1A1A],
+  .bg-[#EFE6D6]\/30 .text-[#1A1A1A] {
     color: #111 !important;
   }
 
   /* PASS 5 — Gold-on-light/champagne guard.
-     The champagne section + cream cards make `text-gold` (~#111 already)
+     The champagne section + cream cards make `text-[#1A1A1A]` (~#111 already)
      still look faded next to neutral grays. Force pure black for max legibility. */
-  .jj-section-champagne .text-gold,
-  .jj-box-active .text-gold,
-  .bg-white .text-gold,
-  .bg-card .text-gold,
-  .bg-background .text-gold,
-  [class*="bg-cream"] .text-gold,
-  [class*="from-white"] .text-gold,
-  [class*="from-gray-50"] .text-gold,
-  [class*="from-gray-100"] .text-gold {
+  .jj-section-champagne .text-[#1A1A1A],
+  .jj-box-active .text-[#1A1A1A],
+  .bg-white .text-[#1A1A1A],
+  .bg-card .text-[#1A1A1A],
+  .bg-background .text-[#1A1A1A],
+  [class*="bg-cream"] .text-[#1A1A1A],
+  [class*="from-white"] .text-[#1A1A1A],
+  [class*="from-gray-50"] .text-[#1A1A1A],
+  [class*="from-gray-100"] .text-[#1A1A1A] {
     color: #000 !important;
   }
   /* Faded helper text in cards — ensure description rows remain readable */
@@ -3880,7 +3880,7 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
 /* 2. Replace gray/silver utility surfaces with champagne */
 :root:not(.dark) :is(
   .bg-neutral-50, .bg-neutral-100, .bg-gray-50, .bg-gray-100,
-  .bg-zinc-50, .bg-zinc-100, .bg-slate-50, .bg-slate-100,
+  .bg-[#FDFBF7], .bg-[#F7F2EA], .bg-slate-50, .bg-slate-100,
   .bg-stone-50, .bg-stone-100
 ):not([data-surface="dark"]) {
   background-color: #F7F2EA !important;
@@ -3889,7 +3889,7 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
 /* 3. Replace neutral text on light surfaces with ink/brown */
 :root:not(.dark) :is(
   .text-neutral-400, .text-neutral-500, .text-neutral-600, .text-neutral-700,
-  .text-zinc-500, .text-zinc-600, .text-slate-500, .text-slate-600,
+  .text-[#1A1A1A]\/60, .text-[#1A1A1A]\/70, .text-slate-500, .text-slate-600,
   .text-stone-500, .text-stone-600
 ) {
   color: #3A2D1D !important;
@@ -3900,7 +3900,7 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
 :root:not(.dark) :is(
   .border-neutral-100, .border-neutral-200, .border-neutral-300,
   .border-gray-100, .border-gray-200, .border-gray-300,
-  .border-zinc-100, .border-zinc-200, .border-zinc-300,
+  .border-zinc-100, .border-[#B89555]\/30, .border-[#B89555]\/30,
   .border-slate-100, .border-slate-200
 ) {
   border-color: rgba(184, 149, 85, 0.40) !important;
@@ -4136,7 +4136,7 @@ a[class*="bg-red-"]:hover {
  * or generic gray text were unreadable. Force readable colors.
  * ============================================================ */
 :where(
-  .bg-zinc-800, .bg-zinc-900, .bg-zinc-950,
+  .bg-[#1A1A1A], .bg-[#FDFBF7], .bg-[#FDFBF7],
   .bg-gray-800, .bg-gray-900, .bg-gray-950,
   .bg-slate-800, .bg-slate-900, .bg-slate-950,
   .bg-black, [class*="bg-black"],
@@ -4149,7 +4149,7 @@ a[class*="bg-red-"]:hover {
 
 /* Brown #5A4A2E on dark surfaces becomes legible champagne */
 :where(
-  .bg-zinc-800, .bg-zinc-900, .bg-zinc-950,
+  .bg-[#1A1A1A], .bg-[#FDFBF7], .bg-[#FDFBF7],
   .bg-gray-800, .bg-gray-900, .bg-gray-950,
   .bg-slate-800, .bg-slate-900, .bg-slate-950,
   .bg-black, [class*="bg-black"],
@@ -4163,14 +4163,14 @@ a[class*="bg-red-"]:hover {
 
 /* Inputs / textareas / selects on dark surfaces — readable text + placeholder */
 :where(
-  .bg-zinc-800, .bg-zinc-900, .bg-zinc-950,
+  .bg-[#1A1A1A], .bg-[#FDFBF7], .bg-[#FDFBF7],
   .bg-gray-800, .bg-gray-900, .bg-gray-950,
   .bg-black, [class*="bg-black"], [class*="bg-zinc-8"], [class*="bg-zinc-9"]
 ) :is(input, textarea, select):not([data-no-contrast-guard]) {
   color: #FFFFFF !important;
 }
 :where(
-  .bg-zinc-800, .bg-zinc-900, .bg-zinc-950,
+  .bg-[#1A1A1A], .bg-[#FDFBF7], .bg-[#FDFBF7],
   .bg-gray-800, .bg-gray-900, .bg-gray-950,
   .bg-black, [class*="bg-black"]
 ) :is(input, textarea, select)::placeholder {
@@ -4295,21 +4295,21 @@ a[class*="bg-red-"]:hover {
  * ============================================================ */
 
 /* 1. Faded gold text on backend champagne surfaces → ink.
- *    Covers text-gold/40..90 used widely across owner pages. */
+ *    Covers text-[#1A1A1A]/40..90 used widely across owner pages. */
 [data-surface="champagne"] :is(
-  [class*="text-gold/4"],
-  [class*="text-gold/5"],
-  [class*="text-gold/6"],
-  [class*="text-gold/7"],
-  [class*="text-gold/8"],
-  [class*="text-gold/9"]
+  [class*="text-[#1A1A1A]/4"],
+  [class*="text-[#1A1A1A]/5"],
+  [class*="text-[#1A1A1A]/6"],
+  [class*="text-[#1A1A1A]/7"],
+  [class*="text-[#1A1A1A]/8"],
+  [class*="text-[#1A1A1A]/9"]
 ):not([data-no-contrast-guard]) {
   color: #1A1A1A !important;
 }
 
-/* 2. Solid `text-gold` used for body copy on champagne is too washed —
+/* 2. Solid `text-[#1A1A1A]` used for body copy on champagne is too washed —
  *    keep gold for icons/badges only. Body-text nodes on champagne flip to ink. */
-[data-surface="champagne"] :is(p, span, a, li, label, button, h1, h2, h3, h4, h5, h6):where(.text-gold):not([data-no-contrast-guard]):not(svg):not(:has(> svg:only-child)) {
+[data-surface="champagne"] :is(p, span, a, li, label, button, h1, h2, h3, h4, h5, h6):where(.text-[#1A1A1A]):not([data-no-contrast-guard]):not(svg):not(:has(> svg:only-child)) {
   color: #1A1A1A !important;
 }
 
@@ -4383,7 +4383,7 @@ a[class*="bg-red-"]:hover {
  *
  * Exceptions kept: brand monogram (img tags untouched),
  * --price-orange, AI purple system, semantic data-viz colours,
- * `text-gold` foreground accent labels, and 1px gold borders.
+ * `text-[#1A1A1A]` foreground accent labels, and 1px gold borders.
  * ============================================================ */
 
 /* 1. data-surface="gold" repainted to cream + ink + 1px gold border */
@@ -4420,12 +4420,12 @@ a[class*="bg-red-"]:hover {
   border-color: #B89555 !important;
 }
 
-/* 3. Tailwind token-named gold fills (bg-gold, bg-gold-dark, etc.)
+/* 3. Tailwind token-named gold fills (bg-[#EFE6D6], bg-[#EFE6D6]-dark, etc.)
  *    Use class~= to match exact utility names. */
-.bg-gold:not([data-no-gold-debrand]),
-.bg-gold-dark:not([data-no-gold-debrand]),
-.bg-gold-light:not([data-no-gold-debrand]),
-.bg-gold-muted:not([data-no-gold-debrand]) {
+.bg-[#EFE6D6]:not([data-no-gold-debrand]),
+.bg-[#EFE6D6]-dark:not([data-no-gold-debrand]),
+.bg-[#EFE6D6]-light:not([data-no-gold-debrand]),
+.bg-[#EFE6D6]-muted:not([data-no-gold-debrand]) {
   background-color: #EFE6D6 !important;
   color: #1A1A1A !important;
 }
@@ -4446,7 +4446,7 @@ a[class*="bg-red-"]:hover {
 
 /* 5. Active tab / data-state="active" gold fills → cream + 1px gold underline. */
 [data-state="active"][class*="bg-[#B89555]"],
-[data-state="active"][class*="bg-gold"],
+[data-state="active"][class*="bg-[#EFE6D6]"],
 [data-state="active"][class*="from-[#B89555]"] {
   background-color: #EFE6D6 !important;
   background-image: none !important;
@@ -4457,7 +4457,7 @@ a[class*="bg-red-"]:hover {
 /* 6. Badge / chip safety: text on the new cream fill must never inherit
  *    white from a previous solid-gold context. */
 [class*="bg-[#B89555]"]:not([class*="bg-[#B89555]/"]) :is(.text-white, [class*="text-white/"]):not([data-no-contrast-guard]),
-.bg-gold :is(.text-white, [class*="text-white/"]):not([data-no-contrast-guard]) {
+.bg-[#EFE6D6] :is(.text-white, [class*="text-white/"]):not([data-no-contrast-guard]) {
   color: #1A1A1A !important;
 }
 
@@ -4476,10 +4476,10 @@ nav a[data-active="true"] {
 /* 8. Keep gold for hairline borders, focus rings, and small text accents. */
 [class*="border-[#B89555]"],
 [class*="ring-[#B89555]"],
-[class*="border-gold"],
+[class*="border-[#B89555]"],
 [class*="ring-gold"],
 [class*="text-[#B89555]"],
-[class*="text-gold"] {
+[class*="text-[#1A1A1A]"] {
   /* no-op: these stay gold by design (hairline accent) */
 }
 

@@ -65,8 +65,8 @@ export default function DeveloperActionsRail() {
   }
 
   return (
-    <Card className="bg-[#F7F2EA] border-gold/20 sticky top-[104px]">
-      <CardHeader className="pb-3 border-b border-gold/15">
+    <Card className="bg-[#F7F2EA] border-[#B89555]/20 sticky top-[104px]">
+      <CardHeader className="pb-3 border-b border-[#B89555]/15">
         <div className="flex items-center justify-between gap-2">
           <CardTitle className="flex items-center gap-2 text-[#1A1A1A] text-base">
             <IconTile icon={AlertCircle} tone="amber" size="sm" />
@@ -77,7 +77,7 @@ export default function DeveloperActionsRail() {
             variant="outline"
             onClick={() => sync.mutate()}
             disabled={sync.isPending}
-            className="h-8 text-xs border-gold/40 text-[#1A1A1A] hover:bg-gold/10"
+            className="h-8 text-xs border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
           >
             <RefreshCw className={`h-3 w-3 mr-1 ${sync.isPending ? "animate-spin" : ""}`} />
             Sync inbox
@@ -90,8 +90,8 @@ export default function DeveloperActionsRail() {
               onClick={() => setFilter(f)}
               className={`px-3 py-1 text-xs font-medium rounded-md transition ${
                 filter === f
-                  ? "bg-gold text-[#1A1A1A]"
-                  : "text-[#1A1A1A]/70 hover:bg-gold/10"
+                  ? "bg-[#EFE6D6] text-[#1A1A1A]"
+                  : "text-[#1A1A1A]/70 hover:bg-[#EFE6D6]/10"
               }`}
             >
               {f === "open" ? `Open (${items.filter((i) => i.status === "pending" || i.status === "awaiting_owner").length})` : "All"}
@@ -114,7 +114,7 @@ export default function DeveloperActionsRail() {
           return (
             <div
               key={item.id}
-              className="bg-[#FDFBF7] border border-gold/15 rounded-lg p-3 space-y-2"
+              className="bg-[#FDFBF7] border border-[#B89555]/15 rounded-lg p-3 space-y-2"
             >
               <div className="flex items-start justify-between gap-2">
                 <div className="flex items-start gap-2 min-w-0">
@@ -130,7 +130,7 @@ export default function DeveloperActionsRail() {
                 </div>
                 <Badge
                   variant="outline"
-                  className="border-gold/40 text-[#1A1A1A] text-[10px] uppercase tracking-wide whitespace-nowrap"
+                  className="border-[#B89555]/40 text-[#1A1A1A] text-[10px] uppercase tracking-wide whitespace-nowrap"
                 >
                   {TYPE_LABEL[item.request_type]}
                 </Badge>

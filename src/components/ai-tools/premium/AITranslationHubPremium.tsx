@@ -93,7 +93,7 @@ const AITranslationHubPremium = () => {
     <AIToolPremiumLayout
       title="AI Translation Hub"
       subtitle="Professional real estate translations with cultural context and industry terminology for global clients"
-      icon={<Languages className="h-8 w-8 text-amber-400" />}
+      icon={<Languages className="h-8 w-8 text-[#1A1A1A]" />}
       accentColor="amber"
       gradientFrom="amber"
       badge="15+ Languages"
@@ -149,7 +149,7 @@ const AITranslationHubPremium = () => {
                 placeholder="Enter text to translate..."
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                className={`bg-zinc-900/50 border-amber-500/30 text-white min-h-[200px] hover:border-amber-500/50 focus:border-amber-400 transition-colors ${
+                className={`bg-[#FDFBF7]/50 border-amber-500/30 text-white min-h-[200px] hover:border-amber-500/50 focus:border-amber-400 transition-colors ${
                   isRTL(sourceLanguage) ? "text-right" : ""
                 }`}
                 dir={isRTL(sourceLanguage) ? "rtl" : "ltr"}
@@ -164,7 +164,7 @@ const AITranslationHubPremium = () => {
           <Card className="bg-amber-900/20 border-amber-500/30">
             <CardContent className="p-4">
               <Label className="text-white/85 flex items-center gap-2 mb-3">
-                <MessageSquare className="h-4 w-4 text-amber-400" />
+                <MessageSquare className="h-4 w-4 text-[#1A1A1A]" />
                 Context
               </Label>
               <Select value={context} onValueChange={setContext}>
@@ -189,7 +189,7 @@ const AITranslationHubPremium = () => {
             whileHover={{ scale: 1.1, rotate: 180 }}
             whileTap={{ scale: 0.95 }}
             onClick={swapLanguages}
-            className="p-3 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 hover:bg-amber-500/30"
+            className="p-3 rounded-full bg-amber-500/20 border border-amber-500/30 text-[#1A1A1A] hover:bg-amber-500/30"
           >
             <ArrowLeftRight className="h-5 w-5" />
           </motion.button>
@@ -202,8 +202,8 @@ const AITranslationHubPremium = () => {
             size="sm"
             onClick={swapLanguages}
           >
-            <ArrowLeftRight className="h-4 w-4 mr-2 text-amber-400" />
-            <span className="text-amber-400">Swap Languages</span>
+            <ArrowLeftRight className="h-4 w-4 mr-2 text-[#1A1A1A]" />
+            <span className="text-[#1A1A1A]">Swap Languages</span>
           </Button>
         </div>
 
@@ -243,7 +243,7 @@ const AITranslationHubPremium = () => {
                     key="translation"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className={`bg-zinc-800 border border-[#1A1A1A] rounded-md p-4 min-h-[200px] text-white ${
+                    className={`bg-[#1A1A1A] border border-[#1A1A1A] rounded-md p-4 min-h-[200px] text-white ${
                       isRTL(targetLanguage) ? "text-right" : ""
                     }`}
                     dir={isRTL(targetLanguage) ? "rtl" : "ltr"}
@@ -251,7 +251,7 @@ const AITranslationHubPremium = () => {
                     {response.translation}
                   </motion.div>
                 ) : (
-                  <div className="bg-zinc-800/50 border border-[#1A1A1A]/50 rounded-md p-4 min-h-[200px] flex items-center justify-center">
+                  <div className="bg-[#1A1A1A]/50 border border-[#1A1A1A]/50 rounded-md p-4 min-h-[200px] flex items-center justify-center">
                     <div className="text-center text-white/90">
                       <Globe className="h-8 w-8 mx-auto mb-2 opacity-50" />
                       <p className="text-sm">Translation will appear here</p>
@@ -271,9 +271,9 @@ const AITranslationHubPremium = () => {
               <Card className="bg-amber-500/10 border-amber-500/30">
                 <CardContent className="p-4">
                   <div className="flex items-start gap-2">
-                    <Info className="h-4 w-4 text-amber-400 mt-0.5" />
+                    <Info className="h-4 w-4 text-[#1A1A1A] mt-0.5" />
                     <div>
-                      <p className="text-sm font-medium text-amber-400 mb-1">Translation Notes</p>
+                      <p className="text-sm font-medium text-[#1A1A1A] mb-1">Translation Notes</p>
                       <p className="text-sm text-white/85">{response.notes}</p>
                     </div>
                   </div>
@@ -314,7 +314,7 @@ const AITranslationHubPremium = () => {
           { icon: Languages, label: "RTL Support" },
         ].map(({ icon: Icon, label }) => (
           <Card key={label} className="bg-amber-900/20 border-amber-500/30 p-3 text-center">
-            <Icon className="h-5 w-5 mx-auto mb-1 text-amber-400" />
+            <Icon className="h-5 w-5 mx-auto mb-1 text-[#1A1A1A]" />
             <p className="text-xs text-white/70">{label}</p>
           </Card>
         ))}

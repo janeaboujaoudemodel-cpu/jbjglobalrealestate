@@ -72,7 +72,7 @@ export function MatchEditor({ developerId, projectId, docType, onApply }: MatchE
   }, [dev, search]);
 
   return (
-    <div className="space-y-2 p-3 rounded-lg bg-white border border-gold/30">
+    <div className="space-y-2 p-3 rounded-lg bg-white border border-[#B89555]/30">
       <div>
         <label className="text-xs text-muted-foreground">Developer</label>
         <select
@@ -81,7 +81,7 @@ export function MatchEditor({ developerId, projectId, docType, onApply }: MatchE
             setDev(e.target.value || null);
             setProj(null);
           }}
-          className="w-full rounded border border-gold/30 bg-white p-1.5 text-sm text-foreground"
+          className="w-full rounded border border-[#B89555]/30 bg-white p-1.5 text-sm text-foreground"
         >
           <option value="">— None —</option>
           {developers.map((d) => (
@@ -99,12 +99,12 @@ export function MatchEditor({ developerId, projectId, docType, onApply }: MatchE
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search project name…"
-          className="w-full rounded border border-gold/30 bg-white p-1.5 text-sm mb-1"
+          className="w-full rounded border border-[#B89555]/30 bg-white p-1.5 text-sm mb-1"
         />
         <select
           value={proj ?? ""}
           onChange={(e) => setProj(e.target.value || null)}
-          className="w-full rounded border border-gold/30 bg-white p-1.5 text-sm text-foreground"
+          className="w-full rounded border border-[#B89555]/30 bg-white p-1.5 text-sm text-foreground"
           size={5}
         >
           <option value="">— None —</option>
@@ -121,7 +121,7 @@ export function MatchEditor({ developerId, projectId, docType, onApply }: MatchE
         <select
           value={type}
           onChange={(e) => setType(e.target.value)}
-          className="w-full rounded border border-gold/30 bg-white p-1.5 text-sm text-foreground"
+          className="w-full rounded border border-[#B89555]/30 bg-white p-1.5 text-sm text-foreground"
         >
           {DOC_TYPES.map((t) => (
             <option key={t} value={t}>
@@ -144,7 +144,7 @@ export function MatchEditor({ developerId, projectId, docType, onApply }: MatchE
             detected_doc_type: type,
           });
         }}
-        className="w-full mt-1 rounded-lg bg-[#1A1A1A] text-gold py-1.5 text-sm font-medium hover:bg-[#000]"
+        className="w-full mt-1 rounded-lg bg-[#1A1A1A] text-[#1A1A1A] py-1.5 text-sm font-medium hover:bg-[#000]"
       >
         Apply
       </button>

@@ -53,7 +53,7 @@ const activityColors: Record<string, string> = {
   email: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
   call: 'bg-green-500/10 text-green-400 border-green-500/20',
   meeting: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
-  task: 'bg-gold/10 text-gold border-gold/20',
+  task: 'bg-[#EFE6D6]/10 text-[#1A1A1A] border-[#B89555]/20',
   lead: 'bg-orange-500/10 text-orange-400 border-orange-500/20',
   message: 'bg-teal-500/10 text-teal-400 border-teal-500/20',
   system: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
@@ -203,7 +203,7 @@ const FoundersActivityCenter: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="w-8 h-8 animate-spin text-gold" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#1A1A1A]" />
       </div>
     );
   }
@@ -212,10 +212,10 @@ const FoundersActivityCenter: React.FC = () => {
     <div className="space-y-6">
       {/* Stats Cards - White Pearl/Gold Champagne */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
           <CardContent className="p-4 text-center">
-            <Activity className="w-6 h-6 text-gold mx-auto mb-2" />
-            <p className="text-2xl font-bold text-gold">{stats.total}</p>
+            <Activity className="w-6 h-6 text-[#1A1A1A] mx-auto mb-2" />
+            <p className="text-2xl font-bold text-[#1A1A1A]">{stats.total}</p>
             <p className="text-xs text-[#1A1A1A]/70">Total Activities</p>
           </CardContent>
         </Card>
@@ -245,8 +245,8 @@ const FoundersActivityCenter: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-gold/10 border border-gold/30">
-            <Activity className="w-5 h-5 text-gold" />
+          <div className="p-2 rounded-lg bg-[#EFE6D6]/10 border border-[#B89555]/30">
+            <Activity className="w-5 h-5 text-[#1A1A1A]" />
           </div>
           <div>
             <h3 className="text-lg font-semibold text-[#1A1A1A]">Activity Center</h3>
@@ -272,8 +272,8 @@ const FoundersActivityCenter: React.FC = () => {
             size="sm"
             onClick={() => setFilter(f)}
             className={filter === f 
-              ? 'bg-[#1A1A1A] text-white border-2 border-gold/50 shadow-[0_0_15px_rgba(200,167,102,0.3)] whitespace-nowrap hover:bg-[#1A1A1A]' 
-              : 'bg-[#FDFBF7] text-gold border-2 border-gold/30 hover:bg-transparent hover:border-gold/50 whitespace-nowrap'
+              ? 'bg-[#1A1A1A] text-white border-2 border-[#B89555]/50 shadow-[0_0_15px_rgba(200,167,102,0.3)] whitespace-nowrap hover:bg-[#1A1A1A]' 
+              : 'bg-[#FDFBF7] text-[#1A1A1A] border-2 border-[#B89555]/30 hover:bg-transparent hover:border-[#B89555]/50 whitespace-nowrap'
             }
           >
             {f === 'all' && 'All Activities'}
@@ -289,7 +289,7 @@ const FoundersActivityCenter: React.FC = () => {
       <ScrollArea className="h-[500px]">
         <div className="space-y-6">
           {Object.keys(groupedActivities).length === 0 ? (
-            <Card className="bg-[#FDFBF7] border-2 border-gold/20 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+            <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/20 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
               <CardContent className="p-8 text-center">
                 <Activity className="w-16 h-16 text-[#1A1A1A]/70 mx-auto mb-4" />
                 <h4 className="text-[#1A1A1A] font-semibold mb-2">Activity Center</h4>
@@ -311,15 +311,15 @@ const FoundersActivityCenter: React.FC = () => {
               <div key={dateKey}>
                 {/* Date Header */}
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="h-px bg-gold/30 flex-1" />
-                  <span className="text-xs text-gold font-medium px-3 py-1 rounded-full bg-gold/10 border border-gold/30">
+                  <div className="h-px bg-[#EFE6D6]/30 flex-1" />
+                  <span className="text-xs text-[#1A1A1A] font-medium px-3 py-1 rounded-full bg-[#EFE6D6]/10 border border-[#B89555]/30">
                     {format(new Date(dateKey), 'EEEE, MMMM d')}
                   </span>
-                  <div className="h-px bg-gold/30 flex-1" />
+                  <div className="h-px bg-[#EFE6D6]/30 flex-1" />
                 </div>
 
                 {/* Activities for this date */}
-                <div className="space-y-2 pl-4 border-l-2 border-gold/30">
+                <div className="space-y-2 pl-4 border-l-2 border-[#B89555]/30">
                   {dayActivities.map((activity, index) => (
                     <motion.div
                       key={activity.id}
@@ -329,9 +329,9 @@ const FoundersActivityCenter: React.FC = () => {
                       className="relative"
                     >
                       {/* Timeline dot */}
-                      <div className="absolute -left-[13px] top-4 w-2.5 h-2.5 rounded-full bg-gold border-2 border-white" />
+                      <div className="absolute -left-[13px] top-4 w-2.5 h-2.5 rounded-full bg-[#EFE6D6] border-2 border-white" />
                       
-                      <Card className="bg-[#FDFBF7] border-2 border-gold/20 hover:border-gold/40 hover:shadow-[0_4px_20px_rgba(200,167,102,0.15)] transition-all ml-4 group">
+                      <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/20 hover:border-[#B89555]/40 hover:shadow-[0_4px_20px_rgba(200,167,102,0.15)] transition-all ml-4 group">
                         <CardContent className="p-3">
                           <div className="flex items-start gap-3">
                             {/* Icon */}
@@ -342,7 +342,7 @@ const FoundersActivityCenter: React.FC = () => {
                             {/* Content */}
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center justify-between gap-2">
-                                <h4 className="text-sm font-medium text-[#1A1A1A] truncate group-hover:text-gold transition-colors">
+                                <h4 className="text-sm font-medium text-[#1A1A1A] truncate group-hover:text-[#1A1A1A] transition-colors">
                                   {activity.title}
                                 </h4>
                                 <span className="text-xs text-[#1A1A1A]/70 flex-shrink-0">
@@ -354,7 +354,7 @@ const FoundersActivityCenter: React.FC = () => {
                               </p>
                               <div className="flex items-center gap-2 mt-2">
                                 {activity.actor && (
-                                  <Badge variant="outline" className="text-xs border-gold/30 text-[#1A1A1A]/70">
+                                  <Badge variant="outline" className="text-xs border-[#B89555]/30 text-[#1A1A1A]/70">
                                     <User className="w-3 h-3 mr-1" />
                                     {activity.actor}
                                   </Badge>

@@ -64,7 +64,7 @@ export function HandoverDateRange({
             "justify-between min-w-[160px] h-11",
             isDark 
               ? "bg-[#1a1a1a] border-[#2a2a2a] text-white hover:bg-[#2a2a2a]"
-              : "bg-[#FDFBF7]/90 border-gold/30 text-[#1A1A1A] hover:bg-champagne-light",
+              : "bg-[#FDFBF7]/90 border-[#B89555]/30 text-[#1A1A1A] hover:bg-champagne-light",
             className
           )}
         >
@@ -78,7 +78,7 @@ export function HandoverDateRange({
       <PopoverContent 
         className={cn(
           "w-[280px] p-4",
-          isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-[#FDFBF7] border-gold/20"
+          isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-[#FDFBF7] border-[#B89555]/20"
         )}
         align="start"
         sideOffset={8}
@@ -110,7 +110,7 @@ export function HandoverDateRange({
                   "h-10 w-full",
                   isDark 
                     ? "bg-[#2a2a2a] border-[#3a3a3a] text-white"
-                    : "bg-champagne-light border-gold/30 text-[#1A1A1A]"
+                    : "bg-champagne-light border-[#B89555]/30 text-[#1A1A1A]"
                 )}>
                   <SelectValue placeholder="Any" />
                 </SelectTrigger>
@@ -147,7 +147,7 @@ export function HandoverDateRange({
                   "h-10 w-full",
                   isDark 
                     ? "bg-[#2a2a2a] border-[#3a3a3a] text-white"
-                    : "bg-champagne-light border-gold/30 text-[#1A1A1A]"
+                    : "bg-champagne-light border-[#B89555]/30 text-[#1A1A1A]"
                 )}>
                   <SelectValue placeholder="Any" />
                 </SelectTrigger>
@@ -221,7 +221,7 @@ export function HandoverDateInline({
           "h-10 w-24",
           isDark 
             ? "bg-[#1a1a1a] border-[#2a2a2a] text-white"
-            : "bg-[#FDFBF7]/90 border-gold/30 text-[#1A1A1A]"
+            : "bg-[#FDFBF7]/90 border-[#B89555]/30 text-[#1A1A1A]"
         )}>
           <SelectValue placeholder="From" />
         </SelectTrigger>
@@ -245,7 +245,7 @@ export function HandoverDateInline({
           "h-10 w-24",
           isDark 
             ? "bg-[#1a1a1a] border-[#2a2a2a] text-white"
-            : "bg-[#FDFBF7]/90 border-gold/30 text-[#1A1A1A]"
+            : "bg-[#FDFBF7]/90 border-[#B89555]/30 text-[#1A1A1A]"
         )}>
           <SelectValue placeholder="To" />
         </SelectTrigger>

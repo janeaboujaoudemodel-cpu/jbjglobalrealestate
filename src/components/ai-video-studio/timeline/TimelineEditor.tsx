@@ -72,7 +72,7 @@ function ToolBtn({
         size="sm"
         variant={active ? 'default' : 'ghost'}
         onClick={onClick}
-        className={active ? 'bg-gold text-[#1A1A1A]' : 'text-slate-400'}
+        className={active ? 'bg-[#EFE6D6] text-[#1A1A1A]' : 'text-slate-400'}
       >
         {children}
       </Button>
@@ -414,7 +414,7 @@ export function TimelineEditor({
                   </button>
                   <button
                     onClick={() => onUpdateTrack(track.id, { locked: !track.locked })}
-                    className={track.locked ? 'text-amber-400' : 'text-slate-500 hover:text-slate-300'}
+                    className={track.locked ? 'text-[#1A1A1A]' : 'text-slate-500 hover:text-slate-300'}
                   >
                     {track.locked ? <Lock className="w-3 h-3" /> : <Unlock className="w-3 h-3" />}
                   </button>
@@ -462,10 +462,10 @@ export function TimelineEditor({
                 
                 {/* Playhead */}
                 <div
-                  className="absolute top-0 h-full w-0.5 bg-gold z-20"
+                  className="absolute top-0 h-full w-0.5 bg-[#EFE6D6] z-20"
                   style={{ left: currentTime * pixelsPerSecond }}
                 >
-                  <div className="absolute -top-0 left-1/2 -translate-x-1/2 w-3 h-3 bg-gold rotate-45" />
+                  <div className="absolute -top-0 left-1/2 -translate-x-1/2 w-3 h-3 bg-[#EFE6D6] rotate-45" />
                 </div>
               </div>
 
@@ -495,7 +495,7 @@ export function TimelineEditor({
                                 : getTrackColor(track.type)
                             } ${
                               selectedClipIds.includes(clip.id)
-                                ? 'border-gold ring-2 ring-gold/30'
+                                ? 'border-[#B89555] ring-2 ring-gold/30'
                                 : isTransition
                                 ? 'border-purple-400 hover:border-purple-200'
                                 : 'border-transparent hover:border-white/30'
@@ -520,8 +520,8 @@ export function TimelineEditor({
 
                             {selectedClipIds.includes(clip.id) && !isTransition && (
                               <>
-                                <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#FDFBF7]/30 cursor-ew-resize hover:bg-gold" />
-                                <div className="absolute right-0 top-0 bottom-0 w-1 bg-[#FDFBF7]/30 cursor-ew-resize hover:bg-gold" />
+                                <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#FDFBF7]/30 cursor-ew-resize hover:bg-[#EFE6D6]" />
+                                <div className="absolute right-0 top-0 bottom-0 w-1 bg-[#FDFBF7]/30 cursor-ew-resize hover:bg-[#EFE6D6]" />
                               </>
                             )}
                           </div>
@@ -643,7 +643,7 @@ export function TimelineEditor({
 
                   {/* Playhead line through track */}
                   <div
-                    className="absolute top-0 h-full w-0.5 bg-gold/50 pointer-events-none"
+                    className="absolute top-0 h-full w-0.5 bg-[#EFE6D6]/50 pointer-events-none"
                     style={{ left: currentTime * pixelsPerSecond }}
                   />
                 </div>

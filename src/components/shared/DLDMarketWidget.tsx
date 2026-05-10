@@ -26,10 +26,10 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
 
   if (compact) {
     return (
-      <div className="bg-gradient-to-br from-zinc-900 to-black rounded-2xl border border-gold/20 p-5 space-y-4">
+      <div className="bg-gradient-to-br from-zinc-900 to-black rounded-2xl border border-[#B89555]/20 p-5 space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-white font-semibold text-sm flex items-center gap-2">
-            <TrendingUp className="w-4 h-4 text-gold" />
+            <TrendingUp className="w-4 h-4 text-[#1A1A1A]" />
             Dubai Market Pulse
           </h3>
           <span className="text-[10px] text-white/80">As of {today}</span>
@@ -53,8 +53,8 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           </div>
         </div>
         {matchedArea && (
-          <div className="bg-gold/10 border border-gold/30 rounded-lg p-3">
-            <p className="text-[10px] text-gold uppercase tracking-wider mb-1">This Area</p>
+          <div className="bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-lg p-3">
+            <p className="text-[10px] text-[#1A1A1A] uppercase tracking-wider mb-1">This Area</p>
             <div className="flex items-center justify-between">
               <span className="text-white text-sm font-medium">{matchedArea.transactions.toLocaleString()} transactions</span>
               <span className="text-emerald-400 text-sm font-semibold">{matchedArea.change}</span>
@@ -63,7 +63,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
         )}
         <p className="text-[9px] text-white/70 leading-relaxed">
           Sources: DLD, RERA, DXB Interact. For informational purposes only.{" "}
-          <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
+          <Link to="/contact" className="text-[#1A1A1A] hover:underline">Contact our team</Link> for professional guidance.
         </p>
       </div>
     );
@@ -86,20 +86,20 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
   ];
 
   return (
-    <section className="py-16 overflow-hidden rounded-3xl mx-4 md:mx-8 bg-gradient-to-br from-white via-stone-50 to-amber-50/30 border border-gold/20 shadow-[0_8px_40px_rgba(0,0,0,0.06)]">
+    <section className="py-16 overflow-hidden rounded-3xl mx-4 md:mx-8 bg-gradient-to-br from-white via-stone-50 to-amber-50/30 border border-[#B89555]/20 shadow-[0_8px_40px_rgba(0,0,0,0.06)]">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
 
           {/* Premium Header */}
           <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 bg-gold/10 border border-gold/30 rounded-full px-4 py-1.5 mb-4">
-              <Banknote className="w-4 h-4 text-gold" />
-              <span className="text-gold text-xs uppercase tracking-[0.2em] font-semibold">Live Market Data</span>
+            <div className="inline-flex items-center gap-2 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full px-4 py-1.5 mb-4">
+              <Banknote className="w-4 h-4 text-[#1A1A1A]" />
+              <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.2em] font-semibold">Live Market Data</span>
             </div>
             <h2 className="text-foreground text-2xl md:text-3xl font-bold mb-2">
               Dubai Market Intelligence
             </h2>
-            <p className="text-gold text-sm font-medium">
+            <p className="text-[#1A1A1A] text-sm font-medium">
               DLD Transaction Data • As of {today}
             </p>
           </div>
@@ -221,9 +221,9 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           {/* Top Areas + Nationalities */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Top 10 Areas */}
-            <div className="bg-[#FDFBF7] rounded-2xl p-6 border border-gold/20 shadow-sm">
+            <div className="bg-[#FDFBF7] rounded-2xl p-6 border border-[#B89555]/20 shadow-sm">
               <div className="flex items-center gap-2 mb-5">
-                <MapPin className="w-4 h-4 text-gold" />
+                <MapPin className="w-4 h-4 text-[#1A1A1A]" />
                 <h3 className="text-foreground text-sm font-bold">Top 10 Areas by Transactions</h3>
               </div>
               <div className="space-y-2">
@@ -247,7 +247,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                       <div className="relative flex items-center justify-between px-3 py-2.5">
                         <div className="flex items-center gap-2.5">
                           <span className={`text-white text-[10px] font-extrabold w-6 text-center bg-gradient-to-br ${barColors[i]} rounded py-1 shadow-md`}>{i + 1}</span>
-                          <span className={`text-sm font-semibold ${isHighlighted ? "text-gold" : "text-foreground"}`}>{area.area}</span>
+                          <span className={`text-sm font-semibold ${isHighlighted ? "text-[#1A1A1A]" : "text-foreground"}`}>{area.area}</span>
                         </div>
                         <div className="flex items-center gap-3">
                           <span className="text-foreground text-xs font-bold">{area.transactions.toLocaleString()}</span>
@@ -261,9 +261,9 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
             </div>
 
             {/* Top 10 Nationalities */}
-            <div className="bg-[#FDFBF7] rounded-2xl p-6 border border-gold/20 shadow-sm">
+            <div className="bg-[#FDFBF7] rounded-2xl p-6 border border-[#B89555]/20 shadow-sm">
               <div className="flex items-center gap-2 mb-5">
-                <Globe className="w-4 h-4 text-gold" />
+                <Globe className="w-4 h-4 text-[#1A1A1A]" />
                 <h3 className="text-foreground text-sm font-bold">Top 10 Buyer Nationalities</h3>
               </div>
               <div className="space-y-2">
@@ -331,7 +331,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           {/* Disclaimer */}
           <p className="text-[10px] text-foreground/50 text-center mt-8 max-w-2xl mx-auto leading-relaxed">
             Sources: Dubai Land Department (DLD), RERA, DXB Interact. YTD 2026 data. For informational purposes only. Does not constitute financial advice.{" "}
-            <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
+            <Link to="/contact" className="text-[#1A1A1A] hover:underline">Contact our team</Link> for professional guidance.
           </p>
         </div>
       </div>

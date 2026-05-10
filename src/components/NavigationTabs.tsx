@@ -31,8 +31,8 @@ const NavigationTabs = React.forwardRef<HTMLDivElement, NavigationTabsProps>(
               to="/"
               className={`inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all border-2 ${
                 isDeveloperActive
-                  ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border-gold/60 shadow-lg"
-                  : "bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:border-gold/40 border-gold/20"
+                  ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/60 shadow-lg"
+                  : "bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:border-[#B89555]/40 border-[#B89555]/20"
               }`}
             >
               <div className={`w-6 h-6 rounded-md flex items-center justify-center ${
@@ -49,8 +49,8 @@ const NavigationTabs = React.forwardRef<HTMLDivElement, NavigationTabsProps>(
               to="/communities"
               className={`inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all border-2 ${
                 isCommunityActive
-                  ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border-gold/60 shadow-lg"
-                  : "bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:border-gold/40 border-gold/20"
+                  ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/60 shadow-lg"
+                  : "bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:border-[#B89555]/40 border-[#B89555]/20"
               }`}
             >
               <div className={`w-6 h-6 rounded-md flex items-center justify-center ${
@@ -70,7 +70,7 @@ const NavigationTabs = React.forwardRef<HTMLDivElement, NavigationTabsProps>(
               <Button
                 onClick={() => setIsDeveloperSearchOpen(true)}
                 variant="outline"
-                className="px-6 py-3 h-auto rounded-full border-2 border-gold/30 text-[#1A1A1A] hover:bg-gradient-to-br hover:from-[#FDFBF7] hover:via-[#F7F2EA] hover:to-[#EFE6D6] hover:border-gold/50 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark"
+                className="px-6 py-3 h-auto rounded-full border-2 border-[#B89555]/30 text-[#1A1A1A] hover:bg-gradient-to-br hover:from-[#FDFBF7] hover:via-[#F7F2EA] hover:to-[#EFE6D6] hover:border-[#B89555]/50 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark"
               >
                 <div className="w-6 h-6 rounded-md flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] mr-2">
                   <Search className="w-3.5 h-3.5 text-[#1A1A1A]" />
@@ -81,7 +81,7 @@ const NavigationTabs = React.forwardRef<HTMLDivElement, NavigationTabsProps>(
               <Button
                 onClick={() => setIsCommunitySearchOpen(true)}
                 variant="outline"
-                className="px-6 py-3 h-auto rounded-full border-2 border-gold/30 text-[#1A1A1A] hover:bg-gradient-to-br hover:from-[#FDFBF7] hover:via-[#F7F2EA] hover:to-[#EFE6D6] hover:border-gold/50 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark"
+                className="px-6 py-3 h-auto rounded-full border-2 border-[#B89555]/30 text-[#1A1A1A] hover:bg-gradient-to-br hover:from-[#FDFBF7] hover:via-[#F7F2EA] hover:to-[#EFE6D6] hover:border-[#B89555]/50 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark"
               >
                 <div className="w-6 h-6 rounded-md flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] mr-2">
                   <Search className="w-3.5 h-3.5 text-[#1A1A1A]" />
@@ -95,14 +95,14 @@ const NavigationTabs = React.forwardRef<HTMLDivElement, NavigationTabsProps>(
               <Button
                 onClick={onFiltersClick}
                 variant="outline"
-                className="px-6 py-3 h-auto rounded-full border-2 border-gold/30 text-[#1A1A1A] hover:bg-gradient-to-br hover:from-[#FDFBF7] hover:via-[#F7F2EA] hover:to-[#EFE6D6] hover:border-gold/50 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark"
+                className="px-6 py-3 h-auto rounded-full border-2 border-[#B89555]/30 text-[#1A1A1A] hover:bg-gradient-to-br hover:from-[#FDFBF7] hover:via-[#F7F2EA] hover:to-[#EFE6D6] hover:border-[#B89555]/50 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark"
               >
                 <div className="w-6 h-6 rounded-md flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] mr-2">
                   <SlidersHorizontal className="w-3.5 h-3.5 text-[#1A1A1A]" />
                 </div>
                 Filters
                 {activeFiltersCount > 0 && (
-                  <span className="ml-2 px-2 py-0.5 bg-gold text-[#1A1A1A] text-xs font-bold rounded-full">
+                  <span className="ml-2 px-2 py-0.5 bg-[#EFE6D6] text-[#1A1A1A] text-xs font-bold rounded-full">
                     {activeFiltersCount}
                   </span>
                 )}

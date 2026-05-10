@@ -93,7 +93,7 @@ const AICompetitorAnalysisPremium = () => {
               placeholder="Marina Heights Tower"
               value={formData.projectName}
               onChange={(e) => handleChange("projectName", e.target.value)}
-              className="bg-zinc-900/50 border-yellow-500/30 text-white h-12 rounded-xl hover:border-yellow-500/50 focus:border-yellow-400 transition-colors"
+              className="bg-[#FDFBF7]/50 border-yellow-500/30 text-white h-12 rounded-xl hover:border-yellow-500/50 focus:border-yellow-400 transition-colors"
             />
           </div>
 
@@ -107,7 +107,7 @@ const AICompetitorAnalysisPremium = () => {
               placeholder="Dubai Marina"
               value={formData.location}
               onChange={(e) => handleChange("location", e.target.value)}
-              className="bg-zinc-900/50 border-yellow-500/30 text-white h-12 rounded-xl hover:border-yellow-500/50 focus:border-yellow-400 transition-colors"
+              className="bg-[#FDFBF7]/50 border-yellow-500/30 text-white h-12 rounded-xl hover:border-yellow-500/50 focus:border-yellow-400 transition-colors"
             />
           </div>
         </div>
@@ -122,7 +122,7 @@ const AICompetitorAnalysisPremium = () => {
             value={formData.projectDetails}
             onChange={(e) => handleChange("projectDetails", e.target.value)}
             rows={4}
-            className="bg-zinc-900/50 border-yellow-500/30 text-white rounded-xl hover:border-yellow-500/50 focus:border-yellow-400 transition-colors"
+            className="bg-[#FDFBF7]/50 border-yellow-500/30 text-white rounded-xl hover:border-yellow-500/50 focus:border-yellow-400 transition-colors"
           />
         </div>
 
@@ -136,7 +136,7 @@ const AICompetitorAnalysisPremium = () => {
             value={formData.competitorProjects}
             onChange={(e) => handleChange("competitorProjects", e.target.value)}
             rows={3}
-            className="bg-zinc-900/50 border-yellow-500/30 text-white rounded-xl hover:border-yellow-500/50 focus:border-yellow-400 transition-colors"
+            className="bg-[#FDFBF7]/50 border-yellow-500/30 text-white rounded-xl hover:border-yellow-500/50 focus:border-yellow-400 transition-colors"
           />
         </div>
 
@@ -194,20 +194,20 @@ const AICompetitorAnalysisPremium = () => {
               {/* Key Metrics */}
               <div className="grid md:grid-cols-3 gap-4 mb-6">
                 {response.priceComparison && (
-                  <div className="bg-zinc-900/60 border border-yellow-500/20 rounded-xl p-4">
+                  <div className="bg-[#FDFBF7]/60 border border-yellow-500/20 rounded-xl p-4">
                     <DollarSign className="h-5 w-5 mb-2 text-yellow-400" />
                     <p className="text-yellow-400/70 text-xs uppercase tracking-wider mb-1">Price Position</p>
                     <p className="text-white text-lg font-bold">{response.priceComparison}</p>
                   </div>
                 )}
                 {response.competitorCount && (
-                  <div className="bg-zinc-900/60 border border-yellow-500/20 rounded-xl p-4">
+                  <div className="bg-[#FDFBF7]/60 border border-yellow-500/20 rounded-xl p-4">
                     <Users className="h-5 w-5 mb-2 text-yellow-400" />
                     <p className="text-yellow-400/70 text-xs uppercase tracking-wider mb-1">Competitors Analyzed</p>
                     <p className="text-white text-lg font-bold">{response.competitorCount}</p>
                   </div>
                 )}
-                <div className="bg-zinc-900/60 border border-yellow-500/20 rounded-xl p-4">
+                <div className="bg-[#FDFBF7]/60 border border-yellow-500/20 rounded-xl p-4">
                   <BarChart3 className="h-5 w-5 mb-2 text-yellow-400" />
                   <p className="text-yellow-400/70 text-xs uppercase tracking-wider mb-1">Market</p>
                   <p className="text-white text-lg font-bold">Analysis</p>
@@ -255,7 +255,7 @@ const AICompetitorAnalysisPremium = () => {
               )}
 
               {/* Full Analysis */}
-              <div className="bg-zinc-900/60 border border-yellow-500/20 rounded-xl p-6">
+              <div className="bg-[#FDFBF7]/60 border border-yellow-500/20 rounded-xl p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">
                     <Sparkles className="w-5 h-5 text-yellow-400" />
@@ -265,14 +265,14 @@ const AICompetitorAnalysisPremium = () => {
                     {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                   </Button>
                 </div>
-                <div className="bg-zinc-800/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[400px] overflow-y-auto">
+                <div className="bg-[#1A1A1A]/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[400px] overflow-y-auto">
                   {response.analysis}
                 </div>
               </div>
             </div>
 
             {/* Disclaimer */}
-            <div className="bg-zinc-800/50 border border-[#1A1A1A] rounded-2xl p-6">
+            <div className="bg-[#1A1A1A]/50 border border-[#1A1A1A] rounded-2xl p-6">
               <div className="flex items-start gap-3">
                 <AlertTriangle className="w-6 h-6 text-white/70 flex-shrink-0" />
                 <div>

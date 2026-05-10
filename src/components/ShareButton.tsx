@@ -48,7 +48,7 @@ const ShareButton = ({ projectName, projectSlug }: ShareButtonProps) => {
           Share
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="bg-zinc-900 border-[#1A1A1A]">
+      <DropdownMenuContent align="end" className="bg-[#FDFBF7] border-[#1A1A1A]">
         <DropdownMenuItem
           onClick={() => window.open(whatsappUrl, "_blank")}
           className="text-white/85 hover:text-white hover:bg-[#1A1A1A] cursor-pointer"

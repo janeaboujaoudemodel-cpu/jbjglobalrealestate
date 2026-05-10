@@ -249,8 +249,8 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
         <Label>{label} {required && <span className="text-destructive">*</span>}</Label>
         <p className="text-xs text-muted-foreground">{description}</p>
         {url ? (
-          <div className="flex items-center gap-3 p-3 rounded-lg bg-card border border-gold/20">
-            <FileText className="w-4 h-4 text-gold shrink-0" />
+          <div className="flex items-center gap-3 p-3 rounded-lg bg-card border border-[#B89555]/20">
+            <FileText className="w-4 h-4 text-[#1A1A1A] shrink-0" />
             <span className="text-sm text-foreground truncate flex-1">{name}</span>
             <button type="button" onClick={() => setForm(f => ({ ...f, [urlKey]: '', [nameKey]: '' }))} className="text-muted-foreground hover:text-destructive">
               <X className="w-4 h-4" />
@@ -258,7 +258,7 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
           </div>
         ) : (
           <div
-            className="border-2 border-dashed border-gold/40 rounded-xl p-4 text-center hover:border-gold/70 transition-colors cursor-pointer bg-card/50"
+            className="border-2 border-dashed border-[#B89555]/40 rounded-xl p-4 text-center hover:border-[#B89555]/70 transition-colors cursor-pointer bg-card/50"
             onClick={() => fileRef.current?.click()}
           >
             {isUploading ? (
@@ -287,10 +287,10 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
 
   return (
     <div className="space-y-6">
-      <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)]">
+      <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)]">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-foreground text-xl md:text-2xl">
-            <UserCheck className="w-6 h-6 text-gold" />
+            <UserCheck className="w-6 h-6 text-[#1A1A1A]" />
             Register as Developer or Sales
           </CardTitle>
           <p className="text-sm text-muted-foreground">
@@ -339,7 +339,7 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
           <div className="space-y-2">
             <Label>Your Role / Position *</Label>
             <Select value={form.role} onValueChange={(v) => setForm(f => ({ ...f, role: v, custom_role_title: '' }))}>
-              <SelectTrigger className="border-gold/20 h-12">
+              <SelectTrigger className="border-[#B89555]/20 h-12">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -369,7 +369,7 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
                 value={form.custom_role_title}
                 onChange={(e) => setForm(f => ({ ...f, custom_role_title: e.target.value }))}
                 placeholder="e.g. Marketing Director, PR Manager, Legal Advisor"
-                className="border-gold/30"
+                className="border-[#B89555]/30"
               />
             </div>
           )}
@@ -432,7 +432,7 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
             <div className="space-y-2">
               <Label>Gender *</Label>
               <Select value={form.gender} onValueChange={(v) => setForm(f => ({ ...f, gender: v }))}>
-                <SelectTrigger className="border-gold/20">
+                <SelectTrigger className="border-[#B89555]/20">
                   <SelectValue placeholder="Select gender" />
                 </SelectTrigger>
                 <SelectContent>
@@ -478,9 +478,9 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
 
           {/* Owner/CEO mandatory documents */}
           {isOwnerRole && (
-            <div className="space-y-4 p-4 rounded-xl border-2 border-gold/30 bg-gold/5">
+            <div className="space-y-4 p-4 rounded-xl border-2 border-[#B89555]/30 bg-[#EFE6D6]/5">
               <p className="text-sm font-semibold text-foreground flex items-center gap-2">
-                <Crown className="w-4 h-4 text-gold" />
+                <Crown className="w-4 h-4 text-[#1A1A1A]" />
                 Owner / CEO Verification Documents
               </p>
               <p className="text-xs text-muted-foreground">As a company owner or CEO, the following documents are mandatory for verification.</p>
@@ -522,13 +522,13 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
           </div>
 
           {/* T&C Agreement Checkbox */}
-          <div className="border-2 border-gold/30 rounded-xl p-4 bg-gradient-to-br from-[hsl(40,40%,97%)] to-[hsl(38,35%,94%)]">
+          <div className="border-2 border-[#B89555]/30 rounded-xl p-4 bg-gradient-to-br from-[hsl(40,40%,97%)] to-[hsl(38,35%,94%)]">
             <div className="flex items-start gap-3">
               <Checkbox
                 id="agree-terms"
                 checked={agreedToTerms}
                 onCheckedChange={(checked) => setAgreedToTerms(checked === true)}
-                className="mt-0.5 border-gold data-[state=checked]:bg-gold data-[state=checked]:text-[#1A1A1A]"
+                className="mt-0.5 border-[#B89555] data-[state=checked]:bg-[#EFE6D6] data-[state=checked]:text-[#1A1A1A]"
               />
               <label htmlFor="agree-terms" className="text-xs text-foreground cursor-pointer leading-relaxed">
                 I have read and agree to the <strong>Terms & Conditions</strong>, <strong>Usage Rights</strong>, and <strong>Important Notice</strong> of {COMPANY_FULL_NAME}. 
@@ -540,7 +540,7 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
           <Button
             onClick={handleSubmit}
             disabled={submitting || !agreedToTerms || !developerName}
-            className="w-full bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border border-gold/40 text-foreground font-bold h-12 disabled:opacity-50"
+            className="w-full bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border border-[#B89555]/40 text-foreground font-bold h-12 disabled:opacity-50"
           >
             {submitting ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Submitting...</> : (
               <><CheckCircle2 className="w-4 h-4 mr-2" /> Submit Registration</>

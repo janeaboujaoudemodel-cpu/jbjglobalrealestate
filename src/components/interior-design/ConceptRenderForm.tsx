@@ -61,7 +61,7 @@ const ConceptRenderForm = ({
   return (
     <div className="w-full space-y-6">
       {/* Design Style */}
-      <div className="bg-zinc-900/60 border border-fuchsia-500/30 rounded-2xl p-6">
+      <div className="bg-[#FDFBF7]/60 border border-fuchsia-500/30 rounded-2xl p-6">
         <div className="flex items-center gap-3 mb-5">
           <Wand2 className="w-5 h-5 text-fuchsia-400" />
           <h3 className="text-lg font-semibold text-white">Design Style</h3>
@@ -79,7 +79,7 @@ const ConceptRenderForm = ({
                   p-4 rounded-xl border text-center transition-all
                   ${isSelected
                     ? 'bg-fuchsia-500/20 border-fuchsia-500/50 text-white'
-                    : 'bg-zinc-800/50 border-[#1A1A1A] text-white/70 hover:border-[#1A1A1A] hover:text-white/85'
+                    : 'bg-[#1A1A1A]/50 border-[#1A1A1A] text-white/70 hover:border-[#1A1A1A] hover:text-white/85'
                   }
                 `}
               >
@@ -92,7 +92,7 @@ const ConceptRenderForm = ({
       </div>
 
       {/* Color Palette */}
-      <div className="bg-zinc-900/60 border border-fuchsia-500/30 rounded-2xl p-6">
+      <div className="bg-[#FDFBF7]/60 border border-fuchsia-500/30 rounded-2xl p-6">
         <div className="flex items-center gap-3 mb-5">
           <div className="w-5 h-5 rounded-full bg-gradient-to-r from-fuchsia-500 via-purple-500 to-pink-500" />
           <h3 className="text-lg font-semibold text-white">Color Palette</h3>
@@ -110,7 +110,7 @@ const ConceptRenderForm = ({
                   p-4 rounded-xl border transition-all
                   ${isSelected
                     ? 'bg-fuchsia-500/20 border-fuchsia-500/50'
-                    : 'bg-zinc-800/50 border-[#1A1A1A] hover:border-[#1A1A1A]'
+                    : 'bg-[#1A1A1A]/50 border-[#1A1A1A] hover:border-[#1A1A1A]'
                   }
                 `}
               >
@@ -131,7 +131,7 @@ const ConceptRenderForm = ({
       </div>
 
       {/* Purpose */}
-      <div className="bg-zinc-900/60 border border-fuchsia-500/30 rounded-2xl p-6">
+      <div className="bg-[#FDFBF7]/60 border border-fuchsia-500/30 rounded-2xl p-6">
         <div className="flex items-center gap-3 mb-5">
           <h3 className="text-lg font-semibold text-white">Purpose</h3>
         </div>
@@ -148,7 +148,7 @@ const ConceptRenderForm = ({
                   p-4 rounded-xl border text-center transition-all
                   ${isSelected
                     ? 'bg-fuchsia-500/20 border-fuchsia-500/50 text-white'
-                    : 'bg-zinc-800/50 border-[#1A1A1A] text-white/70 hover:border-[#1A1A1A] hover:text-white/85'
+                    : 'bg-[#1A1A1A]/50 border-[#1A1A1A] text-white/70 hover:border-[#1A1A1A] hover:text-white/85'
                   }
                 `}
               >
@@ -161,17 +161,17 @@ const ConceptRenderForm = ({
       </div>
 
       {/* Custom Notes */}
-      <div className="bg-zinc-900/60 border border-fuchsia-500/30 rounded-2xl p-6">
+      <div className="bg-[#FDFBF7]/60 border border-fuchsia-500/30 rounded-2xl p-6">
         <div className="flex items-center gap-3 mb-5">
           <h3 className="text-lg font-semibold text-white">Additional Notes</h3>
-          <Badge className="bg-zinc-700 text-white/85">Optional</Badge>
+          <Badge className="bg-[#1A1A1A] text-white/85">Optional</Badge>
         </div>
         
         <Textarea
           value={customNotes}
           onChange={(e) => onCustomNotesChange(e.target.value)}
           placeholder="Describe any specific features you want: floor-to-ceiling windows, marble floors, gold accents, specific furniture pieces, lighting preferences..."
-          className="bg-zinc-800/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 min-h-[120px] focus:border-fuchsia-500/50"
+          className="bg-[#1A1A1A]/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 min-h-[120px] focus:border-fuchsia-500/50"
           maxLength={1000}
         />
         <p className="text-xs text-white/90 mt-2 text-right">

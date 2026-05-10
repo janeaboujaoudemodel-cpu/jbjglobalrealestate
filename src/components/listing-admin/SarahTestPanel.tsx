@@ -163,7 +163,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
               <Button
                 onClick={() => runTest()}
                 disabled={isLoading}
-                className="bg-zinc-900 hover:bg-[#1A1A1A] text-white"
+                className="bg-[#FDFBF7] hover:bg-[#1A1A1A] text-white"
               >
                 {isLoading ? (
                   <>

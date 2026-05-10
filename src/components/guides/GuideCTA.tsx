@@ -33,7 +33,7 @@ const Premium3DButton = ({
     primary: {
       bg: "bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]",
       text: "text-[#1A1A1A]",
-      border: "border-2 border-gold/50",
+      border: "border-2 border-[#B89555]/50",
       shadow: `0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.9), inset 0 -2px 4px rgba(200,167,102,0.2), 0 0 20px rgba(200,167,102,0.3)`,
     },
     whatsapp: {
@@ -44,8 +44,8 @@ const Premium3DButton = ({
     },
     call: {
       bg: "bg-[#FDFBF7]",
-      text: "text-gold",
-      border: "border-2 border-gold/50",
+      text: "text-[#1A1A1A]",
+      border: "border-2 border-[#B89555]/50",
       shadow: `0 10px 25px rgba(200,167,102,0.3), 0 6px 15px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.9), 0 0 15px rgba(200,167,102,0.2)`,
     }
   };
@@ -78,18 +78,18 @@ export const GuideCTA = ({
       <div className="container mx-auto px-4">
         <div className="max-w-[1100px] mx-auto">
           {/* OUTER CARD (Active Champagne) */}
-          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-2 sm:p-3">
+          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl sm:rounded-3xl p-2 sm:p-3">
             {/* INNER CARD (Pearl) */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, ease: "easeOut" }}
-              className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl sm:rounded-2xl ${variant === "compact" ? "p-6" : "p-8 md:p-12"} shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center`}
+              className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl sm:rounded-2xl ${variant === "compact" ? "p-6" : "p-8 md:p-12"} shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center`}
             >
               {Icon && (
-                <div className="w-16 h-16 bg-[#1A1A1A] border border-gold/30 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <Icon className="w-8 h-8 text-gold" />
+                <div className="w-16 h-16 bg-[#1A1A1A] border border-[#B89555]/30 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                  <Icon className="w-8 h-8 text-[#1A1A1A]" />
                 </div>
               )}
               
@@ -122,10 +122,10 @@ export const GuideCTA = ({
                     <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
                     <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                     <span className="relative flex items-center gap-2">
-                      {primaryAction.icon && <primaryAction.icon className="w-5 h-5 text-gold group-hover:text-[#1A1A1A] transition-colors" />}
-                      <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">{primaryAction.label.split(' ')[0]}</span>
-                      <span className="text-gold group-hover:text-[#1A1A1A] transition-colors">{primaryAction.label.split(' ').slice(1).join(' ')}</span>
-                      <ArrowUpRight className="w-4 h-4 text-[#1A1A1A] group-hover:text-gold transition-colors" />
+                      {primaryAction.icon && <primaryAction.icon className="w-5 h-5 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />}
+                      <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">{primaryAction.label.split(' ')[0]}</span>
+                      <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">{primaryAction.label.split(' ').slice(1).join(' ')}</span>
+                      <ArrowUpRight className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
                     </span>
                   </a>
                 )}

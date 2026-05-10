@@ -17,7 +17,7 @@ interface SubscriptionSuccessModalProps {
 const SubscriptionSuccessModal = ({ isOpen, onClose }: SubscriptionSuccessModalProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 max-w-md z-[10050]">
+      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 max-w-md z-[10050]">
         <DialogHeader className="text-center space-y-4 pt-4">
           <div className="mx-auto w-20 h-20 rounded-full bg-gradient-to-br from-emerald-500/20 to-emerald-500/10 border-2 border-emerald-500/50 flex items-center justify-center">
             <CheckCircle className="w-10 h-10 text-emerald-500" />
@@ -28,7 +28,7 @@ const SubscriptionSuccessModal = ({ isOpen, onClose }: SubscriptionSuccessModalP
           </DialogTitle>
           
           <DialogDescription className="text-muted-foreground text-base leading-relaxed">
-            Your email has been successfully registered for <span className="font-semibold text-gold">Stay in the Loop</span>.
+            Your email has been successfully registered for <span className="font-semibold text-[#1A1A1A]">Stay in the Loop</span>.
             <br /><br />
             You will now receive curated updates, exclusive launches, and investment opportunities.
             Check your inbox for a welcome email.
@@ -37,23 +37,23 @@ const SubscriptionSuccessModal = ({ isOpen, onClose }: SubscriptionSuccessModalP
 
         <div className="space-y-6 py-4">
           {/* Manage preferences hint */}
-          <div className="p-4 rounded-xl border border-gold/30 bg-gold/5">
+          <div className="p-4 rounded-xl border border-[#B89555]/30 bg-[#EFE6D6]/5">
             <p className="text-sm text-foreground mb-3 font-medium">
               You may manage or disable your subscription anytime from:
             </p>
             <div className="flex items-center gap-2 text-sm flex-wrap">
-              <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-[#1A1A1A]/5 border border-gold/20">
-                <User className="w-3.5 h-3.5 text-gold" />
+              <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-[#1A1A1A]/5 border border-[#B89555]/20">
+                <User className="w-3.5 h-3.5 text-[#1A1A1A]" />
                 <span className="text-foreground font-medium">My Account</span>
               </div>
               <ChevronRight className="w-4 h-4 text-muted-foreground" />
-              <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-gold/20 border border-gold/40">
-                <Settings className="w-3.5 h-3.5 text-gold" />
-                <span className="text-gold font-medium">Settings</span>
+              <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-[#EFE6D6]/20 border border-[#B89555]/40">
+                <Settings className="w-3.5 h-3.5 text-[#1A1A1A]" />
+                <span className="text-[#1A1A1A] font-medium">Settings</span>
               </div>
               <ChevronRight className="w-4 h-4 text-muted-foreground" />
-              <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-[#1A1A1A]/5 border border-gold/20">
-                <Mail className="w-3.5 h-3.5 text-gold" />
+              <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-[#1A1A1A]/5 border border-[#B89555]/20">
+                <Mail className="w-3.5 h-3.5 text-[#1A1A1A]" />
                 <span className="text-foreground font-medium">Email Notifications</span>
               </div>
             </div>
@@ -67,7 +67,7 @@ const SubscriptionSuccessModal = ({ isOpen, onClose }: SubscriptionSuccessModalP
               </Link>
             </Button>
             
-            <Button variant="outline" className="w-full border-gold/40 hover:border-gold" onClick={onClose}>
+            <Button variant="outline" className="w-full border-[#B89555]/40 hover:border-[#B89555]" onClick={onClose}>
               Continue Browsing
             </Button>
           </div>

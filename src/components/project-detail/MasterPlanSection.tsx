@@ -48,13 +48,13 @@ export default function MasterPlanSection({
   return (
     <div className="jj-card-inner">
       <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-6">
-        <Map className="w-5 h-5 text-gold" />
+        <Map className="w-5 h-5 text-[#1A1A1A]" />
         Master Plan {communityName && `- ${communityName}`}
       </h3>
 
       {/* Master Plan Image with Maximize Button */}
       {masterPlanImageUrl && (
-        <div className="mb-6 rounded-xl overflow-hidden border border-gold/30 relative group">
+        <div className="mb-6 rounded-xl overflow-hidden border border-[#B89555]/30 relative group">
           <SafeImage
             src={masterPlanImageUrl}
             alt={`${projectName} Master Plan`}
@@ -83,10 +83,10 @@ export default function MasterPlanSection({
                 return (
                   <div 
                     key={idx}
-                    className="flex items-center gap-3 p-3 rounded-lg border border-gold/20 bg-card"
+                    className="flex items-center gap-3 p-3 rounded-lg border border-[#B89555]/20 bg-card"
                   >
-                    <div className="w-8 h-8 rounded-full bg-gold/10 flex items-center justify-center flex-shrink-0">
-                      <Icon className="w-4 h-4 text-gold" />
+                    <div className="w-8 h-8 rounded-full bg-[#EFE6D6]/10 flex items-center justify-center flex-shrink-0">
+                      <Icon className="w-4 h-4 text-[#1A1A1A]" />
                     </div>
                     <span className="text-sm text-foreground">{highlight}</span>
                   </div>

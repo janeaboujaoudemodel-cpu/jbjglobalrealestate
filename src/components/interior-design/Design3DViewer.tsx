@@ -56,8 +56,8 @@ const Design3DViewer = ({ imageUrl, projectName }: Design3DViewerProps) => {
           variant={is3D ? 'default' : 'outline'}
           onClick={() => { setIs3D(!is3D); resetRotation(); }}
           className={is3D 
-            ? 'bg-gold hover:bg-amber-600 text-[#1A1A1A] border-0' 
-            : 'bg-[#1A1A1A]/60 border-gold/40 text-gold hover:bg-gold/15'
+            ? 'bg-[#EFE6D6] hover:bg-amber-600 text-[#1A1A1A] border-0' 
+            : 'bg-[#1A1A1A]/60 border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/15'
           }
         >
           <Move3D className="w-4 h-4 mr-1" />
@@ -106,7 +106,7 @@ const Design3DViewer = ({ imageUrl, projectName }: Design3DViewerProps) => {
           }}
         />
         {is3D && (
-          <div className="absolute bottom-3 left-3 bg-[#1A1A1A]/70 text-gold text-xs px-3 py-1.5 rounded-full backdrop-blur-sm">
+          <div className="absolute bottom-3 left-3 bg-[#1A1A1A]/70 text-[#1A1A1A] text-xs px-3 py-1.5 rounded-full backdrop-blur-sm">
             🎮 Drag to rotate • {rotateX.toFixed(0)}° × {rotateY.toFixed(0)}°
           </div>
         )}

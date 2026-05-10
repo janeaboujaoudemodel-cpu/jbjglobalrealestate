@@ -103,21 +103,21 @@ export default function RoleSelector({ selectedRole, onRoleChange, isLoading = f
             disabled={isSelecting || isLoading}
             className={`w-full text-left rounded-xl border-2 p-4 transition-all ${
               isRoleActive(role.id)
-                ? "border-gold bg-gold/10"
-                : "border-[#1A1A1A] hover:border-[#1A1A1A] bg-zinc-900/50"
+                ? "border-[#B89555] bg-[#EFE6D6]/10"
+                : "border-[#1A1A1A] hover:border-[#1A1A1A] bg-[#FDFBF7]/50"
             } ${(isSelecting || isLoading) ? "cursor-wait" : "cursor-pointer"}`}
           >
             <div className="flex items-start gap-4">
               <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
                 isRoleActive(role.id)
-                  ? "bg-gold/20"
-                  : "bg-zinc-800"
+                  ? "bg-[#EFE6D6]/20"
+                  : "bg-[#1A1A1A]"
               }`}>
                 {isRoleLoading(role.id) ? (
-                  <Loader2 className="w-6 h-6 text-gold animate-spin" />
+                  <Loader2 className="w-6 h-6 text-[#1A1A1A] animate-spin" />
                 ) : (
                   <role.icon className={`w-6 h-6 ${
-                    isRoleActive(role.id) ? "text-gold" : "text-white/70"
+                    isRoleActive(role.id) ? "text-[#1A1A1A]" : "text-white/70"
                   }`} />
                 )}
               </div>
@@ -125,10 +125,10 @@ export default function RoleSelector({ selectedRole, onRoleChange, isLoading = f
                 <div className="flex items-center gap-2 mb-1">
                   <span className="font-semibold text-white">{role.title}</span>
                   {isRoleActive(role.id) && !isRoleLoading(role.id) && (
-                    <CheckCircle2 className="w-4 h-4 text-gold" />
+                    <CheckCircle2 className="w-4 h-4 text-[#1A1A1A]" />
                   )}
                   {isRoleLoading(role.id) && (
-                    <span className="text-xs text-gold">Saving...</span>
+                    <span className="text-xs text-[#1A1A1A]">Saving...</span>
                   )}
                 </div>
                 <p className="text-white/70 text-sm mb-3">{role.description}</p>
@@ -139,7 +139,7 @@ export default function RoleSelector({ selectedRole, onRoleChange, isLoading = f
                       variant="outline" 
                       className={`text-xs ${
                         isRoleActive(role.id)
-                          ? "border-gold/50 text-gold"
+                          ? "border-[#B89555]/50 text-[#1A1A1A]"
                           : "border-[#1A1A1A] text-white/90"
                       }`}
                     >

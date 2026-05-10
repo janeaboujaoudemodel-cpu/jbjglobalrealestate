@@ -56,12 +56,12 @@ export function AICreativeDirector({
   };
 
   return (
-    <div className="bg-slate-800/50 rounded-xl border border-gold/20 overflow-hidden">
+    <div className="bg-slate-800/50 rounded-xl border border-[#B89555]/20 overflow-hidden">
       <Collapsible open={isExpanded} onOpenChange={setIsExpanded}>
         <CollapsibleTrigger className="w-full p-4 flex items-center justify-between hover:bg-slate-700/30 transition-colors">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-gold/20 to-amber-500/20 flex items-center justify-center">
-              <Wand2 className="w-5 h-5 text-gold" />
+              <Wand2 className="w-5 h-5 text-[#1A1A1A]" />
             </div>
             <div className="text-left">
               <h3 className="font-semibold text-white">AI Creative Director</h3>
@@ -75,8 +75,8 @@ export function AICreativeDirector({
           <div className="p-4 pt-0 space-y-4">
             {/* Property Context */}
             {property && (
-              <div className="p-3 rounded-lg bg-gold/10 border border-gold/30">
-                <p className="text-xs text-gold mb-1">Creating content for:</p>
+              <div className="p-3 rounded-lg bg-[#EFE6D6]/10 border border-[#B89555]/30">
+                <p className="text-xs text-[#1A1A1A] mb-1">Creating content for:</p>
                 <p className="text-sm font-medium text-white">{property.name}</p>
                 <p className="text-xs text-slate-400">{property.area_name} {property.developer_name && `by ${property.developer_name}`}</p>
               </div>
@@ -104,7 +104,7 @@ export function AICreativeDirector({
                   <button
                     key={i}
                     onClick={() => setPrompt(sample)}
-                    className="px-3 py-1.5 text-xs rounded-full bg-slate-700/50 text-slate-300 hover:bg-gold/20 hover:text-gold transition-colors"
+                    className="px-3 py-1.5 text-xs rounded-full bg-slate-700/50 text-slate-300 hover:bg-[#EFE6D6]/20 hover:text-[#1A1A1A] transition-colors"
                   >
                     {sample.slice(0, 50)}...
                   </button>

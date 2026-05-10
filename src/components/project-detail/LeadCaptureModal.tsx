@@ -114,11 +114,11 @@ const LeadCaptureModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold shadow-[0_8px_40px_rgba(200,167,102,0.4)]">
+      <DialogContent className="sm:max-w-md bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] shadow-[0_8px_40px_rgba(200,167,102,0.4)]">
         {isSuccess ? (
           <div className="flex flex-col items-center justify-center py-8">
-            <div className="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center mb-4">
-              <CheckCircle className="w-8 h-8 text-gold" />
+            <div className="w-16 h-16 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center mb-4">
+              <CheckCircle className="w-8 h-8 text-[#1A1A1A]" />
             </div>
             <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
               {isInterestOnly ? "Thank You!" : "Download Ready!"}
@@ -131,8 +131,8 @@ const LeadCaptureModal = ({
           <>
             <DialogHeader>
               <div className="flex items-center gap-3 mb-2">
-                <div className="w-10 h-10 rounded-lg bg-gold/20 border border-gold/30 flex items-center justify-center">
-                  <FileText className="w-5 h-5 text-gold" />
+                <div className="w-10 h-10 rounded-lg bg-[#EFE6D6]/20 border border-[#B89555]/30 flex items-center justify-center">
+                  <FileText className="w-5 h-5 text-[#1A1A1A]" />
                 </div>
                 <div>
                   <DialogTitle className="text-lg">{isInterestOnly ? "Register Your Interest" : `Download ${documentLabels[documentType]}`}</DialogTitle>

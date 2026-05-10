@@ -33,7 +33,7 @@ export const PreFooterSeparator = ({
       <section className="bg-gradient-to-r from-champagne-light via-champagne to-champagne-dark py-16">
         <div className="mx-1 sm:mx-2 md:mx-3 lg:mx-4">
           <div className="text-center">
-            <div className="h-px bg-gold/30 w-24 mx-auto" />
+            <div className="h-px bg-[#EFE6D6]/30 w-24 mx-auto" />
           </div>
         </div>
       </section>
@@ -45,10 +45,10 @@ export const PreFooterSeparator = ({
       <div className="mx-1 sm:mx-2 md:mx-3 lg:mx-4">
         <div>
           {/* Pearl Card - Single inner layer on champagne section */}
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-10 lg:p-12 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-10 lg:p-12 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center">
             {badgeText && (
-              <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-gold/20 via-[#F7F2EA] to-gold/20 border border-gold/50 rounded-full text-[#1A1A1A] text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-6 shadow-lg shadow-gold/20">
-                <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gold" />
+              <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-gold/20 via-[#F7F2EA] to-gold/20 border border-[#B89555]/50 rounded-full text-[#1A1A1A] text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-6 shadow-lg shadow-gold/20">
+                <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#1A1A1A]" />
                 {badgeText}
               </div>
             )}
@@ -80,10 +80,10 @@ export const PreFooterSeparator = ({
                   <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
                   <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                   <span className="relative flex items-center gap-1">
-                    <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">{primaryText.split(' ')[0]}</span>
-                    <span className="text-gold group-hover:text-[#1A1A1A] transition-colors">{primaryText.split(' ').slice(1).join(' ') || ''}</span>
+                    <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">{primaryText.split(' ')[0]}</span>
+                    <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">{primaryText.split(' ').slice(1).join(' ') || ''}</span>
                   </span>
-                  <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-[#1A1A1A] group-hover:text-gold transition-colors relative z-10" />
+                  <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors relative z-10" />
                 </button>
               </Link>
               {/* Secondary Button - Transparent with black border */}

@@ -195,10 +195,10 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <FolderOpen className="w-5 h-5 text-gold" />
+          <FolderOpen className="w-5 h-5 text-[#1A1A1A]" />
           <h3 className="text-white font-semibold">My Projects</h3>
         </div>
-        <Button size="sm" onClick={onCreateNew} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
+        <Button size="sm" onClick={onCreateNew} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
           <Plus className="w-4 h-4 mr-1" />
           New Project
         </Button>
@@ -212,7 +212,7 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search projects..."
-            className="pl-10 bg-zinc-800 border-[#1A1A1A] text-white"
+            className="pl-10 bg-[#1A1A1A] border-[#1A1A1A] text-white"
           />
         </div>
         <Button
@@ -234,8 +234,8 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
               onClick={() => setSelectedCategory(cat.id)}
               className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
                 selectedCategory === cat.id
-                  ? 'bg-gold text-[#1A1A1A]'
-                  : 'bg-zinc-800 text-white/70 hover:bg-[#1A1A1A]'
+                  ? 'bg-[#EFE6D6] text-[#1A1A1A]'
+                  : 'bg-[#1A1A1A] text-white/70 hover:bg-[#1A1A1A]'
               }`}
             >
               {cat.label}
@@ -247,7 +247,7 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
       {/* Projects List */}
       {isLoading ? (
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-8 h-8 text-gold animate-spin" />
+          <Loader2 className="w-8 h-8 text-[#1A1A1A] animate-spin" />
         </div>
       ) : filteredProjects.length === 0 ? (
         <div className="text-center py-12">
@@ -256,7 +256,7 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
           <p className="text-white/90 text-sm mb-4">
             {searchQuery ? 'Try a different search term' : 'Create your first design project'}
           </p>
-          <Button onClick={onCreateNew} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
+          <Button onClick={onCreateNew} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
             <Plus className="w-4 h-4 mr-2" />
             Create Project
           </Button>
@@ -274,15 +274,15 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
                   transition={{ delay: index * 0.05 }}
                   className={`group rounded-lg border-2 transition-all cursor-pointer ${
                     selectedProjectId === project.id
-                      ? 'border-gold bg-gold/10'
-                      : 'border-[#1A1A1A] bg-zinc-800/50 hover:border-[#1A1A1A]'
+                      ? 'border-[#B89555] bg-[#EFE6D6]/10'
+                      : 'border-[#1A1A1A] bg-[#1A1A1A]/50 hover:border-[#1A1A1A]'
                   } ${viewMode === 'grid' ? 'p-3' : 'p-4'}`}
                   onClick={() => onSelectProject(project)}
                 >
                   {viewMode === 'grid' ? (
                     <>
                       {/* Thumbnail */}
-                      <div className="aspect-video bg-zinc-700 rounded-lg mb-2 overflow-hidden relative">
+                      <div className="aspect-video bg-[#1A1A1A] rounded-lg mb-2 overflow-hidden relative">
                         {project.thumbnail_url ? (
                           <img 
                             src={project.thumbnail_url} 
@@ -305,7 +305,7 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
                               <MoreVertical className="w-3 h-3 text-white" />
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent className="bg-zinc-900 border-[#1A1A1A]">
+                          <DropdownMenuContent className="bg-[#FDFBF7] border-[#1A1A1A]">
                             <DropdownMenuItem onClick={() => handleDuplicateProject(project)} className="text-white/85">
                               <Copy className="w-4 h-4 mr-2" /> Duplicate
                             </DropdownMenuItem>
@@ -330,7 +330,7 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
                     </>
                   ) : (
                     <div className="flex items-center gap-4">
-                      <div className="w-16 h-12 bg-zinc-700 rounded overflow-hidden flex-shrink-0">
+                      <div className="w-16 h-12 bg-[#1A1A1A] rounded overflow-hidden flex-shrink-0">
                         {project.thumbnail_url ? (
                           <img 
                             src={project.thumbnail_url} 
@@ -359,7 +359,7 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
                             <MoreVertical className="w-4 h-4 text-white/70" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent className="bg-zinc-900 border-[#1A1A1A]">
+                        <DropdownMenuContent className="bg-[#FDFBF7] border-[#1A1A1A]">
                           <DropdownMenuItem onClick={() => handleDuplicateProject(project)} className="text-white/85">
                             <Copy className="w-4 h-4 mr-2" /> Duplicate
                           </DropdownMenuItem>

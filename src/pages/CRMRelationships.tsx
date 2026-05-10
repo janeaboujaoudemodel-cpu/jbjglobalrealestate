@@ -316,7 +316,7 @@ const STATUS_BROKERAGE = [
   { v: "negotiating", label: "Negotiating", cls: "bg-amber-200 text-[#1A1A1A]" },
   { v: "active_partner", label: "Active Partner", cls: "bg-emerald-200 text-[#1A1A1A]" },
   { v: "closed_deals", label: "Closed Deals", cls: "bg-blue-200 text-[#1A1A1A]" },
-  { v: "dormant", label: "Dormant", cls: "bg-zinc-200 text-[#1A1A1A]" },
+  { v: "dormant", label: "Dormant", cls: "bg-[#EFE6D6] text-[#1A1A1A]" },
   { v: "blacklisted", label: "Blacklisted", cls: "bg-red-200 text-[#1A1A1A]" },
 ];
 const STATUS_CLIENT = [
@@ -326,7 +326,7 @@ const STATUS_CLIENT = [
   { v: "vip", label: "VIP", cls: "bg-purple-200 text-[#1A1A1A]" },
   { v: "closed_won", label: "Closed Won", cls: "bg-emerald-200 text-[#1A1A1A]" },
   { v: "closed_lost", label: "Closed Lost", cls: "bg-red-200 text-[#1A1A1A]" },
-  { v: "dormant", label: "Dormant", cls: "bg-zinc-200 text-[#1A1A1A]" },
+  { v: "dormant", label: "Dormant", cls: "bg-[#EFE6D6] text-[#1A1A1A]" },
 ];
 const STATUS_DEV = [
   { v: "not_started", label: "Not Started", cls: "bg-[#EFE6D6] text-[#1A1A1A]" },
@@ -335,7 +335,7 @@ const STATUS_DEV = [
   { v: "under_review", label: "Under Review", cls: "bg-blue-200 text-[#1A1A1A]" },
   { v: "registered", label: "Registered", cls: "bg-emerald-200 text-[#1A1A1A]" },
   { v: "rejected", label: "Rejected", cls: "bg-red-200 text-[#1A1A1A]" },
-  { v: "expired", label: "Expired", cls: "bg-zinc-300 text-[#1A1A1A]" },
+  { v: "expired", label: "Expired", cls: "bg-[#E5D9C4] text-[#1A1A1A]" },
 ];
 
 type StatusOption = { v: string; label: string; cls: string };

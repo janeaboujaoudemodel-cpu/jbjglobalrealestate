@@ -46,7 +46,7 @@ export default function PortfolioAssetCard({ asset }: PortfolioAssetCardProps) {
         variant="outline"
         className={
           type === "off-plan"
-            ? "border-gold/50 text-gold"
+            ? "border-[#B89555]/50 text-[#1A1A1A]"
             : "border-emerald-500/50 text-emerald-600"
         }
       >
@@ -86,7 +86,7 @@ export default function PortfolioAssetCard({ asset }: PortfolioAssetCardProps) {
   };
 
   return (
-    <Card className="border-2 border-gold/30 overflow-hidden group hover:border-gold transition-colors">
+    <Card className="border-2 border-[#B89555]/30 overflow-hidden group hover:border-[#B89555] transition-colors">
       {/* Image Header */}
       <div className="aspect-video relative overflow-hidden bg-[#F7F2EA]">
         {asset.imageUrl ? (
@@ -141,11 +141,11 @@ export default function PortfolioAssetCard({ asset }: PortfolioAssetCardProps) {
               View Details
             </Button>
           </Link>
-          <Button variant="outline" size="sm" className="gap-1 border-gold/30">
+          <Button variant="outline" size="sm" className="gap-1 border-[#B89555]/30">
             <FileText className="w-4 h-4" />
             Reports
           </Button>
-          <Button variant="outline" size="sm" className="gap-1 border-gold/30">
+          <Button variant="outline" size="sm" className="gap-1 border-[#B89555]/30">
             <FolderOpen className="w-4 h-4" />
             Docs
           </Button>

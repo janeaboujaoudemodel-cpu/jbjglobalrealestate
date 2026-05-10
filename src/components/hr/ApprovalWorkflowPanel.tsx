@@ -158,7 +158,7 @@ export function ApprovalWorkflowPanel() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#B89555]"></div>
       </div>
     );
   }
@@ -212,16 +212,16 @@ export function ApprovalWorkflowPanel() {
 
       {/* Tabs */}
       <Tabs defaultValue="pending" className="space-y-4">
-        <TabsList className="bg-gradient-to-r from-[#F7F1E6] to-[#ECE2D2] border-2 border-gold/30">
-          <TabsTrigger value="pending" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]">
+        <TabsList className="bg-gradient-to-r from-[#F7F1E6] to-[#ECE2D2] border-2 border-[#B89555]/30">
+          <TabsTrigger value="pending" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
             <Clock className="h-4 w-4 mr-2" />
             Pending ({pendingApprovals.length})
           </TabsTrigger>
-          <TabsTrigger value="approved" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]">
+          <TabsTrigger value="approved" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
             <CheckCircle className="h-4 w-4 mr-2" />
             Approved ({approvedRequests.length})
           </TabsTrigger>
-          <TabsTrigger value="rejected" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]">
+          <TabsTrigger value="rejected" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
             <XCircle className="h-4 w-4 mr-2" />
             Rejected ({rejectedRequests.length})
           </TabsTrigger>

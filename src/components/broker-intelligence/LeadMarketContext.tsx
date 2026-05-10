@@ -88,7 +88,7 @@ export function LeadMarketContext({ leadArea, leadIntent = "buy", compact = fals
 
   if (!areaData || !contextNarrative) {
     return (
-      <Card className="bg-zinc-900/50 border-[#1A1A1A]">
+      <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
         <CardContent className="p-4 text-center">
           <Info className="w-6 h-6 text-[#1A1A1A]/70 mx-auto mb-2" />
           <p className="text-white/90 text-sm">
@@ -110,7 +110,7 @@ export function LeadMarketContext({ leadArea, leadIntent = "buy", compact = fals
       case "high":
         return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">High Activity</Badge>;
       case "medium":
-        return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">Moderate</Badge>;
+        return <Badge className="bg-amber-500/20 text-[#1A1A1A] border-amber-500/30">Moderate</Badge>;
       default:
         return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">Relaxed</Badge>;
     }
@@ -118,10 +118,10 @@ export function LeadMarketContext({ leadArea, leadIntent = "buy", compact = fals
 
   if (compact) {
     return (
-      <div className="bg-zinc-800/50 rounded-lg p-3 border border-[#1A1A1A]/50">
+      <div className="bg-[#1A1A1A]/50 rounded-lg p-3 border border-[#1A1A1A]/50">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-gold" />
+            <MapPin className="w-4 h-4 text-[#1A1A1A]" />
             <span className="text-white font-medium text-sm">{areaData.area}</span>
           </div>
           {getUrgencyBadge(contextNarrative.urgency)}
@@ -132,10 +132,10 @@ export function LeadMarketContext({ leadArea, leadIntent = "buy", compact = fals
   }
 
   return (
-    <Card className="bg-zinc-900/50 border-[#1A1A1A]">
+    <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
       <CardHeader className="pb-3">
         <CardTitle className="text-white text-base flex items-center gap-2">
-          <MapPin className="w-5 h-5 text-gold" />
+          <MapPin className="w-5 h-5 text-[#1A1A1A]" />
           Market Context: {areaData.area}
         </CardTitle>
       </CardHeader>
@@ -148,7 +148,7 @@ export function LeadMarketContext({ leadArea, leadIntent = "buy", compact = fals
 
         {/* Key Metrics */}
         <div className="grid grid-cols-3 gap-3">
-          <div className="bg-zinc-800/50 rounded-lg p-3 text-center">
+          <div className="bg-[#1A1A1A]/50 rounded-lg p-3 text-center">
             <p className="text-white/90 text-xs mb-1">Price Trend</p>
             <div className="flex items-center justify-center gap-1">
               {getTrendIcon(areaData.yoyChange)}
@@ -157,9 +157,9 @@ export function LeadMarketContext({ leadArea, leadIntent = "buy", compact = fals
               </span>
             </div>
           </div>
-          <div className="bg-zinc-800/50 rounded-lg p-3 text-center">
+          <div className="bg-[#1A1A1A]/50 rounded-lg p-3 text-center">
             <p className="text-white/90 text-xs mb-1">Demand</p>
-            <div className="w-full bg-zinc-700 rounded-full h-1.5 mt-1">
+            <div className="w-full bg-[#1A1A1A] rounded-full h-1.5 mt-1">
               <div 
                 className="bg-emerald-500 h-1.5 rounded-full" 
                 style={{ width: `${areaData.demandScore}%` }}
@@ -167,9 +167,9 @@ export function LeadMarketContext({ leadArea, leadIntent = "buy", compact = fals
             </div>
             <span className="text-white text-xs">{areaData.demandScore}%</span>
           </div>
-          <div className="bg-zinc-800/50 rounded-lg p-3 text-center">
+          <div className="bg-[#1A1A1A]/50 rounded-lg p-3 text-center">
             <p className="text-white/90 text-xs mb-1">Supply</p>
-            <div className="w-full bg-zinc-700 rounded-full h-1.5 mt-1">
+            <div className="w-full bg-[#1A1A1A] rounded-full h-1.5 mt-1">
               <div 
                 className="bg-amber-500 h-1.5 rounded-full" 
                 style={{ width: `${areaData.supplyScore}%` }}
@@ -180,7 +180,7 @@ export function LeadMarketContext({ leadArea, leadIntent = "buy", compact = fals
         </div>
 
         {/* Broker Guidance */}
-        <div className="bg-gold/5 border border-gold/20 rounded-lg p-3">
+        <div className="bg-[#EFE6D6]/5 border border-[#B89555]/20 rounded-lg p-3">
           <p className="text-white/85 text-sm">{contextNarrative.detail}</p>
         </div>
 

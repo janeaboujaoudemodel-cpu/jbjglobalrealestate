@@ -277,16 +277,16 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
 
   if (isLoading) {
     return (
-      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30">
+      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-foreground">
-            <Database className="h-5 w-5 text-gold" />
+            <Database className="h-5 w-5 text-[#1A1A1A]" />
             Pending Projects & Updates
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-center py-8">
-            <RefreshCw className="h-6 w-6 animate-spin text-gold" />
+            <RefreshCw className="h-6 w-6 animate-spin text-[#1A1A1A]" />
           </div>
         </CardContent>
       </Card>
@@ -294,10 +294,10 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
   }
 
   return (
-    <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30">
+    <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="flex items-center gap-2 text-foreground">
-          <Database className="h-5 w-5 text-gold" />
+          <Database className="h-5 w-5 text-[#1A1A1A]" />
           Pending Projects & Updates
           {totalPending > 0 && (
             <Badge variant="secondary" className="bg-amber-100 text-amber-800 text-sm">{totalPending}</Badge>
@@ -309,13 +309,13 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
               size="sm"
               onClick={handleApproveAll}
               disabled={batchProcessing}
-              className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-gold/40 hover:border-gold/60 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
+              className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 hover:border-[#B89555]/60 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
             >
               <Check className="h-4 w-4 mr-1" />
               Approve All ({newProjects.length})
             </Button>
           )}
-          <Button variant="outline" size="sm" onClick={fetchPendingUpdates} className="border-gold/30 hover:bg-gold/10">
+          <Button variant="outline" size="sm" onClick={fetchPendingUpdates} className="border-[#B89555]/30 hover:bg-[#EFE6D6]/10">
             <RefreshCw className="h-4 w-4 mr-2" />
             Refresh
           </Button>
@@ -380,7 +380,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
 
             {/* Migration Log */}
             {migrationLog.length > 0 && (
-              <div className="bg-zinc-950 border border-[#1A1A1A] rounded-xl overflow-hidden">
+              <div className="bg-[#FDFBF7] border border-[#1A1A1A] rounded-xl overflow-hidden">
                 <div className="px-4 py-2 border-b border-[#1A1A1A]">
                   <span className="text-[#1A1A1A]/70 text-xs font-semibold">Migration Log</span>
                 </div>
@@ -390,7 +390,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
                       line.includes("[ERROR]") ? "text-red-400" :
                       line.includes("[OK]") || line.includes("[COMPLETE]") ? "text-emerald-400" :
                       line.includes("[START]") ? "text-yellow-300" :
-                      line.includes("[WARN]") ? "text-amber-400" :
+                      line.includes("[WARN]") ? "text-[#1A1A1A]" :
                       "text-[#1A1A1A]/70"
                     }`}>{line}</div>
                   ))}
@@ -402,9 +402,9 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
             {newProjects.length > 0 && (
               <div>
                 <h3 className="text-sm font-semibold text-[#1A1A1A]/70 mb-3 flex items-center gap-2">
-                  <Building className="h-4 w-4 text-gold" />
+                  <Building className="h-4 w-4 text-[#1A1A1A]" />
                   New Project Discoveries
-                  <Badge className="bg-gold/20 text-gold border border-gold/30 text-xs">{newProjects.length}</Badge>
+                  <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border border-[#B89555]/30 text-xs">{newProjects.length}</Badge>
                 </h3>
                 <ScrollArea className="h-[600px] pr-2">
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -415,7 +415,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
                       return (
                         <div
                           key={update.id}
-                          className="border-2 border-gold/30 rounded-xl bg-[#FDFBF7] overflow-hidden shadow-[0_4px_20px_rgba(200,167,102,0.15)] hover:shadow-[0_12px_40px_rgba(200,167,102,0.3)] hover:scale-[1.01] transition-all duration-300"
+                          className="border-2 border-[#B89555]/30 rounded-xl bg-[#FDFBF7] overflow-hidden shadow-[0_4px_20px_rgba(200,167,102,0.15)] hover:shadow-[0_12px_40px_rgba(200,167,102,0.3)] hover:scale-[1.01] transition-all duration-300"
                         >
                           {/* Image / Placeholder - full card style */}
                           <div className="relative aspect-[4/3] bg-gradient-to-br from-muted via-muted/80 to-muted/60">
@@ -451,7 +451,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
                             </h4>
 
                             {parsed.developer && (
-                              <p className="text-sm text-gold truncate">by {parsed.developer}</p>
+                              <p className="text-sm text-[#1A1A1A] truncate">by {parsed.developer}</p>
                             )}
 
                             <div className="flex items-center gap-3 text-sm text-muted-foreground">
@@ -474,7 +474,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
                                   AED {parsed.price_from.toLocaleString()}
                                 </span>
                               ) : (
-                                <span className="font-semibold text-gold">POA</span>
+                                <span className="font-semibold text-[#1A1A1A]">POA</span>
                               )}
                             </div>
 
@@ -528,7 +528,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
                 <ScrollArea className="h-[300px] pr-2">
                   <div className="space-y-3">
                     {fieldUpdates.map((update) => (
-                      <div key={update.id} className="border border-gold/20 rounded-lg p-4 bg-[#FDFBF7]/50">
+                      <div key={update.id} className="border border-[#B89555]/20 rounded-lg p-4 bg-[#FDFBF7]/50">
                         <div className="flex items-start justify-between mb-2">
                           <span className="font-medium text-[#1A1A1A] text-sm">
                             {update.field_name.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase())}

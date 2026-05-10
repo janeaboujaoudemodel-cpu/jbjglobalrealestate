@@ -20,7 +20,7 @@ export function BookShelf({ books, title = 'Books, Guides & Intelligence' }: Boo
     <>
       <div>
         <h2 className="text-xl font-bold text-[#1A1A1A] mb-6 flex items-center gap-2">
-          <BookOpen className="w-5 h-5 text-gold" />
+          <BookOpen className="w-5 h-5 text-[#1A1A1A]" />
           {title}
         </h2>
         {/* No card background — books float directly on the layer */}
@@ -61,7 +61,7 @@ export function BookShelf({ books, title = 'Books, Guides & Intelligence' }: Boo
                   {/* 3D pages edge removed to prevent white divider cutting the cover art */}
                 </div>
               </div>
-              <p className="text-xs text-[#1A1A1A]/70 text-center font-medium group-hover:text-gold transition-colors leading-tight">
+              <p className="text-xs text-[#1A1A1A]/70 text-center font-medium group-hover:text-[#1A1A1A] transition-colors leading-tight">
                 {book.title}
               </p>
             </motion.button>
@@ -80,44 +80,44 @@ export function BookShelf({ books, title = 'Books, Guides & Intelligence' }: Boo
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden"
             style={{
               boxShadow: '0 20px 60px rgba(200,167,102,0.3), 0 10px 30px rgba(0,0,0,0.2)',
             }}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex items-start gap-5 p-6 border-b border-gold/20">
-              <div className="relative w-24 h-32 rounded-md overflow-hidden shadow-lg flex-shrink-0 border border-gold/40">
+            <div className="flex items-start gap-5 p-6 border-b border-[#B89555]/20">
+              <div className="relative w-24 h-32 rounded-md overflow-hidden shadow-lg flex-shrink-0 border border-[#B89555]/40">
                 <BookCoverFace book={selectedBook} size="modal" />
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="text-xl font-bold text-[#1A1A1A] mb-1">{selectedBook.title}</h3>
-                <p className="text-gold text-sm capitalize font-semibold">{selectedBook.category}</p>
+                <p className="text-[#1A1A1A] text-sm capitalize font-semibold">{selectedBook.category}</p>
                 <p className="text-[#1A1A1A]/40 text-xs mt-2">
                   {selectedBook.tableOfContents.length} chapters
                 </p>
               </div>
-              <button onClick={() => setSelectedBook(null)} className="text-gold hover:text-[#1A1A1A] transition-colors">
+              <button onClick={() => setSelectedBook(null)} className="text-[#1A1A1A] hover:text-[#1A1A1A] transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Table of Contents */}
             <div className="p-6 overflow-y-auto max-h-[45vh]">
-              <h4 className="text-sm font-semibold text-gold uppercase tracking-wider mb-4">Table of Contents</h4>
+              <h4 className="text-sm font-semibold text-[#1A1A1A] uppercase tracking-wider mb-4">Table of Contents</h4>
               <div className="space-y-1">
                 {selectedBook.tableOfContents.map((item, index) => (
                   <button
                     key={index}
-                    className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gold/10 transition-colors group text-left"
+                    className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-[#EFE6D6]/10 transition-colors group text-left"
                     onClick={() => {
                       const directHref = selectedBook._chapterHrefs?.[index];
                       setSelectedBook(null);
                       navigate(directHref || `${selectedBook.href}#chapter-${index + 1}`);
                     }}
                   >
-                    <span className="w-8 h-8 rounded-lg bg-[#1A1A1A] border border-gold/30 flex items-center justify-center text-gold text-sm font-medium flex-shrink-0">
+                    <span className="w-8 h-8 rounded-lg bg-[#1A1A1A] border border-[#B89555]/30 flex items-center justify-center text-[#1A1A1A] text-sm font-medium flex-shrink-0">
                       {index + 1}
                     </span>
                     <span className="text-[#1A1A1A]/80 text-sm flex-1">{item.title}</span>
@@ -127,14 +127,14 @@ export function BookShelf({ books, title = 'Books, Guides & Intelligence' }: Boo
                         {item.duration}
                       </span>
                     )}
-                    <ChevronRight className="w-4 h-4 text-[#1A1A1A]/20 group-hover:text-gold transition-colors flex-shrink-0" />
+                    <ChevronRight className="w-4 h-4 text-[#1A1A1A]/20 group-hover:text-[#1A1A1A] transition-colors flex-shrink-0" />
                   </button>
                 ))}
               </div>
             </div>
 
             {/* Footer */}
-            <div className="p-6 border-t border-gold/20">
+            <div className="p-6 border-t border-[#B89555]/20">
               <Button
                 className="w-full bg-gradient-to-r from-[#B89555] to-[#A68444] hover:from-[#A68444] hover:to-[#A7862E] text-[#1A1A1A] font-bold py-3 rounded-xl"
                 style={{

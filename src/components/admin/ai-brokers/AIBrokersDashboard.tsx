@@ -143,7 +143,7 @@ export function AIBrokersDashboard() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-8 w-8 animate-spin text-gold" />
+        <Loader2 className="h-8 w-8 animate-spin text-[#1A1A1A]" />
       </div>
     );
   }
@@ -162,7 +162,7 @@ export function AIBrokersDashboard() {
           variant="outline"
           onClick={handleRefresh}
           disabled={refreshing}
-          className="border-gold/30 text-[#1A1A1A] hover:bg-gold/10"
+          className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
         >
           <RefreshCw
             className={`h-4 w-4 mr-2 ${refreshing ? "animate-spin" : ""}`}
@@ -173,10 +173,10 @@ export function AIBrokersDashboard() {
 
       {/* Summary Stats */}
       <div className="grid grid-cols-4 gap-4">
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 text-[#1A1A1A]/60 mb-1">
-              <Users className="h-4 w-4 text-gold" />
+              <Users className="h-4 w-4 text-[#1A1A1A]" />
               <span className="text-sm">Active Brokers</span>
             </div>
             <p className="text-[#1A1A1A] text-2xl font-bold">
@@ -187,10 +187,10 @@ export function AIBrokersDashboard() {
             </p>
           </CardContent>
         </Card>
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 text-[#1A1A1A]/60 mb-1">
-              <Users className="h-4 w-4 text-gold" />
+              <Users className="h-4 w-4 text-[#1A1A1A]" />
               <span className="text-sm">Total Leads Handled</span>
             </div>
             <p className="text-[#1A1A1A] text-2xl font-bold">
@@ -198,10 +198,10 @@ export function AIBrokersDashboard() {
             </p>
           </CardContent>
         </Card>
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 text-[#1A1A1A]/60 mb-1">
-              <BarChart3 className="h-4 w-4 text-gold" />
+              <BarChart3 className="h-4 w-4 text-[#1A1A1A]" />
               <span className="text-sm">Total Conversions</span>
             </div>
             <p className="text-[#1A1A1A] text-2xl font-bold">
@@ -209,7 +209,7 @@ export function AIBrokersDashboard() {
             </p>
           </CardContent>
         </Card>
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 text-[#1A1A1A]/60 mb-1">
               <BarChart3 className="h-4 w-4 text-emerald-500" />
@@ -222,7 +222,7 @@ export function AIBrokersDashboard() {
 
       {/* Tabs */}
       <Tabs defaultValue="brokers" className="space-y-6">
-        <TabsList className="bg-[#FDFBF7]/80 border-2 border-gold/30">
+        <TabsList className="bg-[#FDFBF7]/80 border-2 border-[#B89555]/30">
           <TabsTrigger
             value="brokers"
             className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]"
@@ -254,7 +254,7 @@ export function AIBrokersDashboard() {
 
         <TabsContent value="brokers" className="space-y-6">
           {brokers.length === 0 ? (
-            <Card className="bg-[#FDFBF7] border-2 border-gold/30 border-dashed">
+            <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 border-dashed">
               <CardContent className="flex flex-col items-center justify-center py-16">
                 <Users className="h-16 w-16 text-[#1A1A1A]/70 mb-4" />
                 <h3 className="text-[#1A1A1A] text-lg font-medium mb-2">

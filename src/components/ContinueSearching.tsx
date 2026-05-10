@@ -423,7 +423,7 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
         }}
       >
         {/* Gold shimmer border */}
-        <div className="absolute inset-0 rounded-xl border border-gold/20 group-hover:border-gold/60 transition-all duration-500 z-20 pointer-events-none" />
+        <div className="absolute inset-0 rounded-xl border border-[#B89555]/20 group-hover:border-[#B89555]/60 transition-all duration-500 z-20 pointer-events-none" />
         <div className="absolute -inset-[1px] rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-10"
           style={{
             background: "linear-gradient(135deg, transparent 30%, rgba(200,167,102,0.3) 50%, transparent 70%)",

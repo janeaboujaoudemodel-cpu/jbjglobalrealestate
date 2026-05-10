@@ -213,9 +213,9 @@ export default function InvestorDocumentVault({ userId }: InvestorDocumentVaultP
 
   if (loading) {
     return (
-      <Card className="border-2 border-gold/30">
+      <Card className="border-2 border-[#B89555]/30">
         <CardContent className="p-8 flex items-center justify-center">
-          <Loader2 className="w-6 h-6 text-gold animate-spin" />
+          <Loader2 className="w-6 h-6 text-[#1A1A1A] animate-spin" />
         </CardContent>
       </Card>
     );
@@ -227,11 +227,11 @@ export default function InvestorDocumentVault({ userId }: InvestorDocumentVaultP
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+      <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <CardHeader className="pb-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gold/20 rounded-xl flex items-center justify-center">
-              <FileText className="w-5 h-5 text-gold" />
+            <div className="w-10 h-10 bg-[#EFE6D6]/20 rounded-xl flex items-center justify-center">
+              <FileText className="w-5 h-5 text-[#1A1A1A]" />
             </div>
             <div>
               <CardTitle className="text-foreground">My Documents</CardTitle>
@@ -268,7 +268,7 @@ export default function InvestorDocumentVault({ userId }: InvestorDocumentVaultP
                   className={`p-4 rounded-xl border-2 transition-all ${
                     existingDoc
                       ? "border-emerald-500/50 bg-emerald-50/50"
-                      : "border-border/50 bg-[#FDFBF7]/50 hover:border-gold/50"
+                      : "border-border/50 bg-[#FDFBF7]/50 hover:border-[#B89555]/50"
                   }`}
                 >
                   <div className="flex items-start gap-3">

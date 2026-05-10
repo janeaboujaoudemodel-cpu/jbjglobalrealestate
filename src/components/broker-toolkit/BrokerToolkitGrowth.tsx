@@ -50,20 +50,20 @@ export function BrokerToolkitGrowth() {
     <section id="section-growth" className="py-8 md:py-10 bg-[#1A1A1A]">
       <div className="container mx-auto px-3 sm:px-4">
         {/* Active Champagne Layer for Growth Section - matching global design */}
-        <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/30 rounded-2xl p-6 md:p-8 shadow-lg">
+        <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/30 rounded-2xl p-6 md:p-8 shadow-lg">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <Badge className="bg-[#1A1A1A]/80 text-gold border-gold/50 mb-4 shadow-sm">
-              <TrendingUp className="w-3 h-3 mr-1 text-gold" />
-              <span className="text-gold">Growth</span>
+            <Badge className="bg-[#1A1A1A]/80 text-[#1A1A1A] border-[#B89555]/50 mb-4 shadow-sm">
+              <TrendingUp className="w-3 h-3 mr-1 text-[#1A1A1A]" />
+              <span className="text-[#1A1A1A]">Growth</span>
               <span className="text-white ml-1">& Rewards</span>
             </Badge>
             <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4">
-              Level Up Your <span className="text-gold">Career</span>
+              Level Up Your <span className="text-[#1A1A1A]">Career</span>
             </h2>
             <p className="text-[#1A1A1A]/70 max-w-2xl mx-auto">
               Earn points for every action, unlock rewards, and climb the leaderboard.
@@ -77,22 +77,22 @@ export function BrokerToolkitGrowth() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 hover:border-gold hover:shadow-xl hover:shadow-gold/20 h-full">
+              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/40 hover:border-[#B89555] hover:shadow-xl hover:shadow-gold/20 h-full">
                 <CardContent className="p-6">
                   <h3 className="text-xl font-semibold text-[#1A1A1A] mb-6 flex items-center gap-2">
-                    <Crown className="w-5 h-5 text-gold" />
+                    <Crown className="w-5 h-5 text-[#1A1A1A]" />
                     Broker Levels
                   </h3>
                   <div className="space-y-4">
                     {LEVELS.map((level, i) => (
                       <div key={i} className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/50 flex items-center justify-center text-[#1A1A1A] font-bold text-sm shadow-md">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/50 flex items-center justify-center text-[#1A1A1A] font-bold text-sm shadow-md">
                           {level.level}
                         </div>
                         <div className="flex-1">
                           <div className="flex justify-between items-center mb-1">
                             <span className="text-[#1A1A1A] font-medium">{level.name}</span>
-                            <span className="text-gold text-sm font-semibold">{level.points.toLocaleString()} pts</span>
+                            <span className="text-[#1A1A1A] text-sm font-semibold">{level.points.toLocaleString()} pts</span>
                           </div>
                           <Progress value={i === 0 ? 100 : 0} className="h-1.5 bg-[#EFE6D6]" />
                         </div>
@@ -109,22 +109,22 @@ export function BrokerToolkitGrowth() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 hover:border-gold hover:shadow-xl hover:shadow-gold/20 h-full">
+              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/40 hover:border-[#B89555] hover:shadow-xl hover:shadow-gold/20 h-full">
                 <CardContent className="p-6">
                   <h3 className="text-xl font-semibold text-[#1A1A1A] mb-6 flex items-center gap-2">
-                    <Zap className="w-5 h-5 text-gold" />
+                    <Zap className="w-5 h-5 text-[#1A1A1A]" />
                     Earn Points
                   </h3>
                   <div className="space-y-3">
                     {POINT_ACTIVITIES.map((activity, i) => (
-                      <div key={i} className="flex items-center justify-between py-2 border-b border-gold/20 last:border-0">
+                      <div key={i} className="flex items-center justify-between py-2 border-b border-[#B89555]/20 last:border-0">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-lg bg-gold/20 flex items-center justify-center">
-                            <activity.icon className="w-4 h-4 text-gold" />
+                          <div className="w-8 h-8 rounded-lg bg-[#EFE6D6]/20 flex items-center justify-center">
+                            <activity.icon className="w-4 h-4 text-[#1A1A1A]" />
                           </div>
                           <span className="text-[#1A1A1A]/70 text-sm">{activity.activity}</span>
                         </div>
-                        <span className="text-gold font-semibold">+{activity.points}</span>
+                        <span className="text-[#1A1A1A] font-semibold">+{activity.points}</span>
                       </div>
                     ))}
                   </div>
@@ -141,7 +141,7 @@ export function BrokerToolkitGrowth() {
             className="mb-12"
           >
             <h3 className="text-xl font-semibold text-[#1A1A1A] mb-6 text-center flex items-center justify-center gap-2">
-              <Gift className="w-5 h-5 text-gold" />
+              <Gift className="w-5 h-5 text-[#1A1A1A]" />
               Redeem Rewards
             </h3>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -153,13 +153,13 @@ export function BrokerToolkitGrowth() {
                   transition={{ delay: i * 0.1 }}
                   viewport={{ once: true }}
                 >
-                  <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 hover:border-gold/60 hover:shadow-xl hover:shadow-gold/20 transition-all cursor-pointer h-full">
+                  <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/40 hover:border-[#B89555]/60 hover:shadow-xl hover:shadow-gold/20 transition-all cursor-pointer h-full">
                     <CardContent className="p-5 text-center">
-                      <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center mx-auto mb-3">
-                        <reward.icon className="w-6 h-6 text-gold" />
+                      <div className="w-12 h-12 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center mx-auto mb-3">
+                        <reward.icon className="w-6 h-6 text-[#1A1A1A]" />
                       </div>
                       <h4 className="text-[#1A1A1A] font-medium mb-1">{reward.name}</h4>
-                      <p className="text-gold font-semibold">{reward.points.toLocaleString()} points</p>
+                      <p className="text-[#1A1A1A] font-semibold">{reward.points.toLocaleString()} points</p>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -193,8 +193,8 @@ export function BrokerToolkitGrowth() {
               <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
               <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
               <span className="relative flex items-center justify-center gap-2">
-                <Trophy className="w-5 h-5 text-gold" />
-                <span className="text-gold">{user ? 'View My' : 'Start Earning'}</span>
+                <Trophy className="w-5 h-5 text-[#1A1A1A]" />
+                <span className="text-[#1A1A1A]">{user ? 'View My' : 'Start Earning'}</span>
                 <span className="text-[#1A1A1A]">{user ? 'Progress' : 'Points'}</span>
                 <ArrowUpRight className="w-5 h-5 text-[#1A1A1A]" />
               </span>

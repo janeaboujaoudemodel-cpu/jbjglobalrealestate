@@ -120,7 +120,7 @@ const ReportProblemButton: React.FC<ReportProblemButtonProps> = ({
       <DialogTrigger asChild>
         {buttonContent}
       </DialogTrigger>
-      <DialogContent className="bg-zinc-900 border-[#1A1A1A] text-white max-w-md">
+      <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A] text-white max-w-md">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold flex items-center gap-2">
             <AlertCircle className="w-5 h-5 text-red-400" />
@@ -157,7 +157,7 @@ const ReportProblemButton: React.FC<ReportProblemButtonProps> = ({
                     value={formData.name}
                     onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                     placeholder="John Doe"
-                    className="bg-zinc-800 border-[#1A1A1A] text-white"
+                    className="bg-[#1A1A1A] border-[#1A1A1A] text-white"
                   />
                 </div>
                 <div>
@@ -166,7 +166,7 @@ const ReportProblemButton: React.FC<ReportProblemButtonProps> = ({
                     value={formData.phone}
                     onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
                     placeholder="+971 50 123 4567"
-                    className="bg-zinc-800 border-[#1A1A1A] text-white"
+                    className="bg-[#1A1A1A] border-[#1A1A1A] text-white"
                   />
                 </div>
               </div>
@@ -178,7 +178,7 @@ const ReportProblemButton: React.FC<ReportProblemButtonProps> = ({
                   value={formData.email}
                   onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                   placeholder="you@example.com"
-                  className="bg-zinc-800 border-[#1A1A1A] text-white"
+                  className="bg-[#1A1A1A] border-[#1A1A1A] text-white"
                 />
               </div>
 
@@ -188,10 +188,10 @@ const ReportProblemButton: React.FC<ReportProblemButtonProps> = ({
                   value={formData.category}
                   onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}
                 >
-                  <SelectTrigger className="bg-zinc-800 border-[#1A1A1A] text-white">
+                  <SelectTrigger className="bg-[#1A1A1A] border-[#1A1A1A] text-white">
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
-                  <SelectContent className="bg-zinc-800 border-[#1A1A1A]">
+                  <SelectContent className="bg-[#1A1A1A] border-[#1A1A1A]">
                     {ISSUE_CATEGORIES.map(cat => (
                       <SelectItem key={cat.value} value={cat.value} className="text-white">
                         {cat.label}
@@ -207,7 +207,7 @@ const ReportProblemButton: React.FC<ReportProblemButtonProps> = ({
                   value={formData.description}
                   onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                   placeholder="Please describe what happened, what you expected, and any steps to reproduce..."
-                  className="bg-zinc-800 border-[#1A1A1A] text-white min-h-[120px]"
+                  className="bg-[#1A1A1A] border-[#1A1A1A] text-white min-h-[120px]"
                 />
               </div>
 

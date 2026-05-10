@@ -307,7 +307,7 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
         {/* Header */}
         <div className="flex items-center gap-2">
           <div className="p-2 rounded-lg bg-amber-500/20">
-            <Mic2 className="w-4 h-4 text-amber-400" />
+            <Mic2 className="w-4 h-4 text-[#1A1A1A]" />
           </div>
           <div>
             <h3 className="text-sm font-bold text-white">AI Talking Agent</h3>
@@ -362,7 +362,7 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
                 }`}
               >
                 {selectedCharacter.id === char.id && (
-                  <CheckCircle2 className="absolute top-1 right-1 w-3 h-3 text-amber-400" />
+                  <CheckCircle2 className="absolute top-1 right-1 w-3 h-3 text-[#1A1A1A]" />
                 )}
                 <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${char.color} flex items-center justify-center text-xl shadow-lg`}>
                   {char.avatar}
@@ -545,7 +545,7 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
             {/* Script + timeline */}
             <div className="p-3 border-t border-slate-700/50 space-y-2">
               <button onClick={() => setShowScript((s) => !s)}
-                className="text-xs text-amber-400 hover:text-amber-300 font-medium flex items-center gap-1">
+                className="text-xs text-[#1A1A1A] hover:text-amber-300 font-medium flex items-center gap-1">
                 {showScript ? "Hide script ▲" : "Show script ▼"}
               </button>
 

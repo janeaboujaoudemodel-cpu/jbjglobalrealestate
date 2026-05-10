@@ -121,11 +121,11 @@ const ComparisonBar = () => {
           
           <SheetContent 
             side="bottom" 
-            className="h-[90vh] bg-zinc-950 border-t border-[#1A1A1A] rounded-t-3xl"
+            className="h-[90vh] bg-[#FDFBF7] border-t border-[#1A1A1A] rounded-t-3xl"
           >
             <SheetHeader className="pb-4 border-b border-[#1A1A1A]">
               <SheetTitle className="text-white text-2xl flex items-center gap-3">
-                <Scale className="w-6 h-6 text-gold" />
+                <Scale className="w-6 h-6 text-[#1A1A1A]" />
                 Property Shortlist & Comparison
                 <span className="text-sm font-normal text-white/90">
                   ({shortlist.length} selected)
@@ -146,7 +146,7 @@ const ComparisonBar = () => {
                     return (
                       <div
                         key={project.id}
-                        className={`relative bg-zinc-900 rounded-2xl overflow-hidden border transition-all ${
+                        className={`relative bg-[#FDFBF7] rounded-2xl overflow-hidden border transition-all ${
                           badgeInfo ? badgeInfo.color.replace('text-', 'border-').replace('/50', '/30') : 'border-[#1A1A1A]'
                         }`}
                       >
@@ -162,7 +162,7 @@ const ComparisonBar = () => {
                                 {badgeInfo ? badgeInfo.label : <Trophy className="w-3 h-3" />}
                               </button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent className="bg-zinc-900 border-[#1A1A1A]">
+                            <DropdownMenuContent className="bg-[#FDFBF7] border-[#1A1A1A]">
                               <DropdownMenuItem 
                                 onClick={() => handleSetBadge(project.id, 'top1')}
                                 className="text-yellow-400 hover:bg-[#1A1A1A] cursor-pointer"
@@ -218,13 +218,13 @@ const ComparisonBar = () => {
                           </p>
                           
                           <div className="grid grid-cols-2 gap-2 text-sm">
-                            <div className="bg-zinc-800/50 rounded-lg p-2">
+                            <div className="bg-[#1A1A1A]/50 rounded-lg p-2">
                               <p className="text-white/90 text-xs">Price From</p>
                               <p className="text-white font-medium">
                                 AED {(Math.round((project.price_from || 0)) / 1000000).toFixed(1)}M
                               </p>
                             </div>
-                            <div className="bg-zinc-800/50 rounded-lg p-2">
+                            <div className="bg-[#1A1A1A]/50 rounded-lg p-2">
                               <p className="text-white/90 text-xs">Bedrooms</p>
                               <p className="text-white font-medium">
                                 {project.bedrooms_min} - {project.bedrooms_max} BR
@@ -235,7 +235,7 @@ const ComparisonBar = () => {
                           <Link
                             to={`/project/${project.slug}`}
                             onClick={() => setIsOpen(false)}
-                            className="block text-center py-2 text-sm text-gold hover:text-gold-light transition-colors"
+                            className="block text-center py-2 text-sm text-[#1A1A1A] hover:text-[#1A1A1A]-light transition-colors"
                           >
                             View Details →
                           </Link>
@@ -252,7 +252,7 @@ const ComparisonBar = () => {
             </div>
 
             {/* Action buttons */}
-            <div className="absolute bottom-0 left-0 right-0 p-6 bg-zinc-950 border-t border-[#1A1A1A]">
+            <div className="absolute bottom-0 left-0 right-0 p-6 bg-[#FDFBF7] border-t border-[#1A1A1A]">
               <div className="flex flex-col sm:flex-row gap-3">
                 <Link to="/compare" className="flex-1" onClick={() => setIsOpen(false)}>
                   <Button 

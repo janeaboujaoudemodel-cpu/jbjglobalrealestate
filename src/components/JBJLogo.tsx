@@ -47,7 +47,7 @@ export const JBJLogo = ({
         style={{ width: config.width, height: config.height }}
       />
       {showText && (
-        <span className="text-gold text-[10px] md:text-xs tracking-[0.2em] uppercase mt-2">
+        <span className="text-[#1A1A1A] text-[10px] md:text-xs tracking-[0.2em] uppercase mt-2">
           Real Estate
         </span>
       )}

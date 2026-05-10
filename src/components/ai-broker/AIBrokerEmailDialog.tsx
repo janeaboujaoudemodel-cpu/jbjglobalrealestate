@@ -172,7 +172,7 @@ export function AIBrokerEmailDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-zinc-900 border-[#1A1A1A] max-w-2xl">
+      <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A] max-w-2xl">
         <DialogHeader>
           <DialogTitle className="text-white">
             Send Email to {lead.full_name}
@@ -208,7 +208,7 @@ export function AIBrokerEmailDialog({
             <Input
               value={lead.email || ""}
               disabled
-              className="bg-zinc-800 border-[#1A1A1A] text-[#1A1A1A]/70 mt-1"
+              className="bg-[#1A1A1A] border-[#1A1A1A] text-[#1A1A1A]/70 mt-1"
             />
           </div>
 
@@ -218,7 +218,7 @@ export function AIBrokerEmailDialog({
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
               placeholder="Enter email subject..."
-              className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
+              className="bg-[#1A1A1A] border-[#1A1A1A] text-white mt-1"
             />
           </div>
 
@@ -228,7 +228,7 @@ export function AIBrokerEmailDialog({
               value={content}
               onChange={(e) => setContent(e.target.value)}
               placeholder="Enter your message..."
-              className="bg-zinc-800 border-[#1A1A1A] text-white mt-1 min-h-[200px]"
+              className="bg-[#1A1A1A] border-[#1A1A1A] text-white mt-1 min-h-[200px]"
             />
           </div>
 
@@ -243,7 +243,7 @@ export function AIBrokerEmailDialog({
             <Button
               onClick={handleSend}
               disabled={sending || !subject.trim() || !content.trim()}
-              className="bg-gold text-[#1A1A1A] hover:bg-gold/90"
+              className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
             >
               {sending ? (
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />

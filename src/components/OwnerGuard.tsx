@@ -148,7 +148,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
       return (
         <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
           <div className="text-center px-6">
-            <Shield className="w-12 h-12 text-gold animate-pulse mx-auto mb-4" />
+            <Shield className="w-12 h-12 text-[#1A1A1A] animate-pulse mx-auto mb-4" />
             <p className="text-gray-200 font-medium">Verifying access…</p>
             <p className="text-white/70 text-sm mt-2">Please wait a moment.</p>
           </div>
@@ -170,7 +170,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
                 setLoadingTimedOut(false);
                 refreshOwnerVerification();
               }}
-              className="bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold"
+              className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-semibold"
             >
               <RefreshCw className="w-4 h-4 mr-2" />
               Retry Verification
@@ -207,7 +207,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
       return (
         <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
           <div className="text-center px-6">
-            <Shield className="w-12 h-12 text-gold animate-pulse mx-auto mb-4" />
+            <Shield className="w-12 h-12 text-[#1A1A1A] animate-pulse mx-auto mb-4" />
             <p className="text-gray-200 font-medium">Verifying access…</p>
             <p className="text-white/70 text-sm mt-2">Retrying ({autoRetryCount.current + 1}/3)…</p>
           </div>
@@ -230,7 +230,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
                 autoRetryCount.current = 0;
                 refreshOwnerVerification();
               }}
-              className="bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold"
+              className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-semibold"
             >
               <RefreshCw className="w-4 h-4 mr-2" />
               Retry Verification
@@ -259,7 +259,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
       return (
         <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
           <div className="text-center px-6">
-            <Shield className="w-12 h-12 text-gold animate-pulse mx-auto mb-4" />
+            <Shield className="w-12 h-12 text-[#1A1A1A] animate-pulse mx-auto mb-4" />
             <p className="text-gray-200 font-medium">Checking access status…</p>
           </div>
         </div>

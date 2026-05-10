@@ -164,7 +164,7 @@ export function EmployeePerformanceDashboard() {
     <div className="space-y-6">
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-gold/30 shadow-lg">
+        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-[#B89555]/30 shadow-lg">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
@@ -178,7 +178,7 @@ export function EmployeePerformanceDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-gold/30 shadow-lg">
+        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-[#B89555]/30 shadow-lg">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
@@ -192,7 +192,7 @@ export function EmployeePerformanceDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-gold/30 shadow-lg">
+        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-[#B89555]/30 shadow-lg">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
@@ -206,15 +206,15 @@ export function EmployeePerformanceDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-gold/30 shadow-lg">
+        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-[#B89555]/30 shadow-lg">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Leads Contacted</p>
                 <p className="text-2xl font-bold text-foreground">{totalLeadsToday}</p>
               </div>
-              <div className="w-12 h-12 rounded-xl bg-gold/20 flex items-center justify-center">
-                <TrendingUp className="h-6 w-6 text-gold" />
+              <div className="w-12 h-12 rounded-xl bg-[#EFE6D6]/20 flex items-center justify-center">
+                <TrendingUp className="h-6 w-6 text-[#1A1A1A]" />
               </div>
             </div>
           </CardContent>
@@ -222,18 +222,18 @@ export function EmployeePerformanceDashboard() {
       </div>
 
       {/* Employee Performance List */}
-      <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6] border-2 border-gold/30 shadow-lg">
+      <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6] border-2 border-[#B89555]/30 shadow-lg">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-foreground">
-            <Activity className="h-5 w-5 text-gold" />
+            <Activity className="h-5 w-5 text-[#1A1A1A]" />
             Employee Performance Overview
-            <Badge className="ml-2 bg-gold/20 text-gold border-gold/30">{employees.length} Active</Badge>
+            <Badge className="ml-2 bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30">{employees.length} Active</Badge>
           </CardTitle>
         </CardHeader>
         <CardContent>
           {isLoading ? (
             <div className="flex items-center justify-center py-12">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold" />
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#B89555]" />
             </div>
           ) : employees.length === 0 ? (
             <p className="text-muted-foreground text-center py-8">No active employees found</p>
@@ -245,17 +245,17 @@ export function EmployeePerformanceDashboard() {
                 const isExpanded = selectedEmployee === emp.id;
 
                 return (
-                  <div key={emp.id} className="border border-gold/20 rounded-xl overflow-hidden bg-[#FDFBF7]/60 hover:bg-[#FDFBF7]/80 transition-all">
+                  <div key={emp.id} className="border border-[#B89555]/20 rounded-xl overflow-hidden bg-[#FDFBF7]/60 hover:bg-[#FDFBF7]/80 transition-all">
                     <div
                       className="flex items-center justify-between p-4 cursor-pointer"
                       onClick={() => setSelectedEmployee(isExpanded ? null : emp.id)}
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gold/30 to-gold/10 flex items-center justify-center border-2 border-gold/40">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gold/30 to-gold/10 flex items-center justify-center border-2 border-[#B89555]/40">
                           {emp.photo_url ? (
                             <img src={emp.photo_url} alt={emp.display_name} className="w-full h-full rounded-full object-cover" />
                           ) : (
-                            <span className="font-bold text-gold text-lg">{emp.display_name?.charAt(0) || "?"}</span>
+                            <span className="font-bold text-[#1A1A1A] text-lg">{emp.display_name?.charAt(0) || "?"}</span>
                           )}
                         </div>
                         <div>
@@ -294,12 +294,12 @@ export function EmployeePerformanceDashboard() {
                           <p className="text-xs text-muted-foreground">{score > 0 ? getPerformanceLabel(score) : "No data"}</p>
                         </div>
 
-                        <Eye className={`h-5 w-5 transition-transform ${isExpanded ? "rotate-90 text-gold" : "text-muted-foreground"}`} />
+                        <Eye className={`h-5 w-5 transition-transform ${isExpanded ? "rotate-90 text-[#1A1A1A]" : "text-muted-foreground"}`} />
                       </div>
                     </div>
 
                     {isExpanded && (
-                      <div className="border-t border-gold/20 p-4 bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6]/50">
+                      <div className="border-t border-[#B89555]/20 p-4 bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6]/50">
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                           <MetricCard icon={<Clock className="h-4 w-4" />} label="Total Hours" value={`${metrics.totalHours.toFixed(1)}h`} />
                           <MetricCard icon={<Phone className="h-4 w-4" />} label="Calls Made" value={String(metrics.totalCalls)} />
@@ -312,7 +312,7 @@ export function EmployeePerformanceDashboard() {
                         </div>
 
                         {metrics.summary && (
-                          <div className="mt-4 p-3 rounded-lg bg-[#FDFBF7]/60 border border-gold/20">
+                          <div className="mt-4 p-3 rounded-lg bg-[#FDFBF7]/60 border border-[#B89555]/20">
                             <p className="text-xs font-semibold text-muted-foreground mb-2">Monthly Summary</p>
                             <div className="grid grid-cols-3 md:grid-cols-6 gap-2 text-center text-xs">
                               <div><p className="text-muted-foreground">Logins</p><p className="font-bold text-foreground">{metrics.summary.total_logins ?? 0}</p></div>
@@ -345,8 +345,8 @@ export function EmployeePerformanceDashboard() {
 
 function MetricCard({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
-    <div className="flex items-center gap-2 p-3 rounded-lg bg-[#FDFBF7]/80 border border-gold/20">
-      <div className="text-gold">{icon}</div>
+    <div className="flex items-center gap-2 p-3 rounded-lg bg-[#FDFBF7]/80 border border-[#B89555]/20">
+      <div className="text-[#1A1A1A]">{icon}</div>
       <div>
         <p className="text-xs text-muted-foreground">{label}</p>
         <p className="font-semibold text-foreground text-sm">{value}</p>

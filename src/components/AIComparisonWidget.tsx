@@ -30,11 +30,11 @@ const AIComparisonWidget = () => {
       whileInView="visible"
       viewport={{ once: true, margin: "-50px" }}
       variants={fadeInUp}
-      className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-3xl p-8 md:p-10 relative overflow-hidden shadow-[0_0_40px_rgba(200,167,102,0.3)]"
+      className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-3xl p-8 md:p-10 relative overflow-hidden shadow-[0_0_40px_rgba(200,167,102,0.3)]"
     >
       {/* Background decoration */}
-      <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-48 h-48 bg-gold/10 rounded-full blur-3xl" />
+      <div className="absolute top-0 right-0 w-64 h-64 bg-[#EFE6D6]/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#EFE6D6]/10 rounded-full blur-3xl" />
       
       <div className="relative z-10">
         {/* Header */}
@@ -56,8 +56,8 @@ const AIComparisonWidget = () => {
               Powered by JBJ Global Real Estate
             </p>
           </div>
-          <div className="hidden md:flex w-16 h-16 bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] rounded-2xl items-center justify-center shadow-lg border border-gold/30">
-            <BarChart3 className="w-8 h-8 text-gold" />
+          <div className="hidden md:flex w-16 h-16 bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] rounded-2xl items-center justify-center shadow-lg border border-[#B89555]/30">
+            <BarChart3 className="w-8 h-8 text-[#1A1A1A]" />
           </div>
         </div>
 
@@ -66,10 +66,10 @@ const AIComparisonWidget = () => {
           {features.map((feature, i) => (
             <div 
               key={i}
-              className="flex items-center gap-4 p-4 bg-[#F7F2EA] border border-gold/20 rounded-xl shadow-sm"
+              className="flex items-center gap-4 p-4 bg-[#F7F2EA] border border-[#B89555]/20 rounded-xl shadow-sm"
             >
-              <div className="w-10 h-10 bg-gold/20 rounded-lg flex items-center justify-center">
-                <feature.icon className="w-5 h-5 text-gold" />
+              <div className="w-10 h-10 bg-[#EFE6D6]/20 rounded-lg flex items-center justify-center">
+                <feature.icon className="w-5 h-5 text-[#1A1A1A]" />
               </div>
               <div>
                 <p className="text-[#1A1A1A] font-medium text-sm">{feature.label}</p>
@@ -80,7 +80,7 @@ const AIComparisonWidget = () => {
         </div>
 
         {/* Sample comparison preview */}
-        <div className="bg-[#EFE6D6] border border-gold/20 rounded-xl p-4 mb-6">
+        <div className="bg-[#EFE6D6] border border-[#B89555]/20 rounded-xl p-4 mb-6">
           <div className="grid grid-cols-3 gap-2 text-xs text-[#1A1A1A]/70 mb-3">
             <span>Project</span>
             <span className="text-center">Price/sqft</span>
@@ -102,7 +102,7 @@ const AIComparisonWidget = () => {
         {/* CTA - Premium 3D Champagne Button */}
         <Link to="/compare">
           <button 
-            className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 hover:scale-[1.02] transform active:scale-95 group w-full md:w-auto hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
+            className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50 hover:scale-[1.02] transform active:scale-95 group w-full md:w-auto hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
             style={{
               boxShadow: `
                 0 10px 30px rgba(200,167,102,0.4),
@@ -117,10 +117,10 @@ const AIComparisonWidget = () => {
             <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
             <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
             <span className="relative flex items-center justify-center gap-2">
-              <BarChart3 className="w-5 h-5 text-gold group-hover:text-[#1A1A1A] transition-colors" />
-              <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">Start</span>
-              <span className="text-gold group-hover:text-[#1A1A1A] transition-colors">Comparing</span>
-              <ArrowUpRight className="w-5 h-5 text-[#1A1A1A] group-hover:text-gold transition-colors" />
+              <BarChart3 className="w-5 h-5 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
+              <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">Start</span>
+              <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">Comparing</span>
+              <ArrowUpRight className="w-5 h-5 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
             </span>
           </button>
         </Link>

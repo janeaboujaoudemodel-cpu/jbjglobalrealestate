@@ -89,7 +89,7 @@ const BrokerCRMAccessGate = ({ children, fallbackPath = "/join" }: BrokerCRMAcce
     return (
       <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
         <div className="text-center">
-          <Shield className="w-12 h-12 text-gold animate-pulse mx-auto mb-4" />
+          <Shield className="w-12 h-12 text-[#1A1A1A] animate-pulse mx-auto mb-4" />
           <p className="text-white/70">Verifying broker registration...</p>
         </div>
       </div>
@@ -116,23 +116,23 @@ const BrokerCRMAccessGate = ({ children, fallbackPath = "/join" }: BrokerCRMAcce
             </p>
           )}
 
-          <div className="bg-zinc-900/50 border border-[#1A1A1A] rounded-xl p-6 mb-6">
+          <div className="bg-[#FDFBF7]/50 border border-[#1A1A1A] rounded-xl p-6 mb-6">
             <h3 className="text-white font-semibold mb-3">How to Get Access</h3>
             <ol className="text-left text-white/70 text-sm space-y-2">
               <li className="flex items-start gap-2">
-                <span className="text-gold font-bold">1.</span>
+                <span className="text-[#1A1A1A] font-bold">1.</span>
                 Submit your CV through our HR portal
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-gold font-bold">2.</span>
+                <span className="text-[#1A1A1A] font-bold">2.</span>
                 Complete the interview process
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-gold font-bold">3.</span>
+                <span className="text-[#1A1A1A] font-bold">3.</span>
                 Sign your job offer
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-gold font-bold">4.</span>
+                <span className="text-[#1A1A1A] font-bold">4.</span>
                 Access the full CRM dashboard
               </li>
             </ol>
@@ -141,7 +141,7 @@ const BrokerCRMAccessGate = ({ children, fallbackPath = "/join" }: BrokerCRMAcce
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
               onClick={() => navigate(fallbackPath)}
-              className="bg-gold hover:bg-gold/90 text-[#1A1A1A]"
+              className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]"
             >
               <UserPlus className="w-4 h-4 mr-2" />
               Apply to Join

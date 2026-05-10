@@ -314,7 +314,7 @@ const InquiryFormModal = ({
         }}
       >
         <DialogContent 
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 text-[#1A1A1A] max-w-lg p-0 max-h-[90vh] shadow-2xl shadow-gold/20 overflow-visible"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 text-[#1A1A1A] max-w-lg p-0 max-h-[90vh] shadow-2xl shadow-gold/20 overflow-visible"
           style={{ overflow: 'visible' }}
           dir={isRTL ? 'rtl' : 'ltr'}
           onInteractOutside={(e) => {
@@ -389,7 +389,7 @@ const InquiryFormModal = ({
                     <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gold via-gold-light to-gold-dark flex items-center justify-center shadow-2xl shadow-gold/30">
                       <Crown className="w-8 h-8 text-[#1A1A1A]" />
                     </div>
-                    <Sparkles className="absolute -top-1 -right-1 w-5 h-5 text-gold animate-pulse" />
+                    <Sparkles className="absolute -top-1 -right-1 w-5 h-5 text-[#1A1A1A] animate-pulse" />
                   </div>
                 </div>
                 
@@ -421,7 +421,7 @@ const InquiryFormModal = ({
                             }}
                             className={`p-3 rounded-lg border transition-all duration-200 flex flex-col items-center gap-1 ${
                               field.value === 'buyer' 
-                                ? 'border-gold bg-gold/10 text-gold' 
+                                ? 'border-[#B89555] bg-[#EFE6D6]/10 text-[#1A1A1A]' 
                                 : 'border-[#B89555]/30 bg-[#F7F2EA] text-[#1A1A1A]/70 hover:border-[#B89555]/30'
                             }`}
                           >
@@ -436,7 +436,7 @@ const InquiryFormModal = ({
                             }}
                             className={`p-3 rounded-lg border transition-all duration-200 flex flex-col items-center gap-1 ${
                               field.value === 'broker' 
-                                ? 'border-gold bg-gold/10 text-gold' 
+                                ? 'border-[#B89555] bg-[#EFE6D6]/10 text-[#1A1A1A]' 
                                 : 'border-[#B89555]/30 bg-[#F7F2EA] text-[#1A1A1A]/70 hover:border-[#B89555]/30'
                             }`}
                           >
@@ -451,7 +451,7 @@ const InquiryFormModal = ({
                             }}
                             className={`p-3 rounded-lg border transition-all duration-200 flex flex-col items-center gap-1 ${
                               field.value === 'visitor' 
-                                ? 'border-gold bg-gold/10 text-gold' 
+                                ? 'border-[#B89555] bg-[#EFE6D6]/10 text-[#1A1A1A]' 
                                 : 'border-[#B89555]/30 bg-[#F7F2EA] text-[#1A1A1A]/70 hover:border-[#B89555]/30'
                             }`}
                           >
@@ -478,7 +478,7 @@ const InquiryFormModal = ({
                               onClick={() => field.onChange('homeowner')}
                               className={`p-3 rounded-lg border transition-all duration-200 flex items-center justify-center gap-2 ${
                                 field.value === 'homeowner' 
-                                  ? 'border-gold bg-gold/10 text-gold' 
+                                  ? 'border-[#B89555] bg-[#EFE6D6]/10 text-[#1A1A1A]' 
                                   : 'border-[#B89555]/30 bg-[#F7F2EA] text-[#1A1A1A]/70 hover:border-[#B89555]/30'
                               }`}
                             >
@@ -490,7 +490,7 @@ const InquiryFormModal = ({
                               onClick={() => field.onChange('investor')}
                               className={`p-3 rounded-lg border transition-all duration-200 flex items-center justify-center gap-2 ${
                                 field.value === 'investor' 
-                                  ? 'border-gold bg-gold/10 text-gold' 
+                                  ? 'border-[#B89555] bg-[#EFE6D6]/10 text-[#1A1A1A]' 
                                   : 'border-[#B89555]/30 bg-[#F7F2EA] text-[#1A1A1A]/70 hover:border-[#B89555]/30'
                               }`}
                             >
@@ -513,7 +513,7 @@ const InquiryFormModal = ({
                         <FormControl>
                           <Input 
                             {...field} 
-                            className="h-12 bg-[#FDFBF7] border-2 border-gold/50 hover:border-gold text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold rounded-lg"
+                            className="h-12 bg-[#FDFBF7] border-2 border-[#B89555]/50 hover:border-[#B89555] text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] rounded-lg"
                             placeholder="John Doe"
                           />
                         </FormControl>
@@ -547,7 +547,7 @@ const InquiryFormModal = ({
                             className={`h-12 bg-[#FDFBF7] text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 rounded-lg w-full border-2 ${
                               emailStatus === 'valid' ? 'border-green-500/60 focus:border-green-500' :
                               emailStatus === 'invalid' ? 'border-red-500/60 focus:border-red-500' :
-                              'border-gold/50 hover:border-gold focus:border-gold'
+                              'border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555]'
                             }`}
                             placeholder="email@example.com"
                           />
@@ -688,7 +688,7 @@ const InquiryFormModal = ({
                         <FormControl>
                           <Textarea 
                             {...field} 
-                            className="min-h-[80px] bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold rounded-lg resize-none"
+                            className="min-h-[80px] bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] rounded-lg resize-none"
                             placeholder="Tell us about your requirements..."
                           />
                         </FormControl>
@@ -700,7 +700,7 @@ const InquiryFormModal = ({
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full h-14 bg-gradient-to-r from-gold via-gold-light to-gold text-[#1A1A1A] hover:opacity-90 font-bold text-base shadow-xl shadow-gold/20 rounded-lg mt-4 border-2 border-gold-dark flex items-center justify-center gap-2"
+                    className="w-full h-14 bg-gradient-to-r from-gold via-gold-light to-gold text-[#1A1A1A] hover:opacity-90 font-bold text-base shadow-xl shadow-gold/20 rounded-lg mt-4 border-2 border-[#B89555]-dark flex items-center justify-center gap-2"
                   >
                     {isSubmitting ? (
                       <>
@@ -717,7 +717,7 @@ const InquiryFormModal = ({
 
                   {/* Security & Privacy Notice */}
                   <div className="flex items-start gap-2 p-3 rounded-lg bg-[#F7F2EA] border border-[#B89555]/30 mt-3">
-                    <Shield className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
+                    <Shield className="w-4 h-4 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
                     <p className="text-[#1A1A1A]/70 text-xs leading-relaxed">
                       Your information is securely stored in the JBJ Global Real Estate system for service and quality purposes. We never share your data with third parties.
                     </p>

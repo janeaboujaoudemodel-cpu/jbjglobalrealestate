@@ -56,9 +56,9 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
   const tourSteps = [
     {
       icon: Menu,
-      iconColor: "text-gold",
+      iconColor: "text-[#1A1A1A]",
       iconBg: "from-gold/20 to-gold/10",
-      iconBorder: "border-gold/30",
+      iconBorder: "border-[#B89555]/30",
       title: "Navigation Menu",
       description: "Find all pages in the header menu. Click on Buy, Rent, Projects, Services, or More to explore each section.",
       link: null,
@@ -116,9 +116,9 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
     },
     {
       icon: ListPlus,
-      iconColor: "text-gold",
+      iconColor: "text-[#1A1A1A]",
       iconBg: "from-gold/20 to-gold/10",
-      iconBorder: "border-gold/30",
+      iconBorder: "border-[#B89555]/30",
       title: "Add to Shortlist",
       description: "Move your top favorites to the shortlist for detailed comparison. Select up to 5 properties.",
       link: "/favorites",
@@ -126,9 +126,9 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
     },
     {
       icon: Trophy,
-      iconColor: "text-gold",
+      iconColor: "text-[#1A1A1A]",
       iconBg: "from-gold/30 to-amber-500/10",
-      iconBorder: "border-gold/40",
+      iconBorder: "border-[#B89555]/40",
       title: "Assign Badges",
       description: "In Favorites → Shortlist tab, click 'Add Badge' to rank: Gold (Top 1), Silver (Top 2), Bronze (Top 3).",
       link: "/favorites",
@@ -186,9 +186,9 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
     },
     {
       icon: Send,
-      iconColor: "text-gold",
+      iconColor: "text-[#1A1A1A]",
       iconBg: "from-gold/20 to-gold/10",
-      iconBorder: "border-gold/30",
+      iconBorder: "border-[#B89555]/30",
       title: "Connect with JBJ",
       description: "Submit your curated selection directly to our property consultants and book consultations.",
       link: "/contact",
@@ -199,7 +199,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
   const shortcutItems = [
     {
       icon: Menu,
-      iconColor: "text-gold",
+      iconColor: "text-[#1A1A1A]",
       title: "Header Menu",
       description: "Buy, Rent, Projects, Services & More",
       link: null
@@ -290,9 +290,9 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                 </div>
 
                 {/* Welcome badge */}
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gold/10 border border-gold/30 rounded-full mb-4">
-                  <Sparkles className="w-3.5 h-3.5 text-gold" />
-                  <span className="text-gold text-xs font-medium">Welcome Guide</span>
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full mb-4">
+                  <Sparkles className="w-3.5 h-3.5 text-[#1A1A1A]" />
+                  <span className="text-[#1A1A1A] text-xs font-medium">Welcome Guide</span>
                 </div>
 
                 <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-[#1A1A1A] mb-3">
@@ -310,7 +310,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                       handleTakeTour();
                     }}
                     type="button"
-                    className="w-full py-5 sm:py-6 bg-[#1A1A1A] hover:bg-[#1A1A1A] text-gold font-semibold text-base shadow-xl rounded-xl group relative overflow-hidden border border-gold/20"
+                    className="w-full py-5 sm:py-6 bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A] font-semibold text-base shadow-xl rounded-xl group relative overflow-hidden border border-[#B89555]/20"
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                     <Compass className="w-5 h-5 mr-3 relative z-10" />
@@ -372,9 +372,9 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                           onClick={() => setCurrentStep(idx)}
                           className={`w-2 h-2 rounded-full transition-all duration-300 ${
                             idx === currentStep 
-                              ? 'bg-gold scale-125' 
+                              ? 'bg-[#EFE6D6] scale-125' 
                               : idx < currentStep 
-                                ? 'bg-gold/50 hover:bg-gold/70' 
+                                ? 'bg-[#EFE6D6]/50 hover:bg-[#EFE6D6]/70' 
                                 : 'bg-[#EFE6D6] hover:bg-[#B89555]'
                           }`}
                           aria-label={`Go to step ${idx + 1}`}
@@ -398,7 +398,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                     animate={{ y: [0, 5, 0] }}
                     transition={{ duration: 1.5, repeat: Infinity }}
                   >
-                    <div className="w-4 h-4 bg-gold rotate-45 shadow-lg" />
+                    <div className="w-4 h-4 bg-[#EFE6D6] rotate-45 shadow-lg" />
                   </motion.div>
                 </div>
 
@@ -414,7 +414,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                   <Link
                     to={tourSteps[currentStep].link}
                     onClick={handleComplete}
-                    className="inline-flex items-center gap-2 px-4 py-2 mb-6 bg-gold/10 hover:bg-gold/20 border border-gold/30 rounded-lg text-gold text-sm font-medium transition-all group"
+                    className="inline-flex items-center gap-2 px-4 py-2 mb-6 bg-[#EFE6D6]/10 hover:bg-[#EFE6D6]/20 border border-[#B89555]/30 rounded-lg text-[#1A1A1A] text-sm font-medium transition-all group"
                   >
                     {tourSteps[currentStep].linkLabel}
                     <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
@@ -441,7 +441,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                         handleComplete();
                       }
                     }}
-                    className="flex-1 py-4 sm:py-5 bg-[#1A1A1A] hover:bg-[#1A1A1A] text-gold font-semibold rounded-xl group border border-gold/20"
+                    className="flex-1 py-4 sm:py-5 bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A] font-semibold rounded-xl group border border-[#B89555]/20"
                   >
                     {currentStep < tourSteps.length - 1 ? (
                       <>
@@ -466,9 +466,9 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                 animate={{ opacity: 1, y: 0 }}
               >
                 <div className="text-center mb-6">
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gold/10 border border-gold/30 rounded-full mb-3">
-                    <Sparkles className="w-3.5 h-3.5 text-gold" />
-                    <span className="text-gold text-xs font-medium">Quick Reference</span>
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full mb-3">
+                    <Sparkles className="w-3.5 h-3.5 text-[#1A1A1A]" />
+                    <span className="text-[#1A1A1A] text-xs font-medium">Quick Reference</span>
                   </div>
                   <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-[#1A1A1A] mb-2">
                     Key Shortcuts
@@ -490,16 +490,16 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                         <Link
                           to={item.link}
                           onClick={handleComplete}
-                          className="flex items-center gap-3 p-3 bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl hover:border-gold/50 hover:bg-gold/5 transition-all group"
+                          className="flex items-center gap-3 p-3 bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl hover:border-[#B89555]/50 hover:bg-[#EFE6D6]/5 transition-all group"
                         >
-                          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg bg-[#FDFBF7] border border-[#B89555]/30 shadow-sm flex items-center justify-center flex-shrink-0 group-hover:border-gold/30 transition-colors">
+                          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg bg-[#FDFBF7] border border-[#B89555]/30 shadow-sm flex items-center justify-center flex-shrink-0 group-hover:border-[#B89555]/30 transition-colors">
                             <item.icon className={`w-5 h-5 ${item.iconColor}`} />
                           </div>
                           <div className="text-left min-w-0 flex-1">
-                            <p className="text-[#1A1A1A] text-sm font-medium group-hover:text-gold transition-colors">{item.title}</p>
+                            <p className="text-[#1A1A1A] text-sm font-medium group-hover:text-[#1A1A1A] transition-colors">{item.title}</p>
                             <p className="text-[#1A1A1A]/70 text-xs truncate">{item.description}</p>
                           </div>
-                          <ChevronRight className="w-4 h-4 text-[#1A1A1A]/70 group-hover:text-gold group-hover:translate-x-0.5 transition-all flex-shrink-0" />
+                          <ChevronRight className="w-4 h-4 text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] group-hover:translate-x-0.5 transition-all flex-shrink-0" />
                         </Link>
                       ) : (
                         <div className="flex items-center gap-3 p-3 bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl">
@@ -519,7 +519,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                 <div className="space-y-2">
                   <Button
                     onClick={handleComplete}
-                    className="w-full py-4 sm:py-5 bg-[#1A1A1A] hover:bg-[#1A1A1A] text-gold font-semibold rounded-xl group border border-gold/20"
+                    className="w-full py-4 sm:py-5 bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A] font-semibold rounded-xl group border border-[#B89555]/20"
                   >
                     Start Exploring
                     <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -529,7 +529,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                       setShowTour('tour');
                       setCurrentStep(0);
                     }}
-                    className="w-full py-2.5 text-[#1A1A1A]/70 hover:text-gold text-sm transition-colors"
+                    className="w-full py-2.5 text-[#1A1A1A]/70 hover:text-[#1A1A1A] text-sm transition-colors"
                   >
                     Take the full tour instead
                   </button>

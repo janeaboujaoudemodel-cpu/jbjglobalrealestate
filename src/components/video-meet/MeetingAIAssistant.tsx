@@ -197,14 +197,14 @@ export function MeetingAIAssistant({
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 20 }}
-      className={`fixed right-4 bottom-24 w-80 bg-zinc-900 border border-gold/30 rounded-xl shadow-2xl z-50 overflow-hidden ${isMinimized ? 'h-12' : 'h-[500px]'}`}
+      className={`fixed right-4 bottom-24 w-80 bg-[#FDFBF7] border border-[#B89555]/30 rounded-xl shadow-2xl z-50 overflow-hidden ${isMinimized ? 'h-12' : 'h-[500px]'}`}
     >
       <div
-        className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-gold/20 to-gold/10 border-b border-gold/20 cursor-pointer"
+        className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-gold/20 to-gold/10 border-b border-[#B89555]/20 cursor-pointer"
         onClick={() => setIsMinimized(!isMinimized)}
       >
         <div className="flex items-center gap-2">
-          <Brain className="w-5 h-5 text-gold" />
+          <Brain className="w-5 h-5 text-[#1A1A1A]" />
           <span className="text-white font-medium text-sm">AI Meeting Assistant</span>
           <Badge className="bg-green-500/20 text-green-400 text-[10px]">Live</Badge>
         </div>
@@ -223,12 +223,12 @@ export function MeetingAIAssistant({
       {!isMinimized && (
         <>
           {meetingContext && (
-            <div className="px-4 py-2 bg-zinc-800/50 border-b border-[#1A1A1A] text-xs">
+            <div className="px-4 py-2 bg-[#1A1A1A]/50 border-b border-[#1A1A1A] text-xs">
               <div className="flex items-center gap-2 text-[#1A1A1A]/70">
                 <EyeOff className="w-3 h-3" />
                 <span>Private — only you see this</span>
               </div>
-              {meetingContext.clientName && <p className="text-gold text-[10px] mt-1">Client: {meetingContext.clientName}</p>}
+              {meetingContext.clientName && <p className="text-[#1A1A1A] text-[10px] mt-1">Client: {meetingContext.clientName}</p>}
             </div>
           )}
 
@@ -245,8 +245,8 @@ export function MeetingAIAssistant({
                     { icon: FileText, label: 'Summarize meeting', prompt: 'Summarize our meeting' },
                   ].map(({ icon: Icon, label, prompt }) => (
                     <button key={label} onClick={() => setInput(prompt)}
-                      className="w-full p-2 text-left text-xs text-[#1A1A1A]/70 bg-zinc-800 rounded-lg hover:bg-[#1A1A1A] flex items-center gap-2">
-                      <Icon className="w-3 h-3 text-gold" />
+                      className="w-full p-2 text-left text-xs text-[#1A1A1A]/70 bg-[#1A1A1A] rounded-lg hover:bg-[#1A1A1A] flex items-center gap-2">
+                      <Icon className="w-3 h-3 text-[#1A1A1A]" />
                       {label}
                     </button>
                   ))}
@@ -256,7 +256,7 @@ export function MeetingAIAssistant({
               <div className="space-y-4">
                 {messages.map(msg => (
                   <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`max-w-[90%] rounded-lg p-3 ${msg.role === 'user' ? 'bg-gold text-[#1A1A1A]' : 'bg-zinc-800 text-gray-200'}`}>
+                    <div className={`max-w-[90%] rounded-lg p-3 ${msg.role === 'user' ? 'bg-[#EFE6D6] text-[#1A1A1A]' : 'bg-[#1A1A1A] text-gray-200'}`}>
                       <div className="text-sm whitespace-pre-wrap">{msg.content}</div>
                       {msg.role === 'assistant' && (
                         <Button size="icon" variant="ghost" className="h-5 w-5 mt-2 opacity-50 hover:opacity-100"
@@ -269,8 +269,8 @@ export function MeetingAIAssistant({
                 ))}
                 {isLoading && (
                   <div className="flex justify-start">
-                    <div className="bg-zinc-800 rounded-lg p-3 flex items-center gap-2">
-                      <Loader2 className="w-4 h-4 text-gold animate-spin" />
+                    <div className="bg-[#1A1A1A] rounded-lg p-3 flex items-center gap-2">
+                      <Loader2 className="w-4 h-4 text-[#1A1A1A] animate-spin" />
                       <span className="text-[#1A1A1A]/70 text-sm">Thinking...</span>
                     </div>
                   </div>
@@ -283,8 +283,8 @@ export function MeetingAIAssistant({
             <div className="flex gap-2">
               <Input value={input} onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
-                placeholder="Ask AI privately..." className="bg-zinc-800 border-[#1A1A1A] text-white text-sm" />
-              <Button size="icon" onClick={sendMessage} disabled={isLoading || !input.trim()} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
+                placeholder="Ask AI privately..." className="bg-[#1A1A1A] border-[#1A1A1A] text-white text-sm" />
+              <Button size="icon" onClick={sendMessage} disabled={isLoading || !input.trim()} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
                 <Send className="w-4 h-4" />
               </Button>
             </div>

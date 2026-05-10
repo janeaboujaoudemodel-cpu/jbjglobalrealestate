@@ -790,21 +790,21 @@ export default function GlobalVerticalNav() {
     ) {
       return shouldHighlight
         ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] font-bold"
-        : "text-[#1A1A1A] font-semibold hover:bg-gold/10";
+        : "text-[#1A1A1A] font-semibold hover:bg-[#EFE6D6]/10";
     }
     if (sectionKey === 'MY ACCOUNT') {
       return shouldHighlight
         ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] font-bold"
-        : "text-[#1A1A1A] font-semibold hover:bg-gold/10";
+        : "text-[#1A1A1A] font-semibold hover:bg-[#EFE6D6]/10";
     }
     if (item.highlight) {
       return shouldHighlight
         ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] font-bold"
-        : "text-[#1A1A1A] font-semibold hover:bg-gold/10";
+        : "text-[#1A1A1A] font-semibold hover:bg-[#EFE6D6]/10";
     }
     return shouldHighlight
       ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] font-bold"
-      : "text-[#1A1A1A] hover:bg-gold/[0.08] hover:text-[#1A1A1A]";
+      : "text-[#1A1A1A] hover:bg-[#EFE6D6]/[0.08] hover:text-[#1A1A1A]";
   };
 
   // Saturated colored rows where the row background is a vivid fill (not champagne).
@@ -859,11 +859,11 @@ export default function GlobalVerticalNav() {
 style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           >
             <div
-              className="pointer-events-auto relative flex flex-col w-[min(560px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl border border-gold/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[calc(100vh-100px)]"
+              className="pointer-events-auto relative flex flex-col w-[min(560px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl border border-[#B89555]/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[calc(100vh-100px)]"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-gold to-gold-dark" aria-hidden />
-              <div className="flex-shrink-0 flex items-center justify-between px-5 py-3.5 border-b border-gold/40 bg-gradient-to-r from-[#EADBB6] to-[#D8C7A6]">
+              <div className="flex-shrink-0 flex items-center justify-between px-5 py-3.5 border-b border-[#B89555]/40 bg-gradient-to-r from-[#EADBB6] to-[#D8C7A6]">
                 <div className="flex items-center gap-2.5">
                   <span className="w-7 h-7 rounded-lg bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-sm">
                     <Zap className="w-3.5 h-3.5 text-white" />
@@ -885,7 +885,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   isInvestor,
                   isDeveloperMode,
                 }).map((group) => (
-                  <div key={group.label} className={`border border-gold/25 border-l-4 ${group.colorBorder} rounded-xl bg-[#FDFBF7]/70 p-2`}>
+                  <div key={group.label} className={`border border-[#B89555]/25 border-l-4 ${group.colorBorder} rounded-xl bg-[#FDFBF7]/70 p-2`}>
                     <p className={`text-[10px] uppercase tracking-wider font-bold ${group.colorText} px-2 pb-1.5`}>
                       {group.label}
                     </p>
@@ -900,11 +900,11 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                             onClick={closeMegaMenu}
                             className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all border ${
                               linkActive
-                                ? "bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] font-bold border-gold shadow-sm"
-                                : "bg-[#FDFBF7]/80 border-gold/25 text-[#1A1A1A]/85 hover:bg-gold/15 hover:border-gold/60"
+                                ? "bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] font-bold border-[#B89555] shadow-sm"
+                                : "bg-[#FDFBF7]/80 border-[#B89555]/25 text-[#1A1A1A]/85 hover:bg-[#EFE6D6]/15 hover:border-[#B89555]/60"
                             }`}
                           >
-                            <Icon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-[#1A1A1A]' : 'text-gold'}`} />
+                            <Icon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]'}`} />
                             <span className="flex-1">{link.label}</span>
                             <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/70'}`} />
                           </Link>
@@ -940,12 +940,12 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           >
             <div
-              className="pointer-events-auto relative w-[min(600px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl border border-gold/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[calc(100vh-100px)]"
+              className="pointer-events-auto relative w-[min(600px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl border border-[#B89555]/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[calc(100vh-100px)]"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-gold to-gold-dark" aria-hidden />
               {/* Header */}
-              <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold/40 bg-gradient-to-r from-[#EADBB6] to-[#D8C7A6]">
+              <div className="flex items-center justify-between px-5 py-3.5 border-b border-[#B89555]/40 bg-gradient-to-r from-[#EADBB6] to-[#D8C7A6]">
                 <div className="flex items-center gap-2.5">
                   <span className="w-7 h-7 rounded-lg bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-sm">
                     <ItemIcon className="w-3.5 h-3.5 text-white" />
@@ -973,11 +973,11 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       onClick={closeMegaMenu}
                       className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all border ${
                         linkActive
-                          ? "bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] font-bold border-gold shadow-sm"
-                          : "bg-[#FDFBF7]/70 border-gold/25 text-[#1A1A1A]/85 hover:bg-gold/15 hover:border-gold/60"
+                          ? "bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] font-bold border-[#B89555] shadow-sm"
+                          : "bg-[#FDFBF7]/70 border-[#B89555]/25 text-[#1A1A1A]/85 hover:bg-[#EFE6D6]/15 hover:border-[#B89555]/60"
                       }`}
                     >
-                      <ItemIcon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-[#1A1A1A]' : 'text-gold'}`} />
+                      <ItemIcon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]'}`} />
                       <span className="flex-1">{entry.name}</span>
                       <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/70'}`} />
                     </Link>
@@ -985,11 +985,11 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 })}
 
                 {/* Divider + View All CTA */}
-                <hr className="border-gold/30 my-2" />
+                <hr className="border-[#B89555]/30 my-2" />
                 <Link
                   to={viewAllHref}
                   onClick={closeMegaMenu}
-                  className="flex items-center gap-2.5 px-3 py-3 rounded-xl text-sm font-bold text-[#1A1A1A] bg-gradient-to-r from-gold to-gold-dark hover:opacity-95 transition-all border border-gold shadow-sm"
+                  className="flex items-center gap-2.5 px-3 py-3 rounded-xl text-sm font-bold text-[#1A1A1A] bg-gradient-to-r from-gold to-gold-dark hover:opacity-95 transition-all border border-[#B89555] shadow-sm"
                 >
                   <Eye className="w-4 h-4 text-white flex-shrink-0" />
                   <span className="flex-1">{viewAllLabel}</span>
@@ -999,9 +999,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   <Link
                     to="/guides"
                     onClick={closeMegaMenu}
-                    className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold border bg-[#FDFBF7]/70 border-gold/25 text-[#1A1A1A]/85 hover:bg-gold/15 hover:border-gold/60 transition-all"
+                    className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold border bg-[#FDFBF7]/70 border-[#B89555]/25 text-[#1A1A1A]/85 hover:bg-[#EFE6D6]/15 hover:border-[#B89555]/60 transition-all"
                   >
-                    <BookOpen className="w-4 h-4 text-gold flex-shrink-0" />
+                    <BookOpen className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
                     <span className="flex-1">Read Area Guides</span>
                     <ChevronRight className="w-3 h-3 text-[#1A1A1A]/70 flex-shrink-0" />
                   </Link>
@@ -1029,11 +1029,11 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
         >
           <div
-            className={`pointer-events-auto relative w-[min(600px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl border border-gold/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[calc(100vh-100px)]' : 'max-h-[calc(100vh-160px)]'}`}
+            className={`pointer-events-auto relative w-[min(600px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl border border-[#B89555]/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[calc(100vh-100px)]' : 'max-h-[calc(100vh-160px)]'}`}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-gold to-gold-dark" aria-hidden />
-            <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold/40 bg-gradient-to-r from-[#EADBB6] to-[#D8C7A6]">
+            <div className="flex items-center justify-between px-5 py-3.5 border-b border-[#B89555]/40 bg-gradient-to-r from-[#EADBB6] to-[#D8C7A6]">
               <div className="flex items-center gap-2.5">
                 <span className="w-7 h-7 rounded-lg bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-sm">
                   <Sparkles className="w-3.5 h-3.5 text-white" />
@@ -1058,11 +1058,11 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     onClick={closeMegaMenu}
                     className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all break-inside-avoid border mb-1 ${
                       linkActive
-                        ? "bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] font-bold border-gold shadow-sm"
-                        : "bg-[#FDFBF7]/70 border-gold/25 text-[#1A1A1A]/85 hover:bg-gold/15 hover:border-gold/60"
+                        ? "bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] font-bold border-[#B89555] shadow-sm"
+                        : "bg-[#FDFBF7]/70 border-[#B89555]/25 text-[#1A1A1A]/85 hover:bg-[#EFE6D6]/15 hover:border-[#B89555]/60"
                     }`}
                   >
-                    <Icon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-[#1A1A1A]' : 'text-gold'}`} />
+                    <Icon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]'}`} />
                     <span className="flex-1">{link.label}</span>
                     <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/70'}`} />
                   </Link>
@@ -1106,15 +1106,15 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             onClick={(e) => handleNavClick('shortcuts', e as any)}
             className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12px] font-bold w-full transition-all duration-200 ${
               activeMegaMenu === 'shortcuts'
-                ? "bg-gradient-to-r from-gold/25 to-gold/15 text-[#1A1A1A] border border-gold/50 shadow-md shadow-gold/10"
-                : "text-[#1A1A1A] hover:text-[#1A1A1A] border border-dashed border-gold/40 hover:border-gold/60 bg-gold/[0.06] hover:bg-gold/[0.10]"
+                ? "bg-gradient-to-r from-gold/25 to-gold/15 text-[#1A1A1A] border border-[#B89555]/50 shadow-md shadow-gold/10"
+                : "text-[#1A1A1A] hover:text-[#1A1A1A] border border-dashed border-[#B89555]/40 hover:border-[#B89555]/60 bg-[#EFE6D6]/[0.06] hover:bg-[#EFE6D6]/[0.10]"
             }`}
           >
-            <div className={`w-6 h-6 rounded-lg flex items-center justify-center ${activeMegaMenu === 'shortcuts' ? 'bg-gold/20' : 'bg-gold/10'}`}>
-              <Zap className="w-3.5 h-3.5 text-gold" />
+            <div className={`w-6 h-6 rounded-lg flex items-center justify-center ${activeMegaMenu === 'shortcuts' ? 'bg-[#EFE6D6]/20' : 'bg-[#EFE6D6]/10'}`}>
+              <Zap className="w-3.5 h-3.5 text-[#1A1A1A]" />
             </div>
             <span className="flex-1 text-left tracking-wide">My Shortcuts</span>
-            <ChevronRight className={`w-3 h-3 transition-transform duration-200 ${activeMegaMenu === 'shortcuts' ? "rotate-90 text-gold" : "text-[#1A1A1A]/70"}`} />
+            <ChevronRight className={`w-3 h-3 transition-transform duration-200 ${activeMegaMenu === 'shortcuts' ? "rotate-90 text-[#1A1A1A]" : "text-[#1A1A1A]/70"}`} />
           </button>
         </div>
 
@@ -1141,7 +1141,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 </span>
                 <span className="flex-1">{item.label}</span>
                 {hasMega && (
-                  <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-[#1A1A1A]/25"}`} />
+                  <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-[#1A1A1A]" : "text-[#1A1A1A]/25"}`} />
                 )}
                 {item.highlight && !isMenuOpen && !activeMegaMenu && !isRouteActive(item.href) && (
                   <Sparkles className="w-3 h-3 text-[#1A1A1A]/70" />
@@ -1170,7 +1170,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 {sectionIdx > 0 && (
                   <div className="flex items-center gap-2 px-3 my-1">
                     <div className="flex-1 h-[1px] bg-gradient-to-r from-gold/15 to-transparent" />
-                    <div className="w-1 h-1 rounded-full bg-gold/20" />
+                    <div className="w-1 h-1 rounded-full bg-[#EFE6D6]/20" />
                     <div className="flex-1 h-[1px] bg-gradient-to-l from-gold/15 to-transparent" />
                   </div>
                 )}
@@ -1180,8 +1180,8 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     onClick={(e) => toggleSection(sectionKey, e)}
                     className={`w-full flex items-center gap-2 px-2.5 py-[7px] rounded-xl text-[10px] uppercase tracking-[0.18em] font-bold transition-all duration-200 group ${
                       sectionHighlighted
-                        ? "text-[#1A1A1A] bg-gold/[0.18]"
-                        : "text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-gold/[0.10]"
+                        ? "text-[#1A1A1A] bg-[#EFE6D6]/[0.18]"
+                        : "text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/[0.10]"
                     }`}
                   >
                     <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors border ${sectionHighlighted ? 'bg-[hsl(var(--gold))]/20 border-[hsl(var(--gold))]/70' : 'bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/40 group-hover:bg-[hsl(var(--gold))]/15 group-hover:border-[hsl(var(--gold))]/65'}`}>
@@ -1190,14 +1190,14 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     <span className="flex-1 text-left">{sectionKey}</span>
                     <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'} ${sectionHighlighted ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/70'}`} />
                     {!isOpen && hasActiveChild && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#EFE6D6] animate-pulse" />
                     )}
                   </button>
 
                   <div
                     className={`overflow-hidden transition-all duration-250 ease-out ${isOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}`}
                   >
-                    <div className="ml-4 pl-2.5 border-l border-gold/15 space-y-1 pt-1 pb-1.5">
+                    <div className="ml-4 pl-2.5 border-l border-[#B89555]/15 space-y-1 pt-1 pb-1.5">
                       {items.map((item, i) => {
                         const hasMega = !!item.megaMenu;
                         const isMenuOpen = activeMegaMenu === item.megaMenu;
@@ -1225,7 +1225,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                             </span>
                             <span className="flex-1">{item.label}</span>
                             {hasMega && (
-                              <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-[#1A1A1A]/20"}`} />
+                              <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-[#1A1A1A]" : "text-[#1A1A1A]/20"}`} />
                             )}
                           </Link>
                         );
@@ -1379,7 +1379,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               ) : (
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Link to="/auth" className="w-7 h-7 rounded-lg flex items-center justify-center text-gold hover:bg-gold/10 transition-all">
+                    <Link to="/auth" className="w-7 h-7 rounded-lg flex items-center justify-center text-[#1A1A1A] hover:bg-[#EFE6D6]/10 transition-all">
                       <User className="w-3.5 h-3.5" />
                     </Link>
                   </TooltipTrigger>

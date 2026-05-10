@@ -140,7 +140,7 @@ export function BrokerManagementPanel() {
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-xl font-bold text-foreground flex items-center gap-2">
-            <Users className="w-5 h-5 text-gold" /> Broker Management
+            <Users className="w-5 h-5 text-[#1A1A1A]" /> Broker Management
           </h3>
           <p className="text-sm text-muted-foreground">
             Manage broker profiles, verification, probation, and public visibility
@@ -158,9 +158,9 @@ export function BrokerManagementPanel() {
       </div>
 
       {loading ? (
-        <div className="text-center py-12"><Loader2 className="w-6 h-6 animate-spin mx-auto text-gold" /></div>
+        <div className="text-center py-12"><Loader2 className="w-6 h-6 animate-spin mx-auto text-[#1A1A1A]" /></div>
       ) : (
-        <Card className="border-gold/30">
+        <Card className="border-[#B89555]/30">
           <CardContent className="p-0">
             <div className="overflow-x-auto">
               <Table>
@@ -185,7 +185,7 @@ export function BrokerManagementPanel() {
                         </div>
                       </TableCell>
                       <TableCell>
-                        <Badge variant="outline" className="border-gold/30 text-gold text-xs">
+                        <Badge variant="outline" className="border-[#B89555]/30 text-[#1A1A1A] text-xs">
                           {broker.current_tier}
                         </Badge>
                       </TableCell>
@@ -234,7 +234,7 @@ export function BrokerManagementPanel() {
                             <Button
                               size="sm"
                               variant="ghost"
-                              className="text-gold text-[10px] h-6 px-2 ml-1"
+                              className="text-[#1A1A1A] text-[10px] h-6 px-2 ml-1"
                               onClick={() => skipProbation(broker)}
                             >
                               Skip
@@ -268,7 +268,7 @@ export function BrokerManagementPanel() {
                         <Button
                           size="sm"
                           variant="ghost"
-                          className="text-gold h-8"
+                          className="text-[#1A1A1A] h-8"
                           onClick={() => {
                             setEditBroker(broker);
                             setEditForm({
@@ -343,7 +343,7 @@ export function BrokerManagementPanel() {
             </div>
             <div className="flex justify-end gap-2 pt-2">
               <Button variant="outline" onClick={() => setEditBroker(null)}>Cancel</Button>
-              <Button className="bg-gold text-[#1A1A1A] hover:bg-gold/90" onClick={saveEdit}>Save Changes</Button>
+              <Button className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90" onClick={saveEdit}>Save Changes</Button>
             </div>
           </div>
         </DialogContent>

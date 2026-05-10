@@ -129,7 +129,7 @@ export default function BookDownloadDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md p-0 bg-gradient-to-br from-[#FEFCF9] via-[#FAF6EE] to-[#F3EDD9] border-2 border-gold/50 overflow-hidden shadow-[0_25px_80px_-12px_rgba(0,0,0,0.35)]">
+      <DialogContent className="max-w-md p-0 bg-gradient-to-br from-[#FEFCF9] via-[#FAF6EE] to-[#F3EDD9] border-2 border-[#B89555]/50 overflow-hidden shadow-[0_25px_80px_-12px_rgba(0,0,0,0.35)]">
         {isSuccess ? (
           <div className="p-8 text-center space-y-4">
             <div className="w-16 h-16 mx-auto rounded-full bg-green-100 flex items-center justify-center">
@@ -149,10 +149,10 @@ export default function BookDownloadDialog({
             {/* Header with book preview */}
             <div className="bg-gradient-to-r from-zinc-900 via-black to-zinc-900 p-6 text-center">
               <div className="flex items-center justify-center gap-3 mb-3">
-                <BookOpen className="w-6 h-6 text-gold" />
+                <BookOpen className="w-6 h-6 text-[#1A1A1A]" />
                 <DialogTitle className="text-lg font-bold text-white tracking-tight">Free Download</DialogTitle>
               </div>
-              <p className="text-gold text-sm font-semibold">{bookTitle}</p>
+              <p className="text-[#1A1A1A] text-sm font-semibold">{bookTitle}</p>
               <p className="text-[#1A1A1A]/70 text-xs mt-1">2026 Edition • By JBJ Global Real Estate</p>
             </div>
 
@@ -170,7 +170,7 @@ export default function BookDownloadDialog({
                     placeholder="Your name (optional)"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="pl-10 h-11 bg-[#FDFBF7]/90 border-gold/25 rounded-xl focus:border-gold focus:ring-2 focus:ring-gold/20"
+                    className="pl-10 h-11 bg-[#FDFBF7]/90 border-[#B89555]/25 rounded-xl focus:border-[#B89555] focus:ring-2 focus:ring-gold/20"
                   />
                 </div>
 
@@ -182,7 +182,7 @@ export default function BookDownloadDialog({
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleDownload()}
-                    className="pl-10 h-11 bg-[#FDFBF7]/90 border-gold/25 rounded-xl focus:border-gold focus:ring-2 focus:ring-gold/20"
+                    className="pl-10 h-11 bg-[#FDFBF7]/90 border-[#B89555]/25 rounded-xl focus:border-[#B89555] focus:ring-2 focus:ring-gold/20"
                     required
                   />
                 </div>

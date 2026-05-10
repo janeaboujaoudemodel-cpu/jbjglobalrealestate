@@ -112,7 +112,7 @@ const AttachmentItem = ({ url, index }: { url: string; index: number }) => {
 
   if (loading[url]) {
     return (
-      <div className="flex items-center gap-2 bg-[#F7F1E6]/20 px-3 py-2 rounded-lg text-sm text-gold border border-gold/30">
+      <div className="flex items-center gap-2 bg-[#F7F1E6]/20 px-3 py-2 rounded-lg text-sm text-[#1A1A1A] border border-[#B89555]/30">
         <Loader2 className="w-4 h-4 animate-spin" />
         Loading...
       </div>
@@ -133,7 +133,7 @@ const AttachmentItem = ({ url, index }: { url: string; index: number }) => {
       {imagePreview && (
         <div 
           onClick={handleView}
-          className="cursor-pointer rounded-lg overflow-hidden border border-gold/20 hover:border-gold transition-colors"
+          className="cursor-pointer rounded-lg overflow-hidden border border-[#B89555]/20 hover:border-[#B89555] transition-colors"
         >
           <img 
             src={imagePreview} 
@@ -146,7 +146,7 @@ const AttachmentItem = ({ url, index }: { url: string; index: number }) => {
         <button
           onClick={handleView}
           disabled={!signedUrl}
-          className="flex items-center gap-2 bg-[#FDFBF7] px-3 py-2 rounded-lg text-sm text-gold hover:bg-[#F7F1E6] transition-colors border border-gold/30 disabled:opacity-50 disabled:cursor-not-allowed flex-1"
+          className="flex items-center gap-2 bg-[#FDFBF7] px-3 py-2 rounded-lg text-sm text-[#1A1A1A] hover:bg-[#F7F1E6] transition-colors border border-[#B89555]/30 disabled:opacity-50 disabled:cursor-not-allowed flex-1"
         >
           {isImage ? <ImageIcon className="w-4 h-4" /> : <FileText className="w-4 h-4" />}
           <span className="truncate max-w-[120px]">{filename || `Attachment ${index + 1}`}</span>
@@ -155,7 +155,7 @@ const AttachmentItem = ({ url, index }: { url: string; index: number }) => {
         <button
           onClick={handleDownload}
           disabled={!signedUrl}
-          className="flex items-center gap-1 bg-gold/20 px-3 py-2 rounded-lg text-sm text-gold hover:bg-gold/30 transition-colors border border-gold/30 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-1 bg-[#EFE6D6]/20 px-3 py-2 rounded-lg text-sm text-[#1A1A1A] hover:bg-[#EFE6D6]/30 transition-colors border border-[#B89555]/30 disabled:opacity-50 disabled:cursor-not-allowed"
           title="Download"
         >
           <Download className="w-4 h-4" />
@@ -177,9 +177,9 @@ const SuggestionCard = ({
 }) => {
   const [expanded, setExpanded] = useState(false);
   const typeColors = {
-    quick_resolution: 'border-gold/40 bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6]',
-    needs_info: 'border-gold/40 bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6]',
-    acknowledgment: 'border-gold/40 bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6]/30',
+    quick_resolution: 'border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6]',
+    needs_info: 'border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6]',
+    acknowledgment: 'border-[#B89555]/40 bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6]/30',
   };
 
   const typeLabels = {
@@ -194,11 +194,11 @@ const SuggestionCard = ({
         onClick={() => setExpanded(true)}
         className={cn(
           "w-full text-left p-3 rounded-lg border transition-all duration-200",
-          typeColors[suggestion.type] || 'border-gold/30 bg-gold/10',
-          isSelected ? 'ring-2 ring-gold' : 'hover:border-gold/50'
+          typeColors[suggestion.type] || 'border-[#B89555]/30 bg-[#EFE6D6]/10',
+          isSelected ? 'ring-2 ring-gold' : 'hover:border-[#B89555]/50'
         )}
       >
-        <p className="text-xs font-semibold text-gold uppercase tracking-wide mb-1">
+        <p className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wide mb-1">
           {typeLabels[suggestion.type] || suggestion.title}
         </p>
         <p className="text-xs text-[#8A7356] line-clamp-2">
@@ -211,26 +211,26 @@ const SuggestionCard = ({
       {expanded && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#1A1A1A]/70 backdrop-blur-sm p-4" onClick={() => setExpanded(false)}>
           <div
-            className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/40 rounded-2xl shadow-[0_0_60px_rgba(200,167,102,0.3)] max-w-lg w-full max-h-[80vh] flex flex-col"
+            className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl shadow-[0_0_60px_rgba(200,167,102,0.3)] max-w-lg w-full max-h-[80vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="px-5 py-4 border-b border-gold/30 flex items-center justify-between">
+            <div className="px-5 py-4 border-b border-[#B89555]/30 flex items-center justify-between">
               <div>
                 <Badge className={cn("border text-xs mb-1", typeColors[suggestion.type])}>
                   {typeLabels[suggestion.type] || suggestion.title}
                 </Badge>
                 <h3 className="text-[#1A1A1A] font-bold text-lg">{suggestion.title}</h3>
               </div>
-              <Button variant="ghost" size="icon" onClick={() => setExpanded(false)} className="text-gold hover:text-[#1A1A1A] hover:bg-gold/20 border border-gold/40">
+              <Button variant="ghost" size="icon" onClick={() => setExpanded(false)} className="text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/20 border border-[#B89555]/40">
                 <X className="w-5 h-5" />
               </Button>
             </div>
             <ScrollArea className="flex-1 p-5">
-              <div className="bg-[#FDFBF7]/60 border border-gold/20 rounded-lg p-4">
+              <div className="bg-[#FDFBF7]/60 border border-[#B89555]/20 rounded-lg p-4">
                 <p className="text-[#1A1A1A] text-sm whitespace-pre-wrap leading-relaxed">{suggestion.message}</p>
               </div>
             </ScrollArea>
-            <div className="px-5 py-4 border-t border-gold/30 flex gap-3">
+            <div className="px-5 py-4 border-t border-[#B89555]/30 flex gap-3">
               <Button
                 onClick={() => {
                   onSelect();
@@ -244,7 +244,7 @@ const SuggestionCard = ({
               <Button
                 variant="outline"
                 onClick={() => setExpanded(false)}
-                className="border-2 border-gold text-gold hover:bg-gold/20 font-semibold"
+                className="border-2 border-[#B89555] text-[#1A1A1A] hover:bg-[#EFE6D6]/20 font-semibold"
               >
                 Cancel
               </Button>
@@ -282,7 +282,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
 
   if (!ticketId) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-gradient-to-b from-[#FDFBF7]/80 to-[#EFE6D6]/80 rounded-xl border border-gold/20">
+      <div className="flex-1 flex items-center justify-center bg-gradient-to-b from-[#FDFBF7]/80 to-[#EFE6D6]/80 rounded-xl border border-[#B89555]/20">
         <div className="text-center text-[#1A1A1A]/70">
           <MessageSquare className="w-12 h-12 mx-auto mb-3 text-[#1A1A1A]/70" />
           <p>Select a ticket to view details</p>
@@ -293,12 +293,12 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
 
   if (isLoading) {
     return (
-      <div className="flex-1 bg-gradient-to-b from-[#FDFBF7]/80 to-[#EFE6D6]/80 rounded-xl border border-gold/20 p-6">
+      <div className="flex-1 bg-gradient-to-b from-[#FDFBF7]/80 to-[#EFE6D6]/80 rounded-xl border border-[#B89555]/20 p-6">
         <div className="space-y-4">
-          <Skeleton className="h-8 w-48 bg-gold/20" />
-          <Skeleton className="h-4 w-full bg-gold/20" />
-          <Skeleton className="h-4 w-3/4 bg-gold/20" />
-          <Skeleton className="h-32 w-full bg-gold/20" />
+          <Skeleton className="h-8 w-48 bg-[#EFE6D6]/20" />
+          <Skeleton className="h-4 w-full bg-[#EFE6D6]/20" />
+          <Skeleton className="h-4 w-3/4 bg-[#EFE6D6]/20" />
+          <Skeleton className="h-32 w-full bg-[#EFE6D6]/20" />
         </div>
       </div>
     );
@@ -306,7 +306,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
 
   if (!data) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-gradient-to-b from-[#FDFBF7]/80 to-[#EFE6D6]/80 rounded-xl border border-gold/20">
+      <div className="flex-1 flex items-center justify-center bg-gradient-to-b from-[#FDFBF7]/80 to-[#EFE6D6]/80 rounded-xl border border-[#B89555]/20">
         <p className="text-[#1A1A1A]/70">Ticket not found</p>
       </div>
     );
@@ -365,12 +365,12 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
   };
 
   return (
-    <div className="flex-1 bg-gradient-to-b from-[#FDFBF7] to-[#EFE6D6] rounded-xl border border-gold/30 flex flex-col overflow-hidden shadow-[0_0_30px_rgba(200,167,102,0.1)]">
+    <div className="flex-1 bg-gradient-to-b from-[#FDFBF7] to-[#EFE6D6] rounded-xl border border-[#B89555]/30 flex flex-col overflow-hidden shadow-[0_0_30px_rgba(200,167,102,0.1)]">
       {/* Header */}
-      <div className="px-3 py-2.5 border-b border-gold/30 flex items-start justify-between bg-gradient-to-r from-[#F7F1E6] to-[#EFE6D6]">
+      <div className="px-3 py-2.5 border-b border-[#B89555]/30 flex items-start justify-between bg-gradient-to-r from-[#F7F1E6] to-[#EFE6D6]">
         <div className="min-w-0 flex-1 mr-2">
           <div className="flex items-center gap-2 mb-1 overflow-x-auto scrollbar-hide whitespace-nowrap">
-            <span className="text-gold font-mono font-bold text-sm whitespace-nowrap shrink-0">
+            <span className="text-[#1A1A1A] font-mono font-bold text-sm whitespace-nowrap shrink-0">
               {ticket.ticket_number}
             </span>
             <Badge className={cn("border text-[10px] px-1.5 py-0 whitespace-nowrap shrink-0", priority.className)}>
@@ -387,7 +387,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
           variant="ghost"
           size="icon"
           onClick={onClose}
-          className="bg-gold border-2 border-gold text-[#1A1A1A] hover:bg-gold/80 transition-all duration-200"
+          className="bg-[#EFE6D6] border-2 border-[#B89555] text-[#1A1A1A] hover:bg-[#EFE6D6]/80 transition-all duration-200"
         >
           <X className="w-5 h-5" />
         </Button>
@@ -413,20 +413,20 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
           )}
 
           {/* Customer Info */}
-          <div className="bg-[#FDFBF7]/50 rounded-lg p-3 space-y-2 border border-gold/20">
-            <h3 className="text-xs font-semibold text-gold uppercase tracking-wide mb-2">
+          <div className="bg-[#FDFBF7]/50 rounded-lg p-3 space-y-2 border border-[#B89555]/20">
+            <h3 className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wide mb-2">
               Customer Details
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div className="flex items-center gap-2 text-sm">
-                <User className="w-4 h-4 text-gold" />
+                <User className="w-4 h-4 text-[#1A1A1A]" />
                 <span className="text-[#1A1A1A]">{ticket.full_name}</span>
               </div>
               <div className="flex items-center gap-2 text-sm">
-                <Mail className="w-4 h-4 text-gold" />
+                <Mail className="w-4 h-4 text-[#1A1A1A]" />
                 <button
                   onClick={handleEmailClick}
-                  className="text-gold hover:underline flex items-center gap-1"
+                  className="text-[#1A1A1A] hover:underline flex items-center gap-1"
                 >
                   {ticket.email}
                   <ExternalLink className="w-3 h-3" />
@@ -434,17 +434,17 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
               </div>
               {ticket.phone && (
                 <div className="flex items-center gap-2 text-sm">
-                  <Phone className="w-4 h-4 text-gold" />
+                  <Phone className="w-4 h-4 text-[#1A1A1A]" />
                   <a
                     href={`tel:${ticket.phone}`}
-                    className="text-gold hover:underline"
+                    className="text-[#1A1A1A] hover:underline"
                   >
                     {ticket.phone}
                   </a>
                 </div>
               )}
               <div className="flex items-center gap-2 text-sm">
-                <Tag className="w-4 h-4 text-gold" />
+                <Tag className="w-4 h-4 text-[#1A1A1A]" />
                 <span className="text-[#1A1A1A]">{ticket.service_category}</span>
               </div>
             </div>
@@ -452,10 +452,10 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
 
           {/* Description */}
           <div>
-            <h3 className="text-sm font-semibold text-gold uppercase tracking-wide mb-3">
+            <h3 className="text-sm font-semibold text-[#1A1A1A] uppercase tracking-wide mb-3">
               Issue Description
             </h3>
-            <div className="bg-[#FDFBF7]/40 rounded-lg p-4 text-[#1A1A1A] text-sm whitespace-pre-wrap break-words overflow-hidden max-w-full border border-gold/20">
+            <div className="bg-[#FDFBF7]/40 rounded-lg p-4 text-[#1A1A1A] text-sm whitespace-pre-wrap break-words overflow-hidden max-w-full border border-[#B89555]/20">
               {ticket.description}
             </div>
           </div>
@@ -463,7 +463,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
           {/* Attachments */}
           {ticket.attachment_urls && ticket.attachment_urls.length > 0 && (
             <div>
-              <h3 className="text-sm font-semibold text-gold uppercase tracking-wide mb-3">
+              <h3 className="text-sm font-semibold text-[#1A1A1A] uppercase tracking-wide mb-3">
                 Attachments ({ticket.attachment_urls.length})
               </h3>
               <div className="flex flex-wrap gap-3">
@@ -476,7 +476,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
 
           {/* Status Actions */}
           <div>
-            <h3 className="text-sm font-semibold text-gold uppercase tracking-wide mb-3">
+            <h3 className="text-sm font-semibold text-[#1A1A1A] uppercase tracking-wide mb-3">
               Actions
             </h3>
             <div className="flex flex-wrap gap-2">
@@ -515,7 +515,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
                   size="sm"
                   onClick={() => handleStatusChange("open")}
                   disabled={updateStatus.isPending}
-                  className="bg-transparent border border-gold/50 text-gold hover:bg-gold/10"
+                  className="bg-transparent border border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                 >
                   {updateStatus.isPending ? (
                     <Loader2 className="w-4 h-4 animate-spin mr-2" />
@@ -538,7 +538,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
               <Button
                 size="sm"
                 onClick={() => navigate(`/ai-notes?ticket=${ticket.ticket_number}&title=${encodeURIComponent(`Note: ${ticket.subject}`)}`)}
-                className="bg-gold/30 hover:bg-gold/50 text-[#1A1A1A] border border-gold/40"
+                className="bg-[#EFE6D6]/30 hover:bg-[#EFE6D6]/50 text-[#1A1A1A] border border-[#B89555]/40"
               >
                 <StickyNote className="w-4 h-4 mr-2" />
                 Add Note
@@ -549,7 +549,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
           {/* AI Suggestions Section */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold text-gold uppercase tracking-wide">
+              <h3 className="text-sm font-semibold text-[#1A1A1A] uppercase tracking-wide">
                 AI Reply Suggestions
               </h3>
               <Button
@@ -569,9 +569,9 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
 
             {aiSuggestions.isLoading && (
               <div className="space-y-2">
-                <Skeleton className="h-16 w-full bg-gold/20" />
-                <Skeleton className="h-16 w-full bg-gold/20" />
-                <Skeleton className="h-16 w-full bg-gold/20" />
+                <Skeleton className="h-16 w-full bg-[#EFE6D6]/20" />
+                <Skeleton className="h-16 w-full bg-[#EFE6D6]/20" />
+                <Skeleton className="h-16 w-full bg-[#EFE6D6]/20" />
               </div>
             )}
 
@@ -597,7 +597,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
 
           {/* Message Thread */}
           <div>
-            <h3 className="text-sm font-semibold text-gold uppercase tracking-wide mb-3">
+            <h3 className="text-sm font-semibold text-[#1A1A1A] uppercase tracking-wide mb-3">
               Conversation ({messages.length})
             </h3>
             <div className="space-y-3">
@@ -610,8 +610,8 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
                     className={cn(
                       "rounded-lg p-3",
                       msg.sender_type === "staff"
-                        ? "bg-gold/10 border border-gold/20 ml-6"
-                        : "bg-[#FDFBF7]/40 border border-gold/15 mr-6"
+                        ? "bg-[#EFE6D6]/10 border border-[#B89555]/20 ml-6"
+                        : "bg-[#FDFBF7]/40 border border-[#B89555]/15 mr-6"
                     )}
                   >
                     <div className="flex items-center justify-between mb-2">
@@ -619,7 +619,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
                         className={cn(
                           "text-xs font-semibold uppercase",
                           msg.sender_type === "staff"
-                            ? "text-gold"
+                            ? "text-[#1A1A1A]"
                             : "text-[#8A7356]"
                         )}
                       >
@@ -639,7 +639,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
           </div>
 
           {/* Metadata */}
-          <div className="text-xs text-[#1A1A1A]/70 pt-4 border-t border-gold/20">
+          <div className="text-xs text-[#1A1A1A]/70 pt-4 border-t border-[#B89555]/20">
             <p>Created: {format(new Date(ticket.created_at), "MMM d, yyyy h:mm a")}</p>
             {ticket.customer_confirmation_sent_at && (
               <p className="text-green-400">
@@ -652,7 +652,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
       </ScrollArea>
 
       {/* Reply Composer */}
-      <div className="p-3 border-t border-gold/30 bg-gradient-to-r from-[#F7F1E6] to-[#EFE6D6]">
+      <div className="p-3 border-t border-[#B89555]/30 bg-gradient-to-r from-[#F7F1E6] to-[#EFE6D6]">
         <p className="text-[10px] text-[#1A1A1A]/70 mb-1 flex items-center gap-1">
           <Mic className="w-3 h-3" /> Speak in any language — auto-translated to English
         </p>
@@ -663,7 +663,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
               onChange={(e) => setReplyMessage(e.target.value)}
               placeholder="Type your reply to the customer..."
               rows={2}
-              className="w-full min-h-[56px] px-3 py-2 pr-16 rounded-lg bg-[#FDFBF7]/80 border border-gold/30 text-[#1A1A1A] text-sm placeholder:text-[#1A1A1A]/70 resize-none focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all"
+              className="w-full min-h-[56px] px-3 py-2 pr-16 rounded-lg bg-[#FDFBF7]/80 border border-[#B89555]/30 text-[#1A1A1A] text-sm placeholder:text-[#1A1A1A]/70 resize-none focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-[#B89555] transition-all"
             />
             <div className="absolute top-2 right-2 flex items-center gap-1">
               <VoiceInputButton
@@ -677,11 +677,11 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
                 }}
                 size="icon"
                 variant="ghost"
-                className="h-6 w-6 text-[#1A1A1A]/70 hover:text-gold"
+                className="h-6 w-6 text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
               />
               <button
                 onClick={() => setReplyMaximized(true)}
-                className="text-[#1A1A1A]/70 hover:text-gold transition-colors p-0.5"
+                className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors p-0.5"
                 title="Maximize reply editor"
               >
                 <Maximize2 className="w-4 h-4" />
@@ -691,7 +691,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
           <Button
             onClick={handleSendReply}
             disabled={!replyMessage.trim() || sendReply.isPending}
-            className="bg-gold hover:bg-gold/90 text-[#1A1A1A] self-end"
+            className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] self-end"
           >
             {sendReply.isPending ? (
               <Loader2 className="w-4 h-4 animate-spin" />
@@ -706,15 +706,15 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
       {replyMaximized && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#1A1A1A]/60 backdrop-blur-sm p-4" onClick={() => setReplyMaximized(false)}>
           <div
-            className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/40 rounded-2xl shadow-[0_0_60px_rgba(200,167,102,0.3)] max-w-2xl w-full max-h-[80vh] flex flex-col"
+            className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl shadow-[0_0_60px_rgba(200,167,102,0.3)] max-w-2xl w-full max-h-[80vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="px-5 py-4 border-b border-gold/30 flex items-center justify-between">
+            <div className="px-5 py-4 border-b border-[#B89555]/30 flex items-center justify-between">
               <h3 className="text-[#1A1A1A] font-bold text-lg flex items-center gap-2">
-                <MessageSquare className="w-5 h-5 text-gold" />
+                <MessageSquare className="w-5 h-5 text-[#1A1A1A]" />
                 Reply Editor
               </h3>
-              <Button variant="ghost" size="icon" onClick={() => setReplyMaximized(false)} className="text-gold hover:text-[#1A1A1A] hover:bg-gold/20 border border-gold/40">
+              <Button variant="ghost" size="icon" onClick={() => setReplyMaximized(false)} className="text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/20 border border-[#B89555]/40">
                 <Minimize2 className="w-5 h-5" />
               </Button>
             </div>
@@ -723,11 +723,11 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
                 value={replyMessage}
                 onChange={(e) => setReplyMessage(e.target.value)}
                 placeholder="Type your reply to the customer..."
-                className="w-full h-[45vh] px-4 py-3 rounded-lg bg-[#FDFBF7]/80 border border-gold/30 text-[#1A1A1A] text-sm placeholder:text-[#1A1A1A]/70 resize-none focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all leading-relaxed"
+                className="w-full h-[45vh] px-4 py-3 rounded-lg bg-[#FDFBF7]/80 border border-[#B89555]/30 text-[#1A1A1A] text-sm placeholder:text-[#1A1A1A]/70 resize-none focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-[#B89555] transition-all leading-relaxed"
                 autoFocus
               />
             </div>
-            <div className="px-5 py-4 border-t border-gold/30 flex gap-3 items-center">
+            <div className="px-5 py-4 border-t border-[#B89555]/30 flex gap-3 items-center">
               <VoiceInputButton
                 onTranscript={(text) => setReplyMessage(prev => prev ? `${prev} ${text}` : text)}
                 onTranscriptResult={(result) => {
@@ -738,13 +738,13 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
                 }}
                 size="default"
                 variant="outline"
-                className="border-2 border-gold text-gold hover:bg-gold/20"
+                className="border-2 border-[#B89555] text-[#1A1A1A] hover:bg-[#EFE6D6]/20"
               />
               <div className="flex-1" />
               <Button
                 variant="outline"
                 onClick={() => setReplyMaximized(false)}
-                className="border-2 border-gold text-gold hover:bg-gold/20 font-semibold"
+                className="border-2 border-[#B89555] text-[#1A1A1A] hover:bg-[#EFE6D6]/20 font-semibold"
               >
                 <Minimize2 className="w-4 h-4 mr-2" />
                 Minimize

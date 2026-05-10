@@ -34,7 +34,7 @@ const PRIMARY_ACTIONS = [
     description: "Browse our collection of premium properties for sale and rent",
     icon: Building2,
     href: "/properties",
-    color: "text-gold",
+    color: "text-[#1A1A1A]",
     bgGradient: "from-gold/20 to-amber-500/10"
   },
   {
@@ -97,7 +97,7 @@ const VisitorDashboard = () => {
           {/* Welcome Header */}
           <motion.div variants={fadeInUp} className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Welcome to <span className="text-gold">JBJ Global Real Estate</span>
+              Welcome to <span className="text-[#1A1A1A]">JBJ Global Real Estate</span>
             </h1>
             <p className="text-xl text-white/70 max-w-2xl mx-auto">
               Explore. Compare. Invest. List.
@@ -110,12 +110,12 @@ const VisitorDashboard = () => {
               const Icon = action.icon;
               return (
                 <Link key={action.title} to={action.href}>
-                  <Card className="bg-zinc-900/50 border-[#1A1A1A] hover:border-gold/50 transition-all duration-300 h-full group cursor-pointer">
+                  <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A] hover:border-[#B89555]/50 transition-all duration-300 h-full group cursor-pointer">
                     <CardHeader>
                       <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${action.bgGradient} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
                         <Icon className={`w-7 h-7 ${action.color}`} />
                       </div>
-                      <CardTitle className="text-white group-hover:text-gold transition-colors">
+                      <CardTitle className="text-white group-hover:text-[#1A1A1A] transition-colors">
                         {action.title}
                       </CardTitle>
                       <CardDescription className="text-white/70">
@@ -123,7 +123,7 @@ const VisitorDashboard = () => {
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <span className="text-gold text-sm flex items-center gap-2 group-hover:gap-3 transition-all">
+                      <span className="text-[#1A1A1A] text-sm flex items-center gap-2 group-hover:gap-3 transition-all">
                         Learn more <ArrowRight className="w-4 h-4" />
                       </span>
                     </CardContent>
@@ -141,13 +141,13 @@ const VisitorDashboard = () => {
                 const Icon = item.icon;
                 return (
                   <Link key={item.title} to={item.href}>
-                    <Card className="bg-zinc-900/30 border-[#1A1A1A] hover:border-[#1A1A1A] transition-all group cursor-pointer">
+                    <Card className="bg-[#FDFBF7]/30 border-[#1A1A1A] hover:border-[#1A1A1A] transition-all group cursor-pointer">
                       <CardContent className="flex items-center gap-4 p-5">
-                        <div className="w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center group-hover:bg-[#1A1A1A] transition-colors">
-                          <Icon className="w-6 h-6 text-white/70 group-hover:text-gold transition-colors" />
+                        <div className="w-12 h-12 rounded-lg bg-[#1A1A1A] flex items-center justify-center group-hover:bg-[#1A1A1A] transition-colors">
+                          <Icon className="w-6 h-6 text-white/70 group-hover:text-[#1A1A1A] transition-colors" />
                         </div>
                         <div>
-                          <h3 className="font-medium text-white group-hover:text-gold transition-colors">
+                          <h3 className="font-medium text-white group-hover:text-[#1A1A1A] transition-colors">
                             {item.title}
                           </h3>
                           <p className="text-sm text-white/90">{item.description}</p>
@@ -162,7 +162,7 @@ const VisitorDashboard = () => {
 
           {/* Call to Action */}
           <motion.div variants={fadeInUp}>
-            <Card className="bg-gradient-to-r from-gold/10 to-amber-500/5 border-gold/30">
+            <Card className="bg-gradient-to-r from-gold/10 to-amber-500/5 border-[#B89555]/30">
               <CardContent className="flex flex-col md:flex-row items-center justify-between gap-6 p-8">
                 <div>
                   <h3 className="text-2xl font-semibold text-white mb-2">
@@ -174,7 +174,7 @@ const VisitorDashboard = () => {
                 </div>
                 <div className="flex gap-4">
                   <Link to="/auth?mode=signup">
-                    <Button className="bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold px-6">
+                    <Button className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-semibold px-6">
                       <UserPlus className="w-4 h-4 mr-2" />
                       Create Account
                     </Button>

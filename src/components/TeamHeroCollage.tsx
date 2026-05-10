@@ -55,7 +55,7 @@ const CollageItem: React.FC<CollageItemProps> = ({ member, index, size, delay })
 
   return (
     <motion.div
-      className={`${sizeClasses[size]} rounded-full overflow-hidden border-2 border-gold/40 shadow-lg shadow-gold/20 flex-shrink-0`}
+      className={`${sizeClasses[size]} rounded-full overflow-hidden border-2 border-[#B89555]/40 shadow-lg shadow-gold/20 flex-shrink-0`}
       variants={floatVariants}
       initial="initial"
       animate="animate"
@@ -164,7 +164,7 @@ const TeamHeroCollage: React.FC = () => {
 
       {/* Subtle glow effect behind collage */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-gold/10 rounded-full blur-[100px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-[#EFE6D6]/10 rounded-full blur-[100px]" />
       </div>
     </div>
   );

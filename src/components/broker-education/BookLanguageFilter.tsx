@@ -34,18 +34,18 @@ export function BookLanguageFilter({ value, onChange, className }: BookLanguageF
         <Button
           variant="outline"
           className={cn(
-            "border-gold/40 bg-[#FDFBF7]/80 hover:bg-gold/10 text-[#1A1A1A] gap-2",
+            "border-[#B89555]/40 bg-[#FDFBF7]/80 hover:bg-[#EFE6D6]/10 text-[#1A1A1A] gap-2",
             className
           )}
         >
-          <Globe className="w-4 h-4 text-gold" />
+          <Globe className="w-4 h-4 text-[#1A1A1A]" />
           <span className="text-lg">{selectedLanguage.flag}</span>
           <span className="hidden sm:inline">{selectedLanguage.name}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent 
         align="end"
-        className="bg-[#FDFBF7] border-gold/30 shadow-xl min-w-[180px] z-[200]"
+        className="bg-[#FDFBF7] border-[#B89555]/30 shadow-xl min-w-[180px] z-[200]"
       >
         {LANGUAGES.map((lang) => (
           <DropdownMenuItem
@@ -57,14 +57,14 @@ export function BookLanguageFilter({ value, onChange, className }: BookLanguageF
             className={cn(
               "flex items-center gap-3 cursor-pointer",
               value === lang.code 
-                ? "bg-gold/15 !text-gold" 
-                : "!text-[#1A1A1A] hover:bg-gold/10 hover:!text-gold focus:!text-[#1A1A1A] focus:bg-gold/10"
+                ? "bg-[#EFE6D6]/15 !text-[#1A1A1A]" 
+                : "!text-[#1A1A1A] hover:bg-[#EFE6D6]/10 hover:!text-[#1A1A1A] focus:!text-[#1A1A1A] focus:bg-[#EFE6D6]/10"
             )}
           >
             <span className="text-lg">{lang.flag}</span>
             <span className="flex-1">{lang.name}</span>
             {value === lang.code && (
-              <Check className="w-4 h-4 text-gold" />
+              <Check className="w-4 h-4 text-[#1A1A1A]" />
             )}
           </DropdownMenuItem>
         ))}

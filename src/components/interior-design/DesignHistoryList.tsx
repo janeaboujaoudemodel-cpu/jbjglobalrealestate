@@ -56,7 +56,7 @@ const DesignHistoryList = ({
   if (isLoading) {
     return (
       <div className="w-full max-w-4xl mx-auto">
-        <div className="bg-zinc-900/60 border border-[#1A1A1A] rounded-2xl p-6">
+        <div className="bg-[#FDFBF7]/60 border border-[#1A1A1A] rounded-2xl p-6">
           <div className="flex items-center gap-3">
             <History className="w-5 h-5 text-white/90 animate-pulse" />
             <span className="text-white/90">Loading history...</span>
@@ -72,7 +72,7 @@ const DesignHistoryList = ({
 
   return (
     <div className="w-full max-w-4xl mx-auto">
-      <div className="bg-zinc-900/60 border border-[#1A1A1A] rounded-2xl overflow-hidden">
+      <div className="bg-[#FDFBF7]/60 border border-[#1A1A1A] rounded-2xl overflow-hidden">
         {/* Header */}
         <button
           onClick={() => setIsExpanded(!isExpanded)}
@@ -81,7 +81,7 @@ const DesignHistoryList = ({
           <div className="flex items-center gap-3">
             <History className="w-5 h-5 text-white/70" />
             <span className="font-medium text-white">Your Design History</span>
-            <Badge variant="secondary" className="bg-zinc-700">
+            <Badge variant="secondary" className="bg-[#1A1A1A]">
               {history.length}
             </Badge>
           </div>
@@ -112,7 +112,7 @@ const DesignHistoryList = ({
                       className="p-4 border-b border-[#1A1A1A]/50 hover:bg-[#1A1A1A]/30 cursor-pointer transition-colors flex gap-4"
                     >
                       {/* Thumbnail */}
-                      <div className="w-20 h-20 rounded-lg overflow-hidden bg-zinc-800 flex-shrink-0">
+                      <div className="w-20 h-20 rounded-lg overflow-hidden bg-[#1A1A1A] flex-shrink-0">
                         {item.imageUrl ? (
                           <img
                             src={item.imageUrl}

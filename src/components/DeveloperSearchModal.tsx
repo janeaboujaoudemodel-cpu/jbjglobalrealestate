@@ -35,18 +35,18 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
   // Get tier badge based on rank
   const getTierBadge = (rank: number | null) => {
     if (!rank) return null;
-    if (rank <= 3) return { icon: Crown, label: "Elite", color: "text-gold bg-gold/10 border-gold/30" };
-    if (rank <= 10) return { icon: Award, label: "Premier", color: "text-amber-400 bg-amber-400/10 border-amber-400/30" };
-    if (rank <= 20) return { icon: Star, label: "Established", color: "text-white/85 bg-zinc-300/10 border-[#B89555]/30/30" };
+    if (rank <= 3) return { icon: Crown, label: "Elite", color: "text-[#1A1A1A] bg-[#EFE6D6]/10 border-[#B89555]/30" };
+    if (rank <= 10) return { icon: Award, label: "Premier", color: "text-[#1A1A1A] bg-amber-400/10 border-amber-400/30" };
+    if (rank <= 20) return { icon: Star, label: "Established", color: "text-white/85 bg-[#E5D9C4]/10 border-[#B89555]/30/30" };
     return null;
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="bg-zinc-950 border-[#1A1A1A] text-white max-w-3xl max-h-[85vh] overflow-hidden">
+      <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A] text-white max-w-3xl max-h-[85vh] overflow-hidden">
         <DialogHeader>
           <DialogTitle className="text-2xl font-semibold flex items-center gap-2">
-            <Building2 className="w-6 h-6 text-gold" />
+            <Building2 className="w-6 h-6 text-[#1A1A1A]" />
             Search by Developer
           </DialogTitle>
           <p className="text-white/70 text-sm mt-1">
@@ -60,7 +60,7 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search developers by name or headquarters..."
-            className="pl-10 bg-zinc-900 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 focus:border-gold h-12"
+            className="pl-10 bg-[#FDFBF7] border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] h-12"
             autoFocus
           />
         </div>
@@ -81,23 +81,23 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
                   onClick={() => handleSelectDeveloper(developer.slug)}
                   className={`w-full flex items-center gap-4 p-4 rounded-xl transition-all group text-left border ${
                     isTopTier 
-                      ? "bg-gradient-to-r from-zinc-900 via-zinc-900/95 to-gold/5 border-gold/20 hover:border-gold/40" 
-                      : "bg-zinc-900/50 hover:bg-[#1A1A1A] border-[#1A1A1A] hover:border-[#1A1A1A]"
+                      ? "bg-gradient-to-r from-zinc-900 via-zinc-900/95 to-gold/5 border-[#B89555]/20 hover:border-[#B89555]/40" 
+                      : "bg-[#FDFBF7]/50 hover:bg-[#1A1A1A] border-[#1A1A1A] hover:border-[#1A1A1A]"
                   }`}
                 >
                   {/* Rank Number */}
-                  <div className={`w-8 text-center font-bold text-lg ${isTopTier ? "text-gold" : "text-[#1A1A1A]/70"}`}>
+                  <div className={`w-8 text-center font-bold text-lg ${isTopTier ? "text-[#1A1A1A]" : "text-[#1A1A1A]/70"}`}>
                     #{developer.rank || index + 1}
                   </div>
                   
                   {/* Logo */}
                   <div className={`w-14 h-14 rounded-xl flex items-center justify-center overflow-hidden bg-[#FDFBF7] ${
-                    isTopTier ? "border-2 border-gold shadow-[0_4px_16px_rgba(200,167,102,0.3)]" : "border-2 border-gold/40"
+                    isTopTier ? "border-2 border-[#B89555] shadow-[0_4px_16px_rgba(200,167,102,0.3)]" : "border-2 border-[#B89555]/40"
                   }`}>
                     {isValidDeveloperLogoUrl(developer.logo_url) ? (
                       <img src={developer.logo_url as string} alt={developer.name} className="w-full h-full object-contain" />
                     ) : (
-                      <Building2 className={`w-7 h-7 ${isTopTier ? "text-gold" : "text-white/90"}`} />
+                      <Building2 className={`w-7 h-7 ${isTopTier ? "text-[#1A1A1A]" : "text-white/90"}`} />
                     )}
                   </div>
                   
@@ -122,12 +122,12 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
                         <span>✓ {developer.completed_projects.toLocaleString()} completed</span>
                       )}
                       {developer.offplan_projects && (
-                        <span className="text-gold">🏗️ {developer.offplan_projects} active</span>
+                        <span className="text-[#1A1A1A]">🏗️ {developer.offplan_projects} active</span>
                       )}
                     </div>
                   </div>
                   
-                  <ChevronRight className={`w-5 h-5 transition-colors ${isTopTier ? "text-[#1A1A1A]/70 group-hover:text-gold" : "text-[#1A1A1A]/70 group-hover:text-white"}`} />
+                  <ChevronRight className={`w-5 h-5 transition-colors ${isTopTier ? "text-[#1A1A1A]/70 group-hover:text-[#1A1A1A]" : "text-[#1A1A1A]/70 group-hover:text-white"}`} />
                 </button>
               );
             })

@@ -173,8 +173,8 @@ const AIAnalyticsDashboard = () => {
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold/15 to-amber-500/10 flex items-center justify-center border-2 border-gold/30">
-            <Brain className="w-6 h-6 text-gold" />
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold/15 to-amber-500/10 flex items-center justify-center border-2 border-[#B89555]/30">
+            <Brain className="w-6 h-6 text-[#1A1A1A]" />
           </div>
           <div>
             <h2 className="text-[#1A1A1A] text-xl font-semibold">AI Analytics</h2>
@@ -184,7 +184,7 @@ const AIAnalyticsDashboard = () => {
         <div className="flex items-center gap-3">
           {aiGuide && <PageGuide guide={aiGuide} />}
           <Select value={timeRange} onValueChange={(v: any) => setTimeRange(v)}>
-            <SelectTrigger className="w-32 bg-[#FDFBF7]/80 border-2 border-gold/30 text-[#1A1A1A]">
+            <SelectTrigger className="w-32 bg-[#FDFBF7]/80 border-2 border-[#B89555]/30 text-[#1A1A1A]">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -199,7 +199,7 @@ const AIAnalyticsDashboard = () => {
             size="sm"
             onClick={fetchLogs}
             disabled={isLoading}
-            className="border-2 border-gold/40 bg-[#FDFBF7]/80 hover:bg-gold/10 hover:border-gold text-[#1A1A1A]"
+            className="border-2 border-[#B89555]/40 bg-[#FDFBF7]/80 hover:bg-[#EFE6D6]/10 hover:border-[#B89555] text-[#1A1A1A]"
           >
             <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
             Refresh
@@ -209,15 +209,15 @@ const AIAnalyticsDashboard = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
           <div className="flex items-center gap-2 text-[#1A1A1A]/60 text-xs mb-2">
-            <BarChart3 className="w-4 h-4 text-gold" />
+            <BarChart3 className="w-4 h-4 text-[#1A1A1A]" />
             Total Calls
           </div>
           <p className="text-[#1A1A1A] text-2xl font-bold">{stats?.totalCalls || 0}</p>
         </Card>
 
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
           <div className="flex items-center gap-2 text-[#1A1A1A]/60 text-xs mb-2">
             <CheckCircle2 className="w-4 h-4 text-green-600" />
             Success Rate
@@ -227,7 +227,7 @@ const AIAnalyticsDashboard = () => {
           </p>
         </Card>
 
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
           <div className="flex items-center gap-2 text-[#1A1A1A]/60 text-xs mb-2">
             <Clock className="w-4 h-4 text-blue-600" />
             Avg Response
@@ -237,9 +237,9 @@ const AIAnalyticsDashboard = () => {
           </p>
         </Card>
 
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
           <div className="flex items-center gap-2 text-[#1A1A1A]/60 text-xs mb-2">
-            <Zap className="w-4 h-4 text-gold" />
+            <Zap className="w-4 h-4 text-[#1A1A1A]" />
             Input Tokens
           </div>
           <p className="text-[#1A1A1A] text-2xl font-bold">
@@ -247,7 +247,7 @@ const AIAnalyticsDashboard = () => {
           </p>
         </Card>
 
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
           <div className="flex items-center gap-2 text-[#1A1A1A]/60 text-xs mb-2">
             <TrendingUp className="w-4 h-4 text-purple-600" />
             Output Tokens
@@ -257,7 +257,7 @@ const AIAnalyticsDashboard = () => {
           </p>
         </Card>
 
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
           <div className="flex items-center gap-2 text-[#1A1A1A]/60 text-xs mb-2">
             <XCircle className="w-4 h-4 text-red-500" />
             Errors
@@ -271,7 +271,7 @@ const AIAnalyticsDashboard = () => {
       {/* Detailed Breakdown */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* By Function */}
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-6 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 p-6 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
           <h3 className="text-[#1A1A1A] font-semibold mb-4 flex items-center gap-2">
             <Brain className="w-4 h-4 text-purple-500" />
             Usage by Function
@@ -281,7 +281,7 @@ const AIAnalyticsDashboard = () => {
               {Object.entries(stats.byFunction)
                 .sort((a, b) => b[1].calls - a[1].calls)
                 .map(([name, data]) => (
-                  <div key={name} className="flex items-center justify-between p-3 bg-[#FDFBF7]/60 border border-gold/20 rounded-lg hover:border-gold/40 transition-colors">
+                  <div key={name} className="flex items-center justify-between p-3 bg-[#FDFBF7]/60 border border-[#B89555]/20 rounded-lg hover:border-[#B89555]/40 transition-colors">
                     <div>
                       <p className="text-[#1A1A1A] text-sm font-medium">{name}</p>
                       <p className="text-[#1A1A1A]/50 text-xs">
@@ -303,9 +303,9 @@ const AIAnalyticsDashboard = () => {
         </Card>
 
         {/* By Model */}
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-6 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 p-6 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
           <h3 className="text-[#1A1A1A] font-semibold mb-4 flex items-center gap-2">
-            <Zap className="w-4 h-4 text-gold" />
+            <Zap className="w-4 h-4 text-[#1A1A1A]" />
             Usage by Model
           </h3>
           {stats && Object.keys(stats.byModel).length > 0 ? (
@@ -313,7 +313,7 @@ const AIAnalyticsDashboard = () => {
               {Object.entries(stats.byModel)
                 .sort((a, b) => b[1].calls - a[1].calls)
                 .map(([model, data]) => (
-                  <div key={model} className="flex items-center justify-between p-3 bg-[#FDFBF7]/60 border border-gold/20 rounded-lg hover:border-gold/40 transition-colors">
+                  <div key={model} className="flex items-center justify-between p-3 bg-[#FDFBF7]/60 border border-[#B89555]/20 rounded-lg hover:border-[#B89555]/40 transition-colors">
                     <div>
                       <p className="text-[#1A1A1A] text-sm font-medium">{model}</p>
                       <p className="text-[#1A1A1A]/50 text-xs">{formatTokens(data.tokens)} tokens used</p>
@@ -354,11 +354,11 @@ const AIAnalyticsDashboard = () => {
       )}
 
       {/* Recent Logs */}
-      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-6 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 p-6 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
         <h3 className="text-[#1A1A1A] font-semibold mb-4">Recent Logs</h3>
         <ScrollArea className="h-[300px]">
           <table className="w-full text-sm">
-            <thead className="text-[#1A1A1A]/60 text-xs uppercase border-b-2 border-gold/20">
+            <thead className="text-[#1A1A1A]/60 text-xs uppercase border-b-2 border-[#B89555]/20">
               <tr>
                 <th className="text-left pb-3 font-medium">Function</th>
                 <th className="text-left pb-3 font-medium">Model</th>
@@ -370,7 +370,7 @@ const AIAnalyticsDashboard = () => {
             </thead>
             <tbody>
               {logs.slice(0, 50).map((log) => (
-                <tr key={log.id} className="border-b border-gold/10 hover:bg-[#FDFBF7]/40 transition-colors">
+                <tr key={log.id} className="border-b border-[#B89555]/10 hover:bg-[#FDFBF7]/40 transition-colors">
                   <td className="py-2 text-[#1A1A1A] font-medium">{log.function_name}</td>
                   <td className="py-2 text-[#1A1A1A]/70">{log.model}</td>
                   <td className="py-2 text-center">

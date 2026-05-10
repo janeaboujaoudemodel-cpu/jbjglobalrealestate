@@ -166,19 +166,19 @@ export const ConsultationRequestForm = ({
     }
   };
 
-  const selectTriggerClass = "h-12 bg-[#FDFBF7] border-2 border-gold/50 hover:border-gold focus:border-gold rounded-lg";
-  const selectContentClass = "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50";
-  const inputClass = "h-12 bg-[#FDFBF7] border-2 border-gold/50 hover:border-gold focus:border-gold text-[#1A1A1A] rounded-lg";
+  const selectTriggerClass = "h-12 bg-[#FDFBF7] border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555] rounded-lg";
+  const selectContentClass = "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50";
+  const inputClass = "h-12 bg-[#FDFBF7] border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555] text-[#1A1A1A] rounded-lg";
 
   if (isSuccess) {
     return (
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold rounded-2xl p-8 text-center max-w-2xl mx-auto ${className}`}
+        className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] rounded-2xl p-8 text-center max-w-2xl mx-auto ${className}`}
       >
-        <div className="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-4">
-          <CheckCircle className="w-8 h-8 text-gold" />
+        <div className="w-16 h-16 bg-[#EFE6D6]/20 rounded-full flex items-center justify-center mx-auto mb-4">
+          <CheckCircle className="w-8 h-8 text-[#1A1A1A]" />
         </div>
         <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">
           Request Received!
@@ -195,18 +195,18 @@ export const ConsultationRequestForm = ({
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[3px] border-gold rounded-2xl p-6 md:p-8 shadow-[0_12px_40px_rgba(200,167,102,0.4),0_4px_6px_rgba(0,0,0,0.1)] max-w-3xl mx-auto ${className}`}
+      className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[3px] border-[#B89555] rounded-2xl p-6 md:p-8 shadow-[0_12px_40px_rgba(200,167,102,0.4),0_4px_6px_rgba(0,0,0,0.1)] max-w-3xl mx-auto ${className}`}
       style={{ transform: 'perspective(1200px) rotateX(1deg)' }}
     >
       {/* Header */}
       <div className="text-center mb-6">
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/30 rounded-full text-xs uppercase tracking-wider text-gold mb-3">
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full text-xs uppercase tracking-wider text-[#1A1A1A] mb-3">
           <Calendar className="w-3 h-3" />
           Expert Consultation
         </div>
         <h3 className="text-xl md:text-2xl font-semibold text-[#1A1A1A]">
           {projectName ? (
-            <>Register Interest in <span className="text-gold">{projectName}</span></>
+            <>Register Interest in <span className="text-[#1A1A1A]">{projectName}</span></>
           ) : (
             title
           )}
@@ -423,7 +423,7 @@ export const ConsultationRequestForm = ({
                   <Textarea
                     placeholder="Additional details (optional)"
                     {...field}
-                    className="min-h-[80px] bg-[#FDFBF7] border-2 border-gold/50 hover:border-gold focus:border-gold text-[#1A1A1A] resize-none rounded-lg"
+                    className="min-h-[80px] bg-[#FDFBF7] border-2 border-[#B89555]/50 hover:border-[#B89555] focus:border-[#B89555] text-[#1A1A1A] resize-none rounded-lg"
                   />
                 </FormControl>
                 <FormMessage />
@@ -440,11 +440,11 @@ export const ConsultationRequestForm = ({
                   <Checkbox
                     checked={field.value}
                     onCheckedChange={field.onChange}
-                    className="border-gold/30 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+                    className="border-[#B89555]/30 data-[state=checked]:bg-[#EFE6D6] data-[state=checked]:border-[#B89555] mt-0.5"
                   />
                 </FormControl>
                 <p className="text-[#1A1A1A] text-sm leading-tight font-normal">
-                  I agree to the <a href="/terms" className="text-gold underline">Terms</a> and <a href="/privacy" className="text-gold underline">Privacy Policy</a> *
+                  I agree to the <a href="/terms" className="text-[#1A1A1A] underline">Terms</a> and <a href="/privacy" className="text-[#1A1A1A] underline">Privacy Policy</a> *
                 </p>
                 <FormMessage />
               </FormItem>

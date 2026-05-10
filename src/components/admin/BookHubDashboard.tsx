@@ -100,8 +100,8 @@ export default function BookHubDashboard() {
   }, []);
 
   const getDeviceIcon = (device: string) => {
-    if (device === "mobile") return <Smartphone className="w-4 h-4 text-gold" />;
-    return <Monitor className="w-4 h-4 text-gold" />;
+    if (device === "mobile") return <Smartphone className="w-4 h-4 text-[#1A1A1A]" />;
+    return <Monitor className="w-4 h-4 text-[#1A1A1A]" />;
   };
 
   return (
@@ -109,8 +109,8 @@ export default function BookHubDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center border border-gold/30">
-            <BookOpen className="w-5 h-5 text-gold" />
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center border border-[#B89555]/30">
+            <BookOpen className="w-5 h-5 text-[#1A1A1A]" />
           </div>
           <div>
             <h2 className="text-xl font-bold text-[#1A1A1A] tracking-tight">Book Hub</h2>
@@ -122,7 +122,7 @@ export default function BookHubDashboard() {
           size="sm"
           onClick={fetchData}
           disabled={loading}
-          className="border-gold/30 hover:bg-gold/10"
+          className="border-[#B89555]/30 hover:bg-[#EFE6D6]/10"
         >
           <RefreshCw className={`w-4 h-4 mr-2 ${loading ? "animate-spin" : ""}`} />
           Refresh
@@ -131,11 +131,11 @@ export default function BookHubDashboard() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
-                <Download className="w-5 h-5 text-gold" />
+              <div className="w-10 h-10 rounded-lg bg-[#EFE6D6]/10 flex items-center justify-center">
+                <Download className="w-5 h-5 text-[#1A1A1A]" />
               </div>
               <div>
                 <span className="text-[#1A1A1A]/50 text-sm">Total Downloads</span>
@@ -145,11 +145,11 @@ export default function BookHubDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
-                <Users className="w-5 h-5 text-gold" />
+              <div className="w-10 h-10 rounded-lg bg-[#EFE6D6]/10 flex items-center justify-center">
+                <Users className="w-5 h-5 text-[#1A1A1A]" />
               </div>
               <div>
                 <span className="text-[#1A1A1A]/50 text-sm">Unique Users</span>
@@ -159,11 +159,11 @@ export default function BookHubDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
-                <TrendingUp className="w-5 h-5 text-gold" />
+              <div className="w-10 h-10 rounded-lg bg-[#EFE6D6]/10 flex items-center justify-center">
+                <TrendingUp className="w-5 h-5 text-[#1A1A1A]" />
               </div>
               <div>
                 <span className="text-[#1A1A1A]/50 text-sm">Today</span>
@@ -173,11 +173,11 @@ export default function BookHubDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
-                <Globe className="w-5 h-5 text-gold" />
+              <div className="w-10 h-10 rounded-lg bg-[#EFE6D6]/10 flex items-center justify-center">
+                <Globe className="w-5 h-5 text-[#1A1A1A]" />
               </div>
               <div>
                 <span className="text-[#1A1A1A]/50 text-sm">Sources</span>
@@ -190,10 +190,10 @@ export default function BookHubDashboard() {
 
       {/* Source & Device Breakdown */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="bg-[#FDFBF7] border-2 border-gold/20">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/20">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-bold text-[#1A1A1A] flex items-center gap-2">
-              <Globe className="w-4 h-4 text-gold" />
+              <Globe className="w-4 h-4 text-[#1A1A1A]" />
               Traffic Sources
             </CardTitle>
           </CardHeader>
@@ -206,7 +206,7 @@ export default function BookHubDashboard() {
                   <div key={s.source} className="flex items-center justify-between">
                     <span className="text-sm text-[#1A1A1A]/70 capitalize">{s.source.replace(/-/g, " ")}</span>
                     <div className="flex items-center gap-2">
-                      <div className="w-24 h-2 bg-gold/10 rounded-full overflow-hidden">
+                      <div className="w-24 h-2 bg-[#EFE6D6]/10 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-gradient-to-r from-gold to-gold-dark rounded-full"
                           style={{ width: `${totalCount > 0 ? (s.count / totalCount) * 100 : 0}%` }}
@@ -221,10 +221,10 @@ export default function BookHubDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-[#FDFBF7] border-2 border-gold/20">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/20">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-bold text-[#1A1A1A] flex items-center gap-2">
-              <Monitor className="w-4 h-4 text-gold" />
+              <Monitor className="w-4 h-4 text-[#1A1A1A]" />
               Device Breakdown
             </CardTitle>
           </CardHeader>
@@ -240,7 +240,7 @@ export default function BookHubDashboard() {
                       <span className="text-sm text-[#1A1A1A]/70 capitalize">{d.device}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="w-24 h-2 bg-gold/10 rounded-full overflow-hidden">
+                      <div className="w-24 h-2 bg-[#EFE6D6]/10 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-gradient-to-r from-gold to-gold-dark rounded-full"
                           style={{ width: `${totalCount > 0 ? (d.count / totalCount) * 100 : 0}%` }}
@@ -257,10 +257,10 @@ export default function BookHubDashboard() {
       </div>
 
       {/* Recent Downloads Table */}
-      <Card className="bg-[#FDFBF7] border-2 border-gold/20">
+      <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/20">
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-bold text-[#1A1A1A] flex items-center gap-2">
-            <Download className="w-4 h-4 text-gold" />
+            <Download className="w-4 h-4 text-[#1A1A1A]" />
             Recent Downloads
           </CardTitle>
         </CardHeader>
@@ -271,7 +271,7 @@ export default function BookHubDashboard() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-gold/20">
+                  <tr className="border-b border-[#B89555]/20">
                     <th className="text-left py-2 px-3 text-[#1A1A1A]/50 font-semibold text-xs uppercase">User</th>
                     <th className="text-left py-2 px-3 text-[#1A1A1A]/50 font-semibold text-xs uppercase">Email</th>
                     <th className="text-left py-2 px-3 text-[#1A1A1A]/50 font-semibold text-xs uppercase">Source</th>
@@ -282,13 +282,13 @@ export default function BookHubDashboard() {
                 </thead>
                 <tbody>
                   {downloads.map((dl) => (
-                    <tr key={dl.id} className="border-b border-gold/10 hover:bg-gold/5 transition-colors">
+                    <tr key={dl.id} className="border-b border-[#B89555]/10 hover:bg-[#EFE6D6]/5 transition-colors">
                       <td className="py-2.5 px-3 text-[#1A1A1A]/80 font-medium">
                         {dl.downloader_name || "—"}
                       </td>
                       <td className="py-2.5 px-3 text-[#1A1A1A]/70">{dl.downloader_email}</td>
                       <td className="py-2.5 px-3">
-                        <span className="px-2 py-0.5 rounded-full bg-gold/10 text-gold text-xs font-medium capitalize">
+                        <span className="px-2 py-0.5 rounded-full bg-[#EFE6D6]/10 text-[#1A1A1A] text-xs font-medium capitalize">
                           {dl.page_source || "direct"}
                         </span>
                       </td>

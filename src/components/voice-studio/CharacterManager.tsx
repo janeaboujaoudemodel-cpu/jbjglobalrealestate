@@ -147,24 +147,24 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Users className="w-5 h-5 text-gold" />
+          <Users className="w-5 h-5 text-[#1A1A1A]" />
           <h3 className="text-white font-semibold">Voice Characters</h3>
-          <Badge variant="outline" className="border-gold/40 text-gold">
+          <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A]">
             {characters.length} created
           </Badge>
         </div>
         
         <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
           <DialogTrigger asChild>
-            <Button size="sm" className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
+            <Button size="sm" className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
               <Plus className="w-4 h-4 mr-1" />
               New Character
             </Button>
           </DialogTrigger>
-          <DialogContent className="bg-zinc-900 border-[#1A1A1A] max-w-lg">
+          <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A] max-w-lg">
             <DialogHeader>
               <DialogTitle className="text-white flex items-center gap-2">
-                <Mic className="w-5 h-5 text-gold" />
+                <Mic className="w-5 h-5 text-[#1A1A1A]" />
                 Create Voice Character
               </DialogTitle>
             </DialogHeader>
@@ -177,7 +177,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                   value={formData.name}
                   onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                   placeholder="e.g., Alex the Host"
-                  className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
+                  className="bg-[#1A1A1A] border-[#1A1A1A] text-white mt-1"
                 />
               </div>
 
@@ -188,12 +188,12 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                   value={formData.nationality} 
                   onValueChange={(value) => setFormData(prev => ({ ...prev, nationality: value }))}
                 >
-                  <SelectTrigger className="bg-zinc-800 border-[#1A1A1A] text-white mt-1">
+                  <SelectTrigger className="bg-[#1A1A1A] border-[#1A1A1A] text-white mt-1">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-zinc-800 border-[#1A1A1A]">
+                  <SelectContent className="bg-[#1A1A1A] border-[#1A1A1A]">
                     {NATIONALITIES.map(nat => (
-                      <SelectItem key={nat} value={nat} className="text-white hover:bg-gold/20">
+                      <SelectItem key={nat} value={nat} className="text-white hover:bg-[#EFE6D6]/20">
                         {nat}
                       </SelectItem>
                     ))}
@@ -211,8 +211,8 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                       variant="outline"
                       className={`cursor-pointer transition-all ${
                         formData.languages.includes(lang)
-                          ? 'bg-gold/20 border-gold text-gold'
-                          : 'border-[#1A1A1A] text-white/70 hover:border-gold/50'
+                          ? 'bg-[#EFE6D6]/20 border-[#B89555] text-[#1A1A1A]'
+                          : 'border-[#1A1A1A] text-white/70 hover:border-[#B89555]/50'
                       }`}
                       onClick={() => {
                         setFormData(prev => ({
@@ -239,8 +239,8 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                       onClick={() => setFormData(prev => ({ ...prev, voiceId: voice.id }))}
                       className={`p-3 rounded-lg border-2 text-left transition-all ${
                         formData.voiceId === voice.id
-                          ? 'border-gold bg-gold/10'
-                          : 'border-[#1A1A1A] bg-zinc-800 hover:border-[#1A1A1A]'
+                          ? 'border-[#B89555] bg-[#EFE6D6]/10'
+                          : 'border-[#1A1A1A] bg-[#1A1A1A] hover:border-[#1A1A1A]'
                       }`}
                     >
                       <div className="flex items-center justify-between">
@@ -252,7 +252,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                           onClick={(e) => { e.stopPropagation(); handlePreviewVoice(voice.id); }}
                         >
                           {previewingVoice === voice.id ? (
-                            <Pause className="w-3 h-3 text-gold" />
+                            <Pause className="w-3 h-3 text-[#1A1A1A]" />
                           ) : (
                             <Play className="w-3 h-3 text-white/70" />
                           )}
@@ -281,12 +281,12 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                         onClick={() => setFormData(prev => ({ ...prev, persona: preset.id }))}
                         className={`p-3 rounded-lg border-2 text-left transition-all ${
                           formData.persona === preset.id
-                            ? 'border-gold bg-gold/10'
-                            : 'border-[#1A1A1A] bg-zinc-800 hover:border-[#1A1A1A]'
+                            ? 'border-[#B89555] bg-[#EFE6D6]/10'
+                            : 'border-[#1A1A1A] bg-[#1A1A1A] hover:border-[#1A1A1A]'
                         }`}
                       >
                         <div className="flex items-center gap-2">
-                          <Icon className={`w-4 h-4 ${formData.persona === preset.id ? 'text-gold' : 'text-white/70'}`} />
+                          <Icon className={`w-4 h-4 ${formData.persona === preset.id ? 'text-[#1A1A1A]' : 'text-white/70'}`} />
                           <span className="text-white text-sm">{preset.name}</span>
                         </div>
                         <p className="text-xs text-white/90 mt-1">{preset.description}</p>
@@ -303,7 +303,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                   value={formData.description}
                   onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                   placeholder="Additional character notes..."
-                  className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
+                  className="bg-[#1A1A1A] border-[#1A1A1A] text-white mt-1"
                 />
               </div>
 
@@ -341,17 +341,17 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                   animate={{ opacity: 1, y: 0 }}
                   className={`p-3 rounded-lg border-2 transition-all cursor-pointer ${
                     isSelected
-                      ? 'border-gold bg-gold/10'
-                      : 'border-[#1A1A1A] bg-zinc-800/50 hover:border-[#1A1A1A]'
+                      ? 'border-[#B89555] bg-[#EFE6D6]/10'
+                      : 'border-[#1A1A1A] bg-[#1A1A1A]/50 hover:border-[#1A1A1A]'
                   }`}
                   onClick={() => onSelectCharacter?.(character.id)}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                        isSelected ? 'bg-gold/20' : 'bg-zinc-700'
+                        isSelected ? 'bg-[#EFE6D6]/20' : 'bg-[#1A1A1A]'
                       }`}>
-                        <PersonaIcon className={`w-5 h-5 ${isSelected ? 'text-gold' : 'text-white/70'}`} />
+                        <PersonaIcon className={`w-5 h-5 ${isSelected ? 'text-[#1A1A1A]' : 'text-white/70'}`} />
                       </div>
                       <div>
                         <p className="text-white font-medium">{character.name}</p>
@@ -369,7 +369,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                         size="icon"
                         variant="ghost"
                         onClick={(e) => { e.stopPropagation(); handlePreviewVoice(character.voiceId); }}
-                        className="w-8 h-8 text-white/70 hover:text-gold"
+                        className="w-8 h-8 text-white/70 hover:text-[#1A1A1A]"
                       >
                         {previewingVoice === character.voiceId ? (
                           <Pause className="w-4 h-4" />

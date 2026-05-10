@@ -90,7 +90,7 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
 
   return (
     <section className="py-16 md:py-20">
-      <div className="jj-card-inner bg-gradient-to-br from-card via-card to-gold/5 border-2 border-gold/40 p-8 md:p-12">
+      <div className="jj-card-inner bg-gradient-to-br from-card via-card to-gold/5 border-2 border-[#B89555]/40 p-8 md:p-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
           {/* Left: Text content */}
           <div>
@@ -120,22 +120,22 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
             {/* Trust badges */}
             <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
               <span className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-gold" />
+                <CheckCircle className="w-4 h-4 text-[#1A1A1A]" />
                 Licensed RERA Broker
               </span>
               <span className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-gold" />
+                <CheckCircle className="w-4 h-4 text-[#1A1A1A]" />
                 Trusted by 1000+ clients
               </span>
               <span className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-gold" />
+                <CheckCircle className="w-4 h-4 text-[#1A1A1A]" />
                 Expert guidance
               </span>
             </div>
           </div>
 
           {/* Right: Form - FIXED: Champagne gradient, gold borders, no black */}
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/60 rounded-xl p-6 md:p-8 shadow-lg">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/60 rounded-xl p-6 md:p-8 shadow-lg">
             {isSuccess ? (
               <div className="text-center py-8">
                 <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-4">
@@ -164,7 +164,7 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                           <Input 
                             placeholder="Your full name" 
                             {...field}
-                            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 focus:border-gold text-[#1A1A1A] rounded-lg"
+                            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 focus:border-[#B89555] text-[#1A1A1A] rounded-lg"
                           />
                         </FormControl>
                         <FormMessage />
@@ -183,7 +183,7 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                             type="email" 
                             placeholder="your@email.com" 
                             {...field}
-                            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 focus:border-gold text-[#1A1A1A] rounded-lg"
+                            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 focus:border-[#B89555] text-[#1A1A1A] rounded-lg"
                           />
                         </FormControl>
                         <FormMessage />
@@ -218,7 +218,7 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                         <FormLabel className="text-[#1A1A1A] font-medium">Preferred Language *</FormLabel>
                         <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl>
-                            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 hover:border-gold focus:border-gold text-[#1A1A1A] rounded-lg h-12">
+                            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] text-[#1A1A1A] rounded-lg h-12">
                               <SelectValue placeholder="Select language" />
                             </SelectTrigger>
                           </FormControl>
@@ -245,12 +245,12 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-[#1A1A1A] font-medium flex items-center gap-1.5">
-                          <Clock className="w-3.5 h-3.5 text-gold" />
+                          <Clock className="w-3.5 h-3.5 text-[#1A1A1A]" />
                           Preferred Time to Call
                         </FormLabel>
                         <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl>
-                            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 hover:border-gold focus:border-gold text-[#1A1A1A] rounded-lg h-12">
+                            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] text-[#1A1A1A] rounded-lg h-12">
                               <SelectValue placeholder="Select time slot" />
                             </SelectTrigger>
                           </FormControl>
@@ -273,12 +273,12 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-[#1A1A1A] font-medium flex items-center gap-1.5">
-                          <MessageCircle className="w-3.5 h-3.5 text-gold" />
+                          <MessageCircle className="w-3.5 h-3.5 text-[#1A1A1A]" />
                           Preferred Contact Method
                         </FormLabel>
                         <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl>
-                            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 hover:border-gold focus:border-gold text-[#1A1A1A] rounded-lg h-12">
+                            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] text-[#1A1A1A] rounded-lg h-12">
                               <SelectValue placeholder="How should we contact you?" />
                             </SelectTrigger>
                           </FormControl>
@@ -304,7 +304,7 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                           <Textarea 
                             placeholder="Tell us about your requirements..."
                             {...field}
-                            className="min-h-[80px] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 focus:border-gold text-[#1A1A1A] rounded-lg"
+                            className="min-h-[80px] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 focus:border-[#B89555] text-[#1A1A1A] rounded-lg"
                           />
                         </FormControl>
                         <FormMessage />

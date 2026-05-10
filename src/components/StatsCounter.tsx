@@ -118,10 +118,10 @@ const StatItem = ({ end, suffix, prefix, label, icon: Icon, isVisible, language,
   return (
     <div className="relative group">
       {/* Pearl Card with Gold Border - 3-layer compliant */}
-      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold rounded-2xl p-6 md:p-8 text-center hover:shadow-lg hover:shadow-gold/30 transition-all duration-500">
+      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] rounded-2xl p-6 md:p-8 text-center hover:shadow-lg hover:shadow-gold/30 transition-all duration-500">
         {/* Icon - Black circle with gold icon */}
-        <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] flex items-center justify-center shadow-lg border border-gold/30">
-          <Icon className="w-6 h-6 text-gold" />
+        <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] flex items-center justify-center shadow-lg border border-[#B89555]/30">
+          <Icon className="w-6 h-6 text-[#1A1A1A]" />
         </div>
         
         {/* Counter Value */}
@@ -168,8 +168,8 @@ const StatsCounter = () => {
       <div className="jj-layer-2">
           {/* Section Header - Premium Label */}
           <div className="text-center mb-10">
-            <span className="inline-block px-5 py-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-3 shadow-sm">
-              <span className="text-gold">{t('home.stats.trackRecord', 'Track Record').split(' ')[0]}</span>
+            <span className="inline-block px-5 py-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-3 shadow-sm">
+              <span className="text-[#1A1A1A]">{t('home.stats.trackRecord', 'Track Record').split(' ')[0]}</span>
               <span className="text-[#1A1A1A]"> {t('home.stats.trackRecord', 'Track Record').split(' ').slice(1).join(' ')}</span>
             </span>
             <p className="text-[#1A1A1A]/70 text-sm">{t('founder.experience', 'Founder experience')}</p>

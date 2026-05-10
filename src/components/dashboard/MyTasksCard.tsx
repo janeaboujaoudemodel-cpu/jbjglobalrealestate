@@ -207,13 +207,13 @@ export default function MyTasksCard() {
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-base text-foreground flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center">
-              <ListChecks className="w-4 h-4 text-gold" />
+            <div className="w-8 h-8 rounded-lg bg-[#EFE6D6]/10 border border-[#B89555]/30 flex items-center justify-center">
+              <ListChecks className="w-4 h-4 text-[#1A1A1A]" />
             </div>
             My Tasks
           </CardTitle>
           <div className="flex items-center gap-2">
-            <Badge className="bg-gold/10 text-gold border-gold/30 text-[10px]">
+            <Badge className="bg-[#EFE6D6]/10 text-[#1A1A1A] border-[#B89555]/30 text-[10px]">
               {pendingCount} pending
             </Badge>
             {/* Toggle selection mode */}
@@ -224,8 +224,8 @@ export default function MyTasksCard() {
               className={cn(
                 "h-7 px-2 text-[10px]",
                 selectionMode
-                  ? "border-gold bg-gold/10 text-gold"
-                  : "border-gold/30 text-gold hover:bg-gold/10 hover:text-gold"
+                  ? "border-[#B89555] bg-[#EFE6D6]/10 text-[#1A1A1A]"
+                  : "border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 hover:text-[#1A1A1A]"
               )}
               title={selectionMode ? "Exit selection" : "Select tasks"}
             >
@@ -235,7 +235,7 @@ export default function MyTasksCard() {
               size="sm"
               variant="outline"
               onClick={() => setShowCreationModal(true)}
-              className="h-7 px-2 border-gold/30 text-gold hover:bg-gold/10 hover:text-gold"
+              className="h-7 px-2 border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 hover:text-[#1A1A1A]"
             >
               <Plus className="w-3.5 h-3.5" />
             </Button>
@@ -252,7 +252,7 @@ export default function MyTasksCard() {
                 "px-3 py-1 rounded-lg text-[10px] font-semibold uppercase tracking-wider transition-colors",
                 filter === f
                   ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#C8A766]/60"
-                  : "text-[#1A1A1A]/50 hover:text-gold hover:bg-gold/5"
+                  : "text-[#1A1A1A]/50 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/5"
               )}
             >
               {f === "all" ? `All (${tasks.length})` : f === "pending" ? `Pending (${pendingCount})` : `Completed (${completedCount})`}
@@ -262,10 +262,10 @@ export default function MyTasksCard() {
 
         {/* Bulk action bar */}
         {selectionMode && (
-          <div className="flex items-center gap-2 mt-2 px-2 py-2 rounded-xl bg-gold/5 border border-gold/20">
+          <div className="flex items-center gap-2 mt-2 px-2 py-2 rounded-xl bg-[#EFE6D6]/5 border border-[#B89555]/20">
             <button
               onClick={selectAll}
-              className="flex items-center gap-1.5 text-[10px] font-semibold text-gold hover:text-[#1A1A1A] transition-colors"
+              className="flex items-center gap-1.5 text-[10px] font-semibold text-[#1A1A1A] hover:text-[#1A1A1A] transition-colors"
             >
               {selectedIds.size === filtered.length && filtered.length > 0
                 ? <CheckSquare className="w-3.5 h-3.5" />
@@ -276,9 +276,9 @@ export default function MyTasksCard() {
             
             {selectedIds.size > 0 && (
               <>
-                <div className="w-[1px] h-4 bg-gold/30" />
-                <span className="text-[10px] text-gold font-medium">{selectedIds.size} selected</span>
-                <div className="w-[1px] h-4 bg-gold/30" />
+                <div className="w-[1px] h-4 bg-[#EFE6D6]/30" />
+                <span className="text-[10px] text-[#1A1A1A] font-medium">{selectedIds.size} selected</span>
+                <div className="w-[1px] h-4 bg-[#EFE6D6]/30" />
                 
                 {/* Show Mark Complete only if any selected task is pending */}
                 {[...selectedIds].some(id => tasks.find(t => t.id === id)?.status !== "completed") && (
@@ -307,7 +307,7 @@ export default function MyTasksCard() {
                       if (ids.length) bulkReopen.mutate(ids);
                     }}
                     disabled={bulkReopen.isPending}
-                    className="h-6 px-2 text-[10px] border-gold/30 text-gold hover:bg-gold/10"
+                    className="h-6 px-2 text-[10px] border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                   >
                     {bulkReopen.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : <RotateCcw className="w-3 h-3 mr-1" />}
                     Bulk Restore
@@ -336,7 +336,7 @@ export default function MyTasksCard() {
 
         {isLoading ? (
           <div className="flex justify-center py-8">
-            <Loader2 className="w-5 h-5 text-gold animate-spin" />
+            <Loader2 className="w-5 h-5 text-[#1A1A1A] animate-spin" />
           </div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-8">
@@ -360,8 +360,8 @@ export default function MyTasksCard() {
                   className={cn(
                     "flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all group",
                     (selectionMode || getTaskRoute(task)) && "cursor-pointer",
-                    isSelected && "bg-gold/10 ring-1 ring-gold/40",
-                    isCompleted && !isSelected ? "opacity-60" : "hover:bg-gold/5"
+                    isSelected && "bg-[#EFE6D6]/10 ring-1 ring-gold/40",
+                    isCompleted && !isSelected ? "opacity-60" : "hover:bg-[#EFE6D6]/5"
                   )}
                 >
                   {/* Selection checkbox OR completion checkbox */}
@@ -372,8 +372,8 @@ export default function MyTasksCard() {
                       className={cn(
                         "w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-colors",
                         isSelected
-                          ? "bg-gold border-gold"
-                          : "border-gold/40 hover:border-gold"
+                          ? "bg-[#EFE6D6] border-[#B89555]"
+                          : "border-[#B89555]/40 hover:border-[#B89555]"
                       )}
                     >
                       {isSelected && <Check className="w-3 h-3 text-white" />}
@@ -386,7 +386,7 @@ export default function MyTasksCard() {
                         "w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-colors",
                         isCompleted
                           ? "bg-emerald-500 border-emerald-500"
-                          : "border-gold/40 hover:border-gold"
+                          : "border-[#B89555]/40 hover:border-[#B89555]"
                       )}
                     >
                       {isCompleted && <Check className="w-3 h-3 text-white" />}
@@ -428,13 +428,13 @@ export default function MyTasksCard() {
                   {!selectionMode && (
                     <div className="flex items-center gap-1.5 shrink-0">
                       {getTaskRoute(task) && (
-                        <ChevronRight className="w-4 h-4 text-[#1A1A1A]/70 group-hover:text-gold transition-colors" />
+                        <ChevronRight className="w-4 h-4 text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] transition-colors" />
                       )}
                       <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                       {isCompleted && (
                         <button
                           onClick={(e) => { e.stopPropagation(); toggleComplete.mutate({ id: task.id, completed: false }); }}
-                          className="w-8 h-8 rounded-lg flex items-center justify-center bg-gold/10 hover:bg-gold/20 text-gold border border-gold/30 transition-colors"
+                          className="w-8 h-8 rounded-lg flex items-center justify-center bg-[#EFE6D6]/10 hover:bg-[#EFE6D6]/20 text-[#1A1A1A] border border-[#B89555]/30 transition-colors"
                           title="Reopen task"
                         >
                           <RotateCcw className="w-4 h-4" />

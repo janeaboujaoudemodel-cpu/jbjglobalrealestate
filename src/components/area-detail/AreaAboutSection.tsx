@@ -27,14 +27,14 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center gap-3 mb-6">
-            <Compass className="w-6 h-6 text-gold" />
+            <Compass className="w-6 h-6 text-[#1A1A1A]" />
             <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
               About {area.name.replace(/\s*\(.*?\)/g, '')}
             </h2>
           </div>
 
           <div className="flex items-center gap-2 text-sm text-[#1A1A1A]/70 mb-6">
-            <MapPin className="w-4 h-4 text-gold" />
+            <MapPin className="w-4 h-4 text-[#1A1A1A]" />
             <span>{area.emirate}, UAE</span>
           </div>
 
@@ -61,7 +61,7 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
               {isLongDescription && (
                 <button
                   onClick={() => setIsExpanded(!isExpanded)}
-                  className="flex items-center gap-1 text-gold text-sm font-medium mt-3 hover:underline"
+                  className="flex items-center gap-1 text-[#1A1A1A] text-sm font-medium mt-3 hover:underline"
                 >
                   {isExpanded ? (
                     <><ChevronUp className="w-4 h-4" /> Show Less</>
@@ -84,8 +84,8 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
           {/* Quick highlights */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
             {(area.property_count ?? 0) > 0 && (
-              <div className="flex items-center gap-3 p-4 bg-[#FDFBF7] rounded-xl border border-gold/20 shadow-sm">
-                <Building2 className="w-5 h-5 text-gold flex-shrink-0" />
+              <div className="flex items-center gap-3 p-4 bg-[#FDFBF7] rounded-xl border border-[#B89555]/20 shadow-sm">
+                <Building2 className="w-5 h-5 text-[#1A1A1A] flex-shrink-0" />
                 <div>
                   <div className="text-lg font-bold text-[#1A1A1A]">{area.property_count}</div>
                   <div className="text-xs text-[#1A1A1A]/70">Active Projects</div>
@@ -93,16 +93,16 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
               </div>
             )}
             {(area.developer_count ?? 0) > 0 && (
-              <div className="flex items-center gap-3 p-4 bg-[#FDFBF7] rounded-xl border border-gold/20 shadow-sm">
-                <Building2 className="w-5 h-5 text-gold flex-shrink-0" />
+              <div className="flex items-center gap-3 p-4 bg-[#FDFBF7] rounded-xl border border-[#B89555]/20 shadow-sm">
+                <Building2 className="w-5 h-5 text-[#1A1A1A] flex-shrink-0" />
                 <div>
                   <div className="text-lg font-bold text-[#1A1A1A]">{area.developer_count}</div>
                   <div className="text-xs text-[#1A1A1A]/70">Developers</div>
                 </div>
               </div>
             )}
-            <div className="flex items-center gap-3 p-4 bg-[#FDFBF7] rounded-xl border border-gold/20 shadow-sm">
-              <MapPin className="w-5 h-5 text-gold flex-shrink-0" />
+            <div className="flex items-center gap-3 p-4 bg-[#FDFBF7] rounded-xl border border-[#B89555]/20 shadow-sm">
+              <MapPin className="w-5 h-5 text-[#1A1A1A] flex-shrink-0" />
               <div>
                 <div className="text-lg font-bold text-[#1A1A1A]">{area.emirate}</div>
                 <div className="text-xs text-[#1A1A1A]/70">Emirate</div>
@@ -112,7 +112,7 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
 
           <Button
             onClick={handleScrollToProjects}
-            className="px-8 py-6 text-base bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] font-bold border-2 border-gold hover:from-gold hover:to-amber-500 hover:text-[#1A1A1A] transition-all"
+            className="px-8 py-6 text-base bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] font-bold border-2 border-[#B89555] hover:from-gold hover:to-amber-500 hover:text-[#1A1A1A] transition-all"
           >
             Properties
             <ArrowDown className="w-5 h-5 ml-2" />

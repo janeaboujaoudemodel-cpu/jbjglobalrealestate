@@ -84,7 +84,7 @@ const colorClasses: Record<string, { bg: string; border: string; text: string; g
   amber: {
     bg: "bg-amber-500/10",
     border: "border-amber-500/30",
-    text: "text-amber-400",
+    text: "text-[#1A1A1A]",
     glow: "shadow-amber-500/20",
     gradient: "from-amber-400 to-yellow-400",
   },
@@ -117,9 +117,9 @@ const colorClasses: Record<string, { bg: string; border: string; text: string; g
     gradient: "from-sky-400 to-blue-400",
   },
   gold: {
-    bg: "bg-gold/10",
-    border: "border-gold/30",
-    text: "text-gold",
+    bg: "bg-[#EFE6D6]/10",
+    border: "border-[#B89555]/30",
+    text: "text-[#1A1A1A]",
     glow: "shadow-gold/20",
     gradient: "from-gold to-amber-400",
   },

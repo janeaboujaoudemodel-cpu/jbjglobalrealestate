@@ -163,8 +163,8 @@ Help the user complete their listing form and answer questions about the selling
   };
 
   const quickActions = [
-    { icon: Calculator, label: "Run Evaluator", action: () => window.open("/property-evaluator", "_self"), iconClass: "text-gold" },
-    { icon: FileText, label: "Seller Guide", action: () => window.open("/seller-guide", "_self"), iconClass: "text-gold" },
+    { icon: Calculator, label: "Run Evaluator", action: () => window.open("/property-evaluator", "_self"), iconClass: "text-[#1A1A1A]" },
+    { icon: FileText, label: "Seller Guide", action: () => window.open("/seller-guide", "_self"), iconClass: "text-[#1A1A1A]" },
     { icon: MessageCircle, label: "WhatsApp", action: () => window.open(`https://wa.me/${CONTACT_INFO.whatsappNumber.replace(/\D/g, '')}?text=${encodeURIComponent("Hi, I need help with listing my property for sale.")}`, "_blank"), iconClass: "text-green-500" },
   ];
 
@@ -173,14 +173,14 @@ Help the user complete their listing form and answer questions about the selling
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
-      className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold/40 rounded-xl overflow-hidden shadow-xl"
+      className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-[#B89555]/40 rounded-xl overflow-hidden shadow-xl"
       id="seller-assistant-panel"
     >
       {/* Header - ACTIVE COLOR */}
-      <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-b-2 border-gold/40 px-4 py-3 flex items-center justify-between">
+      <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-b-2 border-[#B89555]/40 px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-[#FDFBF7] border border-gold/30 rounded-full flex items-center justify-center">
-            <Sparkles className="w-4 h-4 text-gold" />
+          <div className="w-8 h-8 bg-[#FDFBF7] border border-[#B89555]/30 rounded-full flex items-center justify-center">
+            <Sparkles className="w-4 h-4 text-[#1A1A1A]" />
           </div>
           <div>
             <h3 className="text-[#1A1A1A] font-semibold text-sm">JBJ Seller Assistant</h3>
@@ -198,14 +198,14 @@ Help the user complete their listing form and answer questions about the selling
       </div>
 
       {/* Quick Actions - Champagne BG */}
-      <div className="px-4 py-2 border-b border-gold/30 flex gap-2 overflow-x-auto bg-gradient-to-r from-[#FDFBF7] via-white to-[#F7F2EA]">
+      <div className="px-4 py-2 border-b border-[#B89555]/30 flex gap-2 overflow-x-auto bg-gradient-to-r from-[#FDFBF7] via-white to-[#F7F2EA]">
         {quickActions.map((action, index) => (
           <Button
             key={index}
             variant="outline"
             size="sm"
             onClick={action.action}
-            className="border-gold/40 text-[#1A1A1A]/70 hover:text-gold hover:border-gold whitespace-nowrap text-xs bg-[#FDFBF7]"
+            className="border-[#B89555]/40 text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:border-[#B89555] whitespace-nowrap text-xs bg-[#FDFBF7]"
           >
             <action.icon className={`w-3 h-3 mr-1 ${action.iconClass}`} />
             {action.label}
@@ -224,8 +224,8 @@ Help the user complete their listing form and answer questions about the selling
               <div
                 className={`max-w-[85%] rounded-lg px-4 py-2.5 ${
                   message.role === "user"
-                    ? "bg-gold text-[#1A1A1A]"
-                    : "bg-gradient-to-br from-[#FDFBF7] via-white to-[#F7F2EA] text-[#1A1A1A] border border-gold/30"
+                    ? "bg-[#EFE6D6] text-[#1A1A1A]"
+                    : "bg-gradient-to-br from-[#FDFBF7] via-white to-[#F7F2EA] text-[#1A1A1A] border border-[#B89555]/30"
                 }`}
               >
                 <p className="text-sm whitespace-pre-wrap">{message.content}</p>
@@ -234,8 +234,8 @@ Help the user complete their listing form and answer questions about the selling
           ))}
           {isLoading && (
             <div className="flex justify-start">
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-white to-[#F7F2EA] border border-gold/30 rounded-lg px-4 py-2.5">
-                <Loader2 className="w-4 h-4 animate-spin text-gold" />
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-white to-[#F7F2EA] border border-[#B89555]/30 rounded-lg px-4 py-2.5">
+                <Loader2 className="w-4 h-4 animate-spin text-[#1A1A1A]" />
               </div>
             </div>
           )}
@@ -243,9 +243,9 @@ Help the user complete their listing form and answer questions about the selling
       </ScrollArea>
 
       {/* Suggested Questions - Champagne BG */}
-      <div className="px-4 py-2 border-t border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-white to-[#F7F2EA]">
+      <div className="px-4 py-2 border-t border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-white to-[#F7F2EA]">
         <p className="text-[#1A1A1A]/70 text-xs mb-2 flex items-center gap-1">
-          <Lightbulb className="w-3 h-3 text-gold" />
+          <Lightbulb className="w-3 h-3 text-[#1A1A1A]" />
           Suggested questions:
         </p>
         <div className="flex flex-wrap gap-2">
@@ -254,7 +254,7 @@ Help the user complete their listing form and answer questions about the selling
               key={index}
               onClick={() => sendMessage(question)}
               disabled={isLoading}
-              className="text-xs px-3 py-1.5 bg-[#FDFBF7] text-[#1A1A1A]/70 border border-gold/30 rounded-full hover:bg-gold/10 hover:text-gold hover:border-gold transition-colors disabled:opacity-50"
+              className="text-xs px-3 py-1.5 bg-[#FDFBF7] text-[#1A1A1A]/70 border border-[#B89555]/30 rounded-full hover:bg-[#EFE6D6]/10 hover:text-[#1A1A1A] hover:border-[#B89555] transition-colors disabled:opacity-50"
             >
               {question}
             </button>
@@ -263,7 +263,7 @@ Help the user complete their listing form and answer questions about the selling
       </div>
 
       {/* Input - Champagne BG */}
-      <div className="p-4 border-t border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-white to-[#F7F2EA]">
+      <div className="p-4 border-t border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-white to-[#F7F2EA]">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -276,7 +276,7 @@ Help the user complete their listing form and answer questions about the selling
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask me anything about selling..."
-              className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 pr-10 focus:border-gold"
+              className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 pr-10 focus:border-[#B89555]"
               disabled={isLoading}
             />
             <div className="absolute right-1 top-1/2 -translate-y-1/2">
@@ -285,7 +285,7 @@ Help the user complete their listing form and answer questions about the selling
                 disabled={isLoading}
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8 text-gold hover:text-gold hover:bg-gold/10"
+                className="h-8 w-8 text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
               />
             </div>
           </div>

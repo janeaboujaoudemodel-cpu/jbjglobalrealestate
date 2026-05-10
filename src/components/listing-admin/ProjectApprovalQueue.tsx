@@ -1146,7 +1146,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
               />
             </div>
             <Select value={developerFilter} onValueChange={setDeveloperFilter}>
-              <SelectTrigger className="w-[220px] h-9 text-sm bg-background border-gold/30">
+              <SelectTrigger className="w-[220px] h-9 text-sm bg-background border-[#B89555]/30">
                 <SelectValue placeholder="All Developers" />
               </SelectTrigger>
               <SelectContent>
@@ -1164,7 +1164,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           <div className="flex items-center gap-3 p-2 bg-muted/50 border border-border rounded-lg mb-4">
             <span className="text-sm font-medium text-foreground">Source:</span>
             <Select value={sourceFilter} onValueChange={(v) => setSourceFilter(v as any)}>
-              <SelectTrigger className="w-[220px] h-9 text-sm bg-background border-gold/30">
+              <SelectTrigger className="w-[220px] h-9 text-sm bg-background border-[#B89555]/30">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -1452,7 +1452,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                           key={idx}
                           onClick={() => setCurrentImageIndex(idx)}
                           className={`flex-shrink-0 w-20 h-14 rounded overflow-hidden border-2 transition-colors ${
-                            idx === safeIndex ? 'border-gold' : 'border-transparent'
+                            idx === safeIndex ? 'border-[#B89555]' : 'border-transparent'
                           }`}
                         >
                           <img
@@ -1554,7 +1554,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
 
                   {selectedImport.status_label && (
                     <div className="flex items-center gap-2">
-                      <Badge className="bg-gold/20 text-gold-dark">{selectedImport.status_label}</Badge>
+                      <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A]-dark">{selectedImport.status_label}</Badge>
                     </div>
                   )}
                 </div>
@@ -1608,7 +1608,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                    variant="outline"
                    size="sm"
                    onClick={() => navigate(`/owner/listing-admin/preview/${selectedImport.id}`)}
-                   className="border-gold/30 text-gold hover:bg-gold/10"
+                   className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                  >
                    <Eye className="h-4 w-4 mr-2" />
                    View Internal Draft

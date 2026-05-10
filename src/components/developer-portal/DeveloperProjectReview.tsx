@@ -198,7 +198,7 @@ export function DeveloperProjectReview({ developerId }: { developerId: string })
 
   if (isLoading) {
     return (
-      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30">
+      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30">
         <CardContent className="flex items-center justify-center py-12">
           <RefreshCw className="h-6 w-6 animate-spin text-muted-foreground" />
         </CardContent>
@@ -209,7 +209,7 @@ export function DeveloperProjectReview({ developerId }: { developerId: string })
   return (
     <div className="space-y-6">
       {/* My Live Projects */}
-      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30">
+      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg text-foreground">
             <Building2 className="h-5 w-5" />
@@ -222,7 +222,7 @@ export function DeveloperProjectReview({ developerId }: { developerId: string })
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {projects.map((project) => (
-                <Card key={project.id} className="border border-gold/20 bg-card hover:shadow-md transition-shadow">
+                <Card key={project.id} className="border border-[#B89555]/20 bg-card hover:shadow-md transition-shadow">
                   {/* Project Image */}
                   <div className="aspect-video bg-muted rounded-t-lg overflow-hidden">
                     {project.images[0] ? (
@@ -316,7 +316,7 @@ export function DeveloperProjectReview({ developerId }: { developerId: string })
 
       {/* Pending Change Requests */}
       {changeRequests.length > 0 && (
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg text-foreground">
               <Clock className="h-5 w-5" />
@@ -384,7 +384,7 @@ export function DeveloperProjectReview({ developerId }: { developerId: string })
 
               {/* Read-only AI fields notice */}
               <div className="flex items-center gap-2 p-3 rounded-lg bg-muted/50 border border-border text-xs text-muted-foreground">
-                <ShieldCheck className="h-4 w-4 flex-shrink-0 text-gold" />
+                <ShieldCheck className="h-4 w-4 flex-shrink-0 text-[#1A1A1A]" />
                 <span>AI analysis results, project scoring, and document descriptions are managed by JBJ and cannot be edited here.</span>
               </div>
 

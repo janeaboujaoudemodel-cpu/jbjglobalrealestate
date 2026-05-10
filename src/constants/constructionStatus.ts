@@ -62,7 +62,7 @@ export function getConstructionStatusColor(status: string | null | undefined): s
     case "Completed":
       return "bg-green-500/20 text-green-400 border-green-500/30";
     case "Presale":
-      return "bg-amber-500/20 text-amber-400 border-amber-500/30";
+      return "bg-amber-500/20 text-[#1A1A1A] border-amber-500/30";
     case "Under Construction":
       return "bg-blue-500/20 text-blue-400 border-blue-500/30";
     case "Resale Off-Plan":

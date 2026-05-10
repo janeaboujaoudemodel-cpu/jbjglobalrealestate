@@ -128,7 +128,7 @@ export function TeleprompterPanel({ onScriptChange, initialScript = '' }: Telepr
       {!isFullscreen && (
         <div className="p-3 border-b border-slate-800 space-y-3">
           <div className="flex items-center justify-between">
-            <h4 className="text-sm font-medium text-gold flex items-center gap-2">
+            <h4 className="text-sm font-medium text-[#1A1A1A] flex items-center gap-2">
               <AlignLeft className="w-4 h-4" />
               Teleprompter
             </h4>
@@ -197,7 +197,7 @@ export function TeleprompterPanel({ onScriptChange, initialScript = '' }: Telepr
               <Button
                 size="sm"
                 onClick={handlePlayPause}
-                className="bg-gold text-[#1A1A1A] hover:bg-gold/90"
+                className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
               >
                 {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
               </Button>
@@ -226,7 +226,7 @@ export function TeleprompterPanel({ onScriptChange, initialScript = '' }: Telepr
         {/* Countdown Overlay */}
         {showCountdown && (
           <div className="fixed inset-0 bg-[#1A1A1A]/90 flex items-center justify-center z-50">
-            <span className="text-9xl font-bold text-gold animate-pulse">
+            <span className="text-9xl font-bold text-[#1A1A1A] animate-pulse">
               {countdown}
             </span>
           </div>
@@ -247,14 +247,14 @@ export function TeleprompterPanel({ onScriptChange, initialScript = '' }: Telepr
               size="sm"
               variant="ghost"
               onClick={resetScroll}
-              className="text-white hover:text-gold"
+              className="text-white hover:text-[#1A1A1A]"
             >
               <RotateCcw className="w-4 h-4" />
             </Button>
             <Button
               size="sm"
               onClick={handlePlayPause}
-              className="bg-gold text-[#1A1A1A] hover:bg-gold/90"
+              className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
             >
               {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
             </Button>
@@ -262,7 +262,7 @@ export function TeleprompterPanel({ onScriptChange, initialScript = '' }: Telepr
               size="sm"
               variant="ghost"
               onClick={toggleFullscreen}
-              className="text-white hover:text-gold"
+              className="text-white hover:text-[#1A1A1A]"
             >
               <Minimize2 className="w-4 h-4" />
             </Button>

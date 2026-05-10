@@ -93,7 +93,7 @@ export function WarningsPanel() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#B89555]"></div>
       </div>
     );
   }
@@ -113,7 +113,7 @@ export function WarningsPanel() {
               Issue Warning
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-lg bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6] border-2 border-gold/30">
+          <DialogContent className="max-w-lg bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6] border-2 border-[#B89555]/30">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2 text-red-600">
                 <AlertTriangle className="h-5 w-5" />
@@ -128,7 +128,7 @@ export function WarningsPanel() {
                     placeholder="Enter employee name"
                     value={formData.employee_name}
                     onChange={(e) => setFormData(prev => ({ ...prev, employee_name: e.target.value }))}
-                    className="border-gold/30 focus:border-gold"
+                    className="border-[#B89555]/30 focus:border-[#B89555]"
                   />
                 </div>
                 <div className="space-y-2">
@@ -137,7 +137,7 @@ export function WarningsPanel() {
                     placeholder="Department"
                     value={formData.department}
                     onChange={(e) => setFormData(prev => ({ ...prev, department: e.target.value }))}
-                    className="border-gold/30 focus:border-gold"
+                    className="border-[#B89555]/30 focus:border-[#B89555]"
                   />
                 </div>
               </div>
@@ -149,7 +149,7 @@ export function WarningsPanel() {
                     value={formData.warning_type} 
                     onValueChange={(v) => setFormData(prev => ({ ...prev, warning_type: v as typeof formData.warning_type }))}
                   >
-                    <SelectTrigger className="border-gold/30 focus:border-gold">
+                    <SelectTrigger className="border-[#B89555]/30 focus:border-[#B89555]">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -167,7 +167,7 @@ export function WarningsPanel() {
                     type="date"
                     value={formData.incident_date}
                     onChange={(e) => setFormData(prev => ({ ...prev, incident_date: e.target.value }))}
-                    className="border-gold/30 focus:border-gold"
+                    className="border-[#B89555]/30 focus:border-[#B89555]"
                   />
                 </div>
               </div>
@@ -178,7 +178,7 @@ export function WarningsPanel() {
                   placeholder="Warning subject..."
                   value={formData.subject}
                   onChange={(e) => setFormData(prev => ({ ...prev, subject: e.target.value }))}
-                  className="border-gold/30 focus:border-gold"
+                  className="border-[#B89555]/30 focus:border-[#B89555]"
                 />
               </div>
 
@@ -186,7 +186,7 @@ export function WarningsPanel() {
                 <Label className="text-[#1A1A1A]">Description *</Label>
                 <Textarea 
                   placeholder="Detailed description of the incident or behavior..."
-                  className="min-h-[120px] border-gold/30 focus:border-gold"
+                  className="min-h-[120px] border-[#B89555]/30 focus:border-[#B89555]"
                   value={formData.description}
                   onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                 />
@@ -203,7 +203,7 @@ export function WarningsPanel() {
               </div>
 
               <div className="flex justify-end gap-3 pt-4">
-                <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="border-gold/30 hover:bg-gold/10">
+                <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="border-[#B89555]/30 hover:bg-[#EFE6D6]/10">
                   Cancel
                 </Button>
                 <Button 
@@ -221,7 +221,7 @@ export function WarningsPanel() {
 
       {/* Summary Cards - Premium Theme */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-gold/30 shadow-lg">
+        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-[#B89555]/30 shadow-lg">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -232,7 +232,7 @@ export function WarningsPanel() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-gold/30 shadow-lg">
+        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-[#B89555]/30 shadow-lg">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -243,7 +243,7 @@ export function WarningsPanel() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-gold/30 shadow-lg">
+        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-[#B89555]/30 shadow-lg">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -256,7 +256,7 @@ export function WarningsPanel() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-gold/30 shadow-lg">
+        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-[#B89555]/30 shadow-lg">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -272,7 +272,7 @@ export function WarningsPanel() {
       </div>
 
       {/* Warnings Table - Premium Theme */}
-      <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6] border-2 border-gold/30 shadow-lg">
+      <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6] border-2 border-[#B89555]/30 shadow-lg">
         <CardHeader>
           <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
             <AlertTriangle className="h-5 w-5 text-red-500" />
@@ -288,7 +288,7 @@ export function WarningsPanel() {
           ) : (
             <Table>
               <TableHeader>
-                <TableRow className="border-gold/20">
+                <TableRow className="border-[#B89555]/20">
                   <TableHead className="text-[#1A1A1A]">Employee</TableHead>
                   <TableHead className="text-[#1A1A1A]">Type</TableHead>
                   <TableHead className="text-[#1A1A1A]">Subject</TableHead>
@@ -300,7 +300,7 @@ export function WarningsPanel() {
               </TableHeader>
               <TableBody>
                 {warnings.map(warning => (
-                  <TableRow key={warning.id} className="border-gold/20 hover:bg-gold/5">
+                  <TableRow key={warning.id} className="border-[#B89555]/20 hover:bg-[#EFE6D6]/5">
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <User className="h-4 w-4 text-[#1A1A1A]/70" />

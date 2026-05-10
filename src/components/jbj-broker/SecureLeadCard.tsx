@@ -83,8 +83,8 @@ export function SecureLeadCard({ lead, brokerId, onContact }: SecureLeadCardProp
         {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">
-            <Avatar className="h-12 w-12 border-2 border-gold/30">
-              <AvatarFallback className="bg-gold/10 text-gold font-semibold">
+            <Avatar className="h-12 w-12 border-2 border-[#B89555]/30">
+              <AvatarFallback className="bg-[#EFE6D6]/10 text-[#1A1A1A] font-semibold">
                 {lead.first_name.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>

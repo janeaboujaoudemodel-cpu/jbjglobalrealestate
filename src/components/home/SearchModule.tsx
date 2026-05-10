@@ -194,7 +194,7 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
             className={cn(
               "flex items-center gap-2 px-6 py-3 rounded-full text-base font-semibold transition-all duration-300",
               purpose === 'buy'
-                ? 'bg-gold text-[#1A1A1A] shadow-lg'
+                ? 'bg-[#EFE6D6] text-[#1A1A1A] shadow-lg'
                 : isHero 
                   ? 'bg-[#FDFBF7]/10 text-white hover:bg-[#FDFBF7]/20 backdrop-blur-sm' 
                   : 'bg-[#1A1A1A]/5 text-[#1A1A1A] hover:bg-[#1A1A1A]/10'
@@ -208,7 +208,7 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
             className={cn(
               "flex items-center gap-2 px-6 py-3 rounded-full text-base font-semibold transition-all duration-300",
               purpose === 'rent'
-                ? 'bg-gold text-[#1A1A1A] shadow-lg'
+                ? 'bg-[#EFE6D6] text-[#1A1A1A] shadow-lg'
                 : isHero 
                   ? 'bg-[#FDFBF7]/10 text-white hover:bg-[#FDFBF7]/20 backdrop-blur-sm' 
                   : 'bg-[#1A1A1A]/5 text-[#1A1A1A] hover:bg-[#1A1A1A]/10'
@@ -231,7 +231,7 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
               className={cn(
                 "px-3 py-1.5 rounded-full text-sm font-medium transition-all",
                 currency === c 
-                  ? 'bg-gold text-[#1A1A1A]' 
+                  ? 'bg-[#EFE6D6] text-[#1A1A1A]' 
                   : isHero ? 'text-white/80 hover:text-white' : 'text-[#1A1A1A]/60 hover:text-[#1A1A1A]'
               )}
             >
@@ -253,7 +253,7 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
               className={cn(
                 "px-3 py-1.5 rounded-full text-sm font-medium transition-all",
                 areaUnit === u 
-                  ? 'bg-gold text-[#1A1A1A]' 
+                  ? 'bg-[#EFE6D6] text-[#1A1A1A]' 
                   : isHero ? 'text-white/80 hover:text-white' : 'text-[#1A1A1A]/60 hover:text-[#1A1A1A]'
               )}
             >
@@ -268,7 +268,7 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
         "w-full",
         isHero 
           ? 'bg-[#1A1A1A]/40 backdrop-blur-md border border-white/20 rounded-2xl p-5' 
-          : 'bg-[#FDFBF7] border-2 border-gold/30 rounded-xl p-5'
+          : 'bg-[#FDFBF7] border-2 border-[#B89555]/30 rounded-xl p-5'
       )}>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           {/* Area */}
@@ -278,7 +278,7 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
               {t('search.area', 'Area')}
             </label>
             <Select value={area} onValueChange={setArea}>
-              <SelectTrigger className={cn("h-12 text-base", isHero ? 'bg-[#FDFBF7]/10 border-white/20 text-white' : 'bg-[#FDFBF7] border-gold/30')}>
+              <SelectTrigger className={cn("h-12 text-base", isHero ? 'bg-[#FDFBF7]/10 border-white/20 text-white' : 'bg-[#FDFBF7] border-[#B89555]/30')}>
                 <SelectValue placeholder="Select area" />
               </SelectTrigger>
               <SelectContent className="max-h-64 overflow-y-auto">
@@ -298,7 +298,7 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
               {t('search.propertyType', 'Type')}
             </label>
             <Select value={propertyType} onValueChange={setPropertyType}>
-              <SelectTrigger className={cn("h-12 text-base", isHero ? 'bg-[#FDFBF7]/10 border-white/20 text-white' : 'bg-[#FDFBF7] border-gold/30')}>
+              <SelectTrigger className={cn("h-12 text-base", isHero ? 'bg-[#FDFBF7]/10 border-white/20 text-white' : 'bg-[#FDFBF7] border-[#B89555]/30')}>
                 <SelectValue placeholder="Property type" />
               </SelectTrigger>
               <SelectContent>
@@ -318,7 +318,7 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
               {t('search.bedrooms', 'Beds')}
             </label>
             <Select value={bedrooms} onValueChange={setBedrooms}>
-              <SelectTrigger className={cn("h-12 text-base", isHero ? 'bg-[#FDFBF7]/10 border-white/20 text-white' : 'bg-[#FDFBF7] border-gold/30')}>
+              <SelectTrigger className={cn("h-12 text-base", isHero ? 'bg-[#FDFBF7]/10 border-white/20 text-white' : 'bg-[#FDFBF7] border-[#B89555]/30')}>
                 <SelectValue placeholder="Bedrooms" />
               </SelectTrigger>
               <SelectContent>
@@ -338,7 +338,7 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
               Size ({areaUnit})
             </label>
             <Select value={sizeRange} onValueChange={setSizeRange}>
-              <SelectTrigger className={cn("h-12 text-base", isHero ? 'bg-[#FDFBF7]/10 border-white/20 text-white' : 'bg-[#FDFBF7] border-gold/30')}>
+              <SelectTrigger className={cn("h-12 text-base", isHero ? 'bg-[#FDFBF7]/10 border-white/20 text-white' : 'bg-[#FDFBF7] border-[#B89555]/30')}>
                 <SelectValue placeholder="Size" />
               </SelectTrigger>
               <SelectContent>
@@ -358,7 +358,7 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
               Price ({currency})
             </label>
             <Select value={priceRange} onValueChange={setPriceRange}>
-              <SelectTrigger className={cn("h-12 text-base", isHero ? 'bg-[#FDFBF7]/10 border-white/20 text-white' : 'bg-[#FDFBF7] border-gold/30')}>
+              <SelectTrigger className={cn("h-12 text-base", isHero ? 'bg-[#FDFBF7]/10 border-white/20 text-white' : 'bg-[#FDFBF7] border-[#B89555]/30')}>
                 <SelectValue placeholder="Price" />
               </SelectTrigger>
               <SelectContent>
@@ -375,7 +375,7 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
           <div className="flex items-end">
             <Button
               onClick={handleSearch}
-              className="w-full h-12 bg-gold hover:bg-gold-dark text-[#1A1A1A] font-bold text-base rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl"
+              className="w-full h-12 bg-[#EFE6D6] hover:bg-[#EFE6D6]-dark text-[#1A1A1A] font-bold text-base rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl"
             >
               <Search className="w-5 h-5 mr-2" />
               {t('search.button', 'Search')}

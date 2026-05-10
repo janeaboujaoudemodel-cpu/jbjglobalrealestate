@@ -59,10 +59,10 @@ export function OffPlanInquiryCTA({ variant = "full", className = "" }: OffPlanI
 
   if (variant === "compact") {
     return (
-      <Card className={`bg-card border-2 border-gold shadow-lg ${className}`}>
+      <Card className={`bg-card border-2 border-[#B89555] shadow-lg ${className}`}>
         <CardHeader className="pb-2">
           <CardTitle className="flex items-center gap-2 text-lg text-foreground">
-            <HelpCircle className="w-5 h-5 text-gold" />
+            <HelpCircle className="w-5 h-5 text-[#1A1A1A]" />
             Need Investment Guidance?
           </CardTitle>
         </CardHeader>
@@ -79,7 +79,7 @@ export function OffPlanInquiryCTA({ variant = "full", className = "" }: OffPlanI
               required
               className="flex-1"
             />
-            <Button type="submit" disabled={isSubmitting} className="bg-gold text-[#1A1A1A] hover:bg-gold/90">
+            <Button type="submit" disabled={isSubmitting} className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90">
               {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "Get Advice"}
             </Button>
           </form>
@@ -91,13 +91,13 @@ export function OffPlanInquiryCTA({ variant = "full", className = "" }: OffPlanI
   return (
     <section className={`py-12 md:py-16 ${className}`}>
       <div className="container mx-auto px-4">
-        <Card className="bg-gradient-to-br from-card via-card to-gold/5 border-2 border-gold shadow-[0_8px_40px_rgba(200,167,102,0.2)] overflow-hidden">
+        <Card className="bg-gradient-to-br from-card via-card to-gold/5 border-2 border-[#B89555] shadow-[0_8px_40px_rgba(200,167,102,0.2)] overflow-hidden">
           <div className="grid md:grid-cols-2 gap-0">
             {/* Left side - Content */}
             <div className="p-8 md:p-12 flex flex-col justify-center">
               <div className="flex items-center gap-3 mb-4">
-                <div className="p-3 rounded-xl bg-gold/20">
-                  <Building2 className="w-8 h-8 text-gold" />
+                <div className="p-3 rounded-xl bg-[#EFE6D6]/20">
+                  <Building2 className="w-8 h-8 text-[#1A1A1A]" />
                 </div>
                 <HelpCircle className="w-6 h-6 text-[#1A1A1A]/70" />
               </div>
@@ -113,15 +113,15 @@ export function OffPlanInquiryCTA({ variant = "full", className = "" }: OffPlanI
               
               <ul className="space-y-2 text-sm text-muted-foreground mb-6">
                 <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-gold" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#EFE6D6]" />
                   Flexible payment plans tailored to your investment timeline
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-gold" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#EFE6D6]" />
                   Trusted developers: Emaar, Damac, Sobha, Nakheel & more
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-gold" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#EFE6D6]" />
                   ROI projections and market insights included
                 </li>
               </ul>
@@ -171,7 +171,7 @@ export function OffPlanInquiryCTA({ variant = "full", className = "" }: OffPlanI
                 <Button 
                   type="submit" 
                   disabled={isSubmitting}
-                  className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold py-6"
+                  className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-semibold py-6"
                 >
                   {isSubmitting ? (
                     <>

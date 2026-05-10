@@ -22,10 +22,10 @@ export default function LinkedPortfolioReports({
     <section className="space-y-4">
       <div className="flex items-center gap-2">
         <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
-          <Briefcase className="w-5 h-5 text-gold" />
+          <Briefcase className="w-5 h-5 text-[#1A1A1A]" />
           Linked Reports from Portfolio
         </h2>
-        <Badge variant="outline" className="border-gold/30 text-gold">
+        <Badge variant="outline" className="border-[#B89555]/30 text-[#1A1A1A]">
           Auto-surfaced
         </Badge>
       </div>
@@ -46,7 +46,7 @@ export default function LinkedPortfolioReports({
             ))}
           </div>
         ) : (
-          <Card className="border-2 border-gold/30">
+          <Card className="border-2 border-[#B89555]/30">
             <CardContent className="p-8 text-center">
               <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
               <p className="text-muted-foreground mb-2">No linked reports yet</p>
@@ -57,10 +57,10 @@ export default function LinkedPortfolioReports({
           </Card>
         )
       ) : (
-        <Card className="border-2 border-gold/30 bg-gradient-to-br from-gold/5 to-transparent">
+        <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-gold/5 to-transparent">
           <CardContent className="p-8 text-center">
-            <div className="w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Link2 className="w-8 h-8 text-gold" />
+            <div className="w-16 h-16 bg-[#EFE6D6]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Link2 className="w-8 h-8 text-[#1A1A1A]" />
             </div>
             <h3 className="font-semibold text-foreground mb-2">Link Assets to See Related Reports</h3>
             <p className="text-muted-foreground text-sm mb-6 max-w-md mx-auto">

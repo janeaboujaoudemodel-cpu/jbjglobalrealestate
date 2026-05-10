@@ -65,7 +65,7 @@ const AIContractReviewerPremium = () => {
   const getRiskColor = (level: string) => {
     switch (level) {
       case "high": return { bg: "bg-red-500/10", border: "border-red-500/30", text: "text-red-400", icon: AlertOctagon };
-      case "medium": return { bg: "bg-amber-500/10", border: "border-amber-500/30", text: "text-amber-400", icon: AlertTriangle };
+      case "medium": return { bg: "bg-amber-500/10", border: "border-amber-500/30", text: "text-[#1A1A1A]", icon: AlertTriangle };
       default: return { bg: "bg-emerald-500/10", border: "border-emerald-500/30", text: "text-emerald-400", icon: CheckCircle };
     }
   };
@@ -146,7 +146,7 @@ const AIContractReviewerPremium = () => {
                   placeholder="Paste your contract text here for review..."
                   value={contractText}
                   onChange={(e) => setContractText(e.target.value)}
-                  className="bg-zinc-900/50 border-red-500/30 text-white hover:border-red-500/50 focus:border-red-400 transition-colors min-h-[300px] font-mono text-sm"
+                  className="bg-[#FDFBF7]/50 border-red-500/30 text-white hover:border-red-500/50 focus:border-red-400 transition-colors min-h-[300px] font-mono text-sm"
                 />
                 <p className="text-xs text-white/90">{contractText.length} characters</p>
               </div>
@@ -219,7 +219,7 @@ const AIContractReviewerPremium = () => {
                       </h4>
                       <ul className="space-y-2">
                         {response.keyTerms.map((term: any, idx: number) => (
-                          <li key={idx} className="flex items-start gap-2 text-sm bg-zinc-800/50 p-2 rounded">
+                          <li key={idx} className="flex items-start gap-2 text-sm bg-[#1A1A1A]/50 p-2 rounded">
                             <CheckCircle className="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
                             <span className="text-white/85">
                               <strong className="text-white">{term.term}:</strong> {term.value}
@@ -236,13 +236,13 @@ const AIContractReviewerPremium = () => {
                   <Card className="bg-amber-500/10 border-amber-500/30">
                     <CardContent className="p-4">
                       <h4 className="font-semibold text-white mb-3 flex items-center gap-2">
-                        <AlertTriangle className="h-5 w-5 text-amber-400" />
+                        <AlertTriangle className="h-5 w-5 text-[#1A1A1A]" />
                         Areas of Concern ({response.concerns.length})
                       </h4>
                       <ul className="space-y-2">
                         {response.concerns.map((concern: string, idx: number) => (
                           <li key={idx} className="flex items-start gap-2 text-sm">
-                            <span className="w-5 h-5 rounded-full bg-amber-500/30 flex items-center justify-center flex-shrink-0 text-xs text-amber-400 font-bold">
+                            <span className="w-5 h-5 rounded-full bg-amber-500/30 flex items-center justify-center flex-shrink-0 text-xs text-[#1A1A1A] font-bold">
                               {idx + 1}
                             </span>
                             <span className="text-white/85">{concern}</span>
@@ -265,7 +265,7 @@ const AIContractReviewerPremium = () => {
                         {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                       </Button>
                     </div>
-                    <div className="bg-zinc-800/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
+                    <div className="bg-[#1A1A1A]/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
                       {response.review}
                     </div>
                   </CardContent>

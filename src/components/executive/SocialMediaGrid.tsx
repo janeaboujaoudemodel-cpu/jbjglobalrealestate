@@ -180,7 +180,7 @@ const SocialMediaGrid: React.FC<SocialMediaGridProps> = ({ onConnectPlatform }) 
           className={`relative p-4 rounded-xl border transition-all ${
             platform.connected 
               ? 'border-green-500/50 bg-green-500/5' 
-              : 'border-gold/20 bg-[#0E0E0E] hover:border-gold/40'
+              : 'border-[#B89555]/20 bg-[#0E0E0E] hover:border-[#B89555]/40'
           }`}
         >
           <div className="flex flex-col items-center text-center">
@@ -208,7 +208,7 @@ const SocialMediaGrid: React.FC<SocialMediaGridProps> = ({ onConnectPlatform }) 
                 variant="ghost"
                 onClick={() => handleConnect(platform.id)}
                 disabled={connecting === platform.id}
-                className="text-gold hover:text-gold hover:bg-gold/10 mt-1"
+                className="text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10 mt-1"
               >
                 {connecting === platform.id ? (
                   <Loader2 className="w-4 h-4 animate-spin" />

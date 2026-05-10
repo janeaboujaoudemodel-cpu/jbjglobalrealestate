@@ -24,7 +24,7 @@ export const GuideSectionNav = ({ sections, activeSection }: GuideSectionNavProp
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-zinc-900/80 backdrop-blur-sm border border-[#1A1A1A] rounded-xl p-4 sticky top-20 z-10"
+      className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-[#1A1A1A] rounded-xl p-4 sticky top-20 z-10"
     >
       <p className="text-white/90 text-xs uppercase tracking-wider mb-3 font-medium">Quick Navigation</p>
       <div className="flex flex-wrap gap-2">
@@ -34,8 +34,8 @@ export const GuideSectionNav = ({ sections, activeSection }: GuideSectionNavProp
             onClick={() => scrollToSection(section.id)}
             className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm transition-all ${
               activeSection === section.id
-                ? "bg-gold/20 text-gold border border-gold/30"
-                : "bg-zinc-800/50 text-white/70 hover:text-white hover:bg-[#1A1A1A] border border-transparent"
+                ? "bg-[#EFE6D6]/20 text-[#1A1A1A] border border-[#B89555]/30"
+                : "bg-[#1A1A1A]/50 text-white/70 hover:text-white hover:bg-[#1A1A1A] border border-transparent"
             }`}
           >
             <section.icon className="w-4 h-4" />

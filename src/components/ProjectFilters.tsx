@@ -314,7 +314,7 @@ const ProjectFilters = ({
   return (
     <div className="mb-8 space-y-4">
       {/* Always-Visible Top Bar */}
-      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold rounded-2xl p-3 overflow-hidden">
+      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] rounded-2xl p-3 overflow-hidden">
         <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-1 -mb-1" style={{ WebkitOverflowScrolling: 'touch' }}>
           {/* Search */}
           <div className="relative flex-1 min-w-[200px] snap-start flex-shrink-0">
@@ -323,7 +323,7 @@ const ProjectFilters = ({
               placeholder="Search projects, developers..."
               value={filters.search}
               onChange={(e) => updateFilter("search", e.target.value)}
-              className="pl-10 h-11 bg-[#FDFBF7]/80 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold text-sm rounded-xl"
+              className="pl-10 h-11 bg-[#FDFBF7]/80 border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] text-sm rounded-xl"
             />
             {filters.search && (
               <button
@@ -343,7 +343,7 @@ const ProjectFilters = ({
             }
           >
             <SelectTrigger className="h-11 w-[180px] rounded-xl flex-shrink-0 snap-start">
-              <Building2 className="w-4 h-4 mr-1 text-gold shrink-0" />
+              <Building2 className="w-4 h-4 mr-1 text-[#1A1A1A] shrink-0" />
               <SelectValue placeholder="All Developers" />
             </SelectTrigger>
             <SelectContent className="max-h-72 w-[260px]">
@@ -392,7 +392,7 @@ const ProjectFilters = ({
             }
           >
             <SelectTrigger className="h-11 w-[150px] rounded-xl flex-shrink-0 snap-start">
-              <MapPin className="w-4 h-4 mr-1 text-gold shrink-0" />
+              <MapPin className="w-4 h-4 mr-1 text-[#1A1A1A] shrink-0" />
               <SelectValue placeholder="Location" />
             </SelectTrigger>
             <SelectContent>
@@ -405,12 +405,12 @@ const ProjectFilters = ({
           </Select>
 
           {/* Size Unit Toggle */}
-          <div className="flex items-center h-11 bg-[#FDFBF7]/80 border border-gold/40 rounded-xl overflow-hidden flex-shrink-0 snap-start">
+          <div className="flex items-center h-11 bg-[#FDFBF7]/80 border border-[#B89555]/40 rounded-xl overflow-hidden flex-shrink-0 snap-start">
             <button
               onClick={() => updateFilter("sizeUnit", "sqft")}
               className={`px-3 h-full text-sm font-medium transition-all ${
                 filters.sizeUnit === "sqft"
-                  ? "bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] border-r border-gold/30"
+                  ? "bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] border-r border-[#B89555]/30"
                   : "text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
               }`}
             >
@@ -420,7 +420,7 @@ const ProjectFilters = ({
               onClick={() => updateFilter("sizeUnit", "sqm")}
               className={`px-3 h-full text-sm font-medium transition-all ${
                 filters.sizeUnit === "sqm"
-                  ? "bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] border-l border-gold/30"
+                  ? "bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] border-l border-[#B89555]/30"
                   : "text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
               }`}
             >
@@ -429,14 +429,14 @@ const ProjectFilters = ({
           </div>
 
           {/* Divider */}
-          <div className="hidden sm:block w-px h-8 bg-gold/30" />
+          <div className="hidden sm:block w-px h-8 bg-[#EFE6D6]/30" />
 
           {/* Filters Button */}
           <Sheet open={isFiltersOpen} onOpenChange={setIsFiltersOpen}>
             <SheetTrigger asChild>
               <Button
                 variant="outline"
-                className="h-11 px-4 bg-[#FDFBF7]/80 border-gold/40 text-[#1A1A1A] hover:border-gold hover:bg-[#FDFBF7] rounded-xl"
+                className="h-11 px-4 bg-[#FDFBF7]/80 border-[#B89555]/40 text-[#1A1A1A] hover:border-[#B89555] hover:bg-[#FDFBF7] rounded-xl"
               >
                 <SlidersHorizontal className="w-4 h-4 mr-2" />
                 Filters
@@ -447,8 +447,8 @@ const ProjectFilters = ({
                 )}
               </Button>
             </SheetTrigger>
-            <SheetContent className="w-full sm:max-w-lg bg-gradient-to-b from-[#FDFBF7] to-[#EFE6D6] border-gold/30 p-0 top-[72px] h-[calc(100vh-72px)]">
-              <SheetHeader className="p-6 border-b border-gold/20">
+            <SheetContent className="w-full sm:max-w-lg bg-gradient-to-b from-[#FDFBF7] to-[#EFE6D6] border-[#B89555]/30 p-0 top-[72px] h-[calc(100vh-72px)]">
+              <SheetHeader className="p-6 border-b border-[#B89555]/20">
                 <div className="flex items-center justify-between">
                   <SheetTitle className="text-[#1A1A1A] text-xl font-bold">
                     All Filters
@@ -458,7 +458,7 @@ const ProjectFilters = ({
                       variant="ghost"
                       size="sm"
                       onClick={clearFilters}
-                      className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-gold/10"
+                      className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                     >
                       Clear All
                     </Button>
@@ -511,7 +511,7 @@ const ProjectFilters = ({
                               const value = parseInt(e.target.value.replace(/,/g, '')) || 0;
                               updateFilter("priceMin", Math.round(value / CURRENCY_RATES[filters.currency]));
                             }}
-                            className="bg-[#FDFBF7]/80 border-gold/30 text-[#1A1A1A] h-10"
+                            className="bg-[#FDFBF7]/80 border-[#B89555]/30 text-[#1A1A1A] h-10"
                             placeholder="Min"
                           />
                         </div>
@@ -524,7 +524,7 @@ const ProjectFilters = ({
                               const value = parseInt(e.target.value.replace(/,/g, '')) || PRICE_MAX;
                               updateFilter("priceMax", Math.round(value / CURRENCY_RATES[filters.currency]));
                             }}
-                            className="bg-[#FDFBF7]/80 border-gold/30 text-[#1A1A1A] h-10"
+                            className="bg-[#FDFBF7]/80 border-[#B89555]/30 text-[#1A1A1A] h-10"
                             placeholder="Max"
                           />
                         </div>
@@ -560,7 +560,7 @@ const ProjectFilters = ({
                               const sqft = filters.sizeUnit === 'sqm' ? Math.round(value / 0.0929) : value;
                               updateFilter("sizeMin", sqft);
                             }}
-                            className="bg-[#FDFBF7]/80 border-gold/30 text-[#1A1A1A] h-10"
+                            className="bg-[#FDFBF7]/80 border-[#B89555]/30 text-[#1A1A1A] h-10"
                             placeholder="Min"
                           />
                         </div>
@@ -574,7 +574,7 @@ const ProjectFilters = ({
                               const sqft = filters.sizeUnit === 'sqm' ? Math.round(value / 0.0929) : value;
                               updateFilter("sizeMax", sqft);
                             }}
-                            className="bg-[#FDFBF7]/80 border-gold/30 text-[#1A1A1A] h-10"
+                            className="bg-[#FDFBF7]/80 border-[#B89555]/30 text-[#1A1A1A] h-10"
                             placeholder="Max"
                           />
                         </div>
@@ -712,11 +712,11 @@ const ProjectFilters = ({
                       onClick={() => updateFilter("premiumOnly", !filters.premiumOnly)}
                       className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all w-full ${
                         filters.premiumOnly
-                          ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border-2 border-gold shadow-sm"
-                          : "bg-[#FDFBF7]/80 text-[#1A1A1A]/70 border border-gold/20 hover:border-gold/40"
+                          ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border-2 border-[#B89555] shadow-sm"
+                          : "bg-[#FDFBF7]/80 text-[#1A1A1A]/70 border border-[#B89555]/20 hover:border-[#B89555]/40"
                       }`}
                     >
-                      <Star className={`w-5 h-5 ${filters.premiumOnly ? "fill-black text-[#1A1A1A]" : "text-gold"}`} />
+                      <Star className={`w-5 h-5 ${filters.premiumOnly ? "fill-black text-[#1A1A1A]" : "text-[#1A1A1A]"}`} />
                       <span>Show Exclusive Residences Only</span>
                     </button>
                   </FilterSection>
@@ -893,10 +893,10 @@ const ProjectFilters = ({
               </ScrollArea>
 
               {/* Apply Button */}
-              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#EFE6D6] to-[#EFE6D6]/90 border-t border-gold/20">
+              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#EFE6D6] to-[#EFE6D6]/90 border-t border-[#B89555]/20">
                 <Button
                   onClick={() => setIsFiltersOpen(false)}
-                  className="w-full h-12 bg-gradient-to-r from-gold to-gold-dark text-gold-foreground hover:from-gold-light hover:to-gold font-semibold text-base shadow-lg shadow-gold/20"
+                  className="w-full h-12 bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A]-foreground hover:from-gold-light hover:to-gold font-semibold text-base shadow-lg shadow-gold/20"
                 >
                   Show Results
                 </Button>
@@ -910,7 +910,7 @@ const ProjectFilters = ({
               variant="ghost"
               size="sm"
               onClick={clearFilters}
-              className="h-11 px-3 text-sm text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-gold/10 rounded-xl border border-gold/30"
+              className="h-11 px-3 text-sm text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10 rounded-xl border border-[#B89555]/30"
             >
               <X className="w-3.5 h-3.5 mr-1.5" />
               Reset All
@@ -1043,7 +1043,7 @@ const FilterSection = ({
 }) => (
   <div>
     <div className="flex items-center gap-2 text-[#1A1A1A] mb-3">
-      <span className="text-gold">{icon}</span>
+      <span className="text-[#1A1A1A]">{icon}</span>
       <h3 className="font-medium text-[#1A1A1A]">{title}</h3>
     </div>
     {children}
@@ -1060,8 +1060,8 @@ const QuickFilterChip = forwardRef<HTMLButtonElement, {
     onClick={onClick}
     className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
       active
-        ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border-2 border-gold shadow-sm"
-        : "bg-[#FDFBF7]/90 text-[#1A1A1A]/70 border border-gold/30 hover:border-gold/50 hover:bg-[#FDFBF7]"
+        ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border-2 border-[#B89555] shadow-sm"
+        : "bg-[#FDFBF7]/90 text-[#1A1A1A]/70 border border-[#B89555]/30 hover:border-[#B89555]/50 hover:bg-[#FDFBF7]"
     }`}
   >
     {label}
@@ -1077,7 +1077,7 @@ const FilterPill = ({
   label: string;
   onRemove: () => void;
 }) => (
-  <span className="inline-flex items-center gap-1 px-3 py-1 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-full text-[#1A1A1A] text-sm">
+  <span className="inline-flex items-center gap-1 px-3 py-1 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-full text-[#1A1A1A] text-sm">
     {label}
     <button
       onClick={onRemove}

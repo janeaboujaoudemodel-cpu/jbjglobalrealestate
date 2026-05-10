@@ -121,7 +121,7 @@ const DesignProjectHeader = ({
 
   return (
     <div className="w-full">
-      <div className={`bg-zinc-900/60 border ${colors.border} rounded-2xl p-6`}>
+      <div className={`bg-[#FDFBF7]/60 border ${colors.border} rounded-2xl p-6`}>
         <div className="flex items-center gap-3 mb-6">
           <FileText className={`w-5 h-5 ${colors.icon}`} />
           <h3 className="text-lg font-semibold text-white">Project Details</h3>
@@ -143,7 +143,7 @@ const DesignProjectHeader = ({
               value={projectName}
               onChange={(e) => onProjectNameChange(e.target.value)}
               placeholder="e.g., Downtown Apartment Redesign"
-              className="bg-zinc-800/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]/30"
+              className="bg-[#1A1A1A]/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]/30"
             />
           </div>
 
@@ -180,7 +180,7 @@ const DesignProjectHeader = ({
                       flex items-center gap-2 p-3 rounded-xl border transition-all
                       ${isSelected
                         ? `${colors.selectedBg} ${colors.selectedBorder} ${colors.selectedText}`
-                        : 'bg-zinc-800/50 border-[#1A1A1A] text-white/70 hover:border-[#1A1A1A] hover:text-white/85'
+                        : 'bg-[#1A1A1A]/50 border-[#1A1A1A] text-white/70 hover:border-[#1A1A1A] hover:text-white/85'
                       }
                     `}
                   >
@@ -204,7 +204,7 @@ const DesignProjectHeader = ({
                 value={propertySize}
                 onChange={(e) => onPropertySizeChange(e.target.value)}
                 placeholder="e.g., 1500"
-                className="bg-zinc-800/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]/30 flex-1"
+                className="bg-[#1A1A1A]/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]/30 flex-1"
               />
               <Button
                 type="button"

@@ -118,9 +118,9 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
   };
 
   return (
-    <div className="space-y-4 p-6 bg-gradient-to-r from-[#FDFBF7] to-white border-2 border-gold/30 rounded-xl shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+    <div className="space-y-4 p-6 bg-gradient-to-r from-[#FDFBF7] to-white border-2 border-[#B89555]/30 rounded-xl shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
       <div className="flex items-center gap-3 mb-4">
-        <FileText className="w-5 h-5 text-gold" />
+        <FileText className="w-5 h-5 text-[#1A1A1A]" />
         <h3 className="text-[#1A1A1A] font-semibold">Smart Document Upload</h3>
       </div>
 
@@ -137,15 +137,15 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
         
         <div className="flex gap-3">
           <Select value={documentType} onValueChange={setDocumentType}>
-            <SelectTrigger className="w-40 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A]">
+            <SelectTrigger className="w-40 bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A]">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="bg-[#FDFBF7] border-2 border-gold/30">
+            <SelectContent className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
               {DOCUMENT_TYPES.map((type) => (
                 <SelectItem
                   key={type.value}
                   value={type.value}
-                  className="text-[#1A1A1A] hover:bg-gold/10 focus:bg-gold/10 focus:text-[#1A1A1A]"
+                  className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10 focus:bg-[#EFE6D6]/10 focus:text-[#1A1A1A]"
                 >
                   {type.label}
                 </SelectItem>
@@ -156,9 +156,9 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
           <Button
             onClick={() => fileInputRef.current?.click()}
             variant="outline"
-            className="border-2 border-gold/30 text-[#1A1A1A] bg-[#FDFBF7] hover:bg-gold/10 flex-1"
+            className="border-2 border-[#B89555]/30 text-[#1A1A1A] bg-[#FDFBF7] hover:bg-[#EFE6D6]/10 flex-1"
           >
-            <Upload className="w-4 h-4 mr-2 text-gold" />
+            <Upload className="w-4 h-4 mr-2 text-[#1A1A1A]" />
             {selectedFile ? selectedFile.name : "Select Document"}
           </Button>
         </div>
@@ -166,8 +166,8 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
 
       {/* Analysis Results */}
       {isAnalyzing && (
-        <div className="flex items-center gap-3 p-4 bg-[#FDFBF7] rounded-lg border border-gold/20">
-          <Loader2 className="w-5 h-5 text-gold animate-spin" />
+        <div className="flex items-center gap-3 p-4 bg-[#FDFBF7] rounded-lg border border-[#B89555]/20">
+          <Loader2 className="w-5 h-5 text-[#1A1A1A] animate-spin" />
           <span className="text-[#1A1A1A]/70">Analyzing document...</span>
         </div>
       )}
@@ -189,7 +189,7 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
 
           {/* Match Result */}
           {matchResult && !duplicateResult?.isDuplicate && (
-            <div className="p-4 bg-[#FDFBF7] rounded-lg border-2 border-gold/20">
+            <div className="p-4 bg-[#FDFBF7] rounded-lg border-2 border-[#B89555]/20">
               <div className="flex items-center gap-2 mb-2">
                 {matchResult.confidence === "high" ? (
                   <CheckCircle2 className="w-5 h-5 text-green-600" />
@@ -208,7 +208,7 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
               </div>
               
               <div className="flex items-center gap-2 text-[#1A1A1A]">
-                <ArrowRight className="w-4 h-4 text-gold" />
+                <ArrowRight className="w-4 h-4 text-[#1A1A1A]" />
                 <span className="font-medium">{matchResult.projectName}</span>
                 <span className="text-[#1A1A1A]/70">by {matchResult.developerName}</span>
               </div>
@@ -218,7 +218,7 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
                   {matchResult.matchedKeywords.map((kw) => (
                     <span
                       key={kw}
-                      className="px-2 py-0.5 bg-gold/10 text-[#1A1A1A]/70 text-xs rounded border border-gold/20"
+                      className="px-2 py-0.5 bg-[#EFE6D6]/10 text-[#1A1A1A]/70 text-xs rounded border border-[#B89555]/20"
                     >
                       {kw}
                     </span>
@@ -233,15 +233,15 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
             <div className="space-y-2">
               <Label className="text-[#1A1A1A]/70">Select Project Manually</Label>
               <Select value={manualProjectId} onValueChange={setManualProjectId}>
-                <SelectTrigger className="bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A]">
+                <SelectTrigger className="bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A]">
                   <SelectValue placeholder="Choose project..." />
                 </SelectTrigger>
-                <SelectContent className="bg-[#FDFBF7] border-2 border-gold/30 max-h-60">
+                <SelectContent className="bg-[#FDFBF7] border-2 border-[#B89555]/30 max-h-60">
                   {projects?.map((project) => (
                     <SelectItem
                       key={project.id}
                       value={project.id}
-                      className="text-[#1A1A1A] hover:bg-gold/10 focus:bg-gold/10 focus:text-[#1A1A1A]"
+                      className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10 focus:bg-[#EFE6D6]/10 focus:text-[#1A1A1A]"
                     >
                       {project.name} ({project.developer?.name || "Unknown"})
                     </SelectItem>
@@ -256,7 +256,7 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
             <Button
               variant="outline"
               onClick={resetState}
-              className="border-2 border-gold/30 text-[#1A1A1A] bg-[#FDFBF7] hover:bg-gold/10"
+              className="border-2 border-[#B89555]/30 text-[#1A1A1A] bg-[#FDFBF7] hover:bg-[#EFE6D6]/10"
             >
               Cancel
             </Button>

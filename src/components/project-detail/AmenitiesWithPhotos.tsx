@@ -68,7 +68,7 @@ export default function AmenitiesWithPhotos({ amenities, amenityImages, classNam
           return (
             <div
               key={idx}
-              className="group flex flex-col items-center gap-0 rounded-xl border border-gold/20 bg-card hover:border-gold/40 hover:bg-gold/5 transition-all text-center overflow-hidden"
+              className="group flex flex-col items-center gap-0 rounded-xl border border-[#B89555]/20 bg-card hover:border-[#B89555]/40 hover:bg-[#EFE6D6]/5 transition-all text-center overflow-hidden"
             >
               {/* Fixed-height top area for uniform alignment */}
               <div className="w-full h-24 overflow-hidden relative flex items-center justify-center">
@@ -90,16 +90,16 @@ export default function AmenitiesWithPhotos({ amenities, amenityImages, classNam
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                     <div className="absolute bottom-1.5 right-1.5 w-7 h-7 rounded-full bg-[#1A1A1A]/50 backdrop-blur-sm flex items-center justify-center">
-                      <Icon className="w-3.5 h-3.5 text-gold" />
+                      <Icon className="w-3.5 h-3.5 text-[#1A1A1A]" />
                     </div>
                     {/* Hidden fallback icon shown on image error */}
-                    <div className="amenity-icon-fallback hidden w-12 h-12 rounded-full bg-gold/10 items-center justify-center">
-                      <Icon className="w-6 h-6 text-gold" />
+                    <div className="amenity-icon-fallback hidden w-12 h-12 rounded-full bg-[#EFE6D6]/10 items-center justify-center">
+                      <Icon className="w-6 h-6 text-[#1A1A1A]" />
                     </div>
                   </>
                 ) : (
-                  <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-                    <Icon className="w-6 h-6 text-gold" />
+                  <div className="w-12 h-12 rounded-full bg-[#EFE6D6]/10 flex items-center justify-center group-hover:bg-[#EFE6D6]/20 transition-colors">
+                    <Icon className="w-6 h-6 text-[#1A1A1A]" />
                   </div>
                 )}
               </div>

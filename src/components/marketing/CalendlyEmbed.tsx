@@ -57,7 +57,7 @@ export const CalendlyEmbed = ({
   return (
     <button
       onClick={openCalendly}
-      className={`inline-flex items-center gap-2 bg-gold hover:bg-gold-light text-[#1A1A1A] font-semibold px-6 py-3 rounded-xl transition-all shadow-lg hover:shadow-gold/20 ${className}`}
+      className={`inline-flex items-center gap-2 bg-[#EFE6D6] hover:bg-[#EFE6D6]-light text-[#1A1A1A] font-semibold px-6 py-3 rounded-xl transition-all shadow-lg hover:shadow-gold/20 ${className}`}
     >
       <Calendar className="w-5 h-5" />
       <span>Book a Consultation</span>
@@ -112,7 +112,7 @@ export const CalendlyInline = ({
   return (
     <div
       id="calendly-inline-widget"
-      className={`min-h-[650px] bg-zinc-900 rounded-xl overflow-hidden ${className}`}
+      className={`min-h-[650px] bg-[#FDFBF7] rounded-xl overflow-hidden ${className}`}
       data-url={url}
     />
   );
