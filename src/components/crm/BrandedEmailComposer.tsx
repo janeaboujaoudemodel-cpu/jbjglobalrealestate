@@ -62,14 +62,33 @@ export function BrandedEmailComposer() {
   const [bodyHtml, setBodyHtml] = useState("");
   const [language, setLanguage] = useState<string>("en");
 
+  // Variable context — fills {{first_name}}, {{full_name}}, {{email}} etc. on apply
+  const [propertyTitle, setPropertyTitle] = useState("");
+  const [propertyPrice, setPropertyPrice] = useState("");
+  const [propertyLocation, setPropertyLocation] = useState("");
+
+  // Old "branded_email_templates" (user's saved templates) kept for back-compat
   const [templates, setTemplates] = useState<Template[]>([]);
   const [templateId, setTemplateId] = useState<string>("");
   const [saveAsName, setSaveAsName] = useState("");
 
+  // New: template library + signatures
+  const { data: libraryTemplates = [] } = useEmailTemplateLibrary();
+  const { data: signatures = [] } = useEmailSignatures();
+  const [libraryTemplateId, setLibraryTemplateId] = useState<string>("");
+  const [signatureId, setSignatureId] = useState<string>("");
+  const [missingVars, setMissingVars] = useState<string[]>([]);
+  const saveLib = useSaveEmailTemplate();
+
   const [busy, setBusy] = useState<"" | "ai" | "test" | "live" | "save">("");
   const [ownerEmail, setOwnerEmail] = useState<string>("");
 
-  // Load templates + owner email
+  const selectedSignature = useMemo(
+    () => signatures.find((s) => s.id === signatureId) || signatures.find((s) => s.is_default) || signatures[0],
+    [signatures, signatureId],
+  );
+
+  // Load saved templates + owner email
   useEffect(() => {
     (async () => {
       const { data: u } = await supabase.auth.getUser();
@@ -81,6 +100,31 @@ export function BrandedEmailComposer() {
       setTemplates(data ?? []);
     })();
   }, []);
+
+  // Auto-select default signature once loaded
+  useEffect(() => {
+    if (!signatureId && signatures.length) {
+      const def = signatures.find((s) => s.is_default) || signatures[0];
+      if (def) setSignatureId(def.id);
+    }
+  }, [signatures, signatureId]);
+
+  const buildCtx = (): Record<string, string> => {
+    const first = recipientName.trim().split(/\s+/)[0] || "";
+    return {
+      first_name: first,
+      full_name: recipientName.trim(),
+      email: recipient.trim(),
+      property_title: propertyTitle,
+      price: propertyPrice,
+      location: propertyLocation,
+      book_meeting_url: BOOK_URL,
+      calendar_link: BOOK_URL,
+      sender_name: selectedSignature?.name_line || PRIMARY_SENDER_NAME,
+      sender_title: selectedSignature?.title_line || "",
+      company_legal_name: selectedSignature?.company_line || "JBJ GLOBAL REAL ESTATE",
+    };
+  };
 
   const onLoadTemplate = (id: string) => {
     setTemplateId(id);
@@ -96,6 +140,25 @@ export function BrandedEmailComposer() {
       setBodyHtml(t.body_html);
       setBrief(t.brief ?? "");
     }
+  };
+
+  const applyLibraryTemplate = (id: string) => {
+    setLibraryTemplateId(id);
+    const t = libraryTemplates.find((x) => x.id === id);
+    if (!t) return;
+    const ctx = buildCtx();
+    const sub = mergeTemplate(t.subject, ctx);
+    const body = mergeTemplate(t.body_text, ctx);
+    setSubject(sub.rendered);
+    // Convert plain text to simple HTML paragraphs
+    const html = body.rendered
+      .split(/\n{2,}/)
+      .map((p) => `<p style="margin:0 0 14px;font-size:15px;line-height:1.6;color:#1A1A1A;">${p.replace(/\n/g, "<br/>")}</p>`)
+      .join("");
+    setBodyHtml(html);
+    setMissingVars(Array.from(new Set([...sub.missing, ...body.missing])));
+    if (t.signature_preset_id) setSignatureId(t.signature_preset_id);
+    toast.success(`Loaded "${t.name}"${body.missing.length ? ` — ${body.missing.length} variable(s) to fill` : ""}`);
   };
 
   const draftWithAI = async () => {
