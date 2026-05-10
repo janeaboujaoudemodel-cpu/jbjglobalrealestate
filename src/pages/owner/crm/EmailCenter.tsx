@@ -87,6 +87,7 @@ export default function EmailCenter() {
   const sync = useSyncJbjInbox();
   const sendConfirm = useSendRegistrationConfirmation();
   const archive = useArchiveInboxItem();
+  const unarchive = useUnarchiveInboxItem();
 
   const grouped = useMemo(
     () => (statusFilter === "all" ? items : items.filter((i) => i.status === statusFilter)),
