@@ -988,7 +988,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
       <DialogContent className="sm:max-w-2xl bg-card border-border">
         <DialogHeader>
           <DialogTitle className="text-white flex items-center gap-2">
-            <Upload className="h-5 w-5 text-gold" />
+            <Upload className="h-5 w-5 text-[#1A1A1A]" />
             Import Contacts
           </DialogTitle>
           <DialogDescription className="text-muted-foreground">
@@ -1012,7 +1012,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                 setSourceGroup(val);
                 if (val !== 'custom') setCustomSourceLabel('');
               }}
-              className="w-full h-11 px-3 rounded-md border border-[#1A1A1A] bg-zinc-950 text-white font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
+              className="w-full h-11 px-3 rounded-md border border-[#1A1A1A] bg-[#FDFBF7] text-white font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
               style={{ backgroundColor: '#09090b', color: '#ffffff' }}
             >
               <option value="" disabled style={{ backgroundColor: '#09090b', color: '#888888' }}>
@@ -1066,8 +1066,8 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
             </div>
 
             {/* Upload Section */}
-            <div className="border-2 border-dashed border-gold/30 rounded-lg p-8 text-center bg-gold/5">
-              <FileSpreadsheet className="h-12 w-12 mx-auto text-gold mb-4" />
+            <div className="border-2 border-dashed border-[#B89555]/30 rounded-lg p-8 text-center bg-[#EFE6D6]/5">
+              <FileSpreadsheet className="h-12 w-12 mx-auto text-[#1A1A1A] mb-4" />
               <h3 className="text-lg font-semibold text-white mb-2">
                 Upload Your Contacts
               </h3>
@@ -1156,7 +1156,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
           <div className="space-y-6">
             <div className="bg-muted/30 border border-border rounded-lg p-4">
               <div className="flex items-start gap-3">
-                <User className="h-5 w-5 text-gold mt-0.5" />
+                <User className="h-5 w-5 text-[#1A1A1A] mt-0.5" />
                 <div>
                   <h3 className="text-white font-semibold">Broker Attribution (Optional)</h3>
                   <p className="text-sm text-muted-foreground mt-1">
@@ -1187,7 +1187,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                       <select
                         value={selectedBrokerId}
                         onChange={(e) => setSelectedBrokerId(e.target.value)}
-                        className="w-full h-11 px-3 rounded-md border border-[#1A1A1A] bg-zinc-950 text-white font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
+                        className="w-full h-11 px-3 rounded-md border border-[#1A1A1A] bg-[#FDFBF7] text-white font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
                         style={{ backgroundColor: '#09090b', color: '#ffffff' }}
                         disabled={loadingBrokers}
                       >
@@ -1253,7 +1253,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
               </Button>
               <Button 
                 onClick={handleContinueWithBroker} 
-                className="flex-1 bg-gold text-[#1A1A1A] hover:bg-gold/90"
+                className="flex-1 bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
                 disabled={registerUnderBroker && !selectedBrokerId}
               >
                 Continue
@@ -1265,7 +1265,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
         {/* Analysis Step */}
         {step === "analysis" && (
           <div className="py-8 text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gold mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#B89555] mx-auto mb-4"></div>
             <p className="text-white font-medium">Analyzing contacts...</p>
             <p className="text-sm text-muted-foreground mt-2">
               Validating data and checking for duplicates
@@ -1278,7 +1278,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
           <div className="space-y-4">
             {/* Source Info */}
             <div className="flex items-center gap-3 p-4 bg-muted/30 rounded-lg border border-border">
-              <Database className="h-5 w-5 text-gold" />
+              <Database className="h-5 w-5 text-[#1A1A1A]" />
               <div className="flex-1">
                 <p className="font-medium text-white">
                   {(sourceGroup === 'custom' ? customSourceLabel.trim() : SOURCE_GROUPS.find(g => g.value === sourceGroup)?.label) || sourceGroup} · {sourceName || getDefaultSourceName(file?.name)}
@@ -1286,7 +1286,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                 <p className="text-sm text-muted-foreground">
                   {parsedData.length} contacts from {file?.name}
                   {registerUnderBroker && selectedBrokerId && (
-                    <span className="text-gold"> · Broker: {brokers.find(b => b.id === selectedBrokerId)?.full_name}</span>
+                    <span className="text-[#1A1A1A]"> · Broker: {brokers.find(b => b.id === selectedBrokerId)?.full_name}</span>
                   )}
                 </p>
               </div>
@@ -1424,7 +1424,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
               </Button>
               <Button 
                 onClick={processImport} 
-                className="flex-1 bg-gold text-[#1A1A1A] hover:bg-gold/90"
+                className="flex-1 bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
               >
                 Import {analyzedData.valid.length} Contacts
               </Button>
@@ -1502,7 +1502,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
               </div>
             )}
 
-            <Button onClick={handleComplete} className="w-full bg-gold text-[#1A1A1A] hover:bg-gold/90">
+            <Button onClick={handleComplete} className="w-full bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90">
               Done
             </Button>
           </div>

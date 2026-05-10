@@ -95,16 +95,16 @@ const LeadNotesActions = ({
   };
 
   return (
-    <Card className="bg-zinc-900 border-[#1A1A1A]">
+    <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
       <CardHeader className="pb-3">
         <CardTitle className="text-white text-base flex items-center gap-2">
-          <StickyNote className="w-4 h-4 text-gold" />
+          <StickyNote className="w-4 h-4 text-[#1A1A1A]" />
           Notes & Actions
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Follow-up Date */}
-        <div className="p-3 bg-zinc-800/50 rounded-lg">
+        <div className="p-3 bg-[#F7F2EA]/50 rounded-lg">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm text-white/70 flex items-center gap-2">
               <Calendar className="w-4 h-4" />
@@ -122,12 +122,12 @@ const LeadNotesActions = ({
               type="date"
               value={nextFollowUp}
               onChange={(e) => setNextFollowUp(e.target.value)}
-              className="bg-zinc-900 border-[#1A1A1A] text-white flex-1"
+              className="bg-[#FDFBF7] border-[#1A1A1A] text-white flex-1"
             />
             <Button 
               onClick={setFollowUpReminder} 
               size="sm"
-              className="bg-gold/20 text-gold hover:bg-gold/30"
+              className="bg-[#EFE6D6]/20 text-[#1A1A1A] hover:bg-[#EFE6D6]/30"
             >
               <Bell className="w-4 h-4" />
             </Button>
@@ -145,14 +145,14 @@ const LeadNotesActions = ({
           {notes.map((note) => (
             <div 
               key={note.id} 
-              className="p-3 bg-zinc-800/50 rounded-lg group"
+              className="p-3 bg-[#F7F2EA]/50 rounded-lg group"
             >
               {editingNoteId === note.id ? (
                 <div className="space-y-2">
                   <Textarea
                     value={editContent}
                     onChange={(e) => setEditContent(e.target.value)}
-                    className="bg-zinc-900 border-[#1A1A1A] text-white text-sm"
+                    className="bg-[#FDFBF7] border-[#1A1A1A] text-white text-sm"
                     rows={2}
                   />
                   <div className="flex gap-2">
@@ -205,7 +205,7 @@ const LeadNotesActions = ({
               value={newNote}
               onChange={(e) => setNewNote(e.target.value)}
               placeholder="Write your note here..."
-              className="bg-zinc-800 border-[#1A1A1A] text-white text-sm"
+              className="bg-[#F7F2EA] border-[#1A1A1A] text-white text-sm"
               rows={3}
               autoFocus
             />
@@ -227,7 +227,7 @@ const LeadNotesActions = ({
           <Button 
             onClick={() => setIsAddingNote(true)} 
             variant="outline" 
-            className="w-full border-dashed border-[#1A1A1A] text-white/70 hover:text-white hover:border-gold/50"
+            className="w-full border-dashed border-[#1A1A1A] text-white/70 hover:text-white hover:border-[#B89555]/50"
           >
             <Plus className="w-4 h-4 mr-2" />
             Add Note

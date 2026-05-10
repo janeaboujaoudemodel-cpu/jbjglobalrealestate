@@ -570,7 +570,7 @@ const FlaggedLeadsView = ({ userId, onRefresh }: FlaggedLeadsViewProps) => {
         <DialogContent className="sm:max-w-md bg-card border-border">
           <DialogHeader>
             <DialogTitle className="text-white flex items-center gap-2">
-              <Edit className="h-5 w-5 text-gold" />
+              <Edit className="h-5 w-5 text-[#1A1A1A]" />
               Fix Lead Data
             </DialogTitle>
           </DialogHeader>

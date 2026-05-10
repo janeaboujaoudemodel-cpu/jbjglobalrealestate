@@ -97,7 +97,7 @@ const DealPrediction = ({ lead, currentStatus, activities = [] }: DealPrediction
 
   const getProbabilityColor = (prob: number) => {
     if (prob >= 70) return "text-emerald-500";
-    if (prob >= 40) return "text-gold";
+    if (prob >= 40) return "text-[#1A1A1A]";
     return "text-red-500";
   };
 
@@ -114,12 +114,12 @@ const DealPrediction = ({ lead, currentStatus, activities = [] }: DealPrediction
   const currentStageIndex = stages.indexOf(prediction.stage);
 
   return (
-    <Card className="border-gold/20">
+    <Card className="border-[#B89555]/20">
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="text-base flex items-center gap-2">
-            <div className="p-1.5 rounded-lg bg-gold/10 border border-gold/20">
-              <Target className="h-4 w-4 text-gold" />
+            <div className="p-1.5 rounded-lg bg-[#EFE6D6]/10 border border-[#B89555]/20">
+              <Target className="h-4 w-4 text-[#1A1A1A]" />
             </div>
             Deal Prediction
           </CardTitle>
@@ -145,7 +145,7 @@ const DealPrediction = ({ lead, currentStatus, activities = [] }: DealPrediction
                 className={cn(
                   "flex-1 h-2 rounded-full transition-all",
                   i <= currentStageIndex 
-                    ? "bg-gold shadow-[0_2px_6px_rgba(200,167,102,0.3)]" 
+                    ? "bg-[#EFE6D6] shadow-[0_2px_6px_rgba(200,167,102,0.3)]" 
                     : "bg-muted"
                 )}
               />
@@ -156,7 +156,7 @@ const DealPrediction = ({ lead, currentStatus, activities = [] }: DealPrediction
 
         {/* Estimated Timeline */}
         <div className="flex items-center gap-2 p-2 rounded-lg bg-muted/50 border border-border">
-          <Clock className="h-4 w-4 text-gold shrink-0" />
+          <Clock className="h-4 w-4 text-[#1A1A1A] shrink-0" />
           <div>
             <p className="text-xs font-medium">Est. {prediction.estimatedDays} days to close</p>
             <p className="text-[10px] text-muted-foreground">Based on engagement</p>
@@ -164,10 +164,10 @@ const DealPrediction = ({ lead, currentStatus, activities = [] }: DealPrediction
         </div>
 
         {/* Next Best Action */}
-        <div className="p-2 rounded-lg bg-gold/5 border border-gold/20">
+        <div className="p-2 rounded-lg bg-[#EFE6D6]/5 border border-[#B89555]/20">
           <div className="flex items-center gap-1.5 mb-1">
-            <TrendingUp className="h-3.5 w-3.5 text-gold" />
-            <span className="text-xs font-semibold text-gold">Next Action</span>
+            <TrendingUp className="h-3.5 w-3.5 text-[#1A1A1A]" />
+            <span className="text-xs font-semibold text-[#1A1A1A]">Next Action</span>
           </div>
           <p className="text-xs text-foreground">{prediction.nextBestAction}</p>
         </div>

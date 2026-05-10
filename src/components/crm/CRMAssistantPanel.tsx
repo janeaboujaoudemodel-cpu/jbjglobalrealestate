@@ -472,7 +472,7 @@ ${COMPANY_CONTACTS.email}`;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-2xl bg-[#FDFBF7] border-2 border-gold/30 shadow-[0_10px_40px_rgba(200,167,102,0.2)]">
+      <DialogContent className="sm:max-w-2xl bg-[#FDFBF7] border-2 border-[#B89555]/30 shadow-[0_10px_40px_rgba(200,167,102,0.2)]">
         <DialogHeader>
           <DialogTitle className="text-[#1A1A1A] flex items-center gap-3">
             <div className="relative">
@@ -480,7 +480,7 @@ ${COMPANY_CONTACTS.email}`;
               <img 
                 src={ASSISTANT_IDENTITY.avatar} 
                 alt={ASSISTANT_IDENTITY.name}
-                className="w-10 h-10 rounded-full border-2 border-gold bg-[#FDFBF7]"
+                className="w-10 h-10 rounded-full border-2 border-[#B89555] bg-[#FDFBF7]"
                 style={{ objectFit: "cover", objectPosition: "center 15%" }}
               />
               <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white" />
@@ -493,20 +493,20 @@ ${COMPANY_CONTACTS.email}`;
         </DialogHeader>
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="w-full bg-[#F7F2EA] border-2 border-gold/20 grid grid-cols-4">
-            <TabsTrigger value="assistant" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
+          <TabsList className="w-full bg-[#F7F2EA] border-2 border-[#B89555]/20 grid grid-cols-4">
+            <TabsTrigger value="assistant" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
               <Sparkles className="h-4 w-4 mr-1" />
               Assistant
             </TabsTrigger>
-            <TabsTrigger value="tasks" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
+            <TabsTrigger value="tasks" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
               <ListTodo className="h-4 w-4 mr-1" />
               Tasks ({tasks.filter(t => !t.completed).length})
             </TabsTrigger>
-            <TabsTrigger value="employees" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
+            <TabsTrigger value="employees" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
               <Users className="h-4 w-4 mr-1" />
               Team
             </TabsTrigger>
-            <TabsTrigger value="drafts" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
+            <TabsTrigger value="drafts" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
               <FileText className="h-4 w-4 mr-1" />
               Drafts ({drafts.length})
             </TabsTrigger>
@@ -563,15 +563,15 @@ ${COMPANY_CONTACTS.email}`;
 
             {/* Active Lead Context */}
             {activeLead ? (
-              <div className="bg-gold/10 border border-gold/30 rounded-lg p-3 flex items-center gap-3">
-                <User className="h-5 w-5 text-gold" />
+              <div className="bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-lg p-3 flex items-center gap-3">
+                <User className="h-5 w-5 text-[#1A1A1A]" />
                 <div className="flex-1">
                   <p className="text-sm font-medium text-white">{activeLead.full_name}</p>
                   <p className="text-xs text-muted-foreground">
                     {activeLead.phone || activeLead.email || "No contact"}
                   </p>
                 </div>
-                <Badge variant="outline" className="text-gold border-gold/50">Active</Badge>
+                <Badge variant="outline" className="text-[#1A1A1A] border-[#B89555]/50">Active</Badge>
               </div>
             ) : (
               <div className="bg-muted/30 border border-border rounded-lg p-3 flex items-center gap-3">
@@ -730,8 +730,8 @@ ${COMPANY_CONTACTS.email}`;
                   <Card key={employee.id} className="bg-muted/30 border-border">
                     <CardContent className="p-4">
                       <div className="flex items-start gap-3">
-                        <div className="p-2 bg-gold/20 rounded-lg">
-                          <Bot className="h-5 w-5 text-gold" />
+                        <div className="p-2 bg-[#EFE6D6]/20 rounded-lg">
+                          <Bot className="h-5 w-5 text-[#1A1A1A]" />
                         </div>
                         <div className="flex-1">
                           <h4 className="text-white font-medium">{employee.name}</h4>
@@ -817,7 +817,7 @@ ${COMPANY_CONTACTS.email}`;
           <DialogContent className="sm:max-w-lg bg-card border-border">
             <DialogHeader>
               <DialogTitle className="text-white flex items-center gap-2">
-                <Shield className="h-5 w-5 text-gold" />
+                <Shield className="h-5 w-5 text-[#1A1A1A]" />
                 Review AI Draft
               </DialogTitle>
             </DialogHeader>

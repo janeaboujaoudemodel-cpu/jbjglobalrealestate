@@ -51,11 +51,11 @@ const ChatTranscriptModal = ({ isOpen, onClose, conversation }: ChatTranscriptMo
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[80vh] bg-zinc-950 border-[#1A1A1A] p-0 overflow-hidden">
+      <DialogContent className="max-w-2xl max-h-[80vh] bg-[#FDFBF7] border-[#1A1A1A] p-0 overflow-hidden">
         <DialogHeader className="p-6 pb-4 border-b border-[#1A1A1A]">
           <div className="flex items-center justify-between">
             <DialogTitle className="text-white flex items-center gap-2">
-              <MessageSquare className="w-5 h-5 text-gold" />
+              <MessageSquare className="w-5 h-5 text-[#1A1A1A]" />
               Chat Transcript
             </DialogTitle>
             <Badge className={getStatusColor(conversation.status)}>
@@ -84,7 +84,7 @@ const ChatTranscriptModal = ({ isOpen, onClose, conversation }: ChatTranscriptMo
                 <span>{format(new Date(conversation.created_at), "h:mm a")}</span>
               </div>
               {conversation.service_type && (
-                <Badge variant="outline" className="mt-1 text-gold border-gold/30">
+                <Badge variant="outline" className="mt-1 text-[#1A1A1A] border-[#B89555]/30">
                   {conversation.service_type}
                 </Badge>
               )}
@@ -93,8 +93,8 @@ const ChatTranscriptModal = ({ isOpen, onClose, conversation }: ChatTranscriptMo
 
           {/* Rating if available */}
           {conversation.rating && (
-            <div className="flex items-center gap-2 mt-3 p-3 bg-zinc-900 rounded-lg">
-              <Star className="w-4 h-4 text-gold" />
+            <div className="flex items-center gap-2 mt-3 p-3 bg-[#FDFBF7] rounded-lg">
+              <Star className="w-4 h-4 text-[#1A1A1A]" />
               <span className="text-white font-medium">{conversation.rating}/5</span>
               {conversation.rating_feedback && (
                 <span className="text-white/70 text-sm">- {conversation.rating_feedback}</span>
@@ -119,16 +119,16 @@ const ChatTranscriptModal = ({ isOpen, onClose, conversation }: ChatTranscriptMo
                   }`}
                 >
                   {message.role !== "user" && (
-                    <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center shrink-0">
-                      <Bot className="w-4 h-4 text-gold" />
+                    <div className="w-8 h-8 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center shrink-0">
+                      <Bot className="w-4 h-4 text-[#1A1A1A]" />
                     </div>
                   )}
                   
                   <div
                     className={`max-w-[70%] rounded-2xl px-4 py-3 ${
                       message.role === "user"
-                        ? "bg-gold text-[#1A1A1A]"
-                        : "bg-zinc-800 text-white"
+                        ? "bg-[#EFE6D6] text-[#1A1A1A]"
+                        : "bg-[#F7F2EA] text-white"
                     }`}
                   >
                     <p className="text-sm whitespace-pre-wrap">{message.content}</p>

@@ -181,9 +181,9 @@ export function AdminTasksPanel() {
 
   if (loading) {
     return (
-      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-2xl p-6">
+      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30 rounded-2xl p-6">
         <div className="flex items-center justify-center py-8">
-          <Clock className="w-6 h-6 animate-spin text-gold" />
+          <Clock className="w-6 h-6 animate-spin text-[#1A1A1A]" />
         </div>
       </div>
     );
@@ -191,7 +191,7 @@ export function AdminTasksPanel() {
 
   if (loadError) {
     return (
-      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-2xl p-6">
+      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30 rounded-2xl p-6">
         <div className="flex items-center gap-2 mb-4">
           <AlertTriangle className="w-5 h-5 text-red-500" />
           <h3 className="font-semibold text-[#1A1A1A]">My Tasks</h3>
@@ -205,12 +205,12 @@ export function AdminTasksPanel() {
   }
 
   return (
-    <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-2xl shadow-lg">
+    <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30 rounded-2xl shadow-lg">
       {/* Header */}
-      <div className="flex items-center justify-between p-5 border-b border-gold/20">
+      <div className="flex items-center justify-between p-5 border-b border-[#B89555]/20">
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-xl bg-gold/20">
-            <ListTodo className="w-5 h-5 text-gold" />
+          <div className="p-2 rounded-xl bg-[#EFE6D6]/20">
+            <ListTodo className="w-5 h-5 text-[#1A1A1A]" />
           </div>
           <div>
             <h3 className="font-semibold text-[#1A1A1A]">My Tasks</h3>
@@ -227,7 +227,7 @@ export function AdminTasksPanel() {
               Add
             </Button>
           </DialogTrigger>
-          <DialogContent className="bg-[#FDFBF7] border-gold/30">
+          <DialogContent className="bg-[#FDFBF7] border-[#B89555]/30">
             <DialogHeader>
               <DialogTitle className="text-[#1A1A1A]">Add New Task</DialogTitle>
             </DialogHeader>
@@ -236,13 +236,13 @@ export function AdminTasksPanel() {
                 placeholder="Task title..."
                 value={newTask.title}
                 onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
-                className="border-[#B89555]/30 focus:border-gold"
+                className="border-[#B89555]/30 focus:border-[#B89555]"
               />
               <Textarea
                 placeholder="Description (optional)..."
                 value={newTask.description}
                 onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
-                className="border-[#B89555]/30 focus:border-gold"
+                className="border-[#B89555]/30 focus:border-[#B89555]"
               />
               <div className="grid grid-cols-2 gap-4">
                 <select
@@ -272,7 +272,7 @@ export function AdminTasksPanel() {
                 type="date"
                 value={newTask.due_date}
                 onChange={(e) => setNewTask({ ...newTask, due_date: e.target.value })}
-                className="border-[#B89555]/30 focus:border-gold"
+                className="border-[#B89555]/30 focus:border-[#B89555]"
               />
               <Button onClick={addTask} className="w-full bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] font-semibold hover:brightness-110">
                 Add Task
@@ -286,8 +286,8 @@ export function AdminTasksPanel() {
       <div className="p-4 space-y-3 max-h-[400px] overflow-y-auto">
         {pendingTasks.length === 0 ? (
           <div className="text-center py-8">
-            <div className="w-12 h-12 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-3">
-              <CheckCircle2 className="w-6 h-6 text-gold" />
+            <div className="w-12 h-12 bg-[#EFE6D6]/10 rounded-full flex items-center justify-center mx-auto mb-3">
+              <CheckCircle2 className="w-6 h-6 text-[#1A1A1A]" />
             </div>
             <p className="text-[#1A1A1A]/70 text-sm">No pending tasks</p>
           </div>
@@ -297,12 +297,12 @@ export function AdminTasksPanel() {
               key={task.id}
               initial={{ opacity: 0, y: 5 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-xl p-3 hover:border-gold/50 hover:shadow-md transition-all"
+              className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-xl p-3 hover:border-[#B89555]/50 hover:shadow-md transition-all"
             >
               <div className="flex items-start gap-3">
                 <button
                   onClick={() => toggleTaskStatus(task)}
-                  className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full border-2 border-gold/50 hover:border-gold hover:bg-gold/10 transition-all"
+                  className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full border-2 border-[#B89555]/50 hover:border-[#B89555] hover:bg-[#EFE6D6]/10 transition-all"
                 />
                 <div className="flex-1 min-w-0">
                   <p className="font-medium text-[#1A1A1A] text-sm">{task.title}</p>
@@ -337,7 +337,7 @@ export function AdminTasksPanel() {
 
         {/* Completed Tasks */}
         {completedTasks.length > 0 && (
-          <div className="pt-3 border-t border-gold/20">
+          <div className="pt-3 border-t border-[#B89555]/20">
             <p className="text-xs text-[#1A1A1A]/70 mb-2 flex items-center gap-1">
               <CheckCircle2 className="w-3 h-3 text-green-500" />
               Completed ({completedTasks.length})
@@ -349,7 +349,7 @@ export function AdminTasksPanel() {
               >
                 <button
                   onClick={() => toggleTaskStatus(task)}
-                  className="w-4 h-4 rounded-full bg-gold flex items-center justify-center"
+                  className="w-4 h-4 rounded-full bg-[#EFE6D6] flex items-center justify-center"
                 >
                   <CheckCircle2 className="w-3 h-3 text-[#1A1A1A]" />
                 </button>

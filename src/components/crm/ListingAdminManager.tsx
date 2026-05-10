@@ -127,21 +127,21 @@ const ListingAdminManager = () => {
 
   if (isLoading) {
     return (
-      <Card className="bg-zinc-900 border-[#1A1A1A]">
+      <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
         <CardContent className="p-8 flex items-center justify-center">
-          <Loader2 className="w-6 h-6 animate-spin text-gold" />
+          <Loader2 className="w-6 h-6 animate-spin text-[#1A1A1A]" />
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <Card className="bg-zinc-900 border-[#1A1A1A]">
+    <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
       <CardHeader className="border-b border-[#1A1A1A]">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gold/20 rounded-lg flex items-center justify-center">
-              <Building2 className="w-5 h-5 text-gold" />
+            <div className="w-10 h-10 bg-[#EFE6D6]/20 rounded-lg flex items-center justify-center">
+              <Building2 className="w-5 h-5 text-[#1A1A1A]" />
             </div>
             <div>
               <CardTitle className="text-white">Listing Admins</CardTitle>
@@ -157,7 +157,7 @@ const ListingAdminManager = () => {
                 Add Listing Admin
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-zinc-900 border-[#1A1A1A]">
+            <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A]">
               <DialogHeader>
                 <DialogTitle className="text-white">Add Listing Admin</DialogTitle>
               </DialogHeader>
@@ -169,7 +169,7 @@ const ListingAdminManager = () => {
                       value={searchEmail}
                       onChange={(e) => setSearchEmail(e.target.value)}
                       placeholder="Enter email address..."
-                      className="bg-zinc-800 border-[#1A1A1A] text-white"
+                      className="bg-[#F7F2EA] border-[#1A1A1A] text-white"
                       onKeyDown={(e) => e.key === "Enter" && handleSearchUser()}
                     />
                     <Button
@@ -211,7 +211,7 @@ const ListingAdminManager = () => {
                         value={displayName}
                         onChange={(e) => setDisplayName(e.target.value)}
                         placeholder="Name to display in the system"
-                        className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
+                        className="bg-[#F7F2EA] border-[#1A1A1A] text-white mt-1"
                       />
                     </div>
 
@@ -221,14 +221,14 @@ const ListingAdminManager = () => {
                         value={notes}
                         onChange={(e) => setNotes(e.target.value)}
                         placeholder="Any notes about this admin..."
-                        className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
+                        className="bg-[#F7F2EA] border-[#1A1A1A] text-white mt-1"
                       />
                     </div>
 
                     <Button
                       onClick={handleAddListingAdmin}
                       disabled={isAdding}
-                      className="w-full bg-gold hover:bg-gold-dark text-[#1A1A1A] font-semibold"
+                      className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]-dark text-[#1A1A1A] font-semibold"
                     >
                       {isAdding ? (
                         <>
@@ -261,13 +261,13 @@ const ListingAdminManager = () => {
             {listingAdmins.map((admin) => (
               <div
                 key={admin.id}
-                className="flex items-center justify-between p-4 bg-zinc-800/50 rounded-lg"
+                className="flex items-center justify-between p-4 bg-[#F7F2EA]/50 rounded-lg"
               >
                 <div className="flex items-center gap-3">
                   <div
                     className={`w-10 h-10 rounded-full flex items-center justify-center ${
                       admin.is_active
-                        ? "bg-gold/20 text-gold"
+                        ? "bg-[#EFE6D6]/20 text-[#1A1A1A]"
                         : "bg-zinc-700 text-white/90"
                     }`}
                   >

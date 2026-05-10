@@ -60,7 +60,7 @@ const CVSearchFilters = ({
         <Button
           variant="outline"
           onClick={() => setShowAdvanced(!showAdvanced)}
-          className={`text-white border-border hover:bg-muted ${showAdvanced ? 'bg-gold/20 border-gold/50' : ''}`}
+          className={`text-white border-border hover:bg-muted ${showAdvanced ? 'bg-[#EFE6D6]/20 border-[#B89555]/50' : ''}`}
         >
           <SlidersHorizontal className="h-4 w-4 mr-2" />
           Filters

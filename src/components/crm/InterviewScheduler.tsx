@@ -83,7 +83,7 @@ const InterviewScheduler = ({
       <DialogContent className="max-w-2xl bg-card border-border">
         <DialogHeader>
           <DialogTitle className="text-white flex items-center gap-3">
-            <Video className="h-6 w-6 text-gold" />
+            <Video className="h-6 w-6 text-[#1A1A1A]" />
             Schedule {stage === 'first' ? 'First' : 'Second'} Interview
           </DialogTitle>
         </DialogHeader>
@@ -96,14 +96,14 @@ const InterviewScheduler = ({
               <CardContent className="p-4">
                 <h4 className="text-sm font-medium text-muted-foreground mb-3">Candidate</h4>
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center">
-                    <span className="text-lg font-bold text-gold">
+                  <div className="w-12 h-12 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center">
+                    <span className="text-lg font-bold text-[#1A1A1A]">
                       {candidate.candidateName.charAt(0)}
                     </span>
                   </div>
                   <div>
                     <p className="font-semibold text-white">{candidate.candidateName}</p>
-                    <p className="text-sm text-gold">{candidate.position}</p>
+                    <p className="text-sm text-[#1A1A1A]">{candidate.position}</p>
                     <p className="text-xs text-muted-foreground">{candidate.email}</p>
                   </div>
                 </div>
@@ -224,7 +224,7 @@ const InterviewScheduler = ({
           >
             {isSending ? (
               <>
-                <div className="w-4 h-4 border-2 border-gold/30 border-t-gold rounded-full animate-spin mr-2" />
+                <div className="w-4 h-4 border-2 border-[#B89555]/30 border-t-gold rounded-full animate-spin mr-2" />
                 Sending Invitations...
               </>
             ) : (

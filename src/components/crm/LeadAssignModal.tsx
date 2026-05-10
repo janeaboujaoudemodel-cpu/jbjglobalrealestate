@@ -231,18 +231,18 @@ export default function LeadAssignModal({
             <div className="grid grid-cols-2 gap-4">
               <Button
                 variant="outline"
-                className="h-24 flex-col gap-2 border-2 hover:border-gold hover:bg-gold/10"
+                className="h-24 flex-col gap-2 border-2 hover:border-[#B89555] hover:bg-[#EFE6D6]/10"
                 onClick={() => handleChoose("employees")}
               >
-                <Briefcase className="h-8 w-8 text-gold" />
+                <Briefcase className="h-8 w-8 text-[#1A1A1A]" />
                 <span className="font-semibold">Employees</span>
               </Button>
               <Button
                 variant="outline"
-                className="h-24 flex-col gap-2 border-2 hover:border-gold hover:bg-gold/10"
+                className="h-24 flex-col gap-2 border-2 hover:border-[#B89555] hover:bg-[#EFE6D6]/10"
                 onClick={() => handleChoose("brokers")}
               >
-                <Users className="h-8 w-8 text-gold" />
+                <Users className="h-8 w-8 text-[#1A1A1A]" />
                 <span className="font-semibold">Brokers</span>
               </Button>
             </div>
@@ -281,7 +281,7 @@ export default function LeadAssignModal({
                     >
                       <Avatar className="h-10 w-10">
                         <AvatarImage src={person.photo_url || undefined} />
-                        <AvatarFallback className="bg-gold/20 text-gold text-sm">
+                        <AvatarFallback className="bg-[#EFE6D6]/20 text-[#1A1A1A] text-sm">
                           {getInitials(person.display_name)}
                         </AvatarFallback>
                       </Avatar>
@@ -313,7 +313,7 @@ export default function LeadAssignModal({
             <div className="text-center space-y-4">
               <Avatar className="h-20 w-20 mx-auto">
                 <AvatarImage src={selectedPerson.photo_url || undefined} />
-                <AvatarFallback className="bg-gold/20 text-gold text-2xl">
+                <AvatarFallback className="bg-[#EFE6D6]/20 text-[#1A1A1A] text-2xl">
                   {getInitials(selectedPerson.display_name)}
                 </AvatarFallback>
               </Avatar>
@@ -344,7 +344,7 @@ export default function LeadAssignModal({
               <Button
                 onClick={handleConfirmAssign}
                 disabled={assigning}
-                className="bg-gold text-[#1A1A1A] hover:bg-gold/90"
+                className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
               >
                 {assigning ? (
                   "Assigning..."

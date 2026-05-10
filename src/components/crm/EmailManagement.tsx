@@ -341,7 +341,7 @@ Generated on: ${new Date().toLocaleDateString()}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
           <h3 className="text-xl font-bold text-crm-text flex items-center gap-2">
-            <Mail className="h-5 w-5 text-gold" />
+            <Mail className="h-5 w-5 text-[#1A1A1A]" />
             JBJ Email Accounts
           </h3>
           <p className="text-sm text-crm-text-muted mt-1">
@@ -353,7 +353,7 @@ Generated on: ${new Date().toLocaleDateString()}
             setNewPassword(generatePassword());
             setShowCreateDialog(true);
           }}
-          className="bg-gold hover:bg-gold/90 text-white gap-2"
+          className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-white gap-2"
         >
           <Plus className="h-4 w-4" />
           Create Email Account
@@ -364,7 +364,7 @@ Generated on: ${new Date().toLocaleDateString()}
       <div className="grid grid-cols-3 gap-3">
         <Card className="bg-[#FDFBF7] border-crm-border">
           <CardContent className="p-4 text-center">
-            <Mail className="h-5 w-5 text-gold mx-auto mb-1" />
+            <Mail className="h-5 w-5 text-[#1A1A1A] mx-auto mb-1" />
             <p className="text-2xl font-bold text-crm-text">{activeCount}</p>
             <p className="text-xs text-crm-text-muted">Active Accounts</p>
           </CardContent>
@@ -402,7 +402,7 @@ Generated on: ${new Date().toLocaleDateString()}
           {loading ? (
             <Card className="bg-[#FDFBF7] border-crm-border">
               <CardContent className="py-12 text-center">
-                <RefreshCw className="h-8 w-8 animate-spin text-gold mx-auto mb-3" />
+                <RefreshCw className="h-8 w-8 animate-spin text-[#1A1A1A] mx-auto mb-3" />
                 <p className="text-crm-text-muted">Loading email accounts...</p>
               </CardContent>
             </Card>
@@ -420,19 +420,19 @@ Generated on: ${new Date().toLocaleDateString()}
             filteredEmails.map((email) => (
               <Card
                 key={email.id}
-                className="bg-[#FDFBF7] border-crm-border hover:border-gold/40 transition-all"
+                className="bg-[#FDFBF7] border-crm-border hover:border-[#B89555]/40 transition-all"
               >
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between gap-4">
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center shrink-0">
-                        <Mail className="h-5 w-5 text-gold" />
+                      <div className="w-10 h-10 rounded-full bg-[#EFE6D6]/10 flex items-center justify-center shrink-0">
+                        <Mail className="h-5 w-5 text-[#1A1A1A]" />
                       </div>
                       <div className="min-w-0">
                         <p className="font-semibold text-crm-text truncate">
                           {email.employee_name}
                         </p>
-                        <p className="text-sm text-gold font-medium truncate">
+                        <p className="text-sm text-[#1A1A1A] font-medium truncate">
                           {email.email_address}
                         </p>
                         <div className="flex items-center gap-2 mt-1 flex-wrap">
@@ -543,7 +543,7 @@ Generated on: ${new Date().toLocaleDateString()}
         <DialogContent className="max-w-lg bg-[#FDFBF7]">
           <DialogHeader>
             <DialogTitle className="text-crm-text flex items-center gap-2">
-              <Mail className="h-5 w-5 text-gold" />
+              <Mail className="h-5 w-5 text-[#1A1A1A]" />
               Create JBJ Email Account
             </DialogTitle>
             <DialogDescription>
@@ -683,7 +683,7 @@ Generated on: ${new Date().toLocaleDateString()}
             <Button
               onClick={handleCreateEmail}
               disabled={creating || !newPrefix || !newName}
-              className="bg-gold hover:bg-gold/90 text-white"
+              className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-white"
             >
               {creating ? (
                 <>
@@ -718,7 +718,7 @@ Generated on: ${new Date().toLocaleDateString()}
           {createdCreds && (
             <div className="space-y-4">
               {/* Credentials */}
-              <Card className="bg-gradient-to-br from-gold/5 to-gold/10 border-gold/30">
+              <Card className="bg-gradient-to-br from-gold/5 to-gold/10 border-[#B89555]/30">
                 <CardContent className="p-4 space-y-3">
                   <div className="flex items-center justify-between">
                     <div>
@@ -730,7 +730,7 @@ Generated on: ${new Date().toLocaleDateString()}
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-xs text-crm-text-muted">Email</p>
-                      <p className="font-mono text-sm text-gold font-semibold">
+                      <p className="font-mono text-sm text-[#1A1A1A] font-semibold">
                         {createdCreds.email}
                       </p>
                     </div>
@@ -753,7 +753,7 @@ Generated on: ${new Date().toLocaleDateString()}
               <Card className="bg-[#FDFBF7] border-crm-border">
                 <CardHeader className="pb-2 pt-3 px-4">
                   <CardTitle className="text-sm text-crm-text flex items-center gap-2">
-                    <Server className="h-4 w-4 text-gold" />
+                    <Server className="h-4 w-4 text-[#1A1A1A]" />
                     Mail Server Settings
                   </CardTitle>
                 </CardHeader>
@@ -792,7 +792,7 @@ Generated on: ${new Date().toLocaleDateString()}
             </Button>
             <Button
               onClick={() => setShowCredentialsDialog(false)}
-              className="bg-gold hover:bg-gold/90 text-white"
+              className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-white"
             >
               Done
             </Button>

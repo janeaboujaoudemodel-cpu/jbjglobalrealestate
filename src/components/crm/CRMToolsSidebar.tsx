@@ -21,11 +21,11 @@ const toolCategories = [
   {
     name: "Owner Command Center",
     tools: [
-      { name: "Dashboard", href: "/owner", icon: LayoutDashboard, color: "text-gold" },
+      { name: "Dashboard", href: "/owner", icon: LayoutDashboard, color: "text-[#1A1A1A]" },
       { name: "Daily Agenda", href: "/owner/agenda", icon: Calendar, color: "text-blue-400" },
       { name: "Unified Inbox", href: "/owner/inbox", icon: MessageSquare, color: "text-emerald-400" },
       { name: "Message Templates", href: "/owner/templates", icon: FileText, color: "text-purple-400" },
-      { name: "Media Ingestion", href: "/admin/media-ingestion", icon: Inbox, color: "text-gold" },
+      { name: "Media Ingestion", href: "/admin/media-ingestion", icon: Inbox, color: "text-[#1A1A1A]" },
       { name: "Communication Settings", href: "/owner/settings/communication", icon: Wrench, color: "text-white/70" },
       { name: "Feature Registry", href: "/owner/features", icon: Layers, color: "text-pink-400" },
     ]
@@ -33,7 +33,7 @@ const toolCategories = [
   {
     name: "CRM Modules",
     tools: [
-      { name: "Leads Inbox", href: "/crm/leads", icon: Users, color: "text-gold" },
+      { name: "Leads Inbox", href: "/crm/leads", icon: Users, color: "text-[#1A1A1A]" },
       { name: "Automations", href: "/automations", icon: Zap, color: "text-amber-400", adminOnly: true },
       { name: "My Tasks", href: "/crm/tasks", icon: CheckSquare, color: "text-emerald-400" },
       { name: "Calendar", href: "/crm/calendar", icon: Calendar, color: "text-blue-400" },
@@ -62,7 +62,7 @@ const toolCategories = [
     name: "Communication",
     tools: [
       { name: "VideoMeet", href: "/video-meeting", icon: Video, color: "text-red-400" },
-      { name: "Business Card Scanner", href: "/business-card-scanner", icon: CreditCard, color: "text-gold" },
+      { name: "Business Card Scanner", href: "/business-card-scanner", icon: CreditCard, color: "text-[#1A1A1A]" },
       { name: "AI Calendar", href: "/ai-calendar", icon: Calendar, color: "text-pink-400" },
     ]
   },

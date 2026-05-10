@@ -54,10 +54,10 @@ export default function LeadAuditHistory({ leadId }: { leadId: string }) {
   }
 
   return (
-    <Card className="border-2 border-gold/30">
+    <Card className="border-2 border-[#B89555]/30">
       <CardContent className="pt-6">
         <div className="flex items-center gap-2 mb-4">
-          <Shield className="h-5 w-5 text-gold" />
+          <Shield className="h-5 w-5 text-[#1A1A1A]" />
           <h3 className="font-semibold text-sm">Audit Trail — {entries.length} Events</h3>
         </div>
 

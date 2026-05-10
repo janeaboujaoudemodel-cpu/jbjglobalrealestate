@@ -125,7 +125,7 @@ const ClientPDFGenerator = ({ open, onClose, lead, selectedTools }: ClientPDFGen
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <FileText className="h-5 w-5 text-gold" />
+            <FileText className="h-5 w-5 text-[#1A1A1A]" />
             Generate Client Report
           </DialogTitle>
         </DialogHeader>
@@ -146,8 +146,8 @@ const ClientPDFGenerator = ({ open, onClose, lead, selectedTools }: ClientPDFGen
                   key={section.id}
                   className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-all ${
                     selectedSections.includes(section.id)
-                      ? "border-gold bg-gold/5"
-                      : "hover:border-gold/30"
+                      ? "border-[#B89555] bg-[#EFE6D6]/5"
+                      : "hover:border-[#B89555]/30"
                   }`}
                   onClick={() => toggleSection(section.id)}
                 >
@@ -177,7 +177,7 @@ const ClientPDFGenerator = ({ open, onClose, lead, selectedTools }: ClientPDFGen
                         key={project.id}
                         className={`flex items-center gap-3 p-2 rounded cursor-pointer transition-all ${
                           selectedProjects.includes(project.id)
-                            ? "bg-gold/10"
+                            ? "bg-[#EFE6D6]/10"
                             : "hover:bg-muted"
                         }`}
                         onClick={() => toggleProject(project.id)}
@@ -192,7 +192,7 @@ const ClientPDFGenerator = ({ open, onClose, lead, selectedTools }: ClientPDFGen
                           <p className="text-xs text-muted-foreground">{project.location}</p>
                         </div>
                         {project.price_from && (
-                          <span className="text-xs text-gold">
+                          <span className="text-xs text-[#1A1A1A]">
                             From AED {(project.price_from / 1000000).toFixed(1)}M
                           </span>
                         )}
@@ -205,7 +205,7 @@ const ClientPDFGenerator = ({ open, onClose, lead, selectedTools }: ClientPDFGen
           )}
 
           {/* Branding Note */}
-          <div className="p-4 bg-gold/10 rounded-lg border border-gold/20">
+          <div className="p-4 bg-[#EFE6D6]/10 rounded-lg border border-[#B89555]/20">
             <p className="text-sm">
               <strong>Note:</strong> The PDF will include JBJ Global Real Estate branding, 
               the client's name ({lead.full_name}), and all selected content formatted 
@@ -222,7 +222,7 @@ const ClientPDFGenerator = ({ open, onClose, lead, selectedTools }: ClientPDFGen
           <Button 
             onClick={generatePDF} 
             disabled={isGenerating || selectedSections.length === 0}
-            className="flex-1 bg-gold text-[#1A1A1A] hover:bg-gold/90"
+            className="flex-1 bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
           >
             {isGenerating ? (
               <>

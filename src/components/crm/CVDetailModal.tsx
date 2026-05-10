@@ -81,14 +81,14 @@ const CVDetailModal = ({
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-card border-border">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-4 text-white">
-            <div className="w-14 h-14 rounded-full bg-gold/20 flex items-center justify-center">
-              <span className="text-2xl font-bold text-gold">
+            <div className="w-14 h-14 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center">
+              <span className="text-2xl font-bold text-[#1A1A1A]">
                 {candidate.candidateName.charAt(0)}
               </span>
             </div>
             <div>
               <h2 className="text-xl font-bold">{candidate.candidateName}</h2>
-              <p className="text-sm text-gold font-medium">{candidate.position}</p>
+              <p className="text-sm text-[#1A1A1A] font-medium">{candidate.position}</p>
             </div>
             <Badge className={`ml-auto ${getStatusColor(candidate.status)} text-white`}>
               {candidate.status.replace('_', ' ').toUpperCase()}
@@ -110,20 +110,20 @@ const CVDetailModal = ({
             <Card className="bg-background/50 border-border">
               <CardHeader className="pb-3">
                 <CardTitle className="text-white text-sm flex items-center gap-2">
-                  <User className="h-4 w-4 text-gold" />
+                  <User className="h-4 w-4 text-[#1A1A1A]" />
                   Contact Information
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
                 <div className="flex items-center gap-3 text-sm">
                   <Mail className="h-4 w-4 text-muted-foreground" />
-                  <a href={`mailto:${candidate.email}`} className="text-gold hover:underline">
+                  <a href={`mailto:${candidate.email}`} className="text-[#1A1A1A] hover:underline">
                     {candidate.email}
                   </a>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
                   <Phone className="h-4 w-4 text-muted-foreground" />
-                  <a href={`tel:${candidate.phone}`} className="text-white hover:text-gold">
+                  <a href={`tel:${candidate.phone}`} className="text-white hover:text-[#1A1A1A]">
                     {candidate.phone}
                   </a>
                 </div>
@@ -153,7 +153,7 @@ const CVDetailModal = ({
                     {candidate.aiRanking && (
                       <div className="text-right">
                         <p className="text-sm text-muted-foreground">Position Rank</p>
-                        <p className="text-2xl font-bold text-gold">#{candidate.aiRanking}</p>
+                        <p className="text-2xl font-bold text-[#1A1A1A]">#{candidate.aiRanking}</p>
                       </div>
                     )}
                   </div>
@@ -214,7 +214,7 @@ const CVDetailModal = ({
             <Card className="bg-background/50 border-border">
               <CardHeader className="pb-3">
                 <CardTitle className="text-white text-sm flex items-center gap-2">
-                  <MessageSquare className="h-4 w-4 text-gold" />
+                  <MessageSquare className="h-4 w-4 text-[#1A1A1A]" />
                   Add Notes
                 </CardTitle>
               </CardHeader>
@@ -244,7 +244,7 @@ const CVDetailModal = ({
                   <Card className="bg-background/50 border-border">
                     <CardHeader className="pb-2">
                       <CardTitle className="text-white text-sm flex items-center gap-2">
-                        <Briefcase className="h-4 w-4 text-gold" />
+                        <Briefcase className="h-4 w-4 text-[#1A1A1A]" />
                         Experience
                       </CardTitle>
                     </CardHeader>
@@ -256,7 +256,7 @@ const CVDetailModal = ({
                   <Card className="bg-background/50 border-border">
                     <CardHeader className="pb-2">
                       <CardTitle className="text-white text-sm flex items-center gap-2">
-                        <GraduationCap className="h-4 w-4 text-gold" />
+                        <GraduationCap className="h-4 w-4 text-[#1A1A1A]" />
                         Education
                       </CardTitle>
                     </CardHeader>
@@ -269,14 +269,14 @@ const CVDetailModal = ({
                 <Card className="bg-background/50 border-border">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-white text-sm flex items-center gap-2">
-                      <Star className="h-4 w-4 text-gold" />
+                      <Star className="h-4 w-4 text-[#1A1A1A]" />
                       Skills
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="flex flex-wrap gap-2">
                       {candidate.aiAnalysis.skills.map((skill, idx) => (
-                        <Badge key={idx} variant="outline" className="border-gold/30 text-gold">
+                        <Badge key={idx} variant="outline" className="border-[#B89555]/30 text-[#1A1A1A]">
                           {skill}
                         </Badge>
                       ))}
@@ -288,7 +288,7 @@ const CVDetailModal = ({
                   <Card className="bg-background/50 border-border">
                     <CardHeader className="pb-2">
                       <CardTitle className="text-white text-sm flex items-center gap-2">
-                        <Award className="h-4 w-4 text-gold" />
+                        <Award className="h-4 w-4 text-[#1A1A1A]" />
                         Certifications
                       </CardTitle>
                     </CardHeader>
@@ -392,7 +392,7 @@ const CVDetailModal = ({
               <Card className="bg-background/50 border-border">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-white text-sm flex items-center gap-2">
-                    <MessageSquare className="h-4 w-4 text-gold" />
+                    <MessageSquare className="h-4 w-4 text-[#1A1A1A]" />
                     Interview Notes
                   </CardTitle>
                 </CardHeader>
@@ -422,7 +422,7 @@ const CVDetailModal = ({
                   <Button
                     variant="outline"
                     size="sm"
-                    className="text-gold border-gold/30 hover:bg-gold/10"
+                    className="text-[#1A1A1A] border-[#B89555]/30 hover:bg-[#EFE6D6]/10"
                   >
                     <Download className="h-4 w-4 mr-2" />
                     Download

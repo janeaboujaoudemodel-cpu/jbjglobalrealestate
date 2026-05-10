@@ -65,10 +65,10 @@ const LeadJourneyTracker = ({
   };
 
   return (
-    <Card className="bg-zinc-900 border-[#1A1A1A]">
+    <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
       <CardHeader className="pb-3">
         <CardTitle className="text-white text-base flex items-center gap-2">
-          <MapPin className="w-4 h-4 text-gold" />
+          <MapPin className="w-4 h-4 text-[#1A1A1A]" />
           Lead Journey & Analytics
         </CardTitle>
       </CardHeader>
@@ -76,7 +76,7 @@ const LeadJourneyTracker = ({
         {/* Key Metrics */}
         <div className="grid grid-cols-2 gap-3">
           {/* Entry Time */}
-          <div className="p-3 bg-zinc-800/50 rounded-lg">
+          <div className="p-3 bg-[#F7F2EA]/50 rounded-lg">
             <div className="flex items-center gap-2 text-white/70 text-xs mb-1">
               <Clock className="w-3 h-3" />
               Entry Time
@@ -87,7 +87,7 @@ const LeadJourneyTracker = ({
           </div>
 
           {/* Time Spent */}
-          <div className="p-3 bg-zinc-800/50 rounded-lg">
+          <div className="p-3 bg-[#F7F2EA]/50 rounded-lg">
             <div className="flex items-center gap-2 text-white/70 text-xs mb-1">
               <Timer className="w-3 h-3" />
               Time on Site
@@ -98,7 +98,7 @@ const LeadJourneyTracker = ({
           </div>
 
           {/* Pages Visited */}
-          <div className="p-3 bg-zinc-800/50 rounded-lg">
+          <div className="p-3 bg-[#F7F2EA]/50 rounded-lg">
             <div className="flex items-center gap-2 text-white/70 text-xs mb-1">
               <Eye className="w-3 h-3" />
               Pages Visited
@@ -109,7 +109,7 @@ const LeadJourneyTracker = ({
           </div>
 
           {/* Source */}
-          <div className="p-3 bg-zinc-800/50 rounded-lg">
+          <div className="p-3 bg-[#F7F2EA]/50 rounded-lg">
             <div className="flex items-center gap-2 text-white/70 text-xs mb-1">
               <Globe className="w-3 h-3" />
               Source
@@ -122,7 +122,7 @@ const LeadJourneyTracker = ({
 
         {/* Last Interaction */}
         {lastInteraction && (
-          <div className="p-3 bg-gold/10 border border-gold/20 rounded-lg">
+          <div className="p-3 bg-[#EFE6D6]/10 border border-[#B89555]/20 rounded-lg">
             <p className="text-xs text-[#1A1A1A]/70 mb-1">Last Interaction</p>
             <p className="text-white text-sm">
               {format(new Date(lastInteraction), "MMM d, yyyy 'at' h:mm a")}

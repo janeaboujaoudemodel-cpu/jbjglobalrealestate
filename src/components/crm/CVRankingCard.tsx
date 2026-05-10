@@ -74,14 +74,14 @@ const CVRankingCard = ({
 
   const getRankBadge = () => {
     if (!rank) return null;
-    if (rank === 1) return <Crown className="h-5 w-5 text-gold" />;
+    if (rank === 1) return <Crown className="h-5 w-5 text-[#1A1A1A]" />;
     if (rank === 2) return <Star className="h-5 w-5 text-[#1A1A1A]/70" />;
-    if (rank === 3) return <Star className="h-5 w-5 text-gold-dark" />;
+    if (rank === 3) return <Star className="h-5 w-5 text-[#1A1A1A]-dark" />;
     return <span className="text-sm font-bold text-muted-foreground">#{rank}</span>;
   };
 
   return (
-    <Card className={`bg-card border-border hover:border-gold/30 transition-all ${rank === 1 ? 'border-gold/50 bg-gold/5' : ''}`}>
+    <Card className={`bg-card border-border hover:border-[#B89555]/30 transition-all ${rank === 1 ? 'border-[#B89555]/50 bg-[#EFE6D6]/5' : ''}`}>
       <CardContent className="p-4">
         <div className="flex items-start gap-4">
           {/* Rank Badge */}
@@ -92,8 +92,8 @@ const CVRankingCard = ({
           )}
 
           {/* Avatar */}
-          <div className="flex-shrink-0 w-14 h-14 rounded-full bg-gold/20 flex items-center justify-center">
-            <span className="text-xl font-bold text-gold">
+          <div className="flex-shrink-0 w-14 h-14 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center">
+            <span className="text-xl font-bold text-[#1A1A1A]">
               {candidate.candidateName.charAt(0)}
             </span>
           </div>
@@ -103,7 +103,7 @@ const CVRankingCard = ({
             <div className="flex items-start justify-between gap-4">
               <div>
                 <h4 className="font-semibold text-white text-lg">{candidate.candidateName}</h4>
-                <p className="text-sm text-gold">{candidate.position}</p>
+                <p className="text-sm text-[#1A1A1A]">{candidate.position}</p>
               </div>
               <div className="flex items-center gap-2">
                 {candidate.aiScore && (
@@ -145,7 +145,7 @@ const CVRankingCard = ({
                 </div>
                 <div className="flex flex-wrap gap-1">
                   {candidate.aiAnalysis.skills.slice(0, 5).map((skill, idx) => (
-                    <Badge key={idx} variant="outline" className="text-xs border-gold/30 text-gold">
+                    <Badge key={idx} variant="outline" className="text-xs border-[#B89555]/30 text-[#1A1A1A]">
                       {skill}
                     </Badge>
                   ))}
