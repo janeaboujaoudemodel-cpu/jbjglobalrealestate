@@ -34,7 +34,7 @@ export const PremiumBackendHeader: React.FC<PremiumBackendHeaderProps> = ({
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const { user, signOut } = useAuth();
+  const { user, signOut, isOwner } = useAuth();
 
   const handleSignOut = async () => {
     await signOut();
@@ -116,8 +116,8 @@ export const PremiumBackendHeader: React.FC<PremiumBackendHeaderProps> = ({
                   {userMenuOpen && (
                     <div className="absolute right-0 top-full mt-2 w-56 bg-[#FDFBF7] border-2 border-gold/20 rounded-xl shadow-lg shadow-gold/10 py-2 z-50">
                       <div className="px-4 py-2 border-b border-gold/10">
-                        <p className="text-sm font-medium text-[#1A1A1A] truncate">{user.email}</p>
-                        <p className="text-xs text-[#1A1A1A]/70">Logged in</p>
+                        <p className="text-sm font-medium text-[#1A1A1A] truncate">{isOwner ? "Owner" : "Account"}</p>
+                        <p className="text-xs text-[#1A1A1A]/70">Signed in</p>
                       </div>
                       <button
                         onClick={() => navigate('/my-dashboard#tasks')}
