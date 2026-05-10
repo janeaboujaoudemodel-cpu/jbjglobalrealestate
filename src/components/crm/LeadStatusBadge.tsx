@@ -48,7 +48,7 @@ export const PIPELINE_STATUSES: PipelineStatus[] = [
   { value: "negotiation", label: "Negotiation", color: "bg-emerald-500", bgColor: "bg-emerald-500/20", textColor: "text-emerald-300", dotColor: "#22C55E", category: "positive" },
   { value: "offer_sent", label: "Offer Sent", color: "bg-emerald-400", bgColor: "bg-emerald-400/20", textColor: "text-emerald-300", dotColor: "#22C55E", category: "positive" },
   { value: "closed_won", label: "Closed Won", color: "bg-green-600", bgColor: "bg-green-600/20", textColor: "text-green-100", dotColor: "#22C55E", category: "positive" },
-  { value: "already_bought", label: "Already Bought", color: "bg-green-700", bgColor: "bg-green-700/20", textColor: "text-green-200", dotColor: "#16A34A", category: "positive" },
+  { value: "already_bought", label: "Already Bought", color: "bg-blue-500", bgColor: "bg-blue-500/25", textColor: "text-blue-700", dotColor: "#3B82F6", category: "neutral" },
   
   // NEUTRAL (blue) - New / Follow-up / Pending
   { value: "new", label: "New", color: "bg-blue-500", bgColor: "bg-blue-500/20", textColor: "text-blue-300", dotColor: "#3B82F6", category: "neutral" },
