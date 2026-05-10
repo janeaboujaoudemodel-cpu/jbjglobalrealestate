@@ -63,14 +63,19 @@ function InvestorToggle({ leadId }: { leadId: string }) {
       onClick={toggle}
       disabled={saving}
       title={isInvestor ? "Unmark as Investor" : "Mark as Investor"}
+      aria-pressed={isInvestor}
       className={
-        "h-9 w-9 border " +
+        "h-9 w-9 border transition-all " +
         (isInvestor
-          ? "bg-[#B89555] hover:bg-[#A08047] text-white border-[#B89555]"
-          : "bg-[#EFE6D6] hover:bg-[#E5D9C4] text-[#1A1A1A] border-[#B89555]/30")
+          ? "bg-[#EFE6D6] hover:bg-[#E5D9C4] text-[#B89555] border-[#B89555] shadow-[0_0_0_2px_rgba(184,149,85,0.22)]"
+          : "bg-[#F7F2EA] hover:bg-[#EFE6D6] text-[#1A1A1A]/60 border-[#B89555]/30")
       }
     >
-      {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Crown className="h-4 w-4" />}
+      {saving ? (
+        <Loader2 className="h-4 w-4 animate-spin" />
+      ) : (
+        <Crown className={"h-4 w-4 " + (isInvestor ? "fill-[#B89555]" : "")} />
+      )}
     </Button>
   );
 }
