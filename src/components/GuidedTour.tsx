@@ -285,14 +285,14 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                 animate={{ opacity: 1, y: 0 }}
                 className="text-center"
               >
-                <div className="flex justify-center mb-6">
+                <div className="flex justify-center mb-6 text-[#1A1A1A]">
                   <JJLogoImage variant="light" size="md" />
                 </div>
 
                 {/* Welcome badge */}
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full mb-4">
-                  <Sparkles className="w-3.5 h-3.5 text-[#1A1A1A]" />
-                  <span className="text-[#1A1A1A] text-xs font-medium">Welcome Guide</span>
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#EFE6D6] border border-[#B89555]/40 rounded-full mb-4">
+                  <Sparkles className="w-3.5 h-3.5 !text-[#1A1A1A]" />
+                  <span className="!text-[#1A1A1A] text-xs font-medium">Welcome Guide</span>
                 </div>
 
                 <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-[#1A1A1A] mb-3">
@@ -326,10 +326,10 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                     }}
                     type="button"
                     variant="secondary"
-                    className="w-full py-5 sm:py-6 rounded-xl group"
+                    className="w-full py-5 sm:py-6 rounded-xl group !text-[#1A1A1A]"
                   >
-                    <span className="flex-1 text-left font-semibold">View Quick Shortcuts</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    <span className="flex-1 text-left font-semibold !text-[#1A1A1A]">View Quick Shortcuts</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform !text-[#1A1A1A]" />
                   </Button>
 
                   <Button
