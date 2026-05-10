@@ -334,6 +334,33 @@ Deno.serve(async (req) => {
     let scanned = 0;
     let inserted = 0;
     let skipped = 0;
+    let archived = 0;
+
+    // -----------------------------------------------------------------------
+    // Reclassification pass: scan existing rows and soft-archive any that
+    // no longer pass the strict real-estate filter. Nothing is deleted.
+    // -----------------------------------------------------------------------
+    {
+      const { data: existingRows } = await admin
+        .from("email_inbox_items")
+        .select("id, raw_subject, snippet, from_email, from_name, category, status")
+        .eq("user_id", user.id)
+        .is("archived_at", null)
+        .limit(2000);
+      for (const row of existingRows || []) {
+        // Preserve anything already tied to a signed contract or registration
+        if (row.category === "contracts" || row.status === "registered") continue;
+        const fromDom = (row.from_email || "").split("@")[1] || "";
+        const hay = `${row.raw_subject || ""}\n${row.snippet || ""}\n${row.from_name || ""} ${row.from_email || ""}`;
+        if (!isJbjRelated(hay, devDomains, fromDom, row.raw_subject || "")) {
+          await admin
+            .from("email_inbox_items")
+            .update({ archived_at: new Date().toISOString(), archived_reason: "non_real_estate" })
+            .eq("id", row.id);
+          archived++;
+        }
+      }
+    }
 
     for (const id of ids) {
       scanned++;
@@ -434,7 +461,7 @@ Deno.serve(async (req) => {
       }
     }
 
-    return new Response(JSON.stringify({ ok: true, scanned, inserted, skipped }), {
+    return new Response(JSON.stringify({ ok: true, scanned, inserted, skipped, archived }), {
       status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e) {

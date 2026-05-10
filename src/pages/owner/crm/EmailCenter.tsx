@@ -36,6 +36,7 @@ import {
   useSyncJbjInbox,
   useSendRegistrationConfirmation,
   useArchiveInboxItem,
+  useUnarchiveInboxItem,
   type InboxCategory,
   type InboxStatus,
 } from "@/hooks/useEmailInboxItems";
@@ -80,11 +81,13 @@ const STATUS_FILTERS: Array<{ id: "all" | InboxStatus; label: string }> = [
 export default function EmailCenter() {
   const [active, setActive] = useState<InboxCategory>("overview");
   const [statusFilter, setStatusFilter] = useState<"all" | InboxStatus>("all");
-  const { data: items = [], isLoading } = useEmailInboxItems(active);
+  const [showArchived, setShowArchived] = useState(false);
+  const { data: items = [], isLoading } = useEmailInboxItems(active, { showArchived });
   const { data: counts = {} } = useInboxCategoryCounts();
   const sync = useSyncJbjInbox();
   const sendConfirm = useSendRegistrationConfirmation();
   const archive = useArchiveInboxItem();
+  const unarchive = useUnarchiveInboxItem();
 
   const grouped = useMemo(
     () => (statusFilter === "all" ? items : items.filter((i) => i.status === statusFilter)),
@@ -104,16 +107,31 @@ export default function EmailCenter() {
                 Real-estate only · auto-BCC infoo.jane@gmail.com on every send
               </span>
             </CardTitle>
-            <Button
-              size="sm"
-              variant="outline"
-              disabled={sync.isPending}
-              onClick={() => sync.mutate()}
-              className="h-8 text-xs border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/60"
-            >
-              <RefreshCw className={`h-3.5 w-3.5 mr-1.5 ${sync.isPending ? "animate-spin" : ""}`} />
-              Sync inbox now
-            </Button>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setShowArchived((v) => !v)}
+                className={[
+                  "h-8 px-3 rounded-md text-xs font-medium border transition-colors",
+                  showArchived
+                    ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
+                    : "bg-transparent text-[#1A1A1A]/70 border-[#B89555]/40 hover:bg-[#EFE6D6]/60 hover:text-[#1A1A1A]",
+                ].join(" ")}
+                title={showArchived ? "Show active inbox" : "Show archived (non real-estate) items"}
+              >
+                {showArchived ? "Showing archived" : `Archived (${(counts as any).archived ?? 0})`}
+              </button>
+              <Button
+                size="sm"
+                variant="outline"
+                disabled={sync.isPending}
+                onClick={() => sync.mutate()}
+                className="h-8 text-xs border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/60"
+              >
+                <RefreshCw className={`h-3.5 w-3.5 mr-1.5 ${sync.isPending ? "animate-spin" : ""}`} />
+                Sync inbox now
+              </Button>
+            </div>
           </div>
         </CardHeader>
         <CardContent className="p-3">
@@ -285,14 +303,25 @@ export default function EmailCenter() {
                             )}
                           </>
                         )}
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          className="h-7 text-xs text-[#1A1A1A]/60 hover:text-[#1A1A1A]"
-                          onClick={() => archive.mutate(it.id)}
-                        >
-                          <Archive className="h-3 w-3 mr-1" /> Archive
-                        </Button>
+                        {showArchived ? (
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-7 text-xs text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
+                            onClick={() => unarchive.mutate(it.id)}
+                          >
+                            Restore to inbox
+                          </Button>
+                        ) : (
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-7 text-xs text-[#1A1A1A]/60 hover:text-[#1A1A1A]"
+                            onClick={() => archive.mutate(it.id)}
+                          >
+                            <Archive className="h-3 w-3 mr-1" /> Archive
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>

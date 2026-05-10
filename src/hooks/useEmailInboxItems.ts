@@ -38,16 +38,21 @@ export interface EmailInboxItem {
   created_at: string;
 }
 
-export function useEmailInboxItems(category: InboxCategory = "overview") {
+export function useEmailInboxItems(category: InboxCategory = "overview", opts: { showArchived?: boolean } = {}) {
+  const { showArchived = false } = opts;
   return useQuery({
-    queryKey: ["email_inbox_items", category],
+    queryKey: ["email_inbox_items", category, showArchived ? "archived" : "active"],
     queryFn: async () => {
       let q = supabase
         .from("email_inbox_items" as any)
         .select("*")
-        .is("archived_at", null)
         .order("received_at", { ascending: false })
         .limit(300);
+      if (showArchived) {
+        q = q.not("archived_at", "is", null);
+      } else {
+        q = q.is("archived_at", null);
+      }
       if (category !== "overview") {
         q = q.eq("category", category);
       }
@@ -64,17 +69,17 @@ export function useInboxCategoryCounts() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("email_inbox_items" as any)
-        .select("category,status")
-        .is("archived_at", null)
-        .limit(1000);
+        .select("category,status,archived_at")
+        .limit(2000);
       if (error) throw error;
       const counts: Record<string, number> = {
         overview: 0, contracts: 0, registrations: 0, brokerages: 0,
         new_launches: 0, projects_inventory: 0, commission: 0, events: 0,
         opportunities: 0, partnerships: 0, careers: 0, other: 0,
-        awaiting_you: 0,
+        awaiting_you: 0, archived: 0,
       };
       for (const r of (data ?? []) as any[]) {
+        if (r.archived_at) { counts.archived++; continue; }
         counts.overview++;
         counts[r.category] = (counts[r.category] ?? 0) + 1;
         if (r.status === "awaiting_you") counts.awaiting_you++;
@@ -90,10 +95,12 @@ export function useSyncJbjInbox() {
     mutationFn: async () => {
       const { data, error } = await supabase.functions.invoke("classify-jbj-inbox", { body: {} });
       if (error) throw error;
-      return data as { scanned: number; inserted: number; skipped: number };
+      return data as { scanned: number; inserted: number; skipped: number; archived: number };
     },
     onSuccess: (data) => {
-      toast.success(`Inbox synced — ${data.inserted} new JBJ email(s), ${data.scanned} scanned`);
+      toast.success(
+        `Inbox synced — ${data.inserted} new · ${data.scanned} scanned${data.archived ? ` · ${data.archived} archived` : ""}`
+      );
       qc.invalidateQueries({ queryKey: ["email_inbox_items"] });
       qc.invalidateQueries({ queryKey: ["email_inbox_counts"] });
     },
@@ -131,5 +138,24 @@ export function useArchiveInboxItem() {
       qc.invalidateQueries({ queryKey: ["email_inbox_items"] });
       qc.invalidateQueries({ queryKey: ["email_inbox_counts"] });
     },
+  });
+}
+
+export function useUnarchiveInboxItem() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase
+        .from("email_inbox_items" as any)
+        .update({ archived_at: null, archived_reason: null })
+        .eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Restored to inbox");
+      qc.invalidateQueries({ queryKey: ["email_inbox_items"] });
+      qc.invalidateQueries({ queryKey: ["email_inbox_counts"] });
+    },
+    onError: (e: Error) => toast.error(`Restore failed: ${e.message}`),
   });
 }

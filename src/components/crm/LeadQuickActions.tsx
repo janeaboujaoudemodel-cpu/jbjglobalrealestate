@@ -10,16 +10,18 @@ import { toast } from "sonner";
 interface Props {
   leadId: string;
   leadName?: string;
+  leadPhone?: string | null;
+  leadEmail?: string | null;
   userId: string;
 }
 
-export default function LeadQuickActions({ leadId, leadName, userId }: Props) {
+export default function LeadQuickActions({ leadId, leadName, leadPhone, leadEmail, userId }: Props) {
   return (
     <div className="inline-flex items-center gap-1">
       <InvestorToggle leadId={leadId} />
-      <CalendarPopover leadId={leadId} leadName={leadName} userId={userId} />
-      <NotePopover leadId={leadId} userId={userId} />
-      <TaskPopover leadId={leadId} leadName={leadName} userId={userId} />
+      <CalendarPopover leadId={leadId} leadName={leadName} leadPhone={leadPhone} leadEmail={leadEmail} userId={userId} />
+      <NotePopover leadId={leadId} leadName={leadName} leadPhone={leadPhone} leadEmail={leadEmail} userId={userId} />
+      <TaskPopover leadId={leadId} leadName={leadName} leadPhone={leadPhone} leadEmail={leadEmail} userId={userId} />
     </div>
   );
 }
@@ -61,19 +63,29 @@ function InvestorToggle({ leadId }: { leadId: string }) {
       onClick={toggle}
       disabled={saving}
       title={isInvestor ? "Unmark as Investor" : "Mark as Investor"}
+      aria-pressed={isInvestor}
       className={
-        "h-9 w-9 border " +
+        "h-9 w-9 border transition-all " +
         (isInvestor
-          ? "bg-[#B89555] hover:bg-[#A08047] text-white border-[#B89555]"
-          : "bg-[#EFE6D6] hover:bg-[#E5D9C4] text-[#1A1A1A] border-[#B89555]/30")
+          ? "bg-[#EFE6D6] hover:bg-[#E5D9C4] text-[#B89555] border-[#B89555] shadow-[0_0_0_2px_rgba(184,149,85,0.22)]"
+          : "bg-[#F7F2EA] hover:bg-[#EFE6D6] text-[#1A1A1A]/60 border-[#B89555]/30")
       }
     >
-      {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Crown className="h-4 w-4" />}
+      {saving ? (
+        <Loader2 className="h-4 w-4 animate-spin" />
+      ) : (
+        <Crown className={"h-4 w-4 " + (isInvestor ? "fill-[#B89555]" : "")} />
+      )}
     </Button>
   );
 }
 
-function CalendarPopover({ leadId, leadName, userId }: Props) {
+function contactLine(phone?: string | null, email?: string | null) {
+  const parts = [phone, email].filter(Boolean) as string[];
+  return parts.length ? ` (${parts.join(" · ")})` : "";
+}
+
+function CalendarPopover({ leadId, leadName, leadPhone, leadEmail, userId }: Props) {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState(leadName ? `Meeting with ${leadName}` : "Meeting");
   const [startAt, setStartAt] = useState("");
@@ -84,13 +96,15 @@ function CalendarPopover({ leadId, leadName, userId }: Props) {
     setSaving(true);
     const start = new Date(startAt);
     const end = new Date(start.getTime() + 30 * 60000);
+    const desc = leadName ? `With ${leadName}${contactLine(leadPhone, leadEmail)}` : null;
     const { error } = await supabase.from("owner_calendar_events").insert({
       owner_id: userId,
       title,
+      description: desc,
       start_at: start.toISOString(),
       end_at: end.toISOString(),
-      metadata: { lead_id: leadId },
-    });
+      metadata: { lead_id: leadId, lead_name: leadName, lead_phone: leadPhone, lead_email: leadEmail },
+    } as any);
     setSaving(false);
     if (error) return toast.error(error.message);
     toast.success("Event added");
@@ -107,7 +121,10 @@ function CalendarPopover({ leadId, leadName, userId }: Props) {
       </PopoverTrigger>
       <PopoverContent className="w-72 bg-[#FDFBF7] border-[#B89555]/30 z-50" align="end">
         <div className="space-y-2">
-          <div className="text-sm font-bold text-[#1A1A1A]">Schedule meeting</div>
+          <div className="text-sm font-bold text-[#1A1A1A]">Schedule meeting{leadName ? ` — ${leadName}` : ""}</div>
+          {(leadPhone || leadEmail) && (
+            <div className="text-xs text-[#1A1A1A]/70">{[leadPhone, leadEmail].filter(Boolean).join(" · ")}</div>
+          )}
           <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" />
           <Input type="datetime-local" value={startAt} onChange={(e) => setStartAt(e.target.value)} />
           <Button onClick={save} disabled={saving} className="w-full bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]/90">
@@ -119,7 +136,7 @@ function CalendarPopover({ leadId, leadName, userId }: Props) {
   );
 }
 
-function NotePopover({ leadId, userId }: Props) {
+function NotePopover({ leadId, leadName, leadPhone, leadEmail, userId }: Props) {
   const [open, setOpen] = useState(false);
   const [body, setBody] = useState("");
   const [saving, setSaving] = useState(false);
@@ -127,10 +144,11 @@ function NotePopover({ leadId, userId }: Props) {
   const save = async () => {
     if (!body.trim()) return;
     setSaving(true);
+    const header = leadName ? `— re: ${leadName}${contactLine(leadPhone, leadEmail)}\n` : "";
     const { error } = await supabase.from("crm_notes").insert({
       lead_id: leadId,
       user_id: userId,
-      body: body.trim(),
+      body: (header + body.trim()).trim(),
     });
     setSaving(false);
     if (error) return toast.error(error.message);
@@ -148,7 +166,10 @@ function NotePopover({ leadId, userId }: Props) {
       </PopoverTrigger>
       <PopoverContent className="w-72 bg-[#FDFBF7] border-[#B89555]/30 z-50" align="end">
         <div className="space-y-2">
-          <div className="text-sm font-bold text-[#1A1A1A]">Add note</div>
+          <div className="text-sm font-bold text-[#1A1A1A]">Add note{leadName ? ` — ${leadName}` : ""}</div>
+          {(leadPhone || leadEmail) && (
+            <div className="text-xs text-[#1A1A1A]/70">{[leadPhone, leadEmail].filter(Boolean).join(" · ")}</div>
+          )}
           <Textarea value={body} onChange={(e) => setBody(e.target.value)} rows={4} placeholder="Type a note…" />
           <Button onClick={save} disabled={saving} className="w-full bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]/90">
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save note"}
@@ -159,26 +180,28 @@ function NotePopover({ leadId, userId }: Props) {
   );
 }
 
-function TaskPopover({ leadId, leadName, userId }: Props) {
+function TaskPopover({ leadId, leadName, leadPhone, leadEmail, userId }: Props) {
   const [open, setOpen] = useState(false);
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState(leadName ? `Follow up with ${leadName}` : "");
   const [dueAt, setDueAt] = useState("");
   const [saving, setSaving] = useState(false);
 
   const save = async () => {
     if (!title.trim()) return toast.error("Title required");
     setSaving(true);
+    const noteLine = leadName ? `Contact: ${leadName}${contactLine(leadPhone, leadEmail)}` : null;
     const { error } = await supabase.from("crm_tasks").insert({
       lead_id: leadId,
       user_id: userId,
       title: title.trim(),
+      notes: noteLine,
       due_at: dueAt ? new Date(dueAt).toISOString() : null,
       status: "open",
     });
     setSaving(false);
     if (error) return toast.error(error.message);
     toast.success("Task added");
-    setTitle("");
+    setTitle(leadName ? `Follow up with ${leadName}` : "");
     setDueAt("");
     setOpen(false);
   };
@@ -193,6 +216,9 @@ function TaskPopover({ leadId, leadName, userId }: Props) {
       <PopoverContent className="w-72 bg-[#FDFBF7] border-[#B89555]/30 z-50" align="end">
         <div className="space-y-2">
           <div className="text-sm font-bold text-[#1A1A1A]">Add task{leadName ? ` for ${leadName}` : ""}</div>
+          {(leadPhone || leadEmail) && (
+            <div className="text-xs text-[#1A1A1A]/70">{[leadPhone, leadEmail].filter(Boolean).join(" · ")}</div>
+          )}
           <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Task title" />
           <Input type="datetime-local" value={dueAt} onChange={(e) => setDueAt(e.target.value)} />
           <Button onClick={save} disabled={saving} className="w-full bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]/90">
