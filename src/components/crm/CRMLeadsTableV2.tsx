@@ -408,14 +408,14 @@ export default function CRMLeadsTableV2({
           <span className="text-xs font-bold uppercase tracking-wider text-[#1A1A1A]/60 mr-1">Quick:</span>
           {quickChips.map((c) => {
             const active =
-              (c.stage && stageFilter === c.stage) || (c.tag && tagFilter === c.tag);
+              (c.stage && stageMulti.length === 1 && stageMulti[0] === c.stage) || (c.tag && tagFilter === c.tag);
             const Icon = c.icon;
             return (
               <button
                 key={c.key}
                 type="button"
                 onClick={() => {
-                  if (c.stage) setStageFilter(active ? "" : c.stage);
+                  if (c.stage) setStageMulti(active ? [] : [c.stage]);
                   if (c.tag) setTagFilter(active ? "" : c.tag);
                 }}
                 className={
