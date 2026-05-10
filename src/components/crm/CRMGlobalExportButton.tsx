@@ -84,11 +84,11 @@ export default function CRMGlobalExportButton() {
         modalKind = "brokers";
       } else if (kind === "employees") {
         const { data, error } = await supabase
-          .from("employees")
+          .from("team_members")
           .select("*")
           .limit(5000);
         if (error) throw error;
-        rows = (data ?? []).map((r: any) => ({
+        rows = ((data ?? []) as any[]).map((r: any) => ({
           ...r,
           name: r.full_name || r.name,
           email: r.email,
