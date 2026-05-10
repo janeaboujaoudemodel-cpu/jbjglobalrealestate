@@ -505,7 +505,7 @@ export function BrokerToolkitTools() {
     <section id="section-tools" className="py-8 md:py-10 bg-[#1A1A1A]">
       <div className="container mx-auto px-4">
         {/* Discover All Free Tools - Light Cyan/Slate Layer */}
-        <div className="bg-gradient-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 border border-[#B89555]/30/30 rounded-2xl p-6 md:p-8 shadow-lg mb-12">
+        <div className="bg-gradient-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 border border-[#B89555]/30 rounded-2xl p-6 md:p-8 shadow-lg mb-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -533,7 +533,7 @@ export function BrokerToolkitTools() {
                 placeholder="Search tools (e.g. stamp, calculator, CRM...)"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 h-12 bg-[#1A1A1A]/50 border-[#B89555]/30/50 text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] focus:ring-gold/30 rounded-xl"
+                className="pl-12 h-12 bg-[#1A1A1A]/50 border-[#B89555]/50 text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] focus:ring-gold/30 rounded-xl"
               />
               {searchQuery && (
                 <button

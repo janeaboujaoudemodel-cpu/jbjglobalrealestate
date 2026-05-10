@@ -33,10 +33,10 @@ const departmentHierarchy = {
   'Technology': { order: 6, color: 'border-blue-500/30', bgColor: 'bg-blue-500/5' },
   'Design': { order: 7, color: 'border-cyan-500/30', bgColor: 'bg-cyan-500/5' },
   'Media': { order: 8, color: 'border-red-500/30', bgColor: 'bg-red-500/5' },
-  'Operations': { order: 9, color: 'border-[#B89555]/30/30', bgColor: 'bg-[#B89555]/5' },
+  'Operations': { order: 9, color: 'border-[#B89555]/30', bgColor: 'bg-[#B89555]/5' },
   'Customer Happiness': { order: 10, color: 'border-emerald-500/30', bgColor: 'bg-emerald-500/5' },
   'Client Relations': { order: 11, color: 'border-indigo-500/30', bgColor: 'bg-indigo-500/5' },
-  'Legal': { order: 12, color: 'border-[#B89555]/30/30', bgColor: 'bg-[#1A1A1A]/5' },
+  'Legal': { order: 12, color: 'border-[#B89555]/30', bgColor: 'bg-[#1A1A1A]/5' },
 };
 
 const departments = ['All', ...Object.keys(departmentHierarchy)];

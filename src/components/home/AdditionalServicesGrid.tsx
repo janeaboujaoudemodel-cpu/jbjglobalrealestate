@@ -117,7 +117,7 @@ const AdditionalServicesGrid = () => {
               </div>
             </Link>
           ) : (
-            <div className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl border-2 border-[#B89555]/30/50 p-5 opacity-75">
+            <div className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl border-2 border-[#B89555]/50 p-5 opacity-75">
               <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${service.color} flex items-center justify-center mb-4 shadow-lg opacity-50`}>
                 <service.icon className="w-6 h-6 text-white" />
               </div>

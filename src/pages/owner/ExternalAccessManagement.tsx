@@ -103,7 +103,7 @@ const ExternalAccessManagement = () => {
   const getStatusBadge = (auditor: any) => {
     if (auditor.is_suspended) return <Badge className="bg-red-500/20 text-red-600 border-red-500/40">Suspended</Badge>;
     if (auditor.access_expires_at && new Date(auditor.access_expires_at) < new Date())
-      return <Badge className="bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/40">Expired</Badge>;
+      return <Badge className="bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/40">Expired</Badge>;
     return <Badge className="bg-emerald-500/20 text-emerald-600 border-emerald-500/40">Active</Badge>;
   };
 
@@ -266,7 +266,7 @@ const ExternalAccessManagement = () => {
                         <Badge className={
                           f.feedback_type === "task" ? "bg-blue-500/20 text-blue-400 border-blue-500/40" :
                           f.feedback_type === "screenshot_note" ? "bg-amber-500/20 text-[#1A1A1A] border-amber-500/40" :
-                          "bg-[#B89555]/20 text-white/70 border-[#B89555]/30/40"
+                          "bg-[#B89555]/20 text-white/70 border-[#B89555]/40"
                         }>
                           {f.feedback_type === "task" ? "Task" : f.feedback_type === "screenshot_note" ? "Screenshot" : "Message"}
                         </Badge>

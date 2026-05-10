@@ -74,7 +74,7 @@ const SecurityDashboard: React.FC = () => {
       case 'high': return 'text-orange-500 bg-orange-500/10 border-orange-500/30';
       case 'medium': return 'text-yellow-500 bg-yellow-500/10 border-yellow-500/30';
       case 'low': return 'text-blue-500 bg-blue-500/10 border-blue-500/30';
-      default: return 'text-[#1A1A1A]/70 bg-[#B89555]/10 border-[#B89555]/30/30';
+      default: return 'text-[#1A1A1A]/70 bg-[#B89555]/10 border-[#B89555]/30';
     }
   };
 

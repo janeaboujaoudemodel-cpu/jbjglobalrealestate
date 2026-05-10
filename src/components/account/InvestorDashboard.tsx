@@ -193,7 +193,7 @@ const InvestorDashboard = () => {
       case 'in_progress':
         return 'bg-amber-500/10 text-amber-600 border-amber-500/30';
       default:
-        return 'bg-[#B89555]/10 text-[#1A1A1A]/70 border-[#B89555]/30/30';
+        return 'bg-[#B89555]/10 text-[#1A1A1A]/70 border-[#B89555]/30';
     }
   };
 

@@ -44,7 +44,7 @@ const MarketAreaDetail = () => {
       case 'bearish':
         return <Badge className="bg-red-500/20 text-red-600 border-red-500/30 text-lg px-4 py-1">Bearish</Badge>;
       default:
-        return <Badge className="bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/30 text-lg px-4 py-1">Neutral</Badge>;
+        return <Badge className="bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30 text-lg px-4 py-1">Neutral</Badge>;
     }
   };
 

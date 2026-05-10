@@ -37,7 +37,7 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
     if (!rank) return null;
     if (rank <= 3) return { icon: Crown, label: "Elite", color: "text-[#1A1A1A] bg-[#EFE6D6]/10 border-[#B89555]/30" };
     if (rank <= 10) return { icon: Award, label: "Premier", color: "text-[#1A1A1A] bg-amber-400/10 border-amber-400/30" };
-    if (rank <= 20) return { icon: Star, label: "Established", color: "text-white/85 bg-[#E5D9C4]/10 border-[#B89555]/30/30" };
+    if (rank <= 20) return { icon: Star, label: "Established", color: "text-white/85 bg-[#E5D9C4]/10 border-[#B89555]/30" };
     return null;
   };
 

@@ -33,7 +33,7 @@ const DataOperations = () => {
       case 'error':
         return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Error</Badge>;
       default:
-        return <Badge className="bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/30">Unknown</Badge>;
+        return <Badge className="bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30">Unknown</Badge>;
     }
   };
 

@@ -23,7 +23,7 @@ const LEARNING_PATH_COLORS: Record<string, { badge: string; accent: string }> = 
   'Advanced (Restricted)': { badge: 'bg-red-500/20 text-red-700 border-red-500/30', accent: 'text-red-600' },
 };
 
-const DEFAULT_PATH_COLORS = { badge: 'bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/30', accent: 'text-[#1A1A1A]/70' };
+const DEFAULT_PATH_COLORS = { badge: 'bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30', accent: 'text-[#1A1A1A]/70' };
 
 export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: BookDetailModalProps) {
   const { modules, loading } = useBookModules(book?.id || null);

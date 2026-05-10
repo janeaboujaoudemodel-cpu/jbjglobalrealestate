@@ -118,7 +118,7 @@ export function VideoCallPanel({
             <Badge 
               className={isCallActive 
                 ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30" 
-                : "bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/30"
+                : "bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30"
               }
             >
               {isCallActive ? "In Call" : "Available"}

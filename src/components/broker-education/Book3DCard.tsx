@@ -49,7 +49,7 @@ const LEARNING_PATH_COLORS: Record<string, { bg: string; text: string; border: s
 const DEFAULT_PATH_COLOR = { 
   bg: 'from-zinc-900 via-zinc-800 to-zinc-950', 
   text: 'text-gray-200', 
-  border: 'border-[#B89555]/30/40',
+  border: 'border-[#B89555]/40',
   glow: 'rgba(161, 161, 170, 0.3)'
 };
 

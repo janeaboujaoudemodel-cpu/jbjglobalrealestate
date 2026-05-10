@@ -12,13 +12,13 @@ interface TierBadgeProps {
 
 const TIER_CONFIGS: Record<string, { icon: typeof Crown; color: string; bgClass: string }> = {
   // Broker tiers
-  'Starter': { icon: Star, color: '#6B7280', bgClass: 'bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/30' },
+  'Starter': { icon: Star, color: '#6B7280', bgClass: 'bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30' },
   'Rising': { icon: Zap, color: '#059669', bgClass: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' },
   'Performer': { icon: Award, color: '#3B82F6', bgClass: 'bg-blue-500/20 text-blue-400 border-blue-500/30' },
   'Elite': { icon: Crown, color: '#8B5CF6', bgClass: 'bg-purple-500/20 text-purple-400 border-purple-500/30' },
   'Legend': { icon: Trophy, color: '#D4AF37', bgClass: 'bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30' },
   // Client tiers
-  'Explorer': { icon: Star, color: '#6B7280', bgClass: 'bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/30' },
+  'Explorer': { icon: Star, color: '#6B7280', bgClass: 'bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30' },
   'Seeker': { icon: Zap, color: '#059669', bgClass: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' },
   'Investor': { icon: Award, color: '#3B82F6', bgClass: 'bg-blue-500/20 text-blue-400 border-blue-500/30' },
   'Premium': { icon: Crown, color: '#8B5CF6', bgClass: 'bg-purple-500/20 text-purple-400 border-purple-500/30' },

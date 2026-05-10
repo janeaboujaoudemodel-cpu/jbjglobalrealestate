@@ -271,7 +271,7 @@ export const EmbeddedCustomerHappinessHub = () => {
       case "in_progress":
         return <Badge className="bg-purple-500/20 text-purple-600 border-purple-500/40"><Clock className="w-3 h-3 mr-1" />In Progress</Badge>;
       default:
-        return <Badge className="bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/40">{status}</Badge>;
+        return <Badge className="bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/40">{status}</Badge>;
     }
   };
 

@@ -91,7 +91,7 @@ const EmployeeJourneyTracker: React.FC<EmployeeJourneyTrackerProps> = ({ searchQ
       case 'department_change': return 'bg-blue-500/20 text-blue-700 border-blue-500/30';
       case 'probation_passed': return 'bg-emerald-500/20 text-emerald-700 border-emerald-500/30';
       case 'warning_issued': return 'bg-red-500/20 text-red-700 border-red-500/30';
-      default: return 'bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/30';
+      default: return 'bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30';
     }
   };
 
