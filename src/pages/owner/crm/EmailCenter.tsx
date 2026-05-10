@@ -130,6 +130,7 @@ export default function EmailCenter() {
                 Sync inbox now
               </Button>
             </div>
+          </div>
         </CardHeader>
         <CardContent className="p-3">
           {/* Category tabs */}
