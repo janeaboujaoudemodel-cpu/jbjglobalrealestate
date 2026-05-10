@@ -414,7 +414,6 @@ All colors MUST be HSL.
   .bg-black > svg,
   .bg-\[\#1A1A1A\] > svg,
   .bg-gray-900 > svg,
-  .bg-\[\#FDFBF7\] > svg,
   .bg-\[\#1A1A1A\] > svg,
   [class*="bg-black"] > svg.lucide,
   .jj-icon-keep > svg {
@@ -526,8 +525,6 @@ All colors MUST be HSL.
   .bg-gray-950 svg.lucide,
   .bg-\[\#1A1A1A\] svg.lucide,
   .bg-\[\#1A1A1A\] svg.lucide,
-  .bg-\[\#FDFBF7\] svg.lucide,
-  .bg-\[\#FDFBF7\] svg.lucide,
   .bg-\[\#1A1A1A\] svg.lucide,
   [class*="bg-[#0"] svg.lucide,
   [style*="#0D0D0D"] svg.lucide,
@@ -557,8 +554,6 @@ All colors MUST be HSL.
   .bg-gray-900 .text-gray-600,
   .bg-\[\#1A1A1A\] .text-gray-500,
   .bg-\[\#1A1A1A\] .text-gray-600,
-  .bg-\[\#FDFBF7\] .text-gray-500,
-  .bg-\[\#FDFBF7\] .text-gray-600,
   [class*="bg-[#0"] .text-gray-500,
   [class*="bg-[#0"] .text-gray-600,
   [style*="#0D0D0D"] .text-gray-500,
@@ -709,7 +704,7 @@ All colors MUST be HSL.
     --surface-icon: 36 33% 43%;
   }
   :where([class*="rounded-"]):is(
-    .bg-black, .bg-\[\#FDFBF7\], .bg-\[\#FDFBF7\], .bg-\[\#1A1A1A\], .bg-\[\#1A1A1A\],
+    .bg-black, .bg-\[\#1A1A1A\], .bg-\[\#1A1A1A\],
     .bg-gray-900, .bg-gray-950, .bg-\[\#1A1A1A\], .bg-\[\#1A1A1A\], .bg-\[\#1a1a1a\]
   ):not([data-surface]) {
     --surface-bg: 0 0% 10%;
@@ -2549,7 +2544,6 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
    on champagne (#F7F2EA) surfaces. We use [class~="…"] which matches the bare
    class as a whole word, EXCLUDING any /<alpha> suffix. */
 .bg-black > svg,
-.bg-\[\#FDFBF7\] > svg, .bg-\[\#FDFBF7\] > svg,
 .bg-\[\#1A1A1A\] > svg, .bg-\[\#1A1A1A\] > svg,
 .bg-gray-900 > svg, .bg-gray-950 > svg,
 .bg-\[\#1A1A1A\] > svg, .bg-\[\#1A1A1A\] > svg,
@@ -2563,7 +2557,6 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
 
 /* 2. Icons on SOLID-gold tiles → white. Same exact-token logic as above so
    translucent gold tiles (bg-[#B89555]/10, /15…) keep their authored gold icon. */
-.bg-\[\#EFE6D6\] > svg,
 [class~="bg-[#B89555]"] > svg,
 [class~="bg-[#A68444]"] > svg,
 [class~="bg-[#C8A766]"] > svg {
@@ -2645,7 +2638,7 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
   [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"],
   [class~="bg-[#FFFFFF]"]
 ):not([data-surface="dark"])
-:is(.text-white, [class*="text-white/"]):not(.bg-black):not([class*="bg-black"]):not(.bg-\[\#EFE6D6\]):not([class~="bg-[#EFE6D6]"]):not(.bg-primary):not([class*="bg-primary"]):not([class*="bg-gray-900"]):not([class*="bg-gray-800"]):not([data-surface="dark"]) {
+:is(.text-white, [class*="text-white/"]):not(.bg-black):not([class*="bg-black"]):not(.bg-primary):not([class*="bg-primary"]):not([class*="bg-gray-900"]):not([class*="bg-gray-800"]):not([data-surface="dark"]) {
   color: hsl(var(--foreground)) !important;
   opacity: 1 !important;
   --tw-text-opacity: 1 !important;
@@ -2666,7 +2659,7 @@ html [data-surface="dark"] :is(h1, h2, h3, h4, h5, h6, p, span, a, label, div, b
 :root:not(.dark) :is(
   .bg-black, [class*="bg-black"],
   .bg-gray-800, .bg-gray-900, .bg-gray-950,
-  .bg-\[\#1A1A1A\], .bg-\[\#FDFBF7\], .bg-\[\#FDFBF7\],
+  .bg-\[\#1A1A1A\],
   .bg-\[\#1A1A1A\], .bg-\[\#1A1A1A\], .bg-\[\#1A1A1A\],
   .bg-\[\#1A1A1A\], .bg-\[\#1A1A1A\], .bg-\[\#1A1A1A\],
   .bg-primary, .bg-foreground,
@@ -2682,7 +2675,7 @@ html [data-surface="dark"] :is(h1, h2, h3, h4, h5, h6, p, span, a, label, div, b
 :root:not(.dark) :is(
   .bg-black, [class*="bg-black"],
   .bg-gray-800, .bg-gray-900, .bg-gray-950,
-  .bg-\[\#1A1A1A\], .bg-\[\#FDFBF7\], .bg-\[\#FDFBF7\],
+  .bg-\[\#1A1A1A\],
   .bg-\[\#1A1A1A\], .bg-\[\#1A1A1A\],
   .bg-primary, .bg-foreground,
   [data-surface="dark"]
@@ -2716,7 +2709,7 @@ html [data-surface="dark"][data-surface="dark"] :is(input, textarea, select, opt
 /* Dark surface selector */
 :where(
   .bg-black, .bg-primary, .bg-foreground,
-  .bg-\[\#1A1A1A\], .bg-\[\#FDFBF7\], .bg-\[\#FDFBF7\],
+  .bg-\[\#1A1A1A\],
   .bg-gray-800, .bg-gray-900, .bg-gray-950,
   .bg-\[\#1A1A1A\], .bg-\[\#1A1A1A\], .bg-\[\#1A1A1A\],
   [class*="bg-black"],
@@ -2728,7 +2721,7 @@ html [data-surface="dark"][data-surface="dark"] :is(input, textarea, select, opt
 
 /* 2a. Low-contrast grays on dark → readable white */
 :where(
-  .bg-black, .bg-\[\#FDFBF7\], .bg-\[\#FDFBF7\], .bg-gray-900, .bg-gray-950,
+  .bg-black, .bg-gray-900, .bg-gray-950,
   .bg-gray-800, .bg-\[\#1A1A1A\], .bg-\[\#1A1A1A\],
   [class*="bg-black"],
   [class*="from-[hsl(32,28%,13%)]"], [class*="bg-[hsl(32,28%,13%)]"],
@@ -2744,7 +2737,7 @@ html [data-surface="dark"][data-surface="dark"] :is(input, textarea, select, opt
 
 /* 2b. Darker grays on dark surfaces → bright white */
 :where(
-  .bg-black, .bg-\[\#FDFBF7\], .bg-\[\#FDFBF7\], .bg-gray-900, .bg-gray-950,
+  .bg-black, .bg-gray-900, .bg-gray-950,
   [class*="bg-black"]
 ) :is(
   .text-gray-600, .text-gray-700, .text-gray-800, .text-gray-900,
@@ -2758,7 +2751,7 @@ html [data-surface="dark"][data-surface="dark"] :is(input, textarea, select, opt
 
 /* 2c. Borders on dark surfaces — visible */
 :where(
-  .bg-black, .bg-\[\#FDFBF7\], .bg-\[\#FDFBF7\], .bg-gray-900, .bg-gray-950
+  .bg-black, .bg-gray-900, .bg-gray-950
 ) :is(.border-gray-700, .border-\[\#B89555\]\/30, .border-gray-800, .border-\[\#B89555\]\/30) {
   border-color: rgb(255 255 255 / 0.18) !important;
 }
@@ -2770,33 +2763,28 @@ html [data-surface="dark"][data-surface="dark"] :is(input, textarea, select, opt
 
 /* ── 3. Gold accent text preserved on dark surfaces ── */
 :where(
-  .bg-black, .bg-\[\#FDFBF7\], .bg-\[\#FDFBF7\], .bg-gray-900,
+  .bg-black, .bg-gray-900,
   [class*="from-[hsl(32,28%,13%)]"], [class*="bg-[hsl(32,28%,13%)]"],
   [class*="from-[hsl(38,35%,12%)]"], [class*="bg-[hsl(38,35%,12%)]"]
 ) .text-\[\#1A1A1A\],
 :where(
-  .bg-black, .bg-\[\#FDFBF7\], .bg-\[\#FDFBF7\], .bg-gray-900,
+  .bg-black, .bg-gray-900,
   [class*="from-[hsl(32,28%,13%)]"], [class*="bg-[hsl(32,28%,13%)]"],
   [class*="from-[hsl(38,35%,12%)]"], [class*="bg-[hsl(38,35%,12%)]"]
 ) [class*="text-[#1A1A1A]"] {
   color: #C8A766 !important;
 }
 
-/* ── 4. Gold text on gold bg → white ── */
-.bg-\[\#EFE6D6\] .text-\[\#1A1A1A\], .bg-\[\#EFE6D6\] [class*="text-[#1A1A1A]"] {
-  color: #FFFFFF !important;
-}
+/* ── 4. Raised champagne surfaces keep ink text. ── */
 
 /* ── 5. Buttons & links on dark/gold backgrounds ── */
 button.bg-black, a.bg-black,
-button.bg-\[\#EFE6D6\], a.bg-\[\#EFE6D6\],
 button[class*="bg-gray-900"], a[class*="bg-gray-900"],
 .bg-black button, .bg-black a {
   color: #FFFFFF !important;
 }
 
 button.bg-black *, a.bg-black *,
-button.bg-\[\#EFE6D6\] *, a.bg-\[\#EFE6D6\] *,
 button.bg-black span, a.bg-black span {
   color: inherit !important;
 }
@@ -2857,7 +2845,7 @@ button[style*="background"] [class*="text-[#1A1A1A]"] {
   [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"],
   [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"]
 ):not([data-surface="dark"])
-:is(button, a, [role="button"], [role="option"], [role="menuitem"], label, span, p, h1, h2, h3, h4, h5, h6):is(.text-white, [class*="text-white/"]):not(.bg-black):not([class~="bg-[#1A1A1A]"]):not(.bg-\[\#EFE6D6\]):not([class~="bg-[#B89555]"]):not([class*="bg-red-5"]):not([class*="bg-red-6"]):not([class*="bg-red-7"]):not([class*="bg-emerald-6"]):not([class*="bg-blue-6"]):not([data-surface="dark"]):not([data-surface="dark"] *):not(.jj-hero-fullscreen *) {
+:is(button, a, [role="button"], [role="option"], [role="menuitem"], label, span, p, h1, h2, h3, h4, h5, h6):is(.text-white, [class*="text-white/"]):not(.bg-black):not([class~="bg-[#1A1A1A]"]):not([class~="bg-[#B89555]"]):not([class*="bg-red-5"]):not([class*="bg-red-6"]):not([class*="bg-red-7"]):not([class*="bg-emerald-6"]):not([class*="bg-blue-6"]):not([data-surface="dark"]):not([data-surface="dark"] *):not(.jj-hero-fullscreen *) {
   color: hsl(var(--foreground)) !important;
   --tw-text-opacity: 1 !important;
 }
@@ -3624,7 +3612,6 @@ button:disabled:has(.lucide),
      ============================================================ */
   .bg-black .text-\[\#1A1A1A\],
   .bg-gray-900 .text-\[\#1A1A1A\],
-  .bg-\[\#FDFBF7\] .text-\[\#1A1A1A\],
   .bg-\[\#1A1A1A\] .text-\[\#1A1A1A\],
   .bg-foreground .text-\[\#1A1A1A\],
   .bg-primary .text-\[\#1A1A1A\],
@@ -4129,7 +4116,7 @@ a[class*="bg-red-"]:hover {
  * or generic gray text were unreadable. Force readable colors.
  * ============================================================ */
 :where(
-  .bg-\[\#1A1A1A\], .bg-\[\#FDFBF7\], .bg-\[\#FDFBF7\],
+  .bg-\[\#1A1A1A\],
   .bg-gray-800, .bg-gray-900, .bg-gray-950,
   .bg-\[\#1A1A1A\], .bg-\[\#1A1A1A\], .bg-\[\#1A1A1A\],
   .bg-black, [class*="bg-black"],
@@ -4142,7 +4129,7 @@ a[class*="bg-red-"]:hover {
 
 /* Brown #5A4A2E on dark surfaces becomes legible champagne */
 :where(
-  .bg-\[\#1A1A1A\], .bg-\[\#FDFBF7\], .bg-\[\#FDFBF7\],
+  .bg-\[\#1A1A1A\],
   .bg-gray-800, .bg-gray-900, .bg-gray-950,
   .bg-\[\#1A1A1A\], .bg-\[\#1A1A1A\], .bg-\[\#1A1A1A\],
   .bg-black, [class*="bg-black"],
@@ -4156,14 +4143,14 @@ a[class*="bg-red-"]:hover {
 
 /* Inputs / textareas / selects on dark surfaces — readable text + placeholder */
 :where(
-  .bg-\[\#1A1A1A\], .bg-\[\#FDFBF7\], .bg-\[\#FDFBF7\],
+  .bg-\[\#1A1A1A\],
   .bg-gray-800, .bg-gray-900, .bg-gray-950,
   .bg-black, [class*="bg-black"], [class*="bg-zinc-8"], [class*="bg-zinc-9"]
 ) :is(input, textarea, select):not([data-no-contrast-guard]) {
   color: #FFFFFF !important;
 }
 :where(
-  .bg-\[\#1A1A1A\], .bg-\[\#FDFBF7\], .bg-\[\#FDFBF7\],
+  .bg-\[\#1A1A1A\],
   .bg-gray-800, .bg-gray-900, .bg-gray-950,
   .bg-black, [class*="bg-black"]
 ) :is(input, textarea, select)::placeholder {
@@ -4535,4 +4522,27 @@ button:hover [data-no-contrast-guard] svg[style*="#B89555"] {
 
 .owner-dashboard-shell :is([class~="bg-[#EFE6D6]"]) {
   background-color: #EFE6D6 !important;
+}
+
+/* ============================================================
+   FINAL LIGHT-SURFACE INK RESTORE
+   The prior contrast rescue must never leave homepage/header/CRM
+   champagne controls white. Light surfaces are ink by default;
+   explicit dark islands and hero areas are excluded.
+   ============================================================ */
+:root:not(.dark) :where(
+  .bg-white,
+  .bg-card,
+  .bg-background,
+  [class~="bg-[#FDFBF7]"],
+  [class~="bg-[#F7F2EA]"],
+  [class~="bg-[#EFE6D6]"],
+  [class*="from-[#FDFBF7]"],
+  [class*="from-[#F7F2EA]"],
+  [class*="from-[#F7F1E6]"]
+):not(:where([data-surface="dark"], [data-surface="dark"] *, [data-surface="ink"], [data-surface="ink"] *, .jj-hero-fullscreen, .jj-hero-fullscreen *))
+  :where(h1, h2, h3, h4, h5, h6, p, span, label, small, strong, em, li, a, button, [role="button"], [role="tab"], [role="menuitem"], svg.lucide):not(:where(.bg-black, .bg-black *, .bg-primary, .bg-primary *, .bg-foreground, .bg-foreground *, [class~="bg-[#1A1A1A]"], [class~="bg-[#1A1A1A]"] *, [class*="bg-gray-8"], [class*="bg-gray-8"] *, [class*="bg-gray-9"], [class*="bg-gray-9"] *, [class*="bg-zinc-8"], [class*="bg-zinc-8"] *, [class*="bg-zinc-9"], [class*="bg-zinc-9"] *, [data-surface="dark"], [data-surface="dark"] *, [data-surface="ink"], [data-surface="ink"] *, .jj-hero-fullscreen, .jj-hero-fullscreen *, .text-price-orange, [class*="text-price-orange"])) {
+  color: hsl(0 0% 10%) !important;
+  opacity: 1 !important;
+  --tw-text-opacity: 1 !important;
 }
