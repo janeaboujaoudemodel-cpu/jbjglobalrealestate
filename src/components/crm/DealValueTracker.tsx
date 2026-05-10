@@ -174,10 +174,10 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
         <Card className="border-[#B89555]/30 bg-[#FDFBF7] shadow-lg h-full">
           <CardContent className="p-5 h-full flex flex-col">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-3 rounded-xl bg-gold/20">
-                <Briefcase className="h-5 w-5 text-gold" />
+              <div className="p-3 rounded-xl bg-[#EFE6D6]/20">
+                <Briefcase className="h-5 w-5 text-[#1A1A1A]" />
               </div>
-              <Badge variant="outline" className="text-xs border-gold/30 text-gold px-3 py-1">
+              <Badge variant="outline" className="text-xs border-[#B89555]/30 text-[#1A1A1A] px-3 py-1">
                 Pipeline
               </Badge>
             </div>

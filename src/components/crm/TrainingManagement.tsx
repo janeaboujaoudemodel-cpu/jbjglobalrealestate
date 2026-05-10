@@ -249,7 +249,7 @@ export default function TrainingManagement() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="h-8 w-8 animate-spin text-gold" />
+        <Loader2 className="h-8 w-8 animate-spin text-[#1A1A1A]" />
       </div>
     );
   }
@@ -260,7 +260,7 @@ export default function TrainingManagement() {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold text-crm-text flex items-center gap-2">
-            <GraduationCap className="h-6 w-6 text-gold" />
+            <GraduationCap className="h-6 w-6 text-[#1A1A1A]" />
             Training Management
           </h2>
           <p className="text-crm-text-muted text-sm mt-1">
@@ -285,7 +285,7 @@ export default function TrainingManagement() {
           return (
             <Card
               key={program.id}
-              className={`bg-[#FDFBF7] border cursor-pointer transition-all duration-200 hover:shadow-md ${activeProgram === program.id ? 'border-gold ring-2 ring-gold/20' : 'border-crm-border'}`}
+              className={`bg-[#FDFBF7] border cursor-pointer transition-all duration-200 hover:shadow-md ${activeProgram === program.id ? 'border-[#B89555] ring-2 ring-gold/20' : 'border-crm-border'}`}
               onClick={() => setActiveProgram(program.id)}
             >
               <CardHeader className="pb-3">
@@ -323,7 +323,7 @@ export default function TrainingManagement() {
         <Card className="bg-[#FDFBF7] border-crm-border">
           <CardHeader>
             <CardTitle className="text-crm-text text-base flex items-center gap-2">
-              <BookOpen className="h-5 w-5 text-gold" />
+              <BookOpen className="h-5 w-5 text-[#1A1A1A]" />
               Books in {programs.find(p => p.id === activeProgram)?.name}
             </CardTitle>
           </CardHeader>
@@ -361,8 +361,8 @@ export default function TrainingManagement() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                         {sectionBooks.map(book => (
                           <div key={book.id} className="flex items-center gap-3 p-3 rounded-lg border border-crm-border bg-[#F7F2EA]/50">
-                            <div className="w-8 h-8 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center flex-shrink-0">
-                              <span className="text-gold text-xs font-bold">{book.book_number}</span>
+                            <div className="w-8 h-8 rounded-full bg-[#EFE6D6]/10 border border-[#B89555]/30 flex items-center justify-center flex-shrink-0">
+                              <span className="text-[#1A1A1A] text-xs font-bold">{book.book_number}</span>
                             </div>
                             <div className="min-w-0">
                               <p className="text-sm font-medium text-crm-text truncate">{book.title}</p>
@@ -385,7 +385,7 @@ export default function TrainingManagement() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="text-crm-text text-base flex items-center gap-2">
-              <Users className="h-5 w-5 text-gold" />
+              <Users className="h-5 w-5 text-[#1A1A1A]" />
               Training Assignments ({filteredAssignments.length})
             </CardTitle>
             <div className="relative w-64">
@@ -413,8 +413,8 @@ export default function TrainingManagement() {
                 return (
                   <div key={assignment.id} className="flex items-center justify-between p-4 rounded-lg border border-crm-border bg-[#F7F2EA]/30 hover:bg-[#F7F2EA] transition-colors">
                     <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center">
-                        <GraduationCap className="h-5 w-5 text-gold" />
+                      <div className="w-10 h-10 rounded-full bg-[#EFE6D6]/10 border border-[#B89555]/30 flex items-center justify-center">
+                        <GraduationCap className="h-5 w-5 text-[#1A1A1A]" />
                       </div>
                       <div>
                         <p className="font-medium text-crm-text">{getApplicantName(assignment.user_id)}</p>
@@ -473,7 +473,7 @@ export default function TrainingManagement() {
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <UserPlus className="h-5 w-5 text-gold" />
+              <UserPlus className="h-5 w-5 text-[#1A1A1A]" />
               Assign Training Program
             </DialogTitle>
             <DialogDescription>
@@ -527,7 +527,7 @@ export default function TrainingManagement() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowAssignDialog(false)}>Cancel</Button>
-            <Button onClick={handleAssignUser} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
+            <Button onClick={handleAssignUser} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
               Assign Training
             </Button>
           </DialogFooter>
@@ -539,7 +539,7 @@ export default function TrainingManagement() {
         <DialogContent className="max-w-lg max-h-[80vh]">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <BookOpen className="h-5 w-5 text-gold" />
+              <BookOpen className="h-5 w-5 text-[#1A1A1A]" />
               Manage Books — {managingProgram?.name}
             </DialogTitle>
             <DialogDescription>
@@ -620,7 +620,7 @@ export default function TrainingManagement() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowBooksDialog(false)}>Cancel</Button>
-            <Button onClick={handleSaveBooks} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
+            <Button onClick={handleSaveBooks} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
               Save Books
             </Button>
           </DialogFooter>

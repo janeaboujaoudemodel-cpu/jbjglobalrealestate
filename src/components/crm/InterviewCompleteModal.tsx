@@ -117,14 +117,14 @@ const InterviewCompleteModal = ({
           <Card className="bg-background/50 border-border">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center">
-                  <span className="text-lg font-bold text-gold">
+                <div className="w-12 h-12 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center">
+                  <span className="text-lg font-bold text-[#1A1A1A]">
                     {candidate.candidateName.charAt(0)}
                   </span>
                 </div>
                 <div>
                   <p className="font-semibold text-white">{candidate.candidateName}</p>
-                  <p className="text-sm text-gold">{candidate.position}</p>
+                  <p className="text-sm text-[#1A1A1A]">{candidate.position}</p>
                 </div>
               </div>
             </CardContent>
@@ -186,7 +186,7 @@ const InterviewCompleteModal = ({
           {/* Notes */}
           <div className="space-y-2">
             <Label className="text-white font-medium flex items-center gap-2">
-              <MessageSquare className="h-4 w-4 text-gold" />
+              <MessageSquare className="h-4 w-4 text-[#1A1A1A]" />
               Interview Notes
             </Label>
             <Textarea

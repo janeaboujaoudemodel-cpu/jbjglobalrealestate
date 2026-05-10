@@ -201,7 +201,7 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
   };
 
   return (
-    <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-sm">
+    <Card className="border-2 border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-sm">
       <CardHeader>
         <CardTitle className="text-lg text-[#1A1A1A] flex items-center gap-2">
           <Trash2 className="h-5 w-5 text-red-500" />
@@ -220,13 +220,13 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search deleted leads..."
-              className="pl-10 bg-[#FDFBF7] border-gold/30"
+              className="pl-10 bg-[#FDFBF7] border-[#B89555]/30"
             />
           </div>
           <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200">
             {leads.length} deleted lead{leads.length !== 1 ? "s" : ""}
           </Badge>
-          <Button variant="ghost" size="sm" onClick={fetchDeletedLeads} className="text-gold hover:bg-gold/10">
+          <Button variant="ghost" size="sm" onClick={fetchDeletedLeads} className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
             <RotateCcw className="h-4 w-4 mr-1" />
             Refresh
           </Button>
@@ -234,7 +234,7 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
 
         {/* Bulk action toolbar */}
         {filtered.length > 0 && (
-          <div className="flex flex-wrap items-center gap-2 rounded-lg border border-gold/30 bg-[#FDFBF7] px-3 py-2">
+          <div className="flex flex-wrap items-center gap-2 rounded-lg border border-[#B89555]/30 bg-[#FDFBF7] px-3 py-2">
             <Checkbox
               checked={allFilteredSelected}
               onCheckedChange={(c) => toggleSelectAll(!!c)}
@@ -377,7 +377,7 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
               </TableHeader>
               <TableBody>
                 {filtered.map((lead) => (
-                  <TableRow key={lead.id} data-state={selected.has(lead.id) ? "selected" : undefined} className="hover:bg-gold/5">
+                  <TableRow key={lead.id} data-state={selected.has(lead.id) ? "selected" : undefined} className="hover:bg-[#EFE6D6]/5">
                     <TableCell className="w-10">
                       <Checkbox
                         checked={selected.has(lead.id)}
@@ -390,7 +390,7 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
                     <TableCell className="text-[#1A1A1A]/70 text-sm">{lead.phone_e164 || "—"}</TableCell>
                     <TableCell>
                       {lead.source && (
-                        <Badge variant="secondary" className="text-xs bg-gold/10 border-gold/20">
+                        <Badge variant="secondary" className="text-xs bg-[#EFE6D6]/10 border-[#B89555]/20">
                           {lead.source}
                         </Badge>
                       )}

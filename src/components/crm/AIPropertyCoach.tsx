@@ -228,7 +228,7 @@ const AIPropertyCoach = ({ lead, activities = [], onSuggestionApply }: AIPropert
       case 'approach': return <MessageSquare className="h-4 w-4 text-green-400" />;
       case 'objection': return <Lightbulb className="h-4 w-4 text-amber-400" />;
       case 'followup': return <TrendingUp className="h-4 w-4 text-purple-400" />;
-      default: return <Sparkles className="h-4 w-4 text-gold" />;
+      default: return <Sparkles className="h-4 w-4 text-[#1A1A1A]" />;
     }
   };
 
@@ -237,7 +237,7 @@ const AIPropertyCoach = ({ lead, activities = [], onSuggestionApply }: AIPropert
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg flex items-center gap-2">
-            <Brain className="h-5 w-5 text-gold" />
+            <Brain className="h-5 w-5 text-[#1A1A1A]" />
             AI Property Coach
           </CardTitle>
           <div className="flex items-center gap-2">
@@ -270,7 +270,7 @@ const AIPropertyCoach = ({ lead, activities = [], onSuggestionApply }: AIPropert
           {suggestions.map((suggestion, index) => (
             <div
               key={index}
-              className="p-3 rounded-lg bg-muted/30 border border-border hover:border-gold/30 transition-colors"
+              className="p-3 rounded-lg bg-muted/30 border border-border hover:border-[#B89555]/30 transition-colors"
             >
               <div className="flex items-center gap-2 mb-2">
                 {getSuggestionIcon(suggestion.type)}
@@ -285,7 +285,7 @@ const AIPropertyCoach = ({ lead, activities = [], onSuggestionApply }: AIPropert
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="mt-2 h-7 text-xs text-gold hover:text-gold hover:bg-gold/10"
+                  className="mt-2 h-7 text-xs text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                   onClick={() => onSuggestionApply(suggestion.content)}
                 >
                   Apply Suggestion
@@ -308,7 +308,7 @@ const AIPropertyCoach = ({ lead, activities = [], onSuggestionApply }: AIPropert
                     className={`p-3 rounded-lg text-sm ${
                       msg.role === 'user'
                         ? 'bg-primary/20 text-foreground ml-8'
-                        : 'bg-gold/10 text-foreground mr-8 border border-gold/20'
+                        : 'bg-[#EFE6D6]/10 text-foreground mr-8 border border-[#B89555]/20'
                     }`}
                   >
                     <p className="text-[10px] text-muted-foreground mb-1">

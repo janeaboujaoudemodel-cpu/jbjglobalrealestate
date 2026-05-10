@@ -28,7 +28,7 @@ import { SUPABASE_URL } from "@/config/backend";
 
 // Department categories with icons
 const DEPARTMENT_CATEGORIES = [
-  { id: 'all', label: 'All CVs', icon: FileText, color: 'text-gold' },
+  { id: 'all', label: 'All CVs', icon: FileText, color: 'text-[#1A1A1A]' },
   { id: 'sales', label: 'Sales / Broker', icon: Briefcase, color: 'text-blue-400' },
   { id: 'marketing', label: 'Marketing', icon: Megaphone, color: 'text-orange-400' },
   { id: 'photography', label: 'Photography', icon: Camera, color: 'text-pink-400' },
@@ -803,7 +803,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
       <div className="flex items-center justify-between flex-wrap gap-4 p-4 bg-[#FDFBF7] rounded-xl border border-crm-border shadow-sm">
         <div>
           <h2 className="text-2xl font-bold text-crm-text flex items-center gap-3">
-            <FileText className="h-7 w-7 text-gold" />
+            <FileText className="h-7 w-7 text-[#1A1A1A]" />
             CV Center
           </h2>
           <p className="text-crm-text-muted mt-1">
@@ -847,7 +847,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
             }}
           />
           <Button
-            className="gap-2 bg-gold text-white hover:bg-gold-dark font-semibold"
+            className="gap-2 bg-[#EFE6D6] text-white hover:bg-[#EFE6D6]-dark font-semibold"
             onClick={() => document.getElementById('cv-upload-input')?.click()}
           >
             <Upload className="h-4 w-4" />
@@ -867,14 +867,14 @@ const CVCenter = ({ userId }: CVCenterProps) => {
             <Card
               key={tab.id}
               className={`bg-[#FDFBF7] border cursor-pointer hover:shadow-md transition-all ${
-                activeStatusTab === tab.id ? 'border-gold ring-2 ring-gold/20' : 'border-crm-border'
+                activeStatusTab === tab.id ? 'border-[#B89555] ring-2 ring-gold/20' : 'border-crm-border'
               }`}
               onClick={() => setActiveStatusTab(tab.id)}
             >
               <CardContent className="p-4 text-center">
                 <IconComponent className={`h-5 w-5 mx-auto mb-2 ${
                   tab.id === 'pending' ? 'text-amber-500' : tab.id === 'approved' ? 'text-green-500' :
-                  tab.id === 'rejected' ? 'text-red-500' : tab.id === 'flagged' ? 'text-yellow-500' : 'text-gold'
+                  tab.id === 'rejected' ? 'text-red-500' : tab.id === 'flagged' ? 'text-yellow-500' : 'text-[#1A1A1A]'
                 }`} />
                 <p className="text-xl font-bold text-crm-text">{count}</p>
                 <p className="text-xs text-crm-text-muted font-medium">{tab.label}</p>
@@ -899,7 +899,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                   key={cat.id}
                   variant={activeDeptCategory === cat.id ? 'default' : 'outline'}
                   className={`cursor-pointer px-3 py-2 ${
-                    activeDeptCategory === cat.id ? 'bg-gold text-white border-gold' : 'hover:bg-gold/10 border-crm-border text-crm-text'
+                    activeDeptCategory === cat.id ? 'bg-[#EFE6D6] text-white border-[#B89555]' : 'hover:bg-[#EFE6D6]/10 border-crm-border text-crm-text'
                   }`}
                   onClick={() => setActiveDeptCategory(cat.id)}
                 >
@@ -920,7 +920,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
             placeholder="Search by name, email, nationality, skills..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 bg-[#FDFBF7] border-crm-border text-crm-text placeholder:text-crm-text-muted focus:ring-2 focus:ring-gold/30 focus:border-gold"
+            className="pl-10 bg-[#FDFBF7] border-crm-border text-crm-text placeholder:text-crm-text-muted focus:ring-2 focus:ring-gold/30 focus:border-[#B89555]"
           />
         </div>
         <Select value={sortBy} onValueChange={(v) => setSortBy(v as any)}>
@@ -941,14 +941,14 @@ const CVCenter = ({ userId }: CVCenterProps) => {
       <Card className="bg-[#FDFBF7] border border-crm-border">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-crm-text">
-            <FileText className="h-5 w-5 text-gold" />
+            <FileText className="h-5 w-5 text-[#1A1A1A]" />
             {filteredCVs.length} Candidates
           </CardTitle>
         </CardHeader>
         <CardContent>
           {isLoading ? (
             <div className="flex items-center justify-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin text-gold" />
+              <Loader2 className="h-8 w-8 animate-spin text-[#1A1A1A]" />
             </div>
           ) : (
             <ScrollArea className="h-[700px]">
@@ -961,13 +961,13 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                   const hasUnreadableSummary = /unreadable|corrupt|malformed/i.test(cv.ai_summary || '');
 
                   return (
-                    <Card key={cv.id} className={`bg-gradient-to-r from-zinc-50 to-white border border-crm-border hover:border-gold/50 hover:shadow-md transition-all ${!cv.is_viewed ? 'border-l-4 border-l-amber-500' : ''}`}>
+                    <Card key={cv.id} className={`bg-gradient-to-r from-zinc-50 to-white border border-crm-border hover:border-[#B89555]/50 hover:shadow-md transition-all ${!cv.is_viewed ? 'border-l-4 border-l-amber-500' : ''}`}>
                       <CardContent className="p-5">
                         {/* === QUICK SUMMARY (always visible) === */}
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex gap-4 flex-1">
-                            <Avatar className="h-14 w-14 border-2 border-gold/30 flex-shrink-0">
-                              <AvatarFallback className="bg-gold/10 text-gold font-bold text-lg">
+                            <Avatar className="h-14 w-14 border-2 border-[#B89555]/30 flex-shrink-0">
+                              <AvatarFallback className="bg-[#EFE6D6]/10 text-[#1A1A1A] font-bold text-lg">
                                 {cv.full_name.charAt(0)}
                               </AvatarFallback>
                             </Avatar>
@@ -1100,10 +1100,10 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                                 Re-Analyze
                               </Button>
                             )}
-                            <Button size="sm" onClick={() => handleViewCV(cv)} className="bg-zinc-800 hover:bg-[#1A1A1A] text-white font-bold shadow-lg px-4 py-2">
+                            <Button size="sm" onClick={() => handleViewCV(cv)} className="bg-[#F7F2EA] hover:bg-[#1A1A1A] text-white font-bold shadow-lg px-4 py-2">
                               <Eye className="h-4 w-4 mr-1.5" /> View CV
                             </Button>
-                            <Button size="sm" onClick={() => openContactActions(cv)} className="bg-gold hover:bg-gold-dark text-white font-bold px-4 py-2">
+                            <Button size="sm" onClick={() => openContactActions(cv)} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]-dark text-white font-bold px-4 py-2">
                               <Mail className="h-4 w-4 mr-1.5" /> Contact
                             </Button>
                             <Button
@@ -1116,7 +1116,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                                 setCandidateTaskDescription(`Please review the latest update regarding your ${cv.position_applied || 'application'}.`);
                                 setContactOpen(true);
                               }}
-                              className="text-gold border-gold/40 hover:bg-gold/10 font-semibold"
+                              className="text-[#1A1A1A] border-[#B89555]/40 hover:bg-[#EFE6D6]/10 font-semibold"
                             >
                               <Flag className="h-4 w-4 mr-1.5" /> Add Task
                             </Button>
@@ -1253,7 +1253,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                                 <Button
                                   size="sm" variant="outline"
                                   onClick={() => { setSelectedCV(cv); setScheduleOpen(true); }}
-                                  className="gap-2 text-gold border-gold/30 hover:bg-gold/10"
+                                  className="gap-2 text-[#1A1A1A] border-[#B89555]/30 hover:bg-[#EFE6D6]/10"
                                 >
                                   <Video className="h-4 w-4" /> Schedule Interview
                                 </Button>
@@ -1286,7 +1286,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
           </DialogHeader>
           <div className="flex-1 min-h-0">
             {cvPreviewLoading ? (
-              <div className="h-full flex items-center justify-center"><Loader2 className="h-6 w-6 animate-spin text-gold" /></div>
+              <div className="h-full flex items-center justify-center"><Loader2 className="h-6 w-6 animate-spin text-[#1A1A1A]" /></div>
             ) : cvPreviewUrl ? (
               <iframe title="CV Preview" src={cvPreviewUrl} className="w-full h-full rounded-md border" />
             ) : cvDirectUrl ? (
@@ -1357,7 +1357,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
         <DialogContent className="max-w-md" aria-describedby="contact-actions-desc">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Phone className="h-5 w-5 text-gold" /> Candidate Contact Options
+              <Phone className="h-5 w-5 text-[#1A1A1A]" /> Candidate Contact Options
             </DialogTitle>
           </DialogHeader>
           <p id="contact-actions-desc" className="sr-only">Choose how to contact this candidate</p>
@@ -1369,7 +1369,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                 <p className="text-crm-text-muted">{selectedCV.phone_e164 || 'No phone number available'}</p>
               </div>
 
-              <Button className="w-full bg-gold hover:bg-gold-dark text-white font-bold" onClick={openEmailComposerFromContact}>
+              <Button className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]-dark text-white font-bold" onClick={openEmailComposerFromContact}>
                 <Mail className="h-4 w-4 mr-2" /> Send Email
               </Button>
 
@@ -1411,13 +1411,13 @@ const CVCenter = ({ userId }: CVCenterProps) => {
         if (!open) resetContactComposer();
       }}>
         <DialogContent className="max-w-xl" aria-describedby="contact-desc">
-          <DialogHeader><DialogTitle className="flex items-center gap-2"><Mail className="h-5 w-5 text-gold" /> Message Candidate</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle className="flex items-center gap-2"><Mail className="h-5 w-5 text-[#1A1A1A]" /> Message Candidate</DialogTitle></DialogHeader>
           <p id="contact-desc" className="sr-only">Describe the message, let AI rewrite it, approve, then send automatically.</p>
           {selectedCV && (
             <div className="space-y-4">
               <div className="flex items-center gap-3 p-3 rounded-lg bg-[#F7F2EA] border">
-                <Avatar className="h-10 w-10 border border-gold/30">
-                  <AvatarFallback className="bg-gold/10 text-gold font-bold">{selectedCV.full_name.charAt(0)}</AvatarFallback>
+                <Avatar className="h-10 w-10 border border-[#B89555]/30">
+                  <AvatarFallback className="bg-[#EFE6D6]/10 text-[#1A1A1A] font-bold">{selectedCV.full_name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div>
                   <p className="font-medium text-crm-text">{selectedCV.full_name}</p>
@@ -1437,7 +1437,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                 <Button
                   type="button"
                   variant="outline"
-                  className="mt-2 gap-2 border-gold/40 text-gold hover:bg-gold/10"
+                  className="mt-2 gap-2 border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                   onClick={handleGenerateAiDraft}
                   disabled={isGeneratingDraft}
                 >
@@ -1478,7 +1478,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                     size="sm"
                     variant={createTaskForUser ? 'default' : 'outline'}
                     onClick={() => { setCreateTaskForUser((v) => !v); setApproveTaskForUser(false); }}
-                    className={createTaskForUser ? 'bg-gold text-[#1A1A1A] hover:bg-gold/90' : 'border-gold/40 text-gold hover:bg-gold/10'}
+                    className={createTaskForUser ? 'bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90' : 'border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10'}
                   >
                     {createTaskForUser ? 'Task ON' : 'Enable Task'}
                   </Button>
@@ -1527,7 +1527,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
 
               <div className="flex gap-2">
                 <Button
-                  className="flex-1 bg-gold hover:bg-gold/90 text-[#1A1A1A] font-bold"
+                  className="flex-1 bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-bold"
                   disabled={!adminMessageSubject.trim() || !adminMessageBody.trim() || sendingMessage || isGeneratingDraft || creatingTask || approveTaskForUser}
                   onClick={async () => {
                     if (!selectedCV) return;

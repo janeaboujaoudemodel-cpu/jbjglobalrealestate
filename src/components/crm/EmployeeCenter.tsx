@@ -349,7 +349,7 @@ const EmployeeCenter = ({ userId }: EmployeeCenterProps) => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-            <Users className="h-7 w-7 text-gold" />
+            <Users className="h-7 w-7 text-[#1A1A1A]" />
             Employee Center
           </h2>
           <p className="text-muted-foreground mt-1">AI-powered recruitment & employee management</p>
@@ -367,7 +367,7 @@ const EmployeeCenter = ({ userId }: EmployeeCenterProps) => {
       <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
         <Card className="bg-card border-border">
           <CardContent className="p-4 text-center">
-            <FileText className="h-6 w-6 text-gold mx-auto mb-2" />
+            <FileText className="h-6 w-6 text-[#1A1A1A] mx-auto mb-2" />
             <p className="text-2xl font-bold text-white">{stats.total}</p>
             <p className="text-xs text-muted-foreground">Total CVs</p>
           </CardContent>
@@ -411,10 +411,10 @@ const EmployeeCenter = ({ userId }: EmployeeCenterProps) => {
 
       {/* Upload Form */}
       {showUploadForm && (
-        <Card className="bg-card border-gold/30">
+        <Card className="bg-card border-[#B89555]/30">
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
-              <Upload className="h-5 w-5 text-gold" />
+              <Upload className="h-5 w-5 text-[#1A1A1A]" />
               Upload New CV
             </CardTitle>
           </CardHeader>
@@ -447,7 +447,7 @@ const EmployeeCenter = ({ userId }: EmployeeCenterProps) => {
               />
             </div>
             <label className="block">
-              <div className="border-2 border-dashed border-border rounded-lg p-6 text-center cursor-pointer hover:border-gold/50 transition-colors">
+              <div className="border-2 border-dashed border-border rounded-lg p-6 text-center cursor-pointer hover:border-[#B89555]/50 transition-colors">
                 <Upload className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
                 <p className="text-sm text-muted-foreground">
                   Click to upload CV, Cover Letter, or Documents
@@ -463,8 +463,8 @@ const EmployeeCenter = ({ userId }: EmployeeCenterProps) => {
               />
             </label>
             {isUploading && (
-              <div className="flex items-center gap-2 text-gold">
-                <div className="w-4 h-4 border-2 border-gold/30 border-t-gold rounded-full animate-spin" />
+              <div className="flex items-center gap-2 text-[#1A1A1A]">
+                <div className="w-4 h-4 border-2 border-[#B89555]/30 border-t-gold rounded-full animate-spin" />
                 <span className="text-sm">Uploading & starting AI analysis...</span>
               </div>
             )}
@@ -485,19 +485,19 @@ const EmployeeCenter = ({ userId }: EmployeeCenterProps) => {
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="bg-muted/50">
-          <TabsTrigger value="all" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40">
+          <TabsTrigger value="all" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40">
             All CVs ({candidates.length})
           </TabsTrigger>
-          <TabsTrigger value="pending" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40">
+          <TabsTrigger value="pending" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40">
             Pending ({stats.pending})
           </TabsTrigger>
-          <TabsTrigger value="interviews" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40">
+          <TabsTrigger value="interviews" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40">
             Interviews ({stats.interviews})
           </TabsTrigger>
-          <TabsTrigger value="approved" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40">
+          <TabsTrigger value="approved" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40">
             Approved ({stats.approved})
           </TabsTrigger>
-          <TabsTrigger value="rejected" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40">
+          <TabsTrigger value="rejected" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40">
             Rejected/Hold ({stats.rejected})
           </TabsTrigger>
         </TabsList>

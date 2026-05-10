@@ -400,7 +400,7 @@ export default function CRMLeadsTableV2({
   return (
     <div className="space-y-4">
       {/* Filter card — champagne-themed, no native dropdowns */}
-      <div className="rounded-xl border border-gold/30 bg-[#F7F2EA] p-4 space-y-3">
+      <div className="rounded-xl border border-[#B89555]/30 bg-[#F7F2EA] p-4 space-y-3">
         {/* Quick chips strip */}
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-xs font-bold uppercase tracking-wider text-[#1A1A1A]/60 mr-1">Quick:</span>
@@ -419,8 +419,8 @@ export default function CRMLeadsTableV2({
                 className={
                   "inline-flex items-center gap-1.5 h-8 px-3 rounded-full text-xs font-semibold border transition-colors " +
                   (active
-                    ? "bg-[#EFE6D6] text-[#1A1A1A] border-gold"
-                    : "bg-[#FDFBF7] text-[#1A1A1A]/80 border-gold/30 hover:bg-[#EFE6D6]")
+                    ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
+                    : "bg-[#FDFBF7] text-[#1A1A1A]/80 border-[#B89555]/30 hover:bg-[#EFE6D6]")
                 }
               >
                 <Icon className="h-3.5 w-3.5" />
@@ -437,7 +437,7 @@ export default function CRMLeadsTableV2({
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search name, phone, email…"
-              className="h-10 bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus-visible:ring-1 focus-visible:ring-gold focus-visible:border-gold"
+              className="h-10 bg-[#FDFBF7] border border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus-visible:ring-1 focus-visible:ring-gold focus-visible:border-[#B89555]"
             />
           </div>
           <Button
@@ -452,7 +452,7 @@ export default function CRMLeadsTableV2({
               setAssigneeFilter("");
               setTagFilter("");
             }}
-            className="h-10 font-semibold border-gold/30 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#EFE6D6]"
+            className="h-10 font-semibold border-[#B89555]/30 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#EFE6D6]"
           >
             Clear filters
           </Button>
@@ -508,7 +508,7 @@ export default function CRMLeadsTableV2({
         {/* Dropdown row — shadcn Select, evenly spaced, no overlap */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <Select value={stageFilter || "__all__"} onValueChange={(v) => setStageFilter(v === "__all__" ? "" : v)}>
-            <SelectTrigger className="h-10 bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] font-semibold min-w-0">
+            <SelectTrigger className="h-10 bg-[#FDFBF7] border border-[#B89555]/30 text-[#1A1A1A] font-semibold min-w-0">
               <SelectValue placeholder="All Stages" className="truncate" />
             </SelectTrigger>
             <SelectContent className="bg-[#FDFBF7] border border-[#B89555]/40 shadow-lg max-h-[360px] [&_[data-highlighted]]:bg-[#EFE6D6] [&_[data-highlighted]]:text-[#1A1A1A]">
@@ -550,7 +550,7 @@ export default function CRMLeadsTableV2({
           </Select>
 
           <Select value={sourceTypeFilter || "__all__"} onValueChange={(v) => setSourceTypeFilter(v === "__all__" ? "" : v)}>
-            <SelectTrigger className="h-10 bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] font-semibold min-w-0">
+            <SelectTrigger className="h-10 bg-[#FDFBF7] border border-[#B89555]/30 text-[#1A1A1A] font-semibold min-w-0">
               <SelectValue placeholder="All Sources" className="truncate" />
             </SelectTrigger>
             <SelectContent className="bg-[#FDFBF7] border border-[#B89555]/40 shadow-lg max-h-[360px] [&_[data-highlighted]]:bg-[#EFE6D6] [&_[data-highlighted]]:text-[#1A1A1A]">
@@ -570,7 +570,7 @@ export default function CRMLeadsTableV2({
           </Select>
 
           <Select value={assigneeFilter || "__all__"} onValueChange={(v) => setAssigneeFilter(v === "__all__" ? "" : v)}>
-            <SelectTrigger className="h-10 bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] font-semibold min-w-0">
+            <SelectTrigger className="h-10 bg-[#FDFBF7] border border-[#B89555]/30 text-[#1A1A1A] font-semibold min-w-0">
               <SelectValue placeholder="All Owners" className="truncate" />
             </SelectTrigger>
             <SelectContent className="bg-[#FDFBF7] border border-[#B89555]/40 shadow-lg max-h-[360px] [&_[data-highlighted]]:bg-[#EFE6D6] [&_[data-highlighted]]:text-[#1A1A1A]">
@@ -588,7 +588,7 @@ export default function CRMLeadsTableV2({
           </Select>
 
           <Select value={tagFilter || "__all__"} onValueChange={(v) => setTagFilter(v === "__all__" ? "" : v)}>
-            <SelectTrigger className="h-10 bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] font-semibold min-w-0">
+            <SelectTrigger className="h-10 bg-[#FDFBF7] border border-[#B89555]/30 text-[#1A1A1A] font-semibold min-w-0">
               <SelectValue placeholder="All Tags" className="truncate" />
             </SelectTrigger>
             <SelectContent className="bg-[#FDFBF7] border border-[#B89555]/40 shadow-lg [&_[data-highlighted]]:bg-[#EFE6D6] [&_[data-highlighted]]:text-[#1A1A1A]">
@@ -608,10 +608,10 @@ export default function CRMLeadsTableV2({
         onSuccess={() => { fetchLeads(); onRefresh(); }}
       />
 
-      <div className="w-full overflow-x-auto rounded-lg border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+      <div className="w-full overflow-x-auto rounded-lg border-2 border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <Table className="min-w-[1300px]">
           <TableHeader>
-            <TableRow className="border-gold/20 hover:bg-transparent">
+            <TableRow className="border-[#B89555]/20 hover:bg-transparent">
               <TableHead className="w-12">
                 <Checkbox
                   checked={allVisibleSelected}
@@ -652,7 +652,7 @@ export default function CRMLeadsTableV2({
                 const status = lead.state?.pipeline_status || "new";
 
                 return (
-                  <TableRow key={lead.id} data-state={isSelected ? "selected" : undefined} className="border-gold/20 hover:bg-gold/5">
+                  <TableRow key={lead.id} data-state={isSelected ? "selected" : undefined} className="border-[#B89555]/20 hover:bg-[#EFE6D6]/5">
                     <TableCell>
                       <Checkbox
                         checked={isSelected}
@@ -698,7 +698,7 @@ export default function CRMLeadsTableV2({
                         size="sm"
                         variant={vip ? "default" : "outline"}
                         onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleToggleVIP(lead.id, vip); }}
-                        className={`min-w-[60px] ${vip ? "bg-gold text-[#1A1A1A] hover:bg-gold/90" : "border-gold/30 text-[#1A1A1A]/60 hover:bg-gold/10"}`}
+                        className={`min-w-[60px] ${vip ? "bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90" : "border-[#B89555]/30 text-[#1A1A1A]/60 hover:bg-[#EFE6D6]/10"}`}
                       >
                         {vip ? "★ VIP" : "—"}
                       </Button>
@@ -717,7 +717,7 @@ export default function CRMLeadsTableV2({
                                 type="button"
                                 size="sm"
                                 variant="outline"
-                                className="h-7 px-2 text-xs bg-gold/10 border-gold/30 text-[#1A1A1A] hover:bg-gold/20 whitespace-nowrap"
+                                className="h-7 px-2 text-xs bg-[#EFE6D6]/10 border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/20 whitespace-nowrap"
                                 onClick={(e) => e.stopPropagation()}
                                 title="Assign broker"
                               >

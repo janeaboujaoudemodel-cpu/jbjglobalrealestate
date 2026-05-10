@@ -292,7 +292,7 @@ const CRMAIToolsPanel = ({ lead, onGeneratePDF }: CRMAIToolsPanelProps) => {
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-lg flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-gold" />
+            <Sparkles className="h-5 w-5 text-[#1A1A1A]" />
             AI Tools for {lead.full_name.split(' ')[0]}
           </CardTitle>
         </CardHeader>
@@ -321,7 +321,7 @@ const CRMAIToolsPanel = ({ lead, onGeneratePDF }: CRMAIToolsPanelProps) => {
                             key={tool.id}
                             className={`relative p-3 border rounded-lg transition-all ${
                               isSelected 
-                                ? "border-gold bg-gold/10" 
+                                ? "border-[#B89555] bg-[#EFE6D6]/10" 
                                 : "border-border hover:border-muted-foreground/50"
                             }`}
                           >
@@ -329,10 +329,10 @@ const CRMAIToolsPanel = ({ lead, onGeneratePDF }: CRMAIToolsPanelProps) => {
                               <button
                                 onClick={() => toggleTool(tool.id)}
                                 className={`p-2 rounded-lg transition-colors ${
-                                  isSelected ? "bg-gold/20" : "bg-muted hover:bg-muted/80"
+                                  isSelected ? "bg-[#EFE6D6]/20" : "bg-muted hover:bg-muted/80"
                                 }`}
                               >
-                                <Icon className={`h-4 w-4 ${isSelected ? "text-gold" : tool.color}`} />
+                                <Icon className={`h-4 w-4 ${isSelected ? "text-[#1A1A1A]" : tool.color}`} />
                               </button>
                               <div className="flex-1 min-w-0">
                                 <p className="text-sm font-medium">{tool.name}</p>
@@ -341,7 +341,7 @@ const CRMAIToolsPanel = ({ lead, onGeneratePDF }: CRMAIToolsPanelProps) => {
                                 </p>
                               </div>
                               {isSelected && (
-                                <Check className="h-4 w-4 text-gold" />
+                                <Check className="h-4 w-4 text-[#1A1A1A]" />
                               )}
                               <Button
                                 variant="ghost"

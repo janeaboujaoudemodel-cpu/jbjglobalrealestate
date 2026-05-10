@@ -28,7 +28,7 @@ const DeleteLeadDialog: React.FC<DeleteLeadDialogProps> = ({
 }) => {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 max-w-md">
+      <AlertDialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 max-w-md">
         <AlertDialogHeader>
           <div className="flex items-center gap-3 mb-2">
             <div className="w-12 h-12 rounded-xl bg-red-100 border border-red-200 flex items-center justify-center">
@@ -58,14 +58,14 @@ const DeleteLeadDialog: React.FC<DeleteLeadDialogProps> = ({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="gap-3 mt-4">
-          <AlertDialogCancel className="bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] hover:bg-gold/10 hover:border-gold">
+          <AlertDialogCancel className="bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 hover:border-[#B89555]">
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction
             onClick={onConfirm}
             className={isFinalDelete 
               ? "bg-red-600 text-white hover:bg-red-700 border-0" 
-              : "bg-gold text-[#1A1A1A] hover:bg-gold/90 border-0"
+              : "bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90 border-0"
             }
           >
             {isFinalDelete ? "Delete Forever" : "Move to Deleted"}

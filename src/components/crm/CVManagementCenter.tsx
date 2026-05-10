@@ -261,7 +261,7 @@ const CVManagementCenter = () => {
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
               <CardTitle className="flex items-center gap-2 text-crm-text text-xl font-bold">
-                <FileText className="h-6 w-6 text-gold" />
+                <FileText className="h-6 w-6 text-[#1A1A1A]" />
                 CV Management Center
               </CardTitle>
               <CardDescription className="text-crm-text-muted mt-1">
@@ -330,13 +330,13 @@ const CVManagementCenter = () => {
                 placeholder="Search by name, position, language, skills..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-[#FDFBF7] border-crm-border text-crm-text placeholder:text-crm-text-muted focus:ring-2 focus:ring-gold/30 focus:border-gold"
+                className="pl-10 bg-[#FDFBF7] border-crm-border text-crm-text placeholder:text-crm-text-muted focus:ring-2 focus:ring-gold/30 focus:border-[#B89555]"
               />
             </div>
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="px-4 py-2 bg-[#FDFBF7] border border-crm-border rounded-lg text-crm-text text-sm font-medium focus:ring-2 focus:ring-gold/30 focus:border-gold transition-all"
+              className="px-4 py-2 bg-[#FDFBF7] border border-crm-border rounded-lg text-crm-text text-sm font-medium focus:ring-2 focus:ring-gold/30 focus:border-[#B89555] transition-all"
             >
               <option value="all">All Categories</option>
               <option value="collected">Collected</option>
@@ -347,7 +347,7 @@ const CVManagementCenter = () => {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-2 bg-[#FDFBF7] border border-crm-border rounded-lg text-crm-text text-sm font-medium focus:ring-2 focus:ring-gold/30 focus:border-gold transition-all"
+              className="px-4 py-2 bg-[#FDFBF7] border border-crm-border rounded-lg text-crm-text text-sm font-medium focus:ring-2 focus:ring-gold/30 focus:border-[#B89555] transition-all"
             >
               <option value="all">All Status</option>
               <option value="pending">Pending Review</option>
@@ -359,7 +359,7 @@ const CVManagementCenter = () => {
             <select
               value={genderFilter}
               onChange={(e) => setGenderFilter(e.target.value)}
-              className="px-4 py-2 bg-[#FDFBF7] border border-crm-border rounded-lg text-crm-text text-sm font-medium focus:ring-2 focus:ring-gold/30 focus:border-gold transition-all"
+              className="px-4 py-2 bg-[#FDFBF7] border border-crm-border rounded-lg text-crm-text text-sm font-medium focus:ring-2 focus:ring-gold/30 focus:border-[#B89555] transition-all"
             >
               <option value="all">All Gender</option>
               <option value="male">Male</option>
@@ -381,14 +381,14 @@ const CVManagementCenter = () => {
                 <div className="flex-1">
                   {/* Header Row */}
                   <div className="flex items-center gap-4 mb-4">
-                    <Avatar className="h-14 w-14 border-2 border-gold/40">
-                      <AvatarFallback className="bg-gold/20 text-gold font-bold text-xl">
+                    <Avatar className="h-14 w-14 border-2 border-[#B89555]/40">
+                      <AvatarFallback className="bg-[#EFE6D6]/20 text-[#1A1A1A] font-bold text-xl">
                         {cv.candidateName.charAt(0)}
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1">
                       <h4 className="text-white font-bold text-lg">{cv.candidateName}</h4>
-                      <p className="text-gold font-semibold">{cv.positionApplied}</p>
+                      <p className="text-[#1A1A1A] font-semibold">{cv.positionApplied}</p>
                     </div>
                     <div className="flex items-center gap-2 flex-wrap">
                       {getCVStatusBadge(cv.status)}
@@ -425,7 +425,7 @@ const CVManagementCenter = () => {
                     <Badge className="bg-zinc-700 text-gray-200 font-medium border-0">
                       Source: {cv.source || cv.uploadedBy}
                     </Badge>
-                    <Badge className="bg-gold/20 text-gold border-gold/30 font-semibold">
+                    <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30 font-semibold">
                       <Star className="h-3 w-3 mr-1" />
                       Ranking: {cv.ranking}/10
                     </Badge>
@@ -447,7 +447,7 @@ const CVManagementCenter = () => {
                 <div className="flex flex-col gap-2 min-w-[160px]">
                   <Button 
                     size="sm" 
-                    className="bg-[#FDFBF7] border border-gold text-crm-text hover:bg-gold hover:text-white font-semibold transition-all duration-200 gap-2"
+                    className="bg-[#FDFBF7] border border-[#B89555] text-crm-text hover:bg-[#EFE6D6] hover:text-white font-semibold transition-all duration-200 gap-2"
                     onClick={() => handleViewCV(cv)}
                   >
                     <FileText className="h-4 w-4" />
@@ -455,7 +455,7 @@ const CVManagementCenter = () => {
                   </Button>
                   <Button 
                     size="sm" 
-                    className="bg-[#FDFBF7] border border-gold text-crm-text hover:bg-gold hover:text-white font-semibold transition-all duration-200 gap-2"
+                    className="bg-[#FDFBF7] border border-[#B89555] text-crm-text hover:bg-[#EFE6D6] hover:text-white font-semibold transition-all duration-200 gap-2"
                     onClick={() => handleContact(cv)}
                   >
                     <Mail className="h-4 w-4" />
@@ -463,7 +463,7 @@ const CVManagementCenter = () => {
                   </Button>
                   <Button 
                     size="sm" 
-                    className="bg-gold text-white hover:bg-gold-dark font-semibold transition-all duration-200 gap-2"
+                    className="bg-[#EFE6D6] text-white hover:bg-[#EFE6D6]-dark font-semibold transition-all duration-200 gap-2"
                     onClick={() => handleScheduleInterview(cv)}
                   >
                     <Calendar className="h-4 w-4" />
@@ -491,7 +491,7 @@ const CVManagementCenter = () => {
         <DialogContent className="bg-[#FDFBF7] border-crm-border text-crm-text max-w-md">
           <DialogHeader>
             <DialogTitle className="text-crm-text font-bold text-lg flex items-center gap-2">
-              <Calendar className="h-5 w-5 text-gold" />
+              <Calendar className="h-5 w-5 text-[#1A1A1A]" />
               Schedule Interview
             </DialogTitle>
           </DialogHeader>
@@ -499,8 +499,8 @@ const CVManagementCenter = () => {
           {selectedCV && (
             <div className="space-y-4 py-2">
               <div className="flex items-center gap-3 p-3 bg-crm-highlight rounded-lg">
-                <Avatar className="h-10 w-10 border border-gold/30">
-                  <AvatarFallback className="bg-gold/20 text-gold font-bold">
+                <Avatar className="h-10 w-10 border border-[#B89555]/30">
+                  <AvatarFallback className="bg-[#EFE6D6]/20 text-[#1A1A1A] font-bold">
                     {selectedCV.candidateName.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
@@ -517,7 +517,7 @@ const CVManagementCenter = () => {
                     type="date" 
                     value={interviewDate}
                     onChange={(e) => setInterviewDate(e.target.value)}
-                    className="mt-1 bg-[#FDFBF7] border-crm-border text-crm-text focus:ring-gold/30 focus:border-gold"
+                    className="mt-1 bg-[#FDFBF7] border-crm-border text-crm-text focus:ring-gold/30 focus:border-[#B89555]"
                   />
                 </div>
                 <div>
@@ -526,7 +526,7 @@ const CVManagementCenter = () => {
                     type="time" 
                     value={interviewTime}
                     onChange={(e) => setInterviewTime(e.target.value)}
-                    className="mt-1 bg-[#FDFBF7] border-crm-border text-crm-text focus:ring-gold/30 focus:border-gold"
+                    className="mt-1 bg-[#FDFBF7] border-crm-border text-crm-text focus:ring-gold/30 focus:border-[#B89555]"
                   />
                 </div>
               </div>
@@ -536,7 +536,7 @@ const CVManagementCenter = () => {
                 <select
                   value={hrAssigned}
                   onChange={(e) => setHrAssigned(e.target.value)}
-                  className="w-full mt-1 px-3 py-2 bg-[#FDFBF7] border border-crm-border rounded-lg text-crm-text focus:ring-2 focus:ring-gold/30 focus:border-gold"
+                  className="w-full mt-1 px-3 py-2 bg-[#FDFBF7] border border-crm-border rounded-lg text-crm-text focus:ring-2 focus:ring-gold/30 focus:border-[#B89555]"
                 >
                   <option value="">Select HR Member</option>
                   <option value="david">David Carter - Head of Recruitment</option>
@@ -551,7 +551,7 @@ const CVManagementCenter = () => {
                   value={interviewNotes}
                   onChange={(e) => setInterviewNotes(e.target.value)}
                   placeholder="Interview notes, preparation reminders..."
-                  className="mt-1 bg-[#FDFBF7] border-crm-border text-crm-text placeholder:text-crm-text-muted focus:ring-gold/30 focus:border-gold min-h-[80px]"
+                  className="mt-1 bg-[#FDFBF7] border-crm-border text-crm-text placeholder:text-crm-text-muted focus:ring-gold/30 focus:border-[#B89555] min-h-[80px]"
                 />
               </div>
             </div>

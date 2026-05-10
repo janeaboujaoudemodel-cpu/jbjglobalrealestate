@@ -547,7 +547,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
       <div className="flex items-center justify-between flex-wrap gap-4 p-4 bg-[#FDFBF7] rounded-xl border border-crm-border shadow-sm">
         <div>
           <h2 className="text-2xl font-bold text-crm-text flex items-center gap-3">
-            <Building2 className="h-7 w-7 text-gold" />
+            <Building2 className="h-7 w-7 text-[#1A1A1A]" />
             JBJ Employees Hub
           </h2>
           <p className="text-crm-text-muted mt-1">Team Management & HR Center</p>
@@ -565,11 +565,11 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
       {/* Stats Cards - CLICKABLE to filter - WHITE BACKGROUND */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
         <Card 
-          className={`bg-[#FDFBF7] border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'all' ? 'border-gold ring-2 ring-gold/20' : 'border-crm-border'}`}
+          className={`bg-[#FDFBF7] border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'all' ? 'border-[#B89555] ring-2 ring-gold/20' : 'border-crm-border'}`}
           onClick={() => setActiveTab('all')}
         >
           <CardContent className="p-4 text-center">
-            <Users className="h-5 w-5 text-gold mx-auto mb-2" />
+            <Users className="h-5 w-5 text-[#1A1A1A] mx-auto mb-2" />
             <p className="text-xl font-bold text-crm-text">{stats.total}</p>
             <p className="text-xs text-crm-text-muted font-medium">Total Team</p>
           </CardContent>
@@ -625,12 +625,12 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
           </CardContent>
         </Card>
         <Card 
-          className={`bg-[#FDFBF7] border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'cv' ? 'border-gold ring-2 ring-gold/20' : 'border-crm-border'}`}
+          className={`bg-[#FDFBF7] border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'cv' ? 'border-[#B89555] ring-2 ring-gold/20' : 'border-crm-border'}`}
           onClick={() => setActiveTab('cv')}
         >
           <CardContent className="p-4 text-center">
-            <FileText className="h-5 w-5 text-gold mx-auto mb-2" />
-            <p className="text-xl font-bold text-gold">{cvEntries.length}</p>
+            <FileText className="h-5 w-5 text-[#1A1A1A] mx-auto mb-2" />
+            <p className="text-xl font-bold text-[#1A1A1A]">{cvEntries.length}</p>
             <p className="text-xs text-crm-text-muted font-medium">CV Center</p>
           </CardContent>
         </Card>
@@ -669,7 +669,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
                 placeholder="Search employees by name, role, or department..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-[#FDFBF7] border-crm-border text-crm-text placeholder:text-crm-text-muted focus:ring-2 focus:ring-gold/30 focus:border-gold"
+                className="pl-10 bg-[#FDFBF7] border-crm-border text-crm-text placeholder:text-crm-text-muted focus:ring-2 focus:ring-gold/30 focus:border-[#B89555]"
               />
             </div>
           </div>
@@ -709,7 +709,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
                   <div key={dept} className="space-y-3">
                     {/* Department Header */}
                     <div className="flex items-center gap-3 pb-2 border-b border-crm-border">
-                      <div className="w-8 h-8 bg-gold/10 rounded-lg flex items-center justify-center">
+                      <div className="w-8 h-8 bg-[#EFE6D6]/10 rounded-lg flex items-center justify-center">
                         {getDepartmentIcon(dept)}
                       </div>
                       <div>
@@ -723,7 +723,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
                       {grouped[dept].map((employee) => (
                         <Card 
                           key={employee.id} 
-                          className="bg-[#FDFBF7] border border-crm-border hover:border-gold/50 hover:shadow-md transition-all duration-200 cursor-pointer"
+                          className="bg-[#FDFBF7] border border-crm-border hover:border-[#B89555]/50 hover:shadow-md transition-all duration-200 cursor-pointer"
                           onClick={() => setSelectedEmployee(employee)}
                         >
                           <CardContent className="p-4">
@@ -731,12 +731,12 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
                               <div className="flex items-center gap-4">
                                 {/* Avatar - Use actual team photos */}
                                 <div className="relative">
-                                  <Avatar className="h-12 w-12 border-2 border-gold/30">
+                                  <Avatar className="h-12 w-12 border-2 border-[#B89555]/30">
                                     {/* GLOBAL IMAGE RULE - LOCKED (FINAL): max zoom, crop from bottom */}
                                     {employee.avatar ? (
-                                      <AvatarImage src={employee.avatar} alt={employee.name} className="bg-zinc-900" />
+                                      <AvatarImage src={employee.avatar} alt={employee.name} className="bg-[#FDFBF7]" />
                                     ) : null}
-                                    <AvatarFallback className="bg-gold/10 text-gold font-bold">
+                                    <AvatarFallback className="bg-[#EFE6D6]/10 text-[#1A1A1A] font-bold">
                                       {employee.name.charAt(0)}
                                     </AvatarFallback>
                                   </Avatar>
@@ -748,10 +748,10 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
                                   <div className="flex items-center gap-2 flex-wrap">
                                     <p className="font-semibold text-crm-text">{employee.name}</p>
                                     {employee.role === 'Founder & CEO' && (
-                                      <Crown className="h-4 w-4 text-gold" />
+                                      <Crown className="h-4 w-4 text-[#1A1A1A]" />
                                     )}
                                   </div>
-                                  <p className="text-sm text-gold font-medium">{employee.role}</p>
+                                  <p className="text-sm text-[#1A1A1A] font-medium">{employee.role}</p>
                                   
                                   {/* Reports To */}
                                   {employee.reportsTo && (

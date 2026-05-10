@@ -103,12 +103,12 @@ const LeadContactActions = ({ lead, onGenerateReport }: LeadContactActionsProps)
           <Button 
             variant="outline" 
             size="sm" 
-            className="bg-gold/10 border-gold/30 text-gold hover:bg-gold/20"
+            className="bg-[#EFE6D6]/10 border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/20"
           >
             <MoreHorizontal className="w-4 h-4" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="bg-zinc-900 border-[#1A1A1A] w-56">
+        <DropdownMenuContent align="end" className="bg-[#FDFBF7] border-[#1A1A1A] w-56">
           <DropdownMenuItem 
             onClick={handleGenerateReport}
             className="flex items-center gap-2 text-white/85 hover:text-white cursor-pointer"

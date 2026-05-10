@@ -58,7 +58,7 @@ export default function CRMReAuthModal({ open, onOpenChange, actionLabel, onSucc
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 max-w-md">
+      <AlertDialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 max-w-md">
         <AlertDialogHeader>
           <div className="flex items-center gap-3 mb-2">
             <div className="w-12 h-12 rounded-xl bg-amber-100 border border-amber-300 flex items-center justify-center">
@@ -81,16 +81,16 @@ export default function CRMReAuthModal({ open, onOpenChange, actionLabel, onSucc
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleReAuth()}
-            className="border-gold/30 focus:border-gold"
+            className="border-[#B89555]/30 focus:border-[#B89555]"
             autoFocus
           />
         </div>
 
         <AlertDialogFooter className="gap-3">
-          <AlertDialogCancel className="bg-background border-2 border-gold/30 text-foreground hover:bg-gold/10">
+          <AlertDialogCancel className="bg-background border-2 border-[#B89555]/30 text-foreground hover:bg-[#EFE6D6]/10">
             Cancel
           </AlertDialogCancel>
-          <Button onClick={handleReAuth} disabled={loading || !password} className="bg-gold text-[#1A1A1A] hover:bg-gold/90">
+          <Button onClick={handleReAuth} disabled={loading || !password} className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90">
             {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
             Confirm & Proceed
           </Button>

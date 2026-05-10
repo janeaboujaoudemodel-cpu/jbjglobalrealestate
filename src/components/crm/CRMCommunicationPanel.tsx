@@ -283,7 +283,7 @@ const CRMCommunicationPanel = () => {
   };
 
   return (
-    <Card data-surface="champagne" className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
+    <Card data-surface="champagne" className="border-2 border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
       <CardHeader className="pb-2">
         <CardTitle className="text-[#1A1A1A] font-bold text-base flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -348,7 +348,7 @@ const CRMCommunicationPanel = () => {
                         </span>
                         <div className="flex items-center gap-1">
                           {unreadCount > 0 && (
-                            <span className="min-w-[18px] h-[18px] flex items-center justify-center rounded-full bg-gold text-[#1A1A1A] text-[10px] font-bold px-1">
+                            <span className="min-w-[18px] h-[18px] flex items-center justify-center rounded-full bg-[#EFE6D6] text-[#1A1A1A] text-[10px] font-bold px-1">
                               {unreadCount}
                             </span>
                           )}
@@ -375,7 +375,7 @@ const CRMCommunicationPanel = () => {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-6 w-6 text-[#1A1A1A]/70 hover:text-gold"
+                      className="h-6 w-6 text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
                       onClick={() => setShowMemberModal(true)}
                     >
                       <Settings className="h-3 w-3" />
@@ -403,7 +403,7 @@ const CRMCommunicationPanel = () => {
                           </div>
                           <p
                             className={`text-xs p-2 rounded-lg break-words [overflow-wrap:anywhere] [word-break:break-word] ${
-                              msg.isMe ? 'bg-gold/20 text-[#1A1A1A]' : 'bg-[#F7F2EA] text-[#1A1A1A]'
+                              msg.isMe ? 'bg-[#EFE6D6]/20 text-[#1A1A1A]' : 'bg-[#F7F2EA] text-[#1A1A1A]'
                             }`}
                           >
                             {msg.message}
@@ -419,7 +419,7 @@ const CRMCommunicationPanel = () => {
                 {showScrollButton && (
                   <Button
                     size="sm"
-                    className="absolute bottom-14 left-1/2 -translate-x-1/2 h-7 text-xs bg-gold text-[#1A1A1A] hover:bg-gold/90 shadow-lg"
+                    className="absolute bottom-14 left-1/2 -translate-x-1/2 h-7 text-xs bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90 shadow-lg"
                     onClick={scrollToBottom}
                   >
                     <ChevronDown className="h-3 w-3 mr-1" />
@@ -438,7 +438,7 @@ const CRMCommunicationPanel = () => {
                       >
                         <Avatar className="h-5 w-5">
                           <AvatarImage src={member.avatar} alt={member.name} />
-                          <AvatarFallback className="text-[8px] bg-gold/20 text-gold">
+                          <AvatarFallback className="text-[8px] bg-[#EFE6D6]/20 text-[#1A1A1A]">
                             {member.name.split(' ').map(n => n[0]).join('')}
                           </AvatarFallback>
                         </Avatar>
@@ -477,7 +477,7 @@ const CRMCommunicationPanel = () => {
                     />
                     <Button 
                       size="icon" 
-                      className="h-8 w-8 bg-gold text-[#1A1A1A] hover:bg-gold/90"
+                      className="h-8 w-8 bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
                       onClick={sendMessage}
                     >
                       <Send className="h-4 w-4" />
@@ -508,7 +508,7 @@ const CRMCommunicationPanel = () => {
                     <div key={department} className="space-y-2">
                       <div className="sticky top-0 z-10 bg-[#FDFBF7]">
                         <div className="px-2 py-1">
-                          <Badge variant="secondary" className="text-[10px] bg-gold/10 text-gold border-gold/30">
+                          <Badge variant="secondary" className="text-[10px] bg-[#EFE6D6]/10 text-[#1A1A1A] border-[#B89555]/30">
                             {department} • {deptMembers.length}
                           </Badge>
                         </div>
@@ -523,7 +523,7 @@ const CRMCommunicationPanel = () => {
                                   <div className="relative">
                                     <Avatar className="h-8 w-8">
                                       <AvatarImage src={member.avatar} alt={member.name} />
-                                      <AvatarFallback className="bg-gold/20 text-gold text-xs">
+                                      <AvatarFallback className="bg-[#EFE6D6]/20 text-[#1A1A1A] text-xs">
                                         {member.name.split(' ').map(n => n[0]).join('')}
                                       </AvatarFallback>
                                     </Avatar>
@@ -604,7 +604,7 @@ const CRMCommunicationPanel = () => {
           <TabsContent value="meetings" className="m-0 p-3">
             <div className="space-y-3">
               <Button 
-                className="w-full bg-gold text-[#1A1A1A] hover:bg-gold/90 font-semibold"
+                className="w-full bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90 font-semibold"
                 onClick={() => window.open('/video-meeting', '_blank')}
               >
                 <Video className="h-4 w-4 mr-2" />
@@ -695,7 +695,7 @@ const CRMCommunicationPanel = () => {
                     <div key={member.id} className="flex items-center justify-between p-2 rounded-lg bg-[#F7F2EA]">
                       <div className="flex items-center gap-2">
                         <Avatar className="h-6 w-6">
-                          <AvatarFallback className="text-[10px] bg-gold/20 text-gold">
+                          <AvatarFallback className="text-[10px] bg-[#EFE6D6]/20 text-[#1A1A1A]">
                             {member.name.split(' ').map(n => n[0]).join('')}
                           </AvatarFallback>
                         </Avatar>
@@ -756,7 +756,7 @@ const CRMCommunicationPanel = () => {
           </DialogHeader>
           <div className="text-center py-6">
             <Avatar className="h-16 w-16 mx-auto mb-4">
-              <AvatarFallback className="text-xl bg-gold/20 text-gold">
+              <AvatarFallback className="text-xl bg-[#EFE6D6]/20 text-[#1A1A1A]">
                 {callTarget?.name.split(' ').map(n => n[0]).join('')}
               </AvatarFallback>
             </Avatar>

@@ -205,7 +205,7 @@ ${COMPANY_INFO.website}`;
       <DialogContent className="sm:max-w-lg bg-card border-border">
         <DialogHeader>
           <DialogTitle className="text-white flex items-center gap-2">
-            <Building2 className="h-5 w-5 text-gold" />
+            <Building2 className="h-5 w-5 text-[#1A1A1A]" />
             Property Shortlist
           </DialogTitle>
         </DialogHeader>
@@ -218,7 +218,7 @@ ${COMPANY_INFO.website}`;
               {shortlist.length} properties selected
             </p>
           </div>
-          <Badge variant="outline" className="text-gold border-gold/50">
+          <Badge variant="outline" className="text-[#1A1A1A] border-[#B89555]/50">
             Active Lead
           </Badge>
         </div>
@@ -262,7 +262,7 @@ ${COMPANY_INFO.website}`;
                         <p className="text-xs text-muted-foreground">
                           📍 {item.property_data?.location || "Dubai"}
                         </p>
-                        <p className="text-sm text-gold font-medium mt-1">
+                        <p className="text-sm text-[#1A1A1A] font-medium mt-1">
                           {item.property_data?.price || "Price on request"}
                         </p>
                       </div>
@@ -308,7 +308,7 @@ ${COMPANY_INFO.website}`;
               </Button>
             </div>
             <Button
-              className="w-full bg-gold text-[#1A1A1A] hover:bg-gold/90"
+              className="w-full bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
               onClick={generateReport}
             >
               <FileText className="h-4 w-4 mr-2" />

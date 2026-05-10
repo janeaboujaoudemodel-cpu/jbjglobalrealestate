@@ -51,7 +51,7 @@ const getIcon = (actionType: string) => {
     case "Reassign": return <AlertTriangle className="h-4 w-4 text-red-500" />;
     case "Round-Robin": return <UserPlus className="h-4 w-4 text-purple-500" />;
     case "Queue WhatsApp": return <MessageSquare className="h-4 w-4 text-green-500" />;
-    default: return <Zap className="h-4 w-4 text-gold" />;
+    default: return <Zap className="h-4 w-4 text-[#1A1A1A]" />;
   }
 };
 
@@ -201,7 +201,7 @@ const AutomationRules = ({ userId, isOwner = false }: AutomationRulesProps) => {
             key={rule.id}
             className={`flex items-start gap-3 p-3 rounded-xl border transition-all min-w-0 overflow-hidden ${
               rule.is_active
-                ? "bg-[#FDFBF7] border-gold/30 shadow-sm"
+                ? "bg-[#FDFBF7] border-[#B89555]/30 shadow-sm"
                 : "bg-[#F7F2EA] border-[#B89555]/30"
             }`}
           >
@@ -266,7 +266,7 @@ const AutomationRules = ({ userId, isOwner = false }: AutomationRulesProps) => {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Settings className="h-5 w-5 text-gold" />
+              <Settings className="h-5 w-5 text-[#1A1A1A]" />
               Create Automation Rule
             </DialogTitle>
           </DialogHeader>

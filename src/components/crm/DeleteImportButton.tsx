@@ -272,7 +272,7 @@ const DeleteImportButton = ({ userId, onSuccess, hasOwnerAccess }: DeleteImportB
                   <select
                     value={selectedSourceId}
                     onChange={(e) => setSelectedSourceId(e.target.value)}
-                    className="w-full h-11 px-3 rounded-md border border-[#1A1A1A] bg-zinc-950 text-white font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className="w-full h-11 px-3 rounded-md border border-[#1A1A1A] bg-[#FDFBF7] text-white font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
                     style={{ backgroundColor: '#09090b', color: '#ffffff' }}
                   >
                     <option value="" disabled style={{ backgroundColor: '#09090b', color: '#888888' }}>

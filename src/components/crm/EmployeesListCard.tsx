@@ -44,8 +44,8 @@ const EmployeesListCard = ({ employees, onView }: EmployeesListCardProps) => {
       }`}
     >
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center">
-          <span className="font-bold text-gold">
+        <div className="w-10 h-10 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center">
+          <span className="font-bold text-[#1A1A1A]">
             {employee.candidateName.charAt(0)}
           </span>
         </div>
@@ -58,7 +58,7 @@ const EmployeesListCard = ({ employees, onView }: EmployeesListCardProps) => {
               </Badge>
             )}
           </div>
-          <p className="text-sm text-gold">{employee.position}</p>
+          <p className="text-sm text-[#1A1A1A]">{employee.position}</p>
         </div>
       </div>
 
@@ -123,7 +123,7 @@ const EmployeesListCard = ({ employees, onView }: EmployeesListCardProps) => {
       <Card className="bg-card border-border">
         <CardHeader className="pb-3">
           <CardTitle className="text-white text-lg flex items-center gap-2">
-            <Users className="h-5 w-5 text-gold" />
+            <Users className="h-5 w-5 text-[#1A1A1A]" />
             All Employees
             <Badge className="ml-2 bg-muted text-muted-foreground">{employees.length}</Badge>
           </CardTitle>

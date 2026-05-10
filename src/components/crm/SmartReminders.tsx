@@ -182,7 +182,7 @@ const SmartReminders = ({ userId, limit = 5 }: SmartRemindersProps) => {
   };
 
   return (
-    <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
+    <Card className="border-2 border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
       <CardHeader className="pb-3">
         <CardTitle className="text-base flex items-center gap-2 text-[#1A1A1A]">
           <div className="p-1.5 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
@@ -214,7 +214,7 @@ const SmartReminders = ({ userId, limit = 5 }: SmartRemindersProps) => {
                   "flex items-start gap-3 p-3 rounded-lg border-2 transition-colors",
                   reminder.priority === 'high' 
                     ? "border-red-300/50 bg-gradient-to-br from-red-50 to-red-100/50" 
-                    : "border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:shadow-md"
+                    : "border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:shadow-md"
                 )}
               >
                 <div className={cn(

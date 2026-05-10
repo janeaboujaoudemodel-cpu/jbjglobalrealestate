@@ -124,10 +124,10 @@ export default function LeadSharingPanel({ leadId, isOwner }: LeadSharingPanelPr
   const activeShares = shares.filter(s => !s.expires_at || new Date(s.expires_at) > new Date());
 
   return (
-    <Card className="border-gold/30">
+    <Card className="border-[#B89555]/30">
       <CardHeader className="pb-3">
         <CardTitle className="text-base flex items-center gap-2">
-          <Share2 className="w-4 h-4 text-gold" />
+          <Share2 className="w-4 h-4 text-[#1A1A1A]" />
           Lead Sharing
         </CardTitle>
       </CardHeader>
@@ -136,7 +136,7 @@ export default function LeadSharingPanel({ leadId, isOwner }: LeadSharingPanelPr
         <div className="flex gap-2 items-end">
           <div className="flex-1">
             <Select value={selectedUser} onValueChange={setSelectedUser}>
-              <SelectTrigger className="border-gold/30">
+              <SelectTrigger className="border-[#B89555]/30">
                 <SelectValue placeholder="Select team member" />
               </SelectTrigger>
               <SelectContent>
@@ -149,7 +149,7 @@ export default function LeadSharingPanel({ leadId, isOwner }: LeadSharingPanelPr
             </Select>
           </div>
           <Select value={expiry} onValueChange={setExpiry}>
-            <SelectTrigger className="w-24 border-gold/30">
+            <SelectTrigger className="w-24 border-[#B89555]/30">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -160,7 +160,7 @@ export default function LeadSharingPanel({ leadId, isOwner }: LeadSharingPanelPr
               <SelectItem value="none">No expiry</SelectItem>
             </SelectContent>
           </Select>
-          <Button onClick={handleShare} disabled={!selectedUser || loading} size="sm" className="bg-gold text-[#1A1A1A] hover:bg-gold/90">
+          <Button onClick={handleShare} disabled={!selectedUser || loading} size="sm" className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90">
             <UserPlus className="w-4 h-4" />
           </Button>
         </div>
