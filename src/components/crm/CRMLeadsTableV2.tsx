@@ -343,7 +343,7 @@ export default function CRMLeadsTableV2({
           l.email_lower?.toLowerCase().includes(q);
         if (!hit) return false;
       }
-      if (stageFilter && (l.state?.pipeline_status || "new") !== stageFilter) return false;
+      if (stageMulti.length > 0 && !stageMulti.includes(l.state?.pipeline_status || "new")) return false;
       if (sourceTypeFilter && (l.lead_source_type || "") !== sourceTypeFilter) return false;
       if (assigneeFilter) {
         if (assigneeFilter === "__unassigned__") {
@@ -358,9 +358,10 @@ export default function CRMLeadsTableV2({
       }
       if (tagFilter === "vip" && (l as any).vip !== true) return false;
       if (tagFilter === "unassigned" && leadAssignees[l.id]) return false;
+      if (tagFilter === "investor" && (l as any).is_investor !== true) return false;
       return true;
     });
-  }, [leads, search, stageFilter, sourceTypeFilter, assigneeFilter, tagFilter, leadAssignees, userId]);
+  }, [leads, search, stageMulti, sourceTypeFilter, assigneeFilter, tagFilter, leadAssignees, userId]);
 
   const selectedIds = useMemo(() => Array.from(selected), [selected]);
 
