@@ -1,0 +1,258 @@
+/**
+ * EmailCenter — JBJ-related inbox command center.
+ * Pulls classified emails from email_inbox_items, organized by category
+ * (Overview, Contracts, Registrations, Opportunities, Partnerships, Careers,
+ * Other) with action chips and one-click follow-ups.
+ *
+ * Every automated send BCCs drjane@gmail.com.
+ */
+import { useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { IconTile } from "@/components/ui/icon-tile";
+import {
+  Mail,
+  RefreshCw,
+  Inbox,
+  FileSignature,
+  Building2,
+  Handshake,
+  Briefcase,
+  FileQuestion,
+  Sparkles,
+  ShieldCheck,
+  Paperclip,
+  ExternalLink,
+  Archive,
+  Send,
+} from "lucide-react";
+import {
+  useEmailInboxItems,
+  useInboxCategoryCounts,
+  useSyncJbjInbox,
+  useSendRegistrationConfirmation,
+  useArchiveInboxItem,
+  type InboxCategory,
+} from "@/hooks/useEmailInboxItems";
+
+const CATEGORIES: Array<{ id: InboxCategory; label: string; tone: "gold" | "purple" | "blue" | "amber" | "emerald" | "rose" | "ink"; icon: typeof Mail }> = [
+  { id: "overview",       label: "Overview",       tone: "gold",    icon: Inbox },
+  { id: "contracts",      label: "Contracts",      tone: "purple",  icon: FileSignature },
+  { id: "registrations",  label: "Registrations",  tone: "blue",    icon: ShieldCheck },
+  { id: "opportunities",  label: "Opportunities",  tone: "amber",   icon: Sparkles },
+  { id: "partnerships",   label: "Partnerships",   tone: "emerald", icon: Handshake },
+  { id: "careers",        label: "Careers",        tone: "rose",    icon: Briefcase },
+  { id: "other",          label: "Other",          tone: "ink",     icon: FileQuestion },
+];
+
+const STATUS_CHIP: Record<string, { label: string; cls: string }> = {
+  awaiting_you:  { label: "Awaiting you",  cls: "bg-amber-100 text-amber-900 border-amber-300" },
+  awaiting_them: { label: "Awaiting them", cls: "bg-blue-100 text-blue-900 border-blue-300" },
+  signed:        { label: "Signed",        cls: "bg-emerald-100 text-emerald-900 border-emerald-300" },
+  registered:    { label: "Registered",    cls: "bg-emerald-100 text-emerald-900 border-emerald-300" },
+  needs_review:  { label: "Needs review",  cls: "bg-rose-100 text-rose-900 border-rose-300" },
+  info_only:     { label: "Info",          cls: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/30" },
+};
+
+export default function EmailCenter() {
+  const [active, setActive] = useState<InboxCategory>("overview");
+  const { data: items = [], isLoading } = useEmailInboxItems(active);
+  const { data: counts = {} } = useInboxCategoryCounts();
+  const sync = useSyncJbjInbox();
+  const sendConfirm = useSendRegistrationConfirmation();
+  const archive = useArchiveInboxItem();
+
+  const grouped = useMemo(() => items, [items]);
+
+  return (
+    <div className="space-y-4">
+      {/* Header */}
+      <Card className="bg-[#F7F2EA] border-[#B89555]/30">
+        <CardHeader className="pb-3 border-b border-[#B89555]/15">
+          <div className="flex items-center justify-between gap-3 flex-wrap">
+            <CardTitle className="flex items-center gap-2 text-[#1A1A1A] text-lg">
+              <IconTile icon={Mail} tone="gold" size="sm" />
+              Email Command Center
+              <span className="text-xs font-normal text-[#1A1A1A]/60">
+                JBJ-related mail from the connected inbox · auto-BCC drjane@gmail.com on every send
+              </span>
+            </CardTitle>
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={sync.isPending}
+              onClick={() => sync.mutate()}
+              className="h-8 text-xs border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/60"
+            >
+              <RefreshCw className={`h-3.5 w-3.5 mr-1.5 ${sync.isPending ? "animate-spin" : ""}`} />
+              Sync inbox now
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent className="p-3">
+          {/* Category tabs */}
+          <div className="flex flex-wrap gap-1.5">
+            {CATEGORIES.map((c) => {
+              const Icon = c.icon;
+              const isActive = active === c.id;
+              const n = counts[c.id] ?? 0;
+              return (
+                <button
+                  key={c.id}
+                  type="button"
+                  onClick={() => setActive(c.id)}
+                  className={[
+                    "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-medium border transition-colors",
+                    isActive
+                      ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
+                      : "bg-transparent text-[#1A1A1A]/70 border-transparent hover:bg-[#EFE6D6]/60 hover:text-[#1A1A1A]",
+                  ].join(" ")}
+                >
+                  <Icon className="h-3.5 w-3.5" />
+                  {c.label}
+                  {n > 0 && (
+                    <span className="ml-1 inline-flex items-center justify-center min-w-[1.125rem] h-[18px] px-1 rounded-full text-[10px] font-semibold tabular-nums bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/40">
+                      {n}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Items */}
+      {isLoading ? (
+        <div className="text-sm text-[#1A1A1A]/60 px-4 py-8 text-center">Loading…</div>
+      ) : grouped.length === 0 ? (
+        <Card className="bg-[#FDFBF7] border-[#B89555]/20">
+          <CardContent className="py-12 text-center text-sm text-[#1A1A1A]/70">
+            <Inbox className="h-8 w-8 mx-auto mb-2 text-[#1A1A1A]/40" />
+            No JBJ-related emails yet in this category. Click <strong>Sync inbox now</strong> to pull the latest from Gmail.
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="space-y-2">
+          {grouped.map((it) => {
+            const chip = STATUS_CHIP[it.status] ?? STATUS_CHIP.info_only;
+            const cat = CATEGORIES.find((c) => c.id === it.category) ?? CATEGORIES[CATEGORIES.length - 1];
+            const Icon = cat.icon;
+            const isRegistration = it.category === "registrations" || it.category === "contracts";
+            return (
+              <Card key={it.id} className="bg-[#FDFBF7] border-[#B89555]/20">
+                <CardContent className="p-3">
+                  <div className="flex items-start gap-3">
+                    <IconTile icon={Icon} tone={cat.tone} size="sm" />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between gap-2 flex-wrap">
+                        <div className="text-sm font-semibold text-[#1A1A1A] truncate">
+                          {it.raw_subject || "(no subject)"}
+                        </div>
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          <Badge variant="outline" className={`${chip.cls} border font-semibold text-[10px]`}>{chip.label}</Badge>
+                          <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] text-[10px] uppercase tracking-wide">
+                            {cat.label}
+                          </Badge>
+                        </div>
+                      </div>
+                      <div className="mt-1 text-xs text-[#1A1A1A]/70 truncate">
+                        From <strong>{it.from_name || it.from_email}</strong> · {it.from_email}
+                        {it.received_at && <> · {new Date(it.received_at).toLocaleString()}</>}
+                      </div>
+                      {it.snippet && (
+                        <div className="mt-1 text-xs text-[#1A1A1A]/80 line-clamp-2">
+                          {it.snippet}
+                        </div>
+                      )}
+                      {it.attachments && it.attachments.length > 0 && (
+                        <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-[11px] text-[#1A1A1A]/75">
+                          <Paperclip className="h-3 w-3" />
+                          {it.attachments.slice(0, 3).map((a, i) => (
+                            <span key={i} className="px-1.5 py-0.5 rounded bg-[#EFE6D6] border border-[#B89555]/30">
+                              {a.filename}
+                            </span>
+                          ))}
+                          {it.attachments.length > 3 && <span>+{it.attachments.length - 3} more</span>}
+                        </div>
+                      )}
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        {it.action_required && (
+                          <Badge variant="outline" className="bg-amber-50 border-amber-300 text-amber-900 text-[10px]">
+                            Action: {it.action_required}
+                          </Badge>
+                        )}
+                        {it.linked_contract_url && (
+                          <a
+                            href={it.linked_contract_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-[11px] text-[#1A1A1A] underline underline-offset-2"
+                          >
+                            <ExternalLink className="h-3 w-3" /> Open contract link
+                          </a>
+                        )}
+                      </div>
+                      <div className="mt-2.5 flex flex-wrap gap-2">
+                        {it.gmail_thread_id && (
+                          <Button
+                            asChild
+                            size="sm"
+                            variant="outline"
+                            className="h-7 text-xs border-[#B89555]/40"
+                          >
+                            <a
+                              href={`https://mail.google.com/mail/u/0/#inbox/${it.gmail_thread_id}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <Mail className="h-3 w-3 mr-1" /> Open in Gmail
+                            </a>
+                          </Button>
+                        )}
+                        {isRegistration && it.linked_developer_id && it.status !== "registered" && (
+                          <>
+                            <Button
+                              size="sm"
+                              variant="gold"
+                              className="h-7 text-xs"
+                              disabled={sendConfirm.isPending}
+                              onClick={() => sendConfirm.mutate({ developer_id: it.linked_developer_id!, variant: "registration_confirm" })}
+                            >
+                              <Send className="h-3 w-3 mr-1" />
+                              Ask developer to confirm registration
+                            </Button>
+                            {it.status === "signed" && (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="h-7 text-xs border-[#B89555]/40"
+                                disabled={sendConfirm.isPending}
+                                onClick={() => sendConfirm.mutate({ developer_id: it.linked_developer_id!, variant: "request_signed_doc" })}
+                              >
+                                Request signed document
+                              </Button>
+                            )}
+                          </>
+                        )}
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-7 text-xs text-[#1A1A1A]/60 hover:text-[#1A1A1A]"
+                          onClick={() => archive.mutate(it.id)}
+                        >
+                          <Archive className="h-3 w-3 mr-1" /> Archive
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
