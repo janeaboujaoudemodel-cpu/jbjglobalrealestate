@@ -55,7 +55,7 @@ export const PIPELINE_STATUSES: PipelineStatus[] = [
   { value: "contacted", label: "Contacted", color: "bg-blue-400", bgColor: "bg-blue-400/20", textColor: "text-blue-300", dotColor: "#3B82F6", category: "neutral" },
   { value: "followup", label: "Follow-up", color: "bg-blue-500", bgColor: "bg-blue-500/20", textColor: "text-blue-300", dotColor: "#3B82F6", category: "neutral" },
   { value: "callback", label: "Call Back", color: "bg-blue-400", bgColor: "bg-blue-400/20", textColor: "text-blue-200", dotColor: "#3B82F6", category: "neutral" },
-  { value: "no_answer", label: "No Response", color: "bg-blue-600", bgColor: "bg-blue-600/20", textColor: "text-blue-300", dotColor: "#3B82F6", category: "neutral" },
+  { value: "no_answer", label: "No Response", color: "bg-rose-800", bgColor: "bg-rose-800/20", textColor: "text-rose-900", dotColor: "#9F1239", category: "negative" },
   { value: "on_hold", label: "On Hold", color: "bg-blue-300", bgColor: "bg-blue-300/20", textColor: "text-blue-200", dotColor: "#93C5FD", category: "neutral" },
   
   // NEUTRAL (blue) - Lifecycle states
