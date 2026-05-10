@@ -777,7 +777,7 @@ export default function CRMLeadsTableV2({
                         <Button
                           type="button"
                           size="icon"
-                          className="h-9 w-9 bg-green-600 hover:bg-green-700 text-white border-0"
+                          className="h-9 w-9 bg-[#EFE6D6] hover:bg-[#E5D8BF] text-emerald-700 border border-[#B89555]/30"
                           onClick={() => handleWhatsApp(lead)}
                           title="WhatsApp"
                         >
@@ -786,7 +786,7 @@ export default function CRMLeadsTableV2({
                         <Button
                           type="button"
                           size="icon"
-                          className="h-9 w-9 bg-blue-600 hover:bg-blue-700 text-white border-0"
+                          className="h-9 w-9 bg-[#EFE6D6] hover:bg-[#E5D8BF] text-blue-700 border border-[#B89555]/30"
                           onClick={() => handleCall(lead)}
                           title="Call"
                         >
@@ -795,7 +795,7 @@ export default function CRMLeadsTableV2({
                         <Button
                           type="button"
                           size="icon"
-                          className="h-9 w-9 bg-purple-600 hover:bg-purple-700 text-white border-0"
+                          className="h-9 w-9 bg-[#EFE6D6] hover:bg-[#E5D8BF] text-purple-700 border border-[#B89555]/30"
                           onClick={() => handleEmail(lead)}
                           title="Email"
                         >
@@ -804,7 +804,7 @@ export default function CRMLeadsTableV2({
                         <Button
                           type="button"
                           size="icon"
-                          className="h-9 w-9 bg-[#B89555] hover:bg-[#A08047] text-white border-0"
+                          className="h-9 w-9 bg-[#FDFBF7] hover:bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]"
                           onClick={() => setAgreementLead(lead)}
                           title="Send Agreement"
                         >
@@ -813,8 +813,7 @@ export default function CRMLeadsTableV2({
                         <Button
                           type="button"
                           size="icon"
-                          variant="destructive"
-                          className="h-9 w-9"
+                          className="h-9 w-9 bg-[#EFE6D6] hover:bg-[#E5D8BF] text-red-700 border border-[#B89555]/30"
                           onClick={() => openDeleteDialog(lead)}
                           title="Delete"
                         >
