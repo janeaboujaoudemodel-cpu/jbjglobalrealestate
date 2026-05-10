@@ -143,7 +143,7 @@ export default function YouTubeVideoPlayer({
             alt="JBJ Global Real Estate"
             className="w-40 h-40 md:w-52 md:h-52 object-contain mb-12 opacity-90"
           />
-          <div className="flex items-center gap-2 text-[#1A1A1A] group-hover:text-gold transition-colors">
+          <div className="flex items-center gap-2 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">
             <Play className="w-5 h-5" fill="currentColor" />
             <span className="text-sm font-medium tracking-wider uppercase">Replay</span>
           </div>

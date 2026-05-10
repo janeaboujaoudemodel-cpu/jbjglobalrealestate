@@ -249,7 +249,7 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold flex items-center gap-3 text-[#1A1A1A]">
             <div className="w-10 h-10 rounded-full bg-[#1A1A1A] flex items-center justify-center">
-              <FileText className="w-5 h-5 text-gold" />
+              <FileText className="w-5 h-5 text-[#1A1A1A]" />
             </div>
             Property Report & Share
           </DialogTitle>
@@ -265,7 +265,7 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
             <p className="text-sm text-[#1A1A1A]/70">
               {project.location || 'Dubai'} • {project.developer?.name || 'Premium Developer'}
             </p>
-            <p className="text-gold font-medium mt-2">
+            <p className="text-[#1A1A1A] font-medium mt-2">
               From AED {project.price_from ? (project.price_from / 1000000).toFixed(2) + 'M' : 'Contact for pricing'}
             </p>
           </div>
@@ -335,7 +335,7 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
           <a href={`mailto:${JJ_EMAIL}?subject=${encodeURIComponent(`Property Inquiry: ${project.name}`)}&body=${encodeURIComponent(`Hi JBJ Global Real Estate Team,\n\nI am interested in the following property:\n\nProperty: ${project.name}\nLocation: ${project.location || 'Dubai'}\nDeveloper: ${project.developer?.name || 'N/A'}\nStarting Price: AED ${project.price_from ? (project.price_from / 1000000).toFixed(2) + 'M' : 'Contact for pricing'}\n\nPlease contact me with more information.\n\nBest regards`)}`}>
             <Button
               variant="outline"
-              className="w-full border-gold text-gold hover:bg-gold/10 h-12"
+              className="w-full border-[#B89555] text-[#1A1A1A] hover:bg-[#EFE6D6]/10 h-12"
             >
               <Mail className="w-5 h-5 mr-2" />
               Contact JBJ Global Real Estate Advisor
@@ -354,13 +354,13 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
                     className="w-full flex items-center gap-3 p-3 rounded-lg bg-[#F7F2EA] hover:bg-[#F7F2EA] transition-colors text-left border border-[#B89555]/30"
                   >
                     <div className="w-8 h-8 rounded bg-[#1A1A1A] flex items-center justify-center">
-                      <FileText className="w-4 h-4 text-gold" />
+                      <FileText className="w-4 h-4 text-[#1A1A1A]" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-[#1A1A1A] text-sm font-medium truncate">{doc.file_name}</p>
                       <p className="text-[#1A1A1A]/70 text-xs capitalize">{doc.document_type.replace(/_/g, ' ')}</p>
                     </div>
-                    <Download className="w-4 h-4 text-gold" />
+                    <Download className="w-4 h-4 text-[#1A1A1A]" />
                   </button>
                 ))}
               </div>

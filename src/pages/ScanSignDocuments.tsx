@@ -154,7 +154,7 @@ const ScanSignDocuments = () => {
                     <div key={doc.id} onClick={() => h.setCurrentDoc(doc)} className={`p-3 rounded-lg cursor-pointer transition-all ${h.currentDoc?.id === doc.id ? 'bg-emerald-600/20 border border-emerald-500/50' : 'bg-[#F7F2EA]/50 hover:bg-[#1A1A1A]'}`}>
                       <div className="flex items-center justify-between">
                         <p className="text-sm text-white truncate flex-1">{doc.name}</p>
-                        <span className={`text-xs px-2 py-0.5 rounded ${doc.isColor ? 'bg-blue-500/20 text-blue-400' : 'bg-zinc-600/20 text-white/70'}`}>{doc.isColor ? 'Color' : 'B&W'}</span>
+                        <span className={`text-xs px-2 py-0.5 rounded ${doc.isColor ? 'bg-blue-500/20 text-blue-400' : 'bg-[#1A1A1A]/20 text-white/70'}`}>{doc.isColor ? 'Color' : 'B&W'}</span>
                       </div>
                       <p className="text-xs text-white/90">{doc.timestamp.toLocaleTimeString()}</p>
                     </div>

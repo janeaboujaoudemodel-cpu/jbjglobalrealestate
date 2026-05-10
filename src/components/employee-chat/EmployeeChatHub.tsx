@@ -129,8 +129,8 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
     switch (status) {
       case 'online': return 'bg-green-500';
       case 'busy': return 'bg-amber-500';
-      case 'away': return 'bg-zinc-400';
-      default: return 'bg-zinc-300';
+      case 'away': return 'bg-[#B89555]';
+      default: return 'bg-[#E5D9C4]';
     }
   };
 

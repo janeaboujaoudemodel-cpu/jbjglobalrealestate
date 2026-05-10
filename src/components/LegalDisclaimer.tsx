@@ -12,10 +12,10 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
 
   if (variant === "full") {
     return (
-      <div className={`bg-zinc-900/80 backdrop-blur-md border border-[#1A1A1A] rounded-xl p-6 ${className}`}>
+      <div className={`bg-[#FDFBF7]/80 backdrop-blur-md border border-[#1A1A1A] rounded-xl p-6 ${className}`}>
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 bg-gold/10 border border-gold/30 rounded-lg flex items-center justify-center">
-            <Shield className="w-5 h-5 text-gold" />
+          <div className="w-10 h-10 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-lg flex items-center justify-center">
+            <Shield className="w-5 h-5 text-[#1A1A1A]" />
           </div>
           <div>
             <h4 className="text-white font-semibold">Legal Notice & Disclaimer</h4>
@@ -25,7 +25,7 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
 
         <div className="space-y-4 text-white/70 text-sm">
           <div className="flex items-start gap-3">
-            <Building2 className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
+            <Building2 className="w-4 h-4 text-[#1A1A1A] flex-shrink-0 mt-1" />
             <p>
               <strong className="text-white">Brokerage Services:</strong> JBJ Global Real Estate is a 
               licensed brokerage providing property sales, rentals, and holiday home services within the UAE.
@@ -33,7 +33,7 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
           </div>
 
           <div className="flex items-start gap-3">
-            <AlertTriangle className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
+            <AlertTriangle className="w-4 h-4 text-[#1A1A1A] flex-shrink-0 mt-1" />
             <p>
               <strong className="text-white">Partner Services:</strong> For legal matters and mortgage services, 
               we can introduce you to our licensed partners who contract directly with you.
@@ -41,16 +41,16 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
           </div>
 
           <div className="flex items-start gap-3">
-            <Lock className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
+            <Lock className="w-4 h-4 text-[#1A1A1A] flex-shrink-0 mt-1" />
             <p>
               <strong className="text-white">Intellectual Property:</strong> This website, its design, AI-powered tools, 
               and all associated content are the exclusive intellectual property of 
-              <span className="text-gold"> Jane Bou Jaoude</span> and <span className="text-gold">JBJ Global Real Estate</span>.
+              <span className="text-[#1A1A1A]"> Jane Bou Jaoude</span> and <span className="text-[#1A1A1A]">JBJ Global Real Estate</span>.
             </p>
           </div>
 
           <div className="flex items-start gap-3">
-            <FileText className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
+            <FileText className="w-4 h-4 text-[#1A1A1A] flex-shrink-0 mt-1" />
             <p>
               <strong className="text-white">Third-Party Services:</strong> Legal and mortgage 
               services referenced on this platform are provided by independent professionals. Clients 
@@ -62,8 +62,8 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
         <div className="mt-6 pt-4 border-t border-[#1A1A1A]">
           <p className="text-[#1A1A1A]/70 text-xs text-center">
             © {currentYear} JBJ Global Real Estate | 
-            <Link to="/privacy" className="text-gold hover:underline ml-1">Privacy Policy</Link> | 
-            <Link to="/terms" className="text-gold hover:underline ml-1">Terms of Service</Link>
+            <Link to="/privacy" className="text-[#1A1A1A] hover:underline ml-1">Privacy Policy</Link> | 
+            <Link to="/terms" className="text-[#1A1A1A] hover:underline ml-1">Terms of Service</Link>
           </p>
         </div>
       </div>
@@ -89,13 +89,13 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
 
   if (variant === "ai-tools") {
     return (
-      <div className={`bg-zinc-900/80 border border-gold/30 rounded-xl p-5 ${className}`}>
+      <div className={`bg-[#FDFBF7]/80 border border-[#B89555]/30 rounded-xl p-5 ${className}`}>
         <div className="flex items-start gap-3 mb-4">
-          <div className="w-10 h-10 bg-gold/10 border border-gold/30 rounded-lg flex items-center justify-center flex-shrink-0">
-            <Shield className="w-5 h-5 text-gold" />
+          <div className="w-10 h-10 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-lg flex items-center justify-center flex-shrink-0">
+            <Shield className="w-5 h-5 text-[#1A1A1A]" />
           </div>
           <div>
-            <p className="text-gold text-sm font-semibold mb-1">AI Tool Disclaimer</p>
+            <p className="text-[#1A1A1A] text-sm font-semibold mb-1">AI Tool Disclaimer</p>
             <p className="text-white/70 text-xs leading-relaxed">
               AI outputs support information and comparisons based on available data and inputs. 
               They are not guarantees and do not replace official documents or registration records.

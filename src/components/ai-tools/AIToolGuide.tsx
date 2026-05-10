@@ -20,12 +20,12 @@ const colorClasses: Record<string, { bg: string; border: string; text: string; i
   rose: { bg: "bg-rose-500/10", border: "border-rose-500/30", text: "text-rose-400", icon: "text-rose-400" },
   cyan: { bg: "bg-cyan-500/10", border: "border-cyan-500/30", text: "text-cyan-400", icon: "text-cyan-400" },
   violet: { bg: "bg-violet-500/10", border: "border-violet-500/30", text: "text-violet-400", icon: "text-violet-400" },
-  amber: { bg: "bg-amber-500/10", border: "border-amber-500/30", text: "text-amber-400", icon: "text-amber-400" },
+  amber: { bg: "bg-amber-500/10", border: "border-amber-500/30", text: "text-[#1A1A1A]", icon: "text-[#1A1A1A]" },
   pink: { bg: "bg-pink-500/10", border: "border-pink-500/30", text: "text-pink-400", icon: "text-pink-400" },
   red: { bg: "bg-red-500/10", border: "border-red-500/30", text: "text-red-400", icon: "text-red-400" },
   lime: { bg: "bg-lime-500/10", border: "border-lime-500/30", text: "text-lime-400", icon: "text-lime-400" },
   sky: { bg: "bg-sky-500/10", border: "border-sky-500/30", text: "text-sky-400", icon: "text-sky-400" },
-  gold: { bg: "bg-gold/10", border: "border-gold/30", text: "text-gold", icon: "text-gold" },
+  gold: { bg: "bg-[#EFE6D6]/10", border: "border-[#B89555]/30", text: "text-[#1A1A1A]", icon: "text-[#1A1A1A]" },
 };
 
 const AIToolGuide = ({ description, steps, benefits, accentColor }: AIToolGuideProps) => {

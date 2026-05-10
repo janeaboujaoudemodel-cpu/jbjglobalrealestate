@@ -206,7 +206,7 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
   // No projects with coordinates
   if (projectsWithCoords.length === 0) {
     return (
-      <div className="rounded-xl border-2 border-gold/30 bg-champagne/20 p-8 text-center">
+      <div className="rounded-xl border-2 border-[#B89555]/30 bg-champagne/20 p-8 text-center">
         <p className="text-foreground/70">{t('map.noLocations')}</p>
       </div>
     );
@@ -235,11 +235,11 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
   }
 
   return (
-    <div className="rounded-xl overflow-hidden border-2 border-gold/40" style={{
+    <div className="rounded-xl overflow-hidden border-2 border-[#B89555]/40" style={{
       boxShadow: '0 0 20px rgba(200,167,102,0.2)',
     }}>
       {/* Map Header */}
-      <div className="bg-gradient-to-r from-champagne/80 to-champagne/40 px-4 py-3 flex items-center justify-between border-b border-gold/30">
+      <div className="bg-gradient-to-r from-champagne/80 to-champagne/40 px-4 py-3 flex items-center justify-between border-b border-[#B89555]/30">
         <h3 className="text-foreground font-semibold">
           {developerName} {t('map.projectsMap')}
           <span className="ml-2 text-sm font-normal text-foreground/70">
@@ -252,7 +252,7 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
           variant="outline"
           size="sm"
           onClick={() => setTileLayer(tileLayer === 'street' ? 'satellite' : 'street')}
-          className="gap-2 border-gold/50 hover:bg-gold/10"
+          className="gap-2 border-[#B89555]/50 hover:bg-[#EFE6D6]/10"
         >
           <Layers className="w-4 h-4" />
           {tileLayer === 'street' ? t('map.satellite') : t('map.street')}
@@ -278,7 +278,7 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
               }
             }}
           >
-            <div className="bg-[#FDFBF7]/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-gold/30 text-sm font-medium text-[#1A1A1A]/70">
+            <div className="bg-[#FDFBF7]/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-[#B89555]/30 text-sm font-medium text-[#1A1A1A]/70">
               {t('map.clickToEnable')}
             </div>
           </div>

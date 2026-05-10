@@ -160,11 +160,11 @@ const AuditorFeedbackPanel = ({ isOpen, onClose }: AuditorFeedbackPanelProps) =>
       id="auditor-feedback-panel"
       className="fixed inset-0 z-[10002] flex items-center justify-center bg-[#1A1A1A]/60 backdrop-blur-sm"
     >
-      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl border-2 border-gold/40 shadow-2xl w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
+      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl border-2 border-[#B89555]/40 shadow-2xl w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-gold/30">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-[#B89555]/30">
           <h2 className="text-lg font-bold text-[#1A1A1A] flex items-center gap-2">
-            <MessageSquare className="w-5 h-5 text-gold" />
+            <MessageSquare className="w-5 h-5 text-[#1A1A1A]" />
             Send Feedback to Jane
           </h2>
           <button onClick={onClose} className="text-[#1A1A1A]/50 hover:text-[#1A1A1A]">
@@ -173,7 +173,7 @@ const AuditorFeedbackPanel = ({ isOpen, onClose }: AuditorFeedbackPanelProps) =>
         </div>
 
         {/* Tabs */}
-        <div className="flex border-b border-gold/20">
+        <div className="flex border-b border-[#B89555]/20">
           {[
             { key: "screenshot" as const, label: "Screenshot & Note", icon: Camera },
             { key: "task" as const, label: "Assign Task", icon: ClipboardList },
@@ -184,7 +184,7 @@ const AuditorFeedbackPanel = ({ isOpen, onClose }: AuditorFeedbackPanelProps) =>
               onClick={() => setActiveTab(tab.key)}
               className={`flex-1 py-3 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors ${
                 activeTab === tab.key
-                  ? "text-gold border-b-2 border-gold bg-gold/5"
+                  ? "text-[#1A1A1A] border-b-2 border-[#B89555] bg-[#EFE6D6]/5"
                   : "text-[#1A1A1A]/50 hover:text-[#1A1A1A]"
               }`}
             >
@@ -202,13 +202,13 @@ const AuditorFeedbackPanel = ({ isOpen, onClose }: AuditorFeedbackPanelProps) =>
                 onClick={captureScreenshot}
                 disabled={isCapturing}
                 variant="outline"
-                className="w-full border-gold/40 text-[#1A1A1A] hover:bg-gold/10"
+                className="w-full border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
               >
                 <Camera className="w-4 h-4 mr-2" />
                 {isCapturing ? "Capturing..." : screenshotUrl ? "Retake Screenshot" : "Capture Screenshot"}
               </Button>
               {screenshotUrl && (
-                <div className="rounded-lg border border-gold/30 overflow-hidden">
+                <div className="rounded-lg border border-[#B89555]/30 overflow-hidden">
                   <img src={screenshotUrl} alt="Screenshot" className="w-full h-auto" />
                 </div>
               )}
@@ -228,7 +228,7 @@ const AuditorFeedbackPanel = ({ isOpen, onClose }: AuditorFeedbackPanelProps) =>
                 value={taskTitle}
                 onChange={(e) => setTaskTitle(e.target.value)}
                 placeholder="Task title (e.g., Fix homepage hero image)"
-                className="bg-[#FDFBF7]/80 border-gold/40 text-[#1A1A1A]"
+                className="bg-[#FDFBF7]/80 border-[#B89555]/40 text-[#1A1A1A]"
               />
               <Textarea
                 value={taskDescription}
@@ -267,7 +267,7 @@ const AuditorFeedbackPanel = ({ isOpen, onClose }: AuditorFeedbackPanelProps) =>
                     navigator.clipboard.writeText(promptText);
                     toast.success("Prompt copied!");
                   }}
-                  className="absolute top-2 right-2 text-gold hover:text-[#1A1A1A]"
+                  className="absolute top-2 right-2 text-[#1A1A1A] hover:text-[#1A1A1A]"
                   title="Copy prompt"
                 >
                   <Copy className="w-4 h-4" />
@@ -283,7 +283,7 @@ const AuditorFeedbackPanel = ({ isOpen, onClose }: AuditorFeedbackPanelProps) =>
               variant="outline"
               size="sm"
               onClick={isRecording ? stopRecording : startRecording}
-              className={`border-gold/40 ${isRecording ? "text-red-600 border-red-400 bg-red-50" : "text-[#1A1A1A]"}`}
+              className={`border-[#B89555]/40 ${isRecording ? "text-red-600 border-red-400 bg-red-50" : "text-[#1A1A1A]"}`}
             >
               {isRecording ? <MicOff className="w-4 h-4 mr-1" /> : <Mic className="w-4 h-4 mr-1" />}
               {isRecording ? "Stop Recording" : "Record Voice"}
@@ -297,7 +297,7 @@ const AuditorFeedbackPanel = ({ isOpen, onClose }: AuditorFeedbackPanelProps) =>
           <Button
             onClick={handleSend}
             disabled={isSending || (!noteText && !taskTitle && !promptText && !screenshotBlob && !voiceBlob)}
-            className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A] font-bold"
+            className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-bold"
           >
             <Send className="w-4 h-4 mr-2" />
             {isSending ? "Sending..." : "Send to Jane"}

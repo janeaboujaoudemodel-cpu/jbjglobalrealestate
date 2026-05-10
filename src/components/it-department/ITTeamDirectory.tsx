@@ -36,7 +36,7 @@ const ITTeamDirectory: React.FC<ITTeamDirectoryProps> = ({ searchQuery, teamMemb
           <h2 className="text-2xl font-bold text-[#1A1A1A]">IT Department Team</h2>
           <p className="text-[#1A1A1A]/60">Managing technology infrastructure and security</p>
         </div>
-        <Badge className="bg-gold/20 text-gold border border-gold/30 px-4 py-2">
+        <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border border-[#B89555]/30 px-4 py-2">
           <Monitor className="w-4 h-4 mr-2" />
           {sortedMembers.length} Team Members
         </Badge>
@@ -51,16 +51,16 @@ const ITTeamDirectory: React.FC<ITTeamDirectoryProps> = ({ searchQuery, teamMemb
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05 }}
           >
-            <Card className="bg-[#FDFBF7] border-2 border-gold/30 hover:border-gold/50 transition-all group overflow-hidden">
+            <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 hover:border-[#B89555]/50 transition-all group overflow-hidden">
               <div className="relative">
                 {/* Status Indicator */}
                 <div className={`absolute top-3 right-3 w-3 h-3 rounded-full ${
                   member.status === 'online' ? 'bg-green-500' :
-                  member.status === 'away' ? 'bg-yellow-500' : 'bg-zinc-400'
+                  member.status === 'away' ? 'bg-yellow-500' : 'bg-[#B89555]'
                 } ring-2 ring-white z-10`} />
                 
                 {/* Photo */}
-                <div className="aspect-square overflow-hidden bg-gold/10">
+                <div className="aspect-square overflow-hidden bg-[#EFE6D6]/10">
                   <img 
                     src={member.avatar} 
                     alt={member.name}
@@ -70,7 +70,7 @@ const ITTeamDirectory: React.FC<ITTeamDirectoryProps> = ({ searchQuery, teamMemb
 
                 {/* Overlay with actions */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-4 gap-2">
-                  <Button size="sm" className="bg-gold/90 text-[#1A1A1A] hover:bg-gold">
+                  <Button size="sm" className="bg-[#EFE6D6]/90 text-[#1A1A1A] hover:bg-[#EFE6D6]">
                     <MessageSquare className="w-4 h-4 mr-1" /> Chat
                   </Button>
                 </div>
@@ -79,10 +79,10 @@ const ITTeamDirectory: React.FC<ITTeamDirectoryProps> = ({ searchQuery, teamMemb
               <CardContent className="pt-4">
                 <div className="space-y-2">
                   <div>
-                    <h3 className="font-semibold text-[#1A1A1A] group-hover:text-gold transition-colors">
+                    <h3 className="font-semibold text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">
                       {member.name}
                     </h3>
-                    <p className="text-sm text-gold">{member.role}</p>
+                    <p className="text-sm text-[#1A1A1A]">{member.role}</p>
                   </div>
 
                   {member.nationality && (
@@ -105,7 +105,7 @@ const ITTeamDirectory: React.FC<ITTeamDirectoryProps> = ({ searchQuery, teamMemb
                         <Badge 
                           key={spec} 
                           variant="outline" 
-                          className="text-xs border-gold/30 text-[#1A1A1A]/70"
+                          className="text-xs border-[#B89555]/30 text-[#1A1A1A]/70"
                         >
                           {spec}
                         </Badge>
@@ -120,9 +120,9 @@ const ITTeamDirectory: React.FC<ITTeamDirectoryProps> = ({ searchQuery, teamMemb
       </div>
 
       {filteredMembers.length === 0 && (
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
           <CardContent className="py-12 text-center">
-            <User className="w-12 h-12 text-gold mx-auto mb-4" />
+            <User className="w-12 h-12 text-[#1A1A1A] mx-auto mb-4" />
             <p className="text-[#1A1A1A]/60">No team members found</p>
           </CardContent>
         </Card>

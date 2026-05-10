@@ -82,7 +82,7 @@ export function AIBrokerActivityFeed({ brokerId }: AIBrokerActivityFeedProps) {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-8 w-8 animate-spin text-gold" />
+        <Loader2 className="h-8 w-8 animate-spin text-[#1A1A1A]" />
       </div>
     );
   }
@@ -103,7 +103,7 @@ export function AIBrokerActivityFeed({ brokerId }: AIBrokerActivityFeedProps) {
     <div className="space-y-6">
       {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <Card className="bg-zinc-900 border-[#1A1A1A]">
+        <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 text-[#1A1A1A]/70 mb-1">
               <Users className="h-4 w-4" />
@@ -113,7 +113,7 @@ export function AIBrokerActivityFeed({ brokerId }: AIBrokerActivityFeedProps) {
           </CardContent>
         </Card>
 
-        <Card className="bg-zinc-900 border-[#1A1A1A]">
+        <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 text-[#1A1A1A]/70 mb-1">
               <MessageSquare className="h-4 w-4 text-emerald-500" />
@@ -123,7 +123,7 @@ export function AIBrokerActivityFeed({ brokerId }: AIBrokerActivityFeedProps) {
           </CardContent>
         </Card>
 
-        <Card className="bg-zinc-900 border-[#1A1A1A]">
+        <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 text-[#1A1A1A]/70 mb-1">
               <Mail className="h-4 w-4 text-blue-500" />
@@ -133,7 +133,7 @@ export function AIBrokerActivityFeed({ brokerId }: AIBrokerActivityFeedProps) {
           </CardContent>
         </Card>
 
-        <Card className="bg-zinc-900 border-[#1A1A1A]">
+        <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 text-[#1A1A1A]/70 mb-1">
               <Phone className="h-4 w-4 text-purple-500" />
@@ -143,22 +143,22 @@ export function AIBrokerActivityFeed({ brokerId }: AIBrokerActivityFeedProps) {
           </CardContent>
         </Card>
 
-        <Card className="bg-zinc-900 border-[#1A1A1A]">
+        <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 text-[#1A1A1A]/70 mb-1">
-              <TrendingUp className="h-4 w-4 text-gold" />
+              <TrendingUp className="h-4 w-4 text-[#1A1A1A]" />
               <span className="text-sm">Conversions</span>
             </div>
-            <p className="text-gold text-2xl font-bold">{totals.conversions}</p>
+            <p className="text-[#1A1A1A] text-2xl font-bold">{totals.conversions}</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Activity Timeline */}
-      <Card className="bg-zinc-900 border-[#1A1A1A]">
+      <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
         <CardHeader>
           <CardTitle className="text-white flex items-center gap-2">
-            <Activity className="h-5 w-5 text-gold" />
+            <Activity className="h-5 w-5 text-[#1A1A1A]" />
             Activity History (Last 14 Days)
           </CardTitle>
         </CardHeader>
@@ -174,7 +174,7 @@ export function AIBrokerActivityFeed({ brokerId }: AIBrokerActivityFeedProps) {
                 {stats.map((stat) => (
                   <div
                     key={stat.id}
-                    className="bg-zinc-800/50 rounded-lg p-4 border border-[#1A1A1A]/50"
+                    className="bg-[#1A1A1A]/50 rounded-lg p-4 border border-[#1A1A1A]/50"
                   >
                     <div className="flex items-center justify-between mb-3">
                       <h3 className="text-white font-medium">
@@ -215,7 +215,7 @@ export function AIBrokerActivityFeed({ brokerId }: AIBrokerActivityFeedProps) {
                       </div>
                       <div className="text-center">
                         <p className="text-[#1A1A1A]/70 text-xs mb-1">Converted</p>
-                        <p className="text-gold font-semibold">
+                        <p className="text-[#1A1A1A] font-semibold">
                           {stat.leads_converted || 0}
                         </p>
                       </div>

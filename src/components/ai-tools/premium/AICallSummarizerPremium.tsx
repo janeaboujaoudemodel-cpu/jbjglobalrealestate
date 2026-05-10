@@ -132,7 +132,7 @@ const AICallSummarizerPremium = () => {
   const sentimentColor = (s: string) => {
     if (s === "positive") return "text-emerald-400 bg-emerald-500/20 border-emerald-500/30";
     if (s === "negative") return "text-red-400 bg-red-500/20 border-red-500/30";
-    if (s === "mixed") return "text-amber-400 bg-amber-500/20 border-amber-500/30";
+    if (s === "mixed") return "text-[#1A1A1A] bg-amber-500/20 border-amber-500/30";
     return "text-[#1A1A1A]/70 bg-[#B89555]/20 border-[#B89555]/30/30";
   };
 
@@ -178,7 +178,7 @@ const AICallSummarizerPremium = () => {
                   value={clientName}
                   onChange={(e) => setClientName(e.target.value)}
                   placeholder="Enter client name"
-                  className="bg-zinc-900/50 border-orange-500/30 text-white hover:border-orange-500/50 focus:border-orange-400 transition-colors"
+                  className="bg-[#FDFBF7]/50 border-orange-500/30 text-white hover:border-orange-500/50 focus:border-orange-400 transition-colors"
                 />
               </div>
               <div className="space-y-2">
@@ -239,7 +239,7 @@ const AICallSummarizerPremium = () => {
                 value={callNotes}
                 onChange={(e) => setCallNotes(e.target.value)}
                 placeholder="Enter your call notes, key discussion points, and any important details..."
-                className="bg-zinc-900/50 border-orange-500/30 text-white hover:border-orange-500/50 focus:border-orange-400 transition-colors min-h-[150px]"
+                className="bg-[#FDFBF7]/50 border-orange-500/30 text-white hover:border-orange-500/50 focus:border-orange-400 transition-colors min-h-[150px]"
               />
             </div>
 

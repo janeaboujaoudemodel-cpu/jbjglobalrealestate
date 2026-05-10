@@ -45,8 +45,8 @@ const AuditorForcePasswordChange = ({
     <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center p-6">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
-          <div className="w-20 h-20 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-6">
-            <Shield className="w-10 h-10 text-gold" />
+          <div className="w-20 h-20 rounded-full bg-[#EFE6D6]/10 flex items-center justify-center mx-auto mb-6">
+            <Shield className="w-10 h-10 text-[#1A1A1A]" />
           </div>
           <h1 className="text-2xl font-bold text-white mb-2">
             Welcome, {displayName}
@@ -64,7 +64,7 @@ const AuditorForcePasswordChange = ({
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="New password (min 8 characters)"
-              className="pl-10 pr-10 bg-zinc-900 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70"
+              className="pl-10 pr-10 bg-[#FDFBF7] border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70"
               required
               minLength={8}
             />
@@ -84,7 +84,7 @@ const AuditorForcePasswordChange = ({
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Confirm new password"
-              className="pl-10 bg-zinc-900 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70"
+              className="pl-10 bg-[#FDFBF7] border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70"
               required
             />
           </div>
@@ -92,7 +92,7 @@ const AuditorForcePasswordChange = ({
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A] font-bold"
+            className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-bold"
           >
             {isSubmitting ? "Changing Password..." : "Set New Password & Continue"}
           </Button>

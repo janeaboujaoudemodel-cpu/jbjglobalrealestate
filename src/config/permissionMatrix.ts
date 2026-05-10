@@ -290,7 +290,7 @@ export const ROLE_LABELS: Record<string, string> = {
 export const ACCESS_LEVEL_LABELS: Record<AccessLevel, { label: string; color: string }> = {
   "RW": { label: "Read/Write", color: "text-green-400" },
   "R": { label: "Read Only", color: "text-blue-400" },
-  "R*": { label: "Action-Gated", color: "text-amber-400" },
+  "R*": { label: "Action-Gated", color: "text-[#1A1A1A]" },
   "RW†": { label: "Sandboxed", color: "text-purple-400" },
   "RW‡": { label: "Re-auth Required", color: "text-red-400" },
   "-": { label: "No Access", color: "text-[#1A1A1A]/70" },

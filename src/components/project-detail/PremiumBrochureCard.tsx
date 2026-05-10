@@ -136,10 +136,10 @@ const PremiumBrochureCard = ({
           
           {/* Spine effect on left - book binding */}
           <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black/60 via-black/30 to-transparent" />
-          <div className="absolute left-2 top-4 bottom-4 w-[2px] bg-gold/40 rounded-full" />
+          <div className="absolute left-2 top-4 bottom-4 w-[2px] bg-[#EFE6D6]/40 rounded-full" />
 
           {/* Gold border accent */}
-          <div className="absolute inset-0 border-2 border-gold/50 rounded-lg group-hover:border-gold/80 transition-colors" />
+          <div className="absolute inset-0 border-2 border-[#B89555]/50 rounded-lg group-hover:border-[#B89555]/80 transition-colors" />
           
           {/* Top gold line accent */}
           <div className="absolute top-0 left-8 right-8 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
@@ -148,7 +148,7 @@ const PremiumBrochureCard = ({
           <div className="relative z-10 h-full flex flex-col justify-end p-6">
             {/* Top: Brand mark with real monogram */}
             <div className="absolute top-4 left-10 flex items-center gap-3">
-              <div className="w-14 h-14 rounded-full border-2 border-gold/70 flex items-center justify-center bg-[#1A1A1A] backdrop-blur-sm overflow-hidden">
+              <div className="w-14 h-14 rounded-full border-2 border-[#B89555]/70 flex items-center justify-center bg-[#1A1A1A] backdrop-blur-sm overflow-hidden">
                 <img 
                   src={jbjFullLogoDarkBg} 
                   alt="JBJ" 
@@ -162,13 +162,13 @@ const PremiumBrochureCard = ({
                   textShadow: "0 2px 4px rgba(0,0,0,0.8)"
                 }}
               >
-                <span className="text-gold font-bold">JBJ</span> Global<br/>Real Estate
+                <span className="text-[#1A1A1A] font-bold">JBJ</span> Global<br/>Real Estate
               </p>
             </div>
 
             {/* Bottom: Brochure info */}
             <div className="mt-auto">
-              <p className="text-gold text-xs uppercase tracking-[0.25em] font-bold mb-2 drop-shadow-lg">
+              <p className="text-[#1A1A1A] text-xs uppercase tracking-[0.25em] font-bold mb-2 drop-shadow-lg">
                 Project Brochure
               </p>
               
@@ -187,8 +187,8 @@ const PremiumBrochureCard = ({
 
             {/* Lock indicator for locked state */}
             {isLocked && (
-              <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-[#1A1A1A]/50 border-2 border-gold/60 flex items-center justify-center backdrop-blur-sm">
-                <Lock className="w-5 h-5 text-gold" />
+              <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-[#1A1A1A]/50 border-2 border-[#B89555]/60 flex items-center justify-center backdrop-blur-sm">
+                <Lock className="w-5 h-5 text-[#1A1A1A]" />
               </div>
             )}
           </div>
@@ -220,7 +220,7 @@ const PremiumBrochureCard = ({
           "bg-gradient-to-r from-champagne via-champagne-light to-champagne",
           "text-foreground border-2 border-foreground/70",
           "shadow-[0_10px_30px_rgba(200,167,102,0.25),0_6px_15px_rgba(0,0,0,0.22)]",
-          "hover:shadow-[0_14px_45px_rgba(200,167,102,0.35)] hover:border-gold/80",
+          "hover:shadow-[0_14px_45px_rgba(200,167,102,0.35)] hover:border-[#B89555]/80",
           "group"
         )}
         whileHover={{ 
@@ -231,8 +231,8 @@ const PremiumBrochureCard = ({
       >
         {isLocked ? (
           <>
-            <Lock className="w-5 h-5 text-foreground group-hover:text-gold group-hover:scale-110 transition-all" />
-            <span className="group-hover:text-gold transition-colors">Unlock Brochure</span>
+            <Lock className="w-5 h-5 text-foreground group-hover:text-[#1A1A1A] group-hover:scale-110 transition-all" />
+            <span className="group-hover:text-[#1A1A1A] transition-colors">Unlock Brochure</span>
           </>
         ) : isDownloading ? (
           <>
@@ -241,13 +241,13 @@ const PremiumBrochureCard = ({
           </>
         ) : !brochureUrl ? (
           <>
-            <FileText className="w-5 h-5 text-foreground group-hover:text-gold group-hover:scale-110 transition-all" />
-            <span className="group-hover:text-gold transition-colors">Request Brochure</span>
+            <FileText className="w-5 h-5 text-foreground group-hover:text-[#1A1A1A] group-hover:scale-110 transition-all" />
+            <span className="group-hover:text-[#1A1A1A] transition-colors">Request Brochure</span>
           </>
         ) : (
           <>
-            <Download className="w-5 h-5 text-foreground group-hover:text-gold group-hover:scale-110 transition-all" />
-            <span className="group-hover:text-gold transition-colors">Download Brochure</span>
+            <Download className="w-5 h-5 text-foreground group-hover:text-[#1A1A1A] group-hover:scale-110 transition-all" />
+            <span className="group-hover:text-[#1A1A1A] transition-colors">Download Brochure</span>
           </>
         )}
       </motion.button>

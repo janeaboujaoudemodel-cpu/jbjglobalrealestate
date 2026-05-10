@@ -44,7 +44,7 @@ const ActionGateModal = () => {
   return (
     <Dialog open={isGateOpen} onOpenChange={(open) => { if (!open) closeGate(); }}>
       <DialogContent
-        className="bg-[#1A1A1A]/95 backdrop-blur-xl border border-gold/30 text-white max-w-lg p-0 overflow-hidden shadow-2xl rounded-2xl"
+        className="bg-[#1A1A1A]/95 backdrop-blur-xl border border-[#B89555]/30 text-white max-w-lg p-0 overflow-hidden shadow-2xl rounded-2xl"
         aria-describedby={undefined}
       >
         <VisuallyHidden.Root>
@@ -64,10 +64,10 @@ const ActionGateModal = () => {
         />
 
         {/* Corner accents */}
-        <div className="absolute top-5 left-5 w-8 h-8 border-l-2 border-t-2 border-gold/50" />
-        <div className="absolute top-5 right-5 w-8 h-8 border-r-2 border-t-2 border-gold/50" />
-        <div className="absolute bottom-5 left-5 w-8 h-8 border-l-2 border-b-2 border-gold/40" />
-        <div className="absolute bottom-5 right-5 w-8 h-8 border-r-2 border-b-2 border-gold/40" />
+        <div className="absolute top-5 left-5 w-8 h-8 border-l-2 border-t-2 border-[#B89555]/50" />
+        <div className="absolute top-5 right-5 w-8 h-8 border-r-2 border-t-2 border-[#B89555]/50" />
+        <div className="absolute bottom-5 left-5 w-8 h-8 border-l-2 border-b-2 border-[#B89555]/40" />
+        <div className="absolute bottom-5 right-5 w-8 h-8 border-r-2 border-b-2 border-[#B89555]/40" />
 
         <div className="relative px-8 py-10">
           {/* Logo */}
@@ -77,7 +77,7 @@ const ActionGateModal = () => {
 
           {/* Headline */}
           <h2
-            className="text-center text-xl md:text-2xl font-bold text-gold mb-2 tracking-wide"
+            className="text-center text-xl md:text-2xl font-bold text-[#1A1A1A] mb-2 tracking-wide"
           >
             {headline}
           </h2>
@@ -95,8 +95,8 @@ const ActionGateModal = () => {
           <div className="space-y-3 mb-8">
             {benefits.map((b, i) => (
               <div key={i} className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center mt-0.5">
-                  <b.icon className="w-4 h-4 text-gold" />
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#EFE6D6]/10 border border-[#B89555]/20 flex items-center justify-center mt-0.5">
+                  <b.icon className="w-4 h-4 text-[#1A1A1A]" />
                 </div>
                 <p className="text-sm text-white/85 leading-relaxed">{b.text}</p>
               </div>
@@ -107,7 +107,7 @@ const ActionGateModal = () => {
           <div className="space-y-3">
             <Button
               onClick={handleSignIn}
-              className="w-full py-5 bg-gold hover:bg-gold/90 text-[#1A1A1A] font-bold text-base rounded-xl group relative overflow-hidden transition-all duration-300"
+              className="w-full py-5 bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-bold text-base rounded-xl group relative overflow-hidden transition-all duration-300"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
               <Sparkles className="w-5 h-5 mr-2 relative z-10" />
@@ -118,7 +118,7 @@ const ActionGateModal = () => {
             <Button
               onClick={handleSignIn}
               variant="outline"
-              className="w-full py-5 bg-transparent border border-gold/40 text-gold hover:bg-gold/10 font-semibold text-sm rounded-xl transition-all duration-300"
+              className="w-full py-5 bg-transparent border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 font-semibold text-sm rounded-xl transition-all duration-300"
             >
               Already have an account? Sign In
             </Button>

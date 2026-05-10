@@ -113,7 +113,7 @@ export default function AIAccessGate({ children, toolName }: AIAccessGateProps) 
     <section className="relative w-full min-h-screen bg-[#0D0D0D] flex items-center justify-center py-20 pb-32">
       {/* Background effects */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-gold/15 rounded-full blur-[120px]" />
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#EFE6D6]/15 rounded-full blur-[120px]" />
         <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-purple-500/10 rounded-full blur-[100px]" />
       </div>
 
@@ -164,13 +164,13 @@ export default function AIAccessGate({ children, toolName }: AIAccessGateProps) 
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05 }}
-                className="bg-zinc-900/80 border border-gold/20 rounded-xl p-4 text-left hover:border-gold/40 transition-all"
+                className="bg-[#FDFBF7]/80 border border-[#B89555]/20 rounded-xl p-4 text-left hover:border-[#B89555]/40 transition-all"
                 style={{ boxShadow: "0 0 15px rgba(203, 166, 75, 0.1)" }}
               >
-                <div className="w-10 h-10 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center mb-3"
+                <div className="w-10 h-10 rounded-lg bg-[#EFE6D6]/10 border border-[#B89555]/30 flex items-center justify-center mb-3"
                   style={{ boxShadow: "0 0 10px rgba(203, 166, 75, 0.2)" }}
                 >
-                  <benefit.icon className="w-5 h-5 text-gold" />
+                  <benefit.icon className="w-5 h-5 text-[#1A1A1A]" />
                 </div>
                 <h3 className="text-white font-medium text-sm mb-1">{benefit.title}</h3>
                 <p className="text-white/90 text-xs">{benefit.description}</p>
@@ -183,11 +183,11 @@ export default function AIAccessGate({ children, toolName }: AIAccessGateProps) 
 
           {/* Broker Circle CTA */}
           <div 
-            className="bg-gradient-to-br from-gold/10 via-gold/5 to-transparent border-2 border-gold/40 rounded-2xl p-8 mb-8"
+            className="bg-gradient-to-br from-gold/10 via-gold/5 to-transparent border-2 border-[#B89555]/40 rounded-2xl p-8 mb-8"
             style={{ boxShadow: "0 0 40px rgba(203, 166, 75, 0.2)" }}
           >
             <div className="flex items-center justify-center gap-2 mb-4">
-              <Gift className="w-8 h-8 text-gold" />
+              <Gift className="w-8 h-8 text-[#1A1A1A]" />
             </div>
             <h2 
               className="text-2xl md:text-3xl font-bold mb-4"
@@ -204,14 +204,14 @@ export default function AIAccessGate({ children, toolName }: AIAccessGateProps) 
             {/* Features Grid */}
             <div className="grid md:grid-cols-3 gap-3 max-w-3xl mx-auto mb-6">
               {CIRCLE_FEATURES.map((feature, idx) => (
-                <div key={idx} className="flex items-center gap-2 p-3 rounded-lg border border-gold/20 bg-gold/5">
+                <div key={idx} className="flex items-center gap-2 p-3 rounded-lg border border-[#B89555]/20 bg-[#EFE6D6]/5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
                   <span className="text-white text-sm text-left">{feature}</span>
                 </div>
               ))}
             </div>
 
-            <p className="text-gold text-sm font-medium">
+            <p className="text-[#1A1A1A] text-sm font-medium">
               100% Free • No Credit Card Required
             </p>
           </div>

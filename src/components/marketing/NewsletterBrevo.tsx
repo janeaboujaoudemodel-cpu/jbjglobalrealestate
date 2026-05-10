@@ -126,14 +126,14 @@ export const NewsletterBrevo = ({
             placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="flex-1 bg-card border-2 border-gold/50 text-foreground placeholder:text-muted-foreground focus:border-gold focus:ring-gold/30 hover:shadow-[0_4px_15px_rgba(200,167,102,0.3)] focus:shadow-[0_4px_15px_rgba(200,167,102,0.3)] transition-shadow"
+            className="flex-1 bg-card border-2 border-[#B89555]/50 text-foreground placeholder:text-muted-foreground focus:border-[#B89555] focus:ring-gold/30 hover:shadow-[0_4px_15px_rgba(200,167,102,0.3)] focus:shadow-[0_4px_15px_rgba(200,167,102,0.3)] transition-shadow"
             required
             disabled={isSubmitting}
           />
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="relative overflow-hidden px-5 text-primary-foreground font-semibold bg-gold hover:bg-gold-light transition-all duration-300"
+            className="relative overflow-hidden px-5 text-primary-foreground font-semibold bg-[#EFE6D6] hover:bg-[#EFE6D6]-light transition-all duration-300"
           >
             {isSubmitting ? (
               <Loader2 className="w-4 h-4 animate-spin text-primary-foreground" />
@@ -166,7 +166,7 @@ export const NewsletterBrevo = ({
               placeholder="Your name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="flex-1 bg-zinc-900/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 focus:border-gold/50 focus:ring-gold/20 h-12"
+              className="flex-1 bg-[#FDFBF7]/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]/50 focus:ring-gold/20 h-12"
               disabled={isSubmitting}
             />
             <Input
@@ -174,7 +174,7 @@ export const NewsletterBrevo = ({
               placeholder="Your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="flex-1 bg-zinc-900/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 focus:border-gold/50 focus:ring-gold/20 h-12"
+              className="flex-1 bg-[#FDFBF7]/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]/50 focus:ring-gold/20 h-12"
               required
               disabled={isSubmitting}
             />
@@ -182,7 +182,7 @@ export const NewsletterBrevo = ({
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-gold hover:bg-gold-light text-[#1A1A1A] font-semibold h-12 text-base"
+            className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]-light text-[#1A1A1A] font-semibold h-12 text-base"
           >
             {isSubmitting ? (
               <Loader2 className="w-5 h-5 animate-spin mr-2" />
@@ -215,14 +215,14 @@ export const NewsletterBrevo = ({
           placeholder="Enter your email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="bg-zinc-900/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 focus:border-gold/50 focus:ring-gold/20"
+          className="bg-[#FDFBF7]/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]/50 focus:ring-gold/20"
           required
           disabled={isSubmitting}
         />
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-gold hover:bg-gold-light text-[#1A1A1A] font-semibold"
+          className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]-light text-[#1A1A1A] font-semibold"
         >
           {isSubmitting ? (
             <Loader2 className="w-4 h-4 animate-spin mr-2" />

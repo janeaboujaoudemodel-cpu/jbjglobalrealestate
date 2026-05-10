@@ -71,7 +71,7 @@ export function DocuSignIntegration() {
       case "sent":
         return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30"><Clock className="w-3 h-3 mr-1" />Sent</Badge>;
       case "viewed":
-        return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30"><AlertCircle className="w-3 h-3 mr-1" />Viewed</Badge>;
+        return <Badge className="bg-amber-500/20 text-[#1A1A1A] border-amber-500/30"><AlertCircle className="w-3 h-3 mr-1" />Viewed</Badge>;
       case "signed":
         return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30"><CheckCircle2 className="w-3 h-3 mr-1" />Signed</Badge>;
       case "declined":
@@ -84,19 +84,19 @@ export function DocuSignIntegration() {
       case "buyer": return "text-emerald-400";
       case "seller": return "text-blue-400";
       case "rental": return "text-purple-400";
-      case "investor": return "text-gold";
+      case "investor": return "text-[#1A1A1A]";
     }
   };
 
   return (
     <div className="space-y-6">
       {/* Send New Contract */}
-      <Card className="bg-zinc-900/50 border-[#1A1A1A]">
+      <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
         <CardHeader className="pb-3">
           <CardTitle className="text-white text-lg flex items-center gap-2">
-            <FileSignature className="w-5 h-5 text-gold" />
+            <FileSignature className="w-5 h-5 text-[#1A1A1A]" />
             Send Contract for Signature
-            <Badge className="bg-gold/20 text-gold border-gold/30 text-xs ml-2">
+            <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30 text-xs ml-2">
               DocuSign
             </Badge>
           </CardTitle>
@@ -137,7 +137,7 @@ export function DocuSignIntegration() {
                 placeholder="Full name"
                 value={recipientName}
                 onChange={(e) => setRecipientName(e.target.value)}
-                className="bg-zinc-800/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70"
+                className="bg-[#1A1A1A]/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70"
               />
             </div>
 
@@ -151,7 +151,7 @@ export function DocuSignIntegration() {
                 placeholder="email@example.com"
                 value={recipientEmail}
                 onChange={(e) => setRecipientEmail(e.target.value)}
-                className="bg-zinc-800/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70"
+                className="bg-[#1A1A1A]/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70"
               />
             </div>
           </div>
@@ -165,7 +165,7 @@ export function DocuSignIntegration() {
               placeholder="e.g., JBJ-2024-001"
               value={propertyRef}
               onChange={(e) => setPropertyRef(e.target.value)}
-              className="bg-zinc-800/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70"
+              className="bg-[#1A1A1A]/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70"
             />
           </div>
 
@@ -181,10 +181,10 @@ export function DocuSignIntegration() {
       </Card>
 
       {/* Pending Signatures */}
-      <Card className="bg-zinc-900/50 border-[#1A1A1A]">
+      <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
         <CardHeader className="pb-3">
           <CardTitle className="text-white text-base flex items-center gap-2">
-            <Clock className="w-5 h-5 text-amber-400" />
+            <Clock className="w-5 h-5 text-[#1A1A1A]" />
             Pending Signatures
           </CardTitle>
         </CardHeader>
@@ -198,7 +198,7 @@ export function DocuSignIntegration() {
             pendingSignatures.map((sig) => (
               <div
                 key={sig.id}
-                className="bg-zinc-800/50 rounded-lg p-3 border border-[#1A1A1A]/50 hover:border-gold/20 transition-colors"
+                className="bg-[#1A1A1A]/50 rounded-lg p-3 border border-[#1A1A1A]/50 hover:border-[#B89555]/20 transition-colors"
               >
                 <div className="flex items-start justify-between mb-2">
                   <div>
@@ -229,7 +229,7 @@ export function DocuSignIntegration() {
       </Card>
 
       {/* Integration Status */}
-      <div className="bg-zinc-800/30 rounded-lg p-3 flex items-start gap-2">
+      <div className="bg-[#1A1A1A]/30 rounded-lg p-3 flex items-start gap-2">
         <Shield className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
         <div>
           <p className="text-emerald-400 text-xs font-medium">DocuSign Connected</p>

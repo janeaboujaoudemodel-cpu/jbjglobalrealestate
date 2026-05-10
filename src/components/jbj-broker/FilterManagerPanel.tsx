@@ -239,7 +239,7 @@ export function FilterManagerPanel() {
 
       {/* Add Filter Dialog */}
       <Dialog open={addDialogOpen} onOpenChange={setAddDialogOpen}>
-        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
           <DialogHeader>
             <DialogTitle className="text-[#1A1A1A]">Add New Filter</DialogTitle>
           </DialogHeader>

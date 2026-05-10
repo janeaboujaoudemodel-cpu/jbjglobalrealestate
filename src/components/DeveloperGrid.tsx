@@ -124,31 +124,31 @@ const DeveloperGrid = () => {
               <div className="flex flex-wrap gap-6 text-sm">
                 {developer.founded_year && (
                   <div className="flex items-center gap-2 text-[#1A1A1A]/70">
-                    <Calendar className="w-4 h-4 text-gold" />
+                    <Calendar className="w-4 h-4 text-[#1A1A1A]" />
                     <span>Est. {developer.founded_year}</span>
                   </div>
                 )}
                 {developer.completed_projects && (
                   <div className="flex items-center gap-2 text-[#1A1A1A]/70">
-                    <Building2 className="w-4 h-4 text-gold" />
+                    <Building2 className="w-4 h-4 text-[#1A1A1A]" />
                     <span>{developer.completed_projects.toLocaleString()}+ Units Delivered</span>
                   </div>
                 )}
                 {developer.offplan_projects && (
                   <div className="flex items-center gap-2 text-[#1A1A1A]/70">
-                    <Briefcase className="w-4 h-4 text-gold" />
+                    <Briefcase className="w-4 h-4 text-[#1A1A1A]" />
                     <span>{developer.offplan_projects} Active Projects</span>
                   </div>
                 )}
                 {developer.portfolio_worth && (
                   <div className="flex items-center gap-2 text-[#1A1A1A]/70">
-                    <DollarSign className="w-4 h-4 text-gold" />
+                    <DollarSign className="w-4 h-4 text-[#1A1A1A]" />
                     <span>Portfolio: {formatPortfolioWorth(developer.portfolio_worth)}</span>
                   </div>
                 )}
                 {developer.headquarters && (
                   <div className="flex items-center gap-2 text-[#1A1A1A]/70">
-                    <span className="text-gold">📍</span>
+                    <span className="text-[#1A1A1A]">📍</span>
                     <span>{(() => {
                       const parts = developer.headquarters.split(',').map((s: string) => s.trim());
                       return parts.length >= 2 ? `${parts[parts.length - 2]}, ${parts[parts.length - 1]}` : parts[parts.length - 1];
@@ -164,7 +164,7 @@ const DeveloperGrid = () => {
                 <Link
                   key={project.id}
                   to={`/project/${project.slug}`}
-                  className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold shadow-[0_4px_20px_rgba(200,167,102,0.15)] hover:shadow-[0_12px_40px_rgba(200,167,102,0.35),0_8px_25px_rgba(0,0,0,0.15)] hover:-translate-y-2 transition-all duration-300"
+                  className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] shadow-[0_4px_20px_rgba(200,167,102,0.15)] hover:shadow-[0_12px_40px_rgba(200,167,102,0.35),0_8px_25px_rgba(0,0,0,0.15)] hover:-translate-y-2 transition-all duration-300"
                 >
                   <div className="aspect-[4/3] overflow-hidden relative">
                     {project.images?.[0]?.image_url ? (
@@ -175,7 +175,7 @@ const DeveloperGrid = () => {
                       />
                     ) : (
                       <div className="w-full h-full flex flex-col items-center justify-center gap-2 bg-gradient-to-b from-champagne-light/50 to-champagne/30">
-                        <Building2 className="w-8 h-8 text-gold" />
+                        <Building2 className="w-8 h-8 text-[#1A1A1A]" />
                         <span className="text-xs text-foreground/60 font-medium">Media pending</span>
                       </div>
                     )}
@@ -195,7 +195,7 @@ const DeveloperGrid = () => {
                       <span className={`absolute top-3 left-3 px-2 py-1 rounded text-xs font-medium ${
                         project.handover_date.toLowerCase().includes("ready")
                           ? "bg-green-500/90 text-white"
-                          : "bg-gold text-[#1A1A1A]"
+                          : "bg-[#EFE6D6] text-[#1A1A1A]"
                       }`}>
                         {project.handover_date.toLowerCase().includes("ready") ? "Ready" : project.handover_date}
                       </span>
@@ -203,13 +203,13 @@ const DeveloperGrid = () => {
                   </div>
                   <div className="p-5">
                     <h4
-                      className="text-[#1A1A1A] text-lg font-semibold mb-2 whitespace-normal break-words leading-tight group-hover:text-gold transition-colors"
+                      className="text-[#1A1A1A] text-lg font-semibold mb-2 whitespace-normal break-words leading-tight group-hover:text-[#1A1A1A] transition-colors"
                     >
                       {project.name}
                     </h4>
                     {project.location && (
                       <p className="text-[#1A1A1A]/70 text-sm mb-3 flex items-center gap-1.5">
-                        <svg className="w-4 h-4 flex-shrink-0 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 flex-shrink-0 text-[#1A1A1A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
@@ -224,7 +224,7 @@ const DeveloperGrid = () => {
                       </p>
                     )}
                     {project.price_from && (
-                      <p className="text-gold font-semibold text-lg">
+                      <p className="text-[#1A1A1A] font-semibold text-lg">
                         From AED {(project.price_from / 1000000).toFixed(1)}M
                       </p>
                     )}
@@ -238,7 +238,7 @@ const DeveloperGrid = () => {
               <div className="mt-6 text-center">
                 <Link
                   to={`/developer/${developer.slug}`}
-                  className="inline-flex items-center gap-2 text-gold hover:underline"
+                  className="inline-flex items-center gap-2 text-[#1A1A1A] hover:underline"
                 >
                   View all {devProjects.length} projects from {developer.name}
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -251,14 +251,14 @@ const DeveloperGrid = () => {
         ))}
 
         {(!projectsByDeveloper || projectsByDeveloper.length === 0) && (
-          <div className="text-center py-20 bg-zinc-900 rounded-lg">
+          <div className="text-center py-20 bg-[#FDFBF7] rounded-lg">
             <p className="text-[#1A1A1A]/70 text-lg mb-2">
               {hasFiltersApplied ? "No projects match your filters" : "No projects available yet"}
             </p>
             {hasFiltersApplied && (
               <button
                 onClick={() => setFilters(defaultFilters)}
-                className="text-gold hover:underline"
+                className="text-[#1A1A1A] hover:underline"
               >
                 Clear all filters
               </button>

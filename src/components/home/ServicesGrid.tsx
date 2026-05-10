@@ -113,7 +113,7 @@ const ServicesGrid = () => {
       className="min-w-[75vw] sm:min-w-[45vw] lg:min-w-0 snap-start"
     >
       <Link to={service.href} className="group block h-full">
-        <div className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl border-2 border-gold/30 hover:border-gold p-6 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] hover:-translate-y-1">
+        <div className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl border-2 border-[#B89555]/30 hover:border-[#B89555] p-6 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] hover:-translate-y-1">
           {/* Icon */}
           <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${service.color} flex items-center justify-center mb-5 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
             <service.icon className="w-7 h-7 text-white" />
@@ -121,7 +121,7 @@ const ServicesGrid = () => {
 
           {/* Title */}
           <h3
-            className="text-xl font-bold text-[#1A1A1A] mb-3 group-hover:text-gold transition-colors"
+            className="text-xl font-bold text-[#1A1A1A] mb-3 group-hover:text-[#1A1A1A] transition-colors"
           >
             {service.title}
           </h3>
@@ -164,10 +164,10 @@ const ServicesGrid = () => {
             whileTap={{ scale: 0.8, backgroundColor: "rgba(200,167,102,0.25)", boxShadow: "inset 0 2px 6px rgba(0,0,0,0.15)" }}
             transition={{ type: "spring", stiffness: 400, damping: 15 }}
             onClick={() => scroll("left")}
-            className={`absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-[#FDFBF7]/95 border-2 border-gold shadow-lg flex items-center justify-center transition-opacity lg:hidden ${canScrollLeft ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+            className={`absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-[#FDFBF7]/95 border-2 border-[#B89555] shadow-lg flex items-center justify-center transition-opacity lg:hidden ${canScrollLeft ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
             aria-label="Previous service"
           >
-            <ChevronLeft className="w-5 h-5 text-[#1A1A1A] active:text-gold transition-colors" />
+            <ChevronLeft className="w-5 h-5 text-[#1A1A1A] active:text-[#1A1A1A] transition-colors" />
           </motion.button>
 
           {/* Right Arrow */}
@@ -176,10 +176,10 @@ const ServicesGrid = () => {
             whileTap={{ scale: 0.8, backgroundColor: "rgba(200,167,102,0.25)", boxShadow: "inset 0 2px 6px rgba(0,0,0,0.15)" }}
             transition={{ type: "spring", stiffness: 400, damping: 15 }}
             onClick={() => scroll("right")}
-            className={`absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-[#FDFBF7]/95 border-2 border-gold shadow-lg flex items-center justify-center transition-opacity lg:hidden ${canScrollRight ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+            className={`absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-[#FDFBF7]/95 border-2 border-[#B89555] shadow-lg flex items-center justify-center transition-opacity lg:hidden ${canScrollRight ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
             aria-label="Next service"
           >
-            <ChevronRight className="w-5 h-5 text-[#1A1A1A] active:text-gold transition-colors" />
+            <ChevronRight className="w-5 h-5 text-[#1A1A1A] active:text-[#1A1A1A] transition-colors" />
           </motion.button>
 
           {/* Cards container: horizontal scroll on mobile, grid on desktop */}

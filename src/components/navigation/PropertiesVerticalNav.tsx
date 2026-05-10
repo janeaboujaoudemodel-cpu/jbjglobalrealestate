@@ -112,7 +112,7 @@ export default function PropertiesVerticalNav() {
           style={{ left: '200px', top: '88px', bottom: 0, right: 0 }}
         >
           <div
-            className="pointer-events-auto max-w-[360px] w-full max-h-[calc(100vh-100px)] overflow-y-auto jj-scrollbar-gold mt-2 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA]"
+            className="pointer-events-auto max-w-[360px] w-full max-h-[calc(100vh-100px)] overflow-y-auto jj-scrollbar-gold mt-2 rounded-2xl shadow-2xl border-2 border-[#B89555]/40 bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA]"
             onClick={(e) => e.stopPropagation()}
             onMouseLeave={closeMegaMenu}
           >
@@ -124,9 +124,9 @@ export default function PropertiesVerticalNav() {
                     key={link.href + link.label}
                     to={link.href}
                     onClick={closeMegaMenu}
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[#1A1A1A]/80 hover:bg-gold/10 hover:text-[#1A1A1A] transition-all"
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[#1A1A1A]/80 hover:bg-[#EFE6D6]/10 hover:text-[#1A1A1A] transition-all"
                   >
-                    <Icon className="w-4 h-4 text-gold flex-shrink-0" />
+                    <Icon className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
                     <span>{link.label}</span>
                   </Link>
                 );
@@ -141,15 +141,15 @@ export default function PropertiesVerticalNav() {
   return (
     <>
       <div
-        className="w-[200px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-r border-gold/30 flex flex-col h-full"
+        className="w-[200px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-r border-[#B89555]/30 flex flex-col h-full"
         style={{ borderRight: "1px solid hsl(42 45% 59% / 0.3)" }}
       >
         {/* Logo - Links to homepage */}
-        <Link to="/" className="p-4 border-b border-gold/20 flex items-center gap-3 hover:opacity-80 transition-opacity">
+        <Link to="/" className="p-4 border-b border-[#B89555]/20 flex items-center gap-3 hover:opacity-80 transition-opacity">
           <img src={jbjMonogramLightBg} alt="JBJ" className="w-16 h-16 object-contain" />
           <div className="flex flex-col">
             <span className="text-[11px] font-bold text-[#1A1A1A] tracking-wide leading-tight">JBJ GLOBAL</span>
-            <span className="text-[11px] font-bold text-gold tracking-wide leading-tight">REAL ESTATE</span>
+            <span className="text-[11px] font-bold text-[#1A1A1A] tracking-wide leading-tight">REAL ESTATE</span>
           </div>
         </Link>
 
@@ -174,14 +174,14 @@ export default function PropertiesVerticalNav() {
                   }}
                   className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all ${
                     isActive || isMenuOpen
-                      ? "bg-gradient-to-r from-gold/20 to-gold/10 text-[#1A1A1A] border border-gold/40 font-bold"
+                      ? "bg-gradient-to-r from-gold/20 to-gold/10 text-[#1A1A1A] border border-[#B89555]/40 font-bold"
                       : "text-[#1A1A1A]/70 hover:bg-[#FDFBF7]/60 hover:text-[#1A1A1A]"
                   }`}
                 >
-                  <Icon className={`w-4 h-4 flex-shrink-0 ${isActive || isMenuOpen ? "text-gold" : "text-[#1A1A1A]/50"}`} />
+                  <Icon className={`w-4 h-4 flex-shrink-0 ${isActive || isMenuOpen ? "text-[#1A1A1A]" : "text-[#1A1A1A]/50"}`} />
                   <span className="flex-1">{item.label}</span>
                   {hasMegaMenu && (
-                    <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-[#1A1A1A]/30"}`} />
+                    <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-[#1A1A1A]" : "text-[#1A1A1A]/30"}`} />
                   )}
                 </Link>
               </div>
@@ -190,7 +190,7 @@ export default function PropertiesVerticalNav() {
         </nav>
 
         {/* Utility Section */}
-        <div className="px-3 py-2 border-t border-gold/20 space-y-1">
+        <div className="px-3 py-2 border-t border-[#B89555]/20 space-y-1">
           <button
             onClick={() => setSearchOpen(true)}
             className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium text-[#1A1A1A]/70 hover:bg-[#FDFBF7]/60 hover:text-[#1A1A1A] transition-all w-full"
@@ -219,7 +219,7 @@ export default function PropertiesVerticalNav() {
         </div>
 
         {/* Bottom */}
-        <div className="p-4 border-t border-gold/20 space-y-2">
+        <div className="p-4 border-t border-[#B89555]/20 space-y-2">
           <a
             href="mailto:info@jbjglobal.com"
             className="flex items-center gap-2 text-sm font-bold text-[#1A1A1A] hover:text-red-700 transition-colors"

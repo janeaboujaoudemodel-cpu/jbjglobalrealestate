@@ -125,8 +125,8 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
       <div className="h-full flex flex-col">
         {/* Header */}
         <div className="p-3 border-b border-slate-800 flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-gold/15 border border-gold/30">
-            <Zap className="w-3.5 h-3.5 text-gold" />
+          <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-[#EFE6D6]/15 border border-[#B89555]/30">
+            <Zap className="w-3.5 h-3.5 text-[#1A1A1A]" />
           </div>
           <div className="min-w-0">
             <h3 className="text-sm font-medium text-white truncate">{selectedClip.name}</h3>
@@ -169,7 +169,7 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
                     onClick={() => updateTransition({ duration: d })}
                     className={`px-2.5 py-1 rounded text-xs font-medium border transition-all ${
                       Math.abs(selectedClip.duration - d) < 0.05
-                        ? 'bg-gold/20 border-gold/50 text-gold'
+                        ? 'bg-[#EFE6D6]/20 border-[#B89555]/50 text-[#1A1A1A]'
                         : 'border-slate-700 text-slate-400 hover:border-slate-600 hover:text-white'
                     }`}
                   >
@@ -189,7 +189,7 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
                     onClick={() => updateTransition({ transitionId: t.id })}
                     className={`flex items-center gap-2 px-2.5 py-2 rounded-lg border text-xs font-medium transition-all ${
                       currentTransitionId === t.id
-                        ? 'bg-gold/15 border-gold/40 text-gold'
+                        ? 'bg-[#EFE6D6]/15 border-[#B89555]/40 text-[#1A1A1A]'
                         : 'border-slate-700 text-slate-400 hover:border-slate-600 hover:text-white'
                     }`}
                   >
@@ -212,12 +212,12 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
                       onClick={() => updateTransition({ easing: opt.value })}
                       className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border text-left transition-all ${
                         isActive
-                          ? 'bg-gold/10 border-gold/40'
+                          ? 'bg-[#EFE6D6]/10 border-[#B89555]/40'
                           : 'border-slate-700/60 hover:border-slate-600 hover:bg-slate-800/50'
                       }`}
                     >
                       {/* SVG curve preview */}
-                      <div className={`w-10 h-7 rounded shrink-0 flex items-center justify-center border ${isActive ? 'border-gold/30 bg-gold/5' : 'border-slate-700 bg-slate-800/60'}`}>
+                      <div className={`w-10 h-7 rounded shrink-0 flex items-center justify-center border ${isActive ? 'border-[#B89555]/30 bg-[#EFE6D6]/5' : 'border-slate-700 bg-slate-800/60'}`}>
                         <svg viewBox="0 0 100 100" width="32" height="22" fill="none">
                           <path
                             d={opt.curve}
@@ -229,11 +229,11 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
                         </svg>
                       </div>
                       <div className="min-w-0">
-                        <p className={`text-xs font-semibold leading-tight ${isActive ? 'text-gold' : 'text-slate-300'}`}>{opt.label}</p>
+                        <p className={`text-xs font-semibold leading-tight ${isActive ? 'text-[#1A1A1A]' : 'text-slate-300'}`}>{opt.label}</p>
                         <p className="text-[10px] text-slate-500 leading-tight mt-0.5 truncate">{opt.description}</p>
                       </div>
                       {isActive && (
-                        <div className="ml-auto w-1.5 h-1.5 rounded-full bg-gold shrink-0" />
+                        <div className="ml-auto w-1.5 h-1.5 rounded-full bg-[#EFE6D6] shrink-0" />
                       )}
                     </button>
                   );
@@ -250,7 +250,7 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-xs text-slate-400">Easing</span>
-                <span className="text-xs font-medium text-gold">{easingOptions.find(e => e.value === currentEasing)?.label}</span>
+                <span className="text-xs font-medium text-[#1A1A1A]">{easingOptions.find(e => e.value === currentEasing)?.label}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-xs text-slate-400">Type</span>
@@ -278,43 +278,43 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
         <TabsList className="w-full justify-start rounded-none border-b border-slate-800 bg-transparent p-0 flex-wrap">
           <TabsTrigger 
             value="transform"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold px-2"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] data-[state=active]:text-[#1A1A1A] px-2"
           >
             <Move className="w-4 h-4" />
           </TabsTrigger>
           <TabsTrigger 
             value="crop"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold px-2"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] data-[state=active]:text-[#1A1A1A] px-2"
           >
             <Crop className="w-4 h-4" />
           </TabsTrigger>
           <TabsTrigger 
             value="speed"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold px-2"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] data-[state=active]:text-[#1A1A1A] px-2"
           >
             <Timer className="w-4 h-4" />
           </TabsTrigger>
           <TabsTrigger 
             value="color"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold px-2"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] data-[state=active]:text-[#1A1A1A] px-2"
           >
             <Palette className="w-4 h-4" />
           </TabsTrigger>
           <TabsTrigger 
             value="audio"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold px-2"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] data-[state=active]:text-[#1A1A1A] px-2"
           >
             <Volume2 className="w-4 h-4" />
           </TabsTrigger>
           <TabsTrigger 
             value="captions"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold px-2"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] data-[state=active]:text-[#1A1A1A] px-2"
           >
             <Subtitles className="w-4 h-4" />
           </TabsTrigger>
           <TabsTrigger 
             value="effects"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold px-2"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] data-[state=active]:text-[#1A1A1A] px-2"
           >
             <Sparkles className="w-4 h-4" />
           </TabsTrigger>
@@ -446,7 +446,7 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
                     key={speed}
                     size="sm"
                     variant="outline"
-                    className="border-slate-700 text-slate-400 hover:bg-gold hover:text-[#1A1A1A] h-7 text-xs"
+                    className="border-slate-700 text-slate-400 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] h-7 text-xs"
                   >
                     {speed}x
                   </Button>
@@ -491,7 +491,7 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
                     key={filter.id}
                     size="sm"
                     variant="outline"
-                    className="border-slate-700 text-slate-400 hover:bg-gold hover:text-[#1A1A1A] h-8 text-xs justify-start"
+                    className="border-slate-700 text-slate-400 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] h-8 text-xs justify-start"
                   >
                     {filter.name}
                   </Button>
@@ -571,7 +571,7 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
           <TabsContent value="captions" className="mt-0 p-3 space-y-4">
             <h4 className="text-xs font-medium text-slate-400 uppercase">Captions</h4>
             
-            <Button size="sm" className="w-full bg-gold text-[#1A1A1A] hover:bg-gold/90">
+            <Button size="sm" className="w-full bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90">
               <Subtitles className="w-4 h-4 mr-2" />
               Auto-Transcribe
             </Button>
@@ -609,7 +609,7 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
                     key={ratio}
                     size="sm"
                     variant="outline"
-                    className="border-slate-700 text-slate-400 hover:bg-gold hover:text-[#1A1A1A] h-8 text-xs"
+                    className="border-slate-700 text-slate-400 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] h-8 text-xs"
                   >
                     {ratio}
                   </Button>
@@ -625,7 +625,7 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
                     key={angle}
                     size="sm"
                     variant="outline"
-                    className="flex-1 border-slate-700 text-slate-400 hover:bg-gold hover:text-[#1A1A1A] h-8 text-xs"
+                    className="flex-1 border-slate-700 text-slate-400 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] h-8 text-xs"
                   >
                     {angle}
                   </Button>

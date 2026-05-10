@@ -227,10 +227,10 @@ export const ProvidentSyncButton = () => {
   const progress = totalPages > 0 ? (currentPage / totalPages) * 100 : 0;
 
   return (
-    <Card className="bg-zinc-900 border-[#1A1A1A]">
+    <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-lg">
-          <RefreshCw className="w-5 h-5 text-gold" />
+          <RefreshCw className="w-5 h-5 text-[#1A1A1A]" />
           Provident Source Sync
         </CardTitle>
       </CardHeader>
@@ -243,7 +243,7 @@ export const ProvidentSyncButton = () => {
           </div>
           <div className="flex items-center justify-between">
             <span className="text-white/70">Pending approval:</span>
-            <span className="text-amber-400 font-semibold">{pendingCount ?? "..."}</span>
+            <span className="text-[#1A1A1A] font-semibold">{pendingCount ?? "..."}</span>
           </div>
         </div>
 
@@ -252,7 +252,7 @@ export const ProvidentSyncButton = () => {
           <Button
             onClick={startFullSync}
             disabled={isSyncing}
-            className="bg-gold hover:bg-gold/90 text-[#1A1A1A]"
+            className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]"
           >
             {isSyncing ? (
               <>
@@ -329,19 +329,19 @@ export const ProvidentSyncButton = () => {
         {/* Current page stats */}
         {stats && (
           <div className="grid grid-cols-4 gap-2 text-center">
-            <div className="bg-zinc-800 rounded p-2">
+            <div className="bg-[#1A1A1A] rounded p-2">
               <div className="text-lg font-bold text-blue-400">{stats.extracted}</div>
               <div className="text-xs text-white/90">Extracted</div>
             </div>
-            <div className="bg-zinc-800 rounded p-2">
+            <div className="bg-[#1A1A1A] rounded p-2">
               <div className="text-lg font-bold text-emerald-400">{stats.created}</div>
               <div className="text-xs text-white/90">Created</div>
             </div>
-            <div className="bg-zinc-800 rounded p-2">
-              <div className="text-lg font-bold text-amber-400">{stats.updated}</div>
+            <div className="bg-[#1A1A1A] rounded p-2">
+              <div className="text-lg font-bold text-[#1A1A1A]">{stats.updated}</div>
               <div className="text-xs text-white/90">Updated</div>
             </div>
-            <div className="bg-zinc-800 rounded p-2">
+            <div className="bg-[#1A1A1A] rounded p-2">
               <div className="text-lg font-bold text-purple-400">{stats.images}</div>
               <div className="text-xs text-white/90">Images</div>
             </div>
@@ -354,7 +354,7 @@ export const ProvidentSyncButton = () => {
             <p className="text-xs text-white/90 mb-2">Total Progress:</p>
             <div className="flex gap-4 text-sm">
               <span className="text-emerald-400">+{totalStats.created} new</span>
-              <span className="text-amber-400">{totalStats.updated} updated</span>
+              <span className="text-[#1A1A1A]">{totalStats.updated} updated</span>
               <span className="text-purple-400">{totalStats.images} images</span>
             </div>
           </div>

@@ -61,8 +61,8 @@ export const MarketIntelligenceHero = ({
 
       {/* Decorative gold ambience — sits BEHIND the darkening overlays so it never lifts contrast under the headline */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/8 via-transparent to-transparent z-[1] pointer-events-none" />
-      <div className="absolute top-20 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl z-[1] pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-gold/3 rounded-full blur-3xl z-[1] pointer-events-none" />
+      <div className="absolute top-20 left-1/4 w-96 h-96 bg-[#EFE6D6]/5 rounded-full blur-3xl z-[1] pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#EFE6D6]/3 rounded-full blur-3xl z-[1] pointer-events-none" />
 
       {/* Legibility overlays — composite stack guarantees AA contrast over any frame */}
       {/* 1. Base vertical anchor: heavier top + bottom, breathable middle so imagery still reads */}
@@ -96,9 +96,9 @@ export const MarketIntelligenceHero = ({
             }}
             variants={fadeInUp}
           >
-            <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
+            <span className="w-2 h-2 bg-[#EFE6D6] rounded-full animate-pulse" />
             <span
-              className="text-gold font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]"
+              className="text-[#1A1A1A] font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]"
               style={{ textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}
             >
               {badge}

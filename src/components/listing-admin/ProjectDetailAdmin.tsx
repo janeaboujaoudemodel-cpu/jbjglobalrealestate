@@ -129,7 +129,7 @@ export function ProjectDetailAdmin({ project, onBack, onEdit, onDelete }: Projec
       </div>
 
       {/* Hero Header */}
-      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 overflow-hidden">
+      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 overflow-hidden">
         <div className="flex flex-col lg:flex-row">
           {/* Hero Image */}
           <div className="lg:w-2/5 aspect-[16/10] lg:aspect-auto overflow-hidden bg-muted">
@@ -157,28 +157,28 @@ export function ProjectDetailAdmin({ project, onBack, onEdit, onDelete }: Projec
             {/* Quick stats */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {project.price_from && (
-                <div className="bg-background/60 rounded-lg p-3 text-center border border-gold/20">
+                <div className="bg-background/60 rounded-lg p-3 text-center border border-[#B89555]/20">
                   <DollarSign className="w-4 h-4 mx-auto text-muted-foreground mb-1" />
                   <p className="text-xs text-muted-foreground">Starting</p>
                   <p className="text-sm font-bold text-price-orange">AED {(project.price_from / 1000000).toFixed(1)}M</p>
                 </div>
               )}
               {(project.bedrooms_min || project.bedrooms_max) && (
-                <div className="bg-background/60 rounded-lg p-3 text-center border border-gold/20">
+                <div className="bg-background/60 rounded-lg p-3 text-center border border-[#B89555]/20">
                   <Bed className="w-4 h-4 mx-auto text-muted-foreground mb-1" />
                   <p className="text-xs text-muted-foreground">Bedrooms</p>
                   <p className="text-sm font-bold text-foreground">{project.bedrooms_min}{project.bedrooms_max && project.bedrooms_max !== project.bedrooms_min ? ` - ${project.bedrooms_max}` : ""}</p>
                 </div>
               )}
               {project.handover_date && (
-                <div className="bg-background/60 rounded-lg p-3 text-center border border-gold/20">
+                <div className="bg-background/60 rounded-lg p-3 text-center border border-[#B89555]/20">
                   <Calendar className="w-4 h-4 mx-auto text-muted-foreground mb-1" />
                   <p className="text-xs text-muted-foreground">Handover</p>
                   <p className="text-sm font-bold text-foreground">{project.handover_date}</p>
                 </div>
               )}
               {project.location && (
-                <div className="bg-background/60 rounded-lg p-3 text-center border border-gold/20">
+                <div className="bg-background/60 rounded-lg p-3 text-center border border-[#B89555]/20">
                   <MapPin className="w-4 h-4 mx-auto text-muted-foreground mb-1" />
                   <p className="text-xs text-muted-foreground">Location</p>
                   <p className="text-sm font-bold text-foreground truncate">{project.location.split(",")[0]}</p>
@@ -212,7 +212,7 @@ export function ProjectDetailAdmin({ project, onBack, onEdit, onDelete }: Projec
 
       {/* Tabs: Overview, Gallery, Enrichment Log */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] border border-gold/30">
+        <TabsList className="bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] border border-[#B89555]/30">
           <TabsTrigger value="overview" className="data-[state=active]:bg-background data-[state=active]:text-foreground">
             <Layers className="w-3.5 h-3.5 mr-1.5" /> Overview
           </TabsTrigger>
@@ -231,7 +231,7 @@ export function ProjectDetailAdmin({ project, onBack, onEdit, onDelete }: Projec
         <TabsContent value="overview" className="mt-4 space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Description */}
-            <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/20">
               <CardContent className="p-5 space-y-3">
                 <h3 className="font-semibold text-foreground">Description</h3>
                 {project.description ? (
@@ -243,7 +243,7 @@ export function ProjectDetailAdmin({ project, onBack, onEdit, onDelete }: Projec
             </Card>
 
             {/* Enrichment Scorecard */}
-            <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/20">
               <CardContent className="p-5 space-y-3">
                 <h3 className="font-semibold text-foreground">Field Coverage</h3>
                 <div className="grid grid-cols-2 gap-2">
@@ -262,7 +262,7 @@ export function ProjectDetailAdmin({ project, onBack, onEdit, onDelete }: Projec
             </Card>
 
             {/* Project Details */}
-            <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20 lg:col-span-2">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/20 lg:col-span-2">
               <CardContent className="p-5 space-y-3">
                 <h3 className="font-semibold text-foreground">Project Details</h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
@@ -282,11 +282,11 @@ export function ProjectDetailAdmin({ project, onBack, onEdit, onDelete }: Projec
 
                 {/* Amenities */}
                 {project.amenities && project.amenities.length > 0 && (
-                  <div className="pt-3 border-t border-gold/10">
+                  <div className="pt-3 border-t border-[#B89555]/10">
                     <p className="text-xs font-medium text-muted-foreground mb-2">Amenities</p>
                     <div className="flex flex-wrap gap-1.5">
                       {project.amenities.map((a, i) => (
-                        <Badge key={i} variant="outline" className="text-[10px] border-gold/30">{a}</Badge>
+                        <Badge key={i} variant="outline" className="text-[10px] border-[#B89555]/30">{a}</Badge>
                       ))}
                     </div>
                   </div>
@@ -301,7 +301,7 @@ export function ProjectDetailAdmin({ project, onBack, onEdit, onDelete }: Projec
           {project.images && project.images.length > 0 ? (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
               {project.images.map((img, i) => (
-                <div key={img.id || i} className="aspect-[4/3] rounded-lg overflow-hidden border border-gold/20 bg-muted">
+                <div key={img.id || i} className="aspect-[4/3] rounded-lg overflow-hidden border border-[#B89555]/20 bg-muted">
                   <SafeImage src={img.image_url} alt={img.alt_text || project.name} className="w-full h-full object-cover" fallbackSrc="/placeholder.svg" />
                 </div>
               ))}
@@ -319,7 +319,7 @@ export function ProjectDetailAdmin({ project, onBack, onEdit, onDelete }: Projec
           {documents && documents.length > 0 ? (
             <div className="space-y-2">
               {documents.map((doc: any) => (
-                <div key={doc.id} className="flex items-center justify-between p-3 bg-background/60 rounded-lg border border-gold/20">
+                <div key={doc.id} className="flex items-center justify-between p-3 bg-background/60 rounded-lg border border-[#B89555]/20">
                   <div className="flex items-center gap-3">
                     <FileText className="w-5 h-5 text-muted-foreground" />
                     <div>
@@ -345,14 +345,14 @@ export function ProjectDetailAdmin({ project, onBack, onEdit, onDelete }: Projec
         <TabsContent value="enrichment" className="mt-4 space-y-4">
           {/* Enrichment suggestions */}
           {enrichmentSuggestions && enrichmentSuggestions.length > 0 && (
-            <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/20">
               <CardContent className="p-5 space-y-3">
                 <h3 className="font-semibold text-foreground flex items-center gap-2">
-                  <Zap className="w-4 h-4 text-gold" /> Enrichment Suggestions
+                  <Zap className="w-4 h-4 text-[#1A1A1A]" /> Enrichment Suggestions
                 </h3>
                 <div className="space-y-2 max-h-[300px] overflow-y-auto">
                   {enrichmentSuggestions.map((s: any) => (
-                    <div key={s.id} className="p-3 bg-background/60 rounded-lg border border-gold/10 text-sm">
+                    <div key={s.id} className="p-3 bg-background/60 rounded-lg border border-[#B89555]/10 text-sm">
                       <div className="flex items-center justify-between mb-1">
                         <span className="font-medium text-foreground">{s.field_name || "Field update"}</span>
                         <Badge variant="outline" className="text-[10px]">{s.status || "pending"}</Badge>
@@ -367,7 +367,7 @@ export function ProjectDetailAdmin({ project, onBack, onEdit, onDelete }: Projec
           )}
 
           {/* Edit audit log */}
-          <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/20">
             <CardContent className="p-5 space-y-3">
               <h3 className="font-semibold text-foreground flex items-center gap-2">
                 <Clock className="w-4 h-4 text-muted-foreground" /> Edit History
@@ -375,14 +375,14 @@ export function ProjectDetailAdmin({ project, onBack, onEdit, onDelete }: Projec
               {editLogs && editLogs.length > 0 ? (
                 <div className="space-y-2 max-h-[400px] overflow-y-auto">
                   {editLogs.map((log: any) => (
-                    <div key={log.id} className="flex items-start gap-3 p-3 bg-background/60 rounded-lg border border-gold/10">
-                      <div className="w-2 h-2 mt-1.5 rounded-full bg-gold shrink-0" />
+                    <div key={log.id} className="flex items-start gap-3 p-3 bg-background/60 rounded-lg border border-[#B89555]/10">
+                      <div className="w-2 h-2 mt-1.5 rounded-full bg-[#EFE6D6] shrink-0" />
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-foreground">{log.summary || log.action}</p>
                         {log.changed_fields && (
                           <div className="flex flex-wrap gap-1 mt-1">
                             {log.changed_fields.map((f: string, i: number) => (
-                              <Badge key={i} variant="outline" className="text-[10px] border-gold/20">{f}</Badge>
+                              <Badge key={i} variant="outline" className="text-[10px] border-[#B89555]/20">{f}</Badge>
                             ))}
                           </div>
                         )}

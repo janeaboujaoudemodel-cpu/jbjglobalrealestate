@@ -34,7 +34,7 @@ export function ProjectPreviewModal({ project, open, onOpenChange, onEdit, onOpe
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl p-0 overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30">
+      <DialogContent className="max-w-2xl p-0 overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30">
         <DialogTitle className="sr-only">{project.name} Preview</DialogTitle>
         
         {/* Hero Image */}
@@ -54,7 +54,7 @@ export function ProjectPreviewModal({ project, open, onOpenChange, onEdit, onOpe
           {/* Badges overlay */}
           <div className="absolute top-3 left-3 flex gap-2">
             {project.is_premium && (
-              <Badge className="bg-gold text-foreground text-xs font-bold gap-1">
+              <Badge className="bg-[#EFE6D6] text-foreground text-xs font-bold gap-1">
                 <Crown className="w-3 h-3" /> Premium
               </Badge>
             )}
@@ -62,7 +62,7 @@ export function ProjectPreviewModal({ project, open, onOpenChange, onEdit, onOpe
               <Badge variant="destructive" className="text-xs">Sold Out</Badge>
             )}
             {(project as any).construction_status && (
-              <Badge variant="outline" className="text-xs bg-background/80 backdrop-blur-sm border-gold/30">
+              <Badge variant="outline" className="text-xs bg-background/80 backdrop-blur-sm border-[#B89555]/30">
                 {(project as any).construction_status}
               </Badge>
             )}
@@ -87,7 +87,7 @@ export function ProjectPreviewModal({ project, open, onOpenChange, onEdit, onOpe
 
           {/* Last Edit Info */}
           {lastEdit && (
-            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-background/60 border border-gold/20">
+            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-background/60 border border-[#B89555]/20">
               <Clock className="w-4 h-4 text-muted-foreground shrink-0" />
               <div className="text-xs text-muted-foreground">
                 <span className="font-medium text-foreground">Last edited {formatRelativeTime(lastEdit.created_at)}</span>
@@ -99,13 +99,13 @@ export function ProjectPreviewModal({ project, open, onOpenChange, onEdit, onOpe
           {/* Quick facts */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {project.price_from && (
-              <div className="bg-background/60 rounded-lg p-3 text-center border border-gold/20">
+              <div className="bg-background/60 rounded-lg p-3 text-center border border-[#B89555]/20">
                 <p className="text-xs text-muted-foreground">Starting Price</p>
                 <p className="text-sm font-bold text-price-orange">{formatPrice(project.price_from)}</p>
               </div>
             )}
             {(project.bedrooms_min || project.bedrooms_max) && (
-              <div className="bg-background/60 rounded-lg p-3 text-center border border-gold/20">
+              <div className="bg-background/60 rounded-lg p-3 text-center border border-[#B89555]/20">
                 <p className="text-xs text-muted-foreground">Bedrooms</p>
                 <p className="text-sm font-bold text-foreground flex items-center justify-center gap-1">
                   <Bed className="w-3.5 h-3.5" />
@@ -114,7 +114,7 @@ export function ProjectPreviewModal({ project, open, onOpenChange, onEdit, onOpe
               </div>
             )}
             {project.handover_date && (
-              <div className="bg-background/60 rounded-lg p-3 text-center border border-gold/20">
+              <div className="bg-background/60 rounded-lg p-3 text-center border border-[#B89555]/20">
                 <p className="text-xs text-muted-foreground">Handover</p>
                 <p className="text-sm font-bold text-foreground flex items-center justify-center gap-1">
                   <Calendar className="w-3.5 h-3.5" />{project.handover_date}
@@ -122,7 +122,7 @@ export function ProjectPreviewModal({ project, open, onOpenChange, onEdit, onOpe
               </div>
             )}
             {project.location && (
-              <div className="bg-background/60 rounded-lg p-3 text-center border border-gold/20">
+              <div className="bg-background/60 rounded-lg p-3 text-center border border-[#B89555]/20">
                 <p className="text-xs text-muted-foreground">Location</p>
                 <p className="text-sm font-bold text-foreground flex items-center justify-center gap-1">
                   <MapPin className="w-3.5 h-3.5" />{project.location.split(",")[0]}
@@ -132,7 +132,7 @@ export function ProjectPreviewModal({ project, open, onOpenChange, onEdit, onOpe
           </div>
 
           {/* Actions */}
-          <div className="flex flex-wrap gap-3 pt-2 border-t border-gold/20">
+          <div className="flex flex-wrap gap-3 pt-2 border-t border-[#B89555]/20">
             {onOpenDetail && (
               <Button
                 variant="primary"

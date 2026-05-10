@@ -23,7 +23,7 @@ interface ChatShortcutsProps {
 }
 
 const BASE_SHORTCUTS: ShortcutItem[] = [
-  { id: 'buy_property', icon: Building2, label: 'Buy Property', description: 'Explore properties for sale', color: 'text-gold' },
+  { id: 'buy_property', icon: Building2, label: 'Buy Property', description: 'Explore properties for sale', color: 'text-[#1A1A1A]' },
   { id: 'sell_property', icon: Building2, label: 'Sell Your Property', description: 'List your property for sale', color: 'text-amber-600' },
   { id: 'rent_property', icon: Home, label: 'Rent Property', description: 'Find your perfect rental', color: 'text-green-500' },
   { id: 'list_for_rent', icon: Home, label: 'List for Rent', description: 'List your property for rent', color: 'text-emerald-600' },
@@ -36,7 +36,7 @@ const BASE_SHORTCUTS: ShortcutItem[] = [
 ];
 
 const OWNER_SHORTCUTS: ShortcutItem[] = [
-  { id: 'owner_command', icon: Shield, label: 'Owner Command Center', description: 'Full control panel', color: 'text-gold' },
+  { id: 'owner_command', icon: Shield, label: 'Owner Command Center', description: 'Full control panel', color: 'text-[#1A1A1A]' },
   { id: 'dashboard', icon: LayoutDashboard, label: 'Dashboard', description: 'Your overview', color: 'text-blue-600' },
   { id: 'crm_dashboard', icon: Users, label: 'CRM Dashboard', description: 'Leads, deals & pipeline', color: 'text-blue-600' },
   { id: 'admin_panel', icon: Settings, label: 'Admin Panel', description: 'System administration', color: 'text-red-500' },
@@ -64,7 +64,7 @@ const PARTNER_BROKER_SHORTCUTS: ShortcutItem[] = [
 ];
 
 const INVESTOR_SHORTCUTS: ShortcutItem[] = [
-  { id: 'investor_hub', icon: Star, label: 'Investor Hub', description: 'Investment opportunities', color: 'text-gold' },
+  { id: 'investor_hub', icon: Star, label: 'Investor Hub', description: 'Investment opportunities', color: 'text-[#1A1A1A]' },
   { id: 'investor_dashboard', icon: LayoutDashboard, label: 'Investor Dashboard', description: 'Track your portfolio', color: 'text-emerald-500' },
   { id: 'portfolio', icon: Briefcase, label: 'Portfolio Views', description: 'Manage investments', color: 'text-blue-600' },
 ];
@@ -120,20 +120,20 @@ const ChatShortcuts = ({ onSelectShortcut, userFirstName: userFullName }: ChatSh
             <button
               key={shortcut.id}
               onClick={() => onSelectShortcut(shortcut.id)}
-              className="w-full p-3 bg-[#FDFBF7] border-2 border-gold/30 hover:border-gold hover:bg-gold/5 rounded-xl text-left transition-all duration-300 group flex items-center gap-3"
+              className="w-full p-3 bg-[#FDFBF7] border-2 border-[#B89555]/30 hover:border-[#B89555] hover:bg-[#EFE6D6]/5 rounded-xl text-left transition-all duration-300 group flex items-center gap-3"
             >
-              <div className={`w-10 h-10 rounded-lg bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] flex items-center justify-center border border-gold/30 shadow-sm`}>
+              <div className={`w-10 h-10 rounded-lg bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] flex items-center justify-center border border-[#B89555]/30 shadow-sm`}>
                 <Icon className={`w-5 h-5 ${shortcut.color}`} />
               </div>
               <div className="flex-1">
-                <h5 className="text-[#1A1A1A] text-sm font-semibold group-hover:text-gold transition-colors">
+                <h5 className="text-[#1A1A1A] text-sm font-semibold group-hover:text-[#1A1A1A] transition-colors">
                   <T>{shortcut.label}</T>
                 </h5>
                 <p className="text-[#1A1A1A]/70 text-xs">
                   <T>{shortcut.description}</T>
                 </p>
               </div>
-              <div className="text-gold opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="text-[#1A1A1A] opacity-0 group-hover:opacity-100 transition-opacity">
                 →
               </div>
             </button>

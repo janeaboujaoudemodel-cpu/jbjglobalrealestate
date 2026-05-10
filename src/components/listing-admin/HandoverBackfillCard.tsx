@@ -83,10 +83,10 @@ export const HandoverBackfillCard = () => {
   };
 
   return (
-    <Card className="bg-card border-2 border-gold/30">
+    <Card className="bg-card border-2 border-[#B89555]/30">
       <CardHeader className="pb-3">
         <CardTitle className="text-foreground text-base flex items-center gap-2">
-          <CalendarClock className="w-5 h-5 text-gold" />
+          <CalendarClock className="w-5 h-5 text-[#1A1A1A]" />
           Handover Date Backfill
         </CardTitle>
         <p className="text-muted-foreground text-sm">
@@ -122,7 +122,7 @@ export const HandoverBackfillCard = () => {
         </div>
 
         {(running || progress.batches > 0) && (
-          <div className="space-y-2 rounded-lg border border-gold/20 bg-[#FDFBF7] p-3">
+          <div className="space-y-2 rounded-lg border border-[#B89555]/20 bg-[#FDFBF7] p-3">
             <div className="flex items-center justify-between text-xs text-foreground">
               <span>
                 {stage ? `Running stage ${stage}…` : "Idle"} • {progress.batches} batch

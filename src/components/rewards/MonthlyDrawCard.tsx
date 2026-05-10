@@ -47,9 +47,9 @@ export function MonthlyDrawCard({ className }: MonthlyDrawCardProps) {
 
   if (isLoading) {
     return (
-      <Card className={cn("bg-[#1A1A1A]/40 border-gold/20 backdrop-blur-sm", className)}>
+      <Card className={cn("bg-[#1A1A1A]/40 border-[#B89555]/20 backdrop-blur-sm", className)}>
         <CardContent className="flex items-center justify-center py-12">
-          <Loader2 className="w-8 h-8 text-gold animate-spin" />
+          <Loader2 className="w-8 h-8 text-[#1A1A1A] animate-spin" />
         </CardContent>
       </Card>
     );
@@ -58,7 +58,7 @@ export function MonthlyDrawCard({ className }: MonthlyDrawCardProps) {
   const eligibility = getEligibility();
 
   return (
-    <Card className={cn("bg-[#1A1A1A]/40 border-gold/20 backdrop-blur-sm overflow-hidden", className)}>
+    <Card className={cn("bg-[#1A1A1A]/40 border-[#B89555]/20 backdrop-blur-sm overflow-hidden", className)}>
       {/* Header with gradient */}
       <div className="bg-gradient-to-r from-purple-600/20 via-gold/20 to-purple-600/20 p-1">
         <CardHeader className="bg-[#1A1A1A]/60 backdrop-blur-sm pb-4">
@@ -141,7 +141,7 @@ export function MonthlyDrawCard({ className }: MonthlyDrawCardProps) {
         {pastDraws.length > 0 && (
           <div className="pt-4 border-t border-white/10">
             <h4 className="text-white/80 text-sm font-medium mb-3 flex items-center gap-2">
-              <Trophy className="w-4 h-4 text-gold" />
+              <Trophy className="w-4 h-4 text-[#1A1A1A]" />
               Past Winners
             </h4>
             <div className="space-y-2">
@@ -153,7 +153,7 @@ export function MonthlyDrawCard({ className }: MonthlyDrawCardProps) {
                   <span className="text-white/90">
                     {getMonthName(draw.draw_month)} {draw.draw_year}
                   </span>
-                  <Badge variant="outline" className="border-gold/50 text-gold">
+                  <Badge variant="outline" className="border-[#B89555]/50 text-[#1A1A1A]">
                     Winner Selected
                   </Badge>
                 </div>

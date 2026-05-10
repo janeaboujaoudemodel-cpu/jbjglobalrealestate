@@ -459,9 +459,9 @@ The content should be:
   const renderEmailPreview = () => {
     const isHTML = emailBody.includes('<') && emailBody.includes('>');
     return (
-      <div className="border-2 border-gold/30 rounded-lg overflow-hidden bg-[#FDFBF7] min-h-[400px]">
+      <div className="border-2 border-[#B89555]/30 rounded-lg overflow-hidden bg-[#FDFBF7] min-h-[400px]">
         {/* Email header simulation */}
-        <div className="bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] border-b border-gold/20 p-4 space-y-2">
+        <div className="bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] border-b border-[#B89555]/20 p-4 space-y-2">
           {subjectLine && (
             <div className="flex items-start gap-2">
               <span className="text-xs text-[#1A1A1A]/50 shrink-0 pt-0.5">Subject:</span>
@@ -505,11 +505,11 @@ The content should be:
 
         {/* Attachments footer */}
         {attachments.length > 0 && (
-          <div className="border-t border-gold/20 p-4 bg-[#FDFBF7]">
+          <div className="border-t border-[#B89555]/20 p-4 bg-[#FDFBF7]">
             <p className="text-xs font-medium text-[#1A1A1A]/60 mb-2">📎 Attachments ({attachments.length})</p>
             <div className="flex flex-wrap gap-2">
               {attachments.map(att => (
-                <Badge key={att.id} variant="secondary" className="bg-gold/10 text-[#1A1A1A] border border-gold/20">
+                <Badge key={att.id} variant="secondary" className="bg-[#EFE6D6]/10 text-[#1A1A1A] border border-[#B89555]/20">
                   {att.type === 'image' ? <Image className="w-3 h-3 mr-1" /> : <FileText className="w-3 h-3 mr-1" />}
                   {att.name}
                 </Badge>
@@ -530,10 +530,10 @@ The content should be:
       <input ref={imageInputRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => handleFileUpload(e, 'image')} />
 
       {/* Header */}
-      <header className="sticky top-0 lg:top-[48px] z-50 border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_4px_20px_rgba(200,167,102,0.1)] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
+      <header className="sticky top-0 lg:top-[48px] z-50 border-b-2 border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_4px_20px_rgba(200,167,102,0.1)] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
         <div className="container flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" onClick={onClose} className="text-[#1A1A1A] hover:bg-gold/10">
+            <Button variant="ghost" size="icon" onClick={onClose} className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div>
@@ -547,11 +547,11 @@ The content should be:
           </div>
 
           <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={() => handleSave('draft')} disabled={isSaving || isSending} className="border-2 border-gold/40 bg-[#FDFBF7]/80 text-[#1A1A1A] hover:bg-gold/10">
+            <Button variant="outline" onClick={() => handleSave('draft')} disabled={isSaving || isSending} className="border-2 border-[#B89555]/40 bg-[#FDFBF7]/80 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
               <Save className="h-4 w-4 mr-2" />
               Save Draft
             </Button>
-            <Button onClick={openScheduleDialog} disabled={isSaving || isSending} className="border-2 border-gold/40 bg-[#FDFBF7]/80 text-[#1A1A1A] hover:bg-gold/10">
+            <Button onClick={openScheduleDialog} disabled={isSaving || isSending} className="border-2 border-[#B89555]/40 bg-[#FDFBF7]/80 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
               <Calendar className="h-4 w-4 mr-2" />
               Schedule
             </Button>
@@ -583,19 +583,19 @@ The content should be:
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="p-6 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F7F2EA]"
+              className="p-6 rounded-xl border-2 border-[#B89555]/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F7F2EA]"
             >
               <h2 className="font-semibold mb-4 text-[#1A1A1A]">Campaign Settings</h2>
               
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="name" className="text-[#1A1A1A]">Campaign Name *</Label>
-                  <Input id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g., January Newsletter" className="mt-1 bg-[#FDFBF7] border-gold/30" />
+                  <Input id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g., January Newsletter" className="mt-1 bg-[#FDFBF7] border-[#B89555]/30" />
                 </div>
 
                 <div>
                   <Label htmlFor="description" className="text-[#1A1A1A]">Description</Label>
-                  <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Brief description..." className="mt-1 bg-[#FDFBF7] border-gold/30" rows={2} />
+                  <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Brief description..." className="mt-1 bg-[#FDFBF7] border-[#B89555]/30" rows={2} />
                 </div>
 
                 <div>
@@ -612,8 +612,8 @@ The content should be:
                         onClick={() => setCampaignType(value as CampaignType)}
                         className={`flex items-center gap-2 p-3 rounded-lg border-2 transition-all ${
                           campaignType === value
-                            ? 'border-gold bg-gold/20 text-[#1A1A1A]'
-                            : 'border-gold/30 bg-[#FDFBF7] hover:border-gold/50'
+                            ? 'border-[#B89555] bg-[#EFE6D6]/20 text-[#1A1A1A]'
+                            : 'border-[#B89555]/30 bg-[#FDFBF7] hover:border-[#B89555]/50'
                         }`}
                       >
                         <Icon className="w-4 h-4" />
@@ -626,7 +626,7 @@ The content should be:
                 <div>
                   <Label htmlFor="audience" className="text-[#1A1A1A]">Target Audience</Label>
                   <Select value={targetAudience} onValueChange={(v) => setTargetAudience(v as TargetAudience)}>
-                    <SelectTrigger className="mt-1 bg-[#FDFBF7] border-gold/30">
+                    <SelectTrigger className="mt-1 bg-[#FDFBF7] border-[#B89555]/30">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -649,13 +649,13 @@ The content should be:
                       exit={{ opacity: 0, height: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className="space-y-3 pt-2 border-t border-gold/20">
+                      <div className="space-y-3 pt-2 border-t border-[#B89555]/20">
                         <div className="flex items-center gap-2">
-                          <Database className="w-4 h-4 text-gold" />
+                          <Database className="w-4 h-4 text-[#1A1A1A]" />
                           <Label className="text-[#1A1A1A] text-sm font-semibold">Select Database</Label>
                         </div>
                         <Select value={audienceSource} onValueChange={setAudienceSource}>
-                          <SelectTrigger className="bg-[#FDFBF7] border-gold/30">
+                          <SelectTrigger className="bg-[#FDFBF7] border-[#B89555]/30">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
@@ -672,7 +672,7 @@ The content should be:
                             placeholder="Search recipients..."
                             value={recipientSearch}
                             onChange={(e) => setRecipientSearch(e.target.value)}
-                            className="pl-9 h-9 bg-[#FDFBF7] border-gold/30 text-sm"
+                            className="pl-9 h-9 bg-[#FDFBF7] border-[#B89555]/30 text-sm"
                           />
                         </div>
 
@@ -681,20 +681,20 @@ The content should be:
                             <Checkbox
                               checked={selectAll}
                               onCheckedChange={(c) => handleSelectAll(!!c)}
-                              className="border-gold/50"
+                              className="border-[#B89555]/50"
                             />
                             <span className="text-[#1A1A1A]/60">Select All ({filteredRecipients.length})</span>
                           </div>
-                          <Badge className="bg-gold/20 text-[#1A1A1A] border-gold/30">
+                          <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30">
                             <UserCheck className="w-3 h-3 mr-1" />
                             {selectedCount} selected
                           </Badge>
                         </div>
 
-                        <ScrollArea className="h-[200px] border border-gold/20 rounded-lg bg-[#FDFBF7]">
+                        <ScrollArea className="h-[200px] border border-[#B89555]/20 rounded-lg bg-[#FDFBF7]">
                           {isLoadingRecipients ? (
                             <div className="flex items-center justify-center py-8">
-                              <Loader2 className="w-5 h-5 animate-spin text-gold" />
+                              <Loader2 className="w-5 h-5 animate-spin text-[#1A1A1A]" />
                             </div>
                           ) : filteredRecipients.length === 0 ? (
                             <div className="text-center py-8 text-xs text-[#1A1A1A]/40">
@@ -706,19 +706,19 @@ The content should be:
                                 <label
                                   key={r.id}
                                   className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-colors text-xs ${
-                                    r.selected ? 'bg-gold/10 border border-gold/30' : 'hover:bg-gold/5'
+                                    r.selected ? 'bg-[#EFE6D6]/10 border border-[#B89555]/30' : 'hover:bg-[#EFE6D6]/5'
                                   }`}
                                 >
                                   <Checkbox
                                     checked={r.selected}
                                     onCheckedChange={() => toggleRecipient(r.id)}
-                                    className="border-gold/50"
+                                    className="border-[#B89555]/50"
                                   />
                                   <div className="min-w-0 flex-1">
                                     <p className="font-medium text-[#1A1A1A] truncate">{r.name}</p>
                                     <p className="text-[#1A1A1A]/50 truncate">{r.email}</p>
                                   </div>
-                                  <Badge variant="outline" className="text-[10px] border-gold/20 shrink-0">{r.source}</Badge>
+                                  <Badge variant="outline" className="text-[10px] border-[#B89555]/20 shrink-0">{r.source}</Badge>
                                 </label>
                               ))}
                             </div>
@@ -736,10 +736,10 @@ The content should be:
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 }}
-              className="p-6 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F7F2EA]"
+              className="p-6 rounded-xl border-2 border-[#B89555]/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F7F2EA]"
             >
               <div className="flex items-center gap-2 mb-4">
-                <Sparkles className="w-5 h-5 text-gold" />
+                <Sparkles className="w-5 h-5 text-[#1A1A1A]" />
                 <h2 className="font-semibold text-[#1A1A1A]">AI Content Assistant</h2>
               </div>
               
@@ -748,7 +748,7 @@ The content should be:
                 onChange={(e) => setAiPrompt(e.target.value)}
                 placeholder="Describe what you want to create... e.g., 'Create an email announcing our new Palm Jumeirah villa listings'"
                 rows={3}
-                className="mb-3 bg-[#FDFBF7] border-gold/30"
+                className="mb-3 bg-[#FDFBF7] border-[#B89555]/30"
               />
               
               <Button 
@@ -776,11 +776,11 @@ The content should be:
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="p-6 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F7F2EA]"
+              className="p-6 rounded-xl border-2 border-[#B89555]/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F7F2EA]"
             >
               <Tabs value={activeTab} onValueChange={setActiveTab}>
                 <div className="flex items-center justify-between mb-4">
-                  <TabsList className="bg-gold/10 border-2 border-gold/30">
+                  <TabsList className="bg-[#EFE6D6]/10 border-2 border-[#B89555]/30">
                     <TabsTrigger value="content" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">Content</TabsTrigger>
                     <TabsTrigger value="preview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
                       <Eye className="w-3.5 h-3.5 mr-1" /> Preview
@@ -788,12 +788,12 @@ The content should be:
                     <TabsTrigger value="attachments" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
                       Attachments
                       {attachments.length > 0 && (
-                        <Badge className="ml-2 bg-gold/30 text-[#1A1A1A] text-xs">{attachments.length}</Badge>
+                        <Badge className="ml-2 bg-[#EFE6D6]/30 text-[#1A1A1A] text-xs">{attachments.length}</Badge>
                       )}
                     </TabsTrigger>
                   </TabsList>
 
-                  <Badge variant="outline" className="text-xs border-gold/30 text-[#1A1A1A]">
+                  <Badge variant="outline" className="text-xs border-[#B89555]/30 text-[#1A1A1A]">
                     <Users className="w-3 h-3 mr-1" />
                     {targetAudience === 'custom' 
                       ? `${selectedCount} recipients`
@@ -811,7 +811,7 @@ The content should be:
                         value={subjectLine}
                         onChange={(e) => setSubjectLine(e.target.value)}
                         placeholder="Enter email subject..."
-                        className="mt-1 bg-[#FDFBF7] border-gold/30"
+                        className="mt-1 bg-[#FDFBF7] border-[#B89555]/30"
                       />
                     </div>
                   )}
@@ -834,7 +834,7 @@ The content should be:
                           ? 'Write your email content here (plain text or HTML)...'
                           : 'Write your message here...'
                       }
-                      className="mt-1 min-h-[300px] font-mono text-sm bg-[#FDFBF7] border-gold/30"
+                      className="mt-1 min-h-[300px] font-mono text-sm bg-[#FDFBF7] border-[#B89555]/30"
                     />
                   </div>
                 </TabsContent>
@@ -844,15 +844,15 @@ The content should be:
                 </TabsContent>
 
                 <TabsContent value="attachments" className="m-0">
-                  <div className="border-2 border-dashed border-gold/40 rounded-lg p-8 text-center bg-gold/5">
-                    <Upload className="h-12 w-12 mx-auto text-gold mb-4" />
+                  <div className="border-2 border-dashed border-[#B89555]/40 rounded-lg p-8 text-center bg-[#EFE6D6]/5">
+                    <Upload className="h-12 w-12 mx-auto text-[#1A1A1A] mb-4" />
                     <h3 className="font-semibold mb-2 text-[#1A1A1A]">Upload Attachments</h3>
                     <p className="text-sm text-[#1A1A1A]/60 mb-4">Add images or documents to your campaign</p>
                     <div className="flex justify-center gap-3">
-                      <Button variant="outline" onClick={() => imageInputRef.current?.click()} className="border-2 border-gold/40 bg-[#FDFBF7] hover:bg-gold/10">
+                      <Button variant="outline" onClick={() => imageInputRef.current?.click()} className="border-2 border-[#B89555]/40 bg-[#FDFBF7] hover:bg-[#EFE6D6]/10">
                         <Image className="h-4 w-4 mr-2" /> Add Images
                       </Button>
-                      <Button variant="outline" onClick={() => fileInputRef.current?.click()} className="border-2 border-gold/40 bg-[#FDFBF7] hover:bg-gold/10">
+                      <Button variant="outline" onClick={() => fileInputRef.current?.click()} className="border-2 border-[#B89555]/40 bg-[#FDFBF7] hover:bg-[#EFE6D6]/10">
                         <FileText className="h-4 w-4 mr-2" /> Add Documents
                       </Button>
                     </div>
@@ -861,11 +861,11 @@ The content should be:
                   {attachments.length > 0 && (
                     <div className="mt-4 space-y-2">
                       {attachments.map(att => (
-                        <div key={att.id} className="flex items-center justify-between p-3 rounded-lg border-2 border-gold/20 bg-[#FDFBF7]">
+                        <div key={att.id} className="flex items-center justify-between p-3 rounded-lg border-2 border-[#B89555]/20 bg-[#FDFBF7]">
                           <div className="flex items-center gap-3">
                             {att.type === 'image' ? (
-                              <div className="w-10 h-10 rounded bg-gold/10 flex items-center justify-center">
-                                <Image className="w-5 h-5 text-gold" />
+                              <div className="w-10 h-10 rounded bg-[#EFE6D6]/10 flex items-center justify-center">
+                                <Image className="w-5 h-5 text-[#1A1A1A]" />
                               </div>
                             ) : (
                               <div className="w-10 h-10 rounded bg-blue-50 flex items-center justify-center">
@@ -893,10 +893,10 @@ The content should be:
 
       {/* Schedule Dialog */}
       <Dialog open={showScheduleDialog} onOpenChange={setShowScheduleDialog}>
-        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30">
+        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
-              <Clock className="w-5 h-5 text-gold" />
+              <Clock className="w-5 h-5 text-[#1A1A1A]" />
               Schedule Campaign
             </DialogTitle>
           </DialogHeader>
@@ -904,13 +904,13 @@ The content should be:
           <div className="space-y-4 py-4">
             <div>
               <Label className="text-[#1A1A1A]">Date</Label>
-              <Input type="date" value={scheduleDate} onChange={(e) => setScheduleDate(e.target.value)} min={new Date().toISOString().split('T')[0]} className="mt-1 bg-[#FDFBF7] border-gold/30" />
+              <Input type="date" value={scheduleDate} onChange={(e) => setScheduleDate(e.target.value)} min={new Date().toISOString().split('T')[0]} className="mt-1 bg-[#FDFBF7] border-[#B89555]/30" />
             </div>
             <div>
               <Label className="text-[#1A1A1A]">Time</Label>
-              <Input type="time" value={scheduleTime} onChange={(e) => setScheduleTime(e.target.value)} className="mt-1 bg-[#FDFBF7] border-gold/30" />
+              <Input type="time" value={scheduleTime} onChange={(e) => setScheduleTime(e.target.value)} className="mt-1 bg-[#FDFBF7] border-[#B89555]/30" />
             </div>
-            <div className="p-3 rounded-lg bg-gold/10 border border-gold/30">
+            <div className="p-3 rounded-lg bg-[#EFE6D6]/10 border border-[#B89555]/30">
               <p className="text-sm text-[#1A1A1A]">
                 <CheckCircle className="w-4 h-4 inline mr-2 text-green-600" />
                 Campaign will be sent on{' '}
@@ -920,7 +920,7 @@ The content should be:
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowScheduleDialog(false)} className="border-gold/40">Cancel</Button>
+            <Button variant="outline" onClick={() => setShowScheduleDialog(false)} className="border-[#B89555]/40">Cancel</Button>
             <Button onClick={() => handleSave('scheduled')} disabled={isSaving || !scheduleDate} className="bg-gradient-to-r from-gold to-amber-600 text-[#1A1A1A]">
               {isSaving ? 'Scheduling...' : 'Schedule Campaign'}
             </Button>
@@ -930,16 +930,16 @@ The content should be:
 
       {/* Send Confirmation Dialog */}
       <Dialog open={showSendConfirm} onOpenChange={setShowSendConfirm}>
-        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30">
+        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
-              <Send className="w-5 h-5 text-gold" />
+              <Send className="w-5 h-5 text-[#1A1A1A]" />
               Send Campaign Now
             </DialogTitle>
           </DialogHeader>
           
           <div className="space-y-4 py-4">
-            <div className="p-4 rounded-lg bg-gold/10 border border-gold/30 space-y-2">
+            <div className="p-4 rounded-lg bg-[#EFE6D6]/10 border border-[#B89555]/30 space-y-2">
               <p className="text-sm font-semibold text-[#1A1A1A]">Campaign: {name}</p>
               <p className="text-sm text-[#1A1A1A]/70">Channel: {campaignType === 'whatsapp' ? 'WhatsApp' : campaignType === 'email' ? 'Email' : campaignType}</p>
               <p className="text-sm text-[#1A1A1A]/70">
@@ -952,7 +952,7 @@ The content should be:
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowSendConfirm(false)} className="border-gold/40">Cancel</Button>
+            <Button variant="outline" onClick={() => setShowSendConfirm(false)} className="border-[#B89555]/40">Cancel</Button>
             <Button onClick={handleSendNow} className="bg-gradient-to-r from-gold to-amber-600 text-[#1A1A1A] font-semibold">
               <Send className="h-4 w-4 mr-2" />
               Confirm & Send

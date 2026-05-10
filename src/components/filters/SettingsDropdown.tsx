@@ -55,7 +55,7 @@ export function SettingsDropdown({
             "h-11 w-11",
             isDark 
               ? "bg-[#1a1a1a] border-[#2a2a2a] text-white hover:bg-[#2a2a2a]"
-              : "bg-[#FDFBF7]/90 border-gold/30 text-[#1A1A1A] hover:bg-champagne-light",
+              : "bg-[#FDFBF7]/90 border-[#B89555]/30 text-[#1A1A1A] hover:bg-champagne-light",
             className
           )}
         >
@@ -65,7 +65,7 @@ export function SettingsDropdown({
       <PopoverContent 
         className={cn(
           "w-[280px] p-0",
-          isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-[#FDFBF7] border-gold/20"
+          isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-[#FDFBF7] border-[#B89555]/20"
         )}
         align="end"
       >
@@ -85,7 +85,7 @@ export function SettingsDropdown({
                 className={cn(
                   "flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors",
                   areaUnit === unit.value
-                    ? "bg-gold text-[#1A1A1A]"
+                    ? "bg-[#EFE6D6] text-[#1A1A1A]"
                     : isDark 
                       ? "bg-[#2a2a2a] text-white hover:bg-[#333]"
                       : "bg-champagne-light text-[#1A1A1A] hover:bg-champagne"
@@ -98,7 +98,7 @@ export function SettingsDropdown({
         </div>
         
         {/* Divider */}
-        <div className={cn("border-t", isDark ? "border-[#1A1A1A]" : "border-gold/20")} />
+        <div className={cn("border-t", isDark ? "border-[#1A1A1A]" : "border-[#B89555]/20")} />
         
         {/* Currency */}
         <div className="p-4 space-y-3">
@@ -116,7 +116,7 @@ export function SettingsDropdown({
                 className={cn(
                   "py-2 px-1 rounded-lg text-xs font-medium transition-colors text-center",
                   currency === cur.code
-                    ? "bg-gold text-[#1A1A1A]"
+                    ? "bg-[#EFE6D6] text-[#1A1A1A]"
                     : isDark 
                       ? "bg-[#2a2a2a] text-white hover:bg-[#333]"
                       : "bg-champagne-light text-[#1A1A1A] hover:bg-champagne"
@@ -130,7 +130,7 @@ export function SettingsDropdown({
         </div>
         
         {/* Divider */}
-        <div className={cn("border-t", isDark ? "border-[#1A1A1A]" : "border-gold/20")} />
+        <div className={cn("border-t", isDark ? "border-[#1A1A1A]" : "border-[#B89555]/20")} />
         
         {/* Display Mode */}
         <div className="p-4 space-y-3">
@@ -149,8 +149,8 @@ export function SettingsDropdown({
                   "w-full flex items-center gap-3 p-3 rounded-lg transition-colors text-left",
                   displayMode === mode.value
                     ? isDark 
-                      ? "bg-gold/20 border border-gold/40"
-                      : "bg-gold/10 border border-gold/30"
+                      ? "bg-[#EFE6D6]/20 border border-[#B89555]/40"
+                      : "bg-[#EFE6D6]/10 border border-[#B89555]/30"
                     : isDark 
                       ? "bg-[#2a2a2a] hover:bg-[#333]"
                       : "bg-champagne-light hover:bg-champagne"
@@ -159,8 +159,8 @@ export function SettingsDropdown({
                 <div className={cn(
                   "w-5 h-5 rounded-full border-2 flex items-center justify-center",
                   displayMode === mode.value
-                    ? "border-gold bg-gold"
-                    : isDark ? "border-[#B89555]/30" : "border-gold/40"
+                    ? "border-[#B89555] bg-[#EFE6D6]"
+                    : isDark ? "border-[#B89555]/30" : "border-[#B89555]/40"
                 )}>
                   {displayMode === mode.value && (
                     <Check className="w-3 h-3 text-[#1A1A1A]" />
@@ -188,11 +188,11 @@ export function SettingsDropdown({
         {/* Apply Button */}
         <div className={cn(
           "p-3 border-t",
-          isDark ? "border-[#1A1A1A] bg-[#151515]" : "border-gold/20 bg-champagne-light/50"
+          isDark ? "border-[#1A1A1A] bg-[#151515]" : "border-[#B89555]/20 bg-champagne-light/50"
         )}>
           <Button
             onClick={() => setOpen(false)}
-            className="w-full bg-gold text-[#1A1A1A] hover:bg-gold/90"
+            className="w-full bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
           >
             Apply Settings
           </Button>

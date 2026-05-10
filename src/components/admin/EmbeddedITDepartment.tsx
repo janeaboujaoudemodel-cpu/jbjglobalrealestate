@@ -114,15 +114,15 @@ export function EmbeddedITDepartment() {
           </CardContent>
         </Card>
 
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-[#1A1A1A]/70 text-xs">Active Employees</p>
-                <p className="text-2xl font-bold text-gold">{stats.activeEmployees}</p>
+                <p className="text-2xl font-bold text-[#1A1A1A]">{stats.activeEmployees}</p>
               </div>
-              <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center">
-                <Users className="w-5 h-5 text-gold" />
+              <div className="w-10 h-10 bg-[#EFE6D6]/10 rounded-lg flex items-center justify-center">
+                <Users className="w-5 h-5 text-[#1A1A1A]" />
               </div>
             </div>
           </CardContent>
@@ -132,7 +132,7 @@ export function EmbeddedITDepartment() {
       {/* Main Content */}
       <Tabs defaultValue="applications" className="space-y-4">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <TabsList className="bg-[#FDFBF7]/80 border-2 border-gold/30 p-1">
+          <TabsList className="bg-[#FDFBF7]/80 border-2 border-[#B89555]/30 p-1">
             <TabsTrigger value="applications" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A] text-xs">
               <UserPlus className="w-3.5 h-3.5 mr-1.5" />
               New Joiner Apps
@@ -149,17 +149,17 @@ export function EmbeddedITDepartment() {
 
           <div className="flex items-center gap-2">
             <div className="relative">
-              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gold" />
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#1A1A1A]" />
               <Input
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-8 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] w-48 h-9 text-sm placeholder:text-[#1A1A1A]/70"
+                className="pl-8 bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A] w-48 h-9 text-sm placeholder:text-[#1A1A1A]/70"
               />
             </div>
             <Button
               size="sm"
-              className="bg-gold text-[#1A1A1A] hover:bg-gold/90"
+              className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
               onClick={() => setShowNewJoinerForm(true)}
             >
               <Plus className="w-3.5 h-3.5 mr-1" />

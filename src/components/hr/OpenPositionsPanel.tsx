@@ -127,7 +127,7 @@ export function OpenPositionsPanel() {
         
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
+            <Button className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
               <Plus className="h-4 w-4 mr-2" />
               Add Position
             </Button>
@@ -210,7 +210,7 @@ export function OpenPositionsPanel() {
                 <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
                   Cancel
                 </Button>
-                <Button type="submit" className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
+                <Button type="submit" className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
                   Create Position
                 </Button>
               </div>
@@ -239,13 +239,13 @@ export function OpenPositionsPanel() {
           </Card>
         ) : (
           positions?.map((position) => (
-            <Card key={position.id} className="hover:border-gold/50 transition-colors">
+            <Card key={position.id} className="hover:border-[#B89555]/50 transition-colors">
               <CardContent className="py-4">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <h4 className="font-semibold text-foreground">{position.position_title}</h4>
-                      <Badge variant="outline" className="text-gold border-gold/30">
+                      <Badge variant="outline" className="text-[#1A1A1A] border-[#B89555]/30">
                         {position.department}
                       </Badge>
                     </div>

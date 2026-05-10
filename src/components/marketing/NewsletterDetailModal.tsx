@@ -36,10 +36,10 @@ const NewsletterDetailModal = ({ isOpen, onClose, onComplete, email }: Newslette
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 max-w-md z-[10050]">
+      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 max-w-md z-[10050]">
         <DialogHeader className="text-center space-y-3 pt-2">
-          <div className="mx-auto w-16 h-16 rounded-full bg-gold/10 border-2 border-gold/40 flex items-center justify-center">
-            <User className="w-8 h-8 text-gold" />
+          <div className="mx-auto w-16 h-16 rounded-full bg-[#EFE6D6]/10 border-2 border-[#B89555]/40 flex items-center justify-center">
+            <User className="w-8 h-8 text-[#1A1A1A]" />
           </div>
           <DialogTitle className="text-xl font-bold text-foreground">
             Email Received Successfully
@@ -53,7 +53,7 @@ const NewsletterDetailModal = ({ isOpen, onClose, onComplete, email }: Newslette
         <form onSubmit={handleSubmit} className="space-y-4 py-4">
           <div className="space-y-2">
             <Label htmlFor="detail-name" className="flex items-center gap-2 text-foreground font-medium">
-              <User className="h-4 w-4 text-gold" />
+              <User className="h-4 w-4 text-[#1A1A1A]" />
               Full Name <span className="text-destructive">*</span>
             </Label>
             <Input
@@ -61,7 +61,7 @@ const NewsletterDetailModal = ({ isOpen, onClose, onComplete, email }: Newslette
               placeholder="Enter your full name"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              className="border-2 border-gold/50 focus:border-gold"
+              className="border-2 border-[#B89555]/50 focus:border-[#B89555]"
               required
               disabled={submitting}
             />
@@ -69,7 +69,7 @@ const NewsletterDetailModal = ({ isOpen, onClose, onComplete, email }: Newslette
 
           <div className="space-y-2">
             <Label htmlFor="detail-phone" className="flex items-center gap-2 text-foreground font-medium">
-              <Phone className="h-4 w-4 text-gold" />
+              <Phone className="h-4 w-4 text-[#1A1A1A]" />
               Phone Number
             </Label>
             <PhoneInput
@@ -80,7 +80,7 @@ const NewsletterDetailModal = ({ isOpen, onClose, onComplete, email }: Newslette
             />
           </div>
 
-          <div className="flex items-start gap-2 text-xs text-muted-foreground p-3 bg-gold/5 rounded-lg border border-gold/20">
+          <div className="flex items-start gap-2 text-xs text-muted-foreground p-3 bg-[#EFE6D6]/5 rounded-lg border border-[#B89555]/20">
             <input type="checkbox" defaultChecked className="mt-0.5 accent-[hsl(var(--gold))]" />
             <span>
               I consent to receive marketing communications from JBJ Global Real Estate. 
@@ -92,7 +92,7 @@ const NewsletterDetailModal = ({ isOpen, onClose, onComplete, email }: Newslette
             <Button
               type="button"
               variant="outline"
-              className="flex-1 border-gold/40"
+              className="flex-1 border-[#B89555]/40"
               onClick={onClose}
               disabled={submitting}
             >

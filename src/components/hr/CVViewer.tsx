@@ -190,12 +190,12 @@ const CVViewer = ({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-5xl h-[90dvh] p-0 bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6] border-2 border-gold/30">
-        <DialogHeader className="p-4 border-b border-gold/20">
+      <DialogContent className="sm:max-w-5xl h-[90dvh] p-0 bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6] border-2 border-[#B89555]/30">
+        <DialogHeader className="p-4 border-b border-[#B89555]/20">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center">
-                <span className="text-xl font-bold text-gold">{candidateName.charAt(0)}</span>
+              <div className="w-12 h-12 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center">
+                <span className="text-xl font-bold text-[#1A1A1A]">{candidateName.charAt(0)}</span>
               </div>
               <div>
                 <DialogTitle className="text-xl text-[#1A1A1A]">{candidateName}</DialogTitle>
@@ -207,7 +207,7 @@ const CVViewer = ({
                 variant="outline"
                 size="sm"
                 onClick={handleDownload}
-                className="gap-2 border-gold/30 hover:bg-gold/10"
+                className="gap-2 border-[#B89555]/30 hover:bg-[#EFE6D6]/10"
               >
                 <Download className="h-4 w-4" />
                 Download
@@ -217,7 +217,7 @@ const CVViewer = ({
                 size="sm"
                 onClick={handleOpenExternal}
                 disabled={!signedUrl}
-                className="gap-2 border-gold/30 hover:bg-gold/10"
+                className="gap-2 border-[#B89555]/30 hover:bg-[#EFE6D6]/10"
               >
                 <ExternalLink className="h-4 w-4" />
                 Open
@@ -228,13 +228,13 @@ const CVViewer = ({
 
         <div className="flex h-[calc(90vh-80px)]">
           {/* Sidebar with candidate info */}
-          <div className="w-80 border-r border-gold/20 p-4 overflow-y-auto">
+          <div className="w-80 border-r border-[#B89555]/20 p-4 overflow-y-auto">
             <div className="space-y-4">
               {/* Contact Info */}
-              <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-gold/30">
+              <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-[#B89555]/30">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm text-[#1A1A1A] flex items-center gap-2">
-                    <User className="h-4 w-4 text-gold" />
+                    <User className="h-4 w-4 text-[#1A1A1A]" />
                     Contact Information
                   </CardTitle>
                 </CardHeader>
@@ -267,7 +267,7 @@ const CVViewer = ({
               </Card>
 
               {/* Quick Actions */}
-              <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-gold/30">
+              <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-[#B89555]/30">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm text-[#1A1A1A]">Quick Actions</CardTitle>
                 </CardHeader>
@@ -275,7 +275,7 @@ const CVViewer = ({
                   <Button
                     variant="outline"
                     size="sm"
-                    className="w-full justify-start gap-2 border-gold/30 hover:bg-gold/10"
+                    className="w-full justify-start gap-2 border-[#B89555]/30 hover:bg-[#EFE6D6]/10"
                     onClick={() => handleContact('email')}
                     disabled={!candidateData?.email}
                   >
@@ -304,7 +304,7 @@ const CVViewer = ({
                   </Button>
                   <Button
                     size="sm"
-                    className="w-full justify-start gap-2 bg-gold text-[#1A1A1A] hover:bg-gold/90"
+                    className="w-full justify-start gap-2 bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
                     onClick={() => window.open('/video-meeting', '_blank')}
                   >
                     <Video className="h-4 w-4" />
@@ -350,7 +350,7 @@ const CVViewer = ({
                         <span className="text-[#1A1A1A]/70 mb-1 block">Skills</span>
                         <div className="flex flex-wrap gap-1">
                           {candidateData.aiAnalysis.skills.slice(0, 5).map((skill, idx) => (
-                            <Badge key={idx} variant="outline" className="text-xs border-gold/30 text-gold">
+                            <Badge key={idx} variant="outline" className="text-xs border-[#B89555]/30 text-[#1A1A1A]">
                               {skill}
                             </Badge>
                           ))}
@@ -386,11 +386,11 @@ const CVViewer = ({
           {/* Main content - CV Preview */}
           <div className="flex-1 p-4 overflow-hidden">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-              <TabsList className="mb-4 bg-gradient-to-r from-[#F7F1E6] to-[#ECE2D2] border-2 border-gold/30">
-                <TabsTrigger value="preview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40">
+              <TabsList className="mb-4 bg-gradient-to-r from-[#F7F1E6] to-[#ECE2D2] border-2 border-[#B89555]/30">
+                <TabsTrigger value="preview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40">
                   Document Preview
                 </TabsTrigger>
-                <TabsTrigger value="details" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40">
+                <TabsTrigger value="details" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40">
                   Application Details
                 </TabsTrigger>
               </TabsList>
@@ -398,13 +398,13 @@ const CVViewer = ({
               <TabsContent value="preview" className="flex-1 overflow-hidden">
                 {loading ? (
                   <div className="h-full flex items-center justify-center">
-                    <Loader2 className="h-8 w-8 animate-spin text-gold" />
+                    <Loader2 className="h-8 w-8 animate-spin text-[#1A1A1A]" />
                     <span className="ml-2 text-[#1A1A1A]/70">Loading document...</span>
                   </div>
                 ) : signedUrl ? (
                   <iframe
                     src={signedUrl}
-                    className="w-full h-full border-2 border-gold/20 rounded-lg"
+                    className="w-full h-full border-2 border-[#B89555]/20 rounded-lg"
                     title="CV Preview"
                   />
                 ) : (
@@ -415,7 +415,7 @@ const CVViewer = ({
                       {cvUrl ? 'Unable to load CV preview. Try downloading instead.' : 'No CV file has been uploaded.'}
                     </p>
                     {cvUrl && (
-                      <Button onClick={handleDownload} className="bg-gold text-[#1A1A1A] hover:bg-gold/90">
+                      <Button onClick={handleDownload} className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90">
                         <Download className="h-4 w-4 mr-2" />
                         Download CV
                       </Button>
@@ -425,7 +425,7 @@ const CVViewer = ({
               </TabsContent>
 
               <TabsContent value="details" className="flex-1 overflow-auto">
-                <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-gold/30">
+                <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-[#B89555]/30">
                   <CardContent className="pt-6">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
@@ -457,7 +457,7 @@ const CVViewer = ({
                       <div className="col-span-2">
                         <Label className="text-[#1A1A1A]/70">CV File</Label>
                         <p className="text-[#1A1A1A] flex items-center gap-2">
-                          <FileText className="h-4 w-4 text-gold" />
+                          <FileText className="h-4 w-4 text-[#1A1A1A]" />
                           {cvFileName || 'No file uploaded'}
                         </p>
                       </div>

@@ -58,7 +58,7 @@ export function HRInboxTab() {
     <Card className="bg-[#FDFBF7] border border-crm-border">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="flex items-center gap-2 text-crm-text">
-          <Inbox className="h-5 w-5 text-gold" />
+          <Inbox className="h-5 w-5 text-[#1A1A1A]" />
           HR Inbox
           {threads.some(t => t.unread_count > 0) && (
             <Badge className="bg-red-500 text-white text-xs ml-2">
@@ -69,7 +69,7 @@ export function HRInboxTab() {
         <Button
           variant="outline"
           size="sm"
-          className="gap-2 border-gold/40 text-gold hover:bg-gold/10"
+          className="gap-2 border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
           onClick={() => navigate('/owner/inbox')}
         >
           <ExternalLink className="h-3.5 w-3.5" />
@@ -95,15 +95,15 @@ export function HRInboxTab() {
                   key={thread.id}
                   className={`p-4 rounded-lg border cursor-pointer hover:shadow-sm transition-all ${
                     thread.unread_count > 0
-                      ? 'bg-gold/5 border-gold/30'
+                      ? 'bg-[#EFE6D6]/5 border-[#B89555]/30'
                       : 'bg-[#FDFBF7] border-crm-border'
                   }`}
                   onClick={() => navigate('/owner/inbox')}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="h-9 w-9 rounded-full bg-gold/10 flex items-center justify-center flex-shrink-0">
-                        <User className="h-4 w-4 text-gold" />
+                      <div className="h-9 w-9 rounded-full bg-[#EFE6D6]/10 flex items-center justify-center flex-shrink-0">
+                        <User className="h-4 w-4 text-[#1A1A1A]" />
                       </div>
                       <div className="min-w-0">
                         <p className="font-medium text-sm text-crm-text truncate">

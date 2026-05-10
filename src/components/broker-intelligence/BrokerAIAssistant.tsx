@@ -81,12 +81,12 @@ export function BrokerAIAssistant() {
   };
 
   return (
-    <Card className="bg-zinc-900/50 border-[#1A1A1A]">
+    <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
       <CardHeader className="pb-3">
         <CardTitle className="text-white text-lg flex items-center gap-2">
-          <Bot className="w-5 h-5 text-gold" />
+          <Bot className="w-5 h-5 text-[#1A1A1A]" />
           AI Broker Assistant
-          <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-xs ml-2">
+          <Badge className="bg-amber-500/20 text-[#1A1A1A] border-amber-500/30 text-xs ml-2">
             Internal Only
           </Badge>
         </CardTitle>
@@ -94,7 +94,7 @@ export function BrokerAIAssistant() {
       <CardContent className="space-y-4">
         {/* Type Selection */}
         <Tabs value={selectedType} onValueChange={(v) => setSelectedType(v as AssistantType)}>
-          <TabsList className="grid grid-cols-4 bg-zinc-800">
+          <TabsList className="grid grid-cols-4 bg-[#1A1A1A]">
             <TabsTrigger value="market_explanation" className="text-xs">
               <Sparkles className="w-3 h-3 mr-1" />
               Explain
@@ -148,7 +148,7 @@ export function BrokerAIAssistant() {
               placeholder="Add context about the client's inquiry (optional)..."
               value={context}
               onChange={(e) => setContext(e.target.value)}
-              className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 min-h-[80px]"
+              className="bg-[#1A1A1A] border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 min-h-[80px]"
             />
           </TabsContent>
 
@@ -157,7 +157,7 @@ export function BrokerAIAssistant() {
               placeholder="What objection has the client raised? e.g., 'The prices seem too high'"
               value={clientObjection}
               onChange={(e) => setClientObjection(e.target.value)}
-              className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 min-h-[80px]"
+              className="bg-[#1A1A1A] border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 min-h-[80px]"
             />
           </TabsContent>
 
@@ -172,7 +172,7 @@ export function BrokerAIAssistant() {
               placeholder="Describe the meeting context, e.g., 'First meeting with investor looking for rental yield'"
               value={context}
               onChange={(e) => setContext(e.target.value)}
-              className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 min-h-[80px]"
+              className="bg-[#1A1A1A] border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 min-h-[80px]"
             />
           </TabsContent>
         </Tabs>
@@ -199,10 +199,10 @@ export function BrokerAIAssistant() {
 
         {/* Response */}
         {aiResponse && (
-          <div className="bg-zinc-800/50 rounded-lg p-4 border border-[#1A1A1A]/50 mt-4">
+          <div className="bg-[#1A1A1A]/50 rounded-lg p-4 border border-[#1A1A1A]/50 mt-4">
             <div className="flex items-center gap-2 mb-3">
-              <Bot className="w-4 h-4 text-gold" />
-              <span className="text-gold text-sm font-medium">AI Response</span>
+              <Bot className="w-4 h-4 text-[#1A1A1A]" />
+              <span className="text-[#1A1A1A] text-sm font-medium">AI Response</span>
               <Badge variant="outline" className="text-white/70 border-[#1A1A1A] text-xs ml-auto">
                 {new Date(aiResponse.timestamp).toLocaleTimeString()}
               </Badge>
@@ -215,14 +215,14 @@ export function BrokerAIAssistant() {
             </div>
 
             <div className="mt-4 pt-3 border-t border-[#1A1A1A]/50 flex items-start gap-2">
-              <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+              <AlertTriangle className="w-4 h-4 text-[#1A1A1A] shrink-0 mt-0.5" />
               <p className="text-white/90 text-xs">{aiResponse.disclaimer}</p>
             </div>
           </div>
         )}
 
         {/* Compliance Reminder */}
-        <div className="bg-zinc-800/30 rounded-lg p-3 flex items-start gap-2">
+        <div className="bg-[#1A1A1A]/30 rounded-lg p-3 flex items-start gap-2">
           <Shield className="w-4 h-4 text-white/90 shrink-0 mt-0.5" />
           <p className="text-[#1A1A1A]/70 text-xs">
             AI guidance is descriptive only. Never use predictions, guarantees, or investment advice language with clients.

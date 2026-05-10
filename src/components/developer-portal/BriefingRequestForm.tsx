@@ -143,10 +143,10 @@ const BriefingRequestForm = ({ representativeId, developerName }: BriefingReques
   };
 
   return (
-    <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)]">
+    <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)]">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-foreground">
-          <CalendarIcon className="w-5 h-5 text-gold" />
+          <CalendarIcon className="w-5 h-5 text-[#1A1A1A]" />
           Request Briefing Session
         </CardTitle>
         <p className="text-sm text-muted-foreground">
@@ -163,7 +163,7 @@ const BriefingRequestForm = ({ representativeId, developerName }: BriefingReques
         {/* Location Type */}
         <div className="space-y-3">
           <Label className="flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-gold" /> Briefing Location *
+            <MapPin className="w-4 h-4 text-[#1A1A1A]" /> Briefing Location *
           </Label>
           <RadioGroup
             value={form.location_type}
@@ -174,13 +174,13 @@ const BriefingRequestForm = ({ representativeId, developerName }: BriefingReques
             <div className={cn(
               "flex items-center space-x-3 rounded-xl border-2 p-4 cursor-pointer transition-all",
               form.location_type === 'developer_office'
-                ? "border-gold bg-gold/10 shadow-md"
-                : "border-gold/20 hover:border-gold/40"
+                ? "border-[#B89555] bg-[#EFE6D6]/10 shadow-md"
+                : "border-[#B89555]/20 hover:border-[#B89555]/40"
             )}>
               <RadioGroupItem value="developer_office" id="loc-dev" />
               <label htmlFor="loc-dev" className="flex-1 cursor-pointer">
                 <div className="flex items-center gap-2">
-                  <Building2 className="w-4 h-4 text-gold" />
+                  <Building2 className="w-4 h-4 text-[#1A1A1A]" />
                   <span className="font-semibold text-foreground">Developer Sales Office</span>
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">Briefing at your sales gallery</p>
@@ -281,7 +281,7 @@ const BriefingRequestForm = ({ representativeId, developerName }: BriefingReques
         <div className="space-y-3">
           <Label>Project Documents *</Label>
           <div
-            className="border-2 border-dashed border-gold/40 rounded-xl p-6 text-center hover:border-gold/70 transition-colors cursor-pointer bg-card/50"
+            className="border-2 border-dashed border-[#B89555]/40 rounded-xl p-6 text-center hover:border-[#B89555]/70 transition-colors cursor-pointer bg-card/50"
             onClick={() => fileInputRef.current?.click()}
           >
             <Upload className="w-8 h-8 mx-auto text-[#1A1A1A]/70 mb-2" />
@@ -299,8 +299,8 @@ const BriefingRequestForm = ({ representativeId, developerName }: BriefingReques
           {files.length > 0 && (
             <div className="space-y-2">
               {files.map((file, idx) => (
-                <div key={idx} className="flex items-center gap-3 p-3 rounded-lg bg-card border border-gold/20">
-                  <FileText className="w-4 h-4 text-gold shrink-0" />
+                <div key={idx} className="flex items-center gap-3 p-3 rounded-lg bg-card border border-[#B89555]/20">
+                  <FileText className="w-4 h-4 text-[#1A1A1A] shrink-0" />
                   <span className="text-sm text-foreground truncate flex-1">{file.name}</span>
                   <button onClick={() => setFiles(f => f.filter((_, i) => i !== idx))} className="text-muted-foreground hover:text-destructive">
                     <X className="w-4 h-4" />
@@ -314,7 +314,7 @@ const BriefingRequestForm = ({ representativeId, developerName }: BriefingReques
         <Button
           onClick={handleSubmit}
           disabled={submitting}
-          className="w-full bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border border-gold/40 text-foreground font-bold h-12"
+          className="w-full bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border border-[#B89555]/40 text-foreground font-bold h-12"
         >
           {submitting ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Submitting...</> : <><Send className="w-4 h-4 mr-2" /> Submit Briefing Request</>}
         </Button>

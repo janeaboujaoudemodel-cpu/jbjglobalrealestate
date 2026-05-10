@@ -205,11 +205,11 @@ const MeetingConsentSection = ({
   }
 
   return (
-    <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/30 shadow-sm">
+    <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/30 shadow-sm">
       <CardContent className="p-5 space-y-4">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-full bg-[#1A1A1A] flex items-center justify-center">
-            <ShieldCheck className="h-4 w-4 text-gold" />
+            <ShieldCheck className="h-4 w-4 text-[#1A1A1A]" />
           </div>
           <div>
             <span className="font-semibold text-[#1A1A1A] text-sm">Client Recording Authorization</span>
@@ -218,7 +218,7 @@ const MeetingConsentSection = ({
         </div>
 
         {/* Agreement text */}
-        <div className="bg-[#FDFBF7] border border-gold/15 rounded-lg p-3.5 text-[#1A1A1A]/70 text-xs leading-relaxed">
+        <div className="bg-[#FDFBF7] border border-[#B89555]/15 rounded-lg p-3.5 text-[#1A1A1A]/70 text-xs leading-relaxed">
           <p className="font-semibold text-[#1A1A1A] text-xs mb-1.5">Recording Consent Agreement</p>
           {CONSENT_TEXT}
           <p className="text-[#1A1A1A]/70 text-[10px] mt-2">
@@ -234,7 +234,7 @@ const MeetingConsentSection = ({
               value={clientName}
               onChange={(e) => setClientName(e.target.value)}
               placeholder="Full name"
-              className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] text-sm h-9"
+              className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] text-sm h-9"
             />
           </div>
           <div className="space-y-1">
@@ -243,7 +243,7 @@ const MeetingConsentSection = ({
               value={clientEmail}
               onChange={(e) => setClientEmail(e.target.value)}
               placeholder="email@example.com"
-              className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] text-sm h-9"
+              className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] text-sm h-9"
             />
           </div>
           <div className="space-y-1">
@@ -252,7 +252,7 @@ const MeetingConsentSection = ({
               value={clientPhone}
               onChange={(e) => setClientPhone(e.target.value)}
               placeholder="+971 XX XXX XXXX"
-              className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] text-sm h-9"
+              className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] text-sm h-9"
             />
           </div>
         </div>
@@ -260,11 +260,11 @@ const MeetingConsentSection = ({
         {/* ID Photo Upload */}
         <div className="space-y-1.5">
           <Label className="text-[#1A1A1A]/70 text-xs flex items-center gap-1.5">
-            <Upload className="h-3 w-3 text-gold" /> Client ID Photo (optional — for identity verification)
+            <Upload className="h-3 w-3 text-[#1A1A1A]" /> Client ID Photo (optional — for identity verification)
           </Label>
           {idPhotoPreview ? (
             <div className="relative inline-block">
-              <img src={idPhotoPreview} alt="ID" className="h-20 rounded-lg border border-gold/30 object-cover" />
+              <img src={idPhotoPreview} alt="ID" className="h-20 rounded-lg border border-[#B89555]/30 object-cover" />
               <button
                 onClick={() => { setIdPhotoFile(null); setIdPhotoPreview(null); }}
                 className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center"
@@ -273,8 +273,8 @@ const MeetingConsentSection = ({
               </button>
             </div>
           ) : (
-            <label className="flex items-center gap-2 p-3 border border-dashed border-gold/30 rounded-lg cursor-pointer hover:bg-gold/5 transition-colors">
-              <Upload className="h-4 w-4 text-gold" />
+            <label className="flex items-center gap-2 p-3 border border-dashed border-[#B89555]/30 rounded-lg cursor-pointer hover:bg-[#EFE6D6]/5 transition-colors">
+              <Upload className="h-4 w-4 text-[#1A1A1A]" />
               <span className="text-[#1A1A1A]/70 text-xs">Upload Emirates ID or Passport photo</span>
               <input type="file" accept="image/*" className="hidden" onChange={handleIdUpload} />
             </label>
@@ -284,9 +284,9 @@ const MeetingConsentSection = ({
         {/* Signature Pad */}
         <div className="space-y-1.5">
           <Label className="text-[#1A1A1A]/70 text-xs flex items-center gap-1.5">
-            <PenTool className="h-3 w-3 text-gold" /> Client Signature *
+            <PenTool className="h-3 w-3 text-[#1A1A1A]" /> Client Signature *
           </Label>
-          <div className="relative bg-[#FDFBF7] border border-gold/30 rounded-lg overflow-hidden">
+          <div className="relative bg-[#FDFBF7] border border-[#B89555]/30 rounded-lg overflow-hidden">
             <canvas
               ref={canvasRef}
               width={600}
@@ -317,7 +317,7 @@ const MeetingConsentSection = ({
         <Button
           onClick={handleSubmitConsent}
           disabled={saving || !clientName.trim() || !hasSigned}
-          className="w-full bg-[#1A1A1A] hover:bg-[#1A1A1A] text-gold font-semibold"
+          className="w-full bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A] font-semibold"
         >
           {saving ? (
             <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Saving Consent...</>

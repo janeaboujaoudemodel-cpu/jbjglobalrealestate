@@ -110,12 +110,12 @@ const PreJoinForm = ({
 
         <div className="grid lg:grid-cols-2 gap-6">
           {/* Video Preview */}
-          <Card className="bg-zinc-900/50 border-[#1A1A1A]">
+          <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
             <CardHeader className="pb-2">
               <CardTitle className="text-white text-lg">Camera Preview</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="relative aspect-video bg-zinc-800 rounded-xl overflow-hidden">
+              <div className="relative aspect-video bg-[#1A1A1A] rounded-xl overflow-hidden">
                 <video
                   ref={localVideoRef}
                   autoPlay
@@ -125,8 +125,8 @@ const PreJoinForm = ({
                   style={{ filter: beautyFilter ? 'contrast(1.1) brightness(1.05)' : 'none' }}
                 />
                 {!videoEnabled && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-zinc-800">
-                    <div className="w-20 h-20 rounded-full bg-zinc-700 flex items-center justify-center">
+                  <div className="absolute inset-0 flex items-center justify-center bg-[#1A1A1A]">
+                    <div className="w-20 h-20 rounded-full bg-[#1A1A1A] flex items-center justify-center">
                       <VideoOff className="w-8 h-8 text-white/70" />
                     </div>
                   </div>
@@ -168,10 +168,10 @@ const PreJoinForm = ({
           </Card>
 
           {/* Join Form */}
-          <Card className="bg-zinc-900/50 border-[#1A1A1A]">
+          <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
             <CardHeader className="pb-2">
               <CardTitle className="text-white text-lg flex items-center gap-2">
-                <User className="w-5 h-5 text-gold" />
+                <User className="w-5 h-5 text-[#1A1A1A]" />
                 Enter Your Details
               </CardTitle>
               <p className="text-xs text-white/70">Required to join the meeting</p>
@@ -185,7 +185,7 @@ const PreJoinForm = ({
                     value={formData.firstName}
                     onChange={(e) => updateField('firstName', e.target.value)}
                     placeholder="First"
-                    className={`bg-zinc-800 border-[#1A1A1A] text-white h-9 ${errors.firstName ? 'border-red-500' : ''}`}
+                    className={`bg-[#1A1A1A] border-[#1A1A1A] text-white h-9 ${errors.firstName ? 'border-red-500' : ''}`}
                   />
                   {errors.firstName && <p className="text-red-400 text-xs mt-0.5">{errors.firstName}</p>}
                 </div>
@@ -195,7 +195,7 @@ const PreJoinForm = ({
                     value={formData.lastName}
                     onChange={(e) => updateField('lastName', e.target.value)}
                     placeholder="Last"
-                    className={`bg-zinc-800 border-[#1A1A1A] text-white h-9 ${errors.lastName ? 'border-red-500' : ''}`}
+                    className={`bg-[#1A1A1A] border-[#1A1A1A] text-white h-9 ${errors.lastName ? 'border-red-500' : ''}`}
                   />
                   {errors.lastName && <p className="text-red-400 text-xs mt-0.5">{errors.lastName}</p>}
                 </div>
@@ -204,7 +204,7 @@ const PreJoinForm = ({
               {/* Email */}
               <div>
                 <Label className="text-white/85 text-xs flex items-center gap-1 mb-1">
-                  <Mail className="w-3 h-3 text-gold" />
+                  <Mail className="w-3 h-3 text-[#1A1A1A]" />
                   Email Address *
                 </Label>
                 <Input
@@ -212,7 +212,7 @@ const PreJoinForm = ({
                   value={formData.email}
                   onChange={(e) => updateField('email', e.target.value)}
                   placeholder="your@email.com"
-                  className={`bg-zinc-800 border-[#1A1A1A] text-white h-9 ${errors.email ? 'border-red-500' : ''}`}
+                  className={`bg-[#1A1A1A] border-[#1A1A1A] text-white h-9 ${errors.email ? 'border-red-500' : ''}`}
                 />
                 {errors.email && <p className="text-red-400 text-xs mt-0.5">{errors.email}</p>}
               </div>
@@ -220,7 +220,7 @@ const PreJoinForm = ({
               {/* Phone */}
               <div>
                 <Label className="text-white/85 text-xs flex items-center gap-1 mb-1">
-                  <Phone className="w-3 h-3 text-gold" />
+                  <Phone className="w-3 h-3 text-[#1A1A1A]" />
                   Phone Number *
                 </Label>
                 <Input
@@ -228,7 +228,7 @@ const PreJoinForm = ({
                   value={formData.phone}
                   onChange={(e) => updateField('phone', e.target.value)}
                   placeholder="+971 50 123 4567"
-                  className={`bg-zinc-800 border-[#1A1A1A] text-white h-9 ${errors.phone ? 'border-red-500' : ''}`}
+                  className={`bg-[#1A1A1A] border-[#1A1A1A] text-white h-9 ${errors.phone ? 'border-red-500' : ''}`}
                 />
                 {errors.phone && <p className="text-red-400 text-xs mt-0.5">{errors.phone}</p>}
               </div>
@@ -236,14 +236,14 @@ const PreJoinForm = ({
               {/* Nationality */}
               <div>
                 <Label className="text-white/85 text-xs flex items-center gap-1 mb-1">
-                  <Globe className="w-3 h-3 text-gold" />
+                  <Globe className="w-3 h-3 text-[#1A1A1A]" />
                   Nationality *
                 </Label>
                 <Input
                   value={formData.nationality}
                   onChange={(e) => updateField('nationality', e.target.value)}
                   placeholder="e.g., British"
-                  className={`bg-zinc-800 border-[#1A1A1A] text-white h-9 ${errors.nationality ? 'border-red-500' : ''}`}
+                  className={`bg-[#1A1A1A] border-[#1A1A1A] text-white h-9 ${errors.nationality ? 'border-red-500' : ''}`}
                 />
                 {errors.nationality && <p className="text-red-400 text-xs mt-0.5">{errors.nationality}</p>}
               </div>
@@ -254,7 +254,7 @@ const PreJoinForm = ({
                   id="agree-terms"
                   checked={formData.agreeToTerms}
                   onCheckedChange={(checked) => updateField('agreeToTerms', checked === true)}
-                  className="border-gold/50 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+                  className="border-[#B89555]/50 data-[state=checked]:bg-[#EFE6D6] data-[state=checked]:border-[#B89555] mt-0.5"
                 />
                 <label htmlFor="agree-terms" className="text-white/85 text-xs leading-tight cursor-pointer">
                   I agree to the terms and consent to have my meeting data processed. 

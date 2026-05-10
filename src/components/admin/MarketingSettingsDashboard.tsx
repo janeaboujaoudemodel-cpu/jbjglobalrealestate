@@ -132,12 +132,12 @@ export const MarketingSettingsDashboard = () => {
     fields: { key: keyof MarketingConfig; label: string; placeholder: string }[];
     docsUrl?: string;
   }) => (
-    <Card className="bg-[#FDFBF7] border-2 border-gold/30">
+    <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gold/10 border border-gold/30 rounded-lg flex items-center justify-center">
-              <Icon className="w-5 h-5 text-gold" />
+            <div className="w-10 h-10 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-lg flex items-center justify-center">
+              <Icon className="w-5 h-5 text-[#1A1A1A]" />
             </div>
             <div>
               <CardTitle className="text-[#1A1A1A] text-base">{title}</CardTitle>
@@ -165,7 +165,7 @@ export const MarketingSettingsDashboard = () => {
             href={docsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-gold text-xs hover:underline"
+            className="inline-flex items-center gap-1 text-[#1A1A1A] text-xs hover:underline"
           >
             Setup Guide <ExternalLink className="w-3 h-3" />
           </a>
@@ -193,7 +193,7 @@ export const MarketingSettingsDashboard = () => {
           <Button
             onClick={handleSave}
             disabled={!hasChanges || isSaving}
-            className="bg-gold text-[#1A1A1A] hover:bg-gold/90"
+            className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
           >
             <Save className="w-4 h-4 mr-2" />
             {isSaving ? 'Saving...' : 'Save Settings'}
@@ -202,24 +202,24 @@ export const MarketingSettingsDashboard = () => {
       </div>
 
       <Tabs defaultValue="analytics" className="space-y-6">
-        <TabsList className="bg-[#FDFBF7]/80 border-2 border-gold/30">
-          <TabsTrigger value="analytics" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
+        <TabsList className="bg-[#FDFBF7]/80 border-2 border-[#B89555]/30">
+          <TabsTrigger value="analytics" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
             <BarChart3 className="w-4 h-4 mr-2" />
             Analytics
           </TabsTrigger>
-          <TabsTrigger value="advertising" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
+          <TabsTrigger value="advertising" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
             <Target className="w-4 h-4 mr-2" />
             Advertising
           </TabsTrigger>
-          <TabsTrigger value="email" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
+          <TabsTrigger value="email" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
             <Mail className="w-4 h-4 mr-2" />
             Email & CRM
           </TabsTrigger>
-          <TabsTrigger value="automation" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
+          <TabsTrigger value="automation" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
             <Webhook className="w-4 h-4 mr-2" />
             Automation
           </TabsTrigger>
-          <TabsTrigger value="local" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
+          <TabsTrigger value="local" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
             <Globe className="w-4 h-4 mr-2" />
             Local & Trust
           </TabsTrigger>
@@ -259,7 +259,7 @@ export const MarketingSettingsDashboard = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <IntegrationCard icon={Webhook} title="Zapier Webhook" description="Connect to Google Sheets, CRMs, and 5000+ apps" fields={[{ key: 'zapierWebhookUrl', label: 'Webhook URL', placeholder: 'https://hooks.zapier.com/hooks/catch/...' }]} docsUrl="https://zapier.com/help/create/code-webhooks/trigger-zaps-from-webhooks" />
           </div>
-          <div className="bg-gold/5 border border-gold/20 rounded-xl p-6">
+          <div className="bg-[#EFE6D6]/5 border border-[#B89555]/20 rounded-xl p-6">
             <h3 className="text-[#1A1A1A] font-semibold mb-2">How to set up Zapier:</h3>
             <ol className="text-[#1A1A1A]/60 text-sm space-y-2 list-decimal list-inside">
               <li>Create a Zap in Zapier with "Webhooks by Zapier" as the trigger</li>
@@ -280,7 +280,7 @@ export const MarketingSettingsDashboard = () => {
       </Tabs>
 
       {/* Integration Status Summary */}
-      <Card className="bg-[#FDFBF7] border-2 border-gold/30">
+      <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
         <CardHeader>
           <CardTitle className="text-[#1A1A1A] text-lg">Integration Status</CardTitle>
         </CardHeader>
@@ -297,7 +297,7 @@ export const MarketingSettingsDashboard = () => {
             ].map(item => (
               <div key={item.label} className="text-center">
                 <div className={`w-12 h-12 rounded-full mx-auto mb-2 flex items-center justify-center ${
-                  item.value ? 'bg-emerald-100 border-2 border-emerald-400' : 'bg-gold/5 border-2 border-gold/20'
+                  item.value ? 'bg-emerald-100 border-2 border-emerald-400' : 'bg-[#EFE6D6]/5 border-2 border-[#B89555]/20'
                 }`}>
                   {item.value ? (
                     <CheckCircle className="w-6 h-6 text-emerald-500" />

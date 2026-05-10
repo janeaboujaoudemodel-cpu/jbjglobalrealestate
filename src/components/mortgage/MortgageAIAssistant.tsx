@@ -72,7 +72,7 @@ export default function MortgageAIAssistant({ context }: MortgageAIAssistantProp
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
           <div className="flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-gold" />
+            <Sparkles className="h-4 w-4 text-[#1A1A1A]" />
             <h4 className="text-sm font-semibold text-foreground">AI Mortgage Assistant</h4>
           </div>
           <p className="mt-1 text-xs text-muted-foreground">
@@ -120,7 +120,7 @@ export default function MortgageAIAssistant({ context }: MortgageAIAssistantProp
             <button
               key={p}
               type="button"
-              className="rounded-full border border-gold/30 px-3 py-1 text-xs text-foreground hover:border-gold/60"
+              className="rounded-full border border-[#B89555]/30 px-3 py-1 text-xs text-foreground hover:border-[#B89555]/60"
               onClick={() => {
                 setQuestion(p);
                 void submit(p);
@@ -142,7 +142,7 @@ export default function MortgageAIAssistant({ context }: MortgageAIAssistantProp
         )}
 
         {result && (
-          <div className="rounded-xl border border-gold/30 bg-card p-4">
+          <div className="rounded-xl border border-[#B89555]/30 bg-card p-4">
             <p className="text-sm text-foreground leading-relaxed whitespace-pre-line">{result.answer}</p>
 
             {result.keyPoints?.length > 0 && (

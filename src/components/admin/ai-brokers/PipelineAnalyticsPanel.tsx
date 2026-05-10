@@ -184,7 +184,7 @@ export function PipelineAnalyticsPanel() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-8 w-8 animate-spin text-gold" />
+        <Loader2 className="h-8 w-8 animate-spin text-[#1A1A1A]" />
       </div>
     );
   }
@@ -193,7 +193,7 @@ export function PipelineAnalyticsPanel() {
     <div className="space-y-6">
       {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 text-[#1A1A1A]/60 mb-1">
               <Users className="h-4 w-4" />
@@ -204,7 +204,7 @@ export function PipelineAnalyticsPanel() {
             </p>
           </CardContent>
         </Card>
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 text-[#1A1A1A]/60 mb-1">
               <Target className="h-4 w-4" />
@@ -215,7 +215,7 @@ export function PipelineAnalyticsPanel() {
             </p>
           </CardContent>
         </Card>
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 text-[#1A1A1A]/60 mb-1">
               <TrendingUp className="h-4 w-4 text-emerald-500" />
@@ -226,7 +226,7 @@ export function PipelineAnalyticsPanel() {
             </p>
           </CardContent>
         </Card>
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 text-[#1A1A1A]/60 mb-1">
               <Clock className="h-4 w-4 text-blue-500" />
@@ -242,7 +242,7 @@ export function PipelineAnalyticsPanel() {
       {/* Pipeline Breakdown */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {pipelineStats.map((pipeline) => (
-          <Card key={pipeline.pipeline} className="bg-[#FDFBF7] border-2 border-gold/30">
+          <Card key={pipeline.pipeline} className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg">
                 <pipeline.icon className={`h-5 w-5 ${pipeline.color}`} />
@@ -296,7 +296,7 @@ export function PipelineAnalyticsPanel() {
 
               {/* Top Brokers */}
               {pipeline.brokerPerformance.length > 0 && (
-                <div className="pt-2 border-t border-gold/20">
+                <div className="pt-2 border-t border-[#B89555]/20">
                   <p className="text-[#1A1A1A]/60 text-xs uppercase tracking-wider mb-2">Top Performers</p>
                   <div className="space-y-2">
                     {pipeline.brokerPerformance
@@ -307,7 +307,7 @@ export function PipelineAnalyticsPanel() {
                           <span className="text-[#1A1A1A] truncate max-w-[120px]">{broker.brokerName}</span>
                           <div className="flex items-center gap-2">
                             <span className="text-[#1A1A1A]/40">{broker.leads} leads</span>
-                            <Badge variant="outline" className="border-gold/30 text-emerald-600">
+                            <Badge variant="outline" className="border-[#B89555]/30 text-emerald-600">
                               {broker.conversions} won
                             </Badge>
                           </div>
@@ -322,7 +322,7 @@ export function PipelineAnalyticsPanel() {
       </div>
 
       {/* Pipeline Intent Legend */}
-      <Card className="bg-[#FDFBF7] border-2 border-gold/30">
+      <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
         <CardContent className="p-4">
           <div className="flex items-center gap-6 text-sm flex-wrap">
             <span className="text-[#1A1A1A]/60">Intent Classification:</span>

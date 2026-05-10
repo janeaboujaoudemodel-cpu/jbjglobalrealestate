@@ -66,8 +66,8 @@ const DesignFavoriteButton = ({
             disabled={toggle.isPending}
             className={`${sizeClasses[size]} flex items-center justify-center rounded-full transition-all duration-200 border ${
               isFavorite
-                ? "bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/40 shadow-lg"
-                : "bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 hover:border-gold hover:shadow-lg"
+                ? "bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/40 shadow-lg"
+                : "bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/30 hover:border-[#B89555] hover:shadow-lg"
             }`}
           >
             <Heart
@@ -77,7 +77,7 @@ const DesignFavoriteButton = ({
             />
           </button>
         </TooltipTrigger>
-        <TooltipContent side="bottom" sideOffset={8} className="z-[10100] bg-[#1A1A1A]/90 text-white border-gold/30 text-xs">
+        <TooltipContent side="bottom" sideOffset={8} className="z-[10100] bg-[#1A1A1A]/90 text-white border-[#B89555]/30 text-xs">
           <p>{isFavorite ? "Remove from favorites" : "Add to favorites"}</p>
         </TooltipContent>
       </Tooltip>
@@ -90,8 +90,8 @@ const DesignFavoriteButton = ({
               disabled={toggle.isPending}
               className={`${sizeClasses[size]} flex items-center justify-center rounded-full transition-all duration-200 border ${
                 isShortlisted
-                  ? "bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold shadow-lg"
-                  : "bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 hover:border-gold hover:shadow-lg"
+                  ? "bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555] shadow-lg"
+                  : "bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/30 hover:border-[#B89555] hover:shadow-lg"
               }`}
             >
               {isShortlisted ? (
@@ -101,7 +101,7 @@ const DesignFavoriteButton = ({
               )}
             </button>
           </TooltipTrigger>
-          <TooltipContent side="bottom" sideOffset={8} className="z-[10100] bg-[#1A1A1A]/90 text-white border-gold/30 text-xs">
+          <TooltipContent side="bottom" sideOffset={8} className="z-[10100] bg-[#1A1A1A]/90 text-white border-[#B89555]/30 text-xs">
             <p>{isShortlisted ? "Remove from shortlist" : "Add to shortlist"}</p>
           </TooltipContent>
         </Tooltip>

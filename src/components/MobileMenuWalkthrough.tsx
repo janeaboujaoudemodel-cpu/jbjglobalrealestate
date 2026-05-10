@@ -127,19 +127,19 @@ const MobileMenuWalkthrough = ({ isOpen, onComplete, onClose }: MobileMenuWalkth
             >
               {/* Arrow pointing up */}
               <div 
-                className="absolute -top-2 w-4 h-4 bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6] rotate-45 border-l border-t border-gold/40"
+                className="absolute -top-2 w-4 h-4 bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6] rotate-45 border-l border-t border-[#B89555]/40"
                 style={{ left: Math.min(targetRect.left + targetRect.width / 2 - 8, 240) }}
               />
               
               {/* Tooltip Card */}
               <div 
-                className="relative rounded-xl p-4 border-2 border-gold/40 shadow-2xl"
+                className="relative rounded-xl p-4 border-2 border-[#B89555]/40 shadow-2xl"
                 style={{ background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)' }}
               >
                 {/* Close button */}
                 <button
                   onClick={handleSkip}
-                  className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full hover:bg-gold/20 transition-colors"
+                  className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full hover:bg-[#EFE6D6]/20 transition-colors"
                 >
                   <X className="w-4 h-4 text-[#1A1A1A]/70" />
                 </button>
@@ -151,10 +151,10 @@ const MobileMenuWalkthrough = ({ isOpen, onComplete, onClose }: MobileMenuWalkth
                       key={idx}
                       className={`h-1.5 rounded-full transition-all ${
                         idx === currentStep 
-                          ? 'w-6 bg-gold' 
+                          ? 'w-6 bg-[#EFE6D6]' 
                           : idx < currentStep 
-                            ? 'w-2 bg-gold/60' 
-                            : 'w-2 bg-gold/30'
+                            ? 'w-2 bg-[#EFE6D6]/60' 
+                            : 'w-2 bg-[#EFE6D6]/30'
                       }`}
                     />
                   ))}
@@ -162,7 +162,7 @@ const MobileMenuWalkthrough = ({ isOpen, onComplete, onClose }: MobileMenuWalkth
 
                 {/* Content */}
                 <h4 className="text-[#1A1A1A] font-bold text-sm mb-1 flex items-center gap-2">
-                  <ArrowRight className="w-4 h-4 text-gold" />
+                  <ArrowRight className="w-4 h-4 text-[#1A1A1A]" />
                   {step.label}
                 </h4>
                 <p className="text-[#1A1A1A]/70 text-xs mb-4">
@@ -173,14 +173,14 @@ const MobileMenuWalkthrough = ({ isOpen, onComplete, onClose }: MobileMenuWalkth
                 <div className="flex items-center justify-between">
                   <button
                     onClick={handleSkip}
-                    className="text-xs text-white/90 hover:text-gold transition-colors"
+                    className="text-xs text-white/90 hover:text-[#1A1A1A] transition-colors"
                   >
                     Skip tour
                   </button>
                   <Button
                     onClick={handleNext}
                     size="sm"
-                    className="bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-gold text-xs px-4"
+                    className="bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-[#1A1A1A] text-xs px-4"
                   >
                     {isLastStep ? 'Done' : 'Next'}
                     <ChevronRight className="w-3 h-3 ml-1" />

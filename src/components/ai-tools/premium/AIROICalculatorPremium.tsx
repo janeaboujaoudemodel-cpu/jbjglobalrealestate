@@ -76,7 +76,7 @@ const AIROICalculatorPremium = () => {
 
   const getConfidenceColor = (score: number) => {
     if (score >= 80) return "text-emerald-400";
-    if (score >= 60) return "text-amber-400";
+    if (score >= 60) return "text-[#1A1A1A]";
     return "text-red-400";
   };
 
@@ -119,7 +119,7 @@ const AIROICalculatorPremium = () => {
               value={formData.propertyPrice}
               onChange={(e) => handleChange("propertyPrice", e.target.value)}
               placeholder="2,500,000"
-              className="bg-zinc-900/50 border-emerald-500/30 text-white h-12 rounded-xl hover:border-emerald-500/50 focus:border-emerald-400 transition-colors"
+              className="bg-[#FDFBF7]/50 border-emerald-500/30 text-white h-12 rounded-xl hover:border-emerald-500/50 focus:border-emerald-400 transition-colors"
             />
           </div>
 
@@ -133,7 +133,7 @@ const AIROICalculatorPremium = () => {
               value={formData.downPayment}
               onChange={(e) => handleChange("downPayment", e.target.value)}
               placeholder="500,000"
-              className="bg-zinc-900/50 border-emerald-500/30 text-white h-12 rounded-xl hover:border-emerald-500/50 focus:border-emerald-400 transition-colors"
+              className="bg-[#FDFBF7]/50 border-emerald-500/30 text-white h-12 rounded-xl hover:border-emerald-500/50 focus:border-emerald-400 transition-colors"
             />
           </div>
 
@@ -147,7 +147,7 @@ const AIROICalculatorPremium = () => {
               value={formData.expectedRent}
               onChange={(e) => handleChange("expectedRent", e.target.value)}
               placeholder="120,000"
-              className="bg-zinc-900/50 border-emerald-500/30 text-white h-12 rounded-xl hover:border-emerald-500/50 focus:border-emerald-400 transition-colors"
+              className="bg-[#FDFBF7]/50 border-emerald-500/30 text-white h-12 rounded-xl hover:border-emerald-500/50 focus:border-emerald-400 transition-colors"
             />
           </div>
 
@@ -161,7 +161,7 @@ const AIROICalculatorPremium = () => {
               value={formData.location}
               onChange={(e) => handleChange("location", e.target.value)}
               placeholder="Dubai Marina"
-              className="bg-zinc-900/50 border-emerald-500/30 text-white h-12 rounded-xl hover:border-emerald-500/50 focus:border-emerald-400 transition-colors"
+              className="bg-[#FDFBF7]/50 border-emerald-500/30 text-white h-12 rounded-xl hover:border-emerald-500/50 focus:border-emerald-400 transition-colors"
             />
           </div>
 
@@ -214,7 +214,7 @@ const AIROICalculatorPremium = () => {
             value={formData.additionalCosts}
             onChange={(e) => handleChange("additionalCosts", e.target.value)}
             placeholder="Service charges, maintenance, etc."
-            className="bg-zinc-900/50 border-emerald-500/30 text-white h-12 rounded-xl hover:border-emerald-500/50 focus:border-emerald-400 transition-colors"
+            className="bg-[#FDFBF7]/50 border-emerald-500/30 text-white h-12 rounded-xl hover:border-emerald-500/50 focus:border-emerald-400 transition-colors"
           />
         </div>
 
@@ -284,7 +284,7 @@ const AIROICalculatorPremium = () => {
 
               {/* Confidence Score */}
               {response.confidenceScore && (
-                <div className="bg-zinc-900/60 border border-emerald-500/20 rounded-xl p-4 mb-6">
+                <div className="bg-[#FDFBF7]/60 border border-emerald-500/20 rounded-xl p-4 mb-6">
                   <div className="flex items-center justify-between mb-2">
                     <p className="text-emerald-400/70 text-xs uppercase tracking-wider">AI Confidence Score</p>
                     <p className={`text-lg font-semibold ${getConfidenceColor(response.confidenceScore)}`}>
@@ -307,7 +307,7 @@ const AIROICalculatorPremium = () => {
                   <div className="flex items-center gap-2">
                     <AlertTriangle className={`h-5 w-5 ${
                       response.riskLevel === 'high' ? 'text-red-400' :
-                      response.riskLevel === 'medium' ? 'text-amber-400' : 'text-emerald-400'
+                      response.riskLevel === 'medium' ? 'text-[#1A1A1A]' : 'text-emerald-400'
                     }`} />
                     <span className="font-semibold text-white capitalize">{response.riskLevel} Risk</span>
                   </div>
@@ -325,7 +325,7 @@ const AIROICalculatorPremium = () => {
               )}
 
               {/* AI Insights */}
-              <div className="bg-zinc-900/60 border border-emerald-500/20 rounded-xl p-6">
+              <div className="bg-[#FDFBF7]/60 border border-emerald-500/20 rounded-xl p-6">
                 <div className="flex items-center gap-2 mb-4">
                   <Sparkles className="w-5 h-5 text-emerald-400" />
                   <h4 className="text-white font-semibold">AI Investment Insights</h4>
@@ -336,21 +336,21 @@ const AIROICalculatorPremium = () => {
                     {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                   </Button>
                 </div>
-                <div className="bg-zinc-800/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
+                <div className="bg-[#1A1A1A]/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
                   {response.analysis}
                 </div>
               </div>
             </div>
 
             {/* Disclaimer */}
-            <div className="bg-zinc-800/50 border border-[#1A1A1A] rounded-2xl p-6">
+            <div className="bg-[#1A1A1A]/50 border border-[#1A1A1A] rounded-2xl p-6">
               <div className="flex items-start gap-3">
                 <AlertTriangle className="w-6 h-6 text-white/70 flex-shrink-0" />
                 <div>
                   <h4 className="text-white/85 font-semibold mb-2">Important Disclaimer</h4>
                   <p className="text-white/70 text-sm leading-relaxed">
                     This analysis is AI-generated for informational purposes only. Does not constitute financial advice.{" "}
-                    <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
+                    <Link to="/contact" className="text-[#1A1A1A] hover:underline">Contact our team</Link> for professional guidance.
                     Past performance does not guarantee future results. Market conditions can change rapidly.
                   </p>
                 </div>

@@ -40,7 +40,7 @@ const SHARE_OPTIONS = [
   { id: "facebook", label: "Facebook", icon: ExternalLink, color: "bg-blue-600" },
   { id: "tiktok", label: "TikTok", icon: ExternalLink, color: "bg-[#1A1A1A]" },
   { id: "linkedin", label: "LinkedIn", icon: ExternalLink, color: "bg-blue-700" },
-  { id: "twitter", label: "X", icon: ExternalLink, color: "bg-zinc-800" },
+  { id: "twitter", label: "X", icon: ExternalLink, color: "bg-[#1A1A1A]" },
   { id: "copy", label: "Copy Link", icon: Copy, color: "bg-[#B89555]" },
 ];
 

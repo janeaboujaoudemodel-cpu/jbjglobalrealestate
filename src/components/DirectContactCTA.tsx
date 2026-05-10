@@ -103,7 +103,7 @@ const DirectContactCTA = ({
   const resolvedSubtitle = subtitle || t('cta.connectSubtitle', 'Get in touch for inquiries, consultations, or personalized guidance.');
   return (
     <section className={`py-12 bg-[#1A1A1A] ${className}`}>
-      <div className="mx-1 sm:mx-2 md:mx-3 lg:mx-4 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-4 sm:p-6 md:p-8">
+      <div className="mx-1 sm:mx-2 md:mx-3 lg:mx-4 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-[#B89555]/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-4 sm:p-6 md:p-8">
         
         {showTitle && (
           <>
@@ -115,7 +115,7 @@ const DirectContactCTA = ({
               }`}
             >
               <span className="text-[#1A1A1A]">{resolvedTitle.split(' ').slice(0, -1).join(' ')}</span>{" "}
-              <span className="text-gold">{resolvedTitle.split(' ').slice(-1)[0]}</span>
+              <span className="text-[#1A1A1A]">{resolvedTitle.split(' ').slice(-1)[0]}</span>
             </h2>
             <p className="text-center text-[#1A1A1A]/70 text-sm md:text-base mb-8 max-w-2xl mx-auto">
               {resolvedSubtitle}
@@ -160,16 +160,16 @@ const DirectContactCTA = ({
           {/* Email Us */}
           <a 
             href={`mailto:${CONTACT_INFO.email}`}
-            className="flex items-center gap-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-3 sm:p-5 transition-all duration-300 group hover:shadow-[0_8px_25px_rgba(200,167,102,0.4)] hover:-translate-y-1 hover:border-gold"
+            className="flex items-center gap-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-3 sm:p-5 transition-all duration-300 group hover:shadow-[0_8px_25px_rgba(200,167,102,0.4)] hover:-translate-y-1 hover:border-[#B89555]"
           >
-            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-gold/30 to-handover/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-gold/50 shadow-[0_0_15px_rgba(200,167,102,0.3)] flex-shrink-0">
-              <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-gold drop-shadow-[0_0_8px_rgba(200,167,102,0.8)]" />
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-gold/30 to-handover/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-[#B89555]/50 shadow-[0_0_15px_rgba(200,167,102,0.3)] flex-shrink-0">
+              <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-[#1A1A1A] drop-shadow-[0_0_8px_rgba(200,167,102,0.8)]" />
             </div>
             <div>
               <h3 className="text-[#1A1A1A] font-semibold text-sm mb-0.5">
                 {t('cta.emailUs', 'Email Us')}
               </h3>
-              <p className="text-gold text-xs sm:text-sm font-semibold">{CONTACT_INFO.email}</p>
+              <p className="text-[#1A1A1A] text-xs sm:text-sm font-semibold">{CONTACT_INFO.email}</p>
             </div>
           </a>
         </div>
@@ -183,9 +183,9 @@ const DirectContactCTA = ({
             viewport={{ once: true }}
             transition={{ duration: 0.3 }}
             onClick={downloadVCard}
-            className="flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 hover:scale-105 shadow-lg min-w-[220px] bg-transparent border-2 border-gold/50 hover:border-[#1A1A1A] hover:bg-[#1A1A1A]/5 text-[#1A1A1A]"
+            className="flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 hover:scale-105 shadow-lg min-w-[220px] bg-transparent border-2 border-[#B89555]/50 hover:border-[#1A1A1A] hover:bg-[#1A1A1A]/5 text-[#1A1A1A]"
           >
-            <Download className="w-5 h-5 text-gold" />
+            <Download className="w-5 h-5 text-[#1A1A1A]" />
             <span>{t('cta.saveContact', 'Save Contact')}</span>
           </motion.button>
 
@@ -195,48 +195,48 @@ const DirectContactCTA = ({
             viewport={{ once: true }}
             transition={{ duration: 0.3, delay: 0.1 }}
             onClick={shareContact}
-            className="flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 hover:scale-105 shadow-lg min-w-[180px] bg-transparent border-2 border-gold/50 hover:border-[#1A1A1A] hover:bg-[#1A1A1A]/5 text-[#1A1A1A]"
+            className="flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 hover:scale-105 shadow-lg min-w-[180px] bg-transparent border-2 border-[#B89555]/50 hover:border-[#1A1A1A] hover:bg-[#1A1A1A]/5 text-[#1A1A1A]"
           >
-            <Share2 className="w-5 h-5 text-gold" />
+            <Share2 className="w-5 h-5 text-[#1A1A1A]" />
             <span>{t('cta.share', 'Share')}</span>
           </motion.button>
         </div>
         )}
 
         {/* Social Links Display */}
-        <div className="flex items-center justify-center gap-4 mt-6 pt-4 border-t border-gold/20">
+        <div className="flex items-center justify-center gap-4 mt-6 pt-4 border-t border-[#B89555]/20">
           <span className="text-white/90 text-xs uppercase tracking-wider">{t('cta.followUs', 'Follow Us:')}</span>
           <a 
             href={SOCIAL_LINKS.linkedin} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="w-9 h-9 rounded-full bg-[#1A1A1A]/5 border border-gold/30 flex items-center justify-center hover:bg-gold/10 hover:border-gold transition-all"
+            className="w-9 h-9 rounded-full bg-[#1A1A1A]/5 border border-[#B89555]/30 flex items-center justify-center hover:bg-[#EFE6D6]/10 hover:border-[#B89555] transition-all"
           >
-            <FaLinkedinIn className="w-4 h-4 text-gold" />
+            <FaLinkedinIn className="w-4 h-4 text-[#1A1A1A]" />
           </a>
           <a 
             href={SOCIAL_LINKS.instagram} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="w-9 h-9 rounded-full bg-[#1A1A1A]/5 border border-gold/30 flex items-center justify-center hover:bg-gold/10 hover:border-gold transition-all"
+            className="w-9 h-9 rounded-full bg-[#1A1A1A]/5 border border-[#B89555]/30 flex items-center justify-center hover:bg-[#EFE6D6]/10 hover:border-[#B89555] transition-all"
           >
-            <FaInstagram className="w-4 h-4 text-gold" />
+            <FaInstagram className="w-4 h-4 text-[#1A1A1A]" />
           </a>
           <a 
             href={SOCIAL_LINKS.tiktok} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="w-9 h-9 rounded-full bg-[#1A1A1A]/5 border border-gold/30 flex items-center justify-center hover:bg-gold/10 hover:border-gold transition-all"
+            className="w-9 h-9 rounded-full bg-[#1A1A1A]/5 border border-[#B89555]/30 flex items-center justify-center hover:bg-[#EFE6D6]/10 hover:border-[#B89555] transition-all"
           >
-            <FaTiktok className="w-4 h-4 text-gold" />
+            <FaTiktok className="w-4 h-4 text-[#1A1A1A]" />
           </a>
           <a 
             href={SOCIAL_LINKS.website} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="w-9 h-9 rounded-full bg-[#1A1A1A]/5 border border-gold/30 flex items-center justify-center hover:bg-gold/10 hover:border-gold transition-all"
+            className="w-9 h-9 rounded-full bg-[#1A1A1A]/5 border border-[#B89555]/30 flex items-center justify-center hover:bg-[#EFE6D6]/10 hover:border-[#B89555] transition-all"
           >
-            <FaGlobe className="w-4 h-4 text-gold" />
+            <FaGlobe className="w-4 h-4 text-[#1A1A1A]" />
           </a>
         </div>
       </div>

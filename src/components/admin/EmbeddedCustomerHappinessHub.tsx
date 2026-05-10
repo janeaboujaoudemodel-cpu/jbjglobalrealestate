@@ -281,7 +281,7 @@ export const EmbeddedCustomerHappinessHub = () => {
         {[1, 2, 3, 4, 5].map((star) => (
           <Star
             key={star}
-            className={`w-4 h-4 ${star <= rating ? "fill-gold text-gold" : "text-[#1A1A1A]/70"}`}
+            className={`w-4 h-4 ${star <= rating ? "fill-gold text-[#1A1A1A]" : "text-[#1A1A1A]/70"}`}
           />
         ))}
       </div>
@@ -360,7 +360,7 @@ export const EmbeddedCustomerHappinessHub = () => {
 
       {/* Sub-Tabs */}
       <Tabs defaultValue="tickets" className="space-y-4">
-        <TabsList className="bg-[#FDFBF7]/80 border-2 border-gold/30 p-1">
+        <TabsList className="bg-[#FDFBF7]/80 border-2 border-[#B89555]/30 p-1">
           <TabsTrigger value="tickets" className="tab-trigger-champagne text-[#1A1A1A]">
             <Ticket className="w-4 h-4 mr-2" />
             Tickets
@@ -395,7 +395,7 @@ export const EmbeddedCustomerHappinessHub = () => {
 
         {/* Reviews Tab - With Bulk Actions */}
         <TabsContent value="reviews">
-          <Card className="bg-[#FDFBF7] border-2 border-gold/30">
+          <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
             <CardHeader>
               <div className="flex items-center justify-between flex-wrap gap-3">
                 <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
@@ -409,7 +409,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                       key={f}
                       size="sm"
                       variant={reviewFilter === f ? "default" : "outline"}
-                      className={reviewFilter === f ? "bg-gold text-[#1A1A1A]" : "border-gold/30"}
+                      className={reviewFilter === f ? "bg-[#EFE6D6] text-[#1A1A1A]" : "border-[#B89555]/30"}
                       onClick={() => { setReviewFilter(f); setSelectedReviewIds(new Set()); }}
                     >
                       {f === "all" ? "All" : f === "pending_approval" ? "Pending" : f === "approved" ? "Approved" : "Rejected"}
@@ -419,7 +419,7 @@ export const EmbeddedCustomerHappinessHub = () => {
               </div>
               {/* Bulk Action Bar */}
               {selectedReviewIds.size > 0 && (
-                <div className="flex items-center gap-2 mt-3 p-3 bg-gold/10 rounded-lg border border-gold/30">
+                <div className="flex items-center gap-2 mt-3 p-3 bg-[#EFE6D6]/10 rounded-lg border border-[#B89555]/30">
                   <span className="text-sm font-semibold text-[#1A1A1A]">{selectedReviewIds.size} selected</span>
                   <Button size="sm" className="bg-emerald-500 hover:bg-emerald-600 text-white" onClick={() => bulkReviewMutation.mutate({ ids: Array.from(selectedReviewIds), action: "approve" })} disabled={bulkReviewMutation.isPending}>
                     <ThumbsUp className="w-3 h-3 mr-1" /> Approve All
@@ -427,14 +427,14 @@ export const EmbeddedCustomerHappinessHub = () => {
                   <Button size="sm" variant="destructive" onClick={() => bulkReviewMutation.mutate({ ids: Array.from(selectedReviewIds), action: "reject" })} disabled={bulkReviewMutation.isPending}>
                     <ThumbsDown className="w-3 h-3 mr-1" /> Reject All
                   </Button>
-                  <Button size="sm" variant="outline" className="border-gold/30" onClick={() => bulkReviewMutation.mutate({ ids: Array.from(selectedReviewIds), action: "pending_approval" })} disabled={bulkReviewMutation.isPending}>
+                  <Button size="sm" variant="outline" className="border-[#B89555]/30" onClick={() => bulkReviewMutation.mutate({ ids: Array.from(selectedReviewIds), action: "pending_approval" })} disabled={bulkReviewMutation.isPending}>
                     <Clock className="w-3 h-3 mr-1" /> Set Pending
                   </Button>
                   <Button size="sm" variant="ghost" onClick={() => setSelectedReviewIds(new Set())}>Clear</Button>
                 </div>
               )}
               {filteredReviews.length > 0 && selectedReviewIds.size === 0 && (
-                <Button size="sm" variant="outline" className="mt-2 border-gold/30" onClick={selectAllFiltered}>
+                <Button size="sm" variant="outline" className="mt-2 border-[#B89555]/30" onClick={selectAllFiltered}>
                   Select All ({filteredReviews.length})
                 </Button>
               )}
@@ -453,7 +453,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                       <div
                         key={review.id}
                         className={`p-4 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-white border transition-all ${
-                          selectedReviewIds.has(review.id) ? "border-gold ring-2 ring-gold/30" : "border-gold/20 hover:border-gold/40"
+                          selectedReviewIds.has(review.id) ? "border-[#B89555] ring-2 ring-gold/30" : "border-[#B89555]/20 hover:border-[#B89555]/40"
                         }`}
                       >
                         <div className="flex items-start gap-3">
@@ -462,7 +462,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                             type="checkbox"
                             checked={selectedReviewIds.has(review.id)}
                             onChange={() => toggleReviewSelect(review.id)}
-                            className="mt-1 h-4 w-4 rounded border-[#B89555]/30 text-gold focus:ring-gold"
+                            className="mt-1 h-4 w-4 rounded border-[#B89555]/30 text-[#1A1A1A] focus:ring-gold"
                           />
                           {/* Content */}
                           <div className="flex-1 cursor-pointer" onClick={() => setSelectedReview(review)}>
@@ -484,7 +484,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                               {review.publish_requested && <Badge className="bg-green-50 text-green-600 border-green-200 text-xs">Wants publishing</Badge>}
                             </div>
                           </div>
-                          <Button variant="ghost" size="sm" className="text-gold hover:text-[#1A1A1A]" onClick={() => setSelectedReview(review)}>
+                          <Button variant="ghost" size="sm" className="text-[#1A1A1A] hover:text-[#1A1A1A]" onClick={() => setSelectedReview(review)}>
                             <Eye className="w-4 h-4" />
                           </Button>
                         </div>
@@ -502,7 +502,7 @@ export const EmbeddedCustomerHappinessHub = () => {
 
         {/* Issues Tab */}
         <TabsContent value="issues">
-          <Card className="bg-[#FDFBF7] border-2 border-gold/30">
+          <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
             <CardHeader>
               <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
                 <AlertCircle className="w-5 h-5 text-red-500" />
@@ -522,7 +522,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                     {issues?.map((issue) => (
                       <div
                         key={issue.id}
-                        className="p-4 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-white border border-gold/20 hover:border-gold/40 transition-all"
+                        className="p-4 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-white border border-[#B89555]/20 hover:border-[#B89555]/40 transition-all"
                       >
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
@@ -553,7 +553,7 @@ export const EmbeddedCustomerHappinessHub = () => {
 
         {/* Ideas Tab */}
         <TabsContent value="ideas">
-          <Card className="bg-[#FDFBF7] border-2 border-gold/30">
+          <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
             <CardHeader>
               <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
                 <Lightbulb className="w-5 h-5 text-purple-500" />
@@ -573,7 +573,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                     {ideas?.map((idea) => (
                       <div
                         key={idea.id}
-                        className="p-4 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-white border border-gold/20 hover:border-gold/40 transition-all cursor-pointer"
+                        className="p-4 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-white border border-[#B89555]/20 hover:border-[#B89555]/40 transition-all cursor-pointer"
                         onClick={() => setSelectedIdea(idea)}
                       >
                         <div className="flex items-start justify-between">
@@ -588,7 +588,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                                 </Badge>
                               )}
                               {idea.draw_ticket_number && (
-                                <Badge className="bg-gold/20 text-gold border-gold/40">
+                                <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/40">
                                   #{idea.draw_ticket_number}
                                 </Badge>
                               )}
@@ -608,7 +608,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                               {idea.email && <span>{idea.email}</span>}
                             </div>
                           </div>
-                          <Button variant="ghost" size="sm" className="text-gold hover:text-[#1A1A1A]">
+                          <Button variant="ghost" size="sm" className="text-[#1A1A1A] hover:text-[#1A1A1A]">
                             <Eye className="w-4 h-4" />
                           </Button>
                         </div>
@@ -627,7 +627,7 @@ export const EmbeddedCustomerHappinessHub = () => {
 
       {/* Review Details Dialog */}
       <Dialog open={!!selectedReview} onOpenChange={() => setSelectedReview(null)}>
-        <DialogContent className="max-w-lg bg-[#FDFBF7] border-2 border-gold/30">
+        <DialogContent className="max-w-lg bg-[#FDFBF7] border-2 border-[#B89555]/30">
           <DialogHeader>
             <DialogTitle className="text-[#1A1A1A]">Review Details</DialogTitle>
           </DialogHeader>
@@ -661,7 +661,7 @@ export const EmbeddedCustomerHappinessHub = () => {
 
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-sm text-[#1A1A1A]/70">Would recommend:</span>
-                <Badge className="bg-gold/20 text-gold border-gold/40">{selectedReview.would_recommend}</Badge>
+                <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/40">{selectedReview.would_recommend}</Badge>
                 {selectedReview.publish_requested && <Badge className="bg-green-50 text-green-600 border-green-200 text-xs">Wants publishing</Badge>}
               </div>
 
@@ -674,7 +674,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                   value={adminNotes}
                   onChange={(e) => setAdminNotes(e.target.value)}
                   placeholder="Add any notes about this review..."
-                  className="bg-[#FDFBF7] border-gold/30"
+                  className="bg-[#FDFBF7] border-[#B89555]/30"
                 />
               </div>
               <div className="flex gap-3">
@@ -707,7 +707,7 @@ export const EmbeddedCustomerHappinessHub = () => {
 
       {/* Idea Details Dialog */}
       <Dialog open={!!selectedIdea} onOpenChange={() => setSelectedIdea(null)}>
-        <DialogContent className="max-w-lg bg-[#FDFBF7] border-2 border-gold/30">
+        <DialogContent className="max-w-lg bg-[#FDFBF7] border-2 border-[#B89555]/30">
           <DialogHeader>
             <DialogTitle className="text-[#1A1A1A] flex items-center gap-2">
               <Lightbulb className="w-5 h-5 text-purple-500" />
@@ -751,7 +751,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                       value={adminNotes}
                       onChange={(e) => setAdminNotes(e.target.value)}
                       placeholder="Add notes about this idea..."
-                      className="bg-[#F7F2EA] border-gold/30 text-[#1A1A1A]"
+                      className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]"
                     />
                   </div>
                   <div className="flex gap-3">

@@ -109,8 +109,8 @@ export default function AISignatureGenerator({
               onClick={() => setSelectedStyle(style.id)}
               className={`p-4 rounded-xl border-2 text-left transition-all ${
                 selectedStyle === style.id
-                  ? "border-gold bg-gold/10"
-                  : "border-border hover:border-gold/50 bg-card"
+                  ? "border-[#B89555] bg-[#EFE6D6]/10"
+                  : "border-border hover:border-[#B89555]/50 bg-card"
               }`}
             >
               <p className="font-semibold text-foreground">{style.label}</p>
@@ -142,7 +142,7 @@ export default function AISignatureGenerator({
 
       {/* Generated Signature Preview */}
       {generatedSignature && (
-        <Card className="border-2 border-gold/40 bg-card">
+        <Card className="border-2 border-[#B89555]/40 bg-card">
           <CardContent className="p-6 space-y-4">
             <div className="flex items-center justify-between">
               <Label className="text-foreground font-medium">Generated Signature</Label>
@@ -177,8 +177,8 @@ export default function AISignatureGenerator({
                       onClick={() => selectVariant(index)}
                       className={`p-3 rounded-lg border-2 transition-all ${
                         selectedVariant === index
-                          ? "border-gold bg-gold/5"
-                          : "border-border hover:border-gold/50"
+                          ? "border-[#B89555] bg-[#EFE6D6]/5"
+                          : "border-border hover:border-[#B89555]/50"
                       }`}
                     >
                       <img

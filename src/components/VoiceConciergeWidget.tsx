@@ -224,7 +224,7 @@ const VoiceConciergeWidget = () => {
     return (
       <button
         onClick={handleRestore}
-        className="fixed bottom-6 right-6 z-50 w-12 h-12 bg-gold hover:bg-gold-light text-gold-foreground rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center"
+        className="fixed bottom-6 right-6 z-50 w-12 h-12 bg-[#EFE6D6] hover:bg-[#EFE6D6]-light text-[#1A1A1A]-foreground rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center"
         aria-label="Show voice concierge"
       >
         <Phone className="w-5 h-5" />
@@ -237,20 +237,20 @@ const VoiceConciergeWidget = () => {
       {/* Pulse ring - only when not connected and not minimized */}
       {!isConnected && (
         <>
-          <span className="absolute inset-0 rounded-full bg-gold/40 animate-ping" />
-          <span className="absolute inset-0 rounded-full bg-gold/20 animate-pulse" />
+          <span className="absolute inset-0 rounded-full bg-[#EFE6D6]/40 animate-ping" />
+          <span className="absolute inset-0 rounded-full bg-[#EFE6D6]/20 animate-pulse" />
         </>
       )}
       
       {/* Speaking indicator ring */}
       {conversation.isSpeaking && (
-        <span className="absolute inset-0 rounded-full bg-gold/60 animate-pulse" />
+        <span className="absolute inset-0 rounded-full bg-[#EFE6D6]/60 animate-pulse" />
       )}
       
       {/* Close/minimize button - clicking X turns it into phone icon */}
       <button
         onClick={handleMinimize}
-        className="absolute -top-2 -right-2 w-6 h-6 bg-zinc-800 hover:bg-[#1A1A1A] text-white/70 hover:text-white rounded-full shadow-md flex items-center justify-center transition-colors z-10"
+        className="absolute -top-2 -right-2 w-6 h-6 bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white/70 hover:text-white rounded-full shadow-md flex items-center justify-center transition-colors z-10"
         aria-label="Minimize voice concierge"
       >
         <X className="w-3.5 h-3.5" />
@@ -260,7 +260,7 @@ const VoiceConciergeWidget = () => {
       {!isAuthenticated ? (
         <button
           onClick={handleLoginRedirect}
-          className="relative flex items-center gap-2 bg-gold hover:bg-gold-light text-gold-foreground px-4 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
+          className="relative flex items-center gap-2 bg-[#EFE6D6] hover:bg-[#EFE6D6]-light text-[#1A1A1A]-foreground px-4 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
           aria-label="Login to use voice concierge"
         >
           <LogIn className="w-5 h-5" />
@@ -272,12 +272,12 @@ const VoiceConciergeWidget = () => {
         <button
           onClick={startConversation}
           disabled={isConnecting}
-          className="relative flex items-center gap-2 bg-gold hover:bg-gold-light text-gold-foreground px-4 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group disabled:opacity-70 disabled:cursor-not-allowed"
+          className="relative flex items-center gap-2 bg-[#EFE6D6] hover:bg-[#EFE6D6]-light text-[#1A1A1A]-foreground px-4 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group disabled:opacity-70 disabled:cursor-not-allowed"
           aria-label="Start voice call with concierge"
         >
           {isConnecting ? (
             <>
-              <div className="w-6 h-6 border-2 border-gold-foreground/30 border-t-gold-foreground rounded-full animate-spin" />
+              <div className="w-6 h-6 border-2 border-[#B89555]-foreground/30 border-t-gold-foreground rounded-full animate-spin" />
               <span className="font-medium text-sm">
                 Connecting...
               </span>
@@ -292,7 +292,7 @@ const VoiceConciergeWidget = () => {
           )}
         </button>
       ) : (
-        <div className="relative flex items-center gap-2 bg-gold text-gold-foreground pl-4 pr-2 py-2 rounded-full shadow-lg">
+        <div className="relative flex items-center gap-2 bg-[#EFE6D6] text-[#1A1A1A]-foreground pl-4 pr-2 py-2 rounded-full shadow-lg">
           {/* Status indicator */}
           <div className="flex items-center gap-2">
             {conversation.isSpeaking ? (

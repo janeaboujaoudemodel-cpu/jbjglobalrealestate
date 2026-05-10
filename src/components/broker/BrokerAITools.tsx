@@ -171,9 +171,9 @@ export default function BrokerAITools({ subscription }: BrokerAIToolsProps) {
       </div>
 
       {/* Search Section */}
-      <div className="bg-zinc-900/50 border border-[#1A1A1A] rounded-xl p-6">
+      <div className="bg-[#FDFBF7]/50 border border-[#1A1A1A] rounded-xl p-6">
         <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-          <Search className="w-5 h-5 text-gold" />
+          <Search className="w-5 h-5 text-[#1A1A1A]" />
           Select Properties to Compare
         </h3>
         
@@ -182,10 +182,10 @@ export default function BrokerAITools({ subscription }: BrokerAIToolsProps) {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by project name..."
-            className="bg-zinc-800 border-[#1A1A1A] text-white"
+            className="bg-[#1A1A1A] border-[#1A1A1A] text-white"
           />
           {isSearching && (
-            <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 animate-spin text-gold" />
+            <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 animate-spin text-[#1A1A1A]" />
           )}
         </div>
 
@@ -206,7 +206,7 @@ export default function BrokerAITools({ subscription }: BrokerAIToolsProps) {
                   <span className="text-white/70 text-sm">
                     {formatPrice(project.price_from)} - {formatPrice(project.price_to)}
                   </span>
-                  <Plus className="w-5 h-5 text-gold" />
+                  <Plus className="w-5 h-5 text-[#1A1A1A]" />
                 </div>
               </button>
             ))}
@@ -216,9 +216,9 @@ export default function BrokerAITools({ subscription }: BrokerAIToolsProps) {
 
       {/* Selected Projects */}
       {selectedProjects.length > 0 && (
-        <div className="bg-zinc-900/50 border border-[#1A1A1A] rounded-xl p-6">
+        <div className="bg-[#FDFBF7]/50 border border-[#1A1A1A] rounded-xl p-6">
           <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-            <FileSpreadsheet className="w-5 h-5 text-gold" />
+            <FileSpreadsheet className="w-5 h-5 text-[#1A1A1A]" />
             Properties to Compare ({selectedProjects.length}/3)
           </h3>
           
@@ -228,7 +228,7 @@ export default function BrokerAITools({ subscription }: BrokerAIToolsProps) {
                 key={project.id}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="relative bg-zinc-800/50 border border-[#1A1A1A] rounded-lg p-4"
+                className="relative bg-[#1A1A1A]/50 border border-[#1A1A1A] rounded-lg p-4"
               >
                 <button
                   onClick={() => removeProject(project.id)}
@@ -236,10 +236,10 @@ export default function BrokerAITools({ subscription }: BrokerAIToolsProps) {
                 >
                   <X className="w-4 h-4 text-white/70" />
                 </button>
-                <Badge className="bg-gold/20 text-gold mb-2">{index + 1}</Badge>
+                <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] mb-2">{index + 1}</Badge>
                 <p className="text-white font-medium">{project.name}</p>
                 <p className="text-white/70 text-sm">{project.location}</p>
-                <p className="text-gold text-sm mt-2">
+                <p className="text-[#1A1A1A] text-sm mt-2">
                   {formatPrice(project.price_from)}
                 </p>
               </motion.div>
@@ -250,9 +250,9 @@ export default function BrokerAITools({ subscription }: BrokerAIToolsProps) {
 
       {/* Recommendation Type */}
       {selectedProjects.length >= 2 && (
-        <div className="bg-zinc-900/50 border border-[#1A1A1A] rounded-xl p-6">
+        <div className="bg-[#FDFBF7]/50 border border-[#1A1A1A] rounded-xl p-6">
           <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-            <Bot className="w-5 h-5 text-gold" />
+            <Bot className="w-5 h-5 text-[#1A1A1A]" />
             Recommendation Type
           </h3>
 
@@ -278,7 +278,7 @@ export default function BrokerAITools({ subscription }: BrokerAIToolsProps) {
             </label>
 
             <label className={`flex items-start gap-3 cursor-pointer rounded-xl border-2 p-4 transition-all ${
-              recommendationType === "manual" ? "border-gold bg-gold/10" : "border-[#1A1A1A] hover:border-[#1A1A1A]"
+              recommendationType === "manual" ? "border-[#B89555] bg-[#EFE6D6]/10" : "border-[#1A1A1A] hover:border-[#1A1A1A]"
             }`}>
               <RadioGroupItem value="manual" className="mt-1" />
               <div>
@@ -356,14 +356,14 @@ export default function BrokerAITools({ subscription }: BrokerAIToolsProps) {
                   href="https://wa.me/971565911000?text=Hi%2C%20I%20want%20to%20upgrade%20my%20Broker%20Toolkit%20subscription"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-amber-400 hover:text-amber-300"
+                  className="flex items-center gap-2 text-[#1A1A1A] hover:text-amber-300"
                 >
                   <Phone className="w-4 h-4" />
                   Contact to Upgrade
                 </a>
                 <a
                   href="mailto:CONTACT@JBJ.AE"
-                  className="flex items-center gap-2 text-amber-400 hover:text-amber-300"
+                  className="flex items-center gap-2 text-[#1A1A1A] hover:text-amber-300"
                 >
                   <Mail className="w-4 h-4" />
                   Email Us

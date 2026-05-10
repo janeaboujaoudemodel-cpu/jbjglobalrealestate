@@ -24,10 +24,10 @@ export const GuideCard = ({
   children
 }: GuideCardProps) => {
   const variants = {
-    default: "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 hover:border-gold hover:shadow-xl hover:shadow-gold/20",
-    highlight: "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/40",
-    dark: "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 hover:border-gold",
-    numbered: "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 hover:border-gold hover:shadow-xl hover:shadow-gold/20"
+    default: "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/30 hover:border-[#B89555] hover:shadow-xl hover:shadow-gold/20",
+    highlight: "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/40",
+    dark: "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/30 hover:border-[#B89555]",
+    numbered: "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/30 hover:border-[#B89555] hover:shadow-xl hover:shadow-gold/20"
   };
 
   return (
@@ -44,18 +44,18 @@ export const GuideCard = ({
     >
       <div className="flex items-start gap-4">
         {number !== undefined && (
-          <div className="flex-shrink-0 w-12 h-12 bg-[#1A1A1A] border border-gold rounded-xl flex items-center justify-center">
-            <span className="text-gold text-xl font-semibold">{number}</span>
+          <div className="flex-shrink-0 w-12 h-12 bg-[#1A1A1A] border border-[#B89555] rounded-xl flex items-center justify-center">
+            <span className="text-[#1A1A1A] text-xl font-semibold">{number}</span>
           </div>
         )}
         {Icon && !number && (
-          <div className="flex-shrink-0 w-12 h-12 bg-[#1A1A1A] border border-gold rounded-xl flex items-center justify-center">
-            <Icon className="w-6 h-6 text-gold" />
+          <div className="flex-shrink-0 w-12 h-12 bg-[#1A1A1A] border border-[#B89555] rounded-xl flex items-center justify-center">
+            <Icon className="w-6 h-6 text-[#1A1A1A]" />
           </div>
         )}
         <div className="flex-1">
           <div className="flex items-center gap-3 mb-2">
-            {Icon && number !== undefined && <Icon className="w-5 h-5 text-gold" />}
+            {Icon && number !== undefined && <Icon className="w-5 h-5 text-[#1A1A1A]" />}
             <h3 className="text-xl md:text-2xl font-medium text-[#1A1A1A]">{title}</h3>
           </div>
           {description && (
@@ -65,7 +65,7 @@ export const GuideCard = ({
             <ul className="space-y-2">
               {items.map((item, index) => (
                 <li key={index} className="flex items-start gap-3">
-                  <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
+                  <CheckCircle2 className="w-4 h-4 text-[#1A1A1A] flex-shrink-0 mt-1" />
                   <span className="text-[#1A1A1A]/70 text-sm">{item}</span>
                 </li>
               ))}

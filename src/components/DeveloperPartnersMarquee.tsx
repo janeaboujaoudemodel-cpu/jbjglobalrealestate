@@ -108,7 +108,7 @@ const DeveloperPartnersMarquee = () => {
           />
           {/* Fallback initial – hidden by default, shown on error */}
           <span
-            className="items-center justify-center text-lg md:text-xl font-bold text-gold"
+            className="items-center justify-center text-lg md:text-xl font-bold text-[#1A1A1A]"
             style={{ display: "none" }}
           >
             {initial}
@@ -156,7 +156,7 @@ const DeveloperPartnersMarquee = () => {
         </div>
 
         <div
-          className="relative w-full overflow-hidden py-6 md:py-8 bg-gradient-to-r from-[#EFE6D6] via-[#F7F1E6] to-[#EFE6D6] border-t border-b border-gold/30"
+          className="relative w-full overflow-hidden py-6 md:py-8 bg-gradient-to-r from-[#EFE6D6] via-[#F7F1E6] to-[#EFE6D6] border-t border-b border-[#B89555]/30"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >

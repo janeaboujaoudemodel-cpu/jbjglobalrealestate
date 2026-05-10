@@ -106,11 +106,11 @@ export function BrokerCapacityPanel({ brokers, onUpdate }: BrokerCapacityPanelPr
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <Avatar className="h-12 w-12 border-2 border-gold/40">
+                  <Avatar className="h-12 w-12 border-2 border-[#B89555]/40">
                     {broker.avatar_url ? (
                       <AvatarImage src={broker.avatar_url} alt={broker.name} />
                     ) : (
-                      <AvatarFallback className="bg-gold/20 text-gold font-bold">
+                      <AvatarFallback className="bg-[#EFE6D6]/20 text-[#1A1A1A] font-bold">
                         {getInitials(broker.name)}
                       </AvatarFallback>
                     )}

@@ -178,11 +178,11 @@ const PropertyRecommendationPopup = () => {
           exit={{ opacity: 0, y: 80, scale: 0.95 }}
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
         >
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/50 rounded-2xl shadow-[0_0_30px_rgba(212,175,55,0.15)] overflow-hidden">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/50 rounded-2xl shadow-[0_0_30px_rgba(212,175,55,0.15)] overflow-hidden">
             {/* Header */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-gold/30">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-[#B89555]/30">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-gold" />
+                <Sparkles className="w-4 h-4 text-[#1A1A1A]" />
                 <span className="text-[#1A1A1A] text-sm font-semibold">Recommended for You</span>
               </div>
               <button onClick={handleClose} className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors">
@@ -193,7 +193,7 @@ const PropertyRecommendationPopup = () => {
             {topArea && (
               <div className="px-4 pt-3">
                 <p className="text-[#1A1A1A]/70 text-xs">
-                  Based on your interest in <span className="text-gold font-medium capitalize">{topArea}</span>
+                  Based on your interest in <span className="text-[#1A1A1A] font-medium capitalize">{topArea}</span>
                 </p>
               </div>
             )}
@@ -204,24 +204,24 @@ const PropertyRecommendationPopup = () => {
                 <button
                   key={project.id}
                   onClick={() => handleExplore(project.slug)}
-                  className="w-full flex items-center gap-3 p-2 rounded-xl bg-[#FDFBF7]/70 hover:bg-[#FDFBF7] border border-gold/20 hover:border-gold/50 transition-all group text-left"
+                  className="w-full flex items-center gap-3 p-2 rounded-xl bg-[#FDFBF7]/70 hover:bg-[#FDFBF7] border border-[#B89555]/20 hover:border-[#B89555]/50 transition-all group text-left"
                 >
                   {project.cover_image_url ? (
                     <img
                       src={project.cover_image_url}
                       alt={project.name}
-                      className="w-14 h-14 rounded-lg object-cover flex-shrink-0 bg-gold/10"
+                      className="w-14 h-14 rounded-lg object-cover flex-shrink-0 bg-[#EFE6D6]/10"
                       loading="eager"
                       decoding="sync"
                       fetchPriority="high"
                     />
                   ) : (
-                    <div className="w-14 h-14 rounded-lg bg-gold/10 flex items-center justify-center flex-shrink-0">
+                    <div className="w-14 h-14 rounded-lg bg-[#EFE6D6]/10 flex items-center justify-center flex-shrink-0">
                       <Building2 className="w-5 h-5 text-[#1A1A1A]/70" />
                     </div>
                   )}
                   <div className="flex-1 min-w-0">
-                    <p className="text-[#1A1A1A] text-sm font-medium truncate group-hover:text-gold transition-colors">{project.name}</p>
+                    <p className="text-[#1A1A1A] text-sm font-medium truncate group-hover:text-[#1A1A1A] transition-colors">{project.name}</p>
                     {project.area_name && (
                       <p className="text-[#1A1A1A]/70 text-xs flex items-center gap-1 mt-0.5">
                         <MapPin className="w-3 h-3" />
@@ -230,7 +230,7 @@ const PropertyRecommendationPopup = () => {
                     )}
                     <p className="text-price-orange text-xs font-semibold mt-0.5">{formatPrice(project.price_from)}</p>
                   </div>
-                  <ArrowRight className="w-4 h-4 text-[#1A1A1A]/70 group-hover:text-gold transition-colors flex-shrink-0" />
+                  <ArrowRight className="w-4 h-4 text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] transition-colors flex-shrink-0" />
                 </button>
               ))}
             </div>

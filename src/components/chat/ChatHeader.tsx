@@ -39,7 +39,7 @@ const ChatHeader = React.forwardRef<HTMLDivElement, ChatHeaderProps>(({ step, is
   return (
     <div
       ref={ref}
-      className="flex items-center justify-between p-4 border-b-2 border-gold/60 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] shadow-[0_2px_10px_rgba(200,167,102,0.3)]"
+      className="flex items-center justify-between p-4 border-b-2 border-[#B89555]/60 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] shadow-[0_2px_10px_rgba(200,167,102,0.3)]"
     >
       <div className="flex items-center gap-3">
         {showBackButton && (
@@ -47,13 +47,13 @@ const ChatHeader = React.forwardRef<HTMLDivElement, ChatHeaderProps>(({ step, is
             variant="ghost"
             size="icon"
             onClick={onBack}
-            className="text-[#1A1A1A] hover:text-gold hover:bg-[#1A1A1A]/5 mr-1"
+            className="text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#1A1A1A]/5 mr-1"
           >
             {isRTL ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
           </Button>
         )}
         {showAgentPhoto ? (
-          <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-gold shadow-lg shadow-gold/20">
+          <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-[#B89555] shadow-lg shadow-gold/20">
             <img 
               src={agent.photo} 
               alt={agent.name}
@@ -61,8 +61,8 @@ const ChatHeader = React.forwardRef<HTMLDivElement, ChatHeaderProps>(({ step, is
             />
           </div>
         ) : (
-          <div className="w-10 h-10 rounded-full bg-[#FDFBF7] border-2 border-gold flex items-center justify-center shadow-lg shadow-gold/20">
-            <SquareChatIcon className="w-5 h-5 text-gold" size={20} />
+          <div className="w-10 h-10 rounded-full bg-[#FDFBF7] border-2 border-[#B89555] flex items-center justify-center shadow-lg shadow-gold/20">
+            <SquareChatIcon className="w-5 h-5 text-[#1A1A1A]" size={20} />
           </div>
         )}
         <div>
@@ -73,16 +73,16 @@ const ChatHeader = React.forwardRef<HTMLDivElement, ChatHeaderProps>(({ step, is
         </div>
       </div>
       <div className="flex items-center gap-2">
-        <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 bg-gold/10 rounded-full border border-gold/40">
-          <div className="w-2 h-2 rounded-full bg-gold animate-pulse" />
-          <span className="text-gold text-[10px] font-semibold">{t('chat.available247', 'Available 24/7')}</span>
+        <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 bg-[#EFE6D6]/10 rounded-full border border-[#B89555]/40">
+          <div className="w-2 h-2 rounded-full bg-[#EFE6D6] animate-pulse" />
+          <span className="text-[#1A1A1A] text-[10px] font-semibold">{t('chat.available247', 'Available 24/7')}</span>
         </div>
         {/* Minimize button instead of X */}
         <Button
           variant="ghost"
           size="icon"
           onClick={onToggleCollapse}
-          className="w-10 h-10 rounded-lg bg-[#FDFBF7] border-2 border-gold text-gold hover:bg-gold/10 hover:shadow-lg hover:shadow-gold/20 transition-all"
+          className="w-10 h-10 rounded-lg bg-[#FDFBF7] border-2 border-[#B89555] text-[#1A1A1A] hover:bg-[#EFE6D6]/10 hover:shadow-lg hover:shadow-gold/20 transition-all"
           title={t('chat.minimize', 'Minimize chat')}
         >
           <Minus className="w-5 h-5" />

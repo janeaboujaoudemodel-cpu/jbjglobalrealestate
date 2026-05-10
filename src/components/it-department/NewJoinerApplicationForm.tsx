@@ -271,11 +271,11 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] max-w-3xl max-h-[85vh] overflow-y-auto mt-8">
+      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] max-w-3xl max-h-[85vh] overflow-y-auto mt-8">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-[#1A1A1A] flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-gold/20 border border-gold/30 flex items-center justify-center">
-              <UserCheck className="w-5 h-5 text-gold" />
+            <div className="w-10 h-10 rounded-lg bg-[#EFE6D6]/20 border border-[#B89555]/30 flex items-center justify-center">
+              <UserCheck className="w-5 h-5 text-[#1A1A1A]" />
             </div>
             New Joiner Application
           </DialogTitle>
@@ -285,14 +285,14 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
           {/* Photo Upload */}
           <div className="flex justify-center">
             <div className="relative">
-              <div className="w-32 h-32 rounded-full bg-zinc-800 border-2 border-gold/30 overflow-hidden flex items-center justify-center">
+              <div className="w-32 h-32 rounded-full bg-[#1A1A1A] border-2 border-[#B89555]/30 overflow-hidden flex items-center justify-center">
                 {photoPreview ? (
                   <img src={photoPreview} alt="Preview" className="w-full h-full object-cover" />
                 ) : (
                   <Camera className="w-12 h-12 text-[#1A1A1A]/70" />
                 )}
               </div>
-              <label className="absolute bottom-0 right-0 w-10 h-10 bg-gold rounded-full flex items-center justify-center cursor-pointer hover:bg-gold/90 transition-colors">
+              <label className="absolute bottom-0 right-0 w-10 h-10 bg-[#EFE6D6] rounded-full flex items-center justify-center cursor-pointer hover:bg-[#EFE6D6]/90 transition-colors">
                 <Upload className="w-5 h-5 text-[#1A1A1A]" />
                 <input
                   type="file"
@@ -308,21 +308,21 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label className="text-[#1A1A1A] font-medium flex items-center gap-2">
-                <User className="w-4 h-4 text-gold" />
+                <User className="w-4 h-4 text-[#1A1A1A]" />
                 Full Name *
               </Label>
               <Input
                 value={formData.fullName}
                 onChange={(e) => setFormData(prev => ({ ...prev, fullName: e.target.value }))}
                 placeholder="Enter full name"
-                className="bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:border-gold"
+                className="bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:border-[#B89555]"
                 required
               />
             </div>
 
             <div className="space-y-2">
               <Label className="text-[#1A1A1A] font-medium flex items-center gap-2">
-                <Mail className="w-4 h-4 text-gold" />
+                <Mail className="w-4 h-4 text-[#1A1A1A]" />
                 Email (Auto-generated if empty)
               </Label>
               <Input
@@ -330,13 +330,13 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
                 value={formData.email}
                 onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                 placeholder="name@jbj.ae"
-                className="bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:border-gold"
+                className="bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:border-[#B89555]"
               />
             </div>
 
             <div className="space-y-2 md:col-span-2">
               <Label className="text-[#1A1A1A] font-medium flex items-center gap-2">
-                <Phone className="w-4 h-4 text-gold" />
+                <Phone className="w-4 h-4 text-[#1A1A1A]" />
                 Phone Number
               </Label>
               <PhoneInputWithCountry
@@ -348,7 +348,7 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
 
             <div className="space-y-2 md:col-span-2">
               <Label className="text-[#1A1A1A] font-medium flex items-center gap-2">
-                <Globe className="w-4 h-4 text-gold" />
+                <Globe className="w-4 h-4 text-[#1A1A1A]" />
                 Nationality *
               </Label>
               <NationalitySelect
@@ -362,7 +362,7 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
           {/* Languages */}
           <div className="space-y-2">
             <Label className="text-[#1A1A1A] font-medium flex items-center gap-2">
-              <Languages className="w-4 h-4 text-gold" />
+              <Languages className="w-4 h-4 text-[#1A1A1A]" />
               Languages Spoken
             </Label>
             <LanguageMultiSelect
@@ -375,7 +375,7 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label className="text-[#1A1A1A] font-medium flex items-center gap-2">
-                <Briefcase className="w-4 h-4 text-gold" />
+                <Briefcase className="w-4 h-4 text-[#1A1A1A]" />
                 Job Title *
               </Label>
               <SearchableSelectWithOther
@@ -390,7 +390,7 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
 
             <div className="space-y-2">
               <Label className="text-[#1A1A1A] font-medium flex items-center gap-2">
-                <Building2 className="w-4 h-4 text-gold" />
+                <Building2 className="w-4 h-4 text-[#1A1A1A]" />
                 Department *
               </Label>
               <SearchableSelectWithOther
@@ -405,7 +405,7 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
 
             <div className="space-y-2">
               <Label className="text-[#1A1A1A] font-medium flex items-center gap-2">
-                <UserCheck className="w-4 h-4 text-gold" />
+                <UserCheck className="w-4 h-4 text-[#1A1A1A]" />
                 CRM Role
               </Label>
               <SearchableSelectWithOther
@@ -420,7 +420,7 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
 
             <div className="space-y-2">
               <Label className="text-[#1A1A1A] font-medium flex items-center gap-2">
-                <User className="w-4 h-4 text-gold" />
+                <User className="w-4 h-4 text-[#1A1A1A]" />
                 Reports To
               </Label>
               <SearchableSelectWithOther
@@ -441,24 +441,24 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
               value={formData.notes}
               onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
               placeholder="Any additional information about the new joiner..."
-              className="bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:border-gold min-h-[100px]"
+              className="bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:border-[#B89555] min-h-[100px]"
             />
           </div>
 
           {/* Submit Buttons */}
-          <div className="flex justify-end gap-3 pt-4 border-t border-gold/30">
+          <div className="flex justify-end gap-3 pt-4 border-t border-[#B89555]/30">
             <Button
               type="button"
               variant="outline"
               onClick={onClose}
-              className="border-2 border-gold/30 text-[#1A1A1A] hover:bg-gold/10 hover:border-gold"
+              className="border-2 border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 hover:border-[#B89555]"
             >
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="bg-gold text-[#1A1A1A] hover:bg-gold/90"
+              className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
             >
               {isSubmitting ? (
                 <>

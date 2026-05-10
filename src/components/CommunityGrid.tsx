@@ -32,7 +32,7 @@ const CommunityGrid = React.forwardRef<HTMLDivElement>((_, ref) => {
           <Link
             key={community.id}
             to={`/community/${community.slug}`}
-            className="group relative overflow-hidden rounded-xl aspect-[4/3] border-2 border-gold/30 hover:border-gold/60 transition-all duration-300 shadow-md hover:shadow-xl"
+            className="group relative overflow-hidden rounded-xl aspect-[4/3] border-2 border-[#B89555]/30 hover:border-[#B89555]/60 transition-all duration-300 shadow-md hover:shadow-xl"
           >
             {community.image_url ? (
               <img
@@ -47,26 +47,26 @@ const CommunityGrid = React.forwardRef<HTMLDivElement>((_, ref) => {
             
             {/* Premium badge - Champagne with gold accent */}
             {isPremium && (
-              <div className="absolute top-3 right-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] backdrop-blur-sm text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1.5 border border-gold/40 shadow-md">
-                <TrendingUp className="w-3 h-3 text-gold" />
+              <div className="absolute top-3 right-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] backdrop-blur-sm text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1.5 border border-[#B89555]/40 shadow-md">
+                <TrendingUp className="w-3 h-3 text-[#1A1A1A]" />
                 <span className="text-[#1A1A1A]">Trending</span>
               </div>
             )}
             
             <div className="absolute bottom-0 left-0 right-0 p-4">
               <h3
-                className="text-gold font-semibold text-xl mb-1 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]"
+                className="text-[#1A1A1A] font-semibold text-xl mb-1 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]"
               >
                 {community.name}
               </h3>
               {community.location && (
                 <p className="text-gray-200 text-sm flex items-center gap-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                  <MapPin className="w-3 h-3 text-gold" />
+                  <MapPin className="w-3 h-3 text-[#1A1A1A]" />
                   {community.location}
                 </p>
               )}
             </div>
-            <div className="absolute inset-0 border-2 border-transparent group-hover:border-gold/50 rounded-xl transition-colors duration-300" />
+            <div className="absolute inset-0 border-2 border-transparent group-hover:border-[#B89555]/50 rounded-xl transition-colors duration-300" />
           </Link>
         );
       })}

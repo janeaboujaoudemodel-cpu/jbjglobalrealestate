@@ -7,11 +7,11 @@ export default function ReportMethodologyBlock() {
   return (
     <section className="space-y-4">
       <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
-        <Shield className="w-5 h-5 text-gold" />
+        <Shield className="w-5 h-5 text-[#1A1A1A]" />
         Report Methodology Transparency
       </h2>
 
-      <Card className="border-2 border-gold/30">
+      <Card className="border-2 border-[#B89555]/30">
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row md:items-center gap-6">
             <div className="flex-1">

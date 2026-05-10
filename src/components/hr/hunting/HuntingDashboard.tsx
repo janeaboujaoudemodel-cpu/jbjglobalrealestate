@@ -37,11 +37,11 @@ export function HuntingDashboard() {
   return (
     <div className="max-w-6xl mx-auto space-y-6">
       {/* Champagne container */}
-      <div className="border-2 border-gold/30 rounded-2xl bg-gradient-to-br from-[hsl(40,50%,98%)] via-[hsl(38,40%,93%)] to-[hsl(36,35%,88%)] p-6 md:p-8">
+      <div className="border-2 border-[#B89555]/30 rounded-2xl bg-gradient-to-br from-[hsl(40,50%,98%)] via-[hsl(38,40%,93%)] to-[hsl(36,35%,88%)] p-6 md:p-8">
         {/* Header — centered */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center p-3 rounded-xl bg-gradient-to-br from-[hsl(40,50%,92%)] to-[hsl(36,35%,85%)] mb-3">
-            <Target className="h-6 w-6 text-gold" />
+            <Target className="h-6 w-6 text-[#1A1A1A]" />
           </div>
           <h2 className="text-2xl font-bold text-foreground">Hunting System</h2>
           <p className="text-muted-foreground">AI-powered prospect discovery and outreach</p>
@@ -50,16 +50,16 @@ export function HuntingDashboard() {
         {/* Target Type Tabs */}
         <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as HuntTargetType)}>
           <div className="flex justify-center mb-6">
-            <TabsList className="grid grid-cols-3 w-full max-w-md bg-gradient-to-r from-[hsl(40,50%,92%)] to-[hsl(36,35%,85%)] border-2 border-gold/30">
-              <TabsTrigger value="broker" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,50%,92%)] data-[state=active]:to-[hsl(36,35%,82%)] data-[state=active]:text-foreground data-[state=active]:border data-[state=active]:border-gold/40">
+            <TabsList className="grid grid-cols-3 w-full max-w-md bg-gradient-to-r from-[hsl(40,50%,92%)] to-[hsl(36,35%,85%)] border-2 border-[#B89555]/30">
+              <TabsTrigger value="broker" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,50%,92%)] data-[state=active]:to-[hsl(36,35%,82%)] data-[state=active]:text-foreground data-[state=active]:border data-[state=active]:border-[#B89555]/40">
                 <Building2 className="h-4 w-4" />
                 Brokers
               </TabsTrigger>
-              <TabsTrigger value="investor" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,50%,92%)] data-[state=active]:to-[hsl(36,35%,82%)] data-[state=active]:text-foreground data-[state=active]:border data-[state=active]:border-gold/40">
+              <TabsTrigger value="investor" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,50%,92%)] data-[state=active]:to-[hsl(36,35%,82%)] data-[state=active]:text-foreground data-[state=active]:border data-[state=active]:border-[#B89555]/40">
                 <TrendingUp className="h-4 w-4" />
                 Investors
               </TabsTrigger>
-              <TabsTrigger value="employee" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,50%,92%)] data-[state=active]:to-[hsl(36,35%,82%)] data-[state=active]:text-foreground data-[state=active]:border data-[state=active]:border-gold/40">
+              <TabsTrigger value="employee" className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,50%,92%)] data-[state=active]:to-[hsl(36,35%,82%)] data-[state=active]:text-foreground data-[state=active]:border data-[state=active]:border-[#B89555]/40">
                 <Briefcase className="h-4 w-4" />
                 Employees
               </TabsTrigger>
@@ -68,7 +68,7 @@ export function HuntingDashboard() {
 
           {/* Stats Cards */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <Card className="border-2 border-gold/20">
+            <Card className="border-2 border-[#B89555]/20">
               <CardContent className="pt-4">
                 <div className="flex items-center justify-between">
                   <div>
@@ -82,7 +82,7 @@ export function HuntingDashboard() {
               </CardContent>
             </Card>
 
-            <Card className="border-2 border-gold/20">
+            <Card className="border-2 border-[#B89555]/20">
               <CardContent className="pt-4">
                 <div className="flex items-center justify-between">
                   <div>
@@ -94,7 +94,7 @@ export function HuntingDashboard() {
               </CardContent>
             </Card>
 
-            <Card className="border-2 border-gold/20">
+            <Card className="border-2 border-[#B89555]/20">
               <CardContent className="pt-4">
                 <div className="flex items-center justify-between">
                   <div>
@@ -106,14 +106,14 @@ export function HuntingDashboard() {
               </CardContent>
             </Card>
 
-            <Card className="border-2 border-gold/20">
+            <Card className="border-2 border-[#B89555]/20">
               <CardContent className="pt-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-muted-foreground">Conversions</p>
                     <p className="text-2xl font-bold text-foreground">{stats.totalConversions}</p>
                   </div>
-                  <Badge variant="outline" className="border-gold/30">{stats.conversionRate}%</Badge>
+                  <Badge variant="outline" className="border-[#B89555]/30">{stats.conversionRate}%</Badge>
                 </div>
               </CardContent>
             </Card>
@@ -138,14 +138,14 @@ export function HuntingDashboard() {
 function HuntingContent({ targetType }: { targetType: HuntTargetType }) {
   const [view, setView] = useState<'campaigns' | 'prospects' | 'outreach'>('campaigns');
 
-  const btnBase = "border-2 border-gold/20 font-medium";
-  const btnActive = "bg-gradient-to-r from-[hsl(40,50%,92%)] to-[hsl(36,35%,82%)] text-foreground border-gold/40";
+  const btnBase = "border-2 border-[#B89555]/20 font-medium";
+  const btnActive = "bg-gradient-to-r from-[hsl(40,50%,92%)] to-[hsl(36,35%,82%)] text-foreground border-[#B89555]/40";
   const btnInactive = "bg-[#FDFBF7]/60 text-muted-foreground hover:bg-[#FDFBF7]/80";
 
   return (
     <div className="space-y-4">
       {/* Sub-navigation */}
-      <div className="flex items-center gap-2 border-b border-gold/20 pb-3">
+      <div className="flex items-center gap-2 border-b border-[#B89555]/20 pb-3">
         <Button 
           variant="outline"
           size="sm"

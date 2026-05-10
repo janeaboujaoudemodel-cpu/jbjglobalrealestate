@@ -290,13 +290,13 @@ export const DeveloperApprovalQueue = () => {
   };
 
   return (
-    <Card className="bg-zinc-900 border-gold/30">
-      <CardHeader className="border-b border-gold/20">
+    <Card className="bg-[#FDFBF7] border-[#B89555]/30">
+      <CardHeader className="border-b border-[#B89555]/20">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-3">
-            <Building2 className="w-5 h-5 text-gold" />
+            <Building2 className="w-5 h-5 text-[#1A1A1A]" />
             <CardTitle className="text-white">Developer Approval Queue</CardTitle>
-            <Badge variant="outline" className="border-gold/50 text-gold">
+            <Badge variant="outline" className="border-[#B89555]/50 text-[#1A1A1A]">
               {pendingDevelopers.length} Pending
             </Badge>
           </div>
@@ -306,7 +306,7 @@ export const DeveloperApprovalQueue = () => {
               size="sm"
               onClick={fetchPendingDevelopers}
               disabled={isLoading}
-              className="border-gold/50 text-gold hover:bg-gold/10"
+              className="border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
             >
               <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
               Refresh
@@ -315,7 +315,7 @@ export const DeveloperApprovalQueue = () => {
               size="sm"
               onClick={triggerExtraction}
               disabled={isExtracting}
-              className="bg-gold text-[#1A1A1A] hover:bg-gold/90"
+              className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
             >
               {isExtracting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Download className="w-4 h-4 mr-2" />}
               Extract from Source
@@ -325,7 +325,7 @@ export const DeveloperApprovalQueue = () => {
 
         {/* Bulk Actions Row */}
         {pendingDevelopers.length > 0 && (
-          <div className="flex items-center gap-2 mt-4 pt-4 border-t border-gold/10">
+          <div className="flex items-center gap-2 mt-4 pt-4 border-t border-[#B89555]/10">
             <Button size="sm" onClick={approveAll} className="bg-emerald-600 hover:bg-emerald-700 text-white">
               <Check className="w-4 h-4 mr-2" />
               Approve All ({pendingDevelopers.length})
@@ -346,7 +346,7 @@ export const DeveloperApprovalQueue = () => {
       <CardContent className="p-6">
         {isLoading ? (
           <div className="flex items-center justify-center py-12">
-            <Loader2 className="w-8 h-8 animate-spin text-gold" />
+            <Loader2 className="w-8 h-8 animate-spin text-[#1A1A1A]" />
           </div>
         ) : pendingDevelopers.length === 0 ? (
           <div className="text-center py-12 text-[#1A1A1A]/70">

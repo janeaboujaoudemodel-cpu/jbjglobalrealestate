@@ -120,7 +120,7 @@ export function AIStudyTutor({ moduleId, moduleName }: AIStudyTutorProps) {
         initial={{ opacity: 0, y: 20, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 20, scale: 0.95 }}
-        className={`fixed z-50 bg-zinc-900 border border-purple-500/30 rounded-2xl shadow-2xl shadow-purple-500/20 flex flex-col overflow-hidden ${
+        className={`fixed z-50 bg-[#FDFBF7] border border-purple-500/30 rounded-2xl shadow-2xl shadow-purple-500/20 flex flex-col overflow-hidden ${
           isMaximized 
             ? 'inset-4' 
             : 'bottom-6 right-6 w-[380px] h-[520px]'
@@ -169,20 +169,20 @@ export function AIStudyTutor({ moduleId, moduleName }: AIStudyTutorProps) {
               >
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                   message.role === 'user' 
-                    ? 'bg-gold text-[#1A1A1A]' 
-                    : 'bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border border-gold/20'
+                    ? 'bg-[#EFE6D6] text-[#1A1A1A]' 
+                    : 'bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border border-[#B89555]/20'
                 }`}>
                   {message.role === 'user' ? (
                     <User className="w-4 h-4" />
                   ) : (
-                    <Bot className="w-4 h-4 text-gold" />
+                    <Bot className="w-4 h-4 text-[#1A1A1A]" />
                   )}
                 </div>
                 <div className="flex flex-col max-w-[80%]">
                   <div className={`rounded-2xl px-4 py-2.5 select-text cursor-text ${
                     message.role === 'user'
-                      ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-gold/30 shadow-md rounded-br-md'
-                      : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-gold/20 shadow-sm rounded-bl-md'
+                      ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/30 shadow-md rounded-br-md'
+                      : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/20 shadow-sm rounded-bl-md'
                   }`}>
                     <p className="text-sm whitespace-pre-wrap select-text">{message.content}</p>
                   </div>
@@ -192,7 +192,7 @@ export function AIStudyTutor({ moduleId, moduleName }: AIStudyTutorProps) {
                       await navigator.clipboard.writeText(message.content);
                       toast.success(t('chat.messageCopied') || 'Message copied');
                     }}
-                    className={`flex items-center gap-1 mt-1 text-[10px] text-[#1A1A1A]/70 hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
+                    className={`flex items-center gap-1 mt-1 text-[10px] text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors opacity-0 group-hover:opacity-100 ${
                       message.role === 'user' ? 'self-end mr-1' : 'self-start ml-1'
                     }`}
                   >
@@ -202,7 +202,7 @@ export function AIStudyTutor({ moduleId, moduleName }: AIStudyTutorProps) {
                   {message.relatedModules && message.relatedModules.length > 0 && (
                     <div className="mt-2 flex flex-wrap gap-1">
                       {message.relatedModules.map((mod, i) => (
-                        <span key={i} className="text-xs bg-gold/20 text-gold px-2 py-0.5 rounded-full flex items-center gap-1">
+                        <span key={i} className="text-xs bg-[#EFE6D6]/20 text-[#1A1A1A] px-2 py-0.5 rounded-full flex items-center gap-1">
                           <BookOpen className="w-3 h-3" />
                           {mod}
                         </span>
@@ -214,12 +214,12 @@ export function AIStudyTutor({ moduleId, moduleName }: AIStudyTutorProps) {
             ))}
             {isLoading && (
               <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border border-gold/20 flex items-center justify-center">
-                  <Bot className="w-4 h-4 text-gold" />
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border border-[#B89555]/20 flex items-center justify-center">
+                  <Bot className="w-4 h-4 text-[#1A1A1A]" />
                 </div>
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/20 rounded-2xl rounded-bl-md px-4 py-3">
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/20 rounded-2xl rounded-bl-md px-4 py-3">
                   <div className="flex items-center gap-2">
-                    <Loader2 className="w-4 h-4 animate-spin text-gold" />
+                    <Loader2 className="w-4 h-4 animate-spin text-[#1A1A1A]" />
                     <span className="text-[#1A1A1A]/60 text-sm">Thinking...</span>
                   </div>
                 </div>
@@ -237,7 +237,7 @@ export function AIStudyTutor({ moduleId, moduleName }: AIStudyTutorProps) {
                 <button
                   key={i}
                   onClick={() => setInput(q)}
-                  className="text-xs bg-zinc-800 hover:bg-[#1A1A1A] text-white/85 px-2.5 py-1 rounded-full transition-colors"
+                  className="text-xs bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white/85 px-2.5 py-1 rounded-full transition-colors"
                 >
                   {q}
                 </button>
@@ -247,14 +247,14 @@ export function AIStudyTutor({ moduleId, moduleName }: AIStudyTutorProps) {
         )}
 
         {/* Input */}
-        <div className="p-4 border-t border-[#1A1A1A] bg-zinc-900/50">
+        <div className="p-4 border-t border-[#1A1A1A] bg-[#FDFBF7]/50">
           <div className="flex gap-2">
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Ask about the training..."
-              className="flex-1 bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 focus:border-purple-500"
+              className="flex-1 bg-[#1A1A1A] border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 focus:border-purple-500"
               disabled={isLoading}
             />
             <Button

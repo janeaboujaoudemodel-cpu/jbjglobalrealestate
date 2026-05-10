@@ -31,9 +31,9 @@ const AuditorFeedbackInbox = ({ onClose }: { onClose?: () => void }) => {
   if (!isOwner || !feedback?.length) return null;
 
   return (
-    <div className="mt-3 pt-3 border-t border-gold/20">
+    <div className="mt-3 pt-3 border-t border-[#B89555]/20">
       <div className="flex items-center justify-between mb-2 px-2">
-        <p className="text-[10px] uppercase tracking-[0.2em] text-gold font-bold flex items-center gap-1">
+        <p className="text-[10px] uppercase tracking-[0.2em] text-[#1A1A1A] font-bold flex items-center gap-1">
           <Eye className="w-3 h-3" />
           Auditor Reports
         </p>
@@ -45,9 +45,9 @@ const AuditorFeedbackInbox = ({ onClose }: { onClose?: () => void }) => {
             key={f.id}
             to="/owner/external-access"
             onClick={onClose}
-            className="flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-gold/10 transition-colors"
+            className="flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-[#EFE6D6]/10 transition-colors"
           >
-            <MessageSquare className="w-3.5 h-3.5 text-gold flex-shrink-0" />
+            <MessageSquare className="w-3.5 h-3.5 text-[#1A1A1A] flex-shrink-0" />
             <span className="text-xs text-[#1A1A1A] truncate flex-1">
               {f.note_text?.substring(0, 40) || f.prompt_text?.substring(0, 40) || "New feedback"}
             </span>
@@ -60,7 +60,7 @@ const AuditorFeedbackInbox = ({ onClose }: { onClose?: () => void }) => {
       <Link
         to="/owner/external-access"
         onClick={onClose}
-        className="block text-center text-xs text-gold font-semibold mt-2 hover:underline"
+        className="block text-center text-xs text-[#1A1A1A] font-semibold mt-2 hover:underline"
       >
         View all feedback →
       </Link>

@@ -285,13 +285,13 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
       <div className="p-3 border-b border-slate-800">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-amber-400" />
+            <Sparkles className="h-4 w-4 text-[#1A1A1A]" />
             <h3 className="text-sm font-medium text-white">Beauty Filters</h3>
           </div>
           <div className="flex items-center gap-1.5">
             {isFilterActive && (
               <>
-                <span className="flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30 animate-pulse">
+                <span className="flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-[#1A1A1A] border border-amber-500/30 animate-pulse">
                   <Zap className="w-2.5 h-2.5" />
                   LIVE
                 </span>
@@ -408,10 +408,10 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
             <div key={key}>
               <div className="flex items-center justify-between mb-1">
                 <label className="text-xs text-slate-400 flex items-center gap-1">
-                  <Icon className="h-3 w-3 text-amber-400" />
+                  <Icon className="h-3 w-3 text-[#1A1A1A]" />
                   {label}
                 </label>
-                <span className="text-xs text-amber-400 font-mono">
+                <span className="text-xs text-[#1A1A1A] font-mono">
                   {adjustments[key as keyof BeautyAdjustments]}
                 </span>
               </div>
@@ -432,7 +432,7 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
           <div className="rounded-lg border border-slate-700 overflow-hidden">
             <div className="px-3 py-2 bg-slate-800/80 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Film className="w-3.5 h-3.5 text-amber-400" />
+                <Film className="w-3.5 h-3.5 text-[#1A1A1A]" />
                 <span className="text-xs font-semibold text-slate-200">Bake into Export</span>
               </div>
               {exportFilterActive && (

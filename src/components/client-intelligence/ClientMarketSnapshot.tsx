@@ -75,7 +75,7 @@ const ClientMarketSnapshot = ({
       case "quiet":
       case "balanced":
         return (
-          <Badge variant="outline" className="border-amber-500/50 text-amber-400 bg-amber-500/10 text-xs">
+          <Badge variant="outline" className="border-amber-500/50 text-[#1A1A1A] bg-amber-500/10 text-xs">
             Balanced
           </Badge>
         );
@@ -226,7 +226,7 @@ const ClientMarketSnapshot = ({
         <p className="text-[10px] text-[#1A1A1A]/80 border-t border-border/30 pt-3">
           Insights are based on aggregated official data and are provided for informational purposes only.
           This does not constitute financial, investment, or legal advice.{" "}
-          <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
+          <Link to="/contact" className="text-[#1A1A1A] hover:underline">Contact our team</Link> for professional guidance.
         </p>
       </CardContent>
     </Card>

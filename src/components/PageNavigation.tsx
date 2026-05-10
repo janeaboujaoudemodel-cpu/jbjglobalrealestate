@@ -75,9 +75,9 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
   const buttonBaseClass = cn(
     "h-10 w-10 sm:h-12 sm:w-12 rounded-full",
     "bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark",
-    "border-2 border-gold/70",
+    "border-2 border-[#B89555]/70",
     "shadow-lg transition-all duration-300",
-    "hover:border-gold hover:shadow-[0_6px_26px_hsl(var(--gold)_/_0.45)]",
+    "hover:border-[#B89555] hover:shadow-[0_6px_26px_hsl(var(--gold)_/_0.45)]",
     "focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2",
     "flex items-center justify-center",
     "pointer-events-auto select-none touch-manipulation cursor-pointer"

@@ -137,7 +137,7 @@ const FoundersDraftsPanel: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="w-8 h-8 animate-spin text-gold" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#1A1A1A]" />
       </div>
     );
   }
@@ -145,10 +145,10 @@ const FoundersDraftsPanel: React.FC = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[500px]">
       {/* Drafts List - White Pearl Theme */}
-      <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)] lg:col-span-1">
+      <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)] lg:col-span-1">
         <CardHeader className="pb-3">
           <CardTitle className="text-[#1A1A1A] text-lg flex items-center gap-2">
-            <FileEdit className="w-5 h-5 text-gold" />
+            <FileEdit className="w-5 h-5 text-[#1A1A1A]" />
             Work in Progress
           </CardTitle>
         </CardHeader>
@@ -169,8 +169,8 @@ const FoundersDraftsPanel: React.FC = () => {
                     animate={{ opacity: 1, x: 0 }}
                     className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${
                       selectedDraft?.id === draft.id 
-                        ? 'bg-gold/10 border-gold/40' 
-                        : 'bg-[#FDFBF7] border-gold/20 hover:border-gold/40 hover:shadow-[0_4px_15px_rgba(200,167,102,0.1)]'
+                        ? 'bg-[#EFE6D6]/10 border-[#B89555]/40' 
+                        : 'bg-[#FDFBF7] border-[#B89555]/20 hover:border-[#B89555]/40 hover:shadow-[0_4px_15px_rgba(200,167,102,0.1)]'
                     }`}
                     onClick={() => handleSelectDraft(draft)}
                   >
@@ -188,7 +188,7 @@ const FoundersDraftsPanel: React.FC = () => {
                         className={`text-xs border ${
                           draft.status === 'sent' 
                             ? 'border-green-200 text-green-600 bg-green-50' 
-                            : 'border-gold/30 text-[#1A1A1A]/70 bg-[#F7F2EA]'
+                            : 'border-[#B89555]/30 text-[#1A1A1A]/70 bg-[#F7F2EA]'
                         }`}
                       >
                         {draft.status === 'sent' ? 'Sent' : 'Draft'}
@@ -211,11 +211,11 @@ const FoundersDraftsPanel: React.FC = () => {
       </Card>
 
       {/* Draft Editor - White Pearl Theme */}
-      <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)] lg:col-span-2">
+      <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)] lg:col-span-2">
         <CardHeader className="pb-3">
           <CardTitle className="text-[#1A1A1A] text-lg flex items-center justify-between">
             <span className="flex items-center gap-2">
-              <Edit className="w-5 h-5 text-gold" />
+              <Edit className="w-5 h-5 text-[#1A1A1A]" />
               {selectedDraft ? 'Edit Draft' : 'Select a Draft'}
             </span>
             {selectedDraft && (
@@ -254,7 +254,7 @@ const FoundersDraftsPanel: React.FC = () => {
               {selectedDraft.subject && (
                 <div>
                   <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Subject</label>
-                  <p className="text-[#1A1A1A] bg-[#F7F2EA] p-3 rounded-lg border-2 border-gold/20">
+                  <p className="text-[#1A1A1A] bg-[#F7F2EA] p-3 rounded-lg border-2 border-[#B89555]/20">
                     {selectedDraft.subject}
                   </p>
                 </div>
@@ -264,7 +264,7 @@ const FoundersDraftsPanel: React.FC = () => {
                 <Textarea
                   value={editedContent}
                   onChange={(e) => setEditedContent(e.target.value)}
-                  className="min-h-[300px] bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] resize-none placeholder:text-[#1A1A1A]/70"
+                  className="min-h-[300px] bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A] resize-none placeholder:text-[#1A1A1A]/70"
                   placeholder="Draft content..."
                 />
               </div>

@@ -39,26 +39,26 @@ export default function PortfolioGroupingControls({
   return (
     <section className="space-y-4">
       <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
-        <Layers className="w-5 h-5 text-gold" />
+        <Layers className="w-5 h-5 text-[#1A1A1A]" />
         Portfolio Grouping
       </h2>
       
       {/* Primary Grouping Tabs */}
       <Tabs value={activeGrouping} onValueChange={(v) => onGroupingChange(v as GroupingType)}>
         <TabsList className="bg-muted/50 h-auto p-1 flex-wrap">
-          <TabsTrigger value="objective" className="gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40">
+          <TabsTrigger value="objective" className="gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40">
             <Target className="w-4 h-4" />
             By Objective
           </TabsTrigger>
-          <TabsTrigger value="asset-type" className="gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40">
+          <TabsTrigger value="asset-type" className="gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40">
             <Layers className="w-4 h-4" />
             By Asset Type
           </TabsTrigger>
-          <TabsTrigger value="location" className="gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40">
+          <TabsTrigger value="location" className="gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40">
             <MapPin className="w-4 h-4" />
             By Location
           </TabsTrigger>
-          <TabsTrigger value="status" className="gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40">
+          <TabsTrigger value="status" className="gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40">
             <CheckSquare className="w-4 h-4" />
             By Status
           </TabsTrigger>
@@ -69,7 +69,7 @@ export default function PortfolioGroupingControls({
       <div className="flex flex-wrap gap-3">
         {activeGrouping === "objective" && (
           <Select value={objectiveFilter} onValueChange={(v) => onObjectiveChange(v as ObjectiveFilter)}>
-            <SelectTrigger className="w-[180px] border-gold/30">
+            <SelectTrigger className="w-[180px] border-[#B89555]/30">
               <SelectValue placeholder="Filter by objective" />
             </SelectTrigger>
             <SelectContent>
@@ -84,7 +84,7 @@ export default function PortfolioGroupingControls({
 
         {activeGrouping === "asset-type" && (
           <Select value={assetTypeFilter} onValueChange={(v) => onAssetTypeChange(v as AssetTypeFilter)}>
-            <SelectTrigger className="w-[180px] border-gold/30">
+            <SelectTrigger className="w-[180px] border-[#B89555]/30">
               <SelectValue placeholder="Filter by type" />
             </SelectTrigger>
             <SelectContent>
@@ -99,7 +99,7 @@ export default function PortfolioGroupingControls({
 
         {activeGrouping === "location" && (
           <Select value={locationFilter} onValueChange={onLocationChange}>
-            <SelectTrigger className="w-[180px] border-gold/30">
+            <SelectTrigger className="w-[180px] border-[#B89555]/30">
               <SelectValue placeholder="Filter by location" />
             </SelectTrigger>
             <SelectContent>
@@ -113,7 +113,7 @@ export default function PortfolioGroupingControls({
 
         {activeGrouping === "status" && (
           <Select value={statusFilter} onValueChange={(v) => onStatusChange(v as StatusFilter)}>
-            <SelectTrigger className="w-[180px] border-gold/30">
+            <SelectTrigger className="w-[180px] border-[#B89555]/30">
               <SelectValue placeholder="Filter by status" />
             </SelectTrigger>
             <SelectContent>

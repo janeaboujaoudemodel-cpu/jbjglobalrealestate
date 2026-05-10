@@ -153,7 +153,7 @@ export function MessageFiltersPanel() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-8 w-8 animate-spin text-gold" />
+        <Loader2 className="h-8 w-8 animate-spin text-[#1A1A1A]" />
       </div>
     );
   }
@@ -177,7 +177,7 @@ export function MessageFiltersPanel() {
               Add Filter
             </Button>
           </DialogTrigger>
-          <DialogContent className="bg-[#FDFBF7] border-2 border-gold/30 max-w-md">
+          <DialogContent className="bg-[#FDFBF7] border-2 border-[#B89555]/30 max-w-md">
             <DialogHeader>
               <DialogTitle className="text-[#1A1A1A]">
                 {editingFilter ? "Edit Filter" : "Create Message Filter"}
@@ -197,16 +197,16 @@ export function MessageFiltersPanel() {
 
       {/* Stats Summary */}
       <div className="grid grid-cols-4 gap-4">
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Shield className="h-5 w-5 text-gold" />
+              <Shield className="h-5 w-5 text-[#1A1A1A]" />
               <span className="text-[#1A1A1A]/60">Total Filters</span>
             </div>
             <p className="text-[#1A1A1A] text-2xl font-bold mt-2">{filters.length}</p>
           </CardContent>
         </Card>
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
               <AlertTriangle className="h-5 w-5 text-red-500" />
@@ -217,7 +217,7 @@ export function MessageFiltersPanel() {
             </p>
           </CardContent>
         </Card>
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
               <Shield className="h-5 w-5 text-emerald-500" />
@@ -228,7 +228,7 @@ export function MessageFiltersPanel() {
             </p>
           </CardContent>
         </Card>
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
               <Shield className="h-5 w-5 text-purple-500" />
@@ -246,7 +246,7 @@ export function MessageFiltersPanel() {
         {filters.map((filter) => (
           <Card
             key={filter.id}
-            className={`bg-[#FDFBF7] border-2 border-gold/30 ${
+            className={`bg-[#FDFBF7] border-2 border-[#B89555]/30 ${
               !filter.is_active ? "opacity-60" : ""
             }`}
           >
@@ -254,12 +254,12 @@ export function MessageFiltersPanel() {
               <div className="flex items-center gap-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-3">
-                    <code className="text-[#1A1A1A] bg-gold/10 border border-gold/20 px-2 py-1 rounded text-sm font-mono">
+                    <code className="text-[#1A1A1A] bg-[#EFE6D6]/10 border border-[#B89555]/20 px-2 py-1 rounded text-sm font-mono">
                       {filter.filter_value}
                     </code>
                     <Badge
                       variant="outline"
-                      className="border-gold/30 text-[#1A1A1A]/60"
+                      className="border-[#B89555]/30 text-[#1A1A1A]/60"
                     >
                       {FILTER_TYPES.find((t) => t.value === filter.filter_type)
                         ?.label || filter.filter_type}
@@ -315,7 +315,7 @@ export function MessageFiltersPanel() {
         ))}
 
         {filters.length === 0 && (
-          <Card className="bg-[#FDFBF7] border-2 border-gold/30 border-dashed">
+          <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 border-dashed">
             <CardContent className="flex flex-col items-center justify-center py-12">
               <Shield className="h-12 w-12 text-[#1A1A1A]/70 mb-4" />
               <p className="text-[#1A1A1A]/60 text-center">
@@ -355,12 +355,12 @@ function FilterForm({ filter, onSave, onCancel }: FilterFormProps) {
             setFormData({ ...formData, filter_type: value })
           }
         >
-          <SelectTrigger className="mt-1 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A]">
+          <SelectTrigger className="mt-1 bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A]">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent className="bg-[#FDFBF7] border-2 border-gold/30 z-50">
+          <SelectContent className="bg-[#FDFBF7] border-2 border-[#B89555]/30 z-50">
             {FILTER_TYPES.map((type) => (
-              <SelectItem key={type.value} value={type.value} className="text-[#1A1A1A] hover:bg-gold/10">
+              <SelectItem key={type.value} value={type.value} className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                 {type.label}
               </SelectItem>
             ))}
@@ -375,7 +375,7 @@ function FilterForm({ filter, onSave, onCancel }: FilterFormProps) {
           onChange={(e) =>
             setFormData({ ...formData, filter_value: e.target.value })
           }
-          className="bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] mt-1 font-mono"
+          className="bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A] mt-1 font-mono"
           placeholder={
             formData.filter_type === "regex"
               ? "\\b(word1|word2)\\b"
@@ -391,7 +391,7 @@ function FilterForm({ filter, onSave, onCancel }: FilterFormProps) {
           onChange={(e) =>
             setFormData({ ...formData, replacement_text: e.target.value })
           }
-          className="bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] mt-1"
+          className="bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A] mt-1"
           placeholder="Leave empty to block message entirely"
         />
         <p className="text-[#1A1A1A]/50 text-xs mt-1">
@@ -408,12 +408,12 @@ function FilterForm({ filter, onSave, onCancel }: FilterFormProps) {
             setFormData({ ...formData, severity: value })
           }
         >
-          <SelectTrigger className="mt-1 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A]">
+          <SelectTrigger className="mt-1 bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A]">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent className="bg-[#FDFBF7] border-2 border-gold/30 z-50">
+          <SelectContent className="bg-[#FDFBF7] border-2 border-[#B89555]/30 z-50">
             {SEVERITIES.map((sev) => (
-              <SelectItem key={sev.value} value={sev.value} className="text-[#1A1A1A] hover:bg-gold/10">
+              <SelectItem key={sev.value} value={sev.value} className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                 {sev.label}
               </SelectItem>
             ))}
@@ -421,11 +421,11 @@ function FilterForm({ filter, onSave, onCancel }: FilterFormProps) {
         </Select>
       </div>
 
-      <div className="flex justify-end gap-3 pt-4 border-t border-gold/20">
+      <div className="flex justify-end gap-3 pt-4 border-t border-[#B89555]/20">
         <Button
           variant="outline"
           onClick={onCancel}
-          className="border-gold/30 text-[#1A1A1A] hover:bg-gold/10"
+          className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
         >
           Cancel
         </Button>

@@ -67,15 +67,15 @@ function MapViewToggle({
 }) {
   return (
     <div className="absolute top-4 left-4 z-[1000] flex flex-col gap-2">
-      <div className="bg-card/95 backdrop-blur-sm rounded-lg border border-gold/40 shadow-lg p-1 flex flex-col gap-1">
+      <div className="bg-card/95 backdrop-blur-sm rounded-lg border border-[#B89555]/40 shadow-lg p-1 flex flex-col gap-1">
         {(["satellite", "street", "terrain"] as MapViewType[]).map((view) => (
           <button
             key={view}
             onClick={() => onViewChange(view)}
             className={`px-3 py-2 text-xs font-medium rounded transition-all ${
               mapView === view
-                ? "bg-gold text-foreground"
-                : "hover:bg-gold/20 text-muted-foreground"
+                ? "bg-[#EFE6D6] text-foreground"
+                : "hover:bg-[#EFE6D6]/20 text-muted-foreground"
             }`}
           >
             {t(`map.${view}`)}
@@ -86,7 +86,7 @@ function MapViewToggle({
         href={externalUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="w-11 h-11 flex items-center justify-center rounded-lg bg-card/95 backdrop-blur-sm border border-gold/40 shadow-lg hover:bg-gold/20 active:bg-gold/30 transition-all"
+        className="w-11 h-11 flex items-center justify-center rounded-lg bg-card/95 backdrop-blur-sm border border-[#B89555]/40 shadow-lg hover:bg-[#EFE6D6]/20 active:bg-[#EFE6D6]/30 transition-all"
         aria-label={t('map.openInGoogleMaps')}
       >
         <Maximize className="w-5 h-5 text-foreground" />
@@ -144,20 +144,20 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
     <section className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       <div className="mx-1 sm:mx-2 md:mx-3 lg:mx-4">
         <div className="flex items-center gap-3 mb-8">
-          <MapIcon className="w-6 h-6 text-gold" />
+          <MapIcon className="w-6 h-6 text-[#1A1A1A]" />
           <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
             {t('map.mapOf')} {areaName}
           </h2>
         </div>
 
-        <div className="rounded-xl overflow-hidden border border-gold/30 shadow-2xl relative" style={{ height: 500, touchAction: "none" }}>
+        <div className="rounded-xl overflow-hidden border border-[#B89555]/30 shadow-2xl relative" style={{ height: 500, touchAction: "none" }}>
           {/* Click to enable overlay */}
           {!mapInteractive && (
             <div
               className="absolute inset-0 z-[500] flex items-center justify-center cursor-pointer bg-[#1A1A1A]/5"
               onClick={() => setMapInteractive(true)}
             >
-              <div className="bg-[#FDFBF7]/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-gold/30 text-sm font-medium text-[#1A1A1A]/70">
+              <div className="bg-[#FDFBF7]/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-[#B89555]/30 text-sm font-medium text-[#1A1A1A]/70">
                 {t('map.clickToEnable')}
               </div>
             </div>

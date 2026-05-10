@@ -14,7 +14,7 @@ export function LinkedInInsightsPanel() {
 
       {/* Stats - Premium Theme */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-gold/30 shadow-lg">
+        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-[#B89555]/30 shadow-lg">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -27,7 +27,7 @@ export function LinkedInInsightsPanel() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-gold/30 shadow-lg">
+        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-[#B89555]/30 shadow-lg">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -40,7 +40,7 @@ export function LinkedInInsightsPanel() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-gold/30 shadow-lg">
+        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-[#B89555]/30 shadow-lg">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -53,7 +53,7 @@ export function LinkedInInsightsPanel() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-gold/30 shadow-lg">
+        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-[#B89555]/30 shadow-lg">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -69,7 +69,7 @@ export function LinkedInInsightsPanel() {
       </div>
 
       {/* Main Content - Premium Theme */}
-      <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6] border-2 border-gold/30 shadow-lg">
+      <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6] border-2 border-[#B89555]/30 shadow-lg">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-[#1A1A1A]">
             <Linkedin className="h-5 w-5 text-[#0A66C2]" />

@@ -22,10 +22,10 @@ export default function GlobalBackButton({ className = "" }: { className?: strin
       <TooltipTrigger asChild>
         <button
           onClick={handleBack}
-          className={`h-8 flex items-center gap-1.5 rounded-lg border border-gold/30 hover:border-gold/50 bg-gold/5 hover:bg-gold/15 transition-all px-2.5 group whitespace-nowrap shrink-0 ${className}`}
+          className={`h-8 flex items-center gap-1.5 rounded-lg border border-[#B89555]/30 hover:border-[#B89555]/50 bg-[#EFE6D6]/5 hover:bg-[#EFE6D6]/15 transition-all px-2.5 group whitespace-nowrap shrink-0 ${className}`}
           aria-label="Go back"
         >
-          <ArrowLeft className="w-4 h-4 text-gold group-hover:scale-110 transition-transform shrink-0" />
+          <ArrowLeft className="w-4 h-4 text-[#1A1A1A] group-hover:scale-110 transition-transform shrink-0" />
           <span className="text-[11px] font-semibold text-[#1A1A1A]/55 uppercase tracking-wide hidden lg:inline whitespace-nowrap">
             Back
           </span>

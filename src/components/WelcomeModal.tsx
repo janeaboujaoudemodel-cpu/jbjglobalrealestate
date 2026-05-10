@@ -73,7 +73,7 @@ const WelcomeModal = () => {
         }}
       >
         <DialogContent 
-          className="bg-[#1A1A1A]/95 backdrop-blur-xl border border-gold/30 text-white max-w-md p-0 overflow-hidden shadow-2xl rounded-2xl max-h-[90vh] sm:max-h-[85vh] overflow-y-auto overscroll-contain"
+          className="bg-[#1A1A1A]/95 backdrop-blur-xl border border-[#B89555]/30 text-white max-w-md p-0 overflow-hidden shadow-2xl rounded-2xl max-h-[90vh] sm:max-h-[85vh] overflow-y-auto overscroll-contain"
           dir={isRTL ? 'rtl' : 'ltr'}
           aria-describedby={undefined}
         >
@@ -96,10 +96,10 @@ const WelcomeModal = () => {
           />
 
           {/* Corner accents - gold */}
-          <div className="absolute top-6 left-6 w-10 h-10 border-l-2 border-t-2 border-gold/50" />
-          <div className="absolute top-6 right-6 w-10 h-10 border-r-2 border-t-2 border-gold/50" />
-          <div className="absolute bottom-6 left-6 w-10 h-10 border-l-2 border-b-2 border-gold/40" />
-          <div className="absolute bottom-6 right-6 w-10 h-10 border-r-2 border-b-2 border-gold/40" />
+          <div className="absolute top-6 left-6 w-10 h-10 border-l-2 border-t-2 border-[#B89555]/50" />
+          <div className="absolute top-6 right-6 w-10 h-10 border-r-2 border-t-2 border-[#B89555]/50" />
+          <div className="absolute bottom-6 left-6 w-10 h-10 border-l-2 border-b-2 border-[#B89555]/40" />
+          <div className="absolute bottom-6 right-6 w-10 h-10 border-r-2 border-b-2 border-[#B89555]/40" />
 
           <div className="relative px-6 sm:px-10 py-8 sm:py-14">
             {/* Transparent Logo - Larger and Centered */}
@@ -114,7 +114,7 @@ const WelcomeModal = () => {
             {/* Full Company Name - Large and Prominent - Full Width */}
             <div className="text-center mb-6">
               <h2 
-                className="text-xl sm:text-2xl md:text-3xl font-bold tracking-[0.12em] text-gold uppercase leading-tight"
+                className="text-xl sm:text-2xl md:text-3xl font-bold tracking-[0.12em] text-[#1A1A1A] uppercase leading-tight"
               >
                 JBJ GLOBAL REAL ESTATE
               </h2>
@@ -138,7 +138,7 @@ const WelcomeModal = () => {
             {/* Refined gold divider */}
             <div className="relative h-px mb-8">
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
-              <div className="absolute left-1/2 -translate-x-1/2 -top-1.5 w-3 h-3 bg-gold/80 rotate-45" />
+              <div className="absolute left-1/2 -translate-x-1/2 -top-1.5 w-3 h-3 bg-[#EFE6D6]/80 rotate-45" />
             </div>
 
             {/* Action Buttons — Sign In + Explore */}
@@ -150,7 +150,7 @@ const WelcomeModal = () => {
                   handleLogin();
                 }}
                 type="button"
-                className="w-full py-6 bg-gold hover:bg-gold/90 text-[#1A1A1A] font-bold text-base shadow-xl rounded-xl group relative overflow-hidden transition-all duration-300"
+                className="w-full py-6 bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-bold text-base shadow-xl rounded-xl group relative overflow-hidden transition-all duration-300"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                 <User className="w-5 h-5 mr-3 relative z-10" strokeWidth={2} />
@@ -166,7 +166,7 @@ const WelcomeModal = () => {
                 }}
                 type="button"
                 variant="outline"
-                className="w-full py-6 bg-transparent border border-gold/30 text-gold hover:bg-gold/10 font-semibold text-base rounded-xl group relative overflow-hidden transition-all duration-300"
+                className="w-full py-6 bg-transparent border border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 font-semibold text-base rounded-xl group relative overflow-hidden transition-all duration-300"
               >
                 <Compass className="w-5 h-5 mr-3 relative z-10" strokeWidth={2} />
                 <span className="flex-1 text-left relative z-10">Explore the Platform</span>

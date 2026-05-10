@@ -371,7 +371,7 @@ const BusinessCardCamera = ({
   const getStatusColor = () => {
     switch (scanStatus) {
       case 'processing':
-        return 'text-gold';
+        return 'text-[#1A1A1A]';
       case 'success':
         return 'text-green-500';
       case 'error':
@@ -390,7 +390,7 @@ const BusinessCardCamera = ({
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className={`flex items-center gap-2 p-3 rounded-lg bg-zinc-900/50 border border-[#1A1A1A] ${getStatusColor()}`}
+            className={`flex items-center gap-2 p-3 rounded-lg bg-[#FDFBF7]/50 border border-[#1A1A1A] ${getStatusColor()}`}
           >
             {getStatusIcon()}
             <span className="text-sm font-medium">{statusMessage}</span>
@@ -405,7 +405,7 @@ const BusinessCardCamera = ({
           animate={{ opacity: 1 }}
           className="space-y-2"
         >
-          <Progress value={progress} className="h-2 bg-zinc-800" />
+          <Progress value={progress} className="h-2 bg-[#1A1A1A]" />
           <p className="text-xs text-center text-muted-foreground">
             {Math.round(progress)}% Complete
           </p>
@@ -413,7 +413,7 @@ const BusinessCardCamera = ({
       )}
 
       {/* Camera Preview - Premium Styling */}
-      <div className="relative aspect-[4/3] rounded-xl overflow-hidden border-2 border-gold/30 bg-zinc-950 shadow-2xl shadow-gold/10">
+      <div className="relative aspect-[4/3] rounded-xl overflow-hidden border-2 border-[#B89555]/30 bg-[#FDFBF7] shadow-2xl shadow-gold/10">
         {!isCameraReady ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 bg-gradient-to-b from-zinc-900 to-black">
             {/* Premium camera icon */}
@@ -424,7 +424,7 @@ const BusinessCardCamera = ({
               <motion.div
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
-                className="absolute inset-0 rounded-full border-2 border-gold/30"
+                className="absolute inset-0 rounded-full border-2 border-[#B89555]/30"
               />
             </div>
             
@@ -441,7 +441,7 @@ const BusinessCardCamera = ({
                 <p className="text-red-400 text-sm max-w-xs">{cameraError}</p>
                 <Button 
                   onClick={startCamera} 
-                  className="gap-2 bg-gold hover:bg-gold-light text-[#1A1A1A] font-bold px-8 py-6 text-lg rounded-xl shadow-lg shadow-gold/30 transition-all hover:scale-105"
+                  className="gap-2 bg-[#EFE6D6] hover:bg-[#EFE6D6]-light text-[#1A1A1A] font-bold px-8 py-6 text-lg rounded-xl shadow-lg shadow-gold/30 transition-all hover:scale-105"
                 >
                   <Camera className="h-5 w-5" />
                   Grant Camera Access
@@ -454,7 +454,7 @@ const BusinessCardCamera = ({
               <div className="text-center space-y-4">
                 <Button 
                   onClick={startCamera} 
-                  className="gap-2 bg-gold hover:bg-gold-light text-[#1A1A1A] font-bold px-8 py-6 text-lg rounded-xl shadow-lg shadow-gold/30 transition-all hover:scale-105"
+                  className="gap-2 bg-[#EFE6D6] hover:bg-[#EFE6D6]-light text-[#1A1A1A] font-bold px-8 py-6 text-lg rounded-xl shadow-lg shadow-gold/30 transition-all hover:scale-105"
                 >
                   <Camera className="h-5 w-5" />
                   Open Camera
@@ -466,10 +466,10 @@ const BusinessCardCamera = ({
             {/* Tips */}
             <div className="flex flex-col items-center gap-2 text-xs text-white/90">
               <div className="flex items-center gap-2">
-                <Lightbulb className="h-4 w-4 text-gold" />
+                <Lightbulb className="h-4 w-4 text-[#1A1A1A]" />
                 <span>Ensure good lighting for best results</span>
               </div>
-              <span className="text-gold">Supports multi-card detection</span>
+              <span className="text-[#1A1A1A]">Supports multi-card detection</span>
             </div>
           </div>
         ) : (
@@ -485,13 +485,13 @@ const BusinessCardCamera = ({
             {/* Premium scanning overlay */}
             <div className="absolute inset-0 pointer-events-none">
               {/* Corner brackets */}
-              <div className="absolute top-4 left-4 w-12 h-12 border-l-2 border-t-2 border-gold rounded-tl-lg" />
-              <div className="absolute top-4 right-4 w-12 h-12 border-r-2 border-t-2 border-gold rounded-tr-lg" />
-              <div className="absolute bottom-4 left-4 w-12 h-12 border-l-2 border-b-2 border-gold rounded-bl-lg" />
-              <div className="absolute bottom-4 right-4 w-12 h-12 border-r-2 border-b-2 border-gold rounded-br-lg" />
+              <div className="absolute top-4 left-4 w-12 h-12 border-l-2 border-t-2 border-[#B89555] rounded-tl-lg" />
+              <div className="absolute top-4 right-4 w-12 h-12 border-r-2 border-t-2 border-[#B89555] rounded-tr-lg" />
+              <div className="absolute bottom-4 left-4 w-12 h-12 border-l-2 border-b-2 border-[#B89555] rounded-bl-lg" />
+              <div className="absolute bottom-4 right-4 w-12 h-12 border-r-2 border-b-2 border-[#B89555] rounded-br-lg" />
               
               {/* Center guide area */}
-              <div className="absolute inset-8 border-2 border-dashed border-gold/40 rounded-xl">
+              <div className="absolute inset-8 border-2 border-dashed border-[#B89555]/40 rounded-xl">
                 <div className="absolute top-3 left-3 right-3">
                   <div className="bg-[#1A1A1A]/60 backdrop-blur-sm rounded-lg px-3 py-2 text-center">
                     <span className="text-white/90 text-xs font-medium">
@@ -536,10 +536,10 @@ const BusinessCardCamera = ({
             variant="outline" 
             size="icon" 
             onClick={switchCamera}
-            className="h-12 w-12 rounded-full border-gold/30 hover:border-gold hover:bg-gold/10 transition-all"
+            className="h-12 w-12 rounded-full border-[#B89555]/30 hover:border-[#B89555] hover:bg-[#EFE6D6]/10 transition-all"
             title="Switch Camera"
           >
-            <SwitchCamera className="h-5 w-5 text-gold" />
+            <SwitchCamera className="h-5 w-5 text-[#1A1A1A]" />
           </Button>
           
           <Button 
@@ -569,12 +569,12 @@ const BusinessCardCamera = ({
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="space-y-4 p-4 bg-zinc-900/50 rounded-xl border border-gold/20"
+          className="space-y-4 p-4 bg-[#FDFBF7]/50 rounded-xl border border-[#B89555]/20"
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center">
-                <CheckCircle className="h-4 w-4 text-gold" />
+              <div className="w-8 h-8 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center">
+                <CheckCircle className="h-4 w-4 text-[#1A1A1A]" />
               </div>
               <span className="text-sm font-bold text-white">
                 {capturedImages.length} card(s) captured
@@ -596,7 +596,7 @@ const BusinessCardCamera = ({
                 key={index}
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="flex-shrink-0 w-28 h-20 rounded-lg overflow-hidden border-2 border-gold/30 shadow-lg shadow-gold/10 relative group"
+                className="flex-shrink-0 w-28 h-20 rounded-lg overflow-hidden border-2 border-[#B89555]/30 shadow-lg shadow-gold/10 relative group"
               >
                 <img src={img} alt={`Card ${index + 1}`} className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-[#1A1A1A]/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -629,16 +629,16 @@ const BusinessCardCamera = ({
       {/* Tips section */}
       {isCameraReady && capturedImages.length === 0 && (
         <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-white/90">
-          <div className="flex items-center gap-1.5 bg-zinc-900/50 px-3 py-1.5 rounded-full">
-            <Lightbulb className="h-3 w-3 text-gold" />
+          <div className="flex items-center gap-1.5 bg-[#FDFBF7]/50 px-3 py-1.5 rounded-full">
+            <Lightbulb className="h-3 w-3 text-[#1A1A1A]" />
             <span>Good lighting</span>
           </div>
-          <div className="flex items-center gap-1.5 bg-zinc-900/50 px-3 py-1.5 rounded-full">
-            <Focus className="h-3 w-3 text-gold" />
+          <div className="flex items-center gap-1.5 bg-[#FDFBF7]/50 px-3 py-1.5 rounded-full">
+            <Focus className="h-3 w-3 text-[#1A1A1A]" />
             <span>Hold steady</span>
           </div>
-          <div className="flex items-center gap-1.5 bg-zinc-900/50 px-3 py-1.5 rounded-full">
-            <Scan className="h-3 w-3 text-gold" />
+          <div className="flex items-center gap-1.5 bg-[#FDFBF7]/50 px-3 py-1.5 rounded-full">
+            <Scan className="h-3 w-3 text-[#1A1A1A]" />
             <span>Fill the frame</span>
           </div>
         </div>

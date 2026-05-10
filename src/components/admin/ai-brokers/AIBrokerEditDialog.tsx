@@ -142,7 +142,7 @@ export function AIBrokerEditDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-zinc-900 border-[#1A1A1A] max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A] max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-white text-xl">
             Edit AI Broker: {broker?.name}
@@ -150,7 +150,7 @@ export function AIBrokerEditDialog({
         </DialogHeader>
 
         <Tabs defaultValue="profile" className="mt-4">
-          <TabsList className="bg-zinc-800 border-[#1A1A1A]">
+          <TabsList className="bg-[#1A1A1A] border-[#1A1A1A]">
             <TabsTrigger value="profile">Profile</TabsTrigger>
             <TabsTrigger value="behavior">Behavior</TabsTrigger>
             <TabsTrigger value="schedule">Schedule</TabsTrigger>
@@ -166,7 +166,7 @@ export function AIBrokerEditDialog({
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
-                  className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
+                  className="bg-[#1A1A1A] border-[#1A1A1A] text-white mt-1"
                 />
               </div>
               <div>
@@ -176,7 +176,7 @@ export function AIBrokerEditDialog({
                   onChange={(e) =>
                     setFormData({ ...formData, email: e.target.value })
                   }
-                  className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
+                  className="bg-[#1A1A1A] border-[#1A1A1A] text-white mt-1"
                 />
               </div>
             </div>
@@ -189,7 +189,7 @@ export function AIBrokerEditDialog({
                   onChange={(e) =>
                     setFormData({ ...formData, phone: e.target.value })
                   }
-                  className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
+                  className="bg-[#1A1A1A] border-[#1A1A1A] text-white mt-1"
                 />
               </div>
               <div>
@@ -199,7 +199,7 @@ export function AIBrokerEditDialog({
                   onChange={(e) =>
                     setFormData({ ...formData, avatar_url: e.target.value })
                   }
-                  className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
+                  className="bg-[#1A1A1A] border-[#1A1A1A] text-white mt-1"
                 />
               </div>
             </div>
@@ -211,7 +211,7 @@ export function AIBrokerEditDialog({
                 onChange={(e) =>
                   setFormData({ ...formData, bio: e.target.value })
                 }
-                className="bg-zinc-800 border-[#1A1A1A] text-white mt-1 min-h-[80px]"
+                className="bg-[#1A1A1A] border-[#1A1A1A] text-white mt-1 min-h-[80px]"
                 placeholder="Professional bio for the AI broker..."
               />
             </div>
@@ -222,7 +222,7 @@ export function AIBrokerEditDialog({
                 {formData.languages?.map((lang) => (
                   <Badge
                     key={lang}
-                    className="bg-zinc-800 text-white flex items-center gap-1"
+                    className="bg-[#1A1A1A] text-white flex items-center gap-1"
                   >
                     {lang}
                     <X
@@ -256,7 +256,7 @@ export function AIBrokerEditDialog({
                 {formData.specialization?.map((spec) => (
                   <Badge
                     key={spec}
-                    className="bg-gold/20 text-gold flex items-center gap-1"
+                    className="bg-[#EFE6D6]/20 text-[#1A1A1A] flex items-center gap-1"
                   >
                     {spec}
                     <X
@@ -297,7 +297,7 @@ export function AIBrokerEditDialog({
                     daily_interaction_limit: parseInt(e.target.value) || 150,
                   })
                 }
-                className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
+                className="bg-[#1A1A1A] border-[#1A1A1A] text-white mt-1"
               />
               <p className="text-[#1A1A1A]/70 text-sm mt-1">
                 Maximum leads this broker can handle per day
@@ -316,7 +316,7 @@ export function AIBrokerEditDialog({
                       response_delay_min_seconds: parseInt(e.target.value) || 3,
                     })
                   }
-                  className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
+                  className="bg-[#1A1A1A] border-[#1A1A1A] text-white mt-1"
                 />
               </div>
               <div>
@@ -330,7 +330,7 @@ export function AIBrokerEditDialog({
                       response_delay_max_seconds: parseInt(e.target.value) || 10,
                     })
                   }
-                  className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
+                  className="bg-[#1A1A1A] border-[#1A1A1A] text-white mt-1"
                 />
               </div>
             </div>
@@ -352,7 +352,7 @@ export function AIBrokerEditDialog({
                       working_hours_start: e.target.value,
                     })
                   }
-                  className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
+                  className="bg-[#1A1A1A] border-[#1A1A1A] text-white mt-1"
                 />
               </div>
               <div>
@@ -366,7 +366,7 @@ export function AIBrokerEditDialog({
                       working_hours_end: e.target.value,
                     })
                   }
-                  className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
+                  className="bg-[#1A1A1A] border-[#1A1A1A] text-white mt-1"
                 />
               </div>
             </div>
@@ -386,7 +386,7 @@ export function AIBrokerEditDialog({
                     onClick={() => toggleWorkingDay(day.value)}
                     className={
                       formData.working_days?.includes(day.value)
-                        ? "bg-gold text-[#1A1A1A] hover:bg-gold/90"
+                        ? "bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
                         : "border-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-[#1A1A1A]"
                     }
                   >
@@ -408,7 +408,7 @@ export function AIBrokerEditDialog({
                     personality_prompt: e.target.value,
                   })
                 }
-                className="bg-zinc-800 border-[#1A1A1A] text-white mt-1 min-h-[200px] font-mono text-sm"
+                className="bg-[#1A1A1A] border-[#1A1A1A] text-white mt-1 min-h-[200px] font-mono text-sm"
                 placeholder="System prompt that defines the AI broker's personality, tone, and behavior..."
               />
               <p className="text-[#1A1A1A]/70 text-sm mt-2">
@@ -427,7 +427,7 @@ export function AIBrokerEditDialog({
           >
             Cancel
           </Button>
-          <Button onClick={handleSave} className="bg-gold text-[#1A1A1A] hover:bg-gold/90">
+          <Button onClick={handleSave} className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90">
             Save Changes
           </Button>
         </div>

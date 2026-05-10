@@ -53,7 +53,7 @@ export function MergeHistory() {
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-2 text-foreground font-semibold">
-        <History className="w-5 h-5 text-gold" />
+        <History className="w-5 h-5 text-[#1A1A1A]" />
         Merge History
       </div>
       {loading && <p className="text-sm text-muted-foreground">Loading…</p>}
@@ -63,7 +63,7 @@ export function MergeHistory() {
       {Object.entries(grouped).map(([jobId, items]) => (
         <div
           key={jobId}
-          className="rounded-xl border border-gold/30 bg-[#F7F2EA] p-3"
+          className="rounded-xl border border-[#B89555]/30 bg-[#F7F2EA] p-3"
         >
           <div className="flex items-center justify-between mb-2">
             <div className="text-xs text-muted-foreground">

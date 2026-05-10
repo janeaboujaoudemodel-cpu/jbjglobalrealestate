@@ -202,10 +202,10 @@ const IntegrationWizard: React.FC<IntegrationWizardProps> = ({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           onClick={(e) => e.stopPropagation()}
-          className="w-full max-w-lg bg-[#0E0E0E] border border-gold/30 rounded-2xl overflow-hidden"
+          className="w-full max-w-lg bg-[#0E0E0E] border border-[#B89555]/30 rounded-2xl overflow-hidden"
         >
           {/* Header */}
-          <div className="bg-gradient-to-r from-[#1A1A1A] to-[#0E0E0E] border-b border-gold/20 p-6">
+          <div className="bg-gradient-to-r from-[#1A1A1A] to-[#0E0E0E] border-b border-[#B89555]/20 p-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className={`p-3 rounded-xl ${config.bgColor}`}>
@@ -231,7 +231,7 @@ const IntegrationWizard: React.FC<IntegrationWizardProps> = ({
                   key={index}
                   className={`flex-1 h-1 rounded-full transition-all ${
                     index <= currentStep 
-                      ? 'bg-gold' 
+                      ? 'bg-[#EFE6D6]' 
                       : 'bg-[#1A1A1A]'
                   }`}
                 />
@@ -271,12 +271,12 @@ const IntegrationWizard: React.FC<IntegrationWizardProps> = ({
                         onClick={() => setSelectedProvider(option)}
                         className={`w-full p-4 rounded-xl border transition-all flex items-center justify-between ${
                           selectedProvider === option
-                            ? 'border-gold bg-gold/10 text-white'
+                            ? 'border-[#B89555] bg-[#EFE6D6]/10 text-white'
                             : 'border-[#1A1A1A] hover:border-[#1A1A1A] text-[#1A1A1A]/70'
                         }`}
                       >
                         <span>{option}</span>
-                        {selectedProvider === option && <Check className="w-5 h-5 text-gold" />}
+                        {selectedProvider === option && <Check className="w-5 h-5 text-[#1A1A1A]" />}
                       </button>
                     ))}
                   </div>
@@ -284,7 +284,7 @@ const IntegrationWizard: React.FC<IntegrationWizardProps> = ({
 
                 {currentStep === 0 && integrationType === 'phone' && (
                   <div className="space-y-4">
-                    <div className="p-4 rounded-xl bg-[#1A1A1A] border border-gold/20">
+                    <div className="p-4 rounded-xl bg-[#1A1A1A] border border-[#B89555]/20">
                       <h4 className="text-white font-medium mb-2">VAPI.ai Account</h4>
                       <p className="text-[#1A1A1A]/70 text-sm mb-4">
                         VAPI.ai provides AI-powered call handling for your business.
@@ -293,7 +293,7 @@ const IntegrationWizard: React.FC<IntegrationWizardProps> = ({
                         href="https://vapi.ai"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 text-gold hover:text-[#1A1A1A]"
+                        className="inline-flex items-center gap-2 text-[#1A1A1A] hover:text-[#1A1A1A]"
                       >
                         Open VAPI.ai <ExternalLink className="w-4 h-4" />
                       </a>
@@ -313,24 +313,24 @@ const IntegrationWizard: React.FC<IntegrationWizardProps> = ({
 
                 {currentStep === 1 && integrationType === 'phone' && (
                   <div className="space-y-4">
-                    <div className="p-4 rounded-xl bg-[#1A1A1A] border border-gold/20">
+                    <div className="p-4 rounded-xl bg-[#1A1A1A] border border-[#B89555]/20">
                       <h4 className="text-white font-medium mb-2">UAE Call Forwarding</h4>
                       <div className="space-y-3 text-sm">
                         <div className="flex items-center justify-between p-3 bg-[#1A1A1A]/30 rounded-lg">
                           <span className="text-[#1A1A1A]/70">Etisalat:</span>
                           <div className="flex items-center gap-2">
-                            <code className="text-gold">*100*+971565911000#</code>
+                            <code className="text-[#1A1A1A]">*100*+971565911000#</code>
                             <button onClick={() => copyToClipboard('*100*+971565911000#')}>
-                              <Copy className="w-4 h-4 text-[#1A1A1A]/70 hover:text-gold" />
+                              <Copy className="w-4 h-4 text-[#1A1A1A]/70 hover:text-[#1A1A1A]" />
                             </button>
                           </div>
                         </div>
                         <div className="flex items-center justify-between p-3 bg-[#1A1A1A]/30 rounded-lg">
                           <span className="text-[#1A1A1A]/70">Du:</span>
                           <div className="flex items-center gap-2">
-                            <code className="text-gold">**21*+971565911000#</code>
+                            <code className="text-[#1A1A1A]">**21*+971565911000#</code>
                             <button onClick={() => copyToClipboard('**21*+971565911000#')}>
-                              <Copy className="w-4 h-4 text-[#1A1A1A]/70 hover:text-gold" />
+                              <Copy className="w-4 h-4 text-[#1A1A1A]/70 hover:text-[#1A1A1A]" />
                             </button>
                           </div>
                         </div>
@@ -341,7 +341,7 @@ const IntegrationWizard: React.FC<IntegrationWizardProps> = ({
 
                 {currentStep === 0 && integrationType === 'whatsapp' && (
                   <div className="space-y-4">
-                    <div className="p-4 rounded-xl bg-[#1A1A1A] border border-gold/20">
+                    <div className="p-4 rounded-xl bg-[#1A1A1A] border border-[#B89555]/20">
                       <h4 className="text-white font-medium mb-2">Meta Business Suite</h4>
                       <p className="text-[#1A1A1A]/70 text-sm mb-4">
                         You'll need a verified Meta Business Account to use the WhatsApp Business API.
@@ -350,7 +350,7 @@ const IntegrationWizard: React.FC<IntegrationWizardProps> = ({
                         href="https://business.facebook.com"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 text-gold hover:text-[#1A1A1A]"
+                        className="inline-flex items-center gap-2 text-[#1A1A1A] hover:text-[#1A1A1A]"
                       >
                         Open Meta Business <ExternalLink className="w-4 h-4" />
                       </a>
@@ -367,7 +367,7 @@ const IntegrationWizard: React.FC<IntegrationWizardProps> = ({
 
           {/* Footer */}
           {!isConnected && (
-            <div className="p-6 border-t border-gold/20 flex items-center justify-between">
+            <div className="p-6 border-t border-[#B89555]/20 flex items-center justify-between">
               <Button
                 variant="ghost"
                 onClick={() => currentStep > 0 ? setCurrentStep(prev => prev - 1) : onClose()}
@@ -378,7 +378,7 @@ const IntegrationWizard: React.FC<IntegrationWizardProps> = ({
               <Button
                 onClick={handleNextStep}
                 disabled={isConnecting || (currentStep === 0 && integrationType === 'email' && !selectedProvider)}
-                className="bg-gold hover:bg-gold/90 text-[#1A1A1A]"
+                className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]"
               >
                 {isConnecting ? (
                   <>

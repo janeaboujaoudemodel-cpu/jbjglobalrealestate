@@ -156,7 +156,7 @@ export function BrokerToolkitAcademy() {
             <span className="absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-white/20 to-transparent pointer-events-none rounded-t-2xl" />
             
             <h3 className="text-xl font-semibold text-white mb-4 flex items-center justify-center gap-2 relative z-10">
-              <Star className="w-5 h-5 text-gold" />
+              <Star className="w-5 h-5 text-[#1A1A1A]" />
               Why Get Certified?
             </h3>
             <div className="grid md:grid-cols-4 gap-6 relative z-10">
@@ -167,7 +167,7 @@ export function BrokerToolkitAcademy() {
                 "Access to VIP training"
               ].map((benefit, i) => (
                 <div key={i} className="flex items-center gap-2 justify-center text-white text-sm">
-                  <CheckCircle className="w-4 h-4 text-gold flex-shrink-0" />
+                  <CheckCircle className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
                   <span>{benefit}</span>
                 </div>
               ))}

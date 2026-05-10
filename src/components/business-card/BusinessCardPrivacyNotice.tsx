@@ -59,7 +59,7 @@ const BusinessCardPrivacyNotice = ({ onAccept, onDecline }: BusinessCardPrivacyN
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950 flex items-center justify-center p-4">
-      <Card className="max-w-2xl w-full bg-zinc-900/80 border-2 border-teal-500/30">
+      <Card className="max-w-2xl w-full bg-[#FDFBF7]/80 border-2 border-teal-500/30">
         <CardHeader className="text-center pb-4">
           <div className="flex justify-center mb-4">
             <div className="p-4 bg-teal-500/20 rounded-full border border-teal-500/40">
@@ -75,7 +75,7 @@ const BusinessCardPrivacyNotice = ({ onAccept, onDecline }: BusinessCardPrivacyN
         <CardContent className="space-y-6">
           <div className="grid gap-3">
             {privacyPoints.map((point, index) => (
-              <div key={index} className="flex gap-4 p-4 bg-zinc-800/50 border border-teal-500/20 rounded-lg">
+              <div key={index} className="flex gap-4 p-4 bg-[#1A1A1A]/50 border border-teal-500/20 rounded-lg">
                 <div className="flex-shrink-0">
                   <div className="p-2 bg-teal-500/20 rounded-full border border-teal-500/30">
                     <point.icon className="h-5 w-5 text-teal-400" />

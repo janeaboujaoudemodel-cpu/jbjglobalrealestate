@@ -345,11 +345,11 @@ export function CertificateGenerator({
   // Show existing certificate
   if (certificate) {
     return (
-      <Card className="bg-gradient-to-br from-card to-gold/5 border-gold/30">
+      <Card className="bg-gradient-to-br from-card to-gold/5 border-[#B89555]/30">
         <CardContent className="p-6">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center">
-              <Award className="h-6 w-6 text-gold" />
+            <div className="w-12 h-12 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center">
+              <Award className="h-6 w-6 text-[#1A1A1A]" />
             </div>
             <div>
               <h3 className="font-semibold text-foreground">Certificate Earned!</h3>
@@ -372,9 +372,9 @@ export function CertificateGenerator({
               <p className="text-lg font-bold text-foreground">{certificate.real_estate_score}%</p>
               <p className="text-xs text-muted-foreground">Real Estate</p>
             </div>
-            <div className="text-center p-3 bg-gold/10 rounded-lg border border-gold/30">
-              <Trophy className="h-5 w-5 text-gold mx-auto mb-1" />
-              <p className="text-lg font-bold text-gold">{certificate.combined_score}%</p>
+            <div className="text-center p-3 bg-[#EFE6D6]/10 rounded-lg border border-[#B89555]/30">
+              <Trophy className="h-5 w-5 text-[#1A1A1A] mx-auto mb-1" />
+              <p className="text-lg font-bold text-[#1A1A1A]">{certificate.combined_score}%</p>
               <p className="text-xs text-muted-foreground">Combined</p>
             </div>
           </div>
@@ -391,7 +391,7 @@ export function CertificateGenerator({
             <Button 
               onClick={downloadPDF} 
               disabled={downloading}
-              className="flex-1 bg-gold hover:bg-gold/90 text-[#1A1A1A]"
+              className="flex-1 bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]"
             >
               {downloading ? (
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -403,7 +403,7 @@ export function CertificateGenerator({
             <Button 
               variant="outline" 
               onClick={shareVerificationLink}
-              className="border-gold/50 text-gold hover:bg-gold/10"
+              className="border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
             >
               <Share2 className="h-4 w-4 mr-2" />
               Share
@@ -417,10 +417,10 @@ export function CertificateGenerator({
   // Show generate button if eligible
   if (isEligible) {
     return (
-      <Card className="bg-gradient-to-br from-gold/10 to-card border-gold/30">
+      <Card className="bg-gradient-to-br from-gold/10 to-card border-[#B89555]/30">
         <CardContent className="p-6 text-center">
-          <div className="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center mx-auto mb-4">
-            <Award className="h-8 w-8 text-gold" />
+          <div className="w-16 h-16 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center mx-auto mb-4">
+            <Award className="h-8 w-8 text-[#1A1A1A]" />
           </div>
           <h3 className="text-xl font-semibold text-foreground mb-2">
             Congratulations!
@@ -431,7 +431,7 @@ export function CertificateGenerator({
           <Button 
             onClick={generateCertificate}
             disabled={generating}
-            className="bg-gold hover:bg-gold/90 text-[#1A1A1A]"
+            className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]"
           >
             {generating ? (
               <>

@@ -172,21 +172,21 @@ export function AssignLeadModal({ open, onOpenChange, brokers, onAssigned }: Ass
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+      <DialogContent className="sm:max-w-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
-            <UserPlus className="h-5 w-5 text-gold" />
+            <UserPlus className="h-5 w-5 text-[#1A1A1A]" />
             Assign Lead to Broker
           </DialogTitle>
         </DialogHeader>
 
         <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "existing" | "new")}>
           <TabsList className="grid w-full grid-cols-2 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
-            <TabsTrigger value="existing" className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]">
+            <TabsTrigger value="existing" className="flex items-center gap-2 data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
               <Users className="h-4 w-4" />
               Existing Lead
             </TabsTrigger>
-            <TabsTrigger value="new" className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]">
+            <TabsTrigger value="new" className="flex items-center gap-2 data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
               <PlusCircle className="h-4 w-4" />
               New Lead
             </TabsTrigger>
@@ -210,10 +210,10 @@ export function AssignLeadModal({ open, onOpenChange, brokers, onAssigned }: Ass
             </div>
 
             {/* Leads List */}
-            <ScrollArea className="h-48 rounded-lg border border-gold/30 bg-[#FDFBF7]/50">
+            <ScrollArea className="h-48 rounded-lg border border-[#B89555]/30 bg-[#FDFBF7]/50">
               {loadingLeads ? (
                 <div className="flex items-center justify-center py-8">
-                  <Loader2 className="h-6 w-6 animate-spin text-gold" />
+                  <Loader2 className="h-6 w-6 animate-spin text-[#1A1A1A]" />
                 </div>
               ) : filteredExistingLeads.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-8 text-[#1A1A1A]/60">
@@ -228,8 +228,8 @@ export function AssignLeadModal({ open, onOpenChange, brokers, onAssigned }: Ass
                       onClick={() => setSelectedExistingLead(lead)}
                       className={`w-full text-left p-3 rounded-lg transition-all ${
                         selectedExistingLead?.id === lead.id
-                          ? "bg-gold/20 border-2 border-gold"
-                          : "hover:bg-gold/10 border border-transparent"
+                          ? "bg-[#EFE6D6]/20 border-2 border-[#B89555]"
+                          : "hover:bg-[#EFE6D6]/10 border border-transparent"
                       }`}
                     >
                       <p className="font-medium text-[#1A1A1A]">{lead.name}</p>

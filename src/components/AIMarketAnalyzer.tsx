@@ -209,11 +209,11 @@ export const AIMarketAnalyzer = ({
 
   if (variant === 'compact') {
     return (
-      <div className="border border-gold/30 rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] overflow-hidden">
+      <div className="border border-[#B89555]/30 rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] overflow-hidden">
         <button
           onClick={fetchAnalysis}
           disabled={isLoading}
-          className="w-full p-3 flex items-center justify-between hover:bg-gold/5 transition-colors group"
+          className="w-full p-3 flex items-center justify-between hover:bg-[#EFE6D6]/5 transition-colors group"
         >
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center shadow-lg">
@@ -228,13 +228,13 @@ export const AIMarketAnalyzer = ({
           </div>
           
           {isLoading ? (
-            <div className="w-5 h-5 border-2 border-gold border-t-transparent rounded-full animate-spin" />
+            <div className="w-5 h-5 border-2 border-[#B89555] border-t-transparent rounded-full animate-spin" />
           ) : insights ? (
             <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${getRatingColor(insights.investmentRating)}`}>
               {insights.investmentRating}
             </span>
           ) : (
-            <Sparkles className="w-4 h-4 text-gold group-hover:animate-pulse" />
+            <Sparkles className="w-4 h-4 text-[#1A1A1A] group-hover:animate-pulse" />
           )}
         </button>
 
@@ -249,9 +249,9 @@ export const AIMarketAnalyzer = ({
 
   // Full variant for detail pages - Auto-loads and includes chat
   return (
-    <div className="border-2 border-gold/30 rounded-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-lg overflow-hidden">
+    <div className="border-2 border-[#B89555]/30 rounded-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-lg overflow-hidden">
       {/* Header */}
-      <div className="p-6 border-b border-gold/20 bg-gradient-to-r from-purple-900/10 to-purple-800/5">
+      <div className="p-6 border-b border-[#B89555]/20 bg-gradient-to-r from-purple-900/10 to-purple-800/5">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center shadow-lg">
             <Brain className="w-6 h-6 text-white" />
@@ -267,17 +267,17 @@ export const AIMarketAnalyzer = ({
         <div className="p-8 space-y-4">
           <div className="animate-pulse space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-gold/15" />
+              <div className="w-12 h-12 rounded-xl bg-[#EFE6D6]/15" />
               <div className="space-y-2 flex-1">
-                <div className="h-4 bg-gold/10 rounded w-48" />
-                <div className="h-3 bg-gold/10 rounded w-32" />
+                <div className="h-4 bg-[#EFE6D6]/10 rounded w-48" />
+                <div className="h-3 bg-[#EFE6D6]/10 rounded w-32" />
               </div>
             </div>
-            <div className="h-20 bg-gold/10 rounded-xl" />
+            <div className="h-20 bg-[#EFE6D6]/10 rounded-xl" />
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[1,2,3,4].map(i => <div key={i} className="h-24 bg-gold/10 rounded-xl" />)}
+              {[1,2,3,4].map(i => <div key={i} className="h-24 bg-[#EFE6D6]/10 rounded-xl" />)}
             </div>
-            <div className="h-16 bg-gold/10 rounded-xl" />
+            <div className="h-16 bg-[#EFE6D6]/10 rounded-xl" />
           </div>
           <p className="text-[#1A1A1A]/70 text-sm text-center">Loading market intelligence for {name}...</p>
           {isTimedOut && (
@@ -310,22 +310,22 @@ export const AIMarketAnalyzer = ({
 
           {/* Metrics Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="p-4 bg-[#FDFBF7]/60 rounded-xl border border-gold/20 text-center">
+            <div className="p-4 bg-[#FDFBF7]/60 rounded-xl border border-[#B89555]/20 text-center">
               <TrendingUp className={`w-6 h-6 mx-auto mb-2 ${getDemandColor(insights.supplyDemandScore)}`} />
               <p className="text-xs text-[#1A1A1A]/70 mb-1">Supply/Demand</p>
               <p className="text-lg font-bold text-[#1A1A1A]">{insights.supplyDemandLabel}</p>
             </div>
-            <div className="p-4 bg-[#FDFBF7]/60 rounded-xl border border-gold/20 text-center">
+            <div className="p-4 bg-[#FDFBF7]/60 rounded-xl border border-[#B89555]/20 text-center">
               <BarChart3 className={`w-6 h-6 mx-auto mb-2 ${getPriceComparisonColor(insights.priceComparisonPercent)}`} />
               <p className="text-xs text-[#1A1A1A]/70 mb-1">Price Position</p>
               <p className="text-lg font-bold text-[#1A1A1A]">{insights.priceComparisonLabel}</p>
             </div>
-            <div className="p-4 bg-[#FDFBF7]/60 rounded-xl border border-gold/20 text-center">
-              <Target className="w-6 h-6 mx-auto mb-2 text-gold" />
+            <div className="p-4 bg-[#FDFBF7]/60 rounded-xl border border-[#B89555]/20 text-center">
+              <Target className="w-6 h-6 mx-auto mb-2 text-[#1A1A1A]" />
               <p className="text-xs text-[#1A1A1A]/70 mb-1">Area Avg/sqft</p>
               <p className="text-lg font-bold text-price-orange">AED {insights.avgAreaPriceSqft.toLocaleString()}</p>
             </div>
-            <div className="p-4 bg-[#FDFBF7]/60 rounded-xl border border-gold/20 text-center">
+            <div className="p-4 bg-[#FDFBF7]/60 rounded-xl border border-[#B89555]/20 text-center">
               {insights.priceComparisonPercent < 0 ? (
                 <TrendingDown className="w-6 h-6 mx-auto mb-2 text-green-600" />
               ) : (
@@ -339,7 +339,7 @@ export const AIMarketAnalyzer = ({
           </div>
 
           {/* Summary */}
-          <div className="p-4 bg-[#FDFBF7]/60 rounded-xl border border-gold/20">
+          <div className="p-4 bg-[#FDFBF7]/60 rounded-xl border border-[#B89555]/20">
             <h4 className="font-semibold text-[#1A1A1A] mb-2 flex items-center gap-2">
               <Brain className="w-4 h-4 text-purple-600" />
               Executive Summary
@@ -380,7 +380,7 @@ export const AIMarketAnalyzer = ({
           </div>
 
           {/* AI Chat Assistant */}
-          <div className="border-t border-gold/20 pt-6">
+          <div className="border-t border-[#B89555]/20 pt-6">
             <div className="flex items-center gap-2 mb-4">
               <MessageCircle className="w-5 h-5 text-purple-600" />
               <h4 className="font-semibold text-[#1A1A1A]">Ask AI Analyzer</h4>
@@ -396,7 +396,7 @@ export const AIMarketAnalyzer = ({
                     handleChatSubmit();
                   }}
                   disabled={isChatLoading}
-                  className="text-xs px-3 py-1.5 rounded-full border border-gold/40 text-[#1A1A1A]/70 hover:border-gold hover:bg-gold/10 transition-colors"
+                  className="text-xs px-3 py-1.5 rounded-full border border-[#B89555]/40 text-[#1A1A1A]/70 hover:border-[#B89555] hover:bg-[#EFE6D6]/10 transition-colors"
                 >
                   {q}
                 </button>
@@ -407,14 +407,14 @@ export const AIMarketAnalyzer = ({
             {chatMessages.length > 0 && (
               <div 
                 ref={chatContainerRef}
-                className="max-h-60 overflow-y-auto mb-4 space-y-3 p-4 bg-[#FDFBF7]/50 rounded-xl border border-gold/20"
+                className="max-h-60 overflow-y-auto mb-4 space-y-3 p-4 bg-[#FDFBF7]/50 rounded-xl border border-[#B89555]/20"
               >
                 {chatMessages.map((msg, idx) => (
                   <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                     <div className={`max-w-[80%] p-3 rounded-xl text-sm ${
                       msg.role === 'user' 
                         ? 'bg-purple-600 text-white' 
-                        : 'bg-[#FDFBF7] border border-gold/20 text-[#1A1A1A]/70'
+                        : 'bg-[#FDFBF7] border border-[#B89555]/20 text-[#1A1A1A]/70'
                     }`}>
                       {msg.content}
                     </div>
@@ -422,7 +422,7 @@ export const AIMarketAnalyzer = ({
                 ))}
                 {isChatLoading && (
                   <div className="flex justify-start">
-                    <div className="p-3 rounded-xl bg-[#FDFBF7] border border-gold/20">
+                    <div className="p-3 rounded-xl bg-[#FDFBF7] border border-[#B89555]/20">
                       <Loader2 className="w-4 h-4 animate-spin text-purple-600" />
                     </div>
                   </div>
@@ -458,7 +458,7 @@ export const AIMarketAnalyzer = ({
                 <p className="text-xs text-[#1A1A1A]/70 leading-relaxed">
                   <strong>AI Disclosure:</strong> This analysis is generated by artificial intelligence based on market data patterns. 
                   It does not constitute financial or investment advice.{" "}
-                  <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
+                  <Link to="/contact" className="text-[#1A1A1A] hover:underline">Contact our team</Link> for professional guidance.
                   Past performance does not guarantee future results.
                 </p>
               </div>

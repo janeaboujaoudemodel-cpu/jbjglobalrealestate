@@ -71,7 +71,7 @@ export function JBJLeadCard({ lead, viewMode, onAction }: JBJLeadCardProps) {
         <CardContent className="p-4">
           <div className="flex items-center gap-4">
             <Avatar className="h-10 w-10">
-              <AvatarFallback className="bg-gold/20 text-gold">
+              <AvatarFallback className="bg-[#EFE6D6]/20 text-[#1A1A1A]">
                 {lead.name.charAt(0)}
               </AvatarFallback>
             </Avatar>
@@ -143,7 +143,7 @@ export function JBJLeadCard({ lead, viewMode, onAction }: JBJLeadCardProps) {
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-3">
             <Avatar className="h-11 w-11">
-              <AvatarFallback className="bg-gold/20 text-gold font-medium">
+              <AvatarFallback className="bg-[#EFE6D6]/20 text-[#1A1A1A] font-medium">
                 {lead.name.charAt(0)}
               </AvatarFallback>
             </Avatar>

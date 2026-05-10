@@ -88,7 +88,7 @@ const AIFollowupSchedulerPremium = () => {
       case 'hot':
         return 'bg-red-500/20 text-red-400 border-red-500/30';
       case 'warm':
-        return 'bg-amber-500/20 text-amber-400 border-amber-500/30';
+        return 'bg-amber-500/20 text-[#1A1A1A] border-amber-500/30';
       case 'lukewarm':
         return 'bg-orange-500/20 text-orange-400 border-orange-500/30';
       default:
@@ -124,7 +124,7 @@ const AIFollowupSchedulerPremium = () => {
                   placeholder="John Smith"
                   value={formData.leadName}
                   onChange={(e) => handleChange("leadName", e.target.value)}
-                  className="bg-zinc-900/50 border-cyan-500/30 text-white hover:border-cyan-500/50 focus:border-cyan-400 transition-colors"
+                  className="bg-[#FDFBF7]/50 border-cyan-500/30 text-white hover:border-cyan-500/50 focus:border-cyan-400 transition-colors"
                 />
               </div>
 
@@ -137,7 +137,7 @@ const AIFollowupSchedulerPremium = () => {
                   type="date"
                   value={formData.lastInteraction}
                   onChange={(e) => handleChange("lastInteraction", e.target.value)}
-                  className="bg-zinc-900/50 border-cyan-500/30 text-white hover:border-cyan-500/50 focus:border-cyan-400 transition-colors"
+                  className="bg-[#FDFBF7]/50 border-cyan-500/30 text-white hover:border-cyan-500/50 focus:border-cyan-400 transition-colors"
                 />
               </div>
 
@@ -194,7 +194,7 @@ const AIFollowupSchedulerPremium = () => {
                 value={formData.notes}
                 onChange={(e) => handleChange("notes", e.target.value)}
                 rows={3}
-                className="bg-zinc-900/50 border-cyan-500/30 text-white hover:border-cyan-500/50 focus:border-cyan-400 transition-colors"
+                className="bg-[#FDFBF7]/50 border-cyan-500/30 text-white hover:border-cyan-500/50 focus:border-cyan-400 transition-colors"
               />
             </div>
 
@@ -278,13 +278,13 @@ const AIFollowupSchedulerPremium = () => {
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     {response.optimalTiming.bestDays && (
-                      <div className="bg-zinc-800/50 p-3 rounded-lg">
+                      <div className="bg-[#1A1A1A]/50 p-3 rounded-lg">
                         <p className="text-xs text-white/90">Best Days</p>
                         <p className="text-sm text-white">{response.optimalTiming.bestDays.join(', ')}</p>
                       </div>
                     )}
                     {response.optimalTiming.bestHours && (
-                      <div className="bg-zinc-800/50 p-3 rounded-lg">
+                      <div className="bg-[#1A1A1A]/50 p-3 rounded-lg">
                         <p className="text-xs text-white/90">Best Hours</p>
                         <p className="text-sm text-white">{response.optimalTiming.bestHours}</p>
                       </div>
@@ -302,7 +302,7 @@ const AIFollowupSchedulerPremium = () => {
                   </h4>
                   <div className="space-y-2">
                     {response.suggestedMessages.map((msg: string, i: number) => (
-                      <div key={i} className="bg-zinc-800/50 p-3 rounded-lg text-sm text-white/85 flex items-start gap-2">
+                      <div key={i} className="bg-[#1A1A1A]/50 p-3 rounded-lg text-sm text-white/85 flex items-start gap-2">
                         <ChevronRight className="h-4 w-4 mt-0.5 flex-shrink-0 text-cyan-400" />
                         {msg}
                       </div>
@@ -331,7 +331,7 @@ const AIFollowupSchedulerPremium = () => {
                       {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                     </Button>
                   </div>
-                  <div className="bg-zinc-800/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
+                  <div className="bg-[#1A1A1A]/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
                     {response.schedule || response.recommendations}
                   </div>
                 </CardContent>

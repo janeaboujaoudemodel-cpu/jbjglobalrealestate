@@ -122,7 +122,7 @@ const MEDIA_MARKETING = [
     name: 'Visual Team',
     description: 'Professional listing photography for your properties.',
     icon: Camera,
-    color: 'text-amber-400',
+    color: 'text-[#1A1A1A]',
     glowColor: 'shadow-amber-500/30',
     bgColor: 'bg-amber-500/10',
     borderColor: 'border-amber-500/30',
@@ -290,9 +290,9 @@ const TOOLS_OPERATIONS = [
     description: 'AI-powered contact extraction',
     icon: CreditCard,
     link: '/business-card-scanner',
-    color: 'text-gold',
+    color: 'text-[#1A1A1A]',
     glowColor: 'shadow-gold/30',
-    bgColor: 'bg-gold/10',
+    bgColor: 'bg-[#EFE6D6]/10',
   },
   {
     name: 'JBJ Spreadsheet',
@@ -356,7 +356,7 @@ const AdvancedBrokerToolkit = () => {
 
   const renderTeamCard = (member: typeof PROFESSIONAL_SUPPORT[0], index: number) => (
     <motion.div key={index} variants={fadeInUp}>
-      <Card className={`bg-zinc-900/60 border ${member.borderColor} hover:border-gold transition-all duration-300 h-full shadow-lg ${member.glowColor} hover:shadow-xl hover:shadow-gold/30 group-hover:scale-[1.02]`}>
+      <Card className={`bg-[#FDFBF7]/60 border ${member.borderColor} hover:border-[#B89555] transition-all duration-300 h-full shadow-lg ${member.glowColor} hover:shadow-xl hover:shadow-gold/30 group-hover:scale-[1.02]`}>
         <CardContent className="p-5">
           <div className={`w-12 h-12 ${member.bgColor} rounded-xl flex items-center justify-center mb-4`}>
             <member.icon className={`h-6 w-6 ${member.color}`} />
@@ -371,7 +371,7 @@ const AdvancedBrokerToolkit = () => {
 
   const renderTrainingCard = (item: typeof TRAINING_DEVELOPMENT[0], index: number) => (
     <motion.div key={index} variants={fadeInUp}>
-      <Card className={`bg-zinc-900/60 border-[#1A1A1A] hover:border-gold transition-all duration-300 h-full shadow-lg ${item.glowColor} hover:shadow-xl hover:shadow-gold/30 cursor-pointer group`}>
+      <Card className={`bg-[#FDFBF7]/60 border-[#1A1A1A] hover:border-[#B89555] transition-all duration-300 h-full shadow-lg ${item.glowColor} hover:shadow-xl hover:shadow-gold/30 cursor-pointer group`}>
         <CardContent className="p-4">
           <div className="flex items-center gap-3">
             <div className={`w-10 h-10 ${item.bgColor} rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform`}>
@@ -390,7 +390,7 @@ const AdvancedBrokerToolkit = () => {
   const renderToolCard = (tool: typeof TOOLS_OPERATIONS[0], index: number) => (
     <motion.div key={index} variants={fadeInUp}>
       <Link to={tool.link}>
-        <Card className={`bg-zinc-900/60 border-[#1A1A1A] hover:border-gold transition-all duration-300 h-full shadow-lg ${tool.glowColor} hover:shadow-xl hover:shadow-gold/30 group cursor-pointer`}>
+        <Card className={`bg-[#FDFBF7]/60 border-[#1A1A1A] hover:border-[#B89555] transition-all duration-300 h-full shadow-lg ${tool.glowColor} hover:shadow-xl hover:shadow-gold/30 group cursor-pointer`}>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className={`w-10 h-10 ${tool.bgColor} rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform`}>
@@ -400,7 +400,7 @@ const AdvancedBrokerToolkit = () => {
                 <div className="flex items-center gap-2">
                   <h4 className="text-white text-sm font-medium truncate">{tool.name}</h4>
                   {'badge' in tool && tool.badge && (
-                    <Badge className="bg-gold/20 text-gold border-gold/30 text-[10px] px-1.5 py-0">
+                    <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30 text-[10px] px-1.5 py-0">
                       {tool.badge}
                     </Badge>
                   )}
@@ -426,13 +426,13 @@ const AdvancedBrokerToolkit = () => {
           viewport={{ once: true }}
           variants={fadeInUp}
         >
-          <Badge className="bg-[#FDFBF7] text-[#1A1A1A] border-gold/30 mb-4 shadow-sm">
-            <Briefcase className="w-3 h-3 mr-1 text-gold" />
-            <span className="text-gold">Advanced</span>
+          <Badge className="bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/30 mb-4 shadow-sm">
+            <Briefcase className="w-3 h-3 mr-1 text-[#1A1A1A]" />
+            <span className="text-[#1A1A1A]">Advanced</span>
             <span className="text-[#1A1A1A] ml-1">Broker Toolkit</span>
           </Badge>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
-            Everything You Need to <span className="text-gold">Succeed</span>
+            Everything You Need to <span className="text-[#1A1A1A]">Succeed</span>
           </h2>
           <p className="text-white/70 text-lg">
             Access professional support, media services, training, and AI-powered tools — all included in your JBJ membership.
@@ -444,28 +444,28 @@ const AdvancedBrokerToolkit = () => {
           <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-2 bg-transparent h-auto mb-8">
             <TabsTrigger 
               value="support" 
-              className="data-[state=active]:bg-gold/20 data-[state=active]:text-gold data-[state=active]:border-gold/40 border border-[#1A1A1A] bg-zinc-900/50 py-3"
+              className="data-[state=active]:bg-[#EFE6D6]/20 data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40 border border-[#1A1A1A] bg-[#FDFBF7]/50 py-3"
             >
               <Users className="h-4 w-4 mr-2" />
               Professional Support
             </TabsTrigger>
             <TabsTrigger 
               value="media" 
-              className="data-[state=active]:bg-purple-500/20 data-[state=active]:text-purple-400 data-[state=active]:border-purple-500/40 border border-[#1A1A1A] bg-zinc-900/50 py-3"
+              className="data-[state=active]:bg-purple-500/20 data-[state=active]:text-purple-400 data-[state=active]:border-purple-500/40 border border-[#1A1A1A] bg-[#FDFBF7]/50 py-3"
             >
               <Camera className="h-4 w-4 mr-2" />
               Media & Marketing
             </TabsTrigger>
             <TabsTrigger 
               value="training" 
-              className="data-[state=active]:bg-green-500/20 data-[state=active]:text-green-400 data-[state=active]:border-green-500/40 border border-[#1A1A1A] bg-zinc-900/50 py-3"
+              className="data-[state=active]:bg-green-500/20 data-[state=active]:text-green-400 data-[state=active]:border-green-500/40 border border-[#1A1A1A] bg-[#FDFBF7]/50 py-3"
             >
               <GraduationCap className="h-4 w-4 mr-2" />
               Training
             </TabsTrigger>
             <TabsTrigger 
               value="tools" 
-              className="data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400 data-[state=active]:border-blue-500/40 border border-[#1A1A1A] bg-zinc-900/50 py-3"
+              className="data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400 data-[state=active]:border-blue-500/40 border border-[#1A1A1A] bg-[#FDFBF7]/50 py-3"
             >
               <Briefcase className="h-4 w-4 mr-2" />
               Tools & Operations
@@ -550,11 +550,11 @@ const AdvancedBrokerToolkit = () => {
           </div>
           
           <div className="mt-8 flex items-center justify-center gap-6 text-sm text-white/90">
-            <a href="mailto:CONTACT@JBJ.AE" className="flex items-center gap-2 hover:text-gold transition-colors">
+            <a href="mailto:CONTACT@JBJ.AE" className="flex items-center gap-2 hover:text-[#1A1A1A] transition-colors">
               <Mail className="h-4 w-4" />
               CONTACT@JBJ.AE
             </a>
-            <a href="tel:+971565911000" className="flex items-center gap-2 hover:text-gold transition-colors">
+            <a href="tel:+971565911000" className="flex items-center gap-2 hover:text-[#1A1A1A] transition-colors">
               <Phone className="h-4 w-4" />
               +971 56 591 1000
             </a>

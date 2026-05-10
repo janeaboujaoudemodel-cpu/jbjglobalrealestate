@@ -8,13 +8,13 @@ const WhyDubaiSection = () => {
       <div className="jj-layer-2">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <span className="inline-block px-4 py-1.5 bg-gold/10 border border-gold/30 rounded-full text-gold text-sm font-medium mb-4">
+          <span className="inline-block px-4 py-1.5 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full text-[#1A1A1A] text-sm font-medium mb-4">
             Investment Insights
           </span>
           <h2 
             className="text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-4"
           >
-            Why Invest in the <span className="text-gold">UAE</span>?
+            Why Invest in the <span className="text-[#1A1A1A]">UAE</span>?
           </h2>
           <p className="text-[#1A1A1A]/70 text-lg max-w-2xl mx-auto">
             The UAE offers unparalleled opportunities for property investors with world-class infrastructure and tax-free returns
@@ -57,10 +57,10 @@ const WhyDubaiSection = () => {
           ].map((item, index) => (
             <div 
               key={index}
-              className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-gold/30 rounded-2xl p-6 hover:border-gold/60 transition-all duration-300 group shadow-sm hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1"
+              className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-[#B89555]/30 rounded-2xl p-6 hover:border-[#B89555]/60 transition-all duration-300 group shadow-sm hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1"
             >
               <div className="w-12 h-12 rounded-xl bg-[#1A1A1A] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
-                <item.icon className="w-6 h-6 text-gold" />
+                <item.icon className="w-6 h-6 text-[#1A1A1A]" />
               </div>
               <h3 className="text-[#1A1A1A] text-lg font-semibold mb-2">{item.title}</h3>
               <p className="text-[#1A1A1A]/70 text-sm leading-relaxed">{item.description}</p>
@@ -69,17 +69,17 @@ const WhyDubaiSection = () => {
         </div>
 
         {/* Why Dubai Section */}
-        <div className="bg-gradient-to-br from-black via-zinc-900 to-black rounded-3xl border-2 border-gold/30 overflow-hidden shadow-[0_8px_30px_rgba(200,167,102,0.2)]">
+        <div className="bg-gradient-to-br from-black via-zinc-900 to-black rounded-3xl border-2 border-[#B89555]/30 overflow-hidden shadow-[0_8px_30px_rgba(200,167,102,0.2)]">
           <div className="grid md:grid-cols-2 gap-0">
             {/* Content Side */}
             <div className="p-8 md:p-12 flex flex-col justify-center">
-              <span className="inline-block px-3 py-1 bg-gold/10 border border-gold/30 rounded-full text-gold text-xs font-medium mb-4 w-fit">
+              <span className="inline-block px-3 py-1 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full text-[#1A1A1A] text-xs font-medium mb-4 w-fit">
                 Featured City
               </span>
               <h3 
                 className="text-3xl md:text-4xl font-bold text-white mb-4"
               >
-                Why <span className="text-gold">Dubai</span>?
+                Why <span className="text-[#1A1A1A]">Dubai</span>?
               </h3>
               <p className="text-white/70 mb-6 leading-relaxed">
                 Dubai is not just a city — it's a global phenomenon. As the business capital of the Middle East 
@@ -95,7 +95,7 @@ const WhyDubaiSection = () => {
                   "Smart city infrastructure & future-ready development",
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-3 text-white/85 text-sm">
-                    <span className="w-1.5 h-1.5 rounded-full bg-gold mt-2 flex-shrink-0" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#EFE6D6] mt-2 flex-shrink-0" />
                     {item}
                   </li>
                 ))}
@@ -104,7 +104,7 @@ const WhyDubaiSection = () => {
               <Link to="/">
                 <Button className="bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] hover:opacity-90 font-semibold group w-fit">
                   Discover Properties
-                  <ArrowUpRight className="w-4 h-4 ml-2 text-gold group-hover:translate-x-1 transition-transform" />
+                  <ArrowUpRight className="w-4 h-4 ml-2 text-[#1A1A1A] group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
             </div>
@@ -126,8 +126,8 @@ const WhyDubaiSection = () => {
                   { value: "6–10%", label: "Avg. Rental Yield" },
                   { value: "#1", label: "Safest City" },
                 ].map((stat, i) => (
-                  <div key={i} className="bg-[#1A1A1A]/70 backdrop-blur-sm rounded-lg p-3 text-center border border-gold/30">
-                    <div className="text-gold text-xl font-bold">{stat.value}</div>
+                  <div key={i} className="bg-[#1A1A1A]/70 backdrop-blur-sm rounded-lg p-3 text-center border border-[#B89555]/30">
+                    <div className="text-[#1A1A1A] text-xl font-bold">{stat.value}</div>
                     <div className="text-white/70 text-xs">{stat.label}</div>
                   </div>
                 ))}
@@ -136,7 +136,7 @@ const WhyDubaiSection = () => {
           </div>
 
           {/* Source Citations Bar */}
-          <div className="border-t border-gold/20 px-8 py-4 flex flex-wrap items-center gap-x-6 gap-y-2 bg-[#1A1A1A]/50">
+          <div className="border-t border-[#B89555]/20 px-8 py-4 flex flex-wrap items-center gap-x-6 gap-y-2 bg-[#1A1A1A]/50">
             <span className="text-white/90 text-xs font-medium uppercase tracking-wider">Sources:</span>
             {[
               { label: "#1 Safest City", source: "Numbeo Safety Index 2025" },
@@ -145,7 +145,7 @@ const WhyDubaiSection = () => {
               { label: "Top 5 Most Visited", source: "Mastercard Destination Cities Index" },
             ].map((citation, i) => (
               <span key={i} className="text-white/90 text-xs">
-                <span className="text-gold font-medium">{citation.label}</span>
+                <span className="text-[#1A1A1A] font-medium">{citation.label}</span>
                 {" — "}
                 <span className="italic">{citation.source}</span>
               </span>

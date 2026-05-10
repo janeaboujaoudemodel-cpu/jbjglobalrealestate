@@ -219,7 +219,7 @@ const JobOfferManager = () => {
                     onChange={(e) => setUploadingFile(e.target.files?.[0] || null)}
                   />
                   {(uploadingFile || editingOffer?.document_name) && (
-                    <Badge variant="outline" className="border-gold/30 text-gold">
+                    <Badge variant="outline" className="border-[#B89555]/30 text-[#1A1A1A]">
                       <FileText className="w-3 h-3 mr-1" />
                       {uploadingFile?.name || editingOffer?.document_name}
                     </Badge>
@@ -253,16 +253,16 @@ const JobOfferManager = () => {
       {/* Department Tabs */}
       <Tabs value={selectedDepartment} onValueChange={setSelectedDepartment}>
         <ScrollArea className="w-full">
-          <TabsList className="bg-card border-2 border-gold/20 p-1 inline-flex w-max">
+          <TabsList className="bg-card border-2 border-[#B89555]/20 p-1 inline-flex w-max">
             {DEPARTMENTS.map(dept => (
               <TabsTrigger 
                 key={dept} 
                 value={dept}
-                className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40 text-muted-foreground text-xs px-3 py-1.5 whitespace-nowrap"
+                className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40 text-muted-foreground text-xs px-3 py-1.5 whitespace-nowrap"
               >
                 {dept}
                 {getOffersByDepartment(dept).length > 0 && (
-                  <span className="ml-1.5 text-[10px] bg-gold/20 rounded-full px-1.5">
+                  <span className="ml-1.5 text-[10px] bg-[#EFE6D6]/20 rounded-full px-1.5">
                     {getOffersByDepartment(dept).length}
                   </span>
                 )}
@@ -275,7 +275,7 @@ const JobOfferManager = () => {
           <TabsContent key={dept} value={dept} className="mt-6">
             {isLoading ? (
               <div className="flex items-center justify-center py-12">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold" />
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#B89555]" />
               </div>
             ) : getOffersByDepartment(dept).length === 0 ? (
               <Card>
@@ -307,7 +307,7 @@ const JobOfferManager = () => {
                       <div className="flex items-start justify-between">
                         <div>
                           <CardTitle className="text-foreground text-lg">{offer.position_title}</CardTitle>
-                          <p className="text-gold text-sm mt-1">{offer.department}</p>
+                          <p className="text-[#1A1A1A] text-sm mt-1">{offer.department}</p>
                         </div>
                         <div className="flex gap-1">
                           <Button 
@@ -345,14 +345,14 @@ const JobOfferManager = () => {
 
                       {offer.commission_structure && (
                         <div className="text-sm text-muted-foreground">
-                          <span className="text-gold">Commission:</span> {offer.commission_structure}
+                          <span className="text-[#1A1A1A]">Commission:</span> {offer.commission_structure}
                         </div>
                       )}
 
                       {offer.benefits && offer.benefits.length > 0 && (
                         <div className="flex flex-wrap gap-1">
                           {offer.benefits.slice(0, 3).map((benefit, i) => (
-                            <Badge key={i} variant="outline" className="text-xs border-gold/30 text-foreground">
+                            <Badge key={i} variant="outline" className="text-xs border-[#B89555]/30 text-foreground">
                               <CheckCircle2 className="w-3 h-3 mr-1 text-emerald-500" />
                               {benefit}
                             </Badge>
@@ -370,7 +370,7 @@ const JobOfferManager = () => {
                           href={offer.document_url} 
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 text-sm text-gold hover:text-[#1A1A1A] mt-2"
+                          className="inline-flex items-center gap-2 text-sm text-[#1A1A1A] hover:text-[#1A1A1A] mt-2"
                         >
                           <FileText className="w-4 h-4" />
                           View Document

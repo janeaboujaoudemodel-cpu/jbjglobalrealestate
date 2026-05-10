@@ -73,9 +73,9 @@ export default function DocumentsManager({ documents, onUpdate }: DocumentsManag
   if (!documents.length) return null;
 
   return (
-    <div className="rounded-xl border-2 border-gold/30 bg-gradient-to-b from-champagne/60 to-champagne-light/40 p-5">
+    <div className="rounded-xl border-2 border-[#B89555]/30 bg-gradient-to-b from-champagne/60 to-champagne-light/40 p-5">
       <h3 className="text-foreground font-semibold text-base mb-4 flex items-center gap-2">
-        <FileText className="w-5 h-5 text-gold" />
+        <FileText className="w-5 h-5 text-[#1A1A1A]" />
         Documents Manager
       </h3>
       <p className="text-xs text-muted-foreground mb-4">
@@ -94,12 +94,12 @@ export default function DocumentsManager({ documents, onUpdate }: DocumentsManag
               className={cn(
                 "flex items-center gap-3 rounded-lg border p-3 transition-colors",
                 isVisible
-                  ? "border-gold/30 bg-card"
+                  ? "border-[#B89555]/30 bg-card"
                   : "border-border/30 bg-muted/30 opacity-60"
               )}
             >
               <div className="w-9 h-9 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0">
-                <span className="text-gold">{getDocIcon(doc.type)}</span>
+                <span className="text-[#1A1A1A]">{getDocIcon(doc.type)}</span>
               </div>
 
               <div className="flex-1 min-w-0">
@@ -135,7 +135,7 @@ export default function DocumentsManager({ documents, onUpdate }: DocumentsManag
 
               <div className="flex items-center gap-4 flex-shrink-0">
                 <label className="flex items-center gap-1.5 cursor-pointer">
-                  {isVisible ? <Eye className="w-3.5 h-3.5 text-gold" /> : <EyeOff className="w-3.5 h-3.5 text-muted-foreground" />}
+                  {isVisible ? <Eye className="w-3.5 h-3.5 text-[#1A1A1A]" /> : <EyeOff className="w-3.5 h-3.5 text-muted-foreground" />}
                   <Switch
                     checked={isVisible}
                     onCheckedChange={() => toggle(doc.id, "is_visible")}
@@ -145,7 +145,7 @@ export default function DocumentsManager({ documents, onUpdate }: DocumentsManag
                 </label>
 
                 <label className="flex items-center gap-1.5 cursor-pointer">
-                  <Download className={cn("w-3.5 h-3.5", canDownload ? "text-gold" : "text-muted-foreground")} />
+                  <Download className={cn("w-3.5 h-3.5", canDownload ? "text-[#1A1A1A]" : "text-muted-foreground")} />
                   <Switch
                     checked={canDownload}
                     onCheckedChange={() => toggle(doc.id, "allow_download")}

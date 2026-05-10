@@ -61,8 +61,8 @@ export default function ProtectedContent({
   if (!user) {
     return (
       <div className={`relative ${className}`}>
-        <div className="absolute inset-0 backdrop-blur-lg bg-zinc-900/80 flex flex-col items-center justify-center p-8 text-center rounded-xl border border-[#1A1A1A]">
-          <Lock className="w-12 h-12 text-gold mb-4" />
+        <div className="absolute inset-0 backdrop-blur-lg bg-[#FDFBF7]/80 flex flex-col items-center justify-center p-8 text-center rounded-xl border border-[#1A1A1A]">
+          <Lock className="w-12 h-12 text-[#1A1A1A] mb-4" />
           <h3 className="text-xl font-semibold text-white mb-2">Sign In Required</h3>
           <p className="text-white/70 mb-6 max-w-md">
             Please sign in to access this protected content. Your progress will be saved to your account.
@@ -84,7 +84,7 @@ export default function ProtectedContent({
   if (!isSessionValid || !isAuthorized) {
     return (
       <div className={`relative ${className}`}>
-        <div className="absolute inset-0 backdrop-blur-lg bg-zinc-900/80 flex flex-col items-center justify-center p-8 text-center rounded-xl border border-amber-500/30">
+        <div className="absolute inset-0 backdrop-blur-lg bg-[#FDFBF7]/80 flex flex-col items-center justify-center p-8 text-center rounded-xl border border-amber-500/30">
           <AlertTriangle className="w-12 h-12 text-amber-500 mb-4" />
           <h3 className="text-xl font-semibold text-white mb-2">Session Issue</h3>
           <p className="text-white/70 mb-6 max-w-md">
@@ -132,10 +132,10 @@ export default function ProtectedContent({
             }}
           >
             <div className="text-center opacity-[0.08] transform rotate-[-15deg]">
-              <p className="text-4xl font-bold text-gold whitespace-nowrap">
+              <p className="text-4xl font-bold text-[#1A1A1A] whitespace-nowrap">
                 {currentWatermark || watermarkId}
               </p>
-              <p className="text-lg text-gold">
+              <p className="text-lg text-[#1A1A1A]">
                 Licensed to: {user.email}
               </p>
             </div>
@@ -149,7 +149,7 @@ export default function ProtectedContent({
       </div>
 
       {/* Security badge */}
-      <div className="absolute bottom-2 right-2 flex items-center gap-1 text-xs text-white/90 bg-zinc-900/80 px-2 py-1 rounded">
+      <div className="absolute bottom-2 right-2 flex items-center gap-1 text-xs text-white/90 bg-[#FDFBF7]/80 px-2 py-1 rounded">
         <Shield className="w-3 h-3" />
         Protected Content
       </div>

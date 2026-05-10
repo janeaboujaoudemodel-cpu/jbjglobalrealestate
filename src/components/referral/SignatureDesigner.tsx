@@ -144,7 +144,7 @@ export default function SignatureDesigner({ onSelectSignature, onSaveSignature }
           <Button
             onClick={generateSignatures}
             disabled={isGenerating || !name.trim()}
-            className="bg-gold hover:bg-gold/90 text-[#1A1A1A]"
+            className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]"
           >
             {isGenerating ? (
               <Loader2 className="w-4 h-4 animate-spin" />
@@ -180,14 +180,14 @@ export default function SignatureDesigner({ onSelectSignature, onSaveSignature }
                 key={sig.id}
                 className={`cursor-pointer transition-all hover:shadow-md ${
                   selectedId === sig.id
-                    ? 'ring-2 ring-gold border-gold'
+                    ? 'ring-2 ring-gold border-[#B89555]'
                     : 'hover:border-[#B89555]/30'
                 }`}
                 onClick={() => handleSelectSignature(sig)}
               >
                 <CardContent className="p-4 text-center relative">
                   {selectedId === sig.id && (
-                    <div className="absolute top-2 right-2 w-6 h-6 bg-gold rounded-full flex items-center justify-center">
+                    <div className="absolute top-2 right-2 w-6 h-6 bg-[#EFE6D6] rounded-full flex items-center justify-center">
                       <Check className="w-4 h-4 text-white" />
                     </div>
                   )}
@@ -208,7 +208,7 @@ export default function SignatureDesigner({ onSelectSignature, onSaveSignature }
             <Button
               onClick={handleSaveSignature}
               disabled={isSaving}
-              className="w-full bg-[#1A1A1A] hover:bg-[#1A1A1A] text-gold"
+              className="w-full bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A]"
             >
               {isSaving ? (
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />

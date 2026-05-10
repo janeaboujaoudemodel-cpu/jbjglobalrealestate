@@ -218,10 +218,10 @@ When asked to do tasks, confirm you've understood and will handle it. For comple
         initial={{ opacity: 0, x: 50, scale: 0.95 }}
         animate={{ opacity: 1, x: 0, scale: 1 }}
         exit={{ opacity: 0, x: 50, scale: 0.95 }}
-        className="fixed bottom-6 right-6 z-[9000] w-[400px] h-[600px] bg-[#0A0A0A] border border-gold/30 rounded-2xl shadow-2xl shadow-gold/10 flex flex-col overflow-hidden"
+        className="fixed bottom-6 right-6 z-[9000] w-[400px] h-[600px] bg-[#0A0A0A] border border-[#B89555]/30 rounded-2xl shadow-2xl shadow-gold/10 flex flex-col overflow-hidden"
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-[#0E0E0E] to-[#1A1A1A] border-b border-gold/20 p-4 flex items-center justify-between">
+        <div className="bg-gradient-to-r from-[#0E0E0E] to-[#1A1A1A] border-b border-[#B89555]/20 p-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="relative">
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gold to-gold/60 flex items-center justify-center">
@@ -230,7 +230,7 @@ When asked to do tasks, confirm you've understood and will handle it. For comple
               <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[#0A0A0A] rounded-full animate-pulse" />
             </div>
             <div>
-              <h3 className="text-gold font-semibold">Amanda Clarke</h3>
+              <h3 className="text-[#1A1A1A] font-semibold">Amanda Clarke</h3>
               <p className="text-[#1A1A1A]/70 text-xs flex items-center gap-1">
                 <span className="w-1.5 h-1.5 bg-green-500 rounded-full" />
                 Available 24/7
@@ -240,19 +240,19 @@ When asked to do tasks, confirm you've understood and will handle it. For comple
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsMuted(!isMuted)}
-              className="w-8 h-8 rounded-full bg-gold/10 hover:bg-gold/20 flex items-center justify-center transition-colors"
+              className="w-8 h-8 rounded-full bg-[#EFE6D6]/10 hover:bg-[#EFE6D6]/20 flex items-center justify-center transition-colors"
             >
               {isMuted ? (
-                <VolumeX className="w-4 h-4 text-gold" />
+                <VolumeX className="w-4 h-4 text-[#1A1A1A]" />
               ) : (
-                <Volume2 className="w-4 h-4 text-gold" />
+                <Volume2 className="w-4 h-4 text-[#1A1A1A]" />
               )}
             </button>
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-full bg-gold/10 hover:bg-gold/20 flex items-center justify-center transition-colors"
+              className="w-8 h-8 rounded-full bg-[#EFE6D6]/10 hover:bg-[#EFE6D6]/20 flex items-center justify-center transition-colors"
             >
-              <X className="w-4 h-4 text-gold" />
+              <X className="w-4 h-4 text-[#1A1A1A]" />
             </button>
           </div>
         </div>
@@ -275,14 +275,14 @@ When asked to do tasks, confirm you've understood and will handle it. For comple
                 <div className="flex flex-col max-w-[80%]">
                   <div className={`rounded-2xl px-4 py-3 select-text cursor-text ${
                     message.role === 'user' 
-                      ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-gold/30 shadow-md rounded-tr-sm' 
-                      : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-gold/20 shadow-sm rounded-tl-sm'
+                      ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/30 shadow-md rounded-tr-sm' 
+                      : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/20 shadow-sm rounded-tl-sm'
                   }`}>
                     {message.isTyping ? (
                       <div className="flex gap-1 py-1">
-                        <span className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                        <span className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                        <span className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                        <span className="w-2 h-2 bg-[#EFE6D6] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                        <span className="w-2 h-2 bg-[#EFE6D6] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                        <span className="w-2 h-2 bg-[#EFE6D6] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                       </div>
                     ) : (
                       <p className="text-sm leading-relaxed whitespace-pre-wrap select-text">{message.content}</p>
@@ -295,7 +295,7 @@ When asked to do tasks, confirm you've understood and will handle it. For comple
                         await navigator.clipboard.writeText(message.content);
                         toast.success(t('chat.messageCopied') || 'Message copied');
                       }}
-                      className={`flex items-center gap-1 mt-1 text-[10px] text-[#1A1A1A]/70 hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
+                      className={`flex items-center gap-1 mt-1 text-[10px] text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors opacity-0 group-hover:opacity-100 ${
                         message.role === 'user' ? 'self-end mr-1' : 'self-start ml-1'
                       }`}
                     >
@@ -315,14 +315,14 @@ When asked to do tasks, confirm you've understood and will handle it. For comple
         </ScrollArea>
 
         {/* Input */}
-        <div className="p-4 border-t border-gold/20 bg-[#0E0E0E]">
+        <div className="p-4 border-t border-[#B89555]/20 bg-[#0E0E0E]">
           <div className="flex items-center gap-2">
             <VoiceInputButton
               onTranscript={handleVoiceTranscript}
               disabled={isLoading}
               variant="ghost"
               size="icon"
-              className="w-10 h-10 rounded-full bg-gold/10 text-gold hover:bg-gold/20"
+              className="w-10 h-10 rounded-full bg-[#EFE6D6]/10 text-[#1A1A1A] hover:bg-[#EFE6D6]/20"
             />
             <Input
               ref={inputRef}
@@ -330,7 +330,7 @@ When asked to do tasks, confirm you've understood and will handle it. For comple
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Ask me anything..."
-              className="flex-1 bg-[#1A1A1A] border-gold/20 text-white placeholder:text-[#1A1A1A]/70 focus:border-gold"
+              className="flex-1 bg-[#1A1A1A] border-[#B89555]/20 text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]"
               disabled={isLoading}
             />
             <Button

@@ -105,16 +105,16 @@ export function FeatureReviewPrompt({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {trigger || (
-          <Button variant="outline" size="sm" className="gap-2 border-gold/30 text-gold hover:bg-gold/10">
+          <Button variant="outline" size="sm" className="gap-2 border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
             <Star className="h-4 w-4 fill-gold" />
             Rate
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="max-w-md bg-[#FDFBF7] border-2 border-gold/30">
+      <DialogContent className="max-w-md bg-[#FDFBF7] border-2 border-[#B89555]/30">
         <DialogHeader>
           <DialogTitle className="text-[#1A1A1A] flex items-center gap-2">
-            <Star className="h-5 w-5 text-gold fill-gold" />
+            <Star className="h-5 w-5 text-[#1A1A1A] fill-gold" />
             Rate {featureLabel}
           </DialogTitle>
         </DialogHeader>
@@ -134,14 +134,14 @@ export function FeatureReviewPrompt({
               >
                 <Star
                   className={`h-10 w-10 transition-colors ${
-                    star <= (hoverRating || rating) ? "fill-gold text-gold" : "text-[#1A1A1A]/70"
+                    star <= (hoverRating || rating) ? "fill-gold text-[#1A1A1A]" : "text-[#1A1A1A]/70"
                   }`}
                 />
               </button>
             ))}
           </div>
           {rating > 0 && (
-            <p className="text-center text-sm font-medium text-gold">
+            <p className="text-center text-sm font-medium text-[#1A1A1A]">
               {rating === 5 ? "Excellent!" : rating === 4 ? "Great!" : rating === 3 ? "Good" : rating === 2 ? "Fair" : "Poor"}
             </p>
           )}
@@ -191,7 +191,7 @@ export function FeatureReviewPrompt({
 
           <p className="text-xs text-[#1A1A1A]/70">Reviews are moderated before publishing. You earn 2 points when your review is approved.</p>
 
-          <Button onClick={handleSubmit} disabled={submitting || !rating} className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A] font-bold">
+          <Button onClick={handleSubmit} disabled={submitting || !rating} className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-bold">
             {submitting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Send className="h-4 w-4 mr-2" />}
             Submit Review
           </Button>

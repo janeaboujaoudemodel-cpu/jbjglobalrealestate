@@ -56,10 +56,10 @@ const ComplianceDisclaimer = ({ variant = "compact", className = "", language = 
 
   if (variant === "full") {
     return (
-      <div className={`bg-zinc-900/80 backdrop-blur-md border border-[#1A1A1A] rounded-xl p-6 ${className}`}>
+      <div className={`bg-[#FDFBF7]/80 backdrop-blur-md border border-[#1A1A1A] rounded-xl p-6 ${className}`}>
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 bg-gold/10 border border-gold/30 rounded-lg flex items-center justify-center">
-            <Shield className="w-5 h-5 text-gold" />
+          <div className="w-10 h-10 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-lg flex items-center justify-center">
+            <Shield className="w-5 h-5 text-[#1A1A1A]" />
           </div>
           <div>
             <h4 className="text-white font-semibold">
@@ -74,7 +74,7 @@ const ComplianceDisclaimer = ({ variant = "compact", className = "", language = 
         <div className="space-y-4">
           {fullDisclaimerPoints.map((point) => (
             <div key={point.title} className="flex items-start gap-3">
-              <point.icon className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
+              <point.icon className="w-4 h-4 text-[#1A1A1A] flex-shrink-0 mt-1" />
               <div>
                 <p className="text-white text-sm font-medium mb-1">{point.title}</p>
                 <p className="text-white/70 text-sm leading-relaxed">{point.content}</p>
@@ -86,8 +86,8 @@ const ComplianceDisclaimer = ({ variant = "compact", className = "", language = 
         <div className="mt-6 pt-4 border-t border-[#1A1A1A]">
           <p className="text-[#1A1A1A]/70 text-xs text-center">
             © {currentYear} JBJ Global Real Estate Brokerage | 
-            <Link to="/privacy" className="text-gold hover:underline ml-1">Privacy Policy</Link> | 
-            <Link to="/terms" className="text-gold hover:underline ml-1">Terms of Service</Link>
+            <Link to="/privacy" className="text-[#1A1A1A] hover:underline ml-1">Privacy Policy</Link> | 
+            <Link to="/terms" className="text-[#1A1A1A] hover:underline ml-1">Terms of Service</Link>
           </p>
         </div>
       </div>
@@ -109,9 +109,9 @@ const ComplianceDisclaimer = ({ variant = "compact", className = "", language = 
 
   if (variant === "brokerage-cta") {
     return (
-      <div className={`bg-zinc-900/50 border border-[#1A1A1A] rounded-lg p-4 ${className}`}>
+      <div className={`bg-[#FDFBF7]/50 border border-[#1A1A1A] rounded-lg p-4 ${className}`}>
         <div className="flex items-start gap-3">
-          <Building2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+          <Building2 className="w-5 h-5 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
           <div>
             <p className="text-white text-sm font-medium mb-1">
               {language === "ar" ? "استشارة وساطة عقارية" : "Real Estate Brokerage Consultation"}

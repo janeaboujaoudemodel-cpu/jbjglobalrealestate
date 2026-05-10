@@ -92,32 +92,32 @@ export default function DeveloperOverviewTab() {
   const pendingAlerts = changeRequests.filter(cr => cr.status === "pending");
 
   if (isLoading) {
-    return <div className="flex justify-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold" /></div>;
+    return <div className="flex justify-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#B89555]" /></div>;
   }
 
   return (
     <div className="space-y-6">
       {/* Summary stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="border-gold/20">
+        <Card className="border-[#B89555]/20">
           <CardContent className="pt-5">
-            <div className="text-2xl font-bold text-gold">{devStats.length}</div>
+            <div className="text-2xl font-bold text-[#1A1A1A]">{devStats.length}</div>
             <p className="text-sm text-muted-foreground">Developers with Projects</p>
           </CardContent>
         </Card>
-        <Card className="border-gold/20">
+        <Card className="border-[#B89555]/20">
           <CardContent className="pt-5">
             <div className="text-2xl font-bold text-blue-600">{projects.length}</div>
             <p className="text-sm text-muted-foreground">Total Projects</p>
           </CardContent>
         </Card>
-        <Card className="border-gold/20">
+        <Card className="border-[#B89555]/20">
           <CardContent className="pt-5">
             <div className="text-2xl font-bold text-emerald-600">{projects.filter(p => p.is_published).length}</div>
             <p className="text-sm text-muted-foreground">Published</p>
           </CardContent>
         </Card>
-        <Card className="border-gold/20">
+        <Card className="border-[#B89555]/20">
           <CardContent className="pt-5">
             <div className="text-2xl font-bold text-orange-500">{pendingAlerts.length}</div>
             <p className="text-sm text-muted-foreground">Pending Alerts</p>
@@ -157,7 +157,7 @@ export default function DeveloperOverviewTab() {
       )}
 
       {/* Developer project breakdown */}
-      <Card className="border-gold/20">
+      <Card className="border-[#B89555]/20">
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
             <Building2 className="h-4 w-4" />
@@ -191,7 +191,7 @@ export default function DeveloperOverviewTab() {
                   <span className="text-xs text-muted-foreground truncate">
                     {devReps.length > 0 ? (
                       <span className="flex items-center gap-1">
-                        <Users className="h-3 w-3 text-gold" />
+                        <Users className="h-3 w-3 text-[#1A1A1A]" />
                         {devReps[0].full_name}
                         {devReps.length > 1 && <span className="text-[10px]">+{devReps.length - 1}</span>}
                       </span>

@@ -139,28 +139,28 @@ export function MediaLibraryPanel({
         <TabsList className="w-full justify-start rounded-none border-b border-slate-800 bg-transparent p-0">
           <TabsTrigger 
             value="uploads" 
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] data-[state=active]:text-[#1A1A1A]"
           >
             <FolderOpen className="w-4 h-4 mr-1" />
             <span className="hidden lg:inline">Uploads</span>
           </TabsTrigger>
           <TabsTrigger 
             value="stock"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] data-[state=active]:text-[#1A1A1A]"
           >
             <Music className="w-4 h-4 mr-1" />
             <span className="hidden lg:inline">Stock</span>
           </TabsTrigger>
           <TabsTrigger 
             value="ai"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] data-[state=active]:text-[#1A1A1A]"
           >
             <Wand2 className="w-4 h-4 mr-1" />
             <span className="hidden lg:inline">AI</span>
           </TabsTrigger>
           <TabsTrigger 
             value="templates"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold"
+            className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] data-[state=active]:text-[#1A1A1A]"
           >
             <LayoutTemplate className="w-4 h-4 mr-1" />
             <span className="hidden lg:inline">Templates</span>
@@ -188,7 +188,7 @@ export function MediaLibraryPanel({
             <div
               onDrop={handleDrop}
               onDragOver={(e) => e.preventDefault()}
-              className="border-2 border-dashed border-slate-700 hover:border-gold/50 rounded-lg p-4 text-center cursor-pointer transition-colors mb-3"
+              className="border-2 border-dashed border-slate-700 hover:border-[#B89555]/50 rounded-lg p-4 text-center cursor-pointer transition-colors mb-3"
               onClick={() => fileInputRef.current?.click()}
             >
               <input
@@ -201,7 +201,7 @@ export function MediaLibraryPanel({
               />
               {isUploading ? (
                 <div className="space-y-2">
-                  <Loader2 className="w-8 h-8 mx-auto text-gold animate-spin" />
+                  <Loader2 className="w-8 h-8 mx-auto text-[#1A1A1A] animate-spin" />
                   <p className="text-sm text-slate-400">Uploading... {Math.round(uploadProgress)}%</p>
                 </div>
               ) : (
@@ -262,7 +262,7 @@ export function MediaLibraryPanel({
 
             {isLoadingStock ? (
               <div className="flex items-center justify-center py-8">
-                <Loader2 className="w-6 h-6 text-gold animate-spin" />
+                <Loader2 className="w-6 h-6 text-[#1A1A1A] animate-spin" />
               </div>
             ) : (
               <div className="grid grid-cols-2 gap-2">
@@ -289,7 +289,7 @@ export function MediaLibraryPanel({
           <TabsContent value="ai" className="mt-0 p-2">
             <div className="space-y-3">
               <div className="p-3 bg-slate-800/50 rounded-lg border border-slate-700">
-                <h4 className="text-sm font-medium text-amber-400 mb-2 flex items-center gap-2">
+                <h4 className="text-sm font-medium text-[#1A1A1A] mb-2 flex items-center gap-2">
                   <Sparkles className="w-4 h-4" />
                   AI Scene Generator
                 </h4>
@@ -317,7 +317,7 @@ export function MediaLibraryPanel({
               </div>
 
               <div className="p-3 bg-slate-800/50 rounded-lg border border-slate-700">
-                <h4 className="text-sm font-medium text-gold mb-2 flex items-center gap-2">
+                <h4 className="text-sm font-medium text-[#1A1A1A] mb-2 flex items-center gap-2">
                   <Mic className="w-4 h-4" />
                   AI Voiceover
                 </h4>
@@ -326,7 +326,7 @@ export function MediaLibraryPanel({
                 </p>
                 <Button 
                   size="sm" 
-                  className="w-full bg-gold text-[#1A1A1A] hover:bg-gold/90 border border-gold"
+                  className="w-full bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90 border border-[#B89555]"
                   onClick={() => toast.info('Open the Voice Suite from the Toolkit to create professional voiceovers with AI!')}
                 >
                   <Plus className="w-4 h-4 mr-2" />
@@ -335,7 +335,7 @@ export function MediaLibraryPanel({
               </div>
 
               <div className="p-3 bg-slate-800/50 rounded-lg border border-slate-700">
-                <h4 className="text-sm font-medium text-gold mb-2 flex items-center gap-2">
+                <h4 className="text-sm font-medium text-[#1A1A1A] mb-2 flex items-center gap-2">
                   <Music className="w-4 h-4" />
                   AI SFX Command
                 </h4>
@@ -348,7 +348,7 @@ export function MediaLibraryPanel({
                 />
                 <Button 
                   size="sm" 
-                  className="w-full bg-gold text-[#1A1A1A] hover:bg-gold/90 border border-gold"
+                  className="w-full bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90 border border-[#B89555]"
                   onClick={() => toast.info('AI SFX command coming soon! Browse the Stock tab for available sound effects.')}
                 >
                   <Wand2 className="w-4 h-4 mr-2" />
@@ -361,15 +361,15 @@ export function MediaLibraryPanel({
           {/* Templates Tab */}
           <TabsContent value="templates" className="mt-0 p-2">
             <div className="space-y-3">
-              <div className="p-3 bg-slate-800/50 rounded-lg border border-slate-700 cursor-pointer hover:border-gold/50 transition-colors">
+              <div className="p-3 bg-slate-800/50 rounded-lg border border-slate-700 cursor-pointer hover:border-[#B89555]/50 transition-colors">
                 <h4 className="text-sm font-medium text-white mb-1">JBJ Lower Third</h4>
                 <p className="text-xs text-slate-400">Luxury branded name tag overlay</p>
               </div>
-              <div className="p-3 bg-slate-800/50 rounded-lg border border-slate-700 cursor-pointer hover:border-gold/50 transition-colors">
+              <div className="p-3 bg-slate-800/50 rounded-lg border border-slate-700 cursor-pointer hover:border-[#B89555]/50 transition-colors">
                 <h4 className="text-sm font-medium text-white mb-1">Property Intro</h4>
                 <p className="text-xs text-slate-400">Animated property showcase intro</p>
               </div>
-              <div className="p-3 bg-slate-800/50 rounded-lg border border-slate-700 cursor-pointer hover:border-gold/50 transition-colors">
+              <div className="p-3 bg-slate-800/50 rounded-lg border border-slate-700 cursor-pointer hover:border-[#B89555]/50 transition-colors">
                 <h4 className="text-sm font-medium text-white mb-1">Call to Action</h4>
                 <p className="text-xs text-slate-400">Contact info with gold accents</p>
               </div>
@@ -402,7 +402,7 @@ export function MediaLibraryPanel({
                 Cancel
               </Button>
               <Button 
-                className="bg-gold text-[#1A1A1A] hover:bg-gold/90"
+                className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
                 onClick={() => {
                   onAddToTimeline(previewAsset);
                   setPreviewAsset(null);
@@ -446,7 +446,7 @@ function AssetCard({ asset, onAdd, onDelete, onPreview, isStock }: AssetCardProp
   };
 
   return (
-    <div className="group relative bg-slate-800/50 rounded-lg overflow-hidden border border-slate-700 hover:border-gold/50 transition-colors">
+    <div className="group relative bg-slate-800/50 rounded-lg overflow-hidden border border-slate-700 hover:border-[#B89555]/50 transition-colors">
       {/* Thumbnail */}
       <div 
         className={`aspect-video flex items-center justify-center cursor-pointer ${asset.thumbnailUrl ? 'bg-slate-800' : bg}`}
@@ -478,7 +478,7 @@ function AssetCard({ asset, onAdd, onDelete, onPreview, isStock }: AssetCardProp
       <div className="absolute inset-0 bg-[#1A1A1A]/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
         <Button
           size="sm"
-          className="bg-gold text-[#1A1A1A] hover:bg-gold/90 h-7 text-xs"
+          className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90 h-7 text-xs"
           onClick={onAdd}
         >
           <Plus className="w-3 h-3 mr-1" />

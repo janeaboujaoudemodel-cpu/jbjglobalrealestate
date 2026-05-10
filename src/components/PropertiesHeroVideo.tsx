@@ -31,8 +31,8 @@ const PropertiesHeroVideo = ({ children }: PropertiesHeroVideoProps) => {
       />
 
       {/* Floating gold accent orbs */}
-      <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/5 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-gold/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/4 left-10 w-64 h-64 bg-[#EFE6D6]/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-[#EFE6D6]/10 rounded-full blur-[120px] pointer-events-none" />
 
       {/* Children (hero content) */}
       {children}

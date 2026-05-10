@@ -106,7 +106,7 @@ const VideoBuilderAccessGate = ({ children }: VideoBuilderAccessGateProps) => {
         {/* Animated background effects */}
         <div className="absolute inset-0">
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gold/10 rounded-full blur-3xl animate-pulse delay-1000" />
+          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#EFE6D6]/10 rounded-full blur-3xl animate-pulse delay-1000" />
         </div>
 
         <div className="container max-w-6xl mx-auto px-4 py-16 relative z-10">
@@ -214,7 +214,7 @@ const VideoBuilderAccessGate = ({ children }: VideoBuilderAccessGateProps) => {
                 </div>
                 <div className="flex gap-2">
                   {[...Array(6)].map((_, i) => (
-                    <div key={i} className="h-12 flex-1 bg-zinc-800 rounded border border-white/5" />
+                    <div key={i} className="h-12 flex-1 bg-[#1A1A1A] rounded border border-white/5" />
                   ))}
                 </div>
               </div>
@@ -282,8 +282,8 @@ const VideoBuilderAccessGate = ({ children }: VideoBuilderAccessGateProps) => {
             <Card className="max-w-2xl mx-auto bg-gradient-to-br from-primary/10 via-gold/5 to-primary/10 border-primary/30">
               <CardContent className="p-8">
                 <div className="flex items-center justify-center gap-2 mb-4">
-                  <Lock className="h-5 w-5 text-gold" />
-                  <span className="text-gold font-semibold">Exclusive Access</span>
+                  <Lock className="h-5 w-5 text-[#1A1A1A]" />
+                  <span className="text-[#1A1A1A] font-semibold">Exclusive Access</span>
                 </div>
 
                 <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">

@@ -49,7 +49,7 @@ export function PhaseCard({
         );
       default:
         return (
-          <Badge className="bg-gold/10 text-[#1A1A1A]/50 border-gold/20">
+          <Badge className="bg-[#EFE6D6]/10 text-[#1A1A1A]/50 border-[#B89555]/20">
             Locked
           </Badge>
         );
@@ -68,9 +68,9 @@ export function PhaseCard({
         status === 'completed' 
           ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-emerald-500/40" 
           : status === 'in_progress' || status === 'test_pending'
-            ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/40"
-            : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/20",
-        canStart && "hover:border-gold/50 hover:shadow-md"
+            ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/40"
+            : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/20",
+        canStart && "hover:border-[#B89555]/50 hover:shadow-md"
       )}>
         <CardContent className="p-6 flex flex-col h-full">
           {/* Phase Number */}
@@ -80,8 +80,8 @@ export function PhaseCard({
               status === 'completed' 
                 ? "bg-emerald-500/20 text-emerald-600"
                 : status === 'in_progress' || status === 'test_pending'
-                  ? "bg-gold/20 text-gold"
-                  : "bg-gold/10 text-[#1A1A1A]/40"
+                  ? "bg-[#EFE6D6]/20 text-[#1A1A1A]"
+                  : "bg-[#EFE6D6]/10 text-[#1A1A1A]/40"
             )}>
               {phase.phase_number}
             </div>
@@ -105,7 +105,7 @@ export function PhaseCard({
           </div>
 
           {/* Action Button */}
-          <div className="mt-4 pt-4 border-t border-gold/20">
+          <div className="mt-4 pt-4 border-t border-[#B89555]/20">
             {status === 'completed' ? (
               <div className="flex items-center gap-2 text-emerald-600 text-sm">
                 <CheckCircle className="w-4 h-4" />
@@ -115,7 +115,7 @@ export function PhaseCard({
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="w-full border-gold/50 text-gold hover:bg-gold/10 whitespace-nowrap text-sm"
+                className="w-full border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 whitespace-nowrap text-sm"
               >
                 Continue Learning
                 <ArrowRight className="w-4 h-4 ml-2" />
@@ -123,7 +123,7 @@ export function PhaseCard({
             ) : status === 'test_pending' ? (
               <Button 
                 size="sm" 
-                className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A]"
+                className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]"
               >
                 Take Test
                 <ArrowRight className="w-4 h-4 ml-2" />
@@ -132,7 +132,7 @@ export function PhaseCard({
               <Button 
                 onClick={onStart}
                 size="sm" 
-                className="w-full bg-gold/20 hover:bg-gold/30 text-gold border border-gold/30"
+                className="w-full bg-[#EFE6D6]/20 hover:bg-[#EFE6D6]/30 text-[#1A1A1A] border border-[#B89555]/30"
               >
                 Start Phase
                 <ArrowRight className="w-4 h-4 ml-2" />

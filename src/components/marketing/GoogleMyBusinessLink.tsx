@@ -52,7 +52,7 @@ export const GoogleMyBusinessLink = ({
         href={GMB_URL}
         target="_blank"
         rel="noopener noreferrer"
-        className={`inline-flex items-center gap-2 text-white/70 hover:text-gold transition-colors ${className}`}
+        className={`inline-flex items-center gap-2 text-white/70 hover:text-[#1A1A1A] transition-colors ${className}`}
       >
         <MapPin className="w-4 h-4" />
         <span>View on Google Maps</span>

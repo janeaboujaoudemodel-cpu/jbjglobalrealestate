@@ -640,11 +640,11 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
             placeholder="Search notes..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 bg-[#F7F2EA] border-gold/20 text-[#1A1A1A]"
+            className="pl-10 bg-[#F7F2EA] border-[#B89555]/20 text-[#1A1A1A]"
           />
         </div>
         <Select value={selectedProject} onValueChange={setSelectedProject}>
-          <SelectTrigger className="w-full md:w-[200px] bg-[#F7F2EA] border-gold/20 text-[#1A1A1A]">
+          <SelectTrigger className="w-full md:w-[200px] bg-[#F7F2EA] border-[#B89555]/20 text-[#1A1A1A]">
             <SelectValue placeholder="All Projects" />
           </SelectTrigger>
           <SelectContent>
@@ -662,7 +662,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
         <Button
           variant="outline"
           size="sm"
-          className={`whitespace-nowrap border-gold/30 ${showArchived ? 'bg-red-50 border-red-200 text-red-700' : ''}`}
+          className={`whitespace-nowrap border-[#B89555]/30 ${showArchived ? 'bg-red-50 border-red-200 text-red-700' : ''}`}
           onClick={() => {
             setShowArchived(!showArchived);
             if (!showArchived) fetchArchivedNotes();

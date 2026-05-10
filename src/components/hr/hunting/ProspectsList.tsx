@@ -266,7 +266,7 @@ export function ProspectsList({ targetType }: ProspectsListProps) {
       {/* Prospects List */}
       {loading ? (
         <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold" />
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#B89555]" />
         </div>
       ) : filteredProspects.length === 0 ? (
         <Card>
@@ -289,7 +289,7 @@ export function ProspectsList({ targetType }: ProspectsListProps) {
                 <CardContent className="py-3">
                   <div className="flex items-center gap-4">
                     <Avatar className="h-10 w-10">
-                      <AvatarFallback className="bg-gold/10 text-gold">
+                      <AvatarFallback className="bg-[#EFE6D6]/10 text-[#1A1A1A]">
                         {prospect.full_name.split(' ').map(n => n[0]).join('').slice(0, 2)}
                       </AvatarFallback>
                     </Avatar>

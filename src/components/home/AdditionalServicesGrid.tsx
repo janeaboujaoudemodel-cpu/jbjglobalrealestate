@@ -100,17 +100,17 @@ const AdditionalServicesGrid = () => {
         >
           {service.available ? (
             <Link to={service.href} className="group block h-full">
-              <div className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl border-2 border-gold/30 hover:border-gold p-5 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] hover:-translate-y-1">
+              <div className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl border-2 border-[#B89555]/30 hover:border-[#B89555] p-5 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] hover:-translate-y-1">
                 <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${service.color} flex items-center justify-center mb-4 shadow-lg`}>
                   <service.icon className="w-6 h-6 text-white" />
                 </div>
-                <h4 className="text-lg font-bold text-[#1A1A1A] mb-2 group-hover:text-gold transition-colors">
+                <h4 className="text-lg font-bold text-[#1A1A1A] mb-2 group-hover:text-[#1A1A1A] transition-colors">
                   {service.title}
                 </h4>
                 <p className="text-sm text-[#1A1A1A]/70 mb-3">
                   {service.description}
                 </p>
-                <div className="flex items-center gap-1 text-gold text-sm font-medium">
+                <div className="flex items-center gap-1 text-[#1A1A1A] text-sm font-medium">
                   <span>Learn More</span>
                   <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </div>

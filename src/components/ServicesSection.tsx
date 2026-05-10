@@ -308,7 +308,7 @@ const ServicesSection = () => {
       <div className="container mx-auto px-4 relative z-10" id="services">
         {/* How We Help Section */}
         <div className="text-center mb-16">
-          <span className="inline-block px-5 py-2 bg-gradient-to-r from-gold/20 to-gold/5 border border-gold/30 rounded-full text-gold text-sm font-medium mb-6 backdrop-blur-sm">
+          <span className="inline-block px-5 py-2 bg-gradient-to-r from-gold/20 to-gold/5 border border-[#B89555]/30 rounded-full text-[#1A1A1A] text-sm font-medium mb-6 backdrop-blur-sm">
             JBJ Global Real Estate
           </span>
           <h2 
@@ -329,7 +329,7 @@ const ServicesSection = () => {
               to={item.href}
               className="group relative"
             >
-              <div className="relative bg-[#1A1A1A]/50 backdrop-blur-md border border-white/10 rounded-2xl p-6 h-full transition-all duration-500 group-hover:border-gold/40 group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-gold/10 overflow-hidden">
+              <div className="relative bg-[#1A1A1A]/50 backdrop-blur-md border border-white/10 rounded-2xl p-6 h-full transition-all duration-500 group-hover:border-[#B89555]/40 group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-gold/10 overflow-hidden">
                 <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl`} />
                 
                 <div className="relative z-10">
@@ -338,7 +338,7 @@ const ServicesSection = () => {
                   </div>
                   
                   <h3 
-                    className="text-lg font-bold text-white mb-2 group-hover:text-gold transition-colors duration-300"
+                    className="text-lg font-bold text-white mb-2 group-hover:text-[#1A1A1A] transition-colors duration-300"
                   >
                     {item.title}
                   </h3>
@@ -347,7 +347,7 @@ const ServicesSection = () => {
                     {item.description}
                   </p>
                   
-                  <div className="flex items-center text-gold text-sm font-medium mt-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                  <div className="flex items-center text-[#1A1A1A] text-sm font-medium mt-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
                     <span>Learn More</span>
                     <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
                   </div>
@@ -359,7 +359,7 @@ const ServicesSection = () => {
 
         {/* Services Section Header */}
         <div className="text-center mb-12">
-          <span className="inline-block px-5 py-2 bg-gradient-to-r from-gold/20 to-gold/5 border border-gold/30 rounded-full text-gold text-sm font-medium mb-6 backdrop-blur-sm">
+          <span className="inline-block px-5 py-2 bg-gradient-to-r from-gold/20 to-gold/5 border border-[#B89555]/30 rounded-full text-[#1A1A1A] text-sm font-medium mb-6 backdrop-blur-sm">
             Partner Network
           </span>
           <h2 
@@ -382,7 +382,7 @@ const ServicesSection = () => {
               rel="noopener noreferrer"
               className="group relative"
             >
-              <div className="relative bg-[#1A1A1A]/40 backdrop-blur-md border border-white/10 rounded-2xl p-8 h-full transition-all duration-500 group-hover:border-gold/40 group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-gold/10 overflow-hidden">
+              <div className="relative bg-[#1A1A1A]/40 backdrop-blur-md border border-white/10 rounded-2xl p-8 h-full transition-all duration-500 group-hover:border-[#B89555]/40 group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-gold/10 overflow-hidden">
                 <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl`} />
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 
@@ -392,7 +392,7 @@ const ServicesSection = () => {
                   </div>
 
                   <h3 
-                    className="text-xl font-bold text-white mb-3 group-hover:text-gold transition-colors duration-300"
+                    className="text-xl font-bold text-white mb-3 group-hover:text-[#1A1A1A] transition-colors duration-300"
                   >
                     {service.title}
                   </h3>
@@ -412,7 +412,7 @@ const ServicesSection = () => {
                     </Link>
                   )}
 
-                  <div className="flex items-center text-gold text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                  <div className="flex items-center text-[#1A1A1A] text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
                     <span>Inquire Now</span>
                     <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
                   </div>

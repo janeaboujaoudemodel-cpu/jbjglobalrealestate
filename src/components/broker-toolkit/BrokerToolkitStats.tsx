@@ -40,7 +40,7 @@ const STATS = [
     value: "∞", 
     label: "Growth Potential", 
     icon: Trophy,
-    color: "text-gold",
+    color: "text-[#1A1A1A]",
     description: "Points, levels & rewards"
   },
 ];
@@ -78,14 +78,14 @@ export function BrokerToolkitStats() {
               className="text-center group"
             >
               {/* Card with darker champagne fill, equal sizing */}
-              <div className="bg-gradient-to-br from-[#EFE6D6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-[#1A1A1A] rounded-xl p-4 h-full flex flex-col items-center justify-center transition-all duration-300 group-hover:border-gold group-hover:shadow-lg group-hover:shadow-gold/20">
-                <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-[#1A1A1A] mb-2 group-hover:bg-gold transition-all">
-                  <stat.icon className="w-5 h-5 text-gold group-hover:text-[#1A1A1A] transition-colors" />
+              <div className="bg-gradient-to-br from-[#EFE6D6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-[#1A1A1A] rounded-xl p-4 h-full flex flex-col items-center justify-center transition-all duration-300 group-hover:border-[#B89555] group-hover:shadow-lg group-hover:shadow-gold/20">
+                <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-[#1A1A1A] mb-2 group-hover:bg-[#EFE6D6] transition-all">
+                  <stat.icon className="w-5 h-5 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
                 </div>
                 <div className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-0.5">
                   {stat.value}
                 </div>
-                <div className="text-gold font-semibold text-xs mb-0.5">{stat.label}</div>
+                <div className="text-[#1A1A1A] font-semibold text-xs mb-0.5">{stat.label}</div>
                 <div className="text-[#1A1A1A]/70 text-[10px] hidden md:block leading-tight">{stat.description}</div>
               </div>
             </motion.div>

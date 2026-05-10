@@ -30,7 +30,7 @@ const MarketReportCTA = React.forwardRef<HTMLDivElement>((_, ref) => {
       <div className="flex justify-center relative">
         {/* Ambient glow behind book */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="w-64 h-64 bg-gold/20 rounded-full blur-3xl" />
+          <div className="w-64 h-64 bg-[#EFE6D6]/20 rounded-full blur-3xl" />
         </div>
         <MarketReportHeroBook />
       </div>
@@ -50,7 +50,7 @@ const MarketReportCTA = React.forwardRef<HTMLDivElement>((_, ref) => {
         <div className="space-y-3">
           {benefits.map((benefit, idx) => (
             <div key={idx} className="flex items-center gap-3 text-[#1A1A1A]/70">
-              <CheckCircle className="w-5 h-5 text-gold flex-shrink-0" />
+              <CheckCircle className="w-5 h-5 text-[#1A1A1A] flex-shrink-0" />
               <span>{benefit}</span>
             </div>
           ))}
@@ -74,17 +74,17 @@ const MarketReportCTA = React.forwardRef<HTMLDivElement>((_, ref) => {
             <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
             <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
             <span className="relative flex items-center justify-center gap-2">
-              <FileText className="w-5 h-5 text-gold group-hover:text-[#1A1A1A] transition-colors" />
-              <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">Download Your</span>
-              <span className="text-gold group-hover:text-[#1A1A1A] transition-colors">Free Book Now</span>
-              <ArrowUpRight className="w-5 h-5 text-[#1A1A1A] group-hover:text-gold transition-colors" />
+              <FileText className="w-5 h-5 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
+              <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">Download Your</span>
+              <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">Free Book Now</span>
+              <ArrowUpRight className="w-5 h-5 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
             </span>
           </button>
         </Link>
 
         {/* Attribution */}
         <p className="text-[#1A1A1A]/70 text-xs">
-          Created by <Link to="/about" className="text-gold hover:underline">JBJ Global Real Estate</Link>
+          Created by <Link to="/about" className="text-[#1A1A1A] hover:underline">JBJ Global Real Estate</Link>
         </p>
       </div>
     </motion.div>

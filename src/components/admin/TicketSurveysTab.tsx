@@ -73,23 +73,23 @@ const TicketSurveysTab: React.FC = () => {
     <div className="space-y-6">
       {/* Stats Row */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
           <CardContent className="pt-6 text-center">
-            <TrendingUp className="w-8 h-8 text-gold mx-auto mb-2" />
+            <TrendingUp className="w-8 h-8 text-[#1A1A1A] mx-auto mb-2" />
             <p className="text-3xl font-bold text-[#1A1A1A]">{surveys.length}</p>
             <p className="text-sm text-muted-foreground">Total Surveys</p>
           </CardContent>
         </Card>
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
           <CardContent className="pt-6 text-center">
             <Star className="w-8 h-8 text-yellow-500 mx-auto mb-2" />
             <p className="text-3xl font-bold text-[#1A1A1A]">{avgRating}</p>
             <p className="text-sm text-muted-foreground">Average Rating</p>
           </CardContent>
         </Card>
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
           <CardContent className="pt-6 text-center">
-            <MessageSquare className="w-8 h-8 text-gold mx-auto mb-2" />
+            <MessageSquare className="w-8 h-8 text-[#1A1A1A] mx-auto mb-2" />
             <p className="text-3xl font-bold text-[#1A1A1A]">{totalPoints}</p>
             <p className="text-sm text-muted-foreground">Points Awarded</p>
           </CardContent>
@@ -99,7 +99,7 @@ const TicketSurveysTab: React.FC = () => {
       {/* Charts */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {Object.entries(ratingLabels).map(([key, label]) => (
-          <Card key={key} className="bg-[#FDFBF7] border border-gold/20">
+          <Card key={key} className="bg-[#FDFBF7] border border-[#B89555]/20">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-[#1A1A1A]">{label}</CardTitle>
             </CardHeader>
@@ -123,7 +123,7 @@ const TicketSurveysTab: React.FC = () => {
       </div>
 
       {/* Search + Table */}
-      <Card className="bg-[#FDFBF7] border-2 border-gold/30">
+      <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="text-[#1A1A1A]">Survey Responses</CardTitle>
@@ -147,7 +147,7 @@ const TicketSurveysTab: React.FC = () => {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-gold/20">
+                  <tr className="border-b border-[#B89555]/20">
                     <th className="text-left py-3 px-2 font-semibold text-[#1A1A1A]">Name</th>
                     <th className="text-left py-3 px-2 font-semibold text-[#1A1A1A]">Email</th>
                     <th className="text-left py-3 px-2 font-semibold text-[#1A1A1A]">Ticket</th>
@@ -163,11 +163,11 @@ const TicketSurveysTab: React.FC = () => {
                 </thead>
                 <tbody>
                   {filtered.map((s: any) => (
-                    <tr key={s.id} className="border-b border-gold/10 hover:bg-gold/5">
+                    <tr key={s.id} className="border-b border-[#B89555]/10 hover:bg-[#EFE6D6]/5">
                       <td className="py-2 px-2 text-[#1A1A1A]">{s.full_name || '—'}</td>
                       <td className="py-2 px-2 text-muted-foreground">{s.email || '—'}</td>
                       <td className="py-2 px-2">
-                        <span className="font-mono text-gold font-semibold cursor-pointer hover:underline">
+                        <span className="font-mono text-[#1A1A1A] font-semibold cursor-pointer hover:underline">
                           {s.ticket_number || '—'}
                         </span>
                       </td>
@@ -177,7 +177,7 @@ const TicketSurveysTab: React.FC = () => {
                       <td className="py-2 px-2"><StarDisplay rating={s.resolution_quality} /></td>
                       <td className="py-2 px-2"><StarDisplay rating={s.website_smartness} /></td>
                       <td className="py-2 px-2 max-w-[200px] truncate text-muted-foreground">{s.suggestions || '—'}</td>
-                      <td className="py-2 px-2 text-center text-gold font-semibold">{s.points_awarded}</td>
+                      <td className="py-2 px-2 text-center text-[#1A1A1A] font-semibold">{s.points_awarded}</td>
                       <td className="py-2 px-2 text-muted-foreground text-xs">
                         {s.created_at ? format(new Date(s.created_at), 'MMM d, yyyy') : '—'}
                       </td>

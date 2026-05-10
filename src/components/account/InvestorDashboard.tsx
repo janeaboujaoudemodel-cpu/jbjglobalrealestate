@@ -200,7 +200,7 @@ const InvestorDashboard = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gold"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#B89555]"></div>
       </div>
     );
   }
@@ -208,12 +208,12 @@ const InvestorDashboard = () => {
   return (
     <div className="space-y-8">
       {/* Profile Header */}
-      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row items-center gap-6">
-            <Avatar className="h-24 w-24 border-4 border-gold/30">
+            <Avatar className="h-24 w-24 border-4 border-[#B89555]/30">
               <AvatarImage src={profile?.photo_url || ""} />
-              <AvatarFallback className="text-2xl bg-gold/20 text-gold">
+              <AvatarFallback className="text-2xl bg-[#EFE6D6]/20 text-[#1A1A1A]">
                 {profile?.full_name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
@@ -232,11 +232,11 @@ const InvestorDashboard = () => {
                 </p>
               )}
               <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mt-3">
-                <Badge className="bg-gold/10 text-gold border-gold/30">
+                <Badge className="bg-[#EFE6D6]/10 text-[#1A1A1A] border-[#B89555]/30">
                   <User className="h-3 w-3 mr-1" />
                   Investor Account
                 </Badge>
-                <Badge variant="outline" className="border-gold/30 text-[#1A1A1A]">
+                <Badge variant="outline" className="border-[#B89555]/30 text-[#1A1A1A]">
                   <Shield className="h-3 w-3 mr-1" />
                   Verified Member
                 </Badge>
@@ -300,11 +300,11 @@ const InvestorDashboard = () => {
           </CardContent>
         </Card>
 
-        <Card className="border-2 border-gold/30 hover:shadow-[0_4px_20px_rgba(200,167,102,0.15)] transition-shadow">
+        <Card className="border-2 border-[#B89555]/30 hover:shadow-[0_4px_20px_rgba(200,167,102,0.15)] transition-shadow">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-full bg-gold/10">
-                <MessageCircle className="h-5 w-5 text-gold" />
+              <div className="p-2 rounded-full bg-[#EFE6D6]/10">
+                <MessageCircle className="h-5 w-5 text-[#1A1A1A]" />
               </div>
               <div>
                 <p className="text-2xl font-bold text-[#1A1A1A]">{tickets.length}</p>
@@ -317,17 +317,17 @@ const InvestorDashboard = () => {
 
       {/* Tabs Section */}
       <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList className="bg-[#FDFBF7] border-2 border-gold/30 p-1 shadow-[0_2px_10px_rgba(200,167,102,0.08)]">
-          <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40 text-[#1A1A1A]">
+        <TabsList className="bg-[#FDFBF7] border-2 border-[#B89555]/30 p-1 shadow-[0_2px_10px_rgba(200,167,102,0.08)]">
+          <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
             Overview
           </TabsTrigger>
-          <TabsTrigger value="tickets" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40 text-[#1A1A1A]">
+          <TabsTrigger value="tickets" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
             Support Tickets
           </TabsTrigger>
-          <TabsTrigger value="ideas" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40 text-[#1A1A1A]">
+          <TabsTrigger value="ideas" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
             My Ideas
           </TabsTrigger>
-          <TabsTrigger value="settings" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40 text-[#1A1A1A]">
+          <TabsTrigger value="settings" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
             Settings
           </TabsTrigger>
         </TabsList>
@@ -336,10 +336,10 @@ const InvestorDashboard = () => {
         <TabsContent value="overview" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Quick Actions */}
-            <Card className="border-2 border-gold/30">
+            <Card className="border-2 border-[#B89555]/30">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-[#1A1A1A]">
-                  <ChevronRight className="h-5 w-5 text-gold" />
+                  <ChevronRight className="h-5 w-5 text-[#1A1A1A]" />
                   Quick Actions
                 </CardTitle>
               </CardHeader>
@@ -349,7 +349,7 @@ const InvestorDashboard = () => {
                   className="w-full justify-start" 
                   onClick={() => navigate('/listing-portal')}
                 >
-                  <Building2 className="h-4 w-4 mr-3 text-gold" />
+                  <Building2 className="h-4 w-4 mr-3 text-[#1A1A1A]" />
                   List Your Property for Sale
                 </Button>
                 <Button 
@@ -357,7 +357,7 @@ const InvestorDashboard = () => {
                   className="w-full justify-start" 
                   onClick={() => navigate('/join')}
                 >
-                  <Briefcase className="h-4 w-4 mr-3 text-gold" />
+                  <Briefcase className="h-4 w-4 mr-3 text-[#1A1A1A]" />
                   Apply for Career
                 </Button>
                 <Button 
@@ -365,7 +365,7 @@ const InvestorDashboard = () => {
                   className="w-full justify-start" 
                   onClick={() => navigate('/contact')}
                 >
-                  <HelpCircle className="h-4 w-4 mr-3 text-gold" />
+                  <HelpCircle className="h-4 w-4 mr-3 text-[#1A1A1A]" />
                   Create Support Ticket
                 </Button>
                 <Button 
@@ -373,17 +373,17 @@ const InvestorDashboard = () => {
                   className="w-full justify-start" 
                   onClick={() => navigate('/faq')}
                 >
-                  <Lightbulb className="h-4 w-4 mr-3 text-gold" />
+                  <Lightbulb className="h-4 w-4 mr-3 text-[#1A1A1A]" />
                   Submit an Idea
                 </Button>
               </CardContent>
             </Card>
 
             {/* Recent Activity */}
-            <Card className="border-2 border-gold/30">
+            <Card className="border-2 border-[#B89555]/30">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-[#1A1A1A]">
-                  <Clock className="h-5 w-5 text-gold" />
+                  <Clock className="h-5 w-5 text-[#1A1A1A]" />
                   Recent Activity
                 </CardTitle>
               </CardHeader>
@@ -399,7 +399,7 @@ const InvestorDashboard = () => {
                     {tickets.slice(0, 3).map((ticket) => (
                       <div key={ticket.id} className="flex items-center justify-between p-3 rounded-lg bg-[#F7F2EA] border border-[#B89555]/30">
                         <div className="flex items-center gap-3">
-                          <MessageCircle className="h-4 w-4 text-gold" />
+                          <MessageCircle className="h-4 w-4 text-[#1A1A1A]" />
                           <div>
                             <p className="text-sm font-medium text-[#1A1A1A]">{ticket.subject}</p>
                             <p className="text-xs text-[#1A1A1A]/70">{format(new Date(ticket.created_at), 'MMM d, yyyy')}</p>
@@ -411,7 +411,7 @@ const InvestorDashboard = () => {
                     {ideas.slice(0, 2).map((idea) => (
                       <div key={idea.id} className="flex items-center justify-between p-3 rounded-lg bg-[#F7F2EA] border border-[#B89555]/30">
                         <div className="flex items-center gap-3">
-                          <Lightbulb className="h-4 w-4 text-gold" />
+                          <Lightbulb className="h-4 w-4 text-[#1A1A1A]" />
                           <div>
                             <p className="text-sm font-medium text-[#1A1A1A]">Idea Submission</p>
                             <p className="text-xs text-[#1A1A1A]/70">{format(new Date(idea.created_at), 'MMM d, yyyy')}</p>
@@ -429,10 +429,10 @@ const InvestorDashboard = () => {
 
         {/* Support Tickets Tab */}
         <TabsContent value="tickets">
-          <Card className="border-2 border-gold/30">
+          <Card className="border-2 border-[#B89555]/30">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-[#1A1A1A]">
-                <MessageCircle className="h-5 w-5 text-gold" />
+                <MessageCircle className="h-5 w-5 text-[#1A1A1A]" />
                 My Support Tickets
               </CardTitle>
               <CardDescription className="text-[#1A1A1A]/70">
@@ -452,10 +452,10 @@ const InvestorDashboard = () => {
               ) : (
                 <div className="space-y-3">
                   {tickets.map((ticket) => (
-                    <div key={ticket.id} className="flex items-center justify-between p-4 rounded-xl bg-[#FDFBF7] border-2 border-[#B89555]/30 hover:border-gold/30 transition-colors">
+                    <div key={ticket.id} className="flex items-center justify-between p-4 rounded-xl bg-[#FDFBF7] border-2 border-[#B89555]/30 hover:border-[#B89555]/30 transition-colors">
                       <div className="flex items-center gap-4">
-                        <div className="p-2 rounded-lg bg-gold/10">
-                          <MessageCircle className="h-5 w-5 text-gold" />
+                        <div className="p-2 rounded-lg bg-[#EFE6D6]/10">
+                          <MessageCircle className="h-5 w-5 text-[#1A1A1A]" />
                         </div>
                         <div>
                           <p className="font-medium text-[#1A1A1A]">{ticket.subject}</p>
@@ -475,10 +475,10 @@ const InvestorDashboard = () => {
 
         {/* Ideas Tab */}
         <TabsContent value="ideas">
-          <Card className="border-2 border-gold/30">
+          <Card className="border-2 border-[#B89555]/30">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-[#1A1A1A]">
-                <Lightbulb className="h-5 w-5 text-gold" />
+                <Lightbulb className="h-5 w-5 text-[#1A1A1A]" />
                 My Ideas & Suggestions
               </CardTitle>
               <CardDescription className="text-[#1A1A1A]/70">
@@ -498,10 +498,10 @@ const InvestorDashboard = () => {
               ) : (
                 <div className="space-y-3">
                   {ideas.map((idea) => (
-                    <div key={idea.id} className="flex items-center justify-between p-4 rounded-xl bg-[#FDFBF7] border-2 border-[#B89555]/30 hover:border-gold/30 transition-colors">
+                    <div key={idea.id} className="flex items-center justify-between p-4 rounded-xl bg-[#FDFBF7] border-2 border-[#B89555]/30 hover:border-[#B89555]/30 transition-colors">
                       <div className="flex items-center gap-4">
-                        <div className="p-2 rounded-lg bg-gold/10">
-                          <Lightbulb className="h-5 w-5 text-gold" />
+                        <div className="p-2 rounded-lg bg-[#EFE6D6]/10">
+                          <Lightbulb className="h-5 w-5 text-[#1A1A1A]" />
                         </div>
                         <div>
                           <p className="font-medium text-[#1A1A1A]">Idea Submission</p>
@@ -523,11 +523,11 @@ const InvestorDashboard = () => {
         <TabsContent value="settings">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Profile Settings */}
-            <Card className="border-2 border-gold/30">
+            <Card className="border-2 border-[#B89555]/30">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle className="flex items-center gap-2 text-[#1A1A1A]">
-                    <User className="h-5 w-5 text-gold" />
+                    <User className="h-5 w-5 text-[#1A1A1A]" />
                     Profile Information
                   </CardTitle>
                   <Button 
@@ -549,7 +549,7 @@ const InvestorDashboard = () => {
                         id="full_name"
                         value={formData.full_name}
                         onChange={(e) => setFormData(prev => ({ ...prev, full_name: e.target.value }))}
-                        className="border-gold/30"
+                        className="border-[#B89555]/30"
                       />
                     </div>
                     <div className="space-y-2">
@@ -558,7 +558,7 @@ const InvestorDashboard = () => {
                         id="phone"
                         value={formData.phone}
                         onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                        className="border-gold/30"
+                        className="border-[#B89555]/30"
                       />
                     </div>
                     <div className="space-y-2">
@@ -568,7 +568,7 @@ const InvestorDashboard = () => {
                         type="date"
                         value={formData.date_of_birth}
                         onChange={(e) => setFormData(prev => ({ ...prev, date_of_birth: e.target.value }))}
-                        className="border-gold/30"
+                        className="border-[#B89555]/30"
                       />
                     </div>
                     <Button onClick={handleSaveProfile} variant="primary" className="w-full">
@@ -599,10 +599,10 @@ const InvestorDashboard = () => {
             </Card>
 
             {/* Security Settings */}
-            <Card className="border-2 border-gold/30">
+            <Card className="border-2 border-[#B89555]/30">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-[#1A1A1A]">
-                  <Lock className="h-5 w-5 text-gold" />
+                  <Lock className="h-5 w-5 text-[#1A1A1A]" />
                   Security
                 </CardTitle>
               </CardHeader>
@@ -612,7 +612,7 @@ const InvestorDashboard = () => {
                   className="w-full justify-start"
                   onClick={() => navigate('/auth?mode=reset')}
                 >
-                  <Key className="h-4 w-4 mr-3 text-gold" />
+                  <Key className="h-4 w-4 mr-3 text-[#1A1A1A]" />
                   Change Password
                 </Button>
                 <div className="p-4 rounded-lg bg-green-50 border border-green-200">

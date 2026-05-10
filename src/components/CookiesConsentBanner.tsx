@@ -115,7 +115,7 @@ const CookiesConsentBanner = () => {
           style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}
           data-chrome="cookie-banner"
         >
-          <div className="pointer-events-auto relative max-w-lg sm:max-w-4xl mx-auto bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] backdrop-blur-xl border border-gold/40 rounded-2xl shadow-2xl shadow-gold/10 overflow-hidden max-h-[80vh] overflow-y-auto overscroll-contain">
+          <div className="pointer-events-auto relative max-w-lg sm:max-w-4xl mx-auto bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] backdrop-blur-xl border border-[#B89555]/40 rounded-2xl shadow-2xl shadow-gold/10 overflow-hidden max-h-[80vh] overflow-y-auto overscroll-contain">
             {/* Top gold accent line */}
             <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
             
@@ -123,8 +123,8 @@ const CookiesConsentBanner = () => {
             {!showPreferences ? (
               <div className="p-4 sm:p-6">
                 <div className="flex items-start gap-3 sm:gap-4">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-gold/20 to-gold/10 border border-gold/50 rounded-xl flex items-center justify-center flex-shrink-0 shadow-inner">
-                    <Cookie className="w-5 h-5 sm:w-6 sm:h-6 text-gold" />
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-gold/20 to-gold/10 border border-[#B89555]/50 rounded-xl flex items-center justify-center flex-shrink-0 shadow-inner">
+                    <Cookie className="w-5 h-5 sm:w-6 sm:h-6 text-[#1A1A1A]" />
                   </div>
                   <div className="flex-1">
                     <h3 className="text-[#1A1A1A] font-semibold text-base sm:text-lg mb-1.5">We value your privacy</h3>
@@ -134,7 +134,7 @@ const CookiesConsentBanner = () => {
                     <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                       <Button
                         onClick={handleAcceptAll}
-                        className="bg-gold text-[#1A1A1A] font-semibold hover:brightness-110 transition-all border border-gold/60 shadow-md px-4 sm:px-6 text-sm whitespace-nowrap"
+                        className="bg-[#EFE6D6] text-[#1A1A1A] font-semibold hover:brightness-110 transition-all border border-[#B89555]/60 shadow-md px-4 sm:px-6 text-sm whitespace-nowrap"
                       >
                         Accept All
                       </Button>
@@ -166,18 +166,18 @@ const CookiesConsentBanner = () => {
 
                 <div className="space-y-4 mb-6">
                   {/* Essential - Always on */}
-                  <div className="flex items-center justify-between p-4 bg-[#FDFBF7]/70 border border-gold/20 rounded-xl">
+                  <div className="flex items-center justify-between p-4 bg-[#FDFBF7]/70 border border-[#B89555]/20 rounded-xl">
                     <div>
                       <h4 className="text-[#1A1A1A] font-medium">Essential Cookies</h4>
                       <p className="text-[#1A1A1A]/60 text-sm">Required for the website to function</p>
                     </div>
-                    <div className="px-3 py-1 bg-gradient-to-r from-gold/20 to-gold/10 text-gold text-xs font-medium rounded-full border border-gold/30">
+                    <div className="px-3 py-1 bg-gradient-to-r from-gold/20 to-gold/10 text-[#1A1A1A] text-xs font-medium rounded-full border border-[#B89555]/30">
                       Always on
                     </div>
                   </div>
 
                   {/* Analytics */}
-                  <label className="flex items-center justify-between p-4 bg-[#FDFBF7]/70 border border-gold/20 rounded-xl cursor-pointer hover:bg-[#FDFBF7]/90 hover:border-gold/40 transition-all">
+                  <label className="flex items-center justify-between p-4 bg-[#FDFBF7]/70 border border-[#B89555]/20 rounded-xl cursor-pointer hover:bg-[#FDFBF7]/90 hover:border-[#B89555]/40 transition-all">
                     <div>
                       <h4 className="text-[#1A1A1A] font-medium">Analytics Cookies</h4>
                       <p className="text-[#1A1A1A]/60 text-sm">Help us improve our website</p>
@@ -186,12 +186,12 @@ const CookiesConsentBanner = () => {
                       type="checkbox"
                       checked={preferences.analytics}
                       onChange={(e) => setPreferences({ ...preferences, analytics: e.target.checked })}
-                      className="w-5 h-5 rounded border-gold/50 bg-[#FDFBF7] text-gold focus:ring-gold focus:ring-offset-0 accent-gold"
+                      className="w-5 h-5 rounded border-[#B89555]/50 bg-[#FDFBF7] text-[#1A1A1A] focus:ring-gold focus:ring-offset-0 accent-gold"
                     />
                   </label>
 
                   {/* Marketing */}
-                  <label className="flex items-center justify-between p-4 bg-[#FDFBF7]/70 border border-gold/20 rounded-xl cursor-pointer hover:bg-[#FDFBF7]/90 hover:border-gold/40 transition-all">
+                  <label className="flex items-center justify-between p-4 bg-[#FDFBF7]/70 border border-[#B89555]/20 rounded-xl cursor-pointer hover:bg-[#FDFBF7]/90 hover:border-[#B89555]/40 transition-all">
                     <div>
                       <h4 className="text-[#1A1A1A] font-medium">Marketing Cookies</h4>
                       <p className="text-[#1A1A1A]/60 text-sm">Personalized advertising</p>
@@ -200,7 +200,7 @@ const CookiesConsentBanner = () => {
                       type="checkbox"
                       checked={preferences.marketing}
                       onChange={(e) => setPreferences({ ...preferences, marketing: e.target.checked })}
-                      className="w-5 h-5 rounded border-gold/50 bg-[#FDFBF7] text-gold focus:ring-gold focus:ring-offset-0 accent-gold"
+                      className="w-5 h-5 rounded border-[#B89555]/50 bg-[#FDFBF7] text-[#1A1A1A] focus:ring-gold focus:ring-offset-0 accent-gold"
                     />
                   </label>
                 </div>
@@ -208,7 +208,7 @@ const CookiesConsentBanner = () => {
                 <div className="flex gap-3">
                   <Button
                     onClick={handleSavePreferences}
-                    className="bg-gold text-[#1A1A1A] font-semibold hover:brightness-110 transition-all border border-gold/50 shadow-lg px-6"
+                    className="bg-[#EFE6D6] text-[#1A1A1A] font-semibold hover:brightness-110 transition-all border border-[#B89555]/50 shadow-lg px-6"
                   >
                     Save preferences
                   </Button>

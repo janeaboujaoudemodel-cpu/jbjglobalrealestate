@@ -68,8 +68,8 @@ html[data-style-mode="before"] [data-state="active"][class*="data-[state=active]
    ════════════════════════════════════════════════════════════════ */
 html[data-style-mode="before"] button[class*="bg-[#B89555]"],
 html[data-style-mode="before"] a[class*="bg-[#B89555]"],
-html[data-style-mode="before"] button[class*="bg-gold"]:not([class*="bg-gold/"]),
-html[data-style-mode="before"] a[class*="bg-gold"]:not([class*="bg-gold/"]) {
+html[data-style-mode="before"] button[class*="bg-[#EFE6D6]"]:not([class*="bg-[#EFE6D6]/"]),
+html[data-style-mode="before"] a[class*="bg-[#EFE6D6]"]:not([class*="bg-[#EFE6D6]/"]) {
   background-color: #1a1a1a !important;
   background-image: none !important;
   color: #ffffff !important;
@@ -167,7 +167,7 @@ html[data-style-mode="before"] footer[data-footer="corporate"] a {
 /* ════════════════════════════════════════════════════════════════
    12. GOLD ACCENT BORDERS → neutral border
    ════════════════════════════════════════════════════════════════ */
-html[data-style-mode="before"] [class*="border-gold"],
+html[data-style-mode="before"] [class*="border-[#B89555]"],
 html[data-style-mode="before"] [class*="ring-gold"],
 html[data-style-mode="before"] [class*="border-[#B89555]"] {
   border-color: rgba(0, 0, 0, 0.1) !important;
@@ -205,9 +205,9 @@ html[data-style-mode="before"] [class*="text-3xl"] {
 /* ════════════════════════════════════════════════════════════════
    14. FADED GOLD ON CHIPS (pre-prohibition)
    ════════════════════════════════════════════════════════════════ */
-html[data-style-mode="before"] [class*="bg-gold/"],
-html[data-style-mode="before"] [class*="text-gold/"],
-html[data-style-mode="before"] [class*="text-gold"] {
+html[data-style-mode="before"] [class*="bg-[#EFE6D6]/"],
+html[data-style-mode="before"] [class*="text-[#1A1A1A]/"],
+html[data-style-mode="before"] [class*="text-[#1A1A1A]"] {
   color: rgba(184, 149, 106, 0.7) !important;
 }
 

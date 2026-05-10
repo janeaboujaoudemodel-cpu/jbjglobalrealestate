@@ -63,10 +63,10 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
   };
 
   return (
-    <Card className="bg-zinc-900 border-[#1A1A1A] w-80">
+    <Card className="bg-[#FDFBF7] border-[#1A1A1A] w-80">
       <CardHeader className="pb-2 flex flex-row items-center justify-between">
         <CardTitle className="text-white text-lg flex items-center gap-2">
-          <Sparkles className="w-5 h-5 text-gold" />
+          <Sparkles className="w-5 h-5 text-[#1A1A1A]" />
           Beauty Filters
         </CardTitle>
         <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 text-white/70 hover:text-white">
@@ -75,7 +75,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Master Toggle */}
-        <div className="flex items-center justify-between p-3 bg-zinc-800/50 rounded-lg">
+        <div className="flex items-center justify-between p-3 bg-[#1A1A1A]/50 rounded-lg">
           <Label className="text-white font-medium">Enable Beauty Filters</Label>
           <Switch 
             checked={settings.enabled} 
@@ -85,7 +85,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
 
         {settings.enabled && (
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid grid-cols-4 bg-zinc-800">
+            <TabsList className="grid grid-cols-4 bg-[#1A1A1A]">
               <TabsTrigger value="skin" className="text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A]">
                 <User className="h-3 w-3" />
               </TabsTrigger>
@@ -105,7 +105,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <Label className="text-white/85 text-sm">Skin Smoothing</Label>
-                  <span className="text-xs text-gold">{settings.skinSmoothing}%</span>
+                  <span className="text-xs text-[#1A1A1A]">{settings.skinSmoothing}%</span>
                 </div>
                 <Slider
                   value={[settings.skinSmoothing]}
@@ -119,7 +119,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <Label className="text-white/85 text-sm">Brightness</Label>
-                  <span className="text-xs text-gold">{settings.brightness}%</span>
+                  <span className="text-xs text-[#1A1A1A]">{settings.brightness}%</span>
                 </div>
                 <Slider
                   value={[settings.brightness]}
@@ -134,7 +134,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <Label className="text-white/85 text-sm">Contrast</Label>
-                  <span className="text-xs text-gold">{settings.contrast}%</span>
+                  <span className="text-xs text-[#1A1A1A]">{settings.contrast}%</span>
                 </div>
                 <Slider
                   value={[settings.contrast]}
@@ -149,7 +149,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <Label className="text-white/85 text-sm">Warmth</Label>
-                  <span className="text-xs text-gold">{settings.warmth}%</span>
+                  <span className="text-xs text-[#1A1A1A]">{settings.warmth}%</span>
                 </div>
                 <Slider
                   value={[settings.warmth]}
@@ -167,7 +167,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <Label className="text-white/85 text-sm">Face Slimming</Label>
-                  <span className="text-xs text-gold">{settings.faceSlimming}%</span>
+                  <span className="text-xs text-[#1A1A1A]">{settings.faceSlimming}%</span>
                 </div>
                 <Slider
                   value={[settings.faceSlimming]}
@@ -181,7 +181,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <Label className="text-white/85 text-sm">Eye Enlargement</Label>
-                  <span className="text-xs text-gold">{settings.eyeEnlargement}%</span>
+                  <span className="text-xs text-[#1A1A1A]">{settings.eyeEnlargement}%</span>
                 </div>
                 <Slider
                   value={[settings.eyeEnlargement]}
@@ -195,7 +195,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <Label className="text-white/85 text-sm">Contour</Label>
-                  <span className="text-xs text-gold">{settings.contour}%</span>
+                  <span className="text-xs text-[#1A1A1A]">{settings.contour}%</span>
                 </div>
                 <Slider
                   value={[settings.contour]}
@@ -209,7 +209,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <Label className="text-white/85 text-sm">Blush</Label>
-                  <span className="text-xs text-gold">{settings.blush}%</span>
+                  <span className="text-xs text-[#1A1A1A]">{settings.blush}%</span>
                 </div>
                 <Slider
                   value={[settings.blush]}
@@ -232,7 +232,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
                       onClick={() => updateSetting('makeupPreset', preset.id)}
                       className={`p-2 rounded-lg text-xs text-center border transition-all ${
                         settings.makeupPreset === preset.id 
-                          ? 'border-gold bg-gold/20 text-white' 
+                          ? 'border-[#B89555] bg-[#EFE6D6]/20 text-white' 
                           : 'border-[#1A1A1A] hover:border-[#1A1A1A] text-white/85'
                       }`}
                     >
@@ -251,7 +251,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
                       onClick={() => updateSetting('lipColor', color.id)}
                       className={`w-8 h-8 rounded-full border-2 transition-all ${
                         settings.lipColor === color.id 
-                          ? 'border-gold scale-110' 
+                          ? 'border-[#B89555] scale-110' 
                           : 'border-[#1A1A1A] hover:border-[#B89555]/30'
                       }`}
                       style={{ backgroundColor: color.color === 'transparent' ? '#3f3f46' : color.color }}
@@ -273,7 +273,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
                       onClick={() => updateSetting('hairColor', color.id)}
                       className={`w-8 h-8 rounded-full border-2 transition-all ${
                         settings.hairColor === color.id 
-                          ? 'border-gold scale-110' 
+                          ? 'border-[#B89555] scale-110' 
                           : 'border-[#1A1A1A] hover:border-[#B89555]/30'
                       }`}
                       style={{ backgroundColor: color.color === 'transparent' ? '#3f3f46' : color.color }}
@@ -285,8 +285,8 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
 
               {isOwnerOrBroker && (
                 <div className="pt-4 border-t border-[#1A1A1A]">
-                  <p className="text-xs text-gold mb-2">✨ Owner/Broker Exclusive</p>
-                  <Button variant="outline" className="w-full border-gold/50 text-gold hover:bg-gold/10">
+                  <p className="text-xs text-[#1A1A1A] mb-2">✨ Owner/Broker Exclusive</p>
+                  <Button variant="outline" className="w-full border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                     <Wand2 className="h-4 w-4 mr-2" />
                     AI Persona Generator
                   </Button>

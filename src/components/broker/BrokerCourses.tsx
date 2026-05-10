@@ -104,7 +104,7 @@ const COURSE_MODULES = [
     tier: "professional",
     color: "from-amber-500/20 to-amber-500/5",
     borderColor: "border-amber-500/30",
-    iconColor: "text-amber-400",
+    iconColor: "text-[#1A1A1A]",
   },
   {
     id: "prospecting",
@@ -141,8 +141,8 @@ const COURSE_MODULES = [
     ],
     tier: "enterprise",
     color: "from-gold/20 to-gold/5",
-    borderColor: "border-gold/30",
-    iconColor: "text-gold",
+    borderColor: "border-[#B89555]/30",
+    iconColor: "text-[#1A1A1A]",
   },
 ];
 
@@ -166,10 +166,10 @@ export default function BrokerCourses({ subscription }: BrokerCoursesProps) {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="bg-gradient-to-r from-gold/10 to-gold/5 border border-gold/30 rounded-xl p-6">
+      <div className="bg-gradient-to-r from-gold/10 to-gold/5 border border-[#B89555]/30 rounded-xl p-6">
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-xl bg-gold/20 flex items-center justify-center">
-            <GraduationCap className="w-7 h-7 text-gold" />
+          <div className="w-14 h-14 rounded-xl bg-[#EFE6D6]/20 flex items-center justify-center">
+            <GraduationCap className="w-7 h-7 text-[#1A1A1A]" />
           </div>
           <div>
             <h2 className="text-xl font-bold text-white">Guides & Resources</h2>
@@ -206,14 +206,14 @@ export default function BrokerCourses({ subscription }: BrokerCoursesProps) {
                 className="w-full p-6 flex items-center justify-between text-left"
               >
                 <div className="flex items-center gap-4">
-                  <div className={`w-12 h-12 rounded-xl bg-zinc-900/50 flex items-center justify-center`}>
+                  <div className={`w-12 h-12 rounded-xl bg-[#FDFBF7]/50 flex items-center justify-center`}>
                     <module.icon className={`w-6 h-6 ${module.iconColor}`} />
                   </div>
                   <div>
                     <div className="flex items-center gap-3 mb-1">
                       <h3 className="text-lg font-semibold text-white">{module.title}</h3>
                       {!hasAccess && (
-                        <Badge className="bg-zinc-800 text-white/70">
+                        <Badge className="bg-[#1A1A1A] text-white/70">
                           <Lock className="w-3 h-3 mr-1" />
                           {module.tier.charAt(0).toUpperCase() + module.tier.slice(1)}
                         </Badge>
@@ -262,12 +262,12 @@ export default function BrokerCourses({ subscription }: BrokerCoursesProps) {
                           key={lesson.id}
                           className={`flex items-center justify-between p-3 rounded-lg ${
                             lessonAccess 
-                              ? "bg-zinc-900/50 hover:bg-[#1A1A1A] cursor-pointer" 
-                              : "bg-zinc-900/20 opacity-60"
+                              ? "bg-[#FDFBF7]/50 hover:bg-[#1A1A1A] cursor-pointer" 
+                              : "bg-[#FDFBF7]/20 opacity-60"
                           }`}
                         >
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center text-sm text-white/70">
+                            <div className="w-8 h-8 rounded-full bg-[#1A1A1A] flex items-center justify-center text-sm text-white/70">
                               {lessonIndex + 1}
                             </div>
                             <div>
@@ -283,7 +283,7 @@ export default function BrokerCourses({ subscription }: BrokerCoursesProps) {
                               </Badge>
                             )}
                             {lessonAccess ? (
-                              <PlayCircle className="w-5 h-5 text-gold" />
+                              <PlayCircle className="w-5 h-5 text-[#1A1A1A]" />
                             ) : (
                               <Lock className="w-4 h-4 text-[#1A1A1A]/70" />
                             )}

@@ -31,7 +31,7 @@ type ImageRole = "card" | "hero" | "gallery";
 
 const ROLE_CONFIG: Record<ImageRole, { label: string; icon: typeof Star; color: string; field: string }> = {
   card: { label: "Card", icon: CreditCard, color: "bg-blue-500", field: "card_image_url" },
-  hero: { label: "Hero / Cover", icon: Star, color: "bg-gold", field: "cover_image_url" },
+  hero: { label: "Hero / Cover", icon: Star, color: "bg-[#EFE6D6]", field: "cover_image_url" },
   gallery: { label: "Gallery Start", icon: Layers, color: "bg-emerald-500", field: "gallery_start_image_url" },
 };
 
@@ -228,8 +228,8 @@ export function ProjectMediaManager({ project, onRefresh }: ProjectMediaManagerP
           const Icon = config.icon;
 
           return (
-            <div key={role} className="flex items-center gap-3 p-3 rounded-xl border-2 border-gold/20 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA]">
-              <div className={cn("w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 border-2 border-gold/30", !currentUrl && "flex items-center justify-center bg-muted")}>
+            <div key={role} className="flex items-center gap-3 p-3 rounded-xl border-2 border-[#B89555]/20 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA]">
+              <div className={cn("w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 border-2 border-[#B89555]/30", !currentUrl && "flex items-center justify-center bg-muted")}>
                 {currentUrl ? (
                   <SafeImage src={currentUrl} alt={config.label} className="w-full h-full object-cover" fallbackSrc="/placeholder.svg" />
                 ) : (
@@ -242,7 +242,7 @@ export function ProjectMediaManager({ project, onRefresh }: ProjectMediaManagerP
                   {currentUrl ? "Set ✓" : "Not set — click an image below"}
                 </p>
               </div>
-              <div className={cn("w-2 h-2 rounded-full flex-shrink-0", currentUrl ? "bg-emerald-500" : "bg-zinc-300")} />
+              <div className={cn("w-2 h-2 rounded-full flex-shrink-0", currentUrl ? "bg-emerald-500" : "bg-[#E5D9C4]")} />
             </div>
           );
         })}
@@ -260,7 +260,7 @@ export function ProjectMediaManager({ project, onRefresh }: ProjectMediaManagerP
 
       {/* Image Grid */}
       {images.length === 0 ? (
-        <div className="flex flex-col items-center justify-center p-12 border-2 border-dashed border-gold/30 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA]">
+        <div className="flex flex-col items-center justify-center p-12 border-2 border-dashed border-[#B89555]/30 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA]">
           <ImageIcon className="w-10 h-10 text-muted-foreground mb-3" />
           <p className="text-sm text-muted-foreground">No images uploaded yet</p>
         </div>
@@ -281,9 +281,9 @@ export function ProjectMediaManager({ project, onRefresh }: ProjectMediaManagerP
                 onDragEnd={handleDragEnd}
                 className={cn(
                   "relative group rounded-xl border-2 transition-all duration-200 cursor-move overflow-hidden aspect-square",
-                  draggedIndex === index ? "opacity-50 border-gold scale-95"
-                    : dragOverIndex === index ? "border-gold bg-gold/10"
-                    : "border-gold/20 hover:border-gold/50"
+                  draggedIndex === index ? "opacity-50 border-[#B89555] scale-95"
+                    : dragOverIndex === index ? "border-[#B89555] bg-[#EFE6D6]/10"
+                    : "border-[#B89555]/20 hover:border-[#B89555]/50"
                 )}
               >
                 <SafeImage

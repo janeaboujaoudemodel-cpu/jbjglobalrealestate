@@ -73,10 +73,10 @@ function PricePerSqftChart({ text }: { text: string }) {
   const isPositive = growth >= 0;
 
   return (
-    <div className="bg-[#FDFBF7] border border-gold/20 rounded-2xl p-6 shadow-sm">
+    <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <BarChart3 className="w-5 h-5 text-gold" />
+          <BarChart3 className="w-5 h-5 text-[#1A1A1A]" />
           <h3 className="font-bold text-[#1A1A1A] text-lg">Price Per Sqft</h3>
         </div>
         <div className={`flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full ${isPositive ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-600'}`}>
@@ -104,7 +104,7 @@ function PricePerSqftChart({ text }: { text: string }) {
         <span className="flex items-center gap-1"><div className="w-3 h-3 rounded border-2 border-dashed" style={{ borderColor: '#C8A766', backgroundColor: '#C8A76630' }} /> Projected</span>
       </div>
       {bullets.length > 0 && (
-        <div className="border-t border-gold/10 pt-3 space-y-1.5">
+        <div className="border-t border-[#B89555]/10 pt-3 space-y-1.5">
           {bullets.map((b, i) => <p key={i} className="text-[#1A1A1A]/70 text-xs leading-relaxed">{b}</p>)}
         </div>
       )}
@@ -142,10 +142,10 @@ function SupplyDemandChart({ text }: { text: string }) {
   const StatusIcon = ratio >= 0.9 ? ArrowUpRight : ratio > 0.7 ? TrendingUp : ArrowDownRight;
 
   return (
-    <div className="bg-[#FDFBF7] border border-gold/20 rounded-2xl p-6 shadow-sm">
+    <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <TrendingUp className="w-5 h-5 text-gold" />
+          <TrendingUp className="w-5 h-5 text-[#1A1A1A]" />
           <h3 className="font-bold text-[#1A1A1A] text-lg">Supply vs Demand</h3>
         </div>
         <div className={`flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full ${ratio > 0.9 ? 'bg-emerald-50 text-emerald-700' : ratio > 0.7 ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-600'}`}>
@@ -180,7 +180,7 @@ function SupplyDemandChart({ text }: { text: string }) {
         <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full bg-emerald-500" /><span className="text-[#1A1A1A]/70">Demand (Absorption)</span></div>
       </div>
       {bullets.length > 0 && (
-        <div className="border-t border-gold/10 pt-3 space-y-1.5">
+        <div className="border-t border-[#B89555]/10 pt-3 space-y-1.5">
           {bullets.map((b, i) => <p key={i} className="text-[#1A1A1A]/70 text-xs leading-relaxed">{b}</p>)}
         </div>
       )}
@@ -209,10 +209,10 @@ function InvestmentMetricsChart({ text }: { text: string }) {
   const occupancy = metrics.find(m => m.name === 'Occupancy');
 
   return (
-    <div className="bg-[#FDFBF7] border border-gold/20 rounded-2xl p-6 shadow-sm">
+    <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Shield className="w-5 h-5 text-gold" />
+          <Shield className="w-5 h-5 text-[#1A1A1A]" />
           <h3 className="font-bold text-[#1A1A1A] text-lg">Investment Metrics</h3>
         </div>
         {occupancy && (
@@ -240,7 +240,7 @@ function InvestmentMetricsChart({ text }: { text: string }) {
         ))}
       </div>
       {bullets.length > 0 && (
-        <div className="border-t border-gold/10 pt-3 space-y-1.5">
+        <div className="border-t border-[#B89555]/10 pt-3 space-y-1.5">
           {bullets.map((b, i) => <p key={i} className="text-[#1A1A1A]/70 text-xs leading-relaxed">{b}</p>)}
         </div>
       )}
@@ -262,18 +262,18 @@ function PortfolioStrengthCard({ text }: { text: string }) {
   }, [text]);
 
   return (
-    <div className="bg-[#FDFBF7] border border-gold/20 rounded-2xl p-6 shadow-sm">
+    <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Building2 className="w-5 h-5 text-gold" />
+          <Building2 className="w-5 h-5 text-[#1A1A1A]" />
           <h3 className="font-bold text-[#1A1A1A] text-lg">Portfolio Strength</h3>
         </div>
       </div>
       <div className="space-y-3">
         {devEntries.map((dev, i) => (
-          <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] border border-gold/10 hover:border-gold/30 transition-colors">
+          <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/10 hover:border-[#B89555]/30 transition-colors">
             <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0">
-              <span className="text-gold font-bold text-xs">{dev.name.charAt(0)}</span>
+              <span className="text-[#1A1A1A] font-bold text-xs">{dev.name.charAt(0)}</span>
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-[#1A1A1A] font-semibold text-sm truncate">{dev.name}</p>
@@ -448,7 +448,7 @@ export const DeveloperAIAnalyzer = ({
     <section ref={sectionRef} className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl mt-8">
       <div className="container mx-auto px-4">
         <div className="flex items-center gap-3 mb-8">
-          <Brain className="w-6 h-6 text-gold" />
+          <Brain className="w-6 h-6 text-[#1A1A1A]" />
           <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
             JBJ AI Developer Intelligence
           </h2>
@@ -457,30 +457,30 @@ export const DeveloperAIAnalyzer = ({
         {/* Quick Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {foundedYear && (
-            <div className="bg-[#FDFBF7] border border-gold/20 rounded-xl p-4 text-center shadow-sm">
-              <CalendarDays className="w-4 h-4 text-gold mx-auto mb-1" />
-              <div className="text-2xl font-bold text-gold">{foundedYear}</div>
+            <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl p-4 text-center shadow-sm">
+              <CalendarDays className="w-4 h-4 text-[#1A1A1A] mx-auto mb-1" />
+              <div className="text-2xl font-bold text-[#1A1A1A]">{foundedYear}</div>
               <div className="text-[#1A1A1A]/70 text-xs mt-1">Founded</div>
             </div>
           )}
           {projectCount && (
-            <div className="bg-[#FDFBF7] border border-gold/20 rounded-xl p-4 text-center shadow-sm">
-              <Home className="w-4 h-4 text-gold mx-auto mb-1" />
-              <div className="text-2xl font-bold text-gold">{projectCount}</div>
+            <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl p-4 text-center shadow-sm">
+              <Home className="w-4 h-4 text-[#1A1A1A] mx-auto mb-1" />
+              <div className="text-2xl font-bold text-[#1A1A1A]">{projectCount}</div>
               <div className="text-[#1A1A1A]/70 text-xs mt-1">Projects</div>
             </div>
           )}
           {completedProjects && (
-            <div className="bg-[#FDFBF7] border border-gold/20 rounded-xl p-4 text-center shadow-sm">
-              <Landmark className="w-4 h-4 text-gold mx-auto mb-1" />
-              <div className="text-2xl font-bold text-gold">{completedProjects.toLocaleString()}+</div>
+            <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl p-4 text-center shadow-sm">
+              <Landmark className="w-4 h-4 text-[#1A1A1A] mx-auto mb-1" />
+              <div className="text-2xl font-bold text-[#1A1A1A]">{completedProjects.toLocaleString()}+</div>
               <div className="text-[#1A1A1A]/70 text-xs mt-1">Units Delivered</div>
             </div>
           )}
           {activeProjects && (
-            <div className="bg-[#FDFBF7] border border-gold/20 rounded-xl p-4 text-center shadow-sm">
-              <Building2 className="w-4 h-4 text-gold mx-auto mb-1" />
-              <div className="text-2xl font-bold text-gold">{activeProjects}</div>
+            <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl p-4 text-center shadow-sm">
+              <Building2 className="w-4 h-4 text-[#1A1A1A] mx-auto mb-1" />
+              <div className="text-2xl font-bold text-[#1A1A1A]">{activeProjects}</div>
               <div className="text-[#1A1A1A]/70 text-xs mt-1">Active Projects</div>
             </div>
           )}
@@ -493,7 +493,7 @@ export const DeveloperAIAnalyzer = ({
         {errorMsg ? (
           <div className="text-center py-8 space-y-4">
             <p className="text-red-500 text-sm">{errorMsg}</p>
-            <Button onClick={handleRetry} variant="outline" className="border-gold/40 text-gold hover:bg-gold/10">
+            <Button onClick={handleRetry} variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
               <RefreshCw className="w-4 h-4 mr-2" />
               Retry Analysis
             </Button>
@@ -511,7 +511,7 @@ export const DeveloperAIAnalyzer = ({
             {hasTimedOut ? (
               <div className="text-center space-y-4">
                 <p className="text-[#1A1A1A]/70 text-sm">Analysis is taking longer than expected.</p>
-                <Button onClick={handleRetry} variant="outline" className="border-gold/40 text-gold hover:bg-gold/10">
+                <Button onClick={handleRetry} variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                   <RefreshCw className="w-4 h-4 mr-2" />
                   Retry Analysis
                 </Button>
@@ -519,19 +519,19 @@ export const DeveloperAIAnalyzer = ({
             ) : (
               <div className="space-y-4 animate-pulse">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-8 h-8 rounded-full bg-gold/20" />
-                  <div className="h-4 bg-gold/15 rounded w-56" />
+                  <div className="w-8 h-8 rounded-full bg-[#EFE6D6]/20" />
+                  <div className="h-4 bg-[#EFE6D6]/15 rounded w-56" />
                 </div>
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                   <div className="lg:col-span-2 bg-[#FDFBF7]/60 rounded-2xl p-6 space-y-3">
-                    <div className="h-4 bg-gold/10 rounded w-3/4" />
-                    <div className="h-3 bg-gold/10 rounded w-full" />
-                    <div className="h-3 bg-gold/10 rounded w-5/6" />
-                    <div className="h-3 bg-gold/10 rounded w-2/3" />
+                    <div className="h-4 bg-[#EFE6D6]/10 rounded w-3/4" />
+                    <div className="h-3 bg-[#EFE6D6]/10 rounded w-full" />
+                    <div className="h-3 bg-[#EFE6D6]/10 rounded w-5/6" />
+                    <div className="h-3 bg-[#EFE6D6]/10 rounded w-2/3" />
                   </div>
                   <div className="bg-[#1A1A1A]/80 rounded-2xl p-6 flex flex-col items-center gap-3">
-                    <div className="w-24 h-24 rounded-full bg-gold/10" />
-                    <div className="h-3 bg-gold/10 rounded w-20" />
+                    <div className="w-24 h-24 rounded-full bg-[#EFE6D6]/10" />
+                    <div className="h-3 bg-[#EFE6D6]/10 rounded w-20" />
                   </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -547,14 +547,14 @@ export const DeveloperAIAnalyzer = ({
             {/* Row 1: Overview + Rating */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {sections?.overview && (
-                <div className="lg:col-span-2 bg-[#FDFBF7] border border-gold/20 rounded-2xl shadow-sm overflow-hidden">
+                <div className="lg:col-span-2 bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl shadow-sm overflow-hidden">
                   {/* Premium Gradient Header Bar */}
                   <div className="bg-gradient-to-r from-black via-[#1a1a1a] to-black px-6 py-4 flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-gold/20 border border-gold/40 flex items-center justify-center">
-                      <Building2 className="w-6 h-6 text-gold" />
+                    <div className="w-12 h-12 rounded-xl bg-[#EFE6D6]/20 border border-[#B89555]/40 flex items-center justify-center">
+                      <Building2 className="w-6 h-6 text-[#1A1A1A]" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-gold text-lg">Developer Overview</h3>
+                      <h3 className="font-bold text-[#1A1A1A] text-lg">Developer Overview</h3>
                       <span className="text-[#1A1A1A]/70 text-xs"><DeveloperLink name={developerName} slug={developerSlug} showPrefix={false} className="text-xs text-[#1A1A1A]/70" /> — Portfolio Profile</span>
                     </div>
                   </div>
@@ -563,8 +563,8 @@ export const DeveloperAIAnalyzer = ({
                     {/* Key Highlights Row */}
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
                       {foundedYear && (
-                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20">
-                          <CalendarDays className="w-4 h-4 text-gold flex-shrink-0" />
+                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/20">
+                          <CalendarDays className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
                           <div>
                             <div className="text-xs font-bold text-[#1A1A1A]">{foundedYear}</div>
                             <div className="text-[10px] text-[#1A1A1A]/70">Founded</div>
@@ -572,8 +572,8 @@ export const DeveloperAIAnalyzer = ({
                         </div>
                       )}
                       {headquarters && (
-                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20">
-                          <MapPin className="w-4 h-4 text-gold flex-shrink-0" />
+                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/20">
+                          <MapPin className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
                           <div>
                             <div className="text-xs font-bold text-[#1A1A1A] truncate">{headquarters.split(',')[0]}</div>
                             <div className="text-[10px] text-[#1A1A1A]/70">HQ</div>
@@ -581,8 +581,8 @@ export const DeveloperAIAnalyzer = ({
                         </div>
                       )}
                       {completedProjects && (
-                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20">
-                          <Landmark className="w-4 h-4 text-gold flex-shrink-0" />
+                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/20">
+                          <Landmark className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
                           <div>
                             <div className="text-xs font-bold text-[#1A1A1A]">{completedProjects.toLocaleString()}+</div>
                             <div className="text-[10px] text-[#1A1A1A]/70">Units</div>
@@ -590,8 +590,8 @@ export const DeveloperAIAnalyzer = ({
                         </div>
                       )}
                       {activeProjects && (
-                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20">
-                          <Home className="w-4 h-4 text-gold flex-shrink-0" />
+                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/20">
+                          <Home className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
                           <div>
                             <div className="text-xs font-bold text-[#1A1A1A]">{activeProjects}</div>
                             <div className="text-[10px] text-[#1A1A1A]/70">Active</div>
@@ -615,8 +615,8 @@ export const DeveloperAIAnalyzer = ({
 
               {ratingScore !== null && (
                 <div className="bg-[#1A1A1A] rounded-2xl p-6 shadow-lg flex flex-col items-center justify-center text-center relative overflow-hidden">
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-gold/10 rounded-full blur-[60px] pointer-events-none" />
-                  <Star className="w-7 h-7 text-gold mb-3 relative z-10" />
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-[#EFE6D6]/10 rounded-full blur-[60px] pointer-events-none" />
+                  <Star className="w-7 h-7 text-[#1A1A1A] mb-3 relative z-10" />
                   <div className="relative w-32 h-32 mb-3">
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
@@ -630,7 +630,7 @@ export const DeveloperAIAnalyzer = ({
                       </PieChart>
                     </ResponsiveContainer>
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <span className="text-4xl font-bold text-gold">{ratingScore}</span>
+                      <span className="text-4xl font-bold text-[#1A1A1A]">{ratingScore}</span>
                       <span className="text-[#1A1A1A]/70 text-[10px] font-medium">/10</span>
                     </div>
                   </div>
@@ -642,8 +642,8 @@ export const DeveloperAIAnalyzer = ({
                   )}
                   <div className={`mt-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider relative z-10 ${
                     ratingScore >= 8 ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
-                    ratingScore >= 6 ? 'bg-gold/20 text-gold border border-gold/30' :
-                    'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                    ratingScore >= 6 ? 'bg-[#EFE6D6]/20 text-[#1A1A1A] border border-[#B89555]/30' :
+                    'bg-amber-500/20 text-[#1A1A1A] border border-amber-500/30'
                   }`}>
                     {ratingScore >= 8 ? 'Excellent' : ratingScore >= 6 ? 'Good' : 'Moderate'}
                   </div>
@@ -689,7 +689,7 @@ export const DeveloperAIAnalyzer = ({
             <div className="flex items-center gap-2 text-[#1A1A1A]/70 text-xs pt-2 flex-wrap">
               <Brain className="w-4 h-4" />
               JBJ Property Analyzer — AI-generated analysis based on current market data. Does not constitute financial advice.{" "}
-              <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
+              <Link to="/contact" className="text-[#1A1A1A] hover:underline">Contact our team</Link> for professional guidance.
             </div>
           </motion.div>
         )}

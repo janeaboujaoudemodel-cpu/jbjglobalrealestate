@@ -85,7 +85,7 @@ const AINeighborhoodInsightsPremium = () => {
                     placeholder="Dubai Marina, JBR, Downtown Dubai..."
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
-                    className="bg-zinc-900/50 border-teal-500/30 text-white hover:border-teal-500/50 focus:border-teal-400 transition-colors"
+                    className="bg-[#FDFBF7]/50 border-teal-500/30 text-white hover:border-teal-500/50 focus:border-teal-400 transition-colors"
                   />
                 </div>
 
@@ -96,7 +96,7 @@ const AINeighborhoodInsightsPremium = () => {
                     value={interests}
                     onChange={(e) => setInterests(e.target.value)}
                     rows={3}
-                    className="bg-zinc-900/50 border-teal-500/30 text-white hover:border-teal-500/50 focus:border-teal-400 transition-colors"
+                    className="bg-[#FDFBF7]/50 border-teal-500/30 text-white hover:border-teal-500/50 focus:border-teal-400 transition-colors"
                   />
                 </div>
               </div>
@@ -226,17 +226,17 @@ const AINeighborhoodInsightsPremium = () => {
                       ? 'bg-emerald-500/10 border-emerald-500/30' 
                       : response.investmentPotential === 'medium'
                       ? 'bg-amber-500/10 border-amber-500/30'
-                      : 'bg-zinc-900/50 border-[#1A1A1A]'
+                      : 'bg-[#FDFBF7]/50 border-[#1A1A1A]'
                   }`}>
                     <div className="flex items-center gap-2">
                       <Building className={`h-5 w-5 ${
                         response.investmentPotential === 'high' ? 'text-emerald-400' :
-                        response.investmentPotential === 'medium' ? 'text-amber-400' : 'text-white/70'
+                        response.investmentPotential === 'medium' ? 'text-[#1A1A1A]' : 'text-white/70'
                       }`} />
                       <span className="font-semibold text-white">Investment Potential: </span>
                       <span className={`capitalize ${
                         response.investmentPotential === 'high' ? 'text-emerald-400' :
-                        response.investmentPotential === 'medium' ? 'text-amber-400' : 'text-white/70'
+                        response.investmentPotential === 'medium' ? 'text-[#1A1A1A]' : 'text-white/70'
                       }`}>{response.investmentPotential}</span>
                     </div>
                   </Card>
@@ -251,7 +251,7 @@ const AINeighborhoodInsightsPremium = () => {
                         {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                       </Button>
                     </div>
-                    <div className="bg-zinc-800/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
+                    <div className="bg-[#1A1A1A]/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
                       {response.insights}
                     </div>
                   </CardContent>

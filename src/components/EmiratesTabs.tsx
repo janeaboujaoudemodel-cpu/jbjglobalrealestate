@@ -51,8 +51,8 @@ const EmiratesTabs = ({ projects, selectedEmirate, onEmirateSelect }: EmiratesTa
           onClick={() => onEmirateSelect(null)}
           className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 border-2 ${
             selectedEmirate === null
-              ? "bg-gold/10 text-gold border-gold shadow-[0_4px_12px_rgba(200,167,102,0.15)]"
-              : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-foreground border-gold/40 hover:border-gold hover:shadow-[0_4px_12px_rgba(200,167,102,0.25)]"
+              ? "bg-[#EFE6D6]/10 text-[#1A1A1A] border-[#B89555] shadow-[0_4px_12px_rgba(200,167,102,0.15)]"
+              : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-foreground border-[#B89555]/40 hover:border-[#B89555] hover:shadow-[0_4px_12px_rgba(200,167,102,0.25)]"
           }`}
         >
           All Locations
@@ -65,15 +65,15 @@ const EmiratesTabs = ({ projects, selectedEmirate, onEmirateSelect }: EmiratesTa
               onClick={() => onEmirateSelect(emirate)}
               className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-2 border-2 ${
                 selectedEmirate === emirate
-                  ? "bg-gold/10 text-gold border-gold shadow-[0_4px_12px_rgba(200,167,102,0.15)]"
-                  : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-foreground border-gold/40 hover:border-gold hover:shadow-[0_4px_12px_rgba(200,167,102,0.25)]"
+                  ? "bg-[#EFE6D6]/10 text-[#1A1A1A] border-[#B89555] shadow-[0_4px_12px_rgba(200,167,102,0.15)]"
+                  : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-foreground border-[#B89555]/40 hover:border-[#B89555] hover:shadow-[0_4px_12px_rgba(200,167,102,0.25)]"
               }`}
             >
               {emirate}
               <span className={`text-xs px-1.5 py-0.5 rounded-full ${
                 selectedEmirate === emirate
-                  ? "bg-gold/20 text-gold"
-                  : "bg-gold/20 text-foreground/80"
+                  ? "bg-[#EFE6D6]/20 text-[#1A1A1A]"
+                  : "bg-[#EFE6D6]/20 text-foreground/80"
               }`}>
                 {projectCount}
               </span>

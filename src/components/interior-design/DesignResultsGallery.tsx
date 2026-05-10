@@ -221,7 +221,7 @@ const DesignResultsGallery = ({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-zinc-900/60 border border-[#1A1A1A] rounded-2xl overflow-hidden"
+        className="bg-[#FDFBF7]/60 border border-[#1A1A1A] rounded-2xl overflow-hidden"
       >
         {/* Success Header */}
         <div className="p-6 border-b border-[#1A1A1A] flex items-center justify-between">
@@ -245,7 +245,7 @@ const DesignResultsGallery = ({
 
         {/* Image Gallery */}
         <div className="p-6">
-          <div className="relative rounded-xl overflow-hidden bg-zinc-800">
+          <div className="relative rounded-xl overflow-hidden bg-[#1A1A1A]">
             {images[0] && (
               <img
                 src={images[0]}
@@ -267,7 +267,7 @@ const DesignResultsGallery = ({
         {notes && (
           <div className="px-6 pb-6">
             <h4 className="text-sm font-semibold text-white/85 mb-3">Design Notes</h4>
-            <div className="bg-zinc-800/50 rounded-xl p-4">
+            <div className="bg-[#1A1A1A]/50 rounded-xl p-4">
               <p className="text-sm text-white/70 whitespace-pre-wrap">{notes}</p>
             </div>
           </div>

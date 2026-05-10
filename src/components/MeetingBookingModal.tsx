@@ -172,11 +172,11 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 shadow-2xl shadow-gold/20">
+      <DialogContent className="sm:max-w-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 shadow-2xl shadow-gold/20">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-3 text-[#1A1A1A] text-xl font-bold">
             <div className="w-10 h-10 bg-[#1A1A1A] rounded-lg flex items-center justify-center">
-              <Video className="w-5 h-5 text-gold" />
+              <Video className="w-5 h-5 text-[#1A1A1A]" />
             </div>
             Book Online Meeting
           </DialogTitle>
@@ -211,11 +211,11 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                   <div key={s} className="flex items-center gap-2">
                     <div className={cn(
                       "w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-all",
-                      step >= s ? "bg-gold text-[#1A1A1A]" : "bg-[#EFE6D6] text-[#1A1A1A]/70"
+                      step >= s ? "bg-[#EFE6D6] text-[#1A1A1A]" : "bg-[#EFE6D6] text-[#1A1A1A]/70"
                     )}>
                       {s}
                     </div>
-                    {s < 3 && <div className={cn("w-12 h-0.5", step > s ? "bg-gold" : "bg-[#EFE6D6]")} />}
+                    {s < 3 && <div className={cn("w-12 h-0.5", step > s ? "bg-[#EFE6D6]" : "bg-[#EFE6D6]")} />}
                   </div>
                 ))}
               </div>
@@ -235,7 +235,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                       <FormItem>
                         <FormLabel className="text-[#1A1A1A]/70">Full Name *</FormLabel>
                         <FormControl>
-                          <Input {...field} className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] focus:border-gold" placeholder="Your full legal name" />
+                          <Input {...field} className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] focus:border-[#B89555]" placeholder="Your full legal name" />
                         </FormControl>
                         <FormMessage className="text-red-500 text-xs" />
                       </FormItem>
@@ -250,7 +250,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                         <FormItem>
                           <FormLabel className="text-[#1A1A1A]/70">Email Address *</FormLabel>
                           <FormControl>
-                            <Input {...field} type="email" className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] focus:border-gold" placeholder="email@example.com" />
+                            <Input {...field} type="email" className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] focus:border-[#B89555]" placeholder="email@example.com" />
                           </FormControl>
                           <FormMessage className="text-red-500 text-xs" />
                         </FormItem>
@@ -301,7 +301,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                         <FormItem>
                           <FormLabel className="text-[#1A1A1A]/70">Current Location *</FormLabel>
                           <FormControl>
-                            <Input {...field} className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] focus:border-gold" placeholder="City, Country" />
+                            <Input {...field} className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] focus:border-[#B89555]" placeholder="City, Country" />
                           </FormControl>
                           <FormMessage className="text-red-500 text-xs" />
                         </FormItem>
@@ -317,7 +317,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                         <FormLabel className="text-[#1A1A1A]/70">Service Needed *</FormLabel>
                         <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl>
-                            <SelectTrigger className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] hover:border-gold focus:border-gold">
+                            <SelectTrigger className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] hover:border-[#B89555] focus:border-[#B89555]">
                               <SelectValue placeholder="Select a service" />
                             </SelectTrigger>
                           </FormControl>
@@ -343,7 +343,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                         <FormControl>
                           <Textarea 
                             {...field} 
-                            className="min-h-[120px] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] resize-none focus:border-gold" 
+                            className="min-h-[120px] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] resize-none focus:border-[#B89555]" 
                             placeholder="Please describe in detail: What specific property or service are you interested in? What is your budget range? What is your timeline? Any specific requirements?"
                           />
                         </FormControl>
@@ -352,7 +352,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                     )}
                   />
 
-                  <Button type="button" onClick={handleNext} className="w-full h-12 bg-gold hover:bg-gold-light text-[#1A1A1A] font-semibold">
+                  <Button type="button" onClick={handleNext} className="w-full h-12 bg-[#EFE6D6] hover:bg-[#EFE6D6]-light text-[#1A1A1A] font-semibold">
                     Continue to Select Date & Time
                   </Button>
                 </div>
@@ -417,8 +417,8 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                               className={cn(
                                 "h-10",
                                 field.value === time 
-                                  ? "bg-gold text-[#1A1A1A] hover:bg-gold-light" 
-                                  : "bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]/70 hover:border-gold"
+                                  ? "bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]-light" 
+                                  : "bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]/70 hover:border-[#B89555]"
                               )}
                               onClick={() => field.onChange(time)}
                             >
@@ -435,7 +435,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                     <Button type="button" variant="outline" onClick={handleBack} className="flex-1 h-12 border-[#B89555]/30 text-[#1A1A1A]/70">
                       Back
                     </Button>
-                    <Button type="button" onClick={handleNext} className="flex-1 h-12 bg-gold hover:bg-gold-light text-[#1A1A1A] font-semibold">
+                    <Button type="button" onClick={handleNext} className="flex-1 h-12 bg-[#EFE6D6] hover:bg-[#EFE6D6]-light text-[#1A1A1A] font-semibold">
                       Continue to Confirmation
                     </Button>
                   </div>
@@ -487,7 +487,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                             <Checkbox 
                               checked={field.value} 
                               onCheckedChange={field.onChange}
-                              className="border-[#B89555]/30 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+                              className="border-[#B89555]/30 data-[state=checked]:bg-[#EFE6D6] data-[state=checked]:border-[#B89555] mt-0.5"
                             />
                           </FormControl>
                           <div className="space-y-1 leading-none">
@@ -509,7 +509,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                             <Checkbox 
                               checked={field.value} 
                               onCheckedChange={field.onChange}
-                              className="border-[#B89555]/30 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+                              className="border-[#B89555]/30 data-[state=checked]:bg-[#EFE6D6] data-[state=checked]:border-[#B89555] mt-0.5"
                             />
                           </FormControl>
                           <div className="space-y-1 leading-none">

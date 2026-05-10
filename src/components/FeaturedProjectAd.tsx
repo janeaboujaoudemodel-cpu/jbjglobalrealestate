@@ -36,7 +36,7 @@ export const FeaturedProjectAd = ({
         className="block group"
       >
         <div 
-          className="relative overflow-hidden rounded-2xl border-2 border-gold/40 shadow-[0_8px_30px_rgba(200,167,102,0.25)] hover:shadow-[0_12px_40px_rgba(200,167,102,0.35)] transition-all duration-500"
+          className="relative overflow-hidden rounded-2xl border-2 border-[#B89555]/40 shadow-[0_8px_30px_rgba(200,167,102,0.25)] hover:shadow-[0_12px_40px_rgba(200,167,102,0.35)] transition-all duration-500"
           style={{
             background: 'linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%)'
           }}
@@ -59,7 +59,7 @@ export const FeaturedProjectAd = ({
             {/* Content overlay */}
             <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
               {/* Subtitle / Tagline */}
-              <p className="text-gold text-sm md:text-base font-medium tracking-wide mb-2 uppercase">
+              <p className="text-[#1A1A1A] text-sm md:text-base font-medium tracking-wide mb-2 uppercase">
                 {subtitle}
               </p>
               

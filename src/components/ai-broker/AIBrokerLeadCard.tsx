@@ -91,12 +91,12 @@ export function AIBrokerLeadCard({ lead, brokerId, brokerName }: AIBrokerLeadCar
 
   return (
     <>
-      <Card className="bg-zinc-900 border-[#1A1A1A] hover:border-[#1A1A1A] transition-all duration-200 hover:shadow-lg">
+      <Card className="bg-[#FDFBF7] border-[#1A1A1A] hover:border-[#1A1A1A] transition-all duration-200 hover:shadow-lg">
         <CardContent className="p-4">
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center gap-3">
               <Avatar className="h-10 w-10 border border-[#1A1A1A]">
-                <AvatarFallback className="bg-zinc-800 text-gold text-sm">
+                <AvatarFallback className="bg-[#1A1A1A] text-[#1A1A1A] text-sm">
                   {getInitials(lead.full_name)}
                 </AvatarFallback>
               </Avatar>
@@ -115,8 +115,8 @@ export function AIBrokerLeadCard({ lead, brokerId, brokerName }: AIBrokerLeadCar
                   <MoreVertical className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-zinc-900 border-[#1A1A1A]">
-                <DropdownMenuItem className="text-[#1A1A1A]/70 focus:bg-zinc-800">
+              <DropdownMenuContent align="end" className="bg-[#FDFBF7] border-[#1A1A1A]">
+                <DropdownMenuItem className="text-[#1A1A1A]/70 focus:bg-[#1A1A1A]">
                   <ExternalLink className="h-4 w-4 mr-2" />
                   View Details
                 </DropdownMenuItem>

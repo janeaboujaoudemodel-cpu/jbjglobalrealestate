@@ -430,7 +430,7 @@ export function BrokerToolkitTools() {
                         Free Access
                       </span>
                     ) : (
-                      <span className="flex items-center gap-1 text-xs text-gold">
+                      <span className="flex items-center gap-1 text-xs text-[#1A1A1A]">
                         <Lock className="w-3 h-3" />
                         Member Access
                       </span>
@@ -438,7 +438,7 @@ export function BrokerToolkitTools() {
                   </div>
                 </div>
                 <ArrowRight
-                  className={`w-5 h-5 ${meta.arrowClass} opacity-0 group-hover:opacity-100 group-hover:text-gold transition-all flex-shrink-0`}
+                  className={`w-5 h-5 ${meta.arrowClass} opacity-0 group-hover:opacity-100 group-hover:text-[#1A1A1A] transition-all flex-shrink-0`}
                 />
               </div>
             </CardContent>
@@ -483,7 +483,7 @@ export function BrokerToolkitTools() {
                         Free Access
                       </span>
                     ) : (
-                      <span className="flex items-center gap-1 text-xs text-gold">
+                      <span className="flex items-center gap-1 text-xs text-[#1A1A1A]">
                         <Lock className="w-3 h-3" />
                         Member Access
                       </span>
@@ -491,7 +491,7 @@ export function BrokerToolkitTools() {
                   </div>
                 </div>
                 <ArrowRight
-                  className="w-5 h-5 text-white/90 opacity-0 group-hover:opacity-100 group-hover:text-gold transition-all flex-shrink-0"
+                  className="w-5 h-5 text-white/90 opacity-0 group-hover:opacity-100 group-hover:text-[#1A1A1A] transition-all flex-shrink-0"
                 />
               </div>
             </CardContent>
@@ -533,7 +533,7 @@ export function BrokerToolkitTools() {
                 placeholder="Search tools (e.g. stamp, calculator, CRM...)"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 h-12 bg-slate-700/50 border-slate-500/50 text-white placeholder:text-[#1A1A1A]/70 focus:border-gold focus:ring-gold/30 rounded-xl"
+                className="pl-12 h-12 bg-slate-700/50 border-slate-500/50 text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] focus:ring-gold/30 rounded-xl"
               />
               {searchQuery && (
                 <button

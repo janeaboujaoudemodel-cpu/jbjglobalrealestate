@@ -92,11 +92,11 @@ const ChatMessages = React.memo(({
               className={`flex gap-3 group ${message.role === 'user' ? 'flex-row-reverse' : ''}`}
             >
               {message.role === 'user' ? (
-                <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 bg-gold text-[#1A1A1A] shadow-lg shadow-gold/20">
+                <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 bg-[#EFE6D6] text-[#1A1A1A] shadow-lg shadow-gold/20">
                   <User className="w-4 h-4" />
                 </div>
               ) : (
-                <div className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0 border-2 border-gold shadow-lg shadow-gold/20">
+                <div className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0 border-2 border-[#B89555] shadow-lg shadow-gold/20">
                   <img 
                     src={agent.photo} 
                     alt={agent.name}
@@ -108,8 +108,8 @@ const ChatMessages = React.memo(({
                 <div
                   className={`p-3.5 rounded-2xl shadow-md select-text cursor-text ${
                     message.role === 'user'
-                      ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-gold/30 rounded-tr-sm'
-                      : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-gold/20 rounded-tl-sm'
+                      ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/30 rounded-tr-sm'
+                      : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/20 rounded-tl-sm'
                   }`}
                 >
                   <p className="text-sm leading-relaxed whitespace-pre-wrap font-medium select-text">{message.content}</p>
@@ -122,7 +122,7 @@ const ChatMessages = React.memo(({
                     await navigator.clipboard.writeText(message.content);
                     toast.success(t('chat.messageCopied') || 'Message copied');
                   }}
-                  className={`flex items-center gap-1 mt-1 text-[10px] text-[#1A1A1A]/70 hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
+                  className={`flex items-center gap-1 mt-1 text-[10px] text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors opacity-0 group-hover:opacity-100 ${
                     message.role === 'user' ? 'self-end mr-1' : 'self-start ml-1'
                   }`}
                 >
@@ -134,7 +134,7 @@ const ChatMessages = React.memo(({
           ))}
           {isLoading && messages[messages.length - 1]?.content === '' && (
             <div className="flex gap-3">
-              <div className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0 border-2 border-gold shadow-lg shadow-gold/20">
+              <div className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0 border-2 border-[#B89555] shadow-lg shadow-gold/20">
                 <img 
                   src={agent.photo} 
                   alt={agent.name}
@@ -142,12 +142,12 @@ const ChatMessages = React.memo(({
                 />
               </div>
               <div className="flex flex-col gap-1">
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-4 rounded-2xl rounded-tl-sm flex items-center gap-1.5 border border-gold/20 shadow-sm">
-                  <span className="w-2.5 h-2.5 bg-gold rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                  <span className="w-2.5 h-2.5 bg-gold rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                  <span className="w-2.5 h-2.5 bg-gold rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-4 rounded-2xl rounded-tl-sm flex items-center gap-1.5 border border-[#B89555]/20 shadow-sm">
+                  <span className="w-2.5 h-2.5 bg-[#EFE6D6] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                  <span className="w-2.5 h-2.5 bg-[#EFE6D6] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                  <span className="w-2.5 h-2.5 bg-[#EFE6D6] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                 </div>
-                <p className="text-gold text-xs font-medium ml-1"><T>{`${agent.name} is typing...`}</T></p>
+                <p className="text-[#1A1A1A] text-xs font-medium ml-1"><T>{`${agent.name} is typing...`}</T></p>
               </div>
             </div>
           )}
@@ -156,7 +156,7 @@ const ChatMessages = React.memo(({
 
       {/* Submit to Team Panel */}
       {showSubmitPanel && (
-        <div className="border-t border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+        <div className="border-t border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
           <div className="p-4 space-y-3">
             <div className="flex items-center justify-between">
               <p className="text-sm font-semibold text-[#1A1A1A]">
@@ -175,7 +175,7 @@ const ChatMessages = React.memo(({
             <div className="flex gap-2">
               <Button
                 onClick={handleSubmitConfirm}
-                className="flex-1 bg-gold hover:bg-gold-light text-[#1A1A1A] text-sm font-bold shadow-lg shadow-gold/20"
+                className="flex-1 bg-[#EFE6D6] hover:bg-[#EFE6D6]-light text-[#1A1A1A] text-sm font-bold shadow-lg shadow-gold/20"
               >
                 <Shield className="w-4 h-4 mr-2" />
                 <T>Submit Now</T>
@@ -183,7 +183,7 @@ const ChatMessages = React.memo(({
               <Button
                 variant="outline"
                 onClick={() => setShowSubmitPanel(false)}
-                className="border-gold/30 text-[#1A1A1A]/70"
+                className="border-[#B89555]/30 text-[#1A1A1A]/70"
               >
                 <T>Cancel</T>
               </Button>
@@ -194,7 +194,7 @@ const ChatMessages = React.memo(({
 
       {/* Action Buttons */}
       {!showSubmitPanel && (
-        <div className="px-4 py-3 border-t border-gold/30 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] flex gap-2">
+        <div className="px-4 py-3 border-t border-[#B89555]/30 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] flex gap-2">
           {isExistingUser && (
             <a
               href={`https://wa.me/${CONTACT_INFO.whatsappNumber}?text=${encodeURIComponent(`Hi, I'm ${userFirstName}. I was chatting with the AI about ${serviceName}.`)}`}
@@ -209,7 +209,7 @@ const ChatMessages = React.memo(({
           {userMessageCount > 0 && (
             <Button
               onClick={() => setShowSubmitPanel(true)}
-              className={`${isExistingUser ? 'flex-1' : 'w-full'} bg-gold hover:bg-gold-light text-[#1A1A1A] text-sm py-2.5 font-bold shadow-lg shadow-gold/20`}
+              className={`${isExistingUser ? 'flex-1' : 'w-full'} bg-[#EFE6D6] hover:bg-[#EFE6D6]-light text-[#1A1A1A] text-sm py-2.5 font-bold shadow-lg shadow-gold/20`}
             >
               <Shield className="w-4 h-4 mr-2" />
               <T>Submit to Team</T>
@@ -219,7 +219,7 @@ const ChatMessages = React.memo(({
       )}
 
       {/* Input - Using native input to prevent mobile keyboard dismissal */}
-      <div className="p-4 border-t border-gold/30 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
+      <div className="p-4 border-t border-[#B89555]/30 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
         <div className="flex gap-3">
           <input
             ref={inputRef}
@@ -232,12 +232,12 @@ const ChatMessages = React.memo(({
             autoComplete="off"
             autoCorrect="off"
             disabled={isLoading}
-            className="flex-1 bg-[#FDFBF7]/80 border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:border-gold focus:ring-2 focus:ring-gold/30 h-12 rounded-xl text-sm px-4 py-2 outline-none transition-all duration-200"
+            className="flex-1 bg-[#FDFBF7]/80 border-2 border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:border-[#B89555] focus:ring-2 focus:ring-gold/30 h-12 rounded-xl text-sm px-4 py-2 outline-none transition-all duration-200"
           />
           <Button
             onClick={onSend}
             disabled={!input.trim() || isLoading}
-            className="bg-gold hover:bg-gold-light hover:shadow-[0_6px_20px_rgba(200,167,102,0.5)] active:bg-gold-dark text-[#1A1A1A] h-12 w-12 rounded-xl transition-all duration-200"
+            className="bg-[#EFE6D6] hover:bg-[#EFE6D6]-light hover:shadow-[0_6px_20px_rgba(200,167,102,0.5)] active:bg-[#EFE6D6]-dark text-[#1A1A1A] h-12 w-12 rounded-xl transition-all duration-200"
           >
             <Send className="w-5 h-5" />
           </Button>

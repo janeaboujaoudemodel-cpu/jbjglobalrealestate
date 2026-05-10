@@ -157,7 +157,7 @@ export function NotificationsPanel({ maxHeight = "350px", compact = false }: Not
       case "approval":
         return <Check className="h-4 w-4 text-emerald-400" />;
       case "reminder":
-        return <Bell className="h-4 w-4 text-amber-400" />;
+        return <Bell className="h-4 w-4 text-[#1A1A1A]" />;
       case "event":
         return <Bell className="h-4 w-4 text-blue-400" />;
       default:

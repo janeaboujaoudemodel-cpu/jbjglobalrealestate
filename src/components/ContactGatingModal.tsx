@@ -240,10 +240,10 @@ const ContactGatingModal = React.forwardRef<HTMLDivElement, ContactGatingModalPr
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold max-w-md shadow-[0_8px_40px_rgba(200,167,102,0.4)]">
+      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] max-w-md shadow-[0_8px_40px_rgba(200,167,102,0.4)]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-xl text-[#1A1A1A]">
-            <Shield className="h-5 w-5 text-gold" />
+            <Shield className="h-5 w-5 text-[#1A1A1A]" />
             {step === 'form' && 'Complete Your Profile'}
             {step === 'verification' && 'Verify Your Email'}
             {step === 'complete' && 'Welcome!'}
@@ -260,21 +260,21 @@ const ContactGatingModal = React.forwardRef<HTMLDivElement, ContactGatingModalPr
             {/* Full Name */}
             <div className="space-y-2">
               <Label className="flex items-center gap-2">
-                <User className="h-4 w-4 text-gold" />
+                <User className="h-4 w-4 text-[#1A1A1A]" />
                 Full Name <span className="text-red-500">*</span>
               </Label>
               <Input
                 placeholder="Enter your full name"
                 value={formData.fullName}
                 onChange={(e) => handleInputChange('fullName', e.target.value)}
-                className="border-2 border-gold/40 hover:border-gold focus:border-gold"
+                className="border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555]"
               />
             </div>
 
             {/* Email */}
             <div className="space-y-2">
               <Label className="flex items-center gap-2 text-[#1A1A1A]">
-                <Mail className="h-4 w-4 text-gold" />
+                <Mail className="h-4 w-4 text-[#1A1A1A]" />
                 Email Address <span className="text-red-500">*</span>
               </Label>
               <Input
@@ -282,14 +282,14 @@ const ContactGatingModal = React.forwardRef<HTMLDivElement, ContactGatingModalPr
                 placeholder="Enter your email"
                 value={formData.email}
                 onChange={(e) => handleInputChange('email', e.target.value)}
-                className="border-2 border-gold/40 hover:border-gold focus:border-gold"
+                className="border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555]"
               />
             </div>
 
             {/* Phone */}
             <div className="space-y-2">
               <Label className="flex items-center gap-2 text-[#1A1A1A]">
-                <Phone className="h-4 w-4 text-gold" />
+                <Phone className="h-4 w-4 text-[#1A1A1A]" />
                 Phone Number <span className="text-red-500">*</span>
               </Label>
               <Input
@@ -297,18 +297,18 @@ const ContactGatingModal = React.forwardRef<HTMLDivElement, ContactGatingModalPr
                 placeholder="+971 50 123 4567"
                 value={formData.phone}
                 onChange={(e) => handleInputChange('phone', e.target.value)}
-                className="border-2 border-gold/40 hover:border-gold focus:border-gold"
+                className="border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555]"
               />
             </div>
 
             {/* Nationality */}
             <div className="space-y-2">
               <Label className="flex items-center gap-2 text-[#1A1A1A]">
-                <Globe className="h-4 w-4 text-gold" />
+                <Globe className="h-4 w-4 text-[#1A1A1A]" />
                 Nationality
               </Label>
               <Select value={formData.nationality} onValueChange={(v) => handleInputChange('nationality', v)}>
-                <SelectTrigger className="border-2 border-gold/40 hover:border-gold focus:border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
+                <SelectTrigger className="border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
                   <SelectValue placeholder="Select nationality" />
                 </SelectTrigger>
                 <SelectContent>
@@ -322,25 +322,25 @@ const ContactGatingModal = React.forwardRef<HTMLDivElement, ContactGatingModalPr
             {/* Location */}
             <div className="space-y-2">
               <Label className="flex items-center gap-2 text-[#1A1A1A]">
-                <Globe className="h-4 w-4 text-gold" />
+                <Globe className="h-4 w-4 text-[#1A1A1A]" />
                 Current Location
               </Label>
               <Input
                 placeholder="City, Country"
                 value={formData.location}
                 onChange={(e) => handleInputChange('location', e.target.value)}
-                className="border-2 border-gold/40 hover:border-gold focus:border-gold"
+                className="border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555]"
               />
             </div>
 
             {/* Preferred Language */}
             <div className="space-y-2">
               <Label className="flex items-center gap-2 text-[#1A1A1A]">
-                <Languages className="h-4 w-4 text-gold" />
+                <Languages className="h-4 w-4 text-[#1A1A1A]" />
                 Preferred Language
               </Label>
               <Select value={formData.preferredLanguage} onValueChange={(v) => handleInputChange('preferredLanguage', v)}>
-                <SelectTrigger className="border-2 border-gold/40 hover:border-gold focus:border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
+                <SelectTrigger className="border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
                   <SelectValue placeholder="Select language" />
                 </SelectTrigger>
                 <SelectContent>
@@ -354,11 +354,11 @@ const ContactGatingModal = React.forwardRef<HTMLDivElement, ContactGatingModalPr
             {/* Interested Service */}
             <div className="space-y-2">
               <Label className="flex items-center gap-2 text-[#1A1A1A]">
-                <Briefcase className="h-4 w-4 text-gold" />
+                <Briefcase className="h-4 w-4 text-[#1A1A1A]" />
                 Interested In
               </Label>
               <Select value={formData.interestedService} onValueChange={(v) => handleInputChange('interestedService', v)}>
-                <SelectTrigger className="border-2 border-gold/40 hover:border-gold focus:border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
+                <SelectTrigger className="border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
                   <SelectValue placeholder="Select a service" />
                 </SelectTrigger>
                 <SelectContent>
@@ -395,7 +395,7 @@ const ContactGatingModal = React.forwardRef<HTMLDivElement, ContactGatingModalPr
                 placeholder="Enter 6-digit code"
                 value={verificationCode}
                 onChange={(e) => setVerificationCode(e.target.value)}
-                className="text-center text-2xl tracking-widest border-2 border-gold/40 hover:border-gold focus:border-gold"
+                className="text-center text-2xl tracking-widest border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555]"
                 maxLength={6}
               />
             </div>
@@ -411,7 +411,7 @@ const ContactGatingModal = React.forwardRef<HTMLDivElement, ContactGatingModalPr
             <div className="text-center">
               <button 
                 onClick={handleResendCode}
-                className="text-sm text-gold hover:underline"
+                className="text-sm text-[#1A1A1A] hover:underline"
               >
                 Didn't receive the code? Resend
               </button>
@@ -428,8 +428,8 @@ const ContactGatingModal = React.forwardRef<HTMLDivElement, ContactGatingModalPr
 
         {step === 'complete' && (
           <div className="text-center py-8">
-            <div className="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-4">
-              <CheckCircle className="h-10 w-10 text-gold" />
+            <div className="w-16 h-16 bg-[#EFE6D6]/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <CheckCircle className="h-10 w-10 text-[#1A1A1A]" />
             </div>
             <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">Welcome, {formData.fullName}!</h3>
             <p className="text-[#1A1A1A]/70">

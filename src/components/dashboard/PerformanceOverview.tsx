@@ -111,7 +111,7 @@ export function PerformanceOverview() {
       value: `${stats.loginStreak}`,
       subValue: "days",
       icon: Flame,
-      color: "text-amber-400",
+      color: "text-[#1A1A1A]",
       bgColor: "bg-amber-500/10",
     },
     {

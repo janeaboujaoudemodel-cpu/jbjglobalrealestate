@@ -131,21 +131,21 @@ const BestIdeaAward = () => {
           className=""
         >
           {/* Main Card - Champagne style inside active champagne layer */}
-          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl md:rounded-2xl border border-gold/40 md:border-2 md:border-gold shadow-[0_8px_30px_rgba(200,167,102,0.35),0_4px_15px_rgba(0,0,0,0.15)] overflow-hidden relative">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl md:rounded-2xl border border-[#B89555]/40 md:border-2 md:border-[#B89555] shadow-[0_8px_30px_rgba(200,167,102,0.35),0_4px_15px_rgba(0,0,0,0.15)] overflow-hidden relative">
             {/* Decorative glow */}
-            <div className="absolute top-0 right-0 w-48 h-48 bg-gold/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-            <div className="absolute bottom-0 left-0 w-36 h-36 bg-gold/15 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
+            <div className="absolute top-0 right-0 w-48 h-48 bg-[#EFE6D6]/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+            <div className="absolute bottom-0 left-0 w-36 h-36 bg-[#EFE6D6]/15 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
             
             <CardContent className="p-6 sm:p-8 md:p-10 relative z-10">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-center">
                 {/* Left - Info */}
                 <div>
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] rounded-xl flex items-center justify-center border border-gold/30">
-                      <Lightbulb className="w-5 h-5 text-gold" />
+                    <div className="w-10 h-10 bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] rounded-xl flex items-center justify-center border border-[#B89555]/30">
+                      <Lightbulb className="w-5 h-5 text-[#1A1A1A]" />
                     </div>
                     <div>
-                      <span className="text-[10px] uppercase tracking-[0.2em] text-gold font-semibold">Monthly Challenge</span>
+                      <span className="text-[10px] uppercase tracking-[0.2em] text-[#1A1A1A] font-semibold">Monthly Challenge</span>
                       <h2 className="text-xl md:text-2xl font-bold text-[#1A1A1A] leading-tight">
                         Best Idea Award
                       </h2>
@@ -164,10 +164,10 @@ const BestIdeaAward = () => {
                       <div className="absolute inset-0 bg-gradient-to-r from-gold/10 to-transparent" />
                       <div className="relative z-10 flex items-center gap-3">
                         <div className="w-10 h-10 bg-gradient-to-br from-gold/30 to-gold/10 rounded-lg flex items-center justify-center shrink-0">
-                          <Tablet className="w-5 h-5 text-gold" />
+                          <Tablet className="w-5 h-5 text-[#1A1A1A]" />
                         </div>
                         <div>
-                          <p className="text-gold font-bold text-sm">iPad Pro with M4 chip (13-inch)</p>
+                          <p className="text-[#1A1A1A] font-bold text-sm">iPad Pro with M4 chip (13-inch)</p>
                           <p className="text-white/70 text-[11px]">Ultra Retina XDR Display • Apple Pencil Pro Compatible • Space Black</p>
                         </div>
                       </div>
@@ -177,10 +177,10 @@ const BestIdeaAward = () => {
                       <div className="absolute inset-0 bg-gradient-to-r from-gold/10 to-transparent" />
                       <div className="relative z-10 flex items-center gap-3">
                         <div className="w-10 h-10 bg-gradient-to-br from-gold/30 to-gold/10 rounded-lg flex items-center justify-center shrink-0">
-                          <Gift className="w-5 h-5 text-gold" />
+                          <Gift className="w-5 h-5 text-[#1A1A1A]" />
                         </div>
                         <div>
-                          <p className="text-gold font-bold text-sm">iPhone 16 Pro Max</p>
+                          <p className="text-[#1A1A1A] font-bold text-sm">iPhone 16 Pro Max</p>
                           <p className="text-white/90 text-[11px]">A18 Pro chip • 48MP Camera System • Titanium Design</p>
                         </div>
                       </div>
@@ -189,25 +189,25 @@ const BestIdeaAward = () => {
                   </div>
 
                   {/* Winner's Recognition */}
-                  <div className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border border-gold/40 rounded-lg p-3 mb-3">
+                  <div className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border border-[#B89555]/40 rounded-lg p-3 mb-3">
                     <div className="flex items-center gap-2 mb-2">
-                      <div className="w-6 h-6 bg-gold/20 rounded-md flex items-center justify-center">
-                        <Sparkles className="w-3.5 h-3.5 text-gold" />
+                      <div className="w-6 h-6 bg-[#EFE6D6]/20 rounded-md flex items-center justify-center">
+                        <Sparkles className="w-3.5 h-3.5 text-[#1A1A1A]" />
                       </div>
                       <span className="text-[#1A1A1A] font-bold text-xs">Winner's Recognition Package</span>
                     </div>
                     <ul className="space-y-1.5 text-[11px]" style={{ color: '#374151' }}>
                       <li className="flex items-start gap-2">
-                        <span className="text-gold mt-0.5">✦</span>
-                        <span>Your <span className="text-gold font-semibold">portrait framed</span> & featured on our website</span>
+                        <span className="text-[#1A1A1A] mt-0.5">✦</span>
+                        <span>Your <span className="text-[#1A1A1A] font-semibold">portrait framed</span> & featured on our website</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-gold mt-0.5">✦</span>
-                        <span>Free <span className="text-gold font-semibold">publication & recognition</span> across all platforms</span>
+                        <span className="text-[#1A1A1A] mt-0.5">✦</span>
+                        <span>Free <span className="text-[#1A1A1A] font-semibold">publication & recognition</span> across all platforms</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-gold mt-0.5">✦</span>
-                        <span>Official <span className="text-gold font-semibold">Certificate of Creativity</span> from <span data-no-translate>JBJ Global Real Estate</span></span>
+                        <span className="text-[#1A1A1A] mt-0.5">✦</span>
+                        <span>Official <span className="text-[#1A1A1A] font-semibold">Certificate of Creativity</span> from <span data-no-translate>JBJ Global Real Estate</span></span>
                       </li>
                     </ul>
                   </div>
@@ -235,10 +235,10 @@ const BestIdeaAward = () => {
                     </DialogTrigger>
 
                     
-                    <DialogContent className="bg-[#FDFBF7] border-gold/30 max-w-lg max-h-[85vh] z-[100] mt-20 overflow-hidden flex flex-col">
+                    <DialogContent className="bg-[#FDFBF7] border-[#B89555]/30 max-w-lg max-h-[85vh] z-[100] mt-20 overflow-hidden flex flex-col">
                       <DialogHeader>
                         <DialogTitle className="text-[#1A1A1A] text-xl font-bold flex items-center gap-2">
-                          <Lightbulb className="w-5 h-5 text-gold" />
+                          <Lightbulb className="w-5 h-5 text-[#1A1A1A]" />
                           Submit Your Idea
                         </DialogTitle>
                       </DialogHeader>
@@ -256,16 +256,16 @@ const BestIdeaAward = () => {
                           <h3 className="text-2xl font-bold text-[#1A1A1A] mb-3">Idea Received Successfully!</h3>
                           
                           {!formData.isAnonymous && (
-                            <div className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border border-gold/40 rounded-xl p-5 mb-5">
+                            <div className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border border-[#B89555]/40 rounded-xl p-5 mb-5">
                               <p className="text-sm text-[#1A1A1A]/70 mb-2">Your Draw Ticket Number</p>
-                              <p className="text-xl font-bold text-gold tracking-wider mb-2">{drawTicketNumber}</p>
+                              <p className="text-xl font-bold text-[#1A1A1A] tracking-wider mb-2">{drawTicketNumber}</p>
                               <p className="text-xs text-[#1A1A1A]/70">This ticket is linked to your account</p>
                             </div>
                           )}
 
                           <div className="bg-[#F7F2EA] rounded-xl p-5 mb-5 text-left">
                             <p className="text-[#1A1A1A]/70 mb-3">
-                              <span className="text-gold font-semibold">We deeply appreciate</span> your creativity and the time you took to share your idea with us.
+                              <span className="text-[#1A1A1A] font-semibold">We deeply appreciate</span> your creativity and the time you took to share your idea with us.
                             </p>
                             {!formData.isAnonymous ? (
                               <>
@@ -273,8 +273,8 @@ const BestIdeaAward = () => {
                                   Your idea has been linked to your contact details. In case you are the winner, we will contact you accordingly.
                                 </p>
                                 <p className="text-[#1A1A1A]/70 text-sm">
-                                  <Sparkles className="w-4 h-4 inline text-gold mr-1" />
-                                  <span className="text-gold font-medium">Submit another unique idea</span> to get additional draw tickets!
+                                  <Sparkles className="w-4 h-4 inline text-[#1A1A1A] mr-1" />
+                                  <span className="text-[#1A1A1A] font-medium">Submit another unique idea</span> to get additional draw tickets!
                                 </p>
                               </>
                             ) : (
@@ -299,7 +299,7 @@ const BestIdeaAward = () => {
                               {formData.isAnonymous ? (
                                 <EyeOff className="w-5 h-5 text-[#1A1A1A]/70" />
                               ) : (
-                                <Eye className="w-5 h-5 text-gold" />
+                                <Eye className="w-5 h-5 text-[#1A1A1A]" />
                               )}
                               <div>
                                 <Label className="text-sm font-medium text-[#1A1A1A]">Post Anonymously</Label>
@@ -327,19 +327,19 @@ const BestIdeaAward = () => {
                             >
                               <div>
                                 <Label className="text-[#1A1A1A]/70 flex items-center gap-2">
-                                  <User className="w-4 h-4 text-gold" />
+                                  <User className="w-4 h-4 text-[#1A1A1A]" />
                                   Full Name *
                                 </Label>
                                 <Input
                                   placeholder="John Doe"
                                   value={formData.fullName}
                                   onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                                className="mt-1 border-[#B89555]/30 focus:border-gold"
+                                className="mt-1 border-[#B89555]/30 focus:border-[#B89555]"
                                 />
                               </div>
                               <div>
                                 <Label className="text-[#1A1A1A]/70 flex items-center gap-2">
-                                  <Mail className="w-4 h-4 text-gold" />
+                                  <Mail className="w-4 h-4 text-[#1A1A1A]" />
                                   Email *
                                 </Label>
                                 <Input
@@ -347,12 +347,12 @@ const BestIdeaAward = () => {
                                   placeholder="john@example.com"
                                   value={formData.email}
                                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                className="mt-1 border-[#B89555]/30 focus:border-gold"
+                                className="mt-1 border-[#B89555]/30 focus:border-[#B89555]"
                                 />
                               </div>
                               <div>
                                 <Label className="text-[#1A1A1A]/70 flex items-center gap-2">
-                                  <Phone className="w-4 h-4 text-gold" />
+                                  <Phone className="w-4 h-4 text-[#1A1A1A]" />
                                   Phone Number *
                                 </Label>
                                 <Input
@@ -360,7 +360,7 @@ const BestIdeaAward = () => {
                                   placeholder="+971 50 123 4567"
                                   value={formData.phone}
                                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                                  className="mt-1 border-[#B89555]/30 focus:border-gold"
+                                  className="mt-1 border-[#B89555]/30 focus:border-[#B89555]"
                                 />
                               </div>
                             </motion.div>
@@ -369,14 +369,14 @@ const BestIdeaAward = () => {
                           {/* Idea Field */}
                           <div>
                             <Label className="text-[#1A1A1A]/70 flex items-center gap-2">
-                              <Lightbulb className="w-4 h-4 text-gold" />
+                              <Lightbulb className="w-4 h-4 text-[#1A1A1A]" />
                               Your Idea *
                             </Label>
                             <Textarea
                               placeholder="Describe your idea in detail... How can we improve our services, processes, or customer experience?"
                               value={formData.idea}
                               onChange={(e) => setFormData({ ...formData, idea: e.target.value })}
-                              className="mt-1 min-h-[120px] border-[#B89555]/30 focus:border-gold"
+                              className="mt-1 min-h-[120px] border-[#B89555]/30 focus:border-[#B89555]"
                             />
                           </div>
 

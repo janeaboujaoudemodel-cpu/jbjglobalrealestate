@@ -163,7 +163,7 @@ export function LeadAssignmentRulesPanel() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-8 w-8 animate-spin text-gold" />
+        <Loader2 className="h-8 w-8 animate-spin text-[#1A1A1A]" />
       </div>
     );
   }
@@ -210,7 +210,7 @@ export function LeadAssignmentRulesPanel() {
         {rules.map((rule, index) => (
           <Card
             key={rule.id}
-            className={`bg-[#FDFBF7] border-2 border-gold/30 ${
+            className={`bg-[#FDFBF7] border-2 border-[#B89555]/30 ${
               !rule.is_active ? "opacity-60" : ""
             }`}
           >
@@ -298,9 +298,9 @@ export function LeadAssignmentRulesPanel() {
         ))}
 
         {rules.length === 0 && (
-          <Card className="bg-[#FDFBF7] border-2 border-gold/30 border-dashed">
+          <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 border-dashed">
             <CardContent className="flex flex-col items-center justify-center py-12">
-              <Users className="h-12 w-12 text-gold mb-4" />
+              <Users className="h-12 w-12 text-[#1A1A1A] mb-4" />
               <p className="text-[#1A1A1A]/60 text-center">
                 No assignment rules configured.
                 <br />
@@ -427,7 +427,7 @@ function RuleForm({ rule, brokers, onSave, onCancel }: RuleFormProps) {
         </div>
       )}
 
-      <div className="flex justify-end gap-3 pt-4 border-t border-gold/20">
+      <div className="flex justify-end gap-3 pt-4 border-t border-[#B89555]/20">
         <Button
           variant="secondary"
           onClick={onCancel}

@@ -123,10 +123,10 @@ const DocumentDownloads = ({ documents }: DocumentDownloadsProps) => {
         )}
       </div>
 
-      <div className="flex items-center gap-2 mb-4 p-3 bg-gold/10 border border-gold/20 rounded-lg">
-        <Shield className="w-4 h-4 text-gold flex-shrink-0" />
+      <div className="flex items-center gap-2 mb-4 p-3 bg-[#EFE6D6]/10 border border-[#B89555]/20 rounded-lg">
+        <Shield className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
         <p className="text-xs text-muted-foreground">
-          <span className="text-gold font-medium">Protected Content:</span> All downloads are watermarked and tracked for intellectual property protection.
+          <span className="text-[#1A1A1A] font-medium">Protected Content:</span> All downloads are watermarked and tracked for intellectual property protection.
         </p>
       </div>
 
@@ -137,16 +137,16 @@ const DocumentDownloads = ({ documents }: DocumentDownloadsProps) => {
               <button
                 key={doc.id}
                 onClick={() => handleDownload(doc)}
-                className="w-full flex items-center gap-3 p-4 rounded-xl bg-card transition-colors group border border-gold/30 hover:border-gold/60"
+                className="w-full flex items-center gap-3 p-4 rounded-xl bg-card transition-colors group border border-[#B89555]/30 hover:border-[#B89555]/60"
               >
                 <div className="w-10 h-10 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0">
-                  <span className="text-gold">{getDocumentIcon(type)}</span>
+                  <span className="text-[#1A1A1A]">{getDocumentIcon(type)}</span>
                 </div>
                 <div className="flex-1 min-w-0 text-left">
                   <p className="text-foreground font-medium truncate">{getDocumentLabel(type)}</p>
                   <p className="text-muted-foreground text-sm truncate max-w-[180px]">{doc.file_name}</p>
                 </div>
-                <Download className="w-5 h-5 text-gold group-hover:text-gold transition-colors flex-shrink-0" />
+                <Download className="w-5 h-5 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors flex-shrink-0" />
               </button>
             ))}
           </div>

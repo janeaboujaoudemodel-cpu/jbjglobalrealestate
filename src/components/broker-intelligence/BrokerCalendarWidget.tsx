@@ -62,7 +62,7 @@ export function BrokerCalendarWidget() {
       case "call":
         return <Phone className="w-4 h-4 text-purple-400" />;
       case "follow-up":
-        return <Clock className="w-4 h-4 text-amber-400" />;
+        return <Clock className="w-4 h-4 text-[#1A1A1A]" />;
     }
   };
 
@@ -75,7 +75,7 @@ export function BrokerCalendarWidget() {
       case "call":
         return <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-xs">Call</Badge>;
       case "follow-up":
-        return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-xs">Follow-up</Badge>;
+        return <Badge className="bg-amber-500/20 text-[#1A1A1A] border-amber-500/30 text-xs">Follow-up</Badge>;
     }
   };
 
@@ -92,11 +92,11 @@ export function BrokerCalendarWidget() {
   return (
     <div className="space-y-6">
       {/* Today's Header */}
-      <Card className="bg-zinc-900/50 border-[#1A1A1A]">
+      <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-white text-lg flex items-center gap-2">
-              <Calendar className="w-5 h-5 text-gold" />
+              <Calendar className="w-5 h-5 text-[#1A1A1A]" />
               Today's Schedule
             </CardTitle>
             <Button
@@ -113,7 +113,7 @@ export function BrokerCalendarWidget() {
         <CardContent className="space-y-4">
           {/* Quick Add Form */}
           {showQuickAdd && (
-            <div className="bg-zinc-800/50 rounded-lg p-4 border border-gold/20 space-y-3">
+            <div className="bg-[#1A1A1A]/50 rounded-lg p-4 border border-[#B89555]/20 space-y-3">
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
                   <Label className="text-white/70 text-xs">Event Title</Label>
@@ -121,7 +121,7 @@ export function BrokerCalendarWidget() {
                     placeholder="Meeting title"
                     value={quickEvent.title}
                     onChange={(e) => setQuickEvent({ ...quickEvent, title: e.target.value })}
-                    className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 h-9"
+                    className="bg-[#1A1A1A] border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 h-9"
                   />
                 </div>
                 <div className="space-y-1">
@@ -130,7 +130,7 @@ export function BrokerCalendarWidget() {
                     type="time"
                     value={quickEvent.time}
                     onChange={(e) => setQuickEvent({ ...quickEvent, time: e.target.value })}
-                    className="bg-zinc-800 border-[#1A1A1A] text-white h-9"
+                    className="bg-[#1A1A1A] border-[#1A1A1A] text-white h-9"
                   />
                 </div>
               </div>
@@ -155,7 +155,7 @@ export function BrokerCalendarWidget() {
                     placeholder="Client name"
                     value={quickEvent.client}
                     onChange={(e) => setQuickEvent({ ...quickEvent, client: e.target.value })}
-                    className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 h-9"
+                    className="bg-[#1A1A1A] border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 h-9"
                   />
                 </div>
               </div>
@@ -181,7 +181,7 @@ export function BrokerCalendarWidget() {
               {events.map((event) => (
                 <div
                   key={event.id}
-                  className="bg-zinc-800/50 rounded-lg p-3 border border-[#1A1A1A]/50 hover:border-gold/20 transition-colors"
+                  className="bg-[#1A1A1A]/50 rounded-lg p-3 border border-[#1A1A1A]/50 hover:border-[#B89555]/20 transition-colors"
                 >
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-2">
@@ -217,10 +217,10 @@ export function BrokerCalendarWidget() {
 
       {/* Link to Full Calendar */}
       <Link to="/crm/calendar">
-        <Card className="bg-zinc-800/30 border-[#1A1A1A] hover:border-gold/30 transition-colors cursor-pointer">
+        <Card className="bg-[#1A1A1A]/30 border-[#1A1A1A] hover:border-[#B89555]/30 transition-colors cursor-pointer">
           <CardContent className="p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Calendar className="w-5 h-5 text-gold" />
+              <Calendar className="w-5 h-5 text-[#1A1A1A]" />
               <div>
                 <p className="text-white font-medium text-sm">Open Full Calendar</p>
                 <p className="text-white/90 text-xs">Manage all events, sync with Google Calendar</p>

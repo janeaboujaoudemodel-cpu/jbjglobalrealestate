@@ -222,9 +222,9 @@ const ExploreServicesCard = () => {
   const currentService = services[currentIndex];
 
   return (
-    <div className="relative overflow-hidden rounded-2xl md:rounded-3xl border-2 border-gold/50 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_12px_40px_rgba(200,167,102,0.45),0_6px_20px_rgba(0,0,0,0.2)]">
+    <div className="relative overflow-hidden rounded-2xl md:rounded-3xl border-2 border-[#B89555]/50 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_12px_40px_rgba(200,167,102,0.45),0_6px_20px_rgba(0,0,0,0.2)]">
       {/* Header */}
-      <div className="px-6 md:px-8 py-5 md:py-6 border-b border-gold/30 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
+      <div className="px-6 md:px-8 py-5 md:py-6 border-b border-[#B89555]/30 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
         <h3 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
           Explore Our Services
         </h3>
@@ -309,7 +309,7 @@ const ExploreServicesCard = () => {
                   boxShadow: '0 6px 16px rgba(0,0,0,0.35), inset 0 3px 6px rgba(255,255,255,0.9), 0 0 20px rgba(200,167,102,0.25)',
                 }}
               >
-                <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-gold" />
+                <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-[#1A1A1A]" />
               </button>
               <button
                 onClick={goToNext}
@@ -320,7 +320,7 @@ const ExploreServicesCard = () => {
                   boxShadow: '0 6px 16px rgba(0,0,0,0.35), inset 0 3px 6px rgba(255,255,255,0.9), 0 0 20px rgba(200,167,102,0.25)',
                 }}
               >
-                <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-gold" />
+                <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-[#1A1A1A]" />
               </button>
             </div>
           </div>

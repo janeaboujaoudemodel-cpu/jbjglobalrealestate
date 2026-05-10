@@ -198,9 +198,9 @@ const DynamicBrokerSection = ({ forcedUserType }: DynamicBrokerSectionProps) => 
           variants={fadeInUp}
         >
           {/* Badge */}
-          <Badge className="bg-[#FDFBF7] text-[#1A1A1A] border-gold/30 mb-6 py-2 px-4 shadow-sm">
-            <content.badgeIcon className="w-4 h-4 mr-2 text-gold" />
-            <span className="text-gold">{content.badge.split(' ')[0]}</span>
+          <Badge className="bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/30 mb-6 py-2 px-4 shadow-sm">
+            <content.badgeIcon className="w-4 h-4 mr-2 text-[#1A1A1A]" />
+            <span className="text-[#1A1A1A]">{content.badge.split(' ')[0]}</span>
             <span className="text-[#1A1A1A] ml-1">{content.badge.split(' ').slice(1).join(' ')}</span>
           </Badge>
 
@@ -208,7 +208,7 @@ const DynamicBrokerSection = ({ forcedUserType }: DynamicBrokerSectionProps) => 
           <h2 
             className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4"
           >
-            {content.title} <span className="text-gold">{content.highlightText}</span>
+            {content.title} <span className="text-[#1A1A1A]">{content.highlightText}</span>
           </h2>
 
           {/* Subtitle */}
@@ -222,7 +222,7 @@ const DynamicBrokerSection = ({ forcedUserType }: DynamicBrokerSectionProps) => 
               <Button variant="primary" className="gap-2 px-8 py-6 text-lg min-w-[200px]">
                 <content.primaryButton.icon className="h-5 w-5" />
                 {content.primaryButton.text}
-                <ArrowUpRight className="h-5 w-5 text-gold" />
+                <ArrowUpRight className="h-5 w-5 text-[#1A1A1A]" />
               </Button>
             </Link>
             <Link to={content.secondaryButton.link}>
@@ -245,7 +245,7 @@ const DynamicBrokerSection = ({ forcedUserType }: DynamicBrokerSectionProps) => 
                 }}
                 className={`px-3 py-1.5 text-xs rounded-full transition-all ${
                   userType === type
-                    ? 'bg-gold text-[#1A1A1A] font-semibold'
+                    ? 'bg-[#EFE6D6] text-[#1A1A1A] font-semibold'
                     : 'bg-[hsl(38,35%,18%)] text-[#1A1A1A]/70 hover:bg-[hsl(38,35%,22%)] hover:text-white'
                 }`}
               >

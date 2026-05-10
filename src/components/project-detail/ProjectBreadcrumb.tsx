@@ -72,7 +72,7 @@ export function ProjectBreadcrumb({ projectName, location, surface = "light" }: 
         <BreadcrumbSeparator style={sepStyle} />
 
         <BreadcrumbItem>
-          <BreadcrumbPage style={currentStyle} className={cn(!isDark && "text-gold font-medium")}>
+          <BreadcrumbPage style={currentStyle} className={cn(!isDark && "text-[#1A1A1A] font-medium")}>
             {projectName}
           </BreadcrumbPage>
         </BreadcrumbItem>

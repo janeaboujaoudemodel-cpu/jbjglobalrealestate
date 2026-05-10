@@ -25,7 +25,7 @@ import { useAuth } from '@/contexts/AuthContext';
 
 // Department hierarchy configuration
 const departmentHierarchy = {
-  'Executive': { order: 1, color: 'border-gold/40', bgColor: 'bg-gold/5' },
+  'Executive': { order: 1, color: 'border-[#B89555]/40', bgColor: 'bg-[#EFE6D6]/5' },
   'Sales': { order: 2, color: 'border-green-500/30', bgColor: 'bg-green-500/5' },
   'Marketing': { order: 3, color: 'border-pink-500/30', bgColor: 'bg-pink-500/5' },
   'Human Resources': { order: 4, color: 'border-purple-500/30', bgColor: 'bg-purple-500/5' },
@@ -102,12 +102,12 @@ const FoundersTeamDirectory: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header with Team Count */}
-      <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-[0_0_20px_rgba(200,167,102,0.15)]">
+      <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 shadow-[0_0_20px_rgba(200,167,102,0.15)]">
         <CardContent className="p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-lg bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30">
-                <Users className="w-6 h-6 text-gold" />
+              <div className="p-3 rounded-lg bg-gradient-to-br from-gold/20 to-gold/5 border border-[#B89555]/30">
+                <Users className="w-6 h-6 text-[#1A1A1A]" />
               </div>
               <div>
                 <h2 className="text-xl font-bold text-[#1A1A1A]">Team Directory</h2>
@@ -115,7 +115,7 @@ const FoundersTeamDirectory: React.FC = () => {
               </div>
             </div>
             <div className="text-right">
-              <p className="text-3xl font-bold text-gold">{totalTeamCount}</p>
+              <p className="text-3xl font-bold text-[#1A1A1A]">{totalTeamCount}</p>
               <p className="text-xs text-[#1A1A1A]/70">Total Members</p>
             </div>
           </div>
@@ -130,7 +130,7 @@ const FoundersTeamDirectory: React.FC = () => {
             placeholder="Search team members..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-10 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 shadow-[0_0_10px_rgba(200,167,102,0.1)]"
+            className="pl-10 bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 shadow-[0_0_10px_rgba(200,167,102,0.1)]"
           />
         </div>
         <div className="w-full md:w-auto overflow-x-auto">
@@ -141,8 +141,8 @@ const FoundersTeamDirectory: React.FC = () => {
                 size="sm"
                 onClick={() => setSelectedDepartment(dept)}
                 className={selectedDepartment === dept 
-                  ? 'bg-[#1A1A1A] text-white border-2 border-gold/50 shadow-[0_0_15px_rgba(200,167,102,0.3)] whitespace-nowrap hover:bg-[#1A1A1A]' 
-                  : 'bg-[#FDFBF7] text-gold border-2 border-gold/30 hover:bg-transparent hover:border-gold/50 whitespace-nowrap'
+                  ? 'bg-[#1A1A1A] text-white border-2 border-[#B89555]/50 shadow-[0_0_15px_rgba(200,167,102,0.3)] whitespace-nowrap hover:bg-[#1A1A1A]' 
+                  : 'bg-[#FDFBF7] text-[#1A1A1A] border-2 border-[#B89555]/30 hover:bg-transparent hover:border-[#B89555]/50 whitespace-nowrap'
                 }
               >
                 {dept === 'All' ? `All (${totalTeamCount})` : dept}
@@ -162,18 +162,18 @@ const FoundersTeamDirectory: React.FC = () => {
 
             return (
               <Collapsible key={dept} open={isExpanded} onOpenChange={() => toggleDepartment(dept)}>
-                <Card className={`bg-[#FDFBF7] border-2 ${deptConfig?.color || 'border-gold/20'} shadow-[0_0_15px_rgba(200,167,102,0.1)]`}>
+                <Card className={`bg-[#FDFBF7] border-2 ${deptConfig?.color || 'border-[#B89555]/20'} shadow-[0_0_15px_rgba(200,167,102,0.1)]`}>
                   <CollapsibleTrigger asChild>
                     <CardHeader className="cursor-pointer hover:bg-[#F7F2EA] transition-colors py-3">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           {isExpanded ? (
-                            <ChevronDown className="w-5 h-5 text-gold" />
+                            <ChevronDown className="w-5 h-5 text-[#1A1A1A]" />
                           ) : (
-                            <ChevronRight className="w-5 h-5 text-gold" />
+                            <ChevronRight className="w-5 h-5 text-[#1A1A1A]" />
                           )}
                           <CardTitle className="text-[#1A1A1A] text-lg">{dept}</CardTitle>
-                          <Badge className="bg-gold/10 text-gold border border-gold/30">
+                          <Badge className="bg-[#EFE6D6]/10 text-[#1A1A1A] border border-[#B89555]/30">
                             {members.length} members
                           </Badge>
                         </div>
@@ -191,12 +191,12 @@ const FoundersTeamDirectory: React.FC = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.03 }}
                           >
-                            <Card className="bg-[#FDFBF7] border-2 border-gold/20 hover:border-gold/40 hover:shadow-[0_0_20px_rgba(200,167,102,0.2)] transition-all group">
+                            <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/20 hover:border-[#B89555]/40 hover:shadow-[0_0_20px_rgba(200,167,102,0.2)] transition-all group">
                               <CardContent className="p-4">
                                 <div className="flex items-start gap-4">
                                   {/* Avatar */}
                                   <div className="relative">
-                                    <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-gold/30 group-hover:border-gold/60 transition-colors">
+                                    <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-[#B89555]/30 group-hover:border-[#B89555]/60 transition-colors">
                                       <img 
                                         src={member.avatar} 
                                         alt={member.name} 
@@ -206,7 +206,7 @@ const FoundersTeamDirectory: React.FC = () => {
                                     </div>
                                     {/* Star indicator - visible only to founder/admin for AI personas */}
                                     {isFounderOrAdmin && member.isAI && (
-                                      <span className="absolute -bottom-1 -right-1 w-5 h-5 bg-gold rounded-full flex items-center justify-center">
+                                      <span className="absolute -bottom-1 -right-1 w-5 h-5 bg-[#EFE6D6] rounded-full flex items-center justify-center">
                                         <Sparkles className="w-3 h-3 text-[#1A1A1A]" />
                                       </span>
                                     )}
@@ -217,10 +217,10 @@ const FoundersTeamDirectory: React.FC = () => {
                                     <div className="flex items-center gap-2">
                                       <h4 className="text-[#1A1A1A] font-semibold truncate">{member.name}</h4>
                                       {member.role.includes('CEO') || member.role.includes('Founder') ? (
-                                        <Crown className="w-4 h-4 text-gold" />
+                                        <Crown className="w-4 h-4 text-[#1A1A1A]" />
                                       ) : null}
                                     </div>
-                                    <p className="text-sm text-gold truncate">{member.role}</p>
+                                    <p className="text-sm text-[#1A1A1A] truncate">{member.role}</p>
                                     <div className="flex items-center gap-1 mt-1 text-xs text-[#1A1A1A]/70">
                                       <Building2 className="w-3 h-3" />
                                       Reports to: {getReportsTo(member)}
@@ -232,7 +232,7 @@ const FoundersTeamDirectory: React.FC = () => {
                                 {member.languages && member.languages.length > 0 && (
                                   <div className="flex flex-wrap gap-1 mt-3">
                                     {member.languages.slice(0, 3).map((lang) => (
-                                      <Badge key={lang} variant="outline" className="text-xs border-gold/20 text-[#1A1A1A]/70 bg-[#F7F2EA]">
+                                      <Badge key={lang} variant="outline" className="text-xs border-[#B89555]/20 text-[#1A1A1A]/70 bg-[#F7F2EA]">
                                         {lang}
                                       </Badge>
                                     ))}
@@ -240,10 +240,10 @@ const FoundersTeamDirectory: React.FC = () => {
                                 )}
 
                                 {/* Quick Actions */}
-                                <div className="flex items-center gap-2 mt-4 pt-4 border-t border-gold/10">
+                                <div className="flex items-center gap-2 mt-4 pt-4 border-t border-[#B89555]/10">
                                   <Button
                                     size="sm"
-                                    className="flex-1 bg-[#FDFBF7] text-gold border-2 border-gold/30 hover:bg-transparent hover:border-gold shadow-[0_0_10px_rgba(200,167,102,0.15)]"
+                                    className="flex-1 bg-[#FDFBF7] text-[#1A1A1A] border-2 border-[#B89555]/30 hover:bg-transparent hover:border-[#B89555] shadow-[0_0_10px_rgba(200,167,102,0.15)]"
                                     onClick={() => handleContact(member, 'whatsapp')}
                                   >
                                     <MessageSquare className="w-4 h-4 mr-2" />
@@ -251,19 +251,19 @@ const FoundersTeamDirectory: React.FC = () => {
                                   </Button>
                                   <button
                                     onClick={() => handleContact(member, 'email')}
-                                    className="w-8 h-8 rounded-full bg-[#FDFBF7] text-gold border-2 border-gold/30 hover:border-gold hover:shadow-[0_0_10px_rgba(200,167,102,0.3)] flex items-center justify-center transition-all"
+                                    className="w-8 h-8 rounded-full bg-[#FDFBF7] text-[#1A1A1A] border-2 border-[#B89555]/30 hover:border-[#B89555] hover:shadow-[0_0_10px_rgba(200,167,102,0.3)] flex items-center justify-center transition-all"
                                   >
                                     <Mail className="w-4 h-4" />
                                   </button>
                                   <button
                                     onClick={() => handleContact(member, 'phone')}
-                                    className="w-8 h-8 rounded-full bg-[#FDFBF7] text-gold border-2 border-gold/30 hover:border-gold hover:shadow-[0_0_10px_rgba(200,167,102,0.3)] flex items-center justify-center transition-all"
+                                    className="w-8 h-8 rounded-full bg-[#FDFBF7] text-[#1A1A1A] border-2 border-[#B89555]/30 hover:border-[#B89555] hover:shadow-[0_0_10px_rgba(200,167,102,0.3)] flex items-center justify-center transition-all"
                                   >
                                     <Phone className="w-4 h-4" />
                                   </button>
                                   <button
                                     onClick={() => handleContact(member, 'video')}
-                                    className="w-8 h-8 rounded-full bg-[#FDFBF7] text-gold border-2 border-gold/30 hover:border-gold hover:shadow-[0_0_10px_rgba(200,167,102,0.3)] flex items-center justify-center transition-all"
+                                    className="w-8 h-8 rounded-full bg-[#FDFBF7] text-[#1A1A1A] border-2 border-[#B89555]/30 hover:border-[#B89555] hover:shadow-[0_0_10px_rgba(200,167,102,0.3)] flex items-center justify-center transition-all"
                                   >
                                     <Video className="w-4 h-4" />
                                   </button>
@@ -284,7 +284,7 @@ const FoundersTeamDirectory: React.FC = () => {
 
       {/* Empty State */}
       {filteredMembers.length === 0 && (
-        <Card className="bg-[#FDFBF7] border-2 border-gold/20">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/20">
           <CardContent className="p-8 text-center">
             <Search className="w-12 h-12 text-[#1A1A1A]/70 mx-auto mb-4" />
             <p className="text-[#1A1A1A]/70">No team members found</p>

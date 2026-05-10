@@ -15,9 +15,9 @@ const SummaryCard = ({ item }: SummaryCardProps) => {
       case 'meeting':
         return {
           icon: Video,
-          bgColor: 'bg-gold/20',
-          textColor: 'text-gold-dark',
-          borderColor: 'border-gold/30',
+          bgColor: 'bg-[#EFE6D6]/20',
+          textColor: 'text-[#1A1A1A]-dark',
+          borderColor: 'border-[#B89555]/30',
           label: 'Meeting',
         };
       case 'call':
@@ -31,9 +31,9 @@ const SummaryCard = ({ item }: SummaryCardProps) => {
       case 'voice-ai':
         return {
           icon: Mic,
-          bgColor: 'bg-gold/20',
-          textColor: 'text-gold-dark',
-          borderColor: 'border-gold/30',
+          bgColor: 'bg-[#EFE6D6]/20',
+          textColor: 'text-[#1A1A1A]-dark',
+          borderColor: 'border-[#B89555]/30',
           label: 'Voice AI',
         };
     }
@@ -87,7 +87,7 @@ const SummaryCard = ({ item }: SummaryCardProps) => {
       {/* Expandable Details */}
       {(item.actionItems.length > 0 || item.rawData) && (
         <>
-          <div className="border-t border-gold/20">
+          <div className="border-t border-[#B89555]/20">
             <Button
               variant="ghost"
               onClick={() => setIsExpanded(!isExpanded)}

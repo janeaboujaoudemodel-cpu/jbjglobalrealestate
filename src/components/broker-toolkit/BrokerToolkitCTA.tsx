@@ -23,20 +23,20 @@ export function BrokerToolkitCTA() {
       <div className="container mx-auto px-4">
         <div className="max-w-[1100px] mx-auto">
           {/* OUTER CARD (Active Champagne) - Larger padding for 3rd layer visibility */}
-          <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/30 rounded-2xl sm:rounded-3xl p-4 sm:p-6">
+          <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/30 rounded-2xl sm:rounded-3xl p-4 sm:p-6">
             {/* INNER CARD (Pearl) - Significantly smaller to show more champagne layer */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 md:p-10 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
+              className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl sm:rounded-2xl p-6 md:p-10 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
             >
               {/* Icon container */}
-              <div className="w-16 h-16 bg-[#1A1A1A] border border-gold/30 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Shield className="w-8 h-8 text-gold" />
+              <div className="w-16 h-16 bg-[#1A1A1A] border border-[#B89555]/30 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <Shield className="w-8 h-8 text-[#1A1A1A]" />
               </div>
               <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-4">
-                Ready to Join the <span className="text-gold">JBJ Broker Circle?</span>
+                Ready to Join the <span className="text-[#1A1A1A]">JBJ Broker Circle?</span>
               </h2>
               <p className="text-[#1A1A1A]/70 mb-8 max-w-xl mx-auto">
                 Get free access to all AI tools, 24 training modules, dedicated HR support, 
@@ -62,10 +62,10 @@ export function BrokerToolkitCTA() {
                     <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
                     <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                     <span className="relative flex items-center gap-1">
-                      <Star className="w-5 h-5 text-gold group-hover:text-[#1A1A1A] transition-colors" />
-                      <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">Join Now</span>
-                      <span className="text-gold group-hover:text-[#1A1A1A] transition-colors">— Completely Free</span>
-                      <ArrowUpRight className="w-5 h-5 text-[#1A1A1A] group-hover:text-gold transition-colors" />
+                      <Star className="w-5 h-5 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
+                      <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">Join Now</span>
+                      <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">— Completely Free</span>
+                      <ArrowUpRight className="w-5 h-5 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
                     </span>
                   </button>
                 ) : (
@@ -86,10 +86,10 @@ export function BrokerToolkitCTA() {
                     <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
                     <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                     <span className="relative flex items-center gap-1">
-                      <Sparkles className="w-5 h-5 text-gold group-hover:text-[#1A1A1A] transition-colors" />
-                      <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">Access Your</span>
-                      <span className="text-gold group-hover:text-[#1A1A1A] transition-colors">Dashboard</span>
-                      <ArrowUpRight className="w-5 h-5 text-[#1A1A1A] group-hover:text-gold transition-colors" />
+                      <Sparkles className="w-5 h-5 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
+                      <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">Access Your</span>
+                      <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">Dashboard</span>
+                      <ArrowUpRight className="w-5 h-5 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
                     </span>
                   </button>
                 )}
@@ -98,7 +98,7 @@ export function BrokerToolkitCTA() {
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <a
                   href="tel:+971565911000"
-                  className="flex items-center gap-2 text-[#1A1A1A]/70 hover:text-gold transition-colors"
+                  className="flex items-center gap-2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors"
                 >
                   <Phone className="w-5 h-5 text-blue-500" />
                   +971 56 591 1000
@@ -108,7 +108,7 @@ export function BrokerToolkitCTA() {
                   href="https://wa.me/971565911000?text=Hi%2C%20I%27m%20interested%20in%20joining%20the%20Broker%20Circle"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-[#1A1A1A]/70 hover:text-gold transition-colors"
+                  className="flex items-center gap-2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors"
                 >
                   <MessageCircle className="w-5 h-5 text-green-500" />
                   WhatsApp
@@ -116,9 +116,9 @@ export function BrokerToolkitCTA() {
                 <span className="text-[#1A1A1A]/70 hidden sm:block">|</span>
                 <a
                   href="mailto:CONTACT@JBJ.AE"
-                  className="flex items-center gap-2 text-[#1A1A1A]/70 hover:text-gold transition-colors"
+                  className="flex items-center gap-2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors"
                 >
-                  <Mail className="w-5 h-5 text-gold" />
+                  <Mail className="w-5 h-5 text-[#1A1A1A]" />
                   CONTACT@JBJ.AE
                 </a>
               </div>

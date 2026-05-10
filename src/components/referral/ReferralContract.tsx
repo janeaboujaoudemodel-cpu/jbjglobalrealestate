@@ -25,7 +25,7 @@ export default function ReferralContract({
   return (
     <div className="bg-[#FDFBF7] text-[#1A1A1A] p-8 max-w-3xl mx-auto font-serif" id="referral-contract">
       {/* Header - Large logo only, no duplicate company name */}
-      <div className="text-center border-b-2 border-gold pb-6 mb-8">
+      <div className="text-center border-b-2 border-[#B89555] pb-6 mb-8">
         <img src={jbjFullLogoLight} alt="JBJ Global Real Estate" className="h-28 mx-auto mb-4" />
         <p className="text-sm text-[#1A1A1A]/70 mt-1">Real Estate Brokerage</p>
         <p className="text-xs text-[#1A1A1A]/70 mt-2">Dubai, United Arab Emirates</p>

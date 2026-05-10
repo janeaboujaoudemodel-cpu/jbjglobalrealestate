@@ -33,20 +33,20 @@ export function CurrencyTooltip() {
   return (
     <div className="fixed bottom-24 right-6 z-[9999] max-w-xs animate-in slide-in-from-bottom-4 fade-in duration-500">
       <div
-        className="relative rounded-xl border-2 border-gold/50 p-4 shadow-2xl"
+        className="relative rounded-xl border-2 border-[#B89555]/50 p-4 shadow-2xl"
         style={{
           background: "linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)",
         }}
       >
         <button
           onClick={dismiss}
-          className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full hover:bg-gold/20 transition-colors"
+          className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full hover:bg-[#EFE6D6]/20 transition-colors"
         >
           <X className="w-3.5 h-3.5 text-foreground/60" />
         </button>
         <div className="flex items-start gap-3">
-          <div className="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0">
-            <DollarSign className="w-5 h-5 text-gold" />
+          <div className="w-10 h-10 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center flex-shrink-0">
+            <DollarSign className="w-5 h-5 text-[#1A1A1A]" />
           </div>
           <div>
             <p className="text-sm font-semibold text-foreground mb-1">Change Currency</p>
@@ -57,13 +57,13 @@ export function CurrencyTooltip() {
         </div>
         <button
           onClick={dismiss}
-          className="mt-3 w-full py-2 rounded-lg bg-gold text-[#1A1A1A] text-sm font-semibold hover:bg-gold/90 transition-colors"
+          className="mt-3 w-full py-2 rounded-lg bg-[#EFE6D6] text-[#1A1A1A] text-sm font-semibold hover:bg-[#EFE6D6]/90 transition-colors"
         >
           Got it
         </button>
       </div>
       {/* Arrow pointing up */}
-      <div className="absolute -top-2 right-8 w-4 h-4 rotate-45 border-l-2 border-t-2 border-gold/50" style={{ background: "#FDFBF7" }} />
+      <div className="absolute -top-2 right-8 w-4 h-4 rotate-45 border-l-2 border-t-2 border-[#B89555]/50" style={{ background: "#FDFBF7" }} />
     </div>
   );
 }

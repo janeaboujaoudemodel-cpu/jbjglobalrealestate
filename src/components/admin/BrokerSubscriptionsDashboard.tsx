@@ -69,14 +69,14 @@ interface BrokerSubscription {
 const STATUS_COLORS: { [key: string]: string } = {
   active: "bg-green-500/20 text-green-400 border-green-500/30",
   trial: "bg-blue-500/20 text-blue-400 border-blue-500/30",
-  pending: "bg-amber-500/20 text-amber-400 border-amber-500/30",
+  pending: "bg-amber-500/20 text-[#1A1A1A] border-amber-500/30",
   cancelled: "bg-red-500/20 text-red-400 border-red-500/30",
   expired: "bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/30",
 };
 
 const TIER_COLORS: { [key: string]: string } = {
-  starter: "bg-zinc-700 text-[#1A1A1A]/70",
-  professional: "bg-gold/20 text-gold",
+  starter: "bg-[#1A1A1A] text-[#1A1A1A]/70",
+  professional: "bg-[#EFE6D6]/20 text-[#1A1A1A]",
   enterprise: "bg-purple-500/20 text-purple-400",
 };
 
@@ -320,10 +320,10 @@ export default function BrokerSubscriptionsDashboard() {
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {[1, 2, 3, 4].map((i) => (
-            <Skeleton key={i} className="h-28 bg-zinc-800" />
+            <Skeleton key={i} className="h-28 bg-[#1A1A1A]" />
           ))}
         </div>
-        <Skeleton className="h-96 bg-zinc-800" />
+        <Skeleton className="h-96 bg-[#1A1A1A]" />
       </div>
     );
   }
@@ -344,30 +344,30 @@ export default function BrokerSubscriptionsDashboard() {
 
       {/* Stats Cards - Champagne theme */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-6 shadow-lg">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 p-6 shadow-lg">
           <div className="flex items-center gap-3 mb-2">
-            <Users className="w-5 h-5 text-gold" />
+            <Users className="w-5 h-5 text-[#1A1A1A]" />
             <span className="text-[#1A1A1A]/70 text-sm">Total Subscriptions</span>
           </div>
           <p className="text-[#1A1A1A] text-3xl font-bold">{totalSubscriptions}</p>
         </Card>
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-6 shadow-lg">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 p-6 shadow-lg">
           <div className="flex items-center gap-3 mb-2">
             <Shield className="w-5 h-5 text-green-600" />
             <span className="text-[#1A1A1A]/70 text-sm">Active</span>
           </div>
           <p className="text-[#1A1A1A] text-3xl font-bold">{activeSubscriptions}</p>
         </Card>
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-6 shadow-lg">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 p-6 shadow-lg">
           <div className="flex items-center gap-3 mb-2">
             <Calendar className="w-5 h-5 text-blue-600" />
             <span className="text-[#1A1A1A]/70 text-sm">On Trial</span>
           </div>
           <p className="text-[#1A1A1A] text-3xl font-bold">{trialSubscriptions}</p>
         </Card>
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-6 shadow-lg">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 p-6 shadow-lg">
           <div className="flex items-center gap-3 mb-2">
-            <CreditCard className="w-5 h-5 text-gold" />
+            <CreditCard className="w-5 h-5 text-[#1A1A1A]" />
             <span className="text-[#1A1A1A]/70 text-sm">Active Revenue</span>
           </div>
           <p className="text-[#1A1A1A] text-3xl font-bold">${totalRevenue.toLocaleString()}</p>
@@ -375,10 +375,10 @@ export default function BrokerSubscriptionsDashboard() {
       </div>
 
       {/* Filters and Actions - Champagne theme */}
-      <div className="bg-[#FDFBF7] border-2 border-gold/30 rounded-xl p-4 shadow-lg">
+      <div className="bg-[#FDFBF7] border-2 border-[#B89555]/30 rounded-xl p-4 shadow-lg">
         <div className="flex flex-wrap items-center gap-4">
           <div className="relative flex-1 min-w-64">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gold" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]" />
             <Input
               placeholder="Search by name, email, company, or RERA..."
               value={searchQuery}
@@ -387,10 +387,10 @@ export default function BrokerSubscriptionsDashboard() {
             />
           </div>
           <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-36 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A]">
+            <SelectTrigger className="w-36 bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A]">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
-            <SelectContent className="bg-[#FDFBF7] border-gold/30">
+            <SelectContent className="bg-[#FDFBF7] border-[#B89555]/30">
               <SelectItem value="all">All Statuses</SelectItem>
               <SelectItem value="active">Active</SelectItem>
               <SelectItem value="trial">Trial</SelectItem>
@@ -400,10 +400,10 @@ export default function BrokerSubscriptionsDashboard() {
             </SelectContent>
           </Select>
           <Select value={tierFilter} onValueChange={setTierFilter}>
-            <SelectTrigger className="w-36 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A]">
+            <SelectTrigger className="w-36 bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A]">
               <SelectValue placeholder="Tier" />
             </SelectTrigger>
-            <SelectContent className="bg-[#FDFBF7] border-gold/30">
+            <SelectContent className="bg-[#FDFBF7] border-[#B89555]/30">
               <SelectItem value="all">All Tiers</SelectItem>
               <SelectItem value="starter">Starter</SelectItem>
               <SelectItem value="professional">Professional</SelectItem>
@@ -417,7 +417,7 @@ export default function BrokerSubscriptionsDashboard() {
             <RefreshCw className="w-4 h-4 mr-2" />
             Refresh
           </Button>
-          <Button onClick={exportToCSV} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
+          <Button onClick={exportToCSV} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
             <Download className="w-4 h-4 mr-2" />
             Export
           </Button>
@@ -425,11 +425,11 @@ export default function BrokerSubscriptionsDashboard() {
       </div>
 
       {/* Table - Champagne theme */}
-      <div className="bg-[#FDFBF7] border-2 border-gold/30 rounded-xl overflow-hidden shadow-lg">
+      <div className="bg-[#FDFBF7] border-2 border-[#B89555]/30 rounded-xl overflow-hidden shadow-lg">
         <ScrollArea className="h-[500px]">
           <Table>
             <TableHeader className="bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] sticky top-0">
-              <TableRow className="border-gold/20">
+              <TableRow className="border-[#B89555]/20">
                 <TableHead className="text-[#1A1A1A] font-semibold">Broker</TableHead>
                 <TableHead className="text-[#1A1A1A] font-semibold">Contact</TableHead>
                 <TableHead className="text-[#1A1A1A] font-semibold">Company</TableHead>
@@ -482,12 +482,12 @@ export default function BrokerSubscriptionsDashboard() {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Badge className={TIER_COLORS[sub.tier] || "bg-zinc-700"}>
+                      <Badge className={TIER_COLORS[sub.tier] || "bg-[#1A1A1A]"}>
                         {sub.tier}
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <Badge className={STATUS_COLORS[sub.status] || "bg-zinc-700"}>
+                      <Badge className={STATUS_COLORS[sub.status] || "bg-[#1A1A1A]"}>
                         {sub.status}
                       </Badge>
                     </TableCell>
@@ -507,7 +507,7 @@ export default function BrokerSubscriptionsDashboard() {
                         variant="ghost"
                         size="sm"
                         onClick={() => handleViewDetails(sub)}
-                        className="text-gold hover:text-[#1A1A1A] hover:bg-gold/10"
+                        className="text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                       >
                         <Eye className="w-4 h-4 mr-1" />
                         View
@@ -523,9 +523,9 @@ export default function BrokerSubscriptionsDashboard() {
 
       {/* Detail Dialog */}
       <Dialog open={viewDialogOpen} onOpenChange={setViewDialogOpen}>
-        <DialogContent className="bg-zinc-900 border-[#1A1A1A] text-white max-w-2xl">
+        <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A] text-white max-w-2xl">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-gold">
+            <DialogTitle className="text-xl font-bold text-[#1A1A1A]">
               Broker Subscription Details
             </DialogTitle>
           </DialogHeader>
@@ -563,13 +563,13 @@ export default function BrokerSubscriptionsDashboard() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
                     <p className="text-[#1A1A1A]/70 text-xs uppercase">Tier</p>
-                    <Badge className={TIER_COLORS[selectedSubscription.tier] || "bg-zinc-700"}>
+                    <Badge className={TIER_COLORS[selectedSubscription.tier] || "bg-[#1A1A1A]"}>
                       {selectedSubscription.tier}
                     </Badge>
                   </div>
                   <div className="space-y-1">
                     <p className="text-[#1A1A1A]/70 text-xs uppercase">Status</p>
-                    <Badge className={STATUS_COLORS[selectedSubscription.status] || "bg-zinc-700"}>
+                    <Badge className={STATUS_COLORS[selectedSubscription.status] || "bg-[#1A1A1A]"}>
                       {selectedSubscription.status}
                     </Badge>
                   </div>
@@ -593,17 +593,17 @@ export default function BrokerSubscriptionsDashboard() {
               <div className="border-t border-[#1A1A1A] pt-4">
                 <h4 className="text-sm font-medium text-[#1A1A1A]/70 mb-3">Usage Statistics</h4>
                 <div className="grid grid-cols-3 gap-4">
-                  <div className="bg-zinc-800 rounded-lg p-4 text-center">
+                  <div className="bg-[#1A1A1A] rounded-lg p-4 text-center">
                     <p className="text-2xl font-bold text-white">{selectedSubscription.ai_credits_used}</p>
                     <p className="text-xs text-[#1A1A1A]/70">AI Credits Used</p>
                   </div>
-                  <div className="bg-zinc-800 rounded-lg p-4 text-center">
+                  <div className="bg-[#1A1A1A] rounded-lg p-4 text-center">
                     <p className="text-2xl font-bold text-white">
                       {selectedSubscription.ai_credits_limit || "∞"}
                     </p>
                     <p className="text-xs text-[#1A1A1A]/70">Credit Limit</p>
                   </div>
-                  <div className="bg-zinc-800 rounded-lg p-4 text-center">
+                  <div className="bg-[#1A1A1A] rounded-lg p-4 text-center">
                     <p className="text-2xl font-bold text-white">{selectedSubscription.pdf_downloads}</p>
                     <p className="text-xs text-[#1A1A1A]/70">PDF Downloads</p>
                   </div>

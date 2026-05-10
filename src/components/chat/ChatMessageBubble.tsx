@@ -57,8 +57,8 @@ const ChatMessageBubble: React.FC<ChatMessageBubbleProps> = ({
 
   // User message styles - Active Champagne gradient
   const userStyles = variant === 'dark'
-    ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-gold/30 shadow-md'
-    : 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-gold/30 shadow-md';
+    ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/30 shadow-md'
+    : 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/30 shadow-md';
 
   // Assistant message styles - Premium Champagne (lighter, more subtle)
   const getAssistantStyles = () => {
@@ -70,8 +70,8 @@ const ChatMessageBubble: React.FC<ChatMessageBubbleProps> = ({
     }
     // Premium champagne for assistant - Locked Champagne Layer 3
     return variant === 'dark'
-      ? 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-gold/20 shadow-sm'
-      : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-gold/20 shadow-sm';
+      ? 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/20 shadow-sm'
+      : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/20 shadow-sm';
   };
 
   return (
@@ -99,9 +99,9 @@ const ChatMessageBubble: React.FC<ChatMessageBubbleProps> = ({
         >
           {isTyping ? (
             <div className="flex gap-1 py-1">
-              <span className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-              <span className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-              <span className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+              <span className="w-2 h-2 bg-[#EFE6D6] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+              <span className="w-2 h-2 bg-[#EFE6D6] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+              <span className="w-2 h-2 bg-[#EFE6D6] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
             </div>
           ) : (
             <>

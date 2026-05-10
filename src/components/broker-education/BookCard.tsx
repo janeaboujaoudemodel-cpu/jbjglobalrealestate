@@ -68,7 +68,7 @@ export function BookCard({ book, progress, onOpen, index }: BookCardProps) {
           {/* Book Cover Mock */}
           <div className="relative mb-4">
             <div 
-              className="w-full aspect-[3/4] rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold/40 flex items-center justify-center relative overflow-hidden"
+              className="w-full aspect-[3/4] rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-[#B89555]/40 flex items-center justify-center relative overflow-hidden"
               style={{
                 boxShadow: '8px 8px 20px rgba(0,0,0,0.15), -2px -2px 10px rgba(200,167,102,0.2)',
                 transform: 'perspective(500px) rotateY(-5deg)',
@@ -78,8 +78,8 @@ export function BookCard({ book, progress, onOpen, index }: BookCardProps) {
               <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-gold/40 to-transparent" />
               
               {/* Book number */}
-              <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center">
-                <span className="text-gold text-sm font-bold">{book.book_number}</span>
+              <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#EFE6D6]/20 border border-[#B89555]/40 flex items-center justify-center">
+                <span className="text-[#1A1A1A] text-sm font-bold">{book.book_number}</span>
               </div>
               
               {/* Icon */}
@@ -100,7 +100,7 @@ export function BookCard({ book, progress, onOpen, index }: BookCardProps) {
           </Badge>
 
           {/* Title */}
-          <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2 line-clamp-2 group-hover:text-gold transition-colors">
+          <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2 line-clamp-2 group-hover:text-[#1A1A1A] transition-colors">
             {book.title}
           </h3>
 

@@ -60,7 +60,7 @@ const SOURCE_COLORS: Record<string, string> = {
   'mortgage_calculator': 'bg-green-100 text-green-700',
   'property_comparison': 'bg-blue-100 text-blue-700',
   'live_chat': 'bg-amber-100 text-amber-700',
-  'executive_assistant': 'bg-gold/20 text-gold',
+  'executive_assistant': 'bg-[#EFE6D6]/20 text-[#1A1A1A]',
   'video_meeting': 'bg-red-100 text-red-700',
   'ai_broker': 'bg-cyan-100 text-cyan-700',
   'default': 'bg-[#F7F2EA] text-[#1A1A1A]/70'
@@ -156,7 +156,7 @@ export function ChatHistoryAdmin() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-[#1A1A1A] flex items-center gap-2">
-            <MessageSquare className="w-6 h-6 text-gold" />
+            <MessageSquare className="w-6 h-6 text-[#1A1A1A]" />
             Chat History Monitor
           </h2>
           <p className="text-[#1A1A1A]/60 text-sm">Review all user and broker conversations</p>
@@ -164,7 +164,7 @@ export function ChatHistoryAdmin() {
         <Button 
           onClick={fetchChats} 
           variant="outline" 
-          className="border-gold/30 text-[#1A1A1A] hover:bg-gold/10"
+          className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
         >
           <RefreshCw className="w-4 h-4 mr-2" />
           Refresh
@@ -207,15 +207,15 @@ export function ChatHistoryAdmin() {
             placeholder="Search messages..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 bg-[#FDFBF7] border-gold/20 text-[#1A1A1A]"
+            className="pl-10 bg-[#FDFBF7] border-[#B89555]/20 text-[#1A1A1A]"
           />
         </div>
         
         <Select value={sourceFilter} onValueChange={setSourceFilter}>
-          <SelectTrigger className="w-[180px] bg-[#FDFBF7] border-gold/20 text-[#1A1A1A]">
+          <SelectTrigger className="w-[180px] bg-[#FDFBF7] border-[#B89555]/20 text-[#1A1A1A]">
             <SelectValue placeholder="All Sources" />
           </SelectTrigger>
-          <SelectContent className="bg-[#FDFBF7] border-gold/20">
+          <SelectContent className="bg-[#FDFBF7] border-[#B89555]/20">
             <SelectItem value="all">All Sources</SelectItem>
             {uniqueSources.map(source => (
               <SelectItem key={source} value={source}>
@@ -229,13 +229,13 @@ export function ChatHistoryAdmin() {
           type="date"
           value={selectedDate}
           onChange={(e) => setSelectedDate(e.target.value)}
-          className="w-[180px] bg-[#FDFBF7] border-gold/20 text-[#1A1A1A]"
+          className="w-[180px] bg-[#FDFBF7] border-[#B89555]/20 text-[#1A1A1A]"
         />
 
         <Button
           variant={flaggedOnly ? "default" : "outline"}
           onClick={() => setFlaggedOnly(!flaggedOnly)}
-          className={flaggedOnly ? "bg-red-500 hover:bg-red-600" : "border-gold/30 text-[#1A1A1A]/70"}
+          className={flaggedOnly ? "bg-red-500 hover:bg-red-600" : "border-[#B89555]/30 text-[#1A1A1A]/70"}
         >
           <Flag className="w-4 h-4 mr-2" />
           {flaggedOnly ? 'Flagged Only' : 'Show Flagged'}
@@ -245,7 +245,7 @@ export function ChatHistoryAdmin() {
       {/* Chat Sessions */}
       {loading ? (
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-8 h-8 text-gold animate-spin" />
+          <Loader2 className="w-8 h-8 text-[#1A1A1A] animate-spin" />
         </div>
       ) : (
         <ScrollArea className="h-[600px]">
@@ -258,15 +258,15 @@ export function ChatHistoryAdmin() {
               return (
                 <Card 
                   key={sessionId} 
-                  className={`jj-card-inner hover:border-gold transition-all cursor-pointer ${
+                  className={`jj-card-inner hover:border-[#B89555] transition-all cursor-pointer ${
                     hasFlagged ? 'border-red-300' : ''
                   }`}
                 >
                   <CardHeader className="pb-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center">
-                          <User className="w-5 h-5 text-gold" />
+                        <div className="w-10 h-10 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center">
+                          <User className="w-5 h-5 text-[#1A1A1A]" />
                         </div>
                         <div>
                           <p className="text-[#1A1A1A] font-medium">
@@ -287,7 +287,7 @@ export function ChatHistoryAdmin() {
                             Flagged
                           </Badge>
                         )}
-                        <Badge variant="outline" className="text-[#1A1A1A]/60 border-gold/30">
+                        <Badge variant="outline" className="text-[#1A1A1A]/60 border-[#B89555]/30">
                           {sessionChats.length} msgs
                         </Badge>
                       </div>
@@ -353,7 +353,7 @@ export function ChatHistoryAdmin() {
 
       {/* Flag Dialog */}
       <Dialog open={showFlagDialog} onOpenChange={setShowFlagDialog}>
-        <DialogContent className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-gold/30">
+        <DialogContent className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-[#B89555]/30">
           <DialogHeader>
             <DialogTitle className="text-[#1A1A1A] flex items-center gap-2">
               <Flag className="w-5 h-5 text-red-500" />
@@ -363,7 +363,7 @@ export function ChatHistoryAdmin() {
           
           {selectedChat && (
             <div className="space-y-4">
-              <div className="p-3 bg-[#FDFBF7]/50 rounded-lg border border-gold/20">
+              <div className="p-3 bg-[#FDFBF7]/50 rounded-lg border border-[#B89555]/20">
                 <p className="text-xs text-[#1A1A1A]/50 mb-1">Message:</p>
                 <p className="text-[#1A1A1A] text-sm">{selectedChat.message}</p>
               </div>
@@ -374,14 +374,14 @@ export function ChatHistoryAdmin() {
                   value={flagReason}
                   onChange={(e) => setFlagReason(e.target.value)}
                   placeholder="e.g., Wrong information provided, inappropriate response, misleading content..."
-                  className="bg-[#FDFBF7] border-gold/20 text-[#1A1A1A]"
+                  className="bg-[#FDFBF7] border-[#B89555]/20 text-[#1A1A1A]"
                 />
               </div>
             </div>
           )}
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowFlagDialog(false)} className="border-gold/30">
+            <Button variant="outline" onClick={() => setShowFlagDialog(false)} className="border-[#B89555]/30">
               Cancel
             </Button>
             <Button 

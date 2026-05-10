@@ -45,11 +45,11 @@ export const CompanyProfileDownload = () => {
   };
 
   return (
-    <Card className="border-gold/30 bg-gradient-to-br from-champagne-light to-champagne">
+    <Card className="border-[#B89555]/30 bg-gradient-to-br from-champagne-light to-champagne">
       <CardHeader>
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-[#1A1A1A] flex items-center justify-center">
-            <FileText className="w-5 h-5 text-gold" />
+            <FileText className="w-5 h-5 text-[#1A1A1A]" />
           </div>
           <div>
             <CardTitle className="text-[#1A1A1A] text-lg">Company Profile PDF</CardTitle>

@@ -60,7 +60,7 @@ const AILeadQualificationPremium = () => {
 
   const getScoreColor = (score: number) => {
     if (score >= 80) return "text-emerald-400";
-    if (score >= 60) return "text-amber-400";
+    if (score >= 60) return "text-[#1A1A1A]";
     if (score >= 40) return "text-orange-400";
     return "text-red-400";
   };
@@ -74,7 +74,7 @@ const AILeadQualificationPremium = () => {
 
   const getLeadLabel = (score: number) => {
     if (score >= 80) return { text: "Hot Lead", color: "text-emerald-400", bg: "bg-emerald-500/20" };
-    if (score >= 60) return { text: "Warm Lead", color: "text-amber-400", bg: "bg-amber-500/20" };
+    if (score >= 60) return { text: "Warm Lead", color: "text-[#1A1A1A]", bg: "bg-amber-500/20" };
     if (score >= 40) return { text: "Lukewarm", color: "text-orange-400", bg: "bg-orange-500/20" };
     return { text: "Cold Lead", color: "text-red-400", bg: "bg-red-500/20" };
   };
@@ -107,7 +107,7 @@ const AILeadQualificationPremium = () => {
                     placeholder="John Smith"
                     value={leadInfo.name}
                     onChange={(e) => handleChange("name", e.target.value)}
-                    className="bg-zinc-900/50 border-purple-500/30 text-white hover:border-purple-500/50 focus:border-purple-400 transition-colors"
+                    className="bg-[#FDFBF7]/50 border-purple-500/30 text-white hover:border-purple-500/50 focus:border-purple-400 transition-colors"
                   />
                 </div>
 
@@ -121,7 +121,7 @@ const AILeadQualificationPremium = () => {
                     placeholder="john@example.com"
                     value={leadInfo.email}
                     onChange={(e) => handleChange("email", e.target.value)}
-                    className="bg-zinc-900/50 border-purple-500/30 text-white hover:border-purple-500/50 focus:border-purple-400 transition-colors"
+                    className="bg-[#FDFBF7]/50 border-purple-500/30 text-white hover:border-purple-500/50 focus:border-purple-400 transition-colors"
                   />
                 </div>
 
@@ -134,7 +134,7 @@ const AILeadQualificationPremium = () => {
                     placeholder="+971 50 123 4567"
                     value={leadInfo.phone}
                     onChange={(e) => handleChange("phone", e.target.value)}
-                    className="bg-zinc-900/50 border-purple-500/30 text-white hover:border-purple-500/50 focus:border-purple-400 transition-colors"
+                    className="bg-[#FDFBF7]/50 border-purple-500/30 text-white hover:border-purple-500/50 focus:border-purple-400 transition-colors"
                   />
                 </div>
 
@@ -147,7 +147,7 @@ const AILeadQualificationPremium = () => {
                     placeholder="AED 2-3 Million"
                     value={leadInfo.budget}
                     onChange={(e) => handleChange("budget", e.target.value)}
-                    className="bg-zinc-900/50 border-purple-500/30 text-white hover:border-purple-500/50 focus:border-purple-400 transition-colors"
+                    className="bg-[#FDFBF7]/50 border-purple-500/30 text-white hover:border-purple-500/50 focus:border-purple-400 transition-colors"
                   />
                 </div>
 
@@ -160,7 +160,7 @@ const AILeadQualificationPremium = () => {
                     placeholder="2BR in Dubai Marina"
                     value={leadInfo.propertyInterest}
                     onChange={(e) => handleChange("propertyInterest", e.target.value)}
-                    className="bg-zinc-900/50 border-purple-500/30 text-white hover:border-purple-500/50 focus:border-purple-400 transition-colors"
+                    className="bg-[#FDFBF7]/50 border-purple-500/30 text-white hover:border-purple-500/50 focus:border-purple-400 transition-colors"
                   />
                 </div>
 
@@ -173,7 +173,7 @@ const AILeadQualificationPremium = () => {
                     placeholder="Within 3 months"
                     value={leadInfo.timeline}
                     onChange={(e) => handleChange("timeline", e.target.value)}
-                    className="bg-zinc-900/50 border-purple-500/30 text-white hover:border-purple-500/50 focus:border-purple-400 transition-colors"
+                    className="bg-[#FDFBF7]/50 border-purple-500/30 text-white hover:border-purple-500/50 focus:border-purple-400 transition-colors"
                   />
                 </div>
 
@@ -186,7 +186,7 @@ const AILeadQualificationPremium = () => {
                     placeholder="Website inquiry, referral, social media..."
                     value={leadInfo.source}
                     onChange={(e) => handleChange("source", e.target.value)}
-                    className="bg-zinc-900/50 border-purple-500/30 text-white hover:border-purple-500/50 focus:border-purple-400 transition-colors"
+                    className="bg-[#FDFBF7]/50 border-purple-500/30 text-white hover:border-purple-500/50 focus:border-purple-400 transition-colors"
                   />
                 </div>
               </div>
@@ -198,7 +198,7 @@ const AILeadQualificationPremium = () => {
                   value={leadInfo.notes}
                   onChange={(e) => handleChange("notes", e.target.value)}
                   rows={3}
-                  className="bg-zinc-900/50 border-purple-500/30 text-white hover:border-purple-500/50 focus:border-purple-400 transition-colors"
+                  className="bg-[#FDFBF7]/50 border-purple-500/30 text-white hover:border-purple-500/50 focus:border-purple-400 transition-colors"
                 />
               </div>
 
@@ -257,7 +257,7 @@ const AILeadQualificationPremium = () => {
                             key={star}
                             className={`h-5 w-5 ${
                               star <= Math.round(response.qualificationScore / 20)
-                                ? "text-amber-400 fill-amber-400"
+                                ? "text-[#1A1A1A] fill-amber-400"
                                 : "text-[#1A1A1A]/70"
                             }`}
                           />
@@ -314,7 +314,7 @@ const AILeadQualificationPremium = () => {
                         {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                       </Button>
                     </div>
-                    <div className="bg-zinc-800/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
+                    <div className="bg-[#1A1A1A]/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
                       {response.analysis}
                     </div>
                   </CardContent>

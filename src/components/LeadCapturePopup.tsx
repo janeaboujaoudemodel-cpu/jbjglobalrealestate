@@ -116,7 +116,7 @@ const LeadCapturePopup = () => {
             transition={{ duration: 0.3 }}
             onClick={(e) => e.stopPropagation()}
             data-surface="light"
-            className="relative w-full max-w-md bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl border-2 border-gold/50 shadow-[0_20px_60px_rgba(200,167,102,0.4)] overflow-hidden max-h-[90vh] overflow-y-auto"
+            className="relative w-full max-w-md bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl border-2 border-[#B89555]/50 shadow-[0_20px_60px_rgba(200,167,102,0.4)] overflow-hidden max-h-[90vh] overflow-y-auto"
           >
             {/* Close button */}
             <button
@@ -127,10 +127,10 @@ const LeadCapturePopup = () => {
             </button>
 
             {/* Header - Context-aware */}
-            <div className="bg-gradient-to-r from-[#ECE2D2] to-[#D8C7A6] p-6 pb-4 border-b border-gold/30">
+            <div className="bg-gradient-to-r from-[#ECE2D2] to-[#D8C7A6] p-6 pb-4 border-b border-[#B89555]/30">
               <div className="flex items-center gap-2 mb-2">
-                <Sparkles className="w-5 h-5 text-gold" />
-                <span className="text-xs uppercase tracking-[0.2em] font-semibold text-gold">Exclusive Access</span>
+                <Sparkles className="w-5 h-5 text-[#1A1A1A]" />
+                <span className="text-xs uppercase tracking-[0.2em] font-semibold text-[#1A1A1A]">Exclusive Access</span>
               </div>
               <h3 className="text-xl font-bold text-[#1A1A1A]">
                 {headline}

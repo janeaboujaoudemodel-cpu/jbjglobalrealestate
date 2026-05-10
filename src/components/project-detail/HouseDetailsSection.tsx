@@ -107,7 +107,7 @@ export default function HouseDetailsSection({
   return (
     <div className="jj-card-inner">
       <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-6">
-        <Building2 className="w-5 h-5 text-gold" />
+        <Building2 className="w-5 h-5 text-[#1A1A1A]" />
         House Details
       </h3>
 
@@ -117,10 +117,10 @@ export default function HouseDetailsSection({
           {details.map((detail, idx) => (
             <div 
               key={idx}
-              className="p-4 rounded-xl border border-gold/20 bg-card hover:border-gold/40 transition-all"
+              className="p-4 rounded-xl border border-[#B89555]/20 bg-card hover:border-[#B89555]/40 transition-all"
             >
-              <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center mb-3">
-                <detail.icon className="w-5 h-5 text-gold" />
+              <div className="w-10 h-10 rounded-full bg-[#EFE6D6]/10 flex items-center justify-center mb-3">
+                <detail.icon className="w-5 h-5 text-[#1A1A1A]" />
               </div>
               <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">
                 {detail.label}
@@ -145,7 +145,7 @@ export default function HouseDetailsSection({
                 key={idx}
                 className="flex items-center gap-2 p-3 rounded-lg border border-border bg-card"
               >
-                <Sparkles className="w-4 h-4 text-gold flex-shrink-0" />
+                <Sparkles className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
                 <span className="text-sm text-foreground">{feature}</span>
               </div>
             ))}
@@ -163,9 +163,9 @@ export default function HouseDetailsSection({
             {standardFeatures.map((feature, idx) => (
               <div 
                 key={idx}
-                className="flex items-center gap-2 px-4 py-2 rounded-full border border-gold/30 bg-gold/5"
+                className="flex items-center gap-2 px-4 py-2 rounded-full border border-[#B89555]/30 bg-[#EFE6D6]/5"
               >
-                <feature.icon className="w-4 h-4 text-gold" />
+                <feature.icon className="w-4 h-4 text-[#1A1A1A]" />
                 <span className="text-sm font-medium text-foreground">{feature.label}</span>
               </div>
             ))}

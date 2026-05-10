@@ -132,7 +132,7 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
 
             {/* Book Spine Effect - 3D */}
             <div
-              className="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-zinc-700 via-zinc-600 to-zinc-800 border-r border-gold/30"
+              className="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-zinc-700 via-zinc-600 to-zinc-800 border-r border-[#B89555]/30"
               style={{
                 transformStyle: "preserve-3d",
                 transform: "rotateY(-90deg) translateX(-12px)",
@@ -141,7 +141,7 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
             >
               <div className="absolute inset-0 flex items-center justify-center">
                 <span
-                  className="text-gold text-[8px] font-bold tracking-[0.12em] uppercase whitespace-nowrap"
+                  className="text-[#1A1A1A] text-[8px] font-bold tracking-[0.12em] uppercase whitespace-nowrap"
                   style={{ transform: "rotate(-90deg)", textShadow: "0 0 8px rgba(200,167,102,0.5)" }}
                 >
                   Book {book.book_number}
@@ -154,8 +154,8 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
 
             {/* Top Section with Icon */}
             <div className="relative h-28 flex items-center justify-center bg-[#1A1A1A]/20 flex-shrink-0">
-              <div className="w-14 h-14 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center">
-                <span className="text-gold text-xl font-bold">{book.book_number}</span>
+              <div className="w-14 h-14 rounded-full bg-[#EFE6D6]/20 border border-[#B89555]/40 flex items-center justify-center">
+                <span className="text-[#1A1A1A] text-xl font-bold">{book.book_number}</span>
               </div>
               
               {/* Locked Overlay (restricted or access-locked) */}
@@ -172,7 +172,7 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
             {/* Cover Content */}
             <div className="p-5 relative flex-1 flex flex-col">
               {/* Learning Path Badge */}
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gold/15 border border-gold/30 text-gold text-[10px] uppercase tracking-[0.15em] mb-3 self-start">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#EFE6D6]/15 border border-[#B89555]/30 text-[#1A1A1A] text-[10px] uppercase tracking-[0.15em] mb-3 self-start">
                 <Sparkles className="w-3 h-3" />
                 {book.learning_path}
               </div>
@@ -201,7 +201,7 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
                     <Button
                       variant="secondary"
                       size="sm"
-                      className="w-full bg-gold/10 hover:bg-gold/20 text-[#1A1A1A]/70 border border-gold/30"
+                      className="w-full bg-[#EFE6D6]/10 hover:bg-[#EFE6D6]/20 text-[#1A1A1A]/70 border border-[#B89555]/30"
                       onClick={(e) => {
                         e.stopPropagation();
                         if (!book.is_restricted) onOpen(book);
@@ -215,7 +215,7 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
                   <Button
                     variant="secondary"
                     size="sm"
-                    className="w-full bg-gold/20 hover:bg-gold hover:text-[#1A1A1A] text-gold border border-gold/40 font-semibold transition-colors"
+                    className="w-full bg-[#EFE6D6]/20 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] text-[#1A1A1A] border border-[#B89555]/40 font-semibold transition-colors"
                     onClick={(e) => {
                       e.stopPropagation();
                       onOpen(book);
@@ -234,8 +234,8 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
                 className="h-full bg-gradient-to-l from-zinc-100/10 via-zinc-200/12 to-transparent"
                 style={{ clipPath: "polygon(100% 0, 100% 100%, 0 96%, 0 4%)" }}
               />
-              <div className="absolute right-0 top-[4%] bottom-[4%] w-[2px] bg-zinc-300/15" />
-              <div className="absolute right-[2px] top-[5%] bottom-[5%] w-[1px] bg-zinc-300/10" />
+              <div className="absolute right-0 top-[4%] bottom-[4%] w-[2px] bg-[#E5D9C4]/15" />
+              <div className="absolute right-[2px] top-[5%] bottom-[5%] w-[1px] bg-[#E5D9C4]/10" />
             </div>
           </div>
 

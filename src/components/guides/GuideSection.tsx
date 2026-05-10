@@ -60,8 +60,8 @@ export const GuideSection = ({
             className="text-center mb-12"
           >
             {Icon && (
-              <div className="w-14 h-14 bg-gold/10 border border-gold/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Icon className="w-7 h-7 text-gold" />
+              <div className="w-14 h-14 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Icon className="w-7 h-7 text-[#1A1A1A]" />
               </div>
             )}
             <h2 className={cn(

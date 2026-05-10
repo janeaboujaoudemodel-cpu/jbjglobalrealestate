@@ -93,7 +93,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
 
         {/* Content section */}
         <div className="flex-1 p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex flex-col">
-          <h3 className="text-[#1A1A1A] font-bold text-base md:text-lg mb-1.5 line-clamp-1 group-hover:text-gold transition-colors">
+          <h3 className="text-[#1A1A1A] font-bold text-base md:text-lg mb-1.5 line-clamp-1 group-hover:text-[#1A1A1A] transition-colors">
             {developer.name}
           </h3>
 
@@ -109,16 +109,16 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
             )}
           </div>
 
-          <div className="flex items-center gap-3 text-[#1A1A1A]/75 text-xs mt-3 pt-3 border-t border-gold/20">
+          <div className="flex items-center gap-3 text-[#1A1A1A]/75 text-xs mt-3 pt-3 border-t border-[#B89555]/20">
             {projectCount > 0 ? (
               <div className="flex items-center gap-1">
-                <Building2 className="w-3.5 h-3.5 text-gold" />
+                <Building2 className="w-3.5 h-3.5 text-[#1A1A1A]" />
                 <span>{projectCount} Projects</span>
               </div>
             ) : null}
             {developer.completed_projects && developer.completed_projects > 0 ? (
               <div className="flex items-center gap-1">
-                <TrendingUp className="w-3.5 h-3.5 text-gold" />
+                <TrendingUp className="w-3.5 h-3.5 text-[#1A1A1A]" />
                 <span>{developer.completed_projects.toLocaleString()}+ Delivered</span>
               </div>
             ) : null}

@@ -44,7 +44,7 @@ const ChatEmailCheck = ({ onEmailVerified, checkEmailInDatabase }: ChatEmailChec
 
       {/* Header - centered */}
       <div className="mb-5">
-        <h4 className="text-gold text-xl font-bold mb-2">Connect With Our Team</h4>
+        <h4 className="text-[#1A1A1A] text-xl font-bold mb-2">Connect With Our Team</h4>
         <p className="text-[#1A1A1A]/70 text-sm">Share your details to receive personalized assistance</p>
       </div>
 
@@ -52,7 +52,7 @@ const ChatEmailCheck = ({ onEmailVerified, checkEmailInDatabase }: ChatEmailChec
       <div className="w-full space-y-3">
         <div className="text-left">
           <Label className="text-[#1A1A1A] text-sm flex items-center gap-2 mb-1.5">
-            <User className="w-4 h-4 text-gold" />
+            <User className="w-4 h-4 text-[#1A1A1A]" />
             Your Name
           </Label>
           <Input
@@ -60,13 +60,13 @@ const ChatEmailCheck = ({ onEmailVerified, checkEmailInDatabase }: ChatEmailChec
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Enter your name"
-            className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 h-11 w-full"
+            className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 h-11 w-full"
           />
         </div>
 
         <div className="text-left">
           <Label className="text-[#1A1A1A] text-sm flex items-center gap-2 mb-1.5">
-            <Mail className="w-4 h-4 text-gold" />
+            <Mail className="w-4 h-4 text-[#1A1A1A]" />
             Email Address
           </Label>
           <Input
@@ -75,14 +75,14 @@ const ChatEmailCheck = ({ onEmailVerified, checkEmailInDatabase }: ChatEmailChec
             onChange={(e) => setEmail(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleCheckEmail()}
             placeholder="your@email.com"
-            className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 h-11 w-full"
+            className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 h-11 w-full"
             autoFocus
           />
         </div>
 
         <div className="text-left">
           <Label className="text-[#1A1A1A] text-sm flex items-center gap-2 mb-1.5">
-            <Phone className="w-4 h-4 text-gold" />
+            <Phone className="w-4 h-4 text-[#1A1A1A]" />
             Phone Number <span className="text-[#1A1A1A]/70 text-xs">(optional)</span>
           </Label>
           <Input
@@ -90,7 +90,7 @@ const ChatEmailCheck = ({ onEmailVerified, checkEmailInDatabase }: ChatEmailChec
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             placeholder="+971 XX XXX XXXX"
-            className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 h-11 w-full"
+            className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 h-11 w-full"
           />
         </div>
 

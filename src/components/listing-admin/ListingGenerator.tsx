@@ -718,8 +718,8 @@ const ListingGenerator = () => {
         {(["input", "processing", "preview"] as const).map((s, i) => (
           <div key={s} className="flex items-center gap-2">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
-              step === s ? "bg-gold text-[#1A1A1A]" :
-              (["input", "processing", "preview"].indexOf(step) > i) ? "bg-gold/30 text-gold" :
+              step === s ? "bg-[#EFE6D6] text-[#1A1A1A]" :
+              (["input", "processing", "preview"].indexOf(step) > i) ? "bg-[#EFE6D6]/30 text-[#1A1A1A]" :
               "bg-[#EFE6D6] text-[#1A1A1A]/70"
             }`}>
               {i + 1}
@@ -744,8 +744,8 @@ const ListingGenerator = () => {
             onDrop={handleDrop}
             className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all cursor-pointer ${
               isDragOver
-                ? "border-gold bg-gold/10 scale-[1.01]"
-                : "border-border hover:border-gold/50 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]"
+                ? "border-[#B89555] bg-[#EFE6D6]/10 scale-[1.01]"
+                : "border-border hover:border-[#B89555]/50 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]"
             }`}
             onClick={() => fileInputRef.current?.click()}
           >
@@ -757,7 +757,7 @@ const ListingGenerator = () => {
               className="hidden"
               onChange={(e) => { if (e.target.files) addFiles(e.target.files); e.target.value = ""; }}
             />
-            <Upload className={`w-12 h-12 mx-auto mb-3 ${isDragOver ? "text-gold animate-bounce" : "text-muted-foreground"}`} />
+            <Upload className={`w-12 h-12 mx-auto mb-3 ${isDragOver ? "text-[#1A1A1A] animate-bounce" : "text-muted-foreground"}`} />
             <p className="text-foreground font-semibold text-lg">
               {isDragOver ? "Drop files here" : "Drop documents or click to upload"}
             </p>
@@ -768,10 +768,10 @@ const ListingGenerator = () => {
 
           {/* Queued Files */}
           {files.length > 0 && (
-            <Card className="border-gold/30 bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6]">
+            <Card className="border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6]">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-foreground flex items-center gap-2">
-                  <FileText className="w-4 h-4 text-gold" />
+                  <FileText className="w-4 h-4 text-[#1A1A1A]" />
                   {files.length} Document{files.length > 1 ? "s" : ""} Ready
                 </CardTitle>
               </CardHeader>
@@ -781,8 +781,8 @@ const ListingGenerator = () => {
                     {f.preview ? (
                       <img src={f.preview} alt={f.name} className="w-10 h-10 rounded object-cover" />
                     ) : (
-                      <div className="w-10 h-10 rounded bg-gold/20 flex items-center justify-center">
-                        <FileText className="w-5 h-5 text-gold" />
+                      <div className="w-10 h-10 rounded bg-[#EFE6D6]/20 flex items-center justify-center">
+                        <FileText className="w-5 h-5 text-[#1A1A1A]" />
                       </div>
                     )}
                     <span className="text-sm text-foreground flex-1 truncate">{f.name}</span>
@@ -799,7 +799,7 @@ const ListingGenerator = () => {
           {/* Universal Link Input */}
           <div className="space-y-2">
             <label className="text-sm font-medium text-foreground flex items-center gap-2">
-              <Globe className="w-4 h-4 text-gold" />
+              <Globe className="w-4 h-4 text-[#1A1A1A]" />
               Paste Any Link (Google Drive, Property Portals, Any URL)
             </label>
             <Input
@@ -809,7 +809,7 @@ const ListingGenerator = () => {
             />
             <div className="flex flex-wrap gap-1.5">
               {['Google Drive', 'Property Finder', 'Bayut', 'Emaar', 'Damac', 'Sobha', 'Any URL'].map(tag => (
-                <span key={tag} className="text-[10px] px-2 py-0.5 bg-gold/10 text-gold border border-gold/20 rounded-full">{tag}</span>
+                <span key={tag} className="text-[10px] px-2 py-0.5 bg-[#EFE6D6]/10 text-[#1A1A1A] border border-[#B89555]/20 rounded-full">{tag}</span>
               ))}
             </div>
             <p className="text-xs text-muted-foreground">
@@ -820,7 +820,7 @@ const ListingGenerator = () => {
           {/* Description */}
           <div className="space-y-2">
             <label className="text-sm font-medium text-foreground flex items-center gap-2">
-              <ClipboardList className="w-4 h-4 text-gold" />
+              <ClipboardList className="w-4 h-4 text-[#1A1A1A]" />
               Additional Description (optional)
             </label>
             <Textarea
@@ -868,10 +868,10 @@ const ListingGenerator = () => {
       {step === "processing" && (
         <div className="flex flex-col items-center justify-center py-20 space-y-6">
           <div className="relative">
-            <div className="w-20 h-20 rounded-full bg-gold/20 flex items-center justify-center">
-              <Loader2 className="w-10 h-10 text-gold animate-spin" />
+            <div className="w-20 h-20 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center">
+              <Loader2 className="w-10 h-10 text-[#1A1A1A] animate-spin" />
             </div>
-            <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-gold flex items-center justify-center">
+            <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-[#EFE6D6] flex items-center justify-center">
               <Sparkles className="w-3 h-3 text-[#1A1A1A]" />
             </div>
           </div>
@@ -883,11 +883,11 @@ const ListingGenerator = () => {
             <p className="text-xs text-muted-foreground">
               {hasUrlOnly ? "Using Gemini Flash for fast extraction" : "Using Gemini Pro Vision for complete extraction"}
             </p>
-            <p className="text-sm font-medium text-gold">{elapsedSeconds}s elapsed</p>
+            <p className="text-sm font-medium text-[#1A1A1A]">{elapsedSeconds}s elapsed</p>
           </div>
           <div className="w-64 h-2 bg-[#EFE6D6] rounded-full overflow-hidden">
             <div
-              className="h-full bg-gold rounded-full transition-all duration-1000"
+              className="h-full bg-[#EFE6D6] rounded-full transition-all duration-1000"
               style={{ width: `${Math.min(95, (elapsedSeconds / 60) * 100)}%` }}
             />
           </div>
@@ -1028,14 +1028,14 @@ function ProjectPreview({ extracted, onSave, isSaving }: { extracted: ExtractedD
   return (
     <div className="space-y-6">
       {/* Project Header */}
-      <Card className="border-gold/30 bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6]">
+      <Card className="border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6]">
         <CardContent className="p-6">
           <div className="flex items-start justify-between">
             <div>
               <h3 className="text-2xl font-bold text-foreground">{extracted.name || "Unnamed"}</h3>
               <div className="flex items-center gap-3 mt-2 flex-wrap">
                 {extracted.developer && (
-                  <Badge className="bg-gold/20 text-foreground border-gold/30">
+                  <Badge className="bg-[#EFE6D6]/20 text-foreground border-[#B89555]/30">
                     <Building2 className="w-3 h-3 mr-1" /> {extracted.developer}
                   </Badge>
                 )}
@@ -1126,7 +1126,7 @@ function ProjectPreview({ extracted, onSave, isSaving }: { extracted: ExtractedD
       {/* Amenities */}
       {extracted.amenities.length > 0 && (
         <Card>
-          <CardHeader><CardTitle className="text-sm flex items-center gap-2"><Shield className="w-4 h-4 text-gold" /> Amenities ({extracted.amenities.length})</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-sm flex items-center gap-2"><Shield className="w-4 h-4 text-[#1A1A1A]" /> Amenities ({extracted.amenities.length})</CardTitle></CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-2">
               {extracted.amenities.map((a, i) => (
@@ -1142,7 +1142,7 @@ function ProjectPreview({ extracted, onSave, isSaving }: { extracted: ExtractedD
         <Card>
           <CardHeader>
             <CardTitle className="text-sm flex items-center gap-2">
-              <DollarSign className="w-4 h-4 text-gold" />
+              <DollarSign className="w-4 h-4 text-[#1A1A1A]" />
               Payment Plan {extracted.paymentPlan ? `(${extracted.paymentPlan})` : ""}
             </CardTitle>
           </CardHeader>
@@ -1153,7 +1153,7 @@ function ProjectPreview({ extracted, onSave, isSaving }: { extracted: ExtractedD
                   <span className="text-sm text-foreground">{s.milestone}</span>
                   <div className="flex items-center gap-3">
                     {s.percentage != null && (
-                      <Badge className="bg-gold/20 text-foreground border-gold/30">{s.percentage}%</Badge>
+                      <Badge className="bg-[#EFE6D6]/20 text-foreground border-[#B89555]/30">{s.percentage}%</Badge>
                     )}
                     {s.timing && <span className="text-xs text-muted-foreground">{s.timing}</span>}
                   </div>
@@ -1167,7 +1167,7 @@ function ProjectPreview({ extracted, onSave, isSaving }: { extracted: ExtractedD
       {/* Unit Details */}
       {extracted.unitDetails.length > 0 && (
         <Card>
-          <CardHeader><CardTitle className="text-sm flex items-center gap-2"><LayoutGrid className="w-4 h-4 text-gold" /> Unit Types ({extracted.unitDetails.length})</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-sm flex items-center gap-2"><LayoutGrid className="w-4 h-4 text-[#1A1A1A]" /> Unit Types ({extracted.unitDetails.length})</CardTitle></CardHeader>
           <CardContent>
             <div className="space-y-2">
               {extracted.unitDetails.map((unit, i) => (
@@ -1184,7 +1184,7 @@ function ProjectPreview({ extracted, onSave, isSaving }: { extracted: ExtractedD
                   </div>
                   <div className="text-right">
                     {unit.priceFrom && (
-                      <p className="text-sm font-semibold text-gold">
+                      <p className="text-sm font-semibold text-[#1A1A1A]">
                         AED {unit.priceFrom.toLocaleString()}
                         {unit.priceTo ? ` – ${unit.priceTo.toLocaleString()}` : ""}
                       </p>
@@ -1208,7 +1208,7 @@ function ProjectPreview({ extracted, onSave, isSaving }: { extracted: ExtractedD
             <ul className="grid grid-cols-1 md:grid-cols-2 gap-1">
               {extracted.keyFeatures.map((f, i) => (
                 <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
-                  <Check className="w-3 h-3 text-gold mt-0.5 shrink-0" /> {f}
+                  <Check className="w-3 h-3 text-[#1A1A1A] mt-0.5 shrink-0" /> {f}
                 </li>
               ))}
             </ul>
@@ -1219,7 +1219,7 @@ function ProjectPreview({ extracted, onSave, isSaving }: { extracted: ExtractedD
       {/* Nearby Landmarks */}
       {extracted.nearbyLandmarks.length > 0 && (
         <Card>
-          <CardHeader><CardTitle className="text-sm flex items-center gap-2"><Landmark className="w-4 h-4 text-gold" /> Nearby Landmarks</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-sm flex items-center gap-2"><Landmark className="w-4 h-4 text-[#1A1A1A]" /> Nearby Landmarks</CardTitle></CardHeader>
           <CardContent>
             <div className="space-y-1">
               {extracted.nearbyLandmarks.map((l, i) => (
@@ -1240,7 +1240,7 @@ function ProjectPreview({ extracted, onSave, isSaving }: { extracted: ExtractedD
         <Card>
           <CardHeader><CardTitle className="text-sm flex items-center gap-2">Video</CardTitle></CardHeader>
           <CardContent>
-            <a href={extracted.videoUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-gold hover:underline break-all">
+            <a href={extracted.videoUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-[#1A1A1A] hover:underline break-all">
               {extracted.videoUrl}
             </a>
           </CardContent>
@@ -1264,12 +1264,12 @@ function ProjectPreview({ extracted, onSave, isSaving }: { extracted: ExtractedD
       {/* USPs */}
       {extracted.usps && extracted.usps.length > 0 && (
         <Card>
-          <CardHeader><CardTitle className="text-sm flex items-center gap-2"><Sparkles className="w-4 h-4 text-gold" /> Unique Selling Points ({extracted.usps.length})</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-sm flex items-center gap-2"><Sparkles className="w-4 h-4 text-[#1A1A1A]" /> Unique Selling Points ({extracted.usps.length})</CardTitle></CardHeader>
           <CardContent>
             <ul className="grid grid-cols-1 md:grid-cols-2 gap-1">
               {extracted.usps.map((u, i) => (
                 <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
-                  <Check className="w-3 h-3 text-gold mt-0.5 shrink-0" /> {u}
+                  <Check className="w-3 h-3 text-[#1A1A1A] mt-0.5 shrink-0" /> {u}
                 </li>
               ))}
             </ul>
@@ -1308,7 +1308,7 @@ function ProjectPreview({ extracted, onSave, isSaving }: { extracted: ExtractedD
             <div className="space-y-1">
               {extracted.documents.map((d, i) => (
                 <div key={i} className="flex items-center gap-2 text-sm">
-                  <FileText className="w-4 h-4 text-gold" />
+                  <FileText className="w-4 h-4 text-[#1A1A1A]" />
                   <span className="text-foreground">{d.name}</span>
                   <Badge variant="outline" className="text-xs">{d.type}</Badge>
                 </div>
@@ -1334,7 +1334,7 @@ function ProjectPreview({ extracted, onSave, isSaving }: { extracted: ExtractedD
       )}
 
       {/* Bottom Save Bar */}
-      <div className="sticky bottom-4 p-4 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/30 shadow-lg flex items-center justify-between">
+      <div className="sticky bottom-4 p-4 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] border-2 border-[#B89555]/30 shadow-lg flex items-center justify-between">
         <div>
           <p className="font-semibold text-foreground">{extracted.name}</p>
           <p className="text-xs text-muted-foreground">

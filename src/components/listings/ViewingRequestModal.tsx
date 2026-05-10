@@ -116,9 +116,9 @@ export const ViewingRequestModal = ({
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             className="fixed inset-x-4 top-1/2 -translate-y-1/2 md:inset-x-auto md:left-1/2 md:-translate-x-1/2 max-w-lg w-full z-50"
           >
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold rounded-2xl shadow-2xl overflow-hidden">
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] rounded-2xl shadow-2xl overflow-hidden">
               {/* Header */}
-              <div className="flex items-center justify-between p-5 border-b border-gold/30">
+              <div className="flex items-center justify-between p-5 border-b border-[#B89555]/30">
                 <div>
                   <h3 className="text-lg font-semibold text-[#1A1A1A]">
                     Book a Viewing
@@ -137,8 +137,8 @@ export const ViewingRequestModal = ({
               <div className="p-5">
                 {isSuccess ? (
                   <div className="text-center py-8">
-                    <div className="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <CheckCircle className="w-8 h-8 text-gold" />
+                    <div className="w-16 h-16 bg-[#EFE6D6]/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <CheckCircle className="w-8 h-8 text-[#1A1A1A]" />
                     </div>
                     <h4 className="text-xl font-semibold text-[#1A1A1A] mb-2">Request Submitted!</h4>
                     <p className="text-[#1A1A1A]/70 mb-6">
@@ -202,7 +202,7 @@ export const ViewingRequestModal = ({
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       rows={3}
-                      className="w-full px-4 py-3 bg-[#FDFBF7] border border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 rounded-lg resize-none focus:outline-none focus:border-gold"
+                      className="w-full px-4 py-3 bg-[#FDFBF7] border border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 rounded-lg resize-none focus:outline-none focus:border-[#B89555]"
                     />
 
                     <div className="flex items-start gap-3">
@@ -210,10 +210,10 @@ export const ViewingRequestModal = ({
                         id="viewing-privacy"
                         checked={formData.privacyAccepted}
                         onCheckedChange={(checked) => setFormData({ ...formData, privacyAccepted: !!checked })}
-                        className="border-[#B89555]/30 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+                        className="border-[#B89555]/30 data-[state=checked]:bg-[#EFE6D6] data-[state=checked]:border-[#B89555] mt-0.5"
                       />
                       <label htmlFor="viewing-privacy" className="text-[#1A1A1A] text-sm">
-                        I agree to the <a href="/privacy" className="text-gold underline">Privacy Policy</a>
+                        I agree to the <a href="/privacy" className="text-[#1A1A1A] underline">Privacy Policy</a>
                       </label>
                     </div>
 

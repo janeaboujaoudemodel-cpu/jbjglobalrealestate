@@ -219,10 +219,10 @@ export const ProjectAIAnalyzer = ({
       <section ref={sectionRef} className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl">
         <div className="container mx-auto px-4">
           <div className="flex items-center gap-3 mb-4">
-            <Brain className="w-6 h-6 text-gold" />
+            <Brain className="w-6 h-6 text-[#1A1A1A]" />
             <h2 className="text-2xl font-bold text-[#1A1A1A]">JBJ AI Project Intelligence</h2>
           </div>
-          <div className="bg-[#FDFBF7]/70 border border-gold/20 rounded-xl p-8 text-center">
+          <div className="bg-[#FDFBF7]/70 border border-[#B89555]/20 rounded-xl p-8 text-center">
             <Shield className="w-10 h-10 text-red-400 mx-auto mb-3" />
             <p className="text-red-600 font-medium">Insufficient Data for Analysis</p>
             <p className="text-[#1A1A1A]/80 text-sm mt-1">This project requires a developer, description, or pricing data before AI analysis can be generated.</p>
@@ -236,21 +236,21 @@ export const ProjectAIAnalyzer = ({
     <section ref={sectionRef} className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl">
       <div className="container mx-auto px-4">
         <div className="flex items-center gap-3 mb-8">
-          <Brain className="w-6 h-6 text-gold" />
+          <Brain className="w-6 h-6 text-[#1A1A1A]" />
           <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
             JBJ AI Project Intelligence
           </h2>
         </div>
 
         <p className="text-[#1A1A1A]/80 text-sm mb-6 font-medium">
-          Comprehensive AI analysis for <span className="font-semibold text-gold">{projectName}</span>
+          Comprehensive AI analysis for <span className="font-semibold text-[#1A1A1A]">{projectName}</span>
           {developer && (
             <> by {developerSlug ? (
-              <Link to={`/developer/${developerSlug}`} className="font-semibold text-gold hover:underline transition-all">
+              <Link to={`/developer/${developerSlug}`} className="font-semibold text-[#1A1A1A] hover:underline transition-all">
                 {developer}
               </Link>
             ) : (
-              <span className="font-semibold text-gold">{developer}</span>
+              <span className="font-semibold text-[#1A1A1A]">{developer}</span>
             )}</>
           )}
         </p>
@@ -259,7 +259,7 @@ export const ProjectAIAnalyzer = ({
         {errorMsg ? (
           <div className="text-center py-8 space-y-4">
             <p className="text-red-600 text-sm font-medium">{errorMsg}</p>
-            <Button onClick={handleRetry} variant="outline" className="border-gold/40 text-gold hover:bg-gold/10">
+            <Button onClick={handleRetry} variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
               <RefreshCw className="w-4 h-4 mr-2" />
               Retry Analysis
             </Button>
@@ -269,7 +269,7 @@ export const ProjectAIAnalyzer = ({
             {hasTimedOut ? (
               <div className="space-y-4">
                 <p className="text-red-600 text-sm font-medium">Analysis is taking longer than expected.</p>
-                <Button onClick={handleRetry} variant="outline" className="border-gold/40 text-gold hover:bg-gold/10">
+                <Button onClick={handleRetry} variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                   <RefreshCw className="w-4 h-4 mr-2" />
                   Retry Analysis
                 </Button>
@@ -287,7 +287,7 @@ export const ProjectAIAnalyzer = ({
                 />
                 <div className="text-center space-y-2">
                   <p className="text-sm font-medium text-[#1A1A1A]/80">
-                    JBJ AI is analyzing <span className="text-gold font-semibold">{projectName}</span>
+                    JBJ AI is analyzing <span className="text-[#1A1A1A] font-semibold">{projectName}</span>
                   </p>
                   <p className="text-xs text-[#1A1A1A]/70">Pulling market data, price trends & investment signals…</p>
                 </div>
@@ -315,9 +315,9 @@ export const ProjectAIAnalyzer = ({
 
             {/* Row 1: Overview + Rating */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2 bg-[#FDFBF7] border border-gold/20 rounded-2xl p-6 shadow-sm">
+              <div className="lg:col-span-2 bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
                 <div className="flex items-center gap-2 mb-3">
-                  <Building2 className="w-5 h-5 text-gold" />
+                  <Building2 className="w-5 h-5 text-[#1A1A1A]" />
                   <h3 className="font-bold text-[#1A1A1A] text-lg">Area Overview</h3>
                 </div>
                 {sections?.overview ? (
@@ -327,7 +327,7 @@ export const ProjectAIAnalyzer = ({
                 )}
               </div>
               <div className="relative overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-blue-50 rounded-2xl p-6 shadow-sm border border-emerald-200 flex flex-col items-center justify-center text-center">
-                <Star className="w-9 h-9 fill-gold text-gold mb-2 drop-shadow-[0_0_8px_rgba(200,167,102,0.6)] relative z-10" />
+                <Star className="w-9 h-9 fill-gold text-[#1A1A1A] mb-2 drop-shadow-[0_0_8px_rgba(200,167,102,0.6)] relative z-10" />
                 {ratingScore !== null ? (
                   <>
                     <div className="relative z-10">
@@ -353,7 +353,7 @@ export const ProjectAIAnalyzer = ({
             {/* Row 2: Price Per Sqft (with chart) + Supply vs Demand (with progress) */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Price Per Sqft */}
-              <div className="bg-[#FDFBF7] border border-gold/20 rounded-2xl p-6 shadow-sm">
+              <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
                 <div className="flex items-center gap-2 mb-4">
                   <BarChart3 className="w-5 h-5 text-emerald-600" />
                   <h3 className="font-bold text-[#1A1A1A] text-lg">Price Per Sqft</h3>
@@ -411,7 +411,7 @@ export const ProjectAIAnalyzer = ({
               </div>
 
               {/* Supply vs Demand */}
-              <div className="bg-[#FDFBF7] border border-gold/20 rounded-2xl p-6 shadow-sm">
+              <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
                 <div className="flex items-center gap-2 mb-4">
                   <TrendingUp className="w-5 h-5 text-blue-600" />
                   <h3 className="font-bold text-[#1A1A1A] text-lg">Supply vs Demand</h3>
@@ -452,7 +452,7 @@ export const ProjectAIAnalyzer = ({
             {/* Row 3: Investment Metrics (stat pills) + Developer Landscape */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Investment Metrics */}
-              <div className="bg-[#FDFBF7] border border-gold/20 rounded-2xl p-6 shadow-sm">
+              <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
                 <div className="flex items-center gap-2 mb-4">
                   <Shield className="w-5 h-5 text-emerald-600" />
                   <h3 className="font-bold text-[#1A1A1A] text-lg">Investment Metrics</h3>
@@ -488,9 +488,9 @@ export const ProjectAIAnalyzer = ({
               </div>
 
               {/* Developer Landscape */}
-              <div className="bg-[#FDFBF7] border border-gold/20 rounded-2xl p-6 shadow-sm">
+              <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
                 <div className="flex items-center gap-2 mb-3">
-                  <Building2 className="w-5 h-5 text-gold" />
+                  <Building2 className="w-5 h-5 text-[#1A1A1A]" />
                   <h3 className="font-bold text-[#1A1A1A] text-lg">Developer Landscape</h3>
                 </div>
                 {sections?.developers ? (
@@ -550,7 +550,7 @@ export const ProjectAIAnalyzer = ({
             <div className="flex items-center gap-2 text-[#1A1A1A]/90 text-xs pt-2 flex-wrap">
               <Brain className="w-4 h-4" />
               JBJ Property Analyzer — AI-generated analysis based on current market data. Does not constitute financial advice.{" "}
-              <Link to="/contact" className="text-gold hover:underline font-medium">Contact our team</Link> for professional guidance.
+              <Link to="/contact" className="text-[#1A1A1A] hover:underline font-medium">Contact our team</Link> for professional guidance.
             </div>
           </motion.div>
         )}

@@ -401,7 +401,7 @@ export function SoundEffectsPanel({ onAddToTimeline }: SoundEffectsPanelProps) {
     <div className="h-full flex flex-col bg-slate-900 text-white">
       {/* Volume & info bar */}
       <div className="flex-shrink-0 px-3 py-2 border-b border-slate-700 flex items-center gap-3">
-        <div className="flex items-center gap-1.5 text-amber-400">
+        <div className="flex items-center gap-1.5 text-[#1A1A1A]">
           <Volume2 className="w-3.5 h-3.5" />
           <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Volume</span>
         </div>
@@ -458,7 +458,7 @@ export function SoundEffectsPanel({ onAddToTimeline }: SoundEffectsPanelProps) {
                             className="w-full flex items-center gap-2 px-2.5 py-2 text-left group"
                           >
                             <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 transition-all ${
-                              isPlaying ? 'bg-amber-500 text-[#1A1A1A]' : 'bg-slate-700 text-slate-300 group-hover:bg-amber-500/20 group-hover:text-amber-400'
+                              isPlaying ? 'bg-amber-500 text-[#1A1A1A]' : 'bg-slate-700 text-slate-300 group-hover:bg-amber-500/20 group-hover:text-[#1A1A1A]'
                             }`}>
                               {isPlaying
                                 ? <Square className="w-2.5 h-2.5 fill-current" />

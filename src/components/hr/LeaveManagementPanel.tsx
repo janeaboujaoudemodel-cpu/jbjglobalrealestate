@@ -111,7 +111,7 @@ export function LeaveManagementPanel() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#B89555]"></div>
       </div>
     );
   }
@@ -273,16 +273,16 @@ export function LeaveManagementPanel() {
 
       {/* Tabs */}
       <Tabs defaultValue="pending" className="space-y-4">
-        <TabsList className="bg-gradient-to-r from-[#F7F1E6] to-[#ECE2D2] border-2 border-gold/30">
-          <TabsTrigger value="pending" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40">
+        <TabsList className="bg-gradient-to-r from-[#F7F1E6] to-[#ECE2D2] border-2 border-[#B89555]/30">
+          <TabsTrigger value="pending" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40">
             <Clock className="h-4 w-4 mr-2" />
             Pending Approvals ({pendingApprovals.length})
           </TabsTrigger>
-          <TabsTrigger value="all" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40">
+          <TabsTrigger value="all" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40">
             <FileText className="h-4 w-4 mr-2" />
             All Requests
           </TabsTrigger>
-          <TabsTrigger value="policies" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40">
+          <TabsTrigger value="policies" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40">
             <Calendar className="h-4 w-4 mr-2" />
             Leave Policies
           </TabsTrigger>
@@ -374,7 +374,7 @@ export function LeaveManagementPanel() {
           <Card>
             <CardHeader>
               <CardTitle className="text-foreground flex items-center gap-2">
-                <FileText className="h-5 w-5 text-gold" />
+                <FileText className="h-5 w-5 text-[#1A1A1A]" />
                 All Leave Requests
               </CardTitle>
             </CardHeader>
@@ -429,7 +429,7 @@ export function LeaveManagementPanel() {
           <Card>
             <CardHeader>
               <CardTitle className="text-foreground flex items-center gap-2">
-                <Calendar className="h-5 w-5 text-gold" />
+                <Calendar className="h-5 w-5 text-[#1A1A1A]" />
                 Leave Policies (UAE Standard)
               </CardTitle>
             </CardHeader>

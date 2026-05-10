@@ -513,7 +513,7 @@ Would you like me to run a specific audit or show detailed information? Type **"
                     className={cn(
                       "max-w-[85%] rounded-lg p-3",
                       message.role === 'user' 
-                        ? "bg-gold text-[#1A1A1A]" 
+                        ? "bg-[#EFE6D6] text-[#1A1A1A]" 
                         : "bg-muted"
                     )}
                   >

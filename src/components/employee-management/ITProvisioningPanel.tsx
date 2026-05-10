@@ -217,11 +217,11 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
       </div>
 
       {/* Provisioning Queue */}
-      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
             <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
-              <Key className="w-5 h-5 text-gold" />
+              <Key className="w-5 h-5 text-[#1A1A1A]" />
               IT Provisioning Queue
             </CardTitle>
             <CardDescription className="text-[#1A1A1A]/70">
@@ -235,7 +235,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
         <CardContent>
           {loading ? (
             <div className="flex items-center justify-center h-32">
-              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gold" />
+              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#B89555]" />
             </div>
           ) : filteredApps.length === 0 ? (
             <div className="text-center py-12">
@@ -248,11 +248,11 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
                 {filteredApps.map((app) => (
                   <div 
                     key={app.id}
-                    className="flex items-center justify-between p-4 rounded-lg bg-[#FDFBF7]/50 border border-gold/20 hover:border-gold/40 transition-all"
+                    className="flex items-center justify-between p-4 rounded-lg bg-[#FDFBF7]/50 border border-[#B89555]/20 hover:border-[#B89555]/40 transition-all"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center">
-                        <User className="w-6 h-6 text-gold" />
+                      <div className="w-12 h-12 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center">
+                        <User className="w-6 h-6 text-[#1A1A1A]" />
                       </div>
                       <div>
                         <p className="font-medium text-[#1A1A1A]">{app.full_name}</p>
@@ -295,10 +295,10 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
 
       {/* Provisioning Dialog */}
       <Dialog open={showProvisionDialog} onOpenChange={setShowProvisionDialog}>
-        <DialogContent className="max-w-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+        <DialogContent className="max-w-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
           <DialogHeader>
             <DialogTitle className="text-[#1A1A1A] flex items-center gap-2">
-              <Key className="w-5 h-5 text-gold" />
+              <Key className="w-5 h-5 text-[#1A1A1A]" />
               Provision Employee: {selectedApp?.full_name}
             </DialogTitle>
             <DialogDescription className="text-[#1A1A1A]/70">
@@ -314,7 +314,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
                 <Input 
                   value={generatedEmail}
                   onChange={(e) => setGeneratedEmail(e.target.value)}
-                  className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]"
+                  className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]"
                 />
                 <Button variant="ghost" size="icon" onClick={() => copyToClipboard(generatedEmail, 'Email')}>
                   <Copy className="w-4 h-4" />
@@ -329,7 +329,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
                 <Input 
                   value={tempPassword}
                   onChange={(e) => setTempPassword(e.target.value)}
-                  className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] font-mono"
+                  className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] font-mono"
                 />
                 <Button variant="ghost" size="icon" onClick={() => setTempPassword(generatePassword())}>
                   <RefreshCw className="w-4 h-4" />
@@ -344,13 +344,13 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
             {/* Email Signature Preview */}
             <div className="space-y-2">
               <Label className="text-[#1A1A1A]">Email Signature</Label>
-              <div className="bg-[#FDFBF7] border border-gold/30 rounded-lg p-4">
+              <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-lg p-4">
                 <div dangerouslySetInnerHTML={{ __html: emailSignature }} />
               </div>
             </div>
 
             {/* Access Options */}
-            <div className="space-y-3 p-4 bg-[#FDFBF7]/50 rounded-lg border border-gold/20">
+            <div className="space-y-3 p-4 bg-[#FDFBF7]/50 rounded-lg border border-[#B89555]/20">
               <Label className="text-[#1A1A1A] font-medium">Access & Notifications</Label>
               <div className="flex items-center gap-2">
                 <Checkbox 

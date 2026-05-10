@@ -231,7 +231,7 @@ export const RateLimitDashboard = () => {
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
           <h2 className="text-[#1A1A1A] text-xl font-semibold flex items-center gap-2">
-            <Shield className="w-5 h-5 text-gold" />
+            <Shield className="w-5 h-5 text-[#1A1A1A]" />
             Rate Limit Monitor
           </h2>
           <p className="text-[#1A1A1A]/60 text-sm mt-1">
@@ -245,7 +245,7 @@ export const RateLimitDashboard = () => {
             onClick={() => setIsLive(!isLive)}
             className={isLive 
               ? "bg-emerald-600 hover:bg-emerald-700 text-white" 
-              : "border-gold/30 text-[#1A1A1A] hover:bg-gold/10"
+              : "border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
             }
           >
             <Radio className={`w-4 h-4 mr-2 ${isLive ? "animate-pulse" : ""}`} />
@@ -267,7 +267,7 @@ export const RateLimitDashboard = () => {
             size="sm"
             onClick={handleRefresh}
             disabled={isRefreshing}
-            className="border-gold/30 text-[#1A1A1A] hover:bg-gold/10"
+            className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
           >
             <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
             Refresh
@@ -276,7 +276,7 @@ export const RateLimitDashboard = () => {
             variant="outline"
             size="sm"
             onClick={handleClearOldEntries}
-            className="border-gold/30 text-[#1A1A1A] hover:bg-gold/10"
+            className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
           >
             <Trash2 className="w-4 h-4 mr-2" />
             Clear Old
@@ -286,30 +286,30 @@ export const RateLimitDashboard = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30 p-6">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 p-6">
           <div className="flex items-center gap-3 mb-2">
             <Activity className="w-5 h-5 text-blue-500" />
             <span className="text-[#1A1A1A]/60">Total Requests</span>
           </div>
           <p className="text-[#1A1A1A] text-3xl font-bold">{getTotalRequests()}</p>
         </Card>
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30 p-6">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 p-6">
           <div className="flex items-center gap-3 mb-2">
             <TrendingUp className="w-5 h-5 text-emerald-500" />
             <span className="text-[#1A1A1A]/60">Unique IPs</span>
           </div>
           <p className="text-[#1A1A1A] text-3xl font-bold">{getUniqueIPs()}</p>
         </Card>
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30 p-6">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 p-6">
           <div className="flex items-center gap-3 mb-2">
             <Ban className="w-5 h-5 text-red-500" />
             <span className="text-[#1A1A1A]/60">Blocked Attempts</span>
           </div>
           <p className="text-[#1A1A1A] text-3xl font-bold">{blockedAttempts.length}</p>
         </Card>
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30 p-6">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 p-6">
           <div className="flex items-center gap-3 mb-2">
-            <Clock className="w-5 h-5 text-gold" />
+            <Clock className="w-5 h-5 text-[#1A1A1A]" />
             <span className="text-[#1A1A1A]/60">Active Windows</span>
           </div>
           <p className="text-[#1A1A1A] text-3xl font-bold">{rateLimits.length}</p>
@@ -344,14 +344,14 @@ export const RateLimitDashboard = () => {
       )}
 
       {/* Rate Limits Table */}
-      <Card className="bg-[#FDFBF7] border-2 border-gold/30 overflow-hidden">
-        <div className="p-4 border-b border-gold/20">
+      <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 overflow-hidden">
+        <div className="p-4 border-b border-[#B89555]/20">
           <h3 className="text-[#1A1A1A] font-medium">Rate Limit Entries</h3>
         </div>
         
         {loading ? (
           <div className="flex items-center justify-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold" />
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#B89555]" />
           </div>
         ) : rateLimits.length === 0 ? (
           <div className="text-center py-12">
@@ -380,14 +380,14 @@ export const RateLimitDashboard = () => {
                   const percentage = Math.min((entry.request_count / limit) * 100, 100);
                   
                   return (
-                    <tr key={entry.id} className="border-t border-gold/10 hover:bg-gold/5">
+                    <tr key={entry.id} className="border-t border-[#B89555]/10 hover:bg-[#EFE6D6]/5">
                       <td className="px-6 py-4">
-                        <Badge variant="outline" className="text-[#1A1A1A] border-gold/30">
+                        <Badge variant="outline" className="text-[#1A1A1A] border-[#B89555]/30">
                           {entry.function_name}
                         </Badge>
                       </td>
                       <td className="px-6 py-4">
-                        <code className="text-[#1A1A1A] text-sm font-mono bg-gold/5 px-2 py-1 rounded border border-gold/20">
+                        <code className="text-[#1A1A1A] text-sm font-mono bg-[#EFE6D6]/5 px-2 py-1 rounded border border-[#B89555]/20">
                           {entry.rate_key}
                         </code>
                       </td>
@@ -428,15 +428,15 @@ export const RateLimitDashboard = () => {
       </Card>
 
       {/* Rate Limit Configuration Info */}
-      <Card className="bg-[#FDFBF7] border-2 border-gold/30 p-6">
+      <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 p-6">
         <h3 className="text-[#1A1A1A] font-medium mb-4 flex items-center gap-2">
-          <Shield className="w-4 h-4 text-gold" />
+          <Shield className="w-4 h-4 text-[#1A1A1A]" />
           Rate Limit Configuration
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {Object.entries(RATE_LIMIT_CONFIG).map(([fn, config]) => (
-            <div key={fn} className="bg-gold/5 rounded-lg p-4 border border-gold/20">
-              <code className="text-gold text-sm">{fn}</code>
+            <div key={fn} className="bg-[#EFE6D6]/5 rounded-lg p-4 border border-[#B89555]/20">
+              <code className="text-[#1A1A1A] text-sm">{fn}</code>
               <div className="mt-2 text-[#1A1A1A]/60 text-sm">
                 <span className="text-[#1A1A1A] font-medium">{config.limit}</span> requests per{" "}
                 <span className="text-[#1A1A1A] font-medium">{config.windowMinutes}</span> minutes

@@ -255,7 +255,7 @@ const VIPClientManager = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
-            <Crown className="h-6 w-6 text-gold" />
+            <Crown className="h-6 w-6 text-[#1A1A1A]" />
             VIP Client Management
           </h2>
           <p className="text-muted-foreground mt-1">
@@ -391,7 +391,7 @@ const VIPClientManager = () => {
                   </div>
                 </div>
 
-                <Button onClick={addVIPClient} className="w-full bg-gold hover:bg-gold-dark text-[#1A1A1A]">
+                <Button onClick={addVIPClient} className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]-dark text-[#1A1A1A]">
                   <Crown className="h-4 w-4 mr-2" />
                   Add VIP Client
                 </Button>
@@ -403,10 +403,10 @@ const VIPClientManager = () => {
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-gold/20 to-gold/5 border-gold/30">
+        <Card className="bg-gradient-to-br from-gold/20 to-gold/5 border-[#B89555]/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <Crown className="h-8 w-8 text-gold" />
+              <Crown className="h-8 w-8 text-[#1A1A1A]" />
               <div>
                 <p className="text-2xl font-bold">{vipClients.length}</p>
                 <p className="text-xs text-muted-foreground">Total VIPs</p>
@@ -438,10 +438,10 @@ const VIPClientManager = () => {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-gold/15 to-gold/5 border-gold/30">
+        <Card className="bg-gradient-to-br from-gold/15 to-gold/5 border-[#B89555]/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <Building className="h-8 w-8 text-gold" />
+              <Building className="h-8 w-8 text-[#1A1A1A]" />
               <div>
                 <p className="text-2xl font-bold">
                   {vipClients.filter(c => c.vip_category === 'government_official').length}
@@ -483,7 +483,7 @@ const VIPClientManager = () => {
       <div className="grid gap-4">
         {loading ? (
           <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold mx-auto" />
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#B89555] mx-auto" />
             <p className="text-muted-foreground mt-2">Loading VIP clients...</p>
           </div>
         ) : filteredClients.length === 0 ? (
@@ -502,12 +502,12 @@ const VIPClientManager = () => {
           filteredClients.map((client) => {
             const CategoryIcon = getCategoryIcon(client.vip_category);
             return (
-              <Card key={client.id} className="hover:border-gold/30 transition-colors">
+              <Card key={client.id} className="hover:border-[#B89555]/30 transition-colors">
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center shrink-0">
-                        <CategoryIcon className="h-6 w-6 text-gold" />
+                      <div className="w-12 h-12 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center shrink-0">
+                        <CategoryIcon className="h-6 w-6 text-[#1A1A1A]" />
                       </div>
                       <div>
                         <div className="flex items-center gap-2 mb-1">
@@ -527,7 +527,7 @@ const VIPClientManager = () => {
                         </div>
                         <p className="text-sm text-muted-foreground">{client.email}</p>
                         <div className="flex flex-wrap gap-2 mt-2">
-                          <Badge className="bg-gold/20 text-gold border-gold/30">
+                          <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30">
                             {getCategoryLabel(client.vip_category)}
                           </Badge>
                           {client.organization && (

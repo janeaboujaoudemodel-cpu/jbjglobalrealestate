@@ -200,7 +200,7 @@ export function ForcePasswordChange({ onComplete, userName }: ForcePasswordChang
             )}
 
             <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-3">
-              <div className="flex items-center gap-2 text-amber-400 text-sm font-medium mb-2">
+              <div className="flex items-center gap-2 text-[#1A1A1A] text-sm font-medium mb-2">
                 <ShieldCheck className="w-4 h-4" />
                 Security Tips
               </div>

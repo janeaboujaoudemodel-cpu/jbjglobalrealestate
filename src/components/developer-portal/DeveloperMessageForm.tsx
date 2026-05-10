@@ -88,10 +88,10 @@ const DeveloperMessageForm = ({ representativeId, developerName, autoApprove }: 
   };
 
   return (
-    <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)]">
+    <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)]">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-foreground">
-          <MessageSquare className="w-5 h-5 text-gold" />
+          <MessageSquare className="w-5 h-5 text-[#1A1A1A]" />
           Send Update / Message
         </CardTitle>
         <p className="text-sm text-muted-foreground">
@@ -106,7 +106,7 @@ const DeveloperMessageForm = ({ representativeId, developerName, autoApprove }: 
           <div className="space-y-2">
             <Label>Message Type</Label>
             <Select value={form.message_type} onValueChange={(v) => setForm(f => ({ ...f, message_type: v }))}>
-              <SelectTrigger className="border-gold/20">
+              <SelectTrigger className="border-[#B89555]/20">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -133,7 +133,7 @@ const DeveloperMessageForm = ({ representativeId, developerName, autoApprove }: 
         <div className="space-y-2">
           <Label>Attachments</Label>
           <div
-            className="border-2 border-dashed border-gold/40 rounded-xl p-4 text-center hover:border-gold/70 transition-colors cursor-pointer bg-card/50"
+            className="border-2 border-dashed border-[#B89555]/40 rounded-xl p-4 text-center hover:border-[#B89555]/70 transition-colors cursor-pointer bg-card/50"
             onClick={() => fileInputRef.current?.click()}
           >
             <Upload className="w-6 h-6 mx-auto text-[#1A1A1A]/70 mb-1" />
@@ -150,8 +150,8 @@ const DeveloperMessageForm = ({ representativeId, developerName, autoApprove }: 
           {files.length > 0 && (
             <div className="space-y-1">
               {files.map((file, idx) => (
-                <div key={idx} className="flex items-center gap-2 p-2 rounded-lg bg-card border border-gold/20 text-sm">
-                  <FileText className="w-3 h-3 text-gold shrink-0" />
+                <div key={idx} className="flex items-center gap-2 p-2 rounded-lg bg-card border border-[#B89555]/20 text-sm">
+                  <FileText className="w-3 h-3 text-[#1A1A1A] shrink-0" />
                   <span className="truncate flex-1">{file.name}</span>
                   <button onClick={() => setFiles(f => f.filter((_, i) => i !== idx))} className="text-muted-foreground hover:text-destructive">
                     <X className="w-3 h-3" />
@@ -171,7 +171,7 @@ const DeveloperMessageForm = ({ representativeId, developerName, autoApprove }: 
         <Button
           onClick={handleSubmit}
           disabled={submitting}
-          className="w-full bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border border-gold/40 text-foreground font-bold h-12"
+          className="w-full bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border border-[#B89555]/40 text-foreground font-bold h-12"
         >
           {submitting ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Sending...</> : <><Send className="w-4 h-4 mr-2" /> Send Message</>}
         </Button>

@@ -67,7 +67,7 @@ export function EventsCalendar({ events = [] }: EventsCalendarProps) {
   const getEventTypeBadge = (type: CalendarEvent["type"]) => {
     switch (type) {
       case "launch":
-        return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-xs">Launch</Badge>;
+        return <Badge className="bg-amber-500/20 text-[#1A1A1A] border-amber-500/30 text-xs">Launch</Badge>;
       case "briefing":
         return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30 text-xs">Briefing</Badge>;
       case "event":

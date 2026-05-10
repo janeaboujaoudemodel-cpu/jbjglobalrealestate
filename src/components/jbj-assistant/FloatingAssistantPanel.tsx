@@ -220,7 +220,7 @@ JBJ Contact Information:
       <motion.button
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
-        className="fixed bottom-24 right-6 z-[8000] w-14 h-14 bg-gradient-to-br from-gold to-amber-600 text-[#1A1A1A] rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center border-2 border-gold/50"
+        className="fixed bottom-24 right-6 z-[8000] w-14 h-14 bg-gradient-to-br from-gold to-amber-600 text-[#1A1A1A] rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center border-2 border-[#B89555]/50"
         onClick={() => setIsAssistantOpen(true)}
       >
         <MessageCircle className="w-6 h-6" />
@@ -235,22 +235,22 @@ JBJ Contact Information:
         initial={{ opacity: 0, y: 50, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 50, scale: 0.95 }}
-        className="fixed bottom-6 right-6 z-[9000] w-[380px] h-[550px] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 rounded-2xl shadow-[0_20px_60px_rgba(200,167,102,0.3)] flex flex-col overflow-hidden"
+        className="fixed bottom-6 right-6 z-[9000] w-[380px] h-[550px] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 rounded-2xl shadow-[0_20px_60px_rgba(200,167,102,0.3)] flex flex-col overflow-hidden"
       >
         {/* Header - Premium Champagne */}
-        <div className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] p-4 flex items-center justify-between border-b-2 border-gold/30">
+        <div className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] p-4 flex items-center justify-between border-b-2 border-[#B89555]/30">
           <div className="flex items-center gap-3">
             <div className="relative">
-              <Avatar className="w-10 h-10 border-2 border-gold/50 shadow-md">
+              <Avatar className="w-10 h-10 border-2 border-[#B89555]/50 shadow-md">
                 <AvatarImage src={userAssistant.avatar} alt={userAssistant.name} />
-                <AvatarFallback className="bg-gold/20 text-gold">{userAssistant.name[0]}</AvatarFallback>
+                <AvatarFallback className="bg-[#EFE6D6]/20 text-[#1A1A1A]">{userAssistant.name[0]}</AvatarFallback>
               </Avatar>
               <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />
             </div>
             <div>
               <button 
                 onClick={() => setShowAgentPicker(!showAgentPicker)}
-                className="flex items-center gap-1 text-[#1A1A1A] font-semibold hover:text-gold transition-colors"
+                className="flex items-center gap-1 text-[#1A1A1A] font-semibold hover:text-[#1A1A1A] transition-colors"
               >
                 {userAssistant.name}
                 <ChevronDown className="w-4 h-4" />
@@ -260,7 +260,7 @@ JBJ Contact Information:
           </div>
           <button
             onClick={() => setIsAssistantOpen(false)}
-            className="w-8 h-8 rounded-full bg-[#FDFBF7]/50 hover:bg-[#FDFBF7] flex items-center justify-center transition-colors border border-gold/30"
+            className="w-8 h-8 rounded-full bg-[#FDFBF7]/50 hover:bg-[#FDFBF7] flex items-center justify-center transition-colors border border-[#B89555]/30"
           >
             <X className="w-4 h-4 text-[#1A1A1A]" />
           </button>
@@ -273,7 +273,7 @@ JBJ Contact Information:
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="absolute top-16 left-4 right-4 bg-[#FDFBF7] border-2 border-gold/30 rounded-xl shadow-xl z-10 max-h-64 overflow-y-auto"
+              className="absolute top-16 left-4 right-4 bg-[#FDFBF7] border-2 border-[#B89555]/30 rounded-xl shadow-xl z-10 max-h-64 overflow-y-auto"
             >
               {agents.map(agent => (
                 <button
@@ -288,13 +288,13 @@ JBJ Contact Information:
                       timestamp: new Date(),
                     }]);
                   }}
-                  className={`w-full flex items-center gap-3 p-3 hover:bg-gold/10 transition-colors ${
-                    activeAgent?.id === agent.id ? 'bg-gold/20' : ''
+                  className={`w-full flex items-center gap-3 p-3 hover:bg-[#EFE6D6]/10 transition-colors ${
+                    activeAgent?.id === agent.id ? 'bg-[#EFE6D6]/20' : ''
                   }`}
                 >
-                  <Avatar className="w-8 h-8 border border-gold/30">
+                  <Avatar className="w-8 h-8 border border-[#B89555]/30">
                     <AvatarImage src={agent.avatar} alt={agent.name} />
-                    <AvatarFallback className="bg-gold/20 text-gold">{agent.name[0]}</AvatarFallback>
+                    <AvatarFallback className="bg-[#EFE6D6]/20 text-[#1A1A1A]">{agent.name[0]}</AvatarFallback>
                   </Avatar>
                   <div className="text-left">
                     <p className="text-[#1A1A1A] text-sm font-medium">{agent.name}</p>
@@ -319,13 +319,13 @@ JBJ Contact Information:
                 <div className={`max-w-[85%] ${
                   message.role === 'user' 
                     ? 'bg-gradient-to-r from-gold to-amber-500 text-[#1A1A1A]' 
-                    : 'bg-[#FDFBF7] text-[#1A1A1A] border border-gold/30 shadow-sm'
+                    : 'bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/30 shadow-sm'
                 } rounded-2xl px-4 py-3`}>
                   {message.isTyping ? (
                     <div className="flex gap-1">
-                      <span className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                      <span className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                      <span className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                      <span className="w-2 h-2 bg-[#EFE6D6] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                      <span className="w-2 h-2 bg-[#EFE6D6] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                      <span className="w-2 h-2 bg-[#EFE6D6] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                     </div>
                   ) : (
                     <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
@@ -337,7 +337,7 @@ JBJ Contact Information:
         </ScrollArea>
 
         {/* Input - Premium champagne */}
-        <div className="p-4 border-t-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
+        <div className="p-4 border-t-2 border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
           <div className="flex items-center gap-2">
             <Input
               ref={inputRef}
@@ -345,7 +345,7 @@ JBJ Contact Information:
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Type your message..."
-              className="flex-1 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold"
+              className="flex-1 bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]"
               disabled={isLoading}
             />
             <Button

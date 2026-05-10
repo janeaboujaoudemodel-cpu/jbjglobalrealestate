@@ -44,7 +44,7 @@ function convertMarkdownTables(text: string): string {
       
       let tableHtml = '<table class="w-full border-collapse my-6 text-sm"><thead><tr>';
       for (const h of headers) {
-        tableHtml += `<th class="bg-champagne-light/50 text-left p-3 text-xs font-semibold uppercase tracking-wider text-[#1A1A1A]/70 border border-gold/20">${h}</th>`;
+        tableHtml += `<th class="bg-champagne-light/50 text-left p-3 text-xs font-semibold uppercase tracking-wider text-[#1A1A1A]/70 border border-[#B89555]/20">${h}</th>`;
       }
       tableHtml += '</tr></thead><tbody>';
 
@@ -55,7 +55,7 @@ function convertMarkdownTables(text: string): string {
         const cells = rowLine.split('|').map(c => c.trim());
         tableHtml += '<tr>';
         for (const c of cells) {
-          tableHtml += `<td class="p-3 border border-gold/10 text-sm">${c}</td>`;
+          tableHtml += `<td class="p-3 border border-[#B89555]/10 text-sm">${c}</td>`;
         }
         tableHtml += '</tr>';
         i++;
@@ -196,7 +196,7 @@ export function renderMarkdownToHtml(markdown: string | null): string {
   let html = cleaned
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.+?)\*/g, '<em>$1</em>')
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-gold hover:underline">$1</a>')
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-[#1A1A1A] hover:underline">$1</a>')
     .replace(/^- (.+)$/gm, '<li class="ml-4">$1</li>')
     .replace(/^• (.+)$/gm, '<li class="ml-4">$1</li>')
     .replace(/^\d+\.\s+(.+)$/gm, '<li class="ml-4">$1</li>')

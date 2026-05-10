@@ -111,7 +111,7 @@ export default function BrandIntroSplash() {
       {audioBlocked && (
         <button
           onClick={handlePlayAudio}
-          className="mt-8 flex items-center gap-2 px-5 py-2.5 rounded-full border border-gold/40 bg-gold/10 text-gold text-sm font-medium hover:bg-gold/20 transition-all animate-in fade-in duration-500"
+          className="mt-8 flex items-center gap-2 px-5 py-2.5 rounded-full border border-[#B89555]/40 bg-[#EFE6D6]/10 text-[#1A1A1A] text-sm font-medium hover:bg-[#EFE6D6]/20 transition-all animate-in fade-in duration-500"
         >
           <Volume2 className="w-4 h-4" />
           Enable Sound

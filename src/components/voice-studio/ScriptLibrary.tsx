@@ -81,10 +81,10 @@ interface SaveDialogData {
 }
 
 // Shared champagne-gold input class
-const goldInput = "bg-[#FDFBF7]/80 border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 rounded-xl focus:border-gold focus:ring-gold/20";
-const goldSelect = "bg-[#FDFBF7]/80 border-2 border-gold/30 text-[#1A1A1A] rounded-xl";
-const goldSelectContent = "bg-[#FDFBF7] border-2 border-gold/30 rounded-xl";
-const goldSelectItem = "text-[#1A1A1A] hover:bg-gold/10 focus:bg-gold/15 focus:text-[#1A1A1A] rounded-lg";
+const goldInput = "bg-[#FDFBF7]/80 border-2 border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 rounded-xl focus:border-[#B89555] focus:ring-gold/20";
+const goldSelect = "bg-[#FDFBF7]/80 border-2 border-[#B89555]/30 text-[#1A1A1A] rounded-xl";
+const goldSelectContent = "bg-[#FDFBF7] border-2 border-[#B89555]/30 rounded-xl";
+const goldSelectItem = "text-[#1A1A1A] hover:bg-[#EFE6D6]/10 focus:bg-[#EFE6D6]/15 focus:text-[#1A1A1A] rounded-lg";
 
 export function ScriptLibrary({
   onLoadScript,
@@ -296,7 +296,7 @@ export function ScriptLibrary({
         <Button
           onClick={openSaveDialog}
           disabled={!currentScript.trim()}
-          className="bg-gradient-to-r from-gold to-amber-500 hover:from-gold/90 hover:to-amber-500/90 text-[#1A1A1A] font-semibold shrink-0 rounded-xl border-2 border-gold"
+          className="bg-gradient-to-r from-gold to-amber-500 hover:from-gold/90 hover:to-amber-500/90 text-[#1A1A1A] font-semibold shrink-0 rounded-xl border-2 border-[#B89555]"
           size="sm"
         >
           <Plus className="h-4 w-4 mr-1.5" />
@@ -312,17 +312,17 @@ export function ScriptLibrary({
       {/* Loading */}
       {isLoading && (
         <div className="flex items-center justify-center py-16 gap-3 text-[#1A1A1A]/40">
-          <Loader2 className="h-5 w-5 animate-spin text-gold" />
+          <Loader2 className="h-5 w-5 animate-spin text-[#1A1A1A]" />
           <span className="text-sm">Loading library…</span>
         </div>
       )}
 
       {/* Empty */}
       {!isLoading && scripts.length === 0 && (
-        <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border-2 border-gold/30 border-dashed rounded-2xl">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border-2 border-[#B89555]/30 border-dashed rounded-2xl">
           <CardContent className="py-14 flex flex-col items-center gap-3 text-center">
-            <div className="w-14 h-14 rounded-full bg-gold/10 border-2 border-gold/30 flex items-center justify-center">
-              <BookOpen className="h-6 w-6 text-gold" />
+            <div className="w-14 h-14 rounded-full bg-[#EFE6D6]/10 border-2 border-[#B89555]/30 flex items-center justify-center">
+              <BookOpen className="h-6 w-6 text-[#1A1A1A]" />
             </div>
             <h3 className="text-[#1A1A1A] font-medium">No saved scripts yet</h3>
             <p className="text-[#1A1A1A]/50 text-sm max-w-xs">
@@ -343,7 +343,7 @@ export function ScriptLibrary({
           {filtered.map(s => (
             <Card
               key={s.id}
-              className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border-2 border-gold/30 hover:border-gold/60 transition-all group flex flex-col rounded-2xl"
+              className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border-2 border-[#B89555]/30 hover:border-[#B89555]/60 transition-all group flex flex-col rounded-2xl"
             >
               <CardHeader className="pb-2">
                 <div className="flex items-start justify-between gap-2">
@@ -360,14 +360,14 @@ export function ScriptLibrary({
                   <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
                     <button
                       onClick={() => handleCopy(s)}
-                      className="p-1.5 rounded-lg hover:bg-gold/10 text-[#1A1A1A]/40 hover:text-[#1A1A1A] transition-colors"
+                      className="p-1.5 rounded-lg hover:bg-[#EFE6D6]/10 text-[#1A1A1A]/40 hover:text-[#1A1A1A] transition-colors"
                       title="Copy script"
                     >
                       {copiedId === s.id ? <Check className="h-3.5 w-3.5 text-green-600" /> : <Copy className="h-3.5 w-3.5" />}
                     </button>
                     <button
                       onClick={() => openEditDialog(s)}
-                      className="p-1.5 rounded-lg hover:bg-gold/10 text-[#1A1A1A]/40 hover:text-[#1A1A1A] transition-colors"
+                      className="p-1.5 rounded-lg hover:bg-[#EFE6D6]/10 text-[#1A1A1A]/40 hover:text-[#1A1A1A] transition-colors"
                       title="Edit script"
                     >
                       <Edit3 className="h-3.5 w-3.5" />
@@ -384,15 +384,15 @@ export function ScriptLibrary({
 
                 {/* Badges row */}
                 <div className="flex flex-wrap gap-1.5 mt-2">
-                  <Badge className="text-[10px] bg-gold/15 text-[#1A1A1A] border border-gold/30 px-1.5 py-0.5">
+                  <Badge className="text-[10px] bg-[#EFE6D6]/15 text-[#1A1A1A] border border-[#B89555]/30 px-1.5 py-0.5">
                     <Globe className="h-2.5 w-2.5 mr-1" />
                     {getLangDisplay(s.language)}
                   </Badge>
-                  <Badge className="text-[10px] bg-gold/10 text-[#1A1A1A]/70 border border-gold/20 px-1.5 py-0.5">
+                  <Badge className="text-[10px] bg-[#EFE6D6]/10 text-[#1A1A1A]/70 border border-[#B89555]/20 px-1.5 py-0.5">
                     {s.tone.charAt(0).toUpperCase() + s.tone.slice(1)}
                   </Badge>
                   {s.voice_name && (
-                    <Badge className="text-[10px] bg-gold/10 text-[#1A1A1A]/70 border border-gold/20 px-1.5 py-0.5">
+                    <Badge className="text-[10px] bg-[#EFE6D6]/10 text-[#1A1A1A]/70 border border-[#B89555]/20 px-1.5 py-0.5">
                       <Mic className="h-2.5 w-2.5 mr-1" />
                       {s.voice_name}
                     </Badge>
@@ -402,7 +402,7 @@ export function ScriptLibrary({
 
               <CardContent className="flex-1 flex flex-col gap-3 pt-0">
                 {/* Script preview */}
-                <p className="text-[#1A1A1A]/60 text-xs leading-relaxed line-clamp-3 bg-[#FDFBF7]/60 rounded-xl p-3 border-2 border-gold/15">
+                <p className="text-[#1A1A1A]/60 text-xs leading-relaxed line-clamp-3 bg-[#FDFBF7]/60 rounded-xl p-3 border-2 border-[#B89555]/15">
                   {s.script}
                 </p>
 
@@ -410,7 +410,7 @@ export function ScriptLibrary({
                 {s.tags?.length > 0 && (
                   <div className="flex flex-wrap gap-1">
                     {s.tags.map(tag => (
-                      <span key={tag} className="text-[10px] bg-gold/10 text-[#1A1A1A]/50 border border-gold/20 rounded-lg px-1.5 py-0.5">
+                      <span key={tag} className="text-[10px] bg-[#EFE6D6]/10 text-[#1A1A1A]/50 border border-[#B89555]/20 rounded-lg px-1.5 py-0.5">
                         #{tag}
                       </span>
                     ))}
@@ -418,7 +418,7 @@ export function ScriptLibrary({
                 )}
 
                 {/* Footer */}
-                <div className="flex items-center justify-between mt-auto pt-2 border-t-2 border-gold/15">
+                <div className="flex items-center justify-between mt-auto pt-2 border-t-2 border-[#B89555]/15">
                   <div className="flex items-center gap-3 text-[10px] text-[#1A1A1A]/40">
                     <span className="flex items-center gap-1">
                       <FileText className="h-3 w-3" />
@@ -433,7 +433,7 @@ export function ScriptLibrary({
                     <Button
                       size="sm"
                       onClick={() => { onLoadScript(s.script); toast.success(`"${s.title}" loaded into editor`); }}
-                      className="h-7 text-xs bg-gradient-to-r from-gold to-amber-500 text-[#1A1A1A] font-semibold px-3 rounded-xl border border-gold"
+                      className="h-7 text-xs bg-gradient-to-r from-gold to-amber-500 text-[#1A1A1A] font-semibold px-3 rounded-xl border border-[#B89555]"
                     >
                       Load
                     </Button>
@@ -447,10 +447,10 @@ export function ScriptLibrary({
 
       {/* ── Save Dialog ── */}
       <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
-        <DialogContent className="bg-[#FDFBF7] border-2 border-gold/40 text-[#1A1A1A] sm:max-w-lg rounded-2xl">
+        <DialogContent className="bg-[#FDFBF7] border-2 border-[#B89555]/40 text-[#1A1A1A] sm:max-w-lg rounded-2xl">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
-              <BookOpen className="h-5 w-5 text-gold" />
+              <BookOpen className="h-5 w-5 text-[#1A1A1A]" />
               Save Script to Library
             </DialogTitle>
           </DialogHeader>
@@ -514,20 +514,20 @@ export function ScriptLibrary({
             {/* Script preview */}
             <div>
               <Label className="text-[#1A1A1A]/60 text-xs mb-1.5 block">Script Preview</Label>
-              <p className="text-[#1A1A1A]/60 text-xs bg-[#FDFBF7]/60 rounded-xl p-3 border-2 border-gold/20 line-clamp-3">
+              <p className="text-[#1A1A1A]/60 text-xs bg-[#FDFBF7]/60 rounded-xl p-3 border-2 border-[#B89555]/20 line-clamp-3">
                 {currentScript || "No script entered."}
               </p>
             </div>
           </div>
 
           <DialogFooter className="gap-2 mt-4">
-            <Button variant="outline" onClick={() => setShowSaveDialog(false)} className="border-2 border-gold/30 text-[#1A1A1A]/60 hover:bg-gold/10 rounded-xl">
+            <Button variant="outline" onClick={() => setShowSaveDialog(false)} className="border-2 border-[#B89555]/30 text-[#1A1A1A]/60 hover:bg-[#EFE6D6]/10 rounded-xl">
               Cancel
             </Button>
             <Button
               onClick={handleSave}
               disabled={isSaving || !saveData.title.trim()}
-              className="bg-gradient-to-r from-gold to-amber-500 hover:from-gold/90 hover:to-amber-500/90 text-[#1A1A1A] font-semibold rounded-xl border-2 border-gold"
+              className="bg-gradient-to-r from-gold to-amber-500 hover:from-gold/90 hover:to-amber-500/90 text-[#1A1A1A] font-semibold rounded-xl border-2 border-[#B89555]"
             >
               {isSaving ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Saving…</> : <><BookOpen className="h-4 w-4 mr-2" />Save Script</>}
             </Button>
@@ -537,10 +537,10 @@ export function ScriptLibrary({
 
       {/* ── Edit Dialog ── */}
       <Dialog open={!!editingScript} onOpenChange={() => setEditingScript(null)}>
-        <DialogContent className="bg-[#FDFBF7] border-2 border-gold/40 text-[#1A1A1A] sm:max-w-2xl rounded-2xl">
+        <DialogContent className="bg-[#FDFBF7] border-2 border-[#B89555]/40 text-[#1A1A1A] sm:max-w-2xl rounded-2xl">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
-              <Edit3 className="h-5 w-5 text-gold" />
+              <Edit3 className="h-5 w-5 text-[#1A1A1A]" />
               Edit Script
             </DialogTitle>
           </DialogHeader>
@@ -603,13 +603,13 @@ export function ScriptLibrary({
           </div>
 
           <DialogFooter className="gap-2 mt-4">
-            <Button variant="outline" onClick={() => setEditingScript(null)} className="border-2 border-gold/30 text-[#1A1A1A]/60 hover:bg-gold/10 rounded-xl">
+            <Button variant="outline" onClick={() => setEditingScript(null)} className="border-2 border-[#B89555]/30 text-[#1A1A1A]/60 hover:bg-[#EFE6D6]/10 rounded-xl">
               <X className="h-4 w-4 mr-1.5" />Cancel
             </Button>
             <Button
               onClick={handleUpdate}
               disabled={isUpdating || !editTitle.trim()}
-              className="bg-gradient-to-r from-gold to-amber-500 hover:from-gold/90 hover:to-amber-500/90 text-[#1A1A1A] font-semibold rounded-xl border-2 border-gold"
+              className="bg-gradient-to-r from-gold to-amber-500 hover:from-gold/90 hover:to-amber-500/90 text-[#1A1A1A] font-semibold rounded-xl border-2 border-[#B89555]"
             >
               {isUpdating ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Saving…</> : <><Check className="h-4 w-4 mr-2" />Save Changes</>}
             </Button>
@@ -619,7 +619,7 @@ export function ScriptLibrary({
 
       {/* ── Delete Confirm Dialog ── */}
       <Dialog open={!!deletingId} onOpenChange={() => setDeletingId(null)}>
-        <DialogContent className="bg-[#FDFBF7] border-2 border-gold/40 text-[#1A1A1A] sm:max-w-sm rounded-2xl">
+        <DialogContent className="bg-[#FDFBF7] border-2 border-[#B89555]/40 text-[#1A1A1A] sm:max-w-sm rounded-2xl">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-red-600">
               <Trash2 className="h-5 w-5" />
@@ -628,7 +628,7 @@ export function ScriptLibrary({
           </DialogHeader>
           <p className="text-[#1A1A1A]/60 text-sm mt-2">This action cannot be undone. The script will be permanently deleted.</p>
           <DialogFooter className="gap-2 mt-4">
-            <Button variant="outline" onClick={() => setDeletingId(null)} className="border-2 border-gold/30 text-[#1A1A1A]/60 hover:bg-gold/10 rounded-xl">
+            <Button variant="outline" onClick={() => setDeletingId(null)} className="border-2 border-[#B89555]/30 text-[#1A1A1A]/60 hover:bg-[#EFE6D6]/10 rounded-xl">
               Cancel
             </Button>
             <Button

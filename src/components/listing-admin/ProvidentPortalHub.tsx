@@ -244,18 +244,18 @@ export function ProvidentPortalHub() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/30 rounded-xl p-5">
+      <div className="bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] border-2 border-[#B89555]/30 rounded-xl p-5">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-foreground font-bold text-lg flex items-center gap-2">
-              <Database className="w-5 h-5 text-gold" />
+              <Database className="w-5 h-5 text-[#1A1A1A]" />
               PROVIDENT PORTAL
             </h2>
             <p className="text-muted-foreground text-sm mt-1">
               Central hub for Provident data scraping, enrichment, and project synchronization.
             </p>
           </div>
-          <Button variant="outline" size="sm" onClick={fetchStats} className="border-gold/30 hover:bg-gold/10">
+          <Button variant="outline" size="sm" onClick={fetchStats} className="border-[#B89555]/30 hover:bg-[#EFE6D6]/10">
             <RefreshCw className="w-4 h-4 mr-1" />
             Refresh
           </Button>
@@ -264,35 +264,35 @@ export function ProvidentPortalHub() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-        <Card className="border-gold/20">
+        <Card className="border-[#B89555]/20">
           <CardContent className="p-4 text-center">
-            <Building2 className="w-5 h-5 text-gold mx-auto mb-1" />
+            <Building2 className="w-5 h-5 text-[#1A1A1A] mx-auto mb-1" />
             <p className="text-2xl font-bold text-foreground">{stats.total}</p>
             <p className="text-[11px] text-muted-foreground">Total Projects</p>
           </CardContent>
         </Card>
-        <Card className="border-gold/20">
+        <Card className="border-[#B89555]/20">
           <CardContent className="p-4 text-center">
             <CheckCircle className="w-5 h-5 text-emerald-600 mx-auto mb-1" />
             <p className="text-2xl font-bold text-emerald-700">{stats.published}</p>
             <p className="text-[11px] text-muted-foreground">Published</p>
           </CardContent>
         </Card>
-        <Card className="border-gold/20">
+        <Card className="border-[#B89555]/20">
           <CardContent className="p-4 text-center">
             <Clock className="w-5 h-5 text-amber-600 mx-auto mb-1" />
             <p className="text-2xl font-bold text-amber-700">{stats.pending}</p>
             <p className="text-[11px] text-muted-foreground">Pending</p>
           </CardContent>
         </Card>
-        <Card className="border-gold/20">
+        <Card className="border-[#B89555]/20">
           <CardContent className="p-4 text-center">
             <TrendingUp className="w-5 h-5 text-blue-600 mx-auto mb-1" />
             <p className="text-2xl font-bold text-blue-700">{enrichmentStats.fullyEnriched}</p>
             <p className="text-[11px] text-muted-foreground">Fully Enriched</p>
           </CardContent>
         </Card>
-        <Card className="border-gold/20">
+        <Card className="border-[#B89555]/20">
           <CardContent className="p-4 text-center">
             <AlertTriangle className="w-5 h-5 text-orange-500 mx-auto mb-1" />
             <p className="text-2xl font-bold text-orange-600">{enrichmentStats.unenriched}</p>
@@ -305,10 +305,10 @@ export function ProvidentPortalHub() {
       <HandoverRepairPanel />
 
       {/* Enrichment Status */}
-      <Card className="border-gold/20">
+      <Card className="border-[#B89555]/20">
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
-            <Zap className="w-5 h-5 text-gold" />
+            <Zap className="w-5 h-5 text-[#1A1A1A]" />
             Provident Enrichment Status
           </CardTitle>
         </CardHeader>
@@ -339,10 +339,10 @@ export function ProvidentPortalHub() {
       </Card>
 
       {/* Scrape Timestamps */}
-      <Card className="border-gold/20">
+      <Card className="border-[#B89555]/20">
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-gold" />
+            <Calendar className="w-5 h-5 text-[#1A1A1A]" />
             Scraping History
           </CardTitle>
         </CardHeader>
@@ -372,10 +372,10 @@ export function ProvidentPortalHub() {
       </Card>
 
       {/* Auto-Publish & Data Integrity */}
-      <Card className="border-gold/20">
+      <Card className="border-[#B89555]/20">
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-gold" />
+            <ShieldCheck className="w-5 h-5 text-[#1A1A1A]" />
             Data Quality & Auto-Publish
           </CardTitle>
         </CardHeader>
@@ -393,7 +393,7 @@ export function ProvidentPortalHub() {
               onClick={handleIntegrityCheck}
               disabled={isCheckingIntegrity}
               variant="outline"
-              className="border-gold/30"
+              className="border-[#B89555]/30"
             >
               {isCheckingIntegrity ? <RefreshCw className="h-4 w-4 mr-2 animate-spin" /> : <ShieldCheck className="h-4 w-4 mr-2" />}
               Data Integrity Check
@@ -415,10 +415,10 @@ export function ProvidentPortalHub() {
       </Card>
 
       {/* Provident Firecrawl Extraction Tools */}
-      <Card className="border-gold/20">
+      <Card className="border-[#B89555]/20">
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
-            <CloudDownload className="w-5 h-5 text-gold" />
+            <CloudDownload className="w-5 h-5 text-[#1A1A1A]" />
             Provident Firecrawl Extraction
           </CardTitle>
           <p className="text-sm text-muted-foreground">
@@ -430,7 +430,7 @@ export function ProvidentPortalHub() {
             <Button
               onClick={handleProvidentExtract}
               disabled={isProvidentExtracting || isFullProvidentRunning}
-              className="bg-gold hover:bg-gold/90 text-white"
+              className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-white"
             >
               {isProvidentExtracting ? (
                 <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />Extracting...</>
@@ -442,7 +442,7 @@ export function ProvidentPortalHub() {
               onClick={handleFullProvidentExtract}
               disabled={isProvidentExtracting || isFullProvidentRunning}
               variant="outline"
-              className="border-gold/30 text-foreground hover:bg-gold/10"
+              className="border-[#B89555]/30 text-foreground hover:bg-[#EFE6D6]/10"
             >
               {isFullProvidentRunning ? (
                 <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />Running Full...</>
@@ -453,10 +453,10 @@ export function ProvidentPortalHub() {
           </div>
 
           {isFullProvidentRunning && (
-            <div className="bg-muted/30 rounded-xl p-4 border border-gold/20">
+            <div className="bg-muted/30 rounded-xl p-4 border border-[#B89555]/20">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <RefreshCw className="h-5 w-5 text-gold animate-spin" />
+                  <RefreshCw className="h-5 w-5 text-[#1A1A1A] animate-spin" />
                   <span className="font-medium text-sm">Running full extraction...</span>
                 </div>
                 <Button variant="outline" size="sm" className="border-destructive/30 text-destructive" onClick={() => setFullProvidentStopRequested(true)}>Stop</Button>
@@ -471,7 +471,7 @@ export function ProvidentPortalHub() {
           )}
 
           {providentResult && !isFullProvidentRunning && (
-            <div className="bg-muted/30 rounded-xl p-4 border border-gold/20">
+            <div className="bg-muted/30 rounded-xl p-4 border border-[#B89555]/20">
               <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                 <div className="bg-emerald-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-emerald-700">{providentResult.processed || 0}</p><p className="text-xs text-muted-foreground">Processed</p></div>
                 <div className="bg-blue-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-blue-700">{providentResult.total_pdfs_found || 0}</p><p className="text-xs text-muted-foreground">PDFs Found</p></div>

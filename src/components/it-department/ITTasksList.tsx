@@ -130,7 +130,7 @@ const ITTasksList: React.FC<ITTasksListProps> = ({ searchQuery, onRefresh }) => 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="w-8 h-8 text-gold animate-spin" />
+        <Loader2 className="w-8 h-8 text-[#1A1A1A] animate-spin" />
       </div>
     );
   }
@@ -169,9 +169,9 @@ const ITTasksList: React.FC<ITTasksListProps> = ({ searchQuery, onRefresh }) => 
 
       {/* Tasks List */}
       {filteredTasks.length === 0 ? (
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
           <CardContent className="py-12 text-center">
-            <FileText className="w-12 h-12 text-gold mx-auto mb-4" />
+            <FileText className="w-12 h-12 text-[#1A1A1A] mx-auto mb-4" />
             <p className="text-[#1A1A1A]/60">No tasks found</p>
           </CardContent>
         </Card>
@@ -192,11 +192,11 @@ const ITTasksList: React.FC<ITTasksListProps> = ({ searchQuery, onRefresh }) => 
                   exit={{ opacity: 0, x: 20 }}
                   transition={{ delay: index * 0.03 }}
                 >
-                  <Card className="bg-[#FDFBF7] border-2 border-gold/30 hover:border-gold/50 transition-all">
+                  <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 hover:border-[#B89555]/50 transition-all">
                     <CardContent className="py-4">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                          <div className={`w-10 h-10 rounded-lg ${typeConfig?.color || 'bg-zinc-400'} flex items-center justify-center`}>
+                          <div className={`w-10 h-10 rounded-lg ${typeConfig?.color || 'bg-[#B89555]'} flex items-center justify-center`}>
                             <FileText className="w-5 h-5 text-white" />
                           </div>
                           <div>
@@ -231,10 +231,10 @@ const ITTasksList: React.FC<ITTasksListProps> = ({ searchQuery, onRefresh }) => 
                                 <MoreVertical className="w-4 h-4" />
                               </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent className="bg-[#FDFBF7] border-2 border-gold/30">
+                            <DropdownMenuContent className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
                               {task.status === 'open' && (
                                 <DropdownMenuItem 
-                                  className="text-blue-600 hover:bg-gold/10"
+                                  className="text-blue-600 hover:bg-[#EFE6D6]/10"
                                   onClick={() => handleStatusChange(task.id, 'in_progress')}
                                 >
                                   <Play className="w-4 h-4 mr-2" /> Start Task
@@ -243,13 +243,13 @@ const ITTasksList: React.FC<ITTasksListProps> = ({ searchQuery, onRefresh }) => 
                               {task.status === 'in_progress' && (
                                 <>
                                   <DropdownMenuItem 
-                                    className="text-purple-600 hover:bg-gold/10"
+                                    className="text-purple-600 hover:bg-[#EFE6D6]/10"
                                     onClick={() => handleStatusChange(task.id, 'pending_review')}
                                   >
                                     <Clock className="w-4 h-4 mr-2" /> Send for Review
                                   </DropdownMenuItem>
                                   <DropdownMenuItem 
-                                    className="text-green-600 hover:bg-gold/10"
+                                    className="text-green-600 hover:bg-[#EFE6D6]/10"
                                     onClick={() => handleStatusChange(task.id, 'completed')}
                                   >
                                     <Check className="w-4 h-4 mr-2" /> Mark Complete
@@ -258,7 +258,7 @@ const ITTasksList: React.FC<ITTasksListProps> = ({ searchQuery, onRefresh }) => 
                               )}
                               {task.status === 'pending_review' && (
                                 <DropdownMenuItem 
-                                  className="text-green-600 hover:bg-gold/10"
+                                  className="text-green-600 hover:bg-[#EFE6D6]/10"
                                   onClick={() => handleStatusChange(task.id, 'completed')}
                                 >
                                   <Check className="w-4 h-4 mr-2" /> Approve & Complete
@@ -266,7 +266,7 @@ const ITTasksList: React.FC<ITTasksListProps> = ({ searchQuery, onRefresh }) => 
                               )}
                               {task.status !== 'completed' && task.status !== 'cancelled' && (
                                 <DropdownMenuItem 
-                                  className="text-red-500 hover:bg-gold/10"
+                                  className="text-red-500 hover:bg-[#EFE6D6]/10"
                                   onClick={() => handleStatusChange(task.id, 'cancelled')}
                                 >
                                   <X className="w-4 h-4 mr-2" /> Cancel Task

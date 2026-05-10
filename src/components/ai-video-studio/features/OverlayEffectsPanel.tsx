@@ -71,7 +71,7 @@ export function OverlayEffectsPanel({
         <div className="p-3 space-y-4">
           {/* Header hint */}
           <div className="flex items-center gap-2 p-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
-            <Eye className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+            <Eye className="w-3.5 h-3.5 text-[#1A1A1A] shrink-0" />
             <p className="text-xs text-amber-300">
               <span className="font-semibold">Hover</span> for a live burst preview ·{' '}
               <span className="font-semibold">Click</span> to lock on canvas ·{' '}
@@ -107,7 +107,7 @@ export function OverlayEffectsPanel({
 
                         {/* Lock badge */}
                         {isLocked && (
-                          <div className="absolute top-0.5 right-0.5 flex items-center gap-0.5 text-[7px] font-bold text-amber-400 bg-[#1A1A1A]/70 px-1 py-0.5 rounded-full animate-pulse">
+                          <div className="absolute top-0.5 right-0.5 flex items-center gap-0.5 text-[7px] font-bold text-[#1A1A1A] bg-[#1A1A1A]/70 px-1 py-0.5 rounded-full animate-pulse">
                             <Lock className="w-1.5 h-1.5" />
                             ON
                           </div>

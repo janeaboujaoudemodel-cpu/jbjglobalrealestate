@@ -156,16 +156,16 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
   };
 
   return (
-    <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90 backdrop-blur-sm h-full flex flex-col overflow-hidden">
+    <Card className="border-2 border-[#B89555]/20 bg-[#FDFBF7]/90 backdrop-blur-sm h-full flex flex-col overflow-hidden">
       {/* Header */}
-      <CardHeader className="border-b border-gold/10 py-3 px-4 flex-shrink-0">
+      <CardHeader className="border-b border-[#B89555]/10 py-3 px-4 flex-shrink-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center border border-gold/20">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center border border-[#B89555]/20">
               {thread.contact_avatar_url ? (
                 <img src={thread.contact_avatar_url} alt="" className="w-full h-full rounded-full object-cover" />
               ) : (
-                <User className="h-5 w-5 text-gold" />
+                <User className="h-5 w-5 text-[#1A1A1A]" />
               )}
             </div>
             <div>
@@ -178,7 +178,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
 
           <div className="flex items-center gap-2">
             <Select value={thread.status} onValueChange={(v) => onStatusChange(v as ThreadStatus)}>
-              <SelectTrigger className="w-[130px] h-8 text-xs border-gold/30">
+              <SelectTrigger className="w-[130px] h-8 text-xs border-[#B89555]/30">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -194,7 +194,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
                 {thread.lead.full_name}
               </Badge>
             ) : (
-              <Button variant="outline" size="sm" className="h-8 text-xs border-gold/30">
+              <Button variant="outline" size="sm" className="h-8 text-xs border-[#B89555]/30">
                 <LinkIcon className="h-3 w-3 mr-1" />
                 Link to Lead
               </Button>
@@ -247,7 +247,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
                     <div className={`max-w-[75%] rounded-2xl px-4 py-3 ${
                       message.direction === 'outbound'
                         ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] rounded-tr-sm'
-                        : 'bg-[#FDFBF7] border border-gold/20 text-[#1A1A1A] rounded-tl-sm'
+                        : 'bg-[#FDFBF7] border border-[#B89555]/20 text-[#1A1A1A] rounded-tl-sm'
                     }`}>
                       {message.voice_url && (
                         <div className="flex items-center gap-2 mb-2">
@@ -263,8 +263,8 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
                               <Play className="h-4 w-4" />
                             )}
                           </Button>
-                          <div className="h-1 flex-1 bg-gold/20 rounded-full">
-                            <div className="h-full w-1/3 bg-gold rounded-full" />
+                          <div className="h-1 flex-1 bg-[#EFE6D6]/20 rounded-full">
+                            <div className="h-full w-1/3 bg-[#EFE6D6] rounded-full" />
                           </div>
                           <span className="text-xs text-[#1A1A1A]/70">
                             {message.voice_duration_seconds || 0}s
@@ -297,11 +297,11 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className="border-t border-gold/10 bg-gold/5 p-3"
+                className="border-t border-[#B89555]/10 bg-[#EFE6D6]/5 p-3"
               >
                 <div className="flex items-start justify-between gap-2 mb-2">
                   <div className="flex items-center gap-2">
-                    <Sparkles className="h-4 w-4 text-gold" />
+                    <Sparkles className="h-4 w-4 text-[#1A1A1A]" />
                     <span className="text-sm font-medium text-[#1A1A1A]">AI Draft — Jane Bou Jaoude's style</span>
                   </div>
                   <Button
@@ -328,7 +328,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
                     size="sm"
                     onClick={handleGenerateVoiceReply}
                     disabled={isGeneratingVoice}
-                    className="border-gold/30"
+                    className="border-[#B89555]/30"
                   >
                     {isGeneratingVoice ? (
                       <Loader2 className="h-3 w-3 mr-1 animate-spin" />
@@ -354,13 +354,13 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
           </AnimatePresence>
 
           {/* Reply Input */}
-          <div className="border-t border-gold/10 p-3 flex-shrink-0">
+          <div className="border-t border-[#B89555]/10 p-3 flex-shrink-0">
             <div className="flex items-end gap-2">
               <Textarea
                 value={replyText}
                 onChange={(e) => setReplyText(e.target.value)}
                 placeholder="Type your reply..."
-                className="min-h-[60px] max-h-[120px] resize-none border-gold/30"
+                className="min-h-[60px] max-h-[120px] resize-none border-[#B89555]/30"
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
@@ -372,14 +372,14 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
                 <Button
                   variant="outline"
                   size="icon"
-                  className="h-9 w-9 border-gold/30"
+                  className="h-9 w-9 border-[#B89555]/30"
                   onClick={handleGenerateAIReply}
                   disabled={isGenerating}
                 >
                   {isGenerating ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
-                    <Sparkles className="h-4 w-4 text-gold" />
+                    <Sparkles className="h-4 w-4 text-[#1A1A1A]" />
                   )}
                 </Button>
                 <Button
@@ -407,15 +407,15 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
           {thread.lead ? (
             <div className="space-y-4">
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center border-2 border-gold/30">
-                  <User className="h-8 w-8 text-gold" />
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center border-2 border-[#B89555]/30">
+                  <User className="h-8 w-8 text-[#1A1A1A]" />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-[#1A1A1A]">{thread.lead.full_name}</h3>
                   <p className="text-sm text-[#1A1A1A]/70">CRM Lead</p>
                 </div>
               </div>
-              <Button variant="outline" className="w-full border-gold/30">
+              <Button variant="outline" className="w-full border-[#B89555]/30">
                 View Full Lead Profile
               </Button>
             </div>
@@ -425,7 +425,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
               <p className="text-[#1A1A1A]/70 font-medium">Not linked to a lead</p>
               <p className="text-[#1A1A1A]/70 text-sm mt-1">Link this conversation to an existing lead or create a new one</p>
               <div className="flex gap-2 mt-4">
-                <Button variant="outline" className="border-gold/30">
+                <Button variant="outline" className="border-[#B89555]/30">
                   Link to Lead
                 </Button>
                 <Button variant="primary">
@@ -446,7 +446,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
         <TabsContent value="ai" className="flex-1 m-0 p-4 data-[state=inactive]:hidden">
           <div className="space-y-4">
             <h4 className="font-medium text-[#1A1A1A] flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-gold" />
+              <Sparkles className="h-4 w-4 text-[#1A1A1A]" />
               Quick Templates
             </h4>
             <div className="grid gap-2">
@@ -454,7 +454,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
                 <Button
                   key={template.id}
                   variant="outline"
-                  className="justify-start h-auto py-2 px-3 border-gold/20 text-left"
+                  className="justify-start h-auto py-2 px-3 border-[#B89555]/20 text-left"
                   onClick={() => setReplyText(template.content)}
                 >
                   <div>

@@ -123,7 +123,7 @@ export function BrokerToolkitSupport() {
                             <h3 className="font-semibold text-white truncate">{member.name}</h3>
                             <p className="text-white/70 text-sm mt-1">{member.description}</p>
                           </div>
-                          <ArrowRight className="w-5 h-5 text-pink-300 opacity-0 group-hover:opacity-100 group-hover:text-gold transition-all flex-shrink-0" />
+                          <ArrowRight className="w-5 h-5 text-pink-300 opacity-0 group-hover:opacity-100 group-hover:text-[#1A1A1A] transition-all flex-shrink-0" />
                         </div>
                       </CardContent>
                     </Card>
@@ -179,7 +179,7 @@ export function BrokerToolkitSupport() {
                             <h3 className="font-semibold text-white truncate">{member.name}</h3>
                             <p className="text-white/70 text-sm mt-1">{member.description}</p>
                           </div>
-                          <ArrowRight className="w-5 h-5 text-teal-300 opacity-0 group-hover:opacity-100 group-hover:text-gold transition-all flex-shrink-0" />
+                          <ArrowRight className="w-5 h-5 text-teal-300 opacity-0 group-hover:opacity-100 group-hover:text-[#1A1A1A] transition-all flex-shrink-0" />
                         </div>
                       </CardContent>
                     </Card>

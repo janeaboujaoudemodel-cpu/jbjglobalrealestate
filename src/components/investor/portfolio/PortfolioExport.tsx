@@ -42,10 +42,10 @@ export default function PortfolioExport({ investorName, assetCount, currentGroup
     <section className="space-y-4">
       <div className="flex items-center gap-2">
         <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
-          <Download className="w-5 h-5 text-gold" />
+          <Download className="w-5 h-5 text-[#1A1A1A]" />
           Portfolio Summary Export
         </h2>
-        <Badge className="bg-gold/20 text-gold border-gold/30">
+        <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30">
           <Star className="w-3 h-3 mr-1" />
           Premium
         </Badge>
@@ -54,14 +54,14 @@ export default function PortfolioExport({ investorName, assetCount, currentGroup
         Generate a clean portfolio summary for your records or to share with advisors.
       </p>
 
-      <Card className="border-2 border-gold/30">
+      <Card className="border-2 border-[#B89555]/30">
         <CardContent className="p-6">
           <div className="grid md:grid-cols-2 gap-6">
             {/* PDF Export */}
-            <div className="p-4 border border-gold/20 rounded-lg bg-gradient-to-br from-gold/5 to-transparent">
+            <div className="p-4 border border-[#B89555]/20 rounded-lg bg-gradient-to-br from-gold/5 to-transparent">
               <div className="flex items-start gap-3 mb-4">
-                <div className="w-10 h-10 bg-gold/20 rounded-lg flex items-center justify-center">
-                  <FileDown className="w-5 h-5 text-gold" />
+                <div className="w-10 h-10 bg-[#EFE6D6]/20 rounded-lg flex items-center justify-center">
+                  <FileDown className="w-5 h-5 text-[#1A1A1A]" />
                 </div>
                 <div>
                   <h3 className="font-medium text-foreground">PDF Summary</h3>
@@ -100,10 +100,10 @@ export default function PortfolioExport({ investorName, assetCount, currentGroup
             </div>
 
             {/* Shareable Link */}
-            <div className="p-4 border border-gold/20 rounded-lg bg-gradient-to-br from-gold/5 to-transparent">
+            <div className="p-4 border border-[#B89555]/20 rounded-lg bg-gradient-to-br from-gold/5 to-transparent">
               <div className="flex items-start gap-3 mb-4">
-                <div className="w-10 h-10 bg-gold/20 rounded-lg flex items-center justify-center">
-                  <Link2 className="w-5 h-5 text-gold" />
+                <div className="w-10 h-10 bg-[#EFE6D6]/20 rounded-lg flex items-center justify-center">
+                  <Link2 className="w-5 h-5 text-[#1A1A1A]" />
                 </div>
                 <div>
                   <h3 className="font-medium text-foreground">Shareable Link</h3>

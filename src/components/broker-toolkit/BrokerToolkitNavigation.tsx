@@ -49,13 +49,13 @@ export function BrokerToolkitNavigation({ activeSection, onSectionChange }: Brok
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-full whitespace-nowrap transition-all ${
                   isActive
                     ? isGrowth
-                      ? "bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] shadow-lg border border-gold/50"
+                      ? "bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] shadow-lg border border-[#B89555]/50"
                       : `${section.activeBg} text-white shadow-lg`
-                    : "bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#1A1A1A] text-[#1A1A1A] hover:border-gold"
+                    : "bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#1A1A1A] text-[#1A1A1A] hover:border-[#B89555]"
                 }`}
               >
-                <section.icon className={`w-4 h-4 ${isActive && isGrowth ? "text-[#1A1A1A]" : isActive ? "" : "text-gold"}`} />
-                <span className={`text-sm font-medium ${isActive && isGrowth ? "text-gold" : ""}`}>{section.label}</span>
+                <section.icon className={`w-4 h-4 ${isActive && isGrowth ? "text-[#1A1A1A]" : isActive ? "" : "text-[#1A1A1A]"}`} />
+                <span className={`text-sm font-medium ${isActive && isGrowth ? "text-[#1A1A1A]" : ""}`}>{section.label}</span>
               </button>
             );
           })}

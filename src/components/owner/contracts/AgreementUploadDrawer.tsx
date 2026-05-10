@@ -207,7 +207,7 @@ export function AgreementUploadDrawer({ open, onOpenChange }: Props) {
               onClick={() => inputRef.current?.click()}
               className={cn(
                 "border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition",
-                dragging ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]" : "border-gold/30 hover:border-gold/60 bg-[#F7F2EA]",
+                dragging ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]" : "border-[#B89555]/30 hover:border-[#B89555]/60 bg-[#F7F2EA]",
               )}
             >
               <Upload className="h-8 w-8 mx-auto text-[#1A1A1A]/60 mb-2" />
@@ -219,7 +219,7 @@ export function AgreementUploadDrawer({ open, onOpenChange }: Props) {
           )}
 
           {file && (
-            <div className="bg-[#F7F2EA] border border-gold/20 rounded-xl p-3 flex items-center gap-3">
+            <div className="bg-[#F7F2EA] border border-[#B89555]/20 rounded-xl p-3 flex items-center gap-3">
               <FileText className="h-5 w-5 text-[hsl(var(--gold))] shrink-0" />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-[#1A1A1A] truncate">{file.name}</p>
@@ -240,11 +240,11 @@ export function AgreementUploadDrawer({ open, onOpenChange }: Props) {
 
           {extracted && (
             <div className="space-y-3">
-              <div className="bg-[#F7F2EA] border border-gold/20 rounded-xl p-4 space-y-2">
+              <div className="bg-[#F7F2EA] border border-[#B89555]/20 rounded-xl p-4 space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-xs uppercase tracking-wider text-[#1A1A1A]/60">AI Match</span>
                   {match?.developer_id ? (
-                    <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-gold/40">
+                    <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">
                       <CheckCircle2 className="h-3 w-3 mr-1" />
                       {Math.round((match?.confidence ?? 0) * 100)}% confident
                     </Badge>
@@ -267,10 +267,10 @@ export function AgreementUploadDrawer({ open, onOpenChange }: Props) {
                         placeholder="Search developer by name…"
                         value={devSearch}
                         onChange={(e) => searchDevs(e.target.value)}
-                        className="bg-[#FDFBF7] border-gold/30"
+                        className="bg-[#FDFBF7] border-[#B89555]/30"
                       />
                       {devOptions.length > 0 && (
-                        <div className="border border-gold/20 rounded-lg bg-[#FDFBF7] max-h-40 overflow-auto">
+                        <div className="border border-[#B89555]/20 rounded-lg bg-[#FDFBF7] max-h-40 overflow-auto">
                           {devOptions.map((d) => (
                             <button key={d.id} onClick={() => { setDeveloperId(d.id); setDevSearch(d.name); setDevOptions([]); }}
                               className="block w-full text-left px-3 py-2 text-sm text-[#1A1A1A] hover:bg-[#F7F2EA]">
@@ -303,7 +303,7 @@ export function AgreementUploadDrawer({ open, onOpenChange }: Props) {
                 </div>
 
                 {extracted.summary && (
-                  <div className="pt-2 border-t border-gold/15">
+                  <div className="pt-2 border-t border-[#B89555]/15">
                     <p className="text-xs text-[#1A1A1A]/70 mb-1">Summary</p>
                     <p className="text-xs text-[#1A1A1A]/80 leading-relaxed">{extracted.summary}</p>
                   </div>

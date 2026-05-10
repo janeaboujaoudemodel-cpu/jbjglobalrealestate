@@ -33,10 +33,10 @@ export default function ExistingProjectsReview({ developerName }: Props) {
   const incomplete = existingProjects.filter(p => !p.description || !p.price_from);
 
   return (
-    <Card className="border-2 border-gold/30">
+    <Card className="border-2 border-[#B89555]/30">
       <CardHeader className="pb-3">
         <CardTitle className="text-base flex items-center gap-2">
-          <Building2 className="w-5 h-5 text-gold" />
+          <Building2 className="w-5 h-5 text-[#1A1A1A]" />
           Your Published Projects ({published.length})
         </CardTitle>
         <p className="text-xs text-muted-foreground">
@@ -53,7 +53,7 @@ export default function ExistingProjectsReview({ developerName }: Props) {
         <ScrollArea className="max-h-[300px]">
           <div className="space-y-2">
             {existingProjects.slice(0, 20).map(p => (
-              <div key={p.id} className="flex items-center gap-3 p-3 rounded-lg border border-gold/15 hover:bg-muted/50 transition-colors">
+              <div key={p.id} className="flex items-center gap-3 p-3 rounded-lg border border-[#B89555]/15 hover:bg-muted/50 transition-colors">
                 {p.cover_image_url ? (
                   <img src={p.cover_image_url} alt={p.name} className="w-14 h-10 object-cover rounded" />
                 ) : (
@@ -76,7 +76,7 @@ export default function ExistingProjectsReview({ developerName }: Props) {
                     )}
                   </div>
                 </div>
-                <Link to={`/project/${p.slug}`} className="text-gold hover:text-[#1A1A1A] shrink-0">
+                <Link to={`/project/${p.slug}`} className="text-[#1A1A1A] hover:text-[#1A1A1A] shrink-0">
                   <ExternalLink className="w-4 h-4" />
                 </Link>
               </div>

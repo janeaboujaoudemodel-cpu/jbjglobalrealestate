@@ -97,10 +97,10 @@ export function PublishPanel({ isOpen, onClose, projectId, property, exportedUrl
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-3xl bg-slate-900 border-gold/30">
+      <DialogContent className="sm:max-w-3xl bg-slate-900 border-[#B89555]/30">
         <DialogHeader>
           <DialogTitle className="text-white flex items-center gap-2">
-            <Share2 className="w-5 h-5 text-gold" />
+            <Share2 className="w-5 h-5 text-[#1A1A1A]" />
             Publish & Share
           </DialogTitle>
         </DialogHeader>
@@ -125,7 +125,7 @@ export function PublishPanel({ isOpen, onClose, projectId, property, exportedUrl
                     onClick={() => togglePlatform(platform.id)}
                     className={`p-4 rounded-xl border transition-all ${
                       isSelected
-                        ? 'bg-gold/10 border-gold'
+                        ? 'bg-[#EFE6D6]/10 border-[#B89555]'
                         : 'bg-slate-800/50 border-slate-700 hover:border-slate-600'
                     }`}
                   >
@@ -135,7 +135,7 @@ export function PublishPanel({ isOpen, onClose, projectId, property, exportedUrl
                       {isConnected ? 'Connected' : 'Use share link'}
                     </p>
                     {isSelected && (
-                      <Check className="w-4 h-4 text-gold mx-auto mt-2" />
+                      <Check className="w-4 h-4 text-[#1A1A1A] mx-auto mt-2" />
                     )}
                   </button>
                 );
@@ -150,7 +150,7 @@ export function PublishPanel({ isOpen, onClose, projectId, property, exportedUrl
                   readOnly
                   className="bg-slate-900 border-slate-600 text-slate-300 text-sm"
                 />
-                <Button onClick={handleCopyShareLink} variant="outline" className="border-gold text-gold hover:bg-gold/10">
+                <Button onClick={handleCopyShareLink} variant="outline" className="border-[#B89555] text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                   {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                 </Button>
               </div>
@@ -172,7 +172,7 @@ export function PublishPanel({ isOpen, onClose, projectId, property, exportedUrl
                   </SelectContent>
                 </Select>
               </div>
-              <Button onClick={handleGenerateCaptions} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
+              <Button onClick={handleGenerateCaptions} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
                 <MessageSquare className="w-4 h-4 mr-2" />
                 Generate All
               </Button>
@@ -196,7 +196,7 @@ export function PublishPanel({ isOpen, onClose, projectId, property, exportedUrl
                   />
                   <div className="flex flex-wrap gap-1">
                     {(hashtags[platform] || []).map((tag, i) => (
-                      <span key={i} className="px-2 py-0.5 text-xs rounded-full bg-gold/20 text-gold">
+                      <span key={i} className="px-2 py-0.5 text-xs rounded-full bg-[#EFE6D6]/20 text-[#1A1A1A]">
                         {tag}
                       </span>
                     ))}
@@ -209,7 +209,7 @@ export function PublishPanel({ isOpen, onClose, projectId, property, exportedUrl
           <TabsContent value="schedule" className="space-y-4 mt-4">
             <div className="p-6 rounded-xl bg-slate-800/50 border border-slate-700 space-y-4">
               <div className="flex items-center gap-2 text-slate-300">
-                <Calendar className="w-5 h-5 text-gold" />
+                <Calendar className="w-5 h-5 text-[#1A1A1A]" />
                 <span className="font-medium">Schedule Posts</span>
               </div>
 
@@ -235,7 +235,7 @@ export function PublishPanel({ isOpen, onClose, projectId, property, exportedUrl
               </div>
 
               <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/30">
-                <p className="text-xs text-amber-400">
+                <p className="text-xs text-[#1A1A1A]">
                   <Clock className="w-3 h-3 inline mr-1" />
                   Direct publishing requires connected accounts. Use share links for immediate sharing.
                 </p>
@@ -251,7 +251,7 @@ export function PublishPanel({ isOpen, onClose, projectId, property, exportedUrl
           <Button
             onClick={handleSchedule}
             disabled={isScheduling || selectedPlatforms.length === 0}
-            className="bg-gold hover:bg-gold/90 text-[#1A1A1A]"
+            className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]"
           >
             {isScheduling ? (
               <>

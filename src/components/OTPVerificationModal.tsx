@@ -164,7 +164,7 @@ const OTPVerificationModal = forwardRef<HTMLDivElement, OTPVerificationModalProp
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="bg-zinc-900 border border-[#1A1A1A] text-white sm:max-w-md">
+      <DialogContent className="bg-[#FDFBF7] border border-[#1A1A1A] text-white sm:max-w-md">
         {/* Gold accent line */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
 
@@ -179,11 +179,11 @@ const OTPVerificationModal = forwardRef<HTMLDivElement, OTPVerificationModalProp
         ) : (
           <>
             <DialogHeader className="text-center">
-              <div className="w-14 h-14 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center mx-auto mb-4">
+              <div className="w-14 h-14 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-xl flex items-center justify-center mx-auto mb-4">
                 {type === 'email' ? (
-                  <Mail className="w-7 h-7 text-gold" />
+                  <Mail className="w-7 h-7 text-[#1A1A1A]" />
                 ) : (
-                  <Phone className="w-7 h-7 text-gold" />
+                  <Phone className="w-7 h-7 text-[#1A1A1A]" />
                 )}
               </div>
               <DialogTitle className="text-xl font-bold text-white">
@@ -191,7 +191,7 @@ const OTPVerificationModal = forwardRef<HTMLDivElement, OTPVerificationModalProp
               </DialogTitle>
               <DialogDescription className="text-white/70 mt-2">
                 We've sent a 6-digit code to:
-                <span dir="ltr" className="block text-gold font-medium mt-1 text-base tracking-wide">
+                <span dir="ltr" className="block text-[#1A1A1A] font-medium mt-1 text-base tracking-wide">
                   {type === 'phone' ? value.replace(/[^\d+\s-]/g, '') : value}
                 </span>
               </DialogDescription>
@@ -210,7 +210,7 @@ const OTPVerificationModal = forwardRef<HTMLDivElement, OTPVerificationModalProp
                     value={digit}
                     onChange={(e) => handleInputChange(index, e.target.value)}
                     onKeyDown={(e) => handleKeyDown(index, e)}
-                    className={`w-12 h-14 text-center text-2xl font-bold bg-zinc-800 border-[#1A1A1A] text-white focus:border-gold rounded-lg ${
+                    className={`w-12 h-14 text-center text-2xl font-bold bg-[#1A1A1A] border-[#1A1A1A] text-white focus:border-[#B89555] rounded-lg ${
                       error ? 'border-red-500' : ''
                     }`}
                     autoFocus={index === 0}
@@ -227,7 +227,7 @@ const OTPVerificationModal = forwardRef<HTMLDivElement, OTPVerificationModalProp
               <Button
                 onClick={verifyOTP}
                 disabled={isVerifying || otp.some(d => !d)}
-                className="w-full h-12 bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold"
+                className="w-full h-12 bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-semibold"
               >
                 {isVerifying ? (
                   <>
@@ -249,7 +249,7 @@ const OTPVerificationModal = forwardRef<HTMLDivElement, OTPVerificationModalProp
                     sendOTP();
                   }}
                   disabled={countdown > 0 || isSending}
-                  className="text-gold hover:text-[#1A1A1A] hover:bg-gold/10"
+                  className="text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                 >
                   {isSending ? (
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />

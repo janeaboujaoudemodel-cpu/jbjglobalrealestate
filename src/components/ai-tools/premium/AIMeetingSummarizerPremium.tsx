@@ -578,18 +578,18 @@ const AIMeetingSummarizerPremium = () => {
     <AIToolPremiumLayout
       title="AI Meeting Summarizer & CRM Assistant"
       subtitle="Record sessions, transcribe any language, extract action items, and sync with CRM"
-      icon={<Brain className="h-8 w-8 text-gold" />}
+      icon={<Brain className="h-8 w-8 text-[#1A1A1A]" />}
       accentColor="violet"
       gradientFrom="violet"
       badge="Meeting Intelligence + CRM"
     >
       <div className="space-y-6">
         {/* Meeting Details */}
-        <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/30 shadow-md">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/30 shadow-md">
           <CardContent className="p-6 space-y-5">
             <div className="flex items-center gap-2 mb-2">
               <div className="w-8 h-8 rounded-full bg-[#1A1A1A] flex items-center justify-center">
-                <FileAudio className="h-4 w-4 text-gold" />
+                <FileAudio className="h-4 w-4 text-[#1A1A1A]" />
               </div>
               <span className="font-semibold text-[#1A1A1A] text-lg">Meeting Details</span>
             </div>
@@ -597,23 +597,23 @@ const AIMeetingSummarizerPremium = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-1.5">
                 <Label className="text-[#1A1A1A]/70 text-sm flex items-center gap-1.5">
-                  <Calendar className="h-3.5 w-3.5 text-gold" />
+                  <Calendar className="h-3.5 w-3.5 text-[#1A1A1A]" />
                   Meeting Title
                 </Label>
                 <Input
                   placeholder="Client Discovery Call - Palm Jumeirah"
                   value={formData.meetingTitle}
                   onChange={(e) => handleChange("meetingTitle", e.target.value)}
-                  className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold focus:ring-gold/20"
+                  className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] focus:ring-gold/20"
                 />
               </div>
               <div className="space-y-1.5">
                 <Label className="text-[#1A1A1A]/70 text-sm flex items-center gap-1.5">
-                  <Video className="h-3.5 w-3.5 text-gold" />
+                  <Video className="h-3.5 w-3.5 text-[#1A1A1A]" />
                   Session Type
                 </Label>
                 <Select value={sessionType} onValueChange={setSessionType}>
-                  <SelectTrigger className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] focus:border-gold focus:ring-gold/20">
+                  <SelectTrigger className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] focus:border-[#B89555] focus:ring-gold/20">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -627,23 +627,23 @@ const AIMeetingSummarizerPremium = () => {
               </div>
               <div className="space-y-1.5">
                 <Label className="text-[#1A1A1A]/70 text-sm flex items-center gap-1.5">
-                  <Users className="h-3.5 w-3.5 text-gold" />
+                  <Users className="h-3.5 w-3.5 text-[#1A1A1A]" />
                   Participants
                 </Label>
                 <Input
                   placeholder="John Smith (Client), Sarah Ahmed (Agent)"
                   value={formData.participants}
                   onChange={(e) => handleChange("participants", e.target.value)}
-                  className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold focus:ring-gold/20"
+                  className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] focus:ring-gold/20"
                 />
               </div>
             </div>
 
             {/* CRM Lead Link Section */}
-            <div className="bg-[#FDFBF7] border border-gold/20 rounded-xl p-4 space-y-3">
+            <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl p-4 space-y-3">
               <div className="flex items-center gap-2">
                 <div className="w-7 h-7 rounded-full bg-[#1A1A1A] flex items-center justify-center">
-                  <Search className="h-3.5 w-3.5 text-gold" />
+                  <Search className="h-3.5 w-3.5 text-[#1A1A1A]" />
                 </div>
                 <span className="text-[#1A1A1A] font-semibold text-sm">Link to CRM Lead</span>
               </div>
@@ -674,9 +674,9 @@ const AIMeetingSummarizerPremium = () => {
                       placeholder="Search by name or phone..."
                       value={leadSearch}
                       onChange={(e) => setLeadSearch(e.target.value)}
-                      className="pl-10 bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
+                      className="pl-10 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
                     />
-                    {searchingLeads && <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gold animate-spin" />}
+                    {searchingLeads && <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A] animate-spin" />}
                   </div>
 
                   {leadSearchResults.length > 0 && (
@@ -685,7 +685,7 @@ const AIMeetingSummarizerPremium = () => {
                         <button
                           key={lead.id}
                           onClick={() => handleSelectLead(lead)}
-                          className="w-full text-left p-2 rounded-lg hover:bg-gold/10 border border-transparent hover:border-gold/30 transition-colors"
+                          className="w-full text-left p-2 rounded-lg hover:bg-[#EFE6D6]/10 border border-transparent hover:border-[#B89555]/30 transition-colors"
                         >
                           <p className="text-[#1A1A1A] font-medium text-sm">{lead.full_name}</p>
                           <p className="text-[#1A1A1A]/70 text-xs">{lead.phone_e164 || lead.email_lower || "No contact"}</p>
@@ -715,7 +715,7 @@ const AIMeetingSummarizerPremium = () => {
                         size="sm"
                         onClick={handleCreateNewLead}
                         disabled={creatingLead || !newLeadName.trim()}
-                        className="w-full bg-[#1A1A1A] hover:bg-[#1A1A1A] text-gold text-xs"
+                        className="w-full bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A] text-xs"
                       >
                         {creatingLead ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <UserPlus className="h-3 w-3 mr-1" />}
                         Create & Link Lead
@@ -736,20 +736,20 @@ const AIMeetingSummarizerPremium = () => {
             />
 
             {/* Live Recording Section */}
-            <div className="bg-[#FDFBF7] border border-gold/20 rounded-xl p-5 space-y-4 shadow-sm">
+            <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl p-5 space-y-4 shadow-sm">
               <div className="flex items-center justify-between flex-wrap gap-2">
                 <div className="flex items-center gap-2.5">
                   <div className="w-8 h-8 rounded-full bg-[#1A1A1A] flex items-center justify-center">
-                    <Mic className="h-4 w-4 text-gold" />
+                    <Mic className="h-4 w-4 text-[#1A1A1A]" />
                   </div>
                   <span className="text-[#1A1A1A] font-semibold">Live Session Recorder</span>
                 </div>
                 
                 {/* Translation Language Selector */}
                 <div className="flex items-center gap-2">
-                  <Globe className="h-4 w-4 text-gold" />
+                  <Globe className="h-4 w-4 text-[#1A1A1A]" />
                   <Select value={translationLang} onValueChange={setTranslationLang}>
-                    <SelectTrigger className="w-[140px] h-8 text-xs bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]">
+                    <SelectTrigger className="w-[140px] h-8 text-xs bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -768,7 +768,7 @@ const AIMeetingSummarizerPremium = () => {
                   <Button
                     type="button"
                     onClick={startRecording}
-                    className="bg-[#1A1A1A] hover:bg-[#1A1A1A] text-gold shadow-lg shadow-black/20 px-6"
+                    className="bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A] shadow-lg shadow-black/20 px-6"
                     size="lg"
                   >
                     <Mic className="h-4 w-4 mr-2" /> Start Recording Session
@@ -809,7 +809,7 @@ const AIMeetingSummarizerPremium = () => {
                 )}
                 
                 {isTranscribing && (
-                  <span className="text-gold text-xs flex items-center gap-1.5 font-medium">
+                  <span className="text-[#1A1A1A] text-xs flex items-center gap-1.5 font-medium">
                     <Loader2 className="h-3 w-3 animate-spin" /> Transcribing...
                   </span>
                 )}
@@ -858,15 +858,15 @@ const AIMeetingSummarizerPremium = () => {
               {liveTranscript.length > 0 && (
                 <div
                   ref={transcriptContainerRef}
-                  className="bg-[#FDFBF7] border border-gold/15 rounded-lg p-3 max-h-[200px] overflow-y-auto space-y-2"
+                  className="bg-[#FDFBF7] border border-[#B89555]/15 rounded-lg p-3 max-h-[200px] overflow-y-auto space-y-2"
                 >
-                  <p className="text-gold text-[10px] uppercase tracking-wider font-semibold mb-1">Live Transcript</p>
+                  <p className="text-[#1A1A1A] text-[10px] uppercase tracking-wider font-semibold mb-1">Live Transcript</p>
                   {liveTranscript.map((entry, i) => (
                     <div key={i} className="text-sm space-y-0.5">
                       {entry.translated ? (
                         <>
                           <p className="text-[#1A1A1A]/70">
-                            <span className="text-gold text-xs font-medium">[{entry.lang || 'Original'}]</span> {entry.original}
+                            <span className="text-[#1A1A1A] text-xs font-medium">[{entry.lang || 'Original'}]</span> {entry.original}
                           </p>
                           <p className="text-[#1A1A1A] font-medium">
                             <span className="text-emerald-600 text-xs font-medium">[English]</span> {entry.translated}
@@ -888,12 +888,12 @@ const AIMeetingSummarizerPremium = () => {
 
             {/* AI Response Generator — visible LIVE during recording */}
             {showLiveTools && (
-              <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/30">
+              <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/30">
                 <CardContent className="p-5 space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="w-7 h-7 rounded-full bg-[#1A1A1A] flex items-center justify-center">
-                        <MessageSquare className="h-3.5 w-3.5 text-gold" />
+                        <MessageSquare className="h-3.5 w-3.5 text-[#1A1A1A]" />
                       </div>
                       <h4 className="font-semibold text-[#1A1A1A]">AI Follow-up Response</h4>
                     </div>
@@ -901,19 +901,19 @@ const AIMeetingSummarizerPremium = () => {
                       size="sm"
                       onClick={handleGenerateResponse}
                       disabled={generatingResponse}
-                      className="bg-[#1A1A1A] hover:bg-[#1A1A1A] text-gold text-xs"
+                      className="bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A] text-xs"
                     >
                       {generatingResponse ? <><Loader2 className="h-3 w-3 mr-1 animate-spin" /> Generating...</> : <><Send className="h-3 w-3 mr-1" /> Generate Response</>}
                     </Button>
                   </div>
                   {generatedResponse && (
-                    <div className="bg-[#FDFBF7] border border-gold/15 p-4 rounded-lg space-y-2">
+                    <div className="bg-[#FDFBF7] border border-[#B89555]/15 p-4 rounded-lg space-y-2">
                       <p className="text-[#1A1A1A]/70 text-sm whitespace-pre-wrap">{generatedResponse}</p>
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => copyToClipboard(generatedResponse)}
-                        className="text-xs border-gold/30 text-gold hover:bg-gold/10"
+                        className="text-xs border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                       >
                         <Copy className="h-3 w-3 mr-1" /> Copy Message
                       </Button>
@@ -925,14 +925,14 @@ const AIMeetingSummarizerPremium = () => {
 
             {/* CRM Tools — visible LIVE during recording */}
             {showLiveTools && (
-              <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/30">
+              <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/30">
                 <CardContent className="p-5">
                   <Tabs defaultValue="properties">
-                    <TabsList className="bg-[#FDFBF7] border border-gold/20 w-full">
-                      <TabsTrigger value="properties" className="flex-1 data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-gold text-[#1A1A1A]/70">
+                    <TabsList className="bg-[#FDFBF7] border border-[#B89555]/20 w-full">
+                      <TabsTrigger value="properties" className="flex-1 data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]/70">
                         <Home className="h-4 w-4 mr-1" /> Properties
                       </TabsTrigger>
-                      <TabsTrigger value="mortgage" className="flex-1 data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-gold text-[#1A1A1A]/70">
+                      <TabsTrigger value="mortgage" className="flex-1 data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]/70">
                         <Calculator className="h-4 w-4 mr-1" /> Mortgage
                       </TabsTrigger>
                     </TabsList>
@@ -943,7 +943,7 @@ const AIMeetingSummarizerPremium = () => {
                         onClick={handlePropertySearch}
                         disabled={searchingProperties}
                         size="sm"
-                        className="bg-[#1A1A1A] hover:bg-[#1A1A1A] text-gold"
+                        className="bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A]"
                       >
                         {searchingProperties ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <Home className="h-4 w-4 mr-1" />}
                         Find Matching Properties
@@ -951,7 +951,7 @@ const AIMeetingSummarizerPremium = () => {
                       {propertyResults.length > 0 && (
                         <div className="space-y-2 mt-2">
                           {propertyResults.map((p) => (
-                            <a key={p.id} href={`/project/${p.slug}`} target="_blank" rel="noopener noreferrer" className="block bg-[#FDFBF7] border border-gold/15 rounded-lg p-3 hover:border-gold/40 transition-colors">
+                            <a key={p.id} href={`/project/${p.slug}`} target="_blank" rel="noopener noreferrer" className="block bg-[#FDFBF7] border border-[#B89555]/15 rounded-lg p-3 hover:border-[#B89555]/40 transition-colors">
                               <div className="flex justify-between items-start">
                                 <div>
                                   <p className="text-[#1A1A1A] text-sm font-medium">{p.name}</p>
@@ -971,14 +971,14 @@ const AIMeetingSummarizerPremium = () => {
                           placeholder="Property price (AED)"
                           value={mortgagePrice}
                           onChange={(e) => setMortgagePrice(e.target.value)}
-                          className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] focus:border-gold text-sm"
+                          className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] focus:border-[#B89555] text-sm"
                         />
-                        <Button onClick={handleMortgageCalc} size="sm" className="bg-[#1A1A1A] hover:bg-[#1A1A1A] text-gold">
+                        <Button onClick={handleMortgageCalc} size="sm" className="bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A]">
                           Calculate
                         </Button>
                       </div>
                       {mortgageResult && (
-                        <div className="bg-[#FDFBF7] border border-gold/15 rounded-lg p-3 space-y-1 text-sm">
+                        <div className="bg-[#FDFBF7] border border-[#B89555]/15 rounded-lg p-3 space-y-1 text-sm">
                           <p className="text-[#1A1A1A] font-medium">Mortgage Estimate</p>
                           <p className="text-[#1A1A1A]/70">Property: <span className="text-[#1A1A1A] font-medium">AED {mortgageResult.price.toLocaleString()}</span></p>
                           <p className="text-[#1A1A1A]/70">Down Payment (20%): <span className="text-[#1A1A1A] font-medium">AED {mortgageResult.down.toLocaleString()}</span></p>
@@ -1001,14 +1001,14 @@ const AIMeetingSummarizerPremium = () => {
                 value={formData.notes}
                 onChange={(e) => handleChange("notes", e.target.value)}
                 rows={8}
-                className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold focus:ring-gold/20"
+                className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] focus:ring-gold/20"
               />
             </div>
 
             <Button
               onClick={handleSubmit}
               disabled={loading}
-              className="w-full bg-[#1A1A1A] hover:bg-[#1A1A1A] text-gold font-semibold py-6 shadow-lg shadow-black/20 text-base"
+              className="w-full bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A] font-semibold py-6 shadow-lg shadow-black/20 text-base"
             >
               {loading ? (
                 <><Loader2 className="h-5 w-5 mr-2 animate-spin" /> Summarizing Meeting...</>
@@ -1026,14 +1026,14 @@ const AIMeetingSummarizerPremium = () => {
               {/* Action Items */}
               {response.actionItems && response.actionItems.length > 0 && (
                 <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
-                  <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/30 p-5">
+                  <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/30 p-5">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
                         <div className="w-7 h-7 rounded-full bg-[#1A1A1A] flex items-center justify-center">
-                          <ListChecks className="h-3.5 w-3.5 text-gold" />
+                          <ListChecks className="h-3.5 w-3.5 text-[#1A1A1A]" />
                         </div>
                         <h4 className="font-semibold text-[#1A1A1A]">Action Items</h4>
-                        <Badge className="bg-gold/10 text-gold border border-gold/30 text-xs">{response.actionItems.length}</Badge>
+                        <Badge className="bg-[#EFE6D6]/10 text-[#1A1A1A] border border-[#B89555]/30 text-xs">{response.actionItems.length}</Badge>
                       </div>
                       <Button
                         size="sm"
@@ -1041,7 +1041,7 @@ const AIMeetingSummarizerPremium = () => {
                         disabled={creatingTasks || tasksCreated}
                         className={tasksCreated
                           ? "bg-emerald-600 text-white text-xs"
-                          : "bg-[#1A1A1A] hover:bg-[#1A1A1A] text-gold text-xs"
+                          : "bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A] text-xs"
                         }
                       >
                         {tasksCreated ? <><Check className="h-3 w-3 mr-1" /> Synced + Follow-ups</> : creatingTasks ? <><Loader2 className="h-3 w-3 mr-1 animate-spin" /> Creating...</> : <><Plus className="h-3 w-3 mr-1" /> Create Tasks + Follow-ups</>}
@@ -1050,7 +1050,7 @@ const AIMeetingSummarizerPremium = () => {
                     <ul className="space-y-2.5">
                       {response.actionItems.map((item: any, idx: number) => (
                         <li key={idx} className="flex items-start gap-3 text-sm">
-                          <span className="w-6 h-6 rounded-full bg-[#1A1A1A] flex items-center justify-center flex-shrink-0 text-xs text-gold font-semibold">{idx + 1}</span>
+                          <span className="w-6 h-6 rounded-full bg-[#1A1A1A] flex items-center justify-center flex-shrink-0 text-xs text-[#1A1A1A] font-semibold">{idx + 1}</span>
                           <span className="text-[#1A1A1A]/70">{typeof item === "string" ? item : item.task || JSON.stringify(item)}</span>
                         </li>
                       ))}
@@ -1088,17 +1088,17 @@ const AIMeetingSummarizerPremium = () => {
 
               {/* Follow-ups */}
               {response.followUps && response.followUps.length > 0 && (
-                <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/30 p-5">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/30 p-5">
                   <div className="flex items-center gap-2 mb-3">
                     <div className="w-7 h-7 rounded-full bg-[#1A1A1A] flex items-center justify-center">
-                      <Calendar className="h-3.5 w-3.5 text-gold" />
+                      <Calendar className="h-3.5 w-3.5 text-[#1A1A1A]" />
                     </div>
                     <h4 className="font-semibold text-[#1A1A1A]">Follow-ups Required</h4>
                   </div>
                   <ul className="space-y-2">
                     {response.followUps.map((followUp: string, idx: number) => (
                       <li key={idx} className="text-sm text-[#1A1A1A]/70 flex items-start gap-2">
-                        <Clock className="h-4 w-4 mt-0.5 text-gold flex-shrink-0" />
+                        <Clock className="h-4 w-4 mt-0.5 text-[#1A1A1A] flex-shrink-0" />
                         {followUp}
                       </li>
                     ))}
@@ -1107,7 +1107,7 @@ const AIMeetingSummarizerPremium = () => {
               )}
 
               {/* Full Summary */}
-              <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/30">
+              <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/30">
                 <CardContent className="p-5">
                   <div className="flex items-center justify-between mb-4">
                     <h4 className="font-semibold text-[#1A1A1A]">Full Summary</h4>
@@ -1115,12 +1115,12 @@ const AIMeetingSummarizerPremium = () => {
                       variant="outline"
                       size="sm"
                       onClick={() => copyToClipboard()}
-                      className="border-gold/30 text-gold hover:bg-gold/10"
+                      className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                     >
                       {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                     </Button>
                   </div>
-                  <div className="bg-[#FDFBF7] border border-gold/15 p-4 rounded-lg text-[#1A1A1A]/70 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
+                  <div className="bg-[#FDFBF7] border border-[#B89555]/15 p-4 rounded-lg text-[#1A1A1A]/70 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
                     {response.summary || response.executiveSummary || "No summary generated."}
                   </div>
                 </CardContent>
@@ -1128,8 +1128,8 @@ const AIMeetingSummarizerPremium = () => {
             </motion.div>
           ) : !showLiveTools ? (
             <motion.div key="placeholder" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center justify-center py-16 text-center">
-              <div className="p-6 rounded-full bg-gold/10 border border-gold/20 mb-4">
-                <Brain className="h-12 w-12 text-gold" />
+              <div className="p-6 rounded-full bg-[#EFE6D6]/10 border border-[#B89555]/20 mb-4">
+                <Brain className="h-12 w-12 text-[#1A1A1A]" />
               </div>
               <h3 className="text-lg font-semibold text-[#1A1A1A]">Meeting Intelligence + CRM</h3>
               <p className="text-sm text-[#1A1A1A]/70 mt-2 max-w-sm">

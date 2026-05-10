@@ -97,10 +97,10 @@ export const FAQFloatingSidebar = ({
             exit={{ opacity: 0, x: 20 }}
             className="absolute right-full mr-4 top-0 w-64 z-50"
           >
-            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-xl p-4 shadow-xl">
+            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-xl p-4 shadow-xl">
               <div className="flex items-start gap-3 mb-3">
-                <div className="w-8 h-8 bg-gold/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <HelpCircle className="w-4 h-4 text-gold" />
+                <div className="w-8 h-8 bg-[#EFE6D6]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <HelpCircle className="w-4 h-4 text-[#1A1A1A]" />
                 </div>
                 <div>
                   <h4 className="font-semibold text-[#1A1A1A] text-sm mb-1">Quick Navigation</h4>
@@ -128,17 +128,17 @@ export const FAQFloatingSidebar = ({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-xl overflow-hidden shadow-lg max-h-[calc(100vh-200px)] jj-scrollbar-gold"
+        className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-xl overflow-hidden shadow-lg max-h-[calc(100vh-200px)] jj-scrollbar-gold"
       >
         {/* Header with minimize button */}
         <div className="flex items-center justify-between p-4 border-b border-[#B89555]/30 bg-gradient-to-r from-gold/5 to-transparent">
           <div className="flex items-center gap-2">
-            <List className="w-5 h-5 text-gold" />
+            <List className="w-5 h-5 text-[#1A1A1A]" />
             <h3 className="text-[#1A1A1A] font-semibold text-sm">{title}</h3>
           </div>
           <button
             onClick={() => setIsMinimized(!isMinimized)}
-            className="w-8 h-8 rounded-lg bg-[#F7F2EA] hover:bg-gold/10 flex items-center justify-center transition-colors"
+            className="w-8 h-8 rounded-lg bg-[#F7F2EA] hover:bg-[#EFE6D6]/10 flex items-center justify-center transition-colors"
             aria-label={isMinimized ? "Expand navigation" : "Minimize navigation"}
           >
             {isMinimized ? (
@@ -166,28 +166,28 @@ export const FAQFloatingSidebar = ({
                   className={cn(
                     "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm transition-all",
                     activeId === `category-${index}`
-                      ? "bg-gradient-to-r from-champagne-light via-champagne to-champagne-dark text-[#1A1A1A] font-medium shadow-md border border-gold/40"
-                      : "text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-gold/10 border border-transparent hover:border-gold/30"
+                      ? "bg-gradient-to-r from-champagne-light via-champagne to-champagne-dark text-[#1A1A1A] font-medium shadow-md border border-[#B89555]/40"
+                      : "text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10 border border-transparent hover:border-[#B89555]/30"
                   )}
                 >
                   <span className={cn(
                     "w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-medium flex-shrink-0",
                     activeId === `category-${index}`
-                      ? "bg-[#1A1A1A] text-gold"
-                      : "bg-gold/10 text-gold"
+                      ? "bg-[#1A1A1A] text-[#1A1A1A]"
+                      : "bg-[#EFE6D6]/10 text-[#1A1A1A]"
                   )}>
                     {index + 1}
                   </span>
                   {category.icon && <category.icon className={cn(
                     "w-3.5 h-3.5 flex-shrink-0",
-                    activeId === `category-${index}` ? "text-[#1A1A1A]" : "text-gold"
+                    activeId === `category-${index}` ? "text-[#1A1A1A]" : "text-[#1A1A1A]"
                   )} />}
                   <span className="flex-1 truncate text-xs">{category.title}</span>
                   <span className={cn(
                     "text-[10px] px-1.5 py-0.5 rounded-full",
                     activeId === `category-${index}`
                       ? "bg-[#1A1A1A]/10 text-[#1A1A1A]"
-                      : "bg-gold/10 text-gold"
+                      : "bg-[#EFE6D6]/10 text-[#1A1A1A]"
                   )}>
                     {category.questions.length}
                   </span>
@@ -195,7 +195,7 @@ export const FAQFloatingSidebar = ({
               ))}
               
               {/* CTA Actions - Compact */}
-              <div className="pt-3 mt-2 border-t border-gold/20 space-y-2">
+              <div className="pt-3 mt-2 border-t border-[#B89555]/20 space-y-2">
                 <Button 
                   size="sm"
                   variant="primary"

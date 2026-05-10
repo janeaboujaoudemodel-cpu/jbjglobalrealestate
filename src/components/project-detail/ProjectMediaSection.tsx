@@ -70,7 +70,7 @@ export default function ProjectMediaSection({
   return (
     <div className="jj-card-inner">
       <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-6">
-        <Video className="w-5 h-5 text-gold" />
+        <Video className="w-5 h-5 text-[#1A1A1A]" />
         Project Media
       </h3>
 
@@ -79,7 +79,7 @@ export default function ProjectMediaSection({
         {hasValidVideo && (
           <button
             onClick={() => setVideoOpen(true)}
-            className="group relative rounded-xl border-2 border-gold/30 bg-card overflow-hidden aspect-video hover:border-gold/60 hover:shadow-lg hover:shadow-gold/10 transition-all text-left"
+            className="group relative rounded-xl border-2 border-[#B89555]/30 bg-card overflow-hidden aspect-video hover:border-[#B89555]/60 hover:shadow-lg hover:shadow-gold/10 transition-all text-left"
           >
             {/* YouTube Thumbnail */}
             {youtubeId ? (
@@ -108,7 +108,7 @@ export default function ProjectMediaSection({
             
             {/* Play Button Overlay */}
             <div className="absolute inset-0 bg-[#1A1A1A]/40 flex items-center justify-center group-hover:bg-[#1A1A1A]/50 transition-colors">
-              <div className="w-16 h-16 rounded-full bg-gold/90 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
+              <div className="w-16 h-16 rounded-full bg-[#EFE6D6]/90 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
                 <Play className="w-8 h-8 text-[#1A1A1A] ml-1" fill="currentColor" />
               </div>
             </div>
@@ -124,7 +124,7 @@ export default function ProjectMediaSection({
         {virtualTourUrl && (
           <button
             onClick={() => setTourOpen(true)}
-            className="group relative rounded-xl border-2 border-gold/30 bg-card overflow-hidden aspect-video hover:border-gold/60 hover:shadow-lg hover:shadow-gold/10 transition-all text-left"
+            className="group relative rounded-xl border-2 border-[#B89555]/30 bg-card overflow-hidden aspect-video hover:border-[#B89555]/60 hover:shadow-lg hover:shadow-gold/10 transition-all text-left"
           >
             <div className="w-full h-full bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center">
               <Eye className="w-16 h-16 text-[#1A1A1A]/70 group-hover:scale-110 transition-transform" />
@@ -143,7 +143,7 @@ export default function ProjectMediaSection({
 
       {/* Video Modal */}
       <Dialog open={videoOpen} onOpenChange={setVideoOpen}>
-        <DialogContent className="max-w-4xl p-0 bg-[#1A1A1A] border-gold/30">
+        <DialogContent className="max-w-4xl p-0 bg-[#1A1A1A] border-[#B89555]/30">
           <DialogTitle className="sr-only">{projectName} Video</DialogTitle>
           <div className="aspect-video w-full flex items-center justify-center">
             {videoOpen && isDirect && videoUrl ? (
@@ -169,7 +169,7 @@ export default function ProjectMediaSection({
 
       {/* Virtual Tour Modal */}
       <Dialog open={tourOpen} onOpenChange={setTourOpen}>
-        <DialogContent className="max-w-6xl p-0 bg-[#1A1A1A] border-gold/30">
+        <DialogContent className="max-w-6xl p-0 bg-[#1A1A1A] border-[#B89555]/30">
           <DialogTitle className="sr-only">{projectName} Virtual Tour</DialogTitle>
           <div className="aspect-video w-full relative">
             {tourOpen && virtualTourUrl && (
@@ -184,7 +184,7 @@ export default function ProjectMediaSection({
                   href={virtualTourUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="absolute top-4 right-4 bg-gold text-[#1A1A1A] px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-1 hover:bg-gold-light transition-colors"
+                  className="absolute top-4 right-4 bg-[#EFE6D6] text-[#1A1A1A] px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-1 hover:bg-[#EFE6D6]-light transition-colors"
                 >
                   <ExternalLink className="w-4 h-4" />
                   Open in New Tab

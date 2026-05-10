@@ -22,7 +22,7 @@ export function MapNavigationControls({ latitude, longitude }: MapNavigationCont
   };
 
   const btnClass =
-    "w-11 h-11 flex items-center justify-center rounded-lg bg-card/95 backdrop-blur-sm border border-gold/40 shadow-lg hover:bg-gold/20 active:bg-gold/30 transition-all text-foreground";
+    "w-11 h-11 flex items-center justify-center rounded-lg bg-card/95 backdrop-blur-sm border border-[#B89555]/40 shadow-lg hover:bg-[#EFE6D6]/20 active:bg-[#EFE6D6]/30 transition-all text-foreground";
 
   return (
     <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-2">
@@ -67,7 +67,7 @@ export function MapNavigationControlsStandalone({
   };
 
   const btnClass =
-    "w-11 h-11 flex items-center justify-center rounded-lg bg-card/95 backdrop-blur-sm border border-gold/40 shadow-lg hover:bg-gold/20 active:bg-gold/30 transition-all text-foreground";
+    "w-11 h-11 flex items-center justify-center rounded-lg bg-card/95 backdrop-blur-sm border border-[#B89555]/40 shadow-lg hover:bg-[#EFE6D6]/20 active:bg-[#EFE6D6]/30 transition-all text-foreground";
 
   return (
     <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-2">

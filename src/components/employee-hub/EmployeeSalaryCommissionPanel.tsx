@@ -51,7 +51,7 @@ export function EmployeeSalaryCommissionPanel() {
   });
 
   if (loading) {
-    return <div className="flex items-center justify-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold"></div></div>;
+    return <div className="flex items-center justify-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#B89555]"></div></div>;
   }
 
   return (
@@ -125,7 +125,7 @@ export function EmployeeSalaryCommissionPanel() {
 
         <TabsContent value="commissions">
           <Card className="bg-[#FDFBF7] border-[#B89555]/30">
-            <CardHeader><CardTitle className="text-[#1A1A1A] flex items-center gap-2"><TrendingUp className="h-5 w-5 text-gold" />Commission Tracker</CardTitle></CardHeader>
+            <CardHeader><CardTitle className="text-[#1A1A1A] flex items-center gap-2"><TrendingUp className="h-5 w-5 text-[#1A1A1A]" />Commission Tracker</CardTitle></CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
@@ -162,7 +162,7 @@ export function EmployeeSalaryCommissionPanel() {
 
         <TabsContent value="salaries">
           <Card className="bg-[#FDFBF7] border-[#B89555]/30">
-            <CardHeader><CardTitle className="text-[#1A1A1A] flex items-center gap-2"><Wallet className="h-5 w-5 text-gold" />Salary Structure</CardTitle></CardHeader>
+            <CardHeader><CardTitle className="text-[#1A1A1A] flex items-center gap-2"><Wallet className="h-5 w-5 text-[#1A1A1A]" />Salary Structure</CardTitle></CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
@@ -192,7 +192,7 @@ export function EmployeeSalaryCommissionPanel() {
 
         <TabsContent value="payments">
           <Card className="bg-[#FDFBF7] border-[#B89555]/30">
-            <CardHeader><CardTitle className="text-[#1A1A1A] flex items-center gap-2"><CreditCard className="h-5 w-5 text-gold" />Payment History</CardTitle></CardHeader>
+            <CardHeader><CardTitle className="text-[#1A1A1A] flex items-center gap-2"><CreditCard className="h-5 w-5 text-[#1A1A1A]" />Payment History</CardTitle></CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
@@ -224,7 +224,7 @@ export function EmployeeSalaryCommissionPanel() {
 
         <TabsContent value="summary">
           <Card className="bg-[#FDFBF7] border-[#B89555]/30">
-            <CardHeader><CardTitle className="text-[#1A1A1A] flex items-center gap-2"><Users className="h-5 w-5 text-gold" />Earnings Summary</CardTitle></CardHeader>
+            <CardHeader><CardTitle className="text-[#1A1A1A] flex items-center gap-2"><Users className="h-5 w-5 text-[#1A1A1A]" />Earnings Summary</CardTitle></CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>

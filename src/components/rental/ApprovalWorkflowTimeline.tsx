@@ -183,7 +183,7 @@ export function ApprovalWorkflowTimeline({
                         <HoverCard openDelay={200}>
                           <HoverCardTrigger asChild>
                             <button className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 transition-colors cursor-pointer w-full">
-                              <Avatar className="h-10 w-10 border-2 border-gold/20">
+                              <Avatar className="h-10 w-10 border-2 border-[#B89555]/20">
                                 <AvatarImage src={workflowInfo.approverPhoto} alt={workflowInfo.approverName} />
                                 <AvatarFallback className="bg-gradient-to-br from-gold/20 to-champagne/20 text-foreground font-medium">
                                   {workflowInfo.approverName.split(' ').map(n => n[0]).join('')}
@@ -199,9 +199,9 @@ export function ApprovalWorkflowTimeline({
                           <HoverCardContent className="w-80 p-0" side="right" align="start">
                             <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-800 rounded-lg overflow-hidden">
                               {/* Header */}
-                              <div className="p-4 border-b border-gold/10">
+                              <div className="p-4 border-b border-[#B89555]/10">
                                 <div className="flex items-center gap-3">
-                                  <Avatar className="h-14 w-14 border-2 border-gold/30">
+                                  <Avatar className="h-14 w-14 border-2 border-[#B89555]/30">
                                     <AvatarImage src={workflowInfo.approverPhoto} alt={workflowInfo.approverName} />
                                     <AvatarFallback className="bg-gradient-to-br from-gold/20 to-champagne/20 text-lg">
                                       {workflowInfo.approverName.split(' ').map(n => n[0]).join('')}
@@ -210,7 +210,7 @@ export function ApprovalWorkflowTimeline({
                                   <div>
                                     <h4 className="font-semibold">{workflowInfo.approverName}</h4>
                                     <p className="text-sm text-muted-foreground">{workflowInfo.approverTitle}</p>
-                                    <Badge variant="outline" className="text-xs mt-1 border-gold/30 text-gold">
+                                    <Badge variant="outline" className="text-xs mt-1 border-[#B89555]/30 text-[#1A1A1A]">
                                       {workflowInfo.approverDepartment}
                                     </Badge>
                                   </div>

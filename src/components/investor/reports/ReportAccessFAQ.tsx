@@ -56,20 +56,20 @@ export default function ReportAccessFAQ() {
   return (
     <section className="space-y-4">
       <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
-        <HelpCircle className="w-5 h-5 text-gold" />
+        <HelpCircle className="w-5 h-5 text-[#1A1A1A]" />
         Report Access — FAQs
       </h2>
 
-      <Card className="border-2 border-gold/30">
+      <Card className="border-2 border-[#B89555]/30">
         <CardContent className="p-0">
           <Accordion type="single" collapsible className="w-full">
             {faqItems.map((faq, index) => (
               <AccordionItem
                 key={index}
                 value={`item-${index}`}
-                className="border-b border-gold/10 last:border-0"
+                className="border-b border-[#B89555]/10 last:border-0"
               >
-                <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-gold/5">
+                <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-[#EFE6D6]/5">
                   <span className="font-medium text-foreground">{faq.question}</span>
                 </AccordionTrigger>
                 <AccordionContent className="px-6 pb-4 text-muted-foreground">

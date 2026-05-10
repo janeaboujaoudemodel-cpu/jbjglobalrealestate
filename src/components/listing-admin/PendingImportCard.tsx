@@ -276,7 +276,7 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
 
   return (
     <Card
-      className={`relative h-full overflow-hidden cursor-pointer border-2 ${isIncomplete ? "border-amber-500" : "border-gold"} bg-card shadow-[0_4px_20px_rgba(200,167,102,0.25)] transition-all duration-300 hover:shadow-[0_12px_40px_rgba(200,167,102,0.4)] hover:scale-[1.02] hover:-translate-y-2`}
+      className={`relative h-full overflow-hidden cursor-pointer border-2 ${isIncomplete ? "border-amber-500" : "border-[#B89555]"} bg-card shadow-[0_4px_20px_rgba(200,167,102,0.25)] transition-all duration-300 hover:shadow-[0_12px_40px_rgba(200,167,102,0.4)] hover:scale-[1.02] hover:-translate-y-2`}
       style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
       onClick={handleCardClick}
     >
@@ -324,7 +324,7 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
             <button
               type="button"
               onClick={handlePrev}
-              className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-card border border-gold/60 text-gold flex items-center justify-center shadow-md hover:bg-gold hover:text-foreground hover:border-gold transition-all duration-200 z-10"
+              className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-card border border-[#B89555]/60 text-[#1A1A1A] flex items-center justify-center shadow-md hover:bg-[#EFE6D6] hover:text-foreground hover:border-[#B89555] transition-all duration-200 z-10"
               aria-label="Previous image"
             >
               <ChevronLeft className="w-4 h-4" />
@@ -332,7 +332,7 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
             <button
               type="button"
               onClick={handleNext}
-              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-card border border-gold/60 text-gold flex items-center justify-center shadow-md hover:bg-gold hover:text-foreground hover:border-gold transition-all duration-200 z-10"
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-card border border-[#B89555]/60 text-[#1A1A1A] flex items-center justify-center shadow-md hover:bg-[#EFE6D6] hover:text-foreground hover:border-[#B89555] transition-all duration-200 z-10"
               aria-label="Next image"
             >
               <ChevronRight className="w-4 h-4" />
@@ -390,7 +390,7 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
             <Link 
               to={`/developer/${item.developer_slug || encodeURIComponent(item.developer_name.toLowerCase().replace(/\s+/g, '-'))}`}
               onClick={(e) => e.stopPropagation()}
-              className="text-sm text-gold truncate hover:underline inline-block"
+              className="text-sm text-[#1A1A1A] truncate hover:underline inline-block"
             >
               by {item.developer_name}
             </Link>

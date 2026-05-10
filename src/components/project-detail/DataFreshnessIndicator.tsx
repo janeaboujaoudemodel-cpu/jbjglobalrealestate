@@ -70,7 +70,7 @@ export default function DataFreshnessIndicator({
       {sourceLabel && (
         <Badge 
           variant="outline" 
-          className="text-xs px-2 py-0.5 border-gold/30 bg-gold/5"
+          className="text-xs px-2 py-0.5 border-[#B89555]/30 bg-[#EFE6D6]/5"
         >
           <Database className="w-3 h-3 mr-1" />
           {sourceLabel}

@@ -231,17 +231,17 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Palette className="w-5 h-5 text-gold" />
+          <Palette className="w-5 h-5 text-[#1A1A1A]" />
           <h3 className="text-white font-semibold">Color Palettes</h3>
         </div>
         <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
           <DialogTrigger asChild>
-            <Button size="sm" className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
+            <Button size="sm" className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
               <Plus className="w-4 h-4 mr-1" />
               Create
             </Button>
           </DialogTrigger>
-          <DialogContent className="bg-zinc-900 border-[#1A1A1A] max-w-lg">
+          <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A] max-w-lg">
             <DialogHeader>
               <DialogTitle className="text-white">Create Color Palette</DialogTitle>
             </DialogHeader>
@@ -252,7 +252,7 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
                   value={newPaletteName}
                   onChange={(e) => setNewPaletteName(e.target.value)}
                   placeholder="e.g., Luxury Property Campaign"
-                  className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
+                  className="bg-[#1A1A1A] border-[#1A1A1A] text-white mt-1"
                 />
               </div>
               <div>
@@ -261,7 +261,7 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
                   value={newPaletteDescription}
                   onChange={(e) => setNewPaletteDescription(e.target.value)}
                   placeholder="Optional description"
-                  className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
+                  className="bg-[#1A1A1A] border-[#1A1A1A] text-white mt-1"
                 />
               </div>
               
@@ -269,7 +269,7 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <Label className="text-white/70">Colors</Label>
-                  <Button size="sm" variant="ghost" onClick={addColorToNewPalette} className="text-gold hover:text-[#1A1A1A]">
+                  <Button size="sm" variant="ghost" onClick={addColorToNewPalette} className="text-[#1A1A1A] hover:text-[#1A1A1A]">
                     <Plus className="w-4 h-4 mr-1" />
                     Add Color
                   </Button>
@@ -287,12 +287,12 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
                         value={color.name}
                         onChange={(e) => updateColorInNewPalette(index, 'name', e.target.value)}
                         placeholder="Color name"
-                        className="flex-1 bg-zinc-800 border-[#1A1A1A] text-white text-sm"
+                        className="flex-1 bg-[#1A1A1A] border-[#1A1A1A] text-white text-sm"
                       />
                       <Input
                         value={color.hex}
                         onChange={(e) => updateColorInNewPalette(index, 'hex', e.target.value)}
-                        className="w-24 bg-zinc-800 border-[#1A1A1A] text-white text-sm font-mono"
+                        className="w-24 bg-[#1A1A1A] border-[#1A1A1A] text-white text-sm font-mono"
                       />
                       {newPaletteColors.length > 2 && (
                         <Button size="icon" variant="ghost" onClick={() => removeColorFromNewPalette(index)} className="text-red-400 hover:text-red-300">
@@ -307,7 +307,7 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
               {/* Preview */}
               <div>
                 <Label className="text-white/70 mb-2 block">Preview</Label>
-                <div className="flex gap-1 p-2 bg-zinc-800 rounded-lg">
+                <div className="flex gap-1 p-2 bg-[#1A1A1A] rounded-lg">
                   {newPaletteColors.map((color, index) => (
                     <div
                       key={index}
@@ -337,7 +337,7 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
       </div>
 
       {/* Brand Colors */}
-      <div className="p-3 bg-zinc-800/50 rounded-lg">
+      <div className="p-3 bg-[#1A1A1A]/50 rounded-lg">
         <p className="text-white/70 text-xs mb-2">JBJ Brand Colors</p>
         <div className="flex gap-1">
           {JBJ_BRAND_PALETTE.map((color, index) => (
@@ -359,7 +359,7 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
       {/* User Palettes */}
       {isLoading ? (
         <div className="flex items-center justify-center py-8">
-          <Loader2 className="w-6 h-6 text-gold animate-spin" />
+          <Loader2 className="w-6 h-6 text-[#1A1A1A] animate-spin" />
         </div>
       ) : palettes.length === 0 ? (
         <div className="text-center py-6">
@@ -377,15 +377,15 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
                 animate={{ opacity: 1, y: 0 }}
                 className={`p-3 rounded-lg border-2 transition-all cursor-pointer ${
                   selectedPaletteId === palette.id
-                    ? 'border-gold bg-gold/10'
-                    : 'border-[#1A1A1A] bg-zinc-800/50 hover:border-[#1A1A1A]'
+                    ? 'border-[#B89555] bg-[#EFE6D6]/10'
+                    : 'border-[#1A1A1A] bg-[#1A1A1A]/50 hover:border-[#1A1A1A]'
                 }`}
                 onClick={() => onSelectPalette?.(palette)}
               >
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
                     {palette.is_default && (
-                      <Star className="w-3 h-3 text-gold fill-gold" />
+                      <Star className="w-3 h-3 text-[#1A1A1A] fill-gold" />
                     )}
                     <span className="text-white text-sm font-medium truncate max-w-[150px]">
                       {palette.name}
@@ -397,7 +397,7 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
                         size="icon"
                         variant="ghost"
                         onClick={(e) => { e.stopPropagation(); handleSetDefault(palette.id); }}
-                        className="w-6 h-6 text-white/90 hover:text-gold"
+                        className="w-6 h-6 text-white/90 hover:text-[#1A1A1A]"
                         title="Set as default"
                       >
                         <Star className="w-3 h-3" />

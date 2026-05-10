@@ -241,7 +241,7 @@ export const IPBlocklistDashboard = () => {
             onClick={() => setIsLive(!isLive)}
             className={isLive 
               ? "bg-emerald-600 hover:bg-emerald-700 text-white" 
-              : "border-gold/30 text-[#1A1A1A] hover:bg-gold/10"
+              : "border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
             }
           >
             <Radio className={`w-4 h-4 mr-2 ${isLive ? "animate-pulse" : ""}`} />
@@ -252,7 +252,7 @@ export const IPBlocklistDashboard = () => {
             size="sm"
             onClick={handleRefresh}
             disabled={isRefreshing}
-            className="border-gold/30 text-[#1A1A1A] hover:bg-gold/10"
+            className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
           >
             <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
             Refresh
@@ -286,7 +286,7 @@ export const IPBlocklistDashboard = () => {
                     placeholder="Why is this IP being blocked?"
                     value={newReason}
                     onChange={(e) => setNewReason(e.target.value)}
-                    className="bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A]"
+                    className="bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A]"
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -328,28 +328,28 @@ export const IPBlocklistDashboard = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30 p-6">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 p-6">
           <div className="flex items-center gap-3 mb-2">
             <ShieldBan className="w-5 h-5 text-red-500" />
             <span className="text-[#1A1A1A]/60">Total Blocked</span>
           </div>
           <p className="text-[#1A1A1A] text-3xl font-bold">{blockedIPs.length}</p>
         </Card>
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30 p-6">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 p-6">
           <div className="flex items-center gap-3 mb-2">
             <AlertTriangle className="w-5 h-5 text-amber-500" />
             <span className="text-[#1A1A1A]/60">Permanent Blocks</span>
           </div>
           <p className="text-[#1A1A1A] text-3xl font-bold">{permanentBlocks}</p>
         </Card>
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30 p-6">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 p-6">
           <div className="flex items-center gap-3 mb-2">
             <Clock className="w-5 h-5 text-blue-500" />
             <span className="text-[#1A1A1A]/60">Temporary Blocks</span>
           </div>
           <p className="text-[#1A1A1A] text-3xl font-bold">{temporaryBlocks}</p>
         </Card>
-        <Card className="bg-[#FDFBF7] border-2 border-gold/30 p-6">
+        <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 p-6">
           <div className="flex items-center gap-3 mb-2">
             <Plus className="w-5 h-5 text-emerald-500" />
             <span className="text-[#1A1A1A]/60">Blocked Today</span>
@@ -360,7 +360,7 @@ export const IPBlocklistDashboard = () => {
 
       {/* Search */}
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gold" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]" />
         <Input
           placeholder="Search by IP or reason..."
           value={searchQuery}
@@ -370,8 +370,8 @@ export const IPBlocklistDashboard = () => {
       </div>
 
       {/* Blocklist Table */}
-      <Card className="bg-[#FDFBF7] border-2 border-gold/30 overflow-hidden">
-        <div className="p-4 border-b border-gold/20">
+      <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 overflow-hidden">
+        <div className="p-4 border-b border-[#B89555]/20">
           <h3 className="text-[#1A1A1A] font-medium">Blocked IP Addresses</h3>
         </div>
         
@@ -402,7 +402,7 @@ export const IPBlocklistDashboard = () => {
               </thead>
               <tbody>
                 {filteredIPs.map((entry) => (
-                  <tr key={entry.id} className="border-t border-gold/10 hover:bg-gold/5">
+                  <tr key={entry.id} className="border-t border-[#B89555]/10 hover:bg-[#EFE6D6]/5">
                     <td className="px-6 py-4">
                       <code className="text-red-600 text-sm font-mono bg-red-50 px-2 py-1 rounded border border-red-200">
                         {entry.ip_address}

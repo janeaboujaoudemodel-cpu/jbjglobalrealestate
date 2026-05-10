@@ -44,10 +44,10 @@ function PricePerSqftChart({ text, stats }: { text: string; stats: any }) {
   const isPositive = growth >= 0;
 
   return (
-    <div className="bg-[#FDFBF7] border border-gold/20 rounded-2xl p-6 shadow-sm">
+    <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <BarChart3 className="w-5 h-5 text-gold" />
+          <BarChart3 className="w-5 h-5 text-[#1A1A1A]" />
           <h3 className="font-bold text-[#1A1A1A] text-lg">Price Per Sqft</h3>
         </div>
         <div className={`flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full ${
@@ -83,7 +83,7 @@ function PricePerSqftChart({ text, stats }: { text: string; stats: any }) {
       </div>
 
       {bullets.length > 0 && (
-        <div className="border-t border-gold/10 pt-3 space-y-1.5">
+        <div className="border-t border-[#B89555]/10 pt-3 space-y-1.5">
           {bullets.map((b, i) => (
             <p key={i} className="text-[#1A1A1A]/70 text-xs leading-relaxed">{b}</p>
           ))}
@@ -103,10 +103,10 @@ function InvestmentMetricsChart({ text }: { text: string }) {
   const occupancy = metrics.find(m => m.name === 'Occupancy');
 
   return (
-    <div className="bg-[#FDFBF7] border border-gold/20 rounded-2xl p-6 shadow-sm">
+    <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Shield className="w-5 h-5 text-gold" />
+          <Shield className="w-5 h-5 text-[#1A1A1A]" />
           <h3 className="font-bold text-[#1A1A1A] text-lg">Investment Metrics</h3>
         </div>
         {occupancy && (
@@ -145,7 +145,7 @@ function InvestmentMetricsChart({ text }: { text: string }) {
       </div>
 
       {bullets.length > 0 && (
-        <div className="border-t border-gold/10 pt-3 space-y-1.5">
+        <div className="border-t border-[#B89555]/10 pt-3 space-y-1.5">
           {bullets.map((b, i) => (
             <p key={i} className="text-[#1A1A1A]/70 text-xs leading-relaxed">{b}</p>
           ))}
@@ -234,14 +234,14 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
   const lastPoint = chartData[chartData.length - 1];
   const ratio = lastPoint ? lastPoint.demand / lastPoint.supply : 1;
   const marketStatus = ratio > 0.9 ? 'High Demand' : ratio > 0.7 ? 'Balanced' : 'Oversupplied';
-  const statusColor = ratio > 0.9 ? 'text-emerald-600' : ratio > 0.7 ? 'text-gold' : 'text-red-500';
+  const statusColor = ratio > 0.9 ? 'text-emerald-600' : ratio > 0.7 ? 'text-[#1A1A1A]' : 'text-red-500';
   const StatusIcon = ratio >= 0.9 ? ArrowUpRight : ratio > 0.7 ? TrendingUp : ArrowDownRight;
 
   return (
-    <div className="bg-[#FDFBF7] border border-gold/20 rounded-2xl p-6 shadow-sm">
+    <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <TrendingUp className="w-5 h-5 text-gold" />
+          <TrendingUp className="w-5 h-5 text-[#1A1A1A]" />
           <h3 className="font-bold text-[#1A1A1A] text-lg">Supply vs Demand</h3>
         </div>
         <div className={`flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full ${
@@ -293,7 +293,7 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
 
       {/* Key insights from AI text */}
       {bullets.length > 0 && (
-        <div className="border-t border-gold/10 pt-3 space-y-1.5">
+        <div className="border-t border-[#B89555]/10 pt-3 space-y-1.5">
           {bullets.map((b, i) => (
             <p key={i} className="text-[#1A1A1A]/70 text-xs leading-relaxed">{b}</p>
           ))}
@@ -319,10 +319,10 @@ function DeveloperLandscapeCard({ text, stats }: { text: string; stats: any }) {
   const totalDevs = stats?.developers?.length || devEntries.length;
 
   return (
-    <div className="bg-[#FDFBF7] border border-gold/20 rounded-2xl p-6 shadow-sm">
+    <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Building2 className="w-5 h-5 text-gold" />
+          <Building2 className="w-5 h-5 text-[#1A1A1A]" />
           <h3 className="font-bold text-[#1A1A1A] text-lg">Developer Landscape</h3>
         </div>
         <div className="flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700">
@@ -332,9 +332,9 @@ function DeveloperLandscapeCard({ text, stats }: { text: string; stats: any }) {
 
       <div className="space-y-3">
         {devEntries.map((dev, i) => (
-          <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] border border-gold/10 hover:border-gold/30 transition-colors">
+          <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/10 hover:border-[#B89555]/30 transition-colors">
             <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0">
-              <span className="text-gold font-bold text-xs">{dev.name.charAt(0)}</span>
+              <span className="text-[#1A1A1A] font-bold text-xs">{dev.name.charAt(0)}</span>
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-[#1A1A1A] font-semibold text-sm truncate">{dev.name}</p>
@@ -471,7 +471,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
     <section ref={sectionRef} className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       <div className="container mx-auto px-4">
         <div className="flex items-center gap-3 mb-8">
-          <Brain className="w-6 h-6 text-gold" />
+          <Brain className="w-6 h-6 text-[#1A1A1A]" />
           <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
             JBJ AI Area Intelligence
           </h2>
@@ -480,22 +480,22 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
         {/* Quick Stats */}
         {hasStats && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <div className="bg-[#FDFBF7] border border-gold/20 rounded-xl p-4 text-center shadow-sm">
-              <div className="text-2xl font-bold text-gold">{stats.totalProjects}</div>
+            <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl p-4 text-center shadow-sm">
+              <div className="text-2xl font-bold text-[#1A1A1A]">{stats.totalProjects}</div>
               <div className="text-[#1A1A1A]/70 text-xs mt-1">Active Projects</div>
             </div>
-            <div className="bg-[#FDFBF7] border border-gold/20 rounded-xl p-4 text-center shadow-sm">
-              <div className="text-2xl font-bold text-gold">{stats.developers.length}</div>
+            <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl p-4 text-center shadow-sm">
+              <div className="text-2xl font-bold text-[#1A1A1A]">{stats.developers.length}</div>
               <div className="text-[#1A1A1A]/70 text-xs mt-1">Developers</div>
             </div>
             {stats.avgPrice && (
-              <div className="bg-[#FDFBF7] border border-gold/20 rounded-xl p-4 text-center shadow-sm">
+              <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl p-4 text-center shadow-sm">
                 <div className="text-2xl font-bold text-price-orange">AED {(stats.avgPrice / 1000000).toFixed(1)}M</div>
                 <div className="text-[#1A1A1A]/70 text-xs mt-1">Avg. Starting Price</div>
               </div>
             )}
             {stats.pricePerSqft && (
-              <div className="bg-[#FDFBF7] border border-gold/20 rounded-xl p-4 text-center shadow-sm">
+              <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl p-4 text-center shadow-sm">
                 <div className="text-2xl font-bold text-price-orange">AED {stats.pricePerSqft.toLocaleString()}</div>
                 <div className="text-[#1A1A1A]/70 text-xs mt-1">Est. Price/sqft</div>
               </div>
@@ -507,7 +507,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
         {errorMsg ? (
           <div className="text-center py-8 space-y-4">
             <p className="text-red-500 text-sm">{errorMsg}</p>
-            <Button onClick={handleRetry} variant="outline" className="border-gold/40 text-gold hover:bg-gold/10">
+            <Button onClick={handleRetry} variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
               <RefreshCw className="w-4 h-4 mr-2" />
               Retry Analysis
             </Button>
@@ -517,14 +517,14 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
             {hasTimedOut ? (
               <div className="space-y-4">
                 <p className="text-[#1A1A1A]/70 text-sm">Analysis is taking longer than expected.</p>
-                <Button onClick={handleRetry} variant="outline" className="border-gold/40 text-gold hover:bg-gold/10">
+                <Button onClick={handleRetry} variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                   <RefreshCw className="w-4 h-4 mr-2" />
                   Retry Analysis
                 </Button>
               </div>
             ) : (
               <>
-                <Loader2 className="w-8 h-8 text-gold animate-spin mx-auto mb-3" />
+                <Loader2 className="w-8 h-8 text-[#1A1A1A] animate-spin mx-auto mb-3" />
                 <p className="text-[#1A1A1A]/70 text-sm">Analyzing {areaName}...</p>
               </>
             )}
@@ -535,11 +535,11 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Overview Card - Enhanced */}
               {sections?.overview && (
-                <div className="lg:col-span-2 bg-[#FDFBF7] border border-gold/20 rounded-2xl shadow-sm overflow-hidden">
+                <div className="lg:col-span-2 bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl shadow-sm overflow-hidden">
                   <div className="p-6">
                     <div className="flex items-center gap-2 mb-4">
-                      <div className="w-9 h-9 rounded-xl bg-gold/10 border border-gold/20 flex items-center justify-center">
-                        <Building2 className="w-5 h-5 text-gold" />
+                      <div className="w-9 h-9 rounded-xl bg-[#EFE6D6]/10 border border-[#B89555]/20 flex items-center justify-center">
+                        <Building2 className="w-5 h-5 text-[#1A1A1A]" />
                       </div>
                       <div>
                         <h3 className="font-bold text-[#1A1A1A] text-lg">Area Overview</h3>
@@ -551,29 +551,29 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                     {/* Quick insight stats row */}
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                       {hasStats && stats.totalProjects > 0 && (
-                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-gold/15 text-center">
-                          <Home className="w-4 h-4 text-gold mx-auto mb-1" />
+                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-[#B89555]/15 text-center">
+                          <Home className="w-4 h-4 text-[#1A1A1A] mx-auto mb-1" />
                           <div className="text-lg font-bold text-[#1A1A1A]">{stats.totalProjects}</div>
                           <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wider">Projects</div>
                         </div>
                       )}
                       {hasStats && stats.developers?.length > 0 && (
-                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-gold/15 text-center">
-                          <Landmark className="w-4 h-4 text-gold mx-auto mb-1" />
+                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-[#B89555]/15 text-center">
+                          <Landmark className="w-4 h-4 text-[#1A1A1A] mx-auto mb-1" />
                           <div className="text-lg font-bold text-[#1A1A1A]">{stats.developers.length}</div>
                           <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wider">Developers</div>
                         </div>
                       )}
                       {hasStats && stats.pricePerSqft && (
-                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-gold/15 text-center">
-                          <BarChart3 className="w-4 h-4 text-gold mx-auto mb-1" />
+                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-[#B89555]/15 text-center">
+                          <BarChart3 className="w-4 h-4 text-[#1A1A1A] mx-auto mb-1" />
                           <div className="text-lg font-bold text-[#1A1A1A]">{stats.pricePerSqft.toLocaleString()}</div>
                           <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wider">AED/sqft</div>
                         </div>
                       )}
                       {hasStats && stats.avgPrice && (
-                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-gold/15 text-center">
-                          <TrendingUp className="w-4 h-4 text-gold mx-auto mb-1" />
+                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-[#B89555]/15 text-center">
+                          <TrendingUp className="w-4 h-4 text-[#1A1A1A] mx-auto mb-1" />
                           <div className="text-lg font-bold text-[#1A1A1A]">{(stats.avgPrice / 1000000).toFixed(1)}M</div>
                           <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wider">Avg Price</div>
                         </div>
@@ -583,7 +583,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                   
                   {/* Bottom insight bar */}
                   {hasStats && stats.statuses && Object.keys(stats.statuses).length > 0 && (
-                    <div className="border-t border-gold/10 bg-gradient-to-r from-[#FDFBF7] to-white px-6 py-3">
+                    <div className="border-t border-[#B89555]/10 bg-gradient-to-r from-[#FDFBF7] to-white px-6 py-3">
                       <div className="flex items-center gap-4 flex-wrap">
                         <span className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-widest font-semibold">Status Mix</span>
                         {Object.entries(stats.statuses).slice(0, 4).map(([status, count]) => (
@@ -591,7 +591,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                             <div className={`w-2 h-2 rounded-full ${
                               status.toLowerCase().includes('off') || status.toLowerCase().includes('launch') ? 'bg-emerald-500' : 
                               status.toLowerCase().includes('under') || status.toLowerCase().includes('construct') ? 'bg-amber-500' : 
-                              status.toLowerCase().includes('ready') || status.toLowerCase().includes('complet') ? 'bg-blue-500' : 'bg-zinc-400'
+                              status.toLowerCase().includes('ready') || status.toLowerCase().includes('complet') ? 'bg-blue-500' : 'bg-[#B89555]'
                             }`} />
                             <span className="text-xs text-[#1A1A1A]/70">{status} <span className="font-semibold text-[#1A1A1A]">({count as number})</span></span>
                           </div>
@@ -606,9 +606,9 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
               {ratingScore !== null && (
                 <div className="bg-[#1A1A1A] rounded-2xl p-6 shadow-lg flex flex-col items-center justify-center text-center relative overflow-hidden">
                   {/* Ambient glow */}
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-gold/10 rounded-full blur-[60px] pointer-events-none" />
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-[#EFE6D6]/10 rounded-full blur-[60px] pointer-events-none" />
                   
-                  <Star className="w-7 h-7 text-gold mb-3 relative z-10" />
+                  <Star className="w-7 h-7 text-[#1A1A1A] mb-3 relative z-10" />
                   
                   {/* Radial gauge */}
                   <div className="relative w-32 h-32 mb-3">
@@ -634,7 +634,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                       </PieChart>
                     </ResponsiveContainer>
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <span className="text-4xl font-bold text-gold">{ratingScore}</span>
+                      <span className="text-4xl font-bold text-[#1A1A1A]">{ratingScore}</span>
                       <span className="text-[#1A1A1A]/70 text-[10px] font-medium">/10</span>
                     </div>
                   </div>
@@ -649,8 +649,8 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                   {/* Rating quality label */}
                   <div className={`mt-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider relative z-10 ${
                     ratingScore >= 8 ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
-                    ratingScore >= 6 ? 'bg-gold/20 text-gold border border-gold/30' :
-                    'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                    ratingScore >= 6 ? 'bg-[#EFE6D6]/20 text-[#1A1A1A] border border-[#B89555]/30' :
+                    'bg-amber-500/20 text-[#1A1A1A] border border-amber-500/30'
                   }`}>
                     {ratingScore >= 8 ? 'Excellent' : ratingScore >= 6 ? 'Good' : 'Moderate'}
                   </div>
@@ -708,7 +708,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
             <div className="flex items-center gap-2 text-[#1A1A1A]/70 text-xs pt-2 flex-wrap">
               <Brain className="w-4 h-4" />
               JBJ Property Analyzer — AI-generated analysis based on current market data. Does not constitute financial advice.{" "}
-              <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
+              <Link to="/contact" className="text-[#1A1A1A] hover:underline">Contact our team</Link> for professional guidance.
             </div>
           </motion.div>
         )}

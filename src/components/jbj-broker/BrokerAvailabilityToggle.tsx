@@ -220,7 +220,7 @@ export function BrokerAvailabilityToggle({
         <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
           <div className="flex items-center gap-2">
             {autoReceiveLeads ? (
-              <Bell className="w-4 h-4 text-gold" />
+              <Bell className="w-4 h-4 text-[#1A1A1A]" />
             ) : (
               <BellOff className="w-4 h-4 text-muted-foreground" />
             )}

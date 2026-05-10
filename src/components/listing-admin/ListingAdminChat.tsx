@@ -893,9 +893,9 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
     >
       {/* Header */}
       <div className="flex items-center gap-3 p-4 border-b border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300" style={{ borderRadius: 0 }}>
-        <Avatar className="w-10 h-10 border-2 border-gold/30">
+        <Avatar className="w-10 h-10 border-2 border-[#B89555]/30">
           <AvatarImage src={adminPersona?.avatar} alt={adminPersona?.name} />
-          <AvatarFallback className="bg-gold/20 text-gold font-semibold">SM</AvatarFallback>
+          <AvatarFallback className="bg-[#EFE6D6]/20 text-[#1A1A1A] font-semibold">SM</AvatarFallback>
         </Avatar>
         <div className="flex-1">
           <h3 className="font-semibold text-[#1A1A1A] text-sm">{adminPersona?.name || "Sarah Mitchell"}</h3>
@@ -927,20 +927,20 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
               {message.role === "assistant" && (
                 <Avatar className="w-8 h-8 flex-shrink-0">
                   <AvatarImage src={adminPersona?.avatar} alt={adminPersona?.name} />
-                  <AvatarFallback className="bg-gold/20 text-gold text-xs">SM</AvatarFallback>
+                  <AvatarFallback className="bg-[#EFE6D6]/20 text-[#1A1A1A] text-xs">SM</AvatarFallback>
                 </Avatar>
               )}
               <div className="flex flex-col max-w-[85%]">
                 <div className={`rounded-2xl px-4 py-2.5 select-text cursor-text ${
                   message.role === "user"
-                    ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-gold/30 shadow-md"
+                    ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/30 shadow-md"
                     : message.type === "processing"
                     ? "bg-amber-50 text-[#1A1A1A] border border-amber-200"
                     : message.type === "success"
                     ? "bg-green-50 text-[#1A1A1A] border border-green-200"
                     : message.type === "error"
                     ? "bg-red-50 text-[#1A1A1A] border border-red-200"
-                    : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-gold/20 shadow-sm"
+                    : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/20 shadow-sm"
                 }`}>
                   {message.type === "processing" && (
                     <div className="flex items-center gap-2 mb-2 text-amber-600">
@@ -964,7 +964,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
                   {message.attachments && message.attachments.length > 0 && (
                     <div className="flex flex-wrap gap-1.5 mb-2">
                       {message.attachments.map((att, idx) => (
-                        <div key={idx} className="flex items-center gap-1 px-2 py-1 bg-gold/10 rounded text-xs text-foreground">
+                        <div key={idx} className="flex items-center gap-1 px-2 py-1 bg-[#EFE6D6]/10 rounded text-xs text-foreground">
                           {att.type.includes("image") ? <ImageIcon className="w-3 h-3" /> : <FileText className="w-3 h-3" />}
                           <span className="truncate max-w-[120px]">{att.name}</span>
                         </div>
@@ -1023,10 +1023,10 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
             <div className="flex gap-3">
               <Avatar className="w-8 h-8 flex-shrink-0">
                 <AvatarImage src={adminPersona?.avatar} alt={adminPersona?.name} />
-                <AvatarFallback className="bg-gold/20 text-gold text-xs">SM</AvatarFallback>
+                <AvatarFallback className="bg-[#EFE6D6]/20 text-[#1A1A1A] text-xs">SM</AvatarFallback>
               </Avatar>
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl px-4 py-3 flex items-center gap-2 border border-gold/20">
-                <Loader2 className="w-4 h-4 animate-spin text-gold" />
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl px-4 py-3 flex items-center gap-2 border border-[#B89555]/20">
+                <Loader2 className="w-4 h-4 animate-spin text-[#1A1A1A]" />
                 <span className="text-sm text-[#1A1A1A]/70">Extracting & processing...</span>
               </div>
             </div>
@@ -1055,7 +1055,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
           <Button
             size="sm"
             variant="outline"
-            className="h-7 text-xs bg-[#FDFBF7]/90 backdrop-blur-sm border-gold/30 shadow-md hover:bg-gold/10"
+            className="h-7 text-xs bg-[#FDFBF7]/90 backdrop-blur-sm border-[#B89555]/30 shadow-md hover:bg-[#EFE6D6]/10"
             onClick={() => {
               messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
               isNearBottom.current = true;
@@ -1071,7 +1071,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
       {showBulkUpload && (
         <div className="p-4 border-t border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] max-h-[300px] overflow-y-auto hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
           <div className="flex items-center gap-2 mb-3">
-            <ListChecks className="w-5 h-5 text-gold" />
+            <ListChecks className="w-5 h-5 text-[#1A1A1A]" />
             <span className="font-medium text-[#1A1A1A] text-sm">Batch URL Extraction</span>
             <Button variant="ghost" size="sm" onClick={() => setShowBulkUpload(false)} className="ml-auto h-6 w-6 p-0 text-[#1A1A1A]/70 hover:text-[#1A1A1A]">
               <X className="w-4 h-4" />
@@ -1115,9 +1115,9 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
       {/* WhatsApp-style full-screen drag overlay */}
       {isDragOver && (
         <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#1A1A1A]/40 backdrop-blur-sm pointer-events-none">
-          <div className="flex flex-col items-center gap-4 p-10 border-2 border-dashed border-gold rounded-2xl bg-[#FDFBF7]/95 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
-            <div className="w-16 h-16 rounded-full bg-gold/10 flex items-center justify-center">
-              <Upload className="w-8 h-8 text-gold" />
+          <div className="flex flex-col items-center gap-4 p-10 border-2 border-dashed border-[#B89555] rounded-2xl bg-[#FDFBF7]/95 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+            <div className="w-16 h-16 rounded-full bg-[#EFE6D6]/10 flex items-center justify-center">
+              <Upload className="w-8 h-8 text-[#1A1A1A]" />
             </div>
             <div className="text-center">
               <p className="text-lg font-bold text-foreground">Drop files here</p>
@@ -1129,11 +1129,11 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
 
       {/* Queued Files Preview */}
       {uploadedFiles.length > 0 && (
-        <div ref={queuedFilesRef} className="px-4 py-3 border-t-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA]">
+        <div ref={queuedFilesRef} className="px-4 py-3 border-t-2 border-[#B89555]/40 bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA]">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center">
-                <span className="text-xs font-bold text-gold">{uploadedFiles.length}</span>
+              <div className="w-6 h-6 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center">
+                <span className="text-xs font-bold text-[#1A1A1A]">{uploadedFiles.length}</span>
               </div>
               <span className="text-sm font-semibold text-foreground">
                 {uploadedFiles.length} file{uploadedFiles.length !== 1 ? "s" : ""} ready to process
@@ -1141,7 +1141,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
             </div>
             <div className="flex gap-2">
               <Button variant="ghost" size="sm" onClick={() => setUploadedFiles([])} className="h-6 text-[10px] text-[#1A1A1A]/70 hover:text-red-500 px-2 cursor-pointer">Clear all</Button>
-              <Button variant="ghost" size="sm" onClick={openMultiFilePicker} className="h-6 text-[10px] text-gold px-2 cursor-pointer"><Plus className="w-3 h-3 mr-1" /> Add more</Button>
+              <Button variant="ghost" size="sm" onClick={openMultiFilePicker} className="h-6 text-[10px] text-[#1A1A1A] px-2 cursor-pointer"><Plus className="w-3 h-3 mr-1" /> Add more</Button>
             </div>
           </div>
           <div className="flex flex-wrap gap-1.5 max-h-[80px] overflow-y-auto mb-3">
@@ -1169,14 +1169,14 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
       {/* Input */}
       <div className="p-4 border-t border-[#B89555]/30 bg-[#FDFBF7]" style={{ borderRadius: 0 }}>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" onClick={openMultiFilePicker} className="h-10 w-10 p-0 text-[#1A1A1A]/70 hover:text-gold hover:bg-gold/10 cursor-pointer" title="Upload files" disabled={isLoading}>
+          <Button variant="ghost" size="sm" onClick={openMultiFilePicker} className="h-10 w-10 p-0 text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10 cursor-pointer" title="Upload files" disabled={isLoading}>
             <Paperclip className="w-5 h-5" />
           </Button>
           <Button variant="ghost" size="sm" onClick={() => setShowBulkUpload(!showBulkUpload)}
-            className={`h-10 w-10 p-0 ${showBulkUpload ? "text-gold bg-gold/10" : "text-[#1A1A1A]/70 hover:text-gold hover:bg-gold/10"}`} title="Batch URL Extraction">
+            className={`h-10 w-10 p-0 ${showBulkUpload ? "text-[#1A1A1A] bg-[#EFE6D6]/10" : "text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10"}`} title="Batch URL Extraction">
             <LinkIcon className="w-5 h-5" />
           </Button>
-          <VoiceInputButton onTranscript={handleVoiceTranscript} disabled={isLoading} language={language} variant="ghost" className="h-10 w-10 p-0 text-[#1A1A1A]/70 hover:text-gold hover:bg-gold/10" />
+          <VoiceInputButton onTranscript={handleVoiceTranscript} disabled={isLoading} language={language} variant="ghost" className="h-10 w-10 p-0 text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10" />
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}

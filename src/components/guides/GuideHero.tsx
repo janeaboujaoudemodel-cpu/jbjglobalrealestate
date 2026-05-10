@@ -67,8 +67,8 @@ export const GuideHero = ({
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/8 via-transparent to-transparent z-[1]" />
       
       {/* Decorative elements */}
-      <div className="absolute top-20 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl z-[1]" />
-      <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-gold/3 rounded-full blur-3xl z-[1]" />
+      <div className="absolute top-20 left-1/4 w-96 h-96 bg-[#EFE6D6]/5 rounded-full blur-3xl z-[1]" />
+      <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#EFE6D6]/3 rounded-full blur-3xl z-[1]" />
       
       <motion.div 
         className="relative z-10 w-full py-24"
@@ -88,8 +88,8 @@ export const GuideHero = ({
             }}
             variants={fadeInUp}
           >
-            <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
-            <span className="text-gold font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">{badge}</span>
+            <span className="w-2 h-2 bg-[#EFE6D6] rounded-full animate-pulse" />
+            <span className="text-[#1A1A1A] font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">{badge}</span>
           </motion.button>
           
           {/* Title */}

@@ -146,7 +146,7 @@ export default function ContractAnalyzer({
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-zinc-900">
+          <div className="p-2 rounded-lg bg-[#FDFBF7]">
             <Scale className="w-5 h-5 text-white" />
           </div>
           <div>
@@ -291,7 +291,7 @@ export default function ContractAnalyzer({
                 <ul className="space-y-2">
                   {displayAnalysis.missing_clauses.map((clause, idx) => (
                     <li key={idx} className="flex items-start gap-2 text-sm">
-                      <AlertTriangle className="w-3.5 h-3.5 text-amber-400 mt-0.5 shrink-0" />
+                      <AlertTriangle className="w-3.5 h-3.5 text-[#1A1A1A] mt-0.5 shrink-0" />
                       <span className="text-muted-foreground">{clause}</span>
                     </li>
                   ))}

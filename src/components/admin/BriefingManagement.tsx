@@ -262,7 +262,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="w-8 h-8 animate-spin text-gold" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#1A1A1A]" />
       </div>
     );
   }
@@ -272,13 +272,13 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {[
-          { label: 'Total Briefings', value: briefings.length, color: 'text-gold' },
+          { label: 'Total Briefings', value: briefings.length, color: 'text-[#1A1A1A]' },
           { label: 'Pending', value: briefings.filter(b => b.status === 'pending').length, color: 'text-amber-600' },
           { label: 'Approved', value: briefings.filter(b => b.status === 'approved').length, color: 'text-emerald-600' },
           { label: 'Broker Lists', value: brokerLists.length, color: 'text-blue-600' },
           { label: 'Active Reps', value: reps.length, color: 'text-purple-600' },
         ].map((s, i) => (
-          <Card key={i} className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/30">
+          <Card key={i} className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-[#B89555]/30">
             <CardContent className="pt-4 pb-3">
               <div className={`text-2xl font-bold ${s.color}`}>{s.value}</div>
               <p className="text-xs text-muted-foreground">{s.label}</p>
@@ -289,7 +289,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
 
       {/* Sub-tabs */}
       <Tabs value={subTab} onValueChange={setSubTab}>
-        <TabsList className="bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border-2 border-gold/30">
+        <TabsList className="bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border-2 border-[#B89555]/30">
           <TabsTrigger value="calendar" className="data-[state=active]:bg-[#FDFBF7] data-[state=active]:shadow-md">
             <Calendar className="w-4 h-4 mr-1" /> Briefings
           </TabsTrigger>
@@ -316,7 +316,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
                 placeholder="Search briefings..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 bg-[#FDFBF7] border-gold/20"
+                className="pl-10 bg-[#FDFBF7] border-[#B89555]/20"
               />
             </div>
             <div className="flex gap-2">
@@ -329,7 +329,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
           <ScrollArea className="h-[500px]">
             <div className="space-y-3">
               {filteredBriefings.map(b => (
-                <Card key={b.id} className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/20 hover:border-gold/40 transition-all">
+                <Card key={b.id} className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-[#B89555]/20 hover:border-[#B89555]/40 transition-all">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
@@ -368,7 +368,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
                       </div>
                     </div>
                     {getBriefingAttendance(b.id).length > 0 && (
-                      <div className="mt-3 pt-3 border-t border-gold/20 flex items-center gap-3 text-xs">
+                      <div className="mt-3 pt-3 border-t border-[#B89555]/20 flex items-center gap-3 text-xs">
                         <span className="text-muted-foreground">Attendance:</span>
                         <Badge className="bg-emerald-100 text-emerald-700">{getBriefingAttendance(b.id).filter(a => a.rsvp_status === 'attending').length} Attending</Badge>
                         <Badge className="bg-amber-100 text-amber-700">{getBriefingAttendance(b.id).filter(a => a.rsvp_status === 'late').length} Late</Badge>
@@ -392,7 +392,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
               {attendance.map(a => {
                 const briefing = briefings.find(b => b.id === a.briefing_request_id);
                 return (
-                  <Card key={a.id} className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/20">
+                  <Card key={a.id} className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-[#B89555]/20">
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
                         <div>
@@ -407,7 +407,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
                         </div>
                         <div className="flex items-center gap-3">
                           {a.selfie_url && (
-                            <a href={a.selfie_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-gold text-xs hover:underline">
+                            <a href={a.selfie_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-[#1A1A1A] text-xs hover:underline">
                               <Camera className="w-3 h-3" /> Selfie
                             </a>
                           )}
@@ -416,7 +416,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
                               <Navigation className="w-3 h-3" /> GPS
                             </a>
                           )}
-                          <span className="text-gold font-bold text-sm">+{a.points_earned} pts</span>
+                          <span className="text-[#1A1A1A] font-bold text-sm">+{a.points_earned} pts</span>
                         </div>
                       </div>
                     </CardContent>
@@ -432,13 +432,13 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
         <TabsContent value="broker-lists" className="mt-4 space-y-4">
           <div className="flex justify-between items-center">
             <h3 className="text-foreground font-semibold">Broker Notification Lists</h3>
-            <Button onClick={() => setListDialogOpen(true)} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
+            <Button onClick={() => setListDialogOpen(true)} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
               <Plus className="w-4 h-4 mr-1" /> New List
             </Button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {brokerLists.map(list => (
-              <Card key={list.id} className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/20">
+              <Card key={list.id} className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-[#B89555]/20">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="text-foreground font-semibold">{list.name}</h4>
@@ -464,32 +464,32 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
               {reps.map((rep, idx) => {
                 const rating = responsiveRating(rep.response_time_avg_hours);
                 return (
-                  <Card key={rep.id} className={`bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 ${idx === 0 ? 'border-gold ring-1 ring-gold/30' : 'border-gold/20'}`}>
+                  <Card key={rep.id} className={`bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 ${idx === 0 ? 'border-[#B89555] ring-1 ring-gold/30' : 'border-[#B89555]/20'}`}>
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <div className={`w-10 h-10 rounded-full flex items-center justify-center ${idx === 0 ? 'bg-gold/20 text-gold' : 'bg-muted text-muted-foreground'}`}>
+                          <div className={`w-10 h-10 rounded-full flex items-center justify-center ${idx === 0 ? 'bg-[#EFE6D6]/20 text-[#1A1A1A]' : 'bg-muted text-muted-foreground'}`}>
                             {idx === 0 ? <Trophy className="w-5 h-5" /> : <span className="font-bold">{idx + 1}</span>}
                           </div>
                           <div>
                             <div className="flex items-center gap-2">
                               <h4 className="text-foreground font-semibold">{rep.full_name}</h4>
-                              {idx === 0 && <Star className="w-4 h-4 text-gold fill-gold" />}
+                              {idx === 0 && <Star className="w-4 h-4 text-[#1A1A1A] fill-gold" />}
                             </div>
                             <p className="text-xs text-muted-foreground">{rep.developer_name}</p>
                             {rep.languages?.length > 0 && (
                               <div className="flex gap-1 mt-1">
                                 {rep.languages.slice(0, 3).map(l => (
-                                  <Badge key={l} className="bg-gold/10 text-gold border border-gold/20 text-[9px]">{l}</Badge>
+                                  <Badge key={l} className="bg-[#EFE6D6]/10 text-[#1A1A1A] border border-[#B89555]/20 text-[9px]">{l}</Badge>
                                 ))}
-                                {rep.languages.length > 3 && <Badge className="bg-gold/10 text-gold border border-gold/20 text-[9px]">+{rep.languages.length - 3}</Badge>}
+                                {rep.languages.length > 3 && <Badge className="bg-[#EFE6D6]/10 text-[#1A1A1A] border border-[#B89555]/20 text-[9px]">+{rep.languages.length - 3}</Badge>}
                               </div>
                             )}
                           </div>
                         </div>
                         <div className="flex items-center gap-6 text-right">
                           <div>
-                            <div className="text-gold font-bold text-lg">{rep.activity_score}</div>
+                            <div className="text-[#1A1A1A] font-bold text-lg">{rep.activity_score}</div>
                             <p className="text-[10px] text-muted-foreground">Score</p>
                           </div>
                           <div>
@@ -517,7 +517,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
 
         {/* WHATSAPP LOG */}
         <TabsContent value="whatsapp" className="mt-4">
-          <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/20">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-[#B89555]/20">
             <CardHeader>
               <CardTitle className="text-foreground flex items-center gap-2">
                 <MessageCircle className="w-5 h-5 text-emerald-600" />
@@ -533,7 +533,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
 
       {/* Briefing Detail Dialog */}
       <Dialog open={detailOpen} onOpenChange={setDetailOpen}>
-        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/30 text-foreground max-w-2xl max-h-[80vh] overflow-y-auto">
+        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-[#B89555]/30 text-foreground max-w-2xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Briefing Details</DialogTitle>
           </DialogHeader>
@@ -553,7 +553,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
 
               {/* AI Summary Button */}
               {selectedBriefing.status === 'approved' && (
-                <div className="pt-4 border-t border-gold/20">
+                <div className="pt-4 border-t border-[#B89555]/20">
                   <Button
                     onClick={() => handleAISummary(selectedBriefing)}
                     disabled={aiSummaryLoading}
@@ -563,7 +563,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
                     Generate AI Summary
                   </Button>
                   {aiSummary && (
-                    <div className="mt-3 p-4 rounded-xl bg-[#FDFBF7]/80 border border-gold/20 text-sm whitespace-pre-wrap">
+                    <div className="mt-3 p-4 rounded-xl bg-[#FDFBF7]/80 border border-[#B89555]/20 text-sm whitespace-pre-wrap">
                       {aiSummary}
                     </div>
                   )}
@@ -571,7 +571,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
               )}
 
               {/* Assign Broker List */}
-              <div className="pt-4 border-t border-gold/20">
+              <div className="pt-4 border-t border-[#B89555]/20">
                 <Label className="text-muted-foreground">Assign Broker List</Label>
                 <div className="flex gap-2 mt-2 flex-wrap">
                   {brokerLists.map(list => (
@@ -580,7 +580,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
                       size="sm"
                       variant={selectedBriefing.broker_list_id === list.id ? 'default' : 'outline'}
                       onClick={() => handleAssignList(selectedBriefing.id, list.id)}
-                      className={selectedBriefing.broker_list_id === list.id ? 'bg-gold text-[#1A1A1A]' : 'border-gold/30 text-foreground'}
+                      className={selectedBriefing.broker_list_id === list.id ? 'bg-[#EFE6D6] text-[#1A1A1A]' : 'border-[#B89555]/30 text-foreground'}
                     >
                       {list.name} ({list.broker_ids?.length || 0})
                     </Button>
@@ -590,11 +590,11 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
 
               {/* Attendance */}
               {getBriefingAttendance(selectedBriefing.id).length > 0 && (
-                <div className="pt-4 border-t border-gold/20">
+                <div className="pt-4 border-t border-[#B89555]/20">
                   <Label className="text-muted-foreground mb-2 block">Attendance ({getBriefingAttendance(selectedBriefing.id).length})</Label>
                   <div className="space-y-2">
                     {getBriefingAttendance(selectedBriefing.id).map(a => (
-                      <div key={a.id} className="flex items-center justify-between p-3 bg-[#FDFBF7]/60 rounded-lg border border-gold/15">
+                      <div key={a.id} className="flex items-center justify-between p-3 bg-[#FDFBF7]/60 rounded-lg border border-[#B89555]/15">
                         <div className="flex items-center gap-3">
                           <Badge className={a.confirmed_attended ? 'bg-emerald-100 text-emerald-700' : 'bg-muted text-muted-foreground'}>
                             {a.confirmed_attended ? '✓' : '○'}
@@ -603,9 +603,9 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
                           {a.late_reason && <span className="text-xs text-muted-foreground">({a.late_reason})</span>}
                         </div>
                         <div className="flex items-center gap-2">
-                          {a.selfie_url && <Camera className="w-4 h-4 text-gold" />}
+                          {a.selfie_url && <Camera className="w-4 h-4 text-[#1A1A1A]" />}
                           {a.gps_latitude && <Navigation className="w-4 h-4 text-blue-600" />}
-                          <span className="text-gold text-xs font-bold">+{a.points_earned}</span>
+                          <span className="text-[#1A1A1A] text-xs font-bold">+{a.points_earned}</span>
                         </div>
                       </div>
                     ))}
@@ -619,23 +619,23 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
 
       {/* Create Broker List Dialog */}
       <Dialog open={listDialogOpen} onOpenChange={setListDialogOpen}>
-        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/30 text-foreground">
+        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-[#B89555]/30 text-foreground">
           <DialogHeader>
             <DialogTitle>Create Broker List</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div>
               <Label>List Name *</Label>
-              <Input value={newListName} onChange={(e) => setNewListName(e.target.value)} placeholder="e.g. Core Briefing Team" className="bg-[#FDFBF7] border-gold/20" />
+              <Input value={newListName} onChange={(e) => setNewListName(e.target.value)} placeholder="e.g. Core Briefing Team" className="bg-[#FDFBF7] border-[#B89555]/20" />
             </div>
             <div>
               <Label>Description</Label>
-              <Input value={newListDesc} onChange={(e) => setNewListDesc(e.target.value)} placeholder="Optional description" className="bg-[#FDFBF7] border-gold/20" />
+              <Input value={newListDesc} onChange={(e) => setNewListDesc(e.target.value)} placeholder="Optional description" className="bg-[#FDFBF7] border-[#B89555]/20" />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setListDialogOpen(false)} className="border-gold/30">Cancel</Button>
-            <Button onClick={handleCreateList} className="bg-gold text-[#1A1A1A] hover:bg-gold/90">Create List</Button>
+            <Button variant="outline" onClick={() => setListDialogOpen(false)} className="border-[#B89555]/30">Cancel</Button>
+            <Button onClick={handleCreateList} className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90">Create List</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -690,14 +690,14 @@ const WhatsAppLogger = ({ reps, onLog }: { reps: RepActivity[]; onLog: () => voi
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <Label>Representative</Label>
-          <select value={selectedRep} onChange={(e) => setSelectedRep(e.target.value)} className="flex h-10 w-full rounded-md border border-gold/20 bg-[#FDFBF7] px-3 py-2 text-sm text-foreground">
+          <select value={selectedRep} onChange={(e) => setSelectedRep(e.target.value)} className="flex h-10 w-full rounded-md border border-[#B89555]/20 bg-[#FDFBF7] px-3 py-2 text-sm text-foreground">
             <option value="">Select rep...</option>
             {reps.map(r => <option key={r.id} value={r.id}>{r.full_name} — {r.developer_name}</option>)}
           </select>
         </div>
         <div>
           <Label>Activity Type</Label>
-          <select value={activityType} onChange={(e) => setActivityType(e.target.value)} className="flex h-10 w-full rounded-md border border-gold/20 bg-[#FDFBF7] px-3 py-2 text-sm text-foreground">
+          <select value={activityType} onChange={(e) => setActivityType(e.target.value)} className="flex h-10 w-full rounded-md border border-[#B89555]/20 bg-[#FDFBF7] px-3 py-2 text-sm text-foreground">
             <option value="whatsapp_message">Message Sent</option>
             <option value="whatsapp_response">Response Received</option>
           </select>
@@ -706,12 +706,12 @@ const WhatsAppLogger = ({ reps, onLog }: { reps: RepActivity[]; onLog: () => voi
       {activityType === 'whatsapp_response' && (
         <div>
           <Label>Response Time (minutes)</Label>
-          <Input type="number" value={responseMinutes} onChange={(e) => setResponseMinutes(e.target.value)} placeholder="e.g. 15" className="bg-[#FDFBF7] border-gold/20" />
+          <Input type="number" value={responseMinutes} onChange={(e) => setResponseMinutes(e.target.value)} placeholder="e.g. 15" className="bg-[#FDFBF7] border-[#B89555]/20" />
         </div>
       )}
       <div>
         <Label>Description</Label>
-        <Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Brief note about the activity" className="bg-[#FDFBF7] border-gold/20" />
+        <Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Brief note about the activity" className="bg-[#FDFBF7] border-[#B89555]/20" />
       </div>
       <Button onClick={handleLog} disabled={submitting} className="bg-emerald-600 hover:bg-emerald-700 text-white">
         {submitting ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <MessageCircle className="w-4 h-4 mr-2" />}

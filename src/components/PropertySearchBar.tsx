@@ -31,7 +31,7 @@ function DeveloperSearchSelect({ developers, value, onChange }: { developers: De
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <button className="flex items-center gap-2 w-[190px] h-12 px-3 bg-zinc-900/80 border border-[#1A1A1A]/50 text-white rounded-lg text-sm hover:border-gold transition-colors">
+        <button className="flex items-center gap-2 w-[190px] h-12 px-3 bg-[#FDFBF7]/80 border border-[#1A1A1A]/50 text-white rounded-lg text-sm hover:border-[#B89555] transition-colors">
           <Building2 className="w-4 h-4 text-white/90 flex-shrink-0" />
           <span className="truncate flex-1 text-left text-sm">
             {selectedDev ? selectedDev.name : "Developer / Project"}
@@ -39,7 +39,7 @@ function DeveloperSearchSelect({ developers, value, onChange }: { developers: De
           <ChevronDown className="w-3.5 h-3.5 text-white/90 flex-shrink-0" />
         </button>
       </PopoverTrigger>
-      <PopoverContent className="w-[260px] p-0 bg-zinc-900 border border-[#1A1A1A] z-[10200]" side="bottom" align="start" sideOffset={4}>
+      <PopoverContent className="w-[260px] p-0 bg-[#FDFBF7] border border-[#1A1A1A] z-[10200]" side="bottom" align="start" sideOffset={4}>
         <div className="p-2 border-b border-[#1A1A1A]">
           <div className="relative">
             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/90" />
@@ -48,7 +48,7 @@ function DeveloperSearchSelect({ developers, value, onChange }: { developers: De
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search developer..."
-              className="w-full h-9 pl-8 pr-3 bg-zinc-800 border border-[#1A1A1A] rounded-lg text-sm text-white placeholder:text-[#1A1A1A]/70 outline-none focus:border-gold"
+              className="w-full h-9 pl-8 pr-3 bg-[#1A1A1A] border border-[#1A1A1A] rounded-lg text-sm text-white placeholder:text-[#1A1A1A]/70 outline-none focus:border-[#B89555]"
               autoFocus
             />
           </div>
@@ -56,7 +56,7 @@ function DeveloperSearchSelect({ developers, value, onChange }: { developers: De
         <div className="max-h-64 overflow-y-auto p-1">
           <button
             onClick={() => { onChange(null); setOpen(false); setSearch(""); }}
-            className={cn("w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors", !value ? "bg-gold/20 text-gold" : "text-white/85 hover:bg-[#1A1A1A]")}
+            className={cn("w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors", !value ? "bg-[#EFE6D6]/20 text-[#1A1A1A]" : "text-white/85 hover:bg-[#1A1A1A]")}
           >
             All Developers
           </button>
@@ -64,7 +64,7 @@ function DeveloperSearchSelect({ developers, value, onChange }: { developers: De
             <button
               key={dev.id}
               onClick={() => { onChange(dev.id); setOpen(false); setSearch(""); }}
-              className={cn("w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors", value === dev.id ? "bg-gold/20 text-gold" : "text-white/85 hover:bg-[#1A1A1A]")}
+              className={cn("w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors", value === dev.id ? "bg-[#EFE6D6]/20 text-[#1A1A1A]" : "text-white/85 hover:bg-[#1A1A1A]")}
             >
               {isValidDeveloperLogoUrl(dev.logo_url) ? (
                 <img src={dev.logo_url as string} alt={dev.name} className="w-5 h-5 object-contain rounded-sm flex-shrink-0 bg-[#FDFBF7]" />
@@ -72,7 +72,7 @@ function DeveloperSearchSelect({ developers, value, onChange }: { developers: De
                 <Building2 className="w-5 h-5 text-white/85 flex-shrink-0" />
               )}
               <span className="truncate">{dev.name}</span>
-              {value === dev.id && <Check className="w-3.5 h-3.5 ml-auto text-gold flex-shrink-0" />}
+              {value === dev.id && <Check className="w-3.5 h-3.5 ml-auto text-[#1A1A1A] flex-shrink-0" />}
             </button>
           ))}
           {filtered.length === 0 && (
@@ -128,7 +128,7 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            className="pl-9 h-10 bg-zinc-900/80 border-[#1A1A1A]/50 text-white placeholder:text-[#1A1A1A]/70 focus:border-gold rounded-lg"
+            className="pl-9 h-10 bg-[#FDFBF7]/80 border-[#1A1A1A]/50 text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] rounded-lg"
           />
         </div>
         <Button onClick={handleSearch} variant="primary" className="h-10 px-4 rounded-lg">
@@ -140,7 +140,7 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
 
   return (
     <div
-      className={`bg-zinc-950/90 backdrop-blur-md border border-[#1A1A1A]/50 rounded-2xl p-4 md:p-6 w-full ${className}`}
+      className={`bg-[#FDFBF7]/90 backdrop-blur-md border border-[#1A1A1A]/50 rounded-2xl p-4 md:p-6 w-full ${className}`}
     >
       <div className="flex flex-wrap items-center gap-3 md:gap-4 w-full">
         {/* Keyword Search */}
@@ -151,7 +151,7 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            className="pl-10 h-12 bg-zinc-900/80 border-[#1A1A1A]/50 text-white placeholder:text-[#1A1A1A]/70 focus:border-gold rounded-lg"
+            className="pl-10 h-12 bg-[#FDFBF7]/80 border-[#1A1A1A]/50 text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] rounded-lg"
           />
         </div>
 
@@ -232,7 +232,7 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
         <Button
           variant="outline"
           onClick={() => navigate("/properties")}
-          className="h-12 px-4 bg-zinc-900/80 border-[#1A1A1A]/50 text-white hover:bg-[#1A1A1A] hover:text-white rounded-lg"
+          className="h-12 px-4 bg-[#FDFBF7]/80 border-[#1A1A1A]/50 text-white hover:bg-[#1A1A1A] hover:text-white rounded-lg"
         >
           <Filter className="w-4 h-4 mr-2" />
           Filters

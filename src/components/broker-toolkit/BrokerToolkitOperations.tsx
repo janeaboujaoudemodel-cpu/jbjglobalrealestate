@@ -64,7 +64,7 @@ const SUPPORT_CHANNELS = [
     description: "Detailed inquiries & documentation",
     icon: Mail,
     action: `mailto:${CONTACT_INFO.supportEmail}`,
-    color: "text-gold",
+    color: "text-[#1A1A1A]",
   },
 ];
 

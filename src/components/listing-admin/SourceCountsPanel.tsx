@@ -38,17 +38,17 @@ export function SourceCountsPanel({ reellyApiTotal, onSourceChange, activeSource
         <Card
           className={`cursor-pointer transition-all border-2 ${
             selectedSource === "provident"
-              ? "border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-lg"
-              : "border-border hover:border-gold/40 bg-card"
+              ? "border-[#B89555] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-lg"
+              : "border-border hover:border-[#B89555]/40 bg-card"
           }`}
           onClick={() => handleSourceSelect(selectedSource === "provident" ? "none" : "provident")}
         >
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-sm text-foreground">
-              <Database className="w-4 h-4 text-gold" />
+              <Database className="w-4 h-4 text-[#1A1A1A]" />
               PROVIDENT PORTAL
               {selectedSource === "provident" && (
-                <Badge variant="outline" className="ml-auto bg-gold/10 text-gold border-gold/40 text-[10px]">
+                <Badge variant="outline" className="ml-auto bg-[#EFE6D6]/10 text-[#1A1A1A] border-[#B89555]/40 text-[10px]">
                   Active
                 </Badge>
               )}
@@ -86,8 +86,8 @@ export function SourceCountsPanel({ reellyApiTotal, onSourceChange, activeSource
         <Card
           className={`cursor-pointer transition-all border-2 ${
             selectedSource === "reelly"
-              ? "border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-lg"
-              : "border-border hover:border-gold/40 bg-card opacity-75"
+              ? "border-[#B89555] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-lg"
+              : "border-border hover:border-[#B89555]/40 bg-card opacity-75"
           }`}
           onClick={() => handleSourceSelect(selectedSource === "reelly" ? "none" : "reelly")}
         >
@@ -146,7 +146,7 @@ export function SourceCountsPanel({ reellyApiTotal, onSourceChange, activeSource
           variant="ghost"
           size="sm"
           onClick={() => refreshCounts()}
-          className="h-6 text-xs text-gold hover:text-[#1A1A1A] hover:bg-gold/10"
+          className="h-6 text-xs text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
         >
           <RefreshCw className="w-3 h-3 mr-1" />
           Refresh

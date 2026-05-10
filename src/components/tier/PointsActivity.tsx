@@ -41,7 +41,7 @@ export function PointsActivity({ className, limit = 10 }: PointsActivityProps) {
     return (
       <Card className={cn("bg-[#1A1A1A]/40 border-white/10", className)}>
         <CardContent className="flex items-center justify-center py-8">
-          <Loader2 className="w-6 h-6 text-gold animate-spin" />
+          <Loader2 className="w-6 h-6 text-[#1A1A1A] animate-spin" />
         </CardContent>
       </Card>
     );
@@ -64,7 +64,7 @@ export function PointsActivity({ className, limit = 10 }: PointsActivityProps) {
     <Card className={cn("bg-[#1A1A1A]/40 border-white/10 backdrop-blur-sm", className)}>
       <CardHeader className="pb-2">
         <CardTitle className="text-lg text-white flex items-center gap-2">
-          <TrendingUp className="w-5 h-5 text-gold" />
+          <TrendingUp className="w-5 h-5 text-[#1A1A1A]" />
           Points Activity
         </CardTitle>
       </CardHeader>

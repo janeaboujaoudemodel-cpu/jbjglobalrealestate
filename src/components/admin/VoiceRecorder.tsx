@@ -169,9 +169,9 @@ const VoiceRecorder = () => {
   const progressPercent = Math.min((totalDuration / 180) * 100, 100);
 
   return (
-    <Card className="bg-[#FDFBF7] border-2 border-gold/30">
+    <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
       <CardHeader>
-        <CardTitle className="text-gold flex items-center gap-2">
+        <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
           <Mic className="w-5 h-5" />
           Voice Cloning Recorder
         </CardTitle>
@@ -185,7 +185,7 @@ const VoiceRecorder = () => {
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
             <span className="text-[#1A1A1A]/60">Recording Progress</span>
-            <span className={totalDuration >= 180 ? "text-green-600" : "text-gold"}>
+            <span className={totalDuration >= 180 ? "text-green-600" : "text-[#1A1A1A]"}>
               {formatTime(totalDuration)} / 3:00 min
             </span>
           </div>
@@ -205,7 +205,7 @@ const VoiceRecorder = () => {
             <select
               value={currentSample}
               onChange={(e) => setCurrentSample(Number(e.target.value))}
-              className="bg-[#FDFBF7] border-2 border-gold/30 rounded px-2 py-1 text-sm text-[#1A1A1A]"
+              className="bg-[#FDFBF7] border-2 border-[#B89555]/30 rounded px-2 py-1 text-sm text-[#1A1A1A]"
             >
               {VOICE_SAMPLES.map((sample, i) => (
                 <option key={i} value={i}>{sample.title}</option>
@@ -213,8 +213,8 @@ const VoiceRecorder = () => {
             </select>
           </div>
           
-          <div className="bg-gold/5 border border-gold/20 rounded-lg p-4 space-y-3">
-            <h4 className="text-gold font-medium text-sm">
+          <div className="bg-[#EFE6D6]/5 border border-[#B89555]/20 rounded-lg p-4 space-y-3">
+            <h4 className="text-[#1A1A1A] font-medium text-sm">
               {VOICE_SAMPLES[currentSample].title}
             </h4>
             <p className="text-[#1A1A1A] text-lg leading-relaxed">
@@ -262,14 +262,14 @@ const VoiceRecorder = () => {
               {recordings.map((recording) => (
                 <div
                   key={recording.id}
-                  className="flex items-center justify-between bg-gold/5 border border-gold/20 rounded-lg p-3"
+                  className="flex items-center justify-between bg-[#EFE6D6]/5 border border-[#B89555]/20 rounded-lg p-3"
                 >
                   <div className="flex items-center gap-3">
                     <Button
                       size="sm"
                       variant="ghost"
                       onClick={() => playRecording(recording)}
-                      className="text-gold hover:text-gold-light"
+                      className="text-[#1A1A1A] hover:text-[#1A1A1A]-light"
                     >
                       {playingId === recording.id ? (
                         <Pause className="w-4 h-4" />
@@ -304,7 +304,7 @@ const VoiceRecorder = () => {
         {recordings.length > 0 && totalDuration >= 60 && (
           <Button
             onClick={downloadAllRecordings}
-            className="w-full bg-gold hover:bg-gold-light text-gold-foreground"
+            className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]-light text-[#1A1A1A]-foreground"
           >
             <Upload className="w-4 h-4 mr-2" />
             Download All Recordings for Voice Cloning
@@ -312,7 +312,7 @@ const VoiceRecorder = () => {
         )}
 
         {/* Instructions */}
-        <div className="bg-gold/5 border border-gold/20 rounded-lg p-4 text-sm text-[#1A1A1A]/60 space-y-2">
+        <div className="bg-[#EFE6D6]/5 border border-[#B89555]/20 rounded-lg p-4 text-sm text-[#1A1A1A]/60 space-y-2">
           <p className="font-medium text-[#1A1A1A]">Recording Tips:</p>
           <ul className="list-disc list-inside space-y-1">
             <li>Record in a quiet room with minimal echo</li>
