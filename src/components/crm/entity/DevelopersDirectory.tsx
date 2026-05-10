@@ -155,14 +155,14 @@ export default function DevelopersDirectory() {
         <table className="min-w-full text-sm">
           <thead className="bg-[#F7F2EA] text-[#1A1A1A]">
             <tr>
-              <th className="text-left px-4 py-2 font-semibold">Developer</th>
-              <th className="text-left px-4 py-2 font-semibold">Headquarters</th>
-              <th className="text-left px-4 py-2 font-semibold">CEO</th>
-              <th className="text-left px-4 py-2 font-semibold">License</th>
-              <th className="text-right px-4 py-2 font-semibold">Done</th>
-              <th className="text-right px-4 py-2 font-semibold">Off-plan</th>
-              <th className="text-right px-4 py-2 font-semibold">Founded</th>
-              <th className="text-left px-4 py-2 font-semibold">Status</th>
+              <th className="text-left px-4 py-2 font-semibold whitespace-nowrap sticky left-0 bg-[#F7F2EA] z-10">Developer</th>
+              <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Headquarters</th>
+              <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">CEO</th>
+              <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">License</th>
+              <th className="text-right px-4 py-2 font-semibold whitespace-nowrap">Done</th>
+              <th className="text-right px-4 py-2 font-semibold whitespace-nowrap">Off-plan</th>
+              <th className="text-right px-4 py-2 font-semibold whitespace-nowrap">Founded</th>
+              <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Status</th>
               <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Contact</th>
             </tr>
           </thead>
