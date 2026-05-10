@@ -15,7 +15,6 @@ import {
   RefreshCw,
   Inbox,
   FileSignature,
-  Building2,
   Handshake,
   Briefcase,
   FileQuestion,
