@@ -51,6 +51,14 @@ export default function BookMeetingLanding() {
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState<null | { when: string }>(null);
 
+  useEffect(() => {
+    document.title = "Book a Meeting with Jane Bou Jaoude · JBJ GLOBAL REAL ESTATE";
+    const meta = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
+    const prev = meta?.content;
+    if (meta) meta.content = "Schedule a private 60-minute consultation with Jane Bou Jaoude, founder of JBJ GLOBAL REAL ESTATE. Mon–Fri, 10:00–17:00 Dubai time.";
+    return () => { if (meta && prev !== undefined) meta.content = prev; };
+  }, []);
+
   // Token prefill
   useEffect(() => {
     if (!token) return;
