@@ -2705,6 +2705,27 @@ const DeveloperRegistryTab = () => {
         >
           <Plus className="w-4 h-4 mr-2" />Upload list
         </Button>
+        <Button
+          variant="outline"
+          onClick={async () => {
+            const t = toast.loading("Scanning Gmail for signed agreements…");
+            try {
+              const { data, error } = await supabase.functions.invoke("sync-developer-contracts", { body: {} });
+              if (error) throw error;
+              if (!data?.ok) throw new Error(data?.error || "Sync failed");
+              toast.success(
+                `Scanned ${data.scanned}. Matched ${data.matched}. Needs review ${data.needs_review}. Duplicates ${data.duplicates}.`,
+                { id: t }
+              );
+              refetch();
+            } catch (e: any) {
+              toast.error(`Sync failed: ${e.message || "unknown"}`, { id: t });
+            }
+          }}
+          title="Scan your connected Gmail for signed-agreement / signed-contract emails and attach them to the matching developer automatically."
+        >
+          <FileSignature className="w-4 h-4 mr-2" />Sync signed agreements
+        </Button>
         <Button onClick={openNew}><Plus className="w-4 h-4 mr-2" />Add</Button>
       </div>
       <BulkUploadDialog open={uploadOpen} onOpenChange={setUploadOpen} kind="developer" onDone={refetch} defaultListId={devListView.kind === "list" ? devListView.listId : null} />
