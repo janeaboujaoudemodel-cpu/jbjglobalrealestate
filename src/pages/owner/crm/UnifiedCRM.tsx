@@ -284,22 +284,26 @@ export default function UnifiedCRM() {
               Unified relationship hub — leads, partners, employees, campaigns, calendar, contracts.
             </p>
           </div>
-          <button
-            type="button"
-            onClick={() => setInsightsOpen(o => !o)}
-            aria-expanded={insightsOpen}
-            className={[
-              "shrink-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors",
-              insightsOpen
-                ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
-                : "bg-transparent text-[#1A1A1A] border-[#B89555]/40 hover:bg-[#EFE6D6]/60",
-            ].join(" ")}
-          >
-            <BarChart3 className="h-3.5 w-3.5" />
-            Insights
-            <ChevronDown className={`h-3.5 w-3.5 transition-transform ${insightsOpen ? "rotate-180" : ""}`} />
-          </button>
-        </div>
+          <div className="flex items-center gap-2">
+            <Suspense fallback={null}>
+              <CRMGlobalExportButton />
+            </Suspense>
+            <button
+              type="button"
+              onClick={() => setInsightsOpen(o => !o)}
+              aria-expanded={insightsOpen}
+              className={[
+                "shrink-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors",
+                insightsOpen
+                  ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
+                  : "bg-transparent text-[#1A1A1A] border-[#B89555]/40 hover:bg-[#EFE6D6]/60",
+              ].join(" ")}
+            >
+              <BarChart3 className="h-3.5 w-3.5" />
+              Insights
+              <ChevronDown className={`h-3.5 w-3.5 transition-transform ${insightsOpen ? "rotate-180" : ""}`} />
+            </button>
+          </div>
 
         {/* Insights drawer (above entity bar) */}
         {insightsOpen && (
