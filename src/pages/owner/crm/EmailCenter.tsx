@@ -147,6 +147,29 @@ export default function EmailCenter() {
               );
             })}
           </div>
+
+          {/* Status sub-filter */}
+          <div className="mt-3 pt-3 border-t border-[#B89555]/15 flex flex-wrap items-center gap-1.5">
+            <span className="text-[11px] uppercase tracking-wide text-[#1A1A1A]/55 mr-1">Filter</span>
+            {STATUS_FILTERS.map((f) => {
+              const isActive = statusFilter === f.id;
+              return (
+                <button
+                  key={f.id}
+                  type="button"
+                  onClick={() => setStatusFilter(f.id)}
+                  className={[
+                    "inline-flex items-center px-2.5 py-1 rounded-full text-[12px] font-medium border transition-colors",
+                    isActive
+                      ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
+                      : "bg-transparent text-[#1A1A1A]/70 border-[#B89555]/20 hover:bg-[#EFE6D6]/60",
+                  ].join(" ")}
+                >
+                  {f.label}
+                </button>
+              );
+            })}
+          </div>
         </CardContent>
       </Card>
 
