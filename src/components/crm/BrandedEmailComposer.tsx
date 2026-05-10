@@ -9,20 +9,23 @@
  * outreach-lock-payload / outreach-send-locked pipeline — so what the
  * owner approves in the test is byte-for-byte what the recipient gets.
  */
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
-import { Sparkles, Send, FlaskConical, Save, Mail, Loader2, CalendarPlus } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Sparkles, Send, FlaskConical, Save, Mail, Loader2, CalendarPlus, LibraryBig, PenLine } from "lucide-react";
 import { toast } from "sonner";
 import {
   PRIMARY_SENDER,
   PRIMARY_SENDER_NAME,
   DEFAULT_REPLY_TO,
 } from "@/config/outreachIdentity";
+import { useEmailTemplateLibrary, mergeTemplate, useSaveEmailTemplate } from "@/hooks/useEmailTemplateLibrary";
+import { useEmailSignatures, renderSignatureHtml } from "@/hooks/useEmailSignatures";
 
 type Template = {
   id: string;
