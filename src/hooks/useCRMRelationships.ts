@@ -760,29 +760,61 @@ export const useUnlockEmailTemplate = () => {
 };
 export const useEmailDeliveryStatus = (recipientEmails: string[]) =>
   useQuery({
-    queryKey: ["crm-email-delivery", recipientEmails.sort().join(",")],
+    queryKey: ["crm-email-delivery", recipientEmails.map((e) => (e || "").toLowerCase()).sort().join(",")],
     enabled: recipientEmails.length > 0,
+    retry: 1,
     queryFn: async () => {
+      const lowered = recipientEmails.map((e) => (e || "").toLowerCase()).filter(Boolean);
+      // The current schema uses to_email/kind/template/error; older schema used
+      // recipient_email/template_name/error_message. Select * and normalise so
+      // the dialog works regardless of which migration is live.
       const { data, error } = await (supabase as any)
         .from("email_send_log")
-        .select("recipient_email,status,template_name,created_at,error_message,message_id")
-        .in("recipient_email", recipientEmails)
-        .in("template_name", ["developer_registration", "developer_confirm_registered"])
+        .select("*")
+        .or(
+          `to_email.in.(${lowered.map((e) => `"${e}"`).join(",")}),recipient_email.in.(${lowered
+            .map((e) => `"${e}"`)
+            .join(",")})`
+        )
         .order("created_at", { ascending: false })
         .limit(1000);
-      if (error) throw error;
-      // Latest status per recipient_email
-      const map = new Map<string, any>();
-      const history = new Map<string, any[]>();
-      (data || []).forEach((row: any) => {
-        if (!map.has(row.recipient_email)) map.set(row.recipient_email, row);
-        const arr = history.get(row.recipient_email) || [];
-        arr.push(row);
-        history.set(row.recipient_email, arr);
-      });
-      return { latest: map, history };
+      if (error) {
+        // Fall back to a simpler query if the .or() shape isn't supported.
+        const fb = await (supabase as any)
+          .from("email_send_log")
+          .select("*")
+          .in("to_email", lowered)
+          .order("created_at", { ascending: false })
+          .limit(1000);
+        if (fb.error) throw fb.error;
+        return normaliseLog(fb.data || []);
+      }
+      return normaliseLog(data || []);
     },
   });
+
+function normaliseLog(rows: any[]) {
+  const latest = new Map<string, any>();
+  const history = new Map<string, any[]>();
+  rows.forEach((row: any) => {
+    const email = String(row.to_email || row.recipient_email || "").toLowerCase();
+    if (!email) return;
+    const norm = {
+      ...row,
+      recipient_email: email,
+      template_name: row.template_name || row.template || row.kind || null,
+      error_message: row.error_message || row.error || null,
+      status: row.status || "sent",
+      created_at: row.created_at,
+      subject: row.subject || null,
+    };
+    if (!latest.has(email)) latest.set(email, norm);
+    const arr = history.get(email) || [];
+    arr.push(norm);
+    history.set(email, arr);
+  });
+  return { latest, history };
+}
 
 /* ---------- Reminders ---------- */
 export const useReminders = (filters?: { brokerage_id?: string; client_id?: string; dev_registry_id?: string }) =>
