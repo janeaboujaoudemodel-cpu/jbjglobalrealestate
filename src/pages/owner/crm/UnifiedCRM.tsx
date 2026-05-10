@@ -39,6 +39,7 @@ const AutomationRules     = lazy(() => import("@/components/crm/AutomationRules"
 const CRMEnhancedDashboard= lazy(() => import("@/components/crm/CRMEnhancedDashboard"));
 const InvestorsDirectory  = lazy(() => import("@/components/crm/InvestorsDirectory"));
 const BrokersImported     = lazy(() => import("@/components/crm/BrokersImported"));
+const CRMGlobalExportButton = lazy(() => import("@/components/crm/CRMGlobalExportButton"));
 
 type Entity =
   | "leads" | "investors" | "developers" | "sales-reps"
