@@ -446,9 +446,9 @@ const CRMTasks = () => {
             {doneTasks.length > 0 && (
               <div>
                 <div className="flex items-center gap-2 mb-4">
-                  <CheckCircle2 className="w-4 h-4 text-green-500" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-700" />
                   <h2 className="text-lg font-semibold text-[#1A1A1A]">Done</h2>
-                  <Badge className="bg-green-100 text-green-600">{doneTasks.length}</Badge>
+                  <Badge className="bg-emerald-500/15 text-emerald-800 border border-emerald-500/30">{doneTasks.length}</Badge>
                 </div>
                 <div className="space-y-3">
                   {doneTasks.map(task => (
