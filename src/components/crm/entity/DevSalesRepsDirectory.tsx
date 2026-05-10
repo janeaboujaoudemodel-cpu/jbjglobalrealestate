@@ -142,18 +142,18 @@ export default function DevSalesRepsDirectory() {
                       <span className="font-semibold text-[#1A1A1A]">{r.full_name}</span>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs">{r.title || "—"}</td>
-                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs">{r.developer?.name || "—"}</td>
-                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs">
+                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">{r.title || "—"}</td>
+                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">{r.developer?.name || "—"}</td>
+                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">
                     {r.phone_e164 ? <span className="inline-flex items-center gap-1"><Phone className="h-3 w-3" />{r.phone_e164}</span> : "—"}
                   </td>
-                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs">
+                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">
                     {r.email ? <span className="inline-flex items-center gap-1"><Mail className="h-3 w-3" />{r.email}</span> : "—"}
                   </td>
-                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs">
+                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">
                     {r.whatsapp_number ? <span className="inline-flex items-center gap-1"><MessageCircle className="h-3 w-3" />{r.whatsapp_number}</span> : "—"}
                   </td>
-                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs">
+                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">
                     {(r.languages || []).join(", ") || "—"}
                   </td>
                 </tr>

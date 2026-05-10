@@ -187,7 +187,7 @@ export default function DevelopersDirectory() {
                       <span className="font-semibold text-[#1A1A1A] truncate">{d.name}</span>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs">
+                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">
                     {maps ? (
                       <a href={maps} target="_blank" rel="noreferrer" onClick={stop}
                          className="inline-flex items-center gap-1 hover:underline">
@@ -196,11 +196,11 @@ export default function DevelopersDirectory() {
                       </a>
                     ) : (d.headquarters || "—")}
                   </td>
-                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs">{d.ceo_name || "—"}</td>
-                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs">{d.license_number || "—"}</td>
-                  <td className="px-4 py-3 text-right text-[#1A1A1A]">{d.completed_projects ?? "—"}</td>
-                  <td className="px-4 py-3 text-right text-[#1A1A1A]">{d.offplan_projects ?? "—"}</td>
-                  <td className="px-4 py-3 text-right text-[#1A1A1A]/80 text-xs">{d.founded_year || "—"}</td>
+                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">{d.ceo_name || "—"}</td>
+                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">{d.license_number || "—"}</td>
+                  <td className="px-4 py-3 text-right text-[#1A1A1A] whitespace-nowrap">{d.completed_projects ?? "—"}</td>
+                  <td className="px-4 py-3 text-right text-[#1A1A1A] whitespace-nowrap">{d.offplan_projects ?? "—"}</td>
+                  <td className="px-4 py-3 text-right text-[#1A1A1A]/80 text-xs whitespace-nowrap">{d.founded_year || "—"}</td>
                   <td className="px-4 py-3">
                     {d.registration_status ? (
                       <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] text-[10px] capitalize">
