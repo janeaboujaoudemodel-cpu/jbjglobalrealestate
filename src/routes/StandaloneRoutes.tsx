@@ -25,6 +25,13 @@ export const StandaloneRoutes = () => (
     <Route path="/coming-soon" element={<RouteErrorBoundary routeName="ComingSoon"><ComingSoon /></RouteErrorBoundary>} />
     <Route path="/maintenance" element={<RouteErrorBoundary routeName="Maintenance"><ComingSoon /></RouteErrorBoundary>} />
     <Route path="/card" element={<DigitalCard />} />
+    <Route path="/book" element={
+      <RouteErrorBoundary routeName="BookMeeting">
+        <Suspense fallback={<PageLoader />}>
+          <BookMeetingLanding />
+        </Suspense>
+      </RouteErrorBoundary>
+    } />
     <Route path="/card/:token" element={
       <Suspense fallback={<PageLoader />}>
         {React.createElement(React.lazy(() => import("@/pages/SharedBusinessCard")))}
