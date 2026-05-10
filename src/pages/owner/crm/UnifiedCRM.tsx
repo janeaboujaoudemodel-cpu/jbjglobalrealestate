@@ -310,7 +310,12 @@ export default function UnifiedCRM() {
         <Suspense fallback={null}>
           <CRMFloatingInsightsWidget
             flaggedCount={counts.flagged}
-            onOpenFlagged={() => { setEntity("leads"); setView("flagged"); }}
+            onOpenFlagged={() => {
+              const next = new URLSearchParams(params);
+              next.set("entity", "leads");
+              next.set("view", "flagged");
+              setParams(next, { replace: true });
+            }}
           />
         </Suspense>
         <div className="px-6 pt-5 pb-3 flex items-center justify-between gap-4">
