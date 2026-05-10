@@ -87,166 +87,156 @@ export function CompanyHub({ type, companyName, brokerageId, devRegistryId }: Co
   async function load() {
     setLoading(true);
     try {
-      // Resolve org id by name when not supplied.
-      let bId = brokerageId ?? null;
-      let dId = devRegistryId ?? null;
-      if (!bId && type === "brokerage" && nameKey) {
-        const { data: b } = await supabase
-          .from("crm_brokerages")
-          .select("id")
+      // Phase A — resolve org id + people in parallel
+      const [bRes, dRes, peopleRes] = await Promise.all([
+        !brokerageId && type === "brokerage" && nameKey
+          ? supabase.from("crm_brokerages").select("id").ilike("company_name", companyName).maybeSingle()
+          : Promise.resolve({ data: brokerageId ? { id: brokerageId } : null }) as any,
+        !devRegistryId && type === "developer" && nameKey
+          ? supabase.from("crm_developer_registry").select("id").ilike("developer_name", companyName).maybeSingle()
+          : Promise.resolve({ data: devRegistryId ? { id: devRegistryId } : null }) as any,
+        supabase
+          .from("crm_leads")
+          .select("id,full_name,email_lower,phone_e164,contact_type,company_name,country_of_residence,created_at")
           .ilike("company_name", companyName)
-          .maybeSingle();
-        bId = b?.id ?? null;
-      }
-      if (!dId && type === "developer" && nameKey) {
-        const { data: d } = await supabase
-          .from("crm_developer_registry")
-          .select("id")
-          .ilike("developer_name", companyName)
-          .maybeSingle();
-        dId = d?.id ?? null;
-      }
+          .limit(500),
+      ]);
 
-      // People — leads at this company.
-      const { data: people = [] } = await supabase
-        .from("crm_leads")
-        .select("id,full_name,email_lower,phone_e164,contact_type,company_name,country_of_residence,created_at")
-        .ilike("company_name", companyName)
-        .limit(500);
+      const bId: string | null = (bRes as any)?.data?.id ?? brokerageId ?? null;
+      const dId: string | null = (dRes as any)?.data?.id ?? devRegistryId ?? null;
+      const people = (peopleRes as any)?.data ?? [];
+      const leadIds = people.map((p: any) => p.id);
 
-      const leadIds = (people ?? []).map((p: any) => p.id);
-
-      // Campaigns — recipients whose lead is in this org.
-      let campaigns: HubData["campaigns"] = [];
-      if (leadIds.length) {
-        const { data: recs = [] } = await supabase
-          .from("crm_campaign_recipients")
-          .select("campaign_id, sent_at, status, campaigns:campaign_id(id, name, status)")
-          .in("lead_id", leadIds)
-          .limit(1000);
-        const seen = new Map<string, HubData["campaigns"][number]>();
-        for (const r of recs ?? []) {
-          const c: any = (r as any).campaigns;
-          if (!c?.id) continue;
-          const existing = seen.get(c.id);
-          const sent_at = (r as any).sent_at ?? null;
-          if (!existing || (sent_at && (!existing.sent_at || sent_at > existing.sent_at))) {
-            seen.set(c.id, { id: c.id, name: c.name, status: c.status, sent_at });
+      // Phase B — every dependent fetch runs in parallel
+      const [
+        recsRes,
+        eventsRes,
+        remindersRes,
+        actionsRes,
+        cardsRes,
+        bNotesRes,
+        leadNotesRes,
+        emailsRes,
+        threadsRes,
+      ] = await Promise.all([
+        leadIds.length
+          ? supabase
+              .from("crm_campaign_recipients")
+              .select("campaign_id, sent_at, status, campaigns:campaign_id(id, name, status)")
+              .in("lead_id", leadIds)
+              .limit(1000)
+          : Promise.resolve({ data: [] }) as any,
+        bId
+          ? supabase
+              .from("crm_brokerage_events")
+              .select("id,event_type,event_date,title,notes,created_at")
+              .eq("brokerage_id", bId)
+              .order("event_date", { ascending: false })
+              .limit(200)
+          : Promise.resolve({ data: [] }) as any,
+        (() => {
+          if (!bId && !dId) return Promise.resolve({ data: [] }) as any;
+          let q = supabase
+            .from("crm_relationship_reminders")
+            .select("id,kind,title,body,due_at,is_done,created_at,brokerage_id,dev_registry_id")
+            .eq("is_done", false)
+            .order("due_at", { ascending: true })
+            .limit(200);
+          if (bId && dId) q = q.or(`brokerage_id.eq.${bId},dev_registry_id.eq.${dId}`);
+          else if (bId) q = q.eq("brokerage_id", bId);
+          else if (dId) q = q.eq("dev_registry_id", dId);
+          return q;
+        })(),
+        bId
+          ? supabase
+              .from("crm_brokerage_actions")
+              .select("id,action_type,title,body,due_at,created_at")
+              .eq("brokerage_id", bId)
+              .order("due_at", { ascending: true })
+              .limit(200)
+          : Promise.resolve({ data: [] }) as any,
+        supabase
+          .from("admin_scanned_cards")
+          .select("id, card_data, scanned_at")
+          .ilike("card_data->>company", `%${companyName}%`)
+          .limit(50),
+        bId
+          ? supabase
+              .from("crm_brokerage_notes")
+              .select("id, body, created_at, author_id")
+              .eq("brokerage_id", bId)
+              .order("created_at", { ascending: false })
+              .limit(100)
+          : Promise.resolve({ data: [] }) as any,
+        leadIds.length
+          ? supabase
+              .from("crm_notes")
+              .select("id, body, created_at, user_id, lead_id")
+              .in("lead_id", leadIds)
+              .order("created_at", { ascending: false })
+              .limit(100)
+          : Promise.resolve({ data: [] }) as any,
+        (() => {
+          if (!bId && !dId) return Promise.resolve({ data: [] }) as any;
+          let q = supabase
+            .from("crm_relationship_email_log")
+            .select("id, direction, subject, body_snippet, from_email, to_emails, sent_at, entity_type, entity_id")
+            .order("sent_at", { ascending: false })
+            .limit(200);
+          if (bId && dId) {
+            q = q.or(
+              `and(entity_type.eq.brokerage,entity_id.eq.${bId}),and(entity_type.eq.developer,entity_id.eq.${dId})`
+            );
+          } else if (bId) {
+            q = q.eq("entity_type", "brokerage").eq("entity_id", bId);
+          } else if (dId) {
+            q = q.eq("entity_type", "developer").eq("entity_id", dId);
           }
+          return q;
+        })(),
+        leadIds.length
+          ? supabase
+              .from("owner_comm_threads")
+              .select("id, channel_type, contact_name, contact_identifier, last_message_preview, last_message_at, unread_count")
+              .in("lead_id", leadIds)
+              .order("last_message_at", { ascending: false })
+              .limit(100)
+          : Promise.resolve({ data: [] }) as any,
+      ]);
+
+      // Campaigns — dedupe + sort
+      const seen = new Map<string, HubData["campaigns"][number]>();
+      for (const r of ((recsRes as any)?.data ?? [])) {
+        const c: any = (r as any).campaigns;
+        if (!c?.id) continue;
+        const existing = seen.get(c.id);
+        const sent_at = (r as any).sent_at ?? null;
+        if (!existing || (sent_at && (!existing.sent_at || sent_at > existing.sent_at))) {
+          seen.set(c.id, { id: c.id, name: c.name, status: c.status, sent_at });
         }
-        campaigns = Array.from(seen.values()).sort((a, b) =>
-          String(b.sent_at ?? "").localeCompare(String(a.sent_at ?? ""))
-        );
       }
+      const campaigns = Array.from(seen.values()).sort((a, b) =>
+        String(b.sent_at ?? "").localeCompare(String(a.sent_at ?? ""))
+      );
 
-      // Events — only brokerage has dedicated events table.
-      let events: any[] = [];
-      if (bId) {
-        const { data = [] } = await supabase
-          .from("crm_brokerage_events")
-          .select("id,event_type,event_date,title,notes,created_at")
-          .eq("brokerage_id", bId)
-          .order("event_date", { ascending: false })
-          .limit(200);
-        events = data ?? [];
-      }
-
-      // Follow-ups — relationship reminders + brokerage actions.
       const followups: any[] = [];
-      if (bId || dId) {
-        let q = supabase
-          .from("crm_relationship_reminders")
-          .select("id,kind,title,body,due_at,is_done,created_at,brokerage_id,dev_registry_id")
-          .eq("is_done", false)
-          .order("due_at", { ascending: true })
-          .limit(200);
-        if (bId && dId) q = q.or(`brokerage_id.eq.${bId},dev_registry_id.eq.${dId}`);
-        else if (bId) q = q.eq("brokerage_id", bId);
-        else if (dId) q = q.eq("dev_registry_id", dId);
-        const { data = [] } = await q;
-        for (const r of data ?? []) followups.push({ ...r, _src: "reminder" });
-      }
-      if (bId) {
-        const { data = [] } = await supabase
-          .from("crm_brokerage_actions")
-          .select("id,action_type,title,body,due_at,created_at")
-          .eq("brokerage_id", bId)
-          .order("due_at", { ascending: true })
-          .limit(200);
-        for (const r of data ?? []) followups.push({ ...r, _src: "action" });
-      }
+      for (const r of ((remindersRes as any)?.data ?? [])) followups.push({ ...r, _src: "reminder" });
+      for (const r of ((actionsRes as any)?.data ?? [])) followups.push({ ...r, _src: "action" });
 
-      // Cards — scanned business cards mentioning this company.
-      const { data: cards = [] } = await supabase
-        .from("admin_scanned_cards")
-        .select("id, card_data, scanned_at")
-        .ilike("card_data->>company", `%${companyName}%`)
-        .limit(50);
-
-      // Notes — brokerage notes + crm_notes attached to org leads.
       const notes: any[] = [];
-      if (bId) {
-        const { data = [] } = await supabase
-          .from("crm_brokerage_notes")
-          .select("id, body, created_at, author_id")
-          .eq("brokerage_id", bId)
-          .order("created_at", { ascending: false })
-          .limit(100);
-        for (const n of data ?? []) notes.push({ ...n, _src: "brokerage" });
-      }
-      if (leadIds.length) {
-        const { data = [] } = await supabase
-          .from("crm_notes")
-          .select("id, body, created_at, user_id, lead_id")
-          .in("lead_id", leadIds)
-          .order("created_at", { ascending: false })
-          .limit(100);
-        for (const n of data ?? []) notes.push({ ...n, _src: "lead" });
-      }
+      for (const n of ((bNotesRes as any)?.data ?? [])) notes.push({ ...n, _src: "brokerage" });
+      for (const n of ((leadNotesRes as any)?.data ?? [])) notes.push({ ...n, _src: "lead" });
       notes.sort((a, b) => String(b.created_at).localeCompare(String(a.created_at)));
 
-      // Emails — relationship email log.
-      let emails: any[] = [];
-      if (bId || dId) {
-        let q = supabase
-          .from("crm_relationship_email_log")
-          .select("id, direction, subject, body_snippet, from_email, to_emails, sent_at, entity_type, entity_id")
-          .order("sent_at", { ascending: false })
-          .limit(200);
-        if (bId && dId) {
-          q = q.or(
-            `and(entity_type.eq.brokerage,entity_id.eq.${bId}),and(entity_type.eq.developer,entity_id.eq.${dId})`
-          );
-        } else if (bId) {
-          q = q.eq("entity_type", "brokerage").eq("entity_id", bId);
-        } else if (dId) {
-          q = q.eq("entity_type", "developer").eq("entity_id", dId);
-        }
-        const { data = [] } = await q;
-        emails = data ?? [];
-      }
-
-      // Comms — owner_comm threads tied to org leads.
-      let threads: any[] = [];
-      if (leadIds.length) {
-        const { data = [] } = await supabase
-          .from("owner_comm_threads")
-          .select("id, channel_type, contact_name, contact_identifier, last_message_preview, last_message_at, unread_count")
-          .in("lead_id", leadIds)
-          .order("last_message_at", { ascending: false })
-          .limit(100);
-        threads = data ?? [];
-      }
-
       setData({
-        people: people ?? [],
+        people,
         campaigns,
-        events,
+        events: ((eventsRes as any)?.data ?? []),
         followups,
-        cards: cards ?? [],
+        cards: ((cardsRes as any)?.data ?? []),
         notes,
-        emails,
-        threads,
+        emails: ((emailsRes as any)?.data ?? []),
+        threads: ((threadsRes as any)?.data ?? []),
         brokerageId: bId,
         devRegistryId: dId,
       });
