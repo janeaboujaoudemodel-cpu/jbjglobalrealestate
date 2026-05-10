@@ -191,7 +191,14 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
         next_followup_at: formData.next_followup_at || null,
         notes: formData.notes || null,
         internal_comments: formData.internal_comments || null,
-        tags: formData.tags ? formData.tags.split(",").map((t) => t.trim()).filter(Boolean) : [],
+        tags: (() => {
+          const base = formData.tags ? formData.tags.split(",").map((t) => t.trim()).filter(Boolean) : [];
+          // Independent tier and pool tags
+          if (formData.tier === "vip") base.push("tier:vip"); else base.push("tier:standard");
+          if (formData.pool === "pool") base.push("pool:pool"); else base.push("pool:nonpool");
+          return Array.from(new Set(base));
+        })(),
+        assigned_broker_id: formData.assigned_broker_id,
         owner_type: "broker_owned",
         owner_user_id: userId,
         created_by_user_id: userId,
