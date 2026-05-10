@@ -202,10 +202,15 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
   };
   const isOpen = (item: NavItem) => {
     if (openMap[item.path] !== undefined) return openMap[item.path];
-    return isAnyChildActive(item);
+    // Auto-expand when the parent itself is active or any descendant is active,
+    // OR when the user is anywhere under that section (e.g. /owner/crm).
+    if (isActivePath(item.path)) return true;
+    if (isAnyChildActive(item)) return true;
+    if (location.pathname.startsWith(item.path.split("?")[0])) return true;
+    return false;
   };
   const toggleOpen = (path: string) => {
-    setOpenMap((m) => ({ ...m, [path]: m[path] !== undefined ? !m[path] : false }));
+    setOpenMap((m) => ({ ...m, [path]: !(m[path] ?? true) }));
   };
 
   const renderItem = (item: NavItem, depth = 0): React.ReactNode => {
