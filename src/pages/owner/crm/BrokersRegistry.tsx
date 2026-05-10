@@ -219,7 +219,13 @@ export default function BrokersRegistry() {
     </Card>
   );
 
-  const isLoading = loading1 || loading2;
+  const isLoading = (loading1 && registered.length === 0) && loading2;
+  const stillStreaming = !externalDone;
+
+  // Cap rendered rows so the DOM doesn't choke on 30k+ <tr>.
+  const [renderLimit, setRenderLimit] = useState(500);
+  useEffect(() => { setRenderLimit(500); }, [q, tab, companyFilter, sourceFilter]);
+  const visible = useMemo(() => filtered.slice(0, renderLimit), [filtered, renderLimit]);
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-[#1A1A1A]">
