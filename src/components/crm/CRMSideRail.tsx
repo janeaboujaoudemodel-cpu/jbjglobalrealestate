@@ -65,14 +65,31 @@ export default function CRMSideRail() {
               <SheetTitle className="text-[#1A1A1A] text-base font-semibold tracking-tight">
                 Shortcuts
               </SheetTitle>
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                aria-label="Close workspace"
-                className="h-8 w-8 inline-flex items-center justify-center rounded-full hover:bg-[#EFE6D6] text-[#1A1A1A]"
-              >
-                <X className="h-4 w-4" />
-              </button>
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={handlePrimary}
+                  className="inline-flex items-center gap-1 h-8 px-3 rounded-full text-xs font-semibold bg-[#1A1A1A] text-[#FDFBF7] hover:bg-[#1A1A1A]/90"
+                >
+                  <Plus className="h-3.5 w-3.5" /> {ctaLabel}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleOpenFull}
+                  title="Open full view"
+                  className="h-8 w-8 inline-flex items-center justify-center rounded-full border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                >
+                  <ExternalLink className="h-3.5 w-3.5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  aria-label="Close workspace"
+                  className="h-8 w-8 inline-flex items-center justify-center rounded-full hover:bg-[#EFE6D6] text-[#1A1A1A]"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
             </div>
             <Tabs value={tab} onValueChange={(v) => setTab(v as Tab)} className="mt-3">
               <TabsList className="bg-[#FDFBF7] border border-[#B89555]/30 p-1 rounded-full h-auto">
