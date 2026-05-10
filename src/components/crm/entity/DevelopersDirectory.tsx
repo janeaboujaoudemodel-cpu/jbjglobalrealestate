@@ -209,7 +209,7 @@ export default function DevelopersDirectory() {
                     ) : <span className="text-[#1A1A1A]/40 text-xs">—</span>}
                   </td>
                   <td className="px-4 py-3">
-                    <div className="flex items-center gap-1 flex-wrap">
+                    <div className="flex items-center gap-1 flex-nowrap">
                       <IconLink href={d.website_url} title="Website"><Globe className="h-3.5 w-3.5" /></IconLink>
                       <IconLink href={d.admin_email ? `mailto:${d.admin_email}` : null} title="Email"><Mail className="h-3.5 w-3.5" /></IconLink>
                       <IconLink href={d.office_phone ? `tel:${d.office_phone}` : null} title="Phone"><Phone className="h-3.5 w-3.5" /></IconLink>
