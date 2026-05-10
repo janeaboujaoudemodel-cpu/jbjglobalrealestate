@@ -3,7 +3,7 @@
 import { lazy, Suspense, useState } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { CalendarDays, NotebookPen, ListChecks, X } from "lucide-react";
+import { CalendarDays, NotebookPen, ListChecks, X, LayoutGrid } from "lucide-react";
 
 const CRMCalendar = lazy(() => import("@/pages/CRMCalendar"));
 const CRMNotes    = lazy(() => import("@/pages/CRMNotes"));
