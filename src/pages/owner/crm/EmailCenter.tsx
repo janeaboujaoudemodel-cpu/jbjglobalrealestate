@@ -105,17 +105,31 @@ export default function EmailCenter() {
                 Real-estate only · auto-BCC infoo.jane@gmail.com on every send
               </span>
             </CardTitle>
-            <Button
-              size="sm"
-              variant="outline"
-              disabled={sync.isPending}
-              onClick={() => sync.mutate()}
-              className="h-8 text-xs border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/60"
-            >
-              <RefreshCw className={`h-3.5 w-3.5 mr-1.5 ${sync.isPending ? "animate-spin" : ""}`} />
-              Sync inbox now
-            </Button>
-          </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setShowArchived((v) => !v)}
+                className={[
+                  "h-8 px-3 rounded-md text-xs font-medium border transition-colors",
+                  showArchived
+                    ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
+                    : "bg-transparent text-[#1A1A1A]/70 border-[#B89555]/40 hover:bg-[#EFE6D6]/60 hover:text-[#1A1A1A]",
+                ].join(" ")}
+                title={showArchived ? "Show active inbox" : "Show archived (non real-estate) items"}
+              >
+                {showArchived ? "Showing archived" : `Archived (${(counts as any).archived ?? 0})`}
+              </button>
+              <Button
+                size="sm"
+                variant="outline"
+                disabled={sync.isPending}
+                onClick={() => sync.mutate()}
+                className="h-8 text-xs border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/60"
+              >
+                <RefreshCw className={`h-3.5 w-3.5 mr-1.5 ${sync.isPending ? "animate-spin" : ""}`} />
+                Sync inbox now
+              </Button>
+            </div>
         </CardHeader>
         <CardContent className="p-3">
           {/* Category tabs */}
