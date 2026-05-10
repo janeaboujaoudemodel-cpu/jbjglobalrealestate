@@ -53,7 +53,7 @@ export function BrokerPerformanceCard({ broker, onToggleStatus }: BrokerPerforma
               ? "bg-emerald-500/20 text-emerald-700 border-emerald-500/30"
               : broker.status === "paused"
               ? "bg-amber-500/20 text-amber-700 border-amber-500/30"
-              : "bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/30"
+              : "bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30"
           }
         >
           {broker.status}

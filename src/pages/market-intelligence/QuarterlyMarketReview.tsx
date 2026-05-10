@@ -165,7 +165,7 @@ const QuarterlyMarketReview = () => {
       case "balanced": return "bg-emerald-500/20 text-emerald-600 border-emerald-500/30";
       case "supply_pressure": return "bg-amber-500/20 text-amber-600 border-amber-500/30";
       case "demand_pressure": return "bg-blue-500/20 text-blue-600 border-blue-500/30";
-      default: return "bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/30";
+      default: return "bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30";
     }
   };
 

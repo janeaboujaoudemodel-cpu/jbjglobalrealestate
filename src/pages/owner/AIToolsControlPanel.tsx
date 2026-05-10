@@ -137,7 +137,7 @@ interface Recommendation {
 const STATUS_CONFIG: Record<string, { label: string; className: string }> = {
   published: { label: "Live", className: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40" },
   live: { label: "Live", className: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40" },
-  draft: { label: "Draft", className: "bg-[#B89555]/20 text-white/85 border-[#B89555]/30/40" },
+  draft: { label: "Draft", className: "bg-[#B89555]/20 text-white/85 border-[#B89555]/40" },
   applied: { label: "Applied – Pending Test", className: "bg-amber-500/20 text-amber-300 border-amber-500/40" },
   tested: { label: "Tested – Pending Publish", className: "bg-blue-500/20 text-blue-300 border-blue-500/40" },
   reverted: { label: "Reverted", className: "bg-orange-500/20 text-orange-300 border-orange-500/40" },
@@ -631,7 +631,7 @@ function FixCard({
           <div className="flex items-center gap-2 mb-1">
             <span className="text-sm font-medium text-white">{rec.title}</span>
             {rec.impact_level && (
-              <Badge className={`text-[10px] ${rec.impact_level === "high" ? "bg-red-500/20 text-red-300 border-red-500/40" : rec.impact_level === "medium" ? "bg-amber-500/20 text-amber-300 border-amber-500/40" : "bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/40"}`}>
+              <Badge className={`text-[10px] ${rec.impact_level === "high" ? "bg-red-500/20 text-red-300 border-red-500/40" : rec.impact_level === "medium" ? "bg-amber-500/20 text-amber-300 border-amber-500/40" : "bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/40"}`}>
                 {rec.impact_level}
               </Badge>
             )}

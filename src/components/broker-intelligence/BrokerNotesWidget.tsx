@@ -98,7 +98,7 @@ export function BrokerNotesWidget() {
       case "meeting":
         return <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-xs"><Clock className="w-3 h-3 mr-1" />Meeting</Badge>;
       case "general":
-        return <Badge className="bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/30 text-xs"><Tag className="w-3 h-3 mr-1" />General</Badge>;
+        return <Badge className="bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30 text-xs"><Tag className="w-3 h-3 mr-1" />General</Badge>;
     }
   };
 

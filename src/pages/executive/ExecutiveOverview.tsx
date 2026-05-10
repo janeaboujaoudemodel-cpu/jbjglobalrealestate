@@ -84,7 +84,7 @@ const ExecutiveOverview = () => {
       case "medium":
         return "bg-amber-500/20 text-[#1A1A1A] border-amber-500/30";
       default:
-        return "bg-[#B89555]/20 text-white/70 border-[#B89555]/30/30";
+        return "bg-[#B89555]/20 text-white/70 border-[#B89555]/30";
     }
   };
 

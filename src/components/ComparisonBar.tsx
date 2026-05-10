@@ -27,7 +27,7 @@ const INQUIRY_FORM_URL = "https://jbj.ae/contact";
 const badgeLabels: Record<string, { label: string; color: string }> = {
   top1: { label: "Top 1 — Gold", color: "bg-yellow-500/20 border-yellow-500/50 text-yellow-400" },
   top2: { label: "Top 2 — Silver", color: "bg-orange-600/20 border-orange-600/50 text-orange-400" },
-  top3: { label: "Top 3 — Bronze", color: "bg-[#B89555]/20 border-[#B89555]/30/50 text-[#1A1A1A]/70" },
+  top3: { label: "Top 3 — Bronze", color: "bg-[#B89555]/20 border-[#B89555]/50 text-[#1A1A1A]/70" },
 };
 
 const ComparisonBar = () => {

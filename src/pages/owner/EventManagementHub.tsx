@@ -13,7 +13,7 @@ import { Calendar, MapPin, Users, Plus, Send, Trash2, Edit, Clock, CheckCircle2,
 import { format } from "date-fns";
 
 const STATUS_STYLES: Record<string, string> = {
-  draft: "bg-[#B89555]/10 text-[#1A1A1A]/70 border-[#B89555]/30/30",
+  draft: "bg-[#B89555]/10 text-[#1A1A1A]/70 border-[#B89555]/30",
   published: "bg-emerald-500/10 text-emerald-500 border-emerald-500/30",
   cancelled: "bg-red-500/10 text-red-500 border-red-500/30",
   completed: "bg-blue-500/10 text-blue-500 border-blue-500/30",

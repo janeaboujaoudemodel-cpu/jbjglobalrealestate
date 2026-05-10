@@ -304,7 +304,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
             <div className="flex items-center gap-5 pb-5 mb-5 border-b-2 border-[#B89555]/30">
               {/* Fixed-size avatar container - clickable to profile */}
               <Link to="/profile" onClick={onClose} className="w-16 h-16 flex-shrink-0 cursor-pointer group">
-                <Avatar className="h-16 w-16 border border-[#B89555]/30 bg-transparent group-hover:border-[#B89555]/30/80 transition-all group-hover:ring-2 group-hover:ring-[#B89555]/30">
+                <Avatar className="h-16 w-16 border border-[#B89555]/30 bg-transparent group-hover:border-[#B89555]/80 transition-all group-hover:ring-2 group-hover:ring-[#B89555]/30">
                   <AvatarImage src={accountPhotoUrl ?? ""} alt={`${accountDisplayName} profile photo`} className="object-cover" />
                   <AvatarFallback className="bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 border border-[#B89555]/30 text-[#1A1A1A] text-xl font-bold">
                     {avatarInitials}

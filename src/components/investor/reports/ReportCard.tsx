@@ -40,7 +40,7 @@ export default function ReportCard({ report, onView, onDownload }: ReportCardPro
 
   const getScopeBadge = (scope: Report["geographicScope"]) => {
     const styles = {
-      uae: "bg-[#B89555]/10 text-[#1A1A1A]/70 border-[#B89555]/30/30",
+      uae: "bg-[#B89555]/10 text-[#1A1A1A]/70 border-[#B89555]/30",
       dubai: "bg-blue-500/10 text-blue-600 border-blue-500/30",
       "abu-dhabi": "bg-emerald-500/10 text-emerald-600 border-emerald-500/30",
       sharjah: "bg-amber-500/10 text-amber-600 border-amber-500/30",

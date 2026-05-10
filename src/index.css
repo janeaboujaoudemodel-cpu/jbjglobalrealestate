@@ -1873,11 +1873,11 @@ All colors MUST be HSL.
    * ============================================================ */
   
   .jj-premium-surface {
-    @apply bg-[#FDFBF7] border border-[#B89555]/30/50;
+    @apply bg-[#FDFBF7] border border-[#B89555]/50;
   }
   
   .jj-premium-card {
-    @apply bg-[#FDFBF7]/80 border border-[#B89555]/30/60 rounded-xl;
+    @apply bg-[#FDFBF7]/80 border border-[#B89555]/60 rounded-xl;
     padding: 2rem; /* 32px - card internal padding */
   }
   

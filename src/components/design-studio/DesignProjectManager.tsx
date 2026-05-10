@@ -185,8 +185,8 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
     switch (status) {
       case 'completed': return 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
       case 'in_progress': return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
-      case 'draft': return 'bg-[#B89555]/20 text-white/70 border-[#B89555]/30/30';
-      default: return 'bg-[#B89555]/20 text-white/70 border-[#B89555]/30/30';
+      case 'draft': return 'bg-[#B89555]/20 text-white/70 border-[#B89555]/30';
+      default: return 'bg-[#B89555]/20 text-white/70 border-[#B89555]/30';
     }
   };
 

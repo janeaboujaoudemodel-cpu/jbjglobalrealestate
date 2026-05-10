@@ -1304,7 +1304,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                 <p className="text-lg font-bold text-[#1A1A1A]">{analyzedData.flagged.length}</p>
                 <p className="text-xs text-amber-300">Flagged</p>
               </div>
-              <div className="p-3 bg-[#B89555]/10 border border-[#B89555]/30/30 rounded-lg text-center">
+              <div className="p-3 bg-[#B89555]/10 border border-[#B89555]/30 rounded-lg text-center">
                 <AlertCircle className="h-5 w-5 text-[#1A1A1A]/70 mx-auto mb-1" />
                 <p className="text-lg font-bold text-[#1A1A1A]/70">{analyzedData.skipped.length}</p>
                 <p className="text-xs text-[#1A1A1A]/70">Duplicates</p>

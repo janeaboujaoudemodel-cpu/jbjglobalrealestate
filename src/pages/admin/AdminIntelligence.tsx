@@ -23,9 +23,9 @@ const VIP_COLORS: Record<string, string> = {
   'Royal VIP': 'bg-gradient-to-r from-amber-500/20 to-yellow-500/20 text-amber-700 border-amber-500/40',
   'Platinum': 'bg-purple-500/15 text-purple-700 border-purple-500/30',
   'Gold': 'bg-[#EFE6D6]/15 text-[#1A1A1A] border-[#B89555]/40',
-  'Silver': 'bg-[#F7F2EA]/15 text-[#1A1A1A]/70 border-[#B89555]/30/30',
+  'Silver': 'bg-[#F7F2EA]/15 text-[#1A1A1A]/70 border-[#B89555]/30',
   'Bronze': 'bg-orange-500/15 text-orange-700 border-orange-500/30',
-  'Visitor': 'bg-[#EFE6D6]/30 text-[#1A1A1A]/70 border-[#B89555]/30/30',
+  'Visitor': 'bg-[#EFE6D6]/30 text-[#1A1A1A]/70 border-[#B89555]/30',
 };
 
 const DeviceIcon = ({ device }: { device: string }) => {

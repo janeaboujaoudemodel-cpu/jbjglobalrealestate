@@ -31,7 +31,7 @@ const CATEGORY_BADGES: Record<string, { label: string; className: string }> = {
   'training': { label: 'Training', className: 'bg-blue-500/20 text-blue-300 border-blue-500/30' },
   'check_in': { label: 'Check-in', className: 'bg-purple-500/20 text-purple-300 border-purple-500/30' },
   'referral': { label: 'Referral', className: 'bg-amber-500/20 text-amber-300 border-amber-500/30' },
-  'activity': { label: 'Activity', className: 'bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/30' },
+  'activity': { label: 'Activity', className: 'bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30' },
 };
 
 export function PointsActivity({ className, limit = 10 }: PointsActivityProps) {

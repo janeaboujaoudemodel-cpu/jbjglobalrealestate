@@ -40,14 +40,14 @@ interface AdminTask {
 }
 
 const PRIORITY_COLORS: Record<string, string> = {
-  low: "bg-[#1A1A1A]/20 text-[#1A1A1A]/70 border-[#B89555]/30/30",
+  low: "bg-[#1A1A1A]/20 text-[#1A1A1A]/70 border-[#B89555]/30",
   medium: "bg-blue-500/20 text-blue-400 border-blue-500/30",
   high: "bg-orange-500/20 text-orange-400 border-orange-500/30",
   urgent: "bg-red-500/20 text-red-400 border-red-500/30",
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
-  general: "bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/30",
+  general: "bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30",
   integration: "bg-purple-500/20 text-purple-400 border-purple-500/30",
   security: "bg-red-500/20 text-red-400 border-red-500/30",
   marketing: "bg-green-500/20 text-green-400 border-green-500/30",

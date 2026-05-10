@@ -71,7 +71,7 @@ const STATUS_COLORS: { [key: string]: string } = {
   trial: "bg-blue-500/20 text-blue-400 border-blue-500/30",
   pending: "bg-amber-500/20 text-[#1A1A1A] border-amber-500/30",
   cancelled: "bg-red-500/20 text-red-400 border-red-500/30",
-  expired: "bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/30",
+  expired: "bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30",
 };
 
 const TIER_COLORS: { [key: string]: string } = {

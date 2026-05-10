@@ -43,7 +43,7 @@ const SelectTriggerDark = React.forwardRef<
     className={cn(
       "flex h-10 w-full cursor-pointer items-center justify-between rounded-lg border",
       "bg-[#1A1A1A] border-[#1A1A1A] text-white",
-      "hover:border-[#1A1A1A] focus:ring-2 focus:ring-[#B89555]/30/50 focus:ring-offset-2 focus:ring-offset-gray-900",
+      "hover:border-[#1A1A1A] focus:ring-2 focus:ring-[#B89555]/50 focus:ring-offset-2 focus:ring-offset-gray-900",
       "disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
       "px-3 py-2 text-sm ring-offset-background",
       className,

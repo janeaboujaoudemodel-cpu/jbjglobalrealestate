@@ -178,7 +178,7 @@ export function WhatsAppIntegrationPanel({
       case "pending":
         return <Badge className="bg-amber-500/20 text-[#1A1A1A] border-amber-500/30">Pending</Badge>;
       default:
-        return <Badge className="bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/30">Draft</Badge>;
+        return <Badge className="bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30">Draft</Badge>;
     }
   };
 
