@@ -26,8 +26,12 @@ const FlaggedLeadsView    = lazy(() => import("@/components/crm/FlaggedLeadsView
 const RecentlyDeletedLeads= lazy(() => import("@/components/crm/RecentlyDeletedLeads"));
 const CRMRelationships    = lazy(() => import("@/pages/CRMRelationships"));
 const BrokersRegistryPage = lazy(() => import("@/pages/owner/crm/BrokersRegistry"));
-const DevelopersDirectory       = lazy(() => import("@/components/crm/entity/DevelopersDirectory"));
-const BrokerageAgenciesDirectory= lazy(() => import("@/components/crm/entity/BrokerageAgenciesDirectory"));
+// Use the EXACT same rich tab components that Relationship Hub renders so the
+// UI, fields, filters and drawers are identical on /owner/crm?entity=… and on
+// /owner/crm/relationship-hub.
+const DeveloperRegistryTab      = lazy(() => import("@/components/crm/DeveloperRegistryTab"));
+const BrokeragesTab             = lazy(() => import("@/components/crm/BrokeragesTab"));
+const IndividualBrokersTab      = lazy(() => import("@/components/crm/IndividualBrokersTab"));
 const DevSalesRepsDirectory     = lazy(() => import("@/components/crm/entity/DevSalesRepsDirectory"));
 const EmployeesHub        = lazy(() => import("@/components/crm/EmployeesHub"));
 const CampaignsPage       = lazy(() => import("@/pages/owner/crm/CampaignsPage"));
@@ -256,17 +260,17 @@ export default function UnifiedCRM() {
       return <InvestorsDirectory ownerEmail={ownerEmail} vipOnly={view === "vip"} />;
     }
     if (entity === "developers") {
-      return <DevelopersDirectory />;
+      return <DeveloperRegistryTab />;
     }
     if (entity === "sales-reps") {
       return <DevSalesRepsDirectory />;
     }
     if (entity === "brokers") {
       if (view === "imported") return <BrokersImported />;
-      return <Embed><BrokersRegistryPage /></Embed>;
+      return <IndividualBrokersTab />;
     }
     if (entity === "agencies") {
-      return <BrokerageAgenciesDirectory />;
+      return <BrokeragesTab />;
     }
     if (entity === "employees") {
       return <EmployeesHub userId={userId} />;

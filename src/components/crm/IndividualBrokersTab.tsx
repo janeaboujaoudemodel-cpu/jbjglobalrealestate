@@ -465,6 +465,7 @@ export default function IndividualBrokersTab() {
       <BrokerBulkUploadDialog
         open={bulkOpen}
         onOpenChange={setBulkOpen}
+        brokerages={brokerages}
         onDone={() => {
           qc.invalidateQueries({ queryKey: ["crm-brokers"] });
           qc.invalidateQueries({ queryKey: ["crm-brokers-count"] });
