@@ -33,6 +33,13 @@ const DEPARTMENTS: DepartmentCard[] = [
     color: "text-emerald-600" 
   },
   { 
+    label: "Relationship Hub", 
+    description: "Investors, developers, brokers & agencies", 
+    icon: Network, 
+    path: "/owner/crm?section=relationships", 
+    color: "text-purple-600" 
+  },
+  { 
     label: "Listing Admin", 
     description: "Property listings management", 
     icon: ClipboardList, 
