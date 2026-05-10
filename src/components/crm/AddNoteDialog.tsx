@@ -69,32 +69,32 @@ export default function AddNoteDialog({ leadId, leadName, trigger }: AddNoteDial
           <Button
             variant="ghost"
             size="icon"
-            className="h-8 w-8 text-amber-400 hover:text-amber-300 hover:bg-amber-500/10"
+            className="h-8 w-8 text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]"
           >
             <StickyNote className="h-4 w-4" />
           </Button>
         )}
       </DialogTrigger>
       <DialogContent 
-        className="bg-zinc-900 border-[#1A1A1A] text-white"
+        className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]"
         onClick={(e) => e.stopPropagation()}
       >
         <DialogHeader>
-          <DialogTitle className="text-white">Add Note for {leadName}</DialogTitle>
+          <DialogTitle className="text-[#1A1A1A]">Add Note for {leadName}</DialogTitle>
         </DialogHeader>
         <div className="space-y-4 mt-4">
           <Textarea
             placeholder="Enter your note..."
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            className="min-h-[120px] bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70"
+            className="min-h-[120px] bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/50"
             autoFocus
           />
           <div className="flex justify-end gap-2">
             <Button 
               variant="ghost" 
               onClick={() => setOpen(false)}
-              className="text-white/70 hover:text-white"
+              className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
             >
               Cancel
             </Button>
