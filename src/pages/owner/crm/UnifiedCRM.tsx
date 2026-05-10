@@ -273,6 +273,32 @@ export default function UnifiedCRM() {
   }, [entity, view, userId, ownerEmail]);
 
   const currentViews = VIEWS[entity] || [];
+  const { counts } = useCRMSectionCounts();
+
+  const fmt = (n: number) => (n >= 1000 ? `${(n / 1000).toFixed(n >= 10000 ? 0 : 1)}k` : String(n));
+  const entityCount = (id: Entity): number | null => {
+    switch (id) {
+      case "leads": return counts.leads;
+      case "investors": return counts.investors;
+      case "developers": return counts.developers;
+      case "sales-reps": return counts.salesReps;
+      case "brokers": return counts.brokers;
+      case "agencies": return counts.agencies;
+      case "employees": return counts.employees;
+      default: return null;
+    }
+  };
+  const viewCount = (entity: Entity, viewId: string): number | null => {
+    if (entity === "leads") {
+      if (viewId === "all") return counts.leads;
+      if (viewId === "flagged") return counts.flagged;
+      if (viewId === "vip") return counts.vip;
+      if (viewId === "tasks") return counts.tasks;
+    }
+    if (entity === "brokers" && viewId === "directory") return counts.brokers;
+    if (entity === "investors" && viewId === "vip") return counts.vip;
+    return null;
+  };
 
   return (
     <div className="min-h-screen bg-[#FDFBF7]">
