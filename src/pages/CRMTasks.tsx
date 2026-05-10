@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -62,6 +62,7 @@ const normalizeStatus = (status: string | null): 'todo' | 'in_progress' | 'done'
 const CRMTasks = () => {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -74,6 +75,16 @@ const CRMTasks = () => {
     priority: "medium",
     due_date: "",
   });
+
+  // Open Add Task dialog when ?action=new is in the URL (from shortcut tiles).
+  useEffect(() => {
+    if (searchParams.get("action") === "new") {
+      setIsAddingTask(true);
+      const next = new URLSearchParams(searchParams);
+      next.delete("action");
+      setSearchParams(next, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
   useEffect(() => {
     if (authLoading) return;
