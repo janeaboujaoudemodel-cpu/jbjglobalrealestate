@@ -304,6 +304,7 @@ export default function UnifiedCRM() {
               <ChevronDown className={`h-3.5 w-3.5 transition-transform ${insightsOpen ? "rotate-180" : ""}`} />
             </button>
           </div>
+        </div>
 
         {/* Insights drawer (above entity bar) */}
         {insightsOpen && (
