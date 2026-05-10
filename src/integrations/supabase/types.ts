@@ -10133,6 +10133,48 @@ export type Database = {
           },
         ]
       }
+      developer_registration_confirmations: {
+        Row: {
+          confirmed_at: string | null
+          created_at: string
+          developer_id: string
+          id: string
+          last_reminder_at: string | null
+          metadata: Json
+          reminder_count: number
+          sent_at: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          confirmed_at?: string | null
+          created_at?: string
+          developer_id: string
+          id?: string
+          last_reminder_at?: string | null
+          metadata?: Json
+          reminder_count?: number
+          sent_at?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          confirmed_at?: string | null
+          created_at?: string
+          developer_id?: string
+          id?: string
+          last_reminder_at?: string | null
+          metadata?: Json
+          reminder_count?: number
+          sent_at?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       developer_registration_sync_logs: {
         Row: {
           created_at: string
@@ -11578,6 +11620,7 @@ export type Database = {
         Row: {
           action_required: string | null
           archived_at: string | null
+          archived_reason: string | null
           attachments: Json
           category: string
           confidence: number
@@ -11601,6 +11644,7 @@ export type Database = {
         Insert: {
           action_required?: string | null
           archived_at?: string | null
+          archived_reason?: string | null
           attachments?: Json
           category?: string
           confidence?: number
@@ -11624,6 +11668,7 @@ export type Database = {
         Update: {
           action_required?: string | null
           archived_at?: string | null
+          archived_reason?: string | null
           attachments?: Json
           category?: string
           confidence?: number
