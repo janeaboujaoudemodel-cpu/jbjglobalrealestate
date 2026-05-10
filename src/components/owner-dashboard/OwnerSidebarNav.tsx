@@ -212,11 +212,10 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
   };
   const isOpen = (item: NavItem) => {
     if (openMap[item.path] !== undefined) return openMap[item.path];
-    // Auto-expand when the parent itself is active or any descendant is active,
-    // OR when the user is anywhere under that section (e.g. /owner/crm).
-    if (isActivePath(item.path)) return true;
+    // Auto-expand only when a descendant matches the current route exactly.
+    // Do NOT auto-expand just because we're somewhere under the parent's pathname,
+    // so e.g. landing on /owner/crm leaves Leads collapsed until clicked.
     if (isAnyChildActive(item)) return true;
-    if (location.pathname.startsWith(item.path.split("?")[0])) return true;
     return false;
   };
   const toggleOpen = (path: string) => {
