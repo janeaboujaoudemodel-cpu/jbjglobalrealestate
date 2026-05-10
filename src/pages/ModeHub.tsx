@@ -58,7 +58,7 @@ const ModeHub = () => {
 
         {/* Summary Cards */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-          <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA]">
+          <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA]">
             <CardContent className="p-4 text-center">
               <p className="text-xs text-muted-foreground uppercase tracking-wide">Total Users</p>
               {isLoading ? <Skeleton className="h-8 w-16 mx-auto mt-1" /> : <p className="text-2xl font-bold text-foreground mt-1">{totalUsers}</p>}
@@ -68,10 +68,10 @@ const ModeHub = () => {
           {stats.map((s) => {
             const Icon = s.icon;
             return (
-              <Card key={s.mode} className="border-2 border-gold/20">
+              <Card key={s.mode} className="border-2 border-[#B89555]/20">
                 <CardContent className="p-4 text-center">
                   <div className="flex items-center justify-center gap-1.5 mb-1">
-                    <Icon className="w-4 h-4 text-gold" />
+                    <Icon className="w-4 h-4 text-[#1A1A1A]" />
                     <p className="text-xs text-muted-foreground uppercase tracking-wide">{s.label}</p>
                   </div>
                   {isLoading ? <Skeleton className="h-8 w-12 mx-auto mt-1" /> : <p className="text-2xl font-bold text-foreground">{s.total}</p>}
@@ -83,7 +83,7 @@ const ModeHub = () => {
         </div>
 
         {/* Recent Registrations */}
-        <Card className="border-2 border-gold/30">
+        <Card className="border-2 border-[#B89555]/30">
           <CardHeader>
             <CardTitle className="text-foreground">Recent Registrations</CardTitle>
           </CardHeader>
@@ -99,8 +99,8 @@ const ModeHub = () => {
                     return (
                       <div key={p.user_id} className="flex items-center justify-between py-3 px-2">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-gold/10 flex items-center justify-center">
-                            <Icon className="w-4 h-4 text-gold" />
+                          <div className="w-8 h-8 rounded-full bg-[#EFE6D6]/10 flex items-center justify-center">
+                            <Icon className="w-4 h-4 text-[#1A1A1A]" />
                           </div>
                           <div>
                             <p className="text-sm font-medium text-foreground font-mono">{p.user_id.slice(0, 8)}...</p>

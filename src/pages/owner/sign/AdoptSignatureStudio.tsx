@@ -25,7 +25,7 @@ function PadSection({ kind, title, description }: PadSectionProps) {
   const save = useSaveSignatureAsset();
 
   return (
-    <Card className="bg-[#F7F2EA] border-gold/20">
+    <Card className="bg-[#F7F2EA] border-[#B89555]/20">
       <CardHeader>
         <CardTitle className="text-[#1A1A1A] text-base flex items-center gap-2">
           <IconTile icon={kind === "stamp" ? Stamp : kind === "initial" ? Type : PenLine} tone="gold" size="sm" />
@@ -34,7 +34,7 @@ function PadSection({ kind, title, description }: PadSectionProps) {
         <p className="text-sm text-[#1A1A1A]/70">{description}</p>
       </CardHeader>
       <CardContent className="space-y-3">
-        <div className="bg-[#FDFBF7] border-2 border-dashed border-gold/30 rounded-md p-2">
+        <div className="bg-[#FDFBF7] border-2 border-dashed border-[#B89555]/30 rounded-md p-2">
           <ESignaturePad onSignatureChange={setData} height={150} />
         </div>
         <div className="flex flex-wrap gap-2">
@@ -52,17 +52,17 @@ function PadSection({ kind, title, description }: PadSectionProps) {
           </Button>
         </div>
         {assets.length > 0 && (
-          <div className="pt-3 border-t border-gold/15">
+          <div className="pt-3 border-t border-[#B89555]/15">
             <p className="text-xs text-[#1A1A1A]/70 mb-2">Saved {kind}s:</p>
             <div className="flex flex-wrap gap-2">
               {assets.map((a) => (
                 <div
                   key={a.id}
-                  className={`relative bg-white border rounded-md p-1 ${a.is_default ? "border-gold ring-1 ring-gold" : "border-gold/20"}`}
+                  className={`relative bg-white border rounded-md p-1 ${a.is_default ? "border-[#B89555] ring-1 ring-gold" : "border-[#B89555]/20"}`}
                 >
                   <img src={a.image_url} alt={a.kind} className="h-12 w-auto" />
                   {a.is_default && (
-                    <span className="absolute -top-2 -right-2 bg-gold text-[#1A1A1A] text-[9px] font-bold px-1.5 py-0.5 rounded">
+                    <span className="absolute -top-2 -right-2 bg-[#EFE6D6] text-[#1A1A1A] text-[9px] font-bold px-1.5 py-0.5 rounded">
                       DEFAULT
                     </span>
                   )}
@@ -112,14 +112,14 @@ export default function AdoptSignatureStudio() {
       </div>
 
       <Tabs defaultValue="signature">
-        <TabsList className="bg-[#F7F2EA] border border-gold/20">
-          <TabsTrigger value="signature" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]">
+        <TabsList className="bg-[#F7F2EA] border border-[#B89555]/20">
+          <TabsTrigger value="signature" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
             Signature
           </TabsTrigger>
-          <TabsTrigger value="initial" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]">
+          <TabsTrigger value="initial" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
             Initials
           </TabsTrigger>
-          <TabsTrigger value="stamp" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]">
+          <TabsTrigger value="stamp" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
             Stamp
           </TabsTrigger>
         </TabsList>
@@ -135,7 +135,7 @@ export default function AdoptSignatureStudio() {
       </Tabs>
 
       {envelopeId && (
-        <Card className="bg-[#F7F2EA] border-gold/20">
+        <Card className="bg-[#F7F2EA] border-[#B89555]/20">
           <CardContent className="p-4 flex items-center justify-between gap-4">
             <div>
               <p className="text-sm font-semibold text-[#1A1A1A]">Apply to envelope #{envelopeId.slice(0, 8)}</p>

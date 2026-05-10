@@ -552,7 +552,7 @@ ${COMPANY_CONTACTS.email}`;
 
             {/* Safety Rule Banner */}
             <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-3 flex items-center gap-3">
-              <Shield className="h-5 w-5 text-amber-400 shrink-0" />
+              <Shield className="h-5 w-5 text-[#1A1A1A] shrink-0" />
               <div className="flex-1">
                 <p className="text-xs font-medium text-amber-300">Safety Rule</p>
                 <p className="text-xs text-amber-200/70">
@@ -687,7 +687,7 @@ ${COMPANY_CONTACTS.email}`;
                           <div className="flex items-center gap-2 mt-1">
                             <Badge variant="outline" className={`text-xs ${
                               task.priority === 'high' ? "border-red-500/50 text-red-400" :
-                              task.priority === 'medium' ? "border-amber-500/50 text-amber-400" :
+                              task.priority === 'medium' ? "border-amber-500/50 text-[#1A1A1A]" :
                               "border-muted-foreground text-muted-foreground"
                             }`}>
                               {task.priority}
@@ -801,7 +801,7 @@ ${COMPANY_CONTACTS.email}`;
                               {new Date(draft.created_at).toLocaleString()}
                             </p>
                           </div>
-                          <Clock className="h-4 w-4 text-amber-400 shrink-0" />
+                          <Clock className="h-4 w-4 text-[#1A1A1A] shrink-0" />
                         </div>
                       </CardContent>
                     </Card>

@@ -180,8 +180,8 @@ const ThankYou = () => {
                 <ul className="space-y-3">
                   {content.nextSteps.map((step, index) => (
                     <li key={index} className="flex items-start gap-3">
-                      <div className="w-6 h-6 bg-gold/10 border border-gold/30 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <span className="text-gold text-xs font-bold">{index + 1}</span>
+                      <div className="w-6 h-6 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-[#1A1A1A] text-xs font-bold">{index + 1}</span>
                       </div>
                       <span className="text-[#1A1A1A]/70">{step}</span>
                     </li>
@@ -194,7 +194,7 @@ const ThankYou = () => {
                 variants={fadeInUp}
                 className="flex flex-col sm:flex-row gap-4 justify-center"
               >
-                <Button asChild size="lg" className="bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold">
+                <Button asChild size="lg" className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-semibold">
                   <Link to={content.primaryCta.href}>
                     <Home className="mr-2 h-5 w-5" />
                     {content.primaryCta.label}

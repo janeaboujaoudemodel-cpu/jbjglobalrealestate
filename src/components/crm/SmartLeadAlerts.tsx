@@ -247,7 +247,7 @@ const SmartLeadAlerts = ({ userId, limit = 10 }: SmartLeadAlertsProps) => {
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-base flex items-center gap-2 text-white font-bold">
-            <Bell className="h-4 w-4 text-amber-400" />
+            <Bell className="h-4 w-4 text-[#1A1A1A]" />
             Smart Lead Alerts
           </CardTitle>
           <div className="flex items-center gap-2">
@@ -257,7 +257,7 @@ const SmartLeadAlerts = ({ userId, limit = 10 }: SmartLeadAlertsProps) => {
               </Badge>
             )}
             {highPriority > 0 && (
-              <Badge variant="outline" className="bg-amber-500/20 text-amber-400 border-amber-500/30">
+              <Badge variant="outline" className="bg-amber-500/20 text-[#1A1A1A] border-amber-500/30">
                 {highPriority} Urgent
               </Badge>
             )}

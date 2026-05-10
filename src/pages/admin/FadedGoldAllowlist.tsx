@@ -81,7 +81,7 @@ export default function FadedGoldAllowlist() {
     return JSON.stringify(
       {
         $comment:
-          "Owner-managed allowlist for files permitted to use faded gold (text-gold/XX where XX < 80). Synced from /admin/faded-gold-allowlist.",
+          "Owner-managed allowlist for files permitted to use faded gold (text-[#1A1A1A]/XX where XX < 80). Synced from /admin/faded-gold-allowlist.",
         files: rows.map((r) => r.file_path).sort(),
       },
       null,
@@ -185,7 +185,7 @@ export default function FadedGoldAllowlist() {
               <ArrowLeft className="h-4 w-4" />
             </Link>
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-zinc-500">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#1A1A1A]/60">
                 Design QA · CI guards
               </p>
               <h1 className="text-3xl font-bold tracking-tight text-zinc-950">
@@ -193,7 +193,7 @@ export default function FadedGoldAllowlist() {
               </h1>
               <p className="mt-2 max-w-2xl text-sm leading-relaxed text-zinc-600">
                 Files listed here are exempt from the faded-gold guard
-                (<code className="rounded bg-zinc-100 px-1.5 py-0.5 text-xs">text-gold/XX</code> where{" "}
+                (<code className="rounded bg-zinc-100 px-1.5 py-0.5 text-xs">text-[#1A1A1A]/XX</code> where{" "}
                 <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-xs">XX &lt; 80</code>). Only add
                 legitimate branded watermarks. After saving, export the JSON and
                 commit{" "}
@@ -219,7 +219,7 @@ export default function FadedGoldAllowlist() {
         {/* Add card */}
         <section className="rounded-2xl border border-zinc-200 bg-zinc-50/60 p-6">
           <div className="mb-4 flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-zinc-500" />
+            <Sparkles className="h-4 w-4 text-[#1A1A1A]/60" />
             <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-zinc-700">
               Add an exemption
             </h2>
@@ -285,9 +285,9 @@ export default function FadedGoldAllowlist() {
 
           <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-[#FDFBF7]">
             {loading ? (
-              <div className="p-10 text-center text-sm text-zinc-500">Loading…</div>
+              <div className="p-10 text-center text-sm text-[#1A1A1A]/60">Loading…</div>
             ) : filtered.length === 0 ? (
-              <div className="p-10 text-center text-sm text-zinc-500">
+              <div className="p-10 text-center text-sm text-[#1A1A1A]/60">
                 {rows.length === 0
                   ? "No exemptions yet. The guard rejects all faded-gold usage."
                   : "No entries match your filter."}
@@ -295,7 +295,7 @@ export default function FadedGoldAllowlist() {
             ) : (
               <table className="w-full text-sm">
                 <thead className="border-b border-zinc-100 bg-zinc-50">
-                  <tr className="text-left text-[11px] uppercase tracking-[0.15em] text-zinc-500">
+                  <tr className="text-left text-[11px] uppercase tracking-[0.15em] text-[#1A1A1A]/60">
                     <th className="px-4 py-3 font-semibold">File</th>
                     <th className="px-4 py-3 font-semibold">Reason</th>
                     <th className="px-4 py-3 font-semibold">Added</th>
@@ -313,16 +313,16 @@ export default function FadedGoldAllowlist() {
         </section>
 
         {/* Export */}
-        <section className="rounded-2xl border border-zinc-200 bg-zinc-950 p-6 text-zinc-100">
+        <section className="rounded-2xl border border-zinc-200 bg-[#FDFBF7] p-6 text-zinc-100">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-zinc-400">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#1A1A1A]/70">
                 Sync to CI
               </p>
               <h2 className="text-lg font-semibold text-white">Export to repository</h2>
-              <p className="mt-1 text-xs text-zinc-400">
+              <p className="mt-1 text-xs text-[#1A1A1A]/70">
                 Copy or download the JSON, then replace{" "}
-                <code className="rounded bg-zinc-800 px-1.5 py-0.5 text-[11px]">
+                <code className="rounded bg-[#F7F2EA] px-1.5 py-0.5 text-[11px]">
                   scripts/contrast/faded-gold-allowlist.json
                 </code>{" "}
                 and commit. CI reads that file directly.
@@ -333,7 +333,7 @@ export default function FadedGoldAllowlist() {
                 variant="outline"
                 size="sm"
                 onClick={copyJson}
-                className="gap-2 border-zinc-700 bg-zinc-900 text-zinc-100 hover:bg-zinc-800"
+                className="gap-2 border-[#B89555]/30 bg-[#FDFBF7] text-zinc-100 hover:bg-[#F7F2EA]"
               >
                 {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
                 {copied ? "Copied" : "Copy JSON"}
@@ -380,7 +380,7 @@ function Row({
           placeholder="Why is this file exempt?"
         />
       </td>
-      <td className="px-4 py-3 text-xs text-zinc-500 whitespace-nowrap">
+      <td className="px-4 py-3 text-xs text-[#1A1A1A]/60 whitespace-nowrap">
         {new Date(entry.created_at).toLocaleDateString()}
       </td>
       <td className="px-4 py-3">

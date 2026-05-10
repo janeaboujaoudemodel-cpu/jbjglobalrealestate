@@ -154,7 +154,7 @@ const FAQ = () => {
         badgeIcon={HelpCircle}
         title={
           <>
-            Your Questions <span className="text-gold">Answered</span>
+            Your Questions <span className="text-[#1A1A1A]">Answered</span>
           </>
         }
         description="Find clear answers to the most common questions about buying, selling, and owning property in the UAE."
@@ -162,16 +162,16 @@ const FAQ = () => {
         actions={
           <>
             <Button 
-              className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
+              className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
               onClick={() => document.getElementById('faq-content')?.scrollIntoView({ behavior: 'smooth' })}
             >
               <Search className="w-4 h-4 mr-2 text-[#1A1A1A]" />
-              <span className="text-gold font-semibold">Browse FAQs</span>
+              <span className="text-[#1A1A1A] font-semibold">Browse FAQs</span>
             </Button>
-            <Button asChild className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
+            <Button asChild className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
               <Link to="/contact">
                 <Phone className="w-4 h-4 mr-2 text-[#1A1A1A]" />
-                <span className="text-gold font-semibold">Ask Our Team</span>
+                <span className="text-[#1A1A1A] font-semibold">Ask Our Team</span>
               </Link>
             </Button>
           </>
@@ -189,7 +189,7 @@ const FAQ = () => {
       {/* FAQ Content with Sticky TOC Above */}
       <section id="faq-content" className="bg-[#1A1A1A] relative">
         {/* Sticky FAQ Quick Access - Compact & Above Content (Mobile/Tablet Only) */}
-        <div className="lg:hidden sticky top-0 z-50 px-4 py-3 bg-[#1A1A1A]/95 backdrop-blur-sm border-b border-gold/20 shadow-lg">
+        <div className="lg:hidden sticky top-0 z-50 px-4 py-3 bg-[#1A1A1A]/95 backdrop-blur-sm border-b border-[#B89555]/20 shadow-lg">
           <FAQTableOfContents categories={categories} title="FAQ Quick Access" sticky={true} />
         </div>
 
@@ -224,9 +224,9 @@ const FAQ = () => {
                           <AccordionItem
                             value={`${categoryIndex}-${faqIndex}`}
                             data-accordion-item={`${categoryIndex}-${faqIndex}`}
-                            className="jj-card-inner p-0 overflow-hidden data-[state=open]:border-gold transition-all"
+                            className="jj-card-inner p-0 overflow-hidden data-[state=open]:border-[#B89555] transition-all"
                           >
-                            <AccordionTrigger className="px-6 py-5 text-[#1A1A1A] text-left hover:text-gold hover:no-underline text-base font-medium">
+                            <AccordionTrigger className="px-6 py-5 text-[#1A1A1A] text-left hover:text-[#1A1A1A] hover:no-underline text-base font-medium">
                               {faq.question}
                             </AccordionTrigger>
                             <AccordionContent className="px-6 pb-5 text-[#1A1A1A]/70 leading-relaxed">
@@ -283,7 +283,7 @@ const FAQ = () => {
       </section>
 
       {/* Disclaimer - Premium champagne background */}
-      <section className="py-10 bg-[#1A1A1A] border-t border-gold/20">
+      <section className="py-10 bg-[#1A1A1A] border-t border-[#B89555]/20">
         <div className="jj-layer-2">
           <div className="jj-card-inner max-w-4xl mx-auto">
             <p className="text-center text-[#1A1A1A]/70 text-sm leading-relaxed">

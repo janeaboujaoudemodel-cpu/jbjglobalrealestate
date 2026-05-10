@@ -146,7 +146,7 @@ export default function AIClientMatcherPage() {
 
       <div className="space-y-8">
         {/* Input Form */}
-        <Card className="bg-zinc-900/90 border-purple-500/30">
+        <Card className="bg-[#FDFBF7]/90 border-purple-500/30">
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
               <Target className="w-5 h-5 text-purple-400" />
@@ -163,7 +163,7 @@ export default function AIClientMatcherPage() {
                   value={budgetMin}
                   onChange={(e) => setBudgetMin(e.target.value)}
                   placeholder="500,000"
-                  className="bg-zinc-800 border-purple-500/30 text-white"
+                  className="bg-[#F7F2EA] border-purple-500/30 text-white"
                 />
               </div>
               <div>
@@ -173,7 +173,7 @@ export default function AIClientMatcherPage() {
                   value={budgetMax}
                   onChange={(e) => setBudgetMax(e.target.value)}
                   placeholder="2,000,000"
-                  className="bg-zinc-800 border-purple-500/30 text-white"
+                  className="bg-[#F7F2EA] border-purple-500/30 text-white"
                 />
               </div>
             </div>
@@ -225,7 +225,7 @@ export default function AIClientMatcherPage() {
               <div>
                 <Label className="text-white/85">Min Bedrooms</Label>
                 <Select value={bedroomsMin} onValueChange={setBedroomsMin}>
-                  <SelectTrigger className="bg-zinc-800 border-purple-500/30 text-white">
+                  <SelectTrigger className="bg-[#F7F2EA] border-purple-500/30 text-white">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -238,7 +238,7 @@ export default function AIClientMatcherPage() {
               <div>
                 <Label className="text-white/85">Max Bedrooms</Label>
                 <Select value={bedroomsMax} onValueChange={setBedroomsMax}>
-                  <SelectTrigger className="bg-zinc-800 border-purple-500/30 text-white">
+                  <SelectTrigger className="bg-[#F7F2EA] border-purple-500/30 text-white">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -257,7 +257,7 @@ export default function AIClientMatcherPage() {
                 value={features}
                 onChange={(e) => setFeatures(e.target.value)}
                 placeholder="Sea view, private pool, gym, parking..."
-                className="bg-zinc-800 border-purple-500/30 text-white"
+                className="bg-[#F7F2EA] border-purple-500/30 text-white"
               />
             </div>
 
@@ -266,7 +266,7 @@ export default function AIClientMatcherPage() {
               <div>
                 <Label className="text-white/85">Investment Goal</Label>
                 <Select value={investmentGoal} onValueChange={setInvestmentGoal}>
-                  <SelectTrigger className="bg-zinc-800 border-purple-500/30 text-white">
+                  <SelectTrigger className="bg-[#F7F2EA] border-purple-500/30 text-white">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -280,7 +280,7 @@ export default function AIClientMatcherPage() {
               <div>
                 <Label className="text-white/85">Timeline</Label>
                 <Select value={timeline} onValueChange={setTimeline}>
-                  <SelectTrigger className="bg-zinc-800 border-purple-500/30 text-white">
+                  <SelectTrigger className="bg-[#F7F2EA] border-purple-500/30 text-white">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -318,7 +318,7 @@ export default function AIClientMatcherPage() {
           <div className="space-y-6">
             {/* Client Profile */}
             {result.clientProfile && (
-              <Card className="bg-zinc-900/90 border-purple-500/30">
+              <Card className="bg-[#FDFBF7]/90 border-purple-500/30">
                 <CardHeader>
                   <CardTitle className="text-white flex items-center gap-2">
                     <Users className="w-5 h-5 text-purple-400" />
@@ -347,7 +347,7 @@ export default function AIClientMatcherPage() {
 
             {/* Recommended Areas */}
             {result.recommendedAreas && result.recommendedAreas.length > 0 && (
-              <Card className="bg-zinc-900/90 border-purple-500/30">
+              <Card className="bg-[#FDFBF7]/90 border-purple-500/30">
                 <CardHeader>
                   <CardTitle className="text-white flex items-center gap-2">
                     <MapPin className="w-5 h-5 text-purple-400" />
@@ -357,7 +357,7 @@ export default function AIClientMatcherPage() {
                 <CardContent>
                   <div className="grid md:grid-cols-2 gap-4">
                     {result.recommendedAreas.map((area, i) => (
-                      <div key={i} className="bg-zinc-800/50 rounded-lg p-4 border border-purple-500/20">
+                      <div key={i} className="bg-[#F7F2EA]/50 rounded-lg p-4 border border-purple-500/20">
                         <div className="flex items-center justify-between mb-2">
                           <h4 className="text-white font-semibold">{area.area}</h4>
                           <Badge className="bg-purple-500 text-[#1A1A1A]">{area.matchScore}% Match</Badge>
@@ -373,7 +373,7 @@ export default function AIClientMatcherPage() {
 
             {/* Property Recommendations */}
             {result.propertyRecommendations && result.propertyRecommendations.length > 0 && (
-              <Card className="bg-zinc-900/90 border-purple-500/30">
+              <Card className="bg-[#FDFBF7]/90 border-purple-500/30">
                 <CardHeader>
                   <CardTitle className="text-white flex items-center gap-2">
                     <Building className="w-5 h-5 text-purple-400" />
@@ -383,7 +383,7 @@ export default function AIClientMatcherPage() {
                 <CardContent>
                   <div className="space-y-4">
                     {result.propertyRecommendations.map((prop, i) => (
-                      <div key={i} className="bg-zinc-800/50 rounded-lg p-4 border border-purple-500/20">
+                      <div key={i} className="bg-[#F7F2EA]/50 rounded-lg p-4 border border-purple-500/20">
                         <h4 className="text-white font-semibold mb-2">{prop.type}</h4>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
                           <div>
@@ -412,7 +412,7 @@ export default function AIClientMatcherPage() {
 
             {/* Next Steps */}
             {result.nextSteps && result.nextSteps.length > 0 && (
-              <Card className="bg-zinc-900/90 border-purple-500/30">
+              <Card className="bg-[#FDFBF7]/90 border-purple-500/30">
                 <CardHeader>
                   <CardTitle className="text-white flex items-center gap-2">
                     <Target className="w-5 h-5 text-purple-400" />
@@ -438,7 +438,7 @@ export default function AIClientMatcherPage() {
 
         {/* Placeholder when no results */}
         {!result && !loading && (
-          <div className="bg-zinc-900/50 border border-purple-500/20 rounded-xl py-12 text-center">
+          <div className="bg-[#FDFBF7]/50 border border-purple-500/20 rounded-xl py-12 text-center">
             <Users className="w-12 h-12 text-purple-400/50 mx-auto mb-4" />
             <p className="text-white/70">Enter client preferences above to get AI-powered property matches</p>
           </div>

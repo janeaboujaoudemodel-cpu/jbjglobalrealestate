@@ -327,12 +327,12 @@ const HubCard = ({ hub, hideFounderLinks }: { hub: HubSection; hideFounderLinks?
     <motion.div 
       variants={fadeInUp}
       id={hub.id}
-      className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-5 sm:p-6 hover:border-gold hover:shadow-[0_8px_30px_rgba(200,167,102,0.25)] transition-all"
+      className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-5 sm:p-6 hover:border-[#B89555] hover:shadow-[0_8px_30px_rgba(200,167,102,0.25)] transition-all"
     >
       {/* Hub Header */}
-      <div className="flex items-center gap-3 mb-4 pb-3 border-b border-gold/30">
+      <div className="flex items-center gap-3 mb-4 pb-3 border-b border-[#B89555]/30">
         <div className="w-10 h-10 bg-[#1A1A1A] rounded-lg flex items-center justify-center">
-          <Icon className="w-5 h-5 text-gold" />
+          <Icon className="w-5 h-5 text-[#1A1A1A]" />
         </div>
         <h3 className="text-[#1A1A1A] text-lg font-bold">
           {hub.title}
@@ -345,12 +345,12 @@ const HubCard = ({ hub, hideFounderLinks }: { hub: HubSection; hideFounderLinks?
           <li key={link.href}>
             <Link
               to={link.href}
-              className="group flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-gold/10 transition-colors"
+              className="group flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-[#EFE6D6]/10 transition-colors"
             >
               <span className="text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] text-sm transition-colors">
                 {link.label}
               </span>
-              <ArrowRight className="w-3.5 h-3.5 text-gold opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
+              <ArrowRight className="w-3.5 h-3.5 text-[#1A1A1A] opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
             </Link>
           </li>
         ))}
@@ -422,7 +422,7 @@ const Sitemap = () => {
             >
               {/* Badge */}
               <motion.div variants={fadeInUp} className="mb-6">
-                <Badge className="bg-gold/15 text-gold border-gold/30 px-4 py-1.5 text-sm">
+                <Badge className="bg-[#EFE6D6]/15 text-[#1A1A1A] border-[#B89555]/30 px-4 py-1.5 text-sm">
                   <Map className="w-3.5 h-3.5 mr-1.5" />
                   Sitemap
                 </Badge>
@@ -478,7 +478,7 @@ const Sitemap = () => {
         </section>
 
         {/* QUICK LINKS STRIP */}
-        <section className="py-6 bg-[#1A1A1A] border-y border-gold/20">
+        <section className="py-6 bg-[#1A1A1A] border-y border-[#B89555]/20">
           <div className="container mx-auto px-4">
             <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
               {quickLinks.map((link) => {
@@ -487,10 +487,10 @@ const Sitemap = () => {
                   <Link
                     key={link.href}
                     to={link.href}
-                    className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-lg hover:border-gold hover:shadow-lg transition-all group"
+                    className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-lg hover:border-[#B89555] hover:shadow-lg transition-all group"
                   >
-                    <Icon className="w-4 h-4 text-[#1A1A1A] group-hover:text-gold transition-colors" />
-                    <span className="text-[#1A1A1A] text-xs sm:text-sm font-medium group-hover:text-gold transition-colors whitespace-nowrap">
+                    <Icon className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
+                    <span className="text-[#1A1A1A] text-xs sm:text-sm font-medium group-hover:text-[#1A1A1A] transition-colors whitespace-nowrap">
                       {link.label}
                     </span>
                   </Link>
@@ -511,7 +511,7 @@ const Sitemap = () => {
               className="text-center mb-10"
             >
               <h2 className="text-[#1A1A1A] text-2xl sm:text-3xl font-bold mb-3">
-                Complete <span className="text-gold">Directory</span>
+                Complete <span className="text-[#1A1A1A]">Directory</span>
               </h2>
               <p className="text-[#1A1A1A]/70 text-sm sm:text-base max-w-xl mx-auto">
                 All pages organized by category for easy navigation
@@ -547,7 +547,7 @@ const Sitemap = () => {
               className="text-center mb-8"
             >
               <h2 className="text-[#1A1A1A] text-xl sm:text-2xl font-bold mb-2">
-                Support & <span className="text-gold">Legal</span>
+                Support & <span className="text-[#1A1A1A]">Legal</span>
               </h2>
             </motion.div>
 
@@ -558,9 +558,9 @@ const Sitemap = () => {
                   <Link
                     key={link.href}
                     to={link.href}
-                    className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-lg hover:border-gold hover:shadow-lg transition-all group"
+                    className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-lg hover:border-[#B89555] hover:shadow-lg transition-all group"
                   >
-                    <Icon className="w-4 h-4 text-gold" />
+                    <Icon className="w-4 h-4 text-[#1A1A1A]" />
                     <span className="text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] text-sm transition-colors">
                       {link.label}
                     </span>
@@ -581,7 +581,7 @@ const Sitemap = () => {
               className="text-center mb-8"
             >
               <h2 className="text-[#1A1A1A] text-xl sm:text-2xl font-bold mb-2">
-                Get <span className="text-gold">In Touch</span>
+                Get <span className="text-[#1A1A1A]">In Touch</span>
               </h2>
               <p className="text-[#1A1A1A]/70 text-sm">Choose your preferred way to connect with us</p>
             </motion.div>
@@ -594,14 +594,14 @@ const Sitemap = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0 }}
-                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6 hover:border-gold hover:shadow-lg transition-all text-center group"
+                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 hover:border-[#B89555] hover:shadow-lg transition-all text-center group"
                 >
                   <div className="w-14 h-14 bg-[#1A1A1A] rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                    <Headphones className="w-7 h-7 text-gold" />
+                    <Headphones className="w-7 h-7 text-[#1A1A1A]" />
                   </div>
                   <h3 className="text-[#1A1A1A] font-bold text-lg mb-2">Support Ticket</h3>
                   <p className="text-[#1A1A1A]/70 text-sm mb-4">Get help with any questions or issues</p>
-                  <span className="inline-flex items-center gap-2 text-gold font-semibold text-sm">
+                  <span className="inline-flex items-center gap-2 text-[#1A1A1A] font-semibold text-sm">
                     Submit Ticket <ArrowRight className="w-4 h-4" />
                   </span>
                 </motion.div>
@@ -614,14 +614,14 @@ const Sitemap = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.1 }}
-                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6 hover:border-gold hover:shadow-lg transition-all text-center group"
+                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 hover:border-[#B89555] hover:shadow-lg transition-all text-center group"
                 >
                   <div className="w-14 h-14 bg-[#1A1A1A] rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                    <Calendar className="w-7 h-7 text-gold" />
+                    <Calendar className="w-7 h-7 text-[#1A1A1A]" />
                   </div>
                   <h3 className="text-[#1A1A1A] font-bold text-lg mb-2">Free Consultation</h3>
                   <p className="text-[#1A1A1A]/70 text-sm mb-4">Book a call with our expert advisors</p>
-                  <span className="inline-flex items-center gap-2 text-gold font-semibold text-sm">
+                  <span className="inline-flex items-center gap-2 text-[#1A1A1A] font-semibold text-sm">
                     Book Now <ArrowRight className="w-4 h-4" />
                   </span>
                 </motion.div>
@@ -634,14 +634,14 @@ const Sitemap = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.2 }}
-                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6 hover:border-gold hover:shadow-lg transition-all text-center group"
+                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 hover:border-[#B89555] hover:shadow-lg transition-all text-center group"
                 >
                   <div className="w-14 h-14 bg-[#1A1A1A] rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                    <Phone className="w-7 h-7 text-gold" />
+                    <Phone className="w-7 h-7 text-[#1A1A1A]" />
                   </div>
                   <h3 className="text-[#1A1A1A] font-bold text-lg mb-2">Contact Us</h3>
                   <p className="text-[#1A1A1A]/70 text-sm mb-4">Reach our team directly via phone or email</p>
-                  <span className="inline-flex items-center gap-2 text-gold font-semibold text-sm">
+                  <span className="inline-flex items-center gap-2 text-[#1A1A1A] font-semibold text-sm">
                     Get in Touch <ArrowRight className="w-4 h-4" />
                   </span>
                 </motion.div>
@@ -658,9 +658,9 @@ const Sitemap = () => {
           <div className="container mx-auto px-4 text-center">
             <button
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] rounded-xl hover:border-gold hover:shadow-lg transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] rounded-xl hover:border-[#B89555] hover:shadow-lg transition-all"
             >
-              <ChevronUp className="w-5 h-5 text-gold" />
+              <ChevronUp className="w-5 h-5 text-[#1A1A1A]" />
               <span className="font-medium">Back to Top</span>
             </button>
           </div>
@@ -673,7 +673,7 @@ const Sitemap = () => {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="fixed bottom-24 right-6 z-40 w-12 h-12 bg-gold text-[#1A1A1A] rounded-full shadow-lg hover:bg-gold-dark transition-all flex items-center justify-center"
+            className="fixed bottom-24 right-6 z-40 w-12 h-12 bg-[#EFE6D6] text-[#1A1A1A] rounded-full shadow-lg hover:bg-[#EFE6D6]-dark transition-all flex items-center justify-center"
             aria-label="Back to top"
           >
             <ChevronUp className="w-6 h-6" />

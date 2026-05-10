@@ -448,7 +448,7 @@ const UserProfile = () => {
           <div className="container mx-auto px-4 py-6 max-w-4xl">
           {/* Page Title */}
           <h1 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-2">
-            My <span className="text-gold">Profile</span>
+            My <span className="text-[#1A1A1A]">Profile</span>
           </h1>
           {/* Subtitle */}
           <p className="text-muted-foreground mb-6">Manage your account settings and preferences</p>
@@ -490,8 +490,8 @@ const UserProfile = () => {
                   <h2 className="text-2xl font-bold text-foreground">{displayName}</h2>
                   <p className="text-muted-foreground">{user?.email}</p>
                   <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mt-3">
-                    <Badge variant="outline" className="border-gold/60 text-foreground bg-gold/10 font-semibold">
-                      <User className="h-3 w-3 mr-1 text-gold" />
+                    <Badge variant="outline" className="border-[#B89555]/60 text-foreground bg-[#EFE6D6]/10 font-semibold">
+                      <User className="h-3 w-3 mr-1 text-[#1A1A1A]" />
                       Member
                     </Badge>
                   </div>
@@ -543,7 +543,7 @@ const UserProfile = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="displayName" className="flex items-center gap-2 text-foreground font-medium">
-                        <User className="h-4 w-4 text-gold" />
+                        <User className="h-4 w-4 text-[#1A1A1A]" />
                         Display Name
                       </Label>
                       <Input
@@ -551,12 +551,12 @@ const UserProfile = () => {
                         value={displayName}
                         onChange={(e) => setDisplayName(e.target.value)}
                         placeholder="Your name"
-                        className="border-2 border-gold/50 focus:border-gold hover:border-gold transition-colors"
+                        className="border-2 border-[#B89555]/50 focus:border-[#B89555] hover:border-[#B89555] transition-colors"
                       />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="email" className="flex items-center gap-2 text-foreground font-medium">
-                        <Mail className="h-4 w-4 text-gold" />
+                        <Mail className="h-4 w-4 text-[#1A1A1A]" />
                         Email Address
                       </Label>
                       <div className="flex gap-2">
@@ -564,13 +564,13 @@ const UserProfile = () => {
                           id="email"
                           value={user?.email || ""}
                           disabled
-                          className="bg-muted flex-1 border-2 border-gold/30"
+                          className="bg-muted flex-1 border-2 border-[#B89555]/30"
                         />
                         <Button 
                           variant="outline" 
                           size="sm"
                           onClick={() => setShowEmailChangeDialog(true)}
-                          className="shrink-0 border-gold/50 hover:border-gold"
+                          className="shrink-0 border-[#B89555]/50 hover:border-[#B89555]"
                         >
                           <Pencil className="h-3 w-3 mr-1" />
                           Change
@@ -580,7 +580,7 @@ const UserProfile = () => {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="phone" className="flex items-center gap-2 text-foreground font-medium">
-                        <Phone className="h-4 w-4 text-gold" />
+                        <Phone className="h-4 w-4 text-[#1A1A1A]" />
                         Phone Number
                       </Label>
                       <PhoneInput
@@ -619,7 +619,7 @@ const UserProfile = () => {
                   <div className="space-y-4 max-w-md">
                     <div className="space-y-2">
                       <Label htmlFor="newPassword" className="flex items-center gap-2 text-foreground font-medium">
-                        <Lock className="h-4 w-4 text-gold" />
+                        <Lock className="h-4 w-4 text-[#1A1A1A]" />
                         New Password
                       </Label>
                       <Input
@@ -632,7 +632,7 @@ const UserProfile = () => {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="confirmPassword" className="flex items-center gap-2 text-foreground font-medium">
-                        <Lock className="h-4 w-4 text-gold" />
+                        <Lock className="h-4 w-4 text-[#1A1A1A]" />
                         Confirm New Password
                       </Label>
                       <Input
@@ -673,9 +673,9 @@ const UserProfile = () => {
                   <CardDescription>Manage your account preferences</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="flex items-center justify-between p-4 rounded-lg border border-gold/40 bg-[#EFE6D6] shadow-[0_1px_0_0_rgba(184,149,85,0.25)_inset]">
+                  <div className="flex items-center justify-between p-4 rounded-lg border border-[#B89555]/40 bg-[#EFE6D6] shadow-[0_1px_0_0_rgba(184,149,85,0.25)_inset]">
                     <div className="flex items-center gap-3">
-                      <span className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-[#F7F2EA] border border-gold/40">
+                      <span className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-[#F7F2EA] border border-[#B89555]/40">
                         <Bell className="h-5 w-5 text-[#1A1A1A]" />
                       </span>
                       <div>
@@ -695,16 +695,16 @@ const UserProfile = () => {
                   
                   <a
                     href="/email-preferences"
-                    className="flex items-center justify-between p-4 rounded-lg border border-border hover:border-gold/40 transition-colors group"
+                    className="flex items-center justify-between p-4 rounded-lg border border-border hover:border-[#B89555]/40 transition-colors group"
                   >
                     <div className="flex items-center gap-3">
-                      <Mail className="h-5 w-5 text-gold" />
+                      <Mail className="h-5 w-5 text-[#1A1A1A]" />
                       <div>
                         <p className="font-medium text-foreground">Manage Email Preferences</p>
                         <p className="text-sm text-muted-foreground">Choose which categories of emails you receive</p>
                       </div>
                     </div>
-                    <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-gold transition-colors" />
+                    <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-[#1A1A1A] transition-colors" />
                   </a>
 
                   <Separator />
@@ -767,10 +767,10 @@ const UserProfile = () => {
       
       {/* Email Change Dialog - OTP Based */}
       <Dialog open={showEmailChangeDialog} onOpenChange={handleEmailDialogClose}>
-        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 w-full max-w-[calc(100vw-2rem)] sm:max-w-md mx-auto max-h-[calc(100dvh-2rem)] overflow-y-auto p-4 sm:p-6">
+        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 w-full max-w-[calc(100vw-2rem)] sm:max-w-md mx-auto max-h-[calc(100dvh-2rem)] overflow-y-auto p-4 sm:p-6">
           <DialogHeader>
             <DialogTitle className="text-foreground flex items-center gap-2">
-              <Mail className="h-5 w-5 text-gold" />
+              <Mail className="h-5 w-5 text-[#1A1A1A]" />
               Change Email Address
             </DialogTitle>
             <DialogDescription className="text-muted-foreground">
@@ -816,12 +816,12 @@ const UserProfile = () => {
                     disabled={verifyingEmail}
                   >
                     <InputOTPGroup className="gap-1.5 sm:gap-2 flex-wrap justify-center">
-                      <InputOTPSlot index={0} className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-gold/50 text-foreground text-lg sm:text-xl font-bold bg-[#FDFBF7] rounded-lg" />
-                      <InputOTPSlot index={1} className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-gold/50 text-foreground text-lg sm:text-xl font-bold bg-[#FDFBF7] rounded-lg" />
-                      <InputOTPSlot index={2} className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-gold/50 text-foreground text-lg sm:text-xl font-bold bg-[#FDFBF7] rounded-lg" />
-                      <InputOTPSlot index={3} className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-gold/50 text-foreground text-lg sm:text-xl font-bold bg-[#FDFBF7] rounded-lg" />
-                      <InputOTPSlot index={4} className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-gold/50 text-foreground text-lg sm:text-xl font-bold bg-[#FDFBF7] rounded-lg" />
-                      <InputOTPSlot index={5} className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-gold/50 text-foreground text-lg sm:text-xl font-bold bg-[#FDFBF7] rounded-lg" />
+                      <InputOTPSlot index={0} className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-[#B89555]/50 text-foreground text-lg sm:text-xl font-bold bg-[#FDFBF7] rounded-lg" />
+                      <InputOTPSlot index={1} className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-[#B89555]/50 text-foreground text-lg sm:text-xl font-bold bg-[#FDFBF7] rounded-lg" />
+                      <InputOTPSlot index={2} className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-[#B89555]/50 text-foreground text-lg sm:text-xl font-bold bg-[#FDFBF7] rounded-lg" />
+                      <InputOTPSlot index={3} className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-[#B89555]/50 text-foreground text-lg sm:text-xl font-bold bg-[#FDFBF7] rounded-lg" />
+                      <InputOTPSlot index={4} className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-[#B89555]/50 text-foreground text-lg sm:text-xl font-bold bg-[#FDFBF7] rounded-lg" />
+                      <InputOTPSlot index={5} className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-[#B89555]/50 text-foreground text-lg sm:text-xl font-bold bg-[#FDFBF7] rounded-lg" />
                     </InputOTPGroup>
                   </InputOTP>
                 </div>
@@ -834,7 +834,7 @@ const UserProfile = () => {
                       setOtpCode("");
                       handleSendEmailOtp();
                     }}
-                    className="text-gold hover:underline"
+                    className="text-[#1A1A1A] hover:underline"
                     disabled={sendingOtp}
                   >
                     {sendingOtp ? "Sending..." : "Resend"}
@@ -899,12 +899,12 @@ const UserProfile = () => {
 
       {/* Premium Account Lifecycle Dialogs */}
       <AlertDialog open={accountDialogType === 'deactivate'} onOpenChange={(open) => !open && setAccountDialogType(null)}>
-        <AlertDialogContent className="relative w-full max-w-[calc(100vw-1.5rem)] sm:max-w-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+        <AlertDialogContent className="relative w-full max-w-[calc(100vw-1.5rem)] sm:max-w-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
           <button
             type="button"
             aria-label="Close"
             onClick={() => setAccountDialogType(null)}
-            className="absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full border border-gold/30 bg-background/70 text-foreground transition-colors hover:bg-background"
+            className="absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#B89555]/30 bg-background/70 text-foreground transition-colors hover:bg-background"
           >
             <X className="h-4 w-4" />
           </button>
@@ -921,7 +921,7 @@ const UserProfile = () => {
                 <p>
                   Deactivating your account will immediately hide all your personal information and remove your visibility from the platform.
                 </p>
-                <div className="bg-[#FDFBF7]/60 rounded-lg p-4 border border-gold/20 text-left space-y-2">
+                <div className="bg-[#FDFBF7]/60 rounded-lg p-4 border border-[#B89555]/20 text-left space-y-2">
                   <p className="font-semibold text-foreground text-sm">What happens when you deactivate:</p>
                   <ul className="space-y-1.5 text-xs sm:text-sm">
                     <li className="flex items-start gap-2 leading-relaxed">
@@ -959,12 +959,12 @@ const UserProfile = () => {
       </AlertDialog>
 
       <AlertDialog open={accountDialogType === 'delete'} onOpenChange={(open) => !open && setAccountDialogType(null)}>
-        <AlertDialogContent className="relative w-full max-w-[calc(100vw-1.5rem)] sm:max-w-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+        <AlertDialogContent className="relative w-full max-w-[calc(100vw-1.5rem)] sm:max-w-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
           <button
             type="button"
             aria-label="Close"
             onClick={() => setAccountDialogType(null)}
-            className="absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full border border-gold/30 bg-background/70 text-foreground transition-colors hover:bg-background"
+            className="absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#B89555]/30 bg-background/70 text-foreground transition-colors hover:bg-background"
           >
             <X className="h-4 w-4" />
           </button>

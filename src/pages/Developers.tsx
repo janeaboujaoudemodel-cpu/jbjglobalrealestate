@@ -239,8 +239,8 @@ const Developers = () => {
           </div>
           
           {/* Floating gold accent orbs */}
-          <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/10 rounded-full blur-[100px] pointer-events-none" />
-          <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-gold/15 rounded-full blur-[120px] pointer-events-none" />
+          <div className="absolute top-1/4 left-10 w-64 h-64 bg-[#EFE6D6]/10 rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-[#EFE6D6]/15 rounded-full blur-[120px] pointer-events-none" />
 
           <div className="container mx-auto px-4 relative z-10">
             <motion.div
@@ -250,9 +250,9 @@ const Developers = () => {
               className="text-center max-w-4xl mx-auto"
             >
               {/* Label */}
-              <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-[#1A1A1A]/30 backdrop-blur-md">
-                <Building2 className="w-4 h-4 text-gold" />
-                <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">
+              <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-[#B89555]/40 bg-[#1A1A1A]/30 backdrop-blur-md">
+                <Building2 className="w-4 h-4 text-[#1A1A1A]" />
+                <span className="text-[#1A1A1A] font-semibold text-xs uppercase tracking-[0.2em]">
                   Developer-Direct Properties
                 </span>
               </div>
@@ -284,9 +284,9 @@ const Developers = () => {
         <div ref={filterSentinelRef} className="h-0" />
 
         {/* Filters Section - Champagne Layer matching Properties page */}
-        <section className="z-40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] py-4 border-b border-gold/30">
+        <section className="z-40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] py-4 border-b border-[#B89555]/30">
           <div className="container mx-auto px-3 sm:px-4">
-            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg">
+            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl p-4 sm:p-5 shadow-lg">
               <FilterShortcutBar
                 variant="light"
                 filters={shortcutFilters}
@@ -303,11 +303,11 @@ const Developers = () => {
               />
               
               {/* Tier filter row - unique to developers */}
-              <div className="flex items-center gap-3 flex-wrap mt-3 pt-3 border-t border-gold/20">
+              <div className="flex items-center gap-3 flex-wrap mt-3 pt-3 border-t border-[#B89555]/20">
                 {/* Tier Filter */}
                 <Select value={tierFilter} onValueChange={setTierFilter}>
-                  <SelectTrigger className="w-full sm:w-[180px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] rounded-lg text-sm shadow-sm">
-                    <Crown className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
+                  <SelectTrigger className="w-full sm:w-[180px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] rounded-lg text-sm shadow-sm">
+                    <Crown className="w-4 h-4 mr-2 text-[#1A1A1A] flex-shrink-0" />
                     <span className="truncate text-left flex-1">
                       {TIER_FILTERS.find(t => t.value === tierFilter)?.label || "All Tiers"}
                     </span>
@@ -333,7 +333,7 @@ const Developers = () => {
                     variant="outline"
                     size="sm"
                     onClick={clearFilters}
-                    className="h-9 px-3 bg-[#FDFBF7]/80 border-gold/30 text-[#1A1A1A] hover:bg-[#FDFBF7] rounded-lg flex items-center gap-1.5"
+                    className="h-9 px-3 bg-[#FDFBF7]/80 border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#FDFBF7] rounded-lg flex items-center gap-1.5"
                   >
                     <X className="w-3.5 h-3.5" />
                     Clear ({activeFilterCount})
@@ -354,9 +354,9 @@ const Developers = () => {
 
         {/* Fixed portal copy of filters when scrolled past */}
         {isFilterFixed && createPortal(
-          <section className="fixed top-[88px] left-0 lg:left-[200px] [body.jj-vertical-nav-collapsed_&]:lg:left-[48px] right-0 z-[9998] backdrop-blur-md bg-gradient-to-br from-[#FDFBF7]/90 via-[#F7F2EA]/90 to-[#EFE6D6]/90 py-4 border-b border-gold/30 shadow-lg">
+          <section className="fixed top-[88px] left-0 lg:left-[200px] [body.jj-vertical-nav-collapsed_&]:lg:left-[48px] right-0 z-[9998] backdrop-blur-md bg-gradient-to-br from-[#FDFBF7]/90 via-[#F7F2EA]/90 to-[#EFE6D6]/90 py-4 border-b border-[#B89555]/30 shadow-lg">
             <div className="container mx-auto px-3 sm:px-4">
-              <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg">
+              <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl p-4 sm:p-5 shadow-lg">
                 <FilterShortcutBar
                   variant="light"
                   filters={shortcutFilters}
@@ -373,10 +373,10 @@ const Developers = () => {
                 />
                 
                 {/* Tier filter row */}
-                <div className="flex items-center gap-3 flex-wrap mt-3 pt-3 border-t border-gold/20">
+                <div className="flex items-center gap-3 flex-wrap mt-3 pt-3 border-t border-[#B89555]/20">
                   <Select value={tierFilter} onValueChange={setTierFilter}>
-                    <SelectTrigger className="w-full sm:w-[180px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] rounded-lg text-sm shadow-sm">
-                      <Crown className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
+                    <SelectTrigger className="w-full sm:w-[180px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] rounded-lg text-sm shadow-sm">
+                      <Crown className="w-4 h-4 mr-2 text-[#1A1A1A] flex-shrink-0" />
                       <span className="truncate text-left flex-1">
                         {TIER_FILTERS.find(t => t.value === tierFilter)?.label || "All Tiers"}
                       </span>
@@ -399,7 +399,7 @@ const Developers = () => {
                       variant="outline"
                       size="sm"
                       onClick={clearFilters}
-                      className="h-9 px-3 bg-[#FDFBF7]/80 border-gold/30 text-[#1A1A1A] hover:bg-[#FDFBF7] rounded-lg flex items-center gap-1.5"
+                      className="h-9 px-3 bg-[#FDFBF7]/80 border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#FDFBF7] rounded-lg flex items-center gap-1.5"
                     >
                       <X className="w-3.5 h-3.5" />
                       Clear ({activeFilterCount})
@@ -426,7 +426,7 @@ const Developers = () => {
                 ))}
               </div>
             ) : filteredDevelopers.length === 0 ? (
-              <div className="text-center py-20 border border-dashed border-gold/30 rounded-xl bg-premium-card/50">
+              <div className="text-center py-20 border border-dashed border-[#B89555]/30 rounded-xl bg-premium-card/50">
                 <Building2 className="w-20 h-20 text-[#1A1A1A]/70 mx-auto mb-6" />
                 <h3 className="text-2xl font-semibold text-foreground mb-3">No Developers Found</h3>
                 <p className="text-foreground/70 max-w-lg mx-auto mb-6">
@@ -440,7 +440,7 @@ const Developers = () => {
                       Clear Filters
                     </Button>
                   )}
-                  <Button variant="outline" onClick={() => refetchDevelopers()} className="border-gold/40 text-gold hover:bg-gold/10">
+                  <Button variant="outline" onClick={() => refetchDevelopers()} className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                     Retry
                   </Button>
                 </div>
@@ -466,7 +466,7 @@ const Developers = () => {
                       size="sm"
                       disabled={currentPage <= 1}
                       onClick={() => { setCurrentPage(p => p - 1); window.scrollTo({ top: 400, behavior: 'smooth' }); }}
-                      className="border-gold/30 text-foreground"
+                      className="border-[#B89555]/30 text-foreground"
                     >
                       Previous
                     </Button>
@@ -486,7 +486,7 @@ const Developers = () => {
                             variant={p === currentPage ? "default" : "outline"}
                             size="sm"
                             onClick={() => { setCurrentPage(p); window.scrollTo({ top: 400, behavior: 'smooth' }); }}
-                            className={p === currentPage ? "bg-gold text-[#1A1A1A] hover:bg-gold/90" : "border-gold/30 text-foreground"}
+                            className={p === currentPage ? "bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90" : "border-[#B89555]/30 text-foreground"}
                           >
                             {p}
                           </Button>
@@ -497,7 +497,7 @@ const Developers = () => {
                       size="sm"
                       disabled={currentPage >= totalPages}
                       onClick={() => { setCurrentPage(p => p + 1); window.scrollTo({ top: 400, behavior: 'smooth' }); }}
-                      className="border-gold/30 text-foreground"
+                      className="border-[#B89555]/30 text-foreground"
                     >
                       Next
                     </Button>

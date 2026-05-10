@@ -216,8 +216,8 @@ const InquiryManagementHub: React.FC = () => {
                   onClick={() => setActiveTab(stage)}
                   className={`p-4 rounded-2xl border-2 transition-all text-left ${
                     activeTab === stage
-                      ? 'border-gold bg-gold/10 shadow-lg shadow-gold/10'
-                      : 'border-gold/15 bg-[#FDFBF7] hover:border-gold/30'
+                      ? 'border-[#B89555] bg-[#EFE6D6]/10 shadow-lg shadow-gold/10'
+                      : 'border-[#B89555]/15 bg-[#FDFBF7] hover:border-[#B89555]/30'
                   }`}
                 >
                   <div className="flex items-center gap-2 mb-1">
@@ -231,7 +231,7 @@ const InquiryManagementHub: React.FC = () => {
           </div>
 
           {/* Filters */}
-          <div className="flex flex-wrap items-center gap-3 bg-[#FDFBF7]/80 backdrop-blur rounded-2xl border-2 border-gold/15 p-4">
+          <div className="flex flex-wrap items-center gap-3 bg-[#FDFBF7]/80 backdrop-blur rounded-2xl border-2 border-[#B89555]/15 p-4">
             <div className="relative flex-1 min-w-[200px]">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/70" />
               <Input
@@ -257,7 +257,7 @@ const InquiryManagementHub: React.FC = () => {
 
           {/* Tabs + Table */}
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="bg-[#FDFBF7] border-2 border-gold/15">
+            <TabsList className="bg-[#FDFBF7] border-2 border-[#B89555]/15">
               <TabsTrigger value="all">All ({counts.all})</TabsTrigger>
               {PIPELINE_STAGES.map(s => (
                 <TabsTrigger key={s} value={s}>
@@ -284,7 +284,7 @@ const InquiryManagementHub: React.FC = () => {
                   <p className="text-[#1A1A1A]/70">No inquiries found</p>
                 </div>
               ) : (
-                <div className="bg-[#FDFBF7] rounded-2xl border-2 border-gold/15 overflow-hidden shadow-sm">
+                <div className="bg-[#FDFBF7] rounded-2xl border-2 border-[#B89555]/15 overflow-hidden shadow-sm">
                   <Table>
                     <TableHeader>
                       <TableRow>
@@ -303,7 +303,7 @@ const InquiryManagementHub: React.FC = () => {
                         return (
                           <TableRow
                             key={inq.id}
-                            className="cursor-pointer hover:bg-gold/5 transition-colors"
+                            className="cursor-pointer hover:bg-[#EFE6D6]/5 transition-colors"
                             onClick={() => openDetail(inq)}
                           >
                             <TableCell>
@@ -325,7 +325,7 @@ const InquiryManagementHub: React.FC = () => {
                             <TableCell>
                               {inq.property_name ? (
                                 <div className="flex items-center gap-1 text-sm">
-                                  <Building2 className="w-3.5 h-3.5 text-gold" />
+                                  <Building2 className="w-3.5 h-3.5 text-[#1A1A1A]" />
                                   <span className="line-clamp-1">{inq.property_name}</span>
                                 </div>
                               ) : (
@@ -360,7 +360,7 @@ const InquiryManagementHub: React.FC = () => {
                                 <Button
                                   size="sm"
                                   variant="ghost"
-                                  className="text-gold hover:bg-gold/10"
+                                  className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                                   onClick={() => openDetail(inq)}
                                   title="View Details"
                                 >
@@ -395,13 +395,13 @@ const InquiryManagementHub: React.FC = () => {
 
                 <div className="space-y-5 mt-4">
                   {/* Contact Card */}
-                  <div className="grid grid-cols-2 gap-4 p-4 bg-gradient-to-br from-gold/5 to-gold/10 rounded-xl border border-gold/20">
+                  <div className="grid grid-cols-2 gap-4 p-4 bg-gradient-to-br from-gold/5 to-gold/10 rounded-xl border border-[#B89555]/20">
                     <div>
                       <p className="text-xs text-[#1A1A1A]/70 uppercase tracking-wide mb-1">Contact</p>
                       <p className="font-semibold text-[#1A1A1A]">{selectedInquiry.full_name}</p>
                       <div className="flex items-center gap-1.5 mt-1 text-sm text-[#1A1A1A]/70">
                         <Mail className="w-3.5 h-3.5" />
-                        <a href={`mailto:${selectedInquiry.email}`} className="hover:text-gold">{selectedInquiry.email}</a>
+                        <a href={`mailto:${selectedInquiry.email}`} className="hover:text-[#1A1A1A]">{selectedInquiry.email}</a>
                       </div>
                       {selectedInquiry.phone && (
                         <div className="flex items-center gap-1.5 mt-1 text-sm text-[#1A1A1A]/70">
@@ -417,7 +417,7 @@ const InquiryManagementHub: React.FC = () => {
                         <p><span className="text-[#1A1A1A]/70">Source:</span> {selectedInquiry.source || '—'}</p>
                         {selectedInquiry.property_name && (
                           <p className="flex items-center gap-1">
-                            <Building2 className="w-3.5 h-3.5 text-gold" />
+                            <Building2 className="w-3.5 h-3.5 text-[#1A1A1A]" />
                             {selectedInquiry.property_name}
                           </p>
                         )}
@@ -431,7 +431,7 @@ const InquiryManagementHub: React.FC = () => {
 
                   {/* Message */}
                   {selectedInquiry.message && (
-                    <div className="p-4 bg-[#FDFBF7] rounded-xl border-2 border-gold/15">
+                    <div className="p-4 bg-[#FDFBF7] rounded-xl border-2 border-[#B89555]/15">
                       <p className="text-xs text-[#1A1A1A]/70 uppercase tracking-wide mb-2">Message</p>
                       <p className="text-sm text-[#1A1A1A] whitespace-pre-wrap">{selectedInquiry.message}</p>
                     </div>
@@ -449,7 +449,7 @@ const InquiryManagementHub: React.FC = () => {
                     )}
                     <Button
                       variant="outline"
-                      className="gap-2 border-gold/30 hover:bg-gold/10"
+                      className="gap-2 border-[#B89555]/30 hover:bg-[#EFE6D6]/10"
                       onClick={() => window.open(`mailto:${selectedInquiry.email}?subject=Re: ${encodeURIComponent(selectedInquiry.subject)}`, '_blank')}
                     >
                       <Mail className="w-4 h-4" /> Email
@@ -457,7 +457,7 @@ const InquiryManagementHub: React.FC = () => {
                     {selectedInquiry.phone && (
                       <Button
                         variant="outline"
-                        className="gap-2 border-gold/30 hover:bg-gold/10"
+                        className="gap-2 border-[#B89555]/30 hover:bg-[#EFE6D6]/10"
                         onClick={() => window.open(`tel:${selectedInquiry.phone}`)}
                       >
                         <Phone className="w-4 h-4" /> Call
@@ -476,7 +476,7 @@ const InquiryManagementHub: React.FC = () => {
                     {selectedInquiry.crm_lead_id && (
                       <Button
                         variant="outline"
-                        className="gap-2 border-gold/30"
+                        className="gap-2 border-[#B89555]/30"
                         onClick={() => window.open(`/crm/leads/${selectedInquiry.crm_lead_id}`, '_blank')}
                       >
                         <ExternalLink className="w-4 h-4" /> View in CRM
@@ -496,7 +496,7 @@ const InquiryManagementHub: React.FC = () => {
                   </div>
 
                   {/* Status Update */}
-                  <div className="flex items-center gap-3 pt-2 border-t border-gold/15">
+                  <div className="flex items-center gap-3 pt-2 border-t border-[#B89555]/15">
                     <Select
                       value={selectedInquiry.status}
                       onValueChange={status => {
@@ -518,7 +518,7 @@ const InquiryManagementHub: React.FC = () => {
                         updateStatusMutation.mutate({ id: selectedInquiry.id, status: selectedInquiry.status, notes: adminNotes });
                         toast.success('Notes saved');
                       }}
-                      className="bg-gold hover:bg-gold/90 text-white"
+                      className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-white"
                     >
                       Save Notes
                     </Button>

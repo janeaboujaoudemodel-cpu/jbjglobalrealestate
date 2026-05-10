@@ -143,7 +143,7 @@ const BrokerHub = () => {
               </Link>
               <Link
                 to="/compare"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-amber-500/15 to-orange-500/15 border border-amber-500/30 text-amber-400 hover:border-amber-400 hover:bg-amber-500/20 transition-all text-sm font-medium"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-amber-500/15 to-orange-500/15 border border-amber-500/30 text-[#1A1A1A] hover:border-amber-400 hover:bg-amber-500/20 transition-all text-sm font-medium"
               >
                 <Star className="w-4 h-4" />
                 My Shortlist
@@ -187,7 +187,7 @@ const BrokerHub = () => {
         {user && (
           <div>
             <Tabs defaultValue="activity" className="space-y-4">
-              <TabsList className="grid w-full grid-cols-5 bg-zinc-900/60 border border-[#1A1A1A]">
+              <TabsList className="grid w-full grid-cols-5 bg-[#FDFBF7]/60 border border-[#1A1A1A]">
                 <TabsTrigger value="activity" className="text-xs sm:text-sm">Activity</TabsTrigger>
                 <TabsTrigger value="training" className="text-xs sm:text-sm">Training</TabsTrigger>
                 <TabsTrigger value="calls" className="text-xs sm:text-sm">Calls</TabsTrigger>
@@ -197,30 +197,30 @@ const BrokerHub = () => {
 
               <TabsContent value="activity">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <Card className="bg-zinc-900/60 border-[#1A1A1A]">
+                  <Card className="bg-[#FDFBF7]/60 border-[#1A1A1A]">
                     <CardContent className="p-4 text-center">
                       <Phone className="w-6 h-6 text-blue-400 mx-auto mb-2" />
                       <p className="text-2xl font-bold text-white">{callLogs.length}</p>
                       <p className="text-xs text-white/90">Total Calls</p>
                     </CardContent>
                   </Card>
-                  <Card className="bg-zinc-900/60 border-[#1A1A1A]">
+                  <Card className="bg-[#FDFBF7]/60 border-[#1A1A1A]">
                     <CardContent className="p-4 text-center">
                       <MessageCircle className="w-6 h-6 text-emerald-400 mx-auto mb-2" />
                       <p className="text-2xl font-bold text-white">{chatLogs.length}</p>
                       <p className="text-xs text-white/90">Total Chats</p>
                     </CardContent>
                   </Card>
-                  <Card className="bg-zinc-900/60 border-[#1A1A1A]">
+                  <Card className="bg-[#FDFBF7]/60 border-[#1A1A1A]">
                     <CardContent className="p-4 text-center">
                       <Target className="w-6 h-6 text-purple-400 mx-auto mb-2" />
                       <p className="text-2xl font-bold text-white">{weekCalls + weekChats}</p>
                       <p className="text-xs text-white/90">This Week</p>
                     </CardContent>
                   </Card>
-                  <Card className="bg-zinc-900/60 border-[#1A1A1A]">
+                  <Card className="bg-[#FDFBF7]/60 border-[#1A1A1A]">
                     <CardContent className="p-4 text-center">
-                      <TrendingUp className="w-6 h-6 text-amber-400 mx-auto mb-2" />
+                      <TrendingUp className="w-6 h-6 text-[#1A1A1A] mx-auto mb-2" />
                       <p className="text-2xl font-bold text-white">{monthCalls + monthChats}</p>
                       <p className="text-xs text-white/90">This Month</p>
                     </CardContent>
@@ -229,7 +229,7 @@ const BrokerHub = () => {
               </TabsContent>
 
               <TabsContent value="training">
-                <Card className="bg-zinc-900/60 border-[#1A1A1A]">
+                <Card className="bg-[#FDFBF7]/60 border-[#1A1A1A]">
                   <CardContent className="p-6 space-y-4">
                     <div className="flex justify-between text-sm mb-2">
                       <span className="text-white/70">Completed Courses</span>
@@ -240,12 +240,12 @@ const BrokerHub = () => {
                       {modules.slice(0, 6).map((mod: any) => {
                         const done = trainingProgress.find((p: any) => p.module_id === mod.id)?.is_completed;
                         return (
-                          <div key={mod.id} className="flex items-center justify-between p-2 rounded-lg bg-zinc-800/50">
+                          <div key={mod.id} className="flex items-center justify-between p-2 rounded-lg bg-[#F7F2EA]/50">
                             <div className="flex items-center gap-2">
                               {done ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <Clock className="w-4 h-4 text-white/90" />}
                               <span className="text-sm text-white/85">{mod.title}</span>
                             </div>
-                            <Badge className={done ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' : 'bg-zinc-700/50 text-white/70 border-[#1A1A1A]'}>
+                            <Badge className={done ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' : 'bg-[#EFE6D6]/50 text-white/70 border-[#1A1A1A]'}>
                               {done ? 'Done' : `${mod.duration_minutes}m`}
                             </Badge>
                           </div>
@@ -260,14 +260,14 @@ const BrokerHub = () => {
               </TabsContent>
 
               <TabsContent value="calls">
-                <Card className="bg-zinc-900/60 border-[#1A1A1A]">
+                <Card className="bg-[#FDFBF7]/60 border-[#1A1A1A]">
                   <CardContent className="p-6">
                     {callLogs.length === 0 ? (
                       <p className="text-center text-white/90 py-8">No call logs yet</p>
                     ) : (
                       <div className="space-y-2 max-h-80 overflow-y-auto">
                         {callLogs.slice(0, 10).map((call: any) => (
-                          <div key={call.id} className="flex items-center justify-between p-3 bg-zinc-800/50 rounded-lg">
+                          <div key={call.id} className="flex items-center justify-between p-3 bg-[#F7F2EA]/50 rounded-lg">
                             <div className="flex items-center gap-3">
                               <Phone className="w-4 h-4 text-blue-400" />
                               <div>
@@ -275,7 +275,7 @@ const BrokerHub = () => {
                                 <p className="text-xs text-white/90">{format(new Date(call.created_at), 'MMM d, HH:mm')}</p>
                               </div>
                             </div>
-                            <Badge className="bg-zinc-700/50 text-white/85 border-[#1A1A1A] text-xs">{call.call_status || 'completed'}</Badge>
+                            <Badge className="bg-[#EFE6D6]/50 text-white/85 border-[#1A1A1A] text-xs">{call.call_status || 'completed'}</Badge>
                           </div>
                         ))}
                       </div>
@@ -285,14 +285,14 @@ const BrokerHub = () => {
               </TabsContent>
 
               <TabsContent value="chats">
-                <Card className="bg-zinc-900/60 border-[#1A1A1A]">
+                <Card className="bg-[#FDFBF7]/60 border-[#1A1A1A]">
                   <CardContent className="p-6">
                     {chatLogs.length === 0 ? (
                       <p className="text-center text-white/90 py-8">No chat logs yet</p>
                     ) : (
                       <div className="space-y-2 max-h-80 overflow-y-auto">
                         {chatLogs.slice(0, 10).map((chat: any) => (
-                          <div key={chat.id} className="flex items-center justify-between p-3 bg-zinc-800/50 rounded-lg">
+                          <div key={chat.id} className="flex items-center justify-between p-3 bg-[#F7F2EA]/50 rounded-lg">
                             <div className="flex items-center gap-3">
                               <MessageCircle className="w-4 h-4 text-emerald-400" />
                               <div>
@@ -310,7 +310,7 @@ const BrokerHub = () => {
               </TabsContent>
 
               <TabsContent value="support">
-                <Card className="bg-zinc-900/60 border-[#1A1A1A]">
+                <Card className="bg-[#FDFBF7]/60 border-[#1A1A1A]">
                   <CardContent className="p-6">
                     {supportTickets.length === 0 ? (
                       <div className="text-center py-8">
@@ -339,7 +339,7 @@ const BrokerHub = () => {
                           <button
                             key={ticket.id}
                             onClick={() => navigate(`/support?ticket=${ticket.id}`)}
-                            className="w-full flex items-center justify-between p-3 bg-zinc-800/50 rounded-lg hover:bg-[#1A1A1A] transition-colors text-left"
+                            className="w-full flex items-center justify-between p-3 bg-[#F7F2EA]/50 rounded-lg hover:bg-[#1A1A1A] transition-colors text-left"
                           >
                             <div>
                               <p className="text-sm text-white">{ticket.subject}</p>
@@ -369,7 +369,7 @@ const BrokerHub = () => {
             <FolderOpen className="w-5 h-5 text-fuchsia-400" />
             My Documents
           </h2>
-          <Card className="bg-zinc-900/60 border border-fuchsia-500/20">
+          <Card className="bg-[#FDFBF7]/60 border border-fuchsia-500/20">
             <CardContent className="p-6">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                 {[
@@ -378,7 +378,7 @@ const BrokerHub = () => {
                   { label: 'Contracts', icon: FileText },
                   { label: 'Certificates', icon: Award },
                 ].map(doc => (
-                  <div key={doc.label} className="p-4 bg-zinc-800/50 rounded-xl text-center border border-[#1A1A1A]/50 hover:border-fuchsia-500/30 transition-colors cursor-pointer">
+                  <div key={doc.label} className="p-4 bg-[#F7F2EA]/50 rounded-xl text-center border border-[#1A1A1A]/50 hover:border-fuchsia-500/30 transition-colors cursor-pointer">
                     <doc.icon className="w-8 h-8 mx-auto text-fuchsia-400 mb-2" />
                     <p className="text-xs text-white/70">{doc.label}</p>
                   </div>
@@ -398,14 +398,14 @@ const BrokerHub = () => {
         {/* Professional Certification Section */}
         <div>
           <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-            <Award className="w-5 h-5 text-gold" />
+            <Award className="w-5 h-5 text-[#1A1A1A]" />
             Professional Certification
           </h2>
-          <Card className="bg-gradient-to-br from-zinc-900/80 to-zinc-800/60 border-2 border-gold/40 overflow-hidden">
+          <Card className="bg-gradient-to-br from-zinc-900/80 to-zinc-800/60 border-2 border-[#B89555]/40 overflow-hidden">
             <CardContent className="p-6 md:p-8">
               <div className="flex flex-col md:flex-row items-center gap-6">
-                <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-gold/20 to-amber-500/10 border-2 border-gold/50 flex items-center justify-center flex-shrink-0">
-                  <Award className="w-12 h-12 text-gold" />
+                <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-gold/20 to-amber-500/10 border-2 border-[#B89555]/50 flex items-center justify-center flex-shrink-0">
+                  <Award className="w-12 h-12 text-[#1A1A1A]" />
                 </div>
                 <div className="flex-1 text-center md:text-left">
                   <h3 className="text-lg font-bold text-white mb-2">JBJ Certified Broker</h3>
@@ -414,9 +414,9 @@ const BrokerHub = () => {
                     Demonstrate your expertise in Dubai real estate, legal compliance, and premium client service.
                   </p>
                   <div className="flex flex-wrap gap-3 justify-center md:justify-start">
-                    <Badge className="bg-gold/20 text-gold border-gold/40">RERA Compliant</Badge>
-                    <Badge className="bg-gold/20 text-gold border-gold/40">Market Expert</Badge>
-                    <Badge className="bg-gold/20 text-gold border-gold/40">Client Excellence</Badge>
+                    <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/40">RERA Compliant</Badge>
+                    <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/40">Market Expert</Badge>
+                    <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/40">Client Excellence</Badge>
                   </div>
                 </div>
                 <Button 
@@ -441,7 +441,7 @@ const BrokerHub = () => {
                 <button
                   key={tool.title}
                   onClick={() => navigate(tool.href)}
-                  className="bg-zinc-900/60 border border-[#1A1A1A] rounded-xl p-4 text-left hover:border-fuchsia-500/40 transition-all group"
+                  className="bg-[#FDFBF7]/60 border border-[#1A1A1A] rounded-xl p-4 text-left hover:border-fuchsia-500/40 transition-all group"
                 >
                   <Icon className="w-5 h-5 text-fuchsia-400 mb-2" />
                   <h3 className="text-white font-medium text-sm">{tool.title}</h3>

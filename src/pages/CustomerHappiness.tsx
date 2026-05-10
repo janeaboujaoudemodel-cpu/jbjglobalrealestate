@@ -196,7 +196,7 @@ const SupportTicketForm = () => {
             value={formData.fullName}
             onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]"
             placeholder="John Smith"
           />
         </div>
@@ -210,7 +210,7 @@ const SupportTicketForm = () => {
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]"
             placeholder="john@example.com"
           />
         </div>
@@ -224,7 +224,7 @@ const SupportTicketForm = () => {
             id="phone"
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]"
             placeholder="+971 50 123 4567"
           />
         </div>
@@ -241,7 +241,7 @@ const SupportTicketForm = () => {
               }
             }}
           >
-            <SelectTrigger className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 ${fieldErrors.serviceCategory ? 'border-red-500' : 'border-gold/40'} text-[#1A1A1A]`}>
+            <SelectTrigger className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 ${fieldErrors.serviceCategory ? 'border-red-500' : 'border-[#B89555]/40'} text-[#1A1A1A]`}>
               <SelectValue placeholder="Select service" />
             </SelectTrigger>
             <SelectContent>
@@ -266,7 +266,7 @@ const SupportTicketForm = () => {
           value={formData.subject}
           onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
           required
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]"
           placeholder="Brief description of your inquiry"
         />
       </div>
@@ -275,7 +275,7 @@ const SupportTicketForm = () => {
           Priority
         </Label>
         <Select value={formData.priority} onValueChange={(v) => setFormData({ ...formData, priority: v })}>
-          <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A]">
+          <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A]">
             <SelectValue placeholder="Select priority" />
           </SelectTrigger>
           <SelectContent>
@@ -297,7 +297,7 @@ const SupportTicketForm = () => {
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           required
           rows={5}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]"
           placeholder="Please describe your inquiry in detail..."
         />
       </div>
@@ -315,9 +315,9 @@ const SupportTicketForm = () => {
         {isSubmitting ? (
           <BrandedLoaderInline size={20} className="mr-2" />
         ) : (
-          <Send className="w-4 h-4 text-gold group-hover:text-[#1A1A1A] transition-colors mr-1" />
+          <Send className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors mr-1" />
         )}
-        <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">
+        <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">
           {isSubmitting ? "Submitting..." : "Submit Support Ticket"}
         </span>
       </button>
@@ -425,7 +425,7 @@ const FeedbackForm = () => {
             value={formData.fullName}
             onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A]"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A]"
           />
         </div>
         <div>
@@ -436,7 +436,7 @@ const FeedbackForm = () => {
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A]"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A]"
           />
         </div>
       </div>
@@ -452,7 +452,7 @@ const FeedbackForm = () => {
               className="transition-transform hover:scale-110"
             >
               <Star
-                className={`w-8 h-8 ${star <= rating ? "fill-gold text-gold" : "text-[#1A1A1A]/70"}`}
+                className={`w-8 h-8 ${star <= rating ? "fill-gold text-[#1A1A1A]" : "text-[#1A1A1A]/70"}`}
               />
             </button>
           ))}
@@ -462,7 +462,7 @@ const FeedbackForm = () => {
       <div>
         <Label htmlFor="serviceType" className="text-[#1A1A1A]">Service Used *</Label>
         <Select value={formData.serviceType} onValueChange={(v) => setFormData({ ...formData, serviceType: v })}>
-          <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A]">
+          <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A]">
             <SelectValue placeholder="Select service" />
           </SelectTrigger>
           <SelectContent>
@@ -485,7 +485,7 @@ const FeedbackForm = () => {
           onChange={(e) => setFormData({ ...formData, review: e.target.value })}
           required
           rows={5}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
           placeholder="Share your experience with JBJ Global Real Estate..."
         />
       </div>
@@ -493,7 +493,7 @@ const FeedbackForm = () => {
       <div>
         <Label htmlFor="recommend" className="text-[#1A1A1A]">Would you recommend us?</Label>
         <Select value={formData.wouldRecommend} onValueChange={(v) => setFormData({ ...formData, wouldRecommend: v })}>
-          <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A]">
+          <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A]">
             <SelectValue placeholder="Select option" />
           </SelectTrigger>
           <SelectContent>
@@ -516,9 +516,9 @@ const FeedbackForm = () => {
           boxShadow: '0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.9)',
         }}
       >
-        <MessageSquareHeart className="w-4 h-4 text-gold group-hover:text-[#1A1A1A] transition-colors" />
-        <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">{isSubmitting ? "Submitting..." : "Submit"}</span>
-        <span className="text-gold group-hover:text-[#1A1A1A] transition-colors">Review</span>
+        <MessageSquareHeart className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
+        <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">{isSubmitting ? "Submitting..." : "Submit"}</span>
+        <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">Review</span>
       </button>
       <p className="text-xs text-[#1A1A1A]/70 text-center">
         Reviews are moderated before being published on our website.
@@ -585,7 +585,7 @@ const IssueReportForm = () => {
             value={formData.fullName}
             onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A]"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A]"
           />
         </div>
         <div>
@@ -596,7 +596,7 @@ const IssueReportForm = () => {
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A]"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A]"
           />
         </div>
       </div>
@@ -608,13 +608,13 @@ const IssueReportForm = () => {
             id="issuePhone"
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A]"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A]"
           />
         </div>
         <div>
           <Label htmlFor="browser" className="text-[#1A1A1A]">Browser *</Label>
           <Select value={formData.browser} onValueChange={(v) => setFormData({ ...formData, browser: v })}>
-            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A]">
+            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A]">
               <SelectValue placeholder="Select browser" />
             </SelectTrigger>
             <SelectContent>
@@ -633,7 +633,7 @@ const IssueReportForm = () => {
         <div>
           <Label htmlFor="device" className="text-[#1A1A1A]">Device *</Label>
           <Select value={formData.device} onValueChange={(v) => setFormData({ ...formData, device: v })}>
-            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A]">
+            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A]">
               <SelectValue placeholder="Select device" />
             </SelectTrigger>
             <SelectContent>
@@ -654,7 +654,7 @@ const IssueReportForm = () => {
             value={formData.pageUrl}
             onChange={(e) => setFormData({ ...formData, pageUrl: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
             placeholder="https://jbjglobalrealestate.lovable.app/..."
           />
         </div>
@@ -666,7 +666,7 @@ const IssueReportForm = () => {
           id="errorMessage"
           value={formData.errorMessage}
           onChange={(e) => setFormData({ ...formData, errorMessage: e.target.value })}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
           placeholder="Copy and paste any error message you see"
         />
       </div>
@@ -679,7 +679,7 @@ const IssueReportForm = () => {
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           required
           rows={4}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
           placeholder="Describe what's not working..."
         />
       </div>
@@ -691,14 +691,14 @@ const IssueReportForm = () => {
           value={formData.stepsToReproduce}
           onChange={(e) => setFormData({ ...formData, stepsToReproduce: e.target.value })}
           rows={3}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
           placeholder="Optional: List the steps you took when the issue occurred"
         />
       </div>
 
       <div>
         <Label className="text-[#1A1A1A]">Screenshot (optional)</Label>
-        <div className="mt-2 border-2 border-dashed border-gold/40 rounded-lg p-6 text-center hover:border-gold transition-colors bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+        <div className="mt-2 border-2 border-dashed border-[#B89555]/40 rounded-lg p-6 text-center hover:border-[#B89555] transition-colors bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
           <input
             type="file"
             accept="image/*"
@@ -707,7 +707,7 @@ const IssueReportForm = () => {
             id="screenshot-upload"
           />
           <label htmlFor="screenshot-upload" className="cursor-pointer">
-            <Upload className="w-8 h-8 text-gold mx-auto mb-2" />
+            <Upload className="w-8 h-8 text-[#1A1A1A] mx-auto mb-2" />
             <p className="text-[#1A1A1A]/70 text-sm">
               {screenshot ? screenshot.name : "Click to upload a screenshot"}
             </p>
@@ -725,9 +725,9 @@ const IssueReportForm = () => {
           boxShadow: '0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.9)',
         }}
       >
-        <AlertCircle className="w-4 h-4 text-gold group-hover:text-[#1A1A1A] transition-colors" />
-        <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">{isSubmitting ? "Submitting..." : "Report"}</span>
-        <span className="text-gold group-hover:text-[#1A1A1A] transition-colors">Issue</span>
+        <AlertCircle className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
+        <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">{isSubmitting ? "Submitting..." : "Report"}</span>
+        <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">Issue</span>
       </button>
     </form>
   );
@@ -811,10 +811,10 @@ const IdeaBoxForm = () => {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {/* Prize Banner - Premium Readable */}
-      <div className="bg-gradient-to-r from-purple-900/80 to-gold/30 border-2 border-gold/50 rounded-xl p-5 mb-6 shadow-lg">
+      <div className="bg-gradient-to-r from-purple-900/80 to-gold/30 border-2 border-[#B89555]/50 rounded-xl p-5 mb-6 shadow-lg">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-lg bg-gold/20 flex items-center justify-center">
-            <Trophy className="w-6 h-6 text-gold" />
+          <div className="w-10 h-10 rounded-lg bg-[#EFE6D6]/20 flex items-center justify-center">
+            <Trophy className="w-6 h-6 text-[#1A1A1A]" />
           </div>
           <h3 className="text-white text-lg font-bold">Double Reward Opportunity!</h3>
         </div>
@@ -829,8 +829,8 @@ const IdeaBoxForm = () => {
             </div>
           </div>
           <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-lg bg-gold/30 flex items-center justify-center flex-shrink-0">
-              <Sparkles className="w-5 h-5 text-gold" />
+            <div className="w-8 h-8 rounded-lg bg-[#EFE6D6]/30 flex items-center justify-center flex-shrink-0">
+              <Sparkles className="w-5 h-5 text-[#1A1A1A]" />
             </div>
             <div>
               <p className="text-white font-semibold text-base mb-1">Best Idea Prize</p>
@@ -848,7 +848,7 @@ const IdeaBoxForm = () => {
             value={formData.fullName}
             onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A]"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A]"
           />
         </div>
         <div>
@@ -859,7 +859,7 @@ const IdeaBoxForm = () => {
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A]"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A]"
           />
         </div>
       </div>
@@ -871,13 +871,13 @@ const IdeaBoxForm = () => {
             id="ideaPhone"
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A]"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A]"
           />
         </div>
         <div>
           <Label htmlFor="ideaCategory" className="text-[#1A1A1A]">Idea Category *</Label>
           <Select value={formData.ideaCategory} onValueChange={(v) => setFormData({ ...formData, ideaCategory: v })}>
-            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A]">
+            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A]">
               <SelectValue placeholder="Select category" />
             </SelectTrigger>
             <SelectContent>
@@ -900,7 +900,7 @@ const IdeaBoxForm = () => {
           value={formData.ideaTitle}
           onChange={(e) => setFormData({ ...formData, ideaTitle: e.target.value })}
           required
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
           placeholder="Give your idea a catchy title"
         />
       </div>
@@ -913,7 +913,7 @@ const IdeaBoxForm = () => {
           onChange={(e) => setFormData({ ...formData, ideaDescription: e.target.value })}
           required
           rows={5}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
           placeholder="Describe your creative idea in detail. Be as specific as possible!"
         />
       </div>
@@ -925,7 +925,7 @@ const IdeaBoxForm = () => {
           value={formData.expectedBenefit}
           onChange={(e) => setFormData({ ...formData, expectedBenefit: e.target.value })}
           rows={2}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
           placeholder="How would this idea benefit JBJ Global Real Estate or our clients?"
         />
       </div>
@@ -940,9 +940,9 @@ const IdeaBoxForm = () => {
           boxShadow: '0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.9)',
         }}
       >
-        <Lightbulb className="w-4 h-4 text-gold group-hover:text-[#1A1A1A] transition-colors" />
-        <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">{isSubmitting ? "Submitting..." : "Submit Idea &"}</span>
-        <span className="text-gold group-hover:text-[#1A1A1A] transition-colors">Enter Draw</span>
+        <Lightbulb className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
+        <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">{isSubmitting ? "Submitting..." : "Submit Idea &"}</span>
+        <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">Enter Draw</span>
       </button>
       <p className="text-xs text-[#1A1A1A]/70 text-center">
         By submitting, you agree to enter the monthly draw. Winners will be notified via email.
@@ -965,7 +965,7 @@ const CustomerHappiness = () => {
         {/* Hero Section - Premium Champagne */}
         <section className="relative py-20 md:py-28 overflow-hidden">
           <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-gold/10 rounded-full blur-[120px]" />
+            <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#EFE6D6]/10 rounded-full blur-[120px]" />
             <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-purple-500/10 rounded-full blur-[100px]" />
           </div>
 
@@ -977,7 +977,7 @@ const CustomerHappiness = () => {
               className="text-center max-w-4xl mx-auto"
             >
               <motion.div variants={fadeInUp} className="mb-6">
-                <Badge className="bg-gold/15 text-gold border-gold/30 px-4 py-1.5">
+                <Badge className="bg-[#EFE6D6]/15 text-[#1A1A1A] border-[#B89555]/30 px-4 py-1.5">
                   <Heart className="w-3.5 h-3.5 mr-1.5" />
                   Customer Happiness
                 </Badge>
@@ -1022,30 +1022,30 @@ const CustomerHappiness = () => {
         <section className="py-16">
           <div className="container mx-auto px-4">
             {/* Background Card Wrapper for Premium Look */}
-            <Card className="max-w-4xl mx-auto bg-gradient-to-br from-zinc-900/90 to-zinc-950/90 border-2 border-gold/30 backdrop-blur-sm shadow-[0_20px_60px_rgba(200,167,102,0.15)] overflow-hidden">
+            <Card className="max-w-4xl mx-auto bg-gradient-to-br from-zinc-900/90 to-zinc-950/90 border-2 border-[#B89555]/30 backdrop-blur-sm shadow-[0_20px_60px_rgba(200,167,102,0.15)] overflow-hidden">
               <CardContent className="p-4 md:p-8">
                 <Tabs defaultValue="support">
-                  <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 p-1.5 md:p-2 rounded-xl mb-8 h-auto">
-                    <TabsTrigger value="support" className="flex items-center gap-2 data-[state=active]:bg-[#FDFBF7]/80 data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold data-[state=active]:border-2 text-[#1A1A1A] py-3">
+                  <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 p-1.5 md:p-2 rounded-xl mb-8 h-auto">
+                    <TabsTrigger value="support" className="flex items-center gap-2 data-[state=active]:bg-[#FDFBF7]/80 data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555] data-[state=active]:border-2 text-[#1A1A1A] py-3">
                       <TicketCheck className="w-4 h-4" />
                       <span className="hidden sm:inline">Support</span> Ticket
                     </TabsTrigger>
-                    <TabsTrigger value="feedback" className="flex items-center gap-2 data-[state=active]:bg-[#FDFBF7]/80 data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold data-[state=active]:border-2 text-[#1A1A1A] py-3">
+                    <TabsTrigger value="feedback" className="flex items-center gap-2 data-[state=active]:bg-[#FDFBF7]/80 data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555] data-[state=active]:border-2 text-[#1A1A1A] py-3">
                       <MessageSquareHeart className="w-4 h-4" />
                       <span className="hidden sm:inline">Write a</span> Review
                     </TabsTrigger>
-                    <TabsTrigger value="issue" className="flex items-center gap-2 data-[state=active]:bg-[#FDFBF7]/80 data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold data-[state=active]:border-2 text-[#1A1A1A] py-3">
+                    <TabsTrigger value="issue" className="flex items-center gap-2 data-[state=active]:bg-[#FDFBF7]/80 data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555] data-[state=active]:border-2 text-[#1A1A1A] py-3">
                       <AlertCircle className="w-4 h-4" />
                       Report <span className="hidden sm:inline">Issue</span>
                     </TabsTrigger>
-                    <TabsTrigger value="idea" className="flex items-center gap-2 data-[state=active]:bg-[#FDFBF7]/80 data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold data-[state=active]:border-2 text-[#1A1A1A] py-3">
+                    <TabsTrigger value="idea" className="flex items-center gap-2 data-[state=active]:bg-[#FDFBF7]/80 data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555] data-[state=active]:border-2 text-[#1A1A1A] py-3">
                       <Lightbulb className="w-4 h-4" />
                       Idea <span className="hidden sm:inline">Box</span>
                     </TabsTrigger>
                   </TabsList>
 
               <TabsContent value="support">
-                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 overflow-hidden">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 overflow-hidden">
                   <CardHeader>
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center border border-blue-500/40">
@@ -1066,7 +1066,7 @@ const CustomerHappiness = () => {
               </TabsContent>
 
               <TabsContent value="feedback">
-                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 overflow-hidden">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 overflow-hidden">
                   <CardHeader>
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 bg-pink-500/20 rounded-xl flex items-center justify-center border border-pink-500/40">
@@ -1087,7 +1087,7 @@ const CustomerHappiness = () => {
               </TabsContent>
 
               <TabsContent value="issue">
-                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 overflow-hidden">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 overflow-hidden">
                   <CardHeader>
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center border border-red-500/40">
@@ -1108,7 +1108,7 @@ const CustomerHappiness = () => {
               </TabsContent>
 
               <TabsContent value="idea">
-                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 overflow-hidden">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 overflow-hidden">
                   <CardHeader>
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center border border-purple-500/40">
@@ -1134,7 +1134,7 @@ const CustomerHappiness = () => {
         </section>
 
         {/* Quick Contact - Premium Color-Coded KPI Cards */}
-        <section className="py-16 border-t border-gold/30">
+        <section className="py-16 border-t border-[#B89555]/30">
           <div className="container mx-auto px-4">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -1171,10 +1171,10 @@ const CustomerHappiness = () => {
                   </CardContent>
                 </Card>
                 {/* Office Hours - Gold */}
-                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 transform-gpu">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 transform-gpu">
                   <CardContent className="p-6 text-center">
-                    <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-gold/10 border-2 border-gold/40 flex items-center justify-center">
-                      <Calendar className="w-7 h-7 text-gold" />
+                    <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-[#EFE6D6]/10 border-2 border-[#B89555]/40 flex items-center justify-center">
+                      <Calendar className="w-7 h-7 text-[#1A1A1A]" />
                     </div>
                     <p className="text-[#1A1A1A] font-semibold mb-1">Office Hours</p>
                     <p className="text-[#1A1A1A]/70 font-medium">Mon–Sun: 9AM–9PM</p>

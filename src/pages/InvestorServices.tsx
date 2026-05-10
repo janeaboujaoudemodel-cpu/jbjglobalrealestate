@@ -128,14 +128,14 @@ const InvestorServices = () => {
         </button>
         <button
           onClick={handleCallClick}
-          className="w-12 h-12 bg-gold hover:bg-gold/90 rounded-full flex items-center justify-center text-[#1A1A1A] shadow-lg transition-all hover:scale-110"
+          className="w-12 h-12 bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 rounded-full flex items-center justify-center text-[#1A1A1A] shadow-lg transition-all hover:scale-110"
           aria-label="Call"
         >
           <Phone className="w-5 h-5" />
         </button>
         <Link
           to="/contact"
-          className="w-12 h-12 bg-gradient-to-br from-champagne-light to-champagne-dark hover:from-champagne hover:to-champagne-light rounded-full flex items-center justify-center text-[#1A1A1A] shadow-lg transition-all hover:scale-110 border border-gold/30"
+          className="w-12 h-12 bg-gradient-to-br from-champagne-light to-champagne-dark hover:from-champagne hover:to-champagne-light rounded-full flex items-center justify-center text-[#1A1A1A] shadow-lg transition-all hover:scale-110 border border-[#B89555]/30"
           aria-label="Contact Us"
         >
           <ArrowRight className="w-5 h-5" />
@@ -143,7 +143,7 @@ const InvestorServices = () => {
       </div>
 
       {/* Sticky Actions - Mobile */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-[50] bg-gradient-to-br from-champagne-light to-champagne-dark backdrop-blur-sm border-t-2 border-gold/40 p-3 flex gap-2">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-[50] bg-gradient-to-br from-champagne-light to-champagne-dark backdrop-blur-sm border-t-2 border-[#B89555]/40 p-3 flex gap-2">
         <button
           onClick={handleWhatsAppClick}
           className="flex-1 h-11 bg-green-600 hover:bg-green-700 rounded-lg flex items-center justify-center gap-2 text-white font-medium text-sm"
@@ -153,7 +153,7 @@ const InvestorServices = () => {
         </button>
         <button
           onClick={handleCallClick}
-          className="flex-1 h-11 bg-gold hover:bg-gold/90 rounded-lg flex items-center justify-center gap-2 text-[#1A1A1A] font-medium text-sm"
+          className="flex-1 h-11 bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 rounded-lg flex items-center justify-center gap-2 text-[#1A1A1A] font-medium text-sm"
         >
           <Phone className="w-4 h-4" />
           Call
@@ -181,11 +181,11 @@ const InvestorServices = () => {
               className="max-w-4xl mx-auto text-center"
             >
               <motion.div variants={fadeInUp} className="flex items-center justify-center gap-2 mb-5">
-                <div className="h-px w-10 bg-gold/60" />
-                <span className="px-4 py-1.5 bg-gradient-to-r from-champagne-light to-champagne-dark border border-gold/40 rounded-full text-[#1A1A1A] text-xs font-semibold tracking-wider uppercase">
+                <div className="h-px w-10 bg-[#EFE6D6]/60" />
+                <span className="px-4 py-1.5 bg-gradient-to-r from-champagne-light to-champagne-dark border border-[#B89555]/40 rounded-full text-[#1A1A1A] text-xs font-semibold tracking-wider uppercase">
                   Investor Advisory
                 </span>
-                <div className="h-px w-10 bg-gold/60" />
+                <div className="h-px w-10 bg-[#EFE6D6]/60" />
               </motion.div>
               
               <motion.h1
@@ -193,7 +193,7 @@ const InvestorServices = () => {
                 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-3 leading-tight"
               >
                 Investor Advisory &{" "}
-                <span className="text-gold">Market Intelligence</span>
+                <span className="text-[#1A1A1A]">Market Intelligence</span>
               </motion.h1>
               
               <motion.p
@@ -214,7 +214,7 @@ const InvestorServices = () => {
                 <Button
                   onClick={handleCallClick}
                   variant="outline"
-                  className="border-gold/50 text-gold hover:bg-gold/10 px-6 h-11 rounded-lg gap-2"
+                  className="border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 px-6 h-11 rounded-lg gap-2"
                 >
                   <Phone className="w-4 h-4" />
                   Call Now
@@ -267,8 +267,8 @@ const InvestorServices = () => {
                     { n: "3", title: "Objective Alignment", desc: "Strategy is always aligned with the investor's horizon, capital structure, and risk tolerance." },
                   ].map((item) => (
                     <motion.div key={item.n} variants={fadeInUp} className="jj-card-inner p-5 flex flex-col">
-                      <div className="w-9 h-9 bg-gold/10 border border-gold/40 rounded-lg flex items-center justify-center mb-3">
-                        <span className="text-gold font-bold text-sm">{item.n}</span>
+                      <div className="w-9 h-9 bg-[#EFE6D6]/10 border border-[#B89555]/40 rounded-lg flex items-center justify-center mb-3">
+                        <span className="text-[#1A1A1A] font-bold text-sm">{item.n}</span>
                       </div>
                       <h4 className="text-base font-semibold text-[#1A1A1A] mb-1.5">{item.title}</h4>
                       <p className="text-[#1A1A1A]/60 text-sm leading-relaxed">{item.desc}</p>
@@ -295,7 +295,7 @@ const InvestorServices = () => {
                 <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
                   {whoThisIsFor.map((item, index) => (
                     <motion.div key={index} variants={fadeInUp} className="jj-card-inner p-4 flex items-center gap-3">
-                      <div className="w-2 h-2 bg-gold rounded-full flex-shrink-0" />
+                      <div className="w-2 h-2 bg-[#EFE6D6] rounded-full flex-shrink-0" />
                       <span className="text-[#1A1A1A]/70 text-sm">{item}</span>
                     </motion.div>
                   ))}
@@ -317,22 +317,22 @@ const InvestorServices = () => {
                   Comprehensive advisory services designed for every stage of your investment journey.
                 </motion.p>
                 
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-0 max-w-5xl mx-auto rounded-xl overflow-hidden border-2 border-gold/30">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-0 max-w-5xl mx-auto rounded-xl overflow-hidden border-2 border-[#B89555]/30">
                   {investmentServices.map((service, index) => (
                     <motion.div
                       key={index}
                       variants={fadeInUp}
-                      className="relative p-6 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border-b border-r border-gold/20 last:border-b-0 group hover:bg-gradient-to-br hover:from-[#F7F2EA] hover:to-[#EFE6D6] transition-all duration-300"
+                      className="relative p-6 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border-b border-r border-[#B89555]/20 last:border-b-0 group hover:bg-gradient-to-br hover:from-[#F7F2EA] hover:to-[#EFE6D6] transition-all duration-300"
                     >
                       <div className="flex items-start gap-4">
-                        <div className="w-11 h-11 bg-gold/10 border border-gold/40 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-gold/20 transition-colors">
-                          <service.icon className="w-5 h-5 text-gold" />
+                        <div className="w-11 h-11 bg-[#EFE6D6]/10 border border-[#B89555]/40 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-[#EFE6D6]/20 transition-colors">
+                          <service.icon className="w-5 h-5 text-[#1A1A1A]" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <h3 className="text-base font-semibold text-[#1A1A1A] mb-1">{service.title}</h3>
                           <p className="text-[#1A1A1A]/60 text-sm mb-2 leading-relaxed">{service.description}</p>
                           <p className="text-xs text-[#1A1A1A]/45">
-                            <span className="text-gold font-medium">Deliverables:</span> {service.deliverables}
+                            <span className="text-[#1A1A1A] font-medium">Deliverables:</span> {service.deliverables}
                           </p>
                         </div>
                       </div>
@@ -345,7 +345,7 @@ const InvestorServices = () => {
                   <Button onClick={handleWhatsAppClick} className="bg-green-600 hover:bg-green-700 text-white gap-2 rounded-lg">
                     <MessageCircle className="w-4 h-4" /> Discuss Services
                   </Button>
-                  <Button variant="outline" className="border-gold/40 text-[#1A1A1A] hover:bg-gold/10 gap-2 rounded-lg" asChild>
+                  <Button variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 gap-2 rounded-lg" asChild>
                     <Link to="/contact">
                       <Phone className="w-4 h-4" /> Book a Call
                     </Link>
@@ -373,8 +373,8 @@ const InvestorServices = () => {
                       variants={fadeInUp}
                       className="jj-card-inner p-4 text-center relative"
                     >
-                      <div className="w-8 h-8 bg-gold/15 border border-gold/40 rounded-full flex items-center justify-center mx-auto mb-2">
-                        <span className="text-gold text-xs font-bold">{index + 1}</span>
+                      <div className="w-8 h-8 bg-[#EFE6D6]/15 border border-[#B89555]/40 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <span className="text-[#1A1A1A] text-xs font-bold">{index + 1}</span>
                       </div>
                       <h4 className="text-xs font-semibold text-[#1A1A1A] mb-1 leading-tight">{item.step}</h4>
                       <p className="text-[#1A1A1A]/50 text-[11px] leading-snug">{item.description}</p>
@@ -420,7 +420,7 @@ const InvestorServices = () => {
                     <motion.span
                       key={index}
                       variants={fadeInUp}
-                      className="px-4 py-2 bg-gradient-to-r from-champagne-light/50 to-champagne/50 border border-gold/30 rounded-full text-[#1A1A1A] text-sm font-medium hover:border-gold/60 transition-colors cursor-default"
+                      className="px-4 py-2 bg-gradient-to-r from-champagne-light/50 to-champagne/50 border border-[#B89555]/30 rounded-full text-[#1A1A1A] text-sm font-medium hover:border-[#B89555]/60 transition-colors cursor-default"
                     >
                       {area}
                     </motion.span>
@@ -442,7 +442,7 @@ const InvestorServices = () => {
                 <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                   {experienceStandards.map((standard, index) => (
                     <motion.div key={index} variants={fadeInUp} className="jj-card-inner p-3.5 flex items-center gap-2.5">
-                      <CheckCircle className="w-4 h-4 text-gold flex-shrink-0" />
+                      <CheckCircle className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
                       <span className="text-[#1A1A1A]/70 text-sm">{standard}</span>
                     </motion.div>
                   ))}
@@ -480,13 +480,13 @@ const InvestorServices = () => {
                 <div className="grid sm:grid-cols-3 gap-4">
                   <motion.div variants={fadeInUp}>
                     <button onClick={handleWhatsAppClick} className="block w-full h-full text-left">
-                      <div className="jj-card-inner p-5 h-full hover:border-gold/60 transition-all group cursor-pointer">
+                      <div className="jj-card-inner p-5 h-full hover:border-[#B89555]/60 transition-all group cursor-pointer">
                         <div className="w-10 h-10 bg-green-600/10 rounded-lg flex items-center justify-center mb-3 group-hover:bg-green-600/20 transition-colors">
                           <MessageCircle className="w-5 h-5 text-green-600" />
                         </div>
-                        <h3 className="text-base font-semibold text-[#1A1A1A] mb-1 group-hover:text-gold transition-colors">WhatsApp Consultation</h3>
+                        <h3 className="text-base font-semibold text-[#1A1A1A] mb-1 group-hover:text-[#1A1A1A] transition-colors">WhatsApp Consultation</h3>
                         <p className="text-[#1A1A1A]/60 text-sm mb-3">Discuss investment objectives confidentially</p>
-                        <span className="text-gold text-sm font-medium inline-flex items-center gap-1">
+                        <span className="text-[#1A1A1A] text-sm font-medium inline-flex items-center gap-1">
                           Message Now <ArrowRight className="w-3.5 h-3.5" />
                         </span>
                       </div>
@@ -495,13 +495,13 @@ const InvestorServices = () => {
                   
                   <motion.div variants={fadeInUp}>
                     <button onClick={handleCallClick} className="block w-full h-full text-left">
-                      <div className="jj-card-inner p-5 h-full hover:border-gold/60 transition-all group cursor-pointer">
-                        <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center mb-3 group-hover:bg-gold/20 transition-colors">
-                          <Phone className="w-5 h-5 text-gold" />
+                      <div className="jj-card-inner p-5 h-full hover:border-[#B89555]/60 transition-all group cursor-pointer">
+                        <div className="w-10 h-10 bg-[#EFE6D6]/10 rounded-lg flex items-center justify-center mb-3 group-hover:bg-[#EFE6D6]/20 transition-colors">
+                          <Phone className="w-5 h-5 text-[#1A1A1A]" />
                         </div>
-                        <h3 className="text-base font-semibold text-[#1A1A1A] mb-1 group-hover:text-gold transition-colors">Call Our Team</h3>
+                        <h3 className="text-base font-semibold text-[#1A1A1A] mb-1 group-hover:text-[#1A1A1A] transition-colors">Call Our Team</h3>
                         <p className="text-[#1A1A1A]/60 text-sm mb-3">Speak directly with an investment advisor</p>
-                        <span className="text-gold text-sm font-medium inline-flex items-center gap-1">
+                        <span className="text-[#1A1A1A] text-sm font-medium inline-flex items-center gap-1">
                           Call Now <ArrowRight className="w-3.5 h-3.5" />
                         </span>
                       </div>
@@ -510,13 +510,13 @@ const InvestorServices = () => {
                   
                   <motion.div variants={fadeInUp}>
                     <Link to="/contact" className="block h-full">
-                      <div className="jj-card-inner p-5 h-full hover:border-gold/60 transition-all group">
-                        <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center mb-3 group-hover:bg-gold/20 transition-colors">
-                          <Globe className="w-5 h-5 text-gold" />
+                      <div className="jj-card-inner p-5 h-full hover:border-[#B89555]/60 transition-all group">
+                        <div className="w-10 h-10 bg-[#EFE6D6]/10 rounded-lg flex items-center justify-center mb-3 group-hover:bg-[#EFE6D6]/20 transition-colors">
+                          <Globe className="w-5 h-5 text-[#1A1A1A]" />
                         </div>
-                        <h3 className="text-base font-semibold text-[#1A1A1A] mb-1 group-hover:text-gold transition-colors">Book Consultation</h3>
+                        <h3 className="text-base font-semibold text-[#1A1A1A] mb-1 group-hover:text-[#1A1A1A] transition-colors">Book Consultation</h3>
                         <p className="text-[#1A1A1A]/60 text-sm mb-3">Schedule a detailed strategy session</p>
-                        <span className="text-gold text-sm font-medium inline-flex items-center gap-1">
+                        <span className="text-[#1A1A1A] text-sm font-medium inline-flex items-center gap-1">
                           Get Started <ArrowRight className="w-3.5 h-3.5" />
                         </span>
                       </div>

@@ -232,7 +232,7 @@ const BriefingAttendance = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-gold" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#1A1A1A]" />
       </div>
     );
   }
@@ -240,7 +240,7 @@ const BriefingAttendance = () => {
   if (!briefing) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)] flex items-center justify-center">
-        <Card className="max-w-md w-full border-2 border-gold/30">
+        <Card className="max-w-md w-full border-2 border-[#B89555]/30">
           <CardContent className="py-12 text-center">
             <AlertTriangle className="w-12 h-12 mx-auto text-amber-500 mb-4" />
             <h2 className="text-xl font-bold text-foreground">Briefing Not Found</h2>
@@ -254,9 +254,9 @@ const BriefingAttendance = () => {
   if (!user) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)] flex items-center justify-center">
-        <Card className="max-w-md w-full border-2 border-gold/30">
+        <Card className="max-w-md w-full border-2 border-[#B89555]/30">
           <CardContent className="py-12 text-center">
-            <User className="w-12 h-12 mx-auto text-gold mb-4" />
+            <User className="w-12 h-12 mx-auto text-[#1A1A1A] mb-4" />
             <h2 className="text-xl font-bold text-foreground">Sign In Required</h2>
             <p className="text-muted-foreground mt-2">Please sign in to confirm your attendance.</p>
           </CardContent>
@@ -274,11 +274,11 @@ const BriefingAttendance = () => {
       <div className="min-h-screen bg-gradient-to-b from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)]">
         <div className="container mx-auto px-4 py-8 max-w-2xl">
           {/* Briefing Info Card */}
-          <Card className="border-2 border-gold/30 mb-6 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)]">
+          <Card className="border-2 border-[#B89555]/30 mb-6 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)]">
             <CardHeader>
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-gold/20 rounded-xl flex items-center justify-center">
-                  <Building2 className="w-6 h-6 text-gold" />
+                <div className="w-12 h-12 bg-[#EFE6D6]/20 rounded-xl flex items-center justify-center">
+                  <Building2 className="w-6 h-6 text-[#1A1A1A]" />
                 </div>
                 <div>
                   <CardTitle className="text-foreground">{briefing.project_name}</CardTitle>
@@ -288,10 +288,10 @@ const BriefingAttendance = () => {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-4 text-sm">
-                <div className="flex items-center gap-2"><Calendar className="w-4 h-4 text-gold" />{briefing.briefing_date}</div>
-                <div className="flex items-center gap-2"><Clock className="w-4 h-4 text-gold" />{briefing.briefing_time} ({briefing.duration_minutes}m)</div>
+                <div className="flex items-center gap-2"><Calendar className="w-4 h-4 text-[#1A1A1A]" />{briefing.briefing_date}</div>
+                <div className="flex items-center gap-2"><Clock className="w-4 h-4 text-[#1A1A1A]" />{briefing.briefing_time} ({briefing.duration_minutes}m)</div>
                 <div className="flex items-center gap-2 col-span-2">
-                  <MapPin className="w-4 h-4 text-gold" />
+                  <MapPin className="w-4 h-4 text-[#1A1A1A]" />
                   {briefing.location_type === 'developer_office' ? `Developer Office${briefing.location_address ? ` — ${briefing.location_address}` : ''}` : 'Our Office'}
                 </div>
               </div>
@@ -319,29 +319,29 @@ const BriefingAttendance = () => {
 
           {/* RSVP Section */}
           {!isConfirmed && (
-            <Card className="border-2 border-gold/30 mb-6">
+            <Card className="border-2 border-[#B89555]/30 mb-6">
               <CardHeader>
                 <CardTitle className="text-foreground flex items-center gap-2">
-                  <Send className="w-5 h-5 text-gold" /> RSVP
+                  <Send className="w-5 h-5 text-[#1A1A1A]" /> RSVP
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <RadioGroup value={rsvpStatus} onValueChange={setRsvpStatus} className="space-y-3">
-                  <div className="flex items-center space-x-3 rounded-lg border p-3 cursor-pointer hover:border-gold/40">
+                  <div className="flex items-center space-x-3 rounded-lg border p-3 cursor-pointer hover:border-[#B89555]/40">
                     <RadioGroupItem value="attending" id="rsvp-attending" />
                     <label htmlFor="rsvp-attending" className="cursor-pointer flex-1">
                       <span className="font-semibold text-emerald-700">✓ Attending</span>
                       <p className="text-xs text-muted-foreground">I will be there on time</p>
                     </label>
                   </div>
-                  <div className="flex items-center space-x-3 rounded-lg border p-3 cursor-pointer hover:border-gold/40">
+                  <div className="flex items-center space-x-3 rounded-lg border p-3 cursor-pointer hover:border-[#B89555]/40">
                     <RadioGroupItem value="late" id="rsvp-late" />
                     <label htmlFor="rsvp-late" className="cursor-pointer flex-1">
                       <span className="font-semibold text-amber-700">⏰ Will Be Late</span>
                       <p className="text-xs text-muted-foreground">I'm attending but will arrive late</p>
                     </label>
                   </div>
-                  <div className="flex items-center space-x-3 rounded-lg border p-3 cursor-pointer hover:border-gold/40">
+                  <div className="flex items-center space-x-3 rounded-lg border p-3 cursor-pointer hover:border-[#B89555]/40">
                     <RadioGroupItem value="not_attending" id="rsvp-no" />
                     <label htmlFor="rsvp-no" className="cursor-pointer flex-1">
                       <span className="font-semibold text-red-700">✕ Not Attending</span>
@@ -363,7 +363,7 @@ const BriefingAttendance = () => {
                   </div>
                 )}
 
-                <Button onClick={handleRsvp} disabled={submittingRsvp} className="w-full bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border border-gold/40 text-foreground font-bold h-11">
+                <Button onClick={handleRsvp} disabled={submittingRsvp} className="w-full bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border border-[#B89555]/40 text-foreground font-bold h-11">
                   {submittingRsvp ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
                   {attendance ? 'Update RSVP' : 'Submit RSVP'}
                 </Button>
@@ -392,7 +392,7 @@ const BriefingAttendance = () => {
                     </div>
                   ) : capturedPhoto ? (
                     <div className="relative">
-                      <img src={capturedPhoto} alt="Captured selfie" className="w-full rounded-xl border-2 border-gold/30" />
+                      <img src={capturedPhoto} alt="Captured selfie" className="w-full rounded-xl border-2 border-[#B89555]/30" />
                       <Button onClick={() => { setCapturedPhoto(null); startCamera(); }} size="sm" variant="outline" className="absolute top-2 right-2">
                         Retake
                       </Button>

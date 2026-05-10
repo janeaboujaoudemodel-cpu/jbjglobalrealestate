@@ -244,7 +244,7 @@ const DeleteImportButton = ({ userId, onSuccess, hasOwnerAccess }: DeleteImportB
           {/* Owner Badge */}
           <div className="flex items-center gap-2 p-2 bg-amber-500/10 border border-amber-500/30 rounded-lg">
             <Shield className="h-4 w-4 text-amber-500" />
-            <span className="text-xs text-amber-400">Owner-only action: Hard delete with cascading removal</span>
+            <span className="text-xs text-[#1A1A1A]">Owner-only action: Hard delete with cascading removal</span>
           </div>
 
           <Tabs value={deleteMode} onValueChange={(v) => setDeleteMode(v as "source" | "batch")}>
@@ -337,7 +337,7 @@ const DeleteImportButton = ({ userId, onSuccess, hasOwnerAccess }: DeleteImportB
                     Found <strong>{batchLeadCount}</strong> leads with this batch ID.
                   </p>
                   {batchLeadCount === 0 && (
-                    <p className="text-xs text-amber-400">
+                    <p className="text-xs text-[#1A1A1A]">
                       No leads found with this batch ID.
                     </p>
                   )}

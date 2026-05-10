@@ -138,7 +138,7 @@ const BrokerPartnerDashboard = () => {
                 <Button variant="ghost" className="flex items-center gap-3 p-2">
                   <Avatar className="h-10 w-10">
                     <AvatarImage src="" />
-                    <AvatarFallback className="bg-zinc-800 text-purple-400">
+                    <AvatarFallback className="bg-[#F7F2EA] text-purple-400">
                       {profileName.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
@@ -148,7 +148,7 @@ const BrokerPartnerDashboard = () => {
                   </div>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 bg-zinc-900 border-[#1A1A1A]">
+              <DropdownMenuContent align="end" className="w-56 bg-[#FDFBF7] border-[#1A1A1A]">
                 <DropdownMenuItem asChild>
                   <Link to="/my-account" className="flex items-center gap-2 cursor-pointer">
                     <User className="w-4 h-4" /> My Profile
@@ -159,7 +159,7 @@ const BrokerPartnerDashboard = () => {
                     <Settings className="w-4 h-4" /> Settings
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-zinc-800" />
+                <DropdownMenuSeparator className="bg-[#F7F2EA]" />
                 <DropdownMenuItem onClick={() => signOut()} className="text-red-400 cursor-pointer">
                   Logout
                 </DropdownMenuItem>
@@ -179,7 +179,7 @@ const BrokerPartnerDashboard = () => {
                       placeholder="Search properties by location, developer, or keyword..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10 bg-zinc-900/80 border-[#1A1A1A] h-12"
+                      className="pl-10 bg-[#FDFBF7]/80 border-[#1A1A1A] h-12"
                     />
                   </div>
                   <Button type="submit" className="bg-purple-600 hover:bg-purple-700 h-12 px-8">
@@ -196,7 +196,7 @@ const BrokerPartnerDashboard = () => {
               const Icon = tool.icon;
               return (
                 <Link key={tool.name} to={tool.href}>
-                  <Card className="bg-zinc-900/50 border-[#1A1A1A] hover:border-purple-500/50 transition-all cursor-pointer group">
+                  <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A] hover:border-purple-500/50 transition-all cursor-pointer group">
                     <CardContent className="p-4">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center group-hover:bg-purple-500/30 transition-colors">
@@ -219,7 +219,7 @@ const BrokerPartnerDashboard = () => {
             <div className="lg:col-span-2 space-y-8">
               {/* Client Shortlisting */}
               <motion.div variants={fadeInUp}>
-                <Card className="bg-zinc-900/50 border-[#1A1A1A]">
+                <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
                   <CardHeader className="flex flex-row items-center justify-between">
                     <div>
                       <CardTitle className="text-xl flex items-center gap-2">
@@ -239,7 +239,7 @@ const BrokerPartnerDashboard = () => {
                       {MOCK_SHORTLIST.map((list) => (
                         <div 
                           key={list.id}
-                          className="flex items-center justify-between p-4 rounded-lg bg-zinc-800/50 hover:bg-[#1A1A1A] transition-colors cursor-pointer"
+                          className="flex items-center justify-between p-4 rounded-lg bg-[#F7F2EA]/50 hover:bg-[#1A1A1A] transition-colors cursor-pointer"
                         >
                           <div className="flex items-center gap-4">
                             <div className="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center">
@@ -252,7 +252,7 @@ const BrokerPartnerDashboard = () => {
                           </div>
                           <div className="flex items-center gap-4">
                             <span className="text-xs text-white/90 hidden md:block">{list.lastUpdated}</span>
-                            <Badge className={list.status === 'active' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'}>
+                            <Badge className={list.status === 'active' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-[#1A1A1A]'}>
                               {list.status === 'active' ? 'Active' : 'Follow-up'}
                             </Badge>
                             <ChevronRight className="w-5 h-5 text-white/90" />
@@ -278,7 +278,7 @@ const BrokerPartnerDashboard = () => {
 
               {/* Saved Reports */}
               <motion.div variants={fadeInUp}>
-                <Card className="bg-zinc-900/50 border-[#1A1A1A]">
+                <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
                   <CardHeader>
                     <CardTitle className="text-xl flex items-center gap-2">
                       <FileText className="w-5 h-5 text-purple-400" />
@@ -291,7 +291,7 @@ const BrokerPartnerDashboard = () => {
                       {MOCK_REPORTS.map((report, idx) => (
                         <div 
                           key={idx}
-                          className="flex items-center justify-between p-4 rounded-lg bg-zinc-800/50 hover:bg-[#1A1A1A] transition-colors"
+                          className="flex items-center justify-between p-4 rounded-lg bg-[#F7F2EA]/50 hover:bg-[#1A1A1A] transition-colors"
                         >
                           <div className="flex items-center gap-4">
                             <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
@@ -323,7 +323,7 @@ const BrokerPartnerDashboard = () => {
             <div className="space-y-6">
               {/* Broker Resources */}
               <motion.div variants={fadeInUp}>
-                <Card className="bg-zinc-900/50 border-[#1A1A1A]">
+                <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
                       <Briefcase className="w-5 h-5 text-purple-400" />
@@ -357,7 +357,7 @@ const BrokerPartnerDashboard = () => {
 
               {/* Broker Education */}
               <motion.div variants={fadeInUp}>
-                <Card className="bg-zinc-900/50 border-[#1A1A1A]">
+                <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
                       <BookOpen className="w-5 h-5 text-purple-400" />
@@ -374,7 +374,7 @@ const BrokerPartnerDashboard = () => {
                         </div>
                       </Link>
                       <Link to="/broker-faq">
-                        <div className="p-3 rounded-lg bg-zinc-800/50 hover:bg-[#1A1A1A] transition-colors cursor-pointer">
+                        <div className="p-3 rounded-lg bg-[#F7F2EA]/50 hover:bg-[#1A1A1A] transition-colors cursor-pointer">
                           <p className="font-medium text-sm mb-1">Broker FAQ</p>
                           <p className="text-xs text-white/90">Common questions answered</p>
                         </div>

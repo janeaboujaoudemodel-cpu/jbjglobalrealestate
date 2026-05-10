@@ -157,8 +157,8 @@ const InvestmentAdvisory = () => {
         </div>
         
         {/* Floating gold accent orbs */}
-        <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/10 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-gold/15 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-1/4 left-10 w-64 h-64 bg-[#EFE6D6]/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-[#EFE6D6]/15 rounded-full blur-[120px] pointer-events-none" />
 
         {/* Content */}
         <div className="container mx-auto px-4 relative z-10">
@@ -169,9 +169,9 @@ const InvestmentAdvisory = () => {
             className="text-center max-w-4xl mx-auto"
           >
             {/* Label */}
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-[#1A1A1A]/30 backdrop-blur-md">
-              <TrendingUp className="w-4 h-4 text-gold" />
-              <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-[#B89555]/40 bg-[#1A1A1A]/30 backdrop-blur-md">
+              <TrendingUp className="w-4 h-4 text-[#1A1A1A]" />
+              <span className="text-[#1A1A1A] font-semibold text-xs uppercase tracking-[0.2em]">
                 Investment Advisory
               </span>
             </div>
@@ -241,8 +241,8 @@ const InvestmentAdvisory = () => {
                   className="jj-card-inner"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0 w-12 h-12 bg-[#1A1A1A] border border-gold rounded-xl flex items-center justify-center">
-                      <service.icon className="w-6 h-6 text-gold" />
+                    <div className="flex-shrink-0 w-12 h-12 bg-[#1A1A1A] border border-[#B89555] rounded-xl flex items-center justify-center">
+                      <service.icon className="w-6 h-6 text-[#1A1A1A]" />
                     </div>
                     <div className="flex-1">
                       <h3 className="text-xl md:text-2xl font-medium text-[#1A1A1A] mb-3">{service.title}</h3>
@@ -250,7 +250,7 @@ const InvestmentAdvisory = () => {
                       <ul className="space-y-2 mb-4">
                         {service.items.map((item, idx) => (
                           <li key={idx} className="flex items-start gap-3">
-                            <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
+                            <CheckCircle2 className="w-4 h-4 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
                             <span className="text-[#1A1A1A]/70 text-sm">{item}</span>
                           </li>
                         ))}
@@ -276,8 +276,8 @@ const InvestmentAdvisory = () => {
             className="max-w-4xl mx-auto"
           >
             <motion.div variants={fadeInUp} className="flex justify-center mb-6">
-              <div className="w-14 h-14 rounded-full bg-[#1A1A1A] flex items-center justify-center border-2 border-gold">
-                <XCircle className="w-7 h-7 text-gold" />
+              <div className="w-14 h-14 rounded-full bg-[#1A1A1A] flex items-center justify-center border-2 border-[#B89555]">
+                <XCircle className="w-7 h-7 text-[#1A1A1A]" />
               </div>
             </motion.div>
             <motion.h2
@@ -350,8 +350,8 @@ const InvestmentAdvisory = () => {
                   variants={fadeInUp}
                   className="flex items-center gap-4 jj-card-inner !p-5"
                 >
-                  <div className="w-10 h-10 bg-[#1A1A1A] border border-gold rounded-lg flex items-center justify-center flex-shrink-0">
-                    <item.icon className="w-5 h-5 text-gold" />
+                  <div className="w-10 h-10 bg-[#1A1A1A] border border-[#B89555] rounded-lg flex items-center justify-center flex-shrink-0">
+                    <item.icon className="w-5 h-5 text-[#1A1A1A]" />
                   </div>
                   <span className="text-[#1A1A1A] font-medium">{item.label}</span>
                 </motion.div>
@@ -372,8 +372,8 @@ const InvestmentAdvisory = () => {
             className="max-w-4xl mx-auto"
           >
             <motion.div variants={fadeInUp} className="flex justify-center mb-6">
-              <div className="w-16 h-16 rounded-full bg-[#1A1A1A] flex items-center justify-center border-2 border-gold">
-                <Shield className="w-8 h-8 text-gold" />
+              <div className="w-16 h-16 rounded-full bg-[#1A1A1A] flex items-center justify-center border-2 border-[#B89555]">
+                <Shield className="w-8 h-8 text-[#1A1A1A]" />
               </div>
             </motion.div>
             <motion.h2
@@ -391,7 +391,7 @@ const InvestmentAdvisory = () => {
                   variants={fadeInUp}
                   className="flex items-center gap-4 jj-card-inner !p-4"
                 >
-                  <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0" />
+                  <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] flex-shrink-0" />
                   <span className="text-[#1A1A1A]">{reason}</span>
                 </motion.div>
               ))}
@@ -429,7 +429,7 @@ const InvestmentAdvisory = () => {
               <Button 
                 asChild
                 size="lg"
-                className="bg-gold hover:bg-gold-dark text-[#1A1A1A] font-semibold px-8"
+                className="bg-[#EFE6D6] hover:bg-[#EFE6D6]-dark text-[#1A1A1A] font-semibold px-8"
               >
                 <Link to="/contact?service=investment-advisory">
                   Request Investment Advisory Consultation
@@ -440,7 +440,7 @@ const InvestmentAdvisory = () => {
                 asChild
                 size="lg"
                 variant="outline"
-                className="border-gold text-gold hover:bg-gold/10"
+                className="border-[#B89555] text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
               >
                 <Link to="/properties">
                   Explore Current Investment Opportunities
@@ -452,30 +452,30 @@ const InvestmentAdvisory = () => {
       </section>
 
       {/* INTERNAL LINKS */}
-      <section className="bg-[#1A1A1A] py-12 border-t border-gold/20">
+      <section className="bg-[#1A1A1A] py-12 border-t border-[#B89555]/20">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap justify-center gap-6 text-sm">
             <Link
               to="/investor-education"
-              className="text-white/70 hover:text-gold transition-colors"
+              className="text-white/70 hover:text-[#1A1A1A] transition-colors"
             >
               Investor Education
             </Link>
             <Link
               to="/market-intelligence"
-              className="text-white/70 hover:text-gold transition-colors"
+              className="text-white/70 hover:text-[#1A1A1A] transition-colors"
             >
               Market Intelligence
             </Link>
             <Link
               to="/buyer-guide"
-              className="text-white/70 hover:text-gold transition-colors"
+              className="text-white/70 hover:text-[#1A1A1A] transition-colors"
             >
               Buyer Guide
             </Link>
             <Link
               to="/contact"
-              className="text-white/70 hover:text-gold transition-colors"
+              className="text-white/70 hover:text-[#1A1A1A] transition-colors"
             >
               Contact Us
             </Link>

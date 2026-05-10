@@ -201,7 +201,7 @@ export default function PortfolioViews() {
   if (authLoading || loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-2 border-gold border-t-transparent rounded-full" />
+        <div className="animate-spin w-8 h-8 border-2 border-[#B89555] border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -228,13 +228,13 @@ export default function PortfolioViews() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <div className="inline-flex items-center gap-2 bg-gold/20 backdrop-blur-sm text-gold px-4 py-2 rounded-full text-sm font-medium mb-6 border border-gold/30">
+              <div className="inline-flex items-center gap-2 bg-[#EFE6D6]/20 backdrop-blur-sm text-[#1A1A1A] px-4 py-2 rounded-full text-sm font-medium mb-6 border border-[#B89555]/30">
                 <Briefcase className="w-4 h-4" />
                 Portfolio Views
               </div>
               <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
                 Your Investment Portfolio,{" "}
-                <span className="text-gold">Organized With Clarity</span>
+                <span className="text-[#1A1A1A]">Organized With Clarity</span>
               </h1>
               <p className="text-white/85 text-lg mb-8 max-w-2xl mx-auto">
                 Portfolio Views is where investors see their assets and opportunities in a structured, 
@@ -261,7 +261,7 @@ export default function PortfolioViews() {
           {/* Back Link */}
           <Link
             to="/investor-dashboard"
-            className="inline-flex items-center gap-2 text-[#1A1A1A]/70 hover:text-gold transition-colors mb-8"
+            className="inline-flex items-center gap-2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors mb-8"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Dashboard
@@ -304,7 +304,7 @@ export default function PortfolioViews() {
                 </h2>
               </div>
               {filteredAssets.length === 0 ? (
-                <div className="text-center py-12 bg-muted/20 rounded-lg border-2 border-dashed border-gold/30">
+                <div className="text-center py-12 bg-muted/20 rounded-lg border-2 border-dashed border-[#B89555]/30">
                   <Briefcase className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
                   <p className="text-muted-foreground mb-2">No assets match your current filters</p>
                   <p className="text-sm text-muted-foreground">

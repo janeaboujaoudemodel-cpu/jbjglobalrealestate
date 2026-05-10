@@ -225,7 +225,7 @@ const BrokerCertification = () => {
           {/* Video placeholder */}
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
-              <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center">
+              <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-[#EFE6D6]/20 border border-[#B89555]/40 flex items-center justify-center">
                 <GraduationCap className="w-12 h-12 text-[#1A1A1A]/70" />
               </div>
               <p className="text-[#1A1A1A]/70 text-sm tracking-widest uppercase">JBJ Standards Program Overview</p>
@@ -236,8 +236,8 @@ const BrokerCertification = () => {
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/10 via-transparent to-transparent" />
         </div>
         
-        <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/10 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-gold/15 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-1/4 left-10 w-64 h-64 bg-[#EFE6D6]/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-[#EFE6D6]/15 rounded-full blur-[120px] pointer-events-none" />
 
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
@@ -246,9 +246,9 @@ const BrokerCertification = () => {
             transition={{ duration: 0.6 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-[#1A1A1A]/30 backdrop-blur-md">
-              <GraduationCap className="w-4 h-4 text-gold" />
-              <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-[#B89555]/40 bg-[#1A1A1A]/30 backdrop-blur-md">
+              <GraduationCap className="w-4 h-4 text-[#1A1A1A]" />
+              <span className="text-[#1A1A1A] font-semibold text-xs uppercase tracking-[0.2em]">
                 Services
               </span>
             </div>
@@ -318,7 +318,7 @@ const BrokerCertification = () => {
                 <motion.div key={index} variants={fadeInUp}>
                   <div className="h-full jj-card-inner text-center">
                     <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-[#1A1A1A] flex items-center justify-center">
-                      <item.icon className="w-7 h-7 text-gold" />
+                      <item.icon className="w-7 h-7 text-[#1A1A1A]" />
                     </div>
                     <h3 className="font-semibold text-[#1A1A1A] mb-2">{item.title}</h3>
                     <p className="text-sm text-[#1A1A1A]/70">{item.description}</p>
@@ -352,7 +352,7 @@ const BrokerCertification = () => {
                 {programDelivers.map((item, index) => (
                   <li key={index} className="flex items-start gap-4">
                     <div className="w-10 h-10 rounded-lg bg-[#1A1A1A] flex items-center justify-center shrink-0">
-                      <item.icon className="w-5 h-5 text-gold" />
+                      <item.icon className="w-5 h-5 text-[#1A1A1A]" />
                     </div>
                     <span className="text-[#1A1A1A]/70 pt-2">{item.text}</span>
                   </li>
@@ -385,12 +385,12 @@ const BrokerCertification = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
               {modules.map((module, index) => (
                 <motion.div key={index} variants={fadeInUp}>
-                  <Card className="h-full border-2 border-gold/30 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] overflow-hidden">
+                  <Card className="h-full border-2 border-[#B89555]/30 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] overflow-hidden">
                     <CardContent className="p-0">
                       {/* Book-style header */}
                       <div className="bg-[#1A1A1A] p-4 flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-full bg-gold/20 border-2 border-gold flex items-center justify-center">
-                          <span className="text-gold font-bold">M{module.number}</span>
+                        <div className="w-12 h-12 rounded-full bg-[#EFE6D6]/20 border-2 border-[#B89555] flex items-center justify-center">
+                          <span className="text-[#1A1A1A] font-bold">M{module.number}</span>
                         </div>
                         <div>
                           <h3 className="font-semibold text-white">{module.title}</h3>
@@ -400,8 +400,8 @@ const BrokerCertification = () => {
                       {/* Module content */}
                       <div className="p-6">
                         <div className="flex items-center gap-2 mb-4">
-                          <Target className="w-4 h-4 text-gold" />
-                          <p className="text-sm text-gold font-medium">Goal: {module.goal}</p>
+                          <Target className="w-4 h-4 text-[#1A1A1A]" />
+                          <p className="text-sm text-[#1A1A1A] font-medium">Goal: {module.goal}</p>
                         </div>
                         
                         <div className="mb-4">
@@ -409,14 +409,14 @@ const BrokerCertification = () => {
                           <ul className="space-y-2">
                             {module.topics.map((topic, idx) => (
                               <li key={idx} className="flex items-start gap-2 text-sm text-[#1A1A1A]/70">
-                                <CheckCircle2 className="w-4 h-4 text-gold shrink-0 mt-0.5" />
+                                <CheckCircle2 className="w-4 h-4 text-[#1A1A1A] shrink-0 mt-0.5" />
                                 <span>{topic}</span>
                               </li>
                             ))}
                           </ul>
                         </div>
                         
-                        <div className="bg-[#1A1A1A]/10 rounded-lg p-3 border border-gold/20">
+                        <div className="bg-[#1A1A1A]/10 rounded-lg p-3 border border-[#B89555]/20">
                           <p className="text-xs text-white/90 uppercase tracking-wider mb-1 font-medium">Completion Check:</p>
                           <p className="text-sm text-[#1A1A1A]/70">{module.completionCheck}</p>
                         </div>
@@ -455,7 +455,7 @@ const BrokerCertification = () => {
               <div className="relative">
                 {/* Premium Badge */}
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
-                  <div className="bg-gradient-to-r from-gold via-amber-400 to-gold px-6 py-2 rounded-full shadow-lg border border-gold/50">
+                  <div className="bg-gradient-to-r from-gold via-amber-400 to-gold px-6 py-2 rounded-full shadow-lg border border-[#B89555]/50">
                     <span className="text-[#1A1A1A] font-bold text-sm tracking-widest uppercase flex items-center gap-2">
                       <Award className="w-4 h-4" />
                       Certified Professional
@@ -465,7 +465,7 @@ const BrokerCertification = () => {
                 </div>
 
                 <Card 
-                  className="jj-card-inner border-4 border-gold/60 pt-8"
+                  className="jj-card-inner border-4 border-[#B89555]/60 pt-8"
                   style={{
                     background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 25%, #D8C7A6 50%, #ECE2D2 75%, #F7F1E6 100%)',
                     boxShadow: `
@@ -479,26 +479,26 @@ const BrokerCertification = () => {
                 >
                   <CardContent className="p-10 text-center relative overflow-hidden">
                     {/* Decorative corner elements */}
-                    <div className="absolute top-4 left-4 w-16 h-16 border-l-4 border-t-4 border-gold/40" />
-                    <div className="absolute top-4 right-4 w-16 h-16 border-r-4 border-t-4 border-gold/40" />
-                    <div className="absolute bottom-4 left-4 w-16 h-16 border-l-4 border-b-4 border-gold/40" />
-                    <div className="absolute bottom-4 right-4 w-16 h-16 border-r-4 border-b-4 border-gold/40" />
+                    <div className="absolute top-4 left-4 w-16 h-16 border-l-4 border-t-4 border-[#B89555]/40" />
+                    <div className="absolute top-4 right-4 w-16 h-16 border-r-4 border-t-4 border-[#B89555]/40" />
+                    <div className="absolute bottom-4 left-4 w-16 h-16 border-l-4 border-b-4 border-[#B89555]/40" />
+                    <div className="absolute bottom-4 right-4 w-16 h-16 border-r-4 border-b-4 border-[#B89555]/40" />
 
                     {/* Logo area */}
                     <div className="mb-6">
-                      <div className="w-20 h-20 mx-auto rounded-full bg-[#1A1A1A] flex items-center justify-center border-4 border-gold shadow-xl">
-                        <Award className="w-10 h-10 text-gold" />
+                      <div className="w-20 h-20 mx-auto rounded-full bg-[#1A1A1A] flex items-center justify-center border-4 border-[#B89555] shadow-xl">
+                        <Award className="w-10 h-10 text-[#1A1A1A]" />
                       </div>
                     </div>
 
                     <h3 className="text-3xl font-bold text-[#1A1A1A] mb-1" style={{ fontFamily: "Playfair Display, serif" }}>
                       Certificate of Completion
                     </h3>
-                    <p className="text-gold font-semibold tracking-widest uppercase text-sm mb-8">JBJ Broker Standards Program</p>
+                    <p className="text-[#1A1A1A] font-semibold tracking-widest uppercase text-sm mb-8">JBJ Broker Standards Program</p>
                     
                     <p className="text-muted-foreground text-sm mb-2">This certifies that</p>
                     
-                    <div className="border-b-2 border-gold/40 py-4 mb-6 mx-auto max-w-md">
+                    <div className="border-b-2 border-[#B89555]/40 py-4 mb-6 mx-auto max-w-md">
                       <p className="text-2xl font-bold text-[#1A1A1A]" style={{ fontFamily: "Playfair Display, serif" }}>[Broker Full Name]</p>
                     </div>
                     
@@ -506,14 +506,14 @@ const BrokerCertification = () => {
                       has successfully completed all program requirements and demonstrated proficiency in the JBJ Global Real Estate professional standards curriculum.
                     </p>
                     
-                    <div className="flex items-center justify-between max-w-lg mx-auto pt-6 border-t border-gold/20">
+                    <div className="flex items-center justify-between max-w-lg mx-auto pt-6 border-t border-[#B89555]/20">
                       <div className="text-left">
                         <p className="text-xs text-muted-foreground uppercase tracking-wider">Issue Date</p>
                         <p className="text-[#1A1A1A] font-semibold">{new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                       </div>
                       <div className="text-center">
-                        <div className="w-16 h-16 mx-auto rounded-full bg-[#1A1A1A]/5 border-2 border-gold/30 flex items-center justify-center">
-                          <Shield className="w-8 h-8 text-gold" />
+                        <div className="w-16 h-16 mx-auto rounded-full bg-[#1A1A1A]/5 border-2 border-[#B89555]/30 flex items-center justify-center">
+                          <Shield className="w-8 h-8 text-[#1A1A1A]" />
                         </div>
                         <p className="text-xs text-muted-foreground mt-1">Verified</p>
                       </div>
@@ -528,13 +528,13 @@ const BrokerCertification = () => {
                         >
                           <p className="text-[#1A1A1A] font-semibold">Jane Bou Jaoude</p>
                           <p className="text-xs text-muted-foreground">Founder & CEO</p>
-                          <p className="text-gold italic text-xs mt-1">جاين بو جودة</p>
+                          <p className="text-[#1A1A1A] italic text-xs mt-1">جاين بو جودة</p>
                         </FounderContent>
                       </div>
                     </div>
 
                     {/* Certificate Number */}
-                    <div className="mt-8 pt-4 border-t border-dashed border-gold/30">
+                    <div className="mt-8 pt-4 border-t border-dashed border-[#B89555]/30">
                       <p className="text-xs text-muted-foreground">
                         Certificate No: <span className="font-mono text-[#1A1A1A]">JBJ-CERT-2024-001</span>
                       </p>
@@ -573,7 +573,7 @@ const BrokerCertification = () => {
                 {adminWorkflow.map((item, index) => (
                   <div key={index} className="flex items-center gap-3 bg-[#1A1A1A]/5 rounded-lg p-4">
                     <div className="w-10 h-10 rounded-lg bg-[#1A1A1A] flex items-center justify-center shrink-0">
-                      <item.icon className="w-5 h-5 text-gold" />
+                      <item.icon className="w-5 h-5 text-[#1A1A1A]" />
                     </div>
                     <span className="text-[#1A1A1A]/70 text-sm">{item.text}</span>
                   </div>
@@ -607,9 +607,9 @@ const BrokerCertification = () => {
                   <AccordionItem
                     key={index}
                     value={`faq-${index}`}
-                    className="border-2 border-gold/30 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] overflow-hidden"
+                    className="border-2 border-[#B89555]/30 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] overflow-hidden"
                   >
-                    <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-gold/10">
+                    <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-[#EFE6D6]/10">
                       <span className="text-[#1A1A1A] font-medium">{faq.question}</span>
                     </AccordionTrigger>
                     <AccordionContent className="px-6 pb-4 text-[#1A1A1A]/70">
@@ -633,8 +633,8 @@ const BrokerCertification = () => {
             variants={fadeInUp}
             className="max-w-3xl mx-auto text-center"
           >
-            <div className="jj-card-inner border-2 border-gold/30">
-              <Award className="w-12 h-12 text-gold mx-auto mb-6" />
+            <div className="jj-card-inner border-2 border-[#B89555]/30">
+              <Award className="w-12 h-12 text-[#1A1A1A] mx-auto mb-6" />
               <h2
                 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4"
                 style={{ fontFamily: "Playfair Display, serif" }}

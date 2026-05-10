@@ -202,7 +202,7 @@ const BulkAssignModal = ({
             {fetchingBrokers ? (
               <div className="text-muted-foreground text-sm">Loading brokers...</div>
             ) : brokers.length === 0 ? (
-              <div className="flex items-center gap-2 text-amber-400 text-sm">
+              <div className="flex items-center gap-2 text-[#1A1A1A] text-sm">
                 <AlertCircle className="h-4 w-4" />
                 No active brokers found
               </div>

@@ -100,7 +100,7 @@ const CustomerHappinessCenter = () => {
           {/* Video placeholder */}
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
-              <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center">
+              <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-[#EFE6D6]/20 border border-[#B89555]/40 flex items-center justify-center">
                 <Heart className="w-12 h-12 text-[#1A1A1A]/70" />
               </div>
               <p className="text-[#1A1A1A]/70 text-sm tracking-widest uppercase">Support That Actually Works</p>
@@ -111,8 +111,8 @@ const CustomerHappinessCenter = () => {
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/10 via-transparent to-transparent" />
         </div>
         
-        <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/10 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-gold/15 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-1/4 left-10 w-64 h-64 bg-[#EFE6D6]/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-[#EFE6D6]/15 rounded-full blur-[120px] pointer-events-none" />
 
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
@@ -121,9 +121,9 @@ const CustomerHappinessCenter = () => {
             transition={{ duration: 0.6 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-[#1A1A1A]/30 backdrop-blur-md">
-              <Heart className="w-4 h-4 text-gold" />
-              <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-[#B89555]/40 bg-[#1A1A1A]/30 backdrop-blur-md">
+              <Heart className="w-4 h-4 text-[#1A1A1A]" />
+              <span className="text-[#1A1A1A] font-semibold text-xs uppercase tracking-[0.2em]">
                 Services
               </span>
             </div>
@@ -210,13 +210,13 @@ const CustomerHappinessCenter = () => {
               {/* Email Contact */}
               <div className="flex items-center justify-center gap-4 mb-6">
                 <div className="w-14 h-14 rounded-xl bg-[#1A1A1A] flex items-center justify-center">
-                  <Mail className="w-7 h-7 text-gold" />
+                  <Mail className="w-7 h-7 text-[#1A1A1A]" />
                 </div>
                 <div className="text-left">
                   <p className="text-sm text-[#1A1A1A]/70">Happiness Center Email</p>
                   <a 
                     href="mailto:HAPPINESS@JBJ.AE" 
-                    className="text-gold font-semibold text-lg hover:underline"
+                    className="text-[#1A1A1A] font-semibold text-lg hover:underline"
                   >
                     HAPPINESS@JBJ.AE
                   </a>
@@ -271,7 +271,7 @@ const CustomerHappinessCenter = () => {
                 {whatWeCanHelp.map((item, idx) => (
                   <li key={idx} className="flex items-center gap-4">
                     <div className="w-10 h-10 rounded-lg bg-[#1A1A1A] flex items-center justify-center shrink-0">
-                      <item.icon className="w-5 h-5 text-gold" />
+                      <item.icon className="w-5 h-5 text-[#1A1A1A]" />
                     </div>
                     <span className="text-[#1A1A1A]/70">{item.text}</span>
                   </li>
@@ -305,9 +305,9 @@ const CustomerHappinessCenter = () => {
                   <AccordionItem
                     key={index}
                     value={`item-${index}`}
-                    className="border-2 border-gold/30 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] overflow-hidden"
+                    className="border-2 border-[#B89555]/30 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] overflow-hidden"
                   >
-                    <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-gold/10">
+                    <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-[#EFE6D6]/10">
                       <span className="text-[#1A1A1A] font-medium">{faq.question}</span>
                     </AccordionTrigger>
                     <AccordionContent className="px-6 pb-4 text-[#1A1A1A]/70">
@@ -331,8 +331,8 @@ const CustomerHappinessCenter = () => {
             variants={fadeInUp}
             className="max-w-3xl mx-auto text-center"
           >
-            <div className="jj-card-inner border-2 border-gold/30">
-              <Ticket className="w-12 h-12 text-gold mx-auto mb-6" />
+            <div className="jj-card-inner border-2 border-[#B89555]/30">
+              <Ticket className="w-12 h-12 text-[#1A1A1A] mx-auto mb-6" />
               <h2
                 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4"
                 style={{ fontFamily: "Playfair Display, serif" }}

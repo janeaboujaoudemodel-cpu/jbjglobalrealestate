@@ -28,7 +28,7 @@ const DeveloperProjectsMap = lazy(() => import("@/components/developer/Developer
 
 // Map loading fallback
 const MapLoadingFallback = () => (
-  <div className="rounded-xl border-2 border-gold/40 bg-champagne/20 p-8 h-[400px] flex items-center justify-center">
+  <div className="rounded-xl border-2 border-[#B89555]/40 bg-champagne/20 p-8 h-[400px] flex items-center justify-center">
     <div className="text-center">
       <MapIcon className="w-12 h-12 text-[#1A1A1A]/70 mx-auto mb-3 animate-pulse" />
       <p className="text-foreground/70">Loading map...</p>
@@ -172,7 +172,7 @@ const DeveloperDetail = () => {
       <section className="relative w-full min-h-screen py-16 md:py-24 flex items-center justify-center bg-premium-bg">
         <div className="text-center">
           <h1 className="text-foreground text-2xl mb-4">Developer not found</h1>
-          <Link to="/developers" className="text-gold hover:underline">
+          <Link to="/developers" className="text-[#1A1A1A] hover:underline">
             Back to Developers
           </Link>
         </div>
@@ -285,7 +285,7 @@ const DeveloperDetail = () => {
           {/* Text */}
           <div className="flex-1">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-2">
-              <span className="text-gold">{developer.name.split(" ")[0]}</span>{" "}
+              <span className="text-[#1A1A1A]">{developer.name.split(" ")[0]}</span>{" "}
               {developer.name.split(" ").slice(1).join(" ")}
             </h1>
             {developer.description && (
@@ -303,7 +303,7 @@ const DeveloperDetail = () => {
                 {developer.description.length > 400 && (
                   <button
                     onClick={() => setIsDevDescExpanded(!isDevDescExpanded)}
-                    className="flex items-center gap-1 text-gold text-sm font-medium mt-3 hover:underline"
+                    className="flex items-center gap-1 text-[#1A1A1A] text-sm font-medium mt-3 hover:underline"
                   >
                     {isDevDescExpanded ? (
                       <><ChevronUp className="w-4 h-4" /> Show Less</>
@@ -320,14 +320,14 @@ const DeveloperDetail = () => {
               {stats.map((stat) => (
                 <div 
                   key={stat.label} 
-                  className="rounded-xl border-2 border-gold/40 p-4"
+                  className="rounded-xl border-2 border-[#B89555]/40 p-4"
                   style={{
                     background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)',
                     boxShadow: '0 0 15px rgba(200,167,102,0.22), inset 0 1px 2px rgba(255,255,255,0.4)',
                   }}
                 >
                   <div className="flex items-center gap-2 text-foreground/70 text-xs uppercase tracking-wide mb-2">
-                    <stat.icon className="w-4 h-4 text-gold flex-shrink-0" />
+                    <stat.icon className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
                     <span className="truncate">{stat.label}</span>
                   </div>
                   <p className="text-foreground text-xl font-bold">{stat.value}</p>
@@ -392,7 +392,7 @@ const DeveloperDetail = () => {
           <div ref={filterSentinelRef} className="h-0" />
 
           {/* Inline filter bar — 2 rows only */}
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-2xl p-2 sm:p-4 mb-6 overflow-x-auto scrollbar-hide">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30 rounded-2xl p-2 sm:p-4 mb-6 overflow-x-auto scrollbar-hide">
             <FilterShortcutBar
               variant="light"
               filters={shortcutFilters}
@@ -405,7 +405,7 @@ const DeveloperDetail = () => {
                     placeholder="Search projects..."
                     value={filters.search}
                     onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-                    className="h-8 pl-8 pr-2 text-xs w-full bg-[#FDFBF7] border-gold/30"
+                    className="h-8 pl-8 pr-2 text-xs w-full bg-[#FDFBF7] border-[#B89555]/30"
                   />
                 </div>
               }
@@ -419,7 +419,7 @@ const DeveloperDetail = () => {
 
           {hasFiltersApplied && (
             <p className="text-foreground/70 mb-6">
-              Found <span className="text-gold font-semibold">{filteredProjects.length}</span> project
+              Found <span className="text-[#1A1A1A] font-semibold">{filteredProjects.length}</span> project
               {filteredProjects.length !== 1 ? "s" : ""}
             </p>
           )}
@@ -441,7 +441,7 @@ const DeveloperDetail = () => {
                 <div className="flex justify-center mt-10">
                   <button
                     onClick={() => setShowAllProjects(true)}
-                    className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold tracking-wide rounded-xl transition-all duration-300 border-2 border-gold/40 hover:border-gold/80 hover:-translate-y-0.5"
+                    className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold tracking-wide rounded-xl transition-all duration-300 border-2 border-[#B89555]/40 hover:border-[#B89555]/80 hover:-translate-y-0.5"
                     style={{
                       background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)',
                       boxShadow: '0 4px 20px rgba(200,167,102,0.2)',
@@ -450,14 +450,14 @@ const DeveloperDetail = () => {
                     <span className="text-foreground">
                       Explore All {filteredProjects.length} {developer.name} Projects
                     </span>
-                    <ChevronDown className="w-5 h-5 text-gold group-hover:translate-y-0.5 transition-transform" />
+                    <ChevronDown className="w-5 h-5 text-[#1A1A1A] group-hover:translate-y-0.5 transition-transform" />
                   </button>
                 </div>
               )}
             </div>
           ) : (
             <div className="text-center py-16 jj-box-active">
-              <Building2 className="w-12 h-12 text-gold mx-auto mb-4" />
+              <Building2 className="w-12 h-12 text-[#1A1A1A] mx-auto mb-4" />
               <h3 className="text-foreground text-xl font-semibold mb-2">
                 {hasFiltersApplied
                   ? "No Projects Match Your Filters"

@@ -249,10 +249,10 @@ export default function ReferralAdmin() {
 
             {/* Search Tab */}
             <TabsContent value="search" className="space-y-6">
-              <Card className="bg-[#FDFBF7] border-2 border-gold/40">
+              <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/40">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Search className="w-5 h-5 text-gold" />
+                    <Search className="w-5 h-5 text-[#1A1A1A]" />
                     Search Referral Code
                   </CardTitle>
                 </CardHeader>
@@ -296,7 +296,7 @@ export default function ReferralAdmin() {
                               )}
                             </div>
                             <div className="text-right">
-                              <p className="text-lg font-bold text-gold">{partner.referral_code}</p>
+                              <p className="text-lg font-bold text-[#1A1A1A]">{partner.referral_code}</p>
                               {getStatusBadge(partner.status)}
                               <p className="text-sm text-muted-foreground mt-1">
                                 {partner.commission_rate}% commission
@@ -347,10 +347,10 @@ export default function ReferralAdmin() {
 
             {/* Partners Tab */}
             <TabsContent value="partners" className="space-y-6">
-              <Card className="bg-[#FDFBF7] border-2 border-gold/40">
+              <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/40">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Users className="w-5 h-5 text-gold" />
+                    <Users className="w-5 h-5 text-[#1A1A1A]" />
                     Recent Referral Partners
                   </CardTitle>
                 </CardHeader>
@@ -364,7 +364,7 @@ export default function ReferralAdmin() {
                       {allPartners.map((partner) => (
                         <div
                           key={partner.id}
-                          className="p-4 bg-muted/30 rounded-xl border border-border hover:border-gold/50 transition-colors cursor-pointer"
+                          className="p-4 bg-muted/30 rounded-xl border border-border hover:border-[#B89555]/50 transition-colors cursor-pointer"
                           onClick={() => {
                             setSearchCode(partner.referral_code);
                             setSelectedPartner(partner);
@@ -372,8 +372,8 @@ export default function ReferralAdmin() {
                         >
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-4">
-                              <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center">
-                                <Users className="w-5 h-5 text-gold" />
+                              <div className="w-10 h-10 rounded-full bg-[#EFE6D6]/10 flex items-center justify-center">
+                                <Users className="w-5 h-5 text-[#1A1A1A]" />
                               </div>
                               <div>
                                 <p className="font-semibold text-foreground">{partner.full_name}</p>
@@ -381,7 +381,7 @@ export default function ReferralAdmin() {
                               </div>
                             </div>
                             <div className="text-right">
-                              <p className="font-mono font-bold text-gold">{partner.referral_code}</p>
+                              <p className="font-mono font-bold text-[#1A1A1A]">{partner.referral_code}</p>
                               {getStatusBadge(partner.status)}
                             </div>
                           </div>
@@ -396,10 +396,10 @@ export default function ReferralAdmin() {
             {/* Signature Tab */}
             <TabsContent value="signature" className="space-y-6">
               {/* AI Signature Generator */}
-              <Card className="bg-card border-2 border-gold/40">
+              <Card className="bg-card border-2 border-[#B89555]/40">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Sparkles className="w-5 h-5 text-gold" />
+                    <Sparkles className="w-5 h-5 text-[#1A1A1A]" />
                     AI Signature Designer
                   </CardTitle>
                 </CardHeader>
@@ -417,10 +417,10 @@ export default function ReferralAdmin() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-card border-2 border-gold/40">
+              <Card className="bg-card border-2 border-[#B89555]/40">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <FileSignature className="w-5 h-5 text-gold" />
+                    <FileSignature className="w-5 h-5 text-[#1A1A1A]" />
                     Company Signature for Contracts
                   </CardTitle>
                 </CardHeader>
@@ -433,7 +433,7 @@ export default function ReferralAdmin() {
                   {companySignature && (
                     <div className="space-y-2">
                       <Label>Current Signature:</Label>
-                      <div className="p-4 bg-card border-2 border-dashed border-gold/40 rounded-xl">
+                      <div className="p-4 bg-card border-2 border-dashed border-[#B89555]/40 rounded-xl">
                         <img
                           src={companySignature}
                           alt="Company Signature"

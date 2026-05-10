@@ -412,7 +412,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold" />
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#B89555]" />
       </div>
     );
   }
@@ -423,16 +423,16 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
       <div ref={ref} className="min-h-screen flex items-center justify-center py-12 px-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
         <div className="relative z-10 w-full max-w-md">
-          <div className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-gold/30 rounded-2xl p-10 shadow-sm">
+          <div className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-[#B89555]/30 rounded-2xl p-10 shadow-sm">
             <div className="flex justify-center mb-8"><JJLogoImage variant="light" size="md" /></div>
             <div className="text-center mb-8">
               <h1 className="text-[#1A1A1A] text-2xl font-semibold mb-3">You're Signed In</h1>
-              <p className="text-[#1A1A1A]/70 text-sm">Welcome back, <span className="text-gold font-medium">{user.email}</span></p>
+              <p className="text-[#1A1A1A]/70 text-sm">Welcome back, <span className="text-[#1A1A1A] font-medium">{user.email}</span></p>
             </div>
             <div className="space-y-3">
               <Button type="button" onClick={() => navigate("/my-dashboard")} className="w-full h-12 bg-gradient-to-r from-gold to-gold-dark hover:opacity-90 text-[#1A1A1A] font-semibold rounded-xl shadow-lg shadow-gold/20 transition-all duration-300 hover:shadow-gold/40 hover:scale-[1.02]">Go to My Dashboard</Button>
-              <Button type="button" onClick={() => navigate("/")} className="w-full h-12 bg-[#FDFBF7] border border-[#B89555]/30 hover:border-gold/50 text-[#1A1A1A] font-semibold rounded-xl transition-all duration-300 hover:bg-[#F7F2EA]">Go to Home</Button>
-              <Button type="button" variant="outline" onClick={async () => { try { await signOut(); toast.success("Signed out."); setEmail(""); setPassword(""); setConfirmPassword(""); setMode("signin"); } catch { toast.error("Could not sign out."); } }} className="w-full h-12 border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-gold/50 rounded-xl transition-all duration-300">Sign Out</Button>
+              <Button type="button" onClick={() => navigate("/")} className="w-full h-12 bg-[#FDFBF7] border border-[#B89555]/30 hover:border-[#B89555]/50 text-[#1A1A1A] font-semibold rounded-xl transition-all duration-300 hover:bg-[#F7F2EA]">Go to Home</Button>
+              <Button type="button" variant="outline" onClick={async () => { try { await signOut(); toast.success("Signed out."); setEmail(""); setPassword(""); setConfirmPassword(""); setMode("signin"); } catch { toast.error("Could not sign out."); } }} className="w-full h-12 border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555]/50 rounded-xl transition-all duration-300">Sign Out</Button>
             </div>
           </div>
           <p className="text-center text-[#1A1A1A]/70 text-xs mt-8">© {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p>
@@ -447,10 +447,10 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
       <div ref={ref} className="min-h-screen flex items-center justify-center py-12 px-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
         <div className="relative z-10 w-full max-w-md">
-          <div className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-gold/30 rounded-2xl p-10 shadow-sm text-center">
+          <div className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-[#B89555]/30 rounded-2xl p-10 shadow-sm text-center">
             <div className="flex justify-center mb-6"><JJLogoImage variant="light" size="md" /></div>
-            <div className="mx-auto mb-6 w-16 h-16 rounded-full bg-gold/10 flex items-center justify-center">
-              <Mail className="w-8 h-8 text-gold" />
+            <div className="mx-auto mb-6 w-16 h-16 rounded-full bg-[#EFE6D6]/10 flex items-center justify-center">
+              <Mail className="w-8 h-8 text-[#1A1A1A]" />
             </div>
             <h1 className="text-[#1A1A1A] text-2xl font-semibold mb-3">Check Your Email</h1>
             <p className="text-[#1A1A1A]/70 text-sm leading-relaxed mb-2">
@@ -466,7 +466,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
               </Button>
               <p className="text-[#1A1A1A]/70 text-xs">
                 Didn't receive the email? Check your spam folder or{" "}
-                <button type="button" onClick={() => { setMode("signup"); }} className="text-gold hover:underline">try again</button>.
+                <button type="button" onClick={() => { setMode("signup"); }} className="text-[#1A1A1A] hover:underline">try again</button>.
               </p>
             </div>
           </div>
@@ -517,7 +517,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                 setOtpCode("");
                 setErrors({});
               }}
-              className="flex items-center gap-2 text-[#1A1A1A]/70 hover:text-gold mb-6 transition-colors"
+              className="flex items-center gap-2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] mb-6 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               <span className="text-sm">Back</span>
@@ -542,7 +542,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
               )}
 
               <div className="flex gap-3 mb-4">
-                <Button type="button" onClick={() => handleSocialSignIn("google")} disabled={isSubmitting} className="flex-1 h-12 bg-[#FDFBF7] hover:bg-[#F7F2EA] text-[#1A1A1A] font-medium rounded-xl flex items-center justify-center gap-2 border border-[#B89555]/30 hover:border-gold/50 transition-all duration-300 shadow-sm">
+                <Button type="button" onClick={() => handleSocialSignIn("google")} disabled={isSubmitting} className="flex-1 h-12 bg-[#FDFBF7] hover:bg-[#F7F2EA] text-[#1A1A1A] font-medium rounded-xl flex items-center justify-center gap-2 border border-[#B89555]/30 hover:border-[#B89555]/50 transition-all duration-300 shadow-sm">
                   <svg className="w-5 h-5" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
                     <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
@@ -570,8 +570,8 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
           {mode === "verify-otp" ? (
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="flex flex-col items-center gap-4">
-                <div className="mx-auto w-14 h-14 rounded-full bg-gold/10 flex items-center justify-center">
-                  <KeyRound className="w-7 h-7 text-gold" />
+                <div className="mx-auto w-14 h-14 rounded-full bg-[#EFE6D6]/10 flex items-center justify-center">
+                  <KeyRound className="w-7 h-7 text-[#1A1A1A]" />
                 </div>
                 <InputOTP
                   maxLength={6}
@@ -580,7 +580,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                 >
                   <InputOTPGroup>
                     {[0, 1, 2, 3, 4, 5].map((i) => (
-                      <InputOTPSlot key={i} index={i} className="w-12 h-14 text-xl border-[#B89555]/30 focus:border-gold" />
+                      <InputOTPSlot key={i} index={i} className="w-12 h-14 text-xl border-[#B89555]/30 focus:border-[#B89555]" />
                     ))}
                   </InputOTPGroup>
                 </InputOTP>
@@ -597,7 +597,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                   type="button"
                   onClick={handleResendCode}
                   disabled={resendCooldown > 0}
-                  className={`text-sm transition-colors ${resendCooldown > 0 ? "text-[#1A1A1A]/70 cursor-not-allowed" : "text-gold hover:text-gold-dark hover:underline"}`}
+                  className={`text-sm transition-colors ${resendCooldown > 0 ? "text-[#1A1A1A]/70 cursor-not-allowed" : "text-[#1A1A1A] hover:text-[#1A1A1A]-dark hover:underline"}`}
                 >
                   {resendCooldown > 0 ? `Resend code in ${resendCooldown}s` : "Resend code"}
                 </button>
@@ -612,7 +612,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                   <Label htmlFor="email" className="text-[#1A1A1A] font-medium">Email Address</Label>
                   <div className="relative">
                     <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1A1A1A]/70" />
-                    <Input id="email" name="email" type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" className="pl-12 h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold focus:ring-gold/20 rounded-xl transition-all duration-300" />
+                    <Input id="email" name="email" type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" className="pl-12 h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] focus:ring-gold/20 rounded-xl transition-all duration-300" />
                   </div>
                   {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
                 </div>
@@ -624,8 +624,8 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                   <Label htmlFor="password" className="text-[#1A1A1A] font-medium">Password</Label>
                   <div className="relative">
                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1A1A1A]/70" />
-                    <Input id="password" name="password" type={showPassword ? "text" : "password"} autoComplete={mode === "signin" ? "current-password" : "new-password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className="pl-12 pr-12 h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold focus:ring-gold/20 rounded-xl transition-all duration-300" />
-                    <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#1A1A1A]/70 hover:text-gold transition-colors">
+                    <Input id="password" name="password" type={showPassword ? "text" : "password"} autoComplete={mode === "signin" ? "current-password" : "new-password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className="pl-12 pr-12 h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] focus:ring-gold/20 rounded-xl transition-all duration-300" />
+                    <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors">
                       {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
                   </div>
@@ -640,8 +640,8 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                     <Label htmlFor="password" className="text-[#1A1A1A] font-medium">New Password</Label>
                     <div className="relative">
                       <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1A1A1A]/70" />
-                      <Input id="password" name="new-password" type={showPassword ? "text" : "password"} autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className="pl-12 pr-12 h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold focus:ring-gold/20 rounded-xl transition-all duration-300" />
-                      <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#1A1A1A]/70 hover:text-gold transition-colors">
+                      <Input id="password" name="new-password" type={showPassword ? "text" : "password"} autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className="pl-12 pr-12 h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] focus:ring-gold/20 rounded-xl transition-all duration-300" />
+                      <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors">
                         {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                       </button>
                     </div>
@@ -651,7 +651,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                     <Label htmlFor="confirmPassword" className="text-[#1A1A1A] font-medium">Confirm New Password</Label>
                     <div className="relative">
                       <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1A1A1A]/70" />
-                      <Input id="confirmPassword" name="confirmPassword" type={showPassword ? "text" : "password"} autoComplete="new-password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="••••••••" className="pl-12 h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold focus:ring-gold/20 rounded-xl transition-all duration-300" />
+                      <Input id="confirmPassword" name="confirmPassword" type={showPassword ? "text" : "password"} autoComplete="new-password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="••••••••" className="pl-12 h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] focus:ring-gold/20 rounded-xl transition-all duration-300" />
                     </div>
                     {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword}</p>}
                   </div>
@@ -664,7 +664,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                   <Label htmlFor="confirmPassword" className="text-[#1A1A1A] font-medium">Confirm Password</Label>
                   <div className="relative">
                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1A1A1A]/70" />
-                    <Input id="confirmPassword" name="confirmPassword" type={showPassword ? "text" : "password"} autoComplete="new-password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="••••••••" className="pl-12 h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold focus:ring-gold/20 rounded-xl transition-all duration-300" />
+                    <Input id="confirmPassword" name="confirmPassword" type={showPassword ? "text" : "password"} autoComplete="new-password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="••••••••" className="pl-12 h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] focus:ring-gold/20 rounded-xl transition-all duration-300" />
                   </div>
                   {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword}</p>}
                 </div>
@@ -673,10 +673,10 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
               {/* Forgot password link */}
               {mode === "signin" && (
                 <div className="flex items-center justify-between">
-                  <button type="button" onClick={() => setMode("otp-login")} className="text-sm text-[#1A1A1A]/70 hover:text-gold transition-colors flex items-center gap-1">
+                  <button type="button" onClick={() => setMode("otp-login")} className="text-sm text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors flex items-center gap-1">
                     <KeyRound className="w-3.5 h-3.5" /> Sign in with code
                   </button>
-                  <button type="button" onClick={() => setMode("forgot")} className="text-sm text-gold hover:text-gold-dark hover:underline transition-colors">
+                  <button type="button" onClick={() => setMode("forgot")} className="text-sm text-[#1A1A1A] hover:text-[#1A1A1A]-dark hover:underline transition-colors">
                     Forgot password?
                   </button>
                 </div>
@@ -725,7 +725,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
           if (!open && isReactivationPreview) setIsReactivationPreview(false);
         }}
       >
-        <AlertDialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 max-w-md relative">
+        <AlertDialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 max-w-md relative">
           {/* X close button */}
           <button
             onClick={() => {
@@ -786,7 +786,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                 setPassword("");
                 setMode("signup");
               }}
-              className="w-full border-2 border-gold/40 text-[#1A1A1A] font-semibold hover:bg-gold/10 h-12 rounded-xl mt-0"
+              className="w-full border-2 border-[#B89555]/40 text-[#1A1A1A] font-semibold hover:bg-[#EFE6D6]/10 h-12 rounded-xl mt-0"
             >
               Create New Account
             </AlertDialogCancel>

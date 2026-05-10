@@ -198,18 +198,18 @@ export default function AIBrokerWorkspace() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <h1 className="text-xl font-bold text-gold tracking-wide">
+              <h1 className="text-xl font-bold text-[#1A1A1A] tracking-wide">
                 JBJ GLOBAL REAL ESTATE
               </h1>
-              <Badge variant="outline" className="border-gold/30 text-gold">
+              <Badge variant="outline" className="border-[#B89555]/30 text-[#1A1A1A]">
                 AI Broker Workspace
               </Badge>
             </div>
             
             <div className="flex items-center gap-3">
               {/* Broker Selector */}
-              <div className="flex items-center gap-2 bg-zinc-900 rounded-lg px-3 py-2">
-                <Bot className="h-4 w-4 text-gold" />
+              <div className="flex items-center gap-2 bg-[#FDFBF7] rounded-lg px-3 py-2">
+                <Bot className="h-4 w-4 text-[#1A1A1A]" />
                 <select
                   value={activeBroker?.id || ""}
                   onChange={(e) => {
@@ -219,7 +219,7 @@ export default function AIBrokerWorkspace() {
                   className="bg-transparent text-white text-sm border-none focus:outline-none"
                 >
                   {brokers.map((broker) => (
-                    <option key={broker.id} value={broker.id} className="bg-zinc-900">
+                    <option key={broker.id} value={broker.id} className="bg-[#FDFBF7]">
                       {broker.name}
                     </option>
                   ))}
@@ -253,7 +253,7 @@ export default function AIBrokerWorkspace() {
                     <img
                       src={activeBroker.avatar_url}
                       alt={activeBroker.name}
-                      className="w-full h-full rounded-full bg-zinc-950"
+                      className="w-full h-full rounded-full bg-[#FDFBF7]"
                       style={{ objectFit: "cover", objectPosition: "center 15%" }}
                     />
                   ) : (
@@ -270,12 +270,12 @@ export default function AIBrokerWorkspace() {
               </div>
 
               {/* Capacity Bar */}
-              <div className="bg-zinc-900 rounded-lg p-4">
+              <div className="bg-[#FDFBF7] rounded-lg p-4">
                 <div className="flex justify-between text-sm mb-2">
                   <span className="text-[#1A1A1A]/70">Daily Capacity</span>
                   <span className="text-white">{capacityUsed}/{capacityLimit}</span>
                 </div>
-                <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
+                <div className="h-2 bg-[#F7F2EA] rounded-full overflow-hidden">
                   <div
                     className={`h-full transition-all ${
                       capacityPercent > 90
@@ -357,27 +357,27 @@ export default function AIBrokerWorkspace() {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 p-6 bg-zinc-950">
+        <main className="flex-1 p-6 bg-[#FDFBF7]">
           <Tabs defaultValue="leads" className="space-y-6">
             <div className="flex items-center justify-between">
-              <TabsList className="bg-zinc-900 border border-[#1A1A1A]">
+              <TabsList className="bg-[#FDFBF7] border border-[#1A1A1A]">
                 <TabsTrigger
                   value="leads"
-                  className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]"
+                  className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]"
                 >
                   <Users className="h-4 w-4 mr-2" />
                   Leads ({filteredLeads.length})
                 </TabsTrigger>
                 <TabsTrigger
                   value="conversations"
-                  className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]"
+                  className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]"
                 >
                   <MessageSquare className="h-4 w-4 mr-2" />
                   Conversations
                 </TabsTrigger>
                 <TabsTrigger
                   value="activity"
-                  className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]"
+                  className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]"
                 >
                   <Clock className="h-4 w-4 mr-2" />
                   Activity
@@ -391,7 +391,7 @@ export default function AIBrokerWorkspace() {
                     placeholder="Search leads..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 bg-zinc-900 border-[#1A1A1A] text-white w-64"
+                    className="pl-10 bg-[#FDFBF7] border-[#1A1A1A] text-white w-64"
                   />
                 </div>
                 <Button variant="outline" className="border-[#1A1A1A] text-[#1A1A1A]/70">

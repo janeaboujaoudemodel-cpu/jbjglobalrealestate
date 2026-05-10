@@ -34,7 +34,7 @@ const SectionTitle = ({ title, centered = true }: { title: string; centered?: bo
     <h2 
       className={`text-3xl md:text-4xl font-bold mb-8 ${centered ? 'text-center' : ''}`}
     >
-      <span className="text-gold mr-2">{firstWord}</span>
+      <span className="text-[#1A1A1A] mr-2">{firstWord}</span>
       <span className="text-[#1A1A1A] font-bold">{restWords}</span>
     </h2>
   );
@@ -72,7 +72,7 @@ const ContentSection = ({
               <Icon className="w-6 h-6" />
             </div>
             <h2 className="text-2xl md:text-3xl font-bold">
-              <span className="text-gold">{firstWord}</span>
+              <span className="text-[#1A1A1A]">{firstWord}</span>
               <span className="text-[#1A1A1A] ml-2">{restWords}</span>
             </h2>
           </div>
@@ -80,14 +80,14 @@ const ContentSection = ({
             {children}
           </div>
           {links && links.length > 0 && (
-            <div className="mt-6 pt-6 border-t border-gold/20 space-y-2">
+            <div className="mt-6 pt-6 border-t border-[#B89555]/20 space-y-2">
               {links.map((link, idx) => (
                 <a 
                   key={idx}
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-gold hover:text-gold-dark transition-colors text-sm font-medium"
+                  className="flex items-center gap-2 text-[#1A1A1A] hover:text-[#1A1A1A]-dark transition-colors text-sm font-medium"
                 >
                   <ExternalLink className="w-4 h-4" />
                   {link.label}
@@ -184,7 +184,7 @@ const MarketOverview = () => {
                   <FileText className="w-6 h-6" />
                 </div>
                 <h2 className="text-2xl md:text-3xl font-bold">
-                  <span className="text-gold">About</span>
+                  <span className="text-[#1A1A1A]">About</span>
                   <span className="text-[#1A1A1A] ml-2">This Page</span>
                 </h2>
               </div>
@@ -206,7 +206,7 @@ const MarketOverview = () => {
                   <Landmark className="w-6 h-6" />
                 </div>
                 <h2 className="text-2xl md:text-3xl font-bold">
-                  <span className="text-gold">Market</span>
+                  <span className="text-[#1A1A1A]">Market</span>
                   <span className="text-[#1A1A1A] ml-2">Structure & Regulation</span>
                 </h2>
               </div>
@@ -218,12 +218,12 @@ const MarketOverview = () => {
                   Official real estate data, transaction records, rental benchmarks, and sector research are published directly by DLD through its open data and research portals.
                 </p>
               </div>
-              <div className="mt-6 pt-6 border-t border-gold/20 space-y-2">
+              <div className="mt-6 pt-6 border-t border-[#B89555]/20 space-y-2">
                 <a 
                   href="https://dubailand.gov.ae/en/open-data/real-estate-data/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-gold hover:text-gold-dark transition-colors text-sm font-medium"
+                  className="flex items-center gap-2 text-[#1A1A1A] hover:text-[#1A1A1A]-dark transition-colors text-sm font-medium"
                 >
                   <ExternalLink className="w-4 h-4" />
                   DLD Real Estate Data Portal
@@ -232,7 +232,7 @@ const MarketOverview = () => {
                   href="https://dubailand.gov.ae/en/open-data/research/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-gold hover:text-gold-dark transition-colors text-sm font-medium"
+                  className="flex items-center gap-2 text-[#1A1A1A] hover:text-[#1A1A1A]-dark transition-colors text-sm font-medium"
                 >
                   <ExternalLink className="w-4 h-4" />
                   DLD Research Portal
@@ -317,7 +317,7 @@ const MarketOverview = () => {
           <p className="mt-4">
             We do not base guidance on unverified dashboards, social media claims, or guaranteed-return statements. Market interpretation is grounded in officially published information and location-specific evaluation.
           </p>
-          <div className="mt-6 p-4 bg-[#1A1A1A]/5 rounded-xl border border-gold/20">
+          <div className="mt-6 p-4 bg-[#1A1A1A]/5 rounded-xl border border-[#B89555]/20">
             <p className="text-sm text-[#1A1A1A]/70 italic">
               This Market Overview serves as the foundation for deeper analysis in Area Intelligence, where performance is examined at a location and project level using the same official sources.
             </p>
@@ -340,7 +340,7 @@ const MarketOverview = () => {
                 >
                   <Card className="jj-card-inner text-center p-6 h-full">
                     <CardContent className="p-0">
-                      <p className="text-lg font-semibold mb-2 text-gold">
+                      <p className="text-lg font-semibold mb-2 text-[#1A1A1A]">
                         {stat.label}
                       </p>
                       <p className="text-[#1A1A1A] text-3xl font-bold mb-2">{stat.value}</p>
@@ -357,9 +357,9 @@ const MarketOverview = () => {
             </div>
 
             {/* Source Attribution */}
-            <div className="text-center mt-8 pt-6 border-t border-gold/30">
+            <div className="text-center mt-8 pt-6 border-t border-[#B89555]/30">
               <p className="text-lg">
-                <span className="font-semibold text-xl text-gold">Source:</span>
+                <span className="font-semibold text-xl text-[#1A1A1A]">Source:</span>
                 {" "}
                 <span className="text-[#1A1A1A] font-medium text-lg">{MARKET_OVERVIEW_STATS.dataSource}</span>
               </p>
@@ -379,14 +379,14 @@ const MarketOverview = () => {
               {QUARTERLY_TRENDS.map((quarter, index) => (
                 <Card key={quarter.quarter} className="jj-card-inner">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-lg text-gold">
+                    <CardTitle className="text-lg text-[#1A1A1A]">
                       {quarter.quarter}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <p className="text-[#1A1A1A] text-2xl font-bold">{quarter.transactions.toLocaleString()}</p>
                     <p className="text-[#1A1A1A]/70 text-xs">Transactions</p>
-                    <div className="mt-3 pt-3 border-t border-gold/20">
+                    <div className="mt-3 pt-3 border-t border-[#B89555]/20">
                       <p className="text-[#1A1A1A]/70 text-sm">AED {quarter.avgPrice}/sqft</p>
                       <div className="w-full bg-[#EFE6D6] rounded-full h-1.5 mt-2">
                         <div 
@@ -418,7 +418,7 @@ const MarketOverview = () => {
                   className="jj-card-inner p-5 flex items-center justify-between"
                 >
                   <div>
-                    <p className="text-2xl font-bold mb-1 text-gold">
+                    <p className="text-2xl font-bold mb-1 text-[#1A1A1A]">
                       {type.type}
                     </p>
                     <p className="text-[#1A1A1A] text-sm">{type.volume.toLocaleString()} transactions</p>
@@ -447,8 +447,8 @@ const MarketOverview = () => {
             <div className="max-w-3xl mx-auto mt-8">
               <div className="jj-card-inner p-6 text-center">
                 <div className="flex items-center justify-center gap-4 mb-4">
-                  <Database className="w-5 h-5 text-gold" />
-                  <Shield className="w-5 h-5 text-gold" />
+                  <Database className="w-5 h-5 text-[#1A1A1A]" />
+                  <Shield className="w-5 h-5 text-[#1A1A1A]" />
                 </div>
                 <p className="text-[#1A1A1A]/70 text-sm whitespace-pre-line">{MARKET_DISCLAIMER}</p>
               </div>

@@ -148,7 +148,7 @@ const ComplaintProcedures = () => {
           {/* Video placeholder */}
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
-              <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center">
+              <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-[#EFE6D6]/20 border border-[#B89555]/40 flex items-center justify-center">
                 <AlertTriangle className="w-12 h-12 text-[#1A1A1A]/70" />
               </div>
               <p className="text-[#1A1A1A]/70 text-sm tracking-widest uppercase">How Complaints Are Handled</p>
@@ -159,8 +159,8 @@ const ComplaintProcedures = () => {
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/10 via-transparent to-transparent" />
         </div>
         
-        <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/10 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-gold/15 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-1/4 left-10 w-64 h-64 bg-[#EFE6D6]/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-[#EFE6D6]/15 rounded-full blur-[120px] pointer-events-none" />
 
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
@@ -169,9 +169,9 @@ const ComplaintProcedures = () => {
             transition={{ duration: 0.6 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-[#1A1A1A]/30 backdrop-blur-md">
-              <AlertTriangle className="w-4 h-4 text-gold" />
-              <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-[#B89555]/40 bg-[#1A1A1A]/30 backdrop-blur-md">
+              <AlertTriangle className="w-4 h-4 text-[#1A1A1A]" />
+              <span className="text-[#1A1A1A] font-semibold text-xs uppercase tracking-[0.2em]">
                 Services
               </span>
             </div>
@@ -251,7 +251,7 @@ const ComplaintProcedures = () => {
             <div className="max-w-4xl mx-auto">
               <div className="relative">
                 {/* Vertical line connector */}
-                <div className="absolute left-6 top-0 bottom-0 w-px bg-gold/30 hidden md:block" />
+                <div className="absolute left-6 top-0 bottom-0 w-px bg-[#EFE6D6]/30 hidden md:block" />
                 <div className="space-y-6">
                   {workflowSteps.map((step, index) => (
                     <motion.div
@@ -259,12 +259,12 @@ const ComplaintProcedures = () => {
                       variants={fadeInUp}
                       className="flex items-start gap-6"
                     >
-                      <div className="w-12 h-12 rounded-full bg-[#1A1A1A] flex items-center justify-center shrink-0 z-10 border-2 border-gold">
-                        <span className="text-gold font-bold">{step.step}</span>
+                      <div className="w-12 h-12 rounded-full bg-[#1A1A1A] flex items-center justify-center shrink-0 z-10 border-2 border-[#B89555]">
+                        <span className="text-[#1A1A1A] font-bold">{step.step}</span>
                       </div>
                       <div className="flex-1 jj-card-inner !p-4">
                         <div className="flex items-start gap-4">
-                          <step.icon className="w-6 h-6 text-gold shrink-0 mt-1" />
+                          <step.icon className="w-6 h-6 text-[#1A1A1A] shrink-0 mt-1" />
                           <div>
                             <h3 className="font-semibold text-[#1A1A1A]">{step.title}</h3>
                             <p className="text-sm text-[#1A1A1A]/70 mt-1">{step.description}</p>
@@ -302,7 +302,7 @@ const ComplaintProcedures = () => {
                 {whatYouReceive.map((item, index) => (
                   <div key={index} className="jj-card-inner flex items-center gap-4">
                     <div className="w-12 h-12 rounded-lg bg-[#1A1A1A] flex items-center justify-center shrink-0">
-                      <item.icon className="w-6 h-6 text-gold" />
+                      <item.icon className="w-6 h-6 text-[#1A1A1A]" />
                     </div>
                     <span className="text-[#1A1A1A]/70">{item.text}</span>
                   </div>
@@ -338,7 +338,7 @@ const ComplaintProcedures = () => {
               <ul className="space-y-4">
                 {goodComplaintFormat.map((item, idx) => (
                   <li key={idx} className="flex items-start gap-3 text-[#1A1A1A]/70">
-                    <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] shrink-0 mt-0.5" />
                     <span>{item}</span>
                   </li>
                 ))}
@@ -371,9 +371,9 @@ const ComplaintProcedures = () => {
                   <AccordionItem
                     key={index}
                     value={`item-${index}`}
-                    className="border-2 border-gold/30 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] overflow-hidden"
+                    className="border-2 border-[#B89555]/30 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] overflow-hidden"
                   >
-                    <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-gold/10">
+                    <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-[#EFE6D6]/10">
                       <span className="text-[#1A1A1A] font-medium">{faq.question}</span>
                     </AccordionTrigger>
                     <AccordionContent className="px-6 pb-4 text-[#1A1A1A]/70">
@@ -397,8 +397,8 @@ const ComplaintProcedures = () => {
             variants={fadeInUp}
             className="max-w-3xl mx-auto text-center"
           >
-            <div className="jj-card-inner border-2 border-gold/30">
-              <AlertTriangle className="w-12 h-12 text-gold mx-auto mb-6" />
+            <div className="jj-card-inner border-2 border-[#B89555]/30">
+              <AlertTriangle className="w-12 h-12 text-[#1A1A1A] mx-auto mb-6" />
               <h2
                 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4"
                 style={{ fontFamily: "Playfair Display, serif" }}

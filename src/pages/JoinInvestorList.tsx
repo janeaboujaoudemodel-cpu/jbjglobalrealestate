@@ -138,7 +138,7 @@ const JoinInvestorList = () => {
         <section className="pt-28 pb-8 px-4">
           <div className="max-w-5xl mx-auto text-center">
             <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
-              <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 bg-gold/15 border border-gold/40 px-4 py-1.5 text-gold text-sm font-semibold mb-5 tracking-wide uppercase">
+              <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 bg-[#EFE6D6]/15 border border-[#B89555]/40 px-4 py-1.5 text-[#1A1A1A] text-sm font-semibold mb-5 tracking-wide uppercase">
                 <Shield className="w-4 h-4" />
                 Exclusive Investor Access
               </motion.div>
@@ -165,9 +165,9 @@ const JoinInvestorList = () => {
           <div className="max-w-5xl mx-auto">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
               {benefits.map((b) => (
-                <div key={b.label} className="flex items-start gap-3 p-4 bg-[#FDFBF7]/60 border border-gold/20">
-                  <div className="w-9 h-9 bg-gold/15 flex items-center justify-center flex-shrink-0">
-                    <b.icon className="w-4.5 h-4.5 text-gold" />
+                <div key={b.label} className="flex items-start gap-3 p-4 bg-[#FDFBF7]/60 border border-[#B89555]/20">
+                  <div className="w-9 h-9 bg-[#EFE6D6]/15 flex items-center justify-center flex-shrink-0">
+                    <b.icon className="w-4.5 h-4.5 text-[#1A1A1A]" />
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-foreground leading-tight">{b.label}</p>
@@ -205,7 +205,7 @@ const JoinInvestorList = () => {
                 {/* Contact Details */}
                 <div className="space-y-1 mb-4">
                   <h3 className="text-lg font-bold text-foreground tracking-wide uppercase flex items-center gap-2">
-                    <span className="w-6 h-6 bg-gold/20 flex items-center justify-center text-gold text-xs font-bold">1</span>
+                    <span className="w-6 h-6 bg-[#EFE6D6]/20 flex items-center justify-center text-[#1A1A1A] text-xs font-bold">1</span>
                     Contact Details
                   </h3>
                   <p className="text-xs text-muted-foreground pl-8">Your primary contact information</p>
@@ -226,12 +226,12 @@ const JoinInvestorList = () => {
                 </div>
 
                 {/* Divider */}
-                <div className="h-px bg-gold/20" />
+                <div className="h-px bg-[#EFE6D6]/20" />
 
                 {/* Investor Profile */}
                 <div className="space-y-1 mb-4">
                   <h3 className="text-lg font-bold text-foreground tracking-wide uppercase flex items-center gap-2">
-                    <span className="w-6 h-6 bg-gold/20 flex items-center justify-center text-gold text-xs font-bold">2</span>
+                    <span className="w-6 h-6 bg-[#EFE6D6]/20 flex items-center justify-center text-[#1A1A1A] text-xs font-bold">2</span>
                     Investor Profile
                   </h3>
                   <p className="text-xs text-muted-foreground pl-8">Help us match you with the right opportunities</p>
@@ -323,7 +323,7 @@ const JoinInvestorList = () => {
                 </div>
 
                 {/* Divider */}
-                <div className="h-px bg-gold/20" />
+                <div className="h-px bg-[#EFE6D6]/20" />
 
                 {/* Consent */}
                 <div className="flex items-start gap-3">
@@ -333,7 +333,7 @@ const JoinInvestorList = () => {
                     onCheckedChange={(checked) => handleChange("consentToPrivacy", checked as boolean)}
                   />
                   <Label htmlFor="consent" className="text-sm text-muted-foreground cursor-pointer leading-relaxed">
-                    I agree to the <a href="/privacy" className="text-gold hover:underline font-medium">Privacy Policy</a> and
+                    I agree to the <a href="/privacy" className="text-[#1A1A1A] hover:underline font-medium">Privacy Policy</a> and
                     consent to being contacted regarding investor opportunities.
                   </Label>
                 </div>
@@ -341,7 +341,7 @@ const JoinInvestorList = () => {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A] font-bold h-12 text-base tracking-wide uppercase"
+                  className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-bold h-12 text-base tracking-wide uppercase"
                 >
                   {isSubmitting ? "Submitting..." : "Submit Investor Profile"}
                   <ArrowRight className="ml-2 h-5 w-5" />
@@ -352,9 +352,9 @@ const JoinInvestorList = () => {
         </section>
 
         {/* Footer Notice */}
-        <section className="py-6 border-t border-gold/20">
+        <section className="py-6 border-t border-[#B89555]/20">
           <div className="max-w-5xl mx-auto px-4 flex items-center justify-center gap-2">
-            <Shield className="w-4 h-4 text-gold" />
+            <Shield className="w-4 h-4 text-[#1A1A1A]" />
             <p className="text-center text-sm text-muted-foreground">
               Your details are confidential and accessible only to authorized JBJ administrators.
             </p>

@@ -34,7 +34,7 @@ const RiskBadge = ({ risk }: { risk: string }) => {
   const colors: Record<string, string> = {
     critical: "bg-red-500/20 text-red-400 border-red-500/30",
     high: "bg-orange-500/20 text-orange-400 border-orange-500/30",
-    medium: "bg-amber-500/20 text-amber-400 border-amber-500/30",
+    medium: "bg-amber-500/20 text-[#1A1A1A] border-amber-500/30",
     low: "bg-green-500/20 text-green-400 border-green-500/30",
   };
   return (
@@ -219,7 +219,7 @@ const ZeroTrustAuditPanel = () => {
                           {mod.backendEnforced ? (
                             <Lock className="w-3.5 h-3.5 text-green-400 mx-auto" />
                           ) : (
-                            <AlertTriangle className="w-3.5 h-3.5 text-amber-400 mx-auto" />
+                            <AlertTriangle className="w-3.5 h-3.5 text-[#1A1A1A] mx-auto" />
                           )}
                         </TableCell>
                       </TableRow>
@@ -313,7 +313,7 @@ const ZeroTrustAuditPanel = () => {
                           <Badge variant="outline" className={
                             event.event_type === "success" ? "border-green-500/50 text-green-400" :
                             event.event_type === "suspicious" ? "border-red-500/50 text-red-400" :
-                            "border-amber-500/50 text-amber-400"
+                            "border-amber-500/50 text-[#1A1A1A]"
                           }>
                             {event.event_type}
                           </Badge>
@@ -565,7 +565,7 @@ const ZeroTrustAuditPanel = () => {
           <Card className="border-border/50">
             <CardHeader>
               <CardTitle className="text-sm flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 text-amber-400" />
+                <AlertTriangle className="w-4 h-4 text-[#1A1A1A]" />
                 Anomaly Alerts (Last 30 Days)
               </CardTitle>
             </CardHeader>

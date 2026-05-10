@@ -117,7 +117,7 @@ const sectionColors: Record<string, { active: string; inactive: string; border: 
   sky: { active: 'text-sky-400 bg-sky-500/10', inactive: 'text-white/70 hover:text-sky-400', border: 'border-sky-400' },
   emerald: { active: 'text-emerald-400 bg-emerald-500/10', inactive: 'text-white/70 hover:text-emerald-400', border: 'border-emerald-400' },
   indigo: { active: 'text-indigo-400 bg-indigo-500/10', inactive: 'text-white/70 hover:text-indigo-400', border: 'border-indigo-400' },
-  amber: { active: 'text-amber-400 bg-amber-500/10', inactive: 'text-white/70 hover:text-amber-400', border: 'border-amber-400' },
+  amber: { active: 'text-[#1A1A1A] bg-amber-500/10', inactive: 'text-white/70 hover:text-[#1A1A1A]', border: 'border-amber-400' },
   lime: { active: 'text-lime-400 bg-lime-500/10', inactive: 'text-white/70 hover:text-lime-400', border: 'border-lime-400' },
   violet: { active: 'text-violet-400 bg-violet-500/10', inactive: 'text-white/70 hover:text-violet-400', border: 'border-violet-400' },
   fuchsia: { active: 'text-fuchsia-400 bg-fuchsia-500/10', inactive: 'text-white/70 hover:text-fuchsia-400', border: 'border-fuchsia-400' },
@@ -125,7 +125,7 @@ const sectionColors: Record<string, { active: string; inactive: string; border: 
 
 const LoadingSpinner = () => (
   <div className="min-h-[60vh] flex items-center justify-center">
-    <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold"></div>
+    <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#B89555]"></div>
   </div>
 );
 
@@ -190,7 +190,7 @@ const RealEstateSuite = () => {
         />
 
         {/* Section Tabs - Horizontal Pills */}
-        <div className="sticky top-0 lg:top-[48px] z-40 bg-zinc-900/95 backdrop-blur-sm border-b border-gold/20">
+        <div className="sticky top-0 lg:top-[48px] z-40 bg-[#FDFBF7]/95 backdrop-blur-sm border-b border-[#B89555]/20">
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex gap-1 py-3 overflow-x-auto scrollbar-hide">
               {SECTIONS.map((section) => {
@@ -218,7 +218,7 @@ const RealEstateSuite = () => {
         </div>
 
         {/* Tool Selector - Sub-tabs within section */}
-        <div className="bg-zinc-950 border-b border-[#1A1A1A]">
+        <div className="bg-[#FDFBF7] border-b border-[#1A1A1A]">
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex gap-2 py-3 overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch' }}>
               {currentSection.tools.map((tool) => {

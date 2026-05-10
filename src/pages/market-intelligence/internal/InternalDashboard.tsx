@@ -29,7 +29,7 @@ const InternalDashboard = () => {
       case 'high':
         return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">High Pressure</Badge>;
       case 'medium':
-        return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">Medium</Badge>;
+        return <Badge className="bg-amber-500/20 text-[#1A1A1A] border-amber-500/30">Medium</Badge>;
       default:
         return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">Low</Badge>;
     }
@@ -46,22 +46,22 @@ const InternalDashboard = () => {
       {/* Internal Warning Banner */}
       <div className="bg-amber-500/10 border-b border-amber-500/30 py-3">
         <div className="container mx-auto px-4 flex items-center justify-center gap-3">
-          <Lock className="w-4 h-4 text-amber-400" />
-          <span className="text-amber-400 text-sm font-medium">INTERNAL USE ONLY — Confidential Market Intelligence</span>
+          <Lock className="w-4 h-4 text-[#1A1A1A]" />
+          <span className="text-[#1A1A1A] text-sm font-medium">INTERNAL USE ONLY — Confidential Market Intelligence</span>
         </div>
       </div>
 
       {/* Header */}
       <section className="py-12 border-b border-zinc-900">
         <div className="container mx-auto px-4">
-          <Link to="/market-intelligence" className="inline-flex items-center gap-2 text-gold hover:text-gold-light mb-6">
+          <Link to="/market-intelligence" className="inline-flex items-center gap-2 text-[#1A1A1A] hover:text-[#1A1A1A]-light mb-6">
             <ArrowLeft className="w-4 h-4" />
             Back to Public Intelligence
           </Link>
 
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center">
-              <BarChart3 className="w-6 h-6 text-gold" />
+            <div className="w-12 h-12 rounded-xl bg-[#EFE6D6]/10 border border-[#B89555]/30 flex items-center justify-center">
+              <BarChart3 className="w-6 h-6 text-[#1A1A1A]" />
             </div>
             <div>
               <h1 className="text-white text-3xl font-bold">
@@ -77,7 +77,7 @@ const InternalDashboard = () => {
       <section className="py-8 border-b border-zinc-900">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <Card className="bg-zinc-900/50 border-[#1A1A1A]">
+            <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <Activity className="w-5 h-5 text-emerald-400" />
@@ -90,10 +90,10 @@ const InternalDashboard = () => {
                 </div>
               </CardContent>
             </Card>
-            <Card className="bg-zinc-900/50 border-[#1A1A1A]">
+            <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <Zap className="w-5 h-5 text-gold" />
+                  <Zap className="w-5 h-5 text-[#1A1A1A]" />
                   <div>
                     <p className="text-white/90 text-xs">Accelerating Markets</p>
                     <p className="text-white text-xl font-bold">
@@ -103,7 +103,7 @@ const InternalDashboard = () => {
                 </div>
               </CardContent>
             </Card>
-            <Card className="bg-zinc-900/50 border-[#1A1A1A]">
+            <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <Target className="w-5 h-5 text-blue-400" />
@@ -116,10 +116,10 @@ const InternalDashboard = () => {
                 </div>
               </CardContent>
             </Card>
-            <Card className="bg-zinc-900/50 border-[#1A1A1A]">
+            <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <AlertTriangle className="w-5 h-5 text-amber-400" />
+                  <AlertTriangle className="w-5 h-5 text-[#1A1A1A]" />
                   <div>
                     <p className="text-white/90 text-xs">Avg Days on Market</p>
                     <p className="text-white text-xl font-bold">
@@ -140,7 +140,7 @@ const InternalDashboard = () => {
           
           <div className="grid gap-4">
             {rentPressureSignals.map((signal) => (
-              <Card key={signal.area} className="bg-zinc-900/50 border-[#1A1A1A]">
+              <Card key={signal.area} className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between flex-wrap gap-4">
                     <div className="flex items-center gap-4">
@@ -189,7 +189,7 @@ const InternalDashboard = () => {
           <h2 className="text-white text-xl font-bold mb-6">Internal Tools</h2>
           <div className="grid md:grid-cols-3 gap-4">
             <Link to="/internal/market-intelligence/brokers">
-              <Card className="bg-zinc-900/50 border-[#1A1A1A] hover:border-gold/30 transition-all">
+              <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A] hover:border-[#B89555]/30 transition-all">
                 <CardContent className="p-6">
                   <h3 className="text-white font-bold mb-2">Broker Intelligence</h3>
                   <p className="text-white/90 text-sm">Conversion signals and performance data</p>
@@ -197,7 +197,7 @@ const InternalDashboard = () => {
               </Card>
             </Link>
             <Link to="/internal/market-intelligence/ai-insights">
-              <Card className="bg-zinc-900/50 border-[#1A1A1A] hover:border-gold/30 transition-all">
+              <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A] hover:border-[#B89555]/30 transition-all">
                 <CardContent className="p-6">
                   <h3 className="text-white font-bold mb-2">AI Market Narratives</h3>
                   <p className="text-white/90 text-sm">AI-generated execution insights</p>
@@ -205,7 +205,7 @@ const InternalDashboard = () => {
               </Card>
             </Link>
             <Link to="/internal/market-intelligence/data-ops">
-              <Card className="bg-zinc-900/50 border-[#1A1A1A] hover:border-gold/30 transition-all">
+              <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A] hover:border-[#B89555]/30 transition-all">
                 <CardContent className="p-6">
                   <h3 className="text-white font-bold mb-2">Data Operations</h3>
                   <p className="text-white/90 text-sm">Dataset management and audit logs</p>

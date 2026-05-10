@@ -69,15 +69,15 @@ const GovernmentMethodology: React.FC = () => {
           transition={{ delay: 0.1 }}
           className="mb-8"
         >
-          <Card className="border-gold/30 bg-gradient-to-r from-gold/5 to-transparent">
+          <Card className="border-[#B89555]/30 bg-gradient-to-r from-gold/5 to-transparent">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Building className="h-5 w-5 text-gold" />
+                <Building className="h-5 w-5 text-[#1A1A1A]" />
                 Official Positioning
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <blockquote className="text-lg font-medium border-l-4 border-gold pl-4 py-2">
+              <blockquote className="text-lg font-medium border-l-4 border-[#B89555] pl-4 py-2">
                 "{GOVERNMENT_POSTURE.OFFICIAL_STATEMENT}"
               </blockquote>
               <div className="mt-6 grid md:grid-cols-2 gap-6">
@@ -399,7 +399,7 @@ const GovernmentMethodology: React.FC = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="p-4 rounded-lg border-2 border-gold/30 bg-gold/5">
+                <div className="p-4 rounded-lg border-2 border-[#B89555]/30 bg-[#EFE6D6]/5">
                   <h3 className="font-semibold mb-2">Entity Status</h3>
                   <p className="text-sm">
                     <strong>{BRAND_LOCK.COMPANY_NAME}</strong> is a licensed private real estate brokerage 

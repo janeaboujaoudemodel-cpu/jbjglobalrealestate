@@ -99,7 +99,7 @@ export default function VatCertificate() {
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
-        <Card className="bg-[#F7F2EA] border-gold/20">
+        <Card className="bg-[#F7F2EA] border-[#B89555]/20">
           <CardHeader>
             <CardTitle className="text-[#1A1A1A] text-base">Details</CardTitle>
           </CardHeader>
@@ -120,7 +120,7 @@ export default function VatCertificate() {
               <Label className="text-[#1A1A1A]">Effective date</Label>
               <Input type="date" value={effective} onChange={(e) => setEffective(e.target.value)} />
             </div>
-            <div className="text-xs text-[#1A1A1A]/70 pt-2 border-t border-gold/15">
+            <div className="text-xs text-[#1A1A1A]/70 pt-2 border-t border-[#B89555]/15">
               <p>Signature: {sigDefault ? "✓ default loaded" : "— set one in Adopt Signature Studio"}</p>
               <p>Stamp: {stampDefault ? "✓ default loaded" : "— set one in Adopt Signature Studio"}</p>
             </div>
@@ -131,7 +131,7 @@ export default function VatCertificate() {
           </CardContent>
         </Card>
 
-        <Card className="bg-[#F7F2EA] border-gold/20">
+        <Card className="bg-[#F7F2EA] border-[#B89555]/20">
           <CardHeader>
             <CardTitle className="text-[#1A1A1A] text-base">Preview</CardTitle>
           </CardHeader>
@@ -140,16 +140,16 @@ export default function VatCertificate() {
               <iframe
                 title="VAT preview"
                 src={`data:application/pdf;base64,${pdfBase64}`}
-                className="w-full h-[500px] rounded-md border border-gold/20 bg-white"
+                className="w-full h-[500px] rounded-md border border-[#B89555]/20 bg-white"
               />
             ) : (
-              <div className="h-[500px] flex items-center justify-center border-2 border-dashed border-gold/25 rounded-md text-[#1A1A1A]/50 text-sm">
+              <div className="h-[500px] flex items-center justify-center border-2 border-dashed border-[#B89555]/25 rounded-md text-[#1A1A1A]/50 text-sm">
                 Generated PDF appears here
               </div>
             )}
             {pdfUrl && (
               <div className="flex flex-wrap gap-2 mt-3">
-                <Button asChild variant="outline" className="border-gold/40 text-[#1A1A1A]">
+                <Button asChild variant="outline" className="border-[#B89555]/40 text-[#1A1A1A]">
                   <a href={pdfUrl} target="_blank" rel="noreferrer">
                     <Download className="h-4 w-4 mr-2" />
                     Download

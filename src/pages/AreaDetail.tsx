@@ -161,7 +161,7 @@ const AreaDetail = () => {
     return (
       <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-10 h-10 text-gold animate-spin mx-auto mb-4" />
+          <Loader2 className="w-10 h-10 text-[#1A1A1A] animate-spin mx-auto mb-4" />
           <p className="text-white/70">Loading area...</p>
         </div>
       </div>
@@ -184,7 +184,7 @@ const AreaDetail = () => {
           placeholder="Search projects or developers..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full h-10 pl-9 pr-8 rounded-xl bg-[#FDFBF7]/70 border-2 border-gold/30 text-[#1A1A1A] text-sm placeholder:text-[#1A1A1A]/30 focus:outline-none focus:border-gold/60 transition-colors"
+          className="w-full h-10 pl-9 pr-8 rounded-xl bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 text-[#1A1A1A] text-sm placeholder:text-[#1A1A1A]/30 focus:outline-none focus:border-[#B89555]/60 transition-colors"
           style={{ fontSize: '16px' }}
         />
         {searchQuery && (
@@ -217,7 +217,7 @@ const AreaDetail = () => {
       <div ref={sentinelRef} className="h-0" />
 
       {/* Phase 1: Inline filter bar — always rendered in natural flow */}
-      <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] py-3 px-4 md:px-6 border-b border-gold/20 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
+      <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] py-3 px-4 md:px-6 border-b border-[#B89555]/20 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
         <div className="container mx-auto">
           <div className="flex flex-wrap items-center gap-3">
             {filterBarContent}
@@ -231,7 +231,7 @@ const AreaDetail = () => {
       {/* Phase 2: Fixed portal copy — only when scrolled past sentinel */}
       {isFixed && !bottomReached && createPortal(
         <div
-          className="fixed top-[88px] left-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] backdrop-blur-md bg-gradient-to-r from-[#FDFBF7]/90 via-[#F7F2EA]/90 to-[#EFE6D6]/90 border-b border-gold/20 py-2 px-2 sm:py-3 sm:px-4 transition-all duration-200 lg:left-[200px] [body.jj-vertical-nav-collapsed_&]:lg:left-[48px]"
+          className="fixed top-[88px] left-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] backdrop-blur-md bg-gradient-to-r from-[#FDFBF7]/90 via-[#F7F2EA]/90 to-[#EFE6D6]/90 border-b border-[#B89555]/20 py-2 px-2 sm:py-3 sm:px-4 transition-all duration-200 lg:left-[200px] [body.jj-vertical-nav-collapsed_&]:lg:left-[48px]"
         >
           <div className="container mx-auto px-4">
             <div className="flex flex-wrap items-center gap-3">
@@ -266,7 +266,7 @@ const AreaDetail = () => {
       <section id="area-cta-section" className="py-20 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
           <motion.div 
-            className="max-w-4xl mx-auto text-center rounded-3xl p-10 md:p-14 border-2 border-gold/30 relative overflow-hidden bg-[#FDFBF7]/70 backdrop-blur-sm"
+            className="max-w-4xl mx-auto text-center rounded-3xl p-10 md:p-14 border-2 border-[#B89555]/30 relative overflow-hidden bg-[#FDFBF7]/70 backdrop-blur-sm"
             style={{
               boxShadow: '0 30px 80px -20px rgba(200,167,102,0.15), 0 0 60px rgba(200,167,102,0.05)',
             }}
@@ -276,8 +276,8 @@ const AreaDetail = () => {
           >
             <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
             
-            <div className="w-14 h-14 rounded-2xl bg-gold/10 border border-gold/30 flex items-center justify-center mx-auto mb-6">
-              <MapPin className="w-7 h-7 text-gold" />
+            <div className="w-14 h-14 rounded-2xl bg-[#EFE6D6]/10 border border-[#B89555]/30 flex items-center justify-center mx-auto mb-6">
+              <MapPin className="w-7 h-7 text-[#1A1A1A]" />
             </div>
             <h2 className="text-[#1A1A1A] text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
               Properties in {area.name}
@@ -310,8 +310,8 @@ const AreaDetail = () => {
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
               {/* Header */}
               <div className="text-center mb-8">
-                <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
-                  <MapPin className="w-3.5 h-3.5 text-gold" />
+                <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-[#B89555] rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
+                  <MapPin className="w-3.5 h-3.5 text-[#1A1A1A]" />
                   <span className="text-[#1A1A1A]">Similar Areas</span>
                 </span>
                 <h2 className="text-white text-2xl md:text-3xl font-bold">
@@ -332,7 +332,7 @@ const AreaDetail = () => {
                   >
                     <Link
                       to={`/area/${relatedArea.slug}`}
-                      className="group relative block h-[200px] md:h-[220px] rounded-xl overflow-hidden border-[3px] border-transparent hover:border-gold transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.45)]"
+                      className="group relative block h-[200px] md:h-[220px] rounded-xl overflow-hidden border-[3px] border-transparent hover:border-[#B89555] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.45)]"
                     >
                       {/* Background photo or champagne fallback */}
                       {relatedArea.image_url ? (
@@ -366,11 +366,11 @@ const AreaDetail = () => {
                       {/* Bottom info */}
                       <div className="absolute bottom-0 left-0 right-0 p-3">
                         {relatedArea.property_count != null && relatedArea.property_count > 0 && (
-                          <span className="inline-block mb-1.5 px-2 py-0.5 rounded-full bg-[#1A1A1A]/60 text-gold text-[9px] font-semibold tracking-wide border border-gold/30">
+                          <span className="inline-block mb-1.5 px-2 py-0.5 rounded-full bg-[#1A1A1A]/60 text-[#1A1A1A] text-[9px] font-semibold tracking-wide border border-[#B89555]/30">
                             {relatedArea.property_count} Projects
                           </span>
                         )}
-                        <h3 className="text-white font-bold text-sm md:text-base leading-tight drop-shadow-lg group-hover:text-gold transition-colors duration-300">
+                        <h3 className="text-white font-bold text-sm md:text-base leading-tight drop-shadow-lg group-hover:text-[#1A1A1A] transition-colors duration-300">
                           {relatedArea.name}
                         </h3>
                       </div>
@@ -383,7 +383,7 @@ const AreaDetail = () => {
               <div className="text-center mt-8">
                 <Link
                   to="/areas"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold rounded-xl text-[#1A1A1A] font-semibold text-sm hover:shadow-[0_4px_20px_rgba(200,167,102,0.4)] hover:-translate-y-0.5 transition-all duration-300 group"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-[#B89555] rounded-xl text-[#1A1A1A] font-semibold text-sm hover:shadow-[0_4px_20px_rgba(200,167,102,0.4)] hover:-translate-y-0.5 transition-all duration-300 group"
                   style={{ boxShadow: "0 6px 20px rgba(200,167,102,0.3), inset 0 2px 4px rgba(255,255,255,0.8)" }}
                 >
                   <span>View All Areas</span>

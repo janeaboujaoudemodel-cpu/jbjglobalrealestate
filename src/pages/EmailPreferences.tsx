@@ -72,7 +72,7 @@ const EmailPreferences = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-gold" />
+        <Loader2 className="h-8 w-8 animate-spin text-[#1A1A1A]" />
       </div>
     );
   }
@@ -82,10 +82,10 @@ const EmailPreferences = () => {
       <div className="max-w-lg w-full rounded-2xl border border-border bg-[linear-gradient(135deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)),hsl(var(--champagne-3)))] p-8 space-y-6">
         {/* Header */}
         <div className="text-center">
-          <p className="text-2xl font-bold text-gold tracking-widest font-serif">JBJ GLOBAL</p>
+          <p className="text-2xl font-bold text-[#1A1A1A] tracking-widest font-serif">JBJ GLOBAL</p>
           <p className="text-xs tracking-[0.3em] text-muted-foreground mb-4">REAL ESTATE</p>
           <div className="flex items-center justify-center gap-2">
-            <Settings className="w-5 h-5 text-gold" />
+            <Settings className="w-5 h-5 text-[#1A1A1A]" />
             <h1 className="text-xl font-bold text-foreground">Manage Your Email Preferences</h1>
           </div>
           <p className="text-sm text-muted-foreground mt-2">
@@ -94,7 +94,7 @@ const EmailPreferences = () => {
         </div>
 
         {/* Master Toggle */}
-        <div className="flex items-center justify-between p-4 rounded-xl border-2 border-gold/30 bg-gold/5">
+        <div className="flex items-center justify-between p-4 rounded-xl border-2 border-[#B89555]/30 bg-[#EFE6D6]/5">
           <div>
             <p className="font-semibold text-foreground">Receive Marketing Emails</p>
             <p className="text-sm text-muted-foreground">Master switch for all email communications</p>
@@ -110,13 +110,13 @@ const EmailPreferences = () => {
           {PREFERENCE_CATEGORIES.map((cat) => (
             <label
               key={cat.id}
-              className="flex items-center gap-3 p-3 rounded-lg border border-border hover:border-gold/40 cursor-pointer transition-colors bg-card/50"
+              className="flex items-center gap-3 p-3 rounded-lg border border-border hover:border-[#B89555]/40 cursor-pointer transition-colors bg-card/50"
             >
               <input
                 type="checkbox"
                 checked={preferences.includes(cat.id)}
                 onChange={() => togglePreference(cat.id)}
-                className="w-4 h-4 rounded border-gold/50 text-gold focus:ring-gold/30 accent-[hsl(var(--gold))]"
+                className="w-4 h-4 rounded border-[#B89555]/50 text-[#1A1A1A] focus:ring-gold/30 accent-[hsl(var(--gold))]"
               />
               <div className="flex-1">
                 <p className="font-medium text-foreground text-sm">{cat.label}</p>
@@ -144,7 +144,7 @@ const EmailPreferences = () => {
         </Button>
 
         <div className="pt-4 border-t border-border text-center">
-          <Link to="/" className="text-sm text-gold hover:underline">
+          <Link to="/" className="text-sm text-[#1A1A1A] hover:underline">
             ← Back to JBJ Global Real Estate
           </Link>
         </div>

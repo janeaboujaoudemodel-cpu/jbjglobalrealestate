@@ -204,7 +204,7 @@ const AdminRoleManagement = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center pt-28">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold" />
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#B89555]" />
       </div>
     );
   }
@@ -212,14 +212,14 @@ const AdminRoleManagement = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] pt-24 lg:pt-28">
       {/* Header */}
-      <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-[88px] lg:top-[104px] z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
+      <header className="border-b-2 border-[#B89555]/40 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-[88px] lg:top-[104px] z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center gap-4">
             <Button
               variant="ghost"
               size="icon"
               onClick={() => navigate(-1)}
-              className="text-[#1A1A1A] hover:text-gold hover:bg-gold/10"
+              className="text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
             >
               <ArrowLeft className="w-5 h-5" />
             </Button>
@@ -241,10 +241,10 @@ const AdminRoleManagement = () => {
       <main className="container mx-auto px-4 py-6">
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Add New Role */}
-          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold shadow-lg">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] shadow-lg">
             <CardHeader>
               <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
-                <UserPlus className="w-5 h-5 text-gold" />
+                <UserPlus className="w-5 h-5 text-[#1A1A1A]" />
                 Add New Role
               </CardTitle>
               <CardDescription className="text-[#1A1A1A]/70">
@@ -258,13 +258,13 @@ const AdminRoleManagement = () => {
                   value={newUserEmail}
                   onChange={(e) => setNewUserEmail(e.target.value)}
                   placeholder="user@example.com"
-                  className="bg-[#FDFBF7] border-gold/40 text-[#1A1A1A] mt-1"
+                  className="bg-[#FDFBF7] border-[#B89555]/40 text-[#1A1A1A] mt-1"
                 />
               </div>
               <div>
                 <Label className="text-[#1A1A1A]">Role</Label>
                 <Select value={newUserRole} onValueChange={setNewUserRole}>
-                  <SelectTrigger className="bg-[#FDFBF7] border-gold/40 text-[#1A1A1A] mt-1">
+                  <SelectTrigger className="bg-[#FDFBF7] border-[#B89555]/40 text-[#1A1A1A] mt-1">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -300,25 +300,25 @@ const AdminRoleManagement = () => {
           </Card>
 
           {/* Role Statistics */}
-          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold shadow-lg">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] shadow-lg">
             <CardHeader>
               <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
-                <Users className="w-5 h-5 text-gold" />
+                <Users className="w-5 h-5 text-[#1A1A1A]" />
                 Role Statistics
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 bg-[#FDFBF7] rounded-lg border border-gold/20">
+                <div className="p-4 bg-[#FDFBF7] rounded-lg border border-[#B89555]/20">
                   <div className="flex items-center gap-2 mb-2">
-                    <Crown className="w-5 h-5 text-gold" />
+                    <Crown className="w-5 h-5 text-[#1A1A1A]" />
                     <span className="text-[#1A1A1A]/70 text-sm">System Roles</span>
                   </div>
                   <p className="text-[#1A1A1A] text-2xl font-bold">{userRoles.length}</p>
                 </div>
-                <div className="p-4 bg-[#FDFBF7] rounded-lg border border-gold/20">
+                <div className="p-4 bg-[#FDFBF7] rounded-lg border border-[#B89555]/20">
                   <div className="flex items-center gap-2 mb-2">
-                    <Building2 className="w-5 h-5 text-gold" />
+                    <Building2 className="w-5 h-5 text-[#1A1A1A]" />
                     <span className="text-[#1A1A1A]/70 text-sm">Listing Admins</span>
                   </div>
                   <p className="text-[#1A1A1A] text-2xl font-bold">{listingAdmins.length}</p>
@@ -329,17 +329,17 @@ const AdminRoleManagement = () => {
         </div>
 
         {/* System Roles Table */}
-        <Card className="mt-6 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold shadow-lg">
+        <Card className="mt-6 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] shadow-lg">
           <CardHeader>
             <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
-              <Crown className="w-5 h-5 text-gold" />
+              <Crown className="w-5 h-5 text-[#1A1A1A]" />
               System Roles (Admin/Owner)
             </CardTitle>
           </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
-                <TableRow className="border-gold/20">
+                <TableRow className="border-[#B89555]/20">
                   <TableHead className="text-[#1A1A1A]">User ID</TableHead>
                   <TableHead className="text-[#1A1A1A]">Role</TableHead>
                   <TableHead className="text-[#1A1A1A]">Created</TableHead>
@@ -348,12 +348,12 @@ const AdminRoleManagement = () => {
               </TableHeader>
               <TableBody>
                 {userRoles.map((role) => (
-                  <TableRow key={role.id} className="border-gold/20">
+                  <TableRow key={role.id} className="border-[#B89555]/20">
                     <TableCell className="text-[#1A1A1A]/70 font-mono text-sm">
                       {role.user_id.slice(0, 8)}...
                     </TableCell>
                     <TableCell>
-                      <Badge className={role.role === "owner" ? "bg-gold text-[#1A1A1A]" : "bg-[#1A1A1A] text-white"}>
+                      <Badge className={role.role === "owner" ? "bg-[#EFE6D6] text-[#1A1A1A]" : "bg-[#1A1A1A] text-white"}>
                         {role.role}
                       </Badge>
                     </TableCell>
@@ -401,17 +401,17 @@ const AdminRoleManagement = () => {
         </Card>
 
         {/* Listing Admins Table */}
-        <Card className="mt-6 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold shadow-lg">
+        <Card className="mt-6 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] shadow-lg">
           <CardHeader>
             <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
-              <Building2 className="w-5 h-5 text-gold" />
+              <Building2 className="w-5 h-5 text-[#1A1A1A]" />
               Listing Administrators
             </CardTitle>
           </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
-                <TableRow className="border-gold/20">
+                <TableRow className="border-[#B89555]/20">
                   <TableHead className="text-[#1A1A1A]">Name</TableHead>
                   <TableHead className="text-[#1A1A1A]">Email</TableHead>
                   <TableHead className="text-[#1A1A1A]">Status</TableHead>
@@ -421,7 +421,7 @@ const AdminRoleManagement = () => {
               </TableHeader>
               <TableBody>
                 {listingAdmins.map((admin) => (
-                  <TableRow key={admin.id} className="border-gold/20">
+                  <TableRow key={admin.id} className="border-[#B89555]/20">
                     <TableCell className="text-[#1A1A1A] font-medium">
                       {admin.display_name}
                     </TableCell>

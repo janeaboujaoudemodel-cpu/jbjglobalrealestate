@@ -103,7 +103,7 @@ const DeveloperModerationQueue = () => {
   const critBadge = (type: string) => {
     const map: Record<string, string> = {
       upload: 'bg-blue-500/20 text-blue-400',
-      edit: 'bg-amber-500/20 text-amber-400',
+      edit: 'bg-amber-500/20 text-[#1A1A1A]',
       duplicate_attempt: 'bg-red-500/20 text-red-400',
       failed_upload: 'bg-red-500/20 text-red-400',
       file_rejected: 'bg-red-500/20 text-red-400',
@@ -236,7 +236,7 @@ const DeveloperModerationQueue = () => {
                           <TableCell className="text-xs text-muted-foreground">
                             {item.created_at ? format(new Date(item.created_at), 'MMM d, HH:mm') : '-'}
                           </TableCell>
-                          <TableCell><Badge className="bg-amber-500/20 text-amber-400">Pending</Badge></TableCell>
+                          <TableCell><Badge className="bg-amber-500/20 text-[#1A1A1A]">Pending</Badge></TableCell>
                         </TableRow>
                       ))}
                       {(pendingChanges || []).map((item: any) => (
@@ -248,7 +248,7 @@ const DeveloperModerationQueue = () => {
                           <TableCell className="text-xs text-muted-foreground">
                             {item.created_at ? format(new Date(item.created_at), 'MMM d, HH:mm') : '-'}
                           </TableCell>
-                          <TableCell><Badge className="bg-amber-500/20 text-amber-400">Pending</Badge></TableCell>
+                          <TableCell><Badge className="bg-amber-500/20 text-[#1A1A1A]">Pending</Badge></TableCell>
                         </TableRow>
                       ))}
                       {(pendingSubmissions || []).map((item: any) => (
@@ -269,7 +269,7 @@ const DeveloperModerationQueue = () => {
                           <TableCell className="text-xs text-muted-foreground">
                             {item.created_at ? format(new Date(item.created_at), 'MMM d, HH:mm') : '-'}
                           </TableCell>
-                          <TableCell><Badge className="bg-amber-500/20 text-amber-400">Pending</Badge></TableCell>
+                          <TableCell><Badge className="bg-amber-500/20 text-[#1A1A1A]">Pending</Badge></TableCell>
                         </TableRow>
                       ))}
                     </TableBody>

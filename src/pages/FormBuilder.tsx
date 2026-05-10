@@ -206,7 +206,7 @@ const FormBuilder = () => {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white">
+    <div className="min-h-screen bg-[#FDFBF7] text-white">
       {/* Header */}
       <div className="border-b border-[#1A1A1A] px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
@@ -265,7 +265,7 @@ const FormBuilder = () => {
 
             {/* Form Editor */}
             <div className="flex-1 p-8 max-w-3xl mx-auto">
-              <Card className="bg-zinc-900 border-[#1A1A1A] mb-6">
+              <Card className="bg-[#FDFBF7] border-[#1A1A1A] mb-6">
                 <CardContent className="pt-6">
                   <Input
                     value={formTitle}
@@ -290,7 +290,7 @@ const FormBuilder = () => {
               ) : (
                 <div className="space-y-4">
                   {fields.map((field) => (
-                    <Card key={field.id} className="bg-zinc-900 border-[#1A1A1A]">
+                    <Card key={field.id} className="bg-[#FDFBF7] border-[#1A1A1A]">
                       <CardContent className="pt-6">
                         <div className="flex items-start gap-4">
                           <GripVertical className="w-5 h-5 text-[#1A1A1A]/70 cursor-grab mt-2" />
@@ -374,7 +374,7 @@ const FormBuilder = () => {
 
         {view === "preview" && (
           <div className="flex-1 p-8 max-w-2xl mx-auto">
-            <Card className="bg-zinc-900 border-[#1A1A1A]">
+            <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
               <CardHeader>
                 <CardTitle className="text-2xl">{formTitle}</CardTitle>
                 <p className="text-white/70">{formDescription}</p>

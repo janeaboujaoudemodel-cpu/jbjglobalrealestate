@@ -126,7 +126,7 @@ const InvestorEducation = () => {
         title={
           <>
             Understanding Real Estate Investment{" "}
-            <span className="text-gold">in the UAE</span>
+            <span className="text-[#1A1A1A]">in the UAE</span>
           </>
         }
         description="Real estate investment in the UAE operates within a regulated, transparent framework supported by government planning, long-term infrastructure development, and clear ownership laws. At JBJ Global Real Estate, investment education is a core responsibility — not a sales approach."
@@ -141,7 +141,7 @@ const InvestorEducation = () => {
                 boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
               }}
             >
-              <ArrowDown className="w-4 h-4 text-gold group-hover:text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+              <ArrowDown className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
               <span className="text-white group-hover:text-[#1A1A1A] transition-colors">Read the Full Guide</span>
               <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
             </button>
@@ -153,7 +153,7 @@ const InvestorEducation = () => {
                   boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
                 }}
               >
-                <HelpCircle className="w-4 h-4 text-gold group-hover:text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+                <HelpCircle className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                 <span className="text-white group-hover:text-[#1A1A1A] transition-colors">View Investor FAQs</span>
                 <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
               </button>
@@ -172,13 +172,13 @@ const InvestorEducation = () => {
           <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
             <div className="max-w-5xl mx-auto">
               {/* Layer 3 Card */}
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-2xl p-8 md:p-12">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl p-8 md:p-12">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 flex items-center justify-center">
                     <Target className="w-6 h-6 text-[#1A1A1A]" />
                   </div>
                   <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
-                    <span className="text-gold">Overview</span>
+                    <span className="text-[#1A1A1A]">Overview</span>
                   </h2>
                 </div>
                 <p className="text-[#1A1A1A]/70 text-lg leading-relaxed mb-6">
@@ -197,13 +197,13 @@ const InvestorEducation = () => {
           <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
             <div className="max-w-5xl mx-auto">
               {/* Layer 3 Card */}
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-2xl p-8 md:p-12">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl p-8 md:p-12">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 flex items-center justify-center">
                     <Briefcase className="w-6 h-6 text-[#1A1A1A]" />
                   </div>
                   <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
-                    <span className="text-gold">How</span> Real Estate Investment Works
+                    <span className="text-[#1A1A1A]">How</span> Real Estate Investment Works
                   </h2>
                 </div>
                 <p className="text-[#1A1A1A]/70 mb-6">
@@ -211,9 +211,9 @@ const InvestorEducation = () => {
                 </p>
                 <div className="space-y-4 mb-6">
                   {investmentFactors.map((factor, index) => (
-                    <div key={index} className="flex items-center gap-4 p-4 bg-[#FDFBF7]/60 rounded-xl border border-gold/20">
-                      <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center flex-shrink-0">
-                        <span className="text-gold font-bold">{index + 1}</span>
+                    <div key={index} className="flex items-center gap-4 p-4 bg-[#FDFBF7]/60 rounded-xl border border-[#B89555]/20">
+                      <div className="w-10 h-10 rounded-full bg-[#EFE6D6]/10 flex items-center justify-center flex-shrink-0">
+                        <span className="text-[#1A1A1A] font-bold">{index + 1}</span>
                       </div>
                       <span className="text-[#1A1A1A]/70 font-medium">{factor}</span>
                     </div>
@@ -233,20 +233,20 @@ const InvestorEducation = () => {
             <div className="max-w-5xl mx-auto">
               <div className="text-center mb-12">
                 <div className="inline-flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 flex items-center justify-center">
                     <Building className="w-6 h-6 text-[#1A1A1A]" />
                   </div>
                 </div>
                 <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4">
-                  <span className="text-gold">Types</span> of Real Estate Investments
+                  <span className="text-[#1A1A1A]">Types</span> of Real Estate Investments
                 </h2>
               </div>
 
               <div className="space-y-8">
                 {/* Off-Plan Properties - Layer 3 */}
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-2xl p-8">
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl p-8">
                   <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-12 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-xl flex items-center justify-center">
+                    <div className="w-12 h-12 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-xl flex items-center justify-center">
                       <Clock className="w-6 h-6 text-[#1A1A1A]" />
                     </div>
                     <h3 className="text-xl font-semibold text-[#1A1A1A]">Off-Plan Properties</h3>
@@ -257,12 +257,12 @@ const InvestorEducation = () => {
                   <ul className="space-y-3 mb-6">
                     {offPlanBenefits.map((point, index) => (
                       <li key={index} className="flex items-start gap-3">
-                        <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                        <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
                         <span className="text-[#1A1A1A]/70">{point}</span>
                       </li>
                     ))}
                   </ul>
-                  <div className="p-4 bg-[#FDFBF7]/60 border border-gold/20 rounded-xl">
+                  <div className="p-4 bg-[#FDFBF7]/60 border border-[#B89555]/20 rounded-xl">
                     <p className="text-[#1A1A1A]/70 text-sm">
                       <strong>Important:</strong> For off-plan purchases, buyers do not pay any agency fees. Licensed brokerages are compensated directly by developers. Our role is to analyze projects across the market, compare developers, locations, pricing, and timelines, and guide investors toward options aligned with their objectives — without cost to the buyer.
                     </p>
@@ -270,9 +270,9 @@ const InvestorEducation = () => {
                 </div>
 
                 {/* Ready Properties - Layer 3 */}
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-2xl p-8">
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl p-8">
                   <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-12 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-xl flex items-center justify-center">
+                    <div className="w-12 h-12 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-xl flex items-center justify-center">
                       <Building className="w-6 h-6 text-[#1A1A1A]" />
                     </div>
                     <h3 className="text-xl font-semibold text-[#1A1A1A]">Ready Properties</h3>
@@ -283,12 +283,12 @@ const InvestorEducation = () => {
                   <ul className="space-y-3 mb-6">
                     {readyBenefits.map((point, index) => (
                       <li key={index} className="flex items-start gap-3">
-                        <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                        <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
                         <span className="text-[#1A1A1A]/70">{point}</span>
                       </li>
                     ))}
                   </ul>
-                  <div className="p-4 bg-[#FDFBF7]/60 border border-gold/20 rounded-xl">
+                  <div className="p-4 bg-[#FDFBF7]/60 border border-[#B89555]/20 rounded-xl">
                     <p className="text-[#1A1A1A]/70 text-sm">
                       For ready property purchases, standard agency fees apply in accordance with Dubai regulations. These fees are disclosed clearly before any transaction proceeds.
                     </p>
@@ -305,12 +305,12 @@ const InvestorEducation = () => {
             <div className="max-w-5xl mx-auto">
               <div className="text-center mb-12">
                 <div className="inline-flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 flex items-center justify-center">
                     <TrendingUp className="w-6 h-6 text-[#1A1A1A]" />
                   </div>
                 </div>
                 <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4">
-                  <span className="text-gold">Investment</span> Objectives
+                  <span className="text-[#1A1A1A]">Investment</span> Objectives
                 </h2>
                 <p className="text-[#1A1A1A]/70 max-w-2xl mx-auto">
                   Every investor enters the market with a different objective. Understanding the objective is essential before selecting a location, property type, or developer.
@@ -322,10 +322,10 @@ const InvestorEducation = () => {
                 {investmentObjectives.map((objective, index) => (
                   <div 
                     key={index}
-                    className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-2xl p-8 hover:border-gold hover:shadow-lg hover:shadow-gold/10 transition-all"
+                    className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl p-8 hover:border-[#B89555] hover:shadow-lg hover:shadow-gold/10 transition-all"
                   >
                     <div className="flex items-center gap-4 mb-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <div className="w-12 h-12 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-xl flex items-center justify-center flex-shrink-0">
                         <objective.icon className="w-6 h-6 text-[#1A1A1A]" />
                       </div>
                       <h3 className="text-xl font-semibold text-[#1A1A1A]">{objective.title}</h3>
@@ -343,13 +343,13 @@ const InvestorEducation = () => {
           <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
             <div className="max-w-5xl mx-auto">
               {/* Layer 3 Card */}
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-2xl p-8 md:p-12">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl p-8 md:p-12">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 flex items-center justify-center">
                     <Database className="w-6 h-6 text-[#1A1A1A]" />
                   </div>
                   <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
-                    <span className="text-gold">Market Analysis</span> & Data-Based Evaluation
+                    <span className="text-[#1A1A1A]">Market Analysis</span> & Data-Based Evaluation
                   </h2>
                 </div>
                 <p className="text-[#1A1A1A]/70 mb-6">
@@ -358,7 +358,7 @@ const InvestorEducation = () => {
                 <div className="space-y-3 mb-6">
                   {marketAnalysisFactors.map((factor, index) => (
                     <div key={index} className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                      <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] mt-0.5 flex-shrink-0" />
                       <span className="text-[#1A1A1A]/70">{factor}</span>
                     </div>
                   ))}
@@ -376,13 +376,13 @@ const InvestorEducation = () => {
           <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
             <div className="max-w-4xl mx-auto">
               {/* Layer 3 Card */}
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-2xl p-8 md:p-12">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl p-8 md:p-12">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 flex items-center justify-center">
                     <AlertTriangle className="w-6 h-6 text-[#1A1A1A]" />
                   </div>
                   <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
-                    <span className="text-gold">Risk</span> Awareness
+                    <span className="text-[#1A1A1A]">Risk</span> Awareness
                   </h2>
                 </div>
                 <p className="text-[#1A1A1A]/70 text-lg leading-relaxed mb-6">
@@ -406,13 +406,13 @@ const InvestorEducation = () => {
           <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
             <div className="max-w-4xl mx-auto">
               {/* Layer 3 Card */}
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-2xl p-8 md:p-12">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl p-8 md:p-12">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 flex items-center justify-center">
                     <Shield className="w-6 h-6 text-[#1A1A1A]" />
                   </div>
                   <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
-                    <span className="text-gold">Role of</span> JBJ Global Real Estate
+                    <span className="text-[#1A1A1A]">Role of</span> JBJ Global Real Estate
                   </h2>
                 </div>
                 <p className="text-[#1A1A1A]/70 mb-6">
@@ -421,7 +421,7 @@ const InvestorEducation = () => {
                 <div className="space-y-3 mb-6">
                   {jbjRole.map((item, index) => (
                     <div key={index} className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                      <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] mt-0.5 flex-shrink-0" />
                       <span className="text-[#1A1A1A]/70">{item}</span>
                     </div>
                   ))}
@@ -439,13 +439,13 @@ const InvestorEducation = () => {
           <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
             <div className="max-w-4xl mx-auto">
               {/* Layer 3 Card */}
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-2xl p-8 md:p-12">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl p-8 md:p-12">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 flex items-center justify-center">
                     <Eye className="w-6 h-6 text-[#1A1A1A]" />
                   </div>
                   <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
-                    <span className="text-gold">Long-Term</span> Perspective
+                    <span className="text-[#1A1A1A]">Long-Term</span> Perspective
                   </h2>
                 </div>
                 <p className="text-[#1A1A1A]/70 text-lg leading-relaxed mb-6">

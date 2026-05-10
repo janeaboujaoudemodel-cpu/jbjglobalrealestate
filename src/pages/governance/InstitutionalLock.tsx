@@ -41,7 +41,7 @@ const InstitutionalLock: React.FC = () => {
           </Button>
           <div className="flex-1">
             <h1 className="text-3xl font-bold flex items-center gap-3">
-              <Lock className="h-8 w-8 text-gold" />
+              <Lock className="h-8 w-8 text-[#1A1A1A]" />
               Institutional Lock
             </h1>
             <p className="text-muted-foreground mt-1">
@@ -60,7 +60,7 @@ const InstitutionalLock: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <Card className="border-gold/30 bg-gradient-to-r from-gold/5 to-transparent">
+          <Card className="border-[#B89555]/30 bg-gradient-to-r from-gold/5 to-transparent">
             <CardContent className="p-6">
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
                 {Object.entries(SYSTEM_STATUS.CHECKS).map(([key, value]) => (
@@ -114,7 +114,7 @@ const InstitutionalLock: React.FC = () => {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Lock className="h-5 w-5 text-gold" />
+                    <Lock className="h-5 w-5 text-[#1A1A1A]" />
                     Immutable Constants
                   </CardTitle>
                   <CardDescription>These values are constants, not content</CardDescription>
@@ -337,15 +337,15 @@ const InstitutionalLock: React.FC = () => {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Lock className="h-5 w-5 text-gold" />
+                    <Lock className="h-5 w-5 text-[#1A1A1A]" />
                     JBJ Owns (Non-Negotiable)
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
                     {PARTNER_LOCK.JBJ_OWNS.map((item, i) => (
-                      <div key={i} className="flex items-center gap-2 p-3 rounded-lg bg-gold/10 border border-gold/30">
-                        <CheckCircle2 className="h-4 w-4 text-gold shrink-0" />
+                      <div key={i} className="flex items-center gap-2 p-3 rounded-lg bg-[#EFE6D6]/10 border border-[#B89555]/30">
+                        <CheckCircle2 className="h-4 w-4 text-[#1A1A1A] shrink-0" />
                         <span className="text-sm font-medium">{item.replace(/_/g, ' ')}</span>
                       </div>
                     ))}
@@ -458,8 +458,8 @@ const InstitutionalLock: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="mt-6 p-4 rounded-lg bg-gold/10 border border-gold/30 text-center">
-                    <p className="font-bold text-gold">{BEHAVIOR_RULES.AUTHORITY}</p>
+                  <div className="mt-6 p-4 rounded-lg bg-[#EFE6D6]/10 border border-[#B89555]/30 text-center">
+                    <p className="font-bold text-[#1A1A1A]">{BEHAVIOR_RULES.AUTHORITY}</p>
                   </div>
                 </CardContent>
               </Card>

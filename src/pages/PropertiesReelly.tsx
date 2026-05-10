@@ -259,7 +259,7 @@ const PropertiesReelly = () => {
       <PropertiesHeroVideo>
         <div className="relative z-10 max-w-3xl">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
-            Discover Dubai's Finest <span className="text-gold">Off-Plan</span> Properties
+            Discover Dubai's Finest <span className="text-[#1A1A1A]">Off-Plan</span> Properties
           </h1>
           <p className="text-white/80 text-sm sm:text-base md:text-lg mb-6 max-w-xl">
             Browse {totalCount.toLocaleString()} curated developments from Dubai's top developers
@@ -290,8 +290,8 @@ const PropertiesReelly = () => {
                   {isDbLoading ? (
                     <span className="text-[#1A1A1A]/40 animate-pulse">Loading properties…</span>
                   ) : (
-                    <>Showing <span className="text-gold font-medium">{sortedProjects.length}</span> of{' '}
-                    <span className="text-gold font-medium">{totalCount.toLocaleString()}</span> properties</>
+                    <>Showing <span className="text-[#1A1A1A] font-medium">{sortedProjects.length}</span> of{' '}
+                    <span className="text-[#1A1A1A] font-medium">{totalCount.toLocaleString()}</span> properties</>
                   )}
                 </p>
               </div>
@@ -312,7 +312,7 @@ const PropertiesReelly = () => {
                 </div>
               ) : (
                 <div className="text-center py-12">
-                  <Search className="w-10 h-10 text-gold mx-auto mb-3" />
+                  <Search className="w-10 h-10 text-[#1A1A1A] mx-auto mb-3" />
                   <p className="text-[#1A1A1A]/60">No properties found</p>
                 </div>
               )}
@@ -350,8 +350,8 @@ const PropertiesReelly = () => {
                 <p className="text-[#1A1A1A]/40 animate-pulse">Loading curated developments…</p>
               ) : (
                 <p className="text-[#1A1A1A]/70">
-                  Showing <span className="text-gold font-medium">{paginatedProjects.length}</span> of{' '}
-                  <span className="text-gold font-medium">{sortedProjects.length.toLocaleString()}</span> properties
+                  Showing <span className="text-[#1A1A1A] font-medium">{paginatedProjects.length}</span> of{' '}
+                  <span className="text-[#1A1A1A] font-medium">{sortedProjects.length.toLocaleString()}</span> properties
                   {totalPages > 1 && (
                     <span className="text-[#1A1A1A]/40 ml-2">· Page {currentPage} of {totalPages}</span>
                   )}
@@ -361,7 +361,7 @@ const PropertiesReelly = () => {
               <select
                 value={shortcutFilters.sortBy || ''}
                 onChange={(e) => setShortcutFilters(prev => ({ ...prev, sortBy: e.target.value as any }))}
-                className="px-3 py-2 rounded-lg border border-gold/30 bg-[#FDFBF7]/70 text-[#1A1A1A]/80 text-sm focus:outline-none focus:ring-2 focus:ring-gold/40"
+                className="px-3 py-2 rounded-lg border border-[#B89555]/30 bg-[#FDFBF7]/70 text-[#1A1A1A]/80 text-sm focus:outline-none focus:ring-2 focus:ring-gold/40"
               >
                 <option value="">Sort by</option>
                 <option value="newest">Newest First</option>
@@ -411,7 +411,7 @@ const PropertiesReelly = () => {
                     <button
                       onClick={() => handlePageChange(currentPage - 1)}
                       disabled={currentPage === 1}
-                      className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-gold/30 bg-[#FDFBF7]/60 text-[#1A1A1A]/70 hover:bg-gold hover:text-[#1A1A1A] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                      className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-[#B89555]/30 bg-[#FDFBF7]/60 text-[#1A1A1A]/70 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                     >
                       <ChevronLeft className="w-4 h-4" />
                       Previous
@@ -426,8 +426,8 @@ const PropertiesReelly = () => {
                           onClick={() => handlePageChange(page)}
                           className={`w-10 h-10 rounded-lg text-sm font-medium transition-all ${
                             page === currentPage
-                              ? 'bg-gold text-[#1A1A1A] shadow-md'
-                              : 'bg-[#FDFBF7]/60 border border-gold/30 text-[#1A1A1A]/70 hover:bg-gold/20'
+                              ? 'bg-[#EFE6D6] text-[#1A1A1A] shadow-md'
+                              : 'bg-[#FDFBF7]/60 border border-[#B89555]/30 text-[#1A1A1A]/70 hover:bg-[#EFE6D6]/20'
                           }`}
                         >
                           {page}
@@ -438,7 +438,7 @@ const PropertiesReelly = () => {
                     <button
                       onClick={() => handlePageChange(currentPage + 1)}
                       disabled={currentPage === totalPages}
-                      className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-gold/30 bg-[#FDFBF7]/60 text-[#1A1A1A]/70 hover:bg-gold hover:text-[#1A1A1A] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                      className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-[#B89555]/30 bg-[#FDFBF7]/60 text-[#1A1A1A]/70 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                     >
                       Next
                       <ChevronRight className="w-4 h-4" />
@@ -448,8 +448,8 @@ const PropertiesReelly = () => {
               </>
             ) : (
               <div className="text-center py-20 px-4">
-                <div className="w-20 h-20 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-full flex items-center justify-center mx-auto mb-6 border border-gold/30 shadow-[0_0_30px_rgba(200,167,102,0.3)]">
-                  <Search className="w-10 h-10 text-gold drop-shadow-[0_0_8px_rgba(200,167,102,0.5)]" />
+                <div className="w-20 h-20 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-full flex items-center justify-center mx-auto mb-6 border border-[#B89555]/30 shadow-[0_0_30px_rgba(200,167,102,0.3)]">
+                  <Search className="w-10 h-10 text-[#1A1A1A] drop-shadow-[0_0_8px_rgba(200,167,102,0.5)]" />
                 </div>
                 <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">No Properties Found</h3>
                 <p className="text-[#1A1A1A]/70 mb-4">Try adjusting your search filters or browse all properties.</p>
@@ -457,7 +457,7 @@ const PropertiesReelly = () => {
                   <Button onClick={() => setShortcutFilters(defaultShortcutFilters)} variant="primary" className="h-12 px-8">
                     Browse All Properties
                   </Button>
-                  <Button onClick={() => refetchProjects()} variant="outline" className="border-gold/40 text-gold hover:bg-gold/10 h-12 px-6">
+                  <Button onClick={() => refetchProjects()} variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 h-12 px-6">
                     Retry Loading
                   </Button>
                   <Button asChild variant="outline" className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#F7F2EA] h-12 px-6">

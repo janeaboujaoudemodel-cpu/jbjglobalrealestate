@@ -10,8 +10,8 @@ const corporateTools = [
     title: "Smart Stamp Generator",
     description: "Create bilingual professional company stamps and seals. Export as SVG, PNG, or PDF.",
     href: "/toolkit/stamp-generator",
-    colorClass: "text-gold",
-    borderColorClass: "border-gold/40",
+    colorClass: "text-[#1A1A1A]",
+    borderColorClass: "border-[#B89555]/40",
     gradientFrom: "from-amber-700",
     gradientTo: "to-yellow-600",
   },
@@ -20,8 +20,8 @@ const corporateTools = [
     title: "Business Card Designer",
     description: "Design premium digital and print-ready business cards with 7 shapes and custom branding.",
     href: "/toolkit/corporate-suite/business-card",
-    colorClass: "text-gold",
-    borderColorClass: "border-gold/40",
+    colorClass: "text-[#1A1A1A]",
+    borderColorClass: "border-[#B89555]/40",
     gradientFrom: "from-gold",
     gradientTo: "to-amber-600",
   },
@@ -103,8 +103,8 @@ const productivityTools = [
     title: "Business Card Scanner",
     description: "Scan and digitize business cards instantly with AI-powered OCR and contact extraction.",
     href: "/business-card-scanner",
-    colorClass: "text-gold",
-    borderColorClass: "border-gold/40",
+    colorClass: "text-[#1A1A1A]",
+    borderColorClass: "border-[#B89555]/40",
     gradientFrom: "from-gold",
     gradientTo: "to-amber-600",
   },
@@ -123,8 +123,8 @@ const productivityTools = [
     title: "Mortgage Calculator",
     description: "Calculate mortgage payments, affordability, and compare financing options.",
     href: "/mortgage-calculator",
-    colorClass: "text-gold",
-    borderColorClass: "border-gold/40",
+    colorClass: "text-[#1A1A1A]",
+    borderColorClass: "border-[#B89555]/40",
     gradientFrom: "from-gold",
     gradientTo: "to-amber-600",
   },
@@ -145,18 +145,18 @@ const ChampagneToolCard = ({
   return (
     <a
       href={href}
-      className={`flex flex-col h-full p-5 rounded-2xl bg-[#FDFBF7]/70 border-2 ${borderColorClass} hover:border-gold/70 hover:shadow-[0_8px_32px_rgba(200,167,102,0.3)] hover:-translate-y-1 transition-all duration-300 group backdrop-blur-sm`}
+      className={`flex flex-col h-full p-5 rounded-2xl bg-[#FDFBF7]/70 border-2 ${borderColorClass} hover:border-[#B89555]/70 hover:shadow-[0_8px_32px_rgba(200,167,102,0.3)] hover:-translate-y-1 transition-all duration-300 group backdrop-blur-sm`}
     >
       <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${gradientFrom} ${gradientTo} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-md`}>
         <Icon className="w-6 h-6 text-white" />
       </div>
-      <h3 className={`text-base font-bold ${colorClass} mb-2 text-[#1A1A1A] group-hover:text-gold transition-colors`}>
+      <h3 className={`text-base font-bold ${colorClass} mb-2 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors`}>
         {title}
       </h3>
       <p className="text-sm text-[#1A1A1A]/70 leading-relaxed flex-grow">
         {description}
       </p>
-      <div className="mt-4 text-sm font-semibold text-gold group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+      <div className="mt-4 text-sm font-semibold text-[#1A1A1A] group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
         Open Tool →
       </div>
     </a>
@@ -172,8 +172,8 @@ const ProductivitySuite = () => {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[70%] h-32 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center top, rgba(200,167,102,0.18) 0%, transparent 70%)' }} />
         
         <div className="relative max-w-6xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border-2 border-gold/50 bg-[#FDFBF7]/60 backdrop-blur-sm mb-6 shadow-sm">
-            <Sparkles className="w-4 h-4 text-gold" />
+          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border-2 border-[#B89555]/50 bg-[#FDFBF7]/60 backdrop-blur-sm mb-6 shadow-sm">
+            <Sparkles className="w-4 h-4 text-[#1A1A1A]" />
             <span className="text-[#1A1A1A] font-semibold text-sm tracking-wide">JBJ Royal Tools Hub</span>
           </div>
           
@@ -188,7 +188,7 @@ const ProductivitySuite = () => {
           
           <div className="flex items-center justify-center gap-6 text-sm text-[#1A1A1A]/70">
             <span className="flex items-center gap-2">
-              <span className="w-2 h-2 bg-gold rounded-full" />
+              <span className="w-2 h-2 bg-[#EFE6D6] rounded-full" />
               {corporateTools.length + productivityTools.length} Tools Included
             </span>
             <span className="text-[#1A1A1A]/70">|</span>
@@ -204,7 +204,7 @@ const ProductivitySuite = () => {
       <div className="max-w-7xl mx-auto px-4 pb-12">
         <div className="flex items-center gap-4 mb-8">
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
-          <span className="text-xs font-bold text-[#1A1A1A]/70 tracking-[0.2em] uppercase px-4 py-1.5 rounded-full border border-gold/40 bg-[#FDFBF7]/50">Corporate Identity & Documents</span>
+          <span className="text-xs font-bold text-[#1A1A1A]/70 tracking-[0.2em] uppercase px-4 py-1.5 rounded-full border border-[#B89555]/40 bg-[#FDFBF7]/50">Corporate Identity & Documents</span>
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
         </div>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">

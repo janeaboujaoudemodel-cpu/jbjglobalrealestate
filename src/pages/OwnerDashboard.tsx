@@ -124,7 +124,7 @@ const OwnerDashboard = () => {
       case 'active':
         return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">Active</Badge>;
       case 'pending':
-        return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">Pending Review</Badge>;
+        return <Badge className="bg-amber-500/20 text-[#1A1A1A] border-amber-500/30">Pending Review</Badge>;
       case 'sold':
         return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">Sold</Badge>;
       default:
@@ -153,7 +153,7 @@ const OwnerDashboard = () => {
                 <Button variant="ghost" className="flex items-center gap-3 p-2">
                   <Avatar className="h-10 w-10">
                     <AvatarImage src="" />
-                    <AvatarFallback className="bg-zinc-800 text-gold">
+                    <AvatarFallback className="bg-[#F7F2EA] text-[#1A1A1A]">
                       {profileName.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
@@ -163,7 +163,7 @@ const OwnerDashboard = () => {
                   </div>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 bg-zinc-900 border-[#1A1A1A]">
+              <DropdownMenuContent align="end" className="w-56 bg-[#FDFBF7] border-[#1A1A1A]">
                 <DropdownMenuItem asChild>
                   <Link to="/my-account" className="flex items-center gap-2 cursor-pointer">
                     <User className="w-4 h-4" /> My Profile
@@ -174,7 +174,7 @@ const OwnerDashboard = () => {
                     <Settings className="w-4 h-4" /> Settings
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-zinc-800" />
+                <DropdownMenuSeparator className="bg-[#F7F2EA]" />
                 <DropdownMenuItem onClick={() => signOut()} className="text-red-400 cursor-pointer">
                   Logout
                 </DropdownMenuItem>
@@ -184,7 +184,7 @@ const OwnerDashboard = () => {
 
           {/* Quick Stats */}
           <motion.div variants={fadeInUp} className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <Card className="bg-zinc-900/50 border-[#1A1A1A]">
+            <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
@@ -198,7 +198,7 @@ const OwnerDashboard = () => {
               </CardContent>
             </Card>
             
-            <Card className="bg-zinc-900/50 border-[#1A1A1A]">
+            <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center">
@@ -212,11 +212,11 @@ const OwnerDashboard = () => {
               </CardContent>
             </Card>
             
-            <Card className="bg-zinc-900/50 border-[#1A1A1A]">
+            <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center">
-                    <Clock className="w-5 h-5 text-amber-400" />
+                    <Clock className="w-5 h-5 text-[#1A1A1A]" />
                   </div>
                   <div>
                     <p className="text-2xl font-bold">{MOCK_LISTINGS.filter(l => l.status === 'pending').length}</p>
@@ -226,7 +226,7 @@ const OwnerDashboard = () => {
               </CardContent>
             </Card>
             
-            <Card className="bg-zinc-900/50 border-[#1A1A1A]">
+            <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
@@ -246,14 +246,14 @@ const OwnerDashboard = () => {
             <div className="lg:col-span-2 space-y-8">
               {/* My Listings */}
               <motion.div variants={fadeInUp}>
-                <Card className="bg-zinc-900/50 border-[#1A1A1A]">
+                <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
                   <CardHeader className="flex flex-row items-center justify-between">
                     <div>
                       <CardTitle className="text-xl">My Listings</CardTitle>
                       <CardDescription>Properties you've listed with JBJ</CardDescription>
                     </div>
                     <Link to="/seller-listing">
-                      <Button className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
+                      <Button className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
                         <Plus className="w-4 h-4 mr-2" /> List New Property
                       </Button>
                     </Link>
@@ -263,10 +263,10 @@ const OwnerDashboard = () => {
                       {MOCK_LISTINGS.map((listing) => (
                         <div 
                           key={listing.id}
-                          className="flex items-center justify-between p-4 rounded-lg bg-zinc-800/50 hover:bg-[#1A1A1A] transition-colors"
+                          className="flex items-center justify-between p-4 rounded-lg bg-[#F7F2EA]/50 hover:bg-[#1A1A1A] transition-colors"
                         >
                           <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-lg bg-zinc-700 flex items-center justify-center">
+                            <div className="w-12 h-12 rounded-lg bg-[#EFE6D6] flex items-center justify-center">
                               <Building2 className="w-6 h-6 text-white/70" />
                             </div>
                             <div>
@@ -276,7 +276,7 @@ const OwnerDashboard = () => {
                           </div>
                           <div className="flex items-center gap-4">
                             <div className="text-right hidden md:block">
-                              <p className="font-semibold text-gold">{listing.price}</p>
+                              <p className="font-semibold text-[#1A1A1A]">{listing.price}</p>
                               <p className="text-xs text-white/70">{listing.views} views • {listing.inquiries} inquiries</p>
                             </div>
                             {getStatusBadge(listing.status)}
@@ -290,7 +290,7 @@ const OwnerDashboard = () => {
                           <Home className="w-12 h-12 text-[#1A1A1A]/70 mx-auto mb-4" />
                           <p className="text-white/70">No listings yet</p>
                           <Link to="/seller-listing">
-                            <Button className="mt-4 bg-gold hover:bg-gold/90 text-[#1A1A1A]">
+                            <Button className="mt-4 bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
                               List Your First Property
                             </Button>
                           </Link>
@@ -303,7 +303,7 @@ const OwnerDashboard = () => {
 
               {/* Listing Status Timeline */}
               <motion.div variants={fadeInUp}>
-                <Card className="bg-zinc-900/50 border-[#1A1A1A]">
+                <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
                   <CardHeader>
                     <CardTitle className="text-xl">Listing Status Timeline</CardTitle>
                     <CardDescription>Track the progress of your listings</CardDescription>
@@ -315,7 +315,7 @@ const OwnerDashboard = () => {
                           <div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center">
                             <CheckCircle2 className="w-4 h-4 text-white" />
                           </div>
-                          <div className="w-0.5 h-12 bg-zinc-700" />
+                          <div className="w-0.5 h-12 bg-[#EFE6D6]" />
                         </div>
                         <div>
                           <p className="font-medium">Listing Submitted</p>
@@ -329,7 +329,7 @@ const OwnerDashboard = () => {
                           <div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center">
                             <CheckCircle2 className="w-4 h-4 text-white" />
                           </div>
-                          <div className="w-0.5 h-12 bg-zinc-700" />
+                          <div className="w-0.5 h-12 bg-[#EFE6D6]" />
                         </div>
                         <div>
                           <p className="font-medium">Documents Verified</p>
@@ -360,10 +360,10 @@ const OwnerDashboard = () => {
             <div className="space-y-6">
               {/* Messages */}
               <motion.div variants={fadeInUp}>
-                <Card className="bg-zinc-900/50 border-[#1A1A1A]">
+                <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
-                      <MessageSquare className="w-5 h-5 text-gold" />
+                      <MessageSquare className="w-5 h-5 text-[#1A1A1A]" />
                       Messages from JBJ
                     </CardTitle>
                   </CardHeader>
@@ -373,7 +373,7 @@ const OwnerDashboard = () => {
                         <div 
                           key={message.id}
                           className={`p-3 rounded-lg cursor-pointer transition-colors ${
-                            message.unread ? 'bg-gold/10 border border-gold/20' : 'bg-zinc-800/50 hover:bg-[#1A1A1A]'
+                            message.unread ? 'bg-[#EFE6D6]/10 border border-[#B89555]/20' : 'bg-[#F7F2EA]/50 hover:bg-[#1A1A1A]'
                           }`}
                         >
                           <div className="flex items-center justify-between mb-1">
@@ -391,13 +391,13 @@ const OwnerDashboard = () => {
 
               {/* Documents */}
               <motion.div variants={fadeInUp}>
-                <Card className="bg-zinc-900/50 border-[#1A1A1A]">
+                <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
                   <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle className="text-lg flex items-center gap-2">
-                      <FileText className="w-5 h-5 text-gold" />
+                      <FileText className="w-5 h-5 text-[#1A1A1A]" />
                       Documents
                     </CardTitle>
-                    <Button variant="ghost" size="sm" className="text-gold">
+                    <Button variant="ghost" size="sm" className="text-[#1A1A1A]">
                       <FileUp className="w-4 h-4 mr-1" /> Upload
                     </Button>
                   </CardHeader>
@@ -422,15 +422,15 @@ const OwnerDashboard = () => {
 
               {/* Support */}
               <motion.div variants={fadeInUp}>
-                <Card className="bg-gradient-to-br from-gold/10 to-amber-500/5 border-gold/30">
+                <Card className="bg-gradient-to-br from-gold/10 to-amber-500/5 border-[#B89555]/30">
                   <CardContent className="p-6 text-center">
-                    <HelpCircle className="w-10 h-10 text-gold mx-auto mb-3" />
+                    <HelpCircle className="w-10 h-10 text-[#1A1A1A] mx-auto mb-3" />
                     <h3 className="font-semibold mb-2">Need Help?</h3>
                     <p className="text-sm text-white/70 mb-4">
                       Our team is here to assist with your listings
                     </p>
                     <Link to="/contact">
-                      <Button className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A]">
+                      <Button className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
                         Contact Support
                       </Button>
                     </Link>

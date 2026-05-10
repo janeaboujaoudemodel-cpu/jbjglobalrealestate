@@ -167,7 +167,7 @@ const BrokerFAQ = () => {
         badgeIcon={HelpCircle}
         title={
           <>
-            Broker Questions, <span className="text-gold">Clearly Answered</span>
+            Broker Questions, <span className="text-[#1A1A1A]">Clearly Answered</span>
           </>
         }
         description="Clear, factual answers for real estate professionals operating in the UAE market. This page focuses on professional conduct, licensing scope, and operational clarity — not sales tactics."
@@ -176,23 +176,23 @@ const BrokerFAQ = () => {
           <>
             {/* Hero Button: Transparent bg + white 3D border + white text + gold icon; champagne fill on hover */}
             <button 
-              className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white transition-all duration-300 bg-transparent border-2 border-white/80 hover:bg-gradient-to-r hover:from-[#FDFBF7] hover:via-[#F7F2EA] hover:to-[#EFE6D6] hover:border-gold hover:text-[#1A1A1A]"
+              className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white transition-all duration-300 bg-transparent border-2 border-white/80 hover:bg-gradient-to-r hover:from-[#FDFBF7] hover:via-[#F7F2EA] hover:to-[#EFE6D6] hover:border-[#B89555] hover:text-[#1A1A1A]"
               style={{
                 boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.2), 0 4px 15px rgba(0,0,0,0.3)',
               }}
               onClick={() => document.getElementById('faq-content')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              <Search className="w-4 h-4 text-gold group-hover:text-gold" />
+              <Search className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A]" />
               <span>Browse FAQs</span>
             </button>
             <Link 
               to="/contact"
-              className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white transition-all duration-300 bg-transparent border-2 border-white/80 hover:bg-gradient-to-r hover:from-[#FDFBF7] hover:via-[#F7F2EA] hover:to-[#EFE6D6] hover:border-gold hover:text-[#1A1A1A]"
+              className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white transition-all duration-300 bg-transparent border-2 border-white/80 hover:bg-gradient-to-r hover:from-[#FDFBF7] hover:via-[#F7F2EA] hover:to-[#EFE6D6] hover:border-[#B89555] hover:text-[#1A1A1A]"
               style={{
                 boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.2), 0 4px 15px rgba(0,0,0,0.3)',
               }}
             >
-              <Phone className="w-4 h-4 text-gold group-hover:text-gold" />
+              <Phone className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A]" />
               <span>Ask Our Team</span>
             </Link>
           </>
@@ -211,7 +211,7 @@ const BrokerFAQ = () => {
       <section id="faq-content" className="py-16 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl relative">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           {/* Sticky FAQ Quick Access - Mobile/Tablet Only */}
-          <div className="lg:hidden sticky top-0 z-50 -mx-4 px-4 py-3 bg-gradient-to-br from-[#F7F1E6]/95 via-[#ECE2D2]/95 to-[#D8C7A6]/95 backdrop-blur-sm border-b border-gold/20 shadow-lg">
+          <div className="lg:hidden sticky top-0 z-50 -mx-4 px-4 py-3 bg-gradient-to-br from-[#F7F1E6]/95 via-[#ECE2D2]/95 to-[#D8C7A6]/95 backdrop-blur-sm border-b border-[#B89555]/20 shadow-lg">
             <div className="w-full">
               <FAQTableOfContents 
                 categories={categories}
@@ -238,7 +238,7 @@ const BrokerFAQ = () => {
                   variants={fadeInUp}
                   className="flex items-center gap-4 mb-6"
                 >
-                  <div className="w-12 h-12 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-xl flex items-center justify-center">
                     <category.icon className="w-6 h-6 text-[#1A1A1A]" />
                   </div>
                   <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">{category.title}</h2>
@@ -252,9 +252,9 @@ const BrokerFAQ = () => {
                         <AccordionItem 
                           value={`${categoryIndex}-${faqIndex}`}
                           data-accordion-item={`${categoryIndex}-${faqIndex}`}
-                          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl px-6 py-2 data-[state=open]:border-gold/60 data-[state=open]:shadow-md transition-all"
+                          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl px-6 py-2 data-[state=open]:border-[#B89555]/60 data-[state=open]:shadow-md transition-all"
                         >
-                          <AccordionTrigger className="text-[#1A1A1A] text-left hover:text-gold hover:no-underline py-5 text-base font-medium">
+                          <AccordionTrigger className="text-[#1A1A1A] text-left hover:text-[#1A1A1A] hover:no-underline py-5 text-base font-medium">
                             {faq.question}
                           </AccordionTrigger>
                           <AccordionContent className="text-[#1A1A1A]/70 pb-5 leading-relaxed whitespace-pre-line">
@@ -281,8 +281,8 @@ const BrokerFAQ = () => {
             className="max-w-3xl mx-auto"
           >
             {/* Layer 3 Card */}
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-2xl p-8 md:p-12 text-center">
-              <div className="w-14 h-14 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-xl flex items-center justify-center mx-auto mb-4">
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl p-8 md:p-12 text-center">
+              <div className="w-14 h-14 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-xl flex items-center justify-center mx-auto mb-4">
                 <Shield className="w-7 h-7 text-[#1A1A1A]" />
               </div>
               <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-4">
@@ -321,7 +321,7 @@ const BrokerFAQ = () => {
       <section className="py-8 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl mt-8 mb-8">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6">
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6">
               <p className="text-center text-[#1A1A1A]/70 text-sm leading-relaxed">
                 <span className="text-[#1A1A1A] font-medium">Disclaimer:</span> This FAQ is educational in nature 
                 and does not replace regulatory obligations. Brokers remain responsible for ensuring full compliance 

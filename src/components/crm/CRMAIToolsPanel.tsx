@@ -63,7 +63,7 @@ const AI_TOOLS = [
     description: "AI-powered investment analysis",
     route: "/property-evaluator",
     category: "analysis",
-    color: "text-amber-400"
+    color: "text-[#1A1A1A]"
   },
   {
     id: "roi-calculator",
@@ -118,7 +118,7 @@ const AI_TOOLS = [
     description: "AI-suggested follow-ups",
     route: "/ai-hub",
     category: "intelligence",
-    color: "text-amber-400"
+    color: "text-[#1A1A1A]"
   },
   {
     id: "objection-handler",
@@ -189,7 +189,7 @@ const AI_TOOLS = [
 
 const CATEGORIES = [
   { id: "communication", label: "Communication", color: "text-blue-400" },
-  { id: "analysis", label: "Property Analysis", color: "text-amber-400" },
+  { id: "analysis", label: "Property Analysis", color: "text-[#1A1A1A]" },
   { id: "intelligence", label: "Client Intelligence", color: "text-emerald-400" },
   { id: "content", label: "Content Creation", color: "text-pink-400" },
   { id: "documents", label: "Documents", color: "text-indigo-400" }

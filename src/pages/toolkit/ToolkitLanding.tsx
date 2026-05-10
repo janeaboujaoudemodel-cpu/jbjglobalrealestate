@@ -41,12 +41,12 @@ const ToolCard: React.FC<ToolCardProps> = ({
     to={href}
     className={`group relative block rounded-xl border-2 transition-all duration-300 hover:-translate-y-1 ${
       isFlagship 
-        ? 'border-gold bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 shadow-[0_0_30px_rgba(200,167,102,0.15)]' 
-        : 'border-slate-700/50 bg-slate-900/50 hover:border-gold/50'
+        ? 'border-[#B89555] bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 shadow-[0_0_30px_rgba(200,167,102,0.15)]' 
+        : 'border-slate-700/50 bg-slate-900/50 hover:border-[#B89555]/50'
     }`}
   >
     {isNew && (
-      <span className="absolute -top-2 -right-2 bg-gold text-[#1A1A1A] text-xs font-bold px-2 py-0.5 rounded-full">
+      <span className="absolute -top-2 -right-2 bg-[#EFE6D6] text-[#1A1A1A] text-xs font-bold px-2 py-0.5 rounded-full">
         NEW
       </span>
     )}
@@ -60,13 +60,13 @@ const ToolCard: React.FC<ToolCardProps> = ({
     <div className="p-6">
       <div className={`inline-flex items-center justify-center w-14 h-14 rounded-xl mb-4 ${
         isFlagship 
-          ? 'bg-gold/20 text-gold' 
-          : 'bg-slate-800 text-gold group-hover:bg-gold/20'
+          ? 'bg-[#EFE6D6]/20 text-[#1A1A1A]' 
+          : 'bg-slate-800 text-[#1A1A1A] group-hover:bg-[#EFE6D6]/20'
       } transition-colors`}>
         {icon}
       </div>
       
-      <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-gold transition-colors">
+      <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-[#1A1A1A] transition-colors">
         {title}
       </h3>
       
@@ -85,7 +85,7 @@ const ToolCard: React.FC<ToolCardProps> = ({
         ))}
       </div>
       
-      <div className="flex items-center text-gold text-sm font-medium group-hover:gap-2 transition-all">
+      <div className="flex items-center text-[#1A1A1A] text-sm font-medium group-hover:gap-2 transition-all">
         Open Tool
         <ArrowRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
       </div>
@@ -163,11 +163,11 @@ export default function ToolkitLanding() {
       <section className="relative pt-24 pb-16 px-4 overflow-hidden">
         {/* Background Elements */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gold/10 via-transparent to-transparent" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gold/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#EFE6D6]/5 rounded-full blur-3xl" />
         
         <div className="relative max-w-6xl mx-auto text-center">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gold/10 border border-gold/30 text-gold text-sm font-medium mb-8">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#EFE6D6]/10 border border-[#B89555]/30 text-[#1A1A1A] text-sm font-medium mb-8">
             <Sparkles className="h-4 w-4" />
             100% Free Tools — No Login Required
           </div>
@@ -175,7 +175,7 @@ export default function ToolkitLanding() {
           {/* Title */}
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
             JBJ Royal Tools Hub
-            <span className="block text-gold mt-2">(Free)</span>
+            <span className="block text-[#1A1A1A] mt-2">(Free)</span>
           </h1>
           
           <p className="text-xl text-slate-400 max-w-2xl mx-auto mb-10">
@@ -186,15 +186,15 @@ export default function ToolkitLanding() {
           {/* Features */}
           <div className="flex flex-wrap justify-center gap-6 mb-12">
             <div className="flex items-center gap-2 text-slate-300">
-              <CheckCircle2 className="h-5 w-5 text-gold" />
+              <CheckCircle2 className="h-5 w-5 text-[#1A1A1A]" />
               <span>No Login Required</span>
             </div>
             <div className="flex items-center gap-2 text-slate-300">
-              <Shield className="h-5 w-5 text-gold" />
+              <Shield className="h-5 w-5 text-[#1A1A1A]" />
               <span>Privacy First</span>
             </div>
             <div className="flex items-center gap-2 text-slate-300">
-              <Clock className="h-5 w-5 text-gold" />
+              <Clock className="h-5 w-5 text-[#1A1A1A]" />
               <span>Auto-Save Always</span>
             </div>
           </div>
@@ -228,7 +228,7 @@ export default function ToolkitLanding() {
         <div className="max-w-4xl mx-auto">
           <div className="rounded-xl border border-slate-700 bg-slate-900/50 p-6 md:p-8">
             <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-              <Shield className="h-5 w-5 text-gold" />
+              <Shield className="h-5 w-5 text-[#1A1A1A]" />
               Fair Usage & Privacy
             </h3>
             

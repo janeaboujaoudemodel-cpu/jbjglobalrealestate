@@ -128,7 +128,7 @@ function BrokerProfileHero() {
             <span className="text-muted-foreground">points</span>
           </div>
           {probationDaysLeft !== null && probationDaysLeft > 0 && (
-            <div className="flex items-center gap-1.5 text-amber-400">
+            <div className="flex items-center gap-1.5 text-[#1A1A1A]">
               <Clock className="w-4 h-4" /><span>{probationDaysLeft} days probation left</span>
             </div>
           )}
@@ -242,7 +242,7 @@ function DocumentVerificationSection() {
             <div key={docType} className="flex items-center justify-between p-3 rounded-lg bg-background/50 border border-border/50">
               <div className="flex items-center gap-2"><FileText className="w-4 h-4 text-[hsl(36,40%,70%)]" /><span className="text-sm">{label}</span></div>
               {expiry ? (
-                <span className={`text-xs ${isExpiringSoon(expiry) ? "text-amber-400" : "text-muted-foreground"}`}>
+                <span className={`text-xs ${isExpiringSoon(expiry) ? "text-[#1A1A1A]" : "text-muted-foreground"}`}>
                   Expires: {new Date(expiry).toLocaleDateString()}{isExpiringSoon(expiry) && <AlertTriangle className="w-3 h-3 inline ml-1" />}
                 </span>
               ) : (

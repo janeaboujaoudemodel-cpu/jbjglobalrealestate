@@ -121,7 +121,7 @@ const ITDepartment: React.FC = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gold" />
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#B89555]" />
       </div>
     );
   }
@@ -130,8 +130,8 @@ const ITDepartment: React.FC = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <div className="container mx-auto px-4 py-20 text-center">
-          <div className="w-20 h-20 rounded-2xl bg-gold/10 flex items-center justify-center mx-auto mb-6">
-            <Shield className="w-10 h-10 text-gold" />
+          <div className="w-20 h-20 rounded-2xl bg-[#EFE6D6]/10 flex items-center justify-center mx-auto mb-6">
+            <Shield className="w-10 h-10 text-[#1A1A1A]" />
           </div>
           <h1 className="text-3xl font-bold text-[#1A1A1A] mb-4">Access Restricted</h1>
           <p className="text-[#1A1A1A]/70 mb-8">
@@ -157,7 +157,7 @@ const ITDepartment: React.FC = () => {
       {/* Hero Section - Premium Champagne */}
       <section className="relative py-16 overflow-hidden">
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-gold/10 rounded-full blur-[120px]" />
+          <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#EFE6D6]/10 rounded-full blur-[120px]" />
           <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-amber-500/5 rounded-full blur-[100px]" />
         </div>
         <div className="container mx-auto px-4 relative z-10">
@@ -166,12 +166,12 @@ const ITDepartment: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <div className="inline-flex items-center gap-3 bg-[#FDFBF7] border-2 border-gold/30 rounded-full px-6 py-2 mb-6 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
-              <Monitor className="w-5 h-5 text-gold" />
+            <div className="inline-flex items-center gap-3 bg-[#FDFBF7] border-2 border-[#B89555]/30 rounded-full px-6 py-2 mb-6 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+              <Monitor className="w-5 h-5 text-[#1A1A1A]" />
               <span className="text-[#1A1A1A] font-medium">IT Department Portal</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-4">
-              Information Technology <span className="text-gold">Hub</span>
+              Information Technology <span className="text-[#1A1A1A]">Hub</span>
             </h1>
             <p className="text-xl text-[#1A1A1A]/70 max-w-2xl mx-auto">
               Manage new joiner onboarding, CRM credentials, and IT operations
@@ -225,15 +225,15 @@ const ITDepartment: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+          <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-[#1A1A1A]/70 text-sm">Active Employees</p>
-                  <p className="text-3xl font-bold text-gold">{stats.activeEmployees}</p>
+                  <p className="text-3xl font-bold text-[#1A1A1A]">{stats.activeEmployees}</p>
                 </div>
-                <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center">
-                  <Users className="w-6 h-6 text-gold" />
+                <div className="w-12 h-12 bg-[#EFE6D6]/10 rounded-xl flex items-center justify-center">
+                  <Users className="w-6 h-6 text-[#1A1A1A]" />
                 </div>
               </div>
             </CardContent>
@@ -245,16 +245,16 @@ const ITDepartment: React.FC = () => {
       <section className="container mx-auto px-4 py-12 pb-24">
         <Tabs defaultValue="applications" className="space-y-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <TabsList className="bg-[#FDFBF7]/80 border-2 border-gold/30 p-1">
-              <TabsTrigger value="applications" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40 text-[#1A1A1A]">
+            <TabsList className="bg-[#FDFBF7]/80 border-2 border-[#B89555]/30 p-1">
+              <TabsTrigger value="applications" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
                 <UserPlus className="w-4 h-4 mr-2" />
                 New Joiner Applications
               </TabsTrigger>
-              <TabsTrigger value="tasks" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40 text-[#1A1A1A]">
+              <TabsTrigger value="tasks" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
                 <FileText className="w-4 h-4 mr-2" />
                 IT Tasks
               </TabsTrigger>
-              <TabsTrigger value="team" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40 text-[#1A1A1A]">
+              <TabsTrigger value="team" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
                 <Users className="w-4 h-4 mr-2" />
                 IT Team
               </TabsTrigger>
@@ -262,12 +262,12 @@ const ITDepartment: React.FC = () => {
 
             <div className="flex items-center gap-3">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gold" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]" />
                 <Input
                   placeholder="Search..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] w-64 placeholder:text-[#1A1A1A]/70"
+                  className="pl-10 bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A] w-64 placeholder:text-[#1A1A1A]/70"
                 />
               </div>
               <Button

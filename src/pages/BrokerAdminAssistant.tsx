@@ -83,7 +83,7 @@ export default function BrokerAdminAssistant() {
     return (
       <MainLayout>
         <div className="flex items-center justify-center min-h-screen bg-[#0A0A0A]">
-          <Loader2 className="h-8 w-8 animate-spin text-gold" />
+          <Loader2 className="h-8 w-8 animate-spin text-[#1A1A1A]" />
         </div>
       </MainLayout>
     );
@@ -292,7 +292,7 @@ export default function BrokerAdminAssistant() {
                         <ScrollArea className="h-[200px]">
                           <div className="space-y-3">
                             {pendingBrokers.map((broker) => (
-                              <div key={broker.id} className="p-3 bg-zinc-900 rounded-lg border border-[#1A1A1A]">
+                              <div key={broker.id} className="p-3 bg-[#FDFBF7] rounded-lg border border-[#1A1A1A]">
                                 <div className="flex items-center justify-between">
                                   <div>
                                     <p className="text-white font-medium">{broker.name}</p>
@@ -331,7 +331,7 @@ export default function BrokerAdminAssistant() {
                       </CardHeader>
                       <CardContent>
                         <div className="space-y-3">
-                          <div className="flex items-center gap-3 p-3 bg-zinc-900 rounded-lg">
+                          <div className="flex items-center gap-3 p-3 bg-[#FDFBF7] rounded-lg">
                             <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center">
                               <UserPlus className="h-5 w-5 text-emerald-400" />
                             </div>
@@ -340,7 +340,7 @@ export default function BrokerAdminAssistant() {
                               <p className="text-xs text-[#1A1A1A]/70">2 hours ago</p>
                             </div>
                           </div>
-                          <div className="flex items-center gap-3 p-3 bg-zinc-900 rounded-lg">
+                          <div className="flex items-center gap-3 p-3 bg-[#FDFBF7] rounded-lg">
                             <div className="w-10 h-10 rounded-full bg-yellow-500/20 flex items-center justify-center">
                               <ClipboardCheck className="h-5 w-5 text-yellow-400" />
                             </div>
@@ -349,7 +349,7 @@ export default function BrokerAdminAssistant() {
                               <p className="text-xs text-[#1A1A1A]/70">4 hours ago</p>
                             </div>
                           </div>
-                          <div className="flex items-center gap-3 p-3 bg-zinc-900 rounded-lg">
+                          <div className="flex items-center gap-3 p-3 bg-[#FDFBF7] rounded-lg">
                             <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
                               <FileText className="h-5 w-5 text-blue-400" />
                             </div>
@@ -376,7 +376,7 @@ export default function BrokerAdminAssistant() {
                       <p className="text-[#1A1A1A]/70">Manage broker onboarding from application to activation. Track progress, documentation, and training completion.</p>
                       <div className="mt-4 space-y-4">
                         {pendingBrokers.map((broker) => (
-                          <div key={broker.id} className="p-4 bg-zinc-900 rounded-lg border border-[#1A1A1A]">
+                          <div key={broker.id} className="p-4 bg-[#FDFBF7] rounded-lg border border-[#1A1A1A]">
                             <div className="flex items-center justify-between mb-2">
                               <h3 className="text-white font-medium">{broker.name}</h3>
                               <Badge variant={broker.status === 'in_progress' ? 'secondary' : 'outline'}>
@@ -421,7 +421,7 @@ export default function BrokerAdminAssistant() {
                         <span>Broker Directory</span>
                         <Input 
                           placeholder="Search brokers..." 
-                          className="w-64 bg-zinc-900 border-[#1A1A1A]"
+                          className="w-64 bg-[#FDFBF7] border-[#1A1A1A]"
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
                         />

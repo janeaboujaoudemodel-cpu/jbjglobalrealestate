@@ -120,8 +120,8 @@ const DesignBuild = () => {
                 boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.1), inset 0 -1px 2px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0.3)',
               }}
             >
-              <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
-              <span className="text-gold font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Through Our Licensed Partners</span>
+              <span className="w-2 h-2 bg-[#EFE6D6] rounded-full animate-pulse" />
+              <span className="text-[#1A1A1A] font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Through Our Licensed Partners</span>
             </button>
           </motion.div>
 
@@ -151,9 +151,9 @@ const DesignBuild = () => {
                   boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
                 }}
               >
-                <Calendar className="w-5 h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+                <Calendar className="w-5 h-5 text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                 <span className="text-white group-hover:text-[#1A1A1A] transition-colors">Book a Consultation</span>
-                <ArrowUpRight className="w-5 h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+                <ArrowUpRight className="w-5 h-5 text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                 {/* Hover fill overlay */}
                 <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
               </button>
@@ -163,14 +163,14 @@ const DesignBuild = () => {
       </div>
 
       {/* Partner Badge Section */}
-      <section className="py-8 bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border-y border-gold/20">
+      <section className="py-8 bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border-y border-[#B89555]/20">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center gap-6 flex-wrap">
-            <div className="flex items-center gap-2 text-gold">
+            <div className="flex items-center gap-2 text-[#1A1A1A]">
               <Users className="w-5 h-5" />
               <span className="text-sm font-medium uppercase tracking-wider">Through Our Licensed Partners</span>
             </div>
-            <div className="h-4 w-px bg-gold/30 hidden md:block" />
+            <div className="h-4 w-px bg-[#EFE6D6]/30 hidden md:block" />
             <span className="text-white/70 text-sm">Architecture • Interior Design • Fit-Out & Renovation</span>
           </div>
         </div>
@@ -185,7 +185,7 @@ const DesignBuild = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Services</span>
+            <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Our Services</span>
             <h2 
               className="text-white text-3xl md:text-4xl font-bold mb-4"
             >
@@ -209,7 +209,7 @@ const DesignBuild = () => {
                 className="group"
                 variants={fadeInUp}
               >
-                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.3)] transition-all duration-500 overflow-hidden h-full">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30 hover:border-[#B89555] hover:shadow-[0_0_30px_rgba(200,167,102,0.3)] transition-all duration-500 overflow-hidden h-full">
                   {/* Image */}
                   <div className="relative h-56 overflow-hidden">
                     <img 
@@ -219,11 +219,11 @@ const DesignBuild = () => {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                     
-                    <div className="absolute top-4 left-4 w-12 h-12 rounded-xl bg-[#1A1A1A] flex items-center justify-center border border-gold/30">
-                      <service.icon className="w-6 h-6 text-gold" />
+                    <div className="absolute top-4 left-4 w-12 h-12 rounded-xl bg-[#1A1A1A] flex items-center justify-center border border-[#B89555]/30">
+                      <service.icon className="w-6 h-6 text-[#1A1A1A]" />
                     </div>
 
-                    <Badge className="absolute top-4 right-4 bg-gold/20 text-gold border-gold/40 backdrop-blur-sm">
+                    <Badge className="absolute top-4 right-4 bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/40 backdrop-blur-sm">
                       <Users className="w-3 h-3 mr-1" />
                       Partner Service
                     </Badge>
@@ -232,7 +232,7 @@ const DesignBuild = () => {
                   {/* Content */}
                   <CardContent className="p-6">
                     <h3 
-                      className="text-[#1A1A1A] text-2xl font-bold mb-3 group-hover:text-gold transition-colors"
+                      className="text-[#1A1A1A] text-2xl font-bold mb-3 group-hover:text-[#1A1A1A] transition-colors"
                     >
                       {service.title}
                     </h3>
@@ -243,14 +243,14 @@ const DesignBuild = () => {
                     <ul className="space-y-2 mb-6">
                       {service.features.map((feature, idx) => (
                         <li key={idx} className="flex items-center gap-2 text-[#1A1A1A]/70 text-sm">
-                          <div className="w-1.5 h-1.5 rounded-full bg-gold" />
+                          <div className="w-1.5 h-1.5 rounded-full bg-[#EFE6D6]" />
                           {feature}
                         </li>
                       ))}
                     </ul>
 
                     <Link to={`/services/${service.slug}`}>
-                      <Button className="w-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border-2 border-gold/60 shadow-[0_8px_30px_rgba(200,167,102,0.3),0_4px_15px_rgba(0,0,0,0.1)] hover:bg-[#1A1A1A] hover:text-gold hover:border-gold hover:shadow-[0_8px_40px_rgba(200,167,102,0.5)] font-semibold transition-all duration-300">
+                      <Button className="w-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border-2 border-[#B89555]/60 shadow-[0_8px_30px_rgba(200,167,102,0.3),0_4px_15px_rgba(0,0,0,0.1)] hover:bg-[#1A1A1A] hover:text-[#1A1A1A] hover:border-[#B89555] hover:shadow-[0_8px_40px_rgba(200,167,102,0.5)] font-semibold transition-all duration-300">
                         Explore {service.title}
                         <ArrowUpRight className="w-4 h-4 ml-2" />
                       </Button>
@@ -264,7 +264,7 @@ const DesignBuild = () => {
       </section>
 
       {/* AI Tools Section - Go Premium Alone */}
-      <section className="py-20 bg-gradient-to-b from-black via-zinc-950 to-black border-t border-gold/20">
+      <section className="py-20 bg-gradient-to-b from-black via-zinc-950 to-black border-t border-[#B89555]/20">
         <div className="container mx-auto px-4">
           <motion.div
             className="text-center mb-16"
@@ -279,7 +279,7 @@ const DesignBuild = () => {
             <h2 
               className="text-white text-3xl md:text-4xl font-bold mb-4"
             >
-              Go Premium <span className="text-gold">On Your Own</span>
+              Go Premium <span className="text-[#1A1A1A]">On Your Own</span>
             </h2>
             <p className="text-white/70 max-w-2xl mx-auto">
               Design and measure your space with AI before consulting with our partners
@@ -296,23 +296,23 @@ const DesignBuild = () => {
             {aiTools.map((tool) => (
               <motion.div key={tool.id} variants={fadeInUp}>
                 <Link to={tool.link} className="block group">
-                  <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 hover:border-gold hover:shadow-[0_0_40px_rgba(200,167,102,0.4)] transition-all duration-300 h-full">
+                  <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30 hover:border-[#B89555] hover:shadow-[0_0_40px_rgba(200,167,102,0.4)] transition-all duration-300 h-full">
                     <CardContent className="p-8">
                       <div className="flex items-start gap-4 mb-4">
-                        <div className="w-14 h-14 rounded-xl bg-[#1A1A1A] flex items-center justify-center border border-gold/30 group-hover:scale-110 transition-transform">
-                          <tool.icon className="w-7 h-7 text-gold" />
+                        <div className="w-14 h-14 rounded-xl bg-[#1A1A1A] flex items-center justify-center border border-[#B89555]/30 group-hover:scale-110 transition-transform">
+                          <tool.icon className="w-7 h-7 text-[#1A1A1A]" />
                         </div>
                         <div className="flex-1">
                           <Badge className="bg-purple-500/20 text-purple-600 border-purple-400/40 mb-2">
                             {tool.badge}
                           </Badge>
-                          <h3 className="text-[#1A1A1A] text-xl font-bold group-hover:text-gold transition-colors">
+                          <h3 className="text-[#1A1A1A] text-xl font-bold group-hover:text-[#1A1A1A] transition-colors">
                             {tool.title}
                           </h3>
                         </div>
                       </div>
                       <p className="text-[#1A1A1A]/70 mb-6">{tool.description}</p>
-                      <Button className="w-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border-2 border-gold/60 shadow-[0_8px_30px_rgba(200,167,102,0.3),0_4px_15px_rgba(0,0,0,0.1)] hover:bg-[#1A1A1A] hover:text-gold hover:border-gold hover:shadow-[0_8px_40px_rgba(200,167,102,0.5)] font-semibold transition-all duration-300">
+                      <Button className="w-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border-2 border-[#B89555]/60 shadow-[0_8px_30px_rgba(200,167,102,0.3),0_4px_15px_rgba(0,0,0,0.1)] hover:bg-[#1A1A1A] hover:text-[#1A1A1A] hover:border-[#B89555] hover:shadow-[0_8px_40px_rgba(200,167,102,0.5)] font-semibold transition-all duration-300">
                         {tool.cta}
                         <ArrowUpRight className="w-4 h-4 ml-2" />
                       </Button>
@@ -330,22 +330,22 @@ const DesignBuild = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-[1100px] mx-auto">
             {/* OUTER CARD (Active Champagne) */}
-            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-2 sm:p-3">
+            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl sm:rounded-3xl p-2 sm:p-3">
               {/* INNER CARD (Champagne) */}
               <motion.div
-                className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-8 md:p-12 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl sm:rounded-2xl p-8 md:p-12 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
               >
-                <Badge className="bg-gold/20 text-gold border-gold/40 mb-4">
+                <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/40 mb-4">
                   <Users className="w-3 h-3 mr-1" />
                   Through Our Partners
                 </Badge>
                 <h2 
                   className="text-[#1A1A1A] text-2xl md:text-3xl font-bold mb-4"
                 >
-                  Ready to Transform <span className="text-gold">Your Space?</span>
+                  Ready to Transform <span className="text-[#1A1A1A]">Your Space?</span>
                 </h2>
                 <p className="text-[#1A1A1A]/70 mb-8 max-w-xl mx-auto">
                   Book a consultation with our licensed partners now. Our expert network is ready to bring your vision to life.
@@ -368,10 +368,10 @@ const DesignBuild = () => {
                       <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
                       <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                       <span className="relative flex items-center gap-1">
-                        <Calendar className="w-5 h-5 text-gold group-hover:text-[#1A1A1A] transition-colors" />
-                        <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">Book a</span>
-                        <span className="text-gold group-hover:text-[#1A1A1A] transition-colors">Consultation</span>
-                        <ArrowUpRight className="w-5 h-5 text-[#1A1A1A] group-hover:text-gold transition-colors" />
+                        <Calendar className="w-5 h-5 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
+                        <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">Book a</span>
+                        <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">Consultation</span>
+                        <ArrowUpRight className="w-5 h-5 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
                       </span>
                     </button>
                   </a>

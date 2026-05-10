@@ -114,12 +114,12 @@ export default function AcademyGraduates() {
         <section className="py-16 md:py-24 text-center relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-gold/5 to-transparent" />
           <div className="container mx-auto px-4 relative z-10">
-            <Badge className="bg-gold/20 text-gold border-gold/30 px-4 py-1.5 mb-6">
+            <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30 px-4 py-1.5 mb-6">
               <GraduationCap className="w-4 h-4 mr-2" />
               Certified Professionals
             </Badge>
             <h1 className="text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-4">
-              JBJ Academy <span className="text-gold">Graduates</span>
+              JBJ Academy <span className="text-[#1A1A1A]">Graduates</span>
             </h1>
             <p className="text-[#1A1A1A]/60 max-w-2xl mx-auto">
               Our certified brokers have completed rigorous training in real estate fundamentals, market knowledge, and professional sales techniques.
@@ -130,10 +130,10 @@ export default function AcademyGraduates() {
         {/* Certificate Lookup */}
         <section className="pb-12">
           <div className="max-w-2xl mx-auto px-4">
-            <Card className="border-2 border-gold/30 bg-[#FDFBF7]/90">
+            <Card className="border-2 border-[#B89555]/30 bg-[#FDFBF7]/90">
               <CardContent className="p-6">
                 <h3 className="font-semibold text-[#1A1A1A] mb-3 flex items-center gap-2">
-                  <Shield className="w-5 h-5 text-gold" />
+                  <Shield className="w-5 h-5 text-[#1A1A1A]" />
                   Verify a Certificate
                 </h3>
                 <div className="flex gap-2">
@@ -142,9 +142,9 @@ export default function AcademyGraduates() {
                     value={lookupNumber}
                     onChange={(e) => setLookupNumber(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleLookup()}
-                    className="border-gold/20"
+                    className="border-[#B89555]/20"
                   />
-                  <Button onClick={handleLookup} disabled={lookupLoading} className="bg-gold text-[#1A1A1A] hover:bg-gold/90">
+                  <Button onClick={handleLookup} disabled={lookupLoading} className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90">
                     {lookupLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
                   </Button>
                 </div>
@@ -170,7 +170,7 @@ export default function AcademyGraduates() {
                     <p className="text-xs text-[#1A1A1A]/40 mt-1">
                       Issued {new Date(lookupResult.issued_at).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
                     </p>
-                    <Button asChild size="sm" variant="outline" className="mt-2 border-gold/40 text-gold text-xs">
+                    <Button asChild size="sm" variant="outline" className="mt-2 border-[#B89555]/40 text-[#1A1A1A] text-xs">
                       <Link to={`/verify-certificate/${lookupResult.verification_token}`}>
                         View Full Certificate
                       </Link>
@@ -193,17 +193,17 @@ export default function AcademyGraduates() {
                   placeholder="Search by name or certificate #"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 border-gold/20"
+                  className="pl-10 border-[#B89555]/20"
                 />
               </div>
             </div>
 
             {loading ? (
               <div className="text-center py-12">
-                <Loader2 className="w-8 h-8 text-gold animate-spin mx-auto" />
+                <Loader2 className="w-8 h-8 text-[#1A1A1A] animate-spin mx-auto" />
               </div>
             ) : filteredCerts.length === 0 ? (
-              <Card className="border-gold/20 bg-[#FDFBF7]/80">
+              <Card className="border-[#B89555]/20 bg-[#FDFBF7]/80">
                 <CardContent className="p-8 text-center">
                   <GraduationCap className="w-12 h-12 text-[#1A1A1A]/70 mx-auto mb-3" />
                   <p className="text-[#1A1A1A]/50">
@@ -221,10 +221,10 @@ export default function AcademyGraduates() {
                 {filteredCerts.map((cert) => (
                   <motion.div key={cert.id} variants={fadeInUp}>
                     <Link to={`/verify-certificate/${cert.verification_token}`}>
-                      <Card className="border border-gold/20 bg-[#FDFBF7]/90 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/5 transition-all h-full group">
+                      <Card className="border border-[#B89555]/20 bg-[#FDFBF7]/90 hover:border-[#B89555]/50 hover:shadow-lg hover:shadow-gold/5 transition-all h-full group">
                         <CardContent className="p-5 text-center">
-                          <div className="w-14 h-14 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-gold/20 transition-colors">
-                            <Award className="w-7 h-7 text-gold" />
+                          <div className="w-14 h-14 rounded-full bg-[#EFE6D6]/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-[#EFE6D6]/20 transition-colors">
+                            <Award className="w-7 h-7 text-[#1A1A1A]" />
                           </div>
                           <h3 className="font-semibold text-[#1A1A1A] text-sm">{cert.full_name.split(" ")[0]}</h3>
                           <p className="text-[#1A1A1A]/40 text-xs mt-1">{cert.track}</p>

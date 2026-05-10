@@ -233,8 +233,8 @@ const Services = () => {
             className="flex items-center justify-center gap-2 mb-6"
             variants={fadeInUp}
           >
-            <Briefcase className="w-6 h-6 text-gold" />
-            <span className="text-gold text-sm uppercase tracking-[0.3em]">
+            <Briefcase className="w-6 h-6 text-[#1A1A1A]" />
+            <span className="text-[#1A1A1A] text-sm uppercase tracking-[0.3em]">
               Services
             </span>
           </motion.div>
@@ -279,7 +279,7 @@ const Services = () => {
             className="w-full px-4 sm:px-6 lg:px-8"
           >
             <motion.div className="text-center mb-12" variants={fadeInUp}>
-              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
+              <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">
                 Our Service Library
               </span>
               <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#1A1A1A]">
@@ -294,12 +294,12 @@ const Services = () => {
               {serviceCards.map((service) => (
                 <motion.div key={service.title} variants={fadeInUp}>
                   <Link to={service.link} className="block h-full">
-                    <Card className="jj-card-inner hover:border-gold transition-all group h-full flex flex-col">
+                    <Card className="jj-card-inner hover:border-[#B89555] transition-all group h-full flex flex-col">
                       <CardContent className="p-6 flex flex-col flex-1">
                         <div className="jj-icon-box-active w-12 h-12 mb-4 group-hover:scale-110 transition-transform">
                           <service.icon className="w-6 h-6" />
                         </div>
-                        <h3 className="text-[#1A1A1A] font-semibold text-lg mb-2 group-hover:text-gold transition-colors">
+                        <h3 className="text-[#1A1A1A] font-semibold text-lg mb-2 group-hover:text-[#1A1A1A] transition-colors">
                           {service.title}
                         </h3>
                         <p className="text-[#1A1A1A]/70 text-sm mb-4 flex-1">
@@ -312,7 +312,7 @@ const Services = () => {
                           <ul className="space-y-1">
                             {service.includes.map((item, idx) => (
                               <li key={idx} className="flex items-start gap-2 text-xs text-[#1A1A1A]/80">
-                                <CheckCircle className="w-3 h-3 text-gold flex-shrink-0 mt-0.5" />
+                                <CheckCircle className="w-3 h-3 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
                                 <span>{item}</span>
                               </li>
                             ))}
@@ -321,14 +321,14 @@ const Services = () => {
                         
                         {/* Partner note if applicable */}
                         {service.note && (
-                          <div className="bg-gold/10 rounded-lg p-2 mb-4 border border-gold/20">
+                          <div className="bg-[#EFE6D6]/10 rounded-lg p-2 mb-4 border border-[#B89555]/20">
                             <p className="text-xs text-[#1A1A1A]/60 italic">
                               {service.note}
                             </p>
                           </div>
                         )}
                         
-                        <div className="flex items-center gap-1 text-gold text-sm font-medium mt-auto pt-4 border-t border-gold/20">
+                        <div className="flex items-center gap-1 text-[#1A1A1A] text-sm font-medium mt-auto pt-4 border-t border-[#B89555]/20">
                           {service.cta}
                           <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                         </div>
@@ -392,7 +392,7 @@ const Services = () => {
             className="w-full px-4 sm:px-6 lg:px-8"
           >
             <motion.div className="text-center mb-12" variants={fadeInUp}>
-              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
+              <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">
                 Service Scope
               </span>
               <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#1A1A1A]">
@@ -415,13 +415,13 @@ const Services = () => {
                     {/* Our role includes */}
                     <div>
                       <h3 className="text-[#1A1A1A] font-semibold text-lg mb-4 flex items-center gap-2">
-                        <CheckCircle className="w-5 h-5 text-gold" />
+                        <CheckCircle className="w-5 h-5 text-[#1A1A1A]" />
                         Our role includes
                       </h3>
                       <ul className="space-y-3">
                         {scopeIncludes.map((item, idx) => (
                           <li key={idx} className="flex items-start gap-3 text-[#1A1A1A]/70">
-                            <span className="text-gold">•</span>
+                            <span className="text-[#1A1A1A]">•</span>
                             <span>{item}</span>
                           </li>
                         ))}
@@ -445,7 +445,7 @@ const Services = () => {
                     </div>
                   </div>
                   
-                  <div className="mt-8 pt-6 border-t border-gold/20 text-center">
+                  <div className="mt-8 pt-6 border-t border-[#B89555]/20 text-center">
                     <p className="text-[#1A1A1A]/60 text-sm">
                       Where regulated services are required, we introduce independent licensed partners. 
                       Clients contract directly with those partners.

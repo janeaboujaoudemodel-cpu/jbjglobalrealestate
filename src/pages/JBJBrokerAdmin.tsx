@@ -172,7 +172,7 @@ export default function JBJBrokerAdmin() {
   if (authLoading || loading) {
     return (
       <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-gold" />
+        <Loader2 className="h-8 w-8 animate-spin text-[#1A1A1A]" />
       </div>
     );
   }
@@ -180,7 +180,7 @@ export default function JBJBrokerAdmin() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       {/* Header - Layer 2 Active Champagne */}
-      <header className="sticky top-0 lg:top-[48px] z-50 border-b border-gold/20">
+      <header className="sticky top-0 lg:top-[48px] z-50 border-b border-[#B89555]/20">
         <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] px-6 py-4">
           <div className="container mx-auto flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -201,7 +201,7 @@ export default function JBJBrokerAdmin() {
                 size="sm"
                 onClick={handleRefresh}
                 disabled={refreshing}
-                className="text-[#1A1A1A] hover:bg-gold/20"
+                className="text-[#1A1A1A] hover:bg-[#EFE6D6]/20"
               >
                 <RefreshCw className={`h-4 w-4 mr-2 ${refreshing ? "animate-spin" : ""}`} />
                 Refresh
@@ -217,7 +217,7 @@ export default function JBJBrokerAdmin() {
                 variant="ghost"
                 size="sm"
                 onClick={() => navigate("/")}
-                className="text-[#1A1A1A] hover:bg-gold/20"
+                className="text-[#1A1A1A] hover:bg-[#EFE6D6]/20"
               >
                 <Home className="h-4 w-4 mr-2" />
                 Back to Site
@@ -226,7 +226,7 @@ export default function JBJBrokerAdmin() {
                 variant="ghost"
                 size="sm"
                 onClick={handleLogout}
-                className="text-[#1A1A1A] hover:bg-gold/20"
+                className="text-[#1A1A1A] hover:bg-[#EFE6D6]/20"
               >
                 <LogOut className="h-4 w-4 mr-2" />
                 Sign Out

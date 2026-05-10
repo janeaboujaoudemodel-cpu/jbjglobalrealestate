@@ -47,9 +47,9 @@ const Section = ({
       className={`py-10 md:py-14 lg:py-[72px] bg-[#1A1A1A] ${className}`}
     >
       {/* Thin black contour + Active Champagne Layer */}
-      <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3 sm:p-4">
+      <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3 sm:p-4">
         {/* Inner Pearl Layer */}
-        <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6 md:p-10 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
+        <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-10 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
           <div className="max-w-[1100px] mx-auto">
             {children}
           </div>
@@ -62,7 +62,7 @@ const Section = ({
 // Section label component - supports light backgrounds
 const SectionLabel = ({ children, dark = true }: { children: React.ReactNode; dark?: boolean }) => (
   <span 
-    className={`block text-gold text-xs uppercase mb-4 tracking-[0.18em]`}
+    className={`block text-[#1A1A1A] text-xs uppercase mb-4 tracking-[0.18em]`}
     style={{ fontSize: '12px' }}
   >
     {children}
@@ -99,11 +99,11 @@ const FeatureCard = ({
   description: string;
 }) => (
   <motion.div 
-    className="icon-tile bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 hover:border-gold rounded-xl p-6 md:p-8 transition-all duration-300 hover:shadow-[0_0_25px_rgba(200,167,102,0.28),0_18px_50px_rgba(0,0,0,0.35)] hover:-translate-y-1"
+    className="icon-tile bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 hover:border-[#B89555] rounded-xl p-6 md:p-8 transition-all duration-300 hover:shadow-[0_0_25px_rgba(200,167,102,0.28),0_18px_50px_rgba(0,0,0,0.35)] hover:-translate-y-1"
     variants={fadeInUp}
   >
     <div className="w-14 h-14 rounded-lg bg-[#1A1A1A] flex items-center justify-center mb-5">
-      <Icon className="w-7 h-7 text-gold" />
+      <Icon className="w-7 h-7 text-[#1A1A1A]" />
     </div>
     <h3 className="text-[#1A1A1A] text-xl font-semibold mb-3">{title}</h3>
     <p className="text-[#1A1A1A]/70 text-base leading-relaxed">{description}</p>
@@ -149,8 +149,8 @@ const About = () => {
               }}
               variants={fadeInUp}
             >
-              <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
-              <span className="text-gold font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">About JBJ Global Real Estate</span>
+              <span className="w-2 h-2 bg-[#EFE6D6] rounded-full animate-pulse" />
+              <span className="text-[#1A1A1A] font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">About JBJ Global Real Estate</span>
             </motion.button>
             <motion.h1 
               className="text-white text-[36px] md:text-[48px] lg:text-[58px] font-semibold mb-6 leading-tight"
@@ -186,7 +186,7 @@ const About = () => {
                   }}
                 >
                   <span className="text-white group-hover:text-[#1A1A1A] transition-colors">Explore Our Services</span>
-                  <ArrowUpRight className="w-4 h-4 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+                  <ArrowUpRight className="w-4 h-4 text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                   {/* Hover fill overlay */}
                   <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
                 </button>
@@ -200,7 +200,7 @@ const About = () => {
                 }}
               >
                 <span className="text-white group-hover:text-[#1A1A1A] transition-colors">Contact Our Team</span>
-                <ArrowUpRight className="w-4 h-4 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+                <ArrowUpRight className="w-4 h-4 text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                 {/* Hover fill overlay */}
                 <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
               </Link>
@@ -225,12 +225,12 @@ const About = () => {
                 >
                   <div className="relative">
                     {/* Champagne background card for premium look */}
-                    <div className="absolute inset-0 -m-6 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl border border-gold/30 shadow-lg" />
+                    <div className="absolute inset-0 -m-6 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl border border-[#B89555]/30 shadow-lg" />
                     
                     {/* Circular portrait - GLOBAL PORTRAIT RULE: object-position center 5%, lifted up, no cropping */}
                     {/* KEEP gold border always, add 3D lift on hover */}
                     <Link to="/founder" className="block group relative z-10">
-                      <div className="w-56 h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 mx-auto rounded-full overflow-hidden border-2 border-gold transition-all duration-300 group-hover:shadow-[0_0_30px_rgba(200,167,102,0.4),0_20px_50px_rgba(0,0,0,0.35)] group-hover:-translate-y-2">
+                      <div className="w-56 h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 mx-auto rounded-full overflow-hidden border-2 border-[#B89555] transition-all duration-300 group-hover:shadow-[0_0_30px_rgba(200,167,102,0.4),0_20px_50px_rgba(0,0,0,0.35)] group-hover:-translate-y-2">
                         <img 
                           src={founderProfessional}
                           alt="Founder & CEO of JBJ GLOBAL REAL ESTATE"
@@ -246,7 +246,7 @@ const About = () => {
                       </div>
                       {/* Know More About the Founder - REVERSED: secondary on normal, primary on hover */}
                       <button 
-                        className="group/btn mt-4 relative inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold rounded-xl transition-all duration-300 overflow-hidden w-full bg-transparent border-2 border-[#1A1A1A] hover:border-gold"
+                        className="group/btn mt-4 relative inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold rounded-xl transition-all duration-300 overflow-hidden w-full bg-transparent border-2 border-[#1A1A1A] hover:border-[#B89555]"
                         style={{
                           background: 'transparent',
                         }}
@@ -261,9 +261,9 @@ const About = () => {
                         />
                         <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/0 group-hover/btn:from-white/80 to-transparent pointer-events-none transition-all duration-300" />
                         <span className="relative flex items-center justify-center gap-1">
-                          <span className="text-[#1A1A1A] group-hover/btn:text-gold transition-colors">Know More About the</span>
-                          <span className="text-gold group-hover/btn:text-[#1A1A1A] transition-colors">Founder</span>
-                          <span className="text-[#1A1A1A] group-hover/btn:text-gold transition-colors">↗</span>
+                          <span className="text-[#1A1A1A] group-hover/btn:text-[#1A1A1A] transition-colors">Know More About the</span>
+                          <span className="text-[#1A1A1A] group-hover/btn:text-[#1A1A1A] transition-colors">Founder</span>
+                          <span className="text-[#1A1A1A] group-hover/btn:text-[#1A1A1A] transition-colors">↗</span>
                         </span>
                       </button>
                     </Link>
@@ -313,20 +313,20 @@ const About = () => {
                 
                 {/* Feature Cards - champagne style to match founder card */}
                 <div className="grid sm:grid-cols-2 gap-4 mt-8">
-                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-lg p-5 shadow-sm">
-                    <BarChart3 className="w-6 h-6 text-gold mb-3" />
+                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30 rounded-lg p-5 shadow-sm">
+                    <BarChart3 className="w-6 h-6 text-[#1A1A1A] mb-3" />
                     <p className="text-[#1A1A1A] text-base font-semibold leading-snug">Market Intelligence from Official Data</p>
                   </div>
-                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-lg p-5 shadow-sm">
-                    <FileCheck className="w-6 h-6 text-gold mb-3" />
+                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30 rounded-lg p-5 shadow-sm">
+                    <FileCheck className="w-6 h-6 text-[#1A1A1A] mb-3" />
                     <p className="text-[#1A1A1A] text-base font-semibold leading-snug">Clear Process Mapping</p>
                   </div>
-                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-lg p-5 shadow-sm">
-                    <Target className="w-6 h-6 text-gold mb-3" />
+                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30 rounded-lg p-5 shadow-sm">
+                    <Target className="w-6 h-6 text-[#1A1A1A] mb-3" />
                     <p className="text-[#1A1A1A] text-base font-semibold leading-snug">Disciplined Transaction Management</p>
                   </div>
-                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-lg p-5 shadow-sm">
-                    <Shield className="w-6 h-6 text-gold mb-3" />
+                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30 rounded-lg p-5 shadow-sm">
+                    <Shield className="w-6 h-6 text-[#1A1A1A] mb-3" />
                     <p className="text-[#1A1A1A] text-base font-semibold leading-snug">Defined Compliance Boundaries</p>
                   </div>
                 </div>
@@ -410,20 +410,20 @@ const About = () => {
                 
                 {/* Overlay Cards - Market Intelligence Visual - LARGER CONTENT */}
                 <div className="absolute bottom-6 left-6 right-6 grid grid-cols-2 gap-4">
-                  <div className="bg-[#1A1A1A]/85 backdrop-blur-sm border border-gold/30 rounded-lg p-5">
-                    <BarChart3 className="w-8 h-8 text-gold mb-3" />
+                  <div className="bg-[#1A1A1A]/85 backdrop-blur-sm border border-[#B89555]/30 rounded-lg p-5">
+                    <BarChart3 className="w-8 h-8 text-[#1A1A1A] mb-3" />
                     <p className="text-white text-base font-semibold">Government Data</p>
                   </div>
-                  <div className="bg-[#1A1A1A]/85 backdrop-blur-sm border border-gold/30 rounded-lg p-5">
-                    <Building2 className="w-8 h-8 text-gold mb-3" />
+                  <div className="bg-[#1A1A1A]/85 backdrop-blur-sm border border-[#B89555]/30 rounded-lg p-5">
+                    <Building2 className="w-8 h-8 text-[#1A1A1A] mb-3" />
                     <p className="text-white text-base font-semibold">Infrastructure</p>
                   </div>
-                  <div className="bg-[#1A1A1A]/85 backdrop-blur-sm border border-gold/30 rounded-lg p-5">
-                    <TrendingUp className="w-8 h-8 text-gold mb-3" />
+                  <div className="bg-[#1A1A1A]/85 backdrop-blur-sm border border-[#B89555]/30 rounded-lg p-5">
+                    <TrendingUp className="w-8 h-8 text-[#1A1A1A] mb-3" />
                     <p className="text-white text-base font-semibold">Market Cycles</p>
                   </div>
-                  <div className="bg-[#1A1A1A]/85 backdrop-blur-sm border border-gold/30 rounded-lg p-5">
-                    <Target className="w-8 h-8 text-gold mb-3" />
+                  <div className="bg-[#1A1A1A]/85 backdrop-blur-sm border border-[#B89555]/30 rounded-lg p-5">
+                    <Target className="w-8 h-8 text-[#1A1A1A] mb-3" />
                     <p className="text-white text-base font-semibold">Planning Strategy</p>
                   </div>
                 </div>
@@ -539,8 +539,8 @@ const About = () => {
             </ContentText>
             
             {/* Initials */}
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#1A1A1A] border-2 border-gold mt-4">
-              <span className="text-gold text-xl font-bold">JBJ</span>
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#1A1A1A] border-2 border-[#B89555] mt-4">
+              <span className="text-[#1A1A1A] text-xl font-bold">JBJ</span>
             </div>
           </motion.div>
         </Section>
@@ -550,10 +550,10 @@ const About = () => {
           <div className="container mx-auto px-4 sm:px-6">
             <div className="max-w-[1100px] mx-auto">
               {/* OUTER CARD - Active Champagne Layer */}
-              <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-2 sm:p-3">
+              <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl sm:rounded-3xl p-2 sm:p-3">
                 {/* INNER CARD - Pearl Layer */}
                 <motion.div 
-                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 sm:p-10 md:p-14 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
+                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl sm:rounded-2xl p-6 sm:p-10 md:p-14 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true }}
@@ -561,10 +561,10 @@ const About = () => {
                 >
                   {/* Badge */}
                   <motion.div 
-                    className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-gold/20 via-[#F7F2EA] to-gold/20 border border-gold/50 rounded-full text-[#1A1A1A] text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-6 shadow-lg shadow-gold/20"
+                    className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-gold/20 via-[#F7F2EA] to-gold/20 border border-[#B89555]/50 rounded-full text-[#1A1A1A] text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-6 shadow-lg shadow-gold/20"
                     variants={fadeInUp}
                   >
-                    <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gold" />
+                    <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#1A1A1A]" />
                     Begin Your Journey
                   </motion.div>
 
@@ -604,10 +604,10 @@ const About = () => {
                       <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
                       <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                       <span className="relative flex items-center gap-1">
-                        <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">Speak with</span>
-                        <span className="text-gold group-hover:text-[#1A1A1A] transition-colors">Our Team</span>
+                        <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">Speak with</span>
+                        <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">Our Team</span>
                       </span>
-                      <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-[#1A1A1A] group-hover:text-gold transition-colors relative z-10" />
+                      <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors relative z-10" />
                     </Link>
 
                     {/* Secondary Button - Browse Properties */}

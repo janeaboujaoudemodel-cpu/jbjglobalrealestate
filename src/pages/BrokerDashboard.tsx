@@ -57,7 +57,7 @@ export default function BrokerDashboard() {
   if (authLoading || profileLoading) {
     return (
       <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-2 border-gold border-t-transparent rounded-full" />
+        <div className="animate-spin w-8 h-8 border-2 border-[#B89555] border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -189,15 +189,15 @@ export default function BrokerDashboard() {
               }}
               variants={fadeInUp}
             >
-              <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
-              <span className="text-gold font-semibold text-xs uppercase tracking-widest">Broker Dashboard</span>
+              <span className="w-2 h-2 bg-[#EFE6D6] rounded-full animate-pulse" />
+              <span className="text-[#1A1A1A] font-semibold text-xs uppercase tracking-widest">Broker Dashboard</span>
             </motion.div>
             
             <motion.h1 
               className="text-4xl md:text-5xl font-light text-white mb-4 leading-tight"
               variants={fadeInUp}
             >
-              Your Professional <span className="text-gold">Control Center</span>
+              Your Professional <span className="text-[#1A1A1A]">Control Center</span>
             </motion.h1>
             
             <motion.p 
@@ -220,12 +220,12 @@ export default function BrokerDashboard() {
         >
           {/* SECTION 1: Dashboard Header - Profile */}
           <motion.div variants={fadeInUp}>
-            <Card className="bg-gradient-to-br from-zinc-900/90 via-zinc-900/80 to-black border border-gold/20">
+            <Card className="bg-gradient-to-br from-zinc-900/90 via-zinc-900/80 to-black border border-[#B89555]/20">
               <CardContent className="p-8">
                 <div className="flex flex-col md:flex-row items-center gap-6">
-                  <Avatar className="w-24 h-24 border-2 border-gold/30">
+                  <Avatar className="w-24 h-24 border-2 border-[#B89555]/30">
                     <AvatarImage src={profile?.photo_url || undefined} />
-                    <AvatarFallback className="bg-gold/20 text-gold text-2xl">
+                    <AvatarFallback className="bg-[#EFE6D6]/20 text-[#1A1A1A] text-2xl">
                       {profile?.display_name?.charAt(0) || user?.email?.charAt(0)?.toUpperCase() || 'B'}
                     </AvatarFallback>
                   </Avatar>
@@ -234,7 +234,7 @@ export default function BrokerDashboard() {
                       {profile?.display_name || user?.email || 'Broker'}
                     </h2>
                     <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-2">
-                      <Badge className="bg-gold/20 text-gold border-gold/30">
+                      <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30">
                         {isInternalBroker ? 'JBJ Internal Broker' : 'JBJ Partner Broker'}
                       </Badge>
                       <Badge className={profile?.is_active ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' : 'bg-amber-500/20 text-amber-300 border-amber-500/30'}>
@@ -253,18 +253,18 @@ export default function BrokerDashboard() {
           {/* SECTION 2: Quick Actions */}
           <motion.div variants={fadeInUp}>
             <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <LayoutDashboard className="w-5 h-5 text-gold" />
+              <LayoutDashboard className="w-5 h-5 text-[#1A1A1A]" />
               Quick Actions
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
               {filteredActions.map((action, index) => (
                 <Link key={index} to={action.href}>
-                  <Card className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 hover:border-gold transition-all cursor-pointer group">
+                  <Card className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 hover:border-[#B89555] transition-all cursor-pointer group">
                     <CardContent className="p-4 text-center">
-                      <div className="w-12 h-12 bg-[#1A1A1A] border border-gold/30 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-gold/10 transition-colors">
-                        <action.icon className="w-6 h-6 text-gold" />
+                      <div className="w-12 h-12 bg-[#1A1A1A] border border-[#B89555]/30 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-[#EFE6D6]/10 transition-colors">
+                        <action.icon className="w-6 h-6 text-[#1A1A1A]" />
                       </div>
-                      <h4 className="text-sm font-semibold text-foreground mb-1 group-hover:text-gold transition-colors">
+                      <h4 className="text-sm font-semibold text-foreground mb-1 group-hover:text-[#1A1A1A] transition-colors">
                         {action.title}
                       </h4>
                       <p className="text-xs text-muted-foreground line-clamp-2">
@@ -280,14 +280,14 @@ export default function BrokerDashboard() {
           {/* SECTION 3: Performance Overview */}
           <motion.div variants={fadeInUp}>
             <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-gold" />
+              <TrendingUp className="w-5 h-5 text-[#1A1A1A]" />
               Performance Overview
             </h3>
             <div className={`grid grid-cols-2 ${isInternalBroker ? 'md:grid-cols-3 lg:grid-cols-6' : 'md:grid-cols-4'} gap-4`}>
               {performanceBlocks.map((block, index) => (
-                <Card key={index} className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30">
+                <Card key={index} className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30">
                   <CardContent className="p-4 text-center">
-                    <block.icon className="w-6 h-6 text-gold mx-auto mb-2" />
+                    <block.icon className="w-6 h-6 text-[#1A1A1A] mx-auto mb-2" />
                     <p className="text-2xl font-bold text-foreground">{block.value}</p>
                     <p className="text-xs text-muted-foreground">{block.label}</p>
                   </CardContent>
@@ -299,10 +299,10 @@ export default function BrokerDashboard() {
           {/* SECTION 4: Tasks & Reminders */}
           <motion.div variants={fadeInUp}>
             <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <CheckSquare className="w-5 h-5 text-gold" />
+              <CheckSquare className="w-5 h-5 text-[#1A1A1A]" />
               Tasks & Reminders
             </h3>
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30">
               <CardContent className="p-6">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                   <div className="text-center md:text-left">
@@ -341,10 +341,10 @@ export default function BrokerDashboard() {
           {/* SECTION 5: Notifications */}
           <motion.div variants={fadeInUp}>
             <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <Bell className="w-5 h-5 text-gold" />
+              <Bell className="w-5 h-5 text-[#1A1A1A]" />
               Notifications
             </h3>
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30">
               <CardContent className="p-6">
                 <div className="text-center py-8">
                   <Bell className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
@@ -360,27 +360,27 @@ export default function BrokerDashboard() {
           {/* Broker Hub Links */}
           <motion.div variants={fadeInUp}>
             <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <Briefcase className="w-5 h-5 text-gold" />
+              <Briefcase className="w-5 h-5 text-[#1A1A1A]" />
               Broker Hub
             </h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
               {brokerHubLinks.map((link, index) => (
                 <Link key={index} to={link.href}>
-                  <Card className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 hover:border-gold transition-all cursor-pointer group">
+                  <Card className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 hover:border-[#B89555] transition-all cursor-pointer group">
                     <CardContent className="p-5">
                       <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 bg-[#1A1A1A] border border-gold/30 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-gold/10 transition-colors">
-                          <link.icon className="w-5 h-5 text-gold" />
+                        <div className="w-10 h-10 bg-[#1A1A1A] border border-[#B89555]/30 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-[#EFE6D6]/10 transition-colors">
+                          <link.icon className="w-5 h-5 text-[#1A1A1A]" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h4 className="font-semibold text-foreground group-hover:text-gold transition-colors">
+                          <h4 className="font-semibold text-foreground group-hover:text-[#1A1A1A] transition-colors">
                             {link.title}
                           </h4>
                           <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
                             {link.description}
                           </p>
                         </div>
-                        <ArrowRight className="w-4 h-4 text-gold opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1" />
+                        <ArrowRight className="w-4 h-4 text-[#1A1A1A] opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1" />
                       </div>
                     </CardContent>
                   </Card>

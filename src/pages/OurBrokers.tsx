@@ -23,15 +23,15 @@ const BrokerCard = ({ broker }: { broker: Broker }) => {
     <motion.div variants={fadeInUp}>
       <Card
         className={
-          "bg-zinc-900/60 border-[#1A1A1A] transition-all duration-300 h-full " +
+          "bg-[#FDFBF7]/60 border-[#1A1A1A] transition-all duration-300 h-full " +
           (senior
-            ? "hover:border-gold/60 ring-1 ring-gold/20"
-            : "hover:border-gold/40")
+            ? "hover:border-[#B89555]/60 ring-1 ring-gold/20"
+            : "hover:border-[#B89555]/40")
         }
       >
         <CardContent className="p-5">
           <div className="flex items-center gap-4 mb-3">
-            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center text-gold font-bold text-lg">
+            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center text-[#1A1A1A] font-bold text-lg">
               {broker.name
                 .split(" ")
                 .map((n) => n[0])
@@ -41,7 +41,7 @@ const BrokerCard = ({ broker }: { broker: Broker }) => {
               <div className="flex items-center justify-between gap-2">
                 <h3 className="text-white font-semibold truncate">{broker.name}</h3>
                 {senior && (
-                  <Badge className="bg-gold/15 text-gold border-gold/30 text-xs">
+                  <Badge className="bg-[#EFE6D6]/15 text-[#1A1A1A] border-[#B89555]/30 text-xs">
                     <Crown className="w-3 h-3 mr-1" />
                     Senior
                   </Badge>
@@ -58,7 +58,7 @@ const BrokerCard = ({ broker }: { broker: Broker }) => {
               <Badge
                 key={spec}
                 variant="outline"
-                className="text-xs border-gold/30 text-[#1A1A1A]"
+                className="text-xs border-[#B89555]/30 text-[#1A1A1A]"
               >
                 {spec}
               </Badge>
@@ -131,15 +131,15 @@ const OurBrokers = () => {
         {/* Hero */}
         <section className="relative py-16 md:py-24 overflow-hidden">
           <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-gold/10 rounded-full blur-[100px]" />
+            <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-[#EFE6D6]/10 rounded-full blur-[100px]" />
           </div>
           <div className="container mx-auto px-4 relative z-10 text-center">
-            <Badge className="bg-gold/15 text-gold border-gold/30 px-4 py-1.5 mb-6">
+            <Badge className="bg-[#EFE6D6]/15 text-[#1A1A1A] border-[#B89555]/30 px-4 py-1.5 mb-6">
               <Users className="w-3.5 h-3.5 mr-1.5" />
               {allBrokers.length}+ Professional Brokers
             </Badge>
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Our <span className="text-gold">Brokers</span>
+              Our <span className="text-[#1A1A1A]">Brokers</span>
             </h1>
             <p className="text-white/70 max-w-2xl mx-auto mb-8">
               Explore our team by experience level and specialization.
@@ -150,7 +150,7 @@ const OurBrokers = () => {
                 variant={tier === "all" ? "default" : "outline"}
                 size="sm"
                 onClick={() => setTier("all")}
-                className={tier === "all" ? "bg-gold text-[#1A1A1A]" : "border-[#1A1A1A]"}
+                className={tier === "all" ? "bg-[#EFE6D6] text-[#1A1A1A]" : "border-[#1A1A1A]"}
               >
                 All ({allBrokers.length})
               </Button>
@@ -159,7 +159,7 @@ const OurBrokers = () => {
                 size="sm"
                 onClick={() => setTier("senior")}
                 className={
-                  tier === "senior" ? "bg-gold text-[#1A1A1A]" : "border-[#1A1A1A] text-white/70"
+                  tier === "senior" ? "bg-[#EFE6D6] text-[#1A1A1A]" : "border-[#1A1A1A] text-white/70"
                 }
               >
                 Senior ({seniorCount})
@@ -169,7 +169,7 @@ const OurBrokers = () => {
                 size="sm"
                 onClick={() => setTier("broker")}
                 className={
-                  tier === "broker" ? "bg-gold text-[#1A1A1A]" : "border-[#1A1A1A] text-white/70"
+                  tier === "broker" ? "bg-[#EFE6D6] text-[#1A1A1A]" : "border-[#1A1A1A] text-white/70"
                 }
               >
                 Brokers ({allBrokers.length - seniorCount})
@@ -188,7 +188,7 @@ const OurBrokers = () => {
                   placeholder="Search by name or specialization..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="pl-10 bg-zinc-900 border-[#1A1A1A]"
+                  className="pl-10 bg-[#FDFBF7] border-[#1A1A1A]"
                 />
               </div>
               <div className="flex flex-wrap gap-2">
@@ -198,7 +198,7 @@ const OurBrokers = () => {
                   onClick={() => setNationality(null)}
                   className={
                     nationality === null
-                      ? "bg-gold text-[#1A1A1A]"
+                      ? "bg-[#EFE6D6] text-[#1A1A1A]"
                       : "border-[#1A1A1A]"
                   }
                 >
@@ -212,7 +212,7 @@ const OurBrokers = () => {
                     onClick={() => setNationality(nat)}
                     className={
                       nationality === nat
-                        ? "bg-gold text-[#1A1A1A]"
+                        ? "bg-[#EFE6D6] text-[#1A1A1A]"
                         : "border-[#1A1A1A] text-white/70"
                     }
                   >

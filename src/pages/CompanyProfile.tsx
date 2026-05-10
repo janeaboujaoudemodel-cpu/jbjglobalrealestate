@@ -447,7 +447,7 @@ const CompanyProfile = () => {
           animate="visible"
           variants={staggerContainer}
         >
-          <motion.span className="inline-block text-gold text-xs uppercase tracking-[0.4em] mb-6" variants={fadeInUp}>
+          <motion.span className="inline-block text-[#1A1A1A] text-xs uppercase tracking-[0.4em] mb-6" variants={fadeInUp}>
             Company Profile
           </motion.span>
           <motion.h1
@@ -489,7 +489,7 @@ const CompanyProfile = () => {
           className="max-w-4xl mx-auto"
         >
           <div className="text-center mb-8">
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Contents</span>
+            <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Contents</span>
             <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
               Table of Contents
             </h2>
@@ -547,7 +547,7 @@ const CompanyProfile = () => {
           className="max-w-5xl mx-auto"
         >
           <div className="text-center mb-12">
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Overview</span>
+            <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Overview</span>
             <h2 className="text-white text-3xl md:text-4xl font-bold mb-6">
               Company Overview
             </h2>
@@ -572,7 +572,7 @@ const CompanyProfile = () => {
           className="max-w-6xl mx-auto"
         >
           <div className="text-center mb-12">
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Ecosystem</span>
+            <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Ecosystem</span>
             <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
               Platform Positioning
             </h2>
@@ -608,7 +608,7 @@ const CompanyProfile = () => {
             className="max-w-4xl mx-auto"
           >
             <div className="text-center mb-10">
-              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Watch</span>
+              <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Watch</span>
               <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
                 Company Introduction
               </h2>
@@ -636,7 +636,7 @@ const CompanyProfile = () => {
           className="max-w-5xl mx-auto"
         >
           <div className="text-center mb-12">
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Story</span>
+            <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Our Story</span>
             <h2 className="text-white text-3xl md:text-4xl font-bold mb-6">
               Brand Story
             </h2>
@@ -680,7 +680,7 @@ const CompanyProfile = () => {
           </div>
 
           <div className="text-center mb-12">
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Foundation</span>
+            <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Our Foundation</span>
             <h2 className="text-white text-3xl md:text-4xl font-bold">
               Core Values
             </h2>
@@ -709,7 +709,7 @@ const CompanyProfile = () => {
       {/* 5. Services (8-card grid) */}
       <SectionShell>
         <div id="services" className="text-center mb-12">
-          <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">What We Do</span>
+          <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">What We Do</span>
           <h2 className="text-white text-3xl md:text-4xl font-bold">
             Services
           </h2>
@@ -745,7 +745,7 @@ const CompanyProfile = () => {
       <SectionShell>
         <div id="ai-tools" className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Technology</span>
+            <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Technology</span>
             <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
               AI Tools & Creativity
             </h2>
@@ -777,7 +777,7 @@ const CompanyProfile = () => {
       <SectionShell>
         <div id="marketplace" className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Platform</span>
+            <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Platform</span>
             <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
               Real Estate Marketplace
             </h2>
@@ -809,7 +809,7 @@ const CompanyProfile = () => {
       <SectionShell>
         <div id="dubai-destination" className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Location</span>
+            <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Location</span>
             <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
               Dubai — A Global Real Estate Destination
             </h2>
@@ -838,7 +838,7 @@ const CompanyProfile = () => {
       {/* Prime Areas of Focus — Photo Cards */}
       <SectionShell>
         <div id="areas" className="text-center mb-12">
-          <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Where We Operate</span>
+          <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Where We Operate</span>
           <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
             Prime Areas of Focus
           </h2>
@@ -938,7 +938,7 @@ const CompanyProfile = () => {
       <SectionShell>
         <div id="platform-benefits" className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Value</span>
+            <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Value</span>
             <h2 className="text-white text-3xl md:text-4xl font-bold">
               Platform Benefits
             </h2>
@@ -946,12 +946,12 @@ const CompanyProfile = () => {
           <div className="grid md:grid-cols-2 gap-6">
             <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="jj-card-inner">
               <h3 className="text-[#1A1A1A] font-bold text-lg mb-4 flex items-center gap-2">
-                <Briefcase className="w-5 h-5 text-gold" /> For Investors
+                <Briefcase className="w-5 h-5 text-[#1A1A1A]" /> For Investors
               </h3>
               <ul className="space-y-3">
                 {PROFILE_CONTENT.platformBenefits.investors.map((b, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-[#1A1A1A]/70">
-                    <CheckCircle className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
+                    <CheckCircle className="w-4 h-4 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
                     {b}
                   </li>
                 ))}
@@ -959,12 +959,12 @@ const CompanyProfile = () => {
             </motion.div>
             <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="jj-card-inner">
               <h3 className="text-[#1A1A1A] font-bold text-lg mb-4 flex items-center gap-2">
-                <Handshake className="w-5 h-5 text-gold" /> For Brokers
+                <Handshake className="w-5 h-5 text-[#1A1A1A]" /> For Brokers
               </h3>
               <ul className="space-y-3">
                 {PROFILE_CONTENT.platformBenefits.brokers.map((b, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-[#1A1A1A]/70">
-                    <CheckCircle className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
+                    <CheckCircle className="w-4 h-4 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
                     {b}
                   </li>
                 ))}
@@ -978,7 +978,7 @@ const CompanyProfile = () => {
       <SectionShell>
         <div id="portfolio" className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Portfolio</span>
+            <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Portfolio</span>
             <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
               Portfolio Highlights
             </h2>
@@ -993,7 +993,7 @@ const CompanyProfile = () => {
       <SectionShell>
         <div id="investor-journey" className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Process</span>
+            <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Process</span>
             <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
               The Investor Journey
             </h2>
@@ -1002,10 +1002,10 @@ const CompanyProfile = () => {
             </p>
           </div>
           <motion.div className="relative" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}>
-            <div className="absolute left-6 top-0 bottom-0 w-px bg-gold/30 hidden md:block" />
+            <div className="absolute left-6 top-0 bottom-0 w-px bg-[#EFE6D6]/30 hidden md:block" />
             {PROFILE_CONTENT.investorJourney.map((step) => (
               <motion.div key={step.step} className="flex items-start gap-6 mb-6 last:mb-0" variants={fadeInUp}>
-                <div className="jj-icon-box-active w-12 h-12 rounded-full border border-gold/40 flex items-center justify-center flex-shrink-0">
+                <div className="jj-icon-box-active w-12 h-12 rounded-full border border-[#B89555]/40 flex items-center justify-center flex-shrink-0">
                   <span className="text-[#1A1A1A] font-bold text-sm">{step.step}</span>
                 </div>
                 <div className="jj-card-inner flex-1">
@@ -1022,7 +1022,7 @@ const CompanyProfile = () => {
       <SectionShell>
         <div id="partner-network" className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Network</span>
+            <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Network</span>
             <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
               Partner Network
             </h2>
@@ -1051,17 +1051,17 @@ const CompanyProfile = () => {
       {/* 6. Process (timeline) */}
       <SectionShell>
         <div id="process" className="text-center mb-12">
-          <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">How We Work</span>
+          <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">How We Work</span>
           <h2 className="text-white text-3xl md:text-4xl font-bold">
             Our Process
           </h2>
         </div>
         <div className="max-w-5xl mx-auto">
           <motion.div className="relative" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}>
-            <div className="absolute left-6 top-0 bottom-0 w-px bg-gold/30 hidden md:block" />
+            <div className="absolute left-6 top-0 bottom-0 w-px bg-[#EFE6D6]/30 hidden md:block" />
             {PROFILE_CONTENT.process.map((step) => (
               <motion.div key={step.step} className="flex items-start gap-6 mb-6 last:mb-0" variants={fadeInUp}>
-                <div className="jj-icon-box-active w-12 h-12 rounded-full border border-gold/40 flex items-center justify-center flex-shrink-0">
+                <div className="jj-icon-box-active w-12 h-12 rounded-full border border-[#B89555]/40 flex items-center justify-center flex-shrink-0">
                   <span className="text-[#1A1A1A] font-bold">{step.step}</span>
                 </div>
                 <div className="jj-card-inner flex-1">
@@ -1077,7 +1077,7 @@ const CompanyProfile = () => {
       {/* 7. Differentiators */}
       <SectionShell>
         <div id="differentiators" className="text-center mb-12">
-          <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Edge</span>
+          <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Our Edge</span>
           <h2 className="text-white text-3xl md:text-4xl font-bold">
             Why JBJ
           </h2>
@@ -1103,7 +1103,7 @@ const CompanyProfile = () => {
       {/* 9. Client Experience Standards */}
       <SectionShell>
         <div id="client-experience" className="text-center mb-12">
-          <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Commitment</span>
+          <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Our Commitment</span>
           <h2 className="text-white text-3xl md:text-4xl font-bold">
             Client Experience Standards
           </h2>
@@ -1148,7 +1148,7 @@ const CompanyProfile = () => {
         <SectionShell>
           <div id="founder" className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Leadership</span>
+              <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Leadership</span>
                <h2 className="text-white text-3xl md:text-4xl font-bold">
                 Founder & CEO
               </h2>
@@ -1161,7 +1161,7 @@ const CompanyProfile = () => {
               className="jj-card-inner"
             >
               <div className="flex flex-col md:flex-row items-start gap-8">
-                <div className="w-32 h-40 md:w-40 md:h-52 rounded-xl overflow-hidden border-2 border-gold/30 shadow-xl flex-shrink-0">
+                <div className="w-32 h-40 md:w-40 md:h-52 rounded-xl overflow-hidden border-2 border-[#B89555]/30 shadow-xl flex-shrink-0">
                   <img 
                     src={founderCompanyProfile} 
                     alt={PROFILE_CONTENT.founderProfile.name}
@@ -1170,7 +1170,7 @@ const CompanyProfile = () => {
                 </div>
                 <div className="flex-1">
                   <h3 className="text-[#1A1A1A] text-2xl font-bold mb-1">{PROFILE_CONTENT.founderProfile.name}</h3>
-                  <p className="text-gold mb-4">{PROFILE_CONTENT.founderProfile.title}</p>
+                  <p className="text-[#1A1A1A] mb-4">{PROFILE_CONTENT.founderProfile.title}</p>
                   <p className="text-[#1A1A1A]/70 leading-relaxed mb-6">{PROFILE_CONTENT.founderProfile.bio}</p>
 
                   <div className="mb-6">
@@ -1178,13 +1178,13 @@ const CompanyProfile = () => {
                     <ul className="space-y-2">
                       {PROFILE_CONTENT.founderProfile.principles.map((p, i) => (
                         <li key={i} className="flex items-start gap-2 text-sm text-[#1A1A1A]/70">
-                          <span className="text-gold font-bold">{i + 1}.</span> {p}
+                          <span className="text-[#1A1A1A] font-bold">{i + 1}.</span> {p}
                         </li>
                       ))}
                     </ul>
                   </div>
 
-                  <blockquote className="border-l-4 border-gold pl-6 py-2">
+                  <blockquote className="border-l-4 border-[#B89555] pl-6 py-2">
                     <p className="text-[#1A1A1A] text-xl italic mb-2">"{PROFILE_CONTENT.founderProfile.quote}"</p>
                     <cite className="text-[#1A1A1A]/60 text-sm">— {PROFILE_CONTENT.founderProfile.name}</cite>
                   </blockquote>
@@ -1198,7 +1198,7 @@ const CompanyProfile = () => {
       {/* 12. Company Snapshot */}
       <SectionShell>
         <div id="snapshot" className="text-center mb-12">
-          <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">At a Glance</span>
+          <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">At a Glance</span>
           <h2 className="text-white text-3xl md:text-4xl font-bold">
             Company Snapshot
           </h2>
@@ -1245,7 +1245,7 @@ const CompanyProfile = () => {
       {/* 13. Calls to Action */}
       <SectionShell>
         <div className="text-center mb-12">
-          <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Get Started</span>
+          <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Get Started</span>
           <h2 className="text-white text-3xl md:text-4xl font-bold">
             Ready to Connect?
           </h2>
@@ -1265,9 +1265,9 @@ const CompanyProfile = () => {
               className="jj-card-inner group cursor-pointer flex flex-col h-full"
               onClick={handleWhatsApp}
             >
-              <h3 className="text-[#1A1A1A] text-lg font-bold mb-2 group-hover:text-gold transition-colors">{cta.title}</h3>
+              <h3 className="text-[#1A1A1A] text-lg font-bold mb-2 group-hover:text-[#1A1A1A] transition-colors">{cta.title}</h3>
               <p className="text-[#1A1A1A]/70 text-sm mb-4 flex-1">{cta.description}</p>
-              <div className="flex items-center text-gold text-sm font-semibold mt-auto">
+              <div className="flex items-center text-[#1A1A1A] text-sm font-semibold mt-auto">
                 <span>Get Started</span>
                 <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
               </div>
@@ -1286,7 +1286,7 @@ const CompanyProfile = () => {
           viewport={{ once: true }}
         >
           <div className="text-center mb-8">
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Download</span>
+            <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">Download</span>
             <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
               Get the Full Company Profile
             </h2>
@@ -1316,7 +1316,7 @@ const CompanyProfile = () => {
                     </>
                   )}
                 </Button>
-                <Button onClick={handleWhatsApp} variant="outline" size="lg" className="border-gold text-gold hover:bg-gold hover:text-[#1A1A1A]">
+                <Button onClick={handleWhatsApp} variant="outline" size="lg" className="border-[#B89555] text-[#1A1A1A] hover:bg-[#EFE6D6] hover:text-[#1A1A1A]">
                   <BookOpen className="w-5 h-5" />
                   Request Print Copy
                 </Button>

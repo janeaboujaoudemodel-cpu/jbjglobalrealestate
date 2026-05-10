@@ -103,7 +103,7 @@ export default function VerifyCertificate() {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="h-12 w-12 animate-spin text-gold mx-auto mb-4" />
+          <Loader2 className="h-12 w-12 animate-spin text-[#1A1A1A] mx-auto mb-4" />
           <p className="text-muted-foreground">Verifying certificate...</p>
         </div>
       </div>
@@ -124,10 +124,10 @@ export default function VerifyCertificate() {
 
         {/* Lookup Form */}
         {showLookup && !certificate && (
-          <Card className="mb-6 border-2 border-gold/30">
+          <Card className="mb-6 border-2 border-[#B89555]/30">
             <CardContent className="p-6">
               <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
-                <Search className="w-5 h-5 text-gold" />
+                <Search className="w-5 h-5 text-[#1A1A1A]" />
                 Look Up by Certificate Number
               </h3>
               <div className="flex gap-2">
@@ -136,9 +136,9 @@ export default function VerifyCertificate() {
                   value={lookupNumber}
                   onChange={(e) => setLookupNumber(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && verifyByNumber()}
-                  className="border-gold/20"
+                  className="border-[#B89555]/20"
                 />
-                <Button onClick={verifyByNumber} className="bg-gold text-[#1A1A1A] hover:bg-gold/90">
+                <Button onClick={verifyByNumber} className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90">
                   Verify
                 </Button>
               </div>
@@ -202,8 +202,8 @@ export default function VerifyCertificate() {
             {/* Certificate Card */}
             <Card className="bg-card border-border">
               <CardHeader className="text-center border-b border-border">
-                <div className="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center mx-auto mb-4">
-                  <Award className="h-8 w-8 text-gold" />
+                <div className="w-16 h-16 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center mx-auto mb-4">
+                  <Award className="h-8 w-8 text-[#1A1A1A]" />
                 </div>
                 <CardTitle className="text-2xl">{certificate.full_name}</CardTitle>
                 <CardDescription>JBJ Academy Broker Certification</CardDescription>
@@ -243,9 +243,9 @@ export default function VerifyCertificate() {
                       <p className="text-2xl font-bold text-foreground">{certificate.real_estate_score}%</p>
                       <p className="text-xs text-muted-foreground">Real Estate Basics</p>
                     </div>
-                    <div className="text-center p-4 bg-gold/10 rounded-lg border border-gold/30">
-                      <Trophy className="h-6 w-6 text-gold mx-auto mb-2" />
-                      <p className="text-2xl font-bold text-gold">{certificate.combined_score}%</p>
+                    <div className="text-center p-4 bg-[#EFE6D6]/10 rounded-lg border border-[#B89555]/30">
+                      <Trophy className="h-6 w-6 text-[#1A1A1A] mx-auto mb-2" />
+                      <p className="text-2xl font-bold text-[#1A1A1A]">{certificate.combined_score}%</p>
                       <p className="text-xs text-muted-foreground">Combined Score</p>
                     </div>
                   </div>

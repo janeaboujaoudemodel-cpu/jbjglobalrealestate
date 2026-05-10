@@ -149,7 +149,7 @@ const PAIRS: Pair[] = [
     area: "Chip / Pill",
     element: "Trust badge & filter chip",
     before: {
-      className: "text-[11px] text-gold/80",
+      className: "text-[11px] text-[#1A1A1A]/80",
       fg: "#B8956ACC",
       bg: "#FFFFFF",
       note: "Faded gold — banned by faded-gold guard.",
@@ -270,7 +270,7 @@ export default function ContrastReview() {
               <ArrowLeft className="h-4 w-4" />
             </Link>
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-zinc-500">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#1A1A1A]/60">
                 Internal · Design QA
               </p>
               <h1 className="text-2xl font-bold tracking-tight text-zinc-950">
@@ -307,7 +307,7 @@ export default function ContrastReview() {
         <section className="rounded-2xl border border-zinc-200 bg-zinc-50/60 p-6">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-zinc-500">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#1A1A1A]/60">
                 Live preview
               </p>
               <h2 className="text-xl font-bold tracking-tight text-zinc-950">
@@ -332,7 +332,7 @@ export default function ContrastReview() {
                 onClick={() => setActive(r)}
                 className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
                   r.path === active.path
-                    ? "border-zinc-900 bg-zinc-900 text-white"
+                    ? "border-zinc-900 bg-[#FDFBF7] text-white"
                     : "border-zinc-300 bg-[#FDFBF7] text-zinc-700 hover:bg-zinc-100"
                 }`}
               >
@@ -355,7 +355,7 @@ export default function ContrastReview() {
         {/* Before / After token pairs */}
         <section>
           <div className="mb-6">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-zinc-500">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#1A1A1A]/60">
               Token diff
             </p>
             <h2 className="text-2xl font-bold tracking-tight text-zinc-950">
@@ -378,7 +378,7 @@ export default function ContrastReview() {
                   className="overflow-hidden rounded-2xl border border-zinc-200 bg-[#FDFBF7]"
                 >
                   <header className="border-b border-zinc-100 px-5 py-4">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-zinc-500">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#1A1A1A]/60">
                       {p.area}
                     </p>
                     <h3 className="text-base font-semibold text-zinc-950">{p.element}</h3>
@@ -388,7 +388,7 @@ export default function ContrastReview() {
                     {/* Before */}
                     <div className="border-r border-zinc-100 p-5">
                       <div className="mb-3 flex items-center justify-between">
-                        <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-400">
+                        <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-[#1A1A1A]/70">
                           Before
                         </span>
                         <span
@@ -411,7 +411,7 @@ export default function ContrastReview() {
                       <code className="block break-all rounded-md bg-zinc-50 px-2 py-1.5 text-[11px] text-zinc-700">
                         {p.before.className}
                       </code>
-                      <p className="mt-2 text-xs leading-relaxed text-zinc-500">
+                      <p className="mt-2 text-xs leading-relaxed text-[#1A1A1A]/60">
                         {p.before.note}
                       </p>
                     </div>

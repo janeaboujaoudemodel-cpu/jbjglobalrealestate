@@ -117,7 +117,7 @@ const InteriorDesign = () => {
           <motion.div variants={fadeInUp}>
             <Link 
               to="/services/design-build" 
-              className="inline-flex items-center gap-2 text-gold hover:text-white transition-colors mb-6"
+              className="inline-flex items-center gap-2 text-[#1A1A1A] hover:text-white transition-colors mb-6"
             >
               <ChevronLeft className="w-4 h-4" />
               Back to Design & Build
@@ -128,8 +128,8 @@ const InteriorDesign = () => {
             className="flex items-center gap-2 mb-6"
             variants={fadeInUp}
           >
-            <Palette className="w-6 h-6 text-gold" />
-            <span className="text-gold text-sm uppercase tracking-[0.3em]">
+            <Palette className="w-6 h-6 text-[#1A1A1A]" />
+            <span className="text-[#1A1A1A] text-sm uppercase tracking-[0.3em]">
               Partner Network
             </span>
           </motion.div>
@@ -152,7 +152,7 @@ const InteriorDesign = () => {
           <motion.div variants={fadeInUp}>
             <Button variant="primary" size="lg" asChild>
               <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-                <span className="text-[#1A1A1A]">Book a</span><span className="text-gold"> Consultation</span>
+                <span className="text-[#1A1A1A]">Book a</span><span className="text-[#1A1A1A]"> Consultation</span>
                 <ArrowRight className="w-5 h-5 ml-2" />
               </a>
             </Button>
@@ -170,7 +170,7 @@ const InteriorDesign = () => {
             variants={staggerContainer}
           >
             <motion.div className="text-center mb-12" variants={fadeInUp}>
-              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
+              <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">
                 Our Services
               </span>
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -188,10 +188,10 @@ const InteriorDesign = () => {
                     <CardContent className="p-6">
                       <div className="flex items-start gap-4">
                         <div className="w-14 h-14 rounded-xl bg-[#1A1A1A] flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                          <service.icon className="w-7 h-7 text-gold" />
+                          <service.icon className="w-7 h-7 text-[#1A1A1A]" />
                         </div>
                         <div className="flex-1">
-                          <h3 className="text-[#1A1A1A] font-semibold text-xl mb-2 group-hover:text-gold transition-colors">
+                          <h3 className="text-[#1A1A1A] font-semibold text-xl mb-2 group-hover:text-[#1A1A1A] transition-colors">
                             {service.title}
                           </h3>
                           <p className="text-[#1A1A1A]/70 text-sm mb-4">
@@ -200,7 +200,7 @@ const InteriorDesign = () => {
                           <div className="grid grid-cols-2 gap-2">
                             {service.features.map((feature) => (
                               <div key={feature} className="flex items-center gap-2 text-xs text-[#1A1A1A]/60">
-                                <CheckCircle className="w-3 h-3 text-gold" />
+                                <CheckCircle className="w-3 h-3 text-[#1A1A1A]" />
                                 {feature}
                               </div>
                             ))}
@@ -226,7 +226,7 @@ const InteriorDesign = () => {
             variants={staggerContainer}
           >
             <motion.div className="text-center mb-12" variants={fadeInUp}>
-              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
+              <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">
                 Portfolio
               </span>
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -250,7 +250,7 @@ const InteriorDesign = () => {
                       <h3 className="text-[#1A1A1A] font-semibold text-lg mb-1">
                         {project.title}
                       </h3>
-                      <p className="text-gold text-sm">
+                      <p className="text-[#1A1A1A] text-sm">
                         {project.style}
                       </p>
                     </CardContent>
@@ -272,7 +272,7 @@ const InteriorDesign = () => {
             variants={staggerContainer}
           >
             <motion.div className="text-center mb-12" variants={fadeInUp}>
-              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
+              <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">
                 How We Work
               </span>
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -285,7 +285,7 @@ const InteriorDesign = () => {
                 <motion.div key={item.step} variants={fadeInUp}>
                   <Card className="jj-card-inner h-full">
                     <CardContent className="p-6 text-center">
-                      <div className="text-4xl font-bold text-gold mb-4">
+                      <div className="text-4xl font-bold text-[#1A1A1A] mb-4">
                         {item.step}
                       </div>
                       <h3 className="text-[#1A1A1A] font-semibold text-lg mb-2">
@@ -315,8 +315,8 @@ const InteriorDesign = () => {
           >
             <div className="jj-card-inner rounded-2xl p-8 md:p-12 max-w-3xl mx-auto">
               <div className="flex items-center justify-center gap-2 mb-4">
-                <Sparkles className="w-5 h-5 text-gold" />
-                <span className="text-gold text-sm uppercase tracking-wider">Try AI First</span>
+                <Sparkles className="w-5 h-5 text-[#1A1A1A]" />
+                <span className="text-[#1A1A1A] text-sm uppercase tracking-wider">Try AI First</span>
               </div>
               <h2 className="text-2xl md:text-3xl font-bold mb-4">
                 <SplitTitle text="Visualize Your Space" />
@@ -329,7 +329,7 @@ const InteriorDesign = () => {
                 <Button variant="primary" size="lg" asChild>
                   <Link to="/tools/interior-ai">
                     <Sparkles className="w-5 h-5 mr-2" />
-                    <span className="text-[#1A1A1A]">Try AI</span><span className="text-gold"> Designer</span>
+                    <span className="text-[#1A1A1A]">Try AI</span><span className="text-[#1A1A1A]"> Designer</span>
                   </Link>
                 </Button>
                 <Button variant="secondary" size="lg" asChild>

@@ -36,13 +36,13 @@ function DynamicTileLayer({ mapView, language }: { mapView: MapViewType; languag
 function MapViewToggle({ mapView, onViewChange, t }: { mapView: MapViewType; onViewChange: (v: MapViewType) => void; t: (key: string) => string }) {
   return (
     <div className="absolute top-4 left-4 z-[1000] flex flex-col gap-2">
-      <div className="bg-card/95 backdrop-blur-sm rounded-lg border border-gold/40 shadow-lg p-1 flex flex-col gap-1">
+      <div className="bg-card/95 backdrop-blur-sm rounded-lg border border-[#B89555]/40 shadow-lg p-1 flex flex-col gap-1">
         {(["satellite", "street", "terrain"] as MapViewType[]).map((view) => (
           <button
             key={view}
             onClick={() => onViewChange(view)}
             className={`px-3 py-2 text-xs font-medium rounded transition-all ${
-              mapView === view ? "bg-gold text-foreground" : "hover:bg-gold/20 text-muted-foreground"
+              mapView === view ? "bg-[#EFE6D6] text-foreground" : "hover:bg-[#EFE6D6]/20 text-muted-foreground"
             }`}
           >
             {t(`map.${view}`)}
@@ -273,10 +273,10 @@ const PropertyMap = () => {
   return (
     <div className="flex flex-col h-[calc(100vh-88px)] overflow-hidden">
       {/* ── MAP CONTROL BAR — below header, NOT part of header ── */}
-      <div className="shrink-0 z-10 bg-gradient-to-r from-[#ECE2D2] via-[#E0D3BF] to-[#D8C7A6] border-b border-gold/20">
+      <div className="shrink-0 z-10 bg-gradient-to-r from-[#ECE2D2] via-[#E0D3BF] to-[#D8C7A6] border-b border-[#B89555]/20">
         <div className="flex items-center gap-2 px-3 py-2 flex-wrap">
           {/* Left: count */}
-          <Badge variant="secondary" className="gap-1 shrink-0 bg-gold/10 text-foreground border-gold/30">
+          <Badge variant="secondary" className="gap-1 shrink-0 bg-[#EFE6D6]/10 text-foreground border-[#B89555]/30">
             <MapPin className="h-3 w-3" />
             {filteredProjects.length} {t('map.properties')}
           </Badge>
@@ -287,21 +287,21 @@ const PropertyMap = () => {
           <div className="flex items-center border border-border rounded-lg overflow-hidden">
             <button
               onClick={() => setViewMode("map")}
-              className={`px-3 py-1.5 text-xs font-medium transition-colors ${viewMode === "map" ? "bg-gold/20 text-foreground" : "text-muted-foreground hover:bg-muted"}`}
+              className={`px-3 py-1.5 text-xs font-medium transition-colors ${viewMode === "map" ? "bg-[#EFE6D6]/20 text-foreground" : "text-muted-foreground hover:bg-muted"}`}
             >
               <MapPin className="h-3.5 w-3.5 inline mr-1" />
               Map
             </button>
             <button
               onClick={() => setViewMode("list")}
-              className={`px-3 py-1.5 text-xs font-medium transition-colors border-x border-border ${viewMode === "list" ? "bg-gold/20 text-foreground" : "text-muted-foreground hover:bg-muted"}`}
+              className={`px-3 py-1.5 text-xs font-medium transition-colors border-x border-border ${viewMode === "list" ? "bg-[#EFE6D6]/20 text-foreground" : "text-muted-foreground hover:bg-muted"}`}
             >
               <List className="h-3.5 w-3.5 inline mr-1" />
               List
             </button>
             <button
               onClick={() => setViewMode("grid")}
-              className={`px-3 py-1.5 text-xs font-medium transition-colors ${viewMode === "grid" ? "bg-gold/20 text-foreground" : "text-muted-foreground hover:bg-muted"}`}
+              className={`px-3 py-1.5 text-xs font-medium transition-colors ${viewMode === "grid" ? "bg-[#EFE6D6]/20 text-foreground" : "text-muted-foreground hover:bg-muted"}`}
             >
               <Grid3X3 className="h-3.5 w-3.5 inline mr-1" />
               Grid
@@ -323,7 +323,7 @@ const PropertyMap = () => {
           {/* Hide Sold toggle */}
           <button
             onClick={() => setHideSold(!hideSold)}
-            className={`flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${hideSold ? "bg-gold/20 border-gold/40 text-foreground" : "border-border text-muted-foreground hover:bg-muted"}`}
+            className={`flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${hideSold ? "bg-[#EFE6D6]/20 border-[#B89555]/40 text-foreground" : "border-border text-muted-foreground hover:bg-muted"}`}
           >
             <EyeOff className="h-3.5 w-3.5" />
             Hide Sold
@@ -387,7 +387,7 @@ const PropertyMap = () => {
             className="absolute z-[1000] pointer-events-none"
             style={{ left: hoverPos.left, top: hoverPos.top, width: 220 }}
           >
-            <Card className="shadow-lg border border-gold/30 pointer-events-auto">
+            <Card className="shadow-lg border border-[#B89555]/30 pointer-events-auto">
               <CardContent className="p-0">
                 {hoveredProject.cover_image_url && (
                   <SafeImage src={hoveredProject.cover_image_url} alt={hoveredProject.name} className="w-full h-20 object-cover rounded-t-lg" />
@@ -489,7 +489,7 @@ const PropertyMap = () => {
             {filteredProjects.slice(0, 100).map((project) => (
               <Card
                 key={project.id}
-                className="cursor-pointer hover:border-gold/50 transition-colors"
+                className="cursor-pointer hover:border-[#B89555]/50 transition-colors"
                 onClick={() => setSelectedProject(project)}
               >
                 <CardContent className="p-0">

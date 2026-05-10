@@ -73,11 +73,11 @@ function BookMarquee({ books }: { books: BookData[] }) {
   }, [books.length]);
 
   return (
-    <div className="overflow-hidden w-full py-6 mb-4 border-b border-gold/20 pb-8">
+    <div className="overflow-hidden w-full py-6 mb-4 border-b border-[#B89555]/20 pb-8">
       <div ref={scrollRef} className="flex gap-6 will-change-transform" style={{ width: 'max-content' }}>
         {duplicated.map((book, i) => (
           <div key={`${book.title}-${i}`} className="flex-shrink-0 w-28 md:w-36">
-            <div className="relative w-24 h-36 md:w-32 md:h-44 mx-auto rounded-md overflow-hidden border border-gold/40 shadow-[4px_4px_20px_rgba(0,0,0,0.25)]">
+            <div className="relative w-24 h-36 md:w-32 md:h-44 mx-auto rounded-md overflow-hidden border border-[#B89555]/40 shadow-[4px_4px_20px_rgba(0,0,0,0.25)]">
               <BookCoverFace book={book} bare />
             </div>
           </div>
@@ -149,9 +149,9 @@ const Guides = () => {
           className="relative z-10 container mx-auto px-4 py-32 text-center max-w-4xl"
           initial="hidden" animate="visible" variants={staggerContainer}
         >
-          <motion.div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-[#1A1A1A]/30 backdrop-blur-md" variants={fadeInUp}>
-            <BookOpen className="w-4 h-4 text-gold" />
-            <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">Guides</span>
+          <motion.div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-[#B89555]/40 bg-[#1A1A1A]/30 backdrop-blur-md" variants={fadeInUp}>
+            <BookOpen className="w-4 h-4 text-[#1A1A1A]" />
+            <span className="text-[#1A1A1A] font-semibold text-xs uppercase tracking-[0.2em]">Guides</span>
           </motion.div>
           <motion.h1 className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-[-0.02em]" variants={fadeInUp}>
             Guides Library
@@ -181,7 +181,7 @@ const Guides = () => {
             <motion.div variants={fadeInUp} className="jj-card-inner max-w-3xl mx-auto">
               <div className="flex items-start gap-4">
                 <div className="w-14 h-14 rounded-xl bg-[#1A1A1A] flex items-center justify-center shrink-0">
-                  <BookOpen className="w-7 h-7 text-gold" />
+                  <BookOpen className="w-7 h-7 text-[#1A1A1A]" />
                 </div>
                 <div className="text-left">
                   <p className="text-[#1A1A1A]/70 leading-relaxed">
@@ -228,11 +228,11 @@ const Guides = () => {
                   whileHover={{ y: -8 }}
                   transition={{ type: 'spring', stiffness: 300 }}
                 >
-                  <div className="relative w-24 h-36 md:w-32 md:h-44 rounded-md overflow-hidden border border-gold/40 shadow-[4px_4px_20px_rgba(0,0,0,0.25)] group-hover:shadow-[6px_6px_30px_rgba(200,167,102,0.4)] transition-shadow">
+                  <div className="relative w-24 h-36 md:w-32 md:h-44 rounded-md overflow-hidden border border-[#B89555]/40 shadow-[4px_4px_20px_rgba(0,0,0,0.25)] group-hover:shadow-[6px_6px_30px_rgba(200,167,102,0.4)] transition-shadow">
                     <BookCoverFace book={book} bare />
                     <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
-                  <p className="text-xs text-[#1A1A1A]/70 text-center font-medium group-hover:text-gold transition-colors leading-tight">
+                  <p className="text-xs text-[#1A1A1A]/70 text-center font-medium group-hover:text-[#1A1A1A] transition-colors leading-tight">
                     {book.title}
                   </p>
                 </motion.button>
@@ -241,18 +241,18 @@ const Guides = () => {
 
             {/* Company Profile - Separate row */}
             {allGuideBooks.filter(b => b.title === 'Company Profile').map((book) => (
-              <motion.div key={book.title} variants={fadeInUp} className="flex justify-center mt-8 pt-6 border-t border-gold/20">
+              <motion.div key={book.title} variants={fadeInUp} className="flex justify-center mt-8 pt-6 border-t border-[#B89555]/20">
                 <motion.button
                   onClick={() => setSelectedBook(book)}
                   className="group flex flex-col items-center gap-3 w-28 md:w-36"
                   whileHover={{ y: -8 }}
                   transition={{ type: 'spring', stiffness: 300 }}
                 >
-                  <div className="relative w-24 h-36 md:w-32 md:h-44 rounded-md overflow-hidden border border-gold/40 shadow-[4px_4px_20px_rgba(0,0,0,0.25)] group-hover:shadow-[6px_6px_30px_rgba(200,167,102,0.4)] transition-shadow">
+                  <div className="relative w-24 h-36 md:w-32 md:h-44 rounded-md overflow-hidden border border-[#B89555]/40 shadow-[4px_4px_20px_rgba(0,0,0,0.25)] group-hover:shadow-[6px_6px_30px_rgba(200,167,102,0.4)] transition-shadow">
                     <BookCoverFace book={book} bare />
                     <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
-                  <p className="text-xs text-[#1A1A1A]/70 text-center font-medium group-hover:text-gold transition-colors leading-tight">
+                  <p className="text-xs text-[#1A1A1A]/70 text-center font-medium group-hover:text-[#1A1A1A] transition-colors leading-tight">
                     {book.title}
                   </p>
                 </motion.button>
@@ -280,7 +280,7 @@ const Guides = () => {
                       <CardContent className="p-6">
                         <div className="flex items-start gap-4">
                           <div className="w-12 h-12 rounded-xl bg-[#1A1A1A] flex items-center justify-center shrink-0">
-                            <Icon className="w-6 h-6 text-gold" />
+                            <Icon className="w-6 h-6 text-[#1A1A1A]" />
                           </div>
                           <div>
                             <h3 className="font-semibold text-[#1A1A1A] mb-1">{topic.title}</h3>
@@ -303,8 +303,8 @@ const Guides = () => {
       <section className="py-10 md:py-12 bg-[#1A1A1A]">
         <div className="jj-layer-2">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="text-center">
-            <div className="max-w-5xl mx-auto jj-card-inner border-2 border-gold/30">
-              <HelpCircle className="w-12 h-12 text-gold mx-auto mb-6" />
+            <div className="max-w-5xl mx-auto jj-card-inner border-2 border-[#B89555]/30">
+              <HelpCircle className="w-12 h-12 text-[#1A1A1A] mx-auto mb-6" />
               <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#1A1A1A]" style={{ fontFamily: "Playfair Display, serif" }}>
                 Not sure where to start?
               </h2>
@@ -331,34 +331,34 @@ const Guides = () => {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden"
             style={{ boxShadow: '0 20px 60px rgba(200,167,102,0.3), 0 10px 30px rgba(0,0,0,0.2)' }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-start gap-5 p-6 border-b border-gold/20">
-              <div className="relative w-24 h-32 rounded-md overflow-hidden shadow-lg flex-shrink-0 border border-gold/40">
+            <div className="flex items-start gap-5 p-6 border-b border-[#B89555]/20">
+              <div className="relative w-24 h-32 rounded-md overflow-hidden shadow-lg flex-shrink-0 border border-[#B89555]/40">
                 <img src={selectedBook.cover} alt={selectedBook.title} className="w-full h-full object-cover" loading="eager" />
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="text-xl font-bold text-[#1A1A1A] mb-1">{selectedBook.title}</h3>
-                <p className="text-gold text-sm capitalize font-semibold">{selectedBook.category}</p>
+                <p className="text-[#1A1A1A] text-sm capitalize font-semibold">{selectedBook.category}</p>
                 <p className="text-[#1A1A1A]/40 text-xs mt-2">{selectedBook.tableOfContents.length} chapters</p>
               </div>
-              <button onClick={() => setSelectedBook(null)} className="text-gold hover:text-[#1A1A1A] transition-colors">
+              <button onClick={() => setSelectedBook(null)} className="text-[#1A1A1A] hover:text-[#1A1A1A] transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <div className="p-6 overflow-y-auto max-h-[45vh]">
-              <h4 className="text-sm font-semibold text-gold uppercase tracking-wider mb-4">Table of Contents</h4>
+              <h4 className="text-sm font-semibold text-[#1A1A1A] uppercase tracking-wider mb-4">Table of Contents</h4>
               <div className="space-y-1">
                 {selectedBook.tableOfContents.map((item, index) => (
                   <button
                     key={index}
-                    className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gold/10 transition-colors group text-left"
+                    className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-[#EFE6D6]/10 transition-colors group text-left"
                     onClick={() => goToChapter(selectedBook, index)}
                   >
-                    <span className="w-8 h-8 rounded-lg bg-[#1A1A1A] border border-gold/30 flex items-center justify-center text-gold text-sm font-medium flex-shrink-0">
+                    <span className="w-8 h-8 rounded-lg bg-[#1A1A1A] border border-[#B89555]/30 flex items-center justify-center text-[#1A1A1A] text-sm font-medium flex-shrink-0">
                       {index + 1}
                     </span>
                     <span className="text-[#1A1A1A]/80 text-sm flex-1">{item.title}</span>
@@ -368,13 +368,13 @@ const Guides = () => {
                         {item.duration}
                       </span>
                     )}
-                    <ChevronRight className="w-4 h-4 text-[#1A1A1A]/20 group-hover:text-gold transition-colors flex-shrink-0" />
+                    <ChevronRight className="w-4 h-4 text-[#1A1A1A]/20 group-hover:text-[#1A1A1A] transition-colors flex-shrink-0" />
                   </button>
                 ))}
               </div>
             </div>
 
-            <div className="p-6 border-t border-gold/20">
+            <div className="p-6 border-t border-[#B89555]/20">
               <Button
                 className="w-full bg-gradient-to-r from-[#B89555] to-[#A68444] hover:from-[#A68444] hover:to-[#A7862E] text-[#1A1A1A] font-bold py-3 rounded-xl"
                 style={{ boxShadow: '0 6px 20px rgba(200,167,102,0.3), inset 0 1px 3px rgba(255,255,255,0.5)' }}

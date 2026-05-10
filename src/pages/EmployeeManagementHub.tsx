@@ -164,7 +164,7 @@ const EmployeeManagementHub: React.FC = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gold" />
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#B89555]" />
       </div>
     );
   }
@@ -173,8 +173,8 @@ const EmployeeManagementHub: React.FC = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
         <div className="container mx-auto px-4 py-20 text-center">
-          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 flex items-center justify-center mx-auto mb-6">
-            <Shield className="w-10 h-10 text-gold" />
+          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 flex items-center justify-center mx-auto mb-6">
+            <Shield className="w-10 h-10 text-[#1A1A1A]" />
           </div>
           <h1 className="text-3xl font-bold text-[#1A1A1A] mb-4">Access Restricted</h1>
           <p className="text-[#1A1A1A]/70 mb-8">
@@ -191,20 +191,20 @@ const EmployeeManagementHub: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       {/* Header Section */}
-      <section className="relative py-8 overflow-hidden border-b border-gold/20">
+      <section className="relative py-8 overflow-hidden border-b border-[#B89555]/20">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link to="/crm">
-                <Button variant="ghost" size="sm" className="text-[#1A1A1A] hover:text-gold">
+                <Button variant="ghost" size="sm" className="text-[#1A1A1A] hover:text-[#1A1A1A]">
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Back to CRM
                 </Button>
               </Link>
-              <div className="h-6 w-px bg-gold/30" />
+              <div className="h-6 w-px bg-[#EFE6D6]/30" />
               <div className="flex items-center gap-3">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
-                  <Users className="h-6 w-6 text-gold" />
+                <div className="p-3 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
+                  <Users className="h-6 w-6 text-[#1A1A1A]" />
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-[#1A1A1A]">Employee Management Hub</h1>
@@ -269,10 +269,10 @@ const EmployeeManagementHub: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
             <CardContent className="pt-4 pb-3 px-4">
               <div className="flex items-center justify-between mb-2">
-                <Users className="w-5 h-5 text-gold" />
+                <Users className="w-5 h-5 text-[#1A1A1A]" />
                 <span className="text-2xl font-bold text-[#1A1A1A]">{stats.activeEmployees}</span>
               </div>
               <p className="text-xs text-[#1A1A1A]/70">Active Staff</p>
@@ -305,24 +305,24 @@ const EmployeeManagementHub: React.FC = () => {
       <section className="container mx-auto px-4 pb-12">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-            <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 p-1">
-              <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40 text-[#1A1A1A]">
+            <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 p-1">
+              <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
                 <BarChart3 className="w-4 h-4 mr-2" />
                 Overview
               </TabsTrigger>
-              <TabsTrigger value="applications" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40 text-[#1A1A1A]">
+              <TabsTrigger value="applications" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
                 <UserPlus className="w-4 h-4 mr-2" />
                 Applications
               </TabsTrigger>
-              <TabsTrigger value="provisioning" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40 text-[#1A1A1A]">
+              <TabsTrigger value="provisioning" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
                 <Key className="w-4 h-4 mr-2" />
                 IT Provisioning
               </TabsTrigger>
-              <TabsTrigger value="journey" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40 text-[#1A1A1A]">
+              <TabsTrigger value="journey" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
                 <Activity className="w-4 h-4 mr-2" />
                 Employee Journey
               </TabsTrigger>
-              <TabsTrigger value="audit" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40 text-[#1A1A1A]">
+              <TabsTrigger value="audit" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
                 <Eye className="w-4 h-4 mr-2" />
                 Activity Audit
               </TabsTrigger>
@@ -330,12 +330,12 @@ const EmployeeManagementHub: React.FC = () => {
 
             <div className="flex items-center gap-3">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gold" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]" />
                 <Input
                   placeholder="Search employees..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] w-64 placeholder:text-[#1A1A1A]/70"
+                  className="pl-10 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] w-64 placeholder:text-[#1A1A1A]/70"
                 />
               </div>
             </div>
@@ -345,10 +345,10 @@ const EmployeeManagementHub: React.FC = () => {
           <TabsContent value="overview">
             <div className="grid lg:grid-cols-3 gap-6">
               {/* Recent Activity */}
-              <Card className="lg:col-span-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+              <Card className="lg:col-span-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
                 <CardHeader>
                   <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
-                    <Activity className="w-5 h-5 text-gold" />
+                    <Activity className="w-5 h-5 text-[#1A1A1A]" />
                     Recent Onboarding Activity
                   </CardTitle>
                 </CardHeader>
@@ -358,11 +358,11 @@ const EmployeeManagementHub: React.FC = () => {
                       {recentActivity.map((item) => (
                         <div 
                           key={item.id}
-                          className="flex items-center justify-between p-3 rounded-lg bg-[#FDFBF7]/50 border border-gold/20"
+                          className="flex items-center justify-between p-3 rounded-lg bg-[#FDFBF7]/50 border border-[#B89555]/20"
                         >
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center">
-                              <UserCheck className="w-5 h-5 text-gold" />
+                            <div className="w-10 h-10 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center">
+                              <UserCheck className="w-5 h-5 text-[#1A1A1A]" />
                             </div>
                             <div>
                               <p className="font-medium text-[#1A1A1A]">{item.full_name}</p>
@@ -386,10 +386,10 @@ const EmployeeManagementHub: React.FC = () => {
               </Card>
 
               {/* Quick Actions */}
-              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
                 <CardHeader>
                   <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
-                    <Zap className="w-5 h-5 text-gold" />
+                    <Zap className="w-5 h-5 text-[#1A1A1A]" />
                     Quick Actions
                   </CardTitle>
                 </CardHeader>
@@ -430,10 +430,10 @@ const EmployeeManagementHub: React.FC = () => {
               </Card>
 
               {/* Onboarding Pipeline */}
-              <Card className="lg:col-span-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+              <Card className="lg:col-span-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
                 <CardHeader>
                   <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
-                    <Briefcase className="w-5 h-5 text-gold" />
+                    <Briefcase className="w-5 h-5 text-[#1A1A1A]" />
                     Onboarding Pipeline
                   </CardTitle>
                   <CardDescription className="text-[#1A1A1A]/70">
@@ -457,7 +457,7 @@ const EmployeeManagementHub: React.FC = () => {
                           <p className="text-xs text-[#1A1A1A]/70 mt-2">{stage.label}</p>
                         </div>
                         {idx < 4 && (
-                          <div className="w-8 h-0.5 bg-gold/30" />
+                          <div className="w-8 h-0.5 bg-[#EFE6D6]/30" />
                         )}
                       </React.Fragment>
                     ))}

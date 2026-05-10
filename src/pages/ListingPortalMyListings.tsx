@@ -181,7 +181,7 @@ const ListingPortalMyListings = () => {
       <section className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-[#1A1A1A] text-xl font-bold mb-4">Please sign in</h2>
-          <Button onClick={() => navigate('/auth')} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">Sign In</Button>
+          <Button onClick={() => navigate('/auth')} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">Sign In</Button>
         </div>
       </section>
     );
@@ -192,34 +192,34 @@ const ListingPortalMyListings = () => {
       <div className="relative py-12 overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto">
-            <Button variant="ghost" onClick={() => navigate('/listing-portal')} className="text-[#1A1A1A]/70 hover:text-gold mb-4">
+            <Button variant="ghost" onClick={() => navigate('/listing-portal')} className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] mb-4">
               <ArrowLeft className="w-4 h-4 mr-2" /> Back to Portal
             </Button>
             <div className="flex justify-between items-center mb-8">
               <h1 className="text-2xl font-bold text-[#1A1A1A]">My Listings</h1>
-              <Button onClick={() => navigate('/listing-portal/submit')} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
+              <Button onClick={() => navigate('/listing-portal/submit')} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
                 <Plus className="w-4 h-4 mr-2" /> New Listing
               </Button>
             </div>
 
             {/* Stats Cards */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-              <div className="bg-[#FDFBF7] border-2 border-gold/20 rounded-xl p-4 text-center">
-                <Star className="w-5 h-5 text-gold mx-auto mb-1" />
+              <div className="bg-[#FDFBF7] border-2 border-[#B89555]/20 rounded-xl p-4 text-center">
+                <Star className="w-5 h-5 text-[#1A1A1A] mx-auto mb-1" />
                 <p className="text-2xl font-bold text-[#1A1A1A]">{points?.points || 0}</p>
                 <p className="text-xs text-[#1A1A1A]/70">Points</p>
               </div>
-              <div className="bg-[#FDFBF7] border-2 border-gold/20 rounded-xl p-4 text-center">
-                <Award className="w-5 h-5 text-gold mx-auto mb-1" />
+              <div className="bg-[#FDFBF7] border-2 border-[#B89555]/20 rounded-xl p-4 text-center">
+                <Award className="w-5 h-5 text-[#1A1A1A] mx-auto mb-1" />
                 <p className="text-sm font-bold text-[#1A1A1A] capitalize">{points?.tier || 'Starter'}</p>
                 <p className="text-xs text-[#1A1A1A]/70">Tier</p>
               </div>
-              <div className="bg-[#FDFBF7] border-2 border-gold/20 rounded-xl p-4 text-center">
+              <div className="bg-[#FDFBF7] border-2 border-[#B89555]/20 rounded-xl p-4 text-center">
                 <Sparkles className="w-5 h-5 text-emerald-500 mx-auto mb-1" />
                 <p className="text-2xl font-bold text-[#1A1A1A]">{points?.free_listings_remaining ?? 3}</p>
                 <p className="text-xs text-[#1A1A1A]/70">Free Left</p>
               </div>
-              <div className="bg-[#FDFBF7] border-2 border-gold/20 rounded-xl p-4 text-center">
+              <div className="bg-[#FDFBF7] border-2 border-[#B89555]/20 rounded-xl p-4 text-center">
                 <Shield className={`w-5 h-5 mx-auto mb-1 ${verification?.status === 'verified' ? 'text-emerald-500' : 'text-[#1A1A1A]/70'}`} />
                 <p className="text-sm font-bold text-[#1A1A1A] capitalize">{verification?.status || 'Not Verified'}</p>
                 <p className="text-xs text-[#1A1A1A]/70">Broker Status</p>
@@ -228,7 +228,7 @@ const ListingPortalMyListings = () => {
 
             {/* Verification */}
             {(!verification || verification.status === 'pending') && (
-              <div className="bg-[#FDFBF7] border-2 border-gold/30 rounded-xl p-4 mb-6">
+              <div className="bg-[#FDFBF7] border-2 border-[#B89555]/30 rounded-xl p-4 mb-6">
                 <div className="flex justify-between items-center">
                   <div>
                     <h3 className="text-[#1A1A1A] font-semibold text-sm">Broker Verification</h3>
@@ -237,16 +237,16 @@ const ListingPortalMyListings = () => {
                     </p>
                   </div>
                   {!verification && (
-                    <Button size="sm" onClick={() => setShowVerForm(!showVerForm)} className="bg-gold/15 text-gold border border-gold/30 hover:bg-gold/25">
+                    <Button size="sm" onClick={() => setShowVerForm(!showVerForm)} className="bg-[#EFE6D6]/15 text-[#1A1A1A] border border-[#B89555]/30 hover:bg-[#EFE6D6]/25">
                       <Upload className="w-3 h-3 mr-1" /> Verify
                     </Button>
                   )}
                 </div>
                 {showVerForm && (
                   <div className="mt-4 space-y-3">
-                    <Input value={reraNumber} onChange={e => setReraNumber(e.target.value)} placeholder="RERA Number" className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]" />
-                    <Input value={companyName} onChange={e => setCompanyName(e.target.value)} placeholder="Company Name" className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]" />
-                    <Button onClick={handleVerificationSubmit} size="sm" className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">Submit Verification</Button>
+                    <Input value={reraNumber} onChange={e => setReraNumber(e.target.value)} placeholder="RERA Number" className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]" />
+                    <Input value={companyName} onChange={e => setCompanyName(e.target.value)} placeholder="Company Name" className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]" />
+                    <Button onClick={handleVerificationSubmit} size="sm" className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">Submit Verification</Button>
                   </div>
                 )}
               </div>
@@ -258,7 +258,7 @@ const ListingPortalMyListings = () => {
                 variant={activeTab === 'active' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setActiveTab('active')}
-                className={activeTab === 'active' ? 'bg-gold text-[#1A1A1A] hover:bg-gold/90' : 'border-gold/30 text-[#1A1A1A]/60 hover:bg-gold/10'}
+                className={activeTab === 'active' ? 'bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90' : 'border-[#B89555]/30 text-[#1A1A1A]/60 hover:bg-[#EFE6D6]/10'}
               >
                 Active ({listings.length})
               </Button>
@@ -266,7 +266,7 @@ const ListingPortalMyListings = () => {
                 variant={activeTab === 'deleted' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setActiveTab('deleted')}
-                className={activeTab === 'deleted' ? 'bg-gold text-[#1A1A1A] hover:bg-gold/90' : 'border-gold/30 text-[#1A1A1A]/60 hover:bg-gold/10'}
+                className={activeTab === 'deleted' ? 'bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90' : 'border-[#B89555]/30 text-[#1A1A1A]/60 hover:bg-[#EFE6D6]/10'}
               >
                 <Trash2 className="w-3.5 h-3.5 mr-1" />
                 Recently Deleted ({deletedListings.length})
@@ -276,26 +276,26 @@ const ListingPortalMyListings = () => {
             {/* Listings */}
             {loading ? (
               <div className="text-center py-12">
-                <div className="w-8 h-8 border-2 border-gold/30 border-t-gold rounded-full animate-spin mx-auto" />
+                <div className="w-8 h-8 border-2 border-[#B89555]/30 border-t-gold rounded-full animate-spin mx-auto" />
               </div>
             ) : activeTab === 'active' ? (
               listings.length === 0 ? (
-                <div className="text-center py-12 bg-[#FDFBF7]/60 border-2 border-gold/20 rounded-2xl">
+                <div className="text-center py-12 bg-[#FDFBF7]/60 border-2 border-[#B89555]/20 rounded-2xl">
                   <h3 className="text-[#1A1A1A] font-semibold mb-2">No listings yet</h3>
                   <p className="text-[#1A1A1A]/70 text-sm mb-4">Submit your first property listing!</p>
-                  <Button onClick={() => navigate('/listing-portal/submit')} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">Submit Listing</Button>
+                  <Button onClick={() => navigate('/listing-portal/submit')} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">Submit Listing</Button>
                 </div>
               ) : (
                 <div className="space-y-3">
                   {listings.map(listing => {
                     const daysLeft = getDaysUntilExpiry(listing.expires_at);
                     return (
-                      <div key={listing.id} className="bg-[#FDFBF7] border-2 border-gold/20 rounded-xl p-4 flex items-center justify-between hover:border-gold/50 transition-all">
+                      <div key={listing.id} className="bg-[#FDFBF7] border-2 border-[#B89555]/20 rounded-xl p-4 flex items-center justify-between hover:border-[#B89555]/50 transition-all">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
                             {statusIcon(listing.status)}
                             <h3 className="text-[#1A1A1A] font-medium text-sm">{listing.title}</h3>
-                            {listing.is_featured && <Badge className="bg-gold/15 text-gold border-gold/30 text-[10px]">Featured</Badge>}
+                            {listing.is_featured && <Badge className="bg-[#EFE6D6]/15 text-[#1A1A1A] border-[#B89555]/30 text-[10px]">Featured</Badge>}
                             {listing.listing_type === 'rent' && (
                               <Badge className="bg-blue-100 text-blue-700 border-blue-300 text-[10px]">For Rent</Badge>
                             )}
@@ -318,7 +318,7 @@ const ListingPortalMyListings = () => {
                           </div>
                         </div>
                         <div className="flex gap-2">
-                          <Button size="icon" variant="ghost" className="text-[#1A1A1A]/70 hover:text-gold" onClick={() => handleEdit(listing.id)} title="Edit listing">
+                          <Button size="icon" variant="ghost" className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]" onClick={() => handleEdit(listing.id)} title="Edit listing">
                             <Edit className="w-4 h-4" />
                           </Button>
                           <Button size="icon" variant="ghost" className="text-[#1A1A1A]/70 hover:text-red-500" onClick={() => handleDeleteClick(listing.id)} title="Delete listing">
@@ -332,7 +332,7 @@ const ListingPortalMyListings = () => {
               )
             ) : (
               deletedListings.length === 0 ? (
-                <div className="text-center py-12 bg-[#FDFBF7]/60 border-2 border-gold/20 rounded-2xl">
+                <div className="text-center py-12 bg-[#FDFBF7]/60 border-2 border-[#B89555]/20 rounded-2xl">
                   <Trash2 className="w-8 h-8 text-[#1A1A1A]/70 mx-auto mb-3" />
                   <h3 className="text-[#1A1A1A] font-semibold mb-2">No deleted listings</h3>
                   <p className="text-[#1A1A1A]/70 text-sm">Deleted listings will appear here for restoration.</p>
@@ -354,7 +354,7 @@ const ListingPortalMyListings = () => {
                       <Button
                         size="sm"
                         variant="outline"
-                        className="border-gold/30 text-gold hover:bg-gold/10"
+                        className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                         onClick={() => handleRestore(listing.id)}
                       >
                         <RotateCcw className="w-3.5 h-3.5 mr-1" />
@@ -371,7 +371,7 @@ const ListingPortalMyListings = () => {
 
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent className="bg-[#FDFBF7] border-2 border-gold/30">
+        <AlertDialogContent className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
               <AlertTriangle className="w-5 h-5 text-amber-500" />
@@ -382,7 +382,7 @@ const ListingPortalMyListings = () => {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="border-gold/30 text-[#1A1A1A] hover:bg-gold/10">Cancel</AlertDialogCancel>
+            <AlertDialogCancel className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">Cancel</AlertDialogCancel>
             <AlertDialogAction onClick={handleDeleteConfirm} className="bg-red-500 text-white hover:bg-red-600">
               Yes, Delete
             </AlertDialogAction>

@@ -142,7 +142,7 @@ const ChatTranscriptModal = ({ isOpen, onClose, conversation }: ChatTranscriptMo
                   </div>
 
                   {message.role === "user" && (
-                    <div className="w-8 h-8 rounded-full bg-zinc-700 flex items-center justify-center shrink-0">
+                    <div className="w-8 h-8 rounded-full bg-[#EFE6D6] flex items-center justify-center shrink-0">
                       <User className="w-4 h-4 text-white/85" />
                     </div>
                   )}

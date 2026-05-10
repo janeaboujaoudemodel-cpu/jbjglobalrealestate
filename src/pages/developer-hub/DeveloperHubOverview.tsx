@@ -83,7 +83,7 @@ const DeveloperHubOverview = () => {
   const statusBadge = (status?: string) => {
     const map: Record<string, { label: string; className: string; icon: typeof CheckCircle2 }> = {
       approved: { label: "Approved", className: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30", icon: CheckCircle2 },
-      submitted: { label: "Submitted", className: "bg-amber-500/20 text-amber-400 border-amber-500/30", icon: Clock },
+      submitted: { label: "Submitted", className: "bg-amber-500/20 text-[#1A1A1A] border-amber-500/30", icon: Clock },
       under_review: { label: "Under Review", className: "bg-blue-500/20 text-blue-400 border-blue-500/30", icon: Clock },
       rejected: { label: "Rejected", className: "bg-red-500/20 text-red-400 border-red-500/30", icon: AlertTriangle },
       draft: { label: "Draft", className: "bg-[#FDFBF7]/10 text-[#ECE2D2]/60 border-white/20", icon: Clock },
@@ -113,7 +113,7 @@ const DeveloperHubOverview = () => {
       {/* Developer Identity Block */}
       <div className="space-y-1">
         <h1 className="text-2xl md:text-3xl font-bold text-[#ECE2D2]">Developer Hub</h1>
-        <p className="text-gold font-medium text-lg">
+        <p className="text-[#1A1A1A] font-medium text-lg">
           {registration?.company_name || "Complete your company registration"}
         </p>
         <div className="flex items-center gap-3 mt-2">
@@ -127,15 +127,15 @@ const DeveloperHubOverview = () => {
         {cards.map((card) => (
           <Card
             key={card.title}
-            className="cursor-pointer min-h-[120px] bg-[hsl(38,35%,14%)]/80 border-gold/20 hover:border-gold/40 transition-all group"
+            className="cursor-pointer min-h-[120px] bg-[hsl(38,35%,14%)]/80 border-[#B89555]/20 hover:border-[#B89555]/40 transition-all group"
             onClick={() => navigate(card.path)}
           >
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-[#ECE2D2]/60">{card.title}</CardTitle>
-              <card.icon className="w-5 h-5 text-[#1A1A1A]/70 group-hover:text-gold transition-colors" />
+              <card.icon className="w-5 h-5 text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] transition-colors" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-gold">
+              <div className="text-3xl font-bold text-[#1A1A1A]">
                 {typeof card.value === "number" ? card.value : card.value}
               </div>
             </CardContent>

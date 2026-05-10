@@ -102,8 +102,8 @@ const ExecutivePerformance = () => {
                 to={nav.path}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   nav.active
-                    ? "bg-gold text-[#1A1A1A]"
-                    : "bg-zinc-800 text-white/85 hover:bg-[#1A1A1A]"
+                    ? "bg-[#EFE6D6] text-[#1A1A1A]"
+                    : "bg-[#F7F2EA] text-white/85 hover:bg-[#1A1A1A]"
                 }`}
               >
                 {nav.label}
@@ -113,14 +113,14 @@ const ExecutivePerformance = () => {
 
           {loading ? (
             <div className="text-center py-12">
-              <Activity className="w-8 h-8 text-gold animate-pulse mx-auto mb-4" />
+              <Activity className="w-8 h-8 text-[#1A1A1A] animate-pulse mx-auto mb-4" />
               <p className="text-white/70">Loading performance data...</p>
             </div>
           ) : (
             <>
               {/* Deal Cycle Duration */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <Card className="bg-zinc-900 border-[#1A1A1A]">
+                <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-sm font-medium text-white/70 flex items-center gap-2">
                       <Clock className="w-4 h-4" />
@@ -139,7 +139,7 @@ const ExecutivePerformance = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="bg-zinc-900 border-[#1A1A1A]">
+                <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-sm font-medium text-white/70 flex items-center gap-2">
                       <Clock className="w-4 h-4" />
@@ -160,10 +160,10 @@ const ExecutivePerformance = () => {
               </div>
 
               {/* Conversion by Channel */}
-              <Card className="bg-zinc-900 border-[#1A1A1A] mb-8">
+              <Card className="bg-[#FDFBF7] border-[#1A1A1A] mb-8">
                 <CardHeader>
                   <CardTitle className="text-lg text-white flex items-center gap-2">
-                    <BarChart3 className="w-5 h-5 text-gold" />
+                    <BarChart3 className="w-5 h-5 text-[#1A1A1A]" />
                     Conversion Trend by Channel
                   </CardTitle>
                 </CardHeader>
@@ -184,10 +184,10 @@ const ExecutivePerformance = () => {
               </Card>
 
               {/* Intelligence Tool Usage */}
-              <Card className="bg-zinc-900 border-[#1A1A1A] mb-8">
+              <Card className="bg-[#FDFBF7] border-[#1A1A1A] mb-8">
                 <CardHeader>
                   <CardTitle className="text-lg text-white flex items-center gap-2">
-                    <Zap className="w-5 h-5 text-gold" />
+                    <Zap className="w-5 h-5 text-[#1A1A1A]" />
                     Intelligence Tool Adoption
                   </CardTitle>
                 </CardHeader>
@@ -196,7 +196,7 @@ const ExecutivePerformance = () => {
                     <div className="flex-1">
                       <Progress value={metrics.intelligenceToolUsage} className="h-3" />
                     </div>
-                    <span className="text-2xl font-bold text-gold">{metrics.intelligenceToolUsage}%</span>
+                    <span className="text-2xl font-bold text-[#1A1A1A]">{metrics.intelligenceToolUsage}%</span>
                   </div>
                   <p className="text-sm text-white/70 mt-3">
                     Brokers actively using Market Intelligence tools in client conversations
@@ -209,7 +209,7 @@ const ExecutivePerformance = () => {
               </Card>
 
               {/* Bottleneck Analysis */}
-              <Card className="bg-zinc-900 border-[#1A1A1A]">
+              <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
                 <CardHeader>
                   <CardTitle className="text-lg text-white flex items-center gap-2">
                     <AlertTriangle className="w-5 h-5 text-amber-500" />
@@ -227,7 +227,7 @@ const ExecutivePerformance = () => {
                         className={`flex items-center justify-between p-3 rounded-lg ${
                           stage.isBottleneck
                             ? "bg-amber-500/10 border border-amber-500/30"
-                            : "bg-zinc-800"
+                            : "bg-[#F7F2EA]"
                         }`}
                       >
                         <div className="flex items-center gap-3">
@@ -239,7 +239,7 @@ const ExecutivePerformance = () => {
                           </span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className={`font-medium ${stage.isBottleneck ? "text-amber-400" : "text-white/70"}`}>
+                          <span className={`font-medium ${stage.isBottleneck ? "text-[#1A1A1A]" : "text-white/70"}`}>
                             {stage.avgDays} days
                           </span>
                           {stage.isBottleneck && (

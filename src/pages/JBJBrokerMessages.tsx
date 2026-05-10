@@ -211,7 +211,7 @@ export default function JBJBrokerMessages() {
   if (authLoading || loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-gold" />
+        <Loader2 className="h-8 w-8 animate-spin text-[#1A1A1A]" />
       </div>
     );
   }
@@ -219,7 +219,7 @@ export default function JBJBrokerMessages() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] pt-24 lg:pt-28">
       {/* Header */}
-      <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-20 lg:top-24 z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
+      <header className="border-b-2 border-[#B89555]/40 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-20 lg:top-24 z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
         <div className="px-4 py-4">
           <div className="flex items-center justify-between gap-4 mb-4">
             <div className="flex items-center gap-4">
@@ -227,7 +227,7 @@ export default function JBJBrokerMessages() {
                 variant="ghost"
                 size="icon"
                 onClick={() => navigate("/jbj-broker-dashboard")}
-                className="text-[#1A1A1A] hover:text-gold hover:bg-gold/10"
+                className="text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
               >
                 <MessageSquare className="w-5 h-5" />
               </Button>
@@ -281,8 +281,8 @@ export default function JBJBrokerMessages() {
       {/* Main Content - Full Width Chat */}
       <main className="flex h-[calc(100vh-220px)]">
         {/* Conversations List - Left Panel */}
-        <div className="w-80 bg-[#FDFBF7] border-r border-gold/20 flex flex-col">
-          <div className="p-4 border-b border-gold/20">
+        <div className="w-80 bg-[#FDFBF7] border-r border-[#B89555]/20 flex flex-col">
+          <div className="p-4 border-b border-[#B89555]/20">
             <h2 className="font-semibold text-[#1A1A1A] mb-3">Conversations</h2>
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/70" />
@@ -300,13 +300,13 @@ export default function JBJBrokerMessages() {
               <div
                 key={lead.id}
                 onClick={() => setSelectedLead(lead)}
-                className={`p-4 border-b border-gold/10 cursor-pointer transition-all hover:bg-gold/5 ${
-                  selectedLead?.id === lead.id ? "bg-gold/10 border-l-4 border-l-gold" : ""
+                className={`p-4 border-b border-[#B89555]/10 cursor-pointer transition-all hover:bg-[#EFE6D6]/5 ${
+                  selectedLead?.id === lead.id ? "bg-[#EFE6D6]/10 border-l-4 border-l-gold" : ""
                 }`}
               >
                 <div className="flex items-center gap-3">
                   <Avatar className="h-10 w-10">
-                    <AvatarFallback className="bg-gold/20 text-gold">
+                    <AvatarFallback className="bg-[#EFE6D6]/20 text-[#1A1A1A]">
                       {lead.name.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
@@ -339,10 +339,10 @@ export default function JBJBrokerMessages() {
           {selectedLead ? (
             <>
               {/* Chat Header */}
-              <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-b border-gold/20 p-4 flex items-center justify-between hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
+              <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-b border-[#B89555]/20 p-4 flex items-center justify-between hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
                 <div className="flex items-center gap-3">
-                  <Avatar className="h-10 w-10 border-2 border-gold/30">
-                    <AvatarFallback className="bg-gold/20 text-gold">
+                  <Avatar className="h-10 w-10 border-2 border-[#B89555]/30">
+                    <AvatarFallback className="bg-[#EFE6D6]/20 text-[#1A1A1A]">
                       {selectedLead.name.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
@@ -369,12 +369,12 @@ export default function JBJBrokerMessages() {
                         <div
                           className={`p-3 rounded-lg select-text cursor-text ${
                             msg.direction === "outbound"
-                              ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-gold/30 shadow-md rounded-tr-sm"
-                              : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-gold/20 shadow-sm rounded-tl-sm"
+                              ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/30 shadow-md rounded-tr-sm"
+                              : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/20 shadow-sm rounded-tl-sm"
                           }`}
                         >
                           <div className="flex items-center gap-2 mb-1">
-                            <Badge variant="outline" className="text-xs border-gold/30">
+                            <Badge variant="outline" className="text-xs border-[#B89555]/30">
                               {msg.channel}
                             </Badge>
                             <span className="text-xs text-[#1A1A1A]/60">
@@ -395,7 +395,7 @@ export default function JBJBrokerMessages() {
                             await navigator.clipboard.writeText(msg.content);
                             toast.success(t('chat.messageCopied') || "Message copied");
                           }}
-                          className={`flex items-center gap-1 mt-1 text-[10px] text-[#1A1A1A]/70 hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
+                          className={`flex items-center gap-1 mt-1 text-[10px] text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors opacity-0 group-hover:opacity-100 ${
                             msg.direction === "outbound" ? "self-end mr-1" : "self-start ml-1"
                           }`}
                         >
@@ -410,7 +410,7 @@ export default function JBJBrokerMessages() {
               </ScrollArea>
 
               {/* Message Input */}
-              <div className="bg-[#FDFBF7] border-t border-gold/20 p-4">
+              <div className="bg-[#FDFBF7] border-t border-[#B89555]/20 p-4">
                 {filterWarning && (
                   <div className="flex items-center gap-2 text-red-600 text-sm mb-3 p-2 bg-red-50 rounded">
                     <AlertTriangle className="h-4 w-4" />
@@ -463,18 +463,18 @@ export default function JBJBrokerMessages() {
 
         {/* Lead Info Panel */}
         {selectedLead && (
-          <div className="w-72 bg-[#FDFBF7] border-l border-gold/20 p-4">
+          <div className="w-72 bg-[#FDFBF7] border-l border-[#B89555]/20 p-4">
             <h3 className="font-semibold text-[#1A1A1A] mb-4">Lead Information</h3>
 
             <div className="space-y-4">
               <div className="text-center">
-                <Avatar className="h-20 w-20 mx-auto mb-3 border-2 border-gold/30">
-                  <AvatarFallback className="bg-gold/20 text-gold text-2xl">
+                <Avatar className="h-20 w-20 mx-auto mb-3 border-2 border-[#B89555]/30">
+                  <AvatarFallback className="bg-[#EFE6D6]/20 text-[#1A1A1A] text-2xl">
                     {selectedLead.name.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
                 <h4 className="font-medium text-[#1A1A1A]">{selectedLead.name}</h4>
-                <Badge variant="outline" className="mt-1 border-gold/30">
+                <Badge variant="outline" className="mt-1 border-[#B89555]/30">
                   {selectedLead.status}
                 </Badge>
               </div>
@@ -482,19 +482,19 @@ export default function JBJBrokerMessages() {
               <div className="space-y-3 text-sm">
                 {selectedLead.phone && (
                   <div className="flex items-center gap-2">
-                    <Phone className="h-4 w-4 text-gold" />
+                    <Phone className="h-4 w-4 text-[#1A1A1A]" />
                     <span className="text-[#1A1A1A]">{selectedLead.phone}</span>
                   </div>
                 )}
                 {selectedLead.email && (
                   <div className="flex items-center gap-2">
-                    <Mail className="h-4 w-4 text-gold" />
+                    <Mail className="h-4 w-4 text-[#1A1A1A]" />
                     <span className="text-[#1A1A1A] truncate">{selectedLead.email}</span>
                   </div>
                 )}
                 {selectedLead.last_contact && (
                   <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-gold" />
+                    <Clock className="h-4 w-4 text-[#1A1A1A]" />
                     <span className="text-[#1A1A1A]">
                       Last: {new Date(selectedLead.last_contact).toLocaleDateString()}
                     </span>
@@ -502,7 +502,7 @@ export default function JBJBrokerMessages() {
                 )}
               </div>
 
-              <div className="pt-4 border-t border-gold/20 space-y-2">
+              <div className="pt-4 border-t border-[#B89555]/20 space-y-2">
                 <Button className="w-full" variant="secondary" size="sm">
                   <User className="h-4 w-4 mr-2" />
                   View Full Profile

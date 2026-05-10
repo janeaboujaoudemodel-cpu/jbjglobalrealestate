@@ -250,12 +250,12 @@ const BrandPaletteHub = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)]">
       {/* Header */}
-      <div className="border-b-2 border-gold/30">
+      <div className="border-b-2 border-[#B89555]/30">
         <div className="container mx-auto px-4 py-8">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border border-gold/40 flex items-center justify-center">
-                <Palette className="w-6 h-6 text-gold" />
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border border-[#B89555]/40 flex items-center justify-center">
+                <Palette className="w-6 h-6 text-[#1A1A1A]" />
               </div>
               <div>
                 <h1 className="text-2xl md:text-3xl font-bold text-foreground">
@@ -272,18 +272,18 @@ const BrandPaletteHub = () => {
               <Button
                 variant="outline"
                 onClick={togglePreview}
-                className={`border-gold/40 ${isPreviewing ? 'bg-gold/20 text-foreground' : 'text-muted-foreground'}`}
+                className={`border-[#B89555]/40 ${isPreviewing ? 'bg-[#EFE6D6]/20 text-foreground' : 'text-muted-foreground'}`}
               >
                 {isPreviewing ? <EyeOff className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
                 {isPreviewing ? 'Stop Preview' : 'Live Preview'}
               </Button>
-              <Button variant="outline" onClick={handleReset} className="border-gold/40 text-muted-foreground">
+              <Button variant="outline" onClick={handleReset} className="border-[#B89555]/40 text-muted-foreground">
                 <RotateCcw className="w-4 h-4 mr-2" />
                 Revert
               </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="border-gold/40 text-muted-foreground">
+                  <Button variant="outline" className="border-[#B89555]/40 text-muted-foreground">
                     <Download className="w-4 h-4 mr-2" />
                     Export
                   </Button>
@@ -297,7 +297,7 @@ const BrandPaletteHub = () => {
               <Button
                 onClick={handleSave}
                 disabled={!hasChanges || isSaving}
-                className="bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border border-gold/40 text-foreground font-semibold hover:opacity-90"
+                className="bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border border-[#B89555]/40 text-foreground font-semibold hover:opacity-90"
               >
                 <Save className="w-4 h-4 mr-2" />
                 {isSaving ? 'Saving…' : 'Save Palette'}
@@ -312,14 +312,14 @@ const BrandPaletteHub = () => {
           {/* Left: Color Pickers */}
           <div className="lg:col-span-2 space-y-6">
             {/* Palette Manager */}
-            <div className="bg-card/80 border border-gold/20 rounded-2xl p-4">
+            <div className="bg-card/80 border border-[#B89555]/20 rounded-2xl p-4">
               <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2 flex-1 min-w-0">
-                  <FolderOpen className="w-4 h-4 text-gold flex-shrink-0" />
+                  <FolderOpen className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
                   <Label className="text-foreground font-bold text-sm whitespace-nowrap">Active Palette</Label>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="outline" className="border-gold/30 text-foreground text-sm h-9 min-w-[160px] justify-between">
+                      <Button variant="outline" className="border-[#B89555]/30 text-foreground text-sm h-9 min-w-[160px] justify-between">
                         <span className="truncate">
                           {savedPalettes.find(sp => sp.is_active)?.name ?? (isOwner ? 'Brand Default' : 'Unsaved')}
                         </span>
@@ -344,11 +344,11 @@ const BrandPaletteHub = () => {
                         >
                           <div className="flex gap-0.5 flex-shrink-0">
                             {Object.values(sp.palette).map((c, i) => (
-                              <div key={i} className="w-3.5 h-3.5 rounded-sm border border-gold/20" style={{ backgroundColor: c as string }} />
+                              <div key={i} className="w-3.5 h-3.5 rounded-sm border border-[#B89555]/20" style={{ backgroundColor: c as string }} />
                             ))}
                           </div>
                           <span className="flex-1 truncate text-xs font-medium">{sp.name}</span>
-                          {sp.is_active && <Check className="w-3.5 h-3.5 text-gold flex-shrink-0" />}
+                          {sp.is_active && <Check className="w-3.5 h-3.5 text-[#1A1A1A] flex-shrink-0" />}
                         </DropdownMenuItem>
                       ))}
                       {savedPalettes.length === 0 && (
@@ -371,7 +371,7 @@ const BrandPaletteHub = () => {
                     value={newPaletteName}
                     onChange={(e) => setNewPaletteName(e.target.value)}
                     placeholder="Enter palette name…"
-                    className="bg-background border-gold/20 text-foreground text-sm h-9 flex-1"
+                    className="bg-background border-[#B89555]/20 text-foreground text-sm h-9 flex-1"
                     maxLength={40}
                     autoFocus
                     onKeyDown={(e) => {
@@ -385,7 +385,7 @@ const BrandPaletteHub = () => {
                   />
                   <Button
                     size="sm"
-                    className="h-9 bg-gold/20 text-foreground border border-gold/30 hover:bg-gold/30"
+                    className="h-9 bg-[#EFE6D6]/20 text-foreground border border-[#B89555]/30 hover:bg-[#EFE6D6]/30"
                     disabled={!newPaletteName.trim()}
                     onClick={() => {
                       saveUserPalette(newPaletteName.trim(), draft, true);
@@ -409,7 +409,7 @@ const BrandPaletteHub = () => {
                   key={key}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="bg-card/80 border border-gold/20 rounded-2xl p-5 hover:border-gold/40 transition-all"
+                  className="bg-card/80 border border-[#B89555]/20 rounded-2xl p-5 hover:border-[#B89555]/40 transition-all"
                 >
                   <div className="flex items-center gap-3 mb-3">
                     {/* Color swatch — rounded to match card */}
@@ -419,14 +419,14 @@ const BrandPaletteHub = () => {
                           type="color"
                           value={draft[key]}
                           onChange={(e) => updateColor(key, e.target.value)}
-                          className="w-14 h-14 rounded-2xl cursor-pointer border-2 border-gold/30 shadow-sm"
+                          className="w-14 h-14 rounded-2xl cursor-pointer border-2 border-[#B89555]/30 shadow-sm"
                           style={{ padding: 0 }}
                           title={`Click to change ${label}`}
                         />
                       </label>
                       {/* Prominent color wheel indicator with tooltip */}
-                      <label className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-card border-2 border-gold/40 flex items-center justify-center cursor-pointer shadow-md hover:scale-110 transition-transform" title="Click to change color">
-                        <CircleDot className="w-3.5 h-3.5 text-gold" />
+                      <label className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-card border-2 border-[#B89555]/40 flex items-center justify-center cursor-pointer shadow-md hover:scale-110 transition-transform" title="Click to change color">
+                        <CircleDot className="w-3.5 h-3.5 text-[#1A1A1A]" />
                         <input
                           type="color"
                           value={draft[key]}
@@ -444,7 +444,7 @@ const BrandPaletteHub = () => {
                   {/* Example preview bar */}
                   <div className="flex items-center gap-2 mb-2">
                     <div
-                      className="flex-1 h-8 rounded-xl flex items-center justify-center text-[10px] font-semibold border border-gold/10"
+                      className="flex-1 h-8 rounded-xl flex items-center justify-center text-[10px] font-semibold border border-[#B89555]/10"
                       style={{
                         backgroundColor: draft[key],
                         color: isLightColor(draft[key]) ? '#1A1A1A' : '#FFFFFF',
@@ -463,11 +463,11 @@ const BrandPaletteHub = () => {
                           const v = e.target.value;
                           if (/^#[0-9A-Fa-f]{0,6}$/.test(v)) updateColor(key, v);
                         }}
-                        className="font-mono text-sm bg-muted border-gold/20 text-foreground uppercase"
+                        className="font-mono text-sm bg-muted border-[#B89555]/20 text-foreground uppercase"
                         maxLength={7}
                       />
                       <div
-                        className="w-10 h-10 rounded-xl border border-gold/30 flex-shrink-0"
+                        className="w-10 h-10 rounded-xl border border-[#B89555]/30 flex-shrink-0"
                         style={{ backgroundColor: draft[key] }}
                       />
                     </div>
@@ -477,9 +477,9 @@ const BrandPaletteHub = () => {
             </div>
 
             {/* Presets */}
-            <div className="bg-card/80 border border-gold/20 rounded-2xl p-6">
+            <div className="bg-card/80 border border-[#B89555]/20 rounded-2xl p-6">
               <div className="flex items-center gap-2 mb-4">
-                <Sparkles className="w-5 h-5 text-gold" />
+                <Sparkles className="w-5 h-5 text-[#1A1A1A]" />
                 <h3 className="font-bold text-foreground">Quick Presets</h3>
               </div>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -491,13 +491,13 @@ const BrandPaletteHub = () => {
                       onClick={() => applyPreset(preset.palette)}
                       className={`p-3 rounded-xl border-2 text-left transition-all ${
                         isActive
-                          ? 'border-gold bg-gold/10'
-                          : 'border-gold/20 hover:border-gold/40 bg-card/50'
+                          ? 'border-[#B89555] bg-[#EFE6D6]/10'
+                          : 'border-[#B89555]/20 hover:border-[#B89555]/40 bg-card/50'
                       }`}
                     >
                       <div className="flex items-center gap-2 mb-2">
                         <span className="text-xs font-bold text-foreground">{preset.name}</span>
-                        {isActive && <Check className="w-3 h-3 text-gold" />}
+                        {isActive && <Check className="w-3 h-3 text-[#1A1A1A]" />}
                       </div>
                       <div className="flex gap-1">
                         {Object.values(preset.palette).map((color, i) => (
@@ -521,9 +521,9 @@ const BrandPaletteHub = () => {
 
           {/* Right: Live Preview + History */}
           <div className="space-y-4">
-            <div className="bg-card/80 border border-gold/20 rounded-2xl p-5 sticky top-6">
+            <div className="bg-card/80 border border-[#B89555]/20 rounded-2xl p-5 sticky top-6">
               <h3 className="font-bold text-foreground mb-4 flex items-center gap-2">
-                <Eye className="w-4 h-4 text-gold" />
+                <Eye className="w-4 h-4 text-[#1A1A1A]" />
                 Preview
                 {isPreviewing && (
                   <span className="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-semibold animate-pulse">LIVE</span>
@@ -572,7 +572,7 @@ const BrandPaletteHub = () => {
                 {PALETTE_KEYS.map(({ key, label }) => (
                   <div key={key} className="flex-1 text-center">
                     <div
-                      className="h-8 rounded-xl border border-gold/20 mb-1"
+                      className="h-8 rounded-xl border border-[#B89555]/20 mb-1"
                       style={{ backgroundColor: draft[key] }}
                     />
                     <span className="text-[9px] text-muted-foreground font-medium">{label}</span>
@@ -590,20 +590,20 @@ const BrandPaletteHub = () => {
             </div>
 
             {/* Monogram Preview */}
-            <div className="bg-card/80 border border-gold/20 rounded-2xl p-5">
+            <div className="bg-card/80 border border-[#B89555]/20 rounded-2xl p-5">
               <h3 className="font-bold text-foreground mb-4 text-sm flex items-center gap-2">
-                <Palette className="w-4 h-4 text-gold" />
+                <Palette className="w-4 h-4 text-[#1A1A1A]" />
                 Monogram Preview
               </h3>
               <div className="flex flex-col items-center gap-4">
                 <div
-                  className="w-full rounded-xl p-6 flex items-center justify-center border border-gold/20"
+                  className="w-full rounded-xl p-6 flex items-center justify-center border border-[#B89555]/20"
                   style={{ backgroundColor: draft.secondary }}
                 >
                   <BrandMonogram variant="dark" size="lg" showWordmark />
                 </div>
                 <div
-                  className="w-full rounded-xl p-6 flex items-center justify-center border border-gold/20"
+                  className="w-full rounded-xl p-6 flex items-center justify-center border border-[#B89555]/20"
                   style={{ backgroundColor: draft.background }}
                 >
                   <BrandMonogram variant="light" size="lg" showWordmark />
@@ -615,27 +615,27 @@ const BrandPaletteHub = () => {
             </div>
 
             {/* Color Harmony Generator */}
-            <div className="bg-card/80 border border-gold/20 rounded-2xl p-5">
+            <div className="bg-card/80 border border-[#B89555]/20 rounded-2xl p-5">
               <h3 className="font-bold text-foreground mb-1 text-sm flex items-center gap-2">
-                <Wand2 className="w-4 h-4 text-gold" />
+                <Wand2 className="w-4 h-4 text-[#1A1A1A]" />
                 Color Harmony
               </h3>
               <p className="text-[10px] text-muted-foreground mb-4">
                 Schemes based on your primary color
                 <span
-                  className="inline-block w-3 h-3 rounded-sm border border-gold/30 ml-1.5 align-middle"
+                  className="inline-block w-3 h-3 rounded-sm border border-[#B89555]/30 ml-1.5 align-middle"
                   style={{ backgroundColor: draft.primary }}
                 />
               </p>
               <div className="space-y-3">
                 {harmonySchemes.map((scheme) => (
-                  <div key={scheme.name} className="rounded-xl border border-gold/15 p-3 bg-card/40">
+                  <div key={scheme.name} className="rounded-xl border border-[#B89555]/15 p-3 bg-card/40">
                     <div className="flex items-center justify-between mb-1.5">
                       <span className="text-xs font-semibold text-foreground">{scheme.name}</span>
                       <Button
                         size="sm"
                         variant="ghost"
-                        className="h-6 px-2 text-[10px] text-gold hover:text-gold hover:bg-gold/10"
+                        className="h-6 px-2 text-[10px] text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                         onClick={() => {
                           setDraft(scheme.palette);
                           if (isPreviewing) setPalettePreview(scheme.palette);
@@ -650,7 +650,7 @@ const BrandPaletteHub = () => {
                       {PALETTE_KEYS.map(({ key }) => (
                         <div
                           key={key}
-                          className="flex-1 h-5 rounded-md border border-gold/10"
+                          className="flex-1 h-5 rounded-md border border-[#B89555]/10"
                           style={{ backgroundColor: scheme.palette[key] }}
                           title={`${key}: ${scheme.palette[key]}`}
                         />
@@ -663,9 +663,9 @@ const BrandPaletteHub = () => {
 
             {/* Saved Palettes Manager */}
             {user && (
-              <div className="bg-card/80 border border-gold/20 rounded-2xl p-5">
+              <div className="bg-card/80 border border-[#B89555]/20 rounded-2xl p-5">
                 <h4 className="text-sm font-bold text-foreground mb-3 flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-gold" />
+                  <Clock className="w-4 h-4 text-[#1A1A1A]" />
                   {isOwner ? 'Saved Presets' : 'My Saved Palettes'}
                   <span className="ml-auto text-[10px] text-muted-foreground font-normal">{savedPalettes.length} saved</span>
                 </h4>
@@ -677,7 +677,7 @@ const BrandPaletteHub = () => {
                       <div
                         key={sp.id}
                         className={`p-3 rounded-xl border transition-all ${
-                          sp.is_active ? 'border-gold bg-gold/10' : 'border-gold/20 hover:border-gold/30'
+                          sp.is_active ? 'border-[#B89555] bg-[#EFE6D6]/10' : 'border-[#B89555]/20 hover:border-[#B89555]/30'
                         }`}
                       >
                         <div className="flex items-center justify-between mb-2">
@@ -686,7 +686,7 @@ const BrandPaletteHub = () => {
                               <Input
                                 value={renameValue}
                                 onChange={(e) => setRenameValue(e.target.value)}
-                                className="h-6 text-xs bg-background border-gold/20 text-foreground px-2"
+                                className="h-6 text-xs bg-background border-[#B89555]/20 text-foreground px-2"
                                 maxLength={40}
                                 autoFocus
                                 onKeyDown={(e) => {
@@ -718,7 +718,7 @@ const BrandPaletteHub = () => {
                             <Button
                               size="sm"
                               variant="ghost"
-                              className="h-6 w-6 p-0 text-muted-foreground hover:text-gold"
+                              className="h-6 w-6 p-0 text-muted-foreground hover:text-[#1A1A1A]"
                               title="Rename"
                               onClick={() => {
                                 setIsRenamingId(sp.id);
@@ -731,7 +731,7 @@ const BrandPaletteHub = () => {
                               <Button
                                 size="sm"
                                 variant="ghost"
-                                className="h-6 px-2 text-[10px] text-gold hover:text-gold"
+                                className="h-6 px-2 text-[10px] text-[#1A1A1A] hover:text-[#1A1A1A]"
                                 onClick={() => {
                                   activateUserPalette(sp.id);
                                   setDraft(sp.palette);
@@ -776,7 +776,7 @@ const BrandPaletteHub = () => {
             )}
 
             {/* Info */}
-            <div className="bg-card/80 border border-gold/20 rounded-2xl p-5">
+            <div className="bg-card/80 border border-[#B89555]/20 rounded-2xl p-5">
               <h4 className="text-sm font-bold text-foreground mb-2">
                 {isOwner ? 'Palette Integration' : 'How It Works'}
               </h4>
@@ -789,7 +789,7 @@ const BrandPaletteHub = () => {
               ) : (
                 <div className="text-xs text-muted-foreground leading-relaxed space-y-2">
                   <p>
-                    <strong>Click any color swatch</strong> or the <CircleDot className="w-3 h-3 inline text-gold" /> wheel icon
+                    <strong>Click any color swatch</strong> or the <CircleDot className="w-3 h-3 inline text-[#1A1A1A]" /> wheel icon
                     to open the color picker and choose your preferred color.
                   </p>
                   <p>

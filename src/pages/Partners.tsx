@@ -93,21 +93,21 @@ const Partners = () => {
         {/* ═══ HERO ═══ */}
         <section className="relative py-24 lg:py-32 overflow-hidden">
           {/* Subtle gold spiral accents */}
-          <div className="absolute top-10 right-10 w-72 h-72 bg-gold/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-10 left-10 w-60 h-60 bg-gold/5 rounded-full blur-3xl" />
+          <div className="absolute top-10 right-10 w-72 h-72 bg-[#EFE6D6]/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-10 left-10 w-60 h-60 bg-[#EFE6D6]/5 rounded-full blur-3xl" />
 
           <div className="container mx-auto px-4 relative z-10">
             <motion.div initial="hidden" animate="visible" variants={stagger} className="max-w-4xl mx-auto text-center">
               <motion.div variants={fadeIn}>
-                <button className="group inline-flex items-center gap-2 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-full px-5 py-2.5 mb-6 shadow-sm cursor-default hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
-                  <Handshake className="w-4 h-4 text-gold" />
-                  <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">Strategic Partnerships</span>
+                <button className="group inline-flex items-center gap-2 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-full px-5 py-2.5 mb-6 shadow-sm cursor-default hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
+                  <Handshake className="w-4 h-4 text-[#1A1A1A]" />
+                  <span className="text-[#1A1A1A] font-semibold text-xs uppercase tracking-[0.2em]">Strategic Partnerships</span>
                 </button>
               </motion.div>
 
               <motion.h1 variants={fadeIn} className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#1A1A1A] mb-6 leading-tight" style={{ fontFamily: "'Playfair Display', serif" }}>
                 Strategic Partnerships with{" "}
-                <span className="text-gold">JBJ Global Real Estate</span>
+                <span className="text-[#1A1A1A]">JBJ Global Real Estate</span>
               </motion.h1>
 
               <motion.p variants={fadeIn} className="text-lg md:text-xl text-[#1A1A1A]/70 mb-4 leading-relaxed max-w-3xl mx-auto" style={{ fontFamily: "'Playfair Display', serif" }}>
@@ -121,7 +121,7 @@ const Partners = () => {
               <motion.div variants={fadeIn} className="flex flex-wrap justify-center gap-4">
                 <a href="#partner-application">
                   <Button variant="primary" size="lg" className="px-8">
-                    <Sparkles className="w-5 h-5 mr-2 text-gold" />
+                    <Sparkles className="w-5 h-5 mr-2 text-[#1A1A1A]" />
                     Become a Partner
                     <ArrowUpRight className="w-5 h-5 ml-2" />
                   </Button>
@@ -144,7 +144,7 @@ const Partners = () => {
           <div className="container mx-auto px-4">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="max-w-5xl mx-auto">
               <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold text-center text-[#1A1A1A] mb-6" style={{ fontFamily: "'Playfair Display', serif" }}>
-                Why Collaborate with <span className="text-gold">JBJ</span>
+                Why Collaborate with <span className="text-[#1A1A1A]">JBJ</span>
               </motion.h2>
 
               <motion.p variants={fadeIn} className="text-center text-[#1A1A1A]/70 mb-12 max-w-3xl mx-auto leading-relaxed">
@@ -153,7 +153,7 @@ const Partners = () => {
 
               <motion.div variants={fadeIn} className="jj-card-inner p-8 md:p-10">
                 <h3 className="text-xl font-bold text-[#1A1A1A] mb-6" style={{ fontFamily: "'Playfair Display', serif" }}>
-                  What Makes Us <span className="text-gold">Different</span>
+                  What Makes Us <span className="text-[#1A1A1A]">Different</span>
                 </h3>
                 <div className="grid md:grid-cols-2 gap-3">
                   {[
@@ -166,13 +166,13 @@ const Partners = () => {
                     "Compliance-focused operational execution",
                   ].map((item) => (
                     <div key={item} className="flex items-start gap-3">
-                      <CheckCircle className="w-4 h-4 text-gold mt-1 flex-shrink-0" />
+                      <CheckCircle className="w-4 h-4 text-[#1A1A1A] mt-1 flex-shrink-0" />
                       <span className="text-[#1A1A1A]/70 text-sm">{item}</span>
                     </div>
                   ))}
                 </div>
-                <div className="mt-8 pt-6 border-t border-gold/20">
-                  <p className="text-[#1A1A1A]/70 italic text-sm">We do not offer generic collaborations. <span className="text-gold font-semibold not-italic">We build structured alliances.</span></p>
+                <div className="mt-8 pt-6 border-t border-[#B89555]/20">
+                  <p className="text-[#1A1A1A]/70 italic text-sm">We do not offer generic collaborations. <span className="text-[#1A1A1A] font-semibold not-italic">We build structured alliances.</span></p>
                 </div>
               </motion.div>
             </motion.div>
@@ -186,7 +186,7 @@ const Partners = () => {
           <div className="container mx-auto px-4">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="max-w-6xl mx-auto">
               <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold text-center text-[#1A1A1A] mb-12" style={{ fontFamily: "'Playfair Display', serif" }}>
-                Our Partnership <span className="text-gold">Structures</span>
+                Our Partnership <span className="text-[#1A1A1A]">Structures</span>
               </motion.h2>
 
               <div className="grid md:grid-cols-2 gap-8">
@@ -200,20 +200,20 @@ const Partners = () => {
                     </div>
 
                     <div className="mb-5">
-                      <p className="text-xs uppercase tracking-wider text-gold font-semibold mb-2">For</p>
+                      <p className="text-xs uppercase tracking-wider text-[#1A1A1A] font-semibold mb-2">For</p>
                       <div className="flex flex-wrap gap-2">
                         {cat.forList.map((f) => (
-                          <span key={f} className="text-xs bg-gold/10 border border-gold/30 text-[#1A1A1A]/70 rounded-full px-3 py-1">{f}</span>
+                          <span key={f} className="text-xs bg-[#EFE6D6]/10 border border-[#B89555]/30 text-[#1A1A1A]/70 rounded-full px-3 py-1">{f}</span>
                         ))}
                       </div>
                     </div>
 
                     <div>
-                      <p className="text-xs uppercase tracking-wider text-gold font-semibold mb-2">Scope</p>
+                      <p className="text-xs uppercase tracking-wider text-[#1A1A1A] font-semibold mb-2">Scope</p>
                       <ul className="space-y-1.5">
                         {cat.scope.map((s) => (
                           <li key={s} className="flex items-start gap-2 text-sm text-[#1A1A1A]/70">
-                            <CheckCircle className="w-3.5 h-3.5 text-gold mt-0.5 flex-shrink-0" />
+                            <CheckCircle className="w-3.5 h-3.5 text-[#1A1A1A] mt-0.5 flex-shrink-0" />
                             {s}
                           </li>
                         ))}
@@ -233,7 +233,7 @@ const Partners = () => {
           <div className="container mx-auto px-4">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="max-w-4xl mx-auto">
               <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold text-center text-[#1A1A1A] mb-12" style={{ fontFamily: "'Playfair Display', serif" }}>
-                Our Structured Partnership <span className="text-gold">Process</span>
+                Our Structured Partnership <span className="text-[#1A1A1A]">Process</span>
               </motion.h2>
 
               <div className="relative">
@@ -244,8 +244,8 @@ const Partners = () => {
                   {PROCESS_STEPS.map((step) => (
                     <motion.div key={step.num} variants={fadeIn} className="relative pl-16 md:pl-20">
                       {/* Step number circle */}
-                      <div className="absolute left-0 top-0 w-12 h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 flex items-center justify-center shadow-md z-10">
-                        <span className="text-lg md:text-xl font-bold text-gold">{step.num}</span>
+                      <div className="absolute left-0 top-0 w-12 h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50 flex items-center justify-center shadow-md z-10">
+                        <span className="text-lg md:text-xl font-bold text-[#1A1A1A]">{step.num}</span>
                       </div>
 
                       <div className="jj-card-inner p-5 md:p-6">
@@ -253,7 +253,7 @@ const Partners = () => {
                         <ul className="space-y-1.5">
                           {step.items.map((item) => (
                             <li key={item} className="flex items-start gap-2 text-sm text-[#1A1A1A]/70">
-                              <CheckCircle className="w-3.5 h-3.5 text-gold mt-0.5 flex-shrink-0" />
+                              <CheckCircle className="w-3.5 h-3.5 text-[#1A1A1A] mt-0.5 flex-shrink-0" />
                               {item}
                             </li>
                           ))}
@@ -279,7 +279,7 @@ const Partners = () => {
                 </div>
               </motion.div>
               <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-8" style={{ fontFamily: "'Playfair Display', serif" }}>
-                Governance & Regulatory <span className="text-gold">Integrity</span>
+                Governance & Regulatory <span className="text-[#1A1A1A]">Integrity</span>
               </motion.h2>
 
               <motion.div variants={fadeIn} className="jj-card-inner p-8 md:p-10 text-left">
@@ -293,12 +293,12 @@ const Partners = () => {
                     "Data protection regulations",
                   ].map((item) => (
                     <div key={item} className="flex items-start gap-3">
-                      <Shield className="w-4 h-4 text-gold mt-1 flex-shrink-0" />
+                      <Shield className="w-4 h-4 text-[#1A1A1A] mt-1 flex-shrink-0" />
                       <span className="text-[#1A1A1A]/70 text-sm">{item}</span>
                     </div>
                   ))}
                 </div>
-                <p className="mt-6 text-[#1A1A1A]/70 italic text-sm">We prioritize structured, ethical, and <span className="text-gold font-semibold not-italic">compliant growth.</span></p>
+                <p className="mt-6 text-[#1A1A1A]/70 italic text-sm">We prioritize structured, ethical, and <span className="text-[#1A1A1A] font-semibold not-italic">compliant growth.</span></p>
               </motion.div>
             </motion.div>
           </div>
@@ -311,7 +311,7 @@ const Partners = () => {
           <div className="container mx-auto px-4">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="max-w-4xl mx-auto">
               <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold text-center text-[#1A1A1A] mb-10" style={{ fontFamily: "'Playfair Display', serif" }}>
-                Ideal Partnership <span className="text-gold">Profiles</span>
+                Ideal Partnership <span className="text-[#1A1A1A]">Profiles</span>
               </motion.h2>
 
               <motion.div variants={fadeIn} className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -323,7 +323,7 @@ const Partners = () => {
                   "Strategic investors building long-term UAE exposure",
                 ].map((profile, i) => (
                   <div key={i} className="jj-card-inner p-5 text-center">
-                    <Users className="w-6 h-6 text-gold mx-auto mb-3" />
+                    <Users className="w-6 h-6 text-[#1A1A1A] mx-auto mb-3" />
                     <p className="text-sm text-[#1A1A1A]/70 font-medium">{profile}</p>
                   </div>
                 ))}
@@ -345,20 +345,20 @@ const Partners = () => {
                 </div>
               </motion.div>
               <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>
-                International <span className="text-gold">Collaboration</span>
+                International <span className="text-[#1A1A1A]">Collaboration</span>
               </motion.h2>
               <motion.p variants={fadeIn} className="text-[#1A1A1A]/70 mb-10">We collaborate across:</motion.p>
 
               <motion.div variants={fadeIn} className="flex flex-wrap justify-center gap-3 mb-10">
                 {REGIONS.map((r) => (
-                  <span key={r} className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] font-semibold text-sm rounded-full px-5 py-2.5 shadow-sm hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">{r}</span>
+                  <span key={r} className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] font-semibold text-sm rounded-full px-5 py-2.5 shadow-sm hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">{r}</span>
                 ))}
               </motion.div>
 
               <motion.div variants={fadeIn} className="space-y-1">
-                <p className="text-[#1A1A1A]/70">Our network is <span className="text-gold font-semibold">international.</span></p>
-                <p className="text-[#1A1A1A]/70">Our execution is <span className="text-gold font-semibold">local.</span></p>
-                <p className="text-[#1A1A1A]/70">Our positioning is <span className="text-gold font-semibold">premium.</span></p>
+                <p className="text-[#1A1A1A]/70">Our network is <span className="text-[#1A1A1A] font-semibold">international.</span></p>
+                <p className="text-[#1A1A1A]/70">Our execution is <span className="text-[#1A1A1A] font-semibold">local.</span></p>
+                <p className="text-[#1A1A1A]/70">Our positioning is <span className="text-[#1A1A1A] font-semibold">premium.</span></p>
               </motion.div>
             </motion.div>
           </div>
@@ -371,7 +371,7 @@ const Partners = () => {
           <div className="container mx-auto px-4">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="max-w-3xl mx-auto">
               <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold text-center text-[#1A1A1A] mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>
-                Partner <span className="text-gold">Portal</span>
+                Partner <span className="text-[#1A1A1A]">Portal</span>
               </motion.h2>
               <motion.p variants={fadeIn} className="text-center text-[#1A1A1A]/70 mb-10">
                 Apply for partnership, submit your proposal, and track your application status in real-time.
@@ -391,17 +391,17 @@ const Partners = () => {
           <div className="container mx-auto px-4">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="max-w-3xl mx-auto text-center">
               <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-6" style={{ fontFamily: "'Playfair Display', serif" }}>
-                Let's Build Strategic <span className="text-gold">Growth Together</span>
+                Let's Build Strategic <span className="text-[#1A1A1A]">Growth Together</span>
               </motion.h2>
               <motion.div variants={fadeIn} className="space-y-3 text-[#1A1A1A]/70 mb-8">
                 <p>At JBJ Global Real Estate, partnerships are not transactional.</p>
-                <p>They are <span className="text-gold font-semibold">strategic, structured, and long-term.</span></p>
+                <p>They are <span className="text-[#1A1A1A] font-semibold">strategic, structured, and long-term.</span></p>
                 <p>If you are aligned with excellence, compliance, and scale — we invite you to connect.</p>
               </motion.div>
               <motion.div variants={fadeIn}>
                 <a href="#partner-application">
                   <Button variant="primary" size="lg" className="px-10">
-                    <Sparkles className="w-5 h-5 mr-2 text-gold" />
+                    <Sparkles className="w-5 h-5 mr-2 text-[#1A1A1A]" />
                     Become a Partner
                     <ArrowUpRight className="w-5 h-5 ml-2" />
                   </Button>

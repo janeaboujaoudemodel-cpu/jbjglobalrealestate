@@ -163,19 +163,19 @@ const SupportTicketHub = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] text-[#1A1A1A]">
       {/* Header */}
-      <div className="border-b border-gold/20 bg-gradient-to-b from-zinc-900 to-black">
+      <div className="border-b border-[#B89555]/20 bg-gradient-to-b from-zinc-900 to-black">
         <div className="max-w-[1600px] mx-auto px-6 py-6">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4">
               <Button
                 onClick={() => navigate(-1)}
-                className="bg-gold/20 border border-gold/50 text-gold hover:bg-gold/30"
+                className="bg-[#EFE6D6]/20 border border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6]/30"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back
               </Button>
               <div>
-                <h1 className="text-2xl font-bold text-gold flex items-center gap-3">
+                <h1 className="text-2xl font-bold text-[#1A1A1A] flex items-center gap-3">
                   <Ticket className="w-7 h-7" />
                   Ticket Support Hub
                 </h1>
@@ -187,7 +187,7 @@ const SupportTicketHub = () => {
             <Button
               onClick={() => refetch()}
               disabled={isRefetching}
-              className="bg-gold/20 border border-gold/50 text-gold hover:bg-gold/30"
+              className="bg-[#EFE6D6]/20 border border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6]/30"
             >
               <RefreshCw className={cn("w-4 h-4 mr-2", isRefetching && "animate-spin")} />
               Refresh
@@ -196,7 +196,7 @@ const SupportTicketHub = () => {
 
           {/* Stats */}
           <div className="grid grid-cols-4 lg:grid-cols-5 gap-4 mb-6">
-            <div className="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 rounded-xl p-4 border border-gold/30 shadow-[0_0_20px_rgba(200,167,102,0.1)]">
+            <div className="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 rounded-xl p-4 border border-[#B89555]/30 shadow-[0_0_20px_rgba(200,167,102,0.1)]">
               <p className="text-white/85 text-sm font-medium">Total Tickets</p>
               <p className="text-3xl font-bold text-white">{ticketCounts.total}</p>
             </div>
@@ -233,7 +233,7 @@ const SupportTicketHub = () => {
                 value={filters.search}
                 onChange={(e) => handleSearchChange(e.target.value)}
                 placeholder="Search by ticket #, email, name, or subject..."
-                className="w-full h-10 pl-10 pr-4 rounded-lg bg-zinc-800 border border-gold/30 text-white placeholder:text-[#1A1A1A]/70 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all"
+                className="w-full h-10 pl-10 pr-4 rounded-lg bg-[#F7F2EA] border border-[#B89555]/30 text-white placeholder:text-[#1A1A1A]/70 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-[#B89555] transition-all"
               />
             </div>
 
@@ -309,9 +309,9 @@ const SupportTicketHub = () => {
 
           {/* Bulk Actions Bar */}
           {isSomeSelected && (
-            <div className="mt-4 flex items-center gap-3 p-3 bg-gold/10 border border-gold/30 rounded-lg">
-              <span className="text-gold font-medium">{selectedTicketIds.size} selected</span>
-              <div className="h-4 w-px bg-gold/30" />
+            <div className="mt-4 flex items-center gap-3 p-3 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-lg">
+              <span className="text-[#1A1A1A] font-medium">{selectedTicketIds.size} selected</span>
+              <div className="h-4 w-px bg-[#EFE6D6]/30" />
               <Button
                 size="sm"
                 onClick={() => handleBulkStatusChange("in_progress")}
@@ -356,11 +356,11 @@ const SupportTicketHub = () => {
         <div className="flex gap-6 min-h-[calc(100vh-380px)]">
           {/* Ticket List */}
           <div className="flex-1 min-w-0 flex flex-col">
-            <div className="bg-gradient-to-b from-zinc-900/80 to-zinc-950/80 rounded-xl border border-gold/20 overflow-hidden shadow-[0_0_30px_rgba(200,167,102,0.05)] flex-1 flex flex-col">
+            <div className="bg-gradient-to-b from-zinc-900/80 to-zinc-950/80 rounded-xl border border-[#B89555]/20 overflow-hidden shadow-[0_0_30px_rgba(200,167,102,0.05)] flex-1 flex flex-col">
               {isLoading ? (
                 <div className="p-6 space-y-4 flex-1">
                   {[...Array(5)].map((_, i) => (
-                    <Skeleton key={i} className="h-16 w-full bg-zinc-800" />
+                    <Skeleton key={i} className="h-16 w-full bg-[#F7F2EA]" />
                   ))}
                 </div>
               ) : error ? (
@@ -372,7 +372,7 @@ const SupportTicketHub = () => {
                   </p>
                   <Button
                     onClick={() => refetch()}
-                    className="mt-4 bg-gold/20 border border-gold/50 text-gold hover:bg-gold/30"
+                    className="mt-4 bg-[#EFE6D6]/20 border border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6]/30"
                   >
                     <RefreshCw className="w-4 h-4 mr-2" />
                     Retry
@@ -382,21 +382,21 @@ const SupportTicketHub = () => {
                 <div className="flex-1 overflow-auto">
                   <Table>
                     <TableHeader>
-                      <TableRow className="border-gold/20 hover:bg-transparent">
+                      <TableRow className="border-[#B89555]/20 hover:bg-transparent">
                         <TableHead className="w-10 px-2">
                           <Checkbox
                             checked={isAllSelected}
                             onCheckedChange={handleSelectAll}
-                            className="border-gold/50 data-[state=checked]:bg-gold data-[state=checked]:border-gold"
+                            className="border-[#B89555]/50 data-[state=checked]:bg-[#EFE6D6] data-[state=checked]:border-[#B89555]"
                           />
                         </TableHead>
-                        <TableHead className="text-gold font-semibold text-xs px-2 whitespace-nowrap">Ticket #</TableHead>
-                        <TableHead className="text-gold font-semibold text-xs px-2">Customer</TableHead>
-                        <TableHead className="text-gold font-semibold text-xs px-2">Subject</TableHead>
-                        <TableHead className="text-gold font-semibold text-xs px-2 hidden xl:table-cell">Category</TableHead>
-                        <TableHead className="text-gold font-semibold text-xs px-2 whitespace-nowrap">Priority</TableHead>
-                        <TableHead className="text-gold font-semibold text-xs px-2">Status</TableHead>
-                        <TableHead className="text-gold font-semibold text-xs px-2 whitespace-nowrap">
+                        <TableHead className="text-[#1A1A1A] font-semibold text-xs px-2 whitespace-nowrap">Ticket #</TableHead>
+                        <TableHead className="text-[#1A1A1A] font-semibold text-xs px-2">Customer</TableHead>
+                        <TableHead className="text-[#1A1A1A] font-semibold text-xs px-2">Subject</TableHead>
+                        <TableHead className="text-[#1A1A1A] font-semibold text-xs px-2 hidden xl:table-cell">Category</TableHead>
+                        <TableHead className="text-[#1A1A1A] font-semibold text-xs px-2 whitespace-nowrap">Priority</TableHead>
+                        <TableHead className="text-[#1A1A1A] font-semibold text-xs px-2">Status</TableHead>
+                        <TableHead className="text-[#1A1A1A] font-semibold text-xs px-2 whitespace-nowrap">
                           <button
                             onClick={() => setSortAscending(!sortAscending)}
                             className="flex items-center gap-1 hover:text-white transition-colors"
@@ -419,11 +419,11 @@ const SupportTicketHub = () => {
                             key={ticket.id}
                             onClick={() => setSelectedTicketId(ticket.id)}
                             className={cn(
-                              "border-gold/10 cursor-pointer transition-all duration-200",
+                              "border-[#B89555]/10 cursor-pointer transition-all duration-200",
                               selectedTicketId === ticket.id
-                                ? "bg-gold/15 border-l-4 border-l-gold"
+                                ? "bg-[#EFE6D6]/15 border-l-4 border-l-gold"
                                 : isSelected
-                                ? "bg-gold/10"
+                                ? "bg-[#EFE6D6]/10"
                                 : "hover:bg-[#1A1A1A]/50"
                             )}
                           >
@@ -441,10 +441,10 @@ const SupportTicketHub = () => {
                                     return newSet;
                                   });
                                 }}
-                                className="border-gold/50 data-[state=checked]:bg-gold data-[state=checked]:border-gold"
+                                className="border-[#B89555]/50 data-[state=checked]:bg-[#EFE6D6] data-[state=checked]:border-[#B89555]"
                               />
                             </TableCell>
-                            <TableCell className="font-mono text-gold font-bold text-xs px-2 whitespace-nowrap">
+                            <TableCell className="font-mono text-[#1A1A1A] font-bold text-xs px-2 whitespace-nowrap">
                               {ticket.ticket_number}
                             </TableCell>
                             <TableCell className="px-2">
@@ -516,7 +516,7 @@ const SupportTicketHub = () => {
 
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <AlertDialogContent className="bg-zinc-900 border-gold/30">
+        <AlertDialogContent className="bg-[#FDFBF7] border-[#B89555]/30">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-white">Delete {selectedTicketIds.size} Ticket{selectedTicketIds.size > 1 ? 's' : ''}?</AlertDialogTitle>
             <AlertDialogDescription className="text-white/70">
@@ -524,7 +524,7 @@ const SupportTicketHub = () => {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="bg-zinc-800 border-[#1A1A1A] text-white hover:bg-[#1A1A1A]">
+            <AlertDialogCancel className="bg-[#F7F2EA] border-[#1A1A1A] text-white hover:bg-[#1A1A1A]">
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction

@@ -307,7 +307,7 @@ const MindMap = () => {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white flex flex-col">
+    <div className="min-h-screen bg-[#FDFBF7] text-white flex flex-col">
       {/* Header */}
       <div className="border-b border-[#1A1A1A] px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-4">
@@ -386,7 +386,7 @@ const MindMap = () => {
             <div>
               <h3 className="text-sm font-semibold text-white/70 mb-3">Selected Node</h3>
               {selectedNode ? (
-                <div className="bg-zinc-900 rounded-lg p-3">
+                <div className="bg-[#FDFBF7] rounded-lg p-3">
                   <p className="text-sm">{nodes.find(n => n.id === selectedNode)?.text}</p>
                   <p className="text-xs text-white/90 mt-1">
                     {nodes.find(n => n.id === selectedNode)?.children.length} children

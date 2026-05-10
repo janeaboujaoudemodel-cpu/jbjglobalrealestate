@@ -112,7 +112,7 @@ export default function AIInvestmentReportPage() {
 
       <div className="space-y-8">
         {/* Input Form */}
-        <Card className="bg-zinc-900/90 border-emerald-500/30">
+        <Card className="bg-[#FDFBF7]/90 border-emerald-500/30">
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
               <BarChart3 className="w-5 h-5 text-emerald-400" />
@@ -126,7 +126,7 @@ export default function AIInvestmentReportPage() {
                 value={area}
                 onChange={(e) => setArea(e.target.value)}
                 placeholder="e.g., Dubai Marina, Downtown Dubai..."
-                className="bg-zinc-800 border-emerald-500/30 text-white"
+                className="bg-[#F7F2EA] border-emerald-500/30 text-white"
               />
             </div>
 
@@ -134,7 +134,7 @@ export default function AIInvestmentReportPage() {
               <div>
                 <Label className="text-white/85">Property Type</Label>
                 <Select value={propertyType} onValueChange={setPropertyType}>
-                  <SelectTrigger className="bg-zinc-800 border-emerald-500/30 text-white">
+                  <SelectTrigger className="bg-[#F7F2EA] border-emerald-500/30 text-white">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -149,7 +149,7 @@ export default function AIInvestmentReportPage() {
               <div>
                 <Label className="text-white/85">Investment Focus</Label>
                 <Select value={investmentType} onValueChange={setInvestmentType}>
-                  <SelectTrigger className="bg-zinc-800 border-emerald-500/30 text-white">
+                  <SelectTrigger className="bg-[#F7F2EA] border-emerald-500/30 text-white">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -166,7 +166,7 @@ export default function AIInvestmentReportPage() {
               <div>
                 <Label className="text-white/85">Investment Timeframe</Label>
                 <Select value={timeframe} onValueChange={setTimeframe}>
-                  <SelectTrigger className="bg-zinc-800 border-emerald-500/30 text-white">
+                  <SelectTrigger className="bg-[#F7F2EA] border-emerald-500/30 text-white">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -183,7 +183,7 @@ export default function AIInvestmentReportPage() {
                   value={budget}
                   onChange={(e) => setBudget(e.target.value)}
                   placeholder="2,000,000"
-                  className="bg-zinc-800 border-emerald-500/30 text-white"
+                  className="bg-[#F7F2EA] border-emerald-500/30 text-white"
                 />
               </div>
             </div>
@@ -213,7 +213,7 @@ export default function AIInvestmentReportPage() {
           <div className="space-y-6">
             {/* Executive Summary */}
             {result.executiveSummary && (
-              <Card className="bg-zinc-900/90 border-emerald-500/30">
+              <Card className="bg-[#FDFBF7]/90 border-emerald-500/30">
                 <CardHeader>
                   <CardTitle className="text-white flex items-center gap-2">
                     <TrendingUp className="w-5 h-5 text-emerald-400" />
@@ -228,21 +228,21 @@ export default function AIInvestmentReportPage() {
 
             {/* Market Overview */}
             {result.marketOverview && (
-              <Card className="bg-zinc-900/90 border-emerald-500/30">
+              <Card className="bg-[#FDFBF7]/90 border-emerald-500/30">
                 <CardHeader>
                   <CardTitle className="text-white">Market Overview</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-3 gap-4">
-                    <div className="bg-zinc-800/50 rounded-lg p-4 text-center">
+                    <div className="bg-[#F7F2EA]/50 rounded-lg p-4 text-center">
                       <Label className="text-white/90 text-xs uppercase">State</Label>
                       <p className="text-emerald-400 font-semibold">{result.marketOverview.currentState}</p>
                     </div>
-                    <div className="bg-zinc-800/50 rounded-lg p-4 text-center">
+                    <div className="bg-[#F7F2EA]/50 rounded-lg p-4 text-center">
                       <Label className="text-white/90 text-xs uppercase">Sentiment</Label>
                       <p className="text-emerald-400 font-semibold">{result.marketOverview.sentiment}</p>
                     </div>
-                    <div className="bg-zinc-800/50 rounded-lg p-4 text-center">
+                    <div className="bg-[#F7F2EA]/50 rounded-lg p-4 text-center">
                       <Label className="text-white/90 text-xs uppercase">Trend</Label>
                       <p className="text-emerald-400 font-semibold">{result.priceAnalysis?.trend}</p>
                     </div>
@@ -256,7 +256,7 @@ export default function AIInvestmentReportPage() {
 
             {/* Investment Hotspots */}
             {result.investmentHotspots && result.investmentHotspots.length > 0 && (
-              <Card className="bg-zinc-900/90 border-emerald-500/30">
+              <Card className="bg-[#FDFBF7]/90 border-emerald-500/30">
                 <CardHeader>
                   <CardTitle className="text-white flex items-center gap-2">
                     <DollarSign className="w-5 h-5 text-emerald-400" />
@@ -266,7 +266,7 @@ export default function AIInvestmentReportPage() {
                 <CardContent>
                   <div className="space-y-4">
                     {result.investmentHotspots.map((spot, i) => (
-                      <div key={i} className="bg-zinc-800/50 rounded-lg p-4 border border-emerald-500/20">
+                      <div key={i} className="bg-[#F7F2EA]/50 rounded-lg p-4 border border-emerald-500/20">
                         <div className="flex items-center justify-between mb-2">
                           <h4 className="text-white font-semibold">{spot.area}</h4>
                           <span className="text-emerald-400 font-medium">{spot.expectedGrowth}</span>
@@ -281,17 +281,17 @@ export default function AIInvestmentReportPage() {
 
             {/* Forecast */}
             {result.forecast && (
-              <Card className="bg-zinc-900/90 border-emerald-500/30">
+              <Card className="bg-[#FDFBF7]/90 border-emerald-500/30">
                 <CardHeader>
                   <CardTitle className="text-white">Market Forecast</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="grid md:grid-cols-2 gap-4">
-                    <div className="bg-zinc-800/50 rounded-lg p-4">
+                    <div className="bg-[#F7F2EA]/50 rounded-lg p-4">
                       <Label className="text-white/90 text-xs uppercase">Short Term (3-6 months)</Label>
                       <p className="text-white/85 mt-1">{result.forecast.shortTerm}</p>
                     </div>
-                    <div className="bg-zinc-800/50 rounded-lg p-4">
+                    <div className="bg-[#F7F2EA]/50 rounded-lg p-4">
                       <Label className="text-white/90 text-xs uppercase">Medium Term (6-12 months)</Label>
                       <p className="text-white/85 mt-1">{result.forecast.mediumTerm}</p>
                     </div>
@@ -323,7 +323,7 @@ export default function AIInvestmentReportPage() {
 
         {/* Placeholder */}
         {!result && !loading && (
-          <div className="bg-zinc-900/50 border border-emerald-500/20 rounded-xl py-12 text-center">
+          <div className="bg-[#FDFBF7]/50 border border-emerald-500/20 rounded-xl py-12 text-center">
             <TrendingUp className="w-12 h-12 text-emerald-400/50 mx-auto mb-4" />
             <p className="text-white/70">Enter investment parameters above to generate your report</p>
           </div>

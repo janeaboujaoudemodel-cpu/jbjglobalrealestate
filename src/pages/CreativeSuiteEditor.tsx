@@ -106,7 +106,7 @@ export default function CreativeSuiteEditor() {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-12 h-12 text-gold animate-spin mx-auto mb-4" />
+          <Loader2 className="w-12 h-12 text-[#1A1A1A] animate-spin mx-auto mb-4" />
           <p className="text-slate-400">Loading project...</p>
         </div>
       </div>
@@ -118,7 +118,7 @@ export default function CreativeSuiteEditor() {
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <div className="text-center">
           <p className="text-slate-400 mb-4">Project not found</p>
-          <Button onClick={() => navigate('/studio')} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
+          <Button onClick={() => navigate('/studio')} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
             Back to Studio
           </Button>
         </div>
@@ -129,15 +129,15 @@ export default function CreativeSuiteEditor() {
   return (
     <div className="min-h-screen bg-slate-950 text-white flex flex-col">
       {/* Top Bar */}
-      <header className="h-14 bg-slate-900/90 backdrop-blur-xl border-b border-gold/20 flex items-center justify-between px-4 flex-shrink-0">
+      <header className="h-14 bg-slate-900/90 backdrop-blur-xl border-b border-[#B89555]/20 flex items-center justify-between px-4 flex-shrink-0">
         <div className="flex items-center gap-3">
           <Link to="/studio" className="p-2 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition-colors">
             <ArrowLeft className="w-5 h-5" />
           </Link>
           
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-gold" />
+            <div className="w-8 h-8 rounded-lg bg-[#EFE6D6]/10 border border-[#B89555]/30 flex items-center justify-center">
+              <Sparkles className="w-4 h-4 text-[#1A1A1A]" />
             </div>
             
             {isRenaming ? (
@@ -146,17 +146,17 @@ export default function CreativeSuiteEditor() {
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleRename()}
-                  className="w-64 h-8 bg-slate-800 border-gold/30 text-white"
+                  className="w-64 h-8 bg-slate-800 border-[#B89555]/30 text-white"
                   autoFocus
                 />
-                <Button size="sm" onClick={handleRename} className="h-8 bg-gold hover:bg-gold/90 text-[#1A1A1A]">
+                <Button size="sm" onClick={handleRename} className="h-8 bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
                   Save
                 </Button>
               </div>
             ) : (
               <button
                 onClick={() => setIsRenaming(true)}
-                className="text-lg font-semibold hover:text-gold transition-colors"
+                className="text-lg font-semibold hover:text-[#1A1A1A] transition-colors"
               >
                 {project.name}
               </button>
@@ -190,7 +190,7 @@ export default function CreativeSuiteEditor() {
             variant="outline"
             size="sm"
             onClick={() => setIsPropertyPickerOpen(true)}
-            className={`border-slate-600 ${project.property_snapshot ? 'text-gold border-gold/50' : 'text-slate-300'}`}
+            className={`border-slate-600 ${project.property_snapshot ? 'text-[#1A1A1A] border-[#B89555]/50' : 'text-slate-300'}`}
           >
             <Building2 className="w-4 h-4 mr-2" />
             {project.property_snapshot?.name || 'Link Property'}
@@ -209,7 +209,7 @@ export default function CreativeSuiteEditor() {
           </Button>
 
           {/* Publish */}
-          <Button onClick={() => setIsPublishPanelOpen(true)} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
+          <Button onClick={() => setIsPublishPanelOpen(true)} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
             <Download className="w-4 h-4 mr-2" />
             Export & Publish
           </Button>
@@ -250,7 +250,7 @@ export default function CreativeSuiteEditor() {
                     onClick={() => setActiveTab('ai')}
                     className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors ${
                       activeTab === 'ai'
-                        ? 'bg-gold/20 text-gold'
+                        ? 'bg-[#EFE6D6]/20 text-[#1A1A1A]'
                         : 'text-slate-400 hover:text-white'
                     }`}
                   >
@@ -261,7 +261,7 @@ export default function CreativeSuiteEditor() {
                     onClick={() => setActiveTab('audio')}
                     className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors ${
                       activeTab === 'audio'
-                        ? 'bg-gold/20 text-gold'
+                        ? 'bg-[#EFE6D6]/20 text-[#1A1A1A]'
                         : 'text-slate-400 hover:text-white'
                     }`}
                   >
@@ -308,7 +308,7 @@ export default function CreativeSuiteEditor() {
                           {project.property_snapshot.developer_name && ` by ${project.property_snapshot.developer_name}`}
                         </p>
                         {project.property_snapshot.price_from && (
-                          <p className="text-sm text-gold mt-1">
+                          <p className="text-sm text-[#1A1A1A] mt-1">
                             From AED {(project.property_snapshot.price_from / 1000000).toFixed(1)}M
                           </p>
                         )}

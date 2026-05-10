@@ -90,7 +90,7 @@ const AutoApproveToggle = () => {
 
   if (loading) return null;
   return (
-    <div className="mb-4 flex items-center gap-3 p-3 rounded-xl border-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA]">
+    <div className="mb-4 flex items-center gap-3 p-3 rounded-xl border-2 border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA]">
       <Switch checked={autoApprove} onCheckedChange={toggle} />
       <div>
         <p className="text-sm font-semibold text-foreground">Auto-Approve Developer Listings</p>
@@ -238,13 +238,13 @@ const ListingAdmin = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex flex-col items-center justify-center pt-28 gap-6">
         <div className="flex flex-col items-center gap-4">
-          <Loader2 className="w-10 h-10 animate-spin text-gold" />
+          <Loader2 className="w-10 h-10 animate-spin text-[#1A1A1A]" />
           <p className="text-[#1A1A1A]/70 text-sm">Verifying access permissions...</p>
         </div>
         <div className="w-80 space-y-3">
-          <div className="h-2 bg-zinc-800 rounded-full animate-pulse" />
-          <div className="h-2 bg-zinc-800 rounded-full animate-pulse w-3/4" />
-          <div className="h-2 bg-zinc-800 rounded-full animate-pulse w-1/2" />
+          <div className="h-2 bg-[#F7F2EA] rounded-full animate-pulse" />
+          <div className="h-2 bg-[#F7F2EA] rounded-full animate-pulse w-3/4" />
+          <div className="h-2 bg-[#F7F2EA] rounded-full animate-pulse w-1/2" />
         </div>
       </div>
     );
@@ -253,7 +253,7 @@ const ListingAdmin = () => {
   if (!effectiveAccess) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex items-center justify-center pt-28">
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 max-w-md mx-4">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 max-w-md mx-4">
           <CardContent className="p-8 text-center">
             <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <X className="w-8 h-8 text-red-500" />
@@ -666,7 +666,7 @@ const ListingAdmin = () => {
       {/* Premium Dashboard Shell — full bleed, no black gaps */}
       <div className="border-b border-[#B89555]/20 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       {/* Header - Clean neutral style — top offset accounts for owner shell header (64px + 48px utility bar) */}
-      <header className="border-b border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-0 z-20 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
+      <header className="border-b border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-0 z-20 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
         <div className="max-w-[1200px] mx-auto px-4 pt-6 pb-4">
           {/* Row 1: Title and actions */}
           <div className="flex items-center justify-between gap-4 mb-4">
@@ -680,7 +680,7 @@ const ListingAdmin = () => {
                 <ArrowLeft className="w-5 h-5" />
               </Button>
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-zinc-900">
+                <div className="p-2 rounded-lg bg-[#FDFBF7]">
                   <Building2 className="w-5 h-5 text-white" />
                 </div>
                 <div>
@@ -750,13 +750,13 @@ const ListingAdmin = () => {
               </Button>
             </div>
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] rounded-lg border-2 border-gold/30">
-                <Building2 className="w-4 h-4 text-gold" />
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] rounded-lg border-2 border-[#B89555]/30">
+                <Building2 className="w-4 h-4 text-[#1A1A1A]" />
                 <span className="text-sm text-[#1A1A1A] font-medium">{totalCount ?? 0} Published</span>
                 <span className="text-xs text-[#1A1A1A]/70">/ {allProjectsCount ?? 0} Total</span>
               </div>
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] rounded-lg border-2 border-gold/30">
-                <Crown className="w-4 h-4 text-gold" />
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] rounded-lg border-2 border-[#B89555]/30">
+                <Crown className="w-4 h-4 text-[#1A1A1A]" />
                 <span className="text-sm text-[#1A1A1A] font-medium">{paginatedProjects?.filter((p) => p.is_premium).length || 0} {t('listingAdmin.premium')}</span>
               </div>
             </div>
@@ -779,11 +779,11 @@ const ListingAdmin = () => {
             <SourceCountsPanel onSourceChange={(src) => setActiveSource(src)} activeSource={activeSource} />
             
             <Tabs value={dataOpsTab} onValueChange={setDataOpsTab} className="space-y-6">
-              <TabsList className="w-full flex flex-nowrap overflow-x-auto scrollbar-hide bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] border border-gold/30 p-1 rounded-lg" style={{ overscrollBehaviorX: 'contain' }}>
+              <TabsList className="w-full flex flex-nowrap overflow-x-auto scrollbar-hide bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] border border-[#B89555]/30 p-1 rounded-lg" style={{ overscrollBehaviorX: 'contain' }}>
                 {activeSource === "provident" && (
                   <TabsTrigger 
                     value="provident-hub"
-                    className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+                    className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:text-foreground"
                   >
                     <Database className="w-3.5 h-3.5 mr-1.5" />
                     Provident Portal
@@ -791,21 +791,21 @@ const ListingAdmin = () => {
                 )}
                 <TabsTrigger 
                   value="enrichment"
-                  className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+                  className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:text-foreground"
                 >
                   <Zap className="w-3.5 h-3.5 mr-1.5" />
                   Enrichment & Extraction
                 </TabsTrigger>
                 <TabsTrigger 
                   value="approvals"
-                  className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+                  className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:text-foreground"
                 >
                   <Check className="w-3.5 h-3.5 mr-1.5" />
                   Approval Center
                 </TabsTrigger>
                 <TabsTrigger 
                   value="external"
-                  className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+                  className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:text-foreground"
                 >
                   <Database className="w-3.5 h-3.5 mr-1.5" />
                   Sources
@@ -813,7 +813,7 @@ const ListingAdmin = () => {
                 {activeSource === "reelly" && (
                   <TabsTrigger 
                     value="reelly" 
-                    className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+                    className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:text-foreground"
                   >
                     <Globe className="w-3.5 h-3.5 mr-1.5" />
                     Reelly Sync
@@ -821,7 +821,7 @@ const ListingAdmin = () => {
                 )}
                 <TabsTrigger 
                   value="dev-visibility"
-                  className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+                  className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:text-foreground"
                 >
                   <Building2 className="w-3.5 h-3.5 mr-1.5" />
                   Visibility
@@ -869,7 +869,7 @@ const ListingAdmin = () => {
                 Drafts ({(allProjectsCount ?? 0) - (totalCount ?? 0)})
               </Button>
 
-              <div className="h-6 w-px bg-gold/30 mx-1" />
+              <div className="h-6 w-px bg-[#EFE6D6]/30 mx-1" />
 
               {/* Status filter badges */}
               {["all", "enriched", "needs-work", "pending"].map(s => (
@@ -884,7 +884,7 @@ const ListingAdmin = () => {
                 </Button>
               ))}
 
-              <div className="h-6 w-px bg-gold/30 mx-1" />
+              <div className="h-6 w-px bg-[#EFE6D6]/30 mx-1" />
 
               <ListingSearchFilters
                 developers={developers || []}
@@ -929,8 +929,8 @@ const ListingAdmin = () => {
                     return (
                     <Card
                       key={project.id}
-                      className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 cursor-pointer transition-all hover:shadow-lg hover:border-gold overflow-hidden ${
-                        selectedProject?.id === project.id ? "border-gold ring-2 ring-gold/20" : ""
+                      className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 cursor-pointer transition-all hover:shadow-lg hover:border-[#B89555] overflow-hidden ${
+                        selectedProject?.id === project.id ? "border-[#B89555] ring-2 ring-gold/20" : ""
                       }`}
                       onClick={() => { setDetailProject(project); setActiveView('project-detail'); }}
                     >
@@ -985,10 +985,10 @@ const ListingAdmin = () => {
                             })()}
                           </div>
                           <div className="flex flex-col items-end gap-1">
-                            {project.is_premium && <Crown className="w-4 h-4 text-gold flex-shrink-0" />}
+                            {project.is_premium && <Crown className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />}
                             {project.is_sold_out && <Badge variant="destructive" className="text-[10px]">Sold Out</Badge>}
                             {(project as any).construction_status && (
-                              <Badge variant="outline" className="text-[10px] border-gold/30">{(project as any).construction_status}</Badge>
+                              <Badge variant="outline" className="text-[10px] border-[#B89555]/30">{(project as any).construction_status}</Badge>
                             )}
                             {!(project as any).is_published && (
                               <Badge variant="outline" className="text-[10px] border-amber-300 bg-amber-50 text-amber-700">Draft</Badge>
@@ -1007,13 +1007,13 @@ const ListingAdmin = () => {
                   )}
                 </div>
                 {/* Pagination */}
-                <div className="flex items-center justify-center gap-4 mt-6 px-4 py-3 bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/30 rounded-xl">
+                <div className="flex items-center justify-center gap-4 mt-6 px-4 py-3 bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] border-2 border-[#B89555]/30 rounded-xl">
                   <Button
                     variant="outline"
                     size="sm"
                     disabled={projectsPage === 0}
                     onClick={() => setProjectsPage(p => Math.max(0, p - 1))}
-                    className="bg-[#FDFBF7] border-gold/30 text-foreground hover:bg-gold/10 disabled:opacity-40"
+                    className="bg-[#FDFBF7] border-[#B89555]/30 text-foreground hover:bg-[#EFE6D6]/10 disabled:opacity-40"
                   >
                     Previous
                   </Button>
@@ -1025,7 +1025,7 @@ const ListingAdmin = () => {
                     size="sm"
                     disabled={((projectsPage + 1) * 50) >= (filteredTabCount ?? 0)}
                     onClick={() => setProjectsPage(p => p + 1)}
-                    className="bg-[#FDFBF7] border-gold/30 text-foreground hover:bg-gold/10 disabled:opacity-40"
+                    className="bg-[#FDFBF7] border-[#B89555]/30 text-foreground hover:bg-[#EFE6D6]/10 disabled:opacity-40"
                   >
                     Next
                   </Button>
@@ -1065,8 +1065,8 @@ const ListingAdmin = () => {
         {/* Editor View */}
         {activeView === 'editor' && (isEditing || isCreating) && (
           <div className="container mx-auto px-4 py-6">
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30">
-              <CardHeader className="border-b border-gold/30">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30">
+              <CardHeader className="border-b border-[#B89555]/30">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-[#1A1A1A]">
                     {isCreating ? t('listingAdmin.createNewProject') : `${t('listingAdmin.editProject')}: ${selectedProject?.name}`}
@@ -1339,10 +1339,10 @@ const ListingAdmin = () => {
                       </div>
 
                       {/* Premium Listing */}
-                      <div className="md:col-span-2 flex items-center justify-between p-4 bg-gradient-to-r from-gold/10 to-transparent border border-gold/20 rounded-lg">
+                      <div className="md:col-span-2 flex items-center justify-between p-4 bg-gradient-to-r from-gold/10 to-transparent border border-[#B89555]/20 rounded-lg">
                         <div>
                           <Label className="text-[#1A1A1A] font-medium flex items-center gap-2">
-                            <Crown className="w-4 h-4 text-gold" />
+                            <Crown className="w-4 h-4 text-[#1A1A1A]" />
                             {t('listingAdmin.premiumListing')}
                           </Label>
                           <p className="text-[#1A1A1A]/70 text-sm">

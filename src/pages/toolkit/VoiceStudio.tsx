@@ -132,7 +132,7 @@ export default function VoiceStudio() {
                 />
                 <div className="flex justify-between text-xs text-slate-500">
                   <span>{vs.script.length.toLocaleString()} / {MAX_SCRIPT_LENGTH.toLocaleString()} characters</span>
-                  <span className={vs.script.length > MAX_SCRIPT_LENGTH * 0.9 ? "text-amber-400" : ""}>
+                  <span className={vs.script.length > MAX_SCRIPT_LENGTH * 0.9 ? "text-[#1A1A1A]" : ""}>
                     {vs.script.length >= MAX_SCRIPT_LENGTH ? "Limit reached" : ""}
                   </span>
                 </div>

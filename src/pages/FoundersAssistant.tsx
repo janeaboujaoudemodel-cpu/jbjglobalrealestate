@@ -184,7 +184,7 @@ export default function FoundersAssistant() {
   if (authLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
-        <Loader2 className="h-8 w-8 animate-spin text-gold" />
+        <Loader2 className="h-8 w-8 animate-spin text-[#1A1A1A]" />
       </div>
     );
   }
@@ -225,7 +225,7 @@ export default function FoundersAssistant() {
   };
 
   const statCards = [
-    { label: 'Active', count: stats.activeTasks, colorClass: 'bg-gold/15 text-gold border-gold/30', filter: 'in_progress' },
+    { label: 'Active', count: stats.activeTasks, colorClass: 'bg-[#EFE6D6]/15 text-[#1A1A1A] border-[#B89555]/30', filter: 'in_progress' },
     { label: 'Done', count: stats.completedTasks, colorClass: 'bg-emerald-50 text-emerald-700 border-emerald-200', filter: 'completed' },
     { label: 'Pending', count: stats.pendingTasks, colorClass: 'bg-amber-50 text-amber-700 border-amber-200', filter: 'pending' },
     { label: 'Escalations', count: unreadCount, colorClass: 'bg-red-50 text-red-700 border-red-200', filter: 'escalations' },
@@ -237,7 +237,7 @@ export default function FoundersAssistant() {
       
       <div className="flex flex-col h-screen">
         {/* Amanda header bar — with proper padding from parent shell */}
-        <div className="flex-shrink-0 bg-[#FDFBF7]/80 backdrop-blur-sm border-b-2 border-gold/30 px-4 py-3 mt-1">
+        <div className="flex-shrink-0 bg-[#FDFBF7]/80 backdrop-blur-sm border-b-2 border-[#B89555]/30 px-4 py-3 mt-1">
           <div className="flex items-center justify-between gap-3">
             {/* Left: Amanda identity */}
             <div className="flex items-center gap-3">
@@ -245,7 +245,7 @@ export default function FoundersAssistant() {
                 onClick={() => setActiveView('assistant')}
                 className="flex items-center gap-2.5 hover:opacity-80 transition-opacity"
               >
-                <div className="relative w-10 h-10 rounded-full border-2 border-gold/50 overflow-hidden">
+                <div className="relative w-10 h-10 rounded-full border-2 border-[#B89555]/50 overflow-hidden">
                   <img src={amandaPortrait} alt="Amanda Clarke" className="w-full h-full object-cover" />
                   <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-white rounded-full" />
                 </div>
@@ -262,7 +262,7 @@ export default function FoundersAssistant() {
                 variant="ghost"
                 size="sm"
                 onClick={() => setActiveView('assistant')}
-                className="text-xs h-8 gap-1.5 text-muted-foreground hover:text-foreground hover:bg-gold/10"
+                className="text-xs h-8 gap-1.5 text-muted-foreground hover:text-foreground hover:bg-[#EFE6D6]/10"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">New Chat</span>
@@ -271,7 +271,7 @@ export default function FoundersAssistant() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-xs h-8 gap-1.5 text-muted-foreground hover:text-foreground hover:bg-gold/10 relative"
+                className="text-xs h-8 gap-1.5 text-muted-foreground hover:text-foreground hover:bg-[#EFE6D6]/10 relative"
               >
                 <History className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">History</span>
@@ -285,7 +285,7 @@ export default function FoundersAssistant() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-xs h-8 gap-1.5 text-muted-foreground hover:text-foreground hover:bg-gold/10"
+                className="text-xs h-8 gap-1.5 text-muted-foreground hover:text-foreground hover:bg-[#EFE6D6]/10"
               >
                 <Save className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">Save</span>
@@ -296,7 +296,7 @@ export default function FoundersAssistant() {
               {/* Tools dropdown — organized by category */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="text-xs h-8 gap-1 text-muted-foreground hover:text-foreground hover:bg-gold/10">
+                  <Button variant="ghost" size="sm" className="text-xs h-8 gap-1 text-muted-foreground hover:text-foreground hover:bg-[#EFE6D6]/10">
                     <Wrench className="w-3.5 h-3.5" />
                     Tools
                     <ChevronDown className="w-3 h-3" />
@@ -315,7 +315,7 @@ export default function FoundersAssistant() {
                           onClick={() => { setActiveView(value); if (value !== 'tasks') setTaskFilterStatus(null); }}
                           className={cn(
                             "text-xs gap-2 cursor-pointer",
-                            activeView === value && "bg-gold/10 font-semibold"
+                            activeView === value && "bg-[#EFE6D6]/10 font-semibold"
                           )}
                         >
                           <Icon className="w-3.5 h-3.5" />
@@ -334,17 +334,17 @@ export default function FoundersAssistant() {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setShowCommandPalette(true)}
-                className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-background border border-gold/30 text-muted-foreground hover:border-gold/50 transition-all text-xs"
+                className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-background border border-[#B89555]/30 text-muted-foreground hover:border-[#B89555]/50 transition-all text-xs"
               >
-                <Search className="h-3.5 w-3.5 text-gold" />
-                <kbd className="px-1.5 py-0.5 bg-gold/10 text-gold text-[10px] rounded font-mono">⌘K</kbd>
+                <Search className="h-3.5 w-3.5 text-[#1A1A1A]" />
+                <kbd className="px-1.5 py-0.5 bg-[#EFE6D6]/10 text-[#1A1A1A] text-[10px] rounded font-mono">⌘K</kbd>
               </button>
               
               <button
                 onClick={() => setIsNotificationOpen(!isNotificationOpen)}
-                className="relative p-2 rounded-full bg-background border border-gold/30 hover:border-gold/50 transition-all"
+                className="relative p-2 rounded-full bg-background border border-[#B89555]/30 hover:border-[#B89555]/50 transition-all"
               >
-                <Bell className="h-4 w-4 text-gold" />
+                <Bell className="h-4 w-4 text-[#1A1A1A]" />
                 {unreadCount > 0 && (
                   <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-white text-[10px] flex items-center justify-center font-bold">
                     {unreadCount > 9 ? '9+' : unreadCount}
@@ -356,7 +356,7 @@ export default function FoundersAssistant() {
         </div>
 
         {/* Status cards row — between header and chat */}
-        <div className="flex-shrink-0 px-4 py-2 bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] border-b border-gold/20">
+        <div className="flex-shrink-0 px-4 py-2 bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] border-b border-[#B89555]/20">
           <div className="flex items-center gap-2 overflow-x-auto">
             {statCards.map((s) => (
               <button
@@ -406,7 +406,7 @@ export default function FoundersAssistant() {
             initial={{ opacity: 0, x: 300 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 300 }}
-            className="fixed right-0 top-0 h-full w-96 bg-card border-l-2 border-gold/30 shadow-xl z-50"
+            className="fixed right-0 top-0 h-full w-96 bg-card border-l-2 border-[#B89555]/30 shadow-xl z-50"
           >
             <FoundersNotificationCenter isOpen={isNotificationOpen} onClose={() => setIsNotificationOpen(false)} />
           </motion.div>

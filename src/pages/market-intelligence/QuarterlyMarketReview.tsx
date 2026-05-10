@@ -146,7 +146,7 @@ const QuarterlyMarketReview = () => {
       <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-white mb-4">Report Not Found</h1>
-          <Link to="/market-intelligence/reports" className="text-gold hover:underline">
+          <Link to="/market-intelligence/reports" className="text-[#1A1A1A] hover:underline">
             Return to Reports
           </Link>
         </div>
@@ -197,7 +197,7 @@ const QuarterlyMarketReview = () => {
 
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
-                <Badge className="mb-3 bg-gold/20 text-gold border-gold/30">
+                <Badge className="mb-3 bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30">
                   QUARTERLY MARKET REVIEW
                 </Badge>
                 <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]">
@@ -227,7 +227,7 @@ const QuarterlyMarketReview = () => {
             transition={{ delay: 0.1 }}
             className="mb-8"
           >
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
               <CardHeader>
                 <CardTitle className="text-lg text-[#1A1A1A]">Executive Summary</CardTitle>
               </CardHeader>
@@ -246,11 +246,11 @@ const QuarterlyMarketReview = () => {
             className="mb-8"
           >
             <h2 className="text-xl font-bold text-[#1A1A1A] mb-4 flex items-center gap-2">
-              <BarChart3 className="w-5 h-5 text-gold" />
+              <BarChart3 className="w-5 h-5 text-[#1A1A1A]" />
               Segment Performance
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium text-[#1A1A1A]/70 flex items-center gap-2">
                     <Building className="w-4 h-4" />
@@ -268,7 +268,7 @@ const QuarterlyMarketReview = () => {
                 </CardContent>
               </Card>
 
-              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium text-[#1A1A1A]/70 flex items-center gap-2">
                     <Home className="w-4 h-4" />
@@ -286,7 +286,7 @@ const QuarterlyMarketReview = () => {
                 </CardContent>
               </Card>
 
-              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium text-[#1A1A1A]/70 flex items-center gap-2">
                     <Key className="w-4 h-4" />
@@ -314,10 +314,10 @@ const QuarterlyMarketReview = () => {
             transition={{ delay: 0.3 }}
             className="mb-8"
           >
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
               <CardHeader>
                 <CardTitle className="text-lg text-[#1A1A1A] flex items-center gap-2">
-                  <Activity className="w-5 h-5 text-gold" />
+                  <Activity className="w-5 h-5 text-[#1A1A1A]" />
                   Supply-Demand Balance
                 </CardTitle>
               </CardHeader>
@@ -341,12 +341,12 @@ const QuarterlyMarketReview = () => {
             className="mb-8"
           >
             <h2 className="text-xl font-bold text-[#1A1A1A] mb-4 flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-gold" />
+              <MapPin className="w-5 h-5 text-[#1A1A1A]" />
               Area Analysis
             </h2>
             <div className="space-y-4">
               {data.areaAnalysis.map((area, index) => (
-                <Card key={index} className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+                <Card key={index} className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
                   <CardContent className="pt-4">
                     <h3 className="text-lg font-semibold text-[#1A1A1A] mb-3">{area.name}</h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
@@ -376,7 +376,7 @@ const QuarterlyMarketReview = () => {
             variants={fadeInUp}
             transition={{ delay: 0.5 }}
           >
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
               <CardContent className="pt-6">
                 <h3 className="text-sm font-semibold text-[#1A1A1A] mb-3">Methodology & Disclaimer</h3>
                 <p className="text-sm text-[#1A1A1A]/70 mb-4">
@@ -388,11 +388,11 @@ const QuarterlyMarketReview = () => {
                   <span>•</span>
                   <span>Update Frequency: Quarterly</span>
                   <span>•</span>
-                  <Link to="/market-intelligence/methodology" className="text-gold hover:underline">
+                  <Link to="/market-intelligence/methodology" className="text-[#1A1A1A] hover:underline">
                     Full Methodology
                   </Link>
                 </div>
-                <div className="mt-4 pt-4 border-t border-gold/30">
+                <div className="mt-4 pt-4 border-t border-[#B89555]/30">
                   <p className="text-xs text-[#1A1A1A]/70">
                     JBJ GLOBAL REAL ESTATE
                     <FounderContent>

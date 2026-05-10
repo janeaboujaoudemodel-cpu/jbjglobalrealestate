@@ -451,7 +451,7 @@ export default function JoinApplication() {
       <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <section className="flex-1 flex items-center justify-center px-4 py-16 min-h-screen">
           <div className="w-full max-w-3xl mx-auto">
-            <Card className="bg-[#FDFBF7]/80 backdrop-blur-sm border-2 border-gold/30 shadow-2xl p-8 md:p-12 rounded-2xl">
+            <Card className="bg-[#FDFBF7]/80 backdrop-blur-sm border-2 border-[#B89555]/30 shadow-2xl p-8 md:p-12 rounded-2xl">
               <CardHeader className="text-center pb-6">
                 <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border-2 border-emerald-500/40 flex items-center justify-center shadow-lg shadow-emerald-500/10">
                   <CheckCircle className="h-12 w-12 text-emerald-600" />
@@ -564,7 +564,7 @@ export default function JoinApplication() {
           </Card>
 
           {!user && (
-            <Card className="border-2 border-gold bg-gold/10 backdrop-blur-sm rounded-2xl shadow-md mb-6">
+            <Card className="border-2 border-[#B89555] bg-[#EFE6D6]/10 backdrop-blur-sm rounded-2xl shadow-md mb-6">
               <CardContent className="pt-6">
                 <p className="text-center text-[#1A1A1A] font-semibold mb-2 text-lg">
                   Fill the form below — then sign in to submit
@@ -856,7 +856,7 @@ export default function JoinApplication() {
 
                 {/* Role-aware Qualification */}
                 {qualKind === "sales" && (
-                  <div className="space-y-4 p-5 rounded-xl border border-gold/30 bg-gold/5">
+                  <div className="space-y-4 p-5 rounded-xl border border-[#B89555]/30 bg-[#EFE6D6]/5">
                     <h3 className="text-lg font-semibold text-[#1A1A1A] flex items-center gap-2">
                       <Briefcase className="h-5 w-5" /> Sales Qualification
                     </h3>
@@ -888,7 +888,7 @@ export default function JoinApplication() {
                     </h3>
                     <p className="text-sm text-[#1A1A1A]/70">Provide references from your previous employer so we can verify your experience.</p>
                     {[1, 2].map((n) => (
-                      <div key={n} className="space-y-3 p-3 rounded-lg border border-gold/20 bg-[#FDFBF7]">
+                      <div key={n} className="space-y-3 p-3 rounded-lg border border-[#B89555]/20 bg-[#FDFBF7]">
                         <p className="text-sm font-semibold text-[#1A1A1A]">Reference {n}</p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           <Input
@@ -927,7 +927,7 @@ export default function JoinApplication() {
                 )}
 
                 {qualKind === "marketing" && (
-                  <div className="space-y-4 p-5 rounded-xl border border-gold/30 bg-gold/5">
+                  <div className="space-y-4 p-5 rounded-xl border border-[#B89555]/30 bg-[#EFE6D6]/5">
                     <h3 className="text-lg font-semibold text-[#1A1A1A] flex items-center gap-2">
                       <Briefcase className="h-5 w-5" /> Marketing Qualification
                     </h3>
@@ -953,7 +953,7 @@ export default function JoinApplication() {
                 )}
 
                 {qualKind === "hr_ops" && (
-                  <div className="space-y-4 p-5 rounded-xl border border-gold/30 bg-gold/5">
+                  <div className="space-y-4 p-5 rounded-xl border border-[#B89555]/30 bg-[#EFE6D6]/5">
                     <h3 className="text-lg font-semibold text-[#1A1A1A] flex items-center gap-2">
                       <Briefcase className="h-5 w-5" /> Role Qualification
                     </h3>
@@ -975,7 +975,7 @@ export default function JoinApplication() {
                 )}
 
                 {qualKind === "tech" && (
-                  <div className="space-y-4 p-5 rounded-xl border border-gold/30 bg-gold/5">
+                  <div className="space-y-4 p-5 rounded-xl border border-[#B89555]/30 bg-[#EFE6D6]/5">
                     <h3 className="text-lg font-semibold text-[#1A1A1A] flex items-center gap-2">
                       <Briefcase className="h-5 w-5" /> Technical Qualification
                     </h3>
@@ -997,7 +997,7 @@ export default function JoinApplication() {
                 )}
 
                 {qualKind === "general" && selectedPosition && (
-                  <div className="space-y-4 p-5 rounded-xl border border-gold/30 bg-gold/5">
+                  <div className="space-y-4 p-5 rounded-xl border border-[#B89555]/30 bg-[#EFE6D6]/5">
                     <h3 className="text-lg font-semibold text-[#1A1A1A] flex items-center gap-2">
                       <Briefcase className="h-5 w-5" /> About You
                     </h3>
@@ -1021,7 +1021,7 @@ export default function JoinApplication() {
                 {/* CV / Resume */}
                 <div className="space-y-2">
                   <Label className="text-sm font-semibold text-[#1A1A1A]">CV / Resume</Label>
-                  <div className="border-2 border-dashed border-gold/40 rounded-xl p-7 text-center hover:border-gold/60 transition-colors">
+                  <div className="border-2 border-dashed border-[#B89555]/40 rounded-xl p-7 text-center hover:border-[#B89555]/60 transition-colors">
                     {cvFile ? (
                       <div className="flex flex-col items-center gap-2 text-[#1A1A1A]">
                         <FileText className="h-7 w-7 text-emerald-600" />
@@ -1089,7 +1089,7 @@ export default function JoinApplication() {
                 {uploadProgress > 0 && (
                   <div className="w-full bg-[#F7F2EA] rounded-full h-2">
                     <div
-                      className="bg-gold h-2 rounded-full transition-all duration-300"
+                      className="bg-[#EFE6D6] h-2 rounded-full transition-all duration-300"
                       style={{ width: `${uploadProgress}%` }}
                     />
                   </div>
@@ -1098,7 +1098,7 @@ export default function JoinApplication() {
                 {/* Submit */}
                 <Button
                   type="submit"
-                  className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A] font-bold h-12 text-base"
+                  className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-bold h-12 text-base"
                   disabled={loading}
                 >
                   {loading ? (

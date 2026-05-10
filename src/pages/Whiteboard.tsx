@@ -285,7 +285,7 @@ const Whiteboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white flex flex-col">
+    <div className="min-h-screen bg-[#FDFBF7] text-white flex flex-col">
       {/* Header */}
       <div className="border-b border-[#1A1A1A] px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-4">

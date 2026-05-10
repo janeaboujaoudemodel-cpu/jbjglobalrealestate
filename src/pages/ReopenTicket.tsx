@@ -56,11 +56,11 @@ const ReopenTicket = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-zinc-900 to-black flex items-center justify-center p-4">
       <div className="max-w-md w-full">
-        <div className="bg-gradient-to-br from-zinc-900/90 to-zinc-950/90 rounded-2xl border border-gold/30 p-8 shadow-[0_0_40px_rgba(200,167,102,0.1)] text-center">
+        <div className="bg-gradient-to-br from-zinc-900/90 to-zinc-950/90 rounded-2xl border border-[#B89555]/30 p-8 shadow-[0_0_40px_rgba(200,167,102,0.1)] text-center">
           {status === "loading" && (
             <>
-              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gold/20 flex items-center justify-center">
-                <Loader2 className="w-10 h-10 text-gold animate-spin" />
+              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center">
+                <Loader2 className="w-10 h-10 text-[#1A1A1A] animate-spin" />
               </div>
               <h1 className="text-2xl font-bold text-white mb-3">Reopening Ticket...</h1>
               <p className="text-white/70">Please wait while we process your request.</p>
@@ -73,8 +73,8 @@ const ReopenTicket = () => {
                 <CheckCircle className="w-10 h-10 text-green-400" />
               </div>
               <h1 className="text-2xl font-bold text-white mb-3">Ticket Reopened!</h1>
-              <div className="bg-gold/10 border border-gold/30 rounded-lg p-4 mb-4">
-                <p className="text-gold font-mono font-bold text-lg">{ticketNumber}</p>
+              <div className="bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-lg p-4 mb-4">
+                <p className="text-[#1A1A1A] font-mono font-bold text-lg">{ticketNumber}</p>
               </div>
               <p className="text-white/85 mb-6">{message}</p>
               <p className="text-white/70 text-sm mb-6">
@@ -89,8 +89,8 @@ const ReopenTicket = () => {
                 <Ticket className="w-10 h-10 text-blue-400" />
               </div>
               <h1 className="text-2xl font-bold text-white mb-3">Ticket Already Open</h1>
-              <div className="bg-gold/10 border border-gold/30 rounded-lg p-4 mb-4">
-                <p className="text-gold font-mono font-bold text-lg">{ticketNumber}</p>
+              <div className="bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-lg p-4 mb-4">
+                <p className="text-[#1A1A1A] font-mono font-bold text-lg">{ticketNumber}</p>
               </div>
               <p className="text-white/85 mb-6">{message}</p>
             </>
@@ -125,7 +125,7 @@ const ReopenTicket = () => {
             >
               <Button
                 variant="outline"
-                className="w-full border-gold/50 text-gold hover:bg-gold/10"
+                className="w-full border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
               >
                 Contact Support via WhatsApp
               </Button>

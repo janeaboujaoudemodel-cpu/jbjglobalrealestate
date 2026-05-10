@@ -176,10 +176,10 @@ const OwnerAuditPage = () => {
     <OwnerGuard>
       <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         {/* Header */}
-        <div className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
+        <div className="border-b-2 border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 flex items-center justify-center">
                 <Shield className="w-6 h-6 text-[#8A7356]" />
               </div>
               <div>
@@ -192,16 +192,16 @@ const OwnerAuditPage = () => {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <Tabs defaultValue="routes" className="w-full">
-            <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6] border-2 border-gold/30 mb-6">
-              <TabsTrigger value="routes" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-gold/40 text-[#1A1A1A]">
+            <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6] border-2 border-[#B89555]/30 mb-6">
+              <TabsTrigger value="routes" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
                 <FileText className="w-4 h-4 mr-2" />
                 Route Inventory
               </TabsTrigger>
-              <TabsTrigger value="ai-tools" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-gold/40 text-[#1A1A1A]">
+              <TabsTrigger value="ai-tools" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
                 <Brain className="w-4 h-4 mr-2" />
                 AI Tools Audit
               </TabsTrigger>
-              <TabsTrigger value="delivery" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-gold/40 text-[#1A1A1A]">
+              <TabsTrigger value="delivery" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
                 <ClipboardCheck className="w-4 h-4 mr-2" />
                 Delivery Checklist
               </TabsTrigger>
@@ -210,37 +210,37 @@ const OwnerAuditPage = () => {
             {/* Routes Tab */}
             <TabsContent value="routes">
               <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
+                <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-[#1A1A1A]">{stats.total}</div>
                     <div className="text-xs text-[#1A1A1A]/70">Total Routes</div>
                   </CardContent>
                 </Card>
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
+                <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-purple-700">{stats.ownerRoutes}</div>
                     <div className="text-xs text-[#1A1A1A]/70">Owner Only</div>
                   </CardContent>
                 </Card>
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
+                <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-blue-700">{stats.brokerRoutes}</div>
                     <div className="text-xs text-[#1A1A1A]/70">Broker</div>
                   </CardContent>
                 </Card>
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
+                <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-[#1A1A1A]/70">{stats.publicRoutes}</div>
                     <div className="text-xs text-[#1A1A1A]/70">Public</div>
                   </CardContent>
                 </Card>
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
+                <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-green-700">{stats.visibleRoutes}</div>
                     <div className="text-xs text-[#1A1A1A]/70">Linked in UI</div>
                   </CardContent>
                 </Card>
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
+                <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-red-600">{stats.orphanRoutes}</div>
                     <div className="text-xs text-[#1A1A1A]/70">Orphan Routes</div>
@@ -257,12 +257,12 @@ const OwnerAuditPage = () => {
                       placeholder="Search routes..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10 bg-[#FDFBF7]/80 border-gold/40 text-[#1A1A1A]"
+                      className="pl-10 bg-[#FDFBF7]/80 border-[#B89555]/40 text-[#1A1A1A]"
                     />
                   </div>
                 </div>
                 <Select value={accessFilter} onValueChange={(v) => setAccessFilter(v as any)}>
-                  <SelectTrigger className="w-[160px] bg-[#FDFBF7]/80 border-gold/40 text-[#1A1A1A]">
+                  <SelectTrigger className="w-[160px] bg-[#FDFBF7]/80 border-[#B89555]/40 text-[#1A1A1A]">
                     <SelectValue placeholder="Access Level" />
                   </SelectTrigger>
                   <SelectContent>
@@ -275,7 +275,7 @@ const OwnerAuditPage = () => {
                   </SelectContent>
                 </Select>
                 <Select value={visibilityFilter} onValueChange={(v) => setVisibilityFilter(v as any)}>
-                  <SelectTrigger className="w-[160px] bg-[#FDFBF7]/80 border-gold/40 text-[#1A1A1A]">
+                  <SelectTrigger className="w-[160px] bg-[#FDFBF7]/80 border-[#B89555]/40 text-[#1A1A1A]">
                     <SelectValue placeholder="Visibility" />
                   </SelectTrigger>
                   <SelectContent>
@@ -287,8 +287,8 @@ const OwnerAuditPage = () => {
               </div>
 
               {/* Route Table */}
-              <Card className="border-2 border-gold/30 bg-[#FDFBF7]/60">
-                <CardHeader className="border-b border-gold/20 bg-gradient-to-r from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
+              <Card className="border-2 border-[#B89555]/30 bg-[#FDFBF7]/60">
+                <CardHeader className="border-b border-[#B89555]/20 bg-gradient-to-r from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
                     <FileText className="w-5 h-5 text-[#8A7356]" />
                     Route Inventory ({filteredRoutes.length} routes)
@@ -297,7 +297,7 @@ const OwnerAuditPage = () => {
                 <CardContent className="p-0">
                   <ScrollArea className="h-[600px]">
                     <table className="w-full">
-                      <thead className="sticky top-0 bg-gradient-to-r from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6] border-b border-gold/20">
+                      <thead className="sticky top-0 bg-gradient-to-r from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6] border-b border-[#B89555]/20">
                         <tr>
                           <th className="text-left p-4 text-xs font-semibold text-[#1A1A1A] uppercase">Route</th>
                           <th className="text-left p-4 text-xs font-semibold text-[#1A1A1A] uppercase">Access</th>
@@ -314,7 +314,7 @@ const OwnerAuditPage = () => {
                           return (
                             <tr 
                               key={route.path} 
-                              className={`border-b border-gold/10 hover:bg-gold/5 transition-colors ${isOrphan ? 'bg-red-50' : ''}`}
+                              className={`border-b border-[#B89555]/10 hover:bg-[#EFE6D6]/5 transition-colors ${isOrphan ? 'bg-red-50' : ''}`}
                             >
                               <td className="p-4">
                                 <div className="font-medium text-[#1A1A1A]">{route.name}</div>
@@ -362,7 +362,7 @@ const OwnerAuditPage = () => {
                                   variant="ghost"
                                   size="sm"
                                   asChild
-                                  className="text-[#8A7356] hover:text-[#1A1A1A] hover:bg-gold/10"
+                                  className="text-[#8A7356] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                                 >
                                   <Link to={route.path} target="_blank">
                                     <ExternalLink className="w-4 h-4 mr-1" />
@@ -380,7 +380,7 @@ const OwnerAuditPage = () => {
               </Card>
 
               {/* Legend */}
-              <div className="mt-6 p-4 rounded-lg bg-[#FDFBF7]/60 border-2 border-gold/30">
+              <div className="mt-6 p-4 rounded-lg bg-[#FDFBF7]/60 border-2 border-[#B89555]/30">
                 <h3 className="text-sm font-semibold text-[#1A1A1A] mb-3">Legend</h3>
                 <div className="flex flex-wrap gap-4 text-sm">
                   <div className="flex items-center gap-2">
@@ -406,25 +406,25 @@ const OwnerAuditPage = () => {
             {/* AI Tools Tab */}
             <TabsContent value="ai-tools">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
+                <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-[#1A1A1A]">{aiStats.total}</div>
                     <div className="text-xs text-[#1A1A1A]/70">Total AI Tools</div>
                   </CardContent>
                 </Card>
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
+                <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-green-700">{aiStats.working}</div>
                     <div className="text-xs text-[#1A1A1A]/70">Working</div>
                   </CardContent>
                 </Card>
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
+                <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-amber-700">{aiStats.partial}</div>
                     <div className="text-xs text-[#1A1A1A]/70">Partial</div>
                   </CardContent>
                 </Card>
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
+                <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-red-600">{aiStats.missing}</div>
                     <div className="text-xs text-[#1A1A1A]/70">404 Missing</div>
@@ -432,25 +432,25 @@ const OwnerAuditPage = () => {
                 </Card>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
+                <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-pink-700">{aiStats.apiMissing}</div>
                     <div className="text-xs text-[#1A1A1A]/70">API Missing</div>
                   </CardContent>
                 </Card>
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
+                <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-orange-700">{aiStats.componentOnly}</div>
                     <div className="text-xs text-[#1A1A1A]/70">Component Only</div>
                   </CardContent>
                 </Card>
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
+                <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-blue-700">{aiStats.comingSoon}</div>
                     <div className="text-xs text-[#1A1A1A]/70">Coming Soon</div>
                   </CardContent>
                 </Card>
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
+                <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-purple-700">{aiStats.withEdgeFunction}</div>
                     <div className="text-xs text-[#1A1A1A]/70">Edge Functions</div>
@@ -459,8 +459,8 @@ const OwnerAuditPage = () => {
               </div>
 
               {/* AI Tools Table */}
-              <Card className="border-2 border-gold/30 bg-[#FDFBF7]/60">
-                <CardHeader className="border-b border-gold/20 bg-gradient-to-r from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
+              <Card className="border-2 border-[#B89555]/30 bg-[#FDFBF7]/60">
+                <CardHeader className="border-b border-[#B89555]/20 bg-gradient-to-r from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
                     <Brain className="w-5 h-5 text-[#8A7356]" />
                     AI Tools Inventory ({AI_TOOLS_INVENTORY_VERIFIED.length} tools)
@@ -469,7 +469,7 @@ const OwnerAuditPage = () => {
                 <CardContent className="p-0">
                   <ScrollArea className="h-[600px]">
                     <table className="w-full">
-                      <thead className="sticky top-0 bg-gradient-to-r from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6] border-b border-gold/20">
+                      <thead className="sticky top-0 bg-gradient-to-r from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6] border-b border-[#B89555]/20">
                         <tr>
                           <th className="text-left p-4 text-xs font-semibold text-[#1A1A1A] uppercase">Tool Name</th>
                           <th className="text-left p-4 text-xs font-semibold text-[#1A1A1A] uppercase">Route</th>
@@ -484,7 +484,7 @@ const OwnerAuditPage = () => {
                         {AI_TOOLS_INVENTORY_VERIFIED.map((tool) => (
                           <tr 
                             key={tool.name} 
-                            className={`border-b border-gold/10 hover:bg-gold/5 transition-colors ${tool.status === '404' ? 'bg-red-50' : tool.status === 'component_only' ? 'bg-orange-50' : ''}`}
+                            className={`border-b border-[#B89555]/10 hover:bg-[#EFE6D6]/5 transition-colors ${tool.status === '404' ? 'bg-red-50' : tool.status === 'component_only' ? 'bg-orange-50' : ''}`}
                           >
                             <td className="p-4">
                               <div className="font-medium text-[#1A1A1A] flex items-center gap-2">
@@ -530,7 +530,7 @@ const OwnerAuditPage = () => {
                                   variant="ghost"
                                   size="sm"
                                   asChild
-                                  className="text-[#8A7356] hover:text-[#1A1A1A] hover:bg-gold/10"
+                                  className="text-[#8A7356] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                                 >
                                   <Link to={tool.route} target="_blank">
                                     <ExternalLink className="w-4 h-4 mr-1" />
@@ -552,7 +552,7 @@ const OwnerAuditPage = () => {
               </Card>
 
               {/* AI Legend */}
-              <div className="mt-6 p-4 rounded-lg bg-[#FDFBF7]/60 border-2 border-gold/30">
+              <div className="mt-6 p-4 rounded-lg bg-[#FDFBF7]/60 border-2 border-[#B89555]/30">
                 <h3 className="text-sm font-semibold text-[#1A1A1A] mb-3">AI Tools Status Legend</h3>
                 <div className="flex flex-wrap gap-4 text-sm">
                   <div className="flex items-center gap-2">

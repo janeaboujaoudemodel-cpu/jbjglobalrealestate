@@ -58,7 +58,7 @@ export default function CRMLeadsInbox() {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" onClick={cx.handleRefresh} disabled={cx.isFetching} className="text-[#1A1A1A]/60 hover:text-[#1A1A1A] hover:bg-gold/10">
+            <Button variant="ghost" size="sm" onClick={cx.handleRefresh} disabled={cx.isFetching} className="text-[#1A1A1A]/60 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
               <RefreshCw className={`h-4 w-4 ${cx.isFetching ? "animate-spin" : ""}`} />
             </Button>
             <Button variant="secondary" size="sm" onClick={cx.handleExport}>
@@ -72,7 +72,7 @@ export default function CRMLeadsInbox() {
 
         {/* Active / Deleted Tabs */}
         <Tabs value={cx.activeView} onValueChange={(v) => { cx.setActiveView(v as "active" | "deleted"); cx.setPage(1); }} className="mb-6">
-          <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-1">
+          <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 p-1">
             <TabsTrigger value="active" className="tab-trigger-champagne text-[#1A1A1A] data-[state=active]:text-[#1A1A1A] px-6 py-2">All Leads</TabsTrigger>
             <TabsTrigger value="deleted" className="tab-trigger-champagne text-[#1A1A1A] data-[state=active]:text-[#1A1A1A] px-6 py-2">
               <Trash2 className="h-4 w-4 mr-2" />Recently Deleted
@@ -81,7 +81,7 @@ export default function CRMLeadsInbox() {
         </Tabs>
 
         {/* Filters */}
-        <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] mb-6">
+        <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] mb-6">
           <CardContent className="p-4">
             <div className="flex flex-col gap-3">
               <div className="flex flex-col md:flex-row gap-3">
@@ -89,25 +89,25 @@ export default function CRMLeadsInbox() {
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/40" />
                   <Input placeholder="Search by name, email, or phone..." value={cx.search}
                     onChange={(e) => { cx.setSearch(e.target.value); cx.setPage(1); }}
-                    className="pl-10 bg-[#FDFBF7]/80 border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:border-gold" />
+                    className="pl-10 bg-[#FDFBF7]/80 border-2 border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:border-[#B89555]" />
                 </div>
 
                 <Select value={cx.statusFilter} onValueChange={(v) => { cx.setStatusFilter(v); cx.setPage(1); }}>
-                  <SelectTrigger className="w-full md:w-[200px] bg-[#FDFBF7]/80 border-2 border-gold/30 text-[#1A1A1A]">
+                  <SelectTrigger className="w-full md:w-[200px] bg-[#FDFBF7]/80 border-2 border-[#B89555]/30 text-[#1A1A1A]">
                     <SelectValue placeholder="Status" />
                   </SelectTrigger>
-                  <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 max-h-[400px]">
-                    <SelectItem value="all" className="text-[#1A1A1A] hover:bg-gold/10 font-medium focus:bg-gold/15 focus:text-[#1A1A1A]">All Statuses</SelectItem>
+                  <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 max-h-[400px]">
+                    <SelectItem value="all" className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10 font-medium focus:bg-[#EFE6D6]/15 focus:text-[#1A1A1A]">All Statuses</SelectItem>
                     {(["positive", "neutral", "negative"] as const).map((cat) => {
                       const colors = { positive: "emerald", neutral: "blue", negative: "red" };
                       const c = colors[cat];
                       return (
                         <div key={cat}>
-                          <div className={`px-2 py-1.5 text-xs font-bold text-${c}-700 uppercase tracking-wide border-t border-gold/20 mt-1 flex items-center gap-2`}>
+                          <div className={`px-2 py-1.5 text-xs font-bold text-${c}-700 uppercase tracking-wide border-t border-[#B89555]/20 mt-1 flex items-center gap-2`}>
                             <span className={`w-2 h-2 rounded-full bg-${c}-500`} />{cat}
                           </div>
                           {PIPELINE_STATUSES.filter((s) => s.category === cat).map((opt) => (
-                            <SelectItem key={opt.value} value={opt.value} className="text-[#1A1A1A] hover:bg-gold/10 pl-4 focus:bg-gold/15 focus:text-[#1A1A1A]">
+                            <SelectItem key={opt.value} value={opt.value} className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10 pl-4 focus:bg-[#EFE6D6]/15 focus:text-[#1A1A1A]">
                               <div className="flex items-center gap-2">
                                 <span className={`w-2 h-2 rounded-full bg-${c}-500`} />{opt.label}
                               </div>
@@ -120,12 +120,12 @@ export default function CRMLeadsInbox() {
                 </Select>
 
                 <Select value={cx.sourceFilter} onValueChange={(v) => { cx.setSourceFilter(v); cx.setPage(1); }}>
-                  <SelectTrigger className="w-full md:w-[180px] bg-[#FDFBF7]/80 border-2 border-gold/30 text-[#1A1A1A]">
+                  <SelectTrigger className="w-full md:w-[180px] bg-[#FDFBF7]/80 border-2 border-[#B89555]/30 text-[#1A1A1A]">
                     <SelectValue placeholder="Source" />
                   </SelectTrigger>
-                  <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30">
+                  <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30">
                     {SOURCE_OPTIONS.map((opt) => (
-                      <SelectItem key={opt.value} value={opt.value} className="text-[#1A1A1A] hover:bg-gold/10 focus:bg-gold/15 focus:text-[#1A1A1A]">{opt.label}</SelectItem>
+                      <SelectItem key={opt.value} value={opt.value} className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10 focus:bg-[#EFE6D6]/15 focus:text-[#1A1A1A]">{opt.label}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -136,12 +136,12 @@ export default function CRMLeadsInbox() {
                   <Calendar className="h-4 w-4" /><span>Date range:</span>
                 </div>
                 <Input type="date" value={cx.dateStart} onChange={(e) => { cx.setDateStart(e.target.value); cx.setPage(1); }}
-                  className="w-full md:w-[160px] bg-[#FDFBF7]/80 border-2 border-gold/30 text-[#1A1A1A]" />
+                  className="w-full md:w-[160px] bg-[#FDFBF7]/80 border-2 border-[#B89555]/30 text-[#1A1A1A]" />
                 <span className="text-[#1A1A1A]/40">to</span>
                 <Input type="date" value={cx.dateEnd} onChange={(e) => { cx.setDateEnd(e.target.value); cx.setPage(1); }}
-                  className="w-full md:w-[160px] bg-[#FDFBF7]/80 border-2 border-gold/30 text-[#1A1A1A]" />
+                  className="w-full md:w-[160px] bg-[#FDFBF7]/80 border-2 border-[#B89555]/30 text-[#1A1A1A]" />
                 {cx.hasActiveFilters && (
-                  <Button variant="ghost" size="sm" onClick={cx.clearFilters} className="text-[#1A1A1A]/60 hover:text-[#1A1A1A] hover:bg-gold/10 ml-auto">
+                  <Button variant="ghost" size="sm" onClick={cx.clearFilters} className="text-[#1A1A1A]/60 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10 ml-auto">
                     <X className="h-4 w-4 mr-1" />Clear
                   </Button>
                 )}
@@ -158,11 +158,11 @@ export default function CRMLeadsInbox() {
         )}
 
         {/* Leads Table */}
-        <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+        <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
           <CardContent className="p-0">
             {cx.isLoading ? (
               <div className="p-6 space-y-3">
-                {Array.from({ length: 10 }).map((_, i) => (<Skeleton key={i} className="h-14 bg-gold/10" />))}
+                {Array.from({ length: 10 }).map((_, i) => (<Skeleton key={i} className="h-14 bg-[#EFE6D6]/10" />))}
               </div>
             ) : cx.leads.length === 0 ? (
               <div className="text-center py-16">
@@ -181,7 +181,7 @@ export default function CRMLeadsInbox() {
                 <div className="overflow-x-auto">
                   <Table>
                     <TableHeader>
-                      <TableRow className="border-gold/20 hover:bg-transparent">
+                      <TableRow className="border-[#B89555]/20 hover:bg-transparent">
                         <TableHead className="text-[#1A1A1A]/70 font-bold">Name</TableHead>
                         <TableHead className="text-[#1A1A1A]/70 font-bold">Phone</TableHead>
                         <TableHead className="text-[#1A1A1A]/70 font-bold">Email</TableHead>
@@ -194,7 +194,7 @@ export default function CRMLeadsInbox() {
                     </TableHeader>
                     <TableBody>
                       {cx.leads.map((lead) => (
-                        <TableRow key={lead.id} className="border-gold/20 hover:bg-gold/5 cursor-pointer"
+                        <TableRow key={lead.id} className="border-[#B89555]/20 hover:bg-[#EFE6D6]/5 cursor-pointer"
                           onClick={() => cx.activeView === "active" && cx.navigate(`/crm/leads/${lead.id}`)}>
                           <TableCell className="font-semibold text-[#1A1A1A]">
                             <div>
@@ -202,7 +202,7 @@ export default function CRMLeadsInbox() {
                               {lead.tags && lead.tags.length > 0 && (
                                 <div className="flex gap-1 mt-1">
                                   {lead.tags.slice(0, 2).map((tag, i) => (
-                                    <Badge key={i} variant="secondary" className="text-xs bg-gold/10 text-[#1A1A1A]/70 border-gold/20">{tag}</Badge>
+                                    <Badge key={i} variant="secondary" className="text-xs bg-[#EFE6D6]/10 text-[#1A1A1A]/70 border-[#B89555]/20">{tag}</Badge>
                                   ))}
                                   {lead.tags.length > 2 && <span className="text-xs text-[#1A1A1A]/40">+{lead.tags.length - 2}</span>}
                                 </div>
@@ -213,7 +213,7 @@ export default function CRMLeadsInbox() {
                           <TableCell className="text-[#1A1A1A]/70 text-sm truncate max-w-[180px]">{lead.email_lower || "—"}</TableCell>
                           <TableCell>
                             {lead.source ? (
-                              <Badge variant="secondary" className="bg-gold/10 text-[#1A1A1A]/80 border-gold/20">{lead.source}</Badge>
+                              <Badge variant="secondary" className="bg-[#EFE6D6]/10 text-[#1A1A1A]/80 border-[#B89555]/20">{lead.source}</Badge>
                             ) : <span className="text-[#1A1A1A]/40">—</span>}
                           </TableCell>
                           <TableCell onClick={(e) => e.stopPropagation()}>
@@ -268,7 +268,7 @@ export default function CRMLeadsInbox() {
                                     onClick={(e) => { e.stopPropagation(); cx.setLeadToDelete(lead); cx.setDeleteDialogOpen(true); }} title="Delete">
                                     <Trash2 className="h-4 w-4" />
                                   </Button>
-                                  <Button variant="ghost" size="sm" className="h-8 px-2 text-gold hover:text-[#1A1A1A] hover:bg-gold/10"
+                                  <Button variant="ghost" size="sm" className="h-8 px-2 text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                                     onClick={(e) => { e.stopPropagation(); cx.navigate(`/crm/leads/${lead.id}`); }} title="Open">
                                     Open<ExternalLink className="h-3 w-3 ml-1" />
                                   </Button>
@@ -283,15 +283,15 @@ export default function CRMLeadsInbox() {
                 </div>
 
                 {cx.totalPages > 1 && (
-                  <div className="flex items-center justify-between px-6 py-4 border-t border-gold/20">
+                  <div className="flex items-center justify-between px-6 py-4 border-t border-[#B89555]/20">
                     <p className="text-sm text-[#1A1A1A]/60">Page {cx.page} of {cx.totalPages}</p>
                     <div className="flex items-center gap-2">
                       <Button variant="ghost" size="sm" onClick={() => cx.setPage((p) => Math.max(1, p - 1))} disabled={cx.page === 1}
-                        className="text-[#1A1A1A]/60 hover:text-[#1A1A1A] hover:bg-gold/10 disabled:opacity-50">
+                        className="text-[#1A1A1A]/60 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10 disabled:opacity-50">
                         <ChevronLeft className="h-4 w-4 mr-1" />Previous
                       </Button>
                       <Button variant="ghost" size="sm" onClick={() => cx.setPage((p) => Math.min(cx.totalPages, p + 1))} disabled={cx.page === cx.totalPages}
-                        className="text-[#1A1A1A]/60 hover:text-[#1A1A1A] hover:bg-gold/10 disabled:opacity-50">
+                        className="text-[#1A1A1A]/60 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10 disabled:opacity-50">
                         Next<ChevronRight className="h-4 w-4 ml-1" />
                       </Button>
                     </div>

@@ -413,10 +413,10 @@ export default function OwnerFeatureRegistry() {
             animate={{ opacity: 1, y: 0 }}
             className="mb-6"
           >
-            <div className="flex items-center justify-between flex-wrap gap-4 bg-[#FDFBF7]/80 backdrop-blur-sm border-2 border-gold/30 rounded-2xl p-4 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+            <div className="flex items-center justify-between flex-wrap gap-4 bg-[#FDFBF7]/80 backdrop-blur-sm border-2 border-[#B89555]/30 rounded-2xl p-4 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border-2 border-gold/30">
-                  <BookOpen className="h-6 w-6 text-gold" />
+                <div className="p-3 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border-2 border-[#B89555]/30">
+                  <BookOpen className="h-6 w-6 text-[#1A1A1A]" />
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-[#1A1A1A]">Feature Registry & Audit</h1>
@@ -425,7 +425,7 @@ export default function OwnerFeatureRegistry() {
               </div>
               
               <div className="flex items-center gap-3">
-                <Badge className="bg-gold/10 text-gold border border-gold/30">
+                <Badge className="bg-[#EFE6D6]/10 text-[#1A1A1A] border border-[#B89555]/30">
                   {FEATURES.length} Features
                 </Badge>
                 <Badge className="bg-green-100 text-green-700 border border-green-200">
@@ -446,7 +446,7 @@ export default function OwnerFeatureRegistry() {
 
           {/* Tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid grid-cols-3 mb-6 bg-[#FDFBF7]/80 border-2 border-gold/20">
+            <TabsList className="grid grid-cols-3 mb-6 bg-[#FDFBF7]/80 border-2 border-[#B89555]/20">
               <TabsTrigger value="registry">Feature Registry</TabsTrigger>
               <TabsTrigger value="audit">Audit Summary</TabsTrigger>
               <TabsTrigger value="navigation">Navigation Map</TabsTrigger>
@@ -462,7 +462,7 @@ export default function OwnerFeatureRegistry() {
                     placeholder="Search features, descriptions, paths..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 border-gold/30"
+                    className="pl-10 border-[#B89555]/30"
                   />
                 </div>
                 
@@ -471,7 +471,7 @@ export default function OwnerFeatureRegistry() {
                     <Badge
                       key={cat.name}
                       variant={selectedCategory === cat.name ? 'default' : 'outline'}
-                      className={`cursor-pointer ${selectedCategory === cat.name ? 'bg-gold text-[#1A1A1A]' : 'border-gold/30 hover:bg-gold/10'}`}
+                      className={`cursor-pointer ${selectedCategory === cat.name ? 'bg-[#EFE6D6] text-[#1A1A1A]' : 'border-[#B89555]/30 hover:bg-[#EFE6D6]/10'}`}
                       onClick={() => setSelectedCategory(cat.name)}
                     >
                       {cat.name} ({cat.count})
@@ -481,7 +481,7 @@ export default function OwnerFeatureRegistry() {
               </div>
 
               {/* Features List */}
-              <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
+              <Card className="border-2 border-[#B89555]/20 bg-[#FDFBF7]/90">
                 <CardHeader>
                   <CardTitle className="text-lg">
                     {selectedCategory === 'All' ? 'All Features' : selectedCategory} ({filteredFeatures.length})
@@ -499,7 +499,7 @@ export default function OwnerFeatureRegistry() {
                           initial={{ opacity: 0, x: -10 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: idx * 0.02 }}
-                          className="p-4 rounded-xl border border-gold/20 bg-[#FDFBF7] hover:bg-gold/5 cursor-pointer transition-all group"
+                          className="p-4 rounded-xl border border-[#B89555]/20 bg-[#FDFBF7] hover:bg-[#EFE6D6]/5 cursor-pointer transition-all group"
                           onClick={() => {
                             if (!feature.path.includes(':')) {
                               navigate(feature.path);
@@ -507,7 +507,7 @@ export default function OwnerFeatureRegistry() {
                           }}
                         >
                           <div className="flex items-start gap-4">
-                            <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center text-gold flex-shrink-0">
+                            <div className="w-10 h-10 rounded-lg bg-[#EFE6D6]/10 flex items-center justify-center text-[#1A1A1A] flex-shrink-0">
                               {feature.icon}
                             </div>
                             
@@ -529,7 +529,7 @@ export default function OwnerFeatureRegistry() {
                               </div>
                               <p className="text-sm text-[#1A1A1A]/70 mt-0.5">{feature.description}</p>
                               <div className="flex items-center gap-2 mt-2 text-xs">
-                                <Badge variant="outline" className="border-gold/30 font-normal">
+                                <Badge variant="outline" className="border-[#B89555]/30 font-normal">
                                   {feature.category}
                                 </Badge>
                                 <span className="text-[#1A1A1A]/70">→</span>
@@ -539,7 +539,7 @@ export default function OwnerFeatureRegistry() {
                               </div>
                             </div>
                             
-                            <ChevronRight className="h-4 w-4 text-[#1A1A1A]/70 group-hover:text-gold transition-colors flex-shrink-0" />
+                            <ChevronRight className="h-4 w-4 text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] transition-colors flex-shrink-0" />
                           </div>
                         </motion.div>
                       ))}
@@ -571,16 +571,16 @@ export default function OwnerFeatureRegistry() {
                 </Card>
 
                 {/* By Category */}
-                <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
+                <Card className="border-2 border-[#B89555]/20 bg-[#FDFBF7]/90">
                   <CardHeader>
                     <CardTitle className="text-lg">Features by Category</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
                       {CATEGORIES.filter(c => c.name !== 'All').map(cat => (
-                        <div key={cat.name} className="flex items-center justify-between p-3 rounded-lg bg-gold/5 border border-gold/20">
+                        <div key={cat.name} className="flex items-center justify-between p-3 rounded-lg bg-[#EFE6D6]/5 border border-[#B89555]/20">
                           <span className="font-medium text-[#1A1A1A]">{cat.name}</span>
-                          <Badge className="bg-gold text-[#1A1A1A]">{cat.count}</Badge>
+                          <Badge className="bg-[#EFE6D6] text-[#1A1A1A]">{cat.count}</Badge>
                         </div>
                       ))}
                     </div>
@@ -588,7 +588,7 @@ export default function OwnerFeatureRegistry() {
                 </Card>
 
                 {/* Behavior Summary */}
-                <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
+                <Card className="border-2 border-[#B89555]/20 bg-[#FDFBF7]/90">
                   <CardHeader>
                     <CardTitle className="text-lg">Feature Behavior Summary</CardTitle>
                     <CardDescription>How features operate</CardDescription>
@@ -631,7 +631,7 @@ export default function OwnerFeatureRegistry() {
 
             {/* Navigation Map Tab */}
             <TabsContent value="navigation">
-              <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
+              <Card className="border-2 border-[#B89555]/20 bg-[#FDFBF7]/90">
                 <CardHeader>
                   <CardTitle className="text-lg">Complete Navigation Map</CardTitle>
                   <CardDescription>Every page and how to reach it</CardDescription>
@@ -642,14 +642,14 @@ export default function OwnerFeatureRegistry() {
                       {CATEGORIES.filter(c => c.name !== 'All').map(cat => (
                         <div key={cat.name}>
                           <h3 className="font-semibold text-[#1A1A1A] mb-3 flex items-center gap-2">
-                            <div className="w-2 h-2 rounded-full bg-gold" />
+                            <div className="w-2 h-2 rounded-full bg-[#EFE6D6]" />
                             {cat.name}
                           </h3>
                           <div className="space-y-2 ml-4">
                             {FEATURES.filter(f => f.category === cat.name).map((feature, idx) => (
                               <div 
                                 key={`${feature.name}-nav-${idx}`}
-                                className="flex items-center justify-between p-3 rounded-lg border border-gold/10 bg-[#FDFBF7] hover:bg-gold/5 cursor-pointer"
+                                className="flex items-center justify-between p-3 rounded-lg border border-[#B89555]/10 bg-[#FDFBF7] hover:bg-[#EFE6D6]/5 cursor-pointer"
                                 onClick={() => {
                                   if (!feature.path.includes(':')) {
                                     navigate(feature.path);
@@ -657,7 +657,7 @@ export default function OwnerFeatureRegistry() {
                                 }}
                               >
                                 <div className="flex items-center gap-3">
-                                  <div className="text-gold">{feature.icon}</div>
+                                  <div className="text-[#1A1A1A]">{feature.icon}</div>
                                   <div>
                                     <p className="font-medium text-[#1A1A1A] text-sm">{feature.name}</p>
                                     <code className="text-[11px] text-[#1A1A1A]/70">{feature.path}</code>
@@ -682,7 +682,7 @@ export default function OwnerFeatureRegistry() {
           </Tabs>
 
           {/* Legend */}
-          <div className="mt-6 p-4 bg-[#FDFBF7]/80 border-2 border-gold/20 rounded-xl">
+          <div className="mt-6 p-4 bg-[#FDFBF7]/80 border-2 border-[#B89555]/20 rounded-xl">
             <h3 className="font-semibold text-[#1A1A1A] mb-3">Legend</h3>
             <div className="flex flex-wrap gap-4 text-sm">
               <div className="flex items-center gap-2">
@@ -721,14 +721,14 @@ function StatsCard({
   variant?: 'default' | 'purple' | 'blue' | 'green';
 }) {
   const variants = {
-    default: "border-gold/30 bg-[#FDFBF7]",
+    default: "border-[#B89555]/30 bg-[#FDFBF7]",
     purple: "border-purple-200 bg-purple-50",
     blue: "border-blue-200 bg-blue-50",
     green: "border-green-200 bg-green-50",
   };
 
   const iconColors = {
-    default: "text-gold",
+    default: "text-[#1A1A1A]",
     purple: "text-purple-600",
     blue: "text-blue-600",
     green: "text-green-600",

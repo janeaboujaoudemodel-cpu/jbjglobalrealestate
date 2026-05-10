@@ -74,18 +74,18 @@ const MyDashboardProgress = () => {
       
       <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
         {/* Premium Page Header — aligned with sidebar logo divider */}
-        <div className="border-b border-gold/20">
+        <div className="border-b border-[#B89555]/20">
           <div className="container mx-auto px-6 max-w-4xl flex items-end h-[84px] pb-4 gap-4">
             <Button 
               variant="ghost" 
               onClick={() => navigate('/my-dashboard')}
-              className="text-gold hover:text-[#1A1A1A] hover:bg-gold/10 mb-0.5"
+              className="text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10 mb-0.5"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back
             </Button>
             <h1 className="text-2xl md:text-3xl font-bold text-white">
-              My <span className="text-gold">Progress</span>
+              My <span className="text-[#1A1A1A]">Progress</span>
             </h1>
           </div>
         </div>
@@ -97,10 +97,10 @@ const MyDashboardProgress = () => {
             </p>
 
             {/* Total Points Card */}
-            <Card className="mb-6 border-gold/30 bg-gradient-to-br from-gold/10 to-gold/5">
+            <Card className="mb-6 border-[#B89555]/30 bg-gradient-to-br from-gold/10 to-gold/5">
               <CardContent className="p-6 text-center">
                 <p className="text-muted-foreground text-sm mb-2">Total Points Earned</p>
-                <p className="text-5xl font-bold text-gold">
+                <p className="text-5xl font-bold text-[#1A1A1A]">
                   {totalPoints.toLocaleString()}
                 </p>
               </CardContent>
@@ -168,11 +168,11 @@ const MyDashboardProgress = () => {
                 </Card>
               </div>
             ) : (
-              <Card className="mb-8 border-gold/30">
+              <Card className="mb-8 border-[#B89555]/30">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-3">
-                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gold/30 to-gold/10 border-2 border-gold/50 flex items-center justify-center">
-                      {(currentTierType === 'broker' ? brokerTierIcons : investorTierIcons)[currentTierName.toLowerCase()] || <Star className="w-6 h-6 text-gold" />}
+                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gold/30 to-gold/10 border-2 border-[#B89555]/50 flex items-center justify-center">
+                      {(currentTierType === 'broker' ? brokerTierIcons : investorTierIcons)[currentTierName.toLowerCase()] || <Star className="w-6 h-6 text-[#1A1A1A]" />}
                     </div>
                     <div>
                       <Badge className={cn(
@@ -195,7 +195,7 @@ const MyDashboardProgress = () => {
                     <div className="space-y-3">
                       <div className="flex justify-between text-sm">
                         <span className="text-muted-foreground">Next Tier: {nextTierName}</span>
-                        <span className="text-gold font-medium">{pointsToNext} pts to go</span>
+                        <span className="text-[#1A1A1A] font-medium">{pointsToNext} pts to go</span>
                       </div>
                       <Progress value={progressPercent} className="h-3" />
                       <p className="text-xs text-muted-foreground text-center">
@@ -211,7 +211,7 @@ const MyDashboardProgress = () => {
             <Card className="border-border">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Award className="w-5 h-5 text-gold" />
+                  <Award className="w-5 h-5 text-[#1A1A1A]" />
                   How to Earn Points
                 </CardTitle>
               </CardHeader>

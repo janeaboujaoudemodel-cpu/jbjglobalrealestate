@@ -212,7 +212,7 @@ const AreaGuides = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
             onClick={scrollToGrid}
-            className="inline-flex items-center gap-2 px-8 py-4 border-2 border-gold text-gold font-medium rounded-xl hover:bg-gold hover:text-[#1A1A1A] transition-all"
+            className="inline-flex items-center gap-2 px-8 py-4 border-2 border-[#B89555] text-[#1A1A1A] font-medium rounded-xl hover:bg-[#EFE6D6] hover:text-[#1A1A1A] transition-all"
           >
             Explore Areas
             <ChevronDown className="w-5 h-5" />
@@ -236,7 +236,7 @@ const AreaGuides = () => {
                   setShortcutFilters(prev => ({ ...prev, emirates: [emirate] }));
                   scrollToGrid();
                 }}
-                className="flex items-center gap-2 px-4 py-2 bg-[#FDFBF7]/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-gold/20 hover:border-gold/50 transition-all cursor-pointer"
+                className="flex items-center gap-2 px-4 py-2 bg-[#FDFBF7]/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-[#EFE6D6]/20 hover:border-[#B89555]/50 transition-all cursor-pointer"
               >
                 <MapPin className="w-3 h-3 text-[hsl(var(--gold))]" />
                 <span className="text-white text-xs font-medium">{emirate}</span>
@@ -281,11 +281,11 @@ const AreaGuides = () => {
                       setShortcutFilters(prev => ({ ...prev, emirates: [emirate] }));
                       scrollToGrid();
                     }}
-                    className="flex flex-col items-center gap-1 p-4 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all"
+                    className="flex flex-col items-center gap-1 p-4 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 hover:border-[#B89555] hover:shadow-lg hover:shadow-gold/20 transition-all"
                   >
-                    <MapPin className="w-5 h-5 text-gold" />
+                    <MapPin className="w-5 h-5 text-[#1A1A1A]" />
                     <span className="text-[#1A1A1A] font-semibold text-sm">{emirate}</span>
-                    <span className="text-gold text-xs font-bold">{count} Areas</span>
+                    <span className="text-[#1A1A1A] text-xs font-bold">{count} Areas</span>
                   </button>
                 );
               })}
@@ -303,8 +303,8 @@ const AreaGuides = () => {
           {/* Results count */}
           <div className="mb-6 flex items-center justify-between">
             <p className="text-[#1A1A1A]/70">
-              Showing <span className="text-gold font-medium">{paginatedAreas.length}</span> of{" "}
-              <span className="text-gold font-medium">{filteredAreas.length}</span> areas
+              Showing <span className="text-[#1A1A1A] font-medium">{paginatedAreas.length}</span> of{" "}
+              <span className="text-[#1A1A1A] font-medium">{filteredAreas.length}</span> areas
               {totalPages > 1 && (
                 <span className="text-[#1A1A1A]/40 ml-2">· Page {currentPage} of {totalPages}</span>
               )}
@@ -312,7 +312,7 @@ const AreaGuides = () => {
             {shortcutFilters.emirates && shortcutFilters.emirates.length > 0 && (
               <button
                 onClick={() => setShortcutFilters(prev => ({ ...prev, emirates: [] }))}
-                className="text-xs text-gold hover:text-[#1A1A1A] flex items-center gap-1 transition-colors"
+                className="text-xs text-[#1A1A1A] hover:text-[#1A1A1A] flex items-center gap-1 transition-colors"
               >
                 ✕ Clear emirate filter
               </button>
@@ -321,7 +321,7 @@ const AreaGuides = () => {
 
           {isLoading ? (
             <div className="flex items-center justify-center py-20">
-              <Loader2 className="w-8 h-8 text-gold animate-spin" />
+              <Loader2 className="w-8 h-8 text-[#1A1A1A] animate-spin" />
               <span className="ml-3 text-[#1A1A1A]/50">Loading areas...</span>
             </div>
           ) : error ? (
@@ -398,7 +398,7 @@ const AreaGuides = () => {
 
                           {/* Emirate Label (normalized) */}
                           <div className="absolute top-3 left-3 z-10">
-                            <Badge className="bg-[#1A1A1A]/70 text-white px-3 py-1 text-[10px] font-medium tracking-wider shadow-lg border border-gold/30">
+                            <Badge className="bg-[#1A1A1A]/70 text-white px-3 py-1 text-[10px] font-medium tracking-wider shadow-lg border border-[#B89555]/30">
                               <MapPin className="w-3 h-3 mr-1" />
                               {normalizeEmirate(area.emirate || "")}
                             </Badge>
@@ -407,7 +407,7 @@ const AreaGuides = () => {
 
                         {/* Content Section */}
                         <div className="p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex flex-col flex-1">
-                          <h3 className="text-[#1A1A1A] font-bold text-lg mb-2 line-clamp-1 group-hover:text-gold transition-colors">
+                          <h3 className="text-[#1A1A1A] font-bold text-lg mb-2 line-clamp-1 group-hover:text-[#1A1A1A] transition-colors">
                             {area.name}
                           </h3>
 
@@ -429,10 +429,10 @@ const AreaGuides = () => {
                           </div>
 
                           {/* Stats Row */}
-                          <div className="flex items-center gap-3 text-[#1A1A1A]/70 text-xs mt-3 pt-3 border-t border-gold/20">
+                          <div className="flex items-center gap-3 text-[#1A1A1A]/70 text-xs mt-3 pt-3 border-t border-[#B89555]/20">
                             {(area.property_count ?? 0) > 0 && (
                               <div className="flex items-center gap-1">
-                                <Building2 className="w-3.5 h-3.5 text-gold" />
+                                <Building2 className="w-3.5 h-3.5 text-[#1A1A1A]" />
                                 <span>{area.property_count} Projects</span>
                               </div>
                             )}
@@ -470,7 +470,7 @@ const AreaGuides = () => {
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
-                    className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-gold/30 bg-[#FDFBF7]/60 text-[#1A1A1A]/70 hover:bg-gold hover:text-[#1A1A1A] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                    className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-[#B89555]/30 bg-[#FDFBF7]/60 text-[#1A1A1A]/70 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                   >
                     <ChevronLeft className="w-4 h-4" />
                     Previous
@@ -485,8 +485,8 @@ const AreaGuides = () => {
                         onClick={() => handlePageChange(page)}
                         className={`w-10 h-10 rounded-lg text-sm font-medium transition-all ${
                           page === currentPage
-                            ? "bg-gold text-[#1A1A1A] shadow-md"
-                            : "bg-[#FDFBF7]/60 border border-gold/30 text-[#1A1A1A]/70 hover:bg-gold/20"
+                            ? "bg-[#EFE6D6] text-[#1A1A1A] shadow-md"
+                            : "bg-[#FDFBF7]/60 border border-[#B89555]/30 text-[#1A1A1A]/70 hover:bg-[#EFE6D6]/20"
                         }`}
                       >
                         {page}
@@ -497,7 +497,7 @@ const AreaGuides = () => {
                   <button
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
-                    className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-gold/30 bg-[#FDFBF7]/60 text-[#1A1A1A]/70 hover:bg-gold hover:text-[#1A1A1A] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                    className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-[#B89555]/30 bg-[#FDFBF7]/60 text-[#1A1A1A]/70 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                   >
                     Next
                     <ChevronRight className="w-4 h-4" />

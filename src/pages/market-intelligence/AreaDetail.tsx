@@ -27,7 +27,7 @@ const MarketAreaDetail = () => {
         <div className="text-center">
           <h1 className="text-white text-2xl font-bold mb-4">Area Not Found</h1>
           <Link to="/market-intelligence/areas">
-            <Button variant="outline" className="border-gold text-gold">
+            <Button variant="outline" className="border-[#B89555] text-[#1A1A1A]">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Areas
             </Button>
@@ -93,15 +93,15 @@ const MarketAreaDetail = () => {
           variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
         >
           <motion.div variants={fadeInUp}>
-            <Link to="/market-intelligence/areas" className="inline-flex items-center gap-2 text-gold hover:text-gold-light mb-6">
+            <Link to="/market-intelligence/areas" className="inline-flex items-center gap-2 text-[#1A1A1A] hover:text-[#1A1A1A]-light mb-6">
               <ArrowLeft className="w-4 h-4" />
               Back to All Areas
             </Link>
           </motion.div>
 
           <motion.div className="flex items-center gap-3 mb-4" variants={fadeInUp}>
-            <MapPin className="w-8 h-8 text-gold" />
-            <span className="text-gold text-sm uppercase tracking-[0.3em]">Area Intelligence</span>
+            <MapPin className="w-8 h-8 text-[#1A1A1A]" />
+            <span className="text-[#1A1A1A] text-sm uppercase tracking-[0.3em]">Area Intelligence</span>
           </motion.div>
 
           <motion.h1 
@@ -203,7 +203,7 @@ const MarketAreaDetail = () => {
       <section className="py-12 bg-[#1A1A1A]">
         <div className="jj-layer-2">
           <h2 className="text-[#1A1A1A] text-2xl font-bold mb-8 text-center">
-            <span className="text-gold">Market</span> Highlights
+            <span className="text-[#1A1A1A]">Market</span> Highlights
           </h2>
           <div className="max-w-2xl mx-auto space-y-4">
             {area.highlights.map((highlight, i) => (
@@ -244,13 +244,13 @@ const MarketAreaDetail = () => {
       <section className="py-12 bg-[#1A1A1A]">
         <div className="jj-layer-2">
           <h3 className="text-[#1A1A1A] text-xl font-bold mb-6 text-center">
-            <span className="text-gold">Continue</span> Exploring
+            <span className="text-[#1A1A1A]">Continue</span> Exploring
           </h3>
           <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto">
             <Link to="/market-intelligence/overview" className="group">
               <Card className="jj-card-inner">
                 <CardContent className="p-4 flex items-center justify-between">
-                  <span className="text-gold font-medium group-hover:text-gold-dark transition-colors">Market Overview</span>
+                  <span className="text-[#1A1A1A] font-medium group-hover:text-[#1A1A1A]-dark transition-colors">Market Overview</span>
                   <div className="w-8 h-8 jj-icon-box-active rounded-lg">
                     <ArrowRight className="w-4 h-4" />
                   </div>
@@ -260,7 +260,7 @@ const MarketAreaDetail = () => {
             <Link to="/market-intelligence/reports" className="group">
               <Card className="jj-card-inner">
                 <CardContent className="p-4 flex items-center justify-between">
-                  <span className="text-gold font-medium group-hover:text-gold-dark transition-colors">Market Reports</span>
+                  <span className="text-[#1A1A1A] font-medium group-hover:text-[#1A1A1A]-dark transition-colors">Market Reports</span>
                   <div className="w-8 h-8 jj-icon-box-active rounded-lg">
                     <ArrowRight className="w-4 h-4" />
                   </div>
@@ -270,7 +270,7 @@ const MarketAreaDetail = () => {
             <Link to="/market-intelligence/methodology" className="group">
               <Card className="jj-card-inner">
                 <CardContent className="p-4 flex items-center justify-between">
-                  <span className="text-gold font-medium group-hover:text-gold-dark transition-colors">Methodology</span>
+                  <span className="text-[#1A1A1A] font-medium group-hover:text-[#1A1A1A]-dark transition-colors">Methodology</span>
                   <div className="w-8 h-8 jj-icon-box-active rounded-lg">
                     <ArrowRight className="w-4 h-4" />
                   </div>

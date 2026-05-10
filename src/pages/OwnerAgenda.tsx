@@ -199,10 +199,10 @@ export default function OwnerAgenda() {
             animate={{ opacity: 1, y: 0 }}
             className="mb-6"
           >
-            <div className="flex items-center justify-between flex-wrap gap-4 bg-[#FDFBF7]/80 backdrop-blur-sm border-2 border-gold/30 rounded-2xl p-4 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+            <div className="flex items-center justify-between flex-wrap gap-4 bg-[#FDFBF7]/80 backdrop-blur-sm border-2 border-[#B89555]/30 rounded-2xl p-4 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border-2 border-gold/30">
-                  <Calendar className="h-6 w-6 text-gold" />
+                <div className="p-3 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border-2 border-[#B89555]/30">
+                  <Calendar className="h-6 w-6 text-[#1A1A1A]" />
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-[#1A1A1A]">Daily Agenda</h1>
@@ -219,7 +219,7 @@ export default function OwnerAgenda() {
                     queryClient.invalidateQueries({ queryKey: ['owner-agenda-leads'] });
                     queryClient.invalidateQueries({ queryKey: ['owner-agenda-threads'] });
                   }}
-                  className="border-gold/30"
+                  className="border-[#B89555]/30"
                 >
                   <RefreshCw className="h-4 w-4 mr-2" />
                   Refresh
@@ -262,7 +262,7 @@ export default function OwnerAgenda() {
 
           {/* Main Content */}
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid grid-cols-4 mb-6 bg-[#FDFBF7]/80 border-2 border-gold/20">
+            <TabsList className="grid grid-cols-4 mb-6 bg-[#FDFBF7]/80 border-2 border-[#B89555]/20">
               <TabsTrigger value="today" className="relative">
                 Today
                 {(overdueTasks.length + todayTasks.length) > 0 && (
@@ -310,10 +310,10 @@ export default function OwnerAgenda() {
                 </Card>
 
                 {/* Today's Tasks */}
-                <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
+                <Card className="border-2 border-[#B89555]/20 bg-[#FDFBF7]/90">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
-                      <Clock className="h-5 w-5 text-gold" />
+                      <Clock className="h-5 w-5 text-[#1A1A1A]" />
                       Due Today ({todayTasks.length})
                     </CardTitle>
                   </CardHeader>
@@ -342,17 +342,17 @@ export default function OwnerAgenda() {
 
             {/* Messages Tab */}
             <TabsContent value="messages">
-              <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
+              <Card className="border-2 border-[#B89555]/20 bg-[#FDFBF7]/90">
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div>
                       <CardTitle className="text-lg flex items-center gap-2">
-                        <Inbox className="h-5 w-5 text-gold" />
+                        <Inbox className="h-5 w-5 text-[#1A1A1A]" />
                         Unanswered Messages ({unansweredThreads.length})
                       </CardTitle>
                       <CardDescription>Messages waiting for your reply</CardDescription>
                     </div>
-                    <Button variant="outline" size="sm" onClick={() => navigate('/owner/inbox')} className="border-gold/30">
+                    <Button variant="outline" size="sm" onClick={() => navigate('/owner/inbox')} className="border-[#B89555]/30">
                       Open Inbox <ChevronRight className="h-4 w-4 ml-1" />
                     </Button>
                   </div>
@@ -377,17 +377,17 @@ export default function OwnerAgenda() {
 
             {/* Leads Tab */}
             <TabsContent value="leads">
-              <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
+              <Card className="border-2 border-[#B89555]/20 bg-[#FDFBF7]/90">
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div>
                       <CardTitle className="text-lg flex items-center gap-2">
-                        <User className="h-5 w-5 text-gold" />
+                        <User className="h-5 w-5 text-[#1A1A1A]" />
                         Leads Needing Action ({leadsNeedingAction.length})
                       </CardTitle>
                       <CardDescription>New and open leads requiring follow-up</CardDescription>
                     </div>
-                    <Button variant="outline" size="sm" onClick={() => navigate('/crm/leads')} className="border-gold/30">
+                    <Button variant="outline" size="sm" onClick={() => navigate('/crm/leads')} className="border-[#B89555]/30">
                       View All <ChevronRight className="h-4 w-4 ml-1" />
                     </Button>
                   </div>
@@ -412,10 +412,10 @@ export default function OwnerAgenda() {
 
             {/* All Tasks Tab */}
             <TabsContent value="all">
-              <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
+              <Card className="border-2 border-[#B89555]/20 bg-[#FDFBF7]/90">
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center gap-2">
-                    <CheckSquare className="h-5 w-5 text-gold" />
+                    <CheckSquare className="h-5 w-5 text-[#1A1A1A]" />
                     All Pending Tasks ({tasks.length})
                   </CardTitle>
                 </CardHeader>
@@ -463,7 +463,7 @@ function SummaryCard({
   variant?: 'default' | 'danger' | 'warning' | 'info' | 'success';
 }) {
   const variants = {
-    default: "border-gold/30 bg-[#FDFBF7]",
+    default: "border-[#B89555]/30 bg-[#FDFBF7]",
     danger: "border-red-500/30 bg-red-50",
     warning: "border-yellow-500/30 bg-yellow-50",
     info: "border-blue-500/30 bg-blue-50",
@@ -471,7 +471,7 @@ function SummaryCard({
   };
 
   const iconColors = {
-    default: "text-gold",
+    default: "text-[#1A1A1A]",
     danger: "text-red-600",
     warning: "text-yellow-600",
     info: "text-blue-600",
@@ -507,10 +507,10 @@ function TaskItem({
   showDate?: boolean;
 }) {
   return (
-    <div className={`flex items-center gap-3 p-3 rounded-lg border ${isOverdue ? 'bg-red-50 border-red-200' : 'bg-[#FDFBF7] border-gold/20'}`}>
+    <div className={`flex items-center gap-3 p-3 rounded-lg border ${isOverdue ? 'bg-red-50 border-red-200' : 'bg-[#FDFBF7] border-[#B89555]/20'}`}>
       <button
         onClick={onComplete}
-        className="w-5 h-5 rounded border-2 border-gold hover:bg-gold/20 transition-colors flex-shrink-0"
+        className="w-5 h-5 rounded border-2 border-[#B89555] hover:bg-[#EFE6D6]/20 transition-colors flex-shrink-0"
       />
       <div className="flex-1 min-w-0">
         <p className="font-medium text-sm text-[#1A1A1A] truncate">{task.title}</p>
@@ -543,7 +543,7 @@ function ThreadItem({ thread, onClick }: { thread: AgendaThread; onClick: () => 
 
   return (
     <div 
-      className="flex items-center gap-3 p-3 rounded-lg border border-gold/20 bg-[#FDFBF7] hover:bg-gold/5 cursor-pointer transition-colors"
+      className="flex items-center gap-3 p-3 rounded-lg border border-[#B89555]/20 bg-[#FDFBF7] hover:bg-[#EFE6D6]/5 cursor-pointer transition-colors"
       onClick={onClick}
     >
       <div className={`w-8 h-8 rounded-full flex items-center justify-center ${channelColors[thread.channel_type] || 'bg-[#F7F2EA] text-[#1A1A1A]/70'}`}>
@@ -556,7 +556,7 @@ function ThreadItem({ thread, onClick }: { thread: AgendaThread; onClick: () => 
         <p className="text-xs text-[#1A1A1A]/70 truncate">{thread.last_message_preview}</p>
       </div>
       {thread.unread_count > 0 && (
-        <Badge className="bg-gold text-[#1A1A1A] text-xs">{thread.unread_count}</Badge>
+        <Badge className="bg-[#EFE6D6] text-[#1A1A1A] text-xs">{thread.unread_count}</Badge>
       )}
       <ChevronRight className="h-4 w-4 text-[#1A1A1A]/70" />
     </div>
@@ -566,11 +566,11 @@ function ThreadItem({ thread, onClick }: { thread: AgendaThread; onClick: () => 
 function LeadItem({ lead, onClick }: { lead: AgendaLead; onClick: () => void }) {
   return (
     <div 
-      className="flex items-center gap-3 p-3 rounded-lg border border-gold/20 bg-[#FDFBF7] hover:bg-gold/5 cursor-pointer transition-colors"
+      className="flex items-center gap-3 p-3 rounded-lg border border-[#B89555]/20 bg-[#FDFBF7] hover:bg-[#EFE6D6]/5 cursor-pointer transition-colors"
       onClick={onClick}
     >
-      <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center">
-        <span className="text-gold font-semibold text-sm">{lead.full_name.charAt(0).toUpperCase()}</span>
+      <div className="w-8 h-8 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center">
+        <span className="text-[#1A1A1A] font-semibold text-sm">{lead.full_name.charAt(0).toUpperCase()}</span>
       </div>
       <div className="flex-1 min-w-0">
         <p className="font-medium text-sm text-[#1A1A1A] truncate">{lead.full_name}</p>
@@ -579,7 +579,7 @@ function LeadItem({ lead, onClick }: { lead: AgendaLead; onClick: () => void }) 
           {lead.phone_e164 && <span>{lead.phone_e164}</span>}
         </div>
       </div>
-      <Badge variant="outline" className="text-xs border-gold/30">
+      <Badge variant="outline" className="text-xs border-[#B89555]/30">
         {lead.pipeline_stage || 'new'}
       </Badge>
       <ChevronRight className="h-4 w-4 text-[#1A1A1A]/70" />

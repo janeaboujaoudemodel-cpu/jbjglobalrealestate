@@ -49,7 +49,7 @@ interface RotationRow {
 const riskBadge = (level: string | null) => {
   switch (level) {
     case "low": return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">Low Risk</Badge>;
-    case "medium": return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">Medium</Badge>;
+    case "medium": return <Badge className="bg-amber-500/20 text-[#1A1A1A] border-amber-500/30">Medium</Badge>;
     case "high": return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">High Risk</Badge>;
     default: return <Badge variant="outline">Unknown</Badge>;
   }
@@ -58,14 +58,14 @@ const riskBadge = (level: string | null) => {
 const encryptionIcon = (encrypted: boolean | null) => {
   if (encrypted === true) return <Lock className="w-4 h-4 text-emerald-400" />;
   if (encrypted === false) return <Unlock className="w-4 h-4 text-red-400" />;
-  return <AlertTriangle className="w-4 h-4 text-amber-400" />;
+  return <AlertTriangle className="w-4 h-4 text-[#1A1A1A]" />;
 };
 
 const dataClassIcon = (cls: string) => {
   switch (cls) {
     case "crm_lead": return <Database className="w-4 h-4 text-blue-400" />;
     case "hr_employee": return <Shield className="w-4 h-4 text-purple-400" />;
-    case "business_card": return <Key className="w-4 h-4 text-gold" />;
+    case "business_card": return <Key className="w-4 h-4 text-[#1A1A1A]" />;
     case "storage": return <HardDrive className="w-4 h-4 text-cyan-400" />;
     case "transport": return <Globe className="w-4 h-4 text-green-400" />;
     case "secrets": return <ShieldCheck className="w-4 h-4 text-emerald-400" />;
@@ -81,9 +81,9 @@ function getDaysSince(date: string | null): number {
 function rotationStatusBadge(row: RotationRow) {
   const days = getDaysSince(row.last_rotated_at);
   if (row.status === "disabled") return <Badge variant="outline">Disabled</Badge>;
-  if (row.status === "pending") return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">Not Set</Badge>;
+  if (row.status === "pending") return <Badge className="bg-amber-500/20 text-[#1A1A1A] border-amber-500/30">Not Set</Badge>;
   if (days >= row.rotation_interval_days) return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Overdue</Badge>;
-  if (days >= row.alert_threshold_days) return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">Due Soon</Badge>;
+  if (days >= row.alert_threshold_days) return <Badge className="bg-amber-500/20 text-[#1A1A1A] border-amber-500/30">Due Soon</Badge>;
   return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">Active</Badge>;
 }
 
@@ -190,7 +190,7 @@ export default function EncryptionAuditDashboard() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
-          <ShieldCheck className="w-7 h-7 text-gold" />
+          <ShieldCheck className="w-7 h-7 text-[#1A1A1A]" />
           Encryption & Security Audit
         </h1>
         <p className="text-muted-foreground mt-1">
@@ -233,7 +233,7 @@ export default function EncryptionAuditDashboard() {
               ) : keyStatus.configured ? (
                 <ShieldCheck className="w-5 h-5 text-emerald-400" />
               ) : (
-                <ShieldAlert className="w-5 h-5 text-amber-400" />
+                <ShieldAlert className="w-5 h-5 text-[#1A1A1A]" />
               )}
               <div>
                 <p className="font-medium text-foreground">
@@ -275,7 +275,7 @@ export default function EncryptionAuditDashboard() {
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
-            <ShieldAlert className="w-6 h-6 text-amber-400 mx-auto mb-2" />
+            <ShieldAlert className="w-6 h-6 text-[#1A1A1A] mx-auto mb-2" />
             <div className="text-2xl font-bold text-foreground">{pendingCount}</div>
             <p className="text-xs text-muted-foreground">Pending Encryption</p>
           </CardContent>
@@ -289,7 +289,7 @@ export default function EncryptionAuditDashboard() {
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
-            <Key className="w-6 h-6 text-gold mx-auto mb-2" />
+            <Key className="w-6 h-6 text-[#1A1A1A] mx-auto mb-2" />
             <div className="text-2xl font-bold text-foreground">{keyStatus.configured ? "Active" : "Pending"}</div>
             <p className="text-xs text-muted-foreground">Key Status</p>
           </CardContent>
@@ -427,7 +427,7 @@ export default function EncryptionAuditDashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle className="text-lg flex items-center gap-2">
-                    <RotateCcw className="w-5 h-5 text-gold" />
+                    <RotateCcw className="w-5 h-5 text-[#1A1A1A]" />
                     Key Rotation Schedule
                   </CardTitle>
                   <CardDescription>Track and manage encryption key rotation. Automated daily checks run at 6 AM UTC.</CardDescription>
@@ -469,7 +469,7 @@ export default function EncryptionAuditDashboard() {
                         </TableCell>
                         <TableCell className="text-sm">{row.rotation_interval_days}d</TableCell>
                         <TableCell>
-                          <span className={`font-mono text-sm font-bold ${isOverdue ? "text-red-400" : isDueSoon ? "text-amber-400" : "text-emerald-400"}`}>
+                          <span className={`font-mono text-sm font-bold ${isOverdue ? "text-red-400" : isDueSoon ? "text-[#1A1A1A]" : "text-emerald-400"}`}>
                             {row.status === "pending" ? "—" : `${days}d`}
                           </span>
                         </TableCell>
@@ -572,7 +572,7 @@ export default function EncryptionAuditDashboard() {
                   {item.status === "pass" ? (
                     <CheckCircle2 className="w-5 h-5 text-emerald-400 mt-0.5 shrink-0" />
                   ) : item.status === "warn" ? (
-                    <AlertTriangle className="w-5 h-5 text-amber-400 mt-0.5 shrink-0" />
+                    <AlertTriangle className="w-5 h-5 text-[#1A1A1A] mt-0.5 shrink-0" />
                   ) : (
                     <Shield className="w-5 h-5 text-blue-400 mt-0.5 shrink-0" />
                   )}

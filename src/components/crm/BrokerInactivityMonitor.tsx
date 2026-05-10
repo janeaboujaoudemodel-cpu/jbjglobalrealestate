@@ -208,7 +208,7 @@ const BrokerInactivityMonitor = ({ hasOwnerAccess }: BrokerInactivityMonitorProp
             Broker Inactivity Monitor
           </CardTitle>
           <div className="flex items-center gap-2">
-            <Badge variant="outline" className="bg-amber-500/20 text-amber-400 border-amber-500/30">
+            <Badge variant="outline" className="bg-amber-500/20 text-[#1A1A1A] border-amber-500/30">
               {warningCount} Warning
             </Badge>
             <Badge variant="outline" className="bg-red-500/20 text-red-400 border-red-500/30">
@@ -237,7 +237,7 @@ const BrokerInactivityMonitor = ({ hasOwnerAccess }: BrokerInactivityMonitorProp
                 size="sm"
                 onClick={() => handleBulkAction('alert')}
                 disabled={sending || suspendedCount === 0}
-                className="text-amber-400 border-amber-500/50 hover:bg-amber-500/20"
+                className="text-[#1A1A1A] border-amber-500/50 hover:bg-amber-500/20"
               >
                 <Send className="h-3 w-3 mr-1" />
                 Alert All Suspended
@@ -274,7 +274,7 @@ const BrokerInactivityMonitor = ({ hasOwnerAccess }: BrokerInactivityMonitorProp
                           className={
                             broker.status === 'suspended'
                               ? 'bg-red-500/20 text-red-400 border-red-500/30'
-                              : 'bg-amber-500/20 text-amber-400 border-amber-500/30'
+                              : 'bg-amber-500/20 text-[#1A1A1A] border-amber-500/30'
                           }
                         >
                           {broker.status === 'suspended' ? 'SUSPENDED' : 'WARNING'}

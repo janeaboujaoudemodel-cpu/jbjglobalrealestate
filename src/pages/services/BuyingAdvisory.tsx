@@ -219,8 +219,8 @@ const BuyingAdvisory = () => {
         </div>
         
         {/* Floating gold accent orbs */}
-        <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/10 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-gold/15 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-1/4 left-10 w-64 h-64 bg-[#EFE6D6]/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-[#EFE6D6]/15 rounded-full blur-[120px] pointer-events-none" />
 
         {/* Content */}
         <div className="container mx-auto px-4 relative z-10">
@@ -231,9 +231,9 @@ const BuyingAdvisory = () => {
             className="text-center max-w-4xl mx-auto"
           >
             {/* Label */}
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-[#1A1A1A]/30 backdrop-blur-md">
-              <Briefcase className="w-4 h-4 text-gold" />
-              <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-[#B89555]/40 bg-[#1A1A1A]/30 backdrop-blur-md">
+              <Briefcase className="w-4 h-4 text-[#1A1A1A]" />
+              <span className="text-[#1A1A1A] font-semibold text-xs uppercase tracking-[0.2em]">
                 Professional Representation
               </span>
             </div>
@@ -297,7 +297,7 @@ const BuyingAdvisory = () => {
                 purchase residential or investment properties in the UAE. Our
                 advisory goes beyond general guidance — we represent your
                 interests throughout the buying process, from{" "}
-                <span className="text-gold font-semibold">
+                <span className="text-[#1A1A1A] font-semibold">
                   market analysis and opportunity sourcing to negotiation,
                   transaction coordination, and completion
                 </span>.
@@ -328,7 +328,7 @@ const BuyingAdvisory = () => {
                 <motion.div key={index} variants={fadeInUp}>
                   <div className="h-full jj-card-inner text-center">
                     <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-[#1A1A1A] flex items-center justify-center">
-                      <item.icon className="w-7 h-7 text-gold" />
+                      <item.icon className="w-7 h-7 text-[#1A1A1A]" />
                     </div>
                     <h3 className="font-semibold text-[#1A1A1A] mb-2">
                       {item.title}
@@ -364,7 +364,7 @@ const BuyingAdvisory = () => {
                 <div className="h-full jj-card-inner">
                   <div className="flex items-center gap-3 mb-6">
                     <div className="w-12 h-12 rounded-xl bg-[#1A1A1A] flex items-center justify-center">
-                      <Building2 className="w-6 h-6 text-gold" />
+                      <Building2 className="w-6 h-6 text-[#1A1A1A]" />
                     </div>
                     <h3 className="text-xl font-bold text-[#1A1A1A]">
                       Primary Market (Off-Plan / New)
@@ -376,7 +376,7 @@ const BuyingAdvisory = () => {
                         key={idx}
                         className="flex items-start gap-3 text-[#1A1A1A]/70"
                       >
-                        <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
+                        <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] shrink-0 mt-0.5" />
                         <span>{feature}</span>
                       </li>
                     ))}
@@ -389,7 +389,7 @@ const BuyingAdvisory = () => {
                 <div className="h-full jj-card-inner">
                   <div className="flex items-center gap-3 mb-6">
                     <div className="w-12 h-12 rounded-xl bg-[#1A1A1A] flex items-center justify-center">
-                      <Key className="w-6 h-6 text-gold" />
+                      <Key className="w-6 h-6 text-[#1A1A1A]" />
                     </div>
                     <h3 className="text-xl font-bold text-[#1A1A1A]">
                       Secondary Market (Resale / Ready)
@@ -401,7 +401,7 @@ const BuyingAdvisory = () => {
                         key={idx}
                         className="flex items-start gap-3 text-[#1A1A1A]/70"
                       >
-                        <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
+                        <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] shrink-0 mt-0.5" />
                         <span>{feature}</span>
                       </li>
                     ))}
@@ -432,7 +432,7 @@ const BuyingAdvisory = () => {
             <div className="max-w-4xl mx-auto">
               <div className="relative">
                 {/* Vertical line */}
-                <div className="absolute left-6 top-0 bottom-0 w-px bg-gold/30 hidden md:block" />
+                <div className="absolute left-6 top-0 bottom-0 w-px bg-[#EFE6D6]/30 hidden md:block" />
 
                 <div className="space-y-6">
                   {advisoryProcess.map((step, index) => (
@@ -441,12 +441,12 @@ const BuyingAdvisory = () => {
                       variants={fadeInUp}
                       className="flex items-center gap-6"
                     >
-                      <div className="w-12 h-12 rounded-full bg-[#1A1A1A] flex items-center justify-center shrink-0 z-10 border-2 border-gold">
-                        <span className="text-gold font-bold">{step.step}</span>
+                      <div className="w-12 h-12 rounded-full bg-[#1A1A1A] flex items-center justify-center shrink-0 z-10 border-2 border-[#B89555]">
+                        <span className="text-[#1A1A1A] font-bold">{step.step}</span>
                       </div>
                       <div className="flex-1 jj-card-inner !p-4">
                         <div className="flex items-center gap-4">
-                          <step.icon className="w-6 h-6 text-gold shrink-0" />
+                          <step.icon className="w-6 h-6 text-[#1A1A1A] shrink-0" />
                           <span className="font-semibold text-[#1A1A1A]">
                             {step.title}
                           </span>
@@ -483,24 +483,24 @@ const BuyingAdvisory = () => {
               className="jj-card-inner"
             >
               <div className="flex items-start gap-4 mb-6">
-                <Banknote className="w-8 h-8 text-gold shrink-0" />
+                <Banknote className="w-8 h-8 text-[#1A1A1A] shrink-0" />
                 <h3 className="text-xl font-bold text-[#1A1A1A]">Fee Structure</h3>
               </div>
               <ul className="space-y-4">
                 <li className="flex items-start gap-3 text-[#1A1A1A]/70">
-                  <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] shrink-0 mt-0.5" />
                   <span><strong>Primary market:</strong> No buyer fees — developer-paid commission</span>
                 </li>
                 <li className="flex items-start gap-3 text-[#1A1A1A]/70">
-                  <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] shrink-0 mt-0.5" />
                   <span><strong>Secondary market:</strong> Commission disclosed at engagement</span>
                 </li>
                 <li className="flex items-start gap-3 text-[#1A1A1A]/70">
-                  <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] shrink-0 mt-0.5" />
                   <span>Fee structures comply with UAE brokerage regulations</span>
                 </li>
                 <li className="flex items-start gap-3 text-[#1A1A1A]/70">
-                  <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] shrink-0 mt-0.5" />
                   <span>No hidden charges or undisclosed markups</span>
                 </li>
               </ul>
@@ -520,8 +520,8 @@ const BuyingAdvisory = () => {
             className="max-w-4xl mx-auto text-center"
           >
             <motion.div variants={fadeInUp} className="flex justify-center mb-6">
-              <div className="w-16 h-16 rounded-full bg-[#1A1A1A] flex items-center justify-center border-2 border-gold">
-                <Shield className="w-8 h-8 text-gold" />
+              <div className="w-16 h-16 rounded-full bg-[#1A1A1A] flex items-center justify-center border-2 border-[#B89555]">
+                <Shield className="w-8 h-8 text-[#1A1A1A]" />
               </div>
             </motion.div>
             <motion.h2
@@ -564,18 +564,18 @@ const BuyingAdvisory = () => {
             </motion.h2>
             <motion.div
               variants={fadeInUp}
-              className="overflow-x-auto rounded-xl border-2 border-gold/40"
+              className="overflow-x-auto rounded-xl border-2 border-[#B89555]/40"
             >
               <table className="w-full">
                 <thead>
                   <tr className="bg-[#1A1A1A]">
-                    <th className="px-6 py-4 text-left text-sm font-bold text-gold uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-sm font-bold text-[#1A1A1A] uppercase tracking-wider">
                       Aspect
                     </th>
                     <th className="px-6 py-4 text-left text-sm font-bold text-white/70 uppercase tracking-wider">
                       Buyer Guide
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-bold text-gold uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-sm font-bold text-[#1A1A1A] uppercase tracking-wider">
                       Buying Advisory
                     </th>
                   </tr>
@@ -585,7 +585,7 @@ const BuyingAdvisory = () => {
                     <tr key={index}>
                       <td className="px-6 py-4 text-[#1A1A1A] font-medium">{row.aspect}</td>
                       <td className="px-6 py-4 text-[#1A1A1A]/70">{row.guide}</td>
-                      <td className="px-6 py-4 text-gold font-semibold">
+                      <td className="px-6 py-4 text-[#1A1A1A] font-semibold">
                         {row.advisory}
                       </td>
                     </tr>
@@ -608,8 +608,8 @@ const BuyingAdvisory = () => {
             className="max-w-3xl mx-auto"
           >
             <motion.div variants={fadeInUp} className="flex justify-center mb-6">
-              <div className="w-14 h-14 rounded-full bg-[#1A1A1A] flex items-center justify-center border-2 border-gold">
-                <HelpCircle className="w-7 h-7 text-gold" />
+              <div className="w-14 h-14 rounded-full bg-[#1A1A1A] flex items-center justify-center border-2 border-[#B89555]">
+                <HelpCircle className="w-7 h-7 text-[#1A1A1A]" />
               </div>
             </motion.div>
             <motion.h2
@@ -627,7 +627,7 @@ const BuyingAdvisory = () => {
                     value={`faq-${index}`}
                     className="jj-card-inner overflow-hidden"
                   >
-                    <AccordionTrigger className="px-6 py-4 text-left font-semibold text-[#1A1A1A] hover:text-gold hover:no-underline">
+                    <AccordionTrigger className="px-6 py-4 text-left font-semibold text-[#1A1A1A] hover:text-[#1A1A1A] hover:no-underline">
                       {faq.question}
                     </AccordionTrigger>
                     <AccordionContent className="px-6 pb-4 text-[#1A1A1A]/70">
@@ -672,7 +672,7 @@ const BuyingAdvisory = () => {
               <Button
                 asChild
                 size="lg"
-                className="bg-gold hover:bg-gold-dark text-[#1A1A1A] font-semibold px-8"
+                className="bg-[#EFE6D6] hover:bg-[#EFE6D6]-dark text-[#1A1A1A] font-semibold px-8"
               >
                 <Link to="/contact?service=buying-advisory">
                   Book Buying Advisory Consultation
@@ -683,7 +683,7 @@ const BuyingAdvisory = () => {
                 asChild
                 variant="outline"
                 size="lg"
-                className="border-gold text-gold hover:bg-gold/10"
+                className="border-[#B89555] text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
               >
                 <Link to="/buyer-guide">Explore Buyer Guide</Link>
               </Button>
@@ -693,30 +693,30 @@ const BuyingAdvisory = () => {
       </section>
 
       {/* INTERNAL LINKS */}
-      <section className="bg-[#1A1A1A] py-12 border-t border-gold/20">
+      <section className="bg-[#1A1A1A] py-12 border-t border-[#B89555]/20">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap justify-center gap-6 text-sm">
             <Link
               to="/buyer-guide"
-              className="text-white/70 hover:text-gold transition-colors"
+              className="text-white/70 hover:text-[#1A1A1A] transition-colors"
             >
               Buyer Guide
             </Link>
             <Link
               to="/areas"
-              className="text-white/70 hover:text-gold transition-colors"
+              className="text-white/70 hover:text-[#1A1A1A] transition-colors"
             >
               Area Guides
             </Link>
             <Link
               to="/market-intelligence"
-              className="text-white/70 hover:text-gold transition-colors"
+              className="text-white/70 hover:text-[#1A1A1A] transition-colors"
             >
               Market Intelligence
             </Link>
             <Link
               to="/contact"
-              className="text-white/70 hover:text-gold transition-colors"
+              className="text-white/70 hover:text-[#1A1A1A] transition-colors"
             >
               Contact Us
             </Link>

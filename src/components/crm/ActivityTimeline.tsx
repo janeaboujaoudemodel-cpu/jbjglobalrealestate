@@ -92,7 +92,7 @@ const ActivityTimeline = ({ userId, leadId, limit = 20, showLeadName = true }: A
       case "note":
         return <FileText className="h-4 w-4 text-[#1A1A1A]/70" />;
       case "followup_created":
-        return <Calendar className="h-4 w-4 text-amber-400" />;
+        return <Calendar className="h-4 w-4 text-[#1A1A1A]" />;
       case "followup_completed":
         return <CheckCircle className="h-4 w-4 text-emerald-500" />;
       case "lead_created":

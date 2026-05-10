@@ -29,7 +29,7 @@ const DataOperations = () => {
       case 'success':
         return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">Success</Badge>;
       case 'warning':
-        return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">Warning</Badge>;
+        return <Badge className="bg-amber-500/20 text-[#1A1A1A] border-amber-500/30">Warning</Badge>;
       case 'error':
         return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Error</Badge>;
       default:
@@ -48,22 +48,22 @@ const DataOperations = () => {
       {/* Internal Warning Banner */}
       <div className="bg-amber-500/10 border-b border-amber-500/30 py-3">
         <div className="container mx-auto px-4 flex items-center justify-center gap-3">
-          <Lock className="w-4 h-4 text-amber-400" />
-          <span className="text-amber-400 text-sm font-medium">INTERNAL USE ONLY — Data Operations & Audit</span>
+          <Lock className="w-4 h-4 text-[#1A1A1A]" />
+          <span className="text-[#1A1A1A] text-sm font-medium">INTERNAL USE ONLY — Data Operations & Audit</span>
         </div>
       </div>
 
       {/* Header */}
       <section className="py-12 border-b border-zinc-900">
         <div className="container mx-auto px-4">
-          <Link to="/internal/market-intelligence/dashboard" className="inline-flex items-center gap-2 text-gold hover:text-gold-light mb-6">
+          <Link to="/internal/market-intelligence/dashboard" className="inline-flex items-center gap-2 text-[#1A1A1A] hover:text-[#1A1A1A]-light mb-6">
             <ArrowLeft className="w-4 h-4" />
             Back to Dashboard
           </Link>
 
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center">
-              <Database className="w-6 h-6 text-gold" />
+            <div className="w-12 h-12 rounded-xl bg-[#EFE6D6]/10 border border-[#B89555]/30 flex items-center justify-center">
+              <Database className="w-6 h-6 text-[#1A1A1A]" />
             </div>
             <div>
               <h1 className="text-white text-3xl font-bold">
@@ -82,7 +82,7 @@ const DataOperations = () => {
           
           <div className="grid md:grid-cols-3 gap-4">
             {OPEN_DATA_SOURCES.map((source) => (
-              <Card key={source.id} className="bg-zinc-900/50 border-[#1A1A1A]">
+              <Card key={source.id} className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
                 <CardHeader className="pb-2">
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-white text-lg">{source.name}</CardTitle>
@@ -107,7 +107,7 @@ const DataOperations = () => {
                       <p className="text-[#1A1A1A]/70 text-xs">Data Types</p>
                       <div className="flex flex-wrap gap-1 mt-1">
                         {source.dataTypes.map((type) => (
-                          <span key={type} className="text-xs bg-zinc-800 text-white/70 px-2 py-0.5 rounded">
+                          <span key={type} className="text-xs bg-[#F7F2EA] text-white/70 px-2 py-0.5 rounded">
                             {type}
                           </span>
                         ))}
@@ -169,10 +169,10 @@ const DataOperations = () => {
       {/* Compliance Notes */}
       <section className="py-12 border-t border-zinc-900">
         <div className="container mx-auto px-4">
-          <Card className="bg-zinc-900/50 border-[#1A1A1A] max-w-3xl mx-auto">
+          <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A] max-w-3xl mx-auto">
             <CardHeader>
               <CardTitle className="text-white flex items-center gap-3">
-                <FileText className="w-5 h-5 text-gold" />
+                <FileText className="w-5 h-5 text-[#1A1A1A]" />
                 Compliance Notes
               </CardTitle>
             </CardHeader>

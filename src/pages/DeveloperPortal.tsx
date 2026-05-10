@@ -853,7 +853,7 @@ const DeveloperPortal = () => {
     <div className="space-y-3">
       <Label>Photos, Videos & Documents</Label>
       <div
-        className={`border-2 border-dashed rounded-xl p-6 text-center transition-colors cursor-pointer bg-card/50 ${isDragging ? 'border-primary bg-primary/5' : 'border-gold/40 hover:border-gold/70'}`}
+        className={`border-2 border-dashed rounded-xl p-6 text-center transition-colors cursor-pointer bg-card/50 ${isDragging ? 'border-primary bg-primary/5' : 'border-[#B89555]/40 hover:border-[#B89555]/70'}`}
         onClick={() => inputRef.current?.click()}
         onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
         onDragLeave={(e) => { e.preventDefault(); setIsDragging(false); }}
@@ -881,8 +881,8 @@ const DeveloperPortal = () => {
       {files.length > 0 && (
         <div className="space-y-2">
           {files.map((file, idx) => (
-            <div key={idx} className="flex items-center gap-3 p-3 rounded-lg bg-card border border-gold/20">
-              <FileText className="w-4 h-4 text-gold shrink-0" />
+            <div key={idx} className="flex items-center gap-3 p-3 rounded-lg bg-card border border-[#B89555]/20">
+              <FileText className="w-4 h-4 text-[#1A1A1A] shrink-0" />
               <span className="text-sm text-foreground truncate flex-1">{file.name}</span>
               <button type="button" onClick={() => setFiles(prev => prev.filter((_, i) => i !== idx))} className="text-muted-foreground hover:text-destructive">
                 <X className="w-4 h-4" />
@@ -903,7 +903,7 @@ const DeveloperPortal = () => {
         <div className="relative py-16 md:py-24 bg-gradient-to-br from-[hsl(38,35%,18%)] via-[hsl(36,30%,14%)] to-[hsl(34,25%,10%)] overflow-hidden">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0icmdiYSgyNTUsMjE1LDE1MCwwLjA1KSIvPjwvc3ZnPg==')] opacity-50" />
           <div className="container mx-auto px-4 relative z-10 text-center max-w-3xl">
-            <Badge className="mb-4 bg-gold/20 text-gold border-gold/30 text-sm">
+            <Badge className="mb-4 bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30 text-sm">
               Developer Portal
             </Badge>
             <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[#F7F1E6]">
@@ -918,9 +918,9 @@ const DeveloperPortal = () => {
         {/* Owner Mode Banner */}
         {isOwner && !isDeveloperMode && (
           <div className="container mx-auto px-4 py-4 max-w-4xl">
-            <div className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-gold/10 to-gold/5 border-2 border-gold/30">
+            <div className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-gold/10 to-gold/5 border-2 border-[#B89555]/30">
               <div className="flex items-center gap-3">
-                <Crown className="w-5 h-5 text-gold" />
+                <Crown className="w-5 h-5 text-[#1A1A1A]" />
                 <div>
                   <p className="text-sm font-semibold text-foreground">Owner Mode</p>
                   <p className="text-xs text-muted-foreground">
@@ -933,7 +933,7 @@ const DeveloperPortal = () => {
                   size="sm"
                   variant={ownerSkipMode ? "outline" : "default"}
                   onClick={() => setOwnerSkipMode(false)}
-                  className={!ownerSkipMode ? "bg-gold text-[#1A1A1A] hover:bg-gold/90" : "border-gold/30"}
+                  className={!ownerSkipMode ? "bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90" : "border-[#B89555]/30"}
                 >
                   <Eye className="w-3.5 h-3.5 mr-1.5" /> Developer View
                 </Button>
@@ -941,7 +941,7 @@ const DeveloperPortal = () => {
                   size="sm"
                   variant={ownerSkipMode ? "default" : "outline"}
                   onClick={() => setOwnerSkipMode(true)}
-                  className={ownerSkipMode ? "bg-gold text-[#1A1A1A] hover:bg-gold/90" : "border-gold/30"}
+                  className={ownerSkipMode ? "bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90" : "border-[#B89555]/30"}
                 >
                   <SkipForward className="w-3.5 h-3.5 mr-1.5" /> Quick Upload
                 </Button>
@@ -953,8 +953,8 @@ const DeveloperPortal = () => {
         {/* Rep Status Banner */}
         {hasRepProfile && !isRepApproved && !(isOwner && !ownerSkipMode) && (
           <div className="container mx-auto px-4 py-4 max-w-4xl">
-            <div className="flex items-center gap-3 p-4 rounded-xl bg-gold/10 border border-gold/30 text-stone-800 text-sm">
-              <UserCheck className="w-5 h-5 shrink-0 text-gold" />
+            <div className="flex items-center gap-3 p-4 rounded-xl bg-[#EFE6D6]/10 border border-[#B89555]/30 text-stone-800 text-sm">
+              <UserCheck className="w-5 h-5 shrink-0 text-[#1A1A1A]" />
               <div>
                 <strong>Application Status: {repProfile?.status?.replace(/_/g, ' ')}</strong>
                 <p className="text-xs mt-0.5 text-stone-600">Your {repProfile?.role?.replace(/_/g, ' ')} registration for <strong>{repProfile?.developer_name}</strong> is being reviewed.</p>
@@ -968,7 +968,7 @@ const DeveloperPortal = () => {
         {shouldShowRegistrationGate ? (
           <div className="container mx-auto px-4 py-8 max-w-4xl">
             {/* Developer name selection before registration */}
-            <Card className="border-2 border-gold/30 bg-gradient-to-r from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)] mb-6">
+            <Card className="border-2 border-[#B89555]/30 bg-gradient-to-r from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)] mb-6">
               <CardContent className="p-4">
                 <div className="space-y-1">
                   <Label className="text-xs text-muted-foreground">Developer / Company You Represent *</Label>
@@ -988,9 +988,9 @@ const DeveloperPortal = () => {
           <div className="container mx-auto px-4 py-8 max-w-4xl">
             {hasRepProfile && !isOwner ? (
               /* Profile summary bar */
-              <div className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)] border-2 border-gold/30 mb-6">
+              <div className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)] border-2 border-[#B89555]/30 mb-6">
                 <div className="flex items-center gap-3 min-w-0">
-                  <UserCheck className="w-5 h-5 text-gold shrink-0" />
+                  <UserCheck className="w-5 h-5 text-[#1A1A1A] shrink-0" />
                   <div className="min-w-0">
                     <p className="text-sm font-semibold text-foreground truncate">
                       Submitting as: {repProfile?.full_name} · {repProfile?.developer_name}
@@ -998,12 +998,12 @@ const DeveloperPortal = () => {
                     <p className="text-xs text-muted-foreground truncate">{repProfile?.email}{repProfile?.phone ? ` · ${repProfile.phone}` : ''}</p>
                   </div>
                 </div>
-                <Button size="sm" variant="outline" className="border-gold/30 shrink-0" onClick={() => setActiveTab('register')}>
+                <Button size="sm" variant="outline" className="border-[#B89555]/30 shrink-0" onClick={() => setActiveTab('register')}>
                   Edit Profile
                 </Button>
               </div>
             ) : ownerSkipMode ? (
-              <Card className="border-2 border-gold/30 bg-gradient-to-r from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)] mb-6">
+              <Card className="border-2 border-[#B89555]/30 bg-gradient-to-r from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)] mb-6">
                 <CardContent className="p-4">
                   <div className="space-y-1">
                     <Label className="text-xs text-muted-foreground">Developer / Company Name *</Label>
@@ -1020,44 +1020,44 @@ const DeveloperPortal = () => {
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <div className="w-full overflow-x-auto pb-1">
-              <TabsList className="inline-flex w-auto bg-gradient-to-r from-[hsl(40,40%,90%)] via-[hsl(38,35%,85%)] to-[hsl(36,30%,80%)] border-2 border-gold/30 rounded-xl h-14 gap-0.5 px-1.5 py-1.5">
-                <TabsTrigger value="projects" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-gold/40 rounded-lg">
+              <TabsList className="inline-flex w-auto bg-gradient-to-r from-[hsl(40,40%,90%)] via-[hsl(38,35%,85%)] to-[hsl(36,30%,80%)] border-2 border-[#B89555]/30 rounded-xl h-14 gap-0.5 px-1.5 py-1.5">
+                <TabsTrigger value="projects" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-[#B89555]/40 rounded-lg">
                   <FolderOpen className="w-3.5 h-3.5 mr-1 hidden md:block" /> Projects
                 </TabsTrigger>
-                <TabsTrigger value="submit" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-gold/40 rounded-lg">
+                <TabsTrigger value="submit" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-[#B89555]/40 rounded-lg">
                   <Plus className="w-3.5 h-3.5 mr-1 hidden md:block" /> New Project
                 </TabsTrigger>
-                <TabsTrigger value="events" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-gold/40 rounded-lg">
+                <TabsTrigger value="events" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-[#B89555]/40 rounded-lg">
                   <Calendar className="w-3.5 h-3.5 mr-1 hidden md:block" /> Events
                 </TabsTrigger>
-                <TabsTrigger value="launches" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-gold/40 rounded-lg">
+                <TabsTrigger value="launches" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-[#B89555]/40 rounded-lg">
                   <Rocket className="w-3.5 h-3.5 mr-1 hidden md:block" /> Launches
                 </TabsTrigger>
-                <TabsTrigger value="register" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-gold/40 rounded-lg">
+                <TabsTrigger value="register" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-[#B89555]/40 rounded-lg">
                   <UserCheck className="w-3.5 h-3.5 mr-1 hidden md:block" /> Update Profile
                 </TabsTrigger>
-                <TabsTrigger value="agreements" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-gold/40 rounded-lg">
+                <TabsTrigger value="agreements" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-[#B89555]/40 rounded-lg">
                   <FileSignature className="w-3.5 h-3.5 mr-1 hidden md:block" /> Agreements
                 </TabsTrigger>
-                <TabsTrigger value="tasks" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-gold/40 rounded-lg">
+                <TabsTrigger value="tasks" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-[#B89555]/40 rounded-lg">
                   <ListTodo className="w-3.5 h-3.5 mr-1 hidden md:block" /> Tasks
                 </TabsTrigger>
                 {showRepTabs && (
                   <>
-                    <TabsTrigger value="briefing" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-gold/40 rounded-lg">
+                    <TabsTrigger value="briefing" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-[#B89555]/40 rounded-lg">
                       <Briefcase className="w-3.5 h-3.5 mr-1 hidden md:block" /> Briefing
                     </TabsTrigger>
-                    <TabsTrigger value="messages" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-gold/40 rounded-lg">
+                    <TabsTrigger value="messages" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-[#B89555]/40 rounded-lg">
                       <MessageSquare className="w-3.5 h-3.5 mr-1 hidden md:block" /> Messages
                     </TabsTrigger>
                   </>
                 )}
                 {isOwner && ownerSkipMode && (
-                  <TabsTrigger value="manage" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-gold/40 rounded-lg">
+                  <TabsTrigger value="manage" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-[#B89555]/40 rounded-lg">
                     <Settings className="w-3.5 h-3.5 mr-1 hidden md:block" /> Manage
                   </TabsTrigger>
                 )}
-                <TabsTrigger value="listings" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-gold/40 rounded-lg">
+                <TabsTrigger value="listings" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-[#B89555]/40 rounded-lg">
                   <Eye className="w-3.5 h-3.5 mr-1 hidden md:block" /> Listings
                 </TabsTrigger>
               </TabsList>
@@ -1065,20 +1065,20 @@ const DeveloperPortal = () => {
 
             {/* MY PROJECTS TAB */}
             <TabsContent value="projects" className="mt-6">
-              <Card className="border-2 border-gold/30">
+              <Card className="border-2 border-[#B89555]/30">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-foreground">
-                    <FolderOpen className="w-5 h-5 text-gold" /> Your Submitted Projects
+                    <FolderOpen className="w-5 h-5 text-[#1A1A1A]" /> Your Submitted Projects
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   {loadingProjects ? (
-                    <div className="py-8 text-center"><Loader2 className="w-6 h-6 animate-spin mx-auto text-gold" /></div>
+                    <div className="py-8 text-center"><Loader2 className="w-6 h-6 animate-spin mx-auto text-[#1A1A1A]" /></div>
                   ) : myProjects && myProjects.length > 0 ? (
                     <ScrollArea className="h-[400px]">
                       <div className="space-y-3">
                         {myProjects.map((p: any) => (
-                          <div key={p.id} className="flex items-center justify-between p-4 rounded-xl border border-gold/20 bg-card">
+                          <div key={p.id} className="flex items-center justify-between p-4 rounded-xl border border-[#B89555]/20 bg-card">
                             <div>
                               <h4 className="font-semibold text-foreground">{p.project_name}</h4>
                               <p className="text-xs text-muted-foreground">{format(new Date(p.created_at), "MMM d, yyyy")}</p>
@@ -1115,10 +1115,10 @@ const DeveloperPortal = () => {
                 </div>
               )}
 
-              <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)]">
+              <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)]">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-foreground">
-                    <Building2 className="w-5 h-5 text-gold" />
+                    <Building2 className="w-5 h-5 text-[#1A1A1A]" />
                     {ownerSkipMode ? 'Quick Upload — Owner Mode' : 'Submit New Project'}
                   </CardTitle>
                   <p className="text-sm text-muted-foreground">
@@ -1172,7 +1172,7 @@ const DeveloperPortal = () => {
                   <div className="space-y-3">
                     <Label>Marketing Materials *</Label>
                     <div
-                      className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors cursor-pointer bg-card/50 ${mainDragOver ? 'border-primary bg-primary/5' : 'border-gold/40 hover:border-gold/70'}`}
+                      className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors cursor-pointer bg-card/50 ${mainDragOver ? 'border-primary bg-primary/5' : 'border-[#B89555]/40 hover:border-[#B89555]/70'}`}
                       onClick={() => fileInputRef.current?.click()}
                       onDragOver={(e) => { e.preventDefault(); setMainDragOver(true); }}
                       onDragLeave={(e) => { e.preventDefault(); setMainDragOver(false); }}
@@ -1204,8 +1204,8 @@ const DeveloperPortal = () => {
                     {currentProject.files.length > 0 && (
                       <div className="space-y-2">
                         {currentProject.files.map((file, idx) => (
-                          <div key={idx} className="flex items-center gap-3 p-3 rounded-lg bg-card border border-gold/20">
-                            <FileText className="w-4 h-4 text-gold shrink-0" />
+                          <div key={idx} className="flex items-center gap-3 p-3 rounded-lg bg-card border border-[#B89555]/20">
+                            <FileText className="w-4 h-4 text-[#1A1A1A] shrink-0" />
                             <span className="text-sm text-foreground truncate flex-1">{file.name}</span>
                             <button type="button" onClick={() => removeFile(idx)} className="text-muted-foreground hover:text-destructive">
                               <X className="w-4 h-4" />
@@ -1218,17 +1218,17 @@ const DeveloperPortal = () => {
 
                   <div className="flex gap-3">
                     <Button onClick={handleSubmitProject} disabled={submittingProject || duplicateBlocking}
-                      className="flex-1 bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border border-gold/40 text-foreground font-bold h-12">
+                      className="flex-1 bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border border-[#B89555]/40 text-foreground font-bold h-12">
                       {submittingProject ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Submitting...</> : <><Send className="w-4 h-4 mr-2" /> Submit Project</>}
                     </Button>
                   </div>
 
                   {sessionProjects.length > 0 && (
                     <div className="flex gap-3 pt-2">
-                      <Button variant="outline" onClick={() => { setCurrentProject(emptyProject()); setDuplicateBlocking(false); }} className="flex-1 border-gold/30">
+                      <Button variant="outline" onClick={() => { setCurrentProject(emptyProject()); setDuplicateBlocking(false); }} className="flex-1 border-[#B89555]/30">
                         <Plus className="w-4 h-4 mr-2" /> Add Another Project
                       </Button>
-                      <Button variant="outline" onClick={() => setEndSessionOpen(true)} className="flex-1 border-gold/30">
+                      <Button variant="outline" onClick={() => setEndSessionOpen(true)} className="flex-1 border-[#B89555]/30">
                         <CheckCircle className="w-4 h-4 mr-2" /> End Session
                       </Button>
                     </div>
@@ -1239,10 +1239,10 @@ const DeveloperPortal = () => {
 
             {/* EVENTS TAB — Event Invitations */}
             <TabsContent value="events" className="mt-6">
-              <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)]">
+              <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)]">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-foreground">
-                    <Calendar className="w-5 h-5 text-gold" /> Submit Event Invitation
+                    <Calendar className="w-5 h-5 text-[#1A1A1A]" /> Submit Event Invitation
                   </CardTitle>
                   <p className="text-sm text-muted-foreground">Invite our team to open days, networking events, exhibitions, or private previews.</p>
                 </CardHeader>
@@ -1276,7 +1276,7 @@ const DeveloperPortal = () => {
                     />
 
                     <Button type="submit" disabled={eventSubmitting}
-                      className="w-full bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border border-gold/40 text-foreground font-bold h-12">
+                      className="w-full bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border border-[#B89555]/40 text-foreground font-bold h-12">
                       {eventSubmitting ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Submitting...</> : <><Send className="w-4 h-4 mr-2" /> Submit Event</>}
                     </Button>
                   </form>
@@ -1286,10 +1286,10 @@ const DeveloperPortal = () => {
 
             {/* LAUNCHES TAB */}
             <TabsContent value="launches" className="mt-6 space-y-6">
-              <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)]">
+              <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)]">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-foreground">
-                    <Rocket className="w-5 h-5 text-gold" /> Submit New Launch
+                    <Rocket className="w-5 h-5 text-[#1A1A1A]" /> Submit New Launch
                   </CardTitle>
                   <p className="text-sm text-muted-foreground">Announce a new project launch. Our team will prepare marketing and broker briefings.</p>
                 </CardHeader>
@@ -1323,7 +1323,7 @@ const DeveloperPortal = () => {
                     />
 
                     <Button type="submit" disabled={launchSubmitting}
-                      className="w-full bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border border-gold/40 text-foreground font-bold h-12">
+                      className="w-full bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border border-[#B89555]/40 text-foreground font-bold h-12">
                       {launchSubmitting ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Submitting...</> : <><Rocket className="w-4 h-4 mr-2" /> Submit Launch</>}
                     </Button>
                   </form>
@@ -1331,10 +1331,10 @@ const DeveloperPortal = () => {
               </Card>
 
               {/* Upcoming Launches & Events */}
-              <Card className="border-2 border-gold/30">
+              <Card className="border-2 border-[#B89555]/30">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-foreground">
-                    <Star className="w-5 h-5 text-gold" /> Upcoming Launches & Events
+                    <Star className="w-5 h-5 text-[#1A1A1A]" /> Upcoming Launches & Events
                   </CardTitle>
                   <p className="text-sm text-muted-foreground">Browse upcoming launches and register your interest.</p>
                 </CardHeader>
@@ -1344,17 +1344,17 @@ const DeveloperPortal = () => {
                       {upcomingEvents.map((event: any) => {
                         const registered = hasInterestFor(event.id);
                         return (
-                          <div key={event.id} className="p-4 rounded-xl border border-gold/20 bg-card hover:border-gold/40 transition-colors">
+                          <div key={event.id} className="p-4 rounded-xl border border-[#B89555]/20 bg-card hover:border-[#B89555]/40 transition-colors">
                             <div className="flex items-start justify-between gap-4">
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2 mb-1">
                                   <h4 className="font-semibold text-foreground">{event.event_title}</h4>
-                                  <Badge className={event.submission_subtype === 'launch' ? 'bg-blue-500/20 text-blue-700' : 'bg-gold/20 text-gold'}>
+                                  <Badge className={event.submission_subtype === 'launch' ? 'bg-blue-500/20 text-blue-700' : 'bg-[#EFE6D6]/20 text-[#1A1A1A]'}>
                                     {event.submission_subtype === 'launch' ? 'Launch' : 'Event'}
                                   </Badge>
                                   {registered && <Badge className="bg-emerald-500/20 text-emerald-700 text-[10px]">Registered</Badge>}
                                 </div>
-                                <p className="text-xs text-gold font-medium">{event.developer_name}</p>
+                                <p className="text-xs text-[#1A1A1A] font-medium">{event.developer_name}</p>
                                 {event.event_date && (
                                   <p className="text-xs text-muted-foreground mt-1">
                                     {format(new Date(event.event_date), "EEEE, MMM d, yyyy 'at' h:mm a")}
@@ -1378,7 +1378,7 @@ const DeveloperPortal = () => {
                                 }}
                                 className={registered
                                   ? "bg-emerald-500/20 text-emerald-700 border-emerald-300"
-                                  : "bg-gold text-[#1A1A1A] hover:bg-gold/90"
+                                  : "bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
                                 }
                               >
                                 {registered ? <><CheckCircle className="w-3.5 h-3.5 mr-1" /> Done</> : <><Star className="w-3.5 h-3.5 mr-1" /> Register Interest</>}
@@ -1400,16 +1400,16 @@ const DeveloperPortal = () => {
 
               {/* My Registrations */}
               {myInterests && myInterests.length > 0 && (
-                <Card className="border-2 border-gold/30">
+                <Card className="border-2 border-[#B89555]/30">
                   <CardHeader>
                     <CardTitle className="text-sm flex items-center gap-2 text-foreground">
-                      <CheckCircle className="w-4 h-4 text-gold" /> Your Launch Interests
+                      <CheckCircle className="w-4 h-4 text-[#1A1A1A]" /> Your Launch Interests
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-2">
                       {myInterests.map((i: any) => (
-                        <div key={i.id} className="flex items-center justify-between p-3 rounded-xl border border-gold/20 bg-card">
+                        <div key={i.id} className="flex items-center justify-between p-3 rounded-xl border border-[#B89555]/20 bg-card">
                           <div>
                             <h4 className="font-semibold text-sm text-foreground">{i.event_title}</h4>
                             <p className="text-xs text-muted-foreground">{i.developer_name} · {format(new Date(i.created_at), "MMM d, yyyy")}</p>
@@ -1417,7 +1417,7 @@ const DeveloperPortal = () => {
                           <Badge className={
                             i.interest_type === 'eoi' ? 'bg-emerald-500/20 text-emerald-700' :
                             i.interest_type === 'private_tour' ? 'bg-blue-500/20 text-blue-700' :
-                            'bg-gold/20 text-gold'
+                            'bg-[#EFE6D6]/20 text-[#1A1A1A]'
                           }>{i.interest_type === 'eoi' ? 'EOI' : i.interest_type === 'private_tour' ? 'Private Tour' : 'General'}</Badge>
                         </div>
                       ))}
@@ -1430,12 +1430,12 @@ const DeveloperPortal = () => {
             {/* REGISTER / PROFILE TAB */}
             <TabsContent value="register" className="mt-6">
               {loadingRep ? (
-                <div className="py-8 text-center"><Loader2 className="w-6 h-6 animate-spin mx-auto text-gold" /></div>
+                <div className="py-8 text-center"><Loader2 className="w-6 h-6 animate-spin mx-auto text-[#1A1A1A]" /></div>
               ) : hasRepProfile ? (
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)]">
+                <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)]">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-foreground">
-                      <UserCheck className="w-5 h-5 text-gold" /> Your Profile
+                      <UserCheck className="w-5 h-5 text-[#1A1A1A]" /> Your Profile
                     </CardTitle>
                     <p className="text-xs text-muted-foreground">Your details are linked to all submissions. Edit anytime — we'll be notified of changes.</p>
                   </CardHeader>
@@ -1517,10 +1517,10 @@ const DeveloperPortal = () => {
                         </div>
                         <div className="flex gap-3">
                           <Button onClick={handleSaveProfile} disabled={savingProfile}
-                            className="flex-1 bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border border-gold/40 text-foreground font-bold">
+                            className="flex-1 bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border border-[#B89555]/40 text-foreground font-bold">
                             {savingProfile ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Saving...</> : 'Save Changes'}
                           </Button>
-                          <Button variant="outline" onClick={() => setEditingProfile(false)} className="border-gold/30">Cancel</Button>
+                          <Button variant="outline" onClick={() => setEditingProfile(false)} className="border-[#B89555]/30">Cancel</Button>
                         </div>
                       </div>
                     ) : (
@@ -1562,13 +1562,13 @@ const DeveloperPortal = () => {
                           </div>
                         </div>
                         <div className="flex gap-3 items-center">
-                          <Button variant="outline" onClick={handleStartEditProfile} className="border-gold/30">
+                          <Button variant="outline" onClick={handleStartEditProfile} className="border-[#B89555]/30">
                             Edit Profile
                           </Button>
                         </div>
 
                         {/* On-Leave Toggle */}
-                        <div className="p-4 rounded-xl border border-gold/20 bg-card space-y-3">
+                        <div className="p-4 rounded-xl border border-[#B89555]/20 bg-card space-y-3">
                           <div className="flex items-center justify-between">
                             <div>
                               <p className="text-sm font-semibold text-foreground">On Leave Status</p>
@@ -1577,7 +1577,7 @@ const DeveloperPortal = () => {
                             <Button
                               size="sm"
                               variant={(repProfile as any)?.is_on_leave ? "default" : "outline"}
-                              className={(repProfile as any)?.is_on_leave ? "bg-amber-500 text-white hover:bg-amber-600" : "border-gold/30"}
+                              className={(repProfile as any)?.is_on_leave ? "bg-amber-500 text-white hover:bg-amber-600" : "border-[#B89555]/30"}
                               onClick={async () => {
                                 const newVal = !(repProfile as any)?.is_on_leave;
                                 try {
@@ -1627,7 +1627,7 @@ const DeveloperPortal = () => {
                         </div>
 
                         {!isRepApproved && (
-                          <div className="bg-gold/10 border border-gold/30 rounded-xl p-3 text-sm text-stone-700">
+                          <div className="bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-xl p-3 text-sm text-stone-700">
                             Your registration is under review. Once approved, you'll be able to request briefings and send messages directly.
                           </div>
                         )}
@@ -1654,16 +1654,16 @@ const DeveloperPortal = () => {
                   developerName={repProfile!.developer_name}
                 />
                 {myBriefings && myBriefings.length > 0 && (
-                  <Card className="border-2 border-gold/30">
+                  <Card className="border-2 border-[#B89555]/30">
                     <CardHeader>
                       <CardTitle className="text-sm flex items-center gap-2 text-foreground">
-                        <ClipboardList className="w-4 h-4 text-gold" /> Your Briefing Requests
+                        <ClipboardList className="w-4 h-4 text-[#1A1A1A]" /> Your Briefing Requests
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2">
                         {myBriefings.map((b: any) => (
-                          <div key={b.id} className="flex items-center justify-between p-3 rounded-xl border border-gold/20 bg-card">
+                          <div key={b.id} className="flex items-center justify-between p-3 rounded-xl border border-[#B89555]/20 bg-card">
                             <div>
                               <h4 className="font-semibold text-sm text-foreground">{b.project_name}</h4>
                               <p className="text-xs text-muted-foreground">
@@ -1693,10 +1693,10 @@ const DeveloperPortal = () => {
 
             {/* AGREEMENTS TAB */}
             <TabsContent value="agreements" className="mt-6">
-              <Card className="border-2 border-gold/30">
+              <Card className="border-2 border-[#B89555]/30">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-foreground">
-                    <FileSignature className="w-5 h-5 text-gold" /> Your Agreements & Documents
+                    <FileSignature className="w-5 h-5 text-[#1A1A1A]" /> Your Agreements & Documents
                   </CardTitle>
                   <p className="text-sm text-muted-foreground">Documents assigned to you for review or signature.</p>
                 </CardHeader>
@@ -1705,7 +1705,7 @@ const DeveloperPortal = () => {
                     <ScrollArea className="h-[400px]">
                       <div className="space-y-3">
                         {myAgreements.map((a: any) => (
-                          <div key={a.id} className="flex items-center justify-between p-4 rounded-xl border border-gold/20 bg-card">
+                          <div key={a.id} className="flex items-center justify-between p-4 rounded-xl border border-[#B89555]/20 bg-card">
                             <div>
                               <h4 className="font-semibold text-foreground">{a.title}</h4>
                               <p className="text-xs text-muted-foreground">{format(new Date(a.created_at), "MMM d, yyyy")}</p>
@@ -1733,10 +1733,10 @@ const DeveloperPortal = () => {
 
             {/* TASKS TAB */}
             <TabsContent value="tasks" className="mt-6">
-              <Card className="border-2 border-gold/30">
+              <Card className="border-2 border-[#B89555]/30">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-foreground">
-                    <ListTodo className="w-5 h-5 text-gold" /> Your Tasks
+                    <ListTodo className="w-5 h-5 text-[#1A1A1A]" /> Your Tasks
                   </CardTitle>
                   <p className="text-sm text-muted-foreground">Tasks assigned to you by the team.</p>
                 </CardHeader>
@@ -1745,7 +1745,7 @@ const DeveloperPortal = () => {
                     <ScrollArea className="h-[400px]">
                       <div className="space-y-3">
                         {myTasks.map((t: any) => (
-                          <div key={t.id} className="flex items-center justify-between p-4 rounded-xl border border-gold/20 bg-card">
+                          <div key={t.id} className="flex items-center justify-between p-4 rounded-xl border border-[#B89555]/20 bg-card">
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2">
                                 <h4 className="font-semibold text-foreground truncate">{t.title}</h4>
@@ -1783,10 +1783,10 @@ const DeveloperPortal = () => {
             {isOwner && ownerSkipMode && (
               <TabsContent value="manage" className="mt-6 space-y-6">
                 {/* Launches & Events Management */}
-                <Card className="border-2 border-gold/30">
+                <Card className="border-2 border-[#B89555]/30">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-foreground">
-                      <Settings className="w-5 h-5 text-gold" /> Manage Launches & Events
+                      <Settings className="w-5 h-5 text-[#1A1A1A]" /> Manage Launches & Events
                     </CardTitle>
                     <p className="text-sm text-muted-foreground">Search, filter, hide/show, and assign brokers to submissions.</p>
                   </CardHeader>
@@ -1810,7 +1810,7 @@ const DeveloperPortal = () => {
                     </div>
 
                     {manageDateFilter && (
-                      <Button size="sm" variant="outline" onClick={() => setManageDateFilter("")} className="border-gold/30">
+                      <Button size="sm" variant="outline" onClick={() => setManageDateFilter("")} className="border-[#B89555]/30">
                         <X className="w-3 h-3 mr-1" /> Clear date filter
                       </Button>
                     )}
@@ -1819,17 +1819,17 @@ const DeveloperPortal = () => {
                       <ScrollArea className="h-[400px]">
                         <div className="space-y-3">
                           {filteredSubmissions.map((s: any) => (
-                            <div key={s.id} className={`p-4 rounded-xl border bg-card ${s.is_hidden ? 'opacity-50 border-muted' : 'border-gold/20'}`}>
+                            <div key={s.id} className={`p-4 rounded-xl border bg-card ${s.is_hidden ? 'opacity-50 border-muted' : 'border-[#B89555]/20'}`}>
                               <div className="flex items-start justify-between gap-3">
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center gap-2 mb-1">
                                     <h4 className="font-semibold text-foreground text-sm">{s.event_title}</h4>
-                                    <Badge className={s.submission_subtype === 'launch' ? 'bg-blue-500/20 text-blue-700' : 'bg-gold/20 text-gold'}>
+                                    <Badge className={s.submission_subtype === 'launch' ? 'bg-blue-500/20 text-blue-700' : 'bg-[#EFE6D6]/20 text-[#1A1A1A]'}>
                                       {s.submission_subtype === 'launch' ? 'Launch' : 'Event'}
                                     </Badge>
                                     {s.is_hidden && <Badge className="bg-muted text-muted-foreground text-[10px]">Hidden</Badge>}
                                   </div>
-                                  <p className="text-xs text-gold font-medium">{s.developer_name}</p>
+                                  <p className="text-xs text-[#1A1A1A] font-medium">{s.developer_name}</p>
                                   {s.event_date && (
                                     <p className="text-xs text-muted-foreground mt-1">
                                       {format(new Date(s.event_date), "EEEE, MMM d, yyyy 'at' h:mm a")}
@@ -1845,7 +1845,7 @@ const DeveloperPortal = () => {
                                     <div className="flex flex-wrap gap-1 mt-2">
                                       {(s.event_files as any[]).map((f: any, idx: number) => (
                                         <a key={idx} href={f.url} target="_blank" rel="noopener noreferrer"
-                                          className="text-[10px] text-gold hover:underline flex items-center gap-1">
+                                          className="text-[10px] text-[#1A1A1A] hover:underline flex items-center gap-1">
                                           <FileText className="w-3 h-3" /> {f.name}
                                         </a>
                                       ))}
@@ -1860,7 +1860,7 @@ const DeveloperPortal = () => {
                                   <Button
                                     size="sm"
                                     variant="outline"
-                                    className="border-gold/30 text-xs"
+                                    className="border-[#B89555]/30 text-xs"
                                     onClick={() => handleToggleHide(s.id, s.is_hidden)}
                                   >
                                     {s.is_hidden ? <><Eye className="w-3 h-3 mr-1" /> Show</> : <><EyeOff className="w-3 h-3 mr-1" /> Hide</>}
@@ -1881,10 +1881,10 @@ const DeveloperPortal = () => {
                 </Card>
 
                 {/* Developer Representative Management */}
-                <Card className="border-2 border-gold/30">
+                <Card className="border-2 border-[#B89555]/30">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-foreground">
-                      <Users className="w-5 h-5 text-gold" /> Manage Registered Developers
+                      <Users className="w-5 h-5 text-[#1A1A1A]" /> Manage Registered Developers
                     </CardTitle>
                     <p className="text-sm text-muted-foreground">Toggle auto-approve, restrict access, or review developer representatives.</p>
                   </CardHeader>
@@ -1893,11 +1893,11 @@ const DeveloperPortal = () => {
                       <ScrollArea className="h-[400px]">
                         <div className="space-y-3">
                           {allReps.map((rep: any) => (
-                            <div key={rep.id} className="p-4 rounded-xl border border-gold/20 bg-card">
+                            <div key={rep.id} className="p-4 rounded-xl border border-[#B89555]/20 bg-card">
                               <div className="flex items-start justify-between gap-3">
                                 <div className="flex-1 min-w-0">
                                   <h4 className="font-semibold text-foreground text-sm">{rep.full_name}</h4>
-                                  <p className="text-xs text-gold font-medium">{rep.developer_name}</p>
+                                  <p className="text-xs text-[#1A1A1A] font-medium">{rep.developer_name}</p>
                                   <p className="text-xs text-muted-foreground">
                                     {rep.email} · {rep.role?.replace(/_/g, ' ')}
                                   </p>
@@ -1915,7 +1915,7 @@ const DeveloperPortal = () => {
                                   <Button
                                     size="sm"
                                     variant="outline"
-                                    className="border-gold/30 text-xs"
+                                    className="border-[#B89555]/30 text-xs"
                                     onClick={() => handleToggleAutoApprove(rep.id, !!rep.auto_approve_uploads)}
                                   >
                                     {rep.auto_approve_uploads
@@ -1954,14 +1954,14 @@ const DeveloperPortal = () => {
 
                 {/* Launch Interests — collapsible */}
                 <Collapsible open={interestExpanded} onOpenChange={setInterestExpanded}>
-                  <Card className="border-2 border-gold/30">
+                  <Card className="border-2 border-[#B89555]/30">
                     <CollapsibleTrigger asChild>
-                      <CardHeader className="cursor-pointer hover:bg-gold/5 transition-colors rounded-t-xl">
+                      <CardHeader className="cursor-pointer hover:bg-[#EFE6D6]/5 transition-colors rounded-t-xl">
                         <CardTitle className="flex items-center justify-between text-foreground">
                           <span className="flex items-center gap-2">
-                            <Star className="w-5 h-5 text-gold" /> Launch Interests
+                            <Star className="w-5 h-5 text-[#1A1A1A]" /> Launch Interests
                             {allInterests && allInterests.length > 0 && (
-                              <Badge className="bg-gold/20 text-gold ml-2">{allInterests.length}</Badge>
+                              <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] ml-2">{allInterests.length}</Badge>
                             )}
                           </span>
                           <span className="text-xs text-muted-foreground">{interestExpanded ? 'Collapse' : 'Expand'}</span>
@@ -1974,11 +1974,11 @@ const DeveloperPortal = () => {
                           <ScrollArea className="h-[300px]">
                             <div className="space-y-3">
                               {allInterests.map((i: any) => (
-                                <div key={i.id} className="p-4 rounded-xl border border-gold/20 bg-card">
+                                <div key={i.id} className="p-4 rounded-xl border border-[#B89555]/20 bg-card">
                                   <div className="flex items-start justify-between gap-3">
                                     <div>
                                       <h4 className="font-semibold text-foreground text-sm">{i.event_title}</h4>
-                                      <p className="text-xs text-gold">{i.developer_name}</p>
+                                      <p className="text-xs text-[#1A1A1A]">{i.developer_name}</p>
                                       <p className="text-xs text-muted-foreground mt-1">
                                         {i.user_name} · {i.user_email}
                                         {i.user_phone && ` · ${i.user_phone}`}
@@ -1989,7 +1989,7 @@ const DeveloperPortal = () => {
                                     <Badge className={
                                       i.interest_type === 'eoi' ? 'bg-emerald-500/20 text-emerald-700' :
                                       i.interest_type === 'private_tour' ? 'bg-blue-500/20 text-blue-700' :
-                                      'bg-gold/20 text-gold'
+                                      'bg-[#EFE6D6]/20 text-[#1A1A1A]'
                                     }>{i.interest_type === 'eoi' ? 'EOI' : i.interest_type === 'private_tour' ? 'Private Tour' : 'General'}</Badge>
                                   </div>
                                 </div>
@@ -2010,27 +2010,27 @@ const DeveloperPortal = () => {
             )}
 
             <TabsContent value="listings" className="mt-6">
-              <Card className="border-2 border-gold/30">
+              <Card className="border-2 border-[#B89555]/30">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-foreground">
-                    <Eye className="w-5 h-5 text-gold" /> Check Your Listings
+                    <Eye className="w-5 h-5 text-[#1A1A1A]" /> Check Your Listings
                   </CardTitle>
                   <p className="text-sm text-muted-foreground">View your projects on the website. If anything is incorrect, let us know.</p>
                 </CardHeader>
                 <CardContent>
                   {loadingProjects ? (
-                    <div className="py-8 text-center"><Loader2 className="w-6 h-6 animate-spin mx-auto text-gold" /></div>
+                    <div className="py-8 text-center"><Loader2 className="w-6 h-6 animate-spin mx-auto text-[#1A1A1A]" /></div>
                   ) : myProjects && myProjects.filter((p: any) => p.status === 'approved').length > 0 ? (
                     <div className="space-y-3">
                       {myProjects.filter((p: any) => p.status === 'approved').map((p: any) => (
-                        <div key={p.id} className="flex items-center justify-between p-4 rounded-xl border border-gold/20 bg-card">
+                        <div key={p.id} className="flex items-center justify-between p-4 rounded-xl border border-[#B89555]/20 bg-card">
                           <div>
                             <h4 className="font-semibold text-foreground">{p.project_name}</h4>
                             <p className="text-xs text-muted-foreground">Approved · {format(new Date(p.created_at), "MMM d, yyyy")}</p>
                           </div>
                           <div className="flex gap-2">
                             <Link to={`/properties?search=${encodeURIComponent(p.project_name)}`}>
-                              <Button size="sm" variant="outline" className="border-gold/30">
+                              <Button size="sm" variant="outline" className="border-[#B89555]/30">
                                 <ExternalLink className="w-3.5 h-3.5 mr-1.5" /> View on Site
                               </Button>
                             </Link>
@@ -2064,7 +2064,7 @@ const DeveloperPortal = () => {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2">
-              <ClipboardList className="w-5 h-5 text-gold" /> Session Summary
+              <ClipboardList className="w-5 h-5 text-[#1A1A1A]" /> Session Summary
             </AlertDialogTitle>
             <AlertDialogDescription asChild>
               <div className="space-y-3 text-sm">
@@ -2116,7 +2116,7 @@ const DeveloperPortal = () => {
                   setEndingSession(false);
                 }
               }}
-              className="bg-gold text-[#1A1A1A] hover:bg-gold/90"
+              className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
             >
               {endingSession ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Ending...</> : "Confirm End Session"}
             </AlertDialogAction>
@@ -2129,7 +2129,7 @@ const DeveloperPortal = () => {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Star className="w-5 h-5 text-gold" /> Register Interest
+              <Star className="w-5 h-5 text-[#1A1A1A]" /> Register Interest
             </DialogTitle>
             <DialogDescription>
               {selectedEvent?.event_title} by {selectedEvent?.developer_name}
@@ -2139,21 +2139,21 @@ const DeveloperPortal = () => {
             <div className="space-y-3">
               <Label className="text-sm font-semibold text-foreground">What type of interest?</Label>
               <RadioGroup value={interestType} onValueChange={setInterestType} className="space-y-2">
-                <div className="flex items-center space-x-3 p-3 rounded-lg border border-gold/20 hover:border-gold/40 transition-colors">
+                <div className="flex items-center space-x-3 p-3 rounded-lg border border-[#B89555]/20 hover:border-[#B89555]/40 transition-colors">
                   <RadioGroupItem value="general" id="interest-general" />
                   <label htmlFor="interest-general" className="flex-1 cursor-pointer">
                     <p className="text-sm font-medium text-foreground">General Interest</p>
                     <p className="text-xs text-muted-foreground">Keep me updated about this launch</p>
                   </label>
                 </div>
-                <div className="flex items-center space-x-3 p-3 rounded-lg border border-gold/20 hover:border-gold/40 transition-colors">
+                <div className="flex items-center space-x-3 p-3 rounded-lg border border-[#B89555]/20 hover:border-[#B89555]/40 transition-colors">
                   <RadioGroupItem value="private_tour" id="interest-tour" />
                   <label htmlFor="interest-tour" className="flex-1 cursor-pointer">
                     <p className="text-sm font-medium text-foreground">Private Tour</p>
                     <p className="text-xs text-muted-foreground">I'd like a private showing for my clients</p>
                   </label>
                 </div>
-                <div className="flex items-center space-x-3 p-3 rounded-lg border border-gold/20 hover:border-gold/40 transition-colors">
+                <div className="flex items-center space-x-3 p-3 rounded-lg border border-[#B89555]/20 hover:border-[#B89555]/40 transition-colors">
                   <RadioGroupItem value="eoi" id="interest-eoi" />
                   <label htmlFor="interest-eoi" className="flex-1 cursor-pointer">
                     <p className="text-sm font-medium text-foreground">Expression of Interest (EOI)</p>
@@ -2171,7 +2171,7 @@ const DeveloperPortal = () => {
               <Textarea value={interestNotes} onChange={(e) => setInterestNotes(e.target.value)} placeholder="Any additional details..." rows={3} />
             </div>
             <Button onClick={handleRegisterInterest} disabled={submittingInterest}
-              className="w-full bg-gold text-[#1A1A1A] hover:bg-gold/90 font-bold h-11">
+              className="w-full bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90 font-bold h-11">
               {submittingInterest ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Submitting...</> : <><Star className="w-4 h-4 mr-2" /> Confirm Interest</>}
             </Button>
           </div>

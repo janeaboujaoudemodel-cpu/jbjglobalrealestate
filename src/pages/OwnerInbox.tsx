@@ -47,7 +47,7 @@ const channelIcons: Record<string, React.ReactNode> = {
   email_hostinger: <Mail className="h-4 w-4 text-blue-500" />,
   instagram: <Instagram className="h-4 w-4 text-pink-500" />,
   facebook: <Facebook className="h-4 w-4 text-blue-600" />,
-  website_chat: <Globe className="h-4 w-4 text-gold" />,
+  website_chat: <Globe className="h-4 w-4 text-[#1A1A1A]" />,
   voice: <Mic className="h-4 w-4 text-purple-500" />,
 };
 
@@ -58,7 +58,7 @@ const channelTabs: { value: ChannelType | 'all'; label: string; icon: React.Reac
   { value: 'email_hostinger', label: 'Hostinger', icon: <Mail className="h-4 w-4 text-blue-500" /> },
   { value: 'instagram', label: 'Instagram', icon: <Instagram className="h-4 w-4 text-pink-500" /> },
   { value: 'facebook', label: 'Facebook', icon: <Facebook className="h-4 w-4 text-blue-600" /> },
-  { value: 'website_chat', label: 'Website', icon: <Globe className="h-4 w-4 text-gold" /> },
+  { value: 'website_chat', label: 'Website', icon: <Globe className="h-4 w-4 text-[#1A1A1A]" /> },
   { value: 'voice', label: 'Voice', icon: <Mic className="h-4 w-4 text-purple-500" /> },
 ];
 
@@ -159,10 +159,10 @@ export default function OwnerInbox() {
             animate={{ opacity: 1, y: 0 }}
             className="mb-6"
           >
-            <div className="flex items-center justify-between flex-wrap gap-4 bg-[#FDFBF7]/80 backdrop-blur-sm border border-gold/20 rounded-2xl p-4 shadow-sm">
+            <div className="flex items-center justify-between flex-wrap gap-4 bg-[#FDFBF7]/80 backdrop-blur-sm border border-[#B89555]/20 rounded-2xl p-4 shadow-sm">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border-2 border-gold/30">
-                  <MessageSquare className="h-6 w-6 text-gold" />
+                <div className="p-3 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border-2 border-[#B89555]/30">
+                  <MessageSquare className="h-6 w-6 text-[#1A1A1A]" />
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-[#1A1A1A]">Unified Inbox</h1>
@@ -176,7 +176,7 @@ export default function OwnerInbox() {
                   size="sm"
                   onClick={() => refetchThreads()}
                   disabled={threadsLoading}
-                  className="border-gold/30"
+                  className="border-[#B89555]/30"
                 >
                   <RefreshCw className={`h-4 w-4 mr-2 ${threadsLoading ? 'animate-spin' : ''}`} />
                   Refresh
@@ -203,7 +203,7 @@ export default function OwnerInbox() {
           </div>
 
           {/* Channel Tabs - Header Bar with Badges */}
-          <div className="flex items-center gap-1 mb-4 overflow-x-auto pb-1 border-b-2 border-gold/10">
+          <div className="flex items-center gap-1 mb-4 overflow-x-auto pb-1 border-b-2 border-[#B89555]/10">
             {channelTabs.map((tab) => {
               const isActive = filters.channel === tab.value;
               const unreadCount = tab.value === 'all' ? totalUnreadAll : (channelUnreadCounts[tab.value] || 0);
@@ -213,7 +213,7 @@ export default function OwnerInbox() {
                   onClick={() => handleChannelTabClick(tab.value)}
                   className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all duration-200 border-b-2 -mb-[2px] rounded-t-lg ${
                     isActive
-                      ? 'border-gold bg-gold/10 text-foreground font-bold shadow-sm'
+                      ? 'border-[#B89555] bg-[#EFE6D6]/10 text-foreground font-bold shadow-sm'
                       : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50'
                   }`}
                 >
@@ -221,7 +221,7 @@ export default function OwnerInbox() {
                   <span>{tab.label}</span>
                   {unreadCount > 0 && (
                     <span className={`ml-1 min-w-[20px] h-5 px-1.5 rounded-full text-xs font-bold flex items-center justify-center ${
-                      isActive ? 'bg-gold text-[#1A1A1A]' : 'bg-muted text-muted-foreground'
+                      isActive ? 'bg-[#EFE6D6] text-[#1A1A1A]' : 'bg-muted text-muted-foreground'
                     }`}>
                       {unreadCount}
                     </span>
@@ -239,7 +239,7 @@ export default function OwnerInbox() {
                 placeholder="Search contacts..."
                 value={filters.search}
                 onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-                className="pl-10 border-gold/30"
+                className="pl-10 border-[#B89555]/30"
               />
             </div>
           </div>
@@ -253,7 +253,7 @@ export default function OwnerInbox() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4" style={{ height: 'calc(100vh - 420px)', minHeight: '400px' }}>
             {/* Thread List */}
             <div className="lg:col-span-1 min-h-0 overflow-hidden">
-              <Card className="border border-gold/20 bg-[#FDFBF7]/90 backdrop-blur-sm h-full overflow-hidden shadow-sm">
+              <Card className="border border-[#B89555]/20 bg-[#FDFBF7]/90 backdrop-blur-sm h-full overflow-hidden shadow-sm">
                 <ScrollArea className="h-full">
                   {threadsLoading ? (
                     <div className="p-4 space-y-3">
@@ -298,7 +298,7 @@ export default function OwnerInbox() {
                   onClose={() => setSelectedThread(null)}
                 />
               ) : (
-                <Card className="border border-gold/20 bg-[#FDFBF7]/90 backdrop-blur-sm h-full flex items-center justify-center shadow-sm">
+                <Card className="border border-[#B89555]/20 bg-[#FDFBF7]/90 backdrop-blur-sm h-full flex items-center justify-center shadow-sm">
                   <div className="text-center p-8">
                     <MessageSquare className="h-16 w-16 text-[#1A1A1A]/70 mx-auto mb-4" />
                     <p className="text-[#1A1A1A]/70 font-medium">Select a conversation</p>
@@ -331,7 +331,7 @@ function StatsCard({
   onClick: () => void;
 }) {
   const baseVariants = {
-    default: "border-gold/30 bg-[#FDFBF7]",
+    default: "border-[#B89555]/30 bg-[#FDFBF7]",
     warning: "border-yellow-500/30 bg-yellow-50",
     danger: "border-red-500/30 bg-red-50",
     info: "border-blue-500/30 bg-blue-50",
@@ -339,7 +339,7 @@ function StatsCard({
   };
 
   const activeVariants = {
-    default: "border-gold bg-gold/15 shadow-[0_4px_16px_rgba(200,167,102,0.4)] scale-[1.03]",
+    default: "border-[#B89555] bg-[#EFE6D6]/15 shadow-[0_4px_16px_rgba(200,167,102,0.4)] scale-[1.03]",
     warning: "border-yellow-500 bg-yellow-100 shadow-[0_4px_16px_rgba(234,179,8,0.4)] scale-[1.03]",
     danger: "border-red-500 bg-red-100 shadow-[0_4px_16px_rgba(239,68,68,0.4)] scale-[1.03]",
     info: "border-blue-500 bg-blue-100 shadow-[0_4px_16px_rgba(59,130,246,0.4)] scale-[1.03]",
@@ -347,7 +347,7 @@ function StatsCard({
   };
 
   const iconColors = {
-    default: "text-gold",
+    default: "text-[#1A1A1A]",
     warning: "text-yellow-600",
     danger: "text-red-600",
     info: "text-blue-600",
@@ -394,18 +394,18 @@ function ThreadListItem({
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className={`p-3 cursor-pointer transition-all hover:bg-gold/5 ${
-        isSelected ? 'bg-gold/10 border-l-4 border-l-gold' : ''
+      className={`p-3 cursor-pointer transition-all hover:bg-[#EFE6D6]/5 ${
+        isSelected ? 'bg-[#EFE6D6]/10 border-l-4 border-l-gold' : ''
       }`}
       onClick={onClick}
     >
       <div className="flex items-start gap-3">
         <div className="relative">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center border border-gold/20">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center border border-[#B89555]/20">
             {thread.contact_avatar_url ? (
               <img src={thread.contact_avatar_url} alt="" className="w-full h-full rounded-full object-cover" />
             ) : (
-              <User className="h-5 w-5 text-gold" />
+              <User className="h-5 w-5 text-[#1A1A1A]" />
             )}
           </div>
           <div className="absolute -bottom-1 -right-1 p-0.5 bg-[#FDFBF7] rounded-full">
@@ -419,7 +419,7 @@ function ThreadListItem({
               {thread.contact_name || thread.contact_identifier}
             </span>
             {thread.unread_count > 0 && (
-              <span className="flex-shrink-0 w-5 h-5 rounded-full bg-gold text-[#1A1A1A] text-xs font-bold flex items-center justify-center">
+              <span className="flex-shrink-0 w-5 h-5 rounded-full bg-[#EFE6D6] text-[#1A1A1A] text-xs font-bold flex items-center justify-center">
                 {thread.unread_count}
               </span>
             )}

@@ -366,7 +366,7 @@ export default function ExecutiveAssistant() {
     return (
       <MainLayout>
         <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
-          <Loader2 className="h-8 w-8 animate-spin text-gold" />
+          <Loader2 className="h-8 w-8 animate-spin text-[#1A1A1A]" />
         </div>
       </MainLayout>
     );
@@ -385,10 +385,10 @@ export default function ExecutiveAssistant() {
             animate={{ opacity: 1, y: 0 }}
             className="mb-8"
           >
-            <div className="flex items-center justify-between flex-wrap gap-4 bg-[#FDFBF7]/80 backdrop-blur-sm border-2 border-gold/30 rounded-2xl p-4 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+            <div className="flex items-center justify-between flex-wrap gap-4 bg-[#FDFBF7]/80 backdrop-blur-sm border-2 border-[#B89555]/30 rounded-2xl p-4 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
               <div className="flex items-center gap-4">
-                <div className="p-4 rounded-2xl bg-gradient-to-br from-gold/20 to-gold/5 border-2 border-gold/30">
-                  <LayoutDashboard className="h-8 w-8 text-gold" />
+                <div className="p-4 rounded-2xl bg-gradient-to-br from-gold/20 to-gold/5 border-2 border-[#B89555]/30">
+                  <LayoutDashboard className="h-8 w-8 text-[#1A1A1A]" />
                 </div>
                 <div>
                   <h1 className="text-3xl font-bold text-[#1A1A1A]">JBJ Admin Command Center</h1>
@@ -400,11 +400,11 @@ export default function ExecutiveAssistant() {
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => setShowCommandPalette(true)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A]/70 hover:border-gold/50 transition-all"
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A]/70 hover:border-[#B89555]/50 transition-all"
                 >
-                  <Search className="h-4 w-4 text-gold" />
+                  <Search className="h-4 w-4 text-[#1A1A1A]" />
                   <span className="text-sm">Search across all tools...</span>
-                  <kbd className="ml-2 px-2 py-0.5 bg-gold/10 text-gold text-xs rounded font-mono">⌘K</kbd>
+                  <kbd className="ml-2 px-2 py-0.5 bg-[#EFE6D6]/10 text-[#1A1A1A] text-xs rounded font-mono">⌘K</kbd>
                 </button>
                 <Button
                   onClick={() => setIsChatOpen(true)}
@@ -419,15 +419,15 @@ export default function ExecutiveAssistant() {
 
           {/* Stats Cards - Premium White/Gold Theme */}
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-            <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+            <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-[#1A1A1A]/70">Total</p>
                     <p className="text-2xl font-bold text-[#1A1A1A]">{stats.total}</p>
                   </div>
-                  <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
-                    <Mail className="h-5 w-5 text-gold" />
+                  <div className="w-10 h-10 rounded-lg bg-[#EFE6D6]/10 flex items-center justify-center">
+                    <Mail className="h-5 w-5 text-[#1A1A1A]" />
                   </div>
                 </div>
               </CardContent>
@@ -492,20 +492,20 @@ export default function ExecutiveAssistant() {
 
           {/* Main Tabs - Premium Theme */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <TabsList className="bg-[#FDFBF7]/80 border-2 border-gold/30 p-1 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
-              <TabsTrigger value="inbox" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
+            <TabsList className="bg-[#FDFBF7]/80 border-2 border-[#B89555]/30 p-1 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+              <TabsTrigger value="inbox" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
                 <Mail className="h-4 w-4 mr-2" />
                 Inbox
               </TabsTrigger>
-              <TabsTrigger value="responses" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
+              <TabsTrigger value="responses" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
                 <Brain className="h-4 w-4 mr-2" />
                 AI Responses
               </TabsTrigger>
-              <TabsTrigger value="rules" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
+              <TabsTrigger value="rules" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
                 <Filter className="h-4 w-4 mr-2" />
                 Rules
               </TabsTrigger>
-              <TabsTrigger value="integrations" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
+              <TabsTrigger value="integrations" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
                 <Settings className="h-4 w-4 mr-2" />
                 Integrations
               </TabsTrigger>
@@ -515,7 +515,7 @@ export default function ExecutiveAssistant() {
             <TabsContent value="inbox" className="space-y-4">
               <div className="flex items-center gap-2 flex-wrap">
                 <Badge
-                  className={`cursor-pointer px-4 py-2 ${selectedCategory === 'all' ? 'bg-gold text-[#1A1A1A]' : 'bg-[#FDFBF7] text-[#1A1A1A] border-2 border-gold/30'}`}
+                  className={`cursor-pointer px-4 py-2 ${selectedCategory === 'all' ? 'bg-[#EFE6D6] text-[#1A1A1A]' : 'bg-[#FDFBF7] text-[#1A1A1A] border-2 border-[#B89555]/30'}`}
                   onClick={() => setSelectedCategory('all')}
                 >
                   All ({stats.total})
@@ -551,13 +551,13 @@ export default function ExecutiveAssistant() {
                   {filteredComms.map((comm) => (
                     <Card
                       key={comm.id}
-                      className={`cursor-pointer hover:border-gold/50 transition-all bg-[#FDFBF7] border-2 ${!comm.is_read ? 'border-gold/40 shadow-[0_4px_20px_rgba(200,167,102,0.15)]' : 'border-gold/20'}`}
+                      className={`cursor-pointer hover:border-[#B89555]/50 transition-all bg-[#FDFBF7] border-2 ${!comm.is_read ? 'border-[#B89555]/40 shadow-[0_4px_20px_rgba(200,167,102,0.15)]' : 'border-[#B89555]/20'}`}
                       onClick={() => setSelectedComm(comm)}
                     >
                       <CardContent className="p-4">
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex items-start gap-3">
-                            <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center text-gold">
+                            <div className="w-10 h-10 rounded-full bg-[#EFE6D6]/10 flex items-center justify-center text-[#1A1A1A]">
                               {channelIcons[comm.channel]}
                             </div>
                             <div>
@@ -589,10 +589,10 @@ export default function ExecutiveAssistant() {
 
             {/* Responses Tab */}
             <TabsContent value="responses" className="space-y-6">
-              <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+              <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
                 <CardHeader>
                   <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
-                    <Plus className="h-5 w-5 text-gold" />
+                    <Plus className="h-5 w-5 text-[#1A1A1A]" />
                     Add Response Template
                   </CardTitle>
                   <CardDescription className="text-[#1A1A1A]/70">
@@ -607,13 +607,13 @@ export default function ExecutiveAssistant() {
                         placeholder="e.g., price, availability, viewing"
                         value={newResponseKeywords}
                         onChange={(e) => setNewResponseKeywords(e.target.value)}
-                        className="bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
+                        className="bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
                       />
                     </div>
                     <div className="space-y-2">
                       <Label className="text-[#1A1A1A]">Category Filter (optional)</Label>
                       <Select value={newResponseCategory} onValueChange={(v) => setNewResponseCategory(v as CommCategory)}>
-                        <SelectTrigger className="bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A]">
+                        <SelectTrigger className="bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A]">
                           <SelectValue placeholder="Any category" />
                         </SelectTrigger>
                         <SelectContent>
@@ -631,7 +631,7 @@ export default function ExecutiveAssistant() {
                       placeholder="Enter your response template..."
                       value={newResponseTemplate}
                       onChange={(e) => setNewResponseTemplate(e.target.value)}
-                      className="min-h-[100px] bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
+                      className="min-h-[100px] bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
                     />
                   </div>
                   <div className="flex items-center justify-between">
@@ -653,13 +653,13 @@ export default function ExecutiveAssistant() {
               {/* Existing responses */}
               <div className="grid gap-4">
                 {learnedResponses.map((response) => (
-                  <Card key={response.id} className="bg-[#FDFBF7] border-2 border-gold/30">
+                  <Card key={response.id} className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
                     <CardContent className="p-4">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
                             {response.trigger_keywords.map((kw) => (
-                              <Badge key={kw} variant="outline" className="border-gold/30 text-[#1A1A1A]">{kw}</Badge>
+                              <Badge key={kw} variant="outline" className="border-[#B89555]/30 text-[#1A1A1A]">{kw}</Badge>
                             ))}
                             {response.is_auto_respond && (
                               <Badge className="bg-green-100 text-green-800 border-green-300">Auto-reply</Badge>
@@ -685,10 +685,10 @@ export default function ExecutiveAssistant() {
 
             {/* Rules Tab */}
             <TabsContent value="rules" className="space-y-6">
-              <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+              <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
                 <CardHeader>
                   <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
-                    <Filter className="h-5 w-5 text-gold" />
+                    <Filter className="h-5 w-5 text-[#1A1A1A]" />
                     Add Ignore/Filter Rule
                   </CardTitle>
                 </CardHeader>
@@ -700,13 +700,13 @@ export default function ExecutiveAssistant() {
                         placeholder="e.g., Block marketing emails"
                         value={newRuleName}
                         onChange={(e) => setNewRuleName(e.target.value)}
-                        className="bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A]"
+                        className="bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A]"
                       />
                     </div>
                     <div className="space-y-2">
                       <Label className="text-[#1A1A1A]">Rule Type</Label>
                       <Select value={newRuleType} onValueChange={setNewRuleType}>
-                        <SelectTrigger className="bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A]">
+                        <SelectTrigger className="bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A]">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
@@ -719,7 +719,7 @@ export default function ExecutiveAssistant() {
                     <div className="space-y-2">
                       <Label className="text-[#1A1A1A]">Action</Label>
                       <Select value={newRuleAction} onValueChange={setNewRuleAction}>
-                        <SelectTrigger className="bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A]">
+                        <SelectTrigger className="bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A]">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
@@ -735,7 +735,7 @@ export default function ExecutiveAssistant() {
                       placeholder="Enter value to match..."
                       value={newRuleValue}
                       onChange={(e) => setNewRuleValue(e.target.value)}
-                      className="flex-1 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A]"
+                      className="flex-1 bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A]"
                     />
                     <Button onClick={addIgnoreRule} variant="primary">
                       <Plus className="h-4 w-4 mr-2" />
@@ -748,7 +748,7 @@ export default function ExecutiveAssistant() {
               {/* Existing rules */}
               <div className="grid gap-4">
                 {ignoreRules.map((rule) => (
-                  <Card key={rule.id} className="bg-[#FDFBF7] border-2 border-gold/30">
+                  <Card key={rule.id} className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
                         <div>
@@ -785,7 +785,7 @@ export default function ExecutiveAssistant() {
 
         {/* Communication Detail Dialog */}
         <Dialog open={!!selectedComm} onOpenChange={() => setSelectedComm(null)}>
-          <DialogContent className="max-w-2xl bg-[#FDFBF7] border-2 border-gold/30">
+          <DialogContent className="max-w-2xl bg-[#FDFBF7] border-2 border-[#B89555]/30">
             <DialogHeader>
               <DialogTitle className="text-[#1A1A1A] flex items-center gap-2">
                 {selectedComm && channelIcons[selectedComm.channel]}
@@ -794,7 +794,7 @@ export default function ExecutiveAssistant() {
             </DialogHeader>
             {selectedComm && (
               <div className="space-y-4">
-                <div className="p-4 bg-gradient-to-r from-[#FDFBF7] to-white rounded-lg border border-gold/20">
+                <div className="p-4 bg-gradient-to-r from-[#FDFBF7] to-white rounded-lg border border-[#B89555]/20">
                   <p className="text-[#1A1A1A] whitespace-pre-wrap">{selectedComm.content}</p>
                 </div>
                 
@@ -811,7 +811,7 @@ export default function ExecutiveAssistant() {
                     placeholder="Type your response..."
                     value={humanResponse}
                     onChange={(e) => setHumanResponse(e.target.value)}
-                    className="min-h-[100px] bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A]"
+                    className="min-h-[100px] bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A]"
                   />
                   <Button onClick={handleHumanResponse} variant="primary">
                     <Send className="h-4 w-4 mr-2" />
@@ -819,7 +819,7 @@ export default function ExecutiveAssistant() {
                   </Button>
                 </div>
 
-                <div className="flex items-center gap-2 pt-4 border-t border-gold/20">
+                <div className="flex items-center gap-2 pt-4 border-t border-[#B89555]/20">
                   <span className="text-sm text-[#1A1A1A]/70">Quick actions:</span>
                   <Button
                     variant="secondary"

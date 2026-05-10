@@ -164,8 +164,8 @@ export default function BrokerTraining() {
       {/* Internal Warning Banner */}
       <div className="bg-amber-500/10 border-b border-amber-500/30 py-3">
         <div className="container mx-auto px-4 flex items-center justify-center gap-3">
-          <Lock className="w-4 h-4 text-amber-400" />
-          <span className="text-amber-400 text-sm font-medium">INTERNAL USE ONLY — Broker Training Portal</span>
+          <Lock className="w-4 h-4 text-[#1A1A1A]" />
+          <span className="text-[#1A1A1A] text-sm font-medium">INTERNAL USE ONLY — Broker Training Portal</span>
         </div>
       </div>
 
@@ -174,7 +174,7 @@ export default function BrokerTraining() {
         <div className="container mx-auto px-4">
           <Button 
             variant="ghost" 
-            className="text-gold hover:text-gold-light mb-6"
+            className="text-[#1A1A1A] hover:text-[#1A1A1A]-light mb-6"
             onClick={() => navigate(-1)}
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -183,8 +183,8 @@ export default function BrokerTraining() {
 
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center">
-                <BookOpen className="w-6 h-6 text-gold" />
+              <div className="w-12 h-12 rounded-xl bg-[#EFE6D6]/10 border border-[#B89555]/30 flex items-center justify-center">
+                <BookOpen className="w-6 h-6 text-[#1A1A1A]" />
               </div>
               <div>
                 <h1 className="text-white text-3xl font-bold">
@@ -194,9 +194,9 @@ export default function BrokerTraining() {
               </div>
             </div>
 
-            <div className="bg-zinc-900/50 border border-[#1A1A1A] rounded-xl p-4 min-w-[200px]">
+            <div className="bg-[#FDFBF7]/50 border border-[#1A1A1A] rounded-xl p-4 min-w-[200px]">
               <div className="flex items-center gap-3 mb-2">
-                <Award className="w-5 h-5 text-gold" />
+                <Award className="w-5 h-5 text-[#1A1A1A]" />
                 <span className="text-white font-medium">Your Progress</span>
               </div>
               <Progress value={totalProgress} className="h-2" />
@@ -218,15 +218,15 @@ export default function BrokerTraining() {
                 transition={{ delay: index * 0.1 }}
               >
                 <Card 
-                  className={`bg-zinc-900/50 border-[#1A1A1A] hover:border-gold/30 transition-all cursor-pointer ${
-                    selectedModule?.id === module.id ? "border-gold/50" : ""
+                  className={`bg-[#FDFBF7]/50 border-[#1A1A1A] hover:border-[#B89555]/30 transition-all cursor-pointer ${
+                    selectedModule?.id === module.id ? "border-[#B89555]/50" : ""
                   }`}
                   onClick={() => setSelectedModule(module)}
                 >
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center text-gold">
+                        <div className="w-12 h-12 rounded-xl bg-[#EFE6D6]/10 border border-[#B89555]/30 flex items-center justify-center text-[#1A1A1A]">
                           {module.icon}
                         </div>
                         <div>
@@ -260,7 +260,7 @@ export default function BrokerTraining() {
                     <div className="flex items-center justify-between">
                       <div className="flex flex-wrap gap-2">
                         {module.topics.slice(0, 2).map((topic, i) => (
-                          <span key={i} className="text-xs bg-zinc-800 text-white/70 px-2 py-1 rounded">
+                          <span key={i} className="text-xs bg-[#F7F2EA] text-white/70 px-2 py-1 rounded">
                             {topic}
                           </span>
                         ))}
@@ -268,7 +268,7 @@ export default function BrokerTraining() {
                           <span className="text-xs text-white/90">+{module.topics.length - 2} more</span>
                         )}
                       </div>
-                      <Button size="sm" className="bg-gold/10 text-gold hover:bg-gold/20 border border-gold/30">
+                      <Button size="sm" className="bg-[#EFE6D6]/10 text-[#1A1A1A] hover:bg-[#EFE6D6]/20 border border-[#B89555]/30">
                         <Play className="w-3 h-3 mr-1" />
                         Start
                       </Button>
@@ -335,27 +335,27 @@ export default function BrokerTraining() {
       {/* Key Rules */}
       <section className="py-12 border-t border-zinc-900">
         <div className="container mx-auto px-4">
-          <Card className="bg-gradient-to-br from-zinc-900 to-zinc-950 border-gold/20 max-w-3xl mx-auto">
+          <Card className="bg-gradient-to-br from-zinc-900 to-zinc-950 border-[#B89555]/20 max-w-3xl mx-auto">
             <CardContent className="p-8">
               <h3 className="text-white text-xl font-bold mb-6 text-center">Golden Rules for Market Conversations</h3>
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="text-center">
-                  <div className="w-12 h-12 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center mx-auto mb-3">
-                    <span className="text-gold font-bold">1</span>
+                  <div className="w-12 h-12 rounded-full bg-[#EFE6D6]/10 border border-[#B89555]/30 flex items-center justify-center mx-auto mb-3">
+                    <span className="text-[#1A1A1A] font-bold">1</span>
                   </div>
                   <p className="text-white font-medium mb-1">Describe, Don't Predict</p>
                   <p className="text-white/90 text-sm">Explain what data shows, never what will happen</p>
                 </div>
                 <div className="text-center">
-                  <div className="w-12 h-12 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center mx-auto mb-3">
-                    <span className="text-gold font-bold">2</span>
+                  <div className="w-12 h-12 rounded-full bg-[#EFE6D6]/10 border border-[#B89555]/30 flex items-center justify-center mx-auto mb-3">
+                    <span className="text-[#1A1A1A] font-bold">2</span>
                   </div>
                   <p className="text-white font-medium mb-1">Insight, Not Advice</p>
                   <p className="text-white/90 text-sm">Share market context, let clients decide</p>
                 </div>
                 <div className="text-center">
-                  <div className="w-12 h-12 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center mx-auto mb-3">
-                    <span className="text-gold font-bold">3</span>
+                  <div className="w-12 h-12 rounded-full bg-[#EFE6D6]/10 border border-[#B89555]/30 flex items-center justify-center mx-auto mb-3">
+                    <span className="text-[#1A1A1A] font-bold">3</span>
                   </div>
                   <p className="text-white font-medium mb-1">Cite Sources</p>
                   <p className="text-white/90 text-sm">Always reference Open Data origins</p>

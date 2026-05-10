@@ -481,27 +481,27 @@ Requirements:
               animate={{ opacity: 1, scale: 1 }}
               className="max-w-2xl mx-auto text-center"
             >
-              <div className="w-20 h-20 bg-gradient-to-br from-gold/20 to-gold/5 rounded-full flex items-center justify-center mx-auto mb-6 border border-gold/30">
-                <CheckCircle2 className="w-10 h-10 text-gold" />
+              <div className="w-20 h-20 bg-gradient-to-br from-gold/20 to-gold/5 rounded-full flex items-center justify-center mx-auto mb-6 border border-[#B89555]/30">
+                <CheckCircle2 className="w-10 h-10 text-[#1A1A1A]" />
               </div>
               <h1 className="text-3xl font-bold text-white mb-4">Listing Submitted Successfully!</h1>
               <p className="text-[#1A1A1A]/70 mb-8">
                 Thank you for submitting your property listing. Our team will review your submission and 
                 contact you within 24-48 hours to discuss next steps.
               </p>
-              <div className="bg-zinc-900/50 border border-[#1A1A1A] rounded-xl p-6 mb-8 text-left">
-                <h3 className="text-gold font-semibold mb-3">What Happens Next?</h3>
+              <div className="bg-[#FDFBF7]/50 border border-[#1A1A1A] rounded-xl p-6 mb-8 text-left">
+                <h3 className="text-[#1A1A1A] font-semibold mb-3">What Happens Next?</h3>
                 <ul className="space-y-2 text-[#1A1A1A]/70 text-sm">
                   <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-[#1A1A1A] mt-0.5 flex-shrink-0" />
                     <span>Our team will review your listing details and documents</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-[#1A1A1A] mt-0.5 flex-shrink-0" />
                     <span>We'll contact you via your preferred method to discuss pricing strategy</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-[#1A1A1A] mt-0.5 flex-shrink-0" />
                     <span>Once approved, your property will be marketed to qualified buyers</span>
                   </li>
                 </ul>
@@ -543,11 +543,11 @@ Requirements:
         <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-t-2xl">
           <div className="container mx-auto px-4 py-12">
             <div className="max-w-4xl mx-auto text-center">
-              <span className="inline-block px-4 py-1.5 rounded-full bg-[#1A1A1A] text-gold text-sm font-medium mb-4 border border-gold/30">
+              <span className="inline-block px-4 py-1.5 rounded-full bg-[#1A1A1A] text-[#1A1A1A] text-sm font-medium mb-4 border border-[#B89555]/30">
                 Seller Listing Tool
               </span>
               <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-3">
-                List Your Property <span className="text-gold">for Sale</span>
+                List Your Property <span className="text-[#1A1A1A]">for Sale</span>
               </h1>
               <p className="text-[#1A1A1A]/70 mb-6">
                 Complete the form below to submit your property listing. Our team will contact you within 24-48 hours.
@@ -599,7 +599,7 @@ Requirements:
                     currentStep === step.number 
                       ? 'text-[#1A1A1A]' 
                       : currentStep > step.number 
-                        ? 'text-gold' 
+                        ? 'text-[#1A1A1A]' 
                         : 'text-[#1A1A1A]/70'
                   }`}
                   onClick={() => step.number < currentStep && setCurrentStep(step.number)}
@@ -608,7 +608,7 @@ Requirements:
                     currentStep === step.number 
                       ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-[#1A1A1A] text-[#1A1A1A] shadow-lg' 
                       : currentStep > step.number 
-                        ? 'bg-[#FDFBF7] border-gold text-gold'
+                        ? 'bg-[#FDFBF7] border-[#B89555] text-[#1A1A1A]'
                         : 'bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]/70'
                   }`}>
                     {currentStep > step.number ? (
@@ -627,7 +627,7 @@ Requirements:
 
           {/* Form Content - White/Champagne/Gold Theme */}
           <div className="max-w-3xl mx-auto">
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-2xl p-6 md:p-8 shadow-xl">
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30 rounded-2xl p-6 md:p-8 shadow-xl">
               <AnimatePresence mode="wait">
                 {/* Step 1: Seller Details */}
                 {currentStep === 1 && (
@@ -645,32 +645,32 @@ Requirements:
 
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-[#1A1A1A] font-medium">Full Name <span className="text-gold">*</span></Label>
+                        <Label className="text-[#1A1A1A] font-medium">Full Name <span className="text-[#1A1A1A]">*</span></Label>
                         <Input
                           {...form.register("seller_full_name")}
                           placeholder="Enter your full name"
-                          className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-gold mt-1 focus:border-gold"
+                          className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A] mt-1 focus:border-[#B89555]"
                           style={{ textShadow: 'none' }}
                         />
                       </div>
                       <div>
-                        <Label className="text-[#1A1A1A] font-medium">Phone Number <span className="text-gold">*</span></Label>
+                        <Label className="text-[#1A1A1A] font-medium">Phone Number <span className="text-[#1A1A1A]">*</span></Label>
                         <Input
                           {...form.register("seller_phone")}
                           placeholder="+971 50 123 4567"
-                          className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-gold mt-1 focus:border-gold"
+                          className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A] mt-1 focus:border-[#B89555]"
                           style={{ textShadow: 'none' }}
                         />
                       </div>
                     </div>
 
                     <div>
-                      <Label className="text-[#1A1A1A] font-medium">Email Address <span className="text-gold">*</span></Label>
+                      <Label className="text-[#1A1A1A] font-medium">Email Address <span className="text-[#1A1A1A]">*</span></Label>
                       <Input
                         {...form.register("seller_email")}
                         type="email"
                         placeholder="your@email.com"
-                        className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-gold mt-1 focus:border-gold"
+                        className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A] mt-1 focus:border-[#B89555]"
                         style={{ textShadow: 'none' }}
                       />
                     </div>
@@ -713,7 +713,7 @@ Requirements:
                     </div>
 
                     <div>
-                      <Label className="text-[#1A1A1A] font-medium mb-3 block">Seller Type <span className="text-gold">*</span></Label>
+                      <Label className="text-[#1A1A1A] font-medium mb-3 block">Seller Type <span className="text-[#1A1A1A]">*</span></Label>
                       <RadioGroup 
                         value={form.watch("seller_type")} 
                         onValueChange={(v) => form.setValue("seller_type", v)}
@@ -730,7 +730,7 @@ Requirements:
                             <RadioGroupItem 
                               value={option.value} 
                               id={option.value}
-                              className="border-gold/50"
+                              className="border-[#B89555]/50"
                             />
                             <Label htmlFor={option.value} className="ml-2 text-[#1A1A1A]/70 cursor-pointer">
                               {option.label}
@@ -758,7 +758,7 @@ Requirements:
 
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-[#1A1A1A] font-medium">Property Type <span className="text-gold">*</span></Label>
+                        <Label className="text-[#1A1A1A] font-medium">Property Type <span className="text-[#1A1A1A]">*</span></Label>
                         <Select
                           value={form.watch("property_type")}
                           onValueChange={(v) => form.setValue("property_type", v)}
@@ -778,11 +778,11 @@ Requirements:
                         </Select>
                       </div>
                       <div>
-                        <Label className="text-[#1A1A1A] font-medium">Location / Area <span className="text-gold">*</span></Label>
+                        <Label className="text-[#1A1A1A] font-medium">Location / Area <span className="text-[#1A1A1A]">*</span></Label>
                         <Input
                           {...form.register("property_location")}
                           placeholder="e.g., Downtown Dubai"
-                          className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-gold mt-1 focus:border-gold"
+                          className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A] mt-1 focus:border-[#B89555]"
                         />
                       </div>
                     </div>
@@ -946,7 +946,7 @@ Requirements:
                     {/* Property Evaluator Integration */}
                     <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-lg p-4">
                       <div className="flex items-center gap-3 mb-3">
-                        <Calculator className="w-5 h-5 text-gold" />
+                        <Calculator className="w-5 h-5 text-[#1A1A1A]" />
                         <span className="text-[#1A1A1A] font-medium">Need help with pricing?</span>
                       </div>
                       <p className="text-[#1A1A1A]/70 text-sm mb-3">
@@ -955,7 +955,7 @@ Requirements:
                       <Button
                         type="button"
                         variant="outline"
-                        className="border-gold text-gold hover:bg-gold/10"
+                        className="border-[#B89555] text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                         onClick={() => setShowEvaluator(true)}
                         disabled={!form.getValues("property_type") || !form.getValues("property_location")}
                       >
@@ -965,8 +965,8 @@ Requirements:
 
                       {/* Show estimate if available */}
                       {form.watch("estimated_range_min") && form.watch("estimated_range_max") && (
-                        <div className="mt-4 p-3 bg-gold/10 border border-gold/20 rounded-lg">
-                          <p className="text-gold text-sm font-medium mb-1">AI Estimate (Informational Only)</p>
+                        <div className="mt-4 p-3 bg-[#EFE6D6]/10 border border-[#B89555]/20 rounded-lg">
+                          <p className="text-[#1A1A1A] text-sm font-medium mb-1">AI Estimate (Informational Only)</p>
                           <p className="text-[#1A1A1A]">
                             AED {form.watch("estimated_range_min")?.toLocaleString()} - AED {form.watch("estimated_range_max")?.toLocaleString()}
                           </p>
@@ -1051,7 +1051,7 @@ Requirements:
                         {highlights.map((highlight, index) => (
                           <span 
                             key={index}
-                            className="inline-flex items-center gap-1 px-3 py-1 bg-gold/10 text-gold rounded-full text-sm border border-gold/20"
+                            className="inline-flex items-center gap-1 px-3 py-1 bg-[#EFE6D6]/10 text-[#1A1A1A] rounded-full text-sm border border-[#B89555]/20"
                           >
                             {highlight}
                             <button 
@@ -1076,7 +1076,7 @@ Requirements:
                           size="sm"
                           onClick={generateListingDescription}
                           disabled={isGeneratingDescription || !form.getValues("property_type")}
-                          className="border-gold text-gold hover:bg-gold/10 text-xs"
+                          className="border-[#B89555] text-[#1A1A1A] hover:bg-[#EFE6D6]/10 text-xs"
                         >
                           {isGeneratingDescription ? (
                             <Loader2 className="w-3 h-3 mr-1 animate-spin" />
@@ -1116,7 +1116,7 @@ Requirements:
                       {/* Photos */}
                       <div>
                         <Label className="text-[#1A1A1A] font-medium mb-2 block">Property Photos</Label>
-                        <div className="border-2 border-dashed border-[#B89555]/30 rounded-lg p-6 text-center hover:border-gold transition-colors bg-[#F7F2EA]">
+                        <div className="border-2 border-dashed border-[#B89555]/30 rounded-lg p-6 text-center hover:border-[#B89555] transition-colors bg-[#F7F2EA]">
                           <input
                             type="file"
                             multiple
@@ -1132,14 +1132,14 @@ Requirements:
                           </label>
                         </div>
                         {photoFiles.length > 0 && (
-                          <p className="text-gold text-sm mt-2">{photoFiles.length} photo(s) selected</p>
+                          <p className="text-[#1A1A1A] text-sm mt-2">{photoFiles.length} photo(s) selected</p>
                         )}
                       </div>
 
                       {/* Videos */}
                       <div>
                         <Label className="text-[#1A1A1A] font-medium mb-2 block">Property Videos (optional)</Label>
-                        <div className="border-2 border-dashed border-[#B89555]/30 rounded-lg p-6 text-center hover:border-gold transition-colors bg-[#F7F2EA]">
+                        <div className="border-2 border-dashed border-[#B89555]/30 rounded-lg p-6 text-center hover:border-[#B89555] transition-colors bg-[#F7F2EA]">
                           <input
                             type="file"
                             multiple
@@ -1155,14 +1155,14 @@ Requirements:
                           </label>
                         </div>
                         {videoFiles.length > 0 && (
-                          <p className="text-gold text-sm mt-2">{videoFiles.length} video(s) selected</p>
+                          <p className="text-[#1A1A1A] text-sm mt-2">{videoFiles.length} video(s) selected</p>
                         )}
                       </div>
 
                       {/* Floor Plans */}
                       <div>
                         <Label className="text-[#1A1A1A] font-medium mb-2 block">Floor Plans (optional)</Label>
-                        <div className="border-2 border-dashed border-[#B89555]/30 rounded-lg p-6 text-center hover:border-gold transition-colors bg-[#F7F2EA]">
+                        <div className="border-2 border-dashed border-[#B89555]/30 rounded-lg p-6 text-center hover:border-[#B89555] transition-colors bg-[#F7F2EA]">
                           <input
                             type="file"
                             multiple
@@ -1178,7 +1178,7 @@ Requirements:
                           </label>
                         </div>
                         {floorPlanFiles.length > 0 && (
-                          <p className="text-gold text-sm mt-2">{floorPlanFiles.length} floor plan(s) selected</p>
+                          <p className="text-[#1A1A1A] text-sm mt-2">{floorPlanFiles.length} floor plan(s) selected</p>
                         )}
                       </div>
                     </div>
@@ -1199,8 +1199,8 @@ Requirements:
                       <p className="text-[#1A1A1A]/70 text-sm">Upload required documents securely. These are only visible to you and our team.</p>
                     </div>
 
-                    <div className="bg-gold/10 border border-gold/30 rounded-lg p-4 flex items-start gap-3">
-                      <Shield className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                    <div className="bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-lg p-4 flex items-start gap-3">
+                      <Shield className="w-5 h-5 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
                       <p className="text-[#1A1A1A] text-sm">
                         Your documents are encrypted and stored securely. Only authorized team members can access them.
                       </p>
@@ -1218,7 +1218,7 @@ Requirements:
                           )}
                         </Label>
                         <div className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors bg-[#F7F2EA] ${
-                          titleDeedFile ? 'border-green-500' : 'border-[#B89555]/30 hover:border-gold'
+                          titleDeedFile ? 'border-green-500' : 'border-[#B89555]/30 hover:border-[#B89555]'
                         }`}>
                           <input
                             type="file"
@@ -1243,7 +1243,7 @@ Requirements:
                       {/* Passport/Emirates ID */}
                       <div>
                         <Label className="text-[#1A1A1A] font-medium mb-2 block">Passport / Emirates ID</Label>
-                        <div className="border-2 border-dashed border-[#B89555]/30 rounded-lg p-6 text-center hover:border-gold transition-colors bg-[#F7F2EA]">
+                        <div className="border-2 border-dashed border-[#B89555]/30 rounded-lg p-6 text-center hover:border-[#B89555] transition-colors bg-[#F7F2EA]">
                           <input
                             type="file"
                             accept="application/pdf,image/*"
@@ -1276,7 +1276,7 @@ Requirements:
                             )}
                           </Label>
                           <div className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors bg-[#F7F2EA] ${
-                            poaFile ? 'border-green-500' : 'border-[#B89555]/30 hover:border-gold'
+                            poaFile ? 'border-green-500' : 'border-[#B89555]/30 hover:border-[#B89555]'
                           }`}>
                             <input
                               type="file"
@@ -1302,7 +1302,7 @@ Requirements:
                       {/* Additional Documents */}
                       <div>
                         <Label className="text-[#1A1A1A] font-medium mb-2 block">Additional Documents (optional)</Label>
-                        <div className="border-2 border-dashed border-[#B89555]/30 rounded-lg p-6 text-center hover:border-gold transition-colors bg-[#F7F2EA]">
+                        <div className="border-2 border-dashed border-[#B89555]/30 rounded-lg p-6 text-center hover:border-[#B89555] transition-colors bg-[#F7F2EA]">
                           <input
                             type="file"
                             multiple
@@ -1317,7 +1317,7 @@ Requirements:
                           </label>
                         </div>
                         {additionalDocs.length > 0 && (
-                          <p className="text-gold text-sm mt-2">{additionalDocs.length} additional document(s) selected</p>
+                          <p className="text-[#1A1A1A] text-sm mt-2">{additionalDocs.length} additional document(s) selected</p>
                         )}
                       </div>
                     </div>
@@ -1341,7 +1341,7 @@ Requirements:
                     <div className="space-y-4">
                       {/* Seller Summary */}
                       <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-lg p-4">
-                        <h3 className="text-gold font-semibold mb-3 flex items-center gap-2">
+                        <h3 className="text-[#1A1A1A] font-semibold mb-3 flex items-center gap-2">
                           <User className="w-4 h-4" />
                           Seller Details
                         </h3>
@@ -1359,7 +1359,7 @@ Requirements:
 
                       {/* Property Summary */}
                       <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-lg p-4">
-                        <h3 className="text-gold font-semibold mb-3 flex items-center gap-2">
+                        <h3 className="text-[#1A1A1A] font-semibold mb-3 flex items-center gap-2">
                           <Building2 className="w-4 h-4" />
                           Property Details
                         </h3>
@@ -1385,7 +1385,7 @@ Requirements:
 
                       {/* Pricing Summary */}
                       <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-lg p-4">
-                        <h3 className="text-gold font-semibold mb-3 flex items-center gap-2">
+                        <h3 className="text-[#1A1A1A] font-semibold mb-3 flex items-center gap-2">
                           <DollarSign className="w-4 h-4" />
                           Pricing
                         </h3>
@@ -1399,7 +1399,7 @@ Requirements:
 
                       {/* Files Summary */}
                       <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-lg p-4">
-                        <h3 className="text-gold font-semibold mb-3 flex items-center gap-2">
+                        <h3 className="text-[#1A1A1A] font-semibold mb-3 flex items-center gap-2">
                           <FileText className="w-4 h-4" />
                           Uploaded Files
                         </h3>
@@ -1422,7 +1422,7 @@ Requirements:
                     </div>
 
                     {/* Confirmation Checkbox */}
-                    <div className="flex items-start space-x-3 p-4 bg-gold/10 border border-gold/30 rounded-lg">
+                    <div className="flex items-start space-x-3 p-4 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-lg">
                       <Checkbox
                         id="submission_confirmed"
                         checked={form.watch("submission_confirmed")}
@@ -1439,7 +1439,7 @@ Requirements:
               </AnimatePresence>
 
               {/* Navigation Buttons - Primary Style */}
-              <div className="flex justify-between items-center mt-8 pt-6 border-t border-gold/20">
+              <div className="flex justify-between items-center mt-8 pt-6 border-t border-[#B89555]/20">
                 <Button
                   type="button"
                   variant="secondary"
@@ -1508,9 +1508,9 @@ Requirements:
 
       {/* Property Evaluator Dialog */}
       <Dialog open={showEvaluator} onOpenChange={setShowEvaluator}>
-        <DialogContent className="bg-zinc-900 border-[#1A1A1A] text-white">
+        <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A] text-white">
           <DialogHeader>
-            <DialogTitle className="text-gold flex items-center gap-2">
+            <DialogTitle className="text-[#1A1A1A] flex items-center gap-2">
               <Calculator className="w-5 h-5" />
               Property Evaluator
             </DialogTitle>
@@ -1519,7 +1519,7 @@ Requirements:
             <p className="text-[#1A1A1A]/70 text-sm">
               Run our AI-powered evaluator to get an informational estimate for your property based on current market data.
             </p>
-            <div className="bg-zinc-800/50 rounded-lg p-4 space-y-2 text-sm">
+            <div className="bg-[#F7F2EA]/50 rounded-lg p-4 space-y-2 text-sm">
               <p className="text-[#1A1A1A]/70"><span className="text-[#1A1A1A]/70">Type:</span> {form.getValues("property_type") || 'Not set'}</p>
               <p className="text-[#1A1A1A]/70"><span className="text-[#1A1A1A]/70">Location:</span> {form.getValues("property_location") || 'Not set'}</p>
               <p className="text-[#1A1A1A]/70"><span className="text-[#1A1A1A]/70">Bedrooms:</span> {form.getValues("bedrooms") === 0 ? 'Studio' : form.getValues("bedrooms") || 'Not set'}</p>

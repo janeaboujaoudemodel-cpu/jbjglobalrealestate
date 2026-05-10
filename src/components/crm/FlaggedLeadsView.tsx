@@ -52,8 +52,8 @@ interface FlaggedLeadsViewProps {
 }
 
 const FLAG_REASON_LABELS: Record<string, { label: string; icon: any; color: string }> = {
-  missing_phone: { label: "Missing Phone", icon: Phone, color: "text-amber-400" },
-  missing_email: { label: "Missing Email", icon: Mail, color: "text-amber-400" },
+  missing_phone: { label: "Missing Phone", icon: Phone, color: "text-[#1A1A1A]" },
+  missing_email: { label: "Missing Email", icon: Mail, color: "text-[#1A1A1A]" },
   invalid_phone_format: { label: "Invalid Phone", icon: Phone, color: "text-red-400" },
   invalid_email_format: { label: "Invalid Email", icon: Mail, color: "text-red-400" },
   duplicate_phone: { label: "Duplicate Phone", icon: Phone, color: "text-blue-400" },
@@ -288,7 +288,7 @@ const FlaggedLeadsView = ({ userId, onRefresh }: FlaggedLeadsViewProps) => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-amber-500/20 rounded-lg">
-            <Flag className="h-5 w-5 text-amber-400" />
+            <Flag className="h-5 w-5 text-[#1A1A1A]" />
           </div>
           <div>
             <h2 className="text-lg font-semibold text-[#1A1A1A]">Flagged Leads</h2>
@@ -378,7 +378,7 @@ const FlaggedLeadsView = ({ userId, onRefresh }: FlaggedLeadsViewProps) => {
                   )}
                   onClick={() => handleRowClick(lead)}
                 >
-                  <TableCell className="font-mono text-amber-400">
+                  <TableCell className="font-mono text-[#1A1A1A]">
                     #{lead.source_row_index || "-"}
                   </TableCell>
                   <TableCell>
@@ -399,7 +399,7 @@ const FlaggedLeadsView = ({ userId, onRefresh }: FlaggedLeadsViewProps) => {
                           </span>
                         </div>
                       ) : (
-                        <div className="flex items-center gap-1 text-sm text-amber-400">
+                        <div className="flex items-center gap-1 text-sm text-[#1A1A1A]">
                           <Phone className="h-3 w-3" />
                           <span>Missing</span>
                         </div>
@@ -412,7 +412,7 @@ const FlaggedLeadsView = ({ userId, onRefresh }: FlaggedLeadsViewProps) => {
                           </span>
                         </div>
                       ) : (
-                        <div className="flex items-center gap-1 text-sm text-amber-400">
+                        <div className="flex items-center gap-1 text-sm text-[#1A1A1A]">
                           <Mail className="h-3 w-3" />
                           <span>Missing</span>
                         </div>
@@ -469,7 +469,7 @@ const FlaggedLeadsView = ({ userId, onRefresh }: FlaggedLeadsViewProps) => {
         <DialogContent className="sm:max-w-lg bg-card border-border">
           <DialogHeader>
             <DialogTitle className="text-white flex items-center gap-2">
-              <Flag className="h-5 w-5 text-amber-400" />
+              <Flag className="h-5 w-5 text-[#1A1A1A]" />
               Flagged Lead Details
             </DialogTitle>
           </DialogHeader>
@@ -498,7 +498,7 @@ const FlaggedLeadsView = ({ userId, onRefresh }: FlaggedLeadsViewProps) => {
                   <label className="text-xs text-muted-foreground">Phone</label>
                   <p className={cn(
                     "font-mono",
-                    selectedLead.flag_reasons?.includes("missing_phone") && "text-amber-400",
+                    selectedLead.flag_reasons?.includes("missing_phone") && "text-[#1A1A1A]",
                     selectedLead.flag_reasons?.includes("invalid_phone_format") && "text-red-400"
                   )}>
                     {selectedLead.phone_raw || selectedLead.phone_e164 || "Missing"}
@@ -507,7 +507,7 @@ const FlaggedLeadsView = ({ userId, onRefresh }: FlaggedLeadsViewProps) => {
                 <div>
                   <label className="text-xs text-muted-foreground">Email</label>
                   <p className={cn(
-                    selectedLead.flag_reasons?.includes("missing_email") && "text-amber-400",
+                    selectedLead.flag_reasons?.includes("missing_email") && "text-[#1A1A1A]",
                     selectedLead.flag_reasons?.includes("invalid_email_format") && "text-red-400"
                   )}>
                     {selectedLead.email_lower || "Missing"}
@@ -522,7 +522,7 @@ const FlaggedLeadsView = ({ userId, onRefresh }: FlaggedLeadsViewProps) => {
                   {selectedLead.flag_reasons?.map((reason) => {
                     const info = FLAG_REASON_LABELS[reason];
                     return (
-                      <Badge key={reason} className={cn("bg-amber-500/20 border-amber-500/50", info?.color || "text-amber-400")}>
+                      <Badge key={reason} className={cn("bg-amber-500/20 border-amber-500/50", info?.color || "text-[#1A1A1A]")}>
                         {info?.label || reason}
                       </Badge>
                     );

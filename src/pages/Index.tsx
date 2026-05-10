@@ -275,7 +275,7 @@ const Index = () => {
             {/* Three pillar badges — solid near-black surface (no backdrop-blur) + drop-shadows for guaranteed legibility on busy hero photo */}
             <motion.div
               variants={fadeInUp}
-              className="grid grid-cols-3 max-w-3xl mx-auto mb-8 border border-gold/40 overflow-hidden rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] bg-[#0A0A0A]"
+              className="grid grid-cols-3 max-w-3xl mx-auto mb-8 border border-[#B89555]/40 overflow-hidden rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] bg-[#0A0A0A]"
             >
               {pillars.map((pillar, idx) => (
                 <div
@@ -293,12 +293,12 @@ const Index = () => {
                       }}
                     >
                       <span
-                        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 block w-1.5 h-1.5 rotate-45 bg-gold shadow-[0_0_6px_rgba(184,149,85,0.8)]"
+                        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 block w-1.5 h-1.5 rotate-45 bg-[#EFE6D6] shadow-[0_0_6px_rgba(184,149,85,0.8)]"
                       />
                     </div>
                   )}
                   <pillar.icon
-                    className="w-6 h-6 sm:w-7 sm:h-7 text-gold mx-auto mb-2"
+                    className="w-6 h-6 sm:w-7 sm:h-7 text-[#1A1A1A] mx-auto mb-2"
                     style={{ filter: "drop-shadow(0 1px 3px rgba(0,0,0,0.9))" }}
                   />
                   <h3

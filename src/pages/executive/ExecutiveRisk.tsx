@@ -96,7 +96,7 @@ const ExecutiveRisk = () => {
       case "critical":
         return "bg-red-500/20 text-red-400 border-red-500/30";
       case "warning":
-        return "bg-amber-500/20 text-amber-400 border-amber-500/30";
+        return "bg-amber-500/20 text-[#1A1A1A] border-amber-500/30";
       default:
         return "bg-blue-500/20 text-blue-400 border-blue-500/30";
     }
@@ -109,7 +109,7 @@ const ExecutiveRisk = () => {
       case "enabled":
         return "text-emerald-400";
       case "degraded":
-        return "text-amber-400";
+        return "text-[#1A1A1A]";
       default:
         return "text-red-400";
     }
@@ -168,8 +168,8 @@ const ExecutiveRisk = () => {
                 to={nav.path}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   nav.active
-                    ? "bg-gold text-[#1A1A1A]"
-                    : "bg-zinc-800 text-white/85 hover:bg-[#1A1A1A]"
+                    ? "bg-[#EFE6D6] text-[#1A1A1A]"
+                    : "bg-[#F7F2EA] text-white/85 hover:bg-[#1A1A1A]"
                 }`}
               >
                 {nav.label}
@@ -179,14 +179,14 @@ const ExecutiveRisk = () => {
 
           {loading ? (
             <div className="text-center py-12">
-              <Shield className="w-8 h-8 text-gold animate-pulse mx-auto mb-4" />
+              <Shield className="w-8 h-8 text-[#1A1A1A] animate-pulse mx-auto mb-4" />
               <p className="text-white/70">Loading compliance data...</p>
             </div>
           ) : (
             <>
               {/* System Status Overview */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                <Card className="bg-zinc-900 border-[#1A1A1A]">
+                <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-sm font-medium text-white/70 flex items-center gap-2">
                       <Database className="w-4 h-4" />
@@ -203,7 +203,7 @@ const ExecutiveRisk = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="bg-zinc-900 border-[#1A1A1A]">
+                <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-sm font-medium text-white/70 flex items-center gap-2">
                       <Lock className="w-4 h-4" />
@@ -220,7 +220,7 @@ const ExecutiveRisk = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="bg-zinc-900 border-[#1A1A1A]">
+                <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-sm font-medium text-white/70 flex items-center gap-2">
                       <Eye className="w-4 h-4" />
@@ -237,7 +237,7 @@ const ExecutiveRisk = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="bg-zinc-900 border-[#1A1A1A]">
+                <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-sm font-medium text-white/70 flex items-center gap-2">
                       <FileText className="w-4 h-4" />
@@ -253,7 +253,7 @@ const ExecutiveRisk = () => {
               </div>
 
               {/* Compliance Alerts */}
-              <Card className="bg-zinc-900 border-[#1A1A1A] mb-8">
+              <Card className="bg-[#FDFBF7] border-[#1A1A1A] mb-8">
                 <CardHeader>
                   <CardTitle className="text-lg text-white flex items-center gap-2">
                     <AlertTriangle className="w-5 h-5 text-amber-500" />
@@ -273,7 +273,7 @@ const ExecutiveRisk = () => {
                           key={alert.id}
                           className={`flex items-start gap-4 p-4 rounded-lg border ${
                             alert.resolved
-                              ? "bg-zinc-800/50 border-[#1A1A1A]"
+                              ? "bg-[#F7F2EA]/50 border-[#1A1A1A]"
                               : getSeverityColor(alert.severity).replace("bg-", "bg-").replace("/20", "/10")
                           }`}
                         >
@@ -313,7 +313,7 @@ const ExecutiveRisk = () => {
               </Card>
 
               {/* Language Risk Monitoring */}
-              <Card className="bg-zinc-900 border-[#1A1A1A] mb-8">
+              <Card className="bg-[#FDFBF7] border-[#1A1A1A] mb-8">
                 <CardHeader>
                   <CardTitle className="text-lg text-white">
                     Language & Compliance Guardrails
@@ -334,7 +334,7 @@ const ExecutiveRisk = () => {
                       </ul>
                     </div>
 
-                    <div className="bg-zinc-800 rounded-lg p-4">
+                    <div className="bg-[#F7F2EA] rounded-lg p-4">
                       <h4 className="text-white/85 font-medium mb-2">Filter Statistics (30 days)</h4>
                       <div className="space-y-2">
                         <div className="flex justify-between text-sm">
@@ -343,7 +343,7 @@ const ExecutiveRisk = () => {
                         </div>
                         <div className="flex justify-between text-sm">
                           <span className="text-white/70">Flagged content</span>
-                          <span className="text-amber-400">23</span>
+                          <span className="text-[#1A1A1A]">23</span>
                         </div>
                         <div className="flex justify-between text-sm">
                           <span className="text-white/70">Auto-corrected</span>
@@ -360,10 +360,10 @@ const ExecutiveRisk = () => {
               </Card>
 
               {/* Audit Readiness */}
-              <Card className="bg-zinc-900 border-[#1A1A1A]">
+              <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
                 <CardHeader>
                   <CardTitle className="text-lg text-white flex items-center gap-2">
-                    <Shield className="w-5 h-5 text-gold" />
+                    <Shield className="w-5 h-5 text-[#1A1A1A]" />
                     Audit Readiness Status
                   </CardTitle>
                 </CardHeader>
@@ -393,7 +393,7 @@ const ExecutiveRisk = () => {
                 <p className="text-xs text-white/90">
                   Risk & Compliance Monitor • All events logged and auditable
                 </p>
-                <p className="text-xs text-gold mt-0.5">JBJ Global Real Estate</p>
+                <p className="text-xs text-[#1A1A1A] mt-0.5">JBJ Global Real Estate</p>
               </div>
             </>
           )}

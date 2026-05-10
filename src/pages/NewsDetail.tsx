@@ -188,7 +188,7 @@ const NewsDetail = () => {
           <div className="absolute top-6 left-6 z-10">
             <Link
               to="/news"
-              className="inline-flex items-center gap-2.5 text-white/90 hover:text-gold transition-all duration-300 bg-[#1A1A1A]/30 backdrop-blur-xl px-6 py-3 rounded-full border border-white/15 hover:border-gold/40 hover:bg-[#1A1A1A]/50 font-medium text-sm shadow-lg"
+              className="inline-flex items-center gap-2.5 text-white/90 hover:text-[#1A1A1A] transition-all duration-300 bg-[#1A1A1A]/30 backdrop-blur-xl px-6 py-3 rounded-full border border-white/15 hover:border-[#B89555]/40 hover:bg-[#1A1A1A]/50 font-medium text-sm shadow-lg"
             >
               <ArrowLeft className="w-4 h-4" />
               All News
@@ -198,7 +198,7 @@ const NewsDetail = () => {
           <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
             <div className="container mx-auto max-w-4xl">
               <div className="flex items-center gap-3 mb-4 flex-wrap">
-                <Badge className="bg-gold text-[#1A1A1A] px-3 py-1 text-xs font-medium">
+                <Badge className="bg-[#EFE6D6] text-[#1A1A1A] px-3 py-1 text-xs font-medium">
                   {article.category}
                 </Badge>
                 <Badge variant="outline" className="text-white/80 border-white/30 px-3 py-1 text-xs backdrop-blur-sm">
@@ -221,29 +221,29 @@ const NewsDetail = () => {
         <div className="jj-layer-2 !bg-transparent relative z-10">
           <div className="jj-layer-active rounded-2xl p-6 md:p-10 lg:p-14 max-w-4xl mx-auto">
             {/* Meta row */}
-            <div className="flex items-center gap-4 text-sm text-[#1A1A1A]/70 mb-8 pb-6 border-b border-gold/20 flex-wrap">
+            <div className="flex items-center gap-4 text-sm text-[#1A1A1A]/70 mb-8 pb-6 border-b border-[#B89555]/20 flex-wrap">
               <span className="flex items-center gap-1.5">
                 <Calendar className="w-4 h-4" />
                 {formattedDate}
               </span>
               <span className="text-[#1A1A1A]/70">•</span>
               <span className="flex items-center gap-1.5">
-                <Landmark className="w-4 h-4 text-gold" />
+                <Landmark className="w-4 h-4 text-[#1A1A1A]" />
                 {article.source}
               </span>
             </div>
 
             {/* Key Stats Banner */}
             {keyStats.length > 0 && (
-              <div className="mb-8 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] rounded-xl p-5 border border-gold/30">
+              <div className="mb-8 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] rounded-xl p-5 border border-[#B89555]/30">
                 <div className="flex items-center gap-2 mb-4">
-                  <BarChart3 className="w-4 h-4 text-gold" />
+                  <BarChart3 className="w-4 h-4 text-[#1A1A1A]" />
                   <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wider">Key Statistics</span>
                 </div>
                 <div className={`grid grid-cols-2 ${keyStats.length >= 3 ? 'md:grid-cols-' + Math.min(keyStats.length, 4) : 'md:grid-cols-2'} gap-4`}>
                   {keyStats.slice(0, 4).map((stat, i) => (
-                    <div key={i} className="text-center bg-[#FDFBF7]/50 rounded-lg p-3 border border-gold/10">
-                      <p className="text-xl md:text-2xl font-bold text-gold">{stat.value}</p>
+                    <div key={i} className="text-center bg-[#FDFBF7]/50 rounded-lg p-3 border border-[#B89555]/10">
+                      <p className="text-xl md:text-2xl font-bold text-[#1A1A1A]">{stat.value}</p>
                       <p className="text-xs text-[#1A1A1A]/70 mt-1">{stat.label}</p>
                     </div>
                   ))}
@@ -253,16 +253,16 @@ const NewsDetail = () => {
 
             {/* Key Takeaways Box */}
             {keyTakeaways.length > 0 && (
-              <div className="mb-8 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-5 border border-gold/20">
+              <div className="mb-8 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-5 border border-[#B89555]/20">
                 <div className="flex items-center gap-2 mb-4">
-                  <Lightbulb className="w-4 h-4 text-gold" />
+                  <Lightbulb className="w-4 h-4 text-[#1A1A1A]" />
                   <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wider">Key Takeaways</span>
                 </div>
                 <div className="space-y-2.5">
                   {keyTakeaways.map((point, i) => (
                     <div key={i} className="flex gap-3 items-start">
-                      <div className="w-5 h-5 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <span className="text-[10px] font-bold text-gold">{i + 1}</span>
+                      <div className="w-5 h-5 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-[10px] font-bold text-[#1A1A1A]">{i + 1}</span>
                       </div>
                       <p className="text-sm text-[#1A1A1A]/70 leading-relaxed">{point}</p>
                     </div>
@@ -272,7 +272,7 @@ const NewsDetail = () => {
             )}
 
             {/* Excerpt as highlighted quote */}
-            <blockquote className="text-lg md:text-xl text-[#1A1A1A]/70 leading-relaxed mb-8 border-l-4 border-gold/50 pl-6 italic">
+            <blockquote className="text-lg md:text-xl text-[#1A1A1A]/70 leading-relaxed mb-8 border-l-4 border-[#B89555]/50 pl-6 italic">
               {article.excerpt}
             </blockquote>
 
@@ -282,16 +282,16 @@ const NewsDetail = () => {
               domain="news.article"
               className="prose prose-lg max-w-none text-[#1A1A1A] leading-relaxed
                 prose-headings:text-[#1A1A1A] prose-headings:font-bold
-                prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h2:border-b prose-h2:border-gold/20 prose-h2:pb-2
+                prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h2:border-b prose-h2:border-[#B89555]/20 prose-h2:pb-2
                 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
                 prose-p:text-[#1A1A1A]/70 prose-p:leading-relaxed prose-p:mb-5
                 prose-strong:text-[#1A1A1A]
-                prose-a:text-gold prose-a:no-underline hover:prose-a:underline
+                prose-a:text-[#1A1A1A] prose-a:no-underline hover:prose-a:underline
                 prose-li:text-[#1A1A1A]/70
                 prose-img:rounded-xl prose-img:my-8 prose-img:shadow-lg
                 prose-table:border-collapse prose-table:w-full
-                prose-th:bg-champagne-light/50 prose-th:text-left prose-th:p-3 prose-th:text-xs prose-th:font-semibold prose-th:uppercase prose-th:tracking-wider prose-th:text-[#1A1A1A]/70 prose-th:border prose-th:border-gold/20
-                prose-td:p-3 prose-td:border prose-td:border-gold/10 prose-td:text-sm"
+                prose-th:bg-champagne-light/50 prose-th:text-left prose-th:p-3 prose-th:text-xs prose-th:font-semibold prose-th:uppercase prose-th:tracking-wider prose-th:text-[#1A1A1A]/70 prose-th:border prose-th:border-[#B89555]/20
+                prose-td:p-3 prose-td:border prose-td:border-[#B89555]/10 prose-td:text-sm"
             />
 
             {/* AI Analysis Section - Green Theme */}
@@ -332,9 +332,9 @@ const NewsDetail = () => {
             )}
 
             {/* Dubai Market Intelligence Section */}
-            <div className="mt-12 pt-8 border-t border-gold/20">
+            <div className="mt-12 pt-8 border-t border-[#B89555]/20">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#EDE0C8] to-[#E2D4B8] border border-gold/30 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#EDE0C8] to-[#E2D4B8] border border-[#B89555]/30 flex items-center justify-center">
                   <TrendingUp className="w-5 h-5 text-[#1A1A1A]" />
                 </div>
                 <div>
@@ -347,29 +347,29 @@ const NewsDetail = () => {
 
               {/* KPIs */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                <div className="text-center bg-[#FDFBF7]/60 rounded-xl p-4 border border-gold/10">
-                  <p className="text-2xl font-bold text-gold">{ytd2026Data.value}</p>
+                <div className="text-center bg-[#FDFBF7]/60 rounded-xl p-4 border border-[#B89555]/10">
+                  <p className="text-2xl font-bold text-[#1A1A1A]">{ytd2026Data.value}</p>
                   <p className="text-xs text-[#1A1A1A]/70">YTD Value</p>
                 </div>
-                <div className="text-center bg-[#FDFBF7]/60 rounded-xl p-4 border border-gold/10">
-                  <p className="text-2xl font-bold text-gold">{ytd2026Data.transactions.toLocaleString()}+</p>
+                <div className="text-center bg-[#FDFBF7]/60 rounded-xl p-4 border border-[#B89555]/10">
+                  <p className="text-2xl font-bold text-[#1A1A1A]">{ytd2026Data.transactions.toLocaleString()}+</p>
                   <p className="text-xs text-[#1A1A1A]/70">Transactions</p>
                 </div>
-                <div className="text-center bg-[#FDFBF7]/60 rounded-xl p-4 border border-gold/10">
-                  <p className="text-2xl font-bold text-gold">{ytd2026Data.growth}</p>
+                <div className="text-center bg-[#FDFBF7]/60 rounded-xl p-4 border border-[#B89555]/10">
+                  <p className="text-2xl font-bold text-[#1A1A1A]">{ytd2026Data.growth}</p>
                   <p className="text-xs text-[#1A1A1A]/70">YoY Growth</p>
                 </div>
-                <div className="text-center bg-[#FDFBF7]/60 rounded-xl p-4 border border-gold/10">
-                  <p className="text-2xl font-bold text-gold">{ytd2026Data.topArea}</p>
+                <div className="text-center bg-[#FDFBF7]/60 rounded-xl p-4 border border-[#B89555]/10">
+                  <p className="text-2xl font-bold text-[#1A1A1A]">{ytd2026Data.topArea}</p>
                   <p className="text-xs text-[#1A1A1A]/70">Top Area</p>
                 </div>
               </div>
 
               {/* Transaction Breakdown */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div className="bg-[#FDFBF7]/60 rounded-xl p-4 border border-gold/10">
+                <div className="bg-[#FDFBF7]/60 rounded-xl p-4 border border-[#B89555]/10">
                   <div className="flex items-center gap-2 mb-2">
-                    <Building2 className="w-4 h-4 text-gold" />
+                    <Building2 className="w-4 h-4 text-[#1A1A1A]" />
                     <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wide">Transaction Type</span>
                   </div>
                   <div className="space-y-2">
@@ -378,7 +378,7 @@ const NewsDetail = () => {
                       <span className="text-sm font-bold text-[#1A1A1A]">~{ytd2026Data.offPlan.toLocaleString()}</span>
                     </div>
                     <div className="w-full bg-[#EFE6D6] rounded-full h-2">
-                      <div className="bg-gold rounded-full h-2" style={{ width: `${(ytd2026Data.offPlan / (ytd2026Data.offPlan + ytd2026Data.secondary) * 100).toFixed(0)}%` }} />
+                      <div className="bg-[#EFE6D6] rounded-full h-2" style={{ width: `${(ytd2026Data.offPlan / (ytd2026Data.offPlan + ytd2026Data.secondary) * 100).toFixed(0)}%` }} />
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-[#1A1A1A]/70">Secondary</span>
@@ -387,9 +387,9 @@ const NewsDetail = () => {
                   </div>
                 </div>
 
-                <div className="bg-[#FDFBF7]/60 rounded-xl p-4 border border-gold/10">
+                <div className="bg-[#FDFBF7]/60 rounded-xl p-4 border border-[#B89555]/10">
                   <div className="flex items-center gap-2 mb-2">
-                    <Banknote className="w-4 h-4 text-gold" />
+                    <Banknote className="w-4 h-4 text-[#1A1A1A]" />
                     <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wide">Payment Method</span>
                   </div>
                   <div className="space-y-2">
@@ -407,22 +407,22 @@ const NewsDetail = () => {
                   </div>
                 </div>
 
-                <div className="bg-[#FDFBF7]/60 rounded-xl p-4 border border-gold/10">
+                <div className="bg-[#FDFBF7]/60 rounded-xl p-4 border border-[#B89555]/10">
                   <div className="flex items-center gap-2 mb-2">
-                    <Gift className="w-4 h-4 text-gold" />
+                    <Gift className="w-4 h-4 text-[#1A1A1A]" />
                     <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wide">Gift Transactions</span>
                   </div>
                   <div className="flex flex-col items-center justify-center h-[calc(100%-2rem)]">
-                    <p className="text-3xl font-bold text-gold">~{ytd2026Data.gifts.toLocaleString()}</p>
+                    <p className="text-3xl font-bold text-[#1A1A1A]">~{ytd2026Data.gifts.toLocaleString()}</p>
                     <p className="text-xs text-[#1A1A1A]/70 mt-1">Gift Transfers YTD</p>
                   </div>
                 </div>
               </div>
 
               {/* Top Areas */}
-              <div className="bg-[#FDFBF7]/60 rounded-xl p-4 border border-gold/10">
+              <div className="bg-[#FDFBF7]/60 rounded-xl p-4 border border-[#B89555]/10">
                 <div className="flex items-center gap-2 mb-3">
-                  <MapPin className="w-4 h-4 text-gold" />
+                  <MapPin className="w-4 h-4 text-[#1A1A1A]" />
                   <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wide">Top 10 Areas by Transaction Volume</span>
                 </div>
                 <div className="space-y-2">
@@ -430,7 +430,7 @@ const NewsDetail = () => {
                     <div key={area.area} className="flex items-center gap-3">
                       <span className="text-[#1A1A1A]/70 font-medium text-sm w-4 text-right">{i + 1}</span>
                       <span className="text-sm font-medium text-[#1A1A1A] flex-1">{area.area}</span>
-                      <span className="text-sm font-bold text-gold">{area.transactions.toLocaleString()}</span>
+                      <span className="text-sm font-bold text-[#1A1A1A]">{area.transactions.toLocaleString()}</span>
                       <span className="text-xs text-emerald-600 font-medium bg-emerald-50 px-2 py-0.5 rounded-full">{area.change}</span>
                     </div>
                   ))}
@@ -438,9 +438,9 @@ const NewsDetail = () => {
               </div>
 
               {/* Top Nationalities */}
-              <div className="bg-[#FDFBF7]/60 rounded-xl p-4 border border-gold/10 mt-4">
+              <div className="bg-[#FDFBF7]/60 rounded-xl p-4 border border-[#B89555]/10 mt-4">
                 <div className="flex items-center gap-2 mb-3">
-                  <Globe className="w-4 h-4 text-gold" />
+                  <Globe className="w-4 h-4 text-[#1A1A1A]" />
                   <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wide">Top Buyer Nationalities</span>
                 </div>
                 <div className="space-y-2">
@@ -450,10 +450,10 @@ const NewsDetail = () => {
                       <span className="text-sm font-medium text-[#1A1A1A] flex-1">{nat.country}</span>
                       <div className="w-20">
                         <div className="w-full bg-[#EFE6D6] rounded-full h-1.5">
-                          <div className="bg-gold rounded-full h-1.5" style={{ width: `${nat.percentage * 4}%` }} />
+                          <div className="bg-[#EFE6D6] rounded-full h-1.5" style={{ width: `${nat.percentage * 4}%` }} />
                         </div>
                       </div>
-                      <span className="text-sm font-bold text-gold w-10 text-right">{nat.percentage}%</span>
+                      <span className="text-sm font-bold text-[#1A1A1A] w-10 text-right">{nat.percentage}%</span>
                     </div>
                   ))}
                 </div>
@@ -461,7 +461,7 @@ const NewsDetail = () => {
             </div>
 
             {/* Source Attribution */}
-            <div className="mt-12 pt-8 border-t border-gold/20">
+            <div className="mt-12 pt-8 border-t border-[#B89555]/20">
               <div className="jj-card-inner rounded-xl p-6">
                 <p className="text-sm text-[#1A1A1A]/70 mb-2">Source</p>
                 <p className="text-[#1A1A1A] font-medium text-lg">{article.source}</p>
@@ -470,7 +470,7 @@ const NewsDetail = () => {
                     href={article.source_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 mt-4 px-5 py-2.5 bg-gold/10 hover:bg-gold/20 text-gold font-medium text-sm rounded-full border border-gold/30 transition-all duration-300 hover:border-gold/50"
+                    className="inline-flex items-center gap-2 mt-4 px-5 py-2.5 bg-[#EFE6D6]/10 hover:bg-[#EFE6D6]/20 text-[#1A1A1A] font-medium text-sm rounded-full border border-[#B89555]/30 transition-all duration-300 hover:border-[#B89555]/50"
                   >
                     <ExternalLink className="w-4 h-4" />
                     View Original Source

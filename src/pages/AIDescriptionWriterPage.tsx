@@ -123,7 +123,7 @@ export default function AIDescriptionWriterPage() {
 
       <div className="space-y-8">
         {/* Input Form */}
-        <Card className="bg-zinc-900/90 border-lime-500/30">
+        <Card className="bg-[#FDFBF7]/90 border-lime-500/30">
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
               <Building className="w-5 h-5 text-lime-400" />
@@ -154,7 +154,7 @@ export default function AIDescriptionWriterPage() {
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
                   placeholder="Dubai Marina"
-                  className="bg-zinc-800 border-lime-500/30 text-white"
+                  className="bg-[#F7F2EA] border-lime-500/30 text-white"
                 />
               </div>
             </div>
@@ -179,7 +179,7 @@ export default function AIDescriptionWriterPage() {
                   value={size}
                   onChange={(e) => setSize(e.target.value)}
                   placeholder="1,200"
-                  className="bg-zinc-800 border-lime-500/30 text-white"
+                  className="bg-[#F7F2EA] border-lime-500/30 text-white"
                 />
               </div>
               <div>
@@ -188,7 +188,7 @@ export default function AIDescriptionWriterPage() {
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
                   placeholder="2,500,000"
-                  className="bg-zinc-800 border-lime-500/30 text-white"
+                  className="bg-[#F7F2EA] border-lime-500/30 text-white"
                 />
               </div>
             </div>
@@ -199,7 +199,7 @@ export default function AIDescriptionWriterPage() {
                 value={features}
                 onChange={(e) => setFeatures(e.target.value)}
                 placeholder="Private pool, smart home, maid's room, private parking..."
-                className="bg-zinc-800 border-lime-500/30 text-white"
+                className="bg-[#F7F2EA] border-lime-500/30 text-white"
               />
             </div>
 
@@ -210,7 +210,7 @@ export default function AIDescriptionWriterPage() {
                   value={views}
                   onChange={(e) => setViews(e.target.value)}
                   placeholder="Sea view, Marina view..."
-                  className="bg-zinc-800 border-lime-500/30 text-white"
+                  className="bg-[#F7F2EA] border-lime-500/30 text-white"
                 />
               </div>
               <div>
@@ -235,7 +235,7 @@ export default function AIDescriptionWriterPage() {
                 value={additionalInfo}
                 onChange={(e) => setAdditionalInfo(e.target.value)}
                 placeholder="Any unique selling points, developer info, nearby amenities..."
-                className="bg-zinc-800 border-lime-500/30 text-white"
+                className="bg-[#F7F2EA] border-lime-500/30 text-white"
               />
             </div>
 
@@ -264,7 +264,7 @@ export default function AIDescriptionWriterPage() {
           <div className="space-y-6">
             {/* Headline */}
             {result.headline && (
-              <Card className="bg-zinc-900/90 border-lime-500/30">
+              <Card className="bg-[#FDFBF7]/90 border-lime-500/30">
                 <CardHeader className="flex flex-row items-center justify-between">
                   <CardTitle className="text-white">Headline</CardTitle>
                   <Button
@@ -284,7 +284,7 @@ export default function AIDescriptionWriterPage() {
 
             {/* Full Description */}
             {result.fullDescription && (
-              <Card className="bg-zinc-900/90 border-lime-500/30">
+              <Card className="bg-[#FDFBF7]/90 border-lime-500/30">
                 <CardHeader className="flex flex-row items-center justify-between">
                   <CardTitle className="text-white flex items-center gap-2">
                     <PenTool className="w-5 h-5 text-lime-400" />
@@ -307,7 +307,7 @@ export default function AIDescriptionWriterPage() {
 
             {/* Highlights */}
             {result.highlights && result.highlights.length > 0 && (
-              <Card className="bg-zinc-900/90 border-lime-500/30">
+              <Card className="bg-[#FDFBF7]/90 border-lime-500/30">
                 <CardHeader>
                   <CardTitle className="text-white">Key Highlights</CardTitle>
                 </CardHeader>
@@ -350,7 +350,7 @@ export default function AIDescriptionWriterPage() {
 
         {/* Placeholder */}
         {!result && !loading && (
-          <div className="bg-zinc-900/50 border border-lime-500/20 rounded-xl py-12 text-center">
+          <div className="bg-[#FDFBF7]/50 border border-lime-500/20 rounded-xl py-12 text-center">
             <PenTool className="w-12 h-12 text-lime-400/50 mx-auto mb-4" />
             <p className="text-white/70">Enter property details above to generate compelling descriptions</p>
           </div>

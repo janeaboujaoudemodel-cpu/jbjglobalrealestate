@@ -168,7 +168,7 @@ export default function Onboarding() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "pending":
-        return <Badge className="bg-gold/20 text-gold border border-gold/40"><Clock className="w-3 h-3 mr-1" /> Pending Review</Badge>;
+        return <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border border-[#B89555]/40"><Clock className="w-3 h-3 mr-1" /> Pending Review</Badge>;
       case "approved":
         return <Badge className="bg-green-500/20 text-green-600 border border-green-500/40"><CheckCircle className="w-3 h-3 mr-1" /> Approved</Badge>;
       case "rejected":
@@ -225,7 +225,7 @@ export default function Onboarding() {
         <div className="jj-layer-2">
           <div className="max-w-lg mx-auto">
             <div className="jj-layer-active rounded-2xl p-6">
-              <div className="jj-card-inner border-2 border-gold rounded-xl p-8 text-center">
+              <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-8 text-center">
                 <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">No Application Found</h2>
                 <p className="text-[#1A1A1A]/70 mb-6">You haven't submitted an application yet.</p>
                 <Button asChild variant="primary">
@@ -246,9 +246,9 @@ export default function Onboarding() {
         <div className="jj-layer-2">
           <div className="max-w-lg mx-auto">
             <div className="jj-layer-active rounded-2xl p-6">
-              <div className="jj-card-inner border-2 border-gold rounded-xl p-8 text-center">
+              <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-8 text-center">
                 {application.status === "pending" ? (
-                  <Clock className="h-16 w-16 text-gold mx-auto mb-4" />
+                  <Clock className="h-16 w-16 text-[#1A1A1A] mx-auto mb-4" />
                 ) : (
                   <XCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
                 )}
@@ -271,14 +271,14 @@ export default function Onboarding() {
                       Unfortunately, your application was not approved at this time.
                     </p>
                     {application.rejection_reason && (
-                      <div className="jj-card-inner border border-gold/20 p-4 rounded-lg text-left mb-4">
+                      <div className="jj-card-inner border border-[#B89555]/20 p-4 rounded-lg text-left mb-4">
                         <p className="text-sm font-medium text-[#1A1A1A] mb-1">Reason:</p>
                         <p className="text-sm text-[#1A1A1A]/70">{application.rejection_reason}</p>
                       </div>
                     )}
                     <p className="text-sm text-white/90">
                       If you have questions, please contact us at{" "}
-                      <a href="mailto:CONTACT@JBJ.AE" className="text-gold hover:underline">
+                      <a href="mailto:CONTACT@JBJ.AE" className="text-[#1A1A1A] hover:underline">
                         CONTACT@JBJ.AE
                       </a>
                     </p>
@@ -306,7 +306,7 @@ export default function Onboarding() {
         {/* Header */}
         <div className="jj-layer-active rounded-2xl p-6 md:p-8 mb-6">
           <h1 className="text-3xl font-bold text-[#1A1A1A] mb-2">
-            Welcome, <span className="text-gold">{application.full_name}!</span>
+            Welcome, <span className="text-[#1A1A1A]">{application.full_name}!</span>
           </h1>
           <p className="text-[#1A1A1A]/70">
             Complete your training modules and quizzes to become a certified broker partner.
@@ -316,15 +316,15 @@ export default function Onboarding() {
 
         {/* Score Overview */}
         <div className="grid md:grid-cols-3 gap-4 mb-6">
-          <div className="jj-card-inner border-2 border-gold rounded-xl p-6 transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
+          <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-6 transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
             <div className="flex items-center gap-2 mb-2">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center border-2 border-gold"
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center border-2 border-[#B89555]"
                 style={{ background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)' }}>
                 <Building2 className="h-5 w-5 text-[#1A1A1A]" />
               </div>
               <span className="text-sm font-medium text-[#1A1A1A]/70">Company Knowledge</span>
             </div>
-            <div className="text-2xl font-bold text-gold">
+            <div className="text-2xl font-bold text-[#1A1A1A]">
               {companyProgress.avgScore.toFixed(0)}%
             </div>
             <Progress value={companyProgress.avgScore} className="mt-2 h-2" />
@@ -333,15 +333,15 @@ export default function Onboarding() {
             </p>
           </div>
 
-          <div className="jj-card-inner border-2 border-gold rounded-xl p-6 transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
+          <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-6 transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
             <div className="flex items-center gap-2 mb-2">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center border-2 border-gold"
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center border-2 border-[#B89555]"
                 style={{ background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)' }}>
                 <Briefcase className="h-5 w-5 text-[#1A1A1A]" />
               </div>
               <span className="text-sm font-medium text-[#1A1A1A]/70">Real Estate Basics</span>
             </div>
-            <div className="text-2xl font-bold text-gold">
+            <div className="text-2xl font-bold text-[#1A1A1A]">
               {realEstateProgress.avgScore.toFixed(0)}%
             </div>
             <Progress value={realEstateProgress.avgScore} className="mt-2 h-2" />
@@ -350,15 +350,15 @@ export default function Onboarding() {
             </p>
           </div>
 
-          <div className="jj-card-inner border-2 border-gold rounded-xl p-6 transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
+          <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-6 transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
             <div className="flex items-center gap-2 mb-2">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center border-2 border-gold"
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center border-2 border-[#B89555]"
                 style={{ background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)' }}>
                 <Trophy className="h-5 w-5 text-[#1A1A1A]" />
               </div>
               <span className="text-sm font-medium text-[#1A1A1A]/70">Combined Score</span>
             </div>
-            <div className="text-2xl font-bold text-gold">
+            <div className="text-2xl font-bold text-[#1A1A1A]">
               {combinedAvg.toFixed(0)}%
             </div>
             <Progress value={combinedAvg} className="mt-2 h-2" />
@@ -371,12 +371,12 @@ export default function Onboarding() {
         {/* Training Modules */}
         <div className="jj-layer-active rounded-2xl p-6 md:p-8">
           <Tabs defaultValue="company" className="space-y-6">
-            <TabsList className="grid w-full max-w-md grid-cols-2 bg-champagne border border-gold/30">
-              <TabsTrigger value="company" className="flex items-center gap-2 data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-gold">
+            <TabsList className="grid w-full max-w-md grid-cols-2 bg-champagne border border-[#B89555]/30">
+              <TabsTrigger value="company" className="flex items-center gap-2 data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-[#1A1A1A]">
                 <Building2 className="h-4 w-4" />
                 Company Knowledge
               </TabsTrigger>
-              <TabsTrigger value="realestate" className="flex items-center gap-2 data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-gold">
+              <TabsTrigger value="realestate" className="flex items-center gap-2 data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-[#1A1A1A]">
                 <Briefcase className="h-4 w-4" />
                 Real Estate
               </TabsTrigger>
@@ -384,19 +384,19 @@ export default function Onboarding() {
 
             <TabsContent value="company" className="space-y-4">
               {companyModules.length === 0 ? (
-                <div className="jj-card-inner border-2 border-gold rounded-xl p-12 text-center">
-                  <BookOpen className="h-12 w-12 text-gold mx-auto mb-4" />
+                <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-12 text-center">
+                  <BookOpen className="h-12 w-12 text-[#1A1A1A] mx-auto mb-4" />
                   <p className="text-[#1A1A1A]/70">No modules available yet. Check back soon!</p>
                 </div>
               ) : (
                 companyModules.map((module) => {
                   const bestAttempt = getBestAttempt(module.id);
                   return (
-                    <div key={module.id} className="jj-card-inner border-2 border-gold rounded-xl p-4 transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
+                    <div key={module.id} className="jj-card-inner border-2 border-[#B89555] rounded-xl p-4 transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
                           <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                            bestAttempt?.passed ? 'bg-green-500/20 text-green-600' : 'bg-gold/20 text-gold'
+                            bestAttempt?.passed ? 'bg-green-500/20 text-green-600' : 'bg-[#EFE6D6]/20 text-[#1A1A1A]'
                           }`}>
                             {bestAttempt?.passed ? (
                               <CheckCircle className="h-5 w-5" />
@@ -416,7 +416,7 @@ export default function Onboarding() {
                             )}
                           </div>
                         </div>
-                        <Button asChild variant="ghost" className="text-gold hover:text-[#1A1A1A]">
+                        <Button asChild variant="ghost" className="text-[#1A1A1A] hover:text-[#1A1A1A]">
                           <Link to={`/onboarding/module/${module.id}`}>
                             {bestAttempt ? "Review" : "Start"}
                             <ChevronRight className="h-4 w-4 ml-1" />
@@ -431,19 +431,19 @@ export default function Onboarding() {
 
             <TabsContent value="realestate" className="space-y-4">
               {realEstateModules.length === 0 ? (
-                <div className="jj-card-inner border-2 border-gold rounded-xl p-12 text-center">
-                  <BookOpen className="h-12 w-12 text-gold mx-auto mb-4" />
+                <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-12 text-center">
+                  <BookOpen className="h-12 w-12 text-[#1A1A1A] mx-auto mb-4" />
                   <p className="text-[#1A1A1A]/70">No modules available yet. Check back soon!</p>
                 </div>
               ) : (
                 realEstateModules.map((module) => {
                   const bestAttempt = getBestAttempt(module.id);
                   return (
-                    <div key={module.id} className="jj-card-inner border-2 border-gold rounded-xl p-4 transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
+                    <div key={module.id} className="jj-card-inner border-2 border-[#B89555] rounded-xl p-4 transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
                           <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                            bestAttempt?.passed ? 'bg-green-500/20 text-green-600' : 'bg-gold/20 text-gold'
+                            bestAttempt?.passed ? 'bg-green-500/20 text-green-600' : 'bg-[#EFE6D6]/20 text-[#1A1A1A]'
                           }`}>
                             {bestAttempt?.passed ? (
                               <CheckCircle className="h-5 w-5" />
@@ -463,7 +463,7 @@ export default function Onboarding() {
                             )}
                           </div>
                         </div>
-                        <Button asChild variant="ghost" className="text-gold hover:text-[#1A1A1A]">
+                        <Button asChild variant="ghost" className="text-[#1A1A1A] hover:text-[#1A1A1A]">
                           <Link to={`/onboarding/module/${module.id}`}>
                             {bestAttempt ? "Review" : "Start"}
                             <ChevronRight className="h-4 w-4 ml-1" />
@@ -481,8 +481,8 @@ export default function Onboarding() {
         {/* Certificate Section */}
         {certificate && (
           <div className="jj-layer-active rounded-2xl p-6 md:p-8 mt-6">
-            <div className="jj-card-inner border-2 border-gold rounded-xl p-8 text-center">
-              <GraduationCap className="h-16 w-16 text-gold mx-auto mb-4" />
+            <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-8 text-center">
+              <GraduationCap className="h-16 w-16 text-[#1A1A1A] mx-auto mb-4" />
               <h3 className="text-2xl font-bold text-[#1A1A1A] mb-2">Congratulations!</h3>
               <p className="text-[#1A1A1A]/70 mb-6">You have completed your training and earned your certificate.</p>
               <CertificateGenerator isEligible={true} existingCertificate={certificate} />

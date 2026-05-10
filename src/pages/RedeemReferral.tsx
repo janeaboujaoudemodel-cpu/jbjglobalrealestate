@@ -117,14 +117,14 @@ export default function RedeemReferral() {
           <div className="text-center mb-10">
             <JJLogoImage variant="light" size="lg" className="w-32 h-32 mx-auto mb-4" />
             <h1 className="text-2xl md:text-3xl font-bold mb-2">
-              <span className="text-gold">Redeem Your Referral Code</span>
+              <span className="text-[#1A1A1A]">Redeem Your Referral Code</span>
             </h1>
             <p className="text-muted-foreground">
               Enter the referral code you received to unlock exclusive benefits
             </p>
           </div>
 
-          <Card className="bg-[#FDFBF7] border-2 border-gold/40 shadow-lg">
+          <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/40 shadow-lg">
             <CardContent className="p-6 md:p-8">
               {isSuccess ? (
                 /* Success State */
@@ -137,7 +137,7 @@ export default function RedeemReferral() {
                   </h2>
                   <p className="text-muted-foreground mb-6">
                     {partnerName ? (
-                      <>You've been referred by <span className="font-semibold text-gold">{partnerName}</span>.</>
+                      <>You've been referred by <span className="font-semibold text-[#1A1A1A]">{partnerName}</span>.</>
                     ) : (
                       "Your referral code has been successfully applied."
                     )}
@@ -162,8 +162,8 @@ export default function RedeemReferral() {
                 /* Form */
                 <>
                   <div className="text-center mb-6">
-                    <div className="w-14 h-14 bg-gold/10 rounded-xl flex items-center justify-center mx-auto mb-4">
-                      <Gift className="w-7 h-7 text-gold" />
+                    <div className="w-14 h-14 bg-[#EFE6D6]/10 rounded-xl flex items-center justify-center mx-auto mb-4">
+                      <Gift className="w-7 h-7 text-[#1A1A1A]" />
                     </div>
                     <h2 className="text-xl font-semibold text-foreground">
                       Enter Your Details
