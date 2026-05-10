@@ -34,7 +34,7 @@ export const PremiumBackendHeader: React.FC<PremiumBackendHeaderProps> = ({
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const { user, signOut } = useAuth();
+  const { user, signOut, isOwner } = useAuth();
 
   const handleSignOut = async () => {
     await signOut();
