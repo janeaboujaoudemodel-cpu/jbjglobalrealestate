@@ -711,16 +711,53 @@ export default function CRMLeadsTableV2({
                           <span className="text-[#1A1A1A]/50 italic" title="Not yet assigned to a broker">Pool</span>
                         )}
                         {isOwner && (
-                          <Button
-                            type="button"
-                            size="sm"
-                            variant="outline"
-                            className="h-7 px-2 text-xs bg-gold/10 border-gold/30 text-[#1A1A1A] hover:bg-gold/20 whitespace-nowrap"
-                            onClick={(e) => { e.stopPropagation(); setAssignLeadIds([lead.id]); setShowAssignModal(true); }}
-                            title="Assign broker"
-                          >
-                            Assign
-                          </Button>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <Button
+                                type="button"
+                                size="sm"
+                                variant="outline"
+                                className="h-7 px-2 text-xs bg-gold/10 border-gold/30 text-[#1A1A1A] hover:bg-gold/20 whitespace-nowrap"
+                                onClick={(e) => e.stopPropagation()}
+                                title="Assign broker"
+                              >
+                                {assignedNames[lead.id] ? "Change" : "Assign"}
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent
+                              className="w-72 p-3 bg-[#FDFBF7] border border-[#B89555]/35 shadow-lg"
+                              align="end"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <BrokerCombobox
+                                value={assignedNames[lead.id] || ""}
+                                brokerId={(lead as any).assigned_broker_id ?? null}
+                                label="Assign to broker"
+                                onChange={async ({ brokerId, value }) => {
+                                  try {
+                                    const { error } = await supabase
+                                      .from("crm_leads")
+                                      .update({ assigned_broker_id: brokerId })
+                                      .eq("id", lead.id);
+                                    if (error) throw error;
+                                    toast.success(brokerId ? `Assigned to ${value}` : "Saved as free text");
+                                    fetchLeads();
+                                  } catch (err: any) {
+                                    toast.error(err?.message || "Failed to assign broker");
+                                  }
+                                }}
+                              />
+                              <div className="mt-2 pt-2 border-t border-[#B89555]/20">
+                                <button
+                                  type="button"
+                                  className="w-full text-left text-xs text-[#1A1A1A]/70 hover:text-[#1A1A1A] px-2 py-1 rounded hover:bg-[#EFE6D6]"
+                                  onClick={() => { setAssignLeadIds([lead.id]); setShowAssignModal(true); }}
+                                >
+                                  Open full assign modal →
+                                </button>
+                              </div>
+                            </PopoverContent>
+                          </Popover>
                         )}
                       </div>
                     </TableCell>
