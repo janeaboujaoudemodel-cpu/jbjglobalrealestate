@@ -28,7 +28,13 @@ interface Body {
   brief: string;
   recipient_name?: string;
   tone?: string; // e.g. "warm", "formal", "executive"
+  language?: string; // ISO code: en, ar, fr, es, ru, zh, de
 }
+
+const LANG_NAMES: Record<string, string> = {
+  en: "English", ar: "Arabic", fr: "French", es: "Spanish",
+  ru: "Russian", zh: "Simplified Chinese", de: "German",
+};
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
