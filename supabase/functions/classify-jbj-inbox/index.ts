@@ -360,7 +360,7 @@ Deno.serve(async (req) => {
       const receivedAt = det.internalDate ? new Date(parseInt(det.internalDate, 10)).toISOString() : new Date().toISOString();
 
       const haystack = `${subject}\n${snippet}\n${name} ${email}`;
-      const jbj = isJbjRelated(haystack, devDomains, fromDomain);
+      const jbj = isJbjRelated(haystack, devDomains, fromDomain, subject);
       if (!jbj) { continue; }
 
       const category = classify(subject, snippet, attachments);
