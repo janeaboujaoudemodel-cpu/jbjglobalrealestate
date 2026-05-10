@@ -32,12 +32,32 @@ type Template = {
   brief: string | null;
 };
 
+const LANGUAGES = [
+  ["en", "English"], ["ar", "Arabic"], ["fr", "French"],
+  ["es", "Spanish"], ["ru", "Russian"], ["zh", "Chinese"], ["de", "German"],
+] as const;
+
+const BOOK_URL = "https://www.jbj.ae/book";
+
+function meetingBlockHtml() {
+  return `
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0;width:100%;">
+  <tr><td style="padding:20px;border:1px solid #B89555;border-radius:12px;background:#F7F2EA;">
+    <p style="margin:0 0 6px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#B89555;">Founder Calendar</p>
+    <p style="margin:0 0 12px;font-size:18px;color:#1A1A1A;font-weight:600;">Book a private meeting with Jane</p>
+    <p style="margin:0 0 16px;font-size:14px;color:#1A1A1A;line-height:1.5;">A 60-minute consultation at our Dubai office or online (Zoom / Google Meet). Monday to Friday, 10:00–17:00 Dubai time.</p>
+    <a href="${BOOK_URL}" style="display:inline-block;background:#1A1A1A;color:#FDFBF7;text-decoration:none;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:500;">Reserve a slot</a>
+  </td></tr>
+</table>`.trim();
+}
+
 export function BrandedEmailComposer() {
   const [recipient, setRecipient] = useState("");
   const [recipientName, setRecipientName] = useState("");
   const [brief, setBrief] = useState("");
   const [subject, setSubject] = useState("");
   const [bodyHtml, setBodyHtml] = useState("");
+  const [language, setLanguage] = useState<string>("en");
 
   const [templates, setTemplates] = useState<Template[]>([]);
   const [templateId, setTemplateId] = useState<string>("");
