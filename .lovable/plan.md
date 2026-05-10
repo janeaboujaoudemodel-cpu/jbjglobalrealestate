@@ -1,155 +1,68 @@
+## Plan — Lead UX polish + Email Center roadmap continuation
 
-## Direct answers to your questions
+### 1. Investor mark — visual + filter wiring
+- When a lead's `is_investor` is true:
+  - **Crown icon lights up gold** (`#B89555` fill + soft glow ring) in `LeadQuickActions` (already partially there; make it brighter + persistent across the row).
+  - **Row gets a thin gold left border** + a small "Investor" gold pill next to the name in every lead list (CRM Leads, Kanban card, Email Center sender chip).
+- Wire to filters:
+  - In CRM Leads top bar, the existing **Investors** sub-tab (and `ContactTypeFilter` "Investors" option) will read `is_investor = true` in addition to category, so any lead marked from anywhere instantly appears under Investors.
+  - Add `is_investor` to the `vw_crm_contacts` view payload so the Relationships → Investors tab also picks it up.
 
-**1. Where are Contracts?**
-There IS a Contracts tab in the Email Center (top filter row, between Overview and Registrations). You may be confusing it with the standalone Contract Vault at `/owner/crm?entity=leads&view=contracts`. They are two different things:
-- **Email Center → Contracts tab** = contract-related *emails* (signed agreements, addenda, MOUs landing in your inbox).
-- **Contract Vault** = the master list of signed contract *records*.
-I'll rename the Email Center tab to **"Signed Contracts"** and add a status sub-grouping (Signed / Pending Signature / Needs Document) so it's obvious.
+### 2. Lead-aware quick actions (Calendar / Note / Task / Reminder)
+Today the popovers only carry `leadId`. Change to carry the full lead context (`full_name`, `phone`, `email`) so every artifact is auto-stamped:
+- **Calendar event**: title prefilled `Meeting with {full_name}`, description includes phone + email, `metadata.lead = { id, full_name, phone, email }`.
+- **Note**: body header auto-inserts `— re: {full_name} ({phone} · {email})` so notes are searchable without joins.
+- **Task / Reminder**: title prefilled `Follow up with {full_name}`, `metadata.lead_contact` carries phone/email; due reminder uses lead's preferred channel.
+- Source of truth: pass the full lead object from `crm_leads` row down into `LeadQuickActions` (currently only `leadId` + `leadName`).
 
-**2. Test emails.** Confirmed — from now on, every test send defaults to `infoo.jane@gmail.com`. I will purge every `drjane@gmail.com` reference (6 places — see Technical section).
+### 3. Clickable lead names → CRM detail
+- Every place a lead's name renders (Leads list, Kanban cards, Email Center sender, Tasks list, Calendar event card, Notes panel, Dashboard widgets) becomes a `<Link>` to `/owner/crm?section=leads&leadId={id}` which auto-opens the **Lead Detail drawer** with status editor, notes, tasks, email thread.
+- Add a tiny `useOpenLead(id)` hook that pushes the query param so we don't duplicate routing logic.
+- Style: keep ink color, underline-on-hover with a 1px gold hairline (no faded gold text).
 
-**3. T4 (Registration confirmation).** Understood. For developers already marked "registered" (like Shoba) — send a one-time confirmation email asking them to confirm our agency status. If they reply yes → stays registered. If no reply / negative → auto-flip back to `pending_registration`, extract the task from their reply, attach it to the developer with a link to the email preview. **Going forward, no developer is auto-marked registered until they reply confirming** — and the confirmation reply must include the contact person responsible for projects/events/commission.
+### 4. Email Center — archive previously misclassified items
+Context: When we tightened the real-estate filter, ~older emails that no longer match the strict rules are still in `email_inbox_items`. Plan:
+- Add a column `is_archived boolean default false` + `archived_reason text` to `email_inbox_items`.
+- On next **Sync inbox now**, run a one-shot reclassification: anything that fails the new `RE_SIGNALS` test AND isn't already linked to a contract/registration gets `is_archived = true, archived_reason = 'non_real_estate'`.
+- UI: archived items hidden from all category tabs by default; a small "Archived (N)" link in the Email Center toolbar opens a read-only drawer so you can review what was hidden and restore any false-positive with one click.
+- **Nothing is deleted.** This is a soft archive — full audit trail preserved.
 
-**4. T5 (auto-flip status).** Yes, you're right — I should just do it, not ask. When a developer replies "you are registered/onboarded" the system auto-flips `registration_status = registered`.
+### 5. Continue the roadmap (from prior plan, still pending)
 
-**5. Why the missing-document chase bug?** When an email is classified as `signed` but `contract_document_url` is empty (no PDF attached, or the attachment was a low-confidence match), the system currently flags it `needs_review` instead of auto-firing a chase email. The fix: when `status=signed` AND no attachment AND `linked_developer_id` is set → automatically send the document-request email, log it, and stamp `awaiting_them` until the doc arrives.
+**5a. Registration reconfirmation loop (7-day)**
+- New table `developer_registration_confirmations` (developer_id, sent_at, confirmed_at, reminder_count, status).
+- Edge function `check-registration-confirmations` runs daily via cron:
+  - If no reply after 7 days → auto-fire reminder #1.
+  - After 14 days → reminder #2 + flag lead as `needs_attention` in CRM.
+  - On any inbound reply detected by `classify-jbj-inbox` matching the developer's domain → mark `confirmed_at`, flip developer record `registered = true`.
 
-**6. Email client duplication in Communication.** There are currently two places that show emails: **Communication Hub** (multi-channel: Gmail/Slack/Telegram, raw thread view) and **Email Center** (CRM-scoped, classified, real-estate only, with actions). Recommendation below in section 5.
+**5b. Email → Project listing pipeline**
+- In `classify-jbj-inbox`, when category is `new_launches` or `projects_inventory`:
+  - Extract attached PDFs/links into `extracted_documents jsonb`.
+  - Try to match an existing project by name + developer; if match → attach docs and bump `last_updated_from_email`.
+  - If no match → create a **draft listing** (status=`pending_review`) and queue deep-research enrichment.
+  - Surface in Email Center as a "Project detected → Attach / Create draft" pill.
 
----
+**5c. Commission email → ledger**
+- Category `commission` triggers attaching the email + any PDF to the developer's commission ledger entry (best-match by deal reference in subject/body).
 
-## 1. Premium UI upgrade for Email Center
+**5d. Communication Hub dedup**
+- Replace the generic "Email" tab inside Communication Hub (owner role) with a link card → "Open Email Command Center". Other channels (WhatsApp, Slack, Telegram, etc.) stay in the Hub.
 
-```text
-┌─────────────────────────────────────────────────────────────┐
-│ Email Command Center                  [Sync inbox now]      │
-│ Real-estate only · auto-BCC infoo.jane@gmail.com            │
-├─────────────────────────────────────────────────────────────┤
-│ [Overview] [Signed Contracts] [Registrations]               │
-│ [New Launches] [Projects & Inventory] [Commission]          │
-│ [Events] [Partnerships] [Brokerages] [Careers] [Other]      │
-├─────────────────────────────────────────────────────────────┤
-│ Sub-filters: All · Awaiting you · Awaiting them · Signed    │
-│              · Pending · Needs doc                          │
-├─────────────────────────────────────────────────────────────┤
-│ ╔══════════════════════════════════════════════════════╗   │
-│ ║ 🟡 GOLD-BORDERED CARD                                ║   │
-│ ║ ● Sobha Realty · Signed: Authorization Agreement     ║   │
-│ ║ Status: ✅ Signed   Linked: Sobha (Registered)       ║   │
-│ ║ [Preview email] [Open contract] [Reply] [Archive]    ║   │
-│ ╚══════════════════════════════════════════════════════╝   │
-└─────────────────────────────────────────────────────────────┘
-```
+### 6. Order of work
+1. Investor crown gold + filter wiring (frontend only, ~15 min)
+2. Lead-aware quick actions + clickable names (frontend, ~25 min)
+3. Migration: add `is_archived`, `archived_reason` to `email_inbox_items` + `developer_registration_confirmations` table
+4. Reclassify-on-sync (archive purge) inside `classify-jbj-inbox`
+5. `email-side-effects` edge function (project attach/create, commission ledger, registration confirm flip)
+6. Cron `check-registration-confirmations` (7/14-day loop)
+7. Communication Hub dedup card
+8. End-to-end test against `infoo.jane@gmail.com`
 
-- Every card gets a 1px gold hairline border (`#B89555`), champagne surface, ink text — full conformance with the existing design system.
-- Status pills colour-coded: Signed = emerald, Awaiting you = amber, Awaiting them = blue, Needs doc = rose, Info = champagne.
-- New status filter sub-bar so you can flip between "Awaiting you / Awaiting them / Signed / Pending / Needs doc" within any category.
+### Technical notes
+- All DB writes RLS-scoped to `requireOwnerAuth`.
+- Crown gold uses existing token `#B89555` (1px hairline + 6% glow ring — no solid gold fill on the row, per design rules).
+- Lead name links use existing `/owner/crm` route with `?section=leads&leadId=` param already supported by `UnifiedCRM`.
+- No new dependencies.
 
-## 2. Real-estate-only filter (strict)
-
-Right now the classifier only requires "JBJ token OR known developer domain". That's why unrelated mail leaks in. New rule:
-1. **Must** match a real-estate signal (developer domain, RERA/DLD/ADREC, "agency/brokerage/listing/project/launch/inventory/commission/agreement", or known-developer name) **AND**
-2. **Must not** match a blocklist (newsletters, no-reply marketing, banking, government tax circulars, Google/Apple/Microsoft notices, LinkedIn jobs unrelated to RE).
-
-Anything that doesn't pass both rules is dropped before insert (not just hidden). Re-running Sync will purge previously-misclassified items from `email_inbox_items`.
-
-## 3. New category sections (replaces flat list)
-
-| New tab | What goes here |
-|---|---|
-| Overview | Everything real-estate |
-| Signed Contracts | Signed/executed agreements + MOUs |
-| Registrations | "You are registered / pending registration" replies |
-| Brokerages | Replies from brokerages we onboarded (the automated outreach loop) |
-| New Launches | New project announcements, pre-launch teasers |
-| Projects & Inventory | Brochures, inventory sheets, fact sheets, payment plans |
-| Commission | Commission structures, payouts, slabs |
-| Events | Launch events, broker events, site visits |
-| Partnerships | MoUs, co-broking, JV, referral programs |
-| Careers | CVs, recruiter mail |
-| Other | RE-related but uncategorised |
-
-## 4. Auto-CRM sync from emails (the big one)
-
-Every classified email triggers a side-effect pipeline:
-
-```text
-Email arrives
-  → classify (category + status)
-  → match developer (by domain / known sender)
-  → if signed agreement + no doc → fire document-chase
-  → if registration confirmation reply → flip status registered + capture contact person
-  → if New Launch / Project email
-       └→ extract attached brochure(s), fact sheet, payment plan
-       └→ try to match an existing project (fuzzy: project_name + developer)
-       └→ if match → attach docs to that project (Property page + Home feed update via existing project_media flow)
-       └→ if no match → create a draft listing (status=draft, source=email),
-              auto-fill name/developer/location from email body,
-              run deep-research enrichment (existing universal-link-extractor),
-              route to Listing Admin for owner approval
-       └→ if "offline opportunity" keyword → create as Offline Property
-  → if Commission email → attach to developer's commission ledger
-```
-
-All sends are server-side; you keep one-click "Approve" buttons in Listing Admin so nothing goes public without you.
-
-## 5. Recommendation: Email Center vs Communication Hub
-
-They serve different jobs and should **not** be merged:
-- **Communication Hub** = raw multi-channel inbox (Gmail + Slack + Telegram + Twilio). Keep as-is.
-- **Email Center** = CRM-aware, classified, real-estate-only, with one-click CRM actions.
-
-**Dedup action:** remove the generic "Email" tab inside Communication Hub for the *owner role* (it just mirrors Gmail) and replace it with a link card "Open Email Command Center →". Other channels (Slack, Telegram, SMS) stay in the Hub. This eliminates the duplicate inbox view without losing functionality.
-
-## 6. Founder BCC fix (`drjane@gmail.com` → `infoo.jane@gmail.com`)
-
-Replace in 6 files:
-- `supabase/functions/send-registration-confirmation/index.ts` (line 14: `FOUNDER_BCC` constant)
-- `src/hooks/useEmailInboxItems.ts` (line 96: toast string)
-- `src/pages/owner/crm/EmailCenter.tsx` (lines 7, 78: header copy)
-- `src/config/ownerEmails.ts` (line 12: remove `drjane@gmail.com` from OWNER_EMAILS)
-- header comments in `send-registration-confirmation/index.ts` (line 3)
-
-## 7. End-to-end test (I just run it, no more asking)
-
-I will execute against `infoo.jane@gmail.com` as the captive recipient:
-- T1 Email log dialog → already fixed, just re-verify
-- T2 Sync inbox → confirm real-estate-only filter drops the noise
-- T3 Auto-link signed contracts
-- T4 Send registration-confirm to Sobha **via your address** (you receive it, Sobha doesn't) and verify BCC = infoo.jane@gmail.com
-- T5 Simulate "yes registered" reply → confirm auto-flip
-- T6 Trigger missing-doc chase on a signed-no-attachment record
-- T7 BCC enforcement audit across all outbound functions
-- T8 Counts match UI
-
-I'll deliver a pass/fail table with screenshots and the new categories populated.
-
----
-
-## Technical section (for the AI/dev)
-
-**Files to edit**
-- `supabase/functions/classify-jbj-inbox/index.ts` — tighten `isJbjRelated` (AND-of-positive-signal + blocklist), expand `CATEGORY_RULES` for new sections (new_launches, projects_inventory, commission, events, brokerages), emit side-effect events.
-- `supabase/migrations/<new>.sql` — extend `email_inbox_items.category` check constraint with the new values; add `linked_project_id`, `extracted_documents jsonb`, `auto_action_taken text` columns.
-- New edge function `email-side-effects` — handles project attach/create, doc-chase auto-fire, registration-confirm flip.
-- `src/pages/owner/crm/EmailCenter.tsx` — new CATEGORIES array, status sub-filter bar, gold-bordered card component, copy fix.
-- `src/hooks/useEmailInboxItems.ts` — extend `InboxCategory` union, update queries, fix toast copy.
-- `src/config/ownerEmails.ts` — remove `drjane@gmail.com`.
-- `supabase/functions/send-registration-confirmation/index.ts` — `FOUNDER_BCC = "infoo.jane@gmail.com"`; add `variant="ask_status_confirmation"` mode with 7-day timeout that flips `registered → pending_registration` on no-reply.
-- Listing-creation reuse: call existing `universal-link-extractor` + `create-listing-draft` (or equivalent) — no new ingestion pipeline.
-
-**DB changes summary (one migration):**
-- `email_inbox_items.category` enum widened
-- new cols on `email_inbox_items`: `linked_project_id uuid`, `extracted_documents jsonb default '[]'::jsonb`, `auto_action_taken text`, `confirmation_sent_at timestamptz`
-- new table `developer_registration_confirmations(developer_id, sent_at, replied_at, outcome)` for the 7-day reconfirmation loop.
-
-**Order of work**
-1. BCC purge + ownerEmails edit (5 min, safe).
-2. Migration + classifier rewrite.
-3. EmailCenter UI rebuild with gold cards + sub-filter.
-4. Side-effects edge function.
-5. Communication Hub dedup card.
-6. Run E2E and deliver pass/fail report.
-
-Approve and I'll execute end-to-end, no further questions.
+Approve and I'll execute steps 1→8 in sequence.
