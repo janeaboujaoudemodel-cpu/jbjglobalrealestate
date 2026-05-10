@@ -1,9 +1,10 @@
 // CRMSideRail — slide-in dock for Calendar / Notes / Tasks.
 // Lets the owner peek at the workspace without leaving the current CRM section.
 import { lazy, Suspense, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { CalendarDays, NotebookPen, ListChecks, X, LayoutGrid } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CalendarDays, NotebookPen, ListChecks, X, LayoutGrid, Plus, ExternalLink } from "lucide-react";
 
 const CRMCalendar = lazy(() => import("@/pages/CRMCalendar"));
 const CRMNotes    = lazy(() => import("@/pages/CRMNotes"));
