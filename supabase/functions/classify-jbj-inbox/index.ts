@@ -194,11 +194,54 @@ function collectAttachments(p: GmailPart | undefined): Array<{ filename: string;
   return out;
 }
 
-function isJbjRelated(haystack: string, knownDeveloperDomains: Set<string>, fromDomain: string): boolean {
+// Real-estate positive signals — any one is enough.
+const RE_SIGNALS: RegExp[] = [
+  /\b(real ?estate|property|properties|listing|listings)\b/i,
+  /\b(developer|agency|brokerage|broker)\b/i,
+  /\b(project|tower|community|villa|apartment|penthouse|townhouse)\b/i,
+  /\b(launch|pre[- ]launch|off[- ]plan|inventory|allocation|eoi|payment plan)\b/i,
+  /\b(brochure|fact ?sheet|floor ?plan|master ?plan|unit mix)\b/i,
+  /\b(commission|payout|registration|mou|agreement|contract|addendum|authori[sz]ation)\b/i,
+  /\b(rera|dld|adrec|dubai land department|trakheesi)\b/i,
+  /\b(handover|service charge|escrow)\b/i,
+  /\b(site visit|sales gallery|broker event)\b/i,
+];
+
+// Domains / sender patterns that are never real-estate.
+const NOISE_DOMAINS = new Set([
+  "linkedin.com", "google.com", "googlemail.com", "accounts.google.com",
+  "apple.com", "microsoft.com", "office365.com", "amazon.com", "amazonses.com",
+  "facebook.com", "facebookmail.com", "instagram.com", "tiktok.com", "x.com", "twitter.com",
+  "youtube.com", "spotify.com", "netflix.com",
+  "uber.com", "careem.com", "talabat.com", "noon.com", "amazon.ae",
+  "paypal.com", "stripe.com", "intuit.com", "revolut.com",
+  "github.com", "gitlab.com", "atlassian.com", "notion.so", "figma.com",
+  "openai.com", "anthropic.com",
+]);
+const NOISE_SUBJECT = [
+  /\b(newsletter|unsubscribe|verify your email|password reset|security alert|sign[- ]in (attempt|alert))\b/i,
+  /\b(receipt|invoice number|your order|shipment|tracking)\b/i,
+  /\b(weekly digest|monthly digest|daily digest)\b/i,
+  /\b(promo code|coupon|black friday|sale ends)\b/i,
+];
+
+function isJbjRelated(
+  haystack: string,
+  knownDeveloperDomains: Set<string>,
+  fromDomain: string,
+  subject: string,
+): boolean {
   const h = haystack.toLowerCase();
+  // Hard blocklist first.
+  if (fromDomain && NOISE_DOMAINS.has(fromDomain)) return false;
+  if (NOISE_SUBJECT.some((p) => p.test(subject))) return false;
+
+  // Strong signals: JBJ tokens OR known developer domain (always pass).
   if (JBJ_TOKENS.some((t) => h.includes(t))) return true;
   if (fromDomain && knownDeveloperDomains.has(fromDomain)) return true;
-  return false;
+
+  // Otherwise require an explicit real-estate signal in subject/snippet.
+  return RE_SIGNALS.some((p) => p.test(h));
 }
 
 function classify(subject: string, snippet: string, attachments: Array<{ filename: string }>): Category {
