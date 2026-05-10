@@ -223,7 +223,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
       {/* Primary Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 overflow-hidden">
         {primaryCards.map((card, index) => (
-          <Card key={index} className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)]/95 to-[hsl(36,25%,88%)]/80 shadow-[0_8px_30px_rgba(200,167,102,0.12)] overflow-hidden">
+          <Card key={index} className="border border-[#B89555]/30 bg-[#FDFBF7] shadow-sm overflow-hidden">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-semibold text-[#1A1A1A]/70 truncate">
                 {card.title}
@@ -257,7 +257,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Activity Trend */}
-        <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)]/95 to-[hsl(36,25%,88%)]/80 shadow-[0_8px_30px_rgba(200,167,102,0.12)]">
+        <Card className="border border-[#B89555]/30 bg-[#FDFBF7] shadow-sm">
           <CardHeader>
             <CardTitle className="text-base font-semibold text-[#1A1A1A] flex items-center gap-2">
               <TrendingUp className="h-5 w-5 text-blue-500" />
@@ -310,10 +310,10 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
         </Card>
 
         {/* Pipeline Distribution */}
-        <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)]/95 to-[hsl(36,25%,88%)]/80 shadow-[0_8px_30px_rgba(200,167,102,0.12)]">
+        <Card className="border border-[#B89555]/30 bg-[#FDFBF7] shadow-sm">
           <CardHeader>
             <CardTitle className="text-base font-semibold text-[#1A1A1A] flex items-center gap-2">
-              <Zap className="h-5 w-5 text-gold" />
+              <Zap className="h-5 w-5 text-[#1A1A1A]" />
               Pipeline Distribution
             </CardTitle>
           </CardHeader>
@@ -350,7 +350,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
 
       {/* Secondary Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)]/95 to-[hsl(36,25%,88%)]/80 shadow-[0_8px_30px_rgba(200,167,102,0.12)]">
+        <Card className="border border-[#B89555]/30 bg-[#FDFBF7] shadow-sm">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-amber-500/10">
@@ -363,7 +363,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
             </div>
           </CardContent>
         </Card>
-        <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)]/95 to-[hsl(36,25%,88%)]/80 shadow-[0_8px_30px_rgba(200,167,102,0.12)]">
+        <Card className="border border-[#B89555]/30 bg-[#FDFBF7] shadow-sm">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-blue-500/10">
@@ -376,7 +376,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
             </div>
           </CardContent>
         </Card>
-        <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)]/95 to-[hsl(36,25%,88%)]/80 shadow-[0_8px_30px_rgba(200,167,102,0.12)]">
+        <Card className="border border-[#B89555]/30 bg-[#FDFBF7] shadow-sm">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-green-500/10">
@@ -389,7 +389,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
             </div>
           </CardContent>
         </Card>
-        <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)]/95 to-[hsl(36,25%,88%)]/80 shadow-[0_8px_30px_rgba(200,167,102,0.12)]">
+        <Card className="border border-[#B89555]/30 bg-[#FDFBF7] shadow-sm">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-purple-500/10">
