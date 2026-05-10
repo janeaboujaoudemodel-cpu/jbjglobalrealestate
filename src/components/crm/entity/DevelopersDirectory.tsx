@@ -64,6 +64,9 @@ const IconLink = ({ href, title, children }: { href: string | null; title: strin
     >{children}</a>
   ) : null;
 
+const norm = (s: string | null | undefined) =>
+  (s || "").toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, " ").trim();
+
 export default function DevelopersDirectory() {
   const [rows, setRows] = useState<DeveloperRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -71,6 +74,36 @@ export default function DevelopersDirectory() {
   const [search, setSearch] = useState("");
   const [hubOpen, setHubOpen] = useState(false);
   const [hubName, setHubName] = useState<string | null>(null);
+  const [leadCounts, setLeadCounts] = useState<Map<string, number>>(new Map());
+
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      try {
+        const counts = new Map<string, number>();
+        let from = 0;
+        const PAGE = 1000;
+        for (let i = 0; i < 30; i++) {
+          const { data, error } = await supabase
+            .from("crm_leads")
+            .select("company_name")
+            .not("company_name", "is", null)
+            .range(from, from + PAGE - 1);
+          if (error) break;
+          const batch = (data || []) as Array<{ company_name: string | null }>;
+          for (const r of batch) {
+            const k = norm(r.company_name);
+            if (!k) continue;
+            counts.set(k, (counts.get(k) || 0) + 1);
+          }
+          if (batch.length < PAGE) break;
+          from += PAGE;
+        }
+        if (alive) setLeadCounts(counts);
+      } catch { /* non-fatal */ }
+    })();
+    return () => { alive = false; };
+  }, []);
 
   useEffect(() => {
     let alive = true;
@@ -159,6 +192,7 @@ export default function DevelopersDirectory() {
               <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Headquarters</th>
               <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">CEO</th>
               <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">License</th>
+              <th className="text-right px-4 py-2 font-semibold whitespace-nowrap">Leads</th>
               <th className="text-right px-4 py-2 font-semibold whitespace-nowrap">Done</th>
               <th className="text-right px-4 py-2 font-semibold whitespace-nowrap">Off-plan</th>
               <th className="text-right px-4 py-2 font-semibold whitespace-nowrap">Founded</th>
@@ -198,6 +232,16 @@ export default function DevelopersDirectory() {
                   </td>
                   <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">{d.ceo_name || "—"}</td>
                   <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">{d.license_number || "—"}</td>
+                  <td className="px-4 py-3 text-right whitespace-nowrap">
+                    {(() => {
+                      const c = leadCounts.get(norm(d.name)) || 0;
+                      return c > 0 ? (
+                        <span className="inline-flex items-center justify-center min-w-[28px] px-2 py-0.5 rounded-full text-[11px] font-bold bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 tabular-nums">
+                          {c.toLocaleString()}
+                        </span>
+                      ) : <span className="text-[#1A1A1A]/40 text-xs">0</span>;
+                    })()}
+                  </td>
                   <td className="px-4 py-3 text-right text-[#1A1A1A] whitespace-nowrap">{d.completed_projects ?? "—"}</td>
                   <td className="px-4 py-3 text-right text-[#1A1A1A] whitespace-nowrap">{d.offplan_projects ?? "—"}</td>
                   <td className="px-4 py-3 text-right text-[#1A1A1A]/80 text-xs whitespace-nowrap">{d.founded_year || "—"}</td>
