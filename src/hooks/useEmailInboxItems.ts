@@ -68,7 +68,12 @@ export function useInboxCategoryCounts() {
         .is("archived_at", null)
         .limit(1000);
       if (error) throw error;
-      const counts: Record<string, number> = { overview: 0, contracts: 0, registrations: 0, opportunities: 0, partnerships: 0, careers: 0, other: 0, awaiting_you: 0 };
+      const counts: Record<string, number> = {
+        overview: 0, contracts: 0, registrations: 0, brokerages: 0,
+        new_launches: 0, projects_inventory: 0, commission: 0, events: 0,
+        opportunities: 0, partnerships: 0, careers: 0, other: 0,
+        awaiting_you: 0,
+      };
       for (const r of (data ?? []) as any[]) {
         counts.overview++;
         counts[r.category] = (counts[r.category] ?? 0) + 1;
