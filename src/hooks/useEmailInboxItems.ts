@@ -2,8 +2,20 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-export type InboxCategory = "overview" | "contracts" | "registrations" | "opportunities" | "partnerships" | "careers" | "other";
-export type InboxStatus = "awaiting_you" | "awaiting_them" | "signed" | "registered" | "info_only" | "needs_review";
+export type InboxCategory =
+  | "overview"
+  | "contracts"
+  | "registrations"
+  | "brokerages"
+  | "new_launches"
+  | "projects_inventory"
+  | "commission"
+  | "events"
+  | "opportunities"
+  | "partnerships"
+  | "careers"
+  | "other";
+export type InboxStatus = "awaiting_you" | "awaiting_them" | "signed" | "registered" | "info_only" | "needs_review" | "needs_document";
 
 export interface EmailInboxItem {
   id: string;
