@@ -315,6 +315,17 @@ export default function UnifiedCRM() {
           </div>
           <div className="flex items-center gap-2">
             <Suspense fallback={null}>
+              <CRMFloatingInsightsWidget
+                flaggedCount={counts.flagged}
+                onOpenFlagged={() => {
+                  const next = new URLSearchParams(params);
+                  next.set("entity", "leads");
+                  next.set("view", "flagged");
+                  setParams(next, { replace: true });
+                }}
+              />
+            </Suspense>
+            <Suspense fallback={null}>
               <CRMGlobalExportButton />
             </Suspense>
             <button
