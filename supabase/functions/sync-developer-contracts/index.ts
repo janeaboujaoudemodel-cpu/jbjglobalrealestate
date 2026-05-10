@@ -18,7 +18,7 @@ const GATEWAY_BASE = "https://connector-gateway.lovable.dev";
 // Gmail search query for signed contracts. Covers manual signed PDFs,
 // DocuSign, Adobe Sign, PandaDoc and similar completion notifications.
 const GMAIL_QUERY =
-  '("signed agreement" OR "signed contract" OR "fully executed" OR "executed agreement" OR "contract signed" OR "agreement signed" OR "completed: please docusign" OR "completed via docusign" OR "completed by all parties" OR from:dse_NA1@docusign.net OR from:echosign@echosign.com OR from:adobesign@adobe.com) newer_than:90d';
+  '(subject:signed OR subject:"countersigned" OR subject:"fully executed" OR subject:"executed agreement" OR subject:"contract signed" OR subject:"agreement signed" OR "signed agreement" OR "signed contract" OR "fully executed" OR "completed: please docusign" OR "completed via docusign" OR "completed by all parties" OR from:dse_NA1@docusign.net OR from:echosign@echosign.com OR from:adobesign@adobe.com OR has:attachment filename:(contract OR agreement OR signed)) newer_than:120d';
 
 interface GmailHeader { name: string; value: string }
 interface GmailPart {
