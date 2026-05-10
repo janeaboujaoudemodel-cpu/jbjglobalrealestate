@@ -36,6 +36,7 @@ const CRMTasks            = lazy(() => import("@/pages/CRMTasks"));
 const CRMCalendar         = lazy(() => import("@/pages/CRMCalendar"));
 const CRMNotes            = lazy(() => import("@/pages/CRMNotes"));
 const OwnerInbox          = lazy(() => import("@/pages/OwnerInbox"));
+const EmailCenter         = lazy(() => import("@/pages/owner/crm/EmailCenter"));
 const ContractVault       = lazy(() => import("@/pages/owner/contracts/ContractVault"));
 const AutomationRules     = lazy(() => import("@/components/crm/AutomationRules"));
 const CRMEnhancedDashboard= lazy(() => import("@/components/crm/CRMEnhancedDashboard"));
@@ -71,6 +72,7 @@ const VIEWS: Record<Entity, ViewItem[]> = {
     { id: "calendar",      label: "Calendar",      group: "Workspace" },
     { id: "notes",         label: "Notes",         group: "Workspace" },
     { id: "inbox",         label: "Inbox",         group: "Workspace" },
+    { id: "email-center",  label: "Email Center",  group: "Workspace" },
     { id: "notifications", label: "Notifications", group: "Workspace" },
     { id: "contracts",     label: "Contracts",     group: "Pipeline" },
     { id: "campaigns",     label: "Campaigns",     group: "Pipeline" },
@@ -246,6 +248,7 @@ export default function UnifiedCRM() {
         case "calendar":      return <Embed><CRMCalendar /></Embed>;
         case "notes":         return <Embed><CRMNotes /></Embed>;
         case "inbox":         return <Embed><OwnerInbox /></Embed>;
+        case "email-center":  return <Embed><EmailCenter /></Embed>;
         case "notifications": return <NotificationsPanel />;
         case "contracts":     return <Embed><ContractVault /></Embed>;
         case "campaigns":     return <Embed><CampaignsPage /></Embed>;
