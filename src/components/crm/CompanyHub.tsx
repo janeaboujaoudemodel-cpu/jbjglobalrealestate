@@ -29,6 +29,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   Loader2, Building2, Users, Megaphone, CalendarDays, Bell,
   CreditCard, StickyNote, Mail, MessagesSquare, ExternalLink,
+  Phone, Globe, MapPin, Linkedin, Instagram, BadgeCheck, MessageCircle,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
