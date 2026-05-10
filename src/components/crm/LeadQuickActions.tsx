@@ -51,11 +51,11 @@ function CalendarPopover({ leadId, leadName, userId }: Props) {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button type="button" size="icon" className="h-9 w-9 bg-[#EFE6D6] hover:bg-[#E5D9C4] text-[#1A1A1A] border border-gold/30" title="Schedule">
+        <Button type="button" size="icon" className="h-9 w-9 bg-[#EFE6D6] hover:bg-[#E5D9C4] text-[#1A1A1A] border border-[#B89555]/30" title="Schedule">
           <CalendarPlus className="h-4 w-4" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-72 bg-[#FDFBF7] border-gold/30 z-50" align="end">
+      <PopoverContent className="w-72 bg-[#FDFBF7] border-[#B89555]/30 z-50" align="end">
         <div className="space-y-2">
           <div className="text-sm font-bold text-[#1A1A1A]">Schedule meeting</div>
           <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" />
@@ -92,11 +92,11 @@ function NotePopover({ leadId, userId }: Props) {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button type="button" size="icon" className="h-9 w-9 bg-[#EFE6D6] hover:bg-[#E5D9C4] text-[#1A1A1A] border border-gold/30" title="Note">
+        <Button type="button" size="icon" className="h-9 w-9 bg-[#EFE6D6] hover:bg-[#E5D9C4] text-[#1A1A1A] border border-[#B89555]/30" title="Note">
           <StickyNote className="h-4 w-4" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-72 bg-[#FDFBF7] border-gold/30 z-50" align="end">
+      <PopoverContent className="w-72 bg-[#FDFBF7] border-[#B89555]/30 z-50" align="end">
         <div className="space-y-2">
           <div className="text-sm font-bold text-[#1A1A1A]">Add note</div>
           <Textarea value={body} onChange={(e) => setBody(e.target.value)} rows={4} placeholder="Type a note…" />
@@ -136,11 +136,11 @@ function TaskPopover({ leadId, leadName, userId }: Props) {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button type="button" size="icon" className="h-9 w-9 bg-[#EFE6D6] hover:bg-[#E5D9C4] text-[#1A1A1A] border border-gold/30" title="Task">
+        <Button type="button" size="icon" className="h-9 w-9 bg-[#EFE6D6] hover:bg-[#E5D9C4] text-[#1A1A1A] border border-[#B89555]/30" title="Task">
           <ListTodo className="h-4 w-4" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-72 bg-[#FDFBF7] border-gold/30 z-50" align="end">
+      <PopoverContent className="w-72 bg-[#FDFBF7] border-[#B89555]/30 z-50" align="end">
         <div className="space-y-2">
           <div className="text-sm font-bold text-[#1A1A1A]">Add task{leadName ? ` for ${leadName}` : ""}</div>
           <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Task title" />
