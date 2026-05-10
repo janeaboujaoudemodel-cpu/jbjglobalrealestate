@@ -47,7 +47,7 @@ export default function CRMSideRail() {
           <SheetHeader className="px-5 pt-4 pb-3 border-b border-[#B89555]/20 bg-[#F7F2EA]">
             <div className="flex items-center justify-between gap-3">
               <SheetTitle className="text-[#1A1A1A] text-base font-semibold tracking-tight">
-                Workspace
+                Shortcuts
               </SheetTitle>
               <button
                 type="button"
