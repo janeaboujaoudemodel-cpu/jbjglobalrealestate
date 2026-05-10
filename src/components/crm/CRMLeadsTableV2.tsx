@@ -449,7 +449,7 @@ export default function CRMLeadsTableV2({
             onClick={() => {
               setSelected(new Set());
               setSearch("");
-              setStageFilter("");
+              setStageMulti([]);
               setSourceTypeFilter("");
               setAssigneeFilter("");
               setTagFilter("");
