@@ -44,6 +44,7 @@ const InvestorsDirectory  = lazy(() => import("@/components/crm/InvestorsDirecto
 const BrokersImported     = lazy(() => import("@/components/crm/BrokersImported"));
 const CRMGlobalExportButton = lazy(() => import("@/components/crm/CRMGlobalExportButton"));
 const CRMSideRail = lazy(() => import("@/components/crm/CRMSideRail"));
+const CRMFloatingInsightsWidget = lazy(() => import("@/components/crm/CRMFloatingInsightsWidget"));
 
 type Entity =
   | "leads" | "investors" | "developers" | "sales-reps"
