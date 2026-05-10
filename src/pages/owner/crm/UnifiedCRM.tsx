@@ -44,6 +44,7 @@ const InvestorsDirectory  = lazy(() => import("@/components/crm/InvestorsDirecto
 const BrokersImported     = lazy(() => import("@/components/crm/BrokersImported"));
 const CRMGlobalExportButton = lazy(() => import("@/components/crm/CRMGlobalExportButton"));
 const CRMSideRail = lazy(() => import("@/components/crm/CRMSideRail"));
+const CRMFloatingInsightsWidget = lazy(() => import("@/components/crm/CRMFloatingInsightsWidget"));
 
 type Entity =
   | "leads" | "investors" | "developers" | "sales-reps"
@@ -304,7 +305,7 @@ export default function UnifiedCRM() {
   return (
     <div className="min-h-screen bg-[#FDFBF7]">
       {/* Title row + Insights toggle */}
-      <div className="bg-[#FDFBF7] border-b border-[#B89555]/30">
+      <div className="bg-[#FDFBF7] border-b border-[#B89555]/30 relative">
         <div className="px-6 pt-5 pb-3 flex items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-semibold tracking-tight text-[#1A1A1A]">JBJ CRM</h1>
@@ -313,6 +314,17 @@ export default function UnifiedCRM() {
             </p>
           </div>
           <div className="flex items-center gap-2">
+            <Suspense fallback={null}>
+              <CRMFloatingInsightsWidget
+                flaggedCount={counts.flagged}
+                onOpenFlagged={() => {
+                  const next = new URLSearchParams(params);
+                  next.set("entity", "leads");
+                  next.set("view", "flagged");
+                  setParams(next, { replace: true });
+                }}
+              />
+            </Suspense>
             <Suspense fallback={null}>
               <CRMGlobalExportButton />
             </Suspense>
