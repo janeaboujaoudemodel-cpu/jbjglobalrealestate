@@ -242,7 +242,7 @@ export default function IndividualBrokersTab() {
       ) : (
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {filtered.map((r) => (
-            <Card key={r.id} className="bg-[#FDFBF7] border-[#1A1A1A]/10 hover:shadow-md transition rounded-2xl">
+            <Card key={r.id} className="bg-[#FDFBF7] border-[#B89555]/30 hover:shadow-md hover:border-[#B89555]/50 transition rounded-2xl">
               <CardContent className="p-4">
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-full bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center shrink-0">
@@ -263,17 +263,17 @@ export default function IndividualBrokersTab() {
                         <span key={lbl} className="px-2 py-0.5 rounded-full border border-[#B89555]/40 bg-[#FDFBF7] text-[#1A1A1A] capitalize">{lbl.replace(/_/g, " ")}</span>
                       ))}
                       {(r.specialty_labels || []).length === 0 && (r.expertise_type === "leasing" || r.expertise_type === "both") && (
-                        <span className="px-2 py-0.5 rounded-full border border-emerald-300 bg-emerald-50 text-emerald-900">Leasing</span>
+                        <span className="px-2 py-0.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-800">Leasing</span>
                       )}
                       {(r.specialty_labels || []).length === 0 && (r.expertise_type === "selling" || r.expertise_type === "both") && (
-                        <span className="px-2 py-0.5 rounded-full border border-blue-300 bg-blue-50 text-blue-900">Selling</span>
+                        <span className="px-2 py-0.5 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-800">Selling</span>
                       )}
                       {(r.expertise_areas || []).slice(0, 3).map((a) => (
                         <span key={a} className="px-2 py-0.5 rounded-full border border-[#B89555]/40 bg-[#EFE6D6] text-[#1A1A1A]">{a}</span>
                       ))}
                       {(r.source_history || []).slice(-2).map((sh: any, i: number) => (
-                        <span key={`sh-${i}`} className="px-2 py-0.5 rounded-full border border-[#1A1A1A]/15 bg-white text-[#1A1A1A]/80" title={`Source: ${sh.source_name || ""} (${sh.source_type || "—"})`}>
-                          📂 {sh.label || sh.file || "import"}
+                        <span key={`sh-${i}`} className="px-2 py-0.5 rounded-full border border-[#B89555]/25 bg-[#F7F2EA] text-[#1A1A1A]/80" title={`Source: ${sh.source_name || ""} (${sh.source_type || "—"})`}>
+                          {sh.label || sh.file || "import"}
                         </span>
                       ))}
                     </div>
