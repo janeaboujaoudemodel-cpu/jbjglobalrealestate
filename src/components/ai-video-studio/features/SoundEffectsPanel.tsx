@@ -398,12 +398,12 @@ export function SoundEffectsPanel({ onAddToTimeline }: SoundEffectsPanelProps) {
   }, []);
 
   return (
-    <div className="h-full flex flex-col bg-slate-900 text-white">
+    <div className="h-full flex flex-col bg-[#1A1A1A] text-white">
       {/* Volume & info bar */}
-      <div className="flex-shrink-0 px-3 py-2 border-b border-slate-700 flex items-center gap-3">
+      <div className="flex-shrink-0 px-3 py-2 border-b border-[#1A1A1A] flex items-center gap-3">
         <div className="flex items-center gap-1.5 text-[#1A1A1A]">
           <Volume2 className="w-3.5 h-3.5" />
-          <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Volume</span>
+          <span className="text-[10px] font-semibold text-[#1A1A1A]/70 uppercase tracking-wider">Volume</span>
         </div>
         <input
           type="range"
@@ -414,7 +414,7 @@ export function SoundEffectsPanel({ onAddToTimeline }: SoundEffectsPanelProps) {
           onChange={e => setVolume(Number(e.target.value))}
           className="flex-1 h-1.5 accent-amber-500 cursor-pointer"
         />
-        <span className="text-xs text-slate-400 w-8 text-right">{Math.round(volume * 100)}%</span>
+        <span className="text-xs text-[#1A1A1A]/70 w-8 text-right">{Math.round(volume * 100)}%</span>
         <div className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/30">
           <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
           <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-widest">Zero Credits</span>
@@ -423,33 +423,33 @@ export function SoundEffectsPanel({ onAddToTimeline }: SoundEffectsPanelProps) {
 
       <ScrollArea className="flex-1">
         <div className="p-3 space-y-2">
-          <p className="text-[10px] text-slate-500 leading-relaxed px-1">
-            <strong className="text-slate-400">Click</strong> any sound to preview instantly — synthesized in your browser. <strong className="text-slate-400">Add</strong> to place it on the timeline.
+          <p className="text-[10px] text-[#1A1A1A]/70 leading-relaxed px-1">
+            <strong className="text-[#1A1A1A]/70">Click</strong> any sound to preview instantly — synthesized in your browser. <strong className="text-[#1A1A1A]/70">Add</strong> to place it on the timeline.
           </p>
 
           {SFX_CATEGORIES.map(cat => {
             const isExpanded = expandedCats[cat.label] ?? false;
             return (
-              <div key={cat.label} className="rounded-lg border border-slate-700 overflow-hidden">
+              <div key={cat.label} className="rounded-lg border border-[#1A1A1A] overflow-hidden">
                 <button
                   onClick={() => toggleCat(cat.label)}
-                  className="w-full flex items-center justify-between px-3 py-2 bg-slate-800 hover:bg-slate-750 text-left transition-colors"
+                  className="w-full flex items-center justify-between px-3 py-2 bg-[#1A1A1A] hover:bg-slate-750 text-left transition-colors"
                 >
                   <span className="text-xs font-semibold text-slate-200">{cat.label}</span>
                   {isExpanded
-                    ? <ChevronUp className="w-3.5 h-3.5 text-slate-400" />
-                    : <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+                    ? <ChevronUp className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
+                    : <ChevronDown className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
                   }
                 </button>
                 {isExpanded && (
-                  <div className="px-2 py-2 bg-slate-900 grid grid-cols-2 gap-1.5">
+                  <div className="px-2 py-2 bg-[#1A1A1A] grid grid-cols-2 gap-1.5">
                     {cat.presets.map(preset => {
                       const isPlaying = playingId === preset.id;
                       return (
                         <div
                           key={preset.id}
                           className={`rounded-lg border transition-all overflow-hidden ${
-                            isPlaying ? 'border-amber-500/70 bg-amber-500/5' : 'border-slate-700 bg-slate-800 hover:border-amber-500/40'
+                            isPlaying ? 'border-amber-500/70 bg-amber-500/5' : 'border-[#1A1A1A] bg-[#1A1A1A] hover:border-amber-500/40'
                           }`}
                         >
                           {/* Play row */}
@@ -458,7 +458,7 @@ export function SoundEffectsPanel({ onAddToTimeline }: SoundEffectsPanelProps) {
                             className="w-full flex items-center gap-2 px-2.5 py-2 text-left group"
                           >
                             <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 transition-all ${
-                              isPlaying ? 'bg-amber-500 text-[#1A1A1A]' : 'bg-slate-700 text-slate-300 group-hover:bg-amber-500/20 group-hover:text-[#1A1A1A]'
+                              isPlaying ? 'bg-amber-500 text-[#1A1A1A]' : 'bg-[#1A1A1A] text-[#1A1A1A]/70 group-hover:bg-amber-500/20 group-hover:text-[#1A1A1A]'
                             }`}>
                               {isPlaying
                                 ? <Square className="w-2.5 h-2.5 fill-current" />
@@ -467,13 +467,13 @@ export function SoundEffectsPanel({ onAddToTimeline }: SoundEffectsPanelProps) {
                             </div>
                             <div className="flex-1 min-w-0">
                               <p className="text-[11px] font-semibold text-slate-200 truncate leading-tight">{preset.label}</p>
-                              <p className="text-[9px] text-slate-500 leading-tight">{preset.dur}s · Browser Synth</p>
+                              <p className="text-[9px] text-[#1A1A1A]/70 leading-tight">{preset.dur}s · Browser Synth</p>
                             </div>
                           </button>
                           {/* Add button */}
                           <button
                             onClick={() => handleAdd(preset)}
-                            className="w-full flex items-center justify-center gap-1 py-1 bg-slate-700/60 hover:bg-amber-500 hover:text-[#1A1A1A] text-slate-400 text-[9px] font-bold transition-all border-t border-slate-700/60"
+                            className="w-full flex items-center justify-center gap-1 py-1 bg-[#1A1A1A]/60 hover:bg-amber-500 hover:text-[#1A1A1A] text-[#1A1A1A]/70 text-[9px] font-bold transition-all border-t border-[#1A1A1A]/60"
                           >
                             <Plus className="w-2.5 h-2.5" />
                             Add to Timeline

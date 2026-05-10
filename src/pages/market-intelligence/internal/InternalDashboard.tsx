@@ -52,7 +52,7 @@ const InternalDashboard = () => {
       </div>
 
       {/* Header */}
-      <section className="py-12 border-b border-zinc-900">
+      <section className="py-12 border-b border-[#1A1A1A]">
         <div className="container mx-auto px-4">
           <Link to="/market-intelligence" className="inline-flex items-center gap-2 text-[#1A1A1A] hover:text-[#1A1A1A]-light mb-6">
             <ArrowLeft className="w-4 h-4" />
@@ -74,7 +74,7 @@ const InternalDashboard = () => {
       </section>
 
       {/* Quick Stats */}
-      <section className="py-8 border-b border-zinc-900">
+      <section className="py-8 border-b border-[#1A1A1A]">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
@@ -184,7 +184,7 @@ const InternalDashboard = () => {
       </section>
 
       {/* Navigation to Other Internal Pages */}
-      <section className="py-12 border-t border-zinc-900">
+      <section className="py-12 border-t border-[#1A1A1A]">
         <div className="container mx-auto px-4">
           <h2 className="text-white text-xl font-bold mb-6">Internal Tools</h2>
           <div className="grid md:grid-cols-3 gap-4">

@@ -139,11 +139,11 @@ export default function RegisterInvestor() {
           </div>
           <div>
             <h1 className="text-3xl font-bold text-[#1A1A1A]">Investor Registration</h1>
-            <p className="text-neutral-600 text-sm">Tell us about your investment profile</p>
+            <p className="text-[#1A1A1A]/80 text-sm">Tell us about your investment profile</p>
           </div>
         </div>
 
-        <section className="space-y-5 bg-neutral-50 rounded-2xl p-6 border border-neutral-200 mb-6">
+        <section className="space-y-5 bg-[#F7F2EA] rounded-2xl p-6 border border-[#B89555]/30 mb-6">
           <h2 className="text-lg font-semibold text-[#1A1A1A]">Basic Information</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Field label="Full Name *"><Input value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="As on passport" /></Field>
@@ -162,24 +162,24 @@ export default function RegisterInvestor() {
           </div>
         </section>
 
-        <section className="space-y-5 bg-neutral-50 rounded-2xl p-6 border border-neutral-200 mb-6">
+        <section className="space-y-5 bg-[#F7F2EA] rounded-2xl p-6 border border-[#B89555]/30 mb-6">
           <h2 className="text-lg font-semibold text-[#1A1A1A]">Your Status</h2>
           <RadioGroup value={intent} onValueChange={(v) => setIntent(v as Intent)} className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <label className={`p-4 rounded-xl border-2 cursor-pointer ${intent === "looking_to_buy" ? "border-[#1A1A1A] bg-[#FDFBF7]" : "border-neutral-200 bg-[#FDFBF7]"}`}>
+            <label className={`p-4 rounded-xl border-2 cursor-pointer ${intent === "looking_to_buy" ? "border-[#1A1A1A] bg-[#FDFBF7]" : "border-[#B89555]/30 bg-[#FDFBF7]"}`}>
               <div className="flex items-start gap-3">
                 <RadioGroupItem value="looking_to_buy" />
                 <div>
                   <div className="font-semibold text-[#1A1A1A]">Looking to buy</div>
-                  <div className="text-xs text-neutral-600">I'm searching for properties to invest in</div>
+                  <div className="text-xs text-[#1A1A1A]/80">I'm searching for properties to invest in</div>
                 </div>
               </div>
             </label>
-            <label className={`p-4 rounded-xl border-2 cursor-pointer ${intent === "currently_invested" ? "border-[#1A1A1A] bg-[#FDFBF7]" : "border-neutral-200 bg-[#FDFBF7]"}`}>
+            <label className={`p-4 rounded-xl border-2 cursor-pointer ${intent === "currently_invested" ? "border-[#1A1A1A] bg-[#FDFBF7]" : "border-[#B89555]/30 bg-[#FDFBF7]"}`}>
               <div className="flex items-start gap-3">
                 <RadioGroupItem value="currently_invested" />
                 <div>
                   <div className="font-semibold text-[#1A1A1A]">Currently invested</div>
-                  <div className="text-xs text-neutral-600">I already own one or more properties</div>
+                  <div className="text-xs text-[#1A1A1A]/80">I already own one or more properties</div>
                 </div>
               </div>
             </label>
@@ -187,7 +187,7 @@ export default function RegisterInvestor() {
         </section>
 
         {intent === "looking_to_buy" && (
-          <section className="space-y-5 bg-neutral-50 rounded-2xl p-6 border border-neutral-200 mb-6">
+          <section className="space-y-5 bg-[#F7F2EA] rounded-2xl p-6 border border-[#B89555]/30 mb-6">
             <h2 className="text-lg font-semibold text-[#1A1A1A]">What are you looking for?</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Field label="Budget Min (AED)"><Input type="number" value={budgetMin} onChange={(e) => setBudgetMin(e.target.value)} placeholder="500000" /></Field>
@@ -231,13 +231,13 @@ export default function RegisterInvestor() {
         )}
 
         {intent === "currently_invested" && (
-          <section className="space-y-5 bg-neutral-50 rounded-2xl p-6 border border-neutral-200 mb-6">
+          <section className="space-y-5 bg-[#F7F2EA] rounded-2xl p-6 border border-[#B89555]/30 mb-6">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold text-[#1A1A1A]">Your properties</h2>
               <Button type="button" variant="outline" size="sm" onClick={addOwned}>+ Add property</Button>
             </div>
             {owned.map((p, i) => (
-              <div key={i} className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-[#FDFBF7] rounded-xl border border-neutral-200 relative">
+              <div key={i} className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-[#FDFBF7] rounded-xl border border-[#B89555]/30 relative">
                 <Field label="Project name *"><Input value={p.project_name} onChange={(e) => updateOwned(i, "project_name", e.target.value)} /></Field>
                 <Field label="Unit number"><Input value={p.unit_number} onChange={(e) => updateOwned(i, "unit_number", e.target.value)} /></Field>
                 <Field label="Purchase price (AED)"><Input type="number" value={p.purchase_price} onChange={(e) => updateOwned(i, "purchase_price", e.target.value)} /></Field>
@@ -250,16 +250,16 @@ export default function RegisterInvestor() {
           </section>
         )}
 
-        <section className="space-y-5 bg-neutral-50 rounded-2xl p-6 border border-neutral-200 mb-6">
+        <section className="space-y-5 bg-[#F7F2EA] rounded-2xl p-6 border border-[#B89555]/30 mb-6">
           <Field label="Notes / specific requirements">
             <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={4} placeholder="Anything else our advisors should know" />
           </Field>
         </section>
 
-        <Button onClick={handleSubmit} disabled={submitting} className="w-full h-14 text-base bg-[#1A1A1A] text-white hover:bg-neutral-800">
+        <Button onClick={handleSubmit} disabled={submitting} className="w-full h-14 text-base bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]">
           {submitting ? <Loader2 className="w-5 h-5 animate-spin" /> : (<>Submit & Continue <ArrowRight className="ml-2 w-5 h-5" /></>)}
         </Button>
-        <p className="text-xs text-neutral-500 text-center mt-4 flex items-center justify-center gap-1.5">
+        <p className="text-xs text-[#1A1A1A]/70 text-center mt-4 flex items-center justify-center gap-1.5">
           <CheckCircle2 className="w-3.5 h-3.5" /> Your information is securely stored in your private account.
         </p>
       </div>
@@ -270,7 +270,7 @@ export default function RegisterInvestor() {
 function Field({ label, children, className = "" }: { label: string; children: React.ReactNode; className?: string }) {
   return (
     <div className={`space-y-1.5 ${className}`}>
-      <Label className="text-sm text-neutral-700">{label}</Label>
+      <Label className="text-sm text-[#1A1A1A]/80">{label}</Label>
       {children}
     </div>
   );

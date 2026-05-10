@@ -35,12 +35,12 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
   if (!selectedClip) {
     return (
       <div className="h-full flex flex-col items-center justify-center p-6 gap-3 text-center">
-        <div className="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center">
-          <Move className="w-5 h-5 text-slate-500" />
+        <div className="w-10 h-10 rounded-xl bg-[#1A1A1A] border border-[#1A1A1A] flex items-center justify-center">
+          <Move className="w-5 h-5 text-[#1A1A1A]/70" />
         </div>
         <div>
-          <p className="text-sm font-semibold text-slate-300">No clip selected</p>
-          <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+          <p className="text-sm font-semibold text-[#1A1A1A]/70">No clip selected</p>
+          <p className="text-xs text-[#1A1A1A]/70 mt-1 leading-relaxed">
             Click any clip in the timeline below to inspect and edit its transform, speed, color, audio, and effects.
           </p>
         </div>
@@ -124,13 +124,13 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
     return (
       <div className="h-full flex flex-col">
         {/* Header */}
-        <div className="p-3 border-b border-slate-800 flex items-center gap-2">
+        <div className="p-3 border-b border-[#1A1A1A] flex items-center gap-2">
           <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-[#EFE6D6]/15 border border-[#B89555]/30">
             <Zap className="w-3.5 h-3.5 text-[#1A1A1A]" />
           </div>
           <div className="min-w-0">
             <h3 className="text-sm font-medium text-white truncate">{selectedClip.name}</h3>
-            <p className="text-xs text-slate-500">Transition</p>
+            <p className="text-xs text-[#1A1A1A]/70">Transition</p>
           </div>
         </div>
 
@@ -139,7 +139,7 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
 
             {/* Duration */}
             <div className="space-y-3">
-              <Label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Duration</Label>
+              <Label className="text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider">Duration</Label>
               <div className="flex items-center gap-3">
                 <Slider
                   value={[selectedClip.duration]}
@@ -149,7 +149,7 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
                   onValueChange={(v) => updateTransition({ duration: v[0] })}
                   className="flex-1"
                 />
-                <div className="flex items-center gap-1 rounded-md border border-slate-700 bg-slate-900 px-2 py-1 min-w-[60px] justify-center">
+                <div className="flex items-center gap-1 rounded-md border border-[#1A1A1A] bg-[#1A1A1A] px-2 py-1 min-w-[60px] justify-center">
                   <Input
                     type="number"
                     value={selectedClip.duration.toFixed(1)}
@@ -159,7 +159,7 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
                     onChange={(e) => updateTransition({ duration: Math.max(0.2, Math.min(3, parseFloat(e.target.value) || 0.5)) })}
                     className="h-6 w-12 border-0 bg-transparent text-xs text-white text-center p-0 focus-visible:ring-0"
                   />
-                  <span className="text-xs text-slate-500">s</span>
+                  <span className="text-xs text-[#1A1A1A]/70">s</span>
                 </div>
               </div>
               <div className="flex gap-1 flex-wrap">
@@ -170,7 +170,7 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
                     className={`px-2.5 py-1 rounded text-xs font-medium border transition-all ${
                       Math.abs(selectedClip.duration - d) < 0.05
                         ? 'bg-[#EFE6D6]/20 border-[#B89555]/50 text-[#1A1A1A]'
-                        : 'border-slate-700 text-slate-400 hover:border-slate-600 hover:text-white'
+                        : 'border-[#1A1A1A] text-[#1A1A1A]/70 hover:border-slate-600 hover:text-white'
                     }`}
                   >
                     {d}s
@@ -181,7 +181,7 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
 
             {/* Transition type */}
             <div className="space-y-2">
-              <Label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Type</Label>
+              <Label className="text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider">Type</Label>
               <div className="grid grid-cols-2 gap-1.5">
                 {TRANSITION_TYPES.map(t => (
                   <button
@@ -190,7 +190,7 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
                     className={`flex items-center gap-2 px-2.5 py-2 rounded-lg border text-xs font-medium transition-all ${
                       currentTransitionId === t.id
                         ? 'bg-[#EFE6D6]/15 border-[#B89555]/40 text-[#1A1A1A]'
-                        : 'border-slate-700 text-slate-400 hover:border-slate-600 hover:text-white'
+                        : 'border-[#1A1A1A] text-[#1A1A1A]/70 hover:border-slate-600 hover:text-white'
                     }`}
                   >
                     <span className="text-base leading-none">{t.icon}</span>
@@ -202,7 +202,7 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
 
             {/* Easing curve */}
             <div className="space-y-3">
-              <Label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Easing Curve</Label>
+              <Label className="text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider">Easing Curve</Label>
               <div className="space-y-1.5">
                 {easingOptions.map(opt => {
                   const isActive = currentEasing === opt.value;
@@ -213,11 +213,11 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
                       className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border text-left transition-all ${
                         isActive
                           ? 'bg-[#EFE6D6]/10 border-[#B89555]/40'
-                          : 'border-slate-700/60 hover:border-slate-600 hover:bg-slate-800/50'
+                          : 'border-[#1A1A1A]/60 hover:border-slate-600 hover:bg-[#1A1A1A]/50'
                       }`}
                     >
                       {/* SVG curve preview */}
-                      <div className={`w-10 h-7 rounded shrink-0 flex items-center justify-center border ${isActive ? 'border-[#B89555]/30 bg-[#EFE6D6]/5' : 'border-slate-700 bg-slate-800/60'}`}>
+                      <div className={`w-10 h-7 rounded shrink-0 flex items-center justify-center border ${isActive ? 'border-[#B89555]/30 bg-[#EFE6D6]/5' : 'border-[#1A1A1A] bg-[#1A1A1A]/60'}`}>
                         <svg viewBox="0 0 100 100" width="32" height="22" fill="none">
                           <path
                             d={opt.curve}
@@ -229,8 +229,8 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
                         </svg>
                       </div>
                       <div className="min-w-0">
-                        <p className={`text-xs font-semibold leading-tight ${isActive ? 'text-[#1A1A1A]' : 'text-slate-300'}`}>{opt.label}</p>
-                        <p className="text-[10px] text-slate-500 leading-tight mt-0.5 truncate">{opt.description}</p>
+                        <p className={`text-xs font-semibold leading-tight ${isActive ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/70'}`}>{opt.label}</p>
+                        <p className="text-[10px] text-[#1A1A1A]/70 leading-tight mt-0.5 truncate">{opt.description}</p>
                       </div>
                       {isActive && (
                         <div className="ml-auto w-1.5 h-1.5 rounded-full bg-[#EFE6D6] shrink-0" />
@@ -242,18 +242,18 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
             </div>
 
             {/* Summary */}
-            <div className="rounded-lg border border-slate-800 bg-slate-900/60 p-3 space-y-1.5">
-              <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Summary</p>
+            <div className="rounded-lg border border-[#1A1A1A] bg-[#1A1A1A]/60 p-3 space-y-1.5">
+              <p className="text-[10px] font-semibold text-[#1A1A1A]/70 uppercase tracking-wider">Summary</p>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-400">Duration</span>
+                <span className="text-xs text-[#1A1A1A]/70">Duration</span>
                 <span className="text-xs font-medium text-white">{selectedClip.duration.toFixed(1)}s</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-400">Easing</span>
+                <span className="text-xs text-[#1A1A1A]/70">Easing</span>
                 <span className="text-xs font-medium text-[#1A1A1A]">{easingOptions.find(e => e.value === currentEasing)?.label}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-400">Type</span>
+                <span className="text-xs text-[#1A1A1A]/70">Type</span>
                 <span className="text-xs font-medium text-white">
                   {(TRANSITION_TYPES.find(t => t.id === currentTransitionId)?.name ?? currentTransitionId) || 'Fade'}
                 </span>
@@ -268,14 +268,14 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
 
   return (
     <div className="h-full flex flex-col">
-      <div className="p-3 border-b border-slate-800">
+      <div className="p-3 border-b border-[#1A1A1A]">
         <h3 className="text-sm font-medium text-white truncate">{selectedClip.name}</h3>
-        <p className="text-xs text-slate-500 capitalize">{selectedClip.type} clip</p>
+        <p className="text-xs text-[#1A1A1A]/70 capitalize">{selectedClip.type} clip</p>
       </div>
 
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
-        <TabsList className="w-full justify-start rounded-none border-b border-slate-800 bg-transparent p-0 flex-wrap">
+        <TabsList className="w-full justify-start rounded-none border-b border-[#1A1A1A] bg-transparent p-0 flex-wrap">
           <TabsTrigger 
             value="transform"
             className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] data-[state=active]:text-[#1A1A1A] px-2"
@@ -324,8 +324,8 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
           {/* Transform Tab */}
           <TabsContent value="transform" className="mt-0 p-3 space-y-4">
             <div className="flex justify-between items-center">
-              <h4 className="text-xs font-medium text-slate-400 uppercase">Transform</h4>
-              <Button size="sm" variant="ghost" onClick={resetTransform} className="text-slate-400 h-6 text-xs">
+              <h4 className="text-xs font-medium text-[#1A1A1A]/70 uppercase">Transform</h4>
+              <Button size="sm" variant="ghost" onClick={resetTransform} className="text-[#1A1A1A]/70 h-6 text-xs">
                 <RotateCcw className="w-3 h-3 mr-1" />
                 Reset
               </Button>
@@ -333,24 +333,24 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
 
             {/* Position */}
             <div className="space-y-2">
-              <Label className="text-xs text-slate-400">Position</Label>
+              <Label className="text-xs text-[#1A1A1A]/70">Position</Label>
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <span className="text-xs text-slate-500">X</span>
+                  <span className="text-xs text-[#1A1A1A]/70">X</span>
                   <Input
                     type="number"
                     value={Math.round(selectedClip.transform.x)}
                     onChange={(e) => updateTransform({ x: parseFloat(e.target.value) || 0 })}
-                    className="h-8 bg-slate-800 border-slate-700 text-sm"
+                    className="h-8 bg-[#1A1A1A] border-[#1A1A1A] text-sm"
                   />
                 </div>
                 <div>
-                  <span className="text-xs text-slate-500">Y</span>
+                  <span className="text-xs text-[#1A1A1A]/70">Y</span>
                   <Input
                     type="number"
                     value={Math.round(selectedClip.transform.y)}
                     onChange={(e) => updateTransform({ y: parseFloat(e.target.value) || 0 })}
-                    className="h-8 bg-slate-800 border-slate-700 text-sm"
+                    className="h-8 bg-[#1A1A1A] border-[#1A1A1A] text-sm"
                   />
                 </div>
               </div>
@@ -359,19 +359,19 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
             {/* Scale */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label className="text-xs text-slate-400">Scale</Label>
+                <Label className="text-xs text-[#1A1A1A]/70">Scale</Label>
                 <Button
                   size="sm"
                   variant="ghost"
                   onClick={() => setIsScaleLocked(!isScaleLocked)}
-                  className="h-6 w-6 p-0 text-slate-400"
+                  className="h-6 w-6 p-0 text-[#1A1A1A]/70"
                 >
                   {isScaleLocked ? <Lock className="w-3 h-3" /> : <Unlock className="w-3 h-3" />}
                 </Button>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <span className="text-xs text-slate-500">X</span>
+                  <span className="text-xs text-[#1A1A1A]/70">X</span>
                   <Slider
                     value={[selectedClip.transform.scaleX]}
                     min={0.1}
@@ -379,10 +379,10 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
                     step={0.01}
                     onValueChange={(v) => updateTransform({ scaleX: v[0] })}
                   />
-                  <span className="text-xs text-slate-500">{Math.round(selectedClip.transform.scaleX * 100)}%</span>
+                  <span className="text-xs text-[#1A1A1A]/70">{Math.round(selectedClip.transform.scaleX * 100)}%</span>
                 </div>
                 <div>
-                  <span className="text-xs text-slate-500">Y</span>
+                  <span className="text-xs text-[#1A1A1A]/70">Y</span>
                   <Slider
                     value={[selectedClip.transform.scaleY]}
                     min={0.1}
@@ -390,14 +390,14 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
                     step={0.01}
                     onValueChange={(v) => updateTransform({ scaleY: v[0] })}
                   />
-                  <span className="text-xs text-slate-500">{Math.round(selectedClip.transform.scaleY * 100)}%</span>
+                  <span className="text-xs text-[#1A1A1A]/70">{Math.round(selectedClip.transform.scaleY * 100)}%</span>
                 </div>
               </div>
             </div>
 
             {/* Rotation */}
             <div className="space-y-2">
-              <Label className="text-xs text-slate-400">Rotation</Label>
+              <Label className="text-xs text-[#1A1A1A]/70">Rotation</Label>
               <Slider
                 value={[selectedClip.transform.rotation]}
                 min={-180}
@@ -405,12 +405,12 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
                 step={1}
                 onValueChange={(v) => updateTransform({ rotation: v[0] })}
               />
-              <span className="text-xs text-slate-500">{selectedClip.transform.rotation}°</span>
+              <span className="text-xs text-[#1A1A1A]/70">{selectedClip.transform.rotation}°</span>
             </div>
 
             {/* Opacity */}
             <div className="space-y-2">
-              <Label className="text-xs text-slate-400">Opacity</Label>
+              <Label className="text-xs text-[#1A1A1A]/70">Opacity</Label>
               <Slider
                 value={[selectedClip.transform.opacity]}
                 min={0}
@@ -418,16 +418,16 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
                 step={0.01}
                 onValueChange={(v) => updateTransform({ opacity: v[0] })}
               />
-              <span className="text-xs text-slate-500">{Math.round(selectedClip.transform.opacity * 100)}%</span>
+              <span className="text-xs text-[#1A1A1A]/70">{Math.round(selectedClip.transform.opacity * 100)}%</span>
             </div>
 
             {/* Flip Buttons */}
             <div className="flex gap-2">
-              <Button size="sm" variant="outline" className="flex-1 border-slate-700 text-slate-400">
+              <Button size="sm" variant="outline" className="flex-1 border-[#1A1A1A] text-[#1A1A1A]/70">
                 <FlipHorizontal className="w-4 h-4 mr-2" />
                 Flip H
               </Button>
-              <Button size="sm" variant="outline" className="flex-1 border-slate-700 text-slate-400">
+              <Button size="sm" variant="outline" className="flex-1 border-[#1A1A1A] text-[#1A1A1A]/70">
                 <FlipVertical className="w-4 h-4 mr-2" />
                 Flip V
               </Button>
@@ -436,17 +436,17 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
 
           {/* Speed Tab */}
           <TabsContent value="speed" className="mt-0 p-3 space-y-4">
-            <h4 className="text-xs font-medium text-slate-400 uppercase">Speed</h4>
+            <h4 className="text-xs font-medium text-[#1A1A1A]/70 uppercase">Speed</h4>
             
             <div className="space-y-2">
-              <Label className="text-xs text-slate-400">Playback Speed</Label>
+              <Label className="text-xs text-[#1A1A1A]/70">Playback Speed</Label>
               <div className="flex gap-1 flex-wrap">
                 {[0.5, 0.75, 1, 1.25, 1.5, 2].map((speed) => (
                   <Button
                     key={speed}
                     size="sm"
                     variant="outline"
-                    className="border-slate-700 text-slate-400 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] h-7 text-xs"
+                    className="border-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] h-7 text-xs"
                   >
                     {speed}x
                   </Button>
@@ -455,43 +455,43 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
             </div>
 
             <div className="flex items-center justify-between">
-              <Label className="text-xs text-slate-400">Reverse</Label>
+              <Label className="text-xs text-[#1A1A1A]/70">Reverse</Label>
               <Switch />
             </div>
           </TabsContent>
 
           {/* Color Tab */}
           <TabsContent value="color" className="mt-0 p-3 space-y-4">
-            <h4 className="text-xs font-medium text-slate-400 uppercase">Color Correction</h4>
+            <h4 className="text-xs font-medium text-[#1A1A1A]/70 uppercase">Color Correction</h4>
             
             <div className="space-y-3">
               <div className="space-y-2">
-                <Label className="text-xs text-slate-400">Brightness</Label>
+                <Label className="text-xs text-[#1A1A1A]/70">Brightness</Label>
                 <Slider defaultValue={[0]} min={-100} max={100} step={1} />
               </div>
               <div className="space-y-2">
-                <Label className="text-xs text-slate-400">Contrast</Label>
+                <Label className="text-xs text-[#1A1A1A]/70">Contrast</Label>
                 <Slider defaultValue={[0]} min={-100} max={100} step={1} />
               </div>
               <div className="space-y-2">
-                <Label className="text-xs text-slate-400">Saturation</Label>
+                <Label className="text-xs text-[#1A1A1A]/70">Saturation</Label>
                 <Slider defaultValue={[0]} min={-100} max={100} step={1} />
               </div>
               <div className="space-y-2">
-                <Label className="text-xs text-slate-400">Temperature</Label>
+                <Label className="text-xs text-[#1A1A1A]/70">Temperature</Label>
                 <Slider defaultValue={[0]} min={-100} max={100} step={1} />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label className="text-xs text-slate-400">Filter Presets</Label>
+              <Label className="text-xs text-[#1A1A1A]/70">Filter Presets</Label>
               <div className="grid grid-cols-2 gap-1">
                 {FILTER_PRESETS.map((filter) => (
                   <Button
                     key={filter.id}
                     size="sm"
                     variant="outline"
-                    className="border-slate-700 text-slate-400 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] h-8 text-xs justify-start"
+                    className="border-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] h-8 text-xs justify-start"
                   >
                     {filter.name}
                   </Button>
@@ -502,11 +502,11 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
 
           {/* Audio Tab */}
           <TabsContent value="audio" className="mt-0 p-3 space-y-4">
-            <h4 className="text-xs font-medium text-slate-400 uppercase">Audio</h4>
+            <h4 className="text-xs font-medium text-[#1A1A1A]/70 uppercase">Audio</h4>
             
             <div className="space-y-3">
               <div className="space-y-2">
-                <Label className="text-xs text-slate-400">Volume</Label>
+                <Label className="text-xs text-[#1A1A1A]/70">Volume</Label>
                 <Slider 
                   value={[selectedClip.audio?.volume ?? 1]} 
                   min={0} 
@@ -514,11 +514,11 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
                   step={0.01}
                   onValueChange={(v) => updateAudio({ volume: v[0] })}
                 />
-                <span className="text-xs text-slate-500">{Math.round((selectedClip.audio?.volume ?? 1) * 100)}%</span>
+                <span className="text-xs text-[#1A1A1A]/70">{Math.round((selectedClip.audio?.volume ?? 1) * 100)}%</span>
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs text-slate-400">Fade In</Label>
+                <Label className="text-xs text-[#1A1A1A]/70">Fade In</Label>
                 <Slider 
                   value={[selectedClip.audio?.fadeIn ?? 0]} 
                   min={0} 
@@ -526,11 +526,11 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
                   step={0.1}
                   onValueChange={(v) => updateAudio({ fadeIn: v[0] })}
                 />
-                <span className="text-xs text-slate-500">{(selectedClip.audio?.fadeIn ?? 0).toFixed(1)}s</span>
+                <span className="text-xs text-[#1A1A1A]/70">{(selectedClip.audio?.fadeIn ?? 0).toFixed(1)}s</span>
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs text-slate-400">Fade Out</Label>
+                <Label className="text-xs text-[#1A1A1A]/70">Fade Out</Label>
                 <Slider 
                   value={[selectedClip.audio?.fadeOut ?? 0]} 
                   min={0} 
@@ -538,27 +538,27 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
                   step={0.1}
                   onValueChange={(v) => updateAudio({ fadeOut: v[0] })}
                 />
-                <span className="text-xs text-slate-500">{(selectedClip.audio?.fadeOut ?? 0).toFixed(1)}s</span>
+                <span className="text-xs text-[#1A1A1A]/70">{(selectedClip.audio?.fadeOut ?? 0).toFixed(1)}s</span>
               </div>
             </div>
 
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label className="text-xs text-slate-400">Normalize Audio</Label>
+                <Label className="text-xs text-[#1A1A1A]/70">Normalize Audio</Label>
                 <Switch 
                   checked={selectedClip.audio?.normalized ?? false}
                   onCheckedChange={(checked) => updateAudio({ normalized: checked })}
                 />
               </div>
               <div className="flex items-center justify-between">
-                <Label className="text-xs text-slate-400">Noise Reduction</Label>
+                <Label className="text-xs text-[#1A1A1A]/70">Noise Reduction</Label>
                 <Switch 
                   checked={selectedClip.audio?.noiseReduction ?? false}
                   onCheckedChange={(checked) => updateAudio({ noiseReduction: checked })}
                 />
               </div>
               <div className="flex items-center justify-between">
-                <Label className="text-xs text-slate-400">Mute</Label>
+                <Label className="text-xs text-[#1A1A1A]/70">Mute</Label>
                 <Switch 
                   checked={selectedClip.audio?.muted ?? false}
                   onCheckedChange={(checked) => updateAudio({ muted: checked })}
@@ -569,29 +569,29 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
 
           {/* Captions Tab */}
           <TabsContent value="captions" className="mt-0 p-3 space-y-4">
-            <h4 className="text-xs font-medium text-slate-400 uppercase">Captions</h4>
+            <h4 className="text-xs font-medium text-[#1A1A1A]/70 uppercase">Captions</h4>
             
             <Button size="sm" className="w-full bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90">
               <Subtitles className="w-4 h-4 mr-2" />
               Auto-Transcribe
             </Button>
 
-            <div className="text-center text-slate-500 text-xs py-4">
+            <div className="text-center text-[#1A1A1A]/70 text-xs py-4">
               Transcribe audio to create captions automatically
             </div>
           </TabsContent>
 
           {/* Effects Tab */}
           <TabsContent value="effects" className="mt-0 p-3 space-y-4">
-            <h4 className="text-xs font-medium text-slate-400 uppercase">Effects</h4>
+            <h4 className="text-xs font-medium text-[#1A1A1A]/70 uppercase">Effects</h4>
             
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label className="text-xs text-slate-400">Background Blur</Label>
+                <Label className="text-xs text-[#1A1A1A]/70">Background Blur</Label>
                 <Switch />
               </div>
               <div className="flex items-center justify-between">
-                <Label className="text-xs text-slate-400">Vignette</Label>
+                <Label className="text-xs text-[#1A1A1A]/70">Vignette</Label>
                 <Switch />
               </div>
             </div>
@@ -599,17 +599,17 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
 
           {/* Crop Tab */}
           <TabsContent value="crop" className="mt-0 p-3 space-y-4">
-            <h4 className="text-xs font-medium text-slate-400 uppercase">Crop & Rotation</h4>
+            <h4 className="text-xs font-medium text-[#1A1A1A]/70 uppercase">Crop & Rotation</h4>
             
             <div className="space-y-2">
-              <Label className="text-xs text-slate-400">Aspect Ratio</Label>
+              <Label className="text-xs text-[#1A1A1A]/70">Aspect Ratio</Label>
               <div className="grid grid-cols-2 gap-1">
                 {['None', '16:9', '9:16', '1:1', '4:5'].map((ratio) => (
                   <Button
                     key={ratio}
                     size="sm"
                     variant="outline"
-                    className="border-slate-700 text-slate-400 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] h-8 text-xs"
+                    className="border-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] h-8 text-xs"
                   >
                     {ratio}
                   </Button>
@@ -618,14 +618,14 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
             </div>
 
             <div className="space-y-2">
-              <Label className="text-xs text-slate-400">Rotation Preset</Label>
+              <Label className="text-xs text-[#1A1A1A]/70">Rotation Preset</Label>
               <div className="flex gap-1">
                 {['0°', '90°', '180°', '270°'].map((angle) => (
                   <Button
                     key={angle}
                     size="sm"
                     variant="outline"
-                    className="flex-1 border-slate-700 text-slate-400 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] h-8 text-xs"
+                    className="flex-1 border-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] h-8 text-xs"
                   >
                     {angle}
                   </Button>

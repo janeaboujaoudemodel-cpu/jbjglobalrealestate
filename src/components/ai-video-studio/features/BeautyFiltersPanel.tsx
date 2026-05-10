@@ -282,7 +282,7 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
-      <div className="p-3 border-b border-slate-800">
+      <div className="p-3 border-b border-[#1A1A1A]">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Sparkles className="h-4 w-4 text-[#1A1A1A]" />
@@ -302,7 +302,7 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
                   className={`flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold transition-all border ${
                     comparisonMode
                       ? 'bg-violet-500/25 text-violet-300 border-violet-500/50 shadow-sm'
-                      : 'bg-slate-700 text-slate-300 hover:bg-slate-600 hover:text-white border-transparent'
+                      : 'bg-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-slate-600 hover:text-white border-transparent'
                   }`}
                 >
                   <SplitSquareHorizontal className="w-3 h-3" />
@@ -310,7 +310,7 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
                 </button>
                 <button
                   onClick={handleClearFilter}
-                  className="flex items-center gap-1 px-2 py-0.5 rounded text-[10px] bg-slate-700 text-slate-300 hover:bg-slate-600 hover:text-white transition-colors border border-transparent"
+                  className="flex items-center gap-1 px-2 py-0.5 rounded text-[10px] bg-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-slate-600 hover:text-white transition-colors border border-transparent"
                 >
                   <X className="w-2.5 h-2.5" />
                   Clear
@@ -319,7 +319,7 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
             )}
           </div>
         </div>
-        <p className="text-xs text-slate-500 mt-1">
+        <p className="text-xs text-[#1A1A1A]/70 mt-1">
           {comparisonMode
             ? 'Drag the divider on the canvas to compare original vs filtered'
             : isFilterActive
@@ -333,7 +333,7 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
         {/* ── LUT Color Grades ──────────────────────────────────────── */}
         <div>
           <div className="flex items-center gap-2 mb-2.5">
-            <h4 className="text-xs font-medium text-slate-400">LUT Color Grades</h4>
+            <h4 className="text-xs font-medium text-[#1A1A1A]/70">LUT Color Grades</h4>
             <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-violet-500/20 text-violet-300 border border-violet-500/30 tracking-wider">
               CINEMATIC
             </span>
@@ -366,14 +366,14 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
                     </div>
                   )}
                   {/* Label */}
-                  <div className={`px-2 py-1.5 ${isActive ? 'bg-violet-900/60' : 'bg-slate-800/90 group-hover:bg-slate-700/90'} transition-colors`}>
+                  <div className={`px-2 py-1.5 ${isActive ? 'bg-violet-900/60' : 'bg-[#1A1A1A]/90 group-hover:bg-[#1A1A1A]/90'} transition-colors`}>
                     <div className="flex items-center gap-1">
                       <span className="text-[11px]">{lut.emoji}</span>
                       <span className={`text-[10px] font-semibold leading-tight ${isActive ? 'text-violet-200' : 'text-slate-200'}`}>
                         {lut.name}
                       </span>
                     </div>
-                    <p className="text-[9px] text-slate-500 mt-0.5 leading-tight line-clamp-1">{lut.description}</p>
+                    <p className="text-[9px] text-[#1A1A1A]/70 mt-0.5 leading-tight line-clamp-1">{lut.description}</p>
                   </div>
                 </button>
               );
@@ -383,7 +383,7 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
 
         {/* Presets — always visible */}
         <div>
-          <h4 className="text-xs font-medium text-slate-400 mb-2">Quick Presets</h4>
+          <h4 className="text-xs font-medium text-[#1A1A1A]/70 mb-2">Quick Presets</h4>
           <div className="flex flex-wrap gap-1">
             {FILTER_PRESETS.map((preset) => (
               <button
@@ -392,7 +392,7 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
                 className={`px-2 py-1 rounded text-xs transition-all ${
                   selectedPreset === preset.id && !activeLUT
                     ? 'bg-amber-500 text-[#1A1A1A] font-medium'
-                    : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                    : 'bg-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-[#1A1A1A]'
                 }`}
               >
                 {preset.name}
@@ -403,11 +403,11 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
 
         {/* Adjustments — always visible */}
         <div className="space-y-3">
-          <h4 className="text-xs font-medium text-slate-400">Fine-Tune</h4>
+          <h4 className="text-xs font-medium text-[#1A1A1A]/70">Fine-Tune</h4>
           {adjustmentControls.map(({ key, label, icon: Icon, min, max }) => (
             <div key={key}>
               <div className="flex items-center justify-between mb-1">
-                <label className="text-xs text-slate-400 flex items-center gap-1">
+                <label className="text-xs text-[#1A1A1A]/70 flex items-center gap-1">
                   <Icon className="h-3 w-3 text-[#1A1A1A]" />
                   {label}
                 </label>
@@ -429,8 +429,8 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
 
         {/* ── Apply to Export ────────────────────────────────────────────── */}
         {isFilterActive && (
-          <div className="rounded-lg border border-slate-700 overflow-hidden">
-            <div className="px-3 py-2 bg-slate-800/80 flex items-center justify-between">
+          <div className="rounded-lg border border-[#1A1A1A] overflow-hidden">
+            <div className="px-3 py-2 bg-[#1A1A1A]/80 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Film className="w-3.5 h-3.5 text-[#1A1A1A]" />
                 <span className="text-xs font-semibold text-slate-200">Bake into Export</span>
@@ -442,8 +442,8 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
                 </span>
               )}
             </div>
-            <div className="px-3 pb-3 pt-2 bg-slate-900/60 space-y-2">
-              <p className="text-[10px] text-slate-400 leading-relaxed">
+            <div className="px-3 pb-3 pt-2 bg-[#1A1A1A]/60 space-y-2">
+              <p className="text-[10px] text-[#1A1A1A]/70 leading-relaxed">
                 Bakes the current CSS filter adjustments into the video export pipeline — the downloaded file will have the filter applied, not just the live preview.
               </p>
               <div className="flex gap-2">
@@ -480,20 +480,20 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
         )}
 
         {/* Divider */}
-        <div className="border-t border-slate-800 pt-3">
-          <p className="text-[10px] text-slate-500 uppercase tracking-widest mb-3 font-semibold">Export Frame (Optional)</p>
+        <div className="border-t border-[#1A1A1A] pt-3">
+          <p className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-widest mb-3 font-semibold">Export Frame (Optional)</p>
           
           {/* Upload Area */}
           {!mediaFile && (
             <div
               onDragOver={(e) => e.preventDefault()}
               onDrop={handleFileDrop}
-              className="border-2 border-dashed border-slate-700 rounded-lg p-4 text-center hover:border-amber-500/50 transition-colors cursor-pointer"
+              className="border-2 border-dashed border-[#1A1A1A] rounded-lg p-4 text-center hover:border-amber-500/50 transition-colors cursor-pointer"
               onClick={() => document.getElementById('beauty-file-input')?.click()}
             >
-              <Upload className="h-6 w-6 text-slate-500 mx-auto mb-2" />
+              <Upload className="h-6 w-6 text-[#1A1A1A]/70 mx-auto mb-2" />
               <p className="text-xs text-white mb-1">Drop image or video to export filtered frame</p>
-              <p className="text-[10px] text-slate-500">JPG, PNG, WebP, MP4, MOV</p>
+              <p className="text-[10px] text-[#1A1A1A]/70">JPG, PNG, WebP, MP4, MOV</p>
               <input
                 id="beauty-file-input"
                 type="file"
@@ -507,8 +507,8 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
           {/* Canvas preview + download */}
           {mediaFile && (
             <div className="space-y-2">
-              <div className="rounded-lg bg-slate-800 overflow-hidden">
-                <div className="p-2 border-b border-slate-700 flex items-center justify-between">
+              <div className="rounded-lg bg-[#1A1A1A] overflow-hidden">
+                <div className="p-2 border-b border-[#1A1A1A] flex items-center justify-between">
                   <span className="text-xs text-white truncate">
                     {mediaFile.name}
                   </span>
@@ -521,7 +521,7 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
                     <Trash2 className="h-3 w-3" />
                   </Button>
                 </div>
-                <div className="p-2 bg-slate-900 flex items-center justify-center">
+                <div className="p-2 bg-[#1A1A1A] flex items-center justify-center">
                   <canvas ref={canvasRef} className="max-w-full max-h-[160px] object-contain" />
                 </div>
               </div>

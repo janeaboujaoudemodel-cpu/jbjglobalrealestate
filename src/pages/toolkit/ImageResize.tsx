@@ -529,7 +529,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
               {hasImages && activeImage && (
                 <div className="bg-[#FDFBF7] rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
                   {/* Preview Header */}
-                  <div className="flex items-center justify-between px-4 py-3 border-b border-stone-100 bg-stone-50/50">
+                  <div className="flex items-center justify-between px-4 py-3 border-b border-stone-100 bg-[#F7F2EA]/50">
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-green-500" />
                       <span className="text-sm font-medium text-foreground">Live Preview</span>
@@ -554,7 +554,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                   </div>
 
                   {/* Editing Toolbar */}
-                  <div className="flex items-center gap-1 px-4 py-2.5 border-t border-stone-100 bg-stone-50/50 overflow-x-auto">
+                  <div className="flex items-center gap-1 px-4 py-2.5 border-t border-stone-100 bg-[#F7F2EA]/50 overflow-x-auto">
                     {([
                       { id: "none" as EditTool, icon: <Maximize className="h-4 w-4" />, label: "Select" },
                       { id: "text" as EditTool, icon: <Type className="h-4 w-4" />, label: "Text" },
@@ -572,13 +572,13 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                           "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap",
                           activeTool === tool.id
                             ? "bg-gradient-to-r from-gold/20 to-gold/10 text-foreground border border-[#B89555]/40 shadow-sm"
-                            : "text-muted-foreground hover:text-foreground hover:bg-stone-100"
+                            : "text-muted-foreground hover:text-foreground hover:bg-[#F7F2EA]"
                         )}
                       >
                         {tool.icon} {tool.label}
                       </button>
                     ))}
-                    <div className="h-5 w-px bg-stone-200 mx-1" />
+                    <div className="h-5 w-px bg-[#EFE6D6] mx-1" />
                     <button
                       onClick={() => {
                         const stamp = sessionStorage.getItem('savedStamp');
@@ -589,7 +589,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                           sonnerToast.info("No stamp saved — create one in Stamp Generator first");
                         }
                       }}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-stone-100 whitespace-nowrap"
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-[#F7F2EA] whitespace-nowrap"
                     >
                       <Stamp className="h-4 w-4" /> Stamp
                     </button>
@@ -598,7 +598,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                         const d = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
                         setTextOverlays(prev => [...prev, { id: `date_${Date.now()}`, text: d, x: 20, y: 20, fontSize: 28, color: "#333", fontFamily: "Arial", bold: false }]);
                       }}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-stone-100 whitespace-nowrap"
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-[#F7F2EA] whitespace-nowrap"
                     >
                       <CalendarDays className="h-4 w-4" /> Date
                     </button>
@@ -625,7 +625,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                       {textOverlays.length > 0 && (
                         <div className="space-y-1">
                           {textOverlays.map(ov => (
-                            <div key={ov.id} className="flex items-center justify-between bg-stone-50 rounded px-2 py-1">
+                            <div key={ov.id} className="flex items-center justify-between bg-[#F7F2EA] rounded px-2 py-1">
                               <span className="text-xs text-foreground truncate">{ov.text}</span>
                               <button onClick={() => removeTextOverlay(ov.id)} className="text-red-400 hover:text-red-600 ml-2"><Trash2 className="h-3 w-3" /></button>
                             </div>
@@ -656,7 +656,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                         {(["horizontal", "vertical", "grid"] as const).map(layout => (
                           <button key={layout} onClick={() => setCollageLayout(layout)}
                             className={cn("flex-1 text-xs py-1.5 rounded-lg font-medium capitalize transition-all",
-                              collageLayout === layout ? "bg-[#EFE6D6]/20 border border-[#B89555]/40 text-foreground" : "bg-stone-100 text-muted-foreground hover:bg-stone-200"
+                              collageLayout === layout ? "bg-[#EFE6D6]/20 border border-[#B89555]/40 text-foreground" : "bg-[#F7F2EA] text-muted-foreground hover:bg-[#EFE6D6]"
                             )}>
                             {layout}
                           </button>
@@ -731,7 +731,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 p-4">
                     {processedImages.map((p, i) => (
                       <div key={i} className="group relative">
-                        <div className="aspect-square rounded-lg overflow-hidden bg-stone-100 border border-stone-200">
+                        <div className="aspect-square rounded-lg overflow-hidden bg-[#F7F2EA] border border-stone-200">
                           <img src={p.dataUrl} alt={p.filename} className="w-full h-full object-contain" />
                         </div>
                         <button onClick={() => downloadSingle(p)}
@@ -770,7 +770,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                           "flex items-center gap-2.5 px-3 py-2 rounded-xl cursor-pointer transition-all text-sm",
                           isActive
                             ? "bg-gradient-to-r from-gold/15 to-gold/5 border border-[#B89555]/30"
-                            : "hover:bg-stone-50 border border-transparent"
+                            : "hover:bg-[#F7F2EA] border border-transparent"
                         )}
                         onClick={() => togglePreset(preset.id)}
                       >
@@ -826,7 +826,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                           className={cn("flex-1 capitalize text-xs font-medium py-1.5 rounded-lg transition-all border",
                             paddingBg === bg
                               ? "bg-[#EFE6D6]/15 border-[#B89555]/40 text-foreground"
-                              : "bg-stone-50 border-stone-200 text-muted-foreground hover:bg-stone-100"
+                              : "bg-[#F7F2EA] border-stone-200 text-muted-foreground hover:bg-[#F7F2EA]"
                           )}>
                           {bg}
                         </button>
@@ -912,7 +912,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                         className={cn("flex-1 uppercase text-xs font-semibold py-1.5 rounded-lg transition-all border",
                           outputFormat === fmt
                             ? "bg-[#EFE6D6]/15 border-[#B89555]/40 text-foreground"
-                            : "bg-stone-50 border-stone-200 text-muted-foreground hover:bg-stone-100"
+                            : "bg-[#F7F2EA] border-stone-200 text-muted-foreground hover:bg-[#F7F2EA]"
                         )}>
                         {fmt}
                       </button>

@@ -533,7 +533,7 @@ export function BrokerToolkitTools() {
                 placeholder="Search tools (e.g. stamp, calculator, CRM...)"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 h-12 bg-slate-700/50 border-slate-500/50 text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] focus:ring-gold/30 rounded-xl"
+                className="pl-12 h-12 bg-[#1A1A1A]/50 border-slate-500/50 text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] focus:ring-gold/30 rounded-xl"
               />
               {searchQuery && (
                 <button

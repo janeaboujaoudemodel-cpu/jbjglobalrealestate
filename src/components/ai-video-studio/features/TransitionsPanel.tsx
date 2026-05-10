@@ -49,7 +49,7 @@ function TransitionPreview({ id }: { id: string }) {
   if (id.startsWith('fade-blur')) return (
     <div className={base} style={{ filter: 'blur(2px)' }}>
       <div className="flex-1 bg-slate-500" />
-      <div className="flex-1 bg-slate-300" />
+      <div className="flex-1 bg-[#E5D9C4]" />
     </div>
   );
   if (id.startsWith('dissolve')) return (
@@ -122,7 +122,7 @@ function TransitionCard({ def }: TransitionCardProps) {
       className={`rounded-lg border cursor-grab active:cursor-grabbing p-2 flex flex-col gap-1.5 transition-all select-none ${
         isDragging
           ? 'border-purple-400 bg-purple-950/60 scale-95 opacity-70'
-          : 'border-slate-600 bg-slate-800 hover:border-purple-500 hover:bg-slate-700'
+          : 'border-slate-600 bg-[#1A1A1A] hover:border-purple-500 hover:bg-[#1A1A1A]'
       }`}
       title={`Drag "${def.name}" to timeline`}
     >
@@ -152,12 +152,12 @@ function TransitionCard({ def }: TransitionCardProps) {
 
 export function TransitionsPanel() {
   return (
-    <div className="h-full flex flex-col bg-slate-900">
+    <div className="h-full flex flex-col bg-[#1A1A1A]">
       {/* Header */}
-      <div className="flex-shrink-0 px-4 py-3 border-b border-slate-700 flex items-center gap-2">
+      <div className="flex-shrink-0 px-4 py-3 border-b border-[#1A1A1A] flex items-center gap-2">
         <Clapperboard className="w-4 h-4 text-purple-400" />
         <span className="text-sm font-semibold text-slate-100">Transitions</span>
-        <span className="ml-auto text-xs text-slate-500">Drag onto timeline between clips</span>
+        <span className="ml-auto text-xs text-[#1A1A1A]/70">Drag onto timeline between clips</span>
       </div>
 
       {/* Scrollable grid */}
@@ -178,7 +178,7 @@ export function TransitionsPanel() {
           );
         })}
 
-        <div className="text-center py-3 text-[11px] text-slate-600">
+        <div className="text-center py-3 text-[11px] text-[#1A1A1A]/80">
           12 transitions · Drag between two clips on the timeline
         </div>
       </div>

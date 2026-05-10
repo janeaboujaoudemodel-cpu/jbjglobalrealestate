@@ -106,7 +106,7 @@ const Panel = ({ children, className = "" }: { children: React.ReactNode; classN
 const PanelTitle = ({ icon: Icon, children }: { icon: React.ElementType; children: React.ReactNode }) => (
   <div className="flex items-center gap-2 mb-4">
     <Icon className="h-5 w-5" style={{ color: G.text }} />
-    <h3 className="text-stone-900 font-semibold text-base">{children}</h3>
+    <h3 className="text-[#1A1A1A] font-semibold text-base">{children}</h3>
   </div>
 );
 
@@ -467,14 +467,14 @@ export default function ScanSignPage() {
               </div>
               <div>
                 <div className="flex items-center gap-2 mb-0.5">
-                  <h1 className="text-2xl font-black text-stone-900 tracking-tight">
+                  <h1 className="text-2xl font-black text-[#1A1A1A] tracking-tight">
                     Scan <span className="text-emerald-600">&</span> Sign
                   </h1>
                   <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 border border-emerald-200 text-emerald-700">
                     <Sparkles className="w-3 h-3" /> AI
                   </span>
                 </div>
-                <p className="text-xs text-stone-500">
+                <p className="text-xs text-[#1A1A1A]/70">
                   Scan · Sign · Stamp · Enhance · Export PDF
                 </p>
               </div>
@@ -542,8 +542,8 @@ export default function ScanSignPage() {
                   <div className="w-full rounded-xl p-4 text-center cursor-pointer transition-all border-2 border-dashed border-emerald-200 bg-emerald-50/30 hover:border-emerald-400"
                     onClick={() => fileInputRef.current?.click()}>
                     <Upload className="w-6 h-6 mx-auto mb-1.5 text-emerald-600" />
-                    <p className="text-xs font-medium text-stone-700">Upload Images / PDF</p>
-                    <p className="text-[10px] mt-0.5 text-stone-400">Drag & drop · JPG, PNG, PDF</p>
+                    <p className="text-xs font-medium text-[#1A1A1A]">Upload Images / PDF</p>
+                    <p className="text-[10px] mt-0.5 text-[#1A1A1A]/70">Drag & drop · JPG, PNG, PDF</p>
                   </div>
                   <input ref={fileInputRef} type="file" accept="image/*,application/pdf" multiple className="hidden" onChange={handleFileUpload} />
                 </div>
@@ -647,14 +647,14 @@ export default function ScanSignPage() {
           <div className="lg:sticky lg:top-4 lg:self-start space-y-4">
             <Panel>
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-stone-900 font-semibold text-sm flex items-center gap-2">
+                <h3 className="text-[#1A1A1A] font-semibold text-sm flex items-center gap-2">
                   <span className="text-emerald-600">Preview</span>
-                  {selectedPage && <span className="text-stone-400 text-xs font-normal">Page {selectedPageIndex + 1}/{pages.length}</span>}
+                  {selectedPage && <span className="text-[#1A1A1A]/70 text-xs font-normal">Page {selectedPageIndex + 1}/{pages.length}</span>}
                 </h3>
                 {selectedPage && (
                   <div className="flex gap-1.5">
                     <button onClick={() => rotatePage(selectedPage.id)} title="Rotate 90°"
-                      className="p-1.5 rounded-lg transition-all text-stone-500 bg-stone-100 hover:bg-emerald-100 hover:text-emerald-700 border border-stone-200">
+                      className="p-1.5 rounded-lg transition-all text-[#1A1A1A]/70 bg-[#F7F2EA] hover:bg-emerald-100 hover:text-emerald-700 border border-stone-200">
                       <RotateCw className="w-3.5 h-3.5" />
                     </button>
                     <button onClick={() => deletePage(selectedPage.id)} title="Delete page"
@@ -667,7 +667,7 @@ export default function ScanSignPage() {
 
               {selectedPage ? (
                 <div className="space-y-3">
-                  <div className="relative rounded-xl overflow-hidden flex items-center justify-center bg-stone-100 border border-stone-200"
+                  <div className="relative rounded-xl overflow-hidden flex items-center justify-center bg-[#F7F2EA] border border-stone-200"
                     style={{ minHeight: 300 }}>
                     <img src={selectedPage.imageData} alt="Preview" className="max-w-full max-h-[380px] object-contain"
                       style={{ transform: `rotate(${selectedPage.rotation}deg)`, filter: `brightness(${selectedPage.brightness}%) contrast(${selectedPage.contrast}%)` }} />
@@ -687,14 +687,14 @@ export default function ScanSignPage() {
                   {/* Adjustments */}
                   <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-1.5">
-                      <Label className="text-[10px] text-stone-500">
+                      <Label className="text-[10px] text-[#1A1A1A]/70">
                         Brightness <span className="text-emerald-600 font-semibold">{selectedPage.brightness}%</span>
                       </Label>
                       <Slider value={[selectedPage.brightness]} min={50} max={160} step={5}
                         onValueChange={([val]) => updatePageAdjustments(selectedPage.id, val, selectedPage.contrast)} />
                     </div>
                     <div className="space-y-1.5">
-                      <Label className="text-[10px] text-stone-500">
+                      <Label className="text-[10px] text-[#1A1A1A]/70">
                         Contrast <span className="text-emerald-600 font-semibold">{selectedPage.contrast}%</span>
                       </Label>
                       <Slider value={[selectedPage.contrast]} min={50} max={160} step={5}
@@ -705,7 +705,7 @@ export default function ScanSignPage() {
               ) : (
                 <div className="flex flex-col items-center justify-center h-64 text-stone-300">
                   <ScanLine className="h-16 w-16 mb-3 opacity-20" />
-                  <p className="text-sm font-medium text-stone-400">Scan or upload to preview</p>
+                  <p className="text-sm font-medium text-[#1A1A1A]/70">Scan or upload to preview</p>
                   <p className="text-xs mt-1 text-stone-300">Point camera or drag & drop files</p>
                 </div>
               )}
@@ -722,11 +722,11 @@ export default function ScanSignPage() {
                   <div className="rounded-xl overflow-hidden bg-[#FDFBF7] border-2 border-emerald-200">
                     <canvas ref={signatureCanvasRef} width={560} height={150} className="w-full cursor-crosshair touch-none" style={{ display: "block" }} />
                   </div>
-                  <p className="text-[10px] text-center text-stone-400">Draw your signature using mouse or finger</p>
+                  <p className="text-[10px] text-center text-[#1A1A1A]/70">Draw your signature using mouse or finger</p>
                   <div className="flex gap-2">
                     <PrimaryBtn onClick={saveSignature} className="flex-1 text-xs"><Save className="w-3.5 h-3.5" /> Add</PrimaryBtn>
                     <OutlineBtn onClick={clearSignatureCanvas} className="text-xs"><RefreshCcw className="w-3.5 h-3.5" /></OutlineBtn>
-                    <button onClick={() => setIsDrawingSignature(false)} className="px-2 py-1.5 rounded-xl text-xs text-stone-400 hover:text-stone-600">Cancel</button>
+                    <button onClick={() => setIsDrawingSignature(false)} className="px-2 py-1.5 rounded-xl text-xs text-[#1A1A1A]/70 hover:text-[#1A1A1A]/70">Cancel</button>
                   </div>
                 </div>
               ) : (
@@ -734,11 +734,11 @@ export default function ScanSignPage() {
                   className={`w-full rounded-xl p-5 text-center transition-all border-2 border-dashed ${
                     pages.length > 0
                       ? 'border-emerald-200 bg-emerald-50/20 cursor-pointer hover:border-emerald-400'
-                      : 'border-stone-200 bg-stone-50/50'
+                      : 'border-stone-200 bg-[#F7F2EA]/50'
                   }`}
                   onClick={pages.length > 0 ? startSignatureDrawing : undefined}>
                   <Pen className={`w-7 h-7 mx-auto mb-2 ${pages.length > 0 ? 'text-emerald-500' : 'text-stone-300'}`} />
-                  <p className={`text-xs font-semibold ${pages.length > 0 ? 'text-stone-700' : 'text-stone-300'}`}>
+                  <p className={`text-xs font-semibold ${pages.length > 0 ? 'text-[#1A1A1A]' : 'text-stone-300'}`}>
                     {pages.length > 0 ? "Click to Draw Signature" : "Add pages first"}
                   </p>
                 </div>
@@ -753,7 +753,7 @@ export default function ScanSignPage() {
 
             {/* Export */}
             <div className="rounded-2xl p-4 space-y-3 bg-emerald-50/50 border border-emerald-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-stone-400">Export & Actions</p>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1A1A1A]/70">Export & Actions</p>
               <PrimaryBtn onClick={exportToPDF} disabled={pages.length === 0 || processing} className="w-full py-3.5">
                 {processing ? <><Loader2 className="w-5 h-5 animate-spin" /> Generating…</> : <><Download className="w-5 h-5" /> Export PDF ({pages.length})</>}
               </PrimaryBtn>

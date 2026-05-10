@@ -43,9 +43,9 @@ export function IntegratedToolsPanel({ onAddVoiceover, onAddAIVoice }: Integrate
   const handleTranscribe = async (): Promise<SubtitleSegment[]> => [];
 
   return (
-    <div className="h-full flex flex-col bg-slate-900/50">
+    <div className="h-full flex flex-col bg-[#1A1A1A]/50">
       <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
-        <TabsList className="w-full justify-start rounded-none border-b border-slate-800 bg-slate-900 p-0 h-auto">
+        <TabsList className="w-full justify-start rounded-none border-b border-[#1A1A1A] bg-[#1A1A1A] p-0 h-auto">
           {tabs.map((tab) => (
             <TabsTrigger
               key={tab.id}

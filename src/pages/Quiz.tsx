@@ -478,12 +478,12 @@ const Quiz = () => {
             <div className="flex items-center justify-between">
               <button
                 onClick={() => navigate(-1)}
-                className="text-stone-500 hover:text-stone-900 transition-colors flex items-center gap-2"
+                className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors flex items-center gap-2"
               >
                 <ChevronLeft className="w-5 h-5" />
                 Exit
               </button>
-              <div className="flex items-center gap-3 text-stone-500">
+              <div className="flex items-center gap-3 text-[#1A1A1A]/70">
                 <Clock className="w-4 h-4" />
                 <span className="text-sm">~{estimatedTime} seconds</span>
               </div>
@@ -497,7 +497,7 @@ const Quiz = () => {
             {/* Free Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#B89555]/20 to-[#B89555]/10 border border-[#B89555]/40 mb-8">
               <Gift className="w-4 h-4 text-[#B89555]" />
-              <span className="text-stone-800 text-sm font-medium">
+              <span className="text-[#1A1A1A] text-sm font-medium">
                 Completely Free
               </span>
             </div>
@@ -506,11 +506,11 @@ const Quiz = () => {
               <Wand2 className="w-10 h-10 text-[#1A1A1A]" />
             </div>
 
-            <h1 className="text-stone-900 text-4xl md:text-5xl font-bold mb-4">
+            <h1 className="text-[#1A1A1A] text-4xl md:text-5xl font-bold mb-4">
               AI Property Finder
             </h1>
             
-            <p className="text-stone-500 text-lg mb-6 max-w-lg mx-auto">
+            <p className="text-[#1A1A1A]/70 text-lg mb-6 max-w-lg mx-auto">
               Try our AI Property Matchmaker and Analysis completely FREE!
             </p>
 
@@ -522,15 +522,15 @@ const Quiz = () => {
                   <span className="font-semibold text-[#B89555]">FREE Access</span>
                 </div>
                 <ul className="space-y-2 text-sm">
-                  <li className="flex items-center gap-2 text-stone-700">
+                  <li className="flex items-center gap-2 text-[#1A1A1A]">
                     <CheckCircle2 className="w-4 h-4 text-[#B89555] flex-shrink-0" />
                     <span>Unlimited AI Property Matches</span>
                   </li>
-                  <li className="flex items-center gap-2 text-stone-700">
+                  <li className="flex items-center gap-2 text-[#1A1A1A]">
                     <CheckCircle2 className="w-4 h-4 text-[#B89555] flex-shrink-0" />
                     <span>AI Comparison Reports</span>
                   </li>
-                  <li className="flex items-center gap-2 text-stone-700">
+                  <li className="flex items-center gap-2 text-[#1A1A1A]">
                     <CheckCircle2 className="w-4 h-4 text-[#B89555] flex-shrink-0" />
                     <span>Download Excel Report</span>
                   </li>
@@ -538,24 +538,24 @@ const Quiz = () => {
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-stone-500 mb-10">
+            <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-[#1A1A1A]/70 mb-10">
               <div className="flex items-center gap-2">
                 <div className="w-5 h-5 rounded-full bg-[#B89555]/20 flex items-center justify-center">
                   <Clock className="w-3 h-3 text-[#B89555]" />
                 </div>
-                <span className="text-stone-700">~60 seconds</span>
+                <span className="text-[#1A1A1A]">~60 seconds</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-5 h-5 rounded-full bg-[#B89555]/20 flex items-center justify-center">
                   <Sparkles className="w-3 h-3 text-[#B89555]" />
                 </div>
-                <span className="text-stone-700">AI-Powered</span>
+                <span className="text-[#1A1A1A]">AI-Powered</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-5 h-5 rounded-full bg-[#B89555]/20 flex items-center justify-center">
                   <CheckCircle2 className="w-3 h-3 text-[#B89555]" />
                 </div>
-                <span className="text-stone-700">100% Free</span>
+                <span className="text-[#1A1A1A]">100% Free</span>
               </div>
             </div>
 
@@ -567,17 +567,17 @@ const Quiz = () => {
               <ArrowUpRight className="w-5 h-5 ml-2" />
             </Button>
 
-            <p className="text-stone-400 text-xs mt-6">
+            <p className="text-[#1A1A1A]/70 text-xs mt-6">
               Save money by choosing the right property the first time
             </p>
 
-            <p className="text-stone-400 text-xs mt-8 leading-relaxed">
+            <p className="text-[#1A1A1A]/70 text-xs mt-8 leading-relaxed">
               Software developed and implemented by<br />
-              <FounderContent fallback={<span className="text-stone-700 font-medium">JBJ Global Real Estate Team</span>}>
-                <span className="text-stone-700 font-medium">The Founder & CEO, Jane Bou Jaoude</span>
+              <FounderContent fallback={<span className="text-[#1A1A1A] font-medium">JBJ Global Real Estate Team</span>}>
+                <span className="text-[#1A1A1A] font-medium">The Founder & CEO, Jane Bou Jaoude</span>
               </FounderContent><br />
               Designed exclusively for{" "}
-              <span className="text-stone-700 font-medium">JBJ Global Real Estate</span>
+              <span className="text-[#1A1A1A] font-medium">JBJ Global Real Estate</span>
             </p>
           </div>
         </div>
@@ -595,7 +595,7 @@ const Quiz = () => {
             <div className="flex items-center justify-between">
               <button
                 onClick={() => setShowForm(false)}
-                className="text-stone-500 hover:text-stone-900 transition-colors flex items-center gap-2"
+                className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors flex items-center gap-2"
               >
                 <ChevronLeft className="w-5 h-5" />
                 Back to Questions
@@ -615,10 +615,10 @@ const Quiz = () => {
               <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#B89555] to-[#A68444] mx-auto mb-4 flex items-center justify-center shadow-lg shadow-[#B89555]/30">
                 <Sparkles className="w-8 h-8 text-[#1A1A1A]" />
               </div>
-              <h2 className="text-stone-900 text-3xl font-bold mb-2">
+              <h2 className="text-[#1A1A1A] text-3xl font-bold mb-2">
                 Get Your AI Analysis
               </h2>
-              <p className="text-stone-500">
+              <p className="text-[#1A1A1A]/70">
                 Enter your details to receive your personalized property recommendations
               </p>
             </div>
@@ -626,36 +626,36 @@ const Quiz = () => {
             <div className="bg-[#FDFBF7]/70 border border-[#B89555]/30 rounded-2xl p-6 md:p-8 backdrop-blur-sm">
               <div className="space-y-5">
                 <div>
-                  <Label className="text-stone-700 mb-2 block">Full Name *</Label>
+                  <Label className="text-[#1A1A1A] mb-2 block">Full Name *</Label>
                   <Input
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                     placeholder="Enter your full name"
-                    className="bg-[#FDFBF7] border-[#B89555]/30 text-stone-900 placeholder:text-stone-400 focus:border-[#B89555]"
+                    className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]"
                   />
                 </div>
                 <div>
-                  <Label className="text-stone-700 mb-2 block">Email Address *</Label>
+                  <Label className="text-[#1A1A1A] mb-2 block">Email Address *</Label>
                   <Input
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="Enter your email"
-                    className="bg-[#FDFBF7] border-[#B89555]/30 text-stone-900 placeholder:text-stone-400 focus:border-[#B89555]"
+                    className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]"
                   />
                 </div>
                 <div>
-                  <Label className="text-stone-700 mb-2 block">Phone Number *</Label>
+                  <Label className="text-[#1A1A1A] mb-2 block">Phone Number *</Label>
                   <Input
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     placeholder="+971 XX XXX XXXX"
-                    className="bg-[#FDFBF7] border-[#B89555]/30 text-stone-900 placeholder:text-stone-400 focus:border-[#B89555]"
+                    className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]"
                   />
                 </div>
                 <div>
-                  <Label className="text-stone-700 mb-2 block">Nationality *</Label>
+                  <Label className="text-[#1A1A1A] mb-2 block">Nationality *</Label>
                   <SearchableSelect
                     value={formData.nationality}
                     onChange={(value) => setFormData({ ...formData, nationality: value })}
@@ -663,12 +663,12 @@ const Quiz = () => {
                     placeholder="Select your nationality"
                     searchPlaceholder="Search countries..."
                     priorityItem="United Arab Emirates"
-                    triggerClassName="bg-[#FDFBF7] border-[#B89555]/30 text-stone-900 hover:bg-[#F7F2EA] hover:text-stone-900"
+                    triggerClassName="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A]"
                     className="bg-[#FDFBF7] border-[#B89555]/30"
                   />
                 </div>
                 <div>
-                  <Label className="text-stone-700 mb-2 block">Preferred Language *</Label>
+                  <Label className="text-[#1A1A1A] mb-2 block">Preferred Language *</Label>
                   <SearchableSelect
                     value={formData.preferredLanguage}
                     onChange={(value) => setFormData({ ...formData, preferredLanguage: value })}
@@ -676,7 +676,7 @@ const Quiz = () => {
                     placeholder="Select preferred language"
                     searchPlaceholder="Search languages..."
                     priorityItem="English"
-                    triggerClassName="bg-[#FDFBF7] border-[#B89555]/30 text-stone-900 hover:bg-[#F7F2EA] hover:text-stone-900"
+                    triggerClassName="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A]"
                     className="bg-[#FDFBF7] border-[#B89555]/30"
                   />
                 </div>
@@ -725,12 +725,12 @@ const Quiz = () => {
                 </div>
               )}
 
-              <p className="text-stone-400 text-xs text-center mt-6 leading-relaxed">
+              <p className="text-[#1A1A1A]/70 text-xs text-center mt-6 leading-relaxed">
                 Software developed and implemented by<br />
-                <FounderContent fallback={<span className="text-stone-700">JBJ Global Real Estate Team</span>}>
-                  <span className="text-stone-700">The Founder & CEO, Jane Bou Jaoude</span>
+                <FounderContent fallback={<span className="text-[#1A1A1A]">JBJ Global Real Estate Team</span>}>
+                  <span className="text-[#1A1A1A]">The Founder & CEO, Jane Bou Jaoude</span>
                 </FounderContent><br />
-                Designed exclusively for <span className="text-stone-700">JBJ Global Real Estate</span>
+                Designed exclusively for <span className="text-[#1A1A1A]">JBJ Global Real Estate</span>
               </p>
             </div>
           </div>
@@ -750,12 +750,12 @@ const Quiz = () => {
           <div className="flex items-center justify-between mb-3">
             <button
               onClick={() => currentStep > 0 ? setCurrentStep(currentStep - 1) : setStarted(false)}
-              className="text-stone-500 hover:text-stone-900 transition-colors flex items-center gap-2"
+              className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors flex items-center gap-2"
             >
               <ChevronLeft className="w-5 h-5" />
               {currentStep > 0 ? "Back" : "Exit"}
             </button>
-            <div className="text-stone-500 text-sm">
+            <div className="text-[#1A1A1A]/70 text-sm">
               Question {currentStep + 1} of {QUIZ_QUESTIONS.length}
             </div>
           </div>
@@ -775,7 +775,7 @@ const Quiz = () => {
           {/* Main Question Area */}
           <div className="flex-1 max-w-2xl mx-auto">
             <h2
-              className="text-stone-900 text-2xl md:text-3xl font-bold mb-8 text-center"
+              className="text-[#1A1A1A] text-2xl md:text-3xl font-bold mb-8 text-center"
             >
               {currentQuestion.question}
             </h2>
@@ -788,7 +788,7 @@ const Quiz = () => {
                   size="sm"
                   onClick={handleSelectAll}
                   disabled={allSelected()}
-                  className="bg-[#FDFBF7] text-stone-900 hover:bg-[#F7F2EA] border-[#B89555]/40 font-semibold disabled:opacity-50"
+                  className="bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] border-[#B89555]/40 font-semibold disabled:opacity-50"
                 >
                   Select All
                 </Button>
@@ -797,7 +797,7 @@ const Quiz = () => {
                   size="sm"
                   onClick={handleClearAll}
                   disabled={!answers[currentQuestion.id] || (answers[currentQuestion.id] as string[]).length === 0}
-                  className="bg-[#FDFBF7] text-stone-900 hover:bg-[#F7F2EA] border-[#B89555]/40 font-semibold disabled:opacity-50"
+                  className="bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] border-[#B89555]/40 font-semibold disabled:opacity-50"
                 >
                   Clear All
                 </Button>
@@ -830,7 +830,7 @@ const Quiz = () => {
                       </div>
                     )}
                     <span className="text-2xl mb-2 block">{option.icon}</span>
-                    <span className={`font-medium text-sm md:text-base ${isSelected ? "text-[#B89555]" : "text-stone-900"}`}>
+                    <span className={`font-medium text-sm md:text-base ${isSelected ? "text-[#B89555]" : "text-[#1A1A1A]"}`}>
                       {option.label}
                     </span>
                   </button>
@@ -843,7 +843,7 @@ const Quiz = () => {
               <Button
                 variant="outline"
                 onClick={() => currentStep > 0 ? setCurrentStep(currentStep - 1) : setStarted(false)}
-                className="border-[#B89555]/40 text-stone-700 bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:text-stone-900 px-8 py-6 text-lg"
+                className="border-[#B89555]/40 text-[#1A1A1A] bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:text-[#1A1A1A] px-8 py-6 text-lg"
               >
                 <ChevronLeft className="w-5 h-5 mr-2" />
                 Back
@@ -862,7 +862,7 @@ const Quiz = () => {
           {/* Preferences Summary Sidebar (desktop only) */}
           <div className="hidden lg:block w-64 shrink-0">
             <div className="sticky top-24 rounded-2xl border border-[#B89555]/30 bg-[#FDFBF7]/80 backdrop-blur-sm p-5">
-              <h3 className="text-sm font-bold text-stone-800 mb-4 flex items-center gap-2">
+              <h3 className="text-sm font-bold text-[#1A1A1A] mb-4 flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-[#B89555]" />
                 Your Preferences
               </h3>
@@ -875,15 +875,15 @@ const Quiz = () => {
                     : q.options.find(o => o.value === answer)?.label || String(answer);
                   return (
                     <div key={q.id} className="text-xs">
-                      <p className="text-stone-400 uppercase tracking-wider text-[10px] mb-0.5">
+                      <p className="text-[#1A1A1A]/70 uppercase tracking-wider text-[10px] mb-0.5">
                         {q.id.replace(/_/g, " ")}
                       </p>
-                      <p className="text-stone-700 font-medium truncate">{displayValue}</p>
+                      <p className="text-[#1A1A1A] font-medium truncate">{displayValue}</p>
                     </div>
                   );
                 })}
                 {Object.keys(answers).length === 0 && (
-                  <p className="text-stone-400 text-xs italic">Answer questions to see your preferences here</p>
+                  <p className="text-[#1A1A1A]/70 text-xs italic">Answer questions to see your preferences here</p>
                 )}
               </div>
             </div>

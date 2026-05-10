@@ -111,11 +111,11 @@ export default function RegisterBroker() {
           </div>
           <div>
             <h1 className="text-3xl font-bold text-[#1A1A1A]">Broker Registration</h1>
-            <p className="text-neutral-600 text-sm">Tell us about your professional background</p>
+            <p className="text-[#1A1A1A]/80 text-sm">Tell us about your professional background</p>
           </div>
         </div>
 
-        <section className="space-y-5 bg-neutral-50 rounded-2xl p-6 border border-neutral-200 mb-6">
+        <section className="space-y-5 bg-[#F7F2EA] rounded-2xl p-6 border border-[#B89555]/30 mb-6">
           <h2 className="text-lg font-semibold text-[#1A1A1A]">Personal</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Field label="Full Name *"><Input value={fullName} onChange={(e) => setFullName(e.target.value)} /></Field>
@@ -125,7 +125,7 @@ export default function RegisterBroker() {
           </div>
         </section>
 
-        <section className="space-y-5 bg-neutral-50 rounded-2xl p-6 border border-neutral-200 mb-6">
+        <section className="space-y-5 bg-[#F7F2EA] rounded-2xl p-6 border border-[#B89555]/30 mb-6">
           <h2 className="text-lg font-semibold text-[#1A1A1A]">Professional</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Field label="Current Company / Brokerage *"><Input value={company} onChange={(e) => setCompany(e.target.value)} /></Field>
@@ -141,9 +141,9 @@ export default function RegisterBroker() {
           </div>
         </section>
 
-        <section className="space-y-3 bg-neutral-50 rounded-2xl p-6 border border-neutral-200 mb-6">
+        <section className="space-y-3 bg-[#F7F2EA] rounded-2xl p-6 border border-[#B89555]/30 mb-6">
           <h2 className="text-lg font-semibold text-[#1A1A1A]">CV / Resume</h2>
-          <p className="text-xs text-neutral-600">Optional — PDF or DOCX, max 10MB.</p>
+          <p className="text-xs text-[#1A1A1A]/80">Optional — PDF or DOCX, max 10MB.</p>
           <input
             ref={cvInputRef}
             type="file"
@@ -156,17 +156,17 @@ export default function RegisterBroker() {
               <Upload className="w-4 h-4 mr-2" /> {cvFile ? "Change file" : "Upload CV"}
             </Button>
             {cvFile && (
-              <span className="text-sm text-neutral-700 flex items-center gap-1.5">
+              <span className="text-sm text-[#1A1A1A]/80 flex items-center gap-1.5">
                 <FileText className="w-4 h-4" /> {cvFile.name}
               </span>
             )}
           </div>
         </section>
 
-        <Button onClick={handleSubmit} disabled={submitting} className="w-full h-14 text-base bg-[#1A1A1A] text-white hover:bg-neutral-800">
+        <Button onClick={handleSubmit} disabled={submitting} className="w-full h-14 text-base bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]">
           {submitting ? <Loader2 className="w-5 h-5 animate-spin" /> : (<>Submit Registration <ArrowRight className="ml-2 w-5 h-5" /></>)}
         </Button>
-        <p className="text-xs text-neutral-500 text-center mt-4 flex items-center justify-center gap-1.5">
+        <p className="text-xs text-[#1A1A1A]/70 text-center mt-4 flex items-center justify-center gap-1.5">
           <CheckCircle2 className="w-3.5 h-3.5" /> Your details are reviewed by our team. You'll be notified once approved.
         </p>
       </div>
@@ -177,7 +177,7 @@ export default function RegisterBroker() {
 function Field({ label, children, className = "" }: { label: string; children: React.ReactNode; className?: string }) {
   return (
     <div className={`space-y-1.5 ${className}`}>
-      <Label className="text-sm text-neutral-700">{label}</Label>
+      <Label className="text-sm text-[#1A1A1A]/80">{label}</Label>
       {children}
     </div>
   );

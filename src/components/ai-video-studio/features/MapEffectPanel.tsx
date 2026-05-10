@@ -205,7 +205,7 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
   };
 
   return (
-    <div className="h-full flex flex-col bg-slate-900 text-white overflow-hidden">
+    <div className="h-full flex flex-col bg-[#1A1A1A] text-white overflow-hidden">
       <div className="flex-1 overflow-y-auto overscroll-contain">
         <div className="p-3 space-y-3">
 
@@ -217,7 +217,7 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
                 value={address}
                 onChange={e => { setAddress(e.target.value); setAnimationComplete(false); }}
                 onKeyDown={e => e.key === 'Enter' && handleGeocode()}
-                className="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400 transition-colors"
+                className="flex-1 bg-[#1A1A1A] border border-[#1A1A1A] rounded-lg px-2.5 py-1.5 text-xs text-white placeholder:text-[#1A1A1A]/70 focus:outline-none focus:border-amber-400 transition-colors"
                 placeholder="Type address or place..."
               />
               <button
@@ -234,7 +234,7 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
           <div>
             <button
               onClick={handleToggleProjects}
-              className="w-full flex items-center justify-between text-xs text-slate-300 font-semibold py-1.5 px-2.5 rounded-lg bg-slate-800 border border-slate-700 hover:border-amber-400/50 transition-colors"
+              className="w-full flex items-center justify-between text-xs text-[#1A1A1A]/70 font-semibold py-1.5 px-2.5 rounded-lg bg-[#1A1A1A] border border-[#1A1A1A] hover:border-amber-400/50 transition-colors"
             >
               <span className="flex items-center gap-1.5">
                 <Building2 className="w-3.5 h-3.5 text-[#1A1A1A]" />
@@ -244,20 +244,20 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
                 : showProjects ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
             </button>
             {showProjects && (
-              <div className="mt-1.5 max-h-28 overflow-y-auto rounded-lg border border-slate-700 bg-slate-800">
+              <div className="mt-1.5 max-h-28 overflow-y-auto rounded-lg border border-[#1A1A1A] bg-[#1A1A1A]">
                 {projects.length === 0 && !isLoadingProjects && (
-                  <p className="text-xs text-slate-500 p-2 text-center">No projects with coordinates</p>
+                  <p className="text-xs text-[#1A1A1A]/70 p-2 text-center">No projects with coordinates</p>
                 )}
                 {projects.map(proj => (
                   <button
                     key={proj.id}
                     onClick={() => handleSelectProject(proj)}
-                    className={`w-full text-left text-xs px-2.5 py-1.5 transition-colors hover:bg-slate-700 ${
-                      address.startsWith(proj.name) ? 'text-amber-300 bg-amber-400/10' : 'text-slate-300'
+                    className={`w-full text-left text-xs px-2.5 py-1.5 transition-colors hover:bg-[#1A1A1A] ${
+                      address.startsWith(proj.name) ? 'text-amber-300 bg-amber-400/10' : 'text-[#1A1A1A]/70'
                     }`}
                   >
                     <span className="font-medium">{proj.name}</span>
-                    <span className="text-slate-500 ml-1">· {proj.emirate}</span>
+                    <span className="text-[#1A1A1A]/70 ml-1">· {proj.emirate}</span>
                   </button>
                 ))}
               </div>
@@ -266,7 +266,7 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
 
           {/* Quick Locations */}
           <div>
-            <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-widest mb-1.5">Quick Locations</p>
+            <p className="text-[10px] text-[#1A1A1A]/70 font-semibold uppercase tracking-widest mb-1.5">Quick Locations</p>
             <div className="grid grid-cols-2 gap-1">
               {PRESET_LOCATIONS.map(loc => (
                 <button
@@ -275,7 +275,7 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
                   className={`text-left text-[10px] px-2 py-1.5 rounded-md border transition-all leading-tight ${
                     address === loc.name
                       ? 'border-amber-400 bg-amber-400/15 text-amber-300'
-                      : 'border-slate-700 bg-slate-800 text-slate-300 hover:border-amber-400/40 hover:text-white'
+                      : 'border-[#1A1A1A] bg-[#1A1A1A] text-[#1A1A1A]/70 hover:border-amber-400/40 hover:text-white'
                   }`}
                 >
                   {loc.name}
@@ -286,15 +286,15 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
 
           {/* Animation Style */}
           <div>
-            <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-widest mb-1.5">Exit Animation</p>
+            <p className="text-[10px] text-[#1A1A1A]/70 font-semibold uppercase tracking-widest mb-1.5">Exit Animation</p>
             <button
               onClick={() => setShowAnimPicker(v => !v)}
-              className="w-full flex items-center justify-between text-xs text-slate-300 font-semibold py-1.5 px-2.5 rounded-lg bg-slate-800 border border-slate-700 hover:border-amber-400/50 transition-colors"
+              className="w-full flex items-center justify-between text-xs text-[#1A1A1A]/70 font-semibold py-1.5 px-2.5 rounded-lg bg-[#1A1A1A] border border-[#1A1A1A] hover:border-amber-400/50 transition-colors"
             >
               <span className="flex items-center gap-1.5">
                 <Clapperboard className="w-3.5 h-3.5 text-[#1A1A1A]" />
                 {selectedAnimation.name}
-                <span className="text-slate-500 font-normal">· {selectedAnimation.duration}s</span>
+                <span className="text-[#1A1A1A]/70 font-normal">· {selectedAnimation.duration}s</span>
               </span>
               {showAnimPicker ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
             </button>
@@ -307,11 +307,11 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
                     className={`w-full text-left px-2.5 py-2 rounded-lg border transition-all text-xs ${
                       selectedAnimation.id === anim.id
                         ? 'border-amber-400 bg-amber-400/10 text-amber-300'
-                        : 'border-slate-700 bg-slate-800 text-slate-300 hover:border-amber-400/40'
+                        : 'border-[#1A1A1A] bg-[#1A1A1A] text-[#1A1A1A]/70 hover:border-amber-400/40'
                     }`}
                   >
                     <div className="font-semibold">{anim.name}</div>
-                    <div className="text-slate-500 mt-0.5">{anim.desc} · {anim.duration}s</div>
+                    <div className="text-[#1A1A1A]/70 mt-0.5">{anim.desc} · {anim.duration}s</div>
                   </button>
                 ))}
               </div>
@@ -320,9 +320,9 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
 
           {/* Compact Map Thumbnail */}
           <div>
-            <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-widest mb-1.5">Map Preview</p>
+            <p className="text-[10px] text-[#1A1A1A]/70 font-semibold uppercase tracking-widest mb-1.5">Map Preview</p>
             <div
-              className="relative w-full rounded-lg overflow-hidden border border-slate-700"
+              className="relative w-full rounded-lg overflow-hidden border border-[#1A1A1A]"
               style={{ height: 80, ...animStyle, transformOrigin: 'center center', willChange: 'transform, opacity' }}
             >
               <MapContainer
@@ -365,7 +365,7 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
       </div>
 
       {/* CTA Buttons */}
-      <div className="p-3 border-t border-slate-700 flex gap-2 flex-shrink-0">
+      <div className="p-3 border-t border-[#1A1A1A] flex gap-2 flex-shrink-0">
         <button
           onClick={handleAnimate}
           disabled={isAnimating}
@@ -382,7 +382,7 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
           className={`flex items-center justify-center gap-1.5 flex-1 py-2 rounded-lg text-xs font-bold border transition-all ${
             animationComplete
               ? 'border-green-500 text-green-400 bg-green-500/10 hover:bg-green-500/20'
-              : 'border-slate-600 text-slate-500 cursor-not-allowed opacity-40'
+              : 'border-slate-600 text-[#1A1A1A]/70 cursor-not-allowed opacity-40'
           }`}
         >
           <Plus className="w-3.5 h-3.5" />

@@ -89,25 +89,25 @@ export function VideoScriptPanel() {
         {/* Form */}
         <div className="space-y-2">
           <div>
-            <Label className="text-slate-300 text-xs">Property Name *</Label>
+            <Label className="text-[#1A1A1A]/70 text-xs">Property Name *</Label>
             <Input
               placeholder="Sunset Bay Residences"
               value={formData.propertyName}
               onChange={(e) => handleChange("propertyName", e.target.value)}
-              className="bg-slate-800 border-slate-700 text-white text-sm h-8"
+              className="bg-[#1A1A1A] border-[#1A1A1A] text-white text-sm h-8"
             />
           </div>
           <div>
-            <Label className="text-slate-300 text-xs">Location</Label>
+            <Label className="text-[#1A1A1A]/70 text-xs">Location</Label>
             <Input
               placeholder="Palm Jumeirah"
               value={formData.location}
               onChange={(e) => handleChange("location", e.target.value)}
-              className="bg-slate-800 border-slate-700 text-white text-sm h-8"
+              className="bg-[#1A1A1A] border-[#1A1A1A] text-white text-sm h-8"
             />
           </div>
           <div>
-            <Label className="text-slate-300 text-xs">Audience</Label>
+            <Label className="text-[#1A1A1A]/70 text-xs">Audience</Label>
             <Select value={formData.targetAudience} onValueChange={(v) => handleChange("targetAudience", v)}>
               <SelectTriggerDark className="h-8 text-xs">
                 <SelectValue />
@@ -121,7 +121,7 @@ export function VideoScriptPanel() {
           </div>
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <Label className="text-slate-300 text-xs">Tone</Label>
+              <Label className="text-[#1A1A1A]/70 text-xs">Tone</Label>
               <Select value={formData.tone} onValueChange={(v) => handleChange("tone", v)}>
                 <SelectTriggerDark className="h-8 text-xs">
                   <SelectValue />
@@ -134,7 +134,7 @@ export function VideoScriptPanel() {
               </Select>
             </div>
             <div>
-              <Label className="text-slate-300 text-xs">Duration</Label>
+              <Label className="text-[#1A1A1A]/70 text-xs">Duration</Label>
               <Select value={formData.duration} onValueChange={(v) => handleChange("duration", v)}>
                 <SelectTriggerDark className="h-8 text-xs">
                   <SelectValue />
@@ -149,12 +149,12 @@ export function VideoScriptPanel() {
             </div>
           </div>
           <div>
-            <Label className="text-slate-300 text-xs">Property Details</Label>
+            <Label className="text-[#1A1A1A]/70 text-xs">Property Details</Label>
             <Textarea
               placeholder="Bedrooms, features, views..."
               value={formData.propertyDetails}
               onChange={(e) => handleChange("propertyDetails", e.target.value)}
-              className="bg-slate-800 border-slate-700 text-white text-sm min-h-[60px]"
+              className="bg-[#1A1A1A] border-[#1A1A1A] text-white text-sm min-h-[60px]"
             />
           </div>
 
@@ -173,14 +173,14 @@ export function VideoScriptPanel() {
 
         {/* Results */}
         {response?.script && (
-          <div className="space-y-2 border-t border-slate-700 pt-3">
+          <div className="space-y-2 border-t border-[#1A1A1A] pt-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-white">Generated Script</span>
               <div className="flex gap-1">
-                <Button variant="ghost" size="sm" onClick={copyScript} className="h-6 w-6 p-0 text-slate-400 hover:text-white">
+                <Button variant="ghost" size="sm" onClick={copyScript} className="h-6 w-6 p-0 text-[#1A1A1A]/70 hover:text-white">
                   {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
                 </Button>
-                <Button variant="ghost" size="sm" onClick={downloadScript} className="h-6 w-6 p-0 text-slate-400 hover:text-white">
+                <Button variant="ghost" size="sm" onClick={downloadScript} className="h-6 w-6 p-0 text-[#1A1A1A]/70 hover:text-white">
                   <Download className="h-3 w-3" />
                 </Button>
               </div>
@@ -189,18 +189,18 @@ export function VideoScriptPanel() {
             {response.hook && (
               <div className="bg-amber-500/10 border border-amber-500/30 rounded p-2">
                 <span className="text-[10px] text-[#1A1A1A] uppercase font-bold">Hook</span>
-                <p className="text-slate-300 text-xs italic">"{response.hook}"</p>
+                <p className="text-[#1A1A1A]/70 text-xs italic">"{response.hook}"</p>
               </div>
             )}
 
-            <div className="bg-slate-800/50 rounded p-2 text-slate-300 text-xs whitespace-pre-wrap max-h-[200px] overflow-y-auto">
+            <div className="bg-[#1A1A1A]/50 rounded p-2 text-[#1A1A1A]/70 text-xs whitespace-pre-wrap max-h-[200px] overflow-y-auto">
               {response.script}
             </div>
 
             {response.callToAction && (
               <div className="bg-emerald-500/10 border border-emerald-500/30 rounded p-2">
                 <span className="text-[10px] text-emerald-400 uppercase font-bold">CTA</span>
-                <p className="text-slate-300 text-xs">"{response.callToAction}"</p>
+                <p className="text-[#1A1A1A]/70 text-xs">"{response.callToAction}"</p>
               </div>
             )}
           </div>

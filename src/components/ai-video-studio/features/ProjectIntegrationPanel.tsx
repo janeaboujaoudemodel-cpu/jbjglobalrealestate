@@ -120,11 +120,11 @@ function MiniSelect({ label, value, options, onChange }: {
 }) {
   return (
     <div>
-      <label className="text-[10px] text-slate-400 uppercase tracking-wide mb-1 block">{label}</label>
+      <label className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wide mb-1 block">{label}</label>
       <select
         value={value}
         onChange={e => onChange(e.target.value)}
-        className="w-full bg-slate-700 border border-slate-600 rounded-md px-2 py-1.5 text-xs text-white focus:outline-none focus:border-amber-400 appearance-none cursor-pointer"
+        className="w-full bg-[#1A1A1A] border border-slate-600 rounded-md px-2 py-1.5 text-xs text-white focus:outline-none focus:border-amber-400 appearance-none cursor-pointer"
       >
         {options.map(o => (
           <option key={o.value} value={o.value}>{o.label}</option>
@@ -142,7 +142,7 @@ function ToggleGroup({ label, value, options, onChange }: {
 }) {
   return (
     <div>
-      <label className="text-[10px] text-slate-400 uppercase tracking-wide mb-1 block">{label}</label>
+      <label className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wide mb-1 block">{label}</label>
       <div className="flex gap-1">
         {options.map(o => (
           <button
@@ -151,7 +151,7 @@ function ToggleGroup({ label, value, options, onChange }: {
             className={`flex-1 py-1.5 text-xs rounded-md border transition-all ${
               value === o.value
                 ? 'border-amber-400 bg-amber-400/15 text-amber-300 font-semibold'
-                : 'border-slate-600 text-slate-400 bg-slate-700 hover:border-slate-500'
+                : 'border-slate-600 text-[#1A1A1A]/70 bg-[#1A1A1A] hover:border-slate-500'
             }`}
           >
             {o.label}
@@ -473,25 +473,25 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
   // ─────────────────────────────────────────────────────────────────────────────
   if (step === 'grid') {
     return (
-      <div className="h-full flex flex-col bg-slate-900 text-white overflow-hidden">
+      <div className="h-full flex flex-col bg-[#1A1A1A] text-white overflow-hidden">
         {/* Header */}
-        <div className="px-3 py-2.5 border-b border-slate-700 flex items-center gap-2">
+        <div className="px-3 py-2.5 border-b border-[#1A1A1A] flex items-center gap-2">
           <Building2 className="w-4 h-4 text-[#1A1A1A] shrink-0" />
           <span className="text-xs font-bold text-[#1A1A1A] uppercase tracking-wide flex-1">
             AI Video Ad Generator
           </span>
-          <button onClick={loadProjects} className="text-slate-500 hover:text-slate-300 transition-colors" title="Refresh">
+          <button onClick={loadProjects} className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]/70 transition-colors" title="Refresh">
             <RefreshCw className="w-3.5 h-3.5" />
           </button>
         </div>
 
         {/* URL Import */}
-        <div className="px-3 py-2 border-b border-slate-700">
+        <div className="px-3 py-2 border-b border-[#1A1A1A]">
           <div className="flex gap-1.5">
             <div className="flex-1 relative">
               {scraping
                 ? <Loader2 className="w-3.5 h-3.5 absolute left-2 top-1/2 -translate-y-1/2 text-[#1A1A1A] animate-spin" />
-                : <Link2 className="w-3.5 h-3.5 absolute left-2 top-1/2 -translate-y-1/2 text-slate-500" />
+                : <Link2 className="w-3.5 h-3.5 absolute left-2 top-1/2 -translate-y-1/2 text-[#1A1A1A]/70" />
               }
               <input
                 value={urlInput}
@@ -499,7 +499,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
                 onKeyDown={e => e.key === 'Enter' && !scraping && handleUrlImport()}
                 placeholder="Paste any property URL to auto-import…"
                 disabled={scraping}
-                className="w-full bg-slate-800 border border-slate-700 rounded-md pl-7 pr-2 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400 disabled:opacity-60"
+                className="w-full bg-[#1A1A1A] border border-[#1A1A1A] rounded-md pl-7 pr-2 py-1.5 text-xs text-white placeholder:text-[#1A1A1A]/70 focus:outline-none focus:border-amber-400 disabled:opacity-60"
               />
             </div>
             <button
@@ -510,7 +510,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
               {scraping ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : 'Import'}
             </button>
           </div>
-          <p className="text-[10px] text-slate-500 mt-1 flex items-center gap-1">
+          <p className="text-[10px] text-[#1A1A1A]/70 mt-1 flex items-center gap-1">
             <ExternalLink className="w-2.5 h-2.5" />
             Supports Bayut, Property Finder, developer sites & more
           </p>
@@ -518,18 +518,18 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
 
 
         {/* Search + Filter */}
-        <div className="px-3 py-2 border-b border-slate-700 space-y-2">
+        <div className="px-3 py-2 border-b border-[#1A1A1A] space-y-2">
           <div className="flex gap-1.5">
             <div className="flex-1 relative">
-              <Search className="w-3.5 h-3.5 absolute left-2 top-1/2 -translate-y-1/2 text-slate-500" />
+              <Search className="w-3.5 h-3.5 absolute left-2 top-1/2 -translate-y-1/2 text-[#1A1A1A]/70" />
               <input
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 placeholder="Search projects…"
-                className="w-full bg-slate-800 border border-slate-700 rounded-md pl-7 pr-2 py-1.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-400"
+                className="w-full bg-[#1A1A1A] border border-[#1A1A1A] rounded-md pl-7 pr-2 py-1.5 text-xs text-white placeholder:text-[#1A1A1A]/70 focus:outline-none focus:border-amber-400"
               />
               {search && (
-                <button onClick={() => setSearch('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white">
+                <button onClick={() => setSearch('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-[#1A1A1A]/70 hover:text-white">
                   <X className="w-3 h-3" />
                 </button>
               )}
@@ -539,7 +539,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
               className={`flex items-center gap-1 px-2 py-1.5 rounded-md border text-xs transition-colors ${
                 showFilter || selectedEmirate !== 'All'
                   ? 'border-amber-400 text-amber-300 bg-amber-400/10'
-                  : 'border-slate-700 text-slate-400 bg-slate-800 hover:border-slate-500'
+                  : 'border-[#1A1A1A] text-[#1A1A1A]/70 bg-[#1A1A1A] hover:border-slate-500'
               }`}
             >
               <MapPin className="w-3 h-3" />
@@ -555,7 +555,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
                   className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${
                     selectedEmirate === em
                       ? 'border-amber-400 bg-amber-400/15 text-amber-300'
-                      : 'border-slate-700 text-slate-400 hover:border-slate-500'
+                      : 'border-[#1A1A1A] text-[#1A1A1A]/70 hover:border-slate-500'
                   }`}
                 >
                   {em === 'Abu Dhabi Emirate' ? 'Abu Dhabi' : em}
@@ -574,19 +574,19 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
               </div>
             ) : filtered.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-32 gap-2 text-center">
-                <FolderOpen className="w-8 h-8 text-slate-600" />
-                <p className="text-xs text-slate-400">No projects found</p>
-                {search && <p className="text-xs text-slate-500">Try a different search</p>}
+                <FolderOpen className="w-8 h-8 text-[#1A1A1A]/80" />
+                <p className="text-xs text-[#1A1A1A]/70">No projects found</p>
+                {search && <p className="text-xs text-[#1A1A1A]/70">Try a different search</p>}
               </div>
             ) : (
               <div className="grid grid-cols-2 gap-2">
                 {filtered.map(proj => (
                   <div
                     key={proj.id}
-                    className="bg-slate-800 border border-slate-700 rounded-lg overflow-hidden transition-all group hover:border-amber-400/40 cursor-pointer"
+                    className="bg-[#1A1A1A] border border-[#1A1A1A] rounded-lg overflow-hidden transition-all group hover:border-amber-400/40 cursor-pointer"
                     onClick={() => openWizard(proj)}
                   >
-                    <div className="aspect-video bg-slate-700 relative overflow-hidden">
+                    <div className="aspect-video bg-[#1A1A1A] relative overflow-hidden">
                       {proj.cover_image_url ? (
                         <img
                           src={proj.cover_image_url}
@@ -596,7 +596,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <Building2 className="w-6 h-6 text-slate-500" />
+                          <Building2 className="w-6 h-6 text-[#1A1A1A]/70" />
                         </div>
                       )}
                       {proj.is_featured && (
@@ -614,8 +614,8 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
                     <div className="p-2">
                       <p className="text-xs font-semibold text-white truncate leading-tight">{proj.name}</p>
                       <div className="flex items-center gap-1 mt-0.5">
-                        <MapPin className="w-2.5 h-2.5 text-slate-500 shrink-0" />
-                        <p className="text-[10px] text-slate-400 truncate">
+                        <MapPin className="w-2.5 h-2.5 text-[#1A1A1A]/70 shrink-0" />
+                        <p className="text-[10px] text-[#1A1A1A]/70 truncate">
                           {proj.emirate === 'Abu Dhabi Emirate' ? 'Abu Dhabi' : proj.emirate}
                         </p>
                       </div>
@@ -627,7 +627,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
                             </span>
                           )}
                           {proj.bedrooms_min !== null && (
-                            <span className="text-[10px] text-slate-500">
+                            <span className="text-[10px] text-[#1A1A1A]/70">
                               {formatBeds(proj.bedrooms_min, proj.bedrooms_max)}
                             </span>
                           )}
@@ -641,8 +641,8 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
           </div>
         </ScrollArea>
 
-        <div className="px-3 py-1.5 border-t border-slate-700">
-          <span className="text-[10px] text-slate-500">
+        <div className="px-3 py-1.5 border-t border-[#1A1A1A]">
+          <span className="text-[10px] text-[#1A1A1A]/70">
             {loading ? 'Loading…' : `${filtered.length} of ${projects.length} projects — click any to generate`}
           </span>
         </div>
@@ -662,10 +662,10 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
     const currentPhaseIdx = genPhases.findIndex(p => p.id === genPhase);
 
     return (
-      <div className="h-full flex flex-col bg-slate-900 text-white overflow-hidden">
+      <div className="h-full flex flex-col bg-[#1A1A1A] text-white overflow-hidden">
         {/* Header */}
-        <div className="px-3 py-2.5 border-b border-slate-700 flex items-center gap-2">
-          <button onClick={backToGrid} className="text-slate-500 hover:text-white transition-colors">
+        <div className="px-3 py-2.5 border-b border-[#1A1A1A] flex items-center gap-2">
+          <button onClick={backToGrid} className="text-[#1A1A1A]/70 hover:text-white transition-colors">
             <ArrowLeft className="w-4 h-4" />
           </button>
           <Sparkles className="w-4 h-4 text-[#1A1A1A] shrink-0" />
@@ -677,7 +677,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
         <ScrollArea className="flex-1">
           <div className="p-3 space-y-4">
             {/* Property Summary Card */}
-            <div className="bg-slate-800 border border-slate-700 rounded-lg overflow-hidden">
+            <div className="bg-[#1A1A1A] border border-[#1A1A1A] rounded-lg overflow-hidden">
               {externalProperty && (
                 <div className="px-3 py-1 bg-amber-500/15 border-b border-amber-400/30 flex items-center gap-1.5">
                   <ExternalLink className="w-3 h-3 text-[#1A1A1A]" />
@@ -689,14 +689,14 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
                   <img src={wizardCoverImage} alt={wizardName}
                     className="w-full h-full object-cover" />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-slate-700">
-                    <Building2 className="w-8 h-8 text-slate-500" />
+                  <div className="w-full h-full flex items-center justify-center bg-[#1A1A1A]">
+                    <Building2 className="w-8 h-8 text-[#1A1A1A]/70" />
                   </div>
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-2">
                   <div>
                     <p className="text-xs font-bold text-white leading-tight">{wizardName}</p>
-                    {wizardLocation && <p className="text-[10px] text-slate-300">{wizardLocation}</p>}
+                    {wizardLocation && <p className="text-[10px] text-[#1A1A1A]/70">{wizardLocation}</p>}
                   </div>
                 </div>
               </div>
@@ -706,10 +706,10 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
                     {wizardPriceFrom ? formatPrice(wizardPriceFrom, wizardPriceTo) : externalProperty?.price_text}
                   </span>
                 )}
-                {wizardBeds && <span className="text-[10px] text-slate-400">{wizardBeds}</span>}
-                {wizardType && <span className="text-[10px] text-slate-500">{wizardType}</span>}
+                {wizardBeds && <span className="text-[10px] text-[#1A1A1A]/70">{wizardBeds}</span>}
+                {wizardType && <span className="text-[10px] text-[#1A1A1A]/70">{wizardType}</span>}
                 {externalProperty && externalProperty.images.length > 0 && (
-                  <span className="text-[10px] text-slate-500 flex items-center gap-0.5 ml-auto">
+                  <span className="text-[10px] text-[#1A1A1A]/70 flex items-center gap-0.5 ml-auto">
                     <ImageIcon className="w-2.5 h-2.5" />{externalProperty.images.length} photos
                   </span>
                 )}
@@ -719,7 +719,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
 
             {/* Voice & Language Settings */}
             <div className="space-y-3">
-              <p className="text-[11px] font-bold text-slate-300 uppercase tracking-wide flex items-center gap-1.5">
+              <p className="text-[11px] font-bold text-[#1A1A1A]/70 uppercase tracking-wide flex items-center gap-1.5">
                 <Mic className="w-3.5 h-3.5 text-[#1A1A1A]" />
                 Voice & Language
               </p>
@@ -763,7 +763,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
 
             {/* Ad Style */}
             <div className="space-y-3">
-              <p className="text-[11px] font-bold text-slate-300 uppercase tracking-wide flex items-center gap-1.5">
+              <p className="text-[11px] font-bold text-[#1A1A1A]/70 uppercase tracking-wide flex items-center gap-1.5">
                 <Film className="w-3.5 h-3.5 text-[#1A1A1A]" />
                 Ad Style
               </p>
@@ -804,20 +804,20 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
 
             {/* Generation Progress */}
             {generating && (
-              <div className="bg-slate-800 border border-amber-400/20 rounded-lg p-3 space-y-2">
+              <div className="bg-[#1A1A1A] border border-amber-400/20 rounded-lg p-3 space-y-2">
                 {genPhases.map((phase, idx) => {
                   const isDone = idx < currentPhaseIdx;
                   const isActive = idx === currentPhaseIdx;
                   return (
                     <div key={phase.id} className={`flex items-center gap-2 text-xs transition-all ${
-                      isDone ? 'text-emerald-400' : isActive ? 'text-amber-300' : 'text-slate-600'
+                      isDone ? 'text-emerald-400' : isActive ? 'text-amber-300' : 'text-[#1A1A1A]/80'
                     }`}>
                       {isDone ? (
                         <Check className="w-3.5 h-3.5 shrink-0" />
                       ) : isActive ? (
                         <Loader2 className="w-3.5 h-3.5 animate-spin shrink-0" />
                       ) : (
-                        <div className="w-3.5 h-3.5 rounded-full border border-slate-700 shrink-0" />
+                        <div className="w-3.5 h-3.5 rounded-full border border-[#1A1A1A] shrink-0" />
                       )}
                       <span>{phase.icon} {phase.label}</span>
                     </div>
@@ -829,7 +829,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
         </ScrollArea>
 
         {/* Generate Button */}
-        <div className="p-3 border-t border-slate-700">
+        <div className="p-3 border-t border-[#1A1A1A]">
           <button
             onClick={handleGenerate}
             disabled={generating}
@@ -857,10 +857,10 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
   // ─────────────────────────────────────────────────────────────────────────────
   if (step === 'result' && (selectedProject || externalProperty) && result) {
     return (
-      <div className="h-full flex flex-col bg-slate-900 text-white overflow-hidden">
+      <div className="h-full flex flex-col bg-[#1A1A1A] text-white overflow-hidden">
         {/* Header */}
-        <div className="px-3 py-2.5 border-b border-slate-700 flex items-center gap-2">
-          <button onClick={() => setStep('wizard')} className="text-slate-500 hover:text-white transition-colors">
+        <div className="px-3 py-2.5 border-b border-[#1A1A1A] flex items-center gap-2">
+          <button onClick={() => setStep('wizard')} className="text-[#1A1A1A]/70 hover:text-white transition-colors">
             <ArrowLeft className="w-4 h-4" />
           </button>
           <Check className="w-4 h-4 text-emerald-400 shrink-0" />
@@ -872,11 +872,11 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
         <ScrollArea className="flex-1">
           <div className="p-3 space-y-3">
             {/* Audio Player */}
-            <div className="bg-slate-800 border border-slate-700 rounded-lg p-3">
+            <div className="bg-[#1A1A1A] border border-[#1A1A1A] rounded-lg p-3">
               <div className="flex items-center gap-2 mb-2">
                 <Volume2 className="w-3.5 h-3.5 text-[#1A1A1A]" />
                 <span className="text-xs font-semibold text-white">Voiceover Preview</span>
-                <span className="ml-auto text-[10px] text-slate-500">~{result.duration}s</span>
+                <span className="ml-auto text-[10px] text-[#1A1A1A]/70">~{result.duration}s</span>
               </div>
               <button
                 onClick={toggleAudio}
@@ -888,24 +888,24 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
             </div>
 
             {/* Script */}
-            <div className="bg-slate-800 border border-slate-700 rounded-lg p-3">
+            <div className="bg-[#1A1A1A] border border-[#1A1A1A] rounded-lg p-3">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-semibold text-white">Generated Script</span>
                 <button
                   onClick={copyScript}
-                  className="flex items-center gap-1 text-[10px] text-slate-400 hover:text-amber-300 transition-colors"
+                  className="flex items-center gap-1 text-[10px] text-[#1A1A1A]/70 hover:text-amber-300 transition-colors"
                 >
                   {copied ? <CheckCheck className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
                   {copied ? 'Copied!' : 'Copy'}
                 </button>
               </div>
-              <div className="bg-slate-700/50 rounded-md p-2 max-h-48 overflow-y-auto">
-                <p className="text-[11px] text-slate-300 leading-relaxed whitespace-pre-wrap">{result.script}</p>
+              <div className="bg-[#1A1A1A]/50 rounded-md p-2 max-h-48 overflow-y-auto">
+                <p className="text-[11px] text-[#1A1A1A]/70 leading-relaxed whitespace-pre-wrap">{result.script}</p>
               </div>
             </div>
 
             {/* What will be added */}
-            <div className="bg-slate-800 border border-slate-700 rounded-lg p-3">
+            <div className="bg-[#1A1A1A] border border-[#1A1A1A] rounded-lg p-3">
               <p className="text-xs font-semibold text-white mb-2">Will be added to timeline:</p>
               <div className="space-y-1.5">
                 {[
@@ -913,7 +913,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
                   { icon: Mic, label: `AI voiceover in ${SUPPORTED_LANGUAGES.find(l => l.code === settings.language)?.name || 'English'}`, color: 'text-purple-400' },
                   { icon: Type, label: `${settings.textStyle === 'lower-third' ? 'Lower-third' : settings.textStyle} text overlay`, color: 'text-emerald-400' },
                 ].map(({ icon: Icon, label, color }) => (
-                  <div key={label} className="flex items-start gap-2 text-[11px] text-slate-400">
+                  <div key={label} className="flex items-start gap-2 text-[11px] text-[#1A1A1A]/70">
                     <Icon className={`w-3.5 h-3.5 ${color} mt-0.5 shrink-0`} />
                     <span>{label}</span>
                   </div>
@@ -924,7 +924,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
         </ScrollArea>
 
         {/* Add to Timeline Button */}
-        <div className="p-3 border-t border-slate-700 space-y-2">
+        <div className="p-3 border-t border-[#1A1A1A] space-y-2">
           <button
             onClick={handleAddToTimeline}
             className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-500 text-white text-sm font-bold hover:from-emerald-500 hover:to-emerald-400 transition-all shadow-lg shadow-emerald-500/20"
@@ -934,7 +934,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
           </button>
           <button
             onClick={() => setStep('wizard')}
-            className="w-full py-1.5 text-xs text-slate-400 hover:text-white transition-colors"
+            className="w-full py-1.5 text-xs text-[#1A1A1A]/70 hover:text-white transition-colors"
           >
             ← Regenerate with different settings
           </button>

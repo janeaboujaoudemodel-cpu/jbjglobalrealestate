@@ -96,7 +96,7 @@ export function ForcePasswordChange({ onComplete, userName }: ForcePasswordChang
   if (passwordChanged) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4">
-        <Card className="w-full max-w-md bg-slate-800/80 border-emerald-500/30 backdrop-blur-xl">
+        <Card className="w-full max-w-md bg-[#1A1A1A]/80 border-emerald-500/30 backdrop-blur-xl">
           <CardHeader className="text-center space-y-4">
             <div className="mx-auto w-16 h-16 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center">
               <CheckCircle2 className="w-8 h-8 text-white" />
@@ -104,7 +104,7 @@ export function ForcePasswordChange({ onComplete, userName }: ForcePasswordChang
             <CardTitle className="text-2xl font-bold text-white">
               Password Updated!
             </CardTitle>
-            <CardDescription className="text-slate-300">
+            <CardDescription className="text-[#1A1A1A]/70">
               Your new password has been saved successfully. Please login again with your new password to continue.
             </CardDescription>
           </CardHeader>
@@ -118,7 +118,7 @@ export function ForcePasswordChange({ onComplete, userName }: ForcePasswordChang
             
             <Button
               onClick={handleLoginAgain}
-              className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-900 font-semibold py-3"
+              className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-[#1A1A1A] font-semibold py-3"
             >
               <LogIn className="w-4 h-4 mr-2" />
               Login with New Password
@@ -131,15 +131,15 @@ export function ForcePasswordChange({ onComplete, userName }: ForcePasswordChang
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4">
-      <Card className="w-full max-w-md bg-slate-800/80 border-amber-500/30 backdrop-blur-xl">
+      <Card className="w-full max-w-md bg-[#1A1A1A]/80 border-amber-500/30 backdrop-blur-xl">
         <CardHeader className="text-center space-y-4">
           <div className="mx-auto w-16 h-16 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center">
-            <Lock className="w-8 h-8 text-slate-900" />
+            <Lock className="w-8 h-8 text-[#1A1A1A]" />
           </div>
           <CardTitle className="text-2xl font-bold text-white">
             Welcome{userName ? `, ${userName}` : ""}!
           </CardTitle>
-          <CardDescription className="text-slate-300">
+          <CardDescription className="text-[#1A1A1A]/70">
             For your security, please create a new password. This is a one-time setup.
           </CardDescription>
         </CardHeader>
@@ -156,14 +156,14 @@ export function ForcePasswordChange({ onComplete, userName }: ForcePasswordChang
                   type={showPassword ? "text" : "password"}
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className="bg-slate-700/50 border-slate-600 text-white pr-10"
+                  className="bg-[#1A1A1A]/50 border-slate-600 text-white pr-10"
                   placeholder="Enter your new password"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#1A1A1A]/70 hover:text-white"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -179,7 +179,7 @@ export function ForcePasswordChange({ onComplete, userName }: ForcePasswordChang
                 type={showPassword ? "text" : "password"}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="bg-slate-700/50 border-slate-600 text-white"
+                className="bg-[#1A1A1A]/50 border-slate-600 text-white"
                 placeholder="Confirm your new password"
                 required
               />
@@ -214,7 +214,7 @@ export function ForcePasswordChange({ onComplete, userName }: ForcePasswordChang
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-900 font-semibold py-3"
+              className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-[#1A1A1A] font-semibold py-3"
             >
               {isSubmitting ? "Updating..." : "Set New Password"}
             </Button>

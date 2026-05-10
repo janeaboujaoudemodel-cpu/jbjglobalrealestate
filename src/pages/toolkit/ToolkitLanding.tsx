@@ -42,7 +42,7 @@ const ToolCard: React.FC<ToolCardProps> = ({
     className={`group relative block rounded-xl border-2 transition-all duration-300 hover:-translate-y-1 ${
       isFlagship 
         ? 'border-[#B89555] bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 shadow-[0_0_30px_rgba(200,167,102,0.15)]' 
-        : 'border-slate-700/50 bg-slate-900/50 hover:border-[#B89555]/50'
+        : 'border-[#1A1A1A]/50 bg-[#1A1A1A]/50 hover:border-[#B89555]/50'
     }`}
   >
     {isNew && (
@@ -61,7 +61,7 @@ const ToolCard: React.FC<ToolCardProps> = ({
       <div className={`inline-flex items-center justify-center w-14 h-14 rounded-xl mb-4 ${
         isFlagship 
           ? 'bg-[#EFE6D6]/20 text-[#1A1A1A]' 
-          : 'bg-slate-800 text-[#1A1A1A] group-hover:bg-[#EFE6D6]/20'
+          : 'bg-[#1A1A1A] text-[#1A1A1A] group-hover:bg-[#EFE6D6]/20'
       } transition-colors`}>
         {icon}
       </div>
@@ -70,7 +70,7 @@ const ToolCard: React.FC<ToolCardProps> = ({
         {title}
       </h3>
       
-      <p className="text-slate-400 text-sm mb-4 line-clamp-2">
+      <p className="text-[#1A1A1A]/70 text-sm mb-4 line-clamp-2">
         {description}
       </p>
       
@@ -78,7 +78,7 @@ const ToolCard: React.FC<ToolCardProps> = ({
         {tags.map((tag, i) => (
           <span 
             key={i}
-            className="text-xs px-2 py-1 rounded-full bg-slate-800/80 text-slate-400 border border-slate-700"
+            className="text-xs px-2 py-1 rounded-full bg-[#1A1A1A]/80 text-[#1A1A1A]/70 border border-[#1A1A1A]"
           >
             {tag}
           </span>
@@ -178,22 +178,22 @@ export default function ToolkitLanding() {
             <span className="block text-[#1A1A1A] mt-2">(Free)</span>
           </h1>
           
-          <p className="text-xl text-slate-400 max-w-2xl mx-auto mb-10">
+          <p className="text-xl text-[#1A1A1A]/70 max-w-2xl mx-auto mb-10">
             Professional-grade tools for images, videos, and documents. 
             Designed for real estate professionals. No signup needed.
           </p>
           
           {/* Features */}
           <div className="flex flex-wrap justify-center gap-6 mb-12">
-            <div className="flex items-center gap-2 text-slate-300">
+            <div className="flex items-center gap-2 text-[#1A1A1A]/70">
               <CheckCircle2 className="h-5 w-5 text-[#1A1A1A]" />
               <span>No Login Required</span>
             </div>
-            <div className="flex items-center gap-2 text-slate-300">
+            <div className="flex items-center gap-2 text-[#1A1A1A]/70">
               <Shield className="h-5 w-5 text-[#1A1A1A]" />
               <span>Privacy First</span>
             </div>
-            <div className="flex items-center gap-2 text-slate-300">
+            <div className="flex items-center gap-2 text-[#1A1A1A]/70">
               <Clock className="h-5 w-5 text-[#1A1A1A]" />
               <span>Auto-Save Always</span>
             </div>
@@ -209,7 +209,7 @@ export default function ToolkitLanding() {
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
               All Tools
             </h2>
-            <p className="text-slate-400">
+            <p className="text-[#1A1A1A]/70">
               Click any tool to get started instantly
             </p>
           </div>
@@ -226,13 +226,13 @@ export default function ToolkitLanding() {
       {/* Fair Usage Notice */}
       <section className="px-4 pb-16">
         <div className="max-w-4xl mx-auto">
-          <div className="rounded-xl border border-slate-700 bg-slate-900/50 p-6 md:p-8">
+          <div className="rounded-xl border border-[#1A1A1A] bg-[#1A1A1A]/50 p-6 md:p-8">
             <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
               <Shield className="h-5 w-5 text-[#1A1A1A]" />
               Fair Usage & Privacy
             </h3>
             
-            <div className="grid md:grid-cols-2 gap-6 text-sm text-slate-400">
+            <div className="grid md:grid-cols-2 gap-6 text-sm text-[#1A1A1A]/70">
               <div>
                 <h4 className="text-white font-medium mb-2">Usage Limits</h4>
                 <ul className="space-y-1">
@@ -254,8 +254,8 @@ export default function ToolkitLanding() {
               </div>
             </div>
             
-            <div className="mt-6 pt-6 border-t border-slate-700">
-              <p className="text-xs text-slate-500">
+            <div className="mt-6 pt-6 border-t border-[#1A1A1A]">
+              <p className="text-xs text-[#1A1A1A]/70">
                 By using these tools, you confirm you own the content or have permission to edit it. 
                 The platform operator is not responsible for misuse of these tools.
               </p>
@@ -270,7 +270,7 @@ export default function ToolkitLanding() {
           <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
             Ready to Create?
           </h2>
-          <p className="text-slate-400 mb-8">
+          <p className="text-[#1A1A1A]/70 mb-8">
             Start with our flagship AI Video Studio or explore individual tools
           </p>
           

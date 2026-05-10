@@ -238,7 +238,7 @@ Best regards`);
       <section className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex items-center justify-center">
         <div className="text-center">
           <Sparkles className="w-12 h-12 text-[#B89555] mx-auto mb-4 animate-pulse" />
-          <p className="text-stone-800 text-xl font-semibold">Finding your perfect matches...</p>
+          <p className="text-[#1A1A1A] text-xl font-semibold">Finding your perfect matches...</p>
         </div>
       </section>
     );
@@ -251,13 +251,13 @@ Best regards`);
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#B89555]/20 to-[#B89555]/10 border border-[#B89555]/40 mb-6">
             <Sparkles className="w-4 h-4 text-[#B89555]" />
-            <span className="text-stone-800 text-sm font-medium">#1 AI Property Matchmaker — Exclusive by JBJ Global Real Estate</span>
+            <span className="text-[#1A1A1A] text-sm font-medium">#1 AI Property Matchmaker — Exclusive by JBJ Global Real Estate</span>
           </div>
           
-          <h1 className="text-stone-900 text-4xl md:text-5xl font-bold mb-4">
+          <h1 className="text-[#1A1A1A] text-4xl md:text-5xl font-bold mb-4">
             Your AI-Selected Properties
           </h1>
-          <p className="text-stone-500 text-lg max-w-2xl mx-auto mb-6">
+          <p className="text-[#1A1A1A]/70 text-lg max-w-2xl mx-auto mb-6">
             Based on your preferences, our AI has selected these properties that best match your criteria
           </p>
 
@@ -265,7 +265,7 @@ Best regards`);
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Button
               onClick={handleDownloadReport}
-              className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-stone-900 hover:brightness-95 font-semibold shadow-md border-2 border-[#B89555] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
+              className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] hover:brightness-95 font-semibold shadow-md border-2 border-[#B89555] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
             >
               <Download className="w-4 h-4 mr-2" />
               Download Report
@@ -309,22 +309,22 @@ Best regards`);
                 </div>
                 
                 <div className="p-8 md:p-10 flex flex-col justify-center">
-                  <p className="text-stone-500 text-sm mb-2">{projects[0].developer?.name}</p>
-                  <h2 className="text-stone-900 text-3xl font-bold mb-3">{projects[0].name}</h2>
-                  <p className="text-stone-600 mb-6">{projects[0].location}, {projects[0].emirate}</p>
+                  <p className="text-[#1A1A1A]/70 text-sm mb-2">{projects[0].developer?.name}</p>
+                  <h2 className="text-[#1A1A1A] text-3xl font-bold mb-3">{projects[0].name}</h2>
+                  <p className="text-[#1A1A1A]/70 mb-6">{projects[0].location}, {projects[0].emirate}</p>
                   
                   <div className="grid grid-cols-2 gap-4 mb-6">
                     <div className="bg-[#F7F2EA] rounded-xl p-4 border border-[#B89555]/20">
-                      <p className="text-stone-500 text-sm">Price From</p>
-                      <p className="text-stone-900 text-xl font-semibold">
+                      <p className="text-[#1A1A1A]/70 text-sm">Price From</p>
+                      <p className="text-[#1A1A1A] text-xl font-semibold">
                         {projects[0].price_from
                           ? `AED ${(projects[0].price_from / 1000000).toFixed(1)}M`
                           : "Price on Request"}
                       </p>
                     </div>
                     <div className="bg-[#F7F2EA] rounded-xl p-4 border border-[#B89555]/20">
-                      <p className="text-stone-500 text-sm">Bedrooms</p>
-                      <p className="text-stone-900 text-xl font-semibold">
+                      <p className="text-[#1A1A1A]/70 text-sm">Bedrooms</p>
+                      <p className="text-[#1A1A1A] text-xl font-semibold">
                         {projects[0].bedrooms_min != null && projects[0].bedrooms_max != null
                           ? projects[0].bedrooms_min === 0
                             ? `Studio${projects[0].bedrooms_max > 0 ? ` - ${projects[0].bedrooms_max} BR` : ''}`
@@ -338,7 +338,7 @@ Best regards`);
                   <div className="flex items-center gap-3 mb-6">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="sm" className="border-[#B89555] text-stone-800 bg-[#B89555]/10 hover:bg-[#B89555]/20">
+                        <Button variant="outline" size="sm" className="border-[#B89555] text-[#1A1A1A] bg-[#B89555]/10 hover:bg-[#B89555]/20">
                           <Award className="w-4 h-4 mr-2" />
                           {badges[projects[0].id] ? 'Change Badge' : 'Add Badge'}
                         </Button>
@@ -354,7 +354,7 @@ Best regards`);
                           Top 3 — Bronze
                         </DropdownMenuItem>
                         {badges[projects[0].id] && (
-                          <DropdownMenuItem onClick={() => handleSetBadge(projects[0].id, null)} className="text-stone-400 hover:bg-[#B89555]/10">
+                          <DropdownMenuItem onClick={() => handleSetBadge(projects[0].id, null)} className="text-[#1A1A1A]/70 hover:bg-[#B89555]/10">
                             <X className="w-4 h-4 mr-2" /> Remove Badge
                           </DropdownMenuItem>
                         )}
@@ -363,7 +363,7 @@ Best regards`);
                   </div>
                   
                   <Link to={`/project/${projects[0].slug}`}>
-                    <Button className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-stone-900 hover:brightness-95 w-full md:w-auto border-2 border-[#B89555] font-semibold hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
+                    <Button className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] hover:brightness-95 w-full md:w-auto border-2 border-[#B89555] font-semibold hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
                       View Property
                       <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
@@ -377,7 +377,7 @@ Best regards`);
         {/* Other Recommendations */}
         {projects && projects.length > 1 && (
           <div className="mb-12">
-            <h3 className="text-stone-900 text-xl font-semibold mb-6">More Great Options</h3>
+            <h3 className="text-[#1A1A1A] text-xl font-semibold mb-6">More Great Options</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {projects.slice(1).map((project, index) => {
                 const badge = badges[project.id];
@@ -403,7 +403,7 @@ Best regards`);
                     <div className="mt-2 px-2 pb-2">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="outline" size="sm" className="w-full border-[#B89555] text-stone-800 bg-[#B89555]/10 hover:bg-[#B89555]/20 text-xs">
+                          <Button variant="outline" size="sm" className="w-full border-[#B89555] text-[#1A1A1A] bg-[#B89555]/10 hover:bg-[#B89555]/20 text-xs">
                             <Award className="w-3 h-3 mr-1" />
                             {badge ? 'Change Badge' : 'Add Badge'}
                           </Button>
@@ -419,7 +419,7 @@ Best regards`);
                             Top 3 — Bronze
                           </DropdownMenuItem>
                           {badge && (
-                            <DropdownMenuItem onClick={() => handleSetBadge(project.id, null)} className="text-stone-400 hover:bg-[#B89555]/10">
+                            <DropdownMenuItem onClick={() => handleSetBadge(project.id, null)} className="text-[#1A1A1A]/70 hover:bg-[#B89555]/10">
                               <X className="w-3 h-3 mr-1" /> Remove
                             </DropdownMenuItem>
                           )}
@@ -435,7 +435,7 @@ Best regards`);
 
         {/* Action Cards */}
         <div className="border-2 border-[#B89555]/30 rounded-2xl p-6 bg-[#FDFBF7]/60 backdrop-blur-sm mb-12">
-          <h3 className="text-stone-900 text-lg font-semibold mb-5 flex items-center gap-2">
+          <h3 className="text-[#1A1A1A] text-lg font-semibold mb-5 flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-[#1A1A1A]" />
             Want More AI Power?
           </h3>
@@ -447,11 +447,11 @@ Best regards`);
                   <Sparkles className="w-6 h-6 text-[#1A1A1A]" />
                 </div>
                 <div>
-                  <h3 className="text-stone-900 font-semibold">AI Comparison</h3>
-                  <p className="text-stone-500 text-sm">Instant analysis</p>
+                  <h3 className="text-[#1A1A1A] font-semibold">AI Comparison</h3>
+                  <p className="text-[#1A1A1A]/70 text-sm">Instant analysis</p>
                 </div>
               </div>
-              <p className="text-stone-600 text-sm mb-4 flex-1">
+              <p className="text-[#1A1A1A]/70 text-sm mb-4 flex-1">
                 Generate an AI-powered comparison table with star ratings, price analysis, and recommendations.
               </p>
               <Link to="/compare">
@@ -469,11 +469,11 @@ Best regards`);
                   <Users className="w-6 h-6 text-[#1A1A1A]" />
                 </div>
                 <div>
-                  <h3 className="text-stone-900 font-semibold">Property Consultant</h3>
-                  <p className="text-stone-500 text-sm">Expert consultation</p>
+                  <h3 className="text-[#1A1A1A] font-semibold">Property Consultant</h3>
+                  <p className="text-[#1A1A1A]/70 text-sm">Expert consultation</p>
                 </div>
               </div>
-              <p className="text-stone-600 text-sm mb-4 flex-1">
+              <p className="text-[#1A1A1A]/70 text-sm mb-4 flex-1">
                 Request a personalized evaluation from our property consultants with detailed market insights.
               </p>
               <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer">
@@ -492,11 +492,11 @@ Best regards`);
                   <Brain className="w-6 h-6 text-[#1A1A1A]" />
                 </div>
                 <div>
-                  <h3 className="text-stone-900 font-semibold">AI Home Finder</h3>
-                  <p className="text-stone-500 text-sm">New search</p>
+                  <h3 className="text-[#1A1A1A] font-semibold">AI Home Finder</h3>
+                  <p className="text-[#1A1A1A]/70 text-sm">New search</p>
                 </div>
               </div>
-              <p className="text-stone-600 text-sm mb-4 flex-1">
+              <p className="text-[#1A1A1A]/70 text-sm mb-4 flex-1">
                 Not satisfied? Retake the AI quiz with different preferences to discover new matches.
               </p>
               <Button
@@ -514,15 +514,15 @@ Best regards`);
         <div className="text-center">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
             <Link to="/">
-              <Button className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-stone-900 hover:brightness-95 font-semibold px-6 py-3 border-2 border-[#B89555] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
+              <Button className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] hover:brightness-95 font-semibold px-6 py-3 border-2 border-[#B89555] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
                 Browse All Properties
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
           </div>
-          <p className="text-stone-500 text-xs">
+          <p className="text-[#1A1A1A]/70 text-xs">
             Powered & Made by{" "}
-            <span className="text-stone-900 font-medium">JBJ Global Real Estate</span>
+            <span className="text-[#1A1A1A] font-medium">JBJ Global Real Estate</span>
             {" "}— Brokerage | Dubai, UAE
           </p>
         </div>
@@ -530,20 +530,20 @@ Best regards`);
 
       {/* Share Modal */}
       <Dialog open={shareModalOpen} onOpenChange={setShareModalOpen}>
-        <DialogContent className="bg-[#FDFBF7] border-[#B89555]/30 text-stone-900 sm:max-w-md">
+        <DialogContent className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-stone-900">
+            <DialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
               <Share2 className="w-5 h-5 text-[#B89555]" />
               Share Your Results
             </DialogTitle>
-            <DialogDescription className="text-stone-500">
+            <DialogDescription className="text-[#1A1A1A]/70">
               Send your AI recommendations to our team for a personalized consultation
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 mt-4">
             <div className="bg-[#F7F2EA] rounded-lg p-4 border border-[#B89555]/20">
-              <p className="text-stone-500 text-xs mb-3">Properties to share:</p>
+              <p className="text-[#1A1A1A]/70 text-xs mb-3">Properties to share:</p>
               {projects?.map((p, i) => {
                 const badge = badges[p.id];
                 return (
@@ -554,7 +554,7 @@ Best regards`);
                         {badge === 'top1' ? '(Gold)' : badge === 'top2' ? '(Silver)' : '(Bronze)'}
                       </span>
                     )}
-                    <span className="text-stone-800">{p.name}</span>
+                    <span className="text-[#1A1A1A]">{p.name}</span>
                   </div>
                 );
               })}
@@ -568,7 +568,7 @@ Best regards`);
               Send to CONTACT@JBJ.AE
             </Button>
 
-            <p className="text-stone-500 text-xs text-center">
+            <p className="text-[#1A1A1A]/70 text-xs text-center">
               Our property consultants will contact you within 24 hours
             </p>
           </div>
