@@ -62,7 +62,7 @@ type ViewItem = { id: string; label: string; group?: string };
 const VIEWS: Record<Entity, ViewItem[]> = {
   leads: [
     { id: "all",           label: "All Leads",     group: "People" },
-    { id: "overview",      label: "Overview",      group: "People" },
+    { id: "overview",      label: "Dashboard",     group: "People" },
     { id: "flagged",       label: "Flagged",       group: "People" },
     { id: "vip",           label: "VIP",           group: "People" },
     { id: "management",    label: "Lead Mgmt",     group: "People" },
@@ -249,6 +249,7 @@ export default function UnifiedCRM() {
         case "contracts":     return <Embed><ContractVault /></Embed>;
         case "campaigns":     return <Embed><CampaignsPage /></Embed>;
         case "automation":    return <AutomationRules userId={userId} isOwner />;
+        default:              return <CRMLeadsTableV2 userId={userId} filterType="all" onRefresh={() => {}} isOwner />;
       }
     }
     if (entity === "investors") {
