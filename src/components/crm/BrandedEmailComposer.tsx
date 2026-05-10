@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
-import { Sparkles, Send, FlaskConical, Save, Mail, Loader2 } from "lucide-react";
+import { Sparkles, Send, FlaskConical, Save, Mail, Loader2, CalendarPlus } from "lucide-react";
 import { toast } from "sonner";
 import {
   PRIMARY_SENDER,
