@@ -2710,7 +2710,7 @@ html [data-surface="dark"][data-surface="dark"] :is(input, textarea, select, opt
 /* Dark surface selector */
 :where(
   .bg-black, .bg-primary, .bg-foreground,
-  .bg-\[\#1A1A1A\], .bg-\[\#FDFBF7\], .bg-\[\#FDFBF7\],
+  .bg-\[\#1A1A1A\],
   .bg-gray-800, .bg-gray-900, .bg-gray-950,
   .bg-\[\#1A1A1A\], .bg-\[\#1A1A1A\], .bg-\[\#1A1A1A\],
   [class*="bg-black"],
@@ -2722,7 +2722,7 @@ html [data-surface="dark"][data-surface="dark"] :is(input, textarea, select, opt
 
 /* 2a. Low-contrast grays on dark → readable white */
 :where(
-  .bg-black, .bg-\[\#FDFBF7\], .bg-\[\#FDFBF7\], .bg-gray-900, .bg-gray-950,
+  .bg-black, .bg-gray-900, .bg-gray-950,
   .bg-gray-800, .bg-\[\#1A1A1A\], .bg-\[\#1A1A1A\],
   [class*="bg-black"],
   [class*="from-[hsl(32,28%,13%)]"], [class*="bg-[hsl(32,28%,13%)]"],
@@ -2738,7 +2738,7 @@ html [data-surface="dark"][data-surface="dark"] :is(input, textarea, select, opt
 
 /* 2b. Darker grays on dark surfaces → bright white */
 :where(
-  .bg-black, .bg-\[\#FDFBF7\], .bg-\[\#FDFBF7\], .bg-gray-900, .bg-gray-950,
+  .bg-black, .bg-gray-900, .bg-gray-950,
   [class*="bg-black"]
 ) :is(
   .text-gray-600, .text-gray-700, .text-gray-800, .text-gray-900,
@@ -2752,7 +2752,7 @@ html [data-surface="dark"][data-surface="dark"] :is(input, textarea, select, opt
 
 /* 2c. Borders on dark surfaces — visible */
 :where(
-  .bg-black, .bg-\[\#FDFBF7\], .bg-\[\#FDFBF7\], .bg-gray-900, .bg-gray-950
+  .bg-black, .bg-gray-900, .bg-gray-950
 ) :is(.border-gray-700, .border-\[\#B89555\]\/30, .border-gray-800, .border-\[\#B89555\]\/30) {
   border-color: rgb(255 255 255 / 0.18) !important;
 }
