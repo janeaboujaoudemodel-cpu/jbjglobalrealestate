@@ -2,6 +2,7 @@
 // Single parallel fetch of head-counts; cached for 60s.
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { OWNER_EMAILS_LC } from "@/config/ownerEmails";
 
 export type CRMCounts = {
   leads: number;
