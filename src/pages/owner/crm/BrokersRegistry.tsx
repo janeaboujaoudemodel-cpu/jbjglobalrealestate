@@ -67,26 +67,53 @@ export default function BrokersRegistry() {
     },
   });
 
-  const { data: external = [], isLoading: loading2 } = useQuery({
-    queryKey: ["brokers-external"],
-    queryFn: async () => {
-      // Paginate fully — crm_brokers can hold tens of thousands of rows.
-      const PAGE = 1000;
-      const all: any[] = [];
-      for (let from = 0; from < 200_000; from += PAGE) {
-        const { data, error } = await (supabase as any)
-          .from("crm_brokers")
-          .select("*")
-          .order("updated_at", { ascending: false })
-          .range(from, from + PAGE - 1);
-        if (error) throw error;
-        const batch = data || [];
-        all.push(...batch);
-        if (batch.length < PAGE) break;
+  // Stream crm_brokers in 1k pages so the UI renders the first page immediately
+  // and progressively fills as more pages arrive (32k+ rows otherwise = blank screen).
+  const [external, setExternal] = useState<any[]>([]);
+  const [externalLoadedPages, setExternalLoadedPages] = useState(0);
+  const [externalDone, setExternalDone] = useState(false);
+  const [externalError, setExternalError] = useState<string | null>(null);
+  const [externalReloadKey, setExternalReloadKey] = useState(0);
+
+  useEffect(() => {
+    let cancelled = false;
+    const PAGE = 1000;
+    setExternal([]);
+    setExternalLoadedPages(0);
+    setExternalDone(false);
+    setExternalError(null);
+
+    (async () => {
+      try {
+        for (let from = 0; from < 500_000; from += PAGE) {
+          if (cancelled) return;
+          const { data, error } = await (supabase as any)
+            .from("crm_brokers")
+            .select("*")
+            .order("updated_at", { ascending: false })
+            .range(from, from + PAGE - 1);
+          if (cancelled) return;
+          if (error) throw error;
+          const batch = data || [];
+          setExternal((prev) => prev.concat(batch));
+          setExternalLoadedPages((p) => p + 1);
+          if (batch.length < PAGE) break;
+        }
+        if (!cancelled) setExternalDone(true);
+      } catch (e: any) {
+        if (!cancelled) {
+          setExternalError(e?.message || "Failed to load brokers");
+          setExternalDone(true);
+        }
       }
-      return all;
-    },
-  });
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [externalReloadKey]);
+
+  const loading2 = external.length === 0 && !externalDone;
 
   const { data: history = [] } = useQuery({
     queryKey: ["broker-company-history-all"],
