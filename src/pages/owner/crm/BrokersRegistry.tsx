@@ -303,12 +303,31 @@ export default function BrokersRegistry() {
             <TabsTrigger value="leasing">Leasing ({counts.leasing})</TabsTrigger>
             <TabsTrigger value="pending">Pending ({counts.pending})</TabsTrigger>
           </TabsList>
-          <TabsContent value={tab} className="mt-3">
+          <TabsContent value={tab} className="mt-3 space-y-3">
+            {externalError && (
+              <Card className="border-red-300 bg-red-50/40">
+                <CardContent className="p-4 flex items-center justify-between gap-3">
+                  <div className="text-sm text-[#1A1A1A]">
+                    <div className="font-semibold">Couldn't load all brokers.</div>
+                    <div className="text-[#1A1A1A]/70 text-xs mt-0.5">{externalError}</div>
+                  </div>
+                  <Button variant="outline" size="sm" onClick={() => setExternalReloadKey((k) => k + 1)}>
+                    Retry
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+            {stillStreaming && (
+              <div className="flex items-center gap-2 text-xs text-[#1A1A1A]/70 px-1">
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                Loading brokers… {external.length.toLocaleString()} of {counts.total.toLocaleString()} loaded
+              </div>
+            )}
             {isLoading ? (
               <Skeleton className="h-64" />
             ) : filtered.length === 0 ? (
               <Card><CardContent className="p-8 text-center text-[#1A1A1A]/70">
-                No brokers match your filters.
+                {stillStreaming ? "Loading brokers…" : "No brokers match your filters."}
               </CardContent></Card>
             ) : (
               <Card className="bg-[#F7F2EA] border-[#B89555]/20">
@@ -326,7 +345,7 @@ export default function BrokersRegistry() {
                       </tr>
                     </thead>
                     <tbody>
-                      {filtered.map((r) => {
+                      {visible.map((r) => {
                         const raw = r.source === "external" ? externalById.get(r.id) : null;
                         const dbSource = raw?.database_source || raw?.upload_source || (r.source === "registered" ? "Registered" : "Manual");
                         return (
