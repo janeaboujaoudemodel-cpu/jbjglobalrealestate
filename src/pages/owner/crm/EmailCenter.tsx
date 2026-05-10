@@ -102,7 +102,7 @@ export default function EmailCenter() {
               <IconTile icon={Mail} tone="gold" size="sm" />
               Email Command Center
               <span className="text-xs font-normal text-[#1A1A1A]/60">
-                JBJ-related mail from the connected inbox · auto-BCC drjane@gmail.com on every send
+                Real-estate only · auto-BCC infoo.jane@gmail.com on every send
               </span>
             </CardTitle>
             <Button
