@@ -36,6 +36,7 @@ import {
   useSyncJbjInbox,
   useSendRegistrationConfirmation,
   useArchiveInboxItem,
+  useUnarchiveInboxItem,
   type InboxCategory,
   type InboxStatus,
 } from "@/hooks/useEmailInboxItems";
