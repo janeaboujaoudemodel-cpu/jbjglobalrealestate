@@ -82,6 +82,24 @@ export default function BrokerageAgenciesDirectory() {
     );
   }, [rows, search]);
 
+  // Emirate shortcut counts
+  const emirateCounts = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const r of rows) {
+      const k = (r.emirate || "").trim();
+      if (!k) continue;
+      m.set(k, (m.get(k) || 0) + 1);
+    }
+    return Array.from(m.entries()).sort((a, b) => b[1] - a[1]);
+  }, [rows]);
+
+  const [emirate, setEmirate] = useState<string | null>(null);
+  const finalRows = useMemo(() => {
+    if (!emirate) return filtered;
+    const k = emirate.toLowerCase();
+    return filtered.filter(r => (r.emirate || "").toLowerCase() === k);
+  }, [filtered, emirate]);
+
   if (loading) {
     return (
       <div className="space-y-3">
@@ -101,24 +119,6 @@ export default function BrokerageAgenciesDirectory() {
 
   const sourceLabel = (r: AgencyRow) =>
     [r.database_source, r.upload_source, r.source, r.entry_source].filter(Boolean).join(" · ") || "—";
-
-  // Emirate shortcut counts
-  const emirateCounts = useMemo(() => {
-    const m = new Map<string, number>();
-    for (const r of rows) {
-      const k = (r.emirate || "").trim();
-      if (!k) continue;
-      m.set(k, (m.get(k) || 0) + 1);
-    }
-    return Array.from(m.entries()).sort((a, b) => b[1] - a[1]);
-  }, [rows]);
-
-  const [emirate, setEmirate] = useState<string | null>(null);
-  const finalRows = useMemo(() => {
-    if (!emirate) return filtered;
-    const k = emirate.toLowerCase();
-    return filtered.filter(r => (r.emirate || "").toLowerCase() === k);
-  }, [filtered, emirate]);
 
   return (
     <div className="space-y-4">
