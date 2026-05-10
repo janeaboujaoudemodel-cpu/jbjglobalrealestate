@@ -14,7 +14,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { toast } from "sonner";
-import { FileSignature, Mail, MessageSquare, PhoneCall, Trash2, Flame, Star, CheckCircle2, XCircle, Clock, Ban } from "lucide-react";
+import { FileSignature, Mail, MessageSquare, PhoneCall, Trash2, Flame, Star, CheckCircle2, XCircle, Clock, Ban, Crown } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -34,6 +34,7 @@ import { isRealCRMLead } from "@/utils/crmFakeDataGuard";
 import LeadQuickActions from "./LeadQuickActions";
 import { BrokerCombobox } from "./BrokerCombobox";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { SearchableMultiSelect } from "@/components/ui/searchable-multiselect";
 
 interface LeadSource {
   source_group: string;
@@ -91,11 +92,11 @@ export default function CRMLeadsTableV2({
   const [leadToDelete, setLeadToDelete] = useState<Lead | null>(null);
   const [agreementLead, setAgreementLead] = useState<Lead | null>(null);
 
-  // Inline filter dropdowns: Stage / Source / Assignee / Tag
-  const [stageFilter, setStageFilter] = useState<string>("");
+  // Inline filter dropdowns: Stage (multi) / Source / Assignee / Tag
+  const [stageMulti, setStageMulti] = useState<string[]>([]);
   const [sourceTypeFilter, setSourceTypeFilter] = useState<string>("");
   const [assigneeFilter, setAssigneeFilter] = useState<string>("");
-  const [tagFilter, setTagFilter] = useState<string>(""); // "vip" | "unassigned" | ""
+  const [tagFilter, setTagFilter] = useState<string>(""); // "vip" | "unassigned" | "investor" | ""
 
   const groupedStatuses = useMemo(() => {
     const groups: Record<string, typeof PIPELINE_STATUSES> = {
@@ -342,7 +343,7 @@ export default function CRMLeadsTableV2({
           l.email_lower?.toLowerCase().includes(q);
         if (!hit) return false;
       }
-      if (stageFilter && (l.state?.pipeline_status || "new") !== stageFilter) return false;
+      if (stageMulti.length > 0 && !stageMulti.includes(l.state?.pipeline_status || "new")) return false;
       if (sourceTypeFilter && (l.lead_source_type || "") !== sourceTypeFilter) return false;
       if (assigneeFilter) {
         if (assigneeFilter === "__unassigned__") {
@@ -357,9 +358,10 @@ export default function CRMLeadsTableV2({
       }
       if (tagFilter === "vip" && (l as any).vip !== true) return false;
       if (tagFilter === "unassigned" && leadAssignees[l.id]) return false;
+      if (tagFilter === "investor" && (l as any).is_investor !== true) return false;
       return true;
     });
-  }, [leads, search, stageFilter, sourceTypeFilter, assigneeFilter, tagFilter, leadAssignees, userId]);
+  }, [leads, search, stageMulti, sourceTypeFilter, assigneeFilter, tagFilter, leadAssignees, userId]);
 
   const selectedIds = useMemo(() => Array.from(selected), [selected]);
 
@@ -406,14 +408,14 @@ export default function CRMLeadsTableV2({
           <span className="text-xs font-bold uppercase tracking-wider text-[#1A1A1A]/60 mr-1">Quick:</span>
           {quickChips.map((c) => {
             const active =
-              (c.stage && stageFilter === c.stage) || (c.tag && tagFilter === c.tag);
+              (c.stage && stageMulti.length === 1 && stageMulti[0] === c.stage) || (c.tag && tagFilter === c.tag);
             const Icon = c.icon;
             return (
               <button
                 key={c.key}
                 type="button"
                 onClick={() => {
-                  if (c.stage) setStageFilter(active ? "" : c.stage);
+                  if (c.stage) setStageMulti(active ? [] : [c.stage]);
                   if (c.tag) setTagFilter(active ? "" : c.tag);
                 }}
                 className={
@@ -447,7 +449,7 @@ export default function CRMLeadsTableV2({
             onClick={() => {
               setSelected(new Set());
               setSearch("");
-              setStageFilter("");
+              setStageMulti([]);
               setSourceTypeFilter("");
               setAssigneeFilter("");
               setTagFilter("");
@@ -507,47 +509,30 @@ export default function CRMLeadsTableV2({
 
         {/* Dropdown row — shadcn Select, evenly spaced, no overlap */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <Select value={stageFilter || "__all__"} onValueChange={(v) => setStageFilter(v === "__all__" ? "" : v)}>
-            <SelectTrigger className="h-10 bg-[#FDFBF7] border border-[#B89555]/30 text-[#1A1A1A] font-semibold min-w-0">
-              <SelectValue placeholder="All Stages" className="truncate" />
-            </SelectTrigger>
-            <SelectContent className="bg-[#FDFBF7] border border-[#B89555]/40 shadow-lg max-h-[360px] [&_[data-highlighted]]:bg-[#EFE6D6] [&_[data-highlighted]]:text-[#1A1A1A]">
-              <SelectItem value="__all__">All Stages</SelectItem>
-              <SelectGroup>
-                <SelectLabel className="text-emerald-700 font-bold bg-emerald-50/60">Positive</SelectLabel>
-                {groupedStatuses.positive.map((s) => (
-                  <SelectItem key={s.value} value={s.value}>
-                    <span className="inline-flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: s.dotColor }} />
-                      {s.label}
-                    </span>
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-              <SelectGroup>
-                <SelectLabel className="text-blue-700 font-bold bg-blue-50/60">Neutral</SelectLabel>
-                {groupedStatuses.neutral.map((s) => (
-                  <SelectItem key={s.value} value={s.value}>
-                    <span className="inline-flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: s.dotColor }} />
-                      {s.label}
-                    </span>
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-              <SelectGroup>
-                <SelectLabel className="text-red-700 font-bold bg-red-50/60">Negative</SelectLabel>
-                {groupedStatuses.negative.map((s) => (
-                  <SelectItem key={s.value} value={s.value}>
-                    <span className="inline-flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: s.dotColor }} />
-                      {s.label}
-                    </span>
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          <SearchableMultiSelect
+            label="All Statuses"
+            placeholder="Search statuses…"
+            className="h-10 w-full justify-between"
+            selected={stageMulti}
+            onChange={setStageMulti}
+            options={[
+              ...groupedStatuses.positive.map((s) => ({
+                value: s.value,
+                label: `🟢 ${s.label}`,
+                count: leads.filter((l) => (l.state?.pipeline_status || "new") === s.value).length,
+              })),
+              ...groupedStatuses.neutral.map((s) => ({
+                value: s.value,
+                label: `🔵 ${s.label}`,
+                count: leads.filter((l) => (l.state?.pipeline_status || "new") === s.value).length,
+              })),
+              ...groupedStatuses.negative.map((s) => ({
+                value: s.value,
+                label: `🔴 ${s.label}`,
+                count: leads.filter((l) => (l.state?.pipeline_status || "new") === s.value).length,
+              })),
+            ]}
+          />
 
           <Select value={sourceTypeFilter || "__all__"} onValueChange={(v) => setSourceTypeFilter(v === "__all__" ? "" : v)}>
             <SelectTrigger className="h-10 bg-[#FDFBF7] border border-[#B89555]/30 text-[#1A1A1A] font-semibold min-w-0">
@@ -595,6 +580,7 @@ export default function CRMLeadsTableV2({
               <SelectItem value="__all__">All Tags</SelectItem>
               <SelectItem value="vip">★ VIP</SelectItem>
               <SelectItem value="unassigned">Pool (no broker)</SelectItem>
+              <SelectItem value="investor">👑 Investor</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -666,7 +652,16 @@ export default function CRMLeadsTableV2({
                         }}
                       />
                     </TableCell>
-                    <TableCell className="font-semibold text-[#1A1A1A] whitespace-nowrap">{lead.full_name || "—"}</TableCell>
+                    <TableCell className="font-semibold text-[#1A1A1A] whitespace-nowrap">
+                      <span className="inline-flex items-center gap-1.5">
+                        {(lead as any).is_investor && (
+                          <span title="Investor" className="inline-flex items-center justify-center h-5 w-5 rounded-full bg-[#B89555]/15 border border-[#B89555]/40 text-[#B89555]">
+                            <Crown className="h-3 w-3" />
+                          </span>
+                        )}
+                        {lead.full_name || "—"}
+                      </span>
+                    </TableCell>
                     <TableCell className="font-mono text-sm text-[#1A1A1A]/80 whitespace-nowrap">{lead.phone_e164 || "—"}</TableCell>
                     <TableCell>
                       {lead.email_lower ? (

@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { CalendarPlus, StickyNote, ListTodo, Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { CalendarPlus, StickyNote, ListTodo, Loader2, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -16,10 +16,60 @@ interface Props {
 export default function LeadQuickActions({ leadId, leadName, userId }: Props) {
   return (
     <div className="inline-flex items-center gap-1">
+      <InvestorToggle leadId={leadId} />
       <CalendarPopover leadId={leadId} leadName={leadName} userId={userId} />
       <NotePopover leadId={leadId} userId={userId} />
       <TaskPopover leadId={leadId} leadName={leadName} userId={userId} />
     </div>
+  );
+}
+
+function InvestorToggle({ leadId }: { leadId: string }) {
+  const [isInvestor, setIsInvestor] = useState<boolean>(false);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from("crm_leads")
+        .select("is_investor")
+        .eq("id", leadId)
+        .maybeSingle();
+      if (!cancelled && data) setIsInvestor(Boolean((data as any).is_investor));
+    })();
+    return () => { cancelled = true; };
+  }, [leadId]);
+
+  const toggle = async () => {
+    setSaving(true);
+    const next = !isInvestor;
+    const { error } = await supabase
+      .from("crm_leads")
+      .update({ is_investor: next })
+      .eq("id", leadId);
+    setSaving(false);
+    if (error) return toast.error(error.message);
+    setIsInvestor(next);
+    toast.success(next ? "Marked as Investor" : "Unmarked as Investor");
+  };
+
+  return (
+    <Button
+      type="button"
+      size="icon"
+      onClick={toggle}
+      disabled={saving}
+      title={isInvestor ? "Unmark as Investor" : "Mark as Investor"}
+      className={
+        "h-9 w-9 border " +
+        (isInvestor
+          ? "bg-[#B89555] hover:bg-[#A08047] text-white border-[#B89555]"
+          : "bg-[#EFE6D6] hover:bg-[#E5D9C4] text-[#1A1A1A] border-[#B89555]/30")
+      }
+    >
+      {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Crown className="h-4 w-4" />}
+    </Button>
   );
 }
 
