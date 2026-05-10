@@ -26,8 +26,9 @@ const FlaggedLeadsView    = lazy(() => import("@/components/crm/FlaggedLeadsView
 const RecentlyDeletedLeads= lazy(() => import("@/components/crm/RecentlyDeletedLeads"));
 const CRMRelationships    = lazy(() => import("@/pages/CRMRelationships"));
 const BrokersRegistryPage = lazy(() => import("@/pages/owner/crm/BrokersRegistry"));
-const DevelopersDirectory       = lazy(() => import("@/components/crm/entity/DevelopersDirectory"));
-const BrokerageAgenciesDirectory= lazy(() => import("@/components/crm/entity/BrokerageAgenciesDirectory"));
+// Developers / Brokerage Agencies / Brokers / Sales Reps all render through
+// CRMRelationships so the UI, fields, filters and drawers are identical to
+// /owner/crm/relationship-hub. The page reads ?tab= to jump to the right tab.
 const DevSalesRepsDirectory     = lazy(() => import("@/components/crm/entity/DevSalesRepsDirectory"));
 const EmployeesHub        = lazy(() => import("@/components/crm/EmployeesHub"));
 const CampaignsPage       = lazy(() => import("@/pages/owner/crm/CampaignsPage"));
@@ -255,18 +256,13 @@ export default function UnifiedCRM() {
     if (entity === "investors") {
       return <InvestorsDirectory ownerEmail={ownerEmail} vipOnly={view === "vip"} />;
     }
-    if (entity === "developers") {
-      return <DevelopersDirectory />;
+    if (entity === "developers" || entity === "agencies" || entity === "brokers") {
+      // Render the exact same Relationship Hub the sidebar opens — single source
+      // of truth for developers / brokerage agencies / brokers UI.
+      return <Embed><CRMRelationships /></Embed>;
     }
     if (entity === "sales-reps") {
       return <DevSalesRepsDirectory />;
-    }
-    if (entity === "brokers") {
-      if (view === "imported") return <BrokersImported />;
-      return <Embed><BrokersRegistryPage /></Embed>;
-    }
-    if (entity === "agencies") {
-      return <BrokerageAgenciesDirectory />;
     }
     if (entity === "employees") {
       return <EmployeesHub userId={userId} />;
