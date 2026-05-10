@@ -17,6 +17,7 @@ import { Users, Search, Plus, Building2, BadgeCheck, Clock, Loader2, Download } 
 import { toast } from "sonner";
 import { RelationalHubTabs } from "@/components/crm/RelationalHubTabs";
 import { UnifiedCRMExportModal } from "@/components/crm/UnifiedCRMExportModal";
+import { BrokerageCombobox } from "@/components/crm/BrokerageCombobox";
 import {
   SourceFilterChips,
   EMPTY_SOURCE_FILTER,
