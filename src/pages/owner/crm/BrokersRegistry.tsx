@@ -370,6 +370,14 @@ export default function BrokersRegistry() {
                       })}
                     </tbody>
                   </table>
+                  {filtered.length > visible.length && (
+                    <div className="p-3 border-t border-[#B89555]/20 flex items-center justify-between text-xs text-[#1A1A1A]/70">
+                      <span>Showing {visible.length.toLocaleString()} of {filtered.length.toLocaleString()} matching brokers</span>
+                      <Button variant="outline" size="sm" onClick={() => setRenderLimit((n) => n + 1000)}>
+                        Show more
+                      </Button>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             )}
