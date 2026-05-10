@@ -155,14 +155,14 @@ export default function DevelopersDirectory() {
         <table className="min-w-full text-sm">
           <thead className="bg-[#F7F2EA] text-[#1A1A1A]">
             <tr>
-              <th className="text-left px-4 py-2 font-semibold">Developer</th>
-              <th className="text-left px-4 py-2 font-semibold">Headquarters</th>
-              <th className="text-left px-4 py-2 font-semibold">CEO</th>
-              <th className="text-left px-4 py-2 font-semibold">License</th>
-              <th className="text-right px-4 py-2 font-semibold">Done</th>
-              <th className="text-right px-4 py-2 font-semibold">Off-plan</th>
-              <th className="text-right px-4 py-2 font-semibold">Founded</th>
-              <th className="text-left px-4 py-2 font-semibold">Status</th>
+              <th className="text-left px-4 py-2 font-semibold whitespace-nowrap sticky left-0 bg-[#F7F2EA] z-10">Developer</th>
+              <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Headquarters</th>
+              <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">CEO</th>
+              <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">License</th>
+              <th className="text-right px-4 py-2 font-semibold whitespace-nowrap">Done</th>
+              <th className="text-right px-4 py-2 font-semibold whitespace-nowrap">Off-plan</th>
+              <th className="text-right px-4 py-2 font-semibold whitespace-nowrap">Founded</th>
+              <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Status</th>
               <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Contact</th>
             </tr>
           </thead>
@@ -177,7 +177,7 @@ export default function DevelopersDirectory() {
                   onClick={() => { setHubName(d.name); setHubOpen(true); }}
                   className="cursor-pointer hover:bg-[#F7F2EA]/60"
                 >
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3 whitespace-nowrap">
                     <div className="flex items-center gap-3 min-w-0">
                       <div className="w-8 h-8 rounded bg-[#F7F2EA] border border-[#B89555]/20 flex items-center justify-center overflow-hidden flex-none">
                         {logo
@@ -187,7 +187,7 @@ export default function DevelopersDirectory() {
                       <span className="font-semibold text-[#1A1A1A] truncate">{d.name}</span>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs">
+                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">
                     {maps ? (
                       <a href={maps} target="_blank" rel="noreferrer" onClick={stop}
                          className="inline-flex items-center gap-1 hover:underline">
@@ -196,20 +196,20 @@ export default function DevelopersDirectory() {
                       </a>
                     ) : (d.headquarters || "—")}
                   </td>
-                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs">{d.ceo_name || "—"}</td>
-                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs">{d.license_number || "—"}</td>
-                  <td className="px-4 py-3 text-right text-[#1A1A1A]">{d.completed_projects ?? "—"}</td>
-                  <td className="px-4 py-3 text-right text-[#1A1A1A]">{d.offplan_projects ?? "—"}</td>
-                  <td className="px-4 py-3 text-right text-[#1A1A1A]/80 text-xs">{d.founded_year || "—"}</td>
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">{d.ceo_name || "—"}</td>
+                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">{d.license_number || "—"}</td>
+                  <td className="px-4 py-3 text-right text-[#1A1A1A] whitespace-nowrap">{d.completed_projects ?? "—"}</td>
+                  <td className="px-4 py-3 text-right text-[#1A1A1A] whitespace-nowrap">{d.offplan_projects ?? "—"}</td>
+                  <td className="px-4 py-3 text-right text-[#1A1A1A]/80 text-xs whitespace-nowrap">{d.founded_year || "—"}</td>
+                  <td className="px-4 py-3 whitespace-nowrap">
                     {d.registration_status ? (
                       <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] text-[10px] capitalize">
                         {d.registration_status}
                       </Badge>
                     ) : <span className="text-[#1A1A1A]/40 text-xs">—</span>}
                   </td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-1 flex-wrap">
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    <div className="flex items-center gap-1 flex-nowrap">
                       <IconLink href={d.website_url} title="Website"><Globe className="h-3.5 w-3.5" /></IconLink>
                       <IconLink href={d.admin_email ? `mailto:${d.admin_email}` : null} title="Email"><Mail className="h-3.5 w-3.5" /></IconLink>
                       <IconLink href={d.office_phone ? `tel:${d.office_phone}` : null} title="Phone"><Phone className="h-3.5 w-3.5" /></IconLink>

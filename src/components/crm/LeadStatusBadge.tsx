@@ -36,22 +36,26 @@ export const STATUS_GROUPS = {
 // GLOBAL STATUS LIST - These EXACT statuses must be used everywhere
 // No alternative lists, no shortened versions, no duplicates
 export const PIPELINE_STATUSES: PipelineStatus[] = [
+  // HOT — orange (high-temperature lead)
+  { value: "hot", label: "Hot", color: "bg-orange-500", bgColor: "bg-orange-500/20", textColor: "text-orange-700", dotColor: "#F97316", category: "positive" },
+  // VIP — yellow (premium tier)
+  { value: "vip", label: "VIP", color: "bg-amber-400", bgColor: "bg-amber-400/25", textColor: "text-amber-800", dotColor: "#F59E0B", category: "positive" },
   // POSITIVE (green) - Deal progression
-  { value: "interested", label: "Interested", color: "bg-emerald-500", bgColor: "bg-emerald-500/20", textColor: "text-emerald-300", dotColor: "#22C55E", category: "positive" },
+  { value: "interested", label: "Interested", color: "bg-emerald-500", bgColor: "bg-emerald-500/20", textColor: "text-emerald-700", dotColor: "#22C55E", category: "positive" },
   { value: "qualified", label: "Qualified", color: "bg-green-500", bgColor: "bg-green-500/20", textColor: "text-green-300", dotColor: "#22C55E", category: "positive" },
   { value: "viewing", label: "Viewing Scheduled", color: "bg-emerald-600", bgColor: "bg-emerald-600/20", textColor: "text-emerald-200", dotColor: "#22C55E", category: "positive" },
   { value: "viewing_done", label: "Viewing Done", color: "bg-green-600", bgColor: "bg-green-600/20", textColor: "text-green-200", dotColor: "#22C55E", category: "positive" },
   { value: "negotiation", label: "Negotiation", color: "bg-emerald-500", bgColor: "bg-emerald-500/20", textColor: "text-emerald-300", dotColor: "#22C55E", category: "positive" },
   { value: "offer_sent", label: "Offer Sent", color: "bg-emerald-400", bgColor: "bg-emerald-400/20", textColor: "text-emerald-300", dotColor: "#22C55E", category: "positive" },
   { value: "closed_won", label: "Closed Won", color: "bg-green-600", bgColor: "bg-green-600/20", textColor: "text-green-100", dotColor: "#22C55E", category: "positive" },
-  { value: "already_bought", label: "Already Bought", color: "bg-green-700", bgColor: "bg-green-700/20", textColor: "text-green-200", dotColor: "#16A34A", category: "positive" },
+  { value: "already_bought", label: "Already Bought", color: "bg-blue-500", bgColor: "bg-blue-500/25", textColor: "text-blue-700", dotColor: "#3B82F6", category: "neutral" },
   
   // NEUTRAL (blue) - New / Follow-up / Pending
   { value: "new", label: "New", color: "bg-blue-500", bgColor: "bg-blue-500/20", textColor: "text-blue-300", dotColor: "#3B82F6", category: "neutral" },
   { value: "contacted", label: "Contacted", color: "bg-blue-400", bgColor: "bg-blue-400/20", textColor: "text-blue-300", dotColor: "#3B82F6", category: "neutral" },
   { value: "followup", label: "Follow-up", color: "bg-blue-500", bgColor: "bg-blue-500/20", textColor: "text-blue-300", dotColor: "#3B82F6", category: "neutral" },
   { value: "callback", label: "Call Back", color: "bg-blue-400", bgColor: "bg-blue-400/20", textColor: "text-blue-200", dotColor: "#3B82F6", category: "neutral" },
-  { value: "no_answer", label: "No Response", color: "bg-blue-600", bgColor: "bg-blue-600/20", textColor: "text-blue-300", dotColor: "#3B82F6", category: "neutral" },
+  { value: "no_answer", label: "No Response", color: "bg-rose-800", bgColor: "bg-rose-800/20", textColor: "text-rose-900", dotColor: "#9F1239", category: "negative" },
   { value: "on_hold", label: "On Hold", color: "bg-blue-300", bgColor: "bg-blue-300/20", textColor: "text-blue-200", dotColor: "#93C5FD", category: "neutral" },
   
   // NEUTRAL (blue) - Lifecycle states

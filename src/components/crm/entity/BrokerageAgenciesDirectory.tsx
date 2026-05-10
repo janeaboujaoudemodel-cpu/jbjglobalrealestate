@@ -82,6 +82,24 @@ export default function BrokerageAgenciesDirectory() {
     );
   }, [rows, search]);
 
+  // Emirate shortcut counts
+  const emirateCounts = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const r of rows) {
+      const k = (r.emirate || "").trim();
+      if (!k) continue;
+      m.set(k, (m.get(k) || 0) + 1);
+    }
+    return Array.from(m.entries()).sort((a, b) => b[1] - a[1]);
+  }, [rows]);
+
+  const [emirate, setEmirate] = useState<string | null>(null);
+  const finalRows = useMemo(() => {
+    if (!emirate) return filtered;
+    const k = emirate.toLowerCase();
+    return filtered.filter(r => (r.emirate || "").toLowerCase() === k);
+  }, [filtered, emirate]);
+
   if (loading) {
     return (
       <div className="space-y-3">
@@ -108,7 +126,8 @@ export default function BrokerageAgenciesDirectory() {
         <div>
           <h2 className="text-lg font-semibold text-[#1A1A1A]">Brokerage Agencies</h2>
           <p className="text-xs text-[#1A1A1A]/60">
-            {filtered.length.toLocaleString()} of {rows.length.toLocaleString()} agencies
+            {finalRows.length.toLocaleString()} of {rows.length.toLocaleString()} agencies
+            {emirate ? ` · filtered: ${emirate}` : ""}
           </p>
         </div>
         <input
@@ -120,29 +139,62 @@ export default function BrokerageAgenciesDirectory() {
         />
       </div>
 
+      {/* Emirate shortcut chips */}
+      {emirateCounts.length > 0 && (
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            onClick={() => setEmirate(null)}
+            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border transition-colors whitespace-nowrap ${
+              !emirate
+                ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/60"
+                : "bg-[#FDFBF7] text-[#1A1A1A]/80 border-[#B89555]/25 hover:bg-[#F7F2EA]"
+            }`}
+          >
+            All <span className="text-[10px] tabular-nums opacity-70">{rows.length.toLocaleString()}</span>
+          </button>
+          {emirateCounts.map(([name, count]) => (
+            <button
+              key={name}
+              onClick={() => setEmirate(emirate === name ? null : name)}
+              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border transition-colors whitespace-nowrap ${
+                emirate === name
+                  ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/60"
+                  : "bg-[#FDFBF7] text-[#1A1A1A]/80 border-[#B89555]/25 hover:bg-[#F7F2EA]"
+              }`}
+            >
+              {name} <span className="text-[10px] tabular-nums opacity-70">{count.toLocaleString()}</span>
+            </button>
+          ))}
+        </div>
+      )}
+
       <div className="overflow-x-auto rounded-lg border border-[#B89555]/30 bg-[#FDFBF7]">
         <table className="min-w-full text-sm">
           <thead className="bg-[#F7F2EA] text-[#1A1A1A]">
             <tr>
-              <th className="text-left px-4 py-2 font-semibold">Agency</th>
-              <th className="text-left px-4 py-2 font-semibold">Emirate</th>
-              <th className="text-left px-4 py-2 font-semibold">Country</th>
-              <th className="text-left px-4 py-2 font-semibold">Office</th>
-              <th className="text-left px-4 py-2 font-semibold">Phone</th>
-              <th className="text-left px-4 py-2 font-semibold">Email</th>
-              <th className="text-right px-4 py-2 font-semibold">Agents</th>
-              <th className="text-right px-4 py-2 font-semibold">Rating</th>
-              <th className="text-left px-4 py-2 font-semibold">Source</th>
+              <th className="text-left px-4 py-2 font-semibold whitespace-nowrap sticky left-0 bg-[#F7F2EA] z-10">Agency</th>
+              <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Country</th>
+              <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Emirate</th>
+              <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Office</th>
+              <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Phone</th>
+              <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Email</th>
+              <th className="text-right px-4 py-2 font-semibold whitespace-nowrap">Agents</th>
+              <th className="text-right px-4 py-2 font-semibold whitespace-nowrap">Rating</th>
+              <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Source</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[#B89555]/15">
-            {filtered.slice(0, 1500).map((r) => (
+            {finalRows.slice(0, 1500).map((r) => {
+              const mapsHref = (r.office_address || r.office_location)
+                ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.office_address || r.office_location || "")}`
+                : null;
+              return (
               <tr
                 key={r.id}
                 onClick={() => { setHubName(r.company_name); setHubOpen(true); }}
                 className="cursor-pointer hover:bg-[#F7F2EA]/60"
               >
-                <td className="px-4 py-3">
+                <td className="px-4 py-3 whitespace-nowrap sticky left-0 bg-[#FDFBF7] group-hover:bg-[#F7F2EA]/60">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded bg-[#F7F2EA] border border-[#B89555]/20 flex items-center justify-center overflow-hidden flex-none">
                       {r.logo_url
@@ -152,35 +204,42 @@ export default function BrokerageAgenciesDirectory() {
                     <span className="font-semibold text-[#1A1A1A]">{r.company_name}</span>
                   </div>
                 </td>
-                <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs">{r.emirate || "—"}</td>
-                <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs">{r.country || "—"}</td>
-                <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs">{r.office_location || r.office_address || "—"}</td>
-                <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs">
+                <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">{r.country || "—"}</td>
+                <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">{r.emirate || "—"}</td>
+                <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap max-w-[260px] truncate">
+                  {mapsHref ? (
+                    <a href={mapsHref} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} className="hover:underline">
+                      {r.office_location || r.office_address}
+                    </a>
+                  ) : "—"}
+                </td>
+                <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">
                   {r.phone ? (
-                    <span className="inline-flex items-center gap-1"><Phone className="h-3 w-3" />{r.phone}</span>
+                    <a href={`tel:${r.phone}`} onClick={(e) => e.stopPropagation()} className="inline-flex items-center gap-1 hover:underline"><Phone className="h-3 w-3" />{r.phone}</a>
                   ) : "—"}
                 </td>
-                <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs">
+                <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">
                   {r.email ? (
-                    <span className="inline-flex items-center gap-1"><Mail className="h-3 w-3" />{r.email}</span>
+                    <a href={`mailto:${r.email}`} onClick={(e) => e.stopPropagation()} className="inline-flex items-center gap-1 hover:underline"><Mail className="h-3 w-3" />{r.email}</a>
                   ) : "—"}
                 </td>
-                <td className="px-4 py-3 text-right text-[#1A1A1A]">{r.estimated_agent_count ?? "—"}</td>
-                <td className="px-4 py-3 text-right text-[#1A1A1A]/80 text-xs">
+                <td className="px-4 py-3 text-right text-[#1A1A1A] whitespace-nowrap">{r.estimated_agent_count ?? "—"}</td>
+                <td className="px-4 py-3 text-right text-[#1A1A1A]/80 text-xs whitespace-nowrap">
                   {r.star_rating ? (
                     <span className="inline-flex items-center gap-1"><Star className="h-3 w-3" />{Number(r.star_rating).toFixed(1)}</span>
                   ) : "—"}
                 </td>
-                <td className="px-4 py-3 text-[#1A1A1A]/70 text-[11px]">{sourceLabel(r)}</td>
+                <td className="px-4 py-3 text-[#1A1A1A]/70 text-[11px] whitespace-nowrap">{sourceLabel(r)}</td>
               </tr>
-            ))}
+              );
+            })}
           </tbody>
         </table>
       </div>
 
-      {filtered.length > 1500 && (
+      {finalRows.length > 1500 && (
         <p className="text-xs text-[#1A1A1A]/60 text-right">
-          Showing first 1,500 of {filtered.length.toLocaleString()} matches.
+          Showing first 1,500 of {finalRows.length.toLocaleString()} matches.
         </p>
       )}
 

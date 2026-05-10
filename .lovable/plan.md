@@ -1,72 +1,122 @@
-# Batch Implementation Plan
+# CRM Overhaul Plan — Performance, Layout, Filters, Export
 
-Five tracks executed in one pass. LD 33k import is gated on the user uploading the CSV — everything else ships now.
+Scope: every section under `/owner/crm` (Brokerages, Brokers, Developers, Dev Sales Reps, Leads, Investors, Clients). Pure frontend + a few read-only RPC/index optimizations. No data deletions.
 
-## 1. `developer-enrich` edge function
+---
 
-Goal: fill missing `logo_url`, `ceo_name`, `trade_license_number`, `headquarters`, social handles on `developers` rows.
+## 1. Performance (top priority — section switching is slow)
 
-- New function `supabase/functions/developer-enrich/index.ts`
-  - Input: `{ developer_ids?: string[], limit?: number, dry_run?: boolean }`
-  - Auth: `requireOwnerAuth` (per Zero Trust standard)
-  - For each developer with any null target field:
-    1. Google CSE search (`<name> Dubai developer official site`) → top domain
-    2. Firecrawl `scrape` (formats: `markdown`, `branding`) on root + `/about`, `/leadership`, `/contact`
-    3. Lovable AI Gateway (`google/gemini-3-flash-preview`) with strict JSON schema → `{logo_url, ceo_name, trade_license_number, headquarters, instagram, linkedin, x, facebook, youtube, website}`
-    4. Sanity-check logo URL (HEAD 200 + image content-type), fall back to `branding.logo`
-    5. Upsert ONLY null/empty columns (never overwrite human edits); write `developer_enrichment_log` row with diff + sources
-- Migration: `developer_enrichment_log` table (developer_id, source_urls jsonb, fields_filled jsonb, model, created_at) + RLS owner-only.
-- UI: "Enrich missing data" button on `DevelopersDirectory` (owner only) → calls function with current filter scope, toast with N updated.
+```text
+Symptom: clicking a CRM subsection blocks 1–3 s; brokerage detail >2 s.
+Causes (confirmed in code):
+  - Each section refetches counts + full row payloads on mount (no shared cache key).
+  - Brokerage detail joins 4 tables client-side, no .select() projection.
+  - 32k crm_brokers with no covering index on (current_brokerage_id, status).
+```
 
-## 2. Company typeahead in broker drawer
+Fixes:
+- Wrap CRM hub in a single `QueryClient` boundary with `staleTime: 60s`, `gcTime: 5min`.
+- Prefetch sibling section counts on hub mount (one parallel `Promise.all`) so subheader chips are instant.
+- Convert brokerage detail loader to a single `vw_brokerage_detail` view (logo, HQ, counts of brokers/leads/deals, socials) — read-only migration.
+- Add btree index `(current_brokerage_id)` on `crm_brokers` and `(brokerage_id)` on `crm_leads`.
+- Virtualize tables ≥200 rows with `@tanstack/react-virtual` (already installed).
 
-Goal: when editing/creating a broker, the "Current company" field is a combobox that writes both `current_company` (text, free-form fallback) and `current_brokerage_id` (FK to `brokerages`).
+## 2. Brokerage Agencies section
 
-- Component `src/components/crm/BrokerageCombobox.tsx`
-  - shadcn `Command` + `Popover`, champagne tokens, IconTile gold
-  - Debounced query `brokerages` by `name ilike` + trade_license, top 8
-  - "Create new brokerage…" inline action if no exact match → opens mini-form (name, license #, city) → inserts and selects
-- Wire into `BrokerEditDrawer` (or equivalent — confirm exact filename when implementing): on select set `current_brokerage_id = row.id` and `current_company = row.name`; on free-text fallback clear FK.
-- Migration: ensure `crm_brokers.current_brokerage_id uuid references public.brokerages(id) on delete set null` + index.
+Detail drawer/page redesign:
+- Single horizontal info bar (no vertical 1-letter-per-line wraps): Logo · Name · Country · Emirate · City · License · Phone · Email · Website · LinkedIn · Instagram · CEO · Founded.
+- Order is fixed: **Country → Emirate → City** (currently reversed).
+- Phone/license/address render with `whitespace-nowrap`; the bar itself is `overflow-x-auto` with snap dividers.
+- Full office address is one clickable line → opens Google Maps.
+- Logo slot uses `developerLogo.ts` style champagne-padded container; falls back to initials.
 
-## 3. `birthday-dispatcher` edge function + cron
+Registry table:
+- Sticky left column (Logo+Name), all other columns horizontally scrollable, no wrapping.
+- Premium dividers (`divide-x divide-[#B89555]/20`), zebra champagne rows.
+- Filter bar above search: Country, Emirate (multi), City, License status, Size band, Has-CEO, Has-website, Date added.
+- Emirate shortcut chips with live counts: `Dubai 8,214 · Abu Dhabi 1,902 · Sharjah 412 · Ajman 88 · RAK 41 · Fujairah 22 · UAQ 6`.
+- Export button always visible (see §6).
 
-- Function `supabase/functions/birthday-dispatcher/index.ts`
-  - Reads `crm_contacts` where `extract(month from birthday)=extract(month from now() at time zone 'Asia/Dubai')` and same day
-  - For each: render branded HTML template (champagne + gold hairline, JBJ monogram, no faded gold text), respect single-agency rule, push through `quotaGuardedFetch` → `email_quota_try_claim` → Resend gateway
-  - Idempotency: `email_send_log` unique on `(contact_id, kind='birthday', sent_on::date)`
-  - Returns `{queued, sent, skipped_quota, skipped_already_sent}`
-- Template: `supabase/functions/_shared/templates/birthdayEmail.ts` — Inter, ink on champagne, executive signature "Amanda Clarke, Executive Assistant" (never "AI"), unsubscribe footer.
-- pg_cron via `supabase--insert` (not migration — contains project URL + anon key) at 08:00 Asia/Dubai = `0 4 * * *` UTC.
-- E2E test: `index.test.ts` seeds a contact with today's birthday in a temp schema, calls function, asserts log row + Resend gateway mock 200.
+Missing fields to surface (already in DB or `developer-enrich` payload — just unhidden in UI): CEO, founded year, employee count, RERA/ORN, head office, branches[], primary email, primary phone, WhatsApp, website, LinkedIn, Instagram, Facebook, registered deals count, broker count, last activity.
 
-## 4. Owner-badge email scrub
+## 3. Developers section + Developer Sales Reps
 
-- Search `rg "user\\.email|session\\.user\\.email" src/` and audit every render adjacent to an Owner / role badge.
-- Replace with role-only text: `"Owner"` / `"Executive"` / `"Broker"` per current mode; keep email visible only inside the Account Settings page.
-- Add ESLint custom rule `no-email-near-role-badge` (regex on JSX) to CI to prevent regression — registered in `eslint.config.js` plus `scripts/contrast/`-style guard script.
-- No DB change; this is presentation-only per the user's rule.
+Same horizontal-info-bar pattern. No more 1-letter-per-line.
+- Equal card heights (CSS grid `auto-rows-fr`, fixed `min-h-[260px]`).
+- Cards show: Logo · Name · HQ · CEO · Founded · #Projects · #Sales Managers · Registration status · Registered deals (mine).
+- Clickable: website, email, phone, WhatsApp, LinkedIn, Instagram, Google profile, office (Maps).
+- "Channel partner email" surfaced as its own contact pill.
+- "Register a deal" CTA per developer card → opens deal-register modal pre-filled with developer_id.
+- Dev Sales Reps table: same horizontal scroll + stickied name column; "Back to Developer" link on each row.
 
-## 5. LD 33k import — awaiting file
+## 4. Leads section
 
-- Backfill script + idempotent loader are already drafted in `scripts/import/ld-brokers.ts`.
-- Action required from user: drop the LD CSV/XLSX into chat. On receipt next turn:
-  1. Copy upload → `/tmp/ld.csv`
-  2. Dry-run: row count, column map, dedupe key (email||phone||license)
-  3. Chunked insert into `crm_brokers` via `import-ld-brokers` edge function with `on conflict do update` on the dedupe key
-  4. Report inserted / updated / skipped
+Dropdowns & badges:
+- "All stages" dropdown opens **downward**, full-width, with category headers (Positive/Neutral/Negative) and colored dot per status using `LeadStatusBadge` palette already defined.
+- Replace current pill (blue circle + empty rectangle + faded dropdown) with a single solid `LeadStatusBadge` button — chevron inside the same pill, no double border.
+- Status colors mapped exactly:
+  - Hot → orange, Junk → red, Interested → green, Closed Won → green, No Response → dark red, Already Bought → blue, Lost → red, VIP → yellow.
 
-## Out of scope this batch
+Sources dropdown — add full set: Manual Entry, Database (DLD), Website Form, WhatsApp, Phone Call, Walk-in, Referral, Bayut, Property Finder, Dubizzle, Facebook, Instagram, Google Ads, LinkedIn, Email Campaign, Event, Partner, Other.
 
-- CRM Insights AI strip (queued, separate pass)
-- Investor / Sales Rep / Agency tabs
-- Trade-license popups (already removed earlier)
+Owner dropdown — populate from `auth.users` via `crm_owners_view` (id, full_name, role).
 
-## Technical notes
+Broker assignment field:
+- New `BrokerCombobox` (mirrors `BrokerageCombobox`): typeahead against `crm_brokers`, debounced 200 ms.
+- Free-text fallback: if no match, save string to `lead.broker_name_text` AND nothing to FK.
+- Match found: write both `broker_name_text` (display) and `assigned_broker_id` (FK).
+- Broker registry then shows lead count per broker via `count(crm_leads.assigned_broker_id)`.
 
-- All new edge functions: `verify_jwt = false` default + in-code `requireOwnerAuth`; CORS from `@supabase/supabase-js/cors`; Zod validation.
-- All new UI: champagne tokens only, IconTile gold, no solid gold fills, no faded gold text, `<AdaptiveHairline />` for dividers.
-- Single-agency email rule enforced in birthday dispatcher before send.
-- Resend quota guard: `quotaGuardedFetch` + `email_quota_try_claim` RPC on every outbound.
+Tags:
+- Replace mutually-exclusive "VIP / Pool Non-broker" with two independent fields:
+  - **Tier**: Standard | VIP (single-select, yellow when VIP).
+  - **Pool**: Pool / Non-pool (separate column, not mixed with tier).
+- VIP toggle writes `is_vip=true` → reflected immediately in subheader VIP chip count and VIP sub-section.
 
-Approve to execute tracks 1–4 immediately; track 5 waits on the CSV.
+Subheader counts: every chip (Leads, Flagged, VIP, Mgmt, Relationships, Brokers, Agencies, Developers, Tasks) shows live count badge via a single `crm_section_counts` RPC fetched once and revalidated on mutation.
+
+## 5. Brokers section
+- Same horizontal layout fix.
+- BrokerageCombobox already shipped — verified to write both `current_company` and `current_brokerage_id`.
+- Add lead-count column (deals attributed via `assigned_broker_id`).
+
+## 6. Global Export
+
+Persistent "Export" button in CRM hub header (champagne with gold hairline). Opens modal:
+- Step 1 — Dataset: Employees, Leads, Investors, Clients, Developers, Dev Sales Reps, Brokers, Brokerage Agencies.
+- Step 2 — Filters: reuses the section's current filter state + extra options (date range, country, status, tier, source).
+- Step 3 — Columns: include/exclude checklist (defaults to visible columns).
+- Step 4 — Format: CSV / XLSX / PDF.
+- Server: existing `exportLeads.ts`, `exportDevelopers.ts`, `exportXlsx.ts` extended; logged via `dlpExportLogger`.
+
+## 7. DLD label correction
+Confirm previous LD→DLD rename covered every UI string (chips, source filter, import history). Sweep `rg "LD import|'LD'|database_source.*LD"` and patch any stragglers.
+
+## 8. QA pass
+After implementation, navigate each section and verify:
+- Switch time <300 ms (cached).
+- Brokerage detail open <600 ms.
+- No vertical letter-stacking anywhere; all cards equal height.
+- All contact fields clickable; all dropdowns open downward; all chip counts match table totals.
+- Export modal works for all 8 datasets.
+
+---
+
+## Technical notes (for engineers)
+
+- New files:
+  - `src/components/crm/BrokerCombobox.tsx`
+  - `src/components/crm/CRMExportModal.tsx`
+  - `src/components/crm/EmirateShortcutChips.tsx`
+  - `src/components/crm/HorizontalInfoBar.tsx` (shared by agency + developer)
+  - `src/hooks/useCRMSectionCounts.ts`
+- Edited:
+  - `src/pages/owner/crm/UnifiedCRM.tsx` (QueryClient boundary, prefetch, export button)
+  - `BrokeragesRegistry.tsx`, `BrokersRegistry.tsx`, `DevelopersRegistry.tsx`, `DevSalesRepsDirectory.tsx`, `LeadsTableV2.tsx`
+  - `LeadStatusBadge.tsx` (orange/yellow/dark-red mappings + single-pill chevron)
+- Migrations (read-only / additive):
+  - `vw_brokerage_detail`, `vw_developer_detail`, `vw_crm_section_counts`
+  - Indexes: `crm_brokers(current_brokerage_id)`, `crm_leads(assigned_broker_id, status, is_vip)`
+  - Columns: `crm_leads.broker_name_text text`, `crm_leads.is_vip boolean default false`, `crm_leads.tier text default 'standard'`
+
+No existing features removed (per No-Removal policy). Champagne-gold tokens only; no raw grays; no gold fills.
