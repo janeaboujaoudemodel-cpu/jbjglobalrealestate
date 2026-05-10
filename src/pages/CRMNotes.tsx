@@ -168,12 +168,12 @@ const CRMNotes = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] p-6">
+      <div className="min-h-screen bg-[#FDFBF7] p-6">
         <div className="max-w-6xl mx-auto space-y-6">
-          <Skeleton className="h-12 w-64 bg-gold/20" />
+          <Skeleton className="h-12 w-64" />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[1, 2, 3, 4, 5, 6].map(i => (
-              <Skeleton key={i} className="h-48 bg-gold/20 border-2 border-gold/30 rounded-lg" />
+              <Skeleton key={i} className="h-48 rounded-lg" />
             ))}
           </div>
         </div>
@@ -182,12 +182,11 @@ const CRMNotes = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
-      {/* Layer 2 - Active Champagne */}
+    <div className="min-h-screen bg-[#FDFBF7]">
       <div className="mx-0.5 md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8">
-        <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
-          {/* Header - Layer 3 */}
-          <header className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-0 lg:top-[48px] z-50 shadow-[0_4px_20px_rgba(200,167,102,0.15)] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
+        <div className="min-h-screen bg-[#FDFBF7]">
+          {/* Header */}
+          <header className="border-b border-[#B89555]/30 bg-[#FDFBF7] sticky top-0 lg:top-[48px] z-50">
             <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <Link to="/crm">
@@ -196,10 +195,10 @@ const CRMNotes = () => {
                     Back to CRM
                   </Button>
                 </Link>
-                <div className="h-6 w-px bg-gold/30" />
+                <div className="h-6 w-px bg-[#B89555]/30" />
                 <div className="flex items-center gap-2">
-                  <div className="p-2 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/30">
-                    <StickyNote className="h-5 w-5 text-gold" />
+                  <div className="p-2 rounded-lg bg-[#EFE6D6] border border-[#B89555]/40">
+                    <StickyNote className="h-5 w-5 text-[#1A1A1A]" />
                   </div>
                   <div>
                     <h1 className="text-lg font-bold text-[#1A1A1A]">Notes</h1>
@@ -208,10 +207,10 @@ const CRMNotes = () => {
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <Button 
-                  onClick={() => setShowVoiceRecorder(!showVoiceRecorder)} 
+                <Button
+                  onClick={() => setShowVoiceRecorder(!showVoiceRecorder)}
                   variant="secondary"
-                  className={showVoiceRecorder ? 'bg-gold text-[#1A1A1A]' : ''}
+                  className={showVoiceRecorder ? 'bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]' : ''}
                 >
                   <Mic className="h-4 w-4 mr-2" />
                   Voice Note
@@ -228,10 +227,10 @@ const CRMNotes = () => {
           <main className="max-w-6xl mx-auto px-6 py-8 space-y-6">
             {/* Voice Recorder Panel */}
             {showVoiceRecorder && (
-              <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
+              <Card className="border border-[#B89555]/30 bg-[#FDFBF7]">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
-                    <Mic className="h-5 w-5 text-gold" />
+                    <Mic className="h-5 w-5 text-[#1A1A1A]" />
                     Voice Assistant
                   </CardTitle>
                 </CardHeader>
@@ -246,18 +245,18 @@ const CRMNotes = () => {
 
             {/* Search */}
             <div className="relative max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gold" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/60" />
               <Input
                 placeholder="Search notes..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 focus:border-gold/50"
+                className="pl-10 bg-[#FDFBF7] border border-[#B89555]/30 focus:border-[#B89555]"
               />
             </div>
 
             {/* Notes Grid */}
             {filteredNotes.length === 0 ? (
-              <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
+              <Card className="border border-[#B89555]/30 bg-[#FDFBF7]">
                 <CardContent className="py-12 text-center">
                   <StickyNote className="h-12 w-12 mx-auto mb-4 text-[#1A1A1A]/70" />
                   <p className="text-[#1A1A1A] font-medium">No notes yet</p>
@@ -271,9 +270,9 @@ const CRMNotes = () => {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {filteredNotes.map(note => (
-                  <Card 
-                    key={note.id} 
-                    className={`border-2 transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.25)] hover:-translate-y-0.5 ${note.color}`}
+                  <Card
+                    key={note.id}
+                    className={`border-2 transition-all hover:shadow-md hover:-translate-y-0.5 ${note.color}`}
                   >
                     <CardContent className="p-4">
                       {editingId === note.id ? (
@@ -281,13 +280,13 @@ const CRMNotes = () => {
                           <Input
                             value={editTitle}
                             onChange={(e) => setEditTitle(e.target.value)}
-                            className="font-semibold bg-[#FDFBF7]/70 border-gold/30"
+                            className="font-semibold bg-[#FDFBF7]/70 border-[#B89555]/30"
                             placeholder="Note title"
                           />
                           <Textarea
                             value={editContent}
                             onChange={(e) => setEditContent(e.target.value)}
-                            className="min-h-[120px] bg-[#FDFBF7]/70 border-gold/30 resize-none"
+                            className="min-h-[120px] bg-[#FDFBF7]/70 border-[#B89555]/30 resize-none"
                             placeholder="Write your note..."
                           />
                           <div className="flex gap-2">
@@ -315,11 +314,11 @@ const CRMNotes = () => {
                               >
                                 <ListChecks className="h-3 w-3" />
                               </Button>
-                              <Button 
-                                variant="ghost" 
-                                size="sm" 
+                              <Button
+                                variant="ghost"
+                                size="sm"
                                 onClick={() => startEditing(note)}
-                                className="h-7 w-7 p-0 text-[#1A1A1A]/70 hover:text-gold"
+                                className="h-7 w-7 p-0 text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
                               >
                                 <Edit2 className="h-3 w-3" />
                               </Button>
