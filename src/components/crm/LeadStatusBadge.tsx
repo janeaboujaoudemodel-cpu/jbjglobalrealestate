@@ -36,8 +36,12 @@ export const STATUS_GROUPS = {
 // GLOBAL STATUS LIST - These EXACT statuses must be used everywhere
 // No alternative lists, no shortened versions, no duplicates
 export const PIPELINE_STATUSES: PipelineStatus[] = [
+  // HOT — orange (high-temperature lead)
+  { value: "hot", label: "Hot", color: "bg-orange-500", bgColor: "bg-orange-500/20", textColor: "text-orange-700", dotColor: "#F97316", category: "positive" },
+  // VIP — yellow (premium tier)
+  { value: "vip", label: "VIP", color: "bg-amber-400", bgColor: "bg-amber-400/25", textColor: "text-amber-800", dotColor: "#F59E0B", category: "positive" },
   // POSITIVE (green) - Deal progression
-  { value: "interested", label: "Interested", color: "bg-emerald-500", bgColor: "bg-emerald-500/20", textColor: "text-emerald-300", dotColor: "#22C55E", category: "positive" },
+  { value: "interested", label: "Interested", color: "bg-emerald-500", bgColor: "bg-emerald-500/20", textColor: "text-emerald-700", dotColor: "#22C55E", category: "positive" },
   { value: "qualified", label: "Qualified", color: "bg-green-500", bgColor: "bg-green-500/20", textColor: "text-green-300", dotColor: "#22C55E", category: "positive" },
   { value: "viewing", label: "Viewing Scheduled", color: "bg-emerald-600", bgColor: "bg-emerald-600/20", textColor: "text-emerald-200", dotColor: "#22C55E", category: "positive" },
   { value: "viewing_done", label: "Viewing Done", color: "bg-green-600", bgColor: "bg-green-600/20", textColor: "text-green-200", dotColor: "#22C55E", category: "positive" },
