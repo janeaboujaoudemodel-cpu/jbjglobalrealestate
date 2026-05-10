@@ -165,13 +165,17 @@ export default function BrokersRegistry() {
     });
   }, [allRows, q, tab, companyFilter, sourceFilter, sourceFilterCtx, externalById]);
 
+  // Authoritative DB total (head-count, not capped by row pagination).
+  const { counts: sectionCounts } = useCRMSectionCounts();
+  const dbTotal = Math.max(sectionCounts.brokers || 0, allRows.length);
+
   const counts = useMemo(() => ({
-    total: allRows.length,
+    total: dbTotal,
     sales: allRows.filter(r => r.broker_type === "sales" || r.broker_type === "both").length,
     leasing: allRows.filter(r => r.broker_type === "leasing" || r.broker_type === "both").length,
     pending: registered.filter((b: any) => b.verification_status === "pending").length,
     companies: companies.length,
-  }), [allRows, registered, companies]);
+  }), [allRows, registered, companies, dbTotal]);
 
   const Stat = ({ icon: Icon, label, value, onClick, active }: any) => (
     <Card
