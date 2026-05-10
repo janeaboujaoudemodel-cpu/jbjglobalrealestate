@@ -113,7 +113,7 @@ export default function BookMeetingLanding() {
   if (done) {
     return (
       <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center px-4">
-        <Helmet><title>Meeting Requested · JBJ GLOBAL REAL ESTATE</title></Helmet>
+        
         <div className="max-w-xl w-full bg-[#F7F2EA] border border-[#B89555]/30 rounded-2xl p-10 text-center">
           <CheckCircle2 className="w-14 h-14 text-[#B89555] mx-auto mb-4" />
           <h1 className="text-2xl font-semibold text-[#1A1A1A] mb-2">Your request is in.</h1>
@@ -131,11 +131,6 @@ export default function BookMeetingLanding() {
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-[#1A1A1A]">
-      <Helmet>
-        <title>Book a Meeting with Jane Bou Jaoude · JBJ GLOBAL REAL ESTATE</title>
-        <meta name="description" content="Schedule a private 60-minute consultation with Jane Bou Jaoude, founder of JBJ GLOBAL REAL ESTATE. Available Monday to Friday, 10:00–17:00 Dubai time." />
-        <link rel="canonical" href="https://www.jbj.ae/book" />
-      </Helmet>
 
       <header className="border-b border-[#B89555]/20 bg-[#FDFBF7]">
         <div className="max-w-5xl mx-auto px-6 py-5 flex items-center justify-between">
