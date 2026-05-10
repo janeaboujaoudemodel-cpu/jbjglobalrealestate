@@ -495,7 +495,13 @@ function AddBrokerSheet({ open, onOpenChange, onAdded }: { open: boolean; onOpen
               <option value="both">Both</option>
             </select>
           </div>
-          <Field k="current_company" label="Current company" />
+          <BrokerageCombobox
+            value={form.current_company}
+            brokerageId={form.current_brokerage_id}
+            onChange={({ value, brokerageId }) =>
+              setForm((f) => ({ ...f, current_company: value, current_brokerage_id: brokerageId }))
+            }
+          />
           <Field k="rera_license" label="RERA license" />
           <div className="grid grid-cols-2 gap-3">
             <Field k="linkedin_url" label="LinkedIn URL" />
