@@ -116,9 +116,9 @@ export default function InvestorsDirectory({
 
         const leadsRes: any = await (supabase as any)
           .from("crm_leads")
-          .select("id, full_name, email_lower, phone_e164, birthday, tags, contact_type, vip")
+          .select("id, full_name, email_lower, phone_e164, birthday, tags, contact_type, vip, is_investor")
           .is("deleted_at", null)
-          .or("contact_type.eq.investor,tags.cs.{investor}")
+          .or("contact_type.eq.investor,tags.cs.{investor},is_investor.eq.true")
           .not("email_lower", "in", ownerNotIn)
           .order("updated_at", { ascending: false })
           .limit(5000);
