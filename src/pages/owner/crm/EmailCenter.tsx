@@ -191,7 +191,7 @@ export default function EmailCenter() {
             const Icon = cat.icon;
             const isRegistration = it.category === "registrations" || it.category === "contracts";
             return (
-              <Card key={it.id} className="bg-[#FDFBF7] border-[#B89555]/20">
+              <Card key={it.id} className="bg-[#FDFBF7] border border-[#B89555]/60 shadow-[0_1px_0_rgba(184,149,85,0.15),0_2px_8px_rgba(26,26,26,0.04)] hover:shadow-[0_2px_0_rgba(184,149,85,0.25),0_4px_16px_rgba(26,26,26,0.06)] transition-shadow">
                 <CardContent className="p-3">
                   <div className="flex items-start gap-3">
                     <IconTile icon={Icon} tone={cat.tone} size="sm" />
