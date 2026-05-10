@@ -112,7 +112,8 @@ export const OwnerRoutes = () => (
     <Route path="crm/contracts" element={<Navigate to="/owner/crm?section=contracts" replace />} />
     <Route path="crm/automation" element={<Navigate to="/owner/crm?section=automation" replace />} />
     <Route path="crm/employees" element={<Navigate to="/owner/crm?section=employees" replace />} />
-    <Route path="crm/relationships" element={<Navigate to="/owner/crm?section=relationships&sub=investors" replace />} />
+    <Route path="crm/relationships" element={<Navigate to="/owner/crm/relationship-hub" replace />} />
+    <Route path="crm/relationship-hub" element={<CRMRelationships />} />
     <Route path="admin" element={<Admin />} />
     <Route path="admin/leads" element={<AdminLeads />} />
     <Route path="marketing-hub" element={<MarketingHub />} />

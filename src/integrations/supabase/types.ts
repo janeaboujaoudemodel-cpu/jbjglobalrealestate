@@ -1987,6 +1987,42 @@ export type Database = {
         }
         Relationships: []
       }
+      branded_email_templates: {
+        Row: {
+          body_html: string
+          brief: string | null
+          category: string | null
+          created_at: string
+          id: string
+          name: string
+          owner_id: string
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          body_html?: string
+          brief?: string | null
+          category?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          owner_id: string
+          subject?: string
+          updated_at?: string
+        }
+        Update: {
+          body_html?: string
+          brief?: string | null
+          category?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          owner_id?: string
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       breakfast_slots: {
         Row: {
           capacity: number

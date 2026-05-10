@@ -1,129 +1,96 @@
-## Plan — CRM unification + investor flag + tasks shortcut + employees hub
+## Goal
 
-Five focused changes, all inside `/owner/crm`. No new pages, no DB destructive changes.
+Bring the Relationship Hub back to the rich, feature-complete version we previously had (with Test Send, Outreach Pack, bulk send, exports, GmailSenderStatusBanner) — then layer on top of it the new requests: a universal AI email composer, more fields everywhere, four explicit sub-sections with champagne styling, inventory + database upload, and a Secondary Market Hub.
 
----
+## What's wrong today
 
-### 1. CompanyHub-style detail view for every CRM entity
+- The sidebar **Relationship Hub** shortcut was re-pointed yesterday to `/owner/relationships`, which is a **different, much thinner page** (only 206 lines, no test send, no outreach pack, no exports). The original rich page is `src/pages/CRMRelationships.tsx` (3,150 lines) and is rendered inside `UnifiedCRM` at `/owner/crm?section=relationships`. We have to send the shortcut back there.
 
-The brokerage/developer screen with **Overview · People · Campaigns · Events · Follow-ups · Cards · Notes · Emails · Comms** lives in `src/components/crm/CompanyHub.tsx` and is shown via `CompanyHubDrawer` (side sheet) + `CompanyHubPage` (full view).
+## Plan
 
-We will reuse exactly the same shell — drawer that opens on row click + "Open full view" link — for every directory:
+### 1. Re-wire the sidebar to the real Relationship Hub
+- `OwnerSidebarNav.tsx` and `DepartmentShortcuts.tsx`: change Relationship Hub `path` back to `/owner/crm?section=relationships`.
+- `UnifiedCRM` already renders `<CRMRelationships />` as the fallback for that section — so the rich page (with all its banners, exports, test send, outreach pack) shows up again.
 
-- **Brokerage Agencies** — already wired (`BrokerageAgenciesDirectory.tsx` → `CompanyHubDrawer type="brokerage"`). ✓
-- **Developers** — already wired (`DevelopersDirectory.tsx` → `CompanyHubDrawer type="developer"`). ✓
-- **Brokers** (`BrokersRegistry.tsx`) — replace the current minimal `Sheet` (lines 388–434) with a new `PersonHubDrawer` (broker profile + scanned cards + agencies-worked-for + deals-closed + breakfasts/training attended + warning letters + payroll + leads-assigned + leads-closed + suspend action). Restores the richer pre-existing detail.
-- **Dev Sales Reps** (`DevSalesRepsDirectory.tsx`) — wrap rows with the same `PersonHubDrawer` (sales-rep variant: parent developer + deals + assigned leads + cards).
-- **Investors** (`InvestorsDirectory.tsx`) and **Leads** (`CRMLeadsTableV2`) — open the same `PersonHubDrawer` (lead variant).
-- **Employees** — open `PersonHubDrawer` (employee variant: CV, warning letters, payroll, attendance, leave, performance, suspend).
+### 2. New top section — Send Branded Email composer
+A single card above the tabs, available regardless of which sub-tab is open.
 
-#### New shared primitive: `src/components/crm/PersonHubDrawer.tsx`
-- Same look/behavior as `CompanyHubDrawer` (right side sheet on `#FDFBF7`, gold hairline, "Open full view" link in header).
-- Internally renders a new `PersonHub` component with tab bar matching CompanyHub style:
-  - **Overview** — identity, role, company, quick KPIs.
-  - **Activity** — timeline (notes/emails/calls/follow-ups/campaigns) — pulled from existing `PersonDetailDrawer` logic.
-  - **Cards** — scanned business cards.
-  - **Deals / Leads** — leads assigned + leads closed (broker/sales-rep variants only).
-  - **Training / Breakfasts** — attendance rows (broker variant).
-  - **Documents** — CV, warning letters (employee + broker).
-  - **Payroll** — salary/bonus rows (employee + broker).
-  - **Comms / Notes / Follow-ups** — same panels CompanyHub already exposes, parameterized by `personId` instead of `companyName`.
-- A `variant` prop drives which tabs are visible: `"lead" | "investor" | "broker" | "sales-rep" | "employee"`. No tab is removed for any variant — variants just hide tabs that don't apply.
-- Companion route `/owner/crm/person/:variant/:id` (new file `src/pages/owner/crm/PersonHubPage.tsx`) for "Open full view".
+Fields and behavior:
+- **Recipient email** (typeahead pulling from agencies / brokers / developers / reps + free-text).
+- **Subject** (editable).
+- **Description / AI brief** + **Generate with AI** button — calls a new edge function `compose-branded-email` (Lovable AI Gateway, `google/gemini-2.5-flash`) that returns `{ subject, body_html }`.
+- **Body** (rich editor, always editable after AI fills it).
+- **Save as template** checkbox + name → writes to a new `branded_email_templates` table.
+- **Load template** dropdown (lists owner's saved templates; "+ New" resets).
+- **Send test to me** → sends to the signed-in owner using the **exact same locked-payload pipeline** as the production send.
+- **Send** → sends to recipient.
 
-This restores the rich broker detail the user remembers and standardizes the experience across all CRM directories.
+Consistency guarantee:
+- We render once into `outreach_locked_payloads` (already standardised, per the Locked-Send Outreach memory) and reuse that payload for both test and live. Edge function: `send-branded-email` — it accepts a `lock_id` and a `target = "test" | "live"`, never re-renders the body, and the From / Subject / HTML are byte-for-byte identical.
 
----
+### 3. Four sibling tabs with champagne dividers
 
-### 2. Tasks shortcut must open inside the CRM shell, not navigate away
+In `CRMRelationships.tsx`, replace the current 2-tab strip with 4 tabs, each separated by a thin gold hairline `|` and a hover state, active = champagne `#EFE6D6` + 1px gold ring + ink text:
 
-Today `IntegrationWidgets.tsx` (line 125) navigates to `/crm/tasks?action=new`, which leaves the shell and lacks the "Add new task" affordance.
-
-- Repoint **all** task shortcuts (`IntegrationWidgets.tsx`, any `DepartmentShortcuts.tsx`/`QuickActionsGrid.tsx` task tile, command-palette task action) to `/owner/crm?entity=leads&view=tasks&action=new`.
-- `UnifiedCRM.tsx` already embeds `<CRMTasks />` for that view — extend it to read `?action=new` and forward to `CRMTasks` so it auto-opens the existing "Add task" dialog.
-- This reuses the existing `src/pages/CRMTasks.tsx` (with its 30-day bin / restore behavior) inside the CRM shell — no new tasks page is created.
-
----
-
-### 3. Investor flag inside Leads (non-destructive duplicate-style)
-
-The user wants leads to be markable as Investor without disappearing from Leads, plus surface in the Investors directory and be filterable out by status.
-
-#### Schema (one tiny migration):
-- Add `crm_leads.is_investor BOOLEAN DEFAULT false` (no enum change, no destructive).
-- Index `idx_crm_leads_is_investor` partial on `WHERE is_investor = true`.
-- RLS unchanged (existing policies already cover the row).
-
-#### UI:
-- **Lead row action** — add "Mark as Investor" / "Unmark" toggle in `LeadQuickActions.tsx` and the row context menu in `CRMLeadsTableV2`.
-- **Visual highlight** — when `is_investor = true`, badge the row with a small `Crown` chip + champagne accent ring; row stays in Leads.
-- **Investors directory** — `InvestorsDirectory.tsx` query becomes `crm_leads where is_investor = true OR contact_type = 'investor'` so a flagged lead appears there too (read-only mirror, single source of truth in `crm_leads`).
-- **Status filter rebuild** — replace the current "Stages" filter on the Leads table with a **Status filter** popover that:
-  - Lists every distinct value of `pipeline_stage` plus virtual statuses `Investor`, `VIP`, `Flagged`, `Deleted`.
-  - Has a search input at the top of the dropdown (live-filters the option list as you type — applies to every filter dropdown across the CRM, not just this one — implemented as a shared `<SearchableMultiSelect>` primitive in `src/components/ui/searchable-multiselect.tsx`).
-  - Supports **Select all** / **Unselect all** + per-row tick.
-  - URL-encodes selection so the filter survives reload.
-- Concrete user flow this enables: tick all, untick "Investor", and the Leads table excludes investors so bulk outreach never reaches them — the user can then send a different campaign to the Investors directory.
-
----
-
-### 4. "Currently in lead section, can't see leads" — render fix
-
-`UnifiedCRM.tsx` lines 237–252 maps `entity=leads view=all` → `<CRMLeadsTableV2 filterType="all" />`. The recent CRM blank-screen patch left the `leads/all` branch behind a `Suspense` that doesn't render when `viewParam` is missing.
-
-Fix: when `entity=leads` and no `view` is provided, force `view = "all"` (currently it falls back to first VIEWS entry which is "all" but is being overridden by stale `?view=overview` left in the URL). Also drop the empty-state guard so the `CRMLeadsTableV2` renders even before counts resolve.
-
-This is a one-liner fallback in `UnifiedCRM.tsx` (`defaultView` for leads) plus a defensive `view ||= "all"` before the switch.
-
----
-
-### 5. Employees hub upgrades + global directory bulk-delete + 30-day bin
-
-Inside `EmployeesHub.tsx` (rendered for `entity=employees`) and **mirrored on every CRM directory** (Leads, Investors, Brokers, Agencies, Developers, Sales Reps, Employees):
-
-- **Filter & search by Position** — multi-select with the same searchable dropdown from §3.
-- **Bulk-select / unselect all** — checkbox column + header checkbox + sticky bulk action bar (uses existing `CRMBulkActionsBar.tsx` pattern).
-- **Soft delete with 30-day bin** — set `deleted_at = now()`. A new `Bin` sub-tab on every directory shows rows where `deleted_at` is within the last 30 days, with **Restore selected**, **Restore all**, and **Delete permanently** actions. After 30 days a daily edge function (`process-soft-deletes`, mirrors the existing `process-meeting-reminders` pattern) hard-deletes.
-- **Position management** — surface the existing positions table on the Employees page sidebar (CRUD + soft delete + bin), reusing the same component pattern.
-- **Per-employee/broker hub** integrates (via `PersonHubDrawer` from §1):
-  - CV upload + viewer
-  - Warning letters (existing `useHRWarnings` hook)
-  - Payroll (existing `useEmployeeSalaries` hook)
-  - Leads assigned / leads closed (query `crm_leads` by `assigned_user_id`)
-  - Suspend toggle (sets `is_active = false` + audit log)
-  - Attendance / training / breakfast (broker variant)
-
-#### Migration for soft-delete coverage
-Add `deleted_at TIMESTAMPTZ` to any directory table missing it: `crm_brokerages`, `crm_developer_registry`, `developer_sales_reps`, `crm_employees`, `crm_positions`. RLS policies updated to filter `deleted_at IS NULL` from default selects and expose a `*_bin` view (or `?include_deleted=1` parameter) for the bin tabs. `crm_leads.deleted_at` already exists.
-
----
-
-### Out of scope
-- No redesign of CompanyHub itself — we reuse it.
-- No new "Tasks" page — the existing `CRMTasks` is wired into the CRM shell.
-- No removal of any existing CRM feature ("No Removal" policy).
-
-### Technical summary
-
-```text
-src/components/crm/
-  PersonHubDrawer.tsx          NEW — sheet wrapper (mirrors CompanyHubDrawer)
-  PersonHub.tsx                NEW — tabbed body (Overview/Activity/Cards/Deals/...)
-  ui/searchable-multiselect.tsx NEW — shared filter primitive (search inside dropdown)
-src/pages/owner/crm/
-  PersonHubPage.tsx            NEW — full-view route /owner/crm/person/:variant/:id
-  UnifiedCRM.tsx               MODIFY — leads default view + ?action=new passthrough
-  BrokersRegistry.tsx          MODIFY — replace minimal Sheet with PersonHubDrawer
-src/components/crm/
-  CRMLeadsTableV2.tsx          MODIFY — investor toggle, status filter, bin sub-tab
-  InvestorsDirectory.tsx       MODIFY — include is_investor=true rows
-  EmployeesHub.tsx             MODIFY — position filter, bulk delete, bin
-  entity/DevSalesRepsDirectory MODIFY — open PersonHubDrawer on row click
-  LeadQuickActions.tsx         MODIFY — Mark as Investor toggle
-src/components/owner-dashboard/
-  IntegrationWidgets.tsx       MODIFY — task tile → /owner/crm?entity=leads&view=tasks&action=new
-supabase/migrations/
-  *_crm_unification.sql        NEW — is_investor column + deleted_at on directories + bin view
-supabase/functions/
-  process-soft-deletes/        NEW — daily purge of >30-day bin rows
 ```
+Developers │ Developer Reps │ Brokerage Agencies │ Brokers
+```
+
+Developers + Brokerage Agencies use the existing rich tab components (`DeveloperRegistryTab`, `BrokeragesTab`). Developer Reps and Brokers get their own full tabs (today they're nested under Brokerages or shown only via UnifiedCRM sub-routes).
+
+### 4. Expanded fields — all four entity types
+
+Add migration to extend `crm_developer_registry`, `crm_brokerages`, `crm_developer_sales_reps`, and `crm_individual_brokers` with the shared fields the user listed (skip when already present):
+
+Shared:
+- `country`, `hq_emirate`, `website`, `linkedin_url`, `instagram_url`, `address`, `google_maps_url`
+- `phone`, `email`, `admin_name`, `admin_phone`
+- `broker_count`, `google_reviews_url`, `google_reviews_score`, `google_reviews_count`
+- `inquiry_count`, `closed_deals_count`, `closed_deals_broker_names` (text[])
+- `registration_status` (enum already exists for devs — extend brokerages with `not_registered/inquired/registered/active/blocked`)
+- `agency_status` (enum: `inquiring | closing_deals | active_partner | dormant | blacklisted`)
+- `inventory_file_url`, `database_file_url` (storage paths in a new `relationship-hub` bucket)
+- `notes`
+
+People (reps + brokers + contact persons):
+- `nationality`, `date_of_birth`, `joined_at`, `languages` (text[]), `specialty` (text[] — leasing/sales/off-plan/secondary), `whatsapp_e164`
+
+Contact persons child table `crm_relationship_contacts` (FK to either developer or brokerage):
+- `entity_type` (`developer | brokerage`), `entity_id`
+- `role` (`sales_director | sales_manager | channel_partner | admin | other`)
+- name, email, phone, languages[], nationality, dob, joined_at, linkedin_url, notes
+
+Developers-only: `channel_department_name`, `channel_department_phone`, `channel_department_email`.
+
+### 5. Inventory upload + Secondary Market Hub
+
+- New storage bucket `relationship-hub` with owner-only RLS.
+- "Upload inventory" button on each agency / broker detail drawer (single CSV/XLSX/PDF).
+- New route `/owner/crm/relationships/secondary-market` rendering `SecondaryMarketHub.tsx`: grid of partner listings pulled from uploaded inventories plus any `properties` rows tagged `source=partner_agency`.
+
+### 6. Exports per tab
+
+Re-expose the export menu (already exists in `exportBrokerages.ts` / `exportDevelopers.ts`) on all four tabs, plus add `exportBrokers.ts` and `exportSalesReps.ts` (CSV / XLSX / PDF). Place a single "Export" button per tab header.
+
+### 7. Wire-up
+
+- All entity name cells link into `PersonHubDrawer` / `CompanyHubDrawer` (already exists — extend to the four entity types).
+- The "Send Branded Email" composer accepts pre-filled recipient when clicked from any row's quick action.
+- `GmailSenderStatusBanner` + `BreakfastCalendarStatusBanner` stay where they are.
+
+## Technical notes
+
+- **New tables**: `branded_email_templates`, `crm_relationship_contacts`. RLS: owner-only (`has_role(auth.uid(),'owner')`).
+- **New edge functions**: `compose-branded-email` (AI draft), `send-branded-email` (locked payload sender, reuses `outreach_locked_payloads`).
+- **New storage bucket**: `relationship-hub` (private, signed URLs).
+- **Field migration**: additive only, defaults safe, no drops.
+- **No removals**: every existing feature in `CRMRelationships.tsx` stays.
+- **No data fabrication**: all expanded fields default null until the owner fills them in.
+
+## Out of scope (next pass)
+
+- AI auto-extraction of contact details from LinkedIn / web (separate ticket).
+- Per-broker performance scoring (separate ticket).
+- Email scheduling / drip sequences.
+
+Approve and I'll implement.
