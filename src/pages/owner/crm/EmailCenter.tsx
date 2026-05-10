@@ -80,13 +80,17 @@ const STATUS_FILTERS: Array<{ id: "all" | InboxStatus; label: string }> = [
 
 export default function EmailCenter() {
   const [active, setActive] = useState<InboxCategory>("overview");
+  const [statusFilter, setStatusFilter] = useState<"all" | InboxStatus>("all");
   const { data: items = [], isLoading } = useEmailInboxItems(active);
   const { data: counts = {} } = useInboxCategoryCounts();
   const sync = useSyncJbjInbox();
   const sendConfirm = useSendRegistrationConfirmation();
   const archive = useArchiveInboxItem();
 
-  const grouped = useMemo(() => items, [items]);
+  const grouped = useMemo(
+    () => (statusFilter === "all" ? items : items.filter((i) => i.status === statusFilter)),
+    [items, statusFilter],
+  );
 
   return (
     <div className="space-y-4">
