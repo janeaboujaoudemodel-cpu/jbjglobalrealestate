@@ -130,8 +130,8 @@ const CRMCalendar = () => {
             </Link>
             <div className="h-6 w-px bg-[#EFE6D6]" />
             <div className="flex items-center gap-2">
-              <div className="p-2 rounded-lg bg-purple-500/20">
-                <CalendarIcon className="h-5 w-5 text-purple-500" />
+              <div className="p-2 rounded-lg bg-[#EFE6D6] border border-[#B89555]/40">
+                <CalendarIcon className="h-5 w-5 text-[#1A1A1A]" />
               </div>
               <div>
                 <h1 className="text-lg font-bold text-[#1A1A1A]">Calendar</h1>
