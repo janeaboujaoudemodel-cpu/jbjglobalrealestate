@@ -93,7 +93,7 @@ const PartnerGovernance = () => {
       case "safe":
         return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">Always Safe</Badge>;
       case "conditional":
-        return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">Conditional</Badge>;
+        return <Badge className="bg-amber-500/20 text-[#1A1A1A] border-amber-500/30">Conditional</Badge>;
       case "safe-disclosed":
         return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">Safe When Disclosed</Badge>;
       case "scrutiny":
@@ -414,7 +414,7 @@ const PartnerGovernance = () => {
                     </ul>
                     <p className="text-xs text-muted-foreground border-t border-border/50 pt-3">
                       Typical range: 15%–30% of net commission<br />
-                      <span className="text-amber-400">50% is too high unless exclusivity granted</span>
+                      <span className="text-[#1A1A1A]">50% is too high unless exclusivity granted</span>
                     </p>
                   </CardContent>
                 </Card>
@@ -458,7 +458,7 @@ const PartnerGovernance = () => {
                       <p className="text-sm text-muted-foreground">
                         All revenue-share partnerships require: unique source IDs, UTM-style tracking, 
                         referral contracts, CRM tagging, and deal audit trails.
-                        <span className="block mt-1 text-amber-400 font-medium">
+                        <span className="block mt-1 text-[#1A1A1A] font-medium">
                           No tracking = no revenue share.
                         </span>
                       </p>

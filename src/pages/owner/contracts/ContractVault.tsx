@@ -182,7 +182,7 @@ export default function ContractVault() {
             <Upload className="h-4 w-4 mr-2" />
             Upload Agreement
           </Button>
-          <Button asChild variant="outline" className="border-gold/40 text-[#1A1A1A]">
+          <Button asChild variant="outline" className="border-[#B89555]/40 text-[#1A1A1A]">
             <Link to="/owner/sign">
               <Stamp className="h-4 w-4 mr-2" />
               Manage signature & stamp
@@ -193,7 +193,7 @@ export default function ContractVault() {
 
       <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-4">
         {/* Type sidebar */}
-        <Card className="bg-[#F7F2EA] border-gold/20 h-fit lg:sticky lg:top-[104px]">
+        <Card className="bg-[#F7F2EA] border-[#B89555]/20 h-fit lg:sticky lg:top-[104px]">
           <CardHeader className="pb-2">
             <CardTitle className="text-[#1A1A1A] text-sm uppercase tracking-wider font-bold">
               Contract Types
@@ -212,14 +212,14 @@ export default function ContractVault() {
                     className={
                       "flex items-center gap-2 w-full text-left px-3 py-2 rounded-lg text-sm transition-colors border " +
                       (active
-                        ? "bg-[#EFE6D6] text-[#1A1A1A] border-gold font-semibold"
+                        ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555] font-semibold"
                         : "bg-transparent text-[#1A1A1A]/80 border-transparent hover:bg-[#EFE6D6]/60")
                     }
                   >
                     <Icon className="h-4 w-4 shrink-0" />
                     <span className="flex-1 truncate">{t.label}</span>
                     {count > 0 && (
-                      <Badge variant="outline" className="border-gold/40 text-[#1A1A1A] text-[10px] h-5 px-1.5">
+                      <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] text-[10px] h-5 px-1.5">
                         {count}
                       </Badge>
                     )}
@@ -232,7 +232,7 @@ export default function ContractVault() {
 
         <div className="space-y-4">
           {/* Filters */}
-          <Card className="bg-[#F7F2EA] border-gold/20">
+          <Card className="bg-[#F7F2EA] border-[#B89555]/20">
             <CardHeader className="pb-3">
               <CardTitle className="text-[#1A1A1A] text-base flex items-center gap-2">
                 <Sparkles className="h-4 w-4 text-[hsl(var(--gold))]" />
@@ -249,13 +249,13 @@ export default function ContractVault() {
                   value={q}
                   onChange={(e) => setQ(e.target.value)}
                   placeholder="Search developer, area, recipient…"
-                  className="pl-9 bg-[#FDFBF7] border-gold/25 text-[#1A1A1A]"
+                  className="pl-9 bg-[#FDFBF7] border-[#B89555]/25 text-[#1A1A1A]"
                 />
               </div>
               {showDeveloperPicker && (
                 <div className="min-w-[260px]">
                   <Suspense fallback={
-                    <div className="h-10 px-3 flex items-center text-sm text-[#1A1A1A]/60 bg-[#FDFBF7] border border-gold/25 rounded-md">
+                    <div className="h-10 px-3 flex items-center text-sm text-[#1A1A1A]/60 bg-[#FDFBF7] border border-[#B89555]/25 rounded-md">
                       Loading developers…
                     </div>
                   }>
@@ -268,11 +268,11 @@ export default function ContractVault() {
                 </div>
               )}
               {developerName && (
-                <Button variant="outline" size="sm" className="border-gold/40 text-[#1A1A1A]" onClick={() => setDeveloperName("")}>
+                <Button variant="outline" size="sm" className="border-[#B89555]/40 text-[#1A1A1A]" onClick={() => setDeveloperName("")}>
                   Clear
                 </Button>
               )}
-              <Badge variant="outline" className="border-gold/40 text-[#1A1A1A]">
+              <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A]">
                 {filtered.length + filteredAgreements.length} match{(filtered.length + filteredAgreements.length) === 1 ? "" : "es"}
               </Badge>
             </CardContent>
@@ -280,12 +280,12 @@ export default function ContractVault() {
 
           {/* External agreements (uploaded developer contracts) */}
           {filteredAgreements.length > 0 && (
-            <Card className="bg-[#F7F2EA] border-gold/20">
+            <Card className="bg-[#F7F2EA] border-[#B89555]/20">
               <CardHeader className="pb-3 flex flex-row items-center justify-between">
                 <CardTitle className="text-[#1A1A1A] text-base flex items-center gap-2">
                   <Sparkles className="h-4 w-4 text-[hsl(var(--gold))]" />
                   Uploaded Agreements
-                  <Badge variant="outline" className="border-gold/40 text-[#1A1A1A] ml-2">
+                  <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] ml-2">
                     {filteredAgreements.length}
                   </Badge>
                 </CardTitle>
@@ -306,7 +306,7 @@ export default function ContractVault() {
                     </thead>
                     <tbody>
                       {filteredAgreements.map((a) => (
-                        <tr key={a.id} className="border-t border-gold/15 hover:bg-[#FDFBF7]">
+                        <tr key={a.id} className="border-t border-[#B89555]/15 hover:bg-[#FDFBF7]">
                           <td className="px-4 py-3 text-[#1A1A1A] font-medium">
                             {a.developer_name_raw ?? "—"}
                             {a.ai_confidence != null && (
@@ -324,7 +324,7 @@ export default function ContractVault() {
                             </Badge>
                           </td>
                           <td className="px-4 py-3 text-right">
-                            <Button asChild size="sm" variant="outline" className="border-gold/40 text-[#1A1A1A]">
+                            <Button asChild size="sm" variant="outline" className="border-[#B89555]/40 text-[#1A1A1A]">
                               <a href={a.file_url} target="_blank" rel="noreferrer">
                                 <Download className="h-3 w-3 mr-1" />
                                 Open
@@ -341,7 +341,7 @@ export default function ContractVault() {
           )}
 
           {/* Signed contracts */}
-          <Card className="bg-[#F7F2EA] border-gold/20">
+          <Card className="bg-[#F7F2EA] border-[#B89555]/20">
             <CardContent className="p-0">
               {isLoading && <p className="p-6 text-sm text-[#1A1A1A]/60">Loading…</p>}
               {!isLoading && filtered.length === 0 && filteredAgreements.length === 0 && (
@@ -367,7 +367,7 @@ export default function ContractVault() {
                     </thead>
                     <tbody>
                       {filtered.map((row) => (
-                        <tr key={row.signed_document_id} className="border-t border-gold/15 hover:bg-[#FDFBF7]">
+                        <tr key={row.signed_document_id} className="border-t border-[#B89555]/15 hover:bg-[#FDFBF7]">
                           <td className="px-4 py-3 text-[#1A1A1A] font-medium">
                             {row.envelope_name}
                             <div className="text-xs text-[#1A1A1A]/60">{row.document_filename}</div>
@@ -382,7 +382,7 @@ export default function ContractVault() {
                           </td>
                           <td className="px-4 py-3 text-right">
                             <div className="flex items-center justify-end gap-2">
-                              <Button asChild size="sm" variant="outline" className="border-gold/40 text-[#1A1A1A]">
+                              <Button asChild size="sm" variant="outline" className="border-[#B89555]/40 text-[#1A1A1A]">
                                 <a href={row.document_url} target="_blank" rel="noreferrer">
                                   <Download className="h-3 w-3 mr-1" />
                                   Open

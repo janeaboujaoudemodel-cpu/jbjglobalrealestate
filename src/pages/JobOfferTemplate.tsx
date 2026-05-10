@@ -85,10 +85,10 @@ Make it professional and ready to print. Include placeholders for [SIGNATURE] an
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
-      <div className="border-b-2 border-gold/30">
+      <div className="border-b-2 border-[#B89555]/30">
         <div className="container mx-auto px-4 py-8">
           <div className="text-center max-w-2xl mx-auto">
-            <div className="inline-flex items-center gap-2 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-full px-4 py-1 mb-4">
+            <div className="inline-flex items-center gap-2 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-full px-4 py-1 mb-4">
               <FileSpreadsheet className="w-4 h-4 text-[#8A7356]" />
               <span className="text-[#1A1A1A] text-sm font-medium">Job Offer Template</span>
             </div>
@@ -102,7 +102,7 @@ Make it professional and ready to print. Include placeholders for [SIGNATURE] an
         <div className="grid lg:grid-cols-5 gap-8">
           {/* Form */}
           <div className="lg:col-span-2 space-y-5">
-            <div className="bg-[#FDFBF7]/80 border border-gold/20 rounded-xl p-6 space-y-4">
+            <div className="bg-[#FDFBF7]/80 border border-[#B89555]/20 rounded-xl p-6 space-y-4">
               <div><Label className="font-semibold text-[#1A1A1A]">Company Name</Label><Input value={companyName} onChange={(e) => setCompanyName(e.target.value)} /></div>
               <div><Label className="font-semibold text-[#1A1A1A]">Applicant Full Name *</Label><Input value={applicantName} onChange={(e) => setApplicantName(e.target.value)} placeholder="John Doe" /></div>
               <div><Label className="font-semibold text-[#1A1A1A]">Job Title *</Label><Input value={jobTitle} onChange={(e) => setJobTitle(e.target.value)} placeholder="Senior Sales Manager" /></div>
@@ -137,7 +137,7 @@ Make it professional and ready to print. Include placeholders for [SIGNATURE] an
 
           {/* Preview */}
           <div className="lg:col-span-3">
-            <div className="bg-[#FDFBF7] border border-gold/20 rounded-xl shadow-lg overflow-hidden">
+            <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl shadow-lg overflow-hidden">
               <div className="h-3" style={{ background: `linear-gradient(90deg,${headerColor1},${headerColor2})` }} />
               <div ref={previewRef} className="p-10 min-h-[700px]" style={{ fontFamily: 'Georgia, serif' }}>
                 {generatedHtml ? (
@@ -155,7 +155,7 @@ Make it professional and ready to print. Include placeholders for [SIGNATURE] an
             {generatedHtml && (
               <div className="flex gap-3 mt-4">
                 <Button onClick={handlePrint} className="flex-1 bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]"><Download className="h-4 w-4 mr-2" /> Print / Save PDF</Button>
-                <Button variant="outline" className="border-gold/30" onClick={() => {
+                <Button variant="outline" className="border-[#B89555]/30" onClick={() => {
                   const content = previewRef.current?.innerText || "";
                   navigator.clipboard.writeText(content);
                   toast.success("Copied to clipboard");

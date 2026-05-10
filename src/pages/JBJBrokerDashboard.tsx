@@ -140,7 +140,7 @@ export default function JBJBrokerDashboard() {
   if (authLoading || loading) {
     return (
       <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-gold" />
+        <Loader2 className="h-8 w-8 animate-spin text-[#1A1A1A]" />
       </div>
     );
   }
@@ -148,7 +148,7 @@ export default function JBJBrokerDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] pt-24 lg:pt-28">
       {/* Header */}
-      <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-20 lg:top-24 z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
+      <header className="border-b-2 border-[#B89555]/40 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-20 lg:top-24 z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
         <div className="px-4 py-4">
           <div className="flex items-center justify-between gap-4 mb-4">
             <div className="flex items-center gap-4">
@@ -206,7 +206,7 @@ export default function JBJBrokerDashboard() {
       <main className="px-4 py-6">
         {/* Stats Cards */}
         <div className="grid grid-cols-4 gap-4 mb-6">
-          <Card className="bg-[#FDFBF7] border border-gold/20 shadow-sm">
+          <Card className="bg-[#FDFBF7] border border-[#B89555]/20 shadow-sm">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6]">
@@ -222,7 +222,7 @@ export default function JBJBrokerDashboard() {
             </CardContent>
           </Card>
 
-          <Card className="bg-[#FDFBF7] border border-gold/20 shadow-sm">
+          <Card className="bg-[#FDFBF7] border border-[#B89555]/20 shadow-sm">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6]">
@@ -238,7 +238,7 @@ export default function JBJBrokerDashboard() {
             </CardContent>
           </Card>
 
-          <Card className="bg-[#FDFBF7] border border-gold/20 shadow-sm">
+          <Card className="bg-[#FDFBF7] border border-[#B89555]/20 shadow-sm">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6]">
@@ -254,11 +254,11 @@ export default function JBJBrokerDashboard() {
             </CardContent>
           </Card>
 
-          <Card className="bg-[#FDFBF7] border border-gold/20 shadow-sm">
+          <Card className="bg-[#FDFBF7] border border-[#B89555]/20 shadow-sm">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6]">
-                  <AlertCircle className="h-5 w-5 text-gold" />
+                  <AlertCircle className="h-5 w-5 text-[#1A1A1A]" />
                 </div>
                 <div>
                   <p className="text-[#1A1A1A]/70 text-xs">Converted</p>
@@ -288,7 +288,7 @@ export default function JBJBrokerDashboard() {
               variant="secondary"
               size="icon"
               onClick={() => setViewMode("grid")}
-              className={viewMode === "grid" ? "bg-gold/20 border-gold" : ""}
+              className={viewMode === "grid" ? "bg-[#EFE6D6]/20 border-[#B89555]" : ""}
             >
               <LayoutGrid className="h-4 w-4" />
             </Button>
@@ -296,7 +296,7 @@ export default function JBJBrokerDashboard() {
               variant="secondary"
               size="icon"
               onClick={() => setViewMode("list")}
-              className={viewMode === "list" ? "bg-gold/20 border-gold" : ""}
+              className={viewMode === "list" ? "bg-[#EFE6D6]/20 border-[#B89555]" : ""}
             >
               <List className="h-4 w-4" />
             </Button>

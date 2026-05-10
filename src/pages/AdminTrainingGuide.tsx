@@ -37,16 +37,16 @@ const AdminTrainingGuide = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold" />
+      <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#B89555]" />
       </div>
     );
   }
 
   if (!hasAccess) {
     return (
-      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
-        <Card className="bg-zinc-900 border-[#1A1A1A] max-w-md">
+      <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center">
+        <Card className="bg-[#FDFBF7] border-[#1A1A1A] max-w-md">
           <CardContent className="p-8 text-center">
             <AlertTriangle className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
             <h2 className="text-white text-xl font-semibold mb-2">Access Restricted</h2>
@@ -58,9 +58,9 @@ const AdminTrainingGuide = () => {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950">
+    <div className="min-h-screen bg-[#FDFBF7]">
       {/* Header */}
-      <header className="border-b border-[#1A1A1A] bg-zinc-950/80 backdrop-blur-sm sticky top-0 z-50">
+      <header className="border-b border-[#1A1A1A] bg-[#FDFBF7]/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Button
@@ -78,7 +78,7 @@ const AdminTrainingGuide = () => {
               <p className="text-white/90 text-sm">Complete property listing & verification guide</p>
             </div>
           </div>
-          <Badge className="bg-gold/20 text-gold border-gold/30">
+          <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30">
             <BookOpen className="w-3 h-3 mr-1" />
             Training Material
           </Badge>
@@ -87,30 +87,30 @@ const AdminTrainingGuide = () => {
 
       <main className="container mx-auto px-4 py-8">
         <Tabs defaultValue="getting-started" className="space-y-6">
-          <TabsList className="bg-zinc-900 border border-[#1A1A1A] p-1 h-auto flex-wrap">
-            <TabsTrigger value="getting-started" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40">
+          <TabsList className="bg-[#FDFBF7] border border-[#1A1A1A] p-1 h-auto flex-wrap">
+            <TabsTrigger value="getting-started" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40">
               Getting Started
             </TabsTrigger>
-            <TabsTrigger value="add-property" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40">
+            <TabsTrigger value="add-property" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40">
               Adding Properties
             </TabsTrigger>
-            <TabsTrigger value="categories" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40">
+            <TabsTrigger value="categories" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40">
               Property Categories
             </TabsTrigger>
-            <TabsTrigger value="documents" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40">
+            <TabsTrigger value="documents" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40">
               Documents & Media
             </TabsTrigger>
-            <TabsTrigger value="verification" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40">
+            <TabsTrigger value="verification" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40">
               Client Verification
             </TabsTrigger>
           </TabsList>
 
           {/* Getting Started */}
           <TabsContent value="getting-started" className="space-y-6">
-            <Card className="bg-zinc-900 border-[#1A1A1A]">
+            <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
-                  <Lightbulb className="w-5 h-5 text-gold" />
+                  <Lightbulb className="w-5 h-5 text-[#1A1A1A]" />
                   Welcome to Listing Administration
                 </CardTitle>
               </CardHeader>
@@ -138,8 +138,8 @@ const AdminTrainingGuide = () => {
                   </li>
                 </ul>
 
-                <div className="bg-gold/10 border border-gold/30 rounded-lg p-4 mt-6">
-                  <h4 className="text-gold font-semibold mb-2 flex items-center gap-2">
+                <div className="bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-lg p-4 mt-6">
+                  <h4 className="text-[#1A1A1A] font-semibold mb-2 flex items-center gap-2">
                     <ShieldCheck className="w-4 h-4" />
                     Quality Standards
                   </h4>
@@ -151,20 +151,20 @@ const AdminTrainingGuide = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-zinc-900 border-[#1A1A1A]">
+            <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
-                  <Building2 className="w-5 h-5 text-gold" />
+                  <Building2 className="w-5 h-5 text-[#1A1A1A]" />
                   Quick Access Links
                 </CardTitle>
               </CardHeader>
               <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Button
                   variant="outline"
-                  className="h-auto p-4 flex flex-col items-start gap-2 border-[#1A1A1A] hover:border-gold hover:bg-gold/10"
+                  className="h-auto p-4 flex flex-col items-start gap-2 border-[#1A1A1A] hover:border-[#B89555] hover:bg-[#EFE6D6]/10"
                   onClick={() => navigate("/listing-admin")}
                 >
-                  <div className="flex items-center gap-2 text-gold">
+                  <div className="flex items-center gap-2 text-[#1A1A1A]">
                     <Home className="w-5 h-5" />
                     <span className="font-semibold">Listing Management</span>
                   </div>
@@ -173,10 +173,10 @@ const AdminTrainingGuide = () => {
 
                 <Button
                   variant="outline"
-                  className="h-auto p-4 flex flex-col items-start gap-2 border-[#1A1A1A] hover:border-gold hover:bg-gold/10"
+                  className="h-auto p-4 flex flex-col items-start gap-2 border-[#1A1A1A] hover:border-[#B89555] hover:bg-[#EFE6D6]/10"
                   onClick={() => navigate("/admin/developers")}
                 >
-                  <div className="flex items-center gap-2 text-gold">
+                  <div className="flex items-center gap-2 text-[#1A1A1A]">
                     <Building2 className="w-5 h-5" />
                     <span className="font-semibold">Developer Management</span>
                   </div>
@@ -188,30 +188,30 @@ const AdminTrainingGuide = () => {
 
           {/* Adding Properties */}
           <TabsContent value="add-property" className="space-y-6">
-            <Card className="bg-zinc-900 border-[#1A1A1A]">
+            <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
-                  <Upload className="w-5 h-5 text-gold" />
+                  <Upload className="w-5 h-5 text-[#1A1A1A]" />
                   Step-by-Step: Adding a New Property
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-4">
-                  <div className="flex items-start gap-4 p-4 bg-zinc-800/50 rounded-lg">
-                    <div className="w-8 h-8 bg-gold rounded-full flex items-center justify-center text-[#1A1A1A] font-bold flex-shrink-0">
+                  <div className="flex items-start gap-4 p-4 bg-[#F7F2EA]/50 rounded-lg">
+                    <div className="w-8 h-8 bg-[#EFE6D6] rounded-full flex items-center justify-center text-[#1A1A1A] font-bold flex-shrink-0">
                       1
                     </div>
                     <div>
                       <h4 className="text-white font-semibold mb-1">Go to Listing Management</h4>
                       <p className="text-white/70 text-sm">
-                        Navigate to <code className="bg-zinc-800 px-2 py-0.5 rounded">/listing-admin</code> and click 
+                        Navigate to <code className="bg-[#F7F2EA] px-2 py-0.5 rounded">/listing-admin</code> and click 
                         "Add New Project" button.
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-4 p-4 bg-zinc-800/50 rounded-lg">
-                    <div className="w-8 h-8 bg-gold rounded-full flex items-center justify-center text-[#1A1A1A] font-bold flex-shrink-0">
+                  <div className="flex items-start gap-4 p-4 bg-[#F7F2EA]/50 rounded-lg">
+                    <div className="w-8 h-8 bg-[#EFE6D6] rounded-full flex items-center justify-center text-[#1A1A1A] font-bold flex-shrink-0">
                       2
                     </div>
                     <div>
@@ -226,8 +226,8 @@ const AdminTrainingGuide = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-4 p-4 bg-zinc-800/50 rounded-lg">
-                    <div className="w-8 h-8 bg-gold rounded-full flex items-center justify-center text-[#1A1A1A] font-bold flex-shrink-0">
+                  <div className="flex items-start gap-4 p-4 bg-[#F7F2EA]/50 rounded-lg">
+                    <div className="w-8 h-8 bg-[#EFE6D6] rounded-full flex items-center justify-center text-[#1A1A1A] font-bold flex-shrink-0">
                       3
                     </div>
                     <div>
@@ -242,8 +242,8 @@ const AdminTrainingGuide = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-4 p-4 bg-zinc-800/50 rounded-lg">
-                    <div className="w-8 h-8 bg-gold rounded-full flex items-center justify-center text-[#1A1A1A] font-bold flex-shrink-0">
+                  <div className="flex items-start gap-4 p-4 bg-[#F7F2EA]/50 rounded-lg">
+                    <div className="w-8 h-8 bg-[#EFE6D6] rounded-full flex items-center justify-center text-[#1A1A1A] font-bold flex-shrink-0">
                       4
                     </div>
                     <div>
@@ -274,19 +274,19 @@ const AdminTrainingGuide = () => {
 
           {/* Property Categories */}
           <TabsContent value="categories" className="space-y-6">
-            <Card className="bg-zinc-900 border-[#1A1A1A]">
+            <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
-                  <Folder className="w-5 h-5 text-gold" />
+                  <Folder className="w-5 h-5 text-[#1A1A1A]" />
                   Property Categories Explained
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Off-Plan */}
-                  <div className="p-4 bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 rounded-lg">
+                  <div className="p-4 bg-gradient-to-br from-gold/20 to-gold/5 border border-[#B89555]/30 rounded-lg">
                     <div className="flex items-center gap-2 mb-2">
-                      <Calendar className="w-5 h-5 text-gold" />
+                      <Calendar className="w-5 h-5 text-[#1A1A1A]" />
                       <h4 className="text-white font-semibold">Off-Plan</h4>
                     </div>
                     <p className="text-white/70 text-sm mb-2">
@@ -382,10 +382,10 @@ const AdminTrainingGuide = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-zinc-900 border-[#1A1A1A]">
+            <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
-                  <Crown className="w-5 h-5 text-gold" />
+                  <Crown className="w-5 h-5 text-[#1A1A1A]" />
                   Premium Listings
                 </CardTitle>
               </CardHeader>
@@ -395,19 +395,19 @@ const AdminTrainingGuide = () => {
                 </p>
                 <ul className="space-y-2 ml-4">
                   <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] mt-0.5 flex-shrink-0" />
                     <span>High-value property (typically above AED 5,000,000)</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] mt-0.5 flex-shrink-0" />
                     <span>Prime location (Waterfront, Palm, Downtown, etc.)</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] mt-0.5 flex-shrink-0" />
                     <span>Exclusive or limited availability</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] mt-0.5 flex-shrink-0" />
                     <span>Featured by management for promotion</span>
                   </li>
                 </ul>
@@ -420,36 +420,36 @@ const AdminTrainingGuide = () => {
 
           {/* Documents & Media */}
           <TabsContent value="documents" className="space-y-6">
-            <Card className="bg-zinc-900 border-[#1A1A1A]">
+            <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
-                  <FileText className="w-5 h-5 text-gold" />
+                  <FileText className="w-5 h-5 text-[#1A1A1A]" />
                   Document Types
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="p-4 bg-zinc-800/50 rounded-lg">
+                  <div className="p-4 bg-[#F7F2EA]/50 rounded-lg">
                     <h4 className="text-white font-semibold mb-2">Brochure</h4>
                     <p className="text-white/70 text-sm">
                       Official project brochure from developer. PDF format preferred. 
                       Should include project overview, amenities, and location info.
                     </p>
                   </div>
-                  <div className="p-4 bg-zinc-800/50 rounded-lg">
+                  <div className="p-4 bg-[#F7F2EA]/50 rounded-lg">
                     <h4 className="text-white font-semibold mb-2">Floor Plan</h4>
                     <p className="text-white/70 text-sm">
                       Unit layouts showing room dimensions. Upload multiple for different unit types 
                       (Studio, 1BR, 2BR, etc.).
                     </p>
                   </div>
-                  <div className="p-4 bg-zinc-800/50 rounded-lg">
+                  <div className="p-4 bg-[#F7F2EA]/50 rounded-lg">
                     <h4 className="text-white font-semibold mb-2">Factsheet</h4>
                     <p className="text-white/70 text-sm">
                       Quick reference document with key project details, pricing, and specifications.
                     </p>
                   </div>
-                  <div className="p-4 bg-zinc-800/50 rounded-lg">
+                  <div className="p-4 bg-[#F7F2EA]/50 rounded-lg">
                     <h4 className="text-white font-semibold mb-2">Payment Plan</h4>
                     <p className="text-white/70 text-sm">
                       Official payment schedule from developer showing installment breakdown.
@@ -459,10 +459,10 @@ const AdminTrainingGuide = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-zinc-900 border-[#1A1A1A]">
+            <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
-                  <Image className="w-5 h-5 text-gold" />
+                  <Image className="w-5 h-5 text-[#1A1A1A]" />
                   Image Guidelines
                 </CardTitle>
               </CardHeader>
@@ -503,10 +503,10 @@ const AdminTrainingGuide = () => {
 
           {/* Client Verification */}
           <TabsContent value="verification" className="space-y-6">
-            <Card className="bg-zinc-900 border-[#1A1A1A]">
+            <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
-                  <Users className="w-5 h-5 text-gold" />
+                  <Users className="w-5 h-5 text-[#1A1A1A]" />
                   Verifying Client-Submitted Listings
                 </CardTitle>
               </CardHeader>
@@ -516,8 +516,8 @@ const AdminTrainingGuide = () => {
                 </p>
 
                 <div className="space-y-4">
-                  <div className="flex items-start gap-4 p-4 bg-zinc-800/50 rounded-lg">
-                    <div className="w-8 h-8 bg-gold rounded-full flex items-center justify-center text-[#1A1A1A] font-bold flex-shrink-0">
+                  <div className="flex items-start gap-4 p-4 bg-[#F7F2EA]/50 rounded-lg">
+                    <div className="w-8 h-8 bg-[#EFE6D6] rounded-full flex items-center justify-center text-[#1A1A1A] font-bold flex-shrink-0">
                       1
                     </div>
                     <div>
@@ -529,8 +529,8 @@ const AdminTrainingGuide = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-4 p-4 bg-zinc-800/50 rounded-lg">
-                    <div className="w-8 h-8 bg-gold rounded-full flex items-center justify-center text-[#1A1A1A] font-bold flex-shrink-0">
+                  <div className="flex items-start gap-4 p-4 bg-[#F7F2EA]/50 rounded-lg">
+                    <div className="w-8 h-8 bg-[#EFE6D6] rounded-full flex items-center justify-center text-[#1A1A1A] font-bold flex-shrink-0">
                       2
                     </div>
                     <div>
@@ -542,8 +542,8 @@ const AdminTrainingGuide = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-4 p-4 bg-zinc-800/50 rounded-lg">
-                    <div className="w-8 h-8 bg-gold rounded-full flex items-center justify-center text-[#1A1A1A] font-bold flex-shrink-0">
+                  <div className="flex items-start gap-4 p-4 bg-[#F7F2EA]/50 rounded-lg">
+                    <div className="w-8 h-8 bg-[#EFE6D6] rounded-full flex items-center justify-center text-[#1A1A1A] font-bold flex-shrink-0">
                       3
                     </div>
                     <div>
@@ -555,8 +555,8 @@ const AdminTrainingGuide = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-4 p-4 bg-zinc-800/50 rounded-lg">
-                    <div className="w-8 h-8 bg-gold rounded-full flex items-center justify-center text-[#1A1A1A] font-bold flex-shrink-0">
+                  <div className="flex items-start gap-4 p-4 bg-[#F7F2EA]/50 rounded-lg">
+                    <div className="w-8 h-8 bg-[#EFE6D6] rounded-full flex items-center justify-center text-[#1A1A1A] font-bold flex-shrink-0">
                       4
                     </div>
                     <div>
@@ -598,10 +598,10 @@ const AdminTrainingGuide = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-gold/20 to-gold/5 border-gold/30">
+            <Card className="bg-gradient-to-br from-gold/20 to-gold/5 border-[#B89555]/30">
               <CardContent className="p-6">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-gold rounded-full flex items-center justify-center flex-shrink-0">
+                  <div className="w-12 h-12 bg-[#EFE6D6] rounded-full flex items-center justify-center flex-shrink-0">
                     <ArrowUpRight className="w-6 h-6 text-[#1A1A1A]" />
                   </div>
                   <div>

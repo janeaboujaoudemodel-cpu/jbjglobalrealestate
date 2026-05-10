@@ -137,8 +137,8 @@ const MarketIntelligence = () => {
             className="flex items-center justify-center gap-2 mb-6"
             variants={fadeInUp}
           >
-            <BarChart3 className="w-6 h-6 text-gold" />
-            <span className="text-gold text-sm uppercase tracking-[0.3em]">
+            <BarChart3 className="w-6 h-6 text-[#1A1A1A]" />
+            <span className="text-[#1A1A1A] text-sm uppercase tracking-[0.3em]">
               Official Open Data
             </span>
           </motion.div>

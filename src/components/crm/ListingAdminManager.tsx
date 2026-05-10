@@ -175,7 +175,7 @@ const ListingAdminManager = () => {
                     <Button
                       onClick={handleSearchUser}
                       disabled={isSearching}
-                      className="bg-zinc-700 hover:bg-[#1A1A1A]"
+                      className="bg-[#EFE6D6] hover:bg-[#1A1A1A]"
                     >
                       {isSearching ? (
                         <Loader2 className="w-4 h-4 animate-spin" />
@@ -268,7 +268,7 @@ const ListingAdminManager = () => {
                     className={`w-10 h-10 rounded-full flex items-center justify-center ${
                       admin.is_active
                         ? "bg-[#EFE6D6]/20 text-[#1A1A1A]"
-                        : "bg-zinc-700 text-white/90"
+                        : "bg-[#EFE6D6] text-white/90"
                     }`}
                   >
                     <User className="w-5 h-5" />
@@ -281,7 +281,7 @@ const ListingAdminManager = () => {
                           Active
                         </Badge>
                       ) : (
-                        <Badge className="bg-zinc-700 text-white/70 border-[#1A1A1A] text-xs">
+                        <Badge className="bg-[#EFE6D6] text-white/70 border-[#1A1A1A] text-xs">
                           Inactive
                         </Badge>
                       )}
@@ -308,7 +308,7 @@ const ListingAdminManager = () => {
                     onClick={() => handleToggleStatus(admin.id, admin.is_active)}
                     className={
                       admin.is_active
-                        ? "text-amber-400 hover:text-amber-300"
+                        ? "text-[#1A1A1A] hover:text-amber-300"
                         : "text-green-400 hover:text-green-300"
                     }
                     title={admin.is_active ? "Deactivate" : "Activate"}

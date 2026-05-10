@@ -15,7 +15,7 @@ const ReferralPartner = () => {
       {/* Hero Section */}
       <section className="relative py-24 md:py-32 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/50 to-black" />
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#EFE6D6]/5 rounded-full blur-3xl" />
         
         <div className="container mx-auto px-4 relative z-10">
           <motion.div 
@@ -24,7 +24,7 @@ const ReferralPartner = () => {
             animate="visible"
             variants={fadeInUp}
           >
-            <span className="inline-flex items-center gap-2 text-gold text-xs uppercase tracking-[0.4em] mb-6">
+            <span className="inline-flex items-center gap-2 text-[#1A1A1A] text-xs uppercase tracking-[0.4em] mb-6">
               <Handshake className="w-4 h-4" />
               Partner Program
             </span>
@@ -41,7 +41,7 @@ const ReferralPartner = () => {
       </section>
 
       {/* Program Details */}
-      <section className="py-16 bg-zinc-950">
+      <section className="py-16 bg-[#FDFBF7]">
         <div className="container mx-auto px-4">
           <motion.div 
             className="max-w-4xl mx-auto"
@@ -51,8 +51,8 @@ const ReferralPartner = () => {
           >
             <div className="bg-gradient-to-br from-zinc-900 to-black border border-[#1A1A1A] rounded-2xl p-8 md:p-12">
               <div className="flex items-center gap-4 mb-8">
-                <div className="w-14 h-14 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-gold/30">
-                  <Users className="w-7 h-7 text-gold" />
+                <div className="w-14 h-14 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-[#B89555]/30">
+                  <Users className="w-7 h-7 text-[#1A1A1A]" />
                 </div>
                 <div>
                   <h2 className="text-white text-2xl font-bold">How It Works</h2>
@@ -62,7 +62,7 @@ const ReferralPartner = () => {
 
               <div className="space-y-6 mb-10">
                 <div className="flex items-start gap-4">
-                  <CheckCircle className="w-5 h-5 text-gold mt-1 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-[#1A1A1A] mt-1 flex-shrink-0" />
                   <div>
                     <h3 className="text-white font-semibold mb-1">Refer a Client</h3>
                     <p className="text-white/70">
@@ -71,7 +71,7 @@ const ReferralPartner = () => {
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
-                  <CheckCircle className="w-5 h-5 text-gold mt-1 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-[#1A1A1A] mt-1 flex-shrink-0" />
                   <div>
                     <h3 className="text-white font-semibold mb-1">We Handle the Transaction</h3>
                     <p className="text-white/70">
@@ -80,7 +80,7 @@ const ReferralPartner = () => {
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
-                  <CheckCircle className="w-5 h-5 text-gold mt-1 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-[#1A1A1A] mt-1 flex-shrink-0" />
                   <div>
                     <h3 className="text-white font-semibold mb-1">Referral Arrangement</h3>
                     <p className="text-white/70">
@@ -91,8 +91,8 @@ const ReferralPartner = () => {
               </div>
 
               {/* Compliance Notice */}
-              <div className="bg-zinc-800/50 border border-[#1A1A1A] rounded-xl p-6 mb-8">
-                <h4 className="text-gold font-semibold text-sm uppercase tracking-wider mb-3">Important Notice</h4>
+              <div className="bg-[#F7F2EA]/50 border border-[#1A1A1A] rounded-xl p-6 mb-8">
+                <h4 className="text-[#1A1A1A] font-semibold text-sm uppercase tracking-wider mb-3">Important Notice</h4>
                 <p className="text-white/70 text-sm leading-relaxed">
                   Partners are independent and responsible for compliance with regulations in their own jurisdictions. 
                   This program does not constitute an employment relationship. All arrangements are subject to a formal 

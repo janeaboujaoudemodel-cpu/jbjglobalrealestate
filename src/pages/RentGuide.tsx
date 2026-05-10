@@ -207,7 +207,7 @@ const RentGuide = () => {
         title={
           <>
             Your Guide to{" "}
-            <span className="text-gold">Renting Property in Dubai</span>
+            <span className="text-[#1A1A1A]">Renting Property in Dubai</span>
           </>
         }
         description="A clear, educational resource covering everything you need to know about renting in Dubai — from finding the right property to understanding your rights as a tenant."
@@ -222,7 +222,7 @@ const RentGuide = () => {
                 boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
               }}
             >
-              <ArrowDown className="w-4 h-4 text-gold group-hover:text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+              <ArrowDown className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
               <span className="text-white group-hover:text-[#1A1A1A] transition-colors">Read the Full Guide</span>
               <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
             </button>
@@ -235,7 +235,7 @@ const RentGuide = () => {
                 }}
               >
                 <span className="text-white group-hover:text-[#1A1A1A] transition-colors">View Rental Properties</span>
-                <ArrowUpRight className="w-4 h-4 text-gold group-hover:text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+                <ArrowUpRight className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                 <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
               </button>
             </Link>
@@ -302,17 +302,17 @@ const RentGuide = () => {
             {rentalProcess.map((step) => (
               <div 
                 key={step.number}
-                className="jj-card-inner p-6 md:p-8 hover:border-gold hover:shadow-lg transition-all duration-300"
+                className="jj-card-inner p-6 md:p-8 hover:border-[#B89555] hover:shadow-lg transition-all duration-300"
               >
                 <div className="flex flex-col md:flex-row md:items-start gap-6">
                   <div className="flex-shrink-0">
-                    <div className="w-16 h-16 bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 rounded-2xl flex items-center justify-center">
-                      <span className="text-gold text-2xl font-semibold">{step.number}</span>
+                    <div className="w-16 h-16 bg-gradient-to-br from-gold/20 to-gold/5 border border-[#B89555]/30 rounded-2xl flex items-center justify-center">
+                      <span className="text-[#1A1A1A] text-2xl font-semibold">{step.number}</span>
                     </div>
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-3">
-                      <step.icon className="w-5 h-5 text-gold" />
+                      <step.icon className="w-5 h-5 text-[#1A1A1A]" />
                       <h3 className="text-xl md:text-2xl font-medium text-[#1A1A1A]">
                         {step.title}
                       </h3>
@@ -321,7 +321,7 @@ const RentGuide = () => {
                     <ul className="grid md:grid-cols-2 gap-3">
                       {step.items.map((item, itemIndex) => (
                         <li key={itemIndex} className="flex items-start gap-3">
-                          <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
+                          <CheckCircle2 className="w-4 h-4 text-[#1A1A1A] flex-shrink-0 mt-1" />
                           <span className="text-[#1A1A1A]/70 text-sm">{item}</span>
                         </li>
                       ))}
@@ -391,7 +391,7 @@ const RentGuide = () => {
             {jbjSupport.map((support, index) => (
               <div 
                 key={index}
-                className="jj-card-inner rounded-2xl p-8 hover:border-gold hover:shadow-lg transition-all"
+                className="jj-card-inner rounded-2xl p-8 hover:border-[#B89555] hover:shadow-lg transition-all"
               >
                 <div className="flex items-center gap-4 mb-6">
                   <div className="jj-icon-box-active w-12 h-12 rounded-xl">
@@ -402,7 +402,7 @@ const RentGuide = () => {
                 <ul className="space-y-3">
                   {support.points.map((point, pointIndex) => (
                     <li key={pointIndex} className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                      <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
                       <span className="text-[#1A1A1A]/70 text-sm">{point}</span>
                     </li>
                   ))}
@@ -423,16 +423,16 @@ const RentGuide = () => {
           <div className="flex flex-wrap justify-center gap-4">
             <Link 
               to="/tenant-guide"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 px-6 py-3 rounded-xl shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/40 px-6 py-3 rounded-xl shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
             >
-              <span className="text-gold font-semibold">Tenant Guide</span>
+              <span className="text-[#1A1A1A] font-semibold">Tenant Guide</span>
               <ArrowUpRight className="w-4 h-4 text-[#1A1A1A]" />
             </Link>
             <Link 
               to="/landlord-guide"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 px-6 py-3 rounded-xl shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/40 px-6 py-3 rounded-xl shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
             >
-              <span className="text-gold font-semibold">Landlord Guide</span>
+              <span className="text-[#1A1A1A] font-semibold">Landlord Guide</span>
               <ArrowUpRight className="w-4 h-4 text-[#1A1A1A]" />
             </Link>
           </div>

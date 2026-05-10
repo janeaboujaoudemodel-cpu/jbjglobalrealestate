@@ -256,7 +256,7 @@ const RentalIndex = () => {
                     value={size}
                     onChange={(e) => setSize(e.target.value)}
                     placeholder="e.g., 1200"
-                    className="bg-zinc-900/50 border-emerald-500/30 text-white h-12 rounded-xl hover:border-emerald-500/50 focus:border-emerald-400 transition-colors"
+                    className="bg-[#FDFBF7]/50 border-emerald-500/30 text-white h-12 rounded-xl hover:border-emerald-500/50 focus:border-emerald-400 transition-colors"
                   />
                 </div>
 
@@ -335,22 +335,22 @@ const RentalIndex = () => {
 
                   {/* Additional Metrics */}
                   <div className="grid md:grid-cols-3 gap-4 mb-6">
-                    <div className="bg-zinc-900/60 border border-emerald-500/20 rounded-xl p-4">
+                    <div className="bg-[#FDFBF7]/60 border border-emerald-500/20 rounded-xl p-4">
                       <p className="text-emerald-400/70 text-xs uppercase tracking-wider mb-1">Price per Sq.Ft</p>
                       <p className="text-white text-lg font-semibold">AED {analysis.pricePerSqft}</p>
                     </div>
-                    <div className="bg-zinc-900/60 border border-emerald-500/20 rounded-xl p-4">
+                    <div className="bg-[#FDFBF7]/60 border border-emerald-500/20 rounded-xl p-4">
                       <p className="text-emerald-400/70 text-xs uppercase tracking-wider mb-1">Yearly Increase</p>
                       <p className="text-emerald-400 text-lg font-semibold">{analysis.yearlyIncrease}</p>
                     </div>
-                    <div className="bg-zinc-900/60 border border-emerald-500/20 rounded-xl p-4">
+                    <div className="bg-[#FDFBF7]/60 border border-emerald-500/20 rounded-xl p-4">
                       <p className="text-emerald-400/70 text-xs uppercase tracking-wider mb-1">Market Trend</p>
                       <p className="text-white text-lg font-semibold">{analysis.marketTrend}</p>
                     </div>
                   </div>
 
                   {/* Demand Level */}
-                  <div className="bg-zinc-900/60 border border-emerald-500/20 rounded-xl p-4 mb-6">
+                  <div className="bg-[#FDFBF7]/60 border border-emerald-500/20 rounded-xl p-4 mb-6">
                     <p className="text-emerald-400/70 text-xs uppercase tracking-wider mb-2">Demand Level</p>
                     <div className="flex items-center gap-2">
                       <div className={`h-2 flex-1 rounded-full ${
@@ -364,7 +364,7 @@ const RentalIndex = () => {
                   </div>
 
                   {/* AI Insights */}
-                  <div className="bg-zinc-900/60 border border-emerald-500/20 rounded-xl p-6">
+                  <div className="bg-[#FDFBF7]/60 border border-emerald-500/20 rounded-xl p-6">
                     <div className="flex items-center gap-2 mb-4">
                       <Sparkles className="w-5 h-5 text-emerald-400" />
                       <h4 className="text-white font-semibold">AI Market Insights</h4>
@@ -381,7 +381,7 @@ const RentalIndex = () => {
                 </div>
 
                 {/* Disclaimer - Neutral dark styling */}
-                <div className="bg-zinc-800/50 border border-[#1A1A1A] rounded-2xl p-6">
+                <div className="bg-[#F7F2EA]/50 border border-[#1A1A1A] rounded-2xl p-6">
                   <div className="flex items-start gap-3">
                     <AlertCircle className="w-6 h-6 text-white/70 flex-shrink-0" />
                     <div>
@@ -397,7 +397,7 @@ const RentalIndex = () => {
                 </div>
 
                 {/* CTA - Emerald Theme */}
-                <div className="bg-zinc-900/60 border border-emerald-500/30 rounded-2xl p-6 text-center">
+                <div className="bg-[#FDFBF7]/60 border border-emerald-500/30 rounded-2xl p-6 text-center">
                   <p className="text-white/70 text-sm mb-4">
                     Need expert guidance on your rental investment?
                   </p>
@@ -434,7 +434,7 @@ const RentalIndex = () => {
               variants={fadeInUp}
               className="mt-12 grid md:grid-cols-2 gap-6"
             >
-              <div className="bg-zinc-900/40 border border-emerald-500/30 rounded-2xl p-6">
+              <div className="bg-[#FDFBF7]/40 border border-emerald-500/30 rounded-2xl p-6">
                 <Info className="w-6 h-6 text-emerald-400 mb-4" />
                 <h3 className="text-white font-semibold mb-2">How It Works</h3>
                 <p className="text-white/70 text-sm leading-relaxed">
@@ -442,7 +442,7 @@ const RentalIndex = () => {
                   The tool considers location, property type, size, and amenities to calculate rental ranges.
                 </p>
               </div>
-              <div className="bg-zinc-900/40 border border-emerald-500/30 rounded-2xl p-6">
+              <div className="bg-[#FDFBF7]/40 border border-emerald-500/30 rounded-2xl p-6">
                 <TrendingUp className="w-6 h-6 text-emerald-400 mb-4" />
                 <h3 className="text-white font-semibold mb-2">Data Sources</h3>
                 <p className="text-white/70 text-sm leading-relaxed">

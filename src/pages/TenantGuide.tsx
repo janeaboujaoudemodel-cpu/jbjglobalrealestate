@@ -195,7 +195,7 @@ const TenantGuide = () => {
         title={
           <>
             Renting a Home in Dubai —{" "}
-            <span className="text-gold">Your Rights, Costs, and Responsibilities Explained</span>
+            <span className="text-[#1A1A1A]">Your Rights, Costs, and Responsibilities Explained</span>
           </>
         }
         description="This guide is designed for tenants renting residential property in Dubai. It explains the rental process, costs, legal protections, tenant obligations, Ejari registration, renewals, and dispute prevention — so you can rent with clarity and confidence."
@@ -210,7 +210,7 @@ const TenantGuide = () => {
                 boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
               }}
             >
-              <ArrowDown className="w-4 h-4 text-gold group-hover:text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+              <ArrowDown className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
               <span className="text-white group-hover:text-[#1A1A1A] transition-colors">Read the Full Guide</span>
               <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
             </button>
@@ -223,7 +223,7 @@ const TenantGuide = () => {
                 }}
               >
                 <span className="text-white group-hover:text-[#1A1A1A] transition-colors">Browse Rental Properties</span>
-                <ArrowUpRight className="w-4 h-4 text-gold group-hover:text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+                <ArrowUpRight className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                 <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
               </button>
             </Link>
@@ -256,7 +256,7 @@ const TenantGuide = () => {
             <ul className="space-y-3">
               {rentalMarketPoints.map((item, index) => (
                 <li key={index} className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
                   <span className="text-[#1A1A1A]/70">{item}</span>
                 </li>
               ))}
@@ -275,12 +275,12 @@ const TenantGuide = () => {
             <ul className="space-y-3 mb-6">
               {budgetCosts.map((item, index) => (
                 <li key={index} className="flex items-start gap-3">
-                  <Banknote className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <Banknote className="w-5 h-5 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
                   <span className="text-[#1A1A1A]/70">{item}</span>
                 </li>
               ))}
             </ul>
-            <p className="text-sm text-[#1A1A1A]/70 italic border-t border-gold/30 pt-4">
+            <p className="text-sm text-[#1A1A1A]/70 italic border-t border-[#B89555]/30 pt-4">
               Rent is usually paid in post-dated cheques.
             </p>
           </div>
@@ -297,12 +297,12 @@ const TenantGuide = () => {
             <ul className="space-y-3 mb-6">
               {searchConsiderations.map((item, index) => (
                 <li key={index} className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
                   <span className="text-[#1A1A1A]/70">{item}</span>
                 </li>
               ))}
             </ul>
-            <p className="text-sm text-[#1A1A1A]/70 italic border-t border-gold/30 pt-4">
+            <p className="text-sm text-[#1A1A1A]/70 italic border-t border-[#B89555]/30 pt-4">
               JBJ arranges verified listings and guided viewings to avoid misinformation.
             </p>
           </div>
@@ -319,12 +319,12 @@ const TenantGuide = () => {
             <ul className="space-y-3 mb-6">
               {offerIncludes.map((item, index) => (
                 <li key={index} className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
                   <span className="text-[#1A1A1A]/70">{item}</span>
                 </li>
               ))}
             </ul>
-            <p className="text-sm text-[#1A1A1A]/70 italic border-t border-gold/30 pt-4">
+            <p className="text-sm text-[#1A1A1A]/70 italic border-t border-[#B89555]/30 pt-4">
               Negotiation is common and handled formally.
             </p>
           </div>
@@ -340,12 +340,12 @@ const TenantGuide = () => {
             <ul className="space-y-3 mb-6">
               {documentsRequired.map((item, index) => (
                 <li key={index} className="flex items-start gap-3">
-                  <FileText className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <FileText className="w-5 h-5 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
                   <span className="text-[#1A1A1A]/70">{item}</span>
                 </li>
               ))}
             </ul>
-            <p className="text-sm text-[#1A1A1A]/70 italic border-t border-gold/30 pt-4">
+            <p className="text-sm text-[#1A1A1A]/70 italic border-t border-[#B89555]/30 pt-4">
               All information is used for contract and Ejari registration.
             </p>
           </div>
@@ -362,12 +362,12 @@ const TenantGuide = () => {
             <ul className="space-y-3 mb-6">
               {contractPoints.map((item, index) => (
                 <li key={index} className="flex items-start gap-3">
-                  <Shield className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <Shield className="w-5 h-5 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
                   <span className="text-[#1A1A1A]/70">{item}</span>
                 </li>
               ))}
             </ul>
-            <p className="text-sm text-[#1A1A1A]/70 italic border-t border-gold/30 pt-4">
+            <p className="text-sm text-[#1A1A1A]/70 italic border-t border-[#B89555]/30 pt-4">
               Without Ejari, tenant protections are limited.
             </p>
           </div>
@@ -384,12 +384,12 @@ const TenantGuide = () => {
             <ul className="space-y-3 mb-6">
               {moveInChecklist.map((item, index) => (
                 <li key={index} className="flex items-start gap-3">
-                  <Key className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <Key className="w-5 h-5 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
                   <span className="text-[#1A1A1A]/70">{item}</span>
                 </li>
               ))}
             </ul>
-            <p className="text-sm text-[#1A1A1A]/70 italic border-t border-gold/30 pt-4">
+            <p className="text-sm text-[#1A1A1A]/70 italic border-t border-[#B89555]/30 pt-4">
               Document the unit condition to avoid future disputes.
             </p>
           </div>
@@ -407,7 +407,7 @@ const TenantGuide = () => {
               <ul className="space-y-3">
                 {tenantRights.map((item, index) => (
                   <li key={index} className="flex items-start gap-3">
-                    <Shield className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                    <Shield className="w-5 h-5 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
                     <span className="text-[#1A1A1A]/70">{item}</span>
                   </li>
                 ))}
@@ -419,7 +419,7 @@ const TenantGuide = () => {
               <ul className="space-y-3">
                 {tenantResponsibilities.map((item, index) => (
                   <li key={index} className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
                     <span className="text-[#1A1A1A]/70">{item}</span>
                   </li>
                 ))}
@@ -435,7 +435,7 @@ const TenantGuide = () => {
           <div>
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-light text-[#1A1A1A] mb-4">
-                Section 9: <span className="text-gold">Renewals</span>, Rent Increases & Notices
+                Section 9: <span className="text-[#1A1A1A]">Renewals</span>, Rent Increases & Notices
               </h2>
               <p className="text-lg text-[#1A1A1A]/70 max-w-2xl mx-auto">
                 Tenancy renewals are regulated.
@@ -447,7 +447,7 @@ const TenantGuide = () => {
               <ul className="space-y-3">
                 {renewalRules.map((item, index) => (
                   <li key={index} className="flex items-start gap-3">
-                    <Calendar className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                    <Calendar className="w-5 h-5 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
                     <span className="text-[#1A1A1A]/70">{item}</span>
                   </li>
                 ))}
@@ -467,12 +467,12 @@ const TenantGuide = () => {
             <ul className="space-y-3 mb-6">
               {endingTenancy.map((item, index) => (
                 <li key={index} className="flex items-start gap-3">
-                  <AlertTriangle className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <AlertTriangle className="w-5 h-5 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
                   <span className="text-[#1A1A1A]/70">{item}</span>
                 </li>
               ))}
             </ul>
-            <p className="text-sm text-[#1A1A1A]/70 italic border-t border-gold/30 pt-4">
+            <p className="text-sm text-[#1A1A1A]/70 italic border-t border-[#B89555]/30 pt-4">
               Early termination may involve penalties depending on contract terms.
             </p>
           </div>
@@ -489,12 +489,12 @@ const TenantGuide = () => {
             <ul className="space-y-3 mb-6">
               {jbjSupport.map((item, index) => (
                 <li key={index} className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
                   <span className="text-[#1A1A1A]/70">{item}</span>
                 </li>
               ))}
             </ul>
-            <p className="text-sm text-[#1A1A1A]/70 italic border-t border-gold/30 pt-4">
+            <p className="text-sm text-[#1A1A1A]/70 italic border-t border-[#B89555]/30 pt-4">
               We do not charge tenants hidden fees or misleading costs.
             </p>
           </div>
@@ -510,7 +510,7 @@ const TenantGuide = () => {
             {tenantFAQs.map((faq, index) => (
               <div
                 key={index}
-                className="jj-card-inner p-6 hover:border-gold transition-colors"
+                className="jj-card-inner p-6 hover:border-[#B89555] transition-colors"
               >
                 <h3 className="text-lg font-medium text-[#1A1A1A] mb-3">{faq.question}</h3>
                 <p className="text-[#1A1A1A]/70">{faq.answer}</p>

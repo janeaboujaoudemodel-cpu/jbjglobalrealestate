@@ -71,7 +71,7 @@ const MonthlyMarketBrief = () => {
       <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-white mb-4">Report Not Found</h1>
-          <Link to="/market-intelligence/reports" className="text-gold hover:underline">
+          <Link to="/market-intelligence/reports" className="text-[#1A1A1A] hover:underline">
             Return to Reports
           </Link>
         </div>
@@ -121,8 +121,8 @@ const MonthlyMarketBrief = () => {
 
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
-                <Badge className="mb-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border-gold/30 shadow-sm">
-                  <span className="text-gold">MONTHLY</span>
+                <Badge className="mb-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/30 shadow-sm">
+                  <span className="text-[#1A1A1A]">MONTHLY</span>
                   <span className="text-[#1A1A1A] ml-1">MARKET BRIEF</span>
                 </Badge>
                 <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]">
@@ -152,7 +152,7 @@ const MonthlyMarketBrief = () => {
             transition={{ delay: 0.1 }}
             className="mb-8"
           >
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
               <CardHeader>
                 <CardTitle className="text-lg text-[#1A1A1A]">Executive Summary</CardTitle>
               </CardHeader>
@@ -170,7 +170,7 @@ const MonthlyMarketBrief = () => {
             transition={{ delay: 0.2 }}
             className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8"
           >
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-[#1A1A1A]/70 flex items-center gap-2">
                   <Building className="w-4 h-4" />
@@ -191,7 +191,7 @@ const MonthlyMarketBrief = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-[#1A1A1A]/70 flex items-center gap-2">
                   <Key className="w-4 h-4" />
@@ -211,7 +211,7 @@ const MonthlyMarketBrief = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-[#1A1A1A]/70 flex items-center gap-2">
                   <Home className="w-4 h-4" />
@@ -241,10 +241,10 @@ const MonthlyMarketBrief = () => {
             transition={{ delay: 0.3 }}
             className="mb-8"
           >
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
               <CardHeader>
                 <CardTitle className="text-lg text-[#1A1A1A] flex items-center gap-2">
-                  <MapPin className="w-5 h-5 text-gold" />
+                  <MapPin className="w-5 h-5 text-[#1A1A1A]" />
                   Area Highlights
                 </CardTitle>
               </CardHeader>
@@ -253,7 +253,7 @@ const MonthlyMarketBrief = () => {
                   {data.areaHighlights.map((area, index) => (
                     <div
                       key={index}
-                      className="flex items-center justify-between p-4 bg-[#FDFBF7]/50 border border-gold/20 rounded-lg"
+                      className="flex items-center justify-between p-4 bg-[#FDFBF7]/50 border border-[#B89555]/20 rounded-lg"
                     >
                       <div>
                         <p className="text-[#1A1A1A] font-medium">{area.name}</p>
@@ -276,7 +276,7 @@ const MonthlyMarketBrief = () => {
             variants={fadeInUp}
             transition={{ delay: 0.4 }}
           >
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
               <CardContent className="pt-6">
                 <h3 className="text-sm font-semibold text-[#1A1A1A] mb-3">Methodology & Disclaimer</h3>
                 <p className="text-sm text-[#1A1A1A]/70 mb-4">
@@ -288,11 +288,11 @@ const MonthlyMarketBrief = () => {
                   <span>•</span>
                   <span>Update Frequency: Monthly</span>
                   <span>•</span>
-                  <Link to="/market-intelligence/methodology" className="text-gold hover:underline">
+                  <Link to="/market-intelligence/methodology" className="text-[#1A1A1A] hover:underline">
                     Full Methodology
                   </Link>
                 </div>
-                <div className="mt-4 pt-4 border-t border-gold/30">
+                <div className="mt-4 pt-4 border-t border-[#B89555]/30">
                   <p className="text-xs text-[#1A1A1A]/70">
                     JBJ GLOBAL REAL ESTATE • Jane Bou Jaoude, Founder & CEO
                   </p>

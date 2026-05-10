@@ -181,7 +181,7 @@ export default function JBJBrokerReports() {
   if (authLoading || loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-gold" />
+        <Loader2 className="h-8 w-8 animate-spin text-[#1A1A1A]" />
       </div>
     );
   }
@@ -189,7 +189,7 @@ export default function JBJBrokerReports() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       {/* Header */}
-      <header className="sticky top-0 lg:top-[48px] z-50 border-b border-gold/20">
+      <header className="sticky top-0 lg:top-[48px] z-50 border-b border-[#B89555]/20">
         <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] px-6 py-4">
           <div className="container mx-auto flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -197,7 +197,7 @@ export default function JBJBrokerReports() {
                 variant="ghost"
                 size="sm"
                 onClick={() => navigate("/jbj-broker-admin")}
-                className="text-[#1A1A1A] hover:bg-gold/20"
+                className="text-[#1A1A1A] hover:bg-[#EFE6D6]/20"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back
@@ -218,7 +218,7 @@ export default function JBJBrokerReports() {
             </div>
 
             <div className="flex items-center gap-3">
-              <div className="flex gap-1 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-lg p-1 border border-gold/30">
+              <div className="flex gap-1 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-lg p-1 border border-[#B89555]/30">
                 {["week", "month", "quarter"].map((range) => (
                   <Button
                     key={range}
@@ -227,8 +227,8 @@ export default function JBJBrokerReports() {
                     onClick={() => setDateRange(range as any)}
                     className={
                       dateRange === range
-                        ? "bg-gold text-[#1A1A1A] hover:bg-gold/90"
-                        : "text-[#1A1A1A] hover:bg-gold/20"
+                        ? "bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
+                        : "text-[#1A1A1A] hover:bg-[#EFE6D6]/20"
                     }
                   >
                     {range.charAt(0).toUpperCase() + range.slice(1)}
@@ -277,7 +277,7 @@ export default function JBJBrokerReports() {
                   <p className="text-3xl font-bold text-[#1A1A1A]">
                     {metrics.conversionRate}%
                   </p>
-                  <p className="text-xs text-gold flex items-center">
+                  <p className="text-xs text-[#1A1A1A] flex items-center">
                     <TrendingUp className="h-3 w-3 mr-1" />
                     +5% vs last period
                   </p>

@@ -604,7 +604,7 @@ const VideoMeeting = () => {
 
             <div className="bg-violet-900/20 border border-violet-500/30 rounded-2xl p-6 space-y-6">
               {/* Preview */}
-              <div className="relative aspect-video bg-zinc-800 rounded-xl overflow-hidden">
+              <div className="relative aspect-video bg-[#F7F2EA] rounded-xl overflow-hidden">
                 <video
                   ref={localVideoRef}
                   autoPlay
@@ -614,8 +614,8 @@ const VideoMeeting = () => {
                   style={{ filter: beautyFilter ? 'contrast(1.1) brightness(1.05)' : 'none' }}
                 />
                 {!videoEnabled && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-zinc-800">
-                    <div className="w-20 h-20 rounded-full bg-zinc-700 flex items-center justify-center">
+                  <div className="absolute inset-0 flex items-center justify-center bg-[#F7F2EA]">
+                    <div className="w-20 h-20 rounded-full bg-[#EFE6D6] flex items-center justify-center">
                       <VideoOff className="w-8 h-8 text-white/70" />
                     </div>
                   </div>
@@ -653,7 +653,7 @@ const VideoMeeting = () => {
                 placeholder="Enter your name"
                 value={userName}
                 onChange={(e) => setUserName(e.target.value)}
-                className="bg-zinc-900/50 border-violet-500/30 text-white hover:border-violet-500/50"
+                className="bg-[#FDFBF7]/50 border-violet-500/30 text-white hover:border-violet-500/50"
               />
 
               {/* Broker Name (Optional) */}
@@ -662,7 +662,7 @@ const VideoMeeting = () => {
                   placeholder="Your title (e.g., Senior Property Consultant)"
                   value={brokerName}
                   onChange={(e) => setBrokerName(e.target.value)}
-                  className="bg-zinc-900/50 border-violet-500/30 text-white hover:border-violet-500/50"
+                  className="bg-[#FDFBF7]/50 border-violet-500/30 text-white hover:border-violet-500/50"
                 />
               )}
 
@@ -672,7 +672,7 @@ const VideoMeeting = () => {
                   placeholder="Enter meeting code"
                   value={roomId}
                   onChange={(e) => setRoomId(e.target.value)}
-                  className="bg-zinc-900/50 border-violet-500/30 text-white hover:border-violet-500/50"
+                  className="bg-[#FDFBF7]/50 border-violet-500/30 text-white hover:border-violet-500/50"
                 />
                 <Button 
                   onClick={() => startMeeting()} 
@@ -709,7 +709,7 @@ const VideoMeeting = () => {
 
         {/* Settings Dialog (Lobby) */}
         <Dialog open={showSettings} onOpenChange={setShowSettings}>
-          <DialogContent className="bg-zinc-900 border-[#1A1A1A] max-w-md">
+          <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A] max-w-md">
             <DialogHeader>
               <DialogTitle className="text-white flex items-center gap-2">
                 <Settings className="w-5 h-5" />
@@ -723,10 +723,10 @@ const VideoMeeting = () => {
                   <Camera className="w-4 h-4" /> Camera
                 </Label>
                 <Select value={selectedVideoDevice} onValueChange={setSelectedVideoDevice}>
-                  <SelectTrigger className="bg-zinc-800 border-[#1A1A1A] text-white">
+                  <SelectTrigger className="bg-[#F7F2EA] border-[#1A1A1A] text-white">
                     <SelectValue placeholder="Select camera" />
                   </SelectTrigger>
-                  <SelectContent className="bg-zinc-800 border-[#1A1A1A]">
+                  <SelectContent className="bg-[#F7F2EA] border-[#1A1A1A]">
                     {videoDevices.map(d => (
                       <SelectItem key={d.deviceId} value={d.deviceId} className="text-white">
                         {d.label}
@@ -742,10 +742,10 @@ const VideoMeeting = () => {
                   <Mic className="w-4 h-4" /> Microphone
                 </Label>
                 <Select value={selectedAudioDevice} onValueChange={setSelectedAudioDevice}>
-                  <SelectTrigger className="bg-zinc-800 border-[#1A1A1A] text-white">
+                  <SelectTrigger className="bg-[#F7F2EA] border-[#1A1A1A] text-white">
                     <SelectValue placeholder="Select microphone" />
                   </SelectTrigger>
-                  <SelectContent className="bg-zinc-800 border-[#1A1A1A]">
+                  <SelectContent className="bg-[#F7F2EA] border-[#1A1A1A]">
                     {audioDevices.map(d => (
                       <SelectItem key={d.deviceId} value={d.deviceId} className="text-white">
                         {d.label}
@@ -761,10 +761,10 @@ const VideoMeeting = () => {
                   <Volume2 className="w-4 h-4" /> Speaker
                 </Label>
                 <Select value={selectedSpeakerDevice} onValueChange={setSelectedSpeakerDevice}>
-                  <SelectTrigger className="bg-zinc-800 border-[#1A1A1A] text-white">
+                  <SelectTrigger className="bg-[#F7F2EA] border-[#1A1A1A] text-white">
                     <SelectValue placeholder="Select speaker" />
                   </SelectTrigger>
-                  <SelectContent className="bg-zinc-800 border-[#1A1A1A]">
+                  <SelectContent className="bg-[#F7F2EA] border-[#1A1A1A]">
                     {speakerDevices.map(d => (
                       <SelectItem key={d.deviceId} value={d.deviceId} className="text-white">
                         {d.label}
@@ -834,10 +834,10 @@ const VideoMeeting = () => {
   return (
     <div 
       ref={containerRef}
-      className="h-screen bg-zinc-950 flex flex-col"
+      className="h-screen bg-[#FDFBF7] flex flex-col"
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 bg-zinc-900/80 border-b border-[#1A1A1A]">
+      <div className="flex items-center justify-between px-4 py-3 bg-[#FDFBF7]/80 border-b border-[#1A1A1A]">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-red-500 flex items-center justify-center">
@@ -845,7 +845,7 @@ const VideoMeeting = () => {
             </div>
             <span className="font-semibold text-white">JBJ Video Meet</span>
             {isHost && (
-              <span className="px-2 py-0.5 text-xs bg-gold/20 text-gold rounded-full flex items-center gap-1">
+              <span className="px-2 py-0.5 text-xs bg-[#EFE6D6]/20 text-[#1A1A1A] rounded-full flex items-center gap-1">
                 <Crown className="w-3 h-3" /> Host
               </span>
             )}
@@ -888,7 +888,7 @@ const VideoMeeting = () => {
             variant="ghost"
             size="icon"
             onClick={() => setShowChat(!showChat)}
-            className={`${showChat ? 'text-white bg-zinc-800' : 'text-white/70'} hover:text-white`}
+            className={`${showChat ? 'text-white bg-[#F7F2EA]' : 'text-white/70'} hover:text-white`}
             title="Chat"
           >
             <MessageSquare className="w-4 h-4" />
@@ -927,11 +927,11 @@ const VideoMeeting = () => {
                   <Settings className="w-4 h-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-zinc-900 border-[#1A1A1A]">
+              <DropdownMenuContent className="bg-[#FDFBF7] border-[#1A1A1A]">
                 <DropdownMenuItem onClick={muteAll} className="text-white hover:bg-[#1A1A1A]">
                   <VolumeX className="w-4 h-4 mr-2" /> Mute All
                 </DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-zinc-700" />
+                <DropdownMenuSeparator className="bg-[#EFE6D6]" />
                 <DropdownMenuItem onClick={endMeetingForAll} className="text-red-400 hover:bg-[#1A1A1A]">
                   <PhoneOff className="w-4 h-4 mr-2" /> End Meeting for All
                 </DropdownMenuItem>
@@ -942,7 +942,7 @@ const VideoMeeting = () => {
             variant="ghost"
             size="icon"
             onClick={() => setShowAIAssistant(!showAIAssistant)}
-            className={`${showAIAssistant ? 'text-gold bg-gold/20' : 'text-white/70'} hover:text-gold`}
+            className={`${showAIAssistant ? 'text-[#1A1A1A] bg-[#EFE6D6]/20' : 'text-white/70'} hover:text-[#1A1A1A]`}
             title="AI Assistant (Private)"
           >
             <Brain className="w-4 h-4" />
@@ -971,7 +971,7 @@ const VideoMeeting = () => {
             }}
           >
             {/* Local Video */}
-            <div className="relative bg-zinc-900 rounded-2xl overflow-hidden group">
+            <div className="relative bg-[#FDFBF7] rounded-2xl overflow-hidden group">
               <video
                 ref={localVideoRef}
                 autoPlay
@@ -983,7 +983,7 @@ const VideoMeeting = () => {
                 }}
               />
               {!videoEnabled && (
-                <div className="absolute inset-0 flex items-center justify-center bg-zinc-800">
+                <div className="absolute inset-0 flex items-center justify-center bg-[#F7F2EA]">
                   <div className="w-24 h-24 rounded-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center text-white text-3xl font-bold">
                     {(userName || 'You').charAt(0).toUpperCase()}
                   </div>
@@ -997,7 +997,7 @@ const VideoMeeting = () => {
               <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
                 <span className="bg-[#1A1A1A]/50 px-3 py-1 rounded-lg text-white text-sm backdrop-blur-sm flex items-center gap-2">
                   {userName || 'You'} (You)
-                  {isHost && <Crown className="w-3 h-3 text-gold" />}
+                  {isHost && <Crown className="w-3 h-3 text-[#1A1A1A]" />}
                 </span>
                 <div className="flex gap-1">
                   {!audioEnabled && (
@@ -1016,7 +1016,7 @@ const VideoMeeting = () => {
 
             {/* Remote Participants */}
             {participants.map((participant) => (
-              <div key={participant.oderId} className="relative bg-zinc-900 rounded-2xl overflow-hidden group">
+              <div key={participant.oderId} className="relative bg-[#FDFBF7] rounded-2xl overflow-hidden group">
                 {participant.stream ? (
                   <video
                     autoPlay
@@ -1029,7 +1029,7 @@ const VideoMeeting = () => {
                     }}
                   />
                 ) : (
-                  <div className="absolute inset-0 flex items-center justify-center bg-zinc-800">
+                  <div className="absolute inset-0 flex items-center justify-center bg-[#F7F2EA]">
                     <div className="w-24 h-24 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center text-white text-3xl font-bold">
                       {participant.odername.charAt(0).toUpperCase()}
                     </div>
@@ -1076,7 +1076,7 @@ const VideoMeeting = () => {
 
             {/* Empty state for waiting */}
             {participants.length === 0 && (
-              <div className="flex items-center justify-center bg-zinc-900/50 rounded-2xl border-2 border-dashed border-[#1A1A1A]">
+              <div className="flex items-center justify-center bg-[#FDFBF7]/50 rounded-2xl border-2 border-dashed border-[#1A1A1A]">
                 <div className="text-center p-8">
                   <Users className="w-12 h-12 text-[#1A1A1A]/70 mx-auto mb-4" />
                   <p className="text-white/70 mb-2">Waiting for others to join...</p>
@@ -1092,7 +1092,7 @@ const VideoMeeting = () => {
 
         {/* Chat Sidebar */}
         {showChat && (
-          <div className="fixed right-0 top-16 bottom-24 w-80 bg-zinc-900 border-l border-[#1A1A1A] flex flex-col">
+          <div className="fixed right-0 top-16 bottom-24 w-80 bg-[#FDFBF7] border-l border-[#1A1A1A] flex flex-col">
             <div className="p-4 border-b border-[#1A1A1A] flex items-center justify-between">
               <h3 className="text-white font-semibold">Meeting Chat</h3>
               <Button variant="ghost" size="icon" onClick={() => setShowChat(false)}>
@@ -1109,7 +1109,7 @@ const VideoMeeting = () => {
                     {msg.isSystem ? (
                       <span className="text-xs text-white/90 italic">{msg.message}</span>
                     ) : (
-                      <div className="bg-zinc-800 rounded-lg p-3">
+                      <div className="bg-[#F7F2EA] rounded-lg p-3">
                         <div className="flex items-center justify-between mb-1">
                           <span className="text-white text-sm font-medium">{msg.sender}</span>
                           <span className="text-white/90 text-xs">
@@ -1130,7 +1130,7 @@ const VideoMeeting = () => {
                   onChange={(e) => setNewMessage(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && sendChatMessage()}
                   placeholder="Type a message..."
-                  className="bg-zinc-800 border-[#1A1A1A] text-white"
+                  className="bg-[#F7F2EA] border-[#1A1A1A] text-white"
                 />
                 <Button size="icon" onClick={sendChatMessage} className="bg-red-500 hover:bg-red-600">
                   <Send className="w-4 h-4" />
@@ -1142,7 +1142,7 @@ const VideoMeeting = () => {
       </div>
 
       {/* Controls */}
-      <div className="flex items-center justify-center gap-3 py-4 bg-zinc-900/80 border-t border-[#1A1A1A]">
+      <div className="flex items-center justify-center gap-3 py-4 bg-[#FDFBF7]/80 border-t border-[#1A1A1A]">
         <Button
           variant={audioEnabled ? "secondary" : "destructive"}
           size="lg"
@@ -1216,19 +1216,19 @@ const VideoMeeting = () => {
 
       {/* Participants Dialog */}
       <Dialog open={showParticipants} onOpenChange={setShowParticipants}>
-        <DialogContent className="bg-zinc-900 border-[#1A1A1A]">
+        <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A]">
           <DialogHeader>
             <DialogTitle className="text-white">Participants ({totalParticipants})</DialogTitle>
           </DialogHeader>
           <div className="space-y-2">
-            <div className="flex items-center gap-3 p-3 bg-zinc-800 rounded-lg">
+            <div className="flex items-center gap-3 p-3 bg-[#F7F2EA] rounded-lg">
               <div className="w-10 h-10 rounded-full bg-red-500 flex items-center justify-center text-white font-bold">
                 {(userName || 'You').charAt(0).toUpperCase()}
               </div>
               <div className="flex-1">
                 <p className="text-white font-medium flex items-center gap-2">
                   {userName || 'You'}
-                  {isHost && <Crown className="w-4 h-4 text-gold" />}
+                  {isHost && <Crown className="w-4 h-4 text-[#1A1A1A]" />}
                 </p>
                 <p className="text-white/70 text-sm">{isHost ? 'Host' : 'You'}</p>
               </div>
@@ -1239,14 +1239,14 @@ const VideoMeeting = () => {
             </div>
             
             {participants.map((p) => (
-              <div key={p.oderId} className="flex items-center gap-3 p-3 bg-zinc-800 rounded-lg group">
+              <div key={p.oderId} className="flex items-center gap-3 p-3 bg-[#F7F2EA] rounded-lg group">
                 <div className="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center text-white font-bold">
                   {p.odername.charAt(0).toUpperCase()}
                 </div>
                 <div className="flex-1">
                   <p className="text-white font-medium flex items-center gap-2">
                     {p.odername}
-                    {p.handRaised && <Hand className="w-4 h-4 text-amber-400" />}
+                    {p.handRaised && <Hand className="w-4 h-4 text-[#1A1A1A]" />}
                   </p>
                 </div>
                 <div className="flex gap-1">
@@ -1270,7 +1270,7 @@ const VideoMeeting = () => {
 
       {/* Share Dialog */}
       <Dialog open={showShareDialog} onOpenChange={setShowShareDialog}>
-        <DialogContent className="bg-zinc-900 border-[#1A1A1A]">
+        <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A]">
           <DialogHeader>
             <DialogTitle className="text-white">Invite Participants</DialogTitle>
             <DialogDescription className="text-white/70">
@@ -1278,7 +1278,7 @@ const VideoMeeting = () => {
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
-            <div className="p-3 bg-zinc-800 rounded-lg">
+            <div className="p-3 bg-[#F7F2EA] rounded-lg">
               <p className="text-white/70 text-xs mb-2">Invitation Preview:</p>
               <p className="text-white text-sm whitespace-pre-line">{generateInviteText()}</p>
             </div>
@@ -1299,10 +1299,10 @@ const VideoMeeting = () => {
 
       {/* Recording Consent Dialog */}
       <Dialog open={showRecordingConsent} onOpenChange={setShowRecordingConsent}>
-        <DialogContent className="bg-zinc-900 border-[#1A1A1A]">
+        <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A]">
           <DialogHeader>
             <DialogTitle className="text-white flex items-center gap-2">
-              <AlertCircle className="w-5 h-5 text-amber-400" />
+              <AlertCircle className="w-5 h-5 text-[#1A1A1A]" />
               Recording Consent
             </DialogTitle>
             <DialogDescription className="text-white/70">
@@ -1322,7 +1322,7 @@ const VideoMeeting = () => {
 
       {/* Settings Dialog (In-meeting) */}
       <Dialog open={showSettings} onOpenChange={setShowSettings}>
-        <DialogContent className="bg-zinc-900 border-[#1A1A1A] max-w-md">
+        <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A] max-w-md">
           <DialogHeader>
             <DialogTitle className="text-white flex items-center gap-2">
               <Settings className="w-5 h-5" />
@@ -1336,10 +1336,10 @@ const VideoMeeting = () => {
                 <Camera className="w-4 h-4" /> Camera
               </Label>
               <Select value={selectedVideoDevice} onValueChange={setSelectedVideoDevice}>
-                <SelectTrigger className="bg-zinc-800 border-[#1A1A1A] text-white">
+                <SelectTrigger className="bg-[#F7F2EA] border-[#1A1A1A] text-white">
                   <SelectValue placeholder="Select camera" />
                 </SelectTrigger>
-                <SelectContent className="bg-zinc-800 border-[#1A1A1A]">
+                <SelectContent className="bg-[#F7F2EA] border-[#1A1A1A]">
                   {videoDevices.map(d => (
                     <SelectItem key={d.deviceId} value={d.deviceId} className="text-white">
                       {d.label}
@@ -1355,10 +1355,10 @@ const VideoMeeting = () => {
                 <Mic className="w-4 h-4" /> Microphone
               </Label>
               <Select value={selectedAudioDevice} onValueChange={setSelectedAudioDevice}>
-                <SelectTrigger className="bg-zinc-800 border-[#1A1A1A] text-white">
+                <SelectTrigger className="bg-[#F7F2EA] border-[#1A1A1A] text-white">
                   <SelectValue placeholder="Select microphone" />
                 </SelectTrigger>
-                <SelectContent className="bg-zinc-800 border-[#1A1A1A]">
+                <SelectContent className="bg-[#F7F2EA] border-[#1A1A1A]">
                   {audioDevices.map(d => (
                     <SelectItem key={d.deviceId} value={d.deviceId} className="text-white">
                       {d.label}
@@ -1374,10 +1374,10 @@ const VideoMeeting = () => {
                 <Volume2 className="w-4 h-4" /> Speaker
               </Label>
               <Select value={selectedSpeakerDevice} onValueChange={setSelectedSpeakerDevice}>
-                <SelectTrigger className="bg-zinc-800 border-[#1A1A1A] text-white">
+                <SelectTrigger className="bg-[#F7F2EA] border-[#1A1A1A] text-white">
                   <SelectValue placeholder="Select speaker" />
                 </SelectTrigger>
-                <SelectContent className="bg-zinc-800 border-[#1A1A1A]">
+                <SelectContent className="bg-[#F7F2EA] border-[#1A1A1A]">
                   {speakerDevices.map(d => (
                     <SelectItem key={d.deviceId} value={d.deviceId} className="text-white">
                       {d.label}
@@ -1439,7 +1439,7 @@ const VideoMeeting = () => {
 
       {/* Support Chat Dialog */}
       <Dialog open={showSupportChat} onOpenChange={setShowSupportChat}>
-        <DialogContent className="bg-zinc-900 border-[#1A1A1A]">
+        <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A]">
           <DialogHeader>
             <DialogTitle className="text-white">JBJ Support Assistant</DialogTitle>
             <DialogDescription className="text-white/70">
@@ -1451,7 +1451,7 @@ const VideoMeeting = () => {
               value={supportMessage}
               onChange={(e) => setSupportMessage(e.target.value)}
               placeholder="Describe your issue..."
-              className="bg-zinc-800 border-[#1A1A1A] text-white min-h-[100px]"
+              className="bg-[#F7F2EA] border-[#1A1A1A] text-white min-h-[100px]"
             />
             <div className="flex gap-2">
               <Button onClick={sendSupportMessage} className="flex-1 bg-red-500 hover:bg-red-600">
@@ -1476,7 +1476,7 @@ const VideoMeeting = () => {
 
       {/* Media Prompt Dialog - Shows when joining meeting */}
       <Dialog open={showMediaPrompt} onOpenChange={setShowMediaPrompt}>
-        <DialogContent className="bg-zinc-900 border-[#1A1A1A] max-w-md">
+        <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A] max-w-md">
           <DialogHeader>
             <DialogTitle className="text-white flex items-center gap-2">
               <Shield className="w-5 h-5 text-green-400" />
@@ -1487,7 +1487,7 @@ const VideoMeeting = () => {
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
-            <div className="p-4 bg-zinc-800/50 rounded-xl border border-[#1A1A1A]">
+            <div className="p-4 bg-[#F7F2EA]/50 rounded-xl border border-[#1A1A1A]">
               <p className="text-white text-sm mb-4 text-center">
                 Click the buttons below to enable your devices:
               </p>
@@ -1533,10 +1533,10 @@ const VideoMeeting = () => {
 
       {/* Meeting Ended Dialog */}
       <Dialog open={showMeetingEndedDialog} onOpenChange={setShowMeetingEndedDialog}>
-        <DialogContent className="bg-zinc-900 border-[#1A1A1A] max-w-md text-center">
+        <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A] max-w-md text-center">
           <div className="py-8 space-y-6">
             <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center mx-auto">
-              <Video className="w-10 h-10 text-gold" />
+              <Video className="w-10 h-10 text-[#1A1A1A]" />
             </div>
             <div>
               <h2 className="text-2xl font-bold text-white mb-2">Meeting Ended</h2>
@@ -1544,8 +1544,8 @@ const VideoMeeting = () => {
                 This meeting has been ended by {meetingEndedBy || 'the host'}.
               </p>
             </div>
-            <div className="bg-zinc-800/50 rounded-xl p-4 border border-[#1A1A1A]">
-              <p className="text-gold text-sm font-medium">JBJ Global Real Estate</p>
+            <div className="bg-[#F7F2EA]/50 rounded-xl p-4 border border-[#1A1A1A]">
+              <p className="text-[#1A1A1A] text-sm font-medium">JBJ Global Real Estate</p>
               <p className="text-white/90 text-xs mt-1">
                 Thank you for joining our video meeting. We appreciate your time.
               </p>

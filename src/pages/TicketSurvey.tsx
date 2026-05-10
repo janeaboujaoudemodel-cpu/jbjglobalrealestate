@@ -177,7 +177,7 @@ const TicketSurvey = () => {
   if (submitted) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] flex items-center justify-center p-4">
-        <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="max-w-md w-full bg-[#FDFBF7]/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gold/30 p-8 text-center">
+        <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="max-w-md w-full bg-[#FDFBF7]/80 backdrop-blur-sm rounded-2xl shadow-sm border border-[#B89555]/30 p-8 text-center">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-[#C8A766] to-[#B8956E] flex items-center justify-center">
             <CheckCircle className="w-8 h-8 text-white" />
           </div>
@@ -204,7 +204,7 @@ const TicketSurvey = () => {
           </p>
         </div>
 
-        <div className="bg-[#FDFBF7]/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gold/30 p-6 space-y-6">
+        <div className="bg-[#FDFBF7]/80 backdrop-blur-sm rounded-2xl shadow-sm border border-[#B89555]/30 p-6 space-y-6">
           <StarRating value={overallRating} onChange={setOverallRating} label={`1. ${surveyCopy.questions[0]}`} />
           <StarRating value={easeOfSubmission} onChange={setEaseOfSubmission} label={`2. ${surveyCopy.questions[1]}`} />
           <StarRating value={responseSpeed} onChange={setResponseSpeed} label={`3. ${surveyCopy.questions[2]}`} />
@@ -230,7 +230,7 @@ const TicketSurvey = () => {
                 onClick={() => setWouldRecommend(false)}
                 className={`flex-1 py-3 rounded-xl border-2 font-semibold transition-all ${
                   wouldRecommend === false
-                    ? "bg-zinc-800 text-white border-[#1A1A1A]"
+                    ? "bg-[#F7F2EA] text-white border-[#1A1A1A]"
                     : "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/30 hover:border-[#B89555]/30"
                 }`}
               >

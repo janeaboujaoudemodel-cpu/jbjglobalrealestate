@@ -102,10 +102,10 @@ const OwnerCreativeSuite = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       {/* Hero */}
-      <div className="border-b-2 border-gold/30">
+      <div className="border-b-2 border-[#B89555]/30">
         <div className="container mx-auto px-4 py-10">
           <div className="text-center max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-full px-5 py-1.5 mb-5">
+            <div className="inline-flex items-center gap-2 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-full px-5 py-1.5 mb-5">
               <Sparkles className="w-4 h-4 text-[#8A7356]" />
               <span className="text-[#1A1A1A] text-sm font-semibold tracking-wide">Owner Creative Suite</span>
             </div>
@@ -122,7 +122,7 @@ const OwnerCreativeSuite = () => {
             <button
               key={tool.href}
               onClick={() => navigate(tool.href)}
-              className="group text-left bg-[#FDFBF7]/80 hover:bg-[#FDFBF7] border border-gold/20 hover:border-gold/40 rounded-2xl p-6 transition-all hover:shadow-lg hover:-translate-y-0.5"
+              className="group text-left bg-[#FDFBF7]/80 hover:bg-[#FDFBF7] border border-[#B89555]/20 hover:border-[#B89555]/40 rounded-2xl p-6 transition-all hover:shadow-lg hover:-translate-y-0.5"
             >
               <div className="flex items-start gap-4">
                 <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${tool.color} flex items-center justify-center flex-shrink-0`}>
@@ -131,13 +131,13 @@ const OwnerCreativeSuite = () => {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     <h3 className="font-bold text-[#1A1A1A] text-sm">{tool.title}</h3>
-                    <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-gold/20 text-[#8A7356]">{tool.badge}</span>
+                    <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-[#EFE6D6]/20 text-[#8A7356]">{tool.badge}</span>
                   </div>
                   <p className="text-xs text-[#1A1A1A]/70 leading-relaxed">{tool.description}</p>
                 </div>
               </div>
               <div className="flex justify-end mt-3">
-                <ArrowRight className="h-4 w-4 text-gold opacity-0 group-hover:opacity-100 transition-opacity" />
+                <ArrowRight className="h-4 w-4 text-[#1A1A1A] opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
             </button>
           ))}

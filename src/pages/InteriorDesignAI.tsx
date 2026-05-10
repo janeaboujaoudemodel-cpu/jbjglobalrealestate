@@ -278,7 +278,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <Badge className="mb-4 bg-gold/15 text-gold border-gold/30 px-4 py-2">
+              <Badge className="mb-4 bg-[#EFE6D6]/15 text-[#1A1A1A] border-[#B89555]/30 px-4 py-2">
                 <Palette className="w-4 h-4 mr-2" />
                 AI-Powered Design
               </Badge>
@@ -304,7 +304,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
             value={projectName}
             onChange={(e) => setProjectName(e.target.value)}
             placeholder="Project name (optional)"
-            className="bg-zinc-900/60 border-gold/30 text-white placeholder:text-[#1A1A1A]/70 max-w-xs focus:border-gold/50"
+            className="bg-[#FDFBF7]/60 border-[#B89555]/30 text-white placeholder:text-[#1A1A1A]/70 max-w-xs focus:border-[#B89555]/50"
           />
           <div className="flex gap-2">
             {modeConfig.map(m => {
@@ -316,8 +316,8 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                   onClick={() => setMode(m.id)}
                   className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all border ${
                     active
-                      ? 'bg-gold/15 border-gold/50 text-gold'
-                      : 'bg-zinc-900/60 border-[#1A1A1A] text-white/70 hover:border-[#1A1A1A] hover:text-white/85'
+                      ? 'bg-[#EFE6D6]/15 border-[#B89555]/50 text-[#1A1A1A]'
+                      : 'bg-[#FDFBF7]/60 border-[#1A1A1A] text-white/70 hover:border-[#1A1A1A] hover:text-white/85'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -332,7 +332,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           {/* LEFT PANEL: Upload + Preview (60%) */}
           <div className="lg:col-span-3 space-y-4">
             {/* Upload / Generated Image Area */}
-            <div className="bg-zinc-900/60 border border-gold/30 rounded-2xl overflow-hidden">
+            <div className="bg-[#FDFBF7]/60 border border-[#B89555]/30 rounded-2xl overflow-hidden">
               {generatedImage ? (
                 <div className="relative">
                   <Design3DViewer imageUrl={generatedImage} projectName={projectName} />
@@ -342,7 +342,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                       onClick={() => generateDesign()}
                       disabled={isProcessing}
                       variant="outline"
-                      className="border-gold/40 text-gold hover:bg-gold/15"
+                      className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/15"
                     >
                       <RefreshCw className="w-4 h-4 mr-2" />
                       Regenerate
@@ -382,11 +382,11 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
               ) : (
                 <div className="p-8 md:p-12">
                   <div
-                    className="border-2 border-dashed border-gold/30 rounded-xl p-8 md:p-16 text-center cursor-pointer hover:border-gold/60 hover:bg-gold/5 transition-all"
+                    className="border-2 border-dashed border-[#B89555]/30 rounded-xl p-8 md:p-16 text-center cursor-pointer hover:border-[#B89555]/60 hover:bg-[#EFE6D6]/5 transition-all"
                     onClick={() => fileInputRef.current?.click()}
                   >
-                    <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gold/15 flex items-center justify-center">
-                      <Upload className="w-8 h-8 text-gold" />
+                    <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#EFE6D6]/15 flex items-center justify-center">
+                      <Upload className="w-8 h-8 text-[#1A1A1A]" />
                     </div>
                     <h3 className="text-lg font-semibold text-white mb-2">
                       Upload a Photo
@@ -398,7 +398,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                       <Button
                         variant="outline"
                         onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
-                        className="border-gold/40 text-gold hover:bg-gold/15"
+                        className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/15"
                       >
                         <ImageIcon className="w-4 h-4 mr-2" />
                         Browse Files
@@ -406,7 +406,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                       <Button
                         variant="outline"
                         onClick={(e) => { e.stopPropagation(); cameraInputRef.current?.click(); }}
-                        className="border-gold/40 text-gold hover:bg-gold/15"
+                        className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/15"
                       >
                         <Camera className="w-4 h-4 mr-2" />
                         Take Photo
@@ -431,7 +431,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
 
             {/* Processing indicator */}
             {isProcessing && (
-              <div className="bg-zinc-900/60 border border-gold/30 rounded-2xl p-6 text-center">
+              <div className="bg-[#FDFBF7]/60 border border-[#B89555]/30 rounded-2xl p-6 text-center">
                 <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-gradient-to-br from-gold to-amber-600 flex items-center justify-center">
                   <Sparkles className="w-6 h-6 text-white animate-pulse" />
                 </div>
@@ -456,13 +456,13 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           <div className="lg:col-span-2 space-y-4">
             {/* Style Presets (Collapsible) */}
             <Collapsible open={styleOpen} onOpenChange={setStyleOpen}>
-              <div className="bg-zinc-900/60 border border-gold/30 rounded-2xl overflow-hidden">
+              <div className="bg-[#FDFBF7]/60 border border-[#B89555]/30 rounded-2xl overflow-hidden">
                 <CollapsibleTrigger className="w-full p-4 flex items-center justify-between text-left hover:bg-[#1A1A1A]/30 transition-colors">
                   <div className="flex items-center gap-2">
-                    <Wand2 className="w-4 h-4 text-gold" />
+                    <Wand2 className="w-4 h-4 text-[#1A1A1A]" />
                     <span className="text-sm font-semibold text-white">Design Style</span>
                     {designStyle && (
-                      <Badge className="bg-gold/15 text-gold border-gold/30 text-xs">
+                      <Badge className="bg-[#EFE6D6]/15 text-[#1A1A1A] border-[#B89555]/30 text-xs">
                         {designStyles.find(s => s.id === designStyle)?.label}
                       </Badge>
                     )}
@@ -477,8 +477,8 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                         onClick={() => setDesignStyle(style.id)}
                         className={`p-2.5 rounded-lg border text-left text-xs transition-all ${
                           designStyle === style.id
-                            ? 'bg-gold/15 border-gold/50 text-white'
-                            : 'bg-zinc-800/50 border-[#1A1A1A] text-white/70 hover:border-[#1A1A1A]'
+                            ? 'bg-[#EFE6D6]/15 border-[#B89555]/50 text-white'
+                            : 'bg-[#F7F2EA]/50 border-[#1A1A1A] text-white/70 hover:border-[#1A1A1A]'
                         }`}
                       >
                         <span className="mr-1.5">{style.emoji}</span>
@@ -492,13 +492,13 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
 
             {/* Color Palette (Collapsible) */}
             <Collapsible open={paletteOpen} onOpenChange={setPaletteOpen}>
-              <div className="bg-zinc-900/60 border border-gold/30 rounded-2xl overflow-hidden">
+              <div className="bg-[#FDFBF7]/60 border border-[#B89555]/30 rounded-2xl overflow-hidden">
                 <CollapsibleTrigger className="w-full p-4 flex items-center justify-between text-left hover:bg-[#1A1A1A]/30 transition-colors">
                   <div className="flex items-center gap-2">
                     <div className="w-4 h-4 rounded-full bg-gradient-to-r from-gold via-amber-500 to-amber-400" />
                     <span className="text-sm font-semibold text-white">Color Palette</span>
                     {colorPalette && (
-                      <Badge className="bg-gold/15 text-gold border-gold/30 text-xs">
+                      <Badge className="bg-[#EFE6D6]/15 text-[#1A1A1A] border-[#B89555]/30 text-xs">
                         {colorPalettes.find(p => p.id === colorPalette)?.name}
                       </Badge>
                     )}
@@ -513,8 +513,8 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                         onClick={() => setColorPalette(palette.id)}
                         className={`p-3 rounded-lg border transition-all ${
                           colorPalette === palette.id
-                            ? 'bg-gold/15 border-gold/50'
-                            : 'bg-zinc-800/50 border-[#1A1A1A] hover:border-[#1A1A1A]'
+                            ? 'bg-[#EFE6D6]/15 border-[#B89555]/50'
+                            : 'bg-[#F7F2EA]/50 border-[#1A1A1A] hover:border-[#1A1A1A]'
                         }`}
                       >
                         <div className="flex gap-1 mb-1.5 justify-center">
@@ -531,7 +531,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
             </Collapsible>
 
             {/* Inline AI Chat */}
-            <div className="bg-zinc-900/60 border border-gold/30 rounded-2xl overflow-hidden flex flex-col" style={{ minHeight: '400px' }}>
+            <div className="bg-[#FDFBF7]/60 border border-[#B89555]/30 rounded-2xl overflow-hidden flex flex-col" style={{ minHeight: '400px' }}>
               {/* Chat Header */}
               <div className="p-3 border-b border-[#1A1A1A] flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gold to-amber-600 flex items-center justify-center">
@@ -548,12 +548,12 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                 {messages.map(msg => (
                   <div key={msg.id} className={`flex gap-2 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
                     <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${
-                      msg.role === 'user' ? 'bg-gold/15' : 'bg-gradient-to-br from-gold to-amber-600'
+                      msg.role === 'user' ? 'bg-[#EFE6D6]/15' : 'bg-gradient-to-br from-gold to-amber-600'
                     }`}>
-                      {msg.role === 'user' ? <User className="w-3 h-3 text-gold" /> : <Bot className="w-3 h-3 text-[#1A1A1A]" />}
+                      {msg.role === 'user' ? <User className="w-3 h-3 text-[#1A1A1A]" /> : <Bot className="w-3 h-3 text-[#1A1A1A]" />}
                     </div>
                     <div className={`max-w-[85%] rounded-xl p-3 ${
-                      msg.role === 'user' ? 'bg-gold/15 text-white' : 'bg-zinc-800/80 text-gray-200'
+                      msg.role === 'user' ? 'bg-[#EFE6D6]/15 text-white' : 'bg-[#F7F2EA]/80 text-gray-200'
                     }`}>
                       {msg.image && (
                         <img src={msg.image} alt="Design" className="rounded-lg mb-2 max-h-[200px] w-auto" />
@@ -573,7 +573,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                     onChange={(e) => setChatInput(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="Describe changes: 'make the sofa white' or 'add gold accents'..."
-                    className="bg-zinc-800/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 min-h-[40px] max-h-[80px] resize-none flex-1 text-xs focus:border-gold/50"
+                    className="bg-[#F7F2EA]/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 min-h-[40px] max-h-[80px] resize-none flex-1 text-xs focus:border-[#B89555]/50"
                     disabled={isProcessing}
                   />
                   <Button
@@ -593,13 +593,13 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
             </div>
 
             {/* Additional Notes */}
-            <div className="bg-zinc-900/60 border border-gold/30 rounded-2xl p-4">
+            <div className="bg-[#FDFBF7]/60 border border-[#B89555]/30 rounded-2xl p-4">
               <label className="text-xs font-medium text-white/70 mb-2 block">Additional Notes (Optional)</label>
               <Textarea
                 value={customNotes}
                 onChange={(e) => setCustomNotes(e.target.value)}
                 placeholder="Floor-to-ceiling windows, marble floors, specific furniture..."
-                className="bg-zinc-800/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 min-h-[60px] text-xs focus:border-gold/50"
+                className="bg-[#F7F2EA]/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 min-h-[60px] text-xs focus:border-[#B89555]/50"
                 maxLength={500}
               />
             </div>

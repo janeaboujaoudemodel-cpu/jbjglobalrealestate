@@ -169,7 +169,7 @@ const AILeadScoring = ({ lead, activities = [], onScoreUpdate }: AILeadScoringPr
   const getScoreColor = (value: number) => {
     if (value >= 80) return "text-green-500";
     if (value >= 60) return "text-emerald-400";
-    if (value >= 40) return "text-amber-400";
+    if (value >= 40) return "text-[#1A1A1A]";
     return "text-red-400";
   };
 
@@ -196,7 +196,7 @@ const AILeadScoring = ({ lead, activities = [], onScoreUpdate }: AILeadScoringPr
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-amber-400" />
+            <Sparkles className="h-5 w-5 text-[#1A1A1A]" />
             AI Lead Score
           </CardTitle>
           <Badge 

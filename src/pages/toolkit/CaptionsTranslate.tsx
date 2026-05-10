@@ -253,7 +253,7 @@ export default function CaptionsTranslate({ embedded = false }: CaptionsTranslat
         {/* Title */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-6" style={{ background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.3)", boxShadow: "0 0 32px rgba(201,168,76,0.15)" }}>
-            <Languages className="h-8 w-8 text-gold" />
+            <Languages className="h-8 w-8 text-[#1A1A1A]" />
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">Captions & Translation</h1>
           <p className="max-w-xl mx-auto text-sm" style={{ color: "rgba(255,255,255,0.45)" }}>
@@ -324,7 +324,7 @@ export default function CaptionsTranslate({ embedded = false }: CaptionsTranslat
             {/* File Info */}
             <div className="flex items-center gap-4 p-4 rounded-2xl" style={{ background: "rgba(201,168,76,0.05)", border: "1px solid rgba(201,168,76,0.2)" }}>
               <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: "rgba(201,168,76,0.15)", border: "1px solid rgba(201,168,76,0.3)" }}>
-                <Play className="h-6 w-6 text-gold" />
+                <Play className="h-6 w-6 text-[#1A1A1A]" />
               </div>
               <div className="flex-1">
                 <p className="text-white font-medium">{file.name}</p>

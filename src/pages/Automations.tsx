@@ -215,10 +215,10 @@ const Automations = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] p-6">
         <div className="max-w-5xl mx-auto space-y-6">
-          <Skeleton className="h-12 w-64 bg-gold/20" />
+          <Skeleton className="h-12 w-64 bg-[#EFE6D6]/20" />
           <div className="grid gap-4">
             {[1, 2, 3, 4].map(i => (
-              <Skeleton key={i} className="h-24 bg-gold/20 border-2 border-gold/30 rounded-xl" />
+              <Skeleton key={i} className="h-24 bg-[#EFE6D6]/20 border-2 border-[#B89555]/30 rounded-xl" />
             ))}
           </div>
         </div>
@@ -231,17 +231,17 @@ const Automations = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       {/* Header - Premium Champagne */}
-      <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-0 lg:top-[48px] z-50 shadow-[0_4px_20px_rgba(200,167,102,0.15)] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
+      <header className="border-b-2 border-[#B89555]/40 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-0 lg:top-[48px] z-50 shadow-[0_4px_20px_rgba(200,167,102,0.15)] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" className="text-[#1A1A1A] hover:text-gold hover:bg-gold/10" onClick={() => navigate(-1)}>
+            <Button variant="ghost" size="sm" className="text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10" onClick={() => navigate(-1)}>
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back
               </Button>
-            <div className="h-6 w-px bg-gold/30" />
+            <div className="h-6 w-px bg-[#EFE6D6]/30" />
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-gradient-to-br from-gold/20 to-gold/10 border border-gold/30">
-                <Zap className="h-5 w-5 text-gold" />
+              <div className="p-2.5 rounded-xl bg-gradient-to-br from-gold/20 to-gold/10 border border-[#B89555]/30">
+                <Zap className="h-5 w-5 text-[#1A1A1A]" />
               </div>
               <div>
                 <h1 className="text-xl font-bold text-[#1A1A1A]">Smart Automations</h1>
@@ -262,7 +262,7 @@ const Automations = () => {
           {rules.map((rule) => (
             <Card 
               key={rule.id} 
-              className={`border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] transition-all duration-300 hover:shadow-[0_10px_40px_rgba(200,167,102,0.25)] hover:scale-[1.01] ${
+              className={`border-2 border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] transition-all duration-300 hover:shadow-[0_10px_40px_rgba(200,167,102,0.25)] hover:scale-[1.01] ${
                 rule.isActive ? 'border-l-4 border-l-gold' : 'opacity-70'
               }`}
             >
@@ -271,7 +271,7 @@ const Automations = () => {
                   <div className="flex items-center gap-4">
                     <div className={`p-3 rounded-xl border transition-all ${
                       rule.isActive 
-                        ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-gold/40' 
+                        ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-[#B89555]/40' 
                         : 'bg-[#F7F2EA] border-[#B89555]/30'
                     }`}>
                       <rule.icon className={`h-5 w-5 ${rule.isActive ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/70'}`} />
@@ -305,7 +305,7 @@ const Automations = () => {
                     <Button 
                       variant="ghost" 
                       size="sm" 
-                      className="text-[#1A1A1A]/70 hover:text-gold hover:bg-gold/10"
+                      className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                       onClick={() => toast.info(`Settings for "${rule.name}" - Configuration panel coming soon`)}
                     >
                       <Settings className="h-4 w-4" />
@@ -322,10 +322,10 @@ const Automations = () => {
         </div>
 
         {/* Info Card - Premium Champagne */}
-        <Card className="mt-8 border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.15)]">
+        <Card className="mt-8 border-2 border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.15)]">
           <CardContent className="p-6">
             <div className="flex items-start gap-4">
-              <div className="p-3 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/30">
+              <div className="p-3 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/30">
                 <Shield className="h-6 w-6 text-[#1A1A1A]" />
               </div>
               <div>

@@ -55,7 +55,7 @@ interface KPICardProps {
 function KPICard({ title, value, icon, trend, loading, onClick }: KPICardProps) {
   return (
     <Card 
-      className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 hover:border-gold/50 transition-all duration-300 shadow-sm hover:shadow-md hover:shadow-gold/10 ${onClick ? 'cursor-pointer' : ''}`}
+      className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 hover:border-[#B89555]/50 transition-all duration-300 shadow-sm hover:shadow-md hover:shadow-gold/10 ${onClick ? 'cursor-pointer' : ''}`}
       onClick={onClick}
       role={onClick ? "button" : undefined}
       tabIndex={onClick ? 0 : undefined}

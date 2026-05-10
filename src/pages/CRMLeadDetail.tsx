@@ -330,9 +330,9 @@ const CRMLeadDetail = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)]">
       {/* Header - Premium Champagne Gold */}
-      <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)] sticky top-20 lg:top-24 z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+      <header className="border-b-2 border-[#B89555]/40 bg-gradient-to-r from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)] sticky top-20 lg:top-24 z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate("/crm")} className="text-[#1A1A1A] hover:text-gold hover:bg-gold/10">
+          <Button variant="ghost" size="icon" onClick={() => navigate("/crm")} className="text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div className="flex-1 min-w-0">
@@ -380,7 +380,7 @@ const CRMLeadDetail = () => {
         {/* Row 1: Contact Info + Quick Actions + Status side-by-side */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {/* Contact Info */}
-          <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)]/95 to-[hsl(36,25%,88%)]/80 shadow-[0_8px_30px_rgba(200,167,102,0.12)]">
+          <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[hsl(40,33%,98%)]/95 to-[hsl(36,25%,88%)]/80 shadow-[0_8px_30px_rgba(200,167,102,0.12)]">
             <CardHeader className="pb-2">
               <CardTitle className="text-base">Contact Info</CardTitle>
             </CardHeader>
@@ -431,7 +431,7 @@ const CRMLeadDetail = () => {
           </Card>
 
           {/* Quick Actions */}
-          <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)]/95 to-[hsl(36,25%,88%)]/80 shadow-[0_8px_30px_rgba(200,167,102,0.12)]">
+          <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[hsl(40,33%,98%)]/95 to-[hsl(36,25%,88%)]/80 shadow-[0_8px_30px_rgba(200,167,102,0.12)]">
             <CardHeader className="pb-2">
               <CardTitle className="text-base">Quick Actions</CardTitle>
             </CardHeader>
@@ -449,7 +449,7 @@ const CRMLeadDetail = () => {
           </Card>
 
           {/* Call Tracker */}
-          <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)]/95 to-[hsl(36,25%,88%)]/80 shadow-[0_8px_30px_rgba(200,167,102,0.12)]">
+          <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[hsl(40,33%,98%)]/95 to-[hsl(36,25%,88%)]/80 shadow-[0_8px_30px_rgba(200,167,102,0.12)]">
             <CardHeader className="pb-2">
               <CardTitle className="text-base">Log Call</CardTitle>
             </CardHeader>

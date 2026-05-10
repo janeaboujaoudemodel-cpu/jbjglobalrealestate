@@ -532,10 +532,10 @@ const PendingImportPreview = () => {
     return (
       <section className="relative w-full min-h-screen py-16 md:py-24 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <div className="container mx-auto px-4">
-          <Skeleton className="h-8 w-48 bg-gold/20 mb-8" />
-          <Skeleton className="aspect-[16/9] w-full rounded-lg bg-gold/10 mb-8" />
-          <Skeleton className="h-12 w-64 bg-gold/20 mb-4" />
-          <Skeleton className="h-6 w-full max-w-2xl bg-gold/10" />
+          <Skeleton className="h-8 w-48 bg-[#EFE6D6]/20 mb-8" />
+          <Skeleton className="aspect-[16/9] w-full rounded-lg bg-[#EFE6D6]/10 mb-8" />
+          <Skeleton className="h-12 w-64 bg-[#EFE6D6]/20 mb-4" />
+          <Skeleton className="h-6 w-full max-w-2xl bg-[#EFE6D6]/10" />
         </div>
       </section>
     );
@@ -546,7 +546,7 @@ const PendingImportPreview = () => {
       <section className="relative w-full min-h-screen py-16 md:py-24 flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <div className="text-center">
           <h1 className="text-[#1A1A1A] text-2xl mb-4">Access Denied</h1>
-          <Link to="/" className="text-gold hover:underline">
+          <Link to="/" className="text-[#1A1A1A] hover:underline">
             Go Home
           </Link>
         </div>
@@ -559,7 +559,7 @@ const PendingImportPreview = () => {
       <section className="relative w-full min-h-screen py-16 md:py-24 flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <div className="text-center">
           <h1 className="text-[#1A1A1A] text-2xl mb-4">Project not found</h1>
-          <Link to="/listing-admin" className="text-gold hover:underline">
+          <Link to="/listing-admin" className="text-[#1A1A1A] hover:underline">
             Back to Listing Admin
           </Link>
         </div>
@@ -577,7 +577,7 @@ const PendingImportPreview = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       {/* Admin Bar - sticky at top, no gap */}
-      <section className="bg-gradient-to-r from-champagne via-champagne-light to-champagne border-b-2 border-gold/30 py-3 sticky top-0 z-40 shadow-md">
+      <section className="bg-gradient-to-r from-champagne via-champagne-light to-champagne border-b-2 border-[#B89555]/30 py-3 sticky top-0 z-40 shadow-md">
         <div className="container mx-auto px-4 flex items-center justify-between flex-wrap gap-4">
           <Button 
             variant="primary" 
@@ -589,8 +589,8 @@ const PendingImportPreview = () => {
           </Button>
 
           <div className="flex items-center gap-3 flex-wrap">
-            <Badge className="border-2 border-gold/60 bg-card text-foreground font-semibold">PENDING REVIEW</Badge>
-            <Badge className="border-2 border-gold/60 bg-card text-foreground font-semibold">
+            <Badge className="border-2 border-[#B89555]/60 bg-card text-foreground font-semibold">PENDING REVIEW</Badge>
+            <Badge className="border-2 border-[#B89555]/60 bg-card text-foreground font-semibold">
               {pendingImport.is_new_project ? "New Project" : "Update Existing"}
             </Badge>
           </div>
@@ -633,7 +633,7 @@ const PendingImportPreview = () => {
 
       {/* Documents Manager Panel */}
       {pendingImport.documents.length > 0 && (
-        <section className="bg-gradient-to-b from-champagne-light/50 to-transparent border-b border-gold/10 py-6">
+        <section className="bg-gradient-to-b from-champagne-light/50 to-transparent border-b border-[#B89555]/10 py-6">
           <div className="container mx-auto px-4">
             <DocumentsManager
               documents={pendingImport.documents.map((d, i) => ({
@@ -653,7 +653,7 @@ const PendingImportPreview = () => {
 
       {/* Contained preview box */}
       <div className="container mx-auto px-4 py-6">
-        <div className="border-2 border-gold/30 rounded-2xl overflow-hidden max-h-[80vh] overflow-y-auto bg-background shadow-[0_8px_40px_rgba(200,167,102,0.15)]">
+        <div className="border-2 border-[#B89555]/30 rounded-2xl overflow-hidden max-h-[80vh] overflow-y-auto bg-background shadow-[0_8px_40px_rgba(200,167,102,0.15)]">
           <ProjectDetailLayout project={mapped} />
         </div>
       </div>

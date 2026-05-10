@@ -82,14 +82,14 @@ const DocumentStudio = () => {
       />
 
       {/* Hero Header */}
-      <div className="bg-[#1A1A1A] border-b border-gold/20">
+      <div className="bg-[#1A1A1A] border-b border-[#B89555]/20">
         <div className="max-w-6xl mx-auto px-6 py-10">
           <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
-              <Sparkles className="w-5 h-5 text-gold" />
+            <div className="w-10 h-10 rounded-lg bg-[#EFE6D6]/10 flex items-center justify-center">
+              <Sparkles className="w-5 h-5 text-[#1A1A1A]" />
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-white">
-              Document <span className="text-gold">Studio</span>
+              Document <span className="text-[#1A1A1A]">Studio</span>
             </h1>
           </div>
           <p className="text-[#1A1A1A]/70 ml-[52px]">
@@ -101,12 +101,12 @@ const DocumentStudio = () => {
       <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] min-h-screen">
         <div className="max-w-6xl mx-auto px-6 py-8">
           <Tabs defaultValue="generate" className="space-y-6">
-            <TabsList className="bg-[#1A1A1A]/5 border border-gold/20 p-1 h-auto flex-wrap">
-              <TabsTrigger value="generate" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] gap-2">
+            <TabsList className="bg-[#1A1A1A]/5 border border-[#B89555]/20 p-1 h-auto flex-wrap">
+              <TabsTrigger value="generate" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] gap-2">
                 <Sparkles className="w-4 h-4" />
                 AI Generate
               </TabsTrigger>
-              <TabsTrigger value="tools" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] gap-2">
+              <TabsTrigger value="tools" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] gap-2">
                 <FileText className="w-4 h-4" />
                 Document Tools
               </TabsTrigger>
@@ -124,7 +124,7 @@ const DocumentStudio = () => {
                       navigator.clipboard.writeText(generatedContent);
                       toast.success("Copied to clipboard");
                     }}
-                    className="border-gold/40 text-[#1A1A1A] hover:bg-gold/10"
+                    className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                   >
                     <Copy className="w-4 h-4 mr-2" />
                     Copy
@@ -144,7 +144,7 @@ const DocumentStudio = () => {
                         },
                       },
                     })}
-                    className="border-gold/40 text-[#1A1A1A] hover:bg-gold/10"
+                    className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                   >
                     <Mail className="w-4 h-4 mr-2" />
                     Send by Email
@@ -163,14 +163,14 @@ const DocumentStudio = () => {
                         },
                       },
                     })}
-                    className="border-gold/40 text-[#1A1A1A] hover:bg-gold/10"
+                    className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                   >
                     <MessageSquare className="w-4 h-4 mr-2" />
                     Send to Chat
                   </Button>
                   <Button
                     onClick={handleSendForSignature}
-                    className="bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold"
+                    className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-semibold"
                   >
                     <PenTool className="w-4 h-4 mr-2" />
                     Send for E-Signature
@@ -185,18 +185,18 @@ const DocumentStudio = () => {
                 {TOOL_LINKS.map((tool) => (
                   <Card
                     key={tool.id}
-                    className="border-2 border-gold/20 hover:border-gold/50 transition-all cursor-pointer group bg-[#FDFBF7]/60"
+                    className="border-2 border-[#B89555]/20 hover:border-[#B89555]/50 transition-all cursor-pointer group bg-[#FDFBF7]/60"
                     onClick={() => navigate(tool.path)}
                   >
                     <CardContent className="p-6 flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-gold/10 flex items-center justify-center shrink-0 group-hover:bg-gold/20 transition-colors">
-                        <tool.icon className="w-6 h-6 text-gold" />
+                      <div className="w-12 h-12 rounded-xl bg-[#EFE6D6]/10 flex items-center justify-center shrink-0 group-hover:bg-[#EFE6D6]/20 transition-colors">
+                        <tool.icon className="w-6 h-6 text-[#1A1A1A]" />
                       </div>
                       <div className="flex-1">
                         <h3 className="font-semibold text-lg text-[#1A1A1A] mb-1">{tool.label}</h3>
                         <p className="text-sm text-muted-foreground">{tool.description}</p>
                       </div>
-                      <ArrowRight className="w-5 h-5 text-gold opacity-0 group-hover:opacity-100 transition-opacity mt-1" />
+                      <ArrowRight className="w-5 h-5 text-[#1A1A1A] opacity-0 group-hover:opacity-100 transition-opacity mt-1" />
                     </CardContent>
                   </Card>
                 ))}

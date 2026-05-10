@@ -125,11 +125,11 @@ const OwnerRecommendations = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       {/* Header */}
-      <div className="border-b-2 border-gold/30">
+      <div className="border-b-2 border-[#B89555]/30">
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-              <div className="inline-flex items-center gap-2 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-full px-4 py-1 mb-3">
+              <div className="inline-flex items-center gap-2 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-full px-4 py-1 mb-3">
                 <Sparkles className="w-4 h-4 text-[#8A7356]" />
                 <span className="text-[#1A1A1A] text-sm font-medium">AI Intelligence</span>
               </div>
@@ -151,7 +151,7 @@ const OwnerRecommendations = () => {
             { label: "Applied", count: counts.applied, icon: CheckCircle2, color: "text-emerald-600" },
             { label: "Reverted", count: counts.reverted, icon: RotateCcw, color: "text-[#1A1A1A]/70" },
           ].map(s => (
-            <div key={s.label} className="bg-[#FDFBF7]/80 border border-gold/20 rounded-xl p-4 flex items-center gap-3">
+            <div key={s.label} className="bg-[#FDFBF7]/80 border border-[#B89555]/20 rounded-xl p-4 flex items-center gap-3">
               <s.icon className={`h-6 w-6 ${s.color}`} />
               <div>
                 <p className="text-2xl font-bold text-[#1A1A1A]">{s.count}</p>
@@ -163,23 +163,23 @@ const OwnerRecommendations = () => {
 
         {/* Filters */}
         <div className="flex flex-wrap gap-2 mb-6">
-          <div className="flex flex-wrap gap-1 bg-[#FDFBF7]/60 border border-gold/20 rounded-lg p-1">
+          <div className="flex flex-wrap gap-1 bg-[#FDFBF7]/60 border border-[#B89555]/20 rounded-lg p-1">
             {["all", ...Object.keys(SOURCE_CONFIG)].map(s => {
               const cfg = SOURCE_CONFIG[s];
               const SrcIcon = cfg?.icon;
               return (
                 <button key={s} onClick={() => setFilterSource(s)}
-                  className={`inline-flex items-center gap-1.5 whitespace-nowrap px-4 py-1.5 rounded-md text-xs font-medium transition-all ${filterSource === s ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] border border-gold/40 shadow-sm" : "text-[#1A1A1A]/70 hover:bg-gold/10"}`}>
+                  className={`inline-flex items-center gap-1.5 whitespace-nowrap px-4 py-1.5 rounded-md text-xs font-medium transition-all ${filterSource === s ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/40 shadow-sm" : "text-[#1A1A1A]/70 hover:bg-[#EFE6D6]/10"}`}>
                   {SrcIcon && <SrcIcon className="w-3 h-3 flex-shrink-0" />}
                   {s === "all" ? "All Sources" : cfg?.label || s}
                 </button>
               );
             })}
           </div>
-          <div className="flex flex-wrap gap-1 bg-[#FDFBF7]/60 border border-gold/20 rounded-lg p-1">
+          <div className="flex flex-wrap gap-1 bg-[#FDFBF7]/60 border border-[#B89555]/20 rounded-lg p-1">
             {["all", "pending", "applied", "reverted", "dismissed"].map(s => (
               <button key={s} onClick={() => setFilterStatus(s)}
-                className={`whitespace-nowrap px-4 py-1.5 rounded-md text-xs font-medium capitalize transition-all ${filterStatus === s ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] border border-gold/40 shadow-sm" : "text-[#1A1A1A]/70 hover:bg-gold/10"}`}>
+                className={`whitespace-nowrap px-4 py-1.5 rounded-md text-xs font-medium capitalize transition-all ${filterStatus === s ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/40 shadow-sm" : "text-[#1A1A1A]/70 hover:bg-[#EFE6D6]/10"}`}>
                 {s === "all" ? "All Status" : s}
               </button>
             ))}
@@ -189,10 +189,10 @@ const OwnerRecommendations = () => {
         {/* Recommendations List */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <Loader2 className="h-8 w-8 animate-spin text-gold" />
+            <Loader2 className="h-8 w-8 animate-spin text-[#1A1A1A]" />
           </div>
         ) : recs.length === 0 ? (
-          <div className="text-center py-20 bg-[#FDFBF7]/60 border border-gold/20 rounded-2xl">
+          <div className="text-center py-20 bg-[#FDFBF7]/60 border border-[#B89555]/20 rounded-2xl">
             <Sparkles className="h-12 w-12 mx-auto mb-4 text-[#1A1A1A]/70" />
             <p className="text-lg font-semibold text-[#1A1A1A]">No Recommendations Yet</p>
             <p className="text-sm text-[#1A1A1A]/70 mt-1">Click "Generate New Recommendations" to get AI-powered insights</p>
@@ -204,7 +204,7 @@ const OwnerRecommendations = () => {
               const SrcIcon = srcConfig.icon;
               const isExpanded = expandedId === rec.id;
               return (
-                <div key={rec.id} className="bg-[#FDFBF7]/90 border border-gold/20 rounded-xl overflow-hidden hover:shadow-md transition-shadow">
+                <div key={rec.id} className="bg-[#FDFBF7]/90 border border-[#B89555]/20 rounded-xl overflow-hidden hover:shadow-md transition-shadow">
                   <div className="p-5 flex items-start gap-4 cursor-pointer" onClick={() => setExpandedId(isExpanded ? null : rec.id)}>
                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${srcConfig.color}`}>
                       <SrcIcon className="h-5 w-5" />
@@ -221,7 +221,7 @@ const OwnerRecommendations = () => {
                   </div>
 
                   {isExpanded && (
-                    <div className="border-t border-gold/10 bg-[#FDFBF7] p-5">
+                    <div className="border-t border-[#B89555]/10 bg-[#FDFBF7] p-5">
                       {/* Before / After Preview */}
                       {(rec.before_preview || rec.after_preview) && (
                         <div className="grid md:grid-cols-2 gap-4 mb-4">
@@ -252,18 +252,18 @@ const OwnerRecommendations = () => {
                             <Button size="sm" onClick={() => updateStatus(rec.id, "applied")} className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs">
                               <CheckCircle2 className="h-3 w-3 mr-1" /> Apply
                             </Button>
-                            <Button size="sm" variant="outline" onClick={() => updateStatus(rec.id, "dismissed")} className="text-xs border-gold/30">
+                            <Button size="sm" variant="outline" onClick={() => updateStatus(rec.id, "dismissed")} className="text-xs border-[#B89555]/30">
                               <X className="h-3 w-3 mr-1" /> Dismiss
                             </Button>
                           </>
                         )}
                         {rec.status === "applied" && (
-                          <Button size="sm" variant="outline" onClick={() => updateStatus(rec.id, "reverted")} className="text-xs border-gold/30">
+                          <Button size="sm" variant="outline" onClick={() => updateStatus(rec.id, "reverted")} className="text-xs border-[#B89555]/30">
                             <RotateCcw className="h-3 w-3 mr-1" /> Revert
                           </Button>
                         )}
                         {(rec.status === "reverted" || rec.status === "dismissed") && (
-                          <Button size="sm" variant="outline" onClick={() => updateStatus(rec.id, "pending")} className="text-xs border-gold/30">
+                          <Button size="sm" variant="outline" onClick={() => updateStatus(rec.id, "pending")} className="text-xs border-[#B89555]/30">
                             <RefreshCw className="h-3 w-3 mr-1" /> Re-evaluate
                           </Button>
                         )}

@@ -324,8 +324,8 @@ const ProjectDetail = () => {
     return (
       <section className="relative w-full min-h-screen pt-32 pb-16 flex items-center justify-center bg-premium-bg">
         <div className="text-center">
-          <div className="w-16 h-16 mx-auto mb-6 rounded-full border-2 border-gold/50 flex items-center justify-center bg-[#1A1A1A]/5">
-            <span className="text-gold font-bold text-2xl" style={{ fontFamily: "serif" }}>J</span>
+          <div className="w-16 h-16 mx-auto mb-6 rounded-full border-2 border-[#B89555]/50 flex items-center justify-center bg-[#1A1A1A]/5">
+            <span className="text-[#1A1A1A] font-bold text-2xl" style={{ fontFamily: "serif" }}>J</span>
           </div>
           <h1 className="text-foreground text-2xl font-bold mb-2">Project not found</h1>
           <p className="text-muted-foreground mb-6">This project may have been removed or the link is incorrect.</p>

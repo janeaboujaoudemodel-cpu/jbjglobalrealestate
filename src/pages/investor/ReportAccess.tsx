@@ -230,7 +230,7 @@ export default function ReportAccess() {
   if (authLoading || loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-2 border-gold border-t-transparent rounded-full" />
+        <div className="animate-spin w-8 h-8 border-2 border-[#B89555] border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -263,13 +263,13 @@ export default function ReportAccess() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <div className="inline-flex items-center gap-2 bg-gold/20 backdrop-blur-sm text-gold px-4 py-2 rounded-full text-sm font-medium mb-6 border border-gold/30">
+              <div className="inline-flex items-center gap-2 bg-[#EFE6D6]/20 backdrop-blur-sm text-[#1A1A1A] px-4 py-2 rounded-full text-sm font-medium mb-6 border border-[#B89555]/30">
                 <FileText className="w-4 h-4" />
                 Report Access
               </div>
               <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
                 Centralized Access to{" "}
-                <span className="text-gold">Official Market & Asset Reports</span>
+                <span className="text-[#1A1A1A]">Official Market & Asset Reports</span>
               </h1>
               <p className="text-white/85 text-lg mb-8 max-w-2xl mx-auto">
                 Report Access is your private library for all reports available to your account—organized, 
@@ -296,7 +296,7 @@ export default function ReportAccess() {
           {/* Back Link */}
           <Link
             to="/investor-dashboard"
-            className="inline-flex items-center gap-2 text-[#1A1A1A]/70 hover:text-gold transition-colors mb-8"
+            className="inline-flex items-center gap-2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors mb-8"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Dashboard
@@ -310,11 +310,11 @@ export default function ReportAccess() {
           >
           {/* Section 1: Report Access Overview */}
           <motion.div variants={fadeInUp}>
-            <Card className="border-2 border-gold/30 bg-gradient-to-br from-gold/5 to-transparent">
+            <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-gold/5 to-transparent">
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Sparkles className="w-6 h-6 text-gold" />
+                  <div className="w-12 h-12 bg-[#EFE6D6]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Sparkles className="w-6 h-6 text-[#1A1A1A]" />
                   </div>
                   <div>
                     <h2 className="text-lg font-semibold text-foreground mb-2">
@@ -352,7 +352,7 @@ export default function ReportAccess() {
                 </h2>
               </div>
               {filteredReports.length === 0 ? (
-                <Card className="border-2 border-dashed border-gold/30">
+                <Card className="border-2 border-dashed border-[#B89555]/30">
                   <CardContent className="p-8 text-center">
                     <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
                     <p className="text-muted-foreground mb-2">No reports match your filters</p>

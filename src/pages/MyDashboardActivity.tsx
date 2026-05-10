@@ -38,8 +38,8 @@ const EVENT_COLORS: Record<string, string> = {
   click: "text-stone-500",
   login: "text-emerald-600",
   search: "text-purple-600",
-  listing_view: "text-gold",
-  property_view: "text-gold",
+  listing_view: "text-[#1A1A1A]",
+  property_view: "text-[#1A1A1A]",
   favorite: "text-red-500",
   lead_submit: "text-emerald-700",
   ai_tool_used: "text-purple-700",
@@ -82,7 +82,7 @@ const MyDashboardActivity = () => {
   if (authLoading || isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-[#F7F1E6] via-[#EFE6D6] to-[#E0D5C0] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-gold animate-spin" />
+        <Loader2 className="w-8 h-8 text-[#1A1A1A] animate-spin" />
       </div>
     );
   }
@@ -103,12 +103,12 @@ const MyDashboardActivity = () => {
       />
       
       <div className="min-h-screen bg-gradient-to-b from-[#F7F1E6] via-[#EFE6D6] to-[#E0D5C0]">
-        <div className="mx-0 my-6 rounded-2xl border-2 border-gold/30 overflow-hidden"
+        <div className="mx-0 my-6 rounded-2xl border-2 border-[#B89555]/30 overflow-hidden"
           style={{ background: 'linear-gradient(145deg, #FDFBF7 0%, #F7F1E6 50%, #EFE6D6 100%)' }}
         >
           <div className="container mx-auto px-4 py-8 max-w-5xl">
             {/* Back Button */}
-            <Button variant="ghost" onClick={() => navigate('/my-dashboard')} className="mb-6 text-gold hover:text-[#1A1A1A] hover:bg-gold/10">
+            <Button variant="ghost" onClick={() => navigate('/my-dashboard')} className="mb-6 text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Dashboard
             </Button>
@@ -130,9 +130,9 @@ const MyDashboardActivity = () => {
                 { icon: Activity, label: 'Activities (30d)', value: stats.totalActivities30d, color: 'from-gold/20 to-gold/5' },
               ].map((stat, i) => (
                 <motion.div key={stat.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
-                  <Card className={`border-2 border-gold/30 bg-gradient-to-br ${stat.color} backdrop-blur-sm shadow-sm`}>
+                  <Card className={`border-2 border-[#B89555]/30 bg-gradient-to-br ${stat.color} backdrop-blur-sm shadow-sm`}>
                     <CardContent className="p-4 text-center">
-                      <stat.icon className="w-6 h-6 text-gold mx-auto mb-2" />
+                      <stat.icon className="w-6 h-6 text-[#1A1A1A] mx-auto mb-2" />
                       <p className="text-2xl font-bold text-[#1A1A1A]"><AnimatedCounter value={stat.value} /></p>
                       <p className="text-xs text-stone-500">{stat.label}</p>
                     </CardContent>
@@ -143,23 +143,23 @@ const MyDashboardActivity = () => {
 
             {/* Secondary stats row */}
             <div className="grid grid-cols-3 gap-4 mb-8">
-              <Card className="border-2 border-gold/30 bg-[#FDFBF7]/60">
+              <Card className="border-2 border-[#B89555]/30 bg-[#FDFBF7]/60">
                 <CardContent className="p-4 text-center">
-                  <Zap className="w-5 h-5 text-gold mx-auto mb-1" />
+                  <Zap className="w-5 h-5 text-[#1A1A1A] mx-auto mb-1" />
                   <p className="text-xl font-bold text-[#1A1A1A]"><AnimatedCounter value={stats.totalPoints} /></p>
                   <p className="text-xs text-stone-500">Total Points</p>
                 </CardContent>
               </Card>
-              <Card className="border-2 border-gold/30 bg-[#FDFBF7]/60">
+              <Card className="border-2 border-[#B89555]/30 bg-[#FDFBF7]/60">
                 <CardContent className="p-4 text-center">
-                  <BarChart3 className="w-5 h-5 text-gold mx-auto mb-1" />
+                  <BarChart3 className="w-5 h-5 text-[#1A1A1A] mx-auto mb-1" />
                   <p className="text-xl font-bold text-[#1A1A1A]"><AnimatedCounter value={stats.totalSessions} /></p>
                   <p className="text-xs text-stone-500">Total Sessions</p>
                 </CardContent>
               </Card>
-              <Card className="border-2 border-gold/30 bg-[#FDFBF7]/60">
+              <Card className="border-2 border-[#B89555]/30 bg-[#FDFBF7]/60">
                 <CardContent className="p-4 text-center">
-                  <Clock className="w-5 h-5 text-gold mx-auto mb-1" />
+                  <Clock className="w-5 h-5 text-[#1A1A1A] mx-auto mb-1" />
                   <p className="text-xl font-bold text-[#1A1A1A]">{formatDuration(stats.avgSessionDuration)}</p>
                   <p className="text-xs text-stone-500">Avg Session</p>
                 </CardContent>
@@ -168,17 +168,17 @@ const MyDashboardActivity = () => {
 
             {/* VIP Tier & Scores */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
-              <Card className="border-2 border-gold/40 bg-gradient-to-r from-gold/10 via-white/80 to-gold/10 mb-8 shadow-sm">
+              <Card className="border-2 border-[#B89555]/40 bg-gradient-to-r from-gold/10 via-white/80 to-gold/10 mb-8 shadow-sm">
                 <CardContent className="p-5">
                   <div className="flex flex-col md:flex-row items-center gap-6">
                     {/* VIP Badge */}
                     <div className="flex items-center gap-3">
-                      <div className="w-14 h-14 rounded-full bg-gradient-to-br from-gold/30 to-gold/10 border-2 border-gold/50 flex items-center justify-center">
-                        <Crown className="w-7 h-7 text-gold" />
+                      <div className="w-14 h-14 rounded-full bg-gradient-to-br from-gold/30 to-gold/10 border-2 border-[#B89555]/50 flex items-center justify-center">
+                        <Crown className="w-7 h-7 text-[#1A1A1A]" />
                       </div>
                       <div>
                         <p className="text-xs text-stone-500 uppercase tracking-wider">VIP Status</p>
-                        <p className="text-xl font-bold text-gold">{stats.vipTier}</p>
+                        <p className="text-xl font-bold text-[#1A1A1A]">{stats.vipTier}</p>
                       </div>
                     </div>
 
@@ -195,7 +195,7 @@ const MyDashboardActivity = () => {
                             <span className="text-xs text-stone-500">{score.label}</span>
                           </div>
                           <p className="text-lg font-bold text-[#1A1A1A]">{score.value}<span className="text-xs text-stone-400">/100</span></p>
-                          <div className="h-1.5 bg-gold/10 rounded-full overflow-hidden mt-1">
+                          <div className="h-1.5 bg-[#EFE6D6]/10 rounded-full overflow-hidden mt-1">
                             <div className={`h-full bg-gradient-to-r ${score.color} rounded-full transition-all duration-1000`} style={{ width: `${score.value}%` }} />
                           </div>
                         </div>
@@ -206,19 +206,19 @@ const MyDashboardActivity = () => {
               </Card>
             </motion.div>
             {stats.dailyActivity.length > 0 && (
-              <Card className="border-2 border-gold/30 bg-[#FDFBF7]/70 mb-8">
+              <Card className="border-2 border-[#B89555]/30 bg-[#FDFBF7]/70 mb-8">
                 <CardHeader className="pb-2">
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
-                      <BarChart3 className="w-5 h-5 text-gold" />
+                      <BarChart3 className="w-5 h-5 text-[#1A1A1A]" />
                       Daily Activity
                     </CardTitle>
                     <div className="flex gap-1">
                       <Button size="sm" variant={chartMode === 'events' ? 'default' : 'ghost'}
-                        className={chartMode === 'events' ? 'bg-gold text-[#1A1A1A] hover:bg-gold/90 h-7 text-xs font-semibold' : 'text-stone-500 hover:text-[#1A1A1A] hover:bg-gold/10 h-7 text-xs'}
+                        className={chartMode === 'events' ? 'bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90 h-7 text-xs font-semibold' : 'text-stone-500 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10 h-7 text-xs'}
                         onClick={() => setChartMode('events')}>Events</Button>
                       <Button size="sm" variant={chartMode === 'points' ? 'default' : 'ghost'}
-                        className={chartMode === 'points' ? 'bg-gold text-[#1A1A1A] hover:bg-gold/90 h-7 text-xs font-semibold' : 'text-stone-500 hover:text-[#1A1A1A] hover:bg-gold/10 h-7 text-xs'}
+                        className={chartMode === 'points' ? 'bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90 h-7 text-xs font-semibold' : 'text-stone-500 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10 h-7 text-xs'}
                         onClick={() => setChartMode('points')}>Points</Button>
                     </div>
                   </div>
@@ -256,7 +256,7 @@ const MyDashboardActivity = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               {/* Device Mix */}
               {stats.deviceMix.length > 0 && (
-                <Card className="border-2 border-gold/30 bg-[#FDFBF7]/70">
+                <Card className="border-2 border-[#B89555]/30 bg-[#FDFBF7]/70">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-[#1A1A1A] text-sm">Device Mix</CardTitle>
                   </CardHeader>
@@ -271,9 +271,9 @@ const MyDashboardActivity = () => {
                             <div className="flex-1">
                               <div className="flex justify-between text-sm mb-1">
                                 <span className="text-stone-700 capitalize">{d.device}</span>
-                                <span className="text-gold font-semibold">{pct}%</span>
+                                <span className="text-[#1A1A1A] font-semibold">{pct}%</span>
                               </div>
-                              <div className="h-1.5 bg-gold/10 rounded-full overflow-hidden">
+                              <div className="h-1.5 bg-[#EFE6D6]/10 rounded-full overflow-hidden">
                                 <div className="h-full bg-gradient-to-r from-gold to-gold/60 rounded-full transition-all" style={{ width: `${pct}%` }} />
                               </div>
                             </div>
@@ -286,10 +286,10 @@ const MyDashboardActivity = () => {
               )}
 
               {/* Recent Activity Timeline */}
-              <Card className="border-2 border-gold/30 bg-[#FDFBF7]/70 md:col-span-2">
+              <Card className="border-2 border-[#B89555]/30 bg-[#FDFBF7]/70 md:col-span-2">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
-                    <Clock className="w-5 h-5 text-gold" />
+                    <Clock className="w-5 h-5 text-[#1A1A1A]" />
                     Recent Activity
                   </CardTitle>
                 </CardHeader>
@@ -306,9 +306,9 @@ const MyDashboardActivity = () => {
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: index * 0.02 }}
-                            className="flex items-center gap-3 p-2.5 rounded-lg bg-gold/5 hover:bg-gold/10 transition-colors border border-gold/10"
+                            className="flex items-center gap-3 p-2.5 rounded-lg bg-[#EFE6D6]/5 hover:bg-[#EFE6D6]/10 transition-colors border border-[#B89555]/10"
                           >
-                            <div className={`w-8 h-8 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center shrink-0 ${EVENT_COLORS[event.event_name] || 'text-gold'}`}>
+                            <div className={`w-8 h-8 rounded-full bg-[#EFE6D6]/10 border border-[#B89555]/30 flex items-center justify-center shrink-0 ${EVENT_COLORS[event.event_name] || 'text-[#1A1A1A]'}`}>
                               <Activity className="w-3.5 h-3.5" />
                             </div>
                             <div className="flex-1 min-w-0">

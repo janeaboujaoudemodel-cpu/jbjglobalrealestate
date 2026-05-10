@@ -202,8 +202,8 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
         <div className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm">
           <div className="container max-w-6xl mx-auto px-4 py-6">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30">
-                <Home className="h-6 w-6 text-gold" />
+              <div className="p-2.5 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border border-[#B89555]/30">
+                <Home className="h-6 w-6 text-[#1A1A1A]" />
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-white flex items-center gap-2">
@@ -257,13 +257,13 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                         key={room.id}
                         className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer border transition-all ${
                           roomType === room.id
-                            ? 'border-gold bg-gold/10'
+                            ? 'border-[#B89555] bg-[#EFE6D6]/10'
                             : 'border-slate-700 hover:border-slate-500'
                         }`}
                         onClick={() => setRoomType(room.id)}
                       >
                         <RadioGroupItem value={room.id} id={room.id} className="hidden" />
-                        <room.icon className="h-4 w-4 text-gold" />
+                        <room.icon className="h-4 w-4 text-[#1A1A1A]" />
                         <Label htmlFor={room.id} className="text-white text-sm cursor-pointer">
                           {room.name}
                         </Label>
@@ -286,7 +286,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                         key={style.id}
                         className={`p-3 rounded-lg cursor-pointer border transition-all ${
                           designStyle === style.id
-                            ? 'border-gold bg-gold/10'
+                            ? 'border-[#B89555] bg-[#EFE6D6]/10'
                             : 'border-slate-700 hover:border-slate-500'
                         }`}
                         onClick={() => setDesignStyle(style.id)}
@@ -325,7 +325,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
             <Card className="bg-slate-900/50 border-slate-700/50">
               <CardHeader className="pb-3">
                 <CardTitle className="text-white flex items-center gap-2 text-lg">
-                  <ImageIcon className="h-5 w-5 text-gold" />
+                  <ImageIcon className="h-5 w-5 text-[#1A1A1A]" />
                   {stagedResult ? 'Result' : 'Upload Room Photo'}
                 </CardTitle>
               </CardHeader>
@@ -333,7 +333,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                 {!uploadedImage ? (
                   <div
                     onClick={() => fileInputRef.current?.click()}
-                    className="border-2 border-dashed border-slate-600 rounded-xl p-12 text-center cursor-pointer hover:border-gold/50 transition-colors"
+                    className="border-2 border-dashed border-slate-600 rounded-xl p-12 text-center cursor-pointer hover:border-[#B89555]/50 transition-colors"
                   >
                     <Upload className="h-12 w-12 text-slate-500 mx-auto mb-4" />
                     <p className="text-white mb-2">Click to upload empty room photo</p>
@@ -367,7 +367,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                         <div className="relative aspect-[4/3] bg-slate-800 rounded-lg overflow-hidden flex items-center justify-center">
                           {processing ? (
                             <div className="text-center p-4">
-                              <Loader2 className="w-8 h-8 text-gold animate-spin mx-auto mb-2" />
+                              <Loader2 className="w-8 h-8 text-[#1A1A1A] animate-spin mx-auto mb-2" />
                               <p className="text-slate-400 text-sm">Creating your staged room...</p>
                               <Progress value={progress} className="mt-2" />
                             </div>
@@ -392,7 +392,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                       <Button
                         onClick={generateStaging}
                         disabled={processing}
-                        className="flex-1 bg-gold text-[#1A1A1A] hover:bg-gold/90"
+                        className="flex-1 bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
                       >
                         {processing ? (
                           <>

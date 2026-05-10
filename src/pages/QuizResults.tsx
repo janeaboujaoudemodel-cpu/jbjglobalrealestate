@@ -434,17 +434,17 @@ Best regards`);
         )}
 
         {/* Action Cards */}
-        <div className="border-2 border-gold/30 rounded-2xl p-6 bg-[#FDFBF7]/60 backdrop-blur-sm mb-12">
+        <div className="border-2 border-[#B89555]/30 rounded-2xl p-6 bg-[#FDFBF7]/60 backdrop-blur-sm mb-12">
           <h3 className="text-stone-900 text-lg font-semibold mb-5 flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-gold" />
+            <Sparkles className="w-5 h-5 text-[#1A1A1A]" />
             Want More AI Power?
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* AI Comparison Card */}
-            <div className="bg-[#FDFBF7]/80 rounded-2xl p-6 border border-gold/30 backdrop-blur-sm flex flex-col">
+            <div className="bg-[#FDFBF7]/80 rounded-2xl p-6 border border-[#B89555]/30 backdrop-blur-sm flex flex-col">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] flex items-center justify-center shadow-md shadow-gold/20">
-                  <Sparkles className="w-6 h-6 text-gold" />
+                  <Sparkles className="w-6 h-6 text-[#1A1A1A]" />
                 </div>
                 <div>
                   <h3 className="text-stone-900 font-semibold">AI Comparison</h3>
@@ -455,7 +455,7 @@ Best regards`);
                 Generate an AI-powered comparison table with star ratings, price analysis, and recommendations.
               </p>
               <Link to="/compare">
-                <Button className="w-full bg-gradient-to-r from-[hsl(40,50%,92%)] to-[hsl(36,35%,82%)] hover:brightness-95 text-foreground font-semibold border-2 border-gold/30">
+                <Button className="w-full bg-gradient-to-r from-[hsl(40,50%,92%)] to-[hsl(36,35%,82%)] hover:brightness-95 text-foreground font-semibold border-2 border-[#B89555]/30">
                   Compare with AI
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
@@ -463,10 +463,10 @@ Best regards`);
             </div>
 
             {/* Professional Evaluation Card */}
-            <div className="bg-[#FDFBF7]/80 rounded-2xl p-6 border border-gold/30 backdrop-blur-sm flex flex-col">
+            <div className="bg-[#FDFBF7]/80 rounded-2xl p-6 border border-[#B89555]/30 backdrop-blur-sm flex flex-col">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] flex items-center justify-center shadow-md shadow-gold/20">
-                  <Users className="w-6 h-6 text-gold" />
+                  <Users className="w-6 h-6 text-[#1A1A1A]" />
                 </div>
                 <div>
                   <h3 className="text-stone-900 font-semibold">Property Consultant</h3>
@@ -477,7 +477,7 @@ Best regards`);
                 Request a personalized evaluation from our property consultants with detailed market insights.
               </p>
               <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer">
-                <Button className="w-full bg-gradient-to-r from-[hsl(40,50%,92%)] to-[hsl(36,35%,82%)] hover:brightness-95 text-foreground font-semibold border-2 border-gold/30 flex items-center justify-center gap-2">
+                <Button className="w-full bg-gradient-to-r from-[hsl(40,50%,92%)] to-[hsl(36,35%,82%)] hover:brightness-95 text-foreground font-semibold border-2 border-[#B89555]/30 flex items-center justify-center gap-2">
                   <Users className="w-5 h-5" />
                   Request Evaluation
                   <ArrowRight className="w-4 h-4" />
@@ -486,10 +486,10 @@ Best regards`);
             </div>
 
             {/* Regenerate / AI Finder Card */}
-            <div className="bg-[#FDFBF7]/80 rounded-2xl p-6 border border-gold/30 backdrop-blur-sm flex flex-col">
+            <div className="bg-[#FDFBF7]/80 rounded-2xl p-6 border border-[#B89555]/30 backdrop-blur-sm flex flex-col">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] flex items-center justify-center shadow-md shadow-gold/20">
-                  <Brain className="w-6 h-6 text-gold" />
+                  <Brain className="w-6 h-6 text-[#1A1A1A]" />
                 </div>
                 <div>
                   <h3 className="text-stone-900 font-semibold">AI Home Finder</h3>
@@ -501,7 +501,7 @@ Best regards`);
               </p>
               <Button
                 onClick={() => navigate("/quiz")}
-                className="w-full bg-gradient-to-r from-[hsl(40,50%,92%)] to-[hsl(36,35%,82%)] hover:brightness-95 text-foreground font-semibold border-2 border-gold/30"
+                className="w-full bg-gradient-to-r from-[hsl(40,50%,92%)] to-[hsl(36,35%,82%)] hover:brightness-95 text-foreground font-semibold border-2 border-[#B89555]/30"
               >
                 <Brain className="w-4 h-4 mr-2" />
                 Regenerate with AI

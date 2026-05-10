@@ -564,13 +564,13 @@ const CRM = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-6">
         <div className="max-w-7xl mx-auto space-y-6">
-          <Skeleton className="h-12 w-64 bg-gold/20" />
+          <Skeleton className="h-12 w-64 bg-[#EFE6D6]/20" />
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {[1, 2, 3, 4].map(i => (
-              <Skeleton key={i} className="h-32 bg-gold/20 border-2 border-gold/30 rounded-lg" />
+              <Skeleton key={i} className="h-32 bg-[#EFE6D6]/20 border-2 border-[#B89555]/30 rounded-lg" />
             ))}
           </div>
-          <Skeleton className="h-96 bg-gold/20 border-2 border-gold/30 rounded-lg" />
+          <Skeleton className="h-96 bg-[#EFE6D6]/20 border-2 border-[#B89555]/30 rounded-lg" />
         </div>
       </div>
     );
@@ -579,7 +579,7 @@ const CRM = () => {
   if (!profile) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex items-center justify-center p-6">
-        <Card className="w-full max-w-lg border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_10px_40px_rgba(200,167,102,0.2)]">
+        <Card className="w-full max-w-lg border-2 border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_10px_40px_rgba(200,167,102,0.2)]">
           <CardHeader>
             <CardTitle className="text-[#1A1A1A]">CRM access unavailable</CardTitle>
           </CardHeader>
@@ -669,7 +669,7 @@ const CRM = () => {
       </Suspense>
 
       {/* Premium Header - Champagne with Gold border */}
-      <header data-surface="champagne" className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-20 lg:top-24 z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)] transition-all duration-300">
+      <header data-surface="champagne" className="border-b-2 border-[#B89555]/40 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-20 lg:top-24 z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)] transition-all duration-300">
         <div className="max-w-[1600px] w-full mx-auto px-6 py-2">
           {/* First Line - Role Only */}
           <div className="flex items-center justify-between">
@@ -678,7 +678,7 @@ const CRM = () => {
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowToolsSidebar(!showToolsSidebar)}
-                className="text-[#1A1A1A] hover:text-gold hover:bg-gold/10 shrink-0"
+                className="text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10 shrink-0"
               >
                 {showToolsSidebar ? <PanelLeftClose className="h-5 w-5" /> : <PanelLeftOpen className="h-5 w-5" />}
               </Button>
@@ -693,7 +693,7 @@ const CRM = () => {
                   Owner Command Center
                 </Button>
               )}
-              <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-[#1A1A1A] hover:text-gold hover:bg-gold/10">
+              <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                 <LogOut className="h-4 w-4 mr-2" />
                 Sign Out
               </Button>
@@ -701,11 +701,11 @@ const CRM = () => {
           </div>
           
           {/* Second Line - Search & Quick Actions */}
-          <div data-no-contrast-guard className="flex flex-wrap items-center justify-between gap-y-2 gap-x-4 mt-3 pt-3 border-t border-gold/20">
+          <div data-no-contrast-guard className="flex flex-wrap items-center justify-between gap-y-2 gap-x-4 mt-3 pt-3 border-t border-[#B89555]/20">
             {/* Search Bar */}
             <button
               onClick={() => setShowCommandPalette(true)}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 text-[#1A1A1A] hover:border-gold/50 transition-all max-w-xs"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 text-[#1A1A1A] hover:border-[#B89555]/50 transition-all max-w-xs"
             >
               <Search className="h-4 w-4 text-[#1A1A1A]" />
               <span className="text-sm font-medium">Search leads…</span>
@@ -717,7 +717,7 @@ const CRM = () => {
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowAIInsights(!showAIInsights)}
-                className={`text-[#1A1A1A] hover:text-[#B89555] hover:bg-gold/10 ${showAIInsights ? 'bg-gold/15 text-[#1A1A1A]' : ''}`}
+                className={`text-[#1A1A1A] hover:text-[#B89555] hover:bg-[#EFE6D6]/10 ${showAIInsights ? 'bg-[#EFE6D6]/15 text-[#1A1A1A]' : ''}`}
               >
                 <Brain className="h-4 w-4" />
               </Button>
@@ -726,24 +726,24 @@ const CRM = () => {
                 <NotificationBellLazy
                   count={0}
                   onClick={() => setShowNotifications(true)}
-                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30"
+                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30"
                 />
               </Suspense>
               
-              <div className="hidden md:flex flex-wrap items-center gap-2 ml-2 pl-2 border-l border-gold/20">
-                <Button variant="ghost" size="sm" onClick={() => navigate("/crm/tasks")} className="text-[#1A1A1A] hover:text-[#B89555] hover:bg-gold/10 text-xs px-3">
+              <div className="hidden md:flex flex-wrap items-center gap-2 ml-2 pl-2 border-l border-[#B89555]/20">
+                <Button variant="ghost" size="sm" onClick={() => navigate("/crm/tasks")} className="text-[#1A1A1A] hover:text-[#B89555] hover:bg-[#EFE6D6]/10 text-xs px-3">
                   <CheckSquare className="h-4 w-4 mr-1.5" />
                   Tasks
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => navigate("/crm/calendar")} className="text-[#1A1A1A] hover:text-[#B89555] hover:bg-gold/10 text-xs px-3">
+                <Button variant="ghost" size="sm" onClick={() => navigate("/crm/calendar")} className="text-[#1A1A1A] hover:text-[#B89555] hover:bg-[#EFE6D6]/10 text-xs px-3">
                   <Calendar className="h-4 w-4 mr-1.5" />
                   Calendar
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => setActiveTab("employees")} className="text-[#1A1A1A] hover:text-[#B89555] hover:bg-gold/10 text-xs px-3">
+                <Button variant="ghost" size="sm" onClick={() => setActiveTab("employees")} className="text-[#1A1A1A] hover:text-[#B89555] hover:bg-[#EFE6D6]/10 text-xs px-3">
                   <Users className="h-4 w-4 mr-1.5" />
                   Team
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => navigate("/owner/crm/relationships")} className="text-[#1A1A1A] hover:text-[#B89555] hover:bg-gold/10 text-xs font-semibold px-3">
+                <Button variant="ghost" size="sm" onClick={() => navigate("/owner/crm/relationships")} className="text-[#1A1A1A] hover:text-[#B89555] hover:bg-[#EFE6D6]/10 text-xs font-semibold px-3">
                   <Briefcase className="h-4 w-4 mr-1.5" />
                   Relationships
                 </Button>
@@ -758,7 +758,7 @@ const CRM = () => {
                   Media Ingestion
                 </Button>
                 {isCRMOwner && (
-                  <Button variant="ghost" size="sm" onClick={() => navigate("/automations")} className="text-[#1A1A1A] hover:text-[#B89555] hover:bg-gold/10 text-xs font-semibold px-3">
+                  <Button variant="ghost" size="sm" onClick={() => navigate("/automations")} className="text-[#1A1A1A] hover:text-[#B89555] hover:bg-[#EFE6D6]/10 text-xs font-semibold px-3">
                     <Zap className="h-4 w-4 mr-1.5" />
                     Automations
                   </Button>
@@ -784,7 +784,7 @@ const CRM = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* AI Insights Panel */}
                 {showAIInsights && (
-                  <Card className="overflow-hidden border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
+                  <Card className="overflow-hidden border-2 border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
                     <CardContent className="p-0">
                       <div className="h-[280px]">
                         <Suspense fallback={<Skeleton className="h-full w-full" />}>
@@ -807,14 +807,14 @@ const CRM = () => {
                 </Suspense>
                 
                 {/* Smart Automations */}
-                <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.2)]">
+                <Card className="border-2 border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.2)]">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-[#1A1A1A] font-bold text-base flex items-center gap-2">
                       <div className="p-1.5 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
                         <Zap className="h-4 w-4 text-[#1A1A1A]" />
                       </div>
                       Smart Automations
-                      <Badge className="ml-auto text-xs bg-gold/10 text-[#1A1A1A] border-gold/30">
+                      <Badge className="ml-auto text-xs bg-[#EFE6D6]/10 text-[#1A1A1A] border-[#B89555]/30">
                         Active
                       </Badge>
                     </CardTitle>
@@ -878,7 +878,7 @@ const CRM = () => {
               )}
 
               {/* Leads Update Section with shortcuts */}
-              <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
+              <Card className="border-2 border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-[#1A1A1A] font-bold text-base flex items-center gap-2">
                     <div className="p-1.5 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
@@ -963,20 +963,20 @@ const CRM = () => {
             </div>
 
             {/* Divider */}
-            <div className="border-t-2 border-gold/20" />
+            <div className="border-t-2 border-[#B89555]/20" />
 
             {/* View Mode Toggle - Compact */}
             <div className="flex items-center justify-end gap-3">
-              <div className="flex items-center bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 rounded-lg p-1">
+              <div className="flex items-center bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 rounded-lg p-1">
                 <button
                   onClick={() => setViewMode("table")}
-                  className={`p-2 rounded transition-all ${viewMode === "table" ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 text-[#1A1A1A]" : "text-[#1A1A1A] hover:bg-gold/10"}`}
+                  className={`p-2 rounded transition-all ${viewMode === "table" ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 text-[#1A1A1A]" : "text-[#1A1A1A] hover:bg-[#EFE6D6]/10"}`}
                 >
                   <List className="h-4 w-4" />
                 </button>
                 <button
                   onClick={() => setViewMode("kanban")}
-                  className={`p-2 rounded transition-all ${viewMode === "kanban" ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 text-[#1A1A1A]" : "text-[#1A1A1A] hover:bg-gold/10"}`}
+                  className={`p-2 rounded transition-all ${viewMode === "kanban" ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 text-[#1A1A1A]" : "text-[#1A1A1A] hover:bg-[#EFE6D6]/10"}`}
                 >
                   <LayoutGrid className="h-4 w-4" />
                 </button>
@@ -985,7 +985,7 @@ const CRM = () => {
 
             {/* Leads Section with Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-2 mb-4 w-full flex flex-wrap gap-1 h-auto">
+              <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 p-2 mb-4 w-full flex flex-wrap gap-1 h-auto">
                 <TabsTrigger 
                   value="all" 
                   className="tab-trigger-champagne text-[#1A1A1A] px-5 py-2.5"

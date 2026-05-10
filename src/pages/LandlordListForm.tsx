@@ -148,7 +148,7 @@ const LandlordListForm = () => {
             >
               <motion.span
                 variants={fadeInUp}
-                className="inline-block px-4 py-2 bg-gold/10 border border-gold/30 rounded-full text-gold text-sm font-medium mb-6"
+                className="inline-block px-4 py-2 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full text-[#1A1A1A] text-sm font-medium mb-6"
               >
                 List Your Property
               </motion.span>
@@ -195,8 +195,8 @@ const LandlordListForm = () => {
                     variants={fadeInUp}
                     className="flex items-start gap-4"
                   >
-                    <div className="w-8 h-8 bg-gold/10 border border-gold/30 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-gold font-bold text-sm">{index + 1}</span>
+                    <div className="w-8 h-8 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-[#1A1A1A] font-bold text-sm">{index + 1}</span>
                     </div>
                     <p className="text-[#1A1A1A]/70 pt-1">{step}</p>
                   </motion.div>
@@ -413,7 +413,7 @@ const LandlordListForm = () => {
                     onCheckedChange={(checked) => handleChange("consentToPrivacy", checked as boolean)}
                   />
                   <Label htmlFor="consent" className="text-sm text-[#1A1A1A]/70 cursor-pointer">
-                    I agree to the <a href="/privacy" className="text-gold hover:underline">Privacy Policy</a> and 
+                    I agree to the <a href="/privacy" className="text-[#1A1A1A] hover:underline">Privacy Policy</a> and 
                     consent to being contacted regarding this rental listing.
                   </Label>
                 </div>
@@ -421,7 +421,7 @@ const LandlordListForm = () => {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold h-12"
+                  className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-semibold h-12"
                 >
                   {isSubmitting ? "Submitting..." : "Submit Rental Listing"}
                   <ArrowRight className="ml-2 h-5 w-5" />

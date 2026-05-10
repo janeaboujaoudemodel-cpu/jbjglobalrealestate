@@ -88,7 +88,7 @@ const PartnerVisaServices = () => {
             {/* Back Link */}
             <Link 
               to="/partners" 
-              className="inline-flex items-center gap-2 text-muted-foreground hover:text-gold transition-colors mb-8"
+              className="inline-flex items-center gap-2 text-muted-foreground hover:text-[#1A1A1A] transition-colors mb-8"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to Partner Services
@@ -110,8 +110,8 @@ const PartnerVisaServices = () => {
               className="max-w-4xl"
             >
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-16 h-16 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center">
-                  <Plane className="w-8 h-8 text-gold" />
+                <div className="w-16 h-16 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-xl flex items-center justify-center">
+                  <Plane className="w-8 h-8 text-[#1A1A1A]" />
                 </div>
                 <div>
                   <h1 className="text-4xl md:text-5xl font-bold">Visa Partners</h1>
@@ -144,10 +144,10 @@ const PartnerVisaServices = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
                   >
-                    <Card className="h-full border-border/50 hover:border-gold/30 transition-colors">
+                    <Card className="h-full border-border/50 hover:border-[#B89555]/30 transition-colors">
                       <CardHeader>
-                        <div className="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center mb-4">
-                          <feature.icon className="w-6 h-6 text-gold" />
+                        <div className="w-12 h-12 bg-[#EFE6D6]/10 rounded-lg flex items-center justify-center mb-4">
+                          <feature.icon className="w-6 h-6 text-[#1A1A1A]" />
                         </div>
                         <CardTitle className="text-lg">{feature.title}</CardTitle>
                       </CardHeader>
@@ -174,7 +174,7 @@ const PartnerVisaServices = () => {
               <div className="grid md:grid-cols-4 gap-6">
                 {PROCESS_STEPS.map((item) => (
                   <div key={item.step} className="text-center">
-                    <div className="w-12 h-12 bg-gold text-[#1A1A1A] rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+                    <div className="w-12 h-12 bg-[#EFE6D6] text-[#1A1A1A] rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
                       {item.step}
                     </div>
                     <h3 className="font-semibold mb-2">{item.title}</h3>
@@ -197,15 +197,15 @@ const PartnerVisaServices = () => {
                   <h3 className="font-semibold mb-3 text-lg">Golden Visa</h3>
                   <ul className="space-y-2 text-muted-foreground">
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-gold mt-1 flex-shrink-0" />
+                      <CheckCircle className="w-4 h-4 text-[#1A1A1A] mt-1 flex-shrink-0" />
                       Long-term residency for investors, entrepreneurs, and specialized talents
                     </li>
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-gold mt-1 flex-shrink-0" />
+                      <CheckCircle className="w-4 h-4 text-[#1A1A1A] mt-1 flex-shrink-0" />
                       Property investment thresholds apply for eligibility
                     </li>
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-gold mt-1 flex-shrink-0" />
+                      <CheckCircle className="w-4 h-4 text-[#1A1A1A] mt-1 flex-shrink-0" />
                       Family sponsorship benefits included
                     </li>
                   </ul>
@@ -215,15 +215,15 @@ const PartnerVisaServices = () => {
                   <h3 className="font-semibold mb-3 text-lg">Property Investor Visa</h3>
                   <ul className="space-y-2 text-muted-foreground">
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-gold mt-1 flex-shrink-0" />
+                      <CheckCircle className="w-4 h-4 text-[#1A1A1A] mt-1 flex-shrink-0" />
                       Residency based on property investment value
                     </li>
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-gold mt-1 flex-shrink-0" />
+                      <CheckCircle className="w-4 h-4 text-[#1A1A1A] mt-1 flex-shrink-0" />
                       Multiple investment options available
                     </li>
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-gold mt-1 flex-shrink-0" />
+                      <CheckCircle className="w-4 h-4 text-[#1A1A1A] mt-1 flex-shrink-0" />
                       Renewable visa validity periods
                     </li>
                   </ul>
@@ -233,15 +233,15 @@ const PartnerVisaServices = () => {
                   <h3 className="font-semibold mb-3 text-lg">General Considerations</h3>
                   <ul className="space-y-2 text-muted-foreground">
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-gold mt-1 flex-shrink-0" />
+                      <CheckCircle className="w-4 h-4 text-[#1A1A1A] mt-1 flex-shrink-0" />
                       Requirements and thresholds are subject to government regulations
                     </li>
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-gold mt-1 flex-shrink-0" />
+                      <CheckCircle className="w-4 h-4 text-[#1A1A1A] mt-1 flex-shrink-0" />
                       Professional assessment recommended before property purchase
                     </li>
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-gold mt-1 flex-shrink-0" />
+                      <CheckCircle className="w-4 h-4 text-[#1A1A1A] mt-1 flex-shrink-0" />
                       Processing times vary based on application type
                     </li>
                   </ul>
@@ -258,7 +258,7 @@ const PartnerVisaServices = () => {
               <Card className="border-[#B89555]/30 bg-[#FDFBF7] shadow-sm">
                 <CardHeader className="text-center">
                   <div className="w-16 h-16 bg-[#1A1A1A] rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Users className="w-8 h-8 text-gold" />
+                    <Users className="w-8 h-8 text-[#1A1A1A]" />
                   </div>
                   <CardTitle className="text-2xl text-[#1A1A1A]">Request Partner Introduction</CardTitle>
                 </CardHeader>

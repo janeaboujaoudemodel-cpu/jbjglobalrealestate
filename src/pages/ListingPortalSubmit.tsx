@@ -180,7 +180,7 @@ const ListingPortalSubmit = () => {
       <section className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-[#1A1A1A] text-xl font-bold mb-4">Please sign in to submit a listing</h2>
-          <Button onClick={() => navigate('/auth')} className="bg-gold hover:bg-gold/90 text-[#1A1A1A] border-0">
+          <Button onClick={() => navigate('/auth')} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] border-0">
             Sign In
           </Button>
         </div>
@@ -561,19 +561,19 @@ const ListingPortalSubmit = () => {
 
             {/* Approval Workflow Visual */}
             {!isOwner && (
-              <div className="bg-[#FDFBF7]/70 border-2 border-gold/20 rounded-2xl p-6 mb-8 text-left">
-                <h3 className="text-gold font-semibold mb-4">Approval Stages</h3>
+              <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/20 rounded-2xl p-6 mb-8 text-left">
+                <h3 className="text-[#1A1A1A] font-semibold mb-4">Approval Stages</h3>
                 <div className="space-y-3">
                   {UNIFIED_APPROVAL_WORKFLOW.map((step) => (
                     <div key={step.step} className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center flex-shrink-0">
-                        <Check className="w-4 h-4 text-gold" />
+                      <div className="w-8 h-8 rounded-full bg-[#EFE6D6]/10 border border-[#B89555]/30 flex items-center justify-center flex-shrink-0">
+                        <Check className="w-4 h-4 text-[#1A1A1A]" />
                       </div>
                       <div className="flex-1">
                         <p className="text-[#1A1A1A] text-sm font-medium">{step.name}</p>
                         <p className="text-[#1A1A1A]/70 text-xs">{step.approverName} — {step.approverTitle}</p>
                       </div>
-                      <Badge className="bg-gold/10 text-gold border-gold/30 text-xs">Pending</Badge>
+                      <Badge className="bg-[#EFE6D6]/10 text-[#1A1A1A] border-[#B89555]/30 text-xs">Pending</Badge>
                     </div>
                   ))}
                 </div>
@@ -581,10 +581,10 @@ const ListingPortalSubmit = () => {
             )}
 
             <div className="flex gap-3 justify-center">
-              <Button onClick={() => navigate('/listing-portal/my-listings')} className="bg-gold hover:bg-gold/90 text-[#1A1A1A] border-0">
+              <Button onClick={() => navigate('/listing-portal/my-listings')} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] border-0">
                 View My Listings
               </Button>
-              <Button onClick={() => navigate('/listing-portal')} className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-[#1A1A1A] hover:border-gold hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
+              <Button onClick={() => navigate('/listing-portal')} className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50 text-[#1A1A1A] hover:border-[#B89555] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
                 Back to Portal
               </Button>
             </div>
@@ -605,7 +605,7 @@ const ListingPortalSubmit = () => {
 
             {/* Header */}
             <div className="text-center mb-8">
-              <Badge className="mb-3 bg-gold/15 text-gold border-gold/40 px-4 py-1.5">
+              <Badge className="mb-3 bg-[#EFE6D6]/15 text-[#1A1A1A] border-[#B89555]/40 px-4 py-1.5">
                 <Wand2 className="w-3.5 h-3.5 mr-2" /> AI-Powered
               </Badge>
               <h1 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-2">
@@ -654,8 +654,8 @@ const ListingPortalSubmit = () => {
                 const stepIndex = getPhaseIndex();
                 return (
                   <div key={step} className="flex-1">
-                    <div className={`h-1.5 rounded-full transition-all ${i <= stepIndex ? 'bg-gold' : 'bg-gold/20'}`} />
-                    <p className={`text-[9px] mt-1 text-center ${i <= stepIndex ? 'text-gold' : 'text-[#1A1A1A]/70'}`}>{step}</p>
+                    <div className={`h-1.5 rounded-full transition-all ${i <= stepIndex ? 'bg-[#EFE6D6]' : 'bg-[#EFE6D6]/20'}`} />
+                    <p className={`text-[9px] mt-1 text-center ${i <= stepIndex ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/70'}`}>{step}</p>
                   </div>
                 );
               })}
@@ -672,10 +672,10 @@ const ListingPortalSubmit = () => {
                   className="space-y-6"
                 >
                   <div className="relative">
-                    <div className="absolute inset-0 -m-3 rounded-3xl bg-[#FDFBF7]/40 border border-gold/15" />
+                    <div className="absolute inset-0 -m-3 rounded-3xl bg-[#FDFBF7]/40 border border-[#B89555]/15" />
                     <div className="relative space-y-6 p-3">
                       {/* Category Selection */}
-                      <div className="bg-[#FDFBF7]/70 border-2 border-gold/20 rounded-2xl p-6">
+                      <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/20 rounded-2xl p-6">
                         <h2 className="text-[#1A1A1A] font-semibold mb-4">What type of listing?</h2>
                         <div className="flex flex-wrap justify-center gap-3">
                           {listingCategories.map(cat => {
@@ -687,16 +687,16 @@ const ListingPortalSubmit = () => {
                                 onClick={() => setListingCategory(cat.id)}
                                 className={`relative p-4 rounded-2xl border-2 text-left transition-all w-[calc(33.333%-0.5rem)] min-w-[160px] ${
                                   isSelected
-                                    ? 'bg-gold/10 border-gold/50 text-[#1A1A1A] shadow-lg shadow-gold/15'
-                                    : 'bg-[#FDFBF7]/60 border-gold/15 text-[#1A1A1A]/70 hover:border-gold/30'
+                                    ? 'bg-[#EFE6D6]/10 border-[#B89555]/50 text-[#1A1A1A] shadow-lg shadow-gold/15'
+                                    : 'bg-[#FDFBF7]/60 border-[#B89555]/15 text-[#1A1A1A]/70 hover:border-[#B89555]/30'
                                 }`}
                               >
                                 {isSelected && (
-                                  <div className="absolute top-2 right-2 w-6 h-6 bg-gold rounded-full flex items-center justify-center">
+                                  <div className="absolute top-2 right-2 w-6 h-6 bg-[#EFE6D6] rounded-full flex items-center justify-center">
                                     <Check className="w-3.5 h-3.5 text-white" />
                                   </div>
                                 )}
-                                <Icon className={`w-5 h-5 mb-2 ${isSelected ? 'text-gold' : 'text-[#1A1A1A]/70'}`} />
+                                <Icon className={`w-5 h-5 mb-2 ${isSelected ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/70'}`} />
                                 <div className="font-medium text-sm">{cat.label}</div>
                                 <div className="text-xs text-[#1A1A1A]/70">{cat.desc}</div>
                               </button>
@@ -706,7 +706,7 @@ const ListingPortalSubmit = () => {
                       </div>
 
                       {/* Upload Zone */}
-                      <div className="bg-[#FDFBF7]/70 border-2 border-gold/20 rounded-2xl p-6">
+                      <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/20 rounded-2xl p-6">
                         <h2 className="text-[#1A1A1A] font-semibold mb-2">Upload Documents</h2>
                         <p className="text-[#1A1A1A]/70 text-xs mb-4">
                           Upload PDF brochures, floor plans, fact sheets, property photos, reservation forms, agreements — AI will extract everything
@@ -715,10 +715,10 @@ const ListingPortalSubmit = () => {
                         <div
                           onDragOver={(e) => e.preventDefault()}
                           onDrop={handleFileDrop}
-                          className="border-2 border-dashed border-gold/40 rounded-xl p-8 text-center hover:border-gold/70 transition-all cursor-pointer bg-[#FDFBF7]/50"
+                          className="border-2 border-dashed border-[#B89555]/40 rounded-xl p-8 text-center hover:border-[#B89555]/70 transition-all cursor-pointer bg-[#FDFBF7]/50"
                           onClick={() => document.getElementById('file-input')?.click()}
                         >
-                          <Upload className="w-10 h-10 text-gold mx-auto mb-3" />
+                          <Upload className="w-10 h-10 text-[#1A1A1A] mx-auto mb-3" />
                           <p className="text-[#1A1A1A] font-medium mb-1">Drop files here or click to browse</p>
                           <p className="text-[#1A1A1A]/70 text-xs">
                             PDF, JPG, PNG, DOCX, XLSX — up to 100MB each
@@ -736,7 +736,7 @@ const ListingPortalSubmit = () => {
                         {uploadedDocs.length > 0 && (
                           <div className="mt-4 space-y-2">
                             {uploadedDocs.map(doc => (
-                              <div key={doc.id} className="flex items-center gap-3 bg-[#FDFBF7]/80 border border-gold/20 rounded-lg p-3">
+                              <div key={doc.id} className="flex items-center gap-3 bg-[#FDFBF7]/80 border border-[#B89555]/20 rounded-lg p-3">
                                 {doc.preview ? (
                                   <img src={doc.preview} alt="" className="w-10 h-10 rounded object-cover" />
                                 ) : doc.type === 'pdf' ? (
@@ -754,7 +754,7 @@ const ListingPortalSubmit = () => {
                                     {(doc.file.size / 1024 / 1024).toFixed(1)} MB
                                   </p>
                                 </div>
-                                <button onClick={() => removeDoc(doc.id)} className="p-1.5 hover:bg-gold/10 rounded-lg">
+                                <button onClick={() => removeDoc(doc.id)} className="p-1.5 hover:bg-[#EFE6D6]/10 rounded-lg">
                                   <X className="w-4 h-4 text-[#1A1A1A]/70" />
                                 </button>
                               </div>
@@ -764,9 +764,9 @@ const ListingPortalSubmit = () => {
                       </div>
 
                       {/* Universal Link Input */}
-                      <div className="bg-[#FDFBF7]/70 border-2 border-gold/20 rounded-2xl p-6">
+                      <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/20 rounded-2xl p-6">
                         <h2 className="text-[#1A1A1A] font-semibold mb-2 flex items-center gap-2">
-                          <Globe className="w-4 h-4 text-gold" />
+                          <Globe className="w-4 h-4 text-[#1A1A1A]" />
                           Paste Any Link
                         </h2>
                         <p className="text-[#1A1A1A]/70 text-xs mb-3">
@@ -776,19 +776,19 @@ const ListingPortalSubmit = () => {
                           value={sourceUrl}
                           onChange={e => setSourceUrl(e.target.value)}
                           placeholder="https://drive.google.com/... or any property listing URL"
-                          className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]"
+                          className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]"
                         />
                         <div className="flex flex-wrap gap-1.5 mt-2">
                           {['Google Drive', 'Property Finder', 'Bayut', 'Dubizzle', 'Developer Sites', 'Any URL'].map(tag => (
-                            <span key={tag} className="text-[10px] px-2 py-0.5 bg-gold/10 text-gold border border-gold/20 rounded-full">{tag}</span>
+                            <span key={tag} className="text-[10px] px-2 py-0.5 bg-[#EFE6D6]/10 text-[#1A1A1A] border border-[#B89555]/20 rounded-full">{tag}</span>
                           ))}
                         </div>
                       </div>
 
                       {/* Paste Text Input */}
-                      <div className="bg-[#FDFBF7]/70 border-2 border-gold/20 rounded-2xl p-6">
+                      <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/20 rounded-2xl p-6">
                         <h2 className="text-[#1A1A1A] font-semibold mb-2 flex items-center gap-2">
-                          <FileTextIcon className="w-4 h-4 text-gold" />
+                          <FileTextIcon className="w-4 h-4 text-[#1A1A1A]" />
                           Paste Text / Description (Optional)
                         </h2>
                         <p className="text-[#1A1A1A]/70 text-xs mb-3">
@@ -798,7 +798,7 @@ const ListingPortalSubmit = () => {
                           value={sourceText}
                           onChange={e => setSourceText(e.target.value)}
                           placeholder="Paste property description, features, specs, brochure text..."
-                          className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] min-h-[100px]"
+                          className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] min-h-[100px]"
                         />
                       </div>
 
@@ -806,7 +806,7 @@ const ListingPortalSubmit = () => {
                         <Button
                           onClick={runAIExtraction}
                           disabled={uploadedDocs.length === 0 && !sourceUrl.trim() && !sourceText.trim()}
-                          className="flex-1 bg-gold hover:bg-gold/90 text-[#1A1A1A] border-0 h-12 text-base disabled:opacity-50"
+                          className="flex-1 bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] border-0 h-12 text-base disabled:opacity-50"
                         >
                           <Sparkles className="w-5 h-5 mr-2" />
                           Extract with AI
@@ -816,7 +816,7 @@ const ListingPortalSubmit = () => {
                         </Button>
                         <Button
                           onClick={() => setPhase('pricing_ai')}
-                          className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-[#1A1A1A] hover:border-gold h-12 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
+                          className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50 text-[#1A1A1A] hover:border-[#B89555] h-12 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
                         >
                           Skip — Fill Manually
                         </Button>
@@ -832,7 +832,7 @@ const ListingPortalSubmit = () => {
                   key="extracting"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="bg-[#FDFBF7]/70 border-2 border-gold/20 rounded-2xl p-12 text-center"
+                  className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/20 rounded-2xl p-12 text-center"
                 >
                   <BrandedLoader variant="light" text="AI is analyzing..." className="min-h-0 py-8" />
                   <h2 className="text-[#1A1A1A] text-xl font-bold mb-2 mt-4">AI is analyzing your documents...</h2>
@@ -841,7 +841,7 @@ const ListingPortalSubmit = () => {
                   </p>
                   <div className="flex flex-wrap gap-2 justify-center">
                     {['Reading documents', 'Detecting images', 'Extracting details', 'Generating description'].map((step) => (
-                      <Badge key={step} className="bg-gold/10 text-gold border-gold/30">
+                      <Badge key={step} className="bg-[#EFE6D6]/10 text-[#1A1A1A] border-[#B89555]/30">
                         <Loader2 className="w-3 h-3 mr-1.5 animate-spin" />
                         {step}
                       </Badge>
@@ -860,12 +860,12 @@ const ListingPortalSubmit = () => {
                   className="space-y-6"
                 >
                   <div className="relative">
-                    <div className="absolute inset-0 -m-3 rounded-3xl bg-[#FDFBF7]/40 border border-gold/15" />
+                    <div className="absolute inset-0 -m-3 rounded-3xl bg-[#FDFBF7]/40 border border-[#B89555]/15" />
                     <div className="relative space-y-6 p-3">
-                      <div className="bg-[#FDFBF7]/70 border-2 border-gold/20 rounded-2xl p-6">
+                      <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/20 rounded-2xl p-6">
                         <div className="flex items-center gap-3 mb-4">
-                          <div className="w-12 h-12 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center">
-                            <TrendingUp className="w-6 h-6 text-gold" />
+                          <div className="w-12 h-12 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-xl flex items-center justify-center">
+                            <TrendingUp className="w-6 h-6 text-[#1A1A1A]" />
                           </div>
                           <div>
                             <h2 className="text-[#1A1A1A] font-bold text-lg">AI Price Predictor</h2>
@@ -876,23 +876,23 @@ const ListingPortalSubmit = () => {
                         {/* Quick summary of extracted data */}
                         {extractedData && (
                           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-                            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20 rounded-lg p-3 text-center">
-                              <MapPin className="w-4 h-4 text-gold mx-auto mb-1" />
+                            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/20 rounded-lg p-3 text-center">
+                              <MapPin className="w-4 h-4 text-[#1A1A1A] mx-auto mb-1" />
                               <p className="text-xs text-[#1A1A1A]/70">Location</p>
                               <p className="text-[#1A1A1A] text-sm font-medium truncate">{form.location || 'N/A'}</p>
                             </div>
-                            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20 rounded-lg p-3 text-center">
-                              <Bed className="w-4 h-4 text-gold mx-auto mb-1" />
+                            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/20 rounded-lg p-3 text-center">
+                              <Bed className="w-4 h-4 text-[#1A1A1A] mx-auto mb-1" />
                               <p className="text-xs text-[#1A1A1A]/70">Bedrooms</p>
                               <p className="text-[#1A1A1A] text-sm font-medium">{form.bedrooms || 'N/A'}</p>
                             </div>
-                            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20 rounded-lg p-3 text-center">
-                              <Maximize className="w-4 h-4 text-gold mx-auto mb-1" />
+                            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/20 rounded-lg p-3 text-center">
+                              <Maximize className="w-4 h-4 text-[#1A1A1A] mx-auto mb-1" />
                               <p className="text-xs text-[#1A1A1A]/70">Area</p>
                               <p className="text-[#1A1A1A] text-sm font-medium">{form.area_sqft ? `${parseInt(form.area_sqft).toLocaleString()} sqft` : 'N/A'}</p>
                             </div>
-                            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20 rounded-lg p-3 text-center">
-                              <Building className="w-4 h-4 text-gold mx-auto mb-1" />
+                            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/20 rounded-lg p-3 text-center">
+                              <Building className="w-4 h-4 text-[#1A1A1A] mx-auto mb-1" />
                               <p className="text-xs text-[#1A1A1A]/70">Type</p>
                               <p className="text-[#1A1A1A] text-sm font-medium capitalize">{form.property_type || 'N/A'}</p>
                             </div>
@@ -902,7 +902,7 @@ const ListingPortalSubmit = () => {
                         <Button
                           onClick={runPricePredictor}
                           disabled={isRunningPredictor}
-                          className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A] border-0 h-12 text-base"
+                          className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] border-0 h-12 text-base"
                         >
                           {isRunningPredictor ? (
                             <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> Analyzing Market Data...</>
@@ -936,7 +936,7 @@ const ListingPortalSubmit = () => {
                             </div>
 
                             {pricePrediction.marketInsights && (
-                              <div className="bg-[#FDFBF7]/80 border border-gold/20 rounded-xl p-4">
+                              <div className="bg-[#FDFBF7]/80 border border-[#B89555]/20 rounded-xl p-4">
                                 <p className="text-[#1A1A1A]/70 text-sm">{pricePrediction.marketInsights}</p>
                               </div>
                             )}
@@ -947,13 +947,13 @@ const ListingPortalSubmit = () => {
                       <div className="flex gap-3">
                         <Button
                           onClick={() => setPhase('upload')}
-                          className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-[#1A1A1A] hover:border-gold h-12 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
+                          className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50 text-[#1A1A1A] hover:border-[#B89555] h-12 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
                         >
                           <ArrowLeft className="w-4 h-4 mr-2" /> Back
                         </Button>
                         <Button
                           onClick={() => setPhase('review')}
-                          className="flex-1 bg-gold hover:bg-gold/90 text-[#1A1A1A] border-0 h-12 text-base"
+                          className="flex-1 bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] border-0 h-12 text-base"
                         >
                           Continue to Review <ArrowRight className="w-4 h-4 ml-2" />
                         </Button>
@@ -972,7 +972,7 @@ const ListingPortalSubmit = () => {
                   className="space-y-6"
                 >
                   <div className="relative">
-                    <div className="absolute inset-0 -m-3 rounded-3xl bg-[#FDFBF7]/40 border border-gold/15" />
+                    <div className="absolute inset-0 -m-3 rounded-3xl bg-[#FDFBF7]/40 border border-[#B89555]/15" />
                     <div className="relative space-y-6 p-3">
                       {/* AI Confidence Banner */}
                       {extractedData && (
@@ -1011,7 +1011,7 @@ const ListingPortalSubmit = () => {
 
                       {/* Listing Card Preview */}
                       {(form.title || uploadedImageUrls.length > 0) && (
-                        <div className="bg-[#FDFBF7] border-2 border-gold/30 rounded-2xl overflow-hidden shadow-sm">
+                        <div className="bg-[#FDFBF7] border-2 border-[#B89555]/30 rounded-2xl overflow-hidden shadow-sm">
                           <div className="relative">
                             {uploadedImageUrls.length > 0 ? (
                               <img src={uploadedImageUrls[0]} alt="" className="w-full h-48 object-cover" />
@@ -1037,7 +1037,7 @@ const ListingPortalSubmit = () => {
                               {form.area_sqft && <span className="flex items-center gap-1"><Maximize className="w-3.5 h-3.5" /> {parseInt(form.area_sqft).toLocaleString()} sqft</span>}
                             </div>
                             {form.price && (
-                              <p className="text-gold font-bold text-xl">AED {parseInt(form.price).toLocaleString()}</p>
+                              <p className="text-[#1A1A1A] font-bold text-xl">AED {parseInt(form.price).toLocaleString()}</p>
                             )}
                           </div>
                         </div>
@@ -1045,14 +1045,14 @@ const ListingPortalSubmit = () => {
 
                       {/* Gallery Preview */}
                       {uploadedImageUrls.length > 1 && (
-                        <div className="bg-[#FDFBF7]/70 border-2 border-gold/20 rounded-2xl p-6">
+                        <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/20 rounded-2xl p-6">
                           <h3 className="text-[#1A1A1A] font-semibold mb-3 flex items-center gap-2">
-                            <Image className="w-4 h-4 text-gold" />
+                            <Image className="w-4 h-4 text-[#1A1A1A]" />
                             Gallery ({uploadedImageUrls.length} photos)
                           </h3>
                           <div className="grid grid-cols-3 md:grid-cols-4 gap-2">
                             {uploadedImageUrls.map((url, i) => (
-                              <div key={i} className="aspect-square rounded-lg overflow-hidden border border-gold/20">
+                              <div key={i} className="aspect-square rounded-lg overflow-hidden border border-[#B89555]/20">
                                 <img src={url} alt="" className="w-full h-full object-cover" />
                               </div>
                             ))}
@@ -1061,7 +1061,7 @@ const ListingPortalSubmit = () => {
                       )}
 
                       {/* Main Details Form */}
-                      <div className="bg-[#FDFBF7]/70 border-2 border-gold/20 rounded-2xl p-6 space-y-4">
+                      <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/20 rounded-2xl p-6 space-y-4">
                         <h3 className="text-[#1A1A1A] font-semibold mb-1">Listing Details</h3>
                         
                         <div>
@@ -1070,7 +1070,7 @@ const ListingPortalSubmit = () => {
                             value={form.title}
                             onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
                             placeholder="e.g. Luxury 3BR Villa in Palm Jumeirah"
-                            className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]"
+                            className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]"
                           />
                         </div>
 
@@ -1080,7 +1080,7 @@ const ListingPortalSubmit = () => {
                             value={form.description}
                             onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
                             placeholder="Property description..."
-                            className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] min-h-[100px]"
+                            className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] min-h-[100px]"
                           />
                         </div>
 
@@ -1088,7 +1088,7 @@ const ListingPortalSubmit = () => {
                           <div>
                             <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Category</label>
                             <Select value={form.listing_category} onValueChange={v => setForm(f => ({ ...f, listing_category: v }))}>
-                              <SelectTrigger className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]">
+                              <SelectTrigger className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]">
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
@@ -1099,7 +1099,7 @@ const ListingPortalSubmit = () => {
                           <div>
                             <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Property Type</label>
                             <Select value={form.property_type} onValueChange={v => setForm(f => ({ ...f, property_type: v }))}>
-                              <SelectTrigger className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]">
+                              <SelectTrigger className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]">
                                 <SelectValue placeholder="Select" />
                               </SelectTrigger>
                               <SelectContent>
@@ -1116,7 +1116,7 @@ const ListingPortalSubmit = () => {
                               value={form.developer_name}
                               onChange={e => setForm(f => ({ ...f, developer_name: e.target.value }))}
                               placeholder="e.g. Emaar"
-                              className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]"
+                              className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]"
                             />
                           </div>
                           <div>
@@ -1125,7 +1125,7 @@ const ListingPortalSubmit = () => {
                               value={form.project_name}
                               onChange={e => setForm(f => ({ ...f, project_name: e.target.value }))}
                               placeholder="e.g. Creek Harbour"
-                              className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]"
+                              className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]"
                             />
                           </div>
                         </div>
@@ -1134,7 +1134,7 @@ const ListingPortalSubmit = () => {
                           <div>
                             <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Emirate</label>
                             <Select value={form.emirate} onValueChange={v => setForm(f => ({ ...f, emirate: v }))}>
-                              <SelectTrigger className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]">
+                              <SelectTrigger className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]">
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
@@ -1148,7 +1148,7 @@ const ListingPortalSubmit = () => {
                               value={form.location}
                               onChange={e => setForm(f => ({ ...f, location: e.target.value }))}
                               placeholder="e.g. Dubai Marina"
-                              className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]"
+                              className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]"
                             />
                           </div>
                         </div>
@@ -1156,19 +1156,19 @@ const ListingPortalSubmit = () => {
                         <div className="grid grid-cols-4 gap-3">
                           <div>
                             <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Price (AED)</label>
-                            <Input type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]" />
+                            <Input type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]" />
                           </div>
                           <div>
                             <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Bedrooms</label>
-                            <Input type="number" value={form.bedrooms} onChange={e => setForm(f => ({ ...f, bedrooms: e.target.value }))} className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]" />
+                            <Input type="number" value={form.bedrooms} onChange={e => setForm(f => ({ ...f, bedrooms: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]" />
                           </div>
                           <div>
                             <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Bathrooms</label>
-                            <Input type="number" value={form.bathrooms} onChange={e => setForm(f => ({ ...f, bathrooms: e.target.value }))} className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]" />
+                            <Input type="number" value={form.bathrooms} onChange={e => setForm(f => ({ ...f, bathrooms: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]" />
                           </div>
                           <div>
                             <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Area (sqft)</label>
-                            <Input type="number" value={form.area_sqft} onChange={e => setForm(f => ({ ...f, area_sqft: e.target.value }))} className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]" />
+                            <Input type="number" value={form.area_sqft} onChange={e => setForm(f => ({ ...f, area_sqft: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]" />
                           </div>
                         </div>
 
@@ -1176,7 +1176,7 @@ const ListingPortalSubmit = () => {
                           <div>
                             <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Furnishing</label>
                             <Select value={form.furnishing} onValueChange={v => setForm(f => ({ ...f, furnishing: v }))}>
-                              <SelectTrigger className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]">
+                              <SelectTrigger className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]">
                                 <SelectValue placeholder="Select" />
                               </SelectTrigger>
                               <SelectContent>
@@ -1186,25 +1186,25 @@ const ListingPortalSubmit = () => {
                           </div>
                           <div>
                             <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Handover</label>
-                            <Input value={form.handover_date} onChange={e => setForm(f => ({ ...f, handover_date: e.target.value }))} placeholder="e.g. Q4 2026" className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]" />
+                            <Input value={form.handover_date} onChange={e => setForm(f => ({ ...f, handover_date: e.target.value }))} placeholder="e.g. Q4 2026" className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]" />
                           </div>
                           <div>
                             <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Payment Plan</label>
-                            <Input value={form.payment_plan} onChange={e => setForm(f => ({ ...f, payment_plan: e.target.value }))} placeholder="e.g. 60/40" className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]" />
+                            <Input value={form.payment_plan} onChange={e => setForm(f => ({ ...f, payment_plan: e.target.value }))} placeholder="e.g. 60/40" className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]" />
                           </div>
                         </div>
                       </div>
 
                       {/* Key Features */}
                       {form.key_features.length > 0 && (
-                        <div className="bg-[#FDFBF7]/70 border-2 border-gold/20 rounded-2xl p-6">
+                        <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/20 rounded-2xl p-6">
                           <h3 className="text-[#1A1A1A] font-semibold mb-3 flex items-center gap-2">
-                            <Star className="w-4 h-4 text-gold" />
+                            <Star className="w-4 h-4 text-[#1A1A1A]" />
                             Key Features
                           </h3>
                           <div className="flex flex-wrap gap-2">
                             {form.key_features.map((f, i) => (
-                              <Badge key={i} className="bg-gold/10 text-gold border-gold/30 px-3 py-1">
+                              <Badge key={i} className="bg-[#EFE6D6]/10 text-[#1A1A1A] border-[#B89555]/30 px-3 py-1">
                                 {f}
                                 <button onClick={() => setForm(prev => ({ ...prev, key_features: prev.key_features.filter((_, idx) => idx !== i) }))} className="ml-2">
                                   <X className="w-3 h-3" />
@@ -1217,11 +1217,11 @@ const ListingPortalSubmit = () => {
 
                       {/* Amenities */}
                       {form.amenities.length > 0 && (
-                        <div className="bg-[#FDFBF7]/70 border-2 border-gold/20 rounded-2xl p-6">
+                        <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/20 rounded-2xl p-6">
                           <h3 className="text-[#1A1A1A] font-semibold mb-3">Amenities</h3>
                           <div className="flex flex-wrap gap-2">
                             {form.amenities.map((a, i) => (
-                              <Badge key={i} className="bg-[#FDFBF7] border-gold/20 text-[#1A1A1A]/70 px-3 py-1">
+                              <Badge key={i} className="bg-[#FDFBF7] border-[#B89555]/20 text-[#1A1A1A]/70 px-3 py-1">
                                 {a}
                                 <button onClick={() => setForm(prev => ({ ...prev, amenities: prev.amenities.filter((_, idx) => idx !== i) }))} className="ml-2">
                                   <X className="w-3 h-3" />
@@ -1236,14 +1236,14 @@ const ListingPortalSubmit = () => {
                       <div className="flex gap-3">
                         <Button
                           onClick={() => setPhase('pricing_ai')}
-                          className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-[#1A1A1A] hover:border-gold h-12 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
+                          className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50 text-[#1A1A1A] hover:border-[#B89555] h-12 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
                         >
                           <ArrowLeft className="w-4 h-4 mr-2" /> Back
                         </Button>
                         <Button
                           onClick={() => setPhase('pricing_role')}
                           disabled={!form.title.trim()}
-                          className="flex-1 bg-gold hover:bg-gold/90 text-[#1A1A1A] border-0 h-12 text-base disabled:opacity-50"
+                          className="flex-1 bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] border-0 h-12 text-base disabled:opacity-50"
                         >
                           Continue <ArrowRight className="w-4 h-4 ml-2" />
                         </Button>
@@ -1263,20 +1263,20 @@ const ListingPortalSubmit = () => {
                   className="space-y-6"
                 >
                   <div className="relative">
-                    <div className="absolute inset-0 -m-3 rounded-3xl bg-[#FDFBF7]/40 border border-gold/15" />
+                    <div className="absolute inset-0 -m-3 rounded-3xl bg-[#FDFBF7]/40 border border-[#B89555]/15" />
                     <div className="relative space-y-6 p-3">
                       {/* Role Selection */}
-                      <div className="bg-[#FDFBF7]/70 border-2 border-gold/20 rounded-2xl p-6">
+                      <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/20 rounded-2xl p-6">
                         <h3 className="text-[#1A1A1A] font-semibold mb-4 flex items-center gap-2">
-                          <User className="w-4 h-4 text-gold" />
+                          <User className="w-4 h-4 text-[#1A1A1A]" />
                           Your Role
                         </h3>
                         <RadioGroup value={sellerRole} onValueChange={setSellerRole} className="grid grid-cols-2 gap-3">
                           {sellerRoles.map(role => (
                             <div key={role.value} className={`flex items-center gap-3 p-3 rounded-2xl border-2 transition-all cursor-pointer ${
-                              sellerRole === role.value ? 'bg-gold/10 border-gold/50 shadow-md shadow-gold/10' : 'bg-[#FDFBF7]/60 border-gold/15 hover:border-gold/30'
+                              sellerRole === role.value ? 'bg-[#EFE6D6]/10 border-[#B89555]/50 shadow-md shadow-gold/10' : 'bg-[#FDFBF7]/60 border-[#B89555]/15 hover:border-[#B89555]/30'
                             }`}>
-                              <RadioGroupItem value={role.value} id={`role-${role.value}`} className="border-gold/50" />
+                              <RadioGroupItem value={role.value} id={`role-${role.value}`} className="border-[#B89555]/50" />
                               <Label htmlFor={`role-${role.value}`} className="text-[#1A1A1A] text-sm cursor-pointer">{role.label}</Label>
                             </div>
                           ))}
@@ -1284,9 +1284,9 @@ const ListingPortalSubmit = () => {
                       </div>
 
                       {/* Contact & Pricing Model */}
-                      <div className="bg-[#FDFBF7]/70 border-2 border-gold/20 rounded-2xl p-6">
+                      <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/20 rounded-2xl p-6">
                         <h3 className="text-[#1A1A1A] font-semibold mb-2 flex items-center gap-2">
-                          <CreditCard className="w-4 h-4 text-gold" />
+                          <CreditCard className="w-4 h-4 text-[#1A1A1A]" />
                           Listing Contact & Pricing
                         </h3>
                         <p className="text-[#1A1A1A]/70 text-xs mb-4">Choose how enquiries are handled for your listing</p>
@@ -1297,20 +1297,20 @@ const ListingPortalSubmit = () => {
                             onClick={() => setContactMode('direct')}
                             className={`relative text-left p-5 rounded-2xl border-2 transition-all ${
                               contactMode === 'direct' 
-                                ? 'bg-gold/10 border-gold/50 shadow-lg shadow-gold/15' 
-                                : 'bg-[#FDFBF7]/60 border-gold/15 hover:border-gold/30'
+                                ? 'bg-[#EFE6D6]/10 border-[#B89555]/50 shadow-lg shadow-gold/15' 
+                                : 'bg-[#FDFBF7]/60 border-[#B89555]/15 hover:border-[#B89555]/30'
                             }`}
                           >
                             {contactMode === 'direct' && (
-                              <div className="absolute top-3 right-3 w-6 h-6 bg-gold rounded-full flex items-center justify-center">
+                              <div className="absolute top-3 right-3 w-6 h-6 bg-[#EFE6D6] rounded-full flex items-center justify-center">
                                 <Check className="w-3.5 h-3.5 text-white" />
                               </div>
                             )}
                             <div className="flex items-center gap-2 mb-2">
-                              <Phone className="w-4 h-4 text-gold" />
+                              <Phone className="w-4 h-4 text-[#1A1A1A]" />
                               <span className="text-[#1A1A1A] font-semibold text-sm">Direct Contact</span>
                             </div>
-                            <p className="text-gold font-bold text-lg mb-1">{LISTING_FEES.direct.label}</p>
+                            <p className="text-[#1A1A1A] font-bold text-lg mb-1">{LISTING_FEES.direct.label}</p>
                             <p className="text-[#1A1A1A]/70 text-xs">{LISTING_FEES.direct.description}</p>
                             <div className="mt-3 bg-emerald-50 border border-emerald-200 rounded-2xl p-2">
                               <p className="text-emerald-700 text-xs font-medium">50% less than Property Finder & Bayut</p>
@@ -1322,23 +1322,23 @@ const ListingPortalSubmit = () => {
                             onClick={() => setContactMode('commission')}
                             className={`relative text-left p-5 rounded-2xl border-2 transition-all ${
                               contactMode === 'commission' 
-                                ? 'bg-gold/10 border-gold/50 shadow-lg shadow-gold/15' 
-                                : 'bg-[#FDFBF7]/60 border-gold/15 hover:border-gold/30'
+                                ? 'bg-[#EFE6D6]/10 border-[#B89555]/50 shadow-lg shadow-gold/15' 
+                                : 'bg-[#FDFBF7]/60 border-[#B89555]/15 hover:border-[#B89555]/30'
                             }`}
                           >
                             {contactMode === 'commission' && (
-                              <div className="absolute top-3 right-3 w-6 h-6 bg-gold rounded-full flex items-center justify-center">
+                              <div className="absolute top-3 right-3 w-6 h-6 bg-[#EFE6D6] rounded-full flex items-center justify-center">
                                 <Check className="w-3.5 h-3.5 text-white" />
                               </div>
                             )}
                             <div className="flex items-center gap-2 mb-2">
-                              <Shield className="w-4 h-4 text-gold" />
+                              <Shield className="w-4 h-4 text-[#1A1A1A]" />
                               <span className="text-[#1A1A1A] font-semibold text-sm">Commission-Based</span>
                             </div>
-                            <p className="text-gold font-bold text-lg mb-1">{LISTING_FEES.commission.label}</p>
+                            <p className="text-[#1A1A1A] font-bold text-lg mb-1">{LISTING_FEES.commission.label}</p>
                             <p className="text-[#1A1A1A]/70 text-xs">{LISTING_FEES.commission.description}</p>
-                            <div className="mt-3 bg-gold/5 border border-gold/20 rounded-2xl p-2">
-                              <p className="text-gold text-xs font-medium">JBJ handles all enquiries professionally</p>
+                            <div className="mt-3 bg-[#EFE6D6]/5 border border-[#B89555]/20 rounded-2xl p-2">
+                              <p className="text-[#1A1A1A] text-xs font-medium">JBJ handles all enquiries professionally</p>
                             </div>
                           </button>
                         </div>
@@ -1346,21 +1346,21 @@ const ListingPortalSubmit = () => {
 
                       {/* Approval Preview */}
                       {!isOwner && (
-                        <div className="bg-[#FDFBF7]/70 border-2 border-gold/20 rounded-2xl p-6">
+                        <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/20 rounded-2xl p-6">
                           <h3 className="text-[#1A1A1A] font-semibold mb-4 flex items-center gap-2">
-                            <Shield className="w-4 h-4 text-gold" />
+                            <Shield className="w-4 h-4 text-[#1A1A1A]" />
                             Approval Workflow
                           </h3>
                           <p className="text-[#1A1A1A]/70 text-xs mb-4">Your listing will go through these approval stages before publishing</p>
                           <div className="space-y-3">
                             {UNIFIED_APPROVAL_WORKFLOW.map((step) => (
                               <div key={step.step} className="flex items-center gap-3">
-                                <img src={step.approverPhoto} alt="" className="w-9 h-9 rounded-full object-cover border border-gold/30" />
+                                <img src={step.approverPhoto} alt="" className="w-9 h-9 rounded-full object-cover border border-[#B89555]/30" />
                                 <div className="flex-1">
                                   <p className="text-[#1A1A1A] text-sm font-medium">{step.name}</p>
                                   <p className="text-[#1A1A1A]/70 text-xs">{step.approverName} — {step.approverTitle}</p>
                                 </div>
-                                <Badge className="bg-gold/10 text-gold border-gold/30 text-xs flex items-center gap-1"><Check className="w-3 h-3" /> Step {step.step}</Badge>
+                                <Badge className="bg-[#EFE6D6]/10 text-[#1A1A1A] border-[#B89555]/30 text-xs flex items-center gap-1"><Check className="w-3 h-3" /> Step {step.step}</Badge>
                               </div>
                             ))}
                           </div>
@@ -1383,13 +1383,13 @@ const ListingPortalSubmit = () => {
                       <div className="flex gap-3">
                         <Button
                           onClick={() => setPhase('review')}
-                          className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-[#1A1A1A] hover:border-gold h-12 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
+                          className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50 text-[#1A1A1A] hover:border-[#B89555] h-12 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
                         >
                           <ArrowLeft className="w-4 h-4 mr-2" /> Back
                         </Button>
                         <Button
                           onClick={handleSubmit}
-                          className="flex-1 bg-gold hover:bg-gold/90 text-[#1A1A1A] border-0 h-12 text-base"
+                          className="flex-1 bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] border-0 h-12 text-base"
                         >
                           <Check className="w-5 h-5 mr-2" />
                           {isOwner ? 'Approve & Publish' : 'Submit for Approval'}
@@ -1406,7 +1406,7 @@ const ListingPortalSubmit = () => {
                   key="submitting"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="bg-[#FDFBF7]/70 border-2 border-gold/20 rounded-2xl p-12 text-center"
+                  className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/20 rounded-2xl p-12 text-center"
                 >
                   <BrandedLoader variant="light" text={isOwner ? 'Approving...' : 'Submitting...'} className="min-h-0 py-8" />
                   <h2 className="text-[#1A1A1A] text-xl font-bold mt-4">

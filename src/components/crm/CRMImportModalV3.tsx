@@ -1301,7 +1301,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
               </div>
               <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-lg text-center">
                 <Flag className="h-5 w-5 text-amber-500 mx-auto mb-1" />
-                <p className="text-lg font-bold text-amber-400">{analyzedData.flagged.length}</p>
+                <p className="text-lg font-bold text-[#1A1A1A]">{analyzedData.flagged.length}</p>
                 <p className="text-xs text-amber-300">Flagged</p>
               </div>
               <div className="p-3 bg-[#B89555]/10 border border-[#B89555]/30/30 rounded-lg text-center">
@@ -1365,7 +1365,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                           </td>
                           <td className="p-2">
                             {row.isFlagged ? (
-                              <Badge variant="outline" className="text-[10px] text-amber-400 border-amber-500/50">
+                              <Badge variant="outline" className="text-[10px] text-[#1A1A1A] border-amber-500/50">
                                 Flagged
                               </Badge>
                             ) : (
@@ -1389,9 +1389,9 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                     <table className="w-full text-xs">
                       <thead className="bg-amber-500/10 sticky top-0">
                         <tr>
-                          <th className="p-2 text-left text-amber-400">Row</th>
-                          <th className="p-2 text-left text-amber-400">Name</th>
-                          <th className="p-2 text-left text-amber-400">Issues</th>
+                          <th className="p-2 text-left text-[#1A1A1A]">Row</th>
+                          <th className="p-2 text-left text-[#1A1A1A]">Name</th>
+                          <th className="p-2 text-left text-[#1A1A1A]">Issues</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -1402,7 +1402,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                             <td className="p-2">
                               <div className="flex flex-wrap gap-1">
                                 {row.flagReasons?.map((reason, j) => (
-                                  <Badge key={j} variant="outline" className="text-[10px] text-amber-400 border-amber-500/50">
+                                  <Badge key={j} variant="outline" className="text-[10px] text-[#1A1A1A] border-amber-500/50">
                                     {reason.replace(/_/g, ' ')}
                                   </Badge>
                                 ))}
@@ -1464,7 +1464,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                   <p className="text-xs text-green-300">Imported</p>
                 </div>
                 <div className="p-3 bg-amber-500/10 rounded-lg">
-                  <p className="text-xl font-bold text-amber-400">{result.flagged}</p>
+                  <p className="text-xl font-bold text-[#1A1A1A]">{result.flagged}</p>
                   <p className="text-xs text-amber-300">Flagged</p>
                 </div>
                 <div className="p-3 bg-[#B89555]/10 rounded-lg">
@@ -1481,7 +1481,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                   <p className="text-sm text-amber-300 font-medium">
                     {result.flagged} leads flagged for review
                   </p>
-                  <p className="text-xs text-amber-400/80 mt-1">
+                  <p className="text-xs text-[#1A1A1A]/80 mt-1">
                     View them in the "Flagged" tab to fix incomplete data
                   </p>
                 </div>

@@ -550,16 +550,16 @@ export default function CreateEnvelope() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       {/* Premium Page Header — aligned with sidebar logo divider */}
-      <div className="border-b border-gold/20">
+      <div className="border-b border-[#B89555]/20">
         <div className="max-w-5xl mx-auto px-6 flex items-end h-[84px] pb-4 gap-4">
-          <Button variant="ghost" onClick={() => navigate("/e-signature")} className="text-gold hover:text-[#1A1A1A] hover:bg-gold/10 mb-0.5">
+          <Button variant="ghost" onClick={() => navigate("/e-signature")} className="text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10 mb-0.5">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back
           </Button>
           <div className="flex items-center gap-3">
-            <Upload className="w-5 h-5 text-gold" />
+            <Upload className="w-5 h-5 text-[#1A1A1A]" />
             <h1 className="text-2xl md:text-3xl font-bold text-white">
-              Upload & <span className="text-gold">Sign</span>
+              Upload & <span className="text-[#1A1A1A]">Sign</span>
             </h1>
           </div>
         </div>
@@ -575,12 +575,12 @@ export default function CreateEnvelope() {
             <div key={step.id} className="flex items-center flex-1">
               <div 
                 className={`flex items-center gap-2 ${
-                  currentStep >= step.id ? "text-gold" : "text-muted-foreground"
+                  currentStep >= step.id ? "text-[#1A1A1A]" : "text-muted-foreground"
                 }`}
               >
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
                   currentStep >= step.id 
-                    ? "bg-gold text-white" 
+                    ? "bg-[#EFE6D6] text-white" 
                     : "bg-muted text-muted-foreground"
                 }`}>
                   <step.icon className="w-5 h-5" />
@@ -589,7 +589,7 @@ export default function CreateEnvelope() {
               </div>
               {index < steps.length - 1 && (
                 <div className={`flex-1 h-0.5 mx-4 ${
-                  currentStep > step.id ? "bg-gold" : "bg-muted"
+                  currentStep > step.id ? "bg-[#EFE6D6]" : "bg-muted"
                 }`} />
               )}
             </div>
@@ -637,8 +637,8 @@ export default function CreateEnvelope() {
                       onClick={() => document.getElementById("esign-file-input")?.click()}
                       className={`border-2 border-dashed rounded-xl p-10 flex flex-col items-center justify-center cursor-pointer transition-all ${
                         isDragOver
-                          ? "border-gold bg-gold/10 scale-[1.01]"
-                          : "border-muted-foreground/25 hover:border-gold/50"
+                          ? "border-[#B89555] bg-[#EFE6D6]/10 scale-[1.01]"
+                          : "border-muted-foreground/25 hover:border-[#B89555]/50"
                       }`}
                     >
                       <input
@@ -649,7 +649,7 @@ export default function CreateEnvelope() {
                         onChange={handleFileUpload}
                         className="hidden"
                       />
-                      <Upload className={`w-12 h-12 mb-3 ${isDragOver ? "text-gold animate-bounce" : "text-muted-foreground"}`} />
+                      <Upload className={`w-12 h-12 mb-3 ${isDragOver ? "text-[#1A1A1A] animate-bounce" : "text-muted-foreground"}`} />
                       <p className="text-lg font-medium text-foreground">
                         {isDragOver ? "Drop files here" : "Drop files or click to upload"}
                       </p>
@@ -675,14 +675,14 @@ export default function CreateEnvelope() {
                                   className="w-10 h-10 rounded object-cover flex-shrink-0"
                                 />
                               ) : (
-                                <FileText className="w-8 h-8 text-gold flex-shrink-0" />
+                                <FileText className="w-8 h-8 text-[#1A1A1A] flex-shrink-0" />
                               )}
                               <div className="min-w-0">
                                 <p className="text-sm font-medium truncate">{file.name}</p>
                                 <p className="text-xs text-muted-foreground">
                                   {(file.size / 1024 / 1024).toFixed(2)} MB
                                   {file === pdfFile && (
-                                    <span className="ml-2 text-gold font-semibold">• Signing Document</span>
+                                    <span className="ml-2 text-[#1A1A1A] font-semibold">• Signing Document</span>
                                   )}
                                 </p>
                               </div>
@@ -1063,7 +1063,7 @@ export default function CreateEnvelope() {
           </Button>
           
           {currentStep < 4 ? (
-            <Button onClick={nextStep} className="bg-gold hover:bg-gold/90">
+            <Button onClick={nextStep} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90">
               Next
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
@@ -1071,7 +1071,7 @@ export default function CreateEnvelope() {
             <Button 
               onClick={handleSubmit} 
               disabled={isSubmitting || !reviewConfirmed}
-              className="bg-gold hover:bg-gold/90"
+              className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90"
             >
               {isSubmitting ? (
                 <>

@@ -37,8 +37,8 @@ const Philanthropy = () => {
             className="flex items-center justify-center gap-2 mb-6"
             variants={fadeInUp}
           >
-            <Heart className="w-6 h-6 text-gold" />
-            <span className="text-gold text-sm uppercase tracking-[0.3em]">
+            <Heart className="w-6 h-6 text-[#1A1A1A]" />
+            <span className="text-[#1A1A1A] text-sm uppercase tracking-[0.3em]">
               Giving Back
             </span>
           </motion.div>
@@ -63,15 +63,15 @@ const Philanthropy = () => {
             variants={fadeInUp}
           >
             <div className="flex items-center gap-2 text-white/90">
-              <Heart className="w-5 h-5 text-gold" />
+              <Heart className="w-5 h-5 text-[#1A1A1A]" />
               <span className="text-sm">Community Support</span>
             </div>
             <div className="flex items-center gap-2 text-white/90">
-              <Users className="w-5 h-5 text-gold" />
+              <Users className="w-5 h-5 text-[#1A1A1A]" />
               <span className="text-sm">Social Responsibility</span>
             </div>
             <div className="flex items-center gap-2 text-white/90">
-              <Globe className="w-5 h-5 text-gold" />
+              <Globe className="w-5 h-5 text-[#1A1A1A]" />
               <span className="text-sm">Global Impact</span>
             </div>
           </motion.div>
@@ -84,10 +84,10 @@ const Philanthropy = () => {
           <div className="max-w-3xl mx-auto text-center">
             <div className="jj-card-inner rounded-2xl p-12">
               <div className="w-16 h-16 rounded-2xl bg-[#1A1A1A] flex items-center justify-center mx-auto mb-6">
-                <Heart className="w-8 h-8 text-gold" />
+                <Heart className="w-8 h-8 text-[#1A1A1A]" />
               </div>
               <h2 className="text-[#1A1A1A] text-2xl md:text-3xl font-bold mb-4">
-                Content <span className="text-gold">Coming Soon</span>
+                Content <span className="text-[#1A1A1A]">Coming Soon</span>
               </h2>
               <p className="text-[#1A1A1A]/70 mb-8">
                 We're currently preparing detailed information about our philanthropic initiatives 
@@ -95,7 +95,7 @@ const Philanthropy = () => {
                 JBJ Global Real Estate is making a difference.
               </p>
               <Link to="/contact">
-                <Button className="bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-gold px-8 py-6">
+                <Button className="bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-[#1A1A1A] px-8 py-6">
                   Contact Us to Learn More
                   <ArrowUpRight className="w-5 h-5 ml-2" />
                 </Button>

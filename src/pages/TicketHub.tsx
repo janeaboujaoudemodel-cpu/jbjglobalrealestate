@@ -445,7 +445,7 @@ const TicketHub = () => {
             </div>
 
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-              <TabsList className="grid w-full grid-cols-3 bg-muted/60 border-2 border-gold/30 rounded-xl h-12 p-1 gap-1">
+              <TabsList className="grid w-full grid-cols-3 bg-muted/60 border-2 border-[#B89555]/30 rounded-xl h-12 p-1 gap-1">
                 <TabsTrigger value="new" className="text-sm font-semibold h-full rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-foreground data-[state=active]:shadow-md">
                   <Plus className="w-4 h-4 mr-2" />
                   New Ticket
@@ -553,8 +553,8 @@ const TicketHub = () => {
                           className={cn(
                             "border-2 border-dashed rounded-xl p-5 text-center transition-colors cursor-pointer",
                             isDragOver
-                              ? "border-gold bg-gold/10"
-                              : "border-gold/30 hover:border-gold/50 bg-[#FDFBF7]"
+                              ? "border-[#B89555] bg-[#EFE6D6]/10"
+                              : "border-[#B89555]/30 hover:border-[#B89555]/50 bg-[#FDFBF7]"
                           )}
                           onClick={() => fileInputRef.current?.click()}
                         >
@@ -568,7 +568,7 @@ const TicketHub = () => {
                           />
                           <Upload className="w-8 h-8 mx-auto mb-2 text-[#1A1A1A]/70" />
                           <p className="text-sm text-muted-foreground">
-                            Drag & drop files here or <span className="text-gold font-medium underline">browse</span>
+                            Drag & drop files here or <span className="text-[#1A1A1A] font-medium underline">browse</span>
                           </p>
                           <p className="text-xs text-muted-foreground mt-1">Images, videos, PDFs, screen recordings</p>
                         </div>
@@ -605,11 +605,11 @@ const TicketHub = () => {
                         {attachments.length > 0 && (
                           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
                             {attachments.map((att) => (
-                              <div key={att.id} className="relative group rounded-lg border-2 border-gold/20 bg-[#FDFBF7] overflow-hidden">
+                              <div key={att.id} className="relative group rounded-lg border-2 border-[#B89555]/20 bg-[#FDFBF7] overflow-hidden">
                                 {att.preview ? (
                                   <img src={att.preview} alt={att.file.name} className="w-full h-20 object-cover" />
                                 ) : (
-                                  <div className="w-full h-20 flex items-center justify-center bg-gold/5">
+                                  <div className="w-full h-20 flex items-center justify-center bg-[#EFE6D6]/5">
                                     {att.file.type.startsWith('video/') ? (
                                       <Video className="w-8 h-8 text-[#1A1A1A]/70" />
                                     ) : (
@@ -621,8 +621,8 @@ const TicketHub = () => {
                                   <p className="text-[10px] text-foreground truncate font-medium">{att.file.name}</p>
                                   <p className="text-[9px] text-muted-foreground">{formatFileSize(att.file.size)}</p>
                                   {att.status === 'uploading' && (
-                                    <div className="w-full h-1 bg-gold/20 rounded-full mt-1">
-                                      <div className="h-full bg-gold rounded-full animate-pulse w-2/3" />
+                                    <div className="w-full h-1 bg-[#EFE6D6]/20 rounded-full mt-1">
+                                      <div className="h-full bg-[#EFE6D6] rounded-full animate-pulse w-2/3" />
                                     </div>
                                   )}
                                   {att.status === 'error' && (
@@ -655,15 +655,15 @@ const TicketHub = () => {
                 {user ? (
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {/* Ticket List */}
-                    <div className="bg-background rounded-2xl border-2 border-gold/30 shadow-lg overflow-hidden">
-                      <div className="p-4 border-b border-gold/20 bg-gradient-to-r from-[#F7F1E6]/50 to-transparent">
+                    <div className="bg-background rounded-2xl border-2 border-[#B89555]/30 shadow-lg overflow-hidden">
+                      <div className="p-4 border-b border-[#B89555]/20 bg-gradient-to-r from-[#F7F1E6]/50 to-transparent">
                         <h2 className="font-semibold text-foreground flex items-center gap-2">
-                          <Ticket className="w-4 h-4 text-gold" />
+                          <Ticket className="w-4 h-4 text-[#1A1A1A]" />
                           Your Tickets ({userTickets?.length || 0})
                         </h2>
                       </div>
                       {loadingTickets ? (
-                        <div className="p-8 text-center"><Loader2 className="w-6 h-6 animate-spin mx-auto text-gold" /></div>
+                        <div className="p-8 text-center"><Loader2 className="w-6 h-6 animate-spin mx-auto text-[#1A1A1A]" /></div>
                       ) : userTickets && userTickets.length > 0 ? (
                         <ScrollArea className="h-[450px]">
                           <div className="divide-y divide-gold/10">
@@ -672,10 +672,10 @@ const TicketHub = () => {
                               const StatusIcon = status.icon;
                               return (
                                 <button key={ticket.id} onClick={() => handleSelectTicket(ticket.id)}
-                                  className={cn("w-full p-4 text-left hover:bg-gold/5 transition-colors",
-                                    selectedTicket?.id === ticket.id && "bg-gold/10 border-l-4 border-l-gold")}>
+                                  className={cn("w-full p-4 text-left hover:bg-[#EFE6D6]/5 transition-colors",
+                                    selectedTicket?.id === ticket.id && "bg-[#EFE6D6]/10 border-l-4 border-l-gold")}>
                                   <div className="flex items-center gap-2 mb-1">
-                                    <span className="font-mono text-gold font-semibold text-sm">{ticket.ticket_number}</span>
+                                    <span className="font-mono text-[#1A1A1A] font-semibold text-sm">{ticket.ticket_number}</span>
                                     <Badge className={cn("text-xs", status.className)}><StatusIcon className="w-3 h-3 mr-1" />{status.label}</Badge>
                                   </div>
                                   <p className="text-foreground font-medium truncate text-sm">{ticket.subject}</p>
@@ -693,14 +693,14 @@ const TicketHub = () => {
                       )}
                     </div>
                     {/* Detail */}
-                    <div className="bg-background rounded-2xl border-2 border-gold/30 shadow-lg overflow-hidden">
+                    <div className="bg-background rounded-2xl border-2 border-[#B89555]/30 shadow-lg overflow-hidden">
                       {selectedTicket ? (
                         <>
-                          <div className="p-4 border-b border-gold/20 bg-gradient-to-r from-[#F7F1E6]/50 to-transparent">
+                          <div className="p-4 border-b border-[#B89555]/20 bg-gradient-to-r from-[#F7F1E6]/50 to-transparent">
                             <div className="flex items-center gap-2">
-                              <span className="font-mono text-gold font-semibold">{selectedTicket.ticket_number}</span>
+                              <span className="font-mono text-[#1A1A1A] font-semibold">{selectedTicket.ticket_number}</span>
                               <button onClick={() => handleCopyTicketNumber(selectedTicket.ticket_number)}
-                                className="inline-flex h-6 w-6 items-center justify-center rounded-md border border-gold/30 text-gold hover:bg-gold/10">
+                                className="inline-flex h-6 w-6 items-center justify-center rounded-md border border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                                 <Copy className="w-3.5 h-3.5" />
                               </button>
                               <Badge className={statusConfig[selectedTicket.status]?.className}>{statusConfig[selectedTicket.status]?.label}</Badge>
@@ -710,20 +710,20 @@ const TicketHub = () => {
                           </div>
                           <ScrollArea className="h-[300px]">
                             <div className="p-4 space-y-3">
-                              <div className="bg-[#FDFBF7] rounded-lg p-3 border border-gold/10">
-                                <p className="text-[10px] text-gold uppercase tracking-wide mb-1 font-semibold">Your Message</p>
+                              <div className="bg-[#FDFBF7] rounded-lg p-3 border border-[#B89555]/10">
+                                <p className="text-[10px] text-[#1A1A1A] uppercase tracking-wide mb-1 font-semibold">Your Message</p>
                                 <p className="text-muted-foreground text-sm whitespace-pre-wrap">{selectedTicket.description}</p>
                               </div>
                               {selectedTicket.messages.map((msg) => (
-                                <div key={msg.id} className={cn("rounded-lg p-3", msg.sender_type === "staff" ? "bg-gold/10 border border-gold/20 ml-4" : "bg-[#FDFBF7] border border-gold/10 mr-4")}>
-                                  <p className="text-[10px] uppercase tracking-wide mb-1 font-semibold text-gold">{msg.sender_type === "staff" ? "Staff Reply" : "You"}</p>
+                                <div key={msg.id} className={cn("rounded-lg p-3", msg.sender_type === "staff" ? "bg-[#EFE6D6]/10 border border-[#B89555]/20 ml-4" : "bg-[#FDFBF7] border border-[#B89555]/10 mr-4")}>
+                                  <p className="text-[10px] uppercase tracking-wide mb-1 font-semibold text-[#1A1A1A]">{msg.sender_type === "staff" ? "Staff Reply" : "You"}</p>
                                   <p className="text-muted-foreground text-sm whitespace-pre-wrap">{msg.message}</p>
                                   <p className="text-xs text-muted-foreground mt-1">{format(new Date(msg.created_at), "MMM d, h:mm a")}</p>
                                 </div>
                               ))}
                             </div>
                           </ScrollArea>
-                          <div className="p-3 border-t border-gold/20 bg-[#FDFBF7]">
+                          <div className="p-3 border-t border-[#B89555]/20 bg-[#FDFBF7]">
                             {selectedTicket.status === "resolved" && selectedTicket.reopen_token && (
                               <Button onClick={() => reopenMutation.mutate({ ticketNumber: selectedTicket.ticket_number, token: selectedTicket.reopen_token! })}
                                 disabled={reopenMutation.isPending} variant="outline" size="sm"
@@ -755,9 +755,9 @@ const TicketHub = () => {
                   </div>
                 ) : (
                   /* Guest tracking */
-                  <Card className="border-2 border-gold/30 max-w-lg mx-auto">
+                  <Card className="border-2 border-[#B89555]/30 max-w-lg mx-auto">
                     <CardHeader>
-                      <CardTitle className="flex items-center gap-2"><Search className="w-5 h-5 text-gold" /> Track Your Ticket</CardTitle>
+                      <CardTitle className="flex items-center gap-2"><Search className="w-5 h-5 text-[#1A1A1A]" /> Track Your Ticket</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div>
@@ -786,10 +786,10 @@ const TicketHub = () => {
 
               {/* INBOX TAB */}
               <TabsContent value="inbox">
-                <div className="bg-background rounded-2xl border-2 border-gold/30 shadow-lg overflow-hidden">
-                  <div className="p-4 border-b border-gold/20 bg-gradient-to-r from-[#F7F1E6]/50 to-transparent">
+                <div className="bg-background rounded-2xl border-2 border-[#B89555]/30 shadow-lg overflow-hidden">
+                  <div className="p-4 border-b border-[#B89555]/20 bg-gradient-to-r from-[#F7F1E6]/50 to-transparent">
                     <h2 className="font-semibold text-foreground flex items-center gap-2">
-                      <Inbox className="w-4 h-4 text-gold" />
+                      <Inbox className="w-4 h-4 text-[#1A1A1A]" />
                       JBJ Messages Inbox
                       {(inboxQuery.data?.length || 0) > 0 && <Badge className="bg-red-500 text-white text-xs">{inboxQuery.data?.length}</Badge>}
                     </h2>
@@ -799,10 +799,10 @@ const TicketHub = () => {
                       <div className="divide-y divide-gold/10">
                         {inboxQuery.data?.map((msg) => (
                           <button key={msg.id} onClick={() => { handleSelectTicket(msg.ticket_id); setActiveTab("track"); }}
-                            className="w-full p-4 text-left hover:bg-gold/5 transition-colors">
+                            className="w-full p-4 text-left hover:bg-[#EFE6D6]/5 transition-colors">
                             <div className="flex items-center justify-between mb-1 gap-2">
                               <span className="text-sm font-semibold text-foreground truncate">{msg.support_tickets?.subject || "Message from JBJ"}</span>
-                              <span className="font-mono text-[11px] text-gold shrink-0">{msg.support_tickets?.ticket_number || ""}</span>
+                              <span className="font-mono text-[11px] text-[#1A1A1A] shrink-0">{msg.support_tickets?.ticket_number || ""}</span>
                             </div>
                             <p className="text-sm text-muted-foreground line-clamp-2">{msg.message}</p>
                             <p className="text-xs text-muted-foreground mt-1">{format(new Date(msg.created_at), "MMM d, yyyy h:mm a")}</p>

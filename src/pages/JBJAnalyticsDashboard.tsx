@@ -288,7 +288,7 @@ const JBJAnalyticsDashboard: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold" />
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#B89555]" />
       </div>
     );
   }
@@ -298,7 +298,7 @@ const JBJAnalyticsDashboard: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       {/* Header - full width champagne */}
-      <div className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
+      <div className="border-b-2 border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
@@ -308,22 +308,22 @@ const JBJAnalyticsDashboard: React.FC = () => {
               <p className="text-[#1A1A1A]/70 mt-1">Monitor platform performance and user activity</p>
             </div>
             <div className="flex items-center gap-3">
-              <div className="flex bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 rounded-lg p-1">
+              <div className="flex bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 rounded-lg p-1">
                 {(['today', 'week', 'month'] as const).map(range => (
                   <button
                     key={range}
                     onClick={() => setDateRange(range)}
                     className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                       dateRange === range 
-                        ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] shadow-md border border-gold/40' 
-                        : 'text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-gold/10'
+                        ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] shadow-md border border-[#B89555]/40' 
+                        : 'text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10'
                     }`}
                   >
                     {range === 'today' ? 'Today' : range === 'week' ? '7 Days' : '30 Days'}
                   </button>
                 ))}
               </div>
-              <Button onClick={exportToCSV} variant="secondary" className="border-gold/30">
+              <Button onClick={exportToCSV} variant="secondary" className="border-[#B89555]/30">
                 <Download className="w-4 h-4 mr-2" />
                 Export
               </Button>
@@ -342,10 +342,10 @@ const JBJAnalyticsDashboard: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.05 }}
             >
-              <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_4px_20px_rgba(200,167,102,0.15)] hover:shadow-[0_8px_30px_rgba(200,167,102,0.25)] hover:-translate-y-0.5 transition-all h-full">
+              <Card className="border-2 border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_4px_20px_rgba(200,167,102,0.15)] hover:shadow-[0_8px_30px_rgba(200,167,102,0.25)] hover:-translate-y-0.5 transition-all h-full">
                 <CardContent className="p-4">
                   <div className="flex items-center gap-3 mb-2">
-                    <div className="p-1.5 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/30">
+                    <div className="p-1.5 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/30">
                       <stat.icon className="w-4 h-4 text-[#8A7356]" />
                     </div>
                     <span className="text-[#1A1A1A]/70 text-xs font-medium">{stat.label}</span>
@@ -361,16 +361,16 @@ const JBJAnalyticsDashboard: React.FC = () => {
         </div>
 
         <Tabs defaultValue="visitors" className="space-y-6">
-          <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30">
-            <TabsTrigger value="visitors" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-gold/40 text-[#1A1A1A]">
+          <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30">
+            <TabsTrigger value="visitors" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
               <Users className="w-4 h-4 mr-2" />
               Daily Visitors
             </TabsTrigger>
-            <TabsTrigger value="usage" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-gold/40 text-[#1A1A1A]">
+            <TabsTrigger value="usage" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
               <BarChart3 className="w-4 h-4 mr-2" />
               Tool Usage
             </TabsTrigger>
-            <TabsTrigger value="issues" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-gold/40 text-[#1A1A1A]">
+            <TabsTrigger value="issues" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/40 text-[#1A1A1A]">
               <AlertCircle className="w-4 h-4 mr-2" />
               Issue Reports
             </TabsTrigger>
@@ -379,10 +379,10 @@ const JBJAnalyticsDashboard: React.FC = () => {
           <TabsContent value="visitors">
             <div className="space-y-6">
               {/* Daily Visitors Chart */}
-              <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
+              <Card className="border-2 border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
                 <CardHeader>
                   <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
-                    <Users className="w-5 h-5 text-gold" />
+                    <Users className="w-5 h-5 text-[#1A1A1A]" />
                     Daily Visitors Trend
                   </CardTitle>
                 </CardHeader>
@@ -415,28 +415,28 @@ const JBJAnalyticsDashboard: React.FC = () => {
 
               {/* Summary Cards */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+                <Card className="border-2 border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
                   <CardContent className="p-5 text-center">
-                    <div className="w-10 h-10 rounded-full bg-gold/15 flex items-center justify-center mx-auto mb-2">
-                      <Users className="w-5 h-5 text-gold" />
+                    <div className="w-10 h-10 rounded-full bg-[#EFE6D6]/15 flex items-center justify-center mx-auto mb-2">
+                      <Users className="w-5 h-5 text-[#1A1A1A]" />
                     </div>
                     <p className="text-2xl font-bold text-[#1A1A1A]">{dailyVisitors.reduce((s, d) => s + d.visitors, 0)}</p>
                     <p className="text-xs text-[#1A1A1A]/70">Total Unique Visitors</p>
                   </CardContent>
                 </Card>
-                <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+                <Card className="border-2 border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
                   <CardContent className="p-5 text-center">
-                    <div className="w-10 h-10 rounded-full bg-gold/15 flex items-center justify-center mx-auto mb-2">
-                      <Eye className="w-5 h-5 text-gold" />
+                    <div className="w-10 h-10 rounded-full bg-[#EFE6D6]/15 flex items-center justify-center mx-auto mb-2">
+                      <Eye className="w-5 h-5 text-[#1A1A1A]" />
                     </div>
                     <p className="text-2xl font-bold text-[#1A1A1A]">{dailyVisitors.reduce((s, d) => s + d.pageViews, 0)}</p>
                     <p className="text-xs text-[#1A1A1A]/70">Total Page Views</p>
                   </CardContent>
                 </Card>
-                <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+                <Card className="border-2 border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
                   <CardContent className="p-5 text-center">
-                    <div className="w-10 h-10 rounded-full bg-gold/15 flex items-center justify-center mx-auto mb-2">
-                      <Activity className="w-5 h-5 text-gold" />
+                    <div className="w-10 h-10 rounded-full bg-[#EFE6D6]/15 flex items-center justify-center mx-auto mb-2">
+                      <Activity className="w-5 h-5 text-[#1A1A1A]" />
                     </div>
                     <p className="text-2xl font-bold text-[#1A1A1A]">
                       {dailyVisitors.length > 0 ? Math.round(dailyVisitors.reduce((s, d) => s + d.visitors, 0) / dailyVisitors.length) : 0}
@@ -449,7 +449,7 @@ const JBJAnalyticsDashboard: React.FC = () => {
           </TabsContent>
 
           <TabsContent value="usage">
-            <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
+            <Card className="border-2 border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
               <CardHeader>
                 <CardTitle className="text-[#1A1A1A]">Tool Usage Rankings</CardTitle>
               </CardHeader>
@@ -466,7 +466,7 @@ const JBJAnalyticsDashboard: React.FC = () => {
                             <span className="text-[#1A1A1A] font-medium">{tool.tool_name}</span>
                             <span className="text-[#1A1A1A]/70 text-sm">{tool.usage_count} uses</span>
                           </div>
-                          <div className="h-2 bg-gold/20 rounded-full overflow-hidden">
+                          <div className="h-2 bg-[#EFE6D6]/20 rounded-full overflow-hidden">
                             <div 
                               className="h-full bg-gradient-to-r from-[#D8C7A6] to-[#8A7356] rounded-full"
                               style={{ width: `${(tool.usage_count / (toolUsage[0]?.usage_count || 1)) * 100}%` }}
@@ -483,7 +483,7 @@ const JBJAnalyticsDashboard: React.FC = () => {
           </TabsContent>
 
           <TabsContent value="issues">
-            <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
+            <Card className="border-2 border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
               <CardHeader>
                 <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
                   User Issue Reports
@@ -501,7 +501,7 @@ const JBJAnalyticsDashboard: React.FC = () => {
                       issueReports.map(issue => (
                         <div 
                           key={issue.id} 
-                          className="p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-lg border border-gold/30"
+                          className="p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-lg border border-[#B89555]/30"
                         >
                           <div className="flex items-start justify-between mb-3">
                             <div>
@@ -529,7 +529,7 @@ const JBJAnalyticsDashboard: React.FC = () => {
                               <Button 
                                 size="sm" 
                                 variant="secondary"
-                                className="border-gold/30"
+                                className="border-[#B89555]/30"
                                 onClick={() => handleUpdateIssueStatus(issue.id, 'resolved')}
                               >
                                 Resolve
@@ -537,7 +537,7 @@ const JBJAnalyticsDashboard: React.FC = () => {
                               <Button 
                                 size="sm" 
                                 variant="secondary"
-                                className="border-gold/30"
+                                className="border-[#B89555]/30"
                                 onClick={() => handleUpdateIssueStatus(issue.id, 'dismissed')}
                               >
                                 Dismiss

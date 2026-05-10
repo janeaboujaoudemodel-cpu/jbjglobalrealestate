@@ -86,7 +86,7 @@ const AccessDenied = () => {
 
         {/* User status — email hidden for security */}
         {user && (
-          <div className="bg-zinc-900/50 border border-[#1A1A1A] rounded-xl p-4 mb-6">
+          <div className="bg-[#FDFBF7]/50 border border-[#1A1A1A] rounded-xl p-4 mb-6">
             <p className="text-white/70 text-sm">You are signed in but do not have access to this page.</p>
           </div>
         )}

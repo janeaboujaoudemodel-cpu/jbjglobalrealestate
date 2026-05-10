@@ -70,8 +70,8 @@ const Presentations = () => {
   /* Grid View */
   if (h.showGrid) {
     return (
-      <div className="min-h-screen bg-zinc-950 text-white flex flex-col">
-        <div className="border-b border-[#1A1A1A] px-4 py-2.5 flex items-center justify-between bg-zinc-900/90 backdrop-blur flex-shrink-0">
+      <div className="min-h-screen bg-[#FDFBF7] text-white flex flex-col">
+        <div className="border-b border-[#1A1A1A] px-4 py-2.5 flex items-center justify-between bg-[#FDFBF7]/90 backdrop-blur flex-shrink-0">
           <div className="flex items-center gap-3"><Presentation className="w-5 h-5 text-[#B89555]" /><span className="text-base font-semibold">{h.presentationTitle}</span></div>
           <Button variant="outline" size="sm" onClick={() => h.setShowGrid(false)} className="border-[#1A1A1A] text-white/85"><X className="w-3.5 h-3.5 mr-1.5" /> Close Grid</Button>
         </div>
@@ -82,7 +82,7 @@ const Presentations = () => {
                 <div className="aspect-video relative overflow-hidden" style={{ backgroundColor: s.backgroundColor }}>
                   <div style={{ transform: "scale(0.14)", transformOrigin: "top left", width: "1920px", height: "1080px", pointerEvents: "none" }}><SlideCanvas s={s} slideIndex={index} totalSlides={h.slides.length} /></div>
                 </div>
-                <div className="bg-zinc-900 px-3 py-2 flex items-center justify-between">
+                <div className="bg-[#FDFBF7] px-3 py-2 flex items-center justify-between">
                   <span className="text-xs text-white/70">{index + 1}. {s.title.slice(0, 30)}</span>
                   <button className="p-1 text-red-400 hover:bg-red-900/30 rounded transition-colors" onClick={(e) => { e.stopPropagation(); h.deleteSlide(index); }}><Trash2 className="w-3 h-3" /></button>
                 </div>
@@ -112,9 +112,9 @@ const Presentations = () => {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white flex flex-col">
+    <div className="min-h-screen bg-[#FDFBF7] text-white flex flex-col">
       {/* Header */}
-      <div className="border-b border-[#1A1A1A] px-4 py-2.5 flex items-center justify-between bg-zinc-900/90 backdrop-blur flex-shrink-0">
+      <div className="border-b border-[#1A1A1A] px-4 py-2.5 flex items-center justify-between bg-[#FDFBF7]/90 backdrop-blur flex-shrink-0">
         <div className="flex items-center gap-3">
           <Link to="/ai-hub" className="p-1.5 hover:bg-[#1A1A1A] rounded-lg transition-colors"><ArrowLeft className="w-4 h-4 text-white/70" /></Link>
           <Presentation className="w-5 h-5 text-[#B89555]" />
@@ -130,7 +130,7 @@ const Presentations = () => {
               {h.isExporting ? <span className="animate-pulse">Exporting...</span> : <><FileDown className="w-3.5 h-3.5" /> Export</>}
             </button>
             {h.showExportMenu && (
-              <div className="absolute right-0 top-full mt-1 bg-zinc-800 border border-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden z-50 min-w-[160px]">
+              <div className="absolute right-0 top-full mt-1 bg-[#F7F2EA] border border-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden z-50 min-w-[160px]">
                 <button onClick={h.exportAsPDF} className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm text-gray-200 hover:bg-[#1A1A1A] transition-colors"><FileText className="w-4 h-4 text-red-400" /> Export PDF</button>
               </div>
             )}
@@ -141,7 +141,7 @@ const Presentations = () => {
 
       <div className="flex flex-1 overflow-hidden">
         {/* Slide Thumbnails */}
-        <div className="w-44 border-r border-[#1A1A1A] bg-zinc-900/50 overflow-y-auto flex-shrink-0 p-2 space-y-2">
+        <div className="w-44 border-r border-[#1A1A1A] bg-[#FDFBF7]/50 overflow-y-auto flex-shrink-0 p-2 space-y-2">
           {h.slides.map((s, index) => (
             <div key={s.id} className={`relative cursor-pointer rounded-lg overflow-hidden border-2 transition-all group ${index === h.currentSlide ? "border-[#B89555] shadow-lg shadow-[#B89555]/20" : "border-[#1A1A1A] hover:border-[#B89555]/30"}`} onClick={() => h.setCurrentSlide(index)}>
               <div className="aspect-video relative overflow-hidden" style={{ backgroundColor: s.backgroundColor }}>
@@ -155,10 +155,10 @@ const Presentations = () => {
         </div>
 
         {/* Main Canvas Area */}
-        <div className="flex-1 overflow-auto flex flex-col items-center p-6 bg-zinc-950">
+        <div className="flex-1 overflow-auto flex flex-col items-center p-6 bg-[#FDFBF7]">
           {/* AI Panel */}
           {h.showAIPanel && (
-            <div className="w-full mb-5 bg-zinc-900/80 border border-[#B89555]/30 rounded-2xl p-5" style={{ maxWidth: `${1920 * previewScale + 40}px` }}>
+            <div className="w-full mb-5 bg-[#FDFBF7]/80 border border-[#B89555]/30 rounded-2xl p-5" style={{ maxWidth: `${1920 * previewScale + 40}px` }}>
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2"><Wand2 className="w-4 h-4 text-[#B89555]" /><h3 className="text-sm font-semibold text-gray-200">AI Slide Generator</h3></div>
                 <button onClick={() => h.setShowAIPanel(false)} className="text-white/90 hover:text-white/85"><X className="w-4 h-4" /></button>
@@ -174,7 +174,7 @@ const Presentations = () => {
                 })}
               </div>
               <div className="flex gap-2 mb-3">
-                <Textarea value={h.aiPrompt} onChange={(e) => h.setAiPrompt(e.target.value)} placeholder="Describe the slide you want to create..." className="flex-1 bg-zinc-800 border-[#1A1A1A] text-gray-200 text-sm resize-none min-h-[60px]" rows={2} />
+                <Textarea value={h.aiPrompt} onChange={(e) => h.setAiPrompt(e.target.value)} placeholder="Describe the slide you want to create..." className="flex-1 bg-[#F7F2EA] border-[#1A1A1A] text-gray-200 text-sm resize-none min-h-[60px]" rows={2} />
                 <div className="flex flex-col gap-1.5">
                   <Button size="sm" onClick={() => h.generateAISlide(h.aiPrompt)} disabled={!h.aiPrompt.trim() || h.isAIGenerating} className="bg-[#B89555] text-[#1A1A1A] hover:bg-[#b8963d] text-xs">
                     {h.isAIGenerating ? <Zap className="w-3.5 h-3.5 animate-pulse" /> : <Sparkles className="w-3.5 h-3.5" />} Generate
@@ -197,7 +197,7 @@ const Presentations = () => {
 
           {/* Template Gallery */}
           {h.showTemplates && (
-            <div className="w-full mb-5 bg-zinc-900/80 border border-[#1A1A1A] rounded-2xl p-5" style={{ maxWidth: `${1920 * previewScale + 40}px` }}>
+            <div className="w-full mb-5 bg-[#FDFBF7]/80 border border-[#1A1A1A] rounded-2xl p-5" style={{ maxWidth: `${1920 * previewScale + 40}px` }}>
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-sm font-semibold text-gray-200">Templates</h3>
                 <div className="flex items-center gap-1">
@@ -246,34 +246,34 @@ const Presentations = () => {
 
           {/* Navigation */}
           <div className="flex items-center gap-3">
-            <button onClick={h.prevSlide} disabled={h.currentSlide === 0} className="p-2 bg-zinc-800 hover:bg-[#1A1A1A] disabled:opacity-30 rounded-lg transition-all text-white/85"><ChevronLeft className="w-4 h-4" /></button>
+            <button onClick={h.prevSlide} disabled={h.currentSlide === 0} className="p-2 bg-[#F7F2EA] hover:bg-[#1A1A1A] disabled:opacity-30 rounded-lg transition-all text-white/85"><ChevronLeft className="w-4 h-4" /></button>
             <span className="text-white/70 text-sm min-w-[80px] text-center">{h.currentSlide + 1} / {h.slides.length}</span>
-            <button onClick={h.nextSlide} disabled={h.currentSlide === h.slides.length - 1} className="p-2 bg-zinc-800 hover:bg-[#1A1A1A] disabled:opacity-30 rounded-lg transition-all text-white/85"><ChevronRight className="w-4 h-4" /></button>
+            <button onClick={h.nextSlide} disabled={h.currentSlide === h.slides.length - 1} className="p-2 bg-[#F7F2EA] hover:bg-[#1A1A1A] disabled:opacity-30 rounded-lg transition-all text-white/85"><ChevronRight className="w-4 h-4" /></button>
           </div>
 
           {/* Speaker Notes */}
           {h.showNotes && (
-            <div className="w-full mt-4 bg-zinc-900/80 border border-[#1A1A1A] rounded-xl p-4" style={{ maxWidth: `${1920 * previewScale + 40}px` }}>
+            <div className="w-full mt-4 bg-[#FDFBF7]/80 border border-[#1A1A1A] rounded-xl p-4" style={{ maxWidth: `${1920 * previewScale + 40}px` }}>
               <div className="flex items-center gap-2 mb-2"><FileText className="w-3.5 h-3.5 text-white/70" /><span className="text-xs font-medium text-white/70">Speaker Notes</span></div>
-              <Textarea value={h.slide.notes || ""} onChange={(e) => h.updateSlide("notes", e.target.value)} placeholder="Add speaker notes for this slide..." className="bg-zinc-800 border-[#1A1A1A] text-white/85 text-sm resize-none min-h-[80px]" rows={3} />
+              <Textarea value={h.slide.notes || ""} onChange={(e) => h.updateSlide("notes", e.target.value)} placeholder="Add speaker notes for this slide..." className="bg-[#F7F2EA] border-[#1A1A1A] text-white/85 text-sm resize-none min-h-[80px]" rows={3} />
             </div>
           )}
         </div>
 
         {/* Properties Panel */}
-        <div className="w-60 border-l border-[#1A1A1A] bg-zinc-900/50 overflow-y-auto flex-shrink-0 p-3 space-y-4">
+        <div className="w-60 border-l border-[#1A1A1A] bg-[#FDFBF7]/50 overflow-y-auto flex-shrink-0 p-3 space-y-4">
           <h3 className="text-xs font-bold text-white/85 uppercase tracking-wider">Slide Properties</h3>
           <div>
             <label className="text-[10px] text-white/90 mb-1.5 block uppercase tracking-wide">Layout</label>
             <div className="grid grid-cols-2 gap-1">
               {(["title", "content", "two-column", "blank", "quote", "stats"] as const).map(layout => (
-                <button key={layout} className={`py-1.5 text-xs rounded-lg capitalize transition-all ${h.slide.layout === layout ? "bg-[#B89555]/20 text-[#B89555] border border-[#B89555]/50 font-semibold" : "bg-zinc-800 text-white/85 hover:bg-[#1A1A1A] border border-transparent"}`} onClick={() => h.updateSlide("layout", layout)}>{layout}</button>
+                <button key={layout} className={`py-1.5 text-xs rounded-lg capitalize transition-all ${h.slide.layout === layout ? "bg-[#B89555]/20 text-[#B89555] border border-[#B89555]/50 font-semibold" : "bg-[#F7F2EA] text-white/85 hover:bg-[#1A1A1A] border border-transparent"}`} onClick={() => h.updateSlide("layout", layout)}>{layout}</button>
               ))}
             </div>
           </div>
           <div>
             <label className="text-[10px] text-white/90 mb-1.5 block uppercase tracking-wide">Font</label>
-            <select value={h.slide.fontFamily} onChange={(e) => h.updateSlide("fontFamily", e.target.value)} className="w-full bg-zinc-800 text-gray-200 text-xs rounded-lg px-2 py-1.5 border border-[#1A1A1A] focus:outline-none focus:border-[#B89555]">
+            <select value={h.slide.fontFamily} onChange={(e) => h.updateSlide("fontFamily", e.target.value)} className="w-full bg-[#F7F2EA] text-gray-200 text-xs rounded-lg px-2 py-1.5 border border-[#1A1A1A] focus:outline-none focus:border-[#B89555]">
               {FONT_OPTIONS.map(f => <option key={f.value} value={f.value}>{f.label}</option>)}
             </select>
           </div>
@@ -281,7 +281,7 @@ const Presentations = () => {
             <label className="text-[10px] text-white/90 mb-1.5 block uppercase tracking-wide">Alignment</label>
             <div className="flex gap-1">
               {(["left", "center", "right"] as const).map(align => (
-                <button key={align} onClick={() => h.updateSlide("textAlign", align)} className={`flex-1 py-1.5 rounded-lg flex items-center justify-center transition-all ${h.slide.textAlign === align ? "bg-[#B89555]/20 text-[#B89555] border border-[#B89555]/50" : "bg-zinc-800 text-white/70 hover:bg-[#1A1A1A] border border-transparent"}`}>
+                <button key={align} onClick={() => h.updateSlide("textAlign", align)} className={`flex-1 py-1.5 rounded-lg flex items-center justify-center transition-all ${h.slide.textAlign === align ? "bg-[#B89555]/20 text-[#B89555] border border-[#B89555]/50" : "bg-[#F7F2EA] text-white/70 hover:bg-[#1A1A1A] border border-transparent"}`}>
                   {align === "left" && <AlignLeft className="w-3 h-3" />}{align === "center" && <AlignCenter className="w-3 h-3" />}{align === "right" && <AlignRight className="w-3 h-3" />}
                 </button>
               ))}
@@ -309,8 +309,8 @@ const Presentations = () => {
             </div>
           ))}
           <div className="pt-2 border-t border-[#1A1A1A] space-y-2">
-            <button onClick={h.duplicateSlide} className="w-full py-2 text-xs text-white/85 hover:text-white bg-zinc-800 hover:bg-[#1A1A1A] rounded-lg transition-all flex items-center justify-center gap-1.5"><Copy className="w-3 h-3" /> Duplicate Slide</button>
-            <button onClick={() => h.deleteSlide(h.currentSlide)} className="w-full py-2 text-xs text-red-400 hover:text-red-300 bg-zinc-800 hover:bg-red-900/30 rounded-lg transition-all flex items-center justify-center gap-1.5"><Trash2 className="w-3 h-3" /> Delete Slide</button>
+            <button onClick={h.duplicateSlide} className="w-full py-2 text-xs text-white/85 hover:text-white bg-[#F7F2EA] hover:bg-[#1A1A1A] rounded-lg transition-all flex items-center justify-center gap-1.5"><Copy className="w-3 h-3" /> Duplicate Slide</button>
+            <button onClick={() => h.deleteSlide(h.currentSlide)} className="w-full py-2 text-xs text-red-400 hover:text-red-300 bg-[#F7F2EA] hover:bg-red-900/30 rounded-lg transition-all flex items-center justify-center gap-1.5"><Trash2 className="w-3 h-3" /> Delete Slide</button>
           </div>
         </div>
       </div>

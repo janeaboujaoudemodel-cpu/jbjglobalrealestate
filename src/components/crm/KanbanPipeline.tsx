@@ -239,7 +239,7 @@ const KanbanPipeline = ({ userId, onRefresh }: KanbanPipelineProps) => {
                               </Button>
                             )}
                             {lead.state?.next_followup_at && (
-                              <div className="ml-auto flex items-center gap-1 text-xs text-amber-400">
+                              <div className="ml-auto flex items-center gap-1 text-xs text-[#1A1A1A]">
                                 <Calendar className="h-3 w-3" />
                                 {formatDate(lead.state.next_followup_at)}
                               </div>

@@ -226,7 +226,7 @@ export default function OnboardingModule() {
   if (authLoading || loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-gold" />
+        <Loader2 className="h-8 w-8 animate-spin text-[#1A1A1A]" />
       </div>
     );
   }
@@ -254,7 +254,7 @@ export default function OnboardingModule() {
           <Card className="bg-card border-border">
             <CardHeader className="text-center">
               {passed ? (
-                <Trophy className="h-20 w-20 text-gold mx-auto mb-4" />
+                <Trophy className="h-20 w-20 text-[#1A1A1A] mx-auto mb-4" />
               ) : (
                 <AlertCircle className="h-20 w-20 text-yellow-500 mx-auto mb-4" />
               )}
@@ -324,7 +324,7 @@ export default function OnboardingModule() {
                   <Link to="/onboarding">Back to Dashboard</Link>
                 </Button>
                 {!passed && (
-                  <Button onClick={handleRetakeQuiz} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
+                  <Button onClick={handleRetakeQuiz} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
                     Retake Quiz
                   </Button>
                 )}
@@ -422,7 +422,7 @@ export default function OnboardingModule() {
                 </Button>
                 
                 {currentQuestionIndex < questions.length - 1 ? (
-                  <Button onClick={handleNextQuestion} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
+                  <Button onClick={handleNextQuestion} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
                     Next
                     <ChevronRight className="h-4 w-4 ml-1" />
                   </Button>
@@ -430,7 +430,7 @@ export default function OnboardingModule() {
                   <Button
                     onClick={handleSubmitQuiz}
                     disabled={!allAnswered || submitting}
-                    className="bg-gold hover:bg-gold/90 text-[#1A1A1A]"
+                    className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]"
                   >
                     {submitting ? (
                       <>
@@ -454,7 +454,7 @@ export default function OnboardingModule() {
                 onClick={() => setCurrentQuestionIndex(index)}
                 className={`w-8 h-8 rounded-full text-sm font-medium transition-colors ${
                   currentQuestionIndex === index
-                    ? 'bg-gold text-[#1A1A1A]'
+                    ? 'bg-[#EFE6D6] text-[#1A1A1A]'
                     : answers[q.id]
                     ? 'bg-green-500/20 text-green-500 border border-green-500'
                     : 'bg-muted text-muted-foreground'
@@ -511,7 +511,7 @@ export default function OnboardingModule() {
                     ) : (
                       <div className="text-center">
                         <PlayCircle className="h-16 w-16 text-muted-foreground mx-auto mb-2" />
-                        <a href={module.video_url} target="_blank" rel="noopener noreferrer" className="text-gold hover:underline">
+                        <a href={module.video_url} target="_blank" rel="noopener noreferrer" className="text-[#1A1A1A] hover:underline">
                           Watch Video
                         </a>
                       </div>
@@ -536,7 +536,7 @@ export default function OnboardingModule() {
                     <ul className="space-y-2">
                       {module.key_points.map((point, index) => (
                         <li key={index} className="flex items-start gap-2">
-                          <CheckCircle className="h-4 w-4 text-gold mt-0.5 shrink-0" />
+                          <CheckCircle className="h-4 w-4 text-[#1A1A1A] mt-0.5 shrink-0" />
                           <span className="text-muted-foreground text-sm">{point}</span>
                         </li>
                       ))}
@@ -567,7 +567,7 @@ export default function OnboardingModule() {
                     </p>
                     <Button
                       onClick={() => setShowQuiz(true)}
-                      className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A]"
+                      className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]"
                     >
                       Start Quiz
                     </Button>

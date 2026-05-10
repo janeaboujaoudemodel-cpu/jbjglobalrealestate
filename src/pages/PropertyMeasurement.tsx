@@ -346,17 +346,17 @@ jbj.ae
 
             {/* Why Use This Tool - Enhanced */}
             <div className="grid md:grid-cols-3 gap-4 max-w-4xl mx-auto mt-12">
-              <div className="bg-zinc-900/50 border border-teal-500/20 rounded-xl p-4">
+              <div className="bg-[#FDFBF7]/50 border border-teal-500/20 rounded-xl p-4">
                 <CheckCircle2 className="w-8 h-8 text-teal-400 mx-auto mb-2" />
                 <p className="text-white font-medium">Verify Developer Claims</p>
                 <p className="text-white/90 text-sm">Check if the property matches the stated size before you buy</p>
               </div>
-              <div className="bg-zinc-900/50 border border-teal-500/20 rounded-xl p-4">
+              <div className="bg-[#FDFBF7]/50 border border-teal-500/20 rounded-xl p-4">
                 <AlertCircle className="w-8 h-8 text-teal-400 mx-auto mb-2" />
                 <p className="text-white font-medium">Check Rental Sizes</p>
                 <p className="text-white/90 text-sm">Verify apartment sizes before signing a rental agreement</p>
               </div>
-              <div className="bg-zinc-900/50 border border-teal-500/20 rounded-xl p-4">
+              <div className="bg-[#FDFBF7]/50 border border-teal-500/20 rounded-xl p-4">
                 <Sparkles className="w-8 h-8 text-teal-400 mx-auto mb-2" />
                 <p className="text-white font-medium">Secondary Market Check</p>
                 <p className="text-white/90 text-sm">Verify size claims before viewing a resale property</p>
@@ -376,12 +376,12 @@ jbj.ae
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all ${
                   step >= s 
                     ? "bg-teal-500 text-white" 
-                    : "bg-zinc-800 text-white/90"
+                    : "bg-[#F7F2EA] text-white/90"
                 }`}>
                   {step > s ? <CheckCircle2 className="w-5 h-5" /> : s}
                 </div>
                 {s < 5 && (
-                  <div className={`w-8 md:w-12 h-1 ${step > s ? "bg-teal-500" : "bg-zinc-800"}`} />
+                  <div className={`w-8 md:w-12 h-1 ${step > s ? "bg-teal-500" : "bg-[#F7F2EA]"}`} />
                 )}
               </div>
             ))}
@@ -395,7 +395,7 @@ jbj.ae
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <Card className="!border-teal-500/30 !border bg-zinc-900/50">
+            <Card className="!border-teal-500/30 !border bg-[#FDFBF7]/50">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
                   <Building2 className="w-5 h-5 text-teal-400" />
@@ -413,7 +413,7 @@ jbj.ae
                         className={`p-4 rounded-xl border transition-all ${
                           propertyType === type.id
                             ? "border-teal-500 bg-teal-500/20 text-teal-300"
-                            : "border-[#1A1A1A] bg-zinc-800/50 text-white/70 hover:border-[#1A1A1A]"
+                            : "border-[#1A1A1A] bg-[#F7F2EA]/50 text-white/70 hover:border-[#1A1A1A]"
                         }`}
                       >
                         <type.icon className="w-6 h-6 mx-auto mb-2" />
@@ -430,7 +430,7 @@ jbj.ae
                     value={propertyName}
                     onChange={(e) => setPropertyName(e.target.value)}
                     placeholder="e.g., My Dubai Marina Apartment"
-                    className="bg-zinc-800/50 border-[#1A1A1A] text-white mt-2"
+                    className="bg-[#F7F2EA]/50 border-[#1A1A1A] text-white mt-2"
                   />
                 </div>
 
@@ -448,7 +448,7 @@ jbj.ae
                         className={`px-4 py-2 rounded-lg border transition-all ${
                           unitPreference === unit.id
                             ? "border-teal-500 bg-teal-500/20 text-teal-300"
-                            : "border-[#1A1A1A] bg-zinc-800/50 text-white/70 hover:border-[#1A1A1A]"
+                            : "border-[#1A1A1A] bg-[#F7F2EA]/50 text-white/70 hover:border-[#1A1A1A]"
                         }`}
                       >
                         {unit.label}
@@ -477,7 +477,7 @@ jbj.ae
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <Card className="!border-teal-500/30 !border bg-zinc-900/50">
+            <Card className="!border-teal-500/30 !border bg-[#FDFBF7]/50">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
                   <Info className="w-5 h-5 text-teal-400" />
@@ -553,7 +553,7 @@ jbj.ae
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <Card className="!border-teal-500/30 !border bg-zinc-900/50">
+            <Card className="!border-teal-500/30 !border bg-[#FDFBF7]/50">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
                   <LayoutGrid className="w-5 h-5 text-teal-400" />
@@ -569,7 +569,7 @@ jbj.ae
                       className={`relative p-4 rounded-xl border transition-all ${
                         room.isComplete 
                           ? "border-teal-500 bg-teal-500/10" 
-                          : "border-[#1A1A1A] bg-zinc-800/50"
+                          : "border-[#1A1A1A] bg-[#F7F2EA]/50"
                       }`}
                     >
                       <button
@@ -598,7 +598,7 @@ jbj.ae
                       const name = prompt("Enter room/area name:");
                       if (name) addCustomRoom(name);
                     }}
-                    className="p-4 rounded-xl border-2 border-dashed border-[#1A1A1A] hover:border-teal-500/50 bg-zinc-800/30 hover:bg-[#1A1A1A]/50 transition-all flex flex-col items-center justify-center gap-2 min-h-[100px]"
+                    className="p-4 rounded-xl border-2 border-dashed border-[#1A1A1A] hover:border-teal-500/50 bg-[#F7F2EA]/30 hover:bg-[#1A1A1A]/50 transition-all flex flex-col items-center justify-center gap-2 min-h-[100px]"
                   >
                     <Plus className="w-6 h-6 text-white/90" />
                     <span className="text-white/70 text-sm">Add Custom Room</span>
@@ -634,7 +634,7 @@ jbj.ae
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <Card className="!border-teal-500/30 !border bg-zinc-900/50">
+            <Card className="!border-teal-500/30 !border bg-[#FDFBF7]/50">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-white flex items-center gap-2">
@@ -655,7 +655,7 @@ jbj.ae
                       className={`p-4 rounded-xl border transition-all ${
                         room.isComplete 
                           ? "border-teal-500/50 bg-teal-500/5" 
-                          : "border-[#1A1A1A] bg-zinc-800/30"
+                          : "border-[#1A1A1A] bg-[#F7F2EA]/30"
                       }`}
                     >
                       <div className="flex items-center justify-between mb-4">
@@ -675,7 +675,7 @@ jbj.ae
                             className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
                               room.mediaType === "photo"
                                 ? "bg-teal-500 text-white"
-                                : "bg-zinc-800 text-white/70 hover:bg-[#1A1A1A]"
+                                : "bg-[#F7F2EA] text-white/70 hover:bg-[#1A1A1A]"
                             }`}
                           >
                             <Camera className="w-3 h-3 inline mr-1" />
@@ -686,7 +686,7 @@ jbj.ae
                             className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
                               room.mediaType === "video"
                                 ? "bg-teal-500 text-white"
-                                : "bg-zinc-800 text-white/70 hover:bg-[#1A1A1A]"
+                                : "bg-[#F7F2EA] text-white/70 hover:bg-[#1A1A1A]"
                             }`}
                           >
                             <Video className="w-3 h-3 inline mr-1" />
@@ -727,7 +727,7 @@ jbj.ae
                           <div className="space-y-2">
                             <div className="flex flex-wrap gap-2">
                               {room.files.map((file, i) => (
-                                <div key={i} className="relative bg-zinc-800 rounded-lg px-3 py-2 flex items-center gap-2">
+                                <div key={i} className="relative bg-[#F7F2EA] rounded-lg px-3 py-2 flex items-center gap-2">
                                   {file.type.startsWith("image/") ? (
                                     <Camera className="w-4 h-4 text-teal-400" />
                                   ) : (
@@ -798,7 +798,7 @@ jbj.ae
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <Card className="!border-teal-500/30 !border bg-zinc-900/50">
+            <Card className="!border-teal-500/30 !border bg-[#FDFBF7]/50">
               <CardHeader className="border-b border-[#1A1A1A]">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-white flex items-center gap-2">
@@ -835,7 +835,7 @@ jbj.ae
 
                 {/* AI Notes */}
                 {result.notes && (
-                  <div className="bg-zinc-800/50 border border-[#1A1A1A] rounded-xl p-4">
+                  <div className="bg-[#F7F2EA]/50 border border-[#1A1A1A] rounded-xl p-4">
                     <div className="flex items-start gap-3">
                       <Info className="w-5 h-5 text-teal-400 mt-0.5 flex-shrink-0" />
                       <div>
@@ -851,7 +851,7 @@ jbj.ae
                   <h3 className="text-white font-semibold mb-4">Room Breakdown</h3>
                   <div className="grid md:grid-cols-2 gap-3">
                     {result.rooms.map((room, i) => (
-                      <div key={i} className="bg-zinc-800/50 rounded-lg p-4">
+                      <div key={i} className="bg-[#F7F2EA]/50 rounded-lg p-4">
                         <div className="flex justify-between items-center">
                           <span className="text-white/85">{room.name}</span>
                           <div className="text-right">

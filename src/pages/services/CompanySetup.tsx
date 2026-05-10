@@ -112,8 +112,8 @@ const CompanySetup = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/10 via-transparent to-transparent" />
         
-        <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/10 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-gold/15 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-1/4 left-10 w-64 h-64 bg-[#EFE6D6]/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-[#EFE6D6]/15 rounded-full blur-[120px] pointer-events-none" />
 
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
@@ -122,9 +122,9 @@ const CompanySetup = () => {
             transition={{ duration: 0.6 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-[#1A1A1A]/30 backdrop-blur-md">
-              <Building className="w-4 h-4 text-gold" />
-              <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-[#B89555]/40 bg-[#1A1A1A]/30 backdrop-blur-md">
+              <Building className="w-4 h-4 text-[#1A1A1A]" />
+              <span className="text-[#1A1A1A] font-semibold text-xs uppercase tracking-[0.2em]">
                 Services
               </span>
             </div>
@@ -207,7 +207,7 @@ const CompanySetup = () => {
                   {whatWeProvide.map((item, idx) => (
                     <li key={idx} className="flex items-start gap-4 text-[#1A1A1A]/70">
                       <div className="w-10 h-10 rounded-lg bg-[#1A1A1A] flex items-center justify-center shrink-0">
-                        <item.icon className="w-5 h-5 text-gold" />
+                        <item.icon className="w-5 h-5 text-[#1A1A1A]" />
                       </div>
                       <span className="pt-2">{item.text}</span>
                     </li>
@@ -237,7 +237,7 @@ const CompanySetup = () => {
             </motion.h2>
             <div className="max-w-3xl mx-auto">
               <div className="relative">
-                <div className="absolute left-6 top-0 bottom-0 w-px bg-gold/30 hidden md:block" />
+                <div className="absolute left-6 top-0 bottom-0 w-px bg-[#EFE6D6]/30 hidden md:block" />
                 <div className="space-y-6">
                   {processSteps.map((step, index) => (
                     <motion.div
@@ -245,12 +245,12 @@ const CompanySetup = () => {
                       variants={fadeInUp}
                       className="flex items-center gap-6"
                     >
-                      <div className="w-12 h-12 rounded-full bg-[#1A1A1A] flex items-center justify-center shrink-0 z-10 border-2 border-gold">
-                        <span className="text-gold font-bold">{step.step}</span>
+                      <div className="w-12 h-12 rounded-full bg-[#1A1A1A] flex items-center justify-center shrink-0 z-10 border-2 border-[#B89555]">
+                        <span className="text-[#1A1A1A] font-bold">{step.step}</span>
                       </div>
                       <div className="flex-1 jj-card-inner !p-4">
                         <div className="flex items-center gap-4">
-                          <step.icon className="w-6 h-6 text-gold shrink-0" />
+                          <step.icon className="w-6 h-6 text-[#1A1A1A] shrink-0" />
                           <span className="font-semibold text-[#1A1A1A]">{step.title}</span>
                         </div>
                       </div>
@@ -284,7 +284,7 @@ const CompanySetup = () => {
               <ul className="space-y-4">
                 {typicalDocuments.map((item, idx) => (
                   <li key={idx} className="flex items-start gap-3 text-[#1A1A1A]/70">
-                    <FolderOpen className="w-5 h-5 text-gold shrink-0 mt-0.5" />
+                    <FolderOpen className="w-5 h-5 text-[#1A1A1A] shrink-0 mt-0.5" />
                     <span>{item}</span>
                   </li>
                 ))}
@@ -319,9 +319,9 @@ const CompanySetup = () => {
                     value={`item-${index}`}
                     className="jj-card-inner border-none"
                   >
-                    <AccordionTrigger className="text-left text-[#1A1A1A] hover:text-gold">
+                    <AccordionTrigger className="text-left text-[#1A1A1A] hover:text-[#1A1A1A]">
                       <div className="flex items-center gap-3">
-                        <HelpCircle className="w-5 h-5 text-gold shrink-0" />
+                        <HelpCircle className="w-5 h-5 text-[#1A1A1A] shrink-0" />
                         {faq.question}
                       </div>
                     </AccordionTrigger>

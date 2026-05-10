@@ -287,7 +287,7 @@ export default function StudioEditor() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-gold animate-spin" />
+        <Loader2 className="w-8 h-8 text-[#1A1A1A] animate-spin" />
       </div>
     );
   }
@@ -296,7 +296,7 @@ export default function StudioEditor() {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center">
         <h2 className="text-xl font-semibold text-foreground mb-4">Project not found</h2>
-        <Button className="bg-gold hover:bg-gold/90 text-[#1A1A1A]" onClick={() => navigate("/studio")}>
+        <Button className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]" onClick={() => navigate("/studio")}>
           Back to Projects
         </Button>
       </div>
@@ -306,12 +306,12 @@ export default function StudioEditor() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <header className="sticky top-0 lg:top-[48px] z-50 bg-background/90 backdrop-blur-xl border-b border-gold/20">
+      <header className="sticky top-0 lg:top-[48px] z-50 bg-background/90 backdrop-blur-xl border-b border-[#B89555]/20">
         <div className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center gap-4">
             <Link to="/studio" className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-gold" />
+              <div className="w-10 h-10 rounded-xl bg-[#EFE6D6]/10 border border-[#B89555]/30 flex items-center justify-center">
+                <Sparkles className="w-5 h-5 text-[#1A1A1A]" />
               </div>
               <div>
                 <h1 className="text-lg font-bold text-foreground">Creative Suite™</h1>
@@ -354,14 +354,14 @@ export default function StudioEditor() {
         <div className="grid grid-cols-12 gap-6 h-[calc(100vh-180px)]">
           {/* Left Panel - Property & Assets */}
           <div className="col-span-3 space-y-4 overflow-y-auto">
-            <div className="p-4 rounded-2xl bg-card border border-gold/20">
+            <div className="p-4 rounded-2xl bg-card border border-[#B89555]/20">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-foreground font-semibold">Property</h3>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => setIsPropertyPickerOpen(true)}
-                  className="text-gold hover:text-gold hover:bg-gold/10"
+                  className="text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                 >
                   <Building2 className="w-4 h-4 mr-1" />
                   {selectedProperty ? "Change" : "Select"}
@@ -394,16 +394,16 @@ export default function StudioEditor() {
             </div>
 
             {/* Timeline Layers Preview */}
-            <div className="p-4 rounded-2xl bg-card border border-gold/20">
+            <div className="p-4 rounded-2xl bg-card border border-[#B89555]/20">
               <div className="flex items-center gap-2 mb-4">
-                <Layers className="w-4 h-4 text-gold" />
+                <Layers className="w-4 h-4 text-[#1A1A1A]" />
                 <h3 className="text-foreground font-semibold">Layers</h3>
               </div>
               <div className="space-y-2 text-sm text-muted-foreground">
-                <div className="p-2 rounded bg-background/50 border border-gold/10">Video Track</div>
-                <div className="p-2 rounded bg-background/50 border border-gold/10">Audio Track</div>
-                <div className="p-2 rounded bg-background/50 border border-gold/10">Captions</div>
-                <div className="p-2 rounded bg-background/50 border border-gold/10">Overlays</div>
+                <div className="p-2 rounded bg-background/50 border border-[#B89555]/10">Video Track</div>
+                <div className="p-2 rounded bg-background/50 border border-[#B89555]/10">Audio Track</div>
+                <div className="p-2 rounded bg-background/50 border border-[#B89555]/10">Captions</div>
+                <div className="p-2 rounded bg-background/50 border border-[#B89555]/10">Overlays</div>
               </div>
             </div>
           </div>
@@ -411,11 +411,11 @@ export default function StudioEditor() {
           {/* Center - Preview & Timeline */}
           <div className="col-span-6 flex flex-col">
             {/* Video Preview */}
-            <div className="flex-1 rounded-2xl bg-background border border-gold/20 overflow-hidden relative">
+            <div className="flex-1 rounded-2xl bg-background border border-[#B89555]/20 overflow-hidden relative">
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center">
-                  <div className="w-24 h-24 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-4">
-                    <Play className="w-10 h-10 text-gold ml-1" />
+                  <div className="w-24 h-24 rounded-full bg-[#EFE6D6]/10 flex items-center justify-center mx-auto mb-4">
+                    <Play className="w-10 h-10 text-[#1A1A1A] ml-1" />
                   </div>
                   <p className="text-muted-foreground">Preview will appear here</p>
                 </div>
@@ -426,7 +426,7 @@ export default function StudioEditor() {
             </div>
 
             {/* Playback Controls */}
-            <div className="mt-4 p-4 rounded-2xl bg-card border border-gold/20">
+            <div className="mt-4 p-4 rounded-2xl bg-card border border-[#B89555]/20">
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
                   <button className="p-2 text-muted-foreground hover:text-foreground">
@@ -434,7 +434,7 @@ export default function StudioEditor() {
                   </button>
                   <button
                     onClick={() => setIsPlaying(!isPlaying)}
-                    className="w-10 h-10 rounded-full bg-gold flex items-center justify-center text-[#1A1A1A] hover:bg-gold/90 transition-colors"
+                    className="w-10 h-10 rounded-full bg-[#EFE6D6] flex items-center justify-center text-[#1A1A1A] hover:bg-[#EFE6D6]/90 transition-colors"
                   >
                     {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
                   </button>
@@ -455,7 +455,7 @@ export default function StudioEditor() {
             </div>
 
             {/* Timeline */}
-            <div className="mt-4 p-4 rounded-2xl bg-card border border-gold/20 h-40 overflow-hidden">
+            <div className="mt-4 p-4 rounded-2xl bg-card border border-[#B89555]/20 h-40 overflow-hidden">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-foreground font-semibold text-sm">Timeline</h3>
                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -464,13 +464,13 @@ export default function StudioEditor() {
                 </div>
               </div>
               <div className="space-y-2">
-                <div className="h-8 bg-background/50 rounded border border-gold/10 relative">
-                  <div className="absolute inset-y-0 left-0 w-1/3 bg-gold/20 rounded" />
+                <div className="h-8 bg-background/50 rounded border border-[#B89555]/10 relative">
+                  <div className="absolute inset-y-0 left-0 w-1/3 bg-[#EFE6D6]/20 rounded" />
                 </div>
-                <div className="h-8 bg-background/50 rounded border border-gold/10 relative">
+                <div className="h-8 bg-background/50 rounded border border-[#B89555]/10 relative">
                   <div className="absolute inset-y-0 left-[20%] w-1/4 bg-primary/20 rounded" />
                 </div>
-                <div className="h-8 bg-background/50 rounded border border-gold/10" />
+                <div className="h-8 bg-background/50 rounded border border-[#B89555]/10" />
               </div>
             </div>
           </div>
@@ -478,7 +478,7 @@ export default function StudioEditor() {
           {/* Right Panel - Tools */}
           <div className="col-span-3 overflow-y-auto">
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="w-full grid grid-cols-4 bg-background/50 border border-gold/20 mb-4">
+              <TabsList className="w-full grid grid-cols-4 bg-background/50 border border-[#B89555]/20 mb-4">
                 <TabsTrigger value="ai" className="text-xs">AI</TabsTrigger>
                 <TabsTrigger value="audio" className="text-xs">Audio</TabsTrigger>
                 <TabsTrigger value="export" className="text-xs">Export</TabsTrigger>
@@ -486,10 +486,10 @@ export default function StudioEditor() {
               </TabsList>
 
               <TabsContent value="ai" className="mt-0 space-y-4">
-                <div className="p-6 rounded-2xl bg-card border border-gold/20">
+                <div className="p-6 rounded-2xl bg-card border border-[#B89555]/20">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center">
-                      <Wand2 className="w-5 h-5 text-gold" />
+                    <div className="w-10 h-10 rounded-xl bg-[#EFE6D6]/10 flex items-center justify-center">
+                      <Wand2 className="w-5 h-5 text-[#1A1A1A]" />
                     </div>
                     <div>
                       <h3 className="text-foreground font-semibold">AI Creative Director</h3>
@@ -501,7 +501,7 @@ export default function StudioEditor() {
                     value={aiPrompt}
                     onChange={(e) => setAiPrompt(e.target.value)}
                     placeholder="e.g., Create a 30-second luxury property showcase..."
-                    className="min-h-[100px] bg-background border-gold/30 mb-4"
+                    className="min-h-[100px] bg-background border-[#B89555]/30 mb-4"
                   />
 
                   {!selectedProperty && (
@@ -511,7 +511,7 @@ export default function StudioEditor() {
                   )}
 
                   <Button
-                    className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A]"
+                    className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]"
                     onClick={handleAIGenerate}
                     disabled={!aiPrompt.trim() || isGenerating || !selectedProperty}
                   >
@@ -530,13 +530,13 @@ export default function StudioEditor() {
                 </div>
 
                 {/* Settings */}
-                <div className="p-6 rounded-2xl bg-card border border-gold/20 space-y-6">
+                <div className="p-6 rounded-2xl bg-card border border-[#B89555]/20 space-y-6">
                   <h3 className="text-foreground font-semibold">Creative Settings</h3>
 
                   <div>
                     <div className="flex justify-between mb-2">
                       <label className="text-sm text-muted-foreground">Creativity Level</label>
-                      <span className="text-sm text-gold">{creativityLabels[creativityLevel]}</span>
+                      <span className="text-sm text-[#1A1A1A]">{creativityLabels[creativityLevel]}</span>
                     </div>
                     <Slider value={[creativityLevel]} max={2} step={1} onValueChange={([v]) => setCreativityLevel(v)} />
                   </div>
@@ -544,7 +544,7 @@ export default function StudioEditor() {
                   <div>
                     <div className="flex justify-between mb-2">
                       <label className="text-sm text-muted-foreground">Brand Strictness</label>
-                      <span className="text-sm text-gold">{brandLabels[brandStrictness]}</span>
+                      <span className="text-sm text-[#1A1A1A]">{brandLabels[brandStrictness]}</span>
                     </div>
                     <Slider value={[brandStrictness]} max={2} step={1} onValueChange={([v]) => setBrandStrictness(v)} />
                   </div>
@@ -552,7 +552,7 @@ export default function StudioEditor() {
                   <div>
                     <label className="text-sm text-muted-foreground mb-2 block">Target Audience</label>
                     <Select value={audience} onValueChange={setAudience}>
-                      <SelectTrigger className="bg-background border-gold/30">
+                      <SelectTrigger className="bg-background border-[#B89555]/30">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -566,10 +566,10 @@ export default function StudioEditor() {
               </TabsContent>
 
               <TabsContent value="audio" className="mt-0">
-                <div className="p-6 rounded-2xl bg-card border border-gold/20">
+                <div className="p-6 rounded-2xl bg-card border border-[#B89555]/20">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center">
-                      <Music className="w-5 h-5 text-gold" />
+                    <div className="w-10 h-10 rounded-xl bg-[#EFE6D6]/10 flex items-center justify-center">
+                      <Music className="w-5 h-5 text-[#1A1A1A]" />
                     </div>
                     <div>
                       <h3 className="text-foreground font-semibold">Trending Audio</h3>
@@ -578,9 +578,9 @@ export default function StudioEditor() {
                   </div>
                   <div className="space-y-2 text-sm text-muted-foreground">
                     {["Luxury Vibes", "Modern Elegance", "Urban Dreams"].map((track) => (
-                      <div key={track} className="p-3 rounded-xl bg-background/50 border border-gold/10 flex items-center justify-between">
+                      <div key={track} className="p-3 rounded-xl bg-background/50 border border-[#B89555]/10 flex items-center justify-between">
                         <span>{track}</span>
-                        <Button variant="ghost" size="sm" className="text-gold hover:text-gold hover:bg-gold/10">
+                        <Button variant="ghost" size="sm" className="text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                           <Plus className="w-4 h-4" />
                         </Button>
                       </div>
@@ -590,7 +590,7 @@ export default function StudioEditor() {
               </TabsContent>
 
               <TabsContent value="export" className="mt-0 space-y-4">
-                <div className="p-6 rounded-2xl bg-card border border-gold/20 space-y-4">
+                <div className="p-6 rounded-2xl bg-card border border-[#B89555]/20 space-y-4">
                   <h3 className="text-foreground font-semibold">Export Formats</h3>
                   <div className="space-y-2">
                     {[
@@ -601,19 +601,19 @@ export default function StudioEditor() {
                     ].map((exp) => (
                       <button
                         key={exp.label}
-                        className="w-full p-3 rounded-xl bg-background/50 border border-gold/20 hover:border-gold/40 transition-colors text-left"
+                        className="w-full p-3 rounded-xl bg-background/50 border border-[#B89555]/20 hover:border-[#B89555]/40 transition-colors text-left"
                       >
                         <div className="flex items-center justify-between">
                           <div>
                             <p className="text-sm text-foreground">{exp.label}</p>
                             <p className="text-xs text-muted-foreground">{exp.size}</p>
                           </div>
-                          <span className="text-xs text-gold">{exp.format}</span>
+                          <span className="text-xs text-[#1A1A1A]">{exp.format}</span>
                         </div>
                       </button>
                     ))}
                   </div>
-                  <Button className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A]">
+                  <Button className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
                     <Download className="w-4 h-4 mr-2" />
                     Export All (ZIP)
                   </Button>
@@ -621,17 +621,17 @@ export default function StudioEditor() {
               </TabsContent>
 
               <TabsContent value="jobs" className="mt-0">
-                <div className="p-6 rounded-2xl bg-card border border-gold/20">
+                <div className="p-6 rounded-2xl bg-card border border-[#B89555]/20">
                   <h3 className="text-foreground font-semibold mb-4">Background Jobs</h3>
                   {jobs.length === 0 ? (
                     <div className="text-center py-8 text-muted-foreground text-sm">No jobs running</div>
                   ) : (
                     <div className="space-y-3">
                       {jobs.map((job) => (
-                        <div key={job.id} className="p-4 rounded-xl bg-background/50 border border-gold/20">
+                        <div key={job.id} className="p-4 rounded-xl bg-background/50 border border-[#B89555]/20">
                           <div className="flex items-center gap-2">
                             {job.status === "processing" ? (
-                              <Loader2 className="w-4 h-4 text-gold animate-spin" />
+                              <Loader2 className="w-4 h-4 text-[#1A1A1A] animate-spin" />
                             ) : job.status === "completed" ? (
                               <CheckCircle className="w-4 h-4 text-green-400" />
                             ) : job.status === "failed" ? (
@@ -643,7 +643,7 @@ export default function StudioEditor() {
                           </div>
                           {job.status === "processing" && (
                             <div className="mt-2 h-1.5 bg-background rounded-full overflow-hidden">
-                              <div className="h-full bg-gold" style={{ width: `${job.progress}%` }} />
+                              <div className="h-full bg-[#EFE6D6]" style={{ width: `${job.progress}%` }} />
                             </div>
                           )}
                         </div>
@@ -659,10 +659,10 @@ export default function StudioEditor() {
 
       {/* Property Picker Dialog */}
       <Dialog open={isPropertyPickerOpen} onOpenChange={setIsPropertyPickerOpen}>
-        <DialogContent className="bg-card border-gold/20 max-w-4xl max-h-[80vh]">
+        <DialogContent className="bg-card border-[#B89555]/20 max-w-4xl max-h-[80vh]">
           <DialogHeader>
             <DialogTitle className="text-foreground flex items-center gap-2">
-              <Building2 className="w-5 h-5 text-gold" />
+              <Building2 className="w-5 h-5 text-[#1A1A1A]" />
               Select Property
             </DialogTitle>
           </DialogHeader>
@@ -674,14 +674,14 @@ export default function StudioEditor() {
                 value={propertySearch}
                 onChange={(e) => setPropertySearch(e.target.value)}
                 placeholder="Search properties..."
-                className="pl-10 bg-background border-gold/30"
+                className="pl-10 bg-background border-[#B89555]/30"
               />
             </div>
 
             <ScrollArea className="h-[400px]">
               {loadingProperties ? (
                 <div className="flex items-center justify-center py-12">
-                  <Loader2 className="w-6 h-6 text-gold animate-spin" />
+                  <Loader2 className="w-6 h-6 text-[#1A1A1A] animate-spin" />
                 </div>
               ) : properties.length === 0 ? (
                 <div className="text-center py-12 text-muted-foreground">No properties found</div>
@@ -693,8 +693,8 @@ export default function StudioEditor() {
                       onClick={() => handlePropertySelect(property)}
                       className={`p-4 rounded-xl border text-left transition-all ${
                         selectedProperty?.id === property.id
-                          ? "bg-gold/10 border-gold"
-                          : "bg-background/50 border-gold/20 hover:border-gold/40"
+                          ? "bg-[#EFE6D6]/10 border-[#B89555]"
+                          : "bg-background/50 border-[#B89555]/20 hover:border-[#B89555]/40"
                       }`}
                     >
                       <div className="flex gap-4">
@@ -720,7 +720,7 @@ export default function StudioEditor() {
                             )}
                           </div>
                         </div>
-                        {selectedProperty?.id === property.id && <Check className="w-5 h-5 text-gold" />}
+                        {selectedProperty?.id === property.id && <Check className="w-5 h-5 text-[#1A1A1A]" />}
                       </div>
                     </button>
                   ))}
@@ -729,7 +729,7 @@ export default function StudioEditor() {
             </ScrollArea>
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-gold/10">
+          <div className="flex justify-end gap-3 pt-4 border-t border-[#B89555]/10">
             <Button variant="secondary" onClick={() => setIsPropertyPickerOpen(false)}>
               Cancel
             </Button>

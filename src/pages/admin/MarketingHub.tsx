@@ -54,22 +54,22 @@ interface Campaign {
 
 // AI Tools sidebar items
 const AI_TOOLS = [
-  { label: 'AI Email Generator', icon: Mail, route: '/ai/email-generator', color: 'text-gold' },
-  { label: 'AI Social Media', icon: Share2, route: '/ai/social-media', color: 'text-gold' },
-  { label: 'AI Description Writer', icon: PenTool, route: '/ai/description-writer', color: 'text-gold' },
-  { label: 'AI Translation Hub', icon: Globe, route: '/ai/translation-hub', color: 'text-gold' },
-  { label: 'AI Video Tour Script', icon: Video, route: '/ai/video-tour-script', color: 'text-gold' },
-  { label: 'AI Objection Handler', icon: Shield, route: '/ai/objection-handler', color: 'text-gold' },
-  { label: 'AI Follow-up Scheduler', icon: Calendar, route: '/ai/followup-scheduler', color: 'text-gold' },
-  { label: 'AI Client Matcher', icon: Target, route: '/ai/client-matcher', color: 'text-gold' },
-  { label: 'AI Lead Qualification', icon: TrendingUp, route: '/ai/lead-qualification', color: 'text-gold' },
-  { label: 'AI Meeting Summarizer', icon: ClipboardList, route: '/ai/meeting-summarizer', color: 'text-gold' },
-  { label: 'AI Call Summarizer', icon: Headphones, route: '/ai/call-summarizer', color: 'text-gold' },
-  { label: 'AI Document Analyzer', icon: FileText, route: '/ai/document-analyzer', color: 'text-gold' },
-  { label: 'AI Property Evaluation', icon: Lightbulb, route: '/ai/property-evaluation', color: 'text-gold' },
-  { label: 'AI Presentation Generator', icon: Palette, route: '/ai/presentation-generator', color: 'text-gold' },
-  { label: 'Marketing Creative Suite', icon: Palette, route: '/studio', color: 'text-gold' },
-  { label: 'AI Video Studio', icon: Video, route: '/toolkit/video-suite', color: 'text-gold' },
+  { label: 'AI Email Generator', icon: Mail, route: '/ai/email-generator', color: 'text-[#1A1A1A]' },
+  { label: 'AI Social Media', icon: Share2, route: '/ai/social-media', color: 'text-[#1A1A1A]' },
+  { label: 'AI Description Writer', icon: PenTool, route: '/ai/description-writer', color: 'text-[#1A1A1A]' },
+  { label: 'AI Translation Hub', icon: Globe, route: '/ai/translation-hub', color: 'text-[#1A1A1A]' },
+  { label: 'AI Video Tour Script', icon: Video, route: '/ai/video-tour-script', color: 'text-[#1A1A1A]' },
+  { label: 'AI Objection Handler', icon: Shield, route: '/ai/objection-handler', color: 'text-[#1A1A1A]' },
+  { label: 'AI Follow-up Scheduler', icon: Calendar, route: '/ai/followup-scheduler', color: 'text-[#1A1A1A]' },
+  { label: 'AI Client Matcher', icon: Target, route: '/ai/client-matcher', color: 'text-[#1A1A1A]' },
+  { label: 'AI Lead Qualification', icon: TrendingUp, route: '/ai/lead-qualification', color: 'text-[#1A1A1A]' },
+  { label: 'AI Meeting Summarizer', icon: ClipboardList, route: '/ai/meeting-summarizer', color: 'text-[#1A1A1A]' },
+  { label: 'AI Call Summarizer', icon: Headphones, route: '/ai/call-summarizer', color: 'text-[#1A1A1A]' },
+  { label: 'AI Document Analyzer', icon: FileText, route: '/ai/document-analyzer', color: 'text-[#1A1A1A]' },
+  { label: 'AI Property Evaluation', icon: Lightbulb, route: '/ai/property-evaluation', color: 'text-[#1A1A1A]' },
+  { label: 'AI Presentation Generator', icon: Palette, route: '/ai/presentation-generator', color: 'text-[#1A1A1A]' },
+  { label: 'Marketing Creative Suite', icon: Palette, route: '/studio', color: 'text-[#1A1A1A]' },
+  { label: 'AI Video Studio', icon: Video, route: '/toolkit/video-suite', color: 'text-[#1A1A1A]' },
 ];
 
 const ADMIN_SHORTCUTS = [
@@ -119,7 +119,7 @@ const MarketingHub: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
-        <div className="animate-spin h-8 w-8 border-4 border-gold border-t-transparent rounded-full" />
+        <div className="animate-spin h-8 w-8 border-4 border-[#B89555] border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -218,10 +218,10 @@ const MarketingHub: React.FC = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Header */}
-        <header className="sticky top-0 z-50 border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_4px_20px_rgba(200,167,102,0.1)] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
+        <header className="sticky top-0 z-50 border-b-2 border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_4px_20px_rgba(200,167,102,0.1)] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
           <div className="flex h-16 items-center justify-between px-4">
             <div className="flex items-center gap-4">
-              <Button variant="ghost" size="icon" onClick={() => navigate('/admin')} className="text-[#1A1A1A] hover:bg-gold/10">
+              <Button variant="ghost" size="icon" onClick={() => navigate('/admin')} className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <div className="flex items-center gap-3">
@@ -238,14 +238,14 @@ const MarketingHub: React.FC = () => {
             <div className="flex items-center gap-3">
               {/* Quick AI Actions */}
               <Link to="/ai/email-generator">
-                <Button variant="outline" size="sm" className="border-gold/40 text-[#1A1A1A] hover:bg-gold/10 hidden md:flex">
-                  <Sparkles className="h-3.5 w-3.5 mr-1.5 text-gold" />
+                <Button variant="outline" size="sm" className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 hidden md:flex">
+                  <Sparkles className="h-3.5 w-3.5 mr-1.5 text-[#1A1A1A]" />
                   AI Email
                 </Button>
               </Link>
               <Link to="/founders-assistant">
-                <Button variant="outline" size="sm" className="border-gold/40 text-[#1A1A1A] hover:bg-gold/10 hidden md:flex">
-                  <Bot className="h-3.5 w-3.5 mr-1.5 text-gold" />
+                <Button variant="outline" size="sm" className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 hidden md:flex">
+                  <Bot className="h-3.5 w-3.5 mr-1.5 text-[#1A1A1A]" />
                   AI Assistant
                 </Button>
               </Link>
@@ -265,18 +265,18 @@ const MarketingHub: React.FC = () => {
           {/* Stats Row */}
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
             {[
-              { label: 'Total Campaigns', value: stats.total, icon: BarChart3, iconBg: 'bg-gold/20 border-gold/30', iconColor: 'text-gold' },
-              { label: 'Sent', value: stats.sent, icon: Send, iconBg: 'bg-gold/10 border-gold/20', iconColor: 'text-gold' },
-              { label: 'Scheduled', value: stats.scheduled, icon: Calendar, iconBg: 'bg-gold/10 border-gold/20', iconColor: 'text-gold' },
-              { label: 'Drafts', value: stats.drafts, icon: Edit2, iconBg: 'bg-gold/10 border-gold/20', iconColor: 'text-gold' },
-              { label: 'Subscribers', value: subscriberCount || 0, icon: Users, iconBg: 'bg-gold/10 border-gold/20', iconColor: 'text-gold' },
+              { label: 'Total Campaigns', value: stats.total, icon: BarChart3, iconBg: 'bg-[#EFE6D6]/20 border-[#B89555]/30', iconColor: 'text-[#1A1A1A]' },
+              { label: 'Sent', value: stats.sent, icon: Send, iconBg: 'bg-[#EFE6D6]/10 border-[#B89555]/20', iconColor: 'text-[#1A1A1A]' },
+              { label: 'Scheduled', value: stats.scheduled, icon: Calendar, iconBg: 'bg-[#EFE6D6]/10 border-[#B89555]/20', iconColor: 'text-[#1A1A1A]' },
+              { label: 'Drafts', value: stats.drafts, icon: Edit2, iconBg: 'bg-[#EFE6D6]/10 border-[#B89555]/20', iconColor: 'text-[#1A1A1A]' },
+              { label: 'Subscribers', value: subscriberCount || 0, icon: Users, iconBg: 'bg-[#EFE6D6]/10 border-[#B89555]/20', iconColor: 'text-[#1A1A1A]' },
             ].map((stat, idx) => (
               <motion.div
                 key={stat.label}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.05 }}
-                className="p-4 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/80 via-white/60 to-[#F7F2EA] shadow-[0_4px_20px_rgba(200,167,102,0.15)]"
+                className="p-4 rounded-xl border-2 border-[#B89555]/30 bg-gradient-to-br from-white/80 via-white/60 to-[#F7F2EA] shadow-[0_4px_20px_rgba(200,167,102,0.15)]"
               >
                 <div className="flex items-center gap-3">
                   <div className={`p-2.5 rounded-xl ${stat.iconBg} border`}>
@@ -294,7 +294,7 @@ const MarketingHub: React.FC = () => {
           {/* Tabs */}
           <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)}>
             <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
-              <TabsList className="bg-[#FDFBF7]/80 border-2 border-gold/30">
+              <TabsList className="bg-[#FDFBF7]/80 border-2 border-[#B89555]/30">
                 <TabsTrigger value="campaigns" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
                   <Megaphone className="w-3.5 h-3.5 mr-1.5" />
                   Campaigns
@@ -353,14 +353,14 @@ const MarketingHub: React.FC = () => {
                   >
                     <Link
                       to={tool.route}
-                      className="block p-4 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F7F2EA] hover:border-gold hover:shadow-lg transition-all group"
+                      className="block p-4 rounded-xl border-2 border-[#B89555]/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F7F2EA] hover:border-[#B89555] hover:shadow-lg transition-all group"
                     >
           <div className="flex items-start gap-3">
                         <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${tool.color} flex items-center justify-center shadow-lg shrink-0`}>
                           <tool.icon className="w-5 h-5 text-[#1A1A1A]" />
                         </div>
                         <div className="min-w-0">
-                          <p className="font-semibold text-[#1A1A1A] text-sm group-hover:text-gold transition-colors">{tool.label}</p>
+                          <p className="font-semibold text-[#1A1A1A] text-sm group-hover:text-[#1A1A1A] transition-colors">{tool.label}</p>
                           <p className="text-xs text-[#1A1A1A]/60 mt-0.5">{tool.desc}</p>
                         </div>
                       </div>
@@ -374,12 +374,12 @@ const MarketingHub: React.FC = () => {
             <TabsContent value="campaigns" className="m-0">
               {loadingCampaigns ? (
                 <div className="flex items-center justify-center py-12">
-                  <div className="animate-spin h-8 w-8 border-4 border-gold border-t-transparent rounded-full" />
+                  <div className="animate-spin h-8 w-8 border-4 border-[#B89555] border-t-transparent rounded-full" />
                 </div>
               ) : filteredCampaigns?.length === 0 ? (
-                <div className="text-center py-12 border-2 border-gold/30 rounded-xl bg-gradient-to-br from-white/80 via-white/60 to-[#F7F2EA]">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gold/20 flex items-center justify-center">
-                    <Send className="h-8 w-8 text-gold" />
+                <div className="text-center py-12 border-2 border-[#B89555]/30 rounded-xl bg-gradient-to-br from-white/80 via-white/60 to-[#F7F2EA]">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-[#EFE6D6]/20 flex items-center justify-center">
+                    <Send className="h-8 w-8 text-[#1A1A1A]" />
                   </div>
                   <h3 className="font-semibold mb-2 text-[#1A1A1A]">No campaigns yet</h3>
                   <p className="text-sm text-[#1A1A1A]/60 mb-4">Create your first marketing campaign.</p>
@@ -389,10 +389,10 @@ const MarketingHub: React.FC = () => {
                   </Button>
                 </div>
               ) : (
-                <div className="border-2 border-gold/30 rounded-xl overflow-hidden bg-[#FDFBF7]/80">
+                <div className="border-2 border-[#B89555]/30 rounded-xl overflow-hidden bg-[#FDFBF7]/80">
                   <Table>
                     <TableHeader>
-                      <TableRow className="border-b-2 border-gold/20 bg-gold/5">
+                      <TableRow className="border-b-2 border-[#B89555]/20 bg-[#EFE6D6]/5">
                         <TableHead className="text-[#1A1A1A] font-semibold">Campaign</TableHead>
                         <TableHead className="text-[#1A1A1A] font-semibold">Type</TableHead>
                         <TableHead className="text-[#1A1A1A] font-semibold">Status</TableHead>
@@ -404,7 +404,7 @@ const MarketingHub: React.FC = () => {
                     </TableHeader>
                     <TableBody>
                       {filteredCampaigns?.map((campaign) => (
-                        <TableRow key={campaign.id} className="border-b border-gold/10 hover:bg-gold/5 transition-colors">
+                        <TableRow key={campaign.id} className="border-b border-[#B89555]/10 hover:bg-[#EFE6D6]/5 transition-colors">
                           <TableCell>
                             <div>
                               <p className="font-medium text-[#1A1A1A]">{campaign.name}</p>
@@ -436,18 +436,18 @@ const MarketingHub: React.FC = () => {
                           <TableCell className="text-right">
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="icon" className="hover:bg-gold/10">
+                                <Button variant="ghost" size="icon" className="hover:bg-[#EFE6D6]/10">
                                   <MoreHorizontal className="h-4 w-4 text-[#1A1A1A]" />
                                 </Button>
                               </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end" className="bg-[#FDFBF7] border-2 border-gold/30">
-                                <DropdownMenuItem onClick={() => setSelectedCampaign(campaign)} className="text-[#1A1A1A] hover:bg-gold/10">
+                              <DropdownMenuContent align="end" className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
+                                <DropdownMenuItem onClick={() => setSelectedCampaign(campaign)} className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                                   <Edit2 className="h-4 w-4 mr-2" /> Edit
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className="text-[#1A1A1A] hover:bg-gold/10">
+                                <DropdownMenuItem className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                                   <Eye className="h-4 w-4 mr-2" /> Preview
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => handleDuplicateCampaign(campaign)} className="text-[#1A1A1A] hover:bg-gold/10">
+                                <DropdownMenuItem onClick={() => handleDuplicateCampaign(campaign)} className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                                   <Copy className="h-4 w-4 mr-2" /> Duplicate
                                 </DropdownMenuItem>
                                 <DropdownMenuItem className="text-red-600 hover:bg-red-50" onClick={() => handleDeleteCampaign(campaign.id)}>
@@ -494,18 +494,18 @@ const MarketingHub: React.FC = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.03 }}
-                    className="p-4 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F7F2EA] hover:border-gold hover:shadow-lg transition-all cursor-pointer group"
+                    className="p-4 rounded-xl border-2 border-[#B89555]/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F7F2EA] hover:border-[#B89555] hover:shadow-lg transition-all cursor-pointer group"
                     onClick={() => setIsCreating(true)}
                   >
                     <div className="flex items-start justify-between mb-3">
-                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gold/20 to-amber-500/20 flex items-center justify-center border border-gold/30">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gold/20 to-amber-500/20 flex items-center justify-center border border-[#B89555]/30">
                         <template.icon className="w-5 h-5 text-[#1A1A1A]" />
                       </div>
                       <Badge className="text-[10px] bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/30">{template.category}</Badge>
                     </div>
-                    <h4 className="font-semibold text-[#1A1A1A] group-hover:text-gold transition-colors">{template.name}</h4>
+                    <h4 className="font-semibold text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">{template.name}</h4>
                     <p className="text-sm text-[#1A1A1A]/60 mt-1 line-clamp-2">{template.description}</p>
-                    <Badge className="mt-3 bg-gold/10 text-gold border-gold/30">{template.type}</Badge>
+                    <Badge className="mt-3 bg-[#EFE6D6]/10 text-[#1A1A1A] border-[#B89555]/30">{template.type}</Badge>
                   </motion.div>
                 ))}
               </div>
@@ -531,23 +531,23 @@ const MarketingHub: React.FC = () => {
               <Plus className="w-3.5 h-3.5 mr-1.5" /> New Campaign
             </Button>
             <Link to="/ai/email-generator">
-              <Button variant="outline" size="sm" className="border-gold/40 text-[#1A1A1A] text-xs hover:bg-gold/10">
-                <Mail className="w-3.5 h-3.5 mr-1.5 text-gold" /> AI Email
+              <Button variant="outline" size="sm" className="border-[#B89555]/40 text-[#1A1A1A] text-xs hover:bg-[#EFE6D6]/10">
+                <Mail className="w-3.5 h-3.5 mr-1.5 text-[#1A1A1A]" /> AI Email
               </Button>
             </Link>
             <Link to="/ai/social-media">
-              <Button variant="outline" size="sm" className="border-gold/40 text-[#1A1A1A] text-xs hover:bg-gold/10">
-                <Share2 className="w-3.5 h-3.5 mr-1.5 text-gold" /> Social Post
+              <Button variant="outline" size="sm" className="border-[#B89555]/40 text-[#1A1A1A] text-xs hover:bg-[#EFE6D6]/10">
+                <Share2 className="w-3.5 h-3.5 mr-1.5 text-[#1A1A1A]" /> Social Post
               </Button>
             </Link>
             <Link to="/founders-assistant">
-              <Button variant="outline" size="sm" className="border-gold/40 text-[#1A1A1A] text-xs hover:bg-gold/10">
-                <Bot className="w-3.5 h-3.5 mr-1.5 text-gold" /> AI Assistant
+              <Button variant="outline" size="sm" className="border-[#B89555]/40 text-[#1A1A1A] text-xs hover:bg-[#EFE6D6]/10">
+                <Bot className="w-3.5 h-3.5 mr-1.5 text-[#1A1A1A]" /> AI Assistant
               </Button>
             </Link>
             <Link to="/toolkit">
-              <Button variant="outline" size="sm" className="border-gold/40 text-[#1A1A1A] text-xs hover:bg-gold/10">
-                <Sparkles className="w-3.5 h-3.5 mr-1.5 text-gold" /> All Tools
+              <Button variant="outline" size="sm" className="border-[#B89555]/40 text-[#1A1A1A] text-xs hover:bg-[#EFE6D6]/10">
+                <Sparkles className="w-3.5 h-3.5 mr-1.5 text-[#1A1A1A]" /> All Tools
               </Button>
             </Link>
           </div>
@@ -556,7 +556,7 @@ const MarketingHub: React.FC = () => {
               <p className="font-bold text-[#1A1A1A] text-lg">{stats.sent}</p>
               <p className="text-[#1A1A1A]/50">Sent</p>
             </div>
-            <div className="w-px h-8 bg-gold/20" />
+            <div className="w-px h-8 bg-[#EFE6D6]/20" />
             <div className="text-center">
               <p className="font-bold text-[#1A1A1A] text-lg">{subscriberCount || 0}</p>
               <p className="text-[#1A1A1A]/50">Subscribers</p>

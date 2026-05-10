@@ -34,7 +34,7 @@ const toolCategories = [
     name: "CRM Modules",
     tools: [
       { name: "Leads Inbox", href: "/crm/leads", icon: Users, color: "text-[#1A1A1A]" },
-      { name: "Automations", href: "/automations", icon: Zap, color: "text-amber-400", adminOnly: true },
+      { name: "Automations", href: "/automations", icon: Zap, color: "text-[#1A1A1A]", adminOnly: true },
       { name: "My Tasks", href: "/crm/tasks", icon: CheckSquare, color: "text-emerald-400" },
       { name: "Calendar", href: "/crm/calendar", icon: Calendar, color: "text-blue-400" },
       { name: "Notes", href: "/crm/notes", icon: StickyNote, color: "text-purple-400" },
@@ -46,7 +46,7 @@ const toolCategories = [
     tools: [
       { name: "Property Comparison", href: "/compare", icon: Scale, color: "text-blue-400" },
       { name: "Property Evaluator", href: "/property-evaluator", icon: BarChart3, color: "text-emerald-400" },
-      { name: "Mortgage Calculator", href: "/mortgage-calculator", icon: Calculator, color: "text-amber-400" },
+      { name: "Mortgage Calculator", href: "/mortgage-calculator", icon: Calculator, color: "text-[#1A1A1A]" },
       { name: "Property Map", href: "/map", icon: Building2, color: "text-cyan-400" },
     ]
   },

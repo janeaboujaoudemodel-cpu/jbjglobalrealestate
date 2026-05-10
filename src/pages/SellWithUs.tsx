@@ -136,7 +136,7 @@ const SellWithUs = () => {
         canonicalPath="/sell"
       />
       
-      <main className="min-h-screen bg-zinc-950">
+      <main className="min-h-screen bg-[#FDFBF7]">
         {/* ═══ HERO — Cinematic Full-Bleed ═══ */}
         <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
           <div 
@@ -284,13 +284,13 @@ const SellWithUs = () => {
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <Label className="text-[#1A1A1A]/70 text-sm mb-1.5 block">Community *</Label>
-                        <Input value={valCommunity} onChange={(e) => setValCommunity(e.target.value)} placeholder="e.g., Dubai Marina" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-[#1A1A1A]/70 focus:border-blue-400" />
+                        <Input value={valCommunity} onChange={(e) => setValCommunity(e.target.value)} placeholder="e.g., Dubai Marina" className="bg-[#FDFBF7]/50 border-white/10 text-white placeholder:text-[#1A1A1A]/70 focus:border-blue-400" />
                       </div>
                       <div>
                         <Label className="text-[#1A1A1A]/70 text-sm mb-1.5 block">Property Type</Label>
                         <Select value={valType} onValueChange={setValType}>
-                          <SelectTrigger className="bg-zinc-900/50 border-white/10 text-white"><SelectValue /></SelectTrigger>
-                          <SelectContent className="bg-zinc-900 border-[#1A1A1A]">
+                          <SelectTrigger className="bg-[#FDFBF7]/50 border-white/10 text-white"><SelectValue /></SelectTrigger>
+                          <SelectContent className="bg-[#FDFBF7] border-[#1A1A1A]">
                             <SelectItem value="studio" className="text-white">Studio</SelectItem>
                             <SelectItem value="apartment" className="text-white">Apartment</SelectItem>
                             <SelectItem value="penthouse" className="text-white">Penthouse</SelectItem>
@@ -303,13 +303,13 @@ const SellWithUs = () => {
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <Label className="text-[#1A1A1A]/70 text-sm mb-1.5 block">Size (sq ft) *</Label>
-                        <Input type="number" value={valSize} onChange={(e) => setValSize(e.target.value)} placeholder="e.g., 1200" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-[#1A1A1A]/70 focus:border-blue-400" />
+                        <Input type="number" value={valSize} onChange={(e) => setValSize(e.target.value)} placeholder="e.g., 1200" className="bg-[#FDFBF7]/50 border-white/10 text-white placeholder:text-[#1A1A1A]/70 focus:border-blue-400" />
                       </div>
                       <div>
                         <Label className="text-[#1A1A1A]/70 text-sm mb-1.5 block">Bedrooms</Label>
                         <Select value={valBedrooms} onValueChange={setValBedrooms}>
-                          <SelectTrigger className="bg-zinc-900/50 border-white/10 text-white"><SelectValue /></SelectTrigger>
-                          <SelectContent className="bg-zinc-900 border-[#1A1A1A]">
+                          <SelectTrigger className="bg-[#FDFBF7]/50 border-white/10 text-white"><SelectValue /></SelectTrigger>
+                          <SelectContent className="bg-[#FDFBF7] border-[#1A1A1A]">
                             {['0', '1', '2', '3', '4', '5'].map(b => (
                               <SelectItem key={b} value={b} className="text-white">{b === '0' ? 'Studio' : `${b} BR`}</SelectItem>
                             ))}
@@ -369,19 +369,19 @@ const SellWithUs = () => {
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <Label className="text-[#1A1A1A]/70 text-sm mb-1.5 block">Full Name</Label>
-                        <Input value={listName} onChange={(e) => setListName(e.target.value)} placeholder="Your name" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-[#1A1A1A]/70" />
+                        <Input value={listName} onChange={(e) => setListName(e.target.value)} placeholder="Your name" className="bg-[#FDFBF7]/50 border-white/10 text-white placeholder:text-[#1A1A1A]/70" />
                       </div>
                       <div>
                         <Label className="text-[#1A1A1A]/70 text-sm mb-1.5 block">Phone Number *</Label>
-                        <Input value={listPhone} onChange={(e) => setListPhone(e.target.value)} placeholder="+971 50 123 4567" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-[#1A1A1A]/70" />
+                        <Input value={listPhone} onChange={(e) => setListPhone(e.target.value)} placeholder="+971 50 123 4567" className="bg-[#FDFBF7]/50 border-white/10 text-white placeholder:text-[#1A1A1A]/70" />
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <Label className="text-[#1A1A1A]/70 text-sm mb-1.5 block">Property Type *</Label>
                         <Select value={listType} onValueChange={setListType}>
-                          <SelectTrigger className="bg-zinc-900/50 border-white/10 text-white"><SelectValue placeholder="Select type" /></SelectTrigger>
-                          <SelectContent className="bg-zinc-900 border-[#1A1A1A]">
+                          <SelectTrigger className="bg-[#FDFBF7]/50 border-white/10 text-white"><SelectValue placeholder="Select type" /></SelectTrigger>
+                          <SelectContent className="bg-[#FDFBF7] border-[#1A1A1A]">
                             <SelectItem value="apartment" className="text-white">Apartment</SelectItem>
                             <SelectItem value="villa" className="text-white">Villa</SelectItem>
                             <SelectItem value="townhouse" className="text-white">Townhouse</SelectItem>
@@ -392,12 +392,12 @@ const SellWithUs = () => {
                       </div>
                       <div>
                         <Label className="text-[#1A1A1A]/70 text-sm mb-1.5 block">Community *</Label>
-                        <Input value={listCommunity} onChange={(e) => setListCommunity(e.target.value)} placeholder="e.g., Dubai Marina" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-[#1A1A1A]/70" />
+                        <Input value={listCommunity} onChange={(e) => setListCommunity(e.target.value)} placeholder="e.g., Dubai Marina" className="bg-[#FDFBF7]/50 border-white/10 text-white placeholder:text-[#1A1A1A]/70" />
                       </div>
                     </div>
                     <div>
                       <Label className="text-[#1A1A1A]/70 text-sm mb-1.5 block">Email (optional)</Label>
-                      <Input type="email" value={listEmail} onChange={(e) => setListEmail(e.target.value)} placeholder="your@email.com" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-[#1A1A1A]/70" />
+                      <Input type="email" value={listEmail} onChange={(e) => setListEmail(e.target.value)} placeholder="your@email.com" className="bg-[#FDFBF7]/50 border-white/10 text-white placeholder:text-[#1A1A1A]/70" />
                     </div>
                     <Button onClick={handleListingSubmit} className="w-full bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] font-semibold py-6 rounded-xl">
                       Submit Listing Request <ArrowRight className="w-4 h-4 ml-2" />

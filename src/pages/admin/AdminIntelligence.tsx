@@ -22,7 +22,7 @@ import { format } from "date-fns";
 const VIP_COLORS: Record<string, string> = {
   'Royal VIP': 'bg-gradient-to-r from-amber-500/20 to-yellow-500/20 text-amber-700 border-amber-500/40',
   'Platinum': 'bg-purple-500/15 text-purple-700 border-purple-500/30',
-  'Gold': 'bg-gold/15 text-gold border-gold/40',
+  'Gold': 'bg-[#EFE6D6]/15 text-[#1A1A1A] border-[#B89555]/40',
   'Silver': 'bg-stone-400/15 text-stone-600 border-stone-400/30',
   'Bronze': 'bg-orange-500/15 text-orange-700 border-orange-500/30',
   'Visitor': 'bg-stone-200/30 text-stone-500 border-stone-300/30',
@@ -287,7 +287,7 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
   if (isLoading) {
     return (
       <div className={`${embedded ? '' : 'min-h-screen bg-gradient-to-b from-[#F7F1E6] via-[#EFE6D6] to-[#E0D5C0]'} flex items-center justify-center p-12`}>
-        <Loader2 className="w-8 h-8 text-gold animate-spin" />
+        <Loader2 className="w-8 h-8 text-[#1A1A1A] animate-spin" />
       </div>
     );
   }
@@ -301,7 +301,7 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
           <div className="flex items-center justify-between mb-8">
             <div>
               {!embedded && (
-                <Button variant="ghost" onClick={() => navigate(-1)} className="mb-2 text-gold hover:text-[#1A1A1A] hover:bg-gold/10">
+                <Button variant="ghost" onClick={() => navigate(-1)} className="mb-2 text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                   <ArrowLeft className="w-4 h-4 mr-2" /> Back
                 </Button>
               )}
@@ -312,11 +312,11 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
             </div>
             <div className="flex gap-2">
               <Button variant="outline" onClick={() => scoreMutation.mutate()} disabled={scoreMutation.isPending}
-                className="border-2 border-gold/40 text-gold hover:bg-gold/10 hover:text-gold bg-[#FDFBF7]/80 font-semibold">
+                className="border-2 border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 hover:text-[#1A1A1A] bg-[#FDFBF7]/80 font-semibold">
                 <RefreshCw className={`w-4 h-4 mr-2 ${scoreMutation.isPending ? "animate-spin" : ""}`} />
                 Recalculate
               </Button>
-              <Button onClick={exportCSV} className="bg-gold text-[#1A1A1A] hover:bg-gold/90 font-semibold border-2 border-gold/60">
+              <Button onClick={exportCSV} className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90 font-semibold border-2 border-[#B89555]/60">
                 <Download className="w-4 h-4 mr-2" /> Export CSV
               </Button>
             </div>
@@ -324,28 +324,28 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
 
           {/* Summary */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <Card className="bg-[#FDFBF7]/70 border-2 border-gold/30 shadow-sm">
+            <Card className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 shadow-sm">
               <CardContent className="p-4 text-center">
-                <Users className="w-6 h-6 text-gold mx-auto mb-2" />
+                <Users className="w-6 h-6 text-[#1A1A1A] mx-auto mb-2" />
                 <p className="text-2xl font-bold text-[#1A1A1A]">{filteredProfiles.length}</p>
                 <p className="text-xs text-stone-500">Total Users</p>
               </CardContent>
             </Card>
-            <Card className="bg-[#FDFBF7]/70 border-2 border-gold/30 shadow-sm">
+            <Card className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 shadow-sm">
               <CardContent className="p-4 text-center">
                 <TrendingUp className="w-6 h-6 text-emerald-600 mx-auto mb-2" />
                 <p className="text-2xl font-bold text-[#1A1A1A]">{totalSessions.toLocaleString()}</p>
                 <p className="text-xs text-stone-500">Total Sessions</p>
               </CardContent>
             </Card>
-            <Card className="bg-[#FDFBF7]/70 border-2 border-gold/30 shadow-sm">
+            <Card className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 shadow-sm">
               <CardContent className="p-4 text-center">
                 <Brain className="w-6 h-6 text-purple-600 mx-auto mb-2" />
                 <p className="text-2xl font-bold text-[#1A1A1A]">{avgIntent}/100</p>
                 <p className="text-xs text-stone-500">Avg Intent</p>
               </CardContent>
             </Card>
-            <Card className="bg-[#FDFBF7]/70 border-2 border-gold/30 shadow-sm">
+            <Card className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 shadow-sm">
               <CardContent className="p-4 text-center">
                 <Zap className="w-6 h-6 text-blue-600 mx-auto mb-2" />
                 <p className="text-2xl font-bold text-[#1A1A1A]">{avgEngagement}/100</p>
@@ -357,11 +357,11 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
           {/* VIP Tier Filters */}
           <div className="flex flex-wrap gap-2 mb-6">
             <Button size="sm" variant={tierFilter === "all" ? "default" : "outline"}
-              className={tierFilter === "all" ? "bg-gold text-[#1A1A1A] font-semibold border-2 border-gold" : "text-stone-600 border-2 border-gold/30 bg-[#FDFBF7]/70 hover:bg-gold/10 hover:text-[#1A1A1A] font-medium"}
+              className={tierFilter === "all" ? "bg-[#EFE6D6] text-[#1A1A1A] font-semibold border-2 border-[#B89555]" : "text-stone-600 border-2 border-[#B89555]/30 bg-[#FDFBF7]/70 hover:bg-[#EFE6D6]/10 hover:text-[#1A1A1A] font-medium"}
               onClick={() => setTierFilter("all")}>All</Button>
             {["Royal VIP", "Platinum", "Gold", "Silver", "Bronze", "Visitor"].map(tier => (
               <Button key={tier} size="sm" variant={tierFilter === tier ? "default" : "outline"}
-                className={tierFilter === tier ? "bg-gold text-[#1A1A1A] font-semibold border-2 border-gold" : "text-stone-600 border-2 border-gold/30 bg-[#FDFBF7]/70 hover:bg-gold/10 hover:text-[#1A1A1A] font-medium"}
+                className={tierFilter === tier ? "bg-[#EFE6D6] text-[#1A1A1A] font-semibold border-2 border-[#B89555]" : "text-stone-600 border-2 border-[#B89555]/30 bg-[#FDFBF7]/70 hover:bg-[#EFE6D6]/10 hover:text-[#1A1A1A] font-medium"}
                 onClick={() => setTierFilter(tier)}>
                 {tier} ({tierCounts[tier] || 0})
               </Button>
@@ -375,32 +375,32 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
               placeholder="Search by name, email, phone, country, nationality..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="pl-10 bg-[#FDFBF7]/80 border-2 border-gold/30 text-[#1A1A1A] placeholder:text-stone-400 focus:border-gold"
+              className="pl-10 bg-[#FDFBF7]/80 border-2 border-[#B89555]/30 text-[#1A1A1A] placeholder:text-stone-400 focus:border-[#B89555]"
             />
           </div>
 
           {/* Users Table — with Country & Category columns */}
-          <Card className="bg-[#FDFBF7]/80 border-2 border-gold/30 shadow-sm">
+          <Card className="bg-[#FDFBF7]/80 border-2 border-[#B89555]/30 shadow-sm">
             <CardContent className="p-0">
               <ScrollArea className="h-[600px]">
                 <table className="w-full text-sm">
                   <thead className="sticky top-0 bg-gradient-to-r from-[#F7F1E6] to-[#EFE6D6] backdrop-blur z-10">
-                    <tr className="border-b-2 border-gold/20">
-                      <th className="text-left p-3 text-gold font-bold">User</th>
-                      <th className="text-center p-3 text-gold font-bold">Category</th>
-                      <th className="text-center p-3 text-gold font-bold hidden lg:table-cell">Country</th>
-                      <th className="text-center p-3 text-gold font-bold">VIP</th>
-                      <th className="text-center p-3 text-gold font-bold">Intent</th>
-                      <th className="text-center p-3 text-gold font-bold">Engagement</th>
-                      <th className="text-center p-3 text-gold font-bold">Sessions</th>
-                      <th className="text-center p-3 text-gold font-bold">Time</th>
-                      <th className="text-center p-3 text-gold font-bold hidden md:table-cell">Last Active</th>
-                      <th className="text-center p-3 text-gold font-bold">View</th>
+                    <tr className="border-b-2 border-[#B89555]/20">
+                      <th className="text-left p-3 text-[#1A1A1A] font-bold">User</th>
+                      <th className="text-center p-3 text-[#1A1A1A] font-bold">Category</th>
+                      <th className="text-center p-3 text-[#1A1A1A] font-bold hidden lg:table-cell">Country</th>
+                      <th className="text-center p-3 text-[#1A1A1A] font-bold">VIP</th>
+                      <th className="text-center p-3 text-[#1A1A1A] font-bold">Intent</th>
+                      <th className="text-center p-3 text-[#1A1A1A] font-bold">Engagement</th>
+                      <th className="text-center p-3 text-[#1A1A1A] font-bold">Sessions</th>
+                      <th className="text-center p-3 text-[#1A1A1A] font-bold">Time</th>
+                      <th className="text-center p-3 text-[#1A1A1A] font-bold hidden md:table-cell">Last Active</th>
+                      <th className="text-center p-3 text-[#1A1A1A] font-bold">View</th>
                     </tr>
                   </thead>
                   <tbody>
                     {filteredProfiles.map(p => (
-                      <tr key={p.user_id} className="border-b border-gold/10 hover:bg-gold/5 transition-colors cursor-pointer" onClick={() => { setSelectedUser(p); setUserActivities(null); setUserDocuments(null); setUserScannedCards(null); setUserSessions(null); }}>
+                      <tr key={p.user_id} className="border-b border-[#B89555]/10 hover:bg-[#EFE6D6]/5 transition-colors cursor-pointer" onClick={() => { setSelectedUser(p); setUserActivities(null); setUserDocuments(null); setUserScannedCards(null); setUserSessions(null); }}>
                         <td className="p-3">
                           <div className="font-semibold text-[#1A1A1A] truncate max-w-[180px]">{p.full_name}</div>
                           <div className="text-xs text-stone-500 truncate max-w-[180px]">{p.email}</div>
@@ -429,7 +429,7 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
                           {p.last_active_at ? format(new Date(p.last_active_at), "dd MMM HH:mm") : "—"}
                         </td>
                         <td className="p-3 text-center">
-                          <Button size="sm" variant="outline" onClick={(e) => { e.stopPropagation(); setSelectedUser(p); setUserActivities(null); setUserDocuments(null); setUserScannedCards(null); setUserSessions(null); }} className="text-gold border-gold/30 hover:bg-gold/10 h-7 font-semibold">
+                          <Button size="sm" variant="outline" onClick={(e) => { e.stopPropagation(); setSelectedUser(p); setUserActivities(null); setUserDocuments(null); setUserScannedCards(null); setUserSessions(null); }} className="text-[#1A1A1A] border-[#B89555]/30 hover:bg-[#EFE6D6]/10 h-7 font-semibold">
                             <Eye className="w-3.5 h-3.5" />
                           </Button>
                         </td>
@@ -444,11 +444,11 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
 
         {/* User Detail Dialog */}
         <Dialog open={!!selectedUser} onOpenChange={() => { setSelectedUser(null); setUserActivities(null); setUserDocuments(null); setUserScannedCards(null); setUserSessions(null); }}>
-          <DialogContent className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6] border-2 border-gold/40 text-[#1A1A1A] max-w-5xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6] border-2 border-[#B89555]/40 text-[#1A1A1A] max-w-5xl max-h-[90vh] overflow-y-auto">
             {selectedUser && (
               <>
                 <DialogHeader>
-                  <DialogTitle className="text-gold flex items-center gap-3">
+                  <DialogTitle className="text-[#1A1A1A] flex items-center gap-3">
                     <Crown className="w-5 h-5" />
                     {selectedUser.full_name}
                     <Badge variant="outline" className={`font-semibold ${VIP_COLORS[selectedUser.vip_tier] || ""}`}>
@@ -460,7 +460,7 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
 
                 <div className="space-y-4 mt-4">
                   {/* Contact Info */}
-                  <div className="flex flex-wrap gap-6 text-sm bg-[#FDFBF7]/60 rounded-lg p-4 border border-gold/20">
+                  <div className="flex flex-wrap gap-6 text-sm bg-[#FDFBF7]/60 rounded-lg p-4 border border-[#B89555]/20">
                     <div><span className="text-stone-500">Email:</span> <span className="text-[#1A1A1A] font-medium">{selectedUser.email || "—"}</span></div>
                     <div><span className="text-stone-500">Phone:</span> <span className="text-[#1A1A1A] font-medium">{selectedUser.phone || "—"}</span></div>
                     <div><span className="text-stone-500">Role:</span> <span className="text-[#1A1A1A] font-medium">{getRoleLabel(selectedUser.role || "")}</span></div>
@@ -469,8 +469,8 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
 
                   {/* NEW: Demographics Card */}
                   {(selectedUser.nationality || selectedUser.country || selectedUser.city || selectedUser.preferred_language || selectedUser.age_range) && (
-                    <div className="bg-[#FDFBF7]/60 rounded-lg p-4 border border-gold/20">
-                      <p className="text-gold font-bold mb-3 flex items-center gap-2"><Globe className="w-4 h-4" /> Demographics</p>
+                    <div className="bg-[#FDFBF7]/60 rounded-lg p-4 border border-[#B89555]/20">
+                      <p className="text-[#1A1A1A] font-bold mb-3 flex items-center gap-2"><Globe className="w-4 h-4" /> Demographics</p>
                       <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
                         <div>
                           <p className="text-stone-400 text-xs">Nationality</p>
@@ -498,23 +498,23 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
 
                   {/* Scores */}
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                    <div className="bg-[#FDFBF7]/60 rounded-lg p-3 text-center border border-gold/20">
+                    <div className="bg-[#FDFBF7]/60 rounded-lg p-3 text-center border border-[#B89555]/20">
                       <p className="text-xl font-bold text-purple-700">{selectedUser.intent_score}/100</p>
                       <p className="text-xs font-semibold text-stone-600">Purchase Intent</p>
                       <p className="text-[10px] text-stone-400 mt-1">Leads, saves, contact clicks, searches</p>
                     </div>
-                    <div className="bg-[#FDFBF7]/60 rounded-lg p-3 text-center border border-gold/20">
+                    <div className="bg-[#FDFBF7]/60 rounded-lg p-3 text-center border border-[#B89555]/20">
                       <p className="text-xl font-bold text-blue-700">{selectedUser.engagement_score}/100</p>
                       <p className="text-xs font-semibold text-stone-600">Site Engagement</p>
                       <p className="text-[10px] text-stone-400 mt-1">Sessions, time, pages, features used</p>
                     </div>
-                    <div className="bg-[#FDFBF7]/60 rounded-lg p-3 text-center border border-gold/20">
+                    <div className="bg-[#FDFBF7]/60 rounded-lg p-3 text-center border border-[#B89555]/20">
                       <p className="text-xl font-bold text-emerald-700">{selectedUser.conversion_probability}%</p>
                       <p className="text-xs font-semibold text-stone-600">Conversion Likelihood</p>
                       <p className="text-[10px] text-stone-400 mt-1">Intent × Engagement × Recency</p>
                     </div>
-                    <div className="bg-[#FDFBF7]/60 rounded-lg p-3 text-center border border-gold/20">
-                      <p className="text-xl font-bold text-gold">{selectedUser.confidence_score}/100</p>
+                    <div className="bg-[#FDFBF7]/60 rounded-lg p-3 text-center border border-[#B89555]/20">
+                      <p className="text-xl font-bold text-[#1A1A1A]">{selectedUser.confidence_score}/100</p>
                       <p className="text-xs font-semibold text-stone-600">Data Quality</p>
                       <p className="text-[10px] text-stone-400 mt-1">More data = more accurate scores</p>
                     </div>
@@ -522,20 +522,20 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
 
                   {/* Activity Stats + 30-Day Actions — 2 columns */}
                   <div className="grid grid-cols-2 gap-3">
-                    <div className="bg-[#FDFBF7]/60 rounded-lg p-4 border border-gold/20">
-                      <p className="text-gold font-bold mb-3 flex items-center gap-2"><Clock className="w-4 h-4" /> Activity Stats</p>
+                    <div className="bg-[#FDFBF7]/60 rounded-lg p-4 border border-[#B89555]/20">
+                      <p className="text-[#1A1A1A] font-bold mb-3 flex items-center gap-2"><Clock className="w-4 h-4" /> Activity Stats</p>
                       <div className="space-y-2 text-sm text-stone-700">
                         <div className="flex justify-between"><span>Total Sessions</span><span className="text-[#1A1A1A] font-bold">{selectedUser.total_sessions}</span></div>
                         <div className="flex justify-between"><span>Total Time on Site</span><span className="text-[#1A1A1A] font-bold">{formatDuration(selectedUser.total_time_seconds || 0)}</span></div>
                         <div className="flex justify-between"><span>Sessions (last 7 days)</span><span className="text-[#1A1A1A] font-bold">{selectedUser.sessions_last_7d}</span></div>
                         <div className="flex justify-between"><span>Day Streak</span><span className="text-[#1A1A1A] font-bold">{selectedUser.current_streak} days</span></div>
-                        <div className="flex justify-between"><span>Total Points Earned</span><span className="text-gold font-bold">{selectedUser.total_points?.toLocaleString()}</span></div>
+                        <div className="flex justify-between"><span>Total Points Earned</span><span className="text-[#1A1A1A] font-bold">{selectedUser.total_points?.toLocaleString()}</span></div>
                         <div className="flex justify-between"><span>Unique Feature Types</span><span className="text-[#1A1A1A] font-bold">{selectedUser.feature_diversity}</span></div>
                       </div>
                     </div>
 
-                    <div className="bg-[#FDFBF7]/60 rounded-lg p-4 border border-gold/20">
-                      <p className="text-gold font-bold mb-3 flex items-center gap-2"><MousePointerClick className="w-4 h-4" /> 30-Day Actions</p>
+                    <div className="bg-[#FDFBF7]/60 rounded-lg p-4 border border-[#B89555]/20">
+                      <p className="text-[#1A1A1A] font-bold mb-3 flex items-center gap-2"><MousePointerClick className="w-4 h-4" /> 30-Day Actions</p>
                       <div className="space-y-2 text-sm text-stone-700">
                         <div className="flex justify-between"><span>Leads Submitted</span><span className="text-[#1A1A1A] font-bold">{selectedUser.lead_count_30d}</span></div>
                         <div className="flex justify-between"><span>Properties Saved</span><span className="text-[#1A1A1A] font-bold">{selectedUser.saves_count_30d}</span></div>
@@ -543,7 +543,7 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
                         <div className="flex justify-between"><span>Searches</span><span className="text-[#1A1A1A] font-bold">{selectedUser.searches_30d}</span></div>
                       </div>
                       
-                      <p className="text-gold font-bold mt-4 mb-2 flex items-center gap-2"><Monitor className="w-4 h-4" /> Devices Used</p>
+                      <p className="text-[#1A1A1A] font-bold mt-4 mb-2 flex items-center gap-2"><Monitor className="w-4 h-4" /> Devices Used</p>
                       {selectedUser.device_mix && Object.entries(selectedUser.device_mix).length > 0 ? (
                         Object.entries(selectedUser.device_mix).map(([d, c]) => (
                           <div key={d} className="flex items-center gap-2 text-stone-700 text-sm mb-1">
@@ -560,8 +560,8 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
 
                   {/* NEW: Per-Page Time Breakdown */}
                   {selectedUser.page_time_breakdown && Object.keys(selectedUser.page_time_breakdown).length > 0 && (
-                    <div className="bg-[#FDFBF7]/60 rounded-lg p-4 border border-gold/20">
-                      <p className="text-gold font-bold mb-3 flex items-center gap-2"><BarChart3 className="w-4 h-4" /> Time Spent Per Page</p>
+                    <div className="bg-[#FDFBF7]/60 rounded-lg p-4 border border-[#B89555]/20">
+                      <p className="text-[#1A1A1A] font-bold mb-3 flex items-center gap-2"><BarChart3 className="w-4 h-4" /> Time Spent Per Page</p>
                       <div className="space-y-2">
                         {Object.entries(selectedUser.page_time_breakdown)
                           .sort(([, a], [, b]) => (b as number) - (a as number))
@@ -572,7 +572,7 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
                             return (
                               <div key={page} className="flex items-center gap-3 text-xs">
                                 <span className="text-stone-600 truncate w-40 shrink-0" title={page}>{page}</span>
-                                <div className="flex-1 h-4 bg-gold/10 rounded-full overflow-hidden">
+                                <div className="flex-1 h-4 bg-[#EFE6D6]/10 rounded-full overflow-hidden">
                                   <div className="h-full bg-gradient-to-r from-gold/60 to-gold rounded-full transition-all" style={{ width: `${widthPercent}%` }} />
                                 </div>
                                 <span className="text-[#1A1A1A] font-bold w-16 text-right shrink-0">{formatDuration(seconds as number)}</span>
@@ -585,12 +585,12 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
 
                   {/* Top Pages (fallback if no time breakdown) */}
                   {(!selectedUser.page_time_breakdown || Object.keys(selectedUser.page_time_breakdown).length === 0) && selectedUser.top_pages?.length > 0 && (
-                    <div className="bg-[#FDFBF7]/60 rounded-lg p-4 border border-gold/20">
-                      <p className="text-gold font-bold mb-2 flex items-center gap-2"><MapPin className="w-4 h-4" /> Top Pages Visited</p>
+                    <div className="bg-[#FDFBF7]/60 rounded-lg p-4 border border-[#B89555]/20">
+                      <p className="text-[#1A1A1A] font-bold mb-2 flex items-center gap-2"><MapPin className="w-4 h-4" /> Top Pages Visited</p>
                       <div className="grid grid-cols-2 gap-1">
                         {selectedUser.top_pages.slice(0, 10).map((page, i) => (
                           <div key={i} className="text-xs text-stone-600 truncate flex items-center gap-2">
-                            <span className="text-gold font-bold w-4">{i + 1}.</span>
+                            <span className="text-[#1A1A1A] font-bold w-4">{i + 1}.</span>
                             <span className="truncate">{page}</span>
                           </div>
                         ))}
@@ -600,11 +600,11 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
 
                   {/* Tools Used */}
                   {selectedUser.tools_used?.length > 0 && (
-                    <div className="bg-[#FDFBF7]/60 rounded-lg p-3 border border-gold/20">
-                      <p className="text-gold font-bold mb-2">Tools Used</p>
+                    <div className="bg-[#FDFBF7]/60 rounded-lg p-3 border border-[#B89555]/20">
+                      <p className="text-[#1A1A1A] font-bold mb-2">Tools Used</p>
                       <div className="flex flex-wrap gap-1.5">
                         {selectedUser.tools_used.map(t => (
-                          <Badge key={t} variant="outline" className="text-xs text-stone-600 border-gold/30 bg-gold/5">{t}</Badge>
+                          <Badge key={t} variant="outline" className="text-xs text-stone-600 border-[#B89555]/30 bg-[#EFE6D6]/5">{t}</Badge>
                         ))}
                       </div>
                     </div>
@@ -615,23 +615,23 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
                     <div className="flex justify-center">
                       <Button variant="outline" onClick={() => loadUserDetails(selectedUser.user_id)}
                         disabled={activitiesLoading}
-                        className="text-gold border-2 border-gold/40 hover:bg-gold/10 font-semibold bg-[#FDFBF7]/80">
+                        className="text-[#1A1A1A] border-2 border-[#B89555]/40 hover:bg-[#EFE6D6]/10 font-semibold bg-[#FDFBF7]/80">
                         {activitiesLoading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
                         Load Session History, Timeline & Documents
                       </Button>
                     </div>
                   )}
 
-                  {activitiesLoading && <div className="flex justify-center py-4"><Loader2 className="w-5 h-5 text-gold animate-spin" /></div>}
+                  {activitiesLoading && <div className="flex justify-center py-4"><Loader2 className="w-5 h-5 text-[#1A1A1A] animate-spin" /></div>}
 
                   {/* NEW: Session History Timeline */}
                   {userSessions && userSessions.length > 0 && (
-                    <div className="bg-[#FDFBF7]/60 rounded-lg p-4 border border-gold/20">
-                      <p className="text-gold font-bold mb-3 flex items-center gap-2"><LogIn className="w-4 h-4" /> Session History ({userSessions.length} sessions)</p>
+                    <div className="bg-[#FDFBF7]/60 rounded-lg p-4 border border-[#B89555]/20">
+                      <p className="text-[#1A1A1A] font-bold mb-3 flex items-center gap-2"><LogIn className="w-4 h-4" /> Session History ({userSessions.length} sessions)</p>
                       <ScrollArea className="h-[220px]">
                         <div className="space-y-1.5">
                           {userSessions.map((sess: any, i: number) => (
-                            <div key={i} className="flex items-center gap-3 text-xs border-b border-gold/10 pb-1.5 py-1">
+                            <div key={i} className="flex items-center gap-3 text-xs border-b border-[#B89555]/10 pb-1.5 py-1">
                               <span className="text-stone-400 whitespace-nowrap w-28 shrink-0">
                                 {format(new Date(sess.started_at), "dd MMM HH:mm")}
                               </span>
@@ -655,16 +655,16 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
 
                   {/* Activity Timeline */}
                   {userActivities && userActivities.length > 0 && (
-                    <div className="bg-[#FDFBF7]/60 rounded-lg p-4 border border-gold/20">
-                      <p className="text-gold font-bold mb-3 flex items-center gap-2"><Clock className="w-4 h-4" /> Activity Timeline ({userActivities.length} events)</p>
+                    <div className="bg-[#FDFBF7]/60 rounded-lg p-4 border border-[#B89555]/20">
+                      <p className="text-[#1A1A1A] font-bold mb-3 flex items-center gap-2"><Clock className="w-4 h-4" /> Activity Timeline ({userActivities.length} events)</p>
                       <ScrollArea className="h-[250px]">
                         <div className="space-y-1">
                           {userActivities.map((act, i) => (
-                            <div key={i} className="flex items-center gap-2 text-xs border-b border-gold/10 pb-1 py-0.5">
+                            <div key={i} className="flex items-center gap-2 text-xs border-b border-[#B89555]/10 pb-1 py-0.5">
                               <span className="text-stone-400 whitespace-nowrap w-32 shrink-0">
                                 {format(new Date(act.created_at), "dd MMM yyyy HH:mm")}
                               </span>
-                              <Badge variant="outline" className="text-[10px] h-4 px-1.5 border-gold/30 bg-gold/5 shrink-0">{act.event_type}</Badge>
+                              <Badge variant="outline" className="text-[10px] h-4 px-1.5 border-[#B89555]/30 bg-[#EFE6D6]/5 shrink-0">{act.event_type}</Badge>
                               <span className="text-stone-700 truncate flex-1">{act.event_name}</span>
                               {act.page_path && <span className="text-stone-400 truncate max-w-[150px]">{act.page_path}</span>}
                             </div>
@@ -676,12 +676,12 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
 
                   {/* Documents */}
                   {userDocuments && userDocuments.length > 0 && (
-                    <div className="bg-[#FDFBF7]/60 rounded-lg p-4 border border-gold/20">
-                      <p className="text-gold font-bold mb-3 flex items-center gap-2"><FileText className="w-4 h-4" /> Documents ({userDocuments.length})</p>
+                    <div className="bg-[#FDFBF7]/60 rounded-lg p-4 border border-[#B89555]/20">
+                      <p className="text-[#1A1A1A] font-bold mb-3 flex items-center gap-2"><FileText className="w-4 h-4" /> Documents ({userDocuments.length})</p>
                       <div className="space-y-1.5">
                         {userDocuments.map((doc: any, i: number) => (
-                          <div key={i} className="flex items-center gap-3 text-xs bg-gold/5 rounded p-2 border border-gold/10">
-                            <Badge variant="outline" className="text-[10px] h-4 px-1 border-gold/30 bg-gold/5 shrink-0 uppercase">{doc.action}</Badge>
+                          <div key={i} className="flex items-center gap-3 text-xs bg-[#EFE6D6]/5 rounded p-2 border border-[#B89555]/10">
+                            <Badge variant="outline" className="text-[10px] h-4 px-1 border-[#B89555]/30 bg-[#EFE6D6]/5 shrink-0 uppercase">{doc.action}</Badge>
                             <span className="font-medium text-stone-800 truncate">{doc.document_name}</span>
                             <span className="text-stone-400">{doc.document_type}</span>
                             <span className="text-stone-400 ml-auto whitespace-nowrap">{format(new Date(doc.created_at), "dd MMM HH:mm")}</span>
@@ -693,13 +693,13 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
 
                   {/* Scanned Business Cards */}
                   {userScannedCards && userScannedCards.length > 0 && (
-                    <div className="bg-[#FDFBF7]/60 rounded-lg p-4 border border-gold/20">
-                      <p className="text-gold font-bold mb-3 flex items-center gap-2"><CreditCard className="w-4 h-4" /> Scanned Business Cards ({userScannedCards.length})</p>
+                    <div className="bg-[#FDFBF7]/60 rounded-lg p-4 border border-[#B89555]/20">
+                      <p className="text-[#1A1A1A] font-bold mb-3 flex items-center gap-2"><CreditCard className="w-4 h-4" /> Scanned Business Cards ({userScannedCards.length})</p>
                       <div className="space-y-2">
                         {userScannedCards.map((card: any, i: number) => {
                           const cd = card.card_data || {};
                           return (
-                            <div key={i} className="bg-gold/5 rounded p-3 border border-gold/20 text-xs">
+                            <div key={i} className="bg-[#EFE6D6]/5 rounded p-3 border border-[#B89555]/20 text-xs">
                               <div className="flex flex-wrap gap-4">
                                 {cd.name && <span><strong>Name:</strong> {cd.name}</span>}
                                 {cd.company && <span><strong>Company:</strong> {cd.company}</span>}
@@ -717,14 +717,14 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
 
                   {/* No data message */}
                   {userActivities && userActivities.length === 0 && !userScannedCards?.length && !userDocuments?.length && !userSessions?.length && (
-                    <div className="bg-[#FDFBF7]/60 rounded-lg p-4 border border-gold/20 text-center">
+                    <div className="bg-[#FDFBF7]/60 rounded-lg p-4 border border-[#B89555]/20 text-center">
                       <p className="text-xs text-stone-400">No activities, sessions, documents, or scanned cards found</p>
                     </div>
                   )}
 
                   {/* VIP Tier Reason */}
-                  <div className="bg-gold/10 rounded-lg p-3 border-2 border-gold/30">
-                    <p className="text-xs text-gold font-bold mb-1">VIP Tier Summary</p>
+                  <div className="bg-[#EFE6D6]/10 rounded-lg p-3 border-2 border-[#B89555]/30">
+                    <p className="text-xs text-[#1A1A1A] font-bold mb-1">VIP Tier Summary</p>
                     <p className="text-sm text-stone-700">{selectedUser.vip_tier_reason}</p>
                   </div>
                 </div>
@@ -738,10 +738,10 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
 }
 
 function ScoreBar({ value, color }: { value: number; color: string }) {
-  const colorClass = color === "purple" ? "bg-purple-500" : color === "blue" ? "bg-blue-500" : "bg-gold";
+  const colorClass = color === "purple" ? "bg-purple-500" : color === "blue" ? "bg-blue-500" : "bg-[#EFE6D6]";
   return (
     <div className="flex items-center gap-1.5">
-      <div className="w-12 h-1.5 bg-gold/10 rounded-full overflow-hidden">
+      <div className="w-12 h-1.5 bg-[#EFE6D6]/10 rounded-full overflow-hidden">
         <div className={`h-full ${colorClass} rounded-full`} style={{ width: `${value}%` }} />
       </div>
       <span className="text-xs text-stone-700 w-6 font-semibold">{value}</span>

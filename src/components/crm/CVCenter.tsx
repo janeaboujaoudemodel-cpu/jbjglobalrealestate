@@ -990,7 +990,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                                 ) : null}
                                 {cv.status === 'approved' && <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Accepted</Badge>}
                                 {cv.status === 'rejected' && <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Rejected</Badge>}
-                                {cv.status === 'pending' && <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">Pending Review</Badge>}
+                                {cv.status === 'pending' && <Badge className="bg-amber-500/20 text-[#1A1A1A] border-amber-500/30">Pending Review</Badge>}
                               </div>
 
                               {/* Quick info pills */}
@@ -1219,7 +1219,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                       <Button
                         size="sm"
                         variant="outline"
-                        className="h-7 gap-1.5 text-xs border-amber-500/30 text-amber-400 hover:bg-amber-500/10"
+                        className="h-7 gap-1.5 text-xs border-amber-500/30 text-[#1A1A1A] hover:bg-amber-500/10"
                         onClick={(e) => {
                           e.stopPropagation();
                           window.open(`tel:${cv.phone_e164}`, '_self');
@@ -1297,7 +1297,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
               </div>
             ) : (
               <div className="h-full flex flex-col items-center justify-center gap-4 text-center text-sm text-muted-foreground">
-                <AlertTriangle className="h-12 w-12 text-amber-400" />
+                <AlertTriangle className="h-12 w-12 text-[#1A1A1A]" />
                 <p className="text-lg font-medium text-foreground">Unable to load CV</p>
                 <p>The file may have been moved or deleted. Try re-uploading.</p>
               </div>

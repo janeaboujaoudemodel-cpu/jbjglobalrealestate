@@ -97,7 +97,7 @@ const AreaIntelligence = () => {
                         <AlertTriangle className="w-6 h-6" />
                       </div>
                       <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
-                        <span className="text-gold">No</span> Assumptions, Projections, or Guarantees
+                        <span className="text-[#1A1A1A]">No</span> Assumptions, Projections, or Guarantees
                       </h2>
                     </div>
                     <p className="text-[#1A1A1A]/70 text-lg leading-relaxed">
@@ -123,7 +123,7 @@ const AreaIntelligence = () => {
                         <MapPin className="w-6 h-6" />
                       </div>
                       <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
-                        <span className="text-gold">What</span> "Area Intelligence" Means
+                        <span className="text-[#1A1A1A]">What</span> "Area Intelligence" Means
                       </h2>
                     </div>
                     <p className="text-[#1A1A1A]/70 text-lg leading-relaxed mb-6">
@@ -139,12 +139,12 @@ const AreaIntelligence = () => {
                         "Official rental benchmarks"
                       ].map((item, idx) => (
                         <li key={idx} className="flex items-center gap-3 text-[#1A1A1A]/70">
-                          <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0" />
+                          <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] flex-shrink-0" />
                           <span>{item}</span>
                         </li>
                       ))}
                     </ul>
-                    <div className="mt-6 p-4 bg-[#1A1A1A]/5 rounded-xl border border-gold/20">
+                    <div className="mt-6 p-4 bg-[#1A1A1A]/5 rounded-xl border border-[#B89555]/20">
                       <p className="text-[#1A1A1A]/70 text-sm italic">
                         Each area is assessed independently. No two locations behave the same, even within the same district.
                       </p>
@@ -169,7 +169,7 @@ const AreaIntelligence = () => {
                         <Database className="w-6 h-6" />
                       </div>
                       <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
-                        <span className="text-gold">Official</span> Data Sources Used Per Area
+                        <span className="text-[#1A1A1A]">Official</span> Data Sources Used Per Area
                       </h2>
                     </div>
                     <p className="text-[#1A1A1A]/70 text-lg leading-relaxed mb-6">
@@ -187,14 +187,14 @@ const AreaIntelligence = () => {
                           href={source.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="block p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 hover:border-gold rounded-xl transition-all group shadow-sm"
+                          className="block p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 hover:border-[#B89555] rounded-xl transition-all group shadow-sm"
                         >
                           <div className="flex items-start justify-between">
                             <div>
-                              <h4 className="font-semibold text-[#1A1A1A] group-hover:text-gold transition-colors">{source.title}</h4>
+                              <h4 className="font-semibold text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">{source.title}</h4>
                               <p className="text-[#1A1A1A]/70 text-sm mt-1">{source.desc}</p>
                             </div>
-                            <ExternalLink className="w-4 h-4 text-gold opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <ExternalLink className="w-4 h-4 text-[#1A1A1A] opacity-0 group-hover:opacity-100 transition-opacity" />
                           </div>
                         </a>
                       ))}
@@ -219,7 +219,7 @@ const AreaIntelligence = () => {
                         <BarChart3 className="w-6 h-6" />
                       </div>
                       <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
-                        <span className="text-gold">How</span> an Area Is Evaluated
+                        <span className="text-[#1A1A1A]">How</span> an Area Is Evaluated
                       </h2>
                     </div>
                     <p className="text-[#1A1A1A]/70 text-lg leading-relaxed mb-6">
@@ -233,9 +233,9 @@ const AreaIntelligence = () => {
                         { num: "4", title: "Supply Status", desc: "Existing stock versus registered handovers and newly delivered units, as published by DLD." },
                         { num: "5", title: "Cost Structure", desc: "Approved service charges and municipality fees applicable to properties within the area." }
                       ].map((item, idx) => (
-                        <div key={idx} className="flex gap-4 p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl">
-                          <div className="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0">
-                            <span className="text-gold font-bold">{item.num}</span>
+                        <div key={idx} className="flex gap-4 p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl">
+                          <div className="w-10 h-10 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center flex-shrink-0">
+                            <span className="text-[#1A1A1A] font-bold">{item.num}</span>
                           </div>
                           <div>
                             <h4 className="font-semibold text-[#1A1A1A]">{item.title}</h4>
@@ -264,7 +264,7 @@ const AreaIntelligence = () => {
                         <Shield className="w-6 h-6" />
                       </div>
                       <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
-                        <span className="text-gold">What</span> Area Intelligence Does Not Do
+                        <span className="text-[#1A1A1A]">What</span> Area Intelligence Does Not Do
                       </h2>
                     </div>
                     <p className="text-[#1A1A1A]/70 text-lg leading-relaxed mb-6">
@@ -310,7 +310,7 @@ const AreaIntelligence = () => {
                       <Building2 className="w-6 h-6" />
                     </div>
                     <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
-                      <span className="text-gold">Why</span> Area-Level Analysis Matters
+                      <span className="text-[#1A1A1A]">Why</span> Area-Level Analysis Matters
                     </h2>
                   </div>
                     <p className="text-[#1A1A1A]/70 text-lg leading-relaxed mb-6">
@@ -325,12 +325,12 @@ const AreaIntelligence = () => {
                         "Approved pricing benchmarks"
                       ].map((item, idx) => (
                         <li key={idx} className="flex items-center gap-3 text-[#1A1A1A]/70">
-                          <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0" />
+                          <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] flex-shrink-0" />
                           <span>{item}</span>
                         </li>
                       ))}
                     </ul>
-                    <div className="p-4 bg-[#1A1A1A]/5 rounded-xl border border-gold/20">
+                    <div className="p-4 bg-[#1A1A1A]/5 rounded-xl border border-[#B89555]/20">
                       <p className="text-[#1A1A1A]/70 text-sm">
                         Understanding these differences helps buyers, sellers, landlords, and tenants make informed decisions based on where a property is located—not just the property itself.
                       </p>
@@ -355,7 +355,7 @@ const AreaIntelligence = () => {
                         <FileText className="w-6 h-6" />
                       </div>
                       <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
-                        <span className="text-gold">How</span> JBJ Global Real Estate Uses Area Intelligence
+                        <span className="text-[#1A1A1A]">How</span> JBJ Global Real Estate Uses Area Intelligence
                       </h2>
                     </div>
                     <p className="text-[#1A1A1A]/70 text-lg leading-relaxed mb-6">
@@ -369,19 +369,19 @@ const AreaIntelligence = () => {
                         "Avoid misrepresentation or over-marketing"
                       ].map((item, idx) => (
                         <li key={idx} className="flex items-center gap-3 text-[#1A1A1A]/70">
-                          <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0" />
+                          <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] flex-shrink-0" />
                           <span>{item}</span>
                         </li>
                       ))}
                     </ul>
-                    <div className="p-4 bg-gold/10 rounded-xl border border-gold/30">
+                    <div className="p-4 bg-[#EFE6D6]/10 rounded-xl border border-[#B89555]/30">
                       <p className="text-[#1A1A1A]/70 text-sm font-medium">
                         All explanations are grounded in registered data and official benchmarks.
                       </p>
                     </div>
                     <div className="mt-6 p-4 bg-[#1A1A1A] rounded-xl">
                       <p className="text-[#1A1A1A]/70 text-sm">
-                        Area Intelligence feeds directly into <Link to="/market-intelligence/reports" className="text-gold hover:underline">Market Reports</Link>, where trends are summarized at a broader market level using the same official datasets.
+                        Area Intelligence feeds directly into <Link to="/market-intelligence/reports" className="text-[#1A1A1A] hover:underline">Market Reports</Link>, where trends are summarized at a broader market level using the same official datasets.
                       </p>
                     </div>
                   </div>
@@ -403,7 +403,7 @@ const AreaIntelligence = () => {
               >
                   <div className="jj-card-inner p-8">
                     <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
-                      <span className="text-gold">Dubai</span>{" "}
+                      <span className="text-[#1A1A1A]">Dubai</span>{" "}
                       <span className="text-[#1A1A1A]">Neighborhood Analysis</span>
                     </h2>
                     
@@ -417,11 +417,11 @@ const AreaIntelligence = () => {
                           transition={{ delay: index * 0.05 }}
                         >
                           <Link to={`/market-intelligence/areas/${area.area.toLowerCase().replace(/\s+/g, '-')}`}>
-                            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] transition-all h-full group cursor-pointer">
+                            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 hover:border-[#B89555] hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] transition-all h-full group cursor-pointer">
                               <CardContent className="p-6">
                                 <div className="flex items-start justify-between mb-4">
                                   <div>
-                                    <h3 className="text-lg font-bold mb-1 text-gold">
+                                    <h3 className="text-lg font-bold mb-1 text-[#1A1A1A]">
                                       {area.area}
                                     </h3>
                                     {getTrendBadge(area.trend)}
@@ -442,11 +442,11 @@ const AreaIntelligence = () => {
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-4 mb-4">
-                                  <div className="bg-[#FDFBF7]/60 border border-gold/20 rounded-lg p-2">
+                                  <div className="bg-[#FDFBF7]/60 border border-[#B89555]/20 rounded-lg p-2">
                                     <p className="text-[#1A1A1A]/70 text-xs">Price Index</p>
                                     <p className="text-[#1A1A1A] font-semibold">{area.priceIndex}</p>
                                   </div>
-                                  <div className="bg-[#FDFBF7]/60 border border-gold/20 rounded-lg p-2">
+                                  <div className="bg-[#FDFBF7]/60 border border-[#B89555]/20 rounded-lg p-2">
                                     <p className="text-[#1A1A1A]/70 text-xs">Rental Index</p>
                                     <p className="text-[#1A1A1A] font-semibold">{area.rentalIndex}</p>
                                   </div>
@@ -463,25 +463,25 @@ const AreaIntelligence = () => {
                                     <p className="text-[#1A1A1A]/70 text-xs">Supply</p>
                                     <div className="w-full bg-[#1A1A1A]/10 rounded-full h-1.5 mt-1">
                                       <div 
-                                        className="bg-gold h-1.5 rounded-full" 
+                                        className="bg-[#EFE6D6] h-1.5 rounded-full" 
                                         style={{ width: `${area.supplyScore}%` }}
                                       />
                                     </div>
                                   </div>
                                 </div>
 
-                                <div className="border-t border-gold/30 pt-4">
+                                <div className="border-t border-[#B89555]/30 pt-4">
                                   <ul className="space-y-1">
                                     {area.highlights.slice(0, 2).map((highlight, i) => (
                                       <li key={i} className="text-[#1A1A1A]/70 text-xs flex items-start gap-2">
-                                        <span className="text-gold">•</span>
+                                        <span className="text-[#1A1A1A]">•</span>
                                         {highlight}
                                       </li>
                                     ))}
                                   </ul>
                                 </div>
 
-                                <div className="mt-4 flex items-center justify-between text-gold text-sm font-medium">
+                                <div className="mt-4 flex items-center justify-between text-[#1A1A1A] text-sm font-medium">
                                   <span>View Full Analysis</span>
                                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                                 </div>
@@ -510,8 +510,8 @@ const AreaIntelligence = () => {
           <div className="max-w-3xl mx-auto mt-8">
             <div className="jj-card-inner p-6 text-center">
               <div className="flex items-center justify-center gap-4 mb-4">
-                <Database className="w-5 h-5 text-gold" />
-                <Shield className="w-5 h-5 text-gold" />
+                <Database className="w-5 h-5 text-[#1A1A1A]" />
+                <Shield className="w-5 h-5 text-[#1A1A1A]" />
               </div>
               <p className="text-[#1A1A1A]/70 text-sm whitespace-pre-line">{MARKET_DISCLAIMER}</p>
             </div>

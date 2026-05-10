@@ -148,8 +148,8 @@ const SignatureCollection = () => {
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/10 via-transparent to-transparent" />
         </div>
         
-        <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/10 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-gold/15 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-1/4 left-10 w-64 h-64 bg-[#EFE6D6]/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-[#EFE6D6]/15 rounded-full blur-[120px] pointer-events-none" />
 
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
@@ -158,9 +158,9 @@ const SignatureCollection = () => {
             transition={{ duration: 0.6 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-[#1A1A1A]/30 backdrop-blur-md">
-              <PenTool className="w-4 h-4 text-gold" />
-              <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-[#B89555]/40 bg-[#1A1A1A]/30 backdrop-blur-md">
+              <PenTool className="w-4 h-4 text-[#1A1A1A]" />
+              <span className="text-[#1A1A1A] font-semibold text-xs uppercase tracking-[0.2em]">
                 Services
               </span>
             </div>
@@ -244,11 +244,11 @@ const SignatureCollection = () => {
             
             {/* Form Helper Text */}
             <motion.div variants={fadeInUp} className="mb-8">
-              <div className="jj-card-inner !bg-[#1A1A1A]/5 border border-gold/20">
+              <div className="jj-card-inner !bg-[#1A1A1A]/5 border border-[#B89555]/20">
                 <div className="flex flex-col gap-3">
                   {formHelperItems.map((item, idx) => (
                     <div key={idx} className="flex items-center gap-3 text-sm text-[#1A1A1A]/70">
-                      <item.icon className="w-4 h-4 text-gold shrink-0" />
+                      <item.icon className="w-4 h-4 text-[#1A1A1A] shrink-0" />
                       <span>{item.text}</span>
                     </div>
                   ))}
@@ -385,8 +385,8 @@ const SignatureCollection = () => {
                 {statusTimeline.map((step, index) => (
                   <motion.div key={index} variants={fadeInUp}>
                     <div className="jj-card-inner text-center h-full">
-                      <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-[#1A1A1A] flex items-center justify-center border-2 border-gold">
-                        <step.icon className="w-5 h-5 text-gold" />
+                      <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-[#1A1A1A] flex items-center justify-center border-2 border-[#B89555]">
+                        <step.icon className="w-5 h-5 text-[#1A1A1A]" />
                       </div>
                       <h3 className="font-semibold text-[#1A1A1A] mb-2">{step.label}</h3>
                       <p className="text-sm text-[#1A1A1A]/70">{step.description}</p>
@@ -481,9 +481,9 @@ const SignatureCollection = () => {
                     value={`item-${index}`}
                     className="jj-card-inner border-none"
                   >
-                    <AccordionTrigger className="text-left text-[#1A1A1A] hover:text-gold">
+                    <AccordionTrigger className="text-left text-[#1A1A1A] hover:text-[#1A1A1A]">
                       <div className="flex items-center gap-3">
-                        <HelpCircle className="w-5 h-5 text-gold shrink-0" />
+                        <HelpCircle className="w-5 h-5 text-[#1A1A1A] shrink-0" />
                         {faq.question}
                       </div>
                     </AccordionTrigger>

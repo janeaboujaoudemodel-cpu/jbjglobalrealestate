@@ -90,7 +90,7 @@ export default function Welcome() {
             Your {CATEGORIES.find(c => c.id === selected)?.label} experience is ready.
           </span>
         </div>,
-        { duration: 4000, icon: <CheckCircle2 className="w-5 h-5 text-gold" /> }
+        { duration: 4000, icon: <CheckCircle2 className="w-5 h-5 text-[#1A1A1A]" /> }
       );
 
       // Route to category-specific registration form (skip for explorer)
@@ -126,7 +126,7 @@ export default function Welcome() {
             <JJLogoImage variant="light" size="md" />
           </div>
           <h1 className="text-3xl font-bold text-[#1A1A1A] mb-2">
-            Welcome to <span className="text-gold">JBJ Global</span>
+            Welcome to <span className="text-[#1A1A1A]">JBJ Global</span>
           </h1>
           <p className="text-[#1A1A1A]/70 text-sm">
             {user.email && (
@@ -149,25 +149,25 @@ export default function Welcome() {
                   "p-5 rounded-2xl border-2 transition-all duration-300 text-left",
                   "hover:shadow-lg hover:scale-[1.01]",
                   isSelected
-                    ? "bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6] border-gold shadow-md"
-                    : "bg-[#FDFBF7]/90 backdrop-blur-sm border-gold/15 hover:border-gold/40"
+                    ? "bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6] border-[#B89555] shadow-md"
+                    : "bg-[#FDFBF7]/90 backdrop-blur-sm border-[#B89555]/15 hover:border-[#B89555]/40"
                 )}
               >
                 <div className="flex items-start gap-3 mb-3">
                   <div className={cn(
                     "w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border",
                     isSelected
-                      ? "bg-gold/20 border-gold"
-                      : "bg-gold/5 border-gold/20"
+                      ? "bg-[#EFE6D6]/20 border-[#B89555]"
+                      : "bg-[#EFE6D6]/5 border-[#B89555]/20"
                   )}>
-                    <Icon className={cn("w-5 h-5", isSelected ? "text-gold" : "text-[#1A1A1A]/70")} />
+                    <Icon className={cn("w-5 h-5", isSelected ? "text-[#1A1A1A]" : "text-[#1A1A1A]/70")} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <h3 className={cn("font-bold text-base", isSelected ? "text-[#1A1A1A]" : "text-[#1A1A1A]/80")}>
                         {cat.label}
                       </h3>
-                      {isSelected && <CheckCircle2 className="w-4 h-4 text-gold" />}
+                      {isSelected && <CheckCircle2 className="w-4 h-4 text-[#1A1A1A]" />}
                     </div>
                     <p className="text-xs text-[#1A1A1A]/70 mt-0.5">{cat.description}</p>
                   </div>

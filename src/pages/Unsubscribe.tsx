@@ -50,13 +50,13 @@ const Unsubscribe = () => {
       <div className="max-w-md w-full rounded-2xl border border-border bg-[linear-gradient(135deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)),hsl(var(--champagne-3)))] p-8 text-center space-y-6">
         {/* Logo */}
         <div>
-          <p className="text-2xl font-bold text-gold tracking-widest font-serif">JBJ GLOBAL</p>
+          <p className="text-2xl font-bold text-[#1A1A1A] tracking-widest font-serif">JBJ GLOBAL</p>
           <p className="text-xs tracking-[0.3em] text-muted-foreground">REAL ESTATE</p>
         </div>
 
         {status === "loading" && (
           <div className="space-y-4">
-            <Loader2 className="h-12 w-12 animate-spin text-gold mx-auto" />
+            <Loader2 className="h-12 w-12 animate-spin text-[#1A1A1A] mx-auto" />
             <p className="text-muted-foreground">Processing your request...</p>
           </div>
         )}
@@ -83,8 +83,8 @@ const Unsubscribe = () => {
 
         {status === "resubscribed" && (
           <div className="space-y-6">
-            <div className="mx-auto w-20 h-20 rounded-full bg-gold/10 border-2 border-gold/40 flex items-center justify-center">
-              <Mail className="w-10 h-10 text-gold" />
+            <div className="mx-auto w-20 h-20 rounded-full bg-[#EFE6D6]/10 border-2 border-[#B89555]/40 flex items-center justify-center">
+              <Mail className="w-10 h-10 text-[#1A1A1A]" />
             </div>
             <div>
               <h1 className="text-2xl font-bold text-foreground">Welcome Back!</h1>
@@ -110,7 +110,7 @@ const Unsubscribe = () => {
         )}
 
         <div className="pt-4 border-t border-border">
-          <Link to="/" className="text-sm text-gold hover:underline">
+          <Link to="/" className="text-sm text-[#1A1A1A] hover:underline">
             ← Back to JBJ Global Real Estate
           </Link>
         </div>

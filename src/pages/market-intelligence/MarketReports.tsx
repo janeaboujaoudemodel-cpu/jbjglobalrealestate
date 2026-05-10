@@ -88,7 +88,7 @@ const SectionWrapper = ({ id, children }: { id: string; children: React.ReactNod
     {/* Layer 2: Active Champagne with thin black contour */}
     <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] rounded-2xl p-3 shadow-lg">
       {/* Layer 3: Champagne Card with gold border */}
-      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl p-8 border-2 border-gold/40">
+      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl p-8 border-2 border-[#B89555]/40">
         {children}
       </div>
     </div>
@@ -106,7 +106,7 @@ const MarketReportsPage = () => {
       case 'quarterly':
         return <Badge className="bg-purple-500/20 text-purple-500 border-purple-500/30 font-medium">Quarterly</Badge>;
       case 'annual':
-        return <Badge className="bg-gold/20 text-gold border-gold/30 font-medium">Annual</Badge>;
+        return <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30 font-medium">Annual</Badge>;
       default:
         return null;
     }
@@ -193,10 +193,10 @@ const MarketReportsPage = () => {
                 </h2>
                 <p className="text-[#1A1A1A] text-lg leading-relaxed mb-6">Market Reports exist to:</p>
                 <ul className="space-y-3 text-[#1A1A1A]">
-                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Summarize registered market activity</span></li>
-                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Present verified transaction trends</span></li>
-                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Explain rental and ownership behavior</span></li>
-                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Provide regulatory context for decisions</span></li>
+                  <li className="flex items-start gap-3"><span className="text-[#1A1A1A] mt-1">•</span><span>Summarize registered market activity</span></li>
+                  <li className="flex items-start gap-3"><span className="text-[#1A1A1A] mt-1">•</span><span>Present verified transaction trends</span></li>
+                  <li className="flex items-start gap-3"><span className="text-[#1A1A1A] mt-1">•</span><span>Explain rental and ownership behavior</span></li>
+                  <li className="flex items-start gap-3"><span className="text-[#1A1A1A] mt-1">•</span><span>Provide regulatory context for decisions</span></li>
                 </ul>
                 <p className="text-[#1A1A1A]/70 leading-relaxed mt-6">They are designed to help readers understand market movement, not to speculate on outcomes.</p>
               </SectionWrapper>
@@ -214,24 +214,24 @@ const MarketReportsPage = () => {
                 </h2>
                 <p className="text-[#1A1A1A] text-lg leading-relaxed mb-6">Every Market Report is compiled using the following official sources:</p>
                 <div className="space-y-4">
-                  <a href="https://dubailand.gov.ae/en/open-data/real-estate-data/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[#1A1A1A] hover:text-gold transition-colors group">
-                    <ExternalLink className="w-5 h-5 text-gold group-hover:scale-110 transition-transform" />
+                  <a href="https://dubailand.gov.ae/en/open-data/real-estate-data/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[#1A1A1A] hover:text-[#1A1A1A] transition-colors group">
+                    <ExternalLink className="w-5 h-5 text-[#1A1A1A] group-hover:scale-110 transition-transform" />
                     <span className="font-medium">Dubai Land Department – Open Data</span>
                   </a>
-                  <a href="https://dubailand.gov.ae/en/open-data/research/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[#1A1A1A] hover:text-gold transition-colors group">
-                    <ExternalLink className="w-5 h-5 text-gold group-hover:scale-110 transition-transform" />
+                  <a href="https://dubailand.gov.ae/en/open-data/research/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[#1A1A1A] hover:text-[#1A1A1A] transition-colors group">
+                    <ExternalLink className="w-5 h-5 text-[#1A1A1A] group-hover:scale-110 transition-transform" />
                     <span className="font-medium">Dubai Land Department – Research & Market Studies</span>
                   </a>
-                  <a href="https://dubailand.gov.ae/en/eservices/rental-index/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[#1A1A1A] hover:text-gold transition-colors group">
-                    <ExternalLink className="w-5 h-5 text-gold group-hover:scale-110 transition-transform" />
+                  <a href="https://dubailand.gov.ae/en/eservices/rental-index/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[#1A1A1A] hover:text-[#1A1A1A] transition-colors group">
+                    <ExternalLink className="w-5 h-5 text-[#1A1A1A] group-hover:scale-110 transition-transform" />
                     <span className="font-medium">RERA Rental Index</span>
                   </a>
-                  <a href="https://dubailand.gov.ae/en/eservices/service-charge-index-overview/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[#1A1A1A] hover:text-gold transition-colors group">
-                    <ExternalLink className="w-5 h-5 text-gold group-hover:scale-110 transition-transform" />
+                  <a href="https://dubailand.gov.ae/en/eservices/service-charge-index-overview/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[#1A1A1A] hover:text-[#1A1A1A] transition-colors group">
+                    <ExternalLink className="w-5 h-5 text-[#1A1A1A] group-hover:scale-110 transition-transform" />
                     <span className="font-medium">RERA Service Charge Index</span>
                   </a>
                 </div>
-                <p className="text-[#1A1A1A]/70 leading-relaxed mt-6 pt-4 border-t border-gold/30">No private dashboards, promotional statistics, or third-party estimations are used.</p>
+                <p className="text-[#1A1A1A]/70 leading-relaxed mt-6 pt-4 border-t border-[#B89555]/30">No private dashboards, promotional statistics, or third-party estimations are used.</p>
               </SectionWrapper>
 
               {/* Report Structure Section */}
@@ -247,23 +247,23 @@ const MarketReportsPage = () => {
                 </h2>
                 <p className="text-[#1A1A1A] text-lg leading-relaxed mb-6">Each report follows the same fixed structure:</p>
                 <div className="space-y-6">
-                  <div className="border-l-4 border-gold pl-6">
+                  <div className="border-l-4 border-[#B89555] pl-6">
                     <h3 className="text-xl font-bold text-[#1A1A1A] mb-2">1. Transaction Volume Overview</h3>
                     <p className="text-[#1A1A1A]/70">Summary of registered sales transactions during the reporting period, including volume and value ranges as recorded by DLD.</p>
                   </div>
-                  <div className="border-l-4 border-gold pl-6">
+                  <div className="border-l-4 border-[#B89555] pl-6">
                     <h3 className="text-xl font-bold text-[#1A1A1A] mb-2">2. Rental Market Activity</h3>
                     <p className="text-[#1A1A1A]/70">Overview of registered tenancy contracts, rental ranges, and compliance with official rental index benchmarks.</p>
                   </div>
-                  <div className="border-l-4 border-gold pl-6">
+                  <div className="border-l-4 border-[#B89555] pl-6">
                     <h3 className="text-xl font-bold text-[#1A1A1A] mb-2">3. Property Type Distribution</h3>
                     <p className="text-[#1A1A1A]/70">Breakdown of activity across apartments, villas, townhouses, and commercial units based on registered classifications.</p>
                   </div>
-                  <div className="border-l-4 border-gold pl-6">
+                  <div className="border-l-4 border-[#B89555] pl-6">
                     <h3 className="text-xl font-bold text-[#1A1A1A] mb-2">4. Area-Level Highlights</h3>
                     <p className="text-[#1A1A1A]/70">Identification of areas with notable transaction concentration or rental activity, based solely on recorded data.</p>
                   </div>
-                  <div className="border-l-4 border-gold pl-6">
+                  <div className="border-l-4 border-[#B89555] pl-6">
                     <h3 className="text-xl font-bold text-[#1A1A1A] mb-2">5. Ownership Cost Context</h3>
                     <p className="text-[#1A1A1A]/70">Reference to approved service charges and their role in total ownership cost during the period.</p>
                   </div>
@@ -283,13 +283,13 @@ const MarketReportsPage = () => {
                 </h2>
                 <p className="text-[#1A1A1A] text-lg leading-relaxed mb-6">Market Reports do not:</p>
                 <ul className="space-y-3 text-[#1A1A1A]">
-                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Forecast prices or rents</span></li>
-                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Assign performance scores</span></li>
-                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Rank developers or projects</span></li>
-                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Provide investment guarantees</span></li>
-                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Suggest expected returns</span></li>
+                  <li className="flex items-start gap-3"><span className="text-[#1A1A1A] mt-1">•</span><span>Forecast prices or rents</span></li>
+                  <li className="flex items-start gap-3"><span className="text-[#1A1A1A] mt-1">•</span><span>Assign performance scores</span></li>
+                  <li className="flex items-start gap-3"><span className="text-[#1A1A1A] mt-1">•</span><span>Rank developers or projects</span></li>
+                  <li className="flex items-start gap-3"><span className="text-[#1A1A1A] mt-1">•</span><span>Provide investment guarantees</span></li>
+                  <li className="flex items-start gap-3"><span className="text-[#1A1A1A] mt-1">•</span><span>Suggest expected returns</span></li>
                 </ul>
-                <p className="text-[#1A1A1A]/70 leading-relaxed mt-6 pt-4 border-t border-gold/30">Any interpretation remains grounded in past and current registered activity only.</p>
+                <p className="text-[#1A1A1A]/70 leading-relaxed mt-6 pt-4 border-t border-[#B89555]/30">Any interpretation remains grounded in past and current registered activity only.</p>
               </SectionWrapper>
 
               {/* Reporting Frequency Section */}
@@ -305,9 +305,9 @@ const MarketReportsPage = () => {
                 </h2>
                 <p className="text-[#1A1A1A] text-lg leading-relaxed mb-6">Market Reports are issued based on data availability and official publication cycles. Updates align with:</p>
                 <ul className="space-y-3 text-[#1A1A1A]">
-                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Monthly or quarterly DLD releases</span></li>
-                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Official research publications</span></li>
-                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Regulatory updates impacting the sector</span></li>
+                  <li className="flex items-start gap-3"><span className="text-[#1A1A1A] mt-1">•</span><span>Monthly or quarterly DLD releases</span></li>
+                  <li className="flex items-start gap-3"><span className="text-[#1A1A1A] mt-1">•</span><span>Official research publications</span></li>
+                  <li className="flex items-start gap-3"><span className="text-[#1A1A1A] mt-1">•</span><span>Regulatory updates impacting the sector</span></li>
                 </ul>
               </SectionWrapper>
 
@@ -324,12 +324,12 @@ const MarketReportsPage = () => {
                 </h2>
                 <p className="text-[#1A1A1A] text-lg leading-relaxed mb-6">JBJ Global Real Estate uses Market Reports to:</p>
                 <ul className="space-y-3 text-[#1A1A1A]">
-                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Support factual market explanations</span></li>
-                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Provide context during advisory discussions</span></li>
-                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Align property selection with verified market behavior</span></li>
-                  <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Maintain compliance with UAE real estate regulations</span></li>
+                  <li className="flex items-start gap-3"><span className="text-[#1A1A1A] mt-1">•</span><span>Support factual market explanations</span></li>
+                  <li className="flex items-start gap-3"><span className="text-[#1A1A1A] mt-1">•</span><span>Provide context during advisory discussions</span></li>
+                  <li className="flex items-start gap-3"><span className="text-[#1A1A1A] mt-1">•</span><span>Align property selection with verified market behavior</span></li>
+                  <li className="flex items-start gap-3"><span className="text-[#1A1A1A] mt-1">•</span><span>Maintain compliance with UAE real estate regulations</span></li>
                 </ul>
-                <p className="text-[#1A1A1A]/70 leading-relaxed mt-6 pt-4 border-t border-gold/30">All guidance references published data rather than assumptions.</p>
+                <p className="text-[#1A1A1A]/70 leading-relaxed mt-6 pt-4 border-t border-[#B89555]/30">All guidance references published data rather than assumptions.</p>
                 <p className="text-[#1A1A1A]/70 leading-relaxed mt-4 text-sm italic">Market Reports are supported by Methodology & Sources, which explain how data is selected, validated, and presented.</p>
               </SectionWrapper>
 
@@ -356,7 +356,7 @@ const MarketReportsPage = () => {
                       viewport={{ once: true }}
                       transition={{ delay: index * 0.1 }}
                     >
-                      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] hover:scale-[1.02] transition-all h-full group">
+                      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 hover:border-[#B89555] hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] hover:scale-[1.02] transition-all h-full group">
                         <CardContent className="p-6 flex flex-col h-full">
                           <div className="flex items-start justify-between mb-4">
                             {getTypeBadge(report.type)}
@@ -377,7 +377,7 @@ const MarketReportsPage = () => {
                           <p className="text-[#1A1A1A] font-medium text-sm mb-3">{report.subtitle}</p>
                           <p className="text-[#1A1A1A]/70 text-sm mb-6 flex-grow leading-relaxed">{report.description}</p>
 
-                          <div className="flex items-center justify-between pt-4 border-t border-gold/30">
+                          <div className="flex items-center justify-between pt-4 border-t border-[#B89555]/30">
                             <div className="flex items-center gap-2 text-[#1A1A1A]/70 text-xs">
                               <Calendar className="w-3 h-3" />
                               {new Date(report.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
@@ -412,11 +412,11 @@ const MarketReportsPage = () => {
 
                 <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                   {/* Monthly Reports Selector */}
-                  <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.3)] transition-all">
+                  <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 hover:border-[#B89555] hover:shadow-[0_0_20px_rgba(200,167,102,0.3)] transition-all">
                     <CardContent className="p-6">
                       <div className="flex items-center gap-3 mb-4">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] flex items-center justify-center border border-gold/30">
-                          <Calendar className="w-6 h-6 text-gold" />
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] flex items-center justify-center border border-[#B89555]/30">
+                          <Calendar className="w-6 h-6 text-[#1A1A1A]" />
                         </div>
                         <div>
                           <h3 
@@ -434,7 +434,7 @@ const MarketReportsPage = () => {
                       </div>
                       <p className="text-[#1A1A1A]/70 text-sm mb-4">Download any monthly report from our archive. Data sourced from Dubai Government Open Data.</p>
                       <select 
-                        className="w-full p-3 border-2 border-gold/40 rounded-lg text-[#1A1A1A] bg-[#FDFBF7] mb-4 focus:border-gold focus:ring-1 focus:ring-gold"
+                        className="w-full p-3 border-2 border-[#B89555]/40 rounded-lg text-[#1A1A1A] bg-[#FDFBF7] mb-4 focus:border-[#B89555] focus:ring-1 focus:ring-gold"
                         value={selectedMonthlyDownload || ''}
                         onChange={(e) => setSelectedMonthlyDownload(e.target.value)}
                       >
@@ -453,11 +453,11 @@ const MarketReportsPage = () => {
                   </Card>
 
                   {/* Quarterly Reports Selector */}
-                  <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.3)] transition-all">
+                  <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 hover:border-[#B89555] hover:shadow-[0_0_20px_rgba(200,167,102,0.3)] transition-all">
                     <CardContent className="p-6">
                       <div className="flex items-center gap-3 mb-4">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] flex items-center justify-center border border-gold/30">
-                          <FileText className="w-6 h-6 text-gold" />
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] flex items-center justify-center border border-[#B89555]/30">
+                          <FileText className="w-6 h-6 text-[#1A1A1A]" />
                         </div>
                         <div>
                           <h3 
@@ -475,7 +475,7 @@ const MarketReportsPage = () => {
                       </div>
                       <p className="text-[#1A1A1A]/70 text-sm mb-4">Comprehensive quarterly reports with area breakdowns and property type analysis.</p>
                       <select 
-                        className="w-full p-3 border-2 border-gold/40 rounded-lg text-[#1A1A1A] bg-[#FDFBF7] mb-4 focus:border-gold focus:ring-1 focus:ring-gold"
+                        className="w-full p-3 border-2 border-[#B89555]/40 rounded-lg text-[#1A1A1A] bg-[#FDFBF7] mb-4 focus:border-[#B89555] focus:ring-1 focus:ring-gold"
                         value={selectedQuarterlyDownload || ''}
                         onChange={(e) => setSelectedQuarterlyDownload(e.target.value)}
                       >
@@ -495,7 +495,7 @@ const MarketReportsPage = () => {
                 </div>
 
                 {/* Data source note */}
-                <div className="text-center mt-8 pt-6 border-t border-gold/30">
+                <div className="text-center mt-8 pt-6 border-t border-[#B89555]/30">
                   <p className="text-lg">
                     <span 
                       className="font-semibold"
@@ -516,14 +516,14 @@ const MarketReportsPage = () => {
               {/* Custom Report CTA */}
               <section id="custom-report" className="scroll-mt-24">
                 <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] rounded-2xl p-3 shadow-lg">
-                  <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 overflow-hidden">
+                  <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50 overflow-hidden">
                     <CardContent className="p-8 md:p-10 text-center relative">
                       <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-gold/20 to-transparent rounded-full -translate-x-1/2 -translate-y-1/2" />
                       <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tl from-gold/15 to-transparent rounded-full translate-x-1/2 translate-y-1/2" />
                       
                       <div className="relative z-10">
                         <div className="w-14 h-14 rounded-xl bg-[#1A1A1A] flex items-center justify-center mx-auto mb-5">
-                          <FileText className="w-7 h-7 text-gold" />
+                          <FileText className="w-7 h-7 text-[#1A1A1A]" />
                         </div>
                         <h3 
                           className="text-2xl md:text-3xl font-bold mb-4"
@@ -563,10 +563,10 @@ const MarketReportsPage = () => {
           
           {/* Disclaimer Box */}
           <div className="max-w-3xl mx-auto mt-8">
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6 text-center">
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 text-center">
               <div className="flex items-center justify-center gap-4 mb-4">
-                <Database className="w-5 h-5 text-gold" />
-                <Shield className="w-5 h-5 text-gold" />
+                <Database className="w-5 h-5 text-[#1A1A1A]" />
+                <Shield className="w-5 h-5 text-[#1A1A1A]" />
               </div>
               <p className="text-[#1A1A1A]/70 text-sm whitespace-pre-line">{MARKET_DISCLAIMER}</p>
             </div>

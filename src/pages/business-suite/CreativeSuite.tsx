@@ -116,8 +116,8 @@ const CreativeSuite = () => {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[70%] h-32 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center top, rgba(200,167,102,0.15) 0%, transparent 70%)' }} />
         
         <div className="relative max-w-6xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border-2 border-gold/50 bg-[#FDFBF7]/60 backdrop-blur-sm mb-6 shadow-sm">
-            <Sparkles className="w-4 h-4 text-gold" />
+          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border-2 border-[#B89555]/50 bg-[#FDFBF7]/60 backdrop-blur-sm mb-6 shadow-sm">
+            <Sparkles className="w-4 h-4 text-[#1A1A1A]" />
             <span className="text-[#1A1A1A] font-semibold text-sm tracking-wide">Creative & Communication Suite</span>
           </div>
           
@@ -137,7 +137,7 @@ const CreativeSuite = () => {
             </span>
             <span className="text-[#1A1A1A]/70">|</span>
             <span className="flex items-center gap-2">
-              <span className="w-2 h-2 bg-gold rounded-full" />
+              <span className="w-2 h-2 bg-[#EFE6D6] rounded-full" />
               Powered by AI
             </span>
           </div>
@@ -148,7 +148,7 @@ const CreativeSuite = () => {
       <div className="max-w-5xl mx-auto px-4 pb-10">
         <div className="flex items-center gap-4 mb-8">
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
-          <span className="text-xs font-bold text-[#1A1A1A]/70 tracking-[0.2em] uppercase px-4 py-1.5 rounded-full border border-gold/40 bg-[#FDFBF7]/50">AI Tools</span>
+          <span className="text-xs font-bold text-[#1A1A1A]/70 tracking-[0.2em] uppercase px-4 py-1.5 rounded-full border border-[#B89555]/40 bg-[#FDFBF7]/50">AI Tools</span>
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -162,7 +162,7 @@ const CreativeSuite = () => {
       <div className="max-w-5xl mx-auto px-4 pb-20">
         <div className="flex items-center gap-4 mb-8">
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
-          <span className="text-xs font-bold text-[#1A1A1A]/70 tracking-[0.2em] uppercase px-4 py-1.5 rounded-full border border-gold/40 bg-[#FDFBF7]/50">Creative Suites</span>
+          <span className="text-xs font-bold text-[#1A1A1A]/70 tracking-[0.2em] uppercase px-4 py-1.5 rounded-full border border-[#B89555]/40 bg-[#FDFBF7]/50">Creative Suites</span>
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">

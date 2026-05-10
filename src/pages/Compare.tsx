@@ -472,7 +472,7 @@ const Compare = () => {
 
   const renderStars = (rating: number) => {
     return (
-      <span className="text-gold">
+      <span className="text-[#1A1A1A]">
         {"★".repeat(rating)}
         <span className="text-[#1A1A1A]/70">{"☆".repeat(5 - rating)}</span>
       </span>
@@ -489,7 +489,7 @@ const Compare = () => {
     return (
       <div className="flex items-center gap-2">
         <span className="text-[10px] text-white/90 w-20 shrink-0 text-right">{label}</span>
-        <div className="flex-1 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+        <div className="flex-1 h-1.5 bg-[#F7F2EA] rounded-full overflow-hidden">
           <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, background: color }} />
         </div>
         <span className="text-xs font-bold w-6 text-right" style={{ color }}>{score.toFixed(0)}</span>
@@ -499,7 +499,7 @@ const Compare = () => {
 
   if (isLoading) {
     return (
-      <section className="min-h-screen bg-zinc-950 flex items-center justify-center">
+      <section className="min-h-screen bg-[#FDFBF7] flex items-center justify-center">
         <Loader2 className="w-8 h-8 text-white/70 animate-spin" />
       </section>
     );
@@ -509,14 +509,14 @@ const Compare = () => {
     return (
       <section className="min-h-screen bg-gradient-to-br from-[#F7F1E6]/10 via-zinc-950 to-zinc-950">
         {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gold/5 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gold/3 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#EFE6D6]/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#EFE6D6]/3 rounded-full blur-3xl pointer-events-none" />
         
         <div className="container mx-auto px-4 py-16 relative z-10">
           {/* Back link */}
           <button
             onClick={() => navigate(-1)}
-            className="inline-flex items-center gap-2 text-white/70 hover:text-gold transition-colors mb-12"
+            className="inline-flex items-center gap-2 text-white/70 hover:text-[#1A1A1A] transition-colors mb-12"
           >
             <ArrowLeft className="w-5 h-5" />
             <span>Back to Previous Page</span>
@@ -524,9 +524,9 @@ const Compare = () => {
 
           <div className="max-w-4xl mx-auto text-center">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/30 rounded-full mb-8">
-              <BarChart3 className="w-4 h-4 text-gold" />
-              <span className="text-gold text-sm font-medium">AI-Powered Comparison</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full mb-8">
+              <BarChart3 className="w-4 h-4 text-[#1A1A1A]" />
+              <span className="text-[#1A1A1A] text-sm font-medium">AI-Powered Comparison</span>
             </div>
 
             {/* Welcome Title */}
@@ -544,15 +544,15 @@ const Compare = () => {
             <FounderContent>
               <div className="text-center mb-12">
                 <p className="text-white/85 text-sm font-medium">Jane Bou Jaoude</p>
-                <p className="text-gold text-xs mt-0.5">Founder & CEO</p>
+                <p className="text-[#1A1A1A] text-xs mt-0.5">Founder & CEO</p>
                 <p className="text-white/90 text-xs mt-0.5">JBJ Global Real Estate</p>
               </div>
             </FounderContent>
 
             {/* Steps Guide */}
-            <div className="bg-zinc-900/80 backdrop-blur-sm border border-gold/20 rounded-3xl p-8 md:p-10 mb-10">
+            <div className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-[#B89555]/20 rounded-3xl p-8 md:p-10 mb-10">
               <h2 className="text-white text-2xl font-semibold mb-8 flex items-center justify-center gap-3">
-                <Sparkles className="w-6 h-6 text-gold" />
+                <Sparkles className="w-6 h-6 text-[#1A1A1A]" />
                 How to Compare Properties
               </h2>
               
@@ -563,9 +563,9 @@ const Compare = () => {
                   { icon: Layers, title: "Generate Comparison", desc: "Return here and let our AI analyze all projects with detailed insights and recommendations.", step: 3 },
                 ].map((item) => (
                   <div key={item.step} className="relative group">
-                    <div className="bg-gradient-to-br from-gold/5 to-zinc-900 border border-gold/20 rounded-2xl p-6 h-full transition-all duration-300 group-hover:border-gold/40 group-hover:shadow-lg group-hover:shadow-gold/10">
+                    <div className="bg-gradient-to-br from-gold/5 to-zinc-900 border border-[#B89555]/20 rounded-2xl p-6 h-full transition-all duration-300 group-hover:border-[#B89555]/40 group-hover:shadow-lg group-hover:shadow-gold/10">
                       <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-gold/30 to-gold/10 flex items-center justify-center mb-4 mx-auto shadow-lg shadow-gold/20">
-                        <item.icon className="w-7 h-7 text-gold" />
+                        <item.icon className="w-7 h-7 text-[#1A1A1A]" />
                       </div>
                       <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-gradient-to-br from-gold to-[#ECE2D2] flex items-center justify-center text-[#1A1A1A] font-bold text-sm shadow-lg">
                         {item.step}
@@ -586,8 +586,8 @@ const Compare = () => {
                 { icon: Star, label: "Smart", sub: "Ratings" },
                 { icon: Award, label: "Expert", sub: "Recommendations" },
               ].map((f) => (
-                <div key={f.label} className="bg-zinc-900/50 border border-[#1A1A1A] rounded-xl p-4 text-center">
-                  <f.icon className="w-6 h-6 text-gold mx-auto mb-2" />
+                <div key={f.label} className="bg-[#FDFBF7]/50 border border-[#1A1A1A] rounded-xl p-4 text-center">
+                  <f.icon className="w-6 h-6 text-[#1A1A1A] mx-auto mb-2" />
                   <p className="text-white text-sm font-medium">{f.label}</p>
                   <p className="text-white/90 text-xs">{f.sub}</p>
                 </div>
@@ -605,8 +605,8 @@ const Compare = () => {
               >
                 <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
                 <span className="relative flex items-center gap-2">
-                  <Building className="w-5 h-5 text-gold" />
-                  <span className="text-gold">Browse</span>
+                  <Building className="w-5 h-5 text-[#1A1A1A]" />
+                  <span className="text-[#1A1A1A]">Browse</span>
                   <span className="text-[#1A1A1A]">Properties</span>
                   <ArrowUpRight className="w-5 h-5 text-[#1A1A1A]" />
                 </span>
@@ -623,26 +623,26 @@ const Compare = () => {
   }
 
   return (
-    <section className="min-h-screen bg-zinc-950">
+    <section className="min-h-screen bg-[#FDFBF7]">
       {/* Hero Section - Champagne/Gold Theme */}
       <div className="relative py-16 md:py-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-gold/10 via-zinc-950 to-zinc-950" />
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-gold/3 rounded-full blur-2xl" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#EFE6D6]/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#EFE6D6]/3 rounded-full blur-2xl" />
         
         <div className="container mx-auto px-4 relative z-10">
           <button
             onClick={() => navigate(-1)}
-            className="inline-flex items-center gap-2 text-white/70 hover:text-gold transition-colors mb-8"
+            className="inline-flex items-center gap-2 text-white/70 hover:text-[#1A1A1A] transition-colors mb-8"
           >
             <ArrowLeft className="w-5 h-5" />
             <span>Back to Previous Page</span>
           </button>
 
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/30 rounded-full mb-6">
-              <BarChart3 className="w-4 h-4 text-gold" />
-              <span className="text-gold text-sm font-medium">AI-Powered</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full mb-6">
+              <BarChart3 className="w-4 h-4 text-[#1A1A1A]" />
+              <span className="text-[#1A1A1A] text-sm font-medium">AI-Powered</span>
             </div>
             
             <h1 className="text-white text-4xl md:text-5xl font-bold mb-4">
@@ -654,7 +654,7 @@ const Compare = () => {
             <FounderContent>
               <div className="mt-2">
                 <p className="text-white/85 text-sm font-medium">Jane Bou Jaoude</p>
-                <p className="text-gold text-xs mt-0.5">Founder & CEO</p>
+                <p className="text-[#1A1A1A] text-xs mt-0.5">Founder & CEO</p>
                 <p className="text-white/90 text-xs mt-0.5">JBJ Global Real Estate</p>
               </div>
             </FounderContent>
@@ -666,9 +666,9 @@ const Compare = () => {
                 { icon: TrendingUp, title: "ROI Projections", sub: "Investment returns" },
                 { icon: Award, title: "Smart Ratings", sub: "Location, value & more" },
               ].map((f) => (
-                <div key={f.title} className="flex items-center gap-3 bg-gold/5 backdrop-blur-sm border border-gold/20 rounded-xl p-4">
-                  <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
-                    <f.icon className="w-5 h-5 text-gold" />
+                <div key={f.title} className="flex items-center gap-3 bg-[#EFE6D6]/5 backdrop-blur-sm border border-[#B89555]/20 rounded-xl p-4">
+                  <div className="w-10 h-10 rounded-lg bg-[#EFE6D6]/10 flex items-center justify-center">
+                    <f.icon className="w-5 h-5 text-[#1A1A1A]" />
                   </div>
                   <div>
                     <p className="text-white font-medium">{f.title}</p>
@@ -694,13 +694,13 @@ const Compare = () => {
                 <span className="relative flex items-center justify-center gap-2">
                   {isGenerating ? (
                     <>
-                      <Sparkles className="w-5 h-5 text-gold animate-pulse" />
+                      <Sparkles className="w-5 h-5 text-[#1A1A1A] animate-pulse" />
                       <span className="text-[#1A1A1A]">Analyzing Property Intelligence...</span>
                     </>
                   ) : (
                     <>
-                      <Sparkles className="w-5 h-5 text-gold" />
-                      <span className="text-gold">Start</span>
+                      <Sparkles className="w-5 h-5 text-[#1A1A1A]" />
+                      <span className="text-[#1A1A1A]">Start</span>
                       <span className="text-[#1A1A1A]">Comparing</span>
                     </>
                   )}
@@ -710,7 +710,7 @@ const Compare = () => {
                 <>
                   <button
                     onClick={downloadComprehensiveReport}
-                    className="relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-gold/50 text-gold hover:bg-gold/10 group"
+                    className="relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 group"
                   >
                     <Download className="w-5 h-5" />
                     Download Report
@@ -734,7 +734,7 @@ const Compare = () => {
                       const body = encodeURIComponent(`Dear Investor,\n\nPlease find the AI-powered property comparison analysis:\n\n${projectLines}\n\nFor full details and AI recommendations, view the comparison:\n${window.location.href}\n\nBest regards,\nJBJ Global Real Estate\n+971 56 591 1000\nContact@JBJ.ae | www.JBJ.ae`);
                       window.location.href = `mailto:?subject=${subject}&body=${body}`;
                     }}
-                    className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-zinc-800 hover:bg-[#1A1A1A] text-white group"
+                    className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-[#F7F2EA] hover:bg-[#1A1A1A] text-white group"
                   >
                     <Mail className="w-5 h-5" />
                     Share via Email
@@ -749,7 +749,7 @@ const Compare = () => {
       {/* Main Content */}
       <div className="container mx-auto px-4 pb-16">
         {/* Champagne/gold border wrapper */}
-        <div className="rounded-2xl border-2 border-[#C8A766]/40 shadow-[0_0_40px_rgba(200,167,102,0.08)] p-6 bg-zinc-950/60 backdrop-blur-sm flex flex-col gap-8">
+        <div className="rounded-2xl border-2 border-[#C8A766]/40 shadow-[0_0_40px_rgba(200,167,102,0.08)] p-6 bg-[#FDFBF7]/60 backdrop-blur-sm flex flex-col gap-8">
           {/* Properties Count */}
           <div className="flex items-center gap-2 text-white/70">
             <span className="text-lg font-medium text-white">{projects.length}</span>
@@ -757,11 +757,11 @@ const Compare = () => {
           </div>
 
           {/* Basic Comparison Table */}
-          <div ref={tableRef} className="overflow-x-auto bg-zinc-900 rounded-2xl border border-[#1A1A1A]">
+          <div ref={tableRef} className="overflow-x-auto bg-[#FDFBF7] rounded-2xl border border-[#1A1A1A]">
             <table className="w-full">
               <thead>
                 <tr>
-                  <th className="text-left py-4 px-4 text-white/90 font-medium border-b border-[#1A1A1A] sticky left-0 bg-zinc-900 z-10">
+                  <th className="text-left py-4 px-4 text-white/90 font-medium border-b border-[#1A1A1A] sticky left-0 bg-[#FDFBF7] z-10">
                     Feature
                   </th>
                     {projects.map((project) => {
@@ -777,15 +777,15 @@ const Compare = () => {
                             <div className="flex items-center justify-between gap-2">
                               {badge && (
                                 <span className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-bold w-fit ${
-                                  badge === 'top1' ? 'bg-gold/20 text-gold' :
-                                  badge === 'top2' ? 'bg-gold/15 text-[#1A1A1A]' :
-                                  'bg-gold/10 text-[#1A1A1A]/70'
+                                  badge === 'top1' ? 'bg-[#EFE6D6]/20 text-[#1A1A1A]' :
+                                  badge === 'top2' ? 'bg-[#EFE6D6]/15 text-[#1A1A1A]' :
+                                  'bg-[#EFE6D6]/10 text-[#1A1A1A]/70'
                                 }`}>
                                   {badge === 'top1' ? 'Top 1' : badge === 'top2' ? 'Top 2' : 'Top 3'}
                                 </span>
                               )}
                               <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold ${
-                                isFav ? 'bg-red-500/15 text-red-400' : 'bg-zinc-800 text-white/90'
+                                isFav ? 'bg-red-500/15 text-red-400' : 'bg-[#F7F2EA] text-white/90'
                               }`}>
                                 <Heart className="w-2.5 h-2.5" fill={isFav ? "currentColor" : "none"} />
                                 {isFav ? 'In Favorites' : 'Not Saved'}
@@ -847,8 +847,8 @@ const Compare = () => {
                     return "See project page";
                   }},
                 ].map((row) => (
-                  <tr key={row.label} className="border-b border-[#1A1A1A]/50 even:bg-zinc-800/20 odd:bg-zinc-900/40 hover:bg-[#1A1A1A]/30">
-                    <td className="py-4 px-4 text-white/70 sticky left-0 bg-zinc-900 font-medium">
+                  <tr key={row.label} className="border-b border-[#1A1A1A]/50 even:bg-[#F7F2EA]/20 odd:bg-[#FDFBF7]/40 hover:bg-[#1A1A1A]/30">
+                    <td className="py-4 px-4 text-white/70 sticky left-0 bg-[#FDFBF7] font-medium">
                       {row.label}
                     </td>
                     {projects.map((project) => (
@@ -866,14 +866,14 @@ const Compare = () => {
           {aiAnalysis ? (
             <div className="space-y-8">
               {/* Summary */}
-              <div className="bg-gradient-to-br from-gold/10 to-zinc-900 rounded-2xl border border-gold/20 p-6">
+              <div className="bg-gradient-to-br from-gold/10 to-zinc-900 rounded-2xl border border-[#B89555]/20 p-6">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold to-[#ECE2D2] flex items-center justify-center">
                     <Sparkles className="w-5 h-5 text-[#1A1A1A]" />
                   </div>
                   <div>
                     <h3 className="text-white font-semibold text-lg">Executive Summary</h3>
-                    <p className="text-gold text-sm">AI-Generated Analysis</p>
+                    <p className="text-[#1A1A1A] text-sm">AI-Generated Analysis</p>
                   </div>
                 </div>
                 <p className="text-white/85 leading-relaxed">{aiAnalysis.summary}</p>
@@ -882,12 +882,12 @@ const Compare = () => {
               {/* Ratings Cards */}
               <div>
                 <h2 className="text-white text-xl font-semibold mb-4 flex items-center gap-2">
-                  <Star className="w-5 h-5 text-gold" />
+                  <Star className="w-5 h-5 text-[#1A1A1A]" />
                   Property Ratings
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {aiAnalysis.ratings.map((rating, index) => (
-                    <div key={index} className="bg-zinc-900 rounded-xl border border-[#1A1A1A] p-5">
+                    <div key={index} className="bg-[#FDFBF7] rounded-xl border border-[#1A1A1A] p-5">
                       <div className="flex justify-between items-start mb-3">
                         <h4 className="text-white font-semibold">{rating.projectName}</h4>
                         <div className="flex items-center gap-2">
@@ -938,12 +938,12 @@ const Compare = () => {
               </div>
 
               {/* Recommendation - Champagne Theme */}
-              <div className="bg-gradient-to-r from-gold/10 to-[#ECE2D2]/10 rounded-2xl border border-gold/30 p-6">
+              <div className="bg-gradient-to-r from-gold/10 to-[#ECE2D2]/10 rounded-2xl border border-[#B89555]/30 p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <Award className="w-8 h-8 text-gold" />
+                  <Award className="w-8 h-8 text-[#1A1A1A]" />
                   <div>
                     <h3 className="text-white font-bold text-xl">Our Recommendation</h3>
-                    <p className="text-gold text-lg">{aiAnalysis.recommendation.topChoice}</p>
+                    <p className="text-[#1A1A1A] text-lg">{aiAnalysis.recommendation.topChoice}</p>
                   </div>
                 </div>
                 <p className="text-white/85 mb-6">{aiAnalysis.recommendation.reasoning}</p>
@@ -955,8 +955,8 @@ const Compare = () => {
                     { icon: Users, label: "First-Time Buyers", value: aiAnalysis.recommendation.bestFor.firstTimeBuyers },
                     { icon: Crown, label: "Luxury Buyers", value: aiAnalysis.recommendation.bestFor.luxuryBuyers },
                   ].map((item) => (
-                    <div key={item.label} className="bg-gold/5 border border-gold/20 rounded-lg p-4">
-                      <div className="flex items-center gap-2 text-gold text-sm mb-2">
+                    <div key={item.label} className="bg-[#EFE6D6]/5 border border-[#B89555]/20 rounded-lg p-4">
+                      <div className="flex items-center gap-2 text-[#1A1A1A] text-sm mb-2">
                         <item.icon className="w-4 h-4" /> {item.label}
                       </div>
                       <p className="text-white text-sm">{item.value}</p>
@@ -964,8 +964,8 @@ const Compare = () => {
                   ))}
                 </div>
 
-                <div className="bg-gold/5 rounded-lg p-4 border border-gold/20">
-                  <div className="flex items-center gap-2 text-gold mb-2">
+                <div className="bg-[#EFE6D6]/5 rounded-lg p-4 border border-[#B89555]/20">
+                  <div className="flex items-center gap-2 text-[#1A1A1A] mb-2">
                     <Zap className="w-4 h-4" />
                     <span className="font-semibold">Investment Advice</span>
                   </div>
@@ -993,26 +993,26 @@ const Compare = () => {
               <div className="flex flex-col items-center text-center">
                 <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-gold to-[#ECE2D2] flex items-center justify-center mx-auto mb-6">
                   <Sparkles className="w-10 h-10 text-[#1A1A1A] animate-pulse" />
-                  <div className="absolute inset-0 rounded-full border-2 border-gold/40 animate-ping" />
+                  <div className="absolute inset-0 rounded-full border-2 border-[#B89555]/40 animate-ping" />
                 </div>
                 <h3 className="text-white text-2xl font-bold mb-2">Analyzing Property Intelligence...</h3>
                 <p className="text-white/70 max-w-md mx-auto mb-6">
                   Our AI is comparing locations, pricing, ROI potential, developer track records, and generating investment recommendations.
                 </p>
-                <div className="w-full max-w-sm h-2 bg-zinc-800 rounded-full overflow-hidden">
+                <div className="w-full max-w-sm h-2 bg-[#F7F2EA] rounded-full overflow-hidden">
                   <div className="h-full bg-gradient-to-r from-gold via-[#ECE2D2] to-gold rounded-full animate-[shimmer_2s_ease-in-out_infinite]" style={{ width: '75%', backgroundSize: '200% 100%' }} />
                 </div>
                 <p className="text-[#1A1A1A]/70 text-xs mt-3">This may take 15-30 seconds</p>
               </div>
             </div>
           ) : (
-            <div className="bg-gradient-to-br from-gold/5 to-zinc-900 rounded-2xl border border-gold/20 p-8 text-center">
+            <div className="bg-gradient-to-br from-gold/5 to-zinc-900 rounded-2xl border border-[#B89555]/20 p-8 text-center">
               <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gold to-[#ECE2D2] flex items-center justify-center mx-auto mb-4">
                 <Sparkles className="w-8 h-8 text-[#1A1A1A]" />
               </div>
               <h3 className="text-white text-2xl font-bold mb-2">AI Analysis Ready</h3>
               <p className="text-white/70 max-w-md mx-auto mb-6">
-                Click <strong className="text-gold">Start Comparing</strong> above to generate a detailed AI comparison with ratings, investment advice, and recommendations.
+                Click <strong className="text-[#1A1A1A]">Start Comparing</strong> above to generate a detailed AI comparison with ratings, investment advice, and recommendations.
               </p>
               <Button
                 onClick={generateSmartAnalysis}
@@ -1033,7 +1033,7 @@ const Compare = () => {
           )}
 
           {/* Contact Advisor Section - Champagne Theme */}
-          <div className="bg-gold/5 rounded-2xl border border-gold/20 p-6">
+          <div className="bg-[#EFE6D6]/5 rounded-2xl border border-[#B89555]/20 p-6">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold to-[#ECE2D2] flex items-center justify-center">
                 <Users className="w-5 h-5 text-[#1A1A1A]" />
@@ -1056,21 +1056,21 @@ const Compare = () => {
                   placeholder="Your Name"
                   value={formData.name}
                   onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                  className="bg-zinc-800 border-[#1A1A1A] text-white"
+                  className="bg-[#F7F2EA] border-[#1A1A1A] text-white"
                 />
                 <Input
                   type="email"
                   placeholder="Email Address"
                   value={formData.email}
                   onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                  className="bg-zinc-800 border-[#1A1A1A] text-white"
+                  className="bg-[#F7F2EA] border-[#1A1A1A] text-white"
                 />
                 <Input
                   type="tel"
                   placeholder="Phone Number"
                   value={formData.phone}
                   onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                  className="bg-zinc-800 border-[#1A1A1A] text-white"
+                  className="bg-[#F7F2EA] border-[#1A1A1A] text-white"
                 />
                 <div className="flex gap-3">
                   <Button
@@ -1090,7 +1090,7 @@ const Compare = () => {
                   <Button
                     variant="outline"
                     onClick={() => setShowRequestForm(false)}
-                    className="border-gold/50 text-gold hover:bg-gold/10"
+                    className="border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                   >
                     Cancel
                   </Button>
@@ -1107,7 +1107,7 @@ const Compare = () => {
                 </Button>
                 <a href="tel:+971565911000" className="w-full">
                   <Button
-                    className="w-full bg-zinc-800 border-2 border-gold/40 text-white font-semibold hover:bg-[#1A1A1A]"
+                    className="w-full bg-[#F7F2EA] border-2 border-[#B89555]/40 text-white font-semibold hover:bg-[#1A1A1A]"
                   >
                     <Phone className="w-4 h-4 mr-2" />
                     Call Now
@@ -1115,7 +1115,7 @@ const Compare = () => {
                 </a>
                 <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer" className="w-full">
                   <Button
-                    className="w-full bg-zinc-800 border-2 border-gold/40 text-white font-semibold hover:bg-[#1A1A1A]"
+                    className="w-full bg-[#F7F2EA] border-2 border-[#B89555]/40 text-white font-semibold hover:bg-[#1A1A1A]"
                   >
                     <BadgeCheck className="w-4 h-4 mr-2" />
                     Inquiry Form
@@ -1128,8 +1128,8 @@ const Compare = () => {
           {/* AI Property Analyzer Integration */}
           <div className="border-t border-[#C8A766]/20 pt-8">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 rounded-lg bg-gold/10 border border-[#C8A766]/30">
-                <Brain className="w-6 h-6 text-gold" />
+              <div className="p-2 rounded-lg bg-[#EFE6D6]/10 border border-[#C8A766]/30">
+                <Brain className="w-6 h-6 text-[#1A1A1A]" />
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-white">Deep Area Analysis</h2>
@@ -1146,7 +1146,7 @@ const Compare = () => {
 
         {/* Footer Branding */}
         <div className="text-center text-[#1A1A1A]/70 text-sm py-6">
-          Powered & Made by <span className="text-gold">JBJ Global Real Estate</span> — Real Estate Brokerage
+          Powered & Made by <span className="text-[#1A1A1A]">JBJ Global Real Estate</span> — Real Estate Brokerage
         </div>
         <LegalDisclaimer variant="compact" className="pb-4" />
       </div>

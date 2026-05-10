@@ -258,15 +258,15 @@ const MyTickets = () => {
 
     return (
       <>
-        <div className="p-4 border-b border-gold/20 bg-gold/5">
+        <div className="p-4 border-b border-[#B89555]/20 bg-[#EFE6D6]/5">
           <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide whitespace-nowrap">
-            <span className="font-mono text-gold font-semibold shrink-0">
+            <span className="font-mono text-[#1A1A1A] font-semibold shrink-0">
               {selectedTicket.ticket_number}
             </span>
             <button
               type="button"
               onClick={() => handleCopyTicketNumber(selectedTicket.ticket_number)}
-              className="inline-flex h-6 w-6 items-center justify-center rounded-md border border-gold/30 text-gold hover:bg-gold/10 shrink-0"
+              className="inline-flex h-6 w-6 items-center justify-center rounded-md border border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 shrink-0"
               aria-label="Copy ticket number"
             >
               <Copy className="w-3.5 h-3.5" />
@@ -289,8 +289,8 @@ const MyTickets = () => {
         <ScrollArea className="h-[300px]">
           <div className="p-4 space-y-3">
             {/* Original Description */}
-            <div className="bg-[#FDFBF7] rounded-lg p-3 border border-gold/10">
-              <p className="text-[10px] text-gold uppercase tracking-wide mb-1 font-semibold">Your Message</p>
+            <div className="bg-[#FDFBF7] rounded-lg p-3 border border-[#B89555]/10">
+              <p className="text-[10px] text-[#1A1A1A] uppercase tracking-wide mb-1 font-semibold">Your Message</p>
               <p className="text-[#1A1A1A]/70 text-sm whitespace-pre-wrap">{selectedTicket.description}</p>
             </div>
 
@@ -301,11 +301,11 @@ const MyTickets = () => {
                 className={cn(
                   "rounded-lg p-3",
                   msg.sender_type === "staff"
-                    ? "bg-gold/10 border border-gold/20 ml-4"
-                    : "bg-[#FDFBF7] border border-gold/10 mr-4"
+                    ? "bg-[#EFE6D6]/10 border border-[#B89555]/20 ml-4"
+                    : "bg-[#FDFBF7] border border-[#B89555]/10 mr-4"
                 )}
               >
-                <p className="text-[10px] uppercase tracking-wide mb-1 font-semibold text-gold">
+                <p className="text-[10px] uppercase tracking-wide mb-1 font-semibold text-[#1A1A1A]">
                   {msg.sender_type === "staff" ? "📩 Staff Reply" : "You"}
                 </p>
                 <p className="text-[#1A1A1A]/70 text-sm whitespace-pre-wrap">{msg.message}</p>
@@ -324,7 +324,7 @@ const MyTickets = () => {
         </ScrollArea>
 
         {/* Reply Composer - always available */}
-        <div className="p-3 border-t border-gold/20 bg-[#FDFBF7]">
+        <div className="p-3 border-t border-[#B89555]/20 bg-[#FDFBF7]">
           {/* Reopen button if resolved */}
           {selectedTicket.status === "resolved" && selectedTicket.reopen_token && (
             <Button
@@ -353,7 +353,7 @@ const MyTickets = () => {
                 onChange={(e) => setReplyMessage(e.target.value)}
                 placeholder="Type your reply..."
                 rows={2}
-                className="w-full min-h-[48px] px-3 py-2 pr-10 rounded-lg bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] text-sm placeholder:text-[#1A1A1A]/70 resize-none focus:outline-none focus:ring-2 focus:ring-gold/50"
+                className="w-full min-h-[48px] px-3 py-2 pr-10 rounded-lg bg-[#FDFBF7] border border-[#B89555]/30 text-[#1A1A1A] text-sm placeholder:text-[#1A1A1A]/70 resize-none focus:outline-none focus:ring-2 focus:ring-gold/50"
               />
               <div className="absolute top-2 right-2">
                 <VoiceInputButton
@@ -366,14 +366,14 @@ const MyTickets = () => {
                   }}
                   size="icon"
                   variant="ghost"
-                  className="h-6 w-6 text-[#1A1A1A]/70 hover:text-gold"
+                  className="h-6 w-6 text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
                 />
               </div>
             </div>
             <Button
               onClick={handleSendReply}
               disabled={!replyMessage.trim() || sendReplyMutation.isPending}
-              className="bg-gold hover:bg-gold/90 text-[#1A1A1A] self-end"
+              className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] self-end"
             >
               {sendReplyMutation.isPending ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -392,8 +392,8 @@ const MyTickets = () => {
       <div className="pt-8 pb-16 px-4">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-10">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gold/20 rounded-full mb-4">
-              <Ticket className="w-8 h-8 text-gold" />
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-[#EFE6D6]/20 rounded-full mb-4">
+              <Ticket className="w-8 h-8 text-[#1A1A1A]" />
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-2">
               My Support Tickets
@@ -407,9 +407,9 @@ const MyTickets = () => {
 
           {/* Guest Tracking Form */}
           {!user && (
-            <div className="bg-[#FDFBF7] rounded-2xl border-2 border-gold/30 p-8 shadow-lg mb-8 max-w-lg mx-auto">
+            <div className="bg-[#FDFBF7] rounded-2xl border-2 border-[#B89555]/30 p-8 shadow-lg mb-8 max-w-lg mx-auto">
               <h2 className="text-lg font-semibold text-[#1A1A1A] mb-6 flex items-center gap-2">
-                <Search className="w-5 h-5 text-gold" />
+                <Search className="w-5 h-5 text-[#1A1A1A]" />
                 Track Your Ticket
               </h2>
 
@@ -451,7 +451,7 @@ const MyTickets = () => {
                 <Button
                   onClick={handleTrackTicket}
                   disabled={isTracking}
-                  className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold"
+                  className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-semibold"
                 >
                   {isTracking ? (
                     <Loader2 className="w-4 h-4 animate-spin mr-2" />
@@ -466,7 +466,7 @@ const MyTickets = () => {
 
           {/* Guest Ticket Detail */}
           {!user && selectedTicket && (
-            <div className="bg-[#FDFBF7] rounded-2xl border-2 border-gold/30 shadow-lg overflow-hidden max-w-2xl mx-auto">
+            <div className="bg-[#FDFBF7] rounded-2xl border-2 border-[#B89555]/30 shadow-lg overflow-hidden max-w-2xl mx-auto">
               {renderTicketDetail()}
             </div>
           )}
@@ -474,7 +474,7 @@ const MyTickets = () => {
           {/* Authenticated User Tabs: Tickets + Inbox */}
           {user && (
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-              <TabsList className="bg-[#FDFBF7] border-2 border-gold/30 p-1">
+              <TabsList className="bg-[#FDFBF7] border-2 border-[#B89555]/30 p-1">
               <TabsTrigger value="tickets" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-foreground">
                   <Ticket className="w-4 h-4 mr-2" />
                   Tickets
@@ -494,17 +494,17 @@ const MyTickets = () => {
               <TabsContent value="tickets">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {/* Ticket List */}
-                  <div className="bg-[#FDFBF7] rounded-2xl border-2 border-gold/30 shadow-lg overflow-hidden">
-                    <div className="p-4 border-b border-gold/20 bg-gold/5">
+                  <div className="bg-[#FDFBF7] rounded-2xl border-2 border-[#B89555]/30 shadow-lg overflow-hidden">
+                    <div className="p-4 border-b border-[#B89555]/20 bg-[#EFE6D6]/5">
                       <h2 className="font-semibold text-[#1A1A1A] flex items-center gap-2">
-                        <Ticket className="w-4 h-4 text-gold" />
+                        <Ticket className="w-4 h-4 text-[#1A1A1A]" />
                         Your Tickets ({userTickets?.length || 0})
                       </h2>
                     </div>
 
                     {loadingUserTickets ? (
                       <div className="p-8 text-center">
-                        <Loader2 className="w-6 h-6 animate-spin mx-auto text-gold" />
+                        <Loader2 className="w-6 h-6 animate-spin mx-auto text-[#1A1A1A]" />
                       </div>
                     ) : userTickets && userTickets.length > 0 ? (
                       <ScrollArea className="h-[450px]">
@@ -518,12 +518,12 @@ const MyTickets = () => {
                                 key={ticket.id}
                                 onClick={() => handleSelectUserTicket(ticket.id)}
                                 className={cn(
-                                  "w-full p-4 text-left hover:bg-gold/5 transition-colors",
-                                  selectedTicket?.id === ticket.id && "bg-gold/10 border-l-4 border-l-gold"
+                                  "w-full p-4 text-left hover:bg-[#EFE6D6]/5 transition-colors",
+                                  selectedTicket?.id === ticket.id && "bg-[#EFE6D6]/10 border-l-4 border-l-gold"
                                 )}
                               >
                                 <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide whitespace-nowrap mb-1">
-                                  <span className="font-mono text-gold font-semibold text-sm shrink-0">
+                                  <span className="font-mono text-[#1A1A1A] font-semibold text-sm shrink-0">
                                     {ticket.ticket_number}
                                   </span>
                                   <Badge className={cn("text-xs shrink-0", status.className)}>
@@ -552,7 +552,7 @@ const MyTickets = () => {
                   </div>
 
                   {/* Ticket Detail */}
-                  <div className="bg-[#FDFBF7] rounded-2xl border-2 border-gold/30 shadow-lg overflow-hidden">
+                  <div className="bg-[#FDFBF7] rounded-2xl border-2 border-[#B89555]/30 shadow-lg overflow-hidden">
                     {renderTicketDetail()}
                   </div>
                 </div>
@@ -560,10 +560,10 @@ const MyTickets = () => {
 
               {/* Inbox Tab - JBJ messages only */}
               <TabsContent value="inbox">
-                <div className="bg-[#FDFBF7] rounded-2xl border-2 border-gold/30 shadow-lg overflow-hidden">
-                  <div className="p-4 border-b border-gold/20 bg-gold/5">
+                <div className="bg-[#FDFBF7] rounded-2xl border-2 border-[#B89555]/30 shadow-lg overflow-hidden">
+                  <div className="p-4 border-b border-[#B89555]/20 bg-[#EFE6D6]/5">
                     <h2 className="font-semibold text-[#1A1A1A] flex items-center gap-2">
-                      <Inbox className="w-4 h-4 text-gold" />
+                      <Inbox className="w-4 h-4 text-[#1A1A1A]" />
                       JBJ Messages Inbox
                       {inboxCount > 0 && (
                         <Badge className="bg-red-500 text-white text-xs">{inboxCount}</Badge>
@@ -581,13 +581,13 @@ const MyTickets = () => {
                               handleSelectUserTicket(msg.ticket_id);
                               setActiveTab("tickets");
                             }}
-                            className="w-full p-4 text-left hover:bg-gold/5 transition-colors"
+                            className="w-full p-4 text-left hover:bg-[#EFE6D6]/5 transition-colors"
                           >
                             <div className="flex items-center justify-between mb-1 gap-2">
                               <span className="text-sm font-semibold text-[#1A1A1A] truncate">
                                 {msg.support_tickets?.subject || "Message from JBJ"}
                               </span>
-                              <span className="font-mono text-[11px] text-gold shrink-0">
+                              <span className="font-mono text-[11px] text-[#1A1A1A] shrink-0">
                                 {msg.support_tickets?.ticket_number || ""}
                               </span>
                             </div>

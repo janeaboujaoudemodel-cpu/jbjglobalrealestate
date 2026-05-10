@@ -142,16 +142,16 @@ const BrokerEducation = () => {
               }}
               variants={fadeInUp}
             >
-              <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
-              <GraduationCap className="w-4 h-4 text-gold" />
-              <span className="text-gold font-semibold text-xs uppercase tracking-widest">Broker Education</span>
+              <span className="w-2 h-2 bg-[#EFE6D6] rounded-full animate-pulse" />
+              <GraduationCap className="w-4 h-4 text-[#1A1A1A]" />
+              <span className="text-[#1A1A1A] font-semibold text-xs uppercase tracking-widest">Broker Education</span>
             </motion.div>
             
             <motion.h1 
               className="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight"
               variants={fadeInUp}
             >
-              Internal Training <span className="text-gold">Library</span>
+              Internal Training <span className="text-[#1A1A1A]">Library</span>
             </motion.h1>
             
             <motion.p 
@@ -165,13 +165,13 @@ const BrokerEducation = () => {
             <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
               <Button 
                 variant="hero"
-                className="border-2 border-white/90 hover:border-gold"
+                className="border-2 border-white/90 hover:border-[#B89555]"
                 onClick={() => document.getElementById('library')?.scrollIntoView({ behavior: 'smooth' })}
               >
                 <ArrowDown className="w-4 h-4 mr-2" />
                 Explore Library
               </Button>
-              <Button variant="hero" className="border-2 border-white/90 hover:border-gold" asChild>
+              <Button variant="hero" className="border-2 border-white/90 hover:border-[#B89555]" asChild>
                 <Link to="/broker-dashboard">
                   <Briefcase className="w-4 h-4 mr-2" />
                   Back to Dashboard
@@ -191,14 +191,14 @@ const BrokerEducation = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <Card className="jj-card-inner border-2 border-gold/40 overflow-hidden">
+              <Card className="jj-card-inner border-2 border-[#B89555]/40 overflow-hidden">
                 <CardContent className="p-6 md:p-8 flex flex-col sm:flex-row items-center gap-6">
                   <div className="w-16 h-16 rounded-2xl bg-[#1A1A1A] flex items-center justify-center flex-shrink-0">
-                    <Lock className="w-8 h-8 text-gold" />
+                    <Lock className="w-8 h-8 text-[#1A1A1A]" />
                   </div>
                   <div className="text-center sm:text-left flex-1">
                     <h2 className="text-xl md:text-2xl font-bold text-[#1A1A1A] mb-2">
-                      Training is <span className="text-gold">Locked</span>
+                      Training is <span className="text-[#1A1A1A]">Locked</span>
                     </h2>
                     <p className="text-[#1A1A1A]/60 text-sm mb-0">
                       You can preview all content below, but access is locked until you join the JBJ Broker Circle.
@@ -240,19 +240,19 @@ const BrokerEducation = () => {
                     <h2 className="text-xl font-semibold text-[#1A1A1A] mb-3">Step 1: About This Program</h2>
                     <ul className="space-y-2 text-[#1A1A1A]/70">
                       <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
+                        <span className="w-1.5 h-1.5 bg-[#EFE6D6] rounded-full mt-2 flex-shrink-0" />
                         <span>Internal training program by JBJ Global Real Estate</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
+                        <span className="w-1.5 h-1.5 bg-[#EFE6D6] rounded-full mt-2 flex-shrink-0" />
                         <span>Designed to align brokers with JBJ professional standards</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
+                        <span className="w-1.5 h-1.5 bg-[#EFE6D6] rounded-full mt-2 flex-shrink-0" />
                         <span>No external certification rights — internal recognition only</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
+                        <span className="w-1.5 h-1.5 bg-[#EFE6D6] rounded-full mt-2 flex-shrink-0" />
                         <span>Content is proprietary and access can be modified or revoked</span>
                       </li>
                     </ul>
@@ -265,10 +265,10 @@ const BrokerEducation = () => {
           {/* Bridge Connector */}
           <div className="flex items-center justify-center gap-3 py-4 mb-8">
             <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/40 to-gold/60" />
-            <div className="flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/30 rounded-full">
-              <ArrowDown className="w-4 h-4 text-gold" />
-              <span className="text-sm text-gold font-medium uppercase tracking-wider">Now explore your resources</span>
-              <ArrowDown className="w-4 h-4 text-gold" />
+            <div className="flex items-center gap-2 px-4 py-2 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full">
+              <ArrowDown className="w-4 h-4 text-[#1A1A1A]" />
+              <span className="text-sm text-[#1A1A1A] font-medium uppercase tracking-wider">Now explore your resources</span>
+              <ArrowDown className="w-4 h-4 text-[#1A1A1A]" />
             </div>
             <div className="h-px flex-1 bg-gradient-to-l from-transparent via-gold/40 to-gold/60" />
           </div>
@@ -283,12 +283,12 @@ const BrokerEducation = () => {
             className="scroll-mt-20"
           >
             <div className="text-center mb-12">
-              <Badge className="bg-gold/20 text-gold border-gold/30 mb-4">
+              <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30 mb-4">
                 <BookOpen className="w-3 h-3 mr-1" />
                   {loading ? "Loading…" : `${books.length} Books • ${groupedBooks.length} Learning Paths`}
               </Badge>
               <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4">
-                Step 2: Education <span className="text-gold">Library</span>
+                Step 2: Education <span className="text-[#1A1A1A]">Library</span>
               </h2>
               <p className="text-[#1A1A1A]/70 max-w-2xl mx-auto mb-6">
                 Structured learning paths covering every aspect of professional real estate brokerage in the UAE.
@@ -304,7 +304,7 @@ const BrokerEducation = () => {
 
             {loading ? (
               <div className="flex items-center justify-center py-16">
-                <div className="animate-spin w-8 h-8 border-2 border-gold border-t-transparent rounded-full" />
+                <div className="animate-spin w-8 h-8 border-2 border-[#B89555] border-t-transparent rounded-full" />
               </div>
             ) : (
               <div className="space-y-12">
@@ -316,11 +316,11 @@ const BrokerEducation = () => {
                   >
                     {/* Learning Path Header */}
                     <div className="flex items-center gap-3 mb-6">
-                      <div className="w-2.5 h-10 bg-gold/60 rounded-full" />
+                      <div className="w-2.5 h-10 bg-[#EFE6D6]/60 rounded-full" />
                       <div>
                         <h3 className="text-xl font-semibold text-[#1A1A1A] flex items-center gap-2">
                           {path.name}
-                          {path.isRestricted && <Lock className="w-4 h-4 text-gold" />}
+                          {path.isRestricted && <Lock className="w-4 h-4 text-[#1A1A1A]" />}
                         </h3>
                         <p className="text-[#1A1A1A]/50 text-sm">{path.bookData.length} Book{path.bookData.length > 1 ? 's' : ''}</p>
                       </div>
@@ -374,19 +374,19 @@ const BrokerEducation = () => {
                     </div>
                     <ul className="space-y-2 text-[#1A1A1A]/70 text-sm">
                       <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
+                        <span className="w-1.5 h-1.5 bg-[#EFE6D6] rounded-full mt-2 flex-shrink-0" />
                         <span>Progress tracked internally within the platform</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
+                        <span className="w-1.5 h-1.5 bg-[#EFE6D6] rounded-full mt-2 flex-shrink-0" />
                         <span>Completion badges are for internal recognition only</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
+                        <span className="w-1.5 h-1.5 bg-[#EFE6D6] rounded-full mt-2 flex-shrink-0" />
                         <span>Certificates state: "Internal Recognition — JBJ Global Real Estate"</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
+                        <span className="w-1.5 h-1.5 bg-[#EFE6D6] rounded-full mt-2 flex-shrink-0" />
                         <span>No public sharing or external certification claims</span>
                       </li>
                     </ul>
@@ -401,19 +401,19 @@ const BrokerEducation = () => {
                     </div>
                     <ul className="space-y-2 text-[#1A1A1A]/70 text-sm">
                       <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
+                        <span className="w-1.5 h-1.5 bg-[#EFE6D6] rounded-full mt-2 flex-shrink-0" />
                         <span>This program is proprietary to JBJ Global Real Estate</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
+                        <span className="w-1.5 h-1.5 bg-[#EFE6D6] rounded-full mt-2 flex-shrink-0" />
                         <span>All content is owned by JBJ Global Real Estate</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
+                        <span className="w-1.5 h-1.5 bg-[#EFE6D6] rounded-full mt-2 flex-shrink-0" />
                         <span>Access can be modified or revoked at any time</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
+                        <span className="w-1.5 h-1.5 bg-[#EFE6D6] rounded-full mt-2 flex-shrink-0" />
                         <span>Book 9 (Advanced) requires special access approval</span>
                       </li>
                     </ul>
@@ -435,12 +435,12 @@ const BrokerEducation = () => {
             variants={staggerContainer}
           >
             <div className="text-center mb-10">
-              <Badge className="bg-gold/20 text-gold border-gold/30 mb-4">
+              <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30 mb-4">
                 <Shield className="w-3 h-3 mr-1" />
                 JBJ Employee Benefits
               </Badge>
               <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4">
-                What JBJ Brokers <span className="text-gold">Receive</span>
+                What JBJ Brokers <span className="text-[#1A1A1A]">Receive</span>
               </h2>
               <p className="text-[#1A1A1A]/70 max-w-2xl mx-auto">
                 Registered JBJ employees get full access to training, tools, and dedicated support.
@@ -493,7 +493,7 @@ const BrokerEducation = () => {
             className="max-w-3xl mx-auto text-center"
           >
             <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-6">
-              Join the JBJ <span className="text-gold">Broker Network</span>
+              Join the JBJ <span className="text-[#1A1A1A]">Broker Network</span>
             </h2>
             <p className="text-lg text-[#1A1A1A]/70 mb-10">
               Registered JBJ employees get full access to all books, AI tools, and 24/7 support. Start your journey today.

@@ -51,7 +51,7 @@ function getRoleBadgeColor(role: string | null): string {
     case 'broker':
     case 'broker_jbj':
     case 'broker_partner': return 'bg-purple-500/20 text-purple-600 border-purple-500/30';
-    default: return 'bg-gold/20 text-gold border-gold/30';
+    default: return 'bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30';
   }
 }
 
@@ -112,12 +112,12 @@ function UsefulLinksCard() {
     <div>
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center">
-            <BookOpen className="w-4 h-4 text-gold" />
+          <div className="w-8 h-8 rounded-lg bg-[#EFE6D6]/10 border border-[#B89555]/30 flex items-center justify-center">
+            <BookOpen className="w-4 h-4 text-[#1A1A1A]" />
           </div>
           <h3 className="text-base font-semibold text-foreground">Explore & Learn</h3>
         </div>
-        <Button variant="outline" size="sm" asChild className="border-gold/30 text-gold hover:bg-gold/10 hover:text-gold">
+        <Button variant="outline" size="sm" asChild className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 hover:text-[#1A1A1A]">
           <Link to="/guides">
             Explore All Books
             <ChevronRight className="w-3.5 h-3.5 ml-1" />
@@ -171,7 +171,7 @@ function UsefulLinksCard() {
                 style={{ transform: 'rotateX(90deg) translateY(2px)', transformOrigin: 'bottom' }}
               />
             </motion.div>
-            <p className="text-xs text-foreground/70 text-center font-medium group-hover:text-gold transition-colors leading-tight max-w-[120px]">
+            <p className="text-xs text-foreground/70 text-center font-medium group-hover:text-[#1A1A1A] transition-colors leading-tight max-w-[120px]">
               {book.title}
             </p>
           </Link>
@@ -191,7 +191,7 @@ function AccountSettingsCard() {
             <p className="text-sm font-semibold text-foreground">Account Settings</p>
             <p className="text-xs text-muted-foreground mt-0.5">Profile, preferences & security</p>
           </div>
-          <Button variant="outline" size="sm" asChild className="border-gold/30 text-gold hover:bg-gold/10 hover:text-gold">
+          <Button variant="outline" size="sm" asChild className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 hover:text-[#1A1A1A]">
             <Link to="/profile">
               Manage
               <ChevronRight className="w-3.5 h-3.5 ml-1" />
@@ -258,7 +258,7 @@ const MyDashboard = () => {
   if (authLoading || roleLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-gold animate-spin" />
+        <Loader2 className="w-8 h-8 text-[#1A1A1A] animate-spin" />
       </div>
     );
   }
@@ -271,7 +271,7 @@ const MyDashboard = () => {
   const sectionClass = (id: string) => cn(
     "rounded-2xl transition-all duration-700",
     activeSection === id
-      ? "ring-2 ring-gold/70 shadow-[0_0_24px_rgba(200,167,102,0.3)] bg-gold/5"
+      ? "ring-2 ring-gold/70 shadow-[0_0_24px_rgba(200,167,102,0.3)] bg-[#EFE6D6]/5"
       : ""
   );
 
@@ -288,7 +288,7 @@ const MyDashboard = () => {
             {/* Dashboard Title + Badge */}
             <div className="flex flex-wrap items-center gap-3 mb-2">
               <h1 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
-                My <span className="text-gold">Dashboard</span>
+                My <span className="text-[#1A1A1A]">Dashboard</span>
               </h1>
               {isCombinedMode ? (
                 <Badge className="bg-purple-500/20 text-purple-600 border-purple-500/30">
@@ -375,8 +375,8 @@ const MyDashboard = () => {
                 <Card className="border border-border bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))]">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-base text-foreground flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center">
-                        <Sparkles className="w-4 h-4 text-gold" />
+                      <div className="w-8 h-8 rounded-lg bg-[#EFE6D6]/10 border border-[#B89555]/30 flex items-center justify-center">
+                        <Sparkles className="w-4 h-4 text-[#1A1A1A]" />
                       </div>
                       AI Tools
                     </CardTitle>

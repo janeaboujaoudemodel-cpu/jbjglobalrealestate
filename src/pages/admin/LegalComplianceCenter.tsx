@@ -99,7 +99,7 @@ export default function LegalComplianceCenter() {
       <div className="bg-gradient-to-br from-card via-background to-card border-b border-border py-8 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-3 mb-2">
-            <Shield className="w-8 h-8 text-gold" />
+            <Shield className="w-8 h-8 text-[#1A1A1A]" />
             <h1 className="text-2xl font-bold text-foreground">Legal Compliance Center</h1>
           </div>
           <p className="text-muted-foreground">All user agreements, consents, and legal acceptances — audit-ready.</p>
@@ -110,21 +110,21 @@ export default function LegalComplianceCenter() {
         {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="bg-card border border-border rounded-xl p-5 flex items-center gap-4">
-            <FileText className="w-10 h-10 text-gold" />
+            <FileText className="w-10 h-10 text-[#1A1A1A]" />
             <div>
               <p className="text-2xl font-bold text-foreground">{stats.total}</p>
               <p className="text-sm text-muted-foreground">Total Agreements</p>
             </div>
           </div>
           <div className="bg-card border border-border rounded-xl p-5 flex items-center gap-4">
-            <Users className="w-10 h-10 text-gold" />
+            <Users className="w-10 h-10 text-[#1A1A1A]" />
             <div>
               <p className="text-2xl font-bold text-foreground">{stats.uniqueUsers}</p>
               <p className="text-sm text-muted-foreground">Unique Users</p>
             </div>
           </div>
           <div className="bg-card border border-border rounded-xl p-5 flex items-center gap-4">
-            <Calendar className="w-10 h-10 text-gold" />
+            <Calendar className="w-10 h-10 text-[#1A1A1A]" />
             <div>
               <p className="text-2xl font-bold text-foreground">{stats.today}</p>
               <p className="text-sm text-muted-foreground">Today's Consents</p>
@@ -155,10 +155,10 @@ export default function LegalComplianceCenter() {
               ))}
             </select>
           </div>
-          <Button onClick={fetchRecords} variant="outline" size="sm" className="border-gold/30">
+          <Button onClick={fetchRecords} variant="outline" size="sm" className="border-[#B89555]/30">
             <RefreshCw className="w-4 h-4 mr-1" /> Refresh
           </Button>
-          <Button onClick={exportCSV} size="sm" className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
+          <Button onClick={exportCSV} size="sm" className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
             <Download className="w-4 h-4 mr-1" /> Export CSV
           </Button>
         </div>
@@ -188,7 +188,7 @@ export default function LegalComplianceCenter() {
                       <TableRow key={r.id} className="cursor-pointer" onClick={() => setExpandedId(expandedId === r.id ? null : r.id)}>
                         <TableCell className="font-mono text-xs max-w-[120px] truncate">{r.user_id}</TableCell>
                         <TableCell>
-                          <span className="px-2 py-1 bg-gold/10 text-gold rounded-md text-xs font-medium">
+                          <span className="px-2 py-1 bg-[#EFE6D6]/10 text-[#1A1A1A] rounded-md text-xs font-medium">
                             {r.agreement_type?.replace(/_/g, ' ')}
                           </span>
                         </TableCell>

@@ -58,7 +58,7 @@ const LeadJourneyTracker = ({
     switch (type) {
       case "page_view": return "text-blue-400";
       case "form_submission": return "text-green-400";
-      case "click": return "text-amber-400";
+      case "click": return "text-[#1A1A1A]";
       case "inquiry": return "text-purple-400";
       default: return "text-white/70";
     }

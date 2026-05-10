@@ -165,14 +165,14 @@ const ExclusiveDocuments = () => {
       />
 
       {/* Hero Header */}
-      <div className="bg-[#1A1A1A] border-b border-gold/20">
+      <div className="bg-[#1A1A1A] border-b border-[#B89555]/20">
         <div className="max-w-6xl mx-auto px-6 py-10">
           <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
-              <Shield className="w-5 h-5 text-gold" />
+            <div className="w-10 h-10 rounded-lg bg-[#EFE6D6]/10 flex items-center justify-center">
+              <Shield className="w-5 h-5 text-[#1A1A1A]" />
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-white">
-              JBJ <span className="text-gold">Exclusive Documents</span>
+              JBJ <span className="text-[#1A1A1A]">Exclusive Documents</span>
             </h1>
           </div>
           <p className="text-[#1A1A1A]/70 ml-[52px]">
@@ -184,12 +184,12 @@ const ExclusiveDocuments = () => {
       <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] min-h-screen">
         <div className="max-w-6xl mx-auto px-6 py-8">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <TabsList className="bg-[#1A1A1A]/5 border border-gold/20 p-1 h-auto flex-wrap">
-              <TabsTrigger value="templates" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] gap-2">
+            <TabsList className="bg-[#1A1A1A]/5 border border-[#B89555]/20 p-1 h-auto flex-wrap">
+              <TabsTrigger value="templates" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] gap-2">
                 <FileText className="w-4 h-4" />
                 Templates
               </TabsTrigger>
-              <TabsTrigger value="ai-generate" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] gap-2">
+              <TabsTrigger value="ai-generate" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] gap-2">
                 <Sparkles className="w-4 h-4" />
                 AI Generate
               </TabsTrigger>
@@ -202,7 +202,7 @@ const ExclusiveDocuments = () => {
                 return (
                   <div key={cat.id}>
                     <div className="flex items-center gap-2 mb-4">
-                      <cat.icon className="w-5 h-5 text-gold" />
+                      <cat.icon className="w-5 h-5 text-[#1A1A1A]" />
                       <h2 className="text-xl font-bold text-[#1A1A1A]">{cat.label}</h2>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -211,8 +211,8 @@ const ExclusiveDocuments = () => {
                           key={template.id}
                           className={`border-2 transition-all cursor-pointer ${
                             selectedTemplate?.id === template.id
-                              ? "border-gold bg-gold/5"
-                              : "border-gold/20 hover:border-gold/40 bg-[#FDFBF7]/60"
+                              ? "border-[#B89555] bg-[#EFE6D6]/5"
+                              : "border-[#B89555]/20 hover:border-[#B89555]/40 bg-[#FDFBF7]/60"
                           }`}
                           onClick={() => {
                             setSelectedTemplate(template);
@@ -232,7 +232,7 @@ const ExclusiveDocuments = () => {
 
               {/* Template Generation Form */}
               {selectedTemplate && (
-                <Card className="border-2 border-gold/30 bg-[#FDFBF7]/80">
+                <Card className="border-2 border-[#B89555]/30 bg-[#FDFBF7]/80">
                   <CardContent className="p-6 space-y-4">
                     <h3 className="text-lg font-bold text-[#1A1A1A]">
                       Generate: {selectedTemplate.label}
@@ -249,7 +249,7 @@ const ExclusiveDocuments = () => {
                     <Button
                       onClick={() => generateFromTemplate(selectedTemplate)}
                       disabled={loading}
-                      className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold"
+                      className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-semibold"
                     >
                       {loading ? (
                         <>
@@ -270,10 +270,10 @@ const ExclusiveDocuments = () => {
 
             {/* Tab 2: Free-form AI Prompt */}
             <TabsContent value="ai-generate" className="space-y-6">
-              <Card className="border-2 border-gold/30 bg-[#FDFBF7]/80">
+              <Card className="border-2 border-[#B89555]/30 bg-[#FDFBF7]/80">
                 <CardContent className="p-6 space-y-4">
                   <h3 className="text-lg font-bold text-[#1A1A1A] flex items-center gap-2">
-                    <Sparkles className="w-5 h-5 text-gold" />
+                    <Sparkles className="w-5 h-5 text-[#1A1A1A]" />
                     AI Contract & Document Generator
                   </h3>
                   <p className="text-sm text-muted-foreground">
@@ -308,7 +308,7 @@ const ExclusiveDocuments = () => {
                   <Button
                     onClick={generateFromPrompt}
                     disabled={loading}
-                    className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold"
+                    className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-semibold"
                   >
                     {loading ? (
                       <>
@@ -331,23 +331,23 @@ const ExclusiveDocuments = () => {
           {generatedDocument && (
             <div className="mt-8 space-y-4">
               {generatedSubject && (
-                <div className="bg-gold/10 border border-gold/30 p-4 rounded-xl">
+                <div className="bg-[#EFE6D6]/10 border border-[#B89555]/30 p-4 rounded-xl">
                   <p className="text-sm text-muted-foreground mb-1">Document Title</p>
                   <p className="font-bold text-[#1A1A1A] text-lg">{generatedSubject}</p>
                 </div>
               )}
 
-              <Card className="border-2 border-gold/30 bg-[#FDFBF7]/90">
+              <Card className="border-2 border-[#B89555]/30 bg-[#FDFBF7]/90">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="font-bold text-[#1A1A1A] text-lg">Generated Document</h3>
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm" onClick={handleCopy} className="border-gold/40">
+                      <Button variant="outline" size="sm" onClick={handleCopy} className="border-[#B89555]/40">
                         {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                       </Button>
                     </div>
                   </div>
-                  <div className="bg-[#FDFBF7] border border-gold/10 p-6 rounded-lg prose prose-sm max-w-none whitespace-pre-wrap text-[#1A1A1A]">
+                  <div className="bg-[#FDFBF7] border border-[#B89555]/10 p-6 rounded-lg prose prose-sm max-w-none whitespace-pre-wrap text-[#1A1A1A]">
                     {generatedDocument}
                   </div>
                 </CardContent>
@@ -369,7 +369,7 @@ const ExclusiveDocuments = () => {
                       },
                     },
                   })}
-                  className="border-gold/40 text-[#1A1A1A] hover:bg-gold/10"
+                  className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                 >
                   <Mail className="w-4 h-4 mr-2" />
                   Send by Email
@@ -388,14 +388,14 @@ const ExclusiveDocuments = () => {
                       },
                     },
                   })}
-                  className="border-gold/40 text-[#1A1A1A] hover:bg-gold/10"
+                  className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                 >
                   <MessageSquare className="w-4 h-4 mr-2" />
                   Send to Chat
                 </Button>
                 <Button
                   onClick={handleSendForSignature}
-                  className="bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold"
+                  className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-semibold"
                 >
                   <PenTool className="w-4 h-4 mr-2" />
                   Send for E-Signature

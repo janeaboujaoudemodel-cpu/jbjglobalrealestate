@@ -92,7 +92,7 @@ const EducationHub = () => {
         badgeIcon={GraduationCap}
         title={
           <>
-            <span className="text-gold">Education</span> Hub
+            <span className="text-[#1A1A1A]">Education</span> Hub
           </>
         }
         description="Your centralised gateway to institutional-grade real estate knowledge. Explore our curated library of professional books, expert guides, and data-driven market reports."
@@ -127,8 +127,8 @@ const EducationHub = () => {
               {booksPreview.map((book) => (
                 <motion.div key={book.title} variants={fadeInUp}>
                   <div className="jj-card-inner rounded-2xl p-6 md:p-8 h-full flex flex-col">
-                    <div className="w-12 h-12 bg-[#1A1A1A] border border-gold rounded-xl flex items-center justify-center mb-4">
-                      <book.icon className="w-6 h-6 text-gold" />
+                    <div className="w-12 h-12 bg-[#1A1A1A] border border-[#B89555] rounded-xl flex items-center justify-center mb-4">
+                      <book.icon className="w-6 h-6 text-[#1A1A1A]" />
                     </div>
                     <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">{book.title}</h3>
                     <p className="text-[#1A1A1A]/70 text-sm flex-1">{book.description}</p>
@@ -139,7 +139,7 @@ const EducationHub = () => {
             <div className="mt-8 text-center">
               <Link
                 to="/broker-education"
-                className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-[#1A1A1A] text-gold border border-gold/40 hover:bg-gold/10 transition-all duration-300 font-semibold text-sm"
+                className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-[#1A1A1A] text-[#1A1A1A] border border-[#B89555]/40 hover:bg-[#EFE6D6]/10 transition-all duration-300 font-semibold text-sm"
               >
                 Browse Full Books Library
                 <ArrowRight className="w-4 h-4" />
@@ -165,8 +165,8 @@ const EducationHub = () => {
               {guidesPreview.map((guide) => (
                 <motion.div key={guide.title} variants={fadeInUp}>
                   <div className="jj-card-inner rounded-2xl p-6 h-full flex flex-col">
-                    <div className="w-12 h-12 bg-[#1A1A1A] border border-gold rounded-xl flex items-center justify-center mb-4">
-                      <guide.icon className="w-6 h-6 text-gold" />
+                    <div className="w-12 h-12 bg-[#1A1A1A] border border-[#B89555] rounded-xl flex items-center justify-center mb-4">
+                      <guide.icon className="w-6 h-6 text-[#1A1A1A]" />
                     </div>
                     <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">{guide.title}</h3>
                     <p className="text-[#1A1A1A]/70 text-sm flex-1">{guide.description}</p>
@@ -177,7 +177,7 @@ const EducationHub = () => {
             <div className="mt-8 text-center">
               <Link
                 to="/guides"
-                className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-[#1A1A1A] text-gold border border-gold/40 hover:bg-gold/10 transition-all duration-300 font-semibold text-sm"
+                className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-[#1A1A1A] text-[#1A1A1A] border border-[#B89555]/40 hover:bg-[#EFE6D6]/10 transition-all duration-300 font-semibold text-sm"
               >
                 View All Guides
                 <ArrowRight className="w-4 h-4" />
@@ -203,8 +203,8 @@ const EducationHub = () => {
               {reportsPreview.map((report) => (
                 <motion.div key={report.title} variants={fadeInUp}>
                   <div className="jj-card-inner rounded-2xl p-6 md:p-8 h-full flex flex-col">
-                    <div className="w-12 h-12 bg-[#1A1A1A] border border-gold rounded-xl flex items-center justify-center mb-4">
-                      <report.icon className="w-6 h-6 text-gold" />
+                    <div className="w-12 h-12 bg-[#1A1A1A] border border-[#B89555] rounded-xl flex items-center justify-center mb-4">
+                      <report.icon className="w-6 h-6 text-[#1A1A1A]" />
                     </div>
                     <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">{report.title}</h3>
                     <p className="text-[#1A1A1A]/70 text-sm flex-1">{report.description}</p>
@@ -215,7 +215,7 @@ const EducationHub = () => {
             <div className="mt-8 text-center">
               <Link
                 to="/market-intelligence/reports"
-                className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-[#1A1A1A] text-gold border border-gold/40 hover:bg-gold/10 transition-all duration-300 font-semibold text-sm"
+                className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-[#1A1A1A] text-[#1A1A1A] border border-[#B89555]/40 hover:bg-[#EFE6D6]/10 transition-all duration-300 font-semibold text-sm"
               >
                 Explore Market Reports
                 <ArrowRight className="w-4 h-4" />
@@ -234,7 +234,7 @@ const EducationHub = () => {
               transition={{ duration: 0.5 }}
             >
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                Need Help Choosing <span className="text-gold">What to Read?</span>
+                Need Help Choosing <span className="text-[#1A1A1A]">What to Read?</span>
               </h2>
               <p className="text-white/70 mb-8 max-w-2xl mx-auto">
                 Our team can recommend the right resources based on your role, experience level, and goals. Whether you're a first-time buyer or a seasoned investor, we'll point you in the right direction.

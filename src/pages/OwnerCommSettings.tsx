@@ -62,7 +62,7 @@ const channelTypes = [
   { value: 'email_hostinger', label: 'Hostinger Webmail', icon: Mail, color: 'text-blue-500' },
   { value: 'instagram', label: 'Instagram DM', icon: Instagram, color: 'text-pink-500' },
   { value: 'facebook', label: 'Facebook Messenger', icon: Facebook, color: 'text-blue-600' },
-  { value: 'website_chat', label: 'Website Chat', icon: Globe, color: 'text-gold' },
+  { value: 'website_chat', label: 'Website Chat', icon: Globe, color: 'text-[#1A1A1A]' },
   { value: 'voice', label: 'Voice (ElevenLabs)', icon: Mic, color: 'text-purple-500' },
 ];
 
@@ -190,17 +190,17 @@ export default function OwnerCommSettings() {
             animate={{ opacity: 1, y: 0 }}
             className="mb-6"
           >
-            <div className="flex items-center gap-4 bg-[#FDFBF7]/80 backdrop-blur-sm border-2 border-gold/30 rounded-2xl p-4 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+            <div className="flex items-center gap-4 bg-[#FDFBF7]/80 backdrop-blur-sm border-2 border-[#B89555]/30 rounded-2xl p-4 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => navigate(-1)}
-                className="h-10 w-10 rounded-xl border border-gold/20 hover:bg-gold/10"
+                className="h-10 w-10 rounded-xl border border-[#B89555]/20 hover:bg-[#EFE6D6]/10"
               >
                 <ArrowLeft className="h-5 w-5 text-foreground" />
               </Button>
-              <div className="p-3 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border-2 border-gold/30">
-                <Settings className="h-6 w-6 text-gold" />
+              <div className="p-3 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border-2 border-[#B89555]/30">
+                <Settings className="h-6 w-6 text-[#1A1A1A]" />
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-[#1A1A1A]">Communication Settings</h1>
@@ -211,7 +211,7 @@ export default function OwnerCommSettings() {
 
           {/* Tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid grid-cols-4 mb-6 bg-[#FDFBF7]/80 border-2 border-gold/20">
+            <TabsList className="grid grid-cols-4 mb-6 bg-[#FDFBF7]/80 border-2 border-[#B89555]/20">
               <TabsTrigger value="channels">Channels</TabsTrigger>
               <TabsTrigger value="ai">AI Settings</TabsTrigger>
               <TabsTrigger value="tone">Tone Profile</TabsTrigger>
@@ -221,7 +221,7 @@ export default function OwnerCommSettings() {
             {/* Channels Tab */}
             <TabsContent value="channels">
               <div className="grid gap-4">
-                <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
+                <Card className="border-2 border-[#B89555]/20 bg-[#FDFBF7]/90">
                   <CardHeader>
                     <CardTitle className="text-lg text-[#1A1A1A]">Connected Channels</CardTitle>
                     <CardDescription className="text-[#1A1A1A]/70">
@@ -238,10 +238,10 @@ export default function OwnerCommSettings() {
             {/* AI Settings Tab */}
             <TabsContent value="ai">
               <div className="grid gap-4">
-                <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
+                <Card className="border-2 border-[#B89555]/20 bg-[#FDFBF7]/90">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
-                      <Brain className="h-5 w-5 text-gold" />
+                      <Brain className="h-5 w-5 text-[#1A1A1A]" />
                       AI Behavior
                     </CardTitle>
                     <CardDescription>Control how the AI assistant handles communications</CardDescription>
@@ -293,16 +293,16 @@ export default function OwnerCommSettings() {
                   </CardContent>
                 </Card>
 
-                <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
+                <Card className="border-2 border-[#B89555]/20 bg-[#FDFBF7]/90">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
-                      <Sparkles className="h-5 w-5 text-gold" />
+                      <Sparkles className="h-5 w-5 text-[#1A1A1A]" />
                       AI Learning
                     </CardTitle>
                     <CardDescription>The AI learns from your corrections to improve over time</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="flex items-center justify-between p-4 rounded-xl bg-gold/5 border border-gold/20">
+                    <div className="flex items-center justify-between p-4 rounded-xl bg-[#EFE6D6]/5 border border-[#B89555]/20">
                       <div>
                         <p className="font-medium text-[#1A1A1A]">Learning Enabled</p>
                         <p className="text-sm text-[#1A1A1A]/70">AI adapts to your writing style and preferences</p>
@@ -316,7 +316,7 @@ export default function OwnerCommSettings() {
 
             {/* Tone Profile Tab */}
             <TabsContent value="tone">
-              <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
+              <Card className="border-2 border-[#B89555]/20 bg-[#FDFBF7]/90">
                 <CardHeader>
                   <CardTitle className="text-lg">Your Tone Profile</CardTitle>
                   <CardDescription>Define how the AI should communicate in your style</CardDescription>
@@ -396,10 +396,10 @@ export default function OwnerCommSettings() {
 
             {/* Voice Tab */}
             <TabsContent value="voice">
-              <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
+              <Card className="border-2 border-[#B89555]/20 bg-[#FDFBF7]/90">
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center gap-2">
-                    <Volume2 className="h-5 w-5 text-gold" />
+                    <Volume2 className="h-5 w-5 text-[#1A1A1A]" />
                     Voice Settings
                   </CardTitle>
                   <CardDescription>Configure ElevenLabs voice for voice notes</CardDescription>
@@ -426,9 +426,9 @@ export default function OwnerCommSettings() {
                     </div>
                   </div>
 
-                  <div className="p-4 rounded-xl bg-gold/5 border border-gold/20">
+                  <div className="p-4 rounded-xl bg-[#EFE6D6]/5 border border-[#B89555]/20">
                     <p className="text-sm text-[#1A1A1A]/70">
-                      <Shield className="h-4 w-4 inline mr-1 text-gold" />
+                      <Shield className="h-4 w-4 inline mr-1 text-[#1A1A1A]" />
                       Your voice clone is used exclusively for generating voice notes. 
                       It is never used for phone calls or real-time conversations.
                     </p>

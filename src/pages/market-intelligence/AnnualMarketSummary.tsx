@@ -124,7 +124,7 @@ const AnnualMarketSummary = () => {
       <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-[#1A1A1A] mb-4">Report Not Found</h1>
-          <Link to="/market-intelligence/reports" className="text-gold hover:underline">
+          <Link to="/market-intelligence/reports" className="text-[#1A1A1A] hover:underline">
             Return to Reports
           </Link>
         </div>
@@ -160,7 +160,7 @@ const AnnualMarketSummary = () => {
 
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
-                <Badge className="mb-3 bg-gold/20 text-gold border-gold/30">
+                <Badge className="mb-3 bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30">
                   ANNUAL MARKET SUMMARY
                 </Badge>
                 <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]">
@@ -190,7 +190,7 @@ const AnnualMarketSummary = () => {
             transition={{ delay: 0.1 }}
             className="mb-8"
           >
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
               <CardHeader>
                 <CardTitle className="text-lg text-[#1A1A1A]">Executive Summary</CardTitle>
               </CardHeader>
@@ -208,10 +208,10 @@ const AnnualMarketSummary = () => {
             transition={{ delay: 0.15 }}
             className="mb-8"
           >
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
               <CardHeader>
                 <CardTitle className="text-lg text-[#1A1A1A] flex items-center gap-2">
-                  <BookOpen className="w-5 h-5 text-gold" />
+                  <BookOpen className="w-5 h-5 text-[#1A1A1A]" />
                   Year in Review
                 </CardTitle>
               </CardHeader>
@@ -219,7 +219,7 @@ const AnnualMarketSummary = () => {
                 <ul className="space-y-3">
                   {data.yearInReview.map((point, index) => (
                     <li key={index} className="flex gap-3 text-[#1A1A1A]/70">
-                      <span className="text-gold">•</span>
+                      <span className="text-[#1A1A1A]">•</span>
                       <span>{point}</span>
                     </li>
                   ))}
@@ -236,7 +236,7 @@ const AnnualMarketSummary = () => {
             transition={{ delay: 0.2 }}
             className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8"
           >
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-[#1A1A1A]/70 flex items-center gap-2">
                   <Building className="w-4 h-4" />
@@ -251,7 +251,7 @@ const AnnualMarketSummary = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-[#1A1A1A]/70 flex items-center gap-2">
                   <Home className="w-4 h-4" />
@@ -266,7 +266,7 @@ const AnnualMarketSummary = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-[#1A1A1A]/70 flex items-center gap-2">
                   <Key className="w-4 h-4" />
@@ -290,10 +290,10 @@ const AnnualMarketSummary = () => {
             transition={{ delay: 0.25 }}
             className="mb-8"
           >
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
               <CardHeader>
                 <CardTitle className="text-lg text-[#1A1A1A] flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5 text-gold" />
+                  <TrendingUp className="w-5 h-5 text-[#1A1A1A]" />
                   Structural Market Shifts
                 </CardTitle>
               </CardHeader>
@@ -301,7 +301,7 @@ const AnnualMarketSummary = () => {
                 <ul className="space-y-3">
                   {data.structuralShifts.map((shift, index) => (
                     <li key={index} className="flex gap-3 text-[#1A1A1A]/70">
-                      <span className="text-gold">•</span>
+                      <span className="text-[#1A1A1A]">•</span>
                       <span>{shift}</span>
                     </li>
                   ))}
@@ -318,10 +318,10 @@ const AnnualMarketSummary = () => {
             transition={{ delay: 0.3 }}
             className="mb-8"
           >
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
               <CardHeader>
                 <CardTitle className="text-lg text-[#1A1A1A] flex items-center gap-2">
-                  <Key className="w-5 h-5 text-gold" />
+                  <Key className="w-5 h-5 text-[#1A1A1A]" />
                   RENT Behavior Patterns
                 </CardTitle>
               </CardHeader>
@@ -339,7 +339,7 @@ const AnnualMarketSummary = () => {
             transition={{ delay: 0.35 }}
             className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8"
           >
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
               <CardHeader>
                 <CardTitle className="text-sm font-medium text-[#1A1A1A]">Regulatory Context</CardTitle>
               </CardHeader>
@@ -348,7 +348,7 @@ const AnnualMarketSummary = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
               <CardHeader>
                 <CardTitle className="text-sm font-medium text-[#1A1A1A]">Demographic Context</CardTitle>
               </CardHeader>
@@ -367,12 +367,12 @@ const AnnualMarketSummary = () => {
             className="mb-8"
           >
             <h2 className="text-xl font-bold text-[#1A1A1A] mb-4 flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-gold" />
+              <MapPin className="w-5 h-5 text-[#1A1A1A]" />
               Key Area Narratives
             </h2>
             <div className="space-y-4">
               {data.keyAreas.map((area, index) => (
-                <Card key={index} className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+                <Card key={index} className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
                   <CardContent className="pt-4">
                     <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">{area.name}</h3>
                     <p className="text-[#1A1A1A]/70">{area.narrative}</p>
@@ -389,7 +389,7 @@ const AnnualMarketSummary = () => {
             variants={fadeInUp}
             transition={{ delay: 0.5 }}
           >
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
               <CardContent className="pt-6">
                 <h3 className="text-sm font-semibold text-[#1A1A1A] mb-3">Methodology & Disclaimer</h3>
                 <p className="text-sm text-[#1A1A1A]/70 mb-4">
@@ -402,11 +402,11 @@ const AnnualMarketSummary = () => {
                   <span>•</span>
                   <span>Update Frequency: Annual</span>
                   <span>•</span>
-                  <Link to="/market-intelligence/methodology" className="text-gold hover:underline">
+                  <Link to="/market-intelligence/methodology" className="text-[#1A1A1A] hover:underline">
                     Full Methodology
                   </Link>
                 </div>
-                <div className="mt-4 pt-4 border-t border-gold/30">
+                <div className="mt-4 pt-4 border-t border-[#B89555]/30">
                   <p className="text-xs text-[#1A1A1A]/70">
                     JBJ GLOBAL REAL ESTATE • Jane Bou Jaoude, Founder & CEO
                   </p>

@@ -108,13 +108,13 @@ const ListingPortal = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              <Badge className="mb-4 bg-gold/15 text-gold border-gold/40 px-4 py-2">
+              <Badge className="mb-4 bg-[#EFE6D6]/15 text-[#1A1A1A] border-[#B89555]/40 px-4 py-2">
                 <Building className="w-4 h-4 mr-2" />
                 JBJ Listing Portal
               </Badge>
               <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-3">
                 List Your Property with{" "}
-                <span className="text-gold">JBJ</span>
+                <span className="text-[#1A1A1A]">JBJ</span>
               </h1>
               <p className="text-[#1A1A1A]/70 mb-2">
                 Submit your property for sale or rent — manually or with AI assistance.
@@ -128,7 +128,7 @@ const ListingPortal = () => {
             {!selectedMethod ? (
               <div className="max-w-4xl mx-auto mb-16">
                 <div className="relative">
-                  <div className="absolute inset-0 -m-4 rounded-3xl bg-[#FDFBF7]/50 border border-gold/20 shadow-[0_8px_40px_rgba(200,167,102,0.12)]" />
+                  <div className="absolute inset-0 -m-4 rounded-3xl bg-[#FDFBF7]/50 border border-[#B89555]/20 shadow-[0_8px_40px_rgba(200,167,102,0.12)]" />
                   <div className="relative grid grid-cols-1 md:grid-cols-2 gap-6 p-4">
                     {/* Manual Listing Card */}
                     <motion.div
@@ -136,12 +136,12 @@ const ListingPortal = () => {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.1 }}
                       onClick={() => setSelectedMethod('manual')}
-                      className="group cursor-pointer bg-[#FDFBF7] border-2 border-gold/30 rounded-2xl p-8 hover:border-gold/70 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.25)] relative overflow-hidden"
+                      className="group cursor-pointer bg-[#FDFBF7] border-2 border-[#B89555]/30 rounded-2xl p-8 hover:border-[#B89555]/70 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.25)] relative overflow-hidden"
                     >
                       <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-gold/8 to-transparent rounded-bl-full" />
                       <div className="relative z-10">
-                        <div className="w-14 h-14 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center mb-5">
-                          <ClipboardCheck className="w-7 h-7 text-gold" />
+                        <div className="w-14 h-14 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-xl flex items-center justify-center mb-5">
+                          <ClipboardCheck className="w-7 h-7 text-[#1A1A1A]" />
                         </div>
                         <h2 className="text-xl font-bold text-[#1A1A1A] mb-2">Manual Listing</h2>
                         <p className="text-[#1A1A1A]/70 text-sm mb-4 leading-relaxed">
@@ -149,19 +149,19 @@ const ListingPortal = () => {
                         </p>
                         <ul className="space-y-2 mb-6">
                           <li className="flex items-center gap-2 text-[#1A1A1A]/70 text-sm">
-                            <FileText className="w-4 h-4 text-gold" />
+                            <FileText className="w-4 h-4 text-[#1A1A1A]" />
                             Step-by-step guided form
                           </li>
                           <li className="flex items-center gap-2 text-[#1A1A1A]/70 text-sm">
-                            <Upload className="w-4 h-4 text-gold" />
+                            <Upload className="w-4 h-4 text-[#1A1A1A]" />
                             Upload photos & documents
                           </li>
                           <li className="flex items-center gap-2 text-[#1A1A1A]/70 text-sm">
-                            <Star className="w-4 h-4 text-gold" />
+                            <Star className="w-4 h-4 text-[#1A1A1A]" />
                             AI description generator included
                           </li>
                         </ul>
-                        <div className="flex items-center gap-2 text-gold font-semibold text-sm group-hover:gap-3 transition-all">
+                        <div className="flex items-center gap-2 text-[#1A1A1A] font-semibold text-sm group-hover:gap-3 transition-all">
                           <span>Start Manual Listing</span>
                           <ArrowRight className="w-4 h-4" />
                         </div>
@@ -174,7 +174,7 @@ const ListingPortal = () => {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.2 }}
                       onClick={() => setSelectedMethod('ai')}
-                      className="group cursor-pointer bg-[#FDFBF7] border-2 border-gold/30 rounded-2xl p-8 hover:border-gold/70 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.25)] relative overflow-hidden"
+                      className="group cursor-pointer bg-[#FDFBF7] border-2 border-[#B89555]/30 rounded-2xl p-8 hover:border-[#B89555]/70 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.25)] relative overflow-hidden"
                     >
                       <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-gold/8 to-transparent rounded-bl-full" />
                       <Badge className="absolute top-4 right-4 text-xs" style={{ background: '#ede9fe', color: '#6d28d9', border: '1px solid #c4b5fd' }}>
@@ -182,8 +182,8 @@ const ListingPortal = () => {
                         AI Powered
                       </Badge>
                       <div className="relative z-10">
-                        <div className="w-14 h-14 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center mb-5">
-                          <Wand2 className="w-7 h-7 text-gold" />
+                        <div className="w-14 h-14 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-xl flex items-center justify-center mb-5">
+                          <Wand2 className="w-7 h-7 text-[#1A1A1A]" />
                         </div>
                         <h2 className="text-xl font-bold text-[#1A1A1A] mb-2">List with AI</h2>
                         <p className="text-[#1A1A1A]/70 text-sm mb-4 leading-relaxed">
@@ -191,19 +191,19 @@ const ListingPortal = () => {
                         </p>
                         <ul className="space-y-2 mb-6">
                           <li className="flex items-center gap-2 text-[#1A1A1A]/70 text-sm">
-                            <Wand2 className="w-4 h-4 text-gold" />
+                            <Wand2 className="w-4 h-4 text-[#1A1A1A]" />
                             AI extracts all property data
                           </li>
                           <li className="flex items-center gap-2 text-[#1A1A1A]/70 text-sm">
-                            <Eye className="w-4 h-4 text-gold" />
+                            <Eye className="w-4 h-4 text-[#1A1A1A]" />
                             Review & edit before submitting
                           </li>
                           <li className="flex items-center gap-2 text-[#1A1A1A]/70 text-sm">
-                            <Sparkles className="w-4 h-4 text-gold" />
+                            <Sparkles className="w-4 h-4 text-[#1A1A1A]" />
                             Supports brochures, PDFs & images
                           </li>
                         </ul>
-                        <div className="flex items-center gap-2 text-gold font-semibold text-sm group-hover:gap-3 transition-all">
+                        <div className="flex items-center gap-2 text-[#1A1A1A] font-semibold text-sm group-hover:gap-3 transition-all">
                           <span>Start AI Listing</span>
                           <ArrowRight className="w-4 h-4" />
                         </div>
@@ -216,11 +216,11 @@ const ListingPortal = () => {
               /* Sale / Rent Selection Step */
               <div className="max-w-4xl mx-auto mb-16">
                 <div className="relative">
-                  <div className="absolute inset-0 -m-4 rounded-3xl bg-[#FDFBF7]/50 border border-gold/20 shadow-[0_8px_40px_rgba(200,167,102,0.12)]" />
+                  <div className="absolute inset-0 -m-4 rounded-3xl bg-[#FDFBF7]/50 border border-[#B89555]/20 shadow-[0_8px_40px_rgba(200,167,102,0.12)]" />
                   <div className="relative p-4">
                     <button
                       onClick={() => setSelectedMethod(null)}
-                      className="flex items-center gap-2 text-[#1A1A1A]/70 hover:text-gold text-sm mb-6 transition-colors"
+                      className="flex items-center gap-2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] text-sm mb-6 transition-colors"
                     >
                       <ArrowRight className="w-4 h-4 rotate-180" />
                       Back to listing method
@@ -237,16 +237,16 @@ const ListingPortal = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
                         onClick={() => handlePurposeSelect('sale')}
-                        className="group cursor-pointer bg-[#FDFBF7] border-2 border-gold/30 rounded-2xl p-8 hover:border-gold/70 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.25)] text-center"
+                        className="group cursor-pointer bg-[#FDFBF7] border-2 border-[#B89555]/30 rounded-2xl p-8 hover:border-[#B89555]/70 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.25)] text-center"
                       >
-                        <div className="w-16 h-16 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center mx-auto mb-5">
-                          <DollarSign className="w-8 h-8 text-gold" />
+                        <div className="w-16 h-16 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-xl flex items-center justify-center mx-auto mb-5">
+                          <DollarSign className="w-8 h-8 text-[#1A1A1A]" />
                         </div>
                         <h3 className="text-xl font-bold text-[#1A1A1A] mb-2">List for Sale</h3>
                         <p className="text-[#1A1A1A]/70 text-sm mb-4">
                           Sell your property at the best market price with professional listing support.
                         </p>
-                        <div className="flex items-center justify-center gap-2 text-gold font-semibold text-sm group-hover:gap-3 transition-all">
+                        <div className="flex items-center justify-center gap-2 text-[#1A1A1A] font-semibold text-sm group-hover:gap-3 transition-all">
                           <span>Continue</span>
                           <ArrowRight className="w-4 h-4" />
                         </div>
@@ -256,16 +256,16 @@ const ListingPortal = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
                         onClick={() => handlePurposeSelect('rent')}
-                        className="group cursor-pointer bg-[#FDFBF7] border-2 border-gold/30 rounded-2xl p-8 hover:border-gold/70 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.25)] text-center"
+                        className="group cursor-pointer bg-[#FDFBF7] border-2 border-[#B89555]/30 rounded-2xl p-8 hover:border-[#B89555]/70 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.25)] text-center"
                       >
-                        <div className="w-16 h-16 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center mx-auto mb-5">
-                          <Home className="w-8 h-8 text-gold" />
+                        <div className="w-16 h-16 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-xl flex items-center justify-center mx-auto mb-5">
+                          <Home className="w-8 h-8 text-[#1A1A1A]" />
                         </div>
                         <h3 className="text-xl font-bold text-[#1A1A1A] mb-2">List for Rent</h3>
                         <p className="text-[#1A1A1A]/70 text-sm mb-4">
                           Find reliable tenants for your property with our rental listing service.
                         </p>
-                        <div className="flex items-center justify-center gap-2 text-gold font-semibold text-sm group-hover:gap-3 transition-all">
+                        <div className="flex items-center justify-center gap-2 text-[#1A1A1A] font-semibold text-sm group-hover:gap-3 transition-all">
                           <span>Continue</span>
                           <ArrowRight className="w-4 h-4" />
                         </div>
@@ -280,7 +280,7 @@ const ListingPortal = () => {
             <div className="text-center mb-8">
               <Button
                 onClick={() => navigate('/listing-portal/my-listings')}
-                className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-[#1A1A1A] hover:border-gold hover:shadow-[0_4px_20px_rgba(200,167,102,0.3)] px-8 py-3 h-auto hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
+                className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50 text-[#1A1A1A] hover:border-[#B89555] hover:shadow-[0_4px_20px_rgba(200,167,102,0.3)] px-8 py-3 h-auto hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
               >
                 <Eye className="w-4 h-4 mr-2 text-[#1A1A1A]" />
                 View My Listings
@@ -304,7 +304,7 @@ const ListingPortal = () => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search by title or location..."
-                className="pl-12 bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 h-12"
+                className="pl-12 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 h-12"
               />
             </div>
             <div className="space-y-2">
@@ -318,8 +318,8 @@ const ListingPortal = () => {
                       onClick={() => setTypeFilter(f.id)}
                       className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm border transition-all ${
                         typeFilter === f.id
-                          ? 'bg-gold/20 border-gold/50 text-gold'
-                          : 'bg-[#FDFBF7] border-gold/20 text-[#1A1A1A]/70 hover:border-gold/40'
+                          ? 'bg-[#EFE6D6]/20 border-[#B89555]/50 text-[#1A1A1A]'
+                          : 'bg-[#FDFBF7] border-[#B89555]/20 text-[#1A1A1A]/70 hover:border-[#B89555]/40'
                       }`}
                     >
                       <Icon className="w-3.5 h-3.5" />
@@ -338,8 +338,8 @@ const ListingPortal = () => {
                       onClick={() => setTypeFilter(f.id)}
                       className={`flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-full text-sm border transition-all ${
                         typeFilter === f.id
-                          ? 'bg-gold/20 border-gold/50 text-gold'
-                          : 'bg-[#FDFBF7] border-gold/20 text-[#1A1A1A]/70 hover:border-gold/40'
+                          ? 'bg-[#EFE6D6]/20 border-[#B89555]/50 text-[#1A1A1A]'
+                          : 'bg-[#FDFBF7] border-[#B89555]/20 text-[#1A1A1A]/70 hover:border-[#B89555]/40'
                       }`}
                     >
                       <Icon className="w-3.5 h-3.5" />
@@ -355,28 +355,28 @@ const ListingPortal = () => {
           <div className="max-w-5xl mx-auto">
             {/* Background layer behind listings */}
             <div className="relative">
-              <div className="absolute inset-0 -m-4 rounded-3xl bg-[#FDFBF7]/40 border border-gold/15" />
+              <div className="absolute inset-0 -m-4 rounded-3xl bg-[#FDFBF7]/40 border border-[#B89555]/15" />
               <div className="relative p-4">
                 {loading ? (
                   <div className="text-center py-20">
-                    <div className="w-8 h-8 border-2 border-gold/30 border-t-gold rounded-full animate-spin mx-auto mb-4" />
+                    <div className="w-8 h-8 border-2 border-[#B89555]/30 border-t-gold rounded-full animate-spin mx-auto mb-4" />
                     <p className="text-[#1A1A1A]/70">Loading listings...</p>
                   </div>
                 ) : filtered.length === 0 ? (
-                  <div className="text-center py-20 bg-[#FDFBF7]/60 border border-gold/20 rounded-2xl">
+                  <div className="text-center py-20 bg-[#FDFBF7]/60 border border-[#B89555]/20 rounded-2xl">
                     <Building className="w-12 h-12 text-[#1A1A1A]/70 mx-auto mb-4" />
                     <h3 className="text-[#1A1A1A] font-semibold mb-2">No listings yet</h3>
                     <p className="text-[#1A1A1A]/70 text-sm mb-4">Be the first to submit a property listing!</p>
                     <div className="flex gap-3 justify-center">
                       <Button
                         onClick={() => navigate('/seller-listing')}
-                        className="bg-gold hover:bg-gold/90 text-[#1A1A1A] border-0"
+                        className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] border-0"
                       >
                         <ClipboardCheck className="w-4 h-4 mr-2" /> Manual Listing
                       </Button>
                       <Button
                         onClick={() => navigate('/listing-portal/submit')}
-                        className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-[#1A1A1A] hover:border-gold hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
+                        className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50 text-[#1A1A1A] hover:border-[#B89555] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
                       >
                         <Wand2 className="w-4 h-4 mr-2 text-[#1A1A1A]" /> AI Listing
                       </Button>
@@ -387,7 +387,7 @@ const ListingPortal = () => {
                     {filtered.map(listing => (
                       <motion.div
                         key={listing.id}
-                        className="bg-[#FDFBF7] border-2 border-gold/20 rounded-2xl overflow-hidden hover:border-gold/50 transition-all group hover:shadow-[0_8px_30px_rgba(200,167,102,0.2)]"
+                        className="bg-[#FDFBF7] border-2 border-[#B89555]/20 rounded-2xl overflow-hidden hover:border-[#B89555]/50 transition-all group hover:shadow-[0_8px_30px_rgba(200,167,102,0.2)]"
                         whileHover={{ y: -4 }}
                       >
                         <div className="h-48 bg-[#F7F2EA] relative">
@@ -399,9 +399,9 @@ const ListingPortal = () => {
                             </div>
                           )}
                           {listing.is_featured && (
-                            <Badge className="absolute top-3 left-3 bg-gold text-[#1A1A1A] text-xs border-0">Featured</Badge>
+                            <Badge className="absolute top-3 left-3 bg-[#EFE6D6] text-[#1A1A1A] text-xs border-0">Featured</Badge>
                           )}
-                          <Badge className="absolute top-3 right-3 bg-[#FDFBF7]/90 text-[#1A1A1A]/70 text-xs border-gold/20">
+                          <Badge className="absolute top-3 right-3 bg-[#FDFBF7]/90 text-[#1A1A1A]/70 text-xs border-[#B89555]/20">
                             {listing.listing_type === 'sale' ? 'For Sale' : listing.listing_type === 'yearly_rent' ? 'Rent' : listing.listing_type.replace('_', ' ')}
                           </Badge>
                         </div>

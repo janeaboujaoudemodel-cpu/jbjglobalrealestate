@@ -70,10 +70,10 @@ const QRCodeGenerator = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
-      <div className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
+      <div className="border-b-2 border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
         <div className="container mx-auto px-4 py-8">
           <div className="text-center max-w-2xl mx-auto">
-            <div className="inline-flex items-center gap-2 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-full px-4 py-1 mb-4">
+            <div className="inline-flex items-center gap-2 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-full px-4 py-1 mb-4">
               <QrCode className="w-4 h-4 text-[#8A7356]" />
               <span className="text-[#1A1A1A] text-sm font-medium">QR Code Generator</span>
             </div>
@@ -87,13 +87,13 @@ const QRCodeGenerator = () => {
         <div className="grid md:grid-cols-2 gap-8">
           {/* Controls */}
           <div className="space-y-6">
-            <div className="bg-[#FDFBF7]/80 border border-gold/20 rounded-xl p-6 space-y-5">
+            <div className="bg-[#FDFBF7]/80 border border-[#B89555]/20 rounded-xl p-6 space-y-5">
               <div>
                 <Label className="font-semibold text-[#1A1A1A]">QR Type</Label>
                 <div className="grid grid-cols-3 gap-2 mt-2">
                   {QR_TYPES.map(t => (
                     <button key={t.id} onClick={() => { setQrType(t.id); setQrData(""); }}
-                      className={`flex items-center gap-1.5 p-2.5 rounded-lg text-xs font-medium border transition-all ${qrType === t.id ? 'bg-[#1A1A1A] text-white border-[#1A1A1A]' : 'bg-[#FDFBF7] text-[#1A1A1A]/70 border-gold/30 hover:bg-gold/10'}`}>
+                      className={`flex items-center gap-1.5 p-2.5 rounded-lg text-xs font-medium border transition-all ${qrType === t.id ? 'bg-[#1A1A1A] text-white border-[#1A1A1A]' : 'bg-[#FDFBF7] text-[#1A1A1A]/70 border-[#B89555]/30 hover:bg-[#EFE6D6]/10'}`}>
                       <t.icon className="h-3.5 w-3.5" />{t.label}
                     </button>
                   ))}
@@ -131,7 +131,7 @@ const QRCodeGenerator = () => {
 
           {/* Preview */}
           <div className="space-y-4">
-            <div className="bg-[#FDFBF7] border border-gold/20 rounded-xl p-8 flex flex-col items-center justify-center min-h-[400px]">
+            <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl p-8 flex flex-col items-center justify-center min-h-[400px]">
               {qrData ? (
                 <img src={qrUrl} alt="QR Code" className="max-w-full" style={{ width: Math.min(qrSize, 400), height: Math.min(qrSize, 400) }} />
               ) : (
@@ -145,7 +145,7 @@ const QRCodeGenerator = () => {
               <Button onClick={handleDownload} disabled={!qrData} className="flex-1 bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]">
                 <Download className="h-4 w-4 mr-2" /> Download PNG
               </Button>
-              <Button onClick={handleCopy} disabled={!qrData} variant="outline" className="flex-1 border-gold/30">
+              <Button onClick={handleCopy} disabled={!qrData} variant="outline" className="flex-1 border-[#B89555]/30">
                 <Copy className="h-4 w-4 mr-2" /> Copy
               </Button>
             </div>

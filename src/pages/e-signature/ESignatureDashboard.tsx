@@ -186,12 +186,12 @@ export default function ESignatureDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       {/* Premium Page Header — aligned with sidebar logo divider */}
-      <div className="border-b border-gold/20">
+      <div className="border-b border-[#B89555]/20">
         <div className="max-w-7xl mx-auto px-6 flex items-end h-[84px] pb-4">
           <div className="flex flex-wrap items-center gap-3">
-            <FileSignature className="w-6 h-6 text-gold" />
+            <FileSignature className="w-6 h-6 text-[#1A1A1A]" />
             <h1 className="text-2xl md:text-3xl font-bold text-white">
-              E-<span className="text-gold">Signature</span>
+              E-<span className="text-[#1A1A1A]">Signature</span>
             </h1>
           </div>
         </div>
@@ -229,7 +229,7 @@ export default function ESignatureDashboard() {
           {/* Stats Cards */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Card 
-              className={`cursor-pointer transition-all border-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] ${statusFilter === "all" ? "border-gold ring-2 ring-gold/20" : "border-gold/20 hover:border-gold/40"}`}
+              className={`cursor-pointer transition-all border-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] ${statusFilter === "all" ? "border-[#B89555] ring-2 ring-gold/20" : "border-[#B89555]/20 hover:border-[#B89555]/40"}`}
               onClick={() => setStatusFilter("all")}
             >
               <CardContent className="p-4">
@@ -244,7 +244,7 @@ export default function ESignatureDashboard() {
             </Card>
             
             <Card 
-              className={`cursor-pointer transition-all border-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] ${statusFilter === "draft" ? "border-gold ring-2 ring-gold/20" : "border-gold/20 hover:border-gold/40"}`}
+              className={`cursor-pointer transition-all border-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] ${statusFilter === "draft" ? "border-[#B89555] ring-2 ring-gold/20" : "border-[#B89555]/20 hover:border-[#B89555]/40"}`}
               onClick={() => setStatusFilter("draft")}
             >
               <CardContent className="p-4">
@@ -253,13 +253,13 @@ export default function ESignatureDashboard() {
                     <p className="text-sm text-muted-foreground">Forms Generated</p>
                     <p className="text-2xl font-bold text-foreground">{stats.draft}</p>
                   </div>
-                  <Clock className="w-8 h-8 text-amber-400" />
+                  <Clock className="w-8 h-8 text-[#1A1A1A]" />
                 </div>
               </CardContent>
             </Card>
             
             <Card 
-              className={`cursor-pointer transition-all border-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] ${statusFilter === "sent" ? "border-gold ring-2 ring-gold/20" : "border-gold/20 hover:border-gold/40"}`}
+              className={`cursor-pointer transition-all border-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] ${statusFilter === "sent" ? "border-[#B89555] ring-2 ring-gold/20" : "border-[#B89555]/20 hover:border-[#B89555]/40"}`}
               onClick={() => setStatusFilter("sent")}
             >
               <CardContent className="p-4">
@@ -274,7 +274,7 @@ export default function ESignatureDashboard() {
             </Card>
             
             <Card 
-              className={`cursor-pointer transition-all border-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] ${statusFilter === "completed" ? "border-gold ring-2 ring-gold/20" : "border-gold/20 hover:border-gold/40"}`}
+              className={`cursor-pointer transition-all border-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] ${statusFilter === "completed" ? "border-[#B89555] ring-2 ring-gold/20" : "border-[#B89555]/20 hover:border-[#B89555]/40"}`}
               onClick={() => setStatusFilter("completed")}
             >
               <CardContent className="p-4">
@@ -323,7 +323,7 @@ export default function ESignatureDashboard() {
                 placeholder="Search by client, location, doc no., 3 bed, leasing…"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-[#FDFBF7]/80 border-gold/20 focus:border-gold"
+                className="pl-10 bg-[#FDFBF7]/80 border-[#B89555]/20 focus:border-[#B89555]"
               />
             </div>
           </div>
@@ -397,7 +397,7 @@ export default function ESignatureDashboard() {
           </div>
 
           {/* Envelopes List */}
-          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/20">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/20">
             <CardHeader>
               <CardTitle className="text-foreground">Recent Documents</CardTitle>
             </CardHeader>
@@ -457,7 +457,7 @@ export default function ESignatureDashboard() {
                     return (
                       <div
                         key={envelope.id}
-                        className="rounded-lg border border-gold/20 bg-white/70 hover:border-gold/60 hover:shadow-md transition p-4 flex flex-col gap-2"
+                        className="rounded-lg border border-[#B89555]/20 bg-white/70 hover:border-[#B89555]/60 hover:shadow-md transition p-4 flex flex-col gap-2"
                       >
                         <div className="flex items-center justify-between gap-2 flex-wrap">
                           <div className="flex items-center gap-1.5 flex-wrap">
@@ -490,7 +490,7 @@ export default function ESignatureDashboard() {
                           to={`/e-signature/${envelope.id}`}
                           className="block group"
                         >
-                          <div className="text-base font-semibold text-foreground group-hover:text-gold transition truncate">
+                          <div className="text-base font-semibold text-foreground group-hover:text-[#1A1A1A] transition truncate">
                             {clientName}
                           </div>
                           {propertyCtx && (

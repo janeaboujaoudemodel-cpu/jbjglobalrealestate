@@ -259,7 +259,7 @@ export default function ReferralOnboarding() {
               <JJLogoImage variant="light" size="lg" className="w-40 h-40 md:w-48 md:h-48" />
             </div>
             <h1 className="text-2xl md:text-3xl font-bold mb-2">
-              <span className="text-gold">Join the Referral Circle</span>
+              <span className="text-[#1A1A1A]">Join the Referral Circle</span>
             </h1>
             <p className="text-[#1A1A1A] font-semibold text-lg">
               Earn 5% or 2.5% Commission
@@ -288,7 +288,7 @@ export default function ReferralOnboarding() {
                     }}
                   >
                     {currentStep > step.id ? (
-                      <CheckCircle className="w-5 h-5 text-gold" />
+                      <CheckCircle className="w-5 h-5 text-[#1A1A1A]" />
                     ) : (
                       <step.icon className={`w-5 h-5 ${currentStep >= step.id ? 'text-[#1A1A1A]' : 'text-muted-foreground'}`} />
                     )}
@@ -301,7 +301,7 @@ export default function ReferralOnboarding() {
           </div>
 
           {/* Form Card - White background with gold border */}
-          <Card className="bg-[#FDFBF7] border-2 border-gold/40 shadow-lg">
+          <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/40 shadow-lg">
             <CardContent className="p-6 md:p-8">
               <AnimatePresence mode="wait">
                 {/* Step 1: Basic Info */}
@@ -314,8 +314,8 @@ export default function ReferralOnboarding() {
                     className="space-y-6"
                   >
                     <div className="text-center mb-6">
-                      <div className="w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Users className="w-8 h-8 text-gold" />
+                      <div className="w-16 h-16 bg-[#EFE6D6]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Users className="w-8 h-8 text-[#1A1A1A]" />
                       </div>
                       <h2 className="text-xl font-semibold text-foreground">Join the Referral Circle</h2>
                       <p className="text-muted-foreground text-sm mt-1">
@@ -380,8 +380,8 @@ export default function ReferralOnboarding() {
                     className="space-y-6"
                   >
                     <div className="text-center mb-6">
-                      <div className="w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Upload className="w-8 h-8 text-gold" />
+                      <div className="w-16 h-16 bg-[#EFE6D6]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Upload className="w-8 h-8 text-[#1A1A1A]" />
                       </div>
                       <h2 className="text-xl font-semibold text-foreground">Upload Your Documents</h2>
                       <p className="text-muted-foreground text-sm mt-1">
@@ -405,7 +405,7 @@ export default function ReferralOnboarding() {
                       {/* Passport Upload */}
                       <div>
                         <Label>Passport Copy *</Label>
-                        <div className="mt-1 border-2 border-dashed border-border rounded-xl p-6 text-center hover:border-gold/50 transition-colors">
+                        <div className="mt-1 border-2 border-dashed border-border rounded-xl p-6 text-center hover:border-[#B89555]/50 transition-colors">
                           <input
                             type="file"
                             accept="image/*,.pdf"
@@ -415,7 +415,7 @@ export default function ReferralOnboarding() {
                           />
                           <label htmlFor="passport-upload" className="cursor-pointer">
                             {formData.passportFile ? (
-                              <div className="flex items-center justify-center gap-2 text-gold">
+                              <div className="flex items-center justify-center gap-2 text-[#1A1A1A]">
                                 <CheckCircle className="w-5 h-5" />
                                 <span>{formData.passportFile.name}</span>
                               </div>
@@ -434,7 +434,7 @@ export default function ReferralOnboarding() {
                       {/* Visa Upload */}
                       <div>
                         <Label>Visa Copy (if applicable)</Label>
-                        <div className="mt-1 border-2 border-dashed border-border rounded-xl p-6 text-center hover:border-gold/50 transition-colors">
+                        <div className="mt-1 border-2 border-dashed border-border rounded-xl p-6 text-center hover:border-[#B89555]/50 transition-colors">
                           <input
                             type="file"
                             accept="image/*,.pdf"
@@ -444,7 +444,7 @@ export default function ReferralOnboarding() {
                           />
                           <label htmlFor="visa-upload" className="cursor-pointer">
                             {formData.visaFile ? (
-                              <div className="flex items-center justify-center gap-2 text-gold">
+                              <div className="flex items-center justify-center gap-2 text-[#1A1A1A]">
                                 <CheckCircle className="w-5 h-5" />
                                 <span>{formData.visaFile.name}</span>
                               </div>
@@ -463,7 +463,7 @@ export default function ReferralOnboarding() {
                       {/* Emirates ID Upload */}
                       <div>
                         <Label>Emirates ID (if applicable)</Label>
-                        <div className="mt-1 border-2 border-dashed border-border rounded-xl p-6 text-center hover:border-gold/50 transition-colors">
+                        <div className="mt-1 border-2 border-dashed border-border rounded-xl p-6 text-center hover:border-[#B89555]/50 transition-colors">
                           <input
                             type="file"
                             accept="image/*,.pdf"
@@ -473,7 +473,7 @@ export default function ReferralOnboarding() {
                           />
                           <label htmlFor="emirates-upload" className="cursor-pointer">
                             {formData.emiratesIdFile ? (
-                              <div className="flex items-center justify-center gap-2 text-gold">
+                              <div className="flex items-center justify-center gap-2 text-[#1A1A1A]">
                                 <CheckCircle className="w-5 h-5" />
                                 <span>{formData.emiratesIdFile.name}</span>
                               </div>
@@ -502,8 +502,8 @@ export default function ReferralOnboarding() {
                     className="space-y-6"
                   >
                     <div className="text-center mb-6">
-                      <div className="w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <FileCheck className="w-8 h-8 text-gold" />
+                      <div className="w-16 h-16 bg-[#EFE6D6]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <FileCheck className="w-8 h-8 text-[#1A1A1A]" />
                       </div>
                       <h2 className="text-xl font-semibold text-foreground">Sign the Agreement</h2>
                       <p className="text-muted-foreground text-sm mt-1">
@@ -588,7 +588,7 @@ export default function ReferralOnboarding() {
             
               <div className="text-center py-6">
               <div className="w-20 h-20 bg-gradient-to-br from-gold/20 to-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                <PartyPopper className="w-10 h-10 text-gold" />
+                <PartyPopper className="w-10 h-10 text-[#1A1A1A]" />
               </div>
 
               <h2 className="text-2xl font-bold text-foreground mb-2">
@@ -601,7 +601,7 @@ export default function ReferralOnboarding() {
               {referralCode && (
                 <div className="bg-muted/50 rounded-xl p-4 mb-6">
                   <p className="text-sm text-muted-foreground mb-2">Your Referral Code:</p>
-                  <p className="text-2xl font-bold text-gold">{referralCode}</p>
+                  <p className="text-2xl font-bold text-[#1A1A1A]">{referralCode}</p>
                 </div>
               )}
 
@@ -615,7 +615,7 @@ export default function ReferralOnboarding() {
                   <span>Welcome email sent to {formData.email}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Sparkles className="w-4 h-4 text-gold" />
+                  <Sparkles className="w-4 h-4 text-[#1A1A1A]" />
                   <span>Earn 5% or 2.5% commission on successful referrals</span>
                 </div>
               </div>

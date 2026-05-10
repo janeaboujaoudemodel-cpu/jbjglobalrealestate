@@ -29,7 +29,7 @@ const MeetingCenter = () => {
     <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       {/* Back Button */}
       <div className="max-w-6xl mx-auto px-4 pt-6">
-        <Button variant="outline" size="sm" onClick={() => window.history.back()} className="border-gold/30 text-[#1A1A1A] hover:bg-gold/10">
+        <Button variant="outline" size="sm" onClick={() => window.history.back()} className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
           <Calendar className="w-4 h-4 mr-2" />
           Back
         </Button>
@@ -38,13 +38,13 @@ const MeetingCenter = () => {
       {/* Hero Section */}
       <div className="relative py-12 px-4 overflow-hidden">
         <div className="relative max-w-6xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/30 rounded-full mb-6">
-            <Calendar className="w-5 h-5 text-gold" />
-            <span className="text-gold-dark font-medium text-sm">Communication Hub</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full mb-6">
+            <Calendar className="w-5 h-5 text-[#1A1A1A]" />
+            <span className="text-[#1A1A1A]-dark font-medium text-sm">Communication Hub</span>
           </div>
           
           <h1 className="text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-4">
-            Meeting <span className="text-gold">Center</span>
+            Meeting <span className="text-[#1A1A1A]">Center</span>
           </h1>
           
           <p className="text-lg text-[#1A1A1A]/70 max-w-2xl mx-auto mb-8">
@@ -54,7 +54,7 @@ const MeetingCenter = () => {
 
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Link to="/ai-meeting-summarizer">
-              <Button className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-gold/40 hover:brightness-105">
+              <Button className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/40 hover:brightness-105">
                 <Video className="w-4 h-4 mr-2" />
                 New Meeting Summary
               </Button>
@@ -78,14 +78,14 @@ const MeetingCenter = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by client name or content..."
-              className="pl-10 bg-[#FDFBF7] border-gold/20 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
+              className="pl-10 bg-[#FDFBF7] border-[#B89555]/20 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
             />
           </div>
         </div>
 
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="bg-[#FDFBF7]/80 border-2 border-gold/30 mb-6 flex-wrap h-auto p-1">
+          <TabsList className="bg-[#FDFBF7]/80 border-2 border-[#B89555]/30 mb-6 flex-wrap h-auto p-1">
             <TabsTrigger value="all" className="tab-trigger-champagne text-[#1A1A1A]">
               <Calendar className="w-4 h-4 mr-2" />
               All
@@ -106,12 +106,12 @@ const MeetingCenter = () => {
 
           <TabsContent value={activeTab}>
             {isLoading ? (
-              <div className="text-center py-16 bg-[#FDFBF7]/60 rounded-2xl border border-gold/20">
-                <Loader2 className="w-8 h-8 text-gold mx-auto mb-4 animate-spin" />
+              <div className="text-center py-16 bg-[#FDFBF7]/60 rounded-2xl border border-[#B89555]/20">
+                <Loader2 className="w-8 h-8 text-[#1A1A1A] mx-auto mb-4 animate-spin" />
                 <p className="text-[#1A1A1A]/70">Loading summaries...</p>
               </div>
             ) : filteredSummaries.length === 0 ? (
-              <div className="text-center py-16 bg-[#FDFBF7]/60 rounded-2xl border border-gold/20">
+              <div className="text-center py-16 bg-[#FDFBF7]/60 rounded-2xl border border-[#B89555]/20">
                 <Calendar className="w-12 h-12 text-[#1A1A1A]/70 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">No summaries yet</h3>
                 <p className="text-[#1A1A1A]/70 mb-6">
@@ -122,7 +122,7 @@ const MeetingCenter = () => {
                 </p>
                 <div className="flex justify-center gap-4">
                   <Link to="/ai-meeting-summarizer">
-                    <Button className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-gold/40">
+                    <Button className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/40">
                       <Plus className="w-4 h-4 mr-2" />
                       Add Meeting
                     </Button>

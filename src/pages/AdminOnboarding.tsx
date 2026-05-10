@@ -525,7 +525,7 @@ export default function AdminOnboarding() {
   if (authLoading || loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-gold" />
+        <Loader2 className="h-8 w-8 animate-spin text-[#1A1A1A]" />
       </div>
     );
   }
@@ -580,7 +580,7 @@ export default function AdminOnboarding() {
           <Card className="bg-card border-border">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <BookOpen className="h-8 w-8 text-gold" />
+                <BookOpen className="h-8 w-8 text-[#1A1A1A]" />
                 <div>
                   <p className="text-2xl font-bold text-foreground">{modules.length}</p>
                   <p className="text-sm text-muted-foreground">Training Modules</p>
@@ -695,7 +695,7 @@ export default function AdminOnboarding() {
                   resetModuleForm();
                   setShowModuleDialog(true);
                 }}
-                className="bg-gold hover:bg-gold/90 text-[#1A1A1A]"
+                className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]"
               >
                 <Plus className="h-4 w-4 mr-2" />
                 Add Module
@@ -771,7 +771,7 @@ export default function AdminOnboarding() {
                   resetQuestionForm();
                   setShowQuestionDialog(true);
                 }}
-                className="bg-gold hover:bg-gold/90 text-[#1A1A1A]"
+                className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]"
                 disabled={!selectedModuleForQuestion}
               >
                 <Plus className="h-4 w-4 mr-2" />
@@ -884,7 +884,7 @@ export default function AdminOnboarding() {
                 <Button 
                   onClick={handleSaveThresholds} 
                   disabled={processing}
-                  className="bg-gold hover:bg-gold/90 text-[#1A1A1A]"
+                  className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]"
                 >
                   {processing ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
                   Save Thresholds
@@ -1068,7 +1068,7 @@ export default function AdminOnboarding() {
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setShowModuleDialog(false)}>Cancel</Button>
-              <Button onClick={handleSaveModule} disabled={processing} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
+              <Button onClick={handleSaveModule} disabled={processing} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
                 {processing ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
                 Save Module
               </Button>
@@ -1147,7 +1147,7 @@ export default function AdminOnboarding() {
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setShowQuestionDialog(false)}>Cancel</Button>
-              <Button onClick={handleSaveQuestion} disabled={processing} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
+              <Button onClick={handleSaveQuestion} disabled={processing} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
                 {processing ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
                 Save Question
               </Button>

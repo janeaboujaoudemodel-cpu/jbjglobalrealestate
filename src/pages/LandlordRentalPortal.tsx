@@ -121,7 +121,7 @@ export default function LandlordRentalPortal() {
             animate={{ opacity: 1, y: 0 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <Badge className="mb-4 bg-gradient-to-r from-gold/20 to-champagne/20 text-foreground border-gold/30">
+            <Badge className="mb-4 bg-gradient-to-r from-gold/20 to-champagne/20 text-foreground border-[#B89555]/30">
               <Home className="h-3 w-3 mr-1" />
               Landlord Portal
             </Badge>
@@ -148,7 +148,7 @@ export default function LandlordRentalPortal() {
                 size="lg"
                 variant="outline"
                 onClick={() => setActiveTab('guide')}
-                className="h-14 px-8 text-lg border-gold/30 hover:bg-gold/5"
+                className="h-14 px-8 text-lg border-[#B89555]/30 hover:bg-[#EFE6D6]/5"
               >
                 How It Works
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -169,10 +169,10 @@ export default function LandlordRentalPortal() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Card className="icon-tile h-full bg-[#FDFBF7]/80 backdrop-blur-sm border border-gold/30 hover:border-gold/60 transition-colors hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] rounded-2xl">
+                <Card className="icon-tile h-full bg-[#FDFBF7]/80 backdrop-blur-sm border border-[#B89555]/30 hover:border-[#B89555]/60 transition-colors hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] rounded-2xl">
                   <CardContent className="p-6">
                     <div className="w-12 h-12 rounded-xl bg-[#1A1A1A] flex items-center justify-center mb-4">
-                      <benefit.icon className="h-6 w-6 text-gold" />
+                      <benefit.icon className="h-6 w-6 text-[#1A1A1A]" />
                     </div>
                     <h3 className="font-semibold mb-2 text-[#1A1A1A]">{benefit.title}</h3>
                     <p className="text-sm text-[#1A1A1A]/70">{benefit.description}</p>
@@ -188,21 +188,21 @@ export default function LandlordRentalPortal() {
       <section className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <div className="container mx-auto px-4">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="bg-[#FDFBF7]/60 border border-gold/30 mb-8">
-              <TabsTrigger value="overview" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]">
+            <TabsList className="bg-[#FDFBF7]/60 border border-[#B89555]/30 mb-8">
+              <TabsTrigger value="overview" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
                 Overview
               </TabsTrigger>
-              <TabsTrigger value="guide" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]">
+              <TabsTrigger value="guide" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
                 Landlord Guide
               </TabsTrigger>
-              <TabsTrigger value="list-property" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]">
+              <TabsTrigger value="list-property" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
                 List Property
               </TabsTrigger>
               {isAuthenticated && (
-                <TabsTrigger value="my-listings" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]">
+                <TabsTrigger value="my-listings" className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A]">
                   My Listings
                   {listings.length > 0 && (
-                    <Badge variant="secondary" className="ml-2 bg-zinc-700">
+                    <Badge variant="secondary" className="ml-2 bg-[#EFE6D6]">
                       {listings.length}
                     </Badge>
                   )}
@@ -213,7 +213,7 @@ export default function LandlordRentalPortal() {
             {/* Overview Tab */}
             <TabsContent value="overview" className="space-y-8">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <Card className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
+                <Card className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-[#B89555]/30 rounded-2xl shadow-sm">
                   <CardHeader>
                     <CardTitle className="text-[#1A1A1A]">Why List With Us?</CardTitle>
                     <CardDescription className="text-[#1A1A1A]/70">
@@ -237,7 +237,7 @@ export default function LandlordRentalPortal() {
                   </CardContent>
                 </Card>
 
-                <Card className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
+                <Card className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-[#B89555]/30 rounded-2xl shadow-sm">
                   <CardHeader>
                     <CardTitle className="text-[#1A1A1A]">Approval Process</CardTitle>
                     <CardDescription className="text-[#1A1A1A]/70">
@@ -276,7 +276,7 @@ export default function LandlordRentalPortal() {
 
             {/* Guide Tab */}
             <TabsContent value="guide" className="space-y-8">
-              <Card className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
+              <Card className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-[#B89555]/30 rounded-2xl shadow-sm">
                 <CardHeader>
                   <CardTitle className="text-[#1A1A1A]">Complete Landlord Guide</CardTitle>
                   <CardDescription className="text-[#1A1A1A]/70">
@@ -293,7 +293,7 @@ export default function LandlordRentalPortal() {
                       className="relative"
                     >
                       {index < LANDLORD_GUIDE_STEPS.length - 1 && (
-                        <div className="absolute left-4 top-12 bottom-0 w-0.5 bg-gold/20" />
+                        <div className="absolute left-4 top-12 bottom-0 w-0.5 bg-[#EFE6D6]/20" />
                       )}
                       <div className="flex gap-6">
                         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gold to-champagne flex items-center justify-center flex-shrink-0 text-[#1A1A1A] font-bold z-10">
@@ -324,9 +324,9 @@ export default function LandlordRentalPortal() {
             {/* List Property Tab */}
             <TabsContent value="list-property">
               {!isAuthenticated ? (
-              <Card className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
+              <Card className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-[#B89555]/30 rounded-2xl shadow-sm">
                   <CardContent className="py-12 text-center">
-                    <Building2 className="h-16 w-16 text-gold mx-auto mb-4" />
+                    <Building2 className="h-16 w-16 text-[#1A1A1A] mx-auto mb-4" />
                     <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">
                       Sign In to List Your Property
                     </h3>
@@ -342,7 +342,7 @@ export default function LandlordRentalPortal() {
                   </CardContent>
                 </Card>
               ) : (
-                <Card className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
+                <Card className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-[#B89555]/30 rounded-2xl shadow-sm">
                   <CardHeader>
                     <CardTitle className="text-[#1A1A1A]">Submit Your Rental Listing</CardTitle>
                     <CardDescription className="text-[#1A1A1A]/70">
@@ -361,11 +361,11 @@ export default function LandlordRentalPortal() {
               <TabsContent value="my-listings" className="space-y-6">
                 {isLoading ? (
                   <div className="text-center py-12">
-                    <div className="animate-spin h-8 w-8 border-4 border-gold border-t-transparent rounded-full mx-auto" />
+                    <div className="animate-spin h-8 w-8 border-4 border-[#B89555] border-t-transparent rounded-full mx-auto" />
                     <p className="text-[#1A1A1A]/70 mt-4">Loading your listings...</p>
                   </div>
                 ) : listings.length === 0 ? (
-                  <Card className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
+                  <Card className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-[#B89555]/30 rounded-2xl shadow-sm">
                     <CardContent className="py-12 text-center">
                       <Home className="h-16 w-16 text-[#1A1A1A]/70 mx-auto mb-4" />
                       <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">
@@ -387,7 +387,7 @@ export default function LandlordRentalPortal() {
                     {listings.map((listing) => {
                       const approvalStatus = getApprovalStatus(listing);
                       return (
-                        <Card key={listing.id} className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
+                        <Card key={listing.id} className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-[#B89555]/30 rounded-2xl shadow-sm">
                           <CardContent className="p-6">
                             <div className="flex flex-col lg:flex-row gap-6">
                               {/* Listing Info */}
@@ -440,7 +440,7 @@ export default function LandlordRentalPortal() {
                               </div>
 
                               {/* Approval Timeline */}
-                              <div className="lg:w-96 lg:border-l lg:border-gold/20 lg:pl-6">
+                              <div className="lg:w-96 lg:border-l lg:border-[#B89555]/20 lg:pl-6">
                                 <ApprovalWorkflowTimeline
                                   steps={approvalStatus.steps}
                                   currentStep={approvalStatus.currentStep}

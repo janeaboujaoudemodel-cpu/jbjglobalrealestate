@@ -121,7 +121,7 @@ const ExternalAccessManagement = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-              <Shield className="w-6 h-6 text-gold" />
+              <Shield className="w-6 h-6 text-[#1A1A1A]" />
               External Access Management
             </h1>
             <p className="text-white/70 text-sm mt-1">
@@ -136,7 +136,7 @@ const ExternalAccessManagement = () => {
         </div>
 
         {/* Active Users */}
-        <div className="bg-zinc-900/50 rounded-xl border border-[#1A1A1A] overflow-hidden">
+        <div className="bg-[#FDFBF7]/50 rounded-xl border border-[#1A1A1A] overflow-hidden">
           <div className="px-5 py-4 border-b border-[#1A1A1A]">
             <h2 className="text-lg font-semibold text-white">External Users</h2>
           </div>
@@ -190,7 +190,7 @@ const ExternalAccessManagement = () => {
 
                   {/* Expanded: Session History */}
                   {expandedUser === auditor.user_id && (
-                    <div className="px-5 pb-4 bg-zinc-950/50">
+                    <div className="px-5 pb-4 bg-[#FDFBF7]/50">
                       <h3 className="text-sm font-semibold text-white/85 mb-3 flex items-center gap-2">
                         <Clock className="w-4 h-4" />
                         Session History
@@ -200,7 +200,7 @@ const ExternalAccessManagement = () => {
                       ) : (
                         <div className="space-y-2 max-h-60 overflow-y-auto">
                           {sessions.map((s: any) => (
-                            <div key={s.id} className="bg-zinc-900 rounded-lg p-3 text-xs">
+                            <div key={s.id} className="bg-[#FDFBF7] rounded-lg p-3 text-xs">
                               <div className="flex justify-between text-white/70">
                                 <span>{formatDate(s.session_start)}</span>
                                 <span>{s.total_time_seconds ? `${Math.round(s.total_time_seconds / 60)}min` : "In progress"}</span>
@@ -233,10 +233,10 @@ const ExternalAccessManagement = () => {
         </div>
 
         {/* Feedback Inbox */}
-        <div className="bg-zinc-900/50 rounded-xl border border-[#1A1A1A] overflow-hidden">
+        <div className="bg-[#FDFBF7]/50 rounded-xl border border-[#1A1A1A] overflow-hidden">
           <div className="px-5 py-4 border-b border-[#1A1A1A]">
             <h2 className="text-lg font-semibold text-white flex items-center gap-2">
-              <MessageSquare className="w-5 h-5 text-gold" />
+              <MessageSquare className="w-5 h-5 text-[#1A1A1A]" />
               Auditor Feedback Inbox
               {unreadCount > 0 && (
                 <Badge className="bg-red-500 text-white text-xs ml-2">{unreadCount} new</Badge>
@@ -251,7 +251,7 @@ const ExternalAccessManagement = () => {
               {feedback.map((f: any) => (
                 <div
                   key={f.id}
-                  className={`px-5 py-4 ${f.status === "new" ? "bg-gold/5" : ""}`}
+                  className={`px-5 py-4 ${f.status === "new" ? "bg-[#EFE6D6]/5" : ""}`}
                 >
                   <div className="flex items-start gap-4">
                     {/* Screenshot thumbnail */}
@@ -265,7 +265,7 @@ const ExternalAccessManagement = () => {
                       <div className="flex items-center gap-2 mb-1">
                         <Badge className={
                           f.feedback_type === "task" ? "bg-blue-500/20 text-blue-400 border-blue-500/40" :
-                          f.feedback_type === "screenshot_note" ? "bg-amber-500/20 text-amber-400 border-amber-500/40" :
+                          f.feedback_type === "screenshot_note" ? "bg-amber-500/20 text-[#1A1A1A] border-amber-500/40" :
                           "bg-[#B89555]/20 text-white/70 border-[#B89555]/30/40"
                         }>
                           {f.feedback_type === "task" ? "Task" : f.feedback_type === "screenshot_note" ? "Screenshot" : "Message"}
@@ -277,14 +277,14 @@ const ExternalAccessManagement = () => {
                       {f.note_text && <p className="text-white/85 text-sm mb-1">{f.note_text}</p>}
 
                       {f.prompt_text && (
-                        <div className="bg-zinc-950 rounded-lg p-3 mt-2 relative group">
+                        <div className="bg-[#FDFBF7] rounded-lg p-3 mt-2 relative group">
                           <p className="text-white/70 text-xs font-mono whitespace-pre-wrap">{f.prompt_text}</p>
                           <button
                             onClick={() => {
                               navigator.clipboard.writeText(f.prompt_text);
                               toast.success("Prompt copied!");
                             }}
-                            className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity text-gold hover:text-white"
+                            className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity text-[#1A1A1A] hover:text-white"
                             title="Copy prompt"
                           >
                             <Copy className="w-4 h-4" />

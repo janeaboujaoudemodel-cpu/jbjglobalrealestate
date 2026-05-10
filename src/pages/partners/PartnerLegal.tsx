@@ -88,7 +88,7 @@ const PartnerLegal = () => {
             {/* Back Link */}
             <Link 
               to="/partners" 
-              className="inline-flex items-center gap-2 text-muted-foreground hover:text-gold transition-colors mb-8"
+              className="inline-flex items-center gap-2 text-muted-foreground hover:text-[#1A1A1A] transition-colors mb-8"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to Partner Services
@@ -110,8 +110,8 @@ const PartnerLegal = () => {
               className="max-w-4xl"
             >
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-16 h-16 bg-gold/10 border border-gold/30 rounded-xl flex items-center justify-center">
-                  <Scale className="w-8 h-8 text-gold" />
+                <div className="w-16 h-16 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-xl flex items-center justify-center">
+                  <Scale className="w-8 h-8 text-[#1A1A1A]" />
                 </div>
                 <div>
                   <h1 className="text-4xl md:text-5xl font-bold">Legal Partners</h1>
@@ -144,10 +144,10 @@ const PartnerLegal = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
                   >
-                    <Card className="h-full border-border/50 hover:border-gold/30 transition-colors">
+                    <Card className="h-full border-border/50 hover:border-[#B89555]/30 transition-colors">
                       <CardHeader>
-                        <div className="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center mb-4">
-                          <feature.icon className="w-6 h-6 text-gold" />
+                        <div className="w-12 h-12 bg-[#EFE6D6]/10 rounded-lg flex items-center justify-center mb-4">
+                          <feature.icon className="w-6 h-6 text-[#1A1A1A]" />
                         </div>
                         <CardTitle className="text-lg">{feature.title}</CardTitle>
                       </CardHeader>
@@ -174,7 +174,7 @@ const PartnerLegal = () => {
               <div className="grid md:grid-cols-4 gap-6">
                 {PROCESS_STEPS.map((item) => (
                   <div key={item.step} className="text-center">
-                    <div className="w-12 h-12 bg-gold text-[#1A1A1A] rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+                    <div className="w-12 h-12 bg-[#EFE6D6] text-[#1A1A1A] rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
                       {item.step}
                     </div>
                     <h3 className="font-semibold mb-2">{item.title}</h3>
@@ -197,15 +197,15 @@ const PartnerLegal = () => {
                   <h3 className="font-semibold mb-3 text-lg">For Buyers</h3>
                   <ul className="space-y-2 text-muted-foreground">
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-gold mt-1 flex-shrink-0" />
+                      <CheckCircle className="w-4 h-4 text-[#1A1A1A] mt-1 flex-shrink-0" />
                       Contract review ensures all terms are clearly understood
                     </li>
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-gold mt-1 flex-shrink-0" />
+                      <CheckCircle className="w-4 h-4 text-[#1A1A1A] mt-1 flex-shrink-0" />
                       Title deed verification confirms clean ownership
                     </li>
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-gold mt-1 flex-shrink-0" />
+                      <CheckCircle className="w-4 h-4 text-[#1A1A1A] mt-1 flex-shrink-0" />
                       Due diligence protects against hidden liabilities
                     </li>
                   </ul>
@@ -215,15 +215,15 @@ const PartnerLegal = () => {
                   <h3 className="font-semibold mb-3 text-lg">For Sellers</h3>
                   <ul className="space-y-2 text-muted-foreground">
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-gold mt-1 flex-shrink-0" />
+                      <CheckCircle className="w-4 h-4 text-[#1A1A1A] mt-1 flex-shrink-0" />
                       Proper documentation ensures smooth transfer
                     </li>
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-gold mt-1 flex-shrink-0" />
+                      <CheckCircle className="w-4 h-4 text-[#1A1A1A] mt-1 flex-shrink-0" />
                       Legal representation in negotiations
                     </li>
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-gold mt-1 flex-shrink-0" />
+                      <CheckCircle className="w-4 h-4 text-[#1A1A1A] mt-1 flex-shrink-0" />
                       Compliance with all regulatory requirements
                     </li>
                   </ul>
@@ -233,15 +233,15 @@ const PartnerLegal = () => {
                   <h3 className="font-semibold mb-3 text-lg">For Investors</h3>
                   <ul className="space-y-2 text-muted-foreground">
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-gold mt-1 flex-shrink-0" />
+                      <CheckCircle className="w-4 h-4 text-[#1A1A1A] mt-1 flex-shrink-0" />
                       Corporate structuring advice for optimal ownership
                     </li>
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-gold mt-1 flex-shrink-0" />
+                      <CheckCircle className="w-4 h-4 text-[#1A1A1A] mt-1 flex-shrink-0" />
                       Multi-property portfolio legal management
                     </li>
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-gold mt-1 flex-shrink-0" />
+                      <CheckCircle className="w-4 h-4 text-[#1A1A1A] mt-1 flex-shrink-0" />
                       Cross-border legal considerations
                     </li>
                   </ul>
@@ -258,7 +258,7 @@ const PartnerLegal = () => {
               <Card className="border-[#B89555]/30 bg-[#FDFBF7] shadow-sm">
                 <CardHeader className="text-center">
                   <div className="w-16 h-16 bg-[#1A1A1A] rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Users className="w-8 h-8 text-gold" />
+                    <Users className="w-8 h-8 text-[#1A1A1A]" />
                   </div>
                   <CardTitle className="text-2xl text-[#1A1A1A]">Request Partner Introduction</CardTitle>
                 </CardHeader>

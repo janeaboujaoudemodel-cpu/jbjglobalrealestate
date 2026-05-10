@@ -246,9 +246,9 @@ END:VCARD`;
       title: "Location",
       value: "Dubai, United Arab Emirates",
       action: null,
-      iconColor: "text-gold",
+      iconColor: "text-[#1A1A1A]",
       titleColor: "text-[#1A1A1A]",
-      valueColor: "text-gold",
+      valueColor: "text-[#1A1A1A]",
       clickable: false,
     },
     {
@@ -256,9 +256,9 @@ END:VCARD`;
       title: "Phone",
       value: "+971-5659-11000",
       action: 'phone-actions',
-      iconColor: "text-gold",
+      iconColor: "text-[#1A1A1A]",
       titleColor: "text-[#1A1A1A]",
-      valueColor: "text-gold hover:underline",
+      valueColor: "text-[#1A1A1A] hover:underline",
       clickable: true,
     },
     {
@@ -266,9 +266,9 @@ END:VCARD`;
       title: "Email",
       value: CONTACT_INFO.email,
       action: getEmailUrl(),
-      iconColor: "text-gold",
+      iconColor: "text-[#1A1A1A]",
       titleColor: "text-[#1A1A1A]",
-      valueColor: "text-gold hover:underline",
+      valueColor: "text-[#1A1A1A] hover:underline",
       clickable: true,
     },
     {
@@ -276,9 +276,9 @@ END:VCARD`;
       title: "Business Hours",
       value: "Mon–Sun | 9AM–9PM UAE",
       action: null,
-      iconColor: "text-gold",
+      iconColor: "text-[#1A1A1A]",
       titleColor: "text-[#1A1A1A]",
-      valueColor: "text-gold",
+      valueColor: "text-[#1A1A1A]",
       clickable: false,
     },
   ];
@@ -314,9 +314,9 @@ END:VCARD`;
       {/* Contact Cards - 3-Layer System with thin black contour */}
       <section className="py-10 bg-[#1A1A1A]">
         {/* Thin black contour + Active Champagne Layer */}
-        <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
+        <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-[#B89555]/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
           {/* Inner Champagne Layer */}
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6 md:p-10 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-10 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
             <div className="mb-6 h-px w-full bg-gradient-to-r from-transparent via-gold/70 to-transparent" />
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
               {contactCards.map((card) => (
@@ -327,10 +327,10 @@ END:VCARD`;
                     else if (card.action === "meeting") setMeetingModalOpen(true);
                     else if (card.action && card.clickable) window.location.href = card.action;
                   }}
-                  className={`group bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold rounded-xl p-5 transition-all duration-300 hover:border-[#1A1A1A] hover:shadow-[0_0_25px_rgba(200,167,102,0.28),0_18px_50px_rgba(0,0,0,0.35)] hover:-translate-y-1 hover:scale-[1.02] ${card.clickable ? "cursor-pointer" : ""}`}
+                  className={`group bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] rounded-xl p-5 transition-all duration-300 hover:border-[#1A1A1A] hover:shadow-[0_0_25px_rgba(200,167,102,0.28),0_18px_50px_rgba(0,0,0,0.35)] hover:-translate-y-1 hover:scale-[1.02] ${card.clickable ? "cursor-pointer" : ""}`}
                 >
-                  <div className="w-10 h-10 bg-transparent border-2 border-gold/50 rounded-lg flex items-center justify-center mb-3 transition-all duration-300 group-hover:border-[#1A1A1A] group-hover:bg-gold/10 group-hover:scale-110">
-                    <card.icon className="w-5 h-5 text-gold transition-all duration-300 group-hover:text-[#1A1A1A]" />
+                  <div className="w-10 h-10 bg-transparent border-2 border-[#B89555]/50 rounded-lg flex items-center justify-center mb-3 transition-all duration-300 group-hover:border-[#1A1A1A] group-hover:bg-[#EFE6D6]/10 group-hover:scale-110">
+                    <card.icon className="w-5 h-5 text-[#1A1A1A] transition-all duration-300 group-hover:text-[#1A1A1A]" />
                   </div>
                   <h3 className="font-semibold text-sm mb-1 text-[#1A1A1A] transition-colors">{card.title}</h3>
                   <p className="text-sm font-medium text-[#1A1A1A]/80 transition-colors group-hover:text-[#1A1A1A]">{card.value}</p>
@@ -344,12 +344,12 @@ END:VCARD`;
       {/* Consultation Form Section - Form IS the 3rd layer (directly on active champagne, no extra pearl wrapper) */}
       <section className="py-16 md:py-20 bg-[#1A1A1A]">
         {/* Thin black contour + Active Champagne Layer */}
-        <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-4 md:p-6">
+        <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-[#B89555]/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-4 md:p-6">
           {/* Form IS the 3rd layer - champagne pearl styling */}
           <div className="max-w-3xl mx-auto">
             {isSuccess ? (
               /* Success State */
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold rounded-2xl p-8 md:p-12 text-center shadow-[0_8px_30px_rgba(200,167,102,0.35)]">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] rounded-2xl p-8 md:p-12 text-center shadow-[0_8px_30px_rgba(200,167,102,0.35)]">
                 <div className="w-20 h-20 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-green-500/30">
                   <CheckCircle className="w-10 h-10 text-white" />
                 </div>
@@ -359,8 +359,8 @@ END:VCARD`;
                 <p className="text-[#1A1A1A]/70 text-lg mb-6">
                   We have received your consultation request and will be in touch soon.
                 </p>
-                <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-xl p-6 text-left max-w-md mx-auto">
-                  <h3 className="text-gold font-semibold mb-3 text-sm uppercase tracking-wider">Contact Information</h3>
+                <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-xl p-6 text-left max-w-md mx-auto">
+                  <h3 className="text-[#1A1A1A] font-semibold mb-3 text-sm uppercase tracking-wider">Contact Information</h3>
                   <div className="space-y-2 text-sm">
                     <p className="text-[#1A1A1A]"><span className="text-[#1A1A1A]/70">Phone:</span> {CONTACT_INFO.phone}</p>
                     <p className="text-[#1A1A1A]"><span className="text-[#1A1A1A]/70">Email:</span> {CONTACT_INFO.email}</p>
@@ -377,10 +377,10 @@ END:VCARD`;
               </div>
             ) : (
               /* Form */
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold rounded-2xl p-6 md:p-10 shadow-[0_8px_30px_rgba(200,167,102,0.35),0_4px_15px_rgba(0,0,0,0.15)]">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] rounded-2xl p-6 md:p-10 shadow-[0_8px_30px_rgba(200,167,102,0.35),0_4px_15px_rgba(0,0,0,0.15)]">
                 <div className="text-center mb-8">
                   <div className="w-14 h-14 bg-[#1A1A1A] rounded-xl flex items-center justify-center mx-auto mb-4">
-                    <Shield className="w-7 h-7 text-gold" />
+                    <Shield className="w-7 h-7 text-[#1A1A1A]" />
                   </div>
                   <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-2">
                     Request a Consultation
@@ -403,7 +403,7 @@ END:VCARD`;
                             <FormControl>
                                <Input 
                                 {...field} 
-                                className="h-12 border-2 border-gold/40 hover:border-gold focus:border-gold rounded-lg"
+                                className="h-12 border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] rounded-lg"
                                 placeholder="John Doe"
                               />
                             </FormControl>
@@ -423,7 +423,7 @@ END:VCARD`;
                                 <Input 
                                   {...field} 
                                   type="email"
-                                className="h-12 border-2 border-gold/40 hover:border-gold focus:border-gold rounded-lg"
+                                className="h-12 border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] rounded-lg"
                                   placeholder="email@example.com"
                                 />
                               </FormControl>
@@ -525,7 +525,7 @@ END:VCARD`;
                             <FormControl>
                               <Input 
                                 {...field} 
-                                className="h-12 border-2 border-gold/40 hover:border-gold focus:border-gold rounded-lg"
+                                className="h-12 border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] rounded-lg"
                                 placeholder="e.g., Dubai, UAE or London, UK"
                               />
                             </FormControl>
@@ -547,7 +547,7 @@ END:VCARD`;
                             <FormLabel className="text-[#1A1A1A]/70 text-sm font-medium">Service Needed *</FormLabel>
                             <Select onValueChange={field.onChange} value={field.value}>
                               <FormControl>
-                                <SelectTrigger className="h-12 border-2 border-gold/40 hover:border-gold focus:border-gold rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
+                                <SelectTrigger className="h-12 border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
                                    <SelectValue placeholder="Select a service" />
                                 </SelectTrigger>
                               </FormControl>
@@ -573,7 +573,7 @@ END:VCARD`;
                               <FormLabel className="text-[#1A1A1A]/70 text-sm font-medium">Budget Range (Optional)</FormLabel>
                               <Select onValueChange={field.onChange} value={field.value}>
                                 <FormControl>
-                                   <SelectTrigger className="h-12 border-2 border-gold/40 hover:border-gold focus:border-gold rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
+                                   <SelectTrigger className="h-12 border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
                                      <SelectValue placeholder="Select budget" />
                                   </SelectTrigger>
                                 </FormControl>
@@ -597,7 +597,7 @@ END:VCARD`;
                               <FormLabel className="text-[#1A1A1A]/70 text-sm font-medium">Timeline (Optional)</FormLabel>
                               <Select onValueChange={field.onChange} value={field.value}>
                                 <FormControl>
-                                   <SelectTrigger className="h-12 border-2 border-gold/40 hover:border-gold focus:border-gold rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
+                                   <SelectTrigger className="h-12 border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
                                      <SelectValue placeholder="Select timeline" />
                                   </SelectTrigger>
                                 </FormControl>
@@ -624,7 +624,7 @@ END:VCARD`;
                             <FormControl>
                               <Input 
                                 {...field} 
-                                className="h-12 border-2 border-gold/40 hover:border-gold focus:border-gold rounded-lg uppercase"
+                                className="h-12 border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] rounded-lg uppercase"
                                 placeholder="e.g., JJ-ABC123"
                                 onChange={(e) => field.onChange(e.target.value.toUpperCase())}
                               />
@@ -646,7 +646,7 @@ END:VCARD`;
                             <FormControl>
                               <Textarea 
                                 {...field} 
-                                className="min-h-[100px] border-2 border-gold/40 hover:border-gold focus:border-gold resize-none rounded-lg"
+                                className="min-h-[100px] border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] resize-none rounded-lg"
                                 placeholder="Tell us more about your requirements..."
                               />
                             </FormControl>
@@ -669,7 +669,7 @@ END:VCARD`;
                               <Checkbox 
                                 checked={field.value} 
                                 onCheckedChange={field.onChange}
-                                className="border-[#B89555]/30 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+                                className="border-[#B89555]/30 data-[state=checked]:bg-[#EFE6D6] data-[state=checked]:border-[#B89555] mt-0.5"
                               />
                             </FormControl>
                             <div className="space-y-1 leading-none">
@@ -691,15 +691,15 @@ END:VCARD`;
                               <Checkbox 
                                 checked={field.value} 
                                 onCheckedChange={field.onChange}
-                                className="border-[#B89555]/30 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+                                className="border-[#B89555]/30 data-[state=checked]:bg-[#EFE6D6] data-[state=checked]:border-[#B89555] mt-0.5"
                               />
                             </FormControl>
                             <div className="space-y-1 leading-none">
                               <FormLabel className="text-[#1A1A1A]/70 text-sm font-normal cursor-pointer">
                                 I agree to the{" "}
-                                <Link to="/terms" className="text-gold hover:underline">Terms of Service</Link>
+                                <Link to="/terms" className="text-[#1A1A1A] hover:underline">Terms of Service</Link>
                                 {" "}and{" "}
-                                <Link to="/privacy" className="text-gold hover:underline">Privacy Policy</Link>. *
+                                <Link to="/privacy" className="text-[#1A1A1A] hover:underline">Privacy Policy</Link>. *
                               </FormLabel>
                               <FormMessage className="text-red-500 text-xs" />
                             </div>
@@ -716,7 +716,7 @@ END:VCARD`;
                               <Checkbox 
                                 checked={field.value} 
                                 onCheckedChange={field.onChange}
-                                className="border-[#B89555]/30 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+                                className="border-[#B89555]/30 data-[state=checked]:bg-[#EFE6D6] data-[state=checked]:border-[#B89555] mt-0.5"
                               />
                             </FormControl>
                             <div className="space-y-1 leading-none">
@@ -752,14 +752,14 @@ END:VCARD`;
                       <span className="relative flex items-center justify-center gap-2">
                         {isSubmitting ? (
                           <>
-                            <Loader2 className="w-5 h-5 text-gold animate-spin" />
-                            <span className="text-gold">Submitting...</span>
+                            <Loader2 className="w-5 h-5 text-[#1A1A1A] animate-spin" />
+                            <span className="text-[#1A1A1A]">Submitting...</span>
                           </>
                         ) : (
                           <>
-                            <Send className="w-5 h-5 text-gold group-hover:text-[#1A1A1A] transition-colors" />
-                            <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">Start Your</span>
-                            <span className="text-gold group-hover:text-[#1A1A1A] transition-colors">Inquiry</span>
+                            <Send className="w-5 h-5 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
+                            <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">Start Your</span>
+                            <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">Inquiry</span>
                           </>
                         )}
                       </span>
@@ -779,10 +779,10 @@ END:VCARD`;
       {/* Direct Contact Section */}
       <section className="py-12 bg-[#1A1A1A]">
         {/* Thin black contour + Active Champagne Layer */}
-        <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-6 md:p-8">
+        <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-[#B89555]/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-6 md:p-8">
           <h2 className="text-center text-2xl md:text-3xl font-bold mb-3">
             <span className="text-[#1A1A1A]">Prefer to Reach Us</span>{" "}
-            <span className="text-gold">Directly?</span>
+            <span className="text-[#1A1A1A]">Directly?</span>
           </h2>
           <p className="text-center text-[#1A1A1A]/70 text-sm mb-6 max-w-2xl mx-auto">
             For general inquiries, consultations, or non-technical requests, you may contact us through the channels below.
@@ -794,7 +794,7 @@ END:VCARD`;
               href={getWhatsAppUrl()}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-gold/30 hover:-translate-y-1"
+              className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-gold/30 hover:-translate-y-1"
             >
               <div className="w-12 h-12 bg-green-600/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-green-500/30">
                 <MessageCircle className="w-6 h-6 text-green-600" />
@@ -810,7 +810,7 @@ END:VCARD`;
             {/* Call CTA */}
             <a 
               href={getCallUrl()}
-              className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-gold/30 hover:-translate-y-1"
+              className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] rounded-xl p-5 transition-all group hover:shadow-lg hover:shadow-gold/30 hover:-translate-y-1"
             >
               <div className="w-12 h-12 bg-blue-600/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-blue-500/30">
                 <Phone className="w-6 h-6 text-blue-600" />
@@ -829,16 +829,16 @@ END:VCARD`;
       {/* Important Notice - 3-Layer System */}
       <section className="py-10 bg-[#1A1A1A]">
         {/* Thin black contour + Active Champagne Layer */}
-        <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
+        <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-[#B89555]/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
           {/* Inner Pearl Layer */}
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6 md:p-8 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-8 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
             <div className="max-w-3xl mx-auto">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 bg-[#1A1A1A] rounded-xl flex items-center justify-center">
-                  <Shield className="w-5 h-5 text-gold" />
+                  <Shield className="w-5 h-5 text-[#1A1A1A]" />
                 </div>
                 <h3 className="text-[#1A1A1A] font-semibold text-lg">
-                  <span className="text-gold">Important</span> Notice
+                  <span className="text-[#1A1A1A]">Important</span> Notice
                 </h3>
               </div>
               
@@ -853,12 +853,12 @@ END:VCARD`;
       {/* Appointments Section - 3-Layer System */}
       <section className="py-10 bg-[#1A1A1A]">
         {/* Thin black contour + Active Champagne Layer */}
-        <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
+        <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-[#B89555]/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
           {/* Inner Pearl Layer */}
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6 md:p-8 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-8 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
             <div className="max-w-3xl mx-auto text-center">
               <div className="w-10 h-10 bg-[#1A1A1A] rounded-xl flex items-center justify-center mx-auto mb-4">
-                <Calendar className="w-5 h-5 text-gold" />
+                <Calendar className="w-5 h-5 text-[#1A1A1A]" />
               </div>
               <h3 className="text-[#1A1A1A] font-semibold text-lg mb-2">
                 Appointments
@@ -874,9 +874,9 @@ END:VCARD`;
       {/* Closing Statement - 3-Layer System */}
       <section className="py-10 bg-[#1A1A1A]">
         {/* Thin black contour + Active Champagne Layer */}
-        <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
+        <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-[#B89555]/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
           {/* Inner Pearl Layer */}
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6 md:p-8 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6 md:p-8 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
             <div className="max-w-3xl mx-auto text-center">
               <p className="text-[#1A1A1A]/70 text-base leading-relaxed">
                 At JBJ Global Real Estate, communication is handled with structure, discretion, and accountability. We look forward to assisting you.

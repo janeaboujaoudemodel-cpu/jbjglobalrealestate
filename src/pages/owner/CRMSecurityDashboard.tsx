@@ -106,37 +106,37 @@ export default function CRMSecurityDashboard() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
-            <Shield className="w-6 h-6 text-gold" />
+            <Shield className="w-6 h-6 text-[#1A1A1A]" />
             CRM Security Dashboard
           </h1>
           <p className="text-muted-foreground text-sm mt-1">Monitor access, exports, shares, and suspicious activity</p>
         </div>
-        <Button onClick={fetchData} variant="outline" size="sm" className="border-gold/30">
+        <Button onClick={fetchData} variant="outline" size="sm" className="border-[#B89555]/30">
           <RefreshCw className="w-4 h-4 mr-2" /> Refresh
         </Button>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="border-gold/20">
+        <Card className="border-[#B89555]/20">
           <CardContent className="p-4 text-center">
             <p className="text-3xl font-bold text-foreground">{todayEvents.length}</p>
             <p className="text-xs text-muted-foreground">Events Today</p>
           </CardContent>
         </Card>
-        <Card className="border-gold/20">
+        <Card className="border-[#B89555]/20">
           <CardContent className="p-4 text-center">
             <p className="text-3xl font-bold text-blue-600">{exportEvents.length}</p>
             <p className="text-xs text-muted-foreground">Exports (All Time)</p>
           </CardContent>
         </Card>
-        <Card className="border-gold/20">
+        <Card className="border-[#B89555]/20">
           <CardContent className="p-4 text-center">
             <p className="text-3xl font-bold text-green-600">{shares.length}</p>
             <p className="text-xs text-muted-foreground">Active Shares</p>
           </CardContent>
         </Card>
-        <Card className="border-gold/20">
+        <Card className="border-[#B89555]/20">
           <CardContent className="p-4 text-center">
             <p className="text-3xl font-bold text-red-600">{suspiciousEvents.length}</p>
             <p className="text-xs text-muted-foreground">Suspicious Events</p>
@@ -160,7 +160,7 @@ export default function CRMSecurityDashboard() {
               placeholder="Search events..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="pl-10 border-gold/30"
+              className="pl-10 border-[#B89555]/30"
             />
           </div>
         </div>

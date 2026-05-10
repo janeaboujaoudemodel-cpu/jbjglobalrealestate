@@ -61,13 +61,13 @@ function BrokerProfileCard() {
 
   if (loading) {
     return (
-      <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(36,25%,88%)]">
+      <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(36,25%,88%)]">
         <CardContent className="p-6">
           <div className="animate-pulse flex items-center gap-4">
-            <div className="w-16 h-16 rounded-full bg-gold/20" />
+            <div className="w-16 h-16 rounded-full bg-[#EFE6D6]/20" />
             <div className="flex-1 space-y-2">
-              <div className="h-5 bg-gold/10 rounded w-1/3" />
-              <div className="h-4 bg-gold/10 rounded w-1/2" />
+              <div className="h-5 bg-[#EFE6D6]/10 rounded w-1/3" />
+              <div className="h-4 bg-[#EFE6D6]/10 rounded w-1/2" />
             </div>
           </div>
         </CardContent>
@@ -77,12 +77,12 @@ function BrokerProfileCard() {
 
   if (!user) {
     return (
-      <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(36,25%,88%)]">
+      <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(36,25%,88%)]">
         <CardContent className="p-6 text-center">
-          <GraduationCap className="w-10 h-10 text-gold mx-auto mb-3" />
+          <GraduationCap className="w-10 h-10 text-[#1A1A1A] mx-auto mb-3" />
           <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">Join JBJ Academy</h3>
           <p className="text-[#1A1A1A]/60 text-sm mb-4">Sign in to access your broker profile, training, and certification.</p>
-          <Button asChild className="bg-gold text-[#1A1A1A] hover:bg-gold/90">
+          <Button asChild className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90">
             <Link to="/join">Apply Now</Link>
           </Button>
         </CardContent>
@@ -106,11 +106,11 @@ function BrokerProfileCard() {
   const idExpired = idExpiry ? new Date(idExpiry) < now : false;
 
   return (
-    <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(36,25%,88%)]">
+    <Card className="border-2 border-[#B89555]/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(36,25%,88%)]">
       <CardContent className="p-6">
         <div className="flex items-start gap-4">
           {/* Avatar */}
-          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gold/30 to-gold/10 flex items-center justify-center text-gold font-bold text-xl border-2 border-gold/40 flex-shrink-0">
+          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gold/30 to-gold/10 flex items-center justify-center text-[#1A1A1A] font-bold text-xl border-2 border-[#B89555]/40 flex-shrink-0">
             {profile?.photo_url ? (
               <img src={profile.photo_url} alt={firstName} className="w-full h-full rounded-full object-cover" />
             ) : (
@@ -161,7 +161,7 @@ function BrokerProfileCard() {
 
             {/* Points */}
             {(profile as any)?.total_points !== undefined && (
-              <div className="flex items-center gap-1.5 mt-2 text-xs text-gold">
+              <div className="flex items-center gap-1.5 mt-2 text-xs text-[#1A1A1A]">
                 <Star className="w-3.5 h-3.5" />
                 <span>{(profile as any)?.total_points || 0} loyalty points</span>
               </div>
@@ -171,12 +171,12 @@ function BrokerProfileCard() {
 
         {/* Document upload prompt for unverified */}
         {!isVerified && hasBrokerProfile && (
-          <div className="mt-4 p-3 bg-gold/10 border border-gold/20 rounded-lg">
+          <div className="mt-4 p-3 bg-[#EFE6D6]/10 border border-[#B89555]/20 rounded-lg">
             <p className="text-xs text-[#1A1A1A]/70 mb-2">
-              <Shield className="w-3.5 h-3.5 inline mr-1 text-gold" />
+              <Shield className="w-3.5 h-3.5 inline mr-1 text-[#1A1A1A]" />
               Upload your ID and RERA card to get verified
             </p>
-            <Button size="sm" variant="outline" className="border-gold/40 text-gold hover:bg-gold/10 text-xs">
+            <Button size="sm" variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 text-xs">
               <Upload className="w-3 h-3 mr-1.5" />
               Upload Documents
             </Button>
@@ -194,7 +194,7 @@ function GraduatedBrokersGallery() {
     <section className="py-12">
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-8">
-          <Badge className="mb-4 bg-gold/20 text-gold border-gold/30">
+          <Badge className="mb-4 bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30">
             <Award className="w-3 h-3 mr-1" />
             Graduates
           </Badge>
@@ -204,13 +204,13 @@ function GraduatedBrokersGallery() {
           </p>
         </div>
 
-        <Card className="border-2 border-gold/20 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(36,25%,88%)]">
+        <Card className="border-2 border-[#B89555]/20 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(36,25%,88%)]">
           <CardContent className="p-8 text-center">
             <GraduationCap className="w-12 h-12 text-[#1A1A1A]/70 mx-auto mb-3" />
             <p className="text-[#1A1A1A]/50 text-sm">
               Complete the certification program to join the graduates gallery.
             </p>
-            <Button asChild variant="outline" className="mt-4 border-gold/40 text-gold">
+            <Button asChild variant="outline" className="mt-4 border-[#B89555]/40 text-[#1A1A1A]">
               <Link to="/broker-education">
                 Start Training <ArrowRight className="w-4 h-4 ml-1.5" />
               </Link>
@@ -244,19 +244,19 @@ export default function JBJAcademy() {
           <div className="relative z-10 container mx-auto px-4 py-20 text-center">
             <motion.div initial="hidden" animate="visible" variants={stagger}>
               <motion.div variants={fadeInUp}>
-                <Badge className="bg-gold/20 text-gold border-gold/40 px-4 py-1.5 mb-6 text-sm">
+                <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/40 px-4 py-1.5 mb-6 text-sm">
                   <GraduationCap className="w-4 h-4 mr-2" />
                   JBJ Academy — Internal Training Program
                 </Badge>
               </motion.div>
               <motion.h1 variants={fadeInUp} className="text-4xl md:text-6xl font-bold text-white mb-4">
-                JBJ <span className="text-gold">Academy</span>
+                JBJ <span className="text-[#1A1A1A]">Academy</span>
               </motion.h1>
               <motion.p variants={fadeInUp} className="text-white/70 text-lg max-w-2xl mx-auto mb-8">
                 Your complete professional development hub — education, certification, tools, and career growth all in one place.
               </motion.p>
               <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
-                <Button asChild size="lg" className="bg-gold text-[#1A1A1A] hover:bg-gold/90 font-semibold">
+                <Button asChild size="lg" className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90 font-semibold">
                   <Link to="/broker-education">
                     <BookOpen className="w-5 h-5 mr-2" />
                     Start Learning
@@ -295,13 +295,13 @@ export default function JBJAcademy() {
                   {ACADEMY_TOOLS.map((tool) => (
                     <motion.div key={tool.href} variants={fadeInUp}>
                       <Link to={tool.href}>
-                        <Card className="border border-gold/20 bg-[#FDFBF7]/80 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/5 transition-all duration-300 h-full group">
+                        <Card className="border border-[#B89555]/20 bg-[#FDFBF7]/80 hover:border-[#B89555]/50 hover:shadow-lg hover:shadow-gold/5 transition-all duration-300 h-full group">
                           <CardContent className="p-4 flex items-start gap-3">
-                            <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center flex-shrink-0 group-hover:bg-gold/20 transition-colors">
-                              <tool.icon className="w-5 h-5 text-gold" />
+                            <div className="w-10 h-10 rounded-lg bg-[#EFE6D6]/10 flex items-center justify-center flex-shrink-0 group-hover:bg-[#EFE6D6]/20 transition-colors">
+                              <tool.icon className="w-5 h-5 text-[#1A1A1A]" />
                             </div>
                             <div className="min-w-0">
-                              <h3 className="font-semibold text-[#1A1A1A] text-sm group-hover:text-gold transition-colors">
+                              <h3 className="font-semibold text-[#1A1A1A] text-sm group-hover:text-[#1A1A1A] transition-colors">
                                 {tool.label}
                               </h3>
                               <p className="text-[#1A1A1A]/50 text-xs mt-0.5">{tool.desc}</p>

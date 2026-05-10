@@ -422,7 +422,7 @@ const CVManagementCenter = () => {
                   
                   {/* Tags Row */}
                   <div className="flex items-center gap-2 mt-4 flex-wrap">
-                    <Badge className="bg-zinc-700 text-gray-200 font-medium border-0">
+                    <Badge className="bg-[#EFE6D6] text-gray-200 font-medium border-0">
                       Source: {cv.source || cv.uploadedBy}
                     </Badge>
                     <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30 font-semibold">

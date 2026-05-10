@@ -72,7 +72,7 @@ function SettingRow({ label, sub, defaultOn }: { label: string; sub: string; def
         <p className="text-sm text-white/90 font-medium leading-snug">{label}</p>
         <p className="text-xs mt-0.5 leading-snug" style={{ color: "rgba(255,255,255,0.35)" }}>{sub}</p>
       </div>
-      <Switch checked={on} onCheckedChange={setOn} className="data-[state=checked]:bg-gold shrink-0" />
+      <Switch checked={on} onCheckedChange={setOn} className="data-[state=checked]:bg-[#EFE6D6] shrink-0" />
     </div>
   );
 }
@@ -103,7 +103,7 @@ export default function StudioSettings() {
             </div>
             <div>
               <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white">
-                Studio <span className="text-gold">Settings</span>
+                Studio <span className="text-[#1A1A1A]">Settings</span>
               </h1>
               <p className="text-xs sm:text-sm mt-0.5" style={{ color: "rgba(255,255,255,0.4)" }}>
                 Configure your Creative Suite preferences

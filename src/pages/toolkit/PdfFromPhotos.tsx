@@ -719,7 +719,7 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
                           {(["a4", "letter", "fit"] as PageSize[]).map(v => (
                             <label key={v} className="flex items-center gap-2.5 cursor-pointer group">
                               <RadioGroupItem value={v} id={`ps-${v}`}
-                                className="border-white/25 text-amber-400 data-[state=checked]:border-amber-400" />
+                                className="border-white/25 text-[#1A1A1A] data-[state=checked]:border-amber-400" />
                               <span className="text-sm transition-colors group-hover:text-white"
                                 style={{ color: pageSize === v ? "#fff" : "rgba(255,255,255,0.6)" }}>
                                 {v === "a4" ? "A4 (210 × 297 mm)" : v === "letter" ? "Letter (8.5 × 11 in)" : "Fit to Image"}
@@ -736,7 +736,7 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
                           {(["auto", "portrait", "landscape"] as Orientation[]).map(v => (
                             <label key={v} className="flex items-center gap-2.5 cursor-pointer group">
                               <RadioGroupItem value={v} id={`or-${v}`}
-                                className="border-white/25 text-amber-400 data-[state=checked]:border-amber-400" />
+                                className="border-white/25 text-[#1A1A1A] data-[state=checked]:border-amber-400" />
                               <span className="text-sm transition-colors group-hover:text-white"
                                 style={{ color: orientation === v ? "#fff" : "rgba(255,255,255,0.6)" }}>
                                 {v === "auto" ? "Auto (match image)" : v.charAt(0).toUpperCase() + v.slice(1)}
@@ -765,7 +765,7 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
                           {(["none", "small", "normal"] as Margins[]).map(v => (
                             <label key={v} className="flex items-center gap-2.5 cursor-pointer group">
                               <RadioGroupItem value={v} id={`mg-${v}`}
-                                className="border-white/25 text-amber-400 data-[state=checked]:border-amber-400" />
+                                className="border-white/25 text-[#1A1A1A] data-[state=checked]:border-amber-400" />
                               <span className="text-sm transition-colors group-hover:text-white"
                                 style={{ color: (pageSize === "fit" ? "none" : margins) === v ? "#fff" : "rgba(255,255,255,0.6)" }}>
                                 {v === "none" ? "None (full bleed)" : v === "small" ? "Small (0.5 in)" : "Normal (1 in)"}

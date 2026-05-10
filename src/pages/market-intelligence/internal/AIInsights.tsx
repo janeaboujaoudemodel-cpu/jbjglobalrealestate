@@ -97,7 +97,7 @@ const AIInsights = () => {
   const getColorClasses = (color: string) => {
     const colors: Record<string, { bg: string; border: string; text: string; icon: string }> = {
       emerald: { bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', text: 'text-emerald-400', icon: 'text-emerald-400' },
-      amber: { bg: 'bg-amber-500/10', border: 'border-amber-500/30', text: 'text-amber-400', icon: 'text-amber-400' },
+      amber: { bg: 'bg-amber-500/10', border: 'border-amber-500/30', text: 'text-[#1A1A1A]', icon: 'text-[#1A1A1A]' },
       blue: { bg: 'bg-blue-500/10', border: 'border-blue-500/30', text: 'text-blue-400', icon: 'text-blue-400' },
     };
     return colors[color] || colors.blue;
@@ -114,22 +114,22 @@ const AIInsights = () => {
       {/* Internal Warning Banner */}
       <div className="bg-amber-500/10 border-b border-amber-500/30 py-3">
         <div className="container mx-auto px-4 flex items-center justify-center gap-3">
-          <Lock className="w-4 h-4 text-amber-400" />
-          <span className="text-amber-400 text-sm font-medium">INTERNAL USE ONLY — AI Market Narratives (Execution Mode)</span>
+          <Lock className="w-4 h-4 text-[#1A1A1A]" />
+          <span className="text-[#1A1A1A] text-sm font-medium">INTERNAL USE ONLY — AI Market Narratives (Execution Mode)</span>
         </div>
       </div>
 
       {/* Header */}
       <section className="py-12 border-b border-zinc-900">
         <div className="container mx-auto px-4">
-          <Link to="/internal/market-intelligence/dashboard" className="inline-flex items-center gap-2 text-gold hover:text-gold-light mb-6">
+          <Link to="/internal/market-intelligence/dashboard" className="inline-flex items-center gap-2 text-[#1A1A1A] hover:text-[#1A1A1A]-light mb-6">
             <ArrowLeft className="w-4 h-4" />
             Back to Dashboard
           </Link>
 
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center">
-              <Brain className="w-6 h-6 text-gold" />
+            <div className="w-12 h-12 rounded-xl bg-[#EFE6D6]/10 border border-[#B89555]/30 flex items-center justify-center">
+              <Brain className="w-6 h-6 text-[#1A1A1A]" />
             </div>
             <div>
               <h1 className="text-white text-3xl font-bold">
@@ -144,12 +144,12 @@ const AIInsights = () => {
       {/* Internal Disclaimer */}
       <section className="py-6 border-b border-zinc-900">
         <div className="container mx-auto px-4">
-          <div className="bg-zinc-900/50 border border-[#1A1A1A] rounded-xl p-4 flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+          <div className="bg-[#FDFBF7]/50 border border-[#1A1A1A] rounded-xl p-4 flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-[#1A1A1A] shrink-0 mt-0.5" />
             <div>
               <p className="text-white/70 text-sm">
                 <strong className="text-white">Internal Use Only:</strong> These AI-generated narratives are for broker execution support. 
-                They are <span className="text-amber-400">descriptive and advisory, not predictive</span>. 
+                They are <span className="text-[#1A1A1A]">descriptive and advisory, not predictive</span>. 
                 They do not constitute financial advice and must not be shared externally.
               </p>
             </div>
@@ -161,12 +161,12 @@ const AIInsights = () => {
       <section className="py-12">
         <div className="container mx-auto px-4">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
-            <TabsList className="bg-zinc-900/50 border border-[#1A1A1A] p-1 w-full md:w-auto flex flex-wrap">
+            <TabsList className="bg-[#FDFBF7]/50 border border-[#1A1A1A] p-1 w-full md:w-auto flex flex-wrap">
               {narrativeTypes.map((type) => (
                 <TabsTrigger
                   key={type.id}
                   value={type.id}
-                  className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40"
+                  className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40"
                 >
                   <type.icon className="w-4 h-4" />
                   <span className="hidden sm:inline">{type.title}</span>
@@ -180,7 +180,7 @@ const AIInsights = () => {
 
               return (
                 <TabsContent key={type.id} value={type.id}>
-                  <Card className="bg-zinc-900/50 border-[#1A1A1A]">
+                  <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
                     <CardHeader>
                       <div className="flex items-start justify-between">
                         <div className="flex items-center gap-4">
@@ -218,7 +218,7 @@ const AIInsights = () => {
                             <MessageSquare className="w-3 h-3" />
                             Generated {new Date(insight.generatedAt).toLocaleString()}
                           </div>
-                          <div className="p-6 bg-zinc-800/50 rounded-xl border border-[#1A1A1A]">
+                          <div className="p-6 bg-[#F7F2EA]/50 rounded-xl border border-[#1A1A1A]">
                             <div className="prose prose-invert prose-sm max-w-none">
                               <div className="text-white/85 text-sm leading-relaxed whitespace-pre-wrap">
                                 {insight.content}
@@ -253,7 +253,7 @@ const AIInsights = () => {
         <div className="container mx-auto px-4">
           <h2 className="text-white text-xl font-bold mb-6">Execution Intelligence Summary</h2>
           <div className="grid md:grid-cols-3 gap-4">
-            <Card className="bg-zinc-900/50 border-[#1A1A1A]">
+            <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
               <CardContent className="p-6">
                 <div className="flex items-center gap-3 mb-3">
                   <TrendingUp className="w-5 h-5 text-emerald-400" />
@@ -263,17 +263,17 @@ const AIInsights = () => {
                 <p className="text-white/90 text-xs mt-2">Based on recent inquiry velocity</p>
               </CardContent>
             </Card>
-            <Card className="bg-zinc-900/50 border-[#1A1A1A]">
+            <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
               <CardContent className="p-6">
                 <div className="flex items-center gap-3 mb-3">
-                  <Users className="w-5 h-5 text-amber-400" />
+                  <Users className="w-5 h-5 text-[#1A1A1A]" />
                   <span className="text-white/70 text-sm">Client Focus</span>
                 </div>
                 <p className="text-white font-semibold">HNWI Beachfront, Corporate Rentals</p>
                 <p className="text-white/90 text-xs mt-2">Priority segments this week</p>
               </CardContent>
             </Card>
-            <Card className="bg-zinc-900/50 border-[#1A1A1A]">
+            <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
               <CardContent className="p-6">
                 <div className="flex items-center gap-3 mb-3">
                   <Target className="w-5 h-5 text-blue-400" />

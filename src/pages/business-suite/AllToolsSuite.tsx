@@ -24,9 +24,9 @@ const AllToolsSuite = () => {
   // Get tool theme for content area background
   const getToolTheme = (toolId: string) => {
     return toolColorThemes[toolId] || { 
-      bg: 'bg-zinc-900/40', 
-      accent: 'text-gold', 
-      border: 'border-gold/30',
+      bg: 'bg-[#FDFBF7]/40', 
+      accent: 'text-[#1A1A1A]', 
+      border: 'border-[#B89555]/30',
       gradient: 'from-gold/10 to-zinc-950/40',
       ring: 'ring-gold/30'
     };
@@ -41,7 +41,7 @@ const AllToolsSuite = () => {
       
       <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
         {/* Premium Header - Gold/Champagne theme */}
-        <div className="relative bg-gradient-to-b from-black via-zinc-950 to-black border-b border-gold/20">
+        <div className="relative bg-gradient-to-b from-black via-zinc-950 to-black border-b border-[#B89555]/20">
           {/* Decorative elements */}
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(200,167,102,0.08),transparent_70%)]" />
           
@@ -49,7 +49,7 @@ const AllToolsSuite = () => {
             {/* Back link */}
             <Link
               to="/toolkit"
-              className="inline-flex items-center gap-2 text-white/70 hover:text-gold transition-colors mb-6"
+              className="inline-flex items-center gap-2 text-white/70 hover:text-[#1A1A1A] transition-colors mb-6"
             >
               <ArrowLeft className="w-4 h-4" />
               <span className="text-sm">Back to Toolkit</span>
@@ -58,8 +58,8 @@ const AllToolsSuite = () => {
             {/* Title + Search row */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 flex items-center justify-center shrink-0">
-                  <Sparkles className="w-7 h-7 text-gold" />
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border border-[#B89555]/30 flex items-center justify-center shrink-0">
+                  <Sparkles className="w-7 h-7 text-[#1A1A1A]" />
                 </div>
                 <div>
                   <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
@@ -75,7 +75,7 @@ const AllToolsSuite = () => {
         </div>
 
         {/* Category Tabs - Horizontal scrolling pills */}
-        <div className="sticky top-0 z-40 bg-zinc-950/95 backdrop-blur-sm border-b border-gold/10">
+        <div className="sticky top-0 z-40 bg-[#FDFBF7]/95 backdrop-blur-sm border-b border-[#B89555]/10">
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex gap-2 py-4 overflow-x-auto scrollbar-hide">
               {ALL_TOOL_CATEGORIES.map((category) => {
@@ -181,10 +181,10 @@ const AllToolsSuite = () => {
         </div>
 
         {/* Quick Access Section - All categories overview */}
-        <div className="border-t border-gold/10 bg-zinc-950/50">
+        <div className="border-t border-[#B89555]/10 bg-[#FDFBF7]/50">
           <div className="max-w-7xl mx-auto px-4 py-8">
             <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-gold" />
+              <Sparkles className="w-5 h-5 text-[#1A1A1A]" />
               Quick Access - All Categories
             </h3>
             
@@ -206,7 +206,7 @@ const AllToolsSuite = () => {
                       "flex flex-col items-center gap-2 p-4 rounded-xl transition-all",
                       isActive
                         ? `${colors.active} border ${colors.border}`
-                        : "bg-zinc-900/50 border border-[#1A1A1A] hover:border-[#1A1A1A]"
+                        : "bg-[#FDFBF7]/50 border border-[#1A1A1A] hover:border-[#1A1A1A]"
                     )}
                   >
                     <Icon className={cn("w-6 h-6", isActive ? colors.active.split(' ')[0] : "text-white/70")} />

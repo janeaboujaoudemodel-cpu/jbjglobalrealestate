@@ -228,8 +228,8 @@ export default function GlobalRecommendationsHub() {
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div className="flex items-center gap-3">
-          <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-gold/30 to-gold/10 border border-gold/30 flex items-center justify-center">
-            <Target className="h-6 w-6 text-gold" />
+          <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-gold/30 to-gold/10 border border-[#B89555]/30 flex items-center justify-center">
+            <Target className="h-6 w-6 text-[#1A1A1A]" />
           </div>
           <div>
             <h2 className="text-2xl font-bold text-[#1A1A1A]">
@@ -246,7 +246,7 @@ export default function GlobalRecommendationsHub() {
               {criticalCount} Critical
             </Badge>
           )}
-          <Badge className="bg-gold/10 text-gold border border-gold/30">
+          <Badge className="bg-[#EFE6D6]/10 text-[#1A1A1A] border border-[#B89555]/30">
             {pendingCount} Pending
           </Badge>
           <Badge className="bg-green-500/10 text-green-700 border border-green-500/20">
@@ -256,7 +256,7 @@ export default function GlobalRecommendationsHub() {
             size="sm"
             onClick={refreshData}
             disabled={isProcessing}
-            className="bg-[#FDFBF7] text-[#1A1A1A] border-2 border-gold/30 hover:bg-[#1A1A1A] hover:text-gold"
+            className="bg-[#FDFBF7] text-[#1A1A1A] border-2 border-[#B89555]/30 hover:bg-[#1A1A1A] hover:text-[#1A1A1A]"
           >
             <RotateCcw className={`h-4 w-4 mr-2 ${isProcessing ? "animate-spin" : ""}`} />
             Refresh
@@ -272,7 +272,7 @@ export default function GlobalRecommendationsHub() {
             placeholder="Search recommendations..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 bg-[#FDFBF7] border-gold/20 focus:border-gold/50 text-[#1A1A1A]"
+            className="pl-10 bg-[#FDFBF7] border-[#B89555]/20 focus:border-[#B89555]/50 text-[#1A1A1A]"
           />
         </div>
         <div className="flex gap-2">
@@ -284,7 +284,7 @@ export default function GlobalRecommendationsHub() {
             className={`capitalize ${
                 activeStatus === status
                   ? "bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/40 shadow-sm"
-                  : "bg-[#FDFBF7] text-[#1A1A1A]/70 border border-gold/20 hover:border-gold/40"
+                  : "bg-[#FDFBF7] text-[#1A1A1A]/70 border border-[#B89555]/20 hover:border-[#B89555]/40"
               }`}
             >
               {status}
@@ -302,13 +302,13 @@ export default function GlobalRecommendationsHub() {
             className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-all ${
               activeSource === section.id
                 ? "bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/40 shadow-sm"
-                : "bg-[#FDFBF7] border border-gold/20 text-[#1A1A1A]/70 hover:border-gold/40"
+                : "bg-[#FDFBF7] border border-[#B89555]/20 text-[#1A1A1A]/70 hover:border-[#B89555]/40"
             }`}
           >
             <section.icon className="w-4 h-4" />
             <span>{section.label}</span>
             {section.id !== "all" && (
-              <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-5 ml-1 border-gold/30 text-[#8A7356] bg-gold/10">
+              <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-5 ml-1 border-[#B89555]/30 text-[#8A7356] bg-[#EFE6D6]/10">
                 {globalRecommendations.filter(r => r.source === section.id || r.category === section.id).length}
               </Badge>
             )}
@@ -319,9 +319,9 @@ export default function GlobalRecommendationsHub() {
       {/* Recommendations List */}
       <div className="space-y-3">
         {filteredRecs.length === 0 ? (
-          <Card className="bg-[#FDFBF7] border-gold/20">
+          <Card className="bg-[#FDFBF7] border-[#B89555]/20">
             <CardContent className="flex flex-col items-center justify-center py-16">
-              <div className="w-16 h-16 rounded-2xl mb-4 flex items-center justify-center bg-gold/10 border border-gold/25">
+              <div className="w-16 h-16 rounded-2xl mb-4 flex items-center justify-center bg-[#EFE6D6]/10 border border-[#B89555]/25">
                 <CheckCircle className="w-8 h-8 text-[#1A1A1A]/70" />
               </div>
               <h3 className="text-lg font-bold text-[#1A1A1A] mb-1">No recommendations</h3>
@@ -334,7 +334,7 @@ export default function GlobalRecommendationsHub() {
           filteredRecs.map(rec => (
             <Card
               key={rec.id}
-              className={`bg-[#FDFBF7] border-gold/20 transition-all hover:border-gold/40 hover:shadow-[0_4px_20px_rgba(201,168,76,0.1)] ${
+              className={`bg-[#FDFBF7] border-[#B89555]/20 transition-all hover:border-[#B89555]/40 hover:shadow-[0_4px_20px_rgba(201,168,76,0.1)] ${
                 rec.status !== "pending" ? "opacity-70" : ""
               }`}
             >
@@ -366,7 +366,7 @@ export default function GlobalRecommendationsHub() {
 
                     {/* Source badge */}
                     <div className="flex items-center gap-3 text-[11px] text-[#1A1A1A]/70">
-                      <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-gold/10 text-gold border border-gold/20">
+                      <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#EFE6D6]/10 text-[#1A1A1A] border border-[#B89555]/20">
                         <Building2 className="w-3 h-3" />
                         {rec.sourcePage}
                       </span>
@@ -383,7 +383,7 @@ export default function GlobalRecommendationsHub() {
                     {/* Suggested action */}
                     <div className="mt-3 p-2.5 bg-[#F7F2EA] rounded-lg border border-[#B89555]/30">
                       <p className="text-xs text-[#1A1A1A]">
-                        <span className="font-medium text-gold">Suggested:</span>{" "}
+                        <span className="font-medium text-[#1A1A1A]">Suggested:</span>{" "}
                         {rec.suggestedAction}
                       </p>
                     </div>
@@ -396,7 +396,7 @@ export default function GlobalRecommendationsHub() {
                         <Button
                           size="sm"
                           onClick={() => handlePreview(rec)}
-                          className="bg-[#FDFBF7] text-[#1A1A1A] border border-gold/30 hover:bg-gold/10 text-xs"
+                          className="bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/30 hover:bg-[#EFE6D6]/10 text-xs"
                         >
                           <Eye className="w-3.5 h-3.5 mr-1" />
                           Preview
@@ -450,10 +450,10 @@ export default function GlobalRecommendationsHub() {
 
       {/* Preview/Apply Dialog */}
       <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
-        <DialogContent className="max-w-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30">
+        <DialogContent className="max-w-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[#B89555]/30">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
-              <Eye className="w-5 h-5 text-gold" />
+              <Eye className="w-5 h-5 text-[#1A1A1A]" />
               Recommendation Preview
             </DialogTitle>
             <DialogDescription className="text-[#1A1A1A]/70">
@@ -469,7 +469,7 @@ export default function GlobalRecommendationsHub() {
                 <Badge variant="outline" className={getImpactBadgeClass(selectedRec.impact)}>
                   {selectedRec.impact} impact
                 </Badge>
-                <Badge className="bg-gold/10 text-gold border border-gold/20 text-xs">
+                <Badge className="bg-[#EFE6D6]/10 text-[#1A1A1A] border border-[#B89555]/20 text-xs">
                   {selectedRec.sourcePage}
                 </Badge>
               </div>
@@ -514,8 +514,8 @@ export default function GlobalRecommendationsHub() {
               )}
 
               {/* Action */}
-              <div className="p-3 bg-[#FDFBF7] rounded-lg border border-gold/20">
-                <p className="text-xs font-semibold text-gold mb-1">Suggested Action</p>
+              <div className="p-3 bg-[#FDFBF7] rounded-lg border border-[#B89555]/20">
+                <p className="text-xs font-semibold text-[#1A1A1A] mb-1">Suggested Action</p>
                 <p className="text-sm text-[#1A1A1A]">{selectedRec.suggestedAction}</p>
               </div>
 

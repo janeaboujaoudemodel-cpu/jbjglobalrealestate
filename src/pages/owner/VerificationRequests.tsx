@@ -144,7 +144,7 @@ const VerificationRequests = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-[#1A1A1A] flex items-center gap-2">
-            <ShieldCheck className="w-6 h-6 text-gold" />
+            <ShieldCheck className="w-6 h-6 text-[#1A1A1A]" />
             Verification Requests
           </h1>
           <p className="text-sm text-[#1A1A1A]/70 mt-1">
@@ -168,7 +168,7 @@ const VerificationRequests = () => {
               onClick={() => setFilter(f)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium capitalize transition-all ${
                 filter === f
-                  ? "bg-gold/20 text-gold border border-gold/30"
+                  ? "bg-[#EFE6D6]/20 text-[#1A1A1A] border border-[#B89555]/30"
                   : "bg-[#F7F2EA] text-[#1A1A1A]/70 border border-transparent hover:bg-[#EFE6D6]"
               }`}
             >
@@ -190,7 +190,7 @@ const VerificationRequests = () => {
       {/* Table */}
       {isLoading ? (
         <div className="flex items-center justify-center py-12">
-          <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin" />
+          <div className="w-8 h-8 border-2 border-[#B89555] border-t-transparent rounded-full animate-spin" />
         </div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-12 text-[#1A1A1A]/70">
@@ -198,7 +198,7 @@ const VerificationRequests = () => {
           <p>No {filter === "all" ? "" : filter} verification requests</p>
         </div>
       ) : (
-        <div className="rounded-xl border border-gold/10 overflow-hidden">
+        <div className="rounded-xl border border-[#B89555]/10 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-gradient-to-r from-[#F7F1E6] to-[#EFE6D6] text-[#1A1A1A]">
@@ -212,7 +212,7 @@ const VerificationRequests = () => {
               </thead>
               <tbody className="divide-y divide-[#B89555]/20 bg-[#FDFBF7]">
                 {filtered.map((v) => (
-                  <tr key={v.id} className="hover:bg-gold/5 transition-colors">
+                  <tr key={v.id} className="hover:bg-[#EFE6D6]/5 transition-colors">
                     <td className="px-4 py-3 font-medium text-[#1A1A1A]">{v.full_name || "—"}</td>
                     <td className="px-4 py-3">
                       <Badge className={statusColors[v.status] || ""}>{v.status}</Badge>
@@ -224,13 +224,13 @@ const VerificationRequests = () => {
                       <div className="flex gap-2">
                         <button
                           onClick={() => handlePreview(v.id_document_url)}
-                          className="text-xs text-gold hover:underline flex items-center gap-1"
+                          className="text-xs text-[#1A1A1A] hover:underline flex items-center gap-1"
                         >
                           <Eye className="w-3 h-3" /> ID
                         </button>
                         <button
                           onClick={() => handlePreview(v.selfie_url)}
-                          className="text-xs text-gold hover:underline flex items-center gap-1"
+                          className="text-xs text-[#1A1A1A] hover:underline flex items-center gap-1"
                         >
                           <Eye className="w-3 h-3" /> Selfie
                         </button>

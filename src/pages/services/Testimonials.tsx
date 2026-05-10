@@ -218,7 +218,7 @@ const Testimonials = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-[#1A1A1A] flex items-center justify-center">
-                <User className="w-5 h-5 text-gold" />
+                <User className="w-5 h-5 text-[#1A1A1A]" />
               </div>
               <div>
                 <p className="font-semibold text-[#1A1A1A]">{testimonial.name}</p>
@@ -227,7 +227,7 @@ const Testimonials = () => {
             </div>
             <div className="flex gap-1">
               {[...Array(testimonial.rating)].map((_, i) => (
-                <Star key={i} className="w-4 h-4 fill-gold text-gold" />
+                <Star key={i} className="w-4 h-4 fill-gold text-[#1A1A1A]" />
               ))}
             </div>
           </div>
@@ -250,7 +250,7 @@ const Testimonials = () => {
           {/* Video placeholder */}
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
-              <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center">
+              <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-[#EFE6D6]/20 border border-[#B89555]/40 flex items-center justify-center">
                 <Star className="w-12 h-12 text-[#1A1A1A]/70" />
               </div>
               <p className="text-[#1A1A1A]/70 text-sm tracking-widest uppercase">Client Stories</p>
@@ -261,8 +261,8 @@ const Testimonials = () => {
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/10 via-transparent to-transparent" />
         </div>
         
-        <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/10 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-gold/15 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-1/4 left-10 w-64 h-64 bg-[#EFE6D6]/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-[#EFE6D6]/15 rounded-full blur-[120px] pointer-events-none" />
 
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
@@ -271,9 +271,9 @@ const Testimonials = () => {
             transition={{ duration: 0.6 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-[#1A1A1A]/30 backdrop-blur-md">
-              <Star className="w-4 h-4 text-gold" />
-              <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-[#B89555]/40 bg-[#1A1A1A]/30 backdrop-blur-md">
+              <Star className="w-4 h-4 text-[#1A1A1A]" />
+              <span className="text-[#1A1A1A] font-semibold text-xs uppercase tracking-[0.2em]">
                 Services
               </span>
             </div>
@@ -337,31 +337,31 @@ const Testimonials = () => {
                 <TabsList className="w-full flex flex-wrap justify-center gap-2 bg-transparent mb-8">
                   <TabsTrigger 
                     value="buyers" 
-                    className="px-6 py-3 rounded-full border-2 border-gold/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-[#1A1A1A] data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-gold data-[state=active]:border-gold"
+                    className="px-6 py-3 rounded-full border-2 border-[#B89555]/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-[#1A1A1A] data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]"
                   >
                     Buyers
                   </TabsTrigger>
                   <TabsTrigger 
                     value="sellers"
-                    className="px-6 py-3 rounded-full border-2 border-gold/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-[#1A1A1A] data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-gold data-[state=active]:border-gold"
+                    className="px-6 py-3 rounded-full border-2 border-[#B89555]/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-[#1A1A1A] data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]"
                   >
                     Sellers
                   </TabsTrigger>
                   <TabsTrigger 
                     value="investors"
-                    className="px-6 py-3 rounded-full border-2 border-gold/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-[#1A1A1A] data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-gold data-[state=active]:border-gold"
+                    className="px-6 py-3 rounded-full border-2 border-[#B89555]/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-[#1A1A1A] data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]"
                   >
                     Investors
                   </TabsTrigger>
                   <TabsTrigger 
                     value="landlords"
-                    className="px-6 py-3 rounded-full border-2 border-gold/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-[#1A1A1A] data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-gold data-[state=active]:border-gold"
+                    className="px-6 py-3 rounded-full border-2 border-[#B89555]/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-[#1A1A1A] data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]"
                   >
                     Landlords
                   </TabsTrigger>
                   <TabsTrigger 
                     value="partners"
-                    className="px-6 py-3 rounded-full border-2 border-gold/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-[#1A1A1A] data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-gold data-[state=active]:border-gold"
+                    className="px-6 py-3 rounded-full border-2 border-[#B89555]/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-[#1A1A1A] data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]"
                   >
                     Brokers & Partners
                   </TabsTrigger>
@@ -430,7 +430,7 @@ const Testimonials = () => {
                   <Card className="jj-card-inner overflow-hidden">
                     <div className="aspect-video bg-[#EFE6D6] flex items-center justify-center">
                       <div className="text-center">
-                        <Video className="w-12 h-12 text-gold mx-auto mb-2" />
+                        <Video className="w-12 h-12 text-[#1A1A1A] mx-auto mb-2" />
                         <p className="text-sm text-white/90">Video Coming Soon</p>
                       </div>
                     </div>
@@ -464,7 +464,7 @@ const Testimonials = () => {
               Submit a Testimonial
             </motion.h2>
             <motion.div variants={fadeInUp}>
-              <Card className="jj-card-inner border-2 border-gold/30">
+              <Card className="jj-card-inner border-2 border-[#B89555]/30">
                 <CardContent className="p-6">
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="space-y-2">
@@ -539,7 +539,7 @@ const Testimonials = () => {
                       </Select>
                     </div>
 
-                    <div className="flex items-start gap-3 p-4 rounded-xl bg-[#1A1A1A]/5 border border-gold/20">
+                    <div className="flex items-start gap-3 p-4 rounded-xl bg-[#1A1A1A]/5 border border-[#B89555]/20">
                       <Checkbox
                         id="consent"
                         checked={formData.consentToPublish}
@@ -584,7 +584,7 @@ const Testimonials = () => {
             <motion.div variants={fadeInUp} className="jj-card-inner">
               <div className="flex items-start gap-4">
                 <div className="w-14 h-14 rounded-xl bg-[#1A1A1A] flex items-center justify-center shrink-0">
-                  <Lock className="w-7 h-7 text-gold" />
+                  <Lock className="w-7 h-7 text-[#1A1A1A]" />
                 </div>
                 <div>
                   <p className="text-[#1A1A1A]/70 leading-relaxed">
@@ -620,9 +620,9 @@ const Testimonials = () => {
                   <AccordionItem
                     key={index}
                     value={`item-${index}`}
-                    className="border-2 border-gold/30 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] overflow-hidden"
+                    className="border-2 border-[#B89555]/30 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] overflow-hidden"
                   >
-                    <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-gold/10">
+                    <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-[#EFE6D6]/10">
                       <span className="text-[#1A1A1A] font-medium">{faq.question}</span>
                     </AccordionTrigger>
                     <AccordionContent className="px-6 pb-4 text-[#1A1A1A]/70">
@@ -646,8 +646,8 @@ const Testimonials = () => {
             variants={fadeInUp}
             className="max-w-3xl mx-auto text-center"
           >
-            <div className="jj-card-inner border-2 border-gold/30">
-              <Star className="w-12 h-12 text-gold mx-auto mb-6" />
+            <div className="jj-card-inner border-2 border-[#B89555]/30">
+              <Star className="w-12 h-12 text-[#1A1A1A] mx-auto mb-6" />
               <h2
                 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4"
                 style={{ fontFamily: "Playfair Display, serif" }}

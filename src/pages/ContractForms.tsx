@@ -124,7 +124,7 @@ const categoryLabels: Record<string, { label: string; color: string }> = {
   sales: { label: "Sales", color: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30" },
   rentals: { label: "Rentals", color: "bg-blue-500/20 text-blue-400 border-blue-500/30" },
   agency: { label: "Agency", color: "bg-purple-500/20 text-purple-400 border-purple-500/30" },
-  developer: { label: "Developer", color: "bg-gold/20 text-gold border-gold/30" },
+  developer: { label: "Developer", color: "bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30" },
 };
 
 export default function ContractForms() {
@@ -149,7 +149,7 @@ export default function ContractForms() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(200,167,102,0.15),transparent_50%)]" />
         <div className="container mx-auto px-4 md:px-8 relative z-10">
           <div className="max-w-3xl">
-            <Badge className="mb-4 bg-gold/20 text-gold border-gold/30">
+            <Badge className="mb-4 bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30">
               <FileSignature className="w-3 h-3 mr-1" />
               Professional Templates
             </Badge>
@@ -162,13 +162,13 @@ export default function ContractForms() {
             </p>
             <div className="flex flex-wrap gap-3">
               <a href="https://dubailand.gov.ae" target="_blank" rel="noopener noreferrer">
-                <Button variant="outline" size="sm" className="border-gold/30 text-gold hover:bg-gold/10">
+                <Button variant="outline" size="sm" className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                   <ExternalLink className="w-4 h-4 mr-2" />
                   DLD Official
                 </Button>
               </a>
               <a href="https://www.rera.gov.ae" target="_blank" rel="noopener noreferrer">
-                <Button variant="outline" size="sm" className="border-gold/30 text-gold hover:bg-gold/10">
+                <Button variant="outline" size="sm" className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                   <ExternalLink className="w-4 h-4 mr-2" />
                   RERA Portal
                 </Button>
@@ -187,7 +187,7 @@ export default function ContractForms() {
               variant={selectedCategory === null ? "default" : "outline"}
               size="sm"
               onClick={() => setSelectedCategory(null)}
-              className={selectedCategory === null ? "bg-gold text-[#1A1A1A] hover:bg-gold/90" : "border-gold/30 text-gold hover:bg-gold/10"}
+              className={selectedCategory === null ? "bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90" : "border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"}
             >
               All Templates
             </Button>
@@ -197,7 +197,7 @@ export default function ContractForms() {
                 variant={selectedCategory === cat ? "default" : "outline"}
                 size="sm"
                 onClick={() => setSelectedCategory(cat)}
-                className={selectedCategory === cat ? "bg-gold text-[#1A1A1A] hover:bg-gold/90" : "border-gold/30 text-gold hover:bg-gold/10"}
+                className={selectedCategory === cat ? "bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90" : "border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"}
               >
                 {categoryLabels[cat].label}
               </Button>
@@ -216,8 +216,8 @@ export default function ContractForms() {
                 <div className="jj-card-inner h-full flex flex-col">
                   {/* Header */}
                   <div className="flex items-start justify-between mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-gold/10 border border-gold/20 flex items-center justify-center">
-                      <template.icon className="w-6 h-6 text-gold" />
+                    <div className="w-12 h-12 rounded-xl bg-[#EFE6D6]/10 border border-[#B89555]/20 flex items-center justify-center">
+                      <template.icon className="w-6 h-6 text-[#1A1A1A]" />
                     </div>
                     <Badge className={categoryLabels[template.category].color}>
                       {categoryLabels[template.category].label}
@@ -255,11 +255,11 @@ export default function ContractForms() {
                   <div className="flex gap-2 mt-auto">
                     {template.status === "available" ? (
                       <>
-                        <Button variant="outline" size="sm" className="flex-1 border-gold/30 text-gold hover:bg-gold/10">
+                        <Button variant="outline" size="sm" className="flex-1 border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                           <Eye className="w-4 h-4 mr-1" />
                           Preview
                         </Button>
-                        <Button size="sm" className="flex-1 bg-gold text-[#1A1A1A] hover:bg-gold/90">
+                        <Button size="sm" className="flex-1 bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90">
                           <Download className="w-4 h-4 mr-1" />
                           Download
                         </Button>
@@ -286,13 +286,13 @@ export default function ContractForms() {
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link to="/contact">
-                <Button className="bg-gold text-[#1A1A1A] hover:bg-gold/90">
+                <Button className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90">
                   <FileSignature className="w-4 h-4 mr-2" />
                   Request Assistance
                 </Button>
               </Link>
               <Link to="/services">
-                <Button variant="outline" className="border-gold/30 text-gold hover:bg-gold/10">
+                <Button variant="outline" className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                   View All Services
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>

@@ -136,7 +136,7 @@ export default function AISocialMediaPage() {
 
       <div className="space-y-8">
         {/* Input Form */}
-        <Card className="bg-zinc-900/90 border-pink-500/30">
+        <Card className="bg-[#FDFBF7]/90 border-pink-500/30">
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
               <PlatformIcon className="w-5 h-5 text-pink-400" />
@@ -206,7 +206,7 @@ export default function AISocialMediaPage() {
                   value={propertyTitle}
                   onChange={(e) => setPropertyTitle(e.target.value)}
                   placeholder="Luxury 2BR with Sea View"
-                  className="bg-zinc-800 border-pink-500/30 text-white"
+                  className="bg-[#F7F2EA] border-pink-500/30 text-white"
                 />
               </div>
               <div>
@@ -215,7 +215,7 @@ export default function AISocialMediaPage() {
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
                   placeholder="Dubai Marina"
-                  className="bg-zinc-800 border-pink-500/30 text-white"
+                  className="bg-[#F7F2EA] border-pink-500/30 text-white"
                 />
               </div>
             </div>
@@ -227,7 +227,7 @@ export default function AISocialMediaPage() {
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
                   placeholder="AED 2,500,000"
-                  className="bg-zinc-800 border-pink-500/30 text-white"
+                  className="bg-[#F7F2EA] border-pink-500/30 text-white"
                 />
               </div>
               <div>
@@ -237,7 +237,7 @@ export default function AISocialMediaPage() {
                   value={bedrooms}
                   onChange={(e) => setBedrooms(e.target.value)}
                   placeholder="2"
-                  className="bg-zinc-800 border-pink-500/30 text-white"
+                  className="bg-[#F7F2EA] border-pink-500/30 text-white"
                 />
               </div>
             </div>
@@ -248,7 +248,7 @@ export default function AISocialMediaPage() {
                 value={features}
                 onChange={(e) => setFeatures(e.target.value)}
                 placeholder="Sea view, private pool, smart home..."
-                className="bg-zinc-800 border-pink-500/30 text-white"
+                className="bg-[#F7F2EA] border-pink-500/30 text-white"
               />
             </div>
 
@@ -258,7 +258,7 @@ export default function AISocialMediaPage() {
                 value={highlights}
                 onChange={(e) => setHighlights(e.target.value)}
                 placeholder="What makes this special? Any unique selling points..."
-                className="bg-zinc-800 border-pink-500/30 text-white"
+                className="bg-[#F7F2EA] border-pink-500/30 text-white"
               />
             </div>
 
@@ -286,7 +286,7 @@ export default function AISocialMediaPage() {
         {result && (
           <div className="space-y-6">
             {/* Main Post */}
-            <Card className="bg-zinc-900/90 border-pink-500/30">
+            <Card className="bg-[#FDFBF7]/90 border-pink-500/30">
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle className="text-white flex items-center gap-2">
                   <PlatformIcon className="w-5 h-5 text-pink-400" />
@@ -333,7 +333,7 @@ export default function AISocialMediaPage() {
 
             {/* Story Content */}
             {result.storyContent && (
-              <Card className="bg-zinc-900/90 border-pink-500/30">
+              <Card className="bg-[#FDFBF7]/90 border-pink-500/30">
                 <CardHeader>
                   <CardTitle className="text-white flex items-center gap-2">
                     <Share2 className="w-5 h-5 text-pink-400" />
@@ -343,7 +343,7 @@ export default function AISocialMediaPage() {
                 <CardContent>
                   <div className="grid grid-cols-3 gap-4">
                     {Object.entries(result.storyContent).map(([key, value]) => (
-                      <div key={key} className="bg-zinc-800/50 rounded-lg p-4 border border-pink-500/20 text-center">
+                      <div key={key} className="bg-[#F7F2EA]/50 rounded-lg p-4 border border-pink-500/20 text-center">
                         <Label className="text-pink-400 text-xs uppercase">{key}</Label>
                         <p className="text-white/85 text-sm mt-2">{value}</p>
                       </div>
@@ -355,7 +355,7 @@ export default function AISocialMediaPage() {
 
             {/* Image Prompt */}
             {result.imagePrompt && (
-              <Card className="bg-zinc-900/90 border-pink-500/30">
+              <Card className="bg-[#FDFBF7]/90 border-pink-500/30">
                 <CardHeader>
                   <CardTitle className="text-white text-sm">Suggested Image</CardTitle>
                 </CardHeader>
@@ -367,7 +367,7 @@ export default function AISocialMediaPage() {
 
             {/* Engagement Tips */}
             {result.engagementTips && result.engagementTips.length > 0 && (
-              <Card className="bg-zinc-900/90 border-pink-500/30">
+              <Card className="bg-[#FDFBF7]/90 border-pink-500/30">
                 <CardHeader>
                   <CardTitle className="text-white flex items-center gap-2">
                     <Sparkles className="w-5 h-5 text-pink-400" />
@@ -391,7 +391,7 @@ export default function AISocialMediaPage() {
 
         {/* Placeholder */}
         {!result && !loading && (
-          <div className="bg-zinc-900/50 border border-pink-500/20 rounded-xl py-12 text-center">
+          <div className="bg-[#FDFBF7]/50 border border-pink-500/20 rounded-xl py-12 text-center">
             <Share2 className="w-12 h-12 text-pink-400/50 mx-auto mb-4" />
             <p className="text-white/70">Configure your post above to generate engaging social content</p>
           </div>

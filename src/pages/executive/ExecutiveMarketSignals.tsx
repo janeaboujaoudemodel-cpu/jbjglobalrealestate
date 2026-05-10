@@ -37,7 +37,7 @@ const ExecutiveMarketSignals = () => {
       case "low":
         return "bg-red-500/20 text-red-400 border-red-500/30";
       default:
-        return "bg-amber-500/20 text-amber-400 border-amber-500/30";
+        return "bg-amber-500/20 text-[#1A1A1A] border-amber-500/30";
     }
   };
 
@@ -46,7 +46,7 @@ const ExecutiveMarketSignals = () => {
       case "fast":
         return "text-emerald-400";
       case "moderate":
-        return "text-amber-400";
+        return "text-[#1A1A1A]";
       default:
         return "text-red-400";
     }
@@ -92,8 +92,8 @@ const ExecutiveMarketSignals = () => {
                 to={nav.path}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   nav.active
-                    ? "bg-gold text-[#1A1A1A]"
-                    : "bg-zinc-800 text-white/85 hover:bg-[#1A1A1A]"
+                    ? "bg-[#EFE6D6] text-[#1A1A1A]"
+                    : "bg-[#F7F2EA] text-white/85 hover:bg-[#1A1A1A]"
                 }`}
               >
                 {nav.label}
@@ -103,10 +103,10 @@ const ExecutiveMarketSignals = () => {
 
           {/* Market Overview Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <Card className="bg-zinc-900 border-[#1A1A1A]">
+            <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-white/70 flex items-center gap-2">
-                  <Zap className="w-4 h-4 text-gold" />
+                  <Zap className="w-4 h-4 text-[#1A1A1A]" />
                   RENT Demand Direction
                 </CardTitle>
               </CardHeader>
@@ -121,10 +121,10 @@ const ExecutiveMarketSignals = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-zinc-900 border-[#1A1A1A]">
+            <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-white/70 flex items-center gap-2">
-                  <BarChart3 className="w-4 h-4 text-gold" />
+                  <BarChart3 className="w-4 h-4 text-[#1A1A1A]" />
                   Supply Pressure
                 </CardTitle>
               </CardHeader>
@@ -139,10 +139,10 @@ const ExecutiveMarketSignals = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-zinc-900 border-[#1A1A1A]">
+            <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-white/70 flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 text-gold" />
+                  <AlertCircle className="w-4 h-4 text-[#1A1A1A]" />
                   Price Sensitivity
                 </CardTitle>
               </CardHeader>
@@ -159,7 +159,7 @@ const ExecutiveMarketSignals = () => {
           </div>
 
           {/* Area Heat Map */}
-          <Card className="bg-zinc-900 border-[#1A1A1A] mb-8">
+          <Card className="bg-[#FDFBF7] border-[#1A1A1A] mb-8">
             <CardHeader>
               <CardTitle className="text-lg text-white">
                 Area-Level Market Signals
@@ -217,7 +217,7 @@ const ExecutiveMarketSignals = () => {
           </Card>
 
           {/* Strategic Focus Areas */}
-          <Card className="bg-zinc-900 border-[#1A1A1A]">
+          <Card className="bg-[#FDFBF7] border-[#1A1A1A]">
             <CardHeader>
               <CardTitle className="text-lg text-white">
                 Strategic Focus Recommendations
@@ -233,14 +233,14 @@ const ExecutiveMarketSignals = () => {
               </div>
               
               <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-4">
-                <h4 className="text-amber-400 font-medium mb-2">Price Sensitivity Alert</h4>
+                <h4 className="text-[#1A1A1A] font-medium mb-2">Price Sensitivity Alert</h4>
                 <p className="text-white/85 text-sm">
                   Buyer negotiation intensity is elevated in secondary areas. 
                   Adjust client expectations during initial consultations.
                 </p>
               </div>
 
-              <div className="bg-zinc-800 rounded-lg p-4">
+              <div className="bg-[#F7F2EA] rounded-lg p-4">
                 <h4 className="text-white/85 font-medium mb-2">Data Attribution</h4>
                 <p className="text-white/90 text-sm">
                   All signals derived from aggregated government Open Data and internal CRM trends. 

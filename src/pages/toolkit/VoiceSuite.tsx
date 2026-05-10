@@ -42,7 +42,7 @@ import {
 
 const LoadingSpinner = () => (
   <div className="min-h-[40vh] flex items-center justify-center">
-    <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold" />
+    <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#B89555]" />
   </div>
 );
 
@@ -51,7 +51,7 @@ function CenteredAudioPreview({ src, label, onRemove }: { src: string | null; la
   if (!src) return null;
   return (
     <div className="mx-auto max-w-xl w-full">
-      <div className="rounded-2xl bg-gradient-to-br from-[#1a1708]/80 via-[#1c1a0e]/60 to-[#0d0c08]/80 border border-gold/20 p-5 shadow-[0_0_30px_rgba(212,175,55,0.08)]">
+      <div className="rounded-2xl bg-gradient-to-br from-[#1a1708]/80 via-[#1c1a0e]/60 to-[#0d0c08]/80 border border-[#B89555]/20 p-5 shadow-[0_0_30px_rgba(212,175,55,0.08)]">
         {label && <p className="text-xs text-[#1A1A1A]/70 font-medium mb-3 tracking-wider uppercase">{label}</p>}
         <audio controls src={src} className="w-full [&::-webkit-media-controls-panel]:bg-transparent" />
         {onRemove && (
@@ -96,26 +96,26 @@ function AIScriptWriterButton({ onScriptGenerated, language = 'en' }: { onScript
   if (!open) {
     return (
       <Button onClick={() => setOpen(true)} variant="outline" size="sm"
-        className="border-gold/30 text-gold hover:bg-gold/10 hover:border-gold/50">
+        className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 hover:border-[#B89555]/50">
         <Wand2 className="w-3.5 h-3.5 mr-1.5" /> AI Script Writer
       </Button>
     );
   }
 
   return (
-    <Card className="bg-[#0d0c08] border-gold/20">
+    <Card className="bg-[#0d0c08] border-[#B89555]/20">
       <CardContent className="p-4 space-y-3">
         <div className="flex items-center justify-between">
-          <p className="text-sm font-semibold text-gold flex items-center gap-1.5"><Wand2 className="w-4 h-4" /> AI Script Writer</p>
+          <p className="text-sm font-semibold text-[#1A1A1A] flex items-center gap-1.5"><Wand2 className="w-4 h-4" /> AI Script Writer</p>
           <Button variant="ghost" size="sm" onClick={() => setOpen(false)} className="text-white/90 h-6 w-6 p-0">×</Button>
         </div>
         <Textarea value={prompt} onChange={e => setPrompt(e.target.value)} placeholder="Describe what the script should be about..."
-          className="bg-[#1a1708] border-gold/20 text-white placeholder:text-[#1A1A1A]/70 min-h-[60px]" rows={3} />
+          className="bg-[#1a1708] border-[#B89555]/20 text-white placeholder:text-[#1A1A1A]/70 min-h-[60px]" rows={3} />
         <div className="grid grid-cols-2 gap-3">
           <div>
             <Label className="text-white/70 text-xs">Tone</Label>
             <Select value={tone} onValueChange={setTone}>
-              <SelectTrigger className="bg-[#1a1708] border-gold/20 text-white h-8 text-xs"><SelectValue /></SelectTrigger>
+              <SelectTrigger className="bg-[#1a1708] border-[#B89555]/20 text-white h-8 text-xs"><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="professional">Professional</SelectItem>
                 <SelectItem value="luxury">Luxury</SelectItem>
@@ -126,10 +126,10 @@ function AIScriptWriterButton({ onScriptGenerated, language = 'en' }: { onScript
           <div>
             <Label className="text-white/70 text-xs">Duration (s)</Label>
             <Input type="number" value={duration} onChange={e => setDuration(Number(e.target.value))} min={10} max={300}
-              className="bg-[#1a1708] border-gold/20 text-white h-8 text-xs" />
+              className="bg-[#1a1708] border-[#B89555]/20 text-white h-8 text-xs" />
           </div>
         </div>
-        <Button onClick={generate} disabled={loading} className="w-full bg-gold text-[#1A1A1A] hover:bg-gold/90 h-8 text-xs font-semibold">
+        <Button onClick={generate} disabled={loading} className="w-full bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90 h-8 text-xs font-semibold">
           {loading ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1" /> : <Wand2 className="w-3.5 h-3.5 mr-1" />}
           Generate Script
         </Button>
@@ -141,7 +141,7 @@ function AIScriptWriterButton({ onScriptGenerated, language = 'en' }: { onScript
 /** Premium section card wrapper */
 function SuiteCard({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return (
-    <Card className={`bg-gradient-to-br from-[#FDFBF7]/[0.03] via-[#F7F2EA]/[0.02] to-transparent border-gold/15 shadow-[0_4px_20px_rgba(0,0,0,0.3)] ${className}`}>
+    <Card className={`bg-gradient-to-br from-[#FDFBF7]/[0.03] via-[#F7F2EA]/[0.02] to-transparent border-[#B89555]/15 shadow-[0_4px_20px_rgba(0,0,0,0.3)] ${className}`}>
       {children}
     </Card>
   );
@@ -258,14 +258,14 @@ function VoiceStudioPanel() {
           <SuiteCard>
             <CardHeader className="pb-3">
               <CardTitle className="text-white text-sm flex items-center gap-2">
-                <AudioWaveform className="w-4 h-4 text-gold" /> Script & Preview
+                <AudioWaveform className="w-4 h-4 text-[#1A1A1A]" /> Script & Preview
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="relative">
                 <Textarea value={script} onChange={e => setScript(e.target.value.slice(0, 5000))}
                   placeholder="Type or generate your script..."
-                  className="bg-[#1a1708] border-gold/20 text-white placeholder:text-[#1A1A1A]/70 min-h-[150px]" rows={6} />
+                  className="bg-[#1a1708] border-[#B89555]/20 text-white placeholder:text-[#1A1A1A]/70 min-h-[150px]" rows={6} />
                 <span className="absolute bottom-2 right-3 text-[10px] text-[#1A1A1A]/70">{script.length}/5000</span>
               </div>
 
@@ -279,7 +279,7 @@ function VoiceStudioPanel() {
               {/* Browser preview play */}
               <div className="flex gap-2">
                 <Button onClick={previewVoice} variant="outline" size="sm"
-                  className="border-gold/30 text-gold hover:bg-gold/10">
+                  className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                   {playing ? <Pause className="w-3.5 h-3.5 mr-1" /> : <Play className="w-3.5 h-3.5 mr-1" />}
                   {playing ? 'Stop' : 'Preview'}
                 </Button>
@@ -293,7 +293,7 @@ function VoiceStudioPanel() {
                 onRemove={() => { if (generatedUrl) URL.revokeObjectURL(generatedUrl); setGeneratedUrl(null); }} />
 
               {generatedUrl && (
-                <Button onClick={downloadAudio} className="w-full bg-gold text-[#1A1A1A] hover:bg-gold/90 font-semibold">
+                <Button onClick={downloadAudio} className="w-full bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90 font-semibold">
                   <Download className="w-4 h-4 mr-2" /> Download {outputFormat.toUpperCase()}
                 </Button>
               )}
@@ -307,8 +307,8 @@ function VoiceStudioPanel() {
           <SuiteCard>
             <CardHeader className="pb-2">
               <CardTitle className="text-white text-sm flex items-center gap-2">
-                <MicVocal className="w-4 h-4 text-gold" /> Voice
-                {isOwner && <Badge className="bg-gold/20 text-gold border-gold/30 text-[10px] ml-auto">ElevenLabs</Badge>}
+                <MicVocal className="w-4 h-4 text-[#1A1A1A]" /> Voice
+                {isOwner && <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30 text-[10px] ml-auto">ElevenLabs</Badge>}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -316,7 +316,7 @@ function VoiceStudioPanel() {
                 /* Owner: ElevenLabs voices */
                 <>
                   <Select value={elVoiceId} onValueChange={setElVoiceId}>
-                    <SelectTrigger className="bg-[#1a1708] border-gold/20 text-white text-xs h-9"><SelectValue /></SelectTrigger>
+                    <SelectTrigger className="bg-[#1a1708] border-[#B89555]/20 text-white text-xs h-9"><SelectValue /></SelectTrigger>
                     <SelectContent className="max-h-[300px]">
                       {ELEVENLABS_VOICES.map(v => (
                         <SelectItem key={v.id} value={v.id}>
@@ -330,22 +330,22 @@ function VoiceStudioPanel() {
                   </Select>
 
                   <div className="space-y-2">
-                    <div className="flex justify-between"><Label className="text-white/70 text-xs">Stability</Label><span className="text-[10px] text-gold">{stability[0].toFixed(2)}</span></div>
-                    <Slider value={stability} onValueChange={setStability} min={0} max={1} step={0.05} className="[&_[role=slider]]:bg-gold" />
+                    <div className="flex justify-between"><Label className="text-white/70 text-xs">Stability</Label><span className="text-[10px] text-[#1A1A1A]">{stability[0].toFixed(2)}</span></div>
+                    <Slider value={stability} onValueChange={setStability} min={0} max={1} step={0.05} className="[&_[role=slider]]:bg-[#EFE6D6]" />
                   </div>
                   <div className="space-y-2">
-                    <div className="flex justify-between"><Label className="text-white/70 text-xs">Similarity</Label><span className="text-[10px] text-gold">{similarity[0].toFixed(2)}</span></div>
-                    <Slider value={similarity} onValueChange={setSimilarity} min={0} max={1} step={0.05} className="[&_[role=slider]]:bg-gold" />
+                    <div className="flex justify-between"><Label className="text-white/70 text-xs">Similarity</Label><span className="text-[10px] text-[#1A1A1A]">{similarity[0].toFixed(2)}</span></div>
+                    <Slider value={similarity} onValueChange={setSimilarity} min={0} max={1} step={0.05} className="[&_[role=slider]]:bg-[#EFE6D6]" />
                   </div>
                   <div className="space-y-2">
-                    <div className="flex justify-between"><Label className="text-white/70 text-xs">Style</Label><span className="text-[10px] text-gold">{style[0].toFixed(2)}</span></div>
-                    <Slider value={style} onValueChange={setStyle} min={0} max={1} step={0.05} className="[&_[role=slider]]:bg-gold" />
+                    <div className="flex justify-between"><Label className="text-white/70 text-xs">Style</Label><span className="text-[10px] text-[#1A1A1A]">{style[0].toFixed(2)}</span></div>
+                    <Slider value={style} onValueChange={setStyle} min={0} max={1} step={0.05} className="[&_[role=slider]]:bg-[#EFE6D6]" />
                   </div>
                 </>
               ) : (
                 /* Regular user: Browser voices */
                 <Select value={selectedVoice} onValueChange={setSelectedVoice}>
-                  <SelectTrigger className="bg-[#1a1708] border-gold/20 text-white text-xs h-9"><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="bg-[#1a1708] border-[#B89555]/20 text-white text-xs h-9"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     {BROWSER_VOICE_LIBRARY.slice(0, 12).map(v => (
                       <SelectItem key={v.id} value={v.id}>{v.name} — {v.tag}</SelectItem>
@@ -360,21 +360,21 @@ function VoiceStudioPanel() {
           <SuiteCard>
             <CardHeader className="pb-2">
               <CardTitle className="text-white text-sm flex items-center gap-2">
-                <SlidersHorizontal className="w-4 h-4 text-gold" /> Controls
+                <SlidersHorizontal className="w-4 h-4 text-[#1A1A1A]" /> Controls
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="space-y-2">
-                <div className="flex justify-between"><Label className="text-white/70 text-xs">Speed</Label><span className="text-[10px] text-gold">{speed[0].toFixed(1)}x</span></div>
-                <Slider value={speed} onValueChange={setSpeed} min={0.5} max={2} step={0.1} className="[&_[role=slider]]:bg-gold" />
+                <div className="flex justify-between"><Label className="text-white/70 text-xs">Speed</Label><span className="text-[10px] text-[#1A1A1A]">{speed[0].toFixed(1)}x</span></div>
+                <Slider value={speed} onValueChange={setSpeed} min={0.5} max={2} step={0.1} className="[&_[role=slider]]:bg-[#EFE6D6]" />
               </div>
               <div className="space-y-2">
-                <div className="flex justify-between"><Label className="text-white/70 text-xs">Pitch</Label><span className="text-[10px] text-gold">{pitch[0].toFixed(1)}</span></div>
-                <Slider value={pitch} onValueChange={setPitch} min={0.5} max={2} step={0.1} className="[&_[role=slider]]:bg-gold" />
+                <div className="flex justify-between"><Label className="text-white/70 text-xs">Pitch</Label><span className="text-[10px] text-[#1A1A1A]">{pitch[0].toFixed(1)}</span></div>
+                <Slider value={pitch} onValueChange={setPitch} min={0.5} max={2} step={0.1} className="[&_[role=slider]]:bg-[#EFE6D6]" />
               </div>
               <div className="space-y-2">
-                <div className="flex justify-between"><Label className="text-white/70 text-xs">Volume</Label><span className="text-[10px] text-gold">{Math.round(volume[0] * 100)}%</span></div>
-                <Slider value={volume} onValueChange={setVolume} min={0} max={1} step={0.05} className="[&_[role=slider]]:bg-gold" />
+                <div className="flex justify-between"><Label className="text-white/70 text-xs">Volume</Label><span className="text-[10px] text-[#1A1A1A]">{Math.round(volume[0] * 100)}%</span></div>
+                <Slider value={volume} onValueChange={setVolume} min={0} max={1} step={0.05} className="[&_[role=slider]]:bg-[#EFE6D6]" />
               </div>
             </CardContent>
           </SuiteCard>
@@ -383,14 +383,14 @@ function VoiceStudioPanel() {
           <SuiteCard>
             <CardHeader className="pb-2">
               <CardTitle className="text-white text-sm flex items-center gap-2">
-                <Settings2 className="w-4 h-4 text-gold" /> Output
+                <Settings2 className="w-4 h-4 text-[#1A1A1A]" /> Output
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div>
                 <Label className="text-white/70 text-xs">Language</Label>
                 <Select value={language} onValueChange={setLanguage}>
-                  <SelectTrigger className="bg-[#1a1708] border-gold/20 text-white text-xs h-8"><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="bg-[#1a1708] border-[#B89555]/20 text-white text-xs h-8"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     {[['en','English'],['ar','Arabic'],['hi','Hindi'],['ur','Urdu'],['zh','Chinese'],['es','Spanish'],['fr','French'],['de','German'],['ru','Russian'],['pt','Portuguese'],['ja','Japanese'],['ko','Korean'],['it','Italian'],['tr','Turkish'],['nl','Dutch'],['pl','Polish'],['th','Thai'],['vi','Vietnamese'],['id','Indonesian'],['bn','Bengali'],['ta','Tamil']].map(([code, name]) => (
                       <SelectItem key={code} value={code}>{name}</SelectItem>
@@ -401,7 +401,7 @@ function VoiceStudioPanel() {
               <div>
                 <Label className="text-white/70 text-xs">Format</Label>
                 <Select value={outputFormat} onValueChange={setOutputFormat}>
-                  <SelectTrigger className="bg-[#1a1708] border-gold/20 text-white text-xs h-8"><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="bg-[#1a1708] border-[#B89555]/20 text-white text-xs h-8"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="mp3">MP3 (128kbps)</SelectItem>
                     <SelectItem value="wav">WAV (Lossless)</SelectItem>
@@ -417,7 +417,7 @@ function VoiceStudioPanel() {
                 </Button>
               ) : (
                 <Button onClick={previewVoice} disabled={!script.trim()}
-                  className="w-full bg-gold text-[#1A1A1A] hover:bg-gold/90 font-semibold">
+                  className="w-full bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90 font-semibold">
                   <Play className="w-4 h-4 mr-2" /> Generate Voice
                 </Button>
               )}
@@ -494,17 +494,17 @@ function VoiceToTextPanel() {
       <SuiteCard>
         <CardHeader>
           <CardTitle className="text-white text-base flex items-center gap-2">
-            <FileAudio className="w-5 h-5 text-gold" /> Voice to Text
+            <FileAudio className="w-5 h-5 text-[#1A1A1A]" /> Voice to Text
             <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-[10px] ml-2">FREE</Badge>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex gap-3 flex-wrap">
             <Button onClick={isRecording ? stopRecording : startRecording}
-              className={isRecording ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-gold text-[#1A1A1A] hover:bg-gold/90'}>
+              className={isRecording ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90'}>
               {isRecording ? <><Square className="w-4 h-4 mr-2" />Stop Recording</> : <><Mic className="w-4 h-4 mr-2" />Record Audio</>}
             </Button>
-            <Button variant="outline" onClick={() => fileInputRef.current?.click()} className="border-gold/30 text-gold hover:bg-gold/10">
+            <Button variant="outline" onClick={() => fileInputRef.current?.click()} className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
               <Upload className="w-4 h-4 mr-2" /> Upload Audio
             </Button>
             <input ref={fileInputRef} type="file" accept="audio/*" className="hidden" onChange={handleFileUpload} />
@@ -516,7 +516,7 @@ function VoiceToTextPanel() {
             <div className="flex-1">
               <Label className="text-white/70 text-xs">Language</Label>
               <Select value={language} onValueChange={setLanguage}>
-                <SelectTrigger className="bg-[#1a1708] border-gold/20 text-white text-xs h-9"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="bg-[#1a1708] border-[#B89555]/20 text-white text-xs h-9"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {[['en','English'],['ar','Arabic'],['hi','Hindi'],['ur','Urdu'],['es','Spanish'],['fr','French'],['de','German'],['zh','Chinese'],['ja','Japanese'],['ko','Korean']].map(([c,n]) => (
                     <SelectItem key={c} value={c}>{n}</SelectItem>
@@ -524,7 +524,7 @@ function VoiceToTextPanel() {
                 </SelectContent>
               </Select>
             </div>
-            <Button onClick={transcribe} disabled={!audioFile || processing} className="bg-gold text-[#1A1A1A] hover:bg-gold/90 font-semibold">
+            <Button onClick={transcribe} disabled={!audioFile || processing} className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90 font-semibold">
               {processing ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Transcribe'}
             </Button>
           </div>
@@ -532,8 +532,8 @@ function VoiceToTextPanel() {
           {transcription && (
             <div className="space-y-2">
               <Label className="text-white/70 text-xs">Transcription</Label>
-              <Textarea value={transcription} readOnly rows={6} className="bg-[#1a1708] border-gold/20 text-white" />
-              <Button variant="outline" className="border-gold/30 text-gold hover:bg-gold/10"
+              <Textarea value={transcription} readOnly rows={6} className="bg-[#1a1708] border-[#B89555]/20 text-white" />
+              <Button variant="outline" className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                 onClick={() => { navigator.clipboard.writeText(transcription); toast.success('Copied!'); }}>
                 <Copy className="w-3.5 h-3.5 mr-1.5" /> Copy Text
               </Button>
@@ -606,8 +606,8 @@ function AudioEnhancePanel() {
       <SuiteCard>
         <CardHeader>
           <CardTitle className="text-white text-base flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-gold" /> Audio Enhancement
-            <Badge className="bg-gold/20 text-gold border-gold/30 text-[10px] ml-2">FFmpeg WASM</Badge>
+            <Sparkles className="w-5 h-5 text-[#1A1A1A]" /> Audio Enhancement
+            <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30 text-[10px] ml-2">FFmpeg WASM</Badge>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-5">
@@ -617,11 +617,11 @@ function AudioEnhancePanel() {
               <button key={m.value} onClick={() => !processing && setEnhanceMode(m.value)}
                 className={`p-3 rounded-xl border text-left transition-all ${
                   enhanceMode === m.value
-                    ? 'bg-gold/10 border-gold/40 shadow-[0_0_15px_rgba(212,175,55,0.1)]'
-                    : 'bg-[#1a1708]/50 border-gold/10 hover:border-gold/25'
+                    ? 'bg-[#EFE6D6]/10 border-[#B89555]/40 shadow-[0_0_15px_rgba(212,175,55,0.1)]'
+                    : 'bg-[#1a1708]/50 border-[#B89555]/10 hover:border-[#B89555]/25'
                 }`}>
-                <m.icon className={`w-4 h-4 mb-1 ${enhanceMode === m.value ? 'text-gold' : 'text-white/90'}`} />
-                <p className={`text-xs font-semibold ${enhanceMode === m.value ? 'text-gold' : 'text-white/70'}`}>{m.label}</p>
+                <m.icon className={`w-4 h-4 mb-1 ${enhanceMode === m.value ? 'text-[#1A1A1A]' : 'text-white/90'}`} />
+                <p className={`text-xs font-semibold ${enhanceMode === m.value ? 'text-[#1A1A1A]' : 'text-white/70'}`}>{m.label}</p>
                 <p className="text-[10px] text-[#1A1A1A]/70 mt-0.5">{m.desc}</p>
               </button>
             ))}
@@ -629,7 +629,7 @@ function AudioEnhancePanel() {
 
           {/* Upload */}
           <Button variant="outline" onClick={() => fileInputRef.current?.click()} disabled={processing}
-            className="border-gold/30 text-gold hover:bg-gold/10">
+            className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
             <Upload className="w-4 h-4 mr-2" /> Upload Audio (max 100MB)
           </Button>
           <input ref={fileInputRef} type="file" accept="audio/*" className="hidden" onChange={handleFileUpload} />
@@ -637,9 +637,9 @@ function AudioEnhancePanel() {
           <CenteredAudioPreview src={audioUrl} label="Original Audio" />
 
           {processing && progress && (
-            <div className="max-w-xl mx-auto p-3 bg-[#1a1708]/60 border border-gold/10 rounded-xl space-y-2">
+            <div className="max-w-xl mx-auto p-3 bg-[#1a1708]/60 border border-[#B89555]/10 rounded-xl space-y-2">
               <div className="flex items-center gap-2">
-                <Loader2 className="w-4 h-4 text-gold animate-spin" />
+                <Loader2 className="w-4 h-4 text-[#1A1A1A] animate-spin" />
                 <span className="text-sm text-white">{progress.message}</span>
               </div>
               <Progress value={progress.percent} className="h-1.5" />
@@ -647,7 +647,7 @@ function AudioEnhancePanel() {
           )}
 
           <Button onClick={enhanceAudio} disabled={processing || !audioFile}
-            className="w-full bg-gold text-[#1A1A1A] hover:bg-gold/90 font-semibold max-w-xl mx-auto">
+            className="w-full bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90 font-semibold max-w-xl mx-auto">
             {processing ? <><Loader2 className="w-4 h-4 animate-spin mr-2" />Processing...</> : <><Sparkles className="w-4 h-4 mr-2" />Enhance Audio</>}
           </Button>
 
@@ -775,12 +775,12 @@ function AudioEffectsPanel() {
       <SuiteCard>
         <CardHeader>
           <CardTitle className="text-white text-base flex items-center gap-2">
-            <Waves className="w-5 h-5 text-gold" /> Audio Effects
+            <Waves className="w-5 h-5 text-[#1A1A1A]" /> Audio Effects
             <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-[10px] ml-2">Web Audio</Badge>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-5">
-          <Button variant="outline" onClick={() => fileInputRef.current?.click()} className="border-gold/30 text-gold hover:bg-gold/10">
+          <Button variant="outline" onClick={() => fileInputRef.current?.click()} className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
             <Upload className="w-4 h-4 mr-2" /> Upload Audio
           </Button>
           <input ref={fileInputRef} type="file" accept="audio/*" className="hidden" onChange={handleFileUpload} />
@@ -790,27 +790,27 @@ function AudioEffectsPanel() {
           {audioFile && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-xl mx-auto">
               <div className="space-y-2">
-                <div className="flex justify-between"><Label className="text-white/70 text-xs">Reverb</Label><span className="text-[10px] text-gold">{reverb[0].toFixed(1)}</span></div>
-                <Slider value={reverb} onValueChange={setReverb} min={0} max={1} step={0.05} className="[&_[role=slider]]:bg-gold" />
+                <div className="flex justify-between"><Label className="text-white/70 text-xs">Reverb</Label><span className="text-[10px] text-[#1A1A1A]">{reverb[0].toFixed(1)}</span></div>
+                <Slider value={reverb} onValueChange={setReverb} min={0} max={1} step={0.05} className="[&_[role=slider]]:bg-[#EFE6D6]" />
               </div>
               <div className="space-y-2">
-                <div className="flex justify-between"><Label className="text-white/70 text-xs">Echo</Label><span className="text-[10px] text-gold">{echo[0].toFixed(1)}</span></div>
-                <Slider value={echo} onValueChange={setEcho} min={0} max={1} step={0.05} className="[&_[role=slider]]:bg-gold" />
+                <div className="flex justify-between"><Label className="text-white/70 text-xs">Echo</Label><span className="text-[10px] text-[#1A1A1A]">{echo[0].toFixed(1)}</span></div>
+                <Slider value={echo} onValueChange={setEcho} min={0} max={1} step={0.05} className="[&_[role=slider]]:bg-[#EFE6D6]" />
               </div>
               <div className="space-y-2">
-                <div className="flex justify-between"><Label className="text-white/70 text-xs">Pitch (semitones)</Label><span className="text-[10px] text-gold">{pitchShift[0] > 0 ? '+' : ''}{pitchShift[0]}</span></div>
-                <Slider value={pitchShift} onValueChange={setPitchShift} min={-12} max={12} step={1} className="[&_[role=slider]]:bg-gold" />
+                <div className="flex justify-between"><Label className="text-white/70 text-xs">Pitch (semitones)</Label><span className="text-[10px] text-[#1A1A1A]">{pitchShift[0] > 0 ? '+' : ''}{pitchShift[0]}</span></div>
+                <Slider value={pitchShift} onValueChange={setPitchShift} min={-12} max={12} step={1} className="[&_[role=slider]]:bg-[#EFE6D6]" />
               </div>
               <div className="space-y-2">
-                <div className="flex justify-between"><Label className="text-white/70 text-xs">Speed</Label><span className="text-[10px] text-gold">{speedChange[0].toFixed(1)}x</span></div>
-                <Slider value={speedChange} onValueChange={setSpeedChange} min={0.5} max={2} step={0.1} className="[&_[role=slider]]:bg-gold" />
+                <div className="flex justify-between"><Label className="text-white/70 text-xs">Speed</Label><span className="text-[10px] text-[#1A1A1A]">{speedChange[0].toFixed(1)}x</span></div>
+                <Slider value={speedChange} onValueChange={setSpeedChange} min={0.5} max={2} step={0.1} className="[&_[role=slider]]:bg-[#EFE6D6]" />
               </div>
             </div>
           )}
 
           {audioFile && (
             <Button onClick={applyEffects} disabled={processing}
-              className="w-full bg-gold text-[#1A1A1A] hover:bg-gold/90 font-semibold max-w-xl mx-auto">
+              className="w-full bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90 font-semibold max-w-xl mx-auto">
               {processing ? <><Loader2 className="w-4 h-4 animate-spin mr-2" />Applying...</> : <><Waves className="w-4 h-4 mr-2" />Apply Effects</>}
             </Button>
           )}
@@ -924,8 +924,8 @@ function VoiceCloningPanel() {
       <SuiteCard>
         <CardHeader>
           <CardTitle className="text-white text-base flex items-center gap-2">
-            <Crown className="w-5 h-5 text-gold" /> Voice Cloning
-            <Badge className="bg-gold/20 text-gold border-gold/30 text-[10px] ml-2">ElevenLabs · Owner</Badge>
+            <Crown className="w-5 h-5 text-[#1A1A1A]" /> Voice Cloning
+            <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30 text-[10px] ml-2">ElevenLabs · Owner</Badge>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-5">
@@ -934,7 +934,7 @@ function VoiceCloningPanel() {
             <Label className="text-white/70 text-xs font-semibold tracking-wider uppercase">Step 1: Record Voice Samples</Label>
             <div className="flex gap-2 flex-wrap">
               <Button onClick={isRecording ? stopRecording : startRecording}
-                className={isRecording ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-gold text-[#1A1A1A] hover:bg-gold/90'}>
+                className={isRecording ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90'}>
                 {isRecording ? <><Square className="w-4 h-4 mr-2" />Stop</> : <><Mic className="w-4 h-4 mr-2" />Record Sample</>}
               </Button>
               <span className="text-xs text-white/90 self-center">{recordings.length} sample{recordings.length !== 1 ? 's' : ''} recorded</span>
@@ -951,7 +951,7 @@ function VoiceCloningPanel() {
           <div className="space-y-3">
             <Label className="text-white/70 text-xs font-semibold tracking-wider uppercase">Step 2: Clone Voice</Label>
             <Input value={voiceName} onChange={e => setVoiceName(e.target.value)} placeholder="Voice name..."
-              className="bg-[#1a1708] border-gold/20 text-white placeholder:text-[#1A1A1A]/70" />
+              className="bg-[#1a1708] border-[#B89555]/20 text-white placeholder:text-[#1A1A1A]/70" />
             <Button onClick={cloneVoice} disabled={cloning || recordings.length === 0}
               className="w-full bg-gradient-to-r from-gold via-amber-500 to-gold text-[#1A1A1A] font-bold hover:brightness-110">
               {cloning ? <><Loader2 className="w-4 h-4 animate-spin mr-2" />Cloning...</> : <><MicVocal className="w-4 h-4 mr-2" />Clone Voice</>}
@@ -960,13 +960,13 @@ function VoiceCloningPanel() {
 
           {/* Step 3: Use cloned voice */}
           {clonedVoiceId && (
-            <div className="space-y-3 border-t border-gold/10 pt-4">
+            <div className="space-y-3 border-t border-[#B89555]/10 pt-4">
               <Label className="text-white/70 text-xs font-semibold tracking-wider uppercase">Step 3: Generate with Cloned Voice</Label>
               <p className="text-[10px] text-emerald-400">✓ Voice ID: {clonedVoiceId}</p>
               <Textarea value={ttsText} onChange={e => setTtsText(e.target.value)} placeholder="Enter text to speak..."
-                className="bg-[#1a1708] border-gold/20 text-white placeholder:text-[#1A1A1A]/70" rows={3} />
+                className="bg-[#1a1708] border-[#B89555]/20 text-white placeholder:text-[#1A1A1A]/70" rows={3} />
               <Button onClick={generateTTS} disabled={ttsGenerating || !ttsText.trim()}
-                className="w-full bg-gold text-[#1A1A1A] hover:bg-gold/90 font-semibold">
+                className="w-full bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90 font-semibold">
                 {ttsGenerating ? <><Loader2 className="w-4 h-4 animate-spin mr-2" />Generating...</> : <><Play className="w-4 h-4 mr-2" />Generate</>}
               </Button>
               <CenteredAudioPreview src={ttsUrl} label="Cloned Voice Output" />
@@ -1033,12 +1033,12 @@ function AudioTranslationPanel() {
       <SuiteCard>
         <CardHeader>
           <CardTitle className="text-white text-base flex items-center gap-2">
-            <Languages className="w-5 h-5 text-gold" /> Audio Translation
+            <Languages className="w-5 h-5 text-[#1A1A1A]" /> Audio Translation
             <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-[10px] ml-2">FREE</Badge>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Button variant="outline" onClick={() => fileInputRef.current?.click()} className="border-gold/30 text-gold hover:bg-gold/10">
+          <Button variant="outline" onClick={() => fileInputRef.current?.click()} className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
             <Upload className="w-4 h-4 mr-2" /> Upload Audio
           </Button>
           <input ref={fileInputRef} type="file" accept="audio/*" className="hidden" onChange={handleFileUpload} />
@@ -1049,21 +1049,21 @@ function AudioTranslationPanel() {
             <div>
               <Label className="text-white/70 text-xs">From</Label>
               <Select value={sourceLang} onValueChange={setSourceLang}>
-                <SelectTrigger className="bg-[#1a1708] border-gold/20 text-white text-xs h-9"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="bg-[#1a1708] border-[#B89555]/20 text-white text-xs h-9"><SelectValue /></SelectTrigger>
                 <SelectContent>{LANGUAGES.map(([c,n]) => <SelectItem key={c} value={c}>{n}</SelectItem>)}</SelectContent>
               </Select>
             </div>
             <div>
               <Label className="text-white/70 text-xs">To</Label>
               <Select value={targetLang} onValueChange={setTargetLang}>
-                <SelectTrigger className="bg-[#1a1708] border-gold/20 text-white text-xs h-9"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="bg-[#1a1708] border-[#B89555]/20 text-white text-xs h-9"><SelectValue /></SelectTrigger>
                 <SelectContent>{LANGUAGES.map(([c,n]) => <SelectItem key={c} value={c}>{n}</SelectItem>)}</SelectContent>
               </Select>
             </div>
           </div>
 
           <Button onClick={translateAudio} disabled={!audioFile || processing}
-            className="w-full bg-gold text-[#1A1A1A] hover:bg-gold/90 font-semibold max-w-xl mx-auto">
+            className="w-full bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90 font-semibold max-w-xl mx-auto">
             {processing ? <><Loader2 className="w-4 h-4 animate-spin mr-2" />Translating...</> : 'Translate Audio'}
           </Button>
 
@@ -1072,8 +1072,8 @@ function AudioTranslationPanel() {
           {translatedText && (
             <div className="space-y-2 max-w-xl mx-auto">
               <Label className="text-white/70 text-xs">Translated Text</Label>
-              <Textarea value={translatedText} readOnly rows={6} className="bg-[#1a1708] border-gold/20 text-white" />
-              <Button variant="outline" className="border-gold/30 text-gold hover:bg-gold/10"
+              <Textarea value={translatedText} readOnly rows={6} className="bg-[#1a1708] border-[#B89555]/20 text-white" />
+              <Button variant="outline" className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                 onClick={() => { navigator.clipboard.writeText(translatedText); toast.success('Copied!'); }}>
                 <Copy className="w-3.5 h-3.5 mr-1.5" /> Copy
               </Button>
@@ -1137,7 +1137,7 @@ function audioBufferToWav(buffer: AudioBuffer): Blob {
 export default function VoiceSuite() {
   const { isOwner } = useAuth();
 
-  const TAB_CLASS = "relative px-3 md:px-5 py-3.5 rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold text-white/90 hover:text-white/85 transition-colors flex items-center gap-1.5 whitespace-nowrap text-xs font-medium";
+  const TAB_CLASS = "relative px-3 md:px-5 py-3.5 rounded-none border-b-2 border-transparent data-[state=active]:border-[#B89555] data-[state=active]:text-[#1A1A1A] text-white/90 hover:text-white/85 transition-colors flex items-center gap-1.5 whitespace-nowrap text-xs font-medium";
 
   return (
     <>
@@ -1148,22 +1148,22 @@ export default function VoiceSuite() {
 
       <div className="min-h-screen bg-gradient-to-br from-[#0a0908] via-[#0d0c08] to-[#080704]">
         {/* Header */}
-        <div className="border-b border-gold/15 bg-gradient-to-r from-[#0d0c08] via-[#141008]/80 to-[#0d0c08]">
+        <div className="border-b border-[#B89555]/15 bg-gradient-to-r from-[#0d0c08] via-[#141008]/80 to-[#0d0c08]">
           <div className="max-w-7xl mx-auto px-4 py-5">
             <div className="flex items-center gap-3 mb-3">
               <Link to="/toolkit">
-                <Button variant="ghost" size="sm" className="text-white/90 hover:text-gold hover:bg-gold/5 border border-gold/10 hover:border-gold/30 text-xs h-7">
+                <Button variant="ghost" size="sm" className="text-white/90 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/5 border border-[#B89555]/10 hover:border-[#B89555]/30 text-xs h-7">
                   <ArrowLeft className="w-3.5 h-3.5 mr-1.5" /> Royal Tools Hub
                 </Button>
               </Link>
             </div>
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold/20 to-amber-700/10 border border-gold/30 flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.1)]">
-                <Headphones className="w-6 h-6 text-gold" />
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold/20 to-amber-700/10 border border-[#B89555]/30 flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.1)]">
+                <Headphones className="w-6 h-6 text-[#1A1A1A]" />
               </div>
               <div>
                 <h1 className="text-xl md:text-2xl font-bold text-white tracking-tight">
-                  Voice & Audio <span className="text-gold">Suite</span>
+                  Voice & Audio <span className="text-[#1A1A1A]">Suite</span>
                 </h1>
                 <p className="text-white/90 text-xs">Premium TTS, transcription, enhancement, effects & translation</p>
               </div>
@@ -1173,7 +1173,7 @@ export default function VoiceSuite() {
 
         {/* Tabs */}
         <Tabs defaultValue="tts" className="flex flex-col">
-          <div className="border-b border-gold/10 bg-[#0d0c08]/80 backdrop-blur-sm sticky top-0 z-10">
+          <div className="border-b border-[#B89555]/10 bg-[#0d0c08]/80 backdrop-blur-sm sticky top-0 z-10">
             <div className="max-w-7xl mx-auto px-4">
               <TabsList className="w-full justify-start rounded-none bg-transparent p-0 h-auto gap-0 overflow-x-auto">
                 <TabsTrigger value="tts" className={TAB_CLASS}>

@@ -226,7 +226,7 @@ const AIPropertyCoach = ({ lead, activities = [], onSuggestionApply }: AIPropert
     switch (type) {
       case 'property': return <Building2 className="h-4 w-4 text-blue-400" />;
       case 'approach': return <MessageSquare className="h-4 w-4 text-green-400" />;
-      case 'objection': return <Lightbulb className="h-4 w-4 text-amber-400" />;
+      case 'objection': return <Lightbulb className="h-4 w-4 text-[#1A1A1A]" />;
       case 'followup': return <TrendingUp className="h-4 w-4 text-purple-400" />;
       default: return <Sparkles className="h-4 w-4 text-[#1A1A1A]" />;
     }

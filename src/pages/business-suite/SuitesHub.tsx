@@ -91,7 +91,7 @@ const textMap: Record<string, string> = {
   fuchsia: 'text-fuchsia-400',
   emerald: 'text-emerald-400',
   pink: 'text-pink-400',
-  amber: 'text-amber-400',
+  amber: 'text-[#1A1A1A]',
 };
 
 const SuitesHub = () => {
@@ -109,7 +109,7 @@ const SuitesHub = () => {
           <div className="relative max-w-6xl mx-auto px-4 text-center">
             <Link
               to="/toolkit"
-              className="inline-flex items-center gap-2 text-white/70 hover:text-gold transition-colors mb-8 text-sm"
+              className="inline-flex items-center gap-2 text-white/70 hover:text-[#1A1A1A] transition-colors mb-8 text-sm"
             >
               <ArrowRight className="w-4 h-4 rotate-180" />
               Back to Toolkit
@@ -119,9 +119,9 @@ const SuitesHub = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/30 rounded-full mb-6">
-                <Layers className="w-4 h-4 text-gold" />
-                <span className="text-gold text-xs font-semibold uppercase tracking-wider">Tool Suites</span>
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full mb-6">
+                <Layers className="w-4 h-4 text-[#1A1A1A]" />
+                <span className="text-[#1A1A1A] text-xs font-semibold uppercase tracking-wider">Tool Suites</span>
               </div>
 
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
@@ -148,7 +148,7 @@ const SuitesHub = () => {
                 >
                   <Link
                     to={suite.href}
-                    className={`group block relative p-6 md:p-8 rounded-2xl border-2 ${borderMap[suite.glowColor]} bg-zinc-950/80 backdrop-blur-sm transition-all duration-300 hover:shadow-2xl ${glowMap[suite.glowColor]} hover:scale-[1.01]`}
+                    className={`group block relative p-6 md:p-8 rounded-2xl border-2 ${borderMap[suite.glowColor]} bg-[#FDFBF7]/80 backdrop-blur-sm transition-all duration-300 hover:shadow-2xl ${glowMap[suite.glowColor]} hover:scale-[1.01]`}
                   >
                     {/* Gradient glow */}
                     <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${suite.gradient} opacity-[0.04] group-hover:opacity-[0.08] transition-opacity`} />
@@ -177,7 +177,7 @@ const SuitesHub = () => {
                         {suite.highlights.map(h => (
                           <span
                             key={h}
-                            className={`text-[11px] px-2.5 py-1 rounded-full border ${borderMap[suite.glowColor].split(' ')[0]} bg-zinc-900/80 ${textMap[suite.glowColor]} font-medium`}
+                            className={`text-[11px] px-2.5 py-1 rounded-full border ${borderMap[suite.glowColor].split(' ')[0]} bg-[#FDFBF7]/80 ${textMap[suite.glowColor]} font-medium`}
                           >
                             {h}
                           </span>
@@ -200,7 +200,7 @@ const SuitesHub = () => {
           <div className="mt-10 text-center">
             <Link
               to="/business-suite/all-tools"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-zinc-900/80 border border-gold/30 rounded-full text-gold hover:bg-gold/10 transition-all text-sm font-medium"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[#FDFBF7]/80 border border-[#B89555]/30 rounded-full text-[#1A1A1A] hover:bg-[#EFE6D6]/10 transition-all text-sm font-medium"
             >
               <Sparkles className="w-4 h-4" />
               View All Individual Tools

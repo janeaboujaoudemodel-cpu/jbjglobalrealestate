@@ -137,8 +137,8 @@ const RentalAdvisory = () => {
         </div>
         
         {/* Floating gold accent orbs */}
-        <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/10 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-gold/15 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-1/4 left-10 w-64 h-64 bg-[#EFE6D6]/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-[#EFE6D6]/15 rounded-full blur-[120px] pointer-events-none" />
 
         {/* Content */}
         <div className="container mx-auto px-4 relative z-10">
@@ -149,9 +149,9 @@ const RentalAdvisory = () => {
             className="text-center max-w-4xl mx-auto"
           >
             {/* Label */}
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-[#1A1A1A]/30 backdrop-blur-md">
-              <Briefcase className="w-4 h-4 text-gold" />
-              <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-[#B89555]/40 bg-[#1A1A1A]/30 backdrop-blur-md">
+              <Briefcase className="w-4 h-4 text-[#1A1A1A]" />
+              <span className="text-[#1A1A1A] font-semibold text-xs uppercase tracking-[0.2em]">
                 Rental Advisory
               </span>
             </div>
@@ -214,8 +214,8 @@ const RentalAdvisory = () => {
                   className="jj-card-inner"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0 w-12 h-12 bg-[#1A1A1A] border border-gold rounded-xl flex items-center justify-center">
-                      <service.icon className="w-6 h-6 text-gold" />
+                    <div className="flex-shrink-0 w-12 h-12 bg-[#1A1A1A] border border-[#B89555] rounded-xl flex items-center justify-center">
+                      <service.icon className="w-6 h-6 text-[#1A1A1A]" />
                     </div>
                     <div className="flex-1">
                       <h3 className="text-xl md:text-2xl font-medium text-[#1A1A1A] mb-3">{service.title}</h3>
@@ -223,7 +223,7 @@ const RentalAdvisory = () => {
                       <ul className="space-y-2">
                         {service.items.map((item, idx) => (
                           <li key={idx} className="flex items-start gap-3">
-                            <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
+                            <CheckCircle2 className="w-4 h-4 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
                             <span className="text-[#1A1A1A]/70 text-sm">{item}</span>
                           </li>
                         ))}
@@ -262,8 +262,8 @@ const RentalAdvisory = () => {
                   variants={fadeInUp}
                   className="flex items-center gap-4 jj-card-inner !p-4"
                 >
-                  <div className="w-10 h-10 bg-[#1A1A1A] border border-gold/30 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <item.icon className="w-5 h-5 text-gold" />
+                  <div className="w-10 h-10 bg-[#1A1A1A] border border-[#B89555]/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <item.icon className="w-5 h-5 text-[#1A1A1A]" />
                   </div>
                   <span className="text-[#1A1A1A] font-medium">{item.label}</span>
                 </motion.div>
@@ -284,8 +284,8 @@ const RentalAdvisory = () => {
             className="max-w-4xl mx-auto"
           >
             <motion.div variants={fadeInUp} className="flex justify-center mb-6">
-              <div className="w-14 h-14 rounded-full bg-[#1A1A1A] flex items-center justify-center border-2 border-gold">
-                <HelpCircle className="w-7 h-7 text-gold" />
+              <div className="w-14 h-14 rounded-full bg-[#1A1A1A] flex items-center justify-center border-2 border-[#B89555]">
+                <HelpCircle className="w-7 h-7 text-[#1A1A1A]" />
               </div>
             </motion.div>
             <motion.h2
@@ -302,13 +302,13 @@ const RentalAdvisory = () => {
             >
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-1" />
+                  <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] flex-shrink-0 mt-1" />
                   <p className="text-[#1A1A1A]/70">
                     <span className="font-semibold text-[#1A1A1A]">Rental Advisory</span> focuses on strategic guidance and transaction execution.
                   </p>
                 </div>
                 <div className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-1" />
+                  <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] flex-shrink-0 mt-1" />
                   <p className="text-[#1A1A1A]/70">
                     If you require ongoing property management, we introduce licensed third-party partners where appropriate.
                   </p>
@@ -330,8 +330,8 @@ const RentalAdvisory = () => {
             className="max-w-4xl mx-auto"
           >
             <motion.div variants={fadeInUp} className="flex justify-center mb-6">
-              <div className="w-16 h-16 rounded-full bg-[#1A1A1A] flex items-center justify-center border-2 border-gold">
-                <Shield className="w-8 h-8 text-gold" />
+              <div className="w-16 h-16 rounded-full bg-[#1A1A1A] flex items-center justify-center border-2 border-[#B89555]">
+                <Shield className="w-8 h-8 text-[#1A1A1A]" />
               </div>
             </motion.div>
             <motion.h2
@@ -349,7 +349,7 @@ const RentalAdvisory = () => {
                   variants={fadeInUp}
                   className="flex items-center gap-4 jj-card-inner !p-4"
                 >
-                  <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0" />
+                  <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] flex-shrink-0" />
                   <span className="text-[#1A1A1A]">{reason}</span>
                 </motion.div>
               ))}
@@ -387,7 +387,7 @@ const RentalAdvisory = () => {
               <Button 
                 asChild
                 size="lg"
-                className="bg-gold hover:bg-gold-dark text-[#1A1A1A] font-semibold px-8 whitespace-nowrap"
+                className="bg-[#EFE6D6] hover:bg-[#EFE6D6]-dark text-[#1A1A1A] font-semibold px-8 whitespace-nowrap"
               >
                 <Link to="/seller-listing" className="inline-flex items-center gap-2">
                   <span>List Your Property for Rent</span>
@@ -398,7 +398,7 @@ const RentalAdvisory = () => {
                 asChild
                 size="lg"
                 variant="outline"
-                className="border-gold text-gold hover:bg-gold/10"
+                className="border-[#B89555] text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
               >
                 <Link to="/contact?service=rental-advisory">
                   Request Rental Advisory Consultation
@@ -410,30 +410,30 @@ const RentalAdvisory = () => {
       </section>
 
       {/* INTERNAL LINKS */}
-      <section className="bg-[#1A1A1A] py-12 border-t border-gold/20">
+      <section className="bg-[#1A1A1A] py-12 border-t border-[#B89555]/20">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap justify-center gap-6 text-sm">
             <Link
               to="/landlord-guide"
-              className="text-white/70 hover:text-gold transition-colors"
+              className="text-white/70 hover:text-[#1A1A1A] transition-colors"
             >
               Landlord Guide
             </Link>
             <Link
               to="/tenant-guide"
-              className="text-white/70 hover:text-gold transition-colors"
+              className="text-white/70 hover:text-[#1A1A1A] transition-colors"
             >
               Tenant Guide
             </Link>
             <Link
               to="/market-intelligence"
-              className="text-white/70 hover:text-gold transition-colors"
+              className="text-white/70 hover:text-[#1A1A1A] transition-colors"
             >
               Market Intelligence
             </Link>
             <Link
               to="/contact"
-              className="text-white/70 hover:text-gold transition-colors"
+              className="text-white/70 hover:text-[#1A1A1A] transition-colors"
             >
               Contact Us
             </Link>

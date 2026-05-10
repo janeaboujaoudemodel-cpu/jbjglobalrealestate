@@ -36,15 +36,15 @@ import { Label } from "@/components/ui/label";
 const INQUIRY_FORM_URL = "https://JBJ.ae/contact";
 
 const DESIGN_TYPE_ICONS: Record<string, React.ReactNode> = {
-  stamp: <Stamp className="w-4 h-4 text-gold" />,
-  business_card: <Briefcase className="w-4 h-4 text-gold" />,
-  letterhead: <FileText className="w-4 h-4 text-gold" />,
-  cv: <File className="w-4 h-4 text-gold" />,
-  logo: <PenTool className="w-4 h-4 text-gold" />,
-  cover_letter: <FileText className="w-4 h-4 text-gold" />,
-  document: <File className="w-4 h-4 text-gold" />,
+  stamp: <Stamp className="w-4 h-4 text-[#1A1A1A]" />,
+  business_card: <Briefcase className="w-4 h-4 text-[#1A1A1A]" />,
+  letterhead: <FileText className="w-4 h-4 text-[#1A1A1A]" />,
+  cv: <File className="w-4 h-4 text-[#1A1A1A]" />,
+  logo: <PenTool className="w-4 h-4 text-[#1A1A1A]" />,
+  cover_letter: <FileText className="w-4 h-4 text-[#1A1A1A]" />,
+  document: <File className="w-4 h-4 text-[#1A1A1A]" />,
 };
-const getDesignTypeIcon = (type: string) => DESIGN_TYPE_ICONS[type] || <File className="w-4 h-4 text-gold" />;
+const getDesignTypeIcon = (type: string) => DESIGN_TYPE_ICONS[type] || <File className="w-4 h-4 text-[#1A1A1A]" />;
 
 const DESIGN_TYPE_ROUTES: Record<string, string> = {
   stamp: "/toolkit/stamp-generator",
@@ -57,7 +57,7 @@ const DESIGN_TYPE_ROUTES: Record<string, string> = {
 function DesignCard({ item, onRemove }: { item: { id: string; item_name: string | null; item_type: string; item_id: string; thumbnail_svg: string | null; created_at: string }; onRemove: () => void }) {
   const route = DESIGN_TYPE_ROUTES[item.item_type];
   return (
-    <div className="bg-[#FDFBF7]/70 rounded-xl border border-gold/20 overflow-hidden group hover:border-gold/40 transition-all">
+    <div className="bg-[#FDFBF7]/70 rounded-xl border border-[#B89555]/20 overflow-hidden group hover:border-[#B89555]/40 transition-all">
       <div className="aspect-square bg-[#F7F2EA] flex items-center justify-center p-4 relative">
         {item.thumbnail_svg ? (
           <div
@@ -73,7 +73,7 @@ function DesignCard({ item, onRemove }: { item: { id: string; item_name: string 
         )}
         <button
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); onRemove(); }}
-          className="absolute top-2 right-2 w-7 h-7 rounded-full bg-[#FDFBF7]/80 border border-gold/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50 hover:border-red-200"
+          className="absolute top-2 right-2 w-7 h-7 rounded-full bg-[#FDFBF7]/80 border border-[#B89555]/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50 hover:border-red-200"
         >
           <Trash2 className="w-3.5 h-3.5 text-red-400" />
         </button>
@@ -82,7 +82,7 @@ function DesignCard({ item, onRemove }: { item: { id: string; item_name: string 
         <p className="text-sm font-medium text-[#1A1A1A] truncate">{item.item_name || DESIGN_TYPE_LABELS[item.item_type as DesignItemType] || "Design"}</p>
         <p className="text-xs text-[#1A1A1A]/40 mt-1">{new Date(item.created_at).toLocaleDateString()}</p>
         {route && (
-          <Link to={`${route}/${item.item_id}`} className="text-xs text-gold hover:underline mt-1 inline-block">
+          <Link to={`${route}/${item.item_id}`} className="text-xs text-[#1A1A1A] hover:underline mt-1 inline-block">
             Open in editor →
           </Link>
         )}
@@ -265,7 +265,7 @@ const Favorites = () => {
     <section className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] py-8 md:py-16">
       <div className="container mx-auto px-4">
         {/* Header */}
-        <Link to="/" className="inline-flex items-center gap-2 text-[#1A1A1A]/70 hover:text-gold transition-colors mb-8">
+        <Link to="/" className="inline-flex items-center gap-2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors mb-8">
           <ChevronLeft className="w-5 h-5" />
           <span>Back to Properties</span>
         </Link>
@@ -274,12 +274,12 @@ const Favorites = () => {
         <p className="text-[#1A1A1A]/50 mb-8">Manage your favorites and shortlist</p>
 
         {!user && (
-          <div className="bg-[#FDFBF7]/60 border border-gold/20 rounded-xl p-4 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="bg-[#FDFBF7]/60 border border-[#B89555]/20 rounded-xl p-4 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <p className="text-[#1A1A1A]/60 text-sm">
               <span className="text-[#1A1A1A]/80 font-medium">Guest Mode:</span> Your saved properties are stored locally. Sign in to sync across devices.
             </p>
             <Link to="/auth" className="shrink-0">
-              <Button size="sm" className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] font-semibold hover:brightness-95 border border-gold/30">
+              <Button size="sm" className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] font-semibold hover:brightness-95 border border-[#B89555]/30">
                 Sign In
               </Button>
             </Link>
@@ -287,24 +287,24 @@ const Favorites = () => {
         )}
 
         <Tabs defaultValue={defaultTab} className="w-full">
-          <TabsList className="bg-[#FDFBF7]/60 border border-gold/20 p-1 mb-8">
+          <TabsList className="bg-[#FDFBF7]/60 border border-[#B89555]/20 p-1 mb-8">
             <TabsTrigger
               value="favorites"
-              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-gold/30 text-[#1A1A1A]/50"
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/30 text-[#1A1A1A]/50"
             >
               <Heart className="w-4 h-4 mr-2" />
               Favorites ({favCount})
             </TabsTrigger>
             <TabsTrigger
               value="shortlist"
-              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-gold/30 text-[#1A1A1A]/50"
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/30 text-[#1A1A1A]/50"
             >
               <ListPlus className="w-4 h-4 mr-2" />
               Shortlist ({shortlistCount})
             </TabsTrigger>
             <TabsTrigger
               value="designs"
-              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-gold/30 text-[#1A1A1A]/50"
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/30 text-[#1A1A1A]/50"
             >
               <PenTool className="w-4 h-4 mr-2" />
               My Designs ({designFavCount + designShortCount})
@@ -320,15 +320,15 @@ const Favorites = () => {
               </div>
             ) : favoriteProjects?.length ? (
               <>
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 bg-[#FDFBF7]/60 rounded-xl p-4 border border-gold/20 gap-3">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 bg-[#FDFBF7]/60 rounded-xl p-4 border border-[#B89555]/20 gap-3">
                   <div className="flex items-center gap-4">
-                    <Button variant="outline" size="sm" onClick={selectAllFavorites} className="border-gold/30 text-[#1A1A1A] hover:bg-gold/10">
+                    <Button variant="outline" size="sm" onClick={selectAllFavorites} className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                       <CheckSquare className="w-4 h-4 mr-2" />
                       Select All
                     </Button>
                     <span className="text-[#1A1A1A]/50 text-sm">{selectedFavorites.length} selected</span>
                   </div>
-                  <Button onClick={handleMoveToShortlist} disabled={selectedFavorites.length === 0} className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] hover:brightness-95 border border-gold/30">
+                  <Button onClick={handleMoveToShortlist} disabled={selectedFavorites.length === 0} className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] hover:brightness-95 border border-[#B89555]/30">
                     <ListPlus className="w-4 h-4 mr-2" />
                     Move to Shortlist
                   </Button>
@@ -341,8 +341,8 @@ const Favorites = () => {
                         <div
                           className={`w-6 h-6 rounded-md flex items-center justify-center cursor-pointer transition-all ${
                             selectedFavorites.includes(project.id)
-                              ? "bg-gold text-[#1A1A1A]"
-                              : "bg-[#FDFBF7]/80 border border-gold/30 hover:border-gold"
+                              ? "bg-[#EFE6D6] text-[#1A1A1A]"
+                              : "bg-[#FDFBF7]/80 border border-[#B89555]/30 hover:border-[#B89555]"
                           }`}
                           onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleFavoriteSelection(project.id); }}
                         >
@@ -359,9 +359,9 @@ const Favorites = () => {
                 </div>
               </>
             ) : (
-              <div className="text-center py-16 bg-[#FDFBF7]/60 rounded-2xl border border-gold/20">
+              <div className="text-center py-16 bg-[#FDFBF7]/60 rounded-2xl border border-[#B89555]/20">
                 <div className="max-w-md mx-auto px-4">
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 flex items-center justify-center mx-auto mb-6">
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 border border-[#B89555]/30 flex items-center justify-center mx-auto mb-6">
                     <Heart className="w-10 h-10 text-[#1A1A1A]/70" />
                   </div>
                   <h3 className="text-[#1A1A1A] text-xl font-semibold mb-3">Your Favorites List is Empty</h3>
@@ -369,12 +369,12 @@ const Favorites = () => {
                   <p className="text-[#1A1A1A]/30 text-sm mb-8">Tip: Add properties to your favorites, then move your top picks to your shortlist for final evaluation.</p>
                   <div className="flex flex-col sm:flex-row gap-3 justify-center">
                     <Link to="/properties">
-                      <Button className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] hover:brightness-95 border border-gold/30">
+                      <Button className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] hover:brightness-95 border border-[#B89555]/30">
                         Explore Properties <ArrowUpRight className="w-4 h-4 ml-2" />
                       </Button>
                     </Link>
                     <Link to="/quiz">
-                      <Button variant="outline" className="border-gold/30 text-[#1A1A1A] hover:bg-gold/10">
+                      <Button variant="outline" className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                         <Sparkles className="w-4 h-4 mr-2" /> AI Home Finder
                       </Button>
                     </Link>
@@ -393,11 +393,11 @@ const Favorites = () => {
               </div>
             ) : shortlistedProjects?.length ? (
               <>
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 bg-[#FDFBF7]/60 rounded-xl p-4 border border-gold/20">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 bg-[#FDFBF7]/60 rounded-xl p-4 border border-[#B89555]/20">
                   <p className="text-[#1A1A1A]/50 text-sm">
                     Rank your top properties with badges: <span className="text-yellow-600">🥇 Gold</span>, <span className="text-[#1A1A1A]/70">🥈 Silver</span>, <span className="text-amber-600">🥉 Bronze</span>
                   </p>
-                  <Button onClick={() => setShareModalOpen(true)} className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] hover:brightness-95 border border-gold/30">
+                  <Button onClick={() => setShareModalOpen(true)} className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] hover:brightness-95 border border-[#B89555]/30">
                     <Share2 className="w-4 h-4 mr-2" /> Share My Shortlist
                   </Button>
                 </div>
@@ -421,11 +421,11 @@ const Favorites = () => {
                         <div className="mt-2">
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="outline" size="sm" className="w-full border-gold/30 text-[#1A1A1A] hover:bg-gold/10">
+                              <Button variant="outline" size="sm" className="w-full border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                                 <Award className="w-4 h-4 mr-2" /> {badge ? `Change Badge` : `Add Badge`}
                               </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent className="bg-[#FDFBF7] border-gold/20">
+                            <DropdownMenuContent className="bg-[#FDFBF7] border-[#B89555]/20">
                               <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top1')} className="text-yellow-600 cursor-pointer font-medium">🥇 Top 1 (Gold)</DropdownMenuItem>
                               <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top2')} className="text-[#1A1A1A]/70 cursor-pointer font-medium">🥈 Top 2 (Silver)</DropdownMenuItem>
                               <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top3')} className="text-amber-600 cursor-pointer font-medium">🥉 Top 3 (Bronze)</DropdownMenuItem>
@@ -444,7 +444,7 @@ const Favorites = () => {
 
                 {/* Action Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="bg-[#FDFBF7]/60 rounded-2xl p-6 border border-gold/20">
+                  <div className="bg-[#FDFBF7]/60 rounded-2xl p-6 border border-[#B89555]/20">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-400 flex items-center justify-center">
                         <Sparkles className="w-6 h-6 text-white" />
@@ -462,9 +462,9 @@ const Favorites = () => {
                     </Link>
                   </div>
 
-                  <div className="bg-[#FDFBF7]/60 rounded-2xl p-6 border border-gold/20">
+                  <div className="bg-[#FDFBF7]/60 rounded-2xl p-6 border border-[#B89555]/20">
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#ECE2D2] to-[#D8C7A6] flex items-center justify-center border border-gold/30">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#ECE2D2] to-[#D8C7A6] flex items-center justify-center border border-[#B89555]/30">
                         <Users className="w-6 h-6 text-[#1A1A1A]" />
                       </div>
                       <div>
@@ -474,7 +474,7 @@ const Favorites = () => {
                     </div>
                     <p className="text-[#1A1A1A]/50 text-sm mb-4">Request a personalized evaluation from our property consultants with detailed market insights.</p>
                     <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer">
-                      <Button className="w-full bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] hover:brightness-95 border border-gold/30">
+                      <Button className="w-full bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] hover:brightness-95 border border-[#B89555]/30">
                         Request Evaluation <ArrowUpRight className="w-4 h-4 ml-2" />
                       </Button>
                     </a>
@@ -482,9 +482,9 @@ const Favorites = () => {
                 </div>
               </>
             ) : (
-              <div className="text-center py-16 bg-[#FDFBF7]/60 rounded-2xl border border-gold/20">
+              <div className="text-center py-16 bg-[#FDFBF7]/60 rounded-2xl border border-[#B89555]/20">
                 <div className="max-w-md mx-auto">
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold/20 to-gold/10 border border-gold/20 flex items-center justify-center mx-auto mb-6">
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold/20 to-gold/10 border border-[#B89555]/20 flex items-center justify-center mx-auto mb-6">
                     <ListPlus className="w-10 h-10 text-[#1A1A1A]/70" />
                   </div>
                   <h3 className="text-[#1A1A1A] text-xl font-semibold mb-3">Your Shortlist is Empty</h3>
@@ -492,12 +492,12 @@ const Favorites = () => {
                   <p className="text-[#1A1A1A]/30 text-sm mb-8">Tip: Your shortlist can be shared with our team for professional brokerage support.</p>
                   <div className="flex flex-col sm:flex-row gap-3 justify-center">
                     <Link to="/properties">
-                      <Button className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] hover:brightness-95 border border-gold/30">
+                      <Button className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] hover:brightness-95 border border-[#B89555]/30">
                         Explore Properties <ArrowUpRight className="w-4 h-4 ml-2" />
                       </Button>
                     </Link>
                     {favCount > 0 && (
-                      <Button variant="outline" className="border-gold/30 text-[#1A1A1A] hover:bg-gold/10" onClick={() => { const tabs = document.querySelector('[value="favorites"]'); if (tabs) (tabs as HTMLElement).click(); }}>
+                      <Button variant="outline" className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10" onClick={() => { const tabs = document.querySelector('[value="favorites"]'); if (tabs) (tabs as HTMLElement).click(); }}>
                         View Favorites ({favCount})
                       </Button>
                     )}
@@ -510,15 +510,15 @@ const Favorites = () => {
           {/* ─── My Designs Tab ─── */}
           <TabsContent value="designs">
             {(designFavCount + designShortCount) === 0 ? (
-              <div className="text-center py-16 bg-[#FDFBF7]/60 rounded-2xl border border-gold/20">
+              <div className="text-center py-16 bg-[#FDFBF7]/60 rounded-2xl border border-[#B89555]/20">
                 <div className="max-w-md mx-auto px-4">
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 flex items-center justify-center mx-auto mb-6">
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 border border-[#B89555]/30 flex items-center justify-center mx-auto mb-6">
                     <PenTool className="w-10 h-10 text-[#1A1A1A]/70" />
                   </div>
                   <h3 className="text-[#1A1A1A] text-xl font-semibold mb-3">No Saved Designs Yet</h3>
                   <p className="text-[#1A1A1A]/50 mb-8">Save your stamps, business cards, letterheads, CVs, and more from the toolkit by clicking the heart or shortlist icon.</p>
                   <Link to="/toolkit">
-                    <Button className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] hover:brightness-95 border border-gold/30">
+                    <Button className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] hover:brightness-95 border border-[#B89555]/30">
                       Open Toolkit <ArrowUpRight className="w-4 h-4 ml-2" />
                     </Button>
                   </Link>
@@ -537,7 +537,7 @@ const Favorites = () => {
                       const isOpen = expandedSections[`fav-${type}`] !== false;
                       return (
                         <Collapsible key={`fav-${type}`} open={isOpen} onOpenChange={() => toggleSection(`fav-${type}`)}>
-                          <CollapsibleTrigger className="flex items-center justify-between w-full bg-[#FDFBF7]/60 rounded-xl p-4 border border-gold/20 mb-2 hover:bg-gold/5 transition-colors">
+                          <CollapsibleTrigger className="flex items-center justify-between w-full bg-[#FDFBF7]/60 rounded-xl p-4 border border-[#B89555]/20 mb-2 hover:bg-[#EFE6D6]/5 transition-colors">
                             <span className="flex items-center gap-2 text-[#1A1A1A] font-medium">
                               {getDesignTypeIcon(type)}
                               {DESIGN_TYPE_LABELS[type]} ({items.length})
@@ -561,14 +561,14 @@ const Favorites = () => {
                 {designShortCount > 0 && (
                   <div>
                     <h2 className="text-[#1A1A1A] text-lg font-semibold mb-4 flex items-center gap-2">
-                      <ListPlus className="w-5 h-5 text-gold" /> Shortlisted Designs ({designShortCount})
+                      <ListPlus className="w-5 h-5 text-[#1A1A1A]" /> Shortlisted Designs ({designShortCount})
                     </h2>
                     {(Object.entries(designShortGroups) as [DesignItemType, typeof designShorts][]).map(([type, items]) => {
                       if (!items || items.length === 0) return null;
                       const isOpen = expandedSections[`short-${type}`] !== false;
                       return (
                         <Collapsible key={`short-${type}`} open={isOpen} onOpenChange={() => toggleSection(`short-${type}`)}>
-                          <CollapsibleTrigger className="flex items-center justify-between w-full bg-[#FDFBF7]/60 rounded-xl p-4 border border-gold/20 mb-2 hover:bg-gold/5 transition-colors">
+                          <CollapsibleTrigger className="flex items-center justify-between w-full bg-[#FDFBF7]/60 rounded-xl p-4 border border-[#B89555]/20 mb-2 hover:bg-[#EFE6D6]/5 transition-colors">
                             <span className="flex items-center gap-2 text-[#1A1A1A] font-medium">
                               {getDesignTypeIcon(type)}
                               {DESIGN_TYPE_LABELS[type]} ({items.length})
@@ -595,10 +595,10 @@ const Favorites = () => {
 
       {/* Share Shortlist Modal */}
       <Dialog open={shareModalOpen} onOpenChange={setShareModalOpen}>
-        <DialogContent className="bg-[#FDFBF7] border-gold/20 text-[#1A1A1A]">
+        <DialogContent className="bg-[#FDFBF7] border-[#B89555]/20 text-[#1A1A1A]">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Share2 className="w-5 h-5 text-gold" /> Shortlist Consultation & Copy
+              <Share2 className="w-5 h-5 text-[#1A1A1A]" /> Shortlist Consultation & Copy
             </DialogTitle>
             <DialogDescription className="text-[#1A1A1A]/50">
               Send your shortlist to the JBJ Global Real Estate team for consultation, or download/share a copy.
@@ -607,13 +607,13 @@ const Favorites = () => {
 
           <div className="space-y-4 mt-4">
             {shortlistedProjects && shortlistedProjects.length > 0 && (
-              <div className="bg-[#F7F2EA] rounded-lg p-4 max-h-[150px] overflow-y-auto border border-gold/15">
+              <div className="bg-[#F7F2EA] rounded-lg p-4 max-h-[150px] overflow-y-auto border border-[#B89555]/15">
                 <p className="text-[#1A1A1A]/40 text-xs mb-2">Properties in shortlist:</p>
                 {shortlistedProjects.map((p, i) => {
                   const badge = getProjectBadge(p.id);
                   return (
                     <div key={p.id} className="flex items-center gap-2 text-sm py-1">
-                      <span className="text-gold">#{i + 1}</span>
+                      <span className="text-[#1A1A1A]">#{i + 1}</span>
                       {badge && <span className={`text-xs ${badge === "top1" ? "text-yellow-600" : badge === "top2" ? "text-amber-600" : "text-[#1A1A1A]/70"}`}>{badge === "top1" ? "🥇" : badge === "top2" ? "🥉" : "🥈"}</span>}
                       <span className="text-[#1A1A1A]">{p.name}</span>
                     </div>
@@ -622,24 +622,24 @@ const Favorites = () => {
               </div>
             )}
 
-            <Button onClick={handleSendToTeam} className="w-full bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] hover:brightness-95 border border-gold/30">
+            <Button onClick={handleSendToTeam} className="w-full bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] hover:brightness-95 border border-[#B89555]/30">
               <Users className="w-4 h-4 mr-2" /> Send to JBJ Global Real Estate Team (Consultation)
             </Button>
 
             <div className="flex items-center gap-4">
-              <div className="flex-1 h-px bg-gold/15" />
+              <div className="flex-1 h-px bg-[#EFE6D6]/15" />
               <span className="text-[#1A1A1A]/30 text-xs">SAVE A COPY</span>
-              <div className="flex-1 h-px bg-gold/15" />
+              <div className="flex-1 h-px bg-[#EFE6D6]/15" />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-              <Button onClick={handleDownloadShortlist} variant="outline" className="border-gold/20 text-[#1A1A1A] hover:bg-gold/10">
+              <Button onClick={handleDownloadShortlist} variant="outline" className="border-[#B89555]/20 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                 <Download className="w-4 h-4 mr-2" /> Download HTML
               </Button>
-              <Button onClick={handleShareWhatsApp} variant="outline" className="border-gold/20 text-[#1A1A1A] hover:bg-gold/10">
+              <Button onClick={handleShareWhatsApp} variant="outline" className="border-[#B89555]/20 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                 <MessageCircle className="w-4 h-4 mr-2 text-green-500" /> WhatsApp
               </Button>
-              <Button onClick={handleCopyShortlist} variant="outline" className="border-gold/20 text-[#1A1A1A] hover:bg-gold/10">
+              <Button onClick={handleCopyShortlist} variant="outline" className="border-[#B89555]/20 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                 <Copy className="w-4 h-4 mr-2" /> Copy Text
               </Button>
             </div>
@@ -647,8 +647,8 @@ const Favorites = () => {
             <div>
               <Label htmlFor="email" className="text-[#1A1A1A]/60">Email a copy to yourself</Label>
               <div className="flex gap-2 mt-1">
-                <Input id="email" type="email" placeholder="your.email@example.com" value={shareEmail} onChange={(e) => setShareEmail(e.target.value)} className="bg-[#F7F2EA] border-gold/20 text-[#1A1A1A]" />
-                <Button onClick={handleEmailShare} variant="outline" className="border-gold/20 text-[#1A1A1A] hover:bg-gold/10 shrink-0">
+                <Input id="email" type="email" placeholder="your.email@example.com" value={shareEmail} onChange={(e) => setShareEmail(e.target.value)} className="bg-[#F7F2EA] border-[#B89555]/20 text-[#1A1A1A]" />
+                <Button onClick={handleEmailShare} variant="outline" className="border-[#B89555]/20 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 shrink-0">
                   <Mail className="w-4 h-4" />
                 </Button>
               </div>

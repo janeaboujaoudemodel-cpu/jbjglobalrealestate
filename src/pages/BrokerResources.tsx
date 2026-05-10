@@ -153,8 +153,8 @@ const BrokerResources = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40" />
         
         {/* Ambient glow effects */}
-        <div className="absolute top-20 left-1/4 w-96 h-96 bg-gold/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-gold/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-20 left-1/4 w-96 h-96 bg-[#EFE6D6]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#EFE6D6]/5 rounded-full blur-3xl pointer-events-none" />
         
         <motion.div 
           className="container mx-auto px-4 relative z-10"
@@ -173,15 +173,15 @@ const BrokerResources = () => {
               }}
               variants={fadeInUp}
             >
-              <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
-              <span className="text-gold font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Broker Resources</span>
+              <span className="w-2 h-2 bg-[#EFE6D6] rounded-full animate-pulse" />
+              <span className="text-[#1A1A1A] font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">Broker Resources</span>
             </motion.div>
             
             <motion.h1 
               className="text-4xl md:text-5xl lg:text-6xl font-light text-white mb-6 leading-tight"
               variants={fadeInUp}
             >
-              Professional Resources for <span className="text-gold">Real Estate Brokers</span>
+              Professional Resources for <span className="text-[#1A1A1A]">Real Estate Brokers</span>
             </motion.h1>
             
             <motion.p 
@@ -232,8 +232,8 @@ const BrokerResources = () => {
                     className="jj-card-inner rounded-2xl p-6 md:p-8"
                   >
                     <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 w-12 h-12 bg-[#1A1A1A] border border-gold rounded-xl flex items-center justify-center">
-                        <section.icon className="w-6 h-6 text-gold" />
+                      <div className="flex-shrink-0 w-12 h-12 bg-[#1A1A1A] border border-[#B89555] rounded-xl flex items-center justify-center">
+                        <section.icon className="w-6 h-6 text-[#1A1A1A]" />
                       </div>
                       <div className="flex-1">
                         <h3 className="text-xl md:text-2xl font-medium text-[#1A1A1A] mb-3">{section.title}</h3>
@@ -242,7 +242,7 @@ const BrokerResources = () => {
                           <ul className="space-y-2">
                             {section.items.map((item, idx) => (
                               <li key={idx} className="flex items-start gap-3">
-                                <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
+                                <CheckCircle2 className="w-4 h-4 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
                                 <span className="text-[#1A1A1A]/70 text-sm">{item}</span>
                               </li>
                             ))}
@@ -283,10 +283,10 @@ const BrokerResources = () => {
                 <motion.div
                   key={index}
                   variants={fadeInUp}
-                  className="flex items-center gap-4 p-5 bg-zinc-900/50 border border-[#1A1A1A] rounded-xl hover:border-gold/50 transition-all"
+                  className="flex items-center gap-4 p-5 bg-[#FDFBF7]/50 border border-[#1A1A1A] rounded-xl hover:border-[#B89555]/50 transition-all"
                 >
-                  <div className="w-10 h-10 bg-gold/10 border border-gold/30 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <item.icon className="w-5 h-5 text-gold" />
+                  <div className="w-10 h-10 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <item.icon className="w-5 h-5 text-[#1A1A1A]" />
                   </div>
                   <span className="text-gray-200 font-medium">{item.label}</span>
                 </motion.div>
@@ -323,7 +323,7 @@ const BrokerResources = () => {
                     variants={fadeInUp}
                     className="jj-card-inner rounded-xl p-6 text-center flex flex-col items-center justify-center"
                   >
-                    <CheckCircle2 className="w-6 h-6 text-gold mb-3" />
+                    <CheckCircle2 className="w-6 h-6 text-[#1A1A1A] mb-3" />
                     <span className="text-[#1A1A1A] font-medium">{reason}</span>
                   </motion.div>
                 ))}
@@ -354,7 +354,7 @@ const BrokerResources = () => {
               variants={fadeInUp}
               className="text-3xl md:text-4xl font-light text-white mb-6"
             >
-              Access <span className="text-gold">Broker Resources</span>
+              Access <span className="text-[#1A1A1A]">Broker Resources</span>
             </motion.h2>
             
             <motion.p 
@@ -368,7 +368,7 @@ const BrokerResources = () => {
               <Link to="/broker-dashboard">
                 <Button 
                   size="lg"
-                  className="bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold px-8 py-6 text-base"
+                  className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-semibold px-8 py-6 text-base"
                 >
                   Go to Broker Dashboard
                   <ArrowRight className="ml-2 w-5 h-5" />
@@ -377,7 +377,7 @@ const BrokerResources = () => {
               <Button 
                 size="lg"
                 variant="outline"
-                className="border-gold/50 text-white hover:bg-gold/10 px-8 py-6 text-base"
+                className="border-[#B89555]/50 text-white hover:bg-[#EFE6D6]/10 px-8 py-6 text-base"
                 asChild
               >
                 <Link to="/contact">Request Broker Support</Link>

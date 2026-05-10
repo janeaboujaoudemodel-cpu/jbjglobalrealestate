@@ -57,7 +57,7 @@ const categories = [
   { value: 'follow_up', label: 'Follow-up', color: 'bg-orange-500' },
   { value: 'viewing', label: 'Viewing', color: 'bg-purple-500' },
   { value: 'offer', label: 'Offer', color: 'bg-green-500' },
-  { value: 'closing', label: 'Closing', color: 'bg-gold' },
+  { value: 'closing', label: 'Closing', color: 'bg-[#EFE6D6]' },
   { value: 'nurture', label: 'Nurture', color: 'bg-pink-500' },
   { value: 'support', label: 'Support', color: 'bg-cyan-500' },
   { value: 'custom', label: 'Custom', color: 'bg-[#B89555]' },
@@ -207,16 +207,16 @@ export default function OwnerTemplates() {
       <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <div className="container mx-auto px-4 py-6 max-w-6xl">
           <Tabs defaultValue="templates" className="w-full">
-            <TabsList className="bg-[#EFE6D6] border border-gold/30 mb-6">
+            <TabsList className="bg-[#EFE6D6] border border-[#B89555]/30 mb-6">
               <TabsTrigger
                 value="templates"
-                className="data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-gold"
+                className="data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-[#1A1A1A]"
               >
                 <FileText className="w-4 h-4 mr-2" />Message Templates
               </TabsTrigger>
               <TabsTrigger
                 value="ingestion"
-                className="data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-gold"
+                className="data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-[#1A1A1A]"
               >
                 <Inbox className="w-4 h-4 mr-2" />Media Ingestion
               </TabsTrigger>
@@ -229,10 +229,10 @@ export default function OwnerTemplates() {
             animate={{ opacity: 1, y: 0 }}
             className="mb-6"
           >
-            <div className="flex items-center justify-between flex-wrap gap-4 bg-[#FDFBF7]/80 backdrop-blur-sm border-2 border-gold/30 rounded-2xl p-4 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+            <div className="flex items-center justify-between flex-wrap gap-4 bg-[#FDFBF7]/80 backdrop-blur-sm border-2 border-[#B89555]/30 rounded-2xl p-4 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border-2 border-gold/30">
-                  <FileText className="h-6 w-6 text-gold" />
+                <div className="p-3 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border-2 border-[#B89555]/30">
+                  <FileText className="h-6 w-6 text-[#1A1A1A]" />
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-[#1A1A1A]">Message Templates</h1>
@@ -292,7 +292,7 @@ export default function OwnerTemplates() {
                           <Badge
                             key={ch}
                             variant={formChannels.includes(ch) ? 'default' : 'outline'}
-                            className={`cursor-pointer ${formChannels.includes(ch) ? 'bg-gold text-[#1A1A1A]' : ''}`}
+                            className={`cursor-pointer ${formChannels.includes(ch) ? 'bg-[#EFE6D6] text-[#1A1A1A]' : ''}`}
                             onClick={() => {
                               setFormChannels(prev => 
                                 prev.includes(ch) 
@@ -383,14 +383,14 @@ export default function OwnerTemplates() {
                 placeholder="Search templates..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 border-gold/30"
+                className="pl-10 border-[#B89555]/30"
               />
             </div>
             
             <div className="flex flex-wrap gap-2">
               <Badge
                 variant={selectedCategory === 'all' ? 'default' : 'outline'}
-                className={`cursor-pointer ${selectedCategory === 'all' ? 'bg-gold text-[#1A1A1A]' : ''}`}
+                className={`cursor-pointer ${selectedCategory === 'all' ? 'bg-[#EFE6D6] text-[#1A1A1A]' : ''}`}
                 onClick={() => setSelectedCategory('all')}
               >
                 All
@@ -399,7 +399,7 @@ export default function OwnerTemplates() {
                 <Badge
                   key={cat.value}
                   variant={selectedCategory === cat.value ? 'default' : 'outline'}
-                  className={`cursor-pointer ${selectedCategory === cat.value ? 'bg-gold text-[#1A1A1A]' : ''}`}
+                  className={`cursor-pointer ${selectedCategory === cat.value ? 'bg-[#EFE6D6] text-[#1A1A1A]' : ''}`}
                   onClick={() => setSelectedCategory(cat.value)}
                 >
                   {cat.label}
@@ -412,7 +412,7 @@ export default function OwnerTemplates() {
           {isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {[1, 2, 3, 4, 5, 6].map(i => (
-                <Card key={i} className="border-2 border-gold/20 animate-pulse">
+                <Card key={i} className="border-2 border-[#B89555]/20 animate-pulse">
                   <CardContent className="p-4">
                     <div className="h-4 bg-[#EFE6D6] rounded w-3/4 mb-2" />
                     <div className="h-3 bg-[#F7F2EA] rounded w-full mb-1" />
@@ -422,7 +422,7 @@ export default function OwnerTemplates() {
               ))}
             </div>
           ) : filteredTemplates.length === 0 ? (
-            <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
+            <Card className="border-2 border-[#B89555]/20 bg-[#FDFBF7]/90">
               <CardContent className="p-12 text-center">
                 <FileText className="h-16 w-16 text-[#1A1A1A]/70 mx-auto mb-4" />
                 <p className="text-[#1A1A1A]/70 font-medium">No templates found</p>
@@ -439,7 +439,7 @@ export default function OwnerTemplates() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                   >
-                    <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90 hover:border-gold/40 transition-all group">
+                    <Card className="border-2 border-[#B89555]/20 bg-[#FDFBF7]/90 hover:border-[#B89555]/40 transition-all group">
                       <CardContent className="p-4">
                         <div className="flex items-start justify-between mb-3">
                           <div>

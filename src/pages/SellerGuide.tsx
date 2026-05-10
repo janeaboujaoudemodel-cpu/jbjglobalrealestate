@@ -279,8 +279,8 @@ const SellerGuide = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
           
           {/* Decorative elements */}
-          <div className="absolute top-20 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-gold/3 rounded-full blur-3xl" />
+          <div className="absolute top-20 left-1/4 w-96 h-96 bg-[#EFE6D6]/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#EFE6D6]/3 rounded-full blur-3xl" />
           
           <motion.div 
             className="container mx-auto px-4 relative z-10"
@@ -291,11 +291,11 @@ const SellerGuide = () => {
             <div className="max-w-4xl mx-auto text-center">
               {/* Badge */}
               <motion.div 
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 rounded-full px-5 py-2.5 mb-6 shadow-lg hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/40 rounded-full px-5 py-2.5 mb-6 shadow-lg hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
                 variants={fadeInUp}
               >
                 <Building2 className="w-4 h-4 text-[#1A1A1A]" />
-                <span className="text-gold text-sm font-semibold tracking-wide uppercase">Complete Seller's Guide</span>
+                <span className="text-[#1A1A1A] text-sm font-semibold tracking-wide uppercase">Complete Seller's Guide</span>
               </motion.div>
               
               {/* Title */}
@@ -304,7 +304,7 @@ const SellerGuide = () => {
                 variants={fadeInUp}
               >
                 Selling Property in Dubai —{" "}
-                <span className="text-gold">A Structured, Transparent Guide for Owners</span>
+                <span className="text-[#1A1A1A]">A Structured, Transparent Guide for Owners</span>
               </motion.h1>
               
               {/* Description */}
@@ -332,7 +332,7 @@ const SellerGuide = () => {
                     boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
                   }}
                 >
-                  <ArrowDown className="w-4 h-4 text-gold group-hover:text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+                  <ArrowDown className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                   <span className="text-white group-hover:text-[#1A1A1A] transition-colors">Start the Guide</span>
                   <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
                 </button>
@@ -344,7 +344,7 @@ const SellerGuide = () => {
                       boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
                     }}
                   >
-                    <Building2 className="w-4 h-4 text-gold group-hover:text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+                    <Building2 className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                     <span className="text-white group-hover:text-[#1A1A1A] transition-colors">List Your Property</span>
                     <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
                   </button>
@@ -382,10 +382,10 @@ const SellerGuide = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  className="jj-box-active p-6 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
+                  className="jj-box-active p-6 hover:border-[#B89555] hover:shadow-xl hover:shadow-gold/20 transition-all"
                 >
-                  <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-gold/20 transition-colors">
-                    <item.icon className="w-6 h-6 text-gold" />
+                  <div className="w-12 h-12 bg-[#EFE6D6]/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-[#EFE6D6]/20 transition-colors">
+                    <item.icon className="w-6 h-6 text-[#1A1A1A]" />
                   </div>
                   <h3 className="text-lg font-bold text-[#1A1A1A] mb-2">{item.title}</h3>
                   <p className="text-[#1A1A1A]/70 text-sm">{item.description}</p>
@@ -407,22 +407,22 @@ const SellerGuide = () => {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.05 }}
-                  className="jj-box-active p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
+                  className="jj-box-active p-6 md:p-8 hover:border-[#B89555] hover:shadow-xl hover:shadow-gold/20 transition-all"
                 >
                     <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-gold/20">
-                        <step.icon className="w-6 h-6 text-gold" />
+                      <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-[#B89555]/20">
+                        <step.icon className="w-6 h-6 text-[#1A1A1A]" />
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
-                          <span className="px-2 py-0.5 bg-gold/10 text-gold font-bold text-xs rounded">Step {step.number}</span>
+                          <span className="px-2 py-0.5 bg-[#EFE6D6]/10 text-[#1A1A1A] font-bold text-xs rounded">Step {step.number}</span>
                           <h3 className="text-xl font-bold text-[#1A1A1A]">{step.title}</h3>
                         </div>
                         <p className="text-[#1A1A1A]/70 mb-4">{step.description}</p>
                         <ul className="grid md:grid-cols-2 gap-2 mb-4">
                           {step.items.map((item, i) => (
                             <li key={i} className="flex items-start gap-2 text-[#1A1A1A]/70 text-sm">
-                              <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
+                              <CheckCircle2 className="w-4 h-4 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
                               <span>{item}</span>
                             </li>
                           ))}
@@ -461,7 +461,7 @@ const SellerGuide = () => {
               <GuideSectionHeader icon={Calculator} title="Selling Costs & Fees" />
 
               {/* Agency Commission */}
-              <div className="jj-card-inner p-6 md:p-8 mb-6 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
+              <div className="jj-card-inner p-6 md:p-8 mb-6 hover:border-[#B89555] hover:shadow-xl hover:shadow-gold/20 transition-all">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="jj-icon-box-active w-12 h-12 rounded-xl">
                     <Banknote className="w-6 h-6" />
@@ -476,7 +476,7 @@ const SellerGuide = () => {
                 <ul className="grid md:grid-cols-2 gap-2">
                   {agencyCommission.covers.map((item, index) => (
                     <li key={index} className="flex items-start gap-2 text-[#1A1A1A]/70 text-sm">
-                      <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
+                      <CheckCircle2 className="w-4 h-4 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -484,7 +484,7 @@ const SellerGuide = () => {
               </div>
 
               {/* Government & Developer Fees */}
-              <div className="jj-card-inner p-6 md:p-8 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all">
+              <div className="jj-card-inner p-6 md:p-8 hover:border-[#B89555] hover:shadow-xl hover:shadow-gold/20 transition-all">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="jj-icon-box-active w-12 h-12 rounded-xl">
                     <Landmark className="w-6 h-6" />
@@ -523,7 +523,7 @@ const SellerGuide = () => {
                 <ul className="space-y-3 mb-4">
                   {mortgagedPropertySteps.map((step, index) => (
                     <li key={index} className="flex items-start gap-3 text-[#1A1A1A]/70">
-                      <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                      <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
                       <span>{step}</span>
                     </li>
                   ))}
@@ -553,7 +553,7 @@ const SellerGuide = () => {
                 <ul className="space-y-3 mb-4">
                   {offPlanResaleConditions.map((condition, index) => (
                     <li key={index} className="flex items-start gap-3 text-[#1A1A1A]/70">
-                      <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                      <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
                       <span>{condition}</span>
                     </li>
                   ))}
@@ -572,7 +572,7 @@ const SellerGuide = () => {
               {jbjSupport.map((item, index) => (
                 <div 
                   key={index}
-                  className="jj-card-inner p-6 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
+                  className="jj-card-inner p-6 hover:border-[#B89555] hover:shadow-xl hover:shadow-gold/20 transition-all"
                 >
                   <h4 className="text-[#1A1A1A] font-semibold mb-2">{item.title}</h4>
                   <p className="text-[#1A1A1A]/70 text-sm">{item.description}</p>
@@ -600,7 +600,7 @@ const SellerGuide = () => {
                     value={`faq-${index}`}
                     className="border-b border-[#B89555]/30 last:border-0"
                   >
-                    <AccordionTrigger className="text-[#1A1A1A] text-left font-medium hover:text-gold hover:no-underline py-5">
+                    <AccordionTrigger className="text-[#1A1A1A] text-left font-medium hover:text-[#1A1A1A] hover:no-underline py-5">
                       {faq.question}
                     </AccordionTrigger>
                     <AccordionContent className="text-[#1A1A1A]/70 pb-5">
@@ -626,9 +626,9 @@ const SellerGuide = () => {
               className="max-w-3xl mx-auto"
             >
               <div className="jj-card-inner rounded-2xl p-8 md:p-12 text-center">
-                <Sparkles className="w-12 h-12 text-gold mx-auto mb-4" />
+                <Sparkles className="w-12 h-12 text-[#1A1A1A] mx-auto mb-4" />
                 <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-4">
-                  <span className="text-gold">Next</span> Step
+                  <span className="text-[#1A1A1A]">Next</span> Step
                 </h2>
                 <p className="text-[#1A1A1A]/70 mb-8 max-w-xl mx-auto">
                   If you are considering selling your property, the next step is a structured pricing and market review to determine the correct exit strategy.
@@ -655,21 +655,21 @@ const SellerGuide = () => {
                     href={getWhatsAppUrl("Hi, I'd like to discuss selling my property in Dubai.")}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-[#1A1A1A]/70 hover:text-gold transition-colors"
+                    className="flex items-center gap-2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors"
                   >
                     <MessageCircle className="w-4 h-4 text-green-500" />
                     WhatsApp: {CONTACT_INFO.phone}
                   </a>
                   <a 
                     href={getCallUrl()}
-                    className="flex items-center gap-2 text-[#1A1A1A]/70 hover:text-gold transition-colors"
+                    className="flex items-center gap-2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors"
                   >
                     <Phone className="w-4 h-4 text-blue-500" />
                     Call: {CONTACT_INFO.phone}
                   </a>
                   <a 
                     href={getEmailUrl()}
-                    className="flex items-center gap-2 text-[#1A1A1A]/70 hover:text-gold transition-colors"
+                    className="flex items-center gap-2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors"
                   >
                     <Mail className="w-4 h-4 text-orange-500" />
                     {CONTACT_INFO.email}
@@ -686,7 +686,7 @@ const SellerGuide = () => {
             <div className="max-w-5xl mx-auto">
               <div className="jj-card-inner rounded-lg p-6">
                 <h4 className="text-[#1A1A1A] font-semibold mb-3 flex items-center gap-2">
-                  <Shield className="w-4 h-4 text-gold" />
+                  <Shield className="w-4 h-4 text-[#1A1A1A]" />
                   Important Disclaimer
                 </h4>
                 <div className="text-[#1A1A1A]/70 text-sm space-y-2">

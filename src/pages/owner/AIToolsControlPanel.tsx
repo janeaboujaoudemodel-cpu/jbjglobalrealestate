@@ -352,7 +352,7 @@ export default function AIToolsControlPanel() {
     <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] text-[#1A1A1A] p-4 md:p-8">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl md:text-3xl font-bold text-gold mb-2 flex items-center gap-3">
+        <h1 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-2 flex items-center gap-3">
           <Shield className="w-7 h-7" />
           AI Tools Control Panel
         </h1>
@@ -364,12 +364,12 @@ export default function AIToolsControlPanel() {
         {[
           { label: "Live", value: stats.live, color: "text-emerald-400" },
           { label: "Draft", value: stats.draft, color: "text-white/70" },
-          { label: "Pending Test", value: stats.applied, color: "text-amber-400" },
+          { label: "Pending Test", value: stats.applied, color: "text-[#1A1A1A]" },
           { label: "Pending Publish", value: stats.tested, color: "text-blue-400" },
           { label: "Reverted", value: stats.reverted, color: "text-orange-400" },
           { label: "Error", value: stats.error, color: "text-red-400" },
         ].map(s => (
-          <div key={s.label} className="bg-zinc-900/60 border border-[#1A1A1A] rounded-lg p-3 text-center">
+          <div key={s.label} className="bg-[#FDFBF7]/60 border border-[#1A1A1A] rounded-lg p-3 text-center">
             <div className={`text-2xl font-bold ${s.color}`}>{s.value}</div>
             <div className="text-xs text-white/90">{s.label}</div>
           </div>
@@ -384,7 +384,7 @@ export default function AIToolsControlPanel() {
             placeholder="Search tools..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="pl-10 !bg-zinc-900 !border-[#1A1A1A] !text-white"
+            className="pl-10 !bg-[#FDFBF7] !border-[#1A1A1A] !text-white"
           />
         </div>
         <div className="flex gap-2 flex-wrap">
@@ -394,7 +394,7 @@ export default function AIToolsControlPanel() {
               size="sm"
               variant={catFilter === c ? "default" : "outline"}
               onClick={() => setCatFilter(c)}
-              className={catFilter === c ? "bg-gold text-[#1A1A1A] hover:bg-gold/90" : "border-[#1A1A1A] text-white/70 hover:text-white"}
+              className={catFilter === c ? "bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90" : "border-[#1A1A1A] text-white/70 hover:text-white"}
             >
               {c === "all" ? "All" : CATEGORY_LABELS[c]}
             </Button>
@@ -417,7 +417,7 @@ export default function AIToolsControlPanel() {
 
             return (
               <Collapsible key={tool.id} open={isExpanded} onOpenChange={() => setExpandedTool(isExpanded ? null : tool.id)}>
-                <Card className="!bg-zinc-900/80 !border-[#1A1A1A] hover:!border-[#1A1A1A] transition-colors">
+                <Card className="!bg-[#FDFBF7]/80 !border-[#1A1A1A] hover:!border-[#1A1A1A] transition-colors">
                   <CollapsibleTrigger asChild>
                     <CardHeader className="cursor-pointer py-4">
                       <div className="flex items-center justify-between gap-4">
@@ -451,18 +451,18 @@ export default function AIToolsControlPanel() {
                               {hiddenTools.has(tool.id) ? "Hidden" : "Public"}
                             </span>
                           </div>
-                          <Badge className="bg-zinc-800 text-white/70 border-[#1A1A1A] text-[10px]">{CATEGORY_LABELS[tool.category]}</Badge>
+                          <Badge className="bg-[#F7F2EA] text-white/70 border-[#1A1A1A] text-[10px]">{CATEGORY_LABELS[tool.category]}</Badge>
                           <StatusBadge status={status} />
                         </div>
                       </div>
                       {/* Direct URL row */}
                       <div className="flex items-center gap-2 mt-2 ml-7" onClick={e => e.stopPropagation()}>
-                        <code className="text-xs text-white/70 bg-zinc-800/80 px-2 py-1 rounded font-mono truncate max-w-[400px]">{fullUrl}</code>
-                        <Button size="sm" variant="ghost" onClick={() => copyUrl(fullUrl)} className="h-6 w-6 p-0 text-white/90 hover:text-gold">
+                        <code className="text-xs text-white/70 bg-[#F7F2EA]/80 px-2 py-1 rounded font-mono truncate max-w-[400px]">{fullUrl}</code>
+                        <Button size="sm" variant="ghost" onClick={() => copyUrl(fullUrl)} className="h-6 w-6 p-0 text-white/90 hover:text-[#1A1A1A]">
                           <Copy className="w-3 h-3" />
                         </Button>
                         <Link to={tool.link} target="_blank">
-                          <Button size="sm" variant="ghost" className="h-6 px-2 text-xs text-white/70 hover:text-gold gap-1">
+                          <Button size="sm" variant="ghost" className="h-6 px-2 text-xs text-white/70 hover:text-[#1A1A1A] gap-1">
                             <ExternalLink className="w-3 h-3" /> Open Tool
                           </Button>
                         </Link>
@@ -473,7 +473,7 @@ export default function AIToolsControlPanel() {
                   <CollapsibleContent>
                     <CardContent className="pt-0 pb-4">
                       <Tabs defaultValue="fixes" className="w-full">
-                        <TabsList className="!bg-zinc-800/60 mb-4">
+                        <TabsList className="!bg-[#F7F2EA]/60 mb-4">
                           <TabsTrigger value="fixes" className="text-xs">Fixes & Recommendations</TabsTrigger>
                           <TabsTrigger value="history" className="text-xs">Version History ({toolVersions.length})</TabsTrigger>
                           <TabsTrigger value="tests" className="text-xs">Test Logs ({toolTestLogs.length})</TabsTrigger>
@@ -526,16 +526,16 @@ export default function AIToolsControlPanel() {
                           ) : (
                             <div className="space-y-2">
                               {toolVersions.map(v => (
-                                <div key={v.id} className="bg-zinc-800/50 border border-[#1A1A1A]/50 rounded-lg p-3">
+                                <div key={v.id} className="bg-[#F7F2EA]/50 border border-[#1A1A1A]/50 rounded-lg p-3">
                                   <div className="flex items-center justify-between gap-2">
                                     <div className="flex items-center gap-2">
-                                      <span className="text-sm font-mono text-gold">v{v.version_number}</span>
+                                      <span className="text-sm font-mono text-[#1A1A1A]">v{v.version_number}</span>
                                       <StatusBadge status={v.status} />
                                       <span className="text-xs text-white/90">{new Date(v.created_at).toLocaleString()}</span>
                                     </div>
                                     <div className="flex items-center gap-1">
                                       {v.status !== "published" && (
-                                        <Button size="sm" variant="ghost" onClick={() => restoreVersion(tool.id, v)} className="h-7 text-xs text-white/70 hover:text-gold gap-1">
+                                        <Button size="sm" variant="ghost" onClick={() => restoreVersion(tool.id, v)} className="h-7 text-xs text-white/70 hover:text-[#1A1A1A] gap-1">
                                           <RotateCcw className="w-3 h-3" /> Restore
                                         </Button>
                                       )}
@@ -580,7 +580,7 @@ export default function AIToolsControlPanel() {
                           ) : (
                             <div className="space-y-2">
                               {toolTestLogs.map(t => (
-                                <div key={t.id} className="bg-zinc-800/50 border border-[#1A1A1A]/50 rounded-lg p-3 flex items-center justify-between">
+                                <div key={t.id} className="bg-[#F7F2EA]/50 border border-[#1A1A1A]/50 rounded-lg p-3 flex items-center justify-between">
                                   <div className="flex items-center gap-3">
                                     {t.result === "pass" ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <XCircle className="w-4 h-4 text-red-400" />}
                                     <div>
@@ -625,7 +625,7 @@ function FixCard({
   const isApplied = rec.status === "applied";
   const isTested = rec.status === "tested" || rec.status === "published";
   return (
-    <div className="bg-zinc-800/40 border border-[#1A1A1A]/40 rounded-lg p-4">
+    <div className="bg-[#F7F2EA]/40 border border-[#1A1A1A]/40 rounded-lg p-4">
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
@@ -638,12 +638,12 @@ function FixCard({
             {rec.status && <StatusBadge status={rec.status} />}
           </div>
           <p className="text-xs text-white/70">{rec.description}</p>
-          {rec.side_effects && <p className="text-xs text-amber-400/80 mt-1">⚠ Side effects: {rec.side_effects}</p>}
+          {rec.side_effects && <p className="text-xs text-[#1A1A1A]/80 mt-1">⚠ Side effects: {rec.side_effects}</p>}
         </div>
         {/* Action Buttons — inline next to fix */}
         <div className="flex items-center gap-1 shrink-0">
           {!isApplied && !isTested && (
-            <Button size="sm" onClick={onApply} className="h-7 text-xs bg-gold text-[#1A1A1A] hover:bg-gold/90 gap-1">
+            <Button size="sm" onClick={onApply} className="h-7 text-xs bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90 gap-1">
               <CheckCircle2 className="w-3 h-3" /> Apply
             </Button>
           )}

@@ -116,7 +116,7 @@ const LawFirm = () => {
           <motion.div variants={fadeInUp}>
             <Link 
               to="/services" 
-              className="inline-flex items-center gap-2 text-gold hover:text-white transition-colors mb-6"
+              className="inline-flex items-center gap-2 text-[#1A1A1A] hover:text-white transition-colors mb-6"
             >
               <ChevronLeft className="w-4 h-4" />
               Back to Services
@@ -127,8 +127,8 @@ const LawFirm = () => {
             className="flex items-center gap-2 mb-6"
             variants={fadeInUp}
           >
-            <Scale className="w-6 h-6 text-gold" />
-            <span className="text-gold text-sm uppercase tracking-[0.3em]">
+            <Scale className="w-6 h-6 text-[#1A1A1A]" />
+            <span className="text-[#1A1A1A] text-sm uppercase tracking-[0.3em]">
               Legal Division
             </span>
           </motion.div>
@@ -151,7 +151,7 @@ const LawFirm = () => {
           <motion.div variants={fadeInUp}>
             <Button variant="primary" size="lg" asChild>
               <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-                <span className="text-[#1A1A1A]">Schedule</span><span className="text-gold"> Consultation</span>
+                <span className="text-[#1A1A1A]">Schedule</span><span className="text-[#1A1A1A]"> Consultation</span>
                 <ArrowRight className="w-5 h-5 ml-2" />
               </a>
             </Button>
@@ -169,7 +169,7 @@ const LawFirm = () => {
             variants={staggerContainer}
           >
             <motion.div className="text-center mb-12" variants={fadeInUp}>
-              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
+              <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">
                 Expertise
               </span>
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -187,10 +187,10 @@ const LawFirm = () => {
                     <CardContent className="p-6">
                       <div className="flex items-start gap-4">
                         <div className="w-14 h-14 rounded-xl bg-[#1A1A1A] flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                          <area.icon className="w-7 h-7 text-gold" />
+                          <area.icon className="w-7 h-7 text-[#1A1A1A]" />
                         </div>
                         <div className="flex-1">
-                          <h3 className="text-[#1A1A1A] font-semibold text-xl mb-2 group-hover:text-gold transition-colors">
+                          <h3 className="text-[#1A1A1A] font-semibold text-xl mb-2 group-hover:text-[#1A1A1A] transition-colors">
                             {area.title}
                           </h3>
                           <p className="text-[#1A1A1A]/70 text-sm mb-4">
@@ -199,7 +199,7 @@ const LawFirm = () => {
                           <div className="grid grid-cols-2 gap-2">
                             {area.services.map((service) => (
                               <div key={service} className="flex items-center gap-2 text-xs text-[#1A1A1A]/60">
-                                <CheckCircle className="w-3 h-3 text-gold" />
+                                <CheckCircle className="w-3 h-3 text-[#1A1A1A]" />
                                 {service}
                               </div>
                             ))}
@@ -225,7 +225,7 @@ const LawFirm = () => {
             variants={staggerContainer}
           >
             <motion.div className="text-center mb-12" variants={fadeInUp}>
-              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
+              <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">
                 Our Advantage
               </span>
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -239,7 +239,7 @@ const LawFirm = () => {
                   <Card className="jj-card-inner h-full">
                     <CardContent className="p-6 text-center">
                       <div className="w-16 h-16 rounded-full bg-[#1A1A1A] flex items-center justify-center mx-auto mb-4">
-                        <item.icon className="w-8 h-8 text-gold" />
+                        <item.icon className="w-8 h-8 text-[#1A1A1A]" />
                       </div>
                       <h3 className="text-[#1A1A1A] font-semibold text-lg mb-2">
                         {item.title}
@@ -277,7 +277,7 @@ const LawFirm = () => {
               <div className="flex flex-wrap justify-center gap-4">
                 <Button variant="primary" size="lg" asChild>
                   <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-                    <span className="text-[#1A1A1A]">Book</span><span className="text-gold"> Consultation</span>
+                    <span className="text-[#1A1A1A]">Book</span><span className="text-[#1A1A1A]"> Consultation</span>
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </a>
                 </Button>

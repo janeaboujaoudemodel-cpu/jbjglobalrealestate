@@ -554,12 +554,12 @@ const VideoResizePack = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-gold/5 to-transparent" />
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <Badge className="bg-gold/20 text-gold border-gold/30 mb-4">
+            <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30 mb-4">
               <Sparkles className="h-3 w-3 mr-1" />
               Free Tool
             </Badge>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
-              Video Resizer + <span className="text-gold">Smart Reframe AI</span>
+              Video Resizer + <span className="text-[#1A1A1A]">Smart Reframe AI</span>
             </h1>
             <p className="text-lg md:text-xl text-white/70 max-w-2xl mx-auto">
               Upload once, export to all social formats. Smart AI keeps your subject in focus with per-shot tracking.
@@ -576,14 +576,14 @@ const VideoResizePack = () => {
               <TabsList className="w-full max-w-md mx-auto grid grid-cols-2 bg-jj-layer-2 p-1 rounded-xl">
                 <TabsTrigger 
                   value="resize" 
-                  className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] rounded-lg"
+                  className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] rounded-lg"
                 >
                   <LayoutGrid className="h-4 w-4 mr-2" />
                   Multi-Format Export
                 </TabsTrigger>
                 <TabsTrigger 
                   value="smart-reframe"
-                  className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] rounded-lg"
+                  className="data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] rounded-lg"
                 >
                   <Target className="h-4 w-4 mr-2" />
                   Smart Reframe AI
@@ -593,10 +593,10 @@ const VideoResizePack = () => {
               {/* Multi-Format Export Mode */}
               <TabsContent value="resize" className="mt-8 space-y-8">
                 {/* Step 1: Upload */}
-                <Card className="bg-jj-layer-2 border-gold/20">
+                <Card className="bg-jj-layer-2 border-[#B89555]/20">
                   <CardHeader>
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold text-sm">1</div>
+                      <div className="w-8 h-8 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center text-[#1A1A1A] font-bold text-sm">1</div>
                       <div>
                         <CardTitle className="text-white">Upload Your Video</CardTitle>
                         <CardDescription className="text-white/90">MP4, MOV, or WebM • Max 500MB</CardDescription>
@@ -607,7 +607,7 @@ const VideoResizePack = () => {
                     {!uploadedVideo ? (
                       <div
                         className={`relative border-2 border-dashed rounded-xl p-12 text-center transition-all cursor-pointer ${
-                          dragActive ? "border-gold bg-gold/10" : "border-gold/30 hover:border-gold/50"
+                          dragActive ? "border-[#B89555] bg-[#EFE6D6]/10" : "border-[#B89555]/30 hover:border-[#B89555]/50"
                         }`}
                         onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
                         onDragLeave={() => setDragActive(false)}
@@ -623,12 +623,12 @@ const VideoResizePack = () => {
                         />
                         {isUploading ? (
                           <div className="flex flex-col items-center gap-4">
-                            <Loader2 className="h-12 w-12 text-gold animate-spin" />
+                            <Loader2 className="h-12 w-12 text-[#1A1A1A] animate-spin" />
                             <p className="text-white/70">Processing video...</p>
                           </div>
                         ) : (
                           <>
-                            <Upload className={`h-12 w-12 mx-auto mb-4 ${dragActive ? "text-gold" : "text-[#1A1A1A]/70"}`} />
+                            <Upload className={`h-12 w-12 mx-auto mb-4 ${dragActive ? "text-[#1A1A1A]" : "text-[#1A1A1A]/70"}`} />
                             <p className="text-lg font-medium text-white mb-2">
                               {dragActive ? "Drop your video here" : "Drag & drop your video"}
                             </p>
@@ -652,7 +652,7 @@ const VideoResizePack = () => {
                         {/* Video Info */}
                         <div className="md:w-72 space-y-4">
                           <div className="p-4 bg-[#1A1A1A]/30 rounded-lg space-y-3">
-                            <div className="flex items-center gap-2 text-gold">
+                            <div className="flex items-center gap-2 text-[#1A1A1A]">
                               <FileVideo className="h-5 w-5" />
                               <span className="font-medium truncate">{uploadedVideo.name}</span>
                             </div>
@@ -706,10 +706,10 @@ const VideoResizePack = () => {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -20 }}
                     >
-                      <Card className="bg-jj-layer-2 border-gold/20">
+                      <Card className="bg-jj-layer-2 border-[#B89555]/20">
                         <CardHeader>
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold text-sm">2</div>
+                            <div className="w-8 h-8 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center text-[#1A1A1A] font-bold text-sm">2</div>
                             <div>
                               <CardTitle className="text-white">Target Output</CardTitle>
                               <CardDescription className="text-white/90">Choose how to transform your video</CardDescription>
@@ -733,28 +733,28 @@ const VideoResizePack = () => {
                                 htmlFor={option.value}
                                 className={`relative flex flex-col items-center p-4 rounded-xl cursor-pointer border-2 transition-all ${
                                   targetOutput === option.value 
-                                    ? "border-gold bg-gold/10" 
-                                    : "border-white/10 hover:border-gold/30"
+                                    ? "border-[#B89555] bg-[#EFE6D6]/10" 
+                                    : "border-white/10 hover:border-[#B89555]/30"
                                 }`}
                               >
                                 <RadioGroupItem value={option.value} id={option.value} className="sr-only" />
-                                <div className={`mb-2 ${targetOutput === option.value ? "text-gold" : "text-white/90"}`}>
+                                <div className={`mb-2 ${targetOutput === option.value ? "text-[#1A1A1A]" : "text-white/90"}`}>
                                   {option.icon}
                                 </div>
                                 <p className="font-medium text-white text-sm">{option.label}</p>
                                 <p className="text-xs text-white/90 text-center mt-1">{option.desc}</p>
                                 {targetOutput === option.value && (
-                                  <CheckCircle2 className="absolute top-2 right-2 h-4 w-4 text-gold" />
+                                  <CheckCircle2 className="absolute top-2 right-2 h-4 w-4 text-[#1A1A1A]" />
                                 )}
                               </Label>
                             ))}
                           </RadioGroup>
 
                           {/* Smart Framing Note */}
-                          <div className="mt-4 p-3 bg-gold/10 rounded-lg border border-gold/20 flex items-start gap-3">
-                            <ZoomIn className="h-5 w-5 text-gold shrink-0 mt-0.5" />
+                          <div className="mt-4 p-3 bg-[#EFE6D6]/10 rounded-lg border border-[#B89555]/20 flex items-start gap-3">
+                            <ZoomIn className="h-5 w-5 text-[#1A1A1A] shrink-0 mt-0.5" />
                             <div>
-                              <p className="text-sm text-gold font-medium">Smart Framing Enabled</p>
+                              <p className="text-sm text-[#1A1A1A] font-medium">Smart Framing Enabled</p>
                               <p className="text-xs text-white/90">AI automatically detects subjects and keeps them in frame during reframe - no blind center-crops.</p>
                             </div>
                           </div>
@@ -773,11 +773,11 @@ const VideoResizePack = () => {
                       exit={{ opacity: 0, y: -20 }}
                       transition={{ delay: 0.1 }}
                     >
-                      <Card className="bg-jj-layer-2 border-gold/20">
+                      <Card className="bg-jj-layer-2 border-[#B89555]/20">
                         <CardHeader>
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold text-sm">3</div>
+                              <div className="w-8 h-8 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center text-[#1A1A1A] font-bold text-sm">3</div>
                               <div>
                                 <CardTitle className="text-white">Export Formats</CardTitle>
                                 <CardDescription className="text-white/90">Select the formats you need</CardDescription>
@@ -787,7 +787,7 @@ const VideoResizePack = () => {
                               <Button 
                                 variant="outline" 
                                 size="sm"
-                                className="border-gold/30 text-gold hover:bg-gold/10"
+                                className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                                 onClick={() => setSelectedFormats(EXPORT_FORMATS.map(f => f.id))}
                               >
                                 Select All
@@ -812,18 +812,18 @@ const VideoResizePack = () => {
                                   key={format.id}
                                   className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all ${
                                     isSelected 
-                                      ? "border-gold bg-gold/10" 
-                                      : "border-white/10 hover:border-gold/30"
+                                      ? "border-[#B89555] bg-[#EFE6D6]/10" 
+                                      : "border-white/10 hover:border-[#B89555]/30"
                                   }`}
                                   onClick={() => toggleFormat(format.id)}
                                 >
                                   <div className="flex items-center justify-between mb-3">
-                                    <div className={isSelected ? "text-gold" : "text-white/90"}>
+                                    <div className={isSelected ? "text-[#1A1A1A]" : "text-white/90"}>
                                       {format.icon}
                                     </div>
                                     <Checkbox 
                                       checked={isSelected}
-                                      className="data-[state=checked]:bg-gold data-[state=checked]:border-gold"
+                                      className="data-[state=checked]:bg-[#EFE6D6] data-[state=checked]:border-[#B89555]"
                                     />
                                   </div>
                                   <p className="font-medium text-white text-sm">{format.name}</p>
@@ -846,7 +846,7 @@ const VideoResizePack = () => {
                             </div>
                             <Button 
                               size="lg"
-                              className="bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold px-8"
+                              className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-semibold px-8"
                               onClick={startProcessing}
                               disabled={isProcessing || selectedFormats.length === 0}
                             >
@@ -878,11 +878,11 @@ const VideoResizePack = () => {
                       exit={{ opacity: 0, y: -20 }}
                       transition={{ delay: 0.2 }}
                     >
-                      <Card className="bg-jj-layer-2 border-gold/20">
+                      <Card className="bg-jj-layer-2 border-[#B89555]/20">
                         <CardHeader>
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold text-sm">4</div>
+                              <div className="w-8 h-8 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center text-[#1A1A1A] font-bold text-sm">4</div>
                               <div>
                                 <CardTitle className="text-white">Export Results</CardTitle>
                                 <CardDescription className="text-white/90">
@@ -892,7 +892,7 @@ const VideoResizePack = () => {
                             </div>
                             {hasCompletedJobs && (
                               <Button 
-                                className="bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold"
+                                className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-semibold"
                                 onClick={downloadAllAsZip}
                               >
                                 <Package className="h-4 w-4 mr-2" />
@@ -935,7 +935,7 @@ const VideoResizePack = () => {
                                   </div>
                                   <div className="flex items-center gap-2">
                                     {job.status === "processing" && (
-                                      <Loader2 className="h-5 w-5 text-gold animate-spin" />
+                                      <Loader2 className="h-5 w-5 text-[#1A1A1A] animate-spin" />
                                     )}
                                     {job.status === "completed" && (
                                       <>
@@ -943,7 +943,7 @@ const VideoResizePack = () => {
                                         <Button 
                                           size="sm" 
                                           variant="outline"
-                                          className="border-gold/30 text-gold hover:bg-gold/10"
+                                          className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                                           onClick={() => downloadOutput(job)}
                                         >
                                           <Download className="h-4 w-4 mr-1" />
@@ -979,10 +979,10 @@ const VideoResizePack = () => {
               {/* Smart Reframe AI Mode */}
               <TabsContent value="smart-reframe" className="mt-8 space-y-8">
                 {/* Upload Section (Shared) */}
-                <Card className="bg-jj-layer-2 border-gold/20">
+                <Card className="bg-jj-layer-2 border-[#B89555]/20">
                   <CardHeader>
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold text-sm">1</div>
+                      <div className="w-8 h-8 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center text-[#1A1A1A] font-bold text-sm">1</div>
                       <div>
                         <CardTitle className="text-white">Upload Your Video</CardTitle>
                         <CardDescription className="text-white/90">MP4, MOV, or WebM • Max 500MB</CardDescription>
@@ -993,7 +993,7 @@ const VideoResizePack = () => {
                     {!uploadedVideo ? (
                       <div
                         className={`relative border-2 border-dashed rounded-xl p-12 text-center transition-all cursor-pointer ${
-                          dragActive ? "border-gold bg-gold/10" : "border-gold/30 hover:border-gold/50"
+                          dragActive ? "border-[#B89555] bg-[#EFE6D6]/10" : "border-[#B89555]/30 hover:border-[#B89555]/50"
                         }`}
                         onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
                         onDragLeave={() => setDragActive(false)}
@@ -1009,12 +1009,12 @@ const VideoResizePack = () => {
                         />
                         {isUploading ? (
                           <div className="flex flex-col items-center gap-4">
-                            <Loader2 className="h-12 w-12 text-gold animate-spin" />
+                            <Loader2 className="h-12 w-12 text-[#1A1A1A] animate-spin" />
                             <p className="text-white/70">Processing video...</p>
                           </div>
                         ) : (
                           <>
-                            <Upload className={`h-12 w-12 mx-auto mb-4 ${dragActive ? "text-gold" : "text-[#1A1A1A]/70"}`} />
+                            <Upload className={`h-12 w-12 mx-auto mb-4 ${dragActive ? "text-[#1A1A1A]" : "text-[#1A1A1A]/70"}`} />
                             <p className="text-lg font-medium text-white mb-2">
                               {dragActive ? "Drop your video here" : "Drag & drop your video"}
                             </p>
@@ -1081,7 +1081,7 @@ const VideoResizePack = () => {
                                 {/* Crop Frame */}
                                 <div 
                                   className={`absolute border-2 transition-all ${
-                                    isManualMode ? "border-gold cursor-move" : "border-gold/70"
+                                    isManualMode ? "border-[#B89555] cursor-move" : "border-[#B89555]/70"
                                   }`}
                                   style={getCropPreviewStyle()}
                                   onMouseDown={handleCropMouseDown}
@@ -1103,10 +1103,10 @@ const VideoResizePack = () => {
                                   {/* Corner handles */}
                                   {isManualMode && (
                                     <>
-                                      <div className="absolute -top-1 -left-1 w-3 h-3 bg-gold rounded-sm" />
-                                      <div className="absolute -top-1 -right-1 w-3 h-3 bg-gold rounded-sm" />
-                                      <div className="absolute -bottom-1 -left-1 w-3 h-3 bg-gold rounded-sm" />
-                                      <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-gold rounded-sm" />
+                                      <div className="absolute -top-1 -left-1 w-3 h-3 bg-[#EFE6D6] rounded-sm" />
+                                      <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#EFE6D6] rounded-sm" />
+                                      <div className="absolute -bottom-1 -left-1 w-3 h-3 bg-[#EFE6D6] rounded-sm" />
+                                      <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-[#EFE6D6] rounded-sm" />
                                     </>
                                   )}
                                 </div>
@@ -1125,7 +1125,7 @@ const VideoResizePack = () => {
                                 <Button
                                   size="sm"
                                   variant="outline"
-                                  className={`border-gold/30 ${isManualMode ? 'bg-gold/20 text-gold' : 'text-gold'} hover:bg-gold/10`}
+                                  className={`border-[#B89555]/30 ${isManualMode ? 'bg-[#EFE6D6]/20 text-[#1A1A1A]' : 'text-[#1A1A1A]'} hover:bg-[#EFE6D6]/10`}
                                   onClick={() => setIsManualMode(!isManualMode)}
                                 >
                                   {isManualMode ? <Lock className="h-4 w-4 mr-1" /> : <Unlock className="h-4 w-4 mr-1" />}
@@ -1139,8 +1139,8 @@ const VideoResizePack = () => {
                                     onClick={() => selectShot(shot)}
                                     className={`flex-shrink-0 p-2 rounded-lg border-2 transition-all ${
                                       selectedShotId === shot.id 
-                                        ? "border-gold bg-gold/20" 
-                                        : "border-white/10 hover:border-gold/30"
+                                        ? "border-[#B89555] bg-[#EFE6D6]/20" 
+                                        : "border-white/10 hover:border-[#B89555]/30"
                                     }`}
                                   >
                                     <div className="w-16 h-10 bg-[#FDFBF7]/10 rounded flex items-center justify-center text-xs text-white/70">
@@ -1160,7 +1160,7 @@ const VideoResizePack = () => {
                         <div className="lg:w-80 space-y-4">
                           <div className="p-4 bg-[#1A1A1A]/30 rounded-lg space-y-3">
                             <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-2 text-gold">
+                              <div className="flex items-center gap-2 text-[#1A1A1A]">
                                 <FileVideo className="h-5 w-5" />
                                 <span className="font-medium truncate text-sm">{uploadedVideo.name}</span>
                               </div>
@@ -1188,7 +1188,7 @@ const VideoResizePack = () => {
                           {/* Detect Shots Button */}
                           {detectedShots.length === 0 && (
                             <Button 
-                              className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold"
+                              className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-semibold"
                               onClick={detectShots}
                               disabled={isDetectingShots}
                             >
@@ -1219,10 +1219,10 @@ const VideoResizePack = () => {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -20 }}
                     >
-                      <Card className="bg-jj-layer-2 border-gold/20">
+                      <Card className="bg-jj-layer-2 border-[#B89555]/20">
                         <CardHeader>
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold text-sm">2</div>
+                            <div className="w-8 h-8 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center text-[#1A1A1A] font-bold text-sm">2</div>
                             <div>
                               <CardTitle className="text-white">Reframe Settings</CardTitle>
                               <CardDescription className="text-white/90">Configure AI tracking and output</CardDescription>
@@ -1247,11 +1247,11 @@ const VideoResizePack = () => {
                                   }}
                                   className={`p-4 rounded-xl border-2 transition-all ${
                                     reframeSettings.targetRatio === ratio.value 
-                                      ? "border-gold bg-gold/10" 
-                                      : "border-white/10 hover:border-gold/30"
+                                      ? "border-[#B89555] bg-[#EFE6D6]/10" 
+                                      : "border-white/10 hover:border-[#B89555]/30"
                                   }`}
                                 >
-                                  <div className={`mb-2 ${reframeSettings.targetRatio === ratio.value ? "text-gold" : "text-white/90"}`}>
+                                  <div className={`mb-2 ${reframeSettings.targetRatio === ratio.value ? "text-[#1A1A1A]" : "text-white/90"}`}>
                                     {ratio.icon}
                                   </div>
                                   <p className="font-medium text-white text-sm">{ratio.label}</p>
@@ -1268,7 +1268,7 @@ const VideoResizePack = () => {
                               value={reframeSettings.trackingMode} 
                               onValueChange={(v) => setReframeSettings(prev => ({ ...prev, trackingMode: v as SmartReframeSettings["trackingMode"] }))}
                             >
-                              <SelectTrigger className="w-full bg-[#1A1A1A]/30 border-gold/30 text-white">
+                              <SelectTrigger className="w-full bg-[#1A1A1A]/30 border-[#B89555]/30 text-white">
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
@@ -1304,7 +1304,7 @@ const VideoResizePack = () => {
                           <div>
                             <div className="flex items-center justify-between mb-3">
                               <Label className="text-white">Reframe Sensitivity</Label>
-                              <span className="text-sm text-gold">{reframeSettings.sensitivity}%</span>
+                              <span className="text-sm text-[#1A1A1A]">{reframeSettings.sensitivity}%</span>
                             </div>
                             <Slider
                               value={[reframeSettings.sensitivity]}
@@ -1324,7 +1324,7 @@ const VideoResizePack = () => {
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div className="flex items-center justify-between p-3 bg-[#1A1A1A]/30 rounded-lg">
                               <div className="flex items-center gap-2">
-                                <User className="h-4 w-4 text-gold" />
+                                <User className="h-4 w-4 text-[#1A1A1A]" />
                                 <span className="text-sm text-white">Keep Headroom</span>
                               </div>
                               <Switch
@@ -1334,7 +1334,7 @@ const VideoResizePack = () => {
                             </div>
                             <div className="flex items-center justify-between p-3 bg-[#1A1A1A]/30 rounded-lg">
                               <div className="flex items-center gap-2">
-                                <Grid3X3 className="h-4 w-4 text-gold" />
+                                <Grid3X3 className="h-4 w-4 text-[#1A1A1A]" />
                                 <span className="text-sm text-white">Safe Area Guides</span>
                               </div>
                               <Switch
@@ -1344,7 +1344,7 @@ const VideoResizePack = () => {
                             </div>
                             <div className="flex items-center justify-between p-3 bg-[#1A1A1A]/30 rounded-lg">
                               <div className="flex items-center gap-2">
-                                <Move className="h-4 w-4 text-gold" />
+                                <Move className="h-4 w-4 text-[#1A1A1A]" />
                                 <span className="text-sm text-white">Smooth Transitions</span>
                               </div>
                               <Switch
@@ -1367,10 +1367,10 @@ const VideoResizePack = () => {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -20 }}
                     >
-                      <Card className="bg-jj-layer-2 border-gold/20">
+                      <Card className="bg-jj-layer-2 border-[#B89555]/20">
                         <CardHeader>
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold text-sm">3</div>
+                            <div className="w-8 h-8 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center text-[#1A1A1A] font-bold text-sm">3</div>
                             <div>
                               <CardTitle className="text-white">Export</CardTitle>
                               <CardDescription className="text-white/90">Generate your reframed video</CardDescription>
@@ -1390,14 +1390,14 @@ const VideoResizePack = () => {
                             <div className="flex gap-3">
                               <Button 
                                 variant="outline"
-                                className="border-gold/30 text-gold hover:bg-gold/10"
+                                className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
                                 onClick={downloadAllSizesPack}
                               >
                                 <Package className="h-4 w-4 mr-2" />
                                 All Sizes Pack
                               </Button>
                               <Button 
-                                className="bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold"
+                                className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-semibold"
                                 onClick={startSmartReframe}
                                 disabled={isProcessing}
                               >
@@ -1424,8 +1424,8 @@ const VideoResizePack = () => {
                                   key={job.id}
                                   className="flex items-center gap-4 p-4 bg-[#1A1A1A]/20 rounded-lg"
                                 >
-                                  <div className="w-10 h-10 rounded-lg bg-gold/20 flex items-center justify-center">
-                                    <Target className="h-5 w-5 text-gold" />
+                                  <div className="w-10 h-10 rounded-lg bg-[#EFE6D6]/20 flex items-center justify-center">
+                                    <Target className="h-5 w-5 text-[#1A1A1A]" />
                                   </div>
                                   <div className="flex-1">
                                     <p className="font-medium text-white">Smart Reframe {job.formatId}</p>
@@ -1442,7 +1442,7 @@ const VideoResizePack = () => {
                                   {job.status === "completed" && (
                                     <Button 
                                       size="sm" 
-                                      className="bg-gold hover:bg-gold/90 text-[#1A1A1A]"
+                                      className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]"
                                       onClick={() => downloadOutput(job)}
                                     >
                                       <Download className="h-4 w-4 mr-1" />
@@ -1469,7 +1469,7 @@ const VideoResizePack = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-2xl md:text-3xl font-bold text-white text-center mb-8">
-              Why Use Our <span className="text-gold">Video Tools</span>?
+              Why Use Our <span className="text-[#1A1A1A]">Video Tools</span>?
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
@@ -1489,9 +1489,9 @@ const VideoResizePack = () => {
                   desc: "Drag crop windows on keyframes. Full control when you need it."
                 },
               ].map((feature, idx) => (
-                <Card key={idx} className="bg-[#1A1A1A]/50 border-gold/20">
+                <Card key={idx} className="bg-[#1A1A1A]/50 border-[#B89555]/20">
                   <CardContent className="pt-6 text-center">
-                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gold/20 text-gold mb-4">
+                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-[#EFE6D6]/20 text-[#1A1A1A] mb-4">
                       {feature.icon}
                     </div>
                     <h3 className="font-semibold text-white mb-2">{feature.title}</h3>

@@ -43,23 +43,23 @@ const BrokerIntelligence = () => {
       {/* Internal Warning Banner */}
       <div className="bg-amber-500/10 border-b border-amber-500/30 py-3">
         <div className="container mx-auto px-4 flex items-center justify-center gap-3">
-          <Lock className="w-4 h-4 text-amber-400" />
-          <span className="text-amber-400 text-sm font-medium">INTERNAL USE ONLY — Broker Intelligence Hub</span>
+          <Lock className="w-4 h-4 text-[#1A1A1A]" />
+          <span className="text-[#1A1A1A] text-sm font-medium">INTERNAL USE ONLY — Broker Intelligence Hub</span>
         </div>
       </div>
 
       {/* Header */}
       <section className="py-8 border-b border-zinc-900">
         <div className="container mx-auto px-4">
-          <Link to="/internal/market-intelligence/dashboard" className="inline-flex items-center gap-2 text-gold hover:text-gold-light mb-6">
+          <Link to="/internal/market-intelligence/dashboard" className="inline-flex items-center gap-2 text-[#1A1A1A] hover:text-[#1A1A1A]-light mb-6">
             <ArrowLeft className="w-4 h-4" />
             Back to Dashboard
           </Link>
 
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center">
-                <Users className="w-6 h-6 text-gold" />
+              <div className="w-12 h-12 rounded-xl bg-[#EFE6D6]/10 border border-[#B89555]/30 flex items-center justify-center">
+                <Users className="w-6 h-6 text-[#1A1A1A]" />
               </div>
               <div>
                 <h1 className="text-white text-2xl md:text-3xl font-bold">
@@ -103,10 +103,10 @@ const BrokerIntelligence = () => {
       <section className="py-8">
         <div className="container mx-auto px-4">
           <Tabs defaultValue="signals" className="w-full">
-            <TabsList className="bg-zinc-900 border border-[#1A1A1A] w-full flex flex-wrap justify-start gap-1 h-auto p-1">
+            <TabsList className="bg-[#FDFBF7] border border-[#1A1A1A] w-full flex flex-wrap justify-start gap-1 h-auto p-1">
               <TabsTrigger 
                 value="signals" 
-                className="flex items-center gap-2 data-[state=active]:bg-gold/20 data-[state=active]:text-gold"
+                className="flex items-center gap-2 data-[state=active]:bg-[#EFE6D6]/20 data-[state=active]:text-[#1A1A1A]"
               >
                 <Activity className="w-4 h-4" />
                 <span className="hidden sm:inline">Market Signals</span>
@@ -137,7 +137,7 @@ const BrokerIntelligence = () => {
               </TabsTrigger>
               <TabsTrigger 
                 value="notes" 
-                className="flex items-center gap-2 data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400"
+                className="flex items-center gap-2 data-[state=active]:bg-amber-500/20 data-[state=active]:text-[#1A1A1A]"
               >
                 <FileText className="w-4 h-4" />
                 Notes
@@ -171,7 +171,7 @@ const BrokerIntelligence = () => {
                 >
                   <LeadMarketContext leadArea={selectedArea} leadIntent={leadIntent} />
                   {!selectedArea && (
-                    <div className="mt-4 p-4 bg-zinc-800/30 rounded-lg border border-[#1A1A1A]/50 text-center">
+                    <div className="mt-4 p-4 bg-[#F7F2EA]/30 rounded-lg border border-[#1A1A1A]/50 text-center">
                       <MapPin className="w-6 h-6 text-[#1A1A1A]/70 mx-auto mb-2" />
                       <p className="text-white/90 text-sm">Select an area from the dropdown above to view market context</p>
                     </div>

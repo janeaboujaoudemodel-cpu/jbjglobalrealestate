@@ -371,8 +371,8 @@ const BusinessCardScanner = () => {
         <div className="bg-gradient-to-r from-amber-900/30 via-amber-800/20 to-amber-900/30 border-b border-amber-500/30 -mx-4 px-4 py-8 mb-8">
           <div className="text-center">
             <div className="inline-flex items-center gap-2 bg-amber-500/20 border border-amber-500/40 rounded-full px-4 py-1 mb-4">
-              <Sparkles className="w-4 h-4 text-amber-400" />
-              <span className="text-amber-400 text-sm font-medium">AI-Powered OCR</span>
+              <Sparkles className="w-4 h-4 text-[#1A1A1A]" />
+              <span className="text-[#1A1A1A] text-sm font-medium">AI-Powered OCR</span>
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
               AI Business Card <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-400">Scanner</span>
@@ -401,7 +401,7 @@ const BusinessCardScanner = () => {
 
         {/* Privacy Alert */}
         <Alert className="mb-6 border-amber-500/30 bg-amber-900/20">
-          <Info className="h-4 w-4 text-amber-400" />
+          <Info className="h-4 w-4 text-[#1A1A1A]" />
           <AlertDescription className="text-sm text-white/85">
             <strong className="text-white">Your privacy matters:</strong> All scanned data is encrypted with a key only you possess. 
             Data is processed in-memory and never stored on our servers.
@@ -413,7 +413,7 @@ const BusinessCardScanner = () => {
           <Card className="bg-amber-900/20 border-amber-500/30">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-white">
-                <Sparkles className="h-5 w-5 text-amber-400" />
+                <Sparkles className="h-5 w-5 text-[#1A1A1A]" />
                 Scan Business Cards
               </CardTitle>
               <CardDescription className="text-white/70">
@@ -422,7 +422,7 @@ const BusinessCardScanner = () => {
             </CardHeader>
             <CardContent>
               <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "camera" | "upload")}>
-                <TabsList className="grid w-full grid-cols-2 mb-4 bg-zinc-800 border border-amber-500/30">
+                <TabsList className="grid w-full grid-cols-2 mb-4 bg-[#F7F2EA] border border-amber-500/30">
                   <TabsTrigger value="camera" className="gap-2 data-[state=active]:bg-amber-500 data-[state=active]:text-white">
                     <Camera className="h-4 w-4" />
                     Camera
@@ -460,7 +460,7 @@ const BusinessCardScanner = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle className="flex items-center gap-2 text-white">
-                    <CheckCircle2 className="h-5 w-5 text-amber-400" />
+                    <CheckCircle2 className="h-5 w-5 text-[#1A1A1A]" />
                     Scanned Contacts
                     {scannedContacts.length > 0 && (
                       <Badge className="bg-amber-500/20 text-amber-300">{scannedContacts.length}</Badge>
@@ -496,7 +496,7 @@ const BusinessCardScanner = () => {
 
         {/* Actions Bar */}
         {scannedContacts.length > 0 && (
-          <Card className="mt-6 bg-zinc-900/50 border-blue-500/30">
+          <Card className="mt-6 bg-[#FDFBF7]/50 border-blue-500/30">
             <CardContent className="py-4">
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div className="flex items-center gap-2 text-sm text-white/70">

@@ -21,7 +21,7 @@ const SecurityConsole: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-spin h-8 w-8 border-4 border-gold border-t-transparent rounded-full" />
+        <div className="animate-spin h-8 w-8 border-4 border-[#B89555] border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -172,10 +172,10 @@ const ReportCard: React.FC<{
     whileHover={{ scale: 1.02 }}
     className="p-6 rounded-lg border bg-card hover:shadow-lg transition-shadow cursor-pointer"
   >
-    <Icon className="h-8 w-8 text-gold mb-4" />
+    <Icon className="h-8 w-8 text-[#1A1A1A] mb-4" />
     <h3 className="font-semibold">{title}</h3>
     <p className="text-sm text-muted-foreground mt-1">{description}</p>
-    <p className="text-xs text-gold mt-4">{frequency}</p>
+    <p className="text-xs text-[#1A1A1A] mt-4">{frequency}</p>
   </motion.div>
 );
 

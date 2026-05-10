@@ -70,7 +70,7 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
   return (
     <motion.div variants={fadeInUp} className="min-w-[280px]">
       <Card 
-        className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold shadow-[0_0_20px_rgba(200,167,102,0.2)] hover:shadow-[0_0_25px_rgba(200,167,102,0.35),0_22px_60px_rgba(0,0,0,0.45)] hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300 overflow-hidden group h-full ${isInternalUser ? 'cursor-pointer' : ''}`}
+        className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] shadow-[0_0_20px_rgba(200,167,102,0.2)] hover:shadow-[0_0_25px_rgba(200,167,102,0.35),0_22px_60px_rgba(0,0,0,0.45)] hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300 overflow-hidden group h-full ${isInternalUser ? 'cursor-pointer' : ''}`}
         onClick={handleCardClick}
       >
         <CardContent className="p-0">
@@ -100,7 +100,7 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
             <h3 className="text-[#1A1A1A] font-semibold text-lg mb-1">{member.name}</h3>
 
             {/* Premium shiny job title - allow wrapping */}
-            <p className="text-sm font-medium mb-1 text-gold">
+            <p className="text-sm font-medium mb-1 text-[#1A1A1A]">
               {member.role}
             </p>
 
@@ -132,13 +132,13 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
             <button
               type="button"
               onClick={() => onReadMore(member)}
-              className="text-gold hover:text-[#1A1A1A] text-xs font-medium transition-colors mb-3 text-left"
+              className="text-[#1A1A1A] hover:text-[#1A1A1A] text-xs font-medium transition-colors mb-3 text-left"
             >
               Read more →
             </button>
 
             {/* Divider between Read More and Languages */}
-            <div className="border-t border-gold/30 pt-3">
+            <div className="border-t border-[#B89555]/30 pt-3">
               {/* Languages - Below divider */}
               {displayLanguages.length > 0 && (
                 <div className="flex flex-wrap gap-1.5">
@@ -146,7 +146,7 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
                     <Badge
                       key={lang}
                       variant="outline"
-                      className="text-[10px] border-gold/30 text-[#1A1A1A] bg-gold/10 px-2 py-0.5"
+                      className="text-[10px] border-[#B89555]/30 text-[#1A1A1A] bg-[#EFE6D6]/10 px-2 py-0.5"
                     >
                       {lang}
                     </Badge>
@@ -154,7 +154,7 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
                   {remainingLanguages > 0 && (
                     <Badge
                       variant="outline"
-                      className="text-[10px] border-gold/30 text-[#1A1A1A] bg-gold/10 px-2 py-0.5"
+                      className="text-[10px] border-[#B89555]/30 text-[#1A1A1A] bg-[#EFE6D6]/10 px-2 py-0.5"
                     >
                       +{remainingLanguages}
                     </Badge>
@@ -289,9 +289,9 @@ const MeetTheTeam: React.FC = () => {
           
           {/* Background effects */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none z-[1]">
-            <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-gold/10 rounded-full blur-[120px]" />
-            <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-gold/5 rounded-full blur-[100px]" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-gold/5 rounded-full blur-[150px]" />
+            <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#EFE6D6]/10 rounded-full blur-[120px]" />
+            <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-[#EFE6D6]/5 rounded-full blur-[100px]" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-[#EFE6D6]/5 rounded-full blur-[150px]" />
           </div>
 
           <div className="container mx-auto px-4 relative z-10 pt-24 md:pt-32 lg:pt-36 pb-16 md:pb-24">
@@ -303,7 +303,7 @@ const MeetTheTeam: React.FC = () => {
             >
               {/* Badge at top */}
               <motion.div variants={fadeInUp} className="mb-6 text-center">
-                <Badge className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-gold border-gold/40 px-4 py-1.5 shadow-md">
+                <Badge className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40 px-4 py-1.5 shadow-md">
                   <Users className="w-3.5 h-3.5 mr-1.5" />
                   Our Team
                 </Badge>
@@ -324,7 +324,7 @@ const MeetTheTeam: React.FC = () => {
                   variants={fadeInUp}
                 >
                   <span className="text-white">Meet the </span>
-                  <span className="text-gold">Experts</span>
+                  <span className="text-[#1A1A1A]">Experts</span>
                 </motion.h1>
 
                 <motion.p
@@ -388,14 +388,14 @@ const MeetTheTeam: React.FC = () => {
                       className="mb-8"
                     >
                       {/* Active Champagne Layer - Starts from Department Title */}
-                      <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-6">
+                      <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl p-4 sm:p-6">
                         {/* Department Header - Inside Active Layer */}
                         <motion.div
                           variants={fadeInUp}
                           className="flex items-center gap-3 mb-4"
                         >
-                      <div className="w-10 h-10 bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border border-gold/40 rounded-lg flex items-center justify-center">
-                            <Building2 className="w-5 h-5 text-gold" />
+                      <div className="w-10 h-10 bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border border-[#B89555]/40 rounded-lg flex items-center justify-center">
+                            <Building2 className="w-5 h-5 text-[#1A1A1A]" />
                           </div>
                           <div>
                             <h2 className="text-[#1A1A1A] text-2xl font-semibold">
@@ -465,14 +465,14 @@ const MeetTheTeam: React.FC = () => {
                   className="mb-8"
                 >
                   {/* Active Champagne Layer - Starts from Department Title */}
-                  <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-6">
+                  <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl p-4 sm:p-6">
                     {/* Department Header - Inside Active Layer */}
                     <motion.div
                       variants={fadeInUp}
                       className="flex items-center gap-3 mb-4"
                     >
-                      <div className="w-10 h-10 bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border border-gold/40 rounded-lg flex items-center justify-center">
-                        <Building2 className="w-5 h-5 text-gold" />
+                      <div className="w-10 h-10 bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border border-[#B89555]/40 rounded-lg flex items-center justify-center">
+                        <Building2 className="w-5 h-5 text-[#1A1A1A]" />
                       </div>
                       <div>
                         <h2 className="text-[#1A1A1A] text-2xl font-semibold">
@@ -511,10 +511,10 @@ const MeetTheTeam: React.FC = () => {
           <div className="container mx-auto px-3 sm:px-4 md:px-6">
             <div className="max-w-[1200px] mx-auto">
               {/* OUTER CARD - Active Champagne Layer - Larger padding for visible contrast */}
-              <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8">
+              <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8">
                 {/* INNER CARD - Pearl Layer - Smaller for balance */}
                 <motion.div 
-                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
+                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true }}
@@ -522,10 +522,10 @@ const MeetTheTeam: React.FC = () => {
                 >
                   {/* Badge */}
                   <motion.div 
-                    className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-gold/20 via-[#F7F2EA] to-gold/20 border border-gold/50 rounded-full text-[#1A1A1A] text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-6 shadow-lg shadow-gold/20"
+                    className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-gold/20 via-[#F7F2EA] to-gold/20 border border-[#B89555]/50 rounded-full text-[#1A1A1A] text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-6 shadow-lg shadow-gold/20"
                     variants={fadeInUp}
                   >
-                    <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gold" />
+                    <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#1A1A1A]" />
                     Join Our Team
                   </motion.div>
 
@@ -566,10 +566,10 @@ const MeetTheTeam: React.FC = () => {
                       <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
                       <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                       <span className="relative flex items-center justify-center gap-2">
-                        <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 text-gold group-hover:text-[#1A1A1A] transition-colors" />
-                        <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">Get in</span>
-                        <span className="text-gold group-hover:text-[#1A1A1A] transition-colors">Touch</span>
-                        <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-[#1A1A1A] group-hover:text-gold transition-colors" />
+                        <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
+                        <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">Get in</span>
+                        <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">Touch</span>
+                        <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
                       </span>
                     </button>
 

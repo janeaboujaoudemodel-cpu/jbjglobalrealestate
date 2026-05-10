@@ -117,7 +117,7 @@ const FitOut = () => {
           <motion.div variants={fadeInUp}>
             <Link 
               to="/services/design-build" 
-              className="inline-flex items-center gap-2 text-gold hover:text-white transition-colors mb-6"
+              className="inline-flex items-center gap-2 text-[#1A1A1A] hover:text-white transition-colors mb-6"
             >
               <ChevronLeft className="w-4 h-4" />
               Back to Design & Build
@@ -128,8 +128,8 @@ const FitOut = () => {
             className="flex items-center gap-2 mb-6"
             variants={fadeInUp}
           >
-            <Hammer className="w-6 h-6 text-gold" />
-            <span className="text-gold text-sm uppercase tracking-[0.3em]">
+            <Hammer className="w-6 h-6 text-[#1A1A1A]" />
+            <span className="text-[#1A1A1A] text-sm uppercase tracking-[0.3em]">
               Partner Network
             </span>
           </motion.div>
@@ -167,7 +167,7 @@ const FitOut = () => {
             variants={staggerContainer}
           >
             <motion.div className="text-center mb-12" variants={fadeInUp}>
-              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
+              <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">
                 Our Services
               </span>
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -181,14 +181,14 @@ const FitOut = () => {
             <div className="grid md:grid-cols-2 gap-6">
               {services.map((service) => (
                 <motion.div key={service.title} variants={fadeInUp}>
-                  <Card className="jj-card-inner hover:border-gold transition-all group h-full">
+                  <Card className="jj-card-inner hover:border-[#B89555] transition-all group h-full">
                     <CardContent className="p-6">
                       <div className="flex items-start gap-4">
                         <div className="jj-icon-box-active w-14 h-14 flex-shrink-0 group-hover:scale-110 transition-transform">
                           <service.icon className="w-7 h-7" />
                         </div>
                         <div className="flex-1">
-                          <h3 className="text-[#1A1A1A] font-semibold text-xl mb-2 group-hover:text-gold transition-colors">
+                          <h3 className="text-[#1A1A1A] font-semibold text-xl mb-2 group-hover:text-[#1A1A1A] transition-colors">
                             {service.title}
                           </h3>
                           <p className="text-[#1A1A1A]/70 text-sm mb-4">
@@ -197,7 +197,7 @@ const FitOut = () => {
                           <div className="grid grid-cols-2 gap-2">
                             {service.features.map((feature) => (
                               <div key={feature} className="flex items-center gap-2 text-xs text-[#1A1A1A]/60">
-                                <CheckCircle className="w-3 h-3 text-gold flex-shrink-0" />
+                                <CheckCircle className="w-3 h-3 text-[#1A1A1A] flex-shrink-0" />
                                 {feature}
                               </div>
                             ))}
@@ -223,7 +223,7 @@ const FitOut = () => {
             variants={staggerContainer}
           >
             <motion.div className="text-center mb-12" variants={fadeInUp}>
-              <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
+              <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">
                 Our Advantage
               </span>
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -274,7 +274,7 @@ const FitOut = () => {
               </p>
               <Button variant="primary" size="lg" asChild>
                 <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-                  <span className="text-[#1A1A1A]">Request</span><span className="text-gold"> Quote</span>
+                  <span className="text-[#1A1A1A]">Request</span><span className="text-[#1A1A1A]"> Quote</span>
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </a>
               </Button>
