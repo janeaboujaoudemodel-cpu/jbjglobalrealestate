@@ -453,6 +453,11 @@ export default function UnifiedCRM() {
           </div>
         </div>
       </div>
+
+      {/* Side rail — Calendar / Notes / Tasks dock */}
+      <Suspense fallback={null}>
+        <CRMSideRail />
+      </Suspense>
     </div>
   );
 }
