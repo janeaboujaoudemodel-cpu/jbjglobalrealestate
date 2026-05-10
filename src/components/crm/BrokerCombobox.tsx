@@ -47,7 +47,7 @@ export function BrokerCombobox({
       try {
         let q = supabase
           .from("crm_brokers")
-          .select("id, full_name, current_company, email, phone_e164")
+          .select("id, full_name, current_company, email_lower, phone_e164")
           .order("full_name", { ascending: true })
           .limit(10);
         const term = query.trim();
@@ -136,9 +136,9 @@ export function BrokerCombobox({
                     />
                     <span className="min-w-0">
                       <span className="block truncate font-medium">{opt.full_name}</span>
-                      {(opt.current_company || opt.email) && (
+                      {(opt.current_company || opt.email_lower) && (
                         <span className="block truncate text-xs text-[#1A1A1A]/60">
-                          {[opt.current_company, opt.email].filter(Boolean).join(" · ")}
+                          {[opt.current_company, opt.email_lower].filter(Boolean).join(" · ")}
                         </span>
                       )}
                     </span>
