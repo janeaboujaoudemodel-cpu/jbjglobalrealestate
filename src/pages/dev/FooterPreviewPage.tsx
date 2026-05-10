@@ -208,7 +208,7 @@ const FooterPreviewInner = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-white font-inter">
+    <div className="min-h-screen bg-[#1A1A1A] text-white font-inter">
       {/* Toolbar */}
       <header className="sticky top-0 z-50 border-b border-white/10 bg-[#1A1A1A]/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-[1600px] flex-wrap items-center gap-3 px-4 py-3">

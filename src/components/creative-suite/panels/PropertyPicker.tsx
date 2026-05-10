@@ -48,7 +48,7 @@ export function PropertyPicker({ isOpen, onClose, onSelect, selectedPropertyId }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[80vh] bg-slate-900 border-[#B89555]/30">
+      <DialogContent className="max-w-4xl max-h-[80vh] bg-[#1A1A1A] border-[#B89555]/30">
         <DialogHeader>
           <DialogTitle className="text-white flex items-center gap-2">
             <Building2 className="w-5 h-5 text-[#1A1A1A]" />
@@ -58,12 +58,12 @@ export function PropertyPicker({ isOpen, onClose, onSelect, selectedPropertyId }
 
         <form onSubmit={handleSearch} className="flex gap-2">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/70" />
             <Input
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search by name, developer, or area..."
-              className="pl-10 bg-slate-800 border-slate-700 text-white"
+              className="pl-10 bg-[#1A1A1A] border-[#1A1A1A] text-white"
             />
           </div>
           <Button type="submit" className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
@@ -77,7 +77,7 @@ export function PropertyPicker({ isOpen, onClose, onSelect, selectedPropertyId }
               <Loader2 className="w-8 h-8 text-[#1A1A1A] animate-spin" />
             </div>
           ) : properties.length === 0 ? (
-            <div className="text-center py-20 text-slate-400">
+            <div className="text-center py-20 text-[#1A1A1A]/70">
               <Building2 className="w-12 h-12 mx-auto mb-4 opacity-50" />
               <p>No properties found. Try a different search.</p>
             </div>
@@ -90,10 +90,10 @@ export function PropertyPicker({ isOpen, onClose, onSelect, selectedPropertyId }
                   className={`flex gap-4 p-4 rounded-xl border transition-all text-left ${
                     selectedPropertyId === property.id
                       ? 'bg-[#EFE6D6]/10 border-[#B89555]'
-                      : 'bg-slate-800/50 border-slate-700 hover:border-[#B89555]/50'
+                      : 'bg-[#1A1A1A]/50 border-[#1A1A1A] hover:border-[#B89555]/50'
                   }`}
                 >
-                  <div className="w-24 h-24 rounded-lg bg-slate-700 flex-shrink-0 overflow-hidden">
+                  <div className="w-24 h-24 rounded-lg bg-[#1A1A1A] flex-shrink-0 overflow-hidden">
                     {property.cover_image_url ? (
                       <img
                         src={property.cover_image_url}
@@ -102,7 +102,7 @@ export function PropertyPicker({ isOpen, onClose, onSelect, selectedPropertyId }
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
-                        <ImageIcon className="w-8 h-8 text-slate-500" />
+                        <ImageIcon className="w-8 h-8 text-[#1A1A1A]/70" />
                       </div>
                     )}
                   </div>
@@ -119,7 +119,7 @@ export function PropertyPicker({ isOpen, onClose, onSelect, selectedPropertyId }
                       <p className="text-sm text-[#1A1A1A] truncate">by {property.developer_name}</p>
                     )}
 
-                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 text-xs text-slate-400">
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 text-xs text-[#1A1A1A]/70">
                       {property.area_name && (
                         <span className="flex items-center gap-1">
                           <MapPin className="w-3 h-3" />

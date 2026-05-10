@@ -242,7 +242,7 @@ function TextPreviewThumbnail({ preset, isActive, onClick }: {
       className={`group flex flex-col rounded-lg overflow-hidden border transition-all duration-150 text-left w-full ${
         isActive
           ? 'ring-2 ring-amber-400 border-amber-400'
-          : 'border-slate-700 bg-slate-800/50 hover:border-amber-500/50 hover:shadow-md hover:shadow-amber-500/10 hover:scale-[1.02]'
+          : 'border-[#1A1A1A] bg-[#1A1A1A]/50 hover:border-amber-500/50 hover:shadow-md hover:shadow-amber-500/10 hover:scale-[1.02]'
       }`}
     >
       {/* Dark video bg area */}
@@ -267,9 +267,9 @@ function TextPreviewThumbnail({ preset, isActive, onClick }: {
       </div>
 
       {/* Label bar */}
-      <div className="flex items-center justify-between px-1.5 py-1 bg-slate-800">
+      <div className="flex items-center justify-between px-1.5 py-1 bg-[#1A1A1A]">
         <span className="text-[10px] font-semibold text-slate-200 truncate">{preset.label}</span>
-        <Plus className="w-3 h-3 text-slate-500 group-hover:text-[#1A1A1A] transition-colors shrink-0" />
+        <Plus className="w-3 h-3 text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] transition-colors shrink-0" />
       </div>
     </button>
   );
@@ -359,22 +359,22 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
 
         {/* ── PRESETS ─────────────────────────────── */}
         <section>
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Presets</p>
+          <p className="text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider mb-2">Presets</p>
 
           {/* Search bar */}
           <div className="relative mb-2">
-            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-500 pointer-events-none" />
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#1A1A1A]/70 pointer-events-none" />
             <input
               type="text"
               value={presetSearch}
               onChange={e => setPresetSearch(e.target.value)}
               placeholder="Search presets…"
-              className="w-full h-10 bg-slate-800 border border-slate-600 rounded-lg pl-8 pr-8 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-amber-500/60 transition-colors"
+              className="w-full h-10 bg-[#1A1A1A] border border-slate-600 rounded-lg pl-8 pr-8 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-amber-500/60 transition-colors"
             />
             {presetSearch && (
               <button
                 onClick={() => setPresetSearch('')}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#1A1A1A]/70 hover:text-[#1A1A1A]/70 transition-colors"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -388,7 +388,7 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
               className={`px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-wide border transition-all duration-150 ${
                 activeCategory === null
                   ? 'bg-amber-500/20 border-amber-500/60 text-amber-300'
-                  : 'border-slate-700 bg-slate-800/60 text-slate-400 hover:border-slate-500 hover:text-slate-300'
+                  : 'border-[#1A1A1A] bg-[#1A1A1A]/60 text-[#1A1A1A]/70 hover:border-slate-500 hover:text-[#1A1A1A]/70'
               }`}
             >
               All
@@ -400,7 +400,7 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
                 className={`px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-wide border transition-all duration-150 ${
                   activeCategory === cat
                     ? 'bg-amber-500/20 border-amber-500/60 text-amber-300'
-                    : 'border-slate-700 bg-slate-800/60 text-slate-400 hover:border-slate-500 hover:text-slate-300'
+                    : 'border-[#1A1A1A] bg-[#1A1A1A]/60 text-[#1A1A1A]/70 hover:border-slate-500 hover:text-[#1A1A1A]/70'
                 }`}
               >
                 {cat}
@@ -419,8 +419,8 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
             if (filtered.length === 0) {
               return (
                 <div className="flex flex-col items-center justify-center py-8 text-center">
-                  <Search className="w-6 h-6 text-slate-600 mb-2" />
-                  <p className="text-xs text-slate-500">No presets match your search</p>
+                  <Search className="w-6 h-6 text-[#1A1A1A]/80 mb-2" />
+                  <p className="text-xs text-[#1A1A1A]/70">No presets match your search</p>
                   <button
                     onClick={() => { setPresetSearch(''); setActiveCategory(null); }}
                     className="mt-2 text-[10px] text-[#1A1A1A] hover:text-amber-300 transition-colors"
@@ -453,8 +453,8 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
 
         {/* ── LIVE MINI PREVIEW ───────────────────── */}
         <section>
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Preview</p>
-          <div className="relative bg-[#1A1A1A] rounded-lg overflow-hidden aspect-video flex items-center justify-center border border-slate-700">
+          <p className="text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider mb-2">Preview</p>
+          <div className="relative bg-[#1A1A1A] rounded-lg overflow-hidden aspect-video flex items-center justify-center border border-[#1A1A1A]">
             <div
               className={`
                 ${position === 'top'    ? 'absolute top-4 left-0 right-0 flex justify-center' : ''}
@@ -469,11 +469,11 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
 
         {/* ── TEXT CONTENT ────────────────────────── */}
         <section>
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Text</p>
+          <p className="text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider mb-2">Text</p>
           <textarea
             value={content}
             onChange={e => setContent(e.target.value)}
-            className="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white resize-none focus:outline-none focus:border-amber-500/60 placeholder-slate-500"
+            className="w-full bg-[#1A1A1A] border border-slate-600 rounded-lg px-3 py-2 text-sm text-white resize-none focus:outline-none focus:border-amber-500/60 placeholder-slate-500"
             rows={2}
             placeholder="Enter text…"
           />
@@ -481,7 +481,7 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
 
         {/* ── FONT ───────────────────────────────── */}
         <section>
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Font</p>
+          <p className="text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider mb-2">Font</p>
           <div className="grid grid-cols-3 gap-1.5 mb-3">
             {FONT_FAMILIES.map(f => (
               <button
@@ -490,7 +490,7 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
                 className={`py-1.5 text-xs rounded-md border transition-all truncate px-1 ${
                   fontFamily === f.value
                     ? 'border-amber-500 bg-amber-500/20 text-amber-300'
-                    : 'border-slate-600 bg-slate-800 text-slate-300 hover:border-slate-400'
+                    : 'border-slate-600 bg-[#1A1A1A] text-[#1A1A1A]/70 hover:border-[#B89555]/30'
                 }`}
                 style={{ fontFamily: f.value }}
               >
@@ -503,13 +503,13 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
           <div className="flex items-center gap-2 mb-3">
             <button
               onClick={() => setFontWeight(fw => fw === 'bold' ? 'normal' : 'bold')}
-              className={`p-2 rounded-md border transition-all ${fontWeight === 'bold' ? 'border-amber-500 bg-amber-500/20 text-amber-300' : 'border-slate-600 bg-slate-800 text-slate-400 hover:text-white'}`}
+              className={`p-2 rounded-md border transition-all ${fontWeight === 'bold' ? 'border-amber-500 bg-amber-500/20 text-amber-300' : 'border-slate-600 bg-[#1A1A1A] text-[#1A1A1A]/70 hover:text-white'}`}
             >
               <Bold className="w-3.5 h-3.5" />
             </button>
             <button
               onClick={() => setItalic(i => !i)}
-              className={`p-2 rounded-md border transition-all ${italic ? 'border-amber-500 bg-amber-500/20 text-amber-300' : 'border-slate-600 bg-slate-800 text-slate-400 hover:text-white'}`}
+              className={`p-2 rounded-md border transition-all ${italic ? 'border-amber-500 bg-amber-500/20 text-amber-300' : 'border-slate-600 bg-[#1A1A1A] text-[#1A1A1A]/70 hover:text-white'}`}
             >
               <Italic className="w-3.5 h-3.5" />
             </button>
@@ -520,7 +520,7 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
                 <button
                   key={a}
                   onClick={() => setTextAlign(a)}
-                  className={`p-2 rounded-md border transition-all ${textAlign === a ? 'border-amber-500 bg-amber-500/20 text-amber-300' : 'border-slate-600 bg-slate-800 text-slate-400 hover:text-white'}`}
+                  className={`p-2 rounded-md border transition-all ${textAlign === a ? 'border-amber-500 bg-amber-500/20 text-amber-300' : 'border-slate-600 bg-[#1A1A1A] text-[#1A1A1A]/70 hover:text-white'}`}
                 >
                   <Icon className="w-3.5 h-3.5" />
                 </button>
@@ -530,7 +530,7 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
 
           {/* Size */}
           <div className="flex items-center gap-3">
-            <span className="text-xs text-slate-400 w-8 shrink-0">Size</span>
+            <span className="text-xs text-[#1A1A1A]/70 w-8 shrink-0">Size</span>
             <Slider
               value={[fontSize]}
               min={12}
@@ -539,12 +539,12 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
               onValueChange={([v]) => setFontSize(v)}
               className="flex-1"
             />
-            <span className="text-xs text-slate-300 w-7 text-right shrink-0">{fontSize}</span>
+            <span className="text-xs text-[#1A1A1A]/70 w-7 text-right shrink-0">{fontSize}</span>
           </div>
 
           {/* Opacity */}
           <div className="flex items-center gap-3 mt-2">
-            <span className="text-xs text-slate-400 w-8 shrink-0">Opacity</span>
+            <span className="text-xs text-[#1A1A1A]/70 w-8 shrink-0">Opacity</span>
             <Slider
               value={[Math.round(opacity * 100)]}
               min={10}
@@ -553,22 +553,22 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
               onValueChange={([v]) => setOpacity(v / 100)}
               className="flex-1"
             />
-            <span className="text-xs text-slate-300 w-7 text-right shrink-0">{Math.round(opacity * 100)}%</span>
+            <span className="text-xs text-[#1A1A1A]/70 w-7 text-right shrink-0">{Math.round(opacity * 100)}%</span>
           </div>
         </section>
 
         {/* ── COLORS ─────────────────────────────── */}
         <section>
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Colors</p>
+          <p className="text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider mb-2">Colors</p>
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-400 w-16 shrink-0">Text</span>
+              <span className="text-xs text-[#1A1A1A]/70 w-16 shrink-0">Text</span>
               <div className="flex gap-1 flex-wrap">
                 {COLOR_SWATCHES.map(c => (
                   <button
                     key={c}
                     onClick={() => setColor(c)}
-                    className={`w-5 h-5 rounded-full border-2 transition-all ${color === c ? 'border-amber-400 scale-125' : 'border-slate-600 hover:border-slate-400'}`}
+                    className={`w-5 h-5 rounded-full border-2 transition-all ${color === c ? 'border-amber-400 scale-125' : 'border-slate-600 hover:border-[#B89555]/30'}`}
                     style={{ background: c }}
                     title={c}
                   />
@@ -583,10 +583,10 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
               />
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-400 w-16 shrink-0">BG</span>
+              <span className="text-xs text-[#1A1A1A]/70 w-16 shrink-0">BG</span>
               <button
                 onClick={() => setBgColor('transparent')}
-                className={`px-2 py-0.5 text-xs rounded border transition-all ${bgColor === 'transparent' ? 'border-amber-500 bg-amber-500/20 text-amber-300' : 'border-slate-600 bg-slate-800 text-slate-400'}`}
+                className={`px-2 py-0.5 text-xs rounded border transition-all ${bgColor === 'transparent' ? 'border-amber-500 bg-amber-500/20 text-amber-300' : 'border-slate-600 bg-[#1A1A1A] text-[#1A1A1A]/70'}`}
               >
                 None
               </button>
@@ -595,7 +595,7 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
                   <button
                     key={c}
                     onClick={() => setBgColor(c)}
-                    className={`w-5 h-5 rounded border-2 transition-all ${bgColor === c ? 'border-amber-400 scale-125' : 'border-slate-600 hover:border-slate-400'}`}
+                    className={`w-5 h-5 rounded border-2 transition-all ${bgColor === c ? 'border-amber-400 scale-125' : 'border-slate-600 hover:border-[#B89555]/30'}`}
                     style={{ background: c }}
                     title={c}
                   />
@@ -614,8 +614,8 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
 
         {/* ── POSITION ───────────────────────────── */}
         <section>
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Position on Canvas</p>
-          <div className="grid grid-cols-3 grid-rows-3 gap-1 w-32 mx-auto h-24 border border-slate-600 rounded-lg p-1 bg-slate-800/50">
+          <p className="text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider mb-2">Position on Canvas</p>
+          <div className="grid grid-cols-3 grid-rows-3 gap-1 w-32 mx-auto h-24 border border-slate-600 rounded-lg p-1 bg-[#1A1A1A]/50">
             {(['top-left','top','top-right','left','center','right','bottom-left','bottom','bottom-right'] as const).map(pos => {
               const mainPos = pos.replace('-left','').replace('-right','') as 'top'|'center'|'bottom';
               return (
@@ -630,7 +630,7 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
                   className={`rounded transition-all text-xs ${
                     position === mainPos && pos === mainPos
                       ? 'bg-amber-500 text-[#1A1A1A]'
-                      : 'bg-slate-700 hover:bg-slate-600 text-slate-400 hover:text-white'
+                      : 'bg-[#1A1A1A] hover:bg-slate-600 text-[#1A1A1A]/70 hover:text-white'
                   }`}
                   title={pos}
                 />
@@ -645,7 +645,7 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
                 className={`px-3 py-1 text-xs rounded-md border capitalize transition-all ${
                   position === p
                     ? 'border-amber-500 bg-amber-500/20 text-amber-300'
-                    : 'border-slate-600 bg-slate-800 text-slate-400 hover:text-white hover:border-slate-400'
+                    : 'border-slate-600 bg-[#1A1A1A] text-[#1A1A1A]/70 hover:text-white hover:border-[#B89555]/30'
                 }`}
               >
                 {p}
@@ -656,7 +656,7 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
 
         {/* ── ANIMATION ──────────────────────────── */}
         <section>
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Animation</p>
+          <p className="text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider mb-2">Animation</p>
           <div className="grid grid-cols-4 gap-1.5">
             {TEXT_ANIMATIONS.map(a => (
               <button
@@ -665,7 +665,7 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
                 className={`flex flex-col items-center gap-0.5 py-2 px-1 rounded-md border text-xs transition-all ${
                   animation === a.id
                     ? 'border-amber-500 bg-amber-500/20 text-amber-300'
-                    : 'border-slate-600 bg-slate-800 text-slate-400 hover:border-slate-400 hover:text-white'
+                    : 'border-slate-600 bg-[#1A1A1A] text-[#1A1A1A]/70 hover:border-[#B89555]/30 hover:text-white'
                 }`}
               >
                 <span className="text-base leading-none">{a.emoji}</span>
@@ -678,7 +678,7 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
         {/* ── DURATION ───────────────────────────── */}
         <section>
           <div className="flex items-center gap-3">
-            <span className="text-xs text-slate-400 w-16 shrink-0">Duration</span>
+            <span className="text-xs text-[#1A1A1A]/70 w-16 shrink-0">Duration</span>
             <Slider
               value={[duration]}
               min={1}
@@ -687,7 +687,7 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
               onValueChange={([v]) => setDuration(v)}
               className="flex-1"
             />
-            <span className="text-xs text-slate-300 w-10 text-right shrink-0">{duration}s</span>
+            <span className="text-xs text-[#1A1A1A]/70 w-10 text-right shrink-0">{duration}s</span>
           </div>
         </section>
 

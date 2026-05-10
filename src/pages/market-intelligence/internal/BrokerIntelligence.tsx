@@ -49,7 +49,7 @@ const BrokerIntelligence = () => {
       </div>
 
       {/* Header */}
-      <section className="py-8 border-b border-zinc-900">
+      <section className="py-8 border-b border-[#1A1A1A]">
         <div className="container mx-auto px-4">
           <Link to="/internal/market-intelligence/dashboard" className="inline-flex items-center gap-2 text-[#1A1A1A] hover:text-[#1A1A1A]-light mb-6">
             <ArrowLeft className="w-4 h-4" />

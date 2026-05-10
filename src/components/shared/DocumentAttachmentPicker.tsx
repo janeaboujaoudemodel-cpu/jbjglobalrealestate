@@ -226,7 +226,7 @@ export function DocumentAttachmentPicker({ context, onAttach, onClose }: Documen
 const TYPE_STYLES: Record<string, { border: string; bg: string; badge: string; badgeLabel: string; icon: React.ReactNode }> = {
   stamp: { border: 'border-[#B89555]/40', bg: 'bg-[#B89555]/5', badge: 'bg-[#B89555]/15 text-[#B89555]', badgeLabel: 'Official Stamp', icon: <Stamp className="w-4 h-4 text-[#B89555]" /> },
   signature: { border: 'border-indigo-300/50', bg: 'bg-indigo-50/50', badge: 'bg-indigo-100 text-indigo-700', badgeLabel: 'Signature', icon: <Signature className="w-4 h-4 text-indigo-500" /> },
-  letterhead: { border: 'border-slate-300/50', bg: 'bg-slate-50/50', badge: 'bg-slate-100 text-slate-700', badgeLabel: 'Letterhead', icon: <FileText className="w-4 h-4 text-slate-500" /> },
+  letterhead: { border: 'border-[#B89555]/30/50', bg: 'bg-[#FDFBF7]/50', badge: 'bg-[#F7F2EA] text-[#1A1A1A]/80', badgeLabel: 'Letterhead', icon: <FileText className="w-4 h-4 text-[#1A1A1A]/70" /> },
   business_card: { border: 'border-amber-300/50', bg: 'bg-amber-50/50', badge: 'bg-amber-100 text-amber-700', badgeLabel: 'Business Card', icon: <CreditCard className="w-4 h-4 text-amber-600" /> },
   logo: { border: 'border-emerald-300/50', bg: 'bg-emerald-50/50', badge: 'bg-emerald-100 text-emerald-700', badgeLabel: 'Logo', icon: <Image className="w-4 h-4 text-emerald-500" /> },
   email_signature: { border: 'border-blue-300/50', bg: 'bg-blue-50/50', badge: 'bg-blue-100 text-blue-700', badgeLabel: 'Email Signature', icon: <Mail className="w-4 h-4 text-blue-500" /> },
@@ -325,10 +325,10 @@ export function ChatAttachmentRenderer({ attachment }: { attachment: DocumentAtt
   // Letterhead: company-branded document card
   if (attachment.type === 'letterhead' && attachment.content) {
     return (
-      <div className="mt-2 rounded-xl overflow-hidden border border-slate-200 bg-gradient-to-b from-slate-50 to-white p-3 max-w-[200px]">
+      <div className="mt-2 rounded-xl overflow-hidden border border-[#B89555]/30 bg-gradient-to-b from-slate-50 to-white p-3 max-w-[200px]">
         <div className="flex items-center gap-1.5 mb-2">
-          <FileText className="w-3 h-3 text-slate-500" />
-          <span className="text-[9px] font-semibold text-slate-600 uppercase tracking-wider">Letterhead</span>
+          <FileText className="w-3 h-3 text-[#1A1A1A]/70" />
+          <span className="text-[9px] font-semibold text-[#1A1A1A]/80 uppercase tracking-wider">Letterhead</span>
         </div>
         <div className="border-t-2 border-[#B89555] pt-2">
           <img src={attachment.content} alt={attachment.name} className="max-h-[120px] object-contain rounded" />

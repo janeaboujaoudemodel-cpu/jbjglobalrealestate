@@ -87,19 +87,19 @@ export function SaveProjectBar({
               onBlur={() => setEditing(false)}
               onKeyDown={e => { if (e.key === 'Enter') setEditing(false); }}
               autoFocus
-              className="h-7 text-sm font-semibold bg-transparent border-0 border-b-2 rounded-none focus:ring-0 px-0 text-stone-900"
+              className="h-7 text-sm font-semibold bg-transparent border-0 border-b-2 rounded-none focus:ring-0 px-0 text-[#1A1A1A]"
               style={{ borderBottomColor: accentColor }}
             />
           ) : (
             <button
               onClick={() => setEditing(true)}
-              className="text-sm font-semibold text-stone-900 hover:text-stone-600 transition-colors truncate text-left"
+              className="text-sm font-semibold text-[#1A1A1A] hover:text-[#1A1A1A]/70 transition-colors truncate text-left"
               title="Click to rename project"
             >
               {projectName}
             </button>
           )}
-          <span className="text-[10px] shrink-0 text-stone-400">(click to rename)</span>
+          <span className="text-[10px] shrink-0 text-[#1A1A1A]/70">(click to rename)</span>
         </div>
 
         {/* Actions */}
@@ -107,14 +107,14 @@ export function SaveProjectBar({
           {onCreateNew && (
             <button
               onClick={onCreateNew}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all border border-stone-200 text-stone-600 hover:bg-stone-50"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all border border-stone-200 text-[#1A1A1A]/70 hover:bg-[#F7F2EA]"
             >
               <FilePlus2 className="w-3.5 h-3.5" /> New
             </button>
           )}
           <button
             onClick={() => setShowDrafts(!showDrafts)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all border border-stone-200 text-stone-600 hover:bg-stone-50"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all border border-stone-200 text-[#1A1A1A]/70 hover:bg-[#F7F2EA]"
           >
             <History className="w-3.5 h-3.5" /> Drafts <ChevronDown className="w-3 h-3" />
           </button>
@@ -140,19 +140,19 @@ export function SaveProjectBar({
       {showDrafts && (
         <div className="absolute top-full left-0 right-0 mt-1 z-50 bg-[#FDFBF7] rounded-xl border border-stone-200 shadow-xl max-h-64 overflow-y-auto">
           <div className="p-3 border-b border-stone-100">
-            <p className="text-xs font-semibold text-stone-500 uppercase tracking-wider">Recent Drafts</p>
+            <p className="text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider">Recent Drafts</p>
           </div>
           {drafts.length === 0 ? (
-            <div className="p-6 text-center text-sm text-stone-400">No drafts saved yet</div>
+            <div className="p-6 text-center text-sm text-[#1A1A1A]/70">No drafts saved yet</div>
           ) : (
             drafts.slice(0, 10).map(draft => (
-              <div key={draft.key} className="flex items-center justify-between px-4 py-2.5 hover:bg-stone-50 transition-colors border-b border-stone-50 last:border-0">
+              <div key={draft.key} className="flex items-center justify-between px-4 py-2.5 hover:bg-[#F7F2EA] transition-colors border-b border-stone-50 last:border-0">
                 <button
                   onClick={() => { onLoadDraft?.(draft.key); setShowDrafts(false); }}
                   className="flex-1 text-left"
                 >
-                  <p className="text-sm font-medium text-stone-800">{draft.name}</p>
-                  <p className="text-[10px] text-stone-400">{new Date(draft.savedAt).toLocaleString()}</p>
+                  <p className="text-sm font-medium text-[#1A1A1A]">{draft.name}</p>
+                  <p className="text-[10px] text-[#1A1A1A]/70">{new Date(draft.savedAt).toLocaleString()}</p>
                 </button>
                 <button onClick={() => deleteDraft(draft.key)} className="p-1 text-stone-300 hover:text-red-500 transition-colors">
                   <Trash2 className="w-3.5 h-3.5" />

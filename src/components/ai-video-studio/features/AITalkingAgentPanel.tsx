@@ -311,20 +311,20 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
           </div>
           <div>
             <h3 className="text-sm font-bold text-white">AI Talking Agent</h3>
-            <p className="text-xs text-slate-400">Pick a character narrator for your property video</p>
+            <p className="text-xs text-[#1A1A1A]/70">Pick a character narrator for your property video</p>
           </div>
         </div>
 
         {/* ═══ VOICE ENGINE TOGGLE ═══ */}
         <section>
-          <p className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Voice Engine</p>
+          <p className="text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider mb-2">Voice Engine</p>
           <div className="flex gap-2">
             <button
               onClick={() => setVoiceEngine("browser")}
               className={`flex-1 py-2 rounded-lg text-xs font-bold border transition-all ${
                 voiceEngine === "browser"
-                  ? "bg-slate-700 text-white border-slate-500"
-                  : "bg-slate-800/60 text-slate-400 border-slate-700 hover:border-slate-500"
+                  ? "bg-[#1A1A1A] text-white border-slate-500"
+                  : "bg-[#1A1A1A]/60 text-[#1A1A1A]/70 border-[#1A1A1A] hover:border-slate-500"
               }`}
             >
               🔊 Browser Voice
@@ -334,7 +334,7 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
               className={`flex-1 py-2 rounded-lg text-xs font-bold border transition-all flex items-center justify-center gap-1.5 ${
                 voiceEngine === "premium"
                   ? "bg-purple-500/20 text-purple-300 border-purple-500/50"
-                  : "bg-slate-800/60 text-slate-400 border-slate-700 hover:border-purple-500/30"
+                  : "bg-[#1A1A1A]/60 text-[#1A1A1A]/70 border-[#1A1A1A] hover:border-purple-500/30"
               }`}
             >
               <Sparkles className="w-3 h-3" /> Premium Voice
@@ -349,7 +349,7 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
 
         {/* ═══ CHARACTER GRID ═══ */}
         <section>
-          <p className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Character</p>
+          <p className="text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider mb-2">Character</p>
           <div className="grid grid-cols-4 gap-2">
             {CHARACTERS.map((char) => (
               <button
@@ -358,7 +358,7 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
                 className={`relative flex flex-col items-center gap-1 p-2 rounded-xl border transition-all text-center ${
                   selectedCharacter.id === char.id
                     ? "border-amber-400 bg-amber-500/10"
-                    : "border-slate-700 bg-slate-800/60 hover:border-slate-500"
+                    : "border-[#1A1A1A] bg-[#1A1A1A]/60 hover:border-slate-500"
                 }`}
               >
                 {selectedCharacter.id === char.id && (
@@ -368,26 +368,26 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
                   {char.avatar}
                 </div>
                 <p className="text-[10px] font-bold text-white leading-tight">{char.name}</p>
-                <p className="text-[9px] text-slate-400 leading-tight">{char.title}</p>
+                <p className="text-[9px] text-[#1A1A1A]/70 leading-tight">{char.title}</p>
               </button>
             ))}
           </div>
-          <div className="mt-2 p-2.5 rounded-lg border border-slate-700 bg-slate-800/60">
+          <div className="mt-2 p-2.5 rounded-lg border border-[#1A1A1A] bg-[#1A1A1A]/60">
             <p className="text-xs text-white font-medium">{selectedCharacter.name} · {selectedCharacter.title}</p>
-            <p className="text-[10px] text-slate-400">{selectedCharacter.style}</p>
+            <p className="text-[10px] text-[#1A1A1A]/70">{selectedCharacter.style}</p>
           </div>
         </section>
 
         {/* ── LANGUAGE + TONE ROW ─────────────────────────────────────────── */}
         <div className="grid grid-cols-2 gap-3">
           <section>
-            <p className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5 flex items-center gap-1">
+            <p className="text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider mb-1.5 flex items-center gap-1">
               <Globe className="w-3 h-3" /> Language
             </p>
             <select
               value={selectedLanguage}
               onChange={(e) => setSelectedLanguage(e.target.value)}
-              className="w-full bg-slate-800 border border-slate-600 text-white text-xs rounded-lg px-2 py-2 focus:border-amber-400 focus:outline-none"
+              className="w-full bg-[#1A1A1A] border border-slate-600 text-white text-xs rounded-lg px-2 py-2 focus:border-amber-400 focus:outline-none"
             >
               {LANGUAGES.map((l) => (
                 <option key={l.code} value={l.code}>{l.flag} {l.label}</option>
@@ -396,11 +396,11 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
           </section>
 
           <section>
-            <p className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Tone</p>
+            <p className="text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider mb-1.5">Tone</p>
             <select
               value={selectedTone}
               onChange={(e) => setSelectedTone(e.target.value)}
-              className="w-full bg-slate-800 border border-slate-600 text-white text-xs rounded-lg px-2 py-2 focus:border-amber-400 focus:outline-none"
+              className="w-full bg-[#1A1A1A] border border-slate-600 text-white text-xs rounded-lg px-2 py-2 focus:border-amber-400 focus:outline-none"
             >
               {TONES.map((t) => (
                 <option key={t.id} value={t.id}>{t.icon} {t.label}</option>
@@ -411,7 +411,7 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
 
         {/* ── DURATION ────────────────────────────────────────────────────── */}
         <section>
-          <p className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Duration</p>
+          <p className="text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider mb-1.5">Duration</p>
           <div className="flex gap-2">
             {DURATIONS.map((d) => (
               <button
@@ -420,7 +420,7 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
                 className={`flex-1 py-1.5 rounded-lg text-xs font-bold border transition-all ${
                   selectedDuration === d.value
                     ? "bg-amber-500 text-[#1A1A1A] border-amber-500"
-                    : "bg-slate-800 text-slate-300 border-slate-600 hover:border-slate-400"
+                    : "bg-[#1A1A1A] text-[#1A1A1A]/70 border-slate-600 hover:border-[#B89555]/30"
                 }`}
               >
                 {d.label}
@@ -432,7 +432,7 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
         {/* ── PROPERTY PROMPT ─────────────────────────────────────────────── */}
         <section>
           <div className="flex items-center justify-between mb-1.5">
-            <p className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+            <p className="text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider">
               Property Description
             </p>
             <VoiceInputButton
@@ -440,7 +440,7 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
               language={selectedLanguage}
               size="sm"
               variant="ghost"
-              className="text-slate-400 hover:text-white h-6 w-6 p-0"
+              className="text-[#1A1A1A]/70 hover:text-white h-6 w-6 p-0"
             />
           </div>
           <Textarea
@@ -448,9 +448,9 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
             onChange={(e) => setPrompt(e.target.value)}
             placeholder="e.g. Stunning 3-bedroom villa in Dubai Hills Estate, private pool, panoramic skyline views, modern interiors, AED 4.5M..."
             rows={4}
-            className="bg-slate-800 border-slate-600 text-white placeholder:text-slate-500 text-xs resize-none focus:border-amber-400"
+            className="bg-[#1A1A1A] border-slate-600 text-white placeholder:text-[#1A1A1A]/70 text-xs resize-none focus:border-amber-400"
           />
-          <p className="text-[10px] text-slate-500 mt-1">
+          <p className="text-[10px] text-[#1A1A1A]/70 mt-1">
             Tip: Include bedrooms, location, price, key features, and selling points.
           </p>
         </section>
@@ -470,7 +470,7 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
 
         {/* ── GENERATING SKELETON ─────────────────────────────────────────── */}
         {isGenerating && (
-          <div className="rounded-xl border border-slate-700 bg-slate-800/60 p-4 flex flex-col items-center gap-3">
+          <div className="rounded-xl border border-[#1A1A1A] bg-[#1A1A1A]/60 p-4 flex flex-col items-center gap-3">
             <div className={`w-14 h-14 rounded-full bg-gradient-to-br ${selectedCharacter.color} flex items-center justify-center text-2xl animate-pulse`}>
               {selectedCharacter.avatar}
             </div>
@@ -478,7 +478,7 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
               <p className="text-sm font-semibold text-white">
                 {selectedCharacter.name} is preparing…
               </p>
-              <p className="text-xs text-slate-400 mt-0.5">Writing script</p>
+              <p className="text-xs text-[#1A1A1A]/70 mt-0.5">Writing script</p>
             </div>
             <div className="flex items-center gap-1 h-5">
               {Array.from({ length: 12 }).map((_, i) => (
@@ -491,7 +491,7 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
 
         {/* ── RESULT CARD ─────────────────────────────────────────────────── */}
         {narration && !isGenerating && (
-          <div className="rounded-xl border border-amber-500/30 bg-slate-800/80 overflow-hidden">
+          <div className="rounded-xl border border-amber-500/30 bg-[#1A1A1A]/80 overflow-hidden">
             {/* Header */}
             <div className={`p-3 bg-gradient-to-r ${selectedCharacter.color} opacity-90 flex items-center gap-3`}>
               <div className="w-12 h-12 rounded-full bg-[#FDFBF7]/20 flex items-center justify-center text-2xl shadow-lg flex-shrink-0">
@@ -518,7 +518,7 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
 
             {/* Premium voice generation button */}
             {voiceEngine === "premium" && !premiumAudioUrl && (
-              <div className="p-3 border-b border-slate-700/50">
+              <div className="p-3 border-b border-[#1A1A1A]/50">
                 <Button
                   onClick={handleGeneratePremiumVoice}
                   disabled={isPremiumGenerating}
@@ -543,14 +543,14 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
             )}
 
             {/* Script + timeline */}
-            <div className="p-3 border-t border-slate-700/50 space-y-2">
+            <div className="p-3 border-t border-[#1A1A1A]/50 space-y-2">
               <button onClick={() => setShowScript((s) => !s)}
                 className="text-xs text-[#1A1A1A] hover:text-amber-300 font-medium flex items-center gap-1">
                 {showScript ? "Hide script ▲" : "Show script ▼"}
               </button>
 
               {showScript && (
-                <div className="bg-slate-900/60 rounded-lg p-3 text-xs text-slate-300 leading-relaxed max-h-40 overflow-y-auto">
+                <div className="bg-[#1A1A1A]/60 rounded-lg p-3 text-xs text-[#1A1A1A]/70 leading-relaxed max-h-40 overflow-y-auto">
                   {narration.script}
                 </div>
               )}
@@ -566,7 +566,7 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
 
               {(onAddToTimeline || onAIVoiceGenerated) && (
                 <Button onClick={handleAddToTimeline} size="sm"
-                  className="w-full bg-slate-700 hover:bg-slate-600 text-white gap-1.5 text-xs">
+                  className="w-full bg-[#1A1A1A] hover:bg-slate-600 text-white gap-1.5 text-xs">
                   <Plus className="w-3.5 h-3.5" />
                   Add Narration to Timeline
                 </Button>

@@ -72,7 +72,7 @@ function ToolBtn({
         size="sm"
         variant={active ? 'default' : 'ghost'}
         onClick={onClick}
-        className={active ? 'bg-[#EFE6D6] text-[#1A1A1A]' : 'text-slate-400'}
+        className={active ? 'bg-[#EFE6D6] text-[#1A1A1A]' : 'text-[#1A1A1A]/70'}
       >
         {children}
       </Button>
@@ -293,9 +293,9 @@ export function TimelineEditor({
       {/* ── Keyboard cheat-sheet modal ── */}
       <ShortcutCheatSheet open={showCheatSheet} onClose={() => setShowCheatSheet(false)} />
 
-      <div className="h-full flex flex-col bg-slate-900">
+      <div className="h-full flex flex-col bg-[#1A1A1A]">
         {/* Toolbar */}
-        <div className="flex items-center justify-between px-3 py-2 border-b border-slate-800 bg-slate-900/80 overflow-visible z-10 relative">
+        <div className="flex items-center justify-between px-3 py-2 border-b border-[#1A1A1A] bg-[#1A1A1A]/80 overflow-visible z-10 relative">
           <div className="flex items-center gap-1">
             <ToolBtn active={mode === 'select'} onClick={() => onModeChange('select')} label="Select" shortcut="V">
               <MousePointer2 className="w-4 h-4" />
@@ -307,7 +307,7 @@ export function TimelineEditor({
               <Hand className="w-4 h-4" />
             </ToolBtn>
 
-            <div className="w-px h-4 bg-slate-700 mx-2" />
+            <div className="w-px h-4 bg-[#1A1A1A] mx-2" />
 
             <ToolBtn active={snapEnabled} onClick={onToggleSnap} label="Snap" shortcut="S">
               <Magnet className="w-4 h-4" />
@@ -315,7 +315,7 @@ export function TimelineEditor({
 
             {selectedClipIds.length > 0 && (
               <>
-                <div className="w-px h-4 bg-slate-700 mx-2" />
+                <div className="w-px h-4 bg-[#1A1A1A] mx-2" />
                 <Button
                   size="sm"
                   variant="ghost"
@@ -334,7 +334,7 @@ export function TimelineEditor({
               size="sm"
               variant="ghost"
               onClick={() => onZoomChange(Math.max(0.1, zoom - 0.25))}
-              className="text-slate-400"
+              className="text-[#1A1A1A]/70"
             >
               <Minus className="w-4 h-4" />
             </Button>
@@ -351,15 +351,15 @@ export function TimelineEditor({
               size="sm"
               variant="ghost"
               onClick={() => onZoomChange(Math.min(5, zoom + 0.25))}
-              className="text-slate-400"
+              className="text-[#1A1A1A]/70"
             >
               <Plus className="w-4 h-4" />
             </Button>
-            <span className="text-xs text-slate-500 w-12 text-right">
+            <span className="text-xs text-[#1A1A1A]/70 w-12 text-right">
               {Math.round(zoom * 100)}%
             </span>
 
-            <div className="w-px h-4 bg-slate-700 mx-1" />
+            <div className="w-px h-4 bg-[#1A1A1A] mx-1" />
 
             {/* ? shortcut help button */}
             <button
@@ -379,17 +379,17 @@ export function TimelineEditor({
         {/* Timeline Content */}
         <div className="flex-1 flex min-h-0">
           {/* Track Labels */}
-          <div className="w-40 flex-shrink-0 border-r border-slate-800 bg-slate-900/50">
-            <div className="h-8 border-b border-slate-800" /> {/* Time ruler spacer */}
+          <div className="w-40 flex-shrink-0 border-r border-[#1A1A1A] bg-[#1A1A1A]/50">
+            <div className="h-8 border-b border-[#1A1A1A]" /> {/* Time ruler spacer */}
             {tracks.map((track) => (
               <div
                 key={track.id}
-                className="flex items-center gap-2 px-2 border-b border-slate-800/50 hover:bg-slate-800/30"
+                className="flex items-center gap-2 px-2 border-b border-[#1A1A1A]/50 hover:bg-[#1A1A1A]/30"
                 style={{ height: collapsedTracks.has(track.id) ? 24 : TRACK_HEIGHT }}
               >
                 <button
                   onClick={() => toggleTrackCollapse(track.id)}
-                  className="text-slate-500 hover:text-slate-300"
+                  className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]/70"
                 >
                   {collapsedTracks.has(track.id) ? (
                     <ChevronRight className="w-3 h-3" />
@@ -397,24 +397,24 @@ export function TimelineEditor({
                     <ChevronDown className="w-3 h-3" />
                   )}
                 </button>
-                <span className="text-slate-400">{getTrackIcon(track.type)}</span>
-                <span className="text-xs text-slate-300 flex-1 truncate">{track.name}</span>
+                <span className="text-[#1A1A1A]/70">{getTrackIcon(track.type)}</span>
+                <span className="text-xs text-[#1A1A1A]/70 flex-1 truncate">{track.name}</span>
                 <div className="flex items-center gap-0.5">
                   <button
                     onClick={() => onUpdateTrack(track.id, { muted: !track.muted })}
-                    className={track.muted ? 'text-red-400' : 'text-slate-500 hover:text-slate-300'}
+                    className={track.muted ? 'text-red-400' : 'text-[#1A1A1A]/70 hover:text-[#1A1A1A]/70'}
                   >
                     {track.muted ? <VolumeX className="w-3 h-3" /> : <Volume2 className="w-3 h-3" />}
                   </button>
                   <button
                     onClick={() => onUpdateTrack(track.id, { visible: !track.visible })}
-                    className={!track.visible ? 'text-red-400' : 'text-slate-500 hover:text-slate-300'}
+                    className={!track.visible ? 'text-red-400' : 'text-[#1A1A1A]/70 hover:text-[#1A1A1A]/70'}
                   >
                     {track.visible ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
                   </button>
                   <button
                     onClick={() => onUpdateTrack(track.id, { locked: !track.locked })}
-                    className={track.locked ? 'text-[#1A1A1A]' : 'text-slate-500 hover:text-slate-300'}
+                    className={track.locked ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/70 hover:text-[#1A1A1A]/70'}
                   >
                     {track.locked ? <Lock className="w-3 h-3" /> : <Unlock className="w-3 h-3" />}
                   </button>
@@ -426,7 +426,7 @@ export function TimelineEditor({
               <Button
                 size="sm"
                 variant="ghost"
-                className="w-full text-slate-500 hover:text-slate-300 text-xs"
+                className="w-full text-[#1A1A1A]/70 hover:text-[#1A1A1A]/70 text-xs"
                 onClick={() => onAddTrack('video')}
               >
                 <Plus className="w-3 h-3 mr-1" />
@@ -444,7 +444,7 @@ export function TimelineEditor({
             <div style={{ width: timelineWidth, minWidth: '100%' }}>
               {/* Time Ruler */}
               <div 
-                className="h-8 border-b border-slate-800 relative bg-slate-900/80 sticky top-0 z-10"
+                className="h-8 border-b border-[#1A1A1A] relative bg-[#1A1A1A]/80 sticky top-0 z-10"
                 onClick={handleTimelineClick}
               >
                 {timeMarkers.map((t) => (
@@ -453,10 +453,10 @@ export function TimelineEditor({
                     className="absolute top-0 h-full flex flex-col justify-end"
                     style={{ left: t * pixelsPerSecond }}
                   >
-                    <span className="text-xs text-slate-500 px-1">
+                    <span className="text-xs text-[#1A1A1A]/70 px-1">
                       {Math.floor(t / 60)}:{(t % 60).toString().padStart(2, '0')}
                     </span>
-                    <div className="w-px h-2 bg-slate-700" />
+                    <div className="w-px h-2 bg-[#1A1A1A]" />
                   </div>
                 ))}
                 
@@ -473,14 +473,14 @@ export function TimelineEditor({
               {tracks.map((track) => (
                 <div
                   key={track.id}
-                  className="relative border-b border-slate-800/50"
+                  className="relative border-b border-[#1A1A1A]/50"
                   style={{ 
                     height: collapsedTracks.has(track.id) ? 24 : TRACK_HEIGHT,
                     opacity: track.visible ? 1 : 0.5,
                   }}
                   onClick={handleTimelineClick}
                 >
-                  <div className="absolute inset-0 bg-slate-900/30" />
+                  <div className="absolute inset-0 bg-[#1A1A1A]/30" />
 
                   {/* Clips */}
                   {!collapsedTracks.has(track.id) && track.clips.map((clip) => {
@@ -527,30 +527,30 @@ export function TimelineEditor({
                           </div>
                         </ContextMenuTrigger>
 
-                        <ContextMenuContent className="z-[10200] bg-slate-900 border-slate-700 text-slate-100 min-w-[200px]">
-                          <ContextMenuLabel className="text-slate-400 text-[11px] uppercase tracking-wider">
+                        <ContextMenuContent className="z-[10200] bg-[#1A1A1A] border-[#1A1A1A] text-slate-100 min-w-[200px]">
+                          <ContextMenuLabel className="text-[#1A1A1A]/70 text-[11px] uppercase tracking-wider">
                             <Clapperboard className="inline w-3 h-3 mr-1.5 text-purple-400" />
                             {clip.name}
                           </ContextMenuLabel>
-                          <ContextMenuSeparator className="bg-slate-700" />
+                          <ContextMenuSeparator className="bg-[#1A1A1A]" />
 
                           {/* Add Transition Before */}
                           {onAddTransition && !isTransition && (
                             <ContextMenuSub>
-                              <ContextMenuSubTrigger className="focus:bg-slate-800 data-[state=open]:bg-slate-800 text-slate-200">
+                              <ContextMenuSubTrigger className="focus:bg-[#1A1A1A] data-[state=open]:bg-[#1A1A1A] text-slate-200">
                                 <span className="mr-2 text-purple-400">◁</span>
                                 Add Transition Before
                               </ContextMenuSubTrigger>
-                              <ContextMenuSubContent className="z-[10300] bg-slate-900 border-slate-700 text-slate-100 min-w-[160px]">
+                              <ContextMenuSubContent className="z-[10300] bg-[#1A1A1A] border-[#1A1A1A] text-slate-100 min-w-[160px]">
                                 {QUICK_TRANSITIONS.map((t) => (
                                   <ContextMenuItem
                                     key={t.id}
-                                    className="focus:bg-slate-800 text-slate-200 cursor-pointer"
+                                    className="focus:bg-[#1A1A1A] text-slate-200 cursor-pointer"
                                     onSelect={() => onAddTransition(track.id, clip.startTime, t)}
                                   >
                                     <span className="mr-2 text-purple-400 text-[11px]">◇</span>
                                     <span className="flex-1">{t.name}</span>
-                                    <span className="text-[10px] text-slate-500 ml-2">{t.duration}s</span>
+                                    <span className="text-[10px] text-[#1A1A1A]/70 ml-2">{t.duration}s</span>
                                   </ContextMenuItem>
                                 ))}
                               </ContextMenuSubContent>
@@ -560,34 +560,34 @@ export function TimelineEditor({
                           {/* Add Transition After */}
                           {onAddTransition && !isTransition && (
                             <ContextMenuSub>
-                              <ContextMenuSubTrigger className="focus:bg-slate-800 data-[state=open]:bg-slate-800 text-slate-200">
+                              <ContextMenuSubTrigger className="focus:bg-[#1A1A1A] data-[state=open]:bg-[#1A1A1A] text-slate-200">
                                 <span className="mr-2 text-purple-400">▷</span>
                                 Add Transition After
                               </ContextMenuSubTrigger>
-                              <ContextMenuSubContent className="z-[10300] bg-slate-900 border-slate-700 text-slate-100 min-w-[160px]">
+                              <ContextMenuSubContent className="z-[10300] bg-[#1A1A1A] border-[#1A1A1A] text-slate-100 min-w-[160px]">
                                 {QUICK_TRANSITIONS.map((t) => (
                                   <ContextMenuItem
                                     key={t.id}
-                                    className="focus:bg-slate-800 text-slate-200 cursor-pointer"
+                                    className="focus:bg-[#1A1A1A] text-slate-200 cursor-pointer"
                                     onSelect={() => onAddTransition(track.id, clip.startTime + clip.duration, t)}
                                   >
                                     <span className="mr-2 text-purple-400 text-[11px]">◇</span>
                                     <span className="flex-1">{t.name}</span>
-                                    <span className="text-[10px] text-slate-500 ml-2">{t.duration}s</span>
+                                    <span className="text-[10px] text-[#1A1A1A]/70 ml-2">{t.duration}s</span>
                                   </ContextMenuItem>
                                 ))}
                               </ContextMenuSubContent>
                             </ContextMenuSub>
                           )}
 
-                          <ContextMenuSeparator className="bg-slate-700" />
+                          <ContextMenuSeparator className="bg-[#1A1A1A]" />
 
                           {/* Split */}
                           <ContextMenuItem
-                            className="focus:bg-slate-800 text-slate-200 cursor-pointer"
+                            className="focus:bg-[#1A1A1A] text-slate-200 cursor-pointer"
                             onSelect={() => onSplitClip(clip.id, currentTime)}
                           >
-                            <Scissors className="mr-2 w-3.5 h-3.5 text-slate-400" />
+                            <Scissors className="mr-2 w-3.5 h-3.5 text-[#1A1A1A]/70" />
                             Split at Playhead
                           </ContextMenuItem>
 

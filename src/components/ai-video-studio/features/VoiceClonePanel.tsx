@@ -233,20 +233,20 @@ export function VoiceClonePanel({ onAddToTimeline }: VoiceClonePanelProps) {
           </div>
           <div>
             <h3 className="text-sm font-bold text-white">Voice Clone</h3>
-            <p className="text-xs text-slate-400">Clone your voice and generate narration</p>
+            <p className="text-xs text-[#1A1A1A]/70">Clone your voice and generate narration</p>
           </div>
         </div>
 
         {/* ═══ CLONE SECTION ═══ */}
         <section className="space-y-3">
-          <p className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Clone a New Voice</p>
+          <p className="text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider">Clone a New Voice</p>
 
           <input
             type="text"
             value={voiceName}
             onChange={e => setVoiceName(e.target.value)}
             placeholder="Voice name (e.g. My Voice)"
-            className="w-full px-3 py-2 rounded-lg text-xs bg-slate-800 border border-slate-600 text-white placeholder:text-slate-500 focus:border-purple-400 focus:outline-none"
+            className="w-full px-3 py-2 rounded-lg text-xs bg-[#1A1A1A] border border-slate-600 text-white placeholder:text-[#1A1A1A]/70 focus:border-purple-400 focus:outline-none"
           />
 
           <input ref={fileInputRef} type="file" accept="audio/*" onChange={handleFileSelect} className="hidden" />
@@ -254,7 +254,7 @@ export function VoiceClonePanel({ onAddToTimeline }: VoiceClonePanelProps) {
           {!audioFile ? (
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="w-full flex flex-col items-center justify-center gap-2 py-6 rounded-lg border-2 border-dashed border-purple-500/30 text-slate-400 hover:border-purple-500/50 transition-all"
+              className="w-full flex flex-col items-center justify-center gap-2 py-6 rounded-lg border-2 border-dashed border-purple-500/30 text-[#1A1A1A]/70 hover:border-purple-500/50 transition-all"
             >
               <Upload className="w-5 h-5 text-purple-400" />
               <span className="text-xs font-medium">Upload Voice Sample</span>
@@ -264,7 +264,7 @@ export function VoiceClonePanel({ onAddToTimeline }: VoiceClonePanelProps) {
             <div className="flex items-center gap-2 p-2.5 rounded-lg border border-purple-500/30 bg-purple-500/10">
               <Mic2 className="w-4 h-4 text-purple-400 flex-shrink-0" />
               <span className="text-xs text-white truncate flex-1">{audioFile.name}</span>
-              <button onClick={() => { setAudioFile(null); if (fileInputRef.current) fileInputRef.current.value = ''; }} className="text-slate-400 hover:text-white">
+              <button onClick={() => { setAudioFile(null); if (fileInputRef.current) fileInputRef.current.value = ''; }} className="text-[#1A1A1A]/70 hover:text-white">
                 <Trash2 className="w-3.5 h-3.5" />
               </button>
             </div>
@@ -285,12 +285,12 @@ export function VoiceClonePanel({ onAddToTimeline }: VoiceClonePanelProps) {
 
         {/* ═══ CLONED VOICES LIST ═══ */}
         <section className="space-y-2">
-          <p className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+          <p className="text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider">
             Your Cloned Voices {isLoadingVoices && <Loader2 className="w-3 h-3 inline animate-spin ml-1" />}
           </p>
 
           {clonedVoices.length === 0 && !isLoadingVoices && (
-            <p className="text-[11px] text-slate-500">No cloned voices yet. Upload a sample above.</p>
+            <p className="text-[11px] text-[#1A1A1A]/70">No cloned voices yet. Upload a sample above.</p>
           )}
 
           <div className="space-y-1.5">
@@ -300,7 +300,7 @@ export function VoiceClonePanel({ onAddToTimeline }: VoiceClonePanelProps) {
                 className={`flex items-center gap-2 p-2.5 rounded-lg border transition-all cursor-pointer ${
                   selectedVoice?.voice_id === voice.voice_id
                     ? 'border-purple-400 bg-purple-500/10'
-                    : 'border-slate-700 bg-slate-800/60 hover:border-slate-500'
+                    : 'border-[#1A1A1A] bg-[#1A1A1A]/60 hover:border-slate-500'
                 }`}
                 onClick={() => setSelectedVoice(voice)}
               >
@@ -309,11 +309,11 @@ export function VoiceClonePanel({ onAddToTimeline }: VoiceClonePanelProps) {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs text-white font-medium truncate">{voice.name}</p>
-                  <p className="text-[10px] text-slate-400 truncate">{voice.voice_id.slice(0, 12)}…</p>
+                  <p className="text-[10px] text-[#1A1A1A]/70 truncate">{voice.voice_id.slice(0, 12)}…</p>
                 </div>
                 <button
                   onClick={(e) => { e.stopPropagation(); handleDeleteVoice(voice); }}
-                  className="p-1 text-slate-500 hover:text-red-400 transition-colors"
+                  className="p-1 text-[#1A1A1A]/70 hover:text-red-400 transition-colors"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>
@@ -324,7 +324,7 @@ export function VoiceClonePanel({ onAddToTimeline }: VoiceClonePanelProps) {
 
         {/* ═══ GENERATE TTS WITH CLONE ═══ */}
         {selectedVoice && (
-          <section className="space-y-3 p-3 rounded-xl border border-purple-500/20 bg-slate-800/60">
+          <section className="space-y-3 p-3 rounded-xl border border-purple-500/20 bg-[#1A1A1A]/60">
             <p className="text-xs font-semibold text-purple-300 uppercase tracking-wider">
               Speak as "{selectedVoice.name}"
             </p>
@@ -334,7 +334,7 @@ export function VoiceClonePanel({ onAddToTimeline }: VoiceClonePanelProps) {
               onChange={e => setTtsText(e.target.value)}
               placeholder="Type or paste the text you want this voice to speak..."
               rows={4}
-              className="bg-slate-900/60 border-slate-600 text-white placeholder:text-slate-500 text-xs resize-none focus:border-purple-400"
+              className="bg-[#1A1A1A]/60 border-slate-600 text-white placeholder:text-[#1A1A1A]/70 text-xs resize-none focus:border-purple-400"
             />
 
             <Button
@@ -359,14 +359,14 @@ export function VoiceClonePanel({ onAddToTimeline }: VoiceClonePanelProps) {
                 <div className="flex gap-2">
                   <button
                     onClick={handlePlayPause}
-                    className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[11px] font-medium bg-slate-700 border border-slate-600 text-white hover:bg-slate-600 transition-all"
+                    className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[11px] font-medium bg-[#1A1A1A] border border-slate-600 text-white hover:bg-slate-600 transition-all"
                   >
                     {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
                     {isPlaying ? 'Pause' : 'Play'}
                   </button>
                   <button
                     onClick={handleDownload}
-                    className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-[11px] font-medium bg-slate-700 border border-slate-600 text-white hover:bg-slate-600 transition-all"
+                    className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-[11px] font-medium bg-[#1A1A1A] border border-slate-600 text-white hover:bg-slate-600 transition-all"
                   >
                     <Download className="w-3.5 h-3.5" />
                   </button>

@@ -30,7 +30,7 @@ export default function VoiceStudio() {
       <input ref={vs.videoInputRef} type="file" accept="video/*" className="hidden" onChange={(e) => vs.handleVideoUpload(e.target.files)} />
 
       {/* Header */}
-      <div className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm">
+      <div className="border-b border-[#1A1A1A] bg-[#1A1A1A]/50 backdrop-blur-sm">
         <div className="container max-w-6xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -42,7 +42,7 @@ export default function VoiceStudio() {
                   Voice Studio
                   <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-xs">FREE</Badge>
                 </h1>
-                <p className="text-slate-400 text-sm">Record → Multi-Voice Narration</p>
+                <p className="text-[#1A1A1A]/70 text-sm">Record → Multi-Voice Narration</p>
               </div>
             </div>
             <Link
@@ -62,7 +62,7 @@ export default function VoiceStudio() {
           {/* Left Column - Input */}
           <div className="space-y-6">
             {/* Step 1: Audio Input */}
-            <Card className="bg-slate-900/50 border-slate-700/50">
+            <Card className="bg-[#1A1A1A]/50 border-[#1A1A1A]/50">
               <CardHeader className="pb-4">
                 <CardTitle className="text-white flex items-center gap-2 text-lg">
                   <span className="flex items-center justify-center w-6 h-6 rounded-full bg-[#D4AF37]/20 text-[#D4AF37] text-sm font-bold">1</span>
@@ -82,7 +82,7 @@ export default function VoiceStudio() {
                       <><Mic className="h-4 w-4 mr-2" />Record Voice</>
                     )}
                   </Button>
-                  <Button variant="outline" onClick={() => vs.fileInputRef.current?.click()} className="border-slate-600 text-slate-300 hover:bg-slate-800">
+                  <Button variant="outline" onClick={() => vs.fileInputRef.current?.click()} className="border-slate-600 text-[#1A1A1A]/70 hover:bg-[#1A1A1A]">
                     <Upload className="h-4 w-4 mr-2" />Upload Audio
                   </Button>
                 </div>
@@ -95,28 +95,28 @@ export default function VoiceStudio() {
                 )}
 
                 {vs.hasAudioSample && !vs.isRecording && (
-                  <div className="flex items-center gap-3 p-3 rounded-lg bg-slate-800/50 border border-slate-700">
+                  <div className="flex items-center gap-3 p-3 rounded-lg bg-[#1A1A1A]/50 border border-[#1A1A1A]">
                     <FileAudio className="h-5 w-5 text-[#D4AF37]" />
                     <div className="flex-1 min-w-0">
                       <p className="text-white text-sm truncate">
                         {vs.uploadedAudio?.name || `Recording (${vs.formatTime(vs.recordedAudio?.duration || 0)})`}
                       </p>
                     </div>
-                    <Button variant="ghost" size="sm" onClick={vs.playPreview} className="text-slate-400 hover:text-white">
+                    <Button variant="ghost" size="sm" onClick={vs.playPreview} className="text-[#1A1A1A]/70 hover:text-white">
                       {vs.isPreviewPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
                     </Button>
-                    <Button variant="ghost" size="sm" onClick={vs.clearAudio} className="text-slate-400 hover:text-red-400">
+                    <Button variant="ghost" size="sm" onClick={vs.clearAudio} className="text-[#1A1A1A]/70 hover:text-red-400">
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
                 )}
 
-                <p className="text-xs text-slate-500">Record or upload a voice sample for cloning, or skip for library voices.</p>
+                <p className="text-xs text-[#1A1A1A]/70">Record or upload a voice sample for cloning, or skip for library voices.</p>
               </CardContent>
             </Card>
 
             {/* Step 2: Script */}
-            <Card className="bg-slate-900/50 border-slate-700/50">
+            <Card className="bg-[#1A1A1A]/50 border-[#1A1A1A]/50">
               <CardHeader className="pb-4">
                 <CardTitle className="text-white flex items-center gap-2 text-lg">
                   <span className="flex items-center justify-center w-6 h-6 rounded-full bg-[#D4AF37]/20 text-[#D4AF37] text-sm font-bold">2</span>
@@ -128,9 +128,9 @@ export default function VoiceStudio() {
                   placeholder="Enter your narration script here..."
                   value={vs.script}
                   onChange={(e) => vs.updateScript(e.target.value)}
-                  className="min-h-[150px] bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 resize-none"
+                  className="min-h-[150px] bg-[#1A1A1A]/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 resize-none"
                 />
-                <div className="flex justify-between text-xs text-slate-500">
+                <div className="flex justify-between text-xs text-[#1A1A1A]/70">
                   <span>{vs.script.length.toLocaleString()} / {MAX_SCRIPT_LENGTH.toLocaleString()} characters</span>
                   <span className={vs.script.length > MAX_SCRIPT_LENGTH * 0.9 ? "text-[#1A1A1A]" : ""}>
                     {vs.script.length >= MAX_SCRIPT_LENGTH ? "Limit reached" : ""}
@@ -140,7 +140,7 @@ export default function VoiceStudio() {
             </Card>
 
             {/* Tone & Style */}
-            <Card className="bg-slate-900/50 border-slate-700/50">
+            <Card className="bg-[#1A1A1A]/50 border-[#1A1A1A]/50">
               <CardHeader className="pb-4">
                 <CardTitle className="text-white flex items-center gap-2 text-lg">
                   <span className="flex items-center justify-center w-6 h-6 rounded-full bg-[#D4AF37]/20 text-[#D4AF37] text-sm font-bold">
@@ -155,19 +155,19 @@ export default function VoiceStudio() {
                     <button
                       key={tone.id}
                       onClick={() => vs.toast({ title: `Tone: ${tone.label}`, description: "Adjust your script to match this style for best results." })}
-                      className="p-2.5 rounded-lg border border-slate-700 bg-slate-800/30 hover:border-[#D4AF37]/50 hover:bg-[#D4AF37]/5 transition-all text-left"
+                      className="p-2.5 rounded-lg border border-[#1A1A1A] bg-[#1A1A1A]/30 hover:border-[#D4AF37]/50 hover:bg-[#D4AF37]/5 transition-all text-left"
                     >
                       <span className="text-lg">{tone.icon}</span>
                       <p className="text-xs text-white font-medium mt-1">{tone.label}</p>
                     </button>
                   ))}
                 </div>
-                <p className="text-xs text-slate-500">Select a tone to guide your script. The voice engine will read your text as-written — use punctuation and pacing to control delivery.</p>
+                <p className="text-xs text-[#1A1A1A]/70">Select a tone to guide your script. The voice engine will read your text as-written — use punctuation and pacing to control delivery.</p>
               </CardContent>
             </Card>
 
             {/* Step 3: Voice Selection */}
-            <Card className="bg-slate-900/50 border-slate-700/50">
+            <Card className="bg-[#1A1A1A]/50 border-[#1A1A1A]/50">
               <CardHeader className="pb-4">
                 <CardTitle className="text-white flex items-center gap-2 text-lg">
                   <span className="flex items-center justify-center w-6 h-6 rounded-full bg-[#D4AF37]/20 text-[#D4AF37] text-sm font-bold">3</span>
@@ -176,7 +176,7 @@ export default function VoiceStudio() {
               </CardHeader>
               <CardContent>
                 <Tabs value={vs.voiceMode} onValueChange={(v) => vs.setVoiceMode(v as "library" | "enhance" | "clone")}>
-                  <TabsList className="grid w-full grid-cols-3 bg-slate-800/50">
+                  <TabsList className="grid w-full grid-cols-3 bg-[#1A1A1A]/50">
                     <TabsTrigger value="library" className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-[#1A1A1A]">Voice Library</TabsTrigger>
                     <TabsTrigger value="enhance" className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-[#1A1A1A]">Enhance</TabsTrigger>
                     <TabsTrigger value="clone" className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-[#1A1A1A]">My Voice</TabsTrigger>
@@ -191,29 +191,29 @@ export default function VoiceStudio() {
                           className={`p-3 rounded-lg border text-left transition-all ${
                             vs.selectedVoice === voice.id
                               ? "border-[#D4AF37] bg-[#D4AF37]/10"
-                              : "border-slate-700 bg-slate-800/30 hover:border-slate-600"
+                              : "border-[#1A1A1A] bg-[#1A1A1A]/30 hover:border-slate-600"
                           }`}
                         >
                           <div className="flex items-center gap-2">
-                            <Volume2 className={`h-4 w-4 ${vs.selectedVoice === voice.id ? "text-[#D4AF37]" : "text-slate-500"}`} />
+                            <Volume2 className={`h-4 w-4 ${vs.selectedVoice === voice.id ? "text-[#D4AF37]" : "text-[#1A1A1A]/70"}`} />
                             <span className="text-white font-medium text-sm">{voice.name}</span>
                           </div>
                           <div className="flex items-center gap-2 mt-1">
-                            <Badge variant="outline" className="text-[10px] border-slate-600 text-slate-400">{voice.gender}</Badge>
-                            <Badge variant="outline" className="text-[10px] border-slate-600 text-slate-400">{voice.accent}</Badge>
+                            <Badge variant="outline" className="text-[10px] border-slate-600 text-[#1A1A1A]/70">{voice.gender}</Badge>
+                            <Badge variant="outline" className="text-[10px] border-slate-600 text-[#1A1A1A]/70">{voice.accent}</Badge>
                           </div>
-                          <p className="text-xs text-slate-500 mt-1">{voice.description}</p>
+                          <p className="text-xs text-[#1A1A1A]/70 mt-1">{voice.description}</p>
                         </button>
                       ))}
                     </div>
                   </TabsContent>
 
                   <TabsContent value="enhance" className="mt-4 space-y-4">
-                    <div className="flex items-start gap-3 p-4 rounded-lg bg-slate-800/50 border border-slate-700">
+                    <div className="flex items-start gap-3 p-4 rounded-lg bg-[#1A1A1A]/50 border border-[#1A1A1A]">
                       <Wand2 className="h-5 w-5 text-[#D4AF37] mt-0.5" />
                       <div>
                         <h4 className="text-white font-medium">Voice Enhancement</h4>
-                        <p className="text-sm text-slate-400 mt-1">
+                        <p className="text-sm text-[#1A1A1A]/70 mt-1">
                           Clean up your recorded audio by removing background noise and enhancing clarity.
                           The enhanced audio will be used with a library voice for narration.
                         </p>
@@ -227,11 +227,11 @@ export default function VoiceStudio() {
                           className={`p-3 rounded-lg border text-left transition-all ${
                             vs.selectedVoice === voice.id
                               ? "border-[#D4AF37] bg-[#D4AF37]/10"
-                              : "border-slate-700 bg-slate-800/30 hover:border-slate-600"
+                              : "border-[#1A1A1A] bg-[#1A1A1A]/30 hover:border-slate-600"
                           }`}
                         >
                           <span className="text-white text-sm">{voice.name}</span>
-                          <span className="text-slate-500 text-xs ml-2">({voice.accent})</span>
+                          <span className="text-[#1A1A1A]/70 text-xs ml-2">({voice.accent})</span>
                         </button>
                       ))}
                     </div>
@@ -247,10 +247,10 @@ export default function VoiceStudio() {
                     </Alert>
 
                     {!vs.hasAudioSample ? (
-                      <div className="p-6 rounded-lg border-2 border-dashed border-slate-700 text-center">
-                        <Mic className="h-8 w-8 text-slate-500 mx-auto mb-3" />
-                        <p className="text-slate-400 text-sm">Record or upload a voice sample above to enable voice cloning.</p>
-                        <p className="text-slate-500 text-xs mt-2">Recommended: 30+ seconds of clear speech</p>
+                      <div className="p-6 rounded-lg border-2 border-dashed border-[#1A1A1A] text-center">
+                        <Mic className="h-8 w-8 text-[#1A1A1A]/70 mx-auto mb-3" />
+                        <p className="text-[#1A1A1A]/70 text-sm">Record or upload a voice sample above to enable voice cloning.</p>
+                        <p className="text-[#1A1A1A]/70 text-xs mt-2">Recommended: 30+ seconds of clear speech</p>
                       </div>
                     ) : (
                       <div className="space-y-4">
@@ -258,7 +258,7 @@ export default function VoiceStudio() {
                           <Check className="h-4 w-4 text-emerald-400" />
                           <span className="text-emerald-300 text-sm">Voice sample ready for cloning</span>
                         </div>
-                        <div className="flex items-start space-x-3 p-4 rounded-lg bg-slate-800/50 border border-slate-700">
+                        <div className="flex items-start space-x-3 p-4 rounded-lg bg-[#1A1A1A]/50 border border-[#1A1A1A]">
                           <Checkbox
                             id="consent"
                             checked={vs.cloneConsent}
@@ -269,7 +269,7 @@ export default function VoiceStudio() {
                             <Label htmlFor="consent" className="text-white text-sm font-medium cursor-pointer">
                               I confirm I am the legal owner of this voice
                             </Label>
-                            <p className="text-xs text-slate-400">
+                            <p className="text-xs text-[#1A1A1A]/70">
                               By checking this box, you certify that you have the legal right to clone this voice and that you will not use it to impersonate others.
                             </p>
                           </div>
@@ -285,7 +285,7 @@ export default function VoiceStudio() {
           {/* Right Column - Output */}
           <div className="space-y-6">
             {/* Step 4: Output Options */}
-            <Card className="bg-slate-900/50 border-slate-700/50">
+            <Card className="bg-[#1A1A1A]/50 border-[#1A1A1A]/50">
               <CardHeader className="pb-4">
                 <CardTitle className="text-white flex items-center gap-2 text-lg">
                   <span className="flex items-center justify-center w-6 h-6 rounded-full bg-[#D4AF37]/20 text-[#D4AF37] text-sm font-bold">4</span>
@@ -294,20 +294,20 @@ export default function VoiceStudio() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <Label className="text-slate-300 text-sm mb-3 block">Audio Format</Label>
+                  <Label className="text-[#1A1A1A]/70 text-sm mb-3 block">Audio Format</Label>
                   <RadioGroup value={vs.outputFormat} onValueChange={(v) => vs.setOutputFormat(v as "mp3" | "wav")} className="flex gap-4">
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="mp3" id="mp3" className="border-slate-500 text-[#D4AF37]" />
-                      <Label htmlFor="mp3" className="text-slate-300 cursor-pointer">MP3 (Smaller)</Label>
+                      <Label htmlFor="mp3" className="text-[#1A1A1A]/70 cursor-pointer">MP3 (Smaller)</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="wav" id="wav" className="border-slate-500 text-[#D4AF37]" />
-                      <Label htmlFor="wav" className="text-slate-300 cursor-pointer">WAV (Higher Quality)</Label>
+                      <Label htmlFor="wav" className="text-[#1A1A1A]/70 cursor-pointer">WAV (Higher Quality)</Label>
                     </div>
                   </RadioGroup>
                 </div>
 
-                <div className="pt-2 border-t border-slate-700">
+                <div className="pt-2 border-t border-[#1A1A1A]">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Checkbox
@@ -316,26 +316,26 @@ export default function VoiceStudio() {
                         onCheckedChange={(checked) => vs.setIncludeOverlay(checked === true)}
                         className="border-slate-500 data-[state=checked]:bg-[#D4AF37] data-[state=checked]:border-[#D4AF37]"
                       />
-                      <Label htmlFor="overlay" className="text-slate-300 text-sm cursor-pointer">Overlay onto video</Label>
+                      <Label htmlFor="overlay" className="text-[#1A1A1A]/70 text-sm cursor-pointer">Overlay onto video</Label>
                     </div>
                     {vs.includeOverlay && (
-                      <Button variant="outline" size="sm" onClick={() => vs.videoInputRef.current?.click()} className="border-slate-600 text-slate-300 hover:bg-slate-800">
+                      <Button variant="outline" size="sm" onClick={() => vs.videoInputRef.current?.click()} className="border-slate-600 text-[#1A1A1A]/70 hover:bg-[#1A1A1A]">
                         <Video className="h-4 w-4 mr-2" />
                         {vs.videoFile ? "Change Video" : "Upload Video"}
                       </Button>
                     )}
                   </div>
                   {vs.videoFile && vs.includeOverlay && (
-                    <div className="mt-2 flex items-center gap-2 text-sm text-slate-400">
+                    <div className="mt-2 flex items-center gap-2 text-sm text-[#1A1A1A]/70">
                       <Video className="h-4 w-4" />
                       <span className="truncate">{vs.videoFile.name}</span>
-                      <Button variant="ghost" size="sm" onClick={() => vs.setVideoFile(null)} className="text-slate-500 hover:text-red-400 p-1 h-auto">
+                      <Button variant="ghost" size="sm" onClick={() => vs.setVideoFile(null)} className="text-[#1A1A1A]/70 hover:text-red-400 p-1 h-auto">
                         <Trash2 className="h-3 w-3" />
                       </Button>
                     </div>
                   )}
                   {vs.includeOverlay && (
-                    <p className="text-xs text-slate-500 mt-2">Note: Video overlay creates separate audio + video files for manual merging.</p>
+                    <p className="text-xs text-[#1A1A1A]/70 mt-2">Note: Video overlay creates separate audio + video files for manual merging.</p>
                   )}
                 </div>
               </CardContent>
@@ -354,7 +354,7 @@ export default function VoiceStudio() {
               )}
             </Button>
 
-            {vs.processing && <Progress value={vs.progress} className="h-2 bg-slate-800" />}
+            {vs.processing && <Progress value={vs.progress} className="h-2 bg-[#1A1A1A]" />}
 
             {/* Generated Audio */}
             {vs.generatedAudio && !vs.processing && (
@@ -378,9 +378,9 @@ export default function VoiceStudio() {
                   </div>
 
                   {vs.videoFile && vs.includeOverlay && (
-                    <div className="pt-3 border-t border-slate-700">
-                      <p className="text-slate-400 text-sm mb-2">Video Overlay Instructions:</p>
-                      <ol className="text-xs text-slate-500 space-y-1 list-decimal list-inside">
+                    <div className="pt-3 border-t border-[#1A1A1A]">
+                      <p className="text-[#1A1A1A]/70 text-sm mb-2">Video Overlay Instructions:</p>
+                      <ol className="text-xs text-[#1A1A1A]/70 space-y-1 list-decimal list-inside">
                         <li>Download your narration audio above</li>
                         <li>Use a free tool like Kapwing, CapCut, or iMovie</li>
                         <li>Import your video and the narration audio</li>
@@ -393,9 +393,9 @@ export default function VoiceStudio() {
             )}
 
             {/* Fair Usage Notice */}
-            <div className="p-4 rounded-lg bg-slate-800/30 border border-slate-700/50">
-              <h4 className="text-slate-300 text-sm font-medium mb-2">Fair Usage Policy</h4>
-              <ul className="text-xs text-slate-500 space-y-1">
+            <div className="p-4 rounded-lg bg-[#1A1A1A]/30 border border-[#1A1A1A]/50">
+              <h4 className="text-[#1A1A1A]/70 text-sm font-medium mb-2">Fair Usage Policy</h4>
+              <ul className="text-xs text-[#1A1A1A]/70 space-y-1">
                 <li>• Maximum 5,000 characters per generation</li>
                 <li>• Recording limit: 60 seconds per sample</li>
                 <li>• Voice cloning for personal use only</li>

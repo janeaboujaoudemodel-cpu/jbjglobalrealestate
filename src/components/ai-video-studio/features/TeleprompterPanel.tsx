@@ -123,10 +123,10 @@ export function TeleprompterPanel({ onScriptChange, initialScript = '' }: Telepr
   }, [isFullscreen]);
 
   return (
-    <div ref={containerRef} className="h-full flex flex-col bg-slate-900">
+    <div ref={containerRef} className="h-full flex flex-col bg-[#1A1A1A]">
       {/* Edit Mode */}
       {!isFullscreen && (
-        <div className="p-3 border-b border-slate-800 space-y-3">
+        <div className="p-3 border-b border-[#1A1A1A] space-y-3">
           <div className="flex items-center justify-between">
             <h4 className="text-sm font-medium text-[#1A1A1A] flex items-center gap-2">
               <AlignLeft className="w-4 h-4" />
@@ -136,7 +136,7 @@ export function TeleprompterPanel({ onScriptChange, initialScript = '' }: Telepr
               size="sm"
               variant="ghost"
               onClick={toggleFullscreen}
-              className="text-slate-400 hover:text-white"
+              className="text-[#1A1A1A]/70 hover:text-white"
             >
               <Maximize2 className="w-4 h-4" />
             </Button>
@@ -146,12 +146,12 @@ export function TeleprompterPanel({ onScriptChange, initialScript = '' }: Telepr
             value={script}
             onChange={(e) => handleScriptChange(e.target.value)}
             placeholder="Enter your script here..."
-            className="min-h-[100px] bg-slate-800 border-slate-700 text-white resize-none"
+            className="min-h-[100px] bg-[#1A1A1A] border-[#1A1A1A] text-white resize-none"
           />
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1">
-              <Label className="text-xs text-slate-400">Speed</Label>
+              <Label className="text-xs text-[#1A1A1A]/70">Speed</Label>
               <Slider
                 value={[scrollSpeed]}
                 min={10}
@@ -161,7 +161,7 @@ export function TeleprompterPanel({ onScriptChange, initialScript = '' }: Telepr
               />
             </div>
             <div className="space-y-1">
-              <Label className="text-xs text-slate-400">Font Size</Label>
+              <Label className="text-xs text-[#1A1A1A]/70">Font Size</Label>
               <Slider
                 value={[fontSize]}
                 min={16}
@@ -179,7 +179,7 @@ export function TeleprompterPanel({ onScriptChange, initialScript = '' }: Telepr
                 onCheckedChange={setMirrorMode}
                 id="mirror-mode"
               />
-              <Label htmlFor="mirror-mode" className="text-xs text-slate-400 flex items-center gap-1">
+              <Label htmlFor="mirror-mode" className="text-xs text-[#1A1A1A]/70 flex items-center gap-1">
                 <FlipHorizontal className="w-3 h-3" />
                 Mirror
               </Label>
@@ -190,7 +190,7 @@ export function TeleprompterPanel({ onScriptChange, initialScript = '' }: Telepr
                 size="sm"
                 variant="ghost"
                 onClick={resetScroll}
-                className="text-slate-400 hover:text-white"
+                className="text-[#1A1A1A]/70 hover:text-white"
               >
                 <RotateCcw className="w-4 h-4" />
               </Button>
@@ -205,7 +205,7 @@ export function TeleprompterPanel({ onScriptChange, initialScript = '' }: Telepr
                 size="sm"
                 variant="ghost"
                 onClick={toggleFullscreen}
-                className="text-slate-400 hover:text-white"
+                className="text-[#1A1A1A]/70 hover:text-white"
               >
                 <Maximize2 className="w-4 h-4" />
               </Button>

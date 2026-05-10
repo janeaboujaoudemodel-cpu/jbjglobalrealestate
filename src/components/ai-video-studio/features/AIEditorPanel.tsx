@@ -292,18 +292,18 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
   const scoreColor = (score: number) => {
     if (score >= 0.8) return 'text-green-400';
     if (score >= 0.6) return 'text-[#1A1A1A]';
-    return 'text-slate-400';
+    return 'text-[#1A1A1A]/70';
   };
 
   return (
-    <div className="h-full flex flex-col bg-slate-900 text-white">
+    <div className="h-full flex flex-col bg-[#1A1A1A] text-white">
       <ScrollArea className="flex-1">
         <div className="p-3 space-y-4">
 
           {/* ── AI Analysis ── */}
           <div>
             <p className="text-xs text-slate-200 font-bold mb-0.5">AI Clip Scanner</p>
-            <p className="text-[10px] text-slate-500 mb-2">
+            <p className="text-[10px] text-[#1A1A1A]/70 mb-2">
               Gemini AI reads every clip on your timeline, scores each moment for visual quality and pacing, and returns a ranked highlight list with editing tips.
             </p>
             {clips.length === 0 && (
@@ -327,15 +327,15 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
 
             {isAnalyzing && (
               <div className="mb-2">
-                <Progress value={analysisProgress} className="h-1.5 bg-slate-700" />
-                <p className="text-xs text-slate-500 mt-1 text-center">Gemini AI is analyzing your clips…</p>
+                <Progress value={analysisProgress} className="h-1.5 bg-[#1A1A1A]" />
+                <p className="text-xs text-[#1A1A1A]/70 mt-1 text-center">Gemini AI is analyzing your clips…</p>
               </div>
             )}
 
             {analysisResult && (
               <div className="space-y-2">
                 {/* Summary */}
-                <div className="bg-slate-800 rounded-lg p-3 text-xs text-slate-300 border border-amber-400/30 leading-relaxed">
+                <div className="bg-[#1A1A1A] rounded-lg p-3 text-xs text-[#1A1A1A]/70 border border-amber-400/30 leading-relaxed">
                   <div className="flex items-start gap-2">
                     <Sparkles className="w-3.5 h-3.5 text-[#1A1A1A] mt-0.5 shrink-0" />
                     <span>{analysisResult.analysis}</span>
@@ -350,7 +350,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
 
                 {/* Highlight Moments */}
                 {analysisResult.highlights.length > 0 && (
-                  <div className="bg-slate-800 rounded-lg border border-slate-700 overflow-hidden">
+                  <div className="bg-[#1A1A1A] rounded-lg border border-[#1A1A1A] overflow-hidden">
                     <button
                       className="w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-slate-200"
                       onClick={() => setShowHighlights(v => !v)}
@@ -369,10 +369,10 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
                               #{h.clipIndex + 1}
                             </span>
                             <div className="flex-1 min-w-0">
-                              <p className="text-slate-300 leading-tight">{h.reason}</p>
+                              <p className="text-[#1A1A1A]/70 leading-tight">{h.reason}</p>
                               <div className="flex items-center gap-2 mt-0.5">
-                                <span className="text-slate-500">{h.suggestedDuration}s</span>
-                                <div className="flex-1 h-1 bg-slate-700 rounded-full">
+                                <span className="text-[#1A1A1A]/70">{h.suggestedDuration}s</span>
+                                <div className="flex-1 h-1 bg-[#1A1A1A] rounded-full">
                                   <div
                                     className="h-1 bg-amber-400 rounded-full"
                                     style={{ width: `${h.score * 100}%` }}
@@ -392,7 +392,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
 
                 {/* Editing Tips */}
                 {analysisResult.editingTips.length > 0 && (
-                  <div className="bg-slate-800 rounded-lg border border-slate-700 overflow-hidden">
+                  <div className="bg-[#1A1A1A] rounded-lg border border-[#1A1A1A] overflow-hidden">
                     <button
                       className="w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-slate-200"
                       onClick={() => setShowTips(v => !v)}
@@ -403,7 +403,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
                     {showTips && (
                       <ul className="px-3 pb-2 space-y-1">
                         {analysisResult.editingTips.map((tip, i) => (
-                          <li key={i} className="text-xs text-slate-400 flex items-start gap-1.5">
+                          <li key={i} className="text-xs text-[#1A1A1A]/70 flex items-start gap-1.5">
                             <CheckCircle2 className="w-3 h-3 text-green-500 mt-0.5 shrink-0" />
                             {tip}
                           </li>
@@ -419,7 +419,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
           {/* ── Smart Templates ── */}
           <div>
             <p className="text-xs text-slate-200 font-bold mb-0.5">Smart Templates</p>
-            <p className="text-[10px] text-slate-500 mb-2">
+            <p className="text-[10px] text-[#1A1A1A]/70 mb-2">
               Pick a template and AI will reorder your clips, trim durations, and suggest transitions to match the style — no manual editing needed.
             </p>
             <div className="space-y-2">
@@ -429,7 +429,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
                   className={`rounded-lg border transition-all text-xs ${
                     appliedTemplate === t.id
                       ? 'border-amber-400 bg-amber-400/10'
-                      : 'border-slate-700 bg-slate-800 hover:border-amber-400/50 hover:bg-slate-700'
+                      : 'border-[#1A1A1A] bg-[#1A1A1A] hover:border-amber-400/50 hover:bg-[#1A1A1A]'
                   }`}
                 >
                   <div className="flex items-center justify-between p-2.5">
@@ -437,7 +437,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
                       <div className={`font-medium ${appliedTemplate === t.id ? 'text-amber-300' : 'text-slate-200'}`}>
                         {t.label}
                       </div>
-                      <div className="text-slate-400 mt-0.5">{t.desc}</div>
+                      <div className="text-[#1A1A1A]/70 mt-0.5">{t.desc}</div>
                     </div>
                     <Button
                       size="sm"
@@ -465,24 +465,24 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
 
           {/* ── Assemble Result ── */}
           {assembleResult && (
-            <div className="bg-slate-800 rounded-lg border border-amber-400/40 p-3 space-y-2">
+            <div className="bg-[#1A1A1A] rounded-lg border border-amber-400/40 p-3 space-y-2">
               <div className="flex items-center gap-2">
                 <Film className="w-4 h-4 text-[#1A1A1A]" />
                 <span className="text-xs font-semibold text-amber-300">Edit Plan Ready</span>
-                <span className="text-xs text-slate-500 ml-auto">{assembleResult.totalDuration}s</span>
+                <span className="text-xs text-[#1A1A1A]/70 ml-auto">{assembleResult.totalDuration}s</span>
               </div>
-              <p className="text-xs text-slate-300 leading-relaxed">{assembleResult.summary}</p>
+              <p className="text-xs text-[#1A1A1A]/70 leading-relaxed">{assembleResult.summary}</p>
               {assembleResult.musicSuggestion && (
-                <p className="text-xs text-slate-500">Music: {assembleResult.musicSuggestion}</p>
+                <p className="text-xs text-[#1A1A1A]/70">Music: {assembleResult.musicSuggestion}</p>
               )}
               <div className="space-y-1">
                 {assembleResult.editPlan.map((step, i) => (
-                  <div key={i} className="flex items-center gap-2 text-xs text-slate-400">
-                    <span className="w-4 h-4 rounded bg-slate-700 flex items-center justify-center text-[#1A1A1A] font-bold text-[10px] shrink-0">
+                  <div key={i} className="flex items-center gap-2 text-xs text-[#1A1A1A]/70">
+                    <span className="w-4 h-4 rounded bg-[#1A1A1A] flex items-center justify-center text-[#1A1A1A] font-bold text-[10px] shrink-0">
                       {i + 1}
                     </span>
                     <span className="flex-1 truncate">Clip #{step.clipIndex + 1} — {step.duration}s</span>
-                    <span className="text-slate-600">{step.reason.slice(0, 24)}…</span>
+                    <span className="text-[#1A1A1A]/80">{step.reason.slice(0, 24)}…</span>
                   </div>
                 ))}
               </div>
@@ -501,7 +501,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
                     value={saveTemplateName}
                     onChange={e => setSaveTemplateName(e.target.value)}
                     placeholder="Template name…"
-                    className="flex-1 bg-slate-700 border border-slate-600 rounded px-2 py-1 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                    className="flex-1 bg-[#1A1A1A] border border-slate-600 rounded px-2 py-1 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
                   />
                   <Button
                     size="sm"
@@ -513,7 +513,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
                   </Button>
                   <button
                     onClick={() => setShowSaveForm(false)}
-                    className="text-slate-500 hover:text-slate-300 text-xs"
+                    className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]/70 text-xs"
                   >
                     ✕
                   </button>
@@ -526,12 +526,12 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
           {customTemplates.length > 0 && (
             <div>
               <div className="flex items-center justify-between mb-2">
-                <p className="text-xs text-slate-400 font-semibold uppercase tracking-wide">
+                <p className="text-xs text-[#1A1A1A]/70 font-semibold uppercase tracking-wide">
                   My Templates
                 </p>
                 <button
                   onClick={loadCustomTemplates}
-                  className="text-slate-500 hover:text-slate-300"
+                  className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]/70"
                 >
                   <RefreshCw className="w-3 h-3" />
                 </button>
@@ -540,12 +540,12 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
                 {customTemplates.map(t => (
                   <div
                     key={t.id}
-                    className="flex items-center justify-between p-2.5 rounded-lg border border-slate-700 bg-slate-800 hover:border-amber-400/40 text-xs group"
+                    className="flex items-center justify-between p-2.5 rounded-lg border border-[#1A1A1A] bg-[#1A1A1A] hover:border-amber-400/40 text-xs group"
                   >
                     <div className="flex-1 min-w-0">
                       <div className="text-slate-200 font-medium truncate">{t.name}</div>
                       {t.description && (
-                        <div className="text-slate-500 truncate mt-0.5">{t.description}</div>
+                        <div className="text-[#1A1A1A]/70 truncate mt-0.5">{t.description}</div>
                       )}
                     </div>
                     <div className="flex items-center gap-1 ml-2 shrink-0">
@@ -558,7 +558,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
                       </button>
                       <button
                         onClick={() => handleDeleteTemplate(t.id)}
-                        className="text-slate-600 hover:text-red-400 p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="text-[#1A1A1A]/80 hover:text-red-400 p-1 opacity-0 group-hover:opacity-100 transition-opacity"
                         title="Delete template"
                       >
                         <Trash2 className="w-3.5 h-3.5" />

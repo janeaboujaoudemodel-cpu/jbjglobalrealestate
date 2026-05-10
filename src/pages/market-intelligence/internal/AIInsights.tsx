@@ -120,7 +120,7 @@ const AIInsights = () => {
       </div>
 
       {/* Header */}
-      <section className="py-12 border-b border-zinc-900">
+      <section className="py-12 border-b border-[#1A1A1A]">
         <div className="container mx-auto px-4">
           <Link to="/internal/market-intelligence/dashboard" className="inline-flex items-center gap-2 text-[#1A1A1A] hover:text-[#1A1A1A]-light mb-6">
             <ArrowLeft className="w-4 h-4" />
@@ -142,7 +142,7 @@ const AIInsights = () => {
       </section>
 
       {/* Internal Disclaimer */}
-      <section className="py-6 border-b border-zinc-900">
+      <section className="py-6 border-b border-[#1A1A1A]">
         <div className="container mx-auto px-4">
           <div className="bg-[#FDFBF7]/50 border border-[#1A1A1A] rounded-xl p-4 flex items-start gap-3">
             <AlertTriangle className="w-5 h-5 text-[#1A1A1A] shrink-0 mt-0.5" />
@@ -249,7 +249,7 @@ const AIInsights = () => {
       </section>
 
       {/* Quick Stats */}
-      <section className="py-12 border-t border-zinc-900">
+      <section className="py-12 border-t border-[#1A1A1A]">
         <div className="container mx-auto px-4">
           <h2 className="text-white text-xl font-bold mb-6">Execution Intelligence Summary</h2>
           <div className="grid md:grid-cols-3 gap-4">

@@ -953,11 +953,11 @@ const DeveloperPortal = () => {
         {/* Rep Status Banner */}
         {hasRepProfile && !isRepApproved && !(isOwner && !ownerSkipMode) && (
           <div className="container mx-auto px-4 py-4 max-w-4xl">
-            <div className="flex items-center gap-3 p-4 rounded-xl bg-[#EFE6D6]/10 border border-[#B89555]/30 text-stone-800 text-sm">
+            <div className="flex items-center gap-3 p-4 rounded-xl bg-[#EFE6D6]/10 border border-[#B89555]/30 text-[#1A1A1A] text-sm">
               <UserCheck className="w-5 h-5 shrink-0 text-[#1A1A1A]" />
               <div>
                 <strong>Application Status: {repProfile?.status?.replace(/_/g, ' ')}</strong>
-                <p className="text-xs mt-0.5 text-stone-600">Your {repProfile?.role?.replace(/_/g, ' ')} registration for <strong>{repProfile?.developer_name}</strong> is being reviewed.</p>
+                <p className="text-xs mt-0.5 text-[#1A1A1A]/70">Your {repProfile?.role?.replace(/_/g, ' ')} registration for <strong>{repProfile?.developer_name}</strong> is being reviewed.</p>
               </div>
               {statusBadge(repProfile?.status || 'pending_review')}
             </div>
@@ -1627,7 +1627,7 @@ const DeveloperPortal = () => {
                         </div>
 
                         {!isRepApproved && (
-                          <div className="bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-xl p-3 text-sm text-stone-700">
+                          <div className="bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-xl p-3 text-sm text-[#1A1A1A]">
                             Your registration is under review. Once approved, you'll be able to request briefings and send messages directly.
                           </div>
                         )}

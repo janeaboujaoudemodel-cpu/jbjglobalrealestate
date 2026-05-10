@@ -199,7 +199,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
       {/* Header — hidden when embedded inside PhotoSuite */}
       {!embedded && (
-        <div className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm">
+        <div className="border-b border-[#1A1A1A] bg-[#1A1A1A]/50 backdrop-blur-sm">
           <div className="container max-w-6xl mx-auto px-4 py-6">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border border-[#B89555]/30">
@@ -212,7 +212,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                     FREE
                   </Badge>
                 </h1>
-                <p className="text-slate-400 text-sm">Transform empty rooms into beautifully staged spaces</p>
+                <p className="text-[#1A1A1A]/70 text-sm">Transform empty rooms into beautifully staged spaces</p>
               </div>
             </div>
           </div>
@@ -245,7 +245,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Left Panel - Options */}
           <div className="space-y-4">
-            <Card className="bg-slate-900/50 border-slate-700/50">
+            <Card className="bg-[#1A1A1A]/50 border-[#1A1A1A]/50">
               <CardHeader className="pb-3">
                 <CardTitle className="text-white text-lg">Room Type</CardTitle>
               </CardHeader>
@@ -258,7 +258,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                         className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer border transition-all ${
                           roomType === room.id
                             ? 'border-[#B89555] bg-[#EFE6D6]/10'
-                            : 'border-slate-700 hover:border-slate-500'
+                            : 'border-[#1A1A1A] hover:border-slate-500'
                         }`}
                         onClick={() => setRoomType(room.id)}
                       >
@@ -274,7 +274,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
               </CardContent>
             </Card>
 
-            <Card className="bg-slate-900/50 border-slate-700/50">
+            <Card className="bg-[#1A1A1A]/50 border-[#1A1A1A]/50">
               <CardHeader className="pb-3">
                 <CardTitle className="text-white text-lg">Design Style</CardTitle>
               </CardHeader>
@@ -287,7 +287,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                         className={`p-3 rounded-lg cursor-pointer border transition-all ${
                           designStyle === style.id
                             ? 'border-[#B89555] bg-[#EFE6D6]/10'
-                            : 'border-slate-700 hover:border-slate-500'
+                            : 'border-[#1A1A1A] hover:border-slate-500'
                         }`}
                         onClick={() => setDesignStyle(style.id)}
                       >
@@ -297,7 +297,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                             {style.name}
                           </Label>
                         </div>
-                        <p className="text-slate-500 text-xs mt-1">{style.description}</p>
+                        <p className="text-[#1A1A1A]/70 text-xs mt-1">{style.description}</p>
                       </div>
                     ))}
                   </div>
@@ -305,7 +305,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
               </CardContent>
             </Card>
 
-            <Card className="bg-slate-900/50 border-slate-700/50">
+            <Card className="bg-[#1A1A1A]/50 border-[#1A1A1A]/50">
               <CardHeader className="pb-3">
                 <CardTitle className="text-white text-lg">Custom Instructions</CardTitle>
               </CardHeader>
@@ -314,7 +314,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                   value={customPrompt}
                   onChange={(e) => setCustomPrompt(e.target.value)}
                   placeholder="Add specific furniture, colors, or style preferences..."
-                  className="bg-slate-800 border-slate-600 text-white min-h-[80px]"
+                  className="bg-[#1A1A1A] border-slate-600 text-white min-h-[80px]"
                 />
               </CardContent>
             </Card>
@@ -322,7 +322,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
 
           {/* Center/Right - Preview */}
           <div className="lg:col-span-2 space-y-4">
-            <Card className="bg-slate-900/50 border-slate-700/50">
+            <Card className="bg-[#1A1A1A]/50 border-[#1A1A1A]/50">
               <CardHeader className="pb-3">
                 <CardTitle className="text-white flex items-center gap-2 text-lg">
                   <ImageIcon className="h-5 w-5 text-[#1A1A1A]" />
@@ -335,9 +335,9 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                     onClick={() => fileInputRef.current?.click()}
                     className="border-2 border-dashed border-slate-600 rounded-xl p-12 text-center cursor-pointer hover:border-[#B89555]/50 transition-colors"
                   >
-                    <Upload className="h-12 w-12 text-slate-500 mx-auto mb-4" />
+                    <Upload className="h-12 w-12 text-[#1A1A1A]/70 mx-auto mb-4" />
                     <p className="text-white mb-2">Click to upload empty room photo</p>
-                    <p className="text-slate-500 text-sm">JPG, PNG up to 10MB</p>
+                    <p className="text-[#1A1A1A]/70 text-sm">JPG, PNG up to 10MB</p>
                     <input
                       ref={fileInputRef}
                       type="file"
@@ -351,8 +351,8 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                     {/* Comparison View */}
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <p className="text-slate-400 text-sm mb-2 text-center">Original</p>
-                        <div className="relative aspect-[4/3] bg-slate-800 rounded-lg overflow-hidden">
+                        <p className="text-[#1A1A1A]/70 text-sm mb-2 text-center">Original</p>
+                        <div className="relative aspect-[4/3] bg-[#1A1A1A] rounded-lg overflow-hidden">
                           <img
                             src={uploadedImage}
                             alt="Original room"
@@ -361,14 +361,14 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                         </div>
                       </div>
                       <div>
-                        <p className="text-slate-400 text-sm mb-2 text-center">
+                        <p className="text-[#1A1A1A]/70 text-sm mb-2 text-center">
                           {processing ? 'Generating...' : stagedResult ? 'Staged' : 'Result'}
                         </p>
-                        <div className="relative aspect-[4/3] bg-slate-800 rounded-lg overflow-hidden flex items-center justify-center">
+                        <div className="relative aspect-[4/3] bg-[#1A1A1A] rounded-lg overflow-hidden flex items-center justify-center">
                           {processing ? (
                             <div className="text-center p-4">
                               <Loader2 className="w-8 h-8 text-[#1A1A1A] animate-spin mx-auto mb-2" />
-                              <p className="text-slate-400 text-sm">Creating your staged room...</p>
+                              <p className="text-[#1A1A1A]/70 text-sm">Creating your staged room...</p>
                               <Progress value={progress} className="mt-2" />
                             </div>
                           ) : stagedResult ? (
@@ -379,8 +379,8 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                             />
                           ) : (
                             <div className="text-center p-4">
-                              <Sparkles className="w-8 h-8 text-slate-600 mx-auto mb-2" />
-                              <p className="text-slate-500 text-sm">Staged result will appear here</p>
+                              <Sparkles className="w-8 h-8 text-[#1A1A1A]/80 mx-auto mb-2" />
+                              <p className="text-[#1A1A1A]/70 text-sm">Staged result will appear here</p>
                             </div>
                           )}
                         </div>
@@ -433,7 +433,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
 
             {/* History */}
             {history.length > 0 && (
-              <Card className="bg-slate-900/50 border-slate-700/50">
+              <Card className="bg-[#1A1A1A]/50 border-[#1A1A1A]/50">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-white text-lg">Recent Stagings</CardTitle>
                 </CardHeader>
@@ -442,7 +442,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                     {history.slice(0, 8).map((item) => (
                       <div
                         key={item.id}
-                        className="relative aspect-square bg-slate-800 rounded-lg overflow-hidden cursor-pointer hover:ring-2 hover:ring-gold transition-all"
+                        className="relative aspect-square bg-[#1A1A1A] rounded-lg overflow-hidden cursor-pointer hover:ring-2 hover:ring-gold transition-all"
                         onClick={() => {
                           setUploadedImage(item.originalUrl);
                           setStagedResult(item.stagedUrl);

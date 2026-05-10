@@ -170,7 +170,7 @@ export default function BrokerTraining() {
       </div>
 
       {/* Header */}
-      <section className="py-12 border-b border-zinc-900">
+      <section className="py-12 border-b border-[#1A1A1A]">
         <div className="container mx-auto px-4">
           <Button 
             variant="ghost" 
@@ -282,7 +282,7 @@ export default function BrokerTraining() {
       </section>
 
       {/* Compliance Quick Reference */}
-      <section className="py-12 border-t border-zinc-900">
+      <section className="py-12 border-t border-[#1A1A1A]">
         <div className="container mx-auto px-4">
           <h2 className="text-white text-2xl font-bold mb-8 text-center">
             Compliance Quick Reference
@@ -333,7 +333,7 @@ export default function BrokerTraining() {
       </section>
 
       {/* Key Rules */}
-      <section className="py-12 border-t border-zinc-900">
+      <section className="py-12 border-t border-[#1A1A1A]">
         <div className="container mx-auto px-4">
           <Card className="bg-gradient-to-br from-zinc-900 to-zinc-950 border-[#B89555]/20 max-w-3xl mx-auto">
             <CardContent className="p-8">

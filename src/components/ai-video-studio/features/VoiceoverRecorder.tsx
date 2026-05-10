@@ -112,16 +112,16 @@ export function VoiceoverRecorder({ onRecordingComplete, onAIVoiceGenerated }: V
   return (
     <div className="space-y-2">
       <Tabs defaultValue="record" className="w-full">
-        <TabsList className="w-full bg-slate-800 border border-slate-700 h-8 p-0.5">
+        <TabsList className="w-full bg-[#1A1A1A] border border-[#1A1A1A] h-8 p-0.5">
           <TabsTrigger
             value="record"
-            className="flex-1 h-7 text-xs data-[state=active]:bg-slate-700 data-[state=active]:text-white text-slate-400"
+            className="flex-1 h-7 text-xs data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-white text-[#1A1A1A]/70"
           >
             <Mic className="w-3 h-3 mr-1" /> Record
           </TabsTrigger>
           <TabsTrigger
             value="ai-agent"
-            className="flex-1 h-7 text-xs data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-300 text-slate-400"
+            className="flex-1 h-7 text-xs data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-300 text-[#1A1A1A]/70"
           >
             <Bot className="w-3 h-3 mr-1" /> AI Agent
           </TabsTrigger>
@@ -129,7 +129,7 @@ export function VoiceoverRecorder({ onRecordingComplete, onAIVoiceGenerated }: V
 
         {/* ── Record Tab ── */}
         <TabsContent value="record" className="mt-2">
-          <div className="p-3 bg-slate-800/50 rounded-lg border border-slate-700">
+          <div className="p-3 bg-[#1A1A1A]/50 rounded-lg border border-[#1A1A1A]">
             <div className="flex items-center justify-center gap-4 mb-3">
               {!isRecording && !recordedBlob && (
                 <Button
@@ -154,10 +154,10 @@ export function VoiceoverRecorder({ onRecordingComplete, onAIVoiceGenerated }: V
               )}
               {recordedBlob && !isRecording && (
                 <div className="flex items-center gap-2">
-                  <Button size="sm" variant="ghost" onClick={togglePlayback} className="text-slate-400 hover:text-white">
+                  <Button size="sm" variant="ghost" onClick={togglePlayback} className="text-[#1A1A1A]/70 hover:text-white">
                     {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                   </Button>
-                  <span className="text-slate-400 font-mono text-sm">{formatTime(recordingDuration)}</span>
+                  <span className="text-[#1A1A1A]/70 font-mono text-sm">{formatTime(recordingDuration)}</span>
                   <Button size="sm" variant="ghost" onClick={deleteRecording} className="text-red-400 hover:text-red-300">
                     <Trash2 className="w-4 h-4" />
                   </Button>

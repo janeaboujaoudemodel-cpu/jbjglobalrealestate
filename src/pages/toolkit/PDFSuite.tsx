@@ -43,7 +43,7 @@ export default function PDFSuite() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-0">
             {/* Back link */}
             <Link to="/toolkit"
-              className="inline-flex items-center gap-1.5 text-xs mb-4 transition-colors group text-stone-400 hover:text-stone-700">
+              className="inline-flex items-center gap-1.5 text-xs mb-4 transition-colors group text-[#1A1A1A]/70 hover:text-[#1A1A1A]">
               <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
               Back to Tools Hub
             </Link>
@@ -54,10 +54,10 @@ export default function PDFSuite() {
                 <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-stone-900 leading-tight">
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#1A1A1A] leading-tight">
                   PDF & Documents <span className="text-blue-600">Suite</span>
                 </h1>
-                <p className="text-xs sm:text-sm mt-0.5 hidden sm:block text-stone-500">
+                <p className="text-xs sm:text-sm mt-0.5 hidden sm:block text-[#1A1A1A]/70">
                   Edit · Scan · Sign · Generate professional documents
                 </p>
               </div>
@@ -74,7 +74,7 @@ export default function PDFSuite() {
                 {tabs.map(({ value, label, shortLabel, icon: Icon, color }) => (
                   <TabsTrigger key={value} value={value}
                     className={`relative flex items-center gap-1.5 px-3 sm:px-5 py-3.5 rounded-none border-0 bg-transparent whitespace-nowrap text-xs sm:text-sm font-medium transition-all outline-none
-                      data-[state=inactive]:text-stone-400 data-[state=active]:text-blue-600
+                      data-[state=inactive]:text-[#1A1A1A]/70 data-[state=active]:text-blue-600
                       after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:rounded-full after:transition-all
                       data-[state=inactive]:after:bg-transparent data-[state=active]:after:bg-blue-600`}
                   >

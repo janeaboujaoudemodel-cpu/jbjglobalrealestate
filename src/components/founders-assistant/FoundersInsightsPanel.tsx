@@ -395,7 +395,7 @@ const FoundersInsightsPanel: React.FC = () => {
                       <div className={cn(
                         "h-8 w-8 rounded-full flex items-center justify-center font-bold text-sm",
                         index === 0 ? "bg-amber-500/20 text-amber-600" :
-                        index === 1 ? "bg-slate-300/20 text-slate-500" :
+                        index === 1 ? "bg-[#E5D9C4]/20 text-[#1A1A1A]/70" :
                         index === 2 ? "bg-amber-700/20 text-amber-700" :
                         "bg-muted text-muted-foreground"
                       )}>

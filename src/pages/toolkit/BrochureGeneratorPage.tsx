@@ -135,21 +135,21 @@ const Panel = ({ children, className = "" }: { children: React.ReactNode; classN
 const PanelTitle = ({ icon: Icon, children }: { icon: React.ElementType; children: React.ReactNode }) => (
   <div className="flex items-center gap-2 mb-3">
     <Icon className="h-4 w-4 text-blue-600" />
-    <h3 className="text-stone-900 font-semibold text-sm">{children}</h3>
+    <h3 className="text-[#1A1A1A] font-semibold text-sm">{children}</h3>
   </div>
 );
 
 const CleanInput = ({ className = '', ...props }: React.InputHTMLAttributes<HTMLInputElement>) => (
   <input
     {...props}
-    className={`w-full px-3 py-2 rounded-lg text-sm text-stone-900 placeholder-stone-400 outline-none transition-all bg-stone-50 border border-stone-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 ${className}`}
+    className={`w-full px-3 py-2 rounded-lg text-sm text-[#1A1A1A] placeholder-stone-400 outline-none transition-all bg-[#F7F2EA] border border-stone-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 ${className}`}
   />
 );
 
 const CleanTextarea = ({ className = '', ...props }: React.TextareaHTMLAttributes<HTMLTextAreaElement>) => (
   <textarea
     {...props}
-    className={`w-full px-3 py-2 rounded-lg text-sm text-stone-900 placeholder-stone-400 outline-none transition-all resize-none bg-stone-50 border border-stone-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 ${className}`}
+    className={`w-full px-3 py-2 rounded-lg text-sm text-[#1A1A1A] placeholder-stone-400 outline-none transition-all resize-none bg-[#F7F2EA] border border-stone-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 ${className}`}
   />
 );
 
@@ -539,14 +539,14 @@ export default function BrochureGeneratorPage() {
               </div>
               <div>
                 <div className="flex items-center gap-2 mb-0.5">
-                  <h1 className="text-2xl font-black text-stone-900 tracking-tight">
+                  <h1 className="text-2xl font-black text-[#1A1A1A] tracking-tight">
                     Document <span className="text-blue-600">Creator</span>
                   </h1>
                   <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 border border-blue-200 text-blue-700">
                     <Sparkles className="w-3 h-3" /> AI
                   </span>
                 </div>
-                <p className="text-xs text-stone-500">
+                <p className="text-xs text-[#1A1A1A]/70">
                   Brochures · Company Profiles · Books · Presentations
                 </p>
               </div>
@@ -581,10 +581,10 @@ export default function BrochureGeneratorPage() {
                   : 'border-stone-200 hover:border-blue-300 bg-[#FDFBF7]'
               }`}
             >
-              <dt.icon className={`w-5 h-5 shrink-0 ${documentType === dt.id ? 'text-blue-600' : 'text-stone-400'}`} />
+              <dt.icon className={`w-5 h-5 shrink-0 ${documentType === dt.id ? 'text-blue-600' : 'text-[#1A1A1A]/70'}`} />
               <div>
-                <p className={`text-xs font-semibold ${documentType === dt.id ? 'text-blue-700' : 'text-stone-700'}`}>{dt.label}</p>
-                <p className="text-[10px] text-stone-400">{dt.desc}</p>
+                <p className={`text-xs font-semibold ${documentType === dt.id ? 'text-blue-700' : 'text-[#1A1A1A]'}`}>{dt.label}</p>
+                <p className="text-[10px] text-[#1A1A1A]/70">{dt.desc}</p>
               </div>
             </button>
           ))}
@@ -618,29 +618,29 @@ export default function BrochureGeneratorPage() {
             <div className="relative">
               <button
                 onClick={() => setProjectsOpen(o => !o)}
-                className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm bg-stone-50 border border-stone-200 hover:border-blue-400 transition-all"
+                className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm bg-[#F7F2EA] border border-stone-200 hover:border-blue-400 transition-all"
               >
-                <span className={selectedProject ? 'text-stone-900 font-medium' : 'text-stone-400'}>
+                <span className={selectedProject ? 'text-[#1A1A1A] font-medium' : 'text-[#1A1A1A]/70'}>
                   {selectedProject ? (
                     <span className="flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-blue-600" />
                       {selectedProject.name}
-                      {selectedProject.developer_name && <span className="text-xs text-stone-400">by {selectedProject.developer_name}</span>}
+                      {selectedProject.developer_name && <span className="text-xs text-[#1A1A1A]/70">by {selectedProject.developer_name}</span>}
                     </span>
                   ) : 'Choose a property…'}
                 </span>
-                <ChevronDown className="h-4 w-4 text-stone-400" />
+                <ChevronDown className="h-4 w-4 text-[#1A1A1A]/70" />
               </button>
               {projectsOpen && (
                 <div className="absolute top-full left-0 right-0 z-50 mt-1 rounded-xl overflow-hidden bg-[#FDFBF7] border border-stone-200 shadow-xl">
                   <div className="p-2 border-b border-stone-100">
                     <div className="flex items-center gap-2 px-2">
-                      <Search className="h-4 w-4 text-stone-400" />
+                      <Search className="h-4 w-4 text-[#1A1A1A]/70" />
                       <input
                         value={projectSearch}
                         onChange={e => setProjectSearch(e.target.value)}
                         placeholder="Search projects…"
-                        className="flex-1 bg-transparent text-sm text-stone-900 placeholder-stone-400 outline-none"
+                        className="flex-1 bg-transparent text-sm text-[#1A1A1A] placeholder-stone-400 outline-none"
                         autoFocus
                       />
                     </div>
@@ -652,14 +652,14 @@ export default function BrochureGeneratorPage() {
                         onClick={() => selectProject(project)}
                         className="w-full text-left px-3 py-2.5 transition-colors hover:bg-blue-50 border-b border-stone-50 last:border-0"
                       >
-                        <p className="text-sm font-medium text-stone-800 truncate">{project.name}</p>
-                        <p className="text-[10px] text-stone-400 mt-0.5">
+                        <p className="text-sm font-medium text-[#1A1A1A] truncate">{project.name}</p>
+                        <p className="text-[10px] text-[#1A1A1A]/70 mt-0.5">
                           {[project.area_name, project.emirate, project.price_from ? `AED ${project.price_from.toLocaleString()}` : null].filter(Boolean).join(' · ')}
                         </p>
                       </button>
                     ))}
                     {filteredProjects.length === 0 && (
-                      <div className="px-4 py-6 text-center text-sm text-stone-400">No projects found</div>
+                      <div className="px-4 py-6 text-center text-sm text-[#1A1A1A]/70">No projects found</div>
                     )}
                   </div>
                 </div>
@@ -669,7 +669,7 @@ export default function BrochureGeneratorPage() {
             {/* Project Images with Selection Checkmarks */}
             {selectedProject && projectImages.length > 0 && (
               <div className="mt-3">
-                <p className="text-[10px] font-semibold text-stone-400 uppercase tracking-wide mb-2">
+                <p className="text-[10px] font-semibold text-[#1A1A1A]/70 uppercase tracking-wide mb-2">
                   Project Images — Click to select ({selectedImageIds.size} selected)
                 </p>
                 <div className="grid grid-cols-5 sm:grid-cols-8 gap-1.5">
@@ -696,7 +696,7 @@ export default function BrochureGeneratorPage() {
               </div>
             )}
             {loadingProjectImages && (
-              <div className="mt-2 flex items-center gap-2 text-xs text-stone-400">
+              <div className="mt-2 flex items-center gap-2 text-xs text-[#1A1A1A]/70">
                 <Loader2 className="w-3 h-3 animate-spin" /> Loading images…
               </div>
             )}
@@ -709,8 +709,8 @@ export default function BrochureGeneratorPage() {
                     <img src={developerInfo.logo_url} alt={developerInfo.name} className="w-8 h-8 object-contain rounded bg-[#FDFBF7] p-0.5 border border-blue-200" />
                   )}
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs font-semibold text-stone-800">{developerInfo.name}</p>
-                    <p className="text-[10px] text-stone-400 truncate">
+                    <p className="text-xs font-semibold text-[#1A1A1A]">{developerInfo.name}</p>
+                    <p className="text-[10px] text-[#1A1A1A]/70 truncate">
                       {developerInfo.founded_year && `Est. ${developerInfo.founded_year}`}
                     </p>
                   </div>
@@ -737,7 +737,7 @@ export default function BrochureGeneratorPage() {
                     }`}>
                     <div className="w-4 h-4 rounded-full shrink-0 border border-white shadow-sm"
                       style={{ backgroundColor: `rgb(${theme.primaryColor.map(c => Math.round(c * 255)).join(',')})` }} />
-                    <span className="text-[10px] text-stone-700 font-medium">{theme.name}</span>
+                    <span className="text-[10px] text-[#1A1A1A] font-medium">{theme.name}</span>
                   </button>
                 ))}
               </div>
@@ -749,7 +749,7 @@ export default function BrochureGeneratorPage() {
               <div className="space-y-2">
                 {heroCard.logoUrl ? (
                   <div className="flex items-center gap-2">
-                    <img src={heroCard.logoUrl} alt="Logo" className="h-8 w-8 object-contain rounded bg-stone-100 p-0.5" />
+                    <img src={heroCard.logoUrl} alt="Logo" className="h-8 w-8 object-contain rounded bg-[#F7F2EA] p-0.5" />
                     <button onClick={() => setHeroCard(p => ({ ...p, logoUrl: '' }))} className="text-[10px] px-2 py-1 rounded bg-red-50 text-red-600">
                       <X className="w-3 h-3" />
                     </button>
@@ -771,11 +771,11 @@ export default function BrochureGeneratorPage() {
               <PanelTitle icon={Stamp}>Integrations</PanelTitle>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-stone-700 flex items-center gap-1.5"><CreditCard className="w-3.5 h-3.5 text-blue-500" /> Business Card</span>
+                  <span className="text-xs text-[#1A1A1A] flex items-center gap-1.5"><CreditCard className="w-3.5 h-3.5 text-blue-500" /> Business Card</span>
                   <Switch checked={includeBusinessCard} onCheckedChange={setIncludeBusinessCard} />
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-stone-700 flex items-center gap-1.5"><Stamp className="w-3.5 h-3.5 text-blue-500" /> Company Stamp</span>
+                  <span className="text-xs text-[#1A1A1A] flex items-center gap-1.5"><Stamp className="w-3.5 h-3.5 text-blue-500" /> Company Stamp</span>
                   <Switch checked={includeStamp} onCheckedChange={setIncludeStamp} />
                 </div>
                 {includeStamp && !stampUrl && (
@@ -788,11 +788,11 @@ export default function BrochureGeneratorPage() {
                   <div className="pl-5"><img src={stampUrl} alt="Stamp" className="h-10 object-contain opacity-80" /></div>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-stone-700 flex items-center gap-1.5"><PenTool className="w-3.5 h-3.5 text-blue-500" /> Signature</span>
+                  <span className="text-xs text-[#1A1A1A] flex items-center gap-1.5"><PenTool className="w-3.5 h-3.5 text-blue-500" /> Signature</span>
                   <Switch checked={includeSignature} onCheckedChange={setIncludeSignature} />
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-stone-700 flex items-center gap-1.5"><QrCode className="w-3.5 h-3.5 text-blue-500" /> QR Code</span>
+                  <span className="text-xs text-[#1A1A1A] flex items-center gap-1.5"><QrCode className="w-3.5 h-3.5 text-blue-500" /> QR Code</span>
                   <Switch checked={includeQRCode} onCheckedChange={setIncludeQRCode} />
                 </div>
               </div>
@@ -806,30 +806,30 @@ export default function BrochureGeneratorPage() {
               <PanelTitle icon={Building2}>Content</PanelTitle>
               <div className="space-y-3">
                 <div>
-                  <Label className="text-[10px] text-stone-500 mb-1 block">Title *</Label>
+                  <Label className="text-[10px] text-[#1A1A1A]/70 mb-1 block">Title *</Label>
                   <CleanInput value={propertyData.title} onChange={e => setPropertyData(p => ({ ...p, title: e.target.value }))} placeholder="Project or document title" />
                 </div>
                 <div>
-                  <Label className="text-[10px] text-stone-500 mb-1 block">Location</Label>
+                  <Label className="text-[10px] text-[#1A1A1A]/70 mb-1 block">Location</Label>
                   <CleanInput value={propertyData.location} onChange={e => setPropertyData(p => ({ ...p, location: e.target.value }))} placeholder="Dubai, UAE" />
                 </div>
                 <div className="grid grid-cols-3 gap-2">
                   <div>
-                    <Label className="text-[10px] text-stone-500 mb-1 block">Price</Label>
+                    <Label className="text-[10px] text-[#1A1A1A]/70 mb-1 block">Price</Label>
                     <CleanInput value={propertyData.price} onChange={e => setPropertyData(p => ({ ...p, price: e.target.value }))} placeholder="AED 2.5M" />
                   </div>
                   <div>
-                    <Label className="text-[10px] text-stone-500 mb-1 block">Bedrooms</Label>
+                    <Label className="text-[10px] text-[#1A1A1A]/70 mb-1 block">Bedrooms</Label>
                     <CleanInput value={propertyData.bedrooms} onChange={e => setPropertyData(p => ({ ...p, bedrooms: e.target.value }))} placeholder="3" />
                   </div>
                   <div>
-                    <Label className="text-[10px] text-stone-500 mb-1 block">Size</Label>
+                    <Label className="text-[10px] text-[#1A1A1A]/70 mb-1 block">Size</Label>
                     <CleanInput value={propertyData.size} onChange={e => setPropertyData(p => ({ ...p, size: e.target.value }))} placeholder="1,800 sqft" />
                   </div>
                 </div>
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <Label className="text-[10px] text-stone-500">Description</Label>
+                    <Label className="text-[10px] text-[#1A1A1A]/70">Description</Label>
                     <button onClick={generateAIDescription} disabled={aiGenerating}
                       className="flex items-center gap-1 text-[10px] px-2 py-1 rounded-md bg-blue-50 border border-blue-200 text-blue-600 hover:bg-blue-100 disabled:opacity-50">
                       {aiGenerating ? <Loader2 className="w-3 h-3 animate-spin" /> : <Wand2 className="w-3 h-3" />} AI Write
@@ -840,7 +840,7 @@ export default function BrochureGeneratorPage() {
 
                 {/* Features */}
                 <div>
-                  <Label className="text-[10px] text-stone-500 mb-1 block">Features</Label>
+                  <Label className="text-[10px] text-[#1A1A1A]/70 mb-1 block">Features</Label>
                   <div className="flex gap-1.5 mb-1.5">
                     <CleanInput value={newFeature} onChange={e => setNewFeature(e.target.value)} placeholder="Add feature…" onKeyDown={e => e.key === 'Enter' && addFeature()} />
                     <button onClick={addFeature} className="px-2.5 rounded-lg bg-blue-50 border border-blue-200 text-blue-600 hover:bg-blue-100">
@@ -849,7 +849,7 @@ export default function BrochureGeneratorPage() {
                   </div>
                   <div className="flex flex-wrap gap-1.5">
                     {propertyData.features.map((f, i) => (
-                      <span key={i} className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded bg-blue-50 border border-blue-100 text-stone-700">
+                      <span key={i} className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded bg-blue-50 border border-blue-100 text-[#1A1A1A]">
                         {f}
                         <button onClick={() => removeFeature(i)} className="text-red-400 hover:text-red-600"><X className="w-2.5 h-2.5" /></button>
                       </span>
@@ -859,7 +859,7 @@ export default function BrochureGeneratorPage() {
 
                 {/* Images */}
                 <div>
-                  <Label className="text-[10px] text-stone-500 mb-1 block">Images ({propertyData.images.length})</Label>
+                  <Label className="text-[10px] text-[#1A1A1A]/70 mb-1 block">Images ({propertyData.images.length})</Label>
                   <button onClick={() => imageInputRef.current?.click()}
                     className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs text-blue-600 bg-blue-50 border border-dashed border-blue-200 hover:border-blue-400">
                     <Upload className="w-3.5 h-3.5" /> Upload Images
@@ -899,13 +899,13 @@ export default function BrochureGeneratorPage() {
             {showPreview && previewPdfBytes && (
               <Panel className="border-blue-200">
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-sm font-semibold text-stone-900 flex items-center gap-2">
+                  <h3 className="text-sm font-semibold text-[#1A1A1A] flex items-center gap-2">
                     <FileCheck className="w-4 h-4 text-blue-600" />
                     Document Preview
                   </h3>
                   <div className="flex gap-2">
                     <button onClick={handleGenerate}
-                      className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-[10px] font-medium bg-stone-100 text-stone-600 hover:bg-stone-200 border border-stone-200">
+                      className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-[10px] font-medium bg-[#F7F2EA] text-[#1A1A1A]/70 hover:bg-[#EFE6D6] border border-stone-200">
                       <RotateCcw className="w-3 h-3" /> Regenerate
                     </button>
                     <button onClick={handleDownload}
@@ -916,7 +916,7 @@ export default function BrochureGeneratorPage() {
                 </div>
 
                 {/* PDF Embed */}
-                <div className="rounded-lg overflow-hidden border border-stone-200 bg-stone-100">
+                <div className="rounded-lg overflow-hidden border border-stone-200 bg-[#F7F2EA]">
                   <iframe
                     src={URL.createObjectURL(new Blob([previewPdfBytes], { type: 'application/pdf' }))}
                     className="w-full"
@@ -925,7 +925,7 @@ export default function BrochureGeneratorPage() {
                   />
                 </div>
 
-                <p className="text-[10px] text-center text-stone-400 mt-2">
+                <p className="text-[10px] text-center text-[#1A1A1A]/70 mt-2">
                   Review your document above. Click "Download PDF" when ready.
                 </p>
               </Panel>
@@ -950,7 +950,7 @@ export default function BrochureGeneratorPage() {
             {/* Quick tips */}
             <Panel>
               <PanelTitle icon={Star}>Tips</PanelTitle>
-              <div className="space-y-2 text-[10px] text-stone-500">
+              <div className="space-y-2 text-[10px] text-[#1A1A1A]/70">
                 <p>• Select a project from the database to auto-fill all fields</p>
                 <p>• Click project images to add them — checkmark shows selected</p>
                 <p>• Use AI prompt for instant content generation</p>

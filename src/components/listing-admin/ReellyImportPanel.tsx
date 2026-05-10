@@ -677,30 +677,30 @@ export function ReellyImportPanel() {
     <div className="space-y-6">
       {/* ── Live Database Counts ── */}
       {liveCounts && (
-        <div className="bg-slate-100 rounded-xl p-4 border border-slate-200">
+        <div className="bg-[#F7F2EA] rounded-xl p-4 border border-[#B89555]/30">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold text-slate-800 flex items-center gap-2">
+            <h3 className="font-semibold text-[#1A1A1A] flex items-center gap-2">
               <Database className="w-4 h-4" />
               Live Database Counts
             </h3>
-            <div className="flex items-center gap-2 text-xs text-slate-500">
+            <div className="flex items-center gap-2 text-xs text-[#1A1A1A]/70">
               <Clock className="w-3 h-3" />
               {new Date(liveCounts.last_updated).toLocaleTimeString()}
               <Button variant="ghost" size="sm" onClick={refreshCounts} className="h-6 px-2"><RefreshCw className="w-3 h-3" /></Button>
             </div>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            <div className="bg-[#FDFBF7] rounded-lg p-3 text-center border border-slate-200">
+            <div className="bg-[#FDFBF7] rounded-lg p-3 text-center border border-[#B89555]/30">
               <p className="text-2xl font-bold text-emerald-600">{displayTotalProjects?.toLocaleString() || '—'}</p>
-              <p className="text-xs text-slate-500">API Total (Reelly)</p>
+              <p className="text-xs text-[#1A1A1A]/70">API Total (Reelly)</p>
             </div>
-            <div className="bg-[#FDFBF7] rounded-lg p-3 text-center border border-slate-200">
+            <div className="bg-[#FDFBF7] rounded-lg p-3 text-center border border-[#B89555]/30">
               <p className="text-2xl font-bold text-blue-600">{liveCounts.reelly_pending_queue.toLocaleString()}</p>
-              <p className="text-xs text-slate-500">Pending Queue</p>
+              <p className="text-xs text-[#1A1A1A]/70">Pending Queue</p>
             </div>
-            <div className="bg-[#FDFBF7] rounded-lg p-3 text-center border border-slate-200">
+            <div className="bg-[#FDFBF7] rounded-lg p-3 text-center border border-[#B89555]/30">
               <p className="text-2xl font-bold text-green-600">{liveCounts.reelly_approved.toLocaleString()}</p>
-              <p className="text-xs text-slate-500">Approved (Live DB)</p>
+              <p className="text-xs text-[#1A1A1A]/70">Approved (Live DB)</p>
             </div>
           </div>
         </div>
@@ -1266,12 +1266,12 @@ export function ReellyImportPanel() {
       {/* ██  ADVANCED TOOLS (Collapsible)                     */}
       {/* ═══════════════════════════════════════════════════════ */}
       <Accordion type="single" collapsible className="w-full">
-        <AccordionItem value="advanced" className="border rounded-lg bg-slate-50">
+        <AccordionItem value="advanced" className="border rounded-lg bg-[#FDFBF7]">
           <AccordionTrigger className="px-6 hover:no-underline">
             <div className="flex items-center gap-2">
-              <Settings className="w-4 h-4 text-slate-500" />
-              <span className="font-semibold text-slate-700">Advanced Tools</span>
-              <Badge variant="outline" className="text-xs text-slate-500">Maintenance</Badge>
+              <Settings className="w-4 h-4 text-[#1A1A1A]/70" />
+              <span className="font-semibold text-[#1A1A1A]/80">Advanced Tools</span>
+              <Badge variant="outline" className="text-xs text-[#1A1A1A]/70">Maintenance</Badge>
             </div>
           </AccordionTrigger>
           <AccordionContent className="px-6 space-y-6">
@@ -1306,7 +1306,7 @@ export function ReellyImportPanel() {
             {/* Data Integrity / Restore */}
             <div className="p-4 bg-[#FDFBF7] rounded-lg border">
               <h4 className="font-medium text-[#1A1A1A] flex items-center gap-2 mb-2">
-                <Shield className="w-4 h-4 text-slate-500" /> Data Integrity / Restore to Reelly-Only
+                <Shield className="w-4 h-4 text-[#1A1A1A]/70" /> Data Integrity / Restore to Reelly-Only
               </h4>
               <p className="text-sm text-[#1A1A1A]/70 mb-3">View Provident enrichment stats and optionally restore to Reelly-only state.</p>
 
@@ -1337,7 +1337,7 @@ export function ReellyImportPanel() {
                 <Button onClick={handleGlobalRestore} disabled={isRestoring} className="bg-amber-600 hover:bg-amber-700 text-white">
                   {isRestoring ? <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />Restoring...</> : <><RotateCcw className="h-4 w-4 mr-2" />Restore All to Reelly-Only</>}
                 </Button>
-                <Button onClick={handleClearPendingSuggestions} disabled={isRestoring} variant="outline" className="border-slate-300 text-slate-700 hover:bg-slate-100">
+                <Button onClick={handleClearPendingSuggestions} disabled={isRestoring} variant="outline" className="border-[#B89555]/30 text-[#1A1A1A]/80 hover:bg-[#F7F2EA]">
                   <Trash2 className="h-4 w-4 mr-2" /> Clear Pending Suggestions
                 </Button>
               </div>

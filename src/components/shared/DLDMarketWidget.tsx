@@ -144,7 +144,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                 <h3 className="text-foreground font-semibold text-sm">Off-Plan vs Secondary</h3>
               </div>
               {/* Visual bar */}
-              <div className="h-8 rounded-full overflow-hidden mb-4 flex shadow-inner bg-stone-100 border border-stone-200">
+              <div className="h-8 rounded-full overflow-hidden mb-4 flex shadow-inner bg-[#F7F2EA] border border-stone-200">
                 <div
                   className="h-full bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-400 rounded-l-full shadow-[0_0_10px_rgba(16,185,129,0.4)] flex items-center justify-center"
                   style={{ width: `${offPlanPct}%` }}
@@ -184,7 +184,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                 <Banknote className="w-4 h-4 text-blue-600" />
                 <h3 className="text-foreground font-semibold text-sm">Cash vs Mortgage</h3>
               </div>
-              <div className="h-8 rounded-full overflow-hidden mb-4 flex shadow-inner bg-stone-100 border border-stone-200">
+              <div className="h-8 rounded-full overflow-hidden mb-4 flex shadow-inner bg-[#F7F2EA] border border-stone-200">
                 <div
                   className="h-full bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 rounded-l-full shadow-[0_0_10px_rgba(59,130,246,0.4)] flex items-center justify-center"
                   style={{ width: `${cashPct}%` }}
@@ -239,7 +239,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                   ];
                   return (
                     <div key={area.area} className={`relative rounded-lg overflow-hidden ${isHighlighted ? "ring-1 ring-gold/50" : ""}`}>
-                      <div className="absolute inset-0 bg-stone-50 rounded-lg" />
+                      <div className="absolute inset-0 bg-[#F7F2EA] rounded-lg" />
                       <div
                         className={`absolute inset-y-0 left-0 bg-gradient-to-r ${barColors[i]} opacity-15 rounded-lg`}
                         style={{ width: `${barWidth}%` }}
@@ -287,7 +287,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
 
                   return (
                     <div key={nat.country} className="relative rounded-lg overflow-hidden">
-                      <div className="absolute inset-0 bg-stone-50 rounded-lg" />
+                      <div className="absolute inset-0 bg-[#F7F2EA] rounded-lg" />
                       <div
                         className={`absolute inset-y-0 left-0 bg-gradient-to-r ${barColors[i % barColors.length]} opacity-10 rounded-lg`}
                         style={{ width: `${barWidth}%` }}
@@ -298,7 +298,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                           <span className="text-foreground font-semibold text-sm">{nat.country}</span>
                         </div>
                         <div className="flex items-center gap-3">
-                          <div className="w-24 h-2.5 bg-stone-200 rounded-full overflow-hidden">
+                          <div className="w-24 h-2.5 bg-[#EFE6D6] rounded-full overflow-hidden">
                             <div
                               className={`h-full bg-gradient-to-r ${barColors[i % barColors.length]} rounded-full shadow-[0_0_6px] shadow-current`}
                               style={{ width: `${nat.percentage * 4}%` }}

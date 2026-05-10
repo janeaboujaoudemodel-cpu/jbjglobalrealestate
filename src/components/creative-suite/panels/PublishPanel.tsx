@@ -97,7 +97,7 @@ export function PublishPanel({ isOpen, onClose, projectId, property, exportedUrl
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-3xl bg-slate-900 border-[#B89555]/30">
+      <DialogContent className="sm:max-w-3xl bg-[#1A1A1A] border-[#B89555]/30">
         <DialogHeader>
           <DialogTitle className="text-white flex items-center gap-2">
             <Share2 className="w-5 h-5 text-[#1A1A1A]" />
@@ -106,7 +106,7 @@ export function PublishPanel({ isOpen, onClose, projectId, property, exportedUrl
         </DialogHeader>
 
         <Tabs defaultValue="platforms" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 bg-slate-800">
+          <TabsList className="grid w-full grid-cols-3 bg-[#1A1A1A]">
             <TabsTrigger value="platforms">Platforms</TabsTrigger>
             <TabsTrigger value="captions">Captions</TabsTrigger>
             <TabsTrigger value="schedule">Schedule</TabsTrigger>
@@ -126,12 +126,12 @@ export function PublishPanel({ isOpen, onClose, projectId, property, exportedUrl
                     className={`p-4 rounded-xl border transition-all ${
                       isSelected
                         ? 'bg-[#EFE6D6]/10 border-[#B89555]'
-                        : 'bg-slate-800/50 border-slate-700 hover:border-slate-600'
+                        : 'bg-[#1A1A1A]/50 border-[#1A1A1A] hover:border-slate-600'
                     }`}
                   >
                     <Icon className={`w-8 h-8 mx-auto mb-2 ${platform.color}`} />
                     <p className="text-sm font-medium text-white">{platform.name}</p>
-                    <p className="text-[10px] text-slate-400 mt-1">
+                    <p className="text-[10px] text-[#1A1A1A]/70 mt-1">
                       {isConnected ? 'Connected' : 'Use share link'}
                     </p>
                     {isSelected && (
@@ -142,13 +142,13 @@ export function PublishPanel({ isOpen, onClose, projectId, property, exportedUrl
               })}
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-800/50 border border-slate-700">
-              <p className="text-sm text-slate-300 mb-3">Quick Share Link</p>
+            <div className="p-4 rounded-xl bg-[#1A1A1A]/50 border border-[#1A1A1A]">
+              <p className="text-sm text-[#1A1A1A]/70 mb-3">Quick Share Link</p>
               <div className="flex gap-2">
                 <Input
                   value={exportedUrl || `${window.location.origin}/studio/share/${projectId}`}
                   readOnly
-                  className="bg-slate-900 border-slate-600 text-slate-300 text-sm"
+                  className="bg-[#1A1A1A] border-slate-600 text-[#1A1A1A]/70 text-sm"
                 />
                 <Button onClick={handleCopyShareLink} variant="outline" className="border-[#B89555] text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                   {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
@@ -161,7 +161,7 @@ export function PublishPanel({ isOpen, onClose, projectId, property, exportedUrl
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Select value={tone} onValueChange={setTone}>
-                  <SelectTrigger className="w-40 bg-slate-800 border-slate-700 text-white">
+                  <SelectTrigger className="w-40 bg-[#1A1A1A] border-[#1A1A1A] text-white">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -184,7 +184,7 @@ export function PublishPanel({ isOpen, onClose, projectId, property, exportedUrl
 
               return (
                 <div key={platform} className="space-y-2">
-                  <label className="text-sm text-slate-300 flex items-center gap-2">
+                  <label className="text-sm text-[#1A1A1A]/70 flex items-center gap-2">
                     <Icon className={`w-4 h-4 ${platformInfo?.color}`} />
                     {platformInfo?.name} Caption
                   </label>
@@ -192,7 +192,7 @@ export function PublishPanel({ isOpen, onClose, projectId, property, exportedUrl
                     value={captions[platform] || ''}
                     onChange={(e) => setCaptions({ ...captions, [platform]: e.target.value })}
                     placeholder={`Write caption for ${platformInfo?.name}...`}
-                    className="min-h-[100px] bg-slate-800 border-slate-700 text-white"
+                    className="min-h-[100px] bg-[#1A1A1A] border-[#1A1A1A] text-white"
                   />
                   <div className="flex flex-wrap gap-1">
                     {(hashtags[platform] || []).map((tag, i) => (
@@ -207,29 +207,29 @@ export function PublishPanel({ isOpen, onClose, projectId, property, exportedUrl
           </TabsContent>
 
           <TabsContent value="schedule" className="space-y-4 mt-4">
-            <div className="p-6 rounded-xl bg-slate-800/50 border border-slate-700 space-y-4">
-              <div className="flex items-center gap-2 text-slate-300">
+            <div className="p-6 rounded-xl bg-[#1A1A1A]/50 border border-[#1A1A1A] space-y-4">
+              <div className="flex items-center gap-2 text-[#1A1A1A]/70">
                 <Calendar className="w-5 h-5 text-[#1A1A1A]" />
                 <span className="font-medium">Schedule Posts</span>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm text-slate-400">Date</label>
+                  <label className="text-sm text-[#1A1A1A]/70">Date</label>
                   <Input
                     type="date"
                     value={scheduleDate}
                     onChange={(e) => setScheduleDate(e.target.value)}
-                    className="bg-slate-900 border-slate-600 text-white"
+                    className="bg-[#1A1A1A] border-slate-600 text-white"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm text-slate-400">Time (Dubai)</label>
+                  <label className="text-sm text-[#1A1A1A]/70">Time (Dubai)</label>
                   <Input
                     type="time"
                     value={scheduleTime}
                     onChange={(e) => setScheduleTime(e.target.value)}
-                    className="bg-slate-900 border-slate-600 text-white"
+                    className="bg-[#1A1A1A] border-slate-600 text-white"
                   />
                 </div>
               </div>
@@ -245,7 +245,7 @@ export function PublishPanel({ isOpen, onClose, projectId, property, exportedUrl
         </Tabs>
 
         <DialogFooter className="flex gap-2">
-          <Button variant="outline" onClick={onClose} className="border-slate-600 text-slate-300">
+          <Button variant="outline" onClick={onClose} className="border-slate-600 text-[#1A1A1A]/70">
             Cancel
           </Button>
           <Button

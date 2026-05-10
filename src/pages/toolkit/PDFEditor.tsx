@@ -23,9 +23,9 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
       <input ref={ed.fileInputRef} type="file" accept=".pdf" multiple onChange={ed.handleFileUpload} className="hidden" />
 
       {!embedded && (
-        <header className="border-b border-stone-200 bg-slate-50">
+        <header className="border-b border-stone-200 bg-[#FDFBF7]">
           <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-            <Link to="/toolkit" className="flex items-center gap-2 transition-colors rounded-lg px-3 py-2 text-stone-500 hover:text-stone-800 border border-stone-200">
+            <Link to="/toolkit" className="flex items-center gap-2 transition-colors rounded-lg px-3 py-2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] border border-stone-200">
               <ArrowLeft className="h-5 w-5" /><span>Back to Tools Hub</span>
             </Link>
             <Button variant="outline" size="sm" onClick={() => ed.fileInputRef.current?.click()} disabled={ed.isLoading}>
@@ -40,8 +40,8 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/20">
             <FileText className="h-8 w-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-stone-900 mb-2">PDF Editor</h1>
-          <p className="text-stone-500">Upload, reorder, merge, split PDFs · AI OCR · Signatures</p>
+          <h1 className="text-3xl font-bold text-[#1A1A1A] mb-2">PDF Editor</h1>
+          <p className="text-[#1A1A1A]/70">Upload, reorder, merge, split PDFs · AI OCR · Signatures</p>
         </div>
 
         <div className="mb-5">
@@ -73,13 +73,13 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
             ) : (
               <Upload className="h-12 w-12 mx-auto mb-4" style={{ color: G.goldDim }} />
             )}
-            <p className="text-stone-800 font-semibold text-lg mb-2">{ed.isLoading ? "Loading PDF..." : "Drop your PDF files here"}</p>
-            <p className="text-sm mb-4 text-stone-400">or click to browse your files</p>
+            <p className="text-[#1A1A1A] font-semibold text-lg mb-2">{ed.isLoading ? "Loading PDF..." : "Drop your PDF files here"}</p>
+            <p className="text-sm mb-4 text-[#1A1A1A]/70">or click to browse your files</p>
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all text-white"
               style={{ background: G.btnGradient, boxShadow: G.btnShadow }}>
               <Upload className="h-4 w-4" />Browse PDF Files
             </div>
-            <p className="text-xs mt-4 text-stone-400">Supports multiple PDFs · All processing is local in your browser</p>
+            <p className="text-xs mt-4 text-[#1A1A1A]/70">Supports multiple PDFs · All processing is local in your browser</p>
           </div>
         ) : (
           <div className="grid lg:grid-cols-[240px_1fr_320px] gap-5">

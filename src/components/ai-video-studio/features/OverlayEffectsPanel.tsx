@@ -66,7 +66,7 @@ export function OverlayEffectsPanel({
   }, [lockedEffect, onPreviewEffect, onHoverEffect]);
 
   return (
-    <div className="h-full flex flex-col bg-slate-900 text-white">
+    <div className="h-full flex flex-col bg-[#1A1A1A] text-white">
       <ScrollArea className="flex-1">
         <div className="p-3 space-y-4">
           {/* Header hint */}
@@ -81,7 +81,7 @@ export function OverlayEffectsPanel({
 
           {categories.map(cat => (
             <div key={cat}>
-              <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-widest mb-2">{cat}</p>
+              <p className="text-[10px] text-[#1A1A1A]/70 font-semibold uppercase tracking-widest mb-2">{cat}</p>
               <div className="grid grid-cols-3 gap-1.5">
                 {OVERLAY_EFFECTS.filter(e => e.category === cat).map(effect => {
                   const isLocked = lockedEffect === effect.id;
@@ -94,7 +94,7 @@ export function OverlayEffectsPanel({
                       className={`rounded-md border cursor-pointer transition-all select-none overflow-hidden ${
                         isLocked
                           ? 'border-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.3)]'
-                          : 'border-slate-700 hover:border-amber-500/60 hover:shadow-[0_0_6px_rgba(251,191,36,0.15)]'
+                          : 'border-[#1A1A1A] hover:border-amber-500/60 hover:shadow-[0_0_6px_rgba(251,191,36,0.15)]'
                       }`}
                     >
                       {/* Live particle thumbnail */}
@@ -115,7 +115,7 @@ export function OverlayEffectsPanel({
                       </div>
 
                       {/* Label row */}
-                      <div className={`px-1.5 py-1 ${isLocked ? 'bg-amber-400/10' : 'bg-slate-800'}`}>
+                      <div className={`px-1.5 py-1 ${isLocked ? 'bg-amber-400/10' : 'bg-[#1A1A1A]'}`}>
                         <div className="text-[10px] font-semibold text-slate-100 leading-tight truncate">
                           {effect.label}
                         </div>
@@ -129,7 +129,7 @@ export function OverlayEffectsPanel({
                               toast.success(`${effect.label} added to timeline!`)
                             );
                           }}
-                          className="mt-1 flex items-center gap-0.5 w-full justify-center py-0.5 rounded text-[9px] font-bold bg-slate-700 hover:bg-amber-500 hover:text-[#1A1A1A] text-slate-300 border border-slate-600 hover:border-amber-500 transition-all"
+                          className="mt-1 flex items-center gap-0.5 w-full justify-center py-0.5 rounded text-[9px] font-bold bg-[#1A1A1A] hover:bg-amber-500 hover:text-[#1A1A1A] text-[#1A1A1A]/70 border border-slate-600 hover:border-amber-500 transition-all"
                         >
                           <Plus className="w-2.5 h-2.5" />
                           Add

@@ -389,10 +389,10 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold mb-5 border bg-violet-50 text-violet-700 border-violet-200">
               <Sparkles className="h-3 w-3" /> Free Tool
             </span>
-            <h1 className="text-4xl md:text-6xl font-bold mb-4 tracking-tight text-stone-900">
+            <h1 className="text-4xl md:text-6xl font-bold mb-4 tracking-tight text-[#1A1A1A]">
               Media <span className="text-violet-600">→ PDF</span> Merger
             </h1>
-            <p className="text-lg md:text-xl max-w-2xl mx-auto text-stone-500">
+            <p className="text-lg md:text-xl max-w-2xl mx-auto text-[#1A1A1A]/70">
               Combine images &amp; PDFs into one document. Reorder pages, set margins, export with zero white borders.
             </p>
           </div>
@@ -950,8 +950,8 @@ function StepHeader({ n, title, sub, noMb }: { n: number; title: string; sub: st
         {n}
       </div>
       <div>
-        <h3 className="text-stone-900 font-semibold text-base">{title}</h3>
-        <p className="text-sm mt-0.5 text-stone-500"
+        <h3 className="text-[#1A1A1A] font-semibold text-base">{title}</h3>
+        <p className="text-sm mt-0.5 text-[#1A1A1A]/70"
           dangerouslySetInnerHTML={{ __html: sub }} />
       </div>
     </div>

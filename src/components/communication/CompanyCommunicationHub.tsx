@@ -411,7 +411,7 @@ const CompanyCommunicationHub = () => {
                       {member.name.split(' ').map(n => n[0]).join('')}
                     </AvatarFallback>
                   </Avatar>
-                  <div className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-zinc-900 ${statusColors[member.status || 'online']}`} />
+                  <div className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-[#1A1A1A] ${statusColors[member.status || 'online']}`} />
                 </div>
                 <span className="truncate flex-1 text-left">{member.name}</span>
                 {member.isAI && (
@@ -710,7 +710,7 @@ const CompanyCommunicationHub = () => {
                           {member.name.split(' ').map(n => n[0]).join('')}
                         </AvatarFallback>
                       </Avatar>
-                      <div className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-zinc-900 ${statusColors[member.status || 'online']}`} />
+                      <div className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-[#1A1A1A] ${statusColors[member.status || 'online']}`} />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm truncate">{member.name}</p>

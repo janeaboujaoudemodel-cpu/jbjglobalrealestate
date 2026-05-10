@@ -104,10 +104,10 @@ export default function CreativeSuiteEditor() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-[#1A1A1A] animate-spin mx-auto mb-4" />
-          <p className="text-slate-400">Loading project...</p>
+          <p className="text-[#1A1A1A]/70">Loading project...</p>
         </div>
       </div>
     );
@@ -115,9 +115,9 @@ export default function CreativeSuiteEditor() {
 
   if (!project) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
         <div className="text-center">
-          <p className="text-slate-400 mb-4">Project not found</p>
+          <p className="text-[#1A1A1A]/70 mb-4">Project not found</p>
           <Button onClick={() => navigate('/studio')} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
             Back to Studio
           </Button>
@@ -127,11 +127,11 @@ export default function CreativeSuiteEditor() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white flex flex-col">
+    <div className="min-h-screen bg-[#1A1A1A] text-white flex flex-col">
       {/* Top Bar */}
-      <header className="h-14 bg-slate-900/90 backdrop-blur-xl border-b border-[#B89555]/20 flex items-center justify-between px-4 flex-shrink-0">
+      <header className="h-14 bg-[#1A1A1A]/90 backdrop-blur-xl border-b border-[#B89555]/20 flex items-center justify-between px-4 flex-shrink-0">
         <div className="flex items-center gap-3">
-          <Link to="/studio" className="p-2 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition-colors">
+          <Link to="/studio" className="p-2 rounded-lg hover:bg-[#1A1A1A] text-[#1A1A1A]/70 hover:text-white transition-colors">
             <ArrowLeft className="w-5 h-5" />
           </Link>
           
@@ -146,7 +146,7 @@ export default function CreativeSuiteEditor() {
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleRename()}
-                  className="w-64 h-8 bg-slate-800 border-[#B89555]/30 text-white"
+                  className="w-64 h-8 bg-[#1A1A1A] border-[#B89555]/30 text-white"
                   autoFocus
                 />
                 <Button size="sm" onClick={handleRename} className="h-8 bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
@@ -164,7 +164,7 @@ export default function CreativeSuiteEditor() {
           </div>
 
           {/* Save Status */}
-          <div className="flex items-center gap-1 text-xs text-slate-400">
+          <div className="flex items-center gap-1 text-xs text-[#1A1A1A]/70">
             {isSaving ? (
               <>
                 <Loader2 className="w-3 h-3 animate-spin" />
@@ -190,20 +190,20 @@ export default function CreativeSuiteEditor() {
             variant="outline"
             size="sm"
             onClick={() => setIsPropertyPickerOpen(true)}
-            className={`border-slate-600 ${project.property_snapshot ? 'text-[#1A1A1A] border-[#B89555]/50' : 'text-slate-300'}`}
+            className={`border-slate-600 ${project.property_snapshot ? 'text-[#1A1A1A] border-[#B89555]/50' : 'text-[#1A1A1A]/70'}`}
           >
             <Building2 className="w-4 h-4 mr-2" />
             {project.property_snapshot?.name || 'Link Property'}
           </Button>
 
           {/* Save */}
-          <Button variant="outline" size="sm" onClick={saveProject} className="border-slate-600 text-slate-300">
+          <Button variant="outline" size="sm" onClick={saveProject} className="border-slate-600 text-[#1A1A1A]/70">
             <Save className="w-4 h-4 mr-2" />
             Save
           </Button>
 
           {/* Share */}
-          <Button variant="outline" size="sm" onClick={generateShareLink} className="border-slate-600 text-slate-300">
+          <Button variant="outline" size="sm" onClick={generateShareLink} className="border-slate-600 text-[#1A1A1A]/70">
             <Share2 className="w-4 h-4 mr-2" />
             Share
           </Button>
@@ -217,11 +217,11 @@ export default function CreativeSuiteEditor() {
           {/* More Menu */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="text-slate-400">
+              <Button variant="ghost" size="icon" className="text-[#1A1A1A]/70">
                 <MoreVertical className="w-5 h-5" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="bg-slate-800 border-slate-700">
+            <DropdownMenuContent align="end" className="bg-[#1A1A1A] border-[#1A1A1A]">
               <DropdownMenuItem onClick={() => setIsRenaming(true)}>
                 Rename
               </DropdownMenuItem>
@@ -242,16 +242,16 @@ export default function CreativeSuiteEditor() {
         <ResizablePanelGroup direction="horizontal">
           {/* Left Sidebar - AI & Tools */}
           <ResizablePanel defaultSize={25} minSize={20} maxSize={35}>
-            <div className="h-full bg-slate-900/50 border-r border-slate-800 overflow-auto">
+            <div className="h-full bg-[#1A1A1A]/50 border-r border-[#1A1A1A] overflow-auto">
               <div className="p-4 space-y-4">
                 {/* Tab Switcher */}
-                <div className="flex rounded-lg bg-slate-800/50 p-1">
+                <div className="flex rounded-lg bg-[#1A1A1A]/50 p-1">
                   <button
                     onClick={() => setActiveTab('ai')}
                     className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors ${
                       activeTab === 'ai'
                         ? 'bg-[#EFE6D6]/20 text-[#1A1A1A]'
-                        : 'text-slate-400 hover:text-white'
+                        : 'text-[#1A1A1A]/70 hover:text-white'
                     }`}
                   >
                     <Wand2 className="w-4 h-4 inline mr-1" />
@@ -262,7 +262,7 @@ export default function CreativeSuiteEditor() {
                     className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors ${
                       activeTab === 'audio'
                         ? 'bg-[#EFE6D6]/20 text-[#1A1A1A]'
-                        : 'text-slate-400 hover:text-white'
+                        : 'text-[#1A1A1A]/70 hover:text-white'
                     }`}
                   >
                     Trending Audio
@@ -288,7 +288,7 @@ export default function CreativeSuiteEditor() {
 
                 {/* Property Preview */}
                 {project.property_snapshot && (
-                  <div className="p-4 rounded-xl bg-slate-800/50 border border-slate-700">
+                  <div className="p-4 rounded-xl bg-[#1A1A1A]/50 border border-[#1A1A1A]">
                     <div className="flex items-start gap-3">
                       {project.property_snapshot.cover_image_url ? (
                         <img
@@ -297,13 +297,13 @@ export default function CreativeSuiteEditor() {
                           className="w-16 h-16 rounded-lg object-cover"
                         />
                       ) : (
-                        <div className="w-16 h-16 rounded-lg bg-slate-700 flex items-center justify-center">
-                          <Building2 className="w-6 h-6 text-slate-500" />
+                        <div className="w-16 h-16 rounded-lg bg-[#1A1A1A] flex items-center justify-center">
+                          <Building2 className="w-6 h-6 text-[#1A1A1A]/70" />
                         </div>
                       )}
                       <div className="flex-1 min-w-0">
                         <h4 className="font-medium text-white truncate">{project.property_snapshot.name}</h4>
-                        <p className="text-xs text-slate-400 truncate">
+                        <p className="text-xs text-[#1A1A1A]/70 truncate">
                           {project.property_snapshot.area_name}
                           {project.property_snapshot.developer_name && ` by ${project.property_snapshot.developer_name}`}
                         </p>
@@ -318,7 +318,7 @@ export default function CreativeSuiteEditor() {
                       variant="ghost"
                       size="sm"
                       onClick={() => setIsPropertyPickerOpen(true)}
-                      className="w-full mt-3 text-slate-400 hover:text-white"
+                      className="w-full mt-3 text-[#1A1A1A]/70 hover:text-white"
                     >
                       Change Property
                     </Button>
@@ -332,7 +332,7 @@ export default function CreativeSuiteEditor() {
 
           {/* Main Editor Area */}
           <ResizablePanel defaultSize={75}>
-            <div className="h-full bg-slate-950">
+            <div className="h-full bg-[#1A1A1A]">
               <AIVideoStudio />
             </div>
           </ResizablePanel>

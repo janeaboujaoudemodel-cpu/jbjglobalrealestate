@@ -184,7 +184,7 @@ function TransitionOverlay({ transitionId, progress, easing }: { transitionId: s
     const translate = (1 - p) * 100;
     return (
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute inset-0 bg-slate-900" style={{ transform: `translateX(${translate}%)` }} />
+        <div className="absolute inset-0 bg-[#1A1A1A]" style={{ transform: `translateX(${translate}%)` }} />
       </div>
     );
   }
@@ -193,7 +193,7 @@ function TransitionOverlay({ transitionId, progress, easing }: { transitionId: s
     const translate = (p - 1) * 100;
     return (
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute inset-0 bg-slate-900" style={{ transform: `translateX(${translate}%)` }} />
+        <div className="absolute inset-0 bg-[#1A1A1A]" style={{ transform: `translateX(${translate}%)` }} />
       </div>
     );
   }
@@ -202,7 +202,7 @@ function TransitionOverlay({ transitionId, progress, easing }: { transitionId: s
     const translate = (1 - p) * 100;
     return (
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute inset-0 bg-slate-900" style={{ transform: `translateY(${translate}%)` }} />
+        <div className="absolute inset-0 bg-[#1A1A1A]" style={{ transform: `translateY(${translate}%)` }} />
       </div>
     );
   }
@@ -422,7 +422,7 @@ export function VideoPreviewCanvas({
   ];
 
   return (
-    <div ref={containerRef} className="h-full flex flex-col bg-slate-950">
+    <div ref={containerRef} className="h-full flex flex-col bg-[#1A1A1A]">
       {/* Hidden file input */}
       <input
         ref={fileInputRef}
@@ -456,7 +456,7 @@ export function VideoPreviewCanvas({
               className={`px-2.5 py-1 rounded-full text-[10px] font-bold border transition-all ${
                 aspectRatio === pill.ratio
                   ? 'bg-amber-500 text-[#1A1A1A] border-amber-500'
-                  : 'bg-[#1A1A1A]/60 text-slate-300 border-slate-600 hover:border-amber-400'
+                  : 'bg-[#1A1A1A]/60 text-[#1A1A1A]/70 border-slate-600 hover:border-amber-400'
               }`}
             >
               {pill.icon} {pill.label}
@@ -518,9 +518,9 @@ export function VideoPreviewCanvas({
                   {!activeMediaClip && (
                     <div className="w-full h-full flex items-center justify-center">
                       <div className="text-center">
-                        <Film className="w-12 h-12 text-slate-500 mx-auto mb-3" />
-                        <p className="text-slate-400 text-lg">No media at playhead</p>
-                        <p className="text-slate-500 text-sm mt-1">Move the playhead to a clip</p>
+                        <Film className="w-12 h-12 text-[#1A1A1A]/70 mx-auto mb-3" />
+                        <p className="text-[#1A1A1A]/70 text-lg">No media at playhead</p>
+                        <p className="text-[#1A1A1A]/70 text-sm mt-1">Move the playhead to a clip</p>
                       </div>
                     </div>
                   )}
@@ -681,7 +681,7 @@ export function VideoPreviewCanvas({
                         <CloudUpload className="w-4 h-4 text-[#1A1A1A]" />
                       </div>
                       <p className="text-white text-[11px] font-semibold">Drop or click to browse</p>
-                      <p className="text-slate-500 text-[10px]">MP4, MOV, AVI · up to 2GB</p>
+                      <p className="text-[#1A1A1A]/70 text-[10px]">MP4, MOV, AVI · up to 2GB</p>
                     </button>
 
                     {/* Quick actions */}
@@ -708,7 +708,7 @@ export function VideoPreviewCanvas({
                             </div>
                             <div>
                               <p className="text-white text-[11px] font-semibold leading-tight">{action.label}</p>
-                              <p className="text-slate-500 text-[10px] leading-tight">{action.desc}</p>
+                              <p className="text-[#1A1A1A]/70 text-[10px] leading-tight">{action.desc}</p>
                             </div>
                           </button>
                         );
@@ -732,7 +732,7 @@ export function VideoPreviewCanvas({
 
 
       {/* Transport Controls */}
-      <div className="flex-shrink-0 px-4 py-3 border-t border-slate-700 bg-slate-900">
+      <div className="flex-shrink-0 px-4 py-3 border-t border-[#1A1A1A] bg-[#1A1A1A]">
         {/* Timeline Scrubber */}
         <div className="mb-3">
           <Slider
@@ -749,7 +749,7 @@ export function VideoPreviewCanvas({
         <div className="flex items-center justify-between">
           {/* Left - Time Display */}
           <div className="flex items-center gap-2 w-32">
-            <span className="text-sm font-mono text-slate-300">
+            <span className="text-sm font-mono text-[#1A1A1A]/70">
               {formatTime(currentTime)}
             </span>
           </div>
@@ -758,13 +758,13 @@ export function VideoPreviewCanvas({
           <div className="flex items-center gap-1">
             <button
               onClick={skipBackward}
-              className="p-2 rounded-md text-slate-300 hover:text-amber-300 bg-slate-700 hover:bg-slate-600 border border-slate-600 transition-all"
+              className="p-2 rounded-md text-[#1A1A1A]/70 hover:text-amber-300 bg-[#1A1A1A] hover:bg-slate-600 border border-slate-600 transition-all"
             >
               <SkipBack className="w-4 h-4" />
             </button>
             <button
               onClick={handleStop}
-              className="p-2 rounded-md text-slate-300 hover:text-amber-300 bg-slate-700 hover:bg-slate-600 border border-slate-600 transition-all"
+              className="p-2 rounded-md text-[#1A1A1A]/70 hover:text-amber-300 bg-[#1A1A1A] hover:bg-slate-600 border border-slate-600 transition-all"
             >
               <Square className="w-4 h-4" />
             </button>
@@ -780,7 +780,7 @@ export function VideoPreviewCanvas({
             </button>
             <button
               onClick={skipForward}
-              className="p-2 rounded-md text-slate-300 hover:text-amber-300 bg-slate-700 hover:bg-slate-600 border border-slate-600 transition-all"
+              className="p-2 rounded-md text-[#1A1A1A]/70 hover:text-amber-300 bg-[#1A1A1A] hover:bg-slate-600 border border-slate-600 transition-all"
             >
               <SkipForward className="w-4 h-4" />
             </button>
@@ -790,7 +790,7 @@ export function VideoPreviewCanvas({
           <div className="flex items-center gap-2 w-32 justify-end">
             <button
               onClick={toggleMute}
-              className="p-2 rounded-md text-slate-300 hover:text-amber-300 bg-slate-700 hover:bg-slate-600 border border-slate-600 transition-all"
+              className="p-2 rounded-md text-[#1A1A1A]/70 hover:text-amber-300 bg-[#1A1A1A] hover:bg-slate-600 border border-slate-600 transition-all"
             >
               {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
             </button>
@@ -805,7 +805,7 @@ export function VideoPreviewCanvas({
             </div>
             <button
               onClick={toggleFullscreen}
-              className="p-2 rounded-md text-slate-300 hover:text-amber-300 bg-slate-700 hover:bg-slate-600 border border-slate-600 transition-all"
+              className="p-2 rounded-md text-[#1A1A1A]/70 hover:text-amber-300 bg-[#1A1A1A] hover:bg-slate-600 border border-slate-600 transition-all"
             >
               <Maximize2 className="w-4 h-4" />
             </button>

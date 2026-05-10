@@ -35,7 +35,7 @@ const EVENT_LABELS: Record<string, string> = {
 
 const EVENT_COLORS: Record<string, string> = {
   page_view: "text-blue-600",
-  click: "text-stone-500",
+  click: "text-[#1A1A1A]/70",
   login: "text-emerald-600",
   search: "text-purple-600",
   listing_view: "text-[#1A1A1A]",
@@ -118,7 +118,7 @@ const MyDashboardActivity = () => {
               <h1 className="text-3xl font-bold text-[#1A1A1A]">
                 My Activity Intelligence
               </h1>
-              <p className="text-stone-500 mt-2">Real-time behavioral analytics and engagement tracking.</p>
+              <p className="text-[#1A1A1A]/70 mt-2">Real-time behavioral analytics and engagement tracking.</p>
             </div>
 
             {/* Stats Cards — 4 columns */}
@@ -134,7 +134,7 @@ const MyDashboardActivity = () => {
                     <CardContent className="p-4 text-center">
                       <stat.icon className="w-6 h-6 text-[#1A1A1A] mx-auto mb-2" />
                       <p className="text-2xl font-bold text-[#1A1A1A]"><AnimatedCounter value={stat.value} /></p>
-                      <p className="text-xs text-stone-500">{stat.label}</p>
+                      <p className="text-xs text-[#1A1A1A]/70">{stat.label}</p>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -147,21 +147,21 @@ const MyDashboardActivity = () => {
                 <CardContent className="p-4 text-center">
                   <Zap className="w-5 h-5 text-[#1A1A1A] mx-auto mb-1" />
                   <p className="text-xl font-bold text-[#1A1A1A]"><AnimatedCounter value={stats.totalPoints} /></p>
-                  <p className="text-xs text-stone-500">Total Points</p>
+                  <p className="text-xs text-[#1A1A1A]/70">Total Points</p>
                 </CardContent>
               </Card>
               <Card className="border-2 border-[#B89555]/30 bg-[#FDFBF7]/60">
                 <CardContent className="p-4 text-center">
                   <BarChart3 className="w-5 h-5 text-[#1A1A1A] mx-auto mb-1" />
                   <p className="text-xl font-bold text-[#1A1A1A]"><AnimatedCounter value={stats.totalSessions} /></p>
-                  <p className="text-xs text-stone-500">Total Sessions</p>
+                  <p className="text-xs text-[#1A1A1A]/70">Total Sessions</p>
                 </CardContent>
               </Card>
               <Card className="border-2 border-[#B89555]/30 bg-[#FDFBF7]/60">
                 <CardContent className="p-4 text-center">
                   <Clock className="w-5 h-5 text-[#1A1A1A] mx-auto mb-1" />
                   <p className="text-xl font-bold text-[#1A1A1A]">{formatDuration(stats.avgSessionDuration)}</p>
-                  <p className="text-xs text-stone-500">Avg Session</p>
+                  <p className="text-xs text-[#1A1A1A]/70">Avg Session</p>
                 </CardContent>
               </Card>
             </div>
@@ -177,7 +177,7 @@ const MyDashboardActivity = () => {
                         <Crown className="w-7 h-7 text-[#1A1A1A]" />
                       </div>
                       <div>
-                        <p className="text-xs text-stone-500 uppercase tracking-wider">VIP Status</p>
+                        <p className="text-xs text-[#1A1A1A]/70 uppercase tracking-wider">VIP Status</p>
                         <p className="text-xl font-bold text-[#1A1A1A]">{stats.vipTier}</p>
                       </div>
                     </div>
@@ -191,10 +191,10 @@ const MyDashboardActivity = () => {
                       ].map(score => (
                         <div key={score.label} className="text-center">
                           <div className="flex items-center justify-center gap-1 mb-1">
-                            <score.icon className="w-3.5 h-3.5 text-stone-500" />
-                            <span className="text-xs text-stone-500">{score.label}</span>
+                            <score.icon className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
+                            <span className="text-xs text-[#1A1A1A]/70">{score.label}</span>
                           </div>
-                          <p className="text-lg font-bold text-[#1A1A1A]">{score.value}<span className="text-xs text-stone-400">/100</span></p>
+                          <p className="text-lg font-bold text-[#1A1A1A]">{score.value}<span className="text-xs text-[#1A1A1A]/70">/100</span></p>
                           <div className="h-1.5 bg-[#EFE6D6]/10 rounded-full overflow-hidden mt-1">
                             <div className={`h-full bg-gradient-to-r ${score.color} rounded-full transition-all duration-1000`} style={{ width: `${score.value}%` }} />
                           </div>
@@ -215,10 +215,10 @@ const MyDashboardActivity = () => {
                     </CardTitle>
                     <div className="flex gap-1">
                       <Button size="sm" variant={chartMode === 'events' ? 'default' : 'ghost'}
-                        className={chartMode === 'events' ? 'bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90 h-7 text-xs font-semibold' : 'text-stone-500 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10 h-7 text-xs'}
+                        className={chartMode === 'events' ? 'bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90 h-7 text-xs font-semibold' : 'text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10 h-7 text-xs'}
                         onClick={() => setChartMode('events')}>Events</Button>
                       <Button size="sm" variant={chartMode === 'points' ? 'default' : 'ghost'}
-                        className={chartMode === 'points' ? 'bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90 h-7 text-xs font-semibold' : 'text-stone-500 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10 h-7 text-xs'}
+                        className={chartMode === 'points' ? 'bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90 h-7 text-xs font-semibold' : 'text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10 h-7 text-xs'}
                         onClick={() => setChartMode('points')}>Points</Button>
                     </div>
                   </div>
@@ -270,7 +270,7 @@ const MyDashboardActivity = () => {
                             <DeviceIcon device={d.device} />
                             <div className="flex-1">
                               <div className="flex justify-between text-sm mb-1">
-                                <span className="text-stone-700 capitalize">{d.device}</span>
+                                <span className="text-[#1A1A1A] capitalize">{d.device}</span>
                                 <span className="text-[#1A1A1A] font-semibold">{pct}%</span>
                               </div>
                               <div className="h-1.5 bg-[#EFE6D6]/10 rounded-full overflow-hidden">
@@ -315,7 +315,7 @@ const MyDashboardActivity = () => {
                               <p className="text-sm font-medium text-[#1A1A1A] truncate">
                                 {EVENT_LABELS[event.event_name] || event.event_name}
                               </p>
-                              <p className="text-xs text-stone-500 truncate">
+                              <p className="text-xs text-[#1A1A1A]/70 truncate">
                                 {event.page_path} · {formatDistanceToNow(new Date(event.created_at), { addSuffix: true })}
                               </p>
                             </div>
@@ -331,8 +331,8 @@ const MyDashboardActivity = () => {
                   ) : (
                     <div className="text-center py-12">
                       <Activity className="w-12 h-12 text-[#1A1A1A]/70 mx-auto mb-4" />
-                      <p className="text-stone-600">Activity is being recorded live.</p>
-                      <p className="text-sm text-stone-400 mt-1">Browse the platform to see your activity appear here.</p>
+                      <p className="text-[#1A1A1A]/70">Activity is being recorded live.</p>
+                      <p className="text-sm text-[#1A1A1A]/70 mt-1">Browse the platform to see your activity appear here.</p>
                     </div>
                   )}
                 </CardContent>

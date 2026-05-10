@@ -62,7 +62,7 @@ export const PIPELINE_STATUSES: PipelineStatus[] = [
 
   // NEUTRAL - Lifecycle states
   { value: "assigned", label: "Assigned", color: "bg-blue-500", bgColor: "bg-blue-500/15", textColor: "text-blue-700", dotColor: "#3B82F6", category: "neutral" },
-  { value: "archived", label: "Archived", color: "bg-slate-400", bgColor: "bg-slate-400/15", textColor: "text-slate-700", dotColor: "#94A3B8", category: "neutral" },
+  { value: "archived", label: "Archived", color: "bg-slate-400", bgColor: "bg-slate-400/15", textColor: "text-[#1A1A1A]/80", dotColor: "#94A3B8", category: "neutral" },
 
   // NEGATIVE (red) - Lost / DNC / Invalid / Deleted
   { value: "not_interested", label: "Not Interested", color: "bg-red-500", bgColor: "bg-red-500/15", textColor: "text-red-700", dotColor: "#DC2626", category: "negative" },

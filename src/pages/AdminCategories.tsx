@@ -123,7 +123,7 @@ export default function AdminCategories() {
     return (
       <div>
         <div className="flex items-center justify-between mb-4">
-          <p className="text-sm text-neutral-600">
+          <p className="text-sm text-[#1A1A1A]/80">
             <span className="font-semibold text-[#1A1A1A]">{filtered.length}</span> of {rows.length} {label.toLowerCase()}
           </p>
           <Button variant="outline" size="sm" onClick={() => exportCsv(filtered, label.toLowerCase())}>
@@ -131,9 +131,9 @@ export default function AdminCategories() {
           </Button>
         </div>
 
-        <div className="overflow-x-auto bg-[#FDFBF7] border border-neutral-200 rounded-xl">
+        <div className="overflow-x-auto bg-[#FDFBF7] border border-[#B89555]/30 rounded-xl">
           <table className="w-full text-sm">
-            <thead className="bg-neutral-50 text-neutral-600 text-left">
+            <thead className="bg-[#F7F2EA] text-[#1A1A1A]/80 text-left">
               <tr>
                 <th className="px-4 py-3 font-medium">Name</th>
                 <th className="px-4 py-3 font-medium">Contact</th>
@@ -144,22 +144,22 @@ export default function AdminCategories() {
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan={5} className="px-4 py-8 text-center text-neutral-500">Loading...</td></tr>
+                <tr><td colSpan={5} className="px-4 py-8 text-center text-[#1A1A1A]/70">Loading...</td></tr>
               ) : filtered.length === 0 ? (
-                <tr><td colSpan={5} className="px-4 py-8 text-center text-neutral-500">No results</td></tr>
+                <tr><td colSpan={5} className="px-4 py-8 text-center text-[#1A1A1A]/70">No results</td></tr>
               ) : (
                 filtered.map((r) => (
-                  <tr key={r.user_id} className="border-t border-neutral-100 hover:bg-neutral-50">
+                  <tr key={r.user_id} className="border-t border-[#B89555]/30 hover:bg-[#F7F2EA]">
                     <td className="px-4 py-3 text-[#1A1A1A] font-medium">{r.full_name || "—"}</td>
-                    <td className="px-4 py-3 text-neutral-700">
+                    <td className="px-4 py-3 text-[#1A1A1A]/80">
                       <div className="flex flex-col gap-0.5">
                         {r.email && <span className="flex items-center gap-1.5"><Mail className="w-3 h-3" />{r.email}</span>}
                         {r.phone && <span className="flex items-center gap-1.5"><Phone className="w-3 h-3" />{r.phone}</span>}
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-neutral-700">{r.country || "—"}</td>
+                    <td className="px-4 py-3 text-[#1A1A1A]/80">{r.country || "—"}</td>
                     <td className="px-4 py-3"><Badge variant="outline">{r.status || "—"}</Badge></td>
-                    <td className="px-4 py-3 text-neutral-500 text-xs">
+                    <td className="px-4 py-3 text-[#1A1A1A]/70 text-xs">
                       {r.created_at ? new Date(r.created_at).toLocaleDateString() : "—"}
                     </td>
                   </tr>
@@ -178,7 +178,7 @@ export default function AdminCategories() {
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-[#1A1A1A]">User Categories</h1>
-          <p className="text-neutral-600 text-sm mt-1">All registered users grouped by category</p>
+          <p className="text-[#1A1A1A]/80 text-sm mt-1">All registered users grouped by category</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
@@ -188,7 +188,7 @@ export default function AdminCategories() {
         </div>
 
         <div className="relative mb-4">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/70" />
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -214,9 +214,9 @@ export default function AdminCategories() {
 
 function StatCard({ icon: Icon, label, count }: { icon: typeof TrendingUp; label: string; count: number }) {
   return (
-    <div className="bg-[#FDFBF7] border border-neutral-200 rounded-2xl p-5">
+    <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl p-5">
       <div className="flex items-center justify-between mb-2">
-        <span className="text-sm text-neutral-600">{label}</span>
+        <span className="text-sm text-[#1A1A1A]/80">{label}</span>
         <Icon className="w-5 h-5 text-[#1A1A1A]" />
       </div>
       <div className="text-3xl font-bold text-[#1A1A1A]">{count}</div>

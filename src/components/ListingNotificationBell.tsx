@@ -167,7 +167,7 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
 
         <div className="max-h-[300px] overflow-y-auto bg-[#FDFBF7]">
           {notifications.length === 0 ? (
-            <div className="p-6 text-center text-stone-400 text-sm">
+            <div className="p-6 text-center text-[#1A1A1A]/70 text-sm">
               <Bell className="w-8 h-8 mx-auto mb-2 opacity-30 text-[#1A1A1A]/70" />
               No notifications yet
             </div>
@@ -193,9 +193,9 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-[hsl(var(--gold))] truncate">{n.title}</p>
                     {n.message && (
-                      <p className="text-xs text-stone-500 mt-0.5 line-clamp-2">{n.message}</p>
+                      <p className="text-xs text-[#1A1A1A]/70 mt-0.5 line-clamp-2">{n.message}</p>
                     )}
-                    <p className="text-[10px] text-stone-400 mt-1">
+                    <p className="text-[10px] text-[#1A1A1A]/70 mt-1">
                       {new Date(n.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
                     </p>
                   </div>

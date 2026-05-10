@@ -108,7 +108,7 @@ export function ShortcutCheatSheet({ open, onClose }: ShortcutCheatSheetProps) {
             </div>
             <div>
               <h2 className="text-white text-sm font-bold leading-tight">Keyboard Shortcuts</h2>
-              <p className="text-slate-500 text-[10px] leading-tight">AI Video Studio</p>
+              <p className="text-[#1A1A1A]/70 text-[10px] leading-tight">AI Video Studio</p>
             </div>
           </div>
           <button
@@ -118,7 +118,7 @@ export function ShortcutCheatSheet({ open, onClose }: ShortcutCheatSheetProps) {
             onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.12)')}
             onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.06)')}
           >
-            <X className="w-3.5 h-3.5 text-slate-400" />
+            <X className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
           </button>
         </div>
 
@@ -137,13 +137,13 @@ export function ShortcutCheatSheet({ open, onClose }: ShortcutCheatSheetProps) {
               <div className="space-y-1.5">
                 {section.shortcuts.map(sc => (
                   <div key={sc.desc} className="flex items-center justify-between">
-                    <span className="text-slate-300 text-xs">{sc.desc}</span>
+                    <span className="text-[#1A1A1A]/70 text-xs">{sc.desc}</span>
                     <div className="flex items-center gap-1">
                       {sc.keys.map((k, i) => (
                         <React.Fragment key={k}>
                           <Kbd label={k} />
                           {i < sc.keys.length - 1 && (
-                            <span className="text-slate-600 text-[10px]">+</span>
+                            <span className="text-[#1A1A1A]/80 text-[10px]">+</span>
                           )}
                         </React.Fragment>
                       ))}
@@ -157,7 +157,7 @@ export function ShortcutCheatSheet({ open, onClose }: ShortcutCheatSheetProps) {
 
         {/* Footer hint */}
         <div className="px-5 pb-4 text-center">
-          <p className="text-slate-600 text-[10px]">Press <Kbd label="?" /> or <Kbd label="Esc" /> to dismiss</p>
+          <p className="text-[#1A1A1A]/80 text-[10px]">Press <Kbd label="?" /> or <Kbd label="Esc" /> to dismiss</p>
         </div>
       </div>
     </div>

@@ -113,8 +113,8 @@ export function TrendingAudioPanel({ platform, onSelectAudio }: TrendingAudioPan
   };
 
   return (
-    <div className="bg-slate-800/50 rounded-xl border border-slate-700 overflow-hidden">
-      <div className="p-4 border-b border-slate-700">
+    <div className="bg-[#1A1A1A]/50 rounded-xl border border-[#1A1A1A] overflow-hidden">
+      <div className="p-4 border-b border-[#1A1A1A]">
         <div className="flex items-center gap-2 mb-4">
           <TrendingUp className="w-5 h-5 text-[#1A1A1A]" />
           <h3 className="font-semibold text-white">Trending Audio</h3>
@@ -122,16 +122,16 @@ export function TrendingAudioPanel({ platform, onSelectAudio }: TrendingAudioPan
 
         <div className="flex flex-wrap gap-2">
           <div className="relative flex-1 min-w-[150px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/70" />
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search audio..."
-              className="pl-10 bg-slate-900 border-slate-600 text-white text-sm"
+              className="pl-10 bg-[#1A1A1A] border-slate-600 text-white text-sm"
             />
           </div>
           <Select value={category} onValueChange={setCategory}>
-            <SelectTrigger className="w-28 bg-slate-900 border-slate-600 text-white text-sm">
+            <SelectTrigger className="w-28 bg-[#1A1A1A] border-slate-600 text-white text-sm">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -141,7 +141,7 @@ export function TrendingAudioPanel({ platform, onSelectAudio }: TrendingAudioPan
             </SelectContent>
           </Select>
           <Select value={region} onValueChange={setRegion}>
-            <SelectTrigger className="w-28 bg-slate-900 border-slate-600 text-white text-sm">
+            <SelectTrigger className="w-28 bg-[#1A1A1A] border-slate-600 text-white text-sm">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -159,7 +159,7 @@ export function TrendingAudioPanel({ platform, onSelectAudio }: TrendingAudioPan
             <Loader2 className="w-6 h-6 text-[#1A1A1A] animate-spin" />
           </div>
         ) : filteredAudios.length === 0 ? (
-          <div className="text-center py-10 text-slate-400">
+          <div className="text-center py-10 text-[#1A1A1A]/70">
             <Music className="w-10 h-10 mx-auto mb-2 opacity-50" />
             <p className="text-sm">No trending audio found</p>
           </div>
@@ -168,17 +168,17 @@ export function TrendingAudioPanel({ platform, onSelectAudio }: TrendingAudioPan
             {filteredAudios.map((audio, index) => (
               <div
                 key={audio.id}
-                className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-700/50 transition-colors"
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#1A1A1A]/50 transition-colors"
               >
                 <div className="w-6 text-center">
-                  <span className={`text-sm font-bold ${index < 3 ? 'text-[#1A1A1A]' : 'text-slate-500'}`}>
+                  <span className={`text-sm font-bold ${index < 3 ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/70'}`}>
                     {index + 1}
                   </span>
                 </div>
 
                 <button
                   onClick={() => togglePlay(audio.id)}
-                  className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center hover:bg-[#EFE6D6]/20 transition-colors"
+                  className="w-10 h-10 rounded-full bg-[#1A1A1A] flex items-center justify-center hover:bg-[#EFE6D6]/20 transition-colors"
                 >
                   {playingId === audio.id ? (
                     <Pause className="w-4 h-4 text-[#1A1A1A]" />
@@ -190,16 +190,16 @@ export function TrendingAudioPanel({ platform, onSelectAudio }: TrendingAudioPan
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-white truncate">{audio.audio_title}</p>
                   {audio.audio_artist && (
-                    <p className="text-xs text-slate-400 truncate">{audio.audio_artist}</p>
+                    <p className="text-xs text-[#1A1A1A]/70 truncate">{audio.audio_artist}</p>
                   )}
                 </div>
 
                 <div className="text-right">
-                  <div className="flex items-center gap-1 text-xs text-slate-400">
+                  <div className="flex items-center gap-1 text-xs text-[#1A1A1A]/70">
                     <TrendingUp className="w-3 h-3" />
                     {audio.trend_score}%
                   </div>
-                  <p className="text-[10px] text-slate-500">{formatNumber(audio.usage_count)} uses</p>
+                  <p className="text-[10px] text-[#1A1A1A]/70">{formatNumber(audio.usage_count)} uses</p>
                 </div>
 
                 <Button
