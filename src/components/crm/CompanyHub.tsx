@@ -246,6 +246,8 @@ export function CompanyHub({ type, companyName, brokerageId, devRegistryId }: Co
         threads: ((threadsRes as any)?.data ?? []),
         brokerageId: bId,
         devRegistryId: dId,
+        brokerage: (bRes as any)?.data ?? null,
+        developer: (dRes as any)?.data ?? null,
       });
     } catch (err: any) {
       console.error("[CompanyHub] load failed", err);
