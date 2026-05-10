@@ -37,12 +37,12 @@ export function VerifiedMedia({
         className={cn(
           "w-full h-full flex flex-col items-center justify-center gap-2",
           decorated
-            ? "rounded-md border border-gold/20 bg-champagne-light/40"
+            ? "rounded-md border border-[#B89555]/20 bg-champagne-light/40"
             : "bg-gradient-to-b from-premium-card to-premium-bg",
           className,
         )}
       >
-        <ImageOff className="h-5 w-5 text-gold" aria-hidden="true" />
+        <ImageOff className="h-5 w-5 text-[#1A1A1A]" aria-hidden="true" />
         <span className="text-xs font-medium tracking-wide text-foreground/70">
           {placeholderLabel}
         </span>

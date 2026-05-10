@@ -107,11 +107,11 @@ export const FeedbackPrompt = ({
           exit={{ opacity: 0, y: -20 }}
           className="fixed bottom-6 right-6 z-50 w-[340px]"
         >
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-2xl shadow-xl overflow-hidden">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl shadow-xl overflow-hidden">
             {/* Header */}
             <div className="bg-gradient-to-r from-gold/20 to-gold/10 px-4 py-3 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-gold" />
+                <Sparkles className="w-5 h-5 text-[#1A1A1A]" />
                 <span className="font-semibold text-[#1A1A1A] text-sm">Quick Feedback</span>
               </div>
               <button
@@ -138,7 +138,7 @@ export const FeedbackPrompt = ({
                     <Star
                       className={`w-8 h-8 ${
                         star <= rating
-                          ? "fill-gold text-gold"
+                          ? "fill-gold text-[#1A1A1A]"
                           : "text-[#1A1A1A]/70 hover:text-[#1A1A1A]/70"
                       } transition-colors`}
                     />
@@ -156,7 +156,7 @@ export const FeedbackPrompt = ({
                     value={feedback}
                     onChange={(e) => setFeedback(e.target.value)}
                     placeholder="Any additional thoughts? (optional)"
-                    className="bg-[#FDFBF7]/80 border-gold/30 text-[#1A1A1A] text-sm resize-none"
+                    className="bg-[#FDFBF7]/80 border-[#B89555]/30 text-[#1A1A1A] text-sm resize-none"
                     rows={2}
                   />
                 </motion.div>

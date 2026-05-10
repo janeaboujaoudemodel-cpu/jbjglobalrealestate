@@ -130,7 +130,7 @@ const getNotificationColor = (type: Notification['type'], priority: Notification
     case 'achievement':
       return 'text-purple-600 bg-purple-50';
     case 'system':
-      return 'text-gold bg-gold/10';
+      return 'text-[#1A1A1A] bg-[#EFE6D6]/10';
   }
 };
 
@@ -186,13 +186,13 @@ export const SmartNotifications: React.FC<SmartNotificationsProps> = ({
             initial={{ opacity: 0, x: 20, scale: 0.95 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: 20, scale: 0.95 }}
-            className="fixed right-4 top-20 w-96 max-h-[calc(100vh-8rem)] bg-[#FDFBF7] border border-gold/20 rounded-2xl shadow-2xl shadow-black/10 z-50 overflow-hidden flex flex-col"
+            className="fixed right-4 top-20 w-96 max-h-[calc(100vh-8rem)] bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl shadow-2xl shadow-black/10 z-50 overflow-hidden flex flex-col"
           >
             {/* Header */}
-            <div className="p-4 border-b border-gold/10 bg-gradient-to-r from-white to-[#FDFBF7]">
+            <div className="p-4 border-b border-[#B89555]/10 bg-gradient-to-r from-white to-[#FDFBF7]">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <Bell className="w-5 h-5 text-gold" />
+                  <Bell className="w-5 h-5 text-[#1A1A1A]" />
                   <h3 className="font-semibold text-[#1A1A1A]">Notifications</h3>
                   {unreadCount > 0 && (
                     <span className="px-2 py-0.5 bg-red-500 text-white text-xs font-bold rounded-full">
@@ -221,7 +221,7 @@ export const SmartNotifications: React.FC<SmartNotificationsProps> = ({
                     className={cn(
                       'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors',
                       filter === f.value
-                        ? 'bg-gold text-white'
+                        ? 'bg-[#EFE6D6] text-white'
                         : 'bg-[#F7F2EA] text-[#1A1A1A]/70 hover:bg-[#EFE6D6]'
                     )}
                   >
@@ -254,8 +254,8 @@ export const SmartNotifications: React.FC<SmartNotificationsProps> = ({
                   <div>
                     {highPriority.length > 0 && (
                       <div className="flex items-center gap-2 px-2 py-1.5 mb-2">
-                        <Sparkles className="w-3.5 h-3.5 text-gold" />
-                        <span className="text-xs uppercase tracking-wider text-gold font-semibold">
+                        <Sparkles className="w-3.5 h-3.5 text-[#1A1A1A]" />
+                        <span className="text-xs uppercase tracking-wider text-[#1A1A1A] font-semibold">
                           Updates
                         </span>
                       </div>
@@ -277,15 +277,15 @@ export const SmartNotifications: React.FC<SmartNotificationsProps> = ({
             </ScrollArea>
 
             {/* Footer */}
-            <div className="p-3 border-t border-gold/10 bg-gradient-to-r from-[#FDFBF7] to-white flex items-center justify-between">
+            <div className="p-3 border-t border-[#B89555]/10 bg-gradient-to-r from-[#FDFBF7] to-white flex items-center justify-between">
               <button
                 onClick={onMarkAllRead}
-                className="text-sm text-[#1A1A1A]/70 hover:text-gold transition-colors flex items-center gap-1"
+                className="text-sm text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors flex items-center gap-1"
               >
                 <Check className="w-4 h-4" />
                 Mark all as read
               </button>
-              <button className="text-sm text-gold font-medium hover:underline flex items-center gap-1">
+              <button className="text-sm text-[#1A1A1A] font-medium hover:underline flex items-center gap-1">
                 View All
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -306,7 +306,7 @@ const NotificationItem: React.FC<{ notification: Notification }> = ({ notificati
         'p-3 rounded-xl mb-2 transition-all cursor-pointer',
         notification.read 
           ? 'bg-[#F7F2EA] hover:bg-[#F7F2EA]' 
-          : 'bg-[#FDFBF7] border border-gold/20 hover:border-gold/40 shadow-sm'
+          : 'bg-[#FDFBF7] border border-[#B89555]/20 hover:border-[#B89555]/40 shadow-sm'
       )}
     >
       <div className="flex items-start gap-3">
@@ -334,7 +334,7 @@ const NotificationItem: React.FC<{ notification: Notification }> = ({ notificati
           {notification.action && (
             <button
               onClick={(e) => { e.stopPropagation(); notification.action?.onClick?.(); }}
-              className="mt-2 text-xs font-medium text-gold hover:underline flex items-center gap-1"
+              className="mt-2 text-xs font-medium text-[#1A1A1A] hover:underline flex items-center gap-1"
             >
               {notification.action.label}
               <ChevronRight className="w-3 h-3" />
@@ -342,7 +342,7 @@ const NotificationItem: React.FC<{ notification: Notification }> = ({ notificati
           )}
         </div>
         {!notification.read && (
-          <div className="w-2 h-2 rounded-full bg-gold flex-shrink-0 mt-2" />
+          <div className="w-2 h-2 rounded-full bg-[#EFE6D6] flex-shrink-0 mt-2" />
         )}
       </div>
     </motion.div>
@@ -359,7 +359,7 @@ export const NotificationBell: React.FC<{
     <button
       onClick={onClick}
       className={cn(
-        'relative p-2 rounded-xl bg-[#FDFBF7] border border-gold/20 text-[#1A1A1A]/70 hover:text-gold hover:border-gold/40 transition-all',
+        'relative p-2 rounded-xl bg-[#FDFBF7] border border-[#B89555]/20 text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:border-[#B89555]/40 transition-all',
         className
       )}
     >

@@ -246,7 +246,7 @@ export function VoiceClonePanel({ onAddToTimeline }: VoiceClonePanelProps) {
             value={voiceName}
             onChange={e => setVoiceName(e.target.value)}
             placeholder="Voice name (e.g. My Voice)"
-            className="w-full px-3 py-2 rounded-lg text-xs bg-[#1A1A1A] border border-slate-600 text-white placeholder:text-[#1A1A1A]/70 focus:border-purple-400 focus:outline-none"
+            className="w-full px-3 py-2 rounded-lg text-xs bg-[#1A1A1A] border border-[#B89555]/30 text-white placeholder:text-[#1A1A1A]/70 focus:border-purple-400 focus:outline-none"
           />
 
           <input ref={fileInputRef} type="file" accept="audio/*" onChange={handleFileSelect} className="hidden" />
@@ -300,7 +300,7 @@ export function VoiceClonePanel({ onAddToTimeline }: VoiceClonePanelProps) {
                 className={`flex items-center gap-2 p-2.5 rounded-lg border transition-all cursor-pointer ${
                   selectedVoice?.voice_id === voice.voice_id
                     ? 'border-purple-400 bg-purple-500/10'
-                    : 'border-[#1A1A1A] bg-[#1A1A1A]/60 hover:border-slate-500'
+                    : 'border-[#1A1A1A] bg-[#1A1A1A]/60 hover:border-[#B89555]/30'
                 }`}
                 onClick={() => setSelectedVoice(voice)}
               >
@@ -334,7 +334,7 @@ export function VoiceClonePanel({ onAddToTimeline }: VoiceClonePanelProps) {
               onChange={e => setTtsText(e.target.value)}
               placeholder="Type or paste the text you want this voice to speak..."
               rows={4}
-              className="bg-[#1A1A1A]/60 border-slate-600 text-white placeholder:text-[#1A1A1A]/70 text-xs resize-none focus:border-purple-400"
+              className="bg-[#1A1A1A]/60 border-[#B89555]/30 text-white placeholder:text-[#1A1A1A]/70 text-xs resize-none focus:border-purple-400"
             />
 
             <Button
@@ -359,14 +359,14 @@ export function VoiceClonePanel({ onAddToTimeline }: VoiceClonePanelProps) {
                 <div className="flex gap-2">
                   <button
                     onClick={handlePlayPause}
-                    className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[11px] font-medium bg-[#1A1A1A] border border-slate-600 text-white hover:bg-slate-600 transition-all"
+                    className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[11px] font-medium bg-[#1A1A1A] border border-[#B89555]/30 text-white hover:bg-[#1A1A1A] transition-all"
                   >
                     {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
                     {isPlaying ? 'Pause' : 'Play'}
                   </button>
                   <button
                     onClick={handleDownload}
-                    className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-[11px] font-medium bg-[#1A1A1A] border border-slate-600 text-white hover:bg-slate-600 transition-all"
+                    className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-[11px] font-medium bg-[#1A1A1A] border border-[#B89555]/30 text-white hover:bg-[#1A1A1A] transition-all"
                   >
                     <Download className="w-3.5 h-3.5" />
                   </button>

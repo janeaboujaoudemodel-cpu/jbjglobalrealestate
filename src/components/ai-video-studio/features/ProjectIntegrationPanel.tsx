@@ -124,7 +124,7 @@ function MiniSelect({ label, value, options, onChange }: {
       <select
         value={value}
         onChange={e => onChange(e.target.value)}
-        className="w-full bg-[#1A1A1A] border border-slate-600 rounded-md px-2 py-1.5 text-xs text-white focus:outline-none focus:border-amber-400 appearance-none cursor-pointer"
+        className="w-full bg-[#1A1A1A] border border-[#B89555]/30 rounded-md px-2 py-1.5 text-xs text-white focus:outline-none focus:border-amber-400 appearance-none cursor-pointer"
       >
         {options.map(o => (
           <option key={o.value} value={o.value}>{o.label}</option>
@@ -151,7 +151,7 @@ function ToggleGroup({ label, value, options, onChange }: {
             className={`flex-1 py-1.5 text-xs rounded-md border transition-all ${
               value === o.value
                 ? 'border-amber-400 bg-amber-400/15 text-amber-300 font-semibold'
-                : 'border-slate-600 text-[#1A1A1A]/70 bg-[#1A1A1A] hover:border-slate-500'
+                : 'border-[#B89555]/30 text-[#1A1A1A]/70 bg-[#1A1A1A] hover:border-[#B89555]/30'
             }`}
           >
             {o.label}
@@ -539,7 +539,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
               className={`flex items-center gap-1 px-2 py-1.5 rounded-md border text-xs transition-colors ${
                 showFilter || selectedEmirate !== 'All'
                   ? 'border-amber-400 text-amber-300 bg-amber-400/10'
-                  : 'border-[#1A1A1A] text-[#1A1A1A]/70 bg-[#1A1A1A] hover:border-slate-500'
+                  : 'border-[#1A1A1A] text-[#1A1A1A]/70 bg-[#1A1A1A] hover:border-[#B89555]/30'
               }`}
             >
               <MapPin className="w-3 h-3" />
@@ -555,7 +555,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
                   className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${
                     selectedEmirate === em
                       ? 'border-amber-400 bg-amber-400/15 text-amber-300'
-                      : 'border-[#1A1A1A] text-[#1A1A1A]/70 hover:border-slate-500'
+                      : 'border-[#1A1A1A] text-[#1A1A1A]/70 hover:border-[#B89555]/30'
                   }`}
                 >
                   {em === 'Abu Dhabi Emirate' ? 'Abu Dhabi' : em}

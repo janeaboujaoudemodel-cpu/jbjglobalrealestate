@@ -382,7 +382,7 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
           className={`flex items-center justify-center gap-1.5 flex-1 py-2 rounded-lg text-xs font-bold border transition-all ${
             animationComplete
               ? 'border-green-500 text-green-400 bg-green-500/10 hover:bg-green-500/20'
-              : 'border-slate-600 text-[#1A1A1A]/70 cursor-not-allowed opacity-40'
+              : 'border-[#B89555]/30 text-[#1A1A1A]/70 cursor-not-allowed opacity-40'
           }`}
         >
           <Plus className="w-3.5 h-3.5" />

@@ -200,7 +200,7 @@ export function TimelineEditor({
       case 'voiceover': return 'bg-purple-500/80';
       case 'text': return 'bg-amber-500/80';
       case 'effects': return 'bg-pink-500/80';
-      default: return 'bg-slate-500/80';
+      default: return 'bg-[#1A1A1A]/80';
     }
   };
 
@@ -527,7 +527,7 @@ export function TimelineEditor({
                           </div>
                         </ContextMenuTrigger>
 
-                        <ContextMenuContent className="z-[10200] bg-[#1A1A1A] border-[#1A1A1A] text-slate-100 min-w-[200px]">
+                        <ContextMenuContent className="z-[10200] bg-[#1A1A1A] border-[#1A1A1A] text-[#1A1A1A] min-w-[200px]">
                           <ContextMenuLabel className="text-[#1A1A1A]/70 text-[11px] uppercase tracking-wider">
                             <Clapperboard className="inline w-3 h-3 mr-1.5 text-purple-400" />
                             {clip.name}
@@ -537,15 +537,15 @@ export function TimelineEditor({
                           {/* Add Transition Before */}
                           {onAddTransition && !isTransition && (
                             <ContextMenuSub>
-                              <ContextMenuSubTrigger className="focus:bg-[#1A1A1A] data-[state=open]:bg-[#1A1A1A] text-slate-200">
+                              <ContextMenuSubTrigger className="focus:bg-[#1A1A1A] data-[state=open]:bg-[#1A1A1A] text-[#1A1A1A]">
                                 <span className="mr-2 text-purple-400">◁</span>
                                 Add Transition Before
                               </ContextMenuSubTrigger>
-                              <ContextMenuSubContent className="z-[10300] bg-[#1A1A1A] border-[#1A1A1A] text-slate-100 min-w-[160px]">
+                              <ContextMenuSubContent className="z-[10300] bg-[#1A1A1A] border-[#1A1A1A] text-[#1A1A1A] min-w-[160px]">
                                 {QUICK_TRANSITIONS.map((t) => (
                                   <ContextMenuItem
                                     key={t.id}
-                                    className="focus:bg-[#1A1A1A] text-slate-200 cursor-pointer"
+                                    className="focus:bg-[#1A1A1A] text-[#1A1A1A] cursor-pointer"
                                     onSelect={() => onAddTransition(track.id, clip.startTime, t)}
                                   >
                                     <span className="mr-2 text-purple-400 text-[11px]">◇</span>
@@ -560,15 +560,15 @@ export function TimelineEditor({
                           {/* Add Transition After */}
                           {onAddTransition && !isTransition && (
                             <ContextMenuSub>
-                              <ContextMenuSubTrigger className="focus:bg-[#1A1A1A] data-[state=open]:bg-[#1A1A1A] text-slate-200">
+                              <ContextMenuSubTrigger className="focus:bg-[#1A1A1A] data-[state=open]:bg-[#1A1A1A] text-[#1A1A1A]">
                                 <span className="mr-2 text-purple-400">▷</span>
                                 Add Transition After
                               </ContextMenuSubTrigger>
-                              <ContextMenuSubContent className="z-[10300] bg-[#1A1A1A] border-[#1A1A1A] text-slate-100 min-w-[160px]">
+                              <ContextMenuSubContent className="z-[10300] bg-[#1A1A1A] border-[#1A1A1A] text-[#1A1A1A] min-w-[160px]">
                                 {QUICK_TRANSITIONS.map((t) => (
                                   <ContextMenuItem
                                     key={t.id}
-                                    className="focus:bg-[#1A1A1A] text-slate-200 cursor-pointer"
+                                    className="focus:bg-[#1A1A1A] text-[#1A1A1A] cursor-pointer"
                                     onSelect={() => onAddTransition(track.id, clip.startTime + clip.duration, t)}
                                   >
                                     <span className="mr-2 text-purple-400 text-[11px]">◇</span>
@@ -584,7 +584,7 @@ export function TimelineEditor({
 
                           {/* Split */}
                           <ContextMenuItem
-                            className="focus:bg-[#1A1A1A] text-slate-200 cursor-pointer"
+                            className="focus:bg-[#1A1A1A] text-[#1A1A1A] cursor-pointer"
                             onSelect={() => onSplitClip(clip.id, currentTime)}
                           >
                             <Scissors className="mr-2 w-3.5 h-3.5 text-[#1A1A1A]/70" />

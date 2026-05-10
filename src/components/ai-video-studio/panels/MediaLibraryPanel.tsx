@@ -252,7 +252,7 @@ export function MediaLibraryPanel({
                   className={
                     stockCategory === cat.id
                       ? 'bg-amber-500 text-[#1A1A1A] hover:bg-amber-400 h-7 text-xs font-semibold border border-amber-500'
-                      : 'bg-[#1A1A1A] text-slate-200 hover:text-white hover:bg-slate-600 h-7 text-xs border border-slate-600'
+                      : 'bg-[#1A1A1A] text-[#1A1A1A] hover:text-white hover:bg-[#1A1A1A] h-7 text-xs border border-[#B89555]/30'
                   }
                 >
                   {cat.label}
@@ -300,7 +300,7 @@ export function MediaLibraryPanel({
                   value={aiPrompt}
                   onChange={e => setAiPrompt(e.target.value)}
                   placeholder="Describe your scene... e.g. Luxury villa pool at sunset, Dubai skyline, aerial view"
-                  className="w-full bg-[#1A1A1A] border border-slate-600 rounded-lg px-3 py-2 text-xs text-white resize-none focus:outline-none focus:border-amber-500/60 placeholder-slate-500 mb-2"
+                  className="w-full bg-[#1A1A1A] border border-[#B89555]/30 rounded-lg px-3 py-2 text-xs text-white resize-none focus:outline-none focus:border-amber-500/60 placeholder-slate-500 mb-2"
                   rows={3}
                 />
                 <Button 
@@ -433,7 +433,7 @@ function AssetCard({ asset, onAdd, onDelete, onPreview, isStock }: AssetCardProp
       case 'video': return { icon: <Film className="w-8 h-8 text-blue-300" />, bg: 'bg-blue-900/70 border border-blue-700/50' };
       case 'audio': return { icon: <Music className="w-8 h-8 text-amber-300" />, bg: 'bg-amber-900/70 border border-amber-700/50' };
       case 'image': return { icon: <Image className="w-8 h-8 text-emerald-300" />, bg: 'bg-emerald-900/70 border border-emerald-700/50' };
-      default:      return { icon: <Film className="w-8 h-8 text-[#1A1A1A]/70" />, bg: 'bg-[#1A1A1A] border border-slate-600' };
+      default:      return { icon: <Film className="w-8 h-8 text-[#1A1A1A]/70" />, bg: 'bg-[#1A1A1A] border border-[#B89555]/30' };
     }
   };
   const { icon, bg } = getIconBg();
@@ -486,7 +486,7 @@ function AssetCard({ asset, onAdd, onDelete, onPreview, isStock }: AssetCardProp
         </Button>
         <Button
           size="sm"
-          className="bg-[#1A1A1A] text-white hover:bg-slate-600 h-7 text-xs border border-slate-500"
+          className="bg-[#1A1A1A] text-white hover:bg-[#1A1A1A] h-7 text-xs border border-[#B89555]/30"
           onClick={onPreview}
         >
           <Play className="w-3 h-3 mr-1" />

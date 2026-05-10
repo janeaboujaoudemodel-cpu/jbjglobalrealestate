@@ -926,7 +926,7 @@ export default PdfFromPhotos;
 
 function GoldCard({ children }: { children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl p-6 bg-[#FDFBF7] border border-stone-200 shadow-sm">
+    <div className="rounded-2xl p-6 bg-[#FDFBF7] border border-[#B89555]/30 shadow-sm">
       {children}
     </div>
   );

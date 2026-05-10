@@ -618,7 +618,7 @@ export default function ScanSignPage() {
                 {pages.map((page, index) => (
                   <div key={page.id} onClick={() => setSelectedPageIndex(index)}
                     className={`relative cursor-pointer rounded-xl overflow-hidden transition-all border-2 ${
-                      selectedPageIndex === index ? 'border-emerald-500 shadow-sm shadow-emerald-500/20' : 'border-stone-200 hover:border-emerald-300'
+                      selectedPageIndex === index ? 'border-emerald-500 shadow-sm shadow-emerald-500/20' : 'border-[#B89555]/30 hover:border-emerald-300'
                     }`}>
                     <img src={page.imageData} alt={`Page ${index + 1}`} className="w-full h-14 object-cover"
                       style={{ transform: `rotate(${page.rotation}deg)`, filter: `brightness(${page.brightness}%) contrast(${page.contrast}%)` }} />
@@ -634,7 +634,7 @@ export default function ScanSignPage() {
                   </div>
                 ))}
                 {pages.length === 0 && (
-                  <div className="col-span-3 text-center py-6 text-stone-300">
+                  <div className="col-span-3 text-center py-6 text-[#1A1A1A]/70">
                     <ScanLine className="w-8 h-8 mx-auto mb-2 opacity-30" />
                     <p className="text-xs">No pages yet</p>
                   </div>
@@ -654,7 +654,7 @@ export default function ScanSignPage() {
                 {selectedPage && (
                   <div className="flex gap-1.5">
                     <button onClick={() => rotatePage(selectedPage.id)} title="Rotate 90°"
-                      className="p-1.5 rounded-lg transition-all text-[#1A1A1A]/70 bg-[#F7F2EA] hover:bg-emerald-100 hover:text-emerald-700 border border-stone-200">
+                      className="p-1.5 rounded-lg transition-all text-[#1A1A1A]/70 bg-[#F7F2EA] hover:bg-emerald-100 hover:text-emerald-700 border border-[#B89555]/30">
                       <RotateCw className="w-3.5 h-3.5" />
                     </button>
                     <button onClick={() => deletePage(selectedPage.id)} title="Delete page"
@@ -667,7 +667,7 @@ export default function ScanSignPage() {
 
               {selectedPage ? (
                 <div className="space-y-3">
-                  <div className="relative rounded-xl overflow-hidden flex items-center justify-center bg-[#F7F2EA] border border-stone-200"
+                  <div className="relative rounded-xl overflow-hidden flex items-center justify-center bg-[#F7F2EA] border border-[#B89555]/30"
                     style={{ minHeight: 300 }}>
                     <img src={selectedPage.imageData} alt="Preview" className="max-w-full max-h-[380px] object-contain"
                       style={{ transform: `rotate(${selectedPage.rotation}deg)`, filter: `brightness(${selectedPage.brightness}%) contrast(${selectedPage.contrast}%)` }} />
@@ -703,10 +703,10 @@ export default function ScanSignPage() {
                   </div>
                 </div>
               ) : (
-                <div className="flex flex-col items-center justify-center h-64 text-stone-300">
+                <div className="flex flex-col items-center justify-center h-64 text-[#1A1A1A]/70">
                   <ScanLine className="h-16 w-16 mb-3 opacity-20" />
                   <p className="text-sm font-medium text-[#1A1A1A]/70">Scan or upload to preview</p>
-                  <p className="text-xs mt-1 text-stone-300">Point camera or drag & drop files</p>
+                  <p className="text-xs mt-1 text-[#1A1A1A]/70">Point camera or drag & drop files</p>
                 </div>
               )}
             </Panel>
@@ -734,11 +734,11 @@ export default function ScanSignPage() {
                   className={`w-full rounded-xl p-5 text-center transition-all border-2 border-dashed ${
                     pages.length > 0
                       ? 'border-emerald-200 bg-emerald-50/20 cursor-pointer hover:border-emerald-400'
-                      : 'border-stone-200 bg-[#F7F2EA]/50'
+                      : 'border-[#B89555]/30 bg-[#F7F2EA]/50'
                   }`}
                   onClick={pages.length > 0 ? startSignatureDrawing : undefined}>
-                  <Pen className={`w-7 h-7 mx-auto mb-2 ${pages.length > 0 ? 'text-emerald-500' : 'text-stone-300'}`} />
-                  <p className={`text-xs font-semibold ${pages.length > 0 ? 'text-[#1A1A1A]' : 'text-stone-300'}`}>
+                  <Pen className={`w-7 h-7 mx-auto mb-2 ${pages.length > 0 ? 'text-emerald-500' : 'text-[#1A1A1A]/70'}`} />
+                  <p className={`text-xs font-semibold ${pages.length > 0 ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/70'}`}>
                     {pages.length > 0 ? "Click to Draw Signature" : "Add pages first"}
                   </p>
                 </div>

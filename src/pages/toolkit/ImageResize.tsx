@@ -527,9 +527,9 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
 
               {/* Live Preview Area */}
               {hasImages && activeImage && (
-                <div className="bg-[#FDFBF7] rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
+                <div className="bg-[#FDFBF7] rounded-2xl border border-[#B89555]/30 shadow-sm overflow-hidden">
                   {/* Preview Header */}
-                  <div className="flex items-center justify-between px-4 py-3 border-b border-stone-100 bg-[#F7F2EA]/50">
+                  <div className="flex items-center justify-between px-4 py-3 border-b border-[#B89555]/30 bg-[#F7F2EA]/50">
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-green-500" />
                       <span className="text-sm font-medium text-foreground">Live Preview</span>
@@ -549,12 +549,12 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                   <div className="flex items-center justify-center p-6 min-h-[400px] bg-[repeating-conic-gradient(#f3f3f3_0%_25%,#fff_0%_50%)] bg-[length:16px_16px]">
                     <canvas
                       ref={previewCanvasRef}
-                      className="max-w-full max-h-[500px] rounded-lg shadow-lg border border-stone-200"
+                      className="max-w-full max-h-[500px] rounded-lg shadow-lg border border-[#B89555]/30"
                     />
                   </div>
 
                   {/* Editing Toolbar */}
-                  <div className="flex items-center gap-1 px-4 py-2.5 border-t border-stone-100 bg-[#F7F2EA]/50 overflow-x-auto">
+                  <div className="flex items-center gap-1 px-4 py-2.5 border-t border-[#B89555]/30 bg-[#F7F2EA]/50 overflow-x-auto">
                     {([
                       { id: "none" as EditTool, icon: <Maximize className="h-4 w-4" />, label: "Select" },
                       { id: "text" as EditTool, icon: <Type className="h-4 w-4" />, label: "Text" },
@@ -606,7 +606,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
 
                   {/* Tool-specific controls */}
                   {activeTool === "text" && (
-                    <div className="px-4 py-3 border-t border-stone-100 bg-[#FDFBF7] space-y-3">
+                    <div className="px-4 py-3 border-t border-[#B89555]/30 bg-[#FDFBF7] space-y-3">
                       <div className="flex gap-2">
                         <Input value={newText} onChange={(e) => setNewText(e.target.value)} placeholder="Enter text..." className="flex-1 h-9 text-sm" />
                         <Button size="sm" onClick={addTextOverlay} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] h-9">Add</Button>
@@ -614,7 +614,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                       <div className="flex items-center gap-3 flex-wrap">
                         <div className="flex items-center gap-1.5">
                           <label className="text-xs text-muted-foreground">Color</label>
-                          <input type="color" value={textColor} onChange={(e) => setTextColor(e.target.value)} className="w-7 h-7 rounded cursor-pointer border border-stone-200" />
+                          <input type="color" value={textColor} onChange={(e) => setTextColor(e.target.value)} className="w-7 h-7 rounded cursor-pointer border border-[#B89555]/30" />
                         </div>
                         <div className="flex items-center gap-1.5">
                           <label className="text-xs text-muted-foreground">Size</label>
@@ -636,7 +636,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                   )}
 
                   {activeTool === "border" && (
-                    <div className="px-4 py-3 border-t border-stone-100 bg-[#FDFBF7] space-y-3">
+                    <div className="px-4 py-3 border-t border-[#B89555]/30 bg-[#FDFBF7] space-y-3">
                       <div className="flex items-center gap-3">
                         <label className="text-xs text-muted-foreground whitespace-nowrap">Width</label>
                         <Slider value={[borderWidth]} min={0} max={60} step={2} onValueChange={([v]) => setBorderWidth(v)} className="flex-1" />
@@ -644,14 +644,14 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                       </div>
                       <div className="flex items-center gap-2">
                         <label className="text-xs text-muted-foreground">Color</label>
-                        <input type="color" value={borderColor} onChange={(e) => setBorderColor(e.target.value)} className="w-7 h-7 rounded cursor-pointer border border-stone-200" />
+                        <input type="color" value={borderColor} onChange={(e) => setBorderColor(e.target.value)} className="w-7 h-7 rounded cursor-pointer border border-[#B89555]/30" />
                         <button onClick={() => setBorderWidth(0)} className="text-xs text-red-500 hover:text-red-700 ml-auto">Reset</button>
                       </div>
                     </div>
                   )}
 
                   {activeTool === "collage" && (
-                    <div className="px-4 py-3 border-t border-stone-100 bg-[#FDFBF7] space-y-3">
+                    <div className="px-4 py-3 border-t border-[#B89555]/30 bg-[#FDFBF7] space-y-3">
                       <div className="flex gap-2">
                         {(["horizontal", "vertical", "grid"] as const).map(layout => (
                           <button key={layout} onClick={() => setCollageLayout(layout)}
@@ -669,7 +669,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                       </div>
                       <div className="flex items-center gap-2">
                         <label className="text-xs text-muted-foreground">Background</label>
-                        <input type="color" value={collageBgColor} onChange={(e) => setCollageBgColor(e.target.value)} className="w-7 h-7 rounded cursor-pointer border border-stone-200" />
+                        <input type="color" value={collageBgColor} onChange={(e) => setCollageBgColor(e.target.value)} className="w-7 h-7 rounded cursor-pointer border border-[#B89555]/30" />
                       </div>
                       <Button onClick={exportCollage} disabled={images.length < 2 || processing} className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]">
                         <Layers className="h-4 w-4 mr-2" /> Export Collage ({images.length} images)
@@ -681,7 +681,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
 
               {/* Thumbnail Strip */}
               {hasImages && (
-                <div className="bg-[#FDFBF7] rounded-xl border border-stone-200 shadow-sm p-3">
+                <div className="bg-[#FDFBF7] rounded-xl border border-[#B89555]/30 shadow-sm p-3">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-xs font-medium text-foreground">Images ({images.length})</span>
                     <div className="flex-1" />
@@ -699,7 +699,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                           "relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden cursor-pointer border-2 transition-all group",
                           activeImageId === img.id || (!activeImageId && images[0]?.id === img.id)
                             ? "border-[#B89555] shadow-md ring-2 ring-gold/20"
-                            : "border-stone-200 hover:border-[#B89555]/50"
+                            : "border-[#B89555]/30 hover:border-[#B89555]/50"
                         )}
                       >
                         <img src={img.preview} alt={img.name} className="w-full h-full object-cover" />
@@ -731,7 +731,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 p-4">
                     {processedImages.map((p, i) => (
                       <div key={i} className="group relative">
-                        <div className="aspect-square rounded-lg overflow-hidden bg-[#F7F2EA] border border-stone-200">
+                        <div className="aspect-square rounded-lg overflow-hidden bg-[#F7F2EA] border border-[#B89555]/30">
                           <img src={p.dataUrl} alt={p.filename} className="w-full h-full object-contain" />
                         </div>
                         <button onClick={() => downloadSingle(p)}
@@ -750,8 +750,8 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
             {/* ━━━ RIGHT: Settings Panel ━━━ */}
             <div className="space-y-4">
               {/* Preset Selector */}
-              <div className="bg-[#FDFBF7] rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
-                <div className="flex items-center justify-between px-4 py-3 border-b border-stone-100">
+              <div className="bg-[#FDFBF7] rounded-2xl border border-[#B89555]/30 shadow-sm overflow-hidden">
+                <div className="flex items-center justify-between px-4 py-3 border-b border-[#B89555]/30">
                   <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
                     <Grid3X3 className="h-4 w-4 text-[#1A1A1A]" /> Size Presets
                   </h3>
@@ -794,13 +794,13 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
               </div>
 
               {/* Fit Mode */}
-              <div className="bg-[#FDFBF7] rounded-2xl border border-stone-200 shadow-sm p-4 space-y-3">
+              <div className="bg-[#FDFBF7] rounded-2xl border border-[#B89555]/30 shadow-sm p-4 space-y-3">
                 <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
                   <Crop className="h-4 w-4 text-[#1A1A1A]" /> Fit Mode
                 </h3>
                 <RadioGroup value={fitMode} onValueChange={(v) => setFitMode(v as FitMode)} className="space-y-2">
                   <div className={cn("flex items-center gap-2.5 p-2.5 rounded-xl border transition-all cursor-pointer",
-                    fitMode === "crop" ? "border-[#B89555]/40 bg-[#EFE6D6]/5" : "border-stone-200 hover:border-stone-300")}>
+                    fitMode === "crop" ? "border-[#B89555]/40 bg-[#EFE6D6]/5" : "border-[#B89555]/30 hover:border-[#B89555]/30")}>
                     <RadioGroupItem value="crop" id="crop" className="border-[#B89555] text-[#1A1A1A]" />
                     <Label htmlFor="crop" className="cursor-pointer flex-1">
                       <span className="text-sm font-medium text-foreground">Crop to Fill</span>
@@ -808,7 +808,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                     </Label>
                   </div>
                   <div className={cn("flex items-center gap-2.5 p-2.5 rounded-xl border transition-all cursor-pointer",
-                    fitMode === "fit" ? "border-[#B89555]/40 bg-[#EFE6D6]/5" : "border-stone-200 hover:border-stone-300")}>
+                    fitMode === "fit" ? "border-[#B89555]/40 bg-[#EFE6D6]/5" : "border-[#B89555]/30 hover:border-[#B89555]/30")}>
                     <RadioGroupItem value="fit" id="fit" className="border-[#B89555] text-[#1A1A1A]" />
                     <Label htmlFor="fit" className="cursor-pointer flex-1">
                       <span className="text-sm font-medium text-foreground">Fit with Padding</span>
@@ -818,7 +818,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                 </RadioGroup>
 
                 {fitMode === "fit" && (
-                  <div className="pt-2 border-t border-stone-100 space-y-2">
+                  <div className="pt-2 border-t border-[#B89555]/30 space-y-2">
                     <p className="text-xs text-muted-foreground font-medium">Background</p>
                     <div className="flex gap-1.5">
                       {(["white", "black", "blur", "custom"] as PaddingBg[]).map(bg => (
@@ -826,7 +826,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                           className={cn("flex-1 capitalize text-xs font-medium py-1.5 rounded-lg transition-all border",
                             paddingBg === bg
                               ? "bg-[#EFE6D6]/15 border-[#B89555]/40 text-foreground"
-                              : "bg-[#F7F2EA] border-stone-200 text-muted-foreground hover:bg-[#F7F2EA]"
+                              : "bg-[#F7F2EA] border-[#B89555]/30 text-muted-foreground hover:bg-[#F7F2EA]"
                           )}>
                           {bg}
                         </button>
@@ -834,7 +834,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                     </div>
                     {paddingBg === "custom" && (
                       <div className="flex items-center gap-2 pt-1">
-                        <input type="color" value={customBgColor} onChange={(e) => setCustomBgColor(e.target.value)} className="w-8 h-8 rounded cursor-pointer border border-stone-200" />
+                        <input type="color" value={customBgColor} onChange={(e) => setCustomBgColor(e.target.value)} className="w-8 h-8 rounded cursor-pointer border border-[#B89555]/30" />
                         <span className="text-xs text-muted-foreground font-mono">{customBgColor}</span>
                       </div>
                     )}
@@ -843,7 +843,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
 
                 {/* Crop position when crop mode active */}
                 {fitMode === "crop" && activeImage && (
-                  <div className="pt-2 border-t border-stone-100 space-y-3">
+                  <div className="pt-2 border-t border-[#B89555]/30 space-y-3">
                     {/* AI Smart Crop Button */}
                     <Button
                       size="sm"
@@ -900,7 +900,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
               </div>
 
               {/* Output Settings */}
-              <div className="bg-[#FDFBF7] rounded-2xl border border-stone-200 shadow-sm p-4 space-y-3">
+              <div className="bg-[#FDFBF7] rounded-2xl border border-[#B89555]/30 shadow-sm p-4 space-y-3">
                 <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
                   <SlidersHorizontal className="h-4 w-4 text-[#1A1A1A]" /> Output
                 </h3>
@@ -912,7 +912,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                         className={cn("flex-1 uppercase text-xs font-semibold py-1.5 rounded-lg transition-all border",
                           outputFormat === fmt
                             ? "bg-[#EFE6D6]/15 border-[#B89555]/40 text-foreground"
-                            : "bg-[#F7F2EA] border-stone-200 text-muted-foreground hover:bg-[#F7F2EA]"
+                            : "bg-[#F7F2EA] border-[#B89555]/30 text-muted-foreground hover:bg-[#F7F2EA]"
                         )}>
                         {fmt}
                       </button>

@@ -302,7 +302,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
 
           {/* ── AI Analysis ── */}
           <div>
-            <p className="text-xs text-slate-200 font-bold mb-0.5">AI Clip Scanner</p>
+            <p className="text-xs text-[#1A1A1A] font-bold mb-0.5">AI Clip Scanner</p>
             <p className="text-[10px] text-[#1A1A1A]/70 mb-2">
               Gemini AI reads every clip on your timeline, scores each moment for visual quality and pacing, and returns a ranked highlight list with editing tips.
             </p>
@@ -352,7 +352,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
                 {analysisResult.highlights.length > 0 && (
                   <div className="bg-[#1A1A1A] rounded-lg border border-[#1A1A1A] overflow-hidden">
                     <button
-                      className="w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-slate-200"
+                      className="w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-[#1A1A1A]"
                       onClick={() => setShowHighlights(v => !v)}
                     >
                       <span className="flex items-center gap-1.5">
@@ -394,7 +394,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
                 {analysisResult.editingTips.length > 0 && (
                   <div className="bg-[#1A1A1A] rounded-lg border border-[#1A1A1A] overflow-hidden">
                     <button
-                      className="w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-slate-200"
+                      className="w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-[#1A1A1A]"
                       onClick={() => setShowTips(v => !v)}
                     >
                       <span>Editing Tips ({analysisResult.editingTips.length})</span>
@@ -418,7 +418,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
 
           {/* ── Smart Templates ── */}
           <div>
-            <p className="text-xs text-slate-200 font-bold mb-0.5">Smart Templates</p>
+            <p className="text-xs text-[#1A1A1A] font-bold mb-0.5">Smart Templates</p>
             <p className="text-[10px] text-[#1A1A1A]/70 mb-2">
               Pick a template and AI will reorder your clips, trim durations, and suggest transitions to match the style — no manual editing needed.
             </p>
@@ -434,7 +434,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
                 >
                   <div className="flex items-center justify-between p-2.5">
                     <div className="flex-1 min-w-0">
-                      <div className={`font-medium ${appliedTemplate === t.id ? 'text-amber-300' : 'text-slate-200'}`}>
+                      <div className={`font-medium ${appliedTemplate === t.id ? 'text-amber-300' : 'text-[#1A1A1A]'}`}>
                         {t.label}
                       </div>
                       <div className="text-[#1A1A1A]/70 mt-0.5">{t.desc}</div>
@@ -501,7 +501,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
                     value={saveTemplateName}
                     onChange={e => setSaveTemplateName(e.target.value)}
                     placeholder="Template name…"
-                    className="flex-1 bg-[#1A1A1A] border border-slate-600 rounded px-2 py-1 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                    className="flex-1 bg-[#1A1A1A] border border-[#B89555]/30 rounded px-2 py-1 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
                   />
                   <Button
                     size="sm"
@@ -543,7 +543,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
                     className="flex items-center justify-between p-2.5 rounded-lg border border-[#1A1A1A] bg-[#1A1A1A] hover:border-amber-400/40 text-xs group"
                   >
                     <div className="flex-1 min-w-0">
-                      <div className="text-slate-200 font-medium truncate">{t.name}</div>
+                      <div className="text-[#1A1A1A] font-medium truncate">{t.name}</div>
                       {t.description && (
                         <div className="text-[#1A1A1A]/70 truncate mt-0.5">{t.description}</div>
                       )}

@@ -116,7 +116,7 @@ export function OverlayEffectsPanel({
 
                       {/* Label row */}
                       <div className={`px-1.5 py-1 ${isLocked ? 'bg-amber-400/10' : 'bg-[#1A1A1A]'}`}>
-                        <div className="text-[10px] font-semibold text-slate-100 leading-tight truncate">
+                        <div className="text-[10px] font-semibold text-[#1A1A1A] leading-tight truncate">
                           {effect.label}
                         </div>
 
@@ -129,7 +129,7 @@ export function OverlayEffectsPanel({
                               toast.success(`${effect.label} added to timeline!`)
                             );
                           }}
-                          className="mt-1 flex items-center gap-0.5 w-full justify-center py-0.5 rounded text-[9px] font-bold bg-[#1A1A1A] hover:bg-amber-500 hover:text-[#1A1A1A] text-[#1A1A1A]/70 border border-slate-600 hover:border-amber-500 transition-all"
+                          className="mt-1 flex items-center gap-0.5 w-full justify-center py-0.5 rounded text-[9px] font-bold bg-[#1A1A1A] hover:bg-amber-500 hover:text-[#1A1A1A] text-[#1A1A1A]/70 border border-[#B89555]/30 hover:border-amber-500 transition-all"
                         >
                           <Plus className="w-2.5 h-2.5" />
                           Add

@@ -850,7 +850,7 @@ const AIHub = () => {
         <section className="py-8 md:py-10 bg-[#1A1A1A]">
           <div className="container mx-auto px-3 sm:px-4">
             {/* Active Slate/Blue Layer - matching Broker Hub */}
-            <div className="bg-gradient-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 border border-slate-600/30 rounded-2xl p-6 md:p-8 shadow-lg">
+            <div className="bg-gradient-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 border border-[#B89555]/30/30 rounded-2xl p-6 md:p-8 shadow-lg">
               <motion.div
                 className="text-center mb-12"
                 initial={{ opacity: 0, y: 20 }}

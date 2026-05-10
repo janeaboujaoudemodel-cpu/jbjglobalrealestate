@@ -126,7 +126,7 @@ export function PublishPanel({ isOpen, onClose, projectId, property, exportedUrl
                     className={`p-4 rounded-xl border transition-all ${
                       isSelected
                         ? 'bg-[#EFE6D6]/10 border-[#B89555]'
-                        : 'bg-[#1A1A1A]/50 border-[#1A1A1A] hover:border-slate-600'
+                        : 'bg-[#1A1A1A]/50 border-[#1A1A1A] hover:border-[#B89555]/30'
                     }`}
                   >
                     <Icon className={`w-8 h-8 mx-auto mb-2 ${platform.color}`} />
@@ -148,7 +148,7 @@ export function PublishPanel({ isOpen, onClose, projectId, property, exportedUrl
                 <Input
                   value={exportedUrl || `${window.location.origin}/studio/share/${projectId}`}
                   readOnly
-                  className="bg-[#1A1A1A] border-slate-600 text-[#1A1A1A]/70 text-sm"
+                  className="bg-[#1A1A1A] border-[#B89555]/30 text-[#1A1A1A]/70 text-sm"
                 />
                 <Button onClick={handleCopyShareLink} variant="outline" className="border-[#B89555] text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                   {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
@@ -220,7 +220,7 @@ export function PublishPanel({ isOpen, onClose, projectId, property, exportedUrl
                     type="date"
                     value={scheduleDate}
                     onChange={(e) => setScheduleDate(e.target.value)}
-                    className="bg-[#1A1A1A] border-slate-600 text-white"
+                    className="bg-[#1A1A1A] border-[#B89555]/30 text-white"
                   />
                 </div>
                 <div className="space-y-2">
@@ -229,7 +229,7 @@ export function PublishPanel({ isOpen, onClose, projectId, property, exportedUrl
                     type="time"
                     value={scheduleTime}
                     onChange={(e) => setScheduleTime(e.target.value)}
-                    className="bg-[#1A1A1A] border-slate-600 text-white"
+                    className="bg-[#1A1A1A] border-[#B89555]/30 text-white"
                   />
                 </div>
               </div>
@@ -245,7 +245,7 @@ export function PublishPanel({ isOpen, onClose, projectId, property, exportedUrl
         </Tabs>
 
         <DialogFooter className="flex gap-2">
-          <Button variant="outline" onClick={onClose} className="border-slate-600 text-[#1A1A1A]/70">
+          <Button variant="outline" onClick={onClose} className="border-[#B89555]/30 text-[#1A1A1A]/70">
             Cancel
           </Button>
           <Button

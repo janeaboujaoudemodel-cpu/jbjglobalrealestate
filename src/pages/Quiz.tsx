@@ -819,12 +819,12 @@ const Quiz = () => {
                     className={`relative p-4 md:p-5 rounded-xl border-2 transition-all text-left group ${
                       isSelected
                         ? "border-[#B89555] bg-gradient-to-br from-white to-[#FDFBF7] shadow-lg shadow-[#B89555]/20"
-                        : "border-stone-200 bg-[#FDFBF7] hover:border-[#B89555]/50 hover:shadow-md"
+                        : "border-[#B89555]/30 bg-[#FDFBF7] hover:border-[#B89555]/50 hover:shadow-md"
                     }`}
                   >
                     {currentQuestion.type === "multiple" && (
                       <div className={`absolute top-3 right-3 w-5 h-5 rounded border-2 flex items-center justify-center ${
-                        isSelected ? "border-[#B89555] bg-[#B89555]" : "border-stone-300"
+                        isSelected ? "border-[#B89555] bg-[#B89555]" : "border-[#B89555]/30"
                       }`}>
                         {isSelected && <CheckCircle2 className="w-3 h-3 text-[#1A1A1A]" />}
                       </div>

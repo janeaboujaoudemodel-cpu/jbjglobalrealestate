@@ -190,20 +190,20 @@ export default function CreativeSuiteEditor() {
             variant="outline"
             size="sm"
             onClick={() => setIsPropertyPickerOpen(true)}
-            className={`border-slate-600 ${project.property_snapshot ? 'text-[#1A1A1A] border-[#B89555]/50' : 'text-[#1A1A1A]/70'}`}
+            className={`border-[#B89555]/30 ${project.property_snapshot ? 'text-[#1A1A1A] border-[#B89555]/50' : 'text-[#1A1A1A]/70'}`}
           >
             <Building2 className="w-4 h-4 mr-2" />
             {project.property_snapshot?.name || 'Link Property'}
           </Button>
 
           {/* Save */}
-          <Button variant="outline" size="sm" onClick={saveProject} className="border-slate-600 text-[#1A1A1A]/70">
+          <Button variant="outline" size="sm" onClick={saveProject} className="border-[#B89555]/30 text-[#1A1A1A]/70">
             <Save className="w-4 h-4 mr-2" />
             Save
           </Button>
 
           {/* Share */}
-          <Button variant="outline" size="sm" onClick={generateShareLink} className="border-slate-600 text-[#1A1A1A]/70">
+          <Button variant="outline" size="sm" onClick={generateShareLink} className="border-[#B89555]/30 text-[#1A1A1A]/70">
             <Share2 className="w-4 h-4 mr-2" />
             Share
           </Button>

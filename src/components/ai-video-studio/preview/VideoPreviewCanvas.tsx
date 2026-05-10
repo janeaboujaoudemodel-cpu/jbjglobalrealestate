@@ -456,7 +456,7 @@ export function VideoPreviewCanvas({
               className={`px-2.5 py-1 rounded-full text-[10px] font-bold border transition-all ${
                 aspectRatio === pill.ratio
                   ? 'bg-amber-500 text-[#1A1A1A] border-amber-500'
-                  : 'bg-[#1A1A1A]/60 text-[#1A1A1A]/70 border-slate-600 hover:border-amber-400'
+                  : 'bg-[#1A1A1A]/60 text-[#1A1A1A]/70 border-[#B89555]/30 hover:border-amber-400'
               }`}
             >
               {pill.icon} {pill.label}
@@ -758,13 +758,13 @@ export function VideoPreviewCanvas({
           <div className="flex items-center gap-1">
             <button
               onClick={skipBackward}
-              className="p-2 rounded-md text-[#1A1A1A]/70 hover:text-amber-300 bg-[#1A1A1A] hover:bg-slate-600 border border-slate-600 transition-all"
+              className="p-2 rounded-md text-[#1A1A1A]/70 hover:text-amber-300 bg-[#1A1A1A] hover:bg-[#1A1A1A] border border-[#B89555]/30 transition-all"
             >
               <SkipBack className="w-4 h-4" />
             </button>
             <button
               onClick={handleStop}
-              className="p-2 rounded-md text-[#1A1A1A]/70 hover:text-amber-300 bg-[#1A1A1A] hover:bg-slate-600 border border-slate-600 transition-all"
+              className="p-2 rounded-md text-[#1A1A1A]/70 hover:text-amber-300 bg-[#1A1A1A] hover:bg-[#1A1A1A] border border-[#B89555]/30 transition-all"
             >
               <Square className="w-4 h-4" />
             </button>
@@ -780,7 +780,7 @@ export function VideoPreviewCanvas({
             </button>
             <button
               onClick={skipForward}
-              className="p-2 rounded-md text-[#1A1A1A]/70 hover:text-amber-300 bg-[#1A1A1A] hover:bg-slate-600 border border-slate-600 transition-all"
+              className="p-2 rounded-md text-[#1A1A1A]/70 hover:text-amber-300 bg-[#1A1A1A] hover:bg-[#1A1A1A] border border-[#B89555]/30 transition-all"
             >
               <SkipForward className="w-4 h-4" />
             </button>
@@ -790,7 +790,7 @@ export function VideoPreviewCanvas({
           <div className="flex items-center gap-2 w-32 justify-end">
             <button
               onClick={toggleMute}
-              className="p-2 rounded-md text-[#1A1A1A]/70 hover:text-amber-300 bg-[#1A1A1A] hover:bg-slate-600 border border-slate-600 transition-all"
+              className="p-2 rounded-md text-[#1A1A1A]/70 hover:text-amber-300 bg-[#1A1A1A] hover:bg-[#1A1A1A] border border-[#B89555]/30 transition-all"
             >
               {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
             </button>
@@ -805,7 +805,7 @@ export function VideoPreviewCanvas({
             </div>
             <button
               onClick={toggleFullscreen}
-              className="p-2 rounded-md text-[#1A1A1A]/70 hover:text-amber-300 bg-[#1A1A1A] hover:bg-slate-600 border border-slate-600 transition-all"
+              className="p-2 rounded-md text-[#1A1A1A]/70 hover:text-amber-300 bg-[#1A1A1A] hover:bg-[#1A1A1A] border border-[#B89555]/30 transition-all"
             >
               <Maximize2 className="w-4 h-4" />
             </button>

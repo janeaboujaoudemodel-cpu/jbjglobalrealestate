@@ -127,11 +127,11 @@ export function TrendingAudioPanel({ platform, onSelectAudio }: TrendingAudioPan
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search audio..."
-              className="pl-10 bg-[#1A1A1A] border-slate-600 text-white text-sm"
+              className="pl-10 bg-[#1A1A1A] border-[#B89555]/30 text-white text-sm"
             />
           </div>
           <Select value={category} onValueChange={setCategory}>
-            <SelectTrigger className="w-28 bg-[#1A1A1A] border-slate-600 text-white text-sm">
+            <SelectTrigger className="w-28 bg-[#1A1A1A] border-[#B89555]/30 text-white text-sm">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -141,7 +141,7 @@ export function TrendingAudioPanel({ platform, onSelectAudio }: TrendingAudioPan
             </SelectContent>
           </Select>
           <Select value={region} onValueChange={setRegion}>
-            <SelectTrigger className="w-28 bg-[#1A1A1A] border-slate-600 text-white text-sm">
+            <SelectTrigger className="w-28 bg-[#1A1A1A] border-[#B89555]/30 text-white text-sm">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

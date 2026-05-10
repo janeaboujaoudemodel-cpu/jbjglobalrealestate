@@ -93,14 +93,14 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
         className={cn(
           'fixed right-4 top-1/2 -translate-y-1/2 z-40',
           'flex items-center justify-center w-12 h-12',
-          'bg-[#FDFBF7] border border-gold/20 rounded-xl shadow-lg',
-          'hover:shadow-xl hover:border-gold/40 transition-all',
+          'bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl shadow-lg',
+          'hover:shadow-xl hover:border-[#B89555]/40 transition-all',
           className
         )}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
-        <Sparkles className="w-5 h-5 text-gold" />
+        <Sparkles className="w-5 h-5 text-[#1A1A1A]" />
       </motion.button>
     );
   }
@@ -116,11 +116,11 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
       )}
     >
       {/* Header - Champagne gradient */}
-      <div className="p-4 border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
+      <div className="p-4 border-b-2 border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="p-2 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] rounded-lg border border-gold/30">
-              <Sparkles className="w-5 h-5 text-gold" />
+            <div className="p-2 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] rounded-lg border border-[#B89555]/30">
+              <Sparkles className="w-5 h-5 text-[#1A1A1A]" />
             </div>
             <div>
               <h3 className="font-semibold text-[#1A1A1A]">AI Insights</h3>
@@ -131,7 +131,7 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
             <button
               onClick={onRefresh}
               className={cn(
-                'p-2 rounded-lg text-[#1A1A1A]/70 hover:text-gold hover:bg-gold/10 transition-colors',
+                'p-2 rounded-lg text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10 transition-colors',
                 isLoading && 'animate-spin'
               )}
             >
@@ -140,7 +140,7 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
             {onToggleCollapse && (
               <button
                 onClick={onToggleCollapse}
-                className="p-2 rounded-lg text-[#1A1A1A]/70 hover:text-gold hover:bg-gold/10 transition-colors"
+                className="p-2 rounded-lg text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10 transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -150,13 +150,13 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
       </div>
 
       {/* Summary Stats - Champagne cards with gold borders */}
-      <div className="grid grid-cols-3 gap-2 p-4 border-b-2 border-gold/20 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+      <div className="grid grid-cols-3 gap-2 p-4 border-b-2 border-[#B89555]/20 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         {[
           { label: 'Score', value: '0%', icon: <Target className="w-3 h-3" />, color: 'text-emerald-600' },
-          { label: 'Tasks', value: '0', icon: <Clock className="w-3 h-3" />, color: 'text-gold' },
+          { label: 'Tasks', value: '0', icon: <Clock className="w-3 h-3" />, color: 'text-[#1A1A1A]' },
           { label: 'Leads', value: '0', icon: <Users className="w-3 h-3" />, color: 'text-blue-600' },
         ].map((stat, i) => (
-          <div key={i} className="text-center p-2 rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 shadow-sm">
+          <div key={i} className="text-center p-2 rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30 shadow-sm">
             <div className={cn('flex items-center justify-center gap-1 text-lg font-bold', stat.color)}>
               {stat.icon}
               {stat.value}
@@ -242,7 +242,7 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
       </div>
 
       {/* Footer - Premium champagne */}
-      <div className="p-4 border-t-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
+      <div className="p-4 border-t-2 border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
         <Button variant="primary" className="w-full" onClick={() => {}}>
           <Sparkles className="w-4 h-4 mr-2" />
           View All Insights

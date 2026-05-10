@@ -176,7 +176,7 @@ const JoinDeveloperList = () => {
               </motion.div>
 
               {/* Form Card */}
-              <motion.form variants={fadeInUp} onSubmit={handleSubmit} className="bg-[#FDFBF7] shadow-lg border border-stone-200 p-6 md:p-8 space-y-6">
+              <motion.form variants={fadeInUp} onSubmit={handleSubmit} className="bg-[#FDFBF7] shadow-lg border border-[#B89555]/30 p-6 md:p-8 space-y-6">
                 {/* Section 1: Company Details */}
                 <div className="space-y-1 mb-4">
                   <h3 className="text-lg font-bold text-foreground tracking-wide uppercase flex items-center gap-2">

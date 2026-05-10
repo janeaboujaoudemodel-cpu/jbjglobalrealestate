@@ -170,7 +170,7 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
                     className={`px-2.5 py-1 rounded text-xs font-medium border transition-all ${
                       Math.abs(selectedClip.duration - d) < 0.05
                         ? 'bg-[#EFE6D6]/20 border-[#B89555]/50 text-[#1A1A1A]'
-                        : 'border-[#1A1A1A] text-[#1A1A1A]/70 hover:border-slate-600 hover:text-white'
+                        : 'border-[#1A1A1A] text-[#1A1A1A]/70 hover:border-[#B89555]/30 hover:text-white'
                     }`}
                   >
                     {d}s
@@ -190,7 +190,7 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
                     className={`flex items-center gap-2 px-2.5 py-2 rounded-lg border text-xs font-medium transition-all ${
                       currentTransitionId === t.id
                         ? 'bg-[#EFE6D6]/15 border-[#B89555]/40 text-[#1A1A1A]'
-                        : 'border-[#1A1A1A] text-[#1A1A1A]/70 hover:border-slate-600 hover:text-white'
+                        : 'border-[#1A1A1A] text-[#1A1A1A]/70 hover:border-[#B89555]/30 hover:text-white'
                     }`}
                   >
                     <span className="text-base leading-none">{t.icon}</span>
@@ -213,7 +213,7 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
                       className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border text-left transition-all ${
                         isActive
                           ? 'bg-[#EFE6D6]/10 border-[#B89555]/40'
-                          : 'border-[#1A1A1A]/60 hover:border-slate-600 hover:bg-[#1A1A1A]/50'
+                          : 'border-[#1A1A1A]/60 hover:border-[#B89555]/30 hover:bg-[#1A1A1A]/50'
                       }`}
                     >
                       {/* SVG curve preview */}

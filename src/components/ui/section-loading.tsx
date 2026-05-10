@@ -21,7 +21,7 @@ export const SectionLoading = ({ className }: SectionLoadingProps) => {
       )}
     >
       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer" />
-      <div className="h-full w-full bg-zinc-900/50 backdrop-blur-sm" />
+      <div className="h-full w-full bg-[#1A1A1A]/50 backdrop-blur-sm" />
     </motion.div>
   );
 };

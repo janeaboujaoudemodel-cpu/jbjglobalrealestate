@@ -259,12 +259,12 @@ export default function ContrastReview() {
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-[#1A1A1A]">
       {/* Header */}
-      <header className="sticky top-0 z-20 border-b border-zinc-200 bg-[#FDFBF7]/95 backdrop-blur">
+      <header className="sticky top-0 z-20 border-b border-[#B89555]/30 bg-[#FDFBF7]/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
           <div className="flex items-center gap-4">
             <Link
               to="/"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-zinc-200 text-zinc-600 transition hover:bg-zinc-50"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#B89555]/30 text-[#1A1A1A]/70 transition hover:bg-[#F7F2EA]"
               aria-label="Back to home"
             >
               <ArrowLeft className="h-4 w-4" />
@@ -273,7 +273,7 @@ export default function ContrastReview() {
               <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#1A1A1A]/60">
                 Internal · Design QA
               </p>
-              <h1 className="text-2xl font-bold tracking-tight text-zinc-950">
+              <h1 className="text-2xl font-bold tracking-tight text-[#1A1A1A]/70">
                 Contrast Review Gallery
               </h1>
             </div>
@@ -294,7 +294,7 @@ export default function ContrastReview() {
       <main className="mx-auto max-w-7xl px-6 py-10 space-y-12">
         {/* Intro */}
         <section className="max-w-3xl">
-          <p className="text-base leading-relaxed text-zinc-600">
+          <p className="text-base leading-relaxed text-[#1A1A1A]/70">
             A side-by-side review of the typography &amp; contrast refactor across the
             Market Intelligence module and the supporting hero overlay. Each card pairs the
             previous token usage with the current standardized token, computes WCAG ratios
@@ -304,16 +304,16 @@ export default function ContrastReview() {
         </section>
 
         {/* Live route preview */}
-        <section className="rounded-2xl border border-zinc-200 bg-zinc-50/60 p-6">
+        <section className="rounded-2xl border border-[#B89555]/30 bg-[#F7F2EA]/60 p-6">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#1A1A1A]/60">
                 Live preview
               </p>
-              <h2 className="text-xl font-bold tracking-tight text-zinc-950">
+              <h2 className="text-xl font-bold tracking-tight text-[#1A1A1A]/70">
                 {active.label}
               </h2>
-              <p className="mt-1 text-sm text-zinc-600">{active.description}</p>
+              <p className="mt-1 text-sm text-[#1A1A1A]/70">{active.description}</p>
             </div>
             <a
               href={active.path}
@@ -332,8 +332,8 @@ export default function ContrastReview() {
                 onClick={() => setActive(r)}
                 className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
                   r.path === active.path
-                    ? "border-zinc-900 bg-[#FDFBF7] text-white"
-                    : "border-[#B89555]/30 bg-[#FDFBF7] text-zinc-700 hover:bg-[#F7F2EA]"
+                    ? "border-[#B89555]/30 bg-[#FDFBF7] text-white"
+                    : "border-[#B89555]/30 bg-[#FDFBF7] text-[#1A1A1A]/70 hover:bg-[#F7F2EA]"
                 }`}
               >
                 {r.label}
@@ -341,7 +341,7 @@ export default function ContrastReview() {
             ))}
           </div>
 
-          <div className="overflow-hidden rounded-xl border border-zinc-200 bg-[#FDFBF7] shadow-sm">
+          <div className="overflow-hidden rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] shadow-sm">
             <iframe
               key={active.path}
               src={active.path}
@@ -358,10 +358,10 @@ export default function ContrastReview() {
             <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#1A1A1A]/60">
               Token diff
             </p>
-            <h2 className="text-2xl font-bold tracking-tight text-zinc-950">
+            <h2 className="text-2xl font-bold tracking-tight text-[#1A1A1A]/70">
               Before &amp; after — typography &amp; contrast
             </h2>
-            <p className="mt-1 text-sm text-zinc-600">
+            <p className="mt-1 text-sm text-[#1A1A1A]/70">
               Computed against representative swatches. AA ≥ 4.5, AAA ≥ 7.0.
             </p>
           </div>
@@ -375,18 +375,18 @@ export default function ContrastReview() {
               return (
                 <article
                   key={p.id}
-                  className="overflow-hidden rounded-2xl border border-zinc-200 bg-[#FDFBF7]"
+                  className="overflow-hidden rounded-2xl border border-[#B89555]/30 bg-[#FDFBF7]"
                 >
-                  <header className="border-b border-zinc-100 px-5 py-4">
+                  <header className="border-b border-[#B89555]/30 px-5 py-4">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#1A1A1A]/60">
                       {p.area}
                     </p>
-                    <h3 className="text-base font-semibold text-zinc-950">{p.element}</h3>
+                    <h3 className="text-base font-semibold text-[#1A1A1A]/70">{p.element}</h3>
                   </header>
 
                   <div className="grid grid-cols-2">
                     {/* Before */}
-                    <div className="border-r border-zinc-100 p-5">
+                    <div className="border-r border-[#B89555]/30 p-5">
                       <div className="mb-3 flex items-center justify-between">
                         <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-[#1A1A1A]/70">
                           Before
@@ -398,7 +398,7 @@ export default function ContrastReview() {
                         </span>
                       </div>
                       <div
-                        className="mb-3 flex h-20 items-center justify-center rounded-lg border border-zinc-200"
+                        className="mb-3 flex h-20 items-center justify-center rounded-lg border border-[#B89555]/30"
                         style={{ background: p.before.bg }}
                       >
                         <span
@@ -408,7 +408,7 @@ export default function ContrastReview() {
                           Sample text
                         </span>
                       </div>
-                      <code className="block break-all rounded-md bg-zinc-50 px-2 py-1.5 text-[11px] text-zinc-700">
+                      <code className="block break-all rounded-md bg-[#F7F2EA] px-2 py-1.5 text-[11px] text-[#1A1A1A]/70">
                         {p.before.className}
                       </code>
                       <p className="mt-2 text-xs leading-relaxed text-[#1A1A1A]/60">
@@ -429,7 +429,7 @@ export default function ContrastReview() {
                         </span>
                       </div>
                       <div
-                        className="mb-3 flex h-20 items-center justify-center rounded-lg border border-zinc-200"
+                        className="mb-3 flex h-20 items-center justify-center rounded-lg border border-[#B89555]/30"
                         style={{ background: p.after.bg }}
                       >
                         <span
@@ -442,7 +442,7 @@ export default function ContrastReview() {
                       <code className="block break-all rounded-md bg-emerald-50 px-2 py-1.5 text-[11px] text-emerald-900">
                         {p.after.className}
                       </code>
-                      <p className="mt-2 text-xs leading-relaxed text-zinc-600">
+                      <p className="mt-2 text-xs leading-relaxed text-[#1A1A1A]/70">
                         {p.after.note}
                       </p>
                     </div>
@@ -454,9 +454,9 @@ export default function ContrastReview() {
         </section>
 
         {/* Footer guidance */}
-        <section className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6">
-          <h3 className="text-sm font-semibold text-zinc-950">Verification checklist</h3>
-          <ul className="mt-3 space-y-2 text-sm text-zinc-700">
+        <section className="rounded-2xl border border-[#B89555]/30 bg-[#F7F2EA] p-6">
+          <h3 className="text-sm font-semibold text-[#1A1A1A]/70">Verification checklist</h3>
+          <ul className="mt-3 space-y-2 text-sm text-[#1A1A1A]/70">
             <li>• <code className="rounded bg-[#FDFBF7] px-1.5 py-0.5 text-xs">npm run check:contrast</code> — automated WCAG sweep.</li>
             <li>• <code className="rounded bg-[#FDFBF7] px-1.5 py-0.5 text-xs">npm run check:a11y</code> — focus order, ARIA, keyboard nav.</li>
             <li>• <code className="rounded bg-[#FDFBF7] px-1.5 py-0.5 text-xs">npm run check:faded-gold</code> — guards against faded-gold reintroduction.</li>

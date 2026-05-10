@@ -323,8 +323,8 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
               onClick={() => setVoiceEngine("browser")}
               className={`flex-1 py-2 rounded-lg text-xs font-bold border transition-all ${
                 voiceEngine === "browser"
-                  ? "bg-[#1A1A1A] text-white border-slate-500"
-                  : "bg-[#1A1A1A]/60 text-[#1A1A1A]/70 border-[#1A1A1A] hover:border-slate-500"
+                  ? "bg-[#1A1A1A] text-white border-[#B89555]/30"
+                  : "bg-[#1A1A1A]/60 text-[#1A1A1A]/70 border-[#1A1A1A] hover:border-[#B89555]/30"
               }`}
             >
               🔊 Browser Voice
@@ -358,7 +358,7 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
                 className={`relative flex flex-col items-center gap-1 p-2 rounded-xl border transition-all text-center ${
                   selectedCharacter.id === char.id
                     ? "border-amber-400 bg-amber-500/10"
-                    : "border-[#1A1A1A] bg-[#1A1A1A]/60 hover:border-slate-500"
+                    : "border-[#1A1A1A] bg-[#1A1A1A]/60 hover:border-[#B89555]/30"
                 }`}
               >
                 {selectedCharacter.id === char.id && (
@@ -387,7 +387,7 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
             <select
               value={selectedLanguage}
               onChange={(e) => setSelectedLanguage(e.target.value)}
-              className="w-full bg-[#1A1A1A] border border-slate-600 text-white text-xs rounded-lg px-2 py-2 focus:border-amber-400 focus:outline-none"
+              className="w-full bg-[#1A1A1A] border border-[#B89555]/30 text-white text-xs rounded-lg px-2 py-2 focus:border-amber-400 focus:outline-none"
             >
               {LANGUAGES.map((l) => (
                 <option key={l.code} value={l.code}>{l.flag} {l.label}</option>
@@ -400,7 +400,7 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
             <select
               value={selectedTone}
               onChange={(e) => setSelectedTone(e.target.value)}
-              className="w-full bg-[#1A1A1A] border border-slate-600 text-white text-xs rounded-lg px-2 py-2 focus:border-amber-400 focus:outline-none"
+              className="w-full bg-[#1A1A1A] border border-[#B89555]/30 text-white text-xs rounded-lg px-2 py-2 focus:border-amber-400 focus:outline-none"
             >
               {TONES.map((t) => (
                 <option key={t.id} value={t.id}>{t.icon} {t.label}</option>
@@ -420,7 +420,7 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
                 className={`flex-1 py-1.5 rounded-lg text-xs font-bold border transition-all ${
                   selectedDuration === d.value
                     ? "bg-amber-500 text-[#1A1A1A] border-amber-500"
-                    : "bg-[#1A1A1A] text-[#1A1A1A]/70 border-slate-600 hover:border-[#B89555]/30"
+                    : "bg-[#1A1A1A] text-[#1A1A1A]/70 border-[#B89555]/30 hover:border-[#B89555]/30"
                 }`}
               >
                 {d.label}
@@ -448,7 +448,7 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
             onChange={(e) => setPrompt(e.target.value)}
             placeholder="e.g. Stunning 3-bedroom villa in Dubai Hills Estate, private pool, panoramic skyline views, modern interiors, AED 4.5M..."
             rows={4}
-            className="bg-[#1A1A1A] border-slate-600 text-white placeholder:text-[#1A1A1A]/70 text-xs resize-none focus:border-amber-400"
+            className="bg-[#1A1A1A] border-[#B89555]/30 text-white placeholder:text-[#1A1A1A]/70 text-xs resize-none focus:border-amber-400"
           />
           <p className="text-[10px] text-[#1A1A1A]/70 mt-1">
             Tip: Include bedrooms, location, price, key features, and selling points.
@@ -566,7 +566,7 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
 
               {(onAddToTimeline || onAIVoiceGenerated) && (
                 <Button onClick={handleAddToTimeline} size="sm"
-                  className="w-full bg-[#1A1A1A] hover:bg-slate-600 text-white gap-1.5 text-xs">
+                  className="w-full bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white gap-1.5 text-xs">
                   <Plus className="w-3.5 h-3.5" />
                   Add Narration to Timeline
                 </Button>

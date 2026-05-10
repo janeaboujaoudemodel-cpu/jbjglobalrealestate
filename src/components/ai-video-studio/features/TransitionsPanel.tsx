@@ -36,56 +36,56 @@ function TransitionPreview({ id }: { id: string }) {
 
   if (id.startsWith('fade-black')) return (
     <div className={base}>
-      <div className="flex-1 bg-slate-400" />
+      <div className="flex-1 bg-[#F7F2EA]" />
       <div className="flex-1 bg-[#1A1A1A]" />
     </div>
   );
   if (id.startsWith('fade-white')) return (
     <div className={base}>
-      <div className="flex-1 bg-slate-400" />
+      <div className="flex-1 bg-[#F7F2EA]" />
       <div className="flex-1 bg-[#FDFBF7]" />
     </div>
   );
   if (id.startsWith('fade-blur')) return (
     <div className={base} style={{ filter: 'blur(2px)' }}>
-      <div className="flex-1 bg-slate-500" />
+      <div className="flex-1 bg-[#1A1A1A]" />
       <div className="flex-1 bg-[#E5D9C4]" />
     </div>
   );
   if (id.startsWith('dissolve')) return (
     <div className={base}>
-      <div className="absolute inset-0 bg-slate-600 opacity-60" />
+      <div className="absolute inset-0 bg-[#1A1A1A] opacity-60" />
       <div className="absolute inset-0 bg-purple-500 opacity-40" />
     </div>
   );
   if (id === 'slide-left') return (
     <div className={base} style={{ overflow: 'hidden' }}>
-      <div className="flex-1 bg-slate-500" />
+      <div className="flex-1 bg-[#1A1A1A]" />
       <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-purple-600 opacity-80" />
     </div>
   );
   if (id === 'slide-right') return (
     <div className={base}>
       <div className="flex-1 bg-purple-600 opacity-80" />
-      <div className="flex-1 bg-slate-500" />
+      <div className="flex-1 bg-[#1A1A1A]" />
     </div>
   );
   if (id === 'slide-up') return (
     <div className={`${base} flex-col`}>
-      <div className="flex-1 bg-slate-500" />
+      <div className="flex-1 bg-[#1A1A1A]" />
       <div className="h-3 bg-purple-600 opacity-80" />
     </div>
   );
   if (id === 'zoom-in') return (
     <div className={base} style={{ alignItems: 'center', justifyContent: 'center' }}>
-      <div className="w-full h-full bg-slate-500 flex items-center justify-center">
+      <div className="w-full h-full bg-[#1A1A1A] flex items-center justify-center">
         <div className="w-6 h-6 rounded-full bg-purple-500 opacity-80" />
       </div>
     </div>
   );
   if (id === 'zoom-out') return (
     <div className={base} style={{ alignItems: 'center', justifyContent: 'center' }}>
-      <div className="w-full h-full bg-slate-500 flex items-center justify-center">
+      <div className="w-full h-full bg-[#1A1A1A] flex items-center justify-center">
         <div className="w-10 h-10 rounded-full bg-purple-400 opacity-60" />
       </div>
     </div>
@@ -93,7 +93,7 @@ function TransitionPreview({ id }: { id: string }) {
   // zoom-punch
   return (
     <div className={base} style={{ alignItems: 'center', justifyContent: 'center' }}>
-      <div className="w-full h-full bg-slate-500 flex items-center justify-center">
+      <div className="w-full h-full bg-[#1A1A1A] flex items-center justify-center">
         <div className="w-8 h-8 rounded-full border-2 border-purple-500 opacity-80" />
       </div>
     </div>
@@ -122,14 +122,14 @@ function TransitionCard({ def }: TransitionCardProps) {
       className={`rounded-lg border cursor-grab active:cursor-grabbing p-2 flex flex-col gap-1.5 transition-all select-none ${
         isDragging
           ? 'border-purple-400 bg-purple-950/60 scale-95 opacity-70'
-          : 'border-slate-600 bg-[#1A1A1A] hover:border-purple-500 hover:bg-[#1A1A1A]'
+          : 'border-[#B89555]/30 bg-[#1A1A1A] hover:border-purple-500 hover:bg-[#1A1A1A]'
       }`}
       title={`Drag "${def.name}" to timeline`}
     >
       <TransitionPreview id={def.id} />
 
       <div className="flex items-center justify-between">
-        <span className="text-xs font-semibold text-slate-200 truncate">{def.name}</span>
+        <span className="text-xs font-semibold text-[#1A1A1A] truncate">{def.name}</span>
         <span className="text-[10px] text-purple-400 font-mono ml-1">{duration.toFixed(2)}s</span>
       </div>
 
@@ -156,7 +156,7 @@ export function TransitionsPanel() {
       {/* Header */}
       <div className="flex-shrink-0 px-4 py-3 border-b border-[#1A1A1A] flex items-center gap-2">
         <Clapperboard className="w-4 h-4 text-purple-400" />
-        <span className="text-sm font-semibold text-slate-100">Transitions</span>
+        <span className="text-sm font-semibold text-[#1A1A1A]">Transitions</span>
         <span className="ml-auto text-xs text-[#1A1A1A]/70">Drag onto timeline between clips</span>
       </div>
 

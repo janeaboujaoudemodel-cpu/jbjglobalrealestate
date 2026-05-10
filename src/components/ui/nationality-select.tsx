@@ -182,13 +182,13 @@ export const NationalitySelect: React.FC<NationalitySelectProps> = ({
           value={otherValue || displayValue}
           onChange={(e) => setOtherValue(e.target.value)}
           placeholder="Type nationality..."
-          className="flex-1 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:border-gold"
+          className="flex-1 bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:border-[#B89555]"
           onKeyDown={(e) => e.key === 'Enter' && handleOtherSubmit()}
         />
         <button
           type="button"
           onClick={handleOtherSubmit}
-          className="px-4 py-2 bg-gold text-[#1A1A1A] rounded-md hover:bg-gold/90 transition-colors text-sm font-medium"
+          className="px-4 py-2 bg-[#EFE6D6] text-[#1A1A1A] rounded-md hover:bg-[#EFE6D6]/90 transition-colors text-sm font-medium"
         >
           Set
         </button>
@@ -199,7 +199,7 @@ export const NationalitySelect: React.FC<NationalitySelectProps> = ({
             setOtherValue('');
             if (isCustomValue) onChange('');
           }}
-          className="px-3 py-2 border-2 border-gold/30 text-[#1A1A1A] rounded-md hover:bg-gold/10 transition-colors text-sm"
+          className="px-3 py-2 border-2 border-[#B89555]/30 text-[#1A1A1A] rounded-md hover:bg-[#EFE6D6]/10 transition-colors text-sm"
         >
           ✕
         </button>
@@ -211,7 +211,7 @@ export const NationalitySelect: React.FC<NationalitySelectProps> = ({
 
   return (
     <Select value={value} onValueChange={handleSelect}>
-      <SelectTrigger className={`bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] ${className}`}>
+      <SelectTrigger className={`bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A] ${className}`}>
         <SelectValue placeholder={placeholder}>
           {selectedNat && (
             <span className="flex items-center gap-2">
@@ -221,16 +221,16 @@ export const NationalitySelect: React.FC<NationalitySelectProps> = ({
           )}
         </SelectValue>
       </SelectTrigger>
-      <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 max-h-[300px] z-[9999]">
+      <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 max-h-[300px] z-[9999]">
         {/* Fixed search header - NOT sticky */}
-        <div className="p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-b border-gold/20">
+        <div className="p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-b border-[#B89555]/20">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gold" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]" />
             <Input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search nationality..."
-              className="pl-9 bg-[#FDFBF7]/80 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 h-9"
+              className="pl-9 bg-[#FDFBF7]/80 border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 h-9"
               onClick={(e) => e.stopPropagation()}
               onKeyDown={(e) => e.stopPropagation()}
             />
@@ -242,7 +242,7 @@ export const NationalitySelect: React.FC<NationalitySelectProps> = ({
             <SelectItem 
               key={nat.name} 
               value={nat.name}
-              className="text-[#1A1A1A] hover:bg-gold/20 focus:bg-gold/20"
+              className="text-[#1A1A1A] hover:bg-[#EFE6D6]/20 focus:bg-[#EFE6D6]/20"
             >
               <span className="flex items-center gap-2">
                 <span className="text-lg">{nat.flag}</span>

@@ -147,7 +147,7 @@ export function ForcePasswordChange({ onComplete, userName }: ForcePasswordChang
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="newPassword" className="text-slate-200">
+              <Label htmlFor="newPassword" className="text-[#1A1A1A]">
                 New Password
               </Label>
               <div className="relative">
@@ -156,7 +156,7 @@ export function ForcePasswordChange({ onComplete, userName }: ForcePasswordChang
                   type={showPassword ? "text" : "password"}
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className="bg-[#1A1A1A]/50 border-slate-600 text-white pr-10"
+                  className="bg-[#1A1A1A]/50 border-[#B89555]/30 text-white pr-10"
                   placeholder="Enter your new password"
                   required
                 />
@@ -171,7 +171,7 @@ export function ForcePasswordChange({ onComplete, userName }: ForcePasswordChang
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword" className="text-slate-200">
+              <Label htmlFor="confirmPassword" className="text-[#1A1A1A]">
                 Confirm Password
               </Label>
               <Input
@@ -179,7 +179,7 @@ export function ForcePasswordChange({ onComplete, userName }: ForcePasswordChang
                 type={showPassword ? "text" : "password"}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="bg-[#1A1A1A]/50 border-slate-600 text-white"
+                className="bg-[#1A1A1A]/50 border-[#B89555]/30 text-white"
                 placeholder="Confirm your new password"
                 required
               />
