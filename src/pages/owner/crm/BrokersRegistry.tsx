@@ -15,6 +15,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { Users, Search, Plus, Building2, BadgeCheck, Clock, Loader2, Download } from "lucide-react";
 import { toast } from "sonner";
+import { useCRMSectionCounts } from "@/hooks/useCRMSectionCounts";
 import { RelationalHubTabs } from "@/components/crm/RelationalHubTabs";
 import { UnifiedCRMExportModal } from "@/components/crm/UnifiedCRMExportModal";
 import { BrokerageCombobox } from "@/components/crm/BrokerageCombobox";
