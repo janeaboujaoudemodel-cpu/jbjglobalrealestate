@@ -105,6 +105,10 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
     notes: "",
     internal_comments: "",
     tags: "",
+    broker_name_text: "",
+    assigned_broker_id: null as string | null,
+    tier: "standard" as "standard" | "vip",
+    pool: "nonpool" as "pool" | "nonpool",
   };
   const [formData, setFormData] = useState(initial);
   const [nationalityOpen, setNationalityOpen] = useState(false);
