@@ -105,15 +105,15 @@ const CRMToolsSidebar = ({ isOpen, onClose }: CRMToolsSidebarProps) => {
       animate={{ x: 0, opacity: 1 }}
       exit={{ x: -300, opacity: 0 }}
       transition={{ type: "spring", damping: 25, stiffness: 300 }}
-      className="fixed left-0 top-0 bottom-0 w-72 bg-zinc-950 border-r border-[#1A1A1A] z-50 shadow-2xl"
+      className="fixed left-0 top-0 bottom-0 w-72 bg-[#FDFBF7] border-r border-[#B89555]/30 z-50 shadow-2xl"
     >
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-[#1A1A1A]">
+      <div className="flex items-center justify-between p-4 border-b border-[#B89555]/30 bg-[#F7F2EA]">
         <div className="flex items-center gap-2">
-          <Wrench className="w-5 h-5 text-gold" />
-          <h3 className="font-semibold text-white">CRM Navigation</h3>
+          <Wrench className="w-5 h-5 text-[#1A1A1A]" />
+          <h3 className="font-semibold text-[#1A1A1A]">CRM Navigation</h3>
         </div>
-        <Button variant="ghost" size="icon" onClick={onClose} className="text-white/70 hover:text-white">
+        <Button variant="ghost" size="icon" onClick={onClose} className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]">
           <X className="w-5 h-5" />
         </Button>
       </div>
@@ -123,7 +123,7 @@ const CRMToolsSidebar = ({ isOpen, onClose }: CRMToolsSidebarProps) => {
         <div className="p-4 space-y-6">
           {toolCategories.map((category) => (
             <div key={category.name}>
-              <h4 className="text-xs font-semibold text-white/90 uppercase tracking-wider mb-3">
+              <h4 className="text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider mb-3">
                 {category.name}
               </h4>
               <div className="space-y-1">
@@ -134,15 +134,15 @@ const CRMToolsSidebar = ({ isOpen, onClose }: CRMToolsSidebarProps) => {
                     onClick={onClose}
                     className={cn(
                       "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all group",
-                      isActive(tool.href) 
-                        ? "bg-gold/20 text-gold border-l-2 border-gold" 
-                        : "text-white/85 hover:text-white hover:bg-[#1A1A1A]/50"
+                      isActive(tool.href)
+                        ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40"
+                        : "text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA]"
                     )}
                   >
-                    <tool.icon className={cn("w-4 h-4", isActive(tool.href) ? "text-gold" : tool.color)} />
+                    <tool.icon className={cn("w-4 h-4", isActive(tool.href) ? "text-[#1A1A1A]" : "text-[#1A1A1A]/70")} />
                     <span>{tool.name}</span>
                     {'adminOnly' in tool && tool.adminOnly && (
-                      <span className="ml-auto text-[10px] text-amber-500/80 bg-amber-500/10 px-1.5 py-0.5 rounded">
+                      <span className="ml-auto text-[10px] text-amber-700 bg-amber-500/15 border border-amber-500/30 px-1.5 py-0.5 rounded">
                         Admin
                       </span>
                     )}

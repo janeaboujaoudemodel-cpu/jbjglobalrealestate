@@ -73,29 +73,29 @@ const ActiveLeadBanner = ({
   };
 
   return (
-    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 bg-card border border-gold/50 rounded-lg shadow-lg px-4 py-3 flex items-center gap-4 max-w-xl">
+    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 bg-[#FDFBF7] border border-[#B89555]/40 rounded-lg shadow-lg px-4 py-3 flex items-center gap-4 max-w-xl">
       <div className="flex items-center gap-3">
-        <div className="p-2 bg-gold/20 rounded-full">
-          <User className="h-4 w-4 text-gold" />
+        <div className="p-2 bg-[#EFE6D6] border border-[#B89555]/40 rounded-full">
+          <User className="h-4 w-4 text-[#1A1A1A]" />
         </div>
         <div>
-          <p className="text-sm font-semibold text-white">{activeLead.full_name}</p>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-sm font-semibold text-[#1A1A1A]">{activeLead.full_name}</p>
+          <p className="text-xs text-[#1A1A1A]/70">
             {activeLead.nationality || "Lead"} · {activeLead.language?.toUpperCase() || "EN"}
           </p>
         </div>
-        <Badge variant="outline" className="text-gold border-gold/50 text-xs">
+        <Badge variant="outline" className="text-[#1A1A1A] border-[#B89555]/50 bg-[#EFE6D6] text-xs">
           Active Lead
         </Badge>
       </div>
 
-      <div className="flex items-center gap-2 border-l border-border pl-4">
+      <div className="flex items-center gap-2 border-l border-[#B89555]/30 pl-4">
         {activeLead.phone && (
           <Button
             size="sm"
             variant="outline"
             onClick={handleWhatsApp}
-            className="text-green-400 border-green-500/50 hover:bg-green-600/20 h-8"
+            className="text-emerald-800 border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20 h-8"
           >
             <Phone className="h-3 w-3 mr-1" />
             WhatsApp
@@ -106,7 +106,7 @@ const ActiveLeadBanner = ({
             size="sm"
             variant="outline"
             onClick={handleEmail}
-            className="text-blue-400 border-blue-500/50 hover:bg-blue-600/20 h-8"
+            className="text-blue-800 border-blue-500/40 bg-blue-500/10 hover:bg-blue-500/20 h-8"
           >
             <Mail className="h-3 w-3 mr-1" />
             Email
@@ -115,9 +115,9 @@ const ActiveLeadBanner = ({
         {showAddToShortlist && currentPropertyId && (
           <Button
             size="sm"
-            variant="primary"
+            variant="outline"
             onClick={handleAddToShortlist}
-            className="h-8"
+            className="h-8 bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
           >
             <ListPlus className="h-3 w-3 mr-1" />
             Add to Shortlist
@@ -127,7 +127,7 @@ const ActiveLeadBanner = ({
           size="sm"
           variant="ghost"
           onClick={() => navigate(`/crm/leads/${activeLead.id}`)}
-          className="text-muted-foreground hover:text-white h-8"
+          className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] h-8"
         >
           View Lead
         </Button>
@@ -135,7 +135,7 @@ const ActiveLeadBanner = ({
           size="icon"
           variant="ghost"
           onClick={clearActiveLead}
-          className="text-muted-foreground hover:text-white h-8 w-8"
+          className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] h-8 w-8"
         >
           <X className="h-4 w-4" />
         </Button>
