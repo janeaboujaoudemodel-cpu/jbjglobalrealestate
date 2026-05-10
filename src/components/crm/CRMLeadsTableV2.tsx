@@ -92,11 +92,11 @@ export default function CRMLeadsTableV2({
   const [leadToDelete, setLeadToDelete] = useState<Lead | null>(null);
   const [agreementLead, setAgreementLead] = useState<Lead | null>(null);
 
-  // Inline filter dropdowns: Stage / Source / Assignee / Tag
-  const [stageFilter, setStageFilter] = useState<string>("");
+  // Inline filter dropdowns: Stage (multi) / Source / Assignee / Tag
+  const [stageMulti, setStageMulti] = useState<string[]>([]);
   const [sourceTypeFilter, setSourceTypeFilter] = useState<string>("");
   const [assigneeFilter, setAssigneeFilter] = useState<string>("");
-  const [tagFilter, setTagFilter] = useState<string>(""); // "vip" | "unassigned" | ""
+  const [tagFilter, setTagFilter] = useState<string>(""); // "vip" | "unassigned" | "investor" | ""
 
   const groupedStatuses = useMemo(() => {
     const groups: Record<string, typeof PIPELINE_STATUSES> = {
