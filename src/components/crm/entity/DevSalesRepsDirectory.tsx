@@ -116,50 +116,60 @@ export default function DevSalesRepsDirectory() {
           </Link>
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-lg border border-[#B89555]/30 bg-[#FDFBF7]">
-          <table className="min-w-full text-sm">
-            <thead className="bg-[#F7F2EA] text-[#1A1A1A]">
-              <tr>
-                <th className="text-left px-4 py-2 font-semibold">Name</th>
-                <th className="text-left px-4 py-2 font-semibold">Title</th>
-                <th className="text-left px-4 py-2 font-semibold">Developer</th>
-                <th className="text-left px-4 py-2 font-semibold">Phone</th>
-                <th className="text-left px-4 py-2 font-semibold">Email</th>
-                <th className="text-left px-4 py-2 font-semibold">WhatsApp</th>
-                <th className="text-left px-4 py-2 font-semibold">Languages</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#B89555]/15">
-              {filtered.map((r) => (
-                <tr key={r.id} className="hover:bg-[#F7F2EA]/60">
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-2">
-                      {r.is_primary && (
-                        <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]">
-                          PRIMARY
-                        </span>
-                      )}
-                      <span className="font-semibold text-[#1A1A1A]">{r.full_name}</span>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">{r.title || "—"}</td>
-                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">{r.developer?.name || "—"}</td>
-                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">
-                    {r.phone_e164 ? <span className="inline-flex items-center gap-1"><Phone className="h-3 w-3" />{r.phone_e164}</span> : "—"}
-                  </td>
-                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">
-                    {r.email ? <span className="inline-flex items-center gap-1"><Mail className="h-3 w-3" />{r.email}</span> : "—"}
-                  </td>
-                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">
-                    {r.whatsapp_number ? <span className="inline-flex items-center gap-1"><MessageCircle className="h-3 w-3" />{r.whatsapp_number}</span> : "—"}
-                  </td>
-                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">
-                    {(r.languages || []).join(", ") || "—"}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="space-y-2">
+          {filtered.map((r) => {
+            const telHref = r.phone_e164 ? `tel:${r.phone_e164}` : null;
+            const waHref = r.whatsapp_number ? `https://wa.me/${r.whatsapp_number.replace(/\D/g, "")}` : null;
+            const mailHref = r.email ? `mailto:${r.email}` : null;
+            return (
+              <div
+                key={r.id}
+                className="flex items-center gap-4 px-4 py-3 rounded-lg border border-[#B89555]/30 bg-[#FDFBF7] hover:bg-[#F7F2EA]/60 overflow-x-auto whitespace-nowrap"
+              >
+                <div className="w-9 h-9 rounded bg-[#F7F2EA] border border-[#B89555]/20 flex items-center justify-center overflow-hidden flex-none">
+                  {r.developer?.logo_url
+                    ? <img src={r.developer.logo_url} alt="" className="max-w-full max-h-full object-contain" />
+                    : <BadgeCheck className="h-4 w-4 text-[#B89555]" />}
+                </div>
+                <div className="flex items-center gap-2 min-w-0 flex-none">
+                  {r.is_primary && (
+                    <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]">
+                      PRIMARY
+                    </span>
+                  )}
+                  <span className="font-semibold text-[#1A1A1A]">{r.full_name}</span>
+                </div>
+                <span className="h-4 w-px bg-[#B89555]/30 flex-none" />
+                <span className="text-[#1A1A1A]/80 text-xs flex-none">{r.title || "—"}</span>
+                <span className="h-4 w-px bg-[#B89555]/30 flex-none" />
+                <span className="text-[#1A1A1A]/80 text-xs flex-none">{r.developer?.name || "—"}</span>
+                {telHref && (
+                  <>
+                    <span className="h-4 w-px bg-[#B89555]/30 flex-none" />
+                    <a href={telHref} className="inline-flex items-center gap-1 text-xs text-[#1A1A1A]/80 hover:underline flex-none"><Phone className="h-3 w-3" />{r.phone_e164}</a>
+                  </>
+                )}
+                {mailHref && (
+                  <>
+                    <span className="h-4 w-px bg-[#B89555]/30 flex-none" />
+                    <a href={mailHref} className="inline-flex items-center gap-1 text-xs text-[#1A1A1A]/80 hover:underline flex-none"><Mail className="h-3 w-3" />{r.email}</a>
+                  </>
+                )}
+                {waHref && (
+                  <>
+                    <span className="h-4 w-px bg-[#B89555]/30 flex-none" />
+                    <a href={waHref} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs text-[#1A1A1A]/80 hover:underline flex-none"><MessageCircle className="h-3 w-3" />{r.whatsapp_number}</a>
+                  </>
+                )}
+                {(r.languages || []).length > 0 && (
+                  <>
+                    <span className="h-4 w-px bg-[#B89555]/30 flex-none" />
+                    <span className="text-[#1A1A1A]/70 text-[11px] flex-none">{(r.languages || []).join(", ")}</span>
+                  </>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
