@@ -3135,20 +3135,38 @@ const CRMRelationships = () => {
             <BrandedEmailComposer />
           </div>
 
+          <div className="mb-4 flex items-center justify-end">
+            <RouterLink to="/owner/crm/relationships/secondary-market">
+              <Button variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#F7F2EA]">
+                <Store className="w-4 h-4 mr-2" />Secondary Market Hub
+              </Button>
+            </RouterLink>
+          </div>
+
           <Tabs value={tab} onValueChange={setTab}>
 
             <div className="overflow-x-auto -mx-1 px-1 mb-6">
               <TabsList className="bg-[#FDFBF7] border border-[#B89555]/30 p-1.5 rounded-xl inline-flex w-auto gap-2">
-                <TabsTrigger value="brokerages" className="min-w-fit text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/60 data-[state=active]:shadow-sm hover:bg-[#F7F2EA] rounded-lg px-5 py-2 font-semibold whitespace-nowrap transition-colors"><Building2 className="w-4 h-4 mr-2" />Brokerages</TabsTrigger>
+                <TabsTrigger value="developers" className="min-w-fit text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/60 data-[state=active]:shadow-sm hover:bg-[#F7F2EA] rounded-lg px-5 py-2 font-semibold whitespace-nowrap transition-colors"><FileSignature className="w-4 h-4 mr-2" />Developers</TabsTrigger>
                 <span aria-hidden className="self-center w-px h-5 bg-[#B89555]/30" />
-                <TabsTrigger value="developers" className="min-w-fit text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/60 data-[state=active]:shadow-sm hover:bg-[#F7F2EA] rounded-lg px-5 py-2 font-semibold whitespace-nowrap transition-colors"><FileSignature className="w-4 h-4 mr-2" />Developer Registry</TabsTrigger>
+                <TabsTrigger value="reps" className="min-w-fit text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/60 data-[state=active]:shadow-sm hover:bg-[#F7F2EA] rounded-lg px-5 py-2 font-semibold whitespace-nowrap transition-colors"><UserSquare2 className="w-4 h-4 mr-2" />Developer Reps</TabsTrigger>
+                <span aria-hidden className="self-center w-px h-5 bg-[#B89555]/30" />
+                <TabsTrigger value="brokerages" className="min-w-fit text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/60 data-[state=active]:shadow-sm hover:bg-[#F7F2EA] rounded-lg px-5 py-2 font-semibold whitespace-nowrap transition-colors"><Building2 className="w-4 h-4 mr-2" />Brokerage Agencies</TabsTrigger>
+                <span aria-hidden className="self-center w-px h-5 bg-[#B89555]/30" />
+                <TabsTrigger value="brokers" className="min-w-fit text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/60 data-[state=active]:shadow-sm hover:bg-[#F7F2EA] rounded-lg px-5 py-2 font-semibold whitespace-nowrap transition-colors"><Users className="w-4 h-4 mr-2" />Brokers</TabsTrigger>
               </TabsList>
             </div>
+            <TabsContent value="developers">
+              {mounted.has("developers") && <DeveloperRegistryTab />}
+            </TabsContent>
+            <TabsContent value="reps">
+              {mounted.has("reps") && <DevSalesRepsDirectory />}
+            </TabsContent>
             <TabsContent value="brokerages">
               {mounted.has("brokerages") && <BrokeragesTab />}
             </TabsContent>
-            <TabsContent value="developers">
-              {mounted.has("developers") && <DeveloperRegistryTab />}
+            <TabsContent value="brokers">
+              {mounted.has("brokers") && <IndividualBrokersTab />}
             </TabsContent>
           </Tabs>
         </div>
