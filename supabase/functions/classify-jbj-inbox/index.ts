@@ -364,7 +364,12 @@ Deno.serve(async (req) => {
       if (!jbj) { continue; }
 
       const category = classify(subject, snippet, attachments);
-      const { status, action_required } = inferStatus(subject, snippet, category);
+      let { status, action_required } = inferStatus(subject, snippet, category);
+      // Signed contract email but no attachment → request the document.
+      if (category === "contracts" && status === "signed" && attachments.length === 0) {
+        status = "needs_document";
+        action_required = "Request signed document";
+      }
 
       // Match developer (token overlap + email/domain)
       let linkedDev: string | null = null;
