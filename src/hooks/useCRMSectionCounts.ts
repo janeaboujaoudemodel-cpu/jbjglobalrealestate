@@ -2,6 +2,7 @@
 // Single parallel fetch of head-counts; cached for 60s.
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { OWNER_EMAILS_LC } from "@/config/ownerEmails";
 
 export type CRMCounts = {
   leads: number;
@@ -51,7 +52,12 @@ export function useCRMSectionCounts(): { counts: CRMCounts; loading: boolean; re
       headCount("crm_leads"),
       headCount("crm_leads", (q) => q.eq("flagged", true)),
       headCount("crm_leads", (q) => q.eq("vip", true)),
-      headCount("client_investors"),
+      headCount("crm_leads", (q) =>
+        q
+          .is("deleted_at", null)
+          .or("contact_type.eq.investor,tags.cs.{investor}")
+          .not("email_lower", "in", `(${OWNER_EMAILS_LC.map((e) => `"${e}"`).join(",")})`)
+      ),
       headCount("developers"),
       headCount("developer_sales_reps"),
       headCount("crm_brokers"),
