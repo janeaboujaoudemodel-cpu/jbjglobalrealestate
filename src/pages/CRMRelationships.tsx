@@ -3081,9 +3081,9 @@ const Field = ({ label, children }: { label: string; children: React.ReactNode }
 =========================================================== */
 const CRMRelationships = () => {
   const navigate = useNavigate();
-  const [tab, setTab] = useState("brokerages");
+  const [tab, setTab] = useState("developers");
   
-  const [mounted, setMounted] = useState<Set<string>>(new Set(["brokerages"]));
+  const [mounted, setMounted] = useState<Set<string>>(new Set(["developers"]));
   useEffect(() => {
     setMounted((prev) => prev.has(tab) ? prev : new Set([...prev, tab]));
   }, [tab]);
