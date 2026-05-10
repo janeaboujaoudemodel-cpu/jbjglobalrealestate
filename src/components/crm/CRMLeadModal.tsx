@@ -33,9 +33,11 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, Crown, Users2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { COUNTRIES, LANGUAGES_WITH_FLAGS, ALL_NATIONALITIES, getCitiesForCountry } from "@/data/countries";
+import BrokerCombobox from "@/components/crm/BrokerCombobox";
+import { PIPELINE_STATUSES } from "@/components/crm/LeadStatusBadge";
 
 interface CRMLeadModalProps {
   open: boolean;
@@ -45,13 +47,34 @@ interface CRMLeadModalProps {
 }
 
 const LEAD_TYPES = ["Buyer", "Investor", "Seller", "Tenant", "Landlord", "Broker", "Other"];
-const LEAD_SOURCES = ["Instagram", "WhatsApp", "Website", "Referral", "Event", "Brokerage", "Developer", "Other"];
+// Unified premium source list — must match LeadSourceFilter
+const LEAD_SOURCES = [
+  { value: "manual", label: "Manual Entry" },
+  { value: "imported", label: "Database (DLD)" },
+  { value: "website", label: "Website Form" },
+  { value: "whatsapp", label: "WhatsApp" },
+  { value: "phone", label: "Phone Call" },
+  { value: "walkin", label: "Walk-in" },
+  { value: "referral", label: "Referral" },
+  { value: "broker", label: "Broker" },
+  { value: "bayut", label: "Bayut" },
+  { value: "propertyfinder", label: "Property Finder" },
+  { value: "dubizzle", label: "Dubizzle" },
+  { value: "facebook", label: "Facebook" },
+  { value: "instagram", label: "Instagram" },
+  { value: "google_ads", label: "Google Ads" },
+  { value: "linkedin", label: "LinkedIn" },
+  { value: "campaign", label: "Email Campaign" },
+  { value: "event", label: "Event" },
+  { value: "partner", label: "Partner" },
+  { value: "third_party", label: "Third-party Platform" },
+  { value: "other", label: "Other" },
+];
 const PROPERTY_TYPES = ["Apartment", "Villa", "Townhouse", "Penthouse", "Commercial", "Land", "Other"];
 const BEDROOMS = ["Studio", "1", "2", "3", "4", "5+"];
 const BUYING_PURPOSE = ["Investment", "End Use", "Holiday Home", "Other"];
 const PRIORITY = ["low", "medium", "high"];
 const SCORE_BAND = ["hot", "warm", "cold"];
-const PIPELINE_STATUS = ["new", "contacted", "qualified", "viewing", "negotiation", "offer", "closed_won", "closed_lost"];
 
 const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) => {
   const [loading, setLoading] = useState(false);
