@@ -3129,6 +3129,10 @@ const CRMRelationships = () => {
             <BreakfastCalendarStatusBanner />
           </div>
 
+          <div className="mb-8">
+            <BrandedEmailComposer />
+          </div>
+
           <Tabs value={tab} onValueChange={setTab}>
 
             <div className="overflow-x-auto -mx-1 px-1 mb-6">
