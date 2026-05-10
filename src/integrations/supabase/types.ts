@@ -6474,6 +6474,11 @@ export type Database = {
           closed_deals_count: number
           commission_tier: string | null
           confidence: string | null
+          contract_document_url: string | null
+          contract_email_message_id: string | null
+          contract_email_subject: string | null
+          contract_signed_at: string | null
+          contract_synced_at: string | null
           country: string | null
           created_at: string
           database_file_url: string | null
@@ -6564,6 +6569,11 @@ export type Database = {
           closed_deals_count?: number
           commission_tier?: string | null
           confidence?: string | null
+          contract_document_url?: string | null
+          contract_email_message_id?: string | null
+          contract_email_subject?: string | null
+          contract_signed_at?: string | null
+          contract_synced_at?: string | null
           country?: string | null
           created_at?: string
           database_file_url?: string | null
@@ -6654,6 +6664,11 @@ export type Database = {
           closed_deals_count?: number
           commission_tier?: string | null
           confidence?: string | null
+          contract_document_url?: string | null
+          contract_email_message_id?: string | null
+          contract_email_subject?: string | null
+          contract_signed_at?: string | null
+          contract_synced_at?: string | null
           country?: string | null
           created_at?: string
           database_file_url?: string | null
@@ -9678,6 +9693,74 @@ export type Database = {
           years_in_real_estate?: number | null
         }
         Relationships: []
+      }
+      developer_contract_sync_logs: {
+        Row: {
+          attachment_names: string[]
+          created_at: string
+          developer_email: string | null
+          developer_id: string | null
+          developer_name: string | null
+          document_url: string | null
+          error_message: string | null
+          gmail_message_id: string
+          gmail_thread_id: string | null
+          id: string
+          match_confidence: number
+          sender_email: string | null
+          sender_name: string | null
+          snippet: string | null
+          status: string
+          subject: string | null
+          user_id: string
+        }
+        Insert: {
+          attachment_names?: string[]
+          created_at?: string
+          developer_email?: string | null
+          developer_id?: string | null
+          developer_name?: string | null
+          document_url?: string | null
+          error_message?: string | null
+          gmail_message_id: string
+          gmail_thread_id?: string | null
+          id?: string
+          match_confidence?: number
+          sender_email?: string | null
+          sender_name?: string | null
+          snippet?: string | null
+          status?: string
+          subject?: string | null
+          user_id: string
+        }
+        Update: {
+          attachment_names?: string[]
+          created_at?: string
+          developer_email?: string | null
+          developer_id?: string | null
+          developer_name?: string | null
+          document_url?: string | null
+          error_message?: string | null
+          gmail_message_id?: string
+          gmail_thread_id?: string | null
+          id?: string
+          match_confidence?: number
+          sender_email?: string | null
+          sender_name?: string | null
+          snippet?: string | null
+          status?: string
+          subject?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "developer_contract_sync_logs_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "crm_developer_registry"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       developer_enrichment_log: {
         Row: {
