@@ -704,7 +704,7 @@ All colors MUST be HSL.
     --surface-icon: 36 33% 43%;
   }
   :where([class*="rounded-"]):is(
-    .bg-black, .bg-\[\#FDFBF7\], .bg-\[\#FDFBF7\], .bg-\[\#1A1A1A\], .bg-\[\#1A1A1A\],
+    .bg-black, .bg-\[\#1A1A1A\], .bg-\[\#1A1A1A\],
     .bg-gray-900, .bg-gray-950, .bg-\[\#1A1A1A\], .bg-\[\#1A1A1A\], .bg-\[\#1a1a1a\]
   ):not([data-surface]) {
     --surface-bg: 0 0% 10%;
@@ -2544,7 +2544,6 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
    on champagne (#F7F2EA) surfaces. We use [class~="…"] which matches the bare
    class as a whole word, EXCLUDING any /<alpha> suffix. */
 .bg-black > svg,
-.bg-\[\#FDFBF7\] > svg, .bg-\[\#FDFBF7\] > svg,
 .bg-\[\#1A1A1A\] > svg, .bg-\[\#1A1A1A\] > svg,
 .bg-gray-900 > svg, .bg-gray-950 > svg,
 .bg-\[\#1A1A1A\] > svg, .bg-\[\#1A1A1A\] > svg,
@@ -2661,7 +2660,7 @@ html [data-surface="dark"] :is(h1, h2, h3, h4, h5, h6, p, span, a, label, div, b
 :root:not(.dark) :is(
   .bg-black, [class*="bg-black"],
   .bg-gray-800, .bg-gray-900, .bg-gray-950,
-  .bg-\[\#1A1A1A\], .bg-\[\#FDFBF7\], .bg-\[\#FDFBF7\],
+  .bg-\[\#1A1A1A\],
   .bg-\[\#1A1A1A\], .bg-\[\#1A1A1A\], .bg-\[\#1A1A1A\],
   .bg-\[\#1A1A1A\], .bg-\[\#1A1A1A\], .bg-\[\#1A1A1A\],
   .bg-primary, .bg-foreground,
@@ -2677,7 +2676,7 @@ html [data-surface="dark"] :is(h1, h2, h3, h4, h5, h6, p, span, a, label, div, b
 :root:not(.dark) :is(
   .bg-black, [class*="bg-black"],
   .bg-gray-800, .bg-gray-900, .bg-gray-950,
-  .bg-\[\#1A1A1A\], .bg-\[\#FDFBF7\], .bg-\[\#FDFBF7\],
+  .bg-\[\#1A1A1A\],
   .bg-\[\#1A1A1A\], .bg-\[\#1A1A1A\],
   .bg-primary, .bg-foreground,
   [data-surface="dark"]
