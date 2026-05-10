@@ -119,25 +119,29 @@ export function PersonHub({
     if (variant !== "broker") return;
     let alive = true;
     (async () => {
-      const [{ data: hist }, { count: assigned }, { count: closed }] = await Promise.all([
-        supabase
-          .from("broker_company_history")
-          .select("id, company_name, started_at, ended_at")
-          .eq("broker_id", id)
-          .order("started_at", { ascending: false }),
-        supabase
-          .from("crm_leads")
-          .select("id", { count: "exact", head: true })
-          .eq("assigned_user_id", id),
-        supabase
-          .from("crm_leads")
-          .select("id", { count: "exact", head: true })
-          .eq("assigned_user_id", id)
-          .eq("pipeline_stage", "closed_won"),
+      const histPromise = supabase
+        .from("broker_company_history")
+        .select("id, company_name, started_at, ended_at")
+        .eq("broker_id", id)
+        .order("started_at", { ascending: false });
+      const assignedPromise = supabase
+        .from("crm_leads")
+        .select("id", { count: "exact", head: true })
+        .eq("assigned_broker_id", id);
+      const closedPromise = supabase
+        .from("crm_leads")
+        .select("id", { count: "exact", head: true })
+        .eq("assigned_broker_id", id)
+        .eq("pipeline_stage", "closed_won");
+      const [histRes, assignedRes, closedRes] = await Promise.all([
+        histPromise, assignedPromise, closedPromise,
       ]);
       if (!alive) return;
-      setBrokerHistory(hist || []);
-      setLeadCounts({ assigned: assigned || 0, closed: closed || 0 });
+      setBrokerHistory((histRes.data as any[]) || []);
+      setLeadCounts({
+        assigned: (assignedRes.count as number) || 0,
+        closed: (closedRes.count as number) || 0,
+      });
     })();
     return () => { alive = false; };
   }, [variant, id]);
