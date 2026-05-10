@@ -9488,6 +9488,41 @@ export type Database = {
         }
         Relationships: []
       }
+      developer_enrichment_log: {
+        Row: {
+          created_at: string
+          developer_id: string
+          fields_filled: Json
+          id: string
+          model: string | null
+          source_urls: Json
+        }
+        Insert: {
+          created_at?: string
+          developer_id: string
+          fields_filled?: Json
+          id?: string
+          model?: string | null
+          source_urls?: Json
+        }
+        Update: {
+          created_at?: string
+          developer_id?: string
+          fields_filled?: Json
+          id?: string
+          model?: string | null
+          source_urls?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "developer_enrichment_log_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       developer_file_validations: {
         Row: {
           created_at: string
@@ -11193,6 +11228,48 @@ export type Database = {
           setting_key?: string
           setting_value?: string | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      email_send_log: {
+        Row: {
+          contact_id: string | null
+          created_at: string
+          error: string | null
+          id: string
+          kind: string
+          resend_message_id: string | null
+          sent_on: string
+          status: string
+          subject: string | null
+          template: string | null
+          to_email: string
+        }
+        Insert: {
+          contact_id?: string | null
+          created_at?: string
+          error?: string | null
+          id?: string
+          kind: string
+          resend_message_id?: string | null
+          sent_on?: string
+          status?: string
+          subject?: string | null
+          template?: string | null
+          to_email: string
+        }
+        Update: {
+          contact_id?: string | null
+          created_at?: string
+          error?: string | null
+          id?: string
+          kind?: string
+          resend_message_id?: string | null
+          sent_on?: string
+          status?: string
+          subject?: string | null
+          template?: string | null
+          to_email?: string
         }
         Relationships: []
       }
@@ -33207,6 +33284,8 @@ export type Database = {
       }
       set_founder_visibility: { Args: { p_enabled: boolean }; Returns: boolean }
       set_podcast_visibility: { Args: { p_enabled: boolean }; Returns: boolean }
+      show_limit: { Args: never; Returns: number }
+      show_trgm: { Args: { "": string }; Returns: string[] }
       trigger_emergency_lockdown: {
         Args: {
           p_departments?: string[]
