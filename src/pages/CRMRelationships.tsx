@@ -48,7 +48,6 @@ import { LayoutGrid, Table as TableIcon } from "lucide-react";
 import { sortBrokeragesForDirectory, normalizeForSearch } from "@/utils/brokerageRanking";
 import { FileSpreadsheet, FileText as FileTextIcon, UserSquare2, Store } from "lucide-react";
 import { ExportMenu, type ExportFormat } from "@/components/crm/ExportMenu";
-import IndividualBrokersTab from "@/components/crm/IndividualBrokersTab";
 import DevSalesRepsDirectory from "@/components/crm/entity/DevSalesRepsDirectory";
 import { Link as RouterLink } from "react-router-dom";
 import { BrandedEmailComposer } from "@/components/crm/BrandedEmailComposer";
