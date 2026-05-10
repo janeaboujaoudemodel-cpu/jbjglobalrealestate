@@ -4523,3 +4523,26 @@ button:hover [data-no-contrast-guard] svg[style*="#B89555"] {
 .owner-dashboard-shell :is([class~="bg-[#EFE6D6]"]) {
   background-color: #EFE6D6 !important;
 }
+
+/* ============================================================
+   FINAL LIGHT-SURFACE INK RESTORE
+   The prior contrast rescue must never leave homepage/header/CRM
+   champagne controls white. Light surfaces are ink by default;
+   explicit dark islands and hero areas are excluded.
+   ============================================================ */
+:root:not(.dark) :where(
+  .bg-white,
+  .bg-card,
+  .bg-background,
+  [class~="bg-[#FDFBF7]"],
+  [class~="bg-[#F7F2EA]"],
+  [class~="bg-[#EFE6D6]"],
+  [class*="from-[#FDFBF7]"],
+  [class*="from-[#F7F2EA]"],
+  [class*="from-[#F7F1E6]"]
+):not(:where([data-surface="dark"], [data-surface="dark"] *, [data-surface="ink"], [data-surface="ink"] *, .jj-hero-fullscreen, .jj-hero-fullscreen *))
+  :where(h1, h2, h3, h4, h5, h6, p, span, label, small, strong, em, li, a, button, [role="button"], [role="tab"], [role="menuitem"], svg.lucide):not(:where(.bg-black, .bg-black *, .bg-primary, .bg-primary *, .bg-foreground, .bg-foreground *, [class~="bg-[#1A1A1A]"], [class~="bg-[#1A1A1A]"] *, [class*="bg-gray-8"], [class*="bg-gray-8"] *, [class*="bg-gray-9"], [class*="bg-gray-9"] *, [class*="bg-zinc-8"], [class*="bg-zinc-8"] *, [class*="bg-zinc-9"], [class*="bg-zinc-9"] *, [data-surface="dark"], [data-surface="dark"] *, [data-surface="ink"], [data-surface="ink"] *, .jj-hero-fullscreen, .jj-hero-fullscreen *, .text-price-orange, [class*="text-price-orange"])) {
+  color: hsl(0 0% 10%) !important;
+  opacity: 1 !important;
+  --tw-text-opacity: 1 !important;
+}
