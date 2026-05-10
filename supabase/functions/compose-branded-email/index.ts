@@ -28,7 +28,13 @@ interface Body {
   brief: string;
   recipient_name?: string;
   tone?: string; // e.g. "warm", "formal", "executive"
+  language?: string; // ISO code: en, ar, fr, es, ru, zh, de
 }
+
+const LANG_NAMES: Record<string, string> = {
+  en: "English", ar: "Arabic", fr: "French", es: "Spanish",
+  ru: "Russian", zh: "Simplified Chinese", de: "German",
+};
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
@@ -68,9 +74,11 @@ serve(async (req) => {
       ? `Recipient first name: ${body.recipient_name}`
       : "Recipient name unknown — open with a polite generic greeting.";
 
-    const system = `You write branded business emails for JBJ GLOBAL REAL ESTATE, a luxury Dubai real-estate brokerage. Voice: refined, warm, concise, executive. Never use emojis. Never include unsubscribe text. Never use placeholders like {{name}} — write the final copy directly. Output JSON only: {"subject": string (max 90 chars), "body_html": string}. body_html must be safe inline-styled HTML, paragraphs in <p> tags, no <html>/<body> wrappers, no tracking pixels, no scripts. Sign off as "Jane Bou Jaoude — JBJ GLOBAL REAL ESTATE".`;
+    const langCode = (body.language || "en").toLowerCase();
+    const langName = LANG_NAMES[langCode] || "English";
+    const system = `You write branded business emails for JBJ GLOBAL REAL ESTATE, a luxury Dubai real-estate brokerage. Voice: refined, warm, concise, executive. Never use emojis. Never include unsubscribe text. Never use placeholders like {{name}} — write the final copy directly. Write the ENTIRE email (subject AND body) in ${langName}. If the language is Arabic, set the <p> tags' dir="rtl" and lang="ar". Output JSON only: {"subject": string (max 90 chars), "body_html": string}. body_html must be safe inline-styled HTML, paragraphs in <p> tags, no <html>/<body> wrappers, no tracking pixels, no scripts. Sign off as "Jane Bou Jaoude — JBJ GLOBAL REAL ESTATE".`;
 
-    const userMsg = `${recipientLine}\nTone: ${body.tone || "warm executive"}.\n\nBrief from the owner:\n${brief}`;
+    const userMsg = `${recipientLine}\nTone: ${body.tone || "warm executive"}.\nLanguage: ${langName}.\n\nBrief from the owner:\n${brief}`;
 
     const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
