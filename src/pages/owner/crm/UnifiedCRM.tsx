@@ -305,7 +305,14 @@ export default function UnifiedCRM() {
   return (
     <div className="min-h-screen bg-[#FDFBF7]">
       {/* Title row + Insights toggle */}
-      <div className="bg-[#FDFBF7] border-b border-[#B89555]/30">
+      <div className="bg-[#FDFBF7] border-b border-[#B89555]/30 relative">
+        {/* Floating insights widget — top-right of header */}
+        <Suspense fallback={null}>
+          <CRMFloatingInsightsWidget
+            flaggedCount={counts.flagged}
+            onOpenFlagged={() => { setEntity("leads"); setView("flagged"); }}
+          />
+        </Suspense>
         <div className="px-6 pt-5 pb-3 flex items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-semibold tracking-tight text-[#1A1A1A]">JBJ CRM</h1>
