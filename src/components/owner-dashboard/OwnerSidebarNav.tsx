@@ -55,7 +55,28 @@ const NAV_SECTIONS: NavSection[] = [
     label: "CORE",
     items: [
       { label: "Overview", icon: LayoutDashboard, path: "/owner" },
-      { label: "CRM", icon: Users, path: "/owner/crm" },
+      {
+        label: "CRM",
+        icon: Users,
+        path: "/owner/crm",
+        children: [
+          { label: "Leads", icon: Users, path: "/owner/crm?entity=leads&view=all" },
+          { label: "Flagged", icon: Flag, path: "/owner/crm?entity=leads&view=flagged" },
+          { label: "VIP", icon: Star, path: "/owner/crm?entity=leads&view=vip" },
+          { label: "Management", icon: Briefcase, path: "/owner/crm?entity=leads&view=management" },
+          { label: "Relationships", icon: Network, path: "/owner/crm?entity=investors&view=directory", children: [
+            { label: "Investors", icon: Users, path: "/owner/crm?entity=investors&view=directory" },
+            { label: "Developers", icon: Building2, path: "/owner/crm?entity=developers&view=registry" },
+            { label: "Sales Reps", icon: UserCheck, path: "/owner/crm?entity=sales-reps&view=directory" },
+            { label: "Brokers", icon: UserCheck, path: "/owner/crm?entity=brokers&view=directory" },
+            { label: "Agencies", icon: Building2, path: "/owner/crm?entity=agencies&view=directory" },
+          ] },
+          { label: "Employees", icon: UserCheck, path: "/owner/crm?entity=employees&view=roster" },
+          { label: "Campaigns", icon: Megaphone, path: "/owner/crm?entity=leads&view=campaigns" },
+          { label: "Tasks", icon: CheckSquare, path: "/owner/crm?entity=leads&view=tasks" },
+          { label: "Calendar", icon: Calendar, path: "/owner/crm?entity=leads&view=calendar" },
+        ],
+      },
     ],
   },
   {
