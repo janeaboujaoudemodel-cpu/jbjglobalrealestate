@@ -252,7 +252,7 @@ export function BrandedEmailComposer() {
             onChange={(e) => setBrief(e.target.value)}
             className="bg-white min-h-[70px]"
           />
-          <div className="mt-2">
+          <div className="mt-2 flex flex-wrap items-center gap-2">
             <Button
               type="button"
               variant="outline"
@@ -262,6 +262,26 @@ export function BrandedEmailComposer() {
             >
               {busy === "ai" ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Sparkles className="w-4 h-4 mr-2" />}
               Draft with AI
+            </Button>
+            <select
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+              className="h-9 px-2 text-sm border border-[#B89555]/40 rounded bg-white text-[#1A1A1A]"
+              title="AI will draft in this language"
+            >
+              {LANGUAGES.map(([k, label]) => (
+                <option key={k} value={k}>{label}</option>
+              ))}
+            </select>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setBodyHtml((b) => (b ? b + "\n" + meetingBlockHtml() : meetingBlockHtml()))}
+              className="border-[#B89555]/40"
+              title="Append a styled meeting-booking CTA pointing to /book"
+            >
+              <CalendarPlus className="w-4 h-4 mr-2" />
+              Insert meeting block
             </Button>
           </div>
         </div>
