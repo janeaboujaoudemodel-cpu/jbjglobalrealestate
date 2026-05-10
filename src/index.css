@@ -2557,7 +2557,6 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
 
 /* 2. Icons on SOLID-gold tiles → white. Same exact-token logic as above so
    translucent gold tiles (bg-[#B89555]/10, /15…) keep their authored gold icon. */
-.bg-\[\#EFE6D6\] > svg,
 [class~="bg-[#B89555]"] > svg,
 [class~="bg-[#A68444]"] > svg,
 [class~="bg-[#C8A766]"] > svg {
@@ -2639,7 +2638,7 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
   [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"],
   [class~="bg-[#FFFFFF]"]
 ):not([data-surface="dark"])
-:is(.text-white, [class*="text-white/"]):not(.bg-black):not([class*="bg-black"]):not(.bg-\[\#EFE6D6\]):not([class~="bg-[#EFE6D6]"]):not(.bg-primary):not([class*="bg-primary"]):not([class*="bg-gray-900"]):not([class*="bg-gray-800"]):not([data-surface="dark"]) {
+:is(.text-white, [class*="text-white/"]):not(.bg-black):not([class*="bg-black"]):not(.bg-primary):not([class*="bg-primary"]):not([class*="bg-gray-900"]):not([class*="bg-gray-800"]):not([data-surface="dark"]) {
   color: hsl(var(--foreground)) !important;
   opacity: 1 !important;
   --tw-text-opacity: 1 !important;
@@ -2846,7 +2845,7 @@ button[style*="background"] [class*="text-[#1A1A1A]"] {
   [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"],
   [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"]
 ):not([data-surface="dark"])
-:is(button, a, [role="button"], [role="option"], [role="menuitem"], label, span, p, h1, h2, h3, h4, h5, h6):is(.text-white, [class*="text-white/"]):not(.bg-black):not([class~="bg-[#1A1A1A]"]):not(.bg-\[\#EFE6D6\]):not([class~="bg-[#B89555]"]):not([class*="bg-red-5"]):not([class*="bg-red-6"]):not([class*="bg-red-7"]):not([class*="bg-emerald-6"]):not([class*="bg-blue-6"]):not([data-surface="dark"]):not([data-surface="dark"] *):not(.jj-hero-fullscreen *) {
+:is(button, a, [role="button"], [role="option"], [role="menuitem"], label, span, p, h1, h2, h3, h4, h5, h6):is(.text-white, [class*="text-white/"]):not(.bg-black):not([class~="bg-[#1A1A1A]"]):not([class~="bg-[#B89555]"]):not([class*="bg-red-5"]):not([class*="bg-red-6"]):not([class*="bg-red-7"]):not([class*="bg-emerald-6"]):not([class*="bg-blue-6"]):not([data-surface="dark"]):not([data-surface="dark"] *):not(.jj-hero-fullscreen *) {
   color: hsl(var(--foreground)) !important;
   --tw-text-opacity: 1 !important;
 }
