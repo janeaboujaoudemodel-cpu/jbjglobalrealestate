@@ -38,6 +38,37 @@ export default function BrokerageAgenciesDirectory() {
   const [search, setSearch] = useState("");
   const [hubOpen, setHubOpen] = useState(false);
   const [hubName, setHubName] = useState<string | null>(null);
+  const [leadCounts, setLeadCounts] = useState<Map<string, number>>(new Map());
+
+  // Fetch lead counts per brokerage (matched by lowercased company_name)
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      try {
+        const counts = new Map<string, number>();
+        let from = 0;
+        const PAGE = 1000;
+        for (let i = 0; i < 30; i++) {
+          const { data, error } = await supabase
+            .from("crm_leads")
+            .select("company_name")
+            .not("company_name", "is", null)
+            .range(from, from + PAGE - 1);
+          if (error) break;
+          const batch = (data || []) as Array<{ company_name: string | null }>;
+          for (const r of batch) {
+            const k = normalizeForSearch(r.company_name || "");
+            if (!k) continue;
+            counts.set(k, (counts.get(k) || 0) + 1);
+          }
+          if (batch.length < PAGE) break;
+          from += PAGE;
+        }
+        if (alive) setLeadCounts(counts);
+      } catch { /* non-fatal */ }
+    })();
+    return () => { alive = false; };
+  }, []);
 
   useEffect(() => {
     let alive = true;
@@ -178,6 +209,7 @@ export default function BrokerageAgenciesDirectory() {
               <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Office</th>
               <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Phone</th>
               <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Email</th>
+              <th className="text-right px-4 py-2 font-semibold whitespace-nowrap">Leads</th>
               <th className="text-right px-4 py-2 font-semibold whitespace-nowrap">Agents</th>
               <th className="text-right px-4 py-2 font-semibold whitespace-nowrap">Rating</th>
               <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Source</th>
@@ -222,6 +254,16 @@ export default function BrokerageAgenciesDirectory() {
                   {r.email ? (
                     <a href={`mailto:${r.email}`} onClick={(e) => e.stopPropagation()} className="inline-flex items-center gap-1 hover:underline"><Mail className="h-3 w-3" />{r.email}</a>
                   ) : "—"}
+                </td>
+                <td className="px-4 py-3 text-right whitespace-nowrap">
+                  {(() => {
+                    const c = leadCounts.get(normalizeForSearch(r.company_name)) || 0;
+                    return c > 0 ? (
+                      <span className="inline-flex items-center justify-center min-w-[28px] px-2 py-0.5 rounded-full text-[11px] font-bold bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 tabular-nums">
+                        {c.toLocaleString()}
+                      </span>
+                    ) : <span className="text-[#1A1A1A]/40 text-xs">0</span>;
+                  })()}
                 </td>
                 <td className="px-4 py-3 text-right text-[#1A1A1A] whitespace-nowrap">{r.estimated_agent_count ?? "—"}</td>
                 <td className="px-4 py-3 text-right text-[#1A1A1A]/80 text-xs whitespace-nowrap">
