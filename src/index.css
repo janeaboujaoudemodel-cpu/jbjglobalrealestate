@@ -2616,7 +2616,7 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
   .bg-gray-50, .bg-gray-100,
   .jj-layer-2, .jj-layer-1,
   [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"]
-):not([data-surface="dark"]) :is(.text-gray-300, .text-gray-400, .text-[#1A1A1A]/80, .text-[#1A1A1A]/70) {
+):not([data-surface="dark"]) :is(.text-gray-300, .text-gray-400, .text-[#1A1A1A]\/80, .text-[#1A1A1A]\/70) {
   color: #6b7280 !important; /* gray-500 — 4.6:1 on white */
   opacity: 1 !important;
   --tw-text-opacity: 1 !important;
@@ -2628,7 +2628,7 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
   .bg-gray-50, .bg-gray-100,
   .jj-layer-2, .jj-layer-1,
   [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"]
-):not([data-surface="dark"]) :is(.text-gray-500, .text-[#1A1A1A]/60, .text-gray-600, .text-[#1A1A1A]/70) {
+):not([data-surface="dark"]) :is(.text-gray-500, .text-[#1A1A1A]\/60, .text-gray-600, .text-[#1A1A1A]\/70) {
   color: #374151 !important; /* gray-700 — 9.7:1 on white */
   opacity: 1 !important;
   --tw-text-opacity: 1 !important;
@@ -2734,7 +2734,7 @@ html [data-surface="dark"][data-surface="dark"] :is(input, textarea, select, opt
   [class*="from-[hsl(32,28%,13%)]"], [class*="bg-[hsl(32,28%,13%)]"],
   [class*="from-[hsl(38,35%,12%)]"], [class*="bg-[hsl(38,35%,12%)]"]
 ) :is(
-  .text-gray-400, .text-gray-500, .text-[#1A1A1A]/70, .text-[#1A1A1A]/60,
+  .text-gray-400, .text-gray-500, .text-[#1A1A1A]\/70, .text-[#1A1A1A]\/60,
   .text-slate-400, .text-slate-500
 ) {
   color: rgb(255 255 255 / 0.78) !important;
@@ -2748,7 +2748,7 @@ html [data-surface="dark"][data-surface="dark"] :is(input, textarea, select, opt
   [class*="bg-black"]
 ) :is(
   .text-gray-600, .text-gray-700, .text-gray-800, .text-gray-900,
-  .text-[#1A1A1A]/70, .text-[#1A1A1A]/80, .text-[#1A1A1A],
+  .text-[#1A1A1A]\/70, .text-[#1A1A1A]\/80, .text-[#1A1A1A],
   .text-black, .text-foreground, .text-muted-foreground
 ) {
   color: rgb(255 255 255 / 0.92) !important;
@@ -2764,7 +2764,7 @@ html [data-surface="dark"][data-surface="dark"] :is(input, textarea, select, opt
 }
 
 /* 2d. Dialogs & modals on dark backgrounds */
-.dark [role="dialog"] :is(.text-gray-400, .text-gray-500, .text-[#1A1A1A]/70, .text-[#1A1A1A]/60) {
+.dark [role="dialog"] :is(.text-gray-400, .text-gray-500, .text-[#1A1A1A]\/70, .text-[#1A1A1A]\/60) {
   color: rgb(255 255 255 / 0.78) !important;
 }
 
@@ -3889,7 +3889,7 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
 /* 3. Replace neutral text on light surfaces with ink/brown */
 :root:not(.dark) :is(
   .text-neutral-400, .text-neutral-500, .text-neutral-600, .text-neutral-700,
-  .text-[#1A1A1A]/60, .text-[#1A1A1A]/70, .text-slate-500, .text-slate-600,
+  .text-[#1A1A1A]\/60, .text-[#1A1A1A]\/70, .text-slate-500, .text-slate-600,
   .text-stone-500, .text-stone-600
 ) {
   color: #3A2D1D !important;
