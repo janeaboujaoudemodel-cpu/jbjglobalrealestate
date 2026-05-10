@@ -48,6 +48,7 @@ import { LayoutGrid, Table as TableIcon } from "lucide-react";
 import { sortBrokeragesForDirectory, normalizeForSearch } from "@/utils/brokerageRanking";
 import { FileSpreadsheet, FileText as FileTextIcon } from "lucide-react";
 import { ExportMenu, type ExportFormat } from "@/components/crm/ExportMenu";
+import { BrandedEmailComposer } from "@/components/crm/BrandedEmailComposer";
 import { ExportConfigurator } from "@/components/crm/ExportConfigurator";
 import { UnifiedCRMExportModal } from "@/components/crm/UnifiedCRMExportModal";
 import { BROKERAGE_EXPORT_COLUMNS, BROKERAGE_EXPORT_PRESETS } from "@/utils/exportBrokerages";
@@ -3126,6 +3127,10 @@ const CRMRelationships = () => {
           <div className="mb-6 space-y-3">
             <GmailSenderStatusBanner />
             <BreakfastCalendarStatusBanner />
+          </div>
+
+          <div className="mb-8">
+            <BrandedEmailComposer />
           </div>
 
           <Tabs value={tab} onValueChange={setTab}>
