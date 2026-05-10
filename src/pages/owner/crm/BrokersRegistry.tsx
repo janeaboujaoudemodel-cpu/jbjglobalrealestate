@@ -391,7 +391,8 @@ function AddBrokerSheet({ open, onOpenChange, onAdded }: { open: boolean; onOpen
   const initial = {
     full_name: "", email: "", phone: "", whatsapp: "",
     personal_email: "", company_email: "", personal_phone: "", company_phone: "",
-    current_company: "", rera_license: "", nationality: "", languages: "",
+    current_company: "", current_brokerage_id: null as string | null,
+    rera_license: "", nationality: "", languages: "",
     experience_years: "", broker_type: "" as "" | "sales" | "leasing" | "both",
     birthday: "", linkedin_url: "", bayut_url: "", pf_url: "", instagram_url: "",
     notes: "",
