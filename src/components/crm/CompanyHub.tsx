@@ -65,11 +65,14 @@ interface HubData {
   threads: any[];
   brokerageId: string | null;
   devRegistryId: string | null;
+  brokerage: any | null;
+  developer: any | null;
 }
 
 const EMPTY: HubData = {
   people: [], campaigns: [], events: [], followups: [], cards: [],
   notes: [], emails: [], threads: [], brokerageId: null, devRegistryId: null,
+  brokerage: null, developer: null,
 };
 
 export function CompanyHub({ type, companyName, brokerageId, devRegistryId }: CompanyHubProps) {
