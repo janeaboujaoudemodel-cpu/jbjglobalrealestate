@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { 
   LayoutDashboard, 
@@ -27,6 +27,12 @@ import {
   Link,
   ShieldAlert,
   Brain,
+  ChevronRight,
+  Network,
+  Flag,
+  Star,
+  Briefcase,
+  UserCheck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -41,6 +47,7 @@ interface NavItem {
   path: string;
   badge?: number;
   premium?: boolean;
+  children?: NavItem[];
 }
 
 const NAV_SECTIONS: NavSection[] = [
