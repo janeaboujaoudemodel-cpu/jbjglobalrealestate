@@ -93,11 +93,15 @@ export function CompanyHub({ type, companyName, brokerageId, devRegistryId }: Co
       // Phase A — resolve org id + people in parallel
       const [bRes, dRes, peopleRes] = await Promise.all([
         !brokerageId && type === "brokerage" && nameKey
-          ? supabase.from("crm_brokerages").select("id").ilike("company_name", companyName).maybeSingle()
-          : Promise.resolve({ data: brokerageId ? { id: brokerageId } : null }) as any,
+          ? supabase.from("crm_brokerages").select("*").ilike("company_name", companyName).maybeSingle()
+          : (brokerageId
+              ? supabase.from("crm_brokerages").select("*").eq("id", brokerageId).maybeSingle()
+              : Promise.resolve({ data: null }) as any),
         !devRegistryId && type === "developer" && nameKey
-          ? supabase.from("crm_developer_registry").select("id").ilike("developer_name", companyName).maybeSingle()
-          : Promise.resolve({ data: devRegistryId ? { id: devRegistryId } : null }) as any,
+          ? supabase.from("crm_developer_registry").select("*").ilike("developer_name", companyName).maybeSingle()
+          : (devRegistryId
+              ? supabase.from("crm_developer_registry").select("*").eq("id", devRegistryId).maybeSingle()
+              : Promise.resolve({ data: null }) as any),
         supabase
           .from("crm_leads")
           .select("id,full_name,email_lower,phone_e164,contact_type,company_name,country_of_residence,created_at")
