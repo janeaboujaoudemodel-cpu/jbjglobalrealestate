@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Crown, Phone, Mail, Calendar, Home, Cake } from "lucide-react";
+import { OWNER_EMAILS_LC } from "@/config/ownerEmails";
 
 interface Investor {
   id: string;
