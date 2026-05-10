@@ -10,16 +10,18 @@ import { toast } from "sonner";
 interface Props {
   leadId: string;
   leadName?: string;
+  leadPhone?: string | null;
+  leadEmail?: string | null;
   userId: string;
 }
 
-export default function LeadQuickActions({ leadId, leadName, userId }: Props) {
+export default function LeadQuickActions({ leadId, leadName, leadPhone, leadEmail, userId }: Props) {
   return (
     <div className="inline-flex items-center gap-1">
       <InvestorToggle leadId={leadId} />
-      <CalendarPopover leadId={leadId} leadName={leadName} userId={userId} />
-      <NotePopover leadId={leadId} userId={userId} />
-      <TaskPopover leadId={leadId} leadName={leadName} userId={userId} />
+      <CalendarPopover leadId={leadId} leadName={leadName} leadPhone={leadPhone} leadEmail={leadEmail} userId={userId} />
+      <NotePopover leadId={leadId} leadName={leadName} leadPhone={leadPhone} leadEmail={leadEmail} userId={userId} />
+      <TaskPopover leadId={leadId} leadName={leadName} leadPhone={leadPhone} leadEmail={leadEmail} userId={userId} />
     </div>
   );
 }
