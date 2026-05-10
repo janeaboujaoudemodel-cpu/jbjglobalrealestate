@@ -122,7 +122,7 @@ export default function IntegrationWidgets() {
           <Button 
             variant="outline" 
             className="w-full justify-start gap-3 h-11 border-[#B89555]/30 hover:border-[#B89555]/50 hover:bg-[#B89555]/5 text-[#1A1A1A]"
-            onClick={() => navigate('/crm/tasks?action=new')}
+            onClick={() => navigate('/owner/crm?entity=leads&view=tasks&action=new')}
           >
             <Plus className="h-4 w-4 text-emerald-600" />
             <span className="text-sm">Add Quick Task</span>
@@ -131,7 +131,7 @@ export default function IntegrationWidgets() {
           <Button 
             variant="outline" 
             className="w-full justify-start gap-3 h-11 border-[#B89555]/30 hover:border-[#B89555]/50 hover:bg-[#B89555]/5 text-[#1A1A1A]"
-            onClick={() => navigate('/crm/notes?action=new')}
+            onClick={() => navigate('/owner/crm?entity=leads&view=notes&action=new')}
           >
             <FileText className="h-4 w-4 text-purple-600" />
             <span className="text-sm">Add Quick Note</span>
