@@ -484,8 +484,10 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                   <Label>Lead Source</Label>
                   <Select value={formData.source} onValueChange={(v) => setFormData({ ...formData, source: v })}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent className="bg-[#FDFBF7] z-[200]">
-                      {LEAD_SOURCES.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                    <SelectContent className="bg-[#FDFBF7] z-[200] max-h-80">
+                      {LEAD_SOURCES.map((s) => (
+                        <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
@@ -493,10 +495,103 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                   <Label>Status</Label>
                   <Select value={formData.pipeline_stage} onValueChange={(v) => setFormData({ ...formData, pipeline_stage: v })}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent className="bg-[#FDFBF7] z-[200]">
-                      {PIPELINE_STATUS.map((s) => <SelectItem key={s} value={s}>{s.replace(/_/g, " ")}</SelectItem>)}
+                    <SelectContent
+                      position="popper"
+                      side="bottom"
+                      align="start"
+                      sideOffset={6}
+                      avoidCollisions={false}
+                      className="bg-[#FDFBF7] z-[200] max-h-96 border border-[#B89555]/30 rounded-xl"
+                    >
+                      {(['positive','neutral','negative'] as const).map((cat) => {
+                        const items = PIPELINE_STATUSES.filter(s => s.category === cat);
+                        if (!items.length) return null;
+                        const dot = cat === 'positive' ? 'bg-emerald-500' : cat === 'negative' ? 'bg-red-500' : 'bg-blue-500';
+                        const label = cat === 'positive' ? 'Positive' : cat === 'negative' ? 'Negative' : 'Neutral';
+                        return (
+                          <div key={cat}>
+                            <div className="px-2 py-1.5 text-[10px] font-bold text-[#1A1A1A]/60 uppercase tracking-wider border-t border-[#B89555]/20 first:border-t-0 mt-1 first:mt-0 flex items-center gap-2">
+                              <span className={cn("w-2 h-2 rounded-full", dot)} />
+                              {label}
+                            </div>
+                            {items.map(s => (
+                              <SelectItem key={s.value} value={s.value} className="pl-4">
+                                <div className="flex items-center gap-2">
+                                  <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: s.dotColor }} />
+                                  {s.label}
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </div>
+                        );
+                      })}
                     </SelectContent>
                   </Select>
+                </div>
+              </div>
+
+              {/* Broker assignment */}
+              <BrokerCombobox
+                label="Assigned Broker"
+                placeholder="Search or type broker name…"
+                value={formData.broker_name_text}
+                brokerId={formData.assigned_broker_id}
+                onChange={({ value, brokerId }) =>
+                  setFormData({ ...formData, broker_name_text: value, assigned_broker_id: brokerId })
+                }
+              />
+
+              {/* Tier (Standard / VIP) and Pool (Pool / Non-pool) — independent */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label className="flex items-center gap-1.5">
+                    <Crown className="h-3.5 w-3.5 text-amber-500" />
+                    Tier
+                  </Label>
+                  <div className="inline-flex w-full rounded-lg border border-[#1A1A1A]/15 overflow-hidden bg-[#FDFBF7]">
+                    {(['standard','vip'] as const).map(t => (
+                      <button
+                        key={t}
+                        type="button"
+                        onClick={() => setFormData({ ...formData, tier: t })}
+                        className={cn(
+                          "flex-1 px-3 py-2 text-xs font-bold uppercase tracking-wide transition-colors",
+                          formData.tier === t
+                            ? t === 'vip'
+                              ? "bg-amber-400/25 text-amber-900 border-r border-[#B89555]/40"
+                              : "bg-[#EFE6D6] text-[#1A1A1A] border-r border-[#B89555]/40"
+                            : "text-[#1A1A1A]/60 hover:bg-[#F7F2EA] border-r border-[#1A1A1A]/10 last:border-r-0"
+                        )}
+                      >
+                        {t === 'vip' ? 'VIP' : 'Standard'}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <Label className="flex items-center gap-1.5">
+                    <Users2 className="h-3.5 w-3.5 text-blue-500" />
+                    Pool
+                  </Label>
+                  <div className="inline-flex w-full rounded-lg border border-[#1A1A1A]/15 overflow-hidden bg-[#FDFBF7]">
+                    {(['pool','nonpool'] as const).map(p => (
+                      <button
+                        key={p}
+                        type="button"
+                        onClick={() => setFormData({ ...formData, pool: p })}
+                        className={cn(
+                          "flex-1 px-3 py-2 text-xs font-bold uppercase tracking-wide transition-colors",
+                          formData.pool === p
+                            ? p === 'pool'
+                              ? "bg-blue-500/15 text-blue-800 border-r border-[#B89555]/40"
+                              : "bg-[#EFE6D6] text-[#1A1A1A] border-r border-[#B89555]/40"
+                            : "text-[#1A1A1A]/60 hover:bg-[#F7F2EA] border-r border-[#1A1A1A]/10 last:border-r-0"
+                        )}
+                      >
+                        {p === 'pool' ? 'Pool' : 'Non-pool'}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
 
