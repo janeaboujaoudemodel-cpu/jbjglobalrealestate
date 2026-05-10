@@ -137,13 +137,15 @@ export function EventsCalendar({ events = [] }: EventsCalendarProps) {
               <button
                 key={day.toISOString()}
                 onClick={() => setSelectedDate(isSelected ? null : day)}
-                className={`h-8 rounded-md text-sm relative transition-colors ${
+                className={`h-9 rounded-md text-sm relative transition-colors border ${
                   isToday(day)
-                    ? "bg-primary text-primary-foreground font-semibold"
+                    ? "bg-[#1A1A1A] text-[#FDFBF7] font-semibold border-[#1A1A1A]"
                     : isSelected
-                    ? "bg-primary/20 text-foreground"
-                    : "hover:bg-muted text-foreground"
-                } ${!isSameMonth(day, currentMonth) ? "text-muted-foreground" : ""}`}
+                    ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
+                    : hasEvents
+                    ? "bg-[#EFE6D6]/70 text-[#1A1A1A] border-[#B89555]/50 font-semibold hover:bg-[#EFE6D6]"
+                    : "border-transparent text-[#1A1A1A] hover:bg-[#F7F2EA]"
+                } ${!isSameMonth(day, currentMonth) ? "opacity-40" : ""}`}
               >
                 {format(day, "d")}
                 {hasEvents && (
@@ -161,12 +163,18 @@ export function EventsCalendar({ events = [] }: EventsCalendarProps) {
           })}
         </div>
 
-        {/* Selected date events */}
+        {/* Selected date events — only after the user clicks a day */}
         {selectedDate && (
           <div className="mt-4 pt-4 border-t border-border">
-            <h4 className="text-sm font-medium text-foreground mb-2">
-              {format(selectedDate, "EEEE, MMMM d")}
-            </h4>
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="text-sm font-medium text-foreground">
+                {format(selectedDate, "EEEE, MMMM d")}
+              </h4>
+              <Button variant="ghost" size="icon" className="h-6 w-6"
+                      onClick={() => setSelectedDate(null)}>
+                <span className="sr-only">Close</span>×
+              </Button>
+            </div>
             {selectedEvents.length === 0 ? (
               <p className="text-xs text-muted-foreground">No events scheduled</p>
             ) : (
