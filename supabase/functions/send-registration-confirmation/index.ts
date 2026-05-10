@@ -11,7 +11,7 @@ const corsHeaders = {
 };
 
 const GATEWAY = "https://connector-gateway.lovable.dev/google_mail/gmail/v1";
-const FOUNDER_BCC = "drjane@gmail.com";
+const FOUNDER_BCC = "infoo.jane@gmail.com";
 
 function buildRaw(to: string, bcc: string, subject: string, html: string, fromAlias?: string) {
   const lines = [
