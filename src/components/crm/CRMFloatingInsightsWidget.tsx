@@ -93,7 +93,7 @@ export default function CRMFloatingInsightsWidget({ flaggedCount, onOpenFlagged 
   const hasFlags = flaggedCount > 0;
 
   return (
-    <div ref={wrapRef} className="absolute top-4 right-4 z-30">
+    <div ref={wrapRef} className="relative z-30">
       {/* Minimized pill */}
       <button
         type="button"
