@@ -13,6 +13,7 @@ import OwnerDashboardOverview from "@/pages/OwnerDashboardOverview";
 import OwnerInbox from "@/pages/OwnerInbox";
 import CRM from "@/pages/CRM";
 import CRMRelationships from "@/pages/CRMRelationships";
+import SecondaryMarketHub from "@/pages/SecondaryMarketHub";
 import CRMLeadsInbox from "@/pages/CRMLeadsInbox";
 import UnifiedCRM from "@/pages/owner/crm/UnifiedCRM";
 
