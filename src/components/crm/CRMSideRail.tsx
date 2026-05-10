@@ -1,9 +1,10 @@
 // CRMSideRail — slide-in dock for Calendar / Notes / Tasks.
 // Lets the owner peek at the workspace without leaving the current CRM section.
 import { lazy, Suspense, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { CalendarDays, NotebookPen, ListChecks, X, LayoutGrid } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CalendarDays, NotebookPen, ListChecks, X, LayoutGrid, Plus, ExternalLink } from "lucide-react";
 
 const CRMCalendar = lazy(() => import("@/pages/CRMCalendar"));
 const CRMNotes    = lazy(() => import("@/pages/CRMNotes"));
@@ -16,10 +17,25 @@ const PanelFallback = () => (
 );
 
 export default function CRMSideRail() {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<Tab>("calendar");
 
   const openWith = (t: Tab) => { setTab(t); setOpen(true); };
+
+  const ctaLabel = tab === "calendar" ? "Add Event" : tab === "notes" ? "New Note" : "New Task";
+  const handlePrimary = () => {
+    const ts = new Date();
+    const date = `${ts.getFullYear()}-${String(ts.getMonth()+1).padStart(2,"0")}-${String(ts.getDate()).padStart(2,"0")}`;
+    if (tab === "calendar") navigate(`/owner/crm?view=calendar&title=&date=${date}&time=10:00`);
+    else if (tab === "notes") navigate(`/owner/crm?view=notes&new=1`);
+    else navigate(`/owner/crm?view=tasks&new=1`);
+    setOpen(false);
+  };
+  const handleOpenFull = () => {
+    navigate(`/owner/crm?view=${tab}`);
+    setOpen(false);
+  };
 
   return (
     <>
@@ -49,14 +65,31 @@ export default function CRMSideRail() {
               <SheetTitle className="text-[#1A1A1A] text-base font-semibold tracking-tight">
                 Shortcuts
               </SheetTitle>
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                aria-label="Close workspace"
-                className="h-8 w-8 inline-flex items-center justify-center rounded-full hover:bg-[#EFE6D6] text-[#1A1A1A]"
-              >
-                <X className="h-4 w-4" />
-              </button>
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={handlePrimary}
+                  className="inline-flex items-center gap-1 h-8 px-3 rounded-full text-xs font-semibold bg-[#1A1A1A] text-[#FDFBF7] hover:bg-[#1A1A1A]/90"
+                >
+                  <Plus className="h-3.5 w-3.5" /> {ctaLabel}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleOpenFull}
+                  title="Open full view"
+                  className="h-8 w-8 inline-flex items-center justify-center rounded-full border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                >
+                  <ExternalLink className="h-3.5 w-3.5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  aria-label="Close workspace"
+                  className="h-8 w-8 inline-flex items-center justify-center rounded-full hover:bg-[#EFE6D6] text-[#1A1A1A]"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
             </div>
             <Tabs value={tab} onValueChange={(v) => setTab(v as Tab)} className="mt-3">
               <TabsList className="bg-[#FDFBF7] border border-[#B89555]/30 p-1 rounded-full h-auto">
