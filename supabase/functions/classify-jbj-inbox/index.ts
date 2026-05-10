@@ -36,12 +36,13 @@ const CATEGORY_RULES: Array<{ category: Category; patterns: RegExp[] }> = [
   {
     category: "contracts",
     patterns: [
-      /\bsigned (?:agreement|contract)\b/i,
+      /^\s*signed\s*[:\-–]/i,                          // "Signed: ..." subject prefix
+      /\bsigned\b[^.\n]{0,40}\b(agreement|contract|mou|addendum)\b/i,
+      /\b(agreement|contract|mou|addendum)\b[^.\n]{0,40}\bsigned\b/i,
       /\bfully executed\b/i,
-      /\bexecuted agreement\b/i,
-      /\b(?:agreement|contract) signed\b/i,
+      /\bexecuted (agreement|contract)\b/i,
       /\bcountersigned\b/i,
-      /\bdocusign\b.*\b(?:completed|signed|finalized)\b/i,
+      /\bdocusign\b.*\b(completed|signed|finalized)\b/i,
       /\badobesign\b/i,
       /\becho ?sign\b/i,
       /\bpandadoc\b/i,
