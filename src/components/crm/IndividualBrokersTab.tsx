@@ -1,9 +1,9 @@
 /**
- * IndividualBrokersTab — flat directory of every broker (person) you've added,
- * across all agencies plus standalone brokers. Renders both a card grid and an
- * Excel-style grid so it's always usable as either view.
+ * IndividualBrokersTab — flat directory of every broker (person) in the
+ * canonical `crm_brokers` table (≈32k rows). Renders rich card + Excel grid
+ * with every column the database has. Server-side search, paginated load.
  */
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -21,86 +21,166 @@ import { Label } from "@/components/ui/label";
 import { ExcelGridView } from "@/components/crm/ExcelGridView";
 import BrokerBulkUploadDialog from "@/components/crm/BrokerBulkUploadDialog";
 import { exportRowsToXlsx } from "@/utils/exportXlsx";
-import { Plus, Search, User, Phone, Mail, MessageCircle, Trash2, UploadCloud, FileDown } from "lucide-react";
+import {
+  Plus, Search, User, Phone, Mail, MessageCircle, Trash2,
+  UploadCloud, FileDown, Linkedin, Globe, ChevronLeft, ChevronRight,
+} from "lucide-react";
 
 type Row = {
   id: string;
-  brokerage_id: string | null;
-  name: string | null;
-  phone: string | null;
-  whatsapp: string | null;
-  email: string | null;
-  role: string | null;
-  status: string;
-  source: string;
   created_at: string;
-  expertise_type?: string | null;
-  expertise_areas?: string[] | null;
-  import_label?: string | null;
-  specialty_labels?: string[] | null;
-  source_history?: any[] | null;
-  source_batch_ids?: string[] | null;
-  country?: string | null;
-  license_number?: string | null;
-  rera_number?: string | null;
+  updated_at?: string | null;
+  full_name: string | null;
+  email_lower: string | null;
+  personal_email: string | null;
+  company_email: string | null;
+  phone_e164: string | null;
+  personal_phone: string | null;
+  company_phone: string | null;
+  whatsapp: string | null;
+  current_company: string | null;
+  current_brokerage_id: string | null;
+  rera_license: string | null;
+  position_title: string | null;
+  role_title: string | null;
+  department: string | null;
+  seniority: string | null;
+  position_type: string | null;
+  broker_type: string | null;
+  experience_years: number | null;
+  specialty: string[] | null;
+  languages: string[] | null;
+  labels: string[] | null;
+  nationality: string | null;
+  country: string | null;
+  city: string | null;
+  region: string | null;
+  birthday: string | null;
+  date_of_birth: string | null;
+  joined_at: string | null;
+  is_global_broker: boolean | null;
+  linkedin_url: string | null;
+  bayut_url: string | null;
+  pf_url: string | null;
+  instagram_url: string | null;
+  database_source: string | null;
+  event_source: string | null;
+  upload_source: string | null;
+  original_filename: string | null;
+  notes: string | null;
+  source_history?: any[];
   brokerage?: { company_name: string | null } | null;
 };
 
-const STATUS_OPTS = [
-  { value: "active", label: "Active" },
-  { value: "inactive", label: "Inactive" },
-  { value: "unknown", label: "Unknown" },
-];
+const PAGE_SIZE = 50;
 
 export default function IndividualBrokersTab() {
   const qc = useQueryClient();
   const [q, setQ] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [agencyFilter, setAgencyFilter] = useState<string>("all");
-  const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [expertiseFilter, setExpertiseFilter] = useState<string>("all");
+  const [countryFilter, setCountryFilter] = useState<string>("all");
+  const [page, setPage] = useState(0);
   const [open, setOpen] = useState(false);
   const [bulkOpen, setBulkOpen] = useState(false);
   const [editing, setEditing] = useState<Partial<Row> | null>(null);
 
-  const { data: rows = [], isLoading } = useQuery<Row[]>({
-    queryKey: ["crm-individual-brokers"],
+  // Debounce search → only fire query after user pauses typing
+  useEffect(() => {
+    const t = setTimeout(() => { setSearchTerm(q.trim()); setPage(0); }, 250);
+    return () => clearTimeout(t);
+  }, [q]);
+
+  const { data: totalCount = 0 } = useQuery<number>({
+    queryKey: ["crm-brokers-count", searchTerm, agencyFilter, countryFilter],
     queryFn: async () => {
-      const PAGE = 1000;
-      const all: Row[] = [];
-      for (let from = 0; ; from += PAGE) {
-        const { data, error } = await (supabase as any)
-          .from("crm_brokerage_agents")
-          .select("id, brokerage_id, name, phone, whatsapp, email, role, status, source, created_at, expertise_type, expertise_areas, import_label, specialty_labels, source_history, source_batch_ids, country, license_number, rera_number, brokerage:crm_brokerages(company_name)")
-          .order("created_at", { ascending: false })
-          .range(from, from + PAGE - 1);
-        if (error) throw error;
-        const batch = (data ?? []) as Row[];
-        all.push(...batch);
-        if (batch.length < PAGE) break;
-        if (from > 200_000) break;
+      let qb = (supabase as any).from("crm_brokers").select("id", { count: "exact", head: true });
+      if (searchTerm) {
+        const like = `%${searchTerm}%`;
+        qb = qb.or(
+          [
+            `full_name.ilike.${like}`,
+            `email_lower.ilike.${like}`,
+            `personal_email.ilike.${like}`,
+            `company_email.ilike.${like}`,
+            `phone_e164.ilike.${like}`,
+            `whatsapp.ilike.${like}`,
+            `current_company.ilike.${like}`,
+            `rera_license.ilike.${like}`,
+          ].join(","),
+        );
       }
-      return all;
+      if (agencyFilter === "__none__") qb = qb.is("current_brokerage_id", null);
+      else if (agencyFilter !== "all") qb = qb.eq("current_brokerage_id", agencyFilter);
+      if (countryFilter !== "all") qb = qb.eq("country", countryFilter);
+      const { count, error } = await qb;
+      if (error) throw error;
+      return count || 0;
+    },
+  });
+
+  const { data: rows = [], isLoading } = useQuery<Row[]>({
+    queryKey: ["crm-brokers", searchTerm, agencyFilter, countryFilter, page],
+    queryFn: async () => {
+      let qb = (supabase as any)
+        .from("crm_brokers")
+        .select(
+          "id, created_at, updated_at, full_name, email_lower, personal_email, company_email, phone_e164, personal_phone, company_phone, whatsapp, current_company, current_brokerage_id, rera_license, position_title, role_title, department, seniority, position_type, broker_type, experience_years, specialty, languages, labels, nationality, country, city, region, birthday, date_of_birth, joined_at, is_global_broker, linkedin_url, bayut_url, pf_url, instagram_url, database_source, event_source, upload_source, original_filename, notes, source_history, brokerage:crm_brokerages!current_brokerage_id(company_name)",
+        )
+        .order("created_at", { ascending: false })
+        .range(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE - 1);
+      if (searchTerm) {
+        const like = `%${searchTerm}%`;
+        qb = qb.or(
+          [
+            `full_name.ilike.${like}`,
+            `email_lower.ilike.${like}`,
+            `personal_email.ilike.${like}`,
+            `company_email.ilike.${like}`,
+            `phone_e164.ilike.${like}`,
+            `whatsapp.ilike.${like}`,
+            `current_company.ilike.${like}`,
+            `rera_license.ilike.${like}`,
+          ].join(","),
+        );
+      }
+      if (agencyFilter === "__none__") qb = qb.is("current_brokerage_id", null);
+      else if (agencyFilter !== "all") qb = qb.eq("current_brokerage_id", agencyFilter);
+      if (countryFilter !== "all") qb = qb.eq("country", countryFilter);
+      const { data, error } = await qb;
+      if (error) throw error;
+      return (data ?? []) as Row[];
     },
   });
 
   const { data: brokerages = [] } = useQuery<{ id: string; company_name: string }[]>({
     queryKey: ["crm-brokerages-min"],
     queryFn: async () => {
-      const PAGE = 1000;
       const all: any[] = [];
-      for (let from = 0; ; from += PAGE) {
+      for (let from = 0; ; from += 1000) {
         const { data, error } = await (supabase as any)
           .from("crm_brokerages")
           .select("id, company_name")
           .order("company_name")
-          .range(from, from + PAGE - 1);
+          .range(from, from + 999);
         if (error) throw error;
         const batch = data ?? [];
         all.push(...batch);
-        if (batch.length < PAGE) break;
-        if (from > 200_000) break;
+        if (batch.length < 1000) break;
+        if (from > 50_000) break;
       }
       return all;
+    },
+  });
+
+  const { data: countries = [] } = useQuery<string[]>({
+    queryKey: ["crm-brokers-countries"],
+    queryFn: async () => {
+      const { data } = await (supabase as any)
+        .from("crm_brokers").select("country").not("country", "is", null).limit(5000);
+      const set = new Set<string>();
+      (data ?? []).forEach((r: any) => { if (r.country) set.add(r.country); });
+      return Array.from(set).sort();
     },
   });
 
@@ -108,29 +188,19 @@ export default function IndividualBrokersTab() {
     mutationFn: async (patch: Partial<Row> & { id?: string }) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
-      const payload: any = {
-        owner_id: user.id,
-        brokerage_id: patch.brokerage_id || null,
-        name: patch.name || "Unknown",
-        phone: patch.phone || null,
-        whatsapp: patch.whatsapp || patch.phone || null,
-        email: patch.email || null,
-        role: patch.role || null,
-        status: patch.status || "active",
-        source: patch.source || "manual",
-        expertise_type: patch.expertise_type || "both",
-        expertise_areas: patch.expertise_areas || [],
-      };
+      const payload: any = { owner_id: user.id, ...patch };
+      delete payload.brokerage;
       if (patch.id) {
-        const { error } = await (supabase as any).from("crm_brokerage_agents").update(payload).eq("id", patch.id);
+        const { error } = await (supabase as any).from("crm_brokers").update(payload).eq("id", patch.id);
         if (error) throw error;
       } else {
-        const { error } = await (supabase as any).from("crm_brokerage_agents").insert(payload);
+        const { error } = await (supabase as any).from("crm_brokers").insert(payload);
         if (error) throw error;
       }
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["crm-individual-brokers"] });
+      qc.invalidateQueries({ queryKey: ["crm-brokers"] });
+      qc.invalidateQueries({ queryKey: ["crm-brokers-count"] });
       toast.success("Broker saved");
       setOpen(false);
     },
@@ -139,109 +209,120 @@ export default function IndividualBrokersTab() {
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await (supabase as any).from("crm_brokerage_agents").delete().eq("id", id);
+      const { error } = await (supabase as any).from("crm_brokers").delete().eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["crm-individual-brokers"] });
+      qc.invalidateQueries({ queryKey: ["crm-brokers"] });
+      qc.invalidateQueries({ queryKey: ["crm-brokers-count"] });
       toast.success("Broker removed");
     },
   });
 
-  const updateStatus = (row: Row, next: string) => upsert.mutate({ id: row.id, status: next, brokerage_id: row.brokerage_id });
-
-  const filtered = useMemo(() => {
-    const ql = q.trim().toLowerCase();
-    return rows.filter((r) => {
-      if (statusFilter !== "all" && r.status !== statusFilter) return false;
-      const labels = r.specialty_labels || [];
-      const et = r.expertise_type || "both";
-      if (expertiseFilter !== "all") {
-        if (expertiseFilter === "leasing" && !(labels.includes("leasing") || et === "leasing" || et === "both")) return false;
-        if (expertiseFilter === "sales" && !(labels.includes("sales") || et === "selling" || et === "both")) return false;
-        if (expertiseFilter === "leasing_sales" && !(labels.includes("leasing") && labels.includes("sales"))) return false;
-        if (expertiseFilter === "developer_relations" && !labels.includes("developer_relations")) return false;
-        if (expertiseFilter === "event_attendees" && !labels.includes("event_attendees")) return false;
-      }
-      if (agencyFilter === "__none__" && r.brokerage_id) return false;
-      if (agencyFilter !== "all" && agencyFilter !== "__none__" && r.brokerage_id !== agencyFilter) return false;
-      if (!ql) return true;
-      const hay = [r.name, r.phone, r.whatsapp, r.email, r.role, r.brokerage?.company_name, r.import_label, ...(r.expertise_areas || []), ...labels].filter(Boolean).join(" ").toLowerCase();
-      return hay.includes(ql);
-    });
-  }, [rows, q, agencyFilter, statusFilter, expertiseFilter]);
-
-  const openNew = () => { setEditing({ status: "active", source: "manual", expertise_type: "both", expertise_areas: [] }); setOpen(true); };
+  const openNew = () => { setEditing({}); setOpen(true); };
 
   const exportExcel = () => {
-    if (filtered.length === 0) { toast.error("Nothing to export"); return; }
-    const out = filtered.map(r => ({
-      Name: r.name, Agency: r.brokerage?.company_name || "Standalone",
-      Role: r.role, Phone: r.phone, WhatsApp: r.whatsapp, Email: r.email,
-      Expertise: r.expertise_type || "both",
-      Areas: (r.expertise_areas || []).join(", "),
-      Status: r.status, Batch: r.import_label || "",
-      Added: new Date(r.created_at).toLocaleDateString(),
+    if (rows.length === 0) { toast.error("Nothing to export on this page"); return; }
+    const out = rows.map(r => ({
+      "Full name": r.full_name,
+      "Agency": r.brokerage?.company_name || r.current_company || "Standalone",
+      "Role / Title": r.role_title || r.position_title || "",
+      "Department": r.department || "",
+      "Seniority": r.seniority || "",
+      "Broker type": r.broker_type || "",
+      "Specialty": (r.specialty || []).join(", "),
+      "Languages": (r.languages || []).join(", "),
+      "Years exp.": r.experience_years ?? "",
+      "Personal phone": r.personal_phone || r.phone_e164 || "",
+      "Company phone": r.company_phone || "",
+      "WhatsApp": r.whatsapp || "",
+      "Personal email": r.personal_email || r.email_lower || "",
+      "Company email": r.company_email || "",
+      "RERA": r.rera_license || "",
+      "Nationality": r.nationality || "",
+      "Country": r.country || "",
+      "City": r.city || "",
+      "Region": r.region || "",
+      "Birthday": r.birthday || r.date_of_birth || "",
+      "Joined": r.joined_at || "",
+      "Global": r.is_global_broker ? "Yes" : "",
+      "LinkedIn": r.linkedin_url || "",
+      "Bayut": r.bayut_url || "",
+      "PropertyFinder": r.pf_url || "",
+      "Instagram": r.instagram_url || "",
+      "Database": r.database_source || "",
+      "Event": r.event_source || "",
+      "Upload": r.upload_source || "",
+      "Source file": r.original_filename || "",
+      "Notes": r.notes || "",
+      "Added": new Date(r.created_at).toLocaleDateString(),
     }));
-    exportRowsToXlsx(out, "individual-brokers");
+    exportRowsToXlsx(out, "crm-brokers-page");
     toast.success(`Exported ${out.length} brokers`);
   };
+
+  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
 
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2 items-center">
-        <div className="relative flex-1 min-w-[220px]">
+        <div className="relative flex-1 min-w-[260px]">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#1A1A1A]/70" />
-          <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search name, phone, email, agency…" className="pl-10" />
+          <Input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Search name, email, phone, company, RERA…"
+            className="pl-10"
+          />
         </div>
-        <Select value={agencyFilter} onValueChange={setAgencyFilter}>
-          <SelectTrigger className="w-[220px]"><SelectValue placeholder="Agency" /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All agencies · {rows.length}</SelectItem>
+        <Select value={agencyFilter} onValueChange={(v) => { setAgencyFilter(v); setPage(0); }}>
+          <SelectTrigger className="w-[240px]"><SelectValue placeholder="Agency" /></SelectTrigger>
+          <SelectContent className="max-h-[300px]">
+            <SelectItem value="all">All agencies</SelectItem>
             <SelectItem value="__none__">Standalone (no agency)</SelectItem>
             {brokerages.map((b) => (
               <SelectItem key={b.id} value={b.id}>{b.company_name}</SelectItem>
             ))}
           </SelectContent>
         </Select>
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-[140px]"><SelectValue /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All statuses</SelectItem>
-            {STATUS_OPTS.map((s) => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}
+        <Select value={countryFilter} onValueChange={(v) => { setCountryFilter(v); setPage(0); }}>
+          <SelectTrigger className="w-[160px]"><SelectValue placeholder="Country" /></SelectTrigger>
+          <SelectContent className="max-h-[300px]">
+            <SelectItem value="all">All countries</SelectItem>
+            {countries.map((c) => (<SelectItem key={c} value={c}>{c}</SelectItem>))}
           </SelectContent>
         </Select>
-        <Select value={expertiseFilter} onValueChange={setExpertiseFilter}>
-          <SelectTrigger className="w-[170px]"><SelectValue /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All specialties</SelectItem>
-            <SelectItem value="leasing">Leasing</SelectItem>
-            <SelectItem value="sales">Sales</SelectItem>
-            <SelectItem value="leasing_sales">Leasing + Sales</SelectItem>
-            <SelectItem value="developer_relations">Developer Relations</SelectItem>
-            <SelectItem value="event_attendees">Event Attendees</SelectItem>
-          </SelectContent>
-        </Select>
-        <Button variant="outline" onClick={exportExcel}><FileDown className="w-4 h-4 mr-2" /> Export Excel</Button>
+        <Button variant="outline" onClick={exportExcel}><FileDown className="w-4 h-4 mr-2" /> Export page</Button>
         <Button variant="outline" onClick={() => setBulkOpen(true)}><UploadCloud className="w-4 h-4 mr-2" /> Upload database</Button>
         <Button variant="gold" onClick={openNew}><Plus className="w-4 h-4 mr-2" /> Add broker</Button>
       </div>
 
-      <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-3 text-xs text-[#1A1A1A]/80">
-        <b className="text-[#1A1A1A]">{filtered.length}</b> broker{filtered.length === 1 ? "" : "s"} shown · total <b className="text-[#1A1A1A]">{rows.length}</b>.
-        Both a card view and the Excel grid render below — newly added brokers appear immediately in both.
+      <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-3 text-xs text-[#1A1A1A]/80 flex items-center justify-between flex-wrap gap-2">
+        <div>
+          Showing <b className="text-[#1A1A1A]">{rows.length}</b> of{" "}
+          <b className="text-[#1A1A1A]">{totalCount.toLocaleString()}</b> broker{totalCount === 1 ? "" : "s"} matching filters.
+          Page <b>{page + 1}</b> / <b>{totalPages}</b>.
+        </div>
+        <div className="flex items-center gap-1.5">
+          <Button size="sm" variant="outline" disabled={page === 0} onClick={() => setPage((p) => Math.max(0, p - 1))}>
+            <ChevronLeft className="w-4 h-4" /> Prev
+          </Button>
+          <Button size="sm" variant="outline" disabled={page >= totalPages - 1} onClick={() => setPage((p) => p + 1)}>
+            Next <ChevronRight className="w-4 h-4" />
+          </Button>
+        </div>
       </div>
 
       {/* Cards */}
       {isLoading ? (
         <Skeleton className="h-40" />
-      ) : filtered.length === 0 ? (
+      ) : rows.length === 0 ? (
         <Card><CardContent className="p-8 text-center text-[#1A1A1A]/70">
-          No brokers yet — click <b className="text-[#1A1A1A]">Add broker</b> to start your individual broker rolodex.
+          No brokers match these filters.
         </CardContent></Card>
       ) : (
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-          {filtered.map((r) => (
+          {rows.map((r) => (
             <Card key={r.id} className="bg-[#FDFBF7] border-[#B89555]/30 hover:shadow-md hover:border-[#B89555]/50 transition rounded-2xl">
               <CardContent className="p-4">
                 <div className="flex items-start gap-3">
@@ -253,37 +334,33 @@ export default function IndividualBrokersTab() {
                       onClick={() => { setEditing(r); setOpen(true); }}
                       className="font-bold text-[#1A1A1A] hover:underline decoration-[#B89555] underline-offset-4 truncate text-left block w-full"
                     >
-                      {r.name || "Unknown"}
+                      {r.full_name || "Unknown"}
                     </button>
                     <div className="text-[11px] text-[#1A1A1A]/70 truncate">
-                      {r.role ? `${r.role} · ` : ""}{r.brokerage?.company_name || "Standalone"}
+                      {[r.role_title || r.position_title, r.brokerage?.company_name || r.current_company || "Standalone"].filter(Boolean).join(" · ")}
                     </div>
                     <div className="mt-2 flex flex-wrap gap-1.5 text-[11px]">
-                      {(r.specialty_labels || []).map((lbl) => (
-                        <span key={lbl} className="px-2 py-0.5 rounded-full border border-[#B89555]/40 bg-[#FDFBF7] text-[#1A1A1A] capitalize">{lbl.replace(/_/g, " ")}</span>
+                      {(r.specialty || []).slice(0, 4).map((s) => (
+                        <span key={s} className="px-2 py-0.5 rounded-full border border-[#B89555]/40 bg-[#FDFBF7] text-[#1A1A1A] capitalize">{s.replace(/_/g, " ")}</span>
                       ))}
-                      {(r.specialty_labels || []).length === 0 && (r.expertise_type === "leasing" || r.expertise_type === "both") && (
-                        <span className="px-2 py-0.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-800">Leasing</span>
+                      {r.broker_type && (
+                        <span className="px-2 py-0.5 rounded-full border border-[#B89555]/40 bg-[#EFE6D6] text-[#1A1A1A] capitalize">{r.broker_type}</span>
                       )}
-                      {(r.specialty_labels || []).length === 0 && (r.expertise_type === "selling" || r.expertise_type === "both") && (
-                        <span className="px-2 py-0.5 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-800">Selling</span>
+                      {r.is_global_broker && (
+                        <span className="px-2 py-0.5 rounded-full border border-emerald-500/40 bg-emerald-500/10 text-emerald-800 inline-flex items-center gap-1"><Globe className="w-3 h-3" />Global</span>
                       )}
-                      {(r.expertise_areas || []).slice(0, 3).map((a) => (
-                        <span key={a} className="px-2 py-0.5 rounded-full border border-[#B89555]/40 bg-[#EFE6D6] text-[#1A1A1A]">{a}</span>
-                      ))}
-                      {(r.source_history || []).slice(-2).map((sh: any, i: number) => (
-                        <span key={`sh-${i}`} className="px-2 py-0.5 rounded-full border border-[#B89555]/25 bg-[#F7F2EA] text-[#1A1A1A]/80" title={`Source: ${sh.source_name || ""} (${sh.source_type || "—"})`}>
-                          {sh.label || sh.file || "import"}
-                        </span>
-                      ))}
+                    </div>
+                    <div className="mt-1.5 text-[11px] text-[#1A1A1A]/70 truncate">
+                      {[r.nationality, r.city, r.country].filter(Boolean).join(" · ")}
                     </div>
                     <div className="mt-2 flex flex-wrap gap-1.5 text-[11px]">
-                      {r.phone && <a href={`tel:${r.phone}`} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]"><Phone className="w-3 h-3" />{r.phone}</a>}
+                      {(r.personal_phone || r.phone_e164) && <a href={`tel:${r.personal_phone || r.phone_e164}`} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]"><Phone className="w-3 h-3" />{r.personal_phone || r.phone_e164}</a>}
                       {r.whatsapp && <a href={`https://wa.me/${r.whatsapp.replace(/\D/g, "")}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]"><MessageCircle className="w-3 h-3" />WhatsApp</a>}
-                      {r.email && <a href={`mailto:${r.email}`} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]"><Mail className="w-3 h-3" />{r.email}</a>}
+                      {(r.personal_email || r.email_lower) && <a href={`mailto:${r.personal_email || r.email_lower}`} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]"><Mail className="w-3 h-3" />{r.personal_email || r.email_lower}</a>}
+                      {r.linkedin_url && <a href={r.linkedin_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]"><Linkedin className="w-3 h-3" />LinkedIn</a>}
                     </div>
                   </div>
-                  <Button size="icon" variant="ghost" onClick={() => { if (confirm(`Remove ${r.name || "this broker"}?`)) remove.mutate(r.id); }} aria-label="Remove broker">
+                  <Button size="icon" variant="ghost" onClick={() => { if (confirm(`Remove ${r.full_name || "this broker"}?`)) remove.mutate(r.id); }} aria-label="Remove broker">
                     <Trash2 className="w-3.5 h-3.5" />
                   </Button>
                 </div>
@@ -293,93 +370,94 @@ export default function IndividualBrokersTab() {
         </div>
       )}
 
-      {/* Excel grid — always visible */}
+      {/* Excel grid — every column the database has */}
       <ExcelGridView
-        rows={filtered as any[]}
+        rows={rows as any[]}
         columns={[
-          { key: "name", label: "Name", width: 200, editable: true },
-          { key: "agency", label: "Agency", width: 220, render: (r: any) => r.brokerage?.company_name || "—" },
-          { key: "role", label: "Role", width: 160, editable: true },
-          { key: "phone", label: "Phone", width: 150, editable: true },
+          { key: "full_name", label: "Full name", width: 200, editable: true },
+          { key: "agency", label: "Agency", width: 220, render: (r: any) => r.brokerage?.company_name || r.current_company || "—" },
+          { key: "role_title", label: "Role / Title", width: 180, editable: true },
+          { key: "department", label: "Department", width: 140, editable: true },
+          { key: "seniority", label: "Seniority", width: 120, editable: true },
+          { key: "broker_type", label: "Broker type", width: 140, editable: true },
+          { key: "specialty", label: "Specialty", width: 200, render: (r: any) => (r.specialty || []).join(", ") || "—" },
+          { key: "languages", label: "Languages", width: 180, render: (r: any) => (r.languages || []).join(", ") || "—" },
+          { key: "experience_years", label: "Years", width: 80, editable: true },
+          { key: "personal_phone", label: "Personal phone", width: 150, editable: true },
+          { key: "company_phone", label: "Company phone", width: 150, editable: true },
           { key: "whatsapp", label: "WhatsApp", width: 150, editable: true },
-          { key: "email", label: "Email", width: 220, editable: true },
-          {
-            key: "status", label: "Status", width: 130, status: true,
-            statusOptions: STATUS_OPTS,
-            onStatusChange: (r: any, next) => updateStatus(r, next),
-          },
-          { key: "specialty_labels", label: "Category", width: 160, render: (r: any) => (r.specialty_labels || []).join(", ") || r.expertise_type || "—" },
-          { key: "expertise_areas", label: "Areas", width: 200, render: (r: any) => (r.expertise_areas || []).join(", ") || "—" },
-          { key: "source_database", label: "Source database", width: 200, render: (r: any) => {
-            const sh = r.source_history || [];
-            const last = sh[sh.length - 1];
-            return last?.label || last?.file || r.import_label || "—";
-          } },
-          { key: "source_type", label: "Source type", width: 140, render: (r: any) => {
-            const sh = r.source_history || [];
-            const last = sh[sh.length - 1];
-            return last?.source_type || "—";
-          } },
-          { key: "import_label", label: "Batch", width: 160, render: (r: any) => r.import_label || "—" },
+          { key: "personal_email", label: "Personal email", width: 220, editable: true },
+          { key: "company_email", label: "Company email", width: 220, editable: true },
+          { key: "rera_license", label: "RERA", width: 130, editable: true },
+          { key: "nationality", label: "Nationality", width: 140, editable: true },
+          { key: "country", label: "Country", width: 130, editable: true },
+          { key: "city", label: "City", width: 130, editable: true },
+          { key: "region", label: "Region", width: 130, editable: true },
+          { key: "birthday", label: "Birthday", width: 120, render: (r: any) => r.birthday || r.date_of_birth || "—" },
+          { key: "joined_at", label: "Joined", width: 120, render: (r: any) => r.joined_at || "—" },
+          { key: "linkedin_url", label: "LinkedIn", width: 180, editable: true },
+          { key: "bayut_url", label: "Bayut", width: 160, editable: true },
+          { key: "pf_url", label: "PropertyFinder", width: 160, editable: true },
+          { key: "instagram_url", label: "Instagram", width: 160, editable: true },
+          { key: "database_source", label: "Database", width: 160, render: (r: any) => r.database_source || "—" },
+          { key: "upload_source", label: "Upload", width: 140, render: (r: any) => r.upload_source || "—" },
+          { key: "original_filename", label: "Source file", width: 180, render: (r: any) => r.original_filename || "—" },
           { key: "created_at", label: "Added", width: 130, render: (r: any) => new Date(r.created_at).toLocaleDateString() },
         ]}
-        onCellEdit={(r: any, key, value) => upsert.mutate({ id: r.id, brokerage_id: r.brokerage_id, [key]: value } as any)}
+        onCellEdit={(r: any, key, value) => upsert.mutate({ id: r.id, [key]: value } as any)}
         emptyLabel="No brokers match these filters."
       />
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
+        <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{editing?.id ? "Edit broker" : "Add individual broker"}</DialogTitle>
           </DialogHeader>
           <div className="space-y-3">
             <div className="grid grid-cols-2 gap-3">
-              <div><Label>Name</Label><Input value={editing?.name || ""} onChange={(e) => setEditing({ ...editing, name: e.target.value })} /></div>
-              <div><Label>Role / specialty</Label><Input value={editing?.role || ""} onChange={(e) => setEditing({ ...editing, role: e.target.value })} /></div>
-              <div><Label>Phone</Label><Input value={editing?.phone || ""} onChange={(e) => setEditing({ ...editing, phone: e.target.value })} /></div>
+              <div><Label>Full name *</Label><Input value={editing?.full_name || ""} onChange={(e) => setEditing({ ...editing, full_name: e.target.value })} /></div>
+              <div><Label>Agency</Label>
+                <Select value={editing?.current_brokerage_id || "__none__"} onValueChange={(v) => setEditing({ ...editing, current_brokerage_id: v === "__none__" ? null : v })}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent className="max-h-[300px]">
+                    <SelectItem value="__none__">Standalone</SelectItem>
+                    {brokerages.map((b) => (<SelectItem key={b.id} value={b.id}>{b.company_name}</SelectItem>))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div><Label>Role / Title</Label><Input value={editing?.role_title || ""} onChange={(e) => setEditing({ ...editing, role_title: e.target.value })} /></div>
+              <div><Label>Department</Label><Input value={editing?.department || ""} onChange={(e) => setEditing({ ...editing, department: e.target.value })} /></div>
+              <div><Label>Seniority</Label><Input value={editing?.seniority || ""} onChange={(e) => setEditing({ ...editing, seniority: e.target.value })} /></div>
+              <div><Label>Broker type</Label><Input value={editing?.broker_type || ""} onChange={(e) => setEditing({ ...editing, broker_type: e.target.value })} /></div>
+              <div><Label>Personal phone</Label><Input value={editing?.personal_phone || ""} onChange={(e) => setEditing({ ...editing, personal_phone: e.target.value })} /></div>
+              <div><Label>Company phone</Label><Input value={editing?.company_phone || ""} onChange={(e) => setEditing({ ...editing, company_phone: e.target.value })} /></div>
               <div><Label>WhatsApp</Label><Input value={editing?.whatsapp || ""} onChange={(e) => setEditing({ ...editing, whatsapp: e.target.value })} /></div>
-              <div className="col-span-2"><Label>Email</Label><Input type="email" value={editing?.email || ""} onChange={(e) => setEditing({ ...editing, email: e.target.value })} /></div>
-              <div className="col-span-2">
-                <Label>Agency (optional)</Label>
-                <Select value={editing?.brokerage_id || "__none__"} onValueChange={(v) => setEditing({ ...editing, brokerage_id: v === "__none__" ? null : v })}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="__none__">Standalone (no agency)</SelectItem>
-                    {brokerages.map((b) => <SelectItem key={b.id} value={b.id}>{b.company_name}</SelectItem>)}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label>Status</Label>
-                <Select value={editing?.status || "active"} onValueChange={(v) => setEditing({ ...editing, status: v })}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>{STATUS_OPTS.map((s) => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}</SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label>Expertise *</Label>
-                <Select value={editing?.expertise_type || "both"} onValueChange={(v) => setEditing({ ...editing, expertise_type: v })}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="leasing">Leasing</SelectItem>
-                    <SelectItem value="selling">Selling</SelectItem>
-                    <SelectItem value="both">Both (leasing + selling)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="col-span-2">
-                <Label>Areas of expertise (comma-separated)</Label>
-                <Input
-                  value={(editing?.expertise_areas || []).join(", ")}
-                  placeholder="e.g. Dubai Marina, Downtown, JVC"
-                  onChange={(e) => setEditing({ ...editing, expertise_areas: e.target.value.split(",").map(s => s.trim()).filter(Boolean) })}
-                />
-              </div>
+              <div><Label>Personal email</Label><Input value={editing?.personal_email || ""} onChange={(e) => setEditing({ ...editing, personal_email: e.target.value })} /></div>
+              <div><Label>Company email</Label><Input value={editing?.company_email || ""} onChange={(e) => setEditing({ ...editing, company_email: e.target.value })} /></div>
+              <div><Label>RERA</Label><Input value={editing?.rera_license || ""} onChange={(e) => setEditing({ ...editing, rera_license: e.target.value })} /></div>
+              <div><Label>Nationality</Label><Input value={editing?.nationality || ""} onChange={(e) => setEditing({ ...editing, nationality: e.target.value })} /></div>
+              <div><Label>Country</Label><Input value={editing?.country || ""} onChange={(e) => setEditing({ ...editing, country: e.target.value })} /></div>
+              <div><Label>City</Label><Input value={editing?.city || ""} onChange={(e) => setEditing({ ...editing, city: e.target.value })} /></div>
+              <div><Label>Birthday</Label><Input type="date" value={editing?.birthday || editing?.date_of_birth || ""} onChange={(e) => setEditing({ ...editing, birthday: e.target.value, date_of_birth: e.target.value })} /></div>
+              <div><Label>Joined</Label><Input type="date" value={editing?.joined_at || ""} onChange={(e) => setEditing({ ...editing, joined_at: e.target.value })} /></div>
+              <div><Label>LinkedIn</Label><Input value={editing?.linkedin_url || ""} onChange={(e) => setEditing({ ...editing, linkedin_url: e.target.value })} /></div>
+              <div><Label>Bayut</Label><Input value={editing?.bayut_url || ""} onChange={(e) => setEditing({ ...editing, bayut_url: e.target.value })} /></div>
+              <div><Label>PropertyFinder</Label><Input value={editing?.pf_url || ""} onChange={(e) => setEditing({ ...editing, pf_url: e.target.value })} /></div>
+              <div><Label>Instagram</Label><Input value={editing?.instagram_url || ""} onChange={(e) => setEditing({ ...editing, instagram_url: e.target.value })} /></div>
+            </div>
+            <div><Label>Specialty (comma-separated)</Label>
+              <Input value={(editing?.specialty || []).join(", ")} onChange={(e) => setEditing({ ...editing, specialty: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })} placeholder="off-plan, secondary, leasing, sales" />
+            </div>
+            <div><Label>Languages (comma-separated)</Label>
+              <Input value={(editing?.languages || []).join(", ")} onChange={(e) => setEditing({ ...editing, languages: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })} placeholder="English, Arabic, Russian" />
+            </div>
+            <div><Label>Notes</Label>
+              <Input value={editing?.notes || ""} onChange={(e) => setEditing({ ...editing, notes: e.target.value })} />
             </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-            <Button onClick={() => upsert.mutate(editing as any)} disabled={!editing?.name}>Save</Button>
+            <Button variant="gold" onClick={() => editing && upsert.mutate(editing)}>{editing?.id ? "Save changes" : "Add broker"}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -387,8 +465,10 @@ export default function IndividualBrokersTab() {
       <BrokerBulkUploadDialog
         open={bulkOpen}
         onOpenChange={setBulkOpen}
-        brokerages={brokerages}
-        onDone={() => qc.invalidateQueries({ queryKey: ["crm-individual-brokers"] })}
+        onDone={() => {
+          qc.invalidateQueries({ queryKey: ["crm-brokers"] });
+          qc.invalidateQueries({ queryKey: ["crm-brokers-count"] });
+        }}
       />
     </div>
   );

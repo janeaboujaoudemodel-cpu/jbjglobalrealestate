@@ -234,12 +234,13 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
           ref={setActiveRefCallback(item.path)}
           data-no-contrast-guard
           onClick={() => {
-            if (hasChildren && !collapsed) {
-              // Navigate to first sensible target AND toggle
-              if (!active && !isAnyChildActive(item)) handleNavClick(item.path);
-              else toggleOpen(item.path);
-            } else {
-              handleNavClick(item.path);
+            // Always navigate to the parent's own path. Expansion is automatic
+            // (parent is active or a child is active), and the chevron handles
+            // explicit collapse — clicking the row never just collapses without
+            // also navigating, so e.g. "CRM" always opens the CRM page.
+            handleNavClick(item.path);
+            if (hasChildren && !collapsed && !isOpen(item)) {
+              setOpenMap((m) => ({ ...m, [item.path]: true }));
             }
           }}
           className={cn(
