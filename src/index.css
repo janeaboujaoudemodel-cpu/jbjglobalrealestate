@@ -2764,33 +2764,28 @@ html [data-surface="dark"][data-surface="dark"] :is(input, textarea, select, opt
 
 /* ── 3. Gold accent text preserved on dark surfaces ── */
 :where(
-  .bg-black, .bg-\[\#FDFBF7\], .bg-\[\#FDFBF7\], .bg-gray-900,
+  .bg-black, .bg-gray-900,
   [class*="from-[hsl(32,28%,13%)]"], [class*="bg-[hsl(32,28%,13%)]"],
   [class*="from-[hsl(38,35%,12%)]"], [class*="bg-[hsl(38,35%,12%)]"]
 ) .text-\[\#1A1A1A\],
 :where(
-  .bg-black, .bg-\[\#FDFBF7\], .bg-\[\#FDFBF7\], .bg-gray-900,
+  .bg-black, .bg-gray-900,
   [class*="from-[hsl(32,28%,13%)]"], [class*="bg-[hsl(32,28%,13%)]"],
   [class*="from-[hsl(38,35%,12%)]"], [class*="bg-[hsl(38,35%,12%)]"]
 ) [class*="text-[#1A1A1A]"] {
   color: #C8A766 !important;
 }
 
-/* ── 4. Gold text on gold bg → white ── */
-.bg-\[\#EFE6D6\] .text-\[\#1A1A1A\], .bg-\[\#EFE6D6\] [class*="text-[#1A1A1A]"] {
-  color: #FFFFFF !important;
-}
+/* ── 4. Raised champagne surfaces keep ink text. ── */
 
 /* ── 5. Buttons & links on dark/gold backgrounds ── */
 button.bg-black, a.bg-black,
-button.bg-\[\#EFE6D6\], a.bg-\[\#EFE6D6\],
 button[class*="bg-gray-900"], a[class*="bg-gray-900"],
 .bg-black button, .bg-black a {
   color: #FFFFFF !important;
 }
 
 button.bg-black *, a.bg-black *,
-button.bg-\[\#EFE6D6\] *, a.bg-\[\#EFE6D6\] *,
 button.bg-black span, a.bg-black span {
   color: inherit !important;
 }
