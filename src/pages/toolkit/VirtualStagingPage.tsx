@@ -258,7 +258,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                         className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer border transition-all ${
                           roomType === room.id
                             ? 'border-[#B89555] bg-[#EFE6D6]/10'
-                            : 'border-[#1A1A1A] hover:border-slate-500'
+                            : 'border-[#1A1A1A] hover:border-[#B89555]/30'
                         }`}
                         onClick={() => setRoomType(room.id)}
                       >
@@ -287,7 +287,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                         className={`p-3 rounded-lg cursor-pointer border transition-all ${
                           designStyle === style.id
                             ? 'border-[#B89555] bg-[#EFE6D6]/10'
-                            : 'border-[#1A1A1A] hover:border-slate-500'
+                            : 'border-[#1A1A1A] hover:border-[#B89555]/30'
                         }`}
                         onClick={() => setDesignStyle(style.id)}
                       >
@@ -314,7 +314,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                   value={customPrompt}
                   onChange={(e) => setCustomPrompt(e.target.value)}
                   placeholder="Add specific furniture, colors, or style preferences..."
-                  className="bg-[#1A1A1A] border-slate-600 text-white min-h-[80px]"
+                  className="bg-[#1A1A1A] border-[#B89555]/30 text-white min-h-[80px]"
                 />
               </CardContent>
             </Card>
@@ -333,7 +333,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                 {!uploadedImage ? (
                   <div
                     onClick={() => fileInputRef.current?.click()}
-                    className="border-2 border-dashed border-slate-600 rounded-xl p-12 text-center cursor-pointer hover:border-[#B89555]/50 transition-colors"
+                    className="border-2 border-dashed border-[#B89555]/30 rounded-xl p-12 text-center cursor-pointer hover:border-[#B89555]/50 transition-colors"
                   >
                     <Upload className="h-12 w-12 text-[#1A1A1A]/70 mx-auto mb-4" />
                     <p className="text-white mb-2">Click to upload empty room photo</p>

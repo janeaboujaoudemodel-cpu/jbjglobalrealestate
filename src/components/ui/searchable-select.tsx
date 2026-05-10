@@ -87,7 +87,7 @@ export function SearchableSelect({
           aria-expanded={open}
           className={cn(
             "w-full justify-between h-12 rounded-lg",
-            !triggerClassName && "bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] hover:bg-[#FDFBF7] hover:border-gold/60 hover:text-[#1A1A1A]",
+            !triggerClassName && "bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#FDFBF7] hover:border-[#B89555]/60 hover:text-[#1A1A1A]",
             !value && "text-[#1A1A1A]/70",
             triggerClassName
           )}
@@ -101,7 +101,7 @@ export function SearchableSelect({
       </PopoverTrigger>
       <PopoverContent
         className={cn(
-          "w-[var(--radix-popover-trigger-width)] p-0 bg-[#FDFBF7] border-gold/30 shadow-xl shadow-gold/10 z-[10060]",
+          "w-[var(--radix-popover-trigger-width)] p-0 bg-[#FDFBF7] border-[#B89555]/30 shadow-xl shadow-gold/10 z-[10060]",
           className
         )}
         align="start"
@@ -110,7 +110,7 @@ export function SearchableSelect({
         avoidCollisions={false}
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
-        <div className="p-2 border-b border-gold/20">
+        <div className="p-2 border-b border-[#B89555]/20">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/70" />
             <Input
@@ -118,7 +118,7 @@ export function SearchableSelect({
               placeholder={searchPlaceholder}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="h-10 pl-9 bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold rounded-md"
+              className="h-10 pl-9 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] rounded-md"
             />
           </div>
         </div>
@@ -151,14 +151,14 @@ export function SearchableSelect({
                   className={cn(
                     "w-full flex items-center gap-3 px-3 py-3.5 text-base rounded-md transition-colors text-left min-h-[48px]",
                     value === option
-                      ? "bg-gold/10 text-gold"
-                      : "text-[#1A1A1A] hover:bg-gold/5"
+                      ? "bg-[#EFE6D6]/10 text-[#1A1A1A]"
+                      : "text-[#1A1A1A] hover:bg-[#EFE6D6]/5"
                   )}
                 >
                   <Check
                     className={cn(
                       "h-4 w-4 shrink-0",
-                      value === option ? "opacity-100 text-gold" : "opacity-0"
+                      value === option ? "opacity-100 text-[#1A1A1A]" : "opacity-0"
                     )}
                   />
                   {flag && <span className="text-xl leading-none shrink-0">{flag}</span>}

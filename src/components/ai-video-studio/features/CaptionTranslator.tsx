@@ -175,7 +175,7 @@ function StepIndicator({ activeStep, maxStep, onStep }: { activeStep: number; ma
                   ? 'bg-amber-500 text-[#1A1A1A] ring-2 ring-amber-400/40'
                   : done
                   ? 'bg-emerald-500/30 text-emerald-400 border border-emerald-500/50'
-                  : 'bg-[#1A1A1A] text-[#1A1A1A]/70 border border-slate-600'
+                  : 'bg-[#1A1A1A] text-[#1A1A1A]/70 border border-[#B89555]/30'
               }`}>
                 {done ? <Check className="w-2.5 h-2.5" /> : step.n}
               </div>
@@ -670,7 +670,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                 onDrop={handleDrop}
                 onDragOver={e => e.preventDefault()}
                 onClick={() => fileInputRef.current?.click()}
-                className="border-2 border-dashed border-slate-600 hover:border-amber-400/50 rounded-xl p-6 text-center cursor-pointer transition-colors bg-[#1A1A1A]/30"
+                className="border-2 border-dashed border-[#B89555]/30 hover:border-amber-400/50 rounded-xl p-6 text-center cursor-pointer transition-colors bg-[#1A1A1A]/30"
               >
                 <Upload className="w-8 h-8 mx-auto mb-2 text-[#1A1A1A]/70" />
                 <p className="text-sm text-[#1A1A1A]/70 font-medium">Drop audio or video here</p>
@@ -841,7 +841,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                 <div className="space-y-2">
                   <div className="bg-[#1A1A1A]/50 rounded-lg p-2.5 border border-[#1A1A1A]">
                     <p className="text-[10px] text-[#1A1A1A]/70 mb-1.5 font-medium">Dubbing Voice</p>
-                    <select value={dubVoiceId} onChange={e => setDubVoiceId(e.target.value)} className="w-full bg-[#1A1A1A] text-white text-xs rounded px-2 py-1.5 border border-slate-600 focus:outline-none focus:border-purple-400">
+                    <select value={dubVoiceId} onChange={e => setDubVoiceId(e.target.value)} className="w-full bg-[#1A1A1A] text-white text-xs rounded px-2 py-1.5 border border-[#B89555]/30 focus:outline-none focus:border-purple-400">
                       {VOICE_OPTIONS.map(v => <option key={v.id} value={v.id}>{v.name} ({v.gender})</option>)}
                     </select>
                   </div>
@@ -864,7 +864,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                     </div>
                     <div className="flex gap-1.5">
                       <button onClick={() => { const a = new Audio(trackUrl); a.play(); }} className="flex-1 flex items-center justify-center gap-1 py-1 rounded text-[10px] bg-purple-500/20 text-purple-300 hover:bg-purple-500/30 transition-colors"><Play className="w-2.5 h-2.5" />Play</button>
-                      <a href={trackUrl} download={`dubbed_${lc}.webm`} className="flex-1 flex items-center justify-center gap-1 py-1 rounded text-[10px] bg-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-slate-600 transition-colors"><Download className="w-2.5 h-2.5" />Download</a>
+                      <a href={trackUrl} download={`dubbed_${lc}.webm`} className="flex-1 flex items-center justify-center gap-1 py-1 rounded text-[10px] bg-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-[#1A1A1A] transition-colors"><Download className="w-2.5 h-2.5" />Download</a>
                     </div>
                   </div>
                 );
@@ -896,7 +896,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                               </div>
                               {editingTranslationId === editKey ? (
                                 <div className="space-y-1">
-                                  <textarea value={editingTranslationText} onChange={e => setEditingTranslationText(e.target.value)} dir={isRTL ? 'rtl' : 'ltr'} className={`w-full bg-slate-600 text-white text-xs rounded p-1.5 resize-none border border-amber-400/50 focus:outline-none ${isRTL ? 'text-right' : ''}`} rows={2} autoFocus />
+                                  <textarea value={editingTranslationText} onChange={e => setEditingTranslationText(e.target.value)} dir={isRTL ? 'rtl' : 'ltr'} className={`w-full bg-[#1A1A1A] text-white text-xs rounded p-1.5 resize-none border border-amber-400/50 focus:outline-none ${isRTL ? 'text-right' : ''}`} rows={2} autoFocus />
                                   <div className="flex gap-1">
                                     <Button size="sm" onClick={() => saveEditTranslation(sub.id, lc)} className="h-5 text-[10px] bg-amber-500 text-[#1A1A1A] px-2">Save</Button>
                                     <Button size="sm" variant="ghost" onClick={() => setEditingTranslationId(null)} className="h-5 text-[10px] text-[#1A1A1A]/70 px-2">Cancel</Button>
@@ -1000,7 +1000,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                 <p className="text-xs text-[#1A1A1A]/70 font-medium mb-2">Position</p>
                 <div className="flex gap-1.5">
                   {(['top', 'center', 'bottom'] as const).map(pos => (
-                    <button key={pos} onClick={() => setCaptionStyle(p => ({ ...p, position: pos }))} className={`flex-1 py-1.5 rounded text-xs capitalize transition-colors ${captionStyle.position === pos ? 'bg-amber-500/20 text-[#1A1A1A] border border-amber-500/40' : 'bg-[#1A1A1A] text-[#1A1A1A]/70 hover:text-slate-200 border border-transparent'}`}>{pos}</button>
+                    <button key={pos} onClick={() => setCaptionStyle(p => ({ ...p, position: pos }))} className={`flex-1 py-1.5 rounded text-xs capitalize transition-colors ${captionStyle.position === pos ? 'bg-amber-500/20 text-[#1A1A1A] border border-amber-500/40' : 'bg-[#1A1A1A] text-[#1A1A1A]/70 hover:text-[#1A1A1A] border border-transparent'}`}>{pos}</button>
                   ))}
                 </div>
               </div>
@@ -1009,9 +1009,9 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
               <div className="bg-[#1A1A1A]/50 rounded-lg p-3 border border-[#1A1A1A]">
                 <p className="text-xs text-[#1A1A1A]/70 font-medium mb-2">Colors</p>
                 <div className="flex gap-3">
-                  <label className="flex-1"><p className="text-[10px] text-[#1A1A1A]/70 mb-1">Text</p><input type="color" value={captionStyle.color} onChange={e => setCaptionStyle(p => ({ ...p, color: e.target.value }))} className="w-full h-8 rounded cursor-pointer border border-slate-600" /></label>
-                  <label className="flex-1"><p className="text-[10px] text-[#1A1A1A]/70 mb-1">Background</p><input type="color" value={captionStyle.bgColor} onChange={e => setCaptionStyle(p => ({ ...p, bgColor: e.target.value }))} className="w-full h-8 rounded cursor-pointer border border-slate-600" /></label>
-                  <label className="flex-1"><p className="text-[10px] text-[#1A1A1A]/70 mb-1">Outline</p><input type="color" value={captionStyle.outlineColor} onChange={e => setCaptionStyle(p => ({ ...p, outlineColor: e.target.value }))} className="w-full h-8 rounded cursor-pointer border border-slate-600" /></label>
+                  <label className="flex-1"><p className="text-[10px] text-[#1A1A1A]/70 mb-1">Text</p><input type="color" value={captionStyle.color} onChange={e => setCaptionStyle(p => ({ ...p, color: e.target.value }))} className="w-full h-8 rounded cursor-pointer border border-[#B89555]/30" /></label>
+                  <label className="flex-1"><p className="text-[10px] text-[#1A1A1A]/70 mb-1">Background</p><input type="color" value={captionStyle.bgColor} onChange={e => setCaptionStyle(p => ({ ...p, bgColor: e.target.value }))} className="w-full h-8 rounded cursor-pointer border border-[#B89555]/30" /></label>
+                  <label className="flex-1"><p className="text-[10px] text-[#1A1A1A]/70 mb-1">Outline</p><input type="color" value={captionStyle.outlineColor} onChange={e => setCaptionStyle(p => ({ ...p, outlineColor: e.target.value }))} className="w-full h-8 rounded cursor-pointer border border-[#B89555]/30" /></label>
                 </div>
               </div>
 
@@ -1032,7 +1032,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                 <p className="text-xs text-[#1A1A1A]/70 font-medium mb-2">Fade-In/Out Animation</p>
                 <div className="flex gap-1.5">
                   {(['slow', 'normal', 'fast'] as const).map(speed => (
-                    <button key={speed} onClick={() => setCaptionStyle(p => ({ ...p, speed }))} className={`flex-1 py-1.5 rounded text-xs capitalize transition-colors ${captionStyle.speed === speed ? 'bg-amber-500/20 text-[#1A1A1A] border border-amber-500/40' : 'bg-[#1A1A1A] text-[#1A1A1A]/70 hover:text-slate-200 border border-transparent'}`}>
+                    <button key={speed} onClick={() => setCaptionStyle(p => ({ ...p, speed }))} className={`flex-1 py-1.5 rounded text-xs capitalize transition-colors ${captionStyle.speed === speed ? 'bg-amber-500/20 text-[#1A1A1A] border border-amber-500/40' : 'bg-[#1A1A1A] text-[#1A1A1A]/70 hover:text-[#1A1A1A] border border-transparent'}`}>
                       {speed}<span className="block text-[9px] opacity-60">{speed === 'slow' ? '600ms' : speed === 'normal' ? '300ms' : '80ms'}</span>
                     </button>
                   ))}
@@ -1046,7 +1046,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                 </p>
 
                 {!previewSource && (
-                  <div onClick={() => burnFileInputRef.current?.click()} className="border-2 border-dashed border-slate-600 hover:border-amber-400/50 rounded-xl p-4 text-center cursor-pointer transition-colors bg-[#1A1A1A]/30 mb-2">
+                  <div onClick={() => burnFileInputRef.current?.click()} className="border-2 border-dashed border-[#B89555]/30 hover:border-amber-400/50 rounded-xl p-4 text-center cursor-pointer transition-colors bg-[#1A1A1A]/30 mb-2">
                     <Film className="w-5 h-5 mx-auto mb-1.5 text-[#1A1A1A]/70" />
                     <p className="text-xs text-[#1A1A1A]/70 font-medium">Select video to preview captions on</p>
                     <p className="text-xs text-[#1A1A1A]/70 mt-0.5">MP4, MOV, WebM</p>
@@ -1093,9 +1093,9 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                         <span className="text-[10px] text-[#1A1A1A]/70 font-mono w-10">{fmtDuration(previewDuration)}</span>
                       </div>
                       <div className="flex items-center justify-center gap-2">
-                        <button onClick={() => seekPreview(-5)} className="p-1.5 rounded-lg bg-[#1A1A1A] hover:bg-slate-600 text-[#1A1A1A]/70 transition-colors" title="-5s"><SkipBack className="w-3.5 h-3.5" /></button>
+                        <button onClick={() => seekPreview(-5)} className="p-1.5 rounded-lg bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A]/70 transition-colors" title="-5s"><SkipBack className="w-3.5 h-3.5" /></button>
                         <button onClick={togglePreviewPlay} className="p-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-[#1A1A1A] transition-colors">{previewPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}</button>
-                        <button onClick={() => seekPreview(5)} className="p-1.5 rounded-lg bg-[#1A1A1A] hover:bg-slate-600 text-[#1A1A1A]/70 transition-colors" title="+5s"><SkipForward className="w-3.5 h-3.5" /></button>
+                        <button onClick={() => seekPreview(5)} className="p-1.5 rounded-lg bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A]/70 transition-colors" title="+5s"><SkipForward className="w-3.5 h-3.5" /></button>
                       </div>
                     </div>
 
@@ -1133,8 +1133,8 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                   <div className="bg-[#1A1A1A]/50 rounded-lg p-3 border border-[#1A1A1A]">
                     <p className="text-xs text-[#1A1A1A]/70 font-medium mb-2">Original ({subtitles.length} segments)</p>
                     <div className="flex gap-2">
-                      <Button size="sm" onClick={() => exportSRT()} className="flex-1 bg-[#1A1A1A] hover:bg-slate-600 text-white h-8 text-xs"><Download className="w-3 h-3 mr-1" />SRT</Button>
-                      <Button size="sm" onClick={() => exportVTT()} className="flex-1 bg-[#1A1A1A] hover:bg-slate-600 text-white h-8 text-xs"><Download className="w-3 h-3 mr-1" />VTT</Button>
+                      <Button size="sm" onClick={() => exportSRT()} className="flex-1 bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white h-8 text-xs"><Download className="w-3 h-3 mr-1" />SRT</Button>
+                      <Button size="sm" onClick={() => exportVTT()} className="flex-1 bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white h-8 text-xs"><Download className="w-3 h-3 mr-1" />VTT</Button>
                     </div>
                   </div>
 
@@ -1149,8 +1149,8 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                             <div key={lc} className="flex items-center gap-2">
                               <span className="text-sm">{FLAG_EMOJIS[lc] || '🌐'}</span>
                               <span className="text-xs text-[#1A1A1A]/70 flex-1">{li?.name}</span>
-                              <Button size="sm" onClick={() => exportSRT(lc)} className="h-6 text-xs bg-[#1A1A1A] hover:bg-slate-600 text-white px-2">SRT</Button>
-                              <Button size="sm" onClick={() => exportVTT(lc)} className="h-6 text-xs bg-[#1A1A1A] hover:bg-slate-600 text-white px-2">VTT</Button>
+                              <Button size="sm" onClick={() => exportSRT(lc)} className="h-6 text-xs bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white px-2">SRT</Button>
+                              <Button size="sm" onClick={() => exportVTT(lc)} className="h-6 text-xs bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white px-2">VTT</Button>
                             </div>
                           );
                         })}
@@ -1166,7 +1166,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                     </div>
                     <p className="text-xs text-[#1A1A1A]/70">Bakes captions permanently into the video with your Style settings + audio preserved.</p>
 
-                    <div onClick={() => burnFileInputRef.current?.click()} className="border border-dashed border-slate-600 hover:border-amber-400/50 rounded-lg p-3 text-center cursor-pointer transition-colors">
+                    <div onClick={() => burnFileInputRef.current?.click()} className="border border-dashed border-[#B89555]/30 hover:border-amber-400/50 rounded-lg p-3 text-center cursor-pointer transition-colors">
                       {burnVideoFile ? (
                         <div className="flex items-center gap-2">
                           <Film className="w-4 h-4 text-[#1A1A1A]" />

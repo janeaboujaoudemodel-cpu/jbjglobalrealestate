@@ -516,23 +516,23 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
     // Theme-based styling - CHAMPAGNE gradient for light variant, GOLD borders
     const isLight = variant === 'light';
     const buttonStyles = isLight 
-      ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] hover:border-gold focus:border-gold"
-      : "bg-zinc-900 border-2 border-gold/50 text-white hover:bg-[#1A1A1A] hover:text-white hover:border-gold focus:border-gold";
+      ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] hover:border-[#B89555] focus:border-[#B89555]"
+      : "bg-[#1A1A1A] border-2 border-[#B89555]/50 text-white hover:bg-[#1A1A1A] hover:text-white hover:border-[#B89555] focus:border-[#B89555]";
     const inputStyles = isLight
-      ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold hover:border-gold"
-      : "bg-zinc-900 border-2 border-gold/50 text-white placeholder:text-[#1A1A1A]/70 focus:border-gold hover:border-gold";
+      ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] hover:border-[#B89555]"
+      : "bg-[#1A1A1A] border-2 border-[#B89555]/50 text-white placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] hover:border-[#B89555]";
     const popoverStyles = isLight
-      ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50"
-      : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50";
+      ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50"
+      : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50";
     const commandStyles = isLight
       ? "bg-transparent"
       : "bg-transparent";
     const commandInputStyles = isLight
-      ? "text-[#1A1A1A] border-gold/40"
-      : "text-[#1A1A1A] border-gold/40";
+      ? "text-[#1A1A1A] border-[#B89555]/40"
+      : "text-[#1A1A1A] border-[#B89555]/40";
     const commandItemStyles = isLight
-      ? "text-[#1A1A1A] hover:bg-gold/20 data-[selected=true]:bg-gold/30 data-[selected=true]:text-[#1A1A1A]"
-      : "text-[#1A1A1A] hover:bg-gold/20 data-[selected=true]:bg-gold/30 data-[selected=true]:text-[#1A1A1A]";
+      ? "text-[#1A1A1A] hover:bg-[#EFE6D6]/20 data-[selected=true]:bg-[#EFE6D6]/30 data-[selected=true]:text-[#1A1A1A]"
+      : "text-[#1A1A1A] hover:bg-[#EFE6D6]/20 data-[selected=true]:bg-[#EFE6D6]/30 data-[selected=true]:text-[#1A1A1A]";
     const commandEmptyStyles = isLight
       ? "text-[#1A1A1A]/70"
       : "text-[#1A1A1A]/70";
@@ -540,8 +540,8 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
       ? "text-[#1A1A1A]/70"
       : "text-white/90";
     const countryNameStyles = isLight
-      ? "text-gold font-medium"
-      : "text-gold font-medium";
+      ? "text-[#1A1A1A] font-medium"
+      : "text-[#1A1A1A] font-medium";
 
     return (
       <div className={cn("space-y-1.5 w-full", className)}>
@@ -582,7 +582,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                     No country found. Try searching by name or code.
                   </CommandEmpty>
                   {Object.entries(COUNTRY_CODES_BY_REGION).map(([region, countries]) => (
-                    <CommandGroup key={region} heading={region} className="text-gold text-xs font-semibold px-2 py-1">
+                    <CommandGroup key={region} heading={region} className="text-[#1A1A1A] text-xs font-semibold px-2 py-1">
                       {countries.map((country) => (
                         <CommandItem
                           key={`${country.code}-${country.country}`}
@@ -596,7 +596,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                             <span className={cn("text-sm truncate flex-1", countryNameStyles)}>{country.country}</span>
                           </span>
                           {currentCode === country.code && (
-                            <CheckCircle className="h-5 w-5 text-gold ml-auto shrink-0" />
+                            <CheckCircle className="h-5 w-5 text-[#1A1A1A] ml-auto shrink-0" />
                           )}
                         </CommandItem>
                       ))}
@@ -632,7 +632,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
           </div>
         </div>
         {showValidation && localNumber && !validation.isValid && (
-          <p className="text-amber-400 text-xs">{validation.message}</p>
+          <p className="text-[#1A1A1A] text-xs">{validation.message}</p>
         )}
         {!localNumber && (
           <p className={cn("text-xs", helperTextStyles)}>Select your country code, then enter your phone number</p>

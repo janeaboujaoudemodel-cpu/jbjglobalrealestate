@@ -96,10 +96,10 @@ const PortraitImage = React.forwardRef<HTMLImageElement, PortraitImageProps>(
     return (
       <div 
         className={cn(
-          "overflow-hidden bg-zinc-900 flex-shrink-0 relative",
+          "overflow-hidden bg-[#1A1A1A] flex-shrink-0 relative",
           sizeClasses[size],
           shapeClasses[shape],
-          bordered && "border-2 border-gold/30",
+          bordered && "border-2 border-[#B89555]/30",
           className
         )}
       >

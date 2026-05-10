@@ -125,7 +125,7 @@ export const PhoneInputWithCountry: React.FC<PhoneInputWithCountryProps> = ({
   return (
     <div className={`flex gap-2 ${className}`}>
       <Select value={countryCode} onValueChange={handleCountryChange}>
-        <SelectTrigger className="w-[140px] bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A]">
+        <SelectTrigger className="w-[140px] bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A]">
           <SelectValue>
             {selectedCountry && (
               <span className="flex items-center gap-2">
@@ -135,12 +135,12 @@ export const PhoneInputWithCountry: React.FC<PhoneInputWithCountryProps> = ({
             )}
           </SelectValue>
         </SelectTrigger>
-        <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 max-h-[300px] overflow-y-auto z-[9999]">
+        <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 max-h-[300px] overflow-y-auto z-[9999]">
           {COUNTRY_CODES.map(country => (
             <SelectItem 
               key={country.code} 
               value={country.code}
-              className="text-[#1A1A1A] hover:bg-gold/20 focus:bg-gold/20"
+              className="text-[#1A1A1A] hover:bg-[#EFE6D6]/20 focus:bg-[#EFE6D6]/20"
             >
               <span className="flex items-center gap-2">
                 <span className="text-lg">{country.flag}</span>
@@ -156,7 +156,7 @@ export const PhoneInputWithCountry: React.FC<PhoneInputWithCountryProps> = ({
         value={localNumber}
         onChange={(e) => handleNumberChange(e.target.value)}
         placeholder={placeholder}
-        className="flex-1 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:border-gold"
+        className="flex-1 bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:border-[#B89555]"
       />
     </div>
   );

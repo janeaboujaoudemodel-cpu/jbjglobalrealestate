@@ -82,7 +82,7 @@ export default function VoiceStudio() {
                       <><Mic className="h-4 w-4 mr-2" />Record Voice</>
                     )}
                   </Button>
-                  <Button variant="outline" onClick={() => vs.fileInputRef.current?.click()} className="border-slate-600 text-[#1A1A1A]/70 hover:bg-[#1A1A1A]">
+                  <Button variant="outline" onClick={() => vs.fileInputRef.current?.click()} className="border-[#B89555]/30 text-[#1A1A1A]/70 hover:bg-[#1A1A1A]">
                     <Upload className="h-4 w-4 mr-2" />Upload Audio
                   </Button>
                 </div>
@@ -191,7 +191,7 @@ export default function VoiceStudio() {
                           className={`p-3 rounded-lg border text-left transition-all ${
                             vs.selectedVoice === voice.id
                               ? "border-[#D4AF37] bg-[#D4AF37]/10"
-                              : "border-[#1A1A1A] bg-[#1A1A1A]/30 hover:border-slate-600"
+                              : "border-[#1A1A1A] bg-[#1A1A1A]/30 hover:border-[#B89555]/30"
                           }`}
                         >
                           <div className="flex items-center gap-2">
@@ -199,8 +199,8 @@ export default function VoiceStudio() {
                             <span className="text-white font-medium text-sm">{voice.name}</span>
                           </div>
                           <div className="flex items-center gap-2 mt-1">
-                            <Badge variant="outline" className="text-[10px] border-slate-600 text-[#1A1A1A]/70">{voice.gender}</Badge>
-                            <Badge variant="outline" className="text-[10px] border-slate-600 text-[#1A1A1A]/70">{voice.accent}</Badge>
+                            <Badge variant="outline" className="text-[10px] border-[#B89555]/30 text-[#1A1A1A]/70">{voice.gender}</Badge>
+                            <Badge variant="outline" className="text-[10px] border-[#B89555]/30 text-[#1A1A1A]/70">{voice.accent}</Badge>
                           </div>
                           <p className="text-xs text-[#1A1A1A]/70 mt-1">{voice.description}</p>
                         </button>
@@ -227,7 +227,7 @@ export default function VoiceStudio() {
                           className={`p-3 rounded-lg border text-left transition-all ${
                             vs.selectedVoice === voice.id
                               ? "border-[#D4AF37] bg-[#D4AF37]/10"
-                              : "border-[#1A1A1A] bg-[#1A1A1A]/30 hover:border-slate-600"
+                              : "border-[#1A1A1A] bg-[#1A1A1A]/30 hover:border-[#B89555]/30"
                           }`}
                         >
                           <span className="text-white text-sm">{voice.name}</span>
@@ -263,7 +263,7 @@ export default function VoiceStudio() {
                             id="consent"
                             checked={vs.cloneConsent}
                             onCheckedChange={(checked) => vs.setCloneConsent(checked === true)}
-                            className="mt-1 border-slate-500 data-[state=checked]:bg-[#D4AF37] data-[state=checked]:border-[#D4AF37]"
+                            className="mt-1 border-[#B89555]/30 data-[state=checked]:bg-[#D4AF37] data-[state=checked]:border-[#D4AF37]"
                           />
                           <div className="space-y-1">
                             <Label htmlFor="consent" className="text-white text-sm font-medium cursor-pointer">
@@ -297,11 +297,11 @@ export default function VoiceStudio() {
                   <Label className="text-[#1A1A1A]/70 text-sm mb-3 block">Audio Format</Label>
                   <RadioGroup value={vs.outputFormat} onValueChange={(v) => vs.setOutputFormat(v as "mp3" | "wav")} className="flex gap-4">
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="mp3" id="mp3" className="border-slate-500 text-[#D4AF37]" />
+                      <RadioGroupItem value="mp3" id="mp3" className="border-[#B89555]/30 text-[#D4AF37]" />
                       <Label htmlFor="mp3" className="text-[#1A1A1A]/70 cursor-pointer">MP3 (Smaller)</Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="wav" id="wav" className="border-slate-500 text-[#D4AF37]" />
+                      <RadioGroupItem value="wav" id="wav" className="border-[#B89555]/30 text-[#D4AF37]" />
                       <Label htmlFor="wav" className="text-[#1A1A1A]/70 cursor-pointer">WAV (Higher Quality)</Label>
                     </div>
                   </RadioGroup>
@@ -314,12 +314,12 @@ export default function VoiceStudio() {
                         id="overlay"
                         checked={vs.includeOverlay}
                         onCheckedChange={(checked) => vs.setIncludeOverlay(checked === true)}
-                        className="border-slate-500 data-[state=checked]:bg-[#D4AF37] data-[state=checked]:border-[#D4AF37]"
+                        className="border-[#B89555]/30 data-[state=checked]:bg-[#D4AF37] data-[state=checked]:border-[#D4AF37]"
                       />
                       <Label htmlFor="overlay" className="text-[#1A1A1A]/70 text-sm cursor-pointer">Overlay onto video</Label>
                     </div>
                     {vs.includeOverlay && (
-                      <Button variant="outline" size="sm" onClick={() => vs.videoInputRef.current?.click()} className="border-slate-600 text-[#1A1A1A]/70 hover:bg-[#1A1A1A]">
+                      <Button variant="outline" size="sm" onClick={() => vs.videoInputRef.current?.click()} className="border-[#B89555]/30 text-[#1A1A1A]/70 hover:bg-[#1A1A1A]">
                         <Video className="h-4 w-4 mr-2" />
                         {vs.videoFile ? "Change Video" : "Upload Video"}
                       </Button>

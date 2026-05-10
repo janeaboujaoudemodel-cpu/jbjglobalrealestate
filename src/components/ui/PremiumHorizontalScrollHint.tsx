@@ -96,8 +96,8 @@ export default function PremiumHorizontalScrollHint({
           btnSize,
           "rounded-full flex items-center justify-center shrink-0 transition-all border",
           canScrollLeft
-            ? "bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-gold/50 text-[#1A1A1A] hover:border-gold shadow-sm"
-            : "bg-transparent border-gold/15 text-[#1A1A1A]/20 cursor-default"
+            ? "bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-[#B89555]/50 text-[#1A1A1A] hover:border-[#B89555] shadow-sm"
+            : "bg-transparent border-[#B89555]/15 text-[#1A1A1A]/20 cursor-default"
         )}
         aria-label="Scroll left"
       >
@@ -128,8 +128,8 @@ export default function PremiumHorizontalScrollHint({
           btnSize,
           "rounded-full flex items-center justify-center shrink-0 transition-all border",
           canScrollRight
-            ? "bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-gold/50 text-[#1A1A1A] hover:border-gold shadow-sm"
-            : "bg-transparent border-gold/15 text-[#1A1A1A]/20 cursor-default"
+            ? "bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-[#B89555]/50 text-[#1A1A1A] hover:border-[#B89555] shadow-sm"
+            : "bg-transparent border-[#B89555]/15 text-[#1A1A1A]/20 cursor-default"
         )}
         aria-label="Scroll right"
       >

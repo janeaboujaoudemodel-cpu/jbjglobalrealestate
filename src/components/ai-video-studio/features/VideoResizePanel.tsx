@@ -118,7 +118,7 @@ export function VideoResizePanel() {
                 className={`flex items-center gap-3 p-2.5 rounded-lg cursor-pointer transition-all border ${
                   selectedFormats.includes(format.id)
                     ? 'bg-amber-500/10 border-amber-500/40'
-                    : 'bg-[#1A1A1A] border-[#1A1A1A] hover:border-slate-500'
+                    : 'bg-[#1A1A1A] border-[#1A1A1A] hover:border-[#B89555]/30'
                 } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 <Checkbox

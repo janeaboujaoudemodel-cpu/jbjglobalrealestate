@@ -44,7 +44,7 @@ export const PremiumBackendHeader: React.FC<PremiumBackendHeaderProps> = ({
   return (
     <>
       <header className={cn(
-        'sticky top-0 z-40 bg-[#FDFBF7]/95 backdrop-blur-xl border-b border-gold/15',
+        'sticky top-0 z-40 bg-[#FDFBF7]/95 backdrop-blur-xl border-b border-[#B89555]/15',
         'shadow-[0_2px_10px_rgba(200,167,102,0.05)]',
         className
       )}>
@@ -55,7 +55,7 @@ export const PremiumBackendHeader: React.FC<PremiumBackendHeaderProps> = ({
               {backTo && (
                 <button
                   onClick={() => navigate(backTo)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-[#1A1A1A]/70 hover:text-gold transition-colors rounded-lg hover:bg-gold/5"
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors rounded-lg hover:bg-[#EFE6D6]/5"
                 >
                   <Home className="w-4 h-4" />
                   <span className="hidden sm:inline">{backLabel}</span>
@@ -76,7 +76,7 @@ export const PremiumBackendHeader: React.FC<PremiumBackendHeaderProps> = ({
               {/* Search/Command Button */}
               <button
                 onClick={commandPalette.open}
-                className="flex items-center gap-2 px-4 py-2.5 bg-[#FDFBF7] border-2 border-gold/20 rounded-xl text-[#1A1A1A]/70 hover:text-gold hover:border-gold/40 transition-all shadow-sm"
+                className="flex items-center gap-2 px-4 py-2.5 bg-[#FDFBF7] border-2 border-[#B89555]/20 rounded-xl text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:border-[#B89555]/40 transition-all shadow-sm"
               >
                 <Search className="w-4 h-4" />
                 <span className="hidden sm:inline text-sm">Search...</span>
@@ -86,9 +86,9 @@ export const PremiumBackendHeader: React.FC<PremiumBackendHeaderProps> = ({
               </button>
 
               {/* AI Indicator */}
-              <div className="hidden lg:flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-gold/15 to-gold/5 border border-gold/30 rounded-xl">
-                <Sparkles className="w-4 h-4 text-gold animate-pulse" />
-                <span className="text-xs text-gold font-semibold">AI Active</span>
+              <div className="hidden lg:flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-gold/15 to-gold/5 border border-[#B89555]/30 rounded-xl">
+                <Sparkles className="w-4 h-4 text-[#1A1A1A] animate-pulse" />
+                <span className="text-xs text-[#1A1A1A] font-semibold">AI Active</span>
               </div>
 
               {/* Notifications */}
@@ -102,10 +102,10 @@ export const PremiumBackendHeader: React.FC<PremiumBackendHeaderProps> = ({
                 <div className="relative">
                   <button
                     onClick={() => setUserMenuOpen(!userMenuOpen)}
-                    className="flex items-center gap-2 px-3 py-2 bg-[#FDFBF7] border-2 border-gold/20 rounded-xl hover:border-gold/40 transition-all"
+                    className="flex items-center gap-2 px-3 py-2 bg-[#FDFBF7] border-2 border-[#B89555]/20 rounded-xl hover:border-[#B89555]/40 transition-all"
                   >
                     <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center">
-                      <User className="w-4 h-4 text-gold" />
+                      <User className="w-4 h-4 text-[#1A1A1A]" />
                     </div>
                     <ChevronDown className={cn(
                       "w-4 h-4 text-[#1A1A1A]/70 transition-transform",
@@ -114,21 +114,21 @@ export const PremiumBackendHeader: React.FC<PremiumBackendHeaderProps> = ({
                   </button>
                   
                   {userMenuOpen && (
-                    <div className="absolute right-0 top-full mt-2 w-56 bg-[#FDFBF7] border-2 border-gold/20 rounded-xl shadow-lg shadow-gold/10 py-2 z-50">
-                      <div className="px-4 py-2 border-b border-gold/10">
+                    <div className="absolute right-0 top-full mt-2 w-56 bg-[#FDFBF7] border-2 border-[#B89555]/20 rounded-xl shadow-lg shadow-gold/10 py-2 z-50">
+                      <div className="px-4 py-2 border-b border-[#B89555]/10">
                         <p className="text-sm font-medium text-[#1A1A1A] truncate">{isOwner ? "Owner" : "Account"}</p>
                         <p className="text-xs text-[#1A1A1A]/70">Signed in</p>
                       </div>
                       <button
                         onClick={() => navigate('/my-dashboard#tasks')}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-[#1A1A1A]/70 hover:text-gold hover:bg-gold/5 transition-colors"
+                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/5 transition-colors"
                       >
                         <Check className="w-4 h-4" />
                         My Tasks
                       </button>
                       <button
                         onClick={() => navigate('/broker-account')}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-[#1A1A1A]/70 hover:text-gold hover:bg-gold/5 transition-colors"
+                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/5 transition-colors"
                       >
                         <Settings className="w-4 h-4" />
                         Account Settings

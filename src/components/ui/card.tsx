@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
  * The `surface` variant scopes theme tokens locally so descendants
  * using semantic classes (text-foreground, text-muted-foreground,
  * bg-card, border-border, etc.) automatically resolve to legible
- * colors. Never hardcode `text-gold`/`text-[#1A1A1A]` on `bg-[#1A1A1A]` —
+ * colors. Never hardcode `text-[#1A1A1A]`/`text-[#1A1A1A]` on `bg-[#1A1A1A]` —
  * use <Card surface="dark"> or <Card surface="light"> instead.
  * ============================================================ */
 

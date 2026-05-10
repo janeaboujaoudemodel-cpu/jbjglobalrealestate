@@ -23,9 +23,9 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
       <input ref={ed.fileInputRef} type="file" accept=".pdf" multiple onChange={ed.handleFileUpload} className="hidden" />
 
       {!embedded && (
-        <header className="border-b border-stone-200 bg-[#FDFBF7]">
+        <header className="border-b border-[#B89555]/30 bg-[#FDFBF7]">
           <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-            <Link to="/toolkit" className="flex items-center gap-2 transition-colors rounded-lg px-3 py-2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] border border-stone-200">
+            <Link to="/toolkit" className="flex items-center gap-2 transition-colors rounded-lg px-3 py-2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] border border-[#B89555]/30">
               <ArrowLeft className="h-5 w-5" /><span>Back to Tools Hub</span>
             </Link>
             <Button variant="outline" size="sm" onClick={() => ed.fileInputRef.current?.click()} disabled={ed.isLoading}>

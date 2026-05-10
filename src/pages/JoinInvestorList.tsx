@@ -200,7 +200,7 @@ const JoinInvestorList = () => {
               <motion.form
                 variants={fadeInUp}
                 onSubmit={handleSubmit}
-                className="bg-[#FDFBF7] shadow-lg border border-stone-200 p-6 md:p-8 space-y-6"
+                className="bg-[#FDFBF7] shadow-lg border border-[#B89555]/30 p-6 md:p-8 space-y-6"
               >
                 {/* Contact Details */}
                 <div className="space-y-1 mb-4">

@@ -105,7 +105,7 @@ const getStatusConfig = (status: string | null) => {
   switch (status) {
     case 'completed': return { label: 'Completed', bg: 'bg-emerald-100', text: 'text-emerald-800', border: 'border-emerald-300' };
     case 'submitted_to_team': return { label: 'Submitted', bg: 'bg-sky-100', text: 'text-sky-800', border: 'border-sky-300' };
-    case 'closed': return { label: 'Closed', bg: 'bg-[#EFE6D6]', text: 'text-[#1A1A1A]', border: 'border-stone-400' };
+    case 'closed': return { label: 'Closed', bg: 'bg-[#EFE6D6]', text: 'text-[#1A1A1A]', border: 'border-[#B89555]/30' };
     case 'read': return { label: 'Read', bg: 'bg-violet-100', text: 'text-violet-800', border: 'border-violet-300' };
     case 'action_required': return { label: 'Action Required', bg: 'bg-red-100', text: 'text-red-800', border: 'border-red-300' };
     case 'highlighted': return { label: 'Highlighted', bg: 'bg-amber-100', text: 'text-amber-800', border: 'border-amber-300' };
@@ -118,7 +118,7 @@ const getPriorityConfig = (level: string) => {
   switch (level) {
     case 'critical': return { icon: AlertTriangle, color: 'text-red-600', bg: 'bg-gradient-to-br from-[#FDFBF7] via-[#F8F2E8] to-[#F0E8D8] border-2 border-[#B89555]/40' };
     case 'high': return { icon: AlertCircle, color: 'text-[#B89555]', bg: 'bg-gradient-to-br from-[#FDFBF7] via-[#F8F2E8] to-[#F0E8D8] border-2 border-[#B89555]/30' };
-    case 'medium': return { icon: Bell, color: 'text-[#1A1A1A]/70', bg: 'bg-gradient-to-br from-[#FDFBF7] via-[#F8F2E8] to-[#F0E8D8] border-2 border-stone-300' };
+    case 'medium': return { icon: Bell, color: 'text-[#1A1A1A]/70', bg: 'bg-gradient-to-br from-[#FDFBF7] via-[#F8F2E8] to-[#F0E8D8] border-2 border-[#B89555]/30' };
     default: return { icon: CheckCircle2, color: 'text-emerald-600', bg: 'bg-gradient-to-br from-[#FDFBF7] via-[#F8F2E8] to-[#F0E8D8] border-2 border-emerald-300' };
   }
 };
@@ -529,7 +529,7 @@ const AdminChatDashboard = () => {
               <div className="text-center py-16"><Loader2 className="w-8 h-8 animate-spin text-[#B89555] mx-auto" /></div>
             ) : filteredConversations.length === 0 ? (
               <div className="text-center py-16">
-                <MessageCircle className="w-10 h-10 text-stone-300 mx-auto mb-3" />
+                <MessageCircle className="w-10 h-10 text-[#1A1A1A]/70 mx-auto mb-3" />
                 <p className="text-[#1A1A1A]/70">No conversations found</p>
               </div>
             ) : (
@@ -655,7 +655,7 @@ const AdminChatDashboard = () => {
           <div className="space-y-3">
             {cvSubmissions.length === 0 ? (
               <div className="text-center py-16">
-                <FileText className="w-10 h-10 text-stone-300 mx-auto mb-3" />
+                <FileText className="w-10 h-10 text-[#1A1A1A]/70 mx-auto mb-3" />
                 <p className="text-[#1A1A1A]/70">No CV submissions yet</p>
               </div>
             ) : (
@@ -800,25 +800,25 @@ const AdminChatDashboard = () => {
                 <p className="text-sm text-[#1A1A1A] leading-relaxed">{aiSummary.summary}</p>
                 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                  <div className="p-2 rounded-lg bg-[#FDFBF7]/60 border border-stone-200 text-center">
+                  <div className="p-2 rounded-lg bg-[#FDFBF7]/60 border border-[#B89555]/30 text-center">
                     <p className="text-[9px] uppercase tracking-wider text-[#1A1A1A]/70">Resolution</p>
                     <p className={`text-xs font-bold ${aiSummary.resolution_status === 'resolved' ? 'text-emerald-700' : aiSummary.resolution_status === 'unresolved' ? 'text-red-600' : 'text-amber-600'}`}>
                       {aiSummary.resolution_status?.replace('_', ' ')}
                     </p>
                   </div>
-                  <div className="p-2 rounded-lg bg-[#FDFBF7]/60 border border-stone-200 text-center">
+                  <div className="p-2 rounded-lg bg-[#FDFBF7]/60 border border-[#B89555]/30 text-center">
                     <p className="text-[9px] uppercase tracking-wider text-[#1A1A1A]/70">Sentiment</p>
                     <p className={`text-xs font-bold ${aiSummary.sentiment === 'positive' ? 'text-emerald-700' : aiSummary.sentiment === 'negative' ? 'text-red-600' : 'text-[#1A1A1A]/70'}`}>
                       {aiSummary.sentiment} ({aiSummary.sentiment_score}%)
                     </p>
                   </div>
-                  <div className="p-2 rounded-lg bg-[#FDFBF7]/60 border border-stone-200 text-center">
+                  <div className="p-2 rounded-lg bg-[#FDFBF7]/60 border border-[#B89555]/30 text-center">
                     <p className="text-[9px] uppercase tracking-wider text-[#1A1A1A]/70">Priority</p>
                     <p className={`text-xs font-bold ${aiSummary.priority_level === 'critical' ? 'text-red-600' : aiSummary.priority_level === 'high' ? 'text-orange-600' : 'text-[#1A1A1A]/70'}`}>
                       {aiSummary.priority_level}
                     </p>
                   </div>
-                  <div className="p-2 rounded-lg bg-[#FDFBF7]/60 border border-stone-200 text-center">
+                  <div className="p-2 rounded-lg bg-[#FDFBF7]/60 border border-[#B89555]/30 text-center">
                     <p className="text-[9px] uppercase tracking-wider text-[#1A1A1A]/70">Lead</p>
                     <p className={`text-xs font-bold ${aiSummary.is_lead_opportunity ? 'text-emerald-700' : 'text-[#1A1A1A]/70'}`}>
                       {aiSummary.is_lead_opportunity ? 'Yes' : 'No'}
@@ -888,7 +888,7 @@ const AdminChatDashboard = () => {
                   <div className="text-center py-8"><Loader2 className="w-6 h-6 animate-spin text-[#B89555] mx-auto" /></div>
                 ) : displayMessages.length === 0 ? (
                   <div className="text-center py-12">
-                    <AlertCircle className="w-8 h-8 text-stone-300 mx-auto mb-2" />
+                    <AlertCircle className="w-8 h-8 text-[#1A1A1A]/70 mx-auto mb-2" />
                     <p className="text-sm text-[#1A1A1A]/70">No messages recorded for this session</p>
                     <p className="text-xs text-[#1A1A1A]/70 mt-1">Messages from future conversations will be saved automatically</p>
                   </div>
@@ -903,7 +903,7 @@ const AdminChatDashboard = () => {
                       <div className={`max-w-[75%] rounded-2xl px-3.5 py-2.5 text-sm ${
                         msg.role === 'user'
                           ? 'bg-[#B89555]/10 text-[#1A1A1A] rounded-br-md border border-[#B89555]/20'
-                          : 'bg-[#FDFBF7] text-[#1A1A1A] rounded-bl-md border border-stone-200 shadow-sm'
+                          : 'bg-[#FDFBF7] text-[#1A1A1A] rounded-bl-md border border-[#B89555]/30 shadow-sm'
                       }`}>
                         <p className="whitespace-pre-wrap leading-relaxed text-[13px]">{msg.content}</p>
                         {msg.timestamp && (
@@ -1054,14 +1054,14 @@ const AdminChatDashboard = () => {
                         href={selectedCV.cv_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-[#FDFBF7] hover:bg-[#F7F2EA] text-[#1A1A1A] text-xs font-medium rounded-lg transition-colors border border-stone-200"
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-[#FDFBF7] hover:bg-[#F7F2EA] text-[#1A1A1A] text-xs font-medium rounded-lg transition-colors border border-[#B89555]/30"
                       >
                         <Eye className="w-3 h-3" /> Open in New Tab
                       </a>
                       <a
                         href={selectedCV.cv_url}
                         download={`CV-${selectedCV.full_name.replace(/\s+/g, '-')}`}
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-[#FDFBF7] hover:bg-[#F7F2EA] text-[#1A1A1A] text-xs font-medium rounded-lg transition-colors border border-stone-200"
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-[#FDFBF7] hover:bg-[#F7F2EA] text-[#1A1A1A] text-xs font-medium rounded-lg transition-colors border border-[#B89555]/30"
                       >
                         <Download className="w-3 h-3" /> Download
                       </a>
@@ -1106,8 +1106,8 @@ const AdminChatDashboard = () => {
                   </div>
                 </div>
               ) : (
-                <div className="text-center py-8 bg-[#FDFBF7] rounded-xl border border-stone-200">
-                  <FileText className="w-8 h-8 text-stone-300 mx-auto mb-2" />
+                <div className="text-center py-8 bg-[#FDFBF7] rounded-xl border border-[#B89555]/30">
+                  <FileText className="w-8 h-8 text-[#1A1A1A]/70 mx-auto mb-2" />
                   <p className="text-sm text-[#1A1A1A]/70">No CV file uploaded</p>
                 </div>
               )}

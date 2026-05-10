@@ -127,7 +127,7 @@ const DEFAULT_PROFILE: ProfileData = {
 const accent = '#2563EB';
 
 const Panel = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
-  <div className={`rounded-2xl p-4 bg-[#FDFBF7] border border-stone-200 shadow-sm ${className}`}>
+  <div className={`rounded-2xl p-4 bg-[#FDFBF7] border border-[#B89555]/30 shadow-sm ${className}`}>
     {children}
   </div>
 );
@@ -142,14 +142,14 @@ const PanelTitle = ({ icon: Icon, children }: { icon: React.ElementType; childre
 const CleanInput = ({ className = '', ...props }: React.InputHTMLAttributes<HTMLInputElement>) => (
   <input
     {...props}
-    className={`w-full px-3 py-2 rounded-lg text-sm text-[#1A1A1A] placeholder-stone-400 outline-none transition-all bg-[#F7F2EA] border border-stone-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 ${className}`}
+    className={`w-full px-3 py-2 rounded-lg text-sm text-[#1A1A1A] placeholder-stone-400 outline-none transition-all bg-[#F7F2EA] border border-[#B89555]/30 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 ${className}`}
   />
 );
 
 const CleanTextarea = ({ className = '', ...props }: React.TextareaHTMLAttributes<HTMLTextAreaElement>) => (
   <textarea
     {...props}
-    className={`w-full px-3 py-2 rounded-lg text-sm text-[#1A1A1A] placeholder-stone-400 outline-none transition-all resize-none bg-[#F7F2EA] border border-stone-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 ${className}`}
+    className={`w-full px-3 py-2 rounded-lg text-sm text-[#1A1A1A] placeholder-stone-400 outline-none transition-all resize-none bg-[#F7F2EA] border border-[#B89555]/30 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 ${className}`}
   />
 );
 
@@ -578,7 +578,7 @@ export default function BrochureGeneratorPage() {
               className={`flex items-center gap-2.5 p-3 rounded-xl text-left transition-all border-2 ${
                 documentType === dt.id
                   ? 'border-blue-500 bg-blue-50/50 shadow-sm'
-                  : 'border-stone-200 hover:border-blue-300 bg-[#FDFBF7]'
+                  : 'border-[#B89555]/30 hover:border-blue-300 bg-[#FDFBF7]'
               }`}
             >
               <dt.icon className={`w-5 h-5 shrink-0 ${documentType === dt.id ? 'text-blue-600' : 'text-[#1A1A1A]/70'}`} />
@@ -618,7 +618,7 @@ export default function BrochureGeneratorPage() {
             <div className="relative">
               <button
                 onClick={() => setProjectsOpen(o => !o)}
-                className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm bg-[#F7F2EA] border border-stone-200 hover:border-blue-400 transition-all"
+                className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm bg-[#F7F2EA] border border-[#B89555]/30 hover:border-blue-400 transition-all"
               >
                 <span className={selectedProject ? 'text-[#1A1A1A] font-medium' : 'text-[#1A1A1A]/70'}>
                   {selectedProject ? (
@@ -632,8 +632,8 @@ export default function BrochureGeneratorPage() {
                 <ChevronDown className="h-4 w-4 text-[#1A1A1A]/70" />
               </button>
               {projectsOpen && (
-                <div className="absolute top-full left-0 right-0 z-50 mt-1 rounded-xl overflow-hidden bg-[#FDFBF7] border border-stone-200 shadow-xl">
-                  <div className="p-2 border-b border-stone-100">
+                <div className="absolute top-full left-0 right-0 z-50 mt-1 rounded-xl overflow-hidden bg-[#FDFBF7] border border-[#B89555]/30 shadow-xl">
+                  <div className="p-2 border-b border-[#B89555]/30">
                     <div className="flex items-center gap-2 px-2">
                       <Search className="h-4 w-4 text-[#1A1A1A]/70" />
                       <input
@@ -650,7 +650,7 @@ export default function BrochureGeneratorPage() {
                       <button
                         key={project.id}
                         onClick={() => selectProject(project)}
-                        className="w-full text-left px-3 py-2.5 transition-colors hover:bg-blue-50 border-b border-stone-50 last:border-0"
+                        className="w-full text-left px-3 py-2.5 transition-colors hover:bg-blue-50 border-b border-[#B89555]/30 last:border-0"
                       >
                         <p className="text-sm font-medium text-[#1A1A1A] truncate">{project.name}</p>
                         <p className="text-[10px] text-[#1A1A1A]/70 mt-0.5">
@@ -733,7 +733,7 @@ export default function BrochureGeneratorPage() {
                   <button key={theme.id}
                     onClick={() => setSelectedTheme(theme.id)}
                     className={`flex items-center gap-2 p-2 rounded-lg text-left transition-all border ${
-                      selectedTheme === theme.id ? 'border-blue-500 bg-blue-50' : 'border-stone-200 hover:border-blue-300'
+                      selectedTheme === theme.id ? 'border-blue-500 bg-blue-50' : 'border-[#B89555]/30 hover:border-blue-300'
                     }`}>
                     <div className="w-4 h-4 rounded-full shrink-0 border border-white shadow-sm"
                       style={{ backgroundColor: `rgb(${theme.primaryColor.map(c => Math.round(c * 255)).join(',')})` }} />
@@ -868,7 +868,7 @@ export default function BrochureGeneratorPage() {
                   {propertyData.images.length > 0 && (
                     <div className="grid grid-cols-6 gap-1.5 mt-2">
                       {propertyData.images.map((img, i) => (
-                        <div key={i} className="relative group rounded overflow-hidden aspect-square border border-stone-200">
+                        <div key={i} className="relative group rounded overflow-hidden aspect-square border border-[#B89555]/30">
                           <img src={img} alt={`Image ${i + 1}`} className="w-full h-full object-cover" />
                           <button onClick={() => removeImage(i)}
                             className="absolute top-0.5 right-0.5 p-0.5 rounded-full opacity-0 group-hover:opacity-100 bg-red-500/85">
@@ -905,7 +905,7 @@ export default function BrochureGeneratorPage() {
                   </h3>
                   <div className="flex gap-2">
                     <button onClick={handleGenerate}
-                      className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-[10px] font-medium bg-[#F7F2EA] text-[#1A1A1A]/70 hover:bg-[#EFE6D6] border border-stone-200">
+                      className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-[10px] font-medium bg-[#F7F2EA] text-[#1A1A1A]/70 hover:bg-[#EFE6D6] border border-[#B89555]/30">
                       <RotateCcw className="w-3 h-3" /> Regenerate
                     </button>
                     <button onClick={handleDownload}
@@ -916,7 +916,7 @@ export default function BrochureGeneratorPage() {
                 </div>
 
                 {/* PDF Embed */}
-                <div className="rounded-lg overflow-hidden border border-stone-200 bg-[#F7F2EA]">
+                <div className="rounded-lg overflow-hidden border border-[#B89555]/30 bg-[#F7F2EA]">
                   <iframe
                     src={URL.createObjectURL(new Blob([previewPdfBytes], { type: 'application/pdf' }))}
                     className="w-full"

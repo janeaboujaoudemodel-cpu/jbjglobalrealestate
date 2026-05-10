@@ -36,7 +36,7 @@ const departmentHierarchy = {
   'Operations': { order: 9, color: 'border-[#B89555]/30/30', bgColor: 'bg-[#B89555]/5' },
   'Customer Happiness': { order: 10, color: 'border-emerald-500/30', bgColor: 'bg-emerald-500/5' },
   'Client Relations': { order: 11, color: 'border-indigo-500/30', bgColor: 'bg-indigo-500/5' },
-  'Legal': { order: 12, color: 'border-slate-500/30', bgColor: 'bg-slate-500/5' },
+  'Legal': { order: 12, color: 'border-[#B89555]/30/30', bgColor: 'bg-[#1A1A1A]/5' },
 };
 
 const departments = ['All', ...Object.keys(departmentHierarchy)];

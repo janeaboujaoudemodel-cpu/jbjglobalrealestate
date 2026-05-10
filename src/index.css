@@ -412,10 +412,10 @@ All colors MUST be HSL.
 @layer utilities {
   /* Any SVG inside a black/near-black icon tile → solid white, full opacity */
   .bg-black > svg,
-  .bg-neutral-900 > svg,
+  .bg-[#1A1A1A] > svg,
   .bg-gray-900 > svg,
   .bg-[#FDFBF7] > svg,
-  .bg-stone-900 > svg,
+  .bg-[#1A1A1A] > svg,
   [class*="bg-black"] > svg.lucide,
   .jj-icon-keep > svg {
     color: #ffffff !important;
@@ -478,16 +478,16 @@ All colors MUST be HSL.
   [data-surface="light"] svg.lucide[class*="text-white/"],
   [data-surface="light"] svg.lucide.text-gray-200,
   [data-surface="light"] svg.lucide.text-gray-100,
-  [data-surface="light"] svg.lucide.text-zinc-200,
-  [data-surface="light"] svg.lucide.text-zinc-100 {
+  [data-surface="light"] svg.lucide.text-[#1A1A1A],
+  [data-surface="light"] svg.lucide.text-[#1A1A1A] {
     color: hsl(0 0% 28%) !important;
     opacity: 1 !important;
   }
 
   /* Icons sitting directly on white/very-light cards must never be white */
-  :where(.bg-white, .bg-card, .bg-background, .bg-gray-50, .bg-[#FDFBF7], .bg-neutral-50)
+  :where(.bg-white, .bg-card, .bg-background, .bg-gray-50, .bg-[#FDFBF7], .bg-[#F7F2EA])
     > svg.lucide.text-white,
-  :where(.bg-white, .bg-card, .bg-background, .bg-gray-50, .bg-[#FDFBF7], .bg-neutral-50)
+  :where(.bg-white, .bg-card, .bg-background, .bg-gray-50, .bg-[#FDFBF7], .bg-[#F7F2EA])
     > svg.lucide[class*="text-white/"] {
     color: hsl(0 0% 12%) !important;
     opacity: 1 !important;
@@ -524,11 +524,11 @@ All colors MUST be HSL.
   .bg-black svg.lucide,
   .bg-gray-900 svg.lucide,
   .bg-gray-950 svg.lucide,
-  .bg-neutral-900 svg.lucide,
-  .bg-neutral-950 svg.lucide,
+  .bg-[#1A1A1A] svg.lucide,
+  .bg-[#1A1A1A] svg.lucide,
   .bg-[#FDFBF7] svg.lucide,
   .bg-[#FDFBF7] svg.lucide,
-  .bg-stone-900 svg.lucide,
+  .bg-[#1A1A1A] svg.lucide,
   [class*="bg-[#0"] svg.lucide,
   [style*="#0D0D0D"] svg.lucide,
   [style*="#0A0908"] svg.lucide {
@@ -555,8 +555,8 @@ All colors MUST be HSL.
   .bg-black .text-gray-600,
   .bg-gray-900 .text-gray-500,
   .bg-gray-900 .text-gray-600,
-  .bg-neutral-900 .text-gray-500,
-  .bg-neutral-900 .text-gray-600,
+  .bg-[#1A1A1A] .text-gray-500,
+  .bg-[#1A1A1A] .text-gray-600,
   .bg-[#FDFBF7] .text-gray-500,
   .bg-[#FDFBF7] .text-gray-600,
   [class*="bg-[#0"] .text-gray-500,
@@ -599,7 +599,7 @@ All colors MUST be HSL.
   }
 
   /* Mirror of the existing white-on-light guard: black text on dark surfaces */
-  [data-surface="dark"] :is(.text-black, [class*="text-black/"], .text-[#1A1A1A], .text-zinc-950, .text-neutral-900, .text-neutral-950) {
+  [data-surface="dark"] :is(.text-black, [class*="text-black/"], .text-[#1A1A1A], .text-[#1A1A1A]/70, .text-[#1A1A1A]/70, .text-[#1A1A1A]/70) {
     color: hsl(var(--foreground)) !important;
   }
 
@@ -709,8 +709,8 @@ All colors MUST be HSL.
     --surface-icon: 36 33% 43%;
   }
   :where([class*="rounded-"]):is(
-    .bg-black, .bg-[#FDFBF7], .bg-[#FDFBF7], .bg-neutral-900, .bg-neutral-950,
-    .bg-gray-900, .bg-gray-950, .bg-stone-900, .bg-\[\#1A1A1A\], .bg-\[\#1a1a1a\]
+    .bg-black, .bg-[#FDFBF7], .bg-[#FDFBF7], .bg-[#1A1A1A], .bg-[#1A1A1A],
+    .bg-gray-900, .bg-gray-950, .bg-[#1A1A1A], .bg-\[\#1A1A1A\], .bg-\[\#1a1a1a\]
   ):not([data-surface]) {
     --surface-bg: 0 0% 10%;
     --surface-fg: 36 41% 95%;
@@ -727,8 +727,8 @@ All colors MUST be HSL.
   [data-surface="champagne"] :is(.text-white, [class*="text-white/"]):not([data-no-contrast-guard]) {
     color: hsl(var(--surface-fg)) !important;
   }
-  [data-surface="ink"] :is(.text-black, [class*="text-black/"], .text-[#1A1A1A], .text-zinc-950, .text-neutral-900, .text-neutral-950):not([data-no-contrast-guard]),
-  [data-surface="gold"] :is(.text-black, [class*="text-black/"], .text-[#1A1A1A], .text-zinc-950, .text-neutral-900, .text-neutral-950):not([data-no-contrast-guard]) {
+  [data-surface="ink"] :is(.text-black, [class*="text-black/"], .text-[#1A1A1A], .text-[#1A1A1A]/70, .text-[#1A1A1A]/70, .text-[#1A1A1A]/70):not([data-no-contrast-guard]),
+  [data-surface="gold"] :is(.text-black, [class*="text-black/"], .text-[#1A1A1A], .text-[#1A1A1A]/70, .text-[#1A1A1A]/70, .text-[#1A1A1A]/70):not([data-no-contrast-guard]) {
     color: hsl(var(--surface-fg)) !important;
   }
 
@@ -2550,10 +2550,10 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
    class as a whole word, EXCLUDING any /<alpha> suffix. */
 .bg-black > svg,
 .bg-[#FDFBF7] > svg, .bg-[#FDFBF7] > svg,
-.bg-neutral-900 > svg, .bg-neutral-950 > svg,
+.bg-[#1A1A1A] > svg, .bg-[#1A1A1A] > svg,
 .bg-gray-900 > svg, .bg-gray-950 > svg,
-.bg-stone-900 > svg, .bg-stone-950 > svg,
-.bg-slate-900 > svg, .bg-slate-950 > svg,
+.bg-[#1A1A1A] > svg, .bg-[#1A1A1A] > svg,
+.bg-[#1A1A1A] > svg, .bg-[#1A1A1A] > svg,
 [class~="bg-[#1A1A1A]"] > svg,
 [class~="bg-[#0F0F0F]"] > svg,
 [class~="bg-[#111111]"] > svg,
@@ -2667,8 +2667,8 @@ html [data-surface="dark"] :is(h1, h2, h3, h4, h5, h6, p, span, a, label, div, b
   .bg-black, [class*="bg-black"],
   .bg-gray-800, .bg-gray-900, .bg-gray-950,
   .bg-[#1A1A1A], .bg-[#FDFBF7], .bg-[#FDFBF7],
-  .bg-slate-800, .bg-slate-900, .bg-slate-950,
-  .bg-neutral-800, .bg-neutral-900, .bg-neutral-950,
+  .bg-[#1A1A1A], .bg-[#1A1A1A], .bg-[#1A1A1A],
+  .bg-[#1A1A1A], .bg-[#1A1A1A], .bg-[#1A1A1A],
   .bg-primary, .bg-foreground,
   [data-surface="dark"]
 ) :is(.text-white, [class*="text-white/"]) {
@@ -2683,7 +2683,7 @@ html [data-surface="dark"] :is(h1, h2, h3, h4, h5, h6, p, span, a, label, div, b
   .bg-black, [class*="bg-black"],
   .bg-gray-800, .bg-gray-900, .bg-gray-950,
   .bg-[#1A1A1A], .bg-[#FDFBF7], .bg-[#FDFBF7],
-  .bg-slate-900, .bg-slate-950,
+  .bg-[#1A1A1A], .bg-[#1A1A1A],
   .bg-primary, .bg-foreground,
   [data-surface="dark"]
 ) :is(.text-[#1A1A1A], [class*="text-[#1A1A1A]/"], svg.text-[#1A1A1A], svg[class*="text-[#1A1A1A]"]) {
@@ -2718,7 +2718,7 @@ html [data-surface="dark"][data-surface="dark"] :is(input, textarea, select, opt
   .bg-black, .bg-primary, .bg-foreground,
   .bg-[#1A1A1A], .bg-[#FDFBF7], .bg-[#FDFBF7],
   .bg-gray-800, .bg-gray-900, .bg-gray-950,
-  .bg-slate-800, .bg-slate-900, .bg-slate-950,
+  .bg-[#1A1A1A], .bg-[#1A1A1A], .bg-[#1A1A1A],
   [class*="bg-black"],
   [class*="from-[hsl(32,28%,13%)]"], [class*="bg-[hsl(32,28%,13%)]"],
   [class*="from-[hsl(38,35%,12%)]"], [class*="bg-[hsl(38,35%,12%)]"]
@@ -2729,13 +2729,13 @@ html [data-surface="dark"][data-surface="dark"] :is(input, textarea, select, opt
 /* 2a. Low-contrast grays on dark → readable white */
 :where(
   .bg-black, .bg-[#FDFBF7], .bg-[#FDFBF7], .bg-gray-900, .bg-gray-950,
-  .bg-gray-800, .bg-[#1A1A1A], .bg-slate-900,
+  .bg-gray-800, .bg-[#1A1A1A], .bg-[#1A1A1A],
   [class*="bg-black"],
   [class*="from-[hsl(32,28%,13%)]"], [class*="bg-[hsl(32,28%,13%)]"],
   [class*="from-[hsl(38,35%,12%)]"], [class*="bg-[hsl(38,35%,12%)]"]
 ) :is(
   .text-gray-400, .text-gray-500, .text-[#1A1A1A]\/70, .text-[#1A1A1A]\/60,
-  .text-slate-400, .text-slate-500
+  .text-[#1A1A1A]/70, .text-[#1A1A1A]/70
 ) {
   color: rgb(255 255 255 / 0.78) !important;
   opacity: 1 !important;
@@ -3388,13 +3388,13 @@ a .lucide,
       because the tokens themselves switch). The block below documents intent
       and acts as a safety net for any tile that hard-codes a light bg in dark mode. */
 .dark [class*="bg-white"] .lucide,
-.dark [class*="bg-neutral-50"] .lucide,
-.dark [class*="bg-neutral-100"] .lucide {
+.dark [class*="bg-[#F7F2EA]"] .lucide,
+.dark [class*="bg-[#F7F2EA]"] .lucide {
   color: hsl(0 0% 7%); /* dark ink on stubbornly-light surface */
 }
 :root:not(.dark) [class*="bg-black"] .lucide,
-:root:not(.dark) [class*="bg-neutral-900"] .lucide,
-:root:not(.dark) [class*="bg-neutral-950"] .lucide {
+:root:not(.dark) [class*="bg-[#1A1A1A]"] .lucide,
+:root:not(.dark) [class*="bg-[#1A1A1A]"] .lucide {
   color: hsl(0 0% 100%); /* light ink on stubbornly-dark surface */
 }
 
@@ -3625,7 +3625,7 @@ button:disabled:has(.lucide),
   .bg-black .text-[#1A1A1A],
   .bg-gray-900 .text-[#1A1A1A],
   .bg-[#FDFBF7] .text-[#1A1A1A],
-  .bg-neutral-900 .text-[#1A1A1A],
+  .bg-[#1A1A1A] .text-[#1A1A1A],
   .bg-foreground .text-[#1A1A1A],
   .bg-primary .text-[#1A1A1A],
   [data-surface="dark"] .text-[#1A1A1A],
@@ -3879,18 +3879,18 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
 
 /* 2. Replace gray/silver utility surfaces with champagne */
 :root:not(.dark) :is(
-  .bg-neutral-50, .bg-neutral-100, .bg-gray-50, .bg-gray-100,
-  .bg-[#FDFBF7], .bg-[#F7F2EA], .bg-slate-50, .bg-slate-100,
-  .bg-stone-50, .bg-stone-100
+  .bg-[#F7F2EA], .bg-[#F7F2EA], .bg-gray-50, .bg-gray-100,
+  .bg-[#FDFBF7], .bg-[#F7F2EA], .bg-[#F7F2EA], .bg-[#F7F2EA],
+  .bg-[#F7F2EA], .bg-[#F7F2EA]
 ):not([data-surface="dark"]) {
   background-color: #F7F2EA !important;
 }
 
 /* 3. Replace neutral text on light surfaces with ink/brown */
 :root:not(.dark) :is(
-  .text-neutral-400, .text-neutral-500, .text-neutral-600, .text-neutral-700,
-  .text-[#1A1A1A]\/60, .text-[#1A1A1A]\/70, .text-slate-500, .text-slate-600,
-  .text-stone-500, .text-stone-600
+  .text-[#1A1A1A]/70, .text-[#1A1A1A]/70, .text-[#1A1A1A]/70, .text-[#1A1A1A]/70,
+  .text-[#1A1A1A]\/60, .text-[#1A1A1A]\/70, .text-[#1A1A1A]/70, .text-[#1A1A1A]/70,
+  .text-[#1A1A1A]/70, .text-[#1A1A1A]/70
 ) {
   color: #3A2D1D !important;
   --tw-text-opacity: 1 !important;
@@ -3898,10 +3898,10 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
 
 /* 4. Neutral borders on light surfaces → champagne gold hairline */
 :root:not(.dark) :is(
-  .border-neutral-100, .border-neutral-200, .border-neutral-300,
+  .border-[#B89555]/30, .border-[#B89555]/30, .border-[#B89555]/30,
   .border-gray-100, .border-gray-200, .border-gray-300,
-  .border-zinc-100, .border-[#B89555]\/30, .border-[#B89555]\/30,
-  .border-slate-100, .border-slate-200
+  .border-[#B89555]/30, .border-[#B89555]\/30, .border-[#B89555]\/30,
+  .border-[#B89555]/30, .border-[#B89555]/30
 ) {
   border-color: rgba(184, 149, 85, 0.40) !important;
 }
@@ -4138,7 +4138,7 @@ a[class*="bg-red-"]:hover {
 :where(
   .bg-[#1A1A1A], .bg-[#FDFBF7], .bg-[#FDFBF7],
   .bg-gray-800, .bg-gray-900, .bg-gray-950,
-  .bg-slate-800, .bg-slate-900, .bg-slate-950,
+  .bg-[#1A1A1A], .bg-[#1A1A1A], .bg-[#1A1A1A],
   .bg-black, [class*="bg-black"],
   [class*="bg-zinc-8"], [class*="bg-zinc-9"],
   [class*="from-zinc-9"], [class*="from-black"],
@@ -4151,7 +4151,7 @@ a[class*="bg-red-"]:hover {
 :where(
   .bg-[#1A1A1A], .bg-[#FDFBF7], .bg-[#FDFBF7],
   .bg-gray-800, .bg-gray-900, .bg-gray-950,
-  .bg-slate-800, .bg-slate-900, .bg-slate-950,
+  .bg-[#1A1A1A], .bg-[#1A1A1A], .bg-[#1A1A1A],
   .bg-black, [class*="bg-black"],
   [class*="bg-zinc-8"], [class*="bg-zinc-9"],
   [class*="from-zinc-9"],

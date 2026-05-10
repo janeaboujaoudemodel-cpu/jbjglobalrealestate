@@ -302,7 +302,7 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
                   className={`flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold transition-all border ${
                     comparisonMode
                       ? 'bg-violet-500/25 text-violet-300 border-violet-500/50 shadow-sm'
-                      : 'bg-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-slate-600 hover:text-white border-transparent'
+                      : 'bg-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-[#1A1A1A] hover:text-white border-transparent'
                   }`}
                 >
                   <SplitSquareHorizontal className="w-3 h-3" />
@@ -310,7 +310,7 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
                 </button>
                 <button
                   onClick={handleClearFilter}
-                  className="flex items-center gap-1 px-2 py-0.5 rounded text-[10px] bg-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-slate-600 hover:text-white transition-colors border border-transparent"
+                  className="flex items-center gap-1 px-2 py-0.5 rounded text-[10px] bg-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-[#1A1A1A] hover:text-white transition-colors border border-transparent"
                 >
                   <X className="w-2.5 h-2.5" />
                   Clear
@@ -369,7 +369,7 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
                   <div className={`px-2 py-1.5 ${isActive ? 'bg-violet-900/60' : 'bg-[#1A1A1A]/90 group-hover:bg-[#1A1A1A]/90'} transition-colors`}>
                     <div className="flex items-center gap-1">
                       <span className="text-[11px]">{lut.emoji}</span>
-                      <span className={`text-[10px] font-semibold leading-tight ${isActive ? 'text-violet-200' : 'text-slate-200'}`}>
+                      <span className={`text-[10px] font-semibold leading-tight ${isActive ? 'text-violet-200' : 'text-[#1A1A1A]'}`}>
                         {lut.name}
                       </span>
                     </div>
@@ -433,7 +433,7 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
             <div className="px-3 py-2 bg-[#1A1A1A]/80 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Film className="w-3.5 h-3.5 text-[#1A1A1A]" />
-                <span className="text-xs font-semibold text-slate-200">Bake into Export</span>
+                <span className="text-xs font-semibold text-[#1A1A1A]">Bake into Export</span>
               </div>
               {exportFilterActive && (
                 <span className="flex items-center gap-1 text-[9px] font-bold text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 px-1.5 py-0.5 rounded-full">

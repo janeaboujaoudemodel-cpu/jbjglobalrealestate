@@ -39,7 +39,7 @@ export default function PDFSuite() {
 
       <div className="min-h-screen bg-[#FDFBF7]">
         {/* ── Suite Header ── */}
-        <div className="border-b border-stone-200 bg-gradient-to-b from-slate-50 to-white">
+        <div className="border-b border-[#B89555]/30 bg-gradient-to-b from-slate-50 to-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-0">
             {/* Back link */}
             <Link to="/toolkit"
@@ -68,7 +68,7 @@ export default function PDFSuite() {
         {/* ── Tabs ── */}
         <Tabs defaultValue="editor" className="w-full">
           {/* Tab Bar */}
-          <div className="border-b border-stone-200 bg-[#FDFBF7]">
+          <div className="border-b border-[#B89555]/30 bg-[#FDFBF7]">
             <div className="max-w-7xl mx-auto px-2 sm:px-6">
               <TabsList className="w-full justify-start rounded-none bg-transparent p-0 h-auto gap-0 border-0 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
                 {tabs.map(({ value, label, shortLabel, icon: Icon, color }) => (

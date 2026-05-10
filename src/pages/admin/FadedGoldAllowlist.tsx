@@ -179,7 +179,7 @@ export default function FadedGoldAllowlist() {
           <div className="flex items-start gap-4">
             <Link
               to="/admin"
-              className="mt-1 inline-flex h-9 w-9 items-center justify-center rounded-full border border-zinc-200 text-zinc-600 transition hover:bg-zinc-50"
+              className="mt-1 inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#B89555]/30 text-[#1A1A1A]/70 transition hover:bg-[#F7F2EA]"
               aria-label="Back to admin"
             >
               <ArrowLeft className="h-4 w-4" />
@@ -188,10 +188,10 @@ export default function FadedGoldAllowlist() {
               <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#1A1A1A]/60">
                 Design QA · CI guards
               </p>
-              <h1 className="text-3xl font-bold tracking-tight text-zinc-950">
+              <h1 className="text-3xl font-bold tracking-tight text-[#1A1A1A]/70">
                 Faded-Gold Allowlist
               </h1>
-              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-zinc-600">
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[#1A1A1A]/70">
                 Files listed here are exempt from the faded-gold guard
                 (<code className="rounded bg-[#F7F2EA] px-1.5 py-0.5 text-xs">text-[#1A1A1A]/XX</code> where{" "}
                 <code className="rounded bg-[#F7F2EA] px-1.5 py-0.5 text-xs">XX &lt; 80</code>). Only add
@@ -217,16 +217,16 @@ export default function FadedGoldAllowlist() {
         </header>
 
         {/* Add card */}
-        <section className="rounded-2xl border border-zinc-200 bg-zinc-50/60 p-6">
+        <section className="rounded-2xl border border-[#B89555]/30 bg-[#F7F2EA]/60 p-6">
           <div className="mb-4 flex items-center gap-2">
             <Sparkles className="h-4 w-4 text-[#1A1A1A]/60" />
-            <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-zinc-700">
+            <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-[#1A1A1A]/70">
               Add an exemption
             </h2>
           </div>
           <div className="grid gap-3 md:grid-cols-[2fr_3fr_auto]">
             <div>
-              <label className="mb-1 block text-xs font-medium text-zinc-600">
+              <label className="mb-1 block text-xs font-medium text-[#1A1A1A]/70">
                 File path
               </label>
               <Input
@@ -237,7 +237,7 @@ export default function FadedGoldAllowlist() {
               />
             </div>
             <div>
-              <label className="mb-1 block text-xs font-medium text-zinc-600">
+              <label className="mb-1 block text-xs font-medium text-[#1A1A1A]/70">
                 Reason (visible to auditors)
               </label>
               <Input
@@ -268,9 +268,9 @@ export default function FadedGoldAllowlist() {
         <section>
           <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h2 className="text-lg font-semibold text-zinc-950">
+              <h2 className="text-lg font-semibold text-[#1A1A1A]/70">
                 Current allowlist
-                <span className="ml-2 rounded-full bg-[#F7F2EA] px-2 py-0.5 text-xs font-medium text-zinc-600">
+                <span className="ml-2 rounded-full bg-[#F7F2EA] px-2 py-0.5 text-xs font-medium text-[#1A1A1A]/70">
                   {rows.length}
                 </span>
               </h2>
@@ -283,7 +283,7 @@ export default function FadedGoldAllowlist() {
             />
           </div>
 
-          <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-[#FDFBF7]">
+          <div className="overflow-hidden rounded-2xl border border-[#B89555]/30 bg-[#FDFBF7]">
             {loading ? (
               <div className="p-10 text-center text-sm text-[#1A1A1A]/60">Loading…</div>
             ) : filtered.length === 0 ? (
@@ -294,7 +294,7 @@ export default function FadedGoldAllowlist() {
               </div>
             ) : (
               <table className="w-full text-sm">
-                <thead className="border-b border-zinc-100 bg-zinc-50">
+                <thead className="border-b border-[#B89555]/30 bg-[#F7F2EA]">
                   <tr className="text-left text-[11px] uppercase tracking-[0.15em] text-[#1A1A1A]/60">
                     <th className="px-4 py-3 font-semibold">File</th>
                     <th className="px-4 py-3 font-semibold">Reason</th>
@@ -313,7 +313,7 @@ export default function FadedGoldAllowlist() {
         </section>
 
         {/* Export */}
-        <section className="rounded-2xl border border-zinc-200 bg-[#FDFBF7] p-6 text-zinc-100">
+        <section className="rounded-2xl border border-[#B89555]/30 bg-[#FDFBF7] p-6 text-[#1A1A1A]">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#1A1A1A]/70">
@@ -333,7 +333,7 @@ export default function FadedGoldAllowlist() {
                 variant="outline"
                 size="sm"
                 onClick={copyJson}
-                className="gap-2 border-[#B89555]/30 bg-[#FDFBF7] text-zinc-100 hover:bg-[#F7F2EA]"
+                className="gap-2 border-[#B89555]/30 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA]"
               >
                 {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
                 {copied ? "Copied" : "Copy JSON"}
@@ -348,7 +348,7 @@ export default function FadedGoldAllowlist() {
               </Button>
             </div>
           </div>
-          <pre className="max-h-72 overflow-auto rounded-lg bg-[#1A1A1A]/40 p-4 font-mono text-[11px] leading-relaxed text-zinc-200">
+          <pre className="max-h-72 overflow-auto rounded-lg bg-[#1A1A1A]/40 p-4 font-mono text-[11px] leading-relaxed text-[#1A1A1A]">
             {jsonExport}
           </pre>
         </section>
@@ -369,7 +369,7 @@ function Row({
   const [reason, setReason] = useState(entry.reason);
   const dirty = reason !== entry.reason;
   return (
-    <tr className="border-b border-zinc-100 last:border-0 align-top">
+    <tr className="border-b border-[#B89555]/30 last:border-0 align-top">
       <td className="px-4 py-3 font-mono text-xs text-[#1A1A1A]">{entry.file_path}</td>
       <td className="px-4 py-3">
         <Textarea

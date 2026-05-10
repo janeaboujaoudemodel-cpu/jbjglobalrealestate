@@ -138,13 +138,13 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           {/* Transaction Split Bars — Premium */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             {/* Off-Plan vs Secondary */}
-            <div className="bg-[#FDFBF7] rounded-2xl p-6 border border-stone-200 shadow-sm">
+            <div className="bg-[#FDFBF7] rounded-2xl p-6 border border-[#B89555]/30 shadow-sm">
               <div className="flex items-center gap-2 mb-4">
                 <TrendingUp className="w-4 h-4 text-emerald-600" />
                 <h3 className="text-foreground font-semibold text-sm">Off-Plan vs Secondary</h3>
               </div>
               {/* Visual bar */}
-              <div className="h-8 rounded-full overflow-hidden mb-4 flex shadow-inner bg-[#F7F2EA] border border-stone-200">
+              <div className="h-8 rounded-full overflow-hidden mb-4 flex shadow-inner bg-[#F7F2EA] border border-[#B89555]/30">
                 <div
                   className="h-full bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-400 rounded-l-full shadow-[0_0_10px_rgba(16,185,129,0.4)] flex items-center justify-center"
                   style={{ width: `${offPlanPct}%` }}
@@ -179,12 +179,12 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
             </div>
 
             {/* Cash vs Mortgage */}
-            <div className="bg-[#FDFBF7] rounded-2xl p-6 border border-stone-200 shadow-sm">
+            <div className="bg-[#FDFBF7] rounded-2xl p-6 border border-[#B89555]/30 shadow-sm">
               <div className="flex items-center gap-2 mb-4">
                 <Banknote className="w-4 h-4 text-blue-600" />
                 <h3 className="text-foreground font-semibold text-sm">Cash vs Mortgage</h3>
               </div>
-              <div className="h-8 rounded-full overflow-hidden mb-4 flex shadow-inner bg-[#F7F2EA] border border-stone-200">
+              <div className="h-8 rounded-full overflow-hidden mb-4 flex shadow-inner bg-[#F7F2EA] border border-[#B89555]/30">
                 <div
                   className="h-full bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 rounded-l-full shadow-[0_0_10px_rgba(59,130,246,0.4)] flex items-center justify-center"
                   style={{ width: `${cashPct}%` }}
