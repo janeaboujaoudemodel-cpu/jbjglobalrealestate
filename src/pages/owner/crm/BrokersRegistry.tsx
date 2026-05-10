@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { SEOHead } from "@/components/SEOHead";
@@ -67,26 +67,53 @@ export default function BrokersRegistry() {
     },
   });
 
-  const { data: external = [], isLoading: loading2 } = useQuery({
-    queryKey: ["brokers-external"],
-    queryFn: async () => {
-      // Paginate fully — crm_brokers can hold tens of thousands of rows.
-      const PAGE = 1000;
-      const all: any[] = [];
-      for (let from = 0; from < 200_000; from += PAGE) {
-        const { data, error } = await (supabase as any)
-          .from("crm_brokers")
-          .select("*")
-          .order("updated_at", { ascending: false })
-          .range(from, from + PAGE - 1);
-        if (error) throw error;
-        const batch = data || [];
-        all.push(...batch);
-        if (batch.length < PAGE) break;
+  // Stream crm_brokers in 1k pages so the UI renders the first page immediately
+  // and progressively fills as more pages arrive (32k+ rows otherwise = blank screen).
+  const [external, setExternal] = useState<any[]>([]);
+  const [externalLoadedPages, setExternalLoadedPages] = useState(0);
+  const [externalDone, setExternalDone] = useState(false);
+  const [externalError, setExternalError] = useState<string | null>(null);
+  const [externalReloadKey, setExternalReloadKey] = useState(0);
+
+  useEffect(() => {
+    let cancelled = false;
+    const PAGE = 1000;
+    setExternal([]);
+    setExternalLoadedPages(0);
+    setExternalDone(false);
+    setExternalError(null);
+
+    (async () => {
+      try {
+        for (let from = 0; from < 500_000; from += PAGE) {
+          if (cancelled) return;
+          const { data, error } = await (supabase as any)
+            .from("crm_brokers")
+            .select("*")
+            .order("updated_at", { ascending: false })
+            .range(from, from + PAGE - 1);
+          if (cancelled) return;
+          if (error) throw error;
+          const batch = data || [];
+          setExternal((prev) => prev.concat(batch));
+          setExternalLoadedPages((p) => p + 1);
+          if (batch.length < PAGE) break;
+        }
+        if (!cancelled) setExternalDone(true);
+      } catch (e: any) {
+        if (!cancelled) {
+          setExternalError(e?.message || "Failed to load brokers");
+          setExternalDone(true);
+        }
       }
-      return all;
-    },
-  });
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [externalReloadKey]);
+
+  const loading2 = external.length === 0 && !externalDone;
 
   const { data: history = [] } = useQuery({
     queryKey: ["broker-company-history-all"],
@@ -192,7 +219,13 @@ export default function BrokersRegistry() {
     </Card>
   );
 
-  const isLoading = loading1 || loading2;
+  const isLoading = (loading1 && registered.length === 0) && loading2;
+  const stillStreaming = !externalDone;
+
+  // Cap rendered rows so the DOM doesn't choke on 30k+ <tr>.
+  const [renderLimit, setRenderLimit] = useState(500);
+  useEffect(() => { setRenderLimit(500); }, [q, tab, companyFilter, sourceFilter]);
+  const visible = useMemo(() => filtered.slice(0, renderLimit), [filtered, renderLimit]);
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-[#1A1A1A]">
@@ -270,12 +303,31 @@ export default function BrokersRegistry() {
             <TabsTrigger value="leasing">Leasing ({counts.leasing})</TabsTrigger>
             <TabsTrigger value="pending">Pending ({counts.pending})</TabsTrigger>
           </TabsList>
-          <TabsContent value={tab} className="mt-3">
+          <TabsContent value={tab} className="mt-3 space-y-3">
+            {externalError && (
+              <Card className="border-red-300 bg-red-50/40">
+                <CardContent className="p-4 flex items-center justify-between gap-3">
+                  <div className="text-sm text-[#1A1A1A]">
+                    <div className="font-semibold">Couldn't load all brokers.</div>
+                    <div className="text-[#1A1A1A]/70 text-xs mt-0.5">{externalError}</div>
+                  </div>
+                  <Button variant="outline" size="sm" onClick={() => setExternalReloadKey((k) => k + 1)}>
+                    Retry
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+            {stillStreaming && (
+              <div className="flex items-center gap-2 text-xs text-[#1A1A1A]/70 px-1">
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                Loading brokers… {external.length.toLocaleString()} of {counts.total.toLocaleString()} loaded
+              </div>
+            )}
             {isLoading ? (
               <Skeleton className="h-64" />
             ) : filtered.length === 0 ? (
               <Card><CardContent className="p-8 text-center text-[#1A1A1A]/70">
-                No brokers match your filters.
+                {stillStreaming ? "Loading brokers…" : "No brokers match your filters."}
               </CardContent></Card>
             ) : (
               <Card className="bg-[#F7F2EA] border-[#B89555]/20">
@@ -293,7 +345,7 @@ export default function BrokersRegistry() {
                       </tr>
                     </thead>
                     <tbody>
-                      {filtered.map((r) => {
+                      {visible.map((r) => {
                         const raw = r.source === "external" ? externalById.get(r.id) : null;
                         const dbSource = raw?.database_source || raw?.upload_source || (r.source === "registered" ? "Registered" : "Manual");
                         return (
@@ -318,6 +370,14 @@ export default function BrokersRegistry() {
                       })}
                     </tbody>
                   </table>
+                  {filtered.length > visible.length && (
+                    <div className="p-3 border-t border-[#B89555]/20 flex items-center justify-between text-xs text-[#1A1A1A]/70">
+                      <span>Showing {visible.length.toLocaleString()} of {filtered.length.toLocaleString()} matching brokers</span>
+                      <Button variant="outline" size="sm" onClick={() => setRenderLimit((n) => n + 1000)}>
+                        Show more
+                      </Button>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             )}
@@ -373,7 +433,7 @@ export default function BrokersRegistry() {
         </SheetContent>
       </Sheet>
 
-      <AddBrokerSheet open={addOpen} onOpenChange={setAddOpen} onAdded={() => qc.invalidateQueries({ queryKey: ["brokers-external"] })} />
+      <AddBrokerSheet open={addOpen} onOpenChange={setAddOpen} onAdded={() => { qc.invalidateQueries({ queryKey: ["brokers-registered"] }); setExternalReloadKey((k) => k + 1); }} />
     </div>
   );
 }
