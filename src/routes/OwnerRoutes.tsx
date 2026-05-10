@@ -13,6 +13,7 @@ import OwnerDashboardOverview from "@/pages/OwnerDashboardOverview";
 import OwnerInbox from "@/pages/OwnerInbox";
 import CRM from "@/pages/CRM";
 import CRMRelationships from "@/pages/CRMRelationships";
+import SecondaryMarketHub from "@/pages/SecondaryMarketHub";
 import CRMLeadsInbox from "@/pages/CRMLeadsInbox";
 import UnifiedCRM from "@/pages/owner/crm/UnifiedCRM";
 
@@ -114,6 +115,7 @@ export const OwnerRoutes = () => (
     <Route path="crm/employees" element={<Navigate to="/owner/crm?section=employees" replace />} />
     <Route path="crm/relationships" element={<Navigate to="/owner/crm/relationship-hub" replace />} />
     <Route path="crm/relationship-hub" element={<CRMRelationships />} />
+    <Route path="crm/relationships/secondary-market" element={<SecondaryMarketHub />} />
     <Route path="admin" element={<Admin />} />
     <Route path="admin/leads" element={<AdminLeads />} />
     <Route path="marketing-hub" element={<MarketingHub />} />

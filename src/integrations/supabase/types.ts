@@ -5632,6 +5632,9 @@ export type Database = {
         Row: {
           active_broker_count: number
           admin_contact: Json
+          admin_name: string | null
+          admin_phone: string | null
+          agency_status: Database["public"]["Enums"]["crm_agency_status"] | null
           ai_generated_at: string | null
           ai_next_action: string | null
           ai_summary: string | null
@@ -5646,6 +5649,8 @@ export type Database = {
           briefing_attendee_count: number
           briefing_count: number
           briefing_notes: string | null
+          closed_deals_broker_names: string[]
+          closed_deals_count: number
           company_name: string
           confidence: string | null
           contract_document_url: string | null
@@ -5654,6 +5659,7 @@ export type Database = {
           contract_status: string
           country: string | null
           created_at: string
+          database_file_url: string | null
           database_source: string | null
           deal_count: number
           deal_count_cached: number
@@ -5674,6 +5680,9 @@ export type Database = {
           expertise_type: string
           field_sources: Json
           first_contact_at: string | null
+          google_reviews_count: number | null
+          google_reviews_score: number | null
+          google_reviews_url: string | null
           health_score: number | null
           id: string
           import_batch_id: string | null
@@ -5682,6 +5691,7 @@ export type Database = {
           imported_by: string | null
           inquiry_count: number
           instagram_url: string | null
+          inventory_file_url: string | null
           is_existing_match: boolean
           is_junk: boolean
           last_auto_reply_at: string | null
@@ -5741,6 +5751,11 @@ export type Database = {
         Insert: {
           active_broker_count?: number
           admin_contact?: Json
+          admin_name?: string | null
+          admin_phone?: string | null
+          agency_status?:
+            | Database["public"]["Enums"]["crm_agency_status"]
+            | null
           ai_generated_at?: string | null
           ai_next_action?: string | null
           ai_summary?: string | null
@@ -5755,6 +5770,8 @@ export type Database = {
           briefing_attendee_count?: number
           briefing_count?: number
           briefing_notes?: string | null
+          closed_deals_broker_names?: string[]
+          closed_deals_count?: number
           company_name: string
           confidence?: string | null
           contract_document_url?: string | null
@@ -5763,6 +5780,7 @@ export type Database = {
           contract_status?: string
           country?: string | null
           created_at?: string
+          database_file_url?: string | null
           database_source?: string | null
           deal_count?: number
           deal_count_cached?: number
@@ -5783,6 +5801,9 @@ export type Database = {
           expertise_type?: string
           field_sources?: Json
           first_contact_at?: string | null
+          google_reviews_count?: number | null
+          google_reviews_score?: number | null
+          google_reviews_url?: string | null
           health_score?: number | null
           id?: string
           import_batch_id?: string | null
@@ -5791,6 +5812,7 @@ export type Database = {
           imported_by?: string | null
           inquiry_count?: number
           instagram_url?: string | null
+          inventory_file_url?: string | null
           is_existing_match?: boolean
           is_junk?: boolean
           last_auto_reply_at?: string | null
@@ -5850,6 +5872,11 @@ export type Database = {
         Update: {
           active_broker_count?: number
           admin_contact?: Json
+          admin_name?: string | null
+          admin_phone?: string | null
+          agency_status?:
+            | Database["public"]["Enums"]["crm_agency_status"]
+            | null
           ai_generated_at?: string | null
           ai_next_action?: string | null
           ai_summary?: string | null
@@ -5864,6 +5891,8 @@ export type Database = {
           briefing_attendee_count?: number
           briefing_count?: number
           briefing_notes?: string | null
+          closed_deals_broker_names?: string[]
+          closed_deals_count?: number
           company_name?: string
           confidence?: string | null
           contract_document_url?: string | null
@@ -5872,6 +5901,7 @@ export type Database = {
           contract_status?: string
           country?: string | null
           created_at?: string
+          database_file_url?: string | null
           database_source?: string | null
           deal_count?: number
           deal_count_cached?: number
@@ -5892,6 +5922,9 @@ export type Database = {
           expertise_type?: string
           field_sources?: Json
           first_contact_at?: string | null
+          google_reviews_count?: number | null
+          google_reviews_score?: number | null
+          google_reviews_url?: string | null
           health_score?: number | null
           id?: string
           import_batch_id?: string | null
@@ -5900,6 +5933,7 @@ export type Database = {
           imported_by?: string | null
           inquiry_count?: number
           instagram_url?: string | null
+          inventory_file_url?: string | null
           is_existing_match?: boolean
           is_junk?: boolean
           last_auto_reply_at?: string | null
@@ -5979,6 +6013,7 @@ export type Database = {
           current_brokerage_id: string | null
           current_company: string | null
           database_source: string | null
+          date_of_birth: string | null
           department: string | null
           email_lower: string | null
           event_source: string | null
@@ -5989,6 +6024,7 @@ export type Database = {
           imported_by: string | null
           instagram_url: string | null
           is_global_broker: boolean | null
+          joined_at: string | null
           labels: string[]
           languages: string[] | null
           last_active_at: string | null
@@ -6008,6 +6044,7 @@ export type Database = {
           role_title: string | null
           seniority: string | null
           source_history: Json
+          specialty: string[]
           updated_at: string | null
           upload_source: string | null
           whatsapp: string | null
@@ -6024,6 +6061,7 @@ export type Database = {
           current_brokerage_id?: string | null
           current_company?: string | null
           database_source?: string | null
+          date_of_birth?: string | null
           department?: string | null
           email_lower?: string | null
           event_source?: string | null
@@ -6034,6 +6072,7 @@ export type Database = {
           imported_by?: string | null
           instagram_url?: string | null
           is_global_broker?: boolean | null
+          joined_at?: string | null
           labels?: string[]
           languages?: string[] | null
           last_active_at?: string | null
@@ -6053,6 +6092,7 @@ export type Database = {
           role_title?: string | null
           seniority?: string | null
           source_history?: Json
+          specialty?: string[]
           updated_at?: string | null
           upload_source?: string | null
           whatsapp?: string | null
@@ -6069,6 +6109,7 @@ export type Database = {
           current_brokerage_id?: string | null
           current_company?: string | null
           database_source?: string | null
+          date_of_birth?: string | null
           department?: string | null
           email_lower?: string | null
           event_source?: string | null
@@ -6079,6 +6120,7 @@ export type Database = {
           imported_by?: string | null
           instagram_url?: string | null
           is_global_broker?: boolean | null
+          joined_at?: string | null
           labels?: string[]
           languages?: string[] | null
           last_active_at?: string | null
@@ -6098,6 +6140,7 @@ export type Database = {
           role_title?: string | null
           seniority?: string | null
           source_history?: Json
+          specialty?: string[]
           updated_at?: string | null
           upload_source?: string | null
           whatsapp?: string | null
@@ -6414,16 +6457,26 @@ export type Database = {
       }
       crm_developer_registry: {
         Row: {
+          admin_name: string | null
+          admin_phone: string | null
           agency_code: string | null
+          agency_status: Database["public"]["Enums"]["crm_agency_status"] | null
           ai_generated_at: string | null
           ai_next_action: string | null
           ai_summary: string | null
           assigned_to: string | null
           attempt_count: number
           catalog_developer_id: string | null
+          channel_department_email: string | null
+          channel_department_name: string | null
+          channel_department_phone: string | null
+          closed_deals_broker_names: string[]
+          closed_deals_count: number
           commission_tier: string | null
           confidence: string | null
+          country: string | null
           created_at: string
+          database_file_url: string | null
           database_source: string | null
           deleted_at: string | null
           developer_contact: Json | null
@@ -6438,11 +6491,15 @@ export type Database = {
           expiry_date: string | null
           field_sources: Json
           first_contact_at: string | null
+          google_reviews_count: number | null
+          google_reviews_score: number | null
+          google_reviews_url: string | null
           health_score: number | null
           id: string
           imported_at: string | null
           imported_by: string | null
           instagram_url: string | null
+          inventory_file_url: string | null
           is_junk: boolean
           last_auto_reply_at: string | null
           last_email_synced_at: string | null
@@ -6488,16 +6545,28 @@ export type Database = {
           whatsapp_e164: string | null
         }
         Insert: {
+          admin_name?: string | null
+          admin_phone?: string | null
           agency_code?: string | null
+          agency_status?:
+            | Database["public"]["Enums"]["crm_agency_status"]
+            | null
           ai_generated_at?: string | null
           ai_next_action?: string | null
           ai_summary?: string | null
           assigned_to?: string | null
           attempt_count?: number
           catalog_developer_id?: string | null
+          channel_department_email?: string | null
+          channel_department_name?: string | null
+          channel_department_phone?: string | null
+          closed_deals_broker_names?: string[]
+          closed_deals_count?: number
           commission_tier?: string | null
           confidence?: string | null
+          country?: string | null
           created_at?: string
+          database_file_url?: string | null
           database_source?: string | null
           deleted_at?: string | null
           developer_contact?: Json | null
@@ -6512,11 +6581,15 @@ export type Database = {
           expiry_date?: string | null
           field_sources?: Json
           first_contact_at?: string | null
+          google_reviews_count?: number | null
+          google_reviews_score?: number | null
+          google_reviews_url?: string | null
           health_score?: number | null
           id?: string
           imported_at?: string | null
           imported_by?: string | null
           instagram_url?: string | null
+          inventory_file_url?: string | null
           is_junk?: boolean
           last_auto_reply_at?: string | null
           last_email_synced_at?: string | null
@@ -6562,16 +6635,28 @@ export type Database = {
           whatsapp_e164?: string | null
         }
         Update: {
+          admin_name?: string | null
+          admin_phone?: string | null
           agency_code?: string | null
+          agency_status?:
+            | Database["public"]["Enums"]["crm_agency_status"]
+            | null
           ai_generated_at?: string | null
           ai_next_action?: string | null
           ai_summary?: string | null
           assigned_to?: string | null
           attempt_count?: number
           catalog_developer_id?: string | null
+          channel_department_email?: string | null
+          channel_department_name?: string | null
+          channel_department_phone?: string | null
+          closed_deals_broker_names?: string[]
+          closed_deals_count?: number
           commission_tier?: string | null
           confidence?: string | null
+          country?: string | null
           created_at?: string
+          database_file_url?: string | null
           database_source?: string | null
           deleted_at?: string | null
           developer_contact?: Json | null
@@ -6586,11 +6671,15 @@ export type Database = {
           expiry_date?: string | null
           field_sources?: Json
           first_contact_at?: string | null
+          google_reviews_count?: number | null
+          google_reviews_score?: number | null
+          google_reviews_url?: string | null
           health_score?: number | null
           id?: string
           imported_at?: string | null
           imported_by?: string | null
           instagram_url?: string | null
+          inventory_file_url?: string | null
           is_junk?: boolean
           last_auto_reply_at?: string | null
           last_email_synced_at?: string | null
@@ -8103,6 +8192,69 @@ export type Database = {
           signature_html?: string | null
           test_profile?: Json
           updated_at?: string
+        }
+        Relationships: []
+      }
+      crm_relationship_contacts: {
+        Row: {
+          created_at: string
+          date_of_birth: string | null
+          email: string | null
+          entity_id: string
+          entity_type: string
+          full_name: string
+          id: string
+          instagram_url: string | null
+          joined_at: string | null
+          languages: string[]
+          linkedin_url: string | null
+          nationality: string | null
+          notes: string | null
+          owner_id: string
+          phone: string | null
+          role: string
+          updated_at: string
+          whatsapp_e164: string | null
+        }
+        Insert: {
+          created_at?: string
+          date_of_birth?: string | null
+          email?: string | null
+          entity_id: string
+          entity_type: string
+          full_name: string
+          id?: string
+          instagram_url?: string | null
+          joined_at?: string | null
+          languages?: string[]
+          linkedin_url?: string | null
+          nationality?: string | null
+          notes?: string | null
+          owner_id: string
+          phone?: string | null
+          role?: string
+          updated_at?: string
+          whatsapp_e164?: string | null
+        }
+        Update: {
+          created_at?: string
+          date_of_birth?: string | null
+          email?: string | null
+          entity_id?: string
+          entity_type?: string
+          full_name?: string
+          id?: string
+          instagram_url?: string | null
+          joined_at?: string | null
+          languages?: string[]
+          linkedin_url?: string | null
+          nationality?: string | null
+          notes?: string | null
+          owner_id?: string
+          phone?: string | null
+          role?: string
+          updated_at?: string
+          whatsapp_e164?: string | null
         }
         Relationships: []
       }
@@ -10268,55 +10420,73 @@ export type Database = {
       developer_sales_reps: {
         Row: {
           created_at: string
+          date_of_birth: string | null
           developer_id: string
           email: string | null
           full_name: string
           gender: string | null
           id: string
+          instagram_url: string | null
           is_active: boolean | null
           is_primary: boolean | null
+          joined_at: string | null
           languages: string[] | null
+          linkedin_url: string | null
           nationality: string | null
           notes: string | null
           phone_e164: string
+          specialty: string[]
           title: string | null
           updated_at: string
+          whatsapp_e164: string | null
           whatsapp_number: string | null
           years_in_real_estate: number | null
         }
         Insert: {
           created_at?: string
+          date_of_birth?: string | null
           developer_id: string
           email?: string | null
           full_name: string
           gender?: string | null
           id?: string
+          instagram_url?: string | null
           is_active?: boolean | null
           is_primary?: boolean | null
+          joined_at?: string | null
           languages?: string[] | null
+          linkedin_url?: string | null
           nationality?: string | null
           notes?: string | null
           phone_e164: string
+          specialty?: string[]
           title?: string | null
           updated_at?: string
+          whatsapp_e164?: string | null
           whatsapp_number?: string | null
           years_in_real_estate?: number | null
         }
         Update: {
           created_at?: string
+          date_of_birth?: string | null
           developer_id?: string
           email?: string | null
           full_name?: string
           gender?: string | null
           id?: string
+          instagram_url?: string | null
           is_active?: boolean | null
           is_primary?: boolean | null
+          joined_at?: string | null
           languages?: string[] | null
+          linkedin_url?: string | null
           nationality?: string | null
           notes?: string | null
           phone_e164?: string
+          specialty?: string[]
           title?: string | null
           updated_at?: string
+          whatsapp_e164?: string | null
           whatsapp_number?: string | null
           years_in_real_estate?: number | null
         }
@@ -33481,6 +33651,12 @@ export type Database = {
         | "meeting"
         | "import"
         | "assignment"
+      crm_agency_status:
+        | "inquiring"
+        | "closing_deals"
+        | "active_partner"
+        | "dormant"
+        | "blacklisted"
       crm_brokerage_status:
         | "active_partner"
         | "negotiating"
@@ -34083,6 +34259,13 @@ export const Constants = {
         "meeting",
         "import",
         "assignment",
+      ],
+      crm_agency_status: [
+        "inquiring",
+        "closing_deals",
+        "active_partner",
+        "dormant",
+        "blacklisted",
       ],
       crm_brokerage_status: [
         "active_partner",
