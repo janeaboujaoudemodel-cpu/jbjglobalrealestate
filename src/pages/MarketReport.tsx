@@ -116,9 +116,9 @@ const MarketReport = () => {
                     </div>
                     <div className="absolute right-0 top-0 bottom-0 w-3">
                       <div className="h-full bg-gradient-to-l from-zinc-100/10 via-zinc-200/15 to-transparent" style={{ clipPath: 'polygon(100% 0, 100% 100%, 0 95%, 0 5%)' }} />
-                      <div className="absolute right-0 top-[5%] bottom-[5%] w-[2px] bg-zinc-300/20" />
-                      <div className="absolute right-[3px] top-[6%] bottom-[6%] w-[1px] bg-zinc-300/15" />
-                      <div className="absolute right-[5px] top-[7%] bottom-[7%] w-[1px] bg-zinc-300/10" />
+                      <div className="absolute right-0 top-[5%] bottom-[5%] w-[2px] bg-[#E5D9C4]/20" />
+                      <div className="absolute right-[3px] top-[6%] bottom-[6%] w-[1px] bg-[#E5D9C4]/15" />
+                      <div className="absolute right-[5px] top-[7%] bottom-[7%] w-[1px] bg-[#E5D9C4]/10" />
                     </div>
                   </div>
                   <div className="absolute -bottom-4 left-4 right-4 h-8 bg-[#1A1A1A]/60 blur-xl rounded-full transition-all duration-500 group-hover:blur-2xl group-hover:h-10" />

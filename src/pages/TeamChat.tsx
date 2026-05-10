@@ -266,7 +266,7 @@ const TeamChat = () => {
   const statusColors: Record<string, string> = {
     online: "bg-green-500",
     away: "bg-amber-500",
-    offline: "bg-zinc-300",
+    offline: "bg-[#E5D9C4]",
   };
 
   const handleSelectChannel = (id: string) => {

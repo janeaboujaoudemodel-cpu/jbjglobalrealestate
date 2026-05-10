@@ -10,7 +10,7 @@ const STATUS_STYLE: Record<string, string> = {
   dlq: "bg-red-100 text-red-900 border-red-300",
   bounced: "bg-red-100 text-red-900 border-red-300",
   complained: "bg-red-100 text-red-900 border-red-300",
-  suppressed: "bg-zinc-200 text-zinc-900 border-zinc-300",
+  suppressed: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/30",
 };
 
 export const EmailLogDialog = ({
