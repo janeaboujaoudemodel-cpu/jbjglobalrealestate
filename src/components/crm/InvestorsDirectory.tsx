@@ -105,17 +105,93 @@ export default function InvestorsDirectory({
     (async () => {
       setLoading(true); setErr(null);
       try {
-        const { data, error } = await supabase
+        // Primary source: crm_leads tagged/typed as investor.
+        // Fallback enrichment: any matching client_investors rows (units, prices).
+        const ownerSet = new Set<string>([
+          ...OWNER_EMAILS_LC,
+          (ownerEmail || "").toLowerCase().trim(),
+        ].filter(Boolean));
+
+        const ownerNotIn = `(${[...ownerSet].map((e) => `"${e}"`).join(",")})`;
+
+        const leadsRes: any = await (supabase as any)
+          .from("crm_leads")
+          .select("id, full_name, email_lower, phone_e164, birthday, tags, contact_type, vip")
+          .is("deleted_at", null)
+          .or("contact_type.eq.investor,tags.cs.{investor}")
+          .not("email_lower", "in", ownerNotIn)
+          .order("updated_at", { ascending: false })
+          .limit(5000);
+        if (leadsRes.error) throw leadsRes.error;
+
+        const investorsRes: any = await supabase
           .from("client_investors")
           .select("id, client_name, email, phone, date_of_birth, home_address, unit_number, unit_type, unit_size_sqft, project_name, project_id, purchase_price, purchase_date, handover_date, payment_plan, notes")
           .order("purchase_date", { ascending: false })
-          .limit(2000);
-        if (!alive) return;
-        if (error) throw error;
-        const filtered = (data || []).filter(
-          (r: any) => !ownerEmail || (r.email || "").toLowerCase() !== ownerEmail
+          .limit(5000);
+        const investorRows: any[] = (investorsRes.data || []).filter(
+          (r: any) => !ownerSet.has((r.email || "").toLowerCase().trim())
         );
-        setRows(filtered as Investor[]);
+
+        // Index portfolio rows by lowercase email for enrichment.
+        const portfolioByEmail = new Map<string, any[]>();
+        for (const r of investorRows) {
+          const k = (r.email || "").toLowerCase().trim();
+          if (!k) continue;
+          const arr = portfolioByEmail.get(k) || [];
+          arr.push(r);
+          portfolioByEmail.set(k, arr);
+        }
+
+        // Build a single Investor[] feed: one row per portfolio unit, plus a
+        // synthetic placeholder row per lead with no portfolio data so the
+        // count matches the section badge.
+        const merged: Investor[] = [];
+        const seenEmails = new Set<string>();
+        for (const lead of leadsRes.data || []) {
+          const k = (lead.email_lower || "").toLowerCase().trim();
+          seenEmails.add(k);
+          const portfolio = (k && portfolioByEmail.get(k)) || [];
+          if (portfolio.length === 0) {
+            merged.push({
+              id: lead.id,
+              client_name: lead.full_name,
+              email: lead.email_lower,
+              phone: lead.phone_e164,
+              date_of_birth: lead.birthday,
+              home_address: null,
+              unit_number: null,
+              unit_type: null,
+              unit_size_sqft: null,
+              project_name: null,
+              project_id: null,
+              purchase_price: null,
+              purchase_date: null,
+              handover_date: null,
+              payment_plan: null,
+              notes: null,
+            });
+          } else {
+            for (const p of portfolio) {
+              merged.push({
+                ...p,
+                client_name: p.client_name || lead.full_name,
+                email: p.email || lead.email_lower,
+                phone: p.phone || lead.phone_e164,
+                date_of_birth: p.date_of_birth || lead.birthday,
+              } as Investor);
+            }
+          }
+        }
+        // Include portfolio rows whose owners aren't in crm_leads yet.
+        for (const r of investorRows) {
+          const k = (r.email || "").toLowerCase().trim();
+          if (k && seenEmails.has(k)) continue;
+          merged.push(r as Investor);
+        }
+
+        if (!alive) return;
+        setRows(merged);
       } catch (e: any) {
         if (alive) setErr(e?.message || "Failed to load investors");
       } finally {
