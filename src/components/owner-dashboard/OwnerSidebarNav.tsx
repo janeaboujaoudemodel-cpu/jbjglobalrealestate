@@ -194,6 +194,85 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
     onNavigate?.();
   };
 
+  // Track which parent items are expanded (auto-expand if a child is active)
+  const [openMap, setOpenMap] = useState<Record<string, boolean>>({});
+  const isAnyChildActive = (item: NavItem): boolean => {
+    if (!item.children) return false;
+    return item.children.some((c) => isActivePath(c.path) || isAnyChildActive(c));
+  };
+  const isOpen = (item: NavItem) => {
+    if (openMap[item.path] !== undefined) return openMap[item.path];
+    return isAnyChildActive(item);
+  };
+  const toggleOpen = (path: string) => {
+    setOpenMap((m) => ({ ...m, [path]: m[path] !== undefined ? !m[path] : false }));
+  };
+
+  const renderItem = (item: NavItem, depth = 0): React.ReactNode => {
+    const hasChildren = !!item.children?.length;
+    const active = isActivePath(item.path);
+    const expanded = hasChildren && isOpen(item);
+
+    return (
+      <div key={item.path}>
+        <button
+          ref={setActiveRefCallback(item.path)}
+          data-no-contrast-guard
+          onClick={() => {
+            if (hasChildren && !collapsed) {
+              // Navigate to first sensible target AND toggle
+              if (!active && !isAnyChildActive(item)) handleNavClick(item.path);
+              else toggleOpen(item.path);
+            } else {
+              handleNavClick(item.path);
+            }
+          }}
+          className={cn(
+            "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 border-l-2 border-y border-r relative",
+            active
+              ? "bg-[#EFE6D6] !text-[#1A1A1A] border-l-[#B89555] border-y-[#B89555]/30 border-r-[#B89555]/30 font-semibold"
+              : "bg-transparent !text-[#1A1A1A] border-transparent hover:bg-[#EFE6D6]/60 hover:border-l-[#B89555]/60 hover:!text-[#1A1A1A]",
+            item.premium && !active && "bg-[#F7F2EA]/70 border-l-[#B89555]/40"
+          )}
+          style={depth > 0 ? { paddingLeft: `${12 + depth * 14}px` } : undefined}
+          title={collapsed ? item.label : undefined}
+        >
+          <item.icon
+            className={cn("w-4 h-4 flex-shrink-0", item.premium && !active && "drop-shadow-[0_0_4px_rgba(184,149,85,0.6)]")}
+            style={{ color: '#1A1A1A' }}
+          />
+          {!collapsed && (
+            <>
+              <span className={cn("flex-1 text-left truncate", item.premium && "font-semibold")} style={{ color: '#1A1A1A' }}>
+                {item.label}
+              </span>
+              {item.badge && (
+                <span className={cn(
+                  "text-xs px-1.5 py-0.5 rounded-full font-semibold border",
+                  active ? "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]" : "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/50"
+                )}>
+                  {item.badge}
+                </span>
+              )}
+              {hasChildren && (
+                <ChevronRight
+                  className={cn("w-3.5 h-3.5 flex-shrink-0 transition-transform", expanded && "rotate-90")}
+                  style={{ color: '#1A1A1A' }}
+                  onClick={(e) => { e.stopPropagation(); toggleOpen(item.path); }}
+                />
+              )}
+            </>
+          )}
+        </button>
+        {hasChildren && expanded && !collapsed && (
+          <div className="mt-0.5 space-y-0.5">
+            {item.children!.map((c) => renderItem(c, depth + 1))}
+          </div>
+        )}
+      </div>
+    );
+  };
+
   return (
     <nav data-no-contrast-guard className="p-2 space-y-4 overflow-y-auto flex-1 jj-scrollbar-gold">
       {NAV_SECTIONS.map((section) => (
@@ -204,39 +283,7 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
             </p>
           )}
           <div className="space-y-0.5">
-            {section.items.map((item) => (
-              <button
-                key={item.path}
-                ref={setActiveRefCallback(item.path)}
-                onClick={() => handleNavClick(item.path)}
-                data-no-contrast-guard
-                className={cn(
-                  "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 border-l-2 border-y border-r relative",
-                  isActivePath(item.path)
-                    ? "bg-[#EFE6D6] !text-[#1A1A1A] border-l-[#B89555] border-y-[#B89555]/30 border-r-[#B89555]/30 font-semibold"
-                    : "bg-transparent !text-[#1A1A1A] border-transparent hover:bg-[#EFE6D6]/60 hover:border-l-[#B89555]/60 hover:!text-[#1A1A1A]",
-                  item.premium && !isActivePath(item.path) && "bg-[#F7F2EA]/70 border-l-[#B89555]/40"
-                )}
-                title={collapsed ? item.label : undefined}
-              >
-                <item.icon className={cn("w-4 h-4 flex-shrink-0", item.premium && !isActivePath(item.path) && "drop-shadow-[0_0_4px_rgba(184,149,85,0.6)]")} style={{ color: '#1A1A1A' }} />
-                {!collapsed && (
-                  <>
-                    <span className={cn("flex-1 text-left truncate", item.premium && "font-semibold")} style={{ color: '#1A1A1A' }}>{item.label}</span>
-                    {item.badge && (
-                      <span className={cn(
-                        "text-xs px-1.5 py-0.5 rounded-full font-semibold border",
-                        isActivePath(item.path)
-                          ? "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]"
-                          : "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/50"
-                      )}>
-                        {item.badge}
-                      </span>
-                    )}
-                  </>
-                )}
-              </button>
-            ))}
+            {section.items.map((item) => renderItem(item))}
           </div>
         </div>
       ))}
