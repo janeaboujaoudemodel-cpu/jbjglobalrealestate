@@ -233,8 +233,8 @@ export function BrandedEmailComposer() {
             from_name: PRIMARY_SENDER_NAME,
             reply_to: DEFAULT_REPLY_TO,
             subject,
-            inner_html: bodyHtml,
-            metadata: { source: "BrandedEmailComposer", target },
+            inner_html: composedHtml,
+            metadata: { source: "BrandedEmailComposer", target, signature_id: signatureId || null, template_id: libraryTemplateId || null },
           },
         }
       );
