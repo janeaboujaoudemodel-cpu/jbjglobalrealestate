@@ -140,3 +140,22 @@ export function useArchiveInboxItem() {
     },
   });
 }
+
+export function useUnarchiveInboxItem() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase
+        .from("email_inbox_items" as any)
+        .update({ archived_at: null, archived_reason: null })
+        .eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Restored to inbox");
+      qc.invalidateQueries({ queryKey: ["email_inbox_items"] });
+      qc.invalidateQueries({ queryKey: ["email_inbox_counts"] });
+    },
+    onError: (e: Error) => toast.error(`Restore failed: ${e.message}`),
+  });
+}
