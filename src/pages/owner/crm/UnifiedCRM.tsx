@@ -295,10 +295,19 @@ export default function UnifiedCRM() {
       if (viewId === "all") return counts.leads;
       if (viewId === "flagged") return counts.flagged;
       if (viewId === "vip") return counts.vip;
+      if (viewId === "management") return counts.leadMgmt;
       if (viewId === "tasks") return counts.tasks;
+      if (viewId === "calendar") return counts.calendarUpcoming;
+      if (viewId === "notes") return counts.notes;
+      if (viewId === "inbox") return counts.inbox;
+      if (viewId === "email-center") return counts.emailCenter;
+      if (viewId === "notifications") return counts.notifications;
+      if (viewId === "campaigns") return counts.campaigns;
+      if (viewId === "automation") return counts.automation;
     }
     if (entity === "brokers" && viewId === "directory") return counts.brokers;
     if (entity === "investors" && viewId === "vip") return counts.vip;
+    if (entity === "investors" && viewId === "directory") return counts.investors;
     return null;
   };
 
