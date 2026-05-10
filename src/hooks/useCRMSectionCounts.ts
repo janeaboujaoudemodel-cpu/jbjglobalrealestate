@@ -49,8 +49,8 @@ export function useCRMSectionCounts(): { counts: CRMCounts; loading: boolean; re
       salesReps, brokers, agencies, employees, tasks,
     ] = await Promise.all([
       headCount("crm_leads"),
-      headCount("crm_leads", (q) => q.eq("is_flagged", true)),
-      headCount("crm_leads", (q) => q.eq("is_vip", true)),
+      headCount("crm_leads", (q) => q.eq("flagged", true)),
+      headCount("crm_leads", (q) => q.eq("vip", true)),
       headCount("client_investors"),
       headCount("developers"),
       headCount("developer_sales_reps"),
