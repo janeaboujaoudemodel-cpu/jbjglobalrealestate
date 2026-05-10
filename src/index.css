@@ -4118,7 +4118,7 @@ a[class*="bg-red-"]:hover {
  * or generic gray text were unreadable. Force readable colors.
  * ============================================================ */
 :where(
-  .bg-\[\#1A1A1A\], .bg-\[\#FDFBF7\], .bg-\[\#FDFBF7\],
+  .bg-\[\#1A1A1A\],
   .bg-gray-800, .bg-gray-900, .bg-gray-950,
   .bg-\[\#1A1A1A\], .bg-\[\#1A1A1A\], .bg-\[\#1A1A1A\],
   .bg-black, [class*="bg-black"],
@@ -4131,7 +4131,7 @@ a[class*="bg-red-"]:hover {
 
 /* Brown #5A4A2E on dark surfaces becomes legible champagne */
 :where(
-  .bg-\[\#1A1A1A\], .bg-\[\#FDFBF7\], .bg-\[\#FDFBF7\],
+  .bg-\[\#1A1A1A\],
   .bg-gray-800, .bg-gray-900, .bg-gray-950,
   .bg-\[\#1A1A1A\], .bg-\[\#1A1A1A\], .bg-\[\#1A1A1A\],
   .bg-black, [class*="bg-black"],
@@ -4145,14 +4145,14 @@ a[class*="bg-red-"]:hover {
 
 /* Inputs / textareas / selects on dark surfaces — readable text + placeholder */
 :where(
-  .bg-\[\#1A1A1A\], .bg-\[\#FDFBF7\], .bg-\[\#FDFBF7\],
+  .bg-\[\#1A1A1A\],
   .bg-gray-800, .bg-gray-900, .bg-gray-950,
   .bg-black, [class*="bg-black"], [class*="bg-zinc-8"], [class*="bg-zinc-9"]
 ) :is(input, textarea, select):not([data-no-contrast-guard]) {
   color: #FFFFFF !important;
 }
 :where(
-  .bg-\[\#1A1A1A\], .bg-\[\#FDFBF7\], .bg-\[\#FDFBF7\],
+  .bg-\[\#1A1A1A\],
   .bg-gray-800, .bg-gray-900, .bg-gray-950,
   .bg-black, [class*="bg-black"]
 ) :is(input, textarea, select)::placeholder {
