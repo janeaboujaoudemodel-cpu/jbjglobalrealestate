@@ -26,12 +26,9 @@ const FlaggedLeadsView    = lazy(() => import("@/components/crm/FlaggedLeadsView
 const RecentlyDeletedLeads= lazy(() => import("@/components/crm/RecentlyDeletedLeads"));
 const CRMRelationships    = lazy(() => import("@/pages/CRMRelationships"));
 const BrokersRegistryPage = lazy(() => import("@/pages/owner/crm/BrokersRegistry"));
-// Use the EXACT same rich tab components that Relationship Hub renders so the
-// UI, fields, filters and drawers are identical on /owner/crm?entity=… and on
-// /owner/crm/relationship-hub.
-const DeveloperRegistryTab      = lazy(() => import("@/components/crm/DeveloperRegistryTab"));
-const BrokeragesTab             = lazy(() => import("@/components/crm/BrokeragesTab"));
-const IndividualBrokersTab      = lazy(() => import("@/components/crm/IndividualBrokersTab"));
+// Developers / Brokerage Agencies / Brokers / Sales Reps all render through
+// CRMRelationships so the UI, fields, filters and drawers are identical to
+// /owner/crm/relationship-hub. The page reads ?tab= to jump to the right tab.
 const DevSalesRepsDirectory     = lazy(() => import("@/components/crm/entity/DevSalesRepsDirectory"));
 const EmployeesHub        = lazy(() => import("@/components/crm/EmployeesHub"));
 const CampaignsPage       = lazy(() => import("@/pages/owner/crm/CampaignsPage"));
@@ -259,18 +256,13 @@ export default function UnifiedCRM() {
     if (entity === "investors") {
       return <InvestorsDirectory ownerEmail={ownerEmail} vipOnly={view === "vip"} />;
     }
-    if (entity === "developers") {
-      return <DeveloperRegistryTab />;
+    if (entity === "developers" || entity === "agencies" || entity === "brokers") {
+      // Render the exact same Relationship Hub the sidebar opens — single source
+      // of truth for developers / brokerage agencies / brokers UI.
+      return <Embed><CRMRelationships /></Embed>;
     }
     if (entity === "sales-reps") {
       return <DevSalesRepsDirectory />;
-    }
-    if (entity === "brokers") {
-      if (view === "imported") return <BrokersImported />;
-      return <IndividualBrokersTab />;
-    }
-    if (entity === "agencies") {
-      return <BrokeragesTab />;
     }
     if (entity === "employees") {
       return <EmployeesHub userId={userId} />;
