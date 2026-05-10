@@ -17,6 +17,7 @@ import { Users, Search, Plus, Building2, BadgeCheck, Clock, Loader2, Download } 
 import { toast } from "sonner";
 import { useCRMSectionCounts } from "@/hooks/useCRMSectionCounts";
 import { RelationalHubTabs } from "@/components/crm/RelationalHubTabs";
+import { PersonHub } from "@/components/crm/PersonHub";
 import { UnifiedCRMExportModal } from "@/components/crm/UnifiedCRMExportModal";
 import { BrokerageCombobox } from "@/components/crm/BrokerageCombobox";
 import {
@@ -386,48 +387,42 @@ export default function BrokersRegistry() {
       </div>
 
       <Sheet open={!!openBroker} onOpenChange={(o) => !o && setOpenBroker(null)}>
-        <SheetContent className="bg-[#FDFBF7] sm:max-w-lg overflow-y-auto">
+        <SheetContent className="bg-[#FDFBF7] sm:max-w-2xl overflow-y-auto border-l border-[#B89555]/20">
           {openBroker && (
             <>
-              <SheetHeader>
-                <SheetTitle className="text-[#1A1A1A]">{openBroker.full_name}</SheetTitle>
+              <SheetHeader className="mb-4">
+                <SheetTitle className="text-[#1A1A1A] flex items-center justify-between gap-3 pr-8">
+                  <span>Person Hub</span>
+                  <a
+                    href={`/owner/crm/person/broker/${encodeURIComponent(openBroker.id)}`}
+                    className="text-xs font-normal text-[#1A1A1A]/70 hover:text-[#1A1A1A] inline-flex items-center gap-1"
+                  >
+                    Open full view
+                  </a>
+                </SheetTitle>
                 <SheetDescription className="text-[#1A1A1A]/70">
                   {openBroker.source === "registered" ? "Registered broker profile" : "External broker (CRM only)"}
                 </SheetDescription>
               </SheetHeader>
-              <div className="mt-4 space-y-3 text-sm text-[#1A1A1A]">
-                <div><span className="text-[#1A1A1A]/60 text-xs uppercase tracking-wider">Email</span><div>{openBroker.email || "—"}</div></div>
-                <div><span className="text-[#1A1A1A]/60 text-xs uppercase tracking-wider">Phone</span><div>{openBroker.phone || "—"}</div></div>
-                <div><span className="text-[#1A1A1A]/60 text-xs uppercase tracking-wider">Current company</span><div>{openBroker.current_company || "—"}</div></div>
-                {openBroker.rera && <div><span className="text-[#1A1A1A]/60 text-xs uppercase tracking-wider">RERA</span><div>{openBroker.rera}</div></div>}
-                {openBroker.tier && <div><span className="text-[#1A1A1A]/60 text-xs uppercase tracking-wider">Tier</span><div>{openBroker.tier}</div></div>}
-
-                <div className="pt-3 border-t border-[#B89555]/20">
-                  <span className="text-[#1A1A1A]/60 text-xs uppercase tracking-wider">Companies worked for</span>
-                  <BrokerCompanyTimeline brokerId={openBroker.id} brokerName={openBroker.full_name} history={history} currentCompany={openBroker.current_company} />
-                </div>
-
-                <div className="pt-3 border-t border-[#B89555]/20">
-                  <span className="text-[#1A1A1A]/60 text-xs uppercase tracking-wider mb-2 block">Relational hub</span>
-                  <RelationalHubTabs
-                    kind="broker"
-                    entityId={openBroker.id}
-                    name={openBroker.full_name}
-                    aliases={[openBroker.current_company]}
-                    email={openBroker.email}
-                    phone={openBroker.phone}
-                    sourceHistory={(history ?? [])
-                      .filter((h: any) => h.broker_id === openBroker.id)
-                      .map((h: any) => ({
-                        id: h.id,
-                        when: h.started_at,
-                        who: null,
-                        what: `Worked at ${h.company_name}`,
-                        detail: h.ended_at ? `Ended ${new Date(h.ended_at).toLocaleDateString()}` : "Current",
-                      }))}
-                  />
-                </div>
-              </div>
+              <PersonHub
+                variant="broker"
+                id={openBroker.id}
+                name={openBroker.full_name}
+                email={openBroker.email}
+                phone={openBroker.phone}
+                company={openBroker.current_company}
+                title={openBroker.tier ? `Tier ${openBroker.tier}` : null}
+                facts={openBroker.rera ? [{ label: "RERA", value: openBroker.rera }] : []}
+                sourceHistory={(history ?? [])
+                  .filter((h: any) => h.broker_id === openBroker.id)
+                  .map((h: any) => ({
+                    id: h.id,
+                    when: h.started_at,
+                    who: null,
+                    what: `Worked at ${h.company_name}`,
+                    detail: h.ended_at ? `Ended ${new Date(h.ended_at).toLocaleDateString()}` : "Current",
+                  }))}
+              />
             </>
           )}
         </SheetContent>

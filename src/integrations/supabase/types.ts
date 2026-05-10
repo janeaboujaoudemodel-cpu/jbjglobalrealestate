@@ -7558,6 +7558,7 @@ export type Database = {
           internal_comments: string | null
           is_duplicate: boolean | null
           is_global_broker: boolean | null
+          is_investor: boolean
           is_junk: boolean
           languages: string[] | null
           last_contacted_at: string | null
@@ -7656,6 +7657,7 @@ export type Database = {
           internal_comments?: string | null
           is_duplicate?: boolean | null
           is_global_broker?: boolean | null
+          is_investor?: boolean
           is_junk?: boolean
           languages?: string[] | null
           last_contacted_at?: string | null
@@ -7754,6 +7756,7 @@ export type Database = {
           internal_comments?: string | null
           is_duplicate?: boolean | null
           is_global_broker?: boolean | null
+          is_investor?: boolean
           is_junk?: boolean
           languages?: string[] | null
           last_contacted_at?: string | null

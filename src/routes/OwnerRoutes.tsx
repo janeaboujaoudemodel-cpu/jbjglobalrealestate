@@ -174,5 +174,6 @@ export const OwnerRoutes = () => (
     <Route path="crm/network" element={<Navigate to="/owner/crm?section=relationships&sub=developers" replace />} />
     <Route path="crm/campaigns" element={<Navigate to="/owner/crm?section=campaigns" replace />} />
    <Route path="crm/company/:type/:name" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/CompanyHubPage")))}</Suspense>} />
+   <Route path="crm/person/:variant/:id" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/PersonHubPage")))}</Suspense>} />
   </Route>
 );
