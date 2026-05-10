@@ -34,6 +34,7 @@ import { isRealCRMLead } from "@/utils/crmFakeDataGuard";
 import LeadQuickActions from "./LeadQuickActions";
 import { BrokerCombobox } from "./BrokerCombobox";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { SearchableMultiSelect } from "@/components/ui/searchable-multiselect";
 
 interface LeadSource {
   source_group: string;
