@@ -9,20 +9,23 @@
  * outreach-lock-payload / outreach-send-locked pipeline — so what the
  * owner approves in the test is byte-for-byte what the recipient gets.
  */
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
-import { Sparkles, Send, FlaskConical, Save, Mail, Loader2, CalendarPlus } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Sparkles, Send, FlaskConical, Save, Mail, Loader2, CalendarPlus, LibraryBig, PenLine } from "lucide-react";
 import { toast } from "sonner";
 import {
   PRIMARY_SENDER,
   PRIMARY_SENDER_NAME,
   DEFAULT_REPLY_TO,
 } from "@/config/outreachIdentity";
+import { useEmailTemplateLibrary, mergeTemplate, useSaveEmailTemplate } from "@/hooks/useEmailTemplateLibrary";
+import { useEmailSignatures, renderSignatureHtml } from "@/hooks/useEmailSignatures";
 
 type Template = {
   id: string;
@@ -59,14 +62,33 @@ export function BrandedEmailComposer() {
   const [bodyHtml, setBodyHtml] = useState("");
   const [language, setLanguage] = useState<string>("en");
 
+  // Variable context — fills {{first_name}}, {{full_name}}, {{email}} etc. on apply
+  const [propertyTitle, setPropertyTitle] = useState("");
+  const [propertyPrice, setPropertyPrice] = useState("");
+  const [propertyLocation, setPropertyLocation] = useState("");
+
+  // Old "branded_email_templates" (user's saved templates) kept for back-compat
   const [templates, setTemplates] = useState<Template[]>([]);
   const [templateId, setTemplateId] = useState<string>("");
   const [saveAsName, setSaveAsName] = useState("");
 
+  // New: template library + signatures
+  const { data: libraryTemplates = [] } = useEmailTemplateLibrary();
+  const { data: signatures = [] } = useEmailSignatures();
+  const [libraryTemplateId, setLibraryTemplateId] = useState<string>("");
+  const [signatureId, setSignatureId] = useState<string>("");
+  const [missingVars, setMissingVars] = useState<string[]>([]);
+  const saveLib = useSaveEmailTemplate();
+
   const [busy, setBusy] = useState<"" | "ai" | "test" | "live" | "save">("");
   const [ownerEmail, setOwnerEmail] = useState<string>("");
 
-  // Load templates + owner email
+  const selectedSignature = useMemo(
+    () => signatures.find((s) => s.id === signatureId) || signatures.find((s) => s.is_default) || signatures[0],
+    [signatures, signatureId],
+  );
+
+  // Load saved templates + owner email
   useEffect(() => {
     (async () => {
       const { data: u } = await supabase.auth.getUser();
@@ -78,6 +100,31 @@ export function BrandedEmailComposer() {
       setTemplates(data ?? []);
     })();
   }, []);
+
+  // Auto-select default signature once loaded
+  useEffect(() => {
+    if (!signatureId && signatures.length) {
+      const def = signatures.find((s) => s.is_default) || signatures[0];
+      if (def) setSignatureId(def.id);
+    }
+  }, [signatures, signatureId]);
+
+  const buildCtx = (): Record<string, string> => {
+    const first = recipientName.trim().split(/\s+/)[0] || "";
+    return {
+      first_name: first,
+      full_name: recipientName.trim(),
+      email: recipient.trim(),
+      property_title: propertyTitle,
+      price: propertyPrice,
+      location: propertyLocation,
+      book_meeting_url: BOOK_URL,
+      calendar_link: BOOK_URL,
+      sender_name: selectedSignature?.name_line || PRIMARY_SENDER_NAME,
+      sender_title: selectedSignature?.title_line || "",
+      company_legal_name: selectedSignature?.company_line || "JBJ GLOBAL REAL ESTATE",
+    };
+  };
 
   const onLoadTemplate = (id: string) => {
     setTemplateId(id);
@@ -93,6 +140,25 @@ export function BrandedEmailComposer() {
       setBodyHtml(t.body_html);
       setBrief(t.brief ?? "");
     }
+  };
+
+  const applyLibraryTemplate = (id: string) => {
+    setLibraryTemplateId(id);
+    const t = libraryTemplates.find((x) => x.id === id);
+    if (!t) return;
+    const ctx = buildCtx();
+    const sub = mergeTemplate(t.subject, ctx);
+    const body = mergeTemplate(t.body_text, ctx);
+    setSubject(sub.rendered);
+    // Convert plain text to simple HTML paragraphs
+    const html = body.rendered
+      .split(/\n{2,}/)
+      .map((p) => `<p style="margin:0 0 14px;font-size:15px;line-height:1.6;color:#1A1A1A;">${p.replace(/\n/g, "<br/>")}</p>`)
+      .join("");
+    setBodyHtml(html);
+    setMissingVars(Array.from(new Set([...sub.missing, ...body.missing])));
+    if (t.signature_preset_id) setSignatureId(t.signature_preset_id);
+    toast.success(`Loaded "${t.name}"${body.missing.length ? ` — ${body.missing.length} variable(s) to fill` : ""}`);
   };
 
   const draftWithAI = async () => {
@@ -147,6 +213,12 @@ export function BrandedEmailComposer() {
     }
   };
 
+  const composedHtml = useMemo(() => {
+    if (!bodyHtml.trim()) return "";
+    const sig = selectedSignature ? renderSignatureHtml(selectedSignature) : "";
+    return sig ? `${bodyHtml}\n${sig}` : bodyHtml;
+  }, [bodyHtml, selectedSignature]);
+
   const lockAndSend = async (target: "test" | "live") => {
     if (!subject.trim() || !bodyHtml.trim()) { toast.error("Subject and body required."); return; }
     const to = target === "test" ? ownerEmail : recipient.trim();
@@ -167,8 +239,8 @@ export function BrandedEmailComposer() {
             from_name: PRIMARY_SENDER_NAME,
             reply_to: DEFAULT_REPLY_TO,
             subject,
-            inner_html: bodyHtml,
-            metadata: { source: "BrandedEmailComposer", target },
+            inner_html: composedHtml,
+            metadata: { source: "BrandedEmailComposer", target, signature_id: signatureId || null, template_id: libraryTemplateId || null },
           },
         }
       );
@@ -222,6 +294,63 @@ export function BrandedEmailComposer() {
           )}
         </div>
 
+        {/* Template Library + Signature picker */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-3 rounded-lg border border-[#B89555]/30 bg-[#F7F2EA]">
+          <div>
+            <Label className="text-xs flex items-center gap-1"><LibraryBig className="w-3 h-3" /> Template library</Label>
+            <select
+              value={libraryTemplateId}
+              onChange={(e) => applyLibraryTemplate(e.target.value)}
+              className="mt-1 w-full h-9 px-2 text-sm border border-[#B89555]/40 rounded bg-white text-[#1A1A1A]"
+            >
+              <option value="">— Pick a ready-made template —</option>
+              {["sales_leasing", "birthday_lifecycle", "onboarding_newsletter", "operations"].map((cat) => {
+                const items = libraryTemplates.filter((t) => t.category === cat);
+                if (!items.length) return null;
+                const label = cat.replace(/_/g, " & ").replace(/\b\w/g, (c) => c.toUpperCase());
+                return (
+                  <optgroup key={cat} label={label}>
+                    {items.map((t) => (
+                      <option key={t.id} value={t.id}>{t.name}</option>
+                    ))}
+                  </optgroup>
+                );
+              })}
+              {libraryTemplates.some((t) => !["sales_leasing", "birthday_lifecycle", "onboarding_newsletter", "operations"].includes(t.category)) && (
+                <optgroup label="My templates">
+                  {libraryTemplates
+                    .filter((t) => !["sales_leasing", "birthday_lifecycle", "onboarding_newsletter", "operations"].includes(t.category))
+                    .map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
+                </optgroup>
+              )}
+            </select>
+            {missingVars.length > 0 && (
+              <div className="mt-2 flex flex-wrap gap-1">
+                {missingVars.map((v) => (
+                  <Badge key={v} variant="outline" className="text-[10px] border-amber-500 text-amber-700 bg-amber-50">
+                    fill: {v}
+                  </Badge>
+                ))}
+              </div>
+            )}
+          </div>
+          <div>
+            <Label className="text-xs flex items-center gap-1"><PenLine className="w-3 h-3" /> Signature</Label>
+            <select
+              value={signatureId}
+              onChange={(e) => setSignatureId(e.target.value)}
+              className="mt-1 w-full h-9 px-2 text-sm border border-[#B89555]/40 rounded bg-white text-[#1A1A1A]"
+            >
+              {signatures.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.name}{s.role_label ? ` — ${s.role_label}` : ""}
+                </option>
+              ))}
+            </select>
+            <p className="mt-1 text-[10px] text-[#1A1A1A]/60">Auto-appended to every send. Test = live.</p>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
             <Label className="text-xs">Recipient email</Label>
@@ -234,15 +363,27 @@ export function BrandedEmailComposer() {
             />
           </div>
           <div>
-            <Label className="text-xs">Recipient first name (optional)</Label>
+            <Label className="text-xs">Recipient full name (optional)</Label>
             <Input
-              placeholder="e.g. Sarah"
+              placeholder="e.g. Sarah Johnson"
               value={recipientName}
               onChange={(e) => setRecipientName(e.target.value)}
               className="bg-white"
             />
           </div>
         </div>
+
+        {/* Optional property variables — used when template includes {{property_title}} etc. */}
+        <details className="text-xs">
+          <summary className="cursor-pointer text-[#1A1A1A]/70 hover:text-[#1A1A1A]">
+            Property context (optional — for property templates)
+          </summary>
+          <div className="mt-2 grid grid-cols-1 md:grid-cols-3 gap-2">
+            <Input placeholder="Property title" value={propertyTitle} onChange={(e) => setPropertyTitle(e.target.value)} className="bg-white" />
+            <Input placeholder="Price (e.g. AED 12M)" value={propertyPrice} onChange={(e) => setPropertyPrice(e.target.value)} className="bg-white" />
+            <Input placeholder="Location" value={propertyLocation} onChange={(e) => setPropertyLocation(e.target.value)} className="bg-white" />
+          </div>
+        </details>
 
         <div>
           <Label className="text-xs">Brief for AI (what should this email say?)</Label>
@@ -314,7 +455,7 @@ export function BrandedEmailComposer() {
             <div
               className="mt-2 p-4 bg-white border border-[#B89555]/30 rounded prose prose-sm max-w-none"
               // eslint-disable-next-line react/no-danger
-              dangerouslySetInnerHTML={{ __html: bodyHtml }}
+              dangerouslySetInnerHTML={{ __html: composedHtml }}
             />
           </details>
         )}
