@@ -433,7 +433,7 @@ export default function BrokersRegistry() {
         </SheetContent>
       </Sheet>
 
-      <AddBrokerSheet open={addOpen} onOpenChange={setAddOpen} onAdded={() => qc.invalidateQueries({ queryKey: ["brokers-external"] })} />
+      <AddBrokerSheet open={addOpen} onOpenChange={setAddOpen} onAdded={() => { qc.invalidateQueries({ queryKey: ["brokers-registered"] }); setExternalReloadKey((k) => k + 1); }} />
     </div>
   );
 }
