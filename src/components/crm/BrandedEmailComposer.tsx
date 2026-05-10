@@ -455,7 +455,7 @@ export function BrandedEmailComposer() {
             <div
               className="mt-2 p-4 bg-white border border-[#B89555]/30 rounded prose prose-sm max-w-none"
               // eslint-disable-next-line react/no-danger
-              dangerouslySetInnerHTML={{ __html: bodyHtml }}
+              dangerouslySetInnerHTML={{ __html: composedHtml }}
             />
           </details>
         )}
