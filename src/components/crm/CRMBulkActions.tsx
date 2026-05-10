@@ -247,7 +247,7 @@ const CRMBulkActions = ({
             e.target.value = '';
           }}
           disabled={isUpdating}
-          className="w-[150px] h-9 px-3 rounded-md border border-[#1A1A1A] bg-zinc-950 text-white font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
+          className="w-[150px] h-9 px-3 rounded-md border border-[#B89555]/30 bg-[#FDFBF7] text-[#1A1A1A] font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
           style={{ backgroundColor: '#09090b', color: '#ffffff' }}
           defaultValue=""
         >
@@ -266,7 +266,7 @@ const CRMBulkActions = ({
               e.target.value = '';
             }}
             disabled={isUpdating}
-            className="w-[160px] h-9 px-3 rounded-md border border-[#1A1A1A] bg-zinc-950 text-white font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="w-[160px] h-9 px-3 rounded-md border border-[#B89555]/30 bg-[#FDFBF7] text-[#1A1A1A] font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
             style={{ backgroundColor: '#09090b', color: '#ffffff' }}
             defaultValue=""
           >
