@@ -420,6 +420,7 @@ function AddBrokerSheet({ open, onOpenChange, onAdded }: { open: boolean; onOpen
         personal_phone: form.personal_phone.trim() || null,
         company_phone: form.company_phone.trim() || null,
         current_company: form.current_company.trim() || null,
+        current_brokerage_id: form.current_brokerage_id || null,
         rera_license: form.rera_license.trim() || null,
         nationality: form.nationality.trim() || null,
         languages: langs.length ? langs : null,
