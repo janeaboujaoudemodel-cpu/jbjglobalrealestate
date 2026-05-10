@@ -4546,3 +4546,56 @@ button:hover [data-no-contrast-guard] svg[style*="#B89555"] {
   opacity: 1 !important;
   --tw-text-opacity: 1 !important;
 }
+
+/* ============================================================
+   ABSOLUTE LIGHT-SURFACE LOCK (hover + focus + active included)
+   Lock rule: on any light/champagne surface, text and icons
+   are NEVER white at rest, on hover, on focus, or when active.
+   They are ink #1A1A1A by default; gold and price-orange tokens
+   may opt out. White is allowed ONLY inside explicit dark
+   islands (bg-black/.bg-foreground/[data-surface="dark"|"ink"])
+   or the dark photo/video hero (.jj-hero-fullscreen).
+   ============================================================ */
+:root:not(.dark)
+  :is(
+    .bg-white, .bg-card, .bg-background, .bg-popover, .bg-muted, .bg-secondary,
+    [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"],
+    [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"]
+  ):not([data-surface="dark"]):not([data-surface="ink"]):not(.jj-hero-fullscreen)
+  :is(h1, h2, h3, h4, h5, h6, p, span, label, small, strong, em, li, a, button, [role="button"], [role="tab"], [role="menuitem"], svg, svg.lucide):is(.text-white, [class*="text-white/"]):not(.bg-black):not([class*="bg-black"]):not([class~="bg-[#1A1A1A]"]):not([class*="bg-gray-8"]):not([class*="bg-gray-9"]):not([class*="bg-zinc-8"]):not([class*="bg-zinc-9"]):not(.bg-primary):not(.bg-foreground):not([data-surface="dark"]):not([data-surface="dark"] *):not([data-surface="ink"]):not([data-surface="ink"] *):not(.jj-hero-fullscreen):not(.jj-hero-fullscreen *) {
+  color: #1A1A1A !important;
+  opacity: 1 !important;
+  --tw-text-opacity: 1 !important;
+}
+
+/* Hover / focus / active on light surfaces never turn the label or icon white */
+:root:not(.dark)
+  :is(
+    .bg-white, .bg-card, .bg-background, .bg-popover,
+    [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"],
+    [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"]
+  ):not([data-surface="dark"]):not([data-surface="ink"]):not(.jj-hero-fullscreen)
+  :is(a, button, [role="button"], [role="tab"], [role="menuitem"], .nav-item):not(.bg-black):not([class*="bg-black"]):not([class~="bg-[#1A1A1A]"]):not(.bg-primary):not(.bg-foreground):hover,
+:root:not(.dark)
+  :is(
+    .bg-white, .bg-card, .bg-background, .bg-popover,
+    [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"]
+  ):not([data-surface="dark"]):not([data-surface="ink"])
+  :is(a, button, [role="button"], [role="tab"], [role="menuitem"]):not(.bg-black):not([class*="bg-black"]):not([class~="bg-[#1A1A1A]"]):not(.bg-primary):not(.bg-foreground):focus-visible {
+  color: #1A1A1A !important;
+}
+:root:not(.dark)
+  :is(
+    .bg-white, .bg-card, .bg-background, .bg-popover,
+    [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"]
+  ):not([data-surface="dark"]):not([data-surface="ink"])
+  :is(a, button, [role="button"], [role="tab"], [role="menuitem"]):not(.bg-black):not([class*="bg-black"]):not([class~="bg-[#1A1A1A]"]):not(.bg-primary):not(.bg-foreground):hover svg,
+:root:not(.dark)
+  :is(
+    .bg-white, .bg-card, .bg-background, .bg-popover,
+    [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"]
+  ):not([data-surface="dark"]):not([data-surface="ink"])
+  :is(a, button, [role="button"], [role="tab"], [role="menuitem"]):not(.bg-black):not([class*="bg-black"]):not([class~="bg-[#1A1A1A]"]):not(.bg-primary):not(.bg-foreground):focus-visible svg {
+  color: #1A1A1A !important;
+  opacity: 1 !important;
+}
