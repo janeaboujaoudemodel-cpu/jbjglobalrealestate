@@ -17,10 +17,25 @@ const PanelFallback = () => (
 );
 
 export default function CRMSideRail() {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<Tab>("calendar");
 
   const openWith = (t: Tab) => { setTab(t); setOpen(true); };
+
+  const ctaLabel = tab === "calendar" ? "Add Event" : tab === "notes" ? "New Note" : "New Task";
+  const handlePrimary = () => {
+    const ts = new Date();
+    const date = `${ts.getFullYear()}-${String(ts.getMonth()+1).padStart(2,"0")}-${String(ts.getDate()).padStart(2,"0")}`;
+    if (tab === "calendar") navigate(`/owner/crm?view=calendar&title=&date=${date}&time=10:00`);
+    else if (tab === "notes") navigate(`/owner/crm?view=notes&new=1`);
+    else navigate(`/owner/crm?view=tasks&new=1`);
+    setOpen(false);
+  };
+  const handleOpenFull = () => {
+    navigate(`/owner/crm?view=${tab}`);
+    setOpen(false);
+  };
 
   return (
     <>
