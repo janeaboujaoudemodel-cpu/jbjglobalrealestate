@@ -189,14 +189,15 @@ function TaskPopover({ leadId, leadName, leadPhone, leadEmail, userId }: Props) 
   const save = async () => {
     if (!title.trim()) return toast.error("Title required");
     setSaving(true);
+    const noteLine = leadName ? `Contact: ${leadName}${contactLine(leadPhone, leadEmail)}` : null;
     const { error } = await supabase.from("crm_tasks").insert({
       lead_id: leadId,
       user_id: userId,
       title: title.trim(),
+      notes: noteLine,
       due_at: dueAt ? new Date(dueAt).toISOString() : null,
       status: "open",
-      metadata: { lead_name: leadName, lead_phone: leadPhone, lead_email: leadEmail },
-    } as any);
+    });
     setSaving(false);
     if (error) return toast.error(error.message);
     toast.success("Task added");
