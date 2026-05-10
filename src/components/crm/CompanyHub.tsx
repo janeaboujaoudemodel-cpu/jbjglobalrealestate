@@ -29,6 +29,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   Loader2, Building2, Users, Megaphone, CalendarDays, Bell,
   CreditCard, StickyNote, Mail, MessagesSquare, ExternalLink,
+  Phone, Globe, MapPin, Linkedin, Instagram, BadgeCheck, MessageCircle,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -65,11 +66,14 @@ interface HubData {
   threads: any[];
   brokerageId: string | null;
   devRegistryId: string | null;
+  brokerage: any | null;
+  developer: any | null;
 }
 
 const EMPTY: HubData = {
   people: [], campaigns: [], events: [], followups: [], cards: [],
   notes: [], emails: [], threads: [], brokerageId: null, devRegistryId: null,
+  brokerage: null, developer: null,
 };
 
 export function CompanyHub({ type, companyName, brokerageId, devRegistryId }: CompanyHubProps) {
@@ -90,11 +94,15 @@ export function CompanyHub({ type, companyName, brokerageId, devRegistryId }: Co
       // Phase A — resolve org id + people in parallel
       const [bRes, dRes, peopleRes] = await Promise.all([
         !brokerageId && type === "brokerage" && nameKey
-          ? supabase.from("crm_brokerages").select("id").ilike("company_name", companyName).maybeSingle()
-          : Promise.resolve({ data: brokerageId ? { id: brokerageId } : null }) as any,
+          ? supabase.from("crm_brokerages").select("*").ilike("company_name", companyName).maybeSingle()
+          : (brokerageId
+              ? supabase.from("crm_brokerages").select("*").eq("id", brokerageId).maybeSingle()
+              : Promise.resolve({ data: null }) as any),
         !devRegistryId && type === "developer" && nameKey
-          ? supabase.from("crm_developer_registry").select("id").ilike("developer_name", companyName).maybeSingle()
-          : Promise.resolve({ data: devRegistryId ? { id: devRegistryId } : null }) as any,
+          ? supabase.from("crm_developer_registry").select("*").ilike("developer_name", companyName).maybeSingle()
+          : (devRegistryId
+              ? supabase.from("crm_developer_registry").select("*").eq("id", devRegistryId).maybeSingle()
+              : Promise.resolve({ data: null }) as any),
         supabase
           .from("crm_leads")
           .select("id,full_name,email_lower,phone_e164,contact_type,company_name,country_of_residence,created_at")
@@ -239,6 +247,8 @@ export function CompanyHub({ type, companyName, brokerageId, devRegistryId }: Co
         threads: ((threadsRes as any)?.data ?? []),
         brokerageId: bId,
         devRegistryId: dId,
+        brokerage: (bRes as any)?.data ?? null,
+        developer: (dRes as any)?.data ?? null,
       });
     } catch (err: any) {
       console.error("[CompanyHub] load failed", err);
@@ -339,35 +349,85 @@ export function CompanyHub({ type, companyName, brokerageId, devRegistryId }: Co
 
   return (
     <div className="space-y-4">
-      {/* Header */}
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex items-start gap-3">
-          <div className="h-12 w-12 rounded-lg bg-[#EFE6D6] border border-[#B89555]/30 flex items-center justify-center">
-            <Building2 className="h-6 w-6 text-[#1A1A1A]" />
-          </div>
-          <div>
-            <div className="text-xs uppercase tracking-wider text-[#1A1A1A]/60">
-              {type === "brokerage" ? "Brokerage" : "Developer"}
-            </div>
-            <h2 className="text-xl font-semibold text-[#1A1A1A]">{companyName}</h2>
-            <div className="flex flex-wrap gap-2 mt-1">
-              {data.brokerageId && (
-                <Badge variant="outline" className="border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A]">
-                  Brokerage record linked
+      {/* Header — single horizontal info bar (no vertical stacking) */}
+      {(() => {
+        const b: any = data.brokerage || {};
+        const d: any = data.developer || {};
+        const o = type === "brokerage" ? b : d;
+        const name = (type === "brokerage" ? b?.company_name : d?.developer_name) || companyName;
+        const logo = o?.logo_url || null;
+        const country = o?.country || null;
+        const emirate = o?.emirate || o?.region || null;
+        const city = o?.city || null;
+        const license = o?.rera_license || o?.license_number || null;
+        const phone = o?.phone || null;
+        const whatsapp = o?.whatsapp_e164 || null;
+        const email = o?.email || null;
+        const website = o?.website || null;
+        const linkedin = o?.linkedin_url || null;
+        const instagram = o?.instagram_url || null;
+        const address = o?.office_address || o?.office_location || null;
+        const mapsHref = address
+          ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`
+          : null;
+
+        const Item = ({ icon, children, href, title }: any) => {
+          if (!children) return null;
+          const cls = "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#F7F2EA] border border-[#B89555]/25 text-[12px] text-[#1A1A1A] whitespace-nowrap";
+          const inner = (<>{icon}<span className="truncate max-w-[260px]">{children}</span></>);
+          return href
+            ? <a href={href} target="_blank" rel="noreferrer" title={title} className={cls + " hover:bg-[#EFE6D6] transition-colors"}>{inner}</a>
+            : <span className={cls} title={title}>{inner}</span>;
+        };
+
+        return (
+          <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] shadow-sm">
+            <div className="flex items-center gap-3 px-4 py-3 overflow-x-auto whitespace-nowrap jj-scrollbar-gold">
+              <div className="h-12 w-12 rounded-lg bg-[#F7F2EA] border border-[#B89555]/30 flex items-center justify-center overflow-hidden flex-none">
+                {logo
+                  ? <img src={logo} alt="" className="max-w-full max-h-full object-contain" />
+                  : <Building2 className="h-6 w-6 text-[#1A1A1A]/60" />}
+              </div>
+              <div className="flex-none">
+                <div className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/60">
+                  {type === "brokerage" ? "Brokerage" : "Developer"}
+                </div>
+                <h2 className="text-lg font-semibold text-[#1A1A1A] leading-tight whitespace-nowrap">{name}</h2>
+              </div>
+              <span aria-hidden className="mx-1 h-8 w-px bg-[#B89555]/25 flex-none" />
+              <div className="flex items-center gap-1.5 flex-none">
+                <Item icon={<MapPin className="h-3.5 w-3.5" />} title="Country">{country}</Item>
+                <Item icon={<MapPin className="h-3.5 w-3.5" />} title="Emirate">{emirate}</Item>
+                <Item icon={<MapPin className="h-3.5 w-3.5" />} title="City">{city}</Item>
+                <Item icon={<BadgeCheck className="h-3.5 w-3.5" />} title="License">{license}</Item>
+                <Item icon={<MapPin className="h-3.5 w-3.5" />} href={mapsHref} title="Office address">{address}</Item>
+                <Item icon={<Phone className="h-3.5 w-3.5" />} href={phone ? `tel:${phone}` : undefined} title="Phone">{phone}</Item>
+                <Item icon={<MessageCircle className="h-3.5 w-3.5" />} href={whatsapp ? `https://wa.me/${String(whatsapp).replace(/[^\d]/g, "")}` : undefined} title="WhatsApp">{whatsapp}</Item>
+                <Item icon={<Mail className="h-3.5 w-3.5" />} href={email ? `mailto:${email}` : undefined} title="Email">{email}</Item>
+                <Item icon={<Globe className="h-3.5 w-3.5" />} href={website || undefined} title="Website">{website}</Item>
+                <Item icon={<Linkedin className="h-3.5 w-3.5" />} href={linkedin || undefined} title="LinkedIn">{linkedin ? "LinkedIn" : null}</Item>
+                <Item icon={<Instagram className="h-3.5 w-3.5" />} href={instagram || undefined} title="Instagram">{instagram ? "Instagram" : null}</Item>
+              </div>
+              <span aria-hidden className="mx-1 h-8 w-px bg-[#B89555]/25 flex-none" />
+              <div className="flex items-center gap-1.5 flex-none">
+                {data.brokerageId && (
+                  <Badge variant="outline" className="border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] whitespace-nowrap">
+                    Brokerage linked
+                  </Badge>
+                )}
+                {data.devRegistryId && (
+                  <Badge variant="outline" className="border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] whitespace-nowrap">
+                    Developer linked
+                  </Badge>
+                )}
+                <Badge variant="outline" className="border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] whitespace-nowrap">
+                  {counts.people} people
                 </Badge>
-              )}
-              {data.devRegistryId && (
-                <Badge variant="outline" className="border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A]">
-                  Developer registry linked
-                </Badge>
-              )}
-              <Badge variant="outline" className="border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A]">
-                {counts.people} people
-              </Badge>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        );
+      })()}
 
       <Tabs value={tab} onValueChange={setTab}>
         <TabsList className="bg-[#F7F2EA] border border-[#B89555]/20 flex-wrap h-auto">
