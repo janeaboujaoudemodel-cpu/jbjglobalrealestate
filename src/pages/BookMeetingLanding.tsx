@@ -5,7 +5,6 @@
  * Insert is validated server-side by validate_meeting_booking_slot().
  */
 import { useEffect, useMemo, useState } from "react";
-import { Helmet } from "react-helmet-async";
 import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
