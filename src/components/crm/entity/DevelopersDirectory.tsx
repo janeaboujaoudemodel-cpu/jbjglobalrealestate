@@ -177,7 +177,7 @@ export default function DevelopersDirectory() {
                   onClick={() => { setHubName(d.name); setHubOpen(true); }}
                   className="cursor-pointer hover:bg-[#F7F2EA]/60"
                 >
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3 whitespace-nowrap">
                     <div className="flex items-center gap-3 min-w-0">
                       <div className="w-8 h-8 rounded bg-[#F7F2EA] border border-[#B89555]/20 flex items-center justify-center overflow-hidden flex-none">
                         {logo
@@ -201,14 +201,14 @@ export default function DevelopersDirectory() {
                   <td className="px-4 py-3 text-right text-[#1A1A1A] whitespace-nowrap">{d.completed_projects ?? "—"}</td>
                   <td className="px-4 py-3 text-right text-[#1A1A1A] whitespace-nowrap">{d.offplan_projects ?? "—"}</td>
                   <td className="px-4 py-3 text-right text-[#1A1A1A]/80 text-xs whitespace-nowrap">{d.founded_year || "—"}</td>
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3 whitespace-nowrap">
                     {d.registration_status ? (
                       <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] text-[10px] capitalize">
                         {d.registration_status}
                       </Badge>
                     ) : <span className="text-[#1A1A1A]/40 text-xs">—</span>}
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3 whitespace-nowrap">
                     <div className="flex items-center gap-1 flex-nowrap">
                       <IconLink href={d.website_url} title="Website"><Globe className="h-3.5 w-3.5" /></IconLink>
                       <IconLink href={d.admin_email ? `mailto:${d.admin_email}` : null} title="Email"><Mail className="h-3.5 w-3.5" /></IconLink>
