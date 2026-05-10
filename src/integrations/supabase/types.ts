@@ -19653,6 +19653,135 @@ export type Database = {
           },
         ]
       }
+      meeting_booking_tokens: {
+        Row: {
+          consumed_at: string | null
+          contact_company: string | null
+          contact_email: string | null
+          contact_name: string | null
+          created_at: string
+          created_by: string
+          default_language: string | null
+          default_location_type: string | null
+          expires_at: string
+          token: string
+        }
+        Insert: {
+          consumed_at?: string | null
+          contact_company?: string | null
+          contact_email?: string | null
+          contact_name?: string | null
+          created_at?: string
+          created_by: string
+          default_language?: string | null
+          default_location_type?: string | null
+          expires_at?: string
+          token: string
+        }
+        Update: {
+          consumed_at?: string | null
+          contact_company?: string | null
+          contact_email?: string | null
+          contact_name?: string | null
+          created_at?: string
+          created_by?: string
+          default_language?: string | null
+          default_location_type?: string | null
+          expires_at?: string
+          token?: string
+        }
+        Relationships: []
+      }
+      meeting_bookings: {
+        Row: {
+          booked_for_at: string
+          created_at: string
+          duration_min: number
+          id: string
+          language: string | null
+          location_type: string
+          meeting_request_id: string | null
+          meeting_url: string | null
+          notes: string | null
+          office_address: string | null
+          online_platform: string | null
+          owner_confirmation_sent_at: string | null
+          owner_confirmed_at: string | null
+          ref_token: string | null
+          source: string
+          status: string
+          updated_at: string
+          visitor_company: string | null
+          visitor_confirmation_sent_at: string | null
+          visitor_email: string
+          visitor_name: string
+          visitor_phone: string | null
+        }
+        Insert: {
+          booked_for_at: string
+          created_at?: string
+          duration_min?: number
+          id?: string
+          language?: string | null
+          location_type?: string
+          meeting_request_id?: string | null
+          meeting_url?: string | null
+          notes?: string | null
+          office_address?: string | null
+          online_platform?: string | null
+          owner_confirmation_sent_at?: string | null
+          owner_confirmed_at?: string | null
+          ref_token?: string | null
+          source?: string
+          status?: string
+          updated_at?: string
+          visitor_company?: string | null
+          visitor_confirmation_sent_at?: string | null
+          visitor_email: string
+          visitor_name: string
+          visitor_phone?: string | null
+        }
+        Update: {
+          booked_for_at?: string
+          created_at?: string
+          duration_min?: number
+          id?: string
+          language?: string | null
+          location_type?: string
+          meeting_request_id?: string | null
+          meeting_url?: string | null
+          notes?: string | null
+          office_address?: string | null
+          online_platform?: string | null
+          owner_confirmation_sent_at?: string | null
+          owner_confirmed_at?: string | null
+          ref_token?: string | null
+          source?: string
+          status?: string
+          updated_at?: string
+          visitor_company?: string | null
+          visitor_confirmation_sent_at?: string | null
+          visitor_email?: string
+          visitor_name?: string
+          visitor_phone?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "meeting_bookings_meeting_request_id_fkey"
+            columns: ["meeting_request_id"]
+            isOneToOne: false
+            referencedRelation: "meeting_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "meeting_bookings_ref_token_fkey"
+            columns: ["ref_token"]
+            isOneToOne: false
+            referencedRelation: "meeting_booking_tokens"
+            referencedColumns: ["token"]
+          },
+        ]
+      }
       meeting_requests: {
         Row: {
           attendee_count: number | null
