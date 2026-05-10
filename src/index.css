@@ -2510,11 +2510,11 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
 }
 
 /* Light/cream backgrounds → white */
-[class*="bg-[#FDFBF7]"],
-[class*="bg-[#F7F1E6]"],
-[class*="bg-[#F7F2EA]"],
-[class*="bg-[#ECE2D2]"],
-[class*="bg-[#EFE6D6]"] {
+[class~="bg-[#FDFBF7]"],
+[class~="bg-[#F7F1E6]"],
+[class~="bg-[#F7F2EA]"],
+[class~="bg-[#ECE2D2]"],
+[class~="bg-[#EFE6D6]"] {
   background-color: #FFFFFF !important;
 }
 
@@ -2544,7 +2544,7 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
 
 /* 1. Icons on SOLID-ink tiles → white.
    IMPORTANT: Tailwind arbitrary alpha (e.g. bg-[#1A1A1A]/50) compiles to a class
-   like "bg-[#1A1A1A]/50" — the substring [class*="bg-[#1A1A1A]"] would match it
+   like "bg-[#1A1A1A]/50" — the substring [class~="bg-[#1A1A1A]"] would match it
    and force the icon white over a translucent tile, producing invisible icons
    on champagne (#F7F2EA) surfaces. We use [class~="…"] which matches the bare
    class as a whole word, EXCLUDING any /<alpha> suffix. */
@@ -2642,10 +2642,10 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
   .bg-champagne, .bg-champagne-1, .bg-champagne-2, .bg-champagne-3,
   .jj-layer-2, .jj-layer-1,
   [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"],
-  [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#F7F1E6]"],
-  [class*="bg-[#FFFFFF]"]
+  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"],
+  [class~="bg-[#FFFFFF]"]
 ):not([data-surface="dark"])
-:is(.text-white, [class*="text-white/"]):not(.bg-black):not([class*="bg-black"]):not(.bg-\[\#EFE6D6\]):not([class*="bg-[#EFE6D6]"]):not(.bg-primary):not([class*="bg-primary"]):not([class*="bg-gray-900"]):not([class*="bg-gray-800"]):not([data-surface="dark"]) {
+:is(.text-white, [class*="text-white/"]):not(.bg-black):not([class*="bg-black"]):not(.bg-\[\#EFE6D6\]):not([class~="bg-[#EFE6D6]"]):not(.bg-primary):not([class*="bg-primary"]):not([class*="bg-gray-900"]):not([class*="bg-gray-800"]):not([data-surface="dark"]) {
   color: hsl(var(--foreground)) !important;
   opacity: 1 !important;
   --tw-text-opacity: 1 !important;
@@ -2854,8 +2854,8 @@ button[style*="background"] [class*="text-[#1A1A1A]"] {
   .bg-champagne, [class*="bg-champagne"],
   .bg-white, .bg-card, .bg-popover,
   [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"],
-  [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#F7F1E6]"],
-  [class*="bg-[#EFE6D6]"], [class*="bg-[#ECE2D2]"]
+  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"],
+  [class~="bg-[#EFE6D6]"], [class~="bg-[#ECE2D2]"]
 ):not([data-surface="dark"])
 :is(button, a, [role="button"], [role="option"], [role="menuitem"], label, span, p, h1, h2, h3, h4, h5, h6):is(.text-white, [class*="text-white/"]):not(.bg-black):not([class~="bg-[#1A1A1A]"]):not(.bg-\[\#EFE6D6\]):not([class~="bg-[#B89555]"]):not([class*="bg-red-5"]):not([class*="bg-red-6"]):not([class*="bg-red-7"]):not([class*="bg-emerald-6"]):not([class*="bg-blue-6"]):not([data-surface="dark"]):not([data-surface="dark"] *):not(.jj-hero-fullscreen *) {
   color: hsl(var(--foreground)) !important;
@@ -2863,7 +2863,7 @@ button[style*="background"] [class*="text-[#1A1A1A]"] {
 }
 
 /* Property listing card muted-foreground → readable warm brown on champagne */
-:root:not(.dark) :is([class*="bg-[#FDFBF7]"], [class*="from-[#FDFBF7]"], .bg-card):not([data-surface="dark"]) .text-muted-foreground {
+:root:not(.dark) :is([class~="bg-[#FDFBF7]"], [class*="from-[#FDFBF7]"], .bg-card):not([data-surface="dark"]) .text-muted-foreground {
   color: #5A4A2E !important;
   --tw-text-opacity: 1 !important;
 }
@@ -2956,13 +2956,13 @@ button[style*="background"] [class*="text-[#1A1A1A]"] {
    Override the global "button .text-[#1A1A1A] → inherit" and dark-text rules.
    Ensures hero CTAs (Download Brochure, Register Interest, etc.) keep white
    text on transparent borders and amber on gold accents. */
-[data-surface="dark"] button:not(.bg-white):not([class*="bg-[#EFE6D6]"]):not(.bg-gray-100):not(.bg-gray-50),
-[data-surface="dark"] a.btn:not(.bg-white):not([class*="bg-[#EFE6D6]"]),
-[data-surface="dark"] [role="button"]:not(.bg-white):not([class*="bg-[#EFE6D6]"]) {
+[data-surface="dark"] button:not(.bg-white):not([class~="bg-[#EFE6D6]"]):not(.bg-gray-100):not(.bg-gray-50),
+[data-surface="dark"] a.btn:not(.bg-white):not([class~="bg-[#EFE6D6]"]),
+[data-surface="dark"] [role="button"]:not(.bg-white):not([class~="bg-[#EFE6D6]"]) {
   color: #FFFFFF !important;
 }
 
-[data-surface="dark"] button:not(.bg-white):not([class*="bg-[#EFE6D6]"]):not(.bg-gray-100):not(.bg-gray-50) :is(span, svg, p, div),
+[data-surface="dark"] button:not(.bg-white):not([class~="bg-[#EFE6D6]"]):not(.bg-gray-100):not(.bg-gray-50) :is(span, svg, p, div),
 [data-surface="dark"] a.btn :is(span, svg) {
   color: inherit !important;
   opacity: 1 !important;
@@ -3158,8 +3158,8 @@ button[style*="background"] [class*="text-[#1A1A1A]"] {
   [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"],
   [class*="from-[#F7F1E6]"], [class*="from-[#FEFAF3]"],
   [class*="from-[#ECE2D2]"], [class*="from-[#D8C7A6]"],
-  [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#F7F1E6]"],
-  [class*="bg-[#FFFFFF]"]
+  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#F7F1E6]"],
+  [class~="bg-[#FFFFFF]"]
 ):not([data-surface="dark"]) :is(label, h1, h2, h3, h4, h5, h6, p, span, div, button)[class*="text-black"]:not([data-surface="dark"] *):not(.jj-hero-fullscreen *),
 :is(
   .bg-white, .bg-card, .bg-popover,
@@ -3388,13 +3388,13 @@ a .lucide,
       because the tokens themselves switch). The block below documents intent
       and acts as a safety net for any tile that hard-codes a light bg in dark mode. */
 .dark [class*="bg-white"] .lucide,
-.dark [class*="bg-[#F7F2EA]"] .lucide,
-.dark [class*="bg-[#F7F2EA]"] .lucide {
+.dark [class~="bg-[#F7F2EA]"] .lucide,
+.dark [class~="bg-[#F7F2EA]"] .lucide {
   color: hsl(0 0% 7%); /* dark ink on stubbornly-light surface */
 }
 :root:not(.dark) [class*="bg-black"] .lucide,
-:root:not(.dark) [class*="bg-[#1A1A1A]"] .lucide,
-:root:not(.dark) [class*="bg-[#1A1A1A]"] .lucide {
+:root:not(.dark) [class~="bg-[#1A1A1A]"] .lucide,
+:root:not(.dark) [class~="bg-[#1A1A1A]"] .lucide {
   color: hsl(0 0% 100%); /* light ink on stubbornly-dark surface */
 }
 
@@ -3696,60 +3696,53 @@ button:disabled:has(.lucide),
  * ============================================================ */
 
 /* Brand DARK ink tiles — text + descendants → white */
-[class*="bg-[#1A1A1A]"],
-[class*="bg-[#0F0F0F]"],
-[class*="bg-[#111111]"],
-[class*="bg-[#0A0A0A]"],
-[class*="bg-[#1F1F1F]"],
-[class*="bg-[#222222]"],
-[class*="hover:bg-[#1A1A1A]"]:hover,
-[class*="hover:bg-[#0F0F0F]"]:hover,
-[class*="bg-[#1A1A1A]"] :is(span, p, h1, h2, h3, h4, h5, h6, a, label, small, strong, em, div, li),
-[class*="bg-[#0F0F0F]"] :is(span, p, h1, h2, h3, h4, h5, h6, a, label, small, strong, em, div, li),
-[class*="bg-[#111111]"] :is(span, p, h1, h2, h3, h4, h5, h6, a, label, small, strong, em, div, li),
-[class*="bg-[#0A0A0A]"] :is(span, p, h1, h2, h3, h4, h5, h6, a, label, small, strong, em, div, li) {
+[class~="bg-[#1A1A1A]"],
+[class~="bg-[#0F0F0F]"],
+[class~="bg-[#111111]"],
+[class~="bg-[#0A0A0A]"],
+[class~="bg-[#1F1F1F]"],
+[class~="bg-[#222222]"],
+[class~="bg-[#1A1A1A]"] :is(span, p, h1, h2, h3, h4, h5, h6, a, label, small, strong, em, div, li),
+[class~="bg-[#0F0F0F]"] :is(span, p, h1, h2, h3, h4, h5, h6, a, label, small, strong, em, div, li),
+[class~="bg-[#111111]"] :is(span, p, h1, h2, h3, h4, h5, h6, a, label, small, strong, em, div, li),
+[class~="bg-[#0A0A0A]"] :is(span, p, h1, h2, h3, h4, h5, h6, a, label, small, strong, em, div, li) {
   color: #FFFFFF !important;
   --tw-text-opacity: 1 !important;
 }
 
 /* Brand DARK ink tiles — SVG icons → white */
-[class*="bg-[#1A1A1A]"] svg,
-[class*="bg-[#0F0F0F]"] svg,
-[class*="bg-[#111111]"] svg,
-[class*="bg-[#0A0A0A]"] svg {
+[class~="bg-[#1A1A1A]"] svg,
+[class~="bg-[#0F0F0F]"] svg,
+[class~="bg-[#111111]"] svg,
+[class~="bg-[#0A0A0A]"] svg {
   color: #FFFFFF !important;
 }
 
 /* Brand GOLD tiles — text + descendants → white */
-[class*="bg-[#B89555]"],
-[class*="bg-[#A68444]"],
-[class*="bg-[#C8A766]"],
-[class*="bg-[#D4AF37]"],
-[class*="hover:bg-[#A68444]"]:hover,
-[class*="hover:bg-[#B89555]"]:hover,
-[class*="bg-[#B89555]"] :is(span, p, h1, h2, h3, h4, h5, h6, a, label, small, strong, em, div, li),
-[class*="bg-[#A68444]"] :is(span, p, h1, h2, h3, h4, h5, h6, a, label, small, strong, em, div, li),
-[class*="bg-[#C8A766]"] :is(span, p, h1, h2, h3, h4, h5, h6, a, label, small, strong, em, div, li),
-[class*="bg-[#D4AF37]"] :is(span, p, h1, h2, h3, h4, h5, h6, a, label, small, strong, em, div, li) {
+[class~="bg-[#B89555]"],
+[class~="bg-[#A68444]"],
+[class~="bg-[#C8A766]"],
+[class~="bg-[#D4AF37]"],
+[class~="bg-[#B89555]"] :is(span, p, h1, h2, h3, h4, h5, h6, a, label, small, strong, em, div, li),
+[class~="bg-[#A68444]"] :is(span, p, h1, h2, h3, h4, h5, h6, a, label, small, strong, em, div, li),
+[class~="bg-[#C8A766]"] :is(span, p, h1, h2, h3, h4, h5, h6, a, label, small, strong, em, div, li),
+[class~="bg-[#D4AF37]"] :is(span, p, h1, h2, h3, h4, h5, h6, a, label, small, strong, em, div, li) {
   color: #FFFFFF !important;
   --tw-text-opacity: 1 !important;
 }
 
 /* Brand GOLD tiles — SVG icons → white */
-[class*="bg-[#B89555]"] svg,
-[class*="bg-[#A68444]"] svg,
-[class*="bg-[#C8A766]"] svg,
-[class*="bg-[#D4AF37]"] svg {
+[class~="bg-[#B89555]"] svg,
+[class~="bg-[#A68444]"] svg,
+[class~="bg-[#C8A766]"] svg,
+[class~="bg-[#D4AF37]"] svg {
   color: #FFFFFF !important;
 }
 
 /* Buttons explicitly opted into hover→light surface keep dark text on hover.
    (e.g. variant="hero": hover:bg-[#FDFBF7] hover:text-[#1A1A1A]) */
-button[class*="hover:bg-[#FDFBF7]"]:hover,
-button[class*="hover:bg-[#F7F2EA]"]:hover,
-button[class*="hover:bg-white"]:hover,
-a[class*="hover:bg-[#FDFBF7]"]:hover,
-a[class*="hover:bg-white"]:hover {
+buttonbuttonbutton[class*="hover:bg-white"]:hover,
+aa[class*="hover:bg-white"]:hover {
   color: #1A1A1A !important;
 }
 button[class*="hover:bg-[#FDFBF7]"]:hover :is(span, svg),
@@ -3775,7 +3768,7 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
 .bg-\[\#1A1A1A\],
 .bg-\[\#0F172A\],
 [class*="bg-foreground"]:not([data-no-contrast-guard]),
-[class*="bg-[#1A1A1A]"]:not([data-no-contrast-guard]) {
+[class~="bg-[#1A1A1A]"]:not([data-no-contrast-guard]) {
   color: #FDFBF7;
 }
 
@@ -3783,7 +3776,7 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
 .bg-foreground :is(.text-foreground, .text-black, .text-\[\#1A1A1A\]),
 .bg-black :is(.text-foreground, .text-black, .text-\[\#1A1A1A\]),
 .bg-\[\#1A1A1A\] :is(.text-foreground, .text-black, .text-\[\#1A1A1A\]),
-[class*="bg-[#1A1A1A]"]:not([data-no-contrast-guard]) :is(.text-foreground, .text-black, .text-\[\#1A1A1A\]) {
+[class~="bg-[#1A1A1A]"]:not([data-no-contrast-guard]) :is(.text-foreground, .text-black, .text-\[\#1A1A1A\]) {
   color: #FDFBF7 !important;
 }
 
@@ -3791,9 +3784,9 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
 .bg-\[\#FDFBF7\],
 .bg-\[\#F7F2EA\],
 .bg-\[\#EFE6D6\],
-[class*="bg-[#FDFBF7]"]:not([data-no-contrast-guard]),
-[class*="bg-[#F7F2EA]"]:not([data-no-contrast-guard]),
-[class*="bg-[#EFE6D6]"]:not([data-no-contrast-guard]) {
+[class~="bg-[#FDFBF7]"]:not([data-no-contrast-guard]),
+[class~="bg-[#F7F2EA]"]:not([data-no-contrast-guard]),
+[class~="bg-[#EFE6D6]"]:not([data-no-contrast-guard]) {
   color: #1A1A1A;
 }
 
@@ -3815,12 +3808,12 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
    beats the inversion above for the deepest matching descendant. Covers:
    black icon tiles (TrustBar, Investor Opportunities, etc.), black CTAs
    (VerificationBanner Get Verified), dark badges, and CRM/task popups. */
-.bg-\[\#FDFBF7\] :is([class*="bg-[#1A1A1A]"], [class*="bg-foreground"], .bg-black, .bg-foreground) :is(.text-white, [class*="text-white"]),
-.bg-\[\#F7F2EA\] :is([class*="bg-[#1A1A1A]"], [class*="bg-foreground"], .bg-black, .bg-foreground) :is(.text-white, [class*="text-white"]),
-.bg-\[\#EFE6D6\] :is([class*="bg-[#1A1A1A]"], [class*="bg-foreground"], .bg-black, .bg-foreground) :is(.text-white, [class*="text-white"]),
-.bg-\[\#FDFBF7\] :is([class*="bg-[#1A1A1A]"], [class*="bg-foreground"], .bg-black, .bg-foreground).text-white,
-.bg-\[\#F7F2EA\] :is([class*="bg-[#1A1A1A]"], [class*="bg-foreground"], .bg-black, .bg-foreground).text-white,
-.bg-\[\#EFE6D6\] :is([class*="bg-[#1A1A1A]"], [class*="bg-foreground"], .bg-black, .bg-foreground).text-white {
+.bg-\[\#FDFBF7\] :is([class~="bg-[#1A1A1A]"], [class*="bg-foreground"], .bg-black, .bg-foreground) :is(.text-white, [class*="text-white"]),
+.bg-\[\#F7F2EA\] :is([class~="bg-[#1A1A1A]"], [class*="bg-foreground"], .bg-black, .bg-foreground) :is(.text-white, [class*="text-white"]),
+.bg-\[\#EFE6D6\] :is([class~="bg-[#1A1A1A]"], [class*="bg-foreground"], .bg-black, .bg-foreground) :is(.text-white, [class*="text-white"]),
+.bg-\[\#FDFBF7\] :is([class~="bg-[#1A1A1A]"], [class*="bg-foreground"], .bg-black, .bg-foreground).text-white,
+.bg-\[\#F7F2EA\] :is([class~="bg-[#1A1A1A]"], [class*="bg-foreground"], .bg-black, .bg-foreground).text-white,
+.bg-\[\#EFE6D6\] :is([class~="bg-[#1A1A1A]"], [class*="bg-foreground"], .bg-black, .bg-foreground).text-white {
   color: #FDFBF7 !important;
 }
 
@@ -3829,12 +3822,12 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
    stroke (lucide icons use stroke="currentColor"). This is the last word. */
 .jj-icon-keep > svg,
 .jj-icon-keep svg.lucide,
-[class*="bg-[#1A1A1A]"] > svg.lucide,
-[class*="bg-[#1A1A1A]"] svg.lucide,
+[class~="bg-[#1A1A1A]"] > svg.lucide,
+[class~="bg-[#1A1A1A]"] svg.lucide,
 .bg-black > svg.lucide,
 .bg-foreground > svg.lucide,
-[class*="bg-[#1A1A1A]"] .text-white,
-[class*="bg-[#1A1A1A]"] [class*="text-white"] {
+[class~="bg-[#1A1A1A]"] .text-white,
+[class~="bg-[#1A1A1A]"] [class*="text-white"] {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
@@ -3842,7 +3835,7 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
 /* Gold surfaces — children inherit white text by default */
 .bg-\[\#B89555\],
 .bg-\[\#A68444\],
-[class*="bg-[#B89555]"]:not([class*="bg-[#B89555]/"]):not([data-no-contrast-guard]) {
+[class~="bg-[#B89555]"]:not([class*="bg-[#B89555]/"]):not([data-no-contrast-guard]) {
   color: #FDFBF7;
 }
 
@@ -3863,7 +3856,7 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
    that own their own contrast aren't broken. */
 :root:not(.dark) :is(
   .bg-\[\#FDFBF7\], .bg-\[\#F7F2EA\], .bg-\[\#EFE6D6\],
-  [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#EFE6D6]"],
+  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"],
   [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"]
 ):not([data-surface="dark"]):not([data-no-contrast-guard]) :is(
   .text-\[\#1A1A1A\]\/25, .text-\[\#1A1A1A\]\/40, .text-\[\#1A1A1A\]\/50,
@@ -3872,7 +3865,7 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
   [class*="text-[#1A1A1A]/2"], [class*="text-[#1A1A1A]/3"],
   [class*="text-[#1A1A1A]/4"], [class*="text-[#1A1A1A]/5"],
   [class*="text-[#1A1A1A]/6"], [class*="text-[#1A1A1A]/7"]
-):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not([class*="bg-[#1A1A1A]"] *):not([class*="bg-foreground"] *):not(.bg-black *) {
+):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not([class~="bg-[#1A1A1A]"] *):not([class*="bg-foreground"] *):not(.bg-black *) {
   color: #1A1A1A !important;
   --tw-text-opacity: 1 !important;
 }
@@ -3909,7 +3902,7 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
 /* 5. Faded brown text-[#5A4A2E] on champagne reads as gray — promote to #3A2D1D */
 :root:not(.dark) :is(
   .bg-\[\#FDFBF7\], .bg-\[\#F7F2EA\], .bg-\[\#EFE6D6\],
-  [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#EFE6D6]"]
+  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"]
 ):not([data-surface="dark"]) :is(
   .text-\[\#8A7556\], [class*="text-[#8A7556]"]
 ) {
@@ -3947,7 +3940,7 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
         Targets common low-alpha Tailwind utilities used on icons. */
   :where(
     body,
-    [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#EFE6D6]"],
+    [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"],
     [class*="bg-champagne"], [class*="bg-background"], [class*="bg-card"],
     [class*="bg-muted"], [class*="bg-white"]
   ):not([data-surface="dark"]) :where(
@@ -3987,7 +3980,7 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
 @layer utilities {
   /* 1. REST: faded ink ONLY when on a champagne/light surface */
   :where(
-    [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#EFE6D6]"],
+    [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"],
     .bg-card, .bg-background, .bg-popover, .bg-muted, .bg-secondary,
     .bg-white,
     [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"]
@@ -4004,7 +3997,7 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
 
   /* 2. REST: low-alpha muted-foreground on light surfaces only */
   :where(
-    [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#EFE6D6]"],
+    [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"],
     .bg-card, .bg-background, .bg-popover, .bg-muted, .bg-white
   ):not([data-surface="dark"]):not(.jj-hero-fullscreen)
     :where(.text-muted-foreground):not([data-decorative="true"]):not(.jj-text-fade-allow):not(.jj-text-fade-allow *) {
@@ -4067,12 +4060,12 @@ a[class*="bg-red-"]:hover {
 }
 
 /* Cookie banner: Manage Preferences (dark ink button) — readable on hover */
-.cookie-banner button[class*="bg-[#1A1A1A]"],
-[data-chrome="cookie-banner"] button[class*="bg-[#1A1A1A]"] {
+.cookie-banner button[class~="bg-[#1A1A1A]"],
+[data-chrome="cookie-banner"] button[class~="bg-[#1A1A1A]"] {
   color: #FFFFFF !important;
 }
-.cookie-banner button[class*="bg-[#1A1A1A]"]:hover,
-[data-chrome="cookie-banner"] button[class*="bg-[#1A1A1A]"]:hover {
+.cookie-banner button[class~="bg-[#1A1A1A]"]:hover,
+[data-chrome="cookie-banner"] button[class~="bg-[#1A1A1A]"]:hover {
   color: #FFFFFF !important;
   background-color: #0A0A0A !important;
 }
@@ -4114,7 +4107,7 @@ a[class*="bg-red-"]:hover {
 /* HOVER: keep nav item text + icons solid ink on champagne hover bg */
 :where(
   .bg-card, .bg-background, .bg-popover, .bg-white,
-  [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#EFE6D6]"],
+  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"],
   [class*="from-[#F7F1E6]"]
 ):not([data-surface="dark"]):not(.jj-hero-fullscreen)
   :where(a, button, [role="button"], [role="link"], [role="menuitem"], [role="tab"]):hover
@@ -4142,7 +4135,7 @@ a[class*="bg-red-"]:hover {
   .bg-black, [class*="bg-black"],
   [class*="bg-zinc-8"], [class*="bg-zinc-9"],
   [class*="from-zinc-9"], [class*="from-black"],
-  [class*="bg-[#0D0C08]"], [class*="bg-[#1A1A1A]"]
+  [class~="bg-[#0D0C08]"], [class~="bg-[#1A1A1A]"]
 ) :is(h1, h2, h3, h4, h5, h6, p, span, li, label, small, strong, em, div):not(.text-price-orange):not([class*="text-price-orange"]):not([data-no-contrast-guard]) {
   color: rgb(255 255 255 / 0.92);
 }
@@ -4155,7 +4148,7 @@ a[class*="bg-red-"]:hover {
   .bg-black, [class*="bg-black"],
   [class*="bg-zinc-8"], [class*="bg-zinc-9"],
   [class*="from-zinc-9"],
-  [class*="bg-[#0D0C08]"], [class*="bg-[#1A1A1A]"]
+  [class~="bg-[#0D0C08]"], [class~="bg-[#1A1A1A]"]
 ) :is([class*="text-[#5A4A2E]"], [class*="text-[#3A2D1D]"], [class*="text-[#8A7556]"]):not([data-no-contrast-guard]) {
   color: #F5E9D0 !important;
   opacity: 1 !important;
@@ -4411,10 +4404,10 @@ a[class*="bg-red-"]:hover {
  *    Tailwind escapes [ ] and # in arbitrary values, so we target the
  *    rendered class strings via attribute selectors. Excludes the gold
  *    foreground (text-) and border (border-) tokens — those are kept. */
-[class*="bg-[#B89555]"]:not([class*="bg-[#B89555]/"]):not([data-no-gold-debrand]),
-[class*="bg-[#b89555]"]:not([class*="bg-[#b89555]/"]):not([data-no-gold-debrand]),
-[class*="bg-[#A68444]"]:not([class*="bg-[#A68444]/"]):not([data-no-gold-debrand]),
-[class*="bg-[#a68444]"]:not([class*="bg-[#a68444]/"]):not([data-no-gold-debrand]) {
+[class~="bg-[#B89555]"]:not([class*="bg-[#B89555]/"]):not([data-no-gold-debrand]),
+[class~="bg-[#b89555]"]:not([class*="bg-[#b89555]/"]):not([data-no-gold-debrand]),
+[class~="bg-[#A68444]"]:not([class*="bg-[#A68444]/"]):not([data-no-gold-debrand]),
+[class~="bg-[#a68444]"]:not([class*="bg-[#a68444]/"]):not([data-no-gold-debrand]) {
   background-color: #EFE6D6 !important;
   color: #1A1A1A !important;
   border-color: #B89555 !important;
@@ -4445,8 +4438,8 @@ a[class*="bg-red-"]:hover {
 }
 
 /* 5. Active tab / data-state="active" gold fills → cream + 1px gold underline. */
-[data-state="active"][class*="bg-[#B89555]"],
-[data-state="active"][class*="bg-[#EFE6D6]"],
+[data-state="active"][class~="bg-[#B89555]"],
+[data-state="active"][class~="bg-[#EFE6D6]"],
 [data-state="active"][class*="from-[#B89555]"] {
   background-color: #EFE6D6 !important;
   background-image: none !important;
@@ -4456,7 +4449,7 @@ a[class*="bg-red-"]:hover {
 
 /* 6. Badge / chip safety: text on the new cream fill must never inherit
  *    white from a previous solid-gold context. */
-[class*="bg-[#B89555]"]:not([class*="bg-[#B89555]/"]) :is(.text-white, [class*="text-white/"]):not([data-no-contrast-guard]),
+[class~="bg-[#B89555]"]:not([class*="bg-[#B89555]/"]) :is(.text-white, [class*="text-white/"]):not([data-no-contrast-guard]),
 .bg-\[\#EFE6D6\] :is(.text-white, [class*="text-white/"]):not([data-no-contrast-guard]) {
   color: #1A1A1A !important;
 }
@@ -4536,10 +4529,10 @@ button:hover [data-no-contrast-guard] svg[style*="#B89555"] {
 /* Owner dashboard shell must stay champagne, never be normalized to white. */
 .owner-shell-surface,
 .owner-dashboard-shell,
-.owner-dashboard-shell :is(aside, header, [class*="bg-[#F7F2EA]"]) {
+.owner-dashboard-shell :is(aside, header, [class~="bg-[#F7F2EA]"]) {
   background-color: #F7F2EA !important;
 }
 
-.owner-dashboard-shell :is([class*="bg-[#EFE6D6]"]) {
+.owner-dashboard-shell :is([class~="bg-[#EFE6D6]"]) {
   background-color: #EFE6D6 !important;
 }

@@ -15,6 +15,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { Users, Search, Plus, Building2, BadgeCheck, Clock, Loader2, Download } from "lucide-react";
 import { toast } from "sonner";
+import { useCRMSectionCounts } from "@/hooks/useCRMSectionCounts";
 import { RelationalHubTabs } from "@/components/crm/RelationalHubTabs";
 import { UnifiedCRMExportModal } from "@/components/crm/UnifiedCRMExportModal";
 import { BrokerageCombobox } from "@/components/crm/BrokerageCombobox";
@@ -164,13 +165,17 @@ export default function BrokersRegistry() {
     });
   }, [allRows, q, tab, companyFilter, sourceFilter, sourceFilterCtx, externalById]);
 
+  // Authoritative DB total (head-count, not capped by row pagination).
+  const { counts: sectionCounts } = useCRMSectionCounts();
+  const dbTotal = Math.max(sectionCounts.brokers || 0, allRows.length);
+
   const counts = useMemo(() => ({
-    total: allRows.length,
+    total: dbTotal,
     sales: allRows.filter(r => r.broker_type === "sales" || r.broker_type === "both").length,
     leasing: allRows.filter(r => r.broker_type === "leasing" || r.broker_type === "both").length,
     pending: registered.filter((b: any) => b.verification_status === "pending").length,
     companies: companies.length,
-  }), [allRows, registered, companies]);
+  }), [allRows, registered, companies, dbTotal]);
 
   const Stat = ({ icon: Icon, label, value, onClick, active }: any) => (
     <Card
@@ -192,16 +197,16 @@ export default function BrokersRegistry() {
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-[#1A1A1A]">
       <SEOHead
-        title="Brokers Registry | JBJ Global"
-        description="Every broker, every company they work for. Searchable, filterable, exportable."
+        title="Brokers | JBJ Global"
+        description="Every broker in the market, every company they work for. Searchable, filterable, exportable."
         canonicalPath="/owner/crm/brokers"
       />
       <div className="max-w-7xl mx-auto px-4 py-6 space-y-4">
         <div className="flex items-center gap-3 flex-wrap">
           <IconTile icon={Users} tone="gold" />
           <div className="flex-1 min-w-0">
-            <h1 className="text-2xl font-bold">Brokers Registry</h1>
-            <p className="text-sm text-[#1A1A1A]/70">Every broker, every company they work for.</p>
+            <h1 className="text-2xl font-bold">Brokers</h1>
+            <p className="text-sm text-[#1A1A1A]/70">Every broker in the market, every company they work for.</p>
           </div>
           <Button variant="outline" onClick={() => setExportOpen(true)} disabled={!filtered.length}>
             <Download className="w-4 h-4 mr-1" /> Export
