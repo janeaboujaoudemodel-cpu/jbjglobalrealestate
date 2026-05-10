@@ -1,36 +1,35 @@
-I’m sorry — you’re right that I should not have touched UI styling outside the task. The existing project memory already says not to modify code/styles/data without explicit instruction; I will follow that strictly.
+Plan to fix the white text/icon regression globally, without changing layout or unrelated UI:
 
-Plan to fix this immediately, scoped only to the broken areas:
+1. Preserve the current before state
+- I already captured a before screenshot of the current homepage state in preview.
+- I will also capture before screenshots for the front-end homepage and the owner/CRM area where access allows. If the owner area redirects to sign-in in my browser session, I will use the accessible screen and note that owner-route verification needs you logged in in preview.
 
-1. Restore black text/icons on bright champagne surfaces
-- Edit only `src/index.css` global contrast guard rules that are incorrectly forcing white.
-- Remove the bad selectors that treat `bg-[#FDFBF7]`, `bg-[#F7F2EA]`, and `bg-[#EFE6D6]` as dark/gold surfaces.
-- Keep white text only where it belongs: real dark surfaces, dark hero areas, black buttons, red/destructive buttons, and explicit dark tiles.
-- Verify homepage, header, CRM source chips, stage labels, titles, and shortcut buttons inherit ink/black on bright backgrounds again.
+2. Repair the global contrast rules in `src/index.css`
+- Remove/replace stale rules that still treat champagne/light surfaces as dark or “white dominant”.
+- Make light surfaces globally resolve to ink `#1A1A1A` by default:
+  - `#FDFBF7`
+  - `#F7F2EA`
+  - `#EFE6D6`
+  - white/card/background/muted/popover equivalents
+- Force `text-white`, white SVG icons, and white hover labels to ink on all light/champagne surfaces.
+- Keep gold only as the existing hairline/accent system, not as a fill.
 
-2. Fix Brokers count mismatch
-- Confirmed database has `32,649` rows in `crm_brokers`; the outside `33k` number is correct.
-- Update the inside Brokers screen so the title and stat cards show the database-backed total, not a limited 1,000-row fetch.
-- Rename visible copy from “Brokers Registry” to “Brokers” / “Brokers in the Market” so it does not say registry.
-- Keep the existing layout; only fix labels and data wiring.
+3. Restrict white to true dark contexts only
+- White will remain allowed only inside explicit dark surfaces, black CTAs, dark photo/video hero overlays, or intentionally dark modals/cards.
+- Light hover states, CRM shortcuts, header/sidebar buttons, stage chips, titles, icons, tabs, and filter controls will stay black or gold, not white.
 
-3. Fix all CRM section totals consistently
-- Use count-only queries for badge/stat totals so sections are not capped by the default 1,000-row limit.
-- Apply this to Brokers, Brokerage Agencies, Investors, and other CRM section badges where the count can diverge from the visible paginated list.
-- Remove/replace hard display caps that make a section look like only 1,000 or 1,500 records exist, while preserving performance.
+4. Fix the runtime contrast guard
+- Update `src/utils/contrastGuard.ts` so it cannot inject white text on bright/champagne backgrounds.
+- It will only use white when the computed background is truly dark; otherwise it will restore ink black.
 
-4. Investor list cleanup
-- Keep investor source mapped to `crm_leads` tagged/typed as investor, as requested.
-- Continue excluding these owner emails from investor counts and lists:
-  - `janeaboujaoudemodel@gmail.com`
-  - `janeaboujaoudenails@gmail.com`
-  - `contact@janeaboujaoude.net`
-  - `infoo.jane@gmail.com`
-- Current database check shows `0` tagged investor leads after that filter; if investors are expected, the fix will make the UI accurately reflect tagged `crm_leads` once those rows exist.
+5. Lock the rule with an audit/check
+- Add or tighten a contrast audit so light/champagne selectors cannot force white text/icons again.
+- The lock will target both normal and hover states for front-end and owner/back-end screens.
 
-5. Verification before reporting done
-- Run targeted searches to ensure no remaining CSS rules force white on champagne/light surfaces.
-- Check the database counts again.
-- Verify the affected frontend route visually/behaviorally enough to confirm black text returns and CRM totals match the uploaded database.
+6. Verify visually with after screenshots
+- After implementation, I will capture after screenshots for:
+  - Homepage/header/sidebar/shortcut buttons
+  - Owner/CRM or sign-in-gated owner route state available in preview
+- I will compare against the before screenshots and report exactly what was confirmed.
 
-I will not make unrelated UI/layout changes.
+Scope guard: I will not redesign, restyle layout, remove features, or touch CRM data/count logic in this fix. This is only a global black/gold contrast repair and lock.
