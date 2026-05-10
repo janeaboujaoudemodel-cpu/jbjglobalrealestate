@@ -30,14 +30,26 @@ const JBJ_TOKENS = [
   "jbj.ae",
 ];
 
-type Category = "contracts" | "registrations" | "opportunities" | "partnerships" | "careers" | "other";
+type Category =
+  | "contracts"
+  | "registrations"
+  | "brokerages"
+  | "new_launches"
+  | "projects_inventory"
+  | "commission"
+  | "events"
+  | "opportunities"
+  | "partnerships"
+  | "careers"
+  | "other";
 
+// Order matters — first match wins. More specific buckets come first.
 const CATEGORY_RULES: Array<{ category: Category; patterns: RegExp[] }> = [
   {
     category: "contracts",
     patterns: [
-      /^\s*signed\s*[:\-–]/i,                          // "Signed: ..." subject prefix
-      /\bsigned\b[^.\n]{0,40}\b(agreement|contract|mou|addendum)\b/i,
+      /^\s*signed\s*[:\-–]/i,
+      /\bsigned\b[^.\n]{0,40}\b(agreement|contract|mou|addendum|authori[sz]ation)\b/i,
       /\b(agreement|contract|mou|addendum)\b[^.\n]{0,40}\bsigned\b/i,
       /\bfully executed\b/i,
       /\bexecuted (agreement|contract)\b/i,
@@ -49,6 +61,48 @@ const CATEGORY_RULES: Array<{ category: Category; patterns: RegExp[] }> = [
     ],
   },
   {
+    category: "commission",
+    patterns: [
+      /\bcommission (structure|sheet|slab|breakdown|payout|update)\b/i,
+      /\b(\d+(\.\d+)?\s?%)\s*commission\b/i,
+      /\bcommission\b[^.\n]{0,40}\b(approved|paid|invoice|claim)\b/i,
+      /\bpayout (statement|schedule)\b/i,
+    ],
+  },
+  {
+    category: "events",
+    patterns: [
+      /\b(invite|invitation) to\b[^.\n]{0,40}\b(launch|event|site visit|preview|broker event)\b/i,
+      /\bbroker event\b/i,
+      /\bsite visit\b/i,
+      /\bproject preview\b/i,
+      /\bsales gallery (visit|tour)\b/i,
+      /\brsvp\b[^.\n]{0,40}\b(launch|event)\b/i,
+    ],
+  },
+  {
+    category: "new_launches",
+    patterns: [
+      /\bnew (launch|tower|phase|release)\b/i,
+      /\bpre[- ]launch\b/i,
+      /\bgrand launch\b/i,
+      /\boff[- ]plan launch\b/i,
+      /\bcoming soon\b[^.\n]{0,40}\b(project|tower|phase)\b/i,
+    ],
+  },
+  {
+    category: "projects_inventory",
+    patterns: [
+      /\b(inventory|availability) (sheet|list|update)\b/i,
+      /\b(price|payment) plan\b/i,
+      /\bbrochure\b/i,
+      /\bfact ?sheet\b/i,
+      /\bunit (mix|list|availability)\b/i,
+      /\bfloor ?plan(s)?\b/i,
+      /\bmaster ?plan\b/i,
+    ],
+  },
+  {
     category: "registrations",
     patterns: [
       /\b(broker|agency|agent) registration\b/i,
@@ -57,18 +111,27 @@ const CATEGORY_RULES: Array<{ category: Category; patterns: RegExp[] }> = [
       /\bprincipal broker\b/i,
       /\brera\b/i,
       /\bregistered (with|as)\b/i,
+      /\bonboarded\b/i,
+      /\bchannel partner\b/i,
+    ],
+  },
+  {
+    category: "brokerages",
+    patterns: [
+      /\b(brokerage|agency)\b[^.\n]{0,60}\b(register|registration|partner|onboard|cooperat)/i,
+      /\bco[- ]?brok(e|ing)\b/i,
+      /\bsub[- ]?broker\b/i,
+      /\bagency cooperation\b/i,
     ],
   },
   {
     category: "opportunities",
     patterns: [
-      /\bnew (launch|project|tower|development)\b/i,
       /\beoi\b/i,
       /\ballocation\b/i,
-      /\binventory (sheet|list|update)\b/i,
       /\bproject brief\b/i,
-      /\b(off[- ]plan)\b/i,
-      /\bpre[- ]launch\b/i,
+      /\boff[- ]plan opportunity\b/i,
+      /\bexclusive (deal|allocation|inventory)\b/i,
     ],
   },
   {
@@ -77,7 +140,6 @@ const CATEGORY_RULES: Array<{ category: Category; patterns: RegExp[] }> = [
       /\bpartnership\b/i,
       /\bcollaborat(e|ion)\b/i,
       /\bmou\b/i,
-      /\bco[- ]?brokin?g\b/i,
       /\bjoint venture\b/i,
       /\breferral (program|agreement)\b/i,
     ],
