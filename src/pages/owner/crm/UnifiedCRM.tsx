@@ -353,6 +353,7 @@ export default function UnifiedCRM() {
           {ENTITIES.map((it) => {
             const active = it.id === entity;
             const Icon = it.icon;
+            const c = entityCount(it.id);
             return (
               <button
                 key={it.id}
@@ -369,6 +370,18 @@ export default function UnifiedCRM() {
               >
                 <Icon className="h-4 w-4" />
                 {it.label}
+                {c !== null && c > 0 && (
+                  <span
+                    className={[
+                      "ml-1 inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 rounded-full text-[10px] font-semibold tabular-nums",
+                      active
+                        ? "bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/40"
+                        : "bg-[#EFE6D6] text-[#1A1A1A]/80 border border-[#B89555]/25",
+                    ].join(" ")}
+                  >
+                    {fmt(c)}
+                  </span>
+                )}
               </button>
             );
           })}
