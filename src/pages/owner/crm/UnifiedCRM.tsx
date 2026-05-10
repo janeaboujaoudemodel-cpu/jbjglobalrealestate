@@ -12,6 +12,7 @@
 import { Component, lazy, Suspense, useEffect, useMemo, useState, type ReactNode } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useCRMSectionCounts, type CRMCounts } from "@/hooks/useCRMSectionCounts";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -272,6 +273,32 @@ export default function UnifiedCRM() {
   }, [entity, view, userId, ownerEmail]);
 
   const currentViews = VIEWS[entity] || [];
+  const { counts } = useCRMSectionCounts();
+
+  const fmt = (n: number) => (n >= 1000 ? `${(n / 1000).toFixed(n >= 10000 ? 0 : 1)}k` : String(n));
+  const entityCount = (id: Entity): number | null => {
+    switch (id) {
+      case "leads": return counts.leads;
+      case "investors": return counts.investors;
+      case "developers": return counts.developers;
+      case "sales-reps": return counts.salesReps;
+      case "brokers": return counts.brokers;
+      case "agencies": return counts.agencies;
+      case "employees": return counts.employees;
+      default: return null;
+    }
+  };
+  const viewCount = (entity: Entity, viewId: string): number | null => {
+    if (entity === "leads") {
+      if (viewId === "all") return counts.leads;
+      if (viewId === "flagged") return counts.flagged;
+      if (viewId === "vip") return counts.vip;
+      if (viewId === "tasks") return counts.tasks;
+    }
+    if (entity === "brokers" && viewId === "directory") return counts.brokers;
+    if (entity === "investors" && viewId === "vip") return counts.vip;
+    return null;
+  };
 
   return (
     <div className="min-h-screen bg-[#FDFBF7]">
@@ -326,6 +353,7 @@ export default function UnifiedCRM() {
           {ENTITIES.map((it) => {
             const active = it.id === entity;
             const Icon = it.icon;
+            const c = entityCount(it.id);
             return (
               <button
                 key={it.id}
@@ -342,6 +370,18 @@ export default function UnifiedCRM() {
               >
                 <Icon className="h-4 w-4" />
                 {it.label}
+                {c !== null && c > 0 && (
+                  <span
+                    className={[
+                      "ml-1 inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 rounded-full text-[10px] font-semibold tabular-nums",
+                      active
+                        ? "bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/40"
+                        : "bg-[#EFE6D6] text-[#1A1A1A]/80 border border-[#B89555]/25",
+                    ].join(" ")}
+                  >
+                    {fmt(c)}
+                  </span>
+                )}
               </button>
             );
           })}
@@ -368,6 +408,7 @@ export default function UnifiedCRM() {
                 }
                 lastGroup = t.group;
                 const active = t.id === view;
+                const c = viewCount(entity, t.id);
                 out.push(
                   <button
                     key={t.id}
@@ -375,13 +416,25 @@ export default function UnifiedCRM() {
                     aria-selected={active}
                     onClick={() => setView(t.id)}
                     className={[
-                      "shrink-0 inline-flex items-center px-3 py-1.5 rounded-full text-[13px] font-medium transition-colors border",
+                      "shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-medium transition-colors border",
                       active
                         ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
                         : "bg-transparent text-[#1A1A1A]/70 border-transparent hover:bg-[#EFE6D6]/70 hover:text-[#1A1A1A]",
                     ].join(" ")}
                   >
                     {t.label}
+                    {c !== null && c > 0 && (
+                      <span
+                        className={[
+                          "inline-flex items-center justify-center min-w-[1.125rem] h-[18px] px-1 rounded-full text-[10px] font-semibold tabular-nums",
+                          active
+                            ? "bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/40"
+                            : "bg-[#EFE6D6] text-[#1A1A1A]/80 border border-[#B89555]/25",
+                        ].join(" ")}
+                      >
+                        {fmt(c)}
+                      </span>
+                    )}
                   </button>
                 );
               });
