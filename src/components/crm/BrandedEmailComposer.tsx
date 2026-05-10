@@ -294,6 +294,63 @@ export function BrandedEmailComposer() {
           )}
         </div>
 
+        {/* Template Library + Signature picker */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-3 rounded-lg border border-[#B89555]/30 bg-[#F7F2EA]">
+          <div>
+            <Label className="text-xs flex items-center gap-1"><LibraryBig className="w-3 h-3" /> Template library</Label>
+            <select
+              value={libraryTemplateId}
+              onChange={(e) => applyLibraryTemplate(e.target.value)}
+              className="mt-1 w-full h-9 px-2 text-sm border border-[#B89555]/40 rounded bg-white text-[#1A1A1A]"
+            >
+              <option value="">— Pick a ready-made template —</option>
+              {["sales_leasing", "birthday_lifecycle", "onboarding_newsletter", "operations"].map((cat) => {
+                const items = libraryTemplates.filter((t) => t.category === cat);
+                if (!items.length) return null;
+                const label = cat.replace(/_/g, " & ").replace(/\b\w/g, (c) => c.toUpperCase());
+                return (
+                  <optgroup key={cat} label={label}>
+                    {items.map((t) => (
+                      <option key={t.id} value={t.id}>{t.name}</option>
+                    ))}
+                  </optgroup>
+                );
+              })}
+              {libraryTemplates.some((t) => !["sales_leasing", "birthday_lifecycle", "onboarding_newsletter", "operations"].includes(t.category)) && (
+                <optgroup label="My templates">
+                  {libraryTemplates
+                    .filter((t) => !["sales_leasing", "birthday_lifecycle", "onboarding_newsletter", "operations"].includes(t.category))
+                    .map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
+                </optgroup>
+              )}
+            </select>
+            {missingVars.length > 0 && (
+              <div className="mt-2 flex flex-wrap gap-1">
+                {missingVars.map((v) => (
+                  <Badge key={v} variant="outline" className="text-[10px] border-amber-500 text-amber-700 bg-amber-50">
+                    fill: {v}
+                  </Badge>
+                ))}
+              </div>
+            )}
+          </div>
+          <div>
+            <Label className="text-xs flex items-center gap-1"><PenLine className="w-3 h-3" /> Signature</Label>
+            <select
+              value={signatureId}
+              onChange={(e) => setSignatureId(e.target.value)}
+              className="mt-1 w-full h-9 px-2 text-sm border border-[#B89555]/40 rounded bg-white text-[#1A1A1A]"
+            >
+              {signatures.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.name}{s.role_label ? ` — ${s.role_label}` : ""}
+                </option>
+              ))}
+            </select>
+            <p className="mt-1 text-[10px] text-[#1A1A1A]/60">Auto-appended to every send. Test = live.</p>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
             <Label className="text-xs">Recipient email</Label>
@@ -306,15 +363,27 @@ export function BrandedEmailComposer() {
             />
           </div>
           <div>
-            <Label className="text-xs">Recipient first name (optional)</Label>
+            <Label className="text-xs">Recipient full name (optional)</Label>
             <Input
-              placeholder="e.g. Sarah"
+              placeholder="e.g. Sarah Johnson"
               value={recipientName}
               onChange={(e) => setRecipientName(e.target.value)}
               className="bg-white"
             />
           </div>
         </div>
+
+        {/* Optional property variables — used when template includes {{property_title}} etc. */}
+        <details className="text-xs">
+          <summary className="cursor-pointer text-[#1A1A1A]/70 hover:text-[#1A1A1A]">
+            Property context (optional — for property templates)
+          </summary>
+          <div className="mt-2 grid grid-cols-1 md:grid-cols-3 gap-2">
+            <Input placeholder="Property title" value={propertyTitle} onChange={(e) => setPropertyTitle(e.target.value)} className="bg-white" />
+            <Input placeholder="Price (e.g. AED 12M)" value={propertyPrice} onChange={(e) => setPropertyPrice(e.target.value)} className="bg-white" />
+            <Input placeholder="Location" value={propertyLocation} onChange={(e) => setPropertyLocation(e.target.value)} className="bg-white" />
+          </div>
+        </details>
 
         <div>
           <Label className="text-xs">Brief for AI (what should this email say?)</Label>
