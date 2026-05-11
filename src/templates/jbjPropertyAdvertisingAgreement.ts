@@ -213,11 +213,11 @@ const footerHtml = (chrome: Required<TemplateChrome>) => {
     case "three-column":
     default:
       return `
-        <div style="${base}display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;align-items:center;">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:36px;height:36px;object-fit:contain;display:block;flex:none;" />
+        <div style="${base}display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:18px;align-items:center;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <img src="${JBJ_BRAND.monogram}" alt="JBJ Global Real Estate" crossorigin="anonymous" style="width:64px;height:auto;max-height:38px;object-fit:contain;display:block;flex:none;" />
             <div>
-              <div style="font-weight:700;letter-spacing:.14em;font-size:10px;opacity:.85;">${esc(JBJ_BRAND.legalCompany)}</div>
+              <div style="font-weight:700;letter-spacing:.14em;font-size:10px;opacity:.9;">${esc(JBJ_BRAND.legalCompany)}</div>
               ${JBJ_BRAND.office ? `<div style="opacity:.7;margin-top:2px;">${esc(JBJ_BRAND.office)}</div>` : ""}
             </div>
           </div>
@@ -227,7 +227,7 @@ const footerHtml = (chrome: Required<TemplateChrome>) => {
           </div>
           <div style="text-align:right;">
             <div>${JBJ_BRAND.phone}</div>
-            <div style="opacity:.7;">${trn ? `TRN ${esc(trn)}` : ""}${trn && license ? " · " : ""}${license ? `LIC ${esc(license)}` : ""}</div>
+            <div style="opacity:.7;margin-top:2px;">LIC 1591031 · DCCI 666113 · CR 2789619${trn ? ` · TRN ${esc(trn)}` : ""}${license && license !== "1591031" ? ` · ${esc(license)}` : ""}</div>
           </div>
         </div>`;
   }
