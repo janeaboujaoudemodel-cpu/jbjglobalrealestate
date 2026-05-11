@@ -78,7 +78,9 @@ export default function BrokerageAgenciesDirectory() {
         const all: AgencyRow[] = [];
         let from = 0;
         const PAGE = 1000;
-        for (let i = 0; i < 20; i++) {
+        // Cap initial load to 2 batches (2 000 rows). The previous loop fetched up to
+        // 20 000 rows on mount which made the Brokerage Agencies tab unusable.
+        for (let i = 0; i < 2; i++) {
           const { data, error } = await supabase
             .from("crm_brokerages")
             .select("id,company_name,emirate,country,office_location,office_address,phone,email,website,logo_url,estimated_agent_count,star_rating,source,entry_source,database_source,upload_source,directory_rank,deal_count_cached,is_junk")
