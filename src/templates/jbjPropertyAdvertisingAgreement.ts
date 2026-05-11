@@ -426,17 +426,16 @@ export function buildPAAHtml(
       <span style="border-bottom:1px solid ${accent};padding:0 6px;font-weight:600;">${esc(get("broker_appointee_name") || JBJ_BRAND.legalCompany)}</span>
       as its:
     </div>
-    <div style="margin:6px 0 10px;display:flex;flex-wrap:wrap;align-items:center;">
-      ${exclusivityChip("EXCLUSIVE")}${exclusivityChip("NON EXCLUSIVE")}
+    <div data-chip-row="exclusivity" style="margin:6px 0 10px;display:flex;flex-wrap:wrap;align-items:center;gap:6px;">
+      ${chipRow("exclusivity", "Appointment Type", ["EXCLUSIVE", "NON EXCLUSIVE"], (o, v) => v.toLowerCase().includes(o.toLowerCase().split(" ")[0]))}
       <span style="font-size:12px;opacity:.85;margin-left:6px;">Broker to list and advertise the above property for a period of:</span>
     </div>
-    <div style="margin:6px 0 14px;display:flex;flex-wrap:wrap;align-items:center;">
-      ${periodChip("1 Month", "1")}${periodChip("2 Months", "2")}
-      ${periodChip("3 Months", "3")}
-      <span style="margin:0 6px 0 -8px;font-size:11px;opacity:.7;">OR UNTIL:</span>
-      ${dateBox(get("listing_period_until_date"))}
-      <span style="display:block;width:100%;height:6px;"></span>
-      ${periodChip("6 Months  (Residential Sale or Commercial only)", "6")}
+    <div data-chip-row="listing_period" style="margin:6px 0 14px;display:flex;flex-wrap:wrap;align-items:center;gap:6px;">
+      ${chipRow("listing_period", "Listing Period", ["1 Month", "2 Months", "3 Months", "6 Months  (Residential Sale or Commercial only)"], (o, v) => v.toLowerCase().startsWith(o.toLowerCase().split(" ")[0]))}
+      ${isFinal ? "" : `
+        <span style="margin:0 6px 0 8px;font-size:11px;opacity:.7;">OR UNTIL:</span>
+        <span data-field-key="listing_period_until_date">${dateBox(get("listing_period_until_date"))}</span>
+      `}
     </div>
     <ol style="padding-left:18px;margin:6px 0 0;">
       <li style="margin-bottom:6px;">I, the undersigned, confirm that I am the owner of the above property and / or have the legal authority to sign on behalf of the named owner(s).</li>
