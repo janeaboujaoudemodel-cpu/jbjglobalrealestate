@@ -108,8 +108,8 @@ const fieldUnderline = (
   // to the visible text so empty space never stretches into a long blank line.
   const safe = esc(value || "");
   return `
-  <div${dataAttr} style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;">
-    <div style="display:inline-block;border-bottom:1px solid #B89555;min-width:120px;padding:2px 6px 2px 0;font-size:13px;color:#1A1A1A;">${safe || "&nbsp;"}</div>
+  <div${dataAttr} style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;position:relative;">
+    <div style="display:inline-block;border-bottom:1px solid #B89555;min-width:1ch;padding:2px 8px 2px 2px;font-size:13px;color:#1A1A1A;white-space:nowrap;">${safe || "&nbsp;"}</div>
     <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:#1A1A1A;opacity:.7;margin-top:3px;">${esc(label)}</div>
   </div>`;
 };
