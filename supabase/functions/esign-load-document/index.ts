@@ -26,11 +26,23 @@ Deno.serve(async (req) => {
       .eq("signing_token", token)
       .maybeSingle();
 
+    // NOTE: Terminal states (invalid / expired / removed) intentionally return
+    // HTTP 200 with a structured `{ state, error }` payload. This is a *normal*
+    // signing-page outcome (the user sees a branded "expired link" card with a
+    // Return to Homepage button), not a server error — returning 4xx/410 here
+    // causes global error reporters to mis-flag the page as a runtime crash
+    // with a blank-screen alert.
     if (recErr || !recipient) {
-      return corsErrorResponse("This signing link is invalid or has expired", 404, origin);
+      return corsJsonResponse(
+        { state: "invalid", error: "This signing link is invalid or has expired" },
+        origin,
+      );
     }
     if (recipient.token_expires_at && new Date(recipient.token_expires_at) < new Date()) {
-      return corsErrorResponse("This signing link has expired", 410, origin);
+      return corsJsonResponse(
+        { state: "expired", error: "This signing link has expired" },
+        origin,
+      );
     }
 
     const { data: envelope, error: envErr } = await supabase
@@ -39,8 +51,18 @@ Deno.serve(async (req) => {
       .eq("id", recipient.envelope_id)
       .maybeSingle();
 
-    if (envErr || !envelope) return corsErrorResponse("Document not found", 404, origin);
-    if (envelope.deleted_at) return corsErrorResponse("This document has been removed", 410, origin);
+    if (envErr || !envelope) {
+      return corsJsonResponse(
+        { state: "invalid", error: "Document not found" },
+        origin,
+      );
+    }
+    if (envelope.deleted_at) {
+      return corsJsonResponse(
+        { state: "removed", error: "This document has been removed" },
+        origin,
+      );
+    }
 
     const { data: fields } = await supabase
       .from("esign_fields")
