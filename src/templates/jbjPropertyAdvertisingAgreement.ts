@@ -176,16 +176,15 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string) => {
     case "monogram-wordmark":
     default:
       return `
-        <div style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid ${accent};padding-bottom:14px;margin-bottom:24px;">
-          <div style="display:flex;align-items:center;gap:14px;">
-            <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:80px;height:80px;object-fit:contain;display:block;" />
-            <div>
-              <div style="font-size:18px;letter-spacing:.18em;font-weight:700;color:${ink};">${JBJ_BRAND.company}</div>
-              <div style="font-size:10px;letter-spacing:.16em;color:${ink};opacity:.75;margin-top:3px;">${esc(JBJ_BRAND.legalCompany)}</div>
-              ${JBJ_BRAND.office ? `<div style="font-size:9.5px;letter-spacing:.14em;color:${ink};opacity:.65;margin-top:2px;">${esc(JBJ_BRAND.office)}</div>` : ""}
+        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid ${accent};padding-bottom:14px;margin-bottom:24px;">
+          <div style="display:flex;align-items:center;gap:16px;">
+            <img src="${JBJ_BRAND.monogram}" alt="JBJ Global Real Estate" crossorigin="anonymous" style="width:140px;height:auto;max-height:72px;object-fit:contain;display:block;" />
+            <div style="border-left:1px solid ${accent};padding-left:14px;">
+              <div style="font-size:10px;letter-spacing:.16em;color:${ink};opacity:.85;">${esc(JBJ_BRAND.legalCompany)}</div>
+              ${JBJ_BRAND.office ? `<div style="font-size:9.5px;letter-spacing:.12em;color:${ink};opacity:.7;margin-top:2px;">${esc(JBJ_BRAND.office)}</div>` : ""}
             </div>
           </div>
-          <div style="text-align:right;font-size:11px;color:${ink};opacity:.85;">
+          <div style="text-align:right;font-size:11px;color:${ink};opacity:.9;">
             ${docBadge}
             <div style="margin-top:4px;">${JBJ_BRAND.phone}</div>
             <div>${JBJ_BRAND.email}</div>
