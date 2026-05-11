@@ -34,13 +34,29 @@ import PrintBlockerGuard from "@/components/PrintBlockerGuard";
 // import BrandIntroSplash from "@/components/BrandIntroSplash";
 
 // ── Route Groups ──
-import { StandaloneRoutes } from "@/routes/StandaloneRoutes";
-import { OwnerRoutes } from "@/routes/OwnerRoutes";
+// PublicRoutes stays eager (owns "/" and is needed on first paint).
+// All other bundles are lazy-loaded to shrink the initial JS payload,
+// which prevents the Lovable preview shell from showing
+// "We're getting things ready" on cold start.
 import { PublicRoutes } from "@/routes/PublicRoutes";
-import { AIToolRoutes } from "@/routes/AIToolRoutes";
-import { AdminRoutes } from "@/routes/AdminRoutes";
-import { ToolkitRoutes } from "@/routes/ToolkitRoutes";
-import { DeveloperHubRoutes } from "@/routes/DeveloperHubRoutes";
+const StandaloneRoutes = lazy(() =>
+  import("@/routes/StandaloneRoutes").then((m) => ({ default: () => <>{m.StandaloneRoutes()}</> })),
+);
+const OwnerRoutes = lazy(() =>
+  import("@/routes/OwnerRoutes").then((m) => ({ default: () => <>{m.OwnerRoutes()}</> })),
+);
+const AIToolRoutes = lazy(() =>
+  import("@/routes/AIToolRoutes").then((m) => ({ default: () => <>{m.AIToolRoutes()}</> })),
+);
+const AdminRoutes = lazy(() =>
+  import("@/routes/AdminRoutes").then((m) => ({ default: () => <>{m.AdminRoutes()}</> })),
+);
+const ToolkitRoutes = lazy(() =>
+  import("@/routes/ToolkitRoutes").then((m) => ({ default: () => <>{m.ToolkitRoutes()}</> })),
+);
+const DeveloperHubRoutes = lazy(() =>
+  import("@/routes/DeveloperHubRoutes").then((m) => ({ default: () => <>{m.DeveloperHubRoutes()}</> })),
+);
 
 // ── QueryClient ──
 const queryClient = new QueryClient({
