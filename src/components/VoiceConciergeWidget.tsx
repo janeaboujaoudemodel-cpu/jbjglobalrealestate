@@ -214,10 +214,8 @@ const VoiceConciergeWidget = () => {
 
   const isConnected = conversation.status === "connected";
 
-  // Don't render until we know auth status
-  if (isAuthenticated === null) {
-    return null;
-  }
+  // Render immediately — don't wait for auth check (prevents blank/invisible widget).
+  // The button itself swaps to "Login to speak" once we know the user isn't authenticated.
 
   // Minimized state - small phone icon button (no pulse, no text)
   if (isMinimized) {
