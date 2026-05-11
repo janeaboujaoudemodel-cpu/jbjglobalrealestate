@@ -82,8 +82,9 @@ const fmtDateDDMMYYYY = (raw: string) => {
 const dateBox = (raw: string) => {
   const [d, m, y] = fmtDateDDMMYYYY(raw);
   const cell = (v: string, ph: string) =>
-    `<span style="display:inline-block;min-width:32px;text-align:center;border-bottom:1px solid #B89555;padding:1px 4px;font-size:12px;color:${v ? "#1A1A1A" : "#1A1A1A66"};">${v || ph}</span>`;
-  return `${cell(d, "DD")}<span style="opacity:.4;margin:0 4px;">/</span>${cell(m, "MM")}<span style="opacity:.4;margin:0 4px;">/</span>${cell(y, "YYYY")}`;
+    `<span style="display:inline-block;min-width:32px;text-align:center;padding:1px 4px;font-size:12px;color:${v ? "#1A1A1A" : "#1A1A1A66"};">${v || ph}</span>`;
+  // Single continuous gold hairline under DD / MM / YYYY — no per-cell underline.
+  return `<span style="display:inline-block;border-bottom:1px solid #B89555;padding-bottom:2px;white-space:nowrap;">${cell(d, "DD")}<span style="opacity:.4;margin:0 4px;">/</span>${cell(m, "MM")}<span style="opacity:.4;margin:0 4px;">/</span>${cell(y, "YYYY")}</span>`;
 };
 
 const radioChip = (label: string, selected: boolean) => `
@@ -148,18 +149,18 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string) => {
   switch (headerStyle) {
     case "wordmark-only":
       return `
-        <div style="text-align:center;border-bottom:1px solid ${accent};padding-bottom:14px;margin-bottom:24px;">
-          <div style="font-size:22px;letter-spacing:.24em;font-weight:700;color:${ink};">${JBJ_BRAND.company}</div>
-          ${docBadge ? `<div style="margin-top:6px;">${docBadge}</div>` : ""}
+        <div style="text-align:center;border-bottom:1px solid ${accent};padding-bottom:18px;margin-bottom:26px;">
+          <div style="font-size:28px;letter-spacing:.26em;font-weight:800;color:${ink};">${JBJ_BRAND.company}</div>
+          ${docBadge ? `<div style="margin-top:8px;font-size:12px;">${docBadge}</div>` : ""}
         </div>`;
     case "crest-address":
       return `
-        <div style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid ${accent};padding-bottom:14px;margin-bottom:24px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid ${accent};padding-bottom:18px;margin-bottom:26px;">
           <div>
-            <div style="width:38px;height:38px;border:1px solid ${accent};display:flex;align-items:center;justify-content:center;font-weight:800;letter-spacing:.06em;color:${ink};font-size:14px;">JBJ</div>
-            <div style="font-size:18px;letter-spacing:.18em;font-weight:700;margin-top:8px;color:${ink};">${JBJ_BRAND.company}</div>
+            <div style="width:54px;height:54px;border:1px solid ${accent};display:flex;align-items:center;justify-content:center;font-weight:800;letter-spacing:.06em;color:${ink};font-size:18px;">JBJ</div>
+            <div style="font-size:22px;letter-spacing:.2em;font-weight:700;margin-top:10px;color:${ink};">${JBJ_BRAND.company}</div>
           </div>
-          <div style="text-align:right;font-size:11px;color:${ink};opacity:.85;">
+          <div style="text-align:right;font-size:12.5px;line-height:1.5;color:${ink};opacity:.9;">
             ${docBadge}
             <div>One Central · DIFC · Dubai, UAE</div>
             <div>${JBJ_BRAND.phone}</div>
@@ -168,24 +169,24 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string) => {
         </div>`;
     case "minimal-hairline":
       return `
-        <div style="border-bottom:1px solid ${accent};padding-bottom:8px;margin-bottom:22px;display:flex;justify-content:space-between;align-items:flex-end;">
-          <div style="font-size:14px;letter-spacing:.28em;font-weight:600;color:${ink};">${JBJ_BRAND.company}</div>
+        <div style="border-bottom:1px solid ${accent};padding-bottom:12px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:flex-end;">
+          <div style="font-size:18px;letter-spacing:.3em;font-weight:700;color:${ink};">${JBJ_BRAND.company}</div>
           ${docBadge}
         </div>`;
     case "monogram-wordmark":
     default:
       return `
-        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid ${accent};padding-bottom:14px;margin-bottom:24px;">
-          <div style="display:flex;align-items:center;gap:16px;">
-            <img src="${JBJ_BRAND.monogram}" alt="JBJ Global Real Estate" crossorigin="anonymous" style="width:140px;height:auto;max-height:72px;object-fit:contain;display:block;" />
-            <div style="border-left:1px solid ${accent};padding-left:14px;">
-              <div style="font-size:10px;letter-spacing:.16em;color:${ink};opacity:.85;">${esc(JBJ_BRAND.legalCompany)}</div>
-              ${JBJ_BRAND.office ? `<div style="font-size:9.5px;letter-spacing:.12em;color:${ink};opacity:.7;margin-top:2px;">${esc(JBJ_BRAND.office)}</div>` : ""}
+        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid ${accent};padding-bottom:18px;margin-bottom:26px;">
+          <div style="display:flex;align-items:center;gap:20px;">
+            <img src="${JBJ_BRAND.monogram}" alt="JBJ Global Real Estate" crossorigin="anonymous" style="width:200px;height:auto;max-height:108px;object-fit:contain;display:block;" />
+            <div style="border-left:1px solid ${accent};padding-left:18px;">
+              <div style="font-size:13px;font-weight:600;letter-spacing:.16em;color:${ink};">${esc(JBJ_BRAND.legalCompany)}</div>
+              ${JBJ_BRAND.office ? `<div style="font-size:11px;letter-spacing:.12em;color:${ink};opacity:.8;margin-top:4px;">${esc(JBJ_BRAND.office)}</div>` : ""}
             </div>
           </div>
-          <div style="text-align:right;font-size:11px;color:${ink};opacity:.9;">
+          <div style="text-align:right;font-size:12.5px;line-height:1.55;color:${ink};">
             ${docBadge}
-            <div style="margin-top:4px;">${JBJ_BRAND.phone}</div>
+            <div style="margin-top:6px;">${JBJ_BRAND.phone}</div>
             <div>${JBJ_BRAND.email}</div>
             <div>${JBJ_BRAND.website}</div>
           </div>
@@ -195,29 +196,29 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string) => {
 
 const footerHtml = (chrome: Required<TemplateChrome>) => {
   const { accent, ink, footerStyle, tagline, trn, license } = chrome;
-  const base = `margin-top:36px;padding-top:14px;border-top:1px solid ${accent};font-size:10.5px;color:${ink};opacity:.78;`;
+  const base = `margin-top:44px;padding-top:18px;border-top:1px solid ${accent};font-size:12px;color:${ink};line-height:1.5;`;
   switch (footerStyle) {
     case "centered-tagline":
       return `
         <div style="${base}text-align:center;letter-spacing:.18em;text-transform:uppercase;">
-          <div style="font-weight:600;">${esc(tagline)}</div>
-          <div style="margin-top:4px;">${JBJ_BRAND.email} · ${JBJ_BRAND.website} · ${JBJ_BRAND.phone}</div>
+          <div style="font-weight:700;font-size:12.5px;">${esc(tagline)}</div>
+          <div style="margin-top:6px;opacity:.85;">${JBJ_BRAND.email} · ${JBJ_BRAND.website} · ${JBJ_BRAND.phone}</div>
         </div>`;
     case "compliance-bar":
       return `
-        <div style="${base}display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-          <div>${JBJ_BRAND.company}</div>
+        <div style="${base}display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+          <div style="font-weight:700;">${JBJ_BRAND.company}</div>
           <div>${trn ? `TRN ${esc(trn)} · ` : ""}${license ? `LIC ${esc(license)} · ` : ""}${JBJ_BRAND.email} · ${JBJ_BRAND.website}</div>
         </div>`;
     case "three-column":
     default:
       return `
-        <div style="${base}display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:18px;align-items:center;">
-          <div style="display:flex;align-items:center;gap:10px;">
-            <img src="${JBJ_BRAND.monogram}" alt="JBJ Global Real Estate" crossorigin="anonymous" style="width:64px;height:auto;max-height:38px;object-fit:contain;display:block;flex:none;" />
+        <div style="${base}display:grid;grid-template-columns:1.3fr 1fr 1.1fr;gap:20px;align-items:center;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <img src="${JBJ_BRAND.monogram}" alt="JBJ Global Real Estate" crossorigin="anonymous" style="width:110px;height:auto;max-height:60px;object-fit:contain;display:block;flex:none;" />
             <div>
-              <div style="font-weight:700;letter-spacing:.14em;font-size:10px;opacity:.9;">${esc(JBJ_BRAND.legalCompany)}</div>
-              ${JBJ_BRAND.office ? `<div style="opacity:.7;margin-top:2px;">${esc(JBJ_BRAND.office)}</div>` : ""}
+              <div style="font-weight:700;letter-spacing:.14em;font-size:12px;">${esc(JBJ_BRAND.legalCompany)}</div>
+              ${JBJ_BRAND.office ? `<div style="opacity:.8;margin-top:3px;font-size:11px;">${esc(JBJ_BRAND.office)}</div>` : ""}
             </div>
           </div>
           <div style="text-align:center;">
@@ -225,8 +226,8 @@ const footerHtml = (chrome: Required<TemplateChrome>) => {
             <div>${JBJ_BRAND.website}</div>
           </div>
           <div style="text-align:right;">
-            <div>${JBJ_BRAND.phone}</div>
-            <div style="opacity:.7;margin-top:2px;">LIC 1591031 · DCCI 666113 · CR 2789619${trn ? ` · TRN ${esc(trn)}` : ""}${license && license !== "1591031" ? ` · ${esc(license)}` : ""}</div>
+            <div style="font-weight:600;">${JBJ_BRAND.phone}</div>
+            <div style="opacity:.85;margin-top:3px;font-size:11.5px;">LIC 1591031 · DCCI 666113 · CR 2789619${trn ? ` · TRN ${esc(trn)}` : ""}${license && license !== "1591031" ? ` · ${esc(license)}` : ""}</div>
           </div>
         </div>`;
   }
