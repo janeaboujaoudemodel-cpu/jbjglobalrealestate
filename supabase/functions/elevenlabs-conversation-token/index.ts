@@ -74,8 +74,6 @@ serve(async (req) => {
       );
     }
 
-    const data = await response.json();
-
     return new Response(
       JSON.stringify({ token: data.token }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
