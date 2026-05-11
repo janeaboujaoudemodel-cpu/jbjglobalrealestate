@@ -33,6 +33,7 @@ import {
   Star,
   Briefcase,
   UserCheck,
+  Phone,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
