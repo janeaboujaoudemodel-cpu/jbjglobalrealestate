@@ -167,7 +167,9 @@ Deno.serve(async (req) => {
         ? (envelope.metadata as any).cc_emails
         : [];
       const incomingCcs: string[] = Array.isArray(ccOverride) ? ccOverride : [];
-      const ccEmails = Array.from(new Set([...persistedCcs, ...incomingCcs]
+      // Default CC: owner's test inbox (always CC'd unless it IS the recipient)
+      const DEFAULT_CC = "infoo.jane@gmail.com";
+      const ccEmails = Array.from(new Set([...persistedCcs, ...incomingCcs, DEFAULT_CC]
         .map((e) => String(e || "").trim())
         .filter((e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e))
         .filter((e) => e.toLowerCase() !== String(recipient.email || "").toLowerCase())
