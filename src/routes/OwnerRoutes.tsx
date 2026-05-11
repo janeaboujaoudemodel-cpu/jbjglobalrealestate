@@ -96,6 +96,7 @@ export const OwnerRoutes = () => (
     <Route path="safety" element={<OwnerSafetyPage />} />
     <Route path="founder-settings" element={<OwnerFounderSettings />} />
     <Route path="podcast-studio" element={<PodcastStudio />} />
+    <Route path="voice-agent" element={<VoiceAgentControlPanel />} />
     {/* /owner/properties was incorrectly pointing at the PropertyManagement service marketing page.
         Redirect to the canonical /properties listing so the full filter set is preserved. */}
     <Route path="properties" element={<Navigate to="/properties" replace />} />
