@@ -189,7 +189,7 @@ Deno.serve(async (req) => {
             method: "POST",
             headers: { "Authorization": `Bearer ${resendApiKey}`, "Content-Type": "application/json" },
             body: JSON.stringify({
-              from: "JBJ Global Real Estate <contact@jbj.ae>",
+              from: "JBJ Global Real Estate <noreply@jbj.ae>",
               to: [recipient.email],
               cc: ccEmails,
               bcc: bccEmails,
