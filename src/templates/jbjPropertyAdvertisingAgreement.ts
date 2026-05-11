@@ -351,8 +351,7 @@ export function buildPAAHtml(
     <div style="width:64px;height:1px;background:#B89555;margin:10px auto 0;"></div>
   </div>
   <p style="font-size:12px;color:${ink};opacity:.78;margin:8px 0 4px;">
-    As a property owner or landlord, you are partnering with <strong>JBJ Global Real Estate</strong> — a private office offering
-    maximum exposure and trusted representation to sell or lease your property at the best terms in the shortest time.
+    As a property owner or landlord, you are partnering with <strong>JBJ Global Real Estate</strong> to advertise and represent your property for sale or lease at the best terms in the shortest time.
   </p>
   <p style="font-size:12px;color:${ink};opacity:.78;margin:0 0 4px;">
     By signing this document and providing the details below, your property will be advertised across JBJ's premium portals,
