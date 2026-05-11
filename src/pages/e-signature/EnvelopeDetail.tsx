@@ -153,7 +153,7 @@ export default function EnvelopeDetail() {
     return renderTemplateHtml(
       envelope.template_key,
       { ...vals, doc_number: vals.doc_number || docNumber },
-      { chrome, ownerSignatureUrl, ownerStampUrl, hiddenFields },
+      { chrome, ownerSignatureUrl, ownerStampUrl, hiddenFields, renderMode: editing ? "edit" : "final" },
     );
   }, [envelope?.template_key, envelope?.template_field_values, editing, editValues, docNumber, chrome, ownerSignatureUrl, ownerStampUrl, hiddenFields]);
 
