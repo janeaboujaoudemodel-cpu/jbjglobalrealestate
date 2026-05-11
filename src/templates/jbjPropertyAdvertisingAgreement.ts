@@ -196,29 +196,29 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string) => {
 
 const footerHtml = (chrome: Required<TemplateChrome>) => {
   const { accent, ink, footerStyle, tagline, trn, license } = chrome;
-  const base = `margin-top:36px;padding-top:14px;border-top:1px solid ${accent};font-size:10.5px;color:${ink};opacity:.78;`;
+  const base = `margin-top:44px;padding-top:18px;border-top:1px solid ${accent};font-size:12px;color:${ink};line-height:1.5;`;
   switch (footerStyle) {
     case "centered-tagline":
       return `
         <div style="${base}text-align:center;letter-spacing:.18em;text-transform:uppercase;">
-          <div style="font-weight:600;">${esc(tagline)}</div>
-          <div style="margin-top:4px;">${JBJ_BRAND.email} · ${JBJ_BRAND.website} · ${JBJ_BRAND.phone}</div>
+          <div style="font-weight:700;font-size:12.5px;">${esc(tagline)}</div>
+          <div style="margin-top:6px;opacity:.85;">${JBJ_BRAND.email} · ${JBJ_BRAND.website} · ${JBJ_BRAND.phone}</div>
         </div>`;
     case "compliance-bar":
       return `
-        <div style="${base}display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-          <div>${JBJ_BRAND.company}</div>
+        <div style="${base}display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+          <div style="font-weight:700;">${JBJ_BRAND.company}</div>
           <div>${trn ? `TRN ${esc(trn)} · ` : ""}${license ? `LIC ${esc(license)} · ` : ""}${JBJ_BRAND.email} · ${JBJ_BRAND.website}</div>
         </div>`;
     case "three-column":
     default:
       return `
-        <div style="${base}display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:18px;align-items:center;">
-          <div style="display:flex;align-items:center;gap:10px;">
-            <img src="${JBJ_BRAND.monogram}" alt="JBJ Global Real Estate" crossorigin="anonymous" style="width:64px;height:auto;max-height:38px;object-fit:contain;display:block;flex:none;" />
+        <div style="${base}display:grid;grid-template-columns:1.3fr 1fr 1.1fr;gap:20px;align-items:center;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <img src="${JBJ_BRAND.monogram}" alt="JBJ Global Real Estate" crossorigin="anonymous" style="width:110px;height:auto;max-height:60px;object-fit:contain;display:block;flex:none;" />
             <div>
-              <div style="font-weight:700;letter-spacing:.14em;font-size:10px;opacity:.9;">${esc(JBJ_BRAND.legalCompany)}</div>
-              ${JBJ_BRAND.office ? `<div style="opacity:.7;margin-top:2px;">${esc(JBJ_BRAND.office)}</div>` : ""}
+              <div style="font-weight:700;letter-spacing:.14em;font-size:12px;">${esc(JBJ_BRAND.legalCompany)}</div>
+              ${JBJ_BRAND.office ? `<div style="opacity:.8;margin-top:3px;font-size:11px;">${esc(JBJ_BRAND.office)}</div>` : ""}
             </div>
           </div>
           <div style="text-align:center;">
@@ -226,8 +226,8 @@ const footerHtml = (chrome: Required<TemplateChrome>) => {
             <div>${JBJ_BRAND.website}</div>
           </div>
           <div style="text-align:right;">
-            <div>${JBJ_BRAND.phone}</div>
-            <div style="opacity:.7;margin-top:2px;">LIC 1591031 · DCCI 666113 · CR 2789619${trn ? ` · TRN ${esc(trn)}` : ""}${license && license !== "1591031" ? ` · ${esc(license)}` : ""}</div>
+            <div style="font-weight:600;">${JBJ_BRAND.phone}</div>
+            <div style="opacity:.85;margin-top:3px;font-size:11.5px;">LIC 1591031 · DCCI 666113 · CR 2789619${trn ? ` · TRN ${esc(trn)}` : ""}${license && license !== "1591031" ? ` · ${esc(license)}` : ""}</div>
           </div>
         </div>`;
   }
