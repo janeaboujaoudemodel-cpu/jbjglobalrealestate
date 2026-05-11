@@ -156,8 +156,10 @@ export default function IndividualBrokersTab() {
   const { data: brokerages = [] } = useQuery<{ id: string; company_name: string }[]>({
     queryKey: ["crm-brokerages-min"],
     queryFn: async () => {
+      // Cap brokerage dropdown source list to 2 000 rows — used for a combobox,
+      // not an export. Avoids the previous 50 000-row sweep on every render.
       const all: any[] = [];
-      for (let from = 0; ; from += 1000) {
+      for (let from = 0; from < 2000; from += 1000) {
         const { data, error } = await (supabase as any)
           .from("crm_brokerages")
           .select("id, company_name")
@@ -167,10 +169,10 @@ export default function IndividualBrokersTab() {
         const batch = data ?? [];
         all.push(...batch);
         if (batch.length < 1000) break;
-        if (from > 50_000) break;
       }
       return all;
     },
+    staleTime: 5 * 60_000,
   });
 
   const { data: countries = [] } = useQuery<string[]>({

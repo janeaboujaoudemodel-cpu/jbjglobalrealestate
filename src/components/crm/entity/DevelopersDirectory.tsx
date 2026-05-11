@@ -113,7 +113,9 @@ export default function DevelopersDirectory() {
         const all: DeveloperRow[] = [];
         let from = 0;
         const PAGE = 1000;
-        for (let i = 0; i < 5; i++) {
+        // Cap initial load at 2 batches (2 000 rows) — the UI is search/scroll, not export.
+        // Previously this pulled up to 5 000 rows on every mount which made Developers tab feel frozen.
+        for (let i = 0; i < 2; i++) {
           const { data, error } = await supabase
             .from("developers")
             .select(SELECT)
