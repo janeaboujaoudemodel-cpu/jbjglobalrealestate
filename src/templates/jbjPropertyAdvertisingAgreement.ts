@@ -6,7 +6,6 @@
  */
 
 import monogramUrl from "@/assets/jbj-fulllogo-light-bg.png";
-import footerMarkUrl from "@/assets/jbj-fulllogo-light-bg.png";
 import {
   TRADE_LICENSE_BRAND,
   TRADE_LICENSE_LEGAL_NAME,
