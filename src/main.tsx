@@ -2,6 +2,12 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
+import { installWhatsAppGuard } from "@/utils/whatsappGuard";
+
+// Site-wide guard: every WhatsApp link is normalized to wa.me with sanitized
+// digits. Prevents api.whatsapp.com / web.whatsapp.com (often blocked) and
+// guarantees no callsite can ship an unnormalized phone number.
+installWhatsAppGuard();
 
 // Declare the global flag type
 declare global {
