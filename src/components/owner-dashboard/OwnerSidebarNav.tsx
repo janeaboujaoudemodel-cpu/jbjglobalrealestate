@@ -124,6 +124,7 @@ const NAV_SECTIONS: NavSection[] = [
       { label: "Studio", icon: Video, path: "/owner/studio" },
       { label: "Founder & Podcast Control", icon: Users, path: "/owner/founder-settings" },
       { label: "Podcast Studio", icon: Headphones, path: "/owner/podcast-studio" },
+      { label: "Voice Agent", icon: Phone, path: "/owner/voice-agent" },
       { label: "Kanban Board", icon: Kanban, path: "/owner/kanban" },
       { label: "Marketing Hub", icon: Megaphone, path: "/owner/marketing-hub" },
     ],
