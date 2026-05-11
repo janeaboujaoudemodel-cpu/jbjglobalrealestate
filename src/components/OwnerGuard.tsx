@@ -147,9 +147,15 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
     return null;
   }
 
-  // If owner was already verified once this session, skip the splash entirely on
-  // subsequent (re)verifications — render children optimistically.
-  if ((authLoading || ownerLoading) && showLoading && ownerVerifiedOnce.current && !!user) {
+  // Optimistic render — if we already trust this user as owner (current flag,
+  // a previous successful verify this session, or a persisted localStorage cache),
+  // never block the route on a re-verification round-trip. The verify-owner call
+  // continues in the background and can still downgrade on a real email_mismatch.
+  if (
+    showLoading &&
+    !!user &&
+    (isOwner || ownerVerifiedOnce.current || hasCachedOwner)
+  ) {
     return <>{children}</>;
   }
 
