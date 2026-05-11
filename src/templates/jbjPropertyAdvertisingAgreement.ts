@@ -5,7 +5,8 @@
  * brand chrome. Header & footer are user-customisable via the `chrome` arg.
  */
 
-import monogramUrl from "@/assets/jbj-monogram-dark-on-light.png";
+import monogramUrl from "@/assets/jbj-fulllogo-light-bg.png";
+import footerMarkUrl from "@/assets/jbj-fulllogo-light-bg.png";
 import {
   TRADE_LICENSE_BRAND,
   TRADE_LICENSE_LEGAL_NAME,
