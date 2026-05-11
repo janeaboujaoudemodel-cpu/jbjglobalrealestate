@@ -39,6 +39,16 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
   const ownerVerifiedOnce = useRef<boolean>(
     typeof window !== "undefined" && sessionStorage.getItem("owner_verified_once") === "1"
   );
+  // Optimistic: trust a persistent localStorage cache for the current user.
+  const hasCachedOwner = (() => {
+    if (typeof window === "undefined" || !user?.id) return false;
+    try {
+      const raw = localStorage.getItem(`owner_v2_${user.id}`);
+      if (!raw) return false;
+      const parsed = JSON.parse(raw);
+      return parsed?.ok === true;
+    } catch { return false; }
+  })();
   useEffect(() => {
     if (isOwner) {
       ownerVerifiedOnce.current = true;
