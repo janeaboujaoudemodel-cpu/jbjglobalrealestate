@@ -16,7 +16,8 @@ import { join, extname } from "node:path";
 
 const ROOT = "src";
 const EXT = new Set([".ts", ".tsx", ".js", ".jsx"]);
-const BANNED = /\b(?:api|web)\.whatsapp\.com\b/i;
+// Match actual URLs only, not narrative mentions in comments/strings.
+const BANNED = /\b(?:https?:)?\/\/(?:api|web)\.whatsapp\.com\b/i;
 // Files allowed to mention the banned hosts in *comments* (the guard + this script).
 const ALLOWLIST = new Set([
   "src/utils/whatsappGuard.ts",
