@@ -7,6 +7,26 @@ import { Route, Navigate } from "react-router-dom";
 import RouteErrorBoundary from "@/components/RouteErrorBoundary";
 import PageLoader from "@/components/PageLoader";
 
+/** Branded fallback shown immediately while the SignDocument chunk loads —
+ *  prevents the "white blank page" between clicking the email link and the
+ *  signing UI mounting its own internal loader. */
+function SigningPageFallback() {
+  return (
+    <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-4">
+      <div className="w-full max-w-lg bg-[#F7F2EA] border border-[#B89555]/30 rounded-md p-8 text-center">
+        <div className="w-10 h-10 rounded-full border-2 border-[#B89555]/30 border-t-[#B89555] animate-spin mx-auto mb-5" />
+        <div className="text-[11px] tracking-[0.22em] uppercase text-[#1A1A1A]/60 mb-2">
+          JBJ Global Real Estate
+        </div>
+        <div className="text-[15px] font-semibold text-[#1A1A1A]">Loading your document…</div>
+        <div className="text-xs text-[#1A1A1A]/60 mt-2">
+          Verifying your secure signing link.
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const Auth = lazy(() => import("@/pages/Auth"));
 const Welcome = lazy(() => import("@/pages/Welcome"));
 const AccessDenied = lazy(() => import("@/pages/AccessDenied"));
