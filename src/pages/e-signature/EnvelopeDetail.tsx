@@ -153,7 +153,7 @@ export default function EnvelopeDetail() {
     return renderTemplateHtml(
       envelope.template_key,
       { ...vals, doc_number: vals.doc_number || docNumber },
-      { chrome, ownerSignatureUrl, ownerStampUrl, hiddenFields },
+      { chrome, ownerSignatureUrl, ownerStampUrl, hiddenFields, renderMode: editing ? "edit" : "final" },
     );
   }, [envelope?.template_key, envelope?.template_field_values, editing, editValues, docNumber, chrome, ownerSignatureUrl, ownerStampUrl, hiddenFields]);
 
@@ -364,19 +364,62 @@ export default function EnvelopeDetail() {
         ownerStampUrl,
         hiddenFields: next,
       });
-      toast.success(hide ? "Field removed" : "Field restored");
+      if (hide) {
+        toast.success("Field removed", {
+          action: { label: "Undo", onClick: () => toggleHiddenField(key, false) },
+        });
+      } else {
+        toast.success("Field restored");
+      }
       refetch();
     } catch (e: any) {
       toast.error(e?.message || "Failed to update");
     }
   };
 
-  // Listen for click-to-delete messages from the preview iframe.
+  const restoreAllHiddenFields = async () => {
+    if (!envelope?.template_key || !hiddenFields.length) return;
+    setHiddenFields([]);
+    try {
+      await regenerate.mutateAsync({
+        envelopeId: envelope.id,
+        templateKey: envelope.template_key,
+        values: { ...((envelope.template_field_values as any) || {}), doc_number: docNumber },
+        chrome,
+        ownerSignatureUrl,
+        ownerStampUrl,
+        hiddenFields: [],
+      });
+      toast.success("All removed fields restored");
+      refetch();
+    } catch (e: any) {
+      toast.error(e?.message || "Failed to restore");
+    }
+  };
+
+  // Listen for click-to-edit / click-to-delete / chip-set messages from the preview iframe.
   useEffect(() => {
     const onMsg = (e: MessageEvent) => {
       const data: any = e.data;
-      if (data?.type === "jbj-hide-field" && typeof data.key === "string") {
+      if (!data || typeof data.type !== "string") return;
+      if (data.type === "jbj-hide-field" && typeof data.key === "string") {
         toggleHiddenField(data.key, true);
+      } else if (data.type === "jbj-edit-field" && typeof data.key === "string") {
+        setEditing(true);
+        // Defer focus to the next paint so the sidebar input is mounted.
+        setTimeout(() => {
+          const el = document.querySelector<HTMLInputElement | HTMLTextAreaElement>(
+            `[data-edit-key="${CSS.escape(data.key)}"]`,
+          );
+          if (el) {
+            el.focus();
+            try { (el as HTMLInputElement).select?.(); } catch {}
+            el.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+        }, 50);
+      } else if (data.type === "jbj-set-field" && typeof data.key === "string" && typeof data.value === "string") {
+        setEditing(true);
+        setEditValues((prev) => ({ ...prev, [data.key]: data.value }));
       }
     };
     window.addEventListener("message", onMsg);
@@ -436,7 +479,44 @@ export default function EnvelopeDetail() {
   const clientRec = (envelope.esign_recipients || []).find((r: any) => r.metadata?.role === "client") || envelope.esign_recipients?.[0];
   const isDraft = envelope.status === "draft";
   const previewSrcDoc = previewHtml
-    ? `<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;padding:0;background:#fff;}[data-field-key]{cursor:pointer;transition:background .15s,outline .15s;border-radius:4px;}[data-field-key]:hover{background:#FDECEC;outline:1px dashed #d33;outline-offset:2px;}</style></head><body>${previewHtml}<script>document.addEventListener('click',function(e){var t=e.target;while(t&&t!==document.body){if(t.dataset&&t.dataset.fieldKey){e.preventDefault();e.stopPropagation();var label=(t.querySelector('div:last-child')||{}).textContent||t.dataset.fieldKey;if(confirm('Remove field "'+label.trim()+'" from the document?')){parent.postMessage({type:'jbj-hide-field',key:t.dataset.fieldKey},'*');}return;}t=t.parentNode;}});<\/script></body></html>`
+    ? `<!doctype html><html><head><meta charset="utf-8"><style>
+        html,body{margin:0;padding:0;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+        [data-field-key]{position:relative;cursor:text;transition:background .15s,outline .15s;border-radius:4px;}
+        [data-field-key]:hover{background:#FBF6EC;outline:1px dashed #B89555;outline-offset:2px;}
+        [data-chip-key]{cursor:pointer;border-radius:999px;transition:background .15s;}
+        [data-chip-key]:hover{background:#FBF6EC;}
+        .jbj-x{position:absolute;top:-9px;right:-9px;width:18px;height:18px;border-radius:999px;background:#FDFBF7;border:1px solid #B89555;color:#1A1A1A;font-size:11px;line-height:16px;text-align:center;cursor:pointer;display:none;font-family:Inter,Arial,sans-serif;font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08);user-select:none;}
+        [data-field-key]:hover > .jbj-x{display:block;}
+      </style></head><body>${previewHtml}<script>(function(){
+        var EDITABLE=${editing ? "true" : "false"};
+        // Inject hover X buttons on each editable field block.
+        document.querySelectorAll('[data-field-key]').forEach(function(el){
+          if (!EDITABLE) return;
+          if (el.querySelector(':scope > .jbj-x')) return;
+          var x=document.createElement('span');
+          x.className='jbj-x';x.textContent='×';x.title='Remove field';
+          x.addEventListener('click',function(ev){ev.preventDefault();ev.stopPropagation();parent.postMessage({type:'jbj-hide-field',key:el.dataset.fieldKey},'*');});
+          el.appendChild(x);
+        });
+        // Chip clicks set the field value in the parent editor.
+        document.addEventListener('click',function(e){
+          var t=e.target;
+          while(t&&t!==document.body){
+            if (t.dataset && t.dataset.chipKey){
+              e.preventDefault();e.stopPropagation();
+              if (!EDITABLE){ parent.postMessage({type:'jbj-edit-field',key:t.dataset.chipKey},'*'); return; }
+              parent.postMessage({type:'jbj-set-field',key:t.dataset.chipKey,value:t.dataset.chipValue||''},'*');
+              return;
+            }
+            if (t.dataset && t.dataset.fieldKey){
+              e.preventDefault();e.stopPropagation();
+              parent.postMessage({type:'jbj-edit-field',key:t.dataset.fieldKey},'*');
+              return;
+            }
+            t=t.parentNode;
+          }
+        });
+      })();<\/script></body></html>`
     : null;
 
   return (
@@ -767,8 +847,20 @@ export default function EnvelopeDetail() {
                 schemaHint="jbj_paa_leasing"
                 onExtracted={(fields) => setEditValues((prev) => ({ ...prev, ...fields }))}
               />
+              {hiddenFields.length > 0 && (
+                <div className="flex items-center gap-2 p-2 rounded border border-[#B89555]/40 bg-[#FDFBF7]">
+                  <span className="text-xs text-[#1A1A1A]/80">
+                    {hiddenFields.length} removed field{hiddenFields.length === 1 ? "" : "s"}
+                  </span>
+                  <Button size="sm" variant="gold" className="ml-auto h-7 text-[11px]" onClick={restoreAllHiddenFields}>
+                    Restore all
+                  </Button>
+                </div>
+              )}
               {PAA_FIELD_GROUPS.filter(g => g.title !== "Signatures").map((group) => {
-                const visible = group.fields.filter((f) => !f.conditional || f.conditional(editValues));
+                // Per user request: keep every Property Finder field visible in edit mode
+                // (don't drop conditional ones), so nothing is missing at signing time.
+                const visible = group.fields;
                 if (!visible.length) return null;
                 return (
                   <div key={group.title}>
@@ -777,11 +869,13 @@ export default function EnvelopeDetail() {
                       {visible.map((f) => {
                         const val = editValues[f.key] ?? "";
                         const onChange = (v: string) => setEditValues((prev) => ({ ...prev, [f.key]: v }));
+                        const conditionalHint = f.conditional && !f.conditional(editValues)
+                          ? " (only printed when applicable)" : "";
                         if (f.type === "select" && f.options) {
                           return (
                             <div key={f.key}>
-                              <Label className="text-xs">{f.label}</Label>
-                              <select value={val} onChange={(e) => onChange(e.target.value)} className="w-full h-9 px-2 rounded border border-[#B89555]/40 bg-white text-sm text-[#1A1A1A]">
+                              <Label className="text-xs">{f.label}{conditionalHint && <span className="text-[10px] text-[#1A1A1A]/50 ml-1">{conditionalHint}</span>}</Label>
+                              <select data-edit-key={f.key} value={val} onChange={(e) => onChange(e.target.value)} className="w-full h-9 px-2 rounded border border-[#B89555]/40 bg-white text-sm text-[#1A1A1A]">
                                 <option value="">—</option>
                                 {f.options.map((o) => <option key={o} value={o}>{o}</option>)}
                               </select>
@@ -792,7 +886,7 @@ export default function EnvelopeDetail() {
                           return (
                             <div key={f.key} className="col-span-2 md:col-span-3">
                               <Label className="text-xs">{f.label}</Label>
-                              <Textarea value={val} onChange={(e) => onChange(e.target.value)} rows={2} />
+                              <Textarea data-edit-key={f.key} value={val} onChange={(e) => onChange(e.target.value)} rows={2} />
                             </div>
                           );
                         }
@@ -802,6 +896,7 @@ export default function EnvelopeDetail() {
                               <Label className="text-xs">{f.label}</Label>
                               <div className="relative">
                                 <Input
+                                  data-edit-key={f.key}
                                   inputMode="numeric"
                                   value={val}
                                   onChange={(e) => onChange(e.target.value.replace(/[^\d]/g, ""))}
@@ -817,8 +912,8 @@ export default function EnvelopeDetail() {
                         }
                         return (
                           <div key={f.key}>
-                            <Label className="text-xs">{f.label}</Label>
-                            <Input type={f.type === "date" ? "date" : f.type === "number" ? "number" : "text"} value={val} onChange={(e) => onChange(e.target.value)} />
+                            <Label className="text-xs">{f.label}{conditionalHint && <span className="text-[10px] text-[#1A1A1A]/50 ml-1">{conditionalHint}</span>}</Label>
+                            <Input data-edit-key={f.key} type={f.type === "date" ? "date" : f.type === "number" ? "number" : "text"} value={val} onChange={(e) => onChange(e.target.value)} />
                           </div>
                         );
                       })}

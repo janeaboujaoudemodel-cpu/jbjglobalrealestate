@@ -242,7 +242,7 @@ export function useRegenerateEnvelopePdf() {
       const user = userData.user;
       if (!user) throw new Error("Not signed in");
 
-      const html = renderTemplateHtml(templateKey, values, { chrome, ownerSignatureUrl, ownerStampUrl, clientSignatureUrl, hiddenFields });
+      const html = renderTemplateHtml(templateKey, values, { chrome, ownerSignatureUrl, ownerStampUrl, clientSignatureUrl, hiddenFields, renderMode: "final" });
       const { blob } = await renderHtmlToPdfBlob(html);
 
       const docNumber = values.doc_number || "JBJ-DOC";

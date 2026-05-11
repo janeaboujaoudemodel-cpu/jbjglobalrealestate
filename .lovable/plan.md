@@ -1,68 +1,95 @@
-## Plan — Lead UX polish + Email Center roadmap continuation
+# Plan: Property Advertising Agreement — premium edit/export, smart auto‑fill, brand fixes
 
-### 1. Investor mark — visual + filter wiring
-- When a lead's `is_investor` is true:
-  - **Crown icon lights up gold** (`#B89555` fill + soft glow ring) in `LeadQuickActions` (already partially there; make it brighter + persistent across the row).
-  - **Row gets a thin gold left border** + a small "Investor" gold pill next to the name in every lead list (CRM Leads, Kanban card, Email Center sender chip).
-- Wire to filters:
-  - In CRM Leads top bar, the existing **Investors** sub-tab (and `ContactTypeFilter` "Investors" option) will read `is_investor = true` in addition to category, so any lead marked from anywhere instantly appears under Investors.
-  - Add `is_investor` to the `vw_crm_contacts` view payload so the Relationships → Investors tab also picks it up.
+## 1. Brand chrome (header / footer)
 
-### 2. Lead-aware quick actions (Calendar / Note / Task / Reminder)
-Today the popovers only carry `leadId`. Change to carry the full lead context (`full_name`, `phone`, `email`) so every artifact is auto-stamped:
-- **Calendar event**: title prefilled `Meeting with {full_name}`, description includes phone + email, `metadata.lead = { id, full_name, phone, email }`.
-- **Note**: body header auto-inserts `— re: {full_name} ({phone} · {email})` so notes are searchable without joins.
-- **Task / Reminder**: title prefilled `Follow up with {full_name}`, `metadata.lead_contact` carries phone/email; due reminder uses lead's preferred channel.
-- Source of truth: pass the full lead object from `crm_leads` row down into `LeadQuickActions` (currently only `leadId` + `leadName`).
+- **Switch the document logo from the gold "JBJ" monogram to the real full company logo**
+  - Replace `monogramUrl` import in `src/templates/jbjPropertyAdvertisingAgreement.ts` with `jbj-fulllogo-light-bg.png` (or `jbj-fulllogo-light.png`) so header *and* footer use the real wordmark+icon lockup.
+  - Increase the header logo box (around 130×56) so the logo isn't a tiny square.
+- **Office line** stays from `src/config/companyLegal.ts` (`Office SM1-195, Port Saeed, Deira, Dubai, UAE`) — this already matches the uploaded trade license. No edit needed there, except making sure the office line is what appears in the header (not a generic "Downtown Dubai · DIFC" placeholder).
+- **Trade license metadata** to surface in the footer compliance line: `LIC 1591031 · DCCI 666113 · CR 2789619`.
 
-### 3. Clickable lead names → CRM detail
-- Every place a lead's name renders (Leads list, Kanban cards, Email Center sender, Tasks list, Calendar event card, Notes panel, Dashboard widgets) becomes a `<Link>` to `/owner/crm?section=leads&leadId={id}` which auto-opens the **Lead Detail drawer** with status editor, notes, tasks, email thread.
-- Add a tiny `useOpenLead(id)` hook that pushes the query param so we don't duplicate routing logic.
-- Style: keep ink color, underline-on-hover with a 1px gold hairline (no faded gold text).
+## 2. Intro copy cleanup
 
-### 4. Email Center — archive previously misclassified items
-Context: When we tightened the real-estate filter, ~older emails that no longer match the strict rules are still in `email_inbox_items`. Plan:
-- Add a column `is_archived boolean default false` + `archived_reason text` to `email_inbox_items`.
-- On next **Sync inbox now**, run a one-shot reclassification: anything that fails the new `RE_SIGNALS` test AND isn't already linked to a contract/registration gets `is_archived = true, archived_reason = 'non_real_estate'`.
-- UI: archived items hidden from all category tabs by default; a small "Archived (N)" link in the Email Center toolbar opens a read-only drawer so you can review what was hidden and restore any false-positive with one click.
-- **Nothing is deleted.** This is a soft archive — full audit trail preserved.
+In `buildPAAHtml` opening paragraphs:
 
-### 5. Continue the roadmap (from prior plan, still pending)
+- Remove the phrase *"a private office offering"*.
+- Remove the en‑dash ("—") that visually reads as an underscore between **JBJ Global Real Estate** and the next clause. Replace with a normal period/sentence break.
+- New opening reads (plain, no marketing fluff):
+  > As a property owner or landlord, you are partnering with **JBJ Global Real Estate** to advertise and represent your property for sale or lease at the best terms in the shortest time.
+- Keep the next two paragraphs (verified listing + exposure) as they are.
 
-**5a. Registration reconfirmation loop (7-day)**
-- New table `developer_registration_confirmations` (developer_id, sent_at, confirmed_at, reminder_count, status).
-- Edge function `check-registration-confirmations` runs daily via cron:
-  - If no reply after 7 days → auto-fire reminder #1.
-  - After 14 days → reminder #2 + flag lead as `needs_attention` in CRM.
-  - On any inbound reply detected by `classify-jbj-inbox` matching the developer's domain → mark `confirmed_at`, flip developer record `registered = true`.
+## 3. Property Details — interactive chips + auto‑hide
 
-**5b. Email → Project listing pipeline**
-- In `classify-jbj-inbox`, when category is `new_launches` or `projects_inventory`:
-  - Extract attached PDFs/links into `extracted_documents jsonb`.
-  - Try to match an existing project by name + developer; if match → attach docs and bump `last_updated_from_email`.
-  - If no match → create a **draft listing** (status=`pending_review`) and queue deep-research enrichment.
-  - Surface in Email Center as a "Project detected → Attach / Create draft" pill.
+Currently the radio chips ("Villa / Apartment / Office / Warehouse" and "Vacant / Tenanted") are **render‑only**: they show the selected dot but the user can't click them in the preview, and on export *all* options stay visible.
 
-**5c. Commission email → ledger**
-- Category `commission` triggers attaching the email + any PDF to the developer's commission ledger entry (best-match by deal reference in subject/body).
+- Make all chips (`propTypeChip`, `statusChip`, `furnChip`, `exclusivityChip`, `periodChip`) clickable in **edit mode** inside the iframe preview by attaching `data-field-key` and a `data-field-value`, then posting a `jbj-set-field` message back to the parent on click.
+- In **edit mode**: clicking a chip just updates that field's value in `editValues` (so the user can change their mind, see all options).
+- In **export / view mode** (i.e. the saved/sent PDF render): once a chip is selected, render **only the selected option** as a clean inline value (e.g. `Property Type: Apartment` with a thin gold underline) and drop the other chips. Same rule for Status, Furnishing, Exclusivity and Listing Period.
+- This is driven by a new `opts.renderMode: "edit" | "final"` flag in `buildPAAHtml`. `EnvelopeDetail` passes `"edit"` while `editing === true`, `"final"` when generating the saved document.
 
-**5d. Communication Hub dedup**
-- Replace the generic "Email" tab inside Communication Hub (owner role) with a link card → "Open Email Command Center". Other channels (WhatsApp, Slack, Telegram, etc.) stay in the Hub.
+## 4. Right‑sized underlines
 
-### 6. Order of work
-1. Investor crown gold + filter wiring (frontend only, ~15 min)
-2. Lead-aware quick actions + clickable names (frontend, ~25 min)
-3. Migration: add `is_archived`, `archived_reason` to `email_inbox_items` + `developer_registration_confirmations` table
-4. Reclassify-on-sync (archive purge) inside `classify-jbj-inbox`
-5. `email-side-effects` edge function (project attach/create, commission ledger, registration confirm flip)
-6. Cron `check-registration-confirmations` (7/14-day loop)
-7. Communication Hub dedup card
-8. End-to-end test against `infoo.jane@gmail.com`
+`fieldUnderline` sets `min-width:120px` which is why short values get a long trailing line (the user called this out for *Al Tajer*).
 
-### Technical notes
-- All DB writes RLS-scoped to `requireOwnerAuth`.
-- Crown gold uses existing token `#B89555` (1px hairline + 6% glow ring — no solid gold fill on the row, per design rules).
-- Lead name links use existing `/owner/crm` route with `?section=leads&leadId=` param already supported by `UnifiedCRM`.
-- No new dependencies.
+- Drop the `min-width:120px`, replace with `min-width: 1ch` and let the inline‑block hug its content. Add a small left/right padding so very short text isn't cramped.
+- For currency / numeric fields keep right‑alignment within the underline.
 
-Approve and I'll execute steps 1→8 in sequence.
+## 5. Vacating date — always editable
+
+- Keep `vacating_date` visible in the edit sidebar **unconditionally** (today it's hidden under a `conditional`). The smart auto‑infer (future date ⇒ Tenanted) stays, but the field is always typeable.
+- Pre‑filled with the example the user just dictated for this lead: `2026‑05‑24` (entered as `24/05/2026`). They asked for it to be editable any time — the sidebar input is the source of truth.
+
+## 6. Keep every Property Finder field — even when blank in edit mode
+
+User rule: in the editor every field stays visible (so nothing gets dropped at signing time), but in the **final / sent PDF**:
+
+- Selected single‑choice options collapse to a single clean line.
+- Empty text fields with no value are hidden from the final render (already behaves this way).
+- Conditional fields (Plot Number, Vacating Date, "Until" date) collapse based on rules.
+
+In edit mode every field from `PAA_FIELD_GROUPS` is rendered in the form sidebar regardless of `conditional`, but conditionals are shown as soft hints ("only included if Tenanted").
+
+## 7. Click‑to‑edit, not click‑to‑delete (the main bug)
+
+Today: clicking any field in the preview iframe triggers `confirm("Remove field ...?")`. This is what destroyed two fields on Omar Alam Niyazi Shadid.
+
+New UX:
+
+- Hovering a `[data-field-key]` block in the preview shows:
+  - A subtle gold dashed outline (current behaviour, but champagne tone, not red).
+  - A small **× button** anchored to the top‑right of the field box (8 × 8 px, ink on cream, thin gold border).
+- **Clicking the field body** → posts `{type: "jbj-edit-field", key}` to parent. Parent opens the sidebar in edit mode and focuses the matching input.
+- **Clicking the × button** → posts `{type: "jbj-hide-field", key}` (current behaviour) — *no native `confirm()`*. Instead a sonner toast appears with **Undo** that calls `toggleHiddenField(key, false)`.
+- Update both `previewSrcDoc` script and the `useEffect` message listener accordingly.
+
+## 8. Restore Omar Alam Niyazi Shadid's accidentally‑deleted fields
+
+- One‑off fix: locate the envelope by client name and clear the `metadata.hiddenFields` array (set to `[]`) so every hidden field reappears.
+- Done via a small admin button on the envelope page — **"Restore all removed fields"** — visible only when `metadata.hiddenFields?.length > 0`. Clicking it sets `hiddenFields = []` and re‑renders the document. This is safer than a blanket migration because the same fix is available for any future envelope.
+
+## 9. Faster, more premium editing & export
+
+Editor loop:
+
+- Debounce live preview re‑renders 250 ms instead of regenerating on every keystroke (today every field change calls `buildPAAHtml` on the main thread).
+- Render preview as a memoised HTML string keyed on `JSON.stringify(editValues) + hiddenFields + chrome`.
+- "Save & re‑render" → call `regenerate` once with the final values, show a small progress chip rather than disabling the whole panel.
+
+Export view:
+
+- Convert the preview iframe to use `print-color-adjust: exact` so colours don't shift in the printed PDF.
+- Increase content width to 794 px (A4) and centre it; current 44 × 52 padding stays.
+- Set page break rules so Sections 1/2 stay together, Terms starts on a new page only if it would split badly.
+
+## Files we'll touch
+
+- `src/templates/jbjPropertyAdvertisingAgreement.ts` — logo, intro copy, render modes, chip rendering, underline width, footer compliance line.
+- `src/pages/e-signature/EnvelopeDetail.tsx` — iframe click script, message handlers (`jbj-edit-field` + `jbj-hide-field` + undo toast), restore‑all button, debounced preview, focus‑into‑sidebar.
+- `src/pages/owner/DocumentsFormsHub.tsx` — no functional change beyond passing through `template_field_values`.
+- `src/config/companyLegal.ts` — no change (already matches trade license).
+- No database migration needed.
+
+## Out of scope (for this round)
+
+- Re‑typesetting the Terms & Conditions clauses. They already match the Property Finder standard text the user shared; if they want exact byte‑for‑byte parity I'll do that as a follow‑up with their PF copy in hand.
+- Multi‑page selling‑side template (`jbjListingAuthorisation.ts`) — the same fixes will be applied in a follow‑up so leasing ships first.

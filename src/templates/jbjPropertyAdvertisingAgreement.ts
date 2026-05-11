@@ -5,7 +5,7 @@
  * brand chrome. Header & footer are user-customisable via the `chrome` arg.
  */
 
-import monogramUrl from "@/assets/jbj-monogram-dark-on-light.png";
+import monogramUrl from "@/assets/jbj-fulllogo-light-bg.png";
 import {
   TRADE_LICENSE_BRAND,
   TRADE_LICENSE_LEGAL_NAME,
@@ -26,7 +26,7 @@ export const JBJ_BRAND = {
   monogram: monogramUrl,
 } as const;
 
-export const PAA_LAYOUT_VERSION = 9;
+export const PAA_LAYOUT_VERSION = 10;
 
 export type PAAFieldKey =
   // Owner
@@ -107,8 +107,8 @@ const fieldUnderline = (
   // to the visible text so empty space never stretches into a long blank line.
   const safe = esc(value || "");
   return `
-  <div${dataAttr} style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;">
-    <div style="display:inline-block;border-bottom:1px solid #B89555;min-width:120px;padding:2px 6px 2px 0;font-size:13px;color:#1A1A1A;">${safe || "&nbsp;"}</div>
+  <div${dataAttr} style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;position:relative;">
+    <div style="display:inline-block;border-bottom:1px solid #B89555;min-width:1ch;padding:2px 8px 2px 2px;font-size:13px;color:#1A1A1A;white-space:nowrap;">${safe || "&nbsp;"}</div>
     <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:#1A1A1A;opacity:.7;margin-top:3px;">${esc(label)}</div>
   </div>`;
 };
@@ -175,16 +175,15 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string) => {
     case "monogram-wordmark":
     default:
       return `
-        <div style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid ${accent};padding-bottom:14px;margin-bottom:24px;">
-          <div style="display:flex;align-items:center;gap:14px;">
-            <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:80px;height:80px;object-fit:contain;display:block;" />
-            <div>
-              <div style="font-size:18px;letter-spacing:.18em;font-weight:700;color:${ink};">${JBJ_BRAND.company}</div>
-              <div style="font-size:10px;letter-spacing:.16em;color:${ink};opacity:.75;margin-top:3px;">${esc(JBJ_BRAND.legalCompany)}</div>
-              ${JBJ_BRAND.office ? `<div style="font-size:9.5px;letter-spacing:.14em;color:${ink};opacity:.65;margin-top:2px;">${esc(JBJ_BRAND.office)}</div>` : ""}
+        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid ${accent};padding-bottom:14px;margin-bottom:24px;">
+          <div style="display:flex;align-items:center;gap:16px;">
+            <img src="${JBJ_BRAND.monogram}" alt="JBJ Global Real Estate" crossorigin="anonymous" style="width:140px;height:auto;max-height:72px;object-fit:contain;display:block;" />
+            <div style="border-left:1px solid ${accent};padding-left:14px;">
+              <div style="font-size:10px;letter-spacing:.16em;color:${ink};opacity:.85;">${esc(JBJ_BRAND.legalCompany)}</div>
+              ${JBJ_BRAND.office ? `<div style="font-size:9.5px;letter-spacing:.12em;color:${ink};opacity:.7;margin-top:2px;">${esc(JBJ_BRAND.office)}</div>` : ""}
             </div>
           </div>
-          <div style="text-align:right;font-size:11px;color:${ink};opacity:.85;">
+          <div style="text-align:right;font-size:11px;color:${ink};opacity:.9;">
             ${docBadge}
             <div style="margin-top:4px;">${JBJ_BRAND.phone}</div>
             <div>${JBJ_BRAND.email}</div>
@@ -213,11 +212,11 @@ const footerHtml = (chrome: Required<TemplateChrome>) => {
     case "three-column":
     default:
       return `
-        <div style="${base}display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;align-items:center;">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:36px;height:36px;object-fit:contain;display:block;flex:none;" />
+        <div style="${base}display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:18px;align-items:center;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <img src="${JBJ_BRAND.monogram}" alt="JBJ Global Real Estate" crossorigin="anonymous" style="width:64px;height:auto;max-height:38px;object-fit:contain;display:block;flex:none;" />
             <div>
-              <div style="font-weight:700;letter-spacing:.14em;font-size:10px;opacity:.85;">${esc(JBJ_BRAND.legalCompany)}</div>
+              <div style="font-weight:700;letter-spacing:.14em;font-size:10px;opacity:.9;">${esc(JBJ_BRAND.legalCompany)}</div>
               ${JBJ_BRAND.office ? `<div style="opacity:.7;margin-top:2px;">${esc(JBJ_BRAND.office)}</div>` : ""}
             </div>
           </div>
@@ -227,7 +226,7 @@ const footerHtml = (chrome: Required<TemplateChrome>) => {
           </div>
           <div style="text-align:right;">
             <div>${JBJ_BRAND.phone}</div>
-            <div style="opacity:.7;">${trn ? `TRN ${esc(trn)}` : ""}${trn && license ? " · " : ""}${license ? `LIC ${esc(license)}` : ""}</div>
+            <div style="opacity:.7;margin-top:2px;">LIC 1591031 · DCCI 666113 · CR 2789619${trn ? ` · TRN ${esc(trn)}` : ""}${license && license !== "1591031" ? ` · ${esc(license)}` : ""}</div>
           </div>
         </div>`;
   }
@@ -243,6 +242,13 @@ export interface BuildPAAOptions {
   ownerStampUrl?: string | null;       // url to PNG of company stamp
   clientSignatureUrl?: string | null;  // url to client's captured signature
   hiddenFields?: string[];             // keys explicitly hidden by the user
+  /**
+   * "edit"  → show every option chip (so the user can change a selection in the
+   *           live preview / iframe). All Property Finder fields stay visible.
+   * "final" → collapse single-choice chips down to the selected value only —
+   *           the format used for the signed PDF.
+   */
+  renderMode?: "edit" | "final";
 }
 
 export function buildPAAHtml(
@@ -278,6 +284,28 @@ export function buildPAAHtml(
   const showPlot = isVilla;
   const period = get("listing_period");
   const showUntilDate = /until/i.test(period) && get("listing_period_until_date");
+
+  const isFinal = opts.renderMode === "final";
+
+  /**
+   * Render a single-choice chip row. In edit mode every option chip is
+   * clickable (data-chip-key / data-chip-value emit a `jbj-set-field` postMessage
+   * to the editor). In final mode, only the selected option survives — printed
+   * as a clean inline value with a thin gold underline.
+   */
+  const chipRow = (fieldKey: string, label: string, options: string[], match: (opt: string, v: string) => boolean) => {
+    const current = get(fieldKey as PAAFieldKey);
+    const selected = options.find((o) => match(o, current)) || "";
+    if (isFinal) {
+      if (!selected) return "";
+      return `
+        <span data-field-key="${fieldKey}" style="display:inline-block;margin-right:24px;vertical-align:top;">
+          <span style="display:inline-block;border-bottom:1px solid #B89555;padding:2px 10px 2px 2px;font-size:13px;color:#1A1A1A;font-weight:600;">${esc(selected)}</span>
+          <span style="display:block;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:#1A1A1A;opacity:.7;margin-top:3px;">${esc(label)}</span>
+        </span>`;
+    }
+    return options.map((o) => `<span data-chip-key="${fieldKey}" data-chip-value="${esc(o)}" style="display:inline-block;">${radioChip(o, match(o, current))}</span>`).join("");
+  };
 
   const periodChip = (label: string, key: string) =>
     radioChip(label, period.toLowerCase().startsWith(key.toLowerCase()));
@@ -322,8 +350,7 @@ export function buildPAAHtml(
     <div style="width:64px;height:1px;background:#B89555;margin:10px auto 0;"></div>
   </div>
   <p style="font-size:12px;color:${ink};opacity:.78;margin:8px 0 4px;">
-    As a property owner or landlord, you are partnering with <strong>JBJ Global Real Estate</strong> — a private office offering
-    maximum exposure and trusted representation to sell or lease your property at the best terms in the shortest time.
+    As a property owner or landlord, you are partnering with <strong>JBJ Global Real Estate</strong> to advertise and represent your property for sale or lease at the best terms in the shortest time.
   </p>
   <p style="font-size:12px;color:${ink};opacity:.78;margin:0 0 4px;">
     By signing this document and providing the details below, your property will be advertised across JBJ's premium portals,
@@ -352,16 +379,18 @@ export function buildPAAHtml(
   </div>
 
   ${sectionTitle(2, "Property Details")}
-  <div style="margin:4px 0 10px;display:flex;flex-wrap:wrap;align-items:center;">
-    ${propTypeChip("Villa")}${propTypeChip("Apartment")}${propTypeChip("Office")}${propTypeChip("Warehouse")}
-    <span style="opacity:.3;margin:0 8px;">|</span>
-    ${furnChip("Furnished")}${furnChip("Unfurnished")}
+  <div data-chip-row="property_type" style="margin:4px 0 10px;display:flex;flex-wrap:wrap;align-items:center;gap:6px;">
+    ${chipRow("property_type", "Property Type", ["Villa", "Apartment", "Office", "Warehouse"], (o, v) => o.toLowerCase() === v.toLowerCase())}
+    ${isFinal ? "" : `<span style="opacity:.3;margin:0 8px;">|</span>`}
+    ${chipRow("furnishing", "Furnishing", ["Furnished", "Unfurnished"], (o, v) => v.toLowerCase().startsWith(o.toLowerCase().split("-")[0]))}
   </div>
-  <div style="margin:4px 0 14px;display:flex;flex-wrap:wrap;align-items:center;">
-    ${statusChip("Vacant")}${statusChip("Tenanted")}
+  <div data-chip-row="status_vacant_tenanted" style="margin:4px 0 14px;display:flex;flex-wrap:wrap;align-items:center;gap:6px;">
+    ${chipRow("status_vacant_tenanted", "Status", ["Vacant", "Tenanted"], (o, v) => o.toLowerCase() === v.toLowerCase())}
     ${showVacatingDate ? `
-      <span style="margin-left:18px;font-size:11px;color:${ink};opacity:.7;letter-spacing:.06em;text-transform:uppercase;margin-right:8px;">Vacating Date:</span>
-      ${dateBox(get("vacating_date"))}` : ""}
+      <span data-field-key="vacating_date" style="display:inline-flex;align-items:center;margin-left:12px;">
+        <span style="font-size:11px;color:${ink};opacity:.7;letter-spacing:.06em;text-transform:uppercase;margin-right:8px;">Vacating Date:</span>
+        ${dateBox(get("vacating_date"))}
+      </span>` : ""}
   </div>
 
   <div>
@@ -396,17 +425,16 @@ export function buildPAAHtml(
       <span style="border-bottom:1px solid ${accent};padding:0 6px;font-weight:600;">${esc(get("broker_appointee_name") || JBJ_BRAND.legalCompany)}</span>
       as its:
     </div>
-    <div style="margin:6px 0 10px;display:flex;flex-wrap:wrap;align-items:center;">
-      ${exclusivityChip("EXCLUSIVE")}${exclusivityChip("NON EXCLUSIVE")}
+    <div data-chip-row="exclusivity" style="margin:6px 0 10px;display:flex;flex-wrap:wrap;align-items:center;gap:6px;">
+      ${chipRow("exclusivity", "Appointment Type", ["EXCLUSIVE", "NON EXCLUSIVE"], (o, v) => v.toLowerCase().includes(o.toLowerCase().split(" ")[0]))}
       <span style="font-size:12px;opacity:.85;margin-left:6px;">Broker to list and advertise the above property for a period of:</span>
     </div>
-    <div style="margin:6px 0 14px;display:flex;flex-wrap:wrap;align-items:center;">
-      ${periodChip("1 Month", "1")}${periodChip("2 Months", "2")}
-      ${periodChip("3 Months", "3")}
-      <span style="margin:0 6px 0 -8px;font-size:11px;opacity:.7;">OR UNTIL:</span>
-      ${dateBox(get("listing_period_until_date"))}
-      <span style="display:block;width:100%;height:6px;"></span>
-      ${periodChip("6 Months  (Residential Sale or Commercial only)", "6")}
+    <div data-chip-row="listing_period" style="margin:6px 0 14px;display:flex;flex-wrap:wrap;align-items:center;gap:6px;">
+      ${chipRow("listing_period", "Listing Period", ["1 Month", "2 Months", "3 Months", "6 Months  (Residential Sale or Commercial only)"], (o, v) => v.toLowerCase().startsWith(o.toLowerCase().split(" ")[0]))}
+      ${isFinal ? "" : `
+        <span style="margin:0 6px 0 8px;font-size:11px;opacity:.7;">OR UNTIL:</span>
+        <span data-field-key="listing_period_until_date">${dateBox(get("listing_period_until_date"))}</span>
+      `}
     </div>
     <ol style="padding-left:18px;margin:6px 0 0;">
       <li style="margin-bottom:6px;">I, the undersigned, confirm that I am the owner of the above property and / or have the legal authority to sign on behalf of the named owner(s).</li>
