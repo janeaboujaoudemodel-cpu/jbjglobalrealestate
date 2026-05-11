@@ -100,7 +100,7 @@ const VideoExportPanel = ({ project, isGenerating, progress, onGenerate }: Video
 
     switch (platform) {
       case "whatsapp":
-        window.open(`https://web.whatsapp.com/send?text=${shareText}%20${shareUrl}`, "_blank");
+        window.open(`https://wa.me/?text=${shareText}%20${shareUrl}`, "_blank");
         break;
       case "email":
         window.location.href = `mailto:?subject=Property Video - ${project.name}&body=Check out this property video: ${decodeURIComponent(shareUrl)}`;
