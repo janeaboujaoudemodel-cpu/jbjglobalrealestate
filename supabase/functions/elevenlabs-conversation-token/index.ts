@@ -11,47 +11,65 @@ serve(async (req) => {
   }
 
   try {
-    const ELEVENLABS_API_KEY = Deno.env.get("ELEVENLABS_API_KEY");
+    // Try both possible keys: the manually-set one and the connector-managed one.
+    const candidateKeys = [
+      Deno.env.get("ELEVENLABS_API_KEY"),
+      Deno.env.get("ELEVENLABS_API_KEY_1"),
+    ].filter((k): k is string => !!k && k.length > 0);
+
     const ELEVENLABS_AGENT_ID = Deno.env.get("ELEVENLABS_AGENT_ID");
 
-    if (!ELEVENLABS_API_KEY) {
-      console.error("ELEVENLABS_API_KEY not configured");
+    if (candidateKeys.length === 0) {
+      console.error("No ElevenLabs API key configured");
       return new Response(
-        JSON.stringify({ error: "ElevenLabs API key not configured" }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ error: "ElevenLabs API key not configured", fallback: true }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
     if (!ELEVENLABS_AGENT_ID) {
       console.error("ELEVENLABS_AGENT_ID not configured");
       return new Response(
-        JSON.stringify({ error: "ElevenLabs Agent ID not configured" }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ error: "ElevenLabs Agent ID not configured", fallback: true }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Get conversation token from ElevenLabs
-    const response = await fetch(
-      `https://api.elevenlabs.io/v1/convai/conversation/token?agent_id=${ELEVENLABS_AGENT_ID}`,
-      {
-        headers: {
-          "xi-api-key": ELEVENLABS_API_KEY,
-        },
-      }
-    );
+    let lastStatus = 0;
+    let lastErrorBody = "";
+    let data: any = null;
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("ElevenLabs API error:", response.status, errorText);
+    for (const key of candidateKeys) {
+      const response = await fetch(
+        `https://api.elevenlabs.io/v1/convai/conversation/token?agent_id=${ELEVENLABS_AGENT_ID}`,
+        { headers: { "xi-api-key": key } }
+      );
+
+      if (response.ok) {
+        data = await response.json();
+        break;
+      }
+
+      lastStatus = response.status;
+      lastErrorBody = await response.text();
+      console.error(
+        `ElevenLabs API error with key (len ${key.length}):`,
+        response.status,
+        lastErrorBody
+      );
+      // Only try the next key on 401/403 (auth errors). Other failures = stop.
+      if (response.status !== 401 && response.status !== 403) break;
+    }
+
+    if (!data) {
       const friendly =
-        response.status === 401
+        lastStatus === 401 || lastStatus === 403
           ? "Voice concierge is temporarily unavailable (API key invalid or expired). Please update ELEVENLABS_API_KEY."
-          : response.status === 404
+          : lastStatus === 404
           ? "Voice agent not found. Check ELEVENLABS_AGENT_ID."
-          : `ElevenLabs API error: ${response.status}`;
-      // Always return 200 so the frontend can show a friendly toast instead of a blank screen.
+          : `ElevenLabs API error: ${lastStatus}`;
       return new Response(
-        JSON.stringify({ error: friendly, upstream_status: response.status, fallback: true }),
+        JSON.stringify({ error: friendly, upstream_status: lastStatus, fallback: true }),
         { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
