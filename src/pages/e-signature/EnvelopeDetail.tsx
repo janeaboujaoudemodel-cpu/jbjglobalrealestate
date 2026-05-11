@@ -971,6 +971,7 @@ export default function EnvelopeDetail() {
         landlordName={(editValues.landlord_name as string) || ((envelope?.metadata as any)?.fields?.landlord_name as string) || null}
         signingLink={clientRec?.signing_token ? buildSigningUrl(clientRec.signing_token) : null}
         onShareWhatsApp={() => clientRec && handleWhatsApp(clientRec)}
+        onShareEmail={() => clientRec && handleQuickEmail(clientRec)}
       />
     </div>
   );
