@@ -43,9 +43,16 @@ serve(async (req) => {
     if (!response.ok) {
       const errorText = await response.text();
       console.error("ElevenLabs API error:", response.status, errorText);
+      const friendly =
+        response.status === 401
+          ? "Voice concierge is temporarily unavailable (API key invalid or expired). Please update ELEVENLABS_API_KEY."
+          : response.status === 404
+          ? "Voice agent not found. Check ELEVENLABS_AGENT_ID."
+          : `ElevenLabs API error: ${response.status}`;
+      // Always return 200 so the frontend can show a friendly toast instead of a blank screen.
       return new Response(
-        JSON.stringify({ error: `ElevenLabs API error: ${response.status}` }),
-        { status: response.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ error: friendly, upstream_status: response.status, fallback: true }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 

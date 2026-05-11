@@ -176,8 +176,11 @@ const VoiceConciergeWidget = () => {
         throw new Error(error.message || "Failed to get conversation token");
       }
 
-      if (!data?.token) {
-        throw new Error("No token received");
+      // Graceful fallback when the edge function returned a 200 with `fallback: true`
+      // (e.g. invalid/expired ElevenLabs API key) — show a friendly toast, don't crash.
+      if (data?.fallback || !data?.token) {
+        toast.error(data?.error || "Voice concierge is temporarily unavailable.");
+        return;
       }
 
       // Start the conversation with WebRTC
@@ -214,10 +217,8 @@ const VoiceConciergeWidget = () => {
 
   const isConnected = conversation.status === "connected";
 
-  // Don't render until we know auth status
-  if (isAuthenticated === null) {
-    return null;
-  }
+  // Render immediately — don't wait for auth check (prevents blank/invisible widget).
+  // The button itself swaps to "Login to speak" once we know the user isn't authenticated.
 
   // Minimized state - small phone icon button (no pulse, no text)
   if (isMinimized) {
