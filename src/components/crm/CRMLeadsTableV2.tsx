@@ -125,8 +125,12 @@ export default function CRMLeadsTableV2({
   const fetchLeads = async () => {
     setLoading(true);
     try {
+      // Projection only — never `select *` on crm_leads (wide encrypted PII columns make it slow).
+      // Hard cap at 500 rows; pagination UI can follow.
       let query = supabase.from("crm_leads").select(
-        `*,
+        `id, full_name, email_lower, phone_e164, lead_source_type, source_id,
+         vip, flagged, is_investor, contact_type, owner_type, owner_user_id,
+         assigned_broker_id, assigned_to_user_id, pipeline_stage, created_at,
          crm_lead_sources (source_group, source_name)`
       ).is('deleted_at', null);
 
@@ -136,7 +140,9 @@ export default function CRMLeadsTableV2({
         query = query.eq("lead_source_type", "website");
       }
 
-      const { data: leadsData, error: leadsError } = await query.order("created_at", { ascending: false });
+      const { data: leadsData, error: leadsError } = await query
+        .order("created_at", { ascending: false })
+        .limit(500);
       if (leadsError) throw leadsError;
 
       const leadIds = (leadsData || []).map((l: any) => l.id as string);
@@ -620,11 +626,14 @@ export default function CRMLeadsTableV2({
           </TableHeader>
           <TableBody>
             {loading ? (
-              <TableRow>
-                <TableCell colSpan={10} className="py-10 text-center text-[#1A1A1A]/50">
-                  Loading leads…
-                </TableCell>
-              </TableRow>
+              // Skeleton rows so the UI feels instant instead of a single "Loading…" line.
+              Array.from({ length: 6 }).map((_, i) => (
+                <TableRow key={`sk-${i}`} className="border-[#B89555]/20">
+                  <TableCell colSpan={10} className="py-3">
+                    <div className="h-4 w-full rounded bg-[#EFE6D6]/60 animate-pulse" />
+                  </TableCell>
+                </TableRow>
+              ))
             ) : filtered.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={10} className="py-10 text-center text-[#1A1A1A]/50">
