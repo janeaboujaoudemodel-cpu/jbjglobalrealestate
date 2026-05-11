@@ -77,6 +77,7 @@ const OwnerRelationships = lazy(() => import("@/pages/owner/OwnerRelationships")
 const OwnerRelationshipsRevenue = lazy(() => import("@/pages/owner/OwnerRelationshipsRevenue"));
 const OwnerMediaIngest = lazy(() => import("@/pages/owner/OwnerMediaIngest"));
 const DocumentsFormsHub = lazy(() => import("@/pages/owner/DocumentsFormsHub"));
+const VoiceAgentControlPanel = lazy(() => import("@/pages/owner/VoiceAgentControlPanel"));
 
 export const OwnerRoutes = () => (
   <Route path="/owner" element={
@@ -95,6 +96,7 @@ export const OwnerRoutes = () => (
     <Route path="safety" element={<OwnerSafetyPage />} />
     <Route path="founder-settings" element={<OwnerFounderSettings />} />
     <Route path="podcast-studio" element={<PodcastStudio />} />
+    <Route path="voice-agent" element={<VoiceAgentControlPanel />} />
     {/* /owner/properties was incorrectly pointing at the PropertyManagement service marketing page.
         Redirect to the canonical /properties listing so the full filter set is preserved. */}
     <Route path="properties" element={<Navigate to="/properties" replace />} />
