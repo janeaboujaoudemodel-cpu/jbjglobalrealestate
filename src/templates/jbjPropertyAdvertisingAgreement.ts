@@ -286,6 +286,28 @@ export function buildPAAHtml(
   const period = get("listing_period");
   const showUntilDate = /until/i.test(period) && get("listing_period_until_date");
 
+  const isFinal = opts.renderMode === "final";
+
+  /**
+   * Render a single-choice chip row. In edit mode every option chip is
+   * clickable (data-chip-key / data-chip-value emit a `jbj-set-field` postMessage
+   * to the editor). In final mode, only the selected option survives — printed
+   * as a clean inline value with a thin gold underline.
+   */
+  const chipRow = (fieldKey: string, label: string, options: string[], match: (opt: string, v: string) => boolean) => {
+    const current = get(fieldKey as PAAFieldKey);
+    const selected = options.find((o) => match(o, current)) || "";
+    if (isFinal) {
+      if (!selected) return "";
+      return `
+        <span data-field-key="${fieldKey}" style="display:inline-block;margin-right:24px;vertical-align:top;">
+          <span style="display:inline-block;border-bottom:1px solid #B89555;padding:2px 10px 2px 2px;font-size:13px;color:#1A1A1A;font-weight:600;">${esc(selected)}</span>
+          <span style="display:block;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:#1A1A1A;opacity:.7;margin-top:3px;">${esc(label)}</span>
+        </span>`;
+    }
+    return options.map((o) => `<span data-chip-key="${fieldKey}" data-chip-value="${esc(o)}" style="display:inline-block;">${radioChip(o, match(o, current))}</span>`).join("");
+  };
+
   const periodChip = (label: string, key: string) =>
     radioChip(label, period.toLowerCase().startsWith(key.toLowerCase()));
 
