@@ -380,16 +380,18 @@ export function buildPAAHtml(
   </div>
 
   ${sectionTitle(2, "Property Details")}
-  <div style="margin:4px 0 10px;display:flex;flex-wrap:wrap;align-items:center;">
-    ${propTypeChip("Villa")}${propTypeChip("Apartment")}${propTypeChip("Office")}${propTypeChip("Warehouse")}
-    <span style="opacity:.3;margin:0 8px;">|</span>
-    ${furnChip("Furnished")}${furnChip("Unfurnished")}
+  <div data-chip-row="property_type" style="margin:4px 0 10px;display:flex;flex-wrap:wrap;align-items:center;gap:6px;">
+    ${chipRow("property_type", "Property Type", ["Villa", "Apartment", "Office", "Warehouse"], (o, v) => o.toLowerCase() === v.toLowerCase())}
+    ${isFinal ? "" : `<span style="opacity:.3;margin:0 8px;">|</span>`}
+    ${chipRow("furnishing", "Furnishing", ["Furnished", "Unfurnished"], (o, v) => v.toLowerCase().startsWith(o.toLowerCase().split("-")[0]))}
   </div>
-  <div style="margin:4px 0 14px;display:flex;flex-wrap:wrap;align-items:center;">
-    ${statusChip("Vacant")}${statusChip("Tenanted")}
+  <div data-chip-row="status_vacant_tenanted" style="margin:4px 0 14px;display:flex;flex-wrap:wrap;align-items:center;gap:6px;">
+    ${chipRow("status_vacant_tenanted", "Status", ["Vacant", "Tenanted"], (o, v) => o.toLowerCase() === v.toLowerCase())}
     ${showVacatingDate ? `
-      <span style="margin-left:18px;font-size:11px;color:${ink};opacity:.7;letter-spacing:.06em;text-transform:uppercase;margin-right:8px;">Vacating Date:</span>
-      ${dateBox(get("vacating_date"))}` : ""}
+      <span data-field-key="vacating_date" style="display:inline-flex;align-items:center;margin-left:12px;">
+        <span style="font-size:11px;color:${ink};opacity:.7;letter-spacing:.06em;text-transform:uppercase;margin-right:8px;">Vacating Date:</span>
+        ${dateBox(get("vacating_date"))}
+      </span>` : ""}
   </div>
 
   <div>
