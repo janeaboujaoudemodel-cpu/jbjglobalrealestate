@@ -847,8 +847,20 @@ export default function EnvelopeDetail() {
                 schemaHint="jbj_paa_leasing"
                 onExtracted={(fields) => setEditValues((prev) => ({ ...prev, ...fields }))}
               />
+              {hiddenFields.length > 0 && (
+                <div className="flex items-center gap-2 p-2 rounded border border-[#B89555]/40 bg-[#FDFBF7]">
+                  <span className="text-xs text-[#1A1A1A]/80">
+                    {hiddenFields.length} removed field{hiddenFields.length === 1 ? "" : "s"}
+                  </span>
+                  <Button size="sm" variant="gold" className="ml-auto h-7 text-[11px]" onClick={restoreAllHiddenFields}>
+                    Restore all
+                  </Button>
+                </div>
+              )}
               {PAA_FIELD_GROUPS.filter(g => g.title !== "Signatures").map((group) => {
-                const visible = group.fields.filter((f) => !f.conditional || f.conditional(editValues));
+                // Per user request: keep every Property Finder field visible in edit mode
+                // (don't drop conditional ones), so nothing is missing at signing time.
+                const visible = group.fields;
                 if (!visible.length) return null;
                 return (
                   <div key={group.title}>
@@ -857,11 +869,13 @@ export default function EnvelopeDetail() {
                       {visible.map((f) => {
                         const val = editValues[f.key] ?? "";
                         const onChange = (v: string) => setEditValues((prev) => ({ ...prev, [f.key]: v }));
+                        const conditionalHint = f.conditional && !f.conditional(editValues)
+                          ? " (only printed when applicable)" : "";
                         if (f.type === "select" && f.options) {
                           return (
                             <div key={f.key}>
-                              <Label className="text-xs">{f.label}</Label>
-                              <select value={val} onChange={(e) => onChange(e.target.value)} className="w-full h-9 px-2 rounded border border-[#B89555]/40 bg-white text-sm text-[#1A1A1A]">
+                              <Label className="text-xs">{f.label}{conditionalHint && <span className="text-[10px] text-[#1A1A1A]/50 ml-1">{conditionalHint}</span>}</Label>
+                              <select data-edit-key={f.key} value={val} onChange={(e) => onChange(e.target.value)} className="w-full h-9 px-2 rounded border border-[#B89555]/40 bg-white text-sm text-[#1A1A1A]">
                                 <option value="">—</option>
                                 {f.options.map((o) => <option key={o} value={o}>{o}</option>)}
                               </select>
@@ -872,7 +886,7 @@ export default function EnvelopeDetail() {
                           return (
                             <div key={f.key} className="col-span-2 md:col-span-3">
                               <Label className="text-xs">{f.label}</Label>
-                              <Textarea value={val} onChange={(e) => onChange(e.target.value)} rows={2} />
+                              <Textarea data-edit-key={f.key} value={val} onChange={(e) => onChange(e.target.value)} rows={2} />
                             </div>
                           );
                         }
@@ -882,6 +896,7 @@ export default function EnvelopeDetail() {
                               <Label className="text-xs">{f.label}</Label>
                               <div className="relative">
                                 <Input
+                                  data-edit-key={f.key}
                                   inputMode="numeric"
                                   value={val}
                                   onChange={(e) => onChange(e.target.value.replace(/[^\d]/g, ""))}
@@ -897,8 +912,8 @@ export default function EnvelopeDetail() {
                         }
                         return (
                           <div key={f.key}>
-                            <Label className="text-xs">{f.label}</Label>
-                            <Input type={f.type === "date" ? "date" : f.type === "number" ? "number" : "text"} value={val} onChange={(e) => onChange(e.target.value)} />
+                            <Label className="text-xs">{f.label}{conditionalHint && <span className="text-[10px] text-[#1A1A1A]/50 ml-1">{conditionalHint}</span>}</Label>
+                            <Input data-edit-key={f.key} type={f.type === "date" ? "date" : f.type === "number" ? "number" : "text"} value={val} onChange={(e) => onChange(e.target.value)} />
                           </div>
                         );
                       })}
