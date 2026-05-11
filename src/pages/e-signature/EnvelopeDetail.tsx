@@ -479,7 +479,44 @@ export default function EnvelopeDetail() {
   const clientRec = (envelope.esign_recipients || []).find((r: any) => r.metadata?.role === "client") || envelope.esign_recipients?.[0];
   const isDraft = envelope.status === "draft";
   const previewSrcDoc = previewHtml
-    ? `<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;padding:0;background:#fff;}[data-field-key]{cursor:pointer;transition:background .15s,outline .15s;border-radius:4px;}[data-field-key]:hover{background:#FDECEC;outline:1px dashed #d33;outline-offset:2px;}</style></head><body>${previewHtml}<script>document.addEventListener('click',function(e){var t=e.target;while(t&&t!==document.body){if(t.dataset&&t.dataset.fieldKey){e.preventDefault();e.stopPropagation();var label=(t.querySelector('div:last-child')||{}).textContent||t.dataset.fieldKey;if(confirm('Remove field "'+label.trim()+'" from the document?')){parent.postMessage({type:'jbj-hide-field',key:t.dataset.fieldKey},'*');}return;}t=t.parentNode;}});<\/script></body></html>`
+    ? `<!doctype html><html><head><meta charset="utf-8"><style>
+        html,body{margin:0;padding:0;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+        [data-field-key]{position:relative;cursor:text;transition:background .15s,outline .15s;border-radius:4px;}
+        [data-field-key]:hover{background:#FBF6EC;outline:1px dashed #B89555;outline-offset:2px;}
+        [data-chip-key]{cursor:pointer;border-radius:999px;transition:background .15s;}
+        [data-chip-key]:hover{background:#FBF6EC;}
+        .jbj-x{position:absolute;top:-9px;right:-9px;width:18px;height:18px;border-radius:999px;background:#FDFBF7;border:1px solid #B89555;color:#1A1A1A;font-size:11px;line-height:16px;text-align:center;cursor:pointer;display:none;font-family:Inter,Arial,sans-serif;font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08);user-select:none;}
+        [data-field-key]:hover > .jbj-x{display:block;}
+      </style></head><body>${previewHtml}<script>(function(){
+        var EDITABLE=${editing ? "true" : "false"};
+        // Inject hover X buttons on each editable field block.
+        document.querySelectorAll('[data-field-key]').forEach(function(el){
+          if (!EDITABLE) return;
+          if (el.querySelector(':scope > .jbj-x')) return;
+          var x=document.createElement('span');
+          x.className='jbj-x';x.textContent='×';x.title='Remove field';
+          x.addEventListener('click',function(ev){ev.preventDefault();ev.stopPropagation();parent.postMessage({type:'jbj-hide-field',key:el.dataset.fieldKey},'*');});
+          el.appendChild(x);
+        });
+        // Chip clicks set the field value in the parent editor.
+        document.addEventListener('click',function(e){
+          var t=e.target;
+          while(t&&t!==document.body){
+            if (t.dataset && t.dataset.chipKey){
+              e.preventDefault();e.stopPropagation();
+              if (!EDITABLE){ parent.postMessage({type:'jbj-edit-field',key:t.dataset.chipKey},'*'); return; }
+              parent.postMessage({type:'jbj-set-field',key:t.dataset.chipKey,value:t.dataset.chipValue||''},'*');
+              return;
+            }
+            if (t.dataset && t.dataset.fieldKey){
+              e.preventDefault();e.stopPropagation();
+              parent.postMessage({type:'jbj-edit-field',key:t.dataset.fieldKey},'*');
+              return;
+            }
+            t=t.parentNode;
+          }
+        });
+      })();<\/script></body></html>`
     : null;
 
   return (
