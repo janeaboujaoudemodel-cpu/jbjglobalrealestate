@@ -77,6 +77,7 @@ const OwnerRelationships = lazy(() => import("@/pages/owner/OwnerRelationships")
 const OwnerRelationshipsRevenue = lazy(() => import("@/pages/owner/OwnerRelationshipsRevenue"));
 const OwnerMediaIngest = lazy(() => import("@/pages/owner/OwnerMediaIngest"));
 const DocumentsFormsHub = lazy(() => import("@/pages/owner/DocumentsFormsHub"));
+const VoiceAgentControlPanel = lazy(() => import("@/pages/owner/VoiceAgentControlPanel"));
 
 export const OwnerRoutes = () => (
   <Route path="/owner" element={
