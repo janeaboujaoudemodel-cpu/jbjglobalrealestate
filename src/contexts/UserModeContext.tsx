@@ -35,92 +35,80 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
     const stored = localStorage.getItem(MODE_KEY);
     return normalizeMode(stored);
   });
-  const [isLoading, setIsLoading] = useState(true);
+  // Mode is read synchronously from localStorage in the initial useState above,
+  // so `isLoading` is effectively false after first render. We keep the flag for
+  // API compatibility but never set it back to true on subsequent auth churn —
+  // that was the source of the broker/academy/company tile blink.
+  const [isLoading, setIsLoading] = useState(false);
   const [hasMadeInitialSelection, setHasMadeInitialSelection] = useState(() => {
     if (typeof window === 'undefined') return false;
     return localStorage.getItem(MODE_SELECTED_KEY) === 'true';
   });
   const { user } = useAuth();
+  const lastSyncedUserId = useRef<string | null>(null);
 
-  // Load mode from database on mount and when user changes
+  // Silent background reconcile — only runs once per real user-id change
+  // (TOKEN_REFRESHED churn won't re-fire it). Never toggles isLoading.
   useEffect(() => {
-    const loadMode = async () => {
-      setIsLoading(true);
-      
-      // localStorage is the primary source of truth
+    const userId = user?.id ?? null;
+    if (userId === lastSyncedUserId.current) return;
+    lastSyncedUserId.current = userId;
+    if (!userId) return;
+
+    const reconcile = async () => {
       const storedMode = localStorage.getItem(MODE_KEY);
       const storedSelection = localStorage.getItem(MODE_SELECTED_KEY);
-      
-      if (storedMode) {
-        setModeState(normalizeMode(storedMode));
-      }
-      if (storedSelection === 'true') {
-        setHasMadeInitialSelection(true);
-      }
 
-      // If logged in, sync with database — but NEVER overwrite an explicit local selection
-      if (user?.id) {
-        try {
-          const { data, error } = await supabase
-            .from('user_preferences')
-            .select('selected_mode')
-            .eq('user_id', user.id)
-            .maybeSingle();
+      try {
+        const { data, error } = await supabase
+          .from('user_preferences')
+          .select('selected_mode')
+          .eq('user_id', userId)
+          .maybeSingle();
 
-          if (data?.selected_mode) {
-            // Only adopt DB mode if localStorage has NO mode at all (first visit / cleared)
-            if (!storedMode) {
-              const dbMode = normalizeMode(data.selected_mode);
-              console.info('[UserMode] Adopting DB mode (no local mode set):', dbMode);
-              setModeState(dbMode);
-              localStorage.setItem(MODE_KEY, dbMode);
-              setHasMadeInitialSelection(true);
-              localStorage.setItem(MODE_SELECTED_KEY, 'true');
-              // Make sure a categorized CRM lead exists for this returning user
-              try {
-                await supabase.functions.invoke('register-mode-lead', { body: { mode: dbMode } });
-              } catch (e) {
-                console.warn('[UserMode] register-mode-lead (DB adopt) failed', e);
-              }
-            } else if (storedSelection === 'true') {
-              // User has an explicit local selection — push it to DB to keep in sync
-              const localMode = normalizeMode(storedMode);
-              if (data.selected_mode !== localMode) {
-                await supabase
-                  .from('user_preferences')
-                  .upsert({
-                    user_id: user.id,
-                    selected_mode: localMode,
-                    updated_at: new Date().toISOString()
-                  }, { onConflict: 'user_id' });
-              }
-            }
-          } else if (!error && storedSelection === 'true' && storedMode) {
-            // First write to DB only when the user has EXPLICITLY chosen a mode.
-            // Never auto-create a preferences row from an anonymous default — that
-            // would silently classify users who never picked a category.
-            const currentMode = normalizeMode(storedMode);
-            await supabase
-              .from('user_preferences')
-              .insert({
-                user_id: user.id,
-                selected_mode: currentMode
-              });
-            try {
-              await supabase.functions.invoke('register-mode-lead', { body: { mode: currentMode } });
-            } catch (e) {
-              console.warn('[UserMode] register-mode-lead (first sync) failed', e);
+        if (data?.selected_mode) {
+          // Only adopt DB mode if localStorage has NO mode at all (first visit / cleared)
+          if (!storedMode) {
+            const dbMode = normalizeMode(data.selected_mode);
+            console.info('[UserMode] Adopting DB mode (no local mode set):', dbMode);
+            setModeState(dbMode);
+            localStorage.setItem(MODE_KEY, dbMode);
+            setHasMadeInitialSelection(true);
+            localStorage.setItem(MODE_SELECTED_KEY, 'true');
+          } else if (storedSelection === 'true') {
+            // User has an explicit local selection — push it to DB to keep in sync
+            const localMode = normalizeMode(storedMode);
+            if (data.selected_mode !== localMode) {
+              await supabase
+                .from('user_preferences')
+                .upsert({
+                  user_id: userId,
+                  selected_mode: localMode,
+                  updated_at: new Date().toISOString()
+                }, { onConflict: 'user_id' });
             }
           }
-        } catch (err) {
-          console.error('Error loading user mode:', err);
+        } else if (!error && storedSelection === 'true' && storedMode) {
+          // First write to DB only when the user has EXPLICITLY chosen a mode.
+          const currentMode = normalizeMode(storedMode);
+          await supabase
+            .from('user_preferences')
+            .insert({
+              user_id: userId,
+              selected_mode: currentMode
+            });
+          try {
+            await supabase.functions.invoke('register-mode-lead', { body: { mode: currentMode } });
+          } catch (e) {
+            console.warn('[UserMode] register-mode-lead (first sync) failed', e);
+          }
         }
+      } catch (err) {
+        console.error('Error reconciling user mode:', err);
       }
-
-      setIsLoading(false);
     };
 
-    loadMode();
+    reconcile();
   }, [user?.id]);
 
   const setMode = useCallback(async (newMode: UserMode) => {
