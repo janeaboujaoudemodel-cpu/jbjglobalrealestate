@@ -1,69 +1,139 @@
 ## Goal
-Eliminate the “Verifying access — please wait a moment” lock-up on `/e-signature` (Agreement) and stop the home page from blinking/reverting to **Investor** when switching to **Broker / Academy / Company / Developer** cards. End-to-end verify the signature flow afterwards.
 
-## What's broken (root causes)
+Three deliverables in one shot:
 
-1. **`/e-signature` stuck on splash**
-   - `OwnerGuard` waits on `ownerLoading` from `AuthContext`.
-   - `AuthContext.verifyOwner` initialises `ownerLoading = true` and only flips it off inside the cache branch or after `verify-owner` resolves. If `verify-owner` is slow/blocked (cold start, transient 5xx, network), the guard never advances past 250 ms grace, and the auto-retry path is only triggered by `ownerError`, not by a hanging promise.
-   - `ownerVerifiedOnce` short-circuit only kicks in for users whose session previously verified — first hit after a fresh login on `/e-signature` always sees the splash.
-   - Net effect: on a fresh tab, opening `/e-signature` shows the dark “Verifying access” screen until the 8 s timeout, never optimistically renders.
+1. **Lock in `infoo.jane@gmail.com` as the saved test-recipient** for every signing/preview send going forward — no extra login needed — and **redeploy + re-fire** the signing invite to that inbox so you actually receive it.
+2. **Explain where to click "Agreement / e-signature"** and remove the "We're getting things ready" overlay you are seeing.
+3. **Execute section D of the previous plan** (the queued follow-ups): Sell/Rent intake templates, default CC `info@janeagmail.com`, Resend sender `JBJ Global Real Estate <noreply@jbj.ae>`, AI-prefilled Leasing/Selling agreements with Approve / Approve & Send, and Relationship Hub cleanup.
 
-2. **Home sections blink back to Investor**
-   - `UserModeContext.loadMode` runs in a `useEffect` keyed on `user?.id`. It sets `isLoading=true` → reads localStorage → maybe overwrites with DB → sets `isLoading=false`.
-   - During `isLoading`, components that branch on `isInvestorMode / isBrokerMode / isDeveloperMode` (broker hub card, academy card, company/developer card on `/`) fall back to the default `investor` and re-render again 1 frame later, which produces the blink.
-   - `onAuthStateChange` fires on `TOKEN_REFRESHED` and `INITIAL_SESSION`; both rebuild `user` reference → `useEffect` re-runs → another isLoading cycle → another blink, even if the mode never actually changed.
-   - Mode cards (`CategorySelectorSection`, `DeveloperPortalCTA`, broker/academy/company tiles) re-read `mode` synchronously and don't gate on `isLoading`, so they flash investor styling.
+---
 
-3. **`OwnerGuard` shows a dark hard splash**
-   - Even when the splash is correct, it covers the whole viewport in `#1A1A1A`. On in-app navigation to `/e-signature` this looks like the app is reloading. We should keep the previous page visible and show only a subtle top-bar indicator while re-verifying.
+## 1. Test recipient is already saved — just redeploy & fire
 
-## Fix Plan
+Findings from the code:
 
-### A. Owner verification — never block the route
+- `supabase/functions/esign-send-test-email/index.ts` already has `const TEST_RECIPIENT_DEFAULT = "infoo.jane@gmail.com";` — when no `test_recipient` is passed in the body, it sends there automatically.
+- `src/config/ownerEmails.ts` already lists `infoo.jane@gmail.com` as one of your owner inboxes (it's excluded from CRM directories).
 
-`src/contexts/AuthContext.tsx`
-- Initialise `ownerLoading = false` (loading only flips `true` while an actual verify is in flight).
-- In `verifyOwner`:
-  - On cache hit (any `cached.ok === true`, even if stale) → return `true` immediately AND keep `isOwner=true`; refresh in background regardless of TTL.
-  - Wrap the network verify in `Promise.race` with an 8 s hard timeout that resolves to “use last known state” instead of throwing.
-  - If `verify-owner` returns 5xx / aborts: do NOT downgrade `isOwner`; only `email_mismatch` or a definitive 401 downgrades.
-- Reset `ownerLoading=true` at the start of a real fetch and always set it back to `false` in a `finally` block (currently only on success path).
+So the email is already saved. What's missing is:
 
-`src/components/OwnerGuard.tsx`
-- Replace the full-screen dark splash with an **optimistic-render** strategy:
-  - If `user` exists AND (`isOwner` OR `ownerVerifiedOnce.current` OR there is a cached `owner_v2_<uid>=ok`), render `children` immediately; show a thin gold progress bar at the top while re-verifying.
-  - Only show the dark splash when there's no user AND auth is still resolving, OR when verification has explicitly failed.
-- Move the `sessionStorage("owner_verified_once")` write to set as soon as `verify-owner` has ever returned `ok` for this user (so the second tab / refresh also bypasses splash).
-- Increase auto-retry grace to silent (no UI state changes) — the user never sees the retry counter unless 3 attempts have failed.
+1. A **persistent default** in localStorage / `user_preferences` (`owner_test_recipient = 'infoo.jane@gmail.com'`) so every "Send Test Email" button across CreateEnvelope / EnvelopeDetail / ContractReview pre-fills that address without you typing it.
+2. **Redeploy** `esign-send-test-email` so the latest changes are live.
+3. **Trigger the test send now** for the most-recent envelope you have in `esign_envelopes` (sender_id = you, latest by `created_at`) so the email lands in `infoo.jane@gmail.com`.
 
-### B. User-mode — stop the blink
+### Where to find "Agreement / e-signature"
 
-`src/contexts/UserModeContext.tsx`
-- Compute `mode` synchronously from localStorage on first render and never set `isLoading=true` after that. The DB sync becomes a silent background reconcile that can only:
-  - Push the local choice up to DB.
-  - Adopt a DB value **only** when localStorage has zero mode AND no `MODE_SELECTED_KEY`.
-- Remove the `setIsLoading(true)` at the top of `loadMode`. `isLoading` is only true on very first mount before localStorage is read (already synchronous now), so effectively always `false` post-mount.
-- Gate the `useEffect` so it runs **once per real user id change**, not on every `user` reference churn from `TOKEN_REFRESHED` (track previous user id in a ref).
-- Never call `register-mode-lead` from the load path unless the mode actually changed (currently re-runs on every DB adopt).
+In the running app you reach it three ways — all already wired, no new UI:
 
-Home page mode-aware tiles
-- `src/components/home/CategorySelectorSection.tsx`, `DeveloperPortalCTA.tsx`, broker/academy/company tiles on `/`:
-  - Read `mode` directly; do not branch on `isLoading` (it stays `false` after the fix).
-  - Active-state styling uses `mode === id` only — no derived state stored locally that could lag.
+- **Top header → Owner menu → "E-Signature"** (route `/e-signature`)
+- **Owner CRM sidebar → "Agreements"** subsection → "Open E-Signature"
+- Direct URL: `https://www.jbj.ae/e-signature`
 
-### C. End-to-end signature flow QA
+Once on `/e-signature` you see the dashboard (`ESignatureDashboard.tsx`). Click any envelope row → `EnvelopeDetail.tsx`, and the **"Send Test Email"** button is at the top-right of that page.
 
-After the two fixes ship, walk through and verify:
-1. Fresh login → go directly to `/e-signature` → dashboard renders within one frame, no dark splash.
-2. Click an existing envelope → `EnvelopeDetail` opens immediately (no splash flash on `/e-signature/:id`).
-3. From the home page, click Broker / Academy / Company / Developer tiles in sequence — each card highlights the correct active state, no flash to Investor, mode persists across reload.
-4. Trigger `Send Test Email` and the thank-you flow we wired earlier — confirm both still fire.
+### Why you saw "We're getting things ready"
 
-### D. Out of scope for this fix (tracked separately, will follow in next plan)
-The earlier voice message asks (Sell/Rent intake templates, document-request automation, AI-prefilled leasing/selling agreement with Approve / Approve & Send, default CC of `info@janeagmail.com`, Resend `from: JBJ Global Real Estate <noreply@jbj.ae>`, Relationship Hub red-Gmail/breakfast-booking cleanup) are larger feature work and will be planned in a follow-up once this critical UX bug is resolved.
+That overlay is **not a screen inside the app** — it is the Lovable preview shell's "page taking a moment to load" message. It appears when the dev sandbox is cold-booting and the first HTML response is delayed (>3 s). The agent code change we just shipped (`ownerLoading=false`, optimistic OwnerGuard) removed the **app-level** dark "Verifying access" splash, which was the actual app bug. The lighter "getting things ready" card is platform-level and goes away after the dev server warms up; we can speed it up by trimming the eager imports in `App.tsx` (currently 36) — covered in section 4 below.
 
-## Technical detail summary
-- Files touched in this fix: `src/contexts/AuthContext.tsx`, `src/components/OwnerGuard.tsx`, `src/contexts/UserModeContext.tsx`, possibly `src/components/home/CategorySelectorSection.tsx` (remove any `isLoading` gating).
-- No DB migrations, no edge-function changes, no new dependencies.
-- Behaviour change: `OwnerGuard` is now optimistic — non-owners reaching protected routes still get redirected to `/403` once verify resolves, just without a dark splash beforehand. Security posture is unchanged because the protected backend functions still enforce `requireOwnerAuth`.
+---
+
+## 2. Section D — full feature build
+
+### 2.1 Resend brand sender + default CC
+
+- Centralise outbound sender identity in `src/config/outreachIdentity.ts` (already exists). Set:
+  ```ts
+  export const OUTBOUND_FROM_NAME = "JBJ Global Real Estate";
+  export const OUTBOUND_FROM_EMAIL = "noreply@jbj.ae";
+  export const OUTBOUND_DEFAULT_CC = ["info@janeagmail.com"];
+  ```
+- Update every Resend-sending edge function to read these constants and always append `OUTBOUND_DEFAULT_CC` to the `cc` array (deduped vs primary recipient):
+  - `esign-send-for-signature`
+  - `esign-send-reminder`
+  - `esign-send-signer-thanks`
+  - `esign-send-test-email`
+  - `send-locked` / `outreach-send-locked`
+  - `send-branded-email` (if present)
+- Apply the **Single-Agency Email Rule** guard already present (`requireOwnerAuth` + brokerage check).
+
+### 2.2 Sell / Rent intake templates (Email Template Library)
+
+Three new locked templates in the existing `email_templates` table (used by `useEmailTemplateLibrary.ts`). All branded HTML, all variables interpolated server-side:
+
+| key | Purpose | Triggered from |
+|---|---|---|
+| `intake_sell_request_docs` | Asks seller for title deed, passport copy, Ejari/SPA, photos, asking price, availability | CRM lead → "Selling" pipeline |
+| `intake_rent_request_docs` | Asks landlord for title deed, passport, current Ejari, photos, rent expectation, vacancy date | CRM lead → "Leasing" pipeline |
+| `intake_buyer_brief` | Asks buyer/tenant for budget, area preferences, timeline, financing, decision-makers | CRM lead → "Buyer/Tenant" pipeline |
+
+Each template:
+- Subject auto-generated from template key + client first name.
+- Body uses JBJ champagne brand HTML (Inter, gold hairline, no fills).
+- Sender = `JBJ Global Real Estate <noreply@jbj.ae>`, CC = `info@janeagmail.com`, reply-to = active owner inbox.
+
+### 2.3 AI-prefilled Leasing / Selling agreements with Approve / Approve & Send
+
+New flow on `/e-signature` → "New Agreement":
+
+1. **Pick type**: Leasing Authorisation / Selling Authorisation / Buyer Brokerage.
+2. **Source data**: lookup the CRM lead → pull property + party fields → call `lovable-ai` (`google/gemini-2.5-flash`) with a structured prompt to draft the agreement using `src/templates/jbjListingAuthorisation.ts` as the skeleton.
+3. **Two-button footer** in `CreateEnvelope.tsx`:
+   - **Approve** → saves to `esign_envelopes` as draft, you can edit fields.
+   - **Approve & Send** → locks via `outreach-lock-payload`, fires `esign-send-for-signature` to the client, CC's `info@janeagmail.com`, sender = `JBJ Global Real Estate <noreply@jbj.ae>`.
+
+Backend pieces:
+- New edge function `esign-ai-prefill-agreement` — uses Lovable AI Gateway, returns field values for the chosen template.
+- Reuse the existing `outreach-lock-payload` + `outreach-send-locked` pipeline for byte-for-byte preview = sent guarantee (already memory-locked Locked-Send Outreach Standard).
+
+### 2.4 Relationship Hub cleanup
+
+- Remove the "red Gmail" badge from Relationship cards — the column is misleading because we now route everything through Resend.
+- Remove the "breakfast booking" CTA from generic relationship cards (it was leaking from a one-off campaign). Keep it only inside the specific Breakfast Campaign view at `/owner/crm?section=campaigns&id=breakfast`.
+- Restyle the contact-action row to the champagne IconTile standard: Call · WhatsApp (wa.me) · Email · Note · Task.
+
+---
+
+## 3. Performance fix for the "getting things ready" preview overlay
+
+Reduce cold-start so the platform overlay never has time to appear:
+
+- Convert the 7 route-bundle imports in `App.tsx` (`OwnerRoutes`, `AdminRoutes`, `AIToolRoutes`, `ToolkitRoutes`, `DeveloperHubRoutes`, `StandaloneRoutes`, `PublicRoutes`) from eager to `lazy()` + `<Suspense>`. Only `PublicRoutes` stays eager (it owns `/`).
+- Defer non-critical providers (`PodcastVisibilityProvider`, `BrandPaletteProvider`) to mount after first paint via `useEffect`.
+- Lazy-load heavy contexts (`LanguageProvider`'s translation cache) — gate the auto-translate engine on `requestIdleCallback`.
+
+No memory rules are violated: header L-shape, design tokens, IconTile, content sanitization, and locked-send standards stay intact.
+
+---
+
+## 4. End-to-end QA checklist after build
+
+- `/e-signature` opens with no dark splash and no "getting things ready" overlay on a warm preview.
+- Click "Send Test Email" on the latest envelope → inbox `infoo.jane@gmail.com` receives the byte-for-byte email, CC'd `info@janeagmail.com`, From: `JBJ Global Real Estate <noreply@jbj.ae>`.
+- Home tiles Investor / Broker / Academy / Company / Developer no longer blink.
+- CRM lead → "Request Selling Docs" / "Request Leasing Docs" / "Send Buyer Brief" fires the right intake template.
+- "New Agreement → Leasing / Selling → AI Prefill → Approve & Send" delivers a signing invite to the client and CC's `info@janeagmail.com`.
+- Relationship Hub cards no longer show red-Gmail or stray breakfast booking CTA.
+
+---
+
+## Technical detail — files touched
+
+**Backend (edge functions):**
+- `supabase/functions/esign-send-test-email/index.ts` — already correct, redeploy.
+- `supabase/functions/esign-send-for-signature/index.ts` — add CC + brand sender.
+- `supabase/functions/esign-send-reminder/index.ts` — same.
+- `supabase/functions/esign-send-signer-thanks/index.ts` — same.
+- `supabase/functions/outreach-send-locked/index.ts` — same.
+- `supabase/functions/esign-ai-prefill-agreement/index.ts` — **new**.
+
+**DB migration:** seed 3 rows into `email_templates` (sell/rent/buyer intake).
+
+**Frontend:**
+- `src/config/outreachIdentity.ts` — centralised sender/CC constants.
+- `src/pages/e-signature/CreateEnvelope.tsx` — AI prefill + Approve / Approve & Send buttons.
+- `src/pages/e-signature/EnvelopeDetail.tsx` — pre-fill test recipient with saved owner default.
+- `src/hooks/useEmailTemplateLibrary.ts` — surface new intake templates.
+- `src/pages/owner/crm/sections/RelationshipsSection.tsx` — strip red-Gmail / breakfast CTA.
+- `src/App.tsx` — convert route bundles to `lazy()`.
+
+No new dependencies. No new auth flows. Owner-only RLS unchanged. Locked-Send Outreach Standard, Champagne-Gold design, IconTile, Single-Agency Email Rule, OwnerGuard optimistic render — all preserved.
