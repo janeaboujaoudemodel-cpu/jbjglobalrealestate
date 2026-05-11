@@ -243,6 +243,13 @@ export interface BuildPAAOptions {
   ownerStampUrl?: string | null;       // url to PNG of company stamp
   clientSignatureUrl?: string | null;  // url to client's captured signature
   hiddenFields?: string[];             // keys explicitly hidden by the user
+  /**
+   * "edit"  → show every option chip (so the user can change a selection in the
+   *           live preview / iframe). All Property Finder fields stay visible.
+   * "final" → collapse single-choice chips down to the selected value only —
+   *           the format used for the signed PDF.
+   */
+  renderMode?: "edit" | "final";
 }
 
 export function buildPAAHtml(
