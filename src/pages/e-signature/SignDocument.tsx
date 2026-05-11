@@ -72,11 +72,14 @@ export default function SignDocument() {
           body: JSON.stringify({ token }),
         });
         const out = await res.json().catch(() => ({}));
-        if (!res.ok) {
-          // Map backend status to a clear, branded message
+        // Terminal states return HTTP 200 with `{ state, error }` so global
+        // error reporters don't flag the signing page as a runtime crash.
+        const terminalState = out?.state as string | undefined;
+        if (!res.ok || terminalState === "expired" || terminalState === "invalid" || terminalState === "removed") {
           let msg = out?.error || "We couldn't load this document.";
-          if (res.status === 410) msg = "This signing link has expired. Please ask the sender to issue a new link.";
-          else if (res.status === 404) msg = "This signing link is no longer valid. It may have been revoked or the document was removed.";
+          if (terminalState === "expired" || res.status === 410) msg = "This signing link has expired. Please ask the sender to issue a new link.";
+          else if (terminalState === "invalid" || res.status === 404) msg = "This signing link is no longer valid. It may have been revoked or the document was removed.";
+          else if (terminalState === "removed") msg = "This document has been removed by the sender.";
           setError(msg); setLoading(false); return;
         }
         if (out.recipient.status === "signed") { setCompleted(true); setLoading(false); return; }
