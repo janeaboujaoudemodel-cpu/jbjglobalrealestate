@@ -101,7 +101,7 @@ const MegaMenuToolkit = React.forwardRef<HTMLDivElement, MegaMenuToolkitProps>((
     {
       icon: Globe,
       title: 'JBJ E-Sign',
-      href: '/e-signature',
+      href: '/owner/documents-forms?tab=sign',
       description: 'Contract signing · audit trail',
     },
     {
