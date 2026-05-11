@@ -64,7 +64,7 @@ export default function SignDocument() {
   // Load envelope/recipient/fields
   useEffect(() => {
     const fetchData = async () => {
-      if (!token) { setError("Invalid signing link"); setLoading(false); return; }
+      if (!token) { setError("This signing link is missing its token. Please open the link directly from your email."); setLoading(false); return; }
       try {
         const res = await fetch(`${SUPABASE_URL}/functions/v1/esign-load-document`, {
           method: "POST",
@@ -72,11 +72,20 @@ export default function SignDocument() {
           body: JSON.stringify({ token }),
         });
         const out = await res.json().catch(() => ({}));
-        if (!res.ok) { setError(out.error || "This signing link is invalid or has expired"); setLoading(false); return; }
+        if (!res.ok) {
+          // Map backend status to a clear, branded message
+          let msg = out?.error || "We couldn't load this document.";
+          if (res.status === 410) msg = "This signing link has expired. Please ask the sender to issue a new link.";
+          else if (res.status === 404) msg = "This signing link is no longer valid. It may have been revoked or the document was removed.";
+          setError(msg); setLoading(false); return;
+        }
         if (out.recipient.status === "signed") { setCompleted(true); setLoading(false); return; }
         if (out.recipient.status === "declined") { setDeclined(true); setLoading(false); return; }
-        if (["completed", "voided", "expired"].includes(out.envelope.status)) {
-          setError(`This document has been ${out.envelope.status}`); setLoading(false); return;
+        if (out.envelope.status === "completed") {
+          setError("This document has already been completed by all parties. A signed copy was sent to you by email."); setLoading(false); return;
+        }
+        if (["voided", "expired", "declined"].includes(out.envelope.status)) {
+          setError(`This document is no longer available for signing (status: ${out.envelope.status}).`); setLoading(false); return;
         }
         setData({
           id: out.recipient.id,
@@ -89,7 +98,7 @@ export default function SignDocument() {
         setLoading(false);
       } catch (err) {
         console.error("Error fetching data:", err);
-        setError("Failed to load document");
+        setError("We couldn't reach the signing server. Please check your connection and try again.");
         setLoading(false);
       }
     };
