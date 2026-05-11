@@ -82,8 +82,9 @@ const fmtDateDDMMYYYY = (raw: string) => {
 const dateBox = (raw: string) => {
   const [d, m, y] = fmtDateDDMMYYYY(raw);
   const cell = (v: string, ph: string) =>
-    `<span style="display:inline-block;min-width:32px;text-align:center;border-bottom:1px solid #B89555;padding:1px 4px;font-size:12px;color:${v ? "#1A1A1A" : "#1A1A1A66"};">${v || ph}</span>`;
-  return `${cell(d, "DD")}<span style="opacity:.4;margin:0 4px;">/</span>${cell(m, "MM")}<span style="opacity:.4;margin:0 4px;">/</span>${cell(y, "YYYY")}`;
+    `<span style="display:inline-block;min-width:32px;text-align:center;padding:1px 4px;font-size:12px;color:${v ? "#1A1A1A" : "#1A1A1A66"};">${v || ph}</span>`;
+  // Single continuous gold hairline under DD / MM / YYYY — no per-cell underline.
+  return `<span style="display:inline-block;border-bottom:1px solid #B89555;padding-bottom:2px;white-space:nowrap;">${cell(d, "DD")}<span style="opacity:.4;margin:0 4px;">/</span>${cell(m, "MM")}<span style="opacity:.4;margin:0 4px;">/</span>${cell(y, "YYYY")}</span>`;
 };
 
 const radioChip = (label: string, selected: boolean) => `
