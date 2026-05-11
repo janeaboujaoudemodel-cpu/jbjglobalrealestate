@@ -159,8 +159,9 @@ Deno.serve(async (req) => {
             method: "POST",
             headers: { "Authorization": `Bearer ${resendApiKey}`, "Content-Type": "application/json" },
             body: JSON.stringify({
-              from: "JBJ E-Signature <contact@jbj.ae>",
+              from: "JBJ Global Real Estate <noreply@jbj.ae>",
               to: [recipient.email],
+              cc: recipient.email?.toLowerCase() === "infoo.jane@gmail.com" ? [] : ["infoo.jane@gmail.com"],
               subject: `Reminder: Please sign ${envelope.name}`,
               html: reminderEmailHtml,
             }),
