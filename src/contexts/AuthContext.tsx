@@ -45,7 +45,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
-  const [ownerLoading, setOwnerLoading] = useState(true);
+  // Start in a non-blocking state. Verification is async; OwnerGuard renders
+  // optimistically from cache and flips this to true only while a real fetch
+  // is in flight against the verify-owner edge function.
+  const [ownerLoading, setOwnerLoading] = useState(false);
   const [ownerError, setOwnerError] = useState<string | null>(null);
   const [isOwner, setIsOwner] = useState(false);
   const [isAuditor, setIsAuditor] = useState(false);

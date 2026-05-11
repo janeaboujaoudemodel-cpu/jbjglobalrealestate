@@ -39,6 +39,16 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
   const ownerVerifiedOnce = useRef<boolean>(
     typeof window !== "undefined" && sessionStorage.getItem("owner_verified_once") === "1"
   );
+  // Optimistic: trust a persistent localStorage cache for the current user.
+  const hasCachedOwner = (() => {
+    if (typeof window === "undefined" || !user?.id) return false;
+    try {
+      const raw = localStorage.getItem(`owner_v2_${user.id}`);
+      if (!raw) return false;
+      const parsed = JSON.parse(raw);
+      return parsed?.ok === true;
+    } catch { return false; }
+  })();
   useEffect(() => {
     if (isOwner) {
       ownerVerifiedOnce.current = true;
@@ -137,9 +147,15 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
     return null;
   }
 
-  // If owner was already verified once this session, skip the splash entirely on
-  // subsequent (re)verifications — render children optimistically.
-  if ((authLoading || ownerLoading) && showLoading && ownerVerifiedOnce.current && !!user) {
+  // Optimistic render — if we already trust this user as owner (current flag,
+  // a previous successful verify this session, or a persisted localStorage cache),
+  // never block the route on a re-verification round-trip. The verify-owner call
+  // continues in the background and can still downgrade on a real email_mismatch.
+  if (
+    showLoading &&
+    !!user &&
+    (isOwner || ownerVerifiedOnce.current || hasCachedOwner)
+  ) {
     return <>{children}</>;
   }
 
