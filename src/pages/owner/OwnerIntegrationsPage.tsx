@@ -64,17 +64,9 @@ interface ChannelRow {
   identifier: string | null;
 }
 
-interface ProviderRow {
-  provider: string;
-  is_configured: boolean | null;
-  last_checked_at: string | null;
-  last_error: string | null;
-}
-
 const OwnerIntegrationsPage = () => {
   const { user } = useAuth();
   const [channels, setChannels] = useState<ChannelRow[]>([]);
-  const [providers, setProviders] = useState<ProviderRow[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -83,18 +75,12 @@ const OwnerIntegrationsPage = () => {
 
     const load = async () => {
       setLoading(true);
-      const [{ data: ch }, { data: pr }] = await Promise.all([
-        (supabase as any)
-          .from("owner_comm_channels")
-          .select("channel_type, is_active, sync_status, last_sync_at, last_error, identifier")
-          .eq("user_id", user.id),
-        (supabase as any)
-          .from("owner_comm_provider_status")
-          .select("provider, is_configured, last_checked_at, last_error"),
-      ]);
+      const { data: ch } = await (supabase as any)
+        .from("owner_comm_channels")
+        .select("channel_type, is_active, sync_status, last_sync_at, last_error, identifier")
+        .eq("user_id", user.id);
       if (!alive) return;
       setChannels((ch || []) as ChannelRow[]);
-      setProviders((pr || []) as ProviderRow[]);
       setLoading(false);
     };
 
@@ -103,7 +89,6 @@ const OwnerIntegrationsPage = () => {
     const channel = supabase
       .channel("owner-integrations-status")
       .on("postgres_changes", { event: "*", schema: "public", table: "owner_comm_channels" }, () => load())
-      .on("postgres_changes", { event: "*", schema: "public", table: "owner_comm_provider_status" }, () => load())
       .subscribe();
 
     return () => {
@@ -121,15 +106,12 @@ const OwnerIntegrationsPage = () => {
         if (row.is_active) return { status: "connected", meta: { identifier: row.identifier ?? undefined, lastSync: row.last_sync_at } };
         return { status: "not_connected", meta: { identifier: row.identifier ?? undefined } };
       }
-      if (i.externalEnv) {
-        const pr = providers.find((p) => p.provider.toUpperCase() === i.externalEnv?.toUpperCase());
-        if (!pr) return { status: "not_connected", meta: {} };
-        if (pr.last_error) return { status: "error", meta: { error: pr.last_error, lastSync: pr.last_checked_at } };
-        return { status: pr.is_configured ? "connected" : "not_connected", meta: { lastSync: pr.last_checked_at } };
-      }
+      // External-env integrations (ElevenLabs / Resend) — status is managed server-side;
+      // surface as "not_connected" by default so the Configure button leads users to
+      // the right hub. A future server probe can flip this to "connected".
       return { status: "not_connected", meta: {} };
     };
-  }, [channels, providers]);
+  }, [channels]);
 
   const connectedCount = INTEGRATIONS.filter((i) => statusFor(i).status === "connected").length;
 
