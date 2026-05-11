@@ -364,19 +364,62 @@ export default function EnvelopeDetail() {
         ownerStampUrl,
         hiddenFields: next,
       });
-      toast.success(hide ? "Field removed" : "Field restored");
+      if (hide) {
+        toast.success("Field removed", {
+          action: { label: "Undo", onClick: () => toggleHiddenField(key, false) },
+        });
+      } else {
+        toast.success("Field restored");
+      }
       refetch();
     } catch (e: any) {
       toast.error(e?.message || "Failed to update");
     }
   };
 
-  // Listen for click-to-delete messages from the preview iframe.
+  const restoreAllHiddenFields = async () => {
+    if (!envelope?.template_key || !hiddenFields.length) return;
+    setHiddenFields([]);
+    try {
+      await regenerate.mutateAsync({
+        envelopeId: envelope.id,
+        templateKey: envelope.template_key,
+        values: { ...((envelope.template_field_values as any) || {}), doc_number: docNumber },
+        chrome,
+        ownerSignatureUrl,
+        ownerStampUrl,
+        hiddenFields: [],
+      });
+      toast.success("All removed fields restored");
+      refetch();
+    } catch (e: any) {
+      toast.error(e?.message || "Failed to restore");
+    }
+  };
+
+  // Listen for click-to-edit / click-to-delete / chip-set messages from the preview iframe.
   useEffect(() => {
     const onMsg = (e: MessageEvent) => {
       const data: any = e.data;
-      if (data?.type === "jbj-hide-field" && typeof data.key === "string") {
+      if (!data || typeof data.type !== "string") return;
+      if (data.type === "jbj-hide-field" && typeof data.key === "string") {
         toggleHiddenField(data.key, true);
+      } else if (data.type === "jbj-edit-field" && typeof data.key === "string") {
+        setEditing(true);
+        // Defer focus to the next paint so the sidebar input is mounted.
+        setTimeout(() => {
+          const el = document.querySelector<HTMLInputElement | HTMLTextAreaElement>(
+            `[data-edit-key="${CSS.escape(data.key)}"]`,
+          );
+          if (el) {
+            el.focus();
+            try { (el as HTMLInputElement).select?.(); } catch {}
+            el.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+        }, 50);
+      } else if (data.type === "jbj-set-field" && typeof data.key === "string" && typeof data.value === "string") {
+        setEditing(true);
+        setEditValues((prev) => ({ ...prev, [data.key]: data.value }));
       }
     };
     window.addEventListener("message", onMsg);
