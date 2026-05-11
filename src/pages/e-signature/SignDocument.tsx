@@ -198,6 +198,23 @@ export default function SignDocument() {
       </div>
     );
   }
+  const HomeActions = () => (
+    <div className="mt-6 flex flex-col items-center gap-3">
+      <Button
+        onClick={() => { window.location.href = "/"; }}
+        className="bg-[#EFE6D6] hover:bg-[#E7DCC7] text-[#1A1A1A] border border-[#B89555]/60 hover:border-[#B89555] rounded-md px-6 py-2 text-sm font-medium shadow-none"
+      >
+        Return to Homepage
+      </Button>
+      <a
+        href="mailto:info@jbj.ae"
+        className="text-xs text-[#1A1A1A]/60 hover:text-[#1A1A1A] underline underline-offset-4 decoration-[#B89555]/50"
+      >
+        Contact our team
+      </a>
+    </div>
+  );
+
   if (error) {
     return (
       <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-4">
@@ -212,6 +229,7 @@ export default function SignDocument() {
             <p className="text-xs text-[#1A1A1A]/55 mt-5">
               If you believe this is a mistake, please reply to the original email and our team will issue a new link.
             </p>
+            <HomeActions />
           </CardContent>
         </Card>
       </div>
@@ -224,7 +242,8 @@ export default function SignDocument() {
           <CardContent className="p-8 text-center">
             <CheckCircle2 className="w-20 h-20 text-emerald-600 mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-2 text-[#1A1A1A]">Document Signed!</h2>
-            <p className="text-[#1A1A1A]/70 mb-6">A confirmation email will be sent to you shortly.</p>
+            <p className="text-[#1A1A1A]/70">A confirmation email will be sent to you shortly.</p>
+            <HomeActions />
           </CardContent>
         </Card>
       </div>
@@ -238,6 +257,7 @@ export default function SignDocument() {
             <XCircle className="w-20 h-20 text-red-600 mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-2 text-[#1A1A1A]">Signing Declined</h2>
             <p className="text-[#1A1A1A]/70">You have declined to sign this document. The sender has been notified.</p>
+            <HomeActions />
           </CardContent>
         </Card>
       </div>
