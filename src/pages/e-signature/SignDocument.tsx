@@ -203,12 +203,14 @@ export default function SignDocument() {
       <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-4">
         <Card className="w-full max-w-lg bg-[#F7F2EA] border-[#B89555]/30">
           <CardContent className="p-8 text-center">
-            <AlertTriangle className="w-16 h-16 text-red-600 mx-auto mb-4" />
-            <h2 className="text-xl font-bold mb-2 text-[#1A1A1A]">Unable to Load Document</h2>
-            <p className="text-[#1A1A1A]/70">{error}</p>
-            <p className="text-xs text-[#1A1A1A]/60 mt-4">
-              Signing links require a real token sent by email. Open the link in your inbox or contact{" "}
-              <a href="mailto:contact@jbj.ae" className="underline">contact@jbj.ae</a>.
+            <AlertTriangle className="w-14 h-14 text-[#B89555] mx-auto mb-4" />
+            <div className="text-[11px] tracking-[0.22em] uppercase text-[#1A1A1A]/60 mb-2">
+              JBJ Global Real Estate
+            </div>
+            <h2 className="text-xl font-bold mb-2 text-[#1A1A1A]">We couldn't open this document</h2>
+            <p className="text-[#1A1A1A]/75 text-sm leading-relaxed">{error}</p>
+            <p className="text-xs text-[#1A1A1A]/55 mt-5">
+              If you believe this is a mistake, please reply to the original email and our team will issue a new link.
             </p>
           </CardContent>
         </Card>
