@@ -447,16 +447,19 @@ export function buildPAAHtml(
   ${sectionTitle(4, "Landlord")}
   <div style="display:grid;grid-template-columns:1.2fr 1.2fr 1fr;gap:0 28px;margin-top:6px;align-items:end;">
     <div>
-      <div style="border-bottom:1px solid ${accent};height:44px;display:flex;align-items:flex-end;padding:0 0 4px;font-size:13px;color:${ink};">${esc(get("landlord_signature_name") || get("landlord_name"))}</div>
-      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:3px;">Name</div>
+      <div style="height:48px;display:flex;align-items:flex-end;padding:0 0 4px;font-family:'Cormorant Garamond','Playfair Display',Georgia,serif;font-style:italic;font-weight:500;font-size:22px;color:${ink};letter-spacing:.01em;line-height:1;">${esc(get("landlord_signature_name") || get("landlord_name"))}</div>
+      <div style="height:1px;background:${accent};opacity:.55;"></div>
+      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:5px;">Name</div>
     </div>
     <div>
-      <div style="border-bottom:1px solid ${accent};height:44px;display:flex;align-items:flex-end;padding:0 0 4px;">${clientSigImg}</div>
-      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:3px;">Signature</div>
+      <div style="height:48px;display:flex;align-items:flex-end;padding:0 0 2px;">${clientSigImg}</div>
+      <div style="height:1px;background:${accent};opacity:.55;"></div>
+      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:5px;">Signature</div>
     </div>
     <div>
-      <div style="border-bottom:1px solid ${accent};height:44px;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 4px;font-size:13px;color:${ink};">${esc(get("landlord_signature_date") || "")}</div>
-      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:3px;">Date</div>
+      <div style="height:48px;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 4px;font-size:13px;color:${ink};">${esc(get("landlord_signature_date") || "")}</div>
+      <div style="height:1px;background:${accent};opacity:.55;"></div>
+      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:5px;">Date</div>
     </div>
   </div>
 
