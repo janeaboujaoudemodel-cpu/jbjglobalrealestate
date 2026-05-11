@@ -122,6 +122,21 @@ Deno.serve(async (req) => {
 
     const allSigned = allRecipients?.every(r => r.status === "signed");
 
+    // Fire premium "Thank you for signing" email to the current signer
+    // (fire-and-forget — failures must not block the signing response)
+    try {
+      fetch(`${supabaseUrl}/functions/v1/esign-send-signer-thanks`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${supabaseServiceKey}`,
+        },
+        body: JSON.stringify({ envelope_id: envelope.id, recipient_id: recipient.id }),
+      }).catch((e) => console.error("signer-thanks invoke failed:", e));
+    } catch (e) {
+      console.error("signer-thanks dispatch error:", e);
+    }
+
     if (allSigned) {
       // Update envelope to completed
       await supabase
@@ -155,9 +170,18 @@ Deno.serve(async (req) => {
 
         if (!completeResponse.ok) {
           console.error("Failed to complete envelope:", await completeResponse.text());
+          // Safety net: ensure envelope is marked completed even if PDF/email step failed
+          await supabase
+            .from("esign_envelopes")
+            .update({ status: "completed", completed_at: new Date().toISOString() })
+            .eq("id", envelope.id);
         }
       } catch (completeError) {
         console.error("Error calling complete-envelope:", completeError);
+        await supabase
+          .from("esign_envelopes")
+          .update({ status: "completed", completed_at: new Date().toISOString() })
+          .eq("id", envelope.id);
       }
     } else {
       // Update envelope to partially signed
