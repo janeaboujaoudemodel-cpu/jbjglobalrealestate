@@ -39,7 +39,7 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
   // so `isLoading` is effectively false after first render. We keep the flag for
   // API compatibility but never set it back to true on subsequent auth churn —
   // that was the source of the broker/academy/company tile blink.
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
   const [hasMadeInitialSelection, setHasMadeInitialSelection] = useState(() => {
     if (typeof window === 'undefined') return false;
     return localStorage.getItem(MODE_SELECTED_KEY) === 'true';
