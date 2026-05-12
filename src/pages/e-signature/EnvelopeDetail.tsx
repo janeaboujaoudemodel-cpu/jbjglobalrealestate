@@ -71,6 +71,9 @@ export default function EnvelopeDetail() {
   const [emailDialogOpen, setEmailDialogOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
   const [hiddenFields, setHiddenFields] = useState<string[]>([]);
+  // Tracks fields that were just restored (un-hidden) so we can highlight them
+  // in the editor and the live preview until the user dismisses or re-saves.
+  const [recentlyRestoredFields, setRecentlyRestoredFields] = useState<string[]>([]);
   const regenerate = useRegenerateEnvelopePdf();
   const { data: sigAssets } = useOwnerSignatureAssets("signature");
   const { data: stampAssets } = useOwnerSignatureAssets("stamp");
