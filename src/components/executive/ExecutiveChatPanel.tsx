@@ -192,7 +192,7 @@ CAPABILITIES:
 
 JBJ CONTACT INFO:
 📧 Email: CONTACT@JBJ.AE
-📞 Phone: +971 56 591 1000
+📞 Phone: +971 54 716 7107
 🌐 Website: WWW.JBJ.AE
 
 When asked to do tasks, confirm you've understood and will handle it. For complex requests, break them down into steps.`;

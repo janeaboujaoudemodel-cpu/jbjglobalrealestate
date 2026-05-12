@@ -52,7 +52,7 @@ export const TRADE_LICENSE_ACTIVITIES = [
 ] as const;
 
 export const COMPANY_CONTACT = {
-  phone: "+971 56 591 1000",
+  phone: "+971 54 716 7107",
   email: "Contact@JBJ.AE",
   website: "www.jbj.ae",
 } as const;

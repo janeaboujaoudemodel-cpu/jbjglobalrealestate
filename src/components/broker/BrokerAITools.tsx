@@ -353,7 +353,7 @@ export default function BrokerAITools({ subscription }: BrokerAIToolsProps) {
               </p>
               <div className="flex items-center gap-4 text-sm">
                 <a
-                  href="https://wa.me/971565911000?text=Hi%2C%20I%20want%20to%20upgrade%20my%20Broker%20Toolkit%20subscription"
+                  href="https://wa.me/971547167107?text=Hi%2C%20I%20want%20to%20upgrade%20my%20Broker%20Toolkit%20subscription"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 text-[#1A1A1A] hover:text-amber-300"

@@ -197,7 +197,7 @@ CRITICAL RULES:
 
 JBJ Contact Information:
 📧 Email: Contact@JBJ.ae
-📞 Phone: +971 56 591 1000
+📞 Phone: +971 54 716 7107
 🌐 Website: www.jbj.ae
 `;
 

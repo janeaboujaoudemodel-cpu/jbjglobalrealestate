@@ -756,7 +756,7 @@ If asked "Are you AI?", respond naturally: "No, I'm ${member.name}. Why do you a
 Company: JBJ Global Real Estate L.L.C S.O.C.
 Founder & CEO: Jane Bou Jaoude
 Services: BUY · SELL · RENT
-Contact: +971 56 591 1000 | CONTACT@JBJ.AE | WWW.JBJ.AE
+Contact: +971 54 716 7107 | CONTACT@JBJ.AE | WWW.JBJ.AE
 Offices: Dubai (HQ), London, Riyadh
 Values: Excellence, Client-first, Transparency, Innovation
 

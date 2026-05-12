@@ -258,7 +258,7 @@ function getPage2IdentityAndTOC(isFounderVisible: boolean): string {
         <div class="identity-card-details">
           <div class="company-name">JBJ Global Real Estate L.L.C S.O.C.</div>
           <div style="width: 60px; height: 1px; background: rgba(168,146,90,0.5); margin: 10px 0;"></div>
-          <div class="detail-row"><span class="icon" style="font-size:14px;">☎</span><span>+971 56 591 1000</span></div>
+          <div class="detail-row"><span class="icon" style="font-size:14px;">☎</span><span>+971 54 716 7107</span></div>
           <div class="detail-row"><span class="icon" style="font-size:14px;">✉</span><span>CONTACT@JBJ.AE</span></div>
           <div class="detail-row"><span class="icon" style="font-size:14px;">⌖</span><span>Downtown Dubai, UAE</span></div>
           <div class="detail-row"><span class="icon" style="font-size:14px;">⊕</span><span>JBJ.AE</span></div>
@@ -924,7 +924,7 @@ function getPage23ExploreAndContact(qrUrl: string, websiteUrl: string): string {
         <div class="identity-card-details">
           <div class="company-name">JBJ Global Real Estate L.L.C S.O.C.</div>
           <div style="width: 60px; height: 1px; background: rgba(168,146,90,0.5); margin: 10px 0;"></div>
-          <div class="detail-row"><span class="icon" style="font-size:14px;">☎</span><a href="tel:+971565911000" style="color: rgba(212,196,160,0.85); text-decoration: none;">+971 56 591 1000</a></div>
+          <div class="detail-row"><span class="icon" style="font-size:14px;">☎</span><a href="tel:+971547167107" style="color: rgba(212,196,160,0.85); text-decoration: none;">+971 54 716 7107</a></div>
           <div class="detail-row"><span class="icon" style="font-size:14px;">✉</span><a href="mailto:CONTACT@JBJ.AE" style="color: rgba(212,196,160,0.85); text-decoration: none;">CONTACT@JBJ.AE</a></div>
           <div class="detail-row"><span class="icon" style="font-size:14px;">⌖</span><span>Downtown Dubai, UAE</span></div>
           <div class="detail-row"><span class="icon" style="font-size:14px;">⊕</span><a href="https://JBJ.AE" style="color: rgba(212,196,160,0.85); text-decoration: none;">JBJ.AE</a></div>
@@ -955,7 +955,7 @@ function getPage23ExploreAndContact(qrUrl: string, websiteUrl: string): string {
         <div style="font-size: 11px; color: #8A8278;">Real Estate Brokerage · Downtown Dubai, UAE</div>
       </div>
       <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin-bottom: 24px; padding: 20px 0; border-top: 1px solid rgba(168,146,90,0.2); border-bottom: 1px solid rgba(168,146,90,0.2);">
-        <div><div style="font-size: 10px; font-weight: 700; color: #A8925A; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 10px;">Contact</div><div style="font-size: 11px; color: #6B6459; line-height: 1.9;"><div>+971 56 591 1000</div><div>CONTACT@JBJ.AE</div><div>Downtown Dubai, UAE</div></div></div>
+        <div><div style="font-size: 10px; font-weight: 700; color: #A8925A; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 10px;">Contact</div><div style="font-size: 11px; color: #6B6459; line-height: 1.9;"><div>+971 54 716 7107</div><div>CONTACT@JBJ.AE</div><div>Downtown Dubai, UAE</div></div></div>
         <div><div style="font-size: 10px; font-weight: 700; color: #A8925A; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 10px;">Explore</div><div style="font-size: 11px; line-height: 1.9;"><div><a href="https://JBJ.AE/properties" style="color:#6B6459; text-decoration:none;">Properties</a></div><div><a href="https://JBJ.AE/areas" style="color:#6B6459; text-decoration:none;">Areas</a></div><div><a href="https://JBJ.AE/developers" style="color:#6B6459; text-decoration:none;">Developers</a></div><div><a href="https://JBJ.AE/market-intelligence" style="color:#6B6459; text-decoration:none;">Market Intel</a></div></div></div>
         <div><div style="font-size: 10px; font-weight: 700; color: #A8925A; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 10px;">Social</div><div style="font-size: 11px; line-height: 1.9;"><div><a href="https://www.instagram.com/jbj.ae" style="color:#6B6459; text-decoration:none;">Instagram</a></div><div><a href="https://www.tiktok.com/@jbj.ae" style="color:#6B6459; text-decoration:none;">TikTok</a></div><div><a href="https://youtube.com/@jbjglobalrealestate" style="color:#6B6459; text-decoration:none;">YouTube</a></div><div><a href="https://www.linkedin.com/company/jbj-global-real-estate/" style="color:#6B6459; text-decoration:none;">LinkedIn</a></div></div></div>
       </div>
@@ -983,7 +983,7 @@ function getBackCover(qrUrl: string, websiteUrl: string, backCoverImg: string): 
         <p style="font-family: 'Playfair Display', serif; font-size: 22px; color: #e4e4e7; font-weight: 400; font-style: italic; line-height: 1.5; margin: 0;">"Your trusted partner in UAE real estate investment"</p>
       </div>
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px 40px; margin-bottom: 48px; text-align: left;">
-        <div><div style="font-size: 9px; color: #A8925A; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 6px; font-weight: 600;">Phone</div><div style="font-size: 12px; color: #d4d4d8;"><a href="tel:+971565911000" style="color: #d4d4d8; text-decoration: none;">+971 56 591 1000</a></div></div>
+        <div><div style="font-size: 9px; color: #A8925A; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 6px; font-weight: 600;">Phone</div><div style="font-size: 12px; color: #d4d4d8;"><a href="tel:+971547167107" style="color: #d4d4d8; text-decoration: none;">+971 54 716 7107</a></div></div>
         <div><div style="font-size: 9px; color: #A8925A; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 6px; font-weight: 600;">Email</div><div style="font-size: 12px; color: #d4d4d8;"><a href="mailto:CONTACT@JBJ.AE" style="color: #d4d4d8; text-decoration: none;">CONTACT@JBJ.AE</a></div></div>
         <div><div style="font-size: 9px; color: #A8925A; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 6px; font-weight: 600;">Location</div><div style="font-size: 12px; color: #d4d4d8;">Downtown Dubai, UAE</div></div>
         <div><div style="font-size: 9px; color: #A8925A; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 6px; font-weight: 600;">Website</div><div style="font-size: 12px; color: #d4d4d8;"><a href="https://JBJ.AE" style="color: #d4d4d8; text-decoration: none;">JBJ.AE</a></div></div>

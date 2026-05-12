@@ -10,6 +10,9 @@ import {
   TRADE_LICENSE_BRAND,
   TRADE_LICENSE_LEGAL_NAME,
   TRADE_LICENSE_OFFICE,
+  TRADE_LICENSE_NUMBER,
+  TRADE_LICENSE_DCCI_NO,
+  TRADE_LICENSE_REGISTER_NO,
   COMPANY_CONTACT,
 } from "@/config/companyLegal";
 
@@ -211,25 +214,42 @@ const footerHtml = (chrome: Required<TemplateChrome>) => {
           <div>${trn ? `TRN ${esc(trn)} · ` : ""}${license ? `LIC ${esc(license)} · ` : ""}${JBJ_BRAND.email} · ${JBJ_BRAND.website}</div>
         </div>`;
     case "three-column":
-    default:
+    default: {
+      // Use a real <table> here: html2canvas + email-client renderers occasionally
+      // collapse CSS grid into a single column, breaking the institutional layout.
+      // Tables are rock-solid across PDF, print and email surfaces.
+      const credentials = [
+        `Trade Licence No. ${esc(TRADE_LICENSE_NUMBER)}`,
+        `Dubai Chamber ${esc(TRADE_LICENSE_DCCI_NO)}`,
+        `CR ${esc(TRADE_LICENSE_REGISTER_NO)}`,
+        ...(trn ? [`TRN ${esc(trn)}`] : []),
+        ...(license && license !== TRADE_LICENSE_NUMBER ? [esc(license)] : []),
+      ].join(" · ");
       return `
-        <div style="${base}display:grid;grid-template-columns:1.3fr 1fr 1.1fr;gap:20px;align-items:center;">
-          <div style="display:flex;align-items:center;gap:14px;">
-            <img src="${JBJ_BRAND.monogram}" alt="JBJ Global Real Estate" crossorigin="anonymous" style="width:110px;height:auto;max-height:60px;object-fit:contain;display:block;flex:none;" />
-            <div>
-              <div style="font-weight:700;letter-spacing:.14em;font-size:12px;">${esc(JBJ_BRAND.legalCompany)}</div>
-              ${JBJ_BRAND.office ? `<div style="opacity:.8;margin-top:3px;font-size:11px;">${esc(JBJ_BRAND.office)}</div>` : ""}
-            </div>
-          </div>
-          <div style="text-align:center;">
-            <div>${JBJ_BRAND.email}</div>
-            <div>${JBJ_BRAND.website}</div>
-          </div>
-          <div style="text-align:right;">
-            <div style="font-weight:600;">${JBJ_BRAND.phone}</div>
-            <div style="opacity:.85;margin-top:3px;font-size:11.5px;">LIC 1591031 · DCCI 666113 · CR 2789619${trn ? ` · TRN ${esc(trn)}` : ""}${license && license !== "1591031" ? ` · ${esc(license)}` : ""}</div>
-          </div>
-        </div>`;
+        <table style="${base}width:100%;border-collapse:collapse;table-layout:fixed;">
+          <tr>
+            <td style="vertical-align:middle;width:42%;padding-right:14px;">
+              <table style="border-collapse:collapse;"><tr>
+                <td style="vertical-align:middle;padding-right:12px;width:118px;">
+                  <img src="${JBJ_BRAND.monogram}" alt="JBJ Global Real Estate" crossorigin="anonymous" style="width:110px;height:auto;max-height:60px;object-fit:contain;display:block;" />
+                </td>
+                <td style="vertical-align:middle;">
+                  <div style="font-weight:700;letter-spacing:.10em;font-size:11.5px;line-height:1.3;">${esc(JBJ_BRAND.legalCompany)}</div>
+                  ${JBJ_BRAND.office ? `<div style="opacity:.8;margin-top:3px;font-size:10.5px;line-height:1.35;">${esc(JBJ_BRAND.office)}</div>` : ""}
+                </td>
+              </tr></table>
+            </td>
+            <td style="vertical-align:middle;text-align:center;width:24%;font-size:11.5px;line-height:1.5;">
+              <div>${JBJ_BRAND.email}</div>
+              <div>${JBJ_BRAND.website}</div>
+            </td>
+            <td style="vertical-align:middle;text-align:right;width:34%;padding-left:14px;">
+              <div style="font-weight:600;font-size:12px;">${JBJ_BRAND.phone}</div>
+              <div style="opacity:.85;margin-top:3px;font-size:10.5px;line-height:1.4;">${credentials}</div>
+            </td>
+          </tr>
+        </table>`;
+    }
   }
 };
 
@@ -447,7 +467,7 @@ export function buildPAAHtml(
   ${sectionTitle(4, "Landlord")}
   <div style="display:grid;grid-template-columns:1.2fr 1.2fr 1fr;gap:0 28px;margin-top:6px;align-items:end;">
     <div>
-      <div style="height:48px;display:flex;align-items:flex-end;padding:0 0 4px;font-family:'Cormorant Garamond','Apple Chancery','Lucida Handwriting','Brush Script MT',Georgia,cursive;font-style:italic;font-weight:500;font-size:24px;color:${ink};letter-spacing:.01em;line-height:1;">${esc(get("landlord_signature_name") || get("landlord_name"))}</div>
+      <div style="height:48px;display:flex;align-items:flex-end;padding:0 0 4px;font-family:'Cormorant Garamond','Apple Chancery','Lucida Handwriting','Brush Script MT',Georgia,cursive;font-style:italic;font-weight:500;font-size:24px;color:${ink};letter-spacing:.01em;line-height:1;">${esc(get("landlord_signature_name"))}</div>
       <div style="height:1px;background:${accent};opacity:.55;"></div>
       <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:5px;">Name</div>
     </div>

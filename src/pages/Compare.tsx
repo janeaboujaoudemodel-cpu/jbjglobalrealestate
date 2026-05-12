@@ -414,7 +414,7 @@ const Compare = () => {
 
     <div class="footer">
       <p><strong>JBJ Global Real Estate</strong> — Real Estate Brokerage</p>
-      <p>Contact@JBJ.ae | +971 56 591 1000</p>
+      <p>Contact@JBJ.ae | +971 54 716 7107</p>
       <p>www.JBJ.ae</p>
       <p style="margin-top:15px; font-size:12px;">Powered & Made by JBJ Global Real Estate — Real Estate Brokerage</p>
       <p style="margin-top:10px; font-size:11px; font-style:italic;">
@@ -718,7 +718,7 @@ const Compare = () => {
                   <button
                     onClick={() => {
                       const projectSummary = projects.map(p => `- ${p.name} | ${p.developer?.name || 'N/A'} | ${p.location || 'Dubai'} | ${p.price_from ? `AED ${(p.price_from/1000000).toFixed(1)}M` : 'Price on request'}`).join('\n');
-                      const shareText = `JBJ GLOBAL REAL ESTATE\nAI Property Comparison Report\n\n${projectSummary}\n\nPrepared by JBJ Global Real Estate\n+971 56 591 1000 | www.JBJ.ae\n\nView: ${window.location.href}`;
+                      const shareText = `JBJ GLOBAL REAL ESTATE\nAI Property Comparison Report\n\n${projectSummary}\n\nPrepared by JBJ Global Real Estate\n+971 54 716 7107 | www.JBJ.ae\n\nView: ${window.location.href}`;
                       const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
                       window.location.href = whatsappUrl;
                     }}
@@ -731,7 +731,7 @@ const Compare = () => {
                     onClick={() => {
                       const subject = encodeURIComponent(`JBJ Global Real Estate — Property Comparison: ${projects.map(p => p.name).join(' vs ')}`);
                       const projectLines = projects.map(p => `• ${p.name} — ${p.developer?.name || ''} — ${p.location || 'Dubai'} — ${p.price_from ? `AED ${(p.price_from/1000000).toFixed(1)}M` : 'Price on request'}`).join('\n');
-                      const body = encodeURIComponent(`Dear Investor,\n\nPlease find the AI-powered property comparison analysis:\n\n${projectLines}\n\nFor full details and AI recommendations, view the comparison:\n${window.location.href}\n\nBest regards,\nJBJ Global Real Estate\n+971 56 591 1000\nContact@JBJ.ae | www.JBJ.ae`);
+                      const body = encodeURIComponent(`Dear Investor,\n\nPlease find the AI-powered property comparison analysis:\n\n${projectLines}\n\nFor full details and AI recommendations, view the comparison:\n${window.location.href}\n\nBest regards,\nJBJ Global Real Estate\n+971 54 716 7107\nContact@JBJ.ae | www.JBJ.ae`);
                       window.location.href = `mailto:?subject=${subject}&body=${body}`;
                     }}
                     className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-[#F7F2EA] hover:bg-[#1A1A1A] text-white group"
@@ -1105,7 +1105,7 @@ const Compare = () => {
                   <Mail className="w-4 h-4 mr-2" />
                   Request Consultation
                 </Button>
-                <a href="tel:+971565911000" className="w-full">
+                <a href="tel:+971547167107" className="w-full">
                   <Button
                     className="w-full bg-[#F7F2EA] border-2 border-[#B89555]/40 text-white font-semibold hover:bg-[#1A1A1A]"
                   >

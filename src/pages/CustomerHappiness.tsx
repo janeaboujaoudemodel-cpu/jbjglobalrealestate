@@ -1153,8 +1153,8 @@ const CustomerHappiness = () => {
                       <Phone className="w-7 h-7 text-blue-500" />
                     </div>
                     <p className="text-[#1A1A1A] font-semibold mb-1">Call Us</p>
-                    <a href="tel:+971565911000" className="text-[#1A1A1A]/70 hover:text-blue-500 transition-colors font-medium">
-                      +971 56 591 1000
+                    <a href="tel:+971547167107" className="text-[#1A1A1A]/70 hover:text-blue-500 transition-colors font-medium">
+                      +971 54 716 7107
                     </a>
                   </CardContent>
                 </Card>

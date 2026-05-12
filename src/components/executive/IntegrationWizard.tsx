@@ -319,8 +319,8 @@ const IntegrationWizard: React.FC<IntegrationWizardProps> = ({
                         <div className="flex items-center justify-between p-3 bg-[#1A1A1A]/30 rounded-lg">
                           <span className="text-[#1A1A1A]/70">Etisalat:</span>
                           <div className="flex items-center gap-2">
-                            <code className="text-[#1A1A1A]">*100*+971565911000#</code>
-                            <button onClick={() => copyToClipboard('*100*+971565911000#')}>
+                            <code className="text-[#1A1A1A]">*100*+971547167107#</code>
+                            <button onClick={() => copyToClipboard('*100*+971547167107#')}>
                               <Copy className="w-4 h-4 text-[#1A1A1A]/70 hover:text-[#1A1A1A]" />
                             </button>
                           </div>
@@ -328,8 +328,8 @@ const IntegrationWizard: React.FC<IntegrationWizardProps> = ({
                         <div className="flex items-center justify-between p-3 bg-[#1A1A1A]/30 rounded-lg">
                           <span className="text-[#1A1A1A]/70">Du:</span>
                           <div className="flex items-center gap-2">
-                            <code className="text-[#1A1A1A]">**21*+971565911000#</code>
-                            <button onClick={() => copyToClipboard('**21*+971565911000#')}>
+                            <code className="text-[#1A1A1A]">**21*+971547167107#</code>
+                            <button onClick={() => copyToClipboard('**21*+971547167107#')}>
                               <Copy className="w-4 h-4 text-[#1A1A1A]/70 hover:text-[#1A1A1A]" />
                             </button>
                           </div>

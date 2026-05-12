@@ -1,123 +1,77 @@
+## What's wrong right now (Omar Allam test envelope)
 
-## Goal
+I dug into the envelope `810df24a-145b-48f2-8e5a-f18e44e0c576` ("JBJ Property Advertising Agreement — Leasing", recipient *Omar Allam Niazi Shadid*). In the database it is currently `status = completed`, `signed_at = 2026-05-09 20:14`, with a `signature_data` blob saved on the recipient. That's why the rendered PDF looks "signed" — the system thinks it really was signed during your test.
 
-Stop building the in-house signature tool. Replace the public `/sign/:token` signing experience with a **"Sign via DocuSign"** handoff page that:
+On top of that the template has three real bugs that make the document look fake even when nobody has signed:
 
-1. Tells the recipient the agreement must be signed in **DocuSign** (the only government-approved e-signature in UAE per the user).
-2. Provides a **"Download DocuSign"** button → App Store link (and Play Store fallback).
-3. Provides a **"Download Agreement PDF"** button so they can open the file in DocuSign.
-4. Instructs them to sign in DocuSign and **email the signed PDF back** to a monitored inbox.
-5. After the signed PDF arrives by email, the system files it into the owner's **Signed Contracts** section and triggers the existing **thank-you email** to the client.
+1. **Autofilled landlord name** — `EnvelopeDetail.tsx` (line 160) and `jbjPropertyAdvertisingAgreement.ts` (line 450) fall back to `landlord_name` for the printed *Name* under the Landlord signature block, rendered in a script/cursive font. So Omar's name appears in handwriting even though he never typed it.
+2. **Autofilled signature date** — `EnvelopeDetail.tsx` (line 161) writes today's date into `landlord_signature_date` whenever the recipient row is `signed`. That's also a fabrication.
+3. **Footer collapses vertically** — `footerHtml()` uses `display:grid; grid-template-columns: 1.3fr 1fr 1.1fr`, but the wrapper sits inside a flex column that drops to a single track on certain widths / when rendered for PDF. The licence line `LIC 1591031 · DCCI 666113 · CR 2789619` is also unlabelled, so it reads as random codes.
 
-All other e-sign infrastructure (envelopes, templates, drafts, CRM linkage, audit log, owner inbox, thank-you email, PDF storage) **stays exactly as built** — only the in-app signature pad / field placement / token-based signing UI is bypassed.
-
----
-
-## Scope
-
-### A. Signing handoff (replaces in-app signing)
-
-**File:** `src/pages/e-signature/SignDocument.tsx`
-
-Replace the existing field-placement / signature-pad UI with a single branded "DocuSign Handoff" card containing:
-
-- JBJ header + envelope title + sender name
-- Step 1 — **Download DocuSign** (primary button)
-  - iOS App Store: `https://apps.apple.com/app/docusign/id474990205`
-  - Google Play (secondary link): `https://play.google.com/store/apps/details?id=com.docusign.ink`
-- Step 2 — **Download Agreement** (downloads the envelope's source PDF from storage via the existing `download-file` proxy with auth headers, same fix already applied in `ExportEnvelopeDialog`)
-- Step 3 — Instructions: "Open the file in DocuSign, follow the on-screen prompts to sign, then email the signed copy to **contracts@jbj.ae**." (Email address configurable — see Technical section.)
-- Step 4 — "I've sent the signed copy" button → posts to a new edge function `esign-mark-awaiting-return` which sets envelope status to `awaiting_signed_return` and notifies the sender.
-- Keep the four terminal screens (error / expired / completed / declined) and the "Return to Homepage" button already added.
-
-**Removed from this page:** PDF.js viewer with field overlays, `ESignaturePad`, signature/initial/date input flow, `esign-submit-signature` invocation. Code stays in repo (used by owner-side adopt studio) but is no longer reachable from the public token URL.
-
-### B. Envelope status model
-
-Add status `awaiting_signed_return` between `sent` and `completed`. Existing statuses (`draft`, `sent`, `completed`, `declined`, `expired`, `voided`) are preserved.
-
-### C. Inbound signed-PDF capture
-
-Two acceptance paths:
-
-1. **Owner manual upload (built now):** In `EnvelopeDetail.tsx`, add an "Upload signed PDF" action visible when status is `sent` or `awaiting_signed_return`. Uses existing `esign-signed-documents` storage bucket + `esign_signed_documents` table; on upload, sets envelope `completed`, writes audit row, fires the existing thank-you email via `esign-complete-envelope` (refactored to skip PDF generation when an externally-signed file is supplied).
-2. **Email ingestion (stub now, documented for later):** Edge function `esign-ingest-signed-email` placeholder + README note. Requires an inbound email provider (Resend Inbound / Mailgun) — flagged as a follow-up that needs a connector decision; no secrets requested in this turn.
-
-### D. Template wording update
-
-Inject a standard preamble into all templates in `src/templates/*.ts` and the dynamic envelope email body:
-
-> "This agreement must be signed using **DocuSign**, the only e-signature platform officially recognised by UAE authorities. If you do not have the app, download it here: [App Store] [Google Play]. Open the attached PDF in DocuSign, complete the signature, and email the signed copy back to contracts@jbj.ae."
-
-Implementation: add `src/config/docusignHandoff.ts` (links + copy + return email) and reference it from the template renderer and the SignDocument page so wording stays in one place.
-
-### E. Outbound envelope email
-
-`supabase/functions/esign-send-envelope/index.ts` (existing) — append the DocuSign handoff block to the email body and attach the source PDF directly (so the recipient doesn't need to revisit the link). The token URL still works as a fallback landing page.
-
-### F. Remaining items from previous turn
-
-1. **Drafts: bulk-select + Recently Deleted**
-   - `src/pages/e-signature/EnvelopesList.tsx` (or equivalent drafts view): add row checkboxes, "Select all", bulk **Delete** + bulk **Send** actions.
-   - Soft-delete: add `deleted_at` column to `esign_envelopes` (migration), update RLS/select queries to filter out soft-deleted by default.
-   - New tab **Recently Deleted** showing rows where `deleted_at` is within 30 days, with **Restore** and **Delete forever** actions.
-
-2. **Allow template creation without client email**
-   - `src/components/crm/SendAgreementDialog.tsx` and the standalone "Create envelope from template" page: allow `Create Envelope` when `lead.email_lower` is empty by saving as `draft` (no send). Currently blocked by the `disabled={!lead?.email_lower}` guard and the early `toast.error("This lead has no email address")`.
-
-3. **CRM merge & dropdown filters**
-   - Merge: in the CRM leads grid, add multi-select + "Merge selected" → opens dialog showing field-by-field picker, calls existing `crm-merge-contacts` RPC (or creates one if absent — verify in `supabase/functions/`).
-   - Dropdown filters: convert the current free-text filter row into shadcn `<Select>` dropdowns for **Lead type**, **Stage**, **Source**, **Owner**, **Tag**. Persist selection in URL search params per the Global Filter System standard.
-
-4. **Repair signed-document download** (already partially fixed via `maybeProxyStorageUrl`) — verify on Omar's envelope and on a freshly uploaded signed PDF.
-
-5. **Full E2E screenshots** — Playwright/manual run capturing:
-   - Send envelope → recipient opens token URL → sees DocuSign handoff
-   - Owner uploads signed PDF → envelope completes → thank-you email logged
-   - Drafts bulk select + restore from Recently Deleted
-   - CRM merge + dropdown filter applied
-   - Signed PDF downloads from owner detail view without auth error
-   Screenshots saved to `/mnt/documents/esign-e2e/` and listed as `<lov-artifact>` tags in the final reply.
+The phone number `+971 56 591 1000` is hardcoded in ~25 places; it needs to become `+971 54 716 7107` everywhere it's surfaced.
 
 ---
 
-## Technical notes (for the engineer/agent)
+## Plan
 
-- **New config file** `src/config/docusignHandoff.ts`:
-  ```ts
-  export const DOCUSIGN_APP_STORE = "https://apps.apple.com/app/docusign/id474990205";
-  export const DOCUSIGN_PLAY_STORE = "https://play.google.com/store/apps/details?id=com.docusign.ink";
-  export const SIGNED_RETURN_EMAIL = "contracts@jbj.ae"; // confirm with user
-  ```
-- **Migration:** `ALTER TABLE esign_envelopes ADD COLUMN deleted_at timestamptz;` + partial index `WHERE deleted_at IS NULL`. Update RLS select policies to keep current behaviour (owner sees own rows incl. deleted; recipient token resolver filters out deleted).
-- **Migration:** extend `esign_envelope_status` enum with `awaiting_signed_return` (use `ALTER TYPE ... ADD VALUE IF NOT EXISTS`).
-- **Edge function refactor:** `esign-complete-envelope` gains a branch — if `external_signed_file_path` is provided, skip pdf-lib coordinate work and use the uploaded file as-is; still write audit row, signed_documents row, fire notifications + thank-you email.
-- **New edge function:** `esign-mark-awaiting-return` — small status flip + sender notification.
-- **Deferred:** inbound-email auto-ingest (needs Mailgun/Resend Inbound setup; flag for follow-up).
-- **Do NOT touch:** `src/integrations/supabase/client.ts`, `src/integrations/supabase/types.ts`, `.env`, `supabase/config.toml` project-level settings.
+### 1. Reset the Omar Allam test envelope to "not signed"
 
----
+SQL migration (one-shot, scoped to that envelope):
 
-## Out of scope
+- `esign_envelopes`: `status = 'sent'`, `completed_at = NULL`, `signed_document_url = NULL`.
+- `esign_recipients` for that envelope: `status = 'sent'`, `signed_at = NULL`, `signature_data = NULL`, `viewed_at = NULL` (so the signing link is fresh).
+- Insert one `esign_audit_log` row noting "test envelope reset by owner".
 
-- Building any further in-app signature pad / field placer features for the public flow.
-- Inbound email auto-parsing (stubbed; requires connector + user approval of return-address).
-- Government registration / DocuSign API integration (handoff is link-based, not API-based, per user request).
+### 2. Stop the template from ever inventing a name or date
 
----
+- `src/templates/jbjPropertyAdvertisingAgreement.ts` line 450: render only `landlord_signature_name` (no fallback to `landlord_name`). If empty, leave the line blank — the signer's typed name will fill it on real signing.
+- `src/pages/e-signature/EnvelopeDetail.tsx` lines 157-163: drop the autofill of `landlord_signature_name` (no `signedClient.name` fallback) and the autofill of `landlord_signature_date`. Only the captured `signature_data` image is rendered in the *Signature* column when truly signed. If you ever want the printed name back, the signer must type it on the sign page.
+- Keep `clientSignatureUrl` rendering (real captured pad signature) — that's the only authentic mark.
 
-## Open question (one)
+### 3. Make the unsigned PDF downloadable to send to the client manually
 
-Confirm the **return email address** clients should send signed PDFs to. Plan currently uses `contracts@jbj.ae` — change before implementation if different.
+On `EnvelopeDetail.tsx`, add a new action button **"Download blank PDF (to send manually)"** next to the existing download. It calls the existing HTML→PDF path (the same renderer used for the signed copy) but with `renderMode: "final"`, no `clientSignatureUrl`, and `landlord_signature_name`/`landlord_signature_date` left blank — producing a clean, printable PDF the client can sign by hand or on DocuSign. Filename: `JBJ-PAA-<docNumber>-unsigned.pdf`.
 
----
+### 4. Fix the footer
 
-## Verification
+In `footerHtml()` (`jbjPropertyAdvertisingAgreement.ts` lines 213-232) for the `three-column` style:
 
-1. Open `/sign/<live-token>` → DocuSign handoff card renders with both app store buttons + agreement download + return instructions.
-2. Owner opens envelope detail → "Upload signed PDF" works → status flips to `completed` → thank-you email logged in `email_send_log` → file appears in Signed Contracts section.
-3. Drafts tab: select 3 drafts → Delete → they move to Recently Deleted → Restore one → it returns to Drafts.
-4. SendAgreementDialog: pick a lead with no email → Create Envelope succeeds and lands on draft detail.
-5. CRM: select two duplicates → Merge → resulting record has chosen fields; dropdown filters update URL params and persist on reload.
-6. Download signed PDF from `EnvelopeDetail` works without "Authentication required" error.
-7. Screenshots written to `/mnt/documents/esign-e2e/` and surfaced as artifacts.
+- Replace `display:grid` with `display:table; width:100%; table-layout:fixed;` and three `display:table-cell` columns. Tables print and PDF-render reliably and never collapse.
+- Left cell: monogram + `J B J GLOBAL REAL ESTATE L.L.C S.O.C` on one line, office address on the next.
+- Centre cell: email + website.
+- Right cell: phone on top, then licence line **with proper labels**: `Trade Licence No. 1591031 · Dubai Chamber 666113 · CR 2789619` so it reads as institutional credentials, not random codes.
+- Add `min-width:0; word-break:break-word;` on cells so long strings never push to a new line.
+
+### 5. Replace the phone number site-wide
+
+Single source of truth: change `COMPANY_CONTACT.phone` in `src/config/companyLegal.ts` to `+971 54 716 7107`. Then sweep and update every hardcoded occurrence so call/WhatsApp links and AI prompts stay in sync:
+
+- `src/constants/stats.ts` — `phone`, `phoneRaw`, `whatsappNumber`
+- `src/config/master-lock.ts` — `PRIMARY_PHONE`
+- `src/config/compliance-engine.ts`
+- `src/config/ai-personalities.ts`
+- `src/config/ai-role-specific-training.ts`
+- `src/components/AdvancedBrokerToolkit.tsx` (tel link + display)
+- `src/components/BrokerCircleSection.tsx` (tel link + display)
+- `src/components/PropertyReportModal.tsx` (`WHATSAPP_NUMBER`)
+- `src/components/SEOHead.tsx`
+- `src/pages/usePresentations.ts` (two strings)
+- `src/pages/AIPersonalShopper.tsx`
+- `supabase/functions/vapi-webhook/index.ts`
+- `supabase/functions/ai-chat-support/index.ts` (display + the `565911000` allow-list)
+- `supabase/functions/ai-chat-stream/index.ts` (same)
+- `supabase/functions/submit-support-ticket/index.ts` (WhatsApp link)
+
+The two old SQL migrations that contain `+971565911000` will be left as-is (historical), but a new migration will update any live row that still references the old number in `crm_contacts.phone`, `crm_companies.phone`, `email_templates.body_html`, `ai_response_templates.response_text`, and the welcome-broker email template, replacing `971565911000`/`+971 56 591 1000` with the new number.
+
+### 6. Sanity check after deploy
+
+- Re-open the Omar envelope at `/e-signature/810df24a-…` → status badge says "Sent", no name/signature/date appear in the Landlord block, footer renders as three horizontal columns with labelled credentials and the new phone.
+- Click **Download blank PDF** → verify the PDF has empty signature row.
+- `rg "565911000|56 591 1000"` returns only the historical migration files.
+
+### Technical notes
+
+- No schema change beyond a one-row reset. No new tables, no RLS edits.
+- `renderTemplateHtml` already accepts `clientSignatureUrl: null` — the unsigned download path just passes the existing renderer with empty signature inputs; no new template variant needed.
+- The footer change is HTML/CSS only inside `footerHtml()`; PAA layout version can stay at 10 (semantics unchanged).

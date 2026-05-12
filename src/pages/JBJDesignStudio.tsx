@@ -426,7 +426,7 @@ const JBJDesignStudio: React.FC = () => {
                           <Input
                             value={signatureData.phone}
                             onChange={(e) => setSignatureData(prev => ({ ...prev, phone: e.target.value }))}
-                            placeholder="+971 56 591 1000"
+                            placeholder="+971 54 716 7107"
                             className="bg-[#F7F2EA] border-[#1A1A1A] text-white mt-1"
                           />
                         </div>

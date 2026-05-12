@@ -329,7 +329,7 @@ const COMPANY_INFO = {
   tagline: "Your Trusted Partner in UAE Real Estate",
   location: "Dubai, United Arab Emirates",
   country: "UAE",
-  phone: "+971 56 591 1000",
+  phone: "+971 54 716 7107",
   email: "CONTACT@JBJ.AE",
   website: "JBJ.AE",
   services: [
