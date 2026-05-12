@@ -425,8 +425,8 @@ export function buildPAAHtml(
       if (!selected) return "";
       return `
         <span data-field-key="${fieldKey}" style="display:inline-block;margin-right:24px;vertical-align:top;">
+          <span style="display:block;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:#1A1A1A;opacity:.7;margin-bottom:3px;">${esc(label)}</span>
           <span style="display:inline-block;border-bottom:1px solid #B89555;padding:2px 10px 2px 2px;font-size:13px;color:#1A1A1A;font-weight:600;">${esc(cleanFinalLabel(selected))}</span>
-          <span style="display:block;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:#1A1A1A;opacity:.7;margin-top:3px;">${esc(label)}</span>
         </span>`;
     }
     return options.map((o) => `<span data-chip-key="${fieldKey}" data-chip-value="${esc(o)}" style="display:inline-block;">${radioChip(o, match(o, current))}</span>`).join("");
