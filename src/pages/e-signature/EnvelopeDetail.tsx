@@ -255,6 +255,31 @@ export default function EnvelopeDetail() {
     }
   };
 
+  // Dirty: true when on-screen edits differ from the persisted values. Used
+  // to block stale downloads — the cached PDF (envelope.document_url) is only
+  // refreshed by handleSaveEdits → regenerate, so downloading while dirty
+  // would hand the user a PDF that doesn't match the on-screen preview
+  // (this is what caused the "Jane / Firas" stale render).
+  const dirty = (() => {
+    if (!editing) return false;
+    const persisted = (envelope?.template_field_values as any) || {};
+    const keys = new Set([...Object.keys(persisted), ...Object.keys(editValues)]);
+    for (const k of keys) {
+      const a = (persisted[k] ?? "").toString();
+      const b = (editValues[k] ?? "").toString();
+      if (a !== b) return true;
+    }
+    return false;
+  })();
+
+  // Cache-bust the stored PDF URL with the layout version + envelope updated_at
+  // so a freshly regenerated file is always fetched (no CDN/browser cache).
+  const bustUrl = (raw?: string | null): string => {
+    if (!raw) return "";
+    const stamp = `${PAA_LAYOUT_VERSION}-${(envelope as any)?.updated_at || Date.now()}`;
+    return raw.includes("?") ? `${raw}&v=${encodeURIComponent(stamp)}` : `${raw}?v=${encodeURIComponent(stamp)}`;
+  };
+
   const handleDownload = async (url: string, filename: string) => {
     if (!url) { toast.error("No file available"); return; }
     try {
