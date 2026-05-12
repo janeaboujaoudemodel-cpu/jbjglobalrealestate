@@ -30,12 +30,10 @@ export const JBJ_BRAND = {
   monogram: monogramUrl,
 } as const;
 
-// v19: PDF export pinned to true A4 (595×842pt) and capture container
-// fixed at 794×1123 px with useCORS, so downloaded PDF == on-screen
-// preview byte-for-byte (no more squished/elongated exports). Initial
-// envelope creation now also passes renderMode:"final" so the very first
-// download matches the preview before any save.
-export const PAA_LAYOUT_VERSION = 22;
+// v23: Premium chrome refresh — full JBJ wordmark logo (transparent),
+// label-above-value field layout, no gold border around the legal name
+// in clause 1, taller premium footer with full clickable contact set.
+export const PAA_LAYOUT_VERSION = 23;
 
 export type PAACategory = "leasing" | "selling" | "other";
 
