@@ -357,7 +357,7 @@ export default function SignDocument() {
                         filled
                           ? "border-emerald-500 bg-emerald-50/60"
                           : isDate
-                          ? "border-[#B89555]/60 bg-[#FDF6E9]/80"
+                          ? "border-transparent bg-transparent shadow-none"
                           : "border-amber-500 bg-amber-100/80 hover:bg-amber-200 animate-pulse"
                       }`}
                       style={{
