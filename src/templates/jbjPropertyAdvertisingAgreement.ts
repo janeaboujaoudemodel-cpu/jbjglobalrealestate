@@ -332,8 +332,8 @@ export function buildPAAHtml(
     radioChip(label, get("status_vacant_tenanted").toLowerCase() === label.toLowerCase());
 
   const sectionTitle = (n: number, t: string) => `
-    <div style="margin:22px 0 12px;">
-      <div style="font-size:13px;font-weight:700;letter-spacing:.10em;color:${ink};">${n}. ${t.toUpperCase()}</div>
+    <div style="margin:12px 0 6px;">
+      <div style="font-size:12px;font-weight:700;letter-spacing:.10em;color:${ink};">${n}. ${t.toUpperCase()}</div>
     </div>`;
 
   // Signature blocks
@@ -348,26 +348,17 @@ export function buildPAAHtml(
     : "";
 
   const html = `
-<div style="font-family:Inter,Arial,sans-serif;color:${ink};background:${chrome.surface};padding:44px 52px;max-width:794px;margin:0 auto;line-height:1.55;">
+<div style="font-family:Inter,Arial,sans-serif;color:${ink};background:${chrome.surface};padding:24px 36px;max-width:794px;margin:0 auto;line-height:1.45;font-size:11.5px;">
 
   ${headerHtml(chrome, get("doc_number"))}
 
-  <div style="text-align:center;margin:8px 0 18px;">
-    <h1 style="font-size:22px;font-weight:800;letter-spacing:.22em;margin:0;color:${ink};text-transform:uppercase;">
+  <div style="text-align:center;margin:4px 0 10px;">
+    <h1 style="font-size:17px;font-weight:800;letter-spacing:.20em;margin:0;color:${ink};text-transform:uppercase;">
       Property Advertising Agreement
     </h1>
-    <div style="width:64px;height:1px;background:#B89555;margin:10px auto 0;"></div>
   </div>
-  <p style="font-size:12px;color:${ink};opacity:.78;margin:8px 0 4px;">
-    As a property owner or landlord, you are partnering with <strong>JBJ Global Real Estate</strong> to advertise and represent your property for sale or lease at the best terms in the shortest time.
-  </p>
-  <p style="font-size:12px;color:${ink};opacity:.78;margin:0 0 4px;">
-    By signing this document and providing the details below, your property will be advertised across JBJ's premium portals,
-    website, social media, partner brokerages, CRM and direct outreach channels with enhanced positioning where applicable.
-  </p>
-  <p style="font-size:12px;color:${ink};opacity:.78;margin:0 0 4px;">
-    Submitting further documents for verification ranks your listing higher in search results with the official Verified Listing badge —
-    consumers are 5× more likely to enquire about verified properties.
+  <p style="font-size:11px;color:${ink};opacity:.78;margin:4px 0 3px;line-height:1.45;">
+    As a property owner or landlord, you are partnering with <strong>JBJ Global Real Estate</strong> to advertise and represent your property for sale or lease at the best terms in the shortest time. By signing below, your property will be advertised across JBJ's premium portals, website, social media, partner brokerages, CRM and direct outreach. Submitting verification documents ranks your listing higher with the Verified badge — consumers are 5× more likely to enquire.
   </p>
 
   ${sectionTitle(1, "Landlord / Owner Details")}
@@ -428,7 +419,7 @@ export function buildPAAHtml(
     </div>` : ""}
 
   ${sectionTitle(3, "Terms and Conditions")}
-  <div style="font-size:12.5px;color:${ink};line-height:1.7;">
+  <div style="font-size:11px;color:${ink};line-height:1.5;">
     <div style="margin-bottom:8px;">
       1. The landlord / legal representative has agreed to appoint
       <span style="border-bottom:1px solid ${accent};padding:0 6px;font-weight:600;">${esc(get("broker_appointee_name") || JBJ_BRAND.legalCompany)}</span>
