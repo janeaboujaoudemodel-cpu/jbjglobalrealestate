@@ -44,7 +44,7 @@ export function useEsignTemplates(category?: "leasing" | "selling" | "all") {
   });
 }
 
-/** Renders template HTML for a given key + values, with optional chrome/signature assets (PAA only). */
+/** Renders template HTML for a given key + values, with optional chrome/signature assets. */
 export function renderTemplateHtml(
   templateKey: string,
   values: Record<string, string>,
@@ -53,27 +53,49 @@ export function renderTemplateHtml(
   if (templateKey === "jbj-listing-authorisation-selling") {
     return buildSellingHtml(values as any);
   }
+  if (templateKey === "jbj-blank-letter") {
+    return buildBlankLetterHtml(values as any, opts as BuildBlankLetterOptions);
+  }
   return buildPAAHtml(values as any, opts);
 }
 
-/** Renders an HTML string into a single-page A4 PDF blob (client-side). */
+/** Renders an HTML string into a single-page A4 PDF blob (client-side).
+ *  v19: pinned to true A4 (595×842pt). The capture container is fixed at
+ *  794×1123 px so the rasterised page never elongates beyond one sheet,
+ *  and html2canvas runs with useCORS + windowWidth so embedded images
+ *  (signature, stamp, monogram) and Google fonts render identically to
+ *  what is shown in the on-screen iframe preview. Eliminates the "preview
+ *  vs download mismatch" reported by the user. */
 export async function renderHtmlToPdfBlob(html: string): Promise<{ blob: Blob; pdfWidth: number; pdfHeight: number }> {
+  const A4_PX_W = 794;
+  const A4_PX_H = 1123;
   const container = document.createElement("div");
   container.style.position = "fixed";
   container.style.top = "-10000px";
   container.style.left = "0";
-  container.style.width = "794px";
+  container.style.width = `${A4_PX_W}px`;
+  container.style.minHeight = `${A4_PX_H}px`;
   container.style.background = "#ffffff";
   container.innerHTML = html;
   document.body.appendChild(container);
   try {
     const html2canvas = (await import("html2canvas")).default;
     const { jsPDF } = await import("jspdf");
-    const canvas = await html2canvas(container, { scale: 2, backgroundColor: "#ffffff" });
+    const canvas = await html2canvas(container, {
+      scale: 2,
+      backgroundColor: "#ffffff",
+      useCORS: true,
+      allowTaint: false,
+      letterRendering: true,
+      windowWidth: A4_PX_W,
+      width: A4_PX_W,
+      height: A4_PX_H,
+    } as any);
     const img = canvas.toDataURL("image/jpeg", 0.92);
+    // Pin to true A4 portrait (595×842pt) so the export is always one page.
     const pdfWidth = 595;
-    const pdfHeight = (canvas.height / canvas.width) * pdfWidth;
-    const pdf = new jsPDF({ unit: "pt", format: [pdfWidth, pdfHeight], orientation: "portrait" });
+    const pdfHeight = 842;
+    const pdf = new jsPDF({ unit: "pt", format: "a4", orientation: "portrait" });
     pdf.addImage(img, "JPEG", 0, 0, pdfWidth, pdfHeight);
     return { blob: pdf.output("blob"), pdfWidth, pdfHeight };
   } finally {
