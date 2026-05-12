@@ -23654,6 +23654,7 @@ export type Database = {
           is_published: boolean | null
           is_sold_out: boolean | null
           latitude: number | null
+          listing_kind: string | null
           location: string | null
           location_description: string | null
           location_distances: Json | null
@@ -23661,6 +23662,7 @@ export type Database = {
           location_image_url: string | null
           longitude: number | null
           name: string
+          owner_pii_hidden: boolean
           payment_breakdown: Json | null
           payment_plan: string | null
           price_currency: string | null
@@ -23681,6 +23683,7 @@ export type Database = {
           size_min: number | null
           slug: string
           source: string | null
+          source_envelope_id: string | null
           source_id: string | null
           source_updated_at: string | null
           source_url: string | null
@@ -23744,6 +23747,7 @@ export type Database = {
           is_published?: boolean | null
           is_sold_out?: boolean | null
           latitude?: number | null
+          listing_kind?: string | null
           location?: string | null
           location_description?: string | null
           location_distances?: Json | null
@@ -23751,6 +23755,7 @@ export type Database = {
           location_image_url?: string | null
           longitude?: number | null
           name: string
+          owner_pii_hidden?: boolean
           payment_breakdown?: Json | null
           payment_plan?: string | null
           price_currency?: string | null
@@ -23771,6 +23776,7 @@ export type Database = {
           size_min?: number | null
           slug: string
           source?: string | null
+          source_envelope_id?: string | null
           source_id?: string | null
           source_updated_at?: string | null
           source_url?: string | null
@@ -23834,6 +23840,7 @@ export type Database = {
           is_published?: boolean | null
           is_sold_out?: boolean | null
           latitude?: number | null
+          listing_kind?: string | null
           location?: string | null
           location_description?: string | null
           location_distances?: Json | null
@@ -23841,6 +23848,7 @@ export type Database = {
           location_image_url?: string | null
           longitude?: number | null
           name?: string
+          owner_pii_hidden?: boolean
           payment_breakdown?: Json | null
           payment_plan?: string | null
           price_currency?: string | null
@@ -23861,6 +23869,7 @@ export type Database = {
           size_min?: number | null
           slug?: string
           source?: string | null
+          source_envelope_id?: string | null
           source_id?: string | null
           source_updated_at?: string | null
           source_url?: string | null
