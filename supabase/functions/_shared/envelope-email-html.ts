@@ -100,9 +100,9 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
       <tr><td style="background:#ffffff;border-left:1px solid #B89555;border-right:1px solid #B89555;padding:32px 32px 24px;">
         <h2 style="margin:0 0 18px;color:#1A1A1A;font-size:20px;font-weight:700;line-height:1.3;">${subject}</h2>
         <div style="color:#1A1A1A;line-height:1.7;font-size:14px;">${bodyHtml}</div>
-        <p style="margin:28px 0 0;color:#1A1A1A;opacity:.6;font-size:11px;line-height:1.55;">
-          The signed agreement is attached as a PDF. A separate signing request will be delivered to you via DocuSign.
-        </p>
+        ${ctaBlock}
+        ${attachmentChip}
+        <p style="margin:24px 0 0;color:#1A1A1A;opacity:.6;font-size:11px;line-height:1.55;">${footerNote}</p>
       </td></tr>
       <!-- Footer -->
       <tr><td style="background:#F7F2EA;border:1px solid #B89555;border-top:none;padding:18px 24px;">
