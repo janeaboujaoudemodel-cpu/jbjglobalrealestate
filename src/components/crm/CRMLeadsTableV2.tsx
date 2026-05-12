@@ -650,8 +650,24 @@ export default function CRMLeadsTableV2({
               ))
             ) : filtered.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={10} className="py-10 text-center text-[#1A1A1A]/50">
-                  No leads found.
+                <TableCell colSpan={10} className="py-12 text-center">
+                  {leads.length === 0 ? (
+                    <div className="flex flex-col items-center gap-3">
+                      <div className="text-[#1A1A1A] font-semibold text-base">No leads yet</div>
+                      <div className="text-[#1A1A1A]/60 text-xs">Import a CSV, add a lead manually, or refresh.</div>
+                      <div className="flex items-center gap-2 pt-1">
+                        <Button size="sm" variant="outline" onClick={() => fetchLeads()} className="border-[#B89555]/40 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#EFE6D6]">Refresh</Button>
+                        <Button size="sm" variant="outline" onClick={() => (window.location.href = "/owner/crm/import")} className="border-[#B89555]/40 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#EFE6D6]">Import CSV</Button>
+                        <Button size="sm" onClick={() => (window.location.href = "/owner/crm/leads/new")} className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555] hover:bg-[#EFE6D6]/80">Add lead</Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center gap-2">
+                      <div className="text-[#1A1A1A]/70 text-sm">No leads match your filters.</div>
+                      <div className="text-[#1A1A1A]/50 text-xs">{leads.length} lead{leads.length === 1 ? "" : "s"} hidden by filters.</div>
+                      <Button size="sm" variant="outline" onClick={() => { setSearch(""); setStageMulti([]); setSourceTypeFilter(""); setAssigneeFilter(""); setTagFilter(""); }} className="border-[#B89555]/40 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#EFE6D6] mt-1">Clear filters</Button>
+                    </div>
+                  )}
                 </TableCell>
               </TableRow>
             ) : (
