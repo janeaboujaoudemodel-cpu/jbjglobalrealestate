@@ -166,6 +166,8 @@ export function SendViaEmailDialog({
           cc_emails: cleanCcs,
           interpolated_subject: subject,
           interpolated_body_html: bodyHtml,     // pre-rendered HTML (locked-send)
+          docusign_url: docusignUrl.trim() || undefined,
+          attachment_name: attachmentName,
         }),
       });
       const out = await res.json().catch(() => ({}));
