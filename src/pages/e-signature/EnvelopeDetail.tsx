@@ -1287,6 +1287,7 @@ export default function EnvelopeDetail() {
         docNumber={docNumber}
         landlordName={(editValues.landlord_name as string) || ((envelope?.metadata as any)?.fields?.landlord_name as string) || null}
         signingLink={clientRec?.signing_token ? buildSigningUrl(clientRec.signing_token) : null}
+        getCurrentPdfBlob={renderCurrentPreviewPdf}
         onShareWhatsApp={() => clientRec && handleWhatsApp(clientRec)}
         onShareEmail={() => clientRec && handleQuickEmail(clientRec)}
       />
