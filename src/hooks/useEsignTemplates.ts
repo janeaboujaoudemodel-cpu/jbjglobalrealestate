@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { buildPAAHtml, type BuildPAAOptions, PAA_LAYOUT_VERSION } from "@/templates/jbjPropertyAdvertisingAgreement";
 import { buildSellingHtml } from "@/templates/jbjListingAuthorisation";
+import { buildBlankLetterHtml, type BuildBlankLetterOptions } from "@/templates/jbjBlankLetter";
 
 export interface EsignTemplate {
   id: string;
