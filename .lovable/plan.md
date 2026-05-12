@@ -1,77 +1,75 @@
-## What's wrong right now (Omar Allam test envelope)
+# Plan: E-signature flow polish + agreement layout + Omar reset
 
-I dug into the envelope `810df24a-145b-48f2-8e5a-f18e44e0c576` ("JBJ Property Advertising Agreement — Leasing", recipient *Omar Allam Niazi Shadid*). In the database it is currently `status = completed`, `signed_at = 2026-05-09 20:14`, with a `signature_data` blob saved on the recipient. That's why the rendered PDF looks "signed" — the system thinks it really was signed during your test.
+## 1. Outbound emails: Reply-To = contact@jbj.ae
 
-On top of that the template has three real bugs that make the document look fake even when nobody has signed:
+All esign emails are sent from `noreply@jbj.ae` with no `reply_to`, so when a recipient hits Reply they end up writing to a black-hole address.
 
-1. **Autofilled landlord name** — `EnvelopeDetail.tsx` (line 160) and `jbjPropertyAdvertisingAgreement.ts` (line 450) fall back to `landlord_name` for the printed *Name* under the Landlord signature block, rendered in a script/cursive font. So Omar's name appears in handwriting even though he never typed it.
-2. **Autofilled signature date** — `EnvelopeDetail.tsx` (line 161) writes today's date into `landlord_signature_date` whenever the recipient row is `signed`. That's also a fabrication.
-3. **Footer collapses vertically** — `footerHtml()` uses `display:grid; grid-template-columns: 1.3fr 1fr 1.1fr`, but the wrapper sits inside a flex column that drops to a single track on certain widths / when rendered for PDF. The licence line `LIC 1591031 · DCCI 666113 · CR 2789619` is also unlabelled, so it reads as random codes.
+Add `reply_to: "contact@jbj.ae"` to every Resend payload in:
+- `supabase/functions/esign-send-for-signature/index.ts` (line 192)
+- `supabase/functions/esign-send-test-email/index.ts` (line 153)
+- `supabase/functions/esign-send-signer-thanks/index.ts` (line 106)
+- `supabase/functions/esign-send-reminder/index.ts` (line 162)
 
-The phone number `+971 56 591 1000` is hardcoded in ~25 places; it needs to become `+971 54 716 7107` everywhere it's surfaced.
+Centralise the reply-to in `supabase/functions/_shared/outreachIdentity.ts` as `REPLY_TO_CONTACT = "contact@jbj.ae"` so future sends inherit it.
 
----
+## 2. Block inbound mail to noreply@jbj.ae (friendly bounce)
 
-## Plan
+`supabase/functions/resend-inbound-email-webhook/index.ts` currently maps `noreply@jbj.ae → general` (line 27) and silently routes the email into the inbox. Change it to:
 
-### 1. Reset the Omar Allam test envelope to "not signed"
+- Detect any inbound whose recipient is `noreply@jbj.ae` (or `no-reply@…`).
+- Skip the normal ingest pipeline.
+- Send an auto-reply via the existing Resend client back to `from`, using a branded HTML shell (same template as compose-branded-email) with copy roughly:
 
-SQL migration (one-shot, scoped to that envelope):
+> Hi — thanks for writing in. This inbox doesn't receive replies. For anything you need, please email **contact@jbj.ae** and a real person on the JBJ team will get back to you shortly.
 
-- `esign_envelopes`: `status = 'sent'`, `completed_at = NULL`, `signed_document_url = NULL`.
-- `esign_recipients` for that envelope: `status = 'sent'`, `signed_at = NULL`, `signature_data = NULL`, `viewed_at = NULL` (so the signing link is fresh).
-- Insert one `esign_audit_log` row noting "test envelope reset by owner".
+- Log the bounce in `email_send_log` with a `noreply_autoreply` tag and return 200 so Resend doesn't retry.
 
-### 2. Stop the template from ever inventing a name or date
+## 3. Property Advertising Agreement: fit on one page
 
-- `src/templates/jbjPropertyAdvertisingAgreement.ts` line 450: render only `landlord_signature_name` (no fallback to `landlord_name`). If empty, leave the line blank — the signer's typed name will fill it on real signing.
-- `src/pages/e-signature/EnvelopeDetail.tsx` lines 157-163: drop the autofill of `landlord_signature_name` (no `signedClient.name` fallback) and the autofill of `landlord_signature_date`. Only the captured `signature_data` image is rendered in the *Signature* column when truly signed. If you ever want the printed name back, the signer must type it on the sign page.
-- Keep `clientSignatureUrl` rendering (real captured pad signature) — that's the only authentic mark.
+Edit `src/templates/jbjPropertyAdvertisingAgreement.ts`:
 
-### 3. Make the unsigned PDF downloadable to send to the client manually
+- **Header** (`headerHtml` `monogram-wordmark` branch): keep monogram + the legal company line + Doc No. on the right. Remove the larger watermark/wordmark image — the legal title is enough.
+- **Footer** (`footerHtml` `three-column` branch lines 230-250): drop the duplicated monogram + legal company name. Replace with three clean cells holding only contact details: 
+  - Left: office address
+  - Centre: `contact@jbj.ae · jbj.ae`
+  - Right: `+971 54 716 7107` and labelled credentials line
+- **Density** (the document body, lines ~363+): tighten paddings (`padding: 28px 44px`), reduce section gaps and the additional-notes minimum height, drop the central decorative gold underline, and switch the page wrapper to `@page { size: A4; margin: 18mm 14mm; }` via the rendered PDF wrapper. Goal is single A4 page when fields are normal length.
 
-On `EnvelopeDetail.tsx`, add a new action button **"Download blank PDF (to send manually)"** next to the existing download. It calls the existing HTML→PDF path (the same renderer used for the signed copy) but with `renderMode: "final"`, no `clientSignatureUrl`, and `landlord_signature_name`/`landlord_signature_date` left blank — producing a clean, printable PDF the client can sign by hand or on DocuSign. Filename: `JBJ-PAA-<docNumber>-unsigned.pdf`.
+## 4. Branded email "attach + Sign with DocuSign" handoff
 
-### 4. Fix the footer
+Today the EnvelopeDetail "Send for signature" button opens a generic compose flow. Rework so the flow is:
 
-In `footerHtml()` (`jbjPropertyAdvertisingAgreement.ts` lines 213-232) for the `three-column` style:
+a. Owner opens an envelope, clicks **Send for signature**.
 
-- Replace `display:grid` with `display:table; width:100%; table-layout:fixed;` and three `display:table-cell` columns. Tables print and PDF-render reliably and never collapse.
-- Left cell: monogram + `J B J GLOBAL REAL ESTATE L.L.C S.O.C` on one line, office address on the next.
-- Centre cell: email + website.
-- Right cell: phone on top, then licence line **with proper labels**: `Trade Licence No. 1591031 · Dubai Chamber 666113 · CR 2789619` so it reads as institutional credentials, not random codes.
-- Add `min-width:0; word-break:break-word;` on cells so long strings never push to a new line.
+b. Branded compose modal pre-fills:
+   - Recipient input (owner types client email)
+   - Subject + body (already templated)
+   - **The agreement PDF auto-attached** (uses the existing `renderHtmlToPdfBlob` blank export, uploaded to `esign-documents` storage and added as a Resend attachment in `esign-send-for-signature/index.ts`).
+   - A required **Download & sign with DocuSign** CTA injected into the email body that points to `/sign/{signing_token}` (existing route).
 
-### 5. Replace the phone number site-wide
+c. Recipient lands on the signing page → can download the PDF or sign inline (existing UI). On Finish, `esign-process-signature` + `esign-complete-envelope` already:
+   - Stamp signature into the document
+   - Save signed PDF to storage (`esign_signed_documents`)
+   - Mark envelope `completed`
 
-Single source of truth: change `COMPANY_CONTACT.phone` in `src/config/companyLegal.ts` to `+971 54 716 7107`. Then sweep and update every hardcoded occurrence so call/WhatsApp links and AI prompts stay in sync:
+d. After completion, send the signer a "Thank you" email (existing `esign-send-signer-thanks`) and a copy back to the sender containing the signed PDF link.
 
-- `src/constants/stats.ts` — `phone`, `phoneRaw`, `whatsappNumber`
-- `src/config/master-lock.ts` — `PRIMARY_PHONE`
-- `src/config/compliance-engine.ts`
-- `src/config/ai-personalities.ts`
-- `src/config/ai-role-specific-training.ts`
-- `src/components/AdvancedBrokerToolkit.tsx` (tel link + display)
-- `src/components/BrokerCircleSection.tsx` (tel link + display)
-- `src/components/PropertyReportModal.tsx` (`WHATSAPP_NUMBER`)
-- `src/components/SEOHead.tsx`
-- `src/pages/usePresentations.ts` (two strings)
-- `src/pages/AIPersonalShopper.tsx`
-- `supabase/functions/vapi-webhook/index.ts`
-- `supabase/functions/ai-chat-support/index.ts` (display + the `565911000` allow-list)
-- `supabase/functions/ai-chat-stream/index.ts` (same)
-- `supabase/functions/submit-support-ticket/index.ts` (WhatsApp link)
+e. EnvelopeDetail page already lists the signed document; ensure the **Preview / Download signed** buttons point at `signed_document_url` from `esign_signed_documents` and refresh in real time via the existing Supabase channel subscription (verify the channel is subscribed on this page).
 
-The two old SQL migrations that contain `+971565911000` will be left as-is (historical), but a new migration will update any live row that still references the old number in `crm_contacts.phone`, `crm_companies.phone`, `email_templates.body_html`, `ai_response_templates.response_text`, and the welcome-broker email template, replacing `971565911000`/`+971 56 591 1000` with the new number.
+No new edge functions — just wire the attachment into `esign-send-for-signature` and surface the existing signed-doc record on `EnvelopeDetail`.
 
-### 6. Sanity check after deploy
+## 5. Reset Omar Allam envelope (it was a test)
 
-- Re-open the Omar envelope at `/e-signature/810df24a-…` → status badge says "Sent", no name/signature/date appear in the Landlord block, footer renders as three horizontal columns with labelled credentials and the new phone.
-- Click **Download blank PDF** → verify the PDF has empty signature row.
-- `rg "565911000|56 591 1000"` returns only the historical migration files.
+Envelope `810df24a-145b-48f2-8e5a-f18e44e0c576` currently shows `status='sent'` and recipient `omar.a@shadid.org` `status='sent'` even though only the test inbox received the mail. Migration to:
 
-### Technical notes
+- Set envelope `status = 'draft'`, clear `completed_at`, `signed_document_url`.
+- Set recipient `status = 'pending'`, clear `sent_at`, `viewed_at`, `signed_at`, `signature_data`.
+- Insert audit log row: `action = 'reset_test_send'`, note: "Test-only send to internal QA address; reverted to draft so the real client has not been contacted."
 
-- No schema change beyond a one-row reset. No new tables, no RLS edits.
-- `renderTemplateHtml` already accepts `clientSignatureUrl: null` — the unsigned download path just passes the existing renderer with empty signature inputs; no new template variant needed.
-- The footer change is HTML/CSS only inside `footerHtml()`; PAA layout version can stay at 10 (semantics unchanged).
+## Technical notes
+
+- Reply-To: Resend supports `reply_to` as string; using a single shared constant keeps it DRY.
+- Inbound auto-reply will reuse `_shared/email-shell.ts` to keep the bounce on-brand.
+- PDF attachment in Resend: pass `attachments: [{ filename, content: base64 }]` from the rendered blob.
+- The signing page route already exists at `/sign/:token` — no new public surface added.
+- All footer/header edits keep gold strictly as a 1px hairline (per design memory).
