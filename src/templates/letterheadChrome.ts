@@ -9,7 +9,7 @@
  * preview AND in the html2canvas PDF export — so "preview != download" can
  * never happen on letterhead documents.
  */
-import monogramUrl from "@/assets/jbj-monogram-nobuffer.png?inline";
+// monogram now loaded via absolute public URL inside the rendered HTML.
 import {
   TRADE_LICENSE_LEGAL_NAME,
   TRADE_LICENSE_OFFICE,

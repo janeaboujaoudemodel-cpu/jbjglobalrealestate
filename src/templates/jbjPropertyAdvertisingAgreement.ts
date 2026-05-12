@@ -172,11 +172,7 @@ export const DEFAULT_CHROME: Required<TemplateChrome> = {
   license: "",
 };
 
-// Premium 3-stop gold gradient — deep antique gold → bright champagne → deep
-// antique gold. Reads richer than a flat #B89555 hairline both on screen and
-// in the PDF export. 2px tall for visible heft without dominating the page.
-const goldGradient = (_accent: string) =>
-  `background:linear-gradient(90deg, #8A6A2A00 0%, #8A6A2A 10%, #C9A24E 50%, #8A6A2A 90%, #8A6A2A00 100%);height:2px;`;
+// Decorative gradient removed — chrome uses a single full-width hairline only.
 
 // Clickable contact link helpers — premium ink/gold mix, no underline by
 // default so the chrome stays clean. Used in BOTH header and footer so
