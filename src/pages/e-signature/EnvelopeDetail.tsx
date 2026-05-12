@@ -29,6 +29,8 @@ import ExportEnvelopeDialog from "@/components/e-signature/ExportEnvelopeDialog"
 import { isReadyDraft, computeDisplayStatus, pickClientName, pickPropertyContext, maskPhone, maskEmail } from "@/pages/e-signature/envelopeStatus";
 import { openWhatsApp, openEmail } from "@/utils/contactActions";
 import PAAListingDraftCard from "@/components/e-signature/PAAListingDraftCard";
+import PAAAICopilotDrawer from "@/components/e-signature/PAAAICopilotDrawer";
+import { Lock, Sparkles } from "lucide-react";
 
 type EnvelopeStatus = 'draft' | 'sent' | 'viewed' | 'partially_signed' | 'completed' | 'declined' | 'expired' | 'voided';
 type RecipientStatus = 'pending' | 'sent' | 'delivered' | 'viewed' | 'signed' | 'declined';
@@ -161,6 +163,57 @@ export default function EnvelopeDetail() {
     const m = (envelope?.metadata as any) || {};
     return m.doc_number || (envelope?.template_field_values as any)?.doc_number || "";
   }, [envelope]);
+
+  const isLocked: boolean = useMemo(() => {
+    return Boolean((envelope?.metadata as any)?.locked_at);
+  }, [envelope]);
+
+  const handleApproveLock = async () => {
+    if (!envelope) return;
+    if (!confirm("Approve and lock this agreement? The fields will be frozen and a final PDF generated.")) return;
+    try {
+      if (envelope.template_key) {
+        await regenerate.mutateAsync({
+          envelopeId: envelope.id,
+          templateKey: envelope.template_key,
+          values: { ...((envelope.template_field_values as any) || {}), doc_number: docNumber },
+          chrome,
+          ownerSignatureUrl,
+          ownerStampUrl,
+          hiddenFields,
+        });
+      }
+      await supabase.from("esign_envelopes").update({
+        metadata: { ...((envelope.metadata as any) || {}), locked_at: new Date().toISOString(), locked_by: "owner" },
+      }).eq("id", envelope.id);
+      toast.success("Agreement approved & locked");
+      setEditing(false);
+      refetch();
+    } catch (e: any) {
+      toast.error(e.message || "Failed to lock");
+    }
+  };
+
+  const handleUnlock = async () => {
+    if (!envelope) return;
+    if (!confirm("Unlock this agreement? You will be able to edit fields again.")) return;
+    try {
+      const meta = { ...((envelope.metadata as any) || {}) };
+      delete meta.locked_at;
+      delete meta.locked_by;
+      await supabase.from("esign_envelopes").update({ metadata: meta }).eq("id", envelope.id);
+      toast.success("Agreement unlocked");
+      refetch();
+    } catch (e: any) {
+      toast.error(e.message || "Failed to unlock");
+    }
+  };
+
+  const applyAIUpdates = (updates: Record<string, string>) => {
+    if (isLocked) { toast.error("Document is locked — unlock to edit"); return; }
+    setEditing(true);
+    setEditValues((prev) => ({ ...prev, ...updates }));
+  };
 
   const previewHtml = useMemo(() => {
     if (!envelope?.template_key) return null;
@@ -694,9 +747,27 @@ export default function EnvelopeDetail() {
             <Button variant="outline" onClick={() => handleWhatsApp(clientRec)} disabled={!clientRec}>
               <MessageCircle className="w-4 h-4 mr-2" /> Share via WhatsApp
             </Button>
-            <div className="ml-auto flex items-center gap-2">
+            <div className="ml-auto flex items-center gap-2 flex-wrap">
+              {envelope.template_key === "jbj-property-advertising-agreement" && (
+                <PAAAICopilotDrawer
+                  envelopeId={envelope.id}
+                  currentValues={editing ? editValues : ((envelope.template_field_values as any) || {})}
+                  onApplyUpdates={applyAIUpdates}
+                />
+              )}
+              {isDraft && (
+                isLocked ? (
+                  <Button variant="outline" onClick={handleUnlock} className="border-emerald-300 text-emerald-700">
+                    <Lock className="w-4 h-4 mr-2" /> Locked — click to unlock
+                  </Button>
+                ) : (
+                  <Button variant="gold" onClick={handleApproveLock} disabled={regenerate.isPending}>
+                    <Lock className="w-4 h-4 mr-2" /> Approve & Lock
+                  </Button>
+                )
+              )}
               {!editing ? (
-                <Button variant="outline" onClick={() => setEditing(true)}>
+                <Button variant="outline" onClick={() => setEditing(true)} disabled={isLocked} title={isLocked ? "Unlock to edit" : undefined}>
                   <Edit3 className="w-4 h-4 mr-2" /> Edit fields
                 </Button>
               ) : (
