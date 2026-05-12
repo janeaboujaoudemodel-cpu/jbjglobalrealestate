@@ -26,7 +26,7 @@ import {
   TRADE_LICENSE_OFFICE,
   COMPANY_CONTACT,
 } from "@/config/companyLegal";
-import { sanitizeHtmlContent } from "@/utils/contentSanitizer";
+import { sanitizeHtml } from "@/utils/contentSanitizer";
 
 export const BLANK_LETTER_LAYOUT_VERSION = 1;
 export const BLANK_LETTER_TEMPLATE_KEY = "jbj-blank-letter";
