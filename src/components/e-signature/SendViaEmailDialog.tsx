@@ -16,11 +16,12 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2, Mail, Send, FileText, Eye } from "lucide-react";
+import { Loader2, Mail, Send, FileText, Eye, PenLine } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { SUPABASE_URL } from "@/config/backend";
@@ -28,6 +29,7 @@ import { EmailRecipientChips, isValidEmail } from "./EmailRecipientChips";
 import { EmailBodyEditor } from "./EmailBodyEditor";
 import { EmailPreviewIframe } from "./EmailPreviewIframe";
 import { buildSenderSignatureHtml, escapeHtml } from "@/lib/email/buildEnvelopeEmailHtml";
+import { useEmailSignatures, renderSignatureHtml, type EmailSignature } from "@/hooks/useEmailSignatures";
 
 const TEST_RECIPIENT = "infoo.jane@gmail.com";
 const DEFAULT_CC = "infoo.jane@gmail.com";
@@ -54,7 +56,7 @@ interface Props {
  *  appended as styled HTML so the owner sees the final rendering immediately. */
 function legacyBodyToHtml(
   raw: string,
-  ctx: { clientName: string; docTitle: string; senderName: string; senderTitle: string },
+  ctx: { clientName: string; docTitle: string; senderName: string; senderTitle: string; signatureHtml: string },
 ): string {
   const tokens: Record<string, string> = {
     client_name: ctx.clientName,
@@ -68,11 +70,22 @@ function legacyBodyToHtml(
     .replace(/\{\{sender_signature\}\}/g, SIG_SENTINEL)
     .replace(/\{\{signing_link\}\}/g, "")
     .replace(/\{\{(\w+)\}\}/g, (_, k) => tokens[k] ?? "");
-  const sig = buildSenderSignatureHtml(ctx.senderName, ctx.senderTitle);
-  // Escape any user HTML, convert newlines, then swap sentinel for the
-  // already-trusted signature HTML.
   const escaped = escapeHtml(interpolated).replace(/\n/g, "<br/>");
-  return escaped.replace(SIG_SENTINEL, sig);
+  return escaped.replace(SIG_SENTINEL, ctx.signatureHtml);
+}
+
+/** Strip any previous signature block (data-jbj-sig wrapper or fallback table)
+ *  so the body can be re-rendered with a different signature without duplication. */
+function stripSignature(html: string): string {
+  return String(html || "")
+    .replace(/<div data-jbj-sig="1">[\s\S]*?<\/div>/g, "")
+    .replace(/<table[^>]*data-jbj-sig="1"[\s\S]*?<\/table>/g, "")
+    .replace(/(<br\s*\/?>\s*){2,}$/g, "");
+}
+
+/** Wrap a signature HTML so we can identify and replace it later. */
+function wrapSignature(sigHtml: string): string {
+  return `<div data-jbj-sig="1">${sigHtml}</div>`;
 }
 
 export function SendViaEmailDialog({
@@ -95,6 +108,30 @@ export function SendViaEmailDialog({
   const [bodyHtml, setBodyHtml] = useState("");
   const [docusignUrl, setDocusignUrl] = useState("");
   const [busy, setBusy] = useState<"" | "test" | "send">("");
+  const [selectedSigId, setSelectedSigId] = useState<string>("");
+
+  // Load all email signature presets so the owner can pick which one
+  // appears at the bottom of the message body. Updates the preview live.
+  const { data: signatures = [] } = useEmailSignatures();
+  const fallbackSigHtml = useMemo(
+    () => buildSenderSignatureHtml(senderName, senderTitle),
+    [senderName, senderTitle],
+  );
+  const selectedSig: EmailSignature | undefined = useMemo(
+    () => signatures.find((s) => s.id === selectedSigId),
+    [signatures, selectedSigId],
+  );
+  const selectedSigHtml = useMemo(
+    () => (selectedSig ? renderSignatureHtml(selectedSig) : fallbackSigHtml),
+    [selectedSig, fallbackSigHtml],
+  );
+
+  // Pick a sensible default signature once the list loads.
+  useEffect(() => {
+    if (selectedSigId || !signatures.length) return;
+    const def = signatures.find((s) => s.is_default) || signatures[0];
+    setSelectedSigId(def?.id || "");
+  }, [signatures, selectedSigId]);
 
   useEffect(() => {
     if (!open) return;
@@ -108,10 +145,30 @@ export function SendViaEmailDialog({
         docTitle: defaultSubject || "Document",
         senderName,
         senderTitle,
+        signatureHtml: wrapSignature(selectedSigHtml),
       }),
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, recipientEmail, recipientName, defaultSubject, defaultBody]);
+
+  // Swap the embedded signature when the owner picks a different preset.
+  // Strips the previous signature wrapper and appends the new one so the
+  // body and the iframe preview stay perfectly in sync.
+  const applySelectedSignature = () => {
+    const stripped = stripSignature(bodyHtml).replace(/(<br\s*\/?>\s*)+$/, "");
+    setBodyHtml(`${stripped}<br/><br/>${wrapSignature(selectedSigHtml)}`);
+  };
+  useEffect(() => {
+    if (!open || !selectedSigHtml) return;
+    // Only auto-swap if a signature wrapper exists in the body (avoids
+    // overwriting a freshly cleared body).
+    if (/data-jbj-sig="1"/.test(bodyHtml)) {
+      const stripped = stripSignature(bodyHtml).replace(/(<br\s*\/?>\s*)+$/, "");
+      setBodyHtml(`${stripped}<br/><br/>${wrapSignature(selectedSigHtml)}`);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedSigId]);
+
 
   const cleanCcs = useMemo(
     () => Array.from(new Set(ccs.filter(isValidEmail).filter((c) => !tos.includes(c)))),
@@ -184,20 +241,22 @@ export function SendViaEmailDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[min(96vw,1180px)] max-w-[1180px] max-h-[92vh] overflow-y-auto p-0 bg-[#FDFBF7] border-[#B89555]/40">
+      <DialogContent
+        className="!max-w-[1200px] w-[min(96vw,1200px)] sm:!max-w-[1200px] max-h-[92vh] overflow-y-auto p-0 bg-[#FDFBF7] border-[#B89555]/40"
+      >
         <DialogHeader className="px-5 pt-5 pb-3 border-b border-[#B89555]/30">
           <DialogTitle className="flex items-center gap-2 text-[#1A1A1A] text-base">
             <Mail className="w-5 h-5" />
             Preview &amp; send by email
           </DialogTitle>
-          <p className="text-xs text-[#1A1A1A]/60 mt-1">
-            What you see on the right is exactly what the recipient receives.
-          </p>
+          <DialogDescription className="text-xs text-[#1A1A1A]/60 mt-1">
+            What you see in the preview is byte-for-byte the branded email the recipient receives — including the OPEN IN DOCUSIGN button and App Store / Google Play fallback.
+          </DialogDescription>
         </DialogHeader>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,420px)_minmax(0,1fr)] gap-0">
+        <div className="grid grid-cols-1 md:grid-cols-[minmax(0,420px)_minmax(0,1fr)] gap-0">
           {/* Compose pane */}
-          <div className="p-5 space-y-4 border-b lg:border-b-0 lg:border-r border-[#B89555]/30">
+          <div className="p-5 space-y-4 border-b md:border-b-0 md:border-r border-[#B89555]/30">
             {/* Headers strip */}
             <div className="rounded-md border border-[#B89555]/30 bg-[#F7F2EA] p-2.5 text-[11px] text-[#1A1A1A] space-y-1">
               <div className="flex flex-wrap gap-x-2"><span className="opacity-60">From:</span><strong className="break-all">{DISPLAY_FROM}</strong></div>
@@ -248,6 +307,42 @@ export function SendViaEmailDialog({
               />
             </div>
 
+            {/* Signature picker */}
+            <div className="space-y-1.5">
+              <Label className="text-[#1A1A1A] text-xs flex items-center gap-1.5">
+                <PenLine className="w-3.5 h-3.5" /> Signature · {signatures.length} available
+              </Label>
+              <div className="flex gap-2">
+                <select
+                  value={selectedSigId}
+                  onChange={(e) => setSelectedSigId(e.target.value)}
+                  className="flex-1 h-9 px-2 rounded-md border border-[#B89555]/40 bg-white text-sm text-[#1A1A1A]"
+                  aria-label="Select email signature"
+                >
+                  {!signatures.length && <option value="">Loading signatures…</option>}
+                  {signatures.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.name}{s.is_default ? " · default" : ""}{s.is_system ? " · system" : ""}
+                    </option>
+                  ))}
+                </select>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={applySelectedSignature}
+                  disabled={!selectedSigHtml}
+                  title="Insert/replace this signature in the message body"
+                  className="border-[#B89555]/50"
+                >
+                  Insert
+                </Button>
+              </div>
+              <p className="text-[10px] text-[#1A1A1A]/60">
+                Pick which signature appears at the bottom of the body — the preview updates instantly.
+              </p>
+            </div>
+
             {/* DocuSign URL (optional) */}
             <div className="space-y-1.5">
               <Label className="text-[#1A1A1A] text-xs">
@@ -261,7 +356,7 @@ export function SendViaEmailDialog({
                 type="url"
               />
               <p className="text-[10px] text-[#1A1A1A]/60">
-                Paste it to render a prominent <strong>OPEN IN DOCUSIGN</strong> button. Leave empty for a pure cover email — DocuSign will send its own request separately.
+                Empty is fine — the <strong>OPEN IN DOCUSIGN</strong> button always appears and opens the universal DocuSign entry. Paste a specific envelope URL to deep-link directly.
               </p>
             </div>
 
@@ -277,11 +372,14 @@ export function SendViaEmailDialog({
           </div>
 
           {/* Live preview pane */}
-          <div className="bg-[#F7F2EA]/40 p-3 lg:p-5 flex flex-col min-h-[420px]">
-            <div className="flex items-center gap-1.5 text-[11px] text-[#1A1A1A]/70 mb-2">
-              <Eye className="w-3.5 h-3.5" /> Live preview — recipient view
+          <div className="bg-[#F7F2EA]/40 p-3 md:p-5 flex flex-col min-h-[520px] min-w-0">
+            <div className="flex items-center justify-between gap-2 mb-2">
+              <div className="flex items-center gap-1.5 text-[11px] text-[#1A1A1A]/70">
+                <Eye className="w-3.5 h-3.5" /> Live preview — exact recipient view
+              </div>
+              <span className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/50">includes DocuSign CTA</span>
             </div>
-            <div className="flex-1 min-h-[420px] lg:min-h-[560px] rounded-md border border-[#B89555]/40 overflow-hidden bg-white">
+            <div className="flex-1 min-h-[520px] md:min-h-[640px] rounded-md border border-[#B89555]/40 overflow-hidden bg-white">
               <EmailPreviewIframe
                 subject={subject}
                 bodyHtml={bodyHtml}
