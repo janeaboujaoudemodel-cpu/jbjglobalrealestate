@@ -251,24 +251,23 @@ const footerHtml = (chrome: Required<TemplateChrome>) => {
         </div>`;
     case "three-column":
     default: {
-      // Premium footer: monogram (left), legal name + phone underneath; office
-      // address (center); contact email + gold website (right). 2px gradient
-      // hairline on top — matches the header divider for visual symmetry.
+      // Compact footer: NO monogram. Single gold hairline + three text columns.
+      // Sized to live within A4; vertical slack lives ABOVE this footer (above
+      // the divider) thanks to the flex page wrapper.
       return `
-        <div style="margin-top:22px;${goldGradient(accent)}"></div>
-        <table style="margin-top:12px;width:100%;border-collapse:collapse;table-layout:fixed;font-size:10.5px;color:${ink};line-height:1.55;">
+        <div style="margin-top:14px;${goldGradient(accent)}"></div>
+        <table style="margin-top:8px;width:100%;border-collapse:collapse;table-layout:fixed;font-size:10px;color:${ink};line-height:1.5;">
           <tr>
-            <td style="vertical-align:top;width:28%;padding-right:14px;">
-              <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:84px;height:auto;max-height:64px;object-fit:contain;display:block;opacity:.92;margin-bottom:6px;" />
-              <div style="font-size:9.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:${ink};">${esc(JBJ_BRAND.legalCompany)}</div>
-              <div style="margin-top:4px;font-weight:600;">${JBJ_BRAND.phone}</div>
+            <td style="vertical-align:top;width:34%;padding-right:10px;">
+              <div style="font-size:9.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:${ink};">${esc(JBJ_BRAND.legalCompany)}</div>
+              <div style="margin-top:3px;font-weight:600;">${JBJ_BRAND.phone}</div>
             </td>
-            <td style="vertical-align:top;text-align:center;width:42%;padding:0 12px;color:${ink};opacity:.9;">
+            <td style="vertical-align:top;text-align:center;width:36%;padding:0 8px;color:${ink};opacity:.9;">
               ${JBJ_BRAND.office ? esc(JBJ_BRAND.office) : ""}
             </td>
-            <td style="vertical-align:top;text-align:right;width:30%;padding-left:14px;">
+            <td style="vertical-align:top;text-align:right;width:30%;padding-left:10px;">
               <div style="color:${ink};">${JBJ_BRAND.email}</div>
-              <div style="margin-top:6px;color:${accent};font-weight:600;letter-spacing:.04em;">${JBJ_BRAND.website}</div>
+              <div style="margin-top:3px;color:${accent};font-weight:600;letter-spacing:.04em;">${JBJ_BRAND.website}</div>
             </td>
           </tr>
         </table>`;
