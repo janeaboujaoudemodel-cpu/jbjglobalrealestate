@@ -827,8 +827,7 @@ export default function EnvelopeDetail() {
             )}
             <Button variant="outline" onClick={async () => {
               if (!(await ensureSavedBeforeDownload())) return;
-              const url = (envelope as any)?.document_url;
-              if (url) window.open(bustUrl(url), "_blank");
+              await handleOpenCurrentPdf();
             }}>
               <ExternalLink className="w-4 h-4 mr-2" /> Open in new tab
             </Button>
@@ -837,7 +836,7 @@ export default function EnvelopeDetail() {
             </Button>
             <Button variant="gold" onClick={async () => {
               if (!(await ensureSavedBeforeDownload())) return;
-              handleDownload(bustUrl(envelope.document_url), envelope.document_filename);
+              await handleDownloadCurrentPdf(envelope.document_filename);
             }}>
               <Download className="w-4 h-4 mr-2" /> Download PDF
               {dirty && <span className="ml-2 text-[10px] uppercase tracking-wide opacity-80">· saves first</span>}
