@@ -78,9 +78,31 @@ export async function quotaGuardedFetch(
 
   await throttle(c.last_send_at ?? null, c.rate_per_sec ?? 2);
 
+  // Force Reply-To: contact@jbj.ae on every Resend send going through this
+  // wrapper unless the caller already set one. Mirrors the behaviour in
+  // _shared/resendClient.ts so noreply@jbj.ae is never the reply target.
+  let patchedInit = init;
+  try {
+    if (init?.body && typeof init.body === "string") {
+      const parsed = JSON.parse(init.body);
+      if (parsed && typeof parsed === "object") {
+        const existing = (parsed as any).reply_to;
+        const hasReplyTo =
+          (typeof existing === "string" && existing.trim().length > 0) ||
+          (Array.isArray(existing) && existing.length > 0);
+        if (!hasReplyTo) {
+          (parsed as any).reply_to = "contact@jbj.ae";
+          patchedInit = { ...init, body: JSON.stringify(parsed) };
+        }
+      }
+    }
+  } catch {
+    // body wasn't JSON — pass through unchanged
+  }
+
   let resp: Response;
   try {
-    resp = await fetch(input, init);
+    resp = await fetch(input, patchedInit);
   } catch (e) {
     await sb.rpc("email_quota_record_failure");
     throw e;
