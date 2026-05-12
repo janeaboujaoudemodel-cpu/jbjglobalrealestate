@@ -99,7 +99,7 @@ export default function EnvelopeDetail() {
   // completed (i.e. the client has actually signed). Same rule applies to the
   // landlord/client side — we never autofill the printed name or date; that
   // must come exclusively from the recipient's own signing action.
-  const isFullySigned = envelope?.status === "completed" || envelope?.status === "signed";
+  const isFullySigned = envelope?.status === "completed";
   const ownerSignatureUrl = isFullySigned ? ownerSignatureUrlRaw : null;
   const ownerStampUrl = isFullySigned ? ownerStampUrlRaw : null;
 
