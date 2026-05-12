@@ -179,11 +179,22 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string) => {
     case "monogram-wordmark":
     default:
       return `
-        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid ${accent};padding-bottom:14px;margin-bottom:16px;">
-          <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:120px;height:auto;max-height:96px;object-fit:contain;display:block;" />
-          <div style="text-align:right;font-size:11px;line-height:1.5;color:${ink};">
-            ${docBadge}
+        <div style="margin-bottom:18px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:24px;">
+            <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:148px;height:auto;max-height:120px;object-fit:contain;display:block;" />
+            <div style="text-align:right;font-size:11px;line-height:1.5;color:${ink};padding-top:6px;">
+              ${docBadge}
+            </div>
           </div>
+          <div style="margin-top:10px;text-align:center;">
+            <div style="font-size:13px;font-weight:700;letter-spacing:.22em;color:${ink};text-transform:uppercase;">
+              ${esc(JBJ_BRAND.legalCompany)}
+            </div>
+            <h1 style="font-size:17px;font-weight:800;letter-spacing:.20em;margin:6px 0 0;color:${ink};text-transform:uppercase;">
+              Property Advertising Agreement
+            </h1>
+          </div>
+          <div style="margin-top:12px;border-bottom:1px solid ${accent};"></div>
         </div>`;
   }
 };
