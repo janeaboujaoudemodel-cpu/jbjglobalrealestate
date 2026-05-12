@@ -123,6 +123,17 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
   const previewSubject = interpolate(subject);
   const previewBody = interpolate(body);
 
+  // Build the recipient-ready HTML body (escape, <br/>, swap signature sentinel for styled HTML).
+  const SIG_SENTINEL = "@@JBJ_SIG@@";
+  const previewBodyHtml = useMemo(() => {
+    const sig = buildSenderSignatureHtml(senderName, senderTitle);
+    const interpWithSentinel = body
+      .replace(/\{\{sender_signature\}\}/g, SIG_SENTINEL)
+      .replace(/\{\{signing_link\}\}/g, "")
+      .replace(/\{\{(\w+)\}\}/g, (_, k) => (tokens as any)[k] ?? "");
+    return escapeHtml(interpWithSentinel).replace(/\n/g, "<br/>").replace(SIG_SENTINEL, sig);
+  }, [body, tokens, senderName, senderTitle]);
+
   const addChip = (raw: string, list: string[], setList: (v: string[]) => void, setInput: (v: string) => void) => {
     const v = raw.trim();
     if (!v) return;
