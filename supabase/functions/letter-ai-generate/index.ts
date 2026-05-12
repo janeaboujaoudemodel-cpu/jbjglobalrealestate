@@ -7,7 +7,7 @@
 // no markdown fences. The frontend renders it inside the BlankLetter
 // template body and lets the user edit further.
 
-import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
+const corsHeaders = { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type", "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE" };
 
 const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
 
