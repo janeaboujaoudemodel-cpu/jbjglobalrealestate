@@ -77,8 +77,8 @@ export default function EnvelopeDetail() {
   const regenerate = useRegenerateEnvelopePdf();
   const { data: sigAssets } = useOwnerSignatureAssets("signature");
   const { data: stampAssets } = useOwnerSignatureAssets("stamp");
-  const ownerSignatureUrl = sigAssets?.find((a) => a.is_default)?.image_url || sigAssets?.[0]?.image_url || null;
-  const ownerStampUrl = stampAssets?.find((a) => a.is_default)?.image_url || stampAssets?.[0]?.image_url || null;
+  const ownerSignatureUrlRaw = sigAssets?.find((a) => a.is_default)?.image_url || sigAssets?.[0]?.image_url || null;
+  const ownerStampUrlRaw = stampAssets?.find((a) => a.is_default)?.image_url || stampAssets?.[0]?.image_url || null;
 
   const { data: envelope, isLoading, refetch } = useQuery({
     queryKey: ["esign-envelope", id],
