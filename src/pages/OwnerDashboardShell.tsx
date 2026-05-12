@@ -25,7 +25,16 @@ const OwnerDashboardShell = () => {
   const { user, signOut } = useAuth();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [fullscreen, setFullscreen] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return window.localStorage.getItem("owner.fullscreen") === "1";
+  });
   const isMobile = useIsMobile();
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.localStorage.setItem("owner.fullscreen", fullscreen ? "1" : "0");
+  }, [fullscreen]);
 
   const handleSignOut = async () => {
     try {
