@@ -53,8 +53,14 @@ export function renderTemplateHtml(
   if (templateKey === "jbj-listing-authorisation-selling") {
     return buildSellingHtml(values as any);
   }
-  if (templateKey === "jbj-blank-letter") {
+  if (templateKey === "jbj-blank-letter" || templateKey === "jbj-letterhead-blank") {
     return buildBlankLetterHtml(values as any, opts as BuildBlankLetterOptions);
+  }
+  if (templateKey === "jbj-letterhead-leasing") {
+    return buildBlankLetterHtml(values as any, {
+      ...(opts as BuildBlankLetterOptions),
+      letterheadTitle: "Official Correspondence — Leasing",
+    });
   }
   return buildPAAHtml(values as any, opts);
 }
