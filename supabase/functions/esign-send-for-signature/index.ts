@@ -121,6 +121,8 @@ Deno.serve(async (req) => {
         docNumber,
         senderName,
         senderTitle,
+        docusignUrl: docusignUrlClean,
+        attachmentName: typeof attachment_name === "string" ? attachment_name : undefined,
       });
 
       // Build the To list: the persisted recipient + any extra addresses
