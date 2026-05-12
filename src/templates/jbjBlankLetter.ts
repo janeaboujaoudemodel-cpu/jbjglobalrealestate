@@ -148,7 +148,7 @@ export function buildBlankLetterHtml(
   const date = formatDate(v.date);
   const recipient = v.recipient || "";
   const bodyHtml = v.body_html
-    ? sanitizeHtmlContent(v.body_html)
+    ? sanitizeHtml(v.body_html)
     : (opts.renderMode === "final"
         ? ""
         : `<p style="opacity:.45;font-style:italic;">Use the AI prompt above to draft this letter, or type your own content here…</p>`);
