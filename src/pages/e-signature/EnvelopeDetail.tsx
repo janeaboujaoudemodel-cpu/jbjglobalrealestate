@@ -1010,6 +1010,21 @@ export default function EnvelopeDetail() {
         onShareWhatsApp={() => clientRec && handleWhatsApp(clientRec)}
         onShareEmail={() => clientRec && handleQuickEmail(clientRec)}
       />
+
+      {clientRec && (
+        <SendViaEmailDialog
+          open={emailDialogOpen}
+          onOpenChange={setEmailDialogOpen}
+          envelopeId={envelope.id}
+          recipientName={clientRec.name || "Client"}
+          recipientEmail={clientRec.email || ""}
+          defaultSubject={envelope.email_subject || `Please sign — ${envelope.name || "Document"}${docNumber ? ` · ${docNumber}` : ""}`}
+          defaultBody={envelope.email_message || `Dear {{client_name}},\n\nKindly review and digitally sign your ${envelope.name || "document"} via the secure link below.\n\n{{signing_link}}\n\n{{sender_signature}}`}
+          signingUrl={clientRec.signing_token ? buildSigningUrl(clientRec.signing_token) : undefined}
+          attachmentName={envelope.document_filename || undefined}
+          onSent={() => refetch()}
+        />
+      )}
     </div>
   );
 }
