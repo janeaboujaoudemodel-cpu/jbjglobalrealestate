@@ -383,17 +383,17 @@ export function buildPAAHtml(
         ${docsList.map((d) => `<span style="display:inline-block;padding:3px 10px;border:1px solid ${accent};border-radius:999px;font-size:11px;color:${ink};background:#FDFBF7;">${esc(d)}</span>`).join("")}
       </div>` : "";
 
-  // A4 page (210mm × 297mm). Wrapper is a flex column at min-height A4 so the
-  // footer is pushed flush to the bottom and any blank space lives ABOVE the
-  // footer divider (between signature row and footer) — never below it.
+  // A4 page (210mm × 297mm ≈ 1123px). Wrapper is a flex column at min-height
+  // A4 so the footer is pushed flush to the bottom and any blank space lives
+  // ABOVE the footer divider (between signature row and footer) — never below.
   const html = `
 <div style="font-family:Inter,Arial,sans-serif;color:${ink};background:${chrome.surface};padding:24px 36px;max-width:794px;margin:0 auto;line-height:1.45;font-size:11.5px;min-height:1123px;display:flex;flex-direction:column;box-sizing:border-box;">
 
-  <div style="flex:0 0 auto;">${headerHtml(chrome, get("doc_number"), category, get("rera_permit_number"))}</div>
-  <div style="flex:1 1 auto;display:flex;flex-direction:column;"><div style="flex:1 1 auto;"></div>
-  <div data-paa-body style="flex:0 0 auto;"></div></div>
-  <script>/*paa-body-anchor*/</script>
-  <div data-paa-body-content></div>
+  <div style="flex:0 0 auto;">
+    ${headerHtml(chrome, get("doc_number"), category, get("rera_permit_number"))}
+  </div>
+
+  <div style="flex:1 1 auto;display:flex;flex-direction:column;">
 
   <p style="font-size:11px;color:${ink};opacity:.78;margin:4px 0 3px;line-height:1.45;">
     As a property owner or landlord, you are partnering with <strong>JBJ Global Real Estate</strong> to advertise and represent your property for ${isSelling ? "sale" : "lease"} at the best terms in the shortest time. By signing below, your property will be advertised across JBJ's premium portals, website, social media, partner brokerages, CRM and direct outreach. Submitting verification documents ranks your listing higher with the Verified badge — consumers are 5× more likely to enquire.
@@ -544,7 +544,11 @@ export function buildPAAHtml(
     </div>
   </div>
 
-  ${footerHtml(chrome)}
+  </div>
+
+  <div style="flex:0 0 auto;">
+    ${footerHtml(chrome)}
+  </div>
 </div>`.trim();
 
   return html;
