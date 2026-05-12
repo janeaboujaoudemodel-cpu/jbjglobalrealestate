@@ -29,6 +29,8 @@ import ExportEnvelopeDialog from "@/components/e-signature/ExportEnvelopeDialog"
 import { isReadyDraft, computeDisplayStatus, pickClientName, pickPropertyContext, maskPhone, maskEmail } from "@/pages/e-signature/envelopeStatus";
 import { openWhatsApp, openEmail } from "@/utils/contactActions";
 import PAAListingDraftCard from "@/components/e-signature/PAAListingDraftCard";
+import PAAAICopilotDrawer from "@/components/e-signature/PAAAICopilotDrawer";
+import { Lock, Sparkles } from "lucide-react";
 
 type EnvelopeStatus = 'draft' | 'sent' | 'viewed' | 'partially_signed' | 'completed' | 'declined' | 'expired' | 'voided';
 type RecipientStatus = 'pending' | 'sent' | 'delivered' | 'viewed' | 'signed' | 'declined';
