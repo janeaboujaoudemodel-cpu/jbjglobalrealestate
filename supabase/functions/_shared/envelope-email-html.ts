@@ -5,6 +5,11 @@
 
 export const JBJ_LOGO_URL = "https://www.jbj.ae/jbj-monogram-dark-on-light.png";
 
+export const DOCUSIGN_APP_STORE = "https://apps.apple.com/app/docusign/id474990205";
+export const DOCUSIGN_PLAY_STORE = "https://play.google.com/store/apps/details?id=com.docusign.ink";
+export const DOCUSIGN_WEB = "https://apps.docusign.com/";
+export const SIGNED_RETURN_EMAIL = "contracts@jbj.ae";
+
 export interface BuildEnvelopeEmailArgs {
   subject: string;          // already interpolated, plain text
   bodyHtml: string;         // already interpolated, sanitized HTML (recipient-ready)
@@ -12,6 +17,10 @@ export interface BuildEnvelopeEmailArgs {
   senderName?: string;
   senderTitle?: string;
   year?: number;
+  /** Optional DocuSign envelope URL — when present, a CTA button is rendered. */
+  docusignUrl?: string;
+  /** Attachment filename shown in the "PDF attached" chip. */
+  attachmentName?: string;
 }
 
 export function buildSenderSignatureHtml(senderName: string, senderTitle: string): string {
