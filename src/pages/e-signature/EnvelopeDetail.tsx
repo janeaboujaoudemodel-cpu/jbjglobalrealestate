@@ -94,6 +94,15 @@ export default function EnvelopeDetail() {
     enabled: !!id,
   });
 
+  // CRITICAL: Never auto-stamp the JBJ owner signature/stamp onto an
+  // unsigned/draft document. They only render once the envelope is fully
+  // completed (i.e. the client has actually signed). Same rule applies to the
+  // landlord/client side — we never autofill the printed name or date; that
+  // must come exclusively from the recipient's own signing action.
+  const isFullySigned = envelope?.status === "completed" || envelope?.status === "signed";
+  const ownerSignatureUrl = isFullySigned ? ownerSignatureUrlRaw : null;
+  const ownerStampUrl = isFullySigned ? ownerStampUrlRaw : null;
+
   // Hydrate edit + CC + chrome state when envelope loads
   useEffect(() => {
     if (envelope) {
