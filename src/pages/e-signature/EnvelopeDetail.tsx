@@ -228,15 +228,20 @@ export default function EnvelopeDetail() {
 
   const previewHtml = useMemo(() => {
     if (!envelope?.template_key) return null;
-    const vals = editing ? editValues : ((envelope.template_field_values as any) || {});
+    const baseVals = editing ? editValues : ((envelope.template_field_values as any) || {});
     // Only render the captured signature pad image when the recipient has truly
-    // signed. NEVER autofill the printed name or date — the document must show
-    // exactly what the signer typed/drew, nothing more. (Test envelopes that
-    // were never really signed should look unsigned.)
+    // signed. Once signed, mirror the signer name + signing date into the
+    // rendered letterhead so preview, print, export, and download all match.
     const signedClient = !editing
       ? ((envelope.esign_recipients || []).find((r: any) => r.metadata?.role === "client" && r.status === "signed")
         || (envelope.esign_recipients || []).find((r: any) => r.status === "signed"))
       : null;
+    const signedDate = signedClient?.signed_at ? format(new Date(signedClient.signed_at), "dd/MM/yyyy") : "";
+    const vals = signedClient ? {
+      ...baseVals,
+      landlord_signature_name: baseVals.landlord_signature_name || signedClient.name || "",
+      landlord_signature_date: baseVals.landlord_signature_date || signedDate,
+    } : baseVals;
     return renderTemplateHtml(
       envelope.template_key,
       { ...vals, doc_number: vals.doc_number || docNumber },
@@ -323,6 +328,62 @@ export default function EnvelopeDetail() {
     } catch (e: any) {
       console.error("Download failed:", e);
       toast.error(e?.message || "Failed to download document");
+    }
+  };
+
+  const savePdfBlob = (blob: Blob, filename: string) => {
+    const objectUrl = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = objectUrl;
+    a.download = filename || "document.pdf";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(objectUrl), 60_000);
+  };
+
+  // Template envelopes are preview-first: download/export must render the same
+  // HTML that is currently visible in the iframe, not an older cached storage PDF.
+  const renderCurrentPreviewPdf = async () => {
+    if (!previewHtml) return null;
+    const { blob } = await renderHtmlToPdfBlob(previewHtml);
+    return blob;
+  };
+
+  const handleDownloadCurrentPdf = async (filename?: string | null) => {
+    try {
+      toast.loading("Preparing current PDF…", { id: "current-pdf" });
+      const blob = await renderCurrentPreviewPdf();
+      if (blob) {
+        savePdfBlob(blob, filename || envelope?.document_filename || `${docNumber || "JBJ-Document"}.pdf`);
+        toast.success("Current preview downloaded", { id: "current-pdf" });
+        return;
+      }
+      if (envelope?.document_url) {
+        await handleDownload(bustUrl(envelope.document_url), filename || envelope.document_filename);
+        toast.success("PDF downloaded", { id: "current-pdf" });
+        return;
+      }
+      toast.error("No file available", { id: "current-pdf" });
+    } catch (e: any) {
+      toast.error(e?.message || "Failed to render current PDF", { id: "current-pdf" });
+    }
+  };
+
+  const handleOpenCurrentPdf = async () => {
+    try {
+      const blob = await renderCurrentPreviewPdf();
+      if (blob) {
+        const url = URL.createObjectURL(blob);
+        const w = window.open(url, "_blank");
+        if (!w) { URL.revokeObjectURL(url); toast.error("Pop-ups blocked"); return; }
+        setTimeout(() => URL.revokeObjectURL(url), 5 * 60_000);
+        return;
+      }
+      const url = (envelope as any)?.document_url;
+      if (url) window.open(bustUrl(url), "_blank");
+    } catch (e: any) {
+      toast.error(e?.message || "Failed to open current PDF");
     }
   };
 
@@ -749,7 +810,7 @@ export default function EnvelopeDetail() {
             </div>
             <div className="flex gap-2">
               <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white"
-                onClick={() => handleDownload(signedDoc.document_url, signedDoc.document_filename)}>
+                onClick={() => handleDownloadCurrentPdf(signedDoc.document_filename)}>
                 <Download className="w-3.5 h-3.5 mr-1.5" /> Signed PDF
               </Button>
               {signedDoc.certificate_url && (
@@ -771,8 +832,7 @@ export default function EnvelopeDetail() {
             )}
             <Button variant="outline" onClick={async () => {
               if (!(await ensureSavedBeforeDownload())) return;
-              const url = (envelope as any)?.document_url;
-              if (url) window.open(bustUrl(url), "_blank");
+              await handleOpenCurrentPdf();
             }}>
               <ExternalLink className="w-4 h-4 mr-2" /> Open in new tab
             </Button>
@@ -781,7 +841,7 @@ export default function EnvelopeDetail() {
             </Button>
             <Button variant="gold" onClick={async () => {
               if (!(await ensureSavedBeforeDownload())) return;
-              handleDownload(bustUrl(envelope.document_url), envelope.document_filename);
+              await handleDownloadCurrentPdf(envelope.document_filename);
             }}>
               <Download className="w-4 h-4 mr-2" /> Download PDF
               {dirty && <span className="ml-2 text-[10px] uppercase tracking-wide opacity-80">· saves first</span>}
@@ -989,7 +1049,7 @@ export default function EnvelopeDetail() {
                 </CardHeader>
                 <CardContent className="space-y-2">
                   <Button size="sm" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
-                    onClick={() => handleDownload(signedDoc.document_url, signedDoc.document_filename)}>
+                    onClick={() => handleDownloadCurrentPdf(signedDoc.document_filename)}>
                     <Download className="w-4 h-4 mr-2" /> Download Signed PDF
                   </Button>
                   <Button size="sm" variant="outline" className="w-full" onClick={() => setExportOpen(true)}>
@@ -1232,6 +1292,7 @@ export default function EnvelopeDetail() {
         docNumber={docNumber}
         landlordName={(editValues.landlord_name as string) || ((envelope?.metadata as any)?.fields?.landlord_name as string) || null}
         signingLink={clientRec?.signing_token ? buildSigningUrl(clientRec.signing_token) : null}
+        getCurrentPdfBlob={renderCurrentPreviewPdf}
         onShareWhatsApp={() => clientRec && handleWhatsApp(clientRec)}
         onShareEmail={() => clientRec && handleQuickEmail(clientRec)}
       />

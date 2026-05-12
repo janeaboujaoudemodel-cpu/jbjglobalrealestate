@@ -29,6 +29,7 @@ interface ExportEnvelopeDialogProps {
   docNumber?: string | null;
   landlordName?: string | null;
   signingLink?: string | null;
+  getCurrentPdfBlob?: () => Promise<Blob | null>;
   onShareEmail?: () => void;
   onShareWhatsApp?: () => void;
 }
@@ -111,6 +112,7 @@ export default function ExportEnvelopeDialog({
   docNumber,
   landlordName,
   signingLink,
+  getCurrentPdfBlob,
   onShareEmail,
   onShareWhatsApp,
 }: ExportEnvelopeDialogProps) {
@@ -132,7 +134,7 @@ export default function ExportEnvelopeDialog({
   const willZip = selectedCount > 1 || pickPages; // multi-page PNGs always go in a zip
 
   const handleExport = async () => {
-    if (!sourceUrl) { toast.error("No document available"); return; }
+    if (!sourceUrl && !getCurrentPdfBlob) { toast.error("No document available"); return; }
     if (!selectedCount) { toast.error("Select at least one format"); return; }
     setBusy(true);
     try {
@@ -141,7 +143,8 @@ export default function ExportEnvelopeDialog({
       let pdfBytes: ArrayBuffer | null = null;
 
       if (needsRaster || pickPdf) {
-        pdfBytes = await fetchPdfBytes(sourceUrl);
+        const currentBlob = getCurrentPdfBlob ? await getCurrentPdfBlob() : null;
+        pdfBytes = currentBlob ? await currentBlob.arrayBuffer() : await fetchPdfBytes(sourceUrl);
       }
       if (needsRaster && pdfBytes) {
         canvases = await rasterisePdf(pdfBytes, parseFloat(quality));
