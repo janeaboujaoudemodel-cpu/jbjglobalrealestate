@@ -179,14 +179,8 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string) => {
     case "monogram-wordmark":
     default:
       return `
-        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid ${accent};padding-bottom:12px;margin-bottom:16px;">
-          <div style="display:flex;align-items:center;gap:16px;">
-            <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:78px;height:auto;max-height:60px;object-fit:contain;display:block;" />
-            <div style="border-left:1px solid ${accent};padding-left:14px;">
-              <div style="font-size:12.5px;font-weight:700;letter-spacing:.14em;color:${ink};line-height:1.25;">${esc(JBJ_BRAND.legalCompany)}</div>
-              <div style="font-size:10.5px;letter-spacing:.18em;color:${ink};opacity:.7;margin-top:3px;text-transform:uppercase;">Property Advertising Agreement</div>
-            </div>
-          </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid ${accent};padding-bottom:14px;margin-bottom:16px;">
+          <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:120px;height:auto;max-height:96px;object-fit:contain;display:block;" />
           <div style="text-align:right;font-size:11px;line-height:1.5;color:${ink};">
             ${docBadge}
           </div>
