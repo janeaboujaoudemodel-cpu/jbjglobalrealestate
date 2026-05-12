@@ -161,8 +161,13 @@ export default function CRMLeadsTableV2({
 
       const statesMap = new Map((statesData || []).map((s: any) => [s.lead_id, s]));
 
+      // Owners must always see what's actually in the database — the
+      // isRealCRMLead guard is for public/anonymous surfaces only. For
+      // non-owner views we keep the guard so test/legacy/encrypted seed
+      // rows never bleed through.
+      const ownerView = isOwner === true;
       let rows: Lead[] = (leadsData || [])
-        .filter(isRealCRMLead as (l: any) => boolean)
+        .filter((l: any) => (ownerView ? !l.deleted_at : isRealCRMLead(l)))
         .map((l: any) => ({
           ...l,
           state: statesMap.get(l.id) || null,
