@@ -134,7 +134,7 @@ export default function ExportEnvelopeDialog({
   const willZip = selectedCount > 1 || pickPages; // multi-page PNGs always go in a zip
 
   const handleExport = async () => {
-    if (!sourceUrl) { toast.error("No document available"); return; }
+    if (!sourceUrl && !getCurrentPdfBlob) { toast.error("No document available"); return; }
     if (!selectedCount) { toast.error("Select at least one format"); return; }
     setBusy(true);
     try {
