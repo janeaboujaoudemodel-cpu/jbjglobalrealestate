@@ -391,9 +391,11 @@ export default function EnvelopeDetail() {
       });
       toast.success("Document updated");
       setEditing(false);
-      refetch();
+      setRecentlyRestoredFields([]);
+      await refetch();
       qc.invalidateQueries({ queryKey: ["esign_envelopes_hub"] });
     } catch (e: any) {
+      console.error("Save failed", e);
       toast.error(e.message || "Failed to update");
     }
   };
