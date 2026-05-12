@@ -136,27 +136,28 @@ Deno.serve(async (req) => {
       // Default CC: owner's test inbox (always CC'd unless it IS the recipient)
       const DEFAULT_CC = "infoo.jane@gmail.com";
       const ccEmails = Array.from(new Set([...persistedCcs, ...incomingCcs, DEFAULT_CC]
-        .map((e) => String(e || "").trim())
+        .map((e) => String(e || "").trim().toLowerCase())
         .filter((e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e))
-        .filter((e) => e.toLowerCase() !== String(recipient.email || "").toLowerCase())
+        .filter((e) => !allTos.includes(e))
       ));
       const persistedBccs: string[] = Array.isArray((envelope.metadata as any)?.bcc_emails)
         ? (envelope.metadata as any).bcc_emails
         : [];
       const incomingBccs: string[] = Array.isArray(bccOverride) ? bccOverride : [];
       const bccEmails = Array.from(new Set([...persistedBccs, ...incomingBccs, "contact@jbj.ae"]
-        .map((e) => String(e || "").trim())
+        .map((e) => String(e || "").trim().toLowerCase())
         .filter((e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e))
+        .filter((e) => !allTos.includes(e) && !ccEmails.includes(e))
       ));
 
-      if (channelList.includes("email") && resendApiKey) {
+      if (channelList.includes("email") && resendApiKey && allTos.length) {
         try {
           const res = await quotaGuardedFetch("https://api.resend.com/emails", {
             method: "POST",
             headers: { "Authorization": `Bearer ${resendApiKey}`, "Content-Type": "application/json" },
             body: JSON.stringify({
               from: "JBJ Global Real Estate <noreply@jbj.ae>",
-              to: [recipient.email],
+              to: allTos,
               cc: ccEmails,
               bcc: bccEmails,
               reply_to: "contact@jbj.ae",
@@ -167,11 +168,10 @@ Deno.serve(async (req) => {
           const resData = await res.json();
           if (!res.ok) console.error("Resend API error:", JSON.stringify(resData));
         } catch (emailError) {
-          console.error("Failed to send email to", recipient.email, emailError);
+          console.error("Failed to send email to", allTos.join(","), emailError);
         }
       } else if (channelList.includes("email")) {
-        console.log("Resend not configured, skipping email to:", recipient.email);
-        console.log("Signing URL:", signingUrl);
+        console.log("Resend not configured or no recipients; skipping email.");
       }
 
       // WhatsApp link generation (wa.me fallback when Twilio not configured)
