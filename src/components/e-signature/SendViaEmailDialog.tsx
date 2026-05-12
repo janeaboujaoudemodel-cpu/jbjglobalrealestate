@@ -108,6 +108,30 @@ export function SendViaEmailDialog({
   const [bodyHtml, setBodyHtml] = useState("");
   const [docusignUrl, setDocusignUrl] = useState("");
   const [busy, setBusy] = useState<"" | "test" | "send">("");
+  const [selectedSigId, setSelectedSigId] = useState<string>("");
+
+  // Load all email signature presets so the owner can pick which one
+  // appears at the bottom of the message body. Updates the preview live.
+  const { data: signatures = [] } = useEmailSignatures();
+  const fallbackSigHtml = useMemo(
+    () => buildSenderSignatureHtml(senderName, senderTitle),
+    [senderName, senderTitle],
+  );
+  const selectedSig: EmailSignature | undefined = useMemo(
+    () => signatures.find((s) => s.id === selectedSigId),
+    [signatures, selectedSigId],
+  );
+  const selectedSigHtml = useMemo(
+    () => (selectedSig ? renderSignatureHtml(selectedSig) : fallbackSigHtml),
+    [selectedSig, fallbackSigHtml],
+  );
+
+  // Pick a sensible default signature once the list loads.
+  useEffect(() => {
+    if (selectedSigId || !signatures.length) return;
+    const def = signatures.find((s) => s.is_default) || signatures[0];
+    setSelectedSigId(def?.id || "");
+  }, [signatures, selectedSigId]);
 
   useEffect(() => {
     if (!open) return;
@@ -121,10 +145,30 @@ export function SendViaEmailDialog({
         docTitle: defaultSubject || "Document",
         senderName,
         senderTitle,
+        signatureHtml: wrapSignature(selectedSigHtml),
       }),
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, recipientEmail, recipientName, defaultSubject, defaultBody]);
+
+  // Swap the embedded signature when the owner picks a different preset.
+  // Strips the previous signature wrapper and appends the new one so the
+  // body and the iframe preview stay perfectly in sync.
+  const applySelectedSignature = () => {
+    const stripped = stripSignature(bodyHtml).replace(/(<br\s*\/?>\s*)+$/, "");
+    setBodyHtml(`${stripped}<br/><br/>${wrapSignature(selectedSigHtml)}`);
+  };
+  useEffect(() => {
+    if (!open || !selectedSigHtml) return;
+    // Only auto-swap if a signature wrapper exists in the body (avoids
+    // overwriting a freshly cleared body).
+    if (/data-jbj-sig="1"/.test(bodyHtml)) {
+      const stripped = stripSignature(bodyHtml).replace(/(<br\s*\/?>\s*)+$/, "");
+      setBodyHtml(`${stripped}<br/><br/>${wrapSignature(selectedSigHtml)}`);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedSigId]);
+
 
   const cleanCcs = useMemo(
     () => Array.from(new Set(ccs.filter(isValidEmail).filter((c) => !tos.includes(c)))),
