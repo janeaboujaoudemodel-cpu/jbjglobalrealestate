@@ -9,7 +9,11 @@
  * preview AND in the html2canvas PDF export — so "preview != download" can
  * never happen on letterhead documents.
  */
-// monogram now loaded via absolute public URL inside the rendered HTML.
+// monogram inlined as a base64 data URI so it renders identically in the
+// preview iframe (srcDoc), html2canvas PDF export, and any new-tab print
+// window — eliminating the broken-image placeholder seen when fetching
+// the asset over the network.
+import monogramUrl from "@/assets/jbj-monogram-nobuffer.png?inline";
 import {
   TRADE_LICENSE_LEGAL_NAME,
   TRADE_LICENSE_OFFICE,
