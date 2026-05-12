@@ -26,9 +26,11 @@ export const JBJ_BRAND = {
   monogram: monogramUrl,
 } as const;
 
-// v15: compact horizontal header (small monogram + vertical divider + legal
-// name; gold hairline; agreement title row), no footer monogram, A4-locked.
-export const PAA_LAYOUT_VERSION = 15;
+// v16: single-row Property Specs (type+furnishing+status), placeholder
+// underlines for empty Property Identifiers in edit mode, signature row
+// pushed flush above footer (margin-top:auto) so blank space sits between
+// signatures and footer divider — never below it.
+export const PAA_LAYOUT_VERSION = 16;
 
 export type PAACategory = "leasing" | "selling" | "other";
 
