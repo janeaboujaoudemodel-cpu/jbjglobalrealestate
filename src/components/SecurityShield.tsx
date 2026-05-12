@@ -318,10 +318,9 @@ const SecurityShield = () => {
         user-drag: none;
       }
       
-      /* Disable print (basic) */
-      @media print {
-        body { display: none !important; }
-      }
+      /* Print is intentionally NOT blocked here — owners + clients
+         must be able to print/PDF letterhead documents. Auditor-scoped
+         capture protections live in useAntiCapture. */
     `;
     document.head.appendChild(style);
 
