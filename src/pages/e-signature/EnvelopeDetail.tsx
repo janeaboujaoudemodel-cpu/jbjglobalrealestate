@@ -370,41 +370,47 @@ export default function EnvelopeDetail() {
     }
   };
 
+  // Open / Print: browsers block window.open() called after an await
+  // (loses the user-gesture chain → ERR_BLOCKED_BY_CLIENT). We instead trigger
+  // a same-tab anchor download of the freshly rendered PDF, which is never
+  // blocked. The user opens the file from their downloads bar to view/print.
   const handleOpenCurrentPdf = async () => {
     try {
+      toast.loading("Preparing current PDF…", { id: "open-pdf" });
       const blob = await renderCurrentPreviewPdf();
       if (blob) {
-        const url = URL.createObjectURL(blob);
-        const w = window.open(url, "_blank");
-        if (!w) { URL.revokeObjectURL(url); toast.error("Pop-ups blocked"); return; }
-        setTimeout(() => URL.revokeObjectURL(url), 5 * 60_000);
+        savePdfBlob(blob, envelope?.document_filename || `${docNumber || "JBJ-Document"}.pdf`);
+        toast.success("PDF downloaded — open it from your downloads", { id: "open-pdf" });
         return;
       }
-      const url = (envelope as any)?.document_url;
-      if (url) window.open(bustUrl(url), "_blank");
+      if ((envelope as any)?.document_url) {
+        await handleDownload(bustUrl((envelope as any).document_url), envelope?.document_filename);
+        toast.success("PDF downloaded", { id: "open-pdf" });
+        return;
+      }
+      toast.error("No file available", { id: "open-pdf" });
     } catch (e: any) {
-      toast.error(e?.message || "Failed to open current PDF");
+      toast.error(e?.message || "Failed to render PDF", { id: "open-pdf" });
     }
   };
 
   const handlePrint = async () => {
-    if (!previewHtml) {
-      // Fall back to opening the stored PDF (already a real PDF, no print
-      // chrome injection).
-      if (envelope?.document_url) window.open(envelope.document_url, "_blank");
-      return;
-    }
-    // v20: render directly to a true PDF blob and open the PDF in a new tab.
-    // Browsers print PDFs WITHOUT injecting URL/date headers, so the previous
-    // "blob:…/lovable.app" chrome line in the printed footer is gone for good.
     try {
       toast.loading("Preparing PDF…", { id: "print-pdf" });
-      const { blob } = await renderHtmlToPdfBlob(previewHtml);
-      const url = URL.createObjectURL(blob);
-      const w = window.open(url, "_blank");
-      if (!w) { URL.revokeObjectURL(url); toast.error("Pop-ups blocked", { id: "print-pdf" }); return; }
-      toast.success("PDF ready — use your browser's print button", { id: "print-pdf" });
-      setTimeout(() => URL.revokeObjectURL(url), 5 * 60_000);
+      const blob = previewHtml
+        ? (await renderHtmlToPdfBlob(previewHtml)).blob
+        : null;
+      if (blob) {
+        savePdfBlob(blob, envelope?.document_filename || `${docNumber || "JBJ-Document"}.pdf`);
+        toast.success("PDF downloaded — open the file and press Ctrl/⌘+P to print", { id: "print-pdf" });
+        return;
+      }
+      if (envelope?.document_url) {
+        await handleDownload(bustUrl(envelope.document_url), envelope.document_filename);
+        toast.success("PDF downloaded — open the file and press Ctrl/⌘+P to print", { id: "print-pdf" });
+        return;
+      }
+      toast.error("No file available", { id: "print-pdf" });
     } catch (e: any) {
       toast.error(e?.message || "Failed to render PDF", { id: "print-pdf" });
     }
