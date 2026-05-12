@@ -56,7 +56,7 @@ interface Props {
  *  appended as styled HTML so the owner sees the final rendering immediately. */
 function legacyBodyToHtml(
   raw: string,
-  ctx: { clientName: string; docTitle: string; senderName: string; senderTitle: string },
+  ctx: { clientName: string; docTitle: string; senderName: string; senderTitle: string; signatureHtml: string },
 ): string {
   const tokens: Record<string, string> = {
     client_name: ctx.clientName,
@@ -70,11 +70,22 @@ function legacyBodyToHtml(
     .replace(/\{\{sender_signature\}\}/g, SIG_SENTINEL)
     .replace(/\{\{signing_link\}\}/g, "")
     .replace(/\{\{(\w+)\}\}/g, (_, k) => tokens[k] ?? "");
-  const sig = buildSenderSignatureHtml(ctx.senderName, ctx.senderTitle);
-  // Escape any user HTML, convert newlines, then swap sentinel for the
-  // already-trusted signature HTML.
   const escaped = escapeHtml(interpolated).replace(/\n/g, "<br/>");
-  return escaped.replace(SIG_SENTINEL, sig);
+  return escaped.replace(SIG_SENTINEL, ctx.signatureHtml);
+}
+
+/** Strip any previous signature block (data-jbj-sig wrapper or fallback table)
+ *  so the body can be re-rendered with a different signature without duplication. */
+function stripSignature(html: string): string {
+  return String(html || "")
+    .replace(/<div data-jbj-sig="1">[\s\S]*?<\/div>/g, "")
+    .replace(/<table[^>]*data-jbj-sig="1"[\s\S]*?<\/table>/g, "")
+    .replace(/(<br\s*\/?>\s*){2,}$/g, "");
+}
+
+/** Wrap a signature HTML so we can identify and replace it later. */
+function wrapSignature(sigHtml: string): string {
+  return `<div data-jbj-sig="1">${sigHtml}</div>`;
 }
 
 export function SendViaEmailDialog({
