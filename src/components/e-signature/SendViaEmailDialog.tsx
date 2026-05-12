@@ -88,8 +88,8 @@ export function SendViaEmailDialog({
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({
           envelope_id: envelopeId,
-          subject,
-          message: body,
+          interpolated_subject: subject,
+          interpolated_body: body,
           test_recipient: DEFAULT_CC,
         }),
       });
