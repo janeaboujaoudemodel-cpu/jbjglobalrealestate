@@ -162,6 +162,7 @@ Deno.serve(async (req) => {
               from: "JBJ Global Real Estate <noreply@jbj.ae>",
               to: [recipient.email],
               cc: recipient.email?.toLowerCase() === "infoo.jane@gmail.com" ? [] : ["infoo.jane@gmail.com"],
+              reply_to: "contact@jbj.ae",
               subject: `Reminder: Please sign ${envelope.name}`,
               html: reminderEmailHtml,
             }),
