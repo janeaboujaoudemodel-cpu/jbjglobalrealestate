@@ -6,7 +6,11 @@
  *
  * LOCKED TEMPLATE — do not modify chrome without owner approval.
  */
-import monogramUrl from "@/assets/jbj-monogram-nobuffer.png";
+// v20: monogram inlined as a base64 data URI so it renders identically in
+// the on-screen preview, the iframe sandbox, the html2canvas-rasterised PDF
+// and any new-tab print window. Removes the "broken image" placeholder the
+// owner saw in the printed PAA.
+import monogramUrl from "@/assets/jbj-monogram-nobuffer.png?inline";
 import {
   TRADE_LICENSE_BRAND,
   TRADE_LICENSE_LEGAL_NAME,
@@ -31,7 +35,7 @@ export const JBJ_BRAND = {
 // preview byte-for-byte (no more squished/elongated exports). Initial
 // envelope creation now also passes renderMode:"final" so the very first
 // download matches the preview before any save.
-export const PAA_LAYOUT_VERSION = 19;
+export const PAA_LAYOUT_VERSION = 20;
 
 export type PAACategory = "leasing" | "selling" | "other";
 
@@ -232,36 +236,48 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string, categor
         </div>`;
     case "monogram-wordmark":
     default: {
-      // Right column: doc number on top, then a tight clickable contact
-      // stack (phone in ink, email + website in gold) — premium black/gold
-      // mix, never overlaps with anything else.
+      // v20 premium chrome:
+      //   • champagne (#FBF7EE) wash band so header differentiates from white body
+      //   • monogram (inline base64) + legal name on baseline
+      //   • office line = TRADE_LICENSE_OFFICE (Port Saeed, Deira) — never
+      //     "Downtown Dubai" or "private office"
+      //   • right column: doc number (ink), phone (ink), email + website (gold)
+      //   • everything fits in ~120px to leave room for one-page A4
+      const officeLine = JBJ_BRAND.office
+        ? `<div style="font-size:9.5px;letter-spacing:.04em;color:${ink};opacity:.78;margin-top:4px;line-height:1.35;">${esc(JBJ_BRAND.office)}</div>`
+        : "";
       const contactStack = `
-        <div style="margin-top:6px;font-size:9.5px;line-height:1.55;text-align:right;">
-          <div>${linkPhone(ink)}</div>
-          <div>${linkEmail(accent)}</div>
+        <div style="font-size:9.5px;line-height:1.6;text-align:right;">
+          <div style="margin-bottom:1px;">${linkPhone(ink)}</div>
+          <div style="margin-bottom:1px;">${linkEmail(accent)}</div>
           <div>${linkWebsite(accent, true)}</div>
         </div>`;
-      const rightCol = (docBadge || contactStack)
-        ? `<div style="flex:0 0 auto;text-align:right;min-width:140px;">${docBadge}${contactStack}</div>`
+      const docBadgeBlock = docBadge
+        ? `<div style="margin-bottom:6px;">${docBadge}</div>`
         : "";
       return `
-        <div style="margin-bottom:16px;">
-          <div style="display:flex;align-items:center;gap:14px;min-height:54px;">
-            <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:54px;height:54px;object-fit:contain;display:block;flex:0 0 auto;" />
-            <div style="width:1px;height:38px;background:${accent};opacity:.7;flex:0 0 auto;"></div>
-            <div style="flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;">
-              <div style="font-size:15px;font-weight:700;letter-spacing:.22em;color:${ink};text-transform:uppercase;line-height:1.15;">
+        <div style="margin:-24px -36px 14px;background:#FBF7EE;padding:16px 36px 12px;border-bottom:1px solid ${accent};">
+          <div style="display:flex;align-items:center;gap:14px;min-height:58px;">
+            <img src="${JBJ_BRAND.monogram}" alt="JBJ Global Real Estate" crossorigin="anonymous" style="width:58px;height:58px;object-fit:contain;display:block;flex:0 0 auto;" />
+            <div style="width:1px;height:42px;background:${accent};opacity:.6;flex:0 0 auto;"></div>
+            <div style="flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;min-width:0;">
+              <div style="font-size:15px;font-weight:700;letter-spacing:.20em;color:${ink};text-transform:uppercase;line-height:1.15;">
                 ${esc(JBJ_BRAND.legalCompany)}
               </div>
+              ${officeLine}
               ${reraLine ? `<div style="margin-top:3px;">${reraLine}</div>` : ""}
             </div>
-            ${rightCol}
+            <div style="flex:0 0 auto;text-align:right;min-width:150px;">
+              ${docBadgeBlock}
+              ${contactStack}
+            </div>
           </div>
           <div style="margin-top:10px;${goldGradient(accent)}"></div>
           <div style="margin-top:10px;text-align:center;">
             <div style="font-size:14px;font-weight:800;letter-spacing:.22em;color:${ink};text-transform:uppercase;">
               ${titleFor(category).toUpperCase()}
             </div>
+            <div style="margin:6px auto 0;width:48px;height:2px;background:${accent};border-radius:1px;"></div>
           </div>
         </div>`;
     }
@@ -285,27 +301,33 @@ const footerHtml = (chrome: Required<TemplateChrome>) => {
         </div>`;
     case "three-column":
     default: {
-      // Compact footer: NO monogram. Single gold hairline + three text columns.
-      // Sized to live within A4; vertical slack lives ABOVE this footer (above
-      // the divider) thanks to the flex page wrapper. Phone/email/web are all
-      // clickable anchors (tel: / mailto: / https:).
+      // v20 premium footer: champagne band mirrors the header so the document
+      // is bookended in the same surface tone. Three text columns:
+      //   left   — legal name (ink) + phone (ink)
+      //   center — trade-license office address (ink, .85)
+      //   right  — email (gold) + website (gold)
+      // Phone/email/web are real anchors (tel: / mailto: / https://). No
+      // monogram in the footer (kept since v13).
       return `
-        <div style="margin-top:14px;${goldGradient(accent)}"></div>
-        <table style="margin-top:8px;width:100%;border-collapse:collapse;table-layout:fixed;font-size:10px;color:${ink};line-height:1.5;">
-          <tr>
-            <td style="vertical-align:top;width:34%;padding-right:10px;">
-              <div style="font-size:9.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:${ink};">${esc(JBJ_BRAND.legalCompany)}</div>
-              <div style="margin-top:3px;">${linkPhone(ink)}</div>
-            </td>
-            <td style="vertical-align:top;text-align:center;width:36%;padding:0 8px;color:${ink};opacity:.9;">
-              ${JBJ_BRAND.office ? esc(JBJ_BRAND.office) : ""}
-            </td>
-            <td style="vertical-align:top;text-align:right;width:30%;padding-left:10px;">
-              <div>${linkEmail(ink)}</div>
-              <div style="margin-top:3px;">${linkWebsite(accent, true)}</div>
-            </td>
-          </tr>
-        </table>`;
+        <div style="margin:14px -36px 0;background:#FBF7EE;border-top:1px solid ${accent};padding:10px 36px 12px;">
+          <div style="${goldGradient(accent)}margin-bottom:8px;"></div>
+          <table style="width:100%;border-collapse:collapse;table-layout:fixed;font-size:9.5px;color:${ink};line-height:1.55;">
+            <tr>
+              <td style="vertical-align:top;width:32%;padding-right:10px;">
+                <div style="font-size:9.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:${ink};">${esc(JBJ_BRAND.legalCompany)}</div>
+                <div style="margin-top:3px;">${linkPhone(ink)}</div>
+              </td>
+              <td style="vertical-align:top;text-align:center;width:38%;padding:0 8px;color:${ink};opacity:.85;">
+                ${JBJ_BRAND.office ? esc(JBJ_BRAND.office) : ""}
+                ${trn ? `<div style="margin-top:2px;font-size:9px;letter-spacing:.06em;opacity:.85;">TRN ${esc(trn)}${license ? ` · LIC ${esc(license)}` : ""}</div>` : ""}
+              </td>
+              <td style="vertical-align:top;text-align:right;width:30%;padding-left:10px;">
+                <div>${linkEmail(accent)}</div>
+                <div style="margin-top:3px;">${linkWebsite(accent, true)}</div>
+              </td>
+            </tr>
+          </table>
+        </div>`;
     }
   }
 };

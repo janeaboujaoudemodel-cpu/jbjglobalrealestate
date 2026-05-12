@@ -109,10 +109,21 @@ export default function EnvelopeDetail() {
   // Hydrate edit + CC + chrome state when envelope loads
   useEffect(() => {
     if (envelope) {
-      setEditValues({ ...((envelope.template_field_values as any) || {}) });
+      const persisted = ((envelope.template_field_values as any) || {}) as Record<string, string>;
+      const next = { ...persisted };
+      // v20: PAA leasing — if status & vacating date are both blank, pre-fill
+      // Tenanted as a sensible default (owner already supplied this for the
+      // Burj Khalifa unit). Stays fully editable in the inline form.
+      const isPaaLeasing =
+        envelope.template_key === "jbj-property-advertising-agreement" &&
+        ((envelope.category as any) || "leasing") === "leasing";
+      if (isPaaLeasing && !next.status_vacant_tenanted && !next.vacating_date) {
+        next.status_vacant_tenanted = "Tenanted";
+      }
+      setEditValues(next);
       const meta = (envelope.metadata as any) || {};
-      const persisted = (meta.cc_emails || []) as string[];
-      setCcs(Array.isArray(persisted) ? persisted : []);
+      const persistedCcs = (meta.cc_emails || []) as string[];
+      setCcs(Array.isArray(persistedCcs) ? persistedCcs : []);
       setChrome((meta.chrome as TemplateChrome) || {});
       setHiddenFields(Array.isArray(meta.hidden_fields) ? meta.hidden_fields : []);
     }
@@ -315,38 +326,27 @@ export default function EnvelopeDetail() {
     }
   };
 
-  const handlePrint = () => {
+  const handlePrint = async () => {
     if (!previewHtml) {
-      // Fall back to printing the stored PDF
+      // Fall back to opening the stored PDF (already a real PDF, no print
+      // chrome injection).
       if (envelope?.document_url) window.open(envelope.document_url, "_blank");
       return;
     }
-    const printTitle = docNumber ? String(docNumber) : "JBJ Document";
-    // @page rules + print-color-adjust suppress browser-injected URL/date/time chrome.
-    const printStyles = `
-      <style>
-        @page { size: A4; margin: 16mm 14mm 18mm 14mm; }
-        @media print {
-          html, body {
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-            color-adjust: exact !important;
-            background: #ffffff !important;
-          }
-          .no-print, header, nav, footer.app-footer { display: none !important; }
-        }
-        html, body { margin: 0; padding: 0; background: #ffffff; font-family: Inter, Arial, sans-serif; color: #1A1A1A; }
-        body > .doc-shell { padding: 0; }
-      </style>
-    `;
-    // Render via Blob URL — this gives the new tab a real URL (no "about:blank"
-    // address-bar text) and a clean document title for the browser print chrome.
-    const html = `<!doctype html><html><head><meta charset="utf-8"><title>${printTitle}</title><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">${printStyles}</head><body><div class="doc-shell">${previewHtml}</div><script>window.onload=function(){setTimeout(function(){window.print()},400)}<\/script></body></html>`;
-    const blob = new Blob([html], { type: "text/html" });
-    const url = URL.createObjectURL(blob);
-    const w = window.open(url, "_blank");
-    if (!w) { URL.revokeObjectURL(url); toast.error("Pop-ups blocked"); return; }
-    setTimeout(() => URL.revokeObjectURL(url), 60_000);
+    // v20: render directly to a true PDF blob and open the PDF in a new tab.
+    // Browsers print PDFs WITHOUT injecting URL/date headers, so the previous
+    // "blob:…/lovable.app" chrome line in the printed footer is gone for good.
+    try {
+      toast.loading("Preparing PDF…", { id: "print-pdf" });
+      const { blob } = await renderHtmlToPdfBlob(previewHtml);
+      const url = URL.createObjectURL(blob);
+      const w = window.open(url, "_blank");
+      if (!w) { URL.revokeObjectURL(url); toast.error("Pop-ups blocked", { id: "print-pdf" }); return; }
+      toast.success("PDF ready — use your browser's print button", { id: "print-pdf" });
+      setTimeout(() => URL.revokeObjectURL(url), 5 * 60_000);
+    } catch (e: any) {
+      toast.error(e?.message || "Failed to render PDF", { id: "print-pdf" });
+    }
   };
 
   const buildSigningUrl = (token: string) => `${PUBLIC_DOMAIN}/sign/${token}`;
