@@ -66,6 +66,7 @@ const ESignatureDashboard = lazy(() => import("@/pages/e-signature/ESignatureDas
 const CreateEnvelope = lazy(() => import("@/pages/e-signature/CreateEnvelope"));
 const EnvelopeDetail = lazy(() => import("@/pages/e-signature/EnvelopeDetail"));
 const SignatureStudio = lazy(() => import("@/pages/e-signature/SignatureStudio"));
+const BlankLetterStudio = lazy(() => import("@/pages/e-signature/BlankLetterStudio"));
 const ContractReview = lazy(() => import("@/pages/e-signature/ContractReview"));
 const Automations = lazy(() => import("@/pages/Automations"));
 const AlertsDemo = lazy(() => import("@/pages/AlertsDemo"));
