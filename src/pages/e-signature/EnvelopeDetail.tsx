@@ -326,6 +326,62 @@ export default function EnvelopeDetail() {
     }
   };
 
+  const savePdfBlob = (blob: Blob, filename: string) => {
+    const objectUrl = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = objectUrl;
+    a.download = filename || "document.pdf";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(objectUrl), 60_000);
+  };
+
+  // Template envelopes are preview-first: download/export must render the same
+  // HTML that is currently visible in the iframe, not an older cached storage PDF.
+  const renderCurrentPreviewPdf = async () => {
+    if (!previewHtml) return null;
+    const { blob } = await renderHtmlToPdfBlob(previewHtml);
+    return blob;
+  };
+
+  const handleDownloadCurrentPdf = async (filename?: string | null) => {
+    try {
+      toast.loading("Preparing current PDF…", { id: "current-pdf" });
+      const blob = await renderCurrentPreviewPdf();
+      if (blob) {
+        savePdfBlob(blob, filename || envelope?.document_filename || `${docNumber || "JBJ-Document"}.pdf`);
+        toast.success("Current preview downloaded", { id: "current-pdf" });
+        return;
+      }
+      if (envelope?.document_url) {
+        await handleDownload(bustUrl(envelope.document_url), filename || envelope.document_filename);
+        toast.success("PDF downloaded", { id: "current-pdf" });
+        return;
+      }
+      toast.error("No file available", { id: "current-pdf" });
+    } catch (e: any) {
+      toast.error(e?.message || "Failed to render current PDF", { id: "current-pdf" });
+    }
+  };
+
+  const handleOpenCurrentPdf = async () => {
+    try {
+      const blob = await renderCurrentPreviewPdf();
+      if (blob) {
+        const url = URL.createObjectURL(blob);
+        const w = window.open(url, "_blank");
+        if (!w) { URL.revokeObjectURL(url); toast.error("Pop-ups blocked"); return; }
+        setTimeout(() => URL.revokeObjectURL(url), 5 * 60_000);
+        return;
+      }
+      const url = (envelope as any)?.document_url;
+      if (url) window.open(bustUrl(url), "_blank");
+    } catch (e: any) {
+      toast.error(e?.message || "Failed to open current PDF");
+    }
+  };
+
   const handlePrint = async () => {
     if (!previewHtml) {
       // Fall back to opening the stored PDF (already a real PDF, no print
