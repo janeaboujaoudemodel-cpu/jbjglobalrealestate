@@ -145,7 +145,7 @@ export default function DocumentsFormsHub() {
       const env = await createFromTpl.mutateAsync({ template: picker, client, values: extraValues });
       toast.success("Draft created — review fields and send");
       qc.invalidateQueries({ queryKey: ["esign_envelopes_hub_all"] });
-      navigate(`/e-signature/${env.id}`);
+      navigate(`/owner/documents/forms/${env.id}`);
     } catch (e: any) {
       toast.error(e.message || "Failed to create envelope");
     }
