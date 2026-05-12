@@ -193,6 +193,7 @@ Deno.serve(async (req) => {
               to: [recipient.email],
               cc: ccEmails,
               bcc: bccEmails,
+              reply_to: "contact@jbj.ae",
               subject: finalSubject,
               html: emailHtml,
             }),

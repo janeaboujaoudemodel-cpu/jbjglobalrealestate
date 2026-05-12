@@ -24,8 +24,26 @@ const ADDRESS_TO_SERVICE: Record<string, string> = {
   "support@jbj.ae": "support",
   "careers@jbj.ae": "hr",
   "contact@jbj.com": "general",
-  "noreply@jbj.ae": "general",
+  // NOTE: noreply@jbj.ae is intentionally NOT in this map — replies to it
+  // are intercepted below and bounced with a friendly auto-reply.
 };
+
+const NOREPLY_ADDRESSES = new Set([
+  "noreply@jbj.ae",
+  "no-reply@jbj.ae",
+  "noreply@notify.jbj.ae",
+  "no-reply@notify.jbj.ae",
+]);
+
+function isNoreplyRecipient(toAddresses: string[]): boolean {
+  for (const addr of toAddresses) {
+    const lower = addr.toLowerCase().trim();
+    const match = lower.match(/<([^>]+)>/) || [null, lower];
+    const email = (match[1] || lower).trim();
+    if (NOREPLY_ADDRESSES.has(email)) return true;
+  }
+  return false;
+}
 
 function resolveService(toAddresses: string[]): string {
   for (const addr of toAddresses) {
@@ -117,6 +135,53 @@ serve(async (req: Request): Promise<Response> => {
     const senderName = from.replace(/<[^>]+>/, "").trim() || senderEmail;
 
     const service = resolveService(to);
+
+    // --- Intercept replies to noreply@ addresses ---
+    if (isNoreplyRecipient(to)) {
+      console.log(`[Inbound] Reply to noreply intercepted: from=${senderEmail}, subject=${subject}`);
+      const resendApiKey = Deno.env.get("RESEND_API_KEY");
+      if (resendApiKey && senderEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(senderEmail)) {
+        const friendlyHtml = `<!doctype html><html><body style="margin:0;padding:0;background:#FDFBF7;font-family:Inter,Arial,sans-serif;color:#1A1A1A;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#FDFBF7;padding:40px 0;"><tr><td align="center">
+    <table width="560" cellpadding="0" cellspacing="0" style="background:#F7F2EA;border:1px solid #B89555;border-radius:8px;padding:36px 40px;">
+      <tr><td style="font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#1A1A1A;opacity:.55;padding-bottom:14px;">JBJ Global Real Estate</td></tr>
+      <tr><td style="font-size:22px;font-weight:600;color:#1A1A1A;padding-bottom:18px;line-height:1.3;">Thanks for writing in — but this inbox isn't monitored.</td></tr>
+      <tr><td style="font-size:14px;line-height:1.7;color:#1A1A1A;padding-bottom:24px;">
+        Hi${senderName && senderName !== senderEmail ? ` ${senderName.replace(/[<>&"']/g, "")}` : ""},<br/><br/>
+        We received your reply to <strong>noreply@jbj.ae</strong>, but no one on our team checks this address.
+        For anything you need — questions, follow-ups, or to reach a real person on the team —
+        please write to us at <a href="mailto:contact@jbj.ae" style="color:#1A1A1A;font-weight:600;">contact@jbj.ae</a>
+        and we'll get back to you shortly.
+      </td></tr>
+      <tr><td style="padding-top:8px;border-top:1px solid #B89555;font-size:12px;color:#1A1A1A;opacity:.6;line-height:1.6;">
+        With appreciation,<br/><strong>The JBJ Team</strong><br/>
+        <a href="mailto:contact@jbj.ae" style="color:#1A1A1A;">contact@jbj.ae</a> · <a href="https://jbj.ae" style="color:#1A1A1A;">jbj.ae</a>
+      </td></tr>
+    </table>
+  </td></tr></table>
+</body></html>`;
+        try {
+          await fetch("https://api.resend.com/emails", {
+            method: "POST",
+            headers: { "Authorization": `Bearer ${resendApiKey}`, "Content-Type": "application/json" },
+            body: JSON.stringify({
+              from: "JBJ Global Real Estate <noreply@jbj.ae>",
+              to: [senderEmail],
+              reply_to: "contact@jbj.ae",
+              subject: `Please write to contact@jbj.ae instead`,
+              html: friendlyHtml,
+            }),
+          });
+        } catch (e) {
+          console.warn("[Inbound] noreply auto-reply failed:", (e as Error).message);
+        }
+      }
+      // Skip ingesting into the inbox; ack so Resend doesn't retry.
+      return new Response(
+        JSON.stringify({ success: true, intercepted: "noreply", threadId: null, messageId: null }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     // --- Deduplication check ---
     if (messageId) {

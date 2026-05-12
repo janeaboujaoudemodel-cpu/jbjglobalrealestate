@@ -153,6 +153,7 @@ Deno.serve(async (req) => {
         from: "JBJ Global Real Estate <noreply@jbj.ae>",
         to: [toEmail],
         cc: toEmail.toLowerCase() === "infoo.jane@gmail.com" ? [] : ["infoo.jane@gmail.com"],
+        reply_to: "contact@jbj.ae",
         subject: finalSubject,
         html: emailHtml,
       }),

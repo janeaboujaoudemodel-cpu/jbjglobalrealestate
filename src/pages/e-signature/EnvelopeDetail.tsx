@@ -645,12 +645,33 @@ export default function EnvelopeDetail() {
             </Button>
             <Button
               variant="outline"
-              onClick={() =>
+              onClick={() => {
+                const signingUrl = clientRec?.signing_token ? buildSigningUrl(clientRec.signing_token) : "";
+                const docName = docNumber || envelope.name;
+                const greetingName = clientRec?.name?.split(" ")[0] || "there";
+                const prefillBody = [
+                  `Dear ${greetingName},`,
+                  ``,
+                  `Please find attached "${docName}" for your review and signature.`,
+                  ``,
+                  `▸ Open & sign online (recommended): ${signingUrl}`,
+                  `   You'll be able to review the document, sign electronically, and send it back to us in one click — just like DocuSign.`,
+                  ``,
+                  `▸ Or download the attached PDF, sign manually, and reply to this email with the signed copy.`,
+                  ``,
+                  `Once you've signed, we'll receive a confirmation automatically and your fully-executed copy will be saved to your file.`,
+                  ``,
+                  `Any questions, simply reply to this email or write to contact@jbj.ae.`,
+                  ``,
+                  `With appreciation,`,
+                  `JBJ Global Real Estate`,
+                ].join("\n");
                 navigate("/owner/email-client", {
                   state: {
                     prefillTo: clientRec?.email,
-                    prefillSubject: `${docNumber || envelope.name}`,
-                    prefillBody: `Please find attached "${docNumber || envelope.name}".\n\nSigning link: ${clientRec?.signing_token ? buildSigningUrl(clientRec.signing_token) : ""}`,
+                    prefillSubject: `Please sign — ${docName}`,
+                    prefillBody,
+                    prefillCta: signingUrl ? { label: "Download & sign with DocuSign", url: signingUrl } : undefined,
                     prefillAttachment: {
                       id: crypto.randomUUID(),
                       name: envelope.document_filename || `${docNumber || "document"}.pdf`,
@@ -659,8 +680,8 @@ export default function EnvelopeDetail() {
                       mimeType: "application/pdf",
                     },
                   },
-                })
-              }
+                });
+              }}
             >
               <Mail className="w-4 h-4 mr-2" /> Send via Email
             </Button>
