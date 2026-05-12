@@ -596,8 +596,8 @@ export function buildPAAHtml(
 
   ${!hidden.has("additional_notes") && get("additional_notes") ? `
     <div data-field-key="additional_notes" style="margin:6px 0 14px;">
+      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.7;margin-bottom:3px;">Additional Notes</div>
       <div style="border:1px solid ${accent};border-radius:4px;min-height:54px;padding:8px 10px;font-size:12px;color:${ink};white-space:pre-wrap;">${esc(get("additional_notes"))}</div>
-      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.7;margin-top:3px;">Additional Notes</div>
     </div>` : ""}
 
   ${poaBlock}
