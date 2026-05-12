@@ -382,8 +382,8 @@ export function buildPAAHtml(
     if (opts.renderMode === "final") return "";
     return `
       <div data-field-key="${key}" style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;position:relative;">
+        <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.55;margin-bottom:3px;">${esc(label)}</div>
         <div style="display:inline-block;border-bottom:1px dashed ${accent};min-width:8ch;padding:2px 8px 2px 2px;font-size:13px;color:${ink};opacity:.35;white-space:nowrap;">—</div>
-        <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.55;margin-top:3px;">${esc(label)}</div>
       </div>`;
   };
 
@@ -392,15 +392,15 @@ export function buildPAAHtml(
     if (raw) {
       return `
       <div data-field-key="${key}" style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;">
+        <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.7;margin-bottom:5px;">${esc(label)}</div>
         <div style="display:inline-block;">${dateBox(raw)}</div>
-        <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.7;margin-top:5px;">${esc(label)}</div>
       </div>`;
     }
     if (opts.renderMode === "final") return "";
     return `
       <div data-field-key="${key}" style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;">
+        <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.55;margin-bottom:5px;">${esc(label)}</div>
         <div style="display:inline-block;border-bottom:1px dashed ${accent};padding:2px 8px;font-size:12px;color:${ink};opacity:.35;white-space:nowrap;">DD / MM / YYYY</div>
-        <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.55;margin-top:5px;">${esc(label)}</div>
       </div>`;
   };
   // Smart conditionals
