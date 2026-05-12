@@ -78,6 +78,11 @@ const OwnerRelationshipsRevenue = lazy(() => import("@/pages/owner/OwnerRelation
 const OwnerMediaIngest = lazy(() => import("@/pages/owner/OwnerMediaIngest"));
 const DocumentsFormsHub = lazy(() => import("@/pages/owner/DocumentsFormsHub"));
 const VoiceAgentControlPanel = lazy(() => import("@/pages/owner/VoiceAgentControlPanel"));
+const OwnerEnvelopeDetail = lazy(() => import("@/pages/e-signature/EnvelopeDetail"));
+const OwnerCreateEnvelope = lazy(() => import("@/pages/e-signature/CreateEnvelope"));
+const OwnerSignatureStudio = lazy(() => import("@/pages/e-signature/SignatureStudio"));
+const OwnerBlankLetterStudio = lazy(() => import("@/pages/e-signature/BlankLetterStudio"));
+const OwnerContractReview = lazy(() => import("@/pages/e-signature/ContractReview"));
 
 export const OwnerRoutes = () => (
   <Route path="/owner" element={
@@ -102,6 +107,11 @@ export const OwnerRoutes = () => (
     <Route path="properties" element={<Navigate to="/properties" replace />} />
     <Route path="documents" element={<Documents />} />
     <Route path="documents/forms" element={<DocumentsFormsHub />} />
+    <Route path="documents/forms/create" element={<OwnerCreateEnvelope />} />
+    <Route path="documents/forms/signature-studio" element={<OwnerSignatureStudio />} />
+    <Route path="documents/forms/blank-letter" element={<OwnerBlankLetterStudio />} />
+    <Route path="documents/forms/contract-review" element={<OwnerContractReview />} />
+    <Route path="documents/forms/:id" element={<OwnerEnvelopeDetail />} />
     <Route path="settings" element={<OwnerCommSettings />} />
     {/* Unified CRM — single owner-only hub. All legacy sub-routes redirect into it. */}
     <Route path="crm" element={<UnifiedCRM />} />

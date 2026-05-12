@@ -145,7 +145,7 @@ export default function DocumentsFormsHub() {
       const env = await createFromTpl.mutateAsync({ template: picker, client, values: extraValues });
       toast.success("Draft created — review fields and send");
       qc.invalidateQueries({ queryKey: ["esign_envelopes_hub_all"] });
-      navigate(`/e-signature/${env.id}`);
+      navigate(`/owner/documents/forms/${env.id}`);
     } catch (e: any) {
       toast.error(e.message || "Failed to create envelope");
     }
@@ -279,7 +279,7 @@ export default function DocumentsFormsHub() {
                     <div className="text-[11px] text-[#1A1A1A]/55 mt-0.5">{new Date(e.created_at).toLocaleString()}</div>
                   </div>
                   <div className="flex flex-col gap-2 items-end shrink-0">
-                    <Button size="sm" variant="gold" onClick={() => navigate(`/e-signature/${e.id}`)}>Open</Button>
+                    <Button size="sm" variant="gold" onClick={() => navigate(`/owner/documents/forms/${e.id}`)}>Open</Button>
                     {e.signed_document_url && (
                       <Button size="sm" variant="outline" asChild>
                         <a href={e.signed_document_url} target="_blank" rel="noreferrer">
