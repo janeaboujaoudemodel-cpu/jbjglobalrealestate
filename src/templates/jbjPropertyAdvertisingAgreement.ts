@@ -246,14 +246,14 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string, categor
         : "";
       return `
         <div style="margin-bottom:16px;">
-          <div style="display:flex;align-items:flex-start;gap:14px;">
+          <div style="display:flex;align-items:center;gap:14px;min-height:54px;">
             <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:54px;height:54px;object-fit:contain;display:block;flex:0 0 auto;" />
-            <div style="width:1px;align-self:stretch;background:${accent};opacity:.7;"></div>
+            <div style="width:1px;height:38px;background:${accent};opacity:.7;flex:0 0 auto;"></div>
             <div style="flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;">
-              <div style="font-size:13px;font-weight:700;letter-spacing:.20em;color:${ink};text-transform:uppercase;line-height:1.2;">
+              <div style="font-size:15px;font-weight:700;letter-spacing:.22em;color:${ink};text-transform:uppercase;line-height:1.15;">
                 ${esc(JBJ_BRAND.legalCompany)}
               </div>
-              ${reraLine ? `<div style="margin-top:2px;">${reraLine}</div>` : ""}
+              ${reraLine ? `<div style="margin-top:3px;">${reraLine}</div>` : ""}
             </div>
             ${rightCol}
           </div>
