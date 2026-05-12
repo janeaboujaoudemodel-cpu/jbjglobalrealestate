@@ -66,6 +66,7 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
   const [approving, setApproving] = useState(false);
   const [lockedAt, setLockedAt] = useState<string | null>(null);
   const [lastTestId, setLastTestId] = useState<string | null>(null);
+  const [docusignUrl, setDocusignUrl] = useState("");
 
   // Hydrate from envelope + load owner's locked default template if present
   useEffect(() => {
