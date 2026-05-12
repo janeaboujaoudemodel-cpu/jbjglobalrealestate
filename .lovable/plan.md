@@ -1,75 +1,104 @@
-## Three remaining PAA tweaks + where to test
+## Part 1 — Fix the PDF export so it matches the on-screen preview
 
-All edits in `src/templates/jbjPropertyAdvertisingAgreement.ts`. Bump `PAA_LAYOUT_VERSION` 17 → 18 so every open envelope re-renders.
+**Root cause**
+`renderHtmlToPdfBlob()` rasterises the template HTML at 794 px wide and then scales the JPEG into a 595 pt A4 page. That works on its own, but the HTML being passed in is not always the *same* HTML the iframe shows:
 
-### 1. Property Specs — collapse onto one line
+- The "preview" iframe in `EnvelopeDetail.tsx` renders with the full option bag — `chrome`, `ownerSignatureUrl`, `ownerStampUrl`, `clientSignatureUrl`, `hiddenFields`, `renderMode: "final"`, `category`.
+- The on-demand regen call (`useRegenerateEnvelopePdf`, line 246) passes those options.
+- But the **initial** render in `useCreateEnvelopeFromTemplate` (line 119) calls `renderTemplateHtml(template.key, mergedValues)` with **no opts** → falls back to `renderMode: "edit"` chip rows, no signatures, no hidden-field filtering. That's the "another style" the user sees if they download before the first save/regenerate completes.
+- Cache-busting + `dirty` guard masks this for edited envelopes but not for fresh ones.
 
-Today each chip group (`Property Type`, `Furnishing`, `Status`) renders on its own visual row in the final PDF because each chip prints its **label + selected value as a full segment** with thin dividers between them. On a 794px page this wraps.
-
-**Fix:**
-- In **final** mode (`isFinal === true`), render Property Specs as a single inline sentence:
-  `Apartment · Furnished · Vacant` (or `… · Tenanted (Vacating 12 Mar 2026)`).
-  - Drop the per-row `flex` containers and chip labels, output only the **selected value** per group, separated by a thin gold middle dot.
-  - Keep `Tenure · Usage` on a second compact line (same dot separator).
-- In **edit** mode, keep today's chip row UI so the user can still toggle.
-
-Net result: Property Specs takes one line in the PDF, freeing ~24–32px of vertical space.
-
-### 2. Property Identifiers — explain + auto-hide when empty
-
-The fields in this section are the legal identifiers of the unit:
-
-- **Title Deed No. / Title Deed Date** — for ready secondary properties
-- **Oqood No. / Oqood Date** — for off-plan units (DLD pre-registration)
-- **Expected Handover** — off-plan only
-- **DEWA Premise No.** — utility account anchor
-- **Makani No.** — Dubai Municipality 10-digit address
-- **RERA Permit No.** — required to advertise
-
-It's empty because none of these were typed in for this envelope. Two improvements:
-
-a. **Auto-prefill** from the linked admin listing (when the PAA is created from / synced to a listing): pull `title_deed`, `oqood`, `dewa_premise`, `makani`, `rera_permit` directly into `template_field_values` on first render.
-
-b. **In final mode, hide the Property Identifiers section entirely if every field is blank** (`fuPh` is replaced by a "no identifiers on file" check). In edit mode it stays visible so the user can fill it.
-
-### 3. Footer hugs the page bottom — close the bottom gap
-
-Current page wrapper (line 452):
-`padding:24px 36px; min-height:1123px; display:flex; flex-direction:column;`
-
-The signature block already has `margin-top:auto`, so slack collapses **above** the signatures (between rules and signature). The visible "gap below the footer" is the wrapper's **24px bottom padding** plus the footer's own `margin-top:14px`.
-
-**Fix:**
-- Wrapper padding → `padding:24px 36px 0;` (keep top + sides, drop bottom).
-- Footer wrapper gets its own `padding:10px 0 14px;` so the gold hairline + 3-column row sit ~14px from the page edge — clean, balanced, still inside A4 safe zone.
-- Add `padding-bottom:18px` to the signature grid so signature names don't kiss the footer hairline.
-
-Result: gold hairline + footer text now anchor to the bottom of the A4 page; the slack moves up between the T&C ordered list and the Landlord signature row, exactly as requested.
-
-### 4. Where to test
-
-The PAA template renders in two places. Both are reached from the **Owner side menu → E-Signatures**:
-
-1. **Studio (create new):** `/owner/e-signature/studio` → choose **Property Advertising Agreement** → fill fields → preview iframe shows the live template.
-2. **Existing envelope:** `/owner/e-signature/envelope/:id` (the same URL the user shared, e.g. `/e-signature/810df24a-…`).
-   - Click **Edit document** → change values (e.g. clear "Firas" from Listing Consultant).
-   - The right-hand iframe re-renders live from `editValues` as you type.
-   - Click **Save** → cached PDF regenerates.
-   - **Download PDF** now auto-saves first if there are unsaved edits (from the previous fix), so the downloaded file always matches the screen.
-
-Quick QA checklist after deploy:
-- Open the same `810df24a` envelope, hit Edit, clear `listing_consultant` to "Jane", hit Save, then Download PDF → verify "Jane" appears (no slash, no Firas).
-- Confirm Property Specs prints as one line in the downloaded PDF.
-- Confirm the footer's gold hairline sits ~14px from the bottom edge with no white band beneath it.
-
-### Layout version bump
-
-`PAA_LAYOUT_VERSION` 17 → 18, so the cache-bust URL param invalidates every previously rendered PDF and forces fresh regeneration for all open envelopes.
+**Fix**
+1. In `useCreateEnvelopeFromTemplate`, build the same opts bag used by `useRegenerateEnvelopePdf` (default chrome from `companyLegal`, `renderMode: "final"`, current owner signature/stamp from `useOwnerSignatureAssets`, empty client signature, no hidden fields) and pass it to `renderTemplateHtml`.
+2. In `renderHtmlToPdfBlob`, render at the true A4 pixel size (`794×1123` min-height, fixed) and pin `pdfHeight = 842 pt` so the export is **always** single-page A4 instead of an elongated screenshot. Add `useCORS:true, letterRendering:true, windowWidth:794` to `html2canvas` so embedded signature/stamp PNGs and Google fonts come through identically to the iframe.
+3. In `EnvelopeDetail.handleDownload`, after a successful save, invalidate the bust-URL cache key so the next click reads the freshly regenerated PDF (already partly there — make it deterministic by awaiting the regenerate mutation result before resolving `ensureSavedBeforeDownload`).
+4. Bump `PAA_LAYOUT_VERSION` 18 → 19 so existing envelopes auto-regenerate once.
 
 ---
 
-**Files touched:**
-- `src/templates/jbjPropertyAdvertisingAgreement.ts` — items 1, 2b, 3, 4 (version bump).
-- (Optional, item 2a only) `supabase/functions/paa-sync-listing/*` to backfill identifiers when a listing is linked. Skip if the user wants pure template work.
+## Part 2 — New "Blank Letter" template with AI body + drag-in signature/date/stamp
 
-No DB migrations.
+A second template alongside PAA & Listing Authorisation that gives the user a blank A4 with **only** the corporate header and footer and an AI-driven body.
+
+### Template structure (`src/templates/jbjBlankLetter.ts`)
+
+```text
+┌──────────────────────────────────────────┐
+│  HEADER  — JBJ wordmark · gold divider   │
+│  Trade licence + doc number              │
+├──────────────────────────────────────────┤
+│                                          │
+│   AI prompt strip (edit mode only):      │
+│   ┌────────────────────────────────────┐ │
+│   │ "Write a job offer for…"  [Generate]│ │
+│   └────────────────────────────────────┘ │
+│                                          │
+│   Subject:  ____________________         │
+│   Date:     12 May 2026                  │
+│                                          │
+│   <AI-generated body, editable           │
+│    contenteditable HTML>                 │
+│                                          │
+│   ── signature divider ──                │
+│   Name / Title / Signature / Stamp slot  │
+│                                          │
+├──────────────────────────────────────────┤
+│  FOOTER  — clickable links, hairline     │
+└──────────────────────────────────────────┘
+```
+
+- Header + footer reuse the exact components from PAA v18 so brand stays consistent.
+- Body is a `contenteditable` div in edit mode, plain HTML in final mode.
+- "Insert field" toolbar (chips): **Date**, **Signature**, **Initials**, **Stamp**, **Text field**, **Divider**. Click a chip → inserts a `<span data-field="…">` placeholder at the caret. In final mode each placeholder renders the resolved value (date today, owner saved signature/stamp, etc.).
+
+### AI generation
+
+- New edge function `letter-ai-generate` using **Lovable AI Gateway** (`google/gemini-3-flash-preview`).
+- Input: `{ prompt, recipientName?, language?, tone? }`.
+- Output: structured `{ subject, body_html }` via `Output.object({ schema })` so we never get free-form markdown.
+- System prompt enforces JBJ tone, UAE business letter conventions, no fake legal text, no markdown fences.
+- Quick-pick prompt presets the user can click instead of typing: **Job Offer**, **Warning Letter**, **VAT Exemption Letter**, **NOC**, **Salary Certificate**, **Termination**, **Reference Letter**, **Custom…**
+
+### Stamp upload + place-on-click
+
+- Reuse `owner_signature_assets` table + `useOwnerSignatureAssets("stamp")` (already exists).
+- New "Stamp library" dropdown in the toolbar:
+  - Lists saved stamps; `★ Default` flag; "Upload new" → inline `<input type=file>` → saves via `useSaveSignatureAsset({kind:"stamp", makeDefault?})`.
+- Click "Stamp" tool → cursor switches to crosshair → next click on the document inserts the **default stamp** at that position as an absolutely-positioned `<img>` inside the body. Same flow for Signature.
+- Stamps render with `mix-blend-mode: multiply` via the existing `<StampOverlay/>` so they look like real ink on export.
+
+### Persistence + export
+
+- Stored in `esign_envelopes` with `template_key = "jbj-blank-letter"`.
+- `template_field_values` stores `{ subject, body_html, ai_prompt, placed_fields: [{type,x,y,page,assetId?}] }`.
+- `renderTemplateHtml` gets a third branch:
+  ```ts
+  if (templateKey === "jbj-blank-letter") return buildBlankLetterHtml(values, opts);
+  ```
+- Export uses the **same** `renderHtmlToPdfBlob` (now A4-pinned from Part 1) so preview === download.
+
+### New entry point
+
+- "New letter" button on `/owner/e-signature/studio` next to the existing PAA / Listing Authorisation cards.
+- Same envelope detail page (`EnvelopeDetail.tsx`) handles all three templates — only the body section swaps.
+
+---
+
+## Files to add / change
+
+**New**
+- `src/templates/jbjBlankLetter.ts` — `buildBlankLetterHtml(values, opts)`
+- `src/components/e-signature/BlankLetterEditor.tsx` — contenteditable body, AI prompt strip, field toolbar, stamp-place-on-click
+- `supabase/functions/letter-ai-generate/index.ts` — Lovable AI structured-output call
+- `src/hooks/useLetterAiGenerate.ts`
+
+**Edit**
+- `src/hooks/useEsignTemplates.ts` — branch on `jbj-blank-letter`; pass full opts bag in `useCreateEnvelopeFromTemplate`; A4-pin export
+- `src/templates/jbjPropertyAdvertisingAgreement.ts` — bump `PAA_LAYOUT_VERSION` to 19
+- `src/pages/e-signature/EnvelopeDetail.tsx` — render `<BlankLetterEditor>` when `template_key === "jbj-blank-letter"`; ensure-saved fix
+- `src/pages/e-signature/SignatureStudio.tsx` (or whichever lists templates) — add "Blank Letter" tile
+
+## Where to test
+
+- `/owner/e-signature/studio` → "New letter" → type "Write a job offer for Jane Doe as Senior Broker, AED 18,000/month, start 1 Jun 2026" → Generate → adjust → place stamp/signature → Download → confirm PDF == preview.
+- Existing `/e-signature/810df24a-…` → Download PDF → confirm now identical to on-screen preview after Part 1 fix.

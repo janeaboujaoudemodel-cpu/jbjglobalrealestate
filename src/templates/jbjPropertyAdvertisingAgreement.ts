@@ -26,12 +26,12 @@ export const JBJ_BRAND = {
   monogram: monogramUrl,
 } as const;
 
-// v18: Property Specs collapse to a single inline "Apartment · Furnished ·
-// Vacant" line in final mode (saves ~32px of vertical space); Property
-// Identifiers section is hidden in final mode when every identifier is
-// blank; page wrapper drops bottom padding so the footer's gold hairline
-// hugs the A4 bottom edge — slack now lives above the signature row.
-export const PAA_LAYOUT_VERSION = 18;
+// v19: PDF export pinned to true A4 (595×842pt) and capture container
+// fixed at 794×1123 px with useCORS, so downloaded PDF == on-screen
+// preview byte-for-byte (no more squished/elongated exports). Initial
+// envelope creation now also passes renderMode:"final" so the very first
+// download matches the preview before any save.
+export const PAA_LAYOUT_VERSION = 19;
 
 export type PAACategory = "leasing" | "selling" | "other";
 

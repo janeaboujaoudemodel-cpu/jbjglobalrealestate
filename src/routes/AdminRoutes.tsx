@@ -66,6 +66,7 @@ const ESignatureDashboard = lazy(() => import("@/pages/e-signature/ESignatureDas
 const CreateEnvelope = lazy(() => import("@/pages/e-signature/CreateEnvelope"));
 const EnvelopeDetail = lazy(() => import("@/pages/e-signature/EnvelopeDetail"));
 const SignatureStudio = lazy(() => import("@/pages/e-signature/SignatureStudio"));
+const BlankLetterStudio = lazy(() => import("@/pages/e-signature/BlankLetterStudio"));
 const ContractReview = lazy(() => import("@/pages/e-signature/ContractReview"));
 const Automations = lazy(() => import("@/pages/Automations"));
 const AlertsDemo = lazy(() => import("@/pages/AlertsDemo"));
@@ -169,6 +170,7 @@ export const AdminRoutes = () => (
     <Route path="/e-signature/create" element={<OwnerGuard><CreateEnvelope /></OwnerGuard>} />
     <Route path="/e-signature/:id" element={<OwnerGuard><EnvelopeDetail /></OwnerGuard>} />
     <Route path="/e-signature/signature-studio" element={<OwnerGuard><SignatureStudio /></OwnerGuard>} />
+    <Route path="/e-signature/blank-letter" element={<OwnerGuard><BlankLetterStudio /></OwnerGuard>} />
     <Route path="/e-signature/contract-review" element={<OwnerGuard><ContractReview /></OwnerGuard>} />
 
     {/* ── Email/Unsubscribe ── */}
