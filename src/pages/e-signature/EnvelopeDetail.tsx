@@ -747,9 +747,27 @@ export default function EnvelopeDetail() {
             <Button variant="outline" onClick={() => handleWhatsApp(clientRec)} disabled={!clientRec}>
               <MessageCircle className="w-4 h-4 mr-2" /> Share via WhatsApp
             </Button>
-            <div className="ml-auto flex items-center gap-2">
+            <div className="ml-auto flex items-center gap-2 flex-wrap">
+              {envelope.template_key === "jbj-property-advertising-agreement" && (
+                <PAAAICopilotDrawer
+                  envelopeId={envelope.id}
+                  currentValues={editing ? editValues : ((envelope.template_field_values as any) || {})}
+                  onApplyUpdates={applyAIUpdates}
+                />
+              )}
+              {isDraft && (
+                isLocked ? (
+                  <Button variant="outline" onClick={handleUnlock} className="border-emerald-300 text-emerald-700">
+                    <Lock className="w-4 h-4 mr-2" /> Locked — click to unlock
+                  </Button>
+                ) : (
+                  <Button variant="gold" onClick={handleApproveLock} disabled={regenerate.isPending}>
+                    <Lock className="w-4 h-4 mr-2" /> Approve & Lock
+                  </Button>
+                )
+              )}
               {!editing ? (
-                <Button variant="outline" onClick={() => setEditing(true)}>
+                <Button variant="outline" onClick={() => setEditing(true)} disabled={isLocked} title={isLocked ? "Unlock to edit" : undefined}>
                   <Edit3 className="w-4 h-4 mr-2" /> Edit fields
                 </Button>
               ) : (
