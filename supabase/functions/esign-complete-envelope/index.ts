@@ -367,13 +367,18 @@ async function buildSignedPdf(
       const xPct = isLegacyPx ? (rawX / REF_W) * 100 : rawX;
       const yPct = isLegacyPx ? (rawY / REF_H) * 100 : rawY;
 
-      // Width/height stored in CSS px on the reference viewport — scale to PDF points.
+      // Width/height are CSS px. Older/template-generated PDFs can be much
+      // taller than A4, so derive the reference height from the actual PDF page
+      // aspect ratio and clamp legacy bottom fields back onto the page.
+      const dynamicRefH = Math.max(REF_H, (REF_W / pageW) * pageH, rawY + rawH + 12);
       const w = (rawW / REF_W) * pageW;
-      const h = (rawH / REF_H) * pageH;
+      const h = (rawH / (isLegacyPx ? dynamicRefH : REF_H)) * pageH;
 
-      const x = (xPct / 100) * pageW;
-      const yTop = (yPct / 100) * pageH;
-      const y = pageH - yTop - h;
+      const safeXPct = Math.max(0, Math.min(99, xPct));
+      const safeYPct = Math.max(0, Math.min(99, isLegacyPx ? (rawY / dynamicRefH) * 100 : yPct));
+      const x = (safeXPct / 100) * pageW;
+      const yTop = (safeYPct / 100) * pageH;
+      const y = Math.max(8, pageH - yTop - h);
 
       const recipient = recipientById.get(f.recipient_id);
       const type = f.field_type;
@@ -560,6 +565,7 @@ Deno.serve(async (req) => {
         .from("esign_signed_documents")
         .update({
           certificate_data: certificateData,
+          document_filename: `signed_${envelope.document_filename}`,
           ...(signedDocumentUrl ? { document_url: signedDocumentUrl } : {}),
           ...(certificateUrl ? { certificate_url: certificateUrl } : {}),
         })
@@ -714,19 +720,28 @@ Deno.serve(async (req) => {
         .maybeSingle();
       const senderId = senderUser?.id;
       if (senderId) {
+        const alertPayload = {
+          envelope_id: envelope.id,
+          signer_name: signerName,
+          signer_email: signerEmail,
+          signed_document_url: signedDocumentUrl,
+          certificate_url: certificateUrl,
+        };
         await supabase.from("notifications").insert({
           user_id: senderId,
           title: `${signerName} signed ${envelope.name}`,
           body: `Signed on ${completedDate}. Tap to view the signed document.`,
           notification_type: "esign_signed",
           action_url: `/e-signature/${envelope.id}`,
-          metadata: {
-            envelope_id: envelope.id,
-            signer_name: signerName,
-            signer_email: signerEmail,
-            signed_document_url: signedDocumentUrl,
-            certificate_url: certificateUrl,
-          },
+          metadata: alertPayload,
+        });
+        await supabase.from("user_notifications").insert({
+          user_id: senderId,
+          type: "esign_signed",
+          title: `${signerName} signed ${envelope.name}`,
+          message: `Signed on ${completedDate}. Tap to view the signed document.`,
+          metadata: { ...alertPayload, action_url: `/e-signature/${envelope.id}` },
+          is_read: false,
         });
       }
     } catch (notifErr) {
@@ -737,6 +752,7 @@ Deno.serve(async (req) => {
       success: true,
       message: "Envelope completed successfully",
       certificate_url: certificateUrl,
+      signed_document_url: signedDocumentUrl,
     }, origin);
 
   } catch (error: any) {

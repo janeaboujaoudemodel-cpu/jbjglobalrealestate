@@ -13,6 +13,7 @@ import { Loader2, Download, Copy, MessageCircle, Mail, FileText, Image as ImageI
 import { toast } from "sonner";
 import JSZip from "jszip";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ExportEnvelopeDialogProps {
   open: boolean;
@@ -45,9 +46,15 @@ function saveBlob(blob: Blob, filename: string) {
   setTimeout(() => URL.revokeObjectURL(url), 1500);
 }
 
+async function authHeaders() {
+  const session = await supabase.auth.getSession();
+  const token = session.data.session?.access_token;
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
 async function fetchPdfBytes(url: string): Promise<ArrayBuffer> {
-  const res = await fetch(maybeProxyStorageUrl(url), { cache: "no-store" });
-  if (!res.ok) throw new Error(`Fetch failed (${res.status})`);
+  const res = await fetch(maybeProxyStorageUrl(url), { cache: "no-store", headers: await authHeaders() });
+  if (!res.ok) throw new Error(res.status === 401 ? "Please sign in again to download this file" : `Fetch failed (${res.status})`);
   return res.arrayBuffer();
 }
 
@@ -161,7 +168,7 @@ export default function ExportEnvelopeDialog({
       }
       if (includeCert && signedDoc?.certificate_url) {
         try {
-          const certRes = await fetch(maybeProxyStorageUrl(signedDoc.certificate_url));
+          const certRes = await fetch(maybeProxyStorageUrl(signedDoc.certificate_url), { headers: await authHeaders() });
           if (certRes.ok) {
             const certBuf = await certRes.arrayBuffer();
             files.push({ name: `${baseName}_audit-certificate.pdf`, blob: new Blob([certBuf], { type: "application/pdf" }) });
