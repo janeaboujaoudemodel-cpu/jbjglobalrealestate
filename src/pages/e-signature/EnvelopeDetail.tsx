@@ -109,10 +109,21 @@ export default function EnvelopeDetail() {
   // Hydrate edit + CC + chrome state when envelope loads
   useEffect(() => {
     if (envelope) {
-      setEditValues({ ...((envelope.template_field_values as any) || {}) });
+      const persisted = ((envelope.template_field_values as any) || {}) as Record<string, string>;
+      const next = { ...persisted };
+      // v20: PAA leasing — if status & vacating date are both blank, pre-fill
+      // Tenanted as a sensible default (owner already supplied this for the
+      // Burj Khalifa unit). Stays fully editable in the inline form.
+      const isPaaLeasing =
+        envelope.template_key === "jbj-property-advertising-agreement" &&
+        ((envelope.category as any) || "leasing") === "leasing";
+      if (isPaaLeasing && !next.status_vacant_tenanted && !next.vacating_date) {
+        next.status_vacant_tenanted = "Tenanted";
+      }
+      setEditValues(next);
       const meta = (envelope.metadata as any) || {};
-      const persisted = (meta.cc_emails || []) as string[];
-      setCcs(Array.isArray(persisted) ? persisted : []);
+      const persistedCcs = (meta.cc_emails || []) as string[];
+      setCcs(Array.isArray(persistedCcs) ? persistedCcs : []);
       setChrome((meta.chrome as TemplateChrome) || {});
       setHiddenFields(Array.isArray(meta.hidden_fields) ? meta.hidden_fields : []);
     }
