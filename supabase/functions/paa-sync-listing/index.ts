@@ -39,24 +39,31 @@ Deno.serve(async (req) => {
 
     const { data: env, error: envErr } = await admin
       .from("esign_envelopes")
-      .select("id, owner_user_id, category, template_field_values, template_key, document_title")
+      .select("id, sender_id, category, template_field_values, template_key, name")
       .eq("id", envelope_id)
       .maybeSingle();
     if (envErr || !env) {
       return new Response(JSON.stringify({ error: envErr?.message || "envelope not found" }), { status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
-    if (env.owner_user_id !== user.id) {
+    if (env.sender_id !== user.id) {
       return new Response(JSON.stringify({ error: "Forbidden" }), { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
+    // Skip non-PAA categories (blank letter, generic) — return success without sync.
+    if (env.category !== "leasing" && env.category !== "selling") {
+      return new Response(JSON.stringify({ ok: true, skipped: true, reason: "non-paa-category" }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const f = (env.template_field_values || {}) as Record<string, string>;
-    const cat = env.category === "selling" ? "resale" : (env.category === "leasing" ? "leasing" : "other");
+    const cat = env.category === "selling" ? "resale" : "leasing";
 
     // PROPERTY-ONLY mapping. Never copy owner_*/landlord_*/email/mobile/passport/emirates_id/trn/poa/unit/signature.
     const propertyName =
       f.building_name?.trim() ||
       f.community?.trim() ||
-      env.document_title?.trim() ||
+      env.name?.trim() ||
       "Untitled Listing";
 
     const description = [
