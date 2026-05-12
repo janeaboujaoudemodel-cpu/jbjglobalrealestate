@@ -763,16 +763,24 @@ export default function EnvelopeDetail() {
                 Send for signature
               </Button>
             )}
-            <Button variant="outline" onClick={() => envelope.document_url && window.open(envelope.document_url, "_blank")}>
+            <Button variant="outline" onClick={async () => {
+              if (!(await ensureSavedBeforeDownload())) return;
+              const url = (envelope as any)?.document_url;
+              if (url) window.open(bustUrl(url), "_blank");
+            }}>
               <ExternalLink className="w-4 h-4 mr-2" /> Open in new tab
             </Button>
-            <Button variant="outline" onClick={handlePrint}>
+            <Button variant="outline" onClick={async () => { if (await ensureSavedBeforeDownload()) handlePrint(); }}>
               <Printer className="w-4 h-4 mr-2" /> Print
             </Button>
-            <Button variant="gold" onClick={() => handleDownload(envelope.document_url, envelope.document_filename)}>
+            <Button variant="gold" onClick={async () => {
+              if (!(await ensureSavedBeforeDownload())) return;
+              handleDownload(bustUrl(envelope.document_url), envelope.document_filename);
+            }}>
               <Download className="w-4 h-4 mr-2" /> Download PDF
+              {dirty && <span className="ml-2 text-[10px] uppercase tracking-wide opacity-80">· saves first</span>}
             </Button>
-            <Button variant="outline" onClick={handleDownloadBlank} title="Download a clean unsigned copy of this agreement to send to the client">
+            <Button variant="outline" onClick={async () => { if (await ensureSavedBeforeDownload()) handleDownloadBlank(); }} title="Download a clean unsigned copy of this agreement to send to the client">
               <FileText className="w-4 h-4 mr-2" /> Download blank PDF
             </Button>
             <Button variant="outline" onClick={() => setExportOpen(true)}>
