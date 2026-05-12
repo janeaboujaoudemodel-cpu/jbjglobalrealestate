@@ -1,104 +1,98 @@
-## Part 1 — Fix the PDF export so it matches the on-screen preview
+## Goal
 
-**Root cause**
-`renderHtmlToPdfBlob()` rasterises the template HTML at 794 px wide and then scales the JPEG into a 595 pt A4 page. That works on its own, but the HTML being passed in is not always the *same* HTML the iframe shows:
-
-- The "preview" iframe in `EnvelopeDetail.tsx` renders with the full option bag — `chrome`, `ownerSignatureUrl`, `ownerStampUrl`, `clientSignatureUrl`, `hiddenFields`, `renderMode: "final"`, `category`.
-- The on-demand regen call (`useRegenerateEnvelopePdf`, line 246) passes those options.
-- But the **initial** render in `useCreateEnvelopeFromTemplate` (line 119) calls `renderTemplateHtml(template.key, mergedValues)` with **no opts** → falls back to `renderMode: "edit"` chip rows, no signatures, no hidden-field filtering. That's the "another style" the user sees if they download before the first save/regenerate completes.
-- Cache-busting + `dirty` guard masks this for edited envelopes but not for fresh ones.
-
-**Fix**
-1. In `useCreateEnvelopeFromTemplate`, build the same opts bag used by `useRegenerateEnvelopePdf` (default chrome from `companyLegal`, `renderMode: "final"`, current owner signature/stamp from `useOwnerSignatureAssets`, empty client signature, no hidden fields) and pass it to `renderTemplateHtml`.
-2. In `renderHtmlToPdfBlob`, render at the true A4 pixel size (`794×1123` min-height, fixed) and pin `pdfHeight = 842 pt` so the export is **always** single-page A4 instead of an elongated screenshot. Add `useCORS:true, letterRendering:true, windowWidth:794` to `html2canvas` so embedded signature/stamp PNGs and Google fonts come through identically to the iframe.
-3. In `EnvelopeDetail.handleDownload`, after a successful save, invalidate the bust-URL cache key so the next click reads the freshly regenerated PDF (already partly there — make it deterministic by awaiting the regenerate mutation result before resolving `ensureSavedBeforeDownload`).
-4. Bump `PAA_LAYOUT_VERSION` 18 → 19 so existing envelopes auto-regenerate once.
+Rebuild the **Preview & send by email** dialog (`SendViaEmailDialog`) so the user sees the *real branded email* exactly as the recipient will receive it — fully editable, multi-recipient, responsive, with the JBJ logo, and **no internal signing link** (signing is handled via DocuSign).
 
 ---
 
-## Part 2 — New "Blank Letter" template with AI body + drag-in signature/date/stamp
+## What's broken today
 
-A second template alongside PAA & Listing Authorisation that gives the user a blank A4 with **only** the corporate header and footer and an AI-driven body.
+1. The "Body" is shown as a raw `<textarea>` with HTML/template tokens — not the actual rendered email.
+2. There's no company logo/brand mark anywhere in the preview or in the sent HTML header.
+3. **To** is a single input — can only send to one recipient.
+4. Footer buttons (`Cancel · Send test → infoo.jane@gmail.com · Approve & Send`) overflow horizontally on desktop and stack badly on mobile.
+5. A hint reads *"Signing link will be inserted in the branded email: …"* and the sent HTML embeds a **REVIEW & SIGN** button + link — but signing happens via **DocuSign**, so all of this is wrong and confusing.
+6. The dialog content doesn't fit inside its box — long CC chip rows + long subject overflow.
 
-### Template structure (`src/templates/jbjBlankLetter.ts`)
+---
+
+## Plan
+
+### 1. New WYSIWYG email preview (replaces the textarea)
+
+Render the **exact same branded HTML** the recipient gets, inside a sandboxed iframe (`<iframe srcDoc=…>`), updated live as the user edits. The composer becomes two-pane on desktop, stacked on mobile:
 
 ```text
-┌──────────────────────────────────────────┐
-│  HEADER  — JBJ wordmark · gold divider   │
-│  Trade licence + doc number              │
-├──────────────────────────────────────────┤
-│                                          │
-│   AI prompt strip (edit mode only):      │
-│   ┌────────────────────────────────────┐ │
-│   │ "Write a job offer for…"  [Generate]│ │
-│   └────────────────────────────────────┘ │
-│                                          │
-│   Subject:  ____________________         │
-│   Date:     12 May 2026                  │
-│                                          │
-│   <AI-generated body, editable           │
-│    contenteditable HTML>                 │
-│                                          │
-│   ── signature divider ──                │
-│   Name / Title / Signature / Stamp slot  │
-│                                          │
-├──────────────────────────────────────────┤
-│  FOOTER  — clickable links, hairline     │
-└──────────────────────────────────────────┘
+┌──────────────────────────────────────────────┐
+│  Compose            │   Live preview         │
+│  • To (chips)       │   ┌──────────────────┐ │
+│  • CC (chips)       │   │  [JBJ LOGO]      │ │
+│  • Subject          │   │  Doc № 2025-…    │ │
+│  • Message  (rich)  │   │  ───────────     │ │
+│                     │   │  Dear Omar,      │ │
+│                     │   │  …rendered…      │ │
+│                     │   │  — Jane          │ │
+│                     │   └──────────────────┘ │
+└──────────────────────────────────────────────┘
 ```
 
-- Header + footer reuse the exact components from PAA v18 so brand stays consistent.
-- Body is a `contenteditable` div in edit mode, plain HTML in final mode.
-- "Insert field" toolbar (chips): **Date**, **Signature**, **Initials**, **Stamp**, **Text field**, **Divider**. Click a chip → inserts a `<span data-field="…">` placeholder at the caret. In final mode each placeholder renders the resolved value (date today, owner saved signature/stamp, etc.).
+- Message field uses a lightweight contentEditable (bold/italic/link) — produces clean HTML, no markdown, no `{{tokens}}` shown to user.
+- A small shared renderer (`buildEnvelopeEmailHtml.ts`) is extracted from the edge function so the client and the server produce **byte-identical HTML** (no preview/delivery drift — same rule the project already enforces with `outreach_locked_payloads`).
+- The iframe is `sandbox="allow-same-origin"` and re-renders on every keystroke (debounced 150ms).
 
-### AI generation
+### 2. Add the company logo / brand mark
 
-- New edge function `letter-ai-generate` using **Lovable AI Gateway** (`google/gemini-3-flash-preview`).
-- Input: `{ prompt, recipientName?, language?, tone? }`.
-- Output: structured `{ subject, body_html }` via `Output.object({ schema })` so we never get free-form markdown.
-- System prompt enforces JBJ tone, UAE business letter conventions, no fake legal text, no markdown fences.
-- Quick-pick prompt presets the user can click instead of typing: **Job Offer**, **Warning Letter**, **VAT Exemption Letter**, **NOC**, **Salary Certificate**, **Termination**, **Reference Letter**, **Custom…**
+- Add `<img src="https://www.jbj.ae/brand/jbj-monogram.png" alt="JBJ" width="64" height="64">` (transparent PNG already in brand standard) to the email header table, left of the wordmark.
+- Same logo is rendered in the live preview.
+- Stored as a constant in the new shared renderer so both sides match.
 
-### Stamp upload + place-on-click
+### 3. Multi-recipient **To**
 
-- Reuse `owner_signature_assets` table + `useOwnerSignatureAssets("stamp")` (already exists).
-- New "Stamp library" dropdown in the toolbar:
-  - Lists saved stamps; `★ Default` flag; "Upload new" → inline `<input type=file>` → saves via `useSaveSignatureAsset({kind:"stamp", makeDefault?})`.
-- Click "Stamp" tool → cursor switches to crosshair → next click on the document inserts the **default stamp** at that position as an absolutely-positioned `<img>` inside the body. Same flow for Signature.
-- Stamps render with `mix-blend-mode: multiply` via the existing `<StampOverlay/>` so they look like real ink on export.
+- Replace the single `<Input>` with the same chip pattern already used for CC.
+- `to: string[]` — at least one valid email required to enable Approve & Send.
+- The edge function `esign-send-for-signature` already accepts a recipient via `envelope.recipient_email`; we extend the body to accept `additional_recipients: string[]` and the function fans out one personalised send per address (each gets `{{client_name}}` resolved per recipient if known, else falls back to the address local-part).
+- "Recipient: Omar" helper text is replaced with the chip list count: *"3 recipients · 1 CC"*.
 
-### Persistence + export
+### 4. Remove all internal-signing-link references
 
-- Stored in `esign_envelopes` with `template_key = "jbj-blank-letter"`.
-- `template_field_values` stores `{ subject, body_html, ai_prompt, placed_fields: [{type,x,y,page,assetId?}] }`.
-- `renderTemplateHtml` gets a third branch:
-  ```ts
-  if (templateKey === "jbj-blank-letter") return buildBlankLetterHtml(values, opts);
-  ```
-- Export uses the **same** `renderHtmlToPdfBlob` (now A4-pinned from Part 1) so preview === download.
+- Drop the *"Signing link will be inserted…"* helper line.
+- Drop the **REVIEW & SIGN DOCUMENT** button + the *"paste this secure link"* paragraph from the email HTML in `esign-send-for-signature/index.ts`.
+- Replace with a single **"Open in DocuSign"** CTA (or simply omit if DocuSign sends its own envelope email separately — see Open Question below).
+- Remove `{{signing_link}}` from the merge-token list and from the default body template in `EnvelopeDetail.tsx`.
+- The PDF attachment stays (recipient still gets the document inline).
 
-### New entry point
+### 5. Responsive / overflow fixes
 
-- "New letter" button on `/owner/e-signature/studio` next to the existing PAA / Listing Authorisation cards.
-- Same envelope detail page (`EnvelopeDetail.tsx`) handles all three templates — only the body section swaps.
+- DialogContent: `max-w-5xl w-[min(96vw,1100px)] max-h-[92vh] overflow-y-auto p-0`. Inner padding handled per-section so chips and long subjects wrap inside their containers (`flex-wrap min-w-0 break-all`).
+- Footer: switch to a flex layout that wraps — `flex-col sm:flex-row sm:justify-end gap-2 flex-wrap`. Button labels shorten on small screens (`Send test` instead of `Send test → infoo.jane@gmail.com`, with the address shown as a sub-line `text-[10px]`).
+- Two-pane grid collapses to single column under `lg`.
+
+### 6. Keep existing safety rails
+
+- "Send test" still hard-targets `infoo.jane@gmail.com` (per user memory).
+- Default CC chip remains `infoo.jane@gmail.com`, removable.
+- Subject + body are sent verbatim to the edge function (locked-send rule).
 
 ---
 
-## Files to add / change
+## Files
 
 **New**
-- `src/templates/jbjBlankLetter.ts` — `buildBlankLetterHtml(values, opts)`
-- `src/components/e-signature/BlankLetterEditor.tsx` — contenteditable body, AI prompt strip, field toolbar, stamp-place-on-click
-- `supabase/functions/letter-ai-generate/index.ts` — Lovable AI structured-output call
-- `src/hooks/useLetterAiGenerate.ts`
+- `src/lib/email/buildEnvelopeEmailHtml.ts` — shared renderer (client + edge import).
+- `src/components/e-signature/EmailPreviewIframe.tsx` — sandboxed live preview pane.
+- `src/components/e-signature/RecipientChipsInput.tsx` — reusable chip input (To & CC).
 
-**Edit**
-- `src/hooks/useEsignTemplates.ts` — branch on `jbj-blank-letter`; pass full opts bag in `useCreateEnvelopeFromTemplate`; A4-pin export
-- `src/templates/jbjPropertyAdvertisingAgreement.ts` — bump `PAA_LAYOUT_VERSION` to 19
-- `src/pages/e-signature/EnvelopeDetail.tsx` — render `<BlankLetterEditor>` when `template_key === "jbj-blank-letter"`; ensure-saved fix
-- `src/pages/e-signature/SignatureStudio.tsx` (or whichever lists templates) — add "Blank Letter" tile
+**Edited**
+- `src/components/e-signature/SendViaEmailDialog.tsx` — full rebuild (two-pane, multi-To, no signing-link UI).
+- `src/pages/e-signature/EnvelopeDetail.tsx` — pass `additional_recipients` and drop `signing_link` from default body template.
+- `supabase/functions/esign-send-for-signature/index.ts` — accept `additional_recipients`, fan-out send loop, remove REVIEW & SIGN button block, add JBJ logo `<img>` to header, import shared renderer (inlined as Deno-compatible string).
+- `supabase/functions/esign-send-test-email/index.ts` — same logo + same renderer so test emails match production.
 
-## Where to test
+---
 
-- `/owner/e-signature/studio` → "New letter" → type "Write a job offer for Jane Doe as Senior Broker, AED 18,000/month, start 1 Jun 2026" → Generate → adjust → place stamp/signature → Download → confirm PDF == preview.
-- Existing `/e-signature/810df24a-…` → Download PDF → confirm now identical to on-screen preview after Part 1 fix.
+## Open question (answer before I implement)
+
+**On the "no signing link" rule:** for DocuSign, two patterns are possible —
+  (a) **JBJ sends its own branded cover email** (no link) and DocuSign sends the actual signing email separately when the envelope is created, or
+  (b) The branded JBJ email itself carries a single **"Open in DocuSign to sign"** button pointing at the DocuSign envelope URL.
+
+I'll default to **(a)** — pure cover email, no buttons, PDF attached — unless you say otherwise.

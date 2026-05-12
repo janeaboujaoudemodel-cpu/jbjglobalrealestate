@@ -1196,9 +1196,11 @@ export default function EnvelopeDetail() {
           envelopeId={envelope.id}
           recipientName={clientRec.name || "Client"}
           recipientEmail={clientRec.email || ""}
-          defaultSubject={envelope.email_subject || `Please sign — ${envelope.name || "Document"}${docNumber ? ` · ${docNumber}` : ""}`}
-          defaultBody={envelope.email_message || `Dear {{client_name}},\n\nKindly review and digitally sign your ${envelope.name || "document"} via the secure link below.\n\n{{signing_link}}\n\n{{sender_signature}}`}
-          signingUrl={clientRec.signing_token ? buildSigningUrl(clientRec.signing_token) : undefined}
+          defaultSubject={envelope.email_subject || `Please review — ${envelope.name || "Document"}${docNumber ? ` · ${docNumber}` : ""}`}
+          defaultBody={envelope.email_message || `Dear {{client_name}},\n\nPlease find your ${envelope.name || "document"} attached. A signing request will follow separately via DocuSign.\n\n{{sender_signature}}`}
+          docNumber={docNumber || undefined}
+          senderName={envelope.sender_name || undefined}
+          senderTitle={(envelope as any).sender_title || undefined}
           attachmentName={envelope.document_filename || undefined}
           onSent={() => refetch()}
         />
