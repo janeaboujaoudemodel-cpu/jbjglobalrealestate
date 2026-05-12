@@ -1,98 +1,146 @@
-## Goal
+## Scope
 
-Rebuild the **Preview & send by email** dialog (`SendViaEmailDialog`) so the user sees the *real branded email* exactly as the recipient will receive it — fully editable, multi-recipient, responsive, with the JBJ logo, and **no internal signing link** (signing is handled via DocuSign).
-
----
-
-## What's broken today
-
-1. The "Body" is shown as a raw `<textarea>` with HTML/template tokens — not the actual rendered email.
-2. There's no company logo/brand mark anywhere in the preview or in the sent HTML header.
-3. **To** is a single input — can only send to one recipient.
-4. Footer buttons (`Cancel · Send test → infoo.jane@gmail.com · Approve & Send`) overflow horizontally on desktop and stack badly on mobile.
-5. A hint reads *"Signing link will be inserted in the branded email: …"* and the sent HTML embeds a **REVIEW & SIGN** button + link — but signing happens via **DocuSign**, so all of this is wrong and confusing.
-6. The dialog content doesn't fit inside its box — long CC chip rows + long subject overflow.
+Six concrete fixes on the e-signature flow, plus one architectural decision (document numbering).
 
 ---
 
-## Plan
+## 1. PAA template chrome — header alignment + gold quality
 
-### 1. New WYSIWYG email preview (replaces the textarea)
+File: `src/templates/jbjListingAuthorisation.ts` (and `jbjBlankLetter.ts` for parity).
 
-Render the **exact same branded HTML** the recipient gets, inside a sandboxed iframe (`<iframe srcDoc=…>`), updated live as the user edits. The composer becomes two-pane on desktop, stacked on mobile:
+- Header row becomes a 3-column flex with `align-items: center`: monogram (left) · wordmark "JBJ GLOBAL REAL ESTATE" (center, vertically centered on the same baseline as the monogram) · doc number (right).
+- Wordmark moves from a separate stacked block to inline-flex aligned to the monogram's vertical centerline. Letter-spacing tightened, font-size raised one step so it visually matches the monogram height.
+- Gold upgrade: replace the flat `#B89555` hairline with the tokenised premium gold gradient already used in the live web preview — `linear-gradient(90deg, #8A6A2A 0%, #C9A24E 50%, #8A6A2A 100%)` for the hairline rules, and the deeper champagne `#1A1A1A` text on `#FDFBF7` paper. Increase rule weight from 0.5px to 1px and add a 2px inner offset hairline under the header to match the rich preview look.
+- Body container: switch render canvas to 2× device-pixel-ratio in `renderHtmlToPdfBlob` (html2canvas `scale: 2 → 3`) so the gold rules and wordmark stay crisp in the PDF export.
+
+## 2. Preview blank gap under footer
+
+File: `src/components/e-signature/DocumentPreviewSummary.tsx` (or whichever component renders the on-screen A4 sheet — confirmed by tracing `EnvelopeDetail.tsx` line ~1185).
+
+- Current preview reserves the full 842pt A4 height regardless of body length, leaving a large blank stripe under the footer when the body is short. Export is fine because jsPDF pins to A4.
+- Fix: in the on-screen preview only, swap `min-height: A4_PX_H` to `height: auto; min-height: A4_PX_H` and absolutely-position the footer to the bottom of the sheet inside a `position: relative` page wrapper. The export path (`renderHtmlToPdfBlob`) keeps the fixed 842pt canvas. Result: preview renders one tight page; export still pins A4.
+
+## 3. `paa-sync-listing` 500 / blank screen
+
+File: `supabase/functions/paa-sync-listing/index.ts`.
+
+- The function currently selects `owner_user_id` and compares it to `user.id`. Earlier patch already addressed `sender_id`, but the latest deploy still throws because `category` may be null for blank letters and `template_field_values` may be null. Add null-guards, return 200 with `{ skipped: true }` for non-PAA categories (blank letter, generic), and wrap the whole handler in a try/catch that returns JSON 500 instead of letting Deno crash (which produces the blank-screen runtime error).
+- Validate request body with a small zod schema. Redeploy.
+
+## 4. Branded DocuSign cover-email preview (rebuild)
+
+Files:
+- `supabase/functions/_shared/envelope-email-html.ts`
+- `src/lib/email/buildEnvelopeEmailHtml.ts` (mirror)
+- `src/components/e-signature/SendViaEmailDialog.tsx`
+- `src/components/e-signature/EmailPreviewIframe.tsx`
+
+Rebuild the cover email so the iframe shows EXACTLY what the recipient will receive:
 
 ```text
-┌──────────────────────────────────────────────┐
-│  Compose            │   Live preview         │
-│  • To (chips)       │   ┌──────────────────┐ │
-│  • CC (chips)       │   │  [JBJ LOGO]      │ │
-│  • Subject          │   │  Doc № 2025-…    │ │
-│  • Message  (rich)  │   │  ───────────     │ │
-│                     │   │  Dear Omar,      │ │
-│                     │   │  …rendered…      │ │
-│                     │   │  — Jane          │ │
-│                     │   └──────────────────┘ │
-└──────────────────────────────────────────────┘
+┌─────────────────────────────────────────────┐
+│ [JBJ MONOGRAM]   JBJ GLOBAL REAL ESTATE     │  ← centered on same line
+│ ───── gold gradient hairline ─────          │
+│                                             │
+│ Subject: Please review — Property Authori…  │
+│                                             │
+│ Dear {{client_name}},                       │
+│                                             │
+│ Please find attached the Property Authori-  │
+│ sation Agreement (Doc № JBJ-LSE-0002).      │
+│                                             │
+│ ┌──────────────────────────────────┐        │
+│ │   ▶  OPEN IN DOCUSIGN TO SIGN    │        │  ← single CTA
+│ └──────────────────────────────────┘        │
+│                                             │
+│ How to sign:                                │
+│  1. Tap the button above                    │
+│  2. Or download DocuSign:                   │
+│     [App Store] · [Google Play]             │
+│  3. Or open the attached PDF and upload it  │
+│     to your DocuSign account                │
+│                                             │
+│ DocuSign signatures are legally recognised  │
+│ in the UAE under the Electronic Trans-      │
+│ actions Law.                                │
+│                                             │
+│ Warm regards,                               │
+│ Jane Bin Jelmood                            │
+│ Founder & CEO · JBJ GLOBAL REAL ESTATE      │
+│ Dubai, UAE                                  │
+│ [signature image]                           │
+│                                             │
+│ ───── gold gradient hairline ─────          │
+│ jbj.ae · +971 … · contact@jbj.ae            │
+└─────────────────────────────────────────────┘
 ```
 
-- Message field uses a lightweight contentEditable (bold/italic/link) — produces clean HTML, no markdown, no `{{tokens}}` shown to user.
-- A small shared renderer (`buildEnvelopeEmailHtml.ts`) is extracted from the edge function so the client and the server produce **byte-identical HTML** (no preview/delivery drift — same rule the project already enforces with `outreach_locked_payloads`).
-- The iframe is `sandbox="allow-same-origin"` and re-renders on every keystroke (debounced 150ms).
+- Remove every "Sign Here" / "click sign here to add your signature" / internal `{{signing_link}}` reference from `esign-send-for-signature` and `esign-send-test-email`. The email never collects a signature — it points to DocuSign.
+- Remove the SignaturePad/AdoptAndSign UI from the recipient-facing path entirely (keep it only for the owner's own saved signatures library, see #5).
+- Default email body becomes the locked DocuSign cover above with `{{client_name}}`, `{{doc_title}}`, `{{doc_number}}`, `{{docusign_url}}` merge tokens. Subject default: `Please review and sign — {{doc_title}} · {{doc_number}}`.
+- Preview iframe is byte-identical to delivery (existing locked-send pattern).
 
-### 2. Add the company logo / brand mark
+## 5. Lock founder signature + picker
 
-- Add `<img src="https://www.jbj.ae/brand/jbj-monogram.png" alt="JBJ" width="64" height="64">` (transparent PNG already in brand standard) to the email header table, left of the wordmark.
-- Same logo is rendered in the live preview.
-- Stored as a constant in the new shared renderer so both sides match.
+Files: `src/components/e-signature/SendViaEmailDialog.tsx`, new `SignatureBlockPicker.tsx`, plus `_shared/envelope-email-html.ts`.
 
-### 3. Multi-recipient **To**
+- Founder/CEO sign-off block becomes a locked module rendered server-side from `useOwnerSignatureAssets`. Cannot be edited as raw HTML by the user — only the picker chooses which saved signature image is used.
+- Picker shows all saved signatures (default ★ first), defaults to the user's marked-default signature.
+- Title line is locked to `Founder & CEO · JBJ GLOBAL REAL ESTATE` whenever the sender is the owner account (per the Owner Verification Engine standard). Other staff get their own title from `profiles`.
+- Address line locked to **`Dubai, UAE`** (replaces current `Downtown Dubai, UAE`). Update both the email shared renderer and the PDF templates (`jbjListingAuthorisation.ts`, `jbjBlankLetter.ts`).
 
-- Replace the single `<Input>` with the same chip pattern already used for CC.
-- `to: string[]` — at least one valid email required to enable Approve & Send.
-- The edge function `esign-send-for-signature` already accepts a recipient via `envelope.recipient_email`; we extend the body to accept `additional_recipients: string[]` and the function fans out one personalised send per address (each gets `{{client_name}}` resolved per recipient if known, else falls back to the address local-part).
-- "Recipient: Omar" helper text is replaced with the chip list count: *"3 recipients · 1 CC"*.
+## 6. Per-category document numbering (your open question)
 
-### 4. Remove all internal-signing-link references
+Recommendation: **yes, switch to per-category counters with a category prefix.** Format:
 
-- Drop the *"Signing link will be inserted…"* helper line.
-- Drop the **REVIEW & SIGN DOCUMENT** button + the *"paste this secure link"* paragraph from the email HTML in `esign-send-for-signature/index.ts`.
-- Replace with a single **"Open in DocuSign"** CTA (or simply omit if DocuSign sends its own envelope email separately — see Open Question below).
-- Remove `{{signing_link}}` from the merge-token list and from the default body template in `EnvelopeDetail.tsx`.
-- The PDF attachment stays (recipient still gets the document inline).
+```text
+JBJ-LSE-0001   ← leasing PAA
+JBJ-SLE-0001   ← selling PAA
+JBJ-LTR-0001   ← blank letter
+JBJ-NOC-0001   ← NOC, etc.
+```
 
-### 5. Responsive / overflow fixes
+Each prefix has its own independent counter that resets at 0001 and increments only within its prefix. Benefits:
+- A leasing contract is always identifiable by `LSE` regardless of how many sales contracts exist.
+- Easier filing, audit, and CRM grouping (matches the way you already describe the documents to clients).
+- The number you see on the document equals "this is the Nth leasing PAA we've ever issued" — clean, premium, and human-readable.
 
-- DialogContent: `max-w-5xl w-[min(96vw,1100px)] max-h-[92vh] overflow-y-auto p-0`. Inner padding handled per-section so chips and long subjects wrap inside their containers (`flex-wrap min-w-0 break-all`).
-- Footer: switch to a flex layout that wraps — `flex-col sm:flex-row sm:justify-end gap-2 flex-wrap`. Button labels shorten on small screens (`Send test` instead of `Send test → infoo.jane@gmail.com`, with the address shown as a sub-line `text-[10px]`).
-- Two-pane grid collapses to single column under `lg`.
-
-### 6. Keep existing safety rails
-
-- "Send test" still hard-targets `infoo.jane@gmail.com` (per user memory).
-- Default CC chip remains `infoo.jane@gmail.com`, removable.
-- Subject + body are sent verbatim to the edge function (locked-send rule).
+Implementation:
+- DB migration: replace the single `next_doc_number(_template_key)` RPC with `next_doc_number(_category text)` backed by a `doc_number_counters(category text primary key, last_value int)` table. Upsert + atomic increment in one statement.
+- Map: `paa-leasing → LSE`, `paa-selling → SLE`, `blank-letter → LTR`, `noc → NOC`, `offer → OFR`, `warning → WRN`, `vat → VAT`, `salary → SAL`, `termination → TRM`, `reference → REF`. Stored in `src/config/docNumberPrefixes.ts`.
+- `allocateDocNumber()` in `src/hooks/useEsignTemplates.ts` now takes `category` (or template prefix) instead of `templateKey`.
+- BlankLetterStudio + CreateEnvelope + EnvelopeDetail call sites updated.
+- Existing envelopes keep their old number (no backfill); new envelopes follow the new scheme starting at 0001 per prefix.
 
 ---
 
 ## Files
 
-**New**
-- `src/lib/email/buildEnvelopeEmailHtml.ts` — shared renderer (client + edge import).
-- `src/components/e-signature/EmailPreviewIframe.tsx` — sandboxed live preview pane.
-- `src/components/e-signature/RecipientChipsInput.tsx` — reusable chip input (To & CC).
-
 **Edited**
-- `src/components/e-signature/SendViaEmailDialog.tsx` — full rebuild (two-pane, multi-To, no signing-link UI).
-- `src/pages/e-signature/EnvelopeDetail.tsx` — pass `additional_recipients` and drop `signing_link` from default body template.
-- `supabase/functions/esign-send-for-signature/index.ts` — accept `additional_recipients`, fan-out send loop, remove REVIEW & SIGN button block, add JBJ logo `<img>` to header, import shared renderer (inlined as Deno-compatible string).
-- `supabase/functions/esign-send-test-email/index.ts` — same logo + same renderer so test emails match production.
+- `src/templates/jbjListingAuthorisation.ts` — header alignment, gold gradient, "Dubai, UAE"
+- `src/templates/jbjBlankLetter.ts` — same chrome parity
+- `src/hooks/useEsignTemplates.ts` — html2canvas scale 3, `allocateDocNumber(category)`
+- `src/components/e-signature/DocumentPreviewSummary.tsx` — preview footer-gap fix
+- `src/components/e-signature/SendViaEmailDialog.tsx` — rebuilt DocuSign cover, signature picker, locked sign-off
+- `src/components/e-signature/EmailPreviewIframe.tsx` — passes new merge tokens
+- `src/lib/email/buildEnvelopeEmailHtml.ts` — DocuSign CTA layout, locked sign-off, gold gradient
+- `supabase/functions/_shared/envelope-email-html.ts` — same renderer, byte-for-byte
+- `supabase/functions/esign-send-for-signature/index.ts` — drop signing-link, fan-out, redeploy
+- `supabase/functions/esign-send-test-email/index.ts` — same renderer, redeploy
+- `supabase/functions/paa-sync-listing/index.ts` — null-guards, JSON 500, redeploy
+- `src/pages/e-signature/BlankLetterStudio.tsx` + `EnvelopeDetail.tsx` — call `allocateDocNumber(category)`
+
+**New**
+- `src/components/e-signature/SignatureBlockPicker.tsx`
+- `src/config/docNumberPrefixes.ts`
+- DB migration: `doc_number_counters` table + new `next_doc_number(_category)` RPC
 
 ---
 
-## Open question (answer before I implement)
+## Verification
 
-**On the "no signing link" rule:** for DocuSign, two patterns are possible —
-  (a) **JBJ sends its own branded cover email** (no link) and DocuSign sends the actual signing email separately when the envelope is created, or
-  (b) The branded JBJ email itself carries a single **"Open in DocuSign to sign"** button pointing at the DocuSign envelope URL.
-
-I'll default to **(a)** — pure cover email, no buttons, PDF attached — unless you say otherwise.
+1. Open PAA envelope → header monogram + "JBJ GLOBAL REAL ESTATE" sit on the same baseline; gold rules sharp; no blank gap under footer in preview; PDF export still 1 page.
+2. Click "Preview & send by email" → iframe shows the exact DocuSign cover above; signature picker swaps signatures live; "Dubai, UAE" present.
+3. Send test to `infoo.jane@gmail.com` → received email is byte-identical to preview, no "Sign here" UI, has Open in DocuSign button + App Store / Play links.
+4. Create a new blank letter → number is `JBJ-LTR-0001` even though `JBJ-LSE-0002` exists. Create a new selling PAA → `JBJ-SLE-0001`.
+5. Open envelope detail of a leasing PAA → no blank screen; `paa-sync-listing` returns 200.
