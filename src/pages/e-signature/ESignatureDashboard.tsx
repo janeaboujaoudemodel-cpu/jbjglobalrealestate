@@ -22,6 +22,7 @@ import {
   Upload,
   PenTool,
   Scale,
+  Sparkles,
 } from "lucide-react";
 import {
   DropdownMenu,
