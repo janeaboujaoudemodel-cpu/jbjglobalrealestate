@@ -26,9 +26,9 @@ export const JBJ_BRAND = {
   monogram: monogramUrl,
 } as const;
 
-// v14: A4 flex page — footer pinned to bottom of A4, blank space lives ABOVE
-// footer (between signature row and footer divider) instead of below it.
-export const PAA_LAYOUT_VERSION = 14;
+// v15: compact horizontal header (small monogram + vertical divider + legal
+// name; gold hairline; agreement title row), no footer monogram, A4-locked.
+export const PAA_LAYOUT_VERSION = 15;
 
 export type PAACategory = "leasing" | "selling" | "other";
 
