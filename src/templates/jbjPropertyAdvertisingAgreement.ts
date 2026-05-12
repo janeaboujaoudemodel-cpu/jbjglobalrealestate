@@ -450,38 +450,32 @@ export function buildPAAHtml(
 
   ${sectionTitle(2, "Property Identifiers")}
   <div>
-    ${fu("Title Deed No.", get("title_deed_number"), "title_deed_number")}
-    ${!hidden.has("title_deed_date") && get("title_deed_date") ? `
-    <div data-field-key="title_deed_date" style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;">
-      <div style="display:inline-block;">${dateBox(get("title_deed_date"))}</div>
-      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.7;margin-top:5px;">Title Deed Date</div>
-    </div>` : ""}
-    ${fu("Oqood No.", get("oqood_number"), "oqood_number")}
-    ${!hidden.has("oqood_date") && get("oqood_date") ? `
-    <div data-field-key="oqood_date" style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;">
-      <div style="display:inline-block;">${dateBox(get("oqood_date"))}</div>
-      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.7;margin-top:5px;">Oqood Date</div>
-    </div>` : ""}
-    ${!hidden.has("expected_handover") && get("expected_handover") ? `
-    <div data-field-key="expected_handover" style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;">
-      <div style="display:inline-block;">${dateBox(get("expected_handover"))}</div>
-      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.7;margin-top:5px;">Expected Handover</div>
-    </div>` : ""}
-    ${fu("DEWA Premise No.", get("dewa_premise_number"), "dewa_premise_number")}
-    ${fu("Makani No.", get("makani_number"), "makani_number")}
+    ${fuPh("Title Deed No.", get("title_deed_number"), "title_deed_number")}
+    ${dateFieldPh("Title Deed Date", get("title_deed_date"), "title_deed_date")}
+    ${fuPh("Oqood No.", get("oqood_number"), "oqood_number")}
+    ${dateFieldPh("Oqood Date", get("oqood_date"), "oqood_date")}
+    ${dateFieldPh("Expected Handover", get("expected_handover"), "expected_handover")}
+    ${fuPh("DEWA Premise No.", get("dewa_premise_number"), "dewa_premise_number")}
+    ${fuPh("Makani No.", get("makani_number"), "makani_number")}
+    ${fuPh("RERA Permit No.", get("rera_permit_number"), "rera_permit_number")}
   </div>
 
   ${sectionTitle(3, "Property Specs")}
-  <div data-chip-row="property_type" style="margin:4px 0 10px;display:flex;flex-wrap:wrap;align-items:center;gap:6px;">
-    ${chipRow("property_type", "Property Type", ["Villa", "Apartment", "Office", "Warehouse"], (o, v) => o.toLowerCase() === v.toLowerCase())}
-    ${isFinal ? "" : `<span style="opacity:.3;margin:0 8px;">|</span>`}
-    ${chipRow("furnishing", "Furnishing", ["Furnished", "Unfurnished"], (o, v) => v.toLowerCase().startsWith(o.toLowerCase().split("-")[0]))}
-  </div>
-  <div data-chip-row="status_vacant_tenanted" style="margin:4px 0 14px;display:flex;flex-wrap:wrap;align-items:center;gap:6px;">
-    ${chipRow("status_vacant_tenanted", "Status", ["Vacant", "Tenanted"], (o, v) => o.toLowerCase() === v.toLowerCase())}
+  <div style="margin:4px 0 14px;display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;">
+    <span data-chip-row="property_type" style="display:inline-flex;flex-wrap:wrap;align-items:center;">
+      ${chipRow("property_type", "Property Type", ["Villa", "Apartment", "Office", "Warehouse"], (o, v) => o.toLowerCase() === v.toLowerCase())}
+    </span>
+    ${isFinal ? "" : `<span style="opacity:.3;margin:0 6px;">|</span>`}
+    <span data-chip-row="furnishing" style="display:inline-flex;flex-wrap:wrap;align-items:center;">
+      ${chipRow("furnishing", "Furnishing", ["Furnished", "Unfurnished"], (o, v) => v.toLowerCase().startsWith(o.toLowerCase().split("-")[0]))}
+    </span>
+    ${isFinal ? "" : `<span style="opacity:.3;margin:0 6px;">|</span>`}
+    <span data-chip-row="status_vacant_tenanted" style="display:inline-flex;flex-wrap:wrap;align-items:center;">
+      ${chipRow("status_vacant_tenanted", "Status", ["Vacant", "Tenanted"], (o, v) => o.toLowerCase() === v.toLowerCase())}
+    </span>
     ${showVacatingDate ? `
-      <span data-field-key="vacating_date" style="display:inline-flex;align-items:center;margin-left:12px;">
-        <span style="font-size:11px;color:${ink};opacity:.7;letter-spacing:.06em;text-transform:uppercase;margin-right:8px;">Vacating Date:</span>
+      <span data-field-key="vacating_date" style="display:inline-flex;align-items:center;margin-left:10px;">
+        <span style="font-size:11px;color:${ink};opacity:.7;letter-spacing:.06em;text-transform:uppercase;margin-right:8px;">Vacating:</span>
         ${dateBox(get("vacating_date"))}
       </span>` : ""}
   </div>
