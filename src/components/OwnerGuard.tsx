@@ -154,14 +154,24 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
   }
 
   // Optimistic render — if we already trust this user as owner (current flag,
-  // a previous successful verify this session, or a persisted localStorage cache),
-  // never block the route on a re-verification round-trip. The verify-owner call
-  // continues in the background and can still downgrade on a real email_mismatch.
+  // a previous successful verify this session, a persisted localStorage cache,
+  // or we have already rendered the children once on this guard instance),
+  // never block the route on a re-verification round-trip. The verify-owner
+  // call continues in the background and can still downgrade on a real
+  // email_mismatch.
   if (
     showLoading &&
     !!user &&
-    (isOwner || ownerVerifiedOnce.current || hasCachedOwner)
+    (isOwner || ownerVerifiedOnce.current || hasCachedOwner || hasRenderedRef.current)
   ) {
+    hasRenderedRef.current = true;
+    return <>{children}</>;
+  }
+
+  // If we've already rendered children at least once and we're still loading
+  // (e.g. a token refresh briefly cleared `user`), keep showing the children
+  // instead of flashing the dark splash.
+  if (showLoading && hasRenderedRef.current && (authLoading || ownerLoading)) {
     return <>{children}</>;
   }
 
