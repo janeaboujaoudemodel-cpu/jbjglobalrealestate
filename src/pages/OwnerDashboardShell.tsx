@@ -121,7 +121,7 @@ const OwnerDashboardShell = () => {
       )}
 
       {/* Desktop Sidebar */}
-      {!isMobile && (
+      {!isMobile && !fullscreen && (
         <aside 
           data-surface="champagne"
           className={cn(
@@ -139,7 +139,7 @@ const OwnerDashboardShell = () => {
       <main 
         className={cn(
           "flex-1 transition-all duration-300 overscroll-contain",
-          isMobile ? "ml-0" : (sidebarCollapsed ? "ml-16" : "ml-64")
+          isMobile || fullscreen ? "ml-0" : (sidebarCollapsed ? "ml-16" : "ml-64")
         )}
         role="main"
       >
