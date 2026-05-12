@@ -138,8 +138,10 @@ export function useCreateEnvelopeFromTemplate() {
         ...values,
       };
 
-      // 3. Render HTML + PDF
-      const html = renderTemplateHtml(template.key, mergedValues);
+      // 3. Render HTML + PDF (use the same opts shape as regenerate so the
+      //    initial PDF matches what the iframe preview will show — fixes
+      //    "downloaded a different style of document" before first save.)
+      const html = renderTemplateHtml(template.key, mergedValues, { renderMode: "final", category: template.category });
       const { blob, pdfWidth, pdfHeight } = await renderHtmlToPdfBlob(html);
 
       // 4. Upload PDF
