@@ -71,6 +71,9 @@ export default function EnvelopeDetail() {
   const [emailDialogOpen, setEmailDialogOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
   const [hiddenFields, setHiddenFields] = useState<string[]>([]);
+  // Tracks fields that were just restored (un-hidden) so we can highlight them
+  // in the editor and the live preview until the user dismisses or re-saves.
+  const [recentlyRestoredFields, setRecentlyRestoredFields] = useState<string[]>([]);
   const regenerate = useRegenerateEnvelopePdf();
   const { data: sigAssets } = useOwnerSignatureAssets("signature");
   const { data: stampAssets } = useOwnerSignatureAssets("stamp");
@@ -388,9 +391,11 @@ export default function EnvelopeDetail() {
       });
       toast.success("Document updated");
       setEditing(false);
-      refetch();
+      setRecentlyRestoredFields([]);
+      await refetch();
       qc.invalidateQueries({ queryKey: ["esign_envelopes_hub"] });
     } catch (e: any) {
+      console.error("Save failed", e);
       toast.error(e.message || "Failed to update");
     }
   };
@@ -413,11 +418,13 @@ export default function EnvelopeDetail() {
         hiddenFields: next,
       });
       if (hide) {
+        setRecentlyRestoredFields((prev) => prev.filter((k) => k !== key));
         toast.success("Field removed", {
           action: { label: "Undo", onClick: () => toggleHiddenField(key, false) },
         });
       } else {
-        toast.success("Field restored");
+        setRecentlyRestoredFields((prev) => Array.from(new Set([...prev, key])));
+        toast.success(`Field restored: ${key.replace(/_/g, " ")}`);
       }
       refetch();
     } catch (e: any) {
@@ -427,6 +434,7 @@ export default function EnvelopeDetail() {
 
   const restoreAllHiddenFields = async () => {
     if (!envelope?.template_key || !hiddenFields.length) return;
+    const justRestored = [...hiddenFields];
     setHiddenFields([]);
     try {
       await regenerate.mutateAsync({
@@ -438,7 +446,8 @@ export default function EnvelopeDetail() {
         ownerStampUrl,
         hiddenFields: [],
       });
-      toast.success("All removed fields restored");
+      setRecentlyRestoredFields((prev) => Array.from(new Set([...prev, ...justRestored])));
+      toast.success(`${justRestored.length} field${justRestored.length === 1 ? "" : "s"} restored`);
       refetch();
     } catch (e: any) {
       toast.error(e?.message || "Failed to restore");
@@ -891,6 +900,17 @@ export default function EnvelopeDetail() {
                   </span>
                   <Button size="sm" variant="gold" className="ml-auto h-7 text-[11px]" onClick={restoreAllHiddenFields}>
                     Restore all
+                  </Button>
+                </div>
+              )}
+              {recentlyRestoredFields.length > 0 && (
+                <div className="flex items-start gap-2 p-2 rounded border border-emerald-300 bg-emerald-50/70">
+                  <span className="text-xs text-emerald-900">
+                    <strong>{recentlyRestoredFields.length}</strong> field{recentlyRestoredFields.length === 1 ? "" : "s"} restored:&nbsp;
+                    {recentlyRestoredFields.map((k) => k.replace(/_/g, " ")).join(", ")}
+                  </span>
+                  <Button size="sm" variant="ghost" className="ml-auto h-6 text-[11px] text-emerald-900" onClick={() => setRecentlyRestoredFields([])}>
+                    Dismiss
                   </Button>
                 </div>
               )}

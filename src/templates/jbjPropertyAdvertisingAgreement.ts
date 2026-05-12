@@ -29,7 +29,7 @@ export const JBJ_BRAND = {
   monogram: monogramUrl,
 } as const;
 
-export const PAA_LAYOUT_VERSION = 11;
+export const PAA_LAYOUT_VERSION = 12;
 
 export type PAAFieldKey =
   // Owner
@@ -179,11 +179,22 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string) => {
     case "monogram-wordmark":
     default:
       return `
-        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid ${accent};padding-bottom:14px;margin-bottom:16px;">
-          <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:120px;height:auto;max-height:96px;object-fit:contain;display:block;" />
-          <div style="text-align:right;font-size:11px;line-height:1.5;color:${ink};">
-            ${docBadge}
+        <div style="margin-bottom:18px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:24px;">
+            <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:148px;height:auto;max-height:120px;object-fit:contain;display:block;" />
+            <div style="text-align:right;font-size:11px;line-height:1.5;color:${ink};padding-top:6px;">
+              ${docBadge}
+            </div>
           </div>
+          <div style="margin-top:10px;text-align:center;">
+            <div style="font-size:13px;font-weight:700;letter-spacing:.22em;color:${ink};text-transform:uppercase;">
+              ${esc(JBJ_BRAND.legalCompany)}
+            </div>
+            <h1 style="font-size:17px;font-weight:800;letter-spacing:.20em;margin:6px 0 0;color:${ink};text-transform:uppercase;">
+              Property Advertising Agreement
+            </h1>
+          </div>
+          <div style="margin-top:12px;border-bottom:1px solid ${accent};"></div>
         </div>`;
   }
 };
@@ -206,19 +217,23 @@ const footerHtml = (chrome: Required<TemplateChrome>) => {
         </div>`;
     case "three-column":
     default: {
-      // Footer = contact details ONLY — office (left), email/website (centre), phone (right).
-      // No DCCI / CR / Trade Licence credentials. Footer ends here, no trailing block.
+      // Footer = contact details ONLY.
+      // Left  : phone (top), website in gold (below — no underline).
+      // Middle: office address.
+      // Right : contact email, kept on its own line with breathing room.
+      // No DCCI / CR / Trade Licence credentials.
       return `
         <table style="${base}width:100%;border-collapse:collapse;table-layout:fixed;margin-bottom:0;">
           <tr>
-            <td style="vertical-align:top;width:38%;padding-right:12px;font-size:10.5px;line-height:1.45;">
-              ${JBJ_BRAND.office ? `<div style="opacity:.85;">${esc(JBJ_BRAND.office)}</div>` : ""}
+            <td style="vertical-align:top;width:30%;padding-right:18px;font-size:10.5px;line-height:1.55;">
+              <div style="font-weight:600;color:${ink};">${JBJ_BRAND.phone}</div>
+              <div style="margin-top:6px;color:${accent};font-weight:600;letter-spacing:.04em;">${JBJ_BRAND.website}</div>
             </td>
-            <td style="vertical-align:top;text-align:center;width:32%;font-size:10.5px;line-height:1.45;">
-              <div>${JBJ_BRAND.email} · ${JBJ_BRAND.website}</div>
+            <td style="vertical-align:top;text-align:center;width:40%;padding:0 12px;font-size:10.5px;line-height:1.55;color:${ink};opacity:.9;">
+              ${JBJ_BRAND.office ? esc(JBJ_BRAND.office) : ""}
             </td>
-            <td style="vertical-align:top;text-align:right;width:30%;padding-left:12px;font-size:10.5px;line-height:1.45;">
-              <div style="font-weight:600;">${JBJ_BRAND.phone}</div>
+            <td style="vertical-align:top;text-align:right;width:30%;padding-left:18px;font-size:10.5px;line-height:1.55;">
+              <div style="color:${ink};">${JBJ_BRAND.email}</div>
             </td>
           </tr>
         </table>`;
@@ -337,11 +352,6 @@ export function buildPAAHtml(
 
   ${headerHtml(chrome, get("doc_number"))}
 
-  <div style="text-align:center;margin:4px 0 10px;">
-    <h1 style="font-size:17px;font-weight:800;letter-spacing:.20em;margin:0;color:${ink};text-transform:uppercase;">
-      Property Advertising Agreement
-    </h1>
-  </div>
   <p style="font-size:11px;color:${ink};opacity:.78;margin:4px 0 3px;line-height:1.45;">
     As a property owner or landlord, you are partnering with <strong>JBJ Global Real Estate</strong> to advertise and represent your property for sale or lease at the best terms in the shortest time. By signing below, your property will be advertised across JBJ's premium portals, website, social media, partner brokerages, CRM and direct outreach. Submitting verification documents ranks your listing higher with the Verified badge — consumers are 5× more likely to enquire.
   </p>
