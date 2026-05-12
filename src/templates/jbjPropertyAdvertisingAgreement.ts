@@ -30,12 +30,10 @@ export const JBJ_BRAND = {
   monogram: monogramUrl,
 } as const;
 
-// v19: PDF export pinned to true A4 (595×842pt) and capture container
-// fixed at 794×1123 px with useCORS, so downloaded PDF == on-screen
-// preview byte-for-byte (no more squished/elongated exports). Initial
-// envelope creation now also passes renderMode:"final" so the very first
-// download matches the preview before any save.
-export const PAA_LAYOUT_VERSION = 22;
+// v23: Premium chrome refresh — full JBJ wordmark logo (transparent),
+// label-above-value field layout, no gold border around the legal name
+// in clause 1, taller premium footer with full clickable contact set.
+export const PAA_LAYOUT_VERSION = 23;
 
 export type PAACategory = "leasing" | "selling" | "other";
 
@@ -138,10 +136,13 @@ const fieldUnderline = (
   if (!opts?.force && !value) return "";
   const dataAttr = key ? ` data-field-key="${key}"` : "";
   const safe = esc(value || "");
+  // v23 LABEL-ABOVE-VALUE — label sits above the underlined value so the
+  // user immediately knows what each line means (e.g. "Building Name" above
+  // "Al Tajer Two", "Unit" above "1502").
   return `
   <div${dataAttr} style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;position:relative;">
+    <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:#1A1A1A;opacity:.7;margin-bottom:3px;">${esc(label)}</div>
     <div style="display:inline-block;border-bottom:1px solid #B89555;min-width:1ch;padding:2px 8px 2px 2px;font-size:13px;color:#1A1A1A;white-space:nowrap;">${safe || "&nbsp;"}</div>
-    <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:#1A1A1A;opacity:.7;margin-top:3px;">${esc(label)}</div>
   </div>`;
 };
 
@@ -381,8 +382,8 @@ export function buildPAAHtml(
     if (opts.renderMode === "final") return "";
     return `
       <div data-field-key="${key}" style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;position:relative;">
+        <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.55;margin-bottom:3px;">${esc(label)}</div>
         <div style="display:inline-block;border-bottom:1px dashed ${accent};min-width:8ch;padding:2px 8px 2px 2px;font-size:13px;color:${ink};opacity:.35;white-space:nowrap;">—</div>
-        <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.55;margin-top:3px;">${esc(label)}</div>
       </div>`;
   };
 
@@ -391,15 +392,15 @@ export function buildPAAHtml(
     if (raw) {
       return `
       <div data-field-key="${key}" style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;">
+        <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.7;margin-bottom:5px;">${esc(label)}</div>
         <div style="display:inline-block;">${dateBox(raw)}</div>
-        <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.7;margin-top:5px;">${esc(label)}</div>
       </div>`;
     }
     if (opts.renderMode === "final") return "";
     return `
       <div data-field-key="${key}" style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;">
+        <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.55;margin-bottom:5px;">${esc(label)}</div>
         <div style="display:inline-block;border-bottom:1px dashed ${accent};padding:2px 8px;font-size:12px;color:${ink};opacity:.35;white-space:nowrap;">DD / MM / YYYY</div>
-        <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.55;margin-top:5px;">${esc(label)}</div>
       </div>`;
   };
   // Smart conditionals
@@ -424,8 +425,8 @@ export function buildPAAHtml(
       if (!selected) return "";
       return `
         <span data-field-key="${fieldKey}" style="display:inline-block;margin-right:24px;vertical-align:top;">
+          <span style="display:block;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:#1A1A1A;opacity:.7;margin-bottom:3px;">${esc(label)}</span>
           <span style="display:inline-block;border-bottom:1px solid #B89555;padding:2px 10px 2px 2px;font-size:13px;color:#1A1A1A;font-weight:600;">${esc(cleanFinalLabel(selected))}</span>
-          <span style="display:block;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:#1A1A1A;opacity:.7;margin-top:3px;">${esc(label)}</span>
         </span>`;
     }
     return options.map((o) => `<span data-chip-key="${fieldKey}" data-chip-value="${esc(o)}" style="display:inline-block;">${radioChip(o, match(o, current))}</span>`).join("");
@@ -490,8 +491,8 @@ export function buildPAAHtml(
     ${fu("Property Reference No.", get("property_reference_no"), "property_reference_no")}
     ${!hidden.has("expiry_date") && get("expiry_date") ? `
     <div data-field-key="expiry_date" style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;">
+      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.7;margin-bottom:5px;">Expiry Date</div>
       <div style="display:inline-block;">${dateBox(get("expiry_date"))}</div>
-      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.7;margin-top:5px;">Expiry Date</div>
     </div>` : ""}
   </div>
 
@@ -586,8 +587,8 @@ export function buildPAAHtml(
     ${isLeasing ? fu("Notice Period (days)", get("notice_period_days"), "notice_period_days") : ""}
     ${isLeasing && !hidden.has("current_tenancy_end") && get("current_tenancy_end") ? `
       <div data-field-key="current_tenancy_end" style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;">
+        <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.7;margin-bottom:5px;">Current Tenancy End</div>
         <div style="display:inline-block;">${dateBox(get("current_tenancy_end"))}</div>
-        <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.7;margin-top:5px;">Current Tenancy End</div>
       </div>` : ""}
     ${isSelling ? fu("Chain Free", get("chain_free"), "chain_free") : ""}
     ${isSelling ? fu("Mortgage Status", get("mortgage_status"), "mortgage_status") : ""}
@@ -595,8 +596,8 @@ export function buildPAAHtml(
 
   ${!hidden.has("additional_notes") && get("additional_notes") ? `
     <div data-field-key="additional_notes" style="margin:6px 0 14px;">
+      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.7;margin-bottom:3px;">Additional Notes</div>
       <div style="border:1px solid ${accent};border-radius:4px;min-height:54px;padding:8px 10px;font-size:12px;color:${ink};white-space:pre-wrap;">${esc(get("additional_notes"))}</div>
-      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.7;margin-top:3px;">Additional Notes</div>
     </div>` : ""}
 
   ${poaBlock}
@@ -606,7 +607,7 @@ export function buildPAAHtml(
   <div style="font-size:11px;color:${ink};line-height:1.5;">
     <div style="margin-bottom:8px;">
       1. The landlord / legal representative has agreed to appoint
-      <span style="font-weight:600;padding:0 4px;text-decoration:underline;text-decoration-color:${accent};text-decoration-thickness:1px;text-underline-offset:4px;">${esc(get("broker_appointee_name") || JBJ_BRAND.legalCompany)}</span>
+      <span style="font-weight:700;color:${ink};">${esc(get("broker_appointee_name") || JBJ_BRAND.legalCompany)}</span>
       as its:
     </div>
     <div data-chip-row="exclusivity" style="margin:6px 0 10px;display:flex;flex-wrap:wrap;align-items:center;gap:6px;">
@@ -631,19 +632,19 @@ export function buildPAAHtml(
   ${sectionTitle(8, "Landlord")}
   <div style="display:grid;grid-template-columns:1.2fr 1.2fr 1fr;gap:0 28px;margin-top:6px;align-items:end;">
     <div>
-      <div style="height:48px;display:flex;align-items:flex-end;padding:0 0 4px;font-family:'Cormorant Garamond','Apple Chancery','Lucida Handwriting','Brush Script MT',Georgia,cursive;font-style:italic;font-weight:500;font-size:24px;color:${ink};letter-spacing:.01em;line-height:1;">${esc(get("landlord_signature_name"))}</div>
+      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-bottom:5px;">Name</div>
+      <div style="height:42px;display:flex;align-items:flex-end;padding:0 0 4px;font-family:'Cormorant Garamond','Apple Chancery','Lucida Handwriting','Brush Script MT',Georgia,cursive;font-style:italic;font-weight:500;font-size:22px;color:${ink};letter-spacing:.01em;line-height:1;">${esc(get("landlord_signature_name"))}</div>
       <div style="height:1px;background:${accent};opacity:.55;"></div>
-      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:5px;">Name</div>
     </div>
     <div>
-      <div style="height:48px;display:flex;align-items:flex-end;padding:0 0 2px;">${clientSigImg}</div>
+      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-bottom:5px;">Signature</div>
+      <div style="height:42px;display:flex;align-items:flex-end;padding:0 0 2px;">${clientSigImg}</div>
       <div style="height:1px;background:${accent};opacity:.55;"></div>
-      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:5px;">Signature</div>
     </div>
     <div>
-      <div style="height:48px;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 4px;font-size:13px;color:${ink};">${esc(get("landlord_signature_date") || "")}</div>
+      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-bottom:5px;">Date</div>
+      <div style="height:42px;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 6px;font-size:13px;color:${ink};">${esc(get("landlord_signature_date") || "")}</div>
       <div style="height:1px;background:${accent};opacity:.55;"></div>
-      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:5px;">Date</div>
     </div>
   </div>
   </div>
