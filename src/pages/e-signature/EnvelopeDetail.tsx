@@ -637,6 +637,9 @@ export default function EnvelopeDetail() {
             <Button variant="gold" onClick={() => handleDownload(envelope.document_url, envelope.document_filename)}>
               <Download className="w-4 h-4 mr-2" /> Download PDF
             </Button>
+            <Button variant="outline" onClick={handleDownloadBlank} title="Download a clean unsigned copy of this agreement to send to the client">
+              <FileText className="w-4 h-4 mr-2" /> Download blank PDF
+            </Button>
             <Button variant="outline" onClick={() => setExportOpen(true)}>
               <Download className="w-4 h-4 mr-2" /> Export…
             </Button>
