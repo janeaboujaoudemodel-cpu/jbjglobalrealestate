@@ -326,6 +326,35 @@ export function buildPAAHtml(
   const fu = (label: string, value: string, key: string) =>
     fieldUnderline(label, value, key, { hidden, force: !!value });
 
+  // Placeholder field used in edit mode for empty identifiers — shows the
+  // expected label so the section is never blank. Suppressed in final mode.
+  const fuPh = (label: string, value: string, key: string) => {
+    if (hidden.has(key)) return "";
+    if (value) return fu(label, value, key);
+    if (opts.renderMode === "final") return "";
+    return `
+      <div data-field-key="${key}" style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;position:relative;">
+        <div style="display:inline-block;border-bottom:1px dashed ${accent};min-width:8ch;padding:2px 8px 2px 2px;font-size:13px;color:${ink};opacity:.35;white-space:nowrap;">—</div>
+        <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.55;margin-top:3px;">${esc(label)}</div>
+      </div>`;
+  };
+
+  const dateFieldPh = (label: string, raw: string, key: string) => {
+    if (hidden.has(key)) return "";
+    if (raw) {
+      return `
+      <div data-field-key="${key}" style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;">
+        <div style="display:inline-block;">${dateBox(raw)}</div>
+        <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.7;margin-top:5px;">${esc(label)}</div>
+      </div>`;
+    }
+    if (opts.renderMode === "final") return "";
+    return `
+      <div data-field-key="${key}" style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;">
+        <div style="display:inline-block;border-bottom:1px dashed ${accent};padding:2px 8px;font-size:12px;color:${ink};opacity:.35;white-space:nowrap;">DD / MM / YYYY</div>
+        <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.55;margin-top:5px;">${esc(label)}</div>
+      </div>`;
+  };
   // Smart conditionals
   const rawStatus = get("status_vacant_tenanted");
   const vacatingRaw = get("vacating_date");
