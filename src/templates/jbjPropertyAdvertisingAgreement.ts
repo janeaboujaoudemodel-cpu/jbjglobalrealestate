@@ -206,28 +206,19 @@ const footerHtml = (chrome: Required<TemplateChrome>) => {
         </div>`;
     case "three-column":
     default: {
-      // Footer = contact details only. The company logo + legal name live in the header.
-      // Real <table> for cross-renderer reliability.
-      const credentials = [
-        `Trade Licence No. ${esc(TRADE_LICENSE_NUMBER)}`,
-        `Dubai Chamber ${esc(TRADE_LICENSE_DCCI_NO)}`,
-        `CR ${esc(TRADE_LICENSE_REGISTER_NO)}`,
-        ...(trn ? [`TRN ${esc(trn)}`] : []),
-        ...(license && license !== TRADE_LICENSE_NUMBER ? [esc(license)] : []),
-      ].join(" · ");
+      // Footer = contact details ONLY — office (left), email/website (centre), phone (right).
+      // No DCCI / CR / Trade Licence credentials. Footer ends here, no trailing block.
       return `
-        <table style="${base}width:100%;border-collapse:collapse;table-layout:fixed;">
+        <table style="${base}width:100%;border-collapse:collapse;table-layout:fixed;margin-bottom:0;">
           <tr>
             <td style="vertical-align:top;width:38%;padding-right:12px;font-size:10.5px;line-height:1.45;">
               ${JBJ_BRAND.office ? `<div style="opacity:.85;">${esc(JBJ_BRAND.office)}</div>` : ""}
             </td>
-            <td style="vertical-align:top;text-align:center;width:30%;font-size:10.5px;line-height:1.45;">
-              <div>${JBJ_BRAND.email}</div>
-              <div>${JBJ_BRAND.website}</div>
+            <td style="vertical-align:top;text-align:center;width:32%;font-size:10.5px;line-height:1.45;">
+              <div>${JBJ_BRAND.email} · ${JBJ_BRAND.website}</div>
             </td>
-            <td style="vertical-align:top;text-align:right;width:32%;padding-left:12px;font-size:10.5px;line-height:1.45;">
+            <td style="vertical-align:top;text-align:right;width:30%;padding-left:12px;font-size:10.5px;line-height:1.45;">
               <div style="font-weight:600;">${JBJ_BRAND.phone}</div>
-              <div style="opacity:.85;margin-top:2px;">${credentials}</div>
             </td>
           </tr>
         </table>`;
