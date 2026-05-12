@@ -232,29 +232,41 @@ export default function SignDocument() {
           </CardContent>
         </Card>
 
-        {/* Step 1 — get DocuSign */}
+        {/* Step 1 — open / install DocuSign */}
         <Card className="bg-white border-[#B89555]/30">
           <CardContent className="p-5">
             <div className="flex items-center gap-2 mb-3">
               <span className="w-6 h-6 rounded-full bg-[#EFE6D6] border border-[#B89555]/60 text-[#1A1A1A] text-xs font-bold flex items-center justify-center">1</span>
-              <h2 className="font-semibold text-[#1A1A1A]">Get the DocuSign app</h2>
+              <h2 className="font-semibold text-[#1A1A1A]">Open DocuSign to sign</h2>
             </div>
             <p className="text-sm text-[#1A1A1A]/70 mb-4">
-              Skip this step if DocuSign is already installed on your device.
+              Tap the button below — it opens DocuSign automatically if it's already installed.
+              If not, use the App Store or Google Play link underneath to install it first.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <a href={DOCUSIGN_APP_STORE} target="_blank" rel="noopener noreferrer" className="flex-1">
-                <Button className="w-full bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-white border border-[#B89555]/40">
-                  <Smartphone className="w-4 h-4 mr-2" /> Download for iPhone / iPad
-                  <ExternalLink className="w-3.5 h-3.5 ml-2 opacity-70" />
-                </Button>
-              </a>
-              <a href={DOCUSIGN_PLAY_STORE} target="_blank" rel="noopener noreferrer" className="flex-1">
-                <Button variant="outline" className="w-full border-[#B89555]/60 text-[#1A1A1A] hover:bg-[#EFE6D6]">
-                  <Smartphone className="w-4 h-4 mr-2" /> Download for Android
-                  <ExternalLink className="w-3.5 h-3.5 ml-2 opacity-70" />
-                </Button>
-              </a>
+
+            {/* Primary: open DocuSign (universal link → app if installed, web otherwise) */}
+            <a href={DOCUSIGN_WEB} target="_blank" rel="noopener noreferrer">
+              <Button className="w-full bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-white border border-[#B89555]/40">
+                <FileSignature className="w-4 h-4 mr-2" /> Sign with DocuSign
+                <ExternalLink className="w-3.5 h-3.5 ml-2 opacity-70" />
+              </Button>
+            </a>
+
+            {/* Fallback: install links (smaller, secondary) */}
+            <div className="mt-4 pt-4 border-t border-[#B89555]/20">
+              <p className="text-xs text-[#1A1A1A]/60 mb-2">Don't have DocuSign yet?</p>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <a href={DOCUSIGN_APP_STORE} target="_blank" rel="noopener noreferrer" className="flex-1">
+                  <Button variant="outline" size="sm" className="w-full border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6]">
+                    <Smartphone className="w-3.5 h-3.5 mr-2" /> App Store (iOS)
+                  </Button>
+                </a>
+                <a href={DOCUSIGN_PLAY_STORE} target="_blank" rel="noopener noreferrer" className="flex-1">
+                  <Button variant="outline" size="sm" className="w-full border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6]">
+                    <Smartphone className="w-3.5 h-3.5 mr-2" /> Google Play (Android)
+                  </Button>
+                </a>
+              </div>
             </div>
           </CardContent>
         </Card>
