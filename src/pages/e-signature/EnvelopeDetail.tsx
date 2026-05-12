@@ -150,20 +150,17 @@ export default function EnvelopeDetail() {
   const previewHtml = useMemo(() => {
     if (!envelope?.template_key) return null;
     const vals = editing ? editValues : ((envelope.template_field_values as any) || {});
+    // Only render the captured signature pad image when the recipient has truly
+    // signed. NEVER autofill the printed name or date — the document must show
+    // exactly what the signer typed/drew, nothing more. (Test envelopes that
+    // were never really signed should look unsigned.)
     const signedClient = !editing
       ? ((envelope.esign_recipients || []).find((r: any) => r.metadata?.role === "client" && r.status === "signed")
         || (envelope.esign_recipients || []).find((r: any) => r.status === "signed"))
       : null;
-    const signedVals = signedClient
-      ? {
-          ...vals,
-          landlord_signature_name: vals.landlord_signature_name || signedClient.name || vals.landlord_name || "",
-          landlord_signature_date: vals.landlord_signature_date || (signedClient.signed_at ? format(new Date(signedClient.signed_at), "dd/MM/yyyy") : ""),
-        }
-      : vals;
     return renderTemplateHtml(
       envelope.template_key,
-      { ...signedVals, doc_number: signedVals.doc_number || docNumber },
+      { ...vals, doc_number: vals.doc_number || docNumber },
       { chrome, ownerSignatureUrl, ownerStampUrl, clientSignatureUrl: signedClient?.signature_data || null, hiddenFields, renderMode: editing ? "edit" : "final" },
     );
   }, [envelope?.template_key, envelope?.template_field_values, envelope?.esign_recipients, editing, editValues, docNumber, chrome, ownerSignatureUrl, ownerStampUrl, hiddenFields]);
