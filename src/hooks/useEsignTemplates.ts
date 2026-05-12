@@ -74,7 +74,8 @@ export async function renderHtmlToPdfBlob(html: string): Promise<{ blob: Blob; p
   container.style.top = "-10000px";
   container.style.left = "0";
   container.style.width = `${A4_PX_W}px`;
-  container.style.minHeight = `${A4_PX_H}px`;
+  container.style.height = `${A4_PX_H}px`;
+  container.style.overflow = "hidden";
   container.style.background = "#ffffff";
   container.innerHTML = html;
   document.body.appendChild(container);
