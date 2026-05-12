@@ -93,6 +93,7 @@ export function SendViaEmailDialog({
   const [ccs, setCcs] = useState<string[]>([DEFAULT_CC]);
   const [subject, setSubject] = useState(defaultSubject);
   const [bodyHtml, setBodyHtml] = useState("");
+  const [docusignUrl, setDocusignUrl] = useState("");
   const [busy, setBusy] = useState<"" | "test" | "send">("");
 
   useEffect(() => {
