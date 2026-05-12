@@ -286,6 +286,8 @@ export function SendViaEmailDialog({
                 subject={subject}
                 bodyHtml={bodyHtml}
                 docNumber={docNumber}
+                docusignUrl={docusignUrl}
+                attachmentName={attachmentName}
                 className="w-full h-full bg-[#FDFBF7]"
               />
             </div>
