@@ -77,95 +77,57 @@ Deno.serve(async (req) => {
       const signingUrl = `${baseUrl}/sign/${recipient.signing_token}`;
       const docNumber = (envelope.metadata as any)?.doc_number || "";
       const fieldVals = (envelope.template_field_values as any) || {};
-
-      // Build merge-tag context — use interpolated values from client if provided.
-      // {{sender_signature}} is the brand sign-off at the bottom of the email.
-      // It is always YOUR side (Jane · JBJ), never the client.
       const senderName = envelope.sender_name || "Jane Bou Jaoude";
       const senderTitle = (envelope as any).sender_title || "Founder & CEO";
       const SIG_SENTINEL = "@@JBJ_SENDER_SIGNATURE_BLOCK@@";
       const sigPlain = `— ${senderName}\n${senderTitle}\nJBJ GLOBAL REAL ESTATE`;
-      // Premium HTML signature: ONE name (luxury serif italic) + gold hairline + title + brand
-      const sigHtml = `
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:28px;border-collapse:collapse;font-family:Inter,Arial,sans-serif;">
-  <tr><td style="padding-bottom:6px;">
-    <span style="font-family:'Cormorant Garamond','Playfair Display',Georgia,serif;font-style:italic;font-weight:500;font-size:28px;color:#1A1A1A;letter-spacing:.01em;line-height:1;">${senderName}</span>
-  </td></tr>
-  <tr><td style="padding:6px 0 12px;"><div style="width:72px;height:1px;background:#B89555;line-height:1px;font-size:0;">&nbsp;</div></td></tr>
-  <tr><td style="font-size:10.5px;font-weight:500;letter-spacing:.16em;color:#1A1A1A;text-transform:uppercase;padding-bottom:8px;">${senderTitle}</td></tr>
-  <tr><td style="font-size:11px;font-weight:700;letter-spacing:.22em;color:#1A1A1A;text-transform:uppercase;padding-bottom:3px;">JBJ GLOBAL REAL ESTATE</td></tr>
-  <tr><td style="font-size:10.5px;color:#1A1A1A;opacity:.7;letter-spacing:.04em;padding-bottom:1px;">Downtown Dubai, UAE</td></tr>
-  <tr><td style="font-size:10.5px;color:#1A1A1A;opacity:.7;letter-spacing:.04em;padding-bottom:1px;">CONTACT@JBJ.AE &nbsp;·&nbsp; +971 54 716 7107</td></tr>
-  <tr><td style="font-size:10.5px;color:#1A1A1A;opacity:.7;letter-spacing:.04em;">WWW.JBJ.AE</td></tr>
-</table>`;
+      const sigHtml = buildSenderSignatureHtml(senderName, senderTitle);
+
       const tokens: Record<string, string> = {
         client_name: recipient.name || fieldVals.landlord_name || "Client",
         landlord_name: recipient.name || fieldVals.landlord_name || "Client",
         doc_number: docNumber,
-        doc_title: envelope.name || "Property Advertising Agreement",
+        doc_title: envelope.name || "Document",
         sender_signature: SIG_SENTINEL,
-        owner_name: senderName, // legacy alias
+        owner_name: senderName,
         sender_title: senderTitle,
-        signing_link: signingUrl,
+        signing_link: "", // DocuSign-only — never embed an internal signing URL
       };
       const interp = (s: string) =>
         String(s || "").replace(/\{\{(\w+)\}\}/g, (_, k) => tokens[k] ?? `{{${k}}}`);
 
       const finalSubject = interpolated_subject
         ? interp(interpolated_subject).replace(SIG_SENTINEL, sigPlain)
-        : interp(envelope.email_subject || `Please sign — {{doc_title}} · {{doc_number}}`).replace(SIG_SENTINEL, sigPlain);
-      const rawBody = interpolated_body
-        ? interpolated_body
-        : (envelope.email_message || `Dear {{client_name}},\n\nKindly review and sign your {{doc_title}}.\n\n{{sender_signature}}`);
-      const finalBodyHtml = interp(rawBody)
-        .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-        .replace(/\n/g, "<br/>")
-        .replace(SIG_SENTINEL, sigHtml);
+        : interp(envelope.email_subject || `Please review — {{doc_title}}${docNumber ? " · {{doc_number}}" : ""}`).replace(SIG_SENTINEL, sigPlain);
 
-      const emailHtml = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"></head>
-<body style="margin:0;padding:0;font-family:Inter,Arial,sans-serif;background:#FDFBF7;">
-  <table role="presentation" style="width:100%;border-collapse:collapse;">
-    <tr><td align="center" style="padding:40px 20px;">
-      <table role="presentation" style="width:100%;max-width:620px;border-collapse:collapse;">
-        <!-- Premium JBJ Header (sharp corners to match document chrome) -->
-        <tr><td style="background:#F7F2EA;border:1px solid #B89555;padding:22px 28px;border-bottom:none;">
-          <table role="presentation" style="width:100%;border-collapse:collapse;"><tr>
-            <td style="font-size:20px;font-weight:700;letter-spacing:.18em;color:#1A1A1A;">JBJ GLOBAL REAL ESTATE</td>
-            <td align="right" style="font-size:10px;letter-spacing:.16em;color:#1A1A1A;opacity:.7;">${docNumber ? `DOC NO. <strong style="opacity:1;">${docNumber}</strong>` : ""}</td>
-          </tr></table>
-          <div style="height:1px;background:#B89555;margin-top:14px;"></div>
-        </td></tr>
-        <!-- Body -->
-        <tr><td style="background:#ffffff;border-left:1px solid #B89555;border-right:1px solid #B89555;padding:36px 36px 8px;">
-          <h2 style="margin:0 0 18px;color:#1A1A1A;font-size:20px;font-weight:700;">${finalSubject}</h2>
-          <div style="color:#1A1A1A;line-height:1.7;font-size:14px;">${finalBodyHtml}</div>
-          <div style="text-align:center;margin:32px 0 12px;">
-            <a href="${signingUrl}" style="display:inline-block;background:#1A1A1A;color:#FDFBF7;text-decoration:none;padding:14px 32px;font-weight:600;font-size:14px;letter-spacing:.06em;border:1px solid #B89555;">REVIEW &amp; SIGN DOCUMENT</a>
-          </div>
-          <p style="color:#1A1A1A;opacity:.6;font-size:12px;text-align:center;margin:0 0 8px;">Or paste this secure link in your browser:<br/><span style="color:#1A1A1A;word-break:break-all;">${signingUrl}</span></p>
-        </td></tr>
-        <!-- Premium Footer (single row, no wraps; sharp corners) -->
-        <tr><td style="background:#F7F2EA;border:1px solid #B89555;border-top:none;padding:18px 28px;">
-          <div style="height:1px;background:#B89555;margin-bottom:14px;"></div>
-          <table role="presentation" style="width:100%;border-collapse:collapse;font-size:11px;color:#1A1A1A;line-height:1.55;"><tr>
-            <td style="width:42%;vertical-align:top;">
-              <div style="font-weight:700;letter-spacing:.14em;white-space:nowrap;">JBJ GLOBAL REAL ESTATE</div>
-              <div style="opacity:.7;white-space:nowrap;">Downtown Dubai, UAE</div>
-            </td>
-            <td align="center" style="width:32%;vertical-align:top;">
-              <div style="white-space:nowrap;">CONTACT@JBJ.AE</div>
-              <div style="white-space:nowrap;">WWW.JBJ.AE</div>
-            </td>
-            <td align="right" style="width:26%;vertical-align:top;">
-              <div style="white-space:nowrap;">+971&nbsp;54&nbsp;716&nbsp;7107</div>
-            </td>
-          </tr></table>
-        </td></tr>
-        <tr><td style="text-align:center;padding-top:14px;font-size:11px;color:#1A1A1A;opacity:.55;">© ${new Date().getFullYear()} JBJ Global Real Estate · Link expires in 7 days</td></tr>
-      </table>
-    </td></tr>
-  </table>
-</body></html>`;
+      // New path: client sends pre-rendered, sanitized HTML (locked-send,
+      // matches the iframe preview byte-for-byte). Legacy path: plain text.
+      let finalBodyHtml: string;
+      if (typeof interpolated_body_html === "string" && interpolated_body_html.trim()) {
+        finalBodyHtml = interpolated_body_html;
+      } else {
+        const rawBody = interpolated_body
+          ? interpolated_body
+          : (envelope.email_message || `Dear {{client_name}},\n\nPlease find your {{doc_title}} attached.\n\n{{sender_signature}}`);
+        finalBodyHtml = escapeHtml(interp(rawBody))
+          .replace(/\n/g, "<br/>")
+          .replace(SIG_SENTINEL, sigHtml);
+      }
+
+      const emailHtml = buildEnvelopeEmailHtml({
+        subject: finalSubject,
+        bodyHtml: finalBodyHtml,
+        docNumber,
+        senderName,
+        senderTitle,
+      });
+
+      // Build the To list: the persisted recipient + any extra addresses
+      // the owner picked in the dialog (deduped, recipient first).
+      const primaryEmail = String(recipient.email || "").toLowerCase();
+      const allTos = Array.from(new Set(
+        [primaryEmail, ...extraTos].filter((e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e))
+      ));
 
       const persistedCcs: string[] = Array.isArray((envelope.metadata as any)?.cc_emails)
         ? (envelope.metadata as any).cc_emails
