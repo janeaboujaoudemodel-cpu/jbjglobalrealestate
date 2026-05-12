@@ -24,8 +24,26 @@ const ADDRESS_TO_SERVICE: Record<string, string> = {
   "support@jbj.ae": "support",
   "careers@jbj.ae": "hr",
   "contact@jbj.com": "general",
-  "noreply@jbj.ae": "general",
+  // NOTE: noreply@jbj.ae is intentionally NOT in this map — replies to it
+  // are intercepted below and bounced with a friendly auto-reply.
 };
+
+const NOREPLY_ADDRESSES = new Set([
+  "noreply@jbj.ae",
+  "no-reply@jbj.ae",
+  "noreply@notify.jbj.ae",
+  "no-reply@notify.jbj.ae",
+]);
+
+function isNoreplyRecipient(toAddresses: string[]): boolean {
+  for (const addr of toAddresses) {
+    const lower = addr.toLowerCase().trim();
+    const match = lower.match(/<([^>]+)>/) || [null, lower];
+    const email = (match[1] || lower).trim();
+    if (NOREPLY_ADDRESSES.has(email)) return true;
+  }
+  return false;
+}
 
 function resolveService(toAddresses: string[]): string {
   for (const addr of toAddresses) {
