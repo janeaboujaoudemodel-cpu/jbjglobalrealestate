@@ -5,14 +5,14 @@
  * brand chrome. Header & footer are user-customisable via the `chrome` arg.
  */
 
-import monogramUrl from "@/assets/jbj-fulllogo-light-bg.png";
+// LOCKED TEMPLATE — JBJ Property Advertising Agreement (PAA).
+// Standard layout: do not modify header/footer/body chrome without owner approval.
+// Per-recipient values (names, property, dates, tenancy) are the only variables.
+import monogramUrl from "@/assets/jbj-monogram-nobuffer.png";
 import {
   TRADE_LICENSE_BRAND,
   TRADE_LICENSE_LEGAL_NAME,
   TRADE_LICENSE_OFFICE,
-  TRADE_LICENSE_NUMBER,
-  TRADE_LICENSE_DCCI_NO,
-  TRADE_LICENSE_REGISTER_NO,
   COMPANY_CONTACT,
 } from "@/config/companyLegal";
 
