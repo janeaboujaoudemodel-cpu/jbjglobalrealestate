@@ -76,8 +76,8 @@ export default function ApiAccess() {
             <a href="mailto:contact@jbj.ae" className="inline-flex items-center gap-2 px-6 py-3 bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] rounded-xl font-semibold transition-colors">
               <Mail className="w-4 h-4" /> contact@jbj.ae
             </a>
-            <a href="tel:+971565911000" className="inline-flex items-center gap-2 px-6 py-3 border border-[#B89555]/30 hover:bg-[#EFE6D6]/10 text-foreground rounded-xl font-semibold transition-colors">
-              <Phone className="w-4 h-4" /> +971 56 591 1000
+            <a href="tel:+971547167107" className="inline-flex items-center gap-2 px-6 py-3 border border-[#B89555]/30 hover:bg-[#EFE6D6]/10 text-foreground rounded-xl font-semibold transition-colors">
+              <Phone className="w-4 h-4" /> +971 54 716 7107
             </a>
           </div>
         </div>

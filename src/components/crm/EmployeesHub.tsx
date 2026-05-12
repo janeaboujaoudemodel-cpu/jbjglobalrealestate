@@ -472,11 +472,11 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
     logAction({
       actionType: 'call',
       targetName: employee.name,
-      targetContact: '+971565911000',
+      targetContact: '+971547167107',
       employeeId: employee.id,
       notes: `Called company line for ${employee.name}`,
     });
-    window.location.href = `tel:+971565911000`;
+    window.location.href = `tel:+971547167107`;
   };
 
   const handleEmail = (employee: Employee) => {

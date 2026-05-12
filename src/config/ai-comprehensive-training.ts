@@ -406,7 +406,7 @@ of JBJ Global Real Estate and bound by the same policies and confidentiality agr
 
 export const COMMUNICATION_CAPABILITIES = {
   whatsapp: {
-    companyNumber: '+971 56 591 1000',
+    companyNumber: '+971 54 716 7107',
     usage: 'Company WhatsApp for official communications',
     capabilities: [
       'Send text messages',
@@ -516,7 +516,7 @@ Company: JBJ Global Real Estate L.L.C S.O.C.
 Founder: Jane Bou Jaoude (Founder & CEO)
 Experience: 12+ years of industry experience
 Services: BUY · SELL · RENT
-Contact: +971 56 591 1000 | CONTACT@JBJ.AE | WWW.JBJ.AE
+Contact: +971 54 716 7107 | CONTACT@JBJ.AE | WWW.JBJ.AE
 Offices: Dubai (HQ), London, Riyadh
 
 ${isSalesDepartment ? `

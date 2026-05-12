@@ -170,7 +170,7 @@ const ScanSignDocuments = () => {
                 {[
                   { key: "fullName" as const, label: "Full Name", placeholder: "John Doe" },
                   { key: "email" as const, label: "Email", placeholder: "john@email.com" },
-                  { key: "phone" as const, label: "Phone", placeholder: "+971 56 591 1000" },
+                  { key: "phone" as const, label: "Phone", placeholder: "+971 54 716 7107" },
                   { key: "initials" as const, label: "Initials", placeholder: "JD" },
                 ].map(f => (
                   <div key={f.key}>

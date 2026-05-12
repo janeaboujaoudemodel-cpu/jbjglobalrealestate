@@ -22,7 +22,7 @@ CRITICAL INSTRUCTION - CALL HANDLING:
 - Only end the call if the caller explicitly confirms they want to end the conversation AFTER you have provided assistance
 
 CONTACT INFORMATION:
-- Phone: +971 56 591 1000
+- Phone: +971 54 716 7107
 - Email: contact@JBJ.ae
 - Website: JBJ.ae
 

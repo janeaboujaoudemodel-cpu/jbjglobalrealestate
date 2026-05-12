@@ -772,7 +772,7 @@ export default function JoinApplication() {
                     value={formData.phone}
                     onChange={(value) => setFormData({ ...formData, phone: value || "" })}
                     disabled={loading}
-                    placeholder="+971 56 591 1000"
+                    placeholder="+971 54 716 7107"
                   />
                 </div>
 

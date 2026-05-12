@@ -97,15 +97,15 @@ export function BrokerToolkitCTA() {
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <a
-                  href="tel:+971565911000"
+                  href="tel:+971547167107"
                   className="flex items-center gap-2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors"
                 >
                   <Phone className="w-5 h-5 text-blue-500" />
-                  +971 56 591 1000
+                  +971 54 716 7107
                 </a>
                 <span className="text-[#1A1A1A]/70 hidden sm:block">|</span>
                 <a
-                  href="https://wa.me/971565911000?text=Hi%2C%20I%27m%20interested%20in%20joining%20the%20Broker%20Circle"
+                  href="https://wa.me/971547167107?text=Hi%2C%20I%27m%20interested%20in%20joining%20the%20Broker%20Circle"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors"

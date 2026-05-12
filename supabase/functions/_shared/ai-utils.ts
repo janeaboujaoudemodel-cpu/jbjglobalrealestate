@@ -36,11 +36,11 @@ export function getCorsHeaders(req: Request): Record<string, string> {
 // ============================================================================
 
 export const APPROVED_CONTACT = {
-  phone: "+971 56 591 1000",
+  phone: "+971 54 716 7107",
   email: "contact@JBJ.ae",
   privacyEmail: "privacy@JBJ.ae",
   website: "jbj.ae",
-  whatsapp: "+971565911000",
+  whatsapp: "+971547167107",
   companyName: "JBJ Global Real Estate",
   companyFull: "JBJ Global Real Estate L.L.C S.O.C.",
   founder: "Jane Bou Jaoude",
@@ -79,7 +79,7 @@ export function sanitizeContactInfo(text: string): string {
   phonePatterns.forEach((pattern) => {
     sanitized = sanitized.replace(pattern, (match) => {
       const normalized = match.replace(/[\s\-]/g, "");
-      if (normalized.includes("565911000")) return match;
+      if (normalized.includes("547167107")) return match;
       return APPROVED_CONTACT.phone;
     });
   });

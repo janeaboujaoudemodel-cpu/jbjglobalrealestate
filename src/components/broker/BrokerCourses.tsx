@@ -309,7 +309,7 @@ export default function BrokerCourses({ subscription }: BrokerCoursesProps) {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
-              href="https://wa.me/971565911000?text=Hi%2C%20I%20want%20to%20upgrade%20to%20Enterprise%20for%20full%20course%20access"
+              href="https://wa.me/971547167107?text=Hi%2C%20I%20want%20to%20upgrade%20to%20Enterprise%20for%20full%20course%20access"
               target="_blank"
               rel="noopener noreferrer"
             >

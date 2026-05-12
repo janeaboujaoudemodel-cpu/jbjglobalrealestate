@@ -30,9 +30,9 @@ const CONTACT_INFO = {
   email: "Contact@JBJ.AE",
   emailDisplay: "Contact@JBJ.AE",
   // Company phone
-  phoneCompany: "+971 56 591 1000",
-  phoneCompanyClean: "+971565911000",
-  whatsappCompany: "971565911000",
+  phoneCompany: "+971 54 716 7107",
+  phoneCompanyClean: "+971547167107",
+  whatsappCompany: "971547167107",
   // Personal phone
   phonePersonal: "+971 54 716 7107",
   phonePersonalClean: "+971547167107",

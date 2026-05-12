@@ -13,10 +13,10 @@ const SUPABASE_SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
 // JBJ Approved Contact Information - Single Source of Truth
 const APPROVED_CONTACT = {
-  phone: "+971 56 591 1000",
+  phone: "+971 54 716 7107",
   email: "contact@jbj.ae",
   privacyEmail: "privacy@jbj.ae",
-  whatsapp: "+971565911000",
+  whatsapp: "+971547167107",
   website: "jbj.ae",
   companyName: "JBJ Global Real Estate",
   founder: "Jane Bou Jaoude",
@@ -1278,7 +1278,7 @@ async function initializeTraining(supabase: any, userId: string) {
       user_id: userId,
       category: 'company_info',
       title: 'JBJ Global Real Estate Overview',
-      content: 'JBJ Global Real Estate L.L.C S.O.C. is a premier real estate brokerage based in Dubai, UAE. Founded by Jane Bou Jaoude, the company specializes in off-plan properties, luxury real estate, and investment advisory. Contact: +971 56 591 1000, contact@jbj.ae',
+      content: 'JBJ Global Real Estate L.L.C S.O.C. is a premier real estate brokerage based in Dubai, UAE. Founded by Jane Bou Jaoude, the company specializes in off-plan properties, luxury real estate, and investment advisory. Contact: +971 54 716 7107, contact@jbj.ae',
       keywords: ['jbj', 'company', 'about', 'contact']
     },
     {
