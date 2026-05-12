@@ -47,21 +47,20 @@ export default function SendAgreementDialog({ open, onClose, lead }: SendAgreeme
 
   const handleCreate = async () => {
     if (!lead || !picked) return;
-    if (!lead.email_lower) {
-      toast.error("This lead has no email address");
-      return;
-    }
+    const hasEmail = !!lead.email_lower;
     try {
       const env = await createFromTpl.mutateAsync({
         template: picked,
         client: {
           name: lead.full_name || "Client",
-          email: lead.email_lower,
+          // Backend accepts empty email — envelope stays as draft until an
+          // address is added on the envelope detail page.
+          email: lead.email_lower || "",
           phone: lead.phone_e164 || undefined,
         },
         clientLeadId: lead.id,
       });
-      toast.success("Draft envelope created");
+      toast.success(hasEmail ? "Draft envelope created" : "Draft saved — add the client's email before sending");
       onClose();
       navigate(`/e-signature/${env.id}`);
     } catch (e: any) {
@@ -143,7 +142,7 @@ export default function SendAgreementDialog({ open, onClose, lead }: SendAgreeme
           <Button variant="outline" onClick={onClose}>Cancel</Button>
           <Button
             variant="gold"
-            disabled={!picked || !lead?.email_lower || createFromTpl.isPending}
+            disabled={!picked || createFromTpl.isPending}
             onClick={handleCreate}
           >
             {createFromTpl.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
