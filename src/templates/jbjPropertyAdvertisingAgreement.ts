@@ -587,8 +587,8 @@ export function buildPAAHtml(
     ${isLeasing ? fu("Notice Period (days)", get("notice_period_days"), "notice_period_days") : ""}
     ${isLeasing && !hidden.has("current_tenancy_end") && get("current_tenancy_end") ? `
       <div data-field-key="current_tenancy_end" style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;">
+        <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.7;margin-bottom:5px;">Current Tenancy End</div>
         <div style="display:inline-block;">${dateBox(get("current_tenancy_end"))}</div>
-        <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.7;margin-top:5px;">Current Tenancy End</div>
       </div>` : ""}
     ${isSelling ? fu("Chain Free", get("chain_free"), "chain_free") : ""}
     ${isSelling ? fu("Mortgage Status", get("mortgage_status"), "mortgage_status") : ""}
