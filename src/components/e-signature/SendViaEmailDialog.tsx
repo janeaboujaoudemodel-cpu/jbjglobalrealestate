@@ -16,11 +16,12 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2, Mail, Send, FileText, Eye } from "lucide-react";
+import { Loader2, Mail, Send, FileText, Eye, PenLine } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { SUPABASE_URL } from "@/config/backend";
@@ -28,6 +29,7 @@ import { EmailRecipientChips, isValidEmail } from "./EmailRecipientChips";
 import { EmailBodyEditor } from "./EmailBodyEditor";
 import { EmailPreviewIframe } from "./EmailPreviewIframe";
 import { buildSenderSignatureHtml, escapeHtml } from "@/lib/email/buildEnvelopeEmailHtml";
+import { useEmailSignatures, renderSignatureHtml, type EmailSignature } from "@/hooks/useEmailSignatures";
 
 const TEST_RECIPIENT = "infoo.jane@gmail.com";
 const DEFAULT_CC = "infoo.jane@gmail.com";
