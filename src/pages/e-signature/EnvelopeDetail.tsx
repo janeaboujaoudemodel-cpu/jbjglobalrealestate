@@ -903,6 +903,17 @@ export default function EnvelopeDetail() {
                   </Button>
                 </div>
               )}
+              {recentlyRestoredFields.length > 0 && (
+                <div className="flex items-start gap-2 p-2 rounded border border-emerald-300 bg-emerald-50/70">
+                  <span className="text-xs text-emerald-900">
+                    <strong>{recentlyRestoredFields.length}</strong> field{recentlyRestoredFields.length === 1 ? "" : "s"} restored:&nbsp;
+                    {recentlyRestoredFields.map((k) => k.replace(/_/g, " ")).join(", ")}
+                  </span>
+                  <Button size="sm" variant="ghost" className="ml-auto h-6 text-[11px] text-emerald-900" onClick={() => setRecentlyRestoredFields([])}>
+                    Dismiss
+                  </Button>
+                </div>
+              )}
               {PAA_FIELD_GROUPS.filter(g => g.title !== "Signatures").map((group) => {
                 // Per user request: keep every Property Finder field visible in edit mode
                 // (don't drop conditional ones), so nothing is missing at signing time.
