@@ -77,8 +77,8 @@ export default function EnvelopeDetail() {
   const regenerate = useRegenerateEnvelopePdf();
   const { data: sigAssets } = useOwnerSignatureAssets("signature");
   const { data: stampAssets } = useOwnerSignatureAssets("stamp");
-  const ownerSignatureUrl = sigAssets?.find((a) => a.is_default)?.image_url || sigAssets?.[0]?.image_url || null;
-  const ownerStampUrl = stampAssets?.find((a) => a.is_default)?.image_url || stampAssets?.[0]?.image_url || null;
+  const ownerSignatureUrlRaw = sigAssets?.find((a) => a.is_default)?.image_url || sigAssets?.[0]?.image_url || null;
+  const ownerStampUrlRaw = stampAssets?.find((a) => a.is_default)?.image_url || stampAssets?.[0]?.image_url || null;
 
   const { data: envelope, isLoading, refetch } = useQuery({
     queryKey: ["esign-envelope", id],
@@ -93,6 +93,15 @@ export default function EnvelopeDetail() {
     },
     enabled: !!id,
   });
+
+  // CRITICAL: Never auto-stamp the JBJ owner signature/stamp onto an
+  // unsigned/draft document. They only render once the envelope is fully
+  // completed (i.e. the client has actually signed). Same rule applies to the
+  // landlord/client side — we never autofill the printed name or date; that
+  // must come exclusively from the recipient's own signing action.
+  const isFullySigned = envelope?.status === "completed";
+  const ownerSignatureUrl = isFullySigned ? ownerSignatureUrlRaw : null;
+  const ownerStampUrl = isFullySigned ? ownerStampUrlRaw : null;
 
   // Hydrate edit + CC + chrome state when envelope loads
   useEffect(() => {
@@ -379,6 +388,13 @@ export default function EnvelopeDetail() {
       if (/vacant/i.test(cleaned.status_vacant_tenanted || "")) cleaned.vacating_date = "";
       if (!/villa/i.test(cleaned.property_type || "")) cleaned.plot_sqft = "";
       if (!/until/i.test(cleaned.listing_period || "")) cleaned.listing_period_until_date = "";
+
+      // HARD RULE: never persist client/landlord/JBJ printed names + dates from
+      // the editor — those fields are reserved for the actual signer to fill in.
+      cleaned.landlord_signature_name = "";
+      cleaned.landlord_signature_date = "";
+      cleaned.jbj_signature_name = "";
+      cleaned.jbj_signature_date = "";
 
       await regenerate.mutateAsync({
         envelopeId: envelope.id,
