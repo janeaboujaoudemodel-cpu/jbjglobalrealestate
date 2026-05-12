@@ -119,7 +119,7 @@ export function SearchableMultiSelect({
       </PopoverTrigger>
       <PopoverContent
         align="start"
-        className="w-72 p-0 bg-[#FDFBF7] border border-[#B89555]/40"
+        className="w-72 p-0 bg-[#FDFBF7] border border-[#B89555]/40 shadow-xl ring-1 ring-[#B89555]/10 rounded-lg"
       >
         <div className="p-2 border-b border-[#B89555]/20">
           <div className="relative">
