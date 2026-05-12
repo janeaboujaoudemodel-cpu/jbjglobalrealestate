@@ -119,8 +119,9 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
             <div style="white-space:nowrap;"><a href="tel:+971547167107" style="color:#1A1A1A;text-decoration:none;">+971&nbsp;54&nbsp;716&nbsp;7107</a></div>
           </td>
         </tr></table>
+        <div style="height:1px;background:#B89555;margin:14px 0 10px;"></div>
+        <div style="text-align:center;font-size:10.5px;color:#1A1A1A;opacity:.55;letter-spacing:.04em;">© ${year} JBJ Global Real Estate</div>
       </td></tr>
-      <tr><td style="text-align:center;padding-top:14px;font-size:11px;color:#1A1A1A;opacity:.55;">© ${year} JBJ Global Real Estate</td></tr>
     </table>
   </td></tr></table>
 </body></html>`;
