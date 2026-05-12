@@ -524,17 +524,23 @@ export default function CRMLeadsTableV2({
             options={[
               ...groupedStatuses.positive.map((s) => ({
                 value: s.value,
-                label: `🟢 ${s.label}`,
+                label: s.label,
+                dot: s.dotColor,
+                group: "Positive",
                 count: leads.filter((l) => (l.state?.pipeline_status || "new") === s.value).length,
               })),
               ...groupedStatuses.neutral.map((s) => ({
                 value: s.value,
-                label: `🔵 ${s.label}`,
+                label: s.label,
+                dot: s.dotColor,
+                group: "Neutral",
                 count: leads.filter((l) => (l.state?.pipeline_status || "new") === s.value).length,
               })),
               ...groupedStatuses.negative.map((s) => ({
                 value: s.value,
-                label: `🔴 ${s.label}`,
+                label: s.label,
+                dot: s.dotColor,
+                group: "Negative",
                 count: leads.filter((l) => (l.state?.pipeline_status || "new") === s.value).length,
               })),
             ]}
