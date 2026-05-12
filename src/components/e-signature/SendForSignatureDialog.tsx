@@ -189,6 +189,8 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
             bcc_emails: bccs,
             interpolated_subject: previewSubject,
             interpolated_body: previewBody,
+            interpolated_body_html: previewBodyHtml,
+            docusign_url: docusignUrl.trim() || undefined,
           }),
         });
         const out = await res.json().catch(() => ({}));
@@ -230,6 +232,8 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
           envelope_id: envelope.id,
           interpolated_subject: previewSubject,
           interpolated_body: previewBody,
+          interpolated_body_html: previewBodyHtml,
+          docusign_url: docusignUrl.trim() || undefined,
           test_recipient: "infoo.jane@gmail.com",
         }),
       });
