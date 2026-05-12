@@ -107,6 +107,11 @@ export const OwnerRoutes = () => (
     <Route path="properties" element={<Navigate to="/properties" replace />} />
     <Route path="documents" element={<Documents />} />
     <Route path="documents/forms" element={<DocumentsFormsHub />} />
+    <Route path="documents/forms/create" element={<OwnerCreateEnvelope />} />
+    <Route path="documents/forms/signature-studio" element={<OwnerSignatureStudio />} />
+    <Route path="documents/forms/blank-letter" element={<OwnerBlankLetterStudio />} />
+    <Route path="documents/forms/contract-review" element={<OwnerContractReview />} />
+    <Route path="documents/forms/:id" element={<OwnerEnvelopeDetail />} />
     <Route path="settings" element={<OwnerCommSettings />} />
     {/* Unified CRM — single owner-only hub. All legacy sub-routes redirect into it. */}
     <Route path="crm" element={<UnifiedCRM />} />
