@@ -1,71 +1,62 @@
-## Plan
+## CRM Phase-2 finishing pass
 
-### 1. Make Forms & Agreements the single canonical e-signature workspace
-- Move the owner e-signature experience into the owner shell so it always uses the backend/owner sidebar, not the public/front-site vertical navigation.
-- Canonical routes:
-  - `/owner/documents/forms`
-  - `/owner/documents/forms/:id`
-  - `/owner/documents/forms/create`
-  - `/owner/documents/forms/signature-studio`
-  - `/owner/documents/forms/blank-letter`
-  - `/owner/documents/forms/contract-review`
-- Redirect legacy `/e-signature...` owner/admin paths to the matching `/owner/documents/forms...` path.
-- Keep public signing routes unchanged: `/sign/:token` and `/documents/sign/:token`.
-- Update every internal link from CRM, Forms & Agreements, header/footer/toolkit shortcuts, and blank-letter/create flows to the canonical owner route.
+Most items from the list are already in `CRMLeadsTableV2.tsx` / `InlineStatusSelect.tsx` / `UnifiedCRM.tsx` from the previous turns. The remaining gap is **(a)** the "All Leads" empty state, **(b)** the AI Next-Actions panel + edge function, and **(c)** verifying the inner vertical rail is gone everywhere.
 
-### 2. Clean and organize backend/front-end vertical sidebars
-- Reorganize `OwnerSidebarNav` into clear non-duplicated divisions: Core, CRM, Documents & Agreements, Properties, Communication, AI & Automation, Creative, Admin, Security/System.
-- Remove duplicate entries that open the same content under different labels.
-- Make the owner sidebar active-state logic match full path + query params consistently so CRM/forms pages do not highlight or expand the wrong section.
-- Keep the public/front-site vertical nav separate and ensure owner-only tools point to owner-shell routes, not public shell routes.
+### 1. Fix "All Leads" empty state
+**Root cause:** `CRMLeadsTableV2` runs every fetched row through `isRealCRMLead` which strips any name starting with `test/demo/redacted/system-verification` or any email matching `^test*@`, `@example.com`, `@tupmail.com`, `verification@`. Your 4 seed leads almost certainly match those patterns, so the table empties out even though rows exist.
 
-### 3. Fix the PAA preview logo and document dividers
-- Replace the hardcoded remote logo URL in the PAA HTML with the already imported inline monogram data URI so preview, PDF export, and print/download cannot show a broken image.
-- Remove the duplicate small divider under the document title and the extra title/body divider.
-- Keep exactly one full-width header hairline and one full-width footer hairline.
-- Remove the smaller footer divider while preserving the full-width footer border.
-- Bump the PAA layout version so draft agreements regenerate with the corrected chrome.
+Fix:
+- In `CRMLeadsTableV2.fetchLeads`, when `isOwner === true` **skip** `isRealCRMLead` and instead only drop rows where `deleted_at` is set. Owners must always see what's actually in the database; the guard was for public-facing surfaces.
+- Render an empty-state CTA when there really are zero rows: "No leads yet — Import CSV · Add lead · Refresh", instead of the bare "No leads found." line.
+- Add a tiny diagnostic line under the header in dev when `leads.length !== filtered.length`: "Showing X of Y (filters active) — Clear".
 
-### 4. Fix print/open behavior without popup blocking
-- Keep print/download inside the user gesture chain: create object URLs synchronously after rendering and trigger a same-tab download/open flow instead of delayed `window.open` calls.
-- Ensure owner e-signature pages are exempt from anti-capture/print blocker behavior for owner sessions.
-- Keep the print-blocker guard defensive, but avoid overriding the PAA iframe/document preview in a way that breaks layout.
+### 2. Stage colored chips + Sources cell
+Already shipped in the previous turn (`InlineStatusSelect` now renders each option as a `LeadStatusBadge` with green/blue/red category headers; the Source column wraps inside a champagne pill). No further code change — keep as is.
 
-### 5. Complete CRM lead visibility and filter fixes
-- Ensure `All Leads` fetches real leads even when no per-user state row exists; default missing state to `new`.
-- Reset stage/tag filters for the `all` view so real leads are not hidden by stale filters.
-- Add a clear “filtered out by…” message only when leads exist but current filters hide them.
-- Preserve the no-fake-data guard.
+### 3. Champagne dropdown surfaces, Me/Pool labels, Assignee filter, Distribution strip
+All present in `CRMLeadsTableV2.tsx` (lines 469–600): champagne `SelectContent`, "With Me / Assigned / Pool (no broker)" labels, dedicated Assignee dropdown, distribution strip with total / mine / assigned / pool + clickable top-broker pills. **No change needed** — verify only.
 
-### 6. Finish CRM stage/source/dropdown/assignee polish
-- Stage dropdown: colored chips by status, with positive/interested/hot as green.
-- Source display: no more `...`; show readable source chips and a `+N` popover for long/multiple sources.
-- Dropdown/hover surfaces: champagne backgrounds, gold hairline borders, ink text.
-- Replace every visible `Unassigned` label with:
-  - `Me` when assigned to the current owner/user
-  - broker display name when assigned to a broker
-  - `Pool` when no broker is assigned
-- Add `Assignee` filter options: Me, Any broker, Pool, and per-broker entries.
+### 4. Remove vertical sub-sidebar
+`UnifiedCRM.tsx` uses two horizontal bars (entity tabs + sub-section pills). `CRMRelationships.tsx` has no `aside`/`w-64` either. Sweep:
+- `rg "aside|w-56|w-60|w-64|w-72|flex-col.*sticky"` inside `src/pages/owner/crm/**` and `src/components/crm/**`.
+- If anything still renders a vertical rail (suspected: `CRMSideRail`, `CRMFloatingInsightsWidget`), confirm it's a floating dock not a layout column. The "side rail" should only render as a fixed right-edge dock; if it ever takes column width, swap it to `position: fixed`.
 
-### 7. Add CRM distribution and AI next-actions
-- Create a dedicated `LeadDistributionStrip` above the leads table showing total, with me, assigned to brokers, pool, junk, and per-broker counts.
-- Create `CRMAINextActions` under the strip with actionable cards for stale leads, junk cleanup, hot follow-ups, and broker distribution imbalance.
-- Add a protected backend function for AI suggestions using Lovable AI and owner authentication.
-- Add a small owner-scoped cache table for suggestions with RLS so suggestions refresh safely without excessive AI calls.
+### 5. AI Next-Actions panel + edge function
+New piece. Adds a smart "What to do next" widget at the top of `Leads → Dashboard` view inside `UnifiedCRM`.
 
-### 8. Remove the inner CRM vertical sub-sidebar
-- Keep the CRM experience horizontal inside `/owner/crm`.
-- Replace remaining inner vertical CRM rails/sub-sidebars with horizontal pills/tabs.
-- Preserve all existing CRM content and routes; only change layout/navigation presentation.
+**Component:** `src/components/crm/CRMAINextActions.tsx`
+- Reads the visible `leads` array (top 50 by `created_at desc`) plus the per-user state map.
+- POSTs `{ leads: [{id, full_name, pipeline_stage, last_activity_at, source}] }` to a new edge function.
+- Shows up to 5 ranked cards (champagne surface, gold hairline): **Lead · Why · Suggested action** with one-click buttons (`Call`, `Email`, `Schedule`, `Mark Won`, `Snooze`) that route to existing handlers in `CRMLeadsTableV2` (`handleCall`, `handleEmail`, `InlineStatusSelect`).
+- Cached for 10 min in `crm_ai_suggestions` so the panel doesn't burn tokens on every render.
 
-### 9. Phase 2 CRM upgrade foundation
-- Introduce a cleaner lead-grid structure that can evolve toward a virtualized 2026 CRM without deleting current features.
-- Consolidate overlapping lead/list/filter logic behind reusable helpers/components.
-- Add mobile-safe card/table behavior for leads so the CRM remains usable on smaller screens.
-- Keep changes incremental and safe: no feature removal, no fake placeholders, no role/security shortcuts.
+**Edge function:** `supabase/functions/crm-ai-next-actions/index.ts`
+- `requireOwnerAuth` middleware (per Zero-Trust standard).
+- Calls Lovable AI Gateway (`google/gemini-3-flash-preview`) with structured output (`Output.object`) returning `{ suggestions: [{ leadId, reason, action: "call|email|schedule|won|snooze", confidence }] }`.
+- Stores result in `crm_ai_suggestions` keyed by `(user_id, lead_set_hash)`.
 
-## Technical details
-- Main files: `OwnerRoutes.tsx`, `AdminRoutes.tsx`, `OwnerSidebarNav.tsx`, `GlobalVerticalNav.tsx`, `DocumentsFormsHub.tsx`, e-signature pages, `jbjPropertyAdvertisingAgreement.ts`, `useEsignTemplates.ts`, `CRMLeadsTableV2.tsx`, `UnifiedCRM.tsx`, CRM relationship/list components.
-- New CRM files: `LeadDistributionStrip.tsx`, `CRMAINextActions.tsx`.
-- Backend: migration for `crm_ai_suggestions` and a protected `crm-ai-next-actions` function using existing owner auth patterns.
-- Verification: open `/owner/documents/forms`, open Omar’s agreement, confirm logo/dividers/print/download; open `/owner/crm?entity=leads&view=all`, confirm leads, filters, sources, assignees, distribution strip, AI cards, and no inner vertical sub-sidebar.
+**Migration:** new table `public.crm_ai_suggestions`
+```text
+- user_id uuid (owner of the cache row)
+- lead_set_hash text (md5 of sorted lead ids)
+- payload jsonb
+- created_at timestamptz default now()
+RLS: only the owning user_id can SELECT/INSERT; admins via has_role('admin').
+```
+
+### 6. Mount the panel
+In `UnifiedCRM.tsx`, when `entity === "leads" && view === "overview"`, render `<CRMAINextActions userId={userId} />` above `CRMEnhancedDashboard`. Lazy-imported so initial bundle stays small.
+
+### 7. QA sweep
+- Open `/owner/crm?entity=leads&view=all` → all 4 DB leads visible.
+- Stage cell = colored chip; dropdown items render as badges.
+- Source cell wraps full label, no "…".
+- Distribution strip shows totals; clicking a broker pill filters by them.
+- `/owner/crm?entity=leads&view=overview` shows AI Next-Actions strip, then dashboard.
+- No vertical column anywhere inside the CRM body.
+
+### Technical notes
+- The `isRealCRMLead` guard stays for public/anonymous routes — this only bypasses it for the owner-only table.
+- Edge function uses `npm:ai` + `Output.object` (no manual JSON parsing).
+- Cache invalidates when any lead's `pipeline_stage` changes via existing `queryClient.invalidateQueries(['crm-leads-inbox'])` plus a new key `['crm-ai-suggestions']`.
+- All UI keeps champagne tokens (#FDFBF7 / #F7F2EA / #EFE6D6 / #B89555 hairline / #1A1A1A ink).

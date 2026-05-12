@@ -45,6 +45,7 @@ const BrokersImported     = lazy(() => import("@/components/crm/BrokersImported"
 const CRMGlobalExportButton = lazy(() => import("@/components/crm/CRMGlobalExportButton"));
 const CRMSideRail = lazy(() => import("@/components/crm/CRMSideRail"));
 const CRMFloatingInsightsWidget = lazy(() => import("@/components/crm/CRMFloatingInsightsWidget"));
+const CRMAINextActions = lazy(() => import("@/components/crm/CRMAINextActions"));
 
 type Entity =
   | "leads" | "investors" | "developers" | "sales-reps"
@@ -240,7 +241,12 @@ export default function UnifiedCRM() {
   const Body = useMemo(() => {
     if (entity === "leads") {
       switch (view) {
-        case "overview":      return <CRMEnhancedDashboard userId={userId} hasOwnerAccess />;
+        case "overview":      return (
+          <div className="space-y-4">
+            <Suspense fallback={null}><CRMAINextActions userId={userId} /></Suspense>
+            <CRMEnhancedDashboard userId={userId} hasOwnerAccess />
+          </div>
+        );
         case "all":           return <CRMLeadsTableV2 userId={userId} filterType="all" onRefresh={() => {}} isOwner />;
         case "flagged":       return <FlaggedLeadsView userId={userId} onRefresh={() => {}} />;
         case "vip":           return <CRMLeadsTableV2 userId={userId} filterType="vip" onRefresh={() => {}} isOwner />;
