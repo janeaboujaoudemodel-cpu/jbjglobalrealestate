@@ -30,8 +30,7 @@ const webHref = (raw: string) => {
   return /^https?:/i.test(t) ? t : `https://${t.replace(/^\/+/, "")}`;
 };
 
-const goldGradient = () =>
-  `background:linear-gradient(90deg, #8A6A2A00 0%, #8A6A2A 10%, #C9A24E 50%, #8A6A2A 90%, #8A6A2A00 100%);height:2px;`;
+// goldGradient removed — header/footer use a single full-width hairline only.
 
 export interface LetterheadHeaderOpts {
   docNumber?: string;
@@ -61,18 +60,16 @@ export function buildLetterheadHeader(opts: LetterheadHeaderOpts = {}): string {
   const docBadgeBlock = docBadge ? `<div style="margin-bottom:6px;">${docBadge}</div>` : "";
   const titleBlock = title
     ? `
-      <div style="margin-top:10px;${goldGradient()}"></div>
-      <div style="margin-top:10px;text-align:center;">
+      <div style="margin-top:14px;text-align:center;">
         <div style="font-size:14px;font-weight:800;letter-spacing:.22em;color:${INK};text-transform:uppercase;">
           ${esc(title)}
         </div>
-        <div style="margin:6px auto 0;width:48px;height:2px;background:${GOLD};border-radius:1px;"></div>
       </div>`
-    : `<div style="margin-top:10px;${goldGradient()}"></div>`;
+    : ``;
   return `
-    <div style="margin:-24px -36px 14px;background:${CHAMPAGNE};padding:16px 36px 12px;border-bottom:1px solid ${GOLD};">
+    <div style="margin:-24px -36px 14px;background:${CHAMPAGNE};padding:16px 36px 14px;border-bottom:1px solid ${GOLD};">
       <div style="display:flex;align-items:center;gap:14px;min-height:58px;">
-        <img src="${monogramUrl}" alt="JBJ Global Real Estate" crossorigin="anonymous" style="width:58px;height:58px;object-fit:contain;display:block;flex:0 0 auto;" />
+        <img src="https://www.jbj.ae/jbj-monogram-dark-on-light.png" alt="JBJ Global Real Estate" crossorigin="anonymous" style="width:58px;height:58px;object-fit:contain;display:block;flex:0 0 auto;" />
         <div style="width:1px;height:42px;background:${GOLD};opacity:.6;flex:0 0 auto;"></div>
         <div style="flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;min-width:0;">
           <div style="font-size:15px;font-weight:700;letter-spacing:.20em;color:${INK};text-transform:uppercase;line-height:1.15;">
@@ -92,8 +89,7 @@ export function buildLetterheadHeader(opts: LetterheadHeaderOpts = {}): string {
 
 export function buildLetterheadFooter(): string {
   return `
-    <div style="margin:14px -36px 0;background:${CHAMPAGNE};border-top:1px solid ${GOLD};padding:10px 36px 14px;">
-      <div style="${goldGradient()}margin-bottom:8px;"></div>
+    <div style="margin:14px -36px 0;background:${CHAMPAGNE};border-top:1px solid ${GOLD};padding:14px 36px 14px;">
       <table style="width:100%;border-collapse:collapse;table-layout:fixed;font-size:9.5px;color:${INK};line-height:1.55;">
         <tr>
           <td style="vertical-align:top;width:32%;padding-right:10px;">

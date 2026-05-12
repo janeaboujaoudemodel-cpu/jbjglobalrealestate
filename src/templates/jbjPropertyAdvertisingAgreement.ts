@@ -256,9 +256,9 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string, categor
         ? `<div style="margin-bottom:6px;">${docBadge}</div>`
         : "";
       return `
-        <div style="margin:-24px -36px 14px;background:#FBF7EE;padding:16px 36px 12px;border-bottom:1px solid ${accent};">
+        <div style="margin:-24px -36px 14px;background:#FBF7EE;padding:16px 36px 14px;border-bottom:1px solid ${accent};">
           <div style="display:flex;align-items:center;gap:14px;min-height:58px;">
-            <img src="${JBJ_BRAND.monogram}" alt="JBJ Global Real Estate" crossorigin="anonymous" style="width:58px;height:58px;object-fit:contain;display:block;flex:0 0 auto;" />
+            <img src="https://www.jbj.ae/jbj-monogram-dark-on-light.png" alt="JBJ Global Real Estate" crossorigin="anonymous" style="width:58px;height:58px;object-fit:contain;display:block;flex:0 0 auto;" />
             <div style="width:1px;height:42px;background:${accent};opacity:.6;flex:0 0 auto;"></div>
             <div style="flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;min-width:0;">
               <div style="font-size:15px;font-weight:700;letter-spacing:.20em;color:${ink};text-transform:uppercase;line-height:1.15;">
@@ -272,12 +272,10 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string, categor
               ${contactStack}
             </div>
           </div>
-          <div style="margin-top:10px;${goldGradient(accent)}"></div>
-          <div style="margin-top:10px;text-align:center;">
+          <div style="margin-top:14px;text-align:center;">
             <div style="font-size:14px;font-weight:800;letter-spacing:.22em;color:${ink};text-transform:uppercase;">
               ${titleFor(category).toUpperCase()}
             </div>
-            <div style="margin:6px auto 0;width:48px;height:2px;background:${accent};border-radius:1px;"></div>
           </div>
         </div>`;
     }
@@ -309,8 +307,7 @@ const footerHtml = (chrome: Required<TemplateChrome>) => {
       // Phone/email/web are real anchors (tel: / mailto: / https://). No
       // monogram in the footer (kept since v13).
       return `
-        <div style="margin:14px -36px 0;background:#FBF7EE;border-top:1px solid ${accent};padding:10px 36px 14px;">
-          <div style="${goldGradient(accent)}margin-bottom:8px;"></div>
+        <div style="margin:14px -36px 0;background:#FBF7EE;border-top:1px solid ${accent};padding:14px 36px 14px;">
           <table style="width:100%;border-collapse:collapse;table-layout:fixed;font-size:9.5px;color:${ink};line-height:1.55;">
             <tr>
               <td style="vertical-align:top;width:32%;padding-right:10px;">

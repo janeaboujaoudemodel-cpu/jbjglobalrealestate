@@ -93,9 +93,24 @@ export default function SignDocument() {
     ? maybeProxyStorageUrl(data.envelope.document_url, data.envelope.document_filename)
     : null;
 
-  const downloadAgreement = () => {
+  const downloadAgreement = async () => {
     if (!docUrl) { toast.error("Document not available"); return; }
-    window.open(docUrl, "_blank");
+    // Anchor download — never popup-blocked.
+    try {
+      const res = await fetch(docUrl);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const blob = await res.blob();
+      const objectUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = objectUrl;
+      a.download = data?.envelope.document_filename || "agreement.pdf";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(objectUrl), 60_000);
+    } catch (e: any) {
+      toast.error(e?.message || "Download failed");
+    }
   };
 
   const markSentBack = async () => {

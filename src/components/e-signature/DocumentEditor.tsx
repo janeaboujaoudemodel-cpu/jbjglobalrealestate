@@ -210,10 +210,13 @@ export default function DocumentEditor({ open, onOpenChange, pdfFile, pdfUrl, fi
   };
 
   const print = async () => {
+    // Browsers block window.open() called after an await (loses user-gesture
+    // chain → "popup blocked"). Download the PDF instead — user opens it
+    // from their downloads bar and prints from there.
     const { pdfBytes } = await buildFinalPdf();
-    const url = URL.createObjectURL(new Blob([pdfBytes as BlobPart], { type: "application/pdf" }));
-    const w = window.open(url);
-    setTimeout(() => w?.print(), 800);
+    const blob = new Blob([pdfBytes as BlobPart], { type: "application/pdf" });
+    download(blob, `${baseName()}.pdf`);
+    toast.success("PDF downloaded — open the file and press Ctrl/⌘+P to print");
   };
 
   const baseName = () => (pdfFile?.name || "document").replace(/\.pdf$/i, "");
