@@ -1,75 +1,77 @@
-# Plan: E-signature flow polish + agreement layout + Omar reset
+## 1. Site-wide Reply-To = contact@jbj.ae for ALL outbound mail
 
-## 1. Outbound emails: Reply-To = contact@jbj.ae
+Currently only the four esign edge functions set `reply_to`. Extend it to every Resend send across the project.
 
-All esign emails are sent from `noreply@jbj.ae` with no `reply_to`, so when a recipient hits Reply they end up writing to a black-hole address.
+- Add `REPLY_TO_CONTACT = "contact@jbj.ae"` to `supabase/functions/_shared/outreachIdentity.ts` and a small helper `withReplyTo(payload)` that injects `reply_to` if missing.
+- Sweep every edge function that calls `resend.emails.send` or hits `/emails` on the Resend gateway and inject `reply_to: "contact@jbj.ae"` (compose-branded-email, send-transactional-email, owner-ai-reply, broker-daily-report, submit-support-ticket, esign-*, marketing senders, ticket confirmations, etc.).
+- Mirror constant in `src/config/outreachIdentity.ts` so previews show the same value.
 
-Add `reply_to: "contact@jbj.ae"` to every Resend payload in:
-- `supabase/functions/esign-send-for-signature/index.ts` (line 192)
-- `supabase/functions/esign-send-test-email/index.ts` (line 153)
-- `supabase/functions/esign-send-signer-thanks/index.ts` (line 106)
-- `supabase/functions/esign-send-reminder/index.ts` (line 162)
+## 2. noreply@jbj.ae auto-bounce — apply globally, not only inbound webhook
 
-Centralise the reply-to in `supabase/functions/_shared/outreachIdentity.ts` as `REPLY_TO_CONTACT = "contact@jbj.ae"` so future sends inherit it.
+- Already implemented in `resend-inbound-email-webhook`; extract the bounce-reply HTML + send logic into `_shared/noreplyBounce.ts`.
+- Any other inbound entry points (forwarder rules, support inbox handler) call this helper so a message to `noreply@jbj.ae` from anywhere returns the branded "this inbox does not receive messages — please write to contact@jbj.ae" auto-reply and is NOT ingested.
+- Strip the previous catch-all routing line that mapped `noreply` → `general`.
 
-## 2. Block inbound mail to noreply@jbj.ae (friendly bounce)
-
-`supabase/functions/resend-inbound-email-webhook/index.ts` currently maps `noreply@jbj.ae → general` (line 27) and silently routes the email into the inbox. Change it to:
-
-- Detect any inbound whose recipient is `noreply@jbj.ae` (or `no-reply@…`).
-- Skip the normal ingest pipeline.
-- Send an auto-reply via the existing Resend client back to `from`, using a branded HTML shell (same template as compose-branded-email) with copy roughly:
-
-> Hi — thanks for writing in. This inbox doesn't receive replies. For anything you need, please email **contact@jbj.ae** and a real person on the JBJ team will get back to you shortly.
-
-- Log the bounce in `email_send_log` with a `noreply_autoreply` tag and return 200 so Resend doesn't retry.
-
-## 3. Property Advertising Agreement: fit on one page
+## 3. PAA template — remove footer blank, fix header, fix tenancy field
 
 Edit `src/templates/jbjPropertyAdvertisingAgreement.ts`:
 
-- **Header** (`headerHtml` `monogram-wordmark` branch): keep monogram + the legal company line + Doc No. on the right. Remove the larger watermark/wordmark image — the legal title is enough.
-- **Footer** (`footerHtml` `three-column` branch lines 230-250): drop the duplicated monogram + legal company name. Replace with three clean cells holding only contact details: 
-  - Left: office address
-  - Centre: `contact@jbj.ae · jbj.ae`
-  - Right: `+971 54 716 7107` and labelled credentials line
-- **Density** (the document body, lines ~363+): tighten paddings (`padding: 28px 44px`), reduce section gaps and the additional-notes minimum height, drop the central decorative gold underline, and switch the page wrapper to `@page { size: A4; margin: 18mm 14mm; }` via the rendered PDF wrapper. Goal is single A4 page when fields are normal length.
+**Header (`monogram-wordmark` branch)**
+- Remove the small "JBJ GLOBAL REAL ESTATE" wordmark sitting under the monogram.
+- Increase monogram size (e.g. 72→104px).
+- Keep everything from the gold divider down (legal name line, "Property Advertising Agreement" title, Doc No.) **untouched**.
 
-## 4. Branded email "attach + Sign with DocuSign" handoff
+**Footer (`three-column` branch)**
+- Keep only: office address (left), `contact@jbj.ae · jbj.ae` (centre), `+971 54 716 7107` (right).
+- Delete the "Trade Licence No. 1591031 · Dubai Chamber 666113 · CR 2789619" line entirely — user did not authorise these and doesn't recognise their source.
+- Remove the trailing empty wrapper / min-height that's producing the big blank band beneath the footer. Footer ends exactly after the contact row.
 
-Today the EnvelopeDetail "Send for signature" button opens a generic compose flow. Rework so the flow is:
+**Tenancy / vacancy data binding**
+- The "Vacant" string is hard-coded or pulled from a stale snapshot. Wire the body to read `envelope.metadata.property.tenancy_status` (and `vacant_on` date) from the live envelope record so edits in the form ("Tenanted, vacant on YYYY-MM-DD") propagate into the rendered PDF.
+- On envelope detail open, refetch the related listing/lead to ensure latest tenancy state is used at render time.
 
-a. Owner opens an envelope, clicks **Send for signature**.
+**Lock the template**
+- Mark the file with a `// LOCKED TEMPLATE — do not modify without owner approval` banner and add it to `.lovable/locked-templates.json` so future agent edits require explicit unlock.
+- This becomes the standard PAA — only per-recipient fields (names, property address, dates, tenancy) vary.
 
-b. Branded compose modal pre-fills:
-   - Recipient input (owner types client email)
-   - Subject + body (already templated)
-   - **The agreement PDF auto-attached** (uses the existing `renderHtmlToPdfBlob` blank export, uploaded to `esign-documents` storage and added as a Resend attachment in `esign-send-for-signature/index.ts`).
-   - A required **Download & sign with DocuSign** CTA injected into the email body that points to `/sign/{signing_token}` (existing route).
+## 4. Reset Omar envelope after template fix
 
-c. Recipient lands on the signing page → can download the PDF or sign inline (existing UI). On Finish, `esign-process-signature` + `esign-complete-envelope` already:
-   - Stamp signature into the document
-   - Save signed PDF to storage (`esign_signed_documents`)
-   - Mark envelope `completed`
+Once the template is correct:
+- Re-render the document for envelope `810df24a-…`, replace stored snapshot.
+- Confirm `status='draft'`, no signature, no signed PDF, ready for the real send.
 
-d. After completion, send the signer a "Thank you" email (existing `esign-send-signer-thanks`) and a copy back to the sender containing the signed PDF link.
+## 5. Branded email composer — document-aware
 
-e. EnvelopeDetail page already lists the signed document; ensure the **Preview / Download signed** buttons point at `signed_document_url` from `esign_signed_documents` and refresh in real time via the existing Supabase channel subscription (verify the channel is subscribed on this page).
+In the branded compose flow opened from `EnvelopeDetail`:
 
-No new edge functions — just wire the attachment into `esign-send-for-signature` and surface the existing signed-doc record on `EnvelopeDetail`.
+- When a recipient is selected/typed, query their related documents (envelopes addressed to them or their email) and show a "Detected documents" panel.
+- For each detected doc, an **Attach** toggle. When attached, the composer auto-fills:
+  - **Subject** from a per-template default (e.g. "Property Advertising Agreement — {{property}}")
+  - **Body** from a per-template default with the `/sign/{token}` CTA injected
+  - The PDF as a Resend attachment (rendered via `renderHtmlToPdfBlob`)
+- A "Write custom" toggle reverts to a blank subject/body so the owner can author freely.
+- Templated subject/body strings live in `src/config/emailTemplates/esignDocumentTemplates.ts` keyed by document type so they're reusable.
 
-## 5. Reset Omar Allam envelope (it was a test)
+## 6. "Send via Email" button on `/e-signature/:id` — preview-first flow
 
-Envelope `810df24a-145b-48f2-8e5a-f18e44e0c576` currently shows `status='sent'` and recipient `omar.a@shadid.org` `status='sent'` even though only the test inbox received the mail. Migration to:
+Currently the button jumps straight into the send path. Replace with:
 
-- Set envelope `status = 'draft'`, clear `completed_at`, `signed_document_url`.
-- Set recipient `status = 'pending'`, clear `sent_at`, `viewed_at`, `signed_at`, `signature_data`.
-- Insert audit log row: `action = 'reset_test_send'`, note: "Test-only send to internal QA address; reverted to draft so the real client has not been contacted."
+1. Click → open the existing branded preview modal pre-rendered with the recipient, the attached PDF and the templated body.
+2. Modal exposes three actions:
+   - **Send test** → sends to `infoo.jane@gmail.com` only (uses existing `esign-send-test-email`).
+   - **Approve & Send** → sends to the real recipient via `esign-send-for-signature`.
+   - **Cancel**.
+3. Default headers in both modes:
+   - `from`: `noreply@jbj.ae` (display name "JBJ Global Real Estate")
+   - `reply_to`: `contact@jbj.ae`
+   - `cc`: `infoo.jane@gmail.com` (editable chip — owner can remove before send)
+   - Provider: Resend
+4. Show the resolved headers (From / Reply-To / CC) in the preview header strip so the owner sees exactly what will go out.
 
 ## Technical notes
 
-- Reply-To: Resend supports `reply_to` as string; using a single shared constant keeps it DRY.
-- Inbound auto-reply will reuse `_shared/email-shell.ts` to keep the bounce on-brand.
-- PDF attachment in Resend: pass `attachments: [{ filename, content: base64 }]` from the rendered blob.
-- The signing page route already exists at `/sign/:token` — no new public surface added.
-- All footer/header edits keep gold strictly as a 1px hairline (per design memory).
+- All Resend payload mutations stay server-side; client only passes the editable subject/body/cc.
+- Locked template enforcement: a CI script already exists for theme/contrast — add `scripts/locked-templates-check.mjs` that fails the build if a locked template's hash changes without an `// UNLOCK:` directive.
+- No new edge functions; reuse `esign-send-test-email`, `esign-send-for-signature`, `compose-branded-email`.
+- Tenancy data path: `crm_listings.tenancy_status` + `crm_listings.vacant_on` → joined into envelope metadata at render time.
+- Noreply bounce helper signature: `await sendNoreplyBounce({ to, originalSubject })` → returns `{ logged: true }` and writes `email_send_log` row tagged `noreply_autoreply`.

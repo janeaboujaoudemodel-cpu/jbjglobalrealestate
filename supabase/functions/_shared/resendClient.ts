@@ -86,7 +86,18 @@ export async function sendViaResend(input: ResendSendInput): Promise<ResendSendR
   // 2. Honour 2 req/s throttle
   await throttle(c.last_send_at ?? null, c.rate_per_sec ?? 2);
 
-  // 3. Hit Resend
+  // 3. Force Reply-To: contact@jbj.ae on every send unless caller provided one.
+  //    This guarantees every recipient who hits "Reply" reaches a real inbox,
+  //    even if the From: address is noreply@jbj.ae.
+  const REPLY_TO_CONTACT = "contact@jbj.ae";
+  const hasReplyTo =
+    (typeof input.reply_to === "string" && input.reply_to.trim().length > 0) ||
+    (Array.isArray(input.reply_to) && input.reply_to.length > 0);
+  const payload: ResendSendInput = hasReplyTo
+    ? input
+    : { ...input, reply_to: REPLY_TO_CONTACT };
+
+  // 4. Hit Resend
   let resp: Response;
   try {
     resp = await fetch(RESEND_API, {
@@ -95,7 +106,7 @@ export async function sendViaResend(input: ResendSendInput): Promise<ResendSendR
         Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(input),
+      body: JSON.stringify(payload),
     });
   } catch (e) {
     await sb.rpc("email_quota_record_failure");
