@@ -164,6 +164,57 @@ export default function EnvelopeDetail() {
     return m.doc_number || (envelope?.template_field_values as any)?.doc_number || "";
   }, [envelope]);
 
+  const isLocked: boolean = useMemo(() => {
+    return Boolean((envelope?.metadata as any)?.locked_at);
+  }, [envelope]);
+
+  const handleApproveLock = async () => {
+    if (!envelope) return;
+    if (!confirm("Approve and lock this agreement? The fields will be frozen and a final PDF generated.")) return;
+    try {
+      if (envelope.template_key) {
+        await regenerate.mutateAsync({
+          envelopeId: envelope.id,
+          templateKey: envelope.template_key,
+          values: { ...((envelope.template_field_values as any) || {}), doc_number: docNumber },
+          chrome,
+          ownerSignatureUrl,
+          ownerStampUrl,
+          hiddenFields,
+        });
+      }
+      await supabase.from("esign_envelopes").update({
+        metadata: { ...((envelope.metadata as any) || {}), locked_at: new Date().toISOString(), locked_by: "owner" },
+      }).eq("id", envelope.id);
+      toast.success("Agreement approved & locked");
+      setEditing(false);
+      refetch();
+    } catch (e: any) {
+      toast.error(e.message || "Failed to lock");
+    }
+  };
+
+  const handleUnlock = async () => {
+    if (!envelope) return;
+    if (!confirm("Unlock this agreement? You will be able to edit fields again.")) return;
+    try {
+      const meta = { ...((envelope.metadata as any) || {}) };
+      delete meta.locked_at;
+      delete meta.locked_by;
+      await supabase.from("esign_envelopes").update({ metadata: meta }).eq("id", envelope.id);
+      toast.success("Agreement unlocked");
+      refetch();
+    } catch (e: any) {
+      toast.error(e.message || "Failed to unlock");
+    }
+  };
+
+  const applyAIUpdates = (updates: Record<string, string>) => {
+    if (isLocked) { toast.error("Document is locked — unlock to edit"); return; }
+    setEditing(true);
+    setEditValues((prev) => ({ ...prev, ...updates }));
+  };
+
   const previewHtml = useMemo(() => {
     if (!envelope?.template_key) return null;
     const vals = editing ? editValues : ((envelope.template_field_values as any) || {});
