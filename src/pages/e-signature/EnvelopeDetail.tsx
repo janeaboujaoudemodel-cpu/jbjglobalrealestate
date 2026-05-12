@@ -647,43 +647,8 @@ export default function EnvelopeDetail() {
             </Button>
             <Button
               variant="outline"
-              onClick={() => {
-                const signingUrl = clientRec?.signing_token ? buildSigningUrl(clientRec.signing_token) : "";
-                const docName = docNumber || envelope.name;
-                const greetingName = clientRec?.name?.split(" ")[0] || "there";
-                const prefillBody = [
-                  `Dear ${greetingName},`,
-                  ``,
-                  `Please find attached "${docName}" for your review and signature.`,
-                  ``,
-                  `▸ Open & sign online (recommended): ${signingUrl}`,
-                  `   You'll be able to review the document, sign electronically, and send it back to us in one click — just like DocuSign.`,
-                  ``,
-                  `▸ Or download the attached PDF, sign manually, and reply to this email with the signed copy.`,
-                  ``,
-                  `Once you've signed, we'll receive a confirmation automatically and your fully-executed copy will be saved to your file.`,
-                  ``,
-                  `Any questions, simply reply to this email or write to contact@jbj.ae.`,
-                  ``,
-                  `With appreciation,`,
-                  `JBJ Global Real Estate`,
-                ].join("\n");
-                navigate("/owner/email-client", {
-                  state: {
-                    prefillTo: clientRec?.email,
-                    prefillSubject: `Please sign — ${docName}`,
-                    prefillBody,
-                    prefillCta: signingUrl ? { label: "Download & sign with DocuSign", url: signingUrl } : undefined,
-                    prefillAttachment: {
-                      id: crypto.randomUUID(),
-                      name: envelope.document_filename || `${docNumber || "document"}.pdf`,
-                      type: "file" as const,
-                      content: signedDoc?.document_url || envelope.document_url,
-                      mimeType: "application/pdf",
-                    },
-                  },
-                });
-              }}
+              onClick={() => setEmailDialogOpen(true)}
+              disabled={!clientRec?.email}
             >
               <Mail className="w-4 h-4 mr-2" /> Send via Email
             </Button>
