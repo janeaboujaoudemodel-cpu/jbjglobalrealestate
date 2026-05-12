@@ -217,19 +217,23 @@ const footerHtml = (chrome: Required<TemplateChrome>) => {
         </div>`;
     case "three-column":
     default: {
-      // Footer = contact details ONLY — office (left), email/website (centre), phone (right).
-      // No DCCI / CR / Trade Licence credentials. Footer ends here, no trailing block.
+      // Footer = contact details ONLY.
+      // Left  : phone (top), website in gold (below — no underline).
+      // Middle: office address.
+      // Right : contact email, kept on its own line with breathing room.
+      // No DCCI / CR / Trade Licence credentials.
       return `
         <table style="${base}width:100%;border-collapse:collapse;table-layout:fixed;margin-bottom:0;">
           <tr>
-            <td style="vertical-align:top;width:38%;padding-right:12px;font-size:10.5px;line-height:1.45;">
-              ${JBJ_BRAND.office ? `<div style="opacity:.85;">${esc(JBJ_BRAND.office)}</div>` : ""}
+            <td style="vertical-align:top;width:30%;padding-right:18px;font-size:10.5px;line-height:1.55;">
+              <div style="font-weight:600;color:${ink};">${JBJ_BRAND.phone}</div>
+              <div style="margin-top:6px;color:${accent};font-weight:600;letter-spacing:.04em;">${JBJ_BRAND.website}</div>
             </td>
-            <td style="vertical-align:top;text-align:center;width:32%;font-size:10.5px;line-height:1.45;">
-              <div>${JBJ_BRAND.email} · ${JBJ_BRAND.website}</div>
+            <td style="vertical-align:top;text-align:center;width:40%;padding:0 12px;font-size:10.5px;line-height:1.55;color:${ink};opacity:.9;">
+              ${JBJ_BRAND.office ? esc(JBJ_BRAND.office) : ""}
             </td>
-            <td style="vertical-align:top;text-align:right;width:30%;padding-left:12px;font-size:10.5px;line-height:1.45;">
-              <div style="font-weight:600;">${JBJ_BRAND.phone}</div>
+            <td style="vertical-align:top;text-align:right;width:30%;padding-left:18px;font-size:10.5px;line-height:1.55;">
+              <div style="color:${ink};">${JBJ_BRAND.email}</div>
             </td>
           </tr>
         </table>`;
