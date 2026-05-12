@@ -28,6 +28,7 @@ import { SendViaEmailDialog } from "@/components/e-signature/SendViaEmailDialog"
 import ExportEnvelopeDialog from "@/components/e-signature/ExportEnvelopeDialog";
 import { isReadyDraft, computeDisplayStatus, pickClientName, pickPropertyContext, maskPhone, maskEmail } from "@/pages/e-signature/envelopeStatus";
 import { openWhatsApp, openEmail } from "@/utils/contactActions";
+import PAAListingDraftCard from "@/components/e-signature/PAAListingDraftCard";
 
 type EnvelopeStatus = 'draft' | 'sent' | 'viewed' | 'partially_signed' | 'completed' | 'declined' | 'expired' | 'voided';
 type RecipientStatus = 'pending' | 'sent' | 'delivered' | 'viewed' | 'signed' | 'declined';
@@ -876,6 +877,14 @@ export default function EnvelopeDetail() {
                   )}
                 </CardContent>
               </Card>
+            )}
+
+            {/* Listing draft (auto-generated from PAA) */}
+            {envelope.template_key === "jbj-property-advertising-agreement" && (
+              <PAAListingDraftCard
+                envelopeId={envelope.id}
+                category={(envelope.category as any) || "leasing"}
+              />
             )}
 
             {/* Document Info */}
