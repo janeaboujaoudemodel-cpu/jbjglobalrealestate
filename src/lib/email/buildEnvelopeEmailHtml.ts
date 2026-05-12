@@ -51,10 +51,11 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
   const docusignUrl = (args.docusignUrl || "").trim();
   const attachmentName = args.attachmentName ? escapeHtml(args.attachmentName) : "";
 
-  const ctaBlock = docusignUrl ? `
+  const ctaHref = docusignUrl || DOCUSIGN_WEB;
+  const ctaBlock = `
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:26px 0 6px;border-collapse:collapse;">
           <tr><td align="center" style="border-radius:2px;background:#1A1A1A;">
-            <a href="${escapeHtml(docusignUrl)}" target="_blank" rel="noopener" style="display:inline-block;padding:14px 28px;font-family:Inter,Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:.22em;color:#FDFBF7;text-decoration:none;text-transform:uppercase;border:1px solid #B89555;">
+            <a href="${escapeHtml(ctaHref)}" target="_blank" rel="noopener" style="display:inline-block;padding:14px 28px;font-family:Inter,Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:.22em;color:#FDFBF7;text-decoration:none;text-transform:uppercase;border:1px solid #B89555;">
               OPEN IN DOCUSIGN &nbsp;→
             </a>
           </td></tr>
@@ -62,7 +63,7 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
             DocuSign is the only e-signature platform officially recognised by UAE authorities.<br/>
             Don't have the app? <a href="${DOCUSIGN_APP_STORE}" style="color:#1A1A1A;">App Store</a> · <a href="${DOCUSIGN_PLAY_STORE}" style="color:#1A1A1A;">Google Play</a>
           </td></tr>
-        </table>` : "";
+        </table>`;
 
   const attachmentChip = attachmentName ? `
         <div style="margin:18px 0 0;padding:10px 12px;border:1px solid #B89555;background:#F7F2EA;display:inline-block;font-family:Inter,Arial,sans-serif;font-size:11.5px;color:#1A1A1A;letter-spacing:.04em;">
