@@ -1,13 +1,11 @@
 /**
- * JBJ GLOBAL REAL ESTATE — Property Advertising Agreement
- * Layout follows the Property Finder standard (radio chips, two-column fields,
- * EXCLUSIVE / NON-EXCLUSIVE + period chips), rendered with our champagne-gold
- * brand chrome. Header & footer are user-customisable via the `chrome` arg.
+ * JBJ GLOBAL REAL ESTATE — Property Advertising Agreement (PAA)
+ * v13: category-aware (leasing/selling), premium chrome (large monogram in
+ * header AND footer, gradient hairline, locked/final mode that strips chip
+ * placeholders), and a deep field audit covering Property Finder Form A.
+ *
+ * LOCKED TEMPLATE — do not modify chrome without owner approval.
  */
-
-// LOCKED TEMPLATE — JBJ Property Advertising Agreement (PAA).
-// Standard layout: do not modify header/footer/body chrome without owner approval.
-// Per-recipient values (names, property, dates, tenancy) are the only variables.
 import monogramUrl from "@/assets/jbj-monogram-nobuffer.png";
 import {
   TRADE_LICENSE_BRAND,
@@ -18,7 +16,6 @@ import {
 
 export const JBJ_BRAND = {
   company: TRADE_LICENSE_BRAND,
-  // Full registered name per Trade License — used in binding/legal contexts
   legalCompany: TRADE_LICENSE_LEGAL_NAME,
   office: TRADE_LICENSE_OFFICE,
   phone: COMPANY_CONTACT.phone,
@@ -29,19 +26,38 @@ export const JBJ_BRAND = {
   monogram: monogramUrl,
 } as const;
 
-export const PAA_LAYOUT_VERSION = 12;
+// Bumped to 13: large monogram in header & footer, gradient hairline,
+// category-aware amount fields, displayLabel chip cleanup, audit fields.
+export const PAA_LAYOUT_VERSION = 13;
+
+export type PAACategory = "leasing" | "selling" | "other";
 
 export type PAAFieldKey =
-  // Owner
+  // Owner identity
   | "landlord_name" | "passport_number" | "emirates_id" | "mobile_number"
-  | "email_address" | "nationality" | "listing_consultant" | "property_reference_no" | "expiry_date"
-  // Property
+  | "email_address" | "nationality" | "listing_consultant" | "property_reference_no"
+  | "expiry_date" | "owner_trn"
+  // Property identifiers
+  | "title_deed_number" | "title_deed_date" | "oqood_number" | "oqood_date"
+  | "expected_handover" | "dewa_premise_number" | "makani_number" | "rera_permit_number"
+  // Property specs
   | "property_type" | "status_vacant_tenanted" | "furnishing" | "vacating_date"
   | "building_name" | "unit_number" | "plot_number" | "street_name" | "community"
+  | "tenure" | "usage"
   | "bua_sqft" | "plot_sqft" | "bedrooms" | "bathrooms"
-  | "rental_amount" | "sales_amount" | "parking" | "additional_notes"
+  // Pricing & fees
+  | "rental_amount" | "sales_amount" | "service_charge_per_sqft" | "maintenance_fee_aed"
+  | "commission_pct" | "parking" | "additional_notes"
+  // Lease specifics
+  | "cheques_per_year" | "notice_period_days" | "current_tenancy_end"
+  // Sale specifics
+  | "chain_free" | "mortgage_status"
   // Terms
   | "exclusivity" | "listing_period" | "listing_period_until_date" | "broker_appointee_name"
+  // POA
+  | "poa_holder_name" | "poa_number"
+  // Documents attached
+  | "documents_attached"
   // Sign
   | "landlord_signature_name" | "landlord_signature_date"
   | "jbj_signature_name" | "jbj_signature_date";
@@ -49,13 +65,22 @@ export type PAAFieldKey =
 export const PAA_DEFAULT_VALUES: Record<PAAFieldKey | "doc_number", string> = {
   doc_number: "",
   landlord_name: "", passport_number: "", emirates_id: "", mobile_number: "",
-  email_address: "", nationality: "", listing_consultant: "", property_reference_no: "", expiry_date: "",
+  email_address: "", nationality: "", listing_consultant: "", property_reference_no: "",
+  expiry_date: "", owner_trn: "",
+  title_deed_number: "", title_deed_date: "", oqood_number: "", oqood_date: "",
+  expected_handover: "", dewa_premise_number: "", makani_number: "", rera_permit_number: "",
   property_type: "", status_vacant_tenanted: "", furnishing: "", vacating_date: "",
   building_name: "", unit_number: "", plot_number: "", street_name: "", community: "",
+  tenure: "", usage: "",
   bua_sqft: "", plot_sqft: "", bedrooms: "", bathrooms: "",
-  rental_amount: "", sales_amount: "", parking: "", additional_notes: "",
+  rental_amount: "", sales_amount: "", service_charge_per_sqft: "", maintenance_fee_aed: "",
+  commission_pct: "", parking: "", additional_notes: "",
+  cheques_per_year: "", notice_period_days: "", current_tenancy_end: "",
+  chain_free: "", mortgage_status: "",
   exclusivity: "", listing_period: "", listing_period_until_date: "",
   broker_appointee_name: TRADE_LICENSE_LEGAL_NAME,
+  poa_holder_name: "", poa_number: "",
+  documents_attached: "",
   landlord_signature_name: "", landlord_signature_date: "",
   jbj_signature_name: "", jbj_signature_date: "",
 };
@@ -74,7 +99,6 @@ const fmtMoney = (raw: string) => {
 
 const fmtDateDDMMYYYY = (raw: string) => {
   if (!raw) return ["", "", ""];
-  // accept yyyy-mm-dd or dd/mm/yyyy
   const isoMatch = /^(\d{4})-(\d{2})-(\d{2})/.exec(raw);
   if (isoMatch) return [isoMatch[3], isoMatch[2], isoMatch[1]];
   const dmy = /^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})/.exec(raw);
@@ -86,7 +110,6 @@ const dateBox = (raw: string) => {
   const [d, m, y] = fmtDateDDMMYYYY(raw);
   const cell = (v: string, ph: string) =>
     `<span style="display:inline-block;min-width:32px;text-align:center;padding:1px 4px;font-size:12px;color:${v ? "#1A1A1A" : "#1A1A1A66"};">${v || ph}</span>`;
-  // Single continuous gold hairline under DD / MM / YYYY — no per-cell underline.
   return `<span style="display:inline-block;border-bottom:1px solid #B89555;padding-bottom:2px;white-space:nowrap;">${cell(d, "DD")}<span style="opacity:.4;margin:0 4px;">/</span>${cell(m, "MM")}<span style="opacity:.4;margin:0 4px;">/</span>${cell(y, "YYYY")}</span>`;
 };
 
@@ -107,8 +130,6 @@ const fieldUnderline = (
   if (key && opts?.hidden?.has(key)) return "";
   if (!opts?.force && !value) return "";
   const dataAttr = key ? ` data-field-key="${key}"` : "";
-  // Underline width hugs the actual content; label sits below the value, sized
-  // to the visible text so empty space never stretches into a long blank line.
   const safe = esc(value || "");
   return `
   <div${dataAttr} style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;position:relative;">
@@ -123,14 +144,14 @@ export type ChromeHeaderStyle = "monogram-wordmark" | "wordmark-only" | "crest-a
 export type ChromeFooterStyle = "three-column" | "centered-tagline" | "compliance-bar";
 
 export interface TemplateChrome {
-  accent?: string;            // gold hairline
-  ink?: string;               // text colour
-  surface?: string;           // page background
+  accent?: string;
+  ink?: string;
+  surface?: string;
   headerStyle?: ChromeHeaderStyle;
   footerStyle?: ChromeFooterStyle;
-  tagline?: string;           // for centered-tagline footer
-  trn?: string;               // tax registration #
-  license?: string;           // RERA / DED license #
+  tagline?: string;
+  trn?: string;
+  license?: string;
 }
 
 export const DEFAULT_CHROME: Required<TemplateChrome> = {
@@ -144,10 +165,22 @@ export const DEFAULT_CHROME: Required<TemplateChrome> = {
   license: "",
 };
 
-const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string) => {
+// Premium gradient divider (gold → champagne → gold) — 2px tall.
+const goldGradient = (accent: string) =>
+  `background:linear-gradient(90deg, ${accent}00 0%, ${accent} 12%, ${accent} 88%, ${accent}00 100%);height:1.5px;`;
+
+const titleFor = (category: PAACategory) =>
+  category === "selling"
+    ? "Property Advertising Agreement — Selling"
+    : "Property Advertising Agreement — Leasing";
+
+const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string, category: PAACategory, reraPermit?: string) => {
   const { accent, ink, headerStyle } = chrome;
   const docBadge = docNumber
     ? `<div style="font-size:10.5px;letter-spacing:.18em;color:${ink};font-weight:600;">${esc(docNumber)}</div>`
+    : "";
+  const reraLine = reraPermit
+    ? `<div style="font-size:10px;letter-spacing:.1em;color:${ink};opacity:.75;margin-top:3px;">RERA Permit · ${esc(reraPermit)}</div>`
     : "";
   switch (headerStyle) {
     case "wordmark-only":
@@ -180,60 +213,61 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string) => {
     default:
       return `
         <div style="margin-bottom:18px;">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:24px;">
-            <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:148px;height:auto;max-height:120px;object-fit:contain;display:block;" />
-            <div style="text-align:right;font-size:11px;line-height:1.5;color:${ink};padding-top:6px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:24px;">
+            <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:220px;height:auto;max-height:170px;object-fit:contain;display:block;" />
+            <div style="text-align:right;font-size:11px;line-height:1.5;color:${ink};">
               ${docBadge}
+              ${reraLine}
             </div>
           </div>
-          <div style="margin-top:10px;text-align:center;">
+          <div style="margin-top:14px;${goldGradient(accent)}"></div>
+          <div style="margin-top:14px;text-align:center;">
             <div style="font-size:13px;font-weight:700;letter-spacing:.22em;color:${ink};text-transform:uppercase;">
               ${esc(JBJ_BRAND.legalCompany)}
             </div>
-            <h1 style="font-size:17px;font-weight:800;letter-spacing:.20em;margin:6px 0 0;color:${ink};text-transform:uppercase;">
-              Property Advertising Agreement
+            <h1 style="font-size:18px;font-weight:800;letter-spacing:.20em;margin:8px 0 6px;color:${ink};text-transform:uppercase;display:inline-block;border-bottom:1px solid ${accent};padding-bottom:4px;">
+              ${titleFor(category).toUpperCase()}
             </h1>
           </div>
-          <div style="margin-top:12px;border-bottom:1px solid ${accent};"></div>
         </div>`;
   }
 };
 
 const footerHtml = (chrome: Required<TemplateChrome>) => {
   const { accent, ink, footerStyle, tagline, trn, license } = chrome;
-  const base = `margin-top:18px;padding-top:10px;border-top:1px solid ${accent};font-size:11px;color:${ink};line-height:1.45;`;
   switch (footerStyle) {
     case "centered-tagline":
       return `
-        <div style="${base}text-align:center;letter-spacing:.18em;text-transform:uppercase;">
+        <div style="margin-top:18px;padding-top:10px;border-top:1px solid ${accent};font-size:11px;color:${ink};text-align:center;letter-spacing:.18em;text-transform:uppercase;">
           <div style="font-weight:700;font-size:11.5px;">${esc(tagline)}</div>
           <div style="margin-top:5px;opacity:.85;">${JBJ_BRAND.email} · ${JBJ_BRAND.website} · ${JBJ_BRAND.phone}</div>
         </div>`;
     case "compliance-bar":
       return `
-        <div style="${base}display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+        <div style="margin-top:18px;padding-top:10px;border-top:1px solid ${accent};font-size:11px;color:${ink};display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
           <div>${JBJ_BRAND.office || ""}</div>
           <div>${trn ? `TRN ${esc(trn)} · ` : ""}${license ? `LIC ${esc(license)} · ` : ""}${JBJ_BRAND.email} · ${JBJ_BRAND.website}</div>
         </div>`;
     case "three-column":
     default: {
-      // Footer = contact details ONLY.
-      // Left  : phone (top), website in gold (below — no underline).
-      // Middle: office address.
-      // Right : contact email, kept on its own line with breathing room.
-      // No DCCI / CR / Trade Licence credentials.
+      // Premium footer: monogram (left), legal name + phone underneath; office
+      // address (center); contact email + gold website (right). 2px gradient
+      // hairline on top — matches the header divider for visual symmetry.
       return `
-        <table style="${base}width:100%;border-collapse:collapse;table-layout:fixed;margin-bottom:0;">
+        <div style="margin-top:22px;${goldGradient(accent)}"></div>
+        <table style="margin-top:12px;width:100%;border-collapse:collapse;table-layout:fixed;font-size:10.5px;color:${ink};line-height:1.55;">
           <tr>
-            <td style="vertical-align:top;width:30%;padding-right:18px;font-size:10.5px;line-height:1.55;">
-              <div style="font-weight:600;color:${ink};">${JBJ_BRAND.phone}</div>
-              <div style="margin-top:6px;color:${accent};font-weight:600;letter-spacing:.04em;">${JBJ_BRAND.website}</div>
+            <td style="vertical-align:top;width:28%;padding-right:14px;">
+              <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:84px;height:auto;max-height:64px;object-fit:contain;display:block;opacity:.92;margin-bottom:6px;" />
+              <div style="font-size:9.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:${ink};">${esc(JBJ_BRAND.legalCompany)}</div>
+              <div style="margin-top:4px;font-weight:600;">${JBJ_BRAND.phone}</div>
             </td>
-            <td style="vertical-align:top;text-align:center;width:40%;padding:0 12px;font-size:10.5px;line-height:1.55;color:${ink};opacity:.9;">
+            <td style="vertical-align:top;text-align:center;width:42%;padding:0 12px;color:${ink};opacity:.9;">
               ${JBJ_BRAND.office ? esc(JBJ_BRAND.office) : ""}
             </td>
-            <td style="vertical-align:top;text-align:right;width:30%;padding-left:18px;font-size:10.5px;line-height:1.55;">
+            <td style="vertical-align:top;text-align:right;width:30%;padding-left:14px;">
               <div style="color:${ink};">${JBJ_BRAND.email}</div>
+              <div style="margin-top:6px;color:${accent};font-weight:600;letter-spacing:.04em;">${JBJ_BRAND.website}</div>
             </td>
           </tr>
         </table>`;
@@ -247,18 +281,27 @@ export const JBJ_PAA_TEMPLATE_ID = "jbj-property-advertising-agreement";
 
 export interface BuildPAAOptions {
   chrome?: TemplateChrome;
-  ownerSignatureUrl?: string | null;   // url to PNG of authorised representative signature
-  ownerStampUrl?: string | null;       // url to PNG of company stamp
-  clientSignatureUrl?: string | null;  // url to client's captured signature
-  hiddenFields?: string[];             // keys explicitly hidden by the user
+  ownerSignatureUrl?: string | null;
+  ownerStampUrl?: string | null;
+  clientSignatureUrl?: string | null;
+  hiddenFields?: string[];
   /**
-   * "edit"  → show every option chip (so the user can change a selection in the
-   *           live preview / iframe). All Property Finder fields stay visible.
-   * "final" → collapse single-choice chips down to the selected value only —
-   *           the format used for the signed PDF.
+   * "edit"  → show every option chip (live preview / iframe)
+   * "final" → collapse single-choice chips to selected value only — strips
+   *           "OR UNTIL", parenthetical hints, separators. Used after Approve.
    */
   renderMode?: "edit" | "final";
+  category?: PAACategory;
 }
+
+// Clean display labels for chips in final mode (strip parens, normalize).
+const FINAL_CHIP_LABEL: Record<string, string> = {
+  "6 Months  (Residential Sale or Commercial only)": "6 Months",
+  "6 Months (Residential Sale or Commercial only)": "6 Months",
+  "NON EXCLUSIVE": "Non-Exclusive",
+  "EXCLUSIVE": "Exclusive",
+};
+const cleanFinalLabel = (s: string) => FINAL_CHIP_LABEL[s] || s.replace(/\s*\([^)]*\)\s*$/, "").trim();
 
 export function buildPAAHtml(
   values: Partial<Record<PAAFieldKey | "doc_number", string>> = {},
@@ -270,38 +313,32 @@ export function buildPAAHtml(
   const chrome: Required<TemplateChrome> = { ...DEFAULT_CHROME, ...(opts.chrome || {}) };
   const accent = chrome.accent;
   const ink = chrome.ink;
+  const category: PAACategory = opts.category || "leasing";
+  const isLeasing = category === "leasing";
+  const isSelling = category === "selling";
   const hidden = new Set<string>(opts.hiddenFields || []);
-  // Force any field that has a value to render — guarantees every edited field
-  // is reflected in the document even if it was not present in the original
-  // skeleton render.
+  // Auto-hide the irrelevant amount field based on category.
+  if (isLeasing) hidden.add("sales_amount");
+  if (isSelling) hidden.add("rental_amount");
+
   const fu = (label: string, value: string, key: string) =>
     fieldUnderline(label, value, key, { hidden, force: !!value });
 
-  // Conditionals (smart fields) — auto-infer Tenanted when a future vacating date is provided
+  // Smart conditionals
   const rawStatus = get("status_vacant_tenanted");
   const vacatingRaw = get("vacating_date");
   const vacatingTs = vacatingRaw ? Date.parse(vacatingRaw) : NaN;
   const hasFutureVacating = !!vacatingRaw && isFinite(vacatingTs) && vacatingTs > Date.now();
   const isVacant = rawStatus
     ? /vacant/i.test(rawStatus)
-    : !hasFutureVacating; // empty + future vacating ⇒ Tenanted
+    : !hasFutureVacating;
   const isTenanted = !isVacant;
-  // expose normalised status for chip rendering below
   if (!rawStatus && isTenanted) v.status_vacant_tenanted = "Tenanted";
   const isVilla = /villa/i.test(get("property_type"));
   const showVacatingDate = isTenanted && !!vacatingRaw;
-  const showPlot = isVilla;
-  const period = get("listing_period");
-  const showUntilDate = /until/i.test(period) && get("listing_period_until_date");
 
   const isFinal = opts.renderMode === "final";
 
-  /**
-   * Render a single-choice chip row. In edit mode every option chip is
-   * clickable (data-chip-key / data-chip-value emit a `jbj-set-field` postMessage
-   * to the editor). In final mode, only the selected option survives — printed
-   * as a clean inline value with a thin gold underline.
-   */
   const chipRow = (fieldKey: string, label: string, options: string[], match: (opt: string, v: string) => boolean) => {
     const current = get(fieldKey as PAAFieldKey);
     const selected = options.find((o) => match(o, current)) || "";
@@ -309,51 +346,50 @@ export function buildPAAHtml(
       if (!selected) return "";
       return `
         <span data-field-key="${fieldKey}" style="display:inline-block;margin-right:24px;vertical-align:top;">
-          <span style="display:inline-block;border-bottom:1px solid #B89555;padding:2px 10px 2px 2px;font-size:13px;color:#1A1A1A;font-weight:600;">${esc(selected)}</span>
+          <span style="display:inline-block;border-bottom:1px solid #B89555;padding:2px 10px 2px 2px;font-size:13px;color:#1A1A1A;font-weight:600;">${esc(cleanFinalLabel(selected))}</span>
           <span style="display:block;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:#1A1A1A;opacity:.7;margin-top:3px;">${esc(label)}</span>
         </span>`;
     }
     return options.map((o) => `<span data-chip-key="${fieldKey}" data-chip-value="${esc(o)}" style="display:inline-block;">${radioChip(o, match(o, current))}</span>`).join("");
   };
 
-  const periodChip = (label: string, key: string) =>
-    radioChip(label, period.toLowerCase().startsWith(key.toLowerCase()));
-
-  const exclusivityChip = (label: string) =>
-    radioChip(label, get("exclusivity").toLowerCase().includes(label.toLowerCase().split(" ")[0]));
-
-  const propTypeChip = (label: string) =>
-    radioChip(label, get("property_type").toLowerCase() === label.toLowerCase());
-
-  const furnChip = (label: string) =>
-    radioChip(label, get("furnishing").toLowerCase().startsWith(label.toLowerCase().split("-")[0]));
-
-  const statusChip = (label: string) =>
-    radioChip(label, get("status_vacant_tenanted").toLowerCase() === label.toLowerCase());
-
   const sectionTitle = (n: number, t: string) => `
-    <div style="margin:12px 0 6px;">
+    <div style="margin:14px 0 6px;">
       <div style="font-size:12px;font-weight:700;letter-spacing:.10em;color:${ink};">${n}. ${t.toUpperCase()}</div>
     </div>`;
 
-  // Signature blocks
-  const ownerSigImg = opts.ownerSignatureUrl
-    ? `<img src="${esc(opts.ownerSignatureUrl)}" alt="Authorised signature" crossorigin="anonymous" style="max-height:54px;max-width:200px;object-fit:contain;display:block;" />`
-    : "";
-  const ownerStampImg = opts.ownerStampUrl
-    ? `<img src="${esc(opts.ownerStampUrl)}" alt="Company stamp" crossorigin="anonymous" style="position:absolute;right:-6px;top:-12px;width:88px;height:88px;object-fit:contain;opacity:.85;" />`
-    : "";
+  // Signatures (only render when truly signed — handled by EnvelopeDetail
+  // which only passes URLs when envelope.status === "completed").
   const clientSigImg = opts.clientSignatureUrl
     ? `<img src="${esc(opts.clientSignatureUrl)}" alt="Client signature" crossorigin="anonymous" style="max-height:40px;max-width:200px;object-fit:contain;display:block;" />`
     : "";
 
+  // POA block (only if filled)
+  const poaBlock = (get("poa_holder_name") || get("poa_number"))
+    ? `
+      ${sectionTitle(5, "Power of Attorney")}
+      <div>
+        ${fu("POA Holder Name", get("poa_holder_name"), "poa_holder_name")}
+        ${fu("POA Number", get("poa_number"), "poa_number")}
+      </div>` : "";
+
+  // Documents attached chips (multi-value comma-separated)
+  const docsRaw = get("documents_attached");
+  const docsList = docsRaw ? docsRaw.split(/[,;]/).map((s) => s.trim()).filter(Boolean) : [];
+  const docsBlock = docsList.length
+    ? `
+      ${sectionTitle(6, "Documents Attached")}
+      <div data-field-key="documents_attached" style="display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 12px;">
+        ${docsList.map((d) => `<span style="display:inline-block;padding:3px 10px;border:1px solid ${accent};border-radius:999px;font-size:11px;color:${ink};background:#FDFBF7;">${esc(d)}</span>`).join("")}
+      </div>` : "";
+
   const html = `
 <div style="font-family:Inter,Arial,sans-serif;color:${ink};background:${chrome.surface};padding:24px 36px;max-width:794px;margin:0 auto;line-height:1.45;font-size:11.5px;">
 
-  ${headerHtml(chrome, get("doc_number"))}
+  ${headerHtml(chrome, get("doc_number"), category, get("rera_permit_number"))}
 
   <p style="font-size:11px;color:${ink};opacity:.78;margin:4px 0 3px;line-height:1.45;">
-    As a property owner or landlord, you are partnering with <strong>JBJ Global Real Estate</strong> to advertise and represent your property for sale or lease at the best terms in the shortest time. By signing below, your property will be advertised across JBJ's premium portals, website, social media, partner brokerages, CRM and direct outreach. Submitting verification documents ranks your listing higher with the Verified badge — consumers are 5× more likely to enquire.
+    As a property owner or landlord, you are partnering with <strong>JBJ Global Real Estate</strong> to advertise and represent your property for ${isSelling ? "sale" : "lease"} at the best terms in the shortest time. By signing below, your property will be advertised across JBJ's premium portals, website, social media, partner brokerages, CRM and direct outreach. Submitting verification documents ranks your listing higher with the Verified badge — consumers are 5× more likely to enquire.
   </p>
 
   ${sectionTitle(1, "Landlord / Owner Details")}
@@ -364,6 +400,7 @@ export function buildPAAHtml(
     ${fu("Mobile Number", get("mobile_number"), "mobile_number")}
     ${fu("Email Address", get("email_address"), "email_address")}
     ${fu("Nationality", get("nationality"), "nationality")}
+    ${fu("Owner TRN", get("owner_trn"), "owner_trn")}
     ${fu("Listing Consultant", get("listing_consultant"), "listing_consultant")}
     ${fu("Property Reference No.", get("property_reference_no"), "property_reference_no")}
     ${!hidden.has("expiry_date") && get("expiry_date") ? `
@@ -373,7 +410,30 @@ export function buildPAAHtml(
     </div>` : ""}
   </div>
 
-  ${sectionTitle(2, "Property Details")}
+  ${sectionTitle(2, "Property Identifiers")}
+  <div>
+    ${fu("Title Deed No.", get("title_deed_number"), "title_deed_number")}
+    ${!hidden.has("title_deed_date") && get("title_deed_date") ? `
+    <div data-field-key="title_deed_date" style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;">
+      <div style="display:inline-block;">${dateBox(get("title_deed_date"))}</div>
+      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.7;margin-top:5px;">Title Deed Date</div>
+    </div>` : ""}
+    ${fu("Oqood No.", get("oqood_number"), "oqood_number")}
+    ${!hidden.has("oqood_date") && get("oqood_date") ? `
+    <div data-field-key="oqood_date" style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;">
+      <div style="display:inline-block;">${dateBox(get("oqood_date"))}</div>
+      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.7;margin-top:5px;">Oqood Date</div>
+    </div>` : ""}
+    ${!hidden.has("expected_handover") && get("expected_handover") ? `
+    <div data-field-key="expected_handover" style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;">
+      <div style="display:inline-block;">${dateBox(get("expected_handover"))}</div>
+      <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.7;margin-top:5px;">Expected Handover</div>
+    </div>` : ""}
+    ${fu("DEWA Premise No.", get("dewa_premise_number"), "dewa_premise_number")}
+    ${fu("Makani No.", get("makani_number"), "makani_number")}
+  </div>
+
+  ${sectionTitle(3, "Property Specs")}
   <div data-chip-row="property_type" style="margin:4px 0 10px;display:flex;flex-wrap:wrap;align-items:center;gap:6px;">
     ${chipRow("property_type", "Property Type", ["Villa", "Apartment", "Office", "Warehouse"], (o, v) => o.toLowerCase() === v.toLowerCase())}
     ${isFinal ? "" : `<span style="opacity:.3;margin:0 8px;">|</span>`}
@@ -387,6 +447,11 @@ export function buildPAAHtml(
         ${dateBox(get("vacating_date"))}
       </span>` : ""}
   </div>
+  <div data-chip-row="tenure" style="margin:4px 0 10px;display:flex;flex-wrap:wrap;align-items:center;gap:6px;">
+    ${chipRow("tenure", "Tenure", ["Freehold", "Leasehold", "Common-hold"], (o, v) => o.toLowerCase() === v.toLowerCase())}
+    ${isFinal ? "" : `<span style="opacity:.3;margin:0 8px;">|</span>`}
+    ${chipRow("usage", "Usage", ["Residential", "Commercial"], (o, v) => o.toLowerCase() === v.toLowerCase())}
+  </div>
 
   <div>
     ${fu("Building Name", get("building_name"), "building_name")}
@@ -398,22 +463,37 @@ export function buildPAAHtml(
     ${fu("Plot (Sq.Ft)", get("plot_sqft"), "plot_sqft")}
     ${fu("Bedrooms", get("bedrooms"), "bedrooms")}
     ${fu("Bathrooms", get("bathrooms"), "bathrooms")}
-    ${get("rental_amount") ? fu("Rental Amount", fmtMoney(get("rental_amount")), "rental_amount") : ""}
-    ${get("sales_amount") ? fu("Sales Amount", fmtMoney(get("sales_amount")), "sales_amount") : ""}
     ${fu("Parking", get("parking"), "parking")}
-    ${!get("status_vacant_tenanted").match(/vacant/i) === false && get("vacating_date") && !showVacatingDate
-      ? `<div data-field-key="vacating_date" style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;">
-           <div style="display:inline-block;">${dateBox(get("vacating_date"))}</div>
-           <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.7;margin-top:5px;">Vacating Date</div>
-         </div>` : ""}
   </div>
+
+  ${sectionTitle(4, isSelling ? "Pricing & Sale Terms" : "Pricing & Lease Terms")}
+  <div>
+    ${isLeasing && get("rental_amount") ? fu("Rental Amount", fmtMoney(get("rental_amount")), "rental_amount") : ""}
+    ${isSelling && get("sales_amount") ? fu("Sales Amount", fmtMoney(get("sales_amount")), "sales_amount") : ""}
+    ${fu("Service Charge / SqFt", get("service_charge_per_sqft") ? `AED ${esc(get("service_charge_per_sqft"))}` : "", "service_charge_per_sqft")}
+    ${fu("Maintenance Fee", get("maintenance_fee_aed") ? fmtMoney(get("maintenance_fee_aed")) : "", "maintenance_fee_aed")}
+    ${fu("Commission %", get("commission_pct") ? `${esc(get("commission_pct"))}%` : "", "commission_pct")}
+    ${isLeasing ? fu("Cheques / Year", get("cheques_per_year"), "cheques_per_year") : ""}
+    ${isLeasing ? fu("Notice Period (days)", get("notice_period_days"), "notice_period_days") : ""}
+    ${isLeasing && !hidden.has("current_tenancy_end") && get("current_tenancy_end") ? `
+      <div data-field-key="current_tenancy_end" style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;">
+        <div style="display:inline-block;">${dateBox(get("current_tenancy_end"))}</div>
+        <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.7;margin-top:5px;">Current Tenancy End</div>
+      </div>` : ""}
+    ${isSelling ? fu("Chain Free", get("chain_free"), "chain_free") : ""}
+    ${isSelling ? fu("Mortgage Status", get("mortgage_status"), "mortgage_status") : ""}
+  </div>
+
   ${!hidden.has("additional_notes") && get("additional_notes") ? `
     <div data-field-key="additional_notes" style="margin:6px 0 14px;">
       <div style="border:1px solid ${accent};border-radius:4px;min-height:54px;padding:8px 10px;font-size:12px;color:${ink};white-space:pre-wrap;">${esc(get("additional_notes"))}</div>
       <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:${ink};opacity:.7;margin-top:3px;">Additional Notes</div>
     </div>` : ""}
 
-  ${sectionTitle(3, "Terms and Conditions")}
+  ${poaBlock}
+  ${docsBlock}
+
+  ${sectionTitle(7, "Terms and Conditions")}
   <div style="font-size:11px;color:${ink};line-height:1.5;">
     <div style="margin-bottom:8px;">
       1. The landlord / legal representative has agreed to appoint
@@ -438,7 +518,7 @@ export function buildPAAHtml(
     </ol>
   </div>
 
-  ${sectionTitle(4, "Landlord")}
+  ${sectionTitle(8, "Landlord")}
   <div style="display:grid;grid-template-columns:1.2fr 1.2fr 1fr;gap:0 28px;margin-top:6px;align-items:end;">
     <div>
       <div style="height:48px;display:flex;align-items:flex-end;padding:0 0 4px;font-family:'Cormorant Garamond','Apple Chancery','Lucida Handwriting','Brush Script MT',Georgia,cursive;font-style:italic;font-weight:500;font-size:24px;color:${ink};letter-spacing:.01em;line-height:1;">${esc(get("landlord_signature_name"))}</div>
@@ -465,57 +545,114 @@ export function buildPAAHtml(
 
 /* ----------------------------- form schema -------------------------------- */
 
-export const PAA_FIELD_GROUPS: { title: string; fields: { key: PAAFieldKey; label: string; type?: "text" | "date" | "textarea" | "select" | "number" | "money"; options?: string[]; conditional?: (vals: Record<string, string>) => boolean }[] }[] = [
-  {
-    title: "Landlord / Owner Details",
-    fields: [
-      { key: "landlord_name", label: "Landlord's Name" },
-      { key: "passport_number", label: "Passport Number" },
-      { key: "emirates_id", label: "Emirates ID Number" },
-      { key: "mobile_number", label: "Mobile Number" },
-      { key: "email_address", label: "Email Address" },
-      { key: "nationality", label: "Nationality" },
-      { key: "listing_consultant", label: "Listing Consultant" },
-      { key: "property_reference_no", label: "Property Reference No." },
-      { key: "expiry_date", label: "Expiry Date", type: "date" },
-    ],
-  },
-  {
-    title: "Property Details",
-    fields: [
-      { key: "property_type", label: "Property Type", type: "select", options: ["Villa", "Apartment", "Office", "Warehouse"] },
-      { key: "status_vacant_tenanted", label: "Status", type: "select", options: ["Vacant", "Tenanted"] },
-      { key: "furnishing", label: "Furnishing", type: "select", options: ["Furnished", "Unfurnished"] },
-      { key: "vacating_date", label: "Vacating Date", type: "date", conditional: (v) => !/vacant/i.test(v.status_vacant_tenanted || "") },
-      { key: "building_name", label: "Building Name" },
-      { key: "unit_number", label: "Unit" },
-      { key: "plot_number", label: "Plot Number" },
-      { key: "street_name", label: "Street Name" },
-      { key: "community", label: "Community" },
-      { key: "bua_sqft", label: "BUA (SqFt)", type: "number" },
-      { key: "plot_sqft", label: "Plot (Sq.Ft)", type: "number" },
-      { key: "bedrooms", label: "Bedrooms", type: "number" },
-      { key: "bathrooms", label: "Bathrooms", type: "number" },
-      { key: "rental_amount", label: "Rental Amount", type: "money" },
-      { key: "sales_amount", label: "Sales Amount", type: "money" },
-      { key: "parking", label: "Parking" },
-      { key: "additional_notes", label: "Additional Notes", type: "textarea" },
-    ],
-  },
-  {
-    title: "Terms & Conditions",
-    fields: [
-      { key: "broker_appointee_name", label: "Broker Appointee" },
-      { key: "exclusivity", label: "Exclusivity", type: "select", options: ["EXCLUSIVE", "NON EXCLUSIVE"] },
-      { key: "listing_period", label: "Listing Period", type: "select", options: ["1 Month", "2 Months", "3 Months", "6 Months", "Until Date"] },
-      { key: "listing_period_until_date", label: "Until Date (if applicable)", type: "date", conditional: (v) => /until/i.test(v.listing_period || "") },
-    ],
-  },
-  {
-    title: "Signatures",
-    fields: [
-      { key: "landlord_signature_name", label: "Landlord — Printed Name" },
-      { key: "landlord_signature_date", label: "Landlord — Date", type: "date" },
-    ],
-  },
-];
+type FieldDef = { key: PAAFieldKey; label: string; type?: "text" | "date" | "textarea" | "select" | "number" | "money"; options?: string[]; conditional?: (vals: Record<string, string>) => boolean };
+type FieldGroup = { title: string; fields: FieldDef[] };
+
+export function getPaaFieldGroups(category: PAACategory = "leasing"): FieldGroup[] {
+  const isLeasing = category === "leasing";
+  const isSelling = category === "selling";
+  const groups: FieldGroup[] = [
+    {
+      title: "Owner & Identity",
+      fields: [
+        { key: "landlord_name", label: "Landlord's Name" },
+        { key: "passport_number", label: "Passport Number" },
+        { key: "emirates_id", label: "Emirates ID Number" },
+        { key: "mobile_number", label: "Mobile Number" },
+        { key: "email_address", label: "Email Address" },
+        { key: "nationality", label: "Nationality" },
+        { key: "owner_trn", label: "Owner TRN (Tax)" },
+        { key: "listing_consultant", label: "Listing Consultant" },
+        { key: "property_reference_no", label: "Property Reference No." },
+        { key: "expiry_date", label: "Expiry Date", type: "date" },
+      ],
+    },
+    {
+      title: "Property Identifiers",
+      fields: [
+        { key: "title_deed_number", label: "Title Deed Number" },
+        { key: "title_deed_date", label: "Title Deed Date", type: "date" },
+        { key: "oqood_number", label: "Oqood Number (off-plan)" },
+        { key: "oqood_date", label: "Oqood Date", type: "date" },
+        { key: "expected_handover", label: "Expected Handover", type: "date" },
+        { key: "dewa_premise_number", label: "DEWA Premise No." },
+        { key: "makani_number", label: "Makani Number" },
+        { key: "rera_permit_number", label: "RERA Permit No." },
+      ],
+    },
+    {
+      title: "Property Specs",
+      fields: [
+        { key: "property_type", label: "Property Type", type: "select", options: ["Villa", "Apartment", "Office", "Warehouse"] },
+        { key: "status_vacant_tenanted", label: "Status", type: "select", options: ["Vacant", "Tenanted"] },
+        { key: "furnishing", label: "Furnishing", type: "select", options: ["Furnished", "Unfurnished"] },
+        { key: "tenure", label: "Tenure", type: "select", options: ["Freehold", "Leasehold", "Common-hold"] },
+        { key: "usage", label: "Usage", type: "select", options: ["Residential", "Commercial"] },
+        { key: "vacating_date", label: "Vacating Date", type: "date", conditional: (v) => !/vacant/i.test(v.status_vacant_tenanted || "") },
+        { key: "building_name", label: "Building Name" },
+        { key: "unit_number", label: "Unit" },
+        { key: "plot_number", label: "Plot Number" },
+        { key: "street_name", label: "Street Name" },
+        { key: "community", label: "Community" },
+        { key: "bua_sqft", label: "BUA (SqFt)", type: "number" },
+        { key: "plot_sqft", label: "Plot (Sq.Ft)", type: "number" },
+        { key: "bedrooms", label: "Bedrooms", type: "number" },
+        { key: "bathrooms", label: "Bathrooms", type: "number" },
+        { key: "parking", label: "Parking" },
+      ],
+    },
+    {
+      title: isSelling ? "Pricing & Sale Terms" : "Pricing & Lease Terms",
+      fields: [
+        ...(isLeasing ? [{ key: "rental_amount" as PAAFieldKey, label: "Rental Amount", type: "money" as const }] : []),
+        ...(isSelling ? [{ key: "sales_amount" as PAAFieldKey, label: "Sales Amount", type: "money" as const }] : []),
+        { key: "service_charge_per_sqft", label: "Service Charge / SqFt (AED)", type: "number" },
+        { key: "maintenance_fee_aed", label: "Maintenance Fee (AED)", type: "money" },
+        { key: "commission_pct", label: "Commission %", type: "number" },
+        ...(isLeasing ? [
+          { key: "cheques_per_year" as PAAFieldKey, label: "Cheques / Year", type: "number" as const },
+          { key: "notice_period_days" as PAAFieldKey, label: "Notice Period (days)", type: "number" as const },
+          { key: "current_tenancy_end" as PAAFieldKey, label: "Current Tenancy End", type: "date" as const },
+        ] : []),
+        ...(isSelling ? [
+          { key: "chain_free" as PAAFieldKey, label: "Chain Free", type: "select" as const, options: ["Yes", "No"] },
+          { key: "mortgage_status" as PAAFieldKey, label: "Mortgage Status", type: "select" as const, options: ["None", "Buyout", "Cash"] },
+        ] : []),
+        { key: "additional_notes", label: "Additional Notes", type: "textarea" },
+      ],
+    },
+    {
+      title: "Terms & Conditions",
+      fields: [
+        { key: "broker_appointee_name", label: "Broker Appointee" },
+        { key: "exclusivity", label: "Exclusivity", type: "select", options: ["EXCLUSIVE", "NON EXCLUSIVE"] },
+        { key: "listing_period", label: "Listing Period", type: "select", options: ["1 Month", "2 Months", "3 Months", "6 Months", "Until Date"] },
+        { key: "listing_period_until_date", label: "Until Date (if applicable)", type: "date", conditional: (v) => /until/i.test(v.listing_period || "") },
+      ],
+    },
+    {
+      title: "Power of Attorney",
+      fields: [
+        { key: "poa_holder_name", label: "POA Holder Name" },
+        { key: "poa_number", label: "POA Number" },
+      ],
+    },
+    {
+      title: "Documents Attached",
+      fields: [
+        { key: "documents_attached", label: "Documents (comma-separated, e.g. Passport, Emirates ID, Title Deed, NOC, POA, Tenancy Contract, Cheque copy)", type: "textarea" },
+      ],
+    },
+    {
+      title: "Signatures",
+      fields: [
+        { key: "landlord_signature_name", label: "Landlord — Printed Name" },
+        { key: "landlord_signature_date", label: "Landlord — Date", type: "date" },
+      ],
+    },
+  ];
+  return groups;
+}
+
+// Backwards-compat export — defaults to leasing.
+export const PAA_FIELD_GROUPS = getPaaFieldGroups("leasing");
