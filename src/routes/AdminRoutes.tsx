@@ -170,6 +170,7 @@ export const AdminRoutes = () => (
     <Route path="/e-signature/create" element={<OwnerGuard><CreateEnvelope /></OwnerGuard>} />
     <Route path="/e-signature/:id" element={<OwnerGuard><EnvelopeDetail /></OwnerGuard>} />
     <Route path="/e-signature/signature-studio" element={<OwnerGuard><SignatureStudio /></OwnerGuard>} />
+    <Route path="/e-signature/blank-letter" element={<OwnerGuard><BlankLetterStudio /></OwnerGuard>} />
     <Route path="/e-signature/contract-review" element={<OwnerGuard><ContractReview /></OwnerGuard>} />
 
     {/* ── Email/Unsubscribe ── */}
