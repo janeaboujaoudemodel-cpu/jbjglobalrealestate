@@ -24,6 +24,7 @@ import { SmartFillDropzone } from "@/components/e-signature/SmartFillDropzone";
 import { TemplateChromeStudio } from "@/components/e-signature/TemplateChromeStudio";
 import { useOwnerSignatureAssets } from "@/hooks/useOwnerSignatureAssets";
 import { SendForSignatureDialog } from "@/components/e-signature/SendForSignatureDialog";
+import { SendViaEmailDialog } from "@/components/e-signature/SendViaEmailDialog";
 import ExportEnvelopeDialog from "@/components/e-signature/ExportEnvelopeDialog";
 import { isReadyDraft, computeDisplayStatus, pickClientName, pickPropertyContext, maskPhone, maskEmail } from "@/pages/e-signature/envelopeStatus";
 import { openWhatsApp, openEmail } from "@/utils/contactActions";
