@@ -71,59 +71,36 @@ export default function InlineStatusSelect({
         className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30 shadow-xl max-h-96 rounded-xl"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* POSITIVE - Green */}
-        <div className="px-2 py-1.5 text-xs font-bold text-emerald-700 uppercase tracking-wide flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-emerald-500" />
-          Positive
-        </div>
-        {PIPELINE_STATUSES.filter(s => s.category === 'positive').map(status => (
-          <SelectItem 
-            key={status.value} 
-            value={status.value} 
-            className="text-[#1A1A1A] hover:bg-[#B89555]/10 pl-4 focus:bg-[#B89555]/15 focus:text-[#1A1A1A]"
-          >
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0" />
-              {status.label}
+        {(['positive','neutral','negative'] as const).map((cat) => {
+          const headerClass =
+            cat === 'positive' ? 'text-emerald-700'
+            : cat === 'negative' ? 'text-red-700'
+            : 'text-blue-700';
+          const headerDot =
+            cat === 'positive' ? 'bg-emerald-500'
+            : cat === 'negative' ? 'bg-red-500'
+            : 'bg-blue-500';
+          const label = cat[0].toUpperCase() + cat.slice(1);
+          const items = PIPELINE_STATUSES.filter(s => s.category === cat);
+          if (!items.length) return null;
+          return (
+            <div key={cat}>
+              <div className={`px-2 py-1.5 text-xs font-bold uppercase tracking-wide mt-1 flex items-center gap-2 ${headerClass}`}>
+                <span className={`w-2 h-2 rounded-full ${headerDot}`} />
+                {label}
+              </div>
+              {items.map(status => (
+                <SelectItem
+                  key={status.value}
+                  value={status.value}
+                  className="pl-3 pr-3 py-1 focus:bg-[#B89555]/10 hover:bg-[#B89555]/10 cursor-pointer rounded-md"
+                >
+                  <LeadStatusBadge status={status.value} size="sm" showDot />
+                </SelectItem>
+              ))}
             </div>
-          </SelectItem>
-        ))}
-        
-        {/* NEUTRAL */}
-        <div className="px-2 py-1.5 text-xs font-bold text-[#1A1A1A]/70 uppercase tracking-wide mt-1 flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-[#B89555]" />
-          Neutral
-        </div>
-        {PIPELINE_STATUSES.filter(s => s.category === 'neutral').map(status => (
-          <SelectItem 
-            key={status.value} 
-            value={status.value} 
-            className="text-[#1A1A1A] hover:bg-[#B89555]/10 pl-4 focus:bg-[#B89555]/15 focus:text-[#1A1A1A]"
-          >
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#B89555] flex-shrink-0" />
-              {status.label}
-            </div>
-          </SelectItem>
-        ))}
-        
-        {/* NEGATIVE - Red */}
-        <div className="px-2 py-1.5 text-xs font-bold text-red-700 uppercase tracking-wide mt-1 flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-red-500" />
-          Negative
-        </div>
-        {PIPELINE_STATUSES.filter(s => s.category === 'negative').map(status => (
-          <SelectItem 
-            key={status.value} 
-            value={status.value} 
-            className="text-[#1A1A1A] hover:bg-[#B89555]/10 pl-4 focus:bg-[#B89555]/15 focus:text-[#1A1A1A]"
-          >
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-red-500 flex-shrink-0" />
-              {status.label}
-            </div>
-          </SelectItem>
-        ))}
+          );
+        })}
       </SelectContent>
     </Select>
   );

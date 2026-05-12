@@ -709,7 +709,11 @@ export default function CRMLeadsTableV2({
                         <span className="text-[#1A1A1A]/40">—</span>
                       )}
                     </TableCell>
-                    <TableCell className="text-sm text-[#1A1A1A]/80 whitespace-nowrap">{renderSource(lead)}</TableCell>
+                    <TableCell className="text-sm text-[#1A1A1A]/80 min-w-[180px] max-w-[260px] whitespace-normal break-words leading-snug">
+                      <span className="inline-flex items-center px-2 py-1 rounded-md bg-[#EFE6D6]/60 border border-[#B89555]/25 text-[#1A1A1A]/85 text-xs font-medium">
+                        {renderSource(lead)}
+                      </span>
+                    </TableCell>
                     <TableCell onClick={(e) => e.stopPropagation()}>
                       <InlineStatusSelect
                         leadId={lead.id}
