@@ -26,11 +26,12 @@ export const JBJ_BRAND = {
   monogram: monogramUrl,
 } as const;
 
-// v16: single-row Property Specs (type+furnishing+status), placeholder
-// underlines for empty Property Identifiers in edit mode, signature row
-// pushed flush above footer (margin-top:auto) so blank space sits between
-// signatures and footer divider — never below it.
-export const PAA_LAYOUT_VERSION = 16;
+// v17: T&C #1 company-name uses real text-decoration underline (no more
+// border-bottom strikethrough through descenders); listing_consultant
+// auto-strips legacy " / " separators so stale "Jane / Firas" renders as
+// "Jane, Firas"; header right column gains classy clickable phone/email/web
+// links; footer phone/email/website are wrapped in tel:/mailto:/https: anchors.
+export const PAA_LAYOUT_VERSION = 17;
 
 export type PAACategory = "leasing" | "selling" | "other";
 
@@ -171,6 +172,22 @@ export const DEFAULT_CHROME: Required<TemplateChrome> = {
 const goldGradient = (accent: string) =>
   `background:linear-gradient(90deg, ${accent}00 0%, ${accent} 12%, ${accent} 88%, ${accent}00 100%);height:1.5px;`;
 
+// Clickable contact link helpers — premium ink/gold mix, no underline by
+// default so the chrome stays clean. Used in BOTH header and footer so
+// every printed phone / email / website is a real anchor.
+const telHref = (raw: string) => `tel:${raw.replace(/[^\d+]/g, "")}`;
+const mailHref = (raw: string) => `mailto:${raw.trim()}`;
+const webHref = (raw: string) => {
+  const t = raw.trim();
+  return /^https?:/i.test(t) ? t : `https://${t.replace(/^\/+/, "")}`;
+};
+const linkPhone = (color: string) =>
+  `<a href="${telHref(JBJ_BRAND.phone)}" style="color:${color};text-decoration:none;font-weight:600;">${esc(JBJ_BRAND.phone)}</a>`;
+const linkEmail = (color: string) =>
+  `<a href="${mailHref(JBJ_BRAND.email)}" style="color:${color};text-decoration:none;">${esc(JBJ_BRAND.email)}</a>`;
+const linkWebsite = (color: string, bold = false) =>
+  `<a href="${webHref(JBJ_BRAND.website)}" target="_blank" rel="noopener" style="color:${color};text-decoration:none;${bold ? "font-weight:600;letter-spacing:.04em;" : ""}">${esc(JBJ_BRAND.website)}</a>`;
+
 const titleFor = (category: PAACategory) =>
   category === "selling"
     ? "Property Advertising Agreement — Selling"
@@ -212,10 +229,22 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string, categor
           ${docBadge}
         </div>`;
     case "monogram-wordmark":
-    default:
+    default: {
+      // Right column: doc number on top, then a tight clickable contact
+      // stack (phone in ink, email + website in gold) — premium black/gold
+      // mix, never overlaps with anything else.
+      const contactStack = `
+        <div style="margin-top:6px;font-size:9.5px;line-height:1.55;text-align:right;">
+          <div>${linkPhone(ink)}</div>
+          <div>${linkEmail(accent)}</div>
+          <div>${linkWebsite(accent, true)}</div>
+        </div>`;
+      const rightCol = (docBadge || contactStack)
+        ? `<div style="flex:0 0 auto;text-align:right;min-width:140px;">${docBadge}${contactStack}</div>`
+        : "";
       return `
         <div style="margin-bottom:16px;">
-          <div style="display:flex;align-items:center;gap:14px;">
+          <div style="display:flex;align-items:flex-start;gap:14px;">
             <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:54px;height:54px;object-fit:contain;display:block;flex:0 0 auto;" />
             <div style="width:1px;align-self:stretch;background:${accent};opacity:.7;"></div>
             <div style="flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;">
@@ -224,7 +253,7 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string, categor
               </div>
               ${reraLine ? `<div style="margin-top:2px;">${reraLine}</div>` : ""}
             </div>
-            ${docBadge ? `<div style="flex:0 0 auto;text-align:right;">${docBadge}</div>` : ""}
+            ${rightCol}
           </div>
           <div style="margin-top:10px;${goldGradient(accent)}"></div>
           <div style="margin-top:10px;text-align:center;">
@@ -233,6 +262,7 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string, categor
             </div>
           </div>
         </div>`;
+    }
   }
 };
 
@@ -243,33 +273,34 @@ const footerHtml = (chrome: Required<TemplateChrome>) => {
       return `
         <div style="margin-top:18px;padding-top:10px;border-top:1px solid ${accent};font-size:11px;color:${ink};text-align:center;letter-spacing:.18em;text-transform:uppercase;">
           <div style="font-weight:700;font-size:11.5px;">${esc(tagline)}</div>
-          <div style="margin-top:5px;opacity:.85;">${JBJ_BRAND.email} · ${JBJ_BRAND.website} · ${JBJ_BRAND.phone}</div>
+          <div style="margin-top:5px;opacity:.85;">${linkEmail(ink)} · ${linkWebsite(ink)} · ${linkPhone(ink)}</div>
         </div>`;
     case "compliance-bar":
       return `
         <div style="margin-top:18px;padding-top:10px;border-top:1px solid ${accent};font-size:11px;color:${ink};display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
           <div>${JBJ_BRAND.office || ""}</div>
-          <div>${trn ? `TRN ${esc(trn)} · ` : ""}${license ? `LIC ${esc(license)} · ` : ""}${JBJ_BRAND.email} · ${JBJ_BRAND.website}</div>
+          <div>${trn ? `TRN ${esc(trn)} · ` : ""}${license ? `LIC ${esc(license)} · ` : ""}${linkEmail(ink)} · ${linkWebsite(ink)}</div>
         </div>`;
     case "three-column":
     default: {
       // Compact footer: NO monogram. Single gold hairline + three text columns.
       // Sized to live within A4; vertical slack lives ABOVE this footer (above
-      // the divider) thanks to the flex page wrapper.
+      // the divider) thanks to the flex page wrapper. Phone/email/web are all
+      // clickable anchors (tel: / mailto: / https:).
       return `
         <div style="margin-top:14px;${goldGradient(accent)}"></div>
         <table style="margin-top:8px;width:100%;border-collapse:collapse;table-layout:fixed;font-size:10px;color:${ink};line-height:1.5;">
           <tr>
             <td style="vertical-align:top;width:34%;padding-right:10px;">
               <div style="font-size:9.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:${ink};">${esc(JBJ_BRAND.legalCompany)}</div>
-              <div style="margin-top:3px;font-weight:600;">${JBJ_BRAND.phone}</div>
+              <div style="margin-top:3px;">${linkPhone(ink)}</div>
             </td>
             <td style="vertical-align:top;text-align:center;width:36%;padding:0 8px;color:${ink};opacity:.9;">
               ${JBJ_BRAND.office ? esc(JBJ_BRAND.office) : ""}
             </td>
             <td style="vertical-align:top;text-align:right;width:30%;padding-left:10px;">
-              <div style="color:${ink};">${JBJ_BRAND.email}</div>
-              <div style="margin-top:3px;color:${accent};font-weight:600;letter-spacing:.04em;">${JBJ_BRAND.website}</div>
+              <div>${linkEmail(ink)}</div>
+              <div style="margin-top:3px;">${linkWebsite(accent, true)}</div>
             </td>
           </tr>
         </table>`;
@@ -439,7 +470,7 @@ export function buildPAAHtml(
     ${fu("Email Address", get("email_address"), "email_address")}
     ${fu("Nationality", get("nationality"), "nationality")}
     ${fu("Owner TRN", get("owner_trn"), "owner_trn")}
-    ${fu("Listing Consultant", get("listing_consultant"), "listing_consultant")}
+    ${fu("Listing Consultant", (get("listing_consultant") || "").split(/\s*\/\s*/).filter(Boolean).join(", "), "listing_consultant")}
     ${fu("Property Reference No.", get("property_reference_no"), "property_reference_no")}
     ${!hidden.has("expiry_date") && get("expiry_date") ? `
     <div data-field-key="expiry_date" style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;">
@@ -529,7 +560,7 @@ export function buildPAAHtml(
   <div style="font-size:11px;color:${ink};line-height:1.5;">
     <div style="margin-bottom:8px;">
       1. The landlord / legal representative has agreed to appoint
-      <span style="border-bottom:1px solid ${accent};padding:0 6px;font-weight:600;">${esc(get("broker_appointee_name") || JBJ_BRAND.legalCompany)}</span>
+      <span style="font-weight:600;padding:0 4px;text-decoration:underline;text-decoration-color:${accent};text-decoration-thickness:1px;text-underline-offset:4px;">${esc(get("broker_appointee_name") || JBJ_BRAND.legalCompany)}</span>
       as its:
     </div>
     <div data-chip-row="exclusivity" style="margin:6px 0 10px;display:flex;flex-wrap:wrap;align-items:center;gap:6px;">
