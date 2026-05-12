@@ -26,9 +26,9 @@ export const JBJ_BRAND = {
   monogram: monogramUrl,
 } as const;
 
-// Bumped to 13: large monogram in header & footer, gradient hairline,
-// category-aware amount fields, displayLabel chip cleanup, audit fields.
-export const PAA_LAYOUT_VERSION = 13;
+// v14: A4 flex page — footer pinned to bottom of A4, blank space lives ABOVE
+// footer (between signature row and footer divider) instead of below it.
+export const PAA_LAYOUT_VERSION = 14;
 
 export type PAACategory = "leasing" | "selling" | "other";
 
