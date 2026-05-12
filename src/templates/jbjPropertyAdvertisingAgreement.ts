@@ -35,7 +35,7 @@ export const JBJ_BRAND = {
 // preview byte-for-byte (no more squished/elongated exports). Initial
 // envelope creation now also passes renderMode:"final" so the very first
 // download matches the preview before any save.
-export const PAA_LAYOUT_VERSION = 20;
+export const PAA_LAYOUT_VERSION = 21;
 
 export type PAACategory = "leasing" | "selling" | "other";
 
@@ -309,7 +309,7 @@ const footerHtml = (chrome: Required<TemplateChrome>) => {
       // Phone/email/web are real anchors (tel: / mailto: / https://). No
       // monogram in the footer (kept since v13).
       return `
-        <div style="margin:14px -36px 0;background:#FBF7EE;border-top:1px solid ${accent};padding:10px 36px 12px;">
+        <div style="margin:14px -36px 0;background:#FBF7EE;border-top:1px solid ${accent};padding:10px 36px 14px;">
           <div style="${goldGradient(accent)}margin-bottom:8px;"></div>
           <table style="width:100%;border-collapse:collapse;table-layout:fixed;font-size:9.5px;color:${ink};line-height:1.55;">
             <tr>
@@ -473,7 +473,7 @@ export function buildPAAHtml(
   // A4 so the footer is pushed flush to the bottom and any blank space lives
   // ABOVE the footer divider (between signature row and footer) — never below.
   const html = `
-<div style="font-family:Inter,Arial,sans-serif;color:${ink};background:${chrome.surface};padding:24px 36px 14px;max-width:794px;margin:0 auto;line-height:1.45;font-size:11.5px;min-height:1123px;display:flex;flex-direction:column;box-sizing:border-box;">
+<div style="font-family:Inter,Arial,sans-serif;color:${ink};background:${chrome.surface};padding:24px 36px 0;max-width:794px;margin:0 auto;line-height:1.45;font-size:11.5px;min-height:1123px;display:flex;flex-direction:column;box-sizing:border-box;">
 
   <div style="flex:0 0 auto;">
     ${headerHtml(chrome, get("doc_number"), category, get("rera_permit_number"))}
