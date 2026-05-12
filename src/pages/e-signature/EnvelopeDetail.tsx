@@ -416,11 +416,13 @@ export default function EnvelopeDetail() {
         hiddenFields: next,
       });
       if (hide) {
+        setRecentlyRestoredFields((prev) => prev.filter((k) => k !== key));
         toast.success("Field removed", {
           action: { label: "Undo", onClick: () => toggleHiddenField(key, false) },
         });
       } else {
-        toast.success("Field restored");
+        setRecentlyRestoredFields((prev) => Array.from(new Set([...prev, key])));
+        toast.success(`Field restored: ${key.replace(/_/g, " ")}`);
       }
       refetch();
     } catch (e: any) {
@@ -430,6 +432,7 @@ export default function EnvelopeDetail() {
 
   const restoreAllHiddenFields = async () => {
     if (!envelope?.template_key || !hiddenFields.length) return;
+    const justRestored = [...hiddenFields];
     setHiddenFields([]);
     try {
       await regenerate.mutateAsync({
@@ -441,7 +444,8 @@ export default function EnvelopeDetail() {
         ownerStampUrl,
         hiddenFields: [],
       });
-      toast.success("All removed fields restored");
+      setRecentlyRestoredFields((prev) => Array.from(new Set([...prev, ...justRestored])));
+      toast.success(`${justRestored.length} field${justRestored.length === 1 ? "" : "s"} restored`);
       refetch();
     } catch (e: any) {
       toast.error(e?.message || "Failed to restore");
