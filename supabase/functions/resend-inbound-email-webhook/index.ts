@@ -147,7 +147,7 @@ serve(async (req: Request): Promise<Response> => {
       <tr><td style="font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#1A1A1A;opacity:.55;padding-bottom:14px;">JBJ Global Real Estate</td></tr>
       <tr><td style="font-size:22px;font-weight:600;color:#1A1A1A;padding-bottom:18px;line-height:1.3;">Thanks for writing in — but this inbox isn't monitored.</td></tr>
       <tr><td style="font-size:14px;line-height:1.7;color:#1A1A1A;padding-bottom:24px;">
-        Hi${senderName && senderName !== senderEmail ? ` ${esc(senderName)}` : ""},<br/><br/>
+        Hi${senderName && senderName !== senderEmail ? ` ${senderName.replace(/[<>&"']/g, "")}` : ""},<br/><br/>
         We received your reply to <strong>noreply@jbj.ae</strong>, but no one on our team checks this address.
         For anything you need — questions, follow-ups, or to reach a real person on the team —
         please write to us at <a href="mailto:contact@jbj.ae" style="color:#1A1A1A;font-weight:600;">contact@jbj.ae</a>
