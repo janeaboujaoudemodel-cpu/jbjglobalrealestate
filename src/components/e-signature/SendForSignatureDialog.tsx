@@ -10,6 +10,8 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { SUPABASE_URL, PUBLIC_DOMAIN } from "@/config/backend";
 import { openWhatsApp } from "@/utils/contactActions";
+import { EmailPreviewIframe } from "./EmailPreviewIframe";
+import { buildSenderSignatureHtml, escapeHtml } from "@/lib/email/buildEnvelopeEmailHtml";
 
 const isValidEmail = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.trim());
 
