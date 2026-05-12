@@ -26,12 +26,12 @@ export const JBJ_BRAND = {
   monogram: monogramUrl,
 } as const;
 
-// v17: T&C #1 company-name uses real text-decoration underline (no more
-// border-bottom strikethrough through descenders); listing_consultant
-// auto-strips legacy " / " separators so stale "Jane / Firas" renders as
-// "Jane, Firas"; header right column gains classy clickable phone/email/web
-// links; footer phone/email/website are wrapped in tel:/mailto:/https: anchors.
-export const PAA_LAYOUT_VERSION = 17;
+// v18: Property Specs collapse to a single inline "Apartment · Furnished ·
+// Vacant" line in final mode (saves ~32px of vertical space); Property
+// Identifiers section is hidden in final mode when every identifier is
+// blank; page wrapper drops bottom padding so the footer's gold hairline
+// hugs the A4 bottom edge — slack now lives above the signature row.
+export const PAA_LAYOUT_VERSION = 18;
 
 export type PAACategory = "leasing" | "selling" | "other";
 
