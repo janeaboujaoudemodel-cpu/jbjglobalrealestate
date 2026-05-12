@@ -136,10 +136,13 @@ const fieldUnderline = (
   if (!opts?.force && !value) return "";
   const dataAttr = key ? ` data-field-key="${key}"` : "";
   const safe = esc(value || "");
+  // v23 LABEL-ABOVE-VALUE — label sits above the underlined value so the
+  // user immediately knows what each line means (e.g. "Building Name" above
+  // "Al Tajer Two", "Unit" above "1502").
   return `
   <div${dataAttr} style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;position:relative;">
+    <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:#1A1A1A;opacity:.7;margin-bottom:3px;">${esc(label)}</div>
     <div style="display:inline-block;border-bottom:1px solid #B89555;min-width:1ch;padding:2px 8px 2px 2px;font-size:13px;color:#1A1A1A;white-space:nowrap;">${safe || "&nbsp;"}</div>
-    <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:#1A1A1A;opacity:.7;margin-top:3px;">${esc(label)}</div>
   </div>`;
 };
 
