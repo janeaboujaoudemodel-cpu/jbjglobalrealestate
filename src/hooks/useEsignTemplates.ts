@@ -53,8 +53,14 @@ export function renderTemplateHtml(
   if (templateKey === "jbj-listing-authorisation-selling") {
     return buildSellingHtml(values as any);
   }
-  if (templateKey === "jbj-blank-letter") {
+  if (templateKey === "jbj-blank-letter" || templateKey === "jbj-letterhead-blank") {
     return buildBlankLetterHtml(values as any, opts as BuildBlankLetterOptions);
+  }
+  if (templateKey === "jbj-letterhead-leasing") {
+    return buildBlankLetterHtml(values as any, {
+      ...(opts as BuildBlankLetterOptions),
+      letterheadTitle: "Official Correspondence — Leasing",
+    });
   }
   return buildPAAHtml(values as any, opts);
 }
@@ -74,7 +80,8 @@ export async function renderHtmlToPdfBlob(html: string): Promise<{ blob: Blob; p
   container.style.top = "-10000px";
   container.style.left = "0";
   container.style.width = `${A4_PX_W}px`;
-  container.style.minHeight = `${A4_PX_H}px`;
+  container.style.height = `${A4_PX_H}px`;
+  container.style.overflow = "hidden";
   container.style.background = "#ffffff";
   container.innerHTML = html;
   document.body.appendChild(container);

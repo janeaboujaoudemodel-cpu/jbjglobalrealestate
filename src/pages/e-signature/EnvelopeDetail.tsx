@@ -1078,7 +1078,47 @@ export default function EnvelopeDetail() {
                   </Button>
                 </div>
               )}
-              {PAA_FIELD_GROUPS.filter(g => g.title !== "Signatures").map((group) => {
+              {(envelope.template_key === "jbj-letterhead-leasing" || envelope.template_key === "jbj-letterhead-blank" || envelope.template_key === "jbj-blank-letter") ? (
+                // Plain-text fillable letterhead — no rich-HTML editor.
+                <div className="space-y-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <Label className="text-xs">Recipient</Label>
+                      <Input data-edit-key="recipient" value={editValues.recipient ?? ""} onChange={(e) => setEditValues((p) => ({ ...p, recipient: e.target.value }))} placeholder="To: …" />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Date</Label>
+                      <Input data-edit-key="date" type="date" value={editValues.date ?? ""} onChange={(e) => setEditValues((p) => ({ ...p, date: e.target.value }))} />
+                    </div>
+                  </div>
+                  <div>
+                    <Label className="text-xs">Subject</Label>
+                    <Input data-edit-key="subject" value={editValues.subject ?? ""} onChange={(e) => setEditValues((p) => ({ ...p, subject: e.target.value }))} />
+                  </div>
+                  <div>
+                    <Label className="text-xs">Body (plain text)</Label>
+                    <Textarea
+                      data-edit-key="body_text"
+                      value={editValues.body_text ?? ""}
+                      onChange={(e) => setEditValues((p) => ({ ...p, body_text: e.target.value, body_html: "" }))}
+                      rows={16}
+                      placeholder="Type the letter body here. Line breaks are preserved."
+                      className="font-mono text-sm"
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <Label className="text-xs">Signer name</Label>
+                      <Input data-edit-key="signer_name" value={editValues.signer_name ?? ""} onChange={(e) => setEditValues((p) => ({ ...p, signer_name: e.target.value }))} />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Signer title</Label>
+                      <Input data-edit-key="signer_title" value={editValues.signer_title ?? ""} onChange={(e) => setEditValues((p) => ({ ...p, signer_title: e.target.value }))} />
+                    </div>
+                  </div>
+                </div>
+              ) : (
+              PAA_FIELD_GROUPS.filter(g => g.title !== "Signatures").map((group) => {
                 // Per user request: keep every Property Finder field visible in edit mode
                 // (don't drop conditional ones), so nothing is missing at signing time.
                 const visible = group.fields;
@@ -1141,7 +1181,8 @@ export default function EnvelopeDetail() {
                     </div>
                   </div>
                 );
-              })}
+              })
+              )}
             </CardContent>
           </Card>
         )}
