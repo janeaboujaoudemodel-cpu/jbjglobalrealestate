@@ -229,10 +229,22 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string, categor
           ${docBadge}
         </div>`;
     case "monogram-wordmark":
-    default:
+    default: {
+      // Right column: doc number on top, then a tight clickable contact
+      // stack (phone in ink, email + website in gold) — premium black/gold
+      // mix, never overlaps with anything else.
+      const contactStack = `
+        <div style="margin-top:6px;font-size:9.5px;line-height:1.55;text-align:right;">
+          <div>${linkPhone(ink)}</div>
+          <div>${linkEmail(accent)}</div>
+          <div>${linkWebsite(accent, true)}</div>
+        </div>`;
+      const rightCol = (docBadge || contactStack)
+        ? `<div style="flex:0 0 auto;text-align:right;min-width:140px;">${docBadge}${contactStack}</div>`
+        : "";
       return `
         <div style="margin-bottom:16px;">
-          <div style="display:flex;align-items:center;gap:14px;">
+          <div style="display:flex;align-items:flex-start;gap:14px;">
             <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:54px;height:54px;object-fit:contain;display:block;flex:0 0 auto;" />
             <div style="width:1px;align-self:stretch;background:${accent};opacity:.7;"></div>
             <div style="flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;">
@@ -241,7 +253,7 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string, categor
               </div>
               ${reraLine ? `<div style="margin-top:2px;">${reraLine}</div>` : ""}
             </div>
-            ${docBadge ? `<div style="flex:0 0 auto;text-align:right;">${docBadge}</div>` : ""}
+            ${rightCol}
           </div>
           <div style="margin-top:10px;${goldGradient(accent)}"></div>
           <div style="margin-top:10px;text-align:center;">
@@ -250,6 +262,7 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string, categor
             </div>
           </div>
         </div>`;
+    }
   }
 };
 
