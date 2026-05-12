@@ -172,6 +172,22 @@ export const DEFAULT_CHROME: Required<TemplateChrome> = {
 const goldGradient = (accent: string) =>
   `background:linear-gradient(90deg, ${accent}00 0%, ${accent} 12%, ${accent} 88%, ${accent}00 100%);height:1.5px;`;
 
+// Clickable contact link helpers — premium ink/gold mix, no underline by
+// default so the chrome stays clean. Used in BOTH header and footer so
+// every printed phone / email / website is a real anchor.
+const telHref = (raw: string) => `tel:${raw.replace(/[^\d+]/g, "")}`;
+const mailHref = (raw: string) => `mailto:${raw.trim()}`;
+const webHref = (raw: string) => {
+  const t = raw.trim();
+  return /^https?:/i.test(t) ? t : `https://${t.replace(/^\/+/, "")}`;
+};
+const linkPhone = (color: string) =>
+  `<a href="${telHref(JBJ_BRAND.phone)}" style="color:${color};text-decoration:none;font-weight:600;">${esc(JBJ_BRAND.phone)}</a>`;
+const linkEmail = (color: string) =>
+  `<a href="${mailHref(JBJ_BRAND.email)}" style="color:${color};text-decoration:none;">${esc(JBJ_BRAND.email)}</a>`;
+const linkWebsite = (color: string, bold = false) =>
+  `<a href="${webHref(JBJ_BRAND.website)}" target="_blank" rel="noopener" style="color:${color};text-decoration:none;${bold ? "font-weight:600;letter-spacing:.04em;" : ""}">${esc(JBJ_BRAND.website)}</a>`;
+
 const titleFor = (category: PAACategory) =>
   category === "selling"
     ? "Property Advertising Agreement — Selling"
