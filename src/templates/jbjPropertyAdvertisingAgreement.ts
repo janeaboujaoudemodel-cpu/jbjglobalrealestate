@@ -6,7 +6,11 @@
  *
  * LOCKED TEMPLATE — do not modify chrome without owner approval.
  */
-import monogramUrl from "@/assets/jbj-monogram-nobuffer.png";
+// v20: monogram inlined as a base64 data URI so it renders identically in
+// the on-screen preview, the iframe sandbox, the html2canvas-rasterised PDF
+// and any new-tab print window. Removes the "broken image" placeholder the
+// owner saw in the printed PAA.
+import monogramUrl from "@/assets/jbj-monogram-nobuffer.png?inline";
 import {
   TRADE_LICENSE_BRAND,
   TRADE_LICENSE_LEGAL_NAME,
