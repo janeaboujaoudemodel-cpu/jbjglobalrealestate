@@ -7,8 +7,9 @@ export const DOCUSIGN_APP_STORE =
   "https://apps.apple.com/app/docusign/id474990205";
 export const DOCUSIGN_PLAY_STORE =
   "https://play.google.com/store/apps/details?id=com.docusign.ink";
-export const DOCUSIGN_WEB =
-  "https://www.docusign.com/products/electronic-signature";
+// Universal/web entry — opens the installed DocuSign app via universal links
+// on iOS/Android, otherwise lands the user on the DocuSign web app.
+export const DOCUSIGN_WEB = "https://apps.docusign.com/";
 
 // Inbox monitored by the contracts team for inbound signed PDFs.
 export const SIGNED_RETURN_EMAIL = "contracts@jbj.ae";
