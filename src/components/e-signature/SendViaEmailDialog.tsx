@@ -101,6 +101,7 @@ export function SendViaEmailDialog({
     setTos(recipientEmail ? [recipientEmail] : []);
     setCcs([DEFAULT_CC]);
     setSubject(defaultSubject);
+    setDocusignUrl("");
     setBodyHtml(
       legacyBodyToHtml(defaultBody, {
         clientName: recipientName || "Client",
