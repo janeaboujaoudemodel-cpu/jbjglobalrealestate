@@ -228,15 +228,20 @@ export default function EnvelopeDetail() {
 
   const previewHtml = useMemo(() => {
     if (!envelope?.template_key) return null;
-    const vals = editing ? editValues : ((envelope.template_field_values as any) || {});
+    const baseVals = editing ? editValues : ((envelope.template_field_values as any) || {});
     // Only render the captured signature pad image when the recipient has truly
-    // signed. NEVER autofill the printed name or date — the document must show
-    // exactly what the signer typed/drew, nothing more. (Test envelopes that
-    // were never really signed should look unsigned.)
+    // signed. Once signed, mirror the signer name + signing date into the
+    // rendered letterhead so preview, print, export, and download all match.
     const signedClient = !editing
       ? ((envelope.esign_recipients || []).find((r: any) => r.metadata?.role === "client" && r.status === "signed")
         || (envelope.esign_recipients || []).find((r: any) => r.status === "signed"))
       : null;
+    const signedDate = signedClient?.signed_at ? format(new Date(signedClient.signed_at), "dd/MM/yyyy") : "";
+    const vals = signedClient ? {
+      ...baseVals,
+      landlord_signature_name: baseVals.landlord_signature_name || signedClient.name || "",
+      landlord_signature_date: baseVals.landlord_signature_date || signedDate,
+    } : baseVals;
     return renderTemplateHtml(
       envelope.template_key,
       { ...vals, doc_number: vals.doc_number || docNumber },
