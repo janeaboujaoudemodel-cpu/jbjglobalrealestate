@@ -611,7 +611,7 @@ export function buildPAAHtml(
     </ol>
   </div>
 
-  <div style="margin-top:auto;">
+  <div style="margin-top:auto;padding-bottom:18px;">
   ${sectionTitle(8, "Landlord")}
   <div style="display:grid;grid-template-columns:1.2fr 1.2fr 1fr;gap:0 28px;margin-top:6px;align-items:end;">
     <div>
