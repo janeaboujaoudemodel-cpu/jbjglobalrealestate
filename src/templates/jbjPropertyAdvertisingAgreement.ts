@@ -179,19 +179,16 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string) => {
     case "monogram-wordmark":
     default:
       return `
-        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid ${accent};padding-bottom:18px;margin-bottom:26px;">
-          <div style="display:flex;align-items:center;gap:20px;">
-            <img src="${JBJ_BRAND.monogram}" alt="JBJ Global Real Estate" crossorigin="anonymous" style="width:200px;height:auto;max-height:108px;object-fit:contain;display:block;" />
-            <div style="border-left:1px solid ${accent};padding-left:18px;">
-              <div style="font-size:13px;font-weight:600;letter-spacing:.16em;color:${ink};">${esc(JBJ_BRAND.legalCompany)}</div>
-              ${JBJ_BRAND.office ? `<div style="font-size:11px;letter-spacing:.12em;color:${ink};opacity:.8;margin-top:4px;">${esc(JBJ_BRAND.office)}</div>` : ""}
+        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid ${accent};padding-bottom:12px;margin-bottom:16px;">
+          <div style="display:flex;align-items:center;gap:16px;">
+            <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:78px;height:auto;max-height:60px;object-fit:contain;display:block;" />
+            <div style="border-left:1px solid ${accent};padding-left:14px;">
+              <div style="font-size:12.5px;font-weight:700;letter-spacing:.14em;color:${ink};line-height:1.25;">${esc(JBJ_BRAND.legalCompany)}</div>
+              <div style="font-size:10.5px;letter-spacing:.18em;color:${ink};opacity:.7;margin-top:3px;text-transform:uppercase;">Property Advertising Agreement</div>
             </div>
           </div>
-          <div style="text-align:right;font-size:12.5px;line-height:1.55;color:${ink};">
+          <div style="text-align:right;font-size:11px;line-height:1.5;color:${ink};">
             ${docBadge}
-            <div style="margin-top:6px;">${JBJ_BRAND.phone}</div>
-            <div>${JBJ_BRAND.email}</div>
-            <div>${JBJ_BRAND.website}</div>
           </div>
         </div>`;
   }
@@ -199,25 +196,24 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string) => {
 
 const footerHtml = (chrome: Required<TemplateChrome>) => {
   const { accent, ink, footerStyle, tagline, trn, license } = chrome;
-  const base = `margin-top:44px;padding-top:18px;border-top:1px solid ${accent};font-size:12px;color:${ink};line-height:1.5;`;
+  const base = `margin-top:18px;padding-top:10px;border-top:1px solid ${accent};font-size:11px;color:${ink};line-height:1.45;`;
   switch (footerStyle) {
     case "centered-tagline":
       return `
         <div style="${base}text-align:center;letter-spacing:.18em;text-transform:uppercase;">
-          <div style="font-weight:700;font-size:12.5px;">${esc(tagline)}</div>
-          <div style="margin-top:6px;opacity:.85;">${JBJ_BRAND.email} · ${JBJ_BRAND.website} · ${JBJ_BRAND.phone}</div>
+          <div style="font-weight:700;font-size:11.5px;">${esc(tagline)}</div>
+          <div style="margin-top:5px;opacity:.85;">${JBJ_BRAND.email} · ${JBJ_BRAND.website} · ${JBJ_BRAND.phone}</div>
         </div>`;
     case "compliance-bar":
       return `
-        <div style="${base}display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;">
-          <div style="font-weight:700;">${JBJ_BRAND.company}</div>
+        <div style="${base}display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <div>${JBJ_BRAND.office || ""}</div>
           <div>${trn ? `TRN ${esc(trn)} · ` : ""}${license ? `LIC ${esc(license)} · ` : ""}${JBJ_BRAND.email} · ${JBJ_BRAND.website}</div>
         </div>`;
     case "three-column":
     default: {
-      // Use a real <table> here: html2canvas + email-client renderers occasionally
-      // collapse CSS grid into a single column, breaking the institutional layout.
-      // Tables are rock-solid across PDF, print and email surfaces.
+      // Footer = contact details only. The company logo + legal name live in the header.
+      // Real <table> for cross-renderer reliability.
       const credentials = [
         `Trade Licence No. ${esc(TRADE_LICENSE_NUMBER)}`,
         `Dubai Chamber ${esc(TRADE_LICENSE_DCCI_NO)}`,
@@ -228,24 +224,16 @@ const footerHtml = (chrome: Required<TemplateChrome>) => {
       return `
         <table style="${base}width:100%;border-collapse:collapse;table-layout:fixed;">
           <tr>
-            <td style="vertical-align:middle;width:42%;padding-right:14px;">
-              <table style="border-collapse:collapse;"><tr>
-                <td style="vertical-align:middle;padding-right:12px;width:118px;">
-                  <img src="${JBJ_BRAND.monogram}" alt="JBJ Global Real Estate" crossorigin="anonymous" style="width:110px;height:auto;max-height:60px;object-fit:contain;display:block;" />
-                </td>
-                <td style="vertical-align:middle;">
-                  <div style="font-weight:700;letter-spacing:.10em;font-size:11.5px;line-height:1.3;">${esc(JBJ_BRAND.legalCompany)}</div>
-                  ${JBJ_BRAND.office ? `<div style="opacity:.8;margin-top:3px;font-size:10.5px;line-height:1.35;">${esc(JBJ_BRAND.office)}</div>` : ""}
-                </td>
-              </tr></table>
+            <td style="vertical-align:top;width:38%;padding-right:12px;font-size:10.5px;line-height:1.45;">
+              ${JBJ_BRAND.office ? `<div style="opacity:.85;">${esc(JBJ_BRAND.office)}</div>` : ""}
             </td>
-            <td style="vertical-align:middle;text-align:center;width:24%;font-size:11.5px;line-height:1.5;">
+            <td style="vertical-align:top;text-align:center;width:30%;font-size:10.5px;line-height:1.45;">
               <div>${JBJ_BRAND.email}</div>
               <div>${JBJ_BRAND.website}</div>
             </td>
-            <td style="vertical-align:middle;text-align:right;width:34%;padding-left:14px;">
-              <div style="font-weight:600;font-size:12px;">${JBJ_BRAND.phone}</div>
-              <div style="opacity:.85;margin-top:3px;font-size:10.5px;line-height:1.4;">${credentials}</div>
+            <td style="vertical-align:top;text-align:right;width:32%;padding-left:12px;font-size:10.5px;line-height:1.45;">
+              <div style="font-weight:600;">${JBJ_BRAND.phone}</div>
+              <div style="opacity:.85;margin-top:2px;">${credentials}</div>
             </td>
           </tr>
         </table>`;
