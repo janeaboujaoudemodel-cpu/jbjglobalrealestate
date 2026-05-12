@@ -199,7 +199,7 @@ export const pagesSEO = {
   },
   contact: {
     title: 'Contact JBJ Global Real Estate Dubai',
-    description: 'Contact JBJ Global Real Estate for property inquiries in Dubai. Founded by Founder & CEO Jane Bou Jaoude. Call +971 56 591 1000 or email contact@JBJ.ae for expert assistance.',
+    description: 'Contact JBJ Global Real Estate for property inquiries in Dubai. Founded by Founder & CEO Jane Bou Jaoude. Call +971 54 716 7107 or email contact@JBJ.ae for expert assistance.',
     keywords: 'contact JBJ, JBJ phone number, Dubai real estate contact, property consultation Dubai, Jane Bou Jaoude contact, JBJ Global Real Estate email, real estate inquiry Dubai',
     canonicalPath: '/contact',
   },

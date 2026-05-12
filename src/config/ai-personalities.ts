@@ -32,7 +32,7 @@ export interface AIPersonality {
 export const JBJ_COMPANY_INFO = {
   name: "JBJ Global Real Estate",
   nameFull: "JBJ Global Real Estate L.L.C S.O.C.",
-  phone: "+971 56 591 1000",
+  phone: "+971 54 716 7107",
   email: "Contact@JBJ.ae",
   privacyEmail: "Privacy@JBJ.ae",
   website: "www.JBJ.ae",
@@ -677,7 +677,7 @@ ABOUT JBJ GLOBAL REAL ESTATE:
 - 6+ years operating in Dubai's premium Real Estate market
 - Services: BUY · SELL · RENT (luxury properties)
 - Focus: Off-plan, ready, premium properties in Dubai
-- Website: www.jbj.ae | Contact: +971 56 591 1000
+- Website: www.jbj.ae | Contact: +971 54 716 7107
 
 REAL ESTATE KNOWLEDGE (You are an expert on all of this):
 - Off-Plan Properties: Purchased before/during construction. Payment plans: 50/50 or 60/40.
@@ -770,7 +770,7 @@ JBJ Global Real Estate`,
 Amanda Clarke
 Executive Assistant to CEO
 JBJ Global Real Estate
-www.jbj.ae | +971 56 591 1000`,
+www.jbj.ae | +971 54 716 7107`,
     permissions: ['manage_ceo_calendar', 'priority_communications', 'executive_briefings', 'vip_coordination', 'all_departments_view', 'broker_reports', 'financial_tracking', 'cv_analysis', 'full_crm_access', 'collect_all_reports', 'flag_for_ceo', 'department_coordination'],
     channels: ['chat', 'whatsapp', 'email', 'video', 'call'],
     canUseEmoji: true,

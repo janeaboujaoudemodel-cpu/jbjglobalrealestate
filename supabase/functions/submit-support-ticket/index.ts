@@ -226,7 +226,7 @@ ${sharedSections("support ticket", "JBJ Global Real Estate Support Team")}
     
     // WhatsApp link with pre-filled message
     const whatsappMessage = encodeURIComponent(`Hi JBJ Support Team, I'm following up on my ticket ${ticket.ticket_number}. My issue: ${subject}`);
-    const whatsappLink = `https://wa.me/971565911000?text=${whatsappMessage}`;
+    const whatsappLink = `https://wa.me/971547167107?text=${whatsappMessage}`;
 
     // Survey link
     const surveyLink = `https://jbj.ae/ticket-survey?ticket=${encodeURIComponent(ticket.ticket_number)}&email=${encodeURIComponent(email)}`;

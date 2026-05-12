@@ -174,7 +174,7 @@ export function usePresentations() {
     } else if (lowerPrompt.includes("property") || lowerPrompt.includes("listing")) {
       newSlide = { ...newSlide, title: "Featured Property", content: "Location: Dubai Marina\nType: Luxury Penthouse\nSize: 4,200 sq ft\nBedrooms: 4 | Bathrooms: 5\nPrice: AED 12,500,000\n\nPanoramic sea views with premium finishes throughout.", layout: "content" };
     } else if (lowerPrompt.includes("thank") || lowerPrompt.includes("cta") || lowerPrompt.includes("contact") || lowerPrompt.includes("closing")) {
-      newSlide = { ...newSlide, title: "Thank You", content: "Let's discuss how we can help you achieve your real estate goals.\n\nJBJ Global Real Estate\n+971 56 591 1000\nCONTACT@JBJ.AE", layout: "title", textAlign: "center" };
+      newSlide = { ...newSlide, title: "Thank You", content: "Let's discuss how we can help you achieve your real estate goals.\n\nJBJ Global Real Estate\n+971 54 716 7107\nCONTACT@JBJ.AE", layout: "title", textAlign: "center" };
     } else if (lowerPrompt.includes("comparison") || lowerPrompt.includes("vs")) {
       newSlide = { ...newSlide, title: "Comparison Analysis", content: "Off-Plan vs. Ready Properties:\n\n• Payment Plans: 60/40 vs Full Payment\n• ROI Potential: Higher vs Stable\n• Availability: Wider Selection vs Limited\n• Customization: High vs Low\n• Risk Level: Moderate vs Low", layout: "two-column" };
     } else {
@@ -224,7 +224,7 @@ export function usePresentations() {
       createSlide({ ...base, title: "Key Statistics", content: "Total Market Value: AED 528 Billion\nAnnual Growth: 15.2%\nForeign Investment: 42%\nNew Launches: 200+ Projects\nAverage Yield: 7.1%\nOccupancy Rate: 89%", layout: "stats" }),
       createSlide({ ...base, title: "Investment is not about timing the market, but time in the market.", content: "— JBJ Global Real Estate", layout: "quote", textAlign: "center" }),
       createSlide({ ...base, title: "Strategic Recommendations", content: "Based on our analysis, we recommend:\n\n1. Diversify across premium locations\n2. Consider off-plan for higher returns\n3. Focus on high-demand unit types\n4. Leverage payment plan structures\n5. Monitor regulatory developments", layout: "content" }),
-      createSlide({ ...base, title: "Thank You", content: "Let us help you make informed investment decisions.\n\nJBJ Global Real Estate\n+971 56 591 1000\nCONTACT@JBJ.AE", layout: "title", textAlign: "center" }),
+      createSlide({ ...base, title: "Thank You", content: "Let us help you make informed investment decisions.\n\nJBJ Global Real Estate\n+971 54 716 7107\nCONTACT@JBJ.AE", layout: "title", textAlign: "center" }),
     ];
     setSlides(deckSlides); setCurrentSlide(0);
     setPresentationTitle(topic || "AI Generated Presentation");
