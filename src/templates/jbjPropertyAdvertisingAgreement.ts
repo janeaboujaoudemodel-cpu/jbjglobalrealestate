@@ -449,7 +449,7 @@ export function buildPAAHtml(
   // A4 so the footer is pushed flush to the bottom and any blank space lives
   // ABOVE the footer divider (between signature row and footer) — never below.
   const html = `
-<div style="font-family:Inter,Arial,sans-serif;color:${ink};background:${chrome.surface};padding:24px 36px;max-width:794px;margin:0 auto;line-height:1.45;font-size:11.5px;min-height:1123px;display:flex;flex-direction:column;box-sizing:border-box;">
+<div style="font-family:Inter,Arial,sans-serif;color:${ink};background:${chrome.surface};padding:24px 36px 14px;max-width:794px;margin:0 auto;line-height:1.45;font-size:11.5px;min-height:1123px;display:flex;flex-direction:column;box-sizing:border-box;">
 
   <div style="flex:0 0 auto;">
     ${headerHtml(chrome, get("doc_number"), category, get("rera_permit_number"))}
