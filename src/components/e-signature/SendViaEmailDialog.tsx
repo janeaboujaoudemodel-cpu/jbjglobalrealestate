@@ -116,9 +116,8 @@ export function SendViaEmailDialog({
           envelope_id: envelopeId,
           channels: ["email"],
           cc_emails: cleanCcs,
-          override_subject: subject,
-          override_body: body,
-          override_to: to,
+          interpolated_subject: subject,
+          interpolated_body: body,
         }),
       });
       const out = await res.json().catch(() => ({}));
