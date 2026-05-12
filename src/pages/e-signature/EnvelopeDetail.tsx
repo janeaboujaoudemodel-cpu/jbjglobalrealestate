@@ -19,7 +19,7 @@ import { toast } from "sonner";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 import { SUPABASE_URL, PUBLIC_DOMAIN } from "@/config/backend";
 import { PAA_FIELD_GROUPS, PAA_LAYOUT_VERSION, type TemplateChrome } from "@/templates/jbjPropertyAdvertisingAgreement";
-import { renderTemplateHtml, useRegenerateEnvelopePdf } from "@/hooks/useEsignTemplates";
+import { renderTemplateHtml, renderHtmlToPdfBlob, useRegenerateEnvelopePdf } from "@/hooks/useEsignTemplates";
 import { SmartFillDropzone } from "@/components/e-signature/SmartFillDropzone";
 import { TemplateChromeStudio } from "@/components/e-signature/TemplateChromeStudio";
 import { useOwnerSignatureAssets } from "@/hooks/useOwnerSignatureAssets";
@@ -257,6 +257,44 @@ export default function EnvelopeDetail() {
   };
 
   const buildSigningUrl = (token: string) => `${PUBLIC_DOMAIN}/sign/${token}`;
+
+  // Generate a clean BLANK PDF on demand — same template as the signed copy
+  // but with no captured signature, no printed name and no date. Use this to
+  // download a clean copy you can hand-deliver or send via DocuSign for the
+  // client to actually sign.
+  const handleDownloadBlank = async () => {
+    if (!envelope?.template_key) { toast.error("No template attached"); return; }
+    try {
+      const baseVals = (envelope.template_field_values as any) || {};
+      const blankVals = {
+        ...baseVals,
+        doc_number: baseVals.doc_number || docNumber,
+        landlord_signature_name: "",
+        landlord_signature_date: "",
+      };
+      const html = renderTemplateHtml(envelope.template_key, blankVals, {
+        chrome,
+        ownerSignatureUrl: null,
+        ownerStampUrl: null,
+        clientSignatureUrl: null,
+        hiddenFields,
+        renderMode: "final",
+      });
+      const { blob } = await renderHtmlToPdfBlob(html);
+      const objectUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = objectUrl;
+      a.download = `JBJ-PAA-${docNumber || envelope.id.slice(0, 8)}-unsigned.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(objectUrl), 60_000);
+      toast.success("Blank PDF downloaded — ready to send to the client");
+    } catch (e: any) {
+      console.error(e);
+      toast.error(e?.message || "Failed to generate blank PDF");
+    }
+  };
 
   const handleWhatsApp = (recipient: any) => {
     if (!recipient?.signing_token) { toast.error("No signing token"); return; }
