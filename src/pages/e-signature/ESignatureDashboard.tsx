@@ -217,6 +217,12 @@ export default function ESignatureDashboard() {
                   Signature Studio
                 </Button>
               </Link>
+              <Link to="/e-signature/blank-letter">
+                <Button variant="outline" className="border-[hsl(var(--gold)/.3)] hover:border-[hsl(var(--gold))]">
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  Blank Letter (AI)
+                </Button>
+              </Link>
               <Link to="/e-signature/contract-review">
                 <Button variant="outline" className="border-[hsl(var(--gold)/.3)] hover:border-[hsl(var(--gold))]">
                   <Scale className="w-4 h-4 mr-2" />
