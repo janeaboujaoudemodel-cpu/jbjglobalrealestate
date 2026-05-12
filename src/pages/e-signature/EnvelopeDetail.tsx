@@ -353,14 +353,22 @@ export default function EnvelopeDetail() {
   const handleDownloadCurrentPdf = async (filename?: string | null) => {
     try {
       toast.loading("Preparing current PDF…", { id: "current-pdf" });
+      // Compose a filename that always includes both the document number AND
+      // the landlord/client name so downloaded PDFs are immediately
+      // identifiable in the Downloads folder.
+      const safe = (s?: string | null) => (s || "").replace(/[^a-zA-Z0-9_-]+/g, "-").replace(/^-+|-+$/g, "");
+      const vals = (editing ? editValues : ((envelope?.template_field_values as any) || {})) as Record<string, string>;
+      const landlord = safe(vals.landlord_name || clientRec?.name || "");
+      const composed = filename
+        || [safe(docNumber || envelope?.name || "JBJ-Document"), landlord].filter(Boolean).join("_") + ".pdf";
       const blob = await renderCurrentPreviewPdf();
       if (blob) {
-        savePdfBlob(blob, filename || envelope?.document_filename || `${docNumber || "JBJ-Document"}.pdf`);
+        savePdfBlob(blob, composed);
         toast.success("Current preview downloaded", { id: "current-pdf" });
         return;
       }
       if (envelope?.document_url) {
-        await handleDownload(bustUrl(envelope.document_url), filename || envelope.document_filename);
+        await handleDownload(bustUrl(envelope.document_url), composed);
         toast.success("PDF downloaded", { id: "current-pdf" });
         return;
       }
