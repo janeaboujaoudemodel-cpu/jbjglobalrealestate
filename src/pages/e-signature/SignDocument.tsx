@@ -12,6 +12,7 @@ import { SUPABASE_URL } from "@/config/backend";
 import {
   DOCUSIGN_APP_STORE,
   DOCUSIGN_PLAY_STORE,
+  DOCUSIGN_WEB,
   SIGNED_RETURN_EMAIL,
 } from "@/config/docusignHandoff";
 
