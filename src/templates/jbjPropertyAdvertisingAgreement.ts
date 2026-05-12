@@ -163,14 +163,16 @@ export const DEFAULT_CHROME: Required<TemplateChrome> = {
   surface: "#FFFFFF",
   headerStyle: "monogram-wordmark",
   footerStyle: "three-column",
-  tagline: "DOWNTOWN DUBAI · INSTITUTIONAL REAL ESTATE",
+  tagline: "DUBAI, UAE · INSTITUTIONAL REAL ESTATE",
   trn: "",
   license: "",
 };
 
-// Premium gradient divider (gold → champagne → gold) — 2px tall.
-const goldGradient = (accent: string) =>
-  `background:linear-gradient(90deg, ${accent}00 0%, ${accent} 12%, ${accent} 88%, ${accent}00 100%);height:1.5px;`;
+// Premium 3-stop gold gradient — deep antique gold → bright champagne → deep
+// antique gold. Reads richer than a flat #B89555 hairline both on screen and
+// in the PDF export. 2px tall for visible heft without dominating the page.
+const goldGradient = (_accent: string) =>
+  `background:linear-gradient(90deg, #8A6A2A00 0%, #8A6A2A 10%, #C9A24E 50%, #8A6A2A 90%, #8A6A2A00 100%);height:2px;`;
 
 // Clickable contact link helpers — premium ink/gold mix, no underline by
 // default so the chrome stays clean. Used in BOTH header and footer so
@@ -244,14 +246,14 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string, categor
         : "";
       return `
         <div style="margin-bottom:16px;">
-          <div style="display:flex;align-items:flex-start;gap:14px;">
+          <div style="display:flex;align-items:center;gap:14px;min-height:54px;">
             <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:54px;height:54px;object-fit:contain;display:block;flex:0 0 auto;" />
-            <div style="width:1px;align-self:stretch;background:${accent};opacity:.7;"></div>
+            <div style="width:1px;height:38px;background:${accent};opacity:.7;flex:0 0 auto;"></div>
             <div style="flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;">
-              <div style="font-size:13px;font-weight:700;letter-spacing:.20em;color:${ink};text-transform:uppercase;line-height:1.2;">
+              <div style="font-size:15px;font-weight:700;letter-spacing:.22em;color:${ink};text-transform:uppercase;line-height:1.15;">
                 ${esc(JBJ_BRAND.legalCompany)}
               </div>
-              ${reraLine ? `<div style="margin-top:2px;">${reraLine}</div>` : ""}
+              ${reraLine ? `<div style="margin-top:3px;">${reraLine}</div>` : ""}
             </div>
             ${rightCol}
           </div>

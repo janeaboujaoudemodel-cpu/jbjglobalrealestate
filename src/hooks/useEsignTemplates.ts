@@ -82,7 +82,7 @@ export async function renderHtmlToPdfBlob(html: string): Promise<{ blob: Blob; p
     const html2canvas = (await import("html2canvas")).default;
     const { jsPDF } = await import("jspdf");
     const canvas = await html2canvas(container, {
-      scale: 2,
+      scale: 3,
       backgroundColor: "#ffffff",
       useCORS: true,
       allowTaint: false,
@@ -91,7 +91,7 @@ export async function renderHtmlToPdfBlob(html: string): Promise<{ blob: Blob; p
       width: A4_PX_W,
       height: A4_PX_H,
     } as any);
-    const img = canvas.toDataURL("image/jpeg", 0.92);
+    const img = canvas.toDataURL("image/jpeg", 0.95);
     // Pin to true A4 portrait (595×842pt) so the export is always one page.
     const pdfWidth = 595;
     const pdfHeight = 842;

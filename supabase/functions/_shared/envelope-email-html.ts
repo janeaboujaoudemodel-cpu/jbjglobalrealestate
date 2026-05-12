@@ -32,7 +32,7 @@ export function buildSenderSignatureHtml(senderName: string, senderTitle: string
   <tr><td style="padding:6px 0 12px;"><div style="width:72px;height:1px;background:#B89555;line-height:1px;font-size:0;">&nbsp;</div></td></tr>
   <tr><td style="font-size:10.5px;font-weight:500;letter-spacing:.16em;color:#1A1A1A;text-transform:uppercase;padding-bottom:8px;">${escapeHtml(senderTitle)}</td></tr>
   <tr><td style="font-size:11px;font-weight:700;letter-spacing:.22em;color:#1A1A1A;text-transform:uppercase;padding-bottom:3px;">JBJ GLOBAL REAL ESTATE</td></tr>
-  <tr><td style="font-size:10.5px;color:#1A1A1A;opacity:.7;letter-spacing:.04em;padding-bottom:1px;">Downtown Dubai, UAE</td></tr>
+  <tr><td style="font-size:10.5px;color:#1A1A1A;opacity:.7;letter-spacing:.04em;padding-bottom:1px;">Dubai, UAE</td></tr>
   <tr><td style="font-size:10.5px;color:#1A1A1A;opacity:.7;letter-spacing:.04em;padding-bottom:1px;">CONTACT@JBJ.AE &nbsp;·&nbsp; +971 54 716 7107</td></tr>
   <tr><td style="font-size:10.5px;color:#1A1A1A;opacity:.7;letter-spacing:.04em;">WWW.JBJ.AE</td></tr>
 </table>`;
@@ -110,7 +110,7 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
         <table role="presentation" style="width:100%;border-collapse:collapse;font-size:11px;color:#1A1A1A;line-height:1.55;"><tr>
           <td style="width:42%;vertical-align:top;">
             <div style="font-weight:700;letter-spacing:.14em;white-space:nowrap;">JBJ GLOBAL REAL ESTATE</div>
-            <div style="opacity:.7;white-space:nowrap;">Downtown Dubai, UAE</div>
+            <div style="opacity:.7;white-space:nowrap;">Dubai, UAE</div>
           </td>
           <td align="center" style="width:32%;vertical-align:top;">
             <div style="white-space:nowrap;"><a href="mailto:contact@jbj.ae" style="color:#1A1A1A;text-decoration:none;">CONTACT@JBJ.AE</a></div>
