@@ -524,17 +524,23 @@ export default function CRMLeadsTableV2({
             options={[
               ...groupedStatuses.positive.map((s) => ({
                 value: s.value,
-                label: `🟢 ${s.label}`,
+                label: s.label,
+                dot: s.dotColor,
+                group: "Positive",
                 count: leads.filter((l) => (l.state?.pipeline_status || "new") === s.value).length,
               })),
               ...groupedStatuses.neutral.map((s) => ({
                 value: s.value,
-                label: `🔵 ${s.label}`,
+                label: s.label,
+                dot: s.dotColor,
+                group: "Neutral",
                 count: leads.filter((l) => (l.state?.pipeline_status || "new") === s.value).length,
               })),
               ...groupedStatuses.negative.map((s) => ({
                 value: s.value,
-                label: `🔴 ${s.label}`,
+                label: s.label,
+                dot: s.dotColor,
+                group: "Negative",
                 count: leads.filter((l) => (l.state?.pipeline_status || "new") === s.value).length,
               })),
             ]}
@@ -544,13 +550,14 @@ export default function CRMLeadsTableV2({
             <SelectTrigger className="h-10 bg-[#FDFBF7] border border-[#B89555]/30 text-[#1A1A1A] font-semibold min-w-0">
               <SelectValue placeholder="All Sources" className="truncate" />
             </SelectTrigger>
-            <SelectContent className="bg-[#FDFBF7] border border-[#B89555]/40 shadow-lg max-h-[360px] [&_[data-highlighted]]:bg-[#EFE6D6] [&_[data-highlighted]]:text-[#1A1A1A]">
+            <SelectContent className="bg-[#FDFBF7] border border-[#B89555]/40 shadow-xl ring-1 ring-[#B89555]/10 max-h-[360px] min-w-[16rem] [&_[data-highlighted]]:bg-[#EFE6D6] [&_[data-highlighted]]:text-[#1A1A1A]">
               <SelectItem value="__all__">All Sources</SelectItem>
               {sourceTypeOptions.map((t) => {
                 const count = leads.filter((l) => (l.lead_source_type || "") === t).length;
                 return (
                   <SelectItem key={t} value={t}>
-                    <span className="inline-flex items-center gap-2">
+                    <span className="inline-flex items-center gap-2 whitespace-nowrap">
+                      <span className="inline-block h-2 w-2 rounded-full bg-[#B89555]/70" aria-hidden />
                       {formatSourceLabel(t)}
                       <span className="text-[#1A1A1A]/50 text-[11px]">· {count}</span>
                     </span>
@@ -564,17 +571,19 @@ export default function CRMLeadsTableV2({
             <SelectTrigger className="h-10 bg-[#FDFBF7] border border-[#B89555]/30 text-[#1A1A1A] font-semibold min-w-0">
               <SelectValue placeholder="All Owners" className="truncate" />
             </SelectTrigger>
-            <SelectContent className="bg-[#FDFBF7] border border-[#B89555]/40 shadow-lg max-h-[360px] [&_[data-highlighted]]:bg-[#EFE6D6] [&_[data-highlighted]]:text-[#1A1A1A]">
+            <SelectContent className="bg-[#FDFBF7] border border-[#B89555]/40 shadow-xl ring-1 ring-[#B89555]/10 max-h-[360px] min-w-[14rem] [&_[data-highlighted]]:bg-[#EFE6D6] [&_[data-highlighted]]:text-[#1A1A1A]">
               <SelectItem value="__all__">All Owners</SelectItem>
               <SelectItem value="__mine__">With Me</SelectItem>
               <SelectItem value="__assigned__">Assigned to a Broker</SelectItem>
               <SelectItem value="__unassigned__">Pool (no broker)</SelectItem>
-              <SelectGroup>
-                <SelectLabel className="text-[#1A1A1A]/70 font-bold bg-[#F7F2EA]">Brokers</SelectLabel>
-                {assigneeOptions.map((a) => (
-                  <SelectItem key={a.id} value={a.id}>{a.name}</SelectItem>
-                ))}
-              </SelectGroup>
+              {assigneeOptions.length > 0 && (
+                <SelectGroup>
+                  <SelectLabel className="text-[#1A1A1A]/70 font-bold bg-[#F7F2EA]">Brokers</SelectLabel>
+                  {assigneeOptions.map((a) => (
+                    <SelectItem key={a.id} value={a.id}>{a.name}</SelectItem>
+                  ))}
+                </SelectGroup>
+              )}
             </SelectContent>
           </Select>
 
@@ -582,7 +591,7 @@ export default function CRMLeadsTableV2({
             <SelectTrigger className="h-10 bg-[#FDFBF7] border border-[#B89555]/30 text-[#1A1A1A] font-semibold min-w-0">
               <SelectValue placeholder="All Tags" className="truncate" />
             </SelectTrigger>
-            <SelectContent className="bg-[#FDFBF7] border border-[#B89555]/40 shadow-lg [&_[data-highlighted]]:bg-[#EFE6D6] [&_[data-highlighted]]:text-[#1A1A1A]">
+            <SelectContent className="bg-[#FDFBF7] border border-[#B89555]/40 shadow-xl ring-1 ring-[#B89555]/10 [&_[data-highlighted]]:bg-[#EFE6D6] [&_[data-highlighted]]:text-[#1A1A1A]">
               <SelectItem value="__all__">All Tags</SelectItem>
               <SelectItem value="vip">★ VIP</SelectItem>
               <SelectItem value="unassigned">Pool (no broker)</SelectItem>

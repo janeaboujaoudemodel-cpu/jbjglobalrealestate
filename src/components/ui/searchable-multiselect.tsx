@@ -20,6 +20,10 @@ export interface MultiOption {
   value: string;
   label: string;
   count?: number | null;
+  /** Optional category badge tint (CSS color or hex) — renders as a colored dot before the label. */
+  dot?: string | null;
+  /** Optional group heading rendered above this option (sticky-style separator). */
+  group?: string | null;
 }
 
 interface Props {
@@ -115,7 +119,7 @@ export function SearchableMultiSelect({
       </PopoverTrigger>
       <PopoverContent
         align="start"
-        className="w-72 p-0 bg-[#FDFBF7] border border-[#B89555]/40"
+        className="w-72 p-0 bg-[#FDFBF7] border border-[#B89555]/40 shadow-xl ring-1 ring-[#B89555]/10 rounded-lg"
       >
         <div className="p-2 border-b border-[#B89555]/20">
           <div className="relative">
@@ -156,39 +160,59 @@ export function SearchableMultiSelect({
               No matches
             </div>
           ) : (
-            filtered.map((opt) => {
-              const checked = selected.includes(opt.value);
-              return (
-                <button
-                  key={opt.value}
-                  type="button"
-                  onClick={() => toggle(opt.value)}
-                  className={[
-                    "w-full flex items-center gap-2 px-3 py-1.5 text-sm text-left",
-                    "hover:bg-[#F7F2EA] text-[#1A1A1A]",
-                  ].join(" ")}
-                  role="menuitemcheckbox"
-                  aria-checked={checked}
-                >
-                  <span
-                    className={[
-                      "inline-flex items-center justify-center w-4 h-4 rounded border",
-                      checked
-                        ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]"
-                        : "bg-[#FDFBF7] border-[#B89555]/40",
-                    ].join(" ")}
+            (() => {
+              const out: React.ReactNode[] = [];
+              let lastGroup: string | null | undefined;
+              filtered.forEach((opt) => {
+                if (opt.group && opt.group !== lastGroup) {
+                  lastGroup = opt.group;
+                  out.push(
+                    <div
+                      key={`grp-${opt.group}`}
+                      className="px-3 pt-2 pb-1 text-[10px] font-bold uppercase tracking-wider text-[#1A1A1A]/55 bg-[#F7F2EA]/60"
+                    >
+                      {opt.group}
+                    </div>
+                  );
+                }
+                const checked = selected.includes(opt.value);
+                out.push(
+                  <button
+                    key={opt.value}
+                    type="button"
+                    onClick={() => toggle(opt.value)}
+                    className="w-full flex items-center gap-2 px-3 py-1.5 text-sm text-left hover:bg-[#EFE6D6] text-[#1A1A1A] transition-colors"
+                    role="menuitemcheckbox"
+                    aria-checked={checked}
                   >
-                    {checked && <Check className="h-3 w-3" />}
-                  </span>
-                  <span className="flex-1 truncate">{opt.label}</span>
-                  {opt.count != null && (
-                    <span className="text-[10px] text-[#1A1A1A]/60 tabular-nums">
-                      {opt.count.toLocaleString()}
+                    <span
+                      className={[
+                        "inline-flex items-center justify-center w-4 h-4 rounded border",
+                        checked
+                          ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]"
+                          : "bg-[#FDFBF7] border-[#B89555]/40",
+                      ].join(" ")}
+                    >
+                      {checked && <Check className="h-3 w-3" />}
                     </span>
-                  )}
-                </button>
-              );
-            })
+                    {opt.dot && (
+                      <span
+                        aria-hidden
+                        className="inline-block h-2.5 w-2.5 rounded-full ring-1 ring-black/5 shrink-0"
+                        style={{ backgroundColor: opt.dot }}
+                      />
+                    )}
+                    <span className="flex-1 truncate">{opt.label}</span>
+                    {opt.count != null && (
+                      <span className="text-[10px] text-[#1A1A1A]/60 tabular-nums">
+                        {opt.count.toLocaleString()}
+                      </span>
+                    )}
+                  </button>
+                );
+              });
+              return out;
+            })()
           )}
         </div>
       </PopoverContent>
