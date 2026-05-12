@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 import { 
   ChevronLeft,
@@ -8,6 +8,8 @@ import {
   Shield,
   Menu,
   X,
+  Maximize2,
+  Minimize2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -23,7 +25,16 @@ const OwnerDashboardShell = () => {
   const { user, signOut } = useAuth();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [fullscreen, setFullscreen] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return window.localStorage.getItem("owner.fullscreen") === "1";
+  });
   const isMobile = useIsMobile();
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.localStorage.setItem("owner.fullscreen", fullscreen ? "1" : "0");
+  }, [fullscreen]);
 
   const handleSignOut = async () => {
     try {
@@ -110,7 +121,7 @@ const OwnerDashboardShell = () => {
       )}
 
       {/* Desktop Sidebar */}
-      {!isMobile && (
+      {!isMobile && !fullscreen && (
         <aside 
           data-surface="champagne"
           className={cn(
@@ -128,7 +139,7 @@ const OwnerDashboardShell = () => {
       <main 
         className={cn(
           "flex-1 transition-all duration-300 overscroll-contain",
-          isMobile ? "ml-0" : (sidebarCollapsed ? "ml-16" : "ml-64")
+          isMobile || fullscreen ? "ml-0" : (sidebarCollapsed ? "ml-16" : "ml-64")
         )}
         role="main"
       >
@@ -164,6 +175,22 @@ const OwnerDashboardShell = () => {
               <span className="text-[#1A1A1A] text-xs md:text-sm font-bold hidden sm:inline tracking-wide">Owner</span>
             </div>
             
+            {/* Fullscreen toggle */}
+            {!isMobile && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setFullscreen((f) => !f)}
+                data-no-contrast-guard
+                style={{ color: "#1A1A1A" }}
+                className="hover:text-[#B89555] hover:bg-[#B89555]/10 transition-all duration-300 focus:ring-2 focus:ring-[#B89555]/40"
+                aria-label={fullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+                title={fullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+              >
+                {fullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+              </Button>
+            )}
+
             {/* User Email */}
             <div className="text-right hidden md:block whitespace-nowrap">
               <p className="text-[#1A1A1A] text-sm font-medium truncate max-w-[120px]">
@@ -175,7 +202,7 @@ const OwnerDashboardShell = () => {
         </header>
 
         {/* Page Content */}
-        <div className="p-4 md:p-6 lg:p-8 max-w-[1800px] mx-auto">
+        <div className={cn("transition-all", fullscreen ? "p-2 md:p-3 max-w-none" : "p-4 md:p-6 lg:p-8 max-w-[1800px] mx-auto")}>
           <Outlet />
         </div>
       </main>
