@@ -212,22 +212,23 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string, categor
     case "monogram-wordmark":
     default:
       return `
-        <div style="margin-bottom:18px;">
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:24px;">
-            <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:220px;height:auto;max-height:170px;object-fit:contain;display:block;" />
-            <div style="text-align:right;font-size:11px;line-height:1.5;color:${ink};">
-              ${docBadge}
-              ${reraLine}
+        <div style="margin-bottom:16px;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:54px;height:54px;object-fit:contain;display:block;flex:0 0 auto;" />
+            <div style="width:1px;align-self:stretch;background:${accent};opacity:.7;"></div>
+            <div style="flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;">
+              <div style="font-size:13px;font-weight:700;letter-spacing:.20em;color:${ink};text-transform:uppercase;line-height:1.2;">
+                ${esc(JBJ_BRAND.legalCompany)}
+              </div>
+              ${reraLine ? `<div style="margin-top:2px;">${reraLine}</div>` : ""}
             </div>
+            ${docBadge ? `<div style="flex:0 0 auto;text-align:right;">${docBadge}</div>` : ""}
           </div>
-          <div style="margin-top:14px;${goldGradient(accent)}"></div>
-          <div style="margin-top:14px;text-align:center;">
-            <div style="font-size:13px;font-weight:700;letter-spacing:.22em;color:${ink};text-transform:uppercase;">
-              ${esc(JBJ_BRAND.legalCompany)}
-            </div>
-            <h1 style="font-size:18px;font-weight:800;letter-spacing:.20em;margin:8px 0 6px;color:${ink};text-transform:uppercase;display:inline-block;border-bottom:1px solid ${accent};padding-bottom:4px;">
+          <div style="margin-top:10px;${goldGradient(accent)}"></div>
+          <div style="margin-top:10px;text-align:center;">
+            <div style="font-size:14px;font-weight:800;letter-spacing:.22em;color:${ink};text-transform:uppercase;">
               ${titleFor(category).toUpperCase()}
-            </h1>
+            </div>
           </div>
         </div>`;
   }
