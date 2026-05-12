@@ -132,6 +132,8 @@ export function SendViaEmailDialog({
           envelope_id: envelopeId,
           interpolated_subject: subject,
           interpolated_body_html: bodyHtml,
+          docusign_url: docusignUrl.trim() || undefined,
+          attachment_name: attachmentName,
           test_recipient: TEST_RECIPIENT,
         }),
       });
