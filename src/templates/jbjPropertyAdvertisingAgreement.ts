@@ -35,7 +35,7 @@ export const JBJ_BRAND = {
 // preview byte-for-byte (no more squished/elongated exports). Initial
 // envelope creation now also passes renderMode:"final" so the very first
 // download matches the preview before any save.
-export const PAA_LAYOUT_VERSION = 21;
+export const PAA_LAYOUT_VERSION = 22;
 
 export type PAACategory = "leasing" | "selling" | "other";
 
