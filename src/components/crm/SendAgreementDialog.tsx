@@ -142,7 +142,7 @@ export default function SendAgreementDialog({ open, onClose, lead }: SendAgreeme
           <Button variant="outline" onClick={onClose}>Cancel</Button>
           <Button
             variant="gold"
-            disabled={!picked || !lead?.email_lower || createFromTpl.isPending}
+            disabled={!picked || createFromTpl.isPending}
             onClick={handleCreate}
           >
             {createFromTpl.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
