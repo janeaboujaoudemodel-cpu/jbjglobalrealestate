@@ -1,79 +1,75 @@
-## Three fixes to the PAA template + envelope page
+## Three remaining PAA tweaks + where to test
 
-All edits in `src/templates/jbjPropertyAdvertisingAgreement.ts` and `src/pages/e-signature/EnvelopeDetail.tsx`. Bump `PAA_LAYOUT_VERSION` 16 → 17.
+All edits in `src/templates/jbjPropertyAdvertisingAgreement.ts`. Bump `PAA_LAYOUT_VERSION` 17 → 18 so every open envelope re-renders.
 
-### 1. T&C #1 — gold line cuts through the company name → use a real underline
+### 1. Property Specs — collapse onto one line
 
-Today (line 532) the appointee company name is wrapped in:
+Today each chip group (`Property Type`, `Furnishing`, `Status`) renders on its own visual row in the final PDF because each chip prints its **label + selected value as a full segment** with thin dividers between them. On a 794px page this wraps.
 
-```
-<span style="border-bottom:1px solid #B89555; padding:0 6px; font-weight:600;">
-  J B J GLOBAL REAL ESTATE L.L.C S.O.C
-</span>
-```
+**Fix:**
+- In **final** mode (`isFinal === true`), render Property Specs as a single inline sentence:
+  `Apartment · Furnished · Vacant` (or `… · Tenanted (Vacating 12 Mar 2026)`).
+  - Drop the per-row `flex` containers and chip labels, output only the **selected value** per group, separated by a thin gold middle dot.
+  - Keep `Tenure · Usage` on a second compact line (same dot separator).
+- In **edit** mode, keep today's chip row UI so the user can still toggle.
 
-When the line wraps inside flowing T&C text, the inline `border-bottom` lands at the line baseline and visually cuts through descenders/dots in the legal name (it reads as a strikethrough on the company name).
+Net result: Property Specs takes one line in the PDF, freeing ~24–32px of vertical space.
 
-**Fix:** drop `border-bottom`, switch to a real text underline with offset so the gold line sits clearly **below** the text and never overlaps:
+### 2. Property Identifiers — explain + auto-hide when empty
 
-```
-text-decoration: underline;
-text-decoration-color: #B89555;
-text-decoration-thickness: 1px;
-text-underline-offset: 4px;
-padding: 0 4px;
-```
+The fields in this section are the legal identifiers of the unit:
 
-Result: the legal name reads cleanly with a gold hairline underneath, even when it wraps. No padding-induced offset, no overlap.
+- **Title Deed No. / Title Deed Date** — for ready secondary properties
+- **Oqood No. / Oqood Date** — for off-plan units (DLD pre-registration)
+- **Expected Handover** — off-plan only
+- **DEWA Premise No.** — utility account anchor
+- **Makani No.** — Dubai Municipality 10-digit address
+- **RERA Permit No.** — required to advertise
 
-### 2. Listing Consultant "Jane / Firas" not updating in the downloaded PDF
+It's empty because none of these were typed in for this envelope. Two improvements:
 
-Root cause: the **Download PDF** button on the envelope page (`EnvelopeDetail.tsx` line 731) downloads `envelope.document_url`, which is the **last-rendered cached PDF**. If you edit Listing Consultant from "Jane / Firas" → "Jane" but don't click **Save** (or click Save but the regenerate hasn't completed before you click Download), the cached PDF still contains the old value. The on-screen preview always reflects `editValues`, so the screen looks right while the download is stale.
+a. **Auto-prefill** from the linked admin listing (when the PAA is created from / synced to a listing): pull `title_deed`, `oqood`, `dewa_premise`, `makani`, `rera_permit` directly into `template_field_values` on first render.
 
-**Three-part fix:**
+b. **In final mode, hide the Property Identifiers section entirely if every field is blank** (`fuPh` is replaced by a "no identifiers on file" check). In edit mode it stays visible so the user can fill it.
 
-a. **Track unsaved edits.** Add a `dirty` flag (`true` when `editValues` ≠ persisted `template_field_values`). 
+### 3. Footer hugs the page bottom — close the bottom gap
 
-b. **Block stale downloads.** When `dirty === true`, the Download PDF / Download blank PDF / Export buttons either:
-   - show an inline warning chip "Unsaved changes — save first" and become disabled, OR
-   - automatically run Save → wait for regenerate → then download (preferred; one click).
+Current page wrapper (line 452):
+`padding:24px 36px; min-height:1123px; display:flex; flex-direction:column;`
 
-c. **Force fresh PDF.** After every Save, append a cache-busting query param (`?v=<PAA_LAYOUT_VERSION>-<updated_at>`) to the download URL so even CDN-cached PDFs are bypassed.
+The signature block already has `margin-top:auto`, so slack collapses **above** the signatures (between rules and signature). The visible "gap below the footer" is the wrapper's **24px bottom padding** plus the footer's own `margin-top:14px`.
 
-d. **Strip stale separators.** When rendering `listing_consultant` (line 442), defensively `.split(/\s*\/\s*/).filter(Boolean).join(", ")` so any old "/" left in the DB value renders as a clean comma list — not "Jane / Firas". (User-typed value with no slash is unaffected.)
+**Fix:**
+- Wrapper padding → `padding:24px 36px 0;` (keep top + sides, drop bottom).
+- Footer wrapper gets its own `padding:10px 0 14px;` so the gold hairline + 3-column row sit ~14px from the page edge — clean, balanced, still inside A4 safe zone.
+- Add `padding-bottom:18px` to the signature grid so signature names don't kiss the footer hairline.
 
-### 3. Header — add classy clickable contact block under the doc number
+Result: gold hairline + footer text now anchor to the bottom of the A4 page; the slack moves up between the T&C ordered list and the Landlord signature row, exactly as requested.
 
-The `monogram-wordmark` header already has the structure the user described:
-- monogram → vertical gold divider → legal company name (+ RERA permit) → doc number on the right
-- gold gradient bar → centered "PROPERTY ADVERTISING AGREEMENT — LEASING/SELLING" title
+### 4. Where to test
 
-What's missing: under the doc number on the right, the user wants **phone · email · website**, premium gold/ink mix, all clickable.
+The PAA template renders in two places. Both are reached from the **Owner side menu → E-Signatures**:
 
-**Fix:** in the right-hand column of the header (after `docBadge`), add:
+1. **Studio (create new):** `/owner/e-signature/studio` → choose **Property Advertising Agreement** → fill fields → preview iframe shows the live template.
+2. **Existing envelope:** `/owner/e-signature/envelope/:id` (the same URL the user shared, e.g. `/e-signature/810df24a-…`).
+   - Click **Edit document** → change values (e.g. clear "Firas" from Listing Consultant).
+   - The right-hand iframe re-renders live from `editValues` as you type.
+   - Click **Save** → cached PDF regenerates.
+   - **Download PDF** now auto-saves first if there are unsaved edits (from the previous fix), so the downloaded file always matches the screen.
 
-```
-+971 54 716 7107      ← <a href="tel:+971547167107">, ink color, weight 600
-Contact@JBJ.AE        ← <a href="mailto:Contact@JBJ.AE">, gold #B89555
-www.jbj.ae            ← <a href="https://www.jbj.ae">, gold #B89555, letter-spacing
-```
+Quick QA checklist after deploy:
+- Open the same `810df24a` envelope, hit Edit, clear `listing_consultant` to "Jane", hit Save, then Download PDF → verify "Jane" appears (no slash, no Firas).
+- Confirm Property Specs prints as one line in the downloaded PDF.
+- Confirm the footer's gold hairline sits ~14px from the bottom edge with no white band beneath it.
 
-All three: `text-decoration: none`, `font-size: 9.5px`, right-aligned, 2px line spacing, no underline by default — gold pops as the accent.
+### Layout version bump
 
-### 4. Make every contact in the FOOTER clickable too
-
-In `footerHtml` (the `three-column` style at line 254), the phone, email, website are currently plain text. Wrap each in the same `<a>` tags as the header (same `tel:` / `mailto:` / `https:` pattern). Same colour scheme, no visible underline so the footer stays clean.
-
-This satisfies the user's rule: "Anytime you put the email, number, or website, it has to be clickable — header or footer or anywhere."
-
-### 5. Bump layout version
-
-`PAA_LAYOUT_VERSION` 16 → 17 so all open envelope previews pick up the new chrome and the underline fix immediately, and so the cache-bust in step 2c uses the new value.
+`PAA_LAYOUT_VERSION` 17 → 18, so the cache-bust URL param invalidates every previously rendered PDF and forces fresh regeneration for all open envelopes.
 
 ---
 
 **Files touched:**
-- `src/templates/jbjPropertyAdvertisingAgreement.ts` — items 1, 3, 4, 5 + listing_consultant `.split('/')` cleanup in item 2d.
-- `src/pages/e-signature/EnvelopeDetail.tsx` — items 2a, 2b, 2c (dirty flag + auto-save-on-download + cache-busted URL).
+- `src/templates/jbjPropertyAdvertisingAgreement.ts` — items 1, 2b, 3, 4 (version bump).
+- (Optional, item 2a only) `supabase/functions/paa-sync-listing/*` to backfill identifiers when a listing is linked. Skip if the user wants pure template work.
 
-No DB or edge-function changes.
+No DB migrations.
