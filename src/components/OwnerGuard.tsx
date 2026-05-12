@@ -39,6 +39,12 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
   const ownerVerifiedOnce = useRef<boolean>(
     typeof window !== "undefined" && sessionStorage.getItem("owner_verified_once") === "1"
   );
+  // Once we've rendered the protected page even once on this guard instance,
+  // never replace it with the dark splash again — token refresh / realtime
+  // re-verifications must not cause the page to "blink" between content and
+  // the verifying screen. Real downgrades (sign-out, email_mismatch) still
+  // fall through to the auth redirect below.
+  const hasRenderedRef = useRef(false);
   // Optimistic: trust a persistent localStorage cache for the current user.
   const hasCachedOwner = (() => {
     if (typeof window === "undefined" || !user?.id) return false;
