@@ -26,11 +26,12 @@ export const JBJ_BRAND = {
   monogram: monogramUrl,
 } as const;
 
-// v16: single-row Property Specs (type+furnishing+status), placeholder
-// underlines for empty Property Identifiers in edit mode, signature row
-// pushed flush above footer (margin-top:auto) so blank space sits between
-// signatures and footer divider — never below it.
-export const PAA_LAYOUT_VERSION = 16;
+// v17: T&C #1 company-name uses real text-decoration underline (no more
+// border-bottom strikethrough through descenders); listing_consultant
+// auto-strips legacy " / " separators so stale "Jane / Firas" renders as
+// "Jane, Firas"; header right column gains classy clickable phone/email/web
+// links; footer phone/email/website are wrapped in tel:/mailto:/https: anchors.
+export const PAA_LAYOUT_VERSION = 17;
 
 export type PAACategory = "leasing" | "selling" | "other";
 
