@@ -389,6 +389,13 @@ export default function EnvelopeDetail() {
       if (!/villa/i.test(cleaned.property_type || "")) cleaned.plot_sqft = "";
       if (!/until/i.test(cleaned.listing_period || "")) cleaned.listing_period_until_date = "";
 
+      // HARD RULE: never persist client/landlord/JBJ printed names + dates from
+      // the editor — those fields are reserved for the actual signer to fill in.
+      cleaned.landlord_signature_name = "";
+      cleaned.landlord_signature_date = "";
+      cleaned.jbj_signature_name = "";
+      cleaned.jbj_signature_date = "";
+
       await regenerate.mutateAsync({
         envelopeId: envelope.id,
         templateKey: envelope.template_key,
