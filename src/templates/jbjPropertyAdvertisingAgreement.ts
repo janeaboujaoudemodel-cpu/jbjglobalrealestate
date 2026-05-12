@@ -550,6 +550,7 @@ export function buildPAAHtml(
     </ol>
   </div>
 
+  <div style="margin-top:auto;">
   ${sectionTitle(8, "Landlord")}
   <div style="display:grid;grid-template-columns:1.2fr 1.2fr 1fr;gap:0 28px;margin-top:6px;align-items:end;">
     <div>
@@ -567,6 +568,7 @@ export function buildPAAHtml(
       <div style="height:1px;background:${accent};opacity:.55;"></div>
       <div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-top:5px;">Date</div>
     </div>
+  </div>
   </div>
 
   </div>
