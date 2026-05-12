@@ -78,6 +78,11 @@ const OwnerRelationshipsRevenue = lazy(() => import("@/pages/owner/OwnerRelation
 const OwnerMediaIngest = lazy(() => import("@/pages/owner/OwnerMediaIngest"));
 const DocumentsFormsHub = lazy(() => import("@/pages/owner/DocumentsFormsHub"));
 const VoiceAgentControlPanel = lazy(() => import("@/pages/owner/VoiceAgentControlPanel"));
+const OwnerEnvelopeDetail = lazy(() => import("@/pages/e-signature/EnvelopeDetail"));
+const OwnerCreateEnvelope = lazy(() => import("@/pages/e-signature/CreateEnvelope"));
+const OwnerSignatureStudio = lazy(() => import("@/pages/e-signature/SignatureStudio"));
+const OwnerBlankLetterStudio = lazy(() => import("@/pages/e-signature/BlankLetterStudio"));
+const OwnerContractReview = lazy(() => import("@/pages/e-signature/ContractReview"));
 
 export const OwnerRoutes = () => (
   <Route path="/owner" element={
