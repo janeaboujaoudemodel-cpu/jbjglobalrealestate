@@ -348,11 +348,6 @@ export function buildPAAHtml(
 
   ${headerHtml(chrome, get("doc_number"))}
 
-  <div style="text-align:center;margin:4px 0 10px;">
-    <h1 style="font-size:17px;font-weight:800;letter-spacing:.20em;margin:0;color:${ink};text-transform:uppercase;">
-      Property Advertising Agreement
-    </h1>
-  </div>
   <p style="font-size:11px;color:${ink};opacity:.78;margin:4px 0 3px;line-height:1.45;">
     As a property owner or landlord, you are partnering with <strong>JBJ Global Real Estate</strong> to advertise and represent your property for sale or lease at the best terms in the shortest time. By signing below, your property will be advertised across JBJ's premium portals, website, social media, partner brokerages, CRM and direct outreach. Submitting verification documents ranks your listing higher with the Verified badge — consumers are 5× more likely to enquire.
   </p>
