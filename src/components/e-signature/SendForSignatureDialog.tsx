@@ -419,29 +419,39 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
             </div>
           </div>
 
-          {/* Live preview — renders premium signature block exactly as the email will */}
-          <div className="p-5 rounded-xl border border-[#B89555]/30 bg-white">
-            <div className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/60 mb-2">Live preview · what the recipient will see</div>
-            <div className="text-base font-semibold text-[#1A1A1A] mb-3">{previewSubject}</div>
-            <div className="text-sm text-[#1A1A1A]/85 whitespace-pre-wrap leading-relaxed">
-              {previewBody.split(tokens.sender_signature).map((chunk, i, arr) => (
-                <span key={i}>
-                  {chunk}
-                  {i < arr.length - 1 && (
-                    <span className="block mt-7 not-italic">
-                      <span style={{ fontFamily: "'Cormorant Garamond', 'Playfair Display', Georgia, serif", fontStyle: "italic", fontWeight: 500, fontSize: "28px", color: "#1A1A1A", lineHeight: 1, letterSpacing: ".01em" }}>{senderName}</span>
-                      <span className="block mt-1.5 mb-3" style={{ width: 72, height: 1, background: "#B89555" }} />
-                      <span className="block text-[10.5px] uppercase tracking-[.16em] text-[#1A1A1A] mb-2">{senderTitle}</span>
-                      <span className="block text-[11px] font-bold uppercase tracking-[.22em] text-[#1A1A1A]">JBJ GLOBAL REAL ESTATE</span>
-                      <span className="block text-[10.5px] text-[#1A1A1A]/70">Downtown Dubai, UAE</span>
-                      <span className="block text-[10.5px] text-[#1A1A1A]/70">CONTACT@JBJ.AE · +971 54 716 7107</span>
-                      <span className="block text-[10.5px] text-[#1A1A1A]/70">WWW.JBJ.AE</span>
-                    </span>
-                  )}
-                </span>
-              ))}
+          {/* DocuSign envelope URL (optional — empty falls back to DocuSign web entry) */}
+          <div>
+            <Label className="text-xs uppercase tracking-wider text-[#1A1A1A]/70">
+              DocuSign envelope URL <span className="opacity-60 normal-case font-normal">(optional)</span>
+            </Label>
+            <Input
+              value={docusignUrl}
+              onChange={(e) => setDocusignUrl(e.target.value)}
+              placeholder="https://apps.docusign.com/…"
+              className="mt-1.5 font-mono text-[12px]"
+              type="url"
+            />
+            <div className="text-[11px] text-[#1A1A1A]/60 mt-1">
+              Paste it to deep-link the <strong>OPEN IN DOCUSIGN</strong> button straight to the envelope. Leave empty for the universal DocuSign entry.
             </div>
-            <div className="mt-4 pt-3 border-t border-[#B89555]/20">
+          </div>
+
+          {/* Live preview — byte-for-byte the email the recipient receives */}
+          <div className="rounded-xl border border-[#B89555]/30 bg-white overflow-hidden">
+            <div className="px-4 pt-3 pb-2 text-[10px] uppercase tracking-wider text-[#1A1A1A]/60 border-b border-[#B89555]/20">
+              Live preview · what the recipient will see (incl. OPEN IN DOCUSIGN button)
+            </div>
+            <div className="h-[640px]">
+              <EmailPreviewIframe
+                subject={previewSubject}
+                bodyHtml={previewBodyHtml}
+                docNumber={docNumber}
+                docusignUrl={docusignUrl}
+                attachmentName={`${docTitle}.pdf`}
+                className="w-full h-full bg-[#FDFBF7]"
+              />
+            </div>
+            <div className="px-4 py-3 border-t border-[#B89555]/20">
               <button onClick={() => { navigator.clipboard.writeText(tokens.signing_link); toast.success("Link copied"); }}
                 className="text-xs text-[#1A1A1A]/70 hover:text-[#1A1A1A] flex items-center gap-1.5">
                 <Copy className="w-3 h-3" /> {tokens.signing_link}
