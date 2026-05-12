@@ -9,7 +9,11 @@
  * preview AND in the html2canvas PDF export — so "preview != download" can
  * never happen on letterhead documents.
  */
-// monogram now loaded via absolute public URL inside the rendered HTML.
+// monogram inlined as a base64 data URI so it renders identically in the
+// preview iframe (srcDoc), html2canvas PDF export, and any new-tab print
+// window — eliminating the broken-image placeholder seen when fetching
+// the asset over the network.
+import monogramUrl from "@/assets/jbj-monogram-nobuffer.png?inline";
 import {
   TRADE_LICENSE_LEGAL_NAME,
   TRADE_LICENSE_OFFICE,
@@ -69,9 +73,8 @@ export function buildLetterheadHeader(opts: LetterheadHeaderOpts = {}): string {
   return `
     <div style="margin:-24px -36px 14px;background:${CHAMPAGNE};padding:16px 36px 14px;border-bottom:1px solid ${GOLD};">
       <div style="display:flex;align-items:center;gap:14px;min-height:58px;">
-        <img src="https://www.jbj.ae/jbj-monogram-dark-on-light.png" alt="JBJ Global Real Estate" crossorigin="anonymous" style="width:58px;height:58px;object-fit:contain;display:block;flex:0 0 auto;" />
-        <div style="width:1px;height:42px;background:${GOLD};opacity:.6;flex:0 0 auto;"></div>
-        <div style="flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;min-width:0;">
+        <img src="${monogramUrl}" alt="JBJ Global Real Estate" style="width:58px;height:58px;object-fit:contain;display:block;flex:0 0 auto;" />
+        <div style="flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;min-width:0;padding-left:14px;">
           <div style="font-size:15px;font-weight:700;letter-spacing:.20em;color:${INK};text-transform:uppercase;line-height:1.15;">
             ${esc(TRADE_LICENSE_LEGAL_NAME)}
           </div>

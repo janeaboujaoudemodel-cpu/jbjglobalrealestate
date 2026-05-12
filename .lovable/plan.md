@@ -1,62 +1,53 @@
-## CRM Phase-2 finishing pass
+## What I'll change
 
-Most items from the list are already in `CRMLeadsTableV2.tsx` / `InlineStatusSelect.tsx` / `UnifiedCRM.tsx` from the previous turns. The remaining gap is **(a)** the "All Leads" empty state, **(b)** the AI Next-Actions panel + edge function, and **(c)** verifying the inner vertical rail is gone everywhere.
+### 1. Remove all dividers except two full-width hairlines (header + footer)
 
-### 1. Fix "All Leads" empty state
-**Root cause:** `CRMLeadsTableV2` runs every fetched row through `isRealCRMLead` which strips any name starting with `test/demo/redacted/system-verification` or any email matching `^test*@`, `@example.com`, `@tupmail.com`, `verification@`. Your 4 seed leads almost certainly match those patterns, so the table empties out even though rows exist.
+**`src/templates/jbjPropertyAdvertisingAgreement.ts`** — `monogram-wordmark` header case (around line 254-276):
+- Delete the small **vertical 1px gold strip** between the monogram and the company name (`<div style="width:1px;height:42px;background:${accent};...">`).
+- Keep the single full-width gold hairline that already sits at the bottom of the champagne header band (extends edge-to-edge via the `-36px` negative margin) — this is the only header divider that survives.
+- Title block "PROPERTY ADVERTISING AGREEMENT — LEASING / SELLING" stays centered inside the champagne band, with no extra rule between it and anything else.
 
-Fix:
-- In `CRMLeadsTableV2.fetchLeads`, when `isOwner === true` **skip** `isRealCRMLead` and instead only drop rows where `deleted_at` is set. Owners must always see what's actually in the database; the guard was for public-facing surfaces.
-- Render an empty-state CTA when there really are zero rows: "No leads yet — Import CSV · Add lead · Refresh", instead of the bare "No leads found." line.
-- Add a tiny diagnostic line under the header in dev when `leads.length !== filtered.length`: "Showing X of Y (filters active) — Clear".
+**Footer** (`three-column` case, around line 305-323):
+- Already has a single full-width gold hairline as the band's `border-top`. Confirm no other inner `border-*` rule is rendered. Nothing else to change here besides the cleanup above.
 
-### 2. Stage colored chips + Sources cell
-Already shipped in the previous turn (`InlineStatusSelect` now renders each option as a `LeadStatusBadge` with green/blue/red category headers; the Source column wraps inside a champagne pill). No further code change — keep as is.
+**`src/templates/letterheadChrome.ts`** (shared by Leasing Letter + Blank Letter):
+- Remove the matching vertical 1px gold strip between monogram and wordmark in `buildLetterheadHeader`.
+- Keep the existing full-width header `border-bottom` and full-width footer `border-top`.
 
-### 3. Champagne dropdown surfaces, Me/Pool labels, Assignee filter, Distribution strip
-All present in `CRMLeadsTableV2.tsx` (lines 469–600): champagne `SelectContent`, "With Me / Assigned / Pool (no broker)" labels, dedicated Assignee dropdown, distribution strip with total / mine / assigned / pool + clickable top-broker pills. **No change needed** — verify only.
+Net result on every JBJ document (PAA Leasing/Selling, Leasing Letter, Blank Letter): exactly **two** hairlines — one edge-to-edge under the header band, one edge-to-edge above the footer band. No vertical separators, no duplicates.
 
-### 4. Remove vertical sub-sidebar
-`UnifiedCRM.tsx` uses two horizontal bars (entity tabs + sub-section pills). `CRMRelationships.tsx` has no `aside`/`w-64` either. Sweep:
-- `rg "aside|w-56|w-60|w-64|w-72|flex-col.*sticky"` inside `src/pages/owner/crm/**` and `src/components/crm/**`.
-- If anything still renders a vertical rail (suspected: `CRMSideRail`, `CRMFloatingInsightsWidget`), confirm it's a floating dock not a layout column. The "side rail" should only render as a fixed right-edge dock; if it ever takes column width, swap it to `position: fixed`.
+### 2. Fix "broken logo" in the e-signature preview
 
-### 5. AI Next-Actions panel + edge function
-New piece. Adds a smart "What to do next" widget at the top of `Leads → Dashboard` view inside `UnifiedCRM`.
+- `letterheadChrome.ts` currently loads the monogram from the external URL `https://www.jbj.ae/jbj-monogram-dark-on-light.png`. Inside the preview iframe (`srcDoc`) this image race-fails / shows the broken-image icon for some sessions.
+- Switch it to the same inline base64 asset PAA already uses: `import monogramUrl from "@/assets/jbj-monogram-nobuffer.png?inline"`. Inline data URIs render instantly in `srcDoc`, in `html2canvas` PDF export and in any new-tab print window — eliminating the broken-image state.
 
-**Component:** `src/components/crm/CRMAINextActions.tsx`
-- Reads the visible `leads` array (top 50 by `created_at desc`) plus the per-user state map.
-- POSTs `{ leads: [{id, full_name, pipeline_stage, last_activity_at, source}] }` to a new edge function.
-- Shows up to 5 ranked cards (champagne surface, gold hairline): **Lead · Why · Suggested action** with one-click buttons (`Call`, `Email`, `Schedule`, `Mark Won`, `Snooze`) that route to existing handlers in `CRMLeadsTableV2` (`handleCall`, `handleEmail`, `InlineStatusSelect`).
-- Cached for 10 min in `crm_ai_suggestions` so the panel doesn't burn tokens on every render.
+### 3. Fix Print being "blocked" / popup blocked
 
-**Edge function:** `supabase/functions/crm-ai-next-actions/index.ts`
-- `requireOwnerAuth` middleware (per Zero-Trust standard).
-- Calls Lovable AI Gateway (`google/gemini-3-flash-preview`) with structured output (`Output.object`) returning `{ suggestions: [{ leadId, reason, action: "call|email|schedule|won|snooze", confidence }] }`.
-- Stores result in `crm_ai_suggestions` keyed by `(user_id, lead_set_hash)`.
+Two root causes are layered together; both need to go.
 
-**Migration:** new table `public.crm_ai_suggestions`
-```text
-- user_id uuid (owner of the cache row)
-- lead_set_hash text (md5 of sorted lead ids)
-- payload jsonb
-- created_at timestamptz default now()
-RLS: only the owning user_id can SELECT/INSERT; admins via has_role('admin').
-```
+**a. Global anti-print CSS in `src/components/SecurityShield.tsx`:**
+- It injects `@media print { body { display: none !important; } }` for every visitor, including the owner. This is what makes the browser print preview render as a blank page and what the user is calling "blocked".
+- Remove that `@media print` block entirely. (The real anti-capture protections — `useAntiCapture` — already guard the auditor role and are scoped correctly.)
 
-### 6. Mount the panel
-In `UnifiedCRM.tsx`, when `entity === "leads" && view === "overview"`, render `<CRMAINextActions userId={userId} />` above `CRMEnhancedDashboard`. Lazy-imported so initial bundle stays small.
+**b. "Popup blocked" on Print button in `src/pages/e-signature/EnvelopeDetail.tsx` (`handlePrint`) and `src/components/e-signature/DocumentEditor.tsx` (`print`):**
+- Today both functions `await` PDF rendering then download a `.pdf`, asking the user to manually press Ctrl/⌘+P. The user wants Print to actually open the print dialog.
+- Replace with a synchronous-iframe pattern that keeps the user-gesture and never triggers a popup blocker:
+  1. On click (no `await` first), create a hidden `<iframe>` appended to `document.body` with the preview HTML written via `srcdoc`.
+  2. Wait for `iframe.onload`, then call `iframe.contentWindow.focus(); iframe.contentWindow.print();`.
+  3. Remove the iframe a few seconds after `afterprint`.
+- For `EnvelopeDetail`, `previewHtml` is already memoised, so the iframe path runs without an `await`. If it ever returns null, fall back to the existing PDF-download path.
+- Result: one click → native browser print dialog, no popup blocker, no "downloaded — open and Ctrl+P" toast.
 
-### 7. QA sweep
-- Open `/owner/crm?entity=leads&view=all` → all 4 DB leads visible.
-- Stage cell = colored chip; dropdown items render as badges.
-- Source cell wraps full label, no "…".
-- Distribution strip shows totals; clicking a broker pill filters by them.
-- `/owner/crm?entity=leads&view=overview` shows AI Next-Actions strip, then dashboard.
-- No vertical column anywhere inside the CRM body.
+### 4. Verification
 
-### Technical notes
-- The `isRealCRMLead` guard stays for public/anonymous routes — this only bypasses it for the owner-only table.
-- Edge function uses `npm:ai` + `Output.object` (no manual JSON parsing).
-- Cache invalidates when any lead's `pipeline_stage` changes via existing `queryClient.invalidateQueries(['crm-leads-inbox'])` plus a new key `['crm-ai-suggestions']`.
-- All UI keeps champagne tokens (#FDFBF7 / #F7F2EA / #EFE6D6 / #B89555 hairline / #1A1A1A ink).
+- Open `/owner/esignature/<envelope>` for the PAA Leasing template, confirm:
+  - Logo renders (no broken-image icon) in the live preview iframe.
+  - Header shows monogram + wordmark + contacts with **only** the full-width gold hairline below the band (no vertical strip, no extra rules).
+  - Footer shows the three-column band with **only** the full-width gold hairline above it.
+  - Click "Print" → browser print dialog opens directly. Page is not blank.
+- Repeat for Leasing Letter and Blank Letter to confirm `letterheadChrome.ts` cleanup applied.
+- Re-run `bun run build` (auto by harness) — no TS errors from the asset import or removed nodes.
+
+### Out of scope for this turn
+
+Nothing else in the CRM / sidebar / forms hub is touched in this plan — only the e-signature preview chrome, logo source, and print pipeline as requested.

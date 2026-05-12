@@ -255,8 +255,7 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string, categor
         <div style="margin:-24px -36px 14px;background:#FBF7EE;padding:16px 36px 14px;border-bottom:1px solid ${accent};">
           <div style="display:flex;align-items:center;gap:14px;min-height:58px;">
             <img src="${JBJ_BRAND.monogram}" alt="JBJ Global Real Estate" style="width:58px;height:58px;object-fit:contain;display:block;flex:0 0 auto;" />
-            <div style="width:1px;height:42px;background:${accent};opacity:.6;flex:0 0 auto;"></div>
-            <div style="flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;min-width:0;">
+            <div style="flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;min-width:0;padding-left:14px;">
               <div style="font-size:15px;font-weight:700;letter-spacing:.20em;color:${ink};text-transform:uppercase;line-height:1.15;">
                 ${esc(JBJ_BRAND.legalCompany)}
               </div>
