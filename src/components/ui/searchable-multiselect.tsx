@@ -20,6 +20,10 @@ export interface MultiOption {
   value: string;
   label: string;
   count?: number | null;
+  /** Optional category badge tint (CSS color or hex) — renders as a colored dot before the label. */
+  dot?: string | null;
+  /** Optional group heading rendered above this option (sticky-style separator). */
+  group?: string | null;
 }
 
 interface Props {
