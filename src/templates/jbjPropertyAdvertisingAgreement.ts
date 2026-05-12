@@ -236,36 +236,48 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string, categor
         </div>`;
     case "monogram-wordmark":
     default: {
-      // Right column: doc number on top, then a tight clickable contact
-      // stack (phone in ink, email + website in gold) — premium black/gold
-      // mix, never overlaps with anything else.
+      // v20 premium chrome:
+      //   • champagne (#FBF7EE) wash band so header differentiates from white body
+      //   • monogram (inline base64) + legal name on baseline
+      //   • office line = TRADE_LICENSE_OFFICE (Port Saeed, Deira) — never
+      //     "Downtown Dubai" or "private office"
+      //   • right column: doc number (ink), phone (ink), email + website (gold)
+      //   • everything fits in ~120px to leave room for one-page A4
+      const officeLine = JBJ_BRAND.office
+        ? `<div style="font-size:9.5px;letter-spacing:.04em;color:${ink};opacity:.78;margin-top:4px;line-height:1.35;">${esc(JBJ_BRAND.office)}</div>`
+        : "";
       const contactStack = `
-        <div style="margin-top:6px;font-size:9.5px;line-height:1.55;text-align:right;">
-          <div>${linkPhone(ink)}</div>
-          <div>${linkEmail(accent)}</div>
+        <div style="font-size:9.5px;line-height:1.6;text-align:right;">
+          <div style="margin-bottom:1px;">${linkPhone(ink)}</div>
+          <div style="margin-bottom:1px;">${linkEmail(accent)}</div>
           <div>${linkWebsite(accent, true)}</div>
         </div>`;
-      const rightCol = (docBadge || contactStack)
-        ? `<div style="flex:0 0 auto;text-align:right;min-width:140px;">${docBadge}${contactStack}</div>`
+      const docBadgeBlock = docBadge
+        ? `<div style="margin-bottom:6px;">${docBadge}</div>`
         : "";
       return `
-        <div style="margin-bottom:16px;">
-          <div style="display:flex;align-items:center;gap:14px;min-height:54px;">
-            <img src="${JBJ_BRAND.monogram}" alt="JBJ" crossorigin="anonymous" style="width:54px;height:54px;object-fit:contain;display:block;flex:0 0 auto;" />
-            <div style="width:1px;height:38px;background:${accent};opacity:.7;flex:0 0 auto;"></div>
-            <div style="flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;">
-              <div style="font-size:15px;font-weight:700;letter-spacing:.22em;color:${ink};text-transform:uppercase;line-height:1.15;">
+        <div style="margin:-24px -36px 14px;background:#FBF7EE;padding:16px 36px 12px;border-bottom:1px solid ${accent};">
+          <div style="display:flex;align-items:center;gap:14px;min-height:58px;">
+            <img src="${JBJ_BRAND.monogram}" alt="JBJ Global Real Estate" crossorigin="anonymous" style="width:58px;height:58px;object-fit:contain;display:block;flex:0 0 auto;" />
+            <div style="width:1px;height:42px;background:${accent};opacity:.6;flex:0 0 auto;"></div>
+            <div style="flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;min-width:0;">
+              <div style="font-size:15px;font-weight:700;letter-spacing:.20em;color:${ink};text-transform:uppercase;line-height:1.15;">
                 ${esc(JBJ_BRAND.legalCompany)}
               </div>
+              ${officeLine}
               ${reraLine ? `<div style="margin-top:3px;">${reraLine}</div>` : ""}
             </div>
-            ${rightCol}
+            <div style="flex:0 0 auto;text-align:right;min-width:150px;">
+              ${docBadgeBlock}
+              ${contactStack}
+            </div>
           </div>
           <div style="margin-top:10px;${goldGradient(accent)}"></div>
           <div style="margin-top:10px;text-align:center;">
             <div style="font-size:14px;font-weight:800;letter-spacing:.22em;color:${ink};text-transform:uppercase;">
               ${titleFor(category).toUpperCase()}
             </div>
+            <div style="margin:6px auto 0;width:48px;height:2px;background:${accent};border-radius:1px;"></div>
           </div>
         </div>`;
     }
