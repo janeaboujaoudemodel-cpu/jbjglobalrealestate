@@ -810,7 +810,7 @@ export default function EnvelopeDetail() {
             </div>
             <div className="flex gap-2">
               <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white"
-                onClick={() => handleDownload(signedDoc.document_url, signedDoc.document_filename)}>
+                onClick={() => handleDownloadCurrentPdf(signedDoc.document_filename)}>
                 <Download className="w-3.5 h-3.5 mr-1.5" /> Signed PDF
               </Button>
               {signedDoc.certificate_url && (
@@ -1049,7 +1049,7 @@ export default function EnvelopeDetail() {
                 </CardHeader>
                 <CardContent className="space-y-2">
                   <Button size="sm" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
-                    onClick={() => handleDownload(signedDoc.document_url, signedDoc.document_filename)}>
+                    onClick={() => handleDownloadCurrentPdf(signedDoc.document_filename)}>
                     <Download className="w-4 h-4 mr-2" /> Download Signed PDF
                   </Button>
                   <Button size="sm" variant="outline" className="w-full" onClick={() => setExportOpen(true)}>
