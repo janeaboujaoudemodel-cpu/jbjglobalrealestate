@@ -470,7 +470,7 @@ export function buildPAAHtml(
     ${fu("Email Address", get("email_address"), "email_address")}
     ${fu("Nationality", get("nationality"), "nationality")}
     ${fu("Owner TRN", get("owner_trn"), "owner_trn")}
-    ${fu("Listing Consultant", get("listing_consultant"), "listing_consultant")}
+    ${fu("Listing Consultant", (get("listing_consultant") || "").split(/\s*\/\s*/).filter(Boolean).join(", "), "listing_consultant")}
     ${fu("Property Reference No.", get("property_reference_no"), "property_reference_no")}
     ${!hidden.has("expiry_date") && get("expiry_date") ? `
     <div data-field-key="expiry_date" style="margin:6px 24px 14px 0;display:inline-block;vertical-align:top;">
@@ -560,7 +560,7 @@ export function buildPAAHtml(
   <div style="font-size:11px;color:${ink};line-height:1.5;">
     <div style="margin-bottom:8px;">
       1. The landlord / legal representative has agreed to appoint
-      <span style="border-bottom:1px solid ${accent};padding:0 6px;font-weight:600;">${esc(get("broker_appointee_name") || JBJ_BRAND.legalCompany)}</span>
+      <span style="font-weight:600;padding:0 4px;text-decoration:underline;text-decoration-color:${accent};text-decoration-thickness:1px;text-underline-offset:4px;">${esc(get("broker_appointee_name") || JBJ_BRAND.legalCompany)}</span>
       as its:
     </div>
     <div data-chip-row="exclusivity" style="margin:6px 0 10px;display:flex;flex-wrap:wrap;align-items:center;gap:6px;">
