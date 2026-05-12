@@ -163,7 +163,7 @@ export const DEFAULT_CHROME: Required<TemplateChrome> = {
   surface: "#FFFFFF",
   headerStyle: "monogram-wordmark",
   footerStyle: "three-column",
-  tagline: "DOWNTOWN DUBAI · INSTITUTIONAL REAL ESTATE",
+  tagline: "DUBAI, UAE · INSTITUTIONAL REAL ESTATE",
   trn: "",
   license: "",
 };
