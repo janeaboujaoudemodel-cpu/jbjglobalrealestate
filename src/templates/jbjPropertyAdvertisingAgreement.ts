@@ -479,6 +479,14 @@ export function buildPAAHtml(
     </div>` : ""}
   </div>
 
+  ${(() => {
+    const idKeys: PAAFieldKey[] = [
+      "title_deed_number","title_deed_date","oqood_number","oqood_date",
+      "expected_handover","dewa_premise_number","makani_number","rera_permit_number",
+    ];
+    const allBlank = idKeys.every((k) => !get(k));
+    if (isFinal && allBlank) return "";
+    return `
   ${sectionTitle(2, "Property Identifiers")}
   <div>
     ${fuPh("Title Deed No.", get("title_deed_number"), "title_deed_number")}
@@ -489,18 +497,41 @@ export function buildPAAHtml(
     ${fuPh("DEWA Premise No.", get("dewa_premise_number"), "dewa_premise_number")}
     ${fuPh("Makani No.", get("makani_number"), "makani_number")}
     ${fuPh("RERA Permit No.", get("rera_permit_number"), "rera_permit_number")}
-  </div>
+  </div>`;
+  })()}
 
   ${sectionTitle(3, "Property Specs")}
+  ${isFinal ? (() => {
+    // Final/PDF: collapse Property Type · Furnishing · Status (· Vacating date)
+    // and Tenure · Usage onto two compact inline lines, separated by a thin
+    // gold middle dot. Frees ~32px of vertical space for the signature row.
+    const sel = (fieldKey: PAAFieldKey, options: string[], match: (o: string, v: string) => boolean) => {
+      const cur = get(fieldKey);
+      const found = options.find((o) => match(o, cur));
+      return found ? cleanFinalLabel(found) : "";
+    };
+    const ptype = sel("property_type", ["Villa","Apartment","Office","Warehouse"], (o,v)=>o.toLowerCase()===v.toLowerCase());
+    const furn = sel("furnishing", ["Furnished","Unfurnished"], (o,v)=>v.toLowerCase().startsWith(o.toLowerCase().split("-")[0]));
+    const stat = sel("status_vacant_tenanted", ["Vacant","Tenanted"], (o,v)=>o.toLowerCase()===v.toLowerCase());
+    const tenure = sel("tenure", ["Freehold","Leasehold","Common-hold"], (o,v)=>o.toLowerCase()===v.toLowerCase());
+    const usage = sel("usage", ["Residential","Commercial"], (o,v)=>o.toLowerCase()===v.toLowerCase());
+    const vacBit = showVacatingDate && get("vacating_date") ? `Vacating ${esc(get("vacating_date"))}` : "";
+    const dot = `<span style="color:${accent};margin:0 8px;font-weight:700;">·</span>`;
+    const line1 = [ptype, furn, stat, vacBit].filter(Boolean).map(esc).join(dot);
+    const line2 = [tenure, usage].filter(Boolean).map(esc).join(dot);
+    return `
+    ${line1 ? `<div style="margin:4px 0 ${line2 ? "4px" : "10px"};font-size:13px;color:${ink};font-weight:600;">${line1}</div>` : ""}
+    ${line2 ? `<div style="margin:0 0 10px;font-size:13px;color:${ink};font-weight:600;">${line2}</div>` : ""}`;
+  })() : `
   <div style="margin:4px 0 14px;display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;">
     <span data-chip-row="property_type" style="display:inline-flex;flex-wrap:wrap;align-items:center;">
       ${chipRow("property_type", "Property Type", ["Villa", "Apartment", "Office", "Warehouse"], (o, v) => o.toLowerCase() === v.toLowerCase())}
     </span>
-    ${isFinal ? "" : `<span style="opacity:.3;margin:0 6px;">|</span>`}
+    <span style="opacity:.3;margin:0 6px;">|</span>
     <span data-chip-row="furnishing" style="display:inline-flex;flex-wrap:wrap;align-items:center;">
       ${chipRow("furnishing", "Furnishing", ["Furnished", "Unfurnished"], (o, v) => v.toLowerCase().startsWith(o.toLowerCase().split("-")[0]))}
     </span>
-    ${isFinal ? "" : `<span style="opacity:.3;margin:0 6px;">|</span>`}
+    <span style="opacity:.3;margin:0 6px;">|</span>
     <span data-chip-row="status_vacant_tenanted" style="display:inline-flex;flex-wrap:wrap;align-items:center;">
       ${chipRow("status_vacant_tenanted", "Status", ["Vacant", "Tenanted"], (o, v) => o.toLowerCase() === v.toLowerCase())}
     </span>
@@ -512,10 +543,9 @@ export function buildPAAHtml(
   </div>
   <div data-chip-row="tenure" style="margin:4px 0 10px;display:flex;flex-wrap:wrap;align-items:center;gap:6px;">
     ${chipRow("tenure", "Tenure", ["Freehold", "Leasehold", "Common-hold"], (o, v) => o.toLowerCase() === v.toLowerCase())}
-    ${isFinal ? "" : `<span style="opacity:.3;margin:0 8px;">|</span>`}
+    <span style="opacity:.3;margin:0 8px;">|</span>
     ${chipRow("usage", "Usage", ["Residential", "Commercial"], (o, v) => o.toLowerCase() === v.toLowerCase())}
-  </div>
-
+  </div>`}
   <div>
     ${fu("Building Name", get("building_name"), "building_name")}
     ${fu("Unit", get("unit_number"), "unit_number")}
