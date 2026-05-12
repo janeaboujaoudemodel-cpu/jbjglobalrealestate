@@ -31,13 +31,14 @@ Deno.serve(async (req) => {
       return corsErrorResponse("Unauthorized", 401, origin);
     }
 
-    const { envelope_id, channels, cc_emails: ccOverride, bcc_emails: bccOverride, interpolated_subject, interpolated_body, interpolated_body_html, additional_recipients } = await req.json();
+    const { envelope_id, channels, cc_emails: ccOverride, bcc_emails: bccOverride, interpolated_subject, interpolated_body, interpolated_body_html, additional_recipients, docusign_url, attachment_name } = await req.json();
     const channelList: string[] = Array.isArray(channels) && channels.length
       ? channels
       : ["email"];
     const extraTos: string[] = Array.isArray(additional_recipients)
       ? Array.from(new Set(additional_recipients.map((e: any) => String(e || "").trim().toLowerCase()).filter((e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e))))
       : [];
+    const docusignUrlClean = typeof docusign_url === "string" ? docusign_url.trim() : "";
 
     if (!envelope_id) {
       return corsErrorResponse("envelope_id is required", 400, origin);
@@ -120,6 +121,8 @@ Deno.serve(async (req) => {
         docNumber,
         senderName,
         senderTitle,
+        docusignUrl: docusignUrlClean,
+        attachmentName: typeof attachment_name === "string" ? attachment_name : undefined,
       });
 
       // Build the To list: the persisted recipient + any extra addresses

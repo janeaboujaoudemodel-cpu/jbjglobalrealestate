@@ -93,6 +93,7 @@ export function SendViaEmailDialog({
   const [ccs, setCcs] = useState<string[]>([DEFAULT_CC]);
   const [subject, setSubject] = useState(defaultSubject);
   const [bodyHtml, setBodyHtml] = useState("");
+  const [docusignUrl, setDocusignUrl] = useState("");
   const [busy, setBusy] = useState<"" | "test" | "send">("");
 
   useEffect(() => {
@@ -100,6 +101,7 @@ export function SendViaEmailDialog({
     setTos(recipientEmail ? [recipientEmail] : []);
     setCcs([DEFAULT_CC]);
     setSubject(defaultSubject);
+    setDocusignUrl("");
     setBodyHtml(
       legacyBodyToHtml(defaultBody, {
         clientName: recipientName || "Client",
@@ -130,6 +132,8 @@ export function SendViaEmailDialog({
           envelope_id: envelopeId,
           interpolated_subject: subject,
           interpolated_body_html: bodyHtml,
+          docusign_url: docusignUrl.trim() || undefined,
+          attachment_name: attachmentName,
           test_recipient: TEST_RECIPIENT,
         }),
       });
@@ -162,6 +166,8 @@ export function SendViaEmailDialog({
           cc_emails: cleanCcs,
           interpolated_subject: subject,
           interpolated_body_html: bodyHtml,     // pre-rendered HTML (locked-send)
+          docusign_url: docusignUrl.trim() || undefined,
+          attachment_name: attachmentName,
         }),
       });
       const out = await res.json().catch(() => ({}));
@@ -242,6 +248,23 @@ export function SendViaEmailDialog({
               />
             </div>
 
+            {/* DocuSign URL (optional) */}
+            <div className="space-y-1.5">
+              <Label className="text-[#1A1A1A] text-xs">
+                DocuSign envelope URL <span className="opacity-60 font-normal">(optional)</span>
+              </Label>
+              <Input
+                value={docusignUrl}
+                onChange={(e) => setDocusignUrl(e.target.value)}
+                placeholder="https://apps.docusign.com/…"
+                className="bg-white font-mono text-[12px]"
+                type="url"
+              />
+              <p className="text-[10px] text-[#1A1A1A]/60">
+                Paste it to render a prominent <strong>OPEN IN DOCUSIGN</strong> button. Leave empty for a pure cover email — DocuSign will send its own request separately.
+              </p>
+            </div>
+
             {/* Body (rich) */}
             <div className="space-y-1.5">
               <Label className="text-[#1A1A1A] text-xs">Message</Label>
@@ -263,6 +286,8 @@ export function SendViaEmailDialog({
                 subject={subject}
                 bodyHtml={bodyHtml}
                 docNumber={docNumber}
+                docusignUrl={docusignUrl}
+                attachmentName={attachmentName}
                 className="w-full h-full bg-[#FDFBF7]"
               />
             </div>

@@ -3,6 +3,10 @@
 // exact HTML the recipient receives. If you edit one, edit the other.
 
 export const JBJ_LOGO_URL = "https://www.jbj.ae/jbj-monogram-dark-on-light.png";
+export const DOCUSIGN_APP_STORE = "https://apps.apple.com/app/docusign/id474990205";
+export const DOCUSIGN_PLAY_STORE = "https://play.google.com/store/apps/details?id=com.docusign.ink";
+export const DOCUSIGN_WEB = "https://apps.docusign.com/";
+export const SIGNED_RETURN_EMAIL = "contracts@jbj.ae";
 
 export interface BuildEnvelopeEmailArgs {
   subject: string;
@@ -11,6 +15,8 @@ export interface BuildEnvelopeEmailArgs {
   senderName?: string;
   senderTitle?: string;
   year?: number;
+  docusignUrl?: string;
+  attachmentName?: string;
 }
 
 export function escapeHtml(s: string): string {
@@ -42,6 +48,30 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
   const bodyHtml = args.bodyHtml || "";
   const docNumber = args.docNumber ? escapeHtml(args.docNumber) : "";
   const year = args.year ?? new Date().getFullYear();
+  const docusignUrl = (args.docusignUrl || "").trim();
+  const attachmentName = args.attachmentName ? escapeHtml(args.attachmentName) : "";
+
+  const ctaBlock = docusignUrl ? `
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:26px 0 6px;border-collapse:collapse;">
+          <tr><td align="center" style="border-radius:2px;background:#1A1A1A;">
+            <a href="${escapeHtml(docusignUrl)}" target="_blank" rel="noopener" style="display:inline-block;padding:14px 28px;font-family:Inter,Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:.22em;color:#FDFBF7;text-decoration:none;text-transform:uppercase;border:1px solid #B89555;">
+              OPEN IN DOCUSIGN &nbsp;→
+            </a>
+          </td></tr>
+          <tr><td align="center" style="padding-top:10px;font-size:11px;color:#1A1A1A;opacity:.65;line-height:1.5;font-family:Inter,Arial,sans-serif;">
+            DocuSign is the only e-signature platform officially recognised by UAE authorities.<br/>
+            Don't have the app? <a href="${DOCUSIGN_APP_STORE}" style="color:#1A1A1A;">App Store</a> · <a href="${DOCUSIGN_PLAY_STORE}" style="color:#1A1A1A;">Google Play</a>
+          </td></tr>
+        </table>` : "";
+
+  const attachmentChip = attachmentName ? `
+        <div style="margin:18px 0 0;padding:10px 12px;border:1px solid #B89555;background:#F7F2EA;display:inline-block;font-family:Inter,Arial,sans-serif;font-size:11.5px;color:#1A1A1A;letter-spacing:.04em;">
+          📎 &nbsp;PDF attached: <strong>${attachmentName}</strong>
+        </div>` : "";
+
+  const footerNote = docusignUrl
+    ? `Tap the button above to open the agreement in DocuSign and complete the signature. Once signed, a copy will be returned to ${SIGNED_RETURN_EMAIL}.`
+    : `The signed agreement is attached as a PDF. A separate signing request will be delivered to you via DocuSign — once signed, please return the signed copy to ${SIGNED_RETURN_EMAIL}.`;
 
   return `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"></head>
 <body style="margin:0;padding:0;font-family:Inter,Arial,sans-serif;background:#FDFBF7;">
@@ -64,9 +94,9 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
       <tr><td style="background:#ffffff;border-left:1px solid #B89555;border-right:1px solid #B89555;padding:32px 32px 24px;">
         <h2 style="margin:0 0 18px;color:#1A1A1A;font-size:20px;font-weight:700;line-height:1.3;">${subject}</h2>
         <div style="color:#1A1A1A;line-height:1.7;font-size:14px;">${bodyHtml}</div>
-        <p style="margin:28px 0 0;color:#1A1A1A;opacity:.6;font-size:11px;line-height:1.55;">
-          The signed agreement is attached as a PDF. A separate signing request will be delivered to you via DocuSign.
-        </p>
+        ${ctaBlock}
+        ${attachmentChip}
+        <p style="margin:24px 0 0;color:#1A1A1A;opacity:.6;font-size:11px;line-height:1.55;">${footerNote}</p>
       </td></tr>
       <tr><td style="background:#F7F2EA;border:1px solid #B89555;border-top:none;padding:18px 24px;">
         <div style="height:1px;background:#B89555;margin-bottom:14px;"></div>
