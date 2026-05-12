@@ -23,10 +23,28 @@ const ADDRESS_TO_SERVICE: Record<string, string> = {
   "listings@jbj.ae": "listings",
   "support@jbj.ae": "support",
   "careers@jbj.ae": "hr",
-  "contact@jbj.com": "general",
+  "contact@jbj.ae": "general",
+  "contact@notify.jbj.ae": "general",
   // NOTE: noreply@jbj.ae is intentionally NOT in this map — replies to it
   // are intercepted below and bounced with a friendly auto-reply.
 };
+
+// Inboxes that should send a friendly acknowledgement to the sender
+// (in addition to ingesting the message into the team inbox).
+const CONTACT_ACK_ADDRESSES = new Set([
+  "contact@jbj.ae",
+  "contact@notify.jbj.ae",
+]);
+
+function isContactAckRecipient(toAddresses: string[]): boolean {
+  for (const addr of toAddresses) {
+    const lower = addr.toLowerCase().trim();
+    const match = lower.match(/<([^>]+)>/) || [null, lower];
+    const email = (match[1] || lower).trim();
+    if (CONTACT_ACK_ADDRESSES.has(email)) return true;
+  }
+  return false;
+}
 
 const NOREPLY_ADDRESSES = new Set([
   "noreply@jbj.ae",
