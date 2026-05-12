@@ -1,35 +1,38 @@
 /**
- * SendViaEmailDialog — preview-first composer for the "Send via Email"
- * action on /e-signature/:id.
+ * SendViaEmailDialog — preview-first, multi-recipient composer for the
+ * "Send by email" action on /e-signature/:id. The right pane shows the
+ * REAL branded email (header, JBJ monogram, body, footer) byte-for-byte
+ * what the recipient receives. Editing the subject/body re-renders live.
  *
- * Flow:
- *   • Opens with the exact email the recipient will receive (subject, body,
- *     CC, From / Reply-To, attached PDF info).
- *   • Owner can edit Subject, Body, To, and the CC chips
- *     (defaults to infoo.jane@gmail.com — removable).
- *   • Three actions:
- *       - Send test    → only to infoo.jane@gmail.com
- *       - Approve & Send → real recipient via esign-send-for-signature
- *       - Cancel
- *   • Headers strip is read-only:
- *       From: noreply@jbj.ae   Reply-To: contact@jbj.ae   Provider: Resend
+ *   • Multi-recipient To + CC chips
+ *   • JBJ logo + clickable contact details in header & footer
+ *   • No internal "review & sign" link — DocuSign handles signing
+ *   • Responsive two-pane layout (single column under lg)
+ *   • Wrapping footer that never overflows the dialog
  */
 import { useEffect, useMemo, useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
-import { Loader2, Mail, Send, X, FileText, Plus } from "lucide-react";
+import { Loader2, Mail, Send, FileText, Eye } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { SUPABASE_URL } from "@/config/backend";
+import { EmailRecipientChips, isValidEmail } from "./EmailRecipientChips";
+import { EmailBodyEditor } from "./EmailBodyEditor";
+import { EmailPreviewIframe } from "./EmailPreviewIframe";
+import { buildSenderSignatureHtml, escapeHtml } from "@/lib/email/buildEnvelopeEmailHtml";
 
+const TEST_RECIPIENT = "infoo.jane@gmail.com";
 const DEFAULT_CC = "infoo.jane@gmail.com";
 const DISPLAY_FROM = "JBJ Global Real Estate <noreply@jbj.ae>";
 const DISPLAY_REPLY_TO = "contact@jbj.ae";
-const isValidEmail = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.trim());
 
 interface Props {
   open: boolean;
@@ -38,45 +41,82 @@ interface Props {
   recipientName: string;
   recipientEmail: string;
   defaultSubject: string;
-  defaultBody: string;
-  signingUrl?: string;
+  defaultBody: string;          // legacy plain-text default; converted to HTML on first open
   attachmentName?: string;
+  docNumber?: string;
+  senderName?: string;
+  senderTitle?: string;
   onSent?: () => void;
 }
 
+/** Convert legacy plain-text default body (with `{{client_name}}` etc.) into
+ *  WYSIWYG HTML. Tokens are resolved client-side; sender-signature block is
+ *  appended as styled HTML so the owner sees the final rendering immediately. */
+function legacyBodyToHtml(
+  raw: string,
+  ctx: { clientName: string; docTitle: string; senderName: string; senderTitle: string },
+): string {
+  const tokens: Record<string, string> = {
+    client_name: ctx.clientName,
+    landlord_name: ctx.clientName,
+    doc_title: ctx.docTitle,
+    owner_name: ctx.senderName,
+    sender_title: ctx.senderTitle,
+  };
+  const SIG_SENTINEL = "@@JBJ_SIG@@";
+  const interpolated = String(raw || "")
+    .replace(/\{\{sender_signature\}\}/g, SIG_SENTINEL)
+    .replace(/\{\{signing_link\}\}/g, "")
+    .replace(/\{\{(\w+)\}\}/g, (_, k) => tokens[k] ?? "");
+  const sig = buildSenderSignatureHtml(ctx.senderName, ctx.senderTitle);
+  // Escape any user HTML, convert newlines, then swap sentinel for the
+  // already-trusted signature HTML.
+  const escaped = escapeHtml(interpolated).replace(/\n/g, "<br/>");
+  return escaped.replace(SIG_SENTINEL, sig);
+}
+
 export function SendViaEmailDialog({
-  open, onOpenChange, envelopeId, recipientName, recipientEmail,
-  defaultSubject, defaultBody, signingUrl, attachmentName, onSent,
+  open,
+  onOpenChange,
+  envelopeId,
+  recipientName,
+  recipientEmail,
+  defaultSubject,
+  defaultBody,
+  attachmentName,
+  docNumber,
+  senderName = "Jane Bou Jaoude",
+  senderTitle = "Founder & CEO",
+  onSent,
 }: Props) {
-  const [to, setTo] = useState(recipientEmail);
-  const [subject, setSubject] = useState(defaultSubject);
-  const [body, setBody] = useState(defaultBody);
+  const [tos, setTos] = useState<string[]>([]);
   const [ccs, setCcs] = useState<string[]>([DEFAULT_CC]);
-  const [ccInput, setCcInput] = useState("");
+  const [subject, setSubject] = useState(defaultSubject);
+  const [bodyHtml, setBodyHtml] = useState("");
   const [busy, setBusy] = useState<"" | "test" | "send">("");
 
   useEffect(() => {
-    if (open) {
-      setTo(recipientEmail);
-      setSubject(defaultSubject);
-      setBody(defaultBody);
-      setCcs([DEFAULT_CC]);
-      setCcInput("");
-    }
-  }, [open, recipientEmail, defaultSubject, defaultBody]);
+    if (!open) return;
+    setTos(recipientEmail ? [recipientEmail] : []);
+    setCcs([DEFAULT_CC]);
+    setSubject(defaultSubject);
+    setBodyHtml(
+      legacyBodyToHtml(defaultBody, {
+        clientName: recipientName || "Client",
+        docTitle: defaultSubject || "Document",
+        senderName,
+        senderTitle,
+      }),
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, recipientEmail, recipientName, defaultSubject, defaultBody]);
 
   const cleanCcs = useMemo(
-    () => Array.from(new Set(ccs.map((c) => c.trim()).filter(isValidEmail))),
-    [ccs],
+    () => Array.from(new Set(ccs.filter(isValidEmail).filter((c) => !tos.includes(c)))),
+    [ccs, tos],
   );
 
-  const addCc = () => {
-    const v = ccInput.trim();
-    if (!v) return;
-    if (!isValidEmail(v)) { toast.error("Invalid email"); return; }
-    setCcs((prev) => Array.from(new Set([...prev, v])));
-    setCcInput("");
-  };
+  const canSend = tos.length > 0 && tos.every(isValidEmail) && subject.trim().length > 0;
 
   const sendTest = async () => {
     setBusy("test");
@@ -89,13 +129,13 @@ export function SendViaEmailDialog({
         body: JSON.stringify({
           envelope_id: envelopeId,
           interpolated_subject: subject,
-          interpolated_body: body,
-          test_recipient: DEFAULT_CC,
+          interpolated_body_html: bodyHtml,
+          test_recipient: TEST_RECIPIENT,
         }),
       });
       const out = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(out.error || "Failed to send test");
-      toast.success(`Test sent to ${DEFAULT_CC}`);
+      toast.success(`Test sent to ${TEST_RECIPIENT}`);
     } catch (e: any) {
       toast.error(e.message || "Failed to send test");
     } finally {
@@ -104,7 +144,10 @@ export function SendViaEmailDialog({
   };
 
   const approveAndSend = async () => {
-    if (!isValidEmail(to)) { toast.error("Invalid recipient email"); return; }
+    if (!canSend) {
+      toast.error("Add at least one valid recipient and a subject.");
+      return;
+    }
     setBusy("send");
     try {
       const session = await supabase.auth.getSession();
@@ -115,14 +158,15 @@ export function SendViaEmailDialog({
         body: JSON.stringify({
           envelope_id: envelopeId,
           channels: ["email"],
+          additional_recipients: tos,           // full To list
           cc_emails: cleanCcs,
           interpolated_subject: subject,
-          interpolated_body: body,
+          interpolated_body_html: bodyHtml,     // pre-rendered HTML (locked-send)
         }),
       });
       const out = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(out.error || "Failed to send");
-      toast.success(`Sent to ${recipientName}${cleanCcs.length ? ` · CC ${cleanCcs.length}` : ""}`);
+      toast.success(`Sent to ${tos.length} recipient${tos.length > 1 ? "s" : ""}${cleanCcs.length ? ` · CC ${cleanCcs.length}` : ""}`);
       onSent?.();
       onOpenChange(false);
     } catch (e: any) {
@@ -134,96 +178,127 @@ export function SendViaEmailDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl bg-[#FDFBF7] border-[#B89555]/40">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
-            <Mail className="w-5 h-5" /> Preview & send by email
+      <DialogContent className="w-[min(96vw,1180px)] max-w-[1180px] max-h-[92vh] overflow-y-auto p-0 bg-[#FDFBF7] border-[#B89555]/40">
+        <DialogHeader className="px-5 pt-5 pb-3 border-b border-[#B89555]/30">
+          <DialogTitle className="flex items-center gap-2 text-[#1A1A1A] text-base">
+            <Mail className="w-5 h-5" />
+            Preview &amp; send by email
           </DialogTitle>
+          <p className="text-xs text-[#1A1A1A]/60 mt-1">
+            What you see on the right is exactly what the recipient receives.
+          </p>
         </DialogHeader>
 
-        {/* Headers strip */}
-        <div className="rounded-md border border-[#B89555]/30 bg-[#F7F2EA] p-3 text-xs text-[#1A1A1A] space-y-1">
-          <div><span className="opacity-60 mr-2">From:</span><strong>{DISPLAY_FROM}</strong></div>
-          <div><span className="opacity-60 mr-2">Reply-To:</span><strong>{DISPLAY_REPLY_TO}</strong></div>
-          <div><span className="opacity-60 mr-2">Provider:</span>Resend</div>
-          {attachmentName && (
-            <div className="flex items-center gap-1.5 pt-1">
-              <FileText className="w-3.5 h-3.5" />
-              <span className="opacity-60">Attachment:</span>
-              <strong className="truncate">{attachmentName}</strong>
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,420px)_minmax(0,1fr)] gap-0">
+          {/* Compose pane */}
+          <div className="p-5 space-y-4 border-b lg:border-b-0 lg:border-r border-[#B89555]/30">
+            {/* Headers strip */}
+            <div className="rounded-md border border-[#B89555]/30 bg-[#F7F2EA] p-2.5 text-[11px] text-[#1A1A1A] space-y-1">
+              <div className="flex flex-wrap gap-x-2"><span className="opacity-60">From:</span><strong className="break-all">{DISPLAY_FROM}</strong></div>
+              <div className="flex flex-wrap gap-x-2"><span className="opacity-60">Reply-To:</span><strong className="break-all">{DISPLAY_REPLY_TO}</strong></div>
+              <div className="flex flex-wrap gap-x-2"><span className="opacity-60">Provider:</span>Resend</div>
+              {attachmentName && (
+                <div className="flex items-center gap-1.5 pt-1">
+                  <FileText className="w-3.5 h-3.5 shrink-0" />
+                  <span className="opacity-60">Attachment:</span>
+                  <strong className="truncate">{attachmentName}</strong>
+                </div>
+              )}
             </div>
-          )}
-        </div>
 
-        {/* To */}
-        <div className="space-y-1.5">
-          <Label className="text-[#1A1A1A] text-xs">To</Label>
-          <Input value={to} onChange={(e) => setTo(e.target.value)} className="bg-white" />
-          <p className="text-[10px] text-[#1A1A1A]/60">Recipient: {recipientName}</p>
-        </div>
-
-        {/* CC chips */}
-        <div className="space-y-1.5">
-          <Label className="text-[#1A1A1A] text-xs">CC (default: infoo.jane@gmail.com — remove if not wanted)</Label>
-          <div className="flex flex-wrap gap-1.5">
-            {ccs.map((c) => (
-              <Badge key={c} variant="secondary" className="gap-1 bg-white border border-[#B89555]/30 text-[#1A1A1A]">
-                {c}
-                <button onClick={() => setCcs(ccs.filter((x) => x !== c))} className="ml-1 hover:opacity-70">
-                  <X className="w-3 h-3" />
-                </button>
-              </Badge>
-            ))}
-            <div className="flex gap-1">
-              <Input
-                value={ccInput}
-                onChange={(e) => setCcInput(e.target.value)}
-                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addCc(); } }}
-                placeholder="add@example.com"
-                className="h-7 text-xs w-44 bg-white"
+            {/* To */}
+            <div className="space-y-1.5">
+              <Label className="text-[#1A1A1A] text-xs">To · {tos.length || "no"} recipient{tos.length === 1 ? "" : "s"}</Label>
+              <EmailRecipientChips
+                value={tos}
+                onChange={setTos}
+                placeholder="omar@example.com, sara@example.com…"
+                ariaLabel="Recipient emails"
               />
-              <Button size="sm" variant="outline" className="h-7" onClick={addCc}>
-                <Plus className="w-3 h-3" />
-              </Button>
+              {recipientName && (
+                <p className="text-[10px] text-[#1A1A1A]/60">Primary contact on record: {recipientName}</p>
+              )}
+            </div>
+
+            {/* CC */}
+            <div className="space-y-1.5">
+              <Label className="text-[#1A1A1A] text-xs">CC · {cleanCcs.length}</Label>
+              <EmailRecipientChips
+                value={ccs}
+                onChange={setCcs}
+                placeholder="add CC…"
+                ariaLabel="CC emails"
+              />
+              <p className="text-[10px] text-[#1A1A1A]/60">Default CC is your test inbox — remove the chip if you don't want it.</p>
+            </div>
+
+            {/* Subject */}
+            <div className="space-y-1.5">
+              <Label className="text-[#1A1A1A] text-xs">Subject</Label>
+              <Input
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                className="bg-white"
+              />
+            </div>
+
+            {/* Body (rich) */}
+            <div className="space-y-1.5">
+              <Label className="text-[#1A1A1A] text-xs">Message</Label>
+              <EmailBodyEditor
+                value={bodyHtml}
+                onChange={setBodyHtml}
+                placeholder="Write your cover note…"
+              />
+            </div>
+          </div>
+
+          {/* Live preview pane */}
+          <div className="bg-[#F7F2EA]/40 p-3 lg:p-5 flex flex-col min-h-[420px]">
+            <div className="flex items-center gap-1.5 text-[11px] text-[#1A1A1A]/70 mb-2">
+              <Eye className="w-3.5 h-3.5" /> Live preview — recipient view
+            </div>
+            <div className="flex-1 min-h-[420px] lg:min-h-[560px] rounded-md border border-[#B89555]/40 overflow-hidden bg-white">
+              <EmailPreviewIframe
+                subject={subject}
+                bodyHtml={bodyHtml}
+                docNumber={docNumber}
+                className="w-full h-full bg-[#FDFBF7]"
+              />
             </div>
           </div>
         </div>
 
-        {/* Subject */}
-        <div className="space-y-1.5">
-          <Label className="text-[#1A1A1A] text-xs">Subject</Label>
-          <Input value={subject} onChange={(e) => setSubject(e.target.value)} className="bg-white" />
-        </div>
-
-        {/* Body */}
-        <div className="space-y-1.5">
-          <Label className="text-[#1A1A1A] text-xs">Body</Label>
-          <Textarea
-            value={body}
-            onChange={(e) => setBody(e.target.value)}
-            rows={10}
-            className="bg-white font-mono text-xs"
-          />
-          {signingUrl && (
-            <p className="text-[10px] text-[#1A1A1A]/60">
-              Signing link will be inserted in the branded email: <span className="underline">{signingUrl}</span>
-            </p>
-          )}
-        </div>
-
-        <DialogFooter className="gap-2">
-          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={!!busy}>
+        {/* Footer — wraps; never overflows */}
+        <div className="border-t border-[#B89555]/30 px-5 py-3 bg-[#FDFBF7] flex flex-col sm:flex-row sm:items-center sm:justify-end gap-2 flex-wrap">
+          <Button
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+            disabled={!!busy}
+            className="w-full sm:w-auto"
+          >
             Cancel
           </Button>
-          <Button variant="outline" onClick={sendTest} disabled={!!busy}>
+          <Button
+            variant="outline"
+            onClick={sendTest}
+            disabled={!!busy}
+            className="w-full sm:w-auto"
+            title={`Sends a copy to ${TEST_RECIPIENT}`}
+          >
             {busy === "test" ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Mail className="w-4 h-4 mr-2" />}
-            Send test → {DEFAULT_CC}
+            Send test
           </Button>
-          <Button variant="gold" onClick={approveAndSend} disabled={!!busy}>
+          <Button
+            variant="gold"
+            onClick={approveAndSend}
+            disabled={!!busy || !canSend}
+            className="w-full sm:w-auto"
+          >
             {busy === "send" ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Send className="w-4 h-4 mr-2" />}
-            Approve & Send
+            Approve &amp; send
           </Button>
-        </DialogFooter>
+        </div>
       </DialogContent>
     </Dialog>
   );
