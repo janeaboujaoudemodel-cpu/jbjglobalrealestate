@@ -390,7 +390,22 @@ export default function EnvelopeDetail() {
     }
   };
 
-  const handleWhatsApp = (recipient: any) => {
+  // If the user has unsaved edits, persist + regenerate FIRST so the
+  // downloaded PDF reflects what's on screen. Returns true if the caller
+  // should proceed, false if save failed.
+  const ensureSavedBeforeDownload = async (): Promise<boolean> => {
+    if (!dirty) return true;
+    try {
+      await handleSaveEdits();
+      // refetch already runs inside handleSaveEdits — give state a tick to settle
+      await new Promise((r) => setTimeout(r, 150));
+      return true;
+    } catch (e: any) {
+      toast.error(e?.message || "Save failed — please retry before downloading");
+      return false;
+    }
+  };
+
     if (!recipient?.signing_token) { toast.error("No signing token"); return; }
     const url = buildSigningUrl(recipient.signing_token);
     const text = `Hi ${recipient.name}, please review and sign "${docNumber || envelope?.name}":\n${url}`;
