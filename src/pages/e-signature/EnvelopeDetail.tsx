@@ -878,6 +878,14 @@ export default function EnvelopeDetail() {
               </Card>
             )}
 
+            {/* Listing draft (auto-generated from PAA) */}
+            {envelope.template_key === "jbj-property-advertising-agreement" && (
+              <PAAListingDraftCard
+                envelopeId={envelope.id}
+                category={(envelope.category as any) || "leasing"}
+              />
+            )}
+
             {/* Document Info */}
             <Card className="bg-[#F7F2EA] border-[#B89555]/30">
               <CardHeader className="py-3">
