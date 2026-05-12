@@ -394,25 +394,62 @@ export default function EnvelopeDetail() {
     }
   };
 
-  const handlePrint = async () => {
+  const handlePrint = () => {
+    // Synchronous user-gesture path: render the already-memoised previewHtml
+    // into a hidden iframe and call print() directly. No await, no popup,
+    // so popup-blockers never fire and the browser print dialog opens
+    // immediately. Falls back to PDF download if previewHtml is unavailable.
+    if (!previewHtml) {
+      // Fallback: async PDF download
+      (async () => {
+        try {
+          toast.loading("Preparing PDF…", { id: "print-pdf" });
+          if (envelope?.document_url) {
+            await handleDownload(bustUrl(envelope.document_url), envelope.document_filename);
+            toast.success("PDF downloaded — open the file and press Ctrl/⌘+P to print", { id: "print-pdf" });
+          } else {
+            toast.error("No file available", { id: "print-pdf" });
+          }
+        } catch (e: any) {
+          toast.error(e?.message || "Failed to render PDF", { id: "print-pdf" });
+        }
+      })();
+      return;
+    }
     try {
-      toast.loading("Preparing PDF…", { id: "print-pdf" });
-      const blob = previewHtml
-        ? (await renderHtmlToPdfBlob(previewHtml)).blob
-        : null;
-      if (blob) {
-        savePdfBlob(blob, envelope?.document_filename || `${docNumber || "JBJ-Document"}.pdf`);
-        toast.success("PDF downloaded — open the file and press Ctrl/⌘+P to print", { id: "print-pdf" });
-        return;
-      }
-      if (envelope?.document_url) {
-        await handleDownload(bustUrl(envelope.document_url), envelope.document_filename);
-        toast.success("PDF downloaded — open the file and press Ctrl/⌘+P to print", { id: "print-pdf" });
-        return;
-      }
-      toast.error("No file available", { id: "print-pdf" });
+      const iframe = document.createElement("iframe");
+      iframe.setAttribute("aria-hidden", "true");
+      iframe.style.position = "fixed";
+      iframe.style.right = "0";
+      iframe.style.bottom = "0";
+      iframe.style.width = "0";
+      iframe.style.height = "0";
+      iframe.style.border = "0";
+      iframe.style.opacity = "0";
+      iframe.srcdoc = `<!doctype html><html><head><meta charset="utf-8"><style>
+        html,body{margin:0;padding:0;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+        @page{size:A4;margin:0;}
+      </style></head><body>${previewHtml}</body></html>`;
+      iframe.onload = () => {
+        try {
+          const w = iframe.contentWindow;
+          if (!w) return;
+          const cleanup = () => {
+            window.removeEventListener("focus", cleanup);
+            setTimeout(() => { try { document.body.removeChild(iframe); } catch {} }, 1000);
+          };
+          w.addEventListener?.("afterprint", cleanup);
+          window.addEventListener("focus", cleanup, { once: true });
+          w.focus();
+          w.print();
+        } catch (err: any) {
+          toast.error(err?.message || "Print failed");
+          try { document.body.removeChild(iframe); } catch {}
+        }
+      };
+      document.body.appendChild(iframe);
     } catch (e: any) {
-      toast.error(e?.message || "Failed to render PDF", { id: "print-pdf" });
+      toast.error(e?.message || "Failed to open print dialog");
     }
   };
 
