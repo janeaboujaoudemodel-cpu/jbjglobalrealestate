@@ -406,6 +406,7 @@ export default function EnvelopeDetail() {
     }
   };
 
+  const handleWhatsApp = (recipient: any) => {
     if (!recipient?.signing_token) { toast.error("No signing token"); return; }
     const url = buildSigningUrl(recipient.signing_token);
     const text = `Hi ${recipient.name}, please review and sign "${docNumber || envelope?.name}":\n${url}`;
