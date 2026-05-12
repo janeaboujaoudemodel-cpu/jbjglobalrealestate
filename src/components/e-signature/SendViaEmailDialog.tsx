@@ -248,6 +248,23 @@ export function SendViaEmailDialog({
               />
             </div>
 
+            {/* DocuSign URL (optional) */}
+            <div className="space-y-1.5">
+              <Label className="text-[#1A1A1A] text-xs">
+                DocuSign envelope URL <span className="opacity-60 font-normal">(optional)</span>
+              </Label>
+              <Input
+                value={docusignUrl}
+                onChange={(e) => setDocusignUrl(e.target.value)}
+                placeholder="https://apps.docusign.com/…"
+                className="bg-white font-mono text-[12px]"
+                type="url"
+              />
+              <p className="text-[10px] text-[#1A1A1A]/60">
+                Paste it to render a prominent <strong>OPEN IN DOCUSIGN</strong> button. Leave empty for a pure cover email — DocuSign will send its own request separately.
+              </p>
+            </div>
+
             {/* Body (rich) */}
             <div className="space-y-1.5">
               <Label className="text-[#1A1A1A] text-xs">Message</Label>
