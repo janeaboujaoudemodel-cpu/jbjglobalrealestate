@@ -5017,6 +5017,30 @@ export type Database = {
         }
         Relationships: []
       }
+      crm_ai_suggestions: {
+        Row: {
+          created_at: string
+          id: string
+          lead_set_hash: string
+          payload: Json
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          lead_set_hash: string
+          payload: Json
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          lead_set_hash?: string
+          payload?: Json
+          user_id?: string
+        }
+        Relationships: []
+      }
       crm_audit_logs: {
         Row: {
           action: string
