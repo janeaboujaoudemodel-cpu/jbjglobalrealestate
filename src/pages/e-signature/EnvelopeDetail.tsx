@@ -175,9 +175,9 @@ export default function EnvelopeDetail() {
     return renderTemplateHtml(
       envelope.template_key,
       { ...vals, doc_number: vals.doc_number || docNumber },
-      { chrome, ownerSignatureUrl, ownerStampUrl, clientSignatureUrl: signedClient?.signature_data || null, hiddenFields, renderMode: editing ? "edit" : "final" },
+      { chrome, ownerSignatureUrl, ownerStampUrl, clientSignatureUrl: signedClient?.signature_data || null, hiddenFields, renderMode: editing ? "edit" : "final", category: (envelope.category as any) || "leasing" },
     );
-  }, [envelope?.template_key, envelope?.template_field_values, envelope?.esign_recipients, editing, editValues, docNumber, chrome, ownerSignatureUrl, ownerStampUrl, hiddenFields]);
+  }, [envelope?.template_key, envelope?.template_field_values, envelope?.esign_recipients, envelope?.category, editing, editValues, docNumber, chrome, ownerSignatureUrl, ownerStampUrl, hiddenFields]);
 
   const sendReminder = async (recipientId?: string) => {
     const key = recipientId || "all";
@@ -293,6 +293,7 @@ export default function EnvelopeDetail() {
         clientSignatureUrl: null,
         hiddenFields,
         renderMode: "final",
+        category: (envelope.category as any) || "leasing",
       });
       const { blob } = await renderHtmlToPdfBlob(html);
       const objectUrl = URL.createObjectURL(blob);
