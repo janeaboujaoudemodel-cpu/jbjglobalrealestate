@@ -406,6 +406,18 @@ export default function EnvelopeDetail() {
         ownerStampUrl,
         hiddenFields,
       });
+      // Fire-and-forget: keep an admin Listing draft in sync with this PAA.
+      // Strips owner PII; routes to Leasing or Resale based on category.
+      try {
+        const session = await supabase.auth.getSession();
+        const token = session.data.session?.access_token;
+        await fetch(`${SUPABASE_URL}/functions/v1/paa-sync-listing`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ envelope_id: envelope.id }),
+        });
+        qc.invalidateQueries({ queryKey: ["paa-linked-listing", envelope.id] });
+      } catch (e) { console.warn("paa-sync-listing failed", e); }
       toast.success("Document updated");
       setEditing(false);
       setRecentlyRestoredFields([]);
