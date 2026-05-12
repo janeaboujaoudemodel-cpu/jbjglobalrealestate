@@ -10,13 +10,15 @@ interface Props {
   subject: string;
   bodyHtml: string;
   docNumber?: string;
+  docusignUrl?: string;
+  attachmentName?: string;
   className?: string;
 }
 
-export function EmailPreviewIframe({ subject, bodyHtml, docNumber, className }: Props) {
+export function EmailPreviewIframe({ subject, bodyHtml, docNumber, docusignUrl, attachmentName, className }: Props) {
   const srcDoc = useMemo(
-    () => buildEnvelopeEmailHtml({ subject, bodyHtml, docNumber }),
-    [subject, bodyHtml, docNumber],
+    () => buildEnvelopeEmailHtml({ subject, bodyHtml, docNumber, docusignUrl, attachmentName }),
+    [subject, bodyHtml, docNumber, docusignUrl, attachmentName],
   );
 
   return (
