@@ -73,9 +73,8 @@ export function buildLetterheadHeader(opts: LetterheadHeaderOpts = {}): string {
   return `
     <div style="margin:-24px -36px 14px;background:${CHAMPAGNE};padding:16px 36px 14px;border-bottom:1px solid ${GOLD};">
       <div style="display:flex;align-items:center;gap:14px;min-height:58px;">
-        <img src="https://www.jbj.ae/jbj-monogram-dark-on-light.png" alt="JBJ Global Real Estate" crossorigin="anonymous" style="width:58px;height:58px;object-fit:contain;display:block;flex:0 0 auto;" />
-        <div style="width:1px;height:42px;background:${GOLD};opacity:.6;flex:0 0 auto;"></div>
-        <div style="flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;min-width:0;">
+        <img src="${monogramUrl}" alt="JBJ Global Real Estate" style="width:58px;height:58px;object-fit:contain;display:block;flex:0 0 auto;" />
+        <div style="flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;min-width:0;padding-left:14px;">
           <div style="font-size:15px;font-weight:700;letter-spacing:.20em;color:${INK};text-transform:uppercase;line-height:1.15;">
             ${esc(TRADE_LICENSE_LEGAL_NAME)}
           </div>
