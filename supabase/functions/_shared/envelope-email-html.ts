@@ -74,9 +74,7 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
           📎 &nbsp;PDF attached: <strong>${attachmentName}</strong>
         </div>` : "";
 
-  const footerNote = docusignUrl
-    ? `Tap the button above to open the agreement in DocuSign and complete the signature. Once signed, a copy will be returned to ${SIGNED_RETURN_EMAIL}.`
-    : `The signed agreement is attached as a PDF. A separate signing request will be delivered to you via DocuSign — once signed, please return the signed copy to ${SIGNED_RETURN_EMAIL}.`;
+  const footerNote = `Tap the button above to open the agreement in DocuSign and complete the signature. Once signed, please return the signed PDF to ${SIGNED_RETURN_EMAIL}.`;
 
   return `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"></head>
 <body style="margin:0;padding:0;font-family:Inter,Arial,sans-serif;background:#FDFBF7;">
