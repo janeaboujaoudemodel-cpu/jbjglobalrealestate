@@ -191,6 +191,14 @@ export default function DevSalesRepsDirectory() {
           </table>
         </div>
       )}
+
+      <UnifiedCRMExportModal
+        open={exportOpen}
+        onOpenChange={setExportOpen}
+        kind="developers"
+        rows={filtered as any[]}
+        filenameStem="crm-developer-reps"
+      />
     </div>
   );
 }
