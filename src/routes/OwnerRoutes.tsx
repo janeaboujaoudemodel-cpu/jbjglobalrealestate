@@ -147,7 +147,7 @@ export const OwnerRoutes = () => (
     <Route path="studio" element={<Studio />} />
     <Route path="studio/editor/:projectId" element={<StudioEditor />} />
     <Route path="studio/settings" element={<StudioSettings />} />
-    <Route path="email-client" element={<EmailClient />} />
+    <Route path="email-client" element={<Navigate to="/owner/inbox" replace />} />
     <Route path="team-chat" element={<TeamChat />} />
     <Route path="kanban" element={<KanbanBoard />} />
     <Route path="map" element={<PropertyMap />} />
