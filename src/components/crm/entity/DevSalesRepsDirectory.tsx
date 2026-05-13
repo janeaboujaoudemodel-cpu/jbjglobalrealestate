@@ -172,8 +172,8 @@ export default function DevSalesRepsDirectory() {
                     <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">
                       {telHref ? <a href={telHref} className="inline-flex items-center gap-1 hover:underline"><Phone className="h-3 w-3" />{r.phone_e164}</a> : "—"}
                     </td>
-                    <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">
-                      {mailHref ? <a href={mailHref} className="inline-flex items-center gap-1 hover:underline"><Mail className="h-3 w-3" />{r.email}</a> : "—"}
+                    <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap max-w-[220px]">
+                      {mailHref ? <a href={mailHref} className="inline-flex items-center gap-1 hover:underline truncate" title={r.email || ''}><Mail className="h-3 w-3 flex-shrink-0" /><span className="truncate">{r.email}</span></a> : "—"}
                     </td>
                     <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">
                       {waHref ? <a href={waHref} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 hover:underline"><MessageCircle className="h-3 w-3" />{r.whatsapp_number}</a> : "—"}

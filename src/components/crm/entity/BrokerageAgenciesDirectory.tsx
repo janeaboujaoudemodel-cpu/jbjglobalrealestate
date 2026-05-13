@@ -259,9 +259,9 @@ export default function BrokerageAgenciesDirectory() {
                     <a href={`tel:${r.phone}`} onClick={(e) => e.stopPropagation()} className="inline-flex items-center gap-1 hover:underline"><Phone className="h-3 w-3" />{r.phone}</a>
                   ) : "—"}
                 </td>
-                <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">
+                <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap max-w-[220px]">
                   {r.email ? (
-                    <a href={`mailto:${r.email}`} onClick={(e) => e.stopPropagation()} className="inline-flex items-center gap-1 hover:underline"><Mail className="h-3 w-3" />{r.email}</a>
+                    <a href={`mailto:${r.email}`} onClick={(e) => e.stopPropagation()} className="inline-flex items-center gap-1 hover:underline truncate" title={r.email}><Mail className="h-3 w-3 flex-shrink-0" /><span className="truncate">{r.email}</span></a>
                   ) : "—"}
                 </td>
                 <td className="px-4 py-3 text-xs whitespace-nowrap max-w-[200px]">
