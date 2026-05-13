@@ -1,59 +1,34 @@
-## Goal
-Fix the broken Communication Hub at `/owner/settings/communication` (vertical/cramped tiles, Hostinger showing "Not Connected"), then add AI inbox categorization, suggested replies, and integration with calendar / tasks / notes.
+## Plan: make Webmail connection and inbox usable
 
-## Problem analysis
+### 1) Fix the misleading connection status
+- Change channel state logic so a channel is only shown as **Connected** when it is active and its last sync is not failed.
+- If the mailbox row exists but sync failed, show it as **Needs reconnect / Sync failed** in red, not green.
+- Separate **connection status** from **reply tone status** so “Default active profile” is not confused with mailbox connectivity.
+- After Hostinger/Webmail reconnect succeeds, invalidate and refetch all channel queries immediately so the tile flips state without a manual refresh.
 
-**1. Layout breakage (screenshot evidence)**
-- `ChannelGrid` uses `grid-cols-1 md:grid-cols-2 xl:grid-cols-3` inside the owner settings panel, which itself sits beside the 88px sidebar + a settings sub-nav. At 870px viewport, two tiles are forced into ~280px each → titles like "Outlook", "Hostinger Webmail", "Outbound Email (Resend)" wrap one letter per line, badges overlap the title.
-- Title row uses `flex items-start justify-between` with no `min-w-0` / `truncate` → status pills push the title into a 60px column.
+### 2) Replace confusing actions with clear mailbox actions
+- For a connected mailbox, replace the persistent **Reconnect** emphasis with:
+  - **Open inbox** as the primary action.
+  - **Sync now** / **Resync inbox** as a secondary action.
+  - **Connection settings** for reconnect/edit credentials.
+- Make the per-account row clickable/actionable by adding explicit buttons for **Open inbox**, **Sync**, and **Settings**; the tone-profile dropdown remains only for AI reply tone.
+- Add clear red error copy when sync fails, with a reconnect/settings path.
 
-**2. Hostinger "Not Connected"**
-- `useCommChannels` derives `status` from `comm_channels` rows. Even though `comm-hostinger-connect` succeeds (we verified via curl), the row may be created with `status != 'connected'` or not surfaced because the provider id mapping (`email_hostinger`) doesn't match what the connect function writes.
-- Need to confirm the row exists, has the correct `channel_type`, and `useCommChannels` query reads the latest state immediately after the dialog closes (cache invalidation already fires, but the row may be missing).
+### 3) Route directly into the right inbox section
+- Add query-param support to `/owner/inbox` so links can open a specific provider/account, e.g. Hostinger/Webmail or Gmail.
+- From the Hostinger tile, **Open inbox** will navigate to the unified inbox filtered to that Hostinger channel.
+- Expand the inbox channel tabs so connected Hostinger/Webmail accounts appear individually, just like multiple Gmail accounts.
 
-**3. Missing AI features**
-- No per-message category (Real Estate / Marketing / Admin / Personal) on inbox items.
-- No suggested-reply or "next step" generation surfaced next to messages.
-- No one-click linking of a message → calendar event / task / note.
+### 4) Put all email sources in the Email section
+- Update the CRM Email Center / inbox section so it clearly points to the unified inbox for **Hostinger/Webmail, Gmail, Outlook, and cloud email** rather than only the old Gmail/JBJ classifier.
+- Preserve the existing category chips and AI triage UI, but make the primary email access path the unified provider-based inbox.
 
-## Plan
+### 5) Fix Webmail sync reliability
+- Patch the Hostinger IMAP sync function to authenticate with a method Hostinger accepts instead of failing with the current `AUTH=[object Object]` capability error.
+- When sync succeeds, clear `last_error`; when it fails, store the failure and surface it in red on the tile.
+- Deploy the updated communication functions after editing.
 
-### Phase 1 — Layout fix (frontend only, ChannelTile + ChannelGrid)
-- `ChannelGrid`: change to `grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3` so md viewports (like 870px) get full-width tiles.
-- `ChannelTile`:
-  - Header: wrap title block in `min-w-0 flex-1`, add `truncate` to `<h3>` and `line-clamp-2` to description.
-  - Move status + tone pills to a row *below* the title on narrow widths (`flex-col sm:flex-row`), so they never compete with the title for space.
-  - Tighten padding (`p-4`) and reduce icon tile to `size="sm"` on narrow.
-  - Ensure action buttons row uses `w-full` stacking under `sm`.
-
-### Phase 2 — Hostinger connection persistence
-- Inspect `comm_channels` to confirm the Hostinger row was written with `channel_type = 'email_hostinger'` and `status = 'connected'` after the last successful connect.
-- If missing/wrong, patch `comm-hostinger-connect/index.ts` to upsert the row with the correct shape on success (and clear `last_error`).
-- After dialog success, force `qc.invalidateQueries(['comm-channel-states'])` and refetch so the tile flips to Connected immediately without a manual refresh.
-- Add a small "Verify connection" action on the Hostinger tile that re-runs the IMAP/SMTP test against the stored encrypted credentials and updates `status` accordingly — so the tile is self-healing after secret rotations.
-
-### Phase 3 — AI categorization + suggested replies
-- Add columns to `comm_messages` (or equivalent inbox table): `ai_category text`, `ai_priority text`, `ai_suggested_reply text`, `ai_next_step jsonb`, `ai_processed_at timestamptz`.
-- New edge function `comm-ai-triage`:
-  - Input: `message_id` (or batch).
-  - Calls Lovable AI Gateway (`google/gemini-2.5-flash`) with the email subject + body and a fixed taxonomy: `real_estate_lead`, `real_estate_ops`, `marketing`, `finance`, `personal`, `spam`, `other`.
-  - Returns `{ category, priority, suggested_reply, next_step: { type: 'task'|'meeting'|'note'|'none', title, due_at? } }`.
-  - Writes back to the row.
-- Trigger triage automatically inside `comm-inbound-sync` after each new message is inserted (fan-out, non-blocking).
-- Inbox UI (existing inbox component — will identify exact file in build phase): show a category chip + a collapsible "Suggested reply" panel with three buttons:
-  - **Send reply** (locked-send pipeline, uses the channel's tone profile),
-  - **Create task** (writes to existing tasks table),
-  - **Schedule meeting** (opens calendar booking flow with prefilled attendee + subject),
-  - **Save as note** (writes to existing notes/CRM contact).
-- Add a top-of-inbox filter bar: All / Real Estate / Marketing / Finance / Personal / Spam, driven by `ai_category`.
-
-### Phase 4 — QA
-- Reload `/owner/settings/communication` at 870px and 1440px; confirm tiles render horizontally with readable text and Hostinger shows Connected.
-- Trigger one inbound email, confirm `ai_category` populates within ~10s and the suggested reply renders.
-- Click Create task / Schedule meeting / Save note from a message and confirm the linked records appear in the respective hubs.
-
-## Technical notes
-- All AI calls go through Lovable AI Gateway with `google/gemini-2.5-flash` (fast + cheap, supports JSON mode for structured triage output).
-- Suggested reply send path reuses the existing locked-send standard (subject + body locked into `outreach_locked_payloads` before send).
-- No new third-party services; no new secrets required.
-- Schema changes go through `supabase--migration`; RLS on the new columns inherits existing `comm_messages` policies (owner-only).
+### 6) Verify the result
+- Check backend channel rows confirm Hostinger is active and no stale error remains after sync.
+- Test the Hostinger connect/sync/open-inbox path from `/owner/settings/communication`.
+- Confirm `/owner/inbox` opens with the Hostinger tab/account selected and messages/categories render when available.

@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
-export type ChannelStatus = "connected" | "available" | "not_linked";
+export type ChannelStatus = "connected" | "error" | "available" | "not_linked";
 
 export type ChannelProvider = {
   id: string;
@@ -75,6 +75,8 @@ export function useCommChannels() {
           "id, channel_type, display_name, identifier, is_active, sync_status, last_sync_at, last_error, training_sample_count, auto_reply_enabled, tone_profile_id"
         )
         .order("created_at", { ascending: false });
+      // Note: status === 'connected' requires (a) a row exists, (b) it is active,
+      // and (c) the most recent sync did not fail. Otherwise we surface 'error'.
       if (error) throw error;
 
       return PROVIDERS.map((provider) => {
@@ -95,7 +97,12 @@ export function useCommChannels() {
         );
 
         let status: ChannelStatus = "not_linked";
-        if (channelRows.length > 0) status = "connected";
+        if (channelRows.length > 0) {
+          const anyHealthy = channelRows.some(
+            (r) => r.is_active && r.sync_status !== "failed" && !r.last_error
+          );
+          status = anyHealthy ? "connected" : "error";
+        }
 
         let autoReplyAggregate: AutoReplyAggregate = "none";
         if (channelRows.length > 0) {
