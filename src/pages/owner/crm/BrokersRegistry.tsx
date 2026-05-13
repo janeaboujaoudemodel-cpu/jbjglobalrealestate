@@ -344,7 +344,7 @@ export default function BrokersRegistry() {
             {stillStreaming && (
               <div className="flex items-center gap-2 text-xs text-[#1A1A1A]/70 px-1">
                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                Loading brokers… {external.length.toLocaleString()} of {counts.total.toLocaleString()} loaded
+                Loading brokers… {external.length.toLocaleString()} of {counts.total == null ? "…" : counts.total.toLocaleString()} loaded
               </div>
             )}
             {isLoading ? (
