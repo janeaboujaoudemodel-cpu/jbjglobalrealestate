@@ -207,9 +207,13 @@ export default function BrokersRegistry() {
     });
   }, [allRows, q, tab, companyFilter, sourceFilter, sourceFilterCtx, externalById]);
 
-  // Authoritative DB total (head-count, not capped by row pagination).
+  // Authoritative DB total (head-count, not capped by row pagination, live via realtime).
   const { counts: sectionCounts } = useCRMSectionCounts();
-  const dbTotal = Math.max(sectionCounts.brokers || 0, allRows.length);
+  const { total: brokersHeadCount, loading: countLoading } = useEntityTotal("crm_brokers");
+  const dbTotal: number | null =
+    brokersHeadCount != null ? brokersHeadCount + (registered?.length || 0)
+    : sectionCounts.brokers ? sectionCounts.brokers + (registered?.length || 0)
+    : null;
 
   const counts = useMemo(() => ({
     total: dbTotal,
