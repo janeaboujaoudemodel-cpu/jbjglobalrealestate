@@ -10,7 +10,6 @@
  */
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
-import { ImapClient } from "jsr:@workingdevshero/deno-imap@1.0.0";
 import { SmtpClient } from "https://deno.land/x/smtp@v0.7.0/mod.ts";
 import { encryptCredential } from "../_shared/credentialCrypto.ts";
 import { logChannelAudit } from "../_shared/channelAudit.ts";
@@ -42,17 +41,46 @@ async function testImap(
   password: string,
   host: string,
   port: number
-): Promise<boolean> {
-  const client = new ImapClient({ host, port, tls: true });
+): Promise<{ ok: boolean; error?: string }> {
+  let conn: Deno.TlsConn | null = null;
   try {
-    await client.connect();
-    await client.authenticate({ mechanism: "PLAIN", username: email, password });
-    await client.selectMailbox("INBOX");
-    await client.disconnect();
-    return true;
+    conn = await Deno.connectTls({ hostname: host, port });
+    const dec = new TextDecoder();
+    const enc = new TextEncoder();
+    const buf = new Uint8Array(8192);
+
+    const read = async (): Promise<string> => {
+      const n = await conn!.read(buf);
+      return n ? dec.decode(buf.subarray(0, n)) : "";
+    };
+
+    const greeting = await read();
+    console.log("[hostinger] IMAP greeting:", greeting.trim());
+    if (!greeting.startsWith("* OK")) {
+      return { ok: false, error: `Bad greeting: ${greeting.trim()}` };
+    }
+
+    // RFC3501 quoted string: escape \ and "
+    const qPass = password.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+    const cmd = `a1 LOGIN "${email}" "${qPass}"\r\n`;
+    await conn.write(enc.encode(cmd));
+
+    let response = "";
+    for (let i = 0; i < 5; i++) {
+      const chunk = await read();
+      response += chunk;
+      if (response.includes("a1 OK") || response.includes("a1 NO") || response.includes("a1 BAD")) break;
+    }
+    console.log("[hostinger] IMAP login response:", response.trim());
+
+    if (response.includes("a1 OK")) return { ok: true };
+    const errLine = response.split("\r\n").find((l) => l.startsWith("a1 NO") || l.startsWith("a1 BAD")) || response.trim();
+    return { ok: false, error: errLine };
   } catch (e) {
-    console.error("[hostinger] IMAP test failed:", e);
-    return false;
+    console.error("[hostinger] IMAP test exception:", e);
+    return { ok: false, error: e instanceof Error ? e.message : String(e) };
+  } finally {
+    try { conn?.close(); } catch { /* noop */ }
   }
 }
 
@@ -111,9 +139,9 @@ Deno.serve(async (req) => {
     const smtpPort = body.smtp_port || DEFAULTS.smtp_port;
 
     // 1) Test IMAP
-    const imapOk = await testImap(email, password, imapHost, imapPort);
-    if (!imapOk) {
-      return new Response(JSON.stringify({ error: "IMAP connection failed. Check email/password and server settings." }), {
+    const imapResult = await testImap(email, password, imapHost, imapPort);
+    if (!imapResult.ok) {
+      return new Response(JSON.stringify({ error: `IMAP login failed: ${imapResult.error || "unknown"}` }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
