@@ -189,7 +189,7 @@ export default function BrokerageAgenciesDirectory() {
                 : "bg-[#FDFBF7] text-[#1A1A1A]/80 border-[#B89555]/25 hover:bg-[#F7F2EA]"
             }`}
           >
-            All <span className="text-[10px] tabular-nums opacity-70">{rows.length.toLocaleString()}</span>
+            All <span className="text-[10px] tabular-nums opacity-70">{(dbTotal ?? rows.length).toLocaleString()}</span>
           </button>
           {emirateCounts.map(([name, count]) => (
             <button
