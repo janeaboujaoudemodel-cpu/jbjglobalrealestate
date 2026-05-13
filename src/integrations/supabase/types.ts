@@ -13512,6 +13512,30 @@ export type Database = {
           },
         ]
       }
+      esign_inbound_autoreply_log: {
+        Row: {
+          created_at: string
+          from_email: string
+          id: string
+          message_id: string
+          subject: string | null
+        }
+        Insert: {
+          created_at?: string
+          from_email: string
+          id?: string
+          message_id: string
+          subject?: string | null
+        }
+        Update: {
+          created_at?: string
+          from_email?: string
+          id?: string
+          message_id?: string
+          subject?: string | null
+        }
+        Relationships: []
+      }
       esign_recipients: {
         Row: {
           created_at: string
