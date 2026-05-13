@@ -125,12 +125,16 @@ const getEmail = (r: Recipient, entityType: EntityType) =>
 
 export const BulkSendDialog = ({
   open, onOpenChange, selected, defaultTestEmail, entityType = "developer",
+  initialVariant, title, lockVariant = false,
 }: {
   open: boolean;
   onOpenChange: (v: boolean) => void;
   selected: Recipient[];
   defaultTestEmail: string;
   entityType?: EntityType;
+  initialVariant?: AnyEmailVariant;
+  title?: string;
+  lockVariant?: boolean;
 }) => {
   const sendDev = useSendDeveloperRegistration();
   const sendBrk = useSendBrokerageOutreach();
