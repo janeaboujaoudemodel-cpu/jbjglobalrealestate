@@ -267,7 +267,7 @@ export default function InvestorsDirectory({
         </div>
       ) : (
         <div className="overflow-x-auto rounded-lg border border-[#B89555]/30 bg-[#FDFBF7]">
-          <table className="min-w-full text-sm">
+          <table className="min-w-[1000px] w-full text-sm">
             <thead className="bg-[#F7F2EA] text-[#1A1A1A]">
               <tr>
                 <th className="text-left px-4 py-2 font-semibold">Investor</th>
@@ -295,9 +295,9 @@ export default function InvestorsDirectory({
                       <span className="font-semibold text-[#1A1A1A]">{a.name}</span>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-[#1A1A1A]/80">
-                    <div className="text-xs truncate max-w-[220px]">{a.email || "—"}</div>
-                    <div className="text-xs">{a.phone || "—"}</div>
+                  <td className="px-4 py-3 text-[#1A1A1A]/80 max-w-[240px]">
+                    <div className="text-xs truncate" title={a.email || ""}>{a.email || "—"}</div>
+                    <div className="text-xs truncate whitespace-nowrap" title={a.phone || ""}>{a.phone || "—"}</div>
                   </td>
                   <td className="px-4 py-3 text-right font-semibold text-[#1A1A1A]">{a.unitsCount}</td>
                   <td className="px-4 py-3 text-right font-bold" style={{ color: "var(--price-orange, #E67E22)" }}>

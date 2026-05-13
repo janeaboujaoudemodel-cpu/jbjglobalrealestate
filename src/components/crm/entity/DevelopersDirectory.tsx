@@ -232,14 +232,14 @@ export default function DevelopersDirectory() {
                       <span className="font-semibold text-[#1A1A1A] truncate">{d.name}</span>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs max-w-[260px] whitespace-normal break-words leading-snug">
+                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs max-w-[260px] leading-snug">
                     {maps ? (
-                      <a href={maps} target="_blank" rel="noreferrer" onClick={stop}
-                         className="inline-flex items-start gap-1 hover:underline">
-                        <MapPin className="h-3 w-3 mt-0.5 shrink-0" />
-                        <span>{d.headquarters || d.office_address || "View on map"}</span>
+                      <a href={maps} target="_blank" rel="noreferrer" onClick={stop} title={d.headquarters || d.office_address || ""}
+                         className="inline-flex items-center gap-1 hover:underline max-w-full">
+                        <MapPin className="h-3 w-3 shrink-0" />
+                        <span className="truncate">{d.headquarters || d.office_address || "View on map"}</span>
                       </a>
-                    ) : (d.headquarters || "—")}
+                    ) : <span className="block truncate" title={d.headquarters || ""}>{d.headquarters || "—"}</span>}
                   </td>
                   <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">{d.ceo_name || "—"}</td>
                   <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">{d.license_number || "—"}</td>
