@@ -5,9 +5,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
-import { BadgeCheck, Phone, Mail, MessageCircle, Upload } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { BadgeCheck, Phone, Mail, MessageCircle, Upload, Download } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEntityTotal } from "@/hooks/useEntityTotal";
+import { UnifiedCRMExportModal } from "@/components/crm/UnifiedCRMExportModal";
 
 interface RepRow {
   id: string;
@@ -29,6 +31,7 @@ export default function DevSalesRepsDirectory() {
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+  const [exportOpen, setExportOpen] = useState(false);
   const { total: dbTotal } = useEntityTotal("developer_sales_reps", (q) => q.eq("is_active", true));
 
   useEffect(() => {
@@ -92,13 +95,18 @@ export default function DevSalesRepsDirectory() {
             {filtered.length.toLocaleString()} of {(dbTotal ?? rows.length).toLocaleString()} reps
           </p>
         </div>
-        <input
-          type="search"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search name, developer, email…"
-          className="h-9 w-72 rounded-lg border border-[#B89555]/30 bg-[#FDFBF7] px-3 text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:outline-none focus:border-[#B89555]"
-        />
+        <div className="flex items-center gap-2">
+          <input
+            type="search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search name, developer, email…"
+            className="h-9 w-72 rounded-lg border border-[#B89555]/30 bg-[#FDFBF7] px-3 text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:outline-none focus:border-[#B89555]"
+          />
+          <Button variant="outline" size="sm" onClick={() => setExportOpen(true)}>
+            <Download className="w-4 h-4 mr-1.5" /> Export
+          </Button>
+        </div>
       </div>
 
       {rows.length === 0 ? (
@@ -150,7 +158,17 @@ export default function DevSalesRepsDirectory() {
                       </div>
                     </td>
                     <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">{r.title || "—"}</td>
-                    <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">{r.developer?.name || "—"}</td>
+                    <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">
+                      {r.developer?.name ? (
+                        <Link
+                          to={`/owner/crm/relationship-hub?tab=developers&developer=${r.developer_id}`}
+                          className="hover:underline decoration-[#B89555] underline-offset-2"
+                          title="Open developer in Relationships Hub"
+                        >
+                          {r.developer.name}
+                        </Link>
+                      ) : "—"}
+                    </td>
                     <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">
                       {telHref ? <a href={telHref} className="inline-flex items-center gap-1 hover:underline"><Phone className="h-3 w-3" />{r.phone_e164}</a> : "—"}
                     </td>
@@ -173,6 +191,14 @@ export default function DevSalesRepsDirectory() {
           </table>
         </div>
       )}
+
+      <UnifiedCRMExportModal
+        open={exportOpen}
+        onOpenChange={setExportOpen}
+        kind="developers"
+        rows={filtered as any[]}
+        filenameStem="crm-developer-reps"
+      />
     </div>
   );
 }

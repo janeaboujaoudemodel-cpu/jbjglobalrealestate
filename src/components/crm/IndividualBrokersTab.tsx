@@ -21,9 +21,11 @@ import { Label } from "@/components/ui/label";
 import { ExcelGridView } from "@/components/crm/ExcelGridView";
 import BrokerBulkUploadDialog from "@/components/crm/BrokerBulkUploadDialog";
 import { exportRowsToXlsx } from "@/utils/exportXlsx";
+import { UnifiedCRMExportModal } from "@/components/crm/UnifiedCRMExportModal";
+import { Link } from "react-router-dom";
 import {
   Plus, Search, User, Phone, Mail, MessageCircle, Trash2,
-  UploadCloud, FileDown, Linkedin, Globe, ChevronLeft, ChevronRight,
+  UploadCloud, FileDown, Linkedin, Globe, ChevronLeft, ChevronRight, Download,
 } from "lucide-react";
 
 type Row = {
@@ -83,6 +85,7 @@ export default function IndividualBrokersTab() {
   const [page, setPage] = useState(0);
   const [open, setOpen] = useState(false);
   const [bulkOpen, setBulkOpen] = useState(false);
+  const [exportOpen, setExportOpen] = useState(false);
   const [editing, setEditing] = useState<Partial<Row> | null>(null);
 
   // Debounce search → only fire query after user pauses typing
@@ -295,6 +298,7 @@ export default function IndividualBrokersTab() {
           </SelectContent>
         </Select>
         <Button variant="outline" onClick={exportExcel}><FileDown className="w-4 h-4 mr-2" /> Export page</Button>
+        <Button variant="outline" onClick={() => setExportOpen(true)}><Download className="w-4 h-4 mr-2" /> Unified export</Button>
         <Button variant="outline" onClick={() => setBulkOpen(true)}><UploadCloud className="w-4 h-4 mr-2" /> Upload database</Button>
         <Button variant="gold" onClick={openNew}><Plus className="w-4 h-4 mr-2" /> Add broker</Button>
       </div>
@@ -339,7 +343,19 @@ export default function IndividualBrokersTab() {
                       {r.full_name || "Unknown"}
                     </button>
                     <div className="text-[11px] text-[#1A1A1A]/70 truncate">
-                      {[r.role_title || r.position_title, r.brokerage?.company_name || r.current_company || "Standalone"].filter(Boolean).join(" · ")}
+                      {r.role_title || r.position_title}
+                      {(r.role_title || r.position_title) && (r.brokerage?.company_name || r.current_company) ? " · " : ""}
+                      {r.current_brokerage_id && r.brokerage?.company_name ? (
+                        <Link
+                          to={`/owner/crm/relationship-hub?tab=brokerages&agency=${r.current_brokerage_id}`}
+                          className="text-[#1A1A1A] hover:underline decoration-[#B89555] underline-offset-2"
+                          title="Open agency in Relationships Hub"
+                        >
+                          {r.brokerage.company_name}
+                        </Link>
+                      ) : (
+                        <span>{r.current_company || "Standalone"}</span>
+                      )}
                     </div>
                     <div className="mt-2 flex flex-wrap gap-1.5 text-[11px]">
                       {(r.specialty || []).slice(0, 4).map((s) => (
@@ -472,6 +488,14 @@ export default function IndividualBrokersTab() {
           qc.invalidateQueries({ queryKey: ["crm-brokers"] });
           qc.invalidateQueries({ queryKey: ["crm-brokers-count"] });
         }}
+      />
+
+      <UnifiedCRMExportModal
+        open={exportOpen}
+        onOpenChange={setExportOpen}
+        kind="brokers"
+        rows={rows as any[]}
+        filenameStem="crm-brokers-filtered"
       />
     </div>
   );
