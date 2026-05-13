@@ -102,7 +102,7 @@ export function useCRMSectionCounts(): { counts: CRMCounts; loading: boolean; re
     setLoading(false);
   };
 
-  useEffect(() => { load(); /* eslint-disable-next-line */ }, [tick.current]);
+  useEffect(() => { cache = null; load(true); /* eslint-disable-next-line */ }, [tick.current]);
 
   // Realtime: invalidate cache + reload on relevant table changes (debounced).
   useEffect(() => {
