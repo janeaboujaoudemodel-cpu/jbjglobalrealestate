@@ -5223,25 +5223,32 @@ export type Database = {
       }
       crm_brokerage_agents: {
         Row: {
+          assigned_to: string | null
           birthday: string | null
           broker_id: string | null
           brokerage_id: string | null
           city: string | null
+          closed_deals_count: number
           country: string | null
           created_at: string
           department: string | null
           email: string | null
           email_normalized: string | null
+          emirate: string | null
           expertise_areas: string[]
           expertise_type: string
           first_imported_at: string
+          google_maps_link: string | null
+          google_reviews_url: string | null
           id: string
           import_batch_id: string | null
           import_label: string | null
+          inquiry_count: number
           instagram_url: string | null
           is_global_broker: boolean | null
           languages: string[] | null
           last_contact_at: string | null
+          last_verified_at: string | null
           license_number: string | null
           linkedin_url: string | null
           merge_history: Json
@@ -5249,12 +5256,15 @@ export type Database = {
           name: string | null
           nationality: string | null
           notes: string | null
+          office_address: string | null
           owner_id: string
+          partnership_status: string | null
           phone: string | null
           phone_normalized: string | null
           photo_path: string | null
           position_type: string | null
           region: string | null
+          registration_status: string | null
           rera_number: string | null
           role: string | null
           role_title: string | null
@@ -5265,29 +5275,37 @@ export type Database = {
           specialty_labels: string[]
           status: string
           updated_at: string
+          verification_status: string | null
           whatsapp: string | null
           whatsapp_normalized: string | null
         }
         Insert: {
+          assigned_to?: string | null
           birthday?: string | null
           broker_id?: string | null
           brokerage_id?: string | null
           city?: string | null
+          closed_deals_count?: number
           country?: string | null
           created_at?: string
           department?: string | null
           email?: string | null
           email_normalized?: string | null
+          emirate?: string | null
           expertise_areas?: string[]
           expertise_type?: string
           first_imported_at?: string
+          google_maps_link?: string | null
+          google_reviews_url?: string | null
           id?: string
           import_batch_id?: string | null
           import_label?: string | null
+          inquiry_count?: number
           instagram_url?: string | null
           is_global_broker?: boolean | null
           languages?: string[] | null
           last_contact_at?: string | null
+          last_verified_at?: string | null
           license_number?: string | null
           linkedin_url?: string | null
           merge_history?: Json
@@ -5295,12 +5313,15 @@ export type Database = {
           name?: string | null
           nationality?: string | null
           notes?: string | null
+          office_address?: string | null
           owner_id: string
+          partnership_status?: string | null
           phone?: string | null
           phone_normalized?: string | null
           photo_path?: string | null
           position_type?: string | null
           region?: string | null
+          registration_status?: string | null
           rera_number?: string | null
           role?: string | null
           role_title?: string | null
@@ -5311,29 +5332,37 @@ export type Database = {
           specialty_labels?: string[]
           status?: string
           updated_at?: string
+          verification_status?: string | null
           whatsapp?: string | null
           whatsapp_normalized?: string | null
         }
         Update: {
+          assigned_to?: string | null
           birthday?: string | null
           broker_id?: string | null
           brokerage_id?: string | null
           city?: string | null
+          closed_deals_count?: number
           country?: string | null
           created_at?: string
           department?: string | null
           email?: string | null
           email_normalized?: string | null
+          emirate?: string | null
           expertise_areas?: string[]
           expertise_type?: string
           first_imported_at?: string
+          google_maps_link?: string | null
+          google_reviews_url?: string | null
           id?: string
           import_batch_id?: string | null
           import_label?: string | null
+          inquiry_count?: number
           instagram_url?: string | null
           is_global_broker?: boolean | null
           languages?: string[] | null
           last_contact_at?: string | null
+          last_verified_at?: string | null
           license_number?: string | null
           linkedin_url?: string | null
           merge_history?: Json
@@ -5341,12 +5370,15 @@ export type Database = {
           name?: string | null
           nationality?: string | null
           notes?: string | null
+          office_address?: string | null
           owner_id?: string
+          partnership_status?: string | null
           phone?: string | null
           phone_normalized?: string | null
           photo_path?: string | null
           position_type?: string | null
           region?: string | null
+          registration_status?: string | null
           rera_number?: string | null
           role?: string | null
           role_title?: string | null
@@ -5357,6 +5389,7 @@ export type Database = {
           specialty_labels?: string[]
           status?: string
           updated_at?: string
+          verification_status?: string | null
           whatsapp?: string | null
           whatsapp_normalized?: string | null
         }
@@ -5719,6 +5752,7 @@ export type Database = {
           expertise_type: string
           field_sources: Json
           first_contact_at: string | null
+          google_maps_link: string | null
           google_reviews_count: number | null
           google_reviews_score: number | null
           google_reviews_url: string | null
@@ -5763,6 +5797,7 @@ export type Database = {
           outreach_count: number
           outreach_stage: Database["public"]["Enums"]["outreach_stage"]
           owner_id: string
+          partnership_status: string | null
           pending_documents_notes: string | null
           phone: string | null
           primary_contact: Json | null
@@ -5784,6 +5819,7 @@ export type Database = {
           total_deal_value_cached: number
           updated_at: string
           upload_source: string | null
+          verification_status: string | null
           website: string | null
           whatsapp_e164: string | null
         }
@@ -5840,6 +5876,7 @@ export type Database = {
           expertise_type?: string
           field_sources?: Json
           first_contact_at?: string | null
+          google_maps_link?: string | null
           google_reviews_count?: number | null
           google_reviews_score?: number | null
           google_reviews_url?: string | null
@@ -5884,6 +5921,7 @@ export type Database = {
           outreach_count?: number
           outreach_stage?: Database["public"]["Enums"]["outreach_stage"]
           owner_id: string
+          partnership_status?: string | null
           pending_documents_notes?: string | null
           phone?: string | null
           primary_contact?: Json | null
@@ -5905,6 +5943,7 @@ export type Database = {
           total_deal_value_cached?: number
           updated_at?: string
           upload_source?: string | null
+          verification_status?: string | null
           website?: string | null
           whatsapp_e164?: string | null
         }
@@ -5961,6 +6000,7 @@ export type Database = {
           expertise_type?: string
           field_sources?: Json
           first_contact_at?: string | null
+          google_maps_link?: string | null
           google_reviews_count?: number | null
           google_reviews_score?: number | null
           google_reviews_url?: string | null
@@ -6005,6 +6045,7 @@ export type Database = {
           outreach_count?: number
           outreach_stage?: Database["public"]["Enums"]["outreach_stage"]
           owner_id?: string
+          partnership_status?: string | null
           pending_documents_notes?: string | null
           phone?: string | null
           primary_contact?: Json | null
@@ -6026,6 +6067,7 @@ export type Database = {
           total_deal_value_cached?: number
           updated_at?: string
           upload_source?: string | null
+          verification_status?: string | null
           website?: string | null
           whatsapp_e164?: string | null
         }
@@ -6041,10 +6083,12 @@ export type Database = {
       }
       crm_brokers: {
         Row: {
+          assigned_to: string | null
           bayut_url: string | null
           birthday: string | null
           broker_type: string | null
           city: string | null
+          closed_deals_count: number
           company_email: string | null
           company_phone: string | null
           country: string | null
@@ -6055,23 +6099,33 @@ export type Database = {
           date_of_birth: string | null
           department: string | null
           email_lower: string | null
+          emirate: string | null
           event_source: string | null
           experience_years: number | null
           full_name: string | null
+          google_maps_link: string | null
+          google_reviews_count: number | null
+          google_reviews_score: number | null
+          google_reviews_url: string | null
           id: string
           imported_at: string | null
           imported_by: string | null
+          inquiry_count: number
           instagram_url: string | null
           is_global_broker: boolean | null
           joined_at: string | null
           labels: string[]
           languages: string[] | null
           last_active_at: string | null
+          last_contact_at: string | null
+          last_verified_at: string | null
           linkedin_url: string | null
           nationality: string | null
           notes: string | null
+          office_address: string | null
           original_filename: string | null
           owner_id: string | null
+          partnership_status: string | null
           personal_email: string | null
           personal_phone: string | null
           pf_url: string | null
@@ -6079,6 +6133,7 @@ export type Database = {
           position_title: string | null
           position_type: string | null
           region: string | null
+          registration_status: string | null
           rera_license: string | null
           role_title: string | null
           seniority: string | null
@@ -6086,13 +6141,17 @@ export type Database = {
           specialty: string[]
           updated_at: string | null
           upload_source: string | null
+          verification_status: string | null
+          website: string | null
           whatsapp: string | null
         }
         Insert: {
+          assigned_to?: string | null
           bayut_url?: string | null
           birthday?: string | null
           broker_type?: string | null
           city?: string | null
+          closed_deals_count?: number
           company_email?: string | null
           company_phone?: string | null
           country?: string | null
@@ -6103,23 +6162,33 @@ export type Database = {
           date_of_birth?: string | null
           department?: string | null
           email_lower?: string | null
+          emirate?: string | null
           event_source?: string | null
           experience_years?: number | null
           full_name?: string | null
+          google_maps_link?: string | null
+          google_reviews_count?: number | null
+          google_reviews_score?: number | null
+          google_reviews_url?: string | null
           id?: string
           imported_at?: string | null
           imported_by?: string | null
+          inquiry_count?: number
           instagram_url?: string | null
           is_global_broker?: boolean | null
           joined_at?: string | null
           labels?: string[]
           languages?: string[] | null
           last_active_at?: string | null
+          last_contact_at?: string | null
+          last_verified_at?: string | null
           linkedin_url?: string | null
           nationality?: string | null
           notes?: string | null
+          office_address?: string | null
           original_filename?: string | null
           owner_id?: string | null
+          partnership_status?: string | null
           personal_email?: string | null
           personal_phone?: string | null
           pf_url?: string | null
@@ -6127,6 +6196,7 @@ export type Database = {
           position_title?: string | null
           position_type?: string | null
           region?: string | null
+          registration_status?: string | null
           rera_license?: string | null
           role_title?: string | null
           seniority?: string | null
@@ -6134,13 +6204,17 @@ export type Database = {
           specialty?: string[]
           updated_at?: string | null
           upload_source?: string | null
+          verification_status?: string | null
+          website?: string | null
           whatsapp?: string | null
         }
         Update: {
+          assigned_to?: string | null
           bayut_url?: string | null
           birthday?: string | null
           broker_type?: string | null
           city?: string | null
+          closed_deals_count?: number
           company_email?: string | null
           company_phone?: string | null
           country?: string | null
@@ -6151,23 +6225,33 @@ export type Database = {
           date_of_birth?: string | null
           department?: string | null
           email_lower?: string | null
+          emirate?: string | null
           event_source?: string | null
           experience_years?: number | null
           full_name?: string | null
+          google_maps_link?: string | null
+          google_reviews_count?: number | null
+          google_reviews_score?: number | null
+          google_reviews_url?: string | null
           id?: string
           imported_at?: string | null
           imported_by?: string | null
+          inquiry_count?: number
           instagram_url?: string | null
           is_global_broker?: boolean | null
           joined_at?: string | null
           labels?: string[]
           languages?: string[] | null
           last_active_at?: string | null
+          last_contact_at?: string | null
+          last_verified_at?: string | null
           linkedin_url?: string | null
           nationality?: string | null
           notes?: string | null
+          office_address?: string | null
           original_filename?: string | null
           owner_id?: string | null
+          partnership_status?: string | null
           personal_email?: string | null
           personal_phone?: string | null
           pf_url?: string | null
@@ -6175,6 +6259,7 @@ export type Database = {
           position_title?: string | null
           position_type?: string | null
           region?: string | null
+          registration_status?: string | null
           rera_license?: string | null
           role_title?: string | null
           seniority?: string | null
@@ -6182,6 +6267,8 @@ export type Database = {
           specialty?: string[]
           updated_at?: string | null
           upload_source?: string | null
+          verification_status?: string | null
+          website?: string | null
           whatsapp?: string | null
         }
         Relationships: [
@@ -6535,6 +6622,7 @@ export type Database = {
           expiry_date: string | null
           field_sources: Json
           first_contact_at: string | null
+          google_maps_link: string | null
           google_reviews_count: number | null
           google_reviews_score: number | null
           google_reviews_url: string | null
@@ -6542,6 +6630,7 @@ export type Database = {
           id: string
           imported_at: string | null
           imported_by: string | null
+          inquiry_count: number
           instagram_url: string | null
           inventory_file_url: string | null
           is_junk: boolean
@@ -6562,6 +6651,7 @@ export type Database = {
           next_action_note: string | null
           next_followup_at: string | null
           notes: string | null
+          number_of_brokers: number | null
           office_address: string | null
           office_map_url: string | null
           original_filename: string | null
@@ -6569,6 +6659,7 @@ export type Database = {
           outreach_count: number
           outreach_stage: Database["public"]["Enums"]["outreach_stage"]
           owner_id: string
+          partnership_status: string | null
           phone: string | null
           priority: string | null
           registered_at: string | null
@@ -6589,6 +6680,7 @@ export type Database = {
           uae_developer_id: string | null
           updated_at: string
           upload_source: string | null
+          verification_status: string | null
           website: string | null
           whatsapp_e164: string | null
         }
@@ -6634,6 +6726,7 @@ export type Database = {
           expiry_date?: string | null
           field_sources?: Json
           first_contact_at?: string | null
+          google_maps_link?: string | null
           google_reviews_count?: number | null
           google_reviews_score?: number | null
           google_reviews_url?: string | null
@@ -6641,6 +6734,7 @@ export type Database = {
           id?: string
           imported_at?: string | null
           imported_by?: string | null
+          inquiry_count?: number
           instagram_url?: string | null
           inventory_file_url?: string | null
           is_junk?: boolean
@@ -6661,6 +6755,7 @@ export type Database = {
           next_action_note?: string | null
           next_followup_at?: string | null
           notes?: string | null
+          number_of_brokers?: number | null
           office_address?: string | null
           office_map_url?: string | null
           original_filename?: string | null
@@ -6668,6 +6763,7 @@ export type Database = {
           outreach_count?: number
           outreach_stage?: Database["public"]["Enums"]["outreach_stage"]
           owner_id: string
+          partnership_status?: string | null
           phone?: string | null
           priority?: string | null
           registered_at?: string | null
@@ -6688,6 +6784,7 @@ export type Database = {
           uae_developer_id?: string | null
           updated_at?: string
           upload_source?: string | null
+          verification_status?: string | null
           website?: string | null
           whatsapp_e164?: string | null
         }
@@ -6733,6 +6830,7 @@ export type Database = {
           expiry_date?: string | null
           field_sources?: Json
           first_contact_at?: string | null
+          google_maps_link?: string | null
           google_reviews_count?: number | null
           google_reviews_score?: number | null
           google_reviews_url?: string | null
@@ -6740,6 +6838,7 @@ export type Database = {
           id?: string
           imported_at?: string | null
           imported_by?: string | null
+          inquiry_count?: number
           instagram_url?: string | null
           inventory_file_url?: string | null
           is_junk?: boolean
@@ -6760,6 +6859,7 @@ export type Database = {
           next_action_note?: string | null
           next_followup_at?: string | null
           notes?: string | null
+          number_of_brokers?: number | null
           office_address?: string | null
           office_map_url?: string | null
           original_filename?: string | null
@@ -6767,6 +6867,7 @@ export type Database = {
           outreach_count?: number
           outreach_stage?: Database["public"]["Enums"]["outreach_stage"]
           owner_id?: string
+          partnership_status?: string | null
           phone?: string | null
           priority?: string | null
           registered_at?: string | null
@@ -6787,6 +6888,7 @@ export type Database = {
           uae_developer_id?: string | null
           updated_at?: string
           upload_source?: string | null
+          verification_status?: string | null
           website?: string | null
           whatsapp_e164?: string | null
         }
