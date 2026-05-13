@@ -343,7 +343,19 @@ export default function IndividualBrokersTab() {
                       {r.full_name || "Unknown"}
                     </button>
                     <div className="text-[11px] text-[#1A1A1A]/70 truncate">
-                      {[r.role_title || r.position_title, r.brokerage?.company_name || r.current_company || "Standalone"].filter(Boolean).join(" · ")}
+                      {r.role_title || r.position_title}
+                      {(r.role_title || r.position_title) && (r.brokerage?.company_name || r.current_company) ? " · " : ""}
+                      {r.current_brokerage_id && r.brokerage?.company_name ? (
+                        <Link
+                          to={`/owner/crm/relationship-hub?tab=brokerages&agency=${r.current_brokerage_id}`}
+                          className="text-[#1A1A1A] hover:underline decoration-[#B89555] underline-offset-2"
+                          title="Open agency in Relationships Hub"
+                        >
+                          {r.brokerage.company_name}
+                        </Link>
+                      ) : (
+                        <span>{r.current_company || "Standalone"}</span>
+                      )}
                     </div>
                     <div className="mt-2 flex flex-wrap gap-1.5 text-[11px]">
                       {(r.specialty || []).slice(0, 4).map((s) => (
