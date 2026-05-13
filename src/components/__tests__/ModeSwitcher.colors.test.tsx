@@ -240,7 +240,7 @@ describe("ModeSwitcher color regression", () => {
     // Reference reflects the active broker palette.
     expect(containsHex(reference.bgImage, base)).toBe(true);
     expect(
-      norm(reference.color) === "#ffffff" || norm(reference.color) === "rgb(255,255,255)",
+      norm(reference.color) === "#1a1a1a" || norm(reference.color) === "rgb(26,26,26)",
     ).toBe(true);
 
     // Every placement renders identical trigger styles — no placement can drift.
