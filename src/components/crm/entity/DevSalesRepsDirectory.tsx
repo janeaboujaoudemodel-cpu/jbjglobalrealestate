@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BadgeCheck, Phone, Mail, MessageCircle, Upload } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useEntityTotal } from "@/hooks/useEntityTotal";
 
 interface RepRow {
   id: string;
