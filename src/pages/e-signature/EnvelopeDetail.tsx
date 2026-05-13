@@ -226,9 +226,20 @@ export default function EnvelopeDetail() {
     setEditValues((prev) => ({ ...prev, ...updates }));
   };
 
+  // Strip Unicode bidi-control characters that can flip an entire run of
+  // text RTL (LRM, RLM, LRE, RLE, PDF, LRO, RLO, LRI, RLI, FSI, PDI). OCR /
+  // smart-fill of uploaded contracts often injects these and they are
+  // invisible in field inputs but visibly mirror the rendered preview.
+  const stripBidi = (s: string) => (s || "").replace(/[\u200E\u200F\u202A-\u202E\u2066-\u2069]/g, "");
+  const sanitizeValues = (v: Record<string, any>): Record<string, string> => {
+    const out: Record<string, string> = {};
+    for (const k of Object.keys(v || {})) out[k] = stripBidi(String(v[k] ?? ""));
+    return out;
+  };
+
   const previewHtml = useMemo(() => {
     if (!envelope?.template_key) return null;
-    const baseVals = editing ? editValues : ((envelope.template_field_values as any) || {});
+    const baseVals = sanitizeValues(editing ? editValues : ((envelope.template_field_values as any) || {}));
     // Only render the captured signature pad image when the recipient has truly
     // signed. Once signed, mirror the signer name + signing date into the
     // rendered letterhead so preview, print, export, and download all match.
@@ -239,7 +250,7 @@ export default function EnvelopeDetail() {
     const signedDate = signedClient?.signed_at ? format(new Date(signedClient.signed_at), "dd/MM/yyyy") : "";
     const vals = signedClient ? {
       ...baseVals,
-      landlord_signature_name: baseVals.landlord_signature_name || signedClient.name || "",
+      landlord_signature_name: baseVals.landlord_signature_name || stripBidi(signedClient.name || ""),
       landlord_signature_date: baseVals.landlord_signature_date || signedDate,
     } : baseVals;
     return renderTemplateHtml(
