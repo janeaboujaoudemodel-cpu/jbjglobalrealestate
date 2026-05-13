@@ -143,7 +143,8 @@ export default function DocumentsFormsHub() {
     }
     // Email is optional now — required only at send-time
     try {
-      const env = await createFromTpl.mutateAsync({ template: picker, client, values: extraValues });
+      const hiddenFields = includeJbjBlock ? [] : ["jbj_signature_name", "jbj_signature_date"];
+      const env = await createFromTpl.mutateAsync({ template: picker, client, values: extraValues, hiddenFields });
       toast.success("Draft created — review fields and send");
       qc.invalidateQueries({ queryKey: ["esign_envelopes_hub_all"] });
       navigate(`/owner/documents/forms/${env.id}`);
