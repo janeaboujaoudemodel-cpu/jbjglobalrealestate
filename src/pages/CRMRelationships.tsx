@@ -3078,6 +3078,28 @@ const DeveloperRegistryTab = () => {
         selected={selectedDevs}
         defaultTestEmail={ownerSettings?.cc_email || "infoo.jane@gmail.com"}
       />
+      <ConfirmRegistrationLauncher
+        open={confirmRegOpen}
+        onOpenChange={setConfirmRegOpen}
+        developers={data as any[]}
+        onContinue={(picked) => {
+          setConfirmRegSelected(picked);
+          setTimeout(() => setConfirmRegOpen(false), 0);
+          setTimeout(() => {
+            // open the bulk dialog with locked variant for confirmations
+            setConfirmRegBulkOpen(true);
+          }, 50);
+        }}
+      />
+      <BulkSendDialog
+        open={confirmRegBulkOpen}
+        onOpenChange={setConfirmRegBulkOpen}
+        selected={confirmRegSelected as any}
+        defaultTestEmail={ownerSettings?.cc_email || "infoo.jane@gmail.com"}
+        initialVariant="developer_confirm_registered"
+        title="Confirm Registration Status"
+        lockVariant
+      />
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
