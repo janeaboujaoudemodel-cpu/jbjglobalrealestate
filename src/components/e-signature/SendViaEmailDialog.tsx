@@ -53,11 +53,11 @@ interface Props {
 }
 
 /** Convert legacy plain-text default body (with `{{client_name}}` etc.) into
- *  WYSIWYG HTML. Tokens are resolved client-side; sender-signature block is
- *  appended as styled HTML so the owner sees the final rendering immediately. */
+ *  clean WYSIWYG HTML. Signatures are NEVER embedded in the body — they live
+ *  in a separate state slot and are rendered after the CTA stack. */
 function legacyBodyToHtml(
   raw: string,
-  ctx: { clientName: string; docTitle: string; senderName: string; senderTitle: string; signatureHtml: string },
+  ctx: { clientName: string; docTitle: string; senderName: string; senderTitle: string },
 ): string {
   const tokens: Record<string, string> = {
     client_name: ctx.clientName,
@@ -66,29 +66,21 @@ function legacyBodyToHtml(
     owner_name: ctx.senderName,
     sender_title: ctx.senderTitle,
   };
-  const SIG_SENTINEL = "@@JBJ_SIG@@";
-  const hadToken = /\{\{sender_signature\}\}/.test(String(raw || ""));
   const interpolated = String(raw || "")
-    .replace(/\{\{sender_signature\}\}/g, SIG_SENTINEL)
+    // Drop any signature tokens / signing link tokens — signature is rendered
+    // separately and the signing link belongs in the DocuSign CTA, not body.
+    .replace(/\{\{sender_signature\}\}/g, "")
     .replace(/\{\{signing_link\}\}/g, "")
     .replace(/\{\{(\w+)\}\}/g, (_, k) => tokens[k] ?? "");
-  const escaped = escapeHtml(interpolated).replace(/\n/g, "<br/>");
-  // If the legacy template had no {{sender_signature}} token (e.g. the saved
-  // body was pre-typed without it), append the picker signature at the tail
-  // so the owner still sees one canonical signature in the preview.
-  const withSig = escaped.includes(SIG_SENTINEL)
-    ? escaped.replace(SIG_SENTINEL, ctx.signatureHtml)
-    : `${escaped.replace(/(<br\s*\/?>\s*)+$/, "")}<br/><br/>${ctx.signatureHtml}`;
-  void hadToken;
-  return withSig;
+  return escapeHtml(interpolated).replace(/\n/g, "<br/>").replace(/(<br\s*\/?>\s*)+$/g, "");
 }
 
-/** Strip any previous signature block (data-jbj-sig wrapper or fallback table)
- *  so the body can be re-rendered with a different signature without duplication. */
+/** Aggressively strip ANY embedded signature artifact from a body HTML
+ *  string — wrapped div, raw signature table, or legacy hard-typed lines. */
 function stripSignature(html: string): string {
   return String(html || "")
-    .replace(/<div data-jbj-sig="1">[\s\S]*?<\/div>/g, "")
-    .replace(/<table[^>]*data-jbj-sig="1"[\s\S]*?<\/table>/g, "")
+    .replace(/<div[^>]*data-jbj-sig(?:-final)?="1"[\s\S]*?<\/div>\s*/gi, "")
+    .replace(/<table[^>]*data-jbj-sig(?:-table)?="1"[\s\S]*?<\/table>\s*/gi, "")
     .replace(/(<br\s*\/?>\s*){2,}$/g, "");
 }
 
