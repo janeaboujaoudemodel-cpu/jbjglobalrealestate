@@ -596,7 +596,7 @@ export default function DocumentsFormsHub() {
             </p>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => { setPicker(null); setExtraValues({}); setShowDetails(false); }}>Cancel</Button>
+            <Button variant="outline" onClick={() => { setPicker(null); setExtraValues({}); setShowDetails(false); setIncludeJbjBlock(false); }}>Cancel</Button>
             <Button variant="gold" onClick={handleUseTemplate} disabled={createFromTpl.isPending}>
               {createFromTpl.isPending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
               Create Envelope
