@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useTransition, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
