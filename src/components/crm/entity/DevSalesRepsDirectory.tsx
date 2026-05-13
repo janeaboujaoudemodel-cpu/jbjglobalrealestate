@@ -95,13 +95,18 @@ export default function DevSalesRepsDirectory() {
             {filtered.length.toLocaleString()} of {(dbTotal ?? rows.length).toLocaleString()} reps
           </p>
         </div>
-        <input
-          type="search"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search name, developer, email…"
-          className="h-9 w-72 rounded-lg border border-[#B89555]/30 bg-[#FDFBF7] px-3 text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:outline-none focus:border-[#B89555]"
-        />
+        <div className="flex items-center gap-2">
+          <input
+            type="search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search name, developer, email…"
+            className="h-9 w-72 rounded-lg border border-[#B89555]/30 bg-[#FDFBF7] px-3 text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:outline-none focus:border-[#B89555]"
+          />
+          <Button variant="outline" size="sm" onClick={() => setExportOpen(true)}>
+            <Download className="w-4 h-4 mr-1.5" /> Export
+          </Button>
+        </div>
       </div>
 
       {rows.length === 0 ? (
