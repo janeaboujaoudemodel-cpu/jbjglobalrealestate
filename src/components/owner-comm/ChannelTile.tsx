@@ -250,7 +250,7 @@ export default function ChannelTile({
       )}
 
       {/* Per-account reply-tone controls */}
-      {status === "connected" && channelRows.length > 0 && (
+      {(status === "connected" || status === "error") && channelRows.length > 0 && (
         <div className="mt-3 pt-3 border-t border-[#B89555]/15 space-y-3">
           <p className="text-[11px] uppercase tracking-[0.14em] text-[#1A1A1A]/70 font-semibold">
             Reply tone per account
@@ -273,6 +273,17 @@ export default function ChannelTile({
                       {isOn ? "Auto-reply active" : "Auto-reply paused"}
                     </p>
                   </div>
+                  {isEmailProvider && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-7 px-2 text-[11px] border-[#B89555]/40"
+                      onClick={() => openInbox(row.id)}
+                      aria-label={`Open ${row.display_name || row.identifier} inbox`}
+                    >
+                      <Inbox className="h-3 w-3 mr-1" /> Open inbox
+                    </Button>
+                  )}
                   <Switch
                     checked={isOn}
                     disabled={isPending}
@@ -337,13 +348,24 @@ export default function ChannelTile({
       )}
 
       <div className="mt-4 flex flex-wrap gap-2">
-        {status === "connected" ? (
+        {status === "connected" || status === "error" ? (
           <>
-            {onResync && (
+            {isEmailProvider && (
               <Button
                 variant="gold"
                 size="sm"
                 className="flex-1 min-w-[140px]"
+                onClick={() => openInbox()}
+                aria-label={`Open ${provider.label} inbox`}
+              >
+                <Inbox className="h-3.5 w-3.5 mr-1" /> Open inbox
+              </Button>
+            )}
+            {onResync && (
+              <Button
+                variant="secondary"
+                size="sm"
+                className="flex-1 min-w-[120px]"
                 onClick={onResync}
                 disabled={isResyncing || isConnecting}
                 aria-label={`Resync ${provider.label} inbox`}
@@ -351,19 +373,19 @@ export default function ChannelTile({
                 {isResyncing ? (
                   <><Loader2 className="h-3.5 w-3.5 mr-1 animate-spin" /> Syncing…</>
                 ) : (
-                  <><RefreshCw className="h-3.5 w-3.5 mr-1" /> Resync inbox</>
+                  <><RefreshCw className="h-3.5 w-3.5 mr-1" /> Sync now</>
                 )}
               </Button>
             )}
             {onAddAnother && (
-              <Button variant="secondary" size="sm" className="flex-1" onClick={onAddAnother} disabled={isConnecting}>
+              <Button variant="outline" size="sm" className="flex-1 border-[#B89555]/40" onClick={onAddAnother} disabled={isConnecting}>
                 <Plus className="h-3.5 w-3.5 mr-1" /> Add another
               </Button>
             )}
             <Button
-              variant="secondary"
+              variant={status === "error" ? "gold" : "outline"}
               size="sm"
-              className="flex-1"
+              className={status === "error" ? "flex-1 min-w-[120px]" : "flex-1 border-[#B89555]/40"}
               onClick={onConnect}
               disabled={isConnecting}
               aria-label={`Reconnect ${provider.label}`}
