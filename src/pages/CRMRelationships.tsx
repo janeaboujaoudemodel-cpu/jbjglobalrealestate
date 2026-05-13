@@ -2200,6 +2200,8 @@ const DeveloperRegistryTab = () => {
   const [emailFilter, setEmailFilter] = useState<"all" | "not_sent" | "sent" | "registered">("all");
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [bulkOpen, setBulkOpen] = useState(false);
+  const [confirmRegOpen, setConfirmRegOpen] = useState(false);
+  const [confirmRegSelected, setConfirmRegSelected] = useState<any[]>([]);
   const [tplOpen, setTplOpen] = useState(false);
   const [noteEditing, setNoteEditing] = useState<string | null>(null);
   useEffect(() => {
