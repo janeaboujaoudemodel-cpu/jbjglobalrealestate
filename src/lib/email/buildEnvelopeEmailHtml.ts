@@ -134,8 +134,6 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
         <h2 style="margin:0 0 18px;color:#1A1A1A;font-size:20px;font-weight:700;line-height:1.3;">${subject}</h2>
         <div style="color:#1A1A1A;line-height:1.7;font-size:14px;">${bodyHtml}</div>
         ${ctaBlock}
-        ${attachmentChip}
-        ${howToSignBlock}
         <p style="margin:18px 0 0;color:#1A1A1A;opacity:.55;font-size:11px;line-height:1.55;">Replies to this email are routed to <a href="mailto:contact@jbj.ae" style="color:#B89555;text-decoration:none;font-weight:600;">contact@jbj.ae</a> and answered by our team.</p>
       </td></tr>
       <tr><td class="jbj-foot-pad" style="background:#F7F2EA;border:1px solid #B89555;border-top:none;padding:18px 24px;">
