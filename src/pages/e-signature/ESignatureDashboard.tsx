@@ -541,7 +541,74 @@ export default function ESignatureDashboard() {
           {/* Envelopes List */}
           <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/20">
             <CardHeader>
-              <CardTitle className="text-foreground">Recent Documents</CardTitle>
+              <div className="flex items-center justify-between gap-3 flex-wrap">
+                <div className="flex items-center gap-3">
+                  {visibleIds.length > 0 && (
+                    <Checkbox
+                      checked={allVisibleSelected}
+                      onCheckedChange={toggleAllVisible}
+                      aria-label="Select all visible"
+                    />
+                  )}
+                  <CardTitle className="text-foreground">
+                    {view === "deleted" ? "Recently Deleted" : "Recent Documents"}
+                  </CardTitle>
+                </div>
+                {selected.size > 0 && (
+                  <div className="flex items-center gap-2 rounded-md border border-[#B89555]/40 bg-[#EFE6D6] px-2 py-1">
+                    <span className="text-[11px] font-medium text-[#1A1A1A]">
+                      {selected.size} selected
+                    </span>
+                    {view === "active" ? (
+                      <>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-7 text-[11px] border-[#B89555]/40"
+                          onClick={handleBulkRemind}
+                        >
+                          <Bell className="w-3 h-3 mr-1" /> Send reminder
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-7 text-[11px] border-red-300 text-red-700 hover:bg-red-50"
+                          onClick={() => handleSoftDelete(Array.from(selected))}
+                        >
+                          <Trash2 className="w-3 h-3 mr-1" /> Move to Recently Deleted
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-7 text-[11px] border-[#B89555]/40"
+                          onClick={() => handleRestore(Array.from(selected))}
+                        >
+                          <RotateCcw className="w-3 h-3 mr-1" /> Restore
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-7 text-[11px] border-red-300 text-red-700 hover:bg-red-50"
+                          onClick={() => setPendingPurge({ ids: Array.from(selected) })}
+                        >
+                          <Trash2 className="w-3 h-3 mr-1" /> Delete permanently
+                        </Button>
+                      </>
+                    )}
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-7 text-[11px]"
+                      onClick={() => setSelected(new Set())}
+                    >
+                      <X className="w-3 h-3 mr-1" /> Clear
+                    </Button>
+                  </div>
+                )}
+              </div>
             </CardHeader>
             <CardContent>
               {isLoading ? (
