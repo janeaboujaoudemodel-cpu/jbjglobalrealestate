@@ -37,6 +37,7 @@ export default function CRMLeadsBulkBar({
   const [broadcastChannel, setBroadcastChannel] = useState<"whatsapp" | "email">("whatsapp");
   const [broadcastSubject, setBroadcastSubject] = useState("");
   const [broadcastMessage, setBroadcastMessage] = useState("");
+  const [mergeOpen, setMergeOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
