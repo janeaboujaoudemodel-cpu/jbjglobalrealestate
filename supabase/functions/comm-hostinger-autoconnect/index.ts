@@ -24,10 +24,15 @@ const DEFAULTS = {
 };
 
 async function testImap(email: string, password: string, host: string, port: number) {
-  const client = new ImapClient({ host, port, tls: true });
+  const client = new ImapClient({ host, port, tls: true, username: email, password });
   try {
     await client.connect();
-    await client.authenticate({ mechanism: "PLAIN", username: email, password });
+    // deno-imap auto-authenticates via LOGIN on connect when creds passed in ctor.
+    // Defensive: if a `login` method exists, call it; otherwise rely on connect.
+    const anyClient = client as unknown as { login?: () => Promise<void> };
+    if (typeof anyClient.login === "function") {
+      await anyClient.login();
+    }
     await client.selectMailbox("INBOX");
     await client.disconnect();
     return { ok: true as const };
