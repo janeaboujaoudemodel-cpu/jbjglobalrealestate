@@ -298,6 +298,7 @@ export default function IndividualBrokersTab() {
           </SelectContent>
         </Select>
         <Button variant="outline" onClick={exportExcel}><FileDown className="w-4 h-4 mr-2" /> Export page</Button>
+        <Button variant="outline" onClick={() => setExportOpen(true)}><Download className="w-4 h-4 mr-2" /> Unified export</Button>
         <Button variant="outline" onClick={() => setBulkOpen(true)}><UploadCloud className="w-4 h-4 mr-2" /> Upload database</Button>
         <Button variant="gold" onClick={openNew}><Plus className="w-4 h-4 mr-2" /> Add broker</Button>
       </div>
