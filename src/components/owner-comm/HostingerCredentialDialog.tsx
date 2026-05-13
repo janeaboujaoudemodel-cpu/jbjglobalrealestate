@@ -3,6 +3,7 @@
  * Triggered by the custom "comm:open-hostinger-dialog" event from ChannelGrid.
  */
 import { useState, useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   Dialog,
   DialogContent,
@@ -39,6 +40,7 @@ const DEFAULTS = {
 };
 
 export default function HostingerCredentialDialog() {
+  const qc = useQueryClient();
   const [open, setOpen] = useState(false);
   const [testing, setTesting] = useState(false);
   const [form, setForm] = useState<HostingerForm>({
@@ -96,6 +98,29 @@ export default function HostingerCredentialDialog() {
           ? `Hostinger email connected with the saved mailbox credential: ${data.email}`
           : `Hostinger email connected: ${data.email}`
       );
+      // Refresh ALL channel/inbox queries so the status pill flips to
+      // Connected immediately and the inbox starts polling.
+      qc.invalidateQueries({ queryKey: ["comm-channel-states"] });
+      qc.invalidateQueries({ queryKey: ["owner-channels"] });
+      qc.invalidateQueries({ queryKey: ["owner-comm-channels"] });
+      qc.invalidateQueries({ queryKey: ["owner-comm-channel-audit-summary"] });
+      qc.invalidateQueries({ queryKey: ["owner-comm-channel-audit-events"] });
+      qc.invalidateQueries({ queryKey: ["owner-inbox-threads"] });
+      // Kick off an immediate inbox sync so the user sees mail (or a clean
+      // synced state) without waiting for the next poll cycle.
+      try {
+        if (data?.channel_id) {
+          await supabase.functions.invoke("comm-inbound-sync", {
+            body: { channel_id: data.channel_id, channel_type: "email_hostinger" },
+          });
+          qc.invalidateQueries({ queryKey: ["comm-channel-states"] });
+          qc.invalidateQueries({ queryKey: ["owner-channels"] });
+          qc.invalidateQueries({ queryKey: ["owner-comm-channel-audit-summary"] });
+          qc.invalidateQueries({ queryKey: ["owner-inbox-threads"] });
+        }
+      } catch (syncErr) {
+        console.warn("[hostinger] post-connect sync failed", syncErr);
+      }
       setOpen(false);
       setForm({
         email: DEFAULT_HOSTINGER_EMAIL,
