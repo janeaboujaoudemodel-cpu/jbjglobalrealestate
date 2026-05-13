@@ -186,9 +186,9 @@ Deno.serve(async (req) => {
     }
 
     // 2) Test SMTP
-    const smtpOk = await testSmtp(email, password, smtpHost, smtpPort);
-    if (!smtpOk) {
-      return new Response(JSON.stringify({ error: "SMTP connection failed. Check email/password and server settings." }), {
+    const smtpResult = await testSmtp(email, password, smtpHost, smtpPort);
+    if (!smtpResult.ok) {
+      return new Response(JSON.stringify({ error: `SMTP login failed: ${smtpResult.error || "unknown"}` }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
