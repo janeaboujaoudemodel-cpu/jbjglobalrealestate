@@ -84,6 +84,30 @@ function stripSignature(html: string): string {
     .replace(/(<br\s*\/?>\s*){2,}$/g, "");
 }
 
+/** Strip any LEGACY hard-typed signature block at the tail of a saved
+ *  envelope.email_message — these were authored before the picker existed and
+ *  contain raw text like "Founder & CEO\nJBJ GLOBAL REAL ESTATE\nOffice…
+ *  www.jbj.ae". Without this, the picker preset gets stacked on top of the
+ *  legacy text and the preview shows two signatures. Operates on plain text
+ *  (pre-HTML conversion) and is intentionally aggressive about the tail. */
+function stripInlineSignature(text: string): string {
+  let out = String(text || "").replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n");
+  // Anchors that mark the start of a typed sig block. Anything from the FIRST
+  // matching anchor through end-of-string is removed (closing greeting lines
+  // like "Best," or "Kind regards," remain).
+  const anchors = [
+    /\n\s*Founder\s*&\s*CEO\b[\s\S]*$/i,
+    /\n\s*Office of the Founder\b[\s\S]*$/i,
+    /\n\s*JBJ HR Team\b[\s\S]*$/i,
+    /\n\s*Human Resources(?:\s*&\s*Talent)?\b[\s\S]*$/i,
+    /\n\s*Front Desk\b[\s\S]*$/i,
+    /\n\s*Executive Office\b[\s\S]*$/i,
+    /\n\s*JBJ GLOBAL REAL ESTATE\b[\s\S]*$/i,
+  ];
+  for (const re of anchors) out = out.replace(re, "");
+  return out.replace(/\s+$/g, "");
+}
+
 /** Wrap a signature HTML so we can identify and replace it later. */
 function wrapSignature(sigHtml: string): string {
   return `<div data-jbj-sig="1">${sigHtml}</div>`;
