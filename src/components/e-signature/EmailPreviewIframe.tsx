@@ -9,6 +9,7 @@ import { buildEnvelopeEmailHtml } from "@/lib/email/buildEnvelopeEmailHtml";
 interface Props {
   subject: string;
   bodyHtml: string;
+  signatureHtml?: string;
   docNumber?: string;
   docusignUrl?: string;
   attachmentName?: string;
@@ -16,18 +17,16 @@ interface Props {
   className?: string;
 }
 
-export function EmailPreviewIframe({ subject, bodyHtml, docNumber, docusignUrl, attachmentName, attachmentUrl, className }: Props) {
+export function EmailPreviewIframe({ subject, bodyHtml, signatureHtml, docNumber, docusignUrl, attachmentName, attachmentUrl, className }: Props) {
   const srcDoc = useMemo(
-    () => buildEnvelopeEmailHtml({ subject, bodyHtml, docNumber, docusignUrl, attachmentName, attachmentUrl }),
-    [subject, bodyHtml, docNumber, docusignUrl, attachmentName, attachmentUrl],
+    () => buildEnvelopeEmailHtml({ subject, bodyHtml, signatureHtml, docNumber, docusignUrl, attachmentName, attachmentUrl }),
+    [subject, bodyHtml, signatureHtml, docNumber, docusignUrl, attachmentName, attachmentUrl],
   );
 
   return (
     <iframe
       title="Email preview"
       srcDoc={srcDoc}
-      // allow-popups + allow-popups-to-escape-sandbox so the OPEN IN DOCUSIGN
-      // button + attachment link actually open in a new tab while previewing.
       sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox"
       className={className ?? "w-full h-full bg-[#FDFBF7] rounded-md border border-[#B89555]/40"}
     />

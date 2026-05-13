@@ -53,11 +53,11 @@ interface Props {
 }
 
 /** Convert legacy plain-text default body (with `{{client_name}}` etc.) into
- *  WYSIWYG HTML. Tokens are resolved client-side; sender-signature block is
- *  appended as styled HTML so the owner sees the final rendering immediately. */
+ *  clean WYSIWYG HTML. Signatures are NEVER embedded in the body — they live
+ *  in a separate state slot and are rendered after the CTA stack. */
 function legacyBodyToHtml(
   raw: string,
-  ctx: { clientName: string; docTitle: string; senderName: string; senderTitle: string; signatureHtml: string },
+  ctx: { clientName: string; docTitle: string; senderName: string; senderTitle: string },
 ): string {
   const tokens: Record<string, string> = {
     client_name: ctx.clientName,
@@ -66,29 +66,21 @@ function legacyBodyToHtml(
     owner_name: ctx.senderName,
     sender_title: ctx.senderTitle,
   };
-  const SIG_SENTINEL = "@@JBJ_SIG@@";
-  const hadToken = /\{\{sender_signature\}\}/.test(String(raw || ""));
   const interpolated = String(raw || "")
-    .replace(/\{\{sender_signature\}\}/g, SIG_SENTINEL)
+    // Drop any signature tokens / signing link tokens — signature is rendered
+    // separately and the signing link belongs in the DocuSign CTA, not body.
+    .replace(/\{\{sender_signature\}\}/g, "")
     .replace(/\{\{signing_link\}\}/g, "")
     .replace(/\{\{(\w+)\}\}/g, (_, k) => tokens[k] ?? "");
-  const escaped = escapeHtml(interpolated).replace(/\n/g, "<br/>");
-  // If the legacy template had no {{sender_signature}} token (e.g. the saved
-  // body was pre-typed without it), append the picker signature at the tail
-  // so the owner still sees one canonical signature in the preview.
-  const withSig = escaped.includes(SIG_SENTINEL)
-    ? escaped.replace(SIG_SENTINEL, ctx.signatureHtml)
-    : `${escaped.replace(/(<br\s*\/?>\s*)+$/, "")}<br/><br/>${ctx.signatureHtml}`;
-  void hadToken;
-  return withSig;
+  return escapeHtml(interpolated).replace(/\n/g, "<br/>").replace(/(<br\s*\/?>\s*)+$/g, "");
 }
 
-/** Strip any previous signature block (data-jbj-sig wrapper or fallback table)
- *  so the body can be re-rendered with a different signature without duplication. */
+/** Aggressively strip ANY embedded signature artifact from a body HTML
+ *  string — wrapped div, raw signature table, or legacy hard-typed lines. */
 function stripSignature(html: string): string {
   return String(html || "")
-    .replace(/<div data-jbj-sig="1">[\s\S]*?<\/div>/g, "")
-    .replace(/<table[^>]*data-jbj-sig="1"[\s\S]*?<\/table>/g, "")
+    .replace(/<div[^>]*data-jbj-sig(?:-final)?="1"[\s\S]*?<\/div>\s*/gi, "")
+    .replace(/<table[^>]*data-jbj-sig(?:-table)?="1"[\s\S]*?<\/table>\s*/gi, "")
     .replace(/(<br\s*\/?>\s*){2,}$/g, "");
 }
 
@@ -116,11 +108,6 @@ function stripInlineSignature(text: string): string {
   return out.replace(/\s+$/g, "");
 }
 
-/** Wrap a signature HTML so we can identify and replace it later. */
-function wrapSignature(sigHtml: string): string {
-  return `<div data-jbj-sig="1">${sigHtml}</div>`;
-}
-
 export function SendViaEmailDialog({
   open,
   onOpenChange,
@@ -145,7 +132,8 @@ export function SendViaEmailDialog({
   const [selectedSigId, setSelectedSigId] = useState<string>("");
 
   // Load all email signature presets so the owner can pick which one
-  // appears at the bottom of the message body. Updates the preview live.
+  // appears at the bottom of the body. Signature is rendered SEPARATELY
+  // from the body — never embedded — so only one is ever displayed.
   const { data: signatures = [] } = useEmailSignatures();
   const fallbackSigHtml = useMemo(
     () => buildSenderSignatureHtml(senderName, senderTitle),
@@ -160,7 +148,6 @@ export function SendViaEmailDialog({
     [selectedSig, fallbackSigHtml],
   );
 
-  // Pick a sensible default signature once the list loads.
   useEffect(() => {
     if (selectedSigId || !signatures.length) return;
     const def = signatures.find((s) => s.is_default) || signatures[0];
@@ -174,35 +161,23 @@ export function SendViaEmailDialog({
     setSubject(defaultSubject);
     setDocusignUrl("");
     setBodyHtml(
-      legacyBodyToHtml(stripInlineSignature(defaultBody), {
-        clientName: recipientName || "Client",
-        docTitle: defaultSubject || "Document",
-        senderName,
-        senderTitle,
-        signatureHtml: wrapSignature(selectedSigHtml),
-      }),
+      stripSignature(
+        legacyBodyToHtml(stripInlineSignature(defaultBody), {
+          clientName: recipientName || "Client",
+          docTitle: defaultSubject || "Document",
+          senderName,
+          senderTitle,
+        }),
+      ),
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, recipientEmail, recipientName, defaultSubject, defaultBody]);
 
-  // Swap the embedded signature when the owner picks a different preset.
-  // Strips the previous signature wrapper and appends the new one so the
-  // body and the iframe preview stay perfectly in sync.
+  // Defensive cleanup — if any embedded signature slips into the body,
+  // strip it. Real signature is rendered by the email template separately.
   const applySelectedSignature = () => {
-    const stripped = stripSignature(bodyHtml).replace(/(<br\s*\/?>\s*)+$/, "");
-    setBodyHtml(`${stripped}<br/><br/>${wrapSignature(selectedSigHtml)}`);
+    setBodyHtml((prev) => stripSignature(prev));
   };
-  useEffect(() => {
-    if (!open || !selectedSigHtml) return;
-    // Only auto-swap if a signature wrapper exists in the body (avoids
-    // overwriting a freshly cleared body).
-    if (/data-jbj-sig="1"/.test(bodyHtml)) {
-      const stripped = stripSignature(bodyHtml).replace(/(<br\s*\/?>\s*)+$/, "");
-      setBodyHtml(`${stripped}<br/><br/>${wrapSignature(selectedSigHtml)}`);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedSigId]);
-
 
   const cleanCcs = useMemo(
     () => Array.from(new Set(ccs.filter(isValidEmail).filter((c) => !tos.includes(c)))),
@@ -245,6 +220,7 @@ export function SendViaEmailDialog({
           envelope_id: envelopeId,
           interpolated_subject: subject,
           interpolated_body_html: bodyHtml,
+          signature_html: selectedSigHtml,
           docusign_url: docusignUrl.trim() || undefined,
           attachment_name: attachmentName,
           attachment_url: signedAttachmentUrl,
@@ -271,6 +247,14 @@ export function SendViaEmailDialog({
       const session = await supabase.auth.getSession();
       const token = session.data.session?.access_token;
       const signedAttachmentUrl = await resolveAttachmentUrl(attachmentUrl);
+      // Persist edited subject/body to the envelope so re-opening the dialog
+      // shows the user's latest text instead of resetting to the original.
+      try {
+        await supabase
+          .from("esign_envelopes")
+          .update({ email_subject: subject, email_message: bodyHtml })
+          .eq("id", envelopeId);
+      } catch (e) { /* non-fatal */ }
       const res = await fetch(`${SUPABASE_URL}/functions/v1/esign-send-for-signature`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
@@ -281,6 +265,7 @@ export function SendViaEmailDialog({
           cc_emails: cleanCcs,
           interpolated_subject: subject,
           interpolated_body_html: bodyHtml,
+          signature_html: selectedSigHtml,
           docusign_url: docusignUrl.trim() || undefined,
           attachment_name: attachmentName,
           attachment_url: signedAttachmentUrl,
@@ -442,6 +427,7 @@ export function SendViaEmailDialog({
               <EmailPreviewIframe
                 subject={subject}
                 bodyHtml={bodyHtml}
+                signatureHtml={selectedSigHtml}
                 docNumber={docNumber}
                 docusignUrl={docusignUrl}
                 attachmentName={attachmentName}
