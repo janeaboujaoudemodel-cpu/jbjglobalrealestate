@@ -717,12 +717,12 @@ export default function CRMLeadsTableV2({
                       </span>
                     </TableCell>
                     <TableCell className="font-mono text-sm text-[#1A1A1A]/80 whitespace-nowrap">{lead.phone_e164 || "—"}</TableCell>
-                    <TableCell>
+                    <TableCell className="min-w-[220px] max-w-[320px]">
                       {lead.email_lower ? (
                         <button
                           onClick={() => handleEmail(lead)}
-                          className="text-sm text-[#1A1A1A] hover:text-[#1A1A1A] hover:underline decoration-[#B89555]/60 underline-offset-2 font-medium break-all text-left"
-                          title="Click to send email"
+                          className="block w-full truncate text-sm text-[#1A1A1A] hover:underline decoration-[#B89555]/60 underline-offset-2 font-medium text-left"
+                          title={lead.email_lower}
                         >
                           {lead.email_lower}
                         </button>
@@ -763,11 +763,11 @@ export default function CRMLeadsTableV2({
                         ) : "VIP off"}
                       </Button>
                     </TableCell>
-                    <TableCell className="text-sm">
-                      <div className="flex items-center gap-2">
+                    <TableCell className="text-sm min-w-[200px] whitespace-nowrap">
+                      <div className="inline-flex items-center gap-2 whitespace-nowrap">
                         {assignedNames[lead.id] ? (
-                          <span className="font-semibold text-[#1A1A1A] whitespace-nowrap">
-                            Assigned: {assignedNames[lead.id]}
+                          <span className="font-semibold text-[#1A1A1A] truncate max-w-[140px]" title={`Assigned: ${assignedNames[lead.id]}`}>
+                            {assignedNames[lead.id]}
                           </span>
                         ) : (
                           <span className="text-[#1A1A1A]/55 italic" title="Not yet assigned to a broker">Unassigned</span>
