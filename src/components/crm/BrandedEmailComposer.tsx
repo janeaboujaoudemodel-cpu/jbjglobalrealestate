@@ -24,6 +24,7 @@ import {
 import {
   Sparkles, Send, FlaskConical, Save, Mail, Loader2,
   CalendarPlus, LibraryBig, PenLine, Copy, Download, ExternalLink, Eye,
+  History as HistoryIcon, Building2, RefreshCw, CheckCircle2, AlertCircle, Clock,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
