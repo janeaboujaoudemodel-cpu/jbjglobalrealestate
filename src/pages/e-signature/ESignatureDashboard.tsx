@@ -335,6 +335,39 @@ export default function ESignatureDashboard() {
             </div>
           </div>
 
+          {/* View Tabs: Active / Recently Deleted */}
+          <div className="flex items-center justify-between gap-3 flex-wrap">
+            <div className="inline-flex rounded-lg border border-[#B89555]/40 bg-[#FDFBF7] p-1">
+              {([
+                { key: "active" as const, label: "Active" },
+                { key: "deleted" as const, label: "Recently Deleted" },
+              ]).map((t) => {
+                const active = view === t.key;
+                return (
+                  <button
+                    key={t.key}
+                    onClick={() => {
+                      setView(t.key);
+                      setSelected(new Set());
+                    }}
+                    className={`px-3 py-1.5 text-xs rounded-md transition ${
+                      active
+                        ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555] font-medium"
+                        : "text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
+                    }`}
+                  >
+                    {t.label}
+                  </button>
+                );
+              })}
+            </div>
+            {view === "deleted" && (
+              <span className="text-[11px] text-[#1A1A1A]/60">
+                Items in Recently Deleted are kept for 30 days.
+              </span>
+            )}
+          </div>
+
           {/* Stats Cards */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Card 
