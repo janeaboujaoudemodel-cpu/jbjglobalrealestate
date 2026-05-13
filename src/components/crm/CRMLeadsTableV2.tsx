@@ -752,7 +752,7 @@ export default function CRMLeadsTableV2({
                         variant={vip ? "default" : "outline"}
                         onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleToggleVIP(lead.id, vip); }}
                         className={`min-w-[72px] font-semibold ${vip
-                          ? "bg-amber-300 text-[#1A1A1A] hover:bg-amber-300/90 border border-amber-500"
+                          ? "bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#E8DFCF] border border-[#B89555] shadow-sm"
                           : "border-[#B89555]/40 text-[#1A1A1A]/70 hover:bg-[#EFE6D6]/40 bg-[#FDFBF7]"}`}
                       >
                         {vip ? (
@@ -760,7 +760,7 @@ export default function CRMLeadsTableV2({
                             <Star className="h-3.5 w-3.5 mr-1 fill-[#B89555] text-[#B89555]" />
                             VIP
                           </>
-                        ) : "VIP off"}
+                        ) : "VIP"}
                       </Button>
                     </TableCell>
                     <TableCell className="text-sm min-w-[200px] whitespace-nowrap">
