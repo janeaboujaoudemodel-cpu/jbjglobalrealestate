@@ -996,9 +996,9 @@ export default function EnvelopeDetail() {
               ) : envelope.document_url ? (
                 <iframe
                   title="Document PDF"
-                  src={`${maybeProxyStorageUrl(signedDoc?.document_url || envelope.document_url, { disposition: "inline", filename: signedDoc?.document_filename || envelope.document_filename })}${(signedDoc?.document_url || envelope.document_url).includes("?") ? "&" : "?"}v=${encodeURIComponent(envelope.updated_at || envelope.created_at || "")}`}
+                  src={`${maybeProxyStorageUrl(signedDoc?.document_url || envelope.document_url, { disposition: "inline", filename: signedDoc?.document_filename || envelope.document_filename })}${(signedDoc?.document_url || envelope.document_url).includes("?") ? "&" : "?"}v=${encodeURIComponent(envelope.updated_at || envelope.created_at || "")}#toolbar=0&navpanes=0&view=FitH`}
                   className="w-full bg-white"
-                  style={{ height: "1100px", border: 0 }}
+                  style={{ height: "1100px", border: 0, transform: "none", direction: "ltr" }}
                 />
               ) : (
                 <div className="p-12 text-center text-[#1A1A1A]/70">No document</div>
