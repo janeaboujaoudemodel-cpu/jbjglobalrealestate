@@ -78,6 +78,7 @@ export default function OwnerInbox() {
   const [filters, setFilters] = useState<InboxFilters>({
     status: 'all',
     channel: 'all',
+    channelId: 'all',
     assistant: 'all',
     search: '',
     unreadOnly: false,
