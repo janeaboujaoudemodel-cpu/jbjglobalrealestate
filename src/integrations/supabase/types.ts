@@ -21664,6 +21664,41 @@ export type Database = {
           },
         ]
       }
+      owner_comm_notes: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          is_ai_suggested: boolean | null
+          thread_id: string | null
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          is_ai_suggested?: boolean | null
+          thread_id?: string | null
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          is_ai_suggested?: boolean | null
+          thread_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "owner_comm_notes_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "owner_comm_threads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       owner_comm_settings: {
         Row: {
           ai_draft_by_default: boolean | null
@@ -21860,6 +21895,12 @@ export type Database = {
       }
       owner_comm_threads: {
         Row: {
+          ai_category: string | null
+          ai_next_step: Json | null
+          ai_priority: string | null
+          ai_processed_at: string | null
+          ai_suggested_reply: string | null
+          ai_summary: string | null
           assistant_type: Database["public"]["Enums"]["comm_assistant_type"]
           channel_id: string | null
           channel_type: string
@@ -21878,6 +21919,12 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          ai_category?: string | null
+          ai_next_step?: Json | null
+          ai_priority?: string | null
+          ai_processed_at?: string | null
+          ai_suggested_reply?: string | null
+          ai_summary?: string | null
           assistant_type?: Database["public"]["Enums"]["comm_assistant_type"]
           channel_id?: string | null
           channel_type: string
@@ -21896,6 +21943,12 @@ export type Database = {
           user_id: string
         }
         Update: {
+          ai_category?: string | null
+          ai_next_step?: Json | null
+          ai_priority?: string | null
+          ai_processed_at?: string | null
+          ai_suggested_reply?: string | null
+          ai_summary?: string | null
           assistant_type?: Database["public"]["Enums"]["comm_assistant_type"]
           channel_id?: string | null
           channel_type?: string
