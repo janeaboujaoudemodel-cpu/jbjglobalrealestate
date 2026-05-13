@@ -63,7 +63,9 @@ async function fetchHostingerMessages(
   const client = new ImapClient({ host: creds.imap_host, port: creds.imap_port, tls: true });
   try {
     await client.connect();
-    await client.authenticate({ mechanism: "PLAIN", username: creds.email, password: creds.password });
+    // Hostinger advertises AUTH=LOGIN but not AUTH=PLAIN cleanly; LOGIN
+    // mechanism uses the IMAP LOGIN verb directly and is widely supported.
+    await client.authenticate({ mechanism: "LOGIN", username: creds.email, password: creds.password });
     await client.selectMailbox("INBOX");
 
     // Search for messages since the given date (IMAP SINCE format: 01-Jan-2024)

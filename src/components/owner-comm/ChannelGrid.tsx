@@ -110,8 +110,8 @@ export default function ChannelGrid() {
           toneProfiles={toneProfiles ?? []}
           auditSummary={auditSummary}
           onConnect={() => handleConnect(state)}
-          onAddAnother={state.status === "connected" ? () => handleConnect(state) : undefined}
-          onResync={state.status === "connected" ? () => handleResync(state) : undefined}
+          onAddAnother={state.status === "connected" || state.status === "error" ? () => handleConnect(state) : undefined}
+          onResync={(state.status === "connected" || state.status === "error") && state.channelRows.length > 0 ? () => handleResync(state) : undefined}
           isConnecting={pendingId === state.provider.id}
           isResyncing={resyncingId === state.provider.id}
         />
