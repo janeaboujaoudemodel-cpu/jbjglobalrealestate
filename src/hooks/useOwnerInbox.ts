@@ -77,6 +77,7 @@ export interface CommMessage {
 export interface InboxFilters {
   status?: ThreadStatus | 'all';
   channel?: ChannelType | 'all';
+  channelId?: string | 'all';
   assistant?: AssistantType | 'all';
   search?: string;
   linkedOnly?: boolean;
