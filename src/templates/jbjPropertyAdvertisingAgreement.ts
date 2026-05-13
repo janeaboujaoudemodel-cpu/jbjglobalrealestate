@@ -268,15 +268,18 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string, categor
               ${contactStack}
             </div>
           </div>
-          <div style="margin-top:14px;text-align:center;">
-            <div style="font-size:14px;font-weight:800;letter-spacing:.22em;color:${ink};text-transform:uppercase;">
-              ${titleFor(category).toUpperCase()}
-            </div>
-          </div>
         </div>`;
     }
   }
 };
+
+const titleBlockHtml = (chrome: Required<TemplateChrome>, category: PAACategory) => `
+  <div style="text-align:center;margin:6px 0 22px;">
+    <div style="font-size:14px;font-weight:800;letter-spacing:.22em;color:${chrome.ink};text-transform:uppercase;">
+      ${titleFor(category).toUpperCase()}
+    </div>
+  </div>`;
+
 
 const footerHtml = (chrome: Required<TemplateChrome>) => {
   const { accent, ink, footerStyle, tagline, trn, license } = chrome;
@@ -470,6 +473,7 @@ export function buildPAAHtml(
 
   <div style="flex:0 0 auto;">
     ${headerHtml(chrome, get("doc_number"), category, get("rera_permit_number"))}
+    ${titleBlockHtml(chrome, category)}
   </div>
 
   <div style="flex:1 1 auto;display:flex;flex-direction:column;">
