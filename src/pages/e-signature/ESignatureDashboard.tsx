@@ -669,7 +669,12 @@ export default function ESignatureDashboard() {
                         className="rounded-lg border border-[#B89555]/20 bg-white/70 hover:border-[#B89555]/60 hover:shadow-md transition p-4 flex flex-col gap-2"
                       >
                         <div className="flex items-center justify-between gap-2 flex-wrap">
-                          <div className="flex items-center gap-1.5 flex-wrap">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <Checkbox
+                              checked={selected.has(envelope.id)}
+                              onCheckedChange={() => toggleId(envelope.id)}
+                              aria-label={`Select envelope ${docNumber || envelope.id.slice(0, 8)}`}
+                            />
                             {docNumber ? (
                               <span className="text-[10px] tracking-[0.16em] uppercase text-[#1A1A1A]/70 border border-[#B89555]/50 rounded px-2 py-0.5 bg-[#F7F2EA]">
                                 {docNumber}
