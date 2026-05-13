@@ -67,12 +67,20 @@ function legacyBodyToHtml(
     sender_title: ctx.senderTitle,
   };
   const SIG_SENTINEL = "@@JBJ_SIG@@";
+  const hadToken = /\{\{sender_signature\}\}/.test(String(raw || ""));
   const interpolated = String(raw || "")
     .replace(/\{\{sender_signature\}\}/g, SIG_SENTINEL)
     .replace(/\{\{signing_link\}\}/g, "")
     .replace(/\{\{(\w+)\}\}/g, (_, k) => tokens[k] ?? "");
   const escaped = escapeHtml(interpolated).replace(/\n/g, "<br/>");
-  return escaped.replace(SIG_SENTINEL, ctx.signatureHtml);
+  // If the legacy template had no {{sender_signature}} token (e.g. the saved
+  // body was pre-typed without it), append the picker signature at the tail
+  // so the owner still sees one canonical signature in the preview.
+  const withSig = escaped.includes(SIG_SENTINEL)
+    ? escaped.replace(SIG_SENTINEL, ctx.signatureHtml)
+    : `${escaped.replace(/(<br\s*\/?>\s*)+$/, "")}<br/><br/>${ctx.signatureHtml}`;
+  void hadToken;
+  return withSig;
 }
 
 /** Strip any previous signature block (data-jbj-sig wrapper or fallback table)
