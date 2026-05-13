@@ -114,16 +114,13 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
 <body style="margin:0;padding:0;font-family:Inter,Arial,sans-serif;background:#FDFBF7;">
   <table role="presentation" style="width:100%;border-collapse:collapse;"><tr><td align="center" class="jbj-outer-pad" style="padding:40px 16px;">
     <table role="presentation" class="jbj-card" style="width:100%;max-width:640px;border-collapse:collapse;">
-      <tr><td class="jbj-head-pad" style="background:#F7F2EA;border:1px solid #B89555;padding:20px 24px;border-bottom:none;">
+      <tr><td class="jbj-head-pad" style="background:#F7F2EA;border:1px solid #B89555;padding:22px 24px 18px;border-bottom:none;">
         <table role="presentation" style="width:100%;border-collapse:collapse;"><tr>
-          <td style="vertical-align:middle;width:64px;padding-right:14px;">
+          <td style="vertical-align:middle;width:64px;padding-right:16px;">
             <img src="${JBJ_LOGO_URL}" alt="JBJ" width="56" height="56" style="display:block;border:0;outline:none;height:56px;width:56px;"/>
           </td>
           <td class="jbj-wordmark" style="vertical-align:middle;font-weight:700;letter-spacing:.18em;color:#1A1A1A;line-height:1.2;white-space:nowrap;">
             JBJ GLOBAL REAL ESTATE
-          </td>
-          <td align="right" class="jbj-doc-no" style="vertical-align:middle;font-size:10px;letter-spacing:.16em;color:#1A1A1A;opacity:.7;white-space:nowrap;">
-            ${docNumber ? `DOC NO. <strong style="opacity:1;">${docNumber}</strong>` : ""}
           </td>
         </tr></table>
         <div style="height:1px;background:#B89555;margin-top:14px;"></div>
@@ -133,7 +130,8 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
         <div style="color:#1A1A1A;line-height:1.7;font-size:14px;">${bodyHtml}</div>
         ${ctaBlock}
         ${attachmentChip}
-        <p style="margin:24px 0 0;color:#1A1A1A;opacity:.6;font-size:11px;line-height:1.55;">${footerNote}</p>
+        ${howToSignBlock}
+        <p style="margin:18px 0 0;color:#1A1A1A;opacity:.55;font-size:11px;line-height:1.55;">Replies to this email are routed to <a href="mailto:contact@jbj.ae" style="color:#B89555;text-decoration:none;font-weight:600;">contact@jbj.ae</a> and answered by our team.</p>
       </td></tr>
       <tr><td class="jbj-foot-pad" style="background:#F7F2EA;border:1px solid #B89555;border-top:none;padding:18px 24px;">
         <div style="height:1px;background:#B89555;margin-bottom:14px;"></div>
