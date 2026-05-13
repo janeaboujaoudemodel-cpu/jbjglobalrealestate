@@ -526,6 +526,7 @@ export const BulkSendDialog = ({
         <div className="grid gap-4 lg:grid-cols-[340px_minmax(0,1fr)]">
           <div className="space-y-4 min-w-0">
           {/* Variant */}
+          {!lockVariant ? (
           <div>
             <Label className="text-xs text-[#1A1A1A]">Email variant</Label>
             <div className="grid grid-cols-2 gap-2 mt-1">
@@ -544,6 +545,11 @@ export const BulkSendDialog = ({
               ))}
             </div>
           </div>
+          ) : (
+            <div className="rounded-lg border border-[#B89555]/40 bg-[#EFE6D6]/40 px-3 py-2 text-xs text-[#1A1A1A]">
+              <span className="font-semibold">Variant:</span> {VARIANT_LABELS[variant]}
+            </div>
+          )}
 
           {/* Test send (left col) — always sends to your registered email by default */}
           <div className="border border-[#1A1A1A]/10 rounded-xl p-3 bg-[#FAF5EA]">
