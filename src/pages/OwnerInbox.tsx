@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import DeveloperActionsRail from "@/components/owner-inbox/DeveloperActionsRail";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -75,12 +75,15 @@ type ActiveStatFilter = 'none' | 'unread' | 'needs_reply' | 'new' | 'follow_up_d
 
 export default function OwnerInbox() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const initialChannel = (searchParams.get("channel") as ChannelType | null) ?? null;
+  const initialChannelId = searchParams.get("channelId");
   const [activeStatFilter, setActiveStatFilter] = useState<ActiveStatFilter>('none');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [filters, setFilters] = useState<InboxFilters>({
     status: 'all',
-    channel: 'all',
-    channelId: 'all',
+    channel: initialChannel ?? 'all',
+    channelId: initialChannelId ?? 'all',
     assistant: 'all',
     search: '',
     unreadOnly: false,
