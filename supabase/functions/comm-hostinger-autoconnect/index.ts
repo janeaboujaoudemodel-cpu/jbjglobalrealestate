@@ -159,13 +159,24 @@ Deno.serve(async (req) => {
     const imap = await testImap(email, password, DEFAULTS.imap_host, DEFAULTS.imap_port);
     if (!imap.ok) {
       return new Response(JSON.stringify({ error: `IMAP failed: ${imap.error}` }), {
-        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-    const smtp = await testSmtp(email, password, DEFAULTS.smtp_host, DEFAULTS.smtp_port);
+    let smtpPort = DEFAULTS.smtp_port;
+    let smtp = await testSmtp(email, password, DEFAULTS.smtp_host, smtpPort);
+    if (!smtp.ok) {
+      const fallback = await testSmtp(email, password, DEFAULTS.smtp_host, 587);
+      if (fallback.ok) {
+        console.log("[hostinger] SMTP connected through STARTTLS fallback on port 587");
+        smtp = fallback;
+        smtpPort = 587;
+      } else {
+        smtp = { ok: false as const, error: `${smtp.error || "port 465 failed"}; fallback 587: ${fallback.error || "failed"}` };
+      }
+    }
     if (!smtp.ok) {
       return new Response(JSON.stringify({ error: `SMTP failed: ${smtp.error}` }), {
-        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
@@ -176,7 +187,7 @@ Deno.serve(async (req) => {
       imap_host: DEFAULTS.imap_host,
       imap_port: DEFAULTS.imap_port,
       smtp_host: DEFAULTS.smtp_host,
-      smtp_port: DEFAULTS.smtp_port,
+      smtp_port: smtpPort,
     };
 
     const admin = createClient(SUPABASE_URL, SERVICE_ROLE);
