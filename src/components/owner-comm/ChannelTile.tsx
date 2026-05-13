@@ -199,16 +199,16 @@ export default function ChannelTile({
   }
 
   return (
-    <div className="rounded-2xl border-2 border-[#B89555]/25 bg-[#FDFBF7] p-5 shadow-[0_2px_12px_rgba(184,149,85,0.08)] hover:border-[#B89555]/50 transition-all">
-      <div className="flex items-start justify-between gap-3 mb-3">
-        <div className="flex items-center gap-3">
+    <div className="rounded-2xl border-2 border-[#B89555]/25 bg-[#FDFBF7] p-4 sm:p-5 shadow-[0_2px_12px_rgba(184,149,85,0.08)] hover:border-[#B89555]/50 transition-all min-w-0 overflow-hidden">
+      <div className="flex flex-col gap-3 mb-3">
+        <div className="flex items-start gap-3 min-w-0">
           <IconTile icon={Icon} tone="gold" size="md" />
-          <div>
-            <h3 className="font-semibold text-[#1A1A1A] text-base leading-tight">{provider.label}</h3>
-            <p className="text-xs text-[#1A1A1A]/70 mt-0.5">{provider.description}</p>
+          <div className="min-w-0 flex-1">
+            <h3 className="font-semibold text-[#1A1A1A] text-base leading-tight break-words">{provider.label}</h3>
+            <p className="text-xs text-[#1A1A1A]/70 mt-0.5 line-clamp-2 break-words">{provider.description}</p>
           </div>
         </div>
-        <div className="flex flex-col items-end gap-1.5">
+        <div className="flex flex-wrap items-center gap-1.5">
           {statusPill}
           {status === "connected" && <ToneAggregatePill aggregate={autoReplyAggregate} />}
         </div>

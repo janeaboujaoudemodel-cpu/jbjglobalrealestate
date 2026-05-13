@@ -1,110 +1,59 @@
-## Scope
+## Goal
+Fix the broken Communication Hub at `/owner/settings/communication` (vertical/cramped tiles, Hostinger showing "Not Connected"), then add AI inbox categorization, suggested replies, and integration with calendar / tasks / notes.
 
-Five connected items continuing the e-signature/CRM work. `deleted_at` already exists on `esign_envelopes` (with index) — no schema migration needed for it.
+## Problem analysis
 
----
+**1. Layout breakage (screenshot evidence)**
+- `ChannelGrid` uses `grid-cols-1 md:grid-cols-2 xl:grid-cols-3` inside the owner settings panel, which itself sits beside the 88px sidebar + a settings sub-nav. At 870px viewport, two tiles are forced into ~280px each → titles like "Outlook", "Hostinger Webmail", "Outbound Email (Resend)" wrap one letter per line, badges overlap the title.
+- Title row uses `flex items-start justify-between` with no `min-w-0` / `truncate` → status pills push the title into a 60px column.
 
-### 1. Drafts bulk-select + Recently Deleted tab
+**2. Hostinger "Not Connected"**
+- `useCommChannels` derives `status` from `comm_channels` rows. Even though `comm-hostinger-connect` succeeds (we verified via curl), the row may be created with `status != 'connected'` or not surfaced because the provider id mapping (`email_hostinger`) doesn't match what the connect function writes.
+- Need to confirm the row exists, has the correct `channel_type`, and `useCommChannels` query reads the latest state immediately after the dialog closes (cache invalidation already fires, but the row may be missing).
 
-**`src/pages/e-signature/ESignatureDashboard.tsx`**
+**3. Missing AI features**
+- No per-message category (Real Estate / Marketing / Admin / Personal) on inbox items.
+- No suggested-reply or "next step" generation surfaced next to messages.
+- No one-click linking of a message → calendar event / task / note.
 
-- Add a top-level Tabs row: **Active** (current behaviour, `deleted_at IS NULL`) and **Recently Deleted** (`deleted_at IS NOT NULL`, ordered by `deleted_at DESC`, auto-purge note: kept 30 days).
-- Convert `handleDelete` from hard `DELETE` to soft delete: `update({ deleted_at: new Date().toISOString() })`. Hard-delete remains only via a "Delete permanently" action inside the Recently Deleted tab.
-- **Bulk select** on the Active tab:
-  - Add a leading checkbox column on each envelope row + a master checkbox in the toolbar.
-  - Selection state: `Set<string>` of envelope IDs in component state.
-  - Floating action bar appears when `selected.size > 0`: **Send reminder**, **Move to Recently Deleted**, **Clear selection**, count badge.
-  - Bulk soft-delete = single `update({ deleted_at }).in("id", [...selected])`.
-- **Recently Deleted tab actions** per row + bulk:
-  - **Restore** → `update({ deleted_at: null })`.
-  - **Delete permanently** → confirm dialog → real `DELETE` (cascades remove recipients/fields/audit via existing FKs).
-- React Query: invalidate `["esign-envelopes"]` after every mutation; both tabs share the same key but pass a `view: "active" | "deleted"` filter and key suffix.
+## Plan
 
-No DB migration required for this item.
+### Phase 1 — Layout fix (frontend only, ChannelTile + ChannelGrid)
+- `ChannelGrid`: change to `grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3` so md viewports (like 870px) get full-width tiles.
+- `ChannelTile`:
+  - Header: wrap title block in `min-w-0 flex-1`, add `truncate` to `<h3>` and `line-clamp-2` to description.
+  - Move status + tone pills to a row *below* the title on narrow widths (`flex-col sm:flex-row`), so they never compete with the title for space.
+  - Tighten padding (`p-4`) and reduce icon tile to `size="sm"` on narrow.
+  - Ensure action buttons row uses `w-full` stacking under `sm`.
 
----
+### Phase 2 — Hostinger connection persistence
+- Inspect `comm_channels` to confirm the Hostinger row was written with `channel_type = 'email_hostinger'` and `status = 'connected'` after the last successful connect.
+- If missing/wrong, patch `comm-hostinger-connect/index.ts` to upsert the row with the correct shape on success (and clear `last_error`).
+- After dialog success, force `qc.invalidateQueries(['comm-channel-states'])` and refetch so the tile flips to Connected immediately without a manual refresh.
+- Add a small "Verify connection" action on the Hostinger tile that re-runs the IMAP/SMTP test against the stored encrypted credentials and updates `status` accordingly — so the tile is self-healing after secret rotations.
 
-### 2. CRM merge dialog + dropdown filters
+### Phase 3 — AI categorization + suggested replies
+- Add columns to `comm_messages` (or equivalent inbox table): `ai_category text`, `ai_priority text`, `ai_suggested_reply text`, `ai_next_step jsonb`, `ai_processed_at timestamptz`.
+- New edge function `comm-ai-triage`:
+  - Input: `message_id` (or batch).
+  - Calls Lovable AI Gateway (`google/gemini-2.5-flash`) with the email subject + body and a fixed taxonomy: `real_estate_lead`, `real_estate_ops`, `marketing`, `finance`, `personal`, `spam`, `other`.
+  - Returns `{ category, priority, suggested_reply, next_step: { type: 'task'|'meeting'|'note'|'none', title, due_at? } }`.
+  - Writes back to the row.
+- Trigger triage automatically inside `comm-inbound-sync` after each new message is inserted (fan-out, non-blocking).
+- Inbox UI (existing inbox component — will identify exact file in build phase): show a category chip + a collapsible "Suggested reply" panel with three buttons:
+  - **Send reply** (locked-send pipeline, uses the channel's tone profile),
+  - **Create task** (writes to existing tasks table),
+  - **Schedule meeting** (opens calendar booking flow with prefilled attendee + subject),
+  - **Save as note** (writes to existing notes/CRM contact).
+- Add a top-of-inbox filter bar: All / Real Estate / Marketing / Finance / Personal / Spam, driven by `ai_category`.
 
-**Files:** `src/pages/CRMRelationships.tsx` (and the leads table component it renders, plus a new `src/components/crm/MergeContactsDialog.tsx`).
+### Phase 4 — QA
+- Reload `/owner/settings/communication` at 870px and 1440px; confirm tiles render horizontally with readable text and Hostinger shows Connected.
+- Trigger one inbound email, confirm `ai_category` populates within ~10s and the suggested reply renders.
+- Click Create task / Schedule meeting / Save note from a message and confirm the linked records appear in the respective hubs.
 
-**Dropdown filters** (added to the existing filter row):
-- **Status** (Lead / Contacted / Qualified / Won / Lost — pulled from existing `crm_leads.status` enum)
-- **Source** (re-uses `LeadSourceFilter` values)
-- **Owner / Assignee** (distinct `assigned_to` from `crm_leads`)
-- **Tag** (multi-select from `crm_leads.tags` jsonb)
-- All driven by URL search params so deep-links work (consistent with Global Filter System Standard).
-
-**Merge dialog** (`MergeContactsDialog.tsx`):
-- Triggered when 2 or 3 leads are checked in the table → toolbar shows **Merge selected** button.
-- Dialog shows a 2- or 3-column field-by-field comparison (name, email, phone, company, source, tags, notes).
-- Per-row radio chooses the surviving value; one record is the **primary** (kept), others are absorbed.
-- On confirm: call existing `upsert_contact_with_company` RPC for the surviving row, then `update` non-primary rows to set `merged_into = primary_id` and `deleted_at = now()`. (Soft-merge — non-destructive.)
-- All linked artefacts (envelopes, tasks, comm history) are re-pointed to the primary id via a single SQL UPDATE per related table.
-
-**Schema additions needed (one small migration):**
-- `crm_leads.merged_into uuid` (nullable, FK → `crm_leads.id`)
-- `crm_leads.deleted_at timestamptz` (nullable) — if not already present
-- Index on `merged_into`
-- RLS already covers owner/admin; no policy change.
-
----
-
-### 3. Owner-side "Upload signed PDF" on EnvelopeDetail
-
-**`src/pages/e-signature/EnvelopeDetail.tsx`**
-
-- New action in the envelope header (visible to sender/owner only, all statuses except `completed`/`voided`): **Upload signed PDF**.
-- Click opens a file picker (`accept="application/pdf"`, max 25 MB).
-- Upload path: `supabase.storage.from("esign-signed").upload(\`${envelope.id}/${Date.now()}-signed.pdf\`, file, { upsert: false })`.
-- On success: `update esign_envelopes set signed_document_url = <publicUrl>, status = 'completed', completed_at = now() where id = envelope.id`.
-- Insert an `esign_audit_log` row: `action = 'manually_completed'`, `description = 'Owner uploaded signed PDF'`.
-- Trigger the existing completion email pipeline (call `esign-finalize-envelope` edge function if present, otherwise reuse `esign-send-completion-email`).
-
-**Migration:** ensure storage bucket `esign-signed` exists (private) with RLS — owners insert/read on their own envelopes.
-
----
-
-### 4. Outbound envelope email — embed DocuSign notice + PDF attachment
-
-**Files:** `src/lib/email/buildEnvelopeEmailHtml.ts` + mirrored `supabase/functions/_shared/envelope-email-html.ts` (kept byte-identical) + `supabase/functions/esign-send-for-signature/index.ts`.
-
-- Append a clearly-labelled **"Sign with DocuSign"** block above the existing CTA: short paragraph + the numbered 3-step mini-guide (already drafted), plus a divider above the JBJ signature.
-- Confirm the **PDF chip** (signed/unsigned attachment) uses the 7-day signed Storage URL (already implemented in `SendViaEmailDialog.resolveAttachmentUrl`) and surface it inside the same email card with file size + filename.
-- In `esign-send-for-signature/index.ts`, also pass the resolved attachment URL through to Resend's `attachments` array (Resend supports `path` for remote files) — so the PDF lands as a real file attachment, not just a link. Cap at 10 MB to stay under Resend's limit; if larger, fall back to the link chip only.
-- Re-deploy `esign-send-for-signature`.
-
----
-
-### 5. Full E2E screenshot pass
-
-After 1-4 ship, run a manual screenshot pass on the preview using the browser tools and capture each step into `/mnt/documents/esign-e2e-<timestamp>/`:
-
-1. Dashboard — Active tab, empty selection
-2. Dashboard — Active tab, 3 rows selected → bulk action bar
-3. Dashboard — Recently Deleted tab with restore/permanent buttons
-4. CRM Relationships — new dropdown filters open
-5. CRM Relationships — Merge dialog, 2 leads
-6. EnvelopeDetail — Upload signed PDF button + post-upload state
-7. Email preview iframe — DocuSign block + attachment chip
-8. Inbox screenshot of the test send to `infoo.jane@gmail.com`
-
-Compile a one-page QA contact sheet (`/mnt/documents/esign-e2e-<timestamp>/contact-sheet.pdf`) for review.
-
----
-
-### Files to change
-
-- `src/pages/e-signature/ESignatureDashboard.tsx` — tabs, bulk select, soft-delete
-- `src/pages/e-signature/EnvelopeDetail.tsx` — Upload signed PDF action
-- `src/pages/CRMRelationships.tsx` + leads table — dropdown filters, selection + Merge button
-- `src/components/crm/MergeContactsDialog.tsx` — **new**
-- `src/lib/email/buildEnvelopeEmailHtml.ts` + `supabase/functions/_shared/envelope-email-html.ts`
-- `supabase/functions/esign-send-for-signature/index.ts` — attach PDF via Resend attachments
-- **Migrations:** `crm_leads.merged_into` + `crm_leads.deleted_at` + `esign-signed` storage bucket & policies
-
-### Open questions
-
-1. **Hard-purge schedule** for Recently Deleted — auto-delete after **30 days** via a daily cron (pg_cron), or keep forever until manual purge?
-2. **Merge of 3+ leads** — cap at 3, or allow N (with a scrollable comparison table)?
-3. **PDF attachment cap** — Resend's hard limit is 40 MB total per message. Use **10 MB**, **25 MB**, or fall back to link-only above any size?
+## Technical notes
+- All AI calls go through Lovable AI Gateway with `google/gemini-2.5-flash` (fast + cheap, supports JSON mode for structured triage output).
+- Suggested reply send path reuses the existing locked-send standard (subject + body locked into `outreach_locked_payloads` before send).
+- No new third-party services; no new secrets required.
+- Schema changes go through `supabase--migration`; RLS on the new columns inherits existing `comm_messages` policies (owner-only).
