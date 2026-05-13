@@ -1387,7 +1387,7 @@ export default function EnvelopeDetail() {
           senderName={envelope.sender_name || undefined}
           senderTitle={(envelope as any).sender_title || undefined}
           attachmentName={envelope.document_filename || undefined}
-          attachmentUrl={envelope.document_url ? maybeProxyStorageUrl(envelope.document_url, { filename: envelope.document_filename || undefined }) : undefined}
+          attachmentUrl={envelope.document_url || undefined}
           onSent={() => refetch()}
         />
       )}
