@@ -264,6 +264,7 @@ export default function BrokersRegistry() {
             <h1 className="text-2xl font-bold">Brokers</h1>
             <p className="text-sm text-[#1A1A1A]/70">Every broker in the market, every company they work for.</p>
           </div>
+          <ViewSwitch value={viewMode} onChange={setViewMode} />
           <Button variant="outline" onClick={() => setExportOpen(true)} disabled={!filtered.length}>
             <Download className="w-4 h-4 mr-1" /> Export
           </Button>
