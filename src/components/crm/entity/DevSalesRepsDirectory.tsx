@@ -89,7 +89,7 @@ export default function DevSalesRepsDirectory() {
         <div>
           <h2 className="text-lg font-semibold text-[#1A1A1A]">Developer Sales Representatives</h2>
           <p className="text-xs text-[#1A1A1A]/60">
-            {filtered.length.toLocaleString()} of {rows.length.toLocaleString()} reps
+            {filtered.length.toLocaleString()} of {(dbTotal ?? rows.length).toLocaleString()} reps
           </p>
         </div>
         <input
