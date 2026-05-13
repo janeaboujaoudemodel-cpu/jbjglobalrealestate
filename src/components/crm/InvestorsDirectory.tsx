@@ -295,9 +295,9 @@ export default function InvestorsDirectory({
                       <span className="font-semibold text-[#1A1A1A]">{a.name}</span>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-[#1A1A1A]/80">
-                    <div className="text-xs truncate max-w-[220px]">{a.email || "—"}</div>
-                    <div className="text-xs">{a.phone || "—"}</div>
+                  <td className="px-4 py-3 text-[#1A1A1A]/80 max-w-[240px]">
+                    <div className="text-xs truncate" title={a.email || ""}>{a.email || "—"}</div>
+                    <div className="text-xs truncate whitespace-nowrap" title={a.phone || ""}>{a.phone || "—"}</div>
                   </td>
                   <td className="px-4 py-3 text-right font-semibold text-[#1A1A1A]">{a.unitsCount}</td>
                   <td className="px-4 py-3 text-right font-bold" style={{ color: "var(--price-orange, #E67E22)" }}>
