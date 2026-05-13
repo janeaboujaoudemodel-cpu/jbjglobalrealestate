@@ -98,6 +98,7 @@ export function SendViaEmailDialog({
   defaultSubject,
   defaultBody,
   attachmentName,
+  attachmentUrl,
   docNumber,
   senderName = "Jane Bou Jaoude",
   senderTitle = "Founder & CEO",
