@@ -1982,7 +1982,11 @@ const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "br
     replyTo: isBrk ? "brokerage_reply_to_email" : "reply_to_email",
     savedCc: isBrk ? "brokerage_saved_cc_emails" : "saved_cc_emails",
     activeCc: isBrk ? "brokerage_active_cc_emails" : "active_cc_emails",
+    attachments: isBrk ? "attachments_brokerage" : "attachments_developer",
+    workflows: isBrk ? "workflow_templates_brokerage" : "workflow_templates_developer",
   };
+  const attachments: Array<{ label: string; url: string }> = Array.isArray(s[F.attachments]) ? s[F.attachments] : [];
+  const workflows: Array<{ label: string; url: string }> = Array.isArray(s[F.workflows]) ? s[F.workflows] : [];
 
   const driveUrl: string = s[F.drive] || "";
   const savedSenders: string[] = Array.isArray(s[F.savedSenders]) ? s[F.savedSenders] : [];
