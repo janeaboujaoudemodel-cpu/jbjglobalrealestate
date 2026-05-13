@@ -179,11 +179,33 @@ export function SendViaEmailDialog({
 
   const canSend = tos.length > 0 && tos.every(isValidEmail) && subject.trim().length > 0;
 
+  // Convert a Supabase storage URL into a 7-day signed URL so the recipient's
+  // email client (which can't pass an Authorization header) can download the
+  // PDF directly. Public-bucket URLs and external URLs pass through unchanged.
+  const resolveAttachmentUrl = async (rawUrl?: string): Promise<string | undefined> => {
+    if (!rawUrl) return undefined;
+    const m = rawUrl.match(/\/storage\/v1\/object\/(?:public|sign|authenticated)\/([^/?]+)\/([^?]+)/);
+    if (!m) return rawUrl;
+    const bucket = m[1];
+    let path = m[2];
+    try { path = decodeURIComponent(path); } catch { /* keep raw */ }
+    try {
+      const { data, error } = await supabase.storage.from(bucket).createSignedUrl(path, 60 * 60 * 24 * 7, {
+        download: attachmentName || true,
+      });
+      if (error || !data?.signedUrl) return rawUrl;
+      return data.signedUrl;
+    } catch {
+      return rawUrl;
+    }
+  };
+
   const sendTest = async () => {
     setBusy("test");
     try {
       const session = await supabase.auth.getSession();
       const token = session.data.session?.access_token;
+      const signedAttachmentUrl = await resolveAttachmentUrl(attachmentUrl);
       const res = await fetch(`${SUPABASE_URL}/functions/v1/esign-send-test-email`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
@@ -193,7 +215,7 @@ export function SendViaEmailDialog({
           interpolated_body_html: bodyHtml,
           docusign_url: docusignUrl.trim() || undefined,
           attachment_name: attachmentName,
-          attachment_url: attachmentUrl,
+          attachment_url: signedAttachmentUrl,
           test_recipient: TEST_RECIPIENT,
         }),
       });
@@ -216,19 +238,20 @@ export function SendViaEmailDialog({
     try {
       const session = await supabase.auth.getSession();
       const token = session.data.session?.access_token;
+      const signedAttachmentUrl = await resolveAttachmentUrl(attachmentUrl);
       const res = await fetch(`${SUPABASE_URL}/functions/v1/esign-send-for-signature`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({
           envelope_id: envelopeId,
           channels: ["email"],
-          additional_recipients: tos,           // full To list
+          additional_recipients: tos,
           cc_emails: cleanCcs,
           interpolated_subject: subject,
-          interpolated_body_html: bodyHtml,     // pre-rendered HTML (locked-send)
+          interpolated_body_html: bodyHtml,
           docusign_url: docusignUrl.trim() || undefined,
           attachment_name: attachmentName,
-          attachment_url: attachmentUrl,
+          attachment_url: signedAttachmentUrl,
         }),
       });
       const out = await res.json().catch(() => ({}));

@@ -631,7 +631,7 @@ export default function CRMLeadsTableV2({
               <TableHead className="w-[140px] text-[#1A1A1A]/70 font-bold">Phone</TableHead>
               <TableHead className="w-[240px] text-[#1A1A1A]/70 font-bold">Email</TableHead>
               <TableHead className="w-[140px] text-[#1A1A1A]/70 font-bold">Source</TableHead>
-              <TableHead className="w-[160px] text-[#1A1A1A]/70 font-bold">Status</TableHead>
+              <TableHead className="w-[210px] min-w-[210px] text-[#1A1A1A]/70 font-bold">Status</TableHead>
               <TableHead className="w-[100px] text-[#1A1A1A]/70 font-bold">Date</TableHead>
               <TableHead className="w-20 text-[#1A1A1A]/70 font-bold">VIP</TableHead>
               <TableHead className="text-[#1A1A1A]/70 font-bold">Assigned Broker</TableHead>
@@ -735,7 +735,7 @@ export default function CRMLeadsTableV2({
                         {renderSource(lead)}
                       </span>
                     </TableCell>
-                    <TableCell onClick={(e) => e.stopPropagation()}>
+                    <TableCell className="w-[210px] min-w-[210px] px-3 whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
                       <InlineStatusSelect
                         leadId={lead.id}
                         currentStatus={status}

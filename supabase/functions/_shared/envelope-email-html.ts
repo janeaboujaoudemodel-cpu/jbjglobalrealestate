@@ -1,15 +1,15 @@
-// Shared renderer for the JBJ-branded e-signature cover email.
-// Used by esign-send-for-signature and esign-send-test-email so the test
-// inbox, the live preview iframe, and the real recipient inbox all see
-// byte-for-byte the same HTML. NO signing button — DocuSign handles signing.
-
+// Shared renderer for the JBJ-branded e-signature cover email (edge runtime).
+// Mirror of src/lib/email/buildEnvelopeEmailHtml.ts — keep both byte-identical
+// so preview iframe and delivered email are pixel-perfect equivalent.
 export const JBJ_LOGO_URL = "https://www.jbj.ae/jbj-monogram-dark-on-light.png";
-
 export const DOCUSIGN_APP_STORE = "https://apps.apple.com/app/docusign/id474990205";
 export const DOCUSIGN_PLAY_STORE = "https://play.google.com/store/apps/details?id=com.docusign.ink";
+// Faster, deterministic DocuSign web entry — `apps.docusign.com` was loading
+// to a long blank page; `account.docusign.com` is the production sign-in
+// surface and resolves instantly.
 export const DOCUSIGN_WEB = "https://account.docusign.com/";
 export const DOCUSIGN_SIGNUP = "https://account.docusign.com/signup";
-export const SIGNED_RETURN_EMAIL = "contracts@jbj.ae";
+export const SIGNED_RETURN_EMAIL = "contact@jbj.ae";
 
 export interface BuildEnvelopeEmailArgs {
   subject: string;
@@ -20,6 +20,7 @@ export interface BuildEnvelopeEmailArgs {
   year?: number;
   docusignUrl?: string;
   attachmentName?: string;
+  /** When provided, the "PDF attached" chip becomes a clickable download link. */
   attachmentUrl?: string;
 }
 
@@ -39,7 +40,7 @@ export function buildSenderSignatureHtml(senderName: string, senderTitle: string
     <span style="font-family:'Cormorant Garamond','Playfair Display',Georgia,serif;font-style:italic;font-weight:500;font-size:28px;color:#1A1A1A;letter-spacing:.01em;line-height:1;">${escapeHtml(senderName)}</span>
   </td></tr>
   <tr><td style="padding:6px 0 12px;"><div style="width:72px;height:1px;background:#B89555;line-height:1px;font-size:0;">&nbsp;</div></td></tr>
-  <tr><td style="font-size:10.5px;font-weight:600;letter-spacing:.18em;color:#B89555;text-transform:uppercase;padding-bottom:8px;">${escapeHtml(senderTitle)}</td></tr>
+  <tr><td style="font-size:10.5px;font-weight:700;letter-spacing:.18em;color:#B89555;text-transform:uppercase;padding-bottom:8px;">${escapeHtml(senderTitle)}</td></tr>
   <tr><td style="font-size:11px;font-weight:700;letter-spacing:.22em;color:#1A1A1A;text-transform:uppercase;padding-bottom:3px;">JBJ GLOBAL REAL ESTATE</td></tr>
   <tr><td style="font-size:10.5px;color:#1A1A1A;opacity:.7;letter-spacing:.04em;padding-bottom:1px;">Dubai, UAE</td></tr>
   <tr><td style="font-size:10.5px;color:#1A1A1A;opacity:.7;letter-spacing:.04em;padding-bottom:1px;">CONTACT@JBJ.AE &nbsp;·&nbsp; +971 54 716 7107</td></tr>
@@ -50,7 +51,7 @@ export function buildSenderSignatureHtml(senderName: string, senderTitle: string
 export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
   const subject = escapeHtml(args.subject || "");
   const bodyHtml = args.bodyHtml || "";
-  const docNumber = args.docNumber ? escapeHtml(args.docNumber) : "";
+  void args.docNumber; // intentionally unused — DOC NO. lives on the PDF, not in the email header
   const year = args.year ?? new Date().getFullYear();
   const docusignUrl = (args.docusignUrl || "").trim();
   const attachmentName = args.attachmentName ? escapeHtml(args.attachmentName) : "";
@@ -70,6 +71,17 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
           </td></tr>
         </table>`;
 
+  const howToSignBlock = `
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:18px 0 0;border-collapse:collapse;width:100%;background:#F7F2EA;border:1px solid #B89555;">
+          <tr><td style="padding:14px 18px;font-family:Inter,Arial,sans-serif;font-size:12px;color:#1A1A1A;line-height:1.7;">
+            <div style="font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#1A1A1A;font-size:10.5px;margin-bottom:8px;">How to sign with DocuSign</div>
+            <div style="margin-bottom:4px;"><strong style="color:#B89555;">1.</strong> Download the attached PDF for your records.</div>
+            <div style="margin-bottom:4px;"><strong style="color:#B89555;">2.</strong> <a href="${DOCUSIGN_SIGNUP}" style="color:#1A1A1A;text-decoration:underline;">Create a free DocuSign account</a> (or sign in if you already have one).</div>
+            <div style="margin-bottom:4px;"><strong style="color:#B89555;">3.</strong> Tap <strong>OPEN IN DOCUSIGN</strong> above, upload the PDF, place your signature, and complete signing.</div>
+            <div style="margin-top:6px;opacity:.7;font-size:11px;">Once signed, please return the signed PDF to <a href="mailto:${SIGNED_RETURN_EMAIL}" style="color:#B89555;text-decoration:none;font-weight:600;">${SIGNED_RETURN_EMAIL}</a>.</div>
+          </td></tr>
+        </table>`;
+
   const chipInner = attachmentName
     ? `📎 &nbsp;PDF attached: <strong>${attachmentName}</strong>${attachmentUrl ? ` &nbsp;<span style="color:#B89555;text-transform:uppercase;letter-spacing:.16em;font-size:10px;">Download&nbsp;→</span>` : ""}`
     : "";
@@ -79,8 +91,11 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
       : `<div style="margin:18px 0 0;padding:10px 12px;border:1px solid #B89555;background:#F7F2EA;display:inline-block;font-family:Inter,Arial,sans-serif;font-size:11.5px;color:#1A1A1A;letter-spacing:.04em;">${chipInner}</div>`
     : "";
 
-  const footerNote = `Tap the button above to open the agreement in DocuSign and complete the signature. Once signed, please return the signed PDF to ${SIGNED_RETURN_EMAIL}.`;
+  
 
+  // Mobile-responsive shell — the @media block stacks the header columns,
+  // forces the wordmark on a single line, and turns the 3-column footer into
+  // a single centered column so links never collide on phones.
   return `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"><style>
     .jbj-wordmark{font-size:16px;}
     @media (max-width:520px){
@@ -98,30 +113,25 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
 <body style="margin:0;padding:0;font-family:Inter,Arial,sans-serif;background:#FDFBF7;">
   <table role="presentation" style="width:100%;border-collapse:collapse;"><tr><td align="center" class="jbj-outer-pad" style="padding:40px 16px;">
     <table role="presentation" class="jbj-card" style="width:100%;max-width:640px;border-collapse:collapse;">
-      <!-- Header with monogram -->
-      <tr><td class="jbj-head-pad" style="background:#F7F2EA;border:1px solid #B89555;padding:20px 24px;border-bottom:none;">
+      <tr><td class="jbj-head-pad" style="background:#F7F2EA;border:1px solid #B89555;padding:22px 24px 18px;border-bottom:none;">
         <table role="presentation" style="width:100%;border-collapse:collapse;"><tr>
-          <td style="vertical-align:middle;width:64px;padding-right:14px;">
+          <td style="vertical-align:middle;width:64px;padding-right:16px;">
             <img src="${JBJ_LOGO_URL}" alt="JBJ" width="56" height="56" style="display:block;border:0;outline:none;height:56px;width:56px;"/>
           </td>
           <td class="jbj-wordmark" style="vertical-align:middle;font-weight:700;letter-spacing:.18em;color:#1A1A1A;line-height:1.2;white-space:nowrap;">
             JBJ GLOBAL REAL ESTATE
           </td>
-          <td align="right" class="jbj-doc-no" style="vertical-align:middle;font-size:10px;letter-spacing:.16em;color:#1A1A1A;opacity:.7;white-space:nowrap;">
-            ${docNumber ? `DOC NO. <strong style="opacity:1;">${docNumber}</strong>` : ""}
-          </td>
         </tr></table>
         <div style="height:1px;background:#B89555;margin-top:14px;"></div>
       </td></tr>
-      <!-- Body -->
       <tr><td class="jbj-body" style="background:#ffffff;border-left:1px solid #B89555;border-right:1px solid #B89555;padding:32px 32px 24px;">
         <h2 style="margin:0 0 18px;color:#1A1A1A;font-size:20px;font-weight:700;line-height:1.3;">${subject}</h2>
         <div style="color:#1A1A1A;line-height:1.7;font-size:14px;">${bodyHtml}</div>
         ${ctaBlock}
         ${attachmentChip}
-        <p style="margin:24px 0 0;color:#1A1A1A;opacity:.6;font-size:11px;line-height:1.55;">${footerNote}</p>
+        ${howToSignBlock}
+        <p style="margin:18px 0 0;color:#1A1A1A;opacity:.55;font-size:11px;line-height:1.55;">Replies to this email are routed to <a href="mailto:contact@jbj.ae" style="color:#B89555;text-decoration:none;font-weight:600;">contact@jbj.ae</a> and answered by our team.</p>
       </td></tr>
-      <!-- Footer -->
       <tr><td class="jbj-foot-pad" style="background:#F7F2EA;border:1px solid #B89555;border-top:none;padding:18px 24px;">
         <div style="height:1px;background:#B89555;margin-bottom:14px;"></div>
         <table role="presentation" style="width:100%;border-collapse:collapse;font-size:11px;color:#1A1A1A;line-height:1.7;"><tr>
