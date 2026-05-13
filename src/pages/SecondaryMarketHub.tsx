@@ -39,7 +39,23 @@ export default function SecondaryMarketHub() {
     },
   });
 
-  const isEmpty = !loadingBrokerages && !loadingDevs && brokerages.length === 0 && developers.length === 0;
+  const { data: liveListings = [], isLoading: loadingLive } = useQuery({
+    queryKey: ["secondary-market-listings"],
+    queryFn: async () => {
+      const { data, error } = await (supabase as any)
+        .from("vw_resale_with_source")
+        .select("id, title, source_label, source_entity_name, asking_price, currency, emirate, updated_at")
+        .not("source_entity_type", "is", null)
+        .order("updated_at", { ascending: false })
+        .limit(100);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const isEmpty =
+    !loadingBrokerages && !loadingDevs && !loadingLive &&
+    brokerages.length === 0 && developers.length === 0 && liveListings.length === 0;
 
   return (
     <>
