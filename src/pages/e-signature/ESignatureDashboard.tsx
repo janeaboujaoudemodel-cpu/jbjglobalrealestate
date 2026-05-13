@@ -93,11 +93,14 @@ export default function ESignatureDashboard() {
   const [propTypeFilter, setPropTypeFilter] = useState<string>("all");
   const [locationFilter, setLocationFilter] = useState<string>("");
   const [nationalityFilter, setNationalityFilter] = useState<string>("");
+  const [view, setView] = useState<"active" | "deleted">("active");
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [pendingPurge, setPendingPurge] = useState<{ ids: string[] } | null>(null);
 
   const { data: envelopes, isLoading, refetch } = useQuery({
-    queryKey: ["esign-envelopes", user?.id],
+    queryKey: ["esign-envelopes", user?.id, view],
     queryFn: async () => {
-      const { data, error } = await supabase
+      let q = supabase
         .from("esign_envelopes")
         .select(`
           *,
@@ -107,15 +110,23 @@ export default function ESignatureDashboard() {
             email,
             status
           )
-        `)
-        .is("deleted_at", null)
-        .order("created_at", { ascending: false });
-
+        `);
+      if (view === "active") {
+        q = q.is("deleted_at", null).order("created_at", { ascending: false });
+      } else {
+        q = q.not("deleted_at", "is", null).order("deleted_at", { ascending: false });
+      }
+      const { data, error } = await q;
       if (error) throw error;
       return data as Envelope[];
     },
     enabled: !!user?.id,
   });
+
+  // Reset selection when view or data changes
+  const envelopeIdsKey = (envelopes || []).map((e) => e.id).join(",");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffectIfChanged(() => setSelected(new Set()), [view, envelopeIdsKey]);
 
   const stats = {
     draft: envelopes?.filter(e => e.status === "draft").length || 0,
@@ -150,6 +161,29 @@ export default function ESignatureDashboard() {
     return true;
   });
 
+  const visibleIds = (filteredEnvelopes || []).map((e) => e.id);
+  const allVisibleSelected = visibleIds.length > 0 && visibleIds.every((id) => selected.has(id));
+  const toggleId = (id: string) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+  const toggleAllVisible = () => {
+    setSelected((prev) => {
+      if (allVisibleSelected) {
+        const next = new Set(prev);
+        visibleIds.forEach((id) => next.delete(id));
+        return next;
+      }
+      const next = new Set(prev);
+      visibleIds.forEach((id) => next.add(id));
+      return next;
+    });
+  };
+
   const resetFilters = () => {
     setKindFilter("all");
     setBedroomsFilter("all");
@@ -160,20 +194,58 @@ export default function ESignatureDashboard() {
   const hasActiveAdvancedFilters =
     kindFilter !== "all" || bedroomsFilter !== "all" || propTypeFilter !== "all" || !!loc || !!nat;
 
-  const handleDelete = async (id: string) => {
+  // Soft delete: move to Recently Deleted
+  const handleSoftDelete = async (ids: string[]) => {
+    if (ids.length === 0) return;
+    try {
+      const { error } = await supabase
+        .from("esign_envelopes")
+        .update({ deleted_at: new Date().toISOString() })
+        .in("id", ids);
+      if (error) throw error;
+      toast.success(ids.length === 1 ? "Moved to Recently Deleted" : `${ids.length} moved to Recently Deleted`);
+      setSelected(new Set());
+      refetch();
+    } catch {
+      toast.error("Failed to delete");
+    }
+  };
+
+  const handleRestore = async (ids: string[]) => {
+    if (ids.length === 0) return;
+    try {
+      const { error } = await supabase
+        .from("esign_envelopes")
+        .update({ deleted_at: null })
+        .in("id", ids);
+      if (error) throw error;
+      toast.success(ids.length === 1 ? "Restored" : `${ids.length} restored`);
+      setSelected(new Set());
+      refetch();
+    } catch {
+      toast.error("Failed to restore");
+    }
+  };
+
+  const handlePurge = async (ids: string[]) => {
+    if (ids.length === 0) return;
     try {
       const { error } = await supabase
         .from("esign_envelopes")
         .delete()
-        .eq("id", id);
-
+        .in("id", ids);
       if (error) throw error;
-      toast.success("Envelope deleted");
+      toast.success(ids.length === 1 ? "Permanently deleted" : `${ids.length} permanently deleted`);
+      setSelected(new Set());
+      setPendingPurge(null);
       refetch();
-    } catch (error) {
-      toast.error("Failed to delete envelope");
+    } catch {
+      toast.error("Failed to delete permanently");
+      setPendingPurge(null);
     }
   };
+
+  const handleDelete = (id: string) => handleSoftDelete([id]);
 
   const handleSendReminder = async (id: string) => {
     try {
@@ -195,6 +267,26 @@ export default function ESignatureDashboard() {
     } catch (error) {
       toast.error("Failed to send reminder");
     }
+  };
+
+  const handleBulkRemind = async () => {
+    const remindable = (filteredEnvelopes || []).filter(
+      (e) => selected.has(e.id) && ["sent", "viewed", "partially_signed"].includes(e.status),
+    );
+    if (remindable.length === 0) {
+      toast.info("No pending envelopes selected to remind");
+      return;
+    }
+    let ok = 0;
+    for (const e of remindable) {
+      try {
+        await handleSendReminder(e.id);
+        ok++;
+      } catch {
+        // ignore — handleSendReminder shows a toast
+      }
+    }
+    if (ok > 0) toast.success(`Reminders sent to ${ok}`);
   };
 
   return (
