@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BadgeCheck, Phone, Mail, MessageCircle, Upload } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useEntityTotal } from "@/hooks/useEntityTotal";
 
 interface RepRow {
   id: string;
@@ -28,6 +29,7 @@ export default function DevSalesRepsDirectory() {
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+  const { total: dbTotal } = useEntityTotal("developer_sales_reps", (q) => q.eq("is_active", true));
 
   useEffect(() => {
     let alive = true;
@@ -87,7 +89,7 @@ export default function DevSalesRepsDirectory() {
         <div>
           <h2 className="text-lg font-semibold text-[#1A1A1A]">Developer Sales Representatives</h2>
           <p className="text-xs text-[#1A1A1A]/60">
-            {filtered.length.toLocaleString()} of {rows.length.toLocaleString()} reps
+            {filtered.length.toLocaleString()} of {(dbTotal ?? rows.length).toLocaleString()} reps
           </p>
         </div>
         <input

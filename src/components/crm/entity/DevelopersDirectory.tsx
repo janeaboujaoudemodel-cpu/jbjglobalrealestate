@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { CompanyHubDrawer } from "@/components/crm/CompanyHubDrawer";
 import { getDeveloperLogoUrl } from "@/utils/developerLogo";
+import { useEntityTotal } from "@/hooks/useEntityTotal";
 
 interface DeveloperRow {
   id: string;
@@ -75,6 +76,7 @@ export default function DevelopersDirectory() {
   const [hubOpen, setHubOpen] = useState(false);
   const [hubName, setHubName] = useState<string | null>(null);
   const [leadCounts, setLeadCounts] = useState<Map<string, number>>(new Map());
+  const { total: dbTotal } = useEntityTotal("developers", (q) => q.eq("is_hidden", false));
 
   useEffect(() => {
     let alive = true;
@@ -174,7 +176,7 @@ export default function DevelopersDirectory() {
         <div className="min-w-0">
           <h2 className="text-lg font-semibold text-[#1A1A1A]">Developers</h2>
           <p className="text-xs text-[#1A1A1A]/60">
-            {filtered.length.toLocaleString()} of {rows.length.toLocaleString()} developers · click any row for full hub, contacts, tasks &amp; calendar
+            {filtered.length.toLocaleString()} of {(dbTotal ?? rows.length).toLocaleString()} developers · click any row for full hub, contacts, tasks &amp; calendar
           </p>
         </div>
         <input

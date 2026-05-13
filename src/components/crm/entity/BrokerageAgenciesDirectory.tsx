@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Building2, Globe, Phone, Mail, Star } from "lucide-react";
 import { CompanyHubDrawer } from "@/components/crm/CompanyHubDrawer";
 import { sortBrokeragesForDirectory, normalizeForSearch } from "@/utils/brokerageRanking";
+import { useEntityTotal } from "@/hooks/useEntityTotal";
 
 interface AgencyRow {
   id: string;
@@ -39,6 +40,7 @@ export default function BrokerageAgenciesDirectory() {
   const [hubOpen, setHubOpen] = useState(false);
   const [hubName, setHubName] = useState<string | null>(null);
   const [leadCounts, setLeadCounts] = useState<Map<string, number>>(new Map());
+  const { total: dbTotal } = useEntityTotal("crm_brokerages", (q) => q.is("deleted_at", null).or("is_junk.is.null,is_junk.eq.false"));
 
   // Fetch lead counts per brokerage (matched by lowercased company_name)
   useEffect(() => {
@@ -163,7 +165,7 @@ export default function BrokerageAgenciesDirectory() {
         <div>
           <h2 className="text-lg font-semibold text-[#1A1A1A]">Brokerage Agencies</h2>
           <p className="text-xs text-[#1A1A1A]/60">
-            {finalRows.length.toLocaleString()} of {rows.length.toLocaleString()} agencies
+            {finalRows.length.toLocaleString()} of {(dbTotal ?? rows.length).toLocaleString()} agencies
             {emirate ? ` · filtered: ${emirate}` : ""}
           </p>
         </div>
@@ -187,7 +189,7 @@ export default function BrokerageAgenciesDirectory() {
                 : "bg-[#FDFBF7] text-[#1A1A1A]/80 border-[#B89555]/25 hover:bg-[#F7F2EA]"
             }`}
           >
-            All <span className="text-[10px] tabular-nums opacity-70">{rows.length.toLocaleString()}</span>
+            All <span className="text-[10px] tabular-nums opacity-70">{(dbTotal ?? rows.length).toLocaleString()}</span>
           </button>
           {emirateCounts.map(([name, count]) => (
             <button
