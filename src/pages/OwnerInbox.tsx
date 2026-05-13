@@ -40,6 +40,7 @@ import useOwnerInbox, {
 } from "@/hooks/useOwnerInbox";
 import { formatDistanceToNow } from "date-fns";
 import OwnerInboxThread from "@/components/owner-inbox/OwnerInboxThread";
+import { CATEGORY_META } from "@/hooks/useCommAITriage";
 
 const channelIcons: Record<string, React.ReactNode> = {
   whatsapp: <MessageSquare className="h-4 w-4 text-green-500" />,
