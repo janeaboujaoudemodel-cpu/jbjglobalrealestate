@@ -5223,6 +5223,7 @@ export type Database = {
       }
       crm_brokerage_agents: {
         Row: {
+          birthday: string | null
           broker_id: string | null
           brokerage_id: string | null
           city: string | null
@@ -5237,13 +5238,17 @@ export type Database = {
           id: string
           import_batch_id: string | null
           import_label: string | null
+          instagram_url: string | null
           is_global_broker: boolean | null
           languages: string[] | null
+          last_contact_at: string | null
           license_number: string | null
+          linkedin_url: string | null
           merge_history: Json
           metadata: Json
           name: string | null
           nationality: string | null
+          notes: string | null
           owner_id: string
           phone: string | null
           phone_normalized: string | null
@@ -5264,6 +5269,7 @@ export type Database = {
           whatsapp_normalized: string | null
         }
         Insert: {
+          birthday?: string | null
           broker_id?: string | null
           brokerage_id?: string | null
           city?: string | null
@@ -5278,13 +5284,17 @@ export type Database = {
           id?: string
           import_batch_id?: string | null
           import_label?: string | null
+          instagram_url?: string | null
           is_global_broker?: boolean | null
           languages?: string[] | null
+          last_contact_at?: string | null
           license_number?: string | null
+          linkedin_url?: string | null
           merge_history?: Json
           metadata?: Json
           name?: string | null
           nationality?: string | null
+          notes?: string | null
           owner_id: string
           phone?: string | null
           phone_normalized?: string | null
@@ -5305,6 +5315,7 @@ export type Database = {
           whatsapp_normalized?: string | null
         }
         Update: {
+          birthday?: string | null
           broker_id?: string | null
           brokerage_id?: string | null
           city?: string | null
@@ -5319,13 +5330,17 @@ export type Database = {
           id?: string
           import_batch_id?: string | null
           import_label?: string | null
+          instagram_url?: string | null
           is_global_broker?: boolean | null
           languages?: string[] | null
+          last_contact_at?: string | null
           license_number?: string | null
+          linkedin_url?: string | null
           merge_history?: Json
           metadata?: Json
           name?: string | null
           nationality?: string | null
+          notes?: string | null
           owner_id?: string
           phone?: string | null
           phone_normalized?: string | null
