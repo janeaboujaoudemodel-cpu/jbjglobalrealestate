@@ -166,7 +166,7 @@ export function SendViaEmailDialog({
     setSubject(defaultSubject);
     setDocusignUrl("");
     setBodyHtml(
-      legacyBodyToHtml(defaultBody, {
+      legacyBodyToHtml(stripInlineSignature(defaultBody), {
         clientName: recipientName || "Client",
         docTitle: defaultSubject || "Document",
         senderName,
