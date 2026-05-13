@@ -751,17 +751,26 @@ export default function CRMLeadsTableV2({
                         size="sm"
                         variant={vip ? "default" : "outline"}
                         onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleToggleVIP(lead.id, vip); }}
-                        className={`min-w-[60px] ${vip ? "bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90" : "border-[#B89555]/30 text-[#1A1A1A]/60 hover:bg-[#EFE6D6]/10"}`}
+                        className={`min-w-[72px] font-semibold ${vip
+                          ? "bg-amber-300 text-[#1A1A1A] hover:bg-amber-300/90 border border-amber-500"
+                          : "border-[#B89555]/40 text-[#1A1A1A]/70 hover:bg-[#EFE6D6]/40 bg-[#FDFBF7]"}`}
                       >
-                        {vip ? "★ VIP" : "—"}
+                        {vip ? (
+                          <>
+                            <Star className="h-3.5 w-3.5 mr-1 fill-[#B89555] text-[#B89555]" />
+                            VIP
+                          </>
+                        ) : "VIP off"}
                       </Button>
                     </TableCell>
                     <TableCell className="text-sm">
                       <div className="flex items-center gap-2">
                         {assignedNames[lead.id] ? (
-                          <span className="font-semibold text-[#1A1A1A] whitespace-nowrap">{assignedNames[lead.id]}</span>
+                          <span className="font-semibold text-[#1A1A1A] whitespace-nowrap">
+                            Assigned: {assignedNames[lead.id]}
+                          </span>
                         ) : (
-                          <span className="text-[#1A1A1A]/50 italic" title="Not yet assigned to a broker">Pool</span>
+                          <span className="text-[#1A1A1A]/55 italic" title="Not yet assigned to a broker">Unassigned</span>
                         )}
                         {isOwner && (
                           <Popover>

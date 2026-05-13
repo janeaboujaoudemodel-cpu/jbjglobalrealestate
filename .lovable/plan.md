@@ -1,71 +1,52 @@
-## Plan
+Plan to fix the CRM sections properly:
 
-1. **CRM labels, DLD wording, and status colors**
-   - Replace any visible incorrect `LD` label with `DLD` where it appears in CRM/relationship forms, tables, filters, and exports.
-   - Correct the CRM status registry so labels match the requested wording:
-     - Hot = orange
-     - Interested = green
-     - Deal Closed = green
-     - No Response = dark red
-     - Junk = red
-     - Lost = red
-     - Already Bought = blue/yellow-toned premium neutral
-     - VIP = yellow/amber
-   - Fix the current mismatch where quick chips use different status keys than the dropdown/table status values.
-   - Make the status dropdown, chips, and table badges use the same single status source so filtering, saving, display, and counts stay wired together.
+1. Data source and counts
+- Keep brokers powered by `crm_brokers`; verified live count is 32,649 rows, so the Brokers count/pagination will show the real total instead of “1,000”.
+- Keep agencies powered by `crm_brokerages`; verified live count is 10,613 rows.
+- Replace any visible `LD` label with `DLD` and normalize DLD source display so it never shows raw underscores or internal enum strings.
+- Add a safe formatter for empty/null values so the UI does not show broken placeholders, underscores, `keep`, or raw database codes.
 
-2. **Premium CRM table and action buttons**
-   - Upgrade `CRMLeadsTableV2` table visuals: cleaner row spacing, stronger hierarchy, champagne surfaces, premium borders, better source cell layout, and organized filters.
-   - Replace the current green/blue/purple action buttons with a restrained premium action cluster:
-     - WhatsApp/message, call, email, agreement = champagne/ink with subtle icon treatment.
-     - Delete/trash = red danger styling only.
-   - Keep the table horizontally scrollable inside its own section instead of causing the page/body to scroll sideways.
+2. Developer section cleanup
+- Rework the developer registry cards/table so the title, status, email, phone, website name, office/location, contact person, notes, tasks/calendar actions, and source are clearly labeled.
+- Let location/address wrap naturally instead of forcing one long line.
+- Add thin champagne/gold dividers between identity, contact, status, metrics, notes, and actions.
+- Show website as a readable domain name plus icon, not only an external-arrow/global icon.
+- Replace raw status text like `pending_application` with premium labels like “Pending application”.
+- Keep the card style aligned with the existing Relationship Hub display.
 
-3. **WhatsApp blocking fixed once across CRM/backend**
-   - Replace remaining direct `window.open("https://wa.me...")` / WhatsApp URL callsites in CRM with the centralized `openWhatsApp()` helper.
-   - Harden the helper/guard so old `api.whatsapp.com`, `apiwhatsapp.com`, `web.whatsapp.com`, and direct assignment patterns are normalized to safe `wa.me` links before navigation.
-   - Avoid async work before opening WhatsApp links so browser blockers do not treat them as popups.
+3. Brokerage agency section cleanup
+- Rework the brokerage agency cards/table to show agency name, DLD office number/RERA, emirate/country, wrapped office location, phone, email, website domain, source = DLD where applicable, status, outreach stage, admin contact, and notes.
+- Fix the Agency/Status/RERA column labels so they do not split awkwardly across lines.
+- Remove score/internal placeholder display where real DLD fields exist.
+- Improve source tabs, filters, upload/import buttons, and pills: tighter borders, less-rounded premium segmented controls, no cropped labels, no arrows touching borders.
+- Add proper dividers between directory status, source filters, search/actions, and results.
 
-4. **CRM side workspace: Calendar, Notes, Tasks**
-   - Upgrade the side rail so Calendar, Notes, and Tasks open as a premium in-page section/drawer without leaving CRM.
-   - Improve the calendar visual design from the current basic card layout to a denser premium month/agenda view using the existing calendar data.
-   - Fix side-rail navigation URLs so opening full calendar/notes/tasks preserves `entity=leads&view=...` correctly.
+4. Individual broker section
+- Keep the individual broker list server-side paginated over the full 32,649-row table.
+- Show every broker card with: name, photo/avatar if available, company, RERA license, broker type/status/specialty, phone on one line, email on one line, WhatsApp, LinkedIn/Property Finder/Bayut/Instagram links, DLD/source label, and editable note.
+- Add filters for agency, country, broker type/status/source, and imported/DLD records.
+- Add broker activity/scoring derived from existing deal data where possible: deal count, last deal date, per-period rollups, and top-broker ranking by closed deals/commission.
+- If the database lacks a dedicated broker status column, add a small schema migration for broker CRM status/relationship status and keep RLS protected.
 
-5. **Backend fullscreen mode**
-   - Add a global owner backend fullscreen toggle in `OwnerDashboardShell`.
-   - When fullscreen is active:
-     - Hide the vertical sidebar.
-     - Remove the left content offset.
-     - Let backend sections use the full width.
-   - Persist the fullscreen state locally and expose a clear exit button in the top bar.
+5. Lead section remaining fixes
+- Fix lead status rendering so “New” appears as one clean premium chip, not a blue pen plus separate rectangle.
+- Replace the contact action colors with a consistent champagne/ink system; trash/delete stays red.
+- Fix quick stage chips: Hot orange, Junk red, Interested green, Deal Closed green, No Response dark red, Already Bought blue, Lost red, VIP yellow/gold star.
+- VIP toggle behavior: always show a visible “VIP off” state when inactive, and full gold/yellow active styling when enabled.
+- Replace “Pool/Assigned broker” wording: if unassigned show “Unassigned”; if assigned show “Assigned: {broker name}”.
+- Show lead created timestamps with AM/PM.
 
-6. **CRM header pills and horizontal scroll behavior**
-   - Rework the CRM entity/subsection bars into one connected premium header section instead of disconnected pills.
-   - Add left/right arrow controls for horizontal navigation.
-   - Keep horizontal scroll confined to the nav strip, with champagne/gold scrollbar styling and no browser back/side-page scrolling side effects.
+6. Dropdowns, filters, and navigation performance
+- Upgrade All stages, All sources, All owners, All tags dropdowns to champagne surfaces with complete options, visible counts, and clear selected chips.
+- Add VIP star in gold inside tags.
+- Ensure tabs/buttons use `cursor-pointer`, not arrow cursor, and reduce section-switch lag by avoiding unnecessary remounts/refetches where possible.
+- Tighten the CRM header from Leads to Employees: remove wide side gaps, connect pills visually, add premium dividers, and keep horizontal scroll inside the section.
 
-7. **Property Advertising Agreement: one source for preview/print/download/export**
-   - Create a single agreement render path used by live preview, print iframe, download PDF, export dialog, blank download, and regenerated storage PDF.
-   - Ensure saved edited fields are rendered immediately into the downloaded PDF instead of relying on stale envelope state/refetch timing.
-   - Update file names to include both document number and client/landlord name.
+7. Notes/tasks/calendar integration
+- Ensure developer, agency, and broker cards expose quick actions for note, task, calendar/reminder, and deal/ledger where relevant.
+- Persist small per-record notes inline, and keep main searchable Notes section available through the CRM side rail.
 
-8. **Agreement logo/header/footer/content fixes**
-   - Replace the monogram/gold-border initials in PAA/letterhead with the correct transparent company logo asset everywhere: preview, print, and downloaded PDF.
-   - Rebalance the header company name/location so it aligns with the logo and does not sit too low.
-   - Use the correct trade-license legal company name and office location from the shared legal config, not “Private Office Dubai”.
-   - Center the agreement title and remove “for real estate owners”.
-   - Make the footer taller, premium, and include clickable phone, email, website, and office location.
-
-9. **Agreement field and signature layout fixes**
-   - Replace long gold underline styling with compact label-above-value fields.
-   - Hide empty fields in final/download mode.
-   - In final mode, show only selected options such as `Apartment`, not all property-type options.
-   - Remove JBJ/company authorized representative/signature/stamp/date fields from the PAA final signature area.
-   - Keep only landlord/client name, signature, and date aligned on one row, with labels and underlines not touching the date/signature.
-   - Fit the final PAA on one A4 page as closely as the content allows.
-
-10. **Validation after implementation**
-   - Verify CRM status updates persist and filters reflect the same values.
-   - Verify WhatsApp clicks generate only `wa.me` links and no `apiwhatsapp.com` / `api.whatsapp.com` blocker path.
-   - Verify fullscreen hides the owner sidebar and restores normally.
-   - Verify agreement preview, print, direct download, and export all show the same logo, same edited field values, same selected options, and filename with client name.
+8. Verification
+- Run targeted checks against the affected components and live database counts.
+- Manually verify in the preview: Developers, Brokerage Agencies, Individual Brokers, Imported brokers, filters/dropdowns, lead chips/actions, VIP toggle, DLD source labels, AM/PM dates, and horizontal navigation behavior.
+- Provide a concise proof checklist of what was tested and confirmed.

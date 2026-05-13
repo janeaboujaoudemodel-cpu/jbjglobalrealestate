@@ -72,17 +72,38 @@ export default function BrokersImported() {
 
   const lastPage = Math.max(0, Math.ceil(total / PAGE) - 1);
 
+  const decisionLabel = (d: string): { label: string; cls: string } => {
+    const k = (d || "").toLowerCase();
+    if (k === "merge")   return { label: "Merge candidate", cls: "bg-amber-100 text-amber-900 border-amber-300" };
+    if (k === "keep")    return { label: "Pending review",  cls: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40" };
+    if (k === "skip")    return { label: "Skipped",         cls: "bg-red-50 text-red-800 border-red-200" };
+    if (k === "pending") return { label: "Pending review",  cls: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40" };
+    if (k === "edit")    return { label: "Needs edit",      cls: "bg-blue-50 text-blue-800 border-blue-200" };
+    if (k === "imported")return { label: "Imported",        cls: "bg-emerald-100 text-emerald-900 border-emerald-300" };
+    return { label: d || "Pending review", cls: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40" };
+  };
+
   const items = useMemo(() => rows.map((r) => ({
     id: r.id,
     name: pickField(r, "name", "full_name", "display_name") || "Unnamed",
     email: pickField(r, "email"),
     phone: pickField(r, "phone", "mobile"),
+    whatsapp: pickField(r, "whatsapp", "whatsapp_e164"),
     company: pickField(r, "company", "agency", "brokerage", "custom_label"),
     rera: pickField(r, "rera", "rera_no", "rera_number"),
+    type: pickField(r, "broker_type", "type", "specialty"),
+    source: pickField(r, "database_source", "source", "upload_source") || "DLD",
     decision: r.decision,
     confidence: Math.round((r.match_confidence || 0) * 100),
     date: new Date(r.created_at).toLocaleDateString(),
   })), [rows]);
+
+  const cleanEmail = (e: string | null) => {
+    if (!e) return null;
+    // Reject emails that look broken (only digits / no '@')
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) return null;
+    return e.toLowerCase();
+  };
 
   return (
     <div className="space-y-4">
@@ -92,7 +113,7 @@ export default function BrokersImported() {
             <Users className="h-5 w-5" /> Imported Brokers
           </h2>
           <p className="text-xs text-[#1A1A1A]/60">
-            {total.toLocaleString()} rows in staging · page {page + 1} of {lastPage + 1}
+            {total.toLocaleString()} rows in staging · page {page + 1} of {lastPage + 1} · source: DLD
           </p>
         </div>
         <input
@@ -123,29 +144,40 @@ export default function BrokersImported() {
           <table className="min-w-full text-sm">
             <thead className="bg-[#F7F2EA] text-[#1A1A1A]">
               <tr>
-                <th className="text-left px-4 py-2 font-semibold">Name</th>
-                <th className="text-left px-4 py-2 font-semibold">Agency</th>
-                <th className="text-left px-4 py-2 font-semibold">Email</th>
-                <th className="text-left px-4 py-2 font-semibold">Phone</th>
-                <th className="text-left px-4 py-2 font-semibold">RERA</th>
-                <th className="text-left px-4 py-2 font-semibold">Status</th>
+                <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Name</th>
+                <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Agency</th>
+                <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Phone</th>
+                <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Email</th>
+                <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">RERA</th>
+                <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Type</th>
+                <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Source</th>
+                <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Review status</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#B89555]/15">
-              {items.map((it) => (
+              {items.map((it) => {
+                const dl = decisionLabel(it.decision);
+                const email = cleanEmail(it.email);
+                return (
                 <tr key={it.id} className="hover:bg-[#F7F2EA]/60">
-                  <td className="px-4 py-2 font-semibold text-[#1A1A1A]">{it.name}</td>
-                  <td className="px-4 py-2 text-[#1A1A1A]/80">{it.company || "—"}</td>
-                  <td className="px-4 py-2 text-[#1A1A1A]/80 text-xs">{it.email || "—"}</td>
-                  <td className="px-4 py-2 text-[#1A1A1A]/80 text-xs">{it.phone || "—"}</td>
-                  <td className="px-4 py-2 text-[#1A1A1A]/80 text-xs">{it.rera || "—"}</td>
-                  <td className="px-4 py-2">
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold border border-[#B89555]/40 bg-[#EFE6D6]/60 text-[#1A1A1A]">
-                      {it.decision}
+                  <td className="px-4 py-2 font-semibold text-[#1A1A1A] whitespace-nowrap">{it.name}</td>
+                  <td className="px-4 py-2 text-[#1A1A1A]/80 whitespace-nowrap">{it.company || "—"}</td>
+                  <td className="px-4 py-2 text-[#1A1A1A]/80 text-xs whitespace-nowrap">{it.phone || "—"}</td>
+                  <td className="px-4 py-2 text-[#1A1A1A]/80 text-xs whitespace-nowrap">{email || <span className="text-[#1A1A1A]/40 italic">—</span>}</td>
+                  <td className="px-4 py-2 text-[#1A1A1A]/80 text-xs whitespace-nowrap">{it.rera || "—"}</td>
+                  <td className="px-4 py-2 text-[#1A1A1A]/80 text-xs capitalize whitespace-nowrap">{(it.type || "—").toString().replace(/_/g, " ")}</td>
+                  <td className="px-4 py-2 text-[#1A1A1A]/80 text-xs whitespace-nowrap">
+                    <span className="px-2 py-0.5 rounded-full border border-[#B89555]/40 bg-[#FDFBF7] text-[10px] font-semibold uppercase tracking-wider">
+                      {/dld/i.test(it.source) ? "DLD" : it.source}
+                    </span>
+                  </td>
+                  <td className="px-4 py-2 whitespace-nowrap">
+                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold border ${dl.cls}`}>
+                      {dl.label}
                     </span>
                   </td>
                 </tr>
-              ))}
+              );})}
             </tbody>
           </table>
         </div>

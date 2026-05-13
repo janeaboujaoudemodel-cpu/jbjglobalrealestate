@@ -8,6 +8,16 @@ const MONTHS_SHORT = [
   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
 ];
 
+/** Format a Date as "h:mm AM/PM" (e.g. "6:28 PM") in local time. */
+function formatTime12(d: Date): string {
+  let h = d.getHours();
+  const m = String(d.getMinutes()).padStart(2, "0");
+  const ampm = h >= 12 ? "PM" : "AM";
+  h = h % 12;
+  if (h === 0) h = 12;
+  return `${h}:${m} ${ampm}`;
+}
+
 /**
  * Format a date string to "02 Jan 2026 14:30" format.
  * Handles:
@@ -41,11 +51,15 @@ export function formatDisplayDate(dateStr: string | null | undefined): string {
       const dd = String(day).padStart(2, "0");
       const datePart = `${dd} ${MONTHS_SHORT[month]} ${year}`;
 
-      // If time components exist in the original string, append HH:mm
+      // If time components exist in the original string, append 12-hour time with AM/PM
       if (isoMatch[4] !== undefined && isoMatch[5] !== undefined) {
-        const hh = isoMatch[4];
-        const mm = isoMatch[5];
-        return `${datePart} ${hh}:${mm}`;
+        // Re-parse via Date so we get local-time hours/AM-PM correctly.
+        const d = new Date(trimmed);
+        if (!isNaN(d.getTime())) {
+          return `${datePart} ${formatTime12(d)}`;
+        }
+        // Fallback to raw HH:mm if parsing fails.
+        return `${datePart} ${isoMatch[4]}:${isoMatch[5]}`;
       }
 
       return datePart;
@@ -58,11 +72,9 @@ export function formatDisplayDate(dateStr: string | null | undefined): string {
     if (!isNaN(d.getTime())) {
       const dd = String(d.getDate()).padStart(2, "0");
       const datePart = `${dd} ${MONTHS_SHORT[d.getMonth()]} ${d.getFullYear()}`;
-      // Include time if the original string had a T separator
+      // Include time (with AM/PM) if the original string had a T separator
       if (trimmed.includes("T")) {
-        const hh = String(d.getHours()).padStart(2, "0");
-        const mm = String(d.getMinutes()).padStart(2, "0");
-        return `${datePart} ${hh}:${mm}`;
+        return `${datePart} ${formatTime12(d)}`;
       }
       return datePart;
     }

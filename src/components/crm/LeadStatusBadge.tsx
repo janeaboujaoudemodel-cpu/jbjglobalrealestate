@@ -111,35 +111,25 @@ const LeadStatusBadge = ({
       onClick={onClick}
       disabled={onClick ? false : undefined}
       className={cn(
-        "inline-flex items-center justify-center gap-1.5 rounded-full font-bold transition-all shadow-sm whitespace-nowrap",
+        "inline-flex items-center justify-center gap-1.5 rounded-full font-bold transition-all whitespace-nowrap",
         sizeClasses[size],
         isNew
-          ? "bg-blue-500/15 text-blue-700 border border-blue-400/30"
-          : cn(statusInfo.bgColor, statusInfo.textColor, "border border-current/20"),
-        onClick && "hover:shadow-md cursor-pointer group",
+          ? "bg-blue-500/15 text-blue-700 border border-blue-400/40"
+          : cn(statusInfo.bgColor, statusInfo.textColor, "border border-current/25"),
+        onClick && "hover:shadow-sm cursor-pointer",
         !onClick && "cursor-default",
         className,
       )}
     >
       {showDot && (
         <span
-          className="w-2 h-2 rounded-full flex-shrink-0 ring-1 ring-black/5"
+          className="w-2 h-2 rounded-full flex-shrink-0"
           style={{ backgroundColor: statusInfo.dotColor }}
         />
       )}
       <span className="font-semibold tracking-wide uppercase text-[inherit]">
         {statusInfo.label}
       </span>
-      {onClick && (
-        <svg
-          className="w-3 h-3 opacity-70 transition-transform group-hover:translate-y-0.5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-        </svg>
-      )}
     </Component>
   );
 };
