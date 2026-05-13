@@ -247,9 +247,9 @@ export default function BrokerageAgenciesDirectory() {
                 </td>
                 <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">{r.country || "—"}</td>
                 <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">{r.emirate || "—"}</td>
-                <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs max-w-[280px] whitespace-normal break-words leading-snug">
+                <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs max-w-[280px] leading-snug">
                   {mapsHref ? (
-                    <a href={mapsHref} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} className="hover:underline">
+                    <a href={mapsHref} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} title={r.office_location || r.office_address || ""} className="block truncate hover:underline">
                       {r.office_location || r.office_address}
                     </a>
                   ) : "—"}
