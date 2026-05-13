@@ -52,7 +52,7 @@ export function buildSenderSignatureHtml(senderName: string, senderTitle: string
 export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
   const subject = escapeHtml(args.subject || "");
   const bodyHtml = args.bodyHtml || "";
-  const docNumber = args.docNumber ? escapeHtml(args.docNumber) : "";
+  void args.docNumber; // intentionally unused — DOC NO. lives on the PDF, not in the email header
   const year = args.year ?? new Date().getFullYear();
   const docusignUrl = (args.docusignUrl || "").trim();
   const attachmentName = args.attachmentName ? escapeHtml(args.attachmentName) : "";
