@@ -473,6 +473,7 @@ export function buildPAAHtml(
 
   <div style="flex:0 0 auto;">
     ${headerHtml(chrome, get("doc_number"), category, get("rera_permit_number"))}
+    ${titleBlockHtml(chrome, category)}
   </div>
 
   <div style="flex:1 1 auto;display:flex;flex-direction:column;">
