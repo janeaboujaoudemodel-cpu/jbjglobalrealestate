@@ -156,6 +156,21 @@ Deno.serve(async (req) => {
       });
     }
 
+    const admin = createClient(SUPABASE_URL, SERVICE_ROLE);
+    const { data: alreadyConnected } = await admin
+      .from("owner_comm_channels")
+      .select("id, identifier")
+      .eq("user_id", user.id)
+      .eq("channel_type", "email_hostinger")
+      .eq("identifier", email)
+      .eq("is_active", true)
+      .maybeSingle();
+    if (alreadyConnected?.id) {
+      return new Response(JSON.stringify({ success: true, channel_id: alreadyConnected.id, email: alreadyConnected.identifier }), {
+        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const imap = await testImap(email, password, DEFAULTS.imap_host, DEFAULTS.imap_port);
     if (!imap.ok) {
       return new Response(JSON.stringify({ error: `IMAP failed: ${imap.error}` }), {
@@ -190,7 +205,6 @@ Deno.serve(async (req) => {
       smtp_port: smtpPort,
     };
 
-    const admin = createClient(SUPABASE_URL, SERVICE_ROLE);
     const { data: existing } = await admin
       .from("owner_comm_channels")
       .select("id")
