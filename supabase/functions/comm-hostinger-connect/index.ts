@@ -10,7 +10,6 @@
  */
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
-import { SmtpClient } from "https://deno.land/x/smtp@v0.7.0/mod.ts";
 import { encryptCredential } from "../_shared/credentialCrypto.ts";
 import { logChannelAudit } from "../_shared/channelAudit.ts";
 
@@ -89,15 +88,54 @@ async function testSmtp(
   password: string,
   host: string,
   port: number
-): Promise<boolean> {
-  const client = new SmtpClient();
+): Promise<{ ok: boolean; error?: string }> {
+  let conn: Deno.TlsConn | null = null;
   try {
-    await client.connectTLS({ hostname: host, port, username: email, password });
-    await client.close();
-    return true;
+    conn = await Deno.connectTls({ hostname: host, port });
+    const dec = new TextDecoder();
+    const enc = new TextEncoder();
+    const buf = new Uint8Array(8192);
+
+    const read = async (): Promise<string> => {
+      let acc = "";
+      // Read until we see a complete SMTP reply (line ending with " " after code, not "-")
+      for (let i = 0; i < 10; i++) {
+        const n = await conn!.read(buf);
+        if (!n) break;
+        acc += dec.decode(buf.subarray(0, n));
+        const lines = acc.trimEnd().split("\r\n");
+        const last = lines[lines.length - 1];
+        if (/^\d{3} /.test(last)) break;
+      }
+      return acc;
+    };
+    const send = async (s: string) => {
+      await conn!.write(enc.encode(s + "\r\n"));
+      return await read();
+    };
+
+    const greeting = await read();
+    if (!greeting.startsWith("220")) return { ok: false, error: `Bad greeting: ${greeting.trim()}` };
+
+    const ehlo = await send(`EHLO ${host}`);
+    if (!ehlo.startsWith("250")) return { ok: false, error: `EHLO failed: ${ehlo.trim()}` };
+
+    const auth = await send("AUTH LOGIN");
+    if (!auth.startsWith("334")) return { ok: false, error: `AUTH LOGIN failed: ${auth.trim()}` };
+
+    const userResp = await send(btoa(email));
+    if (!userResp.startsWith("334")) return { ok: false, error: `Username rejected: ${userResp.trim()}` };
+
+    const passResp = await send(btoa(password));
+    if (!passResp.startsWith("235")) return { ok: false, error: `Auth failed: ${passResp.trim()}` };
+
+    try { await send("QUIT"); } catch { /* noop */ }
+    return { ok: true };
   } catch (e) {
-    console.error("[hostinger] SMTP test failed:", e);
-    return false;
+    console.error("[hostinger] SMTP test exception:", e);
+    return { ok: false, error: e instanceof Error ? e.message : String(e) };
+  } finally {
+    try { conn?.close(); } catch { /* noop */ }
   }
 }
 
@@ -148,9 +186,9 @@ Deno.serve(async (req) => {
     }
 
     // 2) Test SMTP
-    const smtpOk = await testSmtp(email, password, smtpHost, smtpPort);
-    if (!smtpOk) {
-      return new Response(JSON.stringify({ error: "SMTP connection failed. Check email/password and server settings." }), {
+    const smtpResult = await testSmtp(email, password, smtpHost, smtpPort);
+    if (!smtpResult.ok) {
+      return new Response(JSON.stringify({ error: `SMTP login failed: ${smtpResult.error || "unknown"}` }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
