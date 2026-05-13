@@ -262,7 +262,7 @@ export default function OwnerInbox() {
           </div>
 
           {/* Search & Status Filters */}
-          <div className="flex flex-wrap items-center gap-3 mb-4">
+          <div className="flex flex-wrap items-center gap-3 mb-3">
             <div className="relative flex-1 min-w-[200px] max-w-md">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/70" />
               <Input
@@ -272,6 +272,29 @@ export default function OwnerInbox() {
                 className="pl-10 border-[#B89555]/30"
               />
             </div>
+          </div>
+
+          {/* AI Category Filter */}
+          <div className="flex items-center gap-2 mb-4 overflow-x-auto pb-1">
+            <button
+              onClick={() => setCategoryFilter('all')}
+              className={`px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap transition ${
+                categoryFilter === 'all'
+                  ? 'bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]'
+                  : 'bg-transparent text-[#1A1A1A]/70 border-[#B89555]/20 hover:bg-[#EFE6D6]/30'
+              }`}
+            >All categories</button>
+            {Object.entries(CATEGORY_META).map(([key, meta]) => (
+              <button
+                key={key}
+                onClick={() => setCategoryFilter(key)}
+                className={`px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap transition ${
+                  categoryFilter === key
+                    ? meta.color + ' border-current'
+                    : 'bg-transparent text-[#1A1A1A]/70 border-[#B89555]/20 hover:bg-[#EFE6D6]/30'
+                }`}
+              >{meta.label}</button>
+            ))}
           </div>
 
           {/* Developer Required Actions Rail */}
