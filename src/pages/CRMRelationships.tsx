@@ -2124,6 +2124,18 @@ const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "br
               CC addresses are saved automatically and will appear here on every send. Click a chip to toggle, or the trash icon to remove permanently.
             </p>
           </div>
+          <OutreachAttachmentsEditor
+            context={isBrk ? "brokerage" : "developer"}
+            attachments={attachments}
+            workflows={workflows}
+            onChange={(patch) => {
+              const next: any = {};
+              if (patch.attachments) next[F.attachments] = patch.attachments;
+              if (patch.workflows) next[F.workflows] = patch.workflows;
+              setDraft({ ...(draft || settings || {}), ...next });
+              autoSave(next);
+            }}
+          />
         </div>
         <div className="flex flex-wrap items-center justify-between gap-2 mt-4 pt-3 border-t border-[#1A1A1A]/10">
           <div className="text-[11px] text-[#1A1A1A]/70">
