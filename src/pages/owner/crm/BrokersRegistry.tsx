@@ -322,7 +322,7 @@ export default function BrokersRegistry() {
         />
         <Tabs value={tab} onValueChange={(v) => setTab(v as any)}>
           <TabsList className="bg-[#EFE6D6]">
-            <TabsTrigger value="all">All ({counts.total})</TabsTrigger>
+            <TabsTrigger value="all">All ({counts.total == null ? "…" : counts.total.toLocaleString()})</TabsTrigger>
             <TabsTrigger value="sales">Sales ({counts.sales})</TabsTrigger>
             <TabsTrigger value="leasing">Leasing ({counts.leasing})</TabsTrigger>
             <TabsTrigger value="pending">Pending ({counts.pending})</TabsTrigger>
