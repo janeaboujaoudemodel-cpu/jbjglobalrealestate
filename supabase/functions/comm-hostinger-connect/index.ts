@@ -182,6 +182,8 @@ Deno.serve(async (req) => {
     const body = (await req.json()) as HostingerPayload;
     const email = body.email?.trim().toLowerCase();
     const password = body.password;
+    const savedEmail = (Deno.env.get("HOSTINGER_EMAIL_ADDRESS") || "").trim().toLowerCase();
+    const savedPassword = Deno.env.get("HOSTINGER_EMAIL_PASSWORD") || "";
     if (!email || !password) {
       return new Response(JSON.stringify({ error: "email and password required" }), {
         status: 400,
@@ -194,8 +196,23 @@ Deno.serve(async (req) => {
     const smtpHost = body.smtp_host || DEFAULTS.smtp_host;
     let smtpPort = body.smtp_port || DEFAULTS.smtp_port;
 
-    // 1) Test IMAP
-    const imapResult = await testImap(email, password, imapHost, imapPort);
+    let passwordForStorage = password;
+    let usedSavedCredential = false;
+
+    // 1) Test IMAP. If the project-owned mailbox has a saved credential,
+    // recover from a stale/wrong form password by validating the saved one.
+    let imapResult = await testImap(email, passwordForStorage, imapHost, imapPort);
+    const isAuthFailure = /AUTHENTICATIONFAILED|authentication failed|invalid credentials|login failed/i.test(
+      imapResult.error || ""
+    );
+    if (!imapResult.ok && isAuthFailure && savedEmail && savedPassword && email === savedEmail) {
+      const savedImapResult = await testImap(email, savedPassword, imapHost, imapPort);
+      if (savedImapResult.ok) {
+        passwordForStorage = savedPassword;
+        usedSavedCredential = true;
+        imapResult = savedImapResult;
+      }
+    }
     if (!imapResult.ok) {
       return new Response(JSON.stringify({ error: `IMAP login failed: ${imapResult.error || "unknown"}` }), {
         status: 200,
@@ -204,9 +221,9 @@ Deno.serve(async (req) => {
     }
 
     // 2) Test SMTP
-    let smtpResult = await testSmtp(email, password, smtpHost, smtpPort);
+    let smtpResult = await testSmtp(email, passwordForStorage, smtpHost, smtpPort);
     if (!smtpResult.ok && smtpHost === DEFAULTS.smtp_host && smtpPort === 465) {
-      const fallback = await testSmtp(email, password, smtpHost, 587);
+      const fallback = await testSmtp(email, passwordForStorage, smtpHost, 587);
       if (fallback.ok) {
         console.log("[hostinger] SMTP connected through STARTTLS fallback on port 587");
         smtpResult = fallback;
@@ -230,7 +247,7 @@ Deno.serve(async (req) => {
     }
 
     // 3) Encrypt password
-    const encryptedPassword = await encryptCredential(password, CRED_KEY);
+    const encryptedPassword = await encryptCredential(passwordForStorage, CRED_KEY);
 
     // 4) Upsert channel
     const admin = createClient(SUPABASE_URL, SERVICE_ROLE);
@@ -283,11 +300,11 @@ Deno.serve(async (req) => {
       channel_type: "email_hostinger",
       identifier: email,
       event_type: existing?.id ? "reconnected" : "connected",
-      details: { display_name: email, imap_host: imapHost, smtp_host: smtpHost },
+      details: { display_name: email, imap_host: imapHost, smtp_host: smtpHost, used_saved_credential: usedSavedCredential },
     });
 
     return new Response(
-      JSON.stringify({ success: true, channel_id: channelId, email }),
+      JSON.stringify({ success: true, channel_id: channelId, email, used_saved_credential: usedSavedCredential }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (err: unknown) {
