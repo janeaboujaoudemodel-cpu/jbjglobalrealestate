@@ -212,6 +212,7 @@ Deno.serve(async (req) => {
       identifier,
       event_type: wasReconnect ? "reconnected" : "connected",
       details: { display_name: displayName, connection_id: connectorId },
+    });
     }
 
     return new Response(
