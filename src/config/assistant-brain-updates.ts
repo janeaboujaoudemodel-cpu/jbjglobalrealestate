@@ -270,7 +270,7 @@ export const FOUNDER_RECOGNITION_RULES = {
   founderIdentity: {
     name: 'Miss Jane Bou Jaoude',
     title: 'Founder & CEO',
-    email: ['admin@jbj.ae', 'jane@jbj.ae', 'ceo@jbj.ae'],
+    email: ['admin@jbj.ae', 'Contact@JBJ.AE', 'ceo@jbj.ae'],
     action: 'When this user logs in, treat them as the EMPLOYER',
   },
 

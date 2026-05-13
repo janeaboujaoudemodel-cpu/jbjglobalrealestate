@@ -159,7 +159,7 @@ const APPROVED_EMAILS = [
   "collaboration@jbj.ae",
   "careers@jbj.ae",
   "security@jbj.ae",
-  "jane@jbj.ae",
+  "Contact@JBJ.AE",
 ];
 
 function sanitizeContactInfo(text: string): string {
