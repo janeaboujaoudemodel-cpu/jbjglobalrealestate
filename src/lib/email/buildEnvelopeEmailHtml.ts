@@ -41,7 +41,7 @@ export function buildSenderSignatureHtml(senderName: string, senderTitle: string
     <span style="font-family:'Cormorant Garamond','Playfair Display',Georgia,serif;font-style:italic;font-weight:500;font-size:28px;color:#1A1A1A;letter-spacing:.01em;line-height:1;">${escapeHtml(senderName)}</span>
   </td></tr>
   <tr><td style="padding:6px 0 12px;"><div style="width:72px;height:1px;background:#B89555;line-height:1px;font-size:0;">&nbsp;</div></td></tr>
-  <tr><td style="font-size:10.5px;font-weight:600;letter-spacing:.18em;color:#B89555;text-transform:uppercase;padding-bottom:8px;">${escapeHtml(senderTitle)}</td></tr>
+  <tr><td style="font-size:10.5px;font-weight:700;letter-spacing:.18em;color:#B89555;text-transform:uppercase;padding-bottom:8px;">${escapeHtml(senderTitle)}</td></tr>
   <tr><td style="font-size:11px;font-weight:700;letter-spacing:.22em;color:#1A1A1A;text-transform:uppercase;padding-bottom:3px;">JBJ GLOBAL REAL ESTATE</td></tr>
   <tr><td style="font-size:10.5px;color:#1A1A1A;opacity:.7;letter-spacing:.04em;padding-bottom:1px;">Dubai, UAE</td></tr>
   <tr><td style="font-size:10.5px;color:#1A1A1A;opacity:.7;letter-spacing:.04em;padding-bottom:1px;">CONTACT@JBJ.AE &nbsp;·&nbsp; +971 54 716 7107</td></tr>
