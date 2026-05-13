@@ -11,10 +11,8 @@ import PageLoader from "@/components/PageLoader";
 import OwnerDashboardShell from "@/pages/OwnerDashboardShell";
 import OwnerDashboardOverview from "@/pages/OwnerDashboardOverview";
 import OwnerInbox from "@/pages/OwnerInbox";
-import CRM from "@/pages/CRM";
 import CRMRelationships from "@/pages/CRMRelationships";
 import SecondaryMarketHub from "@/pages/SecondaryMarketHub";
-import CRMLeadsInbox from "@/pages/CRMLeadsInbox";
 import UnifiedCRM from "@/pages/owner/crm/UnifiedCRM";
 
 const OwnerTemplates = lazy(() => import("@/pages/OwnerTemplates"));
@@ -33,8 +31,7 @@ const CRMLeadDetail = lazy(() => import("@/pages/CRMLeadDetail"));
 const CRMTasks = lazy(() => import("@/pages/CRMTasks"));
 const CRMCalendar = lazy(() => import("@/pages/CRMCalendar"));
 const CRMNotes = lazy(() => import("@/pages/CRMNotes"));
-const CRMReminders = lazy(() => import("@/pages/CRMReminders"));
-const CRMEmployees = lazy(() => import("@/pages/CRMEmployees"));
+// CRMReminders + CRMEmployees deleted — content lives inside UnifiedCRM sections
 const Admin = lazy(() => import("@/pages/Admin"));
 const AdminLeads = lazy(() => import("@/pages/AdminLeads"));
 const MarketingHub = lazy(() => import("@/pages/admin/MarketingHub"));
@@ -45,7 +42,7 @@ const Automations = lazy(() => import("@/pages/Automations"));
 const Studio = lazy(() => import("@/pages/Studio"));
 const StudioEditor = lazy(() => import("@/pages/StudioEditor"));
 const StudioSettings = lazy(() => import("@/pages/StudioSettings"));
-const EmailClient = lazy(() => import("@/pages/EmailClient"));
+// EmailClient deleted — /owner/email-client redirects to /owner/inbox
 const TeamChat = lazy(() => import("@/pages/TeamChat"));
 const KanbanBoard = lazy(() => import("@/pages/KanbanBoard"));
 const PropertyMap = lazy(() => import("@/pages/PropertyMap"));
@@ -150,7 +147,7 @@ export const OwnerRoutes = () => (
     <Route path="studio" element={<Studio />} />
     <Route path="studio/editor/:projectId" element={<StudioEditor />} />
     <Route path="studio/settings" element={<StudioSettings />} />
-    <Route path="email-client" element={<EmailClient />} />
+    <Route path="email-client" element={<Navigate to="/owner/inbox" replace />} />
     <Route path="team-chat" element={<TeamChat />} />
     <Route path="kanban" element={<KanbanBoard />} />
     <Route path="map" element={<PropertyMap />} />

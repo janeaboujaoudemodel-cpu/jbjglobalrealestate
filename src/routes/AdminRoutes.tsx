@@ -55,8 +55,7 @@ const CustomerHappiness = lazy(() => import("@/pages/CustomerHappiness"));
 const SecurityConsole = lazy(() => import("@/pages/SecurityConsole"));
 const EmployeeManagementHub = lazy(() => import("@/pages/EmployeeManagementHub"));
 const HRDashboard = lazy(() => import("@/pages/HRDashboard"));
-const CompanyComm = lazy(() => import("@/pages/CompanyComm"));
-const EmailClient = lazy(() => import("@/pages/EmailClient"));
+// CompanyComm + EmailClient deleted — both redirect to /owner/inbox
 const TeamChat = lazy(() => import("@/pages/TeamChat"));
 const KanbanBoard = lazy(() => import("@/pages/KanbanBoard"));
 const Whiteboard = lazy(() => import("@/pages/Whiteboard"));
@@ -153,8 +152,8 @@ export const AdminRoutes = () => (
     <Route path="/hr-dashboard" element={<OwnerGuard><HRDashboard /></OwnerGuard>} />
 
     {/* ── Communication & Productivity ── */}
-    <Route path="/company-comm" element={<OwnerGuard><CompanyComm /></OwnerGuard>} />
-    <Route path="/email-client" element={<OwnerGuard><EmailClient /></OwnerGuard>} />
+    <Route path="/company-comm" element={<Navigate to="/owner/inbox" replace />} />
+    <Route path="/email-client" element={<Navigate to="/owner/inbox" replace />} />
     <Route path="/team-chat" element={<OwnerGuard><TeamChat /></OwnerGuard>} />
     <Route path="/kanban" element={<OwnerGuard><KanbanBoard /></OwnerGuard>} />
     <Route path="/whiteboard" element={<OwnerGuard><Whiteboard /></OwnerGuard>} />
