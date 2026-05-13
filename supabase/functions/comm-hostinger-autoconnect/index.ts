@@ -5,7 +5,6 @@
  */
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
-import { SmtpClient } from "https://deno.land/x/smtp@v0.7.0/mod.ts";
 import { encryptCredential } from "../_shared/credentialCrypto.ts";
 import { logChannelAudit } from "../_shared/channelAudit.ts";
 
@@ -21,6 +20,13 @@ const DEFAULTS = {
   smtp_host: "smtp.hostinger.com",
   smtp_port: 465,
 };
+
+function base64Utf8(value: string): string {
+  const bytes = new TextEncoder().encode(value);
+  let binary = "";
+  for (const byte of bytes) binary += String.fromCharCode(byte);
+  return btoa(binary);
+}
 
 async function testImap(email: string, password: string, host: string, port: number) {
   let conn: Deno.TlsConn | null = null;
@@ -66,13 +72,54 @@ async function testImap(email: string, password: string, host: string, port: num
 }
 
 async function testSmtp(email: string, password: string, host: string, port: number) {
-  const client = new SmtpClient();
+  let conn: Deno.Conn | Deno.TlsConn | null = null;
   try {
-    await client.connectTLS({ hostname: host, port, username: email, password });
-    await client.close();
+    conn = port === 465
+      ? await Deno.connectTls({ hostname: host, port })
+      : await Deno.connect({ hostname: host, port });
+    const dec = new TextDecoder();
+    const enc = new TextEncoder();
+    const buf = new Uint8Array(8192);
+    const read = async (): Promise<string> => {
+      let acc = "";
+      for (let i = 0; i < 10; i++) {
+        const n = await conn!.read(buf);
+        if (!n) break;
+        acc += dec.decode(buf.subarray(0, n));
+        const last = acc.trimEnd().split("\r\n").pop() || "";
+        if (/^\d{3} /.test(last)) break;
+      }
+      return acc;
+    };
+    const send = async (s: string) => {
+      await conn!.write(enc.encode(s + "\r\n"));
+      return await read();
+    };
+
+    const greeting = await read();
+    if (!greeting.startsWith("220")) return { ok: false as const, error: `Bad greeting: ${greeting.trim()}` };
+    let ehlo = await send(`EHLO ${host}`);
+    if (!ehlo.startsWith("250")) return { ok: false as const, error: `EHLO failed: ${ehlo.trim()}` };
+    if (port !== 465) {
+      if (!/STARTTLS/i.test(ehlo)) return { ok: false as const, error: "STARTTLS not offered by SMTP server" };
+      const startTls = await send("STARTTLS");
+      if (!startTls.startsWith("220")) return { ok: false as const, error: `STARTTLS failed: ${startTls.trim()}` };
+      conn = await Deno.startTls(conn, { hostname: host });
+      ehlo = await send(`EHLO ${host}`);
+      if (!ehlo.startsWith("250")) return { ok: false as const, error: `EHLO after STARTTLS failed: ${ehlo.trim()}` };
+    }
+    const auth = await send("AUTH LOGIN");
+    if (!auth.startsWith("334")) return { ok: false as const, error: `AUTH LOGIN failed: ${auth.trim()}` };
+    const userResp = await send(base64Utf8(email));
+    if (!userResp.startsWith("334")) return { ok: false as const, error: `Username rejected: ${userResp.trim()}` };
+    const passResp = await send(base64Utf8(password));
+    if (!passResp.startsWith("235")) return { ok: false as const, error: `Auth failed: ${passResp.trim()}` };
+    try { await send("QUIT"); } catch { /* noop */ }
     return { ok: true as const };
   } catch (e) {
     return { ok: false as const, error: e instanceof Error ? e.message : String(e) };
+  } finally {
+    try { conn?.close(); } catch { /* noop */ }
   }
 }
 
@@ -109,16 +156,43 @@ Deno.serve(async (req) => {
       });
     }
 
+    const admin = createClient(SUPABASE_URL, SERVICE_ROLE);
+    const { data: alreadyConnected } = await admin
+      .from("owner_comm_channels")
+      .select("id, identifier")
+      .eq("user_id", user.id)
+      .eq("channel_type", "email_hostinger")
+      .eq("is_active", true)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (alreadyConnected?.id) {
+      return new Response(JSON.stringify({ success: true, channel_id: alreadyConnected.id, email: alreadyConnected.identifier }), {
+        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const imap = await testImap(email, password, DEFAULTS.imap_host, DEFAULTS.imap_port);
     if (!imap.ok) {
       return new Response(JSON.stringify({ error: `IMAP failed: ${imap.error}` }), {
-        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-    const smtp = await testSmtp(email, password, DEFAULTS.smtp_host, DEFAULTS.smtp_port);
+    let smtpPort = DEFAULTS.smtp_port;
+    let smtp = await testSmtp(email, password, DEFAULTS.smtp_host, smtpPort);
+    if (!smtp.ok) {
+      const fallback = await testSmtp(email, password, DEFAULTS.smtp_host, 587);
+      if (fallback.ok) {
+        console.log("[hostinger] SMTP connected through STARTTLS fallback on port 587");
+        smtp = fallback;
+        smtpPort = 587;
+      } else {
+        smtp = { ok: false as const, error: `${smtp.error || "port 465 failed"}; fallback 587: ${fallback.error || "failed"}` };
+      }
+    }
     if (!smtp.ok) {
       return new Response(JSON.stringify({ error: `SMTP failed: ${smtp.error}` }), {
-        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
@@ -129,10 +203,9 @@ Deno.serve(async (req) => {
       imap_host: DEFAULTS.imap_host,
       imap_port: DEFAULTS.imap_port,
       smtp_host: DEFAULTS.smtp_host,
-      smtp_port: DEFAULTS.smtp_port,
+      smtp_port: smtpPort,
     };
 
-    const admin = createClient(SUPABASE_URL, SERVICE_ROLE);
     const { data: existing } = await admin
       .from("owner_comm_channels")
       .select("id")

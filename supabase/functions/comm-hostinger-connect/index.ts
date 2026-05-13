@@ -35,6 +35,13 @@ const DEFAULTS = {
   smtp_port: 465,
 };
 
+function base64Utf8(value: string): string {
+  const bytes = new TextEncoder().encode(value);
+  let binary = "";
+  for (const byte of bytes) binary += String.fromCharCode(byte);
+  return btoa(binary);
+}
+
 async function testImap(
   email: string,
   password: string,
@@ -89,9 +96,11 @@ async function testSmtp(
   host: string,
   port: number
 ): Promise<{ ok: boolean; error?: string }> {
-  let conn: Deno.TlsConn | null = null;
+  let conn: Deno.Conn | Deno.TlsConn | null = null;
   try {
-    conn = await Deno.connectTls({ hostname: host, port });
+    conn = port === 465
+      ? await Deno.connectTls({ hostname: host, port })
+      : await Deno.connect({ hostname: host, port });
     const dec = new TextDecoder();
     const enc = new TextEncoder();
     const buf = new Uint8Array(8192);
@@ -117,16 +126,25 @@ async function testSmtp(
     const greeting = await read();
     if (!greeting.startsWith("220")) return { ok: false, error: `Bad greeting: ${greeting.trim()}` };
 
-    const ehlo = await send(`EHLO ${host}`);
+    let ehlo = await send(`EHLO ${host}`);
     if (!ehlo.startsWith("250")) return { ok: false, error: `EHLO failed: ${ehlo.trim()}` };
+
+    if (port !== 465) {
+      if (!/STARTTLS/i.test(ehlo)) return { ok: false, error: "STARTTLS not offered by SMTP server" };
+      const startTls = await send("STARTTLS");
+      if (!startTls.startsWith("220")) return { ok: false, error: `STARTTLS failed: ${startTls.trim()}` };
+      conn = await Deno.startTls(conn, { hostname: host });
+      ehlo = await send(`EHLO ${host}`);
+      if (!ehlo.startsWith("250")) return { ok: false, error: `EHLO after STARTTLS failed: ${ehlo.trim()}` };
+    }
 
     const auth = await send("AUTH LOGIN");
     if (!auth.startsWith("334")) return { ok: false, error: `AUTH LOGIN failed: ${auth.trim()}` };
 
-    const userResp = await send(btoa(email));
+    const userResp = await send(base64Utf8(email));
     if (!userResp.startsWith("334")) return { ok: false, error: `Username rejected: ${userResp.trim()}` };
 
-    const passResp = await send(btoa(password));
+    const passResp = await send(base64Utf8(password));
     if (!passResp.startsWith("235")) return { ok: false, error: `Auth failed: ${passResp.trim()}` };
 
     try { await send("QUIT"); } catch { /* noop */ }
@@ -174,22 +192,32 @@ Deno.serve(async (req) => {
     const imapHost = body.imap_host || DEFAULTS.imap_host;
     const imapPort = body.imap_port || DEFAULTS.imap_port;
     const smtpHost = body.smtp_host || DEFAULTS.smtp_host;
-    const smtpPort = body.smtp_port || DEFAULTS.smtp_port;
+    let smtpPort = body.smtp_port || DEFAULTS.smtp_port;
 
     // 1) Test IMAP
     const imapResult = await testImap(email, password, imapHost, imapPort);
     if (!imapResult.ok) {
       return new Response(JSON.stringify({ error: `IMAP login failed: ${imapResult.error || "unknown"}` }), {
-        status: 400,
+        status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
     // 2) Test SMTP
-    const smtpResult = await testSmtp(email, password, smtpHost, smtpPort);
+    let smtpResult = await testSmtp(email, password, smtpHost, smtpPort);
+    if (!smtpResult.ok && smtpHost === DEFAULTS.smtp_host && smtpPort === 465) {
+      const fallback = await testSmtp(email, password, smtpHost, 587);
+      if (fallback.ok) {
+        console.log("[hostinger] SMTP connected through STARTTLS fallback on port 587");
+        smtpResult = fallback;
+        smtpPort = 587;
+      } else {
+        smtpResult = { ok: false, error: `${smtpResult.error || "port 465 failed"}; fallback 587: ${fallback.error || "failed"}` };
+      }
+    }
     if (!smtpResult.ok) {
       return new Response(JSON.stringify({ error: `SMTP login failed: ${smtpResult.error || "unknown"}` }), {
-        status: 400,
+        status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
