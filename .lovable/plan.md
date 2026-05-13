@@ -1,52 +1,43 @@
-Plan to fix the CRM sections properly:
+## Fixes for the CRM header pills, leads table layout, and side rail
 
-1. Data source and counts
-- Keep brokers powered by `crm_brokers`; verified live count is 32,649 rows, so the Brokers count/pagination will show the real total instead of “1,000”.
-- Keep agencies powered by `crm_brokerages`; verified live count is 10,613 rows.
-- Replace any visible `LD` label with `DLD` and normalize DLD source display so it never shows raw underscores or internal enum strings.
-- Add a safe formatter for empty/null values so the UI does not show broken placeholders, underscores, `keep`, or raw database codes.
+### 1. VIP pill shows "2" but the VIP view is empty
 
-2. Developer section cleanup
-- Rework the developer registry cards/table so the title, status, email, phone, website name, office/location, contact person, notes, tasks/calendar actions, and source are clearly labeled.
-- Let location/address wrap naturally instead of forcing one long line.
-- Add thin champagne/gold dividers between identity, contact, status, metrics, notes, and actions.
-- Show website as a readable domain name plus icon, not only an external-arrow/global icon.
-- Replace raw status text like `pending_application` with premium labels like “Pending application”.
-- Keep the card style aligned with the existing Relationship Hub display.
+The badge in `src/pages/owner/crm/UnifiedCRM.tsx` reads `counts.vip` from `useCRMSectionCounts`, which queries `crm_leads` with `vip=true AND deleted_at IS NULL`. The live database has **0 VIP leads** (verified), so the displayed `2` is stale data persisted in the module-level `cache` object across navigations / hot reloads.
 
-3. Brokerage agency section cleanup
-- Rework the brokerage agency cards/table to show agency name, DLD office number/RERA, emirate/country, wrapped office location, phone, email, website domain, source = DLD where applicable, status, outreach stage, admin contact, and notes.
-- Fix the Agency/Status/RERA column labels so they do not split awkwardly across lines.
-- Remove score/internal placeholder display where real DLD fields exist.
-- Improve source tabs, filters, upload/import buttons, and pills: tighter borders, less-rounded premium segmented controls, no cropped labels, no arrows touching borders.
-- Add proper dividers between directory status, source filters, search/actions, and results.
+Fix:
+- In `src/hooks/useCRMSectionCounts.ts`, drop the long-lived module `cache` for the VIP/flagged counters (or shorten TTL to a few seconds and always refetch on mount with `force=true`) so the pill reflects the real DB state.
+- Make the pill self-correct: in `UnifiedCRM.tsx`, when the table-side query returns `0` for `vip`, push `0` back into the counts hook (via the existing `refresh()`) so the badge clears immediately after opening the view.
+- Confirm: the VIP pill disappears when there are no VIP leads (badge already hides on `c === 0`), and the count matches what the table renders.
 
-4. Individual broker section
-- Keep the individual broker list server-side paginated over the full 32,649-row table.
-- Show every broker card with: name, photo/avatar if available, company, RERA license, broker type/status/specialty, phone on one line, email on one line, WhatsApp, LinkedIn/Property Finder/Bayut/Instagram links, DLD/source label, and editable note.
-- Add filters for agency, country, broker type/status/source, and imported/DLD records.
-- Add broker activity/scoring derived from existing deal data where possible: deal count, last deal date, per-period rollups, and top-broker ranking by closed deals/commission.
-- If the database lacks a dedicated broker status column, add a small schema migration for broker CRM status/relationship status and keep RLS protected.
+### 2. Horizontal scroll on the leads table shows "No leads found"
 
-5. Lead section remaining fixes
-- Fix lead status rendering so “New” appears as one clean premium chip, not a blue pen plus separate rectangle.
-- Replace the contact action colors with a consistent champagne/ink system; trash/delete stays red.
-- Fix quick stage chips: Hot orange, Junk red, Interested green, Deal Closed green, No Response dark red, Already Bought blue, Lost red, VIP yellow/gold star.
-- VIP toggle behavior: always show a visible “VIP off” state when inactive, and full gold/yellow active styling when enabled.
-- Replace “Pool/Assigned broker” wording: if unassigned show “Unassigned”; if assigned show “Assigned: {broker name}”.
-- Show lead created timestamps with AM/PM.
+In `UnifiedCRM.tsx` the body wrapper is `<div className="p-3 md:p-5 overflow-x-auto">` *outside* the table. When the user scrolls horizontally to read columns past Email/Source, the empty-state panel (which is wider than the viewport) is what's actually being scrolled, or the inner table re-renders an empty body.
 
-6. Dropdowns, filters, and navigation performance
-- Upgrade All stages, All sources, All owners, All tags dropdowns to champagne surfaces with complete options, visible counts, and clear selected chips.
-- Add VIP star in gold inside tags.
-- Ensure tabs/buttons use `cursor-pointer`, not arrow cursor, and reduce section-switch lag by avoiding unnecessary remounts/refetches where possible.
-- Tighten the CRM header from Leads to Employees: remove wide side gaps, connect pills visually, add premium dividers, and keep horizontal scroll inside the section.
+Fix:
+- Move horizontal overflow onto the table container itself inside `CRMLeadsTableV2.tsx` (wrap the `<Table>` with `overflow-x-auto` and a `min-w-[1200px]` table) instead of relying on the parent.
+- Remove `overflow-x-auto` from the outer body in `UnifiedCRM.tsx` so only the data grid scrolls horizontally; the empty state stays centered.
+- Verify by scrolling: rows remain visible end-to-end and "No leads" only renders when the dataset is truly empty.
 
-7. Notes/tasks/calendar integration
-- Ensure developer, agency, and broker cards expose quick actions for note, task, calendar/reminder, and deal/ledger where relevant.
-- Persist small per-record notes inline, and keep main searchable Notes section available through the CRM side rail.
+### 3. Big gap between Email and Source columns
 
-8. Verification
-- Run targeted checks against the affected components and live database counts.
-- Manually verify in the preview: Developers, Brokerage Agencies, Individual Brokers, Imported brokers, filters/dropdowns, lead chips/actions, VIP toggle, DLD source labels, AM/PM dates, and horizontal navigation behavior.
-- Provide a concise proof checklist of what was tested and confirmed.
+The Source column header has a large fixed width while Email has `flex-1`-style growth, leaving an empty stretch.
+
+Fix in `CRMLeadsTableV2.tsx`:
+- Tighten the Email column to `min-w-[220px]` and let Source sit immediately after with `w-[140px]`.
+- Add a thin champagne divider (`border-r border-[#B89555]/15`) between sibling cells so columns feel connected.
+- Keep the cell content rule the user already approved: when an image/avatar is present keep the avatar tab; when missing, collapse the avatar slot so the row doesn't leave a hole.
+
+### 4. Shortcuts rail button — icon only
+
+In `src/components/crm/CRMSideRail.tsx` the edge dock button currently shows a `LayoutGrid` icon followed by the word "Shortcuts" on `md+` screens.
+
+Fix:
+- Remove the `<span>Shortcuts</span>` label from the dock button so only the icon is visible at every breakpoint.
+- Keep the `title="Workspace shortcuts — Calendar, Notes, Tasks"` tooltip and `aria-label` for accessibility.
+- Tighten padding to a square pill (`p-2.5`) so it reads as an icon button.
+
+### Verification
+- Reload `/owner/crm`: VIP pill is hidden (count = 0).
+- Scroll the leads table left/right: all columns reachable, rows remain in place, no false "No leads" message.
+- Inspect Email → Source spacing: tight, no large void.
+- Side rail tab: icon-only square button, tooltip on hover.
