@@ -71,7 +71,7 @@ const App = () => {
     const idle = w.requestIdleCallback || ((cb: any) => setTimeout(cb, 1500));
     const handle = idle(() => {
       const prefetch = [
-        () => import("@/pages/CRM"),
+        
         () => import("@/pages/owner/crm/UnifiedCRM"),
         () => import("@/pages/CRMRelationships"),
         () => import("@/pages/OwnerInbox"),
