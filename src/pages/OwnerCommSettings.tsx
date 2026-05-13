@@ -3,8 +3,8 @@
  * Manage channels, AI settings, and integrations
  */
 
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import ChannelGrid from "@/components/owner-comm/ChannelGrid";
 import HostingerCredentialDialog from "@/components/owner-comm/HostingerCredentialDialog";
 
@@ -71,8 +71,34 @@ export default function OwnerCommSettings() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState('channels');
   const [addChannelType, setAddChannelType] = useState<string | null>(null);
+  const autoConnectFiredRef = useRef(false);
+
+  // Auto-connect Hostinger using server-stored secrets when ?autoconnect=hostinger
+  useEffect(() => {
+    if (autoConnectFiredRef.current) return;
+    if (!user?.id) return;
+    if (searchParams.get('autoconnect') !== 'hostinger') return;
+    autoConnectFiredRef.current = true;
+    (async () => {
+      const t = toast.loading('Connecting Hostinger…');
+      try {
+        const { data, error } = await supabase.functions.invoke('comm-hostinger-autoconnect', { body: {} });
+        if (error) throw error;
+        if ((data as any)?.error) throw new Error((data as any).error);
+        toast.success(`Hostinger connected: ${(data as any)?.email ?? 'mailbox active'}`, { id: t });
+        queryClient.invalidateQueries({ queryKey: ['owner-channels'] });
+      } catch (e) {
+        toast.error(`Hostinger connect failed: ${e instanceof Error ? e.message : String(e)}`, { id: t });
+      } finally {
+        const next = new URLSearchParams(searchParams);
+        next.delete('autoconnect');
+        setSearchParams(next, { replace: true });
+      }
+    })();
+  }, [user?.id, searchParams, setSearchParams, queryClient]);
 
   // Fetch channels
   const { data: channels = [], isLoading: channelsLoading } = useQuery({
