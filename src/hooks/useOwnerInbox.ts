@@ -46,6 +46,13 @@ export interface CommThread {
   metadata: Record<string, unknown>;
   created_at: string;
   updated_at: string;
+  // AI triage
+  ai_category?: string | null;
+  ai_priority?: string | null;
+  ai_summary?: string | null;
+  ai_suggested_reply?: string | null;
+  ai_next_step?: { type?: string; title?: string; due_in_hours?: number | null; reasoning?: string } | null;
+  ai_processed_at?: string | null;
   // Joined data
   lead?: {
     id: string;

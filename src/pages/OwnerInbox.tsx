@@ -40,6 +40,7 @@ import useOwnerInbox, {
 } from "@/hooks/useOwnerInbox";
 import { formatDistanceToNow } from "date-fns";
 import OwnerInboxThread from "@/components/owner-inbox/OwnerInboxThread";
+import { CATEGORY_META } from "@/hooks/useCommAITriage";
 
 const channelIcons: Record<string, React.ReactNode> = {
   whatsapp: <MessageSquare className="h-4 w-4 text-green-500" />,
@@ -75,6 +76,7 @@ type ActiveStatFilter = 'none' | 'unread' | 'needs_reply' | 'new' | 'follow_up_d
 export default function OwnerInbox() {
   const navigate = useNavigate();
   const [activeStatFilter, setActiveStatFilter] = useState<ActiveStatFilter>('none');
+  const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [filters, setFilters] = useState<InboxFilters>({
     status: 'all',
     channel: 'all',
@@ -260,7 +262,7 @@ export default function OwnerInbox() {
           </div>
 
           {/* Search & Status Filters */}
-          <div className="flex flex-wrap items-center gap-3 mb-4">
+          <div className="flex flex-wrap items-center gap-3 mb-3">
             <div className="relative flex-1 min-w-[200px] max-w-md">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/70" />
               <Input
@@ -270,6 +272,29 @@ export default function OwnerInbox() {
                 className="pl-10 border-[#B89555]/30"
               />
             </div>
+          </div>
+
+          {/* AI Category Filter */}
+          <div className="flex items-center gap-2 mb-4 overflow-x-auto pb-1">
+            <button
+              onClick={() => setCategoryFilter('all')}
+              className={`px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap transition ${
+                categoryFilter === 'all'
+                  ? 'bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]'
+                  : 'bg-transparent text-[#1A1A1A]/70 border-[#B89555]/20 hover:bg-[#EFE6D6]/30'
+              }`}
+            >All categories</button>
+            {Object.entries(CATEGORY_META).map(([key, meta]) => (
+              <button
+                key={key}
+                onClick={() => setCategoryFilter(key)}
+                className={`px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap transition ${
+                  categoryFilter === key
+                    ? meta.color + ' border-current'
+                    : 'bg-transparent text-[#1A1A1A]/70 border-[#B89555]/20 hover:bg-[#EFE6D6]/30'
+                }`}
+              >{meta.label}</button>
+            ))}
           </div>
 
           {/* Developer Required Actions Rail */}
@@ -303,7 +328,7 @@ export default function OwnerInbox() {
                     </div>
                   ) : (
                     <div className="divide-y divide-gold/10">
-                      {threads.map((thread) => (
+                      {threads.filter(t => categoryFilter === 'all' || t.ai_category === categoryFilter).map((thread) => (
                         <ThreadListItem
                           key={thread.id}
                           thread={thread}
@@ -457,14 +482,20 @@ function ThreadListItem({
             {thread.last_message_preview || 'No messages yet'}
           </p>
 
-          <div className="flex items-center justify-between mt-2">
-            <Badge className={`text-[10px] px-1.5 py-0.5 border ${status.color}`}>
-              {status.icon}
-              <span className="ml-1">{status.label}</span>
-            </Badge>
-            
+          <div className="flex items-center justify-between mt-2 gap-2">
+            <div className="flex items-center gap-1 flex-wrap">
+              <Badge className={`text-[10px] px-1.5 py-0.5 border ${status.color}`}>
+                {status.icon}
+                <span className="ml-1">{status.label}</span>
+              </Badge>
+              {thread.ai_category && CATEGORY_META[thread.ai_category] && (
+                <Badge variant="outline" className={`text-[10px] px-1.5 py-0.5 ${CATEGORY_META[thread.ai_category].color}`}>
+                  {CATEGORY_META[thread.ai_category].label}
+                </Badge>
+              )}
+            </div>
             {thread.last_message_at && (
-              <span className="text-[10px] text-[#1A1A1A]/70">
+              <span className="text-[10px] text-[#1A1A1A]/70 shrink-0">
                 {formatDistanceToNow(new Date(thread.last_message_at), { addSuffix: true })}
               </span>
             )}
