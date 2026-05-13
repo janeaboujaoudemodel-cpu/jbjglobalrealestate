@@ -8279,6 +8279,8 @@ export type Database = {
       crm_owner_settings: {
         Row: {
           active_cc_emails: Json
+          attachments_brokerage: Json
+          attachments_developer: Json
           brokerage_active_cc_emails: Json
           brokerage_drive_doc_pack_url: string | null
           brokerage_from_name: string | null
@@ -8304,9 +8306,13 @@ export type Database = {
           signature_html: string | null
           test_profile: Json
           updated_at: string
+          workflow_templates_brokerage: Json
+          workflow_templates_developer: Json
         }
         Insert: {
           active_cc_emails?: Json
+          attachments_brokerage?: Json
+          attachments_developer?: Json
           brokerage_active_cc_emails?: Json
           brokerage_drive_doc_pack_url?: string | null
           brokerage_from_name?: string | null
@@ -8332,9 +8338,13 @@ export type Database = {
           signature_html?: string | null
           test_profile?: Json
           updated_at?: string
+          workflow_templates_brokerage?: Json
+          workflow_templates_developer?: Json
         }
         Update: {
           active_cc_emails?: Json
+          attachments_brokerage?: Json
+          attachments_developer?: Json
           brokerage_active_cc_emails?: Json
           brokerage_drive_doc_pack_url?: string | null
           brokerage_from_name?: string | null
@@ -8360,6 +8370,8 @@ export type Database = {
           signature_html?: string | null
           test_profile?: Json
           updated_at?: string
+          workflow_templates_brokerage?: Json
+          workflow_templates_developer?: Json
         }
         Relationships: []
       }
