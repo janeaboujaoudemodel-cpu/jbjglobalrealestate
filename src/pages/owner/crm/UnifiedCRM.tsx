@@ -538,7 +538,7 @@ export default function UnifiedCRM() {
       {/* Body */}
       <div className="px-3 md:px-6 py-5">
         <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] shadow-sm overflow-hidden">
-          <div className="p-3 md:p-5 overflow-x-auto">
+          <div className="p-3 md:p-5">
             <CRMBodyErrorBoundary><Suspense fallback={<Fallback />}>{Body}</Suspense></CRMBodyErrorBoundary>
           </div>
         </div>

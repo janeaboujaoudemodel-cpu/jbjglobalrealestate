@@ -48,10 +48,10 @@ export default function CRMSideRail() {
           type="button"
           onClick={() => openWith(tab)}
           title="Workspace shortcuts — Calendar, Notes, Tasks"
-          className="group inline-flex items-center gap-2 px-3 py-2.5 rounded-l-xl bg-[#FDFBF7] border border-r-0 border-[#B89555]/40 shadow-md hover:bg-[#EFE6D6] transition-colors text-[#1A1A1A]"
+          aria-label="Workspace shortcuts"
+          className="group inline-flex items-center justify-center p-2.5 rounded-l-xl bg-[#FDFBF7] border border-r-0 border-[#B89555]/40 shadow-md hover:bg-[#EFE6D6] transition-colors text-[#1A1A1A]"
         >
           <LayoutGrid className="h-4 w-4" />
-          <span className="text-xs font-semibold tracking-wide hidden md:inline">Shortcuts</span>
         </button>
       </div>
 
