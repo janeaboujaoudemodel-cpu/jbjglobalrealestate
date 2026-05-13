@@ -328,7 +328,7 @@ export default function OwnerInbox() {
                     </div>
                   ) : (
                     <div className="divide-y divide-gold/10">
-                      {threads.map((thread) => (
+                      {threads.filter(t => categoryFilter === 'all' || t.ai_category === categoryFilter).map((thread) => (
                         <ThreadListItem
                           key={thread.id}
                           thread={thread}
