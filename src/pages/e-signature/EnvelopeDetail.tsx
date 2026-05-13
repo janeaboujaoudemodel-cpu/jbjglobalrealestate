@@ -971,6 +971,34 @@ export default function EnvelopeDetail() {
                 Send for signature
               </Button>
             )}
+            {envelope.status !== "completed" && envelope.status !== "voided" && (
+              <>
+                <input
+                  ref={(el) => { signedUploadInputRef.current = el; }}
+                  type="file"
+                  accept="application/pdf,.pdf"
+                  className="hidden"
+                  onChange={async (e) => {
+                    const f = e.target.files?.[0];
+                    e.currentTarget.value = "";
+                    if (f) await handleUploadSignedPdf(f);
+                  }}
+                />
+                <Button
+                  variant="outline"
+                  onClick={() => signedUploadInputRef.current?.click()}
+                  disabled={uploadingSigned}
+                  title="Upload the counter-signed PDF returned by the client"
+                >
+                  {uploadingSigned ? (
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  ) : (
+                    <UploadIcon className="w-4 h-4 mr-2" />
+                  )}
+                  Upload signed PDF
+                </Button>
+              </>
+            )}
             <Button variant="outline" onClick={async () => {
               if (!(await ensureSavedBeforeDownload())) return;
               await handleOpenCurrentPdf();
