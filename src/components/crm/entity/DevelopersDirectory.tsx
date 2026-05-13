@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { CompanyHubDrawer } from "@/components/crm/CompanyHubDrawer";
 import { getDeveloperLogoUrl } from "@/utils/developerLogo";
+import { useEntityTotal } from "@/hooks/useEntityTotal";
 
 interface DeveloperRow {
   id: string;
