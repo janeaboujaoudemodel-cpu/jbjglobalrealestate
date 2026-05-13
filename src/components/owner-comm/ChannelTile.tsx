@@ -39,7 +39,6 @@ import {
   Link2,
   ChevronDown,
   ChevronUp,
-  ExternalLink,
   type LucideIcon,
 } from "lucide-react";
 import { useState } from "react";
