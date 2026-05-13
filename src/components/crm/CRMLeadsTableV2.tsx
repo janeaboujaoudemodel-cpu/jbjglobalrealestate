@@ -717,12 +717,12 @@ export default function CRMLeadsTableV2({
                       </span>
                     </TableCell>
                     <TableCell className="font-mono text-sm text-[#1A1A1A]/80 whitespace-nowrap">{lead.phone_e164 || "—"}</TableCell>
-                    <TableCell>
+                    <TableCell className="min-w-[220px] max-w-[320px]">
                       {lead.email_lower ? (
                         <button
                           onClick={() => handleEmail(lead)}
-                          className="text-sm text-[#1A1A1A] hover:text-[#1A1A1A] hover:underline decoration-[#B89555]/60 underline-offset-2 font-medium break-all text-left"
-                          title="Click to send email"
+                          className="block w-full truncate text-sm text-[#1A1A1A] hover:underline decoration-[#B89555]/60 underline-offset-2 font-medium text-left"
+                          title={lead.email_lower}
                         >
                           {lead.email_lower}
                         </button>
