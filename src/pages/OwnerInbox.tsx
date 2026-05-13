@@ -146,9 +146,31 @@ export default function OwnerInbox() {
     }
   };
 
-  const handleChannelTabClick = (channel: ChannelType | 'all') => {
-    setFilters(prev => ({ ...prev, channel }));
+  const handleChannelTabClick = (channel: ChannelType | 'all', channelId: string | 'all' = 'all') => {
+    setFilters(prev => ({ ...prev, channel, channelId }));
   };
+
+  // Build per-Gmail-account tabs so each connected Gmail keeps its own inbox section.
+  const gmailChannels = channels.filter(c => c.channel_type === 'email_gmail');
+  const dynamicChannelTabs = (() => {
+    if (gmailChannels.length <= 1) return channelTabs;
+    // Replace the single 'Gmail' tab with one tab per connected Gmail account.
+    const idx = channelTabs.findIndex(t => t.value === 'email_gmail');
+    const before = channelTabs.slice(0, idx);
+    const after = channelTabs.slice(idx + 1);
+    const perAccount = gmailChannels.map(ch => ({
+      value: 'email_gmail' as const,
+      channelId: ch.id,
+      label: ch.identifier || ch.display_name || 'Gmail',
+      icon: <Mail className="h-4 w-4 text-red-500" />,
+    }));
+    return [...before, ...perAccount, ...after] as Array<{
+      value: ChannelType | 'all';
+      channelId?: string;
+      label: string;
+      icon: React.ReactNode;
+    }>;
+  })();
 
   return (
     <>
