@@ -58,16 +58,27 @@ export default function BrokersRegistry() {
   const [exportOpen, setExportOpen] = useState(false);
   const sourceFilterCtx = useSourceFilterContext(sourceFilter);
 
+  const [viewMode, setViewMode] = useCRMViewMode("brokers", "cards");
+
   const { data: registered = [], isLoading: loading1 } = useQuery({
     queryKey: ["brokers-registered"],
     queryFn: async () => {
-      const { data, error } = await (supabase as any)
-        .from("broker_profiles")
-        .select("id, user_id, display_name, email, phone, current_tier, photo_url, verification_status, custom_label, updated_at")
-        .order("updated_at", { ascending: false })
-        .limit(1000);
-      if (error) throw error;
-      return data || [];
+      // Page through broker_profiles instead of capping at 1000 — the directory
+      // must show every registered broker, not the first page.
+      const PAGE = 1000;
+      const out: any[] = [];
+      for (let from = 0; from < 200_000; from += PAGE) {
+        const { data, error } = await (supabase as any)
+          .from("broker_profiles")
+          .select("id, user_id, display_name, email, phone, current_tier, photo_url, verification_status, custom_label, updated_at, created_at")
+          .order("updated_at", { ascending: false })
+          .range(from, from + PAGE - 1);
+        if (error) throw error;
+        const batch = data || [];
+        out.push(...batch);
+        if (batch.length < PAGE) break;
+      }
+      return out;
     },
   });
 
