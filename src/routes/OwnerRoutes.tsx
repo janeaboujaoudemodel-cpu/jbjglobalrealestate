@@ -42,7 +42,7 @@ const Automations = lazy(() => import("@/pages/Automations"));
 const Studio = lazy(() => import("@/pages/Studio"));
 const StudioEditor = lazy(() => import("@/pages/StudioEditor"));
 const StudioSettings = lazy(() => import("@/pages/StudioSettings"));
-const EmailClient = lazy(() => import("@/pages/EmailClient"));
+// EmailClient deleted — /owner/email-client redirects to /owner/inbox
 const TeamChat = lazy(() => import("@/pages/TeamChat"));
 const KanbanBoard = lazy(() => import("@/pages/KanbanBoard"));
 const PropertyMap = lazy(() => import("@/pages/PropertyMap"));
