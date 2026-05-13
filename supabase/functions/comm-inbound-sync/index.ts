@@ -1,8 +1,8 @@
 // Comm Hub v2: inbound message poller (called by frontend or cron)
-// Pulls Gmail (via API) and Hostinger (via IMAP) inbox messages since last_sync_at,
-// threads them, deduplicates, and writes into owner_comm_threads + owner_comm_messages.
+// Pulls Gmail (via API) and Hostinger (via raw IMAP over TLS) inbox messages
+// since last_sync_at, threads them, deduplicates, and writes into
+// owner_comm_threads + owner_comm_messages.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
-import { ImapClient } from "jsr:@workingdevshero/deno-imap@1.0.0";
 import { logChannelAudit } from "../_shared/channelAudit.ts";
 import { decryptCredential } from "../_shared/credentialCrypto.ts";
 
