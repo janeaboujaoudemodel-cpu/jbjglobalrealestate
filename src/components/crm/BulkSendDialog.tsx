@@ -510,7 +510,7 @@ export const BulkSendDialog = ({
       <DialogContent className="max-w-[1500px] w-[97vw] bg-[#FDFBF7] max-h-[94vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-[#1A1A1A] flex items-center gap-2">
-            {entityType === "brokerage" ? "Send Brokerage Outreach" : "Send Registration Email"}
+            {title || (entityType === "brokerage" ? "Send Brokerage Outreach" : "Send Registration Email")}
             {template?.locked_at ? (
               <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 flex items-center gap-1">
                 <Lock className="w-3 h-3" />Locked
