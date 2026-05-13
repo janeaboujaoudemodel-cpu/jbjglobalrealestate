@@ -2635,6 +2635,15 @@ const DeveloperRegistryTab = () => {
           onSendTest={() => setTestSendOpen(true)}
           onActivityLog={() => navigate("/owner/crm/relationships/activity")}
         />
+        <Button
+          size="sm"
+          variant="gold"
+          className="shadow-md"
+          onClick={() => setConfirmRegOpen(true)}
+        >
+          <ShieldCheck className="w-3.5 h-3.5 mr-1.5" />
+          Confirm Registration Status
+        </Button>
         <ExcludeFilterPopover
           scope="developer"
           options={(data as any[]).map((r) => ({ id: r.id, name: r.developer_name || "Unnamed" }))}
