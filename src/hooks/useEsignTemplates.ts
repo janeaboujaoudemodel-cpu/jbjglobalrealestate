@@ -127,8 +127,9 @@ export function useCreateEnvelopeFromTemplate() {
       values?: Record<string, string>;
       client?: { name: string; email: string; phone?: string };
       clientLeadId?: string;
+      hiddenFields?: string[];
     }) => {
-      const { template, values = {}, client, clientLeadId } = input;
+      const { template, values = {}, client, clientLeadId, hiddenFields = [] } = input;
       const { data: userData } = await supabase.auth.getUser();
       const user = userData.user;
       if (!user) throw new Error("Not signed in");
@@ -148,7 +149,7 @@ export function useCreateEnvelopeFromTemplate() {
       // 3. Render HTML + PDF (use the same opts shape as regenerate so the
       //    initial PDF matches what the iframe preview will show — fixes
       //    "downloaded a different style of document" before first save.)
-      const html = renderTemplateHtml(template.key, mergedValues, { renderMode: "final", category: template.category });
+      const html = renderTemplateHtml(template.key, mergedValues, { renderMode: "final", category: template.category, hiddenFields });
       const { blob, pdfWidth, pdfHeight } = await renderHtmlToPdfBlob(html);
 
       // 4. Upload PDF
