@@ -515,6 +515,16 @@ export default function CRMLeadsBulkBar({
           </div>
         </div>
       )}
+
+      <MergeContactsDialog
+        open={mergeOpen}
+        onOpenChange={setMergeOpen}
+        leadIds={selectedIds}
+        onMerged={() => {
+          onClear();
+          onSuccess();
+        }}
+      />
     </div>
   );
 }
