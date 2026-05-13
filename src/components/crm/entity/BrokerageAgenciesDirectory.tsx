@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Building2, Globe, Phone, Mail, Star } from "lucide-react";
 import { CompanyHubDrawer } from "@/components/crm/CompanyHubDrawer";
 import { sortBrokeragesForDirectory, normalizeForSearch } from "@/utils/brokerageRanking";
+import { useEntityTotal } from "@/hooks/useEntityTotal";
 
 interface AgencyRow {
   id: string;
