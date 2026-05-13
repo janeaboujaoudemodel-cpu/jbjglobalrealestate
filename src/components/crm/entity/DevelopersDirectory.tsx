@@ -76,6 +76,7 @@ export default function DevelopersDirectory() {
   const [hubOpen, setHubOpen] = useState(false);
   const [hubName, setHubName] = useState<string | null>(null);
   const [leadCounts, setLeadCounts] = useState<Map<string, number>>(new Map());
+  const { total: dbTotal } = useEntityTotal("developers", (q) => q.eq("is_hidden", false));
 
   useEffect(() => {
     let alive = true;
