@@ -477,7 +477,7 @@ export default function DocumentsFormsHub() {
       </div>
 
       {/* Use template dialog — email is now optional */}
-      <Dialog open={!!picker} onOpenChange={(o) => { if (!o) { setPicker(null); setExtraValues({}); setShowDetails(false); } }}>
+      <Dialog open={!!picker} onOpenChange={(o) => { if (!o) { setPicker(null); setExtraValues({}); setShowDetails(false); setIncludeJbjBlock(false); } }}>
         <DialogContent className="bg-[#FDFBF7] max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-[#1A1A1A]">{picker?.name}</DialogTitle>
