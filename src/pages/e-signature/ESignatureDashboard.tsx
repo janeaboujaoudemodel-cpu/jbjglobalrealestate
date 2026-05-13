@@ -792,6 +792,28 @@ export default function ESignatureDashboard() {
           </Card>
         </div>
       </div>
+
+      <AlertDialog open={!!pendingPurge} onOpenChange={(o) => !o && setPendingPurge(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete permanently?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently remove {pendingPurge?.ids.length ?? 0}{" "}
+              {pendingPurge && pendingPurge.ids.length === 1 ? "envelope" : "envelopes"} and all
+              related recipients, fields, and audit history. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => pendingPurge && handlePurge(pendingPurge.ids)}
+              className="bg-red-600 hover:bg-red-700 text-white"
+            >
+              Delete permanently
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
