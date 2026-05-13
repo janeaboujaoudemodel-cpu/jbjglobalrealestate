@@ -63,6 +63,7 @@ import { BulkSendDialog } from "@/components/crm/BulkSendDialog";
 import { BulkOutreachPanel } from "@/components/crm/BulkOutreachPanel";
 import { BulkUploadDialog } from "@/components/crm/BulkUploadDialog";
 import { OutreachActionsMenu } from "@/components/crm/OutreachActionsMenu";
+import { OutreachAttachmentsEditor } from "@/components/crm/OutreachAttachmentsEditor";
 import { SentHistoryView } from "@/components/crm/SentHistoryView";
 import { PrimarySenderEditor, CcListEditor } from "@/components/crm/EmailListEditor";
 import { GmailSenderStatusBanner } from "@/components/crm/GmailSenderStatusBanner";
