@@ -106,6 +106,30 @@ export default function SecondaryMarketHub() {
               }))} />
             </div>
           )}
+
+          {liveListings.length > 0 && (
+            <div className="mt-10">
+              <h2 className="text-lg font-semibold text-[#1A1A1A] mb-4">Live Partner Listings ({liveListings.length})</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                {liveListings.map((l: any) => (
+                  <Card key={l.id} className="bg-white border border-[#B89555]/20">
+                    <CardContent className="p-4">
+                      <div className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/50 mb-1">
+                        {l.source_label} · {l.source_entity_name ?? "—"}
+                      </div>
+                      <p className="font-semibold text-[#1A1A1A] truncate">{l.title}</p>
+                      <p className="text-xs text-[#1A1A1A]/60 mt-1">{l.emirate ?? "—"}</p>
+                      {l.asking_price ? (
+                        <p className="text-sm font-semibold mt-2" style={{ color: "var(--price-orange)" }}>
+                          {l.currency ?? "AED"} {Number(l.asking_price).toLocaleString()}
+                        </p>
+                      ) : null}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </>
