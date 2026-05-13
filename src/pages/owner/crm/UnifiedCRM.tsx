@@ -15,10 +15,77 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useCRMSectionCounts, type CRMCounts } from "@/hooks/useCRMSectionCounts";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { useRef, useCallback } from "react";
 import {
   Users, Crown, Building2, UserCog, Network, Briefcase, BadgeCheck,
-  ChevronDown, BarChart3, Bell,
+  ChevronDown, BarChart3, Bell, ChevronLeft, ChevronRight,
 } from "lucide-react";
+
+/**
+ * ScrollStrip — horizontal scroller with left/right arrow controls.
+ * Arrows fade in/out based on scroll position. Champagne-themed.
+ */
+function ScrollStrip({ children, ariaLabel }: { children: React.ReactNode; ariaLabel: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [canL, setCanL] = useState(false);
+  const [canR, setCanR] = useState(false);
+
+  const update = useCallback(() => {
+    const el = ref.current;
+    if (!el) return;
+    setCanL(el.scrollLeft > 4);
+    setCanR(el.scrollLeft + el.clientWidth < el.scrollWidth - 4);
+  }, []);
+
+  useEffect(() => {
+    update();
+    const el = ref.current;
+    if (!el) return;
+    el.addEventListener("scroll", update, { passive: true });
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => { el.removeEventListener("scroll", update); ro.disconnect(); };
+  }, [update]);
+
+  const scrollBy = (dir: 1 | -1) => {
+    const el = ref.current;
+    if (!el) return;
+    el.scrollBy({ left: dir * Math.max(200, el.clientWidth * 0.6), behavior: "smooth" });
+  };
+
+  return (
+    <div className="relative border-t border-[#B89555]/15">
+      {canL && (
+        <button
+          type="button"
+          aria-label="Scroll left"
+          onClick={() => scrollBy(-1)}
+          className="absolute left-0 top-0 bottom-0 z-10 px-1.5 flex items-center bg-gradient-to-r from-[#FDFBF7] via-[#FDFBF7]/95 to-transparent text-[#1A1A1A] hover:text-[#B89555]"
+        >
+          <ChevronLeft className="h-4 w-4" />
+        </button>
+      )}
+      {canR && (
+        <button
+          type="button"
+          aria-label="Scroll right"
+          onClick={() => scrollBy(1)}
+          className="absolute right-0 top-0 bottom-0 z-10 px-1.5 flex items-center bg-gradient-to-l from-[#FDFBF7] via-[#FDFBF7]/95 to-transparent text-[#1A1A1A] hover:text-[#B89555]"
+        >
+          <ChevronRight className="h-4 w-4" />
+        </button>
+      )}
+      <nav
+        ref={ref}
+        role="tablist"
+        aria-label={ariaLabel}
+        className="px-2 flex gap-1 overflow-x-auto whitespace-nowrap jj-scrollbar-gold"
+      >
+        {children}
+      </nav>
+    </div>
+  );
+}
 
 // --- Lazy section content -------------------------------------------------
 const CRMLeadsTableV2     = lazy(() => import("@/components/crm/CRMLeadsTableV2"));
@@ -372,12 +439,8 @@ export default function UnifiedCRM() {
           </div>
         )}
 
-        {/* Entity bar (primary) */}
-        <nav
-          role="tablist"
-          aria-label="CRM entities"
-          className="px-2 flex gap-1 border-t border-[#B89555]/15 overflow-x-auto whitespace-nowrap jj-scrollbar-gold"
-        >
+        {/* Entity bar (primary) — horizontal scroller with arrows */}
+        <ScrollStrip ariaLabel="CRM entities">
           {ENTITIES.map((it) => {
             const active = it.id === entity;
             const Icon = it.icon;
@@ -413,7 +476,7 @@ export default function UnifiedCRM() {
               </button>
             );
           })}
-        </nav>
+        </ScrollStrip>
 
       </div>
 
