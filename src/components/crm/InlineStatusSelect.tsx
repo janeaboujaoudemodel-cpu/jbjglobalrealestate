@@ -57,7 +57,7 @@ export default function InlineStatusSelect({
       disabled={isUpdating}
     >
       <SelectTrigger 
-        className="w-auto min-w-[120px] h-7 border-0 bg-transparent p-0 focus:ring-0 [&>svg]:hidden"
+        className="w-auto min-w-[140px] h-8 border border-[#B89555]/40 bg-[#FDFBF7] text-[#1A1A1A] px-2 rounded-md hover:bg-[#EFE6D6] focus:ring-1 focus:ring-[#B89555] [&>svg]:text-[#1A1A1A]/60"
         onClick={(e) => e.stopPropagation()}
       >
         <LeadStatusBadge status={currentStatus} size="sm" />

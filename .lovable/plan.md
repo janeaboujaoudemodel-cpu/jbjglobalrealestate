@@ -1,55 +1,53 @@
-## Goal
+## Plan
 
-Fix two truth/UX issues in the "Use template → Create Envelope" dialog (and downstream PDF):
+1. **Restore Relationship Hub as its own page**
+   - Keep the sidebar item `Relationship Hub` pointing to `/owner/crm/relationship-hub`.
+   - Make the standalone Relationship Hub use the previous full-page style, not the embedded Unified CRM panel.
+   - Remove/avoid embedding the full Relationship Hub inside the CRM entity tabs for Developers/Brokers/Agencies so it no longer opens the same CRM screen and no longer nests a full page inside another page.
+   - Update legacy redirects carefully so old URLs still land in the correct page or correct CRM entity.
 
-1. The helper line claims we "pre-place client + JBJ signature, stamp and date fields." We cannot pre-place a client signature, and PropertyFinder-style agreements don't actually require the JBJ company signature/stamp block. The copy is wrong.
-2. There is no way for the user to choose whether the JBJ company signature & stamp block is included. By default it should be **OFF** — the agreement only carries landlord signature / name / date.
+2. **Fix the “This panel failed to load / stageFilter is not defined” crash**
+   - Audit the CRM lead/status filter path and replace any stale `stageFilter` assumptions with the current `stageMulti` state model.
+   - Add a defensive fallback so a missing/invalid status filter cannot crash the CRM body.
+   - Verify all CRM tabs render without the error boundary.
 
-## Changes
+3. **Make investor visibility real and consistent**
+   - Ensure the Investors tab appears as a first-class CRM entity.
+   - Align the Investors badge/count with the actual rows shown in `InvestorsDirectory` by counting the same real sources (`crm_leads` investor flags/tags plus `client_investors`) and excluding owner/test records.
+   - Avoid the current mismatch where the tab can show a count but the directory looks empty or incomplete.
 
-### 1. New "Company signature & stamp" toggle in the create-template dialog
-File: `src/pages/owner/DocumentsFormsHub.tsx`
+4. **Improve CRM loading performance**
+   - Reduce CRM count loading from many individual head-count requests into a cheaper consolidated path where possible.
+   - Keep realtime refresh debounced, but avoid heavy full reloads on every small change.
+   - Prevent Relationship Hub from mounting inside Unified CRM unless it is actually needed, because it currently loads very large tables and slows the CRM page.
 
-- Add local state `includeJbjBlock: boolean`, default `false`.
-- Render a small toggle row above the helper text:
-  - Label: **"Add JBJ company signature & stamp"**
-  - Sub-label: *"Off by default — only the landlord signs. Turn on if your client requires our company signature & stamp on the agreement."*
-- Replace the misleading sentence on line 575-577 with:
-  *"We'll generate the agreement, place name and date fields for the landlord, and open the envelope so you can review before sending. The client signs directly when they open the link."*
-- Reset the toggle on dialog close (alongside `extraValues` / `showDetails`).
+5. **Restyle the CRM lead UI back to champagne/ink**
+   - Replace blue/green/purple/black-looking status/action treatments on the lead table with the project’s champagne surfaces, ink text, and gold hairline borders.
+   - Keep semantic colors only where required by project memory, but make them restrained and not “button-like” blocks.
+   - Fix faded dropdown text by enforcing solid ink text, champagne backgrounds, visible hover/active states, and no white-on-light controls.
+   - Keep action buttons (mail/call/message/agreement) as one clean icon cluster with matching champagne styling.
 
-### 2. Pass the toggle through envelope creation
-File: `src/hooks/useEsignTemplates.ts` (`useCreateEnvelopeFromTemplate`)
+6. **Validate and provide proof**
+   - Use the browser preview after implementation to verify:
+     - `/owner/crm` loads with no panel crash.
+     - `/owner/crm/relationship-hub` opens the previous standalone Relationship Hub style.
+     - Investors are visible from the CRM tab and count matches displayed rows.
+     - Dropdowns and action buttons no longer use the ugly multi-color/faded style.
+   - Capture a combined before/after proof image in one screenshot-style artifact so you can compare the broken state against the fixed state.
 
-- Accept new optional input: `hiddenFields?: string[]`.
-- When `includeJbjBlock` is `false`, the dialog passes `hiddenFields: ["jbj_signature_name", "jbj_signature_date"]` (these are the only JBJ-block keys present in `PAA_FIELD_GROUPS` and the selling template).
-- Use `hiddenFields` in three places inside the mutation:
-  1. `renderTemplateHtml(... { hiddenFields, ... })` so the rendered PDF omits the JBJ signatory row (the templates already accept this option — `jbjPropertyAdvertisingAgreement.ts` line 337/369).
-  2. Skip any `field_schema` entries whose `key` is in `hiddenFields` when building `fieldInserts`, so no signing field is created against the owner for that block.
-  3. Persist `metadata.hidden_fields` on the envelope insert so `EnvelopeDetail` (which already reads `meta.hidden_fields`, line 128) keeps the same layout when re-rendering.
+## Technical notes
 
-### 3. Wire the dialog
-File: `src/pages/owner/DocumentsFormsHub.tsx` (`handleUseTemplate`)
+- Primary files likely affected:
+  - `src/routes/OwnerRoutes.tsx`
+  - `src/components/owner-dashboard/OwnerSidebarNav.tsx`
+  - `src/pages/owner/crm/UnifiedCRM.tsx`
+  - `src/pages/CRMRelationships.tsx`
+  - `src/hooks/useCRMSectionCounts.ts`
+  - `src/components/crm/InvestorsDirectory.tsx`
+  - `src/components/crm/CRMLeadsTableV2.tsx`
+  - `src/components/crm/InlineStatusSelect.tsx`
+  - `src/components/crm/LeadStatusBadge.tsx`
+  - `src/components/crm/ExcelGridView.tsx`
 
-```ts
-const hiddenFields = includeJbjBlock
-  ? []
-  : ["jbj_signature_name", "jbj_signature_date"];
-await createFromTpl.mutateAsync({ template: picker, client, values: extraValues, hiddenFields });
-```
-
-### 4. EnvelopeDetail consistency
-File: `src/pages/e-signature/EnvelopeDetail.tsx`
-
-- Already supports `hiddenFields` end-to-end (state, render, regenerate, restore). Verified — no code change needed; the toggle just primes the same flag the detail page already understands, so the user can later flip it back on from the envelope's existing "removed fields" controls.
-
-## What this does NOT touch
-
-- Templates themselves, the signing UI, the recipients table, and the regenerate flow stay as-is.
-- Existing envelopes with the JBJ block continue to render unchanged.
-- The "client signature" field-schema entry still applies — the client signs in their portal, we just stop pretending we pre-fill it.
-
-## Files
-
-- `src/pages/owner/DocumentsFormsHub.tsx` — toggle UI, helper-copy fix, `hiddenFields` wiring.
-- `src/hooks/useEsignTemplates.ts` — accept + apply `hiddenFields` during creation.
+- No database schema changes are planned unless validation shows the investor data source itself is missing required fields or access policies.
+- The implementation will preserve existing CRM features/content under the project’s strict no-removal policy; the change is wiring, crash fix, data consistency, performance, and UI cleanup.
