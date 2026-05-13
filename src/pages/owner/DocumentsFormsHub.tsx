@@ -574,8 +574,25 @@ export default function DocumentsFormsHub() {
               </div>
             )}
 
+            <div className="flex items-start gap-3 rounded-md border border-[#B89555]/30 bg-[#F7F2EA]/60 px-3 py-2.5">
+              <Checkbox
+                id="include-jbj-block"
+                checked={includeJbjBlock}
+                onCheckedChange={(v) => setIncludeJbjBlock(v === true)}
+                className="mt-0.5"
+              />
+              <div className="flex-1 min-w-0">
+                <Label htmlFor="include-jbj-block" className="text-sm font-semibold text-[#1A1A1A] cursor-pointer">
+                  Add JBJ company signature & stamp
+                </Label>
+                <p className="text-[11px] text-[#1A1A1A]/70 mt-0.5">
+                  Off by default — only the landlord signs. Turn on if your client requires our company signature & stamp on the agreement.
+                </p>
+              </div>
+            </div>
+
             <p className="text-xs text-[#1A1A1A]/70">
-              We'll generate the PDF, pre-place client + JBJ signature, stamp and date fields, then open the envelope so you can adjust before sending.
+              We'll generate the agreement, place name and date fields for the landlord, and open the envelope so you can review before sending. The client signs directly when they open the link.
             </p>
           </div>
           <DialogFooter>
