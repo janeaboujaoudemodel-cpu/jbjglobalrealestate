@@ -1,79 +1,110 @@
 ## Scope
 
-Two areas, presentation-only fixes plus one edge-function reply-to/auto-reply tweak.
+Five connected items continuing the e-signature/CRM work. `deleted_at` already exists on `esign_envelopes` (with index) — no schema migration needed for it.
 
 ---
 
-### 1. CRM Leads table — "NEW" badge looks broken
+### 1. Drafts bulk-select + Recently Deleted tab
 
-In `src/components/crm/CRMLeadsTableV2.tsx` the **Status** column is too narrow, so the dot + pill badge collide with the column frame.
+**`src/pages/e-signature/ESignatureDashboard.tsx`**
 
-**Fix**
-- Widen the Status column (`min-w` / `w` on the `<th>` and matching `<td>`) so the full badge fits in one line.
-- Add `whitespace-nowrap` and a small horizontal padding buffer around the badge cell so the circle and pill border never overlap the cell border.
-- No change to badge styles themselves — the badge already has `whitespace-nowrap`; the problem is purely column width.
+- Add a top-level Tabs row: **Active** (current behaviour, `deleted_at IS NULL`) and **Recently Deleted** (`deleted_at IS NOT NULL`, ordered by `deleted_at DESC`, auto-purge note: kept 30 days).
+- Convert `handleDelete` from hard `DELETE` to soft delete: `update({ deleted_at: new Date().toISOString() })`. Hard-delete remains only via a "Delete permanently" action inside the Recently Deleted tab.
+- **Bulk select** on the Active tab:
+  - Add a leading checkbox column on each envelope row + a master checkbox in the toolbar.
+  - Selection state: `Set<string>` of envelope IDs in component state.
+  - Floating action bar appears when `selected.size > 0`: **Send reminder**, **Move to Recently Deleted**, **Clear selection**, count badge.
+  - Bulk soft-delete = single `update({ deleted_at }).in("id", [...selected])`.
+- **Recently Deleted tab actions** per row + bulk:
+  - **Restore** → `update({ deleted_at: null })`.
+  - **Delete permanently** → confirm dialog → real `DELETE` (cascades remove recipients/fields/audit via existing FKs).
+- React Query: invalidate `["esign-envelopes"]` after every mutation; both tabs share the same key but pass a `view: "active" | "deleted"` filter and key suffix.
 
----
-
-### 2. Branded envelope email — fix 5 issues
-
-All edits in **`src/lib/email/buildEnvelopeEmailHtml.ts`** and the mirrored **`supabase/functions/_shared/envelope-email-html.ts`** (these two MUST stay byte-identical because the preview uses one and the edge function uses the other).
-
-#### 2a. Header crowding (company name vs DOC NO.)
-The header row puts `JBJ GLOBAL REAL ESTATE` and `DOC NO. JBJ-PAA-…` on the same line, which collides on narrow widths.
-- Drop `DOC NO.` from the branded email entirely (it's already on the PDF and inside the document body).
-- Keep the wordmark + monogram alone on the header row, with the gold hairline below.
-
-#### 2b. Underscore/dash between "Agreement" and "Leasing"
-Currently rendered as `Agreement — Leasing` but appears as a connector that looks like an underscore on some clients. Replace with a clean comma + space: `Agreement, Leasing` (and same in the subject builder + preview headline). Also fix the matching string in `src/pages/e-signature/EnvelopeDetail.tsx:868`.
-
-#### 2c. "Founder & CEO" must be gold
-In the signature block of both HTML builders, wrap the title line in `<span style="color:#B89555;font-weight:600;letter-spacing:.04em;">Founder &amp; CEO</span>`. Name stays ink, brand line stays ink, only the title turns gold.
-
-#### 2d. PDF Download button opens a blank `…supabase.co/functions/v1/esign-document-proxy…` page
-Root cause: `EnvelopeDetail.tsx:1390` wraps `envelope.document_url` with `maybeProxyStorageUrl(...)` before handing it to the email. The proxy edge function requires an `Authorization` header, which an email client cannot send → blank page with the React "enable JavaScript" fallback.
-
-**Fix**
-- For the email's attachment link, do NOT proxy. Instead, generate a **public signed URL** and pass that as `attachmentUrl`:
-  - On `EnvelopeDetail.tsx`, when opening `SendViaEmailDialog`, derive `attachmentUrl` via `supabase.storage.from(bucket).createSignedUrl(path, 60 * 60 * 24 * 7)` (7-day signed URL) for the envelope's `document_url`. Fall back to the raw public URL if the file is already in a public bucket.
-  - The signed URL ends in `…/object/sign/...?token=…` and works in any email client without auth.
-- In the HTML builder, keep the chip as a plain `<a href="…signed-url…" download="…">` — no other change needed.
-
-#### 2e. "OPEN IN DOCUSIGN" → blank "enable JavaScript" page
-Same root cause when no specific envelope URL is supplied: the button currently points to a Supabase function URL (or to `about:blank` inside the sandboxed preview). Fix:
-- Default `docusignUrl` to the universal public DocuSign entry: `https://apps.docusign.com/send/documents` (already what `src/config/docusignHandoff.ts` exposes — confirm and use that constant).
-- In `buildEnvelopeEmailHtml`, when `docusignUrl` is empty/invalid, hard-fallback to that public URL so the `<a>` always points to a real DocuSign page.
-- Also add `target="_blank" rel="noopener"` (already present) — no JS, just a real link.
-
-#### 2f. Below the DocuSign button, add a short numbered "How to sign with DocuSign" mini-guide
-Per the previous turn's request that's still active. 3 short steps + the Create-account / App Store / Google Play links. Pure HTML in the same builder.
+No DB migration required for this item.
 
 ---
 
-### 3. Reply-to + auto-reply to `contact@jbj.ae`
+### 2. CRM merge dialog + dropdown filters
 
-In `supabase/functions/esign-send-for-signature/index.ts`:
-- `reply_to` is already `contact@jbj.ae` (line 167) ✅ — verify and leave.
-- BCC list already includes `contact@jbj.ae` ✅.
-- Add an **auto-reply** template: when an inbound email lands on `contact@jbj.ae`, an acknowledgment is sent back. This requires a tiny new edge function `esign-inbound-autoreply` that:
-  - Accepts the Resend inbound webhook payload.
-  - Sends a single auto-reply via Resend from `contact@jbj.ae` with subject `Re: <original subject>` and a short branded body ("We've received your message and a member of the JBJ team will respond shortly.").
-  - De-duplicates by `Message-Id` so loops are impossible.
-- Update `src/components/e-signature/SendViaEmailDialog.tsx` `DISPLAY_REPLY_TO` label remains `contact@jbj.ae`. Replace any remaining `contract@jbj.ae` typo with `contact@jbj.ae` project-wide (search + replace).
+**Files:** `src/pages/CRMRelationships.tsx` (and the leads table component it renders, plus a new `src/components/crm/MergeContactsDialog.tsx`).
+
+**Dropdown filters** (added to the existing filter row):
+- **Status** (Lead / Contacted / Qualified / Won / Lost — pulled from existing `crm_leads.status` enum)
+- **Source** (re-uses `LeadSourceFilter` values)
+- **Owner / Assignee** (distinct `assigned_to` from `crm_leads`)
+- **Tag** (multi-select from `crm_leads.tags` jsonb)
+- All driven by URL search params so deep-links work (consistent with Global Filter System Standard).
+
+**Merge dialog** (`MergeContactsDialog.tsx`):
+- Triggered when 2 or 3 leads are checked in the table → toolbar shows **Merge selected** button.
+- Dialog shows a 2- or 3-column field-by-field comparison (name, email, phone, company, source, tags, notes).
+- Per-row radio chooses the surviving value; one record is the **primary** (kept), others are absorbed.
+- On confirm: call existing `upsert_contact_with_company` RPC for the surviving row, then `update` non-primary rows to set `merged_into = primary_id` and `deleted_at = now()`. (Soft-merge — non-destructive.)
+- All linked artefacts (envelopes, tasks, comm history) are re-pointed to the primary id via a single SQL UPDATE per related table.
+
+**Schema additions needed (one small migration):**
+- `crm_leads.merged_into uuid` (nullable, FK → `crm_leads.id`)
+- `crm_leads.deleted_at timestamptz` (nullable) — if not already present
+- Index on `merged_into`
+- RLS already covers owner/admin; no policy change.
+
+---
+
+### 3. Owner-side "Upload signed PDF" on EnvelopeDetail
+
+**`src/pages/e-signature/EnvelopeDetail.tsx`**
+
+- New action in the envelope header (visible to sender/owner only, all statuses except `completed`/`voided`): **Upload signed PDF**.
+- Click opens a file picker (`accept="application/pdf"`, max 25 MB).
+- Upload path: `supabase.storage.from("esign-signed").upload(\`${envelope.id}/${Date.now()}-signed.pdf\`, file, { upsert: false })`.
+- On success: `update esign_envelopes set signed_document_url = <publicUrl>, status = 'completed', completed_at = now() where id = envelope.id`.
+- Insert an `esign_audit_log` row: `action = 'manually_completed'`, `description = 'Owner uploaded signed PDF'`.
+- Trigger the existing completion email pipeline (call `esign-finalize-envelope` edge function if present, otherwise reuse `esign-send-completion-email`).
+
+**Migration:** ensure storage bucket `esign-signed` exists (private) with RLS — owners insert/read on their own envelopes.
+
+---
+
+### 4. Outbound envelope email — embed DocuSign notice + PDF attachment
+
+**Files:** `src/lib/email/buildEnvelopeEmailHtml.ts` + mirrored `supabase/functions/_shared/envelope-email-html.ts` (kept byte-identical) + `supabase/functions/esign-send-for-signature/index.ts`.
+
+- Append a clearly-labelled **"Sign with DocuSign"** block above the existing CTA: short paragraph + the numbered 3-step mini-guide (already drafted), plus a divider above the JBJ signature.
+- Confirm the **PDF chip** (signed/unsigned attachment) uses the 7-day signed Storage URL (already implemented in `SendViaEmailDialog.resolveAttachmentUrl`) and surface it inside the same email card with file size + filename.
+- In `esign-send-for-signature/index.ts`, also pass the resolved attachment URL through to Resend's `attachments` array (Resend supports `path` for remote files) — so the PDF lands as a real file attachment, not just a link. Cap at 10 MB to stay under Resend's limit; if larger, fall back to the link chip only.
+- Re-deploy `esign-send-for-signature`.
+
+---
+
+### 5. Full E2E screenshot pass
+
+After 1-4 ship, run a manual screenshot pass on the preview using the browser tools and capture each step into `/mnt/documents/esign-e2e-<timestamp>/`:
+
+1. Dashboard — Active tab, empty selection
+2. Dashboard — Active tab, 3 rows selected → bulk action bar
+3. Dashboard — Recently Deleted tab with restore/permanent buttons
+4. CRM Relationships — new dropdown filters open
+5. CRM Relationships — Merge dialog, 2 leads
+6. EnvelopeDetail — Upload signed PDF button + post-upload state
+7. Email preview iframe — DocuSign block + attachment chip
+8. Inbox screenshot of the test send to `infoo.jane@gmail.com`
+
+Compile a one-page QA contact sheet (`/mnt/documents/esign-e2e-<timestamp>/contact-sheet.pdf`) for review.
 
 ---
 
 ### Files to change
 
-- `src/components/crm/CRMLeadsTableV2.tsx` — Status column width
-- `src/lib/email/buildEnvelopeEmailHtml.ts` — header, em-dash, gold title, signed-url chip, DocuSign fallback, how-to-sign block
-- `supabase/functions/_shared/envelope-email-html.ts` — same edits, kept byte-identical
-- `src/pages/e-signature/EnvelopeDetail.tsx` — generate signed URL for attachment instead of proxied URL
-- `src/pages/e-signature/SignDocument.tsx` — same dash fix if present
-- `supabase/functions/esign-send-for-signature/index.ts` — verify reply_to, no logic change
-- `supabase/functions/esign-inbound-autoreply/index.ts` — **new** auto-reply handler
-- Project-wide: replace any `contract@jbj.ae` typos with `contact@jbj.ae`
+- `src/pages/e-signature/ESignatureDashboard.tsx` — tabs, bulk select, soft-delete
+- `src/pages/e-signature/EnvelopeDetail.tsx` — Upload signed PDF action
+- `src/pages/CRMRelationships.tsx` + leads table — dropdown filters, selection + Merge button
+- `src/components/crm/MergeContactsDialog.tsx` — **new**
+- `src/lib/email/buildEnvelopeEmailHtml.ts` + `supabase/functions/_shared/envelope-email-html.ts`
+- `supabase/functions/esign-send-for-signature/index.ts` — attach PDF via Resend attachments
+- **Migrations:** `crm_leads.merged_into` + `crm_leads.deleted_at` + `esign-signed` storage bucket & policies
 
-### Open question
+### Open questions
 
-The auto-reply needs Resend **inbound email** (a configured inbound route on `contact@jbj.ae`). If that inbound route isn't set up in Resend yet, the edge function will deploy but won't fire until the route is added in the Resend dashboard. Want me to deploy the function anyway so it's ready, or wait until inbound is enabled?
+1. **Hard-purge schedule** for Recently Deleted — auto-delete after **30 days** via a daily cron (pg_cron), or keep forever until manual purge?
+2. **Merge of 3+ leads** — cap at 3, or allow N (with a scrollable comparison table)?
+3. **PDF attachment cap** — Resend's hard limit is 40 MB total per message. Use **10 MB**, **25 MB**, or fall back to link-only above any size?
