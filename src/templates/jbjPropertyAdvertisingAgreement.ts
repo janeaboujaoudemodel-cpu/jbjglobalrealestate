@@ -268,12 +268,17 @@ const headerHtml = (chrome: Required<TemplateChrome>, docNumber: string, categor
               ${contactStack}
             </div>
           </div>
-          <div style="margin-top:14px;text-align:center;">
-            <div style="font-size:14px;font-weight:800;letter-spacing:.22em;color:${ink};text-transform:uppercase;">
-              ${titleFor(category).toUpperCase()}
-            </div>
-          </div>
         </div>`;
+    }
+  }
+};
+
+const titleBlockHtml = (chrome: Required<TemplateChrome>, category: PAACategory) => `
+  <div style="text-align:center;margin:6px 0 22px;">
+    <div style="font-size:14px;font-weight:800;letter-spacing:.22em;color:${chrome.ink};text-transform:uppercase;">
+      ${titleFor(category).toUpperCase()}
+    </div>
+  </div>`;
     }
   }
 };
