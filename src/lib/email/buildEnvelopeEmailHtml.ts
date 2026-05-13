@@ -72,6 +72,17 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
           </td></tr>
         </table>`;
 
+  const howToSignBlock = `
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:18px 0 0;border-collapse:collapse;width:100%;background:#F7F2EA;border:1px solid #B89555;">
+          <tr><td style="padding:14px 18px;font-family:Inter,Arial,sans-serif;font-size:12px;color:#1A1A1A;line-height:1.7;">
+            <div style="font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#1A1A1A;font-size:10.5px;margin-bottom:8px;">How to sign with DocuSign</div>
+            <div style="margin-bottom:4px;"><strong style="color:#B89555;">1.</strong> Download the attached PDF for your records.</div>
+            <div style="margin-bottom:4px;"><strong style="color:#B89555;">2.</strong> <a href="${DOCUSIGN_SIGNUP}" style="color:#1A1A1A;text-decoration:underline;">Create a free DocuSign account</a> (or sign in if you already have one).</div>
+            <div style="margin-bottom:4px;"><strong style="color:#B89555;">3.</strong> Tap <strong>OPEN IN DOCUSIGN</strong> above, upload the PDF, place your signature, and complete signing.</div>
+            <div style="margin-top:6px;opacity:.7;font-size:11px;">Once signed, please return the signed PDF to <a href="mailto:${SIGNED_RETURN_EMAIL}" style="color:#B89555;text-decoration:none;font-weight:600;">${SIGNED_RETURN_EMAIL}</a>.</div>
+          </td></tr>
+        </table>`;
+
   const chipInner = attachmentName
     ? `📎 &nbsp;PDF attached: <strong>${attachmentName}</strong>${attachmentUrl ? ` &nbsp;<span style="color:#B89555;text-transform:uppercase;letter-spacing:.16em;font-size:10px;">Download&nbsp;→</span>` : ""}`
     : "";
