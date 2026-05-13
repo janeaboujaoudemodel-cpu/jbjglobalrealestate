@@ -150,8 +150,12 @@ export default function BrokerageAgenciesDirectory() {
     );
   }
 
-  const sourceLabel = (r: AgencyRow) =>
-    [r.database_source, r.upload_source, r.source, r.entry_source].filter(Boolean).join(" · ") || "—";
+  const sourceLabel = (r: AgencyRow) => {
+    const parts = [r.database_source, r.upload_source, r.source, r.entry_source]
+      .filter(Boolean)
+      .map((s) => /dld/i.test(String(s)) ? "DLD" : String(s).replace(/_/g, " "));
+    return parts.length ? Array.from(new Set(parts)).join(" · ") : "—";
+  };
 
   return (
     <div className="space-y-4">
@@ -240,7 +244,7 @@ export default function BrokerageAgenciesDirectory() {
                 </td>
                 <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">{r.country || "—"}</td>
                 <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">{r.emirate || "—"}</td>
-                <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap max-w-[260px] truncate">
+                <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs max-w-[280px] whitespace-normal break-words leading-snug">
                   {mapsHref ? (
                     <a href={mapsHref} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} className="hover:underline">
                       {r.office_location || r.office_address}
