@@ -139,9 +139,9 @@ Deno.serve(async (req) => {
     const smtpPort = body.smtp_port || DEFAULTS.smtp_port;
 
     // 1) Test IMAP
-    const imapOk = await testImap(email, password, imapHost, imapPort);
-    if (!imapOk) {
-      return new Response(JSON.stringify({ error: "IMAP connection failed. Check email/password and server settings." }), {
+    const imapResult = await testImap(email, password, imapHost, imapPort);
+    if (!imapResult.ok) {
+      return new Response(JSON.stringify({ error: `IMAP login failed: ${imapResult.error || "unknown"}` }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
