@@ -400,6 +400,14 @@ export function BrandedEmailComposer() {
           <div className="flex items-center gap-2">
             <Button
               type="button" variant="outline" size="sm"
+              onClick={() => setHistoryOpen((s) => !s)}
+              className="border-[#B89555]/40"
+            >
+              <HistoryIcon className="w-3.5 h-3.5 mr-1.5" />
+              {historyOpen ? "Hide history" : "Email history"}
+            </Button>
+            <Button
+              type="button" variant="outline" size="sm"
               onClick={() => setShowPreview((s) => !s)}
               className="border-[#B89555]/40"
             >
