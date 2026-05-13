@@ -108,11 +108,6 @@ function stripInlineSignature(text: string): string {
   return out.replace(/\s+$/g, "");
 }
 
-/** Wrap a signature HTML so we can identify and replace it later. */
-function wrapSignature(sigHtml: string): string {
-  return `<div data-jbj-sig="1">${sigHtml}</div>`;
-}
-
 export function SendViaEmailDialog({
   open,
   onOpenChange,
@@ -137,7 +132,8 @@ export function SendViaEmailDialog({
   const [selectedSigId, setSelectedSigId] = useState<string>("");
 
   // Load all email signature presets so the owner can pick which one
-  // appears at the bottom of the message body. Updates the preview live.
+  // appears at the bottom of the body. Signature is rendered SEPARATELY
+  // from the body — never embedded — so only one is ever displayed.
   const { data: signatures = [] } = useEmailSignatures();
   const fallbackSigHtml = useMemo(
     () => buildSenderSignatureHtml(senderName, senderTitle),
@@ -152,7 +148,6 @@ export function SendViaEmailDialog({
     [selectedSig, fallbackSigHtml],
   );
 
-  // Pick a sensible default signature once the list loads.
   useEffect(() => {
     if (selectedSigId || !signatures.length) return;
     const def = signatures.find((s) => s.is_default) || signatures[0];
@@ -166,35 +161,23 @@ export function SendViaEmailDialog({
     setSubject(defaultSubject);
     setDocusignUrl("");
     setBodyHtml(
-      legacyBodyToHtml(stripInlineSignature(defaultBody), {
-        clientName: recipientName || "Client",
-        docTitle: defaultSubject || "Document",
-        senderName,
-        senderTitle,
-        signatureHtml: wrapSignature(selectedSigHtml),
-      }),
+      stripSignature(
+        legacyBodyToHtml(stripInlineSignature(defaultBody), {
+          clientName: recipientName || "Client",
+          docTitle: defaultSubject || "Document",
+          senderName,
+          senderTitle,
+        }),
+      ),
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, recipientEmail, recipientName, defaultSubject, defaultBody]);
 
-  // Swap the embedded signature when the owner picks a different preset.
-  // Strips the previous signature wrapper and appends the new one so the
-  // body and the iframe preview stay perfectly in sync.
+  // Defensive cleanup — if any embedded signature slips into the body,
+  // strip it. Real signature is rendered by the email template separately.
   const applySelectedSignature = () => {
-    const stripped = stripSignature(bodyHtml).replace(/(<br\s*\/?>\s*)+$/, "");
-    setBodyHtml(`${stripped}<br/><br/>${wrapSignature(selectedSigHtml)}`);
+    setBodyHtml((prev) => stripSignature(prev));
   };
-  useEffect(() => {
-    if (!open || !selectedSigHtml) return;
-    // Only auto-swap if a signature wrapper exists in the body (avoids
-    // overwriting a freshly cleared body).
-    if (/data-jbj-sig="1"/.test(bodyHtml)) {
-      const stripped = stripSignature(bodyHtml).replace(/(<br\s*\/?>\s*)+$/, "");
-      setBodyHtml(`${stripped}<br/><br/>${wrapSignature(selectedSigHtml)}`);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedSigId]);
-
 
   const cleanCcs = useMemo(
     () => Array.from(new Set(ccs.filter(isValidEmail).filter((c) => !tos.includes(c)))),
