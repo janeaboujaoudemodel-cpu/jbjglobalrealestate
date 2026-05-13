@@ -42,20 +42,40 @@ Deno.serve(async (req) => {
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
     const SERVICE_ROLE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    const GMAIL_KEY = Deno.env.get("GOOGLE_MAIL_API_KEY");
+
+    // Collect ALL Gmail connector secrets so multi-account inboxes
+    // (GOOGLE_MAIL_API_KEY + GOOGLE_MAIL_API_KEY_2 + ...) can each be polled
+    // independently and matched to the right channel by email identifier.
+    const gmailKeys = Object.keys(Deno.env.toObject())
+      .filter((k) => k === "GOOGLE_MAIL_API_KEY" || k.startsWith("GOOGLE_MAIL_API_KEY_"))
+      .map((k) => Deno.env.get(k))
+      .filter((v): v is string => !!v);
 
     const admin = createClient(SUPABASE_URL, SERVICE_ROLE);
 
+    // Build identifier → connector key map by querying each Gmail profile.
+    const gmailKeyByEmail = new Map<string, string>();
+    if (LOVABLE_API_KEY) {
+      for (const key of gmailKeys) {
+        try {
+          const r = await fetch(`${GATEWAY_BASE}/google_mail/gmail/v1/users/me/profile`, {
+            headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "X-Connection-Api-Key": key },
+          });
+          const j = await r.json();
+          if (r.ok && j.emailAddress) gmailKeyByEmail.set(String(j.emailAddress).toLowerCase(), key);
+        } catch (e) {
+          console.warn("[comm-inbound-sync] gmail profile fetch failed", e);
+        }
+      }
+    }
+
     // Optional body: { channel_id?: string, channel_type?: string, user_id?: string }
-    // Used by the "Resync inbox" button on individual channel tiles.
     let body: { channel_id?: string; channel_type?: string; user_id?: string } = {};
     if (req.method === "POST") {
       try { body = await req.json(); } catch { /* empty body is fine */ }
     }
 
-    if (!LOVABLE_API_KEY || !GMAIL_KEY) {
-      // Even if Gmail isn't connected, mark the targeted channel as synced
-      // so the UI gets a fresh last_sync_at instead of looking stale.
+    if (!LOVABLE_API_KEY || gmailKeys.length === 0) {
       if (body.channel_id) {
         await admin
           .from("owner_comm_channels")
