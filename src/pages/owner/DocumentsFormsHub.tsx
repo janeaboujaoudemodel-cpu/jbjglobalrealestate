@@ -106,6 +106,7 @@ export default function DocumentsFormsHub() {
   const [client, setClient] = useState({ name: "", email: "", phone: "" });
   const [extraValues, setExtraValues] = useState<Record<string, string>>({});
   const [showDetails, setShowDetails] = useState(false);
+  const [includeJbjBlock, setIncludeJbjBlock] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
 
   // Bucket envelopes.
