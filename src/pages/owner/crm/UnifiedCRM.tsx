@@ -372,12 +372,8 @@ export default function UnifiedCRM() {
           </div>
         )}
 
-        {/* Entity bar (primary) */}
-        <nav
-          role="tablist"
-          aria-label="CRM entities"
-          className="px-2 flex gap-1 border-t border-[#B89555]/15 overflow-x-auto whitespace-nowrap jj-scrollbar-gold"
-        >
+        {/* Entity bar (primary) — horizontal scroller with arrows */}
+        <ScrollStrip ariaLabel="CRM entities">
           {ENTITIES.map((it) => {
             const active = it.id === entity;
             const Icon = it.icon;
@@ -413,7 +409,7 @@ export default function UnifiedCRM() {
               </button>
             );
           })}
-        </nav>
+        </ScrollStrip>
 
       </div>
 
