@@ -162,8 +162,9 @@ Deno.serve(async (req) => {
       .select("id, identifier")
       .eq("user_id", user.id)
       .eq("channel_type", "email_hostinger")
-      .eq("identifier", email)
       .eq("is_active", true)
+      .order("created_at", { ascending: false })
+      .limit(1)
       .maybeSingle();
     if (alreadyConnected?.id) {
       return new Response(JSON.stringify({ success: true, channel_id: alreadyConnected.id, email: alreadyConnected.identifier }), {
