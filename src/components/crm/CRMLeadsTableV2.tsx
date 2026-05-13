@@ -614,8 +614,8 @@ export default function CRMLeadsTableV2({
         onSuccess={() => { fetchLeads(); onRefresh(); }}
       />
 
-      <div className="w-full overflow-x-auto rounded-lg border-2 border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
-        <Table className="min-w-[1300px]">
+      <div className="w-full overflow-x-auto rounded-lg border-2 border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] [&_*]:[overflow-wrap:normal] [&_*]:[word-break:normal]">
+        <Table className="min-w-[1300px] [&_th]:whitespace-nowrap">
           <TableHeader>
             <TableRow className="border-[#B89555]/20 hover:bg-transparent">
               <TableHead className="w-12">
