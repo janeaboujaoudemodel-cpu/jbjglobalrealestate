@@ -216,6 +216,7 @@ export function SendViaEmailDialog({
           docusign_url: docusignUrl.trim() || undefined,
           attachment_name: attachmentName,
           attachment_url: signedAttachmentUrl,
+          test_recipient: TEST_RECIPIENT,
         }),
       });
       const out = await res.json().catch(() => ({}));
