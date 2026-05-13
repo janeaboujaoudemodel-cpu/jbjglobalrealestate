@@ -377,6 +377,78 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
             )}
           </AnimatePresence>
 
+          {/* AI Triage Panel */}
+          {(thread.ai_suggested_reply || thread.ai_summary || triage.isPending) && (
+            <div className="border-t border-[#B89555]/10 bg-[#EFE6D6]/20 p-3 flex-shrink-0 space-y-2">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <Brain className="h-4 w-4 text-[#1A1A1A]" />
+                  <span className="text-xs font-semibold text-[#1A1A1A]">AI Triage</span>
+                  {triage.isPending && <Loader2 className="h-3 w-3 animate-spin" />}
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-6 text-[10px]"
+                  onClick={() => triage.mutate({ threadId: thread.id, force: true })}
+                  disabled={triage.isPending}
+                >
+                  <Wand2 className="h-3 w-3 mr-1" /> Re-run
+                </Button>
+              </div>
+              {thread.ai_summary && (
+                <p className="text-xs text-[#1A1A1A]/80 italic">"{thread.ai_summary}"</p>
+              )}
+              {thread.ai_suggested_reply && (
+                <div className="rounded-lg border border-[#B89555]/20 bg-[#FDFBF7] p-2">
+                  <p className="text-[10px] uppercase tracking-wide text-[#1A1A1A]/60 mb-1">Suggested reply</p>
+                  <p className="text-sm text-[#1A1A1A] whitespace-pre-wrap">{thread.ai_suggested_reply}</p>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    <Button size="sm" variant="primary" className="h-7 text-xs"
+                      onClick={() => setReplyText(thread.ai_suggested_reply || "")}>
+                      <Edit3 className="h-3 w-3 mr-1" /> Use reply
+                    </Button>
+                    <Button size="sm" variant="outline" className="h-7 text-xs border-[#B89555]/30"
+                      onClick={() => { sendMessage({ content: thread.ai_suggested_reply || "" }); }}>
+                      <Send className="h-3 w-3 mr-1" /> Send now
+                    </Button>
+                  </div>
+                </div>
+              )}
+              <div className="flex flex-wrap gap-2">
+                <Button size="sm" variant="outline" className="h-7 text-xs border-[#B89555]/30"
+                  onClick={() => createTask.mutate({
+                    thread,
+                    title: thread.ai_next_step?.title || `Follow up: ${thread.contact_name ?? thread.contact_identifier}`,
+                    dueInHours: thread.ai_next_step?.due_in_hours ?? 24,
+                  })}
+                  disabled={createTask.isPending}>
+                  <ListTodo className="h-3 w-3 mr-1" /> Create task
+                </Button>
+                <Button size="sm" variant="outline" className="h-7 text-xs border-[#B89555]/30"
+                  onClick={() => scheduleMeeting.mutate({
+                    thread,
+                    title: thread.ai_next_step?.title || `Meeting: ${thread.contact_name ?? thread.contact_identifier}`,
+                    startInHours: thread.ai_next_step?.due_in_hours ?? 24,
+                  })}
+                  disabled={scheduleMeeting.isPending}>
+                  <CalendarPlus className="h-3 w-3 mr-1" /> Schedule meeting
+                </Button>
+                <Button size="sm" variant="outline" className="h-7 text-xs border-[#B89555]/30"
+                  onClick={() => saveNote.mutate({
+                    thread,
+                    content: thread.ai_summary || thread.ai_suggested_reply || "Note from AI triage",
+                  })}
+                  disabled={saveNote.isPending}>
+                  <NotebookPen className="h-3 w-3 mr-1" /> Save note
+                </Button>
+              </div>
+              {thread.ai_next_step?.reasoning && (
+                <p className="text-[10px] text-[#1A1A1A]/60">Next step: {thread.ai_next_step.reasoning}</p>
+              )}
+            </div>
+          )}
+
           {/* Reply Input */}
           <div className="border-t border-[#B89555]/10 p-3 flex-shrink-0">
             <div className="flex items-end gap-2">
