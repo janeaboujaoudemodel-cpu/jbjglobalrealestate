@@ -262,6 +262,21 @@ export default function BrokerageAgenciesDirectory() {
                     <a href={`mailto:${r.email}`} onClick={(e) => e.stopPropagation()} className="inline-flex items-center gap-1 hover:underline"><Mail className="h-3 w-3" />{r.email}</a>
                   ) : "—"}
                 </td>
+                <td className="px-4 py-3 text-xs whitespace-nowrap max-w-[200px]">
+                  {(() => {
+                    const w = r.website;
+                    if (!w) return <span className="text-[#1A1A1A]/40">—</span>;
+                    const href = /^https?:\/\//i.test(w) ? w : `https://${w}`;
+                    const domain = w.replace(/^https?:\/\//i, "").replace(/^www\./i, "").replace(/\/$/, "");
+                    return (
+                      <a href={href} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()}
+                         className="inline-flex items-center gap-1 text-[#1A1A1A] hover:underline truncate">
+                        <Globe className="h-3 w-3 shrink-0" />
+                        <span className="truncate">{domain}</span>
+                      </a>
+                    );
+                  })()}
+                </td>
                 <td className="px-4 py-3 text-right whitespace-nowrap">
                   {(() => {
                     const c = leadCounts.get(normalizeForSearch(r.company_name)) || 0;
