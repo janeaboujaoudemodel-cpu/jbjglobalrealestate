@@ -31,7 +31,7 @@ Deno.serve(async (req) => {
       return corsErrorResponse("Unauthorized", 401, origin);
     }
 
-    const { envelope_id, channels, cc_emails: ccOverride, bcc_emails: bccOverride, interpolated_subject, interpolated_body, interpolated_body_html, additional_recipients, docusign_url, attachment_name, attachment_url } = await req.json();
+    const { envelope_id, channels, cc_emails: ccOverride, bcc_emails: bccOverride, interpolated_subject, interpolated_body, interpolated_body_html, signature_html, additional_recipients, docusign_url, attachment_name, attachment_url } = await req.json();
     const channelList: string[] = Array.isArray(channels) && channels.length
       ? channels
       : ["email"];
@@ -118,6 +118,7 @@ Deno.serve(async (req) => {
       const emailHtml = buildEnvelopeEmailHtml({
         subject: finalSubject,
         bodyHtml: finalBodyHtml,
+        signatureHtml: typeof signature_html === "string" && signature_html.trim() ? signature_html : sigHtml,
         docNumber,
         senderName,
         senderTitle,

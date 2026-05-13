@@ -33,6 +33,7 @@ Deno.serve(async (req) => {
       interpolated_subject,
       interpolated_body,
       interpolated_body_html,
+      signature_html,
       docusign_url,
       attachment_name,
       attachment_url,
@@ -97,6 +98,7 @@ Deno.serve(async (req) => {
     const emailHtml = buildEnvelopeEmailHtml({
       subject: finalSubject,
       bodyHtml: finalBodyHtml,
+      signatureHtml: typeof signature_html === "string" && signature_html.trim() ? signature_html : sigHtml,
       docNumber,
       senderName,
       senderTitle,
