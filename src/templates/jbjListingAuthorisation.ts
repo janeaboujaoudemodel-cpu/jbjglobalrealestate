@@ -25,7 +25,7 @@ const sectionTitle = (n: number, t: string) => `
 export function buildSellingHtml(values: Partial<Record<SellingFieldKey, string>> = {}): string {
   const v = { ...SELLING_DEFAULT_VALUES, ...values };
   const html = `
-<div style="font-family:Inter,Arial,sans-serif;color:#1A1A1A;background:#FFFFFF;padding:48px 56px;max-width:794px;margin:0 auto;line-height:1.55;">
+<div dir="ltr" style="direction:ltr;unicode-bidi:isolate;writing-mode:horizontal-tb;transform:none;font-family:Inter,Arial,sans-serif;color:#1A1A1A;background:#FFFFFF;padding:48px 56px;max-width:794px;margin:0 auto;line-height:1.55;">
   <div style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid #B89555;padding-bottom:14px;margin-bottom:8px;">
     <div>
       <div style="font-size:22px;letter-spacing:.18em;font-weight:700;">JBJ GLOBAL REAL ESTATE</div>
