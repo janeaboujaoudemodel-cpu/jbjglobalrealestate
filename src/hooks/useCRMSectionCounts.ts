@@ -38,7 +38,7 @@ const EMPTY: CRMCounts = {
 };
 
 let cache: { at: number; data: CRMCounts } | null = null;
-const TTL = 30_000;
+const TTL = 5_000;
 
 async function headCount(table: string, builder?: (q: any) => any): Promise<number> {
   let q: any = (supabase.from(table as any).select("*", { count: "exact", head: true }) as any);
