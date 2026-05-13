@@ -507,17 +507,60 @@ export function BrandedEmailComposer() {
         <div className={`grid gap-4 ${showPreview ? "grid-cols-1 lg:grid-cols-2" : "grid-cols-1"}`}>
           {/* LEFT: compose */}
           <div className="space-y-4">
-            {/* Recipient name */}
-            <div>
-              <Label className="text-xs">Recipient full name (used for {`{{first_name}}`} / {`{{full_name}}`})</Label>
-              <Input
-                ref={refRecipientName}
-                placeholder="e.g. Sarah Johnson"
-                value={recipientName}
-                onChange={(e) => setRecipientName(e.target.value)}
-                className="bg-[#FDFBF7] border-[#B89555]/40"
-              />
+            {/* Recipient name + Company name */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <Label className="text-xs">Recipient full name (used for {`{{first_name}}`} / {`{{contact_name}}`})</Label>
+                <Input
+                  ref={refRecipientName}
+                  placeholder="e.g. Sarah Johnson"
+                  value={recipientName}
+                  onChange={(e) => setRecipientName(e.target.value)}
+                  className="bg-[#FDFBF7] border-[#B89555]/40"
+                />
+              </div>
+              <div>
+                <Label className="text-xs flex items-center gap-1"><Building2 className="w-3 h-3" /> Company name (used for {`{{company_name}}`} / {`{{agency_name}}`})</Label>
+                <Input
+                  placeholder="e.g. Allsopp & Allsopp"
+                  value={companyName}
+                  onChange={(e) => setCompanyName(e.target.value)}
+                  className="bg-[#FDFBF7] border-[#B89555]/40"
+                />
+              </div>
             </div>
+
+            {/* Email History panel */}
+            {historyOpen && (
+              <div className="rounded-md border border-[#B89555]/30 bg-[#F7F2EA] p-3">
+                <div className="flex items-center justify-between mb-2">
+                  <Label className="text-xs flex items-center gap-1"><HistoryIcon className="w-3 h-3" /> Recent sends &amp; status</Label>
+                  <Button type="button" size="sm" variant="ghost" onClick={loadHistory} disabled={historyLoading} className="h-7">
+                    {historyLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
+                  </Button>
+                </div>
+                <div className="max-h-[220px] overflow-auto space-y-1">
+                  {history.length === 0 && !historyLoading && (
+                    <p className="text-[11px] text-[#1A1A1A]/60 italic px-1">No sends yet.</p>
+                  )}
+                  {history.map((h) => {
+                    const isOk = ["sent", "delivered"].includes((h.status || "").toLowerCase());
+                    const isPending = ["pending", "queued"].includes((h.status || "").toLowerCase());
+                    const Icon = isOk ? CheckCircle2 : isPending ? Clock : AlertCircle;
+                    const tone = isOk ? "text-emerald-700" : isPending ? "text-amber-700" : "text-red-700";
+                    return (
+                      <div key={h.id} className="flex items-center gap-2 text-[11px] px-2 py-1.5 rounded bg-[#FDFBF7] border border-[#B89555]/15">
+                        <Icon className={`w-3.5 h-3.5 shrink-0 ${tone}`} />
+                        <span className="font-medium text-[#1A1A1A] truncate flex-1" title={h.subject || ""}>{h.subject || "(no subject)"}</span>
+                        <span className="text-[#1A1A1A]/60 truncate max-w-[160px]" title={h.recipient_email}>{h.recipient_email}</span>
+                        <span className={`uppercase tracking-wide ${tone} font-semibold`}>{h.status}</span>
+                        <span className="text-[#1A1A1A]/40 hidden md:inline">{new Date(h.created_at).toLocaleString()}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             {/* To / Cc / Bcc chip inputs */}
             <div ref={refRecipientEmail}>
