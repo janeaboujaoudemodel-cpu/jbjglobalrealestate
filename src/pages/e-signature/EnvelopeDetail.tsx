@@ -74,6 +74,70 @@ export default function EnvelopeDetail() {
   const [emailDialogOpen, setEmailDialogOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
   const [hiddenFields, setHiddenFields] = useState<string[]>([]);
+  const [uploadingSigned, setUploadingSigned] = useState(false);
+  const signedUploadInputRef = useMemo(() => ({ current: null as HTMLInputElement | null }), []);
+
+  const handleUploadSignedPdf = async (file: File) => {
+    if (!envelope) return;
+    if (!file.type.includes("pdf") && !file.name.toLowerCase().endsWith(".pdf")) {
+      toast.error("Please choose a PDF file");
+      return;
+    }
+    if (file.size > 25 * 1024 * 1024) {
+      toast.error("File too large (max 25 MB)");
+      return;
+    }
+    setUploadingSigned(true);
+    try {
+      const path = `${envelope.id}/${Date.now()}-signed.pdf`;
+      const { error: upErr } = await supabase.storage
+        .from("signed-contracts")
+        .upload(path, file, { upsert: false, contentType: "application/pdf" });
+      if (upErr) throw upErr;
+
+      // Create a long-lived signed URL (1 year) for downstream display.
+      const { data: signedUrlData, error: urlErr } = await supabase.storage
+        .from("signed-contracts")
+        .createSignedUrl(path, 60 * 60 * 24 * 365);
+      if (urlErr) throw urlErr;
+      const signedUrl = signedUrlData?.signedUrl;
+      if (!signedUrl) throw new Error("Could not create signed URL");
+
+      const nowIso = new Date().toISOString();
+      const { error: updErr } = await supabase
+        .from("esign_envelopes")
+        .update({
+          signed_document_url: signedUrl,
+          status: "completed",
+          completed_at: nowIso,
+        })
+        .eq("id", envelope.id);
+      if (updErr) throw updErr;
+
+      // Insert a signed-document record so the existing "Signed" banner picks it up.
+      await supabase.from("esign_signed_documents").insert({
+        envelope_id: envelope.id,
+        document_url: signedUrl,
+        document_filename: file.name || `signed-${envelope.id}.pdf`,
+      } as any);
+
+      // Best-effort audit entry.
+      await supabase.from("esign_audit_log").insert({
+        envelope_id: envelope.id,
+        action: "manually_completed",
+        description: "Owner uploaded signed PDF",
+      } as any);
+
+      toast.success("Signed PDF uploaded — envelope marked Completed");
+      refetch();
+      qc.invalidateQueries({ queryKey: ["esign-envelopes"] });
+    } catch (err: any) {
+      console.error("upload signed pdf failed", err);
+      toast.error(err?.message || "Failed to upload signed PDF");
+    } finally {
+      setUploadingSigned(false);
+    }
+  };
   // Tracks fields that were just restored (un-hidden) so we can highlight them
   // in the editor and the live preview until the user dismisses or re-saves.
   const [recentlyRestoredFields, setRecentlyRestoredFields] = useState<string[]>([]);
