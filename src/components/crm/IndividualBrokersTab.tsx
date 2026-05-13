@@ -477,6 +477,14 @@ export default function IndividualBrokersTab() {
           qc.invalidateQueries({ queryKey: ["crm-brokers-count"] });
         }}
       />
+
+      <UnifiedCRMExportModal
+        open={exportOpen}
+        onOpenChange={setExportOpen}
+        kind="brokers"
+        rows={rows as any[]}
+        filenameStem="crm-brokers-filtered"
+      />
     </div>
   );
 }
