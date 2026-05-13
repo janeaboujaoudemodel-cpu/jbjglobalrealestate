@@ -143,11 +143,12 @@ export const BulkSendDialog = ({
 
   const VARIANT_LABELS = (entityType === "brokerage" ? VARIANT_LABELS_BRK : VARIANT_LABELS_DEV) as Record<string, string>;
   const defaultVariant: AnyEmailVariant =
-    entityType === "brokerage" ? "brokerage_partnership_intro" : "developer_registration";
+    initialVariant ??
+    (entityType === "brokerage" ? "brokerage_partnership_intro" : "developer_registration");
 
   const [variant, setVariant] = useState<AnyEmailVariant>(defaultVariant);
-  // Reset variant when entityType changes
-  useEffect(() => { setVariant(defaultVariant); }, [entityType]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Reset variant when entityType or initialVariant changes
+  useEffect(() => { setVariant(defaultVariant); }, [entityType, initialVariant]); // eslint-disable-line react-hooks/exhaustive-deps
   const [skipRecent, setSkipRecent] = useState(true);
   const [testEmail, setTestEmail] = useState(defaultTestEmail);
   const [useCustomTestEmail, setUseCustomTestEmail] = useState(false);
