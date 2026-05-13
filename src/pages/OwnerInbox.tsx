@@ -227,13 +227,18 @@ export default function OwnerInbox() {
 
           {/* Channel Tabs - Header Bar with Badges */}
           <div className="flex items-center gap-1 mb-4 overflow-x-auto pb-1 border-b-2 border-[#B89555]/10">
-            {channelTabs.map((tab) => {
-              const isActive = filters.channel === tab.value;
-              const unreadCount = tab.value === 'all' ? totalUnreadAll : (channelUnreadCounts[tab.value] || 0);
+            {dynamicChannelTabs.map((tab) => {
+              const tabChannelId = (tab as { channelId?: string }).channelId;
+              const isActive = tabChannelId
+                ? filters.channelId === tabChannelId
+                : filters.channel === tab.value && (filters.channelId === 'all' || !filters.channelId);
+              const unreadCount = tabChannelId
+                ? threads.filter(t => t.channel_id === tabChannelId).reduce((s, t) => s + (t.unread_count || 0), 0)
+                : tab.value === 'all' ? totalUnreadAll : (channelUnreadCounts[tab.value] || 0);
               return (
                 <button
-                  key={tab.value}
-                  onClick={() => handleChannelTabClick(tab.value)}
+                  key={`${tab.value}-${tabChannelId ?? 'all'}`}
+                  onClick={() => handleChannelTabClick(tab.value, tabChannelId ?? 'all')}
                   className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all duration-200 border-b-2 -mb-[2px] rounded-t-lg ${
                     isActive
                       ? 'border-[#B89555] bg-[#EFE6D6]/10 text-foreground font-bold shadow-sm'
@@ -241,7 +246,7 @@ export default function OwnerInbox() {
                   }`}
                 >
                   {tab.icon}
-                  <span>{tab.label}</span>
+                  <span className="max-w-[180px] truncate">{tab.label}</span>
                   {unreadCount > 0 && (
                     <span className={`ml-1 min-w-[20px] h-5 px-1.5 rounded-full text-xs font-bold flex items-center justify-center ${
                       isActive ? 'bg-[#EFE6D6] text-[#1A1A1A]' : 'bg-muted text-muted-foreground'
