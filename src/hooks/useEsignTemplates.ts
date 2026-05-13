@@ -127,8 +127,9 @@ export function useCreateEnvelopeFromTemplate() {
       values?: Record<string, string>;
       client?: { name: string; email: string; phone?: string };
       clientLeadId?: string;
+      hiddenFields?: string[];
     }) => {
-      const { template, values = {}, client, clientLeadId } = input;
+      const { template, values = {}, client, clientLeadId, hiddenFields = [] } = input;
       const { data: userData } = await supabase.auth.getUser();
       const user = userData.user;
       if (!user) throw new Error("Not signed in");
@@ -148,7 +149,7 @@ export function useCreateEnvelopeFromTemplate() {
       // 3. Render HTML + PDF (use the same opts shape as regenerate so the
       //    initial PDF matches what the iframe preview will show — fixes
       //    "downloaded a different style of document" before first save.)
-      const html = renderTemplateHtml(template.key, mergedValues, { renderMode: "final", category: template.category });
+      const html = renderTemplateHtml(template.key, mergedValues, { renderMode: "final", category: template.category, hiddenFields });
       const { blob, pdfWidth, pdfHeight } = await renderHtmlToPdfBlob(html);
 
       // 4. Upload PDF
@@ -179,7 +180,7 @@ export function useCreateEnvelopeFromTemplate() {
           template_html: html,
           template_field_values: mergedValues,
           client_lead_id: clientLeadId ?? null,
-          metadata: { doc_number: docNumber, cc_emails: [] },
+          metadata: { doc_number: docNumber, cc_emails: [], hidden_fields: hiddenFields },
           expires_at: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
         })
         .select()
@@ -220,10 +221,20 @@ export function useCreateEnvelopeFromTemplate() {
       const ownerRec = createdRecipients.find((r: any) => r.metadata?.role === "owner") ?? createdRecipients[createdRecipients.length - 1];
       const clientRec = createdRecipients.find((r: any) => r.metadata?.role === "client");
 
-      // 7. Fields
+      // 7. Fields — skip any schema entries the caller chose to hide so we don't
+      //    create signing fields against a block that no longer exists in the PDF.
+      const hiddenSet = new Set(hiddenFields);
+      const isHidden = (f: any) => {
+        const k = String(f?.key || f?.field_key || f?.name || "").toLowerCase();
+        if (k && hiddenSet.has(k)) return true;
+        // Heuristic: hide JBJ owner-side blocks when jbj_signature_* keys are hidden.
+        if ((hiddenSet.has("jbj_signature_name") || hiddenSet.has("jbj_signature_date")) && f?.role === "owner") return true;
+        return false;
+      };
       const schema = Array.isArray(template.field_schema) ? template.field_schema : [];
       const fieldInserts = schema
         .map((f) => {
+          if (isHidden(f)) return null;
           const recipient = f.role === "client" ? clientRec : ownerRec;
           if (!recipient) return null;
           // x_position / y_position are stored as percentages (0-100) so the

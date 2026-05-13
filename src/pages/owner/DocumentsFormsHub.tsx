@@ -106,6 +106,7 @@ export default function DocumentsFormsHub() {
   const [client, setClient] = useState({ name: "", email: "", phone: "" });
   const [extraValues, setExtraValues] = useState<Record<string, string>>({});
   const [showDetails, setShowDetails] = useState(false);
+  const [includeJbjBlock, setIncludeJbjBlock] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
 
   // Bucket envelopes.
@@ -142,7 +143,8 @@ export default function DocumentsFormsHub() {
     }
     // Email is optional now — required only at send-time
     try {
-      const env = await createFromTpl.mutateAsync({ template: picker, client, values: extraValues });
+      const hiddenFields = includeJbjBlock ? [] : ["jbj_signature_name", "jbj_signature_date"];
+      const env = await createFromTpl.mutateAsync({ template: picker, client, values: extraValues, hiddenFields });
       toast.success("Draft created — review fields and send");
       qc.invalidateQueries({ queryKey: ["esign_envelopes_hub_all"] });
       navigate(`/owner/documents/forms/${env.id}`);
@@ -475,7 +477,7 @@ export default function DocumentsFormsHub() {
       </div>
 
       {/* Use template dialog — email is now optional */}
-      <Dialog open={!!picker} onOpenChange={(o) => { if (!o) { setPicker(null); setExtraValues({}); setShowDetails(false); } }}>
+      <Dialog open={!!picker} onOpenChange={(o) => { if (!o) { setPicker(null); setExtraValues({}); setShowDetails(false); setIncludeJbjBlock(false); } }}>
         <DialogContent className="bg-[#FDFBF7] max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-[#1A1A1A]">{picker?.name}</DialogTitle>
@@ -572,12 +574,29 @@ export default function DocumentsFormsHub() {
               </div>
             )}
 
+            <div className="flex items-start gap-3 rounded-md border border-[#B89555]/30 bg-[#F7F2EA]/60 px-3 py-2.5">
+              <Checkbox
+                id="include-jbj-block"
+                checked={includeJbjBlock}
+                onCheckedChange={(v) => setIncludeJbjBlock(v === true)}
+                className="mt-0.5"
+              />
+              <div className="flex-1 min-w-0">
+                <Label htmlFor="include-jbj-block" className="text-sm font-semibold text-[#1A1A1A] cursor-pointer">
+                  Add JBJ company signature & stamp
+                </Label>
+                <p className="text-[11px] text-[#1A1A1A]/70 mt-0.5">
+                  Off by default — only the landlord signs. Turn on if your client requires our company signature & stamp on the agreement.
+                </p>
+              </div>
+            </div>
+
             <p className="text-xs text-[#1A1A1A]/70">
-              We'll generate the PDF, pre-place client + JBJ signature, stamp and date fields, then open the envelope so you can adjust before sending.
+              We'll generate the agreement, place name and date fields for the landlord, and open the envelope so you can review before sending. The client signs directly when they open the link.
             </p>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => { setPicker(null); setExtraValues({}); setShowDetails(false); }}>Cancel</Button>
+            <Button variant="outline" onClick={() => { setPicker(null); setExtraValues({}); setShowDetails(false); setIncludeJbjBlock(false); }}>Cancel</Button>
             <Button variant="gold" onClick={handleUseTemplate} disabled={createFromTpl.isPending}>
               {createFromTpl.isPending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
               Create Envelope
