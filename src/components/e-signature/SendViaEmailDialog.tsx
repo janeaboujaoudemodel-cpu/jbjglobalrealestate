@@ -220,6 +220,7 @@ export function SendViaEmailDialog({
           envelope_id: envelopeId,
           interpolated_subject: subject,
           interpolated_body_html: bodyHtml,
+          signature_html: selectedSigHtml,
           docusign_url: docusignUrl.trim() || undefined,
           attachment_name: attachmentName,
           attachment_url: signedAttachmentUrl,
@@ -246,6 +247,14 @@ export function SendViaEmailDialog({
       const session = await supabase.auth.getSession();
       const token = session.data.session?.access_token;
       const signedAttachmentUrl = await resolveAttachmentUrl(attachmentUrl);
+      // Persist edited subject/body to the envelope so re-opening the dialog
+      // shows the user's latest text instead of resetting to the original.
+      try {
+        await supabase
+          .from("esign_envelopes")
+          .update({ email_subject: subject, email_message: bodyHtml })
+          .eq("id", envelopeId);
+      } catch (e) { /* non-fatal */ }
       const res = await fetch(`${SUPABASE_URL}/functions/v1/esign-send-for-signature`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
@@ -256,6 +265,7 @@ export function SendViaEmailDialog({
           cc_emails: cleanCcs,
           interpolated_subject: subject,
           interpolated_body_html: bodyHtml,
+          signature_html: selectedSigHtml,
           docusign_url: docusignUrl.trim() || undefined,
           attachment_name: attachmentName,
           attachment_url: signedAttachmentUrl,
@@ -417,6 +427,7 @@ export function SendViaEmailDialog({
               <EmailPreviewIframe
                 subject={subject}
                 bodyHtml={bodyHtml}
+                signatureHtml={selectedSigHtml}
                 docNumber={docNumber}
                 docusignUrl={docusignUrl}
                 attachmentName={attachmentName}
