@@ -279,9 +279,7 @@ const titleBlockHtml = (chrome: Required<TemplateChrome>, category: PAACategory)
       ${titleFor(category).toUpperCase()}
     </div>
   </div>`;
-    }
-  }
-};
+
 
 const footerHtml = (chrome: Required<TemplateChrome>) => {
   const { accent, ink, footerStyle, tagline, trn, license } = chrome;
