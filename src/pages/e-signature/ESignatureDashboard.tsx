@@ -750,20 +750,35 @@ export default function ESignatureDashboard() {
                                   View Details
                                 </Link>
                               </DropdownMenuItem>
-                              {["sent", "viewed", "partially_signed"].includes(envelope.status) && (
+                              {view === "active" && ["sent", "viewed", "partially_signed"].includes(envelope.status) && (
                                 <DropdownMenuItem onClick={() => handleSendReminder(envelope.id)}>
                                   <Bell className="w-4 h-4 mr-2" />
                                   Send Reminder
                                 </DropdownMenuItem>
                               )}
-                              {envelope.status === "draft" && (
+                              {view === "active" && (
                                 <DropdownMenuItem
                                   onClick={() => handleDelete(envelope.id)}
                                   className="text-red-600"
                                 >
                                   <Trash2 className="w-4 h-4 mr-2" />
-                                  Delete
+                                  Move to Recently Deleted
                                 </DropdownMenuItem>
+                              )}
+                              {view === "deleted" && (
+                                <>
+                                  <DropdownMenuItem onClick={() => handleRestore([envelope.id])}>
+                                    <RotateCcw className="w-4 h-4 mr-2" />
+                                    Restore
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                    onClick={() => setPendingPurge({ ids: [envelope.id] })}
+                                    className="text-red-600"
+                                  >
+                                    <Trash2 className="w-4 h-4 mr-2" />
+                                    Delete permanently
+                                  </DropdownMenuItem>
+                                </>
                               )}
                             </DropdownMenuContent>
                           </DropdownMenu>
