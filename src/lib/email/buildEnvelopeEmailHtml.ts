@@ -92,7 +92,7 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
       : `<div style="margin:18px 0 0;padding:10px 12px;border:1px solid #B89555;background:#F7F2EA;display:inline-block;font-family:Inter,Arial,sans-serif;font-size:11.5px;color:#1A1A1A;letter-spacing:.04em;">${chipInner}</div>`
     : "";
 
-  const footerNote = `Tap the button above to open the agreement in DocuSign and complete the signature. Once signed, please return the signed PDF to ${SIGNED_RETURN_EMAIL}.`;
+  
 
   // Mobile-responsive shell — the @media block stacks the header columns,
   // forces the wordmark on a single line, and turns the 3-column footer into
