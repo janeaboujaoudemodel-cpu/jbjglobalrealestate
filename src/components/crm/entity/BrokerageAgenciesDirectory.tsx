@@ -5,7 +5,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Building2, Globe, ExternalLink, Phone, Mail, Star } from "lucide-react";
+import { Building2, Globe, Phone, Mail, Star } from "lucide-react";
 import { CompanyHubDrawer } from "@/components/crm/CompanyHubDrawer";
 import { sortBrokeragesForDirectory, normalizeForSearch } from "@/utils/brokerageRanking";
 
@@ -215,6 +215,7 @@ export default function BrokerageAgenciesDirectory() {
               <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Office</th>
               <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Phone</th>
               <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Email</th>
+              <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Website</th>
               <th className="text-right px-4 py-2 font-semibold whitespace-nowrap">Leads</th>
               <th className="text-right px-4 py-2 font-semibold whitespace-nowrap">Agents</th>
               <th className="text-right px-4 py-2 font-semibold whitespace-nowrap">Rating</th>
@@ -260,6 +261,21 @@ export default function BrokerageAgenciesDirectory() {
                   {r.email ? (
                     <a href={`mailto:${r.email}`} onClick={(e) => e.stopPropagation()} className="inline-flex items-center gap-1 hover:underline"><Mail className="h-3 w-3" />{r.email}</a>
                   ) : "—"}
+                </td>
+                <td className="px-4 py-3 text-xs whitespace-nowrap max-w-[200px]">
+                  {(() => {
+                    const w = r.website;
+                    if (!w) return <span className="text-[#1A1A1A]/40">—</span>;
+                    const href = /^https?:\/\//i.test(w) ? w : `https://${w}`;
+                    const domain = w.replace(/^https?:\/\//i, "").replace(/^www\./i, "").replace(/\/$/, "");
+                    return (
+                      <a href={href} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()}
+                         className="inline-flex items-center gap-1 text-[#1A1A1A] hover:underline truncate">
+                        <Globe className="h-3 w-3 shrink-0" />
+                        <span className="truncate">{domain}</span>
+                      </a>
+                    );
+                  })()}
                 </td>
                 <td className="px-4 py-3 text-right whitespace-nowrap">
                   {(() => {
