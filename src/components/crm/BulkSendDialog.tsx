@@ -125,12 +125,16 @@ const getEmail = (r: Recipient, entityType: EntityType) =>
 
 export const BulkSendDialog = ({
   open, onOpenChange, selected, defaultTestEmail, entityType = "developer",
+  initialVariant, title, lockVariant = false,
 }: {
   open: boolean;
   onOpenChange: (v: boolean) => void;
   selected: Recipient[];
   defaultTestEmail: string;
   entityType?: EntityType;
+  initialVariant?: AnyEmailVariant;
+  title?: string;
+  lockVariant?: boolean;
 }) => {
   const sendDev = useSendDeveloperRegistration();
   const sendBrk = useSendBrokerageOutreach();
@@ -139,11 +143,12 @@ export const BulkSendDialog = ({
 
   const VARIANT_LABELS = (entityType === "brokerage" ? VARIANT_LABELS_BRK : VARIANT_LABELS_DEV) as Record<string, string>;
   const defaultVariant: AnyEmailVariant =
-    entityType === "brokerage" ? "brokerage_partnership_intro" : "developer_registration";
+    initialVariant ??
+    (entityType === "brokerage" ? "brokerage_partnership_intro" : "developer_registration");
 
   const [variant, setVariant] = useState<AnyEmailVariant>(defaultVariant);
-  // Reset variant when entityType changes
-  useEffect(() => { setVariant(defaultVariant); }, [entityType]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Reset variant when entityType or initialVariant changes
+  useEffect(() => { setVariant(defaultVariant); }, [entityType, initialVariant]); // eslint-disable-line react-hooks/exhaustive-deps
   const [skipRecent, setSkipRecent] = useState(true);
   const [testEmail, setTestEmail] = useState(defaultTestEmail);
   const [useCustomTestEmail, setUseCustomTestEmail] = useState(false);
@@ -505,7 +510,7 @@ export const BulkSendDialog = ({
       <DialogContent className="max-w-[1500px] w-[97vw] bg-[#FDFBF7] max-h-[94vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-[#1A1A1A] flex items-center gap-2">
-            {entityType === "brokerage" ? "Send Brokerage Outreach" : "Send Registration Email"}
+            {title || (entityType === "brokerage" ? "Send Brokerage Outreach" : "Send Registration Email")}
             {template?.locked_at ? (
               <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 flex items-center gap-1">
                 <Lock className="w-3 h-3" />Locked
@@ -521,6 +526,7 @@ export const BulkSendDialog = ({
         <div className="grid gap-4 lg:grid-cols-[340px_minmax(0,1fr)]">
           <div className="space-y-4 min-w-0">
           {/* Variant */}
+          {!lockVariant ? (
           <div>
             <Label className="text-xs text-[#1A1A1A]">Email variant</Label>
             <div className="grid grid-cols-2 gap-2 mt-1">
@@ -539,6 +545,11 @@ export const BulkSendDialog = ({
               ))}
             </div>
           </div>
+          ) : (
+            <div className="rounded-lg border border-[#B89555]/40 bg-[#EFE6D6]/40 px-3 py-2 text-xs text-[#1A1A1A]">
+              <span className="font-semibold">Variant:</span> {VARIANT_LABELS[variant]}
+            </div>
+          )}
 
           {/* Test send (left col) — always sends to your registered email by default */}
           <div className="border border-[#1A1A1A]/10 rounded-xl p-3 bg-[#FAF5EA]">

@@ -60,6 +60,8 @@ import { TemplateEditorDialog } from "@/components/crm/TemplateEditorDialog";
 import { TestSendDialog } from "@/components/crm/TestSendDialog";
 import { BreakfastBookingsSection } from "@/components/crm/BreakfastBookingsSection";
 import { BulkSendDialog } from "@/components/crm/BulkSendDialog";
+import { ConfirmRegistrationLauncher } from "@/components/crm/ConfirmRegistrationLauncher";
+import { ShieldCheck } from "lucide-react";
 import { BulkOutreachPanel } from "@/components/crm/BulkOutreachPanel";
 import { BulkUploadDialog } from "@/components/crm/BulkUploadDialog";
 import { OutreachActionsMenu } from "@/components/crm/OutreachActionsMenu";
@@ -2200,6 +2202,9 @@ const DeveloperRegistryTab = () => {
   const [emailFilter, setEmailFilter] = useState<"all" | "not_sent" | "sent" | "registered">("all");
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [bulkOpen, setBulkOpen] = useState(false);
+  const [confirmRegOpen, setConfirmRegOpen] = useState(false);
+  const [confirmRegBulkOpen, setConfirmRegBulkOpen] = useState(false);
+  const [confirmRegSelected, setConfirmRegSelected] = useState<any[]>([]);
   const [tplOpen, setTplOpen] = useState(false);
   const [noteEditing, setNoteEditing] = useState<string | null>(null);
   useEffect(() => {
@@ -2631,6 +2636,15 @@ const DeveloperRegistryTab = () => {
           onSendTest={() => setTestSendOpen(true)}
           onActivityLog={() => navigate("/owner/crm/relationships/activity")}
         />
+        <Button
+          size="sm"
+          variant="gold"
+          className="shadow-md"
+          onClick={() => setConfirmRegOpen(true)}
+        >
+          <ShieldCheck className="w-3.5 h-3.5 mr-1.5" />
+          Confirm Registration Status
+        </Button>
         <ExcludeFilterPopover
           scope="developer"
           options={(data as any[]).map((r) => ({ id: r.id, name: r.developer_name || "Unnamed" }))}
@@ -3064,6 +3078,28 @@ const DeveloperRegistryTab = () => {
         onOpenChange={setBulkOpen}
         selected={selectedDevs}
         defaultTestEmail={ownerSettings?.cc_email || "infoo.jane@gmail.com"}
+      />
+      <ConfirmRegistrationLauncher
+        open={confirmRegOpen}
+        onOpenChange={setConfirmRegOpen}
+        developers={data as any[]}
+        onContinue={(picked) => {
+          setConfirmRegSelected(picked);
+          setTimeout(() => setConfirmRegOpen(false), 0);
+          setTimeout(() => {
+            // open the bulk dialog with locked variant for confirmations
+            setConfirmRegBulkOpen(true);
+          }, 50);
+        }}
+      />
+      <BulkSendDialog
+        open={confirmRegBulkOpen}
+        onOpenChange={setConfirmRegBulkOpen}
+        selected={confirmRegSelected as any}
+        defaultTestEmail={ownerSettings?.cc_email || "infoo.jane@gmail.com"}
+        initialVariant="developer_confirm_registered"
+        title="Confirm Registration Status"
+        lockVariant
       />
 
       <Dialog open={open} onOpenChange={setOpen}>
