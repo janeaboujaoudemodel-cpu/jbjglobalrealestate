@@ -1,0 +1,40 @@
+# JBJ Global Real Estate
+
+> Dubai's premier RERA-licensed property brokerage. Buy, sell, or rent luxury apartments, villas, and off-plan properties across the UAE.
+
+JBJ Global Real Estate, founded by Jane Bou Jaoude, is a Dubai-headquartered brokerage serving investors, end-users, and developers across the United Arab Emirates. The platform combines a curated property portfolio with AI-powered tools, market intelligence, and concierge services for buyers, sellers, tenants, landlords, and brokers.
+
+## Pages
+
+- [Home](/): Brokerage overview, featured listings, and entry points for buyers, sellers, and renters.
+- [Properties](/properties): Searchable catalog of apartments, villas, penthouses, and off-plan projects for sale and rent.
+- [Resale Properties](/resale-properties): Verified secondary-market listings across Dubai and the UAE.
+- [Communities](/communities): Profiles of premier residential communities in Dubai.
+- [Areas](/areas): In-depth area guides for Dubai neighborhoods.
+- [Developers](/developers): Directory of UAE master developers and their active projects.
+- [Sell with JBJ](/sell): Process and valuation tools for owners listing a property.
+- [Buyer Guide](/buyer-guide): Step-by-step guide to purchasing property in Dubai.
+- [Seller Guide](/seller-guide): Pricing, marketing, and transfer process for property sellers.
+- [Rent Guide](/rent-guide): Tenant guidance for renting in the UAE.
+- [Landlord Guide](/landlord-guide): Resources for property owners leasing units.
+- [Mortgage Calculator](/mortgage-calculator): Free Dubai mortgage and affordability calculator.
+- [Golden Visa Guide](/guides/golden-visa-uae): UAE Golden Visa eligibility and application overview.
+- [Market Intelligence](/market-intelligence): Dubai property market data, reports, and methodology.
+- [News](/news): Real estate news and market commentary.
+- [About](/about): Company background, leadership, and credentials.
+- [Founder](/founder): Profile of founder and CEO Jane Bou Jaoude.
+- [Team](/team): Meet the JBJ Global Real Estate team.
+- [Awards](/awards): Industry recognition and awards.
+- [Services](/services): Brokerage, leasing, off-plan, and advisory services.
+- [Company Profile](/company-profile): Detailed institutional company profile.
+- [Contact](/contact): Contact details and inquiry form.
+
+## Optional
+
+- [FAQ](/faq): Frequently asked questions about Dubai real estate.
+- [Reviews](/reviews): Client testimonials and reviews.
+- [Customer Happiness](/customer-happiness): Service quality and feedback program.
+- [Privacy Policy](/privacy): How we collect, use, and protect personal information.
+- [Terms of Service](/terms): Terms and conditions for using the website.
+- [Cookie Policy](/cookies): Information about cookies used on this site.
+- [Sitemap](/sitemap): Human-readable site index.

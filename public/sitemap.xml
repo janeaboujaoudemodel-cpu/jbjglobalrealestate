@@ -92,11 +92,6 @@
     <priority>0.88</priority>
   </url>
   <url>
-    <loc>https://www.jbj.ae/relocation-guide</loc>
-    <lastmod>2026-03-11</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
   <url>
     <loc>https://www.jbj.ae/education-hub</loc>
     <lastmod>2026-03-11</lastmod>
@@ -168,11 +163,6 @@
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://www.jbj.ae/career-portal</loc>
-    <lastmod>2026-03-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
-  </url>
 
   <!-- ====== COMMUNITIES & AREAS - Local SEO Gold ====== -->
   <url>
@@ -762,5 +752,30 @@
     <lastmod>2026-04-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
+  </url>
+  <!-- ====== AI TOOLS & TOOLKIT ====== -->
+  <url>
+    <loc>https://www.jbj.ae/executive-assistant</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.jbj.ae/interior-design-ai</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.jbj.ae/toolkit/voice-studio</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://www.jbj.ae/toolkit/background-ai</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
   </url>
 </urlset>

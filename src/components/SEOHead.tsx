@@ -18,7 +18,7 @@ interface SEOHeadProps {
   faqItems?: FAQItem[];
 }
 
-const BASE_URL = 'https://jbj.ae';
+const BASE_URL = 'https://www.jbj.ae';
 const DEFAULT_OG_IMAGE = `${BASE_URL}/og-image.jpg`;
 const BRAND_NAME = 'JBJ Global Real Estate';
 
@@ -57,11 +57,9 @@ export const SEOHead = ({
   const finalKeywords = keywords || coreKeywords;
   
   // Build title with or without founder name
-  const fullTitle = title === 'Home' 
-    ? isFounderVisible
-      ? `${BRAND_NAME} | Dubai Property Brokerage | Buy, Sell, Rent | Jane Bou Jaoude`
-      : `${BRAND_NAME} | Dubai Property Brokerage | Buy, Sell, Rent`
-    : `${title} | ${BRAND_NAME} Dubai`;
+    const fullTitle = title === 'Home'
+      ? `${BRAND_NAME} | Dubai Property Brokerage`
+      : `${title} | ${BRAND_NAME}`;
 
   useEffect(() => {
     // Set document title
@@ -169,13 +167,13 @@ export const SEOHead = ({
 export const pagesSEO = {
   home: {
     title: 'Home',
-    description: 'JBJ Global Real Estate, founded by Founder & CEO Jane Bou Jaoude, is Dubai\'s premier property brokerage. Buy, sell, or rent luxury apartments, villas, and off-plan properties in Palm Jumeirah, Downtown Dubai, Marina & across UAE.',
+    description: 'JBJ Global Real Estate — Dubai\'s premier RERA-licensed brokerage. Buy, sell, or rent luxury apartments, villas, and off-plan properties across the UAE.',
     keywords: 'JBJ, JBJ Global Real Estate, Jane Bou Jaoude, Jane Lebanese Dubai, Dubai real estate, buy property Dubai, sell property Dubai, rent apartment Dubai, UAE property brokerage, luxury apartments Dubai, off-plan properties, Palm Jumeirah, Downtown Dubai, Dubai Marina, Business Bay, real estate agent Dubai',
     canonicalPath: '/',
   },
   properties: {
     title: 'Properties for Sale & Rent in Dubai',
-    description: 'Browse exclusive luxury properties in Dubai and UAE. Apartments, villas, penthouses for sale or rent in Palm Jumeirah, Downtown Dubai, Marina. JBJ Global Real Estate by Founder & CEO Jane Bou Jaoude.',
+    description: 'Browse exclusive luxury properties in Dubai and the UAE — apartments, villas, and penthouses for sale or rent in Palm Jumeirah, Downtown, and Marina.',
     keywords: 'Dubai properties for sale, apartments for rent Dubai, villas Dubai, penthouse Dubai, off-plan projects UAE, Palm Jumeirah properties, Downtown Dubai apartments, Dubai Marina rentals, buy property Dubai, rent Dubai',
     canonicalPath: '/properties',
   },
@@ -199,7 +197,7 @@ export const pagesSEO = {
   },
   contact: {
     title: 'Contact JBJ Global Real Estate Dubai',
-    description: 'Contact JBJ Global Real Estate for property inquiries in Dubai. Founded by Founder & CEO Jane Bou Jaoude. Call +971 54 716 7107 or email contact@JBJ.ae for expert assistance.',
+    description: 'Contact JBJ Global Real Estate for property inquiries in Dubai. Call +971 54 716 7107 or email contact@jbj.ae for expert assistance.',
     keywords: 'contact JBJ, JBJ phone number, Dubai real estate contact, property consultation Dubai, Jane Bou Jaoude contact, JBJ Global Real Estate email, real estate inquiry Dubai',
     canonicalPath: '/contact',
   },
