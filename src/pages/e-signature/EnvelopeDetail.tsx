@@ -756,8 +756,22 @@ export default function EnvelopeDetail() {
     return (
       <div className="min-h-screen bg-[#FDFBF7] p-6">
         <div className="max-w-6xl mx-auto space-y-6">
-          <Skeleton className="h-12 w-48" />
-          <Skeleton className="h-[600px] w-full" />
+          <div className="flex items-center gap-3">
+            <Skeleton className="h-10 w-10 rounded-full" />
+            <Skeleton className="h-8 w-64" />
+            <Skeleton className="h-6 w-20" />
+          </div>
+          <Skeleton className="h-12 w-full" />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <Skeleton className="lg:col-span-2 h-[600px] w-full" />
+            <div className="space-y-4">
+              <Skeleton className="h-40 w-full" />
+              <Skeleton className="h-40 w-full" />
+            </div>
+          </div>
+          <div className="flex items-center gap-2 text-[#1A1A1A]/60 text-sm justify-center pt-2">
+            <Loader2 className="w-4 h-4 animate-spin" /> Loading document…
+          </div>
         </div>
       </div>
     );
