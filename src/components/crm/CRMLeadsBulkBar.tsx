@@ -443,10 +443,10 @@ export default function CRMLeadsBulkBar({
             type="button"
             variant="secondary"
             size="sm"
-            onClick={handleMerge}
+            onClick={() => setMergeOpen(true)}
             disabled={busy || count < 2}
             className="font-semibold"
-            title={count < 2 ? "Select 2+ leads to merge" : "Merge selected leads into one"}
+            title={count < 2 ? "Select 2+ leads to merge" : "Review fields and merge"}
           >
             <GitMerge className="h-4 w-4 mr-2" />
             Merge ({count})
