@@ -223,6 +223,8 @@ export default function BrokersRegistry() {
     companies: companies.length,
   }), [allRows, registered, companies, dbTotal]);
 
+  const fmtTotal = (n: number | null) =>
+    n == null ? "…" : n.toLocaleString();
   const Stat = ({ icon: Icon, label, value, onClick, active }: any) => (
     <Card
       onClick={onClick}
@@ -232,7 +234,9 @@ export default function BrokersRegistry() {
         <div className="flex-none"><IconTile icon={Icon} tone="gold" /></div>
         <div className="min-w-0 flex-1">
           <div className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/70 truncate whitespace-nowrap">{label}</div>
-          <div className="text-2xl font-bold text-[#1A1A1A] leading-tight">{value}</div>
+          <div className="text-2xl font-bold text-[#1A1A1A] leading-tight">
+            {value == null ? <Skeleton className="h-7 w-16 inline-block align-middle" /> : (typeof value === "number" ? value.toLocaleString() : value)}
+          </div>
         </div>
       </CardContent>
     </Card>
