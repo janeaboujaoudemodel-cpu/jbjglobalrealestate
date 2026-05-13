@@ -31,8 +31,7 @@ const CRMLeadDetail = lazy(() => import("@/pages/CRMLeadDetail"));
 const CRMTasks = lazy(() => import("@/pages/CRMTasks"));
 const CRMCalendar = lazy(() => import("@/pages/CRMCalendar"));
 const CRMNotes = lazy(() => import("@/pages/CRMNotes"));
-const CRMReminders = lazy(() => import("@/pages/CRMReminders"));
-const CRMEmployees = lazy(() => import("@/pages/CRMEmployees"));
+// CRMReminders + CRMEmployees deleted — content lives inside UnifiedCRM sections
 const Admin = lazy(() => import("@/pages/Admin"));
 const AdminLeads = lazy(() => import("@/pages/AdminLeads"));
 const MarketingHub = lazy(() => import("@/pages/admin/MarketingHub"));
