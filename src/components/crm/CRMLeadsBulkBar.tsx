@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Copy, MessageSquare, Mail, RefreshCw, Trash2, UserPlus, X, Sparkles, GitMerge } from "lucide-react";
 import { PIPELINE_STATUSES } from "./LeadStatusBadge";
+import MergeContactsDialog from "./MergeContactsDialog";
 
 interface BrokerOption {
   user_id: string;
