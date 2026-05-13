@@ -121,6 +121,11 @@ export function useCRMSectionCounts(): { counts: CRMCounts; loading: boolean; re
       .on("postgres_changes", { event: "*", schema: "public", table: "user_notifications" }, bump)
       .on("postgres_changes", { event: "*", schema: "public", table: "crm_email_campaigns" }, bump)
       .on("postgres_changes", { event: "*", schema: "public", table: "crm_automation_rules" }, bump)
+      .on("postgres_changes", { event: "*", schema: "public", table: "crm_brokers" }, bump)
+      .on("postgres_changes", { event: "*", schema: "public", table: "crm_brokerages" }, bump)
+      .on("postgres_changes", { event: "*", schema: "public", table: "developers" }, bump)
+      .on("postgres_changes", { event: "*", schema: "public", table: "developer_sales_reps" }, bump)
+      .on("postgres_changes", { event: "*", schema: "public", table: "broker_profiles" }, bump)
       .subscribe();
     return () => {
       if (t) clearTimeout(t);
