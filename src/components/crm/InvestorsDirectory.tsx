@@ -267,7 +267,7 @@ export default function InvestorsDirectory({
         </div>
       ) : (
         <div className="overflow-x-auto rounded-lg border border-[#B89555]/30 bg-[#FDFBF7]">
-          <table className="min-w-full text-sm">
+          <table className="min-w-[1000px] w-full text-sm">
             <thead className="bg-[#F7F2EA] text-[#1A1A1A]">
               <tr>
                 <th className="text-left px-4 py-2 font-semibold">Investor</th>
