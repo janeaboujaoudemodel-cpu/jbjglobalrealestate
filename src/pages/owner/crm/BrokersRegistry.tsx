@@ -16,6 +16,9 @@ import { Label } from "@/components/ui/label";
 import { Users, Search, Plus, Building2, BadgeCheck, Clock, Loader2, Download } from "lucide-react";
 import { toast } from "sonner";
 import { useCRMSectionCounts } from "@/hooks/useCRMSectionCounts";
+import { useEntityTotal } from "@/hooks/useEntityTotal";
+import { ViewSwitch, useCRMViewMode } from "@/components/crm/ViewSwitch";
+import { ExcelGridView, type ExcelGridColumn } from "@/components/crm/ExcelGridView";
 import { RelationalHubTabs } from "@/components/crm/RelationalHubTabs";
 import { PersonHub } from "@/components/crm/PersonHub";
 import { UnifiedCRMExportModal } from "@/components/crm/UnifiedCRMExportModal";
@@ -55,16 +58,27 @@ export default function BrokersRegistry() {
   const [exportOpen, setExportOpen] = useState(false);
   const sourceFilterCtx = useSourceFilterContext(sourceFilter);
 
+  const [viewMode, setViewMode] = useCRMViewMode("brokers", "cards");
+
   const { data: registered = [], isLoading: loading1 } = useQuery({
     queryKey: ["brokers-registered"],
     queryFn: async () => {
-      const { data, error } = await (supabase as any)
-        .from("broker_profiles")
-        .select("id, user_id, display_name, email, phone, current_tier, photo_url, verification_status, custom_label, updated_at")
-        .order("updated_at", { ascending: false })
-        .limit(1000);
-      if (error) throw error;
-      return data || [];
+      // Page through broker_profiles instead of capping at 1000 — the directory
+      // must show every registered broker, not the first page.
+      const PAGE = 1000;
+      const out: any[] = [];
+      for (let from = 0; from < 200_000; from += PAGE) {
+        const { data, error } = await (supabase as any)
+          .from("broker_profiles")
+          .select("id, user_id, display_name, email, phone, current_tier, photo_url, verification_status, custom_label, updated_at, created_at")
+          .order("updated_at", { ascending: false })
+          .range(from, from + PAGE - 1);
+        if (error) throw error;
+        const batch = data || [];
+        out.push(...batch);
+        if (batch.length < PAGE) break;
+      }
+      return out;
     },
   });
 
@@ -193,9 +207,13 @@ export default function BrokersRegistry() {
     });
   }, [allRows, q, tab, companyFilter, sourceFilter, sourceFilterCtx, externalById]);
 
-  // Authoritative DB total (head-count, not capped by row pagination).
+  // Authoritative DB total (head-count, not capped by row pagination, live via realtime).
   const { counts: sectionCounts } = useCRMSectionCounts();
-  const dbTotal = Math.max(sectionCounts.brokers || 0, allRows.length);
+  const { total: brokersHeadCount, loading: countLoading } = useEntityTotal("crm_brokers");
+  const dbTotal: number | null =
+    brokersHeadCount != null ? brokersHeadCount + (registered?.length || 0)
+    : sectionCounts.brokers ? sectionCounts.brokers + (registered?.length || 0)
+    : null;
 
   const counts = useMemo(() => ({
     total: dbTotal,
@@ -205,6 +223,8 @@ export default function BrokersRegistry() {
     companies: companies.length,
   }), [allRows, registered, companies, dbTotal]);
 
+  const fmtTotal = (n: number | null) =>
+    n == null ? "…" : n.toLocaleString();
   const Stat = ({ icon: Icon, label, value, onClick, active }: any) => (
     <Card
       onClick={onClick}
@@ -214,7 +234,9 @@ export default function BrokersRegistry() {
         <div className="flex-none"><IconTile icon={Icon} tone="gold" /></div>
         <div className="min-w-0 flex-1">
           <div className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/70 truncate whitespace-nowrap">{label}</div>
-          <div className="text-2xl font-bold text-[#1A1A1A] leading-tight">{value}</div>
+          <div className="text-2xl font-bold text-[#1A1A1A] leading-tight">
+            {value == null ? <Skeleton className="h-7 w-16 inline-block align-middle" /> : (typeof value === "number" ? value.toLocaleString() : value)}
+          </div>
         </div>
       </CardContent>
     </Card>
@@ -242,6 +264,7 @@ export default function BrokersRegistry() {
             <h1 className="text-2xl font-bold">Brokers</h1>
             <p className="text-sm text-[#1A1A1A]/70">Every broker in the market, every company they work for.</p>
           </div>
+          <ViewSwitch value={viewMode} onChange={setViewMode} />
           <Button variant="outline" onClick={() => setExportOpen(true)} disabled={!filtered.length}>
             <Download className="w-4 h-4 mr-1" /> Export
           </Button>
@@ -299,7 +322,7 @@ export default function BrokersRegistry() {
         />
         <Tabs value={tab} onValueChange={(v) => setTab(v as any)}>
           <TabsList className="bg-[#EFE6D6]">
-            <TabsTrigger value="all">All ({counts.total})</TabsTrigger>
+            <TabsTrigger value="all">All ({counts.total == null ? "…" : counts.total.toLocaleString()})</TabsTrigger>
             <TabsTrigger value="sales">Sales ({counts.sales})</TabsTrigger>
             <TabsTrigger value="leasing">Leasing ({counts.leasing})</TabsTrigger>
             <TabsTrigger value="pending">Pending ({counts.pending})</TabsTrigger>
