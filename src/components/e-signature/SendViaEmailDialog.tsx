@@ -67,12 +67,20 @@ function legacyBodyToHtml(
     sender_title: ctx.senderTitle,
   };
   const SIG_SENTINEL = "@@JBJ_SIG@@";
+  const hadToken = /\{\{sender_signature\}\}/.test(String(raw || ""));
   const interpolated = String(raw || "")
     .replace(/\{\{sender_signature\}\}/g, SIG_SENTINEL)
     .replace(/\{\{signing_link\}\}/g, "")
     .replace(/\{\{(\w+)\}\}/g, (_, k) => tokens[k] ?? "");
   const escaped = escapeHtml(interpolated).replace(/\n/g, "<br/>");
-  return escaped.replace(SIG_SENTINEL, ctx.signatureHtml);
+  // If the legacy template had no {{sender_signature}} token (e.g. the saved
+  // body was pre-typed without it), append the picker signature at the tail
+  // so the owner still sees one canonical signature in the preview.
+  const withSig = escaped.includes(SIG_SENTINEL)
+    ? escaped.replace(SIG_SENTINEL, ctx.signatureHtml)
+    : `${escaped.replace(/(<br\s*\/?>\s*)+$/, "")}<br/><br/>${ctx.signatureHtml}`;
+  void hadToken;
+  return withSig;
 }
 
 /** Strip any previous signature block (data-jbj-sig wrapper or fallback table)
@@ -82,6 +90,30 @@ function stripSignature(html: string): string {
     .replace(/<div data-jbj-sig="1">[\s\S]*?<\/div>/g, "")
     .replace(/<table[^>]*data-jbj-sig="1"[\s\S]*?<\/table>/g, "")
     .replace(/(<br\s*\/?>\s*){2,}$/g, "");
+}
+
+/** Strip any LEGACY hard-typed signature block at the tail of a saved
+ *  envelope.email_message — these were authored before the picker existed and
+ *  contain raw text like "Founder & CEO\nJBJ GLOBAL REAL ESTATE\nOffice…
+ *  www.jbj.ae". Without this, the picker preset gets stacked on top of the
+ *  legacy text and the preview shows two signatures. Operates on plain text
+ *  (pre-HTML conversion) and is intentionally aggressive about the tail. */
+function stripInlineSignature(text: string): string {
+  let out = String(text || "").replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n");
+  // Anchors that mark the start of a typed sig block. Anything from the FIRST
+  // matching anchor through end-of-string is removed (closing greeting lines
+  // like "Best," or "Kind regards," remain).
+  const anchors = [
+    /\n\s*Founder\s*&\s*CEO\b[\s\S]*$/i,
+    /\n\s*Office of the Founder\b[\s\S]*$/i,
+    /\n\s*JBJ HR Team\b[\s\S]*$/i,
+    /\n\s*Human Resources(?:\s*&\s*Talent)?\b[\s\S]*$/i,
+    /\n\s*Front Desk\b[\s\S]*$/i,
+    /\n\s*Executive Office\b[\s\S]*$/i,
+    /\n\s*JBJ GLOBAL REAL ESTATE\b[\s\S]*$/i,
+  ];
+  for (const re of anchors) out = out.replace(re, "");
+  return out.replace(/\s+$/g, "");
 }
 
 /** Wrap a signature HTML so we can identify and replace it later. */
@@ -142,7 +174,7 @@ export function SendViaEmailDialog({
     setSubject(defaultSubject);
     setDocusignUrl("");
     setBodyHtml(
-      legacyBodyToHtml(defaultBody, {
+      legacyBodyToHtml(stripInlineSignature(defaultBody), {
         clientName: recipientName || "Client",
         docTitle: defaultSubject || "Document",
         senderName,
