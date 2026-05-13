@@ -215,6 +215,7 @@ export default function BrokerageAgenciesDirectory() {
               <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Office</th>
               <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Phone</th>
               <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Email</th>
+              <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Website</th>
               <th className="text-right px-4 py-2 font-semibold whitespace-nowrap">Leads</th>
               <th className="text-right px-4 py-2 font-semibold whitespace-nowrap">Agents</th>
               <th className="text-right px-4 py-2 font-semibold whitespace-nowrap">Rating</th>
