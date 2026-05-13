@@ -158,7 +158,17 @@ export default function DevSalesRepsDirectory() {
                       </div>
                     </td>
                     <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">{r.title || "—"}</td>
-                    <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">{r.developer?.name || "—"}</td>
+                    <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">
+                      {r.developer?.name ? (
+                        <Link
+                          to={`/owner/crm/relationship-hub?tab=developers&developer=${r.developer_id}`}
+                          className="hover:underline decoration-[#B89555] underline-offset-2"
+                          title="Open developer in Relationships Hub"
+                        >
+                          {r.developer.name}
+                        </Link>
+                      ) : "—"}
+                    </td>
                     <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">
                       {telHref ? <a href={telHref} className="inline-flex items-center gap-1 hover:underline"><Phone className="h-3 w-3" />{r.phone_e164}</a> : "—"}
                     </td>
