@@ -76,6 +76,7 @@ type ActiveStatFilter = 'none' | 'unread' | 'needs_reply' | 'new' | 'follow_up_d
 export default function OwnerInbox() {
   const navigate = useNavigate();
   const [activeStatFilter, setActiveStatFilter] = useState<ActiveStatFilter>('none');
+  const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [filters, setFilters] = useState<InboxFilters>({
     status: 'all',
     channel: 'all',
