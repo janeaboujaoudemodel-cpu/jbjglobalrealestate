@@ -67,7 +67,8 @@ export function useCommChannels() {
   return useQuery({
     queryKey: ["comm-channel-states", user?.id],
     enabled: !!user?.id,
-    staleTime: 30_000,
+    staleTime: 5_000,
+    refetchOnWindowFocus: true,
     queryFn: async (): Promise<ProviderState[]> => {
       const { data: rows, error } = await supabase
         .from("owner_comm_channels")
@@ -75,9 +76,20 @@ export function useCommChannels() {
           "id, channel_type, display_name, identifier, is_active, sync_status, last_sync_at, last_error, training_sample_count, auto_reply_enabled, tone_profile_id"
         )
         .order("created_at", { ascending: false });
-      // Note: status === 'connected' requires (a) a row exists, (b) it is active,
-      // and (c) the most recent sync did not fail. Otherwise we surface 'error'.
+      // Status is derived strictly from the CURRENT row state:
+      //   - 'connected' iff the active row has sync_status === 'synced' (or null/active)
+      //     AND last_error is currently null. Stale historical errors must NOT
+      //     downgrade a row that has since recovered.
+      //   - 'error' iff the active row has sync_status === 'failed' OR a current last_error.
       if (error) throw error;
+
+      const isHealthy = (r: { is_active: boolean | null; sync_status: string | null; last_error: string | null }) => {
+        if (!r.is_active) return false;
+        if (r.last_error) return false;
+        const s = (r.sync_status || "").toLowerCase();
+        // Treat synced / active / connected / pending / "" as healthy; only 'failed'/'error' is bad.
+        return s !== "failed" && s !== "error";
+      };
 
       return PROVIDERS.map((provider) => {
         const channelRows = (rows ?? []).filter((r) => r.channel_type === provider.id);
@@ -87,10 +99,8 @@ export function useCommChannels() {
           .filter(Boolean)
           .sort()
           .pop() || null;
-        const lastError = channelRows
-          .map((r) => r.last_error)
-          .filter(Boolean)
-          .pop() || null;
+        // Only surface a current error — never a stale one from a row that has since recovered.
+        const lastError = channelRows.find((r) => r.is_active && r.last_error)?.last_error ?? null;
         const trainingSamples = channelRows.reduce(
           (acc, r) => acc + (r.training_sample_count ?? 0),
           0
@@ -98,9 +108,7 @@ export function useCommChannels() {
 
         let status: ChannelStatus = "not_linked";
         if (channelRows.length > 0) {
-          const anyHealthy = channelRows.some(
-            (r) => r.is_active && r.sync_status !== "failed" && !r.last_error
-          );
+          const anyHealthy = channelRows.some(isHealthy);
           status = anyHealthy ? "connected" : "error";
         }
 

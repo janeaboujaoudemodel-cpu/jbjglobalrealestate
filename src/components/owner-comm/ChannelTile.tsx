@@ -263,8 +263,8 @@ export default function ChannelTile({
                 key={row.id}
                 className="flex flex-col gap-2 rounded-lg border border-[#B89555]/20 bg-[#F7F2EA] px-3 py-2"
               >
-                <div className="flex items-center justify-between gap-2">
-                  <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="min-w-0 flex-1 basis-full sm:basis-auto">
                     <p className="text-xs font-medium text-[#1A1A1A] truncate">
                       {row.display_name || row.identifier}
                     </p>
@@ -272,23 +272,25 @@ export default function ChannelTile({
                       {isOn ? "Auto-reply active" : "Auto-reply paused"}
                     </p>
                   </div>
-                  {isEmailProvider && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="h-7 px-2 text-[11px] border-[#B89555]/40"
-                      onClick={() => openInbox(row.id)}
-                      aria-label={`Open ${row.display_name || row.identifier} inbox`}
-                    >
-                      <Inbox className="h-3 w-3 mr-1" /> Open inbox
-                    </Button>
-                  )}
-                  <Switch
-                    checked={isOn}
-                    disabled={isPending}
-                    onCheckedChange={(v) => handleToggle(row.id, v)}
-                    aria-label={`Toggle auto-reply for ${row.display_name || row.identifier}`}
-                  />
+                  <div className="flex items-center gap-2 shrink-0">
+                    {isEmailProvider && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-7 px-2 text-[11px] border-[#B89555]/40 whitespace-nowrap"
+                        onClick={() => openInbox(row.id)}
+                        aria-label={`Open ${row.display_name || row.identifier} inbox`}
+                      >
+                        <Inbox className="h-3 w-3 mr-1" /> Open inbox
+                      </Button>
+                    )}
+                    <Switch
+                      checked={isOn}
+                      disabled={isPending}
+                      onCheckedChange={(v) => handleToggle(row.id, v)}
+                      aria-label={`Toggle auto-reply for ${row.display_name || row.identifier}`}
+                    />
+                  </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-[11px] text-[#1A1A1A]/70 shrink-0">Tone profile</span>
@@ -346,54 +348,55 @@ export default function ChannelTile({
         </div>
       )}
 
-      <div className="mt-4 flex flex-wrap gap-2">
+      <div className="mt-4 grid grid-cols-2 gap-2">
         {status === "connected" || status === "error" ? (
           <>
             {isEmailProvider && (
               <Button
                 variant="gold"
                 size="sm"
-                className="flex-1 min-w-[140px]"
+                className="w-full min-w-0 whitespace-nowrap"
                 onClick={() => openInbox()}
                 aria-label={`Open ${provider.label} inbox`}
               >
-                <Inbox className="h-3.5 w-3.5 mr-1" /> Open inbox
+                <Inbox className="h-3.5 w-3.5 mr-1 shrink-0" />
+                <span className="truncate">Open inbox</span>
               </Button>
             )}
             {onResync && (
               <Button
                 variant="secondary"
                 size="sm"
-                className="flex-1 min-w-[120px]"
+                className="w-full min-w-0 whitespace-nowrap"
                 onClick={onResync}
                 disabled={isResyncing || isConnecting}
                 aria-label={`Resync ${provider.label} inbox`}
               >
                 {isResyncing ? (
-                  <><Loader2 className="h-3.5 w-3.5 mr-1 animate-spin" /> Syncing…</>
+                  <><Loader2 className="h-3.5 w-3.5 mr-1 animate-spin shrink-0" /><span className="truncate">Syncing…</span></>
                 ) : (
-                  <><RefreshCw className="h-3.5 w-3.5 mr-1" /> Sync now</>
+                  <><RefreshCw className="h-3.5 w-3.5 mr-1 shrink-0" /><span className="truncate">Sync now</span></>
                 )}
               </Button>
             )}
             {onAddAnother && (
-              <Button variant="outline" size="sm" className="flex-1 border-[#B89555]/40" onClick={onAddAnother} disabled={isConnecting}>
-                <Plus className="h-3.5 w-3.5 mr-1" /> Add another
+              <Button variant="outline" size="sm" className="w-full min-w-0 whitespace-nowrap border-[#B89555]/40" onClick={onAddAnother} disabled={isConnecting}>
+                <Plus className="h-3.5 w-3.5 mr-1 shrink-0" /><span className="truncate">Add another</span>
               </Button>
             )}
             <Button
               variant={status === "error" ? "gold" : "outline"}
               size="sm"
-              className={status === "error" ? "flex-1 min-w-[120px]" : "flex-1 border-[#B89555]/40"}
+              className={`w-full min-w-0 whitespace-nowrap col-span-2 ${status === "error" ? "" : "border-[#B89555]/40"}`}
               onClick={onConnect}
               disabled={isConnecting}
               aria-label={`Reconnect ${provider.label}`}
             >
-              {isConnecting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : "Reconnect"}
+              {isConnecting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <span className="truncate">Reconnect</span>}
             </Button>
           </>
         ) : (
-          <Button variant="gold" size="sm" className="w-full" onClick={onConnect} disabled={isConnecting}>
+          <Button variant="gold" size="sm" className="col-span-2 w-full" onClick={onConnect} disabled={isConnecting}>
             {isConnecting ? (
               <><Loader2 className="h-3.5 w-3.5 animate-spin mr-1" /> Connecting…</>
             ) : (
