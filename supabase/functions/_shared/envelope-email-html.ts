@@ -136,10 +136,9 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
       <tr><td class="jbj-body" style="background:#ffffff;border-left:1px solid #B89555;border-right:1px solid #B89555;padding:32px 32px 24px;">
         <h2 style="margin:0 0 18px;color:#1A1A1A;font-size:20px;font-weight:700;line-height:1.3;">${subject}</h2>
         <div style="color:#1A1A1A;line-height:1.7;font-size:14px;">${bodyHtml}</div>
+        ${downloadBlock}
         ${ctaBlock}
-        ${attachmentChip}
-        ${howToSignBlock}
-        <p style="margin:18px 0 0;color:#1A1A1A;opacity:.55;font-size:11px;line-height:1.55;">Replies to this email are routed to <a href="mailto:contact@jbj.ae" style="color:#B89555;text-decoration:none;font-weight:600;">contact@jbj.ae</a> and answered by our team.</p>
+        <p style="margin:22px 0 0;color:#1A1A1A;opacity:.55;font-size:11px;line-height:1.55;text-align:center;">Once signed, please return the signed PDF to <a href="mailto:${SIGNED_RETURN_EMAIL}" style="color:#B89555;text-decoration:none;font-weight:600;">${SIGNED_RETURN_EMAIL}</a>. Replies are answered by our team.</p>
       </td></tr>
       <tr><td class="jbj-foot-pad" style="background:#F7F2EA;border:1px solid #B89555;border-top:none;padding:18px 24px;">
         <div style="height:1px;background:#B89555;margin-bottom:14px;"></div>
