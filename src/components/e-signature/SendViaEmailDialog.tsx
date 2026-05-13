@@ -45,6 +45,7 @@ interface Props {
   defaultSubject: string;
   defaultBody: string;          // legacy plain-text default; converted to HTML on first open
   attachmentName?: string;
+  attachmentUrl?: string;
   docNumber?: string;
   senderName?: string;
   senderTitle?: string;
@@ -97,6 +98,7 @@ export function SendViaEmailDialog({
   defaultSubject,
   defaultBody,
   attachmentName,
+  attachmentUrl,
   docNumber,
   senderName = "Jane Bou Jaoude",
   senderTitle = "Founder & CEO",
@@ -191,6 +193,7 @@ export function SendViaEmailDialog({
           interpolated_body_html: bodyHtml,
           docusign_url: docusignUrl.trim() || undefined,
           attachment_name: attachmentName,
+          attachment_url: attachmentUrl,
           test_recipient: TEST_RECIPIENT,
         }),
       });
@@ -225,6 +228,7 @@ export function SendViaEmailDialog({
           interpolated_body_html: bodyHtml,     // pre-rendered HTML (locked-send)
           docusign_url: docusignUrl.trim() || undefined,
           attachment_name: attachmentName,
+          attachment_url: attachmentUrl,
         }),
       });
       const out = await res.json().catch(() => ({}));
@@ -386,6 +390,7 @@ export function SendViaEmailDialog({
                 docNumber={docNumber}
                 docusignUrl={docusignUrl}
                 attachmentName={attachmentName}
+                attachmentUrl={attachmentUrl}
                 className="w-full h-full bg-[#FDFBF7]"
               />
             </div>

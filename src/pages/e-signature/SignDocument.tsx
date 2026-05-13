@@ -13,6 +13,7 @@ import {
   DOCUSIGN_APP_STORE,
   DOCUSIGN_PLAY_STORE,
   DOCUSIGN_WEB,
+  DOCUSIGN_SIGNUP,
   SIGNED_RETURN_EMAIL,
 } from "@/config/docusignHandoff";
 
@@ -259,7 +260,8 @@ export default function SignDocument() {
               If not, use the App Store or Google Play link underneath to install it first.
             </p>
 
-            {/* Primary: open DocuSign (universal link → app if installed, web otherwise) */}
+            {/* Primary: open DocuSign web (account.docusign.com loads instantly
+                and universal-links into the installed mobile app). */}
             <a href={DOCUSIGN_WEB} target="_blank" rel="noopener noreferrer">
               <Button className="w-full bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-white border border-[#B89555]/40">
                 <FileSignature className="w-4 h-4 mr-2" /> Sign with DocuSign
@@ -267,9 +269,17 @@ export default function SignDocument() {
               </Button>
             </a>
 
+            {/* Secondary: create a free account if the user has none */}
+            <a href={DOCUSIGN_SIGNUP} target="_blank" rel="noopener noreferrer" className="block mt-2">
+              <Button variant="outline" className="w-full border-[#B89555]/60 text-[#1A1A1A] hover:bg-[#EFE6D6]">
+                Create a free DocuSign account
+                <ExternalLink className="w-3.5 h-3.5 ml-2 opacity-70" />
+              </Button>
+            </a>
+
             {/* Fallback: install links (smaller, secondary) */}
             <div className="mt-4 pt-4 border-t border-[#B89555]/20">
-              <p className="text-xs text-[#1A1A1A]/60 mb-2">Don't have DocuSign yet?</p>
+              <p className="text-xs text-[#1A1A1A]/60 mb-2">Don't have the DocuSign app yet?</p>
               <div className="flex flex-col sm:flex-row gap-2">
                 <a href={DOCUSIGN_APP_STORE} target="_blank" rel="noopener noreferrer" className="flex-1">
                   <Button variant="outline" size="sm" className="w-full border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6]">
@@ -282,6 +292,9 @@ export default function SignDocument() {
                   </Button>
                 </a>
               </div>
+              <p className="text-xs text-[#1A1A1A]/60 mt-3 leading-relaxed">
+                Once installed, open the PDF you downloaded in step 2, tap <strong>+ → Upload</strong>, place your signature, initials and date, then tap <strong>Finish</strong>.
+              </p>
             </div>
           </CardContent>
         </Card>

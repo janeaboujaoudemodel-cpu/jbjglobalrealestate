@@ -1,103 +1,70 @@
+## Bugs to fix on /e-signature → Send by email + Sign page
 
-# CRM Audit & Reorganisation Plan
+### 1. Email preview header & footer broken on mobile
+File: `src/lib/email/buildEnvelopeEmailHtml.ts` (and its byte-for-byte mirror `supabase/functions/_shared/envelope-email-html.ts`).
 
-## What's broken right now (from the screenshot at /owner/crm)
+- Header table currently uses 3 fixed `<td>` columns — at narrow widths the JBJ wordmark wraps one word per line and the monogram drifts off-corner.
+- Rebuild header as a stacked, mobile-first block:
+  - Monogram aligned hard-left at 64×64.
+  - "JBJ GLOBAL REAL ESTATE" forced on a single line (`white-space:nowrap; font-size:clamp(14px,3.6vw,18px)`) sitting next to the monogram.
+  - Doc number drops under the wordmark on screens ≤ 480 px (use a `<br>` + `@media` block injected via `<style>` in `<head>`).
+- Footer columns currently collide on phones (email/website/phone overlap, render in ink not gold). Rebuild footer:
+  - One `<td>` per row inside a `@media (max-width:520px)` block (display:block, width:100%, text-align:center).
+  - Email + website + phone styled with `color:#B89555` (gold) and `text-decoration:none`, separated by 6 px vertical spacing.
+  - Company name stays on one line at the top, `Dubai, UAE` underneath.
+- Increase `max-width` of inner table to 100 % below 520 px and remove side padding from outer `<td align="center">` so nothing clips the gold border.
 
-The Leads table renders correctly in code, but it's being squeezed into the right pane while the left sidebar/chat panel is open (~700 px usable). When the table goes below its natural width, three cells collapse badly:
+### 2. Attachment chip not clickable
+- `buildEnvelopeEmailHtml` currently renders the attachment chip as a plain `<div>`. Change the signature so the renderer accepts `attachmentUrl?: string` and wraps the chip in `<a href="${attachmentUrl}" download …>` styled gold-on-champagne with the paperclip icon. When `attachmentUrl` is missing, fall back to the current static chip.
+- Thread the new prop through:
+  - `EmailPreviewIframe` (add `attachmentUrl`),
+  - `SendViaEmailDialog` (resolve from envelope `document_url` via `maybeProxyStorageUrl`),
+  - test/send edge functions `esign-send-test-email` + `esign-send-for-signature` (add to payload + forward to `_shared/envelope-email-html.ts`).
 
-1. **Email column** — `break-all` on `w-[240px]` forces character-by-character vertical wrap (`b / o / u / j / a / o / u / d / ...`).
-2. **Assigned Broker column** — italic "Unassigned" + outlined "Assign" button sit in a `flex gap-2` with no `whitespace-nowrap`, so "Unassigned" breaks across 3 lines and the "Assign" pill is pushed out of its row.
-3. **Status pill** — `InlineStatusSelect` puts a full rounded-pill `<LeadStatusBadge>` (with its own border + colored dot) **inside** a bordered `SelectTrigger` with a chevron. Result: pill-in-a-box, chevron overlapping the badge text, dot clipped on the left edge.
+### 3. PAA + Letterhead preview broken on mobile
+File: `src/templates/letterheadChrome.ts`.
 
-These three are the actual visible bugs in the screenshot. They are pure CSS/markup fixes.
+- `buildLetterheadHeader` uses a flex row with `min-width:150px` on the contact column → forces overflow on the phone preview iframe. Wrap the whole header in a responsive style block: stack the three columns vertically below 520 px, monogram + brand row first, contact column second (still gold, right-aligned on desktop, left-aligned on mobile).
+- `buildLetterheadFooter` 3-column table → add the same `@media` block: stack each `<td>` to `display:block;width:100%;text-align:center` on phones; ensure email/website remain gold (`#B89555`) and the phone number remains ink.
+- No copy or branding changes — chrome only.
 
-## Phase A — Fix the visible bugs (immediate, ~1 file)
+### 4. Purge fake JBJ contact + "Citi Developers Sales & Experience Center" from signature presets
+- Run a migration that updates every row in `email_signature_presets` so:
+  - `address_line` → `'Office SM1-195, Port Saeed, Deira, Dubai, UAE'` (from `TRADE_LICENSE_OFFICE`).
+  - `phone` → `'+971 54 716 7107'` for Founder / CEO and Executive Office; clear (`NULL`) the placeholder zero numbers on HR / Help Desk rows so they fall back to the company line until real numbers exist.
+  - `email` → `'Contact@JBJ.AE'` for Founder / CEO + Executive Office; keep `careers@jbj.ae` and `support@jbj.ae` (real per `companyLegal.ts`).
+  - `website` → `'https://www.jbj.ae'` for all (already correct).
+- Update `renderSignatureHtml` so the title line (`Founder & CEO`) renders in gold (`color:#B89555;letter-spacing:.18em;text-transform:uppercase;font-weight:600`) — the user explicitly asked for the title (or the name) in gold for premium feel. Keep the rest ink.
 
-File: `src/components/crm/CRMLeadsTableV2.tsx`
+### 5. Strip remaining fake `jane@jbj.ae` / `+971 50 000 0000` site-wide
+- Replace literal `jane@jbj.ae` with `Contact@JBJ.AE` in:
+  - `src/config/team-members.ts:343`
+  - `src/config/assistant-brain-updates.ts:273`
+  - `supabase/functions/_shared/ai-utils.ts:56`
+  - `supabase/functions/ai-chat-support/index.ts:162`
+- Search-replace `050 000 0000` / `0500000000` if any literal slipped in (none found in code today, but include the lint sweep so future edits stay clean).
+- Add an entry to `scripts/contrast/...` style guard? No — out of scope. Just a one-pass `rg` clean-up.
 
-**A1. Email cell**
-- Replace `break-all` with `truncate` (single line, ellipsis) and add `title={lead.email_lower}` so the full address shows on hover.
-- Widen the column to `min-w-[220px] max-w-[320px]` and let it truncate instead of wrap.
-- Add `block w-full` to the button so truncation kicks in.
+### 6. Sign page (`/sign/:token`) — DocuSign CTA was opening blank/slow + no clear steps
+File: `src/pages/e-signature/SignDocument.tsx` (+ `src/config/docusignHandoff.ts`).
 
-**A2. Assigned Broker cell**
-- Add `whitespace-nowrap min-w-[180px]` to the cell.
-- Wrap the label + button in a single `inline-flex items-center gap-2 whitespace-nowrap`.
-- Truncate the assigned name with `max-w-[140px] truncate` so a long broker name doesn't push the Assign/Change button.
+- Replace the "Sign with DocuSign" button target with the faster, deterministic web sign-in entry: `https://account.docusign.com/` (loads instantly vs `apps.docusign.com` blank wait). Update `DOCUSIGN_WEB` in `docusignHandoff.ts` so every consumer (email CTA, sign page, mirrored edge fn, `buildEnvelopeEmailHtml.ts`) gets the new URL in one edit.
+- Add a third CTA "Create a free DocuSign account" → `https://account.docusign.com/signup` directly under the Sign button (small outline button, gold border).
+- Restructure the steps cards to read top-to-bottom as a numbered checklist:
+  1. **Download the agreement** (existing card; promote to step 1 — the user must have the PDF before signing).
+  2. **Install or open DocuSign** — App Store / Google Play / "Open DocuSign Web" with the new fast URL + Create-account link.
+  3. **Open the PDF inside DocuSign** — short note: "In the DocuSign app, tap *+ → Upload* and pick the PDF you just downloaded. Place your signature, initials and date, then tap *Finish*."
+  4. **Email the signed copy back** (existing card).
+- Keep all existing copy, status / decline / expired states untouched.
 
-**A3. Status dropdown — flatten the trigger**
-File: `src/components/crm/InlineStatusSelect.tsx`
-- Remove the outer border/background from `SelectTrigger` (use `border-0 bg-transparent shadow-none p-0 h-auto focus:ring-0 [&>svg]:hidden`) so only the colored pill is visible — clicking the pill itself opens the menu.
-- Keep the chevron only if it doesn't overlap; the cleaner pattern is hide chevron, and add a subtle hover ring on the pill via `LeadStatusBadge` `onClick` styling.
-- Result: single clean status pill, no square frame, no clipped dot, no chevron collision.
+### 7. Allow the in-app preview iframe to actually open the DocuSign CTA
+File: `src/components/e-signature/EmailPreviewIframe.tsx`.
+- Sandbox is `allow-same-origin` only — clicks on the OPEN IN DOCUSIGN button do nothing. Change to `sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox"` so test clicks open in a new tab during preview.
 
-**A4. Table horizontal overflow guard**
-- Wrap `<Table>` in a `div` with `overflow-x-auto` and give the inner table `min-w-[1100px]` so when the side panels are open the table scrolls horizontally instead of crushing every cell. This alone prevents the vertical-email class of bug from ever returning.
+---
 
-## Phase B — Deep CRM audit findings & reorganisation
-
-Inventory shows the CRM surface is large and partly duplicated:
-
-```text
-Pages:
-  /owner/crm                  → UnifiedCRM.tsx          (hub, ?section=… subnav)
-  /owner/crm/relationship-hub → CRMRelationships.tsx    (Devs/Reps/Brokerages/Brokers)
-  /owner/crm/leads/:id        → CRMLeadDetail.tsx
-  CRMCalendar / CRMTasks / CRMNotes / AdminCRM (legacy)
-
-Tables / lists (overlap):
-  CRMLeadsTableV2, KanbanPipeline, InvestorsDirectory,
-  DevelopersDirectory, BrokerageAgenciesDirectory, DevSalesRepsDirectory,
-  IndividualBrokersTab, CompanyHub, PersonHub, PersonDetailDrawer
-
-Bulk dialogs (5):
-  BulkUploadDialog, BulkSendDialog, BrokerBulkUploadDialog,
-  BulkOutreachPanel, BulkEmailModal, BulkWhatsAppModal, BulkAssignModal
-```
-
-### B1. Standardise the leads table cell contract
-Adopt one shared row pattern across CRMLeadsTableV2, InvestorsDirectory, IndividualBrokersTab, DevSalesRepsDirectory, BrokerageAgenciesDirectory, DevelopersDirectory:
-- Container: `overflow-x-auto`, table `min-w-[1100px]`.
-- Text cells: `truncate` + `title=`, never `break-all`.
-- Action cells: `whitespace-nowrap`.
-- Status: flat pill via the new `InlineStatusSelect` trigger style.
-- Date: `tabular-nums whitespace-nowrap`.
-
-### B2. Unify the status dropdown
-Single primitive `<StatusPillSelect>` (extract from the fixed `InlineStatusSelect`) used in: leads table, Kanban card, Person/Company hub, lead detail. Removes 3 visual variants today.
-
-### B3. Collapse duplicate bulk dialogs
-Today there are 7 bulk modals with overlapping UX. Consolidate into 2:
-- `BulkActionsModal` (Assign / Tag / Change Status / Delete / Export) — replaces BulkAssignModal + parts of CRMBulkActionsBar.
-- `BulkOutreachModal` (Email / WhatsApp / Upload list) with channel tabs — replaces BulkEmailModal + BulkWhatsAppModal + BulkSendDialog + BulkUploadDialog + BrokerBulkUploadDialog.
-
-### B4. Tighten the section subnav (Phase 6 already added URL sync)
-- Persist last-used `?section=` per role in localStorage so reopening /owner/crm lands on the user's last view.
-- Add a sticky compact toolbar (search · stage filter · source · assignee · clear) shared across all directory tabs — currently each tab reimplements its own filter row.
-
-### B5. Layout density
-- Switch the Leads table to a `compact` density toggle (h-9 rows, 12 px cell padding) for dense workflows; current default is too tall for >50-row screens.
-- Freeze the first two columns (checkbox + name) when scrolling horizontally.
-
-### B6. Empty/loading/error parity
-- All directory tabs adopt the existing skeleton + "no results, clear filters" pattern from CRMLeadsTableV2 lines 642–671 (3 of the 4 directories don't have it).
-
-### B7. Non-functional cleanups discovered
-- `assignedNames` lookup runs per render; memoise with `useMemo` keyed on `leads.length`.
-- `fetchLeads()` is called after every status/VIP/assign change → switch to optimistic update + react-query invalidation already in `InlineStatusSelect`.
-- `CRMLeadsTableV2.tsx` is 909 lines — extract `<LeadRow />`, `<LeadsToolbar />`, `<AssignCell />` for maintainability.
-
-## Suggested execution order
-
-1. **Phase A (now)** — fixes the screenshot in one edit, ships in minutes.
-2. **B1 + B2** — table contract + StatusPillSelect primitive (prevents regressions).
-3. **B3** — dialog consolidation.
-4. **B4 + B5 + B6** — toolbar, density, parity.
-5. **B7** — refactor for maintainability.
-
-## Out of scope
-- No data model / RLS / edge function changes.
-- No removal of features (per the No-Removal policy in memory).
-- No new colours; everything stays within the champagne-gold tokens.
-
-Reply **"go phase A"** to ship the visible fixes immediately, or **"go full plan"** to execute A → B7 in order.
+### Technical notes
+- The two `envelope-email-html` files (frontend + edge) MUST stay byte-for-byte identical (existing rule) — every change in §1, §2 is duplicated.
+- The signature-preset migration is data-only (UPDATE on system rows). No schema change.
+- No new packages. No backend logic changes beyond the signature-preset UPDATE and the new `attachmentUrl` payload field on the two send edge functions.
+- Out of scope: changing the brokerage outreach pipeline (`crm-send-brokerage-outreach`) — that flow is correctly separated from JBJ-only signatures by the Single-Agency Email Rule and is unaffected by these fixes.

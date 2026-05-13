@@ -71,17 +71,25 @@ export function buildLetterheadHeader(opts: LetterheadHeaderOpts = {}): string {
       </div>`
     : ``;
   return `
+    <style>
+      @media (max-width:520px){
+        .jbj-lh-row{display:block !important;}
+        .jbj-lh-row > *{display:block !important;text-align:left !important;min-width:0 !important;width:100% !important;padding:6px 0 !important;}
+        .jbj-lh-contact{text-align:left !important;}
+        .jbj-lh-brand{font-size:13px !important;letter-spacing:.14em !important;}
+      }
+    </style>
     <div style="margin:-24px -36px 14px;background:${CHAMPAGNE};padding:16px 36px 14px;border-bottom:1px solid ${GOLD};">
-      <div style="display:flex;align-items:center;gap:14px;min-height:58px;">
+      <div class="jbj-lh-row" style="display:flex;align-items:center;gap:14px;min-height:58px;">
         <img src="${monogramUrl}" alt="JBJ Global Real Estate" style="width:58px;height:58px;object-fit:contain;display:block;flex:0 0 auto;" />
         <div style="flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;min-width:0;padding-left:14px;">
-          <div style="font-size:15px;font-weight:700;letter-spacing:.20em;color:${INK};text-transform:uppercase;line-height:1.15;">
+          <div class="jbj-lh-brand" style="font-size:15px;font-weight:700;letter-spacing:.20em;color:${INK};text-transform:uppercase;line-height:1.15;white-space:nowrap;">
             ${esc(TRADE_LICENSE_LEGAL_NAME)}
           </div>
           ${officeLine}
           ${reraLine}
         </div>
-        <div style="flex:0 0 auto;text-align:right;min-width:150px;">
+        <div class="jbj-lh-contact" style="flex:0 0 auto;text-align:right;min-width:150px;">
           ${docBadgeBlock}
           ${contactStack}
         </div>
@@ -92,18 +100,23 @@ export function buildLetterheadHeader(opts: LetterheadHeaderOpts = {}): string {
 
 export function buildLetterheadFooter(): string {
   return `
+    <style>
+      @media (max-width:520px){
+        .jbj-lf-cell{display:block !important;width:100% !important;text-align:center !important;padding:6px 0 !important;}
+      }
+    </style>
     <div style="margin:14px -36px 0;background:${CHAMPAGNE};border-top:1px solid ${GOLD};padding:14px 36px 14px;">
       <table style="width:100%;border-collapse:collapse;table-layout:fixed;font-size:9.5px;color:${INK};line-height:1.55;">
         <tr>
-          <td style="vertical-align:top;width:32%;padding-right:10px;">
+          <td class="jbj-lf-cell" style="vertical-align:top;width:32%;padding-right:10px;">
             <div style="font-size:9.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:${INK};">${esc(TRADE_LICENSE_LEGAL_NAME)}</div>
-            <div style="margin-top:3px;"><a href="${telHref(COMPANY_CONTACT.phone)}" style="color:${INK};text-decoration:none;font-weight:600;">${esc(COMPANY_CONTACT.phone)}</a></div>
+            <div style="margin-top:3px;"><a href="${telHref(COMPANY_CONTACT.phone)}" style="color:${GOLD};text-decoration:none;font-weight:600;">${esc(COMPANY_CONTACT.phone)}</a></div>
           </td>
-          <td style="vertical-align:top;text-align:center;width:38%;padding:0 8px;color:${INK};opacity:.85;">
+          <td class="jbj-lf-cell" style="vertical-align:top;text-align:center;width:38%;padding:0 8px;color:${INK};opacity:.85;">
             ${TRADE_LICENSE_OFFICE ? esc(TRADE_LICENSE_OFFICE) : ""}
           </td>
-          <td style="vertical-align:top;text-align:right;width:30%;padding-left:10px;">
-            <div><a href="${mailHref(COMPANY_CONTACT.email)}" style="color:${GOLD};text-decoration:none;">${esc(COMPANY_CONTACT.email)}</a></div>
+          <td class="jbj-lf-cell" style="vertical-align:top;text-align:right;width:30%;padding-left:10px;">
+            <div><a href="${mailHref(COMPANY_CONTACT.email)}" style="color:${GOLD};text-decoration:none;font-weight:600;">${esc(COMPANY_CONTACT.email)}</a></div>
             <div style="margin-top:3px;"><a href="${webHref(COMPANY_CONTACT.website)}" target="_blank" rel="noopener" style="color:${GOLD};text-decoration:none;font-weight:600;letter-spacing:.04em;">${esc(COMPANY_CONTACT.website)}</a></div>
           </td>
         </tr>

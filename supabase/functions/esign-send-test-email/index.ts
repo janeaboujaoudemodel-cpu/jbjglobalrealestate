@@ -35,6 +35,7 @@ Deno.serve(async (req) => {
       interpolated_body_html,
       docusign_url,
       attachment_name,
+      attachment_url,
       test_recipient,
     } = await req.json();
 
@@ -101,6 +102,7 @@ Deno.serve(async (req) => {
       senderTitle,
       docusignUrl: typeof docusign_url === "string" ? docusign_url.trim() : "",
       attachmentName: typeof attachment_name === "string" ? attachment_name : undefined,
+      attachmentUrl: typeof attachment_url === "string" ? attachment_url : undefined,
     });
 
     if (!resendApiKey) {
