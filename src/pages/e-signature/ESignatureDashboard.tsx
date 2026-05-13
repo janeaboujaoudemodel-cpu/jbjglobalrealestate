@@ -123,10 +123,7 @@ export default function ESignatureDashboard() {
     enabled: !!user?.id,
   });
 
-  // Reset selection when view or data changes
-  const envelopeIdsKey = (envelopes || []).map((e) => e.id).join(",");
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffectIfChanged(() => setSelected(new Set()), [view, envelopeIdsKey]);
+  // Selection is reset on view change via the tab handler below.
 
   const stats = {
     draft: envelopes?.filter(e => e.status === "draft").length || 0,
