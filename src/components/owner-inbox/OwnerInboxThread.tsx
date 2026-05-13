@@ -49,6 +49,9 @@ import { format } from "date-fns";
 import { toast } from "sonner";
 import { CommThread, ThreadStatus, useThreadMessages } from "@/hooks/useOwnerInbox";
 import useAIReplyEngine from "@/hooks/useAIReplyEngine";
+import useCommAITriage, { CATEGORY_META } from "@/hooks/useCommAITriage";
+import { useEffect as useReactEffect } from "react";
+import { Brain, ListTodo, CalendarPlus, NotebookPen, Wand2 } from "lucide-react";
 
 interface OwnerInboxThreadProps {
   thread: CommThread;
