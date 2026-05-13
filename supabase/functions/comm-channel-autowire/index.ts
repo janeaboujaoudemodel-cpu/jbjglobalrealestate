@@ -212,10 +212,15 @@ Deno.serve(async (req) => {
       identifier,
       event_type: wasReconnect ? "reconnected" : "connected",
       details: { display_name: displayName, connection_id: connectorId },
-    });
+    }
 
     return new Response(
-      JSON.stringify({ success: true, identifier, display_name: displayName }),
+      JSON.stringify({
+        success: true,
+        identifier: lastIdentifier,
+        display_name: lastDisplay,
+        wired,
+      }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (err: unknown) {
