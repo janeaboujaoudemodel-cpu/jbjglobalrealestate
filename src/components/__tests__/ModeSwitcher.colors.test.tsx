@@ -126,9 +126,10 @@ describe("ModeSwitcher color regression", () => {
         containsHex(trigger.style.backgroundImage, base),
         `${activeMode} trigger gradient should contain ${base}, got ${trigger.style.backgroundImage}`,
       ).toBe(true);
+      // Champagne/no-gold-fills standard: trigger text is ink (#1A1A1A), not white.
       expect(
-        norm(trigger.style.color) === "#ffffff" || norm(trigger.style.color) === "rgb(255,255,255)",
-        `${activeMode} trigger text should be white, got ${trigger.style.color}`,
+        norm(trigger.style.color) === "#1a1a1a" || norm(trigger.style.color) === "rgb(26,26,26)",
+        `${activeMode} trigger text should be ink #1A1A1A, got ${trigger.style.color}`,
       ).toBe(true);
     });
 
@@ -239,7 +240,7 @@ describe("ModeSwitcher color regression", () => {
     // Reference reflects the active broker palette.
     expect(containsHex(reference.bgImage, base)).toBe(true);
     expect(
-      norm(reference.color) === "#ffffff" || norm(reference.color) === "rgb(255,255,255)",
+      norm(reference.color) === "#1a1a1a" || norm(reference.color) === "rgb(26,26,26)",
     ).toBe(true);
 
     // Every placement renders identical trigger styles — no placement can drift.
