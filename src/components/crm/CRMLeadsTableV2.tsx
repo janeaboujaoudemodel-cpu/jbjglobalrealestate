@@ -817,51 +817,54 @@ export default function CRMLeadsTableV2({
                     <TableCell className="text-right">
                       <div className="inline-flex items-center justify-end gap-1 flex-wrap">
                         <LeadQuickActions leadId={lead.id} leadName={lead.full_name} leadPhone={lead.phone_e164} leadEmail={lead.email_lower} userId={userId} />
-                        <Button
-                          type="button"
-                          size="icon"
-                          className="h-9 w-9 bg-[#EFE6D6] hover:bg-[#E5D8BF] text-emerald-700 border border-[#B89555]/30"
-                          onClick={() => handleWhatsApp(lead)}
-                          title="WhatsApp"
-                        >
-                          <MessageSquare className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          type="button"
-                          size="icon"
-                          className="h-9 w-9 bg-[#EFE6D6] hover:bg-[#E5D8BF] text-blue-700 border border-[#B89555]/30"
-                          onClick={() => handleCall(lead)}
-                          title="Call"
-                        >
-                          <PhoneCall className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          type="button"
-                          size="icon"
-                          className="h-9 w-9 bg-[#EFE6D6] hover:bg-[#E5D8BF] text-purple-700 border border-[#B89555]/30"
-                          onClick={() => handleEmail(lead)}
-                          title="Email"
-                        >
-                          <Mail className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          type="button"
-                          size="icon"
-                          className="h-9 w-9 bg-[#FDFBF7] hover:bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]"
-                          onClick={() => setAgreementLead(lead)}
-                          title="Send Agreement"
-                        >
-                          <FileSignature className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          type="button"
-                          size="icon"
-                          className="h-9 w-9 bg-[#EFE6D6] hover:bg-[#E5D8BF] text-red-700 border border-[#B89555]/30"
-                          onClick={() => openDeleteDialog(lead)}
-                          title="Delete"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                        {/* Premium restrained action cluster — champagne + ink, gold hairline; red reserved for destructive */}
+                        <div className="inline-flex items-center rounded-full border border-[#B89555]/40 bg-[#FDFBF7] overflow-hidden divide-x divide-[#B89555]/20 shadow-sm">
+                          <button
+                            type="button"
+                            onClick={() => handleWhatsApp(lead)}
+                            title="WhatsApp"
+                            aria-label="WhatsApp"
+                            className="h-9 w-9 inline-flex items-center justify-center text-[#1A1A1A] hover:bg-[#EFE6D6] transition-colors"
+                          >
+                            <MessageSquare className="h-4 w-4" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleCall(lead)}
+                            title="Call"
+                            aria-label="Call"
+                            className="h-9 w-9 inline-flex items-center justify-center text-[#1A1A1A] hover:bg-[#EFE6D6] transition-colors"
+                          >
+                            <PhoneCall className="h-4 w-4" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleEmail(lead)}
+                            title="Email"
+                            aria-label="Email"
+                            className="h-9 w-9 inline-flex items-center justify-center text-[#1A1A1A] hover:bg-[#EFE6D6] transition-colors"
+                          >
+                            <Mail className="h-4 w-4" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setAgreementLead(lead)}
+                            title="Send Agreement"
+                            aria-label="Send Agreement"
+                            className="h-9 w-9 inline-flex items-center justify-center text-[#1A1A1A] hover:bg-[#EFE6D6] transition-colors"
+                          >
+                            <FileSignature className="h-4 w-4" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => openDeleteDialog(lead)}
+                            title="Delete"
+                            aria-label="Delete"
+                            className="h-9 w-9 inline-flex items-center justify-center text-red-700 hover:bg-red-50 transition-colors"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
                       </div>
                     </TableCell>
                   </TableRow>
