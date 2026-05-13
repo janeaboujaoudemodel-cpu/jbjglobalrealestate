@@ -163,6 +163,7 @@ export const CanonicalAndHreflang = () => {
 
     const canonicalHref = buildCanonicalUrl(pathname, search);
     upsertCanonical(canonicalHref);
+    upsertOgUrl(canonicalHref);
     injectHreflangTags(canonicalHref);
   }, [pathname, search]);
 
