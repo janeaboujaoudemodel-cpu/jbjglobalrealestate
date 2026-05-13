@@ -457,14 +457,20 @@ function ThreadListItem({
             {thread.last_message_preview || 'No messages yet'}
           </p>
 
-          <div className="flex items-center justify-between mt-2">
-            <Badge className={`text-[10px] px-1.5 py-0.5 border ${status.color}`}>
-              {status.icon}
-              <span className="ml-1">{status.label}</span>
-            </Badge>
-            
+          <div className="flex items-center justify-between mt-2 gap-2">
+            <div className="flex items-center gap-1 flex-wrap">
+              <Badge className={`text-[10px] px-1.5 py-0.5 border ${status.color}`}>
+                {status.icon}
+                <span className="ml-1">{status.label}</span>
+              </Badge>
+              {thread.ai_category && CATEGORY_META[thread.ai_category] && (
+                <Badge variant="outline" className={`text-[10px] px-1.5 py-0.5 ${CATEGORY_META[thread.ai_category].color}`}>
+                  {CATEGORY_META[thread.ai_category].label}
+                </Badge>
+              )}
+            </div>
             {thread.last_message_at && (
-              <span className="text-[10px] text-[#1A1A1A]/70">
+              <span className="text-[10px] text-[#1A1A1A]/70 shrink-0">
                 {formatDistanceToNow(new Date(thread.last_message_at), { addSuffix: true })}
               </span>
             )}
