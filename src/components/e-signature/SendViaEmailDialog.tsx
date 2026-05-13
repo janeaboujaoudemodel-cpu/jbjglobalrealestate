@@ -45,6 +45,7 @@ interface Props {
   defaultSubject: string;
   defaultBody: string;          // legacy plain-text default; converted to HTML on first open
   attachmentName?: string;
+  attachmentUrl?: string;
   docNumber?: string;
   senderName?: string;
   senderTitle?: string;
