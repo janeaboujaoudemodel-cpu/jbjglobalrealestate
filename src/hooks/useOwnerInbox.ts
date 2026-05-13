@@ -77,6 +77,7 @@ export interface CommMessage {
 export interface InboxFilters {
   status?: ThreadStatus | 'all';
   channel?: ChannelType | 'all';
+  channelId?: string | 'all';
   assistant?: AssistantType | 'all';
   search?: string;
   linkedOnly?: boolean;
@@ -122,6 +123,9 @@ export function useOwnerInbox(filters: InboxFilters = {}) {
       }
       if (filters.channel && filters.channel !== 'all') {
         query = query.eq('channel_type', filters.channel);
+      }
+      if (filters.channelId && filters.channelId !== 'all') {
+        query = query.eq('channel_id', filters.channelId);
       }
       if (filters.assistant && filters.assistant !== 'all') {
         query = query.eq('assistant_type', filters.assistant);
