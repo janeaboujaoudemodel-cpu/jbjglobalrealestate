@@ -72,10 +72,8 @@ const App = () => {
     const handle = idle(() => {
       const prefetch = [
         () => import("@/pages/CRM"),
-        () => import("@/pages/CRMLeadsInbox"),
+        () => import("@/pages/owner/crm/UnifiedCRM"),
         () => import("@/pages/CRMRelationships"),
-        () => import("@/pages/CRMTasks"),
-        () => import("@/pages/CRMCalendar"),
         () => import("@/pages/OwnerInbox"),
         () => import("@/pages/OwnerAgenda"),
         () => import("@/pages/Admin"),
