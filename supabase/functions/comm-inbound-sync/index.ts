@@ -123,11 +123,15 @@ Deno.serve(async (req) => {
       }
       const sinceMs = ch.last_sync_at ? new Date(ch.last_sync_at).getTime() : Date.now() - 7 * 86400_000;
       let channelImported = 0;
+      // Pick the connector key matching THIS channel's email identifier so each
+      // Gmail account stays in its own inbox section. Fallback to the first key
+      // for legacy single-account installs.
+      const channelEmail = (ch.identifier || "").toLowerCase();
+      const connectorKey = gmailKeyByEmail.get(channelEmail) ?? gmailKeys[0];
       try {
-        const list = await gmailListMessages(LOVABLE_API_KEY, GMAIL_KEY, sinceMs);
+        const list = await gmailListMessages(LOVABLE_API_KEY, connectorKey, sinceMs);
         for (const m of list) {
           // 1) Hard dedup at DB level via unique index (user_id, external_message_id).
-          //    Cheap pre-check avoids a Gmail GET when we already have the message.
           const { data: dup } = await admin
             .from("owner_comm_messages")
             .select("id")
@@ -136,7 +140,7 @@ Deno.serve(async (req) => {
             .maybeSingle();
           if (dup) continue;
 
-          const detail = await gmailGetMessage(LOVABLE_API_KEY, GMAIL_KEY, m.id);
+          const detail = await gmailGetMessage(LOVABLE_API_KEY, connectorKey, m.id);
           const headers = detail.payload?.headers ?? [];
           const fromHeader = pickHeader(headers, "From");
           const subject = pickHeader(headers, "Subject") || "(no subject)";
