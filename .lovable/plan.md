@@ -1,70 +1,77 @@
-## Bugs to fix on /e-signature → Send by email + Sign page
+## Confirm Registration Status — Developer Workflow
 
-### 1. Email preview header & footer broken on mobile
-File: `src/lib/email/buildEnvelopeEmailHtml.ts` (and its byte-for-byte mirror `supabase/functions/_shared/envelope-email-html.ts`).
-
-- Header table currently uses 3 fixed `<td>` columns — at narrow widths the JBJ wordmark wraps one word per line and the monogram drifts off-corner.
-- Rebuild header as a stacked, mobile-first block:
-  - Monogram aligned hard-left at 64×64.
-  - "JBJ GLOBAL REAL ESTATE" forced on a single line (`white-space:nowrap; font-size:clamp(14px,3.6vw,18px)`) sitting next to the monogram.
-  - Doc number drops under the wordmark on screens ≤ 480 px (use a `<br>` + `@media` block injected via `<style>` in `<head>`).
-- Footer columns currently collide on phones (email/website/phone overlap, render in ink not gold). Rebuild footer:
-  - One `<td>` per row inside a `@media (max-width:520px)` block (display:block, width:100%, text-align:center).
-  - Email + website + phone styled with `color:#B89555` (gold) and `text-decoration:none`, separated by 6 px vertical spacing.
-  - Company name stays on one line at the top, `Dubai, UAE` underneath.
-- Increase `max-width` of inner table to 100 % below 520 px and remove side padding from outer `<td align="center">` so nothing clips the gold border.
-
-### 2. Attachment chip not clickable
-- `buildEnvelopeEmailHtml` currently renders the attachment chip as a plain `<div>`. Change the signature so the renderer accepts `attachmentUrl?: string` and wraps the chip in `<a href="${attachmentUrl}" download …>` styled gold-on-champagne with the paperclip icon. When `attachmentUrl` is missing, fall back to the current static chip.
-- Thread the new prop through:
-  - `EmailPreviewIframe` (add `attachmentUrl`),
-  - `SendViaEmailDialog` (resolve from envelope `document_url` via `maybeProxyStorageUrl`),
-  - test/send edge functions `esign-send-test-email` + `esign-send-for-signature` (add to payload + forward to `_shared/envelope-email-html.ts`).
-
-### 3. PAA + Letterhead preview broken on mobile
-File: `src/templates/letterheadChrome.ts`.
-
-- `buildLetterheadHeader` uses a flex row with `min-width:150px` on the contact column → forces overflow on the phone preview iframe. Wrap the whole header in a responsive style block: stack the three columns vertically below 520 px, monogram + brand row first, contact column second (still gold, right-aligned on desktop, left-aligned on mobile).
-- `buildLetterheadFooter` 3-column table → add the same `@media` block: stack each `<td>` to `display:block;width:100%;text-align:center` on phones; ensure email/website remain gold (`#B89555`) and the phone number remains ink.
-- No copy or branding changes — chrome only.
-
-### 4. Purge fake JBJ contact + "Citi Developers Sales & Experience Center" from signature presets
-- Run a migration that updates every row in `email_signature_presets` so:
-  - `address_line` → `'Office SM1-195, Port Saeed, Deira, Dubai, UAE'` (from `TRADE_LICENSE_OFFICE`).
-  - `phone` → `'+971 54 716 7107'` for Founder / CEO and Executive Office; clear (`NULL`) the placeholder zero numbers on HR / Help Desk rows so they fall back to the company line until real numbers exist.
-  - `email` → `'Contact@JBJ.AE'` for Founder / CEO + Executive Office; keep `careers@jbj.ae` and `support@jbj.ae` (real per `companyLegal.ts`).
-  - `website` → `'https://www.jbj.ae'` for all (already correct).
-- Update `renderSignatureHtml` so the title line (`Founder & CEO`) renders in gold (`color:#B89555;letter-spacing:.18em;text-transform:uppercase;font-weight:600`) — the user explicitly asked for the title (or the name) in gold for premium feel. Keep the rest ink.
-
-### 5. Strip remaining fake `jane@jbj.ae` / `+971 50 000 0000` site-wide
-- Replace literal `jane@jbj.ae` with `Contact@JBJ.AE` in:
-  - `src/config/team-members.ts:343`
-  - `src/config/assistant-brain-updates.ts:273`
-  - `supabase/functions/_shared/ai-utils.ts:56`
-  - `supabase/functions/ai-chat-support/index.ts:162`
-- Search-replace `050 000 0000` / `0500000000` if any literal slipped in (none found in code today, but include the lint sweep so future edits stay clean).
-- Add an entry to `scripts/contrast/...` style guard? No — out of scope. Just a one-pass `rg` clean-up.
-
-### 6. Sign page (`/sign/:token`) — DocuSign CTA was opening blank/slow + no clear steps
-File: `src/pages/e-signature/SignDocument.tsx` (+ `src/config/docusignHandoff.ts`).
-
-- Replace the "Sign with DocuSign" button target with the faster, deterministic web sign-in entry: `https://account.docusign.com/` (loads instantly vs `apps.docusign.com` blank wait). Update `DOCUSIGN_WEB` in `docusignHandoff.ts` so every consumer (email CTA, sign page, mirrored edge fn, `buildEnvelopeEmailHtml.ts`) gets the new URL in one edit.
-- Add a third CTA "Create a free DocuSign account" → `https://account.docusign.com/signup` directly under the Sign button (small outline button, gold border).
-- Restructure the steps cards to read top-to-bottom as a numbered checklist:
-  1. **Download the agreement** (existing card; promote to step 1 — the user must have the PDF before signing).
-  2. **Install or open DocuSign** — App Store / Google Play / "Open DocuSign Web" with the new fast URL + Create-account link.
-  3. **Open the PDF inside DocuSign** — short note: "In the DocuSign app, tap *+ → Upload* and pick the PDF you just downloaded. Place your signature, initials and date, then tap *Finish*."
-  4. **Email the signed copy back** (existing card).
-- Keep all existing copy, status / decline / expired states untouched.
-
-### 7. Allow the in-app preview iframe to actually open the DocuSign CTA
-File: `src/components/e-signature/EmailPreviewIframe.tsx`.
-- Sandbox is `allow-same-origin` only — clicks on the OPEN IN DOCUSIGN button do nothing. Change to `sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox"` so test clicks open in a new tab during preview.
+Builds entirely on existing tables (`crm_developer_registry`, `crm_outreach_touchpoints`, `email_send_log`, `developer_action_items`) and the existing `crm-send-developer-registration` edge function. No new providers, no schema redesign — only one additive migration and reuse of the locked-send + Resend pipeline already in place.
 
 ---
 
-### Technical notes
-- The two `envelope-email-html` files (frontend + edge) MUST stay byte-for-byte identical (existing rule) — every change in §1, §2 is duplicated.
-- The signature-preset migration is data-only (UPDATE on system rows). No schema change.
-- No new packages. No backend logic changes beyond the signature-preset UPDATE and the new `attachmentUrl` payload field on the two send edge functions.
-- Out of scope: changing the brokerage outreach pipeline (`crm-send-brokerage-outreach`) — that flow is correctly separated from JBJ-only signatures by the Single-Agency Email Rule and is unaffected by these fixes.
+### 1. New CTA — "Confirm Registration Status"
+- Add a button next to "Send Registration Email" / "Bulk Outreach" / "Send Test" inside `DevelopersDirectory.tsx` and the Developer tab of Relationships Hub.
+- Variant `gold`, opens `<ConfirmRegistrationModal />`.
+
+### 2. Smart selection modal (`ConfirmRegistrationModal.tsx`)
+Two-pane layout (champagne surface, gold hairline):
+
+**Left — Eligible queue (default list).** Server-side query filtering `crm_developer_registry` by:
+- `outreach_count > 0` OR `contract_signed_at IS NOT NULL` OR `required_docs_complete = true`
+- AND `registration_status NOT IN ('registered','commission_eligible','confirmed_registered')`
+- AND `do_not_contact = false`
+- AND valid `developer_email`
+- AND no confirmation sent in last 24h (`registration_confirmation_sent_at`).
+
+Filter chips: emirate, registration stage, contract status, "no response > N days", "follow-up needed".
+Bulk: select all / unselect all / status filter.
+
+**Right — Manual override.** Search box (debounced) over the full registry, including already-registered devs; Add chip injects them into the campaign with a warning pill.
+
+**Status badges (gold/champagne palette + tooltip):**
+`Registered`, `Commission Eligible`, `Pending Registration`, `Awaiting Confirmation`, `Contract Signed`, `Follow-up Needed`, `Registration Rejected`, `No Response`.
+Centralised in `src/lib/crm/registrationStatus.ts` (label + tone + tooltip).
+
+### 3. Email preview & approval
+Reuse the existing locked-send pipeline (`useLockedSend` + `outreach_locked_payloads`). One row per developer is locked with editable Subject + Body + CC + BCC + attachments + sender forced to `Contact@JBJ.AE`. Per-row preview drawer pre-render exactly what will be sent (Single-Agency rule already enforced server-side). "Approve & Send" calls existing `crm-send-developer-registration` with `template = 'registration_confirmation'`.
+
+Template variables: `{{developer_name}} {{contact_name}} {{registration_status}} {{contract_date}} {{sender_name}} {{company_name}}` resolved server-side from the registry row.
+
+### 4. Contract-signed automation
+- E-signature `EnvelopeDetail` already writes `contract_document_url` + `contract_signed_at` on completion. Add a post-completion hook that:
+  1. Upserts the file into `crm_developer_documents` (existing) tagged `signed_contract`.
+  2. Schedules `next_action_at = now() + interval (configurable, default 1 day)` and `next_action_note = 'Confirm registration status'`.
+- Global default editable in Owner → Settings → Automation (single row in `app_settings`).
+
+### 5. Auto-stop engine
+Extend the existing `gmail-inbox-sync` / `classify-developer-request` edge function with a regex+LLM matcher for phrases like "officially registered", "registration completed", "commission eligible", "broker registration approved". On match:
+- Set `registration_status = 'registered'`, `registered_at = now()`, `commission_eligible = true`.
+- Cancel scheduled `next_action_at` for confirmation.
+- Append touchpoint (inbound) and a system note in `developer_action_items`.
+
+### 6. Owner Registration Documents panel
+New section inside `DeveloperProfile` (owner-gated via `requireOwnerAuth` + `useUserRole`). Lists `crm_developer_documents` rows filtered to owner-only doc kinds: signed contract, trade license, RERA, passport, VAT, MOU, NDA, registration approval, commission approval, email confirmation. Upload + replace + download.
+
+### 7. Communication history
+Every send already writes to `email_send_log` and `crm_outreach_touchpoints`. Surface a "Confirmations" tab in the developer profile filtered to `template_name = 'registration_confirmation'` with delivered/opened/replied chips (data already present).
+
+### 8. Safety guardrails (server-side, in edge function)
+Hard checks before each send: valid email, prior outreach exists, contract present when required, sender forced to `Contact@JBJ.AE`, attachment list non-empty when template requires, `registration_confirmation_sent_at` not within last 24h, suppression list clear.
+
+---
+
+### Database (one additive migration)
+- `ALTER TABLE crm_developer_registry ADD COLUMN IF NOT EXISTS commission_eligible boolean NOT NULL DEFAULT false;`
+- `CREATE TYPE` extension if needed for new status values (`confirmed_registered`, `registration_rejected`, `no_response`) — added via `ALTER TYPE crm_dev_registration_status ADD VALUE IF NOT EXISTS …`.
+- New table `app_automation_settings (id, key, value jsonb, updated_at)` for the editable follow-up delay.
+- RLS: owner/admin only via existing `has_role` helper.
+
+### Files
+- New: `src/components/crm/ConfirmRegistrationModal.tsx`, `src/components/crm/registration/StatusBadge.tsx`, `src/lib/crm/registrationStatus.ts`, `src/components/crm/registration/OwnerDocumentsPanel.tsx`, `src/hooks/useRegistrationAutomation.ts`, `src/pages/owner/settings/AutomationSettings.tsx`.
+- Edited: `src/components/crm/entity/DevelopersDirectory.tsx`, `src/pages/owner/OwnerRelationships.tsx`, `src/pages/e-signature/EnvelopeDetail.tsx`, `supabase/functions/crm-send-developer-registration/index.ts`, `supabase/functions/classify-developer-request/index.ts`, `supabase/functions/gmail-inbox-sync/index.ts`.
+- Migration: one file adding the column, enum values, settings table, RLS.
+
+### Out of scope
+- No new email provider, no rewrite of existing outreach pipeline.
+- Brokerage outreach untouched (Single-Agency rule preserved).
+- No changes to e-signature chrome from previous task.
+
+---
+
+### Open question before I start
+Should **"Confirm Registration Status"** be its own dedicated template (separate subject line + body, e.g. *"Please confirm our registration status"*), or a variant of the existing registration outreach email? My default is **separate template** — clearer audit trail and lets the auto-stop engine match replies precisely. Confirm or override.
