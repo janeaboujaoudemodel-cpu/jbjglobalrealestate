@@ -6,6 +6,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ChannelGrid from "@/components/owner-comm/ChannelGrid";
+import HostingerCredentialDialog from "@/components/owner-comm/HostingerCredentialDialog";
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
