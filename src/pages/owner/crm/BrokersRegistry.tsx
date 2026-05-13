@@ -344,7 +344,7 @@ export default function BrokersRegistry() {
             {stillStreaming && (
               <div className="flex items-center gap-2 text-xs text-[#1A1A1A]/70 px-1">
                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                Loading brokers… {external.length.toLocaleString()} of {counts.total.toLocaleString()} loaded
+                Loading brokers… {external.length.toLocaleString()} of {counts.total == null ? "…" : counts.total.toLocaleString()} loaded
               </div>
             )}
             {isLoading ? (
@@ -353,6 +353,65 @@ export default function BrokersRegistry() {
               <Card><CardContent className="p-8 text-center text-[#1A1A1A]/70">
                 {stillStreaming ? "Loading brokers…" : "No brokers match your filters."}
               </CardContent></Card>
+            ) : viewMode === "sheet" ? (
+              <Card className="bg-[#F7F2EA] border-[#B89555]/20">
+                <CardContent className="p-0">
+                  <ExcelGridView
+                    rows={visible.map((r) => {
+                      const raw = r.source === "external" ? externalById.get(r.id) : null;
+                      return {
+                        id: `${r.source}:${r.id}`,
+                        full_name: r.full_name,
+                        email: r.email,
+                        phone: r.phone,
+                        company: r.current_company,
+                        broker_type: r.broker_type || "",
+                        rera: r.rera,
+                        tier: r.tier,
+                        country: raw?.country || "",
+                        city: raw?.city || "",
+                        nationality: raw?.nationality || "",
+                        languages: Array.isArray(raw?.languages) ? raw.languages.join(", ") : "",
+                        experience_years: raw?.experience_years ?? "",
+                        linkedin_url: raw?.linkedin_url || "",
+                        last_active_at: r.last_active_at,
+                        database_source: raw?.database_source || (r.source === "registered" ? "Registered" : ""),
+                        upload_source: raw?.upload_source || "",
+                        original_filename: raw?.original_filename || "",
+                        _row: r,
+                      } as any;
+                    })}
+                    columns={[
+                      { key: "full_name", label: "Broker", width: 200 },
+                      { key: "email", label: "Email", width: 220 },
+                      { key: "phone", label: "Phone", width: 150 },
+                      { key: "company", label: "Company", width: 200 },
+                      { key: "broker_type", label: "Specialty", width: 110 },
+                      { key: "rera", label: "RERA", width: 130 },
+                      { key: "tier", label: "Tier", width: 90 },
+                      { key: "country", label: "Country", width: 120 },
+                      { key: "city", label: "City", width: 120 },
+                      { key: "nationality", label: "Nationality", width: 130 },
+                      { key: "languages", label: "Languages", width: 160 },
+                      { key: "experience_years", label: "Years", width: 80, align: "right" },
+                      { key: "linkedin_url", label: "LinkedIn", width: 200 },
+                      { key: "database_source", label: "Database", width: 140 },
+                      { key: "upload_source", label: "Upload Source", width: 140 },
+                      { key: "original_filename", label: "Source File", width: 200 },
+                      { key: "last_active_at", label: "Last Active", width: 160,
+                        render: (row: any) => row.last_active_at ? new Date(row.last_active_at).toLocaleDateString() : "—" },
+                    ] as ExcelGridColumn<any>[]}
+                    defaultFreezeColumns={1}
+                    emptyLabel="No brokers"
+                  />
+                  {filtered.length > visible.length && (
+                    <div className="p-3 border-t border-[#B89555]/20 flex items-center justify-between text-xs text-[#1A1A1A]/70">
+                      <span>Showing {visible.length.toLocaleString()} of {filtered.length.toLocaleString()} matching brokers</span>
+                      <Button variant="outline" size="sm" onClick={() => setRenderLimit((n) => n + 1000)}>Show more</Button>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
             ) : (
               <Card className="bg-[#F7F2EA] border-[#B89555]/20">
                 <CardContent className="p-0 overflow-x-auto">
