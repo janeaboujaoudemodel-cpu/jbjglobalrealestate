@@ -10,7 +10,6 @@
  */
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
-import { ImapClient } from "jsr:@workingdevshero/deno-imap@1.0.0";
 import { SmtpClient } from "https://deno.land/x/smtp@v0.7.0/mod.ts";
 import { encryptCredential } from "../_shared/credentialCrypto.ts";
 import { logChannelAudit } from "../_shared/channelAudit.ts";
