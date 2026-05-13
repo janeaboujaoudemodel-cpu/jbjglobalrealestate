@@ -180,7 +180,7 @@ export function useCreateEnvelopeFromTemplate() {
           template_html: html,
           template_field_values: mergedValues,
           client_lead_id: clientLeadId ?? null,
-          metadata: { doc_number: docNumber, cc_emails: [] },
+          metadata: { doc_number: docNumber, cc_emails: [], hidden_fields: hiddenFields },
           expires_at: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
         })
         .select()
