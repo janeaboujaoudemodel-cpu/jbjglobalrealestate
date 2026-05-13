@@ -31,6 +31,7 @@ export default function DevSalesRepsDirectory() {
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+  const [exportOpen, setExportOpen] = useState(false);
   const { total: dbTotal } = useEntityTotal("developer_sales_reps", (q) => q.eq("is_active", true));
 
   useEffect(() => {
