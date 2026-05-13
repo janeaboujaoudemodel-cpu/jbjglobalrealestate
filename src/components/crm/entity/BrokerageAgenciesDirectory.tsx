@@ -5,7 +5,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Building2, Globe, ExternalLink, Phone, Mail, Star } from "lucide-react";
+import { Building2, Globe, Phone, Mail, Star } from "lucide-react";
 import { CompanyHubDrawer } from "@/components/crm/CompanyHubDrawer";
 import { sortBrokeragesForDirectory, normalizeForSearch } from "@/utils/brokerageRanking";
 
