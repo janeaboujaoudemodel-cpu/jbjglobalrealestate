@@ -2203,6 +2203,7 @@ const DeveloperRegistryTab = () => {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [bulkOpen, setBulkOpen] = useState(false);
   const [confirmRegOpen, setConfirmRegOpen] = useState(false);
+  const [confirmRegBulkOpen, setConfirmRegBulkOpen] = useState(false);
   const [confirmRegSelected, setConfirmRegSelected] = useState<any[]>([]);
   const [tplOpen, setTplOpen] = useState(false);
   const [noteEditing, setNoteEditing] = useState<string | null>(null);
