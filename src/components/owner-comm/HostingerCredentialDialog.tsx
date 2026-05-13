@@ -3,6 +3,7 @@
  * Triggered by the custom "comm:open-hostinger-dialog" event from ChannelGrid.
  */
 import { useState, useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   Dialog,
   DialogContent,
