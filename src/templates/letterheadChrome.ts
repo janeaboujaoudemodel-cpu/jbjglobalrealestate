@@ -113,5 +113,5 @@ export function buildLetterheadFooter(): string {
 
 /** A4 page wrapper used by every letterhead document — open / close pair. */
 export const LETTERHEAD_PAGE_OPEN =
-  `<div style="font-family:Inter,Arial,sans-serif;color:${INK};background:#FFFFFF;padding:24px 36px 0;max-width:794px;margin:0 auto;line-height:1.55;font-size:12px;min-height:1123px;display:flex;flex-direction:column;box-sizing:border-box;position:relative;">`;
+  `<div dir="ltr" style="direction:ltr;unicode-bidi:isolate;writing-mode:horizontal-tb;transform:none;font-family:Inter,Arial,sans-serif;color:${INK};background:#FFFFFF;padding:24px 36px 0;max-width:794px;margin:0 auto;line-height:1.55;font-size:12px;min-height:1123px;display:flex;flex-direction:column;box-sizing:border-box;position:relative;">`;
 export const LETTERHEAD_PAGE_CLOSE = `</div>`;
