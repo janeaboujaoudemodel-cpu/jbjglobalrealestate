@@ -440,6 +440,7 @@ export default function OwnerCommSettings() {
           </Tabs>
         </div>
       </div>
+      <HostingerCredentialDialog />
     </>
   );
 }
