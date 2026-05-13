@@ -1,140 +1,172 @@
-# Platform Consolidation Audit & Plan
+# Relationships Hub — Consolidation, Upgrade & Outreach Center
 
-This is a discovery + consolidation roadmap. **No code is changed in this plan** — once you approve, I'll execute it in numbered phases, one phase per merge so you can verify before the next.
-
----
-
-## 1. Scope of the problem (what I found)
-
-- **246 page files** in `src/pages` + 7 route bundles + ~580 mounted route paths.
-- Many files exist as **legacy standalone pages** that have already been visually replaced by `UnifiedCRM` sections, but the standalone pages, components and hooks are still in the repo and partially still mounted.
-- Multiple "Hub" / "Dashboard" / "Center" pages overlap in purpose.
-- Hostinger inbox work is currently blocked behind this — once consolidated, the second mailbox slots into the single Inbox surface instead of growing another tab tree.
+This plan turns `/owner/crm/relationship-hub` (`src/pages/CRMRelationships.tsx`, 3199 lines) into a single, premium, fully wired enterprise CRM surface. **No parallel pages.** Every change happens inside the hub or its existing components.
 
 ---
 
-## 2. Duplicate systems detected
+## 1. What already exists (so we upgrade — not rebuild)
 
-### A. CRM (highest priority)
-| Found | Status |
-|---|---|
-| `src/pages/CRM.tsx` | legacy, superseded |
-| `src/pages/AdminCRM.tsx` (`/admin/crm`) | legacy admin CRM |
-| `src/pages/owner/crm/UnifiedCRM.tsx` (`/owner/crm`) | **PRIMARY (keep)** |
-| `src/pages/owner/crm/CRMNetwork.tsx` | duplicate of Relationships sub-tab |
-| `src/pages/owner/crm/BrokersRegistry.tsx` | duplicate of Relationships > Brokers |
-| `src/pages/owner/OwnerRelationships.tsx` (`/owner/relationships`) | parallel relationships hub |
-| `src/pages/owner/OwnerRelationshipsRevenue.tsx` | should be a tab inside Relationships |
-| `CRMLeadsInbox`, `CRMTasks`, `CRMNotes`, `CRMReminders`, `CRMCalendar`, `CRMEmployees`, `CRMRelationships` (top-level pages) | already redirected → delete files + components + hooks |
+| Capability | Where it lives now | Status |
+|---|---|---|
+| 4 tabs: Developers / Developer Reps / Brokerage Agencies / Brokers | `CRMRelationships.tsx` lines 3167-3192 | ✅ keep — restructure into Option A |
+| Branded Outreach composer | `<BrandedEmailComposer />` mounted above tabs (line 3156) | ⚠️ exists, needs feature parity with the 15-feature spec |
+| Templates engine | `TemplateEditorDialog`, `branded_email_templates`, `crm_email_templates`, `useEmailTemplateLibrary` | ✅ exists, unify the two template tables |
+| Test send | `TestSendDialog` + `BrandedEmailComposer` test chips | ⚠️ guarantee byte-for-byte parity (Locked-Send standard already in memory) |
+| Bulk outreach | `BulkOutreachPanel`, `BulkSendDialog`, `BulkEmailModal`, `BulkWhatsAppModal` | ⚠️ overlapping — collapse into one |
+| Sent history | `<SentHistoryView />` lines 2565 / 3043 | ✅ extend with per-account log |
+| Brokerage agents (owner, directors, brokers) | `BrokerageAgentsEditor`, `crm_brokerage_agents` | ✅ extend fields |
+| Brokers | `IndividualBrokersTab`, `crm_brokers`, `broker_profiles`, `BrokerBulkUploadDialog` | ✅ extend fields + inventory |
+| Developer registry | `DeveloperRegistryTab`, `crm_developer_registry` | ✅ extend fields |
+| Developer reps | `DevSalesRepsDirectory` | ✅ extend with Channel vs Sales split |
+| Secondary Market | linked button → `/owner/crm/relationships/secondary-market` | ✅ wire inventory → here |
+| Tasks/Calendar/Notes/Comm history | `crm_tasks`, `crm_notes`, `crm_calls`, `crm_chat_messages`, `crm_brokerage_actions`, `crm_brokerage_notes` | ✅ surface inline on every entity |
+| Export | `ExportMenu`, `UnifiedCRMExportModal`, `ExportConfigurator`, `exportBrokerages`, `exportDevelopers` | ⚠️ standardise across all 4 tabs |
 
-**Action:** UnifiedCRM at `/owner/crm` is the single source of truth. All CRM pages above get deleted; only redirects remain. Per the Unified Owner CRM Hub memory, this is already the standard — we just haven't finished the deletions.
-
-### B. Inbox / Email
-| Found | Status |
-|---|---|
-| `src/pages/OwnerInbox.tsx` (`/owner/inbox`) | **PRIMARY** — extend with multi-account tabs |
-| `src/pages/EmailClient.tsx` (`/owner/email-client`) | duplicate, delete |
-| `src/pages/owner/crm/EmailCenter.tsx` | duplicate, delete |
-| `src/pages/CompanyComm.tsx` | superseded by Communication Hub v2 |
-| `JBJBrokerMessages.tsx` | merge into Inbox or TeamChat |
-
-**Action:** OwnerInbox becomes the only inbox surface, with one tab per connected mailbox (Jane Gmail, JBJ Gmail, Hostinger `contact@jbj.ae`, future channels). Per-section sent log + Hostinger then plug in here.
-
-### C. Calendar / Agenda
-| Found | Status |
-|---|---|
-| `AICalendar.tsx` | standalone AI calendar |
-| `OwnerAgenda.tsx` (`/owner/agenda`) | personal agenda |
-| `CRMCalendar.tsx` | already redirected |
-| `MeetingCenter.tsx` | meetings UI |
-| Calendar widgets inside UnifiedCRM, Marketing Hub, EventManagement | scattered |
-
-**Action:** One calendar primitive (`<UnifiedCalendar />`), surfaced as: `/owner/crm?section=calendar` (work), `/owner/agenda` (personal view of same data), AICalendar becomes an AI overlay on it. Single `calendar_events` table is the source of truth.
-
-### D. Tasks / Notes / Reminders
-| Found | Status |
-|---|---|
-| `CRMTasks`, `CRMNotes`, `CRMReminders` (top-level) | redirect-only, delete files |
-| `FoundersNotesPanel` (`/owner/notes`) | merge into CRM Notes section |
-| Task widgets inside Marketing Hub, EventManagement, Kanban | use unified task store |
-| `KanbanBoard.tsx` | becomes a *view* of the same task table |
-
-**Action:** Single tables `crm_tasks`, `crm_notes`, `crm_reminders` (already exist per CRM standard). Kanban + Calendar + Notes panel all read from these. Delete duplicate stores.
-
-### E. Employee / HR
-| Found | Status |
-|---|---|
-| `EmployeeHub.tsx` (`/employee-hub`) | legacy |
-| `EmployeeManagementHub.tsx` (`/employee-management`) | **PRIMARY** |
-| `CRMEmployees.tsx` | redirected |
-| `HRDashboard.tsx`, `HRAgent.tsx` | merge as tabs into EmployeeManagementHub |
-| `BrokerAdminAssistant`, `JBJBrokerAdmin` | merge into same |
-
-**Action:** EmployeeManagementHub becomes the single Employee/HR hub with tabs: Roster, CV Center, Onboarding, HR Agent, Broker Admin.
-
-### F. Owner / Founder Dashboards
-| Found | Status |
-|---|---|
-| `OwnerDashboard`, `OwnerDashboardOverview`, `OwnerDashboardShell` | three layers, keep Shell + Overview only |
-| `Dashboard.tsx`, `MyDashboard.tsx`, `MyDashboardActivity.tsx`, `MyDashboardProgress.tsx` | role-mode dashboards, merge into one role-aware Dashboard |
-| `Founder.tsx`, `FoundersAssistant.tsx`, `ExecutiveAssistant.tsx` | overlapping AI assistants → keep one Executive Assistant per Amanda Clarke standard |
-| `JBJBrokerDashboard`, `BrokerDashboard`, `BrokerPartnerDashboard`, `BrokerHub`, `BrokerPortal` | five broker dashboards → one |
-| `InvestorDashboard`, `InvestorHub` | two → one |
-
-### G. Automations
-| Found | Status |
-|---|---|
-| `Automations.tsx` (`/owner/automations`) | **PRIMARY** |
-| Automation tab inside UnifiedCRM | should embed same engine, not reimplement |
-| Per-feature ad-hoc triggers in Marketing Hub, EventManagement | route through automation engine |
-
-### H. AI Tool Pages (24 separate pages)
-24 `AI*Page.tsx` files all with their own layout. Per Royal Tools Hub memory, they should share one `<AIToolShell />`. Many already do — audit + force the rest onto the shell.
-
-### I. Misc duplicates
-- Two design studios: `Studio` + `JBJDesignStudio` + `OwnerCreativeSuite` → keep `OwnerCreativeSuite`.
-- Two ticket systems: `TicketHub` + `SupportTicketHub` → keep SupportTicketHub (per memory).
-- Two trust/audit pages: `TrustAndAuditCenter` + `TrustAndCompliance` + `OwnerAuditPage` + `GlobalAuditDashboard` → consolidate into Global Audit + public Trust page.
+149 relationship/CRM tables already exist. We extend; we do not create parallel ones.
 
 ---
 
-## 3. Database / backend duplication
-Will be enumerated per-system in each phase before any merge. Known-good canonical tables (per existing memory standards):
-- `crm_contacts`, `crm_leads`, `crm_companies`, `crm_tasks`, `crm_notes`, `crm_reminders`, `vw_crm_contacts`, `upsert_contact_with_company` — keep.
-- Deprecate: `rel_*`, `jbj_*`, any `legacy_*` mirror tables (read-only first, then drop after migration).
-- One `email_messages` + `email_accounts` model for the unified inbox (already in place — extend, don't fork).
+## 2. Final structure — Option A (your recommendation)
 
-Each phase ships with: data migration script, RLS audit, and a read-only deprecation window before drop.
+```
+Relationships Hub
+├── 🟡 Branded Outreach Email Center  (sticky, above everything)
+│
+├── Tab: Developers
+│   ├── Sub-tab: Developers
+│   └── Sub-tab: Developer Representatives
+│       ├── Channel Department contacts
+│       └── Sales Contact Point contacts
+│
+└── Tab: Brokerage Agencies
+    ├── Sub-tab: Agencies
+    └── Sub-tab: Individual Brokers
+```
 
----
-
-## 4. Execution phases (proposed order)
-
-I'll do these one at a time. Each phase ends with: deletions listed, redirects in place, build green, smoke test in preview.
-
-1. **CRM consolidation** — delete the 7 legacy top-level CRM pages + their components/hooks; keep redirects; verify UnifiedCRM covers every removed feature.
-2. **Inbox consolidation** — fold EmailClient + EmailCenter + CompanyComm into OwnerInbox; finish Jane/JBJ separated tabs; THEN connect Hostinger as a 3rd tab; per-account sent log.
-3. **Calendar/Tasks/Notes/Reminders** — single primitives + tables; Kanban becomes a view.
-4. **Employee/HR** — merge into EmployeeManagementHub.
-5. **Dashboards** — collapse OwnerDashboard variants + role-mode dashboards.
-6. **Broker / Investor hubs** — one per role.
-7. **Automations** — single engine, embed everywhere.
-8. **AI tool pages** — enforce shared shell.
-9. **Misc** (studios, tickets, trust/audit).
-10. **Backend cleanup** — drop deprecated tables + RLS sweep + linter pass.
+Premium dividers, hover animations, gold-champagne active states, sticky sub-headers — using the existing design tokens (no new color system).
 
 ---
 
-## 5. Strict rules I will follow (per existing memory)
-- **No-removal policy**: every feature on a deleted page must exist in the primary before deletion.
-- **Champagne-gold design system** + IconTile + Adaptive Hairline on the unified surfaces.
-- **Single CRM standard** + **Locked-Send** + **Single-Agency Email Rule** preserved.
-- All deletions land with redirects so external links don't 404.
+## 3. Branded Outreach Email Center — 15-feature spec
+
+We upgrade the existing `<BrandedEmailComposer />`; we do not add a second composer. Final field/feature list:
+
+1. Recipient Email (chips) ✅ exists
+2. Recipient Name — add
+3. Company Name — add (auto-suggest from `crm_brokerages` / `crm_developer_registry`)
+4. Subject ✅
+5. Email Body (HTML editor) ✅
+6. Attachments — add (Drive picker + local upload, stored in `crm_documents` bucket)
+7. Save as Template ✅ (already wired to `useSaveEmailTemplate`)
+8. Select Existing Template ✅
+9. AI Email Assistant — add `brief` → `lovable-ai` edge call returning subject + body + CTA + signature; user edits inline
+10. Send Test Email — wired to **Locked-Send** standard so test = final byte-for-byte
+11. Send Final Email ✅
+12. Preview Mode — add full-screen preview dialog
+13. Draft Auto-Save — add (`branded_outreach_drafts` table, 5s debounce, per-user)
+14. Email History — add tab inside composer, reads `email_send_log` filtered by source `BrandedEmailComposer`
+15. Email Status Tracking — add (sent / delivered / bounced / opened — already tracked in `email_send_log`)
+
+Variables supported (rendered server-side at lock time):
+`{{company_name}} {{contact_name}} {{broker_name}} {{developer_name}} {{agency_name}} {{sender_name}} {{sender_email}}`
+
+Locked-Send Outreach Standard + Single-Agency Email Rule already enforced — both stay on.
 
 ---
 
-## 6. What I need from you
+## 4. Field expansion — every entity gets the full spec
 
-1. **Approve this plan** (or tell me to reorder phases).
-2. Confirm I should pause the Hostinger work and do **Phase 1 (CRM consolidation) first**, since Hostinger plugs cleanly into Phase 2 once Inbox is unified. Recommended.
-3. Phase 1 will produce a concrete delete-list + diff before I touch anything destructive in the database.
+Universal block on Developers / Reps / Agencies / Brokers:
+Country, Emirate, Website, LinkedIn, Instagram, Office Address, Google Maps Link, Main Phone, Main Email, Admin Name, Admin Number, Number of Brokers, Google Reviews, Inquiry Count, Closed Deals Count, Registration Status, Partnership Status, Assigned Team Member, Last Contact Date, Notes, Attachments, Communication History, Tasks, Calendar Events, Email Logs, Source Links, Verification Status, Created/Updated dates.
+
+Plus per-entity additions per your spec (agency owner / sales directors / channel managers / DOB / nationalities / languages; broker specialities; rep Channel vs Sales split).
+
+Migration approach: extend existing tables with nullable columns (no new parallel tables). Read-only fallback for legacy records.
+
+---
+
+## 5. Inventory database → Secondary Market Hub
+
+- Bulk Excel/CSV upload on Developer / Agency / Broker entity drawers (reuse `BrokerBulkUploadDialog` + `MediaIngestionHub` patterns).
+- Rows land in existing `crm_brokerage_inventory` (or new `crm_entity_inventory` if absent — checked in Phase 0).
+- Secondary Market Hub reads the same table — instant cross-surface visibility.
+
+---
+
+## 6. Clickable graph
+
+Existing drawers (`CompanyHubDrawer`, `BrokerCombobox`, etc.) get cross-links so:
+Agency → Brokers → Inventory → Deals → CRM Pipeline → Inquiries → Email Log — all one click apart, all in the same hub (no new pages).
+
+---
+
+## 7. Export everywhere
+
+Single primitive: `<UnifiedCRMExportModal />` (already exists). Wire it into every sub-tab with format options CSV / XLSX / PDF / JSON / Print / CRM Report, plus bulk / filtered / selected-rows scopes.
+
+---
+
+## 8. Restore missing pieces
+
+Audit pass restoring (per your list):
+- Outreach pack
+- Bulk email sender (collapse `BulkSendDialog` + `BulkEmailModal` → one)
+- Test email visibility (already in-place via Locked-Send)
+- Document pack integration (Google Drive pack — uses existing `google_drive` connector + Universal Link Extractor)
+- Registration email workflows
+- Saved outreach templates
+- Attachment manager
+
+---
+
+## 9. Execution phases (each ships independently, you verify in preview)
+
+**Phase 0 — audit + zero-risk consolidation (no schema changes)**
+- Map every duplicate component (BulkSendDialog vs BulkEmailModal, etc.) and produce a delete-list.
+- Restructure tabs to Option A nesting. No data changes.
+- Pin Branded Outreach Email Center to the top with sticky styling.
+
+**Phase 1 — Branded Outreach Email Center upgrade**
+- Add the 9 missing features to `BrandedEmailComposer` (Recipient Name, Company autosuggest, Attachments, AI Assistant, Preview, Draft auto-save, Email History panel, Status tracking, Variable expansion).
+- Migration: `branded_outreach_drafts` table + per-user RLS.
+- Edge function: `branded-outreach-ai-draft` (Lovable AI Gateway, no key needed).
+- Lock-Send wiring verified: test = final.
+
+**Phase 2 — Field expansion + entity drawers**
+- ALTER TABLE migrations adding missing columns to `crm_developer_registry`, `crm_brokerages`, `crm_brokerage_agents`, `crm_brokers`.
+- Extend forms in `BrokerageAgentsEditor`, `DeveloperRegistryTab`, `DevSalesRepsDirectory`, `IndividualBrokersTab`.
+- Channel Dept vs Sales Contact Point split for Developer Reps.
+
+**Phase 3 — Inventory & Secondary Market wiring**
+- Confirm/create `crm_entity_inventory` (entity_type, entity_id, listing payload).
+- Bulk uploader in each entity drawer.
+- Secondary Market Hub reads union view.
+
+**Phase 4 — Clickable graph + export standardisation**
+- Cross-links between drawers.
+- `UnifiedCRMExportModal` mounted in all 4 sub-tabs.
+
+**Phase 5 — Restoration sweep**
+- Reinstate Outreach Pack, Drive document packs, Registration workflow templates, Attachment manager.
+- Collapse duplicate dialogs.
+
+**Phase 6 — Polish**
+- Premium dividers, hover/active states audit, sticky sub-headers, AdaptiveHairline pass.
+
+---
+
+## 10. Strict guardrails (already in memory, repeated for clarity)
+
+- **No new pages, no new hubs.** Everything lives at `/owner/crm/relationship-hub`.
+- **No parallel tables.** Extend existing `crm_*` tables.
+- **Locked-Send + Single-Agency Email Rule + Champagne-gold + IconTile + AdaptiveHairline** all stay on.
+- **No removal** of any existing feature; if anything is replaced it's because the new home is functionally a superset.
+- All sends route through the existing `email_send_log` + Resend quota guard.
+
+---
+
+## 11. What I need from you to start
+
+1. **Approve this phased plan.**
+2. **Confirm Option A nesting** (Developers + Reps under one tab; Agencies + Brokers under another) — your message recommended it; I'll implement that unless you say otherwise.
+3. **Pick the first phase to build now**: I recommend **Phase 0 → Phase 1** in this turn since they unblock the rest and give immediate visible upgrade (Outreach Center).

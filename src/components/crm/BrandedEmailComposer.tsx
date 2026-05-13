@@ -24,6 +24,7 @@ import {
 import {
   Sparkles, Send, FlaskConical, Save, Mail, Loader2,
   CalendarPlus, LibraryBig, PenLine, Copy, Download, ExternalLink, Eye,
+  History as HistoryIcon, Building2, RefreshCw, CheckCircle2, AlertCircle, Clock,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -84,15 +85,31 @@ function buildEmlFile(opts: {
   return `${headers}\r\n\r\n${opts.html}`;
 }
 
+type SendLogEntry = {
+  id: string;
+  recipient_email: string;
+  template_name: string | null;
+  status: string;
+  subject: string | null;
+  created_at: string;
+  error_message: string | null;
+};
+
 export function BrandedEmailComposer() {
   // Recipients
   const [toEmails, setToEmails] = useState<string[]>([]);
   const [ccEmails, setCcEmails] = useState<string[]>([DEFAULT_CC_EMAIL]);
   const [bccEmails, setBccEmails] = useState<string[]>([]);
   const [recipientName, setRecipientName] = useState("");
+  const [companyName, setCompanyName] = useState("");
 
   // Test mode chips
   const [testTo, setTestTo] = useState<string[]>([...TEST_DEFAULT_TO]);
+
+  // History
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const [history, setHistory] = useState<SendLogEntry[]>([]);
+  const [historyLoading, setHistoryLoading] = useState(false);
 
   // Content
   const [brief, setBrief] = useState("");
@@ -155,17 +172,45 @@ export function BrandedEmailComposer() {
     return {
       first_name: first,
       full_name: recipientName.trim(),
+      contact_name: recipientName.trim(),
       email: toEmails[0] || "",
+      company_name: companyName.trim(),
+      agency_name: companyName.trim(),
+      developer_name: companyName.trim(),
+      broker_name: recipientName.trim(),
       property_title: propertyTitle,
       price: propertyPrice,
       location: propertyLocation,
       book_meeting_url: BOOK_URL,
       calendar_link: BOOK_URL,
       sender_name: selectedSignature?.name_line || JBJ_FROM_NAME,
+      sender_email: JBJ_FROM_EMAIL,
       sender_title: selectedSignature?.title_line || "",
       company_legal_name: selectedSignature?.company_line || JBJ_FROM_NAME,
     };
   };
+
+  const loadHistory = async () => {
+    setHistoryLoading(true);
+    try {
+      const { data, error } = await (supabase as any)
+        .from("email_send_log")
+        .select("id, recipient_email, template_name, status, subject, created_at, error_message")
+        .order("created_at", { ascending: false })
+        .limit(50);
+      if (error) throw error;
+      setHistory((data ?? []) as SendLogEntry[]);
+    } catch (e: any) {
+      toast.error(e.message ?? "Failed to load history");
+    } finally {
+      setHistoryLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (historyOpen && history.length === 0) loadHistory();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [historyOpen]);
 
   const onLoadTemplate = (id: string) => {
     setTemplateId(id);
@@ -355,6 +400,14 @@ export function BrandedEmailComposer() {
           <div className="flex items-center gap-2">
             <Button
               type="button" variant="outline" size="sm"
+              onClick={() => setHistoryOpen((s) => !s)}
+              className="border-[#B89555]/40"
+            >
+              <HistoryIcon className="w-3.5 h-3.5 mr-1.5" />
+              {historyOpen ? "Hide history" : "Email history"}
+            </Button>
+            <Button
+              type="button" variant="outline" size="sm"
               onClick={() => setShowPreview((s) => !s)}
               className="border-[#B89555]/40"
             >
@@ -454,17 +507,60 @@ export function BrandedEmailComposer() {
         <div className={`grid gap-4 ${showPreview ? "grid-cols-1 lg:grid-cols-2" : "grid-cols-1"}`}>
           {/* LEFT: compose */}
           <div className="space-y-4">
-            {/* Recipient name */}
-            <div>
-              <Label className="text-xs">Recipient full name (used for {`{{first_name}}`} / {`{{full_name}}`})</Label>
-              <Input
-                ref={refRecipientName}
-                placeholder="e.g. Sarah Johnson"
-                value={recipientName}
-                onChange={(e) => setRecipientName(e.target.value)}
-                className="bg-[#FDFBF7] border-[#B89555]/40"
-              />
+            {/* Recipient name + Company name */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <Label className="text-xs">Recipient full name (used for {`{{first_name}}`} / {`{{contact_name}}`})</Label>
+                <Input
+                  ref={refRecipientName}
+                  placeholder="e.g. Sarah Johnson"
+                  value={recipientName}
+                  onChange={(e) => setRecipientName(e.target.value)}
+                  className="bg-[#FDFBF7] border-[#B89555]/40"
+                />
+              </div>
+              <div>
+                <Label className="text-xs flex items-center gap-1"><Building2 className="w-3 h-3" /> Company name (used for {`{{company_name}}`} / {`{{agency_name}}`})</Label>
+                <Input
+                  placeholder="e.g. Allsopp & Allsopp"
+                  value={companyName}
+                  onChange={(e) => setCompanyName(e.target.value)}
+                  className="bg-[#FDFBF7] border-[#B89555]/40"
+                />
+              </div>
             </div>
+
+            {/* Email History panel */}
+            {historyOpen && (
+              <div className="rounded-md border border-[#B89555]/30 bg-[#F7F2EA] p-3">
+                <div className="flex items-center justify-between mb-2">
+                  <Label className="text-xs flex items-center gap-1"><HistoryIcon className="w-3 h-3" /> Recent sends &amp; status</Label>
+                  <Button type="button" size="sm" variant="ghost" onClick={loadHistory} disabled={historyLoading} className="h-7">
+                    {historyLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
+                  </Button>
+                </div>
+                <div className="max-h-[220px] overflow-auto space-y-1">
+                  {history.length === 0 && !historyLoading && (
+                    <p className="text-[11px] text-[#1A1A1A]/60 italic px-1">No sends yet.</p>
+                  )}
+                  {history.map((h) => {
+                    const isOk = ["sent", "delivered"].includes((h.status || "").toLowerCase());
+                    const isPending = ["pending", "queued"].includes((h.status || "").toLowerCase());
+                    const Icon = isOk ? CheckCircle2 : isPending ? Clock : AlertCircle;
+                    const tone = isOk ? "text-emerald-700" : isPending ? "text-amber-700" : "text-red-700";
+                    return (
+                      <div key={h.id} className="flex items-center gap-2 text-[11px] px-2 py-1.5 rounded bg-[#FDFBF7] border border-[#B89555]/15">
+                        <Icon className={`w-3.5 h-3.5 shrink-0 ${tone}`} />
+                        <span className="font-medium text-[#1A1A1A] truncate flex-1" title={h.subject || ""}>{h.subject || "(no subject)"}</span>
+                        <span className="text-[#1A1A1A]/60 truncate max-w-[160px]" title={h.recipient_email}>{h.recipient_email}</span>
+                        <span className={`uppercase tracking-wide ${tone} font-semibold`}>{h.status}</span>
+                        <span className="text-[#1A1A1A]/40 hidden md:inline">{new Date(h.created_at).toLocaleString()}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             {/* To / Cc / Bcc chip inputs */}
             <div ref={refRecipientEmail}>

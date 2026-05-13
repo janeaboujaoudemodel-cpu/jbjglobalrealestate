@@ -3152,9 +3152,20 @@ const CRMRelationships = () => {
             <BreakfastCalendarStatusBanner />
           </div>
 
-          <div className="mb-8">
+          {/* ============ BRANDED OUTREACH EMAIL CENTER ============ */}
+          <section className="mb-10" aria-labelledby="branded-outreach-heading">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#B89555]/40 to-transparent" />
+              <div className="flex items-center gap-2 px-3 py-1 rounded-full border border-[#B89555]/40 bg-[#F7F2EA]">
+                <Mail className="w-3.5 h-3.5 text-[#1A1A1A]" />
+                <h2 id="branded-outreach-heading" className="text-[11px] font-semibold tracking-[0.18em] uppercase text-[#1A1A1A]">
+                  Branded Outreach Email Center
+                </h2>
+              </div>
+              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#B89555]/40 to-transparent" />
+            </div>
             <BrandedEmailComposer />
-          </div>
+          </section>
 
           <div className="mb-4 flex items-center justify-end">
             <RouterLink to="/owner/crm/relationships/secondary-market">
@@ -3164,30 +3175,65 @@ const CRMRelationships = () => {
             </RouterLink>
           </div>
 
-          <Tabs value={tab} onValueChange={setTab}>
-
+          {/* ============ MAIN: Developers | Brokerage Agencies ============ */}
+          <Tabs
+            value={(tab === "reps" || tab === "developers") ? "developers" : "brokerages"}
+            onValueChange={(v) => setTab(v === "developers" ? "developers" : "brokerages")}
+          >
             <div className="overflow-x-auto -mx-1 px-1 mb-6">
               <TabsList className="bg-[#FDFBF7] border border-[#B89555]/30 p-1.5 rounded-xl inline-flex w-auto gap-2">
-                <TabsTrigger value="developers" className="min-w-fit text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/60 data-[state=active]:shadow-sm hover:bg-[#F7F2EA] rounded-lg px-5 py-2 font-semibold whitespace-nowrap transition-colors"><FileSignature className="w-4 h-4 mr-2" />Developers</TabsTrigger>
+                <TabsTrigger value="developers" className="min-w-fit text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/60 data-[state=active]:shadow-sm hover:bg-[#F7F2EA] rounded-lg px-6 py-2.5 font-semibold whitespace-nowrap transition-colors">
+                  <FileSignature className="w-4 h-4 mr-2" />Developers
+                </TabsTrigger>
                 <span aria-hidden className="self-center w-px h-5 bg-[#B89555]/30" />
-                <TabsTrigger value="reps" className="min-w-fit text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/60 data-[state=active]:shadow-sm hover:bg-[#F7F2EA] rounded-lg px-5 py-2 font-semibold whitespace-nowrap transition-colors"><UserSquare2 className="w-4 h-4 mr-2" />Developer Reps</TabsTrigger>
-                <span aria-hidden className="self-center w-px h-5 bg-[#B89555]/30" />
-                <TabsTrigger value="brokerages" className="min-w-fit text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/60 data-[state=active]:shadow-sm hover:bg-[#F7F2EA] rounded-lg px-5 py-2 font-semibold whitespace-nowrap transition-colors"><Building2 className="w-4 h-4 mr-2" />Brokerage Agencies</TabsTrigger>
-                <span aria-hidden className="self-center w-px h-5 bg-[#B89555]/30" />
-                <TabsTrigger value="brokers" className="min-w-fit text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/60 data-[state=active]:shadow-sm hover:bg-[#F7F2EA] rounded-lg px-5 py-2 font-semibold whitespace-nowrap transition-colors"><Users className="w-4 h-4 mr-2" />Brokers</TabsTrigger>
+                <TabsTrigger value="brokerages" className="min-w-fit text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/60 data-[state=active]:shadow-sm hover:bg-[#F7F2EA] rounded-lg px-6 py-2.5 font-semibold whitespace-nowrap transition-colors">
+                  <Building2 className="w-4 h-4 mr-2" />Brokerage Agencies
+                </TabsTrigger>
               </TabsList>
             </div>
+
+            {/* ===== Developers main → sub-tabs ===== */}
             <TabsContent value="developers">
-              {mounted.has("developers") && <DeveloperRegistryTab />}
+              <Tabs value={tab === "reps" ? "reps" : "developers"} onValueChange={setTab}>
+                <div className="overflow-x-auto -mx-1 px-1 mb-5">
+                  <TabsList className="bg-[#F7F2EA] border border-[#B89555]/20 p-1 rounded-lg inline-flex w-auto gap-1">
+                    <TabsTrigger value="developers" className="text-[#1A1A1A] data-[state=active]:bg-[#FDFBF7] data-[state=active]:border data-[state=active]:border-[#B89555]/50 data-[state=active]:shadow-sm rounded-md px-4 py-1.5 text-sm font-medium whitespace-nowrap transition-colors">
+                      Developers
+                    </TabsTrigger>
+                    <TabsTrigger value="reps" className="text-[#1A1A1A] data-[state=active]:bg-[#FDFBF7] data-[state=active]:border data-[state=active]:border-[#B89555]/50 data-[state=active]:shadow-sm rounded-md px-4 py-1.5 text-sm font-medium whitespace-nowrap transition-colors">
+                      <UserSquare2 className="w-3.5 h-3.5 mr-1.5 inline" />Developer Representatives
+                    </TabsTrigger>
+                  </TabsList>
+                </div>
+                <TabsContent value="developers">
+                  {mounted.has("developers") && <DeveloperRegistryTab />}
+                </TabsContent>
+                <TabsContent value="reps">
+                  {mounted.has("reps") && <DevSalesRepsDirectory />}
+                </TabsContent>
+              </Tabs>
             </TabsContent>
-            <TabsContent value="reps">
-              {mounted.has("reps") && <DevSalesRepsDirectory />}
-            </TabsContent>
+
+            {/* ===== Brokerage Agencies main → sub-tabs ===== */}
             <TabsContent value="brokerages">
-              {mounted.has("brokerages") && <BrokeragesTab />}
-            </TabsContent>
-            <TabsContent value="brokers">
-              {mounted.has("brokers") && <IndividualBrokersTab />}
+              <Tabs value={tab === "brokers" ? "brokers" : "brokerages"} onValueChange={setTab}>
+                <div className="overflow-x-auto -mx-1 px-1 mb-5">
+                  <TabsList className="bg-[#F7F2EA] border border-[#B89555]/20 p-1 rounded-lg inline-flex w-auto gap-1">
+                    <TabsTrigger value="brokerages" className="text-[#1A1A1A] data-[state=active]:bg-[#FDFBF7] data-[state=active]:border data-[state=active]:border-[#B89555]/50 data-[state=active]:shadow-sm rounded-md px-4 py-1.5 text-sm font-medium whitespace-nowrap transition-colors">
+                      Agencies
+                    </TabsTrigger>
+                    <TabsTrigger value="brokers" className="text-[#1A1A1A] data-[state=active]:bg-[#FDFBF7] data-[state=active]:border data-[state=active]:border-[#B89555]/50 data-[state=active]:shadow-sm rounded-md px-4 py-1.5 text-sm font-medium whitespace-nowrap transition-colors">
+                      <Users className="w-3.5 h-3.5 mr-1.5 inline" />Individual Brokers
+                    </TabsTrigger>
+                  </TabsList>
+                </div>
+                <TabsContent value="brokerages">
+                  {mounted.has("brokerages") && <BrokeragesTab />}
+                </TabsContent>
+                <TabsContent value="brokers">
+                  {mounted.has("brokers") && <IndividualBrokersTab />}
+                </TabsContent>
+              </Tabs>
             </TabsContent>
           </Tabs>
         </div>
