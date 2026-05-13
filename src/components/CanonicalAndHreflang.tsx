@@ -112,6 +112,19 @@ const upsertCanonical = (href: string | null) => {
   canonical.setAttribute("href", href);
 };
 
+const upsertOgUrl = (href: string | null) => {
+  let tag = document.querySelector(
+    'meta[property="og:url"]'
+  ) as HTMLMetaElement | null;
+  if (!href) return;
+  if (!tag) {
+    tag = document.createElement("meta");
+    tag.setAttribute("property", "og:url");
+    document.head.appendChild(tag);
+  }
+  tag.setAttribute("content", href);
+};
+
 const injectHreflangTags = (canonicalHref: string) => {
   removeManagedTags();
 
