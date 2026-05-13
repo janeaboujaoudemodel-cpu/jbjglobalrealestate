@@ -165,7 +165,7 @@ export default function BrokerageAgenciesDirectory() {
         <div>
           <h2 className="text-lg font-semibold text-[#1A1A1A]">Brokerage Agencies</h2>
           <p className="text-xs text-[#1A1A1A]/60">
-            {finalRows.length.toLocaleString()} of {rows.length.toLocaleString()} agencies
+            {finalRows.length.toLocaleString()} of {(dbTotal ?? rows.length).toLocaleString()} agencies
             {emirate ? ` · filtered: ${emirate}` : ""}
           </p>
         </div>
