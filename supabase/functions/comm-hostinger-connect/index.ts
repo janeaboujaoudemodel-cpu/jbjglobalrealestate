@@ -10,7 +10,7 @@
  */
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
-import { encryptCredential } from "../_shared/credentialCrypto.ts";
+import { decryptCredential, encryptCredential } from "../_shared/credentialCrypto.ts";
 import { logChannelAudit } from "../_shared/channelAudit.ts";
 
 const corsHeaders = {
@@ -196,15 +196,49 @@ Deno.serve(async (req) => {
     const smtpHost = body.smtp_host || DEFAULTS.smtp_host;
     let smtpPort = body.smtp_port || DEFAULTS.smtp_port;
 
+    if (!CRED_KEY) {
+      return new Response(JSON.stringify({ error: "Server misconfiguration: credential encryption key missing" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const admin = createClient(SUPABASE_URL, SERVICE_ROLE);
+    const { data: existing } = await admin
+      .from("owner_comm_channels")
+      .select("id, credentials")
+      .eq("user_id", user.id)
+      .eq("channel_type", "email_hostinger")
+      .eq("identifier", email)
+      .maybeSingle();
+
     let passwordForStorage = password;
     let usedSavedCredential = false;
 
-    // 1) Test IMAP. If the project-owned mailbox has a saved credential,
-    // recover from a stale/wrong form password by validating the saved one.
+    // 1) Test IMAP. If a previously working mailbox credential is already
+    // stored, recover from a stale/wrong form password by validating that.
     let imapResult = await testImap(email, passwordForStorage, imapHost, imapPort);
     const isAuthFailure = /AUTHENTICATIONFAILED|authentication failed|invalid credentials|login failed/i.test(
       imapResult.error || ""
     );
+    if (!imapResult.ok && isAuthFailure && existing?.credentials && typeof existing.credentials === "object") {
+      const encryptedExisting = (existing.credentials as Record<string, unknown>).password;
+      if (typeof encryptedExisting === "string") {
+        try {
+          const existingPassword = await decryptCredential(encryptedExisting, CRED_KEY);
+          if (existingPassword && existingPassword !== passwordForStorage) {
+            const existingImapResult = await testImap(email, existingPassword, imapHost, imapPort);
+            if (existingImapResult.ok) {
+              passwordForStorage = existingPassword;
+              usedSavedCredential = true;
+              imapResult = existingImapResult;
+            }
+          }
+        } catch (decryptError) {
+          console.warn("[hostinger] stored credential fallback unavailable", decryptError);
+        }
+      }
+    }
     if (!imapResult.ok && isAuthFailure && savedEmail && savedPassword && email === savedEmail) {
       const savedImapResult = await testImap(email, savedPassword, imapHost, imapPort);
       if (savedImapResult.ok) {
@@ -239,26 +273,10 @@ Deno.serve(async (req) => {
       });
     }
 
-    if (!CRED_KEY) {
-      return new Response(JSON.stringify({ error: "Server misconfiguration: credential encryption key missing" }), {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
     // 3) Encrypt password
     const encryptedPassword = await encryptCredential(passwordForStorage, CRED_KEY);
 
     // 4) Upsert channel
-    const admin = createClient(SUPABASE_URL, SERVICE_ROLE);
-    const { data: existing } = await admin
-      .from("owner_comm_channels")
-      .select("id")
-      .eq("user_id", user.id)
-      .eq("channel_type", "email_hostinger")
-      .eq("identifier", email)
-      .maybeSingle();
-
     const credentials = {
       email,
       password: encryptedPassword,
