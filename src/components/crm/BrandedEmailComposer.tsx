@@ -84,15 +84,31 @@ function buildEmlFile(opts: {
   return `${headers}\r\n\r\n${opts.html}`;
 }
 
+type SendLogEntry = {
+  id: string;
+  recipient_email: string;
+  template_name: string | null;
+  status: string;
+  subject: string | null;
+  created_at: string;
+  error_message: string | null;
+};
+
 export function BrandedEmailComposer() {
   // Recipients
   const [toEmails, setToEmails] = useState<string[]>([]);
   const [ccEmails, setCcEmails] = useState<string[]>([DEFAULT_CC_EMAIL]);
   const [bccEmails, setBccEmails] = useState<string[]>([]);
   const [recipientName, setRecipientName] = useState("");
+  const [companyName, setCompanyName] = useState("");
 
   // Test mode chips
   const [testTo, setTestTo] = useState<string[]>([...TEST_DEFAULT_TO]);
+
+  // History
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const [history, setHistory] = useState<SendLogEntry[]>([]);
+  const [historyLoading, setHistoryLoading] = useState(false);
 
   // Content
   const [brief, setBrief] = useState("");
