@@ -226,9 +226,20 @@ export default function EnvelopeDetail() {
     setEditValues((prev) => ({ ...prev, ...updates }));
   };
 
+  // Strip Unicode bidi-control characters that can flip an entire run of
+  // text RTL (LRM, RLM, LRE, RLE, PDF, LRO, RLO, LRI, RLI, FSI, PDI). OCR /
+  // smart-fill of uploaded contracts often injects these and they are
+  // invisible in field inputs but visibly mirror the rendered preview.
+  const stripBidi = (s: string) => (s || "").replace(/[\u200E\u200F\u202A-\u202E\u2066-\u2069]/g, "");
+  const sanitizeValues = (v: Record<string, any>): Record<string, string> => {
+    const out: Record<string, string> = {};
+    for (const k of Object.keys(v || {})) out[k] = stripBidi(String(v[k] ?? ""));
+    return out;
+  };
+
   const previewHtml = useMemo(() => {
     if (!envelope?.template_key) return null;
-    const baseVals = editing ? editValues : ((envelope.template_field_values as any) || {});
+    const baseVals = sanitizeValues(editing ? editValues : ((envelope.template_field_values as any) || {}));
     // Only render the captured signature pad image when the recipient has truly
     // signed. Once signed, mirror the signer name + signing date into the
     // rendered letterhead so preview, print, export, and download all match.
@@ -239,7 +250,7 @@ export default function EnvelopeDetail() {
     const signedDate = signedClient?.signed_at ? format(new Date(signedClient.signed_at), "dd/MM/yyyy") : "";
     const vals = signedClient ? {
       ...baseVals,
-      landlord_signature_name: baseVals.landlord_signature_name || signedClient.name || "",
+      landlord_signature_name: baseVals.landlord_signature_name || stripBidi(signedClient.name || ""),
       landlord_signature_date: baseVals.landlord_signature_date || signedDate,
     } : baseVals;
     return renderTemplateHtml(
@@ -745,8 +756,22 @@ export default function EnvelopeDetail() {
     return (
       <div className="min-h-screen bg-[#FDFBF7] p-6">
         <div className="max-w-6xl mx-auto space-y-6">
-          <Skeleton className="h-12 w-48" />
-          <Skeleton className="h-[600px] w-full" />
+          <div className="flex items-center gap-3">
+            <Skeleton className="h-10 w-10 rounded-full" />
+            <Skeleton className="h-8 w-64" />
+            <Skeleton className="h-6 w-20" />
+          </div>
+          <Skeleton className="h-12 w-full" />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <Skeleton className="lg:col-span-2 h-[600px] w-full" />
+            <div className="space-y-4">
+              <Skeleton className="h-40 w-full" />
+              <Skeleton className="h-40 w-full" />
+            </div>
+          </div>
+          <div className="flex items-center gap-2 text-[#1A1A1A]/60 text-sm justify-center pt-2">
+            <Loader2 className="w-4 h-4 animate-spin" /> Loading document…
+          </div>
         </div>
       </div>
     );
@@ -772,8 +797,9 @@ export default function EnvelopeDetail() {
   const clientRec = (envelope.esign_recipients || []).find((r: any) => r.metadata?.role === "client") || envelope.esign_recipients?.[0];
   const isDraft = envelope.status === "draft";
   const previewSrcDoc = previewHtml
-    ? `<!doctype html><html><head><meta charset="utf-8"><style>
-        html,body{margin:0;padding:0;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    ? `<!doctype html><html dir="ltr" lang="en"><head><meta charset="utf-8"><style>
+        html,body{margin:0;padding:0;background:#fff;direction:ltr !important;unicode-bidi:isolate !important;writing-mode:horizontal-tb !important;transform:none !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+        body *{writing-mode:horizontal-tb;}
         /* Preview-only: collapse the A4 min-height so there's no blank gap below the footer.
            Export path uses a separate fixed-height container in renderHtmlToPdfBlob,
            so the PDF stays pinned to A4. */
@@ -786,7 +812,7 @@ export default function EnvelopeDetail() {
         [data-chip-key]:hover{background:#FBF6EC;}
         .jbj-x{position:absolute;top:-9px;right:-9px;width:18px;height:18px;border-radius:999px;background:#FDFBF7;border:1px solid #B89555;color:#1A1A1A;font-size:11px;line-height:16px;text-align:center;cursor:pointer;display:none;font-family:Inter,Arial,sans-serif;font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08);user-select:none;}
         [data-field-key]:hover > .jbj-x{display:block;}
-      </style></head><body>${previewHtml}<script>(function(){
+      </style></head><body dir="ltr">${previewHtml}<script>(function(){
         var EDITABLE=${editing ? "true" : "false"};
         // Inject hover X buttons on each editable field block.
         document.querySelectorAll('[data-field-key]').forEach(function(el){
@@ -984,9 +1010,9 @@ export default function EnvelopeDetail() {
               ) : envelope.document_url ? (
                 <iframe
                   title="Document PDF"
-                  src={`${maybeProxyStorageUrl(signedDoc?.document_url || envelope.document_url, { disposition: "inline", filename: signedDoc?.document_filename || envelope.document_filename })}${(signedDoc?.document_url || envelope.document_url).includes("?") ? "&" : "?"}v=${encodeURIComponent(envelope.updated_at || envelope.created_at || "")}`}
+                  src={`${maybeProxyStorageUrl(signedDoc?.document_url || envelope.document_url, { disposition: "inline", filename: signedDoc?.document_filename || envelope.document_filename })}${(signedDoc?.document_url || envelope.document_url).includes("?") ? "&" : "?"}v=${encodeURIComponent(envelope.updated_at || envelope.created_at || "")}#toolbar=0&navpanes=0&view=FitH`}
                   className="w-full bg-white"
-                  style={{ height: "1100px", border: 0 }}
+                  style={{ height: "1100px", border: 0, transform: "none", direction: "ltr" }}
                 />
               ) : (
                 <div className="p-12 text-center text-[#1A1A1A]/70">No document</div>
