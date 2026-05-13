@@ -172,17 +172,45 @@ export function BrandedEmailComposer() {
     return {
       first_name: first,
       full_name: recipientName.trim(),
+      contact_name: recipientName.trim(),
       email: toEmails[0] || "",
+      company_name: companyName.trim(),
+      agency_name: companyName.trim(),
+      developer_name: companyName.trim(),
+      broker_name: recipientName.trim(),
       property_title: propertyTitle,
       price: propertyPrice,
       location: propertyLocation,
       book_meeting_url: BOOK_URL,
       calendar_link: BOOK_URL,
       sender_name: selectedSignature?.name_line || JBJ_FROM_NAME,
+      sender_email: JBJ_FROM_EMAIL,
       sender_title: selectedSignature?.title_line || "",
       company_legal_name: selectedSignature?.company_line || JBJ_FROM_NAME,
     };
   };
+
+  const loadHistory = async () => {
+    setHistoryLoading(true);
+    try {
+      const { data, error } = await (supabase as any)
+        .from("email_send_log")
+        .select("id, recipient_email, template_name, status, subject, created_at, error_message")
+        .order("created_at", { ascending: false })
+        .limit(50);
+      if (error) throw error;
+      setHistory((data ?? []) as SendLogEntry[]);
+    } catch (e: any) {
+      toast.error(e.message ?? "Failed to load history");
+    } finally {
+      setHistoryLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (historyOpen && history.length === 0) loadHistory();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [historyOpen]);
 
   const onLoadTemplate = (id: string) => {
     setTemplateId(id);
