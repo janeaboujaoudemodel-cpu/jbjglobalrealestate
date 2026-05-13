@@ -39,9 +39,11 @@ import {
   Link2,
   ChevronDown,
   ChevronUp,
+  ExternalLink,
   type LucideIcon,
 } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ProviderState } from "@/hooks/useCommChannels";
 import { ToneProfile, useUpdateChannelToneSettings } from "@/hooks/useToneProfiles";
 import {
@@ -153,7 +155,9 @@ export default function ChannelTile({
     state;
   const Icon = PROVIDER_ICONS[provider.id] || MessageSquare;
   const updateChannel = useUpdateChannelToneSettings();
+  const navigate = useNavigate();
   const [openActivity, setOpenActivity] = useState<Record<string, boolean>>({});
+  const isEmailProvider = provider.id.startsWith("email_");
 
   const statusPill = (() => {
     if (status === "connected") {
@@ -163,10 +167,10 @@ export default function ChannelTile({
         </Badge>
       );
     }
-    if (lastError) {
+    if (status === "error") {
       return (
         <Badge className="bg-red-600 text-white border-red-700">
-          <AlertTriangle className="h-3 w-3 mr-1" /> Reconnect
+          <AlertTriangle className="h-3 w-3 mr-1" /> Sync failed — reconnect
         </Badge>
       );
     }
@@ -176,6 +180,13 @@ export default function ChannelTile({
       </Badge>
     );
   })();
+
+  const openInbox = (channelId?: string) => {
+    const params = new URLSearchParams();
+    params.set("channel", provider.id);
+    if (channelId) params.set("channelId", channelId);
+    navigate(`/owner/inbox?${params.toString()}`);
+  };
 
   function handleToggle(rowId: string, next: boolean) {
     updateChannel.mutate(
