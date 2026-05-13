@@ -28,6 +28,9 @@ interface HostingerForm {
   use_defaults: boolean;
 }
 
+const DEFAULT_HOSTINGER_EMAIL = "contact@jbj.ae";
+const SAVED_PASSWORD_SENTINEL = "__USE_SAVED_HOSTINGER_SECRET__";
+
 const DEFAULTS = {
   imap_host: "imap.hostinger.com",
   imap_port: "993",
@@ -39,8 +42,8 @@ export default function HostingerCredentialDialog() {
   const [open, setOpen] = useState(false);
   const [testing, setTesting] = useState(false);
   const [form, setForm] = useState<HostingerForm>({
-    email: "",
-    password: "",
+    email: DEFAULT_HOSTINGER_EMAIL,
+    password: SAVED_PASSWORD_SENTINEL,
     imap_host: DEFAULTS.imap_host,
     imap_port: DEFAULTS.imap_port,
     smtp_host: DEFAULTS.smtp_host,
@@ -88,11 +91,15 @@ export default function HostingerCredentialDialog() {
       });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
-      toast.success(`Hostinger email connected: ${data.email}`);
+      toast.success(
+        data?.used_saved_credential
+          ? `Hostinger email connected with the saved mailbox credential: ${data.email}`
+          : `Hostinger email connected: ${data.email}`
+      );
       setOpen(false);
       setForm({
-        email: "",
-        password: "",
+        email: DEFAULT_HOSTINGER_EMAIL,
+        password: SAVED_PASSWORD_SENTINEL,
         imap_host: DEFAULTS.imap_host,
         imap_port: DEFAULTS.imap_port,
         smtp_host: DEFAULTS.smtp_host,
@@ -139,6 +146,9 @@ export default function HostingerCredentialDialog() {
               type="password"
               placeholder="••••••••"
               value={form.password}
+              onFocus={() => {
+                if (form.password === SAVED_PASSWORD_SENTINEL) update("password", "");
+              }}
               onChange={(e) => update("password", e.target.value)}
               className="border-[#B89555]/30 bg-[#F7F2EA]"
             />

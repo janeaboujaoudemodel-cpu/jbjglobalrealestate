@@ -10,7 +10,7 @@
  */
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
-import { encryptCredential } from "../_shared/credentialCrypto.ts";
+import { decryptCredential, encryptCredential } from "../_shared/credentialCrypto.ts";
 import { logChannelAudit } from "../_shared/channelAudit.ts";
 
 const corsHeaders = {
@@ -182,6 +182,8 @@ Deno.serve(async (req) => {
     const body = (await req.json()) as HostingerPayload;
     const email = body.email?.trim().toLowerCase();
     const password = body.password;
+    const savedEmail = (Deno.env.get("HOSTINGER_EMAIL_ADDRESS") || "").trim().toLowerCase();
+    const savedPassword = Deno.env.get("HOSTINGER_EMAIL_PASSWORD") || "";
     if (!email || !password) {
       return new Response(JSON.stringify({ error: "email and password required" }), {
         status: 400,
@@ -194,8 +196,57 @@ Deno.serve(async (req) => {
     const smtpHost = body.smtp_host || DEFAULTS.smtp_host;
     let smtpPort = body.smtp_port || DEFAULTS.smtp_port;
 
-    // 1) Test IMAP
-    const imapResult = await testImap(email, password, imapHost, imapPort);
+    if (!CRED_KEY) {
+      return new Response(JSON.stringify({ error: "Server misconfiguration: credential encryption key missing" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const admin = createClient(SUPABASE_URL, SERVICE_ROLE);
+    const { data: existing } = await admin
+      .from("owner_comm_channels")
+      .select("id, credentials")
+      .eq("user_id", user.id)
+      .eq("channel_type", "email_hostinger")
+      .eq("identifier", email)
+      .maybeSingle();
+
+    let passwordForStorage = password;
+    let usedSavedCredential = false;
+
+    // 1) Test IMAP. If a previously working mailbox credential is already
+    // stored, recover from a stale/wrong form password by validating that.
+    let imapResult = await testImap(email, passwordForStorage, imapHost, imapPort);
+    const isAuthFailure = /AUTHENTICATIONFAILED|authentication failed|invalid credentials|login failed/i.test(
+      imapResult.error || ""
+    );
+    if (!imapResult.ok && isAuthFailure && existing?.credentials && typeof existing.credentials === "object") {
+      const encryptedExisting = (existing.credentials as Record<string, unknown>).password;
+      if (typeof encryptedExisting === "string") {
+        try {
+          const existingPassword = await decryptCredential(encryptedExisting, CRED_KEY);
+          if (existingPassword && existingPassword !== passwordForStorage) {
+            const existingImapResult = await testImap(email, existingPassword, imapHost, imapPort);
+            if (existingImapResult.ok) {
+              passwordForStorage = existingPassword;
+              usedSavedCredential = true;
+              imapResult = existingImapResult;
+            }
+          }
+        } catch (decryptError) {
+          console.warn("[hostinger] stored credential fallback unavailable", decryptError);
+        }
+      }
+    }
+    if (!imapResult.ok && isAuthFailure && savedEmail && savedPassword && email === savedEmail) {
+      const savedImapResult = await testImap(email, savedPassword, imapHost, imapPort);
+      if (savedImapResult.ok) {
+        passwordForStorage = savedPassword;
+        usedSavedCredential = true;
+        imapResult = savedImapResult;
+      }
+    }
     if (!imapResult.ok) {
       return new Response(JSON.stringify({ error: `IMAP login failed: ${imapResult.error || "unknown"}` }), {
         status: 200,
@@ -204,9 +255,9 @@ Deno.serve(async (req) => {
     }
 
     // 2) Test SMTP
-    let smtpResult = await testSmtp(email, password, smtpHost, smtpPort);
+    let smtpResult = await testSmtp(email, passwordForStorage, smtpHost, smtpPort);
     if (!smtpResult.ok && smtpHost === DEFAULTS.smtp_host && smtpPort === 465) {
-      const fallback = await testSmtp(email, password, smtpHost, 587);
+      const fallback = await testSmtp(email, passwordForStorage, smtpHost, 587);
       if (fallback.ok) {
         console.log("[hostinger] SMTP connected through STARTTLS fallback on port 587");
         smtpResult = fallback;
@@ -222,26 +273,10 @@ Deno.serve(async (req) => {
       });
     }
 
-    if (!CRED_KEY) {
-      return new Response(JSON.stringify({ error: "Server misconfiguration: credential encryption key missing" }), {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
     // 3) Encrypt password
-    const encryptedPassword = await encryptCredential(password, CRED_KEY);
+    const encryptedPassword = await encryptCredential(passwordForStorage, CRED_KEY);
 
     // 4) Upsert channel
-    const admin = createClient(SUPABASE_URL, SERVICE_ROLE);
-    const { data: existing } = await admin
-      .from("owner_comm_channels")
-      .select("id")
-      .eq("user_id", user.id)
-      .eq("channel_type", "email_hostinger")
-      .eq("identifier", email)
-      .maybeSingle();
-
     const credentials = {
       email,
       password: encryptedPassword,
@@ -283,11 +318,11 @@ Deno.serve(async (req) => {
       channel_type: "email_hostinger",
       identifier: email,
       event_type: existing?.id ? "reconnected" : "connected",
-      details: { display_name: email, imap_host: imapHost, smtp_host: smtpHost },
+      details: { display_name: email, imap_host: imapHost, smtp_host: smtpHost, used_saved_credential: usedSavedCredential },
     });
 
     return new Response(
-      JSON.stringify({ success: true, channel_id: channelId, email }),
+      JSON.stringify({ success: true, channel_id: channelId, email, used_saved_credential: usedSavedCredential }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (err: unknown) {
