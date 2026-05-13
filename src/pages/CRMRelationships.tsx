@@ -3117,11 +3117,39 @@ const Field = ({ label, children }: { label: string; children: React.ReactNode }
 /* ===========================================================
    Page Shell
 =========================================================== */
+const VALID_TABS = ["developers", "reps", "brokerages", "brokers"] as const;
+type TabKey = typeof VALID_TABS[number];
+
 const CRMRelationships = () => {
   const navigate = useNavigate();
-  const [tab, setTab] = useState("developers");
-  
-  const [mounted, setMounted] = useState<Set<string>>(new Set(["developers"]));
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // URL is the source of truth for tab. Honour ?tab= or ?sub= (Phase 4 deep-links).
+  const initialTab: TabKey = (() => {
+    const raw = (searchParams.get("sub") || searchParams.get("tab") || "developers").toLowerCase();
+    return (VALID_TABS as readonly string[]).includes(raw) ? (raw as TabKey) : "developers";
+  })();
+  const [tab, setTabState] = useState<TabKey>(initialTab);
+
+  const setTab = (next: string) => {
+    const v = ((VALID_TABS as readonly string[]).includes(next) ? next : "developers") as TabKey;
+    setTabState(v);
+    const params = new URLSearchParams(searchParams);
+    params.set("tab", v);
+    params.delete("sub");
+    setSearchParams(params, { replace: true });
+  };
+
+  // React to back/forward navigation that changes the URL outside our setter.
+  useEffect(() => {
+    const raw = (searchParams.get("sub") || searchParams.get("tab") || "").toLowerCase();
+    if ((VALID_TABS as readonly string[]).includes(raw) && raw !== tab) {
+      setTabState(raw as TabKey);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
+
+  const [mounted, setMounted] = useState<Set<string>>(new Set([initialTab]));
   useEffect(() => {
     setMounted((prev) => prev.has(tab) ? prev : new Set([...prev, tab]));
   }, [tab]);
