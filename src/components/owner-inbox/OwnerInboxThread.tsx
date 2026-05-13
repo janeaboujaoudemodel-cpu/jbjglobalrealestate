@@ -184,7 +184,19 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
               <h3 className="font-semibold text-[#1A1A1A]">
                 {thread.contact_name || thread.contact_identifier}
               </h3>
-              <p className="text-xs text-[#1A1A1A]/70">{thread.contact_identifier}</p>
+              <div className="flex items-center gap-2 flex-wrap">
+                <p className="text-xs text-[#1A1A1A]/70">{thread.contact_identifier}</p>
+                {thread.ai_category && CATEGORY_META[thread.ai_category] && (
+                  <Badge variant="outline" className={`text-[10px] h-4 px-1.5 ${CATEGORY_META[thread.ai_category].color}`}>
+                    {CATEGORY_META[thread.ai_category].label}
+                  </Badge>
+                )}
+                {thread.ai_priority && thread.ai_priority !== "medium" && (
+                  <Badge variant="outline" className="text-[10px] h-4 px-1.5 border-[#B89555]/30">
+                    {thread.ai_priority}
+                  </Badge>
+                )}
+              </div>
             </div>
           </div>
 
