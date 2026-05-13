@@ -21,9 +21,11 @@ import { Label } from "@/components/ui/label";
 import { ExcelGridView } from "@/components/crm/ExcelGridView";
 import BrokerBulkUploadDialog from "@/components/crm/BrokerBulkUploadDialog";
 import { exportRowsToXlsx } from "@/utils/exportXlsx";
+import { UnifiedCRMExportModal } from "@/components/crm/UnifiedCRMExportModal";
+import { Link } from "react-router-dom";
 import {
   Plus, Search, User, Phone, Mail, MessageCircle, Trash2,
-  UploadCloud, FileDown, Linkedin, Globe, ChevronLeft, ChevronRight,
+  UploadCloud, FileDown, Linkedin, Globe, ChevronLeft, ChevronRight, Download,
 } from "lucide-react";
 
 type Row = {
