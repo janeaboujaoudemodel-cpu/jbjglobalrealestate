@@ -333,10 +333,32 @@ export default function UnifiedCRM() {
     if (entity === "investors") {
       return <InvestorsDirectory ownerEmail={ownerEmail} vipOnly={view === "vip"} />;
     }
-    if (entity === "developers" || entity === "agencies" || entity === "brokers") {
-      // Render the exact same Relationship Hub the sidebar opens — single source
-      // of truth for developers / brokerage agencies / brokers UI.
-      return <Embed><CRMRelationships /></Embed>;
+    if (entity === "brokers") {
+      // Dedicated lightweight Brokers Registry — no full CRMRelationships embed.
+      return <BrokersRegistryPage />;
+    }
+    if (entity === "developers" || entity === "agencies") {
+      // Don't embed the full Relationship Hub inside the CRM tab. Send the user
+      // to the dedicated Relationship Hub page so it loads its own UI properly
+      // and the CRM hub stays fast.
+      const hubTab = entity === "developers" ? "developers" : "brokerages";
+      return (
+        <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-8 text-center space-y-4">
+          <h2 className="text-lg font-semibold text-[#1A1A1A]">
+            {entity === "developers" ? "Developers Registry" : "Brokerage Agencies"}
+          </h2>
+          <p className="text-sm text-[#1A1A1A]/70 max-w-xl mx-auto">
+            The full {entity === "developers" ? "Developers" : "Brokerage Agencies"} workspace lives in
+            the Relationship Hub — open it for filters, bulk outreach, exports and the Excel grid.
+          </p>
+          <a
+            href={`/owner/crm/relationship-hub?tab=${hubTab}`}
+            className="inline-flex items-center gap-2 h-10 px-5 rounded-lg bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555] font-semibold hover:bg-[#E7DCC7]"
+          >
+            Open Relationship Hub →
+          </a>
+        </div>
+      );
     }
     if (entity === "sales-reps") {
       return <DevSalesRepsDirectory />;
@@ -344,7 +366,11 @@ export default function UnifiedCRM() {
     if (entity === "employees") {
       return <EmployeesHub userId={userId} />;
     }
-    return <Embed><CRMRelationships /></Embed>;
+    return (
+      <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-8 text-center text-sm text-[#1A1A1A]/70">
+        Pick a section from the bar above.
+      </div>
+    );
   }, [entity, view, userId, ownerEmail]);
 
   const currentViews = VIEWS[entity] || [];
