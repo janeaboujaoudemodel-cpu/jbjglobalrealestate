@@ -193,6 +193,7 @@ export function SendViaEmailDialog({
           interpolated_body_html: bodyHtml,
           docusign_url: docusignUrl.trim() || undefined,
           attachment_name: attachmentName,
+          attachment_url: attachmentUrl,
           test_recipient: TEST_RECIPIENT,
         }),
       });
@@ -227,6 +228,7 @@ export function SendViaEmailDialog({
           interpolated_body_html: bodyHtml,     // pre-rendered HTML (locked-send)
           docusign_url: docusignUrl.trim() || undefined,
           attachment_name: attachmentName,
+          attachment_url: attachmentUrl,
         }),
       });
       const out = await res.json().catch(() => ({}));
