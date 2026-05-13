@@ -10,7 +10,7 @@ export const DOCUSIGN_PLAY_STORE = "https://play.google.com/store/apps/details?i
 // surface and resolves instantly.
 export const DOCUSIGN_WEB = "https://account.docusign.com/";
 export const DOCUSIGN_SIGNUP = "https://account.docusign.com/signup";
-export const SIGNED_RETURN_EMAIL = "contracts@jbj.ae";
+export const SIGNED_RETURN_EMAIL = "contact@jbj.ae";
 
 export interface BuildEnvelopeEmailArgs {
   subject: string;
