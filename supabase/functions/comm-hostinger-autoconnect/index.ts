@@ -23,19 +23,44 @@ const DEFAULTS = {
 };
 
 async function testImap(email: string, password: string, host: string, port: number) {
-  const client = new ImapClient({ host, port, tls: true, username: email, password });
+  let conn: Deno.TlsConn | null = null;
   try {
-    await client.connect();
-    // deno-imap auto-authenticates via LOGIN on connect when creds passed in ctor.
-    // Defensive: if a `login` method exists, call it; otherwise rely on connect.
-    const anyClient = client as unknown as { login?: () => Promise<void> };
-    if (typeof anyClient.login === "function") {
-      await anyClient.login();
+    conn = await Deno.connectTls({ hostname: host, port });
+    const reader = conn.readable.getReader();
+    const writer = conn.writable.getWriter();
+    const dec = new TextDecoder();
+    const enc = new TextEncoder();
+
+    async function readChunk(): Promise<string> {
+      const { value } = await reader.read();
+      return value ? dec.decode(value) : "";
     }
-    await client.selectMailbox("INBOX");
-    await client.disconnect();
-    return { ok: true as const };
+
+    const greeting = await readChunk();
+    console.log("[imap] greeting:", greeting.trim());
+
+    // Quote password — escape backslash and quotes per RFC3501.
+    const q = (s: string) => `"${s.replace(/\\/g, "\\\\").replace(/"/g, '\\"')}"`;
+    const cmd = `a1 LOGIN ${q(email)} ${q(password)}\r\n`;
+    await writer.write(enc.encode(cmd));
+
+    // Read until we see "a1 OK" or "a1 NO/BAD"
+    let buf = "";
+    for (let i = 0; i < 10; i++) {
+      buf += await readChunk();
+      if (/\r\na1 (OK|NO|BAD)/i.test(buf) || /^a1 (OK|NO|BAD)/i.test(buf)) break;
+    }
+    console.log("[imap] login response:", buf.trim());
+
+    try { await writer.write(enc.encode("a2 LOGOUT\r\n")); } catch { /* noop */ }
+    try { reader.releaseLock(); writer.releaseLock(); } catch { /* noop */ }
+    try { conn.close(); } catch { /* noop */ }
+
+    const m = buf.match(/a1 (OK|NO|BAD)([^\r\n]*)/i);
+    if (m && m[1].toUpperCase() === "OK") return { ok: true as const };
+    return { ok: false as const, error: m ? `${m[1]}${m[2]}`.trim() : `Unexpected response: ${buf.slice(0, 200)}` };
   } catch (e) {
+    try { conn?.close(); } catch { /* noop */ }
     return { ok: false as const, error: e instanceof Error ? e.message : String(e) };
   }
 }
