@@ -176,7 +176,7 @@ export default function DevelopersDirectory() {
         <div className="min-w-0">
           <h2 className="text-lg font-semibold text-[#1A1A1A]">Developers</h2>
           <p className="text-xs text-[#1A1A1A]/60">
-            {filtered.length.toLocaleString()} of {rows.length.toLocaleString()} developers · click any row for full hub, contacts, tasks &amp; calendar
+            {filtered.length.toLocaleString()} of {(dbTotal ?? rows.length).toLocaleString()} developers · click any row for full hub, contacts, tasks &amp; calendar
           </p>
         </div>
         <input
