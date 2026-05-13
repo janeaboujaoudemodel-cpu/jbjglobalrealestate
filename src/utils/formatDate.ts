@@ -8,6 +8,16 @@ const MONTHS_SHORT = [
   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
 ];
 
+/** Format a Date as "h:mm AM/PM" (e.g. "6:28 PM") in local time. */
+function formatTime12(d: Date): string {
+  let h = d.getHours();
+  const m = String(d.getMinutes()).padStart(2, "0");
+  const ampm = h >= 12 ? "PM" : "AM";
+  h = h % 12;
+  if (h === 0) h = 12;
+  return `${h}:${m} ${ampm}`;
+}
+
 /**
  * Format a date string to "02 Jan 2026 14:30" format.
  * Handles:
