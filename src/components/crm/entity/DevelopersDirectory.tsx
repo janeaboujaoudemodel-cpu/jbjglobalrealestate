@@ -191,22 +191,29 @@ export default function DevelopersDirectory() {
           <thead className="bg-[#F7F2EA] text-[#1A1A1A]">
             <tr>
               <th className="text-left px-4 py-2 font-semibold whitespace-nowrap sticky left-0 bg-[#F7F2EA] z-10">Developer</th>
-              <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Headquarters</th>
+              <th className="text-left px-4 py-2 font-semibold">Headquarters</th>
               <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">CEO</th>
               <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">License</th>
               <th className="text-right px-4 py-2 font-semibold whitespace-nowrap">Leads</th>
-              <th className="text-right px-4 py-2 font-semibold whitespace-nowrap">Done</th>
-              <th className="text-right px-4 py-2 font-semibold whitespace-nowrap">Off-plan</th>
+              <th className="text-right px-4 py-2 font-semibold whitespace-nowrap">Completed projects</th>
+              <th className="text-right px-4 py-2 font-semibold whitespace-nowrap">Off-plan projects</th>
               <th className="text-right px-4 py-2 font-semibold whitespace-nowrap">Founded</th>
-              <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Status</th>
+              <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Registration status</th>
+              <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Website</th>
               <th className="text-left px-4 py-2 font-semibold whitespace-nowrap">Contact</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#B89555]/15">
+          <tbody className="divide-y divide-[#B89555]/20">
             {filtered.slice(0, 1000).map((d) => {
               const logo = getDeveloperLogoUrl(d);
               const wa = waLink(d.whatsapp || d.office_phone);
               const maps = mapsLink(d);
+              const websiteDomain = d.website_url
+                ? d.website_url.replace(/^https?:\/\//i, "").replace(/^www\./i, "").replace(/\/$/, "")
+                : null;
+              const prettyStatus = d.registration_status
+                ? d.registration_status.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+                : null;
               return (
                 <tr
                   key={d.id}
@@ -223,12 +230,12 @@ export default function DevelopersDirectory() {
                       <span className="font-semibold text-[#1A1A1A] truncate">{d.name}</span>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs whitespace-nowrap">
+                  <td className="px-4 py-3 text-[#1A1A1A]/80 text-xs max-w-[260px] whitespace-normal break-words leading-snug">
                     {maps ? (
                       <a href={maps} target="_blank" rel="noreferrer" onClick={stop}
-                         className="inline-flex items-center gap-1 hover:underline">
-                        <MapPin className="h-3 w-3" />
-                        {d.headquarters || d.office_address || "View"}
+                         className="inline-flex items-start gap-1 hover:underline">
+                        <MapPin className="h-3 w-3 mt-0.5 shrink-0" />
+                        <span>{d.headquarters || d.office_address || "View on map"}</span>
                       </a>
                     ) : (d.headquarters || "—")}
                   </td>
@@ -248,26 +255,28 @@ export default function DevelopersDirectory() {
                   <td className="px-4 py-3 text-right text-[#1A1A1A] whitespace-nowrap">{d.offplan_projects ?? "—"}</td>
                   <td className="px-4 py-3 text-right text-[#1A1A1A]/80 text-xs whitespace-nowrap">{d.founded_year || "—"}</td>
                   <td className="px-4 py-3 whitespace-nowrap">
-                    {d.registration_status ? (
-                      <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] text-[10px] capitalize">
-                        {d.registration_status}
+                    {prettyStatus ? (
+                      <Badge variant="outline" className="border-[#B89555]/40 bg-[#EFE6D6]/40 text-[#1A1A1A] text-[10px] font-semibold">
+                        {prettyStatus}
                       </Badge>
                     ) : <span className="text-[#1A1A1A]/40 text-xs">—</span>}
                   </td>
+                  <td className="px-4 py-3 text-xs whitespace-nowrap max-w-[200px]">
+                    {websiteDomain && d.website_url ? (
+                      <a href={d.website_url} target="_blank" rel="noreferrer" onClick={stop}
+                         className="inline-flex items-center gap-1 text-[#1A1A1A] hover:underline truncate">
+                        <Globe className="h-3 w-3 shrink-0" />
+                        <span className="truncate">{websiteDomain}</span>
+                      </a>
+                    ) : <span className="text-[#1A1A1A]/40">—</span>}
+                  </td>
                   <td className="px-4 py-3 whitespace-nowrap">
                     <div className="flex items-center gap-1 flex-nowrap">
-                      <IconLink href={d.website_url} title="Website"><Globe className="h-3.5 w-3.5" /></IconLink>
-                      <IconLink href={d.admin_email ? `mailto:${d.admin_email}` : null} title="Email"><Mail className="h-3.5 w-3.5" /></IconLink>
-                      <IconLink href={d.office_phone ? `tel:${d.office_phone}` : null} title="Phone"><Phone className="h-3.5 w-3.5" /></IconLink>
+                      <IconLink href={d.admin_email ? `mailto:${d.admin_email}` : null} title={d.admin_email || "Email"}><Mail className="h-3.5 w-3.5" /></IconLink>
+                      <IconLink href={d.office_phone ? `tel:${d.office_phone}` : null} title={d.office_phone || "Phone"}><Phone className="h-3.5 w-3.5" /></IconLink>
                       <IconLink href={wa} title="WhatsApp"><MessageCircle className="h-3.5 w-3.5" /></IconLink>
                       <IconLink href={d.instagram_url} title="Instagram"><Instagram className="h-3.5 w-3.5" /></IconLink>
                       <IconLink href={d.linkedin_url} title="LinkedIn"><Linkedin className="h-3.5 w-3.5" /></IconLink>
-                      {d.website_url ? (
-                        <a href={d.website_url} target="_blank" rel="noreferrer" onClick={stop}
-                           className="inline-flex items-center gap-1 text-[#1A1A1A]/50 hover:text-[#1A1A1A] text-[10px] ml-1">
-                          <ExternalLink className="h-3 w-3" />
-                        </a>
-                      ) : null}
                     </div>
                   </td>
                 </tr>
