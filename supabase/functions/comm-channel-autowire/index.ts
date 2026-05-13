@@ -120,9 +120,17 @@ Deno.serve(async (req) => {
       );
     }
 
-    const connectorKey = Deno.env.get(cfg.secretName);
-    if (!connectorKey || !LOVABLE_API_KEY) {
-      // Surface a useful message: connection isn't linked at the project level.
+    // Collect ALL connector secrets matching this provider so multiple connections
+    // (e.g. two Gmail accounts → GOOGLE_MAIL_API_KEY + GOOGLE_MAIL_API_KEY_2) are
+    // discovered and each gets its own dedicated channel row.
+    const allEnvKeys = Object.keys(Deno.env.toObject());
+    const baseSecret = cfg.secretName;
+    const matchingKeys = allEnvKeys
+      .filter((k) => k === baseSecret || k.startsWith(`${baseSecret}_`))
+      .map((k) => Deno.env.get(k))
+      .filter((v): v is string => !!v);
+
+    if (matchingKeys.length === 0 || !LOVABLE_API_KEY) {
       return new Response(
         JSON.stringify({
           requires_connector_link: true,
@@ -133,30 +141,35 @@ Deno.serve(async (req) => {
       );
     }
 
-    // 1) Verify credentials via gateway (best-effort)
-    const v = await verifyCredentials(LOVABLE_API_KEY, connectorKey);
-    if (!v.ok && v.status !== 404) {
-      return new Response(
-        JSON.stringify({
-          error: `Credential verification failed (${v.status})`,
-          details: v.payload,
-        }),
-        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+    // For each connector secret, verify + resolve identity and upsert a channel.
+    const wired: Array<{ identifier: string; display_name: string }> = [];
+    for (const connectorKey of matchingKeys) {
+      const v = await verifyCredentials(LOVABLE_API_KEY, connectorKey);
+      if (!v.ok && v.status !== 404) {
+        console.warn("[autowire] verify failed for one key", v.status);
+        continue;
+      }
+
+      let identifier = `${channelType}-${user.id.slice(0, 8)}-${connectorKey.slice(-6)}`;
+      let displayName = channelType;
+      if (cfg.resolveIdentifier) {
+        try {
+          const id = await cfg.resolveIdentifier(LOVABLE_API_KEY, connectorKey);
+          identifier = id.identifier;
+          displayName = id.display_name;
+        } catch (err) {
+          console.warn("[autowire] identifier resolve failed", err);
+        }
+      }
+      wired.push({ identifier, display_name: displayName });
     }
 
-    // 2) Resolve identifier where possible
-    let identifier = `${channelType}-${user.id.slice(0, 8)}`;
-    let displayName = channelType;
-    if (cfg.resolveIdentifier) {
-      try {
-        const id = await cfg.resolveIdentifier(LOVABLE_API_KEY, connectorKey);
-        identifier = id.identifier;
-        displayName = id.display_name;
-      } catch (err) {
-        console.warn("[autowire] identifier resolve failed", err);
-      }
-    }
+    // Upsert one channel per discovered identity. (Loop below uses last identity
+    // for legacy callers expecting a single response payload.)
+    let lastIdentifier = wired[wired.length - 1]?.identifier ?? `${channelType}-${user.id.slice(0, 8)}`;
+    let lastDisplay = wired[wired.length - 1]?.display_name ?? channelType;
+
+    for (const { identifier, display_name: displayName } of wired) {
 
     // 3) Upsert the channel row
     const { data: existing } = await admin
