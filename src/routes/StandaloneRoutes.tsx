@@ -75,6 +75,11 @@ export const StandaloneRoutes = () => (
         <PublicSignDocument />
       </Suspense>
     } />
+    <Route path="/d" element={
+      <Suspense fallback={<PageLoader />}>
+        <DownloadProxy />
+      </Suspense>
+    } />
     <Route path="/dev/footer-preview" element={
       <RouteErrorBoundary routeName="FooterPreview">
         <Suspense fallback={<PageLoader />}>
