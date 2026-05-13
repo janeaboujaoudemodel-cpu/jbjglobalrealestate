@@ -38,7 +38,7 @@ function pickHeader(headers: Array<{ name: string; value: string }>, name: strin
   return headers?.find((h) => h.name?.toLowerCase() === name.toLowerCase())?.value ?? "";
 }
 
-/* ─── IMAP / Hostinger helpers ─── */
+/* ─── Raw IMAP / Hostinger helpers ─── */
 interface HostingerCreds {
   email: string;
   password: string;
@@ -48,68 +48,141 @@ interface HostingerCreds {
   smtp_port: number;
 }
 
+interface RawImapMsg {
+  uid: string;
+  subject: string;
+  from: string;
+  date: string;
+  bodyText: string;
+}
+
+const IMAP_MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+function imapDate(d: Date): string {
+  return `${String(d.getUTCDate()).padStart(2, "0")}-${IMAP_MONTHS[d.getUTCMonth()]}-${d.getUTCFullYear()}`;
+}
+
+function decodeMimeWord(s: string): string {
+  // Decode RFC 2047 =?charset?Q|B?text?= sequences (best-effort).
+  return s.replace(/=\?([^?]+)\?([QqBb])\?([^?]+)\?=/g, (_m, _cs, enc, txt) => {
+    try {
+      if (enc.toUpperCase() === "B") {
+        const bin = atob(txt);
+        const bytes = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+        return new TextDecoder().decode(bytes);
+      }
+      // Quoted-printable
+      return txt
+        .replace(/_/g, " ")
+        .replace(/=([0-9A-Fa-f]{2})/g, (_x: string, h: string) => String.fromCharCode(parseInt(h, 16)));
+    } catch {
+      return txt;
+    }
+  });
+}
+
+function parseHeaderBlock(block: string): Record<string, string> {
+  const lines = block.replace(/\r\n[ \t]+/g, " ").split(/\r?\n/);
+  const h: Record<string, string> = {};
+  for (const line of lines) {
+    const idx = line.indexOf(":");
+    if (idx > 0) {
+      const k = line.slice(0, idx).trim().toLowerCase();
+      const v = line.slice(idx + 1).trim();
+      if (k && !h[k]) h[k] = decodeMimeWord(v);
+    }
+  }
+  return h;
+}
+
 async function fetchHostingerMessages(
   creds: HostingerCreds,
-  sinceDate: Date
-): Promise<
-  Array<{
-    uid: string;
-    subject: string;
-    from: string;
-    date: string;
-    bodyText: string;
-  }>
-> {
-  const client = new ImapClient({ host: creds.imap_host, port: creds.imap_port, tls: true });
+  sinceDate: Date,
+): Promise<RawImapMsg[]> {
+  const conn = await Deno.connectTls({ hostname: creds.imap_host, port: creds.imap_port });
+  const dec = new TextDecoder();
+  const enc = new TextEncoder();
+  const buf = new Uint8Array(16384);
+  let tagCounter = 0;
+  const nextTag = () => `a${++tagCounter}`;
+
+  const readUntilTag = async (tag: string, maxRounds = 80): Promise<string> => {
+    let acc = "";
+    for (let i = 0; i < maxRounds; i++) {
+      const n = await conn.read(buf);
+      if (!n) break;
+      acc += dec.decode(buf.subarray(0, n));
+      if (new RegExp(`(^|\\r\\n)${tag} (OK|NO|BAD)`, "i").test(acc)) break;
+    }
+    return acc;
+  };
+
+  const send = async (cmd: string, tag: string): Promise<string> => {
+    await conn.write(enc.encode(`${tag} ${cmd}\r\n`));
+    return await readUntilTag(tag);
+  };
+
   try {
-    await client.connect();
-    // Hostinger advertises AUTH=LOGIN but not AUTH=PLAIN cleanly; LOGIN
-    // mechanism uses the IMAP LOGIN verb directly and is widely supported.
-    await client.authenticate({ mechanism: "LOGIN", username: creds.email, password: creds.password });
-    await client.selectMailbox("INBOX");
+    // Greeting
+    await conn.read(buf);
 
-    // Search for messages since the given date (IMAP SINCE format: 01-Jan-2024)
-    const sinceStr = sinceDate.toUTCString().replace(/,.*/, ""); // e.g., "01 Jan 2024"
-    // Use broader criteria if SINCE is tricky; try UNSEEN first for safety.
-    const results = await client.search({ since: sinceStr });
-    if (!results || results.length === 0) return [];
+    const loginTag = nextTag();
+    const qPass = creds.password.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+    const qEmail = creds.email.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+    const loginResp = await send(`LOGIN "${qEmail}" "${qPass}"`, loginTag);
+    if (!new RegExp(`${loginTag} OK`, "i").test(loginResp)) {
+      throw new Error(`IMAP LOGIN failed: ${loginResp.split("\r\n").find((l) => /^a\d+ (NO|BAD)/i.test(l)) || loginResp.slice(0, 200)}`);
+    }
 
-    const messages: Array<{
-      uid: string;
-      subject: string;
-      from: string;
-      date: string;
-      bodyText: string;
-    }> = [];
+    const selTag = nextTag();
+    const selResp = await send(`SELECT INBOX`, selTag);
+    if (!new RegExp(`${selTag} OK`, "i").test(selResp)) {
+      throw new Error(`IMAP SELECT failed: ${selResp.slice(0, 200)}`);
+    }
 
-    for (const seq of results.slice(0, 20)) {
+    const searchTag = nextTag();
+    const searchResp = await send(`UID SEARCH SINCE ${imapDate(sinceDate)}`, searchTag);
+    const searchLine = searchResp.split("\r\n").find((l) => /^\* SEARCH/i.test(l)) || "";
+    const uids = searchLine.replace(/^\* SEARCH\s*/i, "").trim().split(/\s+/).filter(Boolean);
+    if (uids.length === 0) {
+      try { await send("LOGOUT", nextTag()); } catch { /* noop */ }
+      try { conn.close(); } catch { /* noop */ }
+      return [];
+    }
+
+    // Limit to most recent 20 UIDs.
+    const targetUids = uids.slice(-20);
+    const results: RawImapMsg[] = [];
+
+    for (const uid of targetUids) {
       try {
-        const fetched = await client.fetch(String(seq), { envelope: true, body: true });
-        // deno-imap returns parsed structures; adapt based on actual shape.
-        const env = (fetched as any)?.envelope ?? {};
-        const parts = (fetched as any)?.body ?? [];
-        let bodyText = "";
-        for (const part of Array.isArray(parts) ? parts : [parts]) {
-          if (part?.type === "text/plain" || part?.contentType?.includes("text/plain")) {
-            bodyText = part.content ?? part.text ?? "";
-          }
-        }
-        messages.push({
-          uid: String(seq),
-          subject: env.subject ?? "(no subject)",
-          from: env.from?.[0] ? `${env.from[0].name || ""} <${env.from[0].email || ""}>`.trim() : "unknown",
-          date: env.date ?? new Date().toISOString(),
-          bodyText,
+        const fTag = nextTag();
+        const fResp = await send(
+          `UID FETCH ${uid} (BODY.PEEK[HEADER.FIELDS (FROM SUBJECT DATE)])`,
+          fTag,
+        );
+        // Extract literal block between { } on the * line and the closing )
+        const litMatch = fResp.match(/\{(\d+)\}\r\n([\s\S]*?)\r\n\)/);
+        const headerBlock = litMatch ? litMatch[2] : "";
+        const headers = parseHeaderBlock(headerBlock);
+        results.push({
+          uid: String(uid),
+          subject: headers["subject"] || "(no subject)",
+          from: headers["from"] || "unknown",
+          date: headers["date"] || new Date().toISOString(),
+          bodyText: "",
         });
       } catch (e) {
         console.warn("[comm-inbound-sync] hostinger fetch item failed", e);
       }
     }
 
-    await client.disconnect();
-    return messages;
+    try { await send("LOGOUT", nextTag()); } catch { /* noop */ }
+    try { conn.close(); } catch { /* noop */ }
+    return results;
   } catch (e) {
-    await client.disconnect().catch(() => {});
+    try { conn.close(); } catch { /* noop */ }
     throw e;
   }
 }
