@@ -39,7 +39,23 @@ export default function SecondaryMarketHub() {
     },
   });
 
-  const isEmpty = !loadingBrokerages && !loadingDevs && brokerages.length === 0 && developers.length === 0;
+  const { data: liveListings = [], isLoading: loadingLive } = useQuery({
+    queryKey: ["secondary-market-listings"],
+    queryFn: async () => {
+      const { data, error } = await (supabase as any)
+        .from("vw_resale_with_source")
+        .select("id, title, source_label, source_entity_name, asking_price, currency, emirate, updated_at")
+        .not("source_entity_type", "is", null)
+        .order("updated_at", { ascending: false })
+        .limit(100);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const isEmpty =
+    !loadingBrokerages && !loadingDevs && !loadingLive &&
+    brokerages.length === 0 && developers.length === 0 && liveListings.length === 0;
 
   return (
     <>
@@ -88,6 +104,30 @@ export default function SecondaryMarketHub() {
                 inventory: d.inventory_file_url,
                 database: d.database_file_url,
               }))} />
+            </div>
+          )}
+
+          {liveListings.length > 0 && (
+            <div className="mt-10">
+              <h2 className="text-lg font-semibold text-[#1A1A1A] mb-4">Live Partner Listings ({liveListings.length})</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                {liveListings.map((l: any) => (
+                  <Card key={l.id} className="bg-white border border-[#B89555]/20">
+                    <CardContent className="p-4">
+                      <div className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/50 mb-1">
+                        {l.source_label} · {l.source_entity_name ?? "—"}
+                      </div>
+                      <p className="font-semibold text-[#1A1A1A] truncate">{l.title}</p>
+                      <p className="text-xs text-[#1A1A1A]/60 mt-1">{l.emirate ?? "—"}</p>
+                      {l.asking_price ? (
+                        <p className="text-sm font-semibold mt-2" style={{ color: "var(--price-orange)" }}>
+                          {l.currency ?? "AED"} {Number(l.asking_price).toLocaleString()}
+                        </p>
+                      ) : null}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </div>
           )}
         </div>

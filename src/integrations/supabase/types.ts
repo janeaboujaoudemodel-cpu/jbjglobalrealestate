@@ -25771,6 +25771,8 @@ export type Database = {
           handover_status: string | null
           id: string
           images: string[] | null
+          import_batch_id: string | null
+          imported_from: string | null
           investor_email: string | null
           investor_name: string | null
           investor_phone: string | null
@@ -25782,6 +25784,10 @@ export type Database = {
           project_name: string | null
           property_type: string | null
           size_sqft: number | null
+          source_entity_id: string | null
+          source_entity_name: string | null
+          source_entity_type: string | null
+          source_file_url: string | null
           status: string | null
           title: string
           updated_at: string | null
@@ -25799,6 +25805,8 @@ export type Database = {
           handover_status?: string | null
           id?: string
           images?: string[] | null
+          import_batch_id?: string | null
+          imported_from?: string | null
           investor_email?: string | null
           investor_name?: string | null
           investor_phone?: string | null
@@ -25810,6 +25818,10 @@ export type Database = {
           project_name?: string | null
           property_type?: string | null
           size_sqft?: number | null
+          source_entity_id?: string | null
+          source_entity_name?: string | null
+          source_entity_type?: string | null
+          source_file_url?: string | null
           status?: string | null
           title: string
           updated_at?: string | null
@@ -25827,6 +25839,8 @@ export type Database = {
           handover_status?: string | null
           id?: string
           images?: string[] | null
+          import_batch_id?: string | null
+          imported_from?: string | null
           investor_email?: string | null
           investor_name?: string | null
           investor_phone?: string | null
@@ -25838,6 +25852,10 @@ export type Database = {
           project_name?: string | null
           property_type?: string | null
           size_sqft?: number | null
+          source_entity_id?: string | null
+          source_entity_name?: string | null
+          source_entity_type?: string | null
+          source_file_url?: string | null
           status?: string | null
           title?: string
           updated_at?: string | null
@@ -33529,6 +33547,114 @@ export type Database = {
           role_title: string | null
           seniority: string | null
           source: string | null
+        }
+        Relationships: []
+      }
+      vw_resale_with_source: {
+        Row: {
+          area_name: string | null
+          asking_price: number | null
+          bedrooms: number | null
+          created_at: string | null
+          currency: string | null
+          description: string | null
+          developer_name: string | null
+          email_encrypted: string | null
+          emirate: string | null
+          handover_status: string | null
+          id: string | null
+          images: string[] | null
+          import_batch_id: string | null
+          imported_from: string | null
+          investor_email: string | null
+          investor_name: string | null
+          investor_phone: string | null
+          investor_user_id: string | null
+          location: string | null
+          name_encrypted: string | null
+          original_purchase_price: number | null
+          phone_encrypted: string | null
+          project_name: string | null
+          property_type: string | null
+          size_sqft: number | null
+          source_entity_id: string | null
+          source_entity_name: string | null
+          source_entity_type: string | null
+          source_file_url: string | null
+          source_label: string | null
+          status: string | null
+          title: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          area_name?: string | null
+          asking_price?: number | null
+          bedrooms?: number | null
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          developer_name?: string | null
+          email_encrypted?: string | null
+          emirate?: string | null
+          handover_status?: string | null
+          id?: string | null
+          images?: string[] | null
+          import_batch_id?: string | null
+          imported_from?: string | null
+          investor_email?: string | null
+          investor_name?: string | null
+          investor_phone?: string | null
+          investor_user_id?: string | null
+          location?: string | null
+          name_encrypted?: string | null
+          original_purchase_price?: number | null
+          phone_encrypted?: string | null
+          project_name?: string | null
+          property_type?: string | null
+          size_sqft?: number | null
+          source_entity_id?: string | null
+          source_entity_name?: string | null
+          source_entity_type?: string | null
+          source_file_url?: string | null
+          source_label?: never
+          status?: string | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          area_name?: string | null
+          asking_price?: number | null
+          bedrooms?: number | null
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          developer_name?: string | null
+          email_encrypted?: string | null
+          emirate?: string | null
+          handover_status?: string | null
+          id?: string | null
+          images?: string[] | null
+          import_batch_id?: string | null
+          imported_from?: string | null
+          investor_email?: string | null
+          investor_name?: string | null
+          investor_phone?: string | null
+          investor_user_id?: string | null
+          location?: string | null
+          name_encrypted?: string | null
+          original_purchase_price?: number | null
+          phone_encrypted?: string | null
+          project_name?: string | null
+          property_type?: string | null
+          size_sqft?: number | null
+          source_entity_id?: string | null
+          source_entity_name?: string | null
+          source_entity_type?: string | null
+          source_file_url?: string | null
+          source_label?: never
+          status?: string | null
+          title?: string | null
+          updated_at?: string | null
         }
         Relationships: []
       }
