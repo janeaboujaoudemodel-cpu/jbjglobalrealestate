@@ -763,11 +763,11 @@ export default function CRMLeadsTableV2({
                         ) : "VIP off"}
                       </Button>
                     </TableCell>
-                    <TableCell className="text-sm">
-                      <div className="flex items-center gap-2">
+                    <TableCell className="text-sm min-w-[200px] whitespace-nowrap">
+                      <div className="inline-flex items-center gap-2 whitespace-nowrap">
                         {assignedNames[lead.id] ? (
-                          <span className="font-semibold text-[#1A1A1A] whitespace-nowrap">
-                            Assigned: {assignedNames[lead.id]}
+                          <span className="font-semibold text-[#1A1A1A] truncate max-w-[140px]" title={`Assigned: ${assignedNames[lead.id]}`}>
+                            {assignedNames[lead.id]}
                           </span>
                         ) : (
                           <span className="text-[#1A1A1A]/55 italic" title="Not yet assigned to a broker">Unassigned</span>
