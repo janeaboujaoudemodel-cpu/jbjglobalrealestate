@@ -40,6 +40,7 @@ export default function BrokerageAgenciesDirectory() {
   const [hubOpen, setHubOpen] = useState(false);
   const [hubName, setHubName] = useState<string | null>(null);
   const [leadCounts, setLeadCounts] = useState<Map<string, number>>(new Map());
+  const { total: dbTotal } = useEntityTotal("crm_brokerages", (q) => q.is("deleted_at", null).or("is_junk.is.null,is_junk.eq.false"));
 
   // Fetch lead counts per brokerage (matched by lowercased company_name)
   useEffect(() => {
