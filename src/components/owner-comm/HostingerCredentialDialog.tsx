@@ -40,6 +40,7 @@ const DEFAULTS = {
 };
 
 export default function HostingerCredentialDialog() {
+  const qc = useQueryClient();
   const [open, setOpen] = useState(false);
   const [testing, setTesting] = useState(false);
   const [form, setForm] = useState<HostingerForm>({
