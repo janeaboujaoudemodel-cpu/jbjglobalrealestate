@@ -735,7 +735,7 @@ export default function CRMLeadsTableV2({
                         {renderSource(lead)}
                       </span>
                     </TableCell>
-                    <TableCell onClick={(e) => e.stopPropagation()}>
+                    <TableCell className="w-[210px] min-w-[210px] px-3 whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
                       <InlineStatusSelect
                         leadId={lead.id}
                         currentStatus={status}
