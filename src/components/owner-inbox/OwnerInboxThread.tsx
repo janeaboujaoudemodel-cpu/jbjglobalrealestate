@@ -85,6 +85,15 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
     isGenerating,
     isGeneratingVoice,
   } = useAIReplyEngine();
+  const { triage, createTask, scheduleMeeting, saveNote } = useCommAITriage();
+
+  // Auto-trigger triage once per thread on open if not yet processed
+  useReactEffect(() => {
+    if (thread?.id && !thread.ai_processed_at && !triage.isPending) {
+      triage.mutate({ threadId: thread.id });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [thread?.id]);
 
   // Auto-scroll to bottom
   useEffect(() => {
