@@ -59,38 +59,43 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
   const attachmentUrl = (args.attachmentUrl || "").trim();
 
   const ctaHref = docusignUrl || DOCUSIGN_WEB;
-  const ctaBlock = `
-        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:26px 0 6px;border-collapse:collapse;">
-          <tr><td align="center" style="border-radius:2px;background:#1A1A1A;">
-            <a href="${escapeHtml(ctaHref)}" target="_blank" rel="noopener" style="display:inline-block;padding:14px 28px;font-family:Inter,Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:.22em;color:#FDFBF7;text-decoration:none;text-transform:uppercase;border:1px solid #B89555;">
-              OPEN IN DOCUSIGN &nbsp;→
+  const hasDownload = Boolean(attachmentUrl && attachmentName);
+
+  const buttonStyle = (bg: string, fg: string) =>
+    `display:block;width:100%;box-sizing:border-box;padding:16px 22px;font-family:Inter,Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:.22em;color:${fg};background:${bg};text-decoration:none;text-transform:uppercase;text-align:center;border:1px solid #B89555;border-radius:2px;`;
+  const stepLabel = (n: number, label: string) =>
+    `<div style="font-family:Inter,Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:.28em;color:#B89555;text-transform:uppercase;text-align:center;margin:0 0 8px;">Step ${n} · ${label}</div>`;
+
+  const downloadBlock = hasDownload
+    ? `
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:380px;margin:24px auto 0;border-collapse:collapse;">
+          <tr><td style="padding-bottom:8px;">${stepLabel(1, "Download your agreement")}</td></tr>
+          <tr><td>
+            <a href="${escapeHtml(attachmentUrl)}" target="_blank" rel="noopener" download="${attachmentName}" style="${buttonStyle("#F7F2EA", "#1A1A1A")}">
+              ⬇ &nbsp; Download PDF
             </a>
           </td></tr>
-          <tr><td align="center" style="padding-top:10px;font-size:11px;color:#1A1A1A;opacity:.7;line-height:1.5;font-family:Inter,Arial,sans-serif;">
-            DocuSign is the only e-signature platform officially recognised by UAE authorities.<br/>
-            New to DocuSign? <a href="${DOCUSIGN_SIGNUP}" style="color:#B89555;text-decoration:none;">Create a free account</a> · <a href="${DOCUSIGN_APP_STORE}" style="color:#B89555;text-decoration:none;">App Store</a> · <a href="${DOCUSIGN_PLAY_STORE}" style="color:#B89555;text-decoration:none;">Google Play</a>
+          <tr><td align="center" style="padding-top:8px;font-family:Inter,Arial,sans-serif;font-size:10.5px;color:#1A1A1A;opacity:.6;line-height:1.5;">
+            Also attached to this email · <strong style="font-weight:600;">${attachmentName}</strong>
+          </td></tr>
+        </table>`
+    : "";
+
+  const ctaBlock = `
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:380px;margin:${hasDownload ? "18px" : "26px"} auto 0;border-collapse:collapse;">
+          <tr><td style="padding-bottom:8px;">${stepLabel(hasDownload ? 2 : 1, "Sign with DocuSign")}</td></tr>
+          <tr><td>
+            <a href="${escapeHtml(ctaHref)}" target="_blank" rel="noopener" style="${buttonStyle("#1A1A1A", "#FDFBF7")}">
+              Open in DocuSign &nbsp;→
+            </a>
+          </td></tr>
+          <tr><td align="center" style="padding-top:10px;font-family:Inter,Arial,sans-serif;font-size:10.5px;color:#1A1A1A;opacity:.65;line-height:1.6;">
+            UAE-recognised e-signature platform.<br/>
+            <a href="${DOCUSIGN_SIGNUP}" style="color:#B89555;text-decoration:none;">Create a free account</a>
+            &nbsp;·&nbsp; <a href="${DOCUSIGN_APP_STORE}" style="color:#B89555;text-decoration:none;">App Store</a>
+            &nbsp;·&nbsp; <a href="${DOCUSIGN_PLAY_STORE}" style="color:#B89555;text-decoration:none;">Google Play</a>
           </td></tr>
         </table>`;
-
-  const howToSignBlock = `
-        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:18px 0 0;border-collapse:collapse;width:100%;background:#F7F2EA;border:1px solid #B89555;">
-          <tr><td style="padding:14px 18px;font-family:Inter,Arial,sans-serif;font-size:12px;color:#1A1A1A;line-height:1.7;">
-            <div style="font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#1A1A1A;font-size:10.5px;margin-bottom:8px;">How to sign with DocuSign</div>
-            <div style="margin-bottom:4px;"><strong style="color:#B89555;">1.</strong> Download the attached PDF for your records.</div>
-            <div style="margin-bottom:4px;"><strong style="color:#B89555;">2.</strong> <a href="${DOCUSIGN_SIGNUP}" style="color:#1A1A1A;text-decoration:underline;">Create a free DocuSign account</a> (or sign in if you already have one).</div>
-            <div style="margin-bottom:4px;"><strong style="color:#B89555;">3.</strong> Tap <strong>OPEN IN DOCUSIGN</strong> above, upload the PDF, place your signature, and complete signing.</div>
-            <div style="margin-top:6px;opacity:.7;font-size:11px;">Once signed, please return the signed PDF to <a href="mailto:${SIGNED_RETURN_EMAIL}" style="color:#B89555;text-decoration:none;font-weight:600;">${SIGNED_RETURN_EMAIL}</a>.</div>
-          </td></tr>
-        </table>`;
-
-  const chipInner = attachmentName
-    ? `📎 &nbsp;PDF attached: <strong>${attachmentName}</strong>${attachmentUrl ? ` &nbsp;<span style="color:#B89555;text-transform:uppercase;letter-spacing:.16em;font-size:10px;">Download&nbsp;→</span>` : ""}`
-    : "";
-  const attachmentChip = attachmentName
-    ? attachmentUrl
-      ? `<a href="${escapeHtml(attachmentUrl)}" target="_blank" rel="noopener" download="${attachmentName}" style="margin:18px 0 0;padding:10px 14px;border:1px solid #B89555;background:#F7F2EA;display:inline-block;font-family:Inter,Arial,sans-serif;font-size:11.5px;color:#1A1A1A;letter-spacing:.04em;text-decoration:none;">${chipInner}</a>`
-      : `<div style="margin:18px 0 0;padding:10px 12px;border:1px solid #B89555;background:#F7F2EA;display:inline-block;font-family:Inter,Arial,sans-serif;font-size:11.5px;color:#1A1A1A;letter-spacing:.04em;">${chipInner}</div>`
-    : "";
 
   
 
