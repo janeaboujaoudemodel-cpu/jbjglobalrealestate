@@ -8,6 +8,17 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { 
   FileSignature, 
   Clock, 
@@ -23,6 +34,8 @@ import {
   PenTool,
   Scale,
   Sparkles,
+  RotateCcw,
+  X,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -80,11 +93,14 @@ export default function ESignatureDashboard() {
   const [propTypeFilter, setPropTypeFilter] = useState<string>("all");
   const [locationFilter, setLocationFilter] = useState<string>("");
   const [nationalityFilter, setNationalityFilter] = useState<string>("");
+  const [view, setView] = useState<"active" | "deleted">("active");
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [pendingPurge, setPendingPurge] = useState<{ ids: string[] } | null>(null);
 
   const { data: envelopes, isLoading, refetch } = useQuery({
-    queryKey: ["esign-envelopes", user?.id],
+    queryKey: ["esign-envelopes", user?.id, view],
     queryFn: async () => {
-      const { data, error } = await supabase
+      let q = supabase
         .from("esign_envelopes")
         .select(`
           *,
@@ -94,15 +110,20 @@ export default function ESignatureDashboard() {
             email,
             status
           )
-        `)
-        .is("deleted_at", null)
-        .order("created_at", { ascending: false });
-
+        `);
+      if (view === "active") {
+        q = q.is("deleted_at", null).order("created_at", { ascending: false });
+      } else {
+        q = q.not("deleted_at", "is", null).order("deleted_at", { ascending: false });
+      }
+      const { data, error } = await q;
       if (error) throw error;
       return data as Envelope[];
     },
     enabled: !!user?.id,
   });
+
+  // Selection is reset on view change via the tab handler below.
 
   const stats = {
     draft: envelopes?.filter(e => e.status === "draft").length || 0,
@@ -137,6 +158,29 @@ export default function ESignatureDashboard() {
     return true;
   });
 
+  const visibleIds = (filteredEnvelopes || []).map((e) => e.id);
+  const allVisibleSelected = visibleIds.length > 0 && visibleIds.every((id) => selected.has(id));
+  const toggleId = (id: string) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+  const toggleAllVisible = () => {
+    setSelected((prev) => {
+      if (allVisibleSelected) {
+        const next = new Set(prev);
+        visibleIds.forEach((id) => next.delete(id));
+        return next;
+      }
+      const next = new Set(prev);
+      visibleIds.forEach((id) => next.add(id));
+      return next;
+    });
+  };
+
   const resetFilters = () => {
     setKindFilter("all");
     setBedroomsFilter("all");
@@ -147,20 +191,58 @@ export default function ESignatureDashboard() {
   const hasActiveAdvancedFilters =
     kindFilter !== "all" || bedroomsFilter !== "all" || propTypeFilter !== "all" || !!loc || !!nat;
 
-  const handleDelete = async (id: string) => {
+  // Soft delete: move to Recently Deleted
+  const handleSoftDelete = async (ids: string[]) => {
+    if (ids.length === 0) return;
+    try {
+      const { error } = await supabase
+        .from("esign_envelopes")
+        .update({ deleted_at: new Date().toISOString() })
+        .in("id", ids);
+      if (error) throw error;
+      toast.success(ids.length === 1 ? "Moved to Recently Deleted" : `${ids.length} moved to Recently Deleted`);
+      setSelected(new Set());
+      refetch();
+    } catch {
+      toast.error("Failed to delete");
+    }
+  };
+
+  const handleRestore = async (ids: string[]) => {
+    if (ids.length === 0) return;
+    try {
+      const { error } = await supabase
+        .from("esign_envelopes")
+        .update({ deleted_at: null })
+        .in("id", ids);
+      if (error) throw error;
+      toast.success(ids.length === 1 ? "Restored" : `${ids.length} restored`);
+      setSelected(new Set());
+      refetch();
+    } catch {
+      toast.error("Failed to restore");
+    }
+  };
+
+  const handlePurge = async (ids: string[]) => {
+    if (ids.length === 0) return;
     try {
       const { error } = await supabase
         .from("esign_envelopes")
         .delete()
-        .eq("id", id);
-
+        .in("id", ids);
       if (error) throw error;
-      toast.success("Envelope deleted");
+      toast.success(ids.length === 1 ? "Permanently deleted" : `${ids.length} permanently deleted`);
+      setSelected(new Set());
+      setPendingPurge(null);
       refetch();
-    } catch (error) {
-      toast.error("Failed to delete envelope");
+    } catch {
+      toast.error("Failed to delete permanently");
+      setPendingPurge(null);
     }
   };
+
+  const handleDelete = (id: string) => handleSoftDelete([id]);
 
   const handleSendReminder = async (id: string) => {
     try {
@@ -182,6 +264,26 @@ export default function ESignatureDashboard() {
     } catch (error) {
       toast.error("Failed to send reminder");
     }
+  };
+
+  const handleBulkRemind = async () => {
+    const remindable = (filteredEnvelopes || []).filter(
+      (e) => selected.has(e.id) && ["sent", "viewed", "partially_signed"].includes(e.status),
+    );
+    if (remindable.length === 0) {
+      toast.info("No pending envelopes selected to remind");
+      return;
+    }
+    let ok = 0;
+    for (const e of remindable) {
+      try {
+        await handleSendReminder(e.id);
+        ok++;
+      } catch {
+        // ignore — handleSendReminder shows a toast
+      }
+    }
+    if (ok > 0) toast.success(`Reminders sent to ${ok}`);
   };
 
   return (
@@ -231,6 +333,39 @@ export default function ESignatureDashboard() {
                 </Button>
               </Link>
             </div>
+          </div>
+
+          {/* View Tabs: Active / Recently Deleted */}
+          <div className="flex items-center justify-between gap-3 flex-wrap">
+            <div className="inline-flex rounded-lg border border-[#B89555]/40 bg-[#FDFBF7] p-1">
+              {([
+                { key: "active" as const, label: "Active" },
+                { key: "deleted" as const, label: "Recently Deleted" },
+              ]).map((t) => {
+                const active = view === t.key;
+                return (
+                  <button
+                    key={t.key}
+                    onClick={() => {
+                      setView(t.key);
+                      setSelected(new Set());
+                    }}
+                    className={`px-3 py-1.5 text-xs rounded-md transition ${
+                      active
+                        ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555] font-medium"
+                        : "text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
+                    }`}
+                  >
+                    {t.label}
+                  </button>
+                );
+              })}
+            </div>
+            {view === "deleted" && (
+              <span className="text-[11px] text-[#1A1A1A]/60">
+                Items in Recently Deleted are kept for 30 days.
+              </span>
+            )}
           </div>
 
           {/* Stats Cards */}
@@ -406,7 +541,74 @@ export default function ESignatureDashboard() {
           {/* Envelopes List */}
           <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/20">
             <CardHeader>
-              <CardTitle className="text-foreground">Recent Documents</CardTitle>
+              <div className="flex items-center justify-between gap-3 flex-wrap">
+                <div className="flex items-center gap-3">
+                  {visibleIds.length > 0 && (
+                    <Checkbox
+                      checked={allVisibleSelected}
+                      onCheckedChange={toggleAllVisible}
+                      aria-label="Select all visible"
+                    />
+                  )}
+                  <CardTitle className="text-foreground">
+                    {view === "deleted" ? "Recently Deleted" : "Recent Documents"}
+                  </CardTitle>
+                </div>
+                {selected.size > 0 && (
+                  <div className="flex items-center gap-2 rounded-md border border-[#B89555]/40 bg-[#EFE6D6] px-2 py-1">
+                    <span className="text-[11px] font-medium text-[#1A1A1A]">
+                      {selected.size} selected
+                    </span>
+                    {view === "active" ? (
+                      <>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-7 text-[11px] border-[#B89555]/40"
+                          onClick={handleBulkRemind}
+                        >
+                          <Bell className="w-3 h-3 mr-1" /> Send reminder
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-7 text-[11px] border-red-300 text-red-700 hover:bg-red-50"
+                          onClick={() => handleSoftDelete(Array.from(selected))}
+                        >
+                          <Trash2 className="w-3 h-3 mr-1" /> Move to Recently Deleted
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-7 text-[11px] border-[#B89555]/40"
+                          onClick={() => handleRestore(Array.from(selected))}
+                        >
+                          <RotateCcw className="w-3 h-3 mr-1" /> Restore
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-7 text-[11px] border-red-300 text-red-700 hover:bg-red-50"
+                          onClick={() => setPendingPurge({ ids: Array.from(selected) })}
+                        >
+                          <Trash2 className="w-3 h-3 mr-1" /> Delete permanently
+                        </Button>
+                      </>
+                    )}
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-7 text-[11px]"
+                      onClick={() => setSelected(new Set())}
+                    >
+                      <X className="w-3 h-3 mr-1" /> Clear
+                    </Button>
+                  </div>
+                )}
+              </div>
             </CardHeader>
             <CardContent>
               {isLoading ? (
@@ -467,7 +669,12 @@ export default function ESignatureDashboard() {
                         className="rounded-lg border border-[#B89555]/20 bg-white/70 hover:border-[#B89555]/60 hover:shadow-md transition p-4 flex flex-col gap-2"
                       >
                         <div className="flex items-center justify-between gap-2 flex-wrap">
-                          <div className="flex items-center gap-1.5 flex-wrap">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <Checkbox
+                              checked={selected.has(envelope.id)}
+                              onCheckedChange={() => toggleId(envelope.id)}
+                              aria-label={`Select envelope ${docNumber || envelope.id.slice(0, 8)}`}
+                            />
                             {docNumber ? (
                               <span className="text-[10px] tracking-[0.16em] uppercase text-[#1A1A1A]/70 border border-[#B89555]/50 rounded px-2 py-0.5 bg-[#F7F2EA]">
                                 {docNumber}
@@ -543,20 +750,35 @@ export default function ESignatureDashboard() {
                                   View Details
                                 </Link>
                               </DropdownMenuItem>
-                              {["sent", "viewed", "partially_signed"].includes(envelope.status) && (
+                              {view === "active" && ["sent", "viewed", "partially_signed"].includes(envelope.status) && (
                                 <DropdownMenuItem onClick={() => handleSendReminder(envelope.id)}>
                                   <Bell className="w-4 h-4 mr-2" />
                                   Send Reminder
                                 </DropdownMenuItem>
                               )}
-                              {envelope.status === "draft" && (
+                              {view === "active" && (
                                 <DropdownMenuItem
                                   onClick={() => handleDelete(envelope.id)}
                                   className="text-red-600"
                                 >
                                   <Trash2 className="w-4 h-4 mr-2" />
-                                  Delete
+                                  Move to Recently Deleted
                                 </DropdownMenuItem>
+                              )}
+                              {view === "deleted" && (
+                                <>
+                                  <DropdownMenuItem onClick={() => handleRestore([envelope.id])}>
+                                    <RotateCcw className="w-4 h-4 mr-2" />
+                                    Restore
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                    onClick={() => setPendingPurge({ ids: [envelope.id] })}
+                                    className="text-red-600"
+                                  >
+                                    <Trash2 className="w-4 h-4 mr-2" />
+                                    Delete permanently
+                                  </DropdownMenuItem>
+                                </>
                               )}
                             </DropdownMenuContent>
                           </DropdownMenu>
@@ -570,6 +792,28 @@ export default function ESignatureDashboard() {
           </Card>
         </div>
       </div>
+
+      <AlertDialog open={!!pendingPurge} onOpenChange={(o) => !o && setPendingPurge(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete permanently?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently remove {pendingPurge?.ids.length ?? 0}{" "}
+              {pendingPurge && pendingPurge.ids.length === 1 ? "envelope" : "envelopes"} and all
+              related recipients, fields, and audit history. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => pendingPurge && handlePurge(pendingPurge.ids)}
+              className="bg-red-600 hover:bg-red-700 text-white"
+            >
+              Delete permanently
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

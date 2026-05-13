@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Copy, MessageSquare, Mail, RefreshCw, Trash2, UserPlus, X, Sparkles, GitMerge } from "lucide-react";
 import { PIPELINE_STATUSES } from "./LeadStatusBadge";
+import MergeContactsDialog from "./MergeContactsDialog";
 
 interface BrokerOption {
   user_id: string;
@@ -36,6 +37,7 @@ export default function CRMLeadsBulkBar({
   const [broadcastChannel, setBroadcastChannel] = useState<"whatsapp" | "email">("whatsapp");
   const [broadcastSubject, setBroadcastSubject] = useState("");
   const [broadcastMessage, setBroadcastMessage] = useState("");
+  const [mergeOpen, setMergeOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -441,10 +443,10 @@ export default function CRMLeadsBulkBar({
             type="button"
             variant="secondary"
             size="sm"
-            onClick={handleMerge}
+            onClick={() => setMergeOpen(true)}
             disabled={busy || count < 2}
             className="font-semibold"
-            title={count < 2 ? "Select 2+ leads to merge" : "Merge selected leads into one"}
+            title={count < 2 ? "Select 2+ leads to merge" : "Review fields and merge"}
           >
             <GitMerge className="h-4 w-4 mr-2" />
             Merge ({count})
@@ -513,6 +515,16 @@ export default function CRMLeadsBulkBar({
           </div>
         </div>
       )}
+
+      <MergeContactsDialog
+        open={mergeOpen}
+        onOpenChange={setMergeOpen}
+        leadIds={selectedIds}
+        onMerged={() => {
+          onClear();
+          onSuccess();
+        }}
+      />
     </div>
   );
 }

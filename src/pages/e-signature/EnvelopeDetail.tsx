@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   ArrowLeft, Download, Bell, Clock, CheckCircle2, XCircle, Eye, Send, FileSignature, FileText,
   User, Mail, Phone, Calendar, Globe, Shield, Loader2, Link as LinkIcon, Printer,
-  ExternalLink, MessageCircle, Edit3, Save, X, Plus,
+  ExternalLink, MessageCircle, Edit3, Save, X, Plus, Upload as UploadIcon,
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
@@ -74,6 +74,70 @@ export default function EnvelopeDetail() {
   const [emailDialogOpen, setEmailDialogOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
   const [hiddenFields, setHiddenFields] = useState<string[]>([]);
+  const [uploadingSigned, setUploadingSigned] = useState(false);
+  const signedUploadInputRef = useMemo(() => ({ current: null as HTMLInputElement | null }), []);
+
+  const handleUploadSignedPdf = async (file: File) => {
+    if (!envelope) return;
+    if (!file.type.includes("pdf") && !file.name.toLowerCase().endsWith(".pdf")) {
+      toast.error("Please choose a PDF file");
+      return;
+    }
+    if (file.size > 25 * 1024 * 1024) {
+      toast.error("File too large (max 25 MB)");
+      return;
+    }
+    setUploadingSigned(true);
+    try {
+      const path = `${envelope.id}/${Date.now()}-signed.pdf`;
+      const { error: upErr } = await supabase.storage
+        .from("signed-contracts")
+        .upload(path, file, { upsert: false, contentType: "application/pdf" });
+      if (upErr) throw upErr;
+
+      // Create a long-lived signed URL (1 year) for downstream display.
+      const { data: signedUrlData, error: urlErr } = await supabase.storage
+        .from("signed-contracts")
+        .createSignedUrl(path, 60 * 60 * 24 * 365);
+      if (urlErr) throw urlErr;
+      const signedUrl = signedUrlData?.signedUrl;
+      if (!signedUrl) throw new Error("Could not create signed URL");
+
+      const nowIso = new Date().toISOString();
+      const { error: updErr } = await supabase
+        .from("esign_envelopes")
+        .update({
+          signed_document_url: signedUrl,
+          status: "completed",
+          completed_at: nowIso,
+        })
+        .eq("id", envelope.id);
+      if (updErr) throw updErr;
+
+      // Insert a signed-document record so the existing "Signed" banner picks it up.
+      await supabase.from("esign_signed_documents").insert({
+        envelope_id: envelope.id,
+        document_url: signedUrl,
+        document_filename: file.name || `signed-${envelope.id}.pdf`,
+      } as any);
+
+      // Best-effort audit entry.
+      await supabase.from("esign_audit_log").insert({
+        envelope_id: envelope.id,
+        action: "manually_completed",
+        description: "Owner uploaded signed PDF",
+      } as any);
+
+      toast.success("Signed PDF uploaded — envelope marked Completed");
+      refetch();
+      qc.invalidateQueries({ queryKey: ["esign-envelopes"] });
+    } catch (err: any) {
+      console.error("upload signed pdf failed", err);
+      toast.error(err?.message || "Failed to upload signed PDF");
+    } finally {
+      setUploadingSigned(false);
+    }
+  };
   // Tracks fields that were just restored (un-hidden) so we can highlight them
   // in the editor and the live preview until the user dismisses or re-saves.
   const [recentlyRestoredFields, setRecentlyRestoredFields] = useState<string[]>([]);
@@ -906,6 +970,34 @@ export default function EnvelopeDetail() {
                 <Send className="w-4 h-4 mr-2" />
                 Send for signature
               </Button>
+            )}
+            {envelope.status !== "completed" && envelope.status !== "voided" && (
+              <>
+                <input
+                  ref={(el) => { signedUploadInputRef.current = el; }}
+                  type="file"
+                  accept="application/pdf,.pdf"
+                  className="hidden"
+                  onChange={async (e) => {
+                    const f = e.target.files?.[0];
+                    e.currentTarget.value = "";
+                    if (f) await handleUploadSignedPdf(f);
+                  }}
+                />
+                <Button
+                  variant="outline"
+                  onClick={() => signedUploadInputRef.current?.click()}
+                  disabled={uploadingSigned}
+                  title="Upload the counter-signed PDF returned by the client"
+                >
+                  {uploadingSigned ? (
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  ) : (
+                    <UploadIcon className="w-4 h-4 mr-2" />
+                  )}
+                  Upload signed PDF
+                </Button>
+              </>
             )}
             <Button variant="outline" onClick={async () => {
               if (!(await ensureSavedBeforeDownload())) return;
