@@ -60,6 +60,8 @@ import { TemplateEditorDialog } from "@/components/crm/TemplateEditorDialog";
 import { TestSendDialog } from "@/components/crm/TestSendDialog";
 import { BreakfastBookingsSection } from "@/components/crm/BreakfastBookingsSection";
 import { BulkSendDialog } from "@/components/crm/BulkSendDialog";
+import { ConfirmRegistrationLauncher } from "@/components/crm/ConfirmRegistrationLauncher";
+import { ShieldCheck } from "lucide-react";
 import { BulkOutreachPanel } from "@/components/crm/BulkOutreachPanel";
 import { BulkUploadDialog } from "@/components/crm/BulkUploadDialog";
 import { OutreachActionsMenu } from "@/components/crm/OutreachActionsMenu";
