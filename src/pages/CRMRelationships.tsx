@@ -3177,8 +3177,8 @@ const CRMRelationships = () => {
 
           {/* ============ MAIN: Developers | Brokerage Agencies ============ */}
           <Tabs
-            value={tab === "reps" ? "developers" : tab === "brokers" ? "brokerages" : tab}
-            onValueChange={(v) => setTab(v === "developers" ? (tab === "reps" ? "reps" : "developers") : (tab === "brokers" ? "brokers" : "brokerages"))}
+            value={(tab === "reps" || tab === "developers") ? "developers" : "brokerages"}
+            onValueChange={(v) => setTab(v === "developers" ? "developers" : "brokerages")}
           >
             <div className="overflow-x-auto -mx-1 px-1 mb-6">
               <TabsList className="bg-[#FDFBF7] border border-[#B89555]/30 p-1.5 rounded-xl inline-flex w-auto gap-2">
