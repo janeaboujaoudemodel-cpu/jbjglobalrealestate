@@ -192,22 +192,32 @@ Deno.serve(async (req) => {
     const imapHost = body.imap_host || DEFAULTS.imap_host;
     const imapPort = body.imap_port || DEFAULTS.imap_port;
     const smtpHost = body.smtp_host || DEFAULTS.smtp_host;
-    const smtpPort = body.smtp_port || DEFAULTS.smtp_port;
+    let smtpPort = body.smtp_port || DEFAULTS.smtp_port;
 
     // 1) Test IMAP
     const imapResult = await testImap(email, password, imapHost, imapPort);
     if (!imapResult.ok) {
       return new Response(JSON.stringify({ error: `IMAP login failed: ${imapResult.error || "unknown"}` }), {
-        status: 400,
+        status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
     // 2) Test SMTP
-    const smtpResult = await testSmtp(email, password, smtpHost, smtpPort);
+    let smtpResult = await testSmtp(email, password, smtpHost, smtpPort);
+    if (!smtpResult.ok && smtpHost === DEFAULTS.smtp_host && smtpPort === 465) {
+      const fallback = await testSmtp(email, password, smtpHost, 587);
+      if (fallback.ok) {
+        console.log("[hostinger] SMTP connected through STARTTLS fallback on port 587");
+        smtpResult = fallback;
+        smtpPort = 587;
+      } else {
+        smtpResult = { ok: false, error: `${smtpResult.error || "port 465 failed"}; fallback 587: ${fallback.error || "failed"}` };
+      }
+    }
     if (!smtpResult.ok) {
       return new Response(JSON.stringify({ error: `SMTP login failed: ${smtpResult.error || "unknown"}` }), {
-        status: 400,
+        status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
