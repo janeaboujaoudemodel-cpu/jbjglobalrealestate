@@ -1390,6 +1390,30 @@ export default function EnvelopeDetail() {
         onShareEmail={() => clientRec && handleQuickEmail(clientRec)}
       />
 
+      {/* Floating Top / Down navigation */}
+      <div className="fixed right-4 bottom-6 z-40 flex flex-col gap-2">
+        <Button
+          size="icon"
+          variant="outline"
+          className="h-10 w-10 rounded-full bg-[#FDFBF7] border-[#B89555]/40 shadow-md hover:bg-[#F7F2EA]"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          aria-label="Go to top"
+          title="Go to top"
+        >
+          <ArrowUp className="w-4 h-4 text-[#1A1A1A]" />
+        </Button>
+        <Button
+          size="icon"
+          variant="outline"
+          className="h-10 w-10 rounded-full bg-[#FDFBF7] border-[#B89555]/40 shadow-md hover:bg-[#F7F2EA]"
+          onClick={() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "smooth" })}
+          aria-label="Go to bottom"
+          title="Go to bottom"
+        >
+          <ArrowDown className="w-4 h-4 text-[#1A1A1A]" />
+        </Button>
+      </div>
+
       {clientRec && (
         <SendViaEmailDialog
           open={emailDialogOpen}
