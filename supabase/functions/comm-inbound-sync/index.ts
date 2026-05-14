@@ -317,24 +317,25 @@ Deno.serve(async (req) => {
 
             const { data: insertedMsg, error: msgErr } = await admin
               .from("owner_comm_messages")
-              .upsert(
-                {
-                  user_id: ch.user_id,
-                  thread_id: threadId,
-                  direction: "inbound",
-                  content: m.subject + (m.bodyText ? "\n\n" + m.bodyText : ""),
-                  content_type: "text",
-                  external_message_id: externalId,
-                  sender_identifier: fromEmail,
-                  sender_name: fromName,
-                  status: "delivered",
-                },
-                { onConflict: "user_id,external_message_id", ignoreDuplicates: true }
-              )
+              .insert({
+                user_id: ch.user_id,
+                thread_id: threadId,
+                direction: "inbound",
+                content: m.subject + (m.bodyText ? "\n\n" + m.bodyText : ""),
+                content_type: "text",
+                external_message_id: externalId,
+                sender_identifier: fromEmail,
+                sender_name: fromName,
+                status: "delivered",
+              })
               .select("id");
 
             if (msgErr) {
-              console.error("[comm-inbound-sync] message upsert failed", msgErr);
+              console.error("[comm-inbound-sync] hostinger message insert failed", msgErr);
+              await admin
+                .from("owner_comm_channels")
+                .update({ last_error: `message_insert: ${msgErr.message}` })
+                .eq("id", ch.id);
               continue;
             }
 
@@ -409,100 +410,130 @@ Deno.serve(async (req) => {
         continue;
       }
 
+      const isFirstSync = !ch.last_sync_at;
       const sinceMs = ch.last_sync_at ? new Date(ch.last_sync_at).getTime() : Date.now() - 7 * 86400_000;
       let channelImported = 0;
       const channelEmail = (ch.identifier || "").toLowerCase();
       const connectorKey = gmailKeyByEmail.get(channelEmail) ?? gmailKeys[0];
+
+      const upsertGmailMessage = async (args: {
+        externalId: string;
+        fromEmail: string;
+        fromName: string;
+        subject: string;
+        snippet: string;
+        receivedAt: string;
+      }) => {
+        const { data: dup } = await admin
+          .from("owner_comm_messages")
+          .select("id")
+          .eq("external_message_id", args.externalId)
+          .eq("user_id", ch.user_id)
+          .maybeSingle();
+        if (dup) return false;
+
+        const { data: thread, error: threadErr } = await admin
+          .from("owner_comm_threads")
+          .upsert(
+            {
+              user_id: ch.user_id,
+              channel_id: ch.id,
+              channel_type: "email_gmail",
+              contact_identifier: args.fromEmail,
+              contact_name: args.fromName,
+              last_message_at: args.receivedAt,
+              last_message_preview: args.subject,
+            },
+            { onConflict: "user_id,channel_type,contact_identifier" }
+          )
+          .select("id, unread_count")
+          .single();
+        if (threadErr || !thread?.id) {
+          console.error("[comm-inbound-sync] gmail thread upsert failed", threadErr);
+          return false;
+        }
+
+        const { error: msgErr } = await admin
+          .from("owner_comm_messages")
+          .insert({
+            user_id: ch.user_id,
+            thread_id: thread.id,
+            direction: "inbound",
+            content: args.subject + (args.snippet ? "\n\n" + args.snippet : ""),
+            content_type: "text",
+            external_message_id: args.externalId,
+            sender_identifier: args.fromEmail,
+            sender_name: args.fromName,
+            status: "delivered",
+          });
+        if (msgErr) {
+          console.error("[comm-inbound-sync] gmail message insert failed", msgErr);
+          await admin
+            .from("owner_comm_channels")
+            .update({ last_error: `gmail_message_insert: ${msgErr.message}` })
+            .eq("id", ch.id);
+          return false;
+        }
+
+        await admin
+          .from("owner_comm_threads")
+          .update({ unread_count: (thread.unread_count ?? 0) + 1 })
+          .eq("id", thread.id);
+        await logChannelAudit(admin, {
+          user_id: ch.user_id,
+          channel_id: ch.id,
+          channel_type: ch.channel_type,
+          identifier: ch.identifier,
+          event_type: "inbound_received",
+          details: { external_message_id: args.externalId, from: args.fromEmail, subject: args.subject, thread_id: thread.id },
+        });
+        return true;
+      };
+
       try {
+        // First-time sync: backfill historical Gmail rows from email_inbox_items
+        // so /owner/inbox isn't empty even before a fresh Gmail pull lands.
+        if (isFirstSync) {
+          const { data: legacy } = await admin
+            .from("email_inbox_items")
+            .select("gmail_message_id, raw_subject, snippet, from_email, from_name, received_at")
+            .eq("user_id", ch.user_id)
+            .order("received_at", { ascending: false })
+            .limit(200);
+          for (const row of legacy ?? []) {
+            if (!row.gmail_message_id) continue;
+            const ok = await upsertGmailMessage({
+              externalId: row.gmail_message_id,
+              fromEmail: (row.from_email || "").toLowerCase() || "unknown@unknown",
+              fromName: row.from_name || row.from_email || "Unknown",
+              subject: row.raw_subject || "(no subject)",
+              snippet: row.snippet || "",
+              receivedAt: row.received_at || new Date().toISOString(),
+            });
+            if (ok) { imported++; channelImported++; }
+          }
+        }
+
         const list = await gmailListMessages(LOVABLE_API_KEY!, connectorKey, sinceMs);
         for (const m of list) {
-          const { data: dup } = await admin
-            .from("owner_comm_messages")
-            .select("id")
-            .eq("external_message_id", m.id)
-            .eq("user_id", ch.user_id)
-            .maybeSingle();
-          if (dup) continue;
-
           const detail = await gmailGetMessage(LOVABLE_API_KEY!, connectorKey, m.id);
           const headers = detail.payload?.headers ?? [];
           const fromHeader = pickHeader(headers, "From");
           const subject = pickHeader(headers, "Subject") || "(no subject)";
           const dateHeader = pickHeader(headers, "Date");
-
           const fromEmailMatch = fromHeader.match(/<([^>]+)>/) || [null, fromHeader];
           const fromEmail = (fromEmailMatch[1] || fromHeader).trim().toLowerCase();
           const fromName = fromHeader.replace(/<.*>/, "").trim().replace(/^"|"$/g, "") || fromEmail;
-          const lastMessageAt = dateHeader ? new Date(dateHeader).toISOString() : new Date().toISOString();
-
-          const { data: thread, error: threadErr } = await admin
-            .from("owner_comm_threads")
-            .upsert(
-              {
-                user_id: ch.user_id,
-                channel_id: ch.id,
-                channel_type: "email_gmail",
-                contact_identifier: fromEmail,
-                contact_name: fromName,
-                last_message_at: lastMessageAt,
-                last_message_preview: subject,
-              },
-              { onConflict: "user_id,channel_type,contact_identifier" }
-            )
-            .select("id, unread_count")
-            .single();
-
-          if (threadErr || !thread?.id) {
-            console.error("[comm-inbound-sync] thread upsert failed", threadErr);
-            continue;
-          }
-          const threadId = thread.id;
-
-          const { data: insertedMsg, error: msgErr } = await admin
-            .from("owner_comm_messages")
-            .upsert(
-              {
-                user_id: ch.user_id,
-                thread_id: threadId,
-                direction: "inbound",
-                content: subject,
-                content_type: "text",
-                external_message_id: m.id,
-                sender_identifier: fromEmail,
-                sender_name: fromName,
-                status: "delivered",
-              },
-              { onConflict: "user_id,external_message_id", ignoreDuplicates: true }
-            )
-            .select("id");
-
-          if (msgErr) {
-            console.error("[comm-inbound-sync] message upsert failed", msgErr);
-            continue;
-          }
-
-          const wasNew = Array.isArray(insertedMsg) && insertedMsg.length > 0;
-          if (wasNew) {
-            await admin
-              .from("owner_comm_threads")
-              .update({ unread_count: (thread.unread_count ?? 0) + 1 })
-              .eq("id", threadId);
-            imported++;
-            channelImported++;
-            await logChannelAudit(admin, {
-              user_id: ch.user_id,
-              channel_id: ch.id,
-              channel_type: ch.channel_type,
-              identifier: ch.identifier,
-              event_type: "inbound_received",
-              details: {
-                external_message_id: m.id,
-                from: fromEmail,
-                subject,
-                thread_id: threadId,
-              },
-            });
-          }
+          const receivedAt = dateHeader ? new Date(dateHeader).toISOString() : new Date().toISOString();
+          const ok = await upsertGmailMessage({
+            externalId: m.id,
+            fromEmail,
+            fromName,
+            subject,
+            snippet: detail.snippet || "",
+            receivedAt,
+          });
+          if (ok) { imported++; channelImported++; }
         }
 
         await admin

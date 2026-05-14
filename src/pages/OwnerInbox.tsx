@@ -6,6 +6,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import DeveloperActionsRail from "@/components/owner-inbox/DeveloperActionsRail";
+import { supabase } from "@/integrations/supabase/client";
+
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -120,6 +122,29 @@ export default function OwnerInbox() {
     }
   }, [threads, selectedThread]);
 
+  // On mount: provision Gmail channel (if Google Mail connector linked) and
+  // pull any new messages into the unified inbox so Hostinger + Gmail show up
+  // without forcing the user to click "Sync inbox" first.
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        await supabase.functions.invoke("comm-gmail-autoconnect", { body: {} });
+      } catch (e) {
+        console.warn("[inbox] gmail autoconnect skipped:", e);
+      }
+      if (cancelled) return;
+      try {
+        await supabase.functions.invoke("comm-inbound-sync", { body: {} });
+      } catch (e) {
+        console.warn("[inbox] inbound sync failed on mount:", e);
+      }
+      if (!cancelled) refetchThreads();
+    })();
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleThreadSelect = (thread: CommThread) => {
     setSelectedThread(thread);
     if (thread.unread_count > 0) {
@@ -202,7 +227,11 @@ export default function OwnerInbox() {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => refetchThreads()}
+                  onClick={async () => {
+                    try { await supabase.functions.invoke("comm-gmail-autoconnect", { body: {} }); } catch { /* noop */ }
+                    try { await supabase.functions.invoke("comm-inbound-sync", { body: {} }); } catch { /* noop */ }
+                    refetchThreads();
+                  }}
                   disabled={threadsLoading}
                   className="border-[#B89555]/30"
                 >
