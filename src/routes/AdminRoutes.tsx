@@ -64,6 +64,7 @@ const FormBuilder = lazy(() => import("@/pages/FormBuilder"));
 // E-Signature dashboards moved into the unified hub at /owner/documents/forms.
 // Only EnvelopeDetail remains here for legacy /e-signature/:id deep links.
 const EnvelopeDetail = lazy(() => import("@/pages/e-signature/EnvelopeDetail"));
+const DocumentsFormsHub = lazy(() => import("@/pages/owner/DocumentsFormsHub"));
 const Automations = lazy(() => import("@/pages/Automations"));
 const AlertsDemo = lazy(() => import("@/pages/AlertsDemo"));
 const ExclusiveDocuments = lazy(() => import("@/pages/owner/ExclusiveDocuments"));
@@ -162,7 +163,7 @@ export const AdminRoutes = () => (
     <Route path="/owner/ai-tools-control" element={<OwnerGuard><AIToolsControlPanel /></OwnerGuard>} />
 
     {/* ── E-Signature (legacy → unified Documents & Agreements hub) ── */}
-    <Route path="/e-signature" element={<Navigate to="/owner/documents/forms?tab=esign" replace />} />
+    <Route path="/e-signature" element={<OwnerGuard><DocumentsFormsHub initialTabOverride="esign" /></OwnerGuard>} />
     <Route path="/e-signature/create" element={<Navigate to="/owner/documents/forms/create" replace />} />
     <Route path="/e-signature/signature-studio" element={<Navigate to="/owner/documents/forms/signature-studio" replace />} />
     <Route path="/e-signature/blank-letter" element={<Navigate to="/owner/documents/forms/blank-letter" replace />} />
