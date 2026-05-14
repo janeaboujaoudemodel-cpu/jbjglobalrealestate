@@ -321,7 +321,7 @@ export default function UnifiedCRM() {
         case "calendar":      return <Embed><CRMCalendar /></Embed>;
         case "notes":         return <Embed><CRMNotes /></Embed>;
         case "inbox":         return <Embed><OwnerInbox /></Embed>;
-        case "email-center":  return <Embed><EmailCenter /></Embed>;
+        case "email-center":  return <Embed><OwnerInbox /></Embed>;
         case "notifications": return <NotificationsPanel />;
         case "contracts":     return <Embed><ContractVault /></Embed>;
         case "campaigns":     return <Embed><CampaignsPage /></Embed>;
