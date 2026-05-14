@@ -130,6 +130,18 @@ Deno.serve(async (req) => {
         origin,
       );
     }
+    const allAttachments = pdfAttachment ? [pdfAttachment] : [];
+    if (Array.isArray(extra_attachments)) {
+      for (const e of extra_attachments) {
+        const a = await fetchEmailAttachment(
+          String(e?.url || ""),
+          String(e?.name || ""),
+          String(e?.content_type || "application/octet-stream"),
+        );
+        if (a) allAttachments.push(a);
+        else if (e?.url && e?.name) console.warn(`[esign-send-test-email] skipped extra attachment ${e.name}`);
+      }
+    }
     const payload: Record<string, unknown> = {
       from: "JBJ Global Real Estate <noreply@jbj.ae>",
       to: [toEmail],
@@ -138,7 +150,7 @@ Deno.serve(async (req) => {
       subject: finalSubject,
       html: emailHtml,
     };
-    if (pdfAttachment) payload.attachments = [pdfAttachment];
+    if (allAttachments.length) payload.attachments = allAttachments;
 
     const res = await quotaGuardedFetch("https://api.resend.com/emails", {
       method: "POST",
