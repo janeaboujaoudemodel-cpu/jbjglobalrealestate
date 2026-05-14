@@ -643,8 +643,8 @@ export function SendViaEmailDialog({
                 signatureHtml={selectedSigHtml}
                 docNumber={docNumber}
                 docusignUrl={docusignUrl}
-                attachmentName={attachmentName}
-                attachmentUrl={attachmentUrl}
+                attachmentName={autoAttachmentRemoved ? undefined : attachmentName}
+                attachmentUrl={autoAttachmentRemoved ? undefined : attachmentUrl}
                 className="w-full h-full bg-[#FDFBF7]"
               />
             </div>
