@@ -451,11 +451,43 @@ export function SendViaEmailDialog({
               <div className="flex flex-wrap gap-x-2"><span className="opacity-60">From:</span><strong className="break-all">{DISPLAY_FROM}</strong></div>
               <div className="flex flex-wrap gap-x-2"><span className="opacity-60">Reply-To:</span><strong className="break-all">{DISPLAY_REPLY_TO}</strong></div>
               <div className="flex flex-wrap gap-x-2"><span className="opacity-60">Provider:</span>Resend</div>
-              {attachmentName && (
+              {attachmentName && !autoAttachmentRemoved && (
                 <div className="flex items-center gap-1.5 pt-1">
                   <FileText className="w-3.5 h-3.5 shrink-0" />
-                  <span className="opacity-60">Attachment:</span>
-                  <strong className="truncate">{attachmentName}</strong>
+                  <span className="opacity-60">Auto-attached:</span>
+                  <strong className="truncate flex-1">{attachmentName}</strong>
+                  {attachmentUrl && (
+                    <a
+                      href={attachmentUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="shrink-0 px-1.5 py-0.5 rounded hover:bg-[#EFE6D6] text-[#1A1A1A]/70"
+                      title="Preview attached PDF"
+                    >
+                      <Eye className="w-3.5 h-3.5" />
+                    </a>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setAutoAttachmentRemoved(true)}
+                    className="shrink-0 text-[10px] uppercase tracking-wider text-[#1A1A1A]/60 hover:text-[#1A1A1A] underline decoration-[#B89555]/60 underline-offset-2"
+                    title="Remove the auto-attached signed PDF from this send"
+                  >
+                    Remove
+                  </button>
+                </div>
+              )}
+              {attachmentName && autoAttachmentRemoved && (
+                <div className="flex items-center gap-1.5 pt-1">
+                  <FileText className="w-3.5 h-3.5 shrink-0 opacity-40" />
+                  <span className="opacity-60 line-through">{attachmentName}</span>
+                  <button
+                    type="button"
+                    onClick={() => setAutoAttachmentRemoved(false)}
+                    className="ml-auto text-[10px] uppercase tracking-wider text-[#B89555] hover:text-[#1A1A1A]"
+                  >
+                    Restore
+                  </button>
                 </div>
               )}
             </div>
