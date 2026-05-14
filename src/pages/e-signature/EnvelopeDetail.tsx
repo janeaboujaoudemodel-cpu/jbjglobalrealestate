@@ -1500,10 +1500,17 @@ export default function EnvelopeDetail() {
           recipientName={clientRec.name || "Client"}
           recipientEmail={clientRec.email || ""}
           defaultSubject={
-            envelope.email_subject ||
-            (envelope.template_key === "jbj-property-advertising-agreement"
-              ? `Property Advertising Agreement — Signature Required${docNumber ? ` · ${docNumber}` : ""}`
-              : `${envelope.name || "Document"} — Signature Required${docNumber ? ` · ${docNumber}` : ""}`)
+            // Always normalize "Please sign…" / "Signature Required" → "Signature Pending"
+            // unless the owner has saved a fully-custom subject that doesn't match those patterns.
+            (() => {
+              const saved = (envelope.email_subject || "").trim();
+              const looksLegacy = !saved || /^please sign\b/i.test(saved) || /signature required/i.test(saved);
+              if (!looksLegacy) return saved;
+              const docTitle = envelope.template_key === "jbj-property-advertising-agreement"
+                ? "Property Advertising Agreement"
+                : (envelope.name || "Document");
+              return `Signature Pending — ${docTitle}${docNumber ? ` · ${docNumber}` : ""}`;
+            })()
           }
           defaultBody={envelope.email_message || `Dear {{client_name}},\n\nPlease find your ${envelope.name || "document"} attached for your review and electronic signature.\n\nKindly sign at your earliest convenience using the secure link below.\n\nThank you,\n{{sender_signature}}`}
           docNumber={docNumber || undefined}
