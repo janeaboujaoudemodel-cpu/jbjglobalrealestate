@@ -35,6 +35,9 @@ function upperJbj(s: string): string {
 }
 
 export function buildSenderSignatureHtml(senderName: string, senderTitle: string): string {
+  // Sender signature intentionally omits CONTACT@/WWW./phone — those live
+  // exclusively in the corporate footer to avoid the duplicated contact
+  // block recipients were seeing twice in the same email.
   return `
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" data-jbj-sig-table="1" style="margin-top:8px;border-collapse:collapse;font-family:Inter,Arial,sans-serif;">
   <tr><td style="padding-bottom:14px;"><div style="width:100%;max-width:380px;height:1px;background:#B89555;line-height:1px;font-size:0;">&nbsp;</div></td></tr>
@@ -42,8 +45,6 @@ export function buildSenderSignatureHtml(senderName: string, senderTitle: string
   <tr><td style="font-style:italic;font-size:12px;color:#B89555;letter-spacing:.06em;padding-bottom:6px;">${escapeHtml(senderTitle)}</td></tr>
   <tr><td style="font-size:11px;font-weight:700;color:#1A1A1A;letter-spacing:.16em;text-transform:uppercase;">JBJ GLOBAL REAL ESTATE</td></tr>
   <tr><td style="font-size:11px;color:#1A1A1A;opacity:.7;letter-spacing:.04em;padding-top:4px;">Dubai, UAE</td></tr>
-  <tr><td style="font-size:11px;color:#B89555;letter-spacing:.04em;padding-top:2px;font-weight:600;">CONTACT@JBJ.AE &nbsp;·&nbsp; +971 54 716 7107</td></tr>
-  <tr><td style="font-size:11px;color:#B89555;letter-spacing:.04em;padding-top:2px;font-weight:600;">WWW.JBJ.AE</td></tr>
 </table>`;
 }
 
