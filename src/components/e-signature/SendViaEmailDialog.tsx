@@ -380,25 +380,34 @@ export function SendViaEmailDialog({
               />
             </div>
 
-            {/* Signature picker */}
+            {/* Signature picker — Radix Select with champagne/gold styling, no native blue */}
             <div className="space-y-1.5">
               <Label className="text-[#1A1A1A] text-xs flex items-center gap-1.5">
                 <PenLine className="w-3.5 h-3.5" /> Signature · {signatures.length} available
               </Label>
               <div className="flex gap-2">
-                <select
-                  value={selectedSigId}
-                  onChange={(e) => setSelectedSigId(e.target.value)}
-                  className="flex-1 h-9 px-2 rounded-md border border-[#B89555]/40 bg-white text-sm text-[#1A1A1A] outline-none focus:border-[#B89555] focus:ring-2 focus:ring-[#B89555]/30 hover:border-[#B89555]/70 transition-colors"
-                  aria-label="Select email signature"
+                <Select
+                  value={selectedSigId || undefined}
+                  onValueChange={(v) => setSelectedSigId(v)}
                 >
-                  {!signatures.length && <option value="">Loading signatures…</option>}
-                  {signatures.map((s) => (
-                    <option key={s.id} value={s.id}>
-                      {s.name}{s.is_default ? " · default" : ""}{s.is_system ? " · system" : ""}
-                    </option>
-                  ))}
-                </select>
+                  <SelectTrigger
+                    aria-label="Select email signature"
+                    className="flex-1 bg-white border-[#B89555]/40 text-[#1A1A1A] hover:border-[#B89555]/70 focus:ring-[#B89555]/30 focus:ring-offset-0 data-[state=open]:border-[#B89555]"
+                  >
+                    <SelectValue placeholder={signatures.length ? "Pick a signature…" : "Loading signatures…"} />
+                  </SelectTrigger>
+                  <SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">
+                    {signatures.map((s) => (
+                      <SelectItem
+                        key={s.id}
+                        value={s.id}
+                        className="text-[#1A1A1A] focus:bg-[#EFE6D6] focus:text-[#1A1A1A] data-[state=checked]:bg-[#EFE6D6] data-[highlighted]:bg-[#EFE6D6] data-[highlighted]:text-[#1A1A1A]"
+                      >
+                        {s.name}{s.is_default ? " · default" : ""}{s.is_system ? " · system" : ""}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <Button
                   type="button"
                   variant="outline"
@@ -406,7 +415,7 @@ export function SendViaEmailDialog({
                   onClick={applySelectedSignature}
                   disabled={!selectedSigHtml}
                   title="Insert/replace this signature in the message body"
-                  className="border-[#B89555]/50"
+                  className="border-[#B89555]/50 hover:bg-[#EFE6D6] hover:border-[#B89555]"
                 >
                   Insert
                 </Button>
