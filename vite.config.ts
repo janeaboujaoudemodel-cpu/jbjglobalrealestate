@@ -13,6 +13,13 @@ export default defineConfig(({ mode }) => {
       host: "0.0.0.0",
       port: parseInt(process.env.PORT || "8080"),
       historyApiFallback: true,
+      proxy: {
+        "/api/download-file": {
+          target: `${supabaseUrl}/functions/v1`,
+          changeOrigin: true,
+          rewrite: (p) => p.replace(/^\/api\//, "/"),
+        },
+      },
     },
     define: {
       'import.meta.env.VITE_SUPABASE_URL': JSON.stringify(supabaseUrl),
