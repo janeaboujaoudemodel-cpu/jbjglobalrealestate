@@ -92,7 +92,7 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
     ? `<div data-jbj-sig-final="1" style="margin-top:18px;">${signatureHtml}</div>`
     : "";
 
-  return `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"><style>
+  return `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><style>
     .jbj-wordmark{font-size:16px;}
     @media (max-width:520px){
       .jbj-outer-pad{padding:16px 8px !important;}
@@ -122,9 +122,9 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
         <div style="height:1px;background:#B89555;line-height:1px;font-size:0;">&nbsp;</div>
       </td></tr>
       <tr><td class="jbj-body" style="background:#ffffff;border-left:1px solid #B89555;border-right:1px solid #B89555;padding:32px 32px 28px;">
-        <h2 style="margin:0 0 18px;color:#1A1A1A;font-size:20px;font-weight:700;line-height:1.3;">${subject}</h2>
+        <h2 style="margin:0 0 14px;color:#1A1A1A;font-size:20px;font-weight:700;line-height:1.3;">${subject}</h2>
+        ${referenceLine}
         <div style="color:#1A1A1A;line-height:1.7;font-size:14px;">${bodyHtml}</div>
-        ${downloadBlock}
         ${ctaBlock}
         ${signatureBlock}
         <p style="margin:22px 0 0;color:#1A1A1A;opacity:.55;font-size:11px;line-height:1.55;">Replies to this email are routed to <a href="mailto:contact@jbj.ae" style="color:#B89555;text-decoration:none;font-weight:600;">CONTACT@JBJ.AE</a> and answered by our team.</p>
