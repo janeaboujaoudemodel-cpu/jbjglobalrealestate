@@ -66,11 +66,14 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
   const signatureHtml = args.signatureHtml || "";
   const docNumber = args.docNumber ? escapeHtml(args.docNumber) : "";
   const year = args.year ?? new Date().getFullYear();
-  const docusignUrl = (args.docusignUrl || "").trim();
+  const docusignUrlRaw = (args.docusignUrl || "").trim();
+  const fallbackSignUrlRaw = (args.fallbackSignUrl || "").trim();
   const attachmentName = args.attachmentName ? escapeHtml(args.attachmentName) : "";
   void args.attachmentUrl;
 
-  const ctaHref = docusignUrl || DOCUSIGN_WEB;
+  const ctaHref = isValidHttpUrl(docusignUrlRaw)
+    ? docusignUrlRaw
+    : (isValidHttpUrl(fallbackSignUrlRaw) ? fallbackSignUrlRaw : DOCUSIGN_WEB);
   const referenceLine = "";
 
   const attachmentStrip = "";
