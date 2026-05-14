@@ -317,24 +317,25 @@ Deno.serve(async (req) => {
 
             const { data: insertedMsg, error: msgErr } = await admin
               .from("owner_comm_messages")
-              .upsert(
-                {
-                  user_id: ch.user_id,
-                  thread_id: threadId,
-                  direction: "inbound",
-                  content: m.subject + (m.bodyText ? "\n\n" + m.bodyText : ""),
-                  content_type: "text",
-                  external_message_id: externalId,
-                  sender_identifier: fromEmail,
-                  sender_name: fromName,
-                  status: "delivered",
-                },
-                { onConflict: "user_id,external_message_id", ignoreDuplicates: true }
-              )
+              .insert({
+                user_id: ch.user_id,
+                thread_id: threadId,
+                direction: "inbound",
+                content: m.subject + (m.bodyText ? "\n\n" + m.bodyText : ""),
+                content_type: "text",
+                external_message_id: externalId,
+                sender_identifier: fromEmail,
+                sender_name: fromName,
+                status: "delivered",
+              })
               .select("id");
 
             if (msgErr) {
-              console.error("[comm-inbound-sync] message upsert failed", msgErr);
+              console.error("[comm-inbound-sync] hostinger message insert failed", msgErr);
+              await admin
+                .from("owner_comm_channels")
+                .update({ last_error: `message_insert: ${msgErr.message}` })
+                .eq("id", ch.id);
               continue;
             }
 
