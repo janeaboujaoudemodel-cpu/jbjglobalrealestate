@@ -1,46 +1,26 @@
-## Goal
-
-When the owner clicks **Send to client** on a PAA (or any envelope), the generated PDF for that specific client (e.g. `JBJ-PAA-LEASING-0001.pdf`) must arrive in the recipient's inbox as a real **email attachment**, in addition to the existing "Download your document" button.
-
-Today the email already includes a styled Download button that links to the PDF in storage, but no file is actually attached to the message — so users see only the link, not a paperclip / file in the email.
-
 ## Plan
 
-### 1. Attach the PDF in `esign-send-for-signature`
-File: `supabase/functions/esign-send-for-signature/index.ts`
+1. **Make the email message editor normal, not code-like**
+   - Detect saved email bodies that contain escaped HTML like `&lt;br/&gt;` and convert them back into normal rich-text line breaks.
+   - Keep the preview rendering as a normal email message, not visible HTML code.
+   - Set the default client message to clearly say the PDF is attached and is for electronic signature.
 
-- After resolving `attachment_url` and `attachment_name` (already passed from the SendViaEmailDialog), fetch the PDF bytes server-side:
-  - `fetch(attachment_url)` → `arrayBuffer()` → base64.
-  - Cap at ~10 MB (Resend's hard limit is ~40 MB; 10 MB is safe and matches typical PAA size). If oversize or fetch fails, log and fall back to link-only (do not block the send).
-- Pass to Resend in the existing `POST https://api.resend.com/emails` body:
-  ```ts
-  attachments: [{
-    filename: attachment_name,        // e.g. "JBJ-PAA-LEASING-0001.pdf"
-    content: <base64 string>,
-    content_type: "application/pdf",
-  }]
-  ```
-- Keep the existing branded **Download your document** button in the email body unchanged — recipient gets the file two ways (paperclip + button), exactly what the user asked for.
+2. **Fix the missing PDF attachment in test/client emails**
+   - Pass the actual generated PDF URL from the envelope into the send dialog.
+   - Keep the branded download button in the email.
+   - Ensure the backend attaches the real PDF file to both **Send test** and **Send to client** emails.
+   - Add a clear fallback/error signal so if the PDF cannot be fetched, it does not silently send without the document.
 
-### 2. Same change in the test-send path
-File: `supabase/functions/esign-send-test-email/index.ts`
+3. **Default to JBJ Executive Office signature**
+   - Change the send dialog signature selection so e-signature client emails default to **JBJ Executive Office**, not Founder/CEO.
+   - Keep Founder/CEO signature untouched.
 
-- Same fetch-and-attach logic so the owner's "Send me a test" preview also arrives with the real PDF attached. This is what the user uses to verify before sending to the client.
+4. **Clean system signature labels/content**
+   - Remove `Office of the Founder` from the **JBJ Executive Office** signature.
+   - Normalize non-founder system signatures so their visible name/title starts directly as `JBJ Front Desk`, `JBJ HR Team`, etc., without duplicated or awkward labels.
+   - Do this through the signature rendering/data path without changing the Founder/CEO signature.
 
-### 3. No client-side changes needed
-- `SendViaEmailDialog` already forwards `attachment_url` (proxied/branded URL) and `attachment_name` (e.g. `JBJ-PAA-LEASING-0001.pdf`) to the edge function.
-- `EnvelopeDetail` already passes `envelope.document_filename` and `envelope.document_url` into the dialog.
-- The PAA editor stays locked; no template or UI rework.
-
-### 4. Quick verification
-
-- Click **Send to client** on the existing locked PAA envelope (Omar) → confirm:
-  - Recipient sees `JBJ-PAA-LEASING-0001.pdf` as a real attachment in Gmail.
-  - Existing Download button still works.
-  - Test inbox `infoo.jane@gmail.com` (CC'd by default) also receives the file as an attachment.
-- Edge function logs show no Resend errors and no oversize fallback for normal PAA-sized PDFs.
-
-### Out of scope
-
-- No changes to the PAA template, layout, or signing UI (PAA editor remains locked as agreed).
-- No marketing / bulk email logic — this is a 1:1 transactional send triggered by the owner.
+5. **Deploy and verify**
+   - Redeploy the changed e-signature email functions.
+   - Verify the last failure cause: the test request sent only `attachment_name` and no `attachment_url`, so the backend had no PDF URL to fetch.
+   - Send/check a test path after changes to confirm the request includes the PDF URL and the function reports the attachment was included.
