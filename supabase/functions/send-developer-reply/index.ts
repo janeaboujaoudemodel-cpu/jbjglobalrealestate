@@ -98,7 +98,11 @@ Deno.serve(async (req) => {
         thread_id: ai.thread_id,
         user_id: auth.userId,
         direction: "outbound",
-        body: finalBody,
+        content: finalBody,
+        content_type: "text",
+        sender_identifier: auth.email ?? "owner",
+        sender_name: "Jane Bou Jaoude",
+        status: "sent",
         sent_at: new Date().toISOString(),
         metadata: { gmail_message_id: sendJson.id, subject },
       });

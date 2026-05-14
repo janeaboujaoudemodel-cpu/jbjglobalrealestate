@@ -40,7 +40,7 @@ const TYPE_TONE: Record<DeveloperRequestType, "gold" | "emerald" | "blue" | "amb
   license: "amber",
   registration: "blue",
   contract_signature: "purple",
-  other: "ink",
+  other: "gold",
 };
 
 export default function DeveloperActionsRail() {
