@@ -6,6 +6,7 @@
  * bytes for Resend's `attachments` array.
  */
 import { useRef, useState } from "react";
+import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 import { Loader2, Paperclip, X, FileText, Upload, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";

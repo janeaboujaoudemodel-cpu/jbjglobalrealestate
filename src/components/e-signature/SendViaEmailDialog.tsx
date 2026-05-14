@@ -38,6 +38,7 @@ import { EmailPreviewIframe } from "./EmailPreviewIframe";
 import { EmailAttachmentsPicker, type EmailAttachment } from "./EmailAttachmentsPicker";
 import { buildSenderSignatureHtml, escapeHtml } from "@/lib/email/buildEnvelopeEmailHtml";
 import { useEmailSignatures, renderSignatureHtml, type EmailSignature } from "@/hooks/useEmailSignatures";
+import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 
 const TEST_RECIPIENT = "infoo.jane@gmail.com";
 const DEFAULT_CC = "infoo.jane@gmail.com";
