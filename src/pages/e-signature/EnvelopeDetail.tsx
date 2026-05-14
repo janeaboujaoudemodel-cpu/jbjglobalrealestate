@@ -1068,9 +1068,48 @@ export default function EnvelopeDetail() {
           </CardContent>
         </Card>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <Card className="bg-[#F7F2EA] border-[#B89555]/30">
+          <CardContent className="p-3 flex items-center gap-2 flex-wrap">
+            <Button variant="outline" size="sm" onClick={() => setShowStudio((s) => !s)}>
+              {showStudio ? "Hide" : "Customize"} header &amp; footer
+            </Button>
+            {showStudio && (
+              <Button variant="gold" size="sm" onClick={handleSaveEdits} disabled={regenerate.isPending}>
+                {regenerate.isPending ? <Loader2 className="w-3.5 h-3.5 mr-1 animate-spin" /> : <Save className="w-3.5 h-3.5 mr-1" />}
+                Apply chrome &amp; re-render
+              </Button>
+            )}
+            <Button type="button" variant="outline" size="sm" className="ml-auto" onClick={() => setActivityOpen((v) => !v)}>
+              <Shield className="w-4 h-4 mr-2" /> {activityOpen ? "Hide" : "Activity log"}
+            </Button>
+          </CardContent>
+        </Card>
+        {showStudio && <TemplateChromeStudio value={chrome} onChange={setChrome} />}
+        {activityOpen && (
+          <Card className="bg-[#F7F2EA] border-[#B89555]/30">
+            <CardContent className="p-4 grid md:grid-cols-2 gap-3">
+              {auditLogs.map((log: any) => (
+                <div key={log.id} className="flex items-start gap-3 rounded-lg bg-white border border-[#B89555]/20 p-3">
+                  <div className="w-7 h-7 rounded-full bg-[#FDFBF7] border border-[#B89555]/30 flex items-center justify-center shrink-0">
+                    <Clock className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm text-[#1A1A1A]">{log.description}</p>
+                    <div className="flex items-center gap-3 text-xs text-[#1A1A1A]/60 mt-0.5 flex-wrap">
+                      <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{format(new Date(log.created_at), "MMM d, yyyy 'at' h:mm a")}</span>
+                      {log.ip_address && <span className="flex items-center gap-1"><Globe className="w-3 h-3" />{log.ip_address}</span>}
+                    </div>
+                  </div>
+                </div>
+              ))}
+              {!auditLogs.length && <p className="text-sm text-[#1A1A1A]/60 text-center py-4 md:col-span-2">No activity yet</p>}
+            </CardContent>
+          </Card>
+        )}
+
+        <div className="grid grid-cols-1 gap-6">
           {/* Document preview */}
-          <Card className="lg:col-span-2 bg-white border-[#B89555]/30 overflow-hidden">
+          <Card className="bg-white border-[#B89555]/30 overflow-hidden">
             <CardHeader className="bg-[#F7F2EA] border-b border-[#B89555]/30 py-3">
               <CardTitle className="text-sm flex items-center gap-2 text-[#1A1A1A]">
                 <FileText className="w-4 h-4" /> {editing ? "Live preview (unsaved edits)" : "Document"}
