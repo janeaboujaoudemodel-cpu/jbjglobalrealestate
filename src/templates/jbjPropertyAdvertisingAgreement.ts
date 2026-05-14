@@ -615,7 +615,10 @@ export function buildPAAHtml(
       as its:
     </div>
     <div data-chip-row="exclusivity" style="margin:6px 0 10px;display:flex;flex-wrap:wrap;align-items:center;gap:6px;">
-      ${chipRow("exclusivity", "Appointment Type", ["EXCLUSIVE", "NON EXCLUSIVE"], (o, v) => v.toLowerCase().includes(o.toLowerCase().split(" ")[0]))}
+      ${chipRow("exclusivity", "Appointment Type", ["EXCLUSIVE", "NON EXCLUSIVE"], (o, v) => {
+        const isNon = /^\s*non[\s_-]*exclusive/i.test(v || "");
+        return o === "NON EXCLUSIVE" ? isNon : (!!v && !isNon && /exclusive/i.test(v));
+      })}
       <span style="font-size:12px;opacity:.85;margin-left:6px;">Broker to list and advertise the above property for a period of:</span>
     </div>
     <div data-chip-row="listing_period" style="margin:6px 0 14px;display:flex;flex-wrap:wrap;align-items:center;gap:6px;">
