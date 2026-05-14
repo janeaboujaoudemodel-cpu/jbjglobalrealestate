@@ -8,6 +8,7 @@ import { getCorsHeaders, corsJsonResponse, corsErrorResponse } from "../_shared/
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { quotaGuardedFetch } from "../_shared/quotaGuardedFetch.ts";
 import { buildEnvelopeEmailHtml, buildSenderSignatureHtml, escapeHtml } from "../_shared/envelope-email-html.ts";
+import { fetchEmailAttachment } from "../_shared/fetchEmailAttachment.ts";
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
 const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
