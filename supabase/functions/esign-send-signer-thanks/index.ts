@@ -109,7 +109,7 @@ Deno.serve(async (req) => {
         description: `Thank-you email sent to ${recipient.name} <${recipient.email}>`,
         actor_email: recipient.email,
         actor_name: recipient.name,
-        metadata: { envelope_completed: isCompleted },
+        metadata: { envelope_status: envelope.status },
       });
     }
 
