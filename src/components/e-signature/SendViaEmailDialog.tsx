@@ -207,9 +207,43 @@ export function SendViaEmailDialog({
       if (data.signature_preset_id) setSelectedSigId(data.signature_preset_id);
       if (Array.isArray(data.default_to_emails) && data.default_to_emails.length) setTos(dedupeEmails(data.default_to_emails));
       if (Array.isArray(data.default_cc_emails)) setCcs(data.default_cc_emails.length ? dedupeEmails(data.default_cc_emails) : [DEFAULT_CC]);
+      // After loading the saved template, restore any newer in-progress draft
+      // so the owner never loses keystrokes between dialog opens / refreshes.
+      try {
+        const raw = localStorage.getItem(draftKey);
+        if (raw) {
+          const draft = JSON.parse(raw) as { subject?: string; bodyHtml?: string; ts?: number };
+          if (draft && (draft.subject || draft.bodyHtml)) {
+            if (draft.subject) setSubject(draft.subject);
+            if (draft.bodyHtml != null) setBodyHtml(stripSignature(draft.bodyHtml));
+            if (draft.ts) setDraftSavedAt(draft.ts);
+          }
+        }
+      } catch { /* ignore corrupt draft */ }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, recipientEmail, recipientName, defaultSubject, defaultBody, templateKey, attachmentName]);
+
+  // Auto-save subject + body on every keystroke (debounced) to localStorage,
+  // scoped per envelope. Cleared on successful send or explicit discard.
+  useEffect(() => {
+    if (!open) return;
+    const t = setTimeout(() => {
+      try {
+        const hasContent = subject.trim().length > 0 || bodyHtml.replace(/<[^>]+>/g, "").trim().length > 0;
+        if (!hasContent) return;
+        const ts = Date.now();
+        localStorage.setItem(draftKey, JSON.stringify({ subject, bodyHtml, ts }));
+        setDraftSavedAt(ts);
+      } catch { /* quota / disabled storage — ignore */ }
+    }, 400);
+    return () => clearTimeout(t);
+  }, [open, subject, bodyHtml, draftKey]);
+
+  const clearDraft = () => {
+    try { localStorage.removeItem(draftKey); } catch { /* ignore */ }
+    setDraftSavedAt(null);
+  };
 
   // Defensive cleanup — if any embedded signature slips into the body,
   // strip it. Real signature is rendered by the email template separately.
