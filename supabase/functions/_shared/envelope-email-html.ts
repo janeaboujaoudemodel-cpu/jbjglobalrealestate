@@ -54,11 +54,27 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
   const docNumber = args.docNumber ? escapeHtml(args.docNumber) : "";
   const year = args.year ?? new Date().getFullYear();
   const docusignUrl = (args.docusignUrl || "").trim();
-  void args.attachmentName;
+  const attachmentName = args.attachmentName ? escapeHtml(args.attachmentName) : "";
   void args.attachmentUrl;
 
   const ctaHref = docusignUrl || DOCUSIGN_WEB;
   const referenceLine = "";
+
+  const attachmentStrip = attachmentName ? `
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:22px 0 0;border-collapse:collapse;">
+          <tr><td style="border:1px solid #B89555;border-radius:4px;background:#F7F2EA;padding:14px 16px;">
+            <table role="presentation" style="width:100%;border-collapse:collapse;"><tr>
+              <td style="vertical-align:middle;width:36px;padding-right:12px;">
+                <div style="width:36px;height:44px;border:1px solid #B89555;background:#FDFBF7;border-radius:3px;text-align:center;font-family:Inter,Arial,sans-serif;font-size:9px;font-weight:700;color:#B89555;letter-spacing:.1em;line-height:44px;">PDF</div>
+              </td>
+              <td style="vertical-align:middle;font-family:Inter,Arial,sans-serif;">
+                <div style="font-size:10px;font-weight:700;letter-spacing:.22em;color:#B89555;text-transform:uppercase;">Attached to this email</div>
+                <div style="font-size:13px;font-weight:700;color:#1A1A1A;margin-top:3px;word-break:break-all;">${attachmentName}</div>
+                <div style="font-size:11px;color:#1A1A1A;opacity:.65;margin-top:2px;">Open the attachment in your mail app to view, sign, and reply.</div>
+              </td>
+            </tr></table>
+          </td></tr>
+        </table>` : "";
 
   const buttonStyle = (bg: string, fg: string) =>
     `display:block;width:100%;box-sizing:border-box;padding:16px 22px;font-family:Inter,Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:.22em;color:${fg};background:${bg};text-decoration:none;text-transform:uppercase;text-align:center;border:1px solid #B89555;border-radius:2px;`;
@@ -99,6 +115,7 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
     }
   </style></head>
 <body style="margin:0;padding:0;font-family:Inter,Arial,sans-serif;background:#FDFBF7;">
+  <div style="display:none !important;visibility:hidden;opacity:0;color:transparent;height:0;width:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;max-height:0;max-width:0;">${attachmentName ? `Your document ${attachmentName} is attached. ` : ""}Please review, sign and reply to this email.</div>
   <table role="presentation" style="width:100%;border-collapse:collapse;"><tr><td align="center" class="jbj-outer-pad" style="padding:40px 16px;">
     <table role="presentation" class="jbj-card" style="width:100%;max-width:640px;border-collapse:collapse;">
       <tr><td class="jbj-head-pad" style="background:#F7F2EA;border:1px solid #B89555;border-bottom:none;padding:18px 24px 0;">
@@ -120,6 +137,7 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
         <div style="color:#1A1A1A;line-height:1.7;font-size:14px;">${bodyHtml}</div>
         ${ctaBlock}
         ${signatureBlock}
+        ${attachmentStrip}
         <p style="margin:22px 0 0;color:#1A1A1A;opacity:.55;font-size:11px;line-height:1.55;">Replies to this email are routed to <a href="mailto:contact@jbj.ae" style="color:#B89555;text-decoration:none;font-weight:600;">CONTACT@JBJ.AE</a> and answered by our team.</p>
       </td></tr>
       <tr><td style="background:#F7F2EA;border-left:1px solid #B89555;border-right:1px solid #B89555;padding:0 0 14px;line-height:0;font-size:0;">
