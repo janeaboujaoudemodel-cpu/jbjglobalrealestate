@@ -48,7 +48,9 @@ const DISPLAY_REPLY_TO = "contact@jbj.ae";
  *  empty or matches a known legacy preset that we want to retire. */
 const NEW_DEFAULT_BODY_HTML =
   `<p>Dear {{client_name}},</p>` +
-  `<p>Please find the PDF attached to this email. Once you have reviewed it, kindly sign it using DocuSign at your earliest convenience and return it by replying to this email or this ticket with the signed copy attached.</p>` +
+  `<p>Please find the attached PDF document for your review.</p>` +
+  `<p>Once reviewed, kindly proceed with signing the document via DocuSign at your earliest convenience and return the signed copy by replying to this email.</p>` +
+  `<p>Should you require any clarification, please do not hesitate to contact me.</p>` +
   `<p>Thank you,</p>`;
 
 /** Phrases from the old template that must be scrubbed when hydrating from
