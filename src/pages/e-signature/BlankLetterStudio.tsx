@@ -89,6 +89,23 @@ export default function BlankLetterStudio() {
   const { data: signatures = [] } = useOwnerSignatureAssets("signature");
   const { data: stamps = [] } = useOwnerSignatureAssets("stamp");
   const saveAsset = useSaveSignatureAsset();
+  const { data: allTemplates = [] } = useEsignTemplates("all");
+  const createFromTemplate = useCreateEnvelopeFromTemplate();
+  const [switchingTemplate, setSwitchingTemplate] = useState<string | null>(null);
+
+  const handlePickTemplate = async (tpl: any) => {
+    if (tpl.key === BLANK_LETTER_TEMPLATE_KEY || tpl.key === "jbj-letterhead-blank") return;
+    setSwitchingTemplate(tpl.key);
+    try {
+      const env = await createFromTemplate.mutateAsync({ template: tpl });
+      toast.success(`Opened ${tpl.name}`);
+      navigate(`/owner/documents/forms/${env.id}`);
+    } catch (e: any) {
+      toast.error(e?.message || "Failed to open template");
+    } finally {
+      setSwitchingTemplate(null);
+    }
+  };
 
   const activeSignature: OwnerSignatureAsset | undefined = useMemo(
     () => signatures.find(s => s.id === activeSigId) || signatures.find(s => s.is_default) || signatures[0],
