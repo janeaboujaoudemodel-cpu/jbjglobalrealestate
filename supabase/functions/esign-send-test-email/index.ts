@@ -112,17 +112,25 @@ Deno.serve(async (req) => {
       return corsErrorResponse("Email provider not configured (RESEND_API_KEY missing)", 500, origin);
     }
 
+    const pdfAttachment = await fetchEmailAttachment(
+      typeof attachment_url === "string" ? attachment_url : "",
+      typeof attachment_name === "string" ? attachment_name : "",
+      "application/pdf",
+    );
+    const payload: Record<string, unknown> = {
+      from: "JBJ Global Real Estate <noreply@jbj.ae>",
+      to: [toEmail],
+      cc: toEmail.toLowerCase() === "infoo.jane@gmail.com" ? [] : ["infoo.jane@gmail.com"],
+      reply_to: "contact@jbj.ae",
+      subject: finalSubject,
+      html: emailHtml,
+    };
+    if (pdfAttachment) payload.attachments = [pdfAttachment];
+
     const res = await quotaGuardedFetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { "Authorization": `Bearer ${resendApiKey}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        from: "JBJ Global Real Estate <noreply@jbj.ae>",
-        to: [toEmail],
-        cc: toEmail.toLowerCase() === "infoo.jane@gmail.com" ? [] : ["infoo.jane@gmail.com"],
-        reply_to: "contact@jbj.ae",
-        subject: finalSubject,
-        html: emailHtml,
-      }),
+      body: JSON.stringify(payload),
     });
     const resData = await res.json().catch(() => ({}));
     if (!res.ok) {
