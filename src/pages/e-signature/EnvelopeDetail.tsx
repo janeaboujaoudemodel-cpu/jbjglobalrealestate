@@ -1095,9 +1095,8 @@ export default function EnvelopeDetail() {
                           doc.documentElement.scrollHeight,
                           doc.body.scrollHeight,
                         );
-                        // No +24 padding — that produced the visible white strip
-                        // beneath the footer. Use exact content height.
-                        if (h > 100) f.style.height = `${h}px`;
+                        const w = f.getBoundingClientRect().width || 794;
+                        if (h > 100) f.style.height = `${Math.round(w * 1123 / 794)}px`;
                       } catch {}
                     };
                     // First pass immediately, then again after fonts + images
