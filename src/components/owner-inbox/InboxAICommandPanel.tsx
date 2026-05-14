@@ -22,9 +22,10 @@ interface Props {
 }
 
 const SUGGESTIONS = [
-  "Find unanswered emails from this week",
-  "Mark all marketing as read",
+  "Find unanswered emails older than 3 days",
+  "Mark all marketing and newsletters as read",
   "Show finance messages only",
+  "Promote waiting threads older than 3 days to follow-up due",
   "Draft replies for selected",
 ];
 
