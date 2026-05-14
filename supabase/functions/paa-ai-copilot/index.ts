@@ -83,7 +83,11 @@ Deno.serve(async (req) => {
           updates = {};
           for (const [k, v] of Object.entries(parsed.updates)) {
             if (banned.test(k)) continue;
-            updates[k] = String(v);
+            let val = String(v);
+            if (k === "exclusivity") {
+              val = /^\s*non[\s_-]*exclusive/i.test(val) ? "NON EXCLUSIVE" : "EXCLUSIVE";
+            }
+            updates[k] = val;
           }
         }
       } catch {}
