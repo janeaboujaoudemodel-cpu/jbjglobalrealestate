@@ -332,6 +332,7 @@ export function SendViaEmailDialog({
           docusign_url: docusignUrl.trim() || undefined,
           attachment_name: attachmentName,
           attachment_url: signedAttachmentUrl,
+          extra_attachments: extraAttachments.map((a) => ({ name: a.name, url: a.url, content_type: a.contentType })),
           test_recipient: TEST_RECIPIENT,
         }),
       });
