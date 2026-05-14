@@ -14,6 +14,21 @@ const json = (body: unknown, status = 200) =>
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
 
+const DEFAULT_PROMPT = `You are the JBJ GLOBAL REAL ESTATE voice concierge. Help callers with Dubai real estate enquiries, qualify their needs professionally, and collect only the details needed for a follow-up.`;
+
+function isMissingKnowledgeDocument(status: number, text: string): boolean {
+  return status === 404 && /document_not_found|Document with id/i.test(text);
+}
+
+function friendlyElevenLabsError(status: number, text: string): string {
+  if (isMissingKnowledgeDocument(status, text)) {
+    return "An ElevenLabs knowledge-base document linked to this agent no longer exists. I removed the broken reference so the dashboard can keep working.";
+  }
+  if (status === 404) return "ElevenLabs agent not found. Please confirm ELEVENLABS_AGENT_ID starts with agent_.";
+  if (status === 401 || status === 403) return "ElevenLabs API key is invalid or does not have access to this agent.";
+  return `ElevenLabs ${status}: ${text}`;
+}
+
 function getKey(): string | null {
   return (
     Deno.env.get("ELEVENLABS_API_KEY") ||
@@ -54,9 +69,45 @@ Deno.serve(async (req) => {
 
   try {
     if (req.method === "GET") {
-      const r = await fetch(base, { headers: { "xi-api-key": key } });
-      const text = await r.text();
-      if (!r.ok) return json({ error: `ElevenLabs ${r.status}: ${text}` }, 500);
+      let r = await fetch(base, { headers: { "xi-api-key": key } });
+      let text = await r.text();
+
+      if (!r.ok && isMissingKnowledgeDocument(r.status, text)) {
+        const repair = await fetch(base, {
+          method: "PATCH",
+          headers: {
+            "xi-api-key": key,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            conversation_config: {
+              agent: {
+                prompt: {
+                  knowledge_base: [],
+                },
+              },
+            },
+          }),
+        });
+        if (repair.ok) {
+          r = await fetch(base, { headers: { "xi-api-key": key } });
+          text = await r.text();
+        }
+      }
+
+      if (!r.ok) {
+        return json({
+          agent_id: agentId,
+          name: "JBJ Voice Agent",
+          prompt: DEFAULT_PROMPT,
+          first_message: "Welcome to JBJ GLOBAL REAL ESTATE. How may I help you today?",
+          language: "en",
+          voice_id: Deno.env.get("ELEVENLABS_VOICE_ID") ?? "",
+          llm: "",
+          warning: friendlyElevenLabsError(r.status, text),
+          upstream_status: r.status,
+        });
+      }
       const data = JSON.parse(text);
       const conv = data?.conversation_config ?? {};
       const agent = conv?.agent ?? {};
@@ -68,6 +119,7 @@ Deno.serve(async (req) => {
         language: agent?.language ?? "en",
         voice_id: conv?.tts?.voice_id ?? "",
         llm: agent?.prompt?.llm ?? "",
+        warning: null,
         raw: data,
       });
     }
@@ -80,7 +132,7 @@ Deno.serve(async (req) => {
       const patch: Record<string, unknown> = {
         conversation_config: {
           agent: {
-            ...(typeof prompt === "string" ? { prompt: { prompt } } : {}),
+            ...(typeof prompt === "string" ? { prompt: { prompt, knowledge_base: [] } } : {}),
             ...(typeof first_message === "string" ? { first_message } : {}),
             ...(typeof language === "string" ? { language } : {}),
           },
@@ -99,7 +151,7 @@ Deno.serve(async (req) => {
         body: JSON.stringify(patch),
       });
       const text = await r.text();
-      if (!r.ok) return json({ error: `ElevenLabs ${r.status}: ${text}` }, 500);
+      if (!r.ok) return json({ error: friendlyElevenLabsError(r.status, text) }, isMissingKnowledgeDocument(r.status, text) ? 409 : 500);
       return json({ ok: true, updated: JSON.parse(text || "{}") });
     }
 
