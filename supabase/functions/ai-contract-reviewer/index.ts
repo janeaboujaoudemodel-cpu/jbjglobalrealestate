@@ -167,7 +167,7 @@ Provide review in this JSON format:
   "legalDisclaimer": "This AI analysis is for informational purposes only. Please consult with a licensed legal professional in the UAE before signing any binding agreements."
 }`;
 
-    const aiResponse = await callLovableAI(systemPrompt, userPrompt, { model: "google/gemini-2.5-pro" });
+    const aiResponse = await callLovableAI({ systemPrompt, userPrompt, model: "google/gemini-2.5-pro" });
     
     let review;
     try {
