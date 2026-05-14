@@ -1084,10 +1084,7 @@ export default function EnvelopeDetail() {
                   title="Document preview"
                   srcDoc={previewSrcDoc}
                   className="w-full bg-white block"
-                  // Start at 0 so we don't paint a giant blank area before the
-                  // content loads. Final height is set precisely by onLoad +
-                  // ResizeObserver below.
-                  style={{ height: "600px", border: 0, display: "block" }}
+                  style={{ aspectRatio: "794 / 1123", height: "auto", minHeight: 0, border: 0, display: "block" }}
                   onLoad={(e) => {
                     const f = e.currentTarget as HTMLIFrameElement;
                     const doc = f.contentDocument;
