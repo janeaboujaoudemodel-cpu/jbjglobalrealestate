@@ -75,7 +75,47 @@ Deno.serve(async (req) => {
 
     const baseUrl = Deno.env.get("SITE_URL") || "https://jbj.ae";
 
-    for (const recipient of recipients) {
+    // Hoist attachment fetches OUT of the per-recipient loop — same bytes for all.
+    const attachmentUrlStr = typeof attachment_url === "string" ? attachment_url : "";
+    const attachmentNameStr = typeof attachment_name === "string" ? attachment_name : "";
+    const [primaryAttachment, ...extras] = await Promise.all([
+      attachmentUrlStr && attachmentNameStr
+        ? fetchEmailAttachment(attachmentUrlStr, attachmentNameStr, "application/pdf")
+        : Promise.resolve(null),
+      ...(Array.isArray(extra_attachments) ? extra_attachments : []).map((e: any) =>
+        fetchEmailAttachment(
+          String(e?.url || ""),
+          String(e?.name || ""),
+          String(e?.content_type || "application/octet-stream"),
+        ),
+      ),
+    ]);
+    if (attachmentUrlStr && attachmentNameStr && !primaryAttachment) {
+      return corsErrorResponse(
+        `Could not attach ${attachmentNameStr} — the PDF could not be fetched from storage. Re-export the document and try again.`,
+        502,
+        origin,
+      );
+    }
+    const sharedAttachments = [
+      ...(primaryAttachment ? [primaryAttachment] : []),
+      ...extras.filter(Boolean),
+    ];
+
+    // Persist cc/bcc on the envelope metadata once (was per-call from the dialog).
+    const incomingCcsTop: string[] = Array.isArray(ccOverride) ? ccOverride : [];
+    const incomingBccsTop: string[] = Array.isArray(bccOverride) ? bccOverride : [];
+    if (incomingCcsTop.length || incomingBccsTop.length) {
+      const meta = { ...((envelope.metadata as any) || {}) };
+      if (incomingCcsTop.length) meta.cc_emails = incomingCcsTop;
+      if (incomingBccsTop.length) meta.bcc_emails = incomingBccsTop;
+      // fire-and-forget — failure here must not block the email
+      supabase.from("esign_envelopes").update({ metadata: meta }).eq("id", envelope.id).then(() => {});
+    }
+
+    const failures: Array<{ recipient_id: string; email: string; error: string }> = [];
+
+    await Promise.all(recipients.map(async (recipient: any) => {
       const signingUrl = `${baseUrl}/sign/${recipient.signing_token}`;
       const docNumber = (envelope.metadata as any)?.doc_number || "";
       const fieldVals = (envelope.template_field_values as any) || {};
