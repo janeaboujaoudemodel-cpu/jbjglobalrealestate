@@ -109,6 +109,7 @@ export default function OwnerInbox() {
     refetchThreads,
     updateThreadStatus,
     markAsRead,
+    bulkUpdateAsync,
     isUpdating,
   } = useOwnerInbox(filters);
   const { triage } = useCommAITriage();
