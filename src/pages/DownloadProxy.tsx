@@ -10,7 +10,7 @@
  *   n  optional filename to suggest in the download dialog
  */
 import { useEffect, useState } from "react";
-import { Loader2, AlertTriangle, FileText } from "lucide-react";
+import { Loader2, AlertTriangle, Download } from "lucide-react";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 
 function decodeUrlParam(s: string | null): string {
