@@ -1441,6 +1441,21 @@ export default function EnvelopeDetail() {
           senderTitle={(envelope as any).sender_title || undefined}
           attachmentName={envelope.document_filename || undefined}
           attachmentUrl={envelope.document_url || undefined}
+          onBeforeSend={async () => {
+            // Persist any in-progress edits first so the regenerated PDF
+            // matches what is currently visible (e.g. NON EXCLUSIVE).
+            if (dirty) { await ensureSavedBeforeDownload(); }
+            // Always re-pull the freshest envelope row.
+            const { data } = await supabase
+              .from("esign_envelopes")
+              .select("document_url, document_filename")
+              .eq("id", envelope.id)
+              .maybeSingle();
+            return {
+              url: (data?.document_url as string) || envelope.document_url || null,
+              filename: (data?.document_filename as string) || envelope.document_filename || null,
+            };
+          }}
           onSent={() => { refetch(); qc.invalidateQueries({ queryKey: ["esign-envelopes"] }); qc.invalidateQueries({ queryKey: ["esign_envelopes_hub"] }); }}
         />
       )}
