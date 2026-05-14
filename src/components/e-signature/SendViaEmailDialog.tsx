@@ -562,7 +562,7 @@ export function SendViaEmailDialog({
                   <strong className="truncate flex-1">{attachmentName}</strong>
                   {attachmentUrl && (
                     <a
-                      href={attachmentUrl}
+                      href={maybeProxyStorageUrl(attachmentUrl, { filename: attachmentName, disposition: 'inline' })}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="shrink-0 px-1.5 py-0.5 rounded hover:bg-[#EFE6D6] text-[#1A1A1A]/70"

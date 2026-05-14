@@ -102,6 +102,11 @@ Deno.serve(async (req) => {
     const uniqueMarker = `<span style="display:none;visibility:hidden;opacity:0;color:transparent;font-size:0;line-height:0;mso-hide:all;">[ref:${crypto.randomUUID()}]</span>`;
     const bodyHtmlWithMarker = uniqueMarker + finalBodyHtml;
 
+    const baseUrl = Deno.env.get("SITE_URL") || "https://jbj.ae";
+    const fallbackSignUrl = primary?.signing_token
+      ? `${baseUrl}/sign/${primary.signing_token}`
+      : `${baseUrl}/sign/${envelope.id}`;
+
     const emailHtml = buildEnvelopeEmailHtml({
       subject: finalSubject,
       bodyHtml: bodyHtmlWithMarker,
@@ -110,6 +115,7 @@ Deno.serve(async (req) => {
       senderName,
       senderTitle,
       docusignUrl: typeof docusign_url === "string" ? docusign_url.trim() : "",
+      fallbackSignUrl,
       attachmentName: typeof attachment_name === "string" ? attachment_name : undefined,
       attachmentUrl: typeof attachment_url === "string" ? attachment_url : undefined,
     });
