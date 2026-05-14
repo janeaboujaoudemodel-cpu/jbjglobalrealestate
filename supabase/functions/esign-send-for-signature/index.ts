@@ -116,9 +116,12 @@ Deno.serve(async (req) => {
           .replace(SIG_SENTINEL, sigHtml);
       }
 
+      const uniqueMarker = `<span style="display:none;visibility:hidden;opacity:0;color:transparent;font-size:0;line-height:0;mso-hide:all;">[ref:${crypto.randomUUID()}]</span>`;
+      const bodyHtmlWithMarker = uniqueMarker + finalBodyHtml;
+
       const emailHtml = buildEnvelopeEmailHtml({
         subject: finalSubject,
-        bodyHtml: finalBodyHtml,
+        bodyHtml: bodyHtmlWithMarker,
         signatureHtml: typeof signature_html === "string" && signature_html.trim() ? signature_html : sigHtml,
         docNumber,
         senderName,
@@ -127,6 +130,19 @@ Deno.serve(async (req) => {
         attachmentName: typeof attachment_name === "string" ? attachment_name : undefined,
         attachmentUrl: typeof attachment_url === "string" ? attachment_url : undefined,
       });
+
+      const plainText = [
+        finalBodyHtml.replace(/<style[\s\S]*?<\/style>/gi, "")
+                     .replace(/<[^>]+>/g, " ")
+                     .replace(/\s+/g, " ")
+                     .trim(),
+        "",
+        typeof attachment_name === "string" && attachment_name
+          ? `Attached: ${attachment_name}`
+          : "",
+        "",
+        "— JBJ GLOBAL REAL ESTATE · contact@jbj.ae · www.jbj.ae",
+      ].filter(Boolean).join("\n");
 
       // Build the To list: the persisted recipient + any extra addresses
       // the owner picked in the dialog (deduped, recipient first).
@@ -158,9 +174,6 @@ Deno.serve(async (req) => {
 
       if (channelList.includes("email") && resendApiKey && allTos.length) {
         try {
-          // Attach the generated PDF (e.g. JBJ-PAA-LEASING-0001.pdf) so the
-          // recipient gets the file directly in their inbox in addition to
-          // the in-email "Download your document" button.
           const attachmentUrlStr = typeof attachment_url === "string" ? attachment_url : "";
           const attachmentNameStr = typeof attachment_name === "string" ? attachment_name : "";
           const pdfAttachment = await fetchEmailAttachment(
@@ -195,6 +208,8 @@ Deno.serve(async (req) => {
             reply_to: "contact@jbj.ae",
             subject: finalSubject,
             html: emailHtml,
+            text: plainText,
+            headers: { "X-Entity-Ref-ID": crypto.randomUUID() },
           };
           if (allAttachments.length) payload.attachments = allAttachments;
           const res = await quotaGuardedFetch("https://api.resend.com/emails", {
