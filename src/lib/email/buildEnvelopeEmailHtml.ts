@@ -127,6 +127,7 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
     }
   </style></head>
 <body style="margin:0;padding:0;font-family:Inter,Arial,sans-serif;background:#FDFBF7;">
+  <div style="display:none !important;visibility:hidden;opacity:0;color:transparent;height:0;width:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;max-height:0;max-width:0;">${attachmentName ? `Your document ${attachmentName} is attached. ` : ""}Please review, sign and reply to this email.</div>
   <table role="presentation" style="width:100%;border-collapse:collapse;"><tr><td align="center" class="jbj-outer-pad" style="padding:40px 16px;">
     <table role="presentation" class="jbj-card" style="width:100%;max-width:640px;border-collapse:collapse;">
       <tr><td class="jbj-head-pad" style="background:#F7F2EA;border:1px solid #B89555;border-bottom:none;padding:18px 24px 0;">
