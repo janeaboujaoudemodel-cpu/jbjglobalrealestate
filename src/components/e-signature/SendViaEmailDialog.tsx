@@ -339,7 +339,7 @@ export function SendViaEmailDialog({
     try {
       const session = await supabase.auth.getSession();
       const token = session.data.session?.access_token;
-      const signedAttachmentUrl = await resolveAttachmentUrl(attachmentUrl);
+      const signedAttachmentUrl = autoAttachmentRemoved ? undefined : await resolveAttachmentUrl(attachmentUrl);
       // NOTE: edits to subject/body are sent to the recipient as-is for THIS email
       // only. They are NOT saved as the new standard template — use
       // "Save as standard template" to persist for future sends.
@@ -355,7 +355,7 @@ export function SendViaEmailDialog({
           interpolated_body_html: bodyHtml,
           signature_html: selectedSigHtml,
           docusign_url: docusignUrl.trim() || undefined,
-          attachment_name: attachmentName,
+          attachment_name: autoAttachmentRemoved ? undefined : attachmentName,
           attachment_url: signedAttachmentUrl,
           extra_attachments: extraAttachments.map((a) => ({ name: a.name, url: a.url, content_type: a.contentType })),
         }),
