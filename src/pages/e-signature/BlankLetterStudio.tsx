@@ -286,17 +286,17 @@ export default function BlankLetterStudio() {
       <div className="max-w-7xl mx-auto">
         <div className="mb-6 flex items-center justify-between flex-wrap gap-3">
           <div className="flex items-center gap-3">
-            <Button variant="ghost" onClick={() => navigate("/e-signature")} className="text-[#1A1A1A]">
+            <Button variant="ghost" onClick={() => navigate("/owner/documents/forms")} className="text-[#1A1A1A]">
               <ArrowLeft className="w-4 h-4 mr-1.5" /> Back
             </Button>
             <div>
-              <h1 className="text-2xl font-bold tracking-tight text-[#1A1A1A]">Blank Letter Studio</h1>
-              <p className="text-sm text-[#1A1A1A]/70">AI-drafted letters on JBJ letterhead · {docNumber}</p>
+              <h1 className="text-2xl font-bold tracking-tight text-[#1A1A1A]">Standard JBJ Letterhead</h1>
+              <p className="text-sm text-[#1A1A1A]/70">Branded A4 letterhead · {docNumber}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <Button variant="outline" onClick={() => navigate("/owner/documents/forms")}>
-              <FileSignature className="w-4 h-4 mr-2" /> Forms & Agreements
+              <FileSignature className="w-4 h-4 mr-2" /> Documents & Forms
             </Button>
             <Button variant="outline" onClick={handleSave} disabled={saving}>
               {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
