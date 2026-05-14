@@ -65,18 +65,19 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
   const stepLabel = (n: number, label: string) =>
     `<div style="font-family:Inter,Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:.28em;color:#B89555;text-transform:uppercase;text-align:center;margin:0 0 8px;">Step ${n} · ${label}</div>`;
 
-  // No icon, no glyph — premium text-only CTA per owner request.
+  const documentIcon = `<span style="display:inline-block;width:18px;height:18px;vertical-align:middle;margin-right:10px;"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 3.75h6.25L18 8.5v11.75H7V3.75Z" stroke="#1A1A1A" stroke-width="1.6"/><path d="M13 4v5h5" stroke="#B89555" stroke-width="1.6"/><path d="M9.5 13h5M9.5 16h5" stroke="#1A1A1A" stroke-width="1.35" stroke-linecap="round"/></svg></span>`;
+
   const downloadBlock = hasDownload
     ? `
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:380px;margin:24px auto 0;border-collapse:collapse;">
           <tr><td style="padding-bottom:8px;">${stepLabel(1, "Download your agreement")}</td></tr>
           <tr><td>
             <a href="${escapeHtml(attachmentUrl)}" target="_blank" rel="noopener" style="${buttonStyle("#F7F2EA", "#1A1A1A")}">
-              Click here to download your document
+              ${documentIcon}<span style="display:inline-block;vertical-align:middle;">Click here to download your document</span>
             </a>
           </td></tr>
           <tr><td align="center" style="padding-top:8px;font-family:Inter,Arial,sans-serif;font-size:10.5px;color:#1A1A1A;opacity:.6;line-height:1.5;">
-            Also attached to this email · <strong style="font-weight:600;">${attachmentName}</strong>
+            Secure PDF · <strong style="font-weight:600;">${attachmentName}</strong>
           </td></tr>
         </table>`
     : "";

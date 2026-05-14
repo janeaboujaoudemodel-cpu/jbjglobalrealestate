@@ -157,30 +157,6 @@ Deno.serve(async (req) => {
 
       if (channelList.includes("email") && resendApiKey && allTos.length) {
         try {
-          // Optionally attach the PDF when an attachment_url was supplied.
-          // Resend supports `path` for remote files. Cap at 10 MB to stay under
-          // Resend's per-message limit; on size failure, fall back to link-only.
-          let attachments: Array<{ filename: string; path: string }> | undefined;
-          const attachUrl = typeof attachment_url === "string" ? attachment_url.trim() : "";
-          const attachFilename =
-            (typeof attachment_name === "string" && attachment_name.trim()) ||
-            `${envelope.name || "envelope"}.pdf`;
-          if (attachUrl) {
-            try {
-              const head = await fetch(attachUrl, { method: "HEAD" });
-              const lenStr = head.headers.get("content-length");
-              const len = lenStr ? Number(lenStr) : NaN;
-              if (Number.isFinite(len) && len > 10 * 1024 * 1024) {
-                console.warn(`Skipping PDF attachment — too large (${len} bytes)`);
-              } else {
-                attachments = [{ filename: attachFilename, path: attachUrl }];
-              }
-            } catch (headErr) {
-              console.warn("HEAD on attachment_url failed; attaching anyway:", headErr);
-              attachments = [{ filename: attachFilename, path: attachUrl }];
-            }
-          }
-
           const res = await quotaGuardedFetch("https://api.resend.com/emails", {
             method: "POST",
             headers: { "Authorization": `Bearer ${resendApiKey}`, "Content-Type": "application/json" },
@@ -192,7 +168,6 @@ Deno.serve(async (req) => {
               reply_to: "contact@jbj.ae",
               subject: finalSubject,
               html: emailHtml,
-              ...(attachments ? { attachments } : {}),
             }),
           });
           const resData = await res.json();

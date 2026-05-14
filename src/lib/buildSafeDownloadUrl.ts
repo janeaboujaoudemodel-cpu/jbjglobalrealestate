@@ -10,7 +10,7 @@ function toBase64Url(input: string): string {
   return b64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
 
-const BRAND_ORIGIN = "https://www.jbj.ae";
+const BRAND_ORIGIN = "https://jbj.ae";
 
 /**
  * @param signedUrl  The actual file URL (Supabase signed URL, etc.)

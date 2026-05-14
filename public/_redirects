@@ -7,5 +7,9 @@
 /og-image.jpg  /og-image.jpg  200
 /manifest.webmanifest  /manifest.webmanifest  200
 
+# Branded file proxy — keeps document email downloads on jbj.ae instead of
+# exposing the raw backend storage/function host that desktop blockers target.
+/api/download-file  https://mdafrewypkkrildjgtey.supabase.co/functions/v1/download-file  200
+
 # SPA fallback - must be LAST
 /*  /index.html  200

@@ -225,7 +225,9 @@ export function SendViaEmailDialog({
 
   const canSend = tos.length > 0 && tos.every(isValidEmail) && subject.trim().length > 0;
 
-  // base64url encoder for safely embedding the signed URL into a /d?u= param.
+  // Wrap a signed storage URL into the branded /d page. That page fetches via
+  // same-domain /api/download-file with the public key, so email clients never
+  // expose or open the raw backend storage/function host directly.
   const b64url = (s: string): string => {
     try {
       const b64 = btoa(unescape(encodeURIComponent(s)));
@@ -235,14 +237,9 @@ export function SendViaEmailDialog({
     }
   };
 
-  // Wrap a signed Supabase URL into our branded /d?u=...&n=... landing page so
-  // the visible link in the email stays on jbj.ae (no ad-blocker block, no
-  // "From: mdafrewy...supabase.co" mobile blank-page experience).
   const wrapAsBrandedDownload = (signedUrl: string, filename?: string): string => {
-    const origin = PUBLIC_DOMAIN;
-    const u = b64url(signedUrl);
     const n = filename ? `&n=${encodeURIComponent(filename)}` : "";
-    return `${origin}/d?u=${u}${n}`;
+    return `${PUBLIC_DOMAIN}/d?u=${b64url(signedUrl)}${n}`;
   };
 
   // Convert a Supabase storage URL into a 7-day signed URL, then wrap it in
