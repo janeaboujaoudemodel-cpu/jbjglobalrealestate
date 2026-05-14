@@ -143,23 +143,38 @@ export default function OwnerInbox() {
     }
   }, [threads, selectedThread]);
 
-  // No automatic full-inbox sync on mount — that was making the page flicker
-  // and re-render every time channels/threads invalidated. The user can click
-  // Refresh to pull new mail; we only run a one-shot Gmail autoconnect (cheap)
-  // to make sure the channel row exists.
+  // One-shot Gmail autoconnect on mount, plus background polling every 60s
+  // for the active channel scope. Realtime postgres_changes also refetches
+  // immediately when new rows arrive — polling is the safety net.
   useEffect(() => {
     let cancelled = false;
+    const runSync = async (scopeChannelId?: string) => {
+      try {
+        const body: { channel_id?: string } = scopeChannelId && scopeChannelId !== 'all'
+          ? { channel_id: scopeChannelId }
+          : {};
+        await supabase.functions.invoke('comm-inbound-sync', { body });
+      } catch (e) {
+        console.warn('[inbox] background sync skipped:', e);
+      }
+    };
     (async () => {
       try {
-        await supabase.functions.invoke("comm-gmail-autoconnect", { body: {} });
+        await supabase.functions.invoke('comm-gmail-autoconnect', { body: {} });
       } catch (e) {
-        console.warn("[inbox] gmail autoconnect skipped:", e);
+        console.warn('[inbox] gmail autoconnect skipped:', e);
       }
-      if (!cancelled) refetchThreads();
+      if (cancelled) return;
+      // First sync ~1.5s after mount (don't block initial paint)
+      setTimeout(() => { if (!cancelled) runSync(filters.channelId); }, 1500);
+      refetchThreads();
     })();
-    return () => { cancelled = true; };
+    const poll = setInterval(() => {
+      if (!cancelled) runSync(filters.channelId);
+    }, 60_000);
+    return () => { cancelled = true; clearInterval(poll); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [filters.channelId]);
 
 
   const handleThreadSelect = (thread: CommThread) => {
