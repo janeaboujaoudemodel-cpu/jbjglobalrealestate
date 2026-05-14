@@ -103,7 +103,7 @@ const CRMTasks            = lazy(() => import("@/pages/CRMTasks"));
 const CRMCalendar         = lazy(() => import("@/pages/CRMCalendar"));
 const CRMNotes            = lazy(() => import("@/pages/CRMNotes"));
 const OwnerInbox          = lazy(() => import("@/pages/OwnerInbox"));
-const EmailCenter         = lazy(() => import("@/pages/owner/crm/EmailCenter"));
+// EmailCenter retired — redirected into Unified Inbox (/owner/inbox).
 const ContractVault       = lazy(() => import("@/pages/owner/contracts/ContractVault"));
 const AutomationRules     = lazy(() => import("@/components/crm/AutomationRules"));
 const CRMEnhancedDashboard= lazy(() => import("@/components/crm/CRMEnhancedDashboard"));
