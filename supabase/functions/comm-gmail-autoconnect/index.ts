@@ -74,13 +74,16 @@ Deno.serve(async (req) => {
       const email = await getGmailAddress(LOVABLE_API_KEY, key);
       if (!email) continue;
 
-      const { data: existing } = await admin
+      // Match case-insensitively to avoid duplicates from casing differences.
+      const { data: existingRows } = await admin
         .from("owner_comm_channels")
         .select("id")
         .eq("user_id", user.id)
         .eq("channel_type", "email_gmail")
-        .eq("identifier", email)
-        .maybeSingle();
+        .ilike("identifier", email)
+        .order("created_at", { ascending: true })
+        .limit(1);
+      const existing = existingRows?.[0] ?? null;
 
       if (existing?.id) {
         // Re-activate in case it was disabled and clear errors.
