@@ -115,7 +115,7 @@ export function EmailAttachmentsPicker({ value, onChange, disabled }: Props) {
           }}
         />
         <p className="text-[10px] text-[#1A1A1A]/60 mt-1.5">
-          Up to 15 MB each. The signed PDF is already attached automatically — add anything extra here.
+          Up to 15 MB each. Remove the document below to skip the auto-attached PDF, or upload another to replace it.
         </p>
 
         {!!value.length && (
@@ -127,7 +127,19 @@ export function EmailAttachmentsPicker({ value, onChange, disabled }: Props) {
               >
                 <FileText className="w-3.5 h-3.5 shrink-0 text-[#1A1A1A]/60" />
                 <span className="truncate flex-1">{a.name}</span>
-                <span className="text-[10px] text-[#1A1A1A]/50 shrink-0">{formatSize(a.size)}</span>
+                <span className="text-[10px] text-[#1A1A1A]/50 shrink-0">{a.size ? formatSize(a.size) : "PDF"}</span>
+                {a.url && (
+                  <a
+                    href={a.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="shrink-0 p-0.5 hover:bg-[#EFE6D6] rounded"
+                    title={`Preview ${a.name}`}
+                    aria-label={`Preview ${a.name}`}
+                  >
+                    <Eye className="w-3.5 h-3.5 text-[#1A1A1A]/60" />
+                  </a>
+                )}
                 <button
                   type="button"
                   onClick={() => removeAt(i)}
