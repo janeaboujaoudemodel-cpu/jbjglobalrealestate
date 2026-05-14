@@ -61,12 +61,9 @@ const KanbanBoard = lazy(() => import("@/pages/KanbanBoard"));
 const Whiteboard = lazy(() => import("@/pages/Whiteboard"));
 const MindMap = lazy(() => import("@/pages/MindMap"));
 const FormBuilder = lazy(() => import("@/pages/FormBuilder"));
-const ESignatureDashboard = lazy(() => import("@/pages/e-signature/ESignatureDashboard"));
-const CreateEnvelope = lazy(() => import("@/pages/e-signature/CreateEnvelope"));
+// E-Signature dashboards moved into the unified hub at /owner/documents/forms.
+// Only EnvelopeDetail remains here for legacy /e-signature/:id deep links.
 const EnvelopeDetail = lazy(() => import("@/pages/e-signature/EnvelopeDetail"));
-const SignatureStudio = lazy(() => import("@/pages/e-signature/SignatureStudio"));
-const BlankLetterStudio = lazy(() => import("@/pages/e-signature/BlankLetterStudio"));
-const ContractReview = lazy(() => import("@/pages/e-signature/ContractReview"));
 const Automations = lazy(() => import("@/pages/Automations"));
 const AlertsDemo = lazy(() => import("@/pages/AlertsDemo"));
 const ExclusiveDocuments = lazy(() => import("@/pages/owner/ExclusiveDocuments"));
@@ -164,13 +161,13 @@ export const AdminRoutes = () => (
     <Route path="/owner/exclusive-documents" element={<OwnerGuard><ExclusiveDocuments /></OwnerGuard>} />
     <Route path="/owner/ai-tools-control" element={<OwnerGuard><AIToolsControlPanel /></OwnerGuard>} />
 
-    {/* ── E-Signature ── */}
-    <Route path="/e-signature" element={<OwnerGuard><ESignatureDashboard /></OwnerGuard>} />
-    <Route path="/e-signature/create" element={<OwnerGuard><CreateEnvelope /></OwnerGuard>} />
+    {/* ── E-Signature (legacy → unified Documents & Agreements hub) ── */}
+    <Route path="/e-signature" element={<Navigate to="/owner/documents/forms" replace />} />
+    <Route path="/e-signature/create" element={<Navigate to="/owner/documents/forms/create" replace />} />
+    <Route path="/e-signature/signature-studio" element={<Navigate to="/owner/documents/forms/signature-studio" replace />} />
+    <Route path="/e-signature/blank-letter" element={<Navigate to="/owner/documents/forms/blank-letter" replace />} />
+    <Route path="/e-signature/contract-review" element={<Navigate to="/owner/documents/forms/contract-review" replace />} />
     <Route path="/e-signature/:id" element={<OwnerGuard><EnvelopeDetail /></OwnerGuard>} />
-    <Route path="/e-signature/signature-studio" element={<OwnerGuard><SignatureStudio /></OwnerGuard>} />
-    <Route path="/e-signature/blank-letter" element={<OwnerGuard><BlankLetterStudio /></OwnerGuard>} />
-    <Route path="/e-signature/contract-review" element={<OwnerGuard><ContractReview /></OwnerGuard>} />
 
     {/* ── Email/Unsubscribe ── */}
     <Route path="/unsubscribe" element={
