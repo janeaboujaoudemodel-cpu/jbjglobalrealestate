@@ -56,10 +56,21 @@ export function EmailAttachmentsPicker({ value, onChange, disabled }: Props) {
           toast.error(`Failed to upload ${f.name}`);
           continue;
         }
-        const { data: urlData } = supabase.storage.from("assistant-files").getPublicUrl(path);
+        // The `assistant-files` bucket is private, so getPublicUrl returns
+        // a URL that 400s. Use a 7-day signed URL so the edge function can
+        // actually fetch the bytes and attach them to the email.
+        const { data: signed, error: signErr } = await supabase
+          .storage
+          .from("assistant-files")
+          .createSignedUrl(path, 60 * 60 * 24 * 7);
+        if (signErr || !signed?.signedUrl) {
+          console.error("attachment sign failed", signErr);
+          toast.error(`Failed to prepare ${f.name} for sending`);
+          continue;
+        }
         next.push({
           name: f.name,
-          url: urlData.publicUrl,
+          url: signed.signedUrl,
           contentType: f.type || "application/octet-stream",
           size: f.size,
         });
