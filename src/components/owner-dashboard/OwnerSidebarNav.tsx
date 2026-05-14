@@ -103,7 +103,6 @@ const NAV_SECTIONS: NavSection[] = [
     label: "COMMUNICATION",
     items: [
       { label: "Messages / Inbox", icon: MessageSquare, path: "/owner/inbox" },
-      { label: "Email Client", icon: Mail, path: "/owner/email-client" },
       { label: "Team Chat", icon: MessagesSquare, path: "/owner/team-chat" },
     ],
   },
