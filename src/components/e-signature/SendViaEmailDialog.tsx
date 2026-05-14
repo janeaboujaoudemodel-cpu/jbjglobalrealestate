@@ -200,6 +200,7 @@ export function SendViaEmailDialog({
     setCcs([DEFAULT_CC]);
     setSubject(normalizeSubject(defaultSubject, attachmentName || "Document"));
     setDocusignUrl("");
+    setExtraAttachments([]);
     setBodyHtml(
       stripSignature(
         legacyBodyToHtml(stripInlineSignature(defaultBody), {
