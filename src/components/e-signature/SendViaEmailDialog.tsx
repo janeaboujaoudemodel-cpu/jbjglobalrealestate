@@ -35,6 +35,7 @@ import { SUPABASE_URL, PUBLIC_DOMAIN } from "@/config/backend";
 import { EmailRecipientChips, isValidEmail } from "./EmailRecipientChips";
 import { EmailBodyEditor } from "./EmailBodyEditor";
 import { EmailPreviewIframe } from "./EmailPreviewIframe";
+import { EmailAttachmentsPicker, type EmailAttachment } from "./EmailAttachmentsPicker";
 import { buildSenderSignatureHtml, escapeHtml } from "@/lib/email/buildEnvelopeEmailHtml";
 import { useEmailSignatures, renderSignatureHtml, type EmailSignature } from "@/hooks/useEmailSignatures";
 
