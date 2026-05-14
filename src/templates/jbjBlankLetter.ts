@@ -94,17 +94,17 @@ export function buildBlankLetterHtml(
   const hasText = (v.body_text || "").trim().length > 0;
   const hasLegacyHtml = !hasText && (v.body_html || "").trim().length > 0;
   const bodyRendered = hasText
-    ? `<div style="white-space:pre-wrap;font-family:Inter,Arial,sans-serif;font-size:12px;line-height:1.65;color:${INK};">${esc(v.body_text!)}</div>`
+    ? `<div style="white-space:pre-wrap;font-family:Inter,Arial,sans-serif;font-size:12.5px;line-height:1.75;color:${INK};">${esc(v.body_text!)}</div>`
     : hasLegacyHtml
-      ? sanitizeHtml(v.body_html!)
+      ? `<div style="font-family:Inter,Arial,sans-serif;font-size:12.5px;line-height:1.75;color:${INK};">${sanitizeHtml(v.body_html!)}</div>`
       : (opts.renderMode === "final"
           ? ""
           : `<p style="opacity:.45;font-style:italic;">Type the letter body here…</p>`);
 
   const signerName = v.signer_name || "";
-  const signerTitle = v.signer_title || "";
+  const signerTitle = v.signer_title || "Founder & CEO";
 
-  // Optional placed assets
+  // Optional placed assets — when the user drags signature/stamp on the canvas
   const sigUrl = opts.ownerSignatureUrl || "";
   const stampUrl = opts.ownerStampUrl || "";
   const sigX = parseFloat(v.placed_signature_x || "");
@@ -113,23 +113,26 @@ export function buildBlankLetterHtml(
   const stY = parseFloat(v.placed_stamp_y || "");
 
   const placedSignature = sigUrl && isFinite(sigX) && isFinite(sigY)
-    ? `<img src="${esc(sigUrl)}" alt="Signature" crossorigin="anonymous" style="position:absolute;left:${sigX}%;top:${sigY}%;max-width:200px;max-height:80px;object-fit:contain;pointer-events:none;" />`
+    ? `<img src="${esc(sigUrl)}" alt="Signature" crossorigin="anonymous" style="position:absolute;left:${sigX}%;top:${sigY}%;max-width:220px;max-height:88px;object-fit:contain;pointer-events:none;" />`
     : "";
   const placedStamp = stampUrl && isFinite(stX) && isFinite(stY)
-    ? `<img src="${esc(stampUrl)}" alt="Stamp" crossorigin="anonymous" style="position:absolute;left:${stX}%;top:${stY}%;width:120px;height:120px;object-fit:contain;mix-blend-mode:multiply;opacity:.85;pointer-events:none;" />`
+    ? `<img src="${esc(stampUrl)}" alt="Stamp" crossorigin="anonymous" style="position:absolute;left:${stX}%;top:${stY}%;width:130px;height:130px;object-fit:contain;mix-blend-mode:multiply;opacity:.9;pointer-events:none;" />`
     : "";
 
-  const sigBlock = (signerName || signerTitle || sigUrl) ? `
-    <div style="margin-top:32px;">
-      <div style="display:flex;align-items:flex-end;gap:24px;">
-        <div style="flex:1 1 auto;">
-          ${sigUrl && !placedSignature ? `<img src="${esc(sigUrl)}" alt="Signature" crossorigin="anonymous" style="max-height:60px;max-width:220px;object-fit:contain;display:block;margin-bottom:4px;" />` : `<div style="height:60px;border-bottom:1px solid ${GOLD};margin-bottom:4px;"></div>`}
-          <div style="font-size:11.5px;font-weight:700;color:${INK};">${esc(signerName)}</div>
-          <div style="font-size:10px;color:${INK};opacity:.75;letter-spacing:.04em;text-transform:uppercase;">${esc(signerTitle)}</div>
+  // Default signature row: signature line + Founder & CEO on left, stamp on right
+  const sigBlock = `
+    <div style="margin-top:48px;display:flex;align-items:flex-end;justify-content:space-between;gap:32px;">
+      <div style="flex:0 1 320px;min-width:220px;">
+        ${sigUrl && !placedSignature ? `<img src="${esc(sigUrl)}" alt="Signature" crossorigin="anonymous" style="max-height:64px;max-width:240px;object-fit:contain;display:block;margin-bottom:6px;" />` : `<div style="height:48px;"></div>`}
+        <div style="border-top:1px solid ${INK};padding-top:6px;">
+          <div style="font-size:12px;font-weight:700;color:${INK};letter-spacing:.02em;">${esc(signerName)}</div>
+          <div style="font-size:10.5px;color:${INK};opacity:.78;letter-spacing:.06em;text-transform:uppercase;margin-top:2px;">${esc(signerTitle)}</div>
         </div>
-        ${stampUrl && !placedStamp ? `<div style="flex:0 0 auto;"><img src="${esc(stampUrl)}" alt="Stamp" crossorigin="anonymous" style="width:110px;height:110px;object-fit:contain;mix-blend-mode:multiply;opacity:.85;" /></div>` : ""}
       </div>
-    </div>` : "";
+      <div style="flex:0 0 auto;text-align:right;min-height:120px;display:flex;align-items:flex-end;justify-content:flex-end;">
+        ${stampUrl && !placedStamp ? `<img src="${esc(stampUrl)}" alt="Stamp" crossorigin="anonymous" style="width:128px;height:128px;object-fit:contain;mix-blend-mode:multiply;opacity:.9;" />` : `<div style="width:128px;height:128px;border:1px dashed ${GOLD};border-radius:6px;display:flex;align-items:center;justify-content:center;color:${INK};opacity:.35;font-size:9px;letter-spacing:.18em;text-transform:uppercase;">Stamp</div>`}
+      </div>
+    </div>`;
 
   return `
 ${LETTERHEAD_PAGE_OPEN}
