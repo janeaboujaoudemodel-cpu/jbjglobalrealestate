@@ -1082,20 +1082,46 @@ export default function EnvelopeDetail() {
                 <iframe
                   title="Document preview"
                   srcDoc={previewSrcDoc}
-                  className="w-full bg-white"
-                  style={{ height: "min(1180px, calc(100vh - 200px))", border: 0 }}
+                  className="w-full bg-white block"
+                  // Start at 0 so we don't paint a giant blank area before the
+                  // content loads. Final height is set precisely by onLoad +
+                  // ResizeObserver below.
+                  style={{ height: "600px", border: 0, display: "block" }}
                   onLoad={(e) => {
-                    // Shrink iframe height to actual content so we don't get a
-                    // huge empty area beneath the footer.
+                    const f = e.currentTarget as HTMLIFrameElement;
+                    const doc = f.contentDocument;
+                    if (!doc) return;
+                    const fit = () => {
+                      try {
+                        const h = Math.max(
+                          doc.documentElement.scrollHeight,
+                          doc.body.scrollHeight,
+                        );
+                        // No +24 padding — that produced the visible white strip
+                        // beneath the footer. Use exact content height.
+                        if (h > 100) f.style.height = `${h}px`;
+                      } catch {}
+                    };
+                    // First pass immediately, then again after fonts + images
+                    // settle to eliminate the "big blank then snap" flash.
+                    fit();
                     try {
-                      const f = e.currentTarget as HTMLIFrameElement;
-                      const doc = f.contentDocument;
-                      if (!doc) return;
-                      const h = Math.max(
-                        doc.documentElement.scrollHeight,
-                        doc.body.scrollHeight,
-                      );
-                      if (h > 200) f.style.height = `${h + 24}px`;
+                      (doc as any).fonts?.ready?.then(fit).catch(() => {});
+                    } catch {}
+                    const imgs = Array.from(doc.images || []);
+                    let pending = imgs.length;
+                    if (pending === 0) setTimeout(fit, 50);
+                    imgs.forEach((img) => {
+                      if (img.complete) { if (--pending === 0) fit(); return; }
+                      img.addEventListener("load", () => { if (--pending === 0) fit(); }, { once: true });
+                      img.addEventListener("error", () => { if (--pending === 0) fit(); }, { once: true });
+                    });
+                    try {
+                      const ro = new ResizeObserver(fit);
+                      ro.observe(doc.documentElement);
+                      ro.observe(doc.body);
+                      // Stop observing if the iframe goes away
+                      f.addEventListener("unload", () => ro.disconnect(), { once: true });
                     } catch {}
                   }}
                 />
