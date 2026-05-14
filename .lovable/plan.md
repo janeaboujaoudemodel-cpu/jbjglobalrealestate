@@ -1,71 +1,54 @@
-## Message I will send after a client replies with a signed document
+## What I'll fix
 
-**Subject:** Thank you for signing — JBJ Property Advertising Agreement
+### 1. "Open" attachment in the email preview is blocked
+The Preview "eye" icon and the email-preview "Open" links point straight at the raw `*.supabase.co/storage/v1/...` signed URL. Desktop ad-blockers and corporate firewalls block that host (the same reason `/api/download-file` proxy and `/d` branded download page exist). On mobile it works because mobile blockers don't filter that pattern.
 
-**Body:**
+Fix:
+- `src/components/e-signature/EmailAttachmentsPicker.tsx` — wrap the "Open / Eye" link with `maybeProxyStorageUrl(a.url, { filename: a.name, disposition: 'inline' })` so it routes through `/api/download-file` (already whitelisted in `public/_redirects`).
+- Same treatment for the "Attachments the client will receive" preview list inside `SendViaEmailDialog.tsx` (open buttons next to each file).
+- Confirm `download-file` edge function honours `disposition=inline` so the PDF renders in-browser instead of forcing download.
+- Test by clicking Open in the dialog — must render the PDF inline, not the blocked page.
 
-Dear Omar Allam Niazi Shadid,
+### 2. Remove "Sign with DocuSign (optional)" — signing is mandatory
+In `src/lib/email/buildEnvelopeEmailHtml.ts` (and its server twin `supabase/functions/_shared/envelope-email-html.ts`):
+- Change the step label from `"Sign with DocuSign (optional)"` to `"Sign with DocuSign"`.
+- Keep the CTA button but remove the "(optional)" wording everywhere it appears.
 
-Thank you for signing the document. We have received your signed Property Advertising Agreement and it has now been filed securely with JBJ GLOBAL REAL ESTATE.
+### 3. Client thank-you email — strip owner-only content
+Currently the thank-you uses `actionButtons({ viewUrl: …/e-signature/<id> })` which links the client into the private owner backend, plus the "we're now collecting the remaining signatures…" paragraph.
 
-Document: JBJ-PAA-LEASING-0001  
-Signed received: {received date and time}
+In `supabase/functions/esign-send-signer-thanks/index.ts`:
+- Remove the `actionButtons(...)` call entirely from the client-facing email (no "VIEW SIGNED DOCUMENT", no "DOWNLOAD SIGNED PDF", no "DOWNLOAD AUDIT CERTIFICATE" buttons in client mail).
+- Replace the `statusNote` block with the exact copy requested:
+  > Thank you for signing, {client first name}. We have received your signature. Any questions, simply reply to this email.
+- Keep the small "Signed {date/time}" confirmation card and the JBJ signature line.
+- The owner notification (separate path in `esign-complete-envelope`) keeps the "VIEW SIGNED DOCUMENT" CTA — that one is for the owner only.
 
-Our team will review the signed copy and contact you if anything further is required. If you have any questions, simply reply to this email.
+### 4. Footer polish in `_shared/esignEmailShell.ts`
+The shared shell used by signer-thanks and complete-envelope shows:
+- "Private Office · Dubai, UAE" — remove "Private Office", keep "Dubai, UAE".
+- Phone wraps to two lines / wordmark wraps — switch the 3-column footer to the same responsive single-row layout already used in `buildEnvelopeEmailHtml.ts` (with `white-space:nowrap` on phone and `letter-spacing` reduced on mobile breakpoints) and force the wordmark to a single line via `white-space:nowrap` + smaller letter-spacing on narrow widths.
+- The blue auto-linked email/website: wrap `contact@jbj.ae` and `www.jbj.ae` in explicit `<a>` tags styled with `color:#B89555;text-decoration:none;font-weight:600` (matches the other email shell) so Gmail doesn't auto-blue them.
+- Bottom line currently reads `© 2026 JBJ Global Real Estate · Electronically signed & legally binding`. Change to: `© {year} JBJ GLOBAL REAL ESTATE` with the same letter-spacing treatment as the other shell, dropping the "Electronically signed…" tail to match the premium look.
 
-With appreciation,  
-JBJ GLOBAL REAL ESTATE
+### 5. End-to-end verification
+- Deploy `esign-send-signer-thanks` after edits.
+- Send a test thank-you to `infoo.jane@gmail.com` via the existing `test_recipient` parameter and confirm:
+  - no "View Signed Document" / "Download Signed PDF" / "Download Audit Certificate" buttons,
+  - new short body copy,
+  - footer single-line wordmark + phone, no "Private Office", branded gold email/website links.
+- Send a test signature-request email and confirm:
+  - "Sign with DocuSign" (no "optional"),
+  - clicking Open on each attachment in the in-app preview opens the PDF inline (no block page),
+  - the same Open links inside the rendered email body open via the `/api/download-file` proxy.
 
-A test of this thank-you email will be sent to **infoo.jane@gmail.com** after implementation.
+## Files I'll touch
 
-## Tasks
+- `src/components/e-signature/EmailAttachmentsPicker.tsx`
+- `src/components/e-signature/SendViaEmailDialog.tsx` (attachment-list Open buttons only)
+- `src/lib/email/buildEnvelopeEmailHtml.ts`
+- `supabase/functions/_shared/envelope-email-html.ts` (server twin — must stay byte-for-byte aligned)
+- `supabase/functions/_shared/esignEmailShell.ts`
+- `supabase/functions/esign-send-signer-thanks/index.ts`
 
-### 1. Force the latest PAA PDF before every email send
-- Make **Send test** and **Approve & send** regenerate/synchronise the current PAA document first.
-- Ensure the attached PDF always matches the latest visible document preview, including **NON EXCLUSIVE** instead of any old **EXCLUSIVE** version.
-- Apply the same safeguard to both current send dialogs so no older cached document URL can be attached.
-- Add cache-busting/signed attachment URL handling so Gmail receives the newly generated PDF bytes, not a stale storage file.
-
-### 2. Show the exact attached documents in the email preview
-- Add an **Attachments included** area directly under the email preview/footer.
-- Show the standard generated PAA PDF first.
-- Make it clickable so you can open/read exactly what the client will receive.
-- Keep the existing upload option for extra files, and show uploaded files in the same preview list.
-- Ensure real sends and test sends include both:
-  - the latest standard PAA PDF
-  - any manually uploaded extra files
-
-### 3. Harden the signed-document reply detection
-- Treat a client reply with a PDF/document attachment as a signed return when the sender matches a pending e-sign recipient.
-- Do not rely only on subject text like “signed” or filename wording; the attachment + matching pending signer should be enough.
-- Keep the inbox classifier category/status correct for signed contract replies.
-- Fix audit logging fields so sync events are recorded properly.
-- Add idempotency so the same Gmail message cannot mark/sign the same envelope twice.
-
-### 4. Complete the e-signature lifecycle from inbox reply
-- When a matching signed document is received:
-  - upload/store the returned signed PDF
-  - mark the recipient as **signed**
-  - set the signed timestamp from the email received time
-  - move the envelope from pending to **completed/signed** when all client signers are complete
-  - create/update the signed contract record
-  - update the owner document hub so it appears under signed contracts
-
-### 5. Send the automatic thank-you email
-- Trigger the branded thank-you email immediately after the signed reply is accepted.
-- Make it idempotent so the client does not receive duplicate thank-you messages.
-- Add a test mode/override so I can send the exact thank-you email to **infoo.jane@gmail.com** without pretending the live client signed again.
-
-### 6. Show “Signed by {name} on {datetime}” everywhere needed
-- Keep the signed-by line in the rendered PAA template.
-- Ensure the main document form and signed-contract cards show:
-  - signer name
-  - received/signed date and time
-  - source: email reply when applicable
-
-### 7. Validate end-to-end
-- Verify the current envelope `JBJ-PAA-LEASING-0001` is stored as **NON EXCLUSIVE** and that the send attachment matches that latest value.
-- Deploy changed backend functions.
-- Send a real outbound **test PAA email** to **infoo.jane@gmail.com** with the latest non-exclusive PDF attached.
-- Send the **thank-you-for-signing test email** to **infoo.jane@gmail.com**.
-- Check function logs and database state for send/sync paths, including pending → signed/completed lifecycle.
+No DB migration. No changes to the owner-facing `esign-complete-envelope` CTA buttons.

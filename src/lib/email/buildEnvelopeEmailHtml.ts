@@ -78,7 +78,7 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
 
   const ctaBlock = `
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:380px;margin:26px auto 28px;border-collapse:collapse;">
-          <tr><td style="padding-bottom:8px;">${stepLabel("Sign with DocuSign (optional)")}</td></tr>
+          <tr><td style="padding-bottom:8px;">${stepLabel("Sign with DocuSign")}</td></tr>
           <tr><td>
             <a href="${escapeHtml(ctaHref)}" target="_blank" rel="noopener" style="${buttonStyle("#1A1A1A", "#FDFBF7")}">
               Open in DocuSign &nbsp;→

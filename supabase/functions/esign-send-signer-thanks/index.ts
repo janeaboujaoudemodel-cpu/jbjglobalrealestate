@@ -1,7 +1,7 @@
 import { getCorsHeaders, corsJsonResponse, corsErrorResponse } from "../_shared/cors-utils.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { quotaGuardedFetch } from "../_shared/quotaGuardedFetch.ts";
-import { premiumShell, actionButtons } from "../_shared/esignEmailShell.ts";
+import { premiumShell } from "../_shared/esignEmailShell.ts";
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
 const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -58,47 +58,28 @@ Deno.serve(async (req) => {
       return corsJsonResponse({ success: true, skipped: "no_resend_key" }, origin);
     }
 
-    const baseUrl = Deno.env.get("SITE_URL") || "https://jbj.ae";
     const docNumber = (envelope.metadata as any)?.doc_number || "";
     const signedAt = new Date(recipient.signed_at || Date.now())
       .toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" });
 
-    const isCompleted = envelope.status === "completed";
-    const signedPdfUrl = isCompleted ? (envelope.signed_document_url || null) : null;
-
-    // Look up audit certificate URL (if envelope already completed)
-    let certificateUrl: string | null = null;
-    if (isCompleted) {
-      const { data: signedDoc } = await supabase
-        .from("esign_signed_documents")
-        .select("certificate_url")
-        .eq("envelope_id", envelope.id)
-        .maybeSingle();
-      certificateUrl = (signedDoc as any)?.certificate_url || null;
-    }
-
-    const statusNote = isCompleted
-      ? `<p style="color:#1A1A1A;line-height:1.7;font-size:14px;margin:0 0 18px;">The fully executed document is now legally binding. A signed copy and audit certificate are available below for your records.</p>`
-      : `<p style="color:#1A1A1A;line-height:1.7;font-size:14px;margin:0 0 18px;">We're now collecting the remaining signatures. As soon as every party has signed, we'll send you the fully executed copy together with the audit certificate.</p>`;
+    const firstName = String(recipient.name || "").trim().split(/\s+/)[0] || "there";
 
     const inner = `
       <div style="text-align:center;margin-bottom:20px;">
         <div style="display:inline-block;width:56px;height:56px;background:#10b981;border-radius:50%;line-height:56px;color:#fff;font-size:28px;">✓</div>
       </div>
       <h2 style="margin:0 0 12px;color:#1A1A1A;font-size:22px;font-weight:700;text-align:center;">Thank you for signing</h2>
-      <p style="color:#1A1A1A;line-height:1.7;font-size:14px;text-align:center;margin:0 0 8px;">Dear ${recipient.name || "Signer"},</p>
-      <p style="color:#1A1A1A;line-height:1.7;font-size:14px;margin:0 0 18px;">
-        We have received your signature on <strong>${envelope.name}</strong>${docNumber ? ` · ${docNumber}` : ""}.
+      <p style="color:#1A1A1A;line-height:1.7;font-size:14px;margin:0 0 14px;">Dear ${firstName},</p>
+      <p style="color:#1A1A1A;line-height:1.7;font-size:14px;margin:0 0 14px;">
+        We have received your signature. Thank you for signing.
       </p>
-      ${statusNote}
+      <p style="color:#1A1A1A;line-height:1.7;font-size:14px;margin:0 0 18px;">
+        Any questions, simply reply to this email.
+      </p>
       <div style="background:#F7F2EA;border:1px solid #B89555;border-radius:10px;padding:16px;margin:20px 0;">
         <p style="margin:0;font-weight:600;color:#1A1A1A;font-size:13px;">📄 ${envelope.name}${docNumber ? ` · ${docNumber}` : ""}</p>
         <p style="margin:6px 0 0;color:#1A1A1A;opacity:.75;font-size:12px;">Signed ${signedAt}</p>
       </div>
-      ${actionButtons({ viewUrl: `${baseUrl}/e-signature/${envelope.id}`, signedPdfUrl, certificateUrl })}
-      <p style="color:#1A1A1A;line-height:1.7;font-size:13px;margin:24px 0 0;">
-        Any questions? Simply reply to this email or contact us at <a href="mailto:contact@jbj.ae" style="color:#1A1A1A;">contact@jbj.ae</a>.
-      </p>
       <p style="color:#1A1A1A;opacity:.6;font-size:12px;text-align:center;margin:24px 0 0;">With appreciation,<br/><strong>JBJ Global Real Estate</strong></p>`;
 
     const deliverTo = test_recipient ? String(test_recipient).trim() : recipient.email;
@@ -128,7 +109,7 @@ Deno.serve(async (req) => {
         description: `Thank-you email sent to ${recipient.name} <${recipient.email}>`,
         actor_email: recipient.email,
         actor_name: recipient.name,
-        metadata: { envelope_completed: isCompleted },
+        metadata: { envelope_status: envelope.status },
       });
     }
 
