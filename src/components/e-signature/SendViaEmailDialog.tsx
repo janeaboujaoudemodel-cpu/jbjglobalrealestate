@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { SUPABASE_URL } from "@/config/backend";
+import { SUPABASE_URL, PUBLIC_DOMAIN } from "@/config/backend";
 import { EmailRecipientChips, isValidEmail } from "./EmailRecipientChips";
 import { EmailBodyEditor } from "./EmailBodyEditor";
 import { EmailPreviewIframe } from "./EmailPreviewIframe";
@@ -43,6 +43,16 @@ const DEFAULT_CC = "infoo.jane@gmail.com";
 const DISPLAY_FROM = "JBJ Global Real Estate <noreply@jbj.ae>";
 const DISPLAY_REPLY_TO = "contact@jbj.ae";
 
+function normalizeSubject(value: string, fallbackDoc = "Document") {
+  const raw = String(value || "").trim();
+  const cleaned = raw
+    .replace(/^please sign\s*[:—-]?\s*/i, "")
+    .replace(/^signature required\s*[:—-]?\s*/i, "")
+    .replace(/^signature pending\s*[.·—-]+\s*/i, "")
+    .replace(/^signature pending\s*:\s*/i, "");
+  return `Signature Pending: ${cleaned || fallbackDoc}`;
+}
+
 interface Props {
   open: boolean;
   onOpenChange: (v: boolean) => void;
@@ -53,6 +63,7 @@ interface Props {
   defaultBody: string;          // legacy plain-text default; converted to HTML on first open
   attachmentName?: string;
   attachmentUrl?: string;
+  templateKey?: string | null;
   docNumber?: string;
   senderName?: string;
   senderTitle?: string;
@@ -125,6 +136,7 @@ export function SendViaEmailDialog({
   defaultBody,
   attachmentName,
   attachmentUrl,
+  templateKey,
   docNumber,
   senderName = "Jane Bou Jaoude",
   senderTitle = "Founder & CEO",
@@ -132,10 +144,11 @@ export function SendViaEmailDialog({
 }: Props) {
   const [tos, setTos] = useState<string[]>([]);
   const [ccs, setCcs] = useState<string[]>([DEFAULT_CC]);
-  const [subject, setSubject] = useState(defaultSubject);
+  const [subject, setSubject] = useState(normalizeSubject(defaultSubject, attachmentName || "Document"));
   const [bodyHtml, setBodyHtml] = useState("");
   const [docusignUrl, setDocusignUrl] = useState("");
   const [busy, setBusy] = useState<"" | "test" | "send">("");
+  const [savingField, setSavingField] = useState<"" | "recipients" | "subject" | "signature" | "body">("");
   const [selectedSigId, setSelectedSigId] = useState<string>("");
 
   // Load all email signature presets so the owner can pick which one
@@ -165,7 +178,7 @@ export function SendViaEmailDialog({
     if (!open) return;
     setTos(recipientEmail ? [recipientEmail] : []);
     setCcs([DEFAULT_CC]);
-    setSubject(defaultSubject);
+    setSubject(normalizeSubject(defaultSubject, attachmentName || "Document"));
     setDocusignUrl("");
     setBodyHtml(
       stripSignature(
@@ -177,8 +190,21 @@ export function SendViaEmailDialog({
         }),
       ),
     );
+    (async () => {
+      const { data } = await (supabase as any)
+        .from("esign_email_template_defaults")
+        .select("subject, body_html, signature_preset_id, default_to_emails, default_cc_emails")
+        .eq("template_key", templateKey || "__global__")
+        .maybeSingle();
+      if (!data || !open) return;
+      if (data.subject) setSubject(normalizeSubject(data.subject, attachmentName || "Document"));
+      if (data.body_html) setBodyHtml(stripSignature(data.body_html));
+      if (data.signature_preset_id) setSelectedSigId(data.signature_preset_id);
+      if (Array.isArray(data.default_to_emails) && data.default_to_emails.length) setTos(data.default_to_emails);
+      if (Array.isArray(data.default_cc_emails)) setCcs(data.default_cc_emails.length ? data.default_cc_emails : [DEFAULT_CC]);
+    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, recipientEmail, recipientName, defaultSubject, defaultBody]);
+  }, [open, recipientEmail, recipientName, defaultSubject, defaultBody, templateKey, attachmentName]);
 
   // Defensive cleanup — if any embedded signature slips into the body,
   // strip it. Real signature is rendered by the email template separately.
@@ -207,9 +233,7 @@ export function SendViaEmailDialog({
   // the visible link in the email stays on jbj.ae (no ad-blocker block, no
   // "From: mdafrewy...supabase.co" mobile blank-page experience).
   const wrapAsBrandedDownload = (signedUrl: string, filename?: string): string => {
-    const origin = (typeof window !== "undefined" && window.location?.origin)
-      ? window.location.origin
-      : "https://www.jbj.ae";
+    const origin = PUBLIC_DOMAIN;
     const u = b64url(signedUrl);
     const n = filename ? `&n=${encodeURIComponent(filename)}` : "";
     return `${origin}/d?u=${u}${n}`;
@@ -325,6 +349,37 @@ export function SendViaEmailDialog({
     }
   };
 
+  const saveTemplateField = async (field: "recipients" | "subject" | "signature" | "body") => {
+    setSavingField(field);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Not signed in");
+      const payload: Record<string, any> = {
+        user_id: user.id,
+        template_key: templateKey || "__global__",
+        subject: normalizeSubject(subject, attachmentName || "Document"),
+        body: bodyHtml.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim() || " ",
+        body_html: stripSignature(bodyHtml),
+        approved_at: new Date().toISOString(),
+      };
+      if (field === "recipients") {
+        payload.default_to_emails = tos.filter(isValidEmail);
+        payload.default_cc_emails = cleanCcs;
+      }
+      if (field === "signature") payload.signature_preset_id = selectedSigId || null;
+      const { error } = await (supabase as any)
+        .from("esign_email_template_defaults")
+        .upsert(payload, { onConflict: "user_id,template_key" });
+      if (error) throw error;
+      if (field === "subject") setSubject(payload.subject);
+      toast.success(`${field === "recipients" ? "Recipients" : field === "subject" ? "Subject" : field === "signature" ? "Signature" : "Message"} saved for future PAA emails`);
+    } catch (e: any) {
+      toast.error(e.message || "Failed to save standard template");
+    } finally {
+      setSavingField("");
+    }
+  };
+
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -360,7 +415,12 @@ export function SendViaEmailDialog({
 
             {/* To */}
             <div className="space-y-1.5">
-              <Label className="text-[#1A1A1A] text-xs">To · {tos.length || "no"} recipient{tos.length === 1 ? "" : "s"}</Label>
+              <div className="flex items-center justify-between gap-2">
+                <Label className="text-[#1A1A1A] text-xs">To · {tos.length || "no"} recipient{tos.length === 1 ? "" : "s"}</Label>
+                <Button type="button" size="sm" variant="outline" onClick={() => saveTemplateField("recipients")} disabled={!!savingField} className="h-7 px-2 text-[11px] border-[#B89555]/50 hover:bg-[#EFE6D6]">
+                  {savingField === "recipients" ? <Loader2 className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3 mr-1" />} Save
+                </Button>
+              </div>
               <EmailRecipientChips
                 value={tos}
                 onChange={setTos}
@@ -386,12 +446,13 @@ export function SendViaEmailDialog({
 
             {/* Subject */}
             <div className="space-y-1.5">
-              <Label className="text-[#1A1A1A] text-xs">Subject</Label>
-              <Input
-                value={subject}
-                onChange={(e) => setSubject(e.target.value)}
-                className="bg-white"
-              />
+              <div className="flex items-center justify-between gap-2">
+                <Label className="text-[#1A1A1A] text-xs">Subject</Label>
+                <Button type="button" size="sm" variant="outline" onClick={() => saveTemplateField("subject")} disabled={!!savingField || !subject.trim()} className="h-7 px-2 text-[11px] border-[#B89555]/50 hover:bg-[#EFE6D6]">
+                  {savingField === "subject" ? <Loader2 className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3 mr-1" />} Save
+                </Button>
+              </div>
+              <Input value={subject} onChange={(e) => setSubject(normalizeSubject(e.target.value, attachmentName || "Document"))} className="bg-white" />
             </div>
 
             {/* Signature picker — Radix Select with champagne/gold styling, no native blue */}
@@ -406,7 +467,7 @@ export function SendViaEmailDialog({
                 >
                   <SelectTrigger
                     aria-label="Select email signature"
-                    className="flex-1 bg-white border-[#B89555]/40 text-[#1A1A1A] hover:border-[#B89555]/70 focus:ring-[#B89555]/30 focus:ring-offset-0 data-[state=open]:border-[#B89555]"
+                      className="flex-1 bg-white border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555]/70 focus:ring-[#B89555]/30 focus:ring-offset-0 data-[state=open]:bg-[#F7F2EA] data-[state=open]:border-[#B89555]"
                   >
                     <SelectValue placeholder={signatures.length ? "Pick a signature…" : "Loading signatures…"} />
                   </SelectTrigger>
@@ -415,7 +476,7 @@ export function SendViaEmailDialog({
                       <SelectItem
                         key={s.id}
                         value={s.id}
-                        className="text-[#1A1A1A] focus:bg-[#EFE6D6] focus:text-[#1A1A1A] data-[state=checked]:bg-[#EFE6D6] data-[highlighted]:bg-[#EFE6D6] data-[highlighted]:text-[#1A1A1A]"
+                        className="text-[#1A1A1A] hover:!bg-[#EFE6D6] focus:!bg-[#EFE6D6] focus:text-[#1A1A1A] data-[state=checked]:!bg-[#EFE6D6] data-[highlighted]:!bg-[#EFE6D6] data-[highlighted]:text-[#1A1A1A]"
                       >
                         {s.name}{s.is_default ? " · default" : ""}{s.is_system ? " · system" : ""}
                       </SelectItem>
@@ -426,12 +487,12 @@ export function SendViaEmailDialog({
                   type="button"
                   variant="outline"
                   size="sm"
-                  onClick={applySelectedSignature}
+                  onClick={() => saveTemplateField("signature")}
                   disabled={!selectedSigHtml}
-                  title="Insert/replace this signature in the message body"
+                  title="Save this signature as the standard for future PAA emails"
                   className="border-[#B89555]/50 hover:bg-[#EFE6D6] hover:border-[#B89555]"
                 >
-                  Insert
+                  {savingField === "signature" ? <Loader2 className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3 mr-1" />} Save
                 </Button>
               </div>
               <p className="text-[10px] text-[#1A1A1A]/60">
