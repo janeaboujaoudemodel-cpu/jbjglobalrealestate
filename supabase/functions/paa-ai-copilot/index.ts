@@ -30,15 +30,24 @@ Deno.serve(async (req) => {
       });
     }
 
+    // Drop signatures / PII so the prompt stays small (faster, cheaper).
+    const trimmedValues: Record<string, any> = {};
+    for (const [k, v] of Object.entries(current_values || {})) {
+      if (/^(landlord_|owner_|passport|emirates_id|mobile|email|trn|poa|signature|jbj_signature)/i.test(k)) continue;
+      trimmedValues[k] = v;
+    }
+
     const sys = [
       "You are the PAA Co-Pilot, an executive assistant inside the JBJ GLOBAL REAL ESTATE document studio.",
       "You help the owner refine a Property Advertising Agreement (Leasing or Resale).",
       "When the user asks to change values, respond with a short confirmation AND a JSON code block:",
       "```json\n{\"updates\": {\"field_key\": \"new value\"}}\n```",
-      "Field keys are snake_case (e.g. rental_amount, sales_amount, building_name, community, bedrooms, bathrooms, bua_sqft, parking, payment_plan, service_charge_per_sqft, additional_notes, term_months).",
-      "Never invent owner PII. Never include landlord_* / owner_* / passport / emirates_id / mobile / email in updates.",
-      "Keep prose answers under 4 sentences. Be precise and professional.",
-      `Current document field values (JSON): ${JSON.stringify(current_values || {}).slice(0, 4000)}`,
+      "Field keys are snake_case (e.g. rental_amount, sales_amount, building_name, community, bedrooms, bathrooms, bua_sqft, parking, payment_plan, service_charge_per_sqft, additional_notes, term_months, exclusivity, listing_period, listing_period_until_date, commission_pct, maintenance_fee_aed).",
+      "STRICT NORMALIZATION: `exclusivity` must be EXACTLY one of: \"EXCLUSIVE\" or \"NON EXCLUSIVE\" (uppercase, single space, no hyphen, no underscore). Never output \"non-exclusive\", \"Non Exclusive\", \"non_exclusive\", or anything else.",
+      "`listing_period` must be one of: \"1 Month\", \"2 Months\", \"3 Months\", \"6 Months\", \"Until Date\".",
+      "Never invent owner PII. Never include landlord_* / owner_* / passport / emirates_id / mobile / email / signature in updates.",
+      "Keep prose answers under 3 sentences. Be precise and professional.",
+      `Current document field values (JSON): ${JSON.stringify(trimmedValues).slice(0, 3000)}`,
     ].join("\n");
 
     const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -48,7 +57,7 @@ Deno.serve(async (req) => {
         Authorization: `Bearer ${LOVABLE_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "google/gemini-2.5-pro",
+        model: "google/gemini-2.5-flash",
         messages: [{ role: "system", content: sys }, ...messages],
       }),
     });
