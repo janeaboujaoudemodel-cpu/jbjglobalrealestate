@@ -13311,31 +13311,54 @@ export type Database = {
         Row: {
           approved_at: string
           body: string
+          body_html: string | null
           created_at: string
+          default_cc_emails: string[]
+          default_to_emails: string[]
           id: string
+          signature_preset_id: string | null
           subject: string
+          template_key: string
           updated_at: string
           user_id: string
         }
         Insert: {
           approved_at?: string
           body: string
+          body_html?: string | null
           created_at?: string
+          default_cc_emails?: string[]
+          default_to_emails?: string[]
           id?: string
+          signature_preset_id?: string | null
           subject: string
+          template_key?: string
           updated_at?: string
           user_id: string
         }
         Update: {
           approved_at?: string
           body?: string
+          body_html?: string | null
           created_at?: string
+          default_cc_emails?: string[]
+          default_to_emails?: string[]
           id?: string
+          signature_preset_id?: string | null
           subject?: string
+          template_key?: string
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "esign_email_template_defaults_signature_preset_id_fkey"
+            columns: ["signature_preset_id"]
+            isOneToOne: false
+            referencedRelation: "email_signature_presets"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       esign_envelopes: {
         Row: {
