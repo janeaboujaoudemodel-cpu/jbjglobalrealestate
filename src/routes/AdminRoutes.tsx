@@ -3,7 +3,7 @@
  * (not in the /owner shell, but still require owner/admin access)
  */
 import React, { lazy, Suspense } from "react";
-import { Route, Navigate } from "react-router-dom";
+import { Route, Navigate, useParams } from "react-router-dom";
 import OwnerGuard from "@/components/OwnerGuard";
 import ListingAdminGuard from "@/components/ListingAdminGuard";
 import RouteErrorBoundary from "@/components/RouteErrorBoundary";
@@ -65,6 +65,10 @@ const FormBuilder = lazy(() => import("@/pages/FormBuilder"));
 // Only EnvelopeDetail remains here for legacy /e-signature/:id deep links.
 const EnvelopeDetail = lazy(() => import("@/pages/e-signature/EnvelopeDetail"));
 const DocumentsFormsHub = lazy(() => import("@/pages/owner/DocumentsFormsHub"));
+const LegacyEnvelopeRedirect = () => {
+  const { id } = useParams();
+  return <Navigate to={`/owner/documents/forms/${id}`} replace />;
+};
 const Automations = lazy(() => import("@/pages/Automations"));
 const AlertsDemo = lazy(() => import("@/pages/AlertsDemo"));
 const ExclusiveDocuments = lazy(() => import("@/pages/owner/ExclusiveDocuments"));
@@ -168,7 +172,7 @@ export const AdminRoutes = () => (
     <Route path="/e-signature/signature-studio" element={<Navigate to="/owner/documents/forms/signature-studio" replace />} />
     <Route path="/e-signature/blank-letter" element={<Navigate to="/owner/documents/forms/blank-letter" replace />} />
     <Route path="/e-signature/contract-review" element={<Navigate to="/owner/documents/forms/contract-review" replace />} />
-    <Route path="/e-signature/:id" element={<OwnerGuard><EnvelopeDetail /></OwnerGuard>} />
+    <Route path="/e-signature/:id" element={<OwnerGuard><LegacyEnvelopeRedirect /></OwnerGuard>} />
 
     {/* ── Email/Unsubscribe ── */}
     <Route path="/unsubscribe" element={
