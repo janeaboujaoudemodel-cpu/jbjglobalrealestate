@@ -185,7 +185,70 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
     }
   };
 
-  const filteredTemplates = templates.filter(t => cat === "all" ? true : t.category === cat);
+  // Hide blank-letter rows from the grid (the Standard Letterhead opens its own studio).
+  const filteredTemplates = templates.filter(t => !isBlankLetterKey(t.key) && (cat === "all" ? true : t.category === cat));
+
+  // ── Asset management helpers (Manage dropdown / sheet) ─────────────
+  const handleAssetUpload = async (kind: "signature" | "stamp", e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async () => {
+      try {
+        const { data: userData } = await supabase.auth.getUser();
+        const userId = userData.user?.id;
+        if (!userId) throw new Error("Not signed in");
+        const blob = await (await fetch(String(reader.result))).blob();
+        const path = `${userId}/${kind}-${Date.now()}.png`;
+        const { error: upErr } = await supabase.storage
+          .from("owner-signature-assets")
+          .upload(path, blob, { contentType: "image/png", upsert: true });
+        if (upErr) throw upErr;
+        const { data: signed } = await supabase.storage
+          .from("owner-signature-assets")
+          .createSignedUrl(path, 60 * 60 * 24 * 365);
+        const existing = kind === "signature" ? signatures : stamps;
+        const { error: insErr } = await supabase.from("owner_signature_assets" as any).insert({
+          user_id: userId, kind, label: file.name, image_url: signed?.signedUrl,
+          storage_path: path, is_default: existing.length === 0,
+        });
+        if (insErr) throw insErr;
+        toast.success(`${kind === "signature" ? "Signature" : "Stamp"} uploaded`);
+        qc.invalidateQueries({ queryKey: ["owner_signature_assets"] });
+      } catch (err: any) { toast.error(err.message || "Upload failed"); }
+    };
+    reader.readAsDataURL(file);
+    if (e.target) e.target.value = "";
+  };
+  const setAssetDefault = async (kind: "signature" | "stamp", id: string) => {
+    await supabase.from("owner_signature_assets" as any).update({ is_default: false }).eq("kind", kind);
+    await supabase.from("owner_signature_assets" as any).update({ is_default: true }).eq("id", id);
+    qc.invalidateQueries({ queryKey: ["owner_signature_assets"] });
+    toast.success("Default updated");
+  };
+  const renameAsset = async (id: string) => {
+    const next = window.prompt("New label");
+    if (!next) return;
+    await supabase.from("owner_signature_assets" as any).update({ label: next }).eq("id", id);
+    qc.invalidateQueries({ queryKey: ["owner_signature_assets"] });
+  };
+  const deleteAsset = async (id: string) => {
+    if (!confirm("Delete this asset?")) return;
+    await supabase.from("owner_signature_assets" as any).delete().eq("id", id);
+    qc.invalidateQueries({ queryKey: ["owner_signature_assets"] });
+    toast.success("Deleted");
+  };
+
+  // Open the right surface for a chosen template (studio for blank, dialog for the rest).
+  const openTemplate = (t: EsignTemplate) => {
+    if (isBlankLetterKey(t.key)) {
+      navigate("/owner/documents/forms/blank-letter");
+      return;
+    }
+    setPicker(t);
+    setClient({ name: "", email: "", phone: "" });
+    setNewEnvelopeOpen(false);
+  };
 
   // Bulk actions on the visible bucket
   const visibleIds = (() => {
