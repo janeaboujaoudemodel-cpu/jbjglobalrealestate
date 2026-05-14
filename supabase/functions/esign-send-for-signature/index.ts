@@ -161,11 +161,20 @@ Deno.serve(async (req) => {
           // Attach the generated PDF (e.g. JBJ-PAA-LEASING-0001.pdf) so the
           // recipient gets the file directly in their inbox in addition to
           // the in-email "Download your document" button.
+          const attachmentUrlStr = typeof attachment_url === "string" ? attachment_url : "";
+          const attachmentNameStr = typeof attachment_name === "string" ? attachment_name : "";
           const pdfAttachment = await fetchEmailAttachment(
-            typeof attachment_url === "string" ? attachment_url : "",
-            typeof attachment_name === "string" ? attachment_name : "",
+            attachmentUrlStr,
+            attachmentNameStr,
             "application/pdf",
           );
+          if (attachmentUrlStr && attachmentNameStr && !pdfAttachment) {
+            return corsErrorResponse(
+              `Could not attach ${attachmentNameStr} — the PDF could not be fetched from storage. Re-export the document and try again.`,
+              502,
+              origin,
+            );
+          }
           const payload: Record<string, unknown> = {
             from: "JBJ Global Real Estate <noreply@jbj.ae>",
             to: allTos,
