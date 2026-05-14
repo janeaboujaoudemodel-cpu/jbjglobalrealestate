@@ -57,40 +57,30 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
   const subject = upperJbj(escapeHtml(args.subject || ""));
   const bodyHtml = args.bodyHtml || "";
   const signatureHtml = args.signatureHtml || "";
-  void args.docNumber;
+  const docNumber = args.docNumber ? escapeHtml(args.docNumber) : "";
   const year = args.year ?? new Date().getFullYear();
   const docusignUrl = (args.docusignUrl || "").trim();
   const attachmentName = args.attachmentName ? escapeHtml(args.attachmentName) : "";
-  const attachmentUrl = (args.attachmentUrl || "").trim();
+  void args.attachmentUrl;
 
   const ctaHref = docusignUrl || DOCUSIGN_WEB;
-  const hasDownload = Boolean(attachmentUrl && attachmentName);
+
+  // Unique reference line so each send produces a distinct message body
+  // (prevents Gmail from clipping with the "..." / show trimmed content).
+  const sentAt = new Date().toISOString().replace("T", " ").slice(0, 16) + " UTC";
+  const refBits = [docNumber, attachmentName, sentAt].filter(Boolean).join(" · ");
+  const referenceLine = refBits
+    ? `<div style="font-family:Inter,Arial,sans-serif;font-size:10.5px;color:#1A1A1A;opacity:.55;letter-spacing:.04em;margin:0 0 14px;">Reference: ${refBits}</div>`
+    : "";
 
   const buttonStyle = (bg: string, fg: string) =>
     `display:block;width:100%;box-sizing:border-box;padding:16px 22px;font-family:Inter,Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:.22em;color:${fg};background:${bg};text-decoration:none;text-transform:uppercase;text-align:center;border:1px solid #B89555;border-radius:2px;`;
-  const stepLabel = (n: number, label: string) =>
-    `<div style="font-family:Inter,Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:.28em;color:#B89555;text-transform:uppercase;text-align:center;margin:0 0 8px;">Step ${n} · ${label}</div>`;
-
-  const documentIcon = `<span style="display:inline-block;width:18px;height:18px;vertical-align:middle;margin-right:10px;"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 3.75h6.25L18 8.5v11.75H7V3.75Z" stroke="#1A1A1A" stroke-width="1.6"/><path d="M13 4v5h5" stroke="#B89555" stroke-width="1.6"/><path d="M9.5 13h5M9.5 16h5" stroke="#1A1A1A" stroke-width="1.35" stroke-linecap="round"/></svg></span>`;
-
-  const downloadBlock = hasDownload
-    ? `
-        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:380px;margin:24px auto 0;border-collapse:collapse;">
-          <tr><td style="padding-bottom:8px;">${stepLabel(1, "Download your agreement")}</td></tr>
-          <tr><td>
-            <a href="${escapeHtml(attachmentUrl)}" target="_blank" rel="noopener" style="${buttonStyle("#F7F2EA", "#1A1A1A")}">
-              ${documentIcon}<span style="display:inline-block;vertical-align:middle;">Click here to download your document</span>
-            </a>
-          </td></tr>
-          <tr><td align="center" style="padding-top:8px;font-family:Inter,Arial,sans-serif;font-size:10.5px;color:#1A1A1A;opacity:.6;line-height:1.5;">
-            Secure PDF · <strong style="font-weight:600;">${attachmentName}</strong>
-          </td></tr>
-        </table>`
-    : "";
+  const stepLabel = (label: string) =>
+    `<div style="font-family:Inter,Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:.28em;color:#B89555;text-transform:uppercase;text-align:center;margin:0 0 8px;">${label}</div>`;
 
   const ctaBlock = `
-        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:380px;margin:${hasDownload ? "22px" : "26px"} auto 28px;border-collapse:collapse;">
-          <tr><td style="padding-bottom:8px;">${stepLabel(hasDownload ? 2 : 1, "Sign with DocuSign")}</td></tr>
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:380px;margin:26px auto 28px;border-collapse:collapse;">
+          <tr><td style="padding-bottom:8px;">${stepLabel("Sign with DocuSign (optional)")}</td></tr>
           <tr><td>
             <a href="${escapeHtml(ctaHref)}" target="_blank" rel="noopener" style="${buttonStyle("#1A1A1A", "#FDFBF7")}">
               Open in DocuSign &nbsp;→
@@ -111,7 +101,7 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
     : "";
 
   // Mobile-responsive shell
-  return `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"><style>
+  return `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><style>
     .jbj-wordmark{font-size:16px;}
     @media (max-width:520px){
       .jbj-outer-pad{padding:16px 8px !important;}
@@ -141,9 +131,9 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
         <div style="height:1px;background:#B89555;line-height:1px;font-size:0;">&nbsp;</div>
       </td></tr>
       <tr><td class="jbj-body" style="background:#ffffff;border-left:1px solid #B89555;border-right:1px solid #B89555;padding:32px 32px 28px;">
-        <h2 style="margin:0 0 18px;color:#1A1A1A;font-size:20px;font-weight:700;line-height:1.3;">${subject}</h2>
+        <h2 style="margin:0 0 14px;color:#1A1A1A;font-size:20px;font-weight:700;line-height:1.3;">${subject}</h2>
+        ${referenceLine}
         <div style="color:#1A1A1A;line-height:1.7;font-size:14px;">${bodyHtml}</div>
-        ${downloadBlock}
         ${ctaBlock}
         ${signatureBlock}
         <p style="margin:22px 0 0;color:#1A1A1A;opacity:.55;font-size:11px;line-height:1.55;">Replies to this email are routed to <a href="mailto:contact@jbj.ae" style="color:#B89555;text-decoration:none;font-weight:600;">CONTACT@JBJ.AE</a> and answered by our team.</p>
