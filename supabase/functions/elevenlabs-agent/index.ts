@@ -83,8 +83,16 @@ Deno.serve(async (req) => {
 
   const key = getKey();
   const agentId = Deno.env.get("ELEVENLABS_AGENT_ID");
-  if (!key) return json({ error: "ELEVENLABS_API_KEY not configured" }, 500);
-  if (!agentId) return json({ error: "ELEVENLABS_AGENT_ID not configured" }, 500);
+  if (!key) {
+    return req.method === "GET"
+      ? fallbackAgentConfig("", "ELEVENLABS_API_KEY is not configured, so the dashboard is using a safe local draft.")
+      : json({ error: "ELEVENLABS_API_KEY not configured" }, 400);
+  }
+  if (!agentId) {
+    return req.method === "GET"
+      ? fallbackAgentConfig("", "ELEVENLABS_AGENT_ID is not configured, so the dashboard is using a safe local draft.")
+      : json({ error: "ELEVENLABS_AGENT_ID not configured" }, 400);
+  }
 
   try {
     const resolved = await resolveAgentId(key, agentId);
