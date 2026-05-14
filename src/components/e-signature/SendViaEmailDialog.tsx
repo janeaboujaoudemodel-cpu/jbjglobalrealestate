@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { SUPABASE_URL } from "@/config/backend";
+import { SUPABASE_URL, PUBLIC_DOMAIN } from "@/config/backend";
 import { EmailRecipientChips, isValidEmail } from "./EmailRecipientChips";
 import { EmailBodyEditor } from "./EmailBodyEditor";
 import { EmailPreviewIframe } from "./EmailPreviewIframe";
@@ -43,6 +43,16 @@ const DEFAULT_CC = "infoo.jane@gmail.com";
 const DISPLAY_FROM = "JBJ Global Real Estate <noreply@jbj.ae>";
 const DISPLAY_REPLY_TO = "contact@jbj.ae";
 
+function normalizeSubject(value: string, fallbackDoc = "Document") {
+  const raw = String(value || "").trim();
+  const cleaned = raw
+    .replace(/^please sign\s*[:—-]?\s*/i, "")
+    .replace(/^signature required\s*[:—-]?\s*/i, "")
+    .replace(/^signature pending\s*[.·—-]+\s*/i, "")
+    .replace(/^signature pending\s*:\s*/i, "");
+  return `Signature Pending: ${cleaned || fallbackDoc}`;
+}
+
 interface Props {
   open: boolean;
   onOpenChange: (v: boolean) => void;
@@ -53,6 +63,7 @@ interface Props {
   defaultBody: string;          // legacy plain-text default; converted to HTML on first open
   attachmentName?: string;
   attachmentUrl?: string;
+  templateKey?: string | null;
   docNumber?: string;
   senderName?: string;
   senderTitle?: string;
@@ -125,6 +136,7 @@ export function SendViaEmailDialog({
   defaultBody,
   attachmentName,
   attachmentUrl,
+  templateKey,
   docNumber,
   senderName = "Jane Bou Jaoude",
   senderTitle = "Founder & CEO",
@@ -132,7 +144,7 @@ export function SendViaEmailDialog({
 }: Props) {
   const [tos, setTos] = useState<string[]>([]);
   const [ccs, setCcs] = useState<string[]>([DEFAULT_CC]);
-  const [subject, setSubject] = useState(defaultSubject);
+  const [subject, setSubject] = useState(normalizeSubject(defaultSubject, attachmentName || "Document"));
   const [bodyHtml, setBodyHtml] = useState("");
   const [docusignUrl, setDocusignUrl] = useState("");
   const [busy, setBusy] = useState<"" | "test" | "send">("");
