@@ -238,8 +238,19 @@ export function SendViaEmailDialog({
     setSelectedSigId(def?.id || "");
   }, [signatures, selectedSigId]);
 
+  // Hydrate ONCE per open transition. Without this gate the parent's prop
+  // identity changes (each render produces fresh `defaultBody`/`attachmentName`
+  // strings) re-fired this effect on every keystroke and overwrote the body
+  // mid-typing — making the Message field appear unresponsive.
+  const hydratedRef = useRef(false);
   useEffect(() => {
-    if (!open) return;
+    if (!open) {
+      hydratedRef.current = false;
+      return;
+    }
+    if (hydratedRef.current) return;
+    hydratedRef.current = true;
+
     setTos(recipientEmail ? [recipientEmail] : []);
     setCcs([DEFAULT_CC]);
     setSubject(normalizeSubject(defaultSubject, attachmentName || "Document"));
@@ -247,13 +258,15 @@ export function SendViaEmailDialog({
     setExtraAttachments([]);
     setAutoAttachmentRemoved(false);
     setBodyHtml(
-      stripSignature(
-        legacyBodyToHtml(stripInlineSignature(defaultBody), {
-          clientName: recipientName || "Client",
-          docTitle: defaultSubject || "Document",
-          senderName,
-          senderTitle,
-        }),
+      scrubLegacyBody(
+        stripSignature(
+          legacyBodyToHtml(stripInlineSignature(defaultBody), {
+            clientName: recipientName || "Client",
+            docTitle: defaultSubject || "Document",
+            senderName,
+            senderTitle,
+          }),
+        ),
       ),
     );
     (async () => {
@@ -264,7 +277,7 @@ export function SendViaEmailDialog({
         .maybeSingle();
       if (!data || !open) return;
       if (data.subject) setSubject(normalizeSubject(data.subject, attachmentName || "Document"));
-      if (data.body_html) setBodyHtml(stripSignature(data.body_html));
+      if (data.body_html) setBodyHtml(scrubLegacyBody(stripSignature(data.body_html)));
       if (data.signature_preset_id) setSelectedSigId(data.signature_preset_id);
       if (Array.isArray(data.default_to_emails) && data.default_to_emails.length) setTos(dedupeEmails(data.default_to_emails));
       if (Array.isArray(data.default_cc_emails)) setCcs(data.default_cc_emails.length ? dedupeEmails(data.default_cc_emails) : [DEFAULT_CC]);
@@ -276,14 +289,14 @@ export function SendViaEmailDialog({
           const draft = JSON.parse(raw) as { subject?: string; bodyHtml?: string; ts?: number };
           if (draft && (draft.subject || draft.bodyHtml)) {
             if (draft.subject) setSubject(draft.subject);
-            if (draft.bodyHtml != null) setBodyHtml(stripSignature(draft.bodyHtml));
+            if (draft.bodyHtml != null) setBodyHtml(scrubLegacyBody(stripSignature(draft.bodyHtml)));
             if (draft.ts) setDraftSavedAt(draft.ts);
           }
         }
       } catch { /* ignore corrupt draft */ }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, recipientEmail, recipientName, defaultSubject, defaultBody, templateKey, attachmentName]);
+  }, [open]);
 
   // Auto-save subject + body on every keystroke (debounced) to localStorage,
   // scoped per envelope. Cleared on successful send or explicit discard.
