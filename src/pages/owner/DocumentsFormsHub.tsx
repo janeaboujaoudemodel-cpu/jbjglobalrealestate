@@ -559,39 +559,28 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
             </Card>
           </TabsContent>
 
-          {/* E-SIGNATURE */}
+          {/* E-SIGNATURE — three uniform cards */}
           <TabsContent value="esign" className="mt-4">
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Card className="p-5 bg-[#F7F2EA] border-[#B89555]/30">
-                <div className="flex items-start gap-3">
-                  <Upload className="w-5 h-5 text-[#1A1A1A]" />
-                  <div>
-                    <div className="font-semibold text-[#1A1A1A] text-sm">Upload & Send for Signature</div>
-                    <div className="text-xs text-[#1A1A1A]/70 mt-1">Upload PDF/Word/photos — auto-converted to a signable envelope.</div>
-                    <Button size="sm" variant="gold" className="mt-3" onClick={() => navigate("/owner/documents/forms/create")}>Create Envelope</Button>
-                  </div>
-                </div>
-              </Card>
-              <Card className="p-5 bg-[#F7F2EA] border-[#B89555]/30">
-                <div className="flex items-start gap-3">
-                  <PenTool className="w-5 h-5 text-[#1A1A1A]" />
-                  <div>
-                    <div className="font-semibold text-[#1A1A1A] text-sm">Signature Studio</div>
-                    <div className="text-xs text-[#1A1A1A]/70 mt-1">Draw, upload or generate your owner signature, initials and stamp.</div>
-                    <Button size="sm" variant="gold" className="mt-3" onClick={() => navigate("/owner/documents/forms/signature-studio")}>Open Studio</Button>
-                  </div>
-                </div>
-              </Card>
-              <Card className="p-5 bg-[#F7F2EA] border-[#B89555]/30">
-                <div className="flex items-start gap-3">
-                  <Scale className="w-5 h-5 text-[#1A1A1A]" />
-                  <div>
-                    <div className="font-semibold text-[#1A1A1A] text-sm">AI Contract Review</div>
-                    <div className="text-xs text-[#1A1A1A]/70 mt-1">Lawyer-grade clause-by-clause analysis of any contract.</div>
-                    <Button size="sm" variant="gold" className="mt-3" onClick={() => navigate("/owner/documents/forms/contract-review")}>Open Review</Button>
-                  </div>
-                </div>
-              </Card>
+            <div className="grid md:grid-cols-3 gap-4 items-stretch">
+              {[
+                { icon: Upload, title: "Upload & Send for Signature", desc: "Upload PDF/Word/photos — auto-converted to a signable envelope.", cta: "Create Envelope", onClick: () => navigate("/owner/documents/forms/create") },
+                { icon: PenTool, title: "Signature Studio", desc: "Draw, upload or generate your owner signature, initials and stamp.", cta: "Open Studio", onClick: () => navigate("/owner/documents/forms/signature-studio") },
+                { icon: Scale, title: "AI Contract Review", desc: "Lawyer-grade clause-by-clause analysis of any contract.", cta: "Open Review", onClick: () => navigate("/owner/documents/forms/contract-review") },
+              ].map((c) => {
+                const Icon = c.icon;
+                return (
+                  <Card key={c.title} className="p-5 bg-[#F7F2EA] border-[#B89555]/30 flex flex-col h-full">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-10 h-10 rounded-lg bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center">
+                        <Icon className="w-5 h-5 text-[#1A1A1A]" />
+                      </div>
+                      <div className="font-semibold text-[#1A1A1A] text-sm leading-tight">{c.title}</div>
+                    </div>
+                    <p className="text-xs text-[#1A1A1A]/70 flex-1">{c.desc}</p>
+                    <Button size="sm" variant="gold" className="mt-4 self-start" onClick={c.onClick}>{c.cta}</Button>
+                  </Card>
+                );
+              })}
             </div>
             <div className="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-3">
               <Button variant="outline" onClick={() => setTab("sent")}>Pending Signature ({buckets.sent.length})</Button>
