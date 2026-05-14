@@ -54,7 +54,7 @@ export function renderSignatureHtml(sig: EmailSignature): string {
   const address = sig.address_line || "";
 
   const phone = sig.phone ? sig.phone.trim() : "";
-  const emailHref = sig.email ? sig.email.trim() : "";
+  const emailHref = "contact@jbj.ae";
   const emailDisplay = emailHref ? upperJbj(emailHref) : "";
   const contactRow = [
     phone
