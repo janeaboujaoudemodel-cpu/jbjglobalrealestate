@@ -594,6 +594,13 @@ export default function EnvelopeDetail() {
       if (/vacant/i.test(cleaned.status_vacant_tenanted || "")) cleaned.vacating_date = "";
       if (!/villa/i.test(cleaned.property_type || "")) cleaned.plot_sqft = "";
       if (!/until/i.test(cleaned.listing_period || "")) cleaned.listing_period_until_date = "";
+      // Normalize exclusivity to canonical "EXCLUSIVE" | "NON EXCLUSIVE" so the
+      // chip matcher and final render always agree.
+      if (cleaned.exclusivity) {
+        cleaned.exclusivity = /^\s*non[\s_-]*exclusive/i.test(cleaned.exclusivity)
+          ? "NON EXCLUSIVE"
+          : "EXCLUSIVE";
+      }
 
       // HARD RULE: never persist client/landlord/JBJ printed names + dates from
       // the editor — those fields are reserved for the actual signer to fill in.
@@ -612,17 +619,19 @@ export default function EnvelopeDetail() {
         hiddenFields,
       });
       // Fire-and-forget: keep an admin Listing draft in sync with this PAA.
-      // Strips owner PII; routes to Leasing or Resale based on category.
-      try {
-        const session = await supabase.auth.getSession();
-        const token = session.data.session?.access_token;
-        await fetch(`${SUPABASE_URL}/functions/v1/paa-sync-listing`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-          body: JSON.stringify({ envelope_id: envelope.id }),
-        });
-        qc.invalidateQueries({ queryKey: ["paa-linked-listing", envelope.id] });
-      } catch (e) { console.warn("paa-sync-listing failed", e); }
+      // Don't block the UI on this — it's best-effort.
+      (async () => {
+        try {
+          const session = await supabase.auth.getSession();
+          const token = session.data.session?.access_token;
+          await fetch(`${SUPABASE_URL}/functions/v1/paa-sync-listing`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+            body: JSON.stringify({ envelope_id: envelope.id }),
+          });
+          qc.invalidateQueries({ queryKey: ["paa-linked-listing", envelope.id] });
+        } catch (e) { console.warn("paa-sync-listing failed", e); }
+      })();
       toast.success("Document updated");
       setEditing(false);
       setRecentlyRestoredFields([]);
