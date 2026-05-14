@@ -93,7 +93,7 @@ Deno.serve(async (req) => {
       slug: baseSlug,
       description,
       location: [f.community, f.street_name].filter(Boolean).join(", ") || null,
-      community: null, // we don't auto-link to communities table
+      // community_id intentionally omitted — we don't auto-link to communities table
       emirate: "Dubai",
       price_from: price,
       price_to: price,
