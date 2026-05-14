@@ -60,21 +60,7 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
   const ctaHref = docusignUrl || DOCUSIGN_WEB;
   const referenceLine = "";
 
-  const attachmentStrip = attachmentName ? `
-        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:22px 0 0;border-collapse:collapse;">
-          <tr><td style="border:1px solid #B89555;border-radius:4px;background:#F7F2EA;padding:14px 16px;">
-            <table role="presentation" style="width:100%;border-collapse:collapse;"><tr>
-              <td style="vertical-align:middle;width:36px;padding-right:12px;">
-                <div style="width:36px;height:44px;border:1px solid #B89555;background:#FDFBF7;border-radius:3px;text-align:center;font-family:Inter,Arial,sans-serif;font-size:9px;font-weight:700;color:#B89555;letter-spacing:.1em;line-height:44px;">PDF</div>
-              </td>
-              <td style="vertical-align:middle;font-family:Inter,Arial,sans-serif;">
-                <div style="font-size:10px;font-weight:700;letter-spacing:.22em;color:#B89555;text-transform:uppercase;">Attached to this email</div>
-                <div style="font-size:13px;font-weight:700;color:#1A1A1A;margin-top:3px;word-break:break-all;">${attachmentName}</div>
-                <div style="font-size:11px;color:#1A1A1A;opacity:.65;margin-top:2px;">Open the attachment in your mail app to view, sign, and reply.</div>
-              </td>
-            </tr></table>
-          </td></tr>
-        </table>` : "";
+  const attachmentStrip = "";
 
   const buttonStyle = (bg: string, fg: string) =>
     `display:block;width:100%;box-sizing:border-box;padding:16px 22px;font-family:Inter,Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:.22em;color:${fg};background:${bg};text-decoration:none;text-transform:uppercase;text-align:center;border:1px solid #B89555;border-radius:2px;`;
