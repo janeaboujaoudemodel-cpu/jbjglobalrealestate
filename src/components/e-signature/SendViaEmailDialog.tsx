@@ -10,7 +10,7 @@
  *   • Responsive two-pane layout (single column under lg)
  *   • Wrapping footer that never overflows the dialog
  */
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Dialog,
   DialogContent,
