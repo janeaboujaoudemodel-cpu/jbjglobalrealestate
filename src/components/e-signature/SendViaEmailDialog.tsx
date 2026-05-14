@@ -304,7 +304,7 @@ export function SendViaEmailDialog({
     try {
       const session = await supabase.auth.getSession();
       const token = session.data.session?.access_token;
-      const signedAttachmentUrl = await resolveAttachmentUrl(attachmentUrl);
+      const signedAttachmentUrl = autoAttachmentRemoved ? undefined : await resolveAttachmentUrl(attachmentUrl);
       const res = await fetch(`${SUPABASE_URL}/functions/v1/esign-send-test-email`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
@@ -314,7 +314,7 @@ export function SendViaEmailDialog({
           interpolated_body_html: bodyHtml,
           signature_html: selectedSigHtml,
           docusign_url: docusignUrl.trim() || undefined,
-          attachment_name: attachmentName,
+          attachment_name: autoAttachmentRemoved ? undefined : attachmentName,
           attachment_url: signedAttachmentUrl,
           extra_attachments: extraAttachments.map((a) => ({ name: a.name, url: a.url, content_type: a.contentType })),
           test_recipient: TEST_RECIPIENT,
