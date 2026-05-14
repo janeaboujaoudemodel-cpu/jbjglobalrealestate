@@ -1,125 +1,49 @@
-## Goal
+I found the concrete breakage: the Omar envelope is stored with `template_key = jbj-letterhead-leasing`, so the app is rendering it as a blank letterhead instead of the approved PAA template. The uploaded PDF is the source of truth for the approved PAA layout.
 
-Restore the previously-approved PAA / EnvelopeDetail document view (full body rendering, no clipped iframe) and finish the four pending hub items.
+Plan:
 
----
+1. Restore the approved PAA leasing template
+   - Rebuild `JBJ PAA Leasing` HTML to match the uploaded approved PDF exactly:
+     - Header: JBJ monogram, legal company name, Port Saeed office line, doc number and contact stack.
+     - Title: `PROPERTY ADVERTISING AGREEMENT — LEASING`.
+     - Sections exactly as uploaded: `1. Landlord / Owner Details`, `3. Property Specs`, `4. Pricing & Lease Terms`, `7. Terms and Conditions`, `8. Landlord`.
+     - Same compact underline field layout, same one-page A4 proportions, same footer.
+   - Keep the existing editable field keys so every client can still have different values.
+   - Do not replace the PAA with blank-letterhead logic again.
 
-## 1. Restore EnvelopeDetail.tsx to the approved layout
+2. Repair the broken Omar envelope data
+   - Correct the existing envelope `810df24a-145b-48f2-8e5a-f18e44e0c576` from `jbj-letterhead-leasing` back to the real PAA template key.
+   - Re-render its current field values into the restored approved PAA HTML/PDF.
+   - Preserve current client data, recipients, status, document number, audit data, and signing links.
 
-The recent rewrite that removed the right rail and forced the iframe into a fixed `aspectRatio: "794 / 1123"` + `scrolling="no"` + `overflow:hidden` is what is producing the blank Document panel on `/owner/documents/forms/810df24a…`. The PAA template content itself is intact — only the preview shell breaks it.
+3. Fix Edit Fields behavior
+   - Move the edit-fields panel above the document preview, directly under the action/header area.
+   - When `Edit fields` is clicked, open the fields immediately in the visible top area and focus/scroll to them.
+   - Keep every PAA field editable using the same field groups; no missing fields.
 
-Action: revert `src/pages/e-signature/EnvelopeDetail.tsx` to the last known-good revision (commit `702c90085`) which had:
+4. Fix EnvelopeDetail layout and preview width
+   - Remove the right-side vertical rail layout.
+   - Put Recipients, CCs, Details, Customize header/footer, Signed document, Listing Draft, and Activity Log above the document in a full-width responsive control band.
+   - Make the document preview full width below those controls.
+   - Use an A4 iframe/preview wrapper with proper scrolling only when needed, not a clipped fixed-height blank panel.
 
-- Right-side rail with Recipients · Send block · CC manager · Signed Doc · PAA listing draft card · Details · Activity log.
-- Document preview iframe sized by **content height**, not aspect ratio:
-  - `style={{ minHeight: "1123px", height: "auto", border: 0 }}`
-  - **`scrolling="auto"`** on the iframe.
-  - Wrapper: `<div className="overflow-auto max-h-[calc(100vh-220px)]">`.
-- Body CSS for the iframe stops forcing `overflow:hidden` and `height:1123px` — keep `min-height:1123px` only, allow growth.
+5. Finish remaining Documents & Forms tasks
+   - New Envelope opens an in-page template picker, not upload/sign directly.
+   - Embed the document editor and e-sign tools as inline tabs/surfaces inside Documents & Forms instead of sending the user away to separate pages.
+   - Add full Manage dropdown actions for saved signatures/stamps: set default, replace image, rename, archive, delete, upload new.
 
-Then re-apply only the small additive features that came in after `702c90085` and are still wanted:
+6. Rework BlankLetterStudio layout
+   - Top toolbar: back, document number/date, save/send/download controls.
+   - Centered A4 preview scaled to fit the viewport.
+   - Move inputs/assets into a compact top toolbar or collapsible panels around the preview.
+   - Remove the old left/right split and avoid scroll-heavy layout.
 
-- "Upload signed PDF" handler + button (for completed envelopes).
-- New envelope statuses `awaiting_signed_return` and `pending_owner_review` in `statusConfig` / `recipientStatusConfig`.
-- The collapsible "Activity log" toggle.
+7. Confirm AI model bump
+   - Verify `paa-ai-copilot` and `ai-contract-reviewer` remain on `google/gemini-2.5-pro`.
+   - If either regressed, update only the model identifier.
 
-PAA template files are NOT touched — `src/templates/jbjPropertyAdvertisingAgreement.ts` and `src/templates/letterheadChrome.ts` stay exactly as they are (this is the approved PAA, locked).
-
-QA: open `/owner/documents/forms/810df24a-145b-48f2-8e5a-f18e44e0c576` — full PAA body renders below the champagne header, scrollable, no blank panel.
-
----
-
-## 2. New Envelope — template picker dialog body
-
-In `DocumentsFormsHub.tsx`, replace the `+ New Envelope` redirect with a real `<Dialog>` containing:
-
-```text
-┌──── New Envelope ─────────────────────────────┐
-│  [Standard JBJ Letterhead]  [JBJ PAA Leasing] │
-│  [JBJ PAA Selling]                            │
-│  ───────────────────────────────────────────  │
-│  Or upload a PDF / image to sign  →           │
-└───────────────────────────────────────────────┘
-```
-
-- 3 primary tiles (icon + name + 1-line description) → route into the matching studio/wizard.
-- One demoted secondary tile → opens the existing upload-and-send flow inline.
-- Closes on selection. Never leaves `/owner/documents/forms`.
-
----
-
-## 3. Manage Sheet + dropdown for Saved Signatures / Stamps
-
-In `DocumentsFormsHub.tsx`:
-
-- Each asset card gets a `DropdownMenu` trigger (⋯): Set as default · Replace image · Rename · Archive · Delete.
-- The top-level `Manage` button next to "Saved Signatures" / "Saved Stamps" opens an inline `<Sheet>` listing every asset with the same per-row actions plus an "Upload new" button.
-- No route change. Wire to the existing `useOwnerSignatureAssets` hook.
-
----
-
-## 4. BlankLetterStudio framed centered A4 layout
-
-Rework `src/pages/e-signature/BlankLetterStudio.tsx`:
-
-```text
-┌──────────────────────────────────────────────┐
-│ ← Back              [Save]   [Send]          │
-├──────────────────────────────────────────────┤
-│ Doc # JBJ-LETTERHEAD-0001 · Date editable    │
-├──────────────────────────────────────────────┤
-│        ┌──────────────────────────┐          │
-│        │   A4 PREVIEW (centered,  │          │
-│        │   scaled to fit viewport)│          │
-│        └──────────────────────────┘          │
-│ [Brand assets: signatures · stamps · upload] │
-└──────────────────────────────────────────────┘
-```
-
-- A4 page rendered at fixed `794×1123` and wrapped in a container that applies `transform: scale(min((vw-64)/820, (vh-260)/1180))` with `transform-origin: top center`.
-- All recipient / subject / body / signature-position controls move into a single collapsible top toolbar (or popovers triggered from the preview).
-- Right rail removed.
-- No inner sub-tabs — only the back arrow.
-
----
-
-## 5. EnvelopeDetail scroll fix
-
-Already covered by the restore in §1: wrap the preview iframe in `overflow-auto max-h-[calc(100vh-220px)]`, drop the forced fixed height + `scrolling="no"`. Add horizontal scroll via the same wrapper for very wide content.
-
----
-
-## 6. AI model bump
-
-Update edge functions to use `google/gemini-2.5-pro`:
-
-- `supabase/functions/paa-ai-copilot/index.ts`
-- `supabase/functions/ai-contract-reviewer/index.ts`
-
-Only swap the model identifier in the gateway call; redeploy. `letter-ai-generate` was already bumped in the previous round.
-
----
-
-## Files to change
-
-- `src/pages/e-signature/EnvelopeDetail.tsx` — restore to `702c90085` baseline + re-apply additive bits (upload signed PDF, new statuses, activity toggle), plus scroll wrapper.
-- `src/pages/owner/DocumentsFormsHub.tsx` — New Envelope dialog body, Manage Sheet, asset-card dropdowns.
-- `src/pages/e-signature/BlankLetterStudio.tsx` — framed scaled A4 layout.
-- `supabase/functions/paa-ai-copilot/index.ts` — model → `google/gemini-2.5-pro`.
-- `supabase/functions/ai-contract-reviewer/index.ts` — model → `google/gemini-2.5-pro`.
-
-Not touched (locked / approved):
-- `src/templates/jbjPropertyAdvertisingAgreement.ts`
-- `src/templates/letterheadChrome.ts`
-- `src/templates/jbjListingAuthorisation.ts`
-
----
-
-## QA checklist
-
-1. PAA envelope `810df24a…` opens and shows the full agreement body, scrollable.
-2. Right-rail details (Doc No, Recipients, Activity, Listing Draft) are visible again.
-3. `+ New Envelope` opens the picker dialog; never navigates away.
-4. Signature/stamp `Manage` opens a Sheet and per-card ⋯ dropdown works.
-5. Standard JBJ Letterhead studio: A4 fully visible, centered, no scrollbars.
-6. PAA AI Copilot and AI Contract Review responses come from Gemini 2.5 Pro.
+8. QA before saying done
+   - Open `/owner/documents/forms/810df24a-145b-48f2-8e5a-f18e44e0c576` and compare the visible preview against the uploaded approved PDF.
+   - Click `Edit fields` and verify fields open immediately above the document.
+   - Verify the document is full-width with top control bands, not a vertical recipient/details rail.
+   - Verify New Envelope picker, asset Manage actions, BlankLetterStudio A4 fit, and inline editor/e-sign surfaces.
