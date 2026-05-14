@@ -378,9 +378,8 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
             )}
           </AnimatePresence>
 
-          {/* AI Triage Panel */}
-          {(thread.ai_suggested_reply || thread.ai_summary || triage.isPending) && (
-            <div className="border-t border-[#B89555]/10 bg-[#EFE6D6]/20 p-3 flex-shrink-0 space-y-2">
+          {/* AI Triage Panel — always visible so the user is never staring at a blank pane */}
+          <div className="border-t border-[#B89555]/10 bg-[#EFE6D6]/20 p-3 flex-shrink-0 space-y-2 max-h-[40%] overflow-y-auto">
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
                   <Brain className="h-4 w-4 text-[#1A1A1A]" />
@@ -394,13 +393,17 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
                   onClick={() => triage.mutate({ threadId: thread.id, force: true })}
                   disabled={triage.isPending}
                 >
-                  <Wand2 className="h-3 w-3 mr-1" /> Re-run
+                  <Wand2 className="h-3 w-3 mr-1" /> {thread.ai_summary ? "Re-run" : "Analyze"}
                 </Button>
               </div>
-              {thread.ai_summary && (
+              {thread.ai_summary ? (
                 <p className="text-xs text-[#1A1A1A]/80 italic">"{thread.ai_summary}"</p>
+              ) : (
+                <p className="text-xs text-[#1A1A1A]/60 italic">
+                  {triage.isPending ? "Analyzing this conversation…" : "AI summary will appear after triage."}
+                </p>
               )}
-              {thread.ai_suggested_reply && (
+              {thread.ai_suggested_reply ? (
                 <div className="rounded-lg border border-[#B89555]/20 bg-[#FDFBF7] p-2">
                   <p className="text-[10px] uppercase tracking-wide text-[#1A1A1A]/60 mb-1">Suggested reply</p>
                   <p className="text-sm text-[#1A1A1A] whitespace-pre-wrap">{thread.ai_suggested_reply}</p>
@@ -414,6 +417,14 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
                       <Send className="h-3 w-3 mr-1" /> Send now
                     </Button>
                   </div>
+                </div>
+              ) : (
+                <div className="rounded-lg border border-dashed border-[#B89555]/20 bg-[#FDFBF7]/60 p-2">
+                  <p className="text-[11px] text-[#1A1A1A]/60">
+                    {thread.ai_category && ["marketing","advertising","campaign","system","business_linkedin","spam"].includes(thread.ai_category)
+                      ? "No reply needed — automated/marketing notification."
+                      : "No suggested reply yet. Click Analyze to generate one."}
+                  </p>
                 </div>
               )}
               <div className="flex flex-wrap gap-2">
@@ -448,7 +459,6 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
                 <p className="text-[10px] text-[#1A1A1A]/60">Next step: {thread.ai_next_step.reasoning}</p>
               )}
             </div>
-          )}
 
           {/* Reply Input */}
           <div className="border-t border-[#B89555]/10 p-3 flex-shrink-0">
