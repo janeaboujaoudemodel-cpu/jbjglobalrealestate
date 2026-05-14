@@ -221,6 +221,25 @@ export function useOwnerInbox(filters: InboxFilters = {}) {
     },
   });
 
+  // Bulk update — apply same patch to many threads (mark read, change status, etc.)
+  const bulkUpdate = useMutation({
+    mutationFn: async ({ threadIds, patch }: { threadIds: string[]; patch: Partial<{ status: ThreadStatus; unread_count: number }> }) => {
+      if (!threadIds.length) return;
+      const { error } = await supabase
+        .from('owner_comm_threads')
+        .update({ ...patch, updated_at: new Date().toISOString() })
+        .in('id', threadIds);
+      if (error) throw error;
+    },
+    onSuccess: (_d, vars) => {
+      queryClient.invalidateQueries({ queryKey: ['owner-inbox-threads'] });
+      queryClient.invalidateQueries({ queryKey: ['owner-inbox-global-stats'] });
+      queryClient.invalidateQueries({ queryKey: ['owner-inbox-per-channel-counts'] });
+      toast.success(`Updated ${vars.threadIds.length} conversation${vars.threadIds.length === 1 ? '' : 's'}`);
+    },
+    onError: () => toast.error('Bulk update failed'),
+  });
+
   // Real-time subscription
   useEffect(() => {
     if (!user?.id) return;
