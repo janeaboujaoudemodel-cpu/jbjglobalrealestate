@@ -108,17 +108,21 @@ Deno.serve(async (req) => {
   "category": one of ${JSON.stringify(CATEGORIES)},
   "priority": "low" | "medium" | "high" | "urgent",
   "summary": "<= 140 chars, neutral tone",
-  "suggested_reply": "concise professional reply in same language as thread, ready to send",
+  "suggested_reply": "concise professional reply in same language as thread, ready to send. If no reply is appropriate, use empty string.",
   "next_step": { "type": "task" | "meeting" | "note" | "none", "title": "...", "due_in_hours": number | null, "reasoning": "short why" }
 }
 Categorization rules:
 - real_estate_lead: prospective buyer/investor enquiring about properties, viewings, or pricing.
-- real_estate_ops: developer documents requests, listings, MOU, registration, brokerage operations, system alerts (GitHub/Supabase/uptime/verification codes).
+- real_estate_ops: brokerage operations, internal requests, contracts in progress.
 - sales_offer: someone offering to buy something the user owns (resale, luxury closet price offers, "buyer waiting").
-- marketing: newsletters, promos, campaigns, creator programs, sales notifications from retail brands (SHEIN, Cobone, Rue La La, Reversible, Farfetch, etc).
-- finance: banking, payments, invoices, tax, VAT, payroll (Emirates NBD, ENBD, HSBC, ADCB, FAB, Mashreq, etc).
+- campaign: influencer/creator collaborations, brand campaigns, sponsored content (SHEIN Creator Center, Reversible UGC, brand collabs).
+- advertising: product ads from brands the user does not own (Canon, Sony, Apple, Nike, Adidas, "Introducing the X", new product launches).
+- marketing: retail newsletters, promo emails, coupons, generic marketing (Cobone, Rue La La, Farfetch, ShopStyle, GITEX newsletter, MMG Talent job alerts).
+- business_linkedin: LinkedIn notifications, content engagement, profile views, professional network activity.
+- finance: banking, payments, invoices, tax, VAT, payroll (Emirates NBD, ENBD, HSBC, ADCB, FAB, Mashreq).
 - developer_documents: developer registration, brochures, inventory, Docusign envelopes, contract signature requests.
-- personal: personal correspondence from individuals known to the user.
+- system: system alerts, GitHub/Supabase/UptimeRobot, Google Search Console, Hostinger verification codes, OTPs, automated monitor alerts.
+- personal: personal correspondence from real individuals known to the user.
 - spam: clear spam.
 - other: anything that doesn't fit.
 No prose, no markdown, JSON only.`;
