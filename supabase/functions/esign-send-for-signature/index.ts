@@ -150,7 +150,7 @@ Deno.serve(async (req) => {
       } else {
         const rawBody = interpolated_body
           ? interpolated_body
-          : (envelope.email_message || `Dear {{client_name}},\n\nPlease find the attached PDF document for your electronic signature. Kindly review it carefully, sign it, and reply back to this same email with the signed copy attached.\n\nIf you prefer, you can also sign it directly in DocuSign using the button below.\n\n{{sender_signature}}`);
+          : (envelope.email_message || `Dear {{client_name}},\n\nPlease find the attached PDF document for your review.\n\nOnce reviewed, kindly proceed with signing the document via DocuSign at your earliest convenience and return the signed copy by replying to this email.\n\nShould you require any clarification, please do not hesitate to contact me.\n\nThank you,\n\n{{sender_signature}}`);
         finalBodyHtml = escapeHtml(interp(rawBody))
           .replace(/\n/g, "<br/>")
           .replace(SIG_SENTINEL, sigHtml);
