@@ -29,6 +29,14 @@ export default function ChannelGrid() {
         return;
       }
 
+      // Providers without a connector wired up yet (Instagram, Facebook, LinkedIn, Snapchat…).
+      if (!state.provider.connectorId) {
+        toast.info(`${state.provider.label} is coming soon`, {
+          description: "This channel isn't available for one-click connect yet.",
+        });
+        return;
+      }
+
       const { data, error } = await supabase.functions.invoke("comm-channel-autowire", {
         body: {
           channel_type: state.provider.id,
