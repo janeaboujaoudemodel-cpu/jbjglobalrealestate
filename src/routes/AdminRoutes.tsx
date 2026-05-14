@@ -61,12 +61,9 @@ const KanbanBoard = lazy(() => import("@/pages/KanbanBoard"));
 const Whiteboard = lazy(() => import("@/pages/Whiteboard"));
 const MindMap = lazy(() => import("@/pages/MindMap"));
 const FormBuilder = lazy(() => import("@/pages/FormBuilder"));
-const ESignatureDashboard = lazy(() => import("@/pages/e-signature/ESignatureDashboard"));
-const CreateEnvelope = lazy(() => import("@/pages/e-signature/CreateEnvelope"));
+// E-Signature dashboards moved into the unified hub at /owner/documents/forms.
+// Only EnvelopeDetail remains here for legacy /e-signature/:id deep links.
 const EnvelopeDetail = lazy(() => import("@/pages/e-signature/EnvelopeDetail"));
-const SignatureStudio = lazy(() => import("@/pages/e-signature/SignatureStudio"));
-const BlankLetterStudio = lazy(() => import("@/pages/e-signature/BlankLetterStudio"));
-const ContractReview = lazy(() => import("@/pages/e-signature/ContractReview"));
 const Automations = lazy(() => import("@/pages/Automations"));
 const AlertsDemo = lazy(() => import("@/pages/AlertsDemo"));
 const ExclusiveDocuments = lazy(() => import("@/pages/owner/ExclusiveDocuments"));
