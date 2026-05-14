@@ -162,7 +162,7 @@ export const AdminRoutes = () => (
     <Route path="/owner/ai-tools-control" element={<OwnerGuard><AIToolsControlPanel /></OwnerGuard>} />
 
     {/* ── E-Signature (legacy → unified Documents & Agreements hub) ── */}
-    <Route path="/e-signature" element={<Navigate to="/owner/documents/forms" replace />} />
+    <Route path="/e-signature" element={<Navigate to="/owner/documents/forms?tab=esign" replace />} />
     <Route path="/e-signature/create" element={<Navigate to="/owner/documents/forms/create" replace />} />
     <Route path="/e-signature/signature-studio" element={<Navigate to="/owner/documents/forms/signature-studio" replace />} />
     <Route path="/e-signature/blank-letter" element={<Navigate to="/owner/documents/forms/blank-letter" replace />} />

@@ -322,8 +322,8 @@ export default function ESignatureDashboard() {
               </Link>
               <Link to="/e-signature/blank-letter">
                 <Button variant="outline" className="border-[hsl(var(--gold)/.3)] hover:border-[hsl(var(--gold))]">
-                  <Sparkles className="w-4 h-4 mr-2" />
-                  Blank Letter (AI)
+                  <FileText className="w-4 h-4 mr-2" />
+                  Standard JBJ Letterhead
                 </Button>
               </Link>
               <Link to="/e-signature/contract-review">
