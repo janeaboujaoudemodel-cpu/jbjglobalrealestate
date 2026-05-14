@@ -76,8 +76,14 @@ export function renderSignatureHtml(sig: EmailSignature): string {
     .filter(Boolean)
     .join('<span style="color:' + ink + ';opacity:.5;"> &nbsp;·&nbsp; </span>');
 
-  const websiteHref = sig.website ? sig.website.trim() : "";
-  const websiteDisplay = websiteHref ? upperJbj(websiteHref.replace(/^https?:\/\//, "")) : "";
+  // Do not link signature shortcut routes such as /careers from email: those
+  // SPA pages can show a browser-level "enable JavaScript" interstitial in
+  // locked-down email clients. Keep all signature links email-native instead.
+  const rawWebsite = sig.website ? sig.website.trim() : "";
+  const websiteHref = /\/careers\/?$/i.test(rawWebsite) ? "mailto:contact@jbj.ae" : rawWebsite;
+  const websiteDisplay = websiteHref
+    ? upperJbj(websiteHref.replace(/^mailto:/i, "").replace(/^https?:\/\//, ""))
+    : "";
   const websiteRow = websiteHref
     ? `<a href="${websiteHref}" style="color:${gold};text-decoration:none;font-weight:600;letter-spacing:.04em;">${websiteDisplay}</a>`
     : "";
