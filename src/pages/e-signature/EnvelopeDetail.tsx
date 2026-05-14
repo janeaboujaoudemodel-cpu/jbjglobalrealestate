@@ -943,216 +943,199 @@ export default function EnvelopeDetail() {
           </CardContent>
         </Card>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Document preview */}
-          <Card className="lg:col-span-2 bg-white border-[#B89555]/30 overflow-hidden">
-            <CardHeader className="bg-[#F7F2EA] border-b border-[#B89555]/30 py-3">
+        {/* TOP CONTROL BAND — Recipients & CCs · Details · Signed Doc · Listing Draft.
+            Moved ABOVE the document so the document panel below can render full-width
+            edge-to-edge, and the user never sees a vertical recipient/details rail. */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+          {/* Recipients + CCs */}
+          <Card className="bg-[#F7F2EA] border-[#B89555]/30">
+            <CardHeader className="py-3">
               <CardTitle className="text-sm flex items-center gap-2 text-[#1A1A1A]">
-                <FileText className="w-4 h-4" /> {editing ? "Live preview (unsaved edits)" : "Document"}
+                <User className="w-4 h-4" /> Recipients & CCs
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-0">
-              {previewSrcDoc ? (
-                <iframe
-                  title="Document preview"
-                  srcDoc={previewSrcDoc}
-                  className="w-full bg-white"
-                  style={{ height: "min(1180px, calc(100vh - 200px))", border: 0 }}
-                  onLoad={(e) => {
-                    // Shrink iframe height to actual content so we don't get a
-                    // huge empty area beneath the footer.
-                    try {
-                      const f = e.currentTarget as HTMLIFrameElement;
-                      const doc = f.contentDocument;
-                      if (!doc) return;
-                      const h = Math.max(
-                        doc.documentElement.scrollHeight,
-                        doc.body.scrollHeight,
-                      );
-                      if (h > 200) f.style.height = `${h + 24}px`;
-                    } catch {}
-                  }}
-                />
-              ) : envelope.document_url ? (
-                <iframe
-                  title="Document PDF"
-                  src={`${maybeProxyStorageUrl(signedDoc?.document_url || envelope.document_url, { disposition: "inline", filename: signedDoc?.document_filename || envelope.document_filename })}${(signedDoc?.document_url || envelope.document_url).includes("?") ? "&" : "?"}v=${encodeURIComponent(envelope.updated_at || envelope.created_at || "")}`}
-                  className="w-full bg-white"
-                  style={{ height: "1100px", border: 0 }}
-                />
-              ) : (
-                <div className="p-12 text-center text-[#1A1A1A]/70">No document</div>
-              )}
+            <CardContent className="space-y-3">
+              {(envelope.esign_recipients || []).map((recipient: any) => {
+                const rConfig = recipientStatusConfig[recipient.status as RecipientStatus];
+                const canRemind = ["pending", "sent", "delivered", "viewed"].includes(recipient.status)
+                  && ["sent", "viewed", "partially_signed"].includes(envelope.status);
+                const isReminding = remindingId === recipient.id;
+                return (
+                  <div key={recipient.id} className="rounded-lg bg-white border border-[#B89555]/20 p-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="min-w-0">
+                        <div className="font-medium text-[#1A1A1A] text-sm truncate">{recipient.name}</div>
+                        <div className="text-xs text-[#1A1A1A]/70 truncate flex items-center gap-1">
+                          <Mail className="w-3 h-3" /> {recipient.email}
+                        </div>
+                        {recipient.phone && (
+                          <div className="text-xs text-[#1A1A1A]/70 truncate flex items-center gap-1">
+                            <Phone className="w-3 h-3" /> {recipient.phone}
+                          </div>
+                        )}
+                        {recipient.signed_at && (
+                          <div className="text-xs text-emerald-700 mt-1">✓ Signed {format(new Date(recipient.signed_at), "MMM d, h:mm a")}</div>
+                        )}
+                      </div>
+                      <Badge className={rConfig?.color}>{rConfig?.label}</Badge>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5 mt-2">
+                      {recipient.signing_token && (
+                        <>
+                          <Button size="sm" variant="outline" className="h-7 text-[11px]"
+                            onClick={async () => {
+                              const url = buildSigningUrl(recipient.signing_token);
+                              try { await navigator.clipboard.writeText(url); toast.success("Signing link copied"); }
+                              catch { window.prompt("Copy:", url); }
+                            }}>
+                            <LinkIcon className="w-3 h-3 mr-1" /> Copy link
+                          </Button>
+                          <Button size="sm" variant="outline" className="h-7 text-[11px]" onClick={() => handleWhatsApp(recipient)}>
+                            <MessageCircle className="w-3 h-3 mr-1" /> WhatsApp
+                          </Button>
+                          <Button size="sm" variant="outline" className="h-7 text-[11px]" onClick={() => handleQuickEmail(recipient)} disabled={!recipient.email}>
+                            <Mail className="w-3 h-3 mr-1" /> Email
+                          </Button>
+                        </>
+                      )}
+                      {canRemind && (
+                        <Button size="sm" variant="outline" className="h-7 text-[11px]" disabled={remindingId !== null} onClick={() => sendReminder(recipient.id)}>
+                          {isReminding ? <Loader2 className="w-3 h-3 animate-spin" /> : <Bell className="w-3 h-3 mr-1" />}
+                          Remind
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+
+              {/* CC manager */}
+              <div className="border-t border-[#B89555]/30 pt-3">
+                <Label className="text-[10px] uppercase tracking-[0.16em] text-[#1A1A1A]/70">CC on send</Label>
+                <div className="flex flex-wrap gap-1.5 mt-2">
+                  {ccs.map((e) => (
+                    <span key={e} className="inline-flex items-center gap-1 text-[11px] bg-white border border-[#B89555]/30 rounded px-2 py-0.5 text-[#1A1A1A]">
+                      {e}
+                      <button type="button" onClick={() => setCcs((prev) => prev.filter((x) => x !== e))} aria-label={`Remove ${e}`}>
+                        <X className="w-3 h-3" />
+                      </button>
+                    </span>
+                  ))}
+                  {!ccs.length && <span className="text-[11px] text-[#1A1A1A]/60">None</span>}
+                </div>
+                <div className="flex gap-2 mt-2">
+                  <Input value={ccInput} onChange={(e) => setCcInput(e.target.value)} placeholder="cc@example.com"
+                    onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addCc(); } }} className="h-8 text-xs" />
+                  <Button size="sm" variant="outline" onClick={() => addCc()}><Plus className="w-3 h-3" /></Button>
+                </div>
+                <Button size="sm" variant="ghost" className="text-[11px] mt-1 h-7 px-2"
+                  onClick={async () => {
+                    const { data } = await supabase.auth.getUser();
+                    if (data.user?.email) addCc(data.user.email);
+                  }}>
+                  + Add me as CC
+                </Button>
+                <Textarea value={bulkCcs} onChange={(e) => setBulkCcs(e.target.value)} placeholder="Bulk paste: emails separated by space, comma, semicolon or newline" className="mt-2 text-xs min-h-[60px]" />
+                <Button size="sm" variant="outline" className="mt-1 h-7 text-[11px]" onClick={handleBulkCcs} disabled={!bulkCcs.trim()}>Add bulk</Button>
+              </div>
             </CardContent>
           </Card>
 
-          {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Recipients + CCs */}
-            <Card className="bg-[#F7F2EA] border-[#B89555]/30">
+          {/* Document Info */}
+          <Card className="bg-[#F7F2EA] border-[#B89555]/30">
+            <CardHeader className="py-3">
+              <CardTitle className="text-sm text-[#1A1A1A]">Details</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2 text-xs text-[#1A1A1A]/80">
+              {docNumber && <div className="flex justify-between"><span>Doc No.</span><span className="font-medium text-[#1A1A1A]">{docNumber}</span></div>}
+              <div className="flex justify-between"><span>File</span><span className="font-medium text-[#1A1A1A] truncate max-w-[180px]">{envelope.document_filename}</span></div>
+              <div className="flex justify-between"><span>Created</span><span>{format(new Date(envelope.created_at), "MMM d, yyyy")}</span></div>
+              {envelope.expires_at && <div className="flex justify-between"><span>Expires</span><span>{formatDistanceToNow(new Date(envelope.expires_at), { addSuffix: true })}</span></div>}
+              {envelope.completed_at && <div className="flex justify-between"><span>Completed</span><span>{format(new Date(envelope.completed_at), "MMM d, yyyy")}</span></div>}
+              <div className="flex justify-between"><span>Reminders</span><span>{envelope.reminders_sent || 0}</span></div>
+              <div className="pt-2 border-t border-[#B89555]/30 mt-2">
+                <Button variant="outline" size="sm" className="w-full h-8 text-[11px]" onClick={() => setShowStudio((s) => !s)}>
+                  {showStudio ? "Hide" : "Customize"} header &amp; footer
+                </Button>
+                {showStudio && (
+                  <Button variant="gold" size="sm" className="w-full h-8 text-[11px] mt-1.5" onClick={handleSaveEdits} disabled={regenerate.isPending}>
+                    {regenerate.isPending ? <Loader2 className="w-3 h-3 mr-1 animate-spin" /> : <Save className="w-3 h-3 mr-1" />}
+                    Apply &amp; re-render
+                  </Button>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Signed doc */}
+          {signedDoc ? (
+            <Card className="bg-[#F7F2EA] border-emerald-300/50">
               <CardHeader className="py-3">
                 <CardTitle className="text-sm flex items-center gap-2 text-[#1A1A1A]">
-                  <User className="w-4 h-4" /> Recipients & CCs
+                  <Shield className="w-4 h-4 text-emerald-600" /> Signed Document
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
-                {(envelope.esign_recipients || []).map((recipient: any) => {
-                  const rConfig = recipientStatusConfig[recipient.status as RecipientStatus];
-                  const canRemind = ["pending", "sent", "delivered", "viewed"].includes(recipient.status)
-                    && ["sent", "viewed", "partially_signed"].includes(envelope.status);
-                  const isReminding = remindingId === recipient.id;
-                  return (
-                    <div key={recipient.id} className="rounded-lg bg-white border border-[#B89555]/20 p-3">
-                      <div className="flex items-center justify-between gap-2">
-                        <div className="min-w-0">
-                          <div className="font-medium text-[#1A1A1A] text-sm truncate">{recipient.name}</div>
-                          <div className="text-xs text-[#1A1A1A]/70 truncate flex items-center gap-1">
-                            <Mail className="w-3 h-3" /> {recipient.email}
-                          </div>
-                          {recipient.phone && (
-                            <div className="text-xs text-[#1A1A1A]/70 truncate flex items-center gap-1">
-                              <Phone className="w-3 h-3" /> {recipient.phone}
-                            </div>
-                          )}
-                          {recipient.signed_at && (
-                            <div className="text-xs text-emerald-700 mt-1">✓ Signed {format(new Date(recipient.signed_at), "MMM d, h:mm a")}</div>
-                          )}
-                        </div>
-                        <Badge className={rConfig?.color}>{rConfig?.label}</Badge>
+              <CardContent className="space-y-2">
+                <Button size="sm" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+                  onClick={() => handleDownloadCurrentPdf(signedDoc.document_filename)}>
+                  <Download className="w-4 h-4 mr-2" /> Download Signed PDF
+                </Button>
+                <Button size="sm" variant="outline" className="w-full" onClick={() => setExportOpen(true)}>
+                  <Download className="w-4 h-4 mr-2" /> Export…
+                </Button>
+                {signedDoc.certificate_url && (
+                  <Button size="sm" variant="outline" className="w-full"
+                    onClick={() => handleDownload(signedDoc.certificate_url, `audit_${envelope.id}.pdf`)}>
+                    <Download className="w-4 h-4 mr-2" /> Audit Certificate
+                  </Button>
+                )}
+              </CardContent>
+            </Card>
+          ) : (
+            <Card className="bg-[#F7F2EA] border-[#B89555]/30">
+              <CardHeader className="py-3">
+                <CardTitle className="text-sm text-[#1A1A1A] flex items-center gap-2">
+                  <Shield className="w-4 h-4" /> Activity Log
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="max-h-[260px] overflow-auto">
+                <div className="space-y-3">
+                  {auditLogs.slice(0, 5).map((log: any) => (
+                    <div key={log.id} className="flex items-start gap-2">
+                      <div className="w-6 h-6 rounded-full bg-white border border-[#B89555]/30 flex items-center justify-center shrink-0">
+                        <Clock className="w-3 h-3 text-[#1A1A1A]/70" />
                       </div>
-                      <div className="flex flex-wrap gap-1.5 mt-2">
-                        {recipient.signing_token && (
-                          <>
-                            <Button size="sm" variant="outline" className="h-7 text-[11px]"
-                              onClick={async () => {
-                                const url = buildSigningUrl(recipient.signing_token);
-                                try { await navigator.clipboard.writeText(url); toast.success("Signing link copied"); }
-                                catch { window.prompt("Copy:", url); }
-                              }}>
-                              <LinkIcon className="w-3 h-3 mr-1" /> Copy link
-                            </Button>
-                            <Button size="sm" variant="outline" className="h-7 text-[11px]" onClick={() => handleWhatsApp(recipient)}>
-                              <MessageCircle className="w-3 h-3 mr-1" /> WhatsApp
-                            </Button>
-                            <Button size="sm" variant="outline" className="h-7 text-[11px]" onClick={() => handleQuickEmail(recipient)} disabled={!recipient.email}>
-                              <Mail className="w-3 h-3 mr-1" /> Email
-                            </Button>
-                          </>
-                        )}
-                        {canRemind && (
-                          <Button size="sm" variant="outline" className="h-7 text-[11px]" disabled={remindingId !== null} onClick={() => sendReminder(recipient.id)}>
-                            {isReminding ? <Loader2 className="w-3 h-3 animate-spin" /> : <Bell className="w-3 h-3 mr-1" />}
-                            Remind
-                          </Button>
-                        )}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs text-[#1A1A1A]">{log.description}</p>
+                        <div className="text-[10px] text-[#1A1A1A]/60 mt-0.5">{format(new Date(log.created_at), "MMM d, h:mm a")}</div>
                       </div>
                     </div>
-                  );
-                })}
-
-                {/* CC manager */}
-                <div className="border-t border-[#B89555]/30 pt-3">
-                  <Label className="text-[10px] uppercase tracking-[0.16em] text-[#1A1A1A]/70">CC on send</Label>
-                  <div className="flex flex-wrap gap-1.5 mt-2">
-                    {ccs.map((e) => (
-                      <span key={e} className="inline-flex items-center gap-1 text-[11px] bg-white border border-[#B89555]/30 rounded px-2 py-0.5 text-[#1A1A1A]">
-                        {e}
-                        <button type="button" onClick={() => setCcs((prev) => prev.filter((x) => x !== e))} aria-label={`Remove ${e}`}>
-                          <X className="w-3 h-3" />
-                        </button>
-                      </span>
-                    ))}
-                    {!ccs.length && <span className="text-[11px] text-[#1A1A1A]/60">None</span>}
-                  </div>
-                  <div className="flex gap-2 mt-2">
-                    <Input value={ccInput} onChange={(e) => setCcInput(e.target.value)} placeholder="cc@example.com"
-                      onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addCc(); } }} className="h-8 text-xs" />
-                    <Button size="sm" variant="outline" onClick={() => addCc()}><Plus className="w-3 h-3" /></Button>
-                  </div>
-                  <Button size="sm" variant="ghost" className="text-[11px] mt-1 h-7 px-2"
-                    onClick={async () => {
-                      const { data } = await supabase.auth.getUser();
-                      if (data.user?.email) addCc(data.user.email);
-                    }}>
-                    + Add me as CC
-                  </Button>
-                  <Textarea value={bulkCcs} onChange={(e) => setBulkCcs(e.target.value)} placeholder="Bulk paste: emails separated by space, comma, semicolon or newline" className="mt-2 text-xs min-h-[60px]" />
-                  <Button size="sm" variant="outline" className="mt-1 h-7 text-[11px]" onClick={handleBulkCcs} disabled={!bulkCcs.trim()}>Add bulk</Button>
+                  ))}
+                  {!auditLogs.length && <p className="text-xs text-[#1A1A1A]/60 text-center py-2">No activity yet</p>}
                 </div>
               </CardContent>
             </Card>
+          )}
 
-            {/* Signed doc */}
-            {signedDoc && (
-              <Card className="bg-[#F7F2EA] border-emerald-300/50">
-                <CardHeader className="py-3">
-                  <CardTitle className="text-sm flex items-center gap-2 text-[#1A1A1A]">
-                    <Shield className="w-4 h-4 text-emerald-600" /> Signed Document
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <Button size="sm" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
-                    onClick={() => handleDownloadCurrentPdf(signedDoc.document_filename)}>
-                    <Download className="w-4 h-4 mr-2" /> Download Signed PDF
-                  </Button>
-                  <Button size="sm" variant="outline" className="w-full" onClick={() => setExportOpen(true)}>
-                    <Download className="w-4 h-4 mr-2" /> Export…
-                  </Button>
-                  {signedDoc.certificate_url && (
-                    <Button size="sm" variant="outline" className="w-full"
-                      onClick={() => handleDownload(signedDoc.certificate_url, `audit_${envelope.id}.pdf`)}>
-                      <Download className="w-4 h-4 mr-2" /> Audit Certificate
-                    </Button>
-                  )}
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Listing draft (auto-generated from PAA) */}
-            {envelope.template_key === "jbj-property-advertising-agreement" && (
-              <PAAListingDraftCard
-                envelopeId={envelope.id}
-                category={(envelope.category as any) || "leasing"}
-              />
-            )}
-
-            {/* Document Info */}
-            <Card className="bg-[#F7F2EA] border-[#B89555]/30">
-              <CardHeader className="py-3">
-                <CardTitle className="text-sm text-[#1A1A1A]">Details</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2 text-xs text-[#1A1A1A]/80">
-                {docNumber && <div className="flex justify-between"><span>Doc No.</span><span className="font-medium text-[#1A1A1A]">{docNumber}</span></div>}
-                <div className="flex justify-between"><span>File</span><span className="font-medium text-[#1A1A1A] truncate max-w-[180px]">{envelope.document_filename}</span></div>
-                <div className="flex justify-between"><span>Created</span><span>{format(new Date(envelope.created_at), "MMM d, yyyy")}</span></div>
-                {envelope.expires_at && <div className="flex justify-between"><span>Expires</span><span>{formatDistanceToNow(new Date(envelope.expires_at), { addSuffix: true })}</span></div>}
-                {envelope.completed_at && <div className="flex justify-between"><span>Completed</span><span>{format(new Date(envelope.completed_at), "MMM d, yyyy")}</span></div>}
-                <div className="flex justify-between"><span>Reminders</span><span>{envelope.reminders_sent || 0}</span></div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-
-        {/* Header & footer studio (always available) */}
-        <div className="flex items-center justify-between gap-2">
-          <Button variant="outline" size="sm" onClick={() => setShowStudio((s) => !s)}>
-            {showStudio ? "Hide" : "Customize"} header &amp; footer
-          </Button>
-          {showStudio && (
-            <Button variant="gold" size="sm" onClick={handleSaveEdits} disabled={regenerate.isPending}>
-              {regenerate.isPending ? <Loader2 className="w-3.5 h-3.5 mr-1 animate-spin" /> : <Save className="w-3.5 h-3.5 mr-1" />}
-              Apply chrome &amp; re-render
-            </Button>
+          {/* Listing draft (auto-generated from PAA) */}
+          {envelope.template_key === "jbj-property-advertising-agreement" && (
+            <PAAListingDraftCard
+              envelopeId={envelope.id}
+              category={(envelope.category as any) || "leasing"}
+            />
           )}
         </div>
+
+        {/* Header & footer studio panel (when toggled) — full width */}
         {showStudio && <TemplateChromeStudio value={chrome} onChange={setChrome} />}
 
-        {/* Edit Fields panel (full width below preview) */}
+        {/* Edit Fields panel — appears ABOVE the document so the user can immediately
+            see and edit every PAA field. Live preview below updates as they type. */}
         {editing && envelope.template_key && (
           <Card className="bg-[#F7F2EA] border-[#B89555]/30">
             <CardHeader className="py-3">
               <CardTitle className="text-sm text-[#1A1A1A] flex items-center gap-2">
-                <Edit3 className="w-4 h-4" /> Edit fields — changes preview live above
+                <Edit3 className="w-4 h-4" /> Edit fields — changes preview live below
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -1181,7 +1164,7 @@ export default function EnvelopeDetail() {
                   </Button>
                 </div>
               )}
-              {(envelope.template_key === "jbj-letterhead-leasing" || envelope.template_key === "jbj-letterhead-blank" || envelope.template_key === "jbj-blank-letter") ? (
+              {(envelope.template_key === "jbj-letterhead-blank" || envelope.template_key === "jbj-blank-letter") ? (
                 // Plain-text fillable letterhead — no rich-HTML editor.
                 <div className="space-y-3">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -1222,14 +1205,12 @@ export default function EnvelopeDetail() {
                 </div>
               ) : (
               PAA_FIELD_GROUPS.filter(g => g.title !== "Signatures").map((group) => {
-                // Per user request: keep every Property Finder field visible in edit mode
-                // (don't drop conditional ones), so nothing is missing at signing time.
                 const visible = group.fields;
                 if (!visible.length) return null;
                 return (
                   <div key={group.title}>
                     <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/70 mb-2">{group.title}</div>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                       {visible.map((f) => {
                         const val = editValues[f.key] ?? "";
                         const onChange = (v: string) => setEditValues((prev) => ({ ...prev, [f.key]: v }));
@@ -1248,7 +1229,7 @@ export default function EnvelopeDetail() {
                         }
                         if (f.type === "textarea") {
                           return (
-                            <div key={f.key} className="col-span-2 md:col-span-3">
+                            <div key={f.key} className="col-span-2 md:col-span-3 lg:col-span-4">
                               <Label className="text-xs">{f.label}</Label>
                               <Textarea data-edit-key={f.key} value={val} onChange={(e) => onChange(e.target.value)} rows={2} />
                             </div>
@@ -1290,35 +1271,76 @@ export default function EnvelopeDetail() {
           </Card>
         )}
 
-        {/* Activity log */}
-        <Card className="bg-[#F7F2EA] border-[#B89555]/30">
-          <CardHeader className="py-3">
-            <CardTitle className="text-sm text-[#1A1A1A] flex items-center gap-2">
-              <Shield className="w-4 h-4" /> Activity Log
+        {/* Document preview — FULL WIDTH, edge to edge */}
+        <Card className="bg-white border-[#B89555]/30 overflow-hidden">
+          <CardHeader className="bg-[#F7F2EA] border-b border-[#B89555]/30 py-3">
+            <CardTitle className="text-sm flex items-center gap-2 text-[#1A1A1A]">
+              <FileText className="w-4 h-4" /> {editing ? "Live preview (unsaved edits)" : "Document"}
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {auditLogs.map((log: any) => (
-                <div key={log.id} className="flex items-start gap-3">
-                  <div className="w-7 h-7 rounded-full bg-white border border-[#B89555]/30 flex items-center justify-center shrink-0">
-                    <Clock className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm text-[#1A1A1A]">{log.description}</p>
-                    <div className="flex items-center gap-3 text-xs text-[#1A1A1A]/60 mt-0.5">
-                      <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{format(new Date(log.created_at), "MMM d, yyyy 'at' h:mm a")}</span>
-                      {log.ip_address && <span className="flex items-center gap-1"><Globe className="w-3 h-3" />{log.ip_address}</span>}
-                    </div>
-                  </div>
-                </div>
-              ))}
-              {!auditLogs.length && <p className="text-sm text-[#1A1A1A]/60 text-center py-4">No activity yet</p>}
-            </div>
+          <CardContent className="p-0">
+            {previewSrcDoc ? (
+              <iframe
+                title="Document preview"
+                srcDoc={previewSrcDoc}
+                className="w-full bg-white"
+                style={{ height: "min(1180px, calc(100vh - 200px))", border: 0 }}
+                onLoad={(e) => {
+                  try {
+                    const f = e.currentTarget as HTMLIFrameElement;
+                    const doc = f.contentDocument;
+                    if (!doc) return;
+                    const h = Math.max(
+                      doc.documentElement.scrollHeight,
+                      doc.body.scrollHeight,
+                    );
+                    if (h > 200) f.style.height = `${h + 24}px`;
+                  } catch {}
+                }}
+              />
+            ) : envelope.document_url ? (
+              <iframe
+                title="Document PDF"
+                src={`${maybeProxyStorageUrl(signedDoc?.document_url || envelope.document_url, { disposition: "inline", filename: signedDoc?.document_filename || envelope.document_filename })}${(signedDoc?.document_url || envelope.document_url).includes("?") ? "&" : "?"}v=${encodeURIComponent(envelope.updated_at || envelope.created_at || "")}`}
+                className="w-full bg-white"
+                style={{ height: "1100px", border: 0 }}
+              />
+            ) : (
+              <div className="p-12 text-center text-[#1A1A1A]/70">No document</div>
+            )}
           </CardContent>
         </Card>
-      </div>
 
+        {/* Full activity log (kept below for completeness — full audit trail) */}
+        {signedDoc && (
+          <Card className="bg-[#F7F2EA] border-[#B89555]/30">
+            <CardHeader className="py-3">
+              <CardTitle className="text-sm text-[#1A1A1A] flex items-center gap-2">
+                <Shield className="w-4 h-4" /> Activity Log
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {auditLogs.map((log: any) => (
+                  <div key={log.id} className="flex items-start gap-3">
+                    <div className="w-7 h-7 rounded-full bg-white border border-[#B89555]/30 flex items-center justify-center shrink-0">
+                      <Clock className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm text-[#1A1A1A]">{log.description}</p>
+                      <div className="flex items-center gap-3 text-xs text-[#1A1A1A]/60 mt-0.5">
+                        <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{format(new Date(log.created_at), "MMM d, yyyy 'at' h:mm a")}</span>
+                        {log.ip_address && <span className="flex items-center gap-1"><Globe className="w-3 h-3" />{log.ip_address}</span>}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                {!auditLogs.length && <p className="text-sm text-[#1A1A1A]/60 text-center py-4">No activity yet</p>}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+      </div>
       <SendForSignatureDialog
         open={sendOpen}
         onOpenChange={setSendOpen}

@@ -56,11 +56,12 @@ export function renderTemplateHtml(
   if (templateKey === "jbj-blank-letter" || templateKey === "jbj-letterhead-blank") {
     return buildBlankLetterHtml(values as any, opts as BuildBlankLetterOptions);
   }
-  if (templateKey === "jbj-letterhead-leasing") {
-    return buildBlankLetterHtml(values as any, {
-      ...(opts as BuildBlankLetterOptions),
-      letterheadTitle: "Official Correspondence — Leasing",
-    });
+  // LOCKED: jbj-letterhead-leasing is a legacy/alias key for the approved
+  // PAA leasing agreement. It must render the full Property Advertising
+  // Agreement, NOT a blank letterhead. Routing it to buildBlankLetterHtml
+  // is what caused the "Omar PAA blank document" regression.
+  if (templateKey === "jbj-letterhead-leasing" || templateKey === "jbj-paa-leasing") {
+    return buildPAAHtml(values as any, { ...opts, category: opts.category || "leasing" });
   }
   return buildPAAHtml(values as any, opts);
 }
