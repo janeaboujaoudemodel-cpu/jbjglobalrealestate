@@ -31,13 +31,11 @@ export function useEmailSignatures() {
         .order("name");
       if (error) throw error;
       const rows = (data ?? []) as EmailSignature[];
+      // Show every preset individually (Front Desk, Help Desk, Support, etc.).
+      // Reply-to email is always rendered as contact@jbj.ae downstream.
       const seen = new Set<string>();
       return rows.filter((sig) => {
-        const label = `${sig.name || ""} ${sig.role_label || ""} ${sig.title_line || ""}`.toLowerCase();
-        // Hide accidental front-desk/help-desk aliases so the picker stays compact;
-        // the single Support preset remains available and every preset renders contact@jbj.ae.
-        if (/front\s*desk|help\s*desk/.test(label)) return false;
-        const key = (sig.name || sig.role_label || sig.title_line || sig.id).trim().toLowerCase().replace(/\s+/g, " ");
+        const key = (sig.id || sig.name || sig.role_label || "").trim().toLowerCase();
         if (seen.has(key)) return false;
         seen.add(key);
         return true;
