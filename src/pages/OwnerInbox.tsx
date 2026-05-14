@@ -42,7 +42,7 @@ import useOwnerInbox, {
 } from "@/hooks/useOwnerInbox";
 import { formatDistanceToNow } from "date-fns";
 import OwnerInboxThread from "@/components/owner-inbox/OwnerInboxThread";
-import { CATEGORY_META } from "@/hooks/useCommAITriage";
+import { CATEGORY_META, clientCategorize } from "@/hooks/useCommAITriage";
 
 const channelIcons: Record<string, React.ReactNode> = {
   whatsapp: <MessageSquare className="h-4 w-4 text-green-500" />,
@@ -336,7 +336,7 @@ export default function OwnerInbox() {
           </div>
 
           {/* Main Content - Split View */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4" style={{ height: 'calc(100vh - 420px)', minHeight: '400px' }}>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 min-h-[600px]" style={{ height: 'min(calc(100vh - 360px), 900px)' }}>
             {/* Thread List */}
             <div className="lg:col-span-1 min-h-0 overflow-hidden">
               <Card className="border border-[#B89555]/20 bg-[#FDFBF7]/90 backdrop-blur-sm h-full overflow-hidden shadow-sm">
@@ -361,7 +361,7 @@ export default function OwnerInbox() {
                     </div>
                   ) : (
                     <div className="divide-y divide-gold/10">
-                      {threads.filter(t => categoryFilter === 'all' || t.ai_category === categoryFilter).map((thread) => (
+                      {threads.filter(t => categoryFilter === 'all' || clientCategorize(t) === categoryFilter).map((thread) => (
                         <ThreadListItem
                           key={thread.id}
                           thread={thread}
@@ -521,11 +521,14 @@ function ThreadListItem({
                 {status.icon}
                 <span className="ml-1">{status.label}</span>
               </Badge>
-              {thread.ai_category && CATEGORY_META[thread.ai_category] && (
-                <Badge variant="outline" className={`text-[10px] px-1.5 py-0.5 ${CATEGORY_META[thread.ai_category].color}`}>
-                  {CATEGORY_META[thread.ai_category].label}
-                </Badge>
-              )}
+              {(() => {
+                const cat = clientCategorize(thread);
+                return CATEGORY_META[cat] ? (
+                  <Badge variant="outline" className={`text-[10px] px-1.5 py-0.5 ${CATEGORY_META[cat].color}`}>
+                    {CATEGORY_META[cat].label}
+                  </Badge>
+                ) : null;
+              })()}
             </div>
             {thread.last_message_at && (
               <span className="text-[10px] text-[#1A1A1A]/70 shrink-0">
