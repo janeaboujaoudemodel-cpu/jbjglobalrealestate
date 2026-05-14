@@ -236,6 +236,8 @@ export function useOwnerInbox(filters: InboxFilters = {}) {
         },
         () => {
           refetchThreads();
+          queryClient.invalidateQueries({ queryKey: ['owner-inbox-global-stats'] });
+          queryClient.invalidateQueries({ queryKey: ['owner-inbox-per-channel-counts'] });
         }
       )
       .on(
@@ -247,6 +249,8 @@ export function useOwnerInbox(filters: InboxFilters = {}) {
         },
         () => {
           refetchThreads();
+          queryClient.invalidateQueries({ queryKey: ['owner-inbox-global-stats'] });
+          queryClient.invalidateQueries({ queryKey: ['owner-inbox-per-channel-counts'] });
         }
       )
       .subscribe();
