@@ -169,6 +169,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
 
   return (
     <Card className="border-2 border-[#B89555]/20 bg-[#FDFBF7]/90 backdrop-blur-sm h-full flex flex-col overflow-hidden">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col overflow-hidden">
       {/* Header */}
       <CardHeader className="border-b border-[#B89555]/10 py-3 px-4 flex-shrink-0">
         <div className="flex items-center justify-between">
@@ -231,14 +232,14 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
         </div>
 
         {/* Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-3">
-          <TabsList className="grid grid-cols-4 h-8">
+        <div className="mt-3">
+          <TabsList className="grid grid-cols-4 h-8 w-full">
             <TabsTrigger value="conversation" className="text-xs">Conversation</TabsTrigger>
             <TabsTrigger value="lead" className="text-xs">Lead Profile</TabsTrigger>
             <TabsTrigger value="activity" className="text-xs">Activity</TabsTrigger>
             <TabsTrigger value="ai" className="text-xs">AI Suggestions</TabsTrigger>
           </TabsList>
-        </Tabs>
+        </div>
       </CardHeader>
 
       {/* Content */}
@@ -563,6 +564,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
           </div>
         </TabsContent>
       </CardContent>
+      </Tabs>
 
       {/* Hidden audio element */}
       <audio ref={audioRef} onEnded={() => setPlayingAudio(null)} />
