@@ -93,7 +93,15 @@ function legacyBodyToHtml(
     .replace(/\{\{sender_signature\}\}/g, "")
     .replace(/\{\{signing_link\}\}/g, "")
     .replace(/\{\{(\w+)\}\}/g, (_, k) => tokens[k] ?? "");
-  return escapeHtml(interpolated).replace(/\n/g, "<br/>").replace(/(<br\s*\/?>\s*)+$/g, "");
+  // If the saved body already contains HTML tags (legacy stored as `<br/>`),
+  // do NOT re-escape it — that would render as literal "&lt;br/&gt;" code in
+  // the editor and the delivered email. Treat as already-HTML and just trim
+  // trailing breaks. Plain text is escaped + newline→<br/> as before.
+  const looksLikeHtml = /<[a-z][\s\S]*?>/i.test(interpolated);
+  const html = looksLikeHtml
+    ? interpolated
+    : escapeHtml(interpolated).replace(/\n/g, "<br/>");
+  return html.replace(/(<br\s*\/?>\s*)+$/g, "");
 }
 
 /** Aggressively strip ANY embedded signature artifact from a body HTML
@@ -175,7 +183,12 @@ export function SendViaEmailDialog({
 
   useEffect(() => {
     if (selectedSigId || !signatures.length) return;
-    const def = signatures.find((s) => s.is_default) || signatures[0];
+    // E-signature client emails always default to JBJ Executive Office —
+    // Founder/CEO is reserved for personal correspondence.
+    const exec =
+      signatures.find((s) => /executive\s*office/i.test(s.name || "")) ||
+      signatures.find((s) => /executive\s*office/i.test(s.role_label || ""));
+    const def = exec || signatures.find((s) => s.is_default) || signatures[0];
     setSelectedSigId(def?.id || "");
   }, [signatures, selectedSigId]);
 
