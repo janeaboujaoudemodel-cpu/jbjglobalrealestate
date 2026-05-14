@@ -942,7 +942,7 @@ export default function EnvelopeDetail() {
               </div>
               <p className="text-[#1A1A1A]/70 mt-1 text-sm">
                 {envelope.template_key === "jbj-property-advertising-agreement"
-                  ? "Property Advertising Agreement, Leasing"
+                  ? "Property Advertising Agreement — Leasing"
                   : envelope.name}
                 {envelope.description ? ` · ${envelope.description}` : ""}
               </p>
