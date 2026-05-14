@@ -355,7 +355,9 @@ export function useOwnerInbox(filters: InboxFilters = {}) {
     updateThreadStatus: updateThreadStatus.mutate,
     linkToLead: linkToLead.mutate,
     markAsRead: markAsRead.mutate,
-    isUpdating: updateThreadStatus.isPending || linkToLead.isPending,
+    bulkUpdate: bulkUpdate.mutate,
+    bulkUpdateAsync: bulkUpdate.mutateAsync,
+    isUpdating: updateThreadStatus.isPending || linkToLead.isPending || bulkUpdate.isPending,
   };
 }
 
