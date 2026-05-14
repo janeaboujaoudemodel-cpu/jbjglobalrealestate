@@ -20,7 +20,11 @@ const DEFAULT_SUBJECT = "Signature Pending: {{doc_title}} · {{doc_number}}";
 // always YOUR brand (Jane Bou Jaoude · JBJ GLOBAL REAL ESTATE), never the client.
 const DEFAULT_BODY = `Dear {{client_name}},
 
-Please find the PDF attached to this email. Once you have reviewed it, kindly sign it using DocuSign at your earliest convenience and return it by replying to this email or this ticket with the signed copy attached.
+Please find the attached PDF document for your review.
+
+Once reviewed, kindly proceed with signing the document via DocuSign at your earliest convenience and return the signed copy by replying to this email.
+
+Should you require any clarification, please do not hesitate to contact me.
 
 Thank you,`;
 
