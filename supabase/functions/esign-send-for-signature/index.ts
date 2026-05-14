@@ -212,34 +212,10 @@ Deno.serve(async (req) => {
         .filter((e) => !allTos.includes(e) && !ccEmails.includes(e))
       ));
 
+      let resendOk = false;
+      let resendErr: string | null = null;
       if (channelList.includes("email") && resendApiKey && allTos.length) {
         try {
-          const attachmentUrlStr = typeof attachment_url === "string" ? attachment_url : "";
-          const attachmentNameStr = typeof attachment_name === "string" ? attachment_name : "";
-          const pdfAttachment = await fetchEmailAttachment(
-            attachmentUrlStr,
-            attachmentNameStr,
-            "application/pdf",
-          );
-          if (attachmentUrlStr && attachmentNameStr && !pdfAttachment) {
-            return corsErrorResponse(
-              `Could not attach ${attachmentNameStr} — the PDF could not be fetched from storage. Re-export the document and try again.`,
-              502,
-              origin,
-            );
-          }
-          const allAttachments = pdfAttachment ? [pdfAttachment] : [];
-          if (Array.isArray(extra_attachments)) {
-            for (const e of extra_attachments) {
-              const a = await fetchEmailAttachment(
-                String(e?.url || ""),
-                String(e?.name || ""),
-                String(e?.content_type || "application/octet-stream"),
-              );
-              if (a) allAttachments.push(a);
-              else if (e?.url && e?.name) console.warn(`[esign-send-for-signature] skipped extra attachment ${e.name}`);
-            }
-          }
           const payload: Record<string, unknown> = {
             from: "JBJ Global Real Estate <noreply@jbj.ae>",
             to: allTos,
@@ -251,32 +227,36 @@ Deno.serve(async (req) => {
             text: plainText,
             headers: { "X-Entity-Ref-ID": crypto.randomUUID() },
           };
-          if (allAttachments.length) payload.attachments = allAttachments;
+          if (sharedAttachments.length) payload.attachments = sharedAttachments;
           const res = await quotaGuardedFetch("https://api.resend.com/emails", {
             method: "POST",
             headers: { "Authorization": `Bearer ${resendApiKey}`, "Content-Type": "application/json" },
             body: JSON.stringify(payload),
           });
           const resData = await res.json();
-          if (!res.ok) console.error("Resend API error:", JSON.stringify(resData));
-        } catch (emailError) {
+          if (!res.ok) {
+            resendErr = (resData?.message || res.statusText || "Resend error");
+            console.error("Resend API error:", JSON.stringify(resData));
+          } else {
+            resendOk = true;
+          }
+        } catch (emailError: any) {
+          resendErr = emailError?.message || "Email send failed";
           console.error("Failed to send email to", allTos.join(","), emailError);
         }
       } else if (channelList.includes("email")) {
         console.log("Resend not configured or no recipients; skipping email.");
       }
 
-      // WhatsApp link generation (wa.me fallback when Twilio not configured)
+      const sidePromises: Promise<unknown>[] = [];
       if (channelList.includes("whatsapp") && recipient.phone) {
         const phoneDigits = String(recipient.phone).replace(/[^\d]/g, "");
         const waText = encodeURIComponent(
           `Hi ${recipient.name}, please sign "${envelope.name}" here: ${signingUrl}`
         );
         const waUrl = `https://wa.me/${phoneDigits}?text=${waText}`;
-        // Persist link for client-side opening
-        await supabase
-          .from("esign_audit_log")
-          .insert({
+        sidePromises.push(
+          supabase.from("esign_audit_log").insert({
             envelope_id: envelope.id,
             recipient_id: recipient.id,
             action: "whatsapp_link_generated",
@@ -284,49 +264,58 @@ Deno.serve(async (req) => {
             actor_id: user.id,
             actor_email: user.email,
             metadata: { wa_url: waUrl },
-          });
+          }),
+        );
       }
 
-      // Update recipient status
-      await supabase
-        .from("esign_recipients")
-        .update({
-          status: "sent",
-          sent_at: new Date().toISOString(),
-        })
-        .eq("id", recipient.id);
+      if (resendOk || !channelList.includes("email")) {
+        sidePromises.push(
+          supabase
+            .from("esign_recipients")
+            .update({ status: "sent", sent_at: new Date().toISOString() })
+            .eq("id", recipient.id),
+          supabase.from("esign_audit_log").insert({
+            envelope_id: envelope.id,
+            recipient_id: recipient.id,
+            action: "sent",
+            description: `Signature request sent to ${recipient.name} (${recipient.email})`,
+            actor_id: user.id,
+            actor_email: user.email,
+            actor_name: envelope.sender_name,
+          }),
+        );
+      } else {
+        failures.push({ recipient_id: recipient.id, email: recipient.email, error: resendErr || "Send failed" });
+        sidePromises.push(
+          supabase
+            .from("esign_recipients")
+            .update({ status: "failed", metadata: { ...((recipient.metadata as any) || {}), last_error: resendErr } })
+            .eq("id", recipient.id),
+        );
+      }
 
-      // Create audit log
-      await supabase.from("esign_audit_log").insert({
+      await Promise.allSettled(sidePromises);
+    }));
+
+    await Promise.allSettled([
+      supabase
+        .from("esign_envelopes")
+        .update({ status: "sent" })
+        .eq("id", envelope.id),
+      supabase.from("esign_audit_log").insert({
         envelope_id: envelope.id,
-        recipient_id: recipient.id,
         action: "sent",
-        description: `Signature request sent to ${recipient.name} (${recipient.email})`,
+        description: `Envelope sent to ${recipients.length} recipient(s)${failures.length ? ` (${failures.length} failed)` : ""}`,
         actor_id: user.id,
         actor_email: user.email,
         actor_name: envelope.sender_name,
-      });
-    }
-
-    // Update envelope status
-    await supabase
-      .from("esign_envelopes")
-      .update({ status: "sent" })
-      .eq("id", envelope.id);
-
-    // Create envelope sent audit log
-    await supabase.from("esign_audit_log").insert({
-      envelope_id: envelope.id,
-      action: "sent",
-      description: `Envelope sent to ${recipients.length} recipient(s)`,
-      actor_id: user.id,
-      actor_email: user.email,
-      actor_name: envelope.sender_name,
-    });
+      }),
+    ]);
 
     return corsJsonResponse({
       success: true,
-      message: `Sent to ${recipients.length} recipient(s)`,
+      message: `Sent to ${recipients.length - failures.length}/${recipients.length} recipient(s)`,
+      failures,
     }, origin);
 
   } catch (error: any) {
