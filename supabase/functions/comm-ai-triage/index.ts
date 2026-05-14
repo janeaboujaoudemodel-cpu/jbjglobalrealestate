@@ -10,9 +10,13 @@ const CATEGORIES = [
   "real_estate_lead",
   "real_estate_ops",
   "sales_offer",
+  "campaign",
+  "advertising",
   "marketing",
+  "business_linkedin",
   "finance",
   "developer_documents",
+  "system",
   "personal",
   "spam",
   "other",
@@ -22,12 +26,15 @@ const CATEGORIES = [
 // gateway returns blank/invalid output.
 function ruleBasedCategory(input: { from: string; subject: string }): string | null {
   const hay = `${input.from} ${input.subject}`.toLowerCase();
-  if (/(shein|creator center|campaign|reversible|ruelala|farfetch|cobone|newsletter|unsubscribe|promo|sale\b|deal|coupon)/.test(hay)) return "marketing";
+  if (/(shein.*creator|creator center|influencer|brand collab|campaign\b|sponsor|ugc|gifting|barter)/.test(hay)) return "campaign";
+  if (/(canon|nikon|sony|adidas|nike|samsung|new product|introducing the|launch|advertis|sponsored)/.test(hay)) return "advertising";
+  if (/(linkedin|new connection|profile view|posted|comment on your|endorsement)/.test(hay)) return "business_linkedin";
   if (/(emiratesnbd|enbd|hsbc|adcb|fab\b|mashreq|payroll|invoice|tax\b|vat\b|payment|bank|statement|priorit\w*banking)/.test(hay)) return "finance";
   if (/(price offer|buyer waiting|luxury closet|offer for your|sell your|resale)/.test(hay)) return "sales_offer";
   if (/(registration|mou\b|trade license|docusign|envelope|developer|brochure|inventory|listing\b|broker)/.test(hay)) return "developer_documents";
-  if (/(github|uptime|monitor|alert|deploy|build failed|run failed|supabase|hostinger|verification code|otp)/.test(hay)) return "real_estate_ops";
-  if (/(spam|win a prize|unsubscribed|do not reply)/.test(hay)) return "spam";
+  if (/(github|uptime|monitor|alert|deploy|build failed|run failed|supabase|hostinger|verification code|otp|search console|sc-noreply)/.test(hay)) return "system";
+  if (/(shein|ruelala|farfetch|cobone|reversible|shopstyle|newsletter|unsubscribe|promo|sale\b|deal|coupon|rotana|gitex|mmgtalent|job alert)/.test(hay)) return "marketing";
+  if (/(spam|win a prize|do not reply)/.test(hay)) return "spam";
   return null;
 }
 
