@@ -15,7 +15,7 @@ import { buildSenderSignatureHtml, escapeHtml } from "@/lib/email/buildEnvelopeE
 
 const isValidEmail = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.trim());
 
-const DEFAULT_SUBJECT = "Please sign — {{doc_title}} · {{doc_number}}";
+const DEFAULT_SUBJECT = "Signature Pending: {{doc_title}} · {{doc_number}}";
 // {{sender_signature}} is the signature block at the bottom of the email — it is
 // always YOUR brand (Jane Bou Jaoude · JBJ GLOBAL REAL ESTATE), never the client.
 const DEFAULT_BODY = `Dear {{client_name}},
@@ -155,19 +155,11 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
 
     setSending(true);
     try {
-      // Persist editable subject/body + cc/bcc onto envelope
+      // Current composer edits are sent only for this email. Future defaults are
+      // changed only when the owner clicks Approve & Lock / Save.
       await supabase
         .from("esign_envelopes")
-        .update({
-          email_subject: subject,
-          email_message: body,
-          metadata: {
-            ...meta,
-            cc_emails: ccs,
-            bcc_emails: bccs,
-            send_template: { subject, body, last_edited: new Date().toISOString() },
-          },
-        })
+        .update({ metadata: { ...meta, cc_emails: ccs, bcc_emails: bccs } })
         .eq("id", envelope.id);
 
       // Update primary recipient phone if provided

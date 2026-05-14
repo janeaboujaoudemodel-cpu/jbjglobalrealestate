@@ -73,6 +73,7 @@ export default function EnvelopeDetail() {
   const [sendOpen, setSendOpen] = useState(false);
   const [emailDialogOpen, setEmailDialogOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
+  const [activityOpen, setActivityOpen] = useState(false);
   const [hiddenFields, setHiddenFields] = useState<string[]>([]);
   const [uploadingSigned, setUploadingSigned] = useState(false);
   const signedUploadInputRef = useMemo(() => ({ current: null as HTMLInputElement | null }), []);
@@ -1083,10 +1084,7 @@ export default function EnvelopeDetail() {
                   title="Document preview"
                   srcDoc={previewSrcDoc}
                   className="w-full bg-white block"
-                  // Start at 0 so we don't paint a giant blank area before the
-                  // content loads. Final height is set precisely by onLoad +
-                  // ResizeObserver below.
-                  style={{ height: "600px", border: 0, display: "block" }}
+                  style={{ aspectRatio: "794 / 1123", height: "auto", minHeight: 0, border: 0, display: "block" }}
                   onLoad={(e) => {
                     const f = e.currentTarget as HTMLIFrameElement;
                     const doc = f.contentDocument;
@@ -1097,9 +1095,8 @@ export default function EnvelopeDetail() {
                           doc.documentElement.scrollHeight,
                           doc.body.scrollHeight,
                         );
-                        // No +24 padding — that produced the visible white strip
-                        // beneath the footer. Use exact content height.
-                        if (h > 100) f.style.height = `${h}px`;
+                        const w = f.getBoundingClientRect().width || 794;
+                        if (h > 100) f.style.height = `${Math.round(w * 1123 / 794)}px`;
                       } catch {}
                     };
                     // First pass immediately, then again after fonts + images
@@ -1444,12 +1441,15 @@ export default function EnvelopeDetail() {
 
         {/* Activity log */}
         <Card className="bg-[#F7F2EA] border-[#B89555]/30">
-          <CardHeader className="py-3">
-            <CardTitle className="text-sm text-[#1A1A1A] flex items-center gap-2">
-              <Shield className="w-4 h-4" /> Activity Log
+          <CardHeader className="py-3 cursor-pointer" onClick={() => setActivityOpen((v) => !v)}>
+            <CardTitle className="text-sm text-[#1A1A1A] flex items-center gap-2 justify-between">
+              <span className="flex items-center gap-2"><Shield className="w-4 h-4" /> Activity Log</span>
+              <Button type="button" variant="outline" size="sm" className="h-7 text-[11px] border-[#B89555]/40" onClick={(e) => { e.stopPropagation(); setActivityOpen((v) => !v); }}>
+                {activityOpen ? "Minimize" : "Expand"}
+              </Button>
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          {activityOpen && <CardContent>
             <div className="space-y-3">
               {auditLogs.map((log: any) => (
                 <div key={log.id} className="flex items-start gap-3">
@@ -1467,7 +1467,7 @@ export default function EnvelopeDetail() {
               ))}
               {!auditLogs.length && <p className="text-sm text-[#1A1A1A]/60 text-center py-4">No activity yet</p>}
             </div>
-          </CardContent>
+          </CardContent>}
         </Card>
       </div>
 
