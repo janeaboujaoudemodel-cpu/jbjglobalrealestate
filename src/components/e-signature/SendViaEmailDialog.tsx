@@ -153,6 +153,8 @@ export function SendViaEmailDialog({
   const [busy, setBusy] = useState<"" | "test" | "send">("");
   const [savingField, setSavingField] = useState<"" | "recipients" | "subject" | "signature" | "body">("");
   const [selectedSigId, setSelectedSigId] = useState<string>("");
+  const [draftSavedAt, setDraftSavedAt] = useState<number | null>(null);
+  const draftKey = `jbj_esign_email_draft_${envelopeId || "__new__"}`;
 
   // Load all email signature presets so the owner can pick which one
   // appears at the bottom of the body. Signature is rendered SEPARATELY
