@@ -1,112 +1,71 @@
-## Goal
+## Message I will send after a client replies with a signed document
 
-Three things:
-1. Make **Approve & Send** (and the Send-for-Signature dialog) feel snappy.
-2. Make sure that once Approve & Send fires, the envelope/recipient correctly moves into "Pending Signature" on the dashboard immediately — not stuck at 0.
-3. Auto-detect when the client emails the signed copy back, mark the envelope/recipient as **signed** (with name + date/time), surface it in the Signed Contracts section, and stamp the generated PAA form with "Signed by {name} on {dd/mm/yyyy hh:mm}".
+**Subject:** Thank you for signing — JBJ Property Advertising Agreement
 
-## Root causes
+**Body:**
 
-### 1) Slow Approve & Send
+Dear Omar Allam Niazi Shadid,
 
-`supabase/functions/esign-send-for-signature/index.ts` runs everything sequentially per recipient:
-- `fetchEmailAttachment(attachment_url, ...)` downloads the PDF from storage **before** every Resend call (≈500‑2000 ms).
-- For each extra attachment another sequential fetch.
-- After each Resend call: per-recipient `update esign_recipients`, then `insert esign_audit_log` (each its own round trip).
-- Finally a second envelope `update` + a second `insert esign_audit_log`.
+Thank you for signing the document. We have received your signed Property Advertising Agreement and it has now been filed securely with JBJ GLOBAL REAL ESTATE.
 
-For a typical 1-recipient PAA send that's ~6‑8 sequential round trips. The dialog also `await`s a metadata `update esign_envelopes` and an `update esign_recipients` (for phone) **before** the send call.
+Document: JBJ-PAA-LEASING-0001  
+Signed received: {received date and time}
 
-### 2) "Pending" stays at 0 after sending
+Our team will review the signed copy and contact you if anything further is required. If you have any questions, simply reply to this email.
 
-Dashboard `stats.pending` counts envelopes whose `status ∈ {sent, viewed, partially_signed}`. The edge function does set `status='sent'`, but:
-- `EnvelopeDetail.tsx` and `ESignatureDashboard.tsx` don't `refetch()` after Send-for-Signature dialog returns. The user only sees the new status after a hard reload.
-- If the edge function 500s mid-loop (any one Resend failure throws), the envelope status update at the bottom never runs and the recipient row is left as `draft`/`sent` partially. There's no transactional guarantee.
+With appreciation,  
+JBJ GLOBAL REAL ESTATE
 
-### 3) Signed‑back never syncs
+A test of this thank-you email will be sent to **infoo.jane@gmail.com** after implementation.
 
-There is **no** glue between the Gmail inbox classifier (`classify-jbj-inbox`) and the e‑signature tables. When the client replies "signed" with a PDF attached we tag the inbox thread `category=contracts, status=signed`, but we never:
-- Match the reply to an `esign_envelopes` row.
-- Update `esign_recipients.signed_at` / `status='signed'`.
-- Move the envelope to `completed`.
-- Save the returned signed PDF to `esign_envelope_files` so it appears in the Signed Contracts section / generated PAA form.
+## Tasks
 
-That's why the doc still says "Pending — 0 signed" even after Omar replies.
+### 1. Force the latest PAA PDF before every email send
+- Make **Send test** and **Approve & send** regenerate/synchronise the current PAA document first.
+- Ensure the attached PDF always matches the latest visible document preview, including **NON EXCLUSIVE** instead of any old **EXCLUSIVE** version.
+- Apply the same safeguard to both current send dialogs so no older cached document URL can be attached.
+- Add cache-busting/signed attachment URL handling so Gmail receives the newly generated PDF bytes, not a stale storage file.
 
-## Fixes
+### 2. Show the exact attached documents in the email preview
+- Add an **Attachments included** area directly under the email preview/footer.
+- Show the standard generated PAA PDF first.
+- Make it clickable so you can open/read exactly what the client will receive.
+- Keep the existing upload option for extra files, and show uploaded files in the same preview list.
+- Ensure real sends and test sends include both:
+  - the latest standard PAA PDF
+  - any manually uploaded extra files
 
-### A. `supabase/functions/esign-send-for-signature/index.ts` — make it fast and resilient
+### 3. Harden the signed-document reply detection
+- Treat a client reply with a PDF/document attachment as a signed return when the sender matches a pending e-sign recipient.
+- Do not rely only on subject text like “signed” or filename wording; the attachment + matching pending signer should be enough.
+- Keep the inbox classifier category/status correct for signed contract replies.
+- Fix audit logging fields so sync events are recorded properly.
+- Add idempotency so the same Gmail message cannot mark/sign the same envelope twice.
 
-1. Hoist the attachment fetches **out of the per-recipient loop** — fetch once, reuse for all recipients.
-2. Run the per-recipient block in parallel with `await Promise.all(recipients.map(...))`.
-3. Inside each recipient block, fire the recipient `update`, the audit-log `insert`, and the Resend POST **in parallel** (`Promise.allSettled`) — they don't depend on each other.
-4. After the loop, do the envelope `update` + final `audit_log insert` as a single `Promise.all`.
-5. If Resend fails for one recipient, mark **only that recipient** as `failed` and continue, then return 207-style `{ ok: true, failures: [...] }` instead of throwing 500. The envelope still flips to `sent` so the dashboard reflects reality.
-6. Return the new envelope row in the response so the client can update its cache without a refetch.
+### 4. Complete the e-signature lifecycle from inbox reply
+- When a matching signed document is received:
+  - upload/store the returned signed PDF
+  - mark the recipient as **signed**
+  - set the signed timestamp from the email received time
+  - move the envelope from pending to **completed/signed** when all client signers are complete
+  - create/update the signed contract record
+  - update the owner document hub so it appears under signed contracts
 
-### B. `src/components/e-signature/SendViaEmailDialog.tsx` and `SendForSignatureDialog.tsx`
+### 5. Send the automatic thank-you email
+- Trigger the branded thank-you email immediately after the signed reply is accepted.
+- Make it idempotent so the client does not receive duplicate thank-you messages.
+- Add a test mode/override so I can send the exact thank-you email to **infoo.jane@gmail.com** without pretending the live client signed again.
 
-1. Drop the pre-send `await supabase.from("esign_envelopes").update({ metadata: ... })` — fold cc/bcc into the same edge-function payload (already supported); persist metadata server‑side in the same loop.
-2. Fire the optimistic UI immediately: close dialog + `toast.success("Sending…")`, then `await` the response and replace toast with success/failure. Users perceive ≤200 ms instead of 1.5–4 s.
-3. After the send promise resolves, call the parent `onSent?.()` which already invalidates `esign_envelopes` queries. Add `qc.invalidateQueries({ queryKey: ["esign_envelopes"] })` and `["esign_recipients", envelopeId]` to make the dashboard's **Pending Signature** counter update instantly.
+### 6. Show “Signed by {name} on {datetime}” everywhere needed
+- Keep the signed-by line in the rendered PAA template.
+- Ensure the main document form and signed-contract cards show:
+  - signer name
+  - received/signed date and time
+  - source: email reply when applicable
 
-### C. New edge function `esign-sync-from-inbox` + classifier wiring
-
-Create `supabase/functions/esign-sync-from-inbox/index.ts`:
-
-Input (called from `classify-jbj-inbox` whenever it tags `category=contracts, status=signed`, or from a new "Mark as signed reply" button on the inbox thread):
-```ts
-{ thread_id, message_id, from_email, sender_name, subject, attachments:[{name,url,content_type}], received_at }
-```
-
-Logic:
-1. Find the most recent `esign_envelopes` row where `status in ('sent','viewed','partially_signed')` and any `esign_recipients.email = from_email`. Tiebreaker: subject/doc_number match.
-2. If found:
-   - Update the matching `esign_recipient`: `status='signed'`, `signed_at=received_at`, `metadata.signed_via='email_reply'`, `metadata.thread_id`, `metadata.signer_name=sender_name`.
-   - For each PDF attachment: copy to the `esign-signed` storage bucket and insert into `esign_envelope_files` with `kind='client_signed'`.
-   - If all recipients of role `client` are now signed → set envelope `status='completed'`, `completed_at=now()`. Otherwise `partially_signed`.
-   - Insert `esign_audit_log` `{action:'signed_by_email', actor_email:from_email, description:"Signed copy received via email reply", metadata:{thread_id}}`.
-3. Trigger `esign-complete-envelope` (existing) to render the final PDF with the countersignature stamp.
-
-Wire-up:
-- Inside `classify-jbj-inbox/index.ts`, after the persist step, when `category==='contracts' && status==='signed' && attachments.length`, fire-and-forget `fetch(SUPABASE_URL+'/functions/v1/esign-sync-from-inbox', ...)` with the service-role internal token.
-- Also expose a manual "Link to envelope & mark signed" button on the inbox thread that calls the same function with a chosen `envelope_id` (covers fuzzy-match misses).
-
-### D. PAA generated form — show "Signed by Omar on dd/mm/yyyy hh:mm"
-
-`src/pages/e-signature/EnvelopeDetail.tsx` already reads `clientRec?.signed_at` (line 866 / line 245) but the PAA template never receives the signed string. Two small touches:
-
-1. In `useAgreementSaver`/render path, pass `signed_by_client` and `signed_at_client` into the PAA HTML build (`buildPAAHtml`) tokens.
-2. In `src/templates/jbjPropertyAdvertisingAgreement.ts`, in the "Client signature" row, render the existing client signature block + below it: `Signed by {{client_signed_name}} on {{client_signed_at_human}} (received via email reply)` whenever those tokens are present. Falls back to the placeholder when not signed.
-
-### E. Dashboard counters
-
-`ESignatureDashboard.tsx`:
-- Subscribe to `esign_envelopes` realtime (`postgres_changes`) once on mount → invalidate the query. This guarantees Pending/Completed counters move within ~1 s of any send/sign event, no manual refresh.
-
-## Verification (end‑to‑end)
-
-1. Open `/owner/documents/forms/<id>` (current PAA), click **Send for Signature → Approve & Send**:
-   - Toast appears within ~300 ms; dialog closes.
-   - Dashboard "Pending Signature" goes from N → N+1 within ~1 s.
-   - Server log shows recipient row `status='sent', sent_at=now`, envelope `status='sent'`.
-2. Reply from `omar@…` to the sent thread with the signed PDF attached:
-   - Within one inbox‑sync cycle: classifier tags the thread, `esign-sync-from-inbox` runs.
-   - Envelope flips to `completed`, recipient row `status='signed', signed_at=…`.
-   - Dashboard "Pending Signature" decrements, "Completed" increments.
-   - Envelope detail shows green "Signed by Omar on 14/05/2026 17:42 (via email reply)"; signed PDF appears in **Signed Contracts** + the rendered PAA shows the same line under the client signature box.
-3. Negative path: Resend rate‑limits one recipient → that recipient gets `status='failed'`, others stay sent, envelope still `sent`, banner shows partial failure.
-
-## Files touched
-
-- `supabase/functions/esign-send-for-signature/index.ts` — parallelize, hoist attachments, partial-failure response.
-- `supabase/functions/esign-sync-from-inbox/index.ts` — **new** function.
-- `supabase/functions/classify-jbj-inbox/index.ts` — fire-and-forget call to the new function.
-- `src/components/e-signature/SendViaEmailDialog.tsx` — drop pre-send awaits, invalidate caches, optimistic toast.
-- `src/components/e-signature/SendForSignatureDialog.tsx` — same treatment for the legacy path.
-- `src/pages/e-signature/EnvelopeDetail.tsx` — pass signed-by tokens, realtime subscription on detail.
-- `src/pages/e-signature/ESignatureDashboard.tsx` — realtime subscription on `esign_envelopes`.
-- `src/templates/jbjPropertyAdvertisingAgreement.ts` — render "Signed by {name} on {datetime}" line when present.
-- `src/hooks/useEsignTemplates.ts` (or a small new `useEsignRealtime.ts`) — shared realtime subscription helper.
-
-No DB schema changes required; all needed columns (`signed_at`, `status`, `metadata`, `completed_at`, `esign_envelope_files`) already exist.
+### 7. Validate end-to-end
+- Verify the current envelope `JBJ-PAA-LEASING-0001` is stored as **NON EXCLUSIVE** and that the send attachment matches that latest value.
+- Deploy changed backend functions.
+- Send a real outbound **test PAA email** to **infoo.jane@gmail.com** with the latest non-exclusive PDF attached.
+- Send the **thank-you-for-signing test email** to **infoo.jane@gmail.com**.
+- Check function logs and database state for send/sync paths, including pending → signed/completed lifecycle.
