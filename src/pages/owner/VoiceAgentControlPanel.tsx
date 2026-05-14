@@ -4,15 +4,31 @@
  * and quick-config links. The actual agent prompt/voice is managed in the
  * ElevenLabs dashboard; this page surfaces the operational state.
  */
-import { useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { IconTile } from "@/components/ui/icon-tile";
-import { Phone, PhoneCall, Clock, Users, ExternalLink, Mic2, Settings } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Phone, PhoneCall, Clock, Users, ExternalLink, Mic2, Settings, Save, Send, Loader2, Sparkles } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
+import { toast } from "sonner";
+
+interface AgentConfig {
+  agent_id: string;
+  name: string;
+  prompt: string;
+  first_message: string;
+  language: string;
+  voice_id: string;
+  llm: string;
+}
+
+interface TestMessage { role: "user" | "assistant"; content: string }
 
 type Row = {
   id: string;
@@ -53,6 +69,74 @@ export default function VoiceAgentControlPanel() {
     const avg = completed > 0 ? Math.round(totalSec / completed) : 0;
     return { total, completed, totalSec, unique, avg };
   }, [logs]);
+
+  // Live agent config (prompt/voice/language/first message)
+  const qc = useQueryClient();
+  const { data: agent, isLoading: loadingAgent, error: agentError } = useQuery<AgentConfig>({
+    queryKey: ["elevenlabs_agent_config"],
+    queryFn: async () => {
+      const { data, error } = await supabase.functions.invoke("elevenlabs-agent", { method: "GET" });
+      if (error) throw error;
+      if ((data as { error?: string })?.error) throw new Error((data as { error: string }).error);
+      return data as AgentConfig;
+    },
+  });
+
+  const [draft, setDraft] = useState<AgentConfig | null>(null);
+  useEffect(() => { if (agent && !draft) setDraft(agent); }, [agent, draft]);
+
+  const saveMutation = useMutation({
+    mutationFn: async (payload: Partial<AgentConfig>) => {
+      const { data, error } = await supabase.functions.invoke("elevenlabs-agent", {
+        method: "POST",
+        body: payload,
+      });
+      if (error) throw error;
+      if ((data as { error?: string })?.error) throw new Error((data as { error: string }).error);
+      return data;
+    },
+    onSuccess: () => {
+      toast.success("Agent updated in ElevenLabs");
+      qc.invalidateQueries({ queryKey: ["elevenlabs_agent_config"] });
+    },
+    onError: (e: Error) => toast.error(e.message || "Save failed"),
+  });
+
+  // Free text-mode tester (uses Lovable AI gateway, no ElevenLabs credits)
+  const [testMessages, setTestMessages] = useState<TestMessage[]>([]);
+  const [testInput, setTestInput] = useState("");
+  const [testing, setTesting] = useState(false);
+  const testEndRef = useRef<HTMLDivElement>(null);
+  useEffect(() => { testEndRef.current?.scrollIntoView({ behavior: "smooth" }); }, [testMessages, testing]);
+
+  const runTest = async () => {
+    const text = testInput.trim();
+    if (!text || !draft) return;
+    const next: TestMessage[] = [...testMessages, { role: "user", content: text }];
+    setTestMessages(next);
+    setTestInput("");
+    setTesting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("elevenlabs-agent-test-chat", {
+        body: { systemPrompt: draft.prompt, messages: next },
+      });
+      if (error) throw error;
+      const reply = (data as { reply?: string; error?: string })?.reply ?? "";
+      if ((data as { error?: string })?.error) throw new Error((data as { error: string }).error);
+      setTestMessages((m) => [...m, { role: "assistant", content: reply || "(no reply)" }]);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Test failed");
+    } finally {
+      setTesting(false);
+    }
+  };
+
+  const dirty = !!(agent && draft && (
+    draft.prompt !== agent.prompt ||
+    draft.first_message !== agent.first_message ||
+    draft.language !== agent.language ||
+    draft.voice_id !== agent.voice_id
+  ));
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] px-6 py-8">
@@ -180,15 +264,173 @@ export default function VoiceAgentControlPanel() {
           )}
         </Card>
 
-        {/* Configuration note */}
-        <Card className="p-5 bg-[#F7F2EA] border border-[#B89555]/40">
-          <h3 className="text-base font-semibold text-[#1A1A1A] mb-2">Configuration</h3>
-          <p className="text-sm text-[#1A1A1A]/70 leading-relaxed">
-            The agent's prompt, voice, language, and tools are managed in the ElevenLabs Conversational AI dashboard.
-            The conversation token is minted server-side by the <code className="bg-[#EFE6D6] px-1.5 py-0.5 rounded text-xs">elevenlabs-conversation-token</code> edge function
-            and connects over WebRTC. Calls are logged here automatically.
-          </p>
+        {/* Live agent configuration editor */}
+        <Card className="p-5 bg-[#F7F2EA] border border-[#B89555]/40 space-y-4">
+          <div className="flex items-center justify-between gap-3 flex-wrap">
+            <div>
+              <h3 className="text-base font-semibold text-[#1A1A1A]">Agent Configuration</h3>
+              <p className="text-xs text-[#1A1A1A]/70 mt-1">
+                Edit the prompt, voice, language and greeting here — changes save directly to ElevenLabs.
+              </p>
+            </div>
+            {agent && (
+              <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] font-mono text-[11px]">
+                {agent.name || agent.agent_id}
+              </Badge>
+            )}
+          </div>
+
+          {loadingAgent && (
+            <div className="text-sm text-[#1A1A1A]/70 flex items-center gap-2">
+              <Loader2 className="w-4 h-4 animate-spin" /> Loading from ElevenLabs…
+            </div>
+          )}
+          {agentError && (
+            <div className="text-sm text-red-700 bg-red-50 border border-red-200 rounded p-3">
+              {(agentError as Error).message}
+            </div>
+          )}
+
+          {draft && (
+            <div className="space-y-4">
+              <div>
+                <Label className="text-xs text-[#1A1A1A]">System Prompt</Label>
+                <Textarea
+                  value={draft.prompt}
+                  onChange={(e) => setDraft({ ...draft, prompt: e.target.value })}
+                  rows={10}
+                  className="mt-1 bg-white border-[#B89555]/30 text-[#1A1A1A] font-mono text-xs leading-relaxed"
+                  placeholder="You are John, a senior property consultant at JBJ Global Real Estate…"
+                />
+                <p className="text-[11px] text-[#1A1A1A]/60 mt-1">
+                  Tip: include website knowledge, FAQs, and brand voice. The agent will use this for every call.
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-3">
+                <div>
+                  <Label className="text-xs text-[#1A1A1A]">First Message</Label>
+                  <Input
+                    value={draft.first_message}
+                    onChange={(e) => setDraft({ ...draft, first_message: e.target.value })}
+                    className="mt-1 bg-white border-[#B89555]/30 text-[#1A1A1A]"
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs text-[#1A1A1A]">Language</Label>
+                  <Input
+                    value={draft.language}
+                    onChange={(e) => setDraft({ ...draft, language: e.target.value })}
+                    placeholder="en"
+                    className="mt-1 bg-white border-[#B89555]/30 text-[#1A1A1A]"
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs text-[#1A1A1A]">Voice ID</Label>
+                  <Input
+                    value={draft.voice_id}
+                    onChange={(e) => setDraft({ ...draft, voice_id: e.target.value })}
+                    placeholder="ElevenLabs voice id"
+                    className="mt-1 bg-white border-[#B89555]/30 text-[#1A1A1A] font-mono text-xs"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Button
+                  onClick={() => saveMutation.mutate({
+                    prompt: draft.prompt,
+                    first_message: draft.first_message,
+                    language: draft.language,
+                    voice_id: draft.voice_id,
+                  })}
+                  disabled={!dirty || saveMutation.isPending}
+                  className="bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]/90"
+                >
+                  {saveMutation.isPending ? (
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  ) : (
+                    <Save className="w-4 h-4 mr-2" />
+                  )}
+                  Save to ElevenLabs
+                </Button>
+                {dirty && (
+                  <Button
+                    variant="ghost"
+                    onClick={() => agent && setDraft(agent)}
+                    className="text-[#1A1A1A]/70"
+                  >
+                    Reset
+                  </Button>
+                )}
+              </div>
+            </div>
+          )}
         </Card>
+
+        {/* Free text-mode tester */}
+        <Card className="p-5 bg-[#F7F2EA] border border-[#B89555]/40 space-y-3">
+          <div className="flex items-center justify-between gap-3 flex-wrap">
+            <div className="flex items-center gap-2">
+              <IconTile icon={Sparkles} tone="purple" size="sm" />
+              <div>
+                <h3 className="text-base font-semibold text-[#1A1A1A]">Test the prompt — free</h3>
+                <p className="text-xs text-[#1A1A1A]/70">
+                  Chat against the current draft prompt without spending ElevenLabs voice credits.
+                </p>
+              </div>
+            </div>
+            {testMessages.length > 0 && (
+              <Button variant="ghost" size="sm" onClick={() => setTestMessages([])} className="text-[#1A1A1A]/70">
+                Clear
+              </Button>
+            )}
+          </div>
+
+          <div className="bg-white border border-[#B89555]/30 rounded-md p-3 max-h-80 overflow-y-auto space-y-2 min-h-[120px]">
+            {testMessages.length === 0 && !testing && (
+              <p className="text-xs text-[#1A1A1A]/50 text-center py-6">
+                Start a test conversation — your edits above are used as the system prompt.
+              </p>
+            )}
+            {testMessages.map((m, i) => (
+              <div key={i} className={`text-sm ${m.role === "user" ? "text-[#1A1A1A]" : "text-[#1A1A1A]/85"}`}>
+                <span className="font-semibold mr-2">{m.role === "user" ? "You:" : "Agent:"}</span>
+                <span className="whitespace-pre-wrap">{m.content}</span>
+              </div>
+            ))}
+            {testing && (
+              <div className="text-xs text-[#1A1A1A]/60 flex items-center gap-2">
+                <Loader2 className="w-3 h-3 animate-spin" /> Agent is thinking…
+              </div>
+            )}
+            <div ref={testEndRef} />
+          </div>
+
+          <div className="flex gap-2">
+            <Input
+              value={testInput}
+              onChange={(e) => setTestInput(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); runTest(); } }}
+              placeholder="Ask the agent anything…"
+              disabled={!draft || testing}
+              className="bg-white border-[#B89555]/30 text-[#1A1A1A]"
+            />
+            <Button
+              onClick={runTest}
+              disabled={!draft || !testInput.trim() || testing}
+              className="bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]/90"
+            >
+              <Send className="w-4 h-4" />
+            </Button>
+          </div>
+        </Card>
+
+        <p className="text-[11px] text-[#1A1A1A]/60 leading-relaxed">
+          Conversation tokens are minted server-side by the
+          {" "}<code className="bg-[#EFE6D6] px-1.5 py-0.5 rounded text-[10px]">elevenlabs-conversation-token</code>{" "}
+          edge function and connect over WebRTC. Voice calls are logged automatically above; text tests use the Lovable AI gateway and don't consume ElevenLabs credits.
+        </p>
       </div>
     </div>
   );
