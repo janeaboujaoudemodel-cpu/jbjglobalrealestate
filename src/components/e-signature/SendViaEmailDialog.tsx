@@ -511,6 +511,15 @@ export function SendViaEmailDialog({
             Send test
           </Button>
           <Button
+            variant="outline"
+            onClick={saveAsTemplate}
+            disabled={!!busy || !subject.trim()}
+            className="w-full sm:w-auto border-[#B89555]/50 hover:bg-[#EFE6D6]"
+            title="Save the current subject + body as the standard template — affects future sends only, not this one"
+          >
+            <Save className="w-4 h-4 mr-2" /> Save as standard template
+          </Button>
+          <Button
             variant="gold"
             onClick={approveAndSend}
             disabled={!!busy || !canSend}
