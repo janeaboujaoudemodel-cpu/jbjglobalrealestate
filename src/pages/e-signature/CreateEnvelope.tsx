@@ -607,7 +607,7 @@ export default function CreateEnvelope() {
                   <Input
                     value={documentName}
                     onChange={(e) => setDocumentName(e.target.value)}
-                    placeholder="e.g., Sales Agreement - Palm Jumeirah"
+                    placeholder="e.g., Sales Agreement — Palm Jumeirah"
                     className="mt-2"
                   />
                 </div>
