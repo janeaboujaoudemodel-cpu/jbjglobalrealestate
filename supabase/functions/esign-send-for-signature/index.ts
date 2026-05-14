@@ -76,8 +76,17 @@ Deno.serve(async (req) => {
     const baseUrl = Deno.env.get("SITE_URL") || "https://jbj.ae";
 
     // Hoist attachment fetches OUT of the per-recipient loop — same bytes for all.
-    const attachmentUrlStr = typeof attachment_url === "string" ? attachment_url : "";
-    const attachmentNameStr = typeof attachment_name === "string" ? attachment_name : "";
+    let attachmentUrlStr = typeof attachment_url === "string" ? attachment_url : "";
+    let attachmentNameStr = typeof attachment_name === "string" ? attachment_name : "";
+    // Server-side fallback: if the client didn't send an attachment URL, pull
+    // the freshest one off the envelope so we never deliver an attachment-less
+    // email by accident.
+    if (!attachmentUrlStr && (envelope as any).document_url) {
+      attachmentUrlStr = String((envelope as any).document_url);
+      if (!attachmentNameStr) {
+        attachmentNameStr = String((envelope as any).document_filename || `${envelope.name || "Document"}.pdf`);
+      }
+    }
     const [primaryAttachment, ...extras] = await Promise.all([
       attachmentUrlStr && attachmentNameStr
         ? fetchEmailAttachment(attachmentUrlStr, attachmentNameStr, "application/pdf")
