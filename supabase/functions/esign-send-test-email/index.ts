@@ -80,7 +80,7 @@ Deno.serve(async (req) => {
 
     const finalSubject = (interpolated_subject
       ? interp(interpolated_subject)
-      : interp(envelope.email_subject || `Please review — {{doc_title}}${docNumber ? " · {{doc_number}}" : ""}`)
+      : interp(envelope.email_subject || `Signature Pending — {{doc_title}}${docNumber ? " · {{doc_number}}" : ""}`)
     ).replace(SIG_SENTINEL, sigPlain);
 
     let finalBodyHtml: string;

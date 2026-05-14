@@ -65,13 +65,17 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
   const stepLabel = (n: number, label: string) =>
     `<div style="font-family:Inter,Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:.28em;color:#B89555;text-transform:uppercase;text-align:center;margin:0 0 8px;">Step ${n} · ${label}</div>`;
 
+  // Inline document/file glyph rendered as a span so it survives email
+  // clients that strip <svg>. Uses a unicode document symbol with the gold
+  // hairline circle — NO arrow, NO download icon.
+  const docGlyph = `<span style="display:inline-block;width:18px;height:18px;line-height:18px;border:1px solid #B89555;border-radius:50%;font-size:11px;color:#B89555;text-align:center;margin-right:10px;vertical-align:-3px;font-weight:700;font-family:Georgia,serif;">&#128196;</span>`;
   const downloadBlock = hasDownload
     ? `
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:380px;margin:24px auto 0;border-collapse:collapse;">
           <tr><td style="padding-bottom:8px;">${stepLabel(1, "Download your agreement")}</td></tr>
           <tr><td>
             <a href="${escapeHtml(attachmentUrl)}" target="_blank" rel="noopener" style="${buttonStyle("#F7F2EA", "#1A1A1A")}">
-              Click here to download your document
+              ${docGlyph}Click here to download your document
             </a>
           </td></tr>
           <tr><td align="center" style="padding-top:8px;font-family:Inter,Arial,sans-serif;font-size:10.5px;color:#1A1A1A;opacity:.6;line-height:1.5;">

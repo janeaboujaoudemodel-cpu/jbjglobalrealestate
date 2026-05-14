@@ -99,7 +99,7 @@ Deno.serve(async (req) => {
 
       const finalSubject = interpolated_subject
         ? interp(interpolated_subject).replace(SIG_SENTINEL, sigPlain)
-        : interp(envelope.email_subject || `Please review — {{doc_title}}${docNumber ? " · {{doc_number}}" : ""}`).replace(SIG_SENTINEL, sigPlain);
+        : interp(envelope.email_subject || `Signature Pending — {{doc_title}}${docNumber ? " · {{doc_number}}" : ""}`).replace(SIG_SENTINEL, sigPlain);
 
       // New path: client sends pre-rendered, sanitized HTML (locked-send,
       // matches the iframe preview byte-for-byte). Legacy path: plain text.

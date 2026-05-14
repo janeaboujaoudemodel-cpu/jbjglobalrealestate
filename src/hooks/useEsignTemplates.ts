@@ -174,7 +174,7 @@ export function useCreateEnvelopeFromTemplate() {
           sender_email: user.email!,
           sender_name: (user.user_metadata as any)?.full_name || user.email,
           status: "draft",
-          email_subject: `Please sign: ${docNumber} — ${template.name}`,
+          email_subject: `Signature Pending — ${template.name}${docNumber ? ` · ${docNumber}` : ""}`,
           category: template.category,
           template_key: template.key,
           template_html: html,
