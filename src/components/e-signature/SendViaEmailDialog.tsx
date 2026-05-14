@@ -360,12 +360,45 @@ export function SendViaEmailDialog({
     return rawUrl;
   };
 
+  /** Always pull the freshest envelope row right before sending so the
+   *  attachment URL/filename reflect the most recent regenerate — never the
+   *  stale value the dialog opened with. */
+  const fetchLatestAttachment = async (): Promise<{ url?: string; name?: string }> => {
+    try {
+      const { data } = await supabase
+        .from("esign_envelopes")
+        .select("document_url, document_filename")
+        .eq("id", envelopeId)
+        .maybeSingle();
+      if (data?.document_url) {
+        return { url: data.document_url as string, name: (data.document_filename as string) || attachmentName };
+      }
+    } catch { /* fall through */ }
+    return { url: attachmentUrl, name: attachmentName };
+  };
+
+  /** Combined sync step: parent regenerates if dirty, then we re-pull the
+   *  envelope so the attached PDF matches what is on screen byte-for-byte. */
+  const resolveFreshAttachment = async (): Promise<{ url?: string; name?: string }> => {
+    try {
+      const fromParent = onBeforeSend ? await onBeforeSend() : undefined;
+      if (fromParent && (fromParent as any).url) {
+        const v = fromParent as { url?: string; filename?: string };
+        return { url: v.url || undefined, name: v.filename || attachmentName };
+      }
+    } catch (e) {
+      console.warn("onBeforeSend failed; using DB attachment", e);
+    }
+    return await fetchLatestAttachment();
+  };
+
   const sendTest = async () => {
     setBusy("test");
     try {
       const session = await supabase.auth.getSession();
       const token = session.data.session?.access_token;
-      const signedAttachmentUrl = autoAttachmentRemoved ? undefined : await resolveAttachmentUrl(attachmentUrl);
+      const fresh = autoAttachmentRemoved ? { url: undefined, name: undefined } : await resolveFreshAttachment();
+      const signedAttachmentUrl = fresh.url ? await resolveAttachmentUrl(fresh.url) : undefined;
       const res = await fetch(`${SUPABASE_URL}/functions/v1/esign-send-test-email`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
@@ -375,7 +408,7 @@ export function SendViaEmailDialog({
           interpolated_body_html: bodyHtml,
           signature_html: selectedSigHtml,
           docusign_url: docusignUrl.trim() || undefined,
-          attachment_name: autoAttachmentRemoved ? undefined : attachmentName,
+          attachment_name: fresh.name,
           attachment_url: signedAttachmentUrl,
           extra_attachments: extraAttachments.map((a) => ({ name: a.name, url: a.url, content_type: a.contentType })),
           test_recipient: TEST_RECIPIENT,
@@ -383,7 +416,7 @@ export function SendViaEmailDialog({
       });
       const out = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(out.error || "Failed to send test");
-      toast.success(`Test sent to ${TEST_RECIPIENT}`);
+      toast.success(`Test sent to ${TEST_RECIPIENT}${fresh.name ? ` · ${fresh.name}` : ""}`);
     } catch (e: any) {
       toast.error(e.message || "Failed to send test");
     } finally {
@@ -397,17 +430,14 @@ export function SendViaEmailDialog({
       return;
     }
     setBusy("send");
-    // Optimistic UX — close the dialog immediately so the owner is not waiting on
-    // attachment fetch + Resend round-trips. The actual send completes in the
-    // background; success/failure is reported via toast and the dashboard
-    // counters update via realtime + onSent callback.
-    const sendingToast = toast.loading(`Sending to ${tos.length} recipient${tos.length > 1 ? "s" : ""}…`);
-    clearDraft();
-    onOpenChange(false);
+    const sendingToast = toast.loading(`Syncing latest document & sending to ${tos.length} recipient${tos.length > 1 ? "s" : ""}…`);
     try {
       const session = await supabase.auth.getSession();
       const token = session.data.session?.access_token;
-      const signedAttachmentUrl = autoAttachmentRemoved ? undefined : await resolveAttachmentUrl(attachmentUrl);
+      const fresh = autoAttachmentRemoved ? { url: undefined, name: undefined } : await resolveFreshAttachment();
+      const signedAttachmentUrl = fresh.url ? await resolveAttachmentUrl(fresh.url) : undefined;
+      clearDraft();
+      onOpenChange(false);
       const res = await fetch(`${SUPABASE_URL}/functions/v1/esign-send-for-signature`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
@@ -420,7 +450,7 @@ export function SendViaEmailDialog({
           interpolated_body_html: bodyHtml,
           signature_html: selectedSigHtml,
           docusign_url: docusignUrl.trim() || undefined,
-          attachment_name: autoAttachmentRemoved ? undefined : attachmentName,
+          attachment_name: fresh.name,
           attachment_url: signedAttachmentUrl,
           extra_attachments: extraAttachments.map((a) => ({ name: a.name, url: a.url, content_type: a.contentType })),
         }),
@@ -432,7 +462,7 @@ export function SendViaEmailDialog({
       if (failed) {
         toast.warning(`${out.message} — ${failed} failed`, { description: out.failures.map((f: any) => `${f.email}: ${f.error}`).join("\n") });
       } else {
-        toast.success(`Sent to ${tos.length} recipient${tos.length > 1 ? "s" : ""}${cleanCcs.length ? ` · CC ${cleanCcs.length}` : ""}`);
+        toast.success(`Sent to ${tos.length} recipient${tos.length > 1 ? "s" : ""}${cleanCcs.length ? ` · CC ${cleanCcs.length}` : ""} · attached ${fresh.name || "document"}`);
       }
       onSent?.();
     } catch (e: any) {
