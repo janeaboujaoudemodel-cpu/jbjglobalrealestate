@@ -368,6 +368,48 @@ export default function BlankLetterStudio() {
               <h1 className="text-base font-bold tracking-tight text-[#1A1A1A] truncate">Standard JBJ Letterhead</h1>
               <p className="text-[11px] text-[#1A1A1A]/70 truncate">Branded A4 · {docNumber}</p>
             </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="ml-2 border-[#B89555]/40 text-[#1A1A1A]">
+                  <FileText className="w-3.5 h-3.5 mr-1.5" />
+                  Templates
+                  <ChevronDown className="w-3.5 h-3.5 ml-1 opacity-70" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-72 bg-[#FDFBF7] border-[#B89555]/40">
+                <DropdownMenuLabel className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/60">
+                  Switch document template
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {allTemplates.length === 0 && (
+                  <div className="px-2 py-3 text-[11px] text-[#1A1A1A]/60">No templates yet.</div>
+                )}
+                {allTemplates.map((tpl) => {
+                  const isCurrent = tpl.key === BLANK_LETTER_TEMPLATE_KEY || tpl.key === "jbj-letterhead-blank";
+                  const isLoading = switchingTemplate === tpl.key;
+                  return (
+                    <DropdownMenuItem
+                      key={tpl.id}
+                      disabled={isCurrent || isLoading}
+                      onSelect={(e) => { e.preventDefault(); if (!isCurrent) handlePickTemplate(tpl); }}
+                      className="flex items-start gap-2 cursor-pointer focus:bg-[#EFE6D6]"
+                    >
+                      <FileText className="w-4 h-4 mt-0.5 text-[#B89555] shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <div className="text-[13px] font-semibold text-[#1A1A1A] flex items-center gap-1.5">
+                          {tpl.name}
+                          {isCurrent && <span className="text-[9px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-[#EFE6D6] text-[#1A1A1A]/70">Current</span>}
+                          {isLoading && <Loader2 className="w-3 h-3 animate-spin" />}
+                        </div>
+                        <div className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/60 mt-0.5">
+                          {tpl.category}
+                        </div>
+                      </div>
+                    </DropdownMenuItem>
+                  );
+                })}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             <SectionToggle open={openAI} onToggle={() => setOpenAI(v => !v)} label="AI Prompt" icon={Sparkles} />
