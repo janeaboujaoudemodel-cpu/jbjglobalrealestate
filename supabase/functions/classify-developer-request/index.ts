@@ -96,9 +96,15 @@ Deno.serve(async (req) => {
   const requestType = validTypes.includes(parsed.request_type) ? parsed.request_type : "other";
   const confidence = Math.max(0, Math.min(1, Number(parsed.confidence) || 0));
 
-  // Skip noise
-  if (requestType === "other" && confidence < 0.3) {
-    return new Response(JSON.stringify({ ok: true, skipped: true }), {
+  // Hard skip: never create Required Action items for newsletters, marketing,
+  // social notifications, banks, retail, search-console alerts, etc.
+  // These belong in the Unified Inbox categorized list — not in the action queue.
+  const noiseRe = /(noreply|no-reply|no_reply|newsletter|notifications?@|alerts?@|updates?-noreply|marketing@|info@|welcome@|reminder@|emails@|news@|team@info\.|sc-noreply|googlecommunityteam|linkedin\.com|shopstyle|shein|cobone|ruelala|farfetch|reversible|canon|rotana|gitex|emiratesnbd|enbd|hsbc|adcb|mashreq|theluxurycloset|uptimerobot|github\.com|supabase\.com|hostinger\.com|mmgtalent)/i;
+  const isNoise = noiseRe.test(`${from_email ?? ""} ${from_name ?? ""}`);
+
+  // Skip noise and weak "other" classifications
+  if (isNoise || (requestType === "other" && confidence < 0.7)) {
+    return new Response(JSON.stringify({ ok: true, skipped: true, reason: isNoise ? "noise_sender" : "low_confidence_other" }), {
       status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
