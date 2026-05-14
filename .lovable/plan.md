@@ -1,81 +1,94 @@
-## Plan to fix the Unified Inbox behavior
+## Plan: stabilize and upgrade Unified Inbox
 
-### 1. Make “Send link” actually work
-- Fix the backend reply logging bug in `send-developer-reply`: it inserts into `owner_comm_messages` using `body`, but the table uses `content`, which can make the action fail after Gmail send or silently not update the inbox.
-- Add proper success/error feedback on the card button so the user sees “sending”, “sent”, or the exact reconnect/missing-link problem.
-- Disable “Send link” only when there is truly no email or no document link, and show a clear reason instead of appearing unclickable.
-- Because the current `document_library_links` table is empty, add a safe default document-link seed or fallback path so “Send link” has something valid to send for general document requests.
+### What I found
+- The top stats are counting **threads/conversations**, while the Gmail tab badge is counting **unread messages**. That is why Gmail can show 50/46 while Total shows 25/26.
+- Selecting Gmail / Needs Reply changes the dataset, so the cards recalculate against a filtered list and look inconsistent.
+- The Gmail/Instagram/Facebook tab labels are being squeezed because the tab row allows text truncation instead of giving the horizontal scroll area enough width.
+- Auto-sync was disabled to stop blinking, so the inbox only syncs when manually clicked.
+- The main inbox uses a fixed height based on viewport math; combined with nested scroll areas, the thread detail panel can appear non-scrollable.
+- AI suggestions are hidden behind a tab/conditional block and only appear if stored triage fields exist, so many conversations show blank AI sections.
+- Sync functions fetch and classify too much sequentially; this caused the prior 150s idle timeout and makes syncing a few emails take minutes.
 
-### 2. Replace the black email icon boxes with gold/champagne styling
-- Update the Required Actions cards so sender icons use the project’s `IconTile` gold/champagne tones instead of black blocks.
-- Keep semantic tones for true document/action types, but marketing/other notification cards should never render as harsh black.
-- Apply the same visual rule in thread list avatars where email badges appear over the round icon.
+### Phase 1 — Make counts accurate and understandable
+- Update `useOwnerInbox` so it returns two count layers:
+  - **Global counts** for the selected channel/account, independent of status/category filters.
+  - **Visible counts** for the currently filtered list.
+- Change stats cards to clearly use the same base:
+  - Total = total conversations in selected channel/account.
+  - Unread = unread conversations, with optional smaller message count if needed.
+  - Needs Reply / New / Follow-up Due are subsets of Total.
+- Make channel tab badges use the same definition consistently, preferably conversation count + unread state, not a different unread-message total.
+- Keep clicking stat cards as a filter, but do not let it rewrite the meaning of the top cards.
 
-### 3. Stop putting marketing/newsletters into Required Actions
-- Tighten `classify-developer-request` so only real developer/document requests become Required Actions.
-- Explicitly skip Google Search Console, ShopStyle, LinkedIn notifications, Canon product ads, GITEX newsletters, SHEIN/campaign promos, bank offers, retail promos, system alerts, and generic marketing.
-- Keep Charbel / real people and real developer document requests eligible when they need a reply.
+### Phase 2 — Fix premium header tabs and category chips
+- Redesign channel tabs as a stable horizontal scroll strip with full labels: Gmail, Hostinger, Instagram, Facebook, Website, Voice.
+- If multiple Gmail accounts exist, show a readable account label without crushing the tab, e.g. `Gmail · janeaboujaoudemodel`.
+- Redesign category chips as a second horizontal scroll strip with full labels, fixed spacing, no overlap, and active state wired to the thread list.
+- Keep the left thread list vertically scrollable and filtered by the selected channel + category.
 
-### 4. Add smarter category organization for the inbox
-- Expand categories to include user-specific buckets:
-  - Campaign / Influencer
-  - Advertising / Promotions
-  - Marketing
-  - Finance / Banking
-  - Sales / Offers
-  - Business / LinkedIn Content
-  - Real Estate Leads
-  - Real Estate Ops
-  - Developer / Documents
-  - Personal
-  - System / Website
-  - Spam / Other
-- Update client-side fallback categorization so examples route correctly:
-  - SHEIN Creator Center → Campaign / Influencer
-  - Canon camera ads → Advertising / Promotions
-  - LinkedIn content notifications → Business / LinkedIn Content
-  - Emirates NBD → Finance / Banking
-  - ShopStyle / retail newsletters → Marketing or Advertising
-  - Google Search Console / GitHub / Hostinger verification → System / Website
-  - The Luxury Closet price offer → Sales / Offers
+### Phase 3 — Fix detail pane scrolling and AI suggestions
+- Replace the broken four-tab detail layout with a single scrollable conversation-first view:
+  - Conversation messages at the top.
+  - AI summary + suggested reply directly inside the same section.
+  - Quick actions: create task, schedule meeting, save note, use reply, send reply.
+  - Lead/profile and activity as compact expandable sections below, not empty blocking tabs.
+- Ensure the detail pane has one reliable vertical scroll container and the reply composer stays usable.
+- Add fallback message rendering using thread preview if message rows are missing, so the conversation never appears completely blank for a synced email.
 
-### 5. Make AI triage reliable and not blank
-- Update `comm-ai-triage` with the expanded category rules and fallback replies.
-- If the AI returns blank, always save a rule-based summary, category, next step, and suggested reply/“no reply needed” reason.
-- Add a small batch triage pass after sync/refresh for visible unprocessed threads so categories populate without opening every email manually.
+### Phase 4 — Speed up Gmail sync and stop timeouts/blinking
+- Change `comm-inbound-sync` to be bounded and fast:
+  - Sync only the active Gmail channel when the user is viewing that Gmail account.
+  - Limit per request and return quickly with a clear `{ imported, scanned, hasMore }` response.
+  - Skip Hostinger IMAP unless the active channel is Hostinger or “all” sync explicitly requests it.
+  - Add per-message fetch timeouts and avoid long sequential work where possible.
+- Add a lightweight auto-sync on inbox open:
+  - Fire once shortly after page load for the active channel.
+  - Then poll at a sane interval, not every second, to avoid rate limits/blinking.
+  - Use realtime database updates to refresh immediately when new rows arrive.
+- Keep the manual Refresh button, but show a clear syncing state and avoid re-render loops.
 
-### 6. Add the AI command/chat foundation inside the inbox
-- Add an “AI Assistant” panel on the inbox page where the owner can type commands like:
-  - “Open the LinkedIn email and reply 1 to 3”
-  - “Answer all campaign requests politely”
-  - “Show emails I received and didn’t respond to”
-- Implement a protected backend function that reads the owner’s inbox, messages, CRM notes/tasks, prior replies, and current thread context, then returns safe proposed actions.
-- For sending or bulk actions, require owner confirmation first; the AI can draft and queue, not silently send irreversible replies.
+### Phase 5 — Fix classification / needs-reply logic
+- Update triage rules so marketing, campaigns, advertising, system alerts, and spam are not automatically treated as “needs reply”.
+- Apply deterministic category routing for obvious examples:
+  - SHEIN / creator emails → Campaign / Influencer or Marketing depending on intent.
+  - Emirates NBD / banking → Finance.
+  - Google Search Console / verification / alerts → System / Website.
+  - Luxury Closet price offers → Sales / Offers.
+- Ensure every synced thread gets at least a category, summary, and suggested action; no blank AI panel.
 
-### 7. Wire follow-up intelligence
-- Mark threads as `needs_reply`, `waiting`, or `follow_up_due` based on message direction and age.
-- Surface “you received this and didn’t respond” in Required Actions and the AI panel.
-- Add quick actions: create task, schedule follow-up, use AI reply, send after confirmation.
+### Phase 6 — AI command/check panel
+- Add a compact AI command panel inside Unified Inbox where the owner can type natural-language actions like:
+  - “Find unanswered Gmail emails from today.”
+  - “Draft replies for all finance messages.”
+  - “Create tasks from these selected conversations.”
+- Initially wire it to safe actions: filtering, draft generation, task/note creation, and calendar event creation.
+- Require explicit confirmation before sending or bulk-changing external Gmail state.
 
-### Technical details
-- Files to update:
+### Phase 7 — Follow-up intelligence and bulk actions
+- Add bulk selection to the thread list: select visible, unselect, select unread, select needs reply.
+- Add bulk actions:
+  - Mark read/unread in app.
+  - Assign category/status.
+  - Create tasks.
+  - Create calendar follow-ups.
+  - Save notes.
+  - Archive/dismiss.
+- Where Gmail write-back is available, wire read/unread/archive/label changes to Gmail; if the connected Gmail permissions are missing, show a reconnect prompt for the needed Gmail scope.
+- Add follow-up intelligence:
+  - Show overdue replies.
+  - Show waiting-for-them threads.
+  - Suggest next follow-up time.
+  - Keep these counts synced with the stats cards.
+
+### Technical notes
+- Files likely to change:
+  - `src/hooks/useOwnerInbox.ts`
   - `src/pages/OwnerInbox.tsx`
-  - `src/components/owner-inbox/DeveloperActionsRail.tsx`
   - `src/components/owner-inbox/OwnerInboxThread.tsx`
   - `src/hooks/useCommAITriage.ts`
   - `src/hooks/useDeveloperActionItems.ts`
-  - `supabase/functions/send-developer-reply/index.ts`
-  - `supabase/functions/classify-developer-request/index.ts`
+  - `src/components/owner-inbox/DeveloperActionsRail.tsx`
+  - `supabase/functions/comm-inbound-sync/index.ts`
   - `supabase/functions/comm-ai-triage/index.ts`
-  - likely add one new protected AI command function
-- Database change needed:
-  - Add/seed default document library links if none exist.
-  - Optionally add a table for AI command/action audit so every AI-suggested/send action is traceable.
-- Validation:
-  - Confirm clicking “Send link” sends or shows the exact missing prerequisite.
-  - Confirm black icon boxes are gone.
-  - Confirm non-action marketing cards disappear from Required Actions and move into categories.
-  - Confirm category filters show SHEIN, Canon, LinkedIn, Emirates NBD, Google Search Console, and Luxury Closet in the intended sections.
-  - Confirm AI Suggestions and AI command panel never show blank states.
-
-After approval, I’ll implement this in focused phases, starting with the broken click + icon styling + smart categorization so the current inbox becomes usable immediately.
+- Database changes may be needed for durable bulk/follow-up intelligence, such as action status history or Gmail label/write-back metadata. If needed, I will create a migration with RLS before code that depends on it.
+- I will not remove existing inbox features; I will stabilize and reorganize them under the current unified inbox.
