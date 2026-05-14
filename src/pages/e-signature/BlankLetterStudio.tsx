@@ -45,6 +45,18 @@ const PRESETS = [
   { id: "reference", label: "Reference Letter", prompt: "Write a professional reference letter for [Name] who served as [Title] from [date] to [date]." },
 ];
 
+const categoryKeyFromPrompt = (prompt: string) => {
+  const text = prompt.toLowerCase();
+  if (/offer|job offer/.test(text)) return "offer";
+  if (/warning/.test(text)) return "warning";
+  if (/vat/.test(text)) return "vat";
+  if (/\bnoc\b|no-objection/.test(text)) return "noc";
+  if (/salary/.test(text)) return "salary";
+  if (/termination/.test(text)) return "termination";
+  if (/reference/.test(text)) return "reference";
+  return "letterhead";
+};
+
 export default function BlankLetterStudio() {
   const navigate = useNavigate();
   const qc = useQueryClient();
@@ -86,7 +98,7 @@ export default function BlankLetterStudio() {
   useEffect(() => {
     (async () => {
       try {
-        const dn = await allocateDocNumber(BLANK_LETTER_TEMPLATE_KEY);
+        const dn = await allocateDocNumber(`${BLANK_LETTER_TEMPLATE_KEY}:letterhead`);
         setDocNumber(dn);
       } catch {
         setDocNumber(`JBJ-LTR-${Date.now().toString().slice(-6)}`);
@@ -129,12 +141,15 @@ export default function BlankLetterStudio() {
       if (error) throw error;
       if ((data as any)?.error) throw new Error((data as any).error);
       const r: any = data;
+      const categoryKey = categoryKeyFromPrompt(prompt);
+      const nextDocNumber = await allocateDocNumber(`${BLANK_LETTER_TEMPLATE_KEY}:${categoryKey}`);
+      setDocNumber(nextDocNumber);
       if (r?.subject) setSubject(r.subject);
       if (r?.recipient) setRecipient(r.recipient);
       if (r?.body_text) setBodyText(r.body_text);
       if (r?.signer_title) setSignerTitle(r.signer_title);
       if (r?.date && !date) setDate(r.date);
-      toast.success("Letter drafted — edit it like a normal text");
+      toast.success("Letter drafted with category numbering — edit it like normal text");
     } catch (e: any) {
       toast.error(e?.message || "AI generation failed");
     } finally {
@@ -273,7 +288,7 @@ export default function BlankLetterStudio() {
         .single();
       if (envErr) throw envErr;
       toast.success("Letter saved to your library");
-      navigate(`/e-signature/${env.id}`);
+      navigate(`/owner/documents/forms/${env.id}`);
     } catch (e: any) {
       toast.error(e?.message || "Save failed");
     } finally {

@@ -2,7 +2,7 @@
  * Owner Command Center routes — dedicated shell with sidebar
  */
 import React, { lazy, Suspense } from "react";
-import { Route, Navigate } from "react-router-dom";
+import { Route, Navigate, useParams } from "react-router-dom";
 import OwnerGuard from "@/components/OwnerGuard";
 import ListingAdminGuard from "@/components/ListingAdminGuard";
 import PageLoader from "@/components/PageLoader";
@@ -81,6 +81,13 @@ const OwnerSignatureStudio = lazy(() => import("@/pages/e-signature/SignatureStu
 const OwnerBlankLetterStudio = lazy(() => import("@/pages/e-signature/BlankLetterStudio"));
 const OwnerContractReview = lazy(() => import("@/pages/e-signature/ContractReview"));
 
+const OwnerDocumentsTab = () => <DocumentsFormsHub initialTabOverride="documents" />;
+const OwnerEsignTab = () => <DocumentsFormsHub initialTabOverride="esign" />;
+const LegacyOwnerEnvelopeDetail = () => {
+  const { id } = useParams();
+  return <Navigate to={`/owner/documents/forms/${id}`} replace />;
+};
+
 export const OwnerRoutes = () => (
   <Route path="/owner" element={
     <OwnerGuard>
@@ -102,7 +109,7 @@ export const OwnerRoutes = () => (
     {/* /owner/properties was incorrectly pointing at the PropertyManagement service marketing page.
         Redirect to the canonical /properties listing so the full filter set is preserved. */}
     <Route path="properties" element={<Navigate to="/properties" replace />} />
-    <Route path="documents" element={<Navigate to="/owner/documents/forms" replace />} />
+    <Route path="documents" element={<OwnerDocumentsTab />} />
     <Route path="documents/editor" element={<Documents />} />
     <Route path="documents/forms" element={<DocumentsFormsHub />} />
     <Route path="documents/forms/create" element={<OwnerCreateEnvelope />} />
@@ -110,6 +117,12 @@ export const OwnerRoutes = () => (
     <Route path="documents/forms/blank-letter" element={<OwnerBlankLetterStudio />} />
     <Route path="documents/forms/contract-review" element={<OwnerContractReview />} />
     <Route path="documents/forms/:id" element={<OwnerEnvelopeDetail />} />
+    <Route path="e-signature" element={<OwnerEsignTab />} />
+    <Route path="e-signature/create" element={<OwnerCreateEnvelope />} />
+    <Route path="e-signature/signature-studio" element={<OwnerSignatureStudio />} />
+    <Route path="e-signature/blank-letter" element={<OwnerBlankLetterStudio />} />
+    <Route path="e-signature/contract-review" element={<OwnerContractReview />} />
+    <Route path="e-signature/:id" element={<LegacyOwnerEnvelopeDetail />} />
     <Route path="settings" element={<OwnerCommSettings />} />
     {/* Unified CRM — single owner-only hub. All legacy sub-routes redirect into it. */}
     <Route path="crm" element={<UnifiedCRM />} />

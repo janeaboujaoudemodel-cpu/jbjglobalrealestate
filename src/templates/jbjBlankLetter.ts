@@ -121,7 +121,7 @@ export function buildBlankLetterHtml(
 
   // Default signature row: signature line + Founder & CEO on left, stamp on right
   const sigBlock = `
-    <div style="margin-top:48px;display:flex;align-items:flex-end;justify-content:space-between;gap:32px;">
+    <div style="margin-top:34px;display:flex;align-items:flex-end;justify-content:space-between;gap:32px;flex:0 0 auto;">
       <div style="flex:0 1 320px;min-width:220px;">
         ${sigUrl && !placedSignature ? `<img src="${esc(sigUrl)}" alt="Signature" crossorigin="anonymous" style="max-height:64px;max-width:240px;object-fit:contain;display:block;margin-bottom:6px;" />` : `<div style="height:48px;"></div>`}
         <div style="border-top:1px solid ${INK};padding-top:6px;">
@@ -138,7 +138,7 @@ export function buildBlankLetterHtml(
 ${LETTERHEAD_PAGE_OPEN}
   <div style="flex:0 0 auto;">${buildLetterheadHeader({ docNumber, title: opts.letterheadTitle })}</div>
 
-  <div style="flex:1 1 auto;display:flex;flex-direction:column;position:relative;">
+  <div style="flex:1 1 auto;display:flex;flex-direction:column;position:relative;min-height:0;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;font-size:11.5px;">
       <div>
         ${recipient ? `<div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.65;">To</div><div style="font-weight:600;margin-top:2px;">${esc(recipient)}</div>` : ""}
@@ -151,7 +151,7 @@ ${LETTERHEAD_PAGE_OPEN}
 
     ${subject ? `<div style="margin:6px 0 14px;"><span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.65;">Subject</span><div style="font-size:14px;font-weight:700;color:${INK};margin-top:2px;letter-spacing:.01em;">${esc(subject)}</div></div>` : ""}
 
-    <div data-letter-body style="flex:1 1 auto;font-size:12px;line-height:1.65;color:${INK};">${bodyRendered}</div>
+    <div data-letter-body style="flex:1 1 auto;min-height:420px;font-size:12px;line-height:1.65;color:${INK};">${bodyRendered}</div>
 
     ${sigBlock}
     ${placedSignature}

@@ -18,6 +18,7 @@ import { SmartFillDropzone } from "@/components/e-signature/SmartFillDropzone";
 
 type Cat = "all" | "leasing" | "selling";
 type Bucket = "templates" | "documents" | "esign" | "drafts" | "generated" | "sent" | "submitted" | "signed" | "deleted" | "assets";
+interface DocumentsFormsHubProps { initialTabOverride?: Bucket; }
 
 /** Single query for the entire hub — much faster than four parallel queries. */
 function useAllEnvelopes() {
@@ -93,12 +94,13 @@ function isCompleteEnoughToBeGenerated(e: any): boolean {
 
 const VALID_TABS: Bucket[] = ["templates","documents","esign","drafts","generated","sent","submitted","signed","deleted","assets"];
 
-export default function DocumentsFormsHub() {
+export default function DocumentsFormsHub({ initialTabOverride }: DocumentsFormsHubProps = {}) {
   const navigate = useNavigate();
   const qc = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
   const initialTab = (() => {
     const t = searchParams.get("tab") as Bucket | null;
+    if (initialTabOverride && VALID_TABS.includes(initialTabOverride)) return initialTabOverride;
     return t && VALID_TABS.includes(t) ? t : "templates";
   })();
   const [tab, setTab] = useState<Bucket>(initialTab);
