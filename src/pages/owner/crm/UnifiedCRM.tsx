@@ -141,7 +141,6 @@ const VIEWS: Record<Entity, ViewItem[]> = {
     { id: "calendar",      label: "Calendar",      group: "Workspace" },
     { id: "notes",         label: "Notes",         group: "Workspace" },
     { id: "inbox",         label: "Inbox",         group: "Workspace" },
-    { id: "email-center",  label: "Email Center",  group: "Workspace" },
     { id: "notifications", label: "Notifications", group: "Workspace" },
     { id: "contracts",     label: "Contracts",     group: "Pipeline" },
     { id: "campaigns",     label: "Campaigns",     group: "Pipeline" },
