@@ -388,6 +388,38 @@ export default function OwnerInbox() {
             <DeveloperActionsRail />
           </div>
 
+          {/* AI Command + AI filter chip */}
+          <div className="mb-3 flex items-center gap-2 flex-wrap">
+            <InboxAICommandPanel
+              threads={threads}
+              selectedIds={Array.from(selectedIds)}
+              onApplyFilter={(ids, label) => { setAiFilterIds(new Set(ids)); setAiFilterLabel(label); }}
+              onBulkMarkRead={async (ids) => { await bulkUpdateAsync({ threadIds: ids, patch: { unread_count: 0 } }); }}
+              onBulkSetStatus={async (ids, status) => { await bulkUpdateAsync({ threadIds: ids, patch: { status } }); }}
+            />
+            {aiFilterIds && (
+              <button
+                onClick={() => { setAiFilterIds(null); setAiFilterLabel(""); }}
+                className="text-xs px-2 py-1 rounded-full bg-[#EFE6D6] border border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/70"
+              >AI filter: {aiFilterLabel || `${aiFilterIds.size} matches`} · clear</button>
+            )}
+          </div>
+
+          {/* Bulk action toolbar (visible when threads selected) */}
+          <InboxBulkActionsBar
+            selectedCount={selectedIds.size}
+            onClear={() => setSelectedIds(new Set())}
+            onMarkRead={async () => {
+              await bulkUpdateAsync({ threadIds: Array.from(selectedIds), patch: { unread_count: 0 } });
+              setSelectedIds(new Set());
+            }}
+            onSetStatus={async (status) => {
+              await bulkUpdateAsync({ threadIds: Array.from(selectedIds), patch: { status } });
+              setSelectedIds(new Set());
+            }}
+            disabled={isUpdating}
+          />
+
           {/* Main Content - Split View */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 min-h-[600px]" style={{ height: 'min(calc(100vh - 360px), 900px)' }}>
             {/* Thread List */}
