@@ -186,25 +186,47 @@ export function SendViaEmailDialog({
 
   const canSend = tos.length > 0 && tos.every(isValidEmail) && subject.trim().length > 0;
 
-  // Convert a Supabase storage URL into a 7-day signed URL so the recipient's
-  // email client (which can't pass an Authorization header) can download the
-  // PDF directly. Public-bucket URLs and external URLs pass through unchanged.
+  // base64url encoder for safely embedding the signed URL into a /d?u= param.
+  const b64url = (s: string): string => {
+    try {
+      const b64 = btoa(unescape(encodeURIComponent(s)));
+      return b64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+    } catch {
+      return encodeURIComponent(s);
+    }
+  };
+
+  // Wrap a signed Supabase URL into our branded /d?u=...&n=... landing page so
+  // the visible link in the email stays on jbj.ae (no ad-blocker block, no
+  // "From: mdafrewy...supabase.co" mobile blank-page experience).
+  const wrapAsBrandedDownload = (signedUrl: string, filename?: string): string => {
+    const origin = (typeof window !== "undefined" && window.location?.origin)
+      ? window.location.origin
+      : "https://www.jbj.ae";
+    const u = b64url(signedUrl);
+    const n = filename ? `&n=${encodeURIComponent(filename)}` : "";
+    return `${origin}/d?u=${u}${n}`;
+  };
+
+  // Convert a Supabase storage URL into a 7-day signed URL, then wrap it in
+  // the branded /d landing page. Public-bucket URLs and external URLs are
+  // wrapped too so the email always shows a jbj.ae link.
   const resolveAttachmentUrl = async (rawUrl?: string): Promise<string | undefined> => {
     if (!rawUrl) return undefined;
     const m = rawUrl.match(/\/storage\/v1\/object\/(?:public|sign|authenticated)\/([^/?]+)\/([^?]+)/);
-    if (!m) return rawUrl;
-    const bucket = m[1];
-    let path = m[2];
-    try { path = decodeURIComponent(path); } catch { /* keep raw */ }
-    try {
-      const { data, error } = await supabase.storage.from(bucket).createSignedUrl(path, 60 * 60 * 24 * 7, {
-        download: attachmentName || true,
-      });
-      if (error || !data?.signedUrl) return rawUrl;
-      return data.signedUrl;
-    } catch {
-      return rawUrl;
+    let signed = rawUrl;
+    if (m) {
+      const bucket = m[1];
+      let path = m[2];
+      try { path = decodeURIComponent(path); } catch { /* keep raw */ }
+      try {
+        const { data, error } = await supabase.storage.from(bucket).createSignedUrl(path, 60 * 60 * 24 * 7, {
+          download: attachmentName || true,
+        });
+        if (!error && data?.signedUrl) signed = data.signedUrl;
+      } catch { /* keep raw */ }
     }
+    return wrapAsBrandedDownload(signed, attachmentName);
   };
 
   const sendTest = async () => {

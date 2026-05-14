@@ -70,8 +70,8 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:380px;margin:24px auto 0;border-collapse:collapse;">
           <tr><td style="padding-bottom:8px;">${stepLabel(1, "Download your agreement")}</td></tr>
           <tr><td>
-            <a href="${escapeHtml(attachmentUrl)}" target="_blank" rel="noopener" download="${attachmentName}" style="${buttonStyle("#F7F2EA", "#1A1A1A")}">
-              ⬇ &nbsp; Download PDF
+            <a href="${escapeHtml(attachmentUrl)}" target="_blank" rel="noopener" style="${buttonStyle("#F7F2EA", "#1A1A1A")}">
+              Click here to download your document
             </a>
           </td></tr>
           <tr><td align="center" style="padding-top:8px;font-family:Inter,Arial,sans-serif;font-size:10.5px;color:#1A1A1A;opacity:.6;line-height:1.5;">
