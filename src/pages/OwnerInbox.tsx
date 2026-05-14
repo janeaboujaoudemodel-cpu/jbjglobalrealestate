@@ -122,9 +122,10 @@ export default function OwnerInbox() {
     }
   }, [threads, selectedThread]);
 
-  // On mount: provision Gmail channel (if Google Mail connector linked) and
-  // pull any new messages into the unified inbox so Hostinger + Gmail show up
-  // without forcing the user to click "Sync inbox" first.
+  // No automatic full-inbox sync on mount — that was making the page flicker
+  // and re-render every time channels/threads invalidated. The user can click
+  // Refresh to pull new mail; we only run a one-shot Gmail autoconnect (cheap)
+  // to make sure the channel row exists.
   useEffect(() => {
     let cancelled = false;
     (async () => {
@@ -133,17 +134,12 @@ export default function OwnerInbox() {
       } catch (e) {
         console.warn("[inbox] gmail autoconnect skipped:", e);
       }
-      if (cancelled) return;
-      try {
-        await supabase.functions.invoke("comm-inbound-sync", { body: {} });
-      } catch (e) {
-        console.warn("[inbox] inbound sync failed on mount:", e);
-      }
       if (!cancelled) refetchThreads();
     })();
     return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
 
   const handleThreadSelect = (thread: CommThread) => {
     setSelectedThread(thread);
