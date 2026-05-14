@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -124,7 +124,22 @@ export default function ESignatureDashboard() {
     enabled: !!user?.id,
   });
 
-  // Selection is reset on view change via the tab handler below.
+  const qc = useQueryClient();
+  // Live counters: any insert/update on esign_envelopes or esign_recipients
+  // (status flip from sent → signed, completed_at set, etc.) re-fetches.
+  useEffect(() => {
+    if (!user?.id) return;
+    const ch = supabase
+      .channel(`esign-dashboard-${user.id}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "esign_envelopes" }, () => {
+        qc.invalidateQueries({ queryKey: ["esign-envelopes"] });
+      })
+      .on("postgres_changes", { event: "*", schema: "public", table: "esign_recipients" }, () => {
+        qc.invalidateQueries({ queryKey: ["esign-envelopes"] });
+      })
+      .subscribe();
+    return () => { supabase.removeChannel(ch); };
+  }, [user?.id, qc]);
 
   const stats = {
     draft: envelopes?.filter(e => e.status === "draft").length || 0,
