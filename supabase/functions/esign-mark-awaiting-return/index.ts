@@ -41,18 +41,19 @@ Deno.serve(async (req) => {
 
     // Mark recipient as awaiting_signed_return (idempotent if already set)
     if (recipient.status !== "signed" && recipient.status !== "declined") {
-      await supabase
+      const { error: rUpdErr } = await supabase
         .from("esign_recipients")
         .update({ status: "awaiting_signed_return" })
         .eq("id", recipient.id);
+      if (rUpdErr) console.warn("recipient status update failed", rUpdErr);
     }
 
-    // Best-effort envelope flip — if the enum doesn't accept the value, ignore.
-    await supabase
+    // Envelope status — enum now supports awaiting_signed_return.
+    const { error: envUpdErr } = await supabase
       .from("esign_envelopes")
       .update({ status: "awaiting_signed_return" })
-      .eq("id", envelopeId)
-      .then(() => {}, () => {});
+      .eq("id", envelopeId);
+    if (envUpdErr) console.warn("envelope status update failed", envUpdErr);
 
     // Audit log
     await supabase.from("esign_audit_log").insert({

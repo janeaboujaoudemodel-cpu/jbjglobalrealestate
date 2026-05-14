@@ -61,47 +61,53 @@ export default function DownloadProxy() {
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-6">
-      <div className="w-full max-w-md bg-white border border-[#B89555]/40 rounded-md p-8 text-center">
-        <div className="text-[10px] tracking-[0.22em] uppercase text-[#1A1A1A]/60 mb-3">
-          JBJ Global Real Estate
+      <div className="w-full max-w-lg bg-white border border-[#B89555]/40 rounded-md p-10 text-center shadow-sm">
+        <div className="text-[10px] tracking-[0.28em] uppercase text-[#B89555] mb-3 font-semibold">
+          JBJ Global Real Estate LLC SOC
         </div>
+        <div className="h-px w-16 bg-[#B89555] mx-auto mb-6" />
+        <FileText className="w-10 h-10 mx-auto mb-4 text-[#1A1A1A]" />
+        <h1 className="text-xl font-semibold text-[#1A1A1A] mb-2">Your document is ready</h1>
+        <p className="text-sm text-[#1A1A1A]/70 mb-1">
+          <strong className="text-[#1A1A1A]">{filename}</strong>
+        </p>
+        <p className="text-xs text-[#1A1A1A]/60 mb-6">
+          Tap the button below to save the document to your device. The file is delivered securely from JBJ Global Real Estate.
+        </p>
+
         {state === "loading" && (
-          <>
-            <Loader2 className="w-8 h-8 mx-auto mb-4 text-[#B89555] animate-spin" />
-            <div className="text-base font-semibold text-[#1A1A1A]">Preparing your document…</div>
-            <div className="text-xs text-[#1A1A1A]/60 mt-2">Your download will start automatically.</div>
-          </>
+          <div className="flex items-center justify-center gap-2 text-[#1A1A1A]/70 text-sm mb-4">
+            <Loader2 className="w-4 h-4 animate-spin text-[#B89555]" /> Preparing your download…
+          </div>
         )}
         {state === "ok" && (
-          <>
-            <FileText className="w-8 h-8 mx-auto mb-4 text-[#1A1A1A]" />
-            <div className="text-base font-semibold text-[#1A1A1A]">Download started</div>
-            <div className="text-xs text-[#1A1A1A]/60 mt-2">Check your downloads folder for <strong>{filename}</strong>.</div>
-            <button type="button" onClick={triggerDownload} className="mt-5 inline-block text-[11px] tracking-[0.18em] uppercase text-[#B89555] underline">
-              Didn't start? Download again
-            </button>
-          </>
+          <div className="text-xs text-emerald-700 mb-4">
+            Download started — check your downloads folder.
+          </div>
         )}
         {state === "fallback" && (
-          <>
-            <AlertTriangle className="w-8 h-8 mx-auto mb-4 text-[#B89555]" />
-            <div className="text-base font-semibold text-[#1A1A1A]">Open document manually</div>
-            <div className="text-xs text-[#1A1A1A]/60 mt-2 mb-5">
-              Tap the button below to open your file in a new tab.
-            </div>
-            {target ? (
-              <a
-                href={proxiedTarget || target}
-                download={filename}
-                className="inline-block px-6 py-3 bg-[#1A1A1A] text-[#FDFBF7] text-[12px] tracking-[0.22em] uppercase font-bold border border-[#B89555] no-underline"
-              >
-                Download {filename}
-              </a>
-            ) : (
-              <div className="text-xs text-[#1A1A1A]/60">No document URL provided.</div>
-            )}
-          </>
+          <div className="flex items-center justify-center gap-2 text-[#1A1A1A]/70 text-xs mb-4">
+            <AlertTriangle className="w-3.5 h-3.5 text-[#B89555]" />
+            Tap the button to download manually.
+          </div>
         )}
+
+        <button
+          type="button"
+          onClick={triggerDownload}
+          disabled={!target || state === "loading"}
+          className="inline-block w-full px-6 py-3 bg-[#1A1A1A] text-[#FDFBF7] text-[12px] tracking-[0.22em] uppercase font-bold border border-[#B89555] hover:bg-[#1A1A1A]/90 disabled:opacity-60"
+        >
+          {state === "loading" ? "Preparing…" : `Download ${filename}`}
+        </button>
+
+        {!target && (
+          <div className="text-xs text-[#1A1A1A]/60 mt-4">No document URL provided.</div>
+        )}
+
+        <div className="mt-8 pt-6 border-t border-[#B89555]/20 text-[10px] text-[#1A1A1A]/50 tracking-[0.18em] uppercase">
+          Secure delivery · JBJ.AE
+        </div>
       </div>
     </div>
   );
