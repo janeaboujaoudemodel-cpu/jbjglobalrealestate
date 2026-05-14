@@ -32,37 +32,52 @@ export async function fetchEmailAttachment(
   const name = String(filename || "").trim();
   if (!u || !name) return null;
 
-  try {
-    const res = await fetch(u, { redirect: "follow" });
-    if (!res.ok) {
-      console.warn(`[fetchEmailAttachment] HTTP ${res.status} fetching ${u}`);
-      return null;
-    }
-    const buf = new Uint8Array(await res.arrayBuffer());
-    if (buf.byteLength === 0) return null;
-    if (buf.byteLength > MAX_BYTES) {
-      console.warn(`[fetchEmailAttachment] Skipping oversize attachment ${name} (${buf.byteLength} bytes)`);
-      return null;
-    }
-    // If a PDF was requested, verify the bytes actually start with %PDF-.
-    // Otherwise we'd be base64-encoding an HTML error/landing page and
-    // delivering it as a .pdf — which is exactly why Gmail showed a blank
-    // document. Reject so the caller surfaces a clear error.
-    if (contentType === "application/pdf") {
-      const head = buf.subarray(0, 5);
-      const isPdf = head[0] === 0x25 && head[1] === 0x50 && head[2] === 0x44 && head[3] === 0x46 && head[4] === 0x2d;
-      if (!isPdf) {
-        console.warn(`[fetchEmailAttachment] ${name} fetched but is not a PDF (first bytes: ${Array.from(head).join(",")}). Refusing to attach.`);
-        return null;
+  // Single retry-once after a brief delay to absorb storage CDN propagation
+  // races (PDF uploaded <1s before the send call) and transient 5xx.
+  const attempt = async (): Promise<{ ok: true; bytes: Uint8Array } | { ok: false; transient: boolean }> => {
+    try {
+      const res = await fetch(u, { redirect: "follow" });
+      if (!res.ok) {
+        const transient = res.status === 404 || res.status === 408 || res.status === 425 || res.status === 429 || res.status >= 500;
+        console.warn(`[fetchEmailAttachment] HTTP ${res.status} fetching ${u}`);
+        return { ok: false, transient };
       }
+      const buf = new Uint8Array(await res.arrayBuffer());
+      if (buf.byteLength === 0) return { ok: false, transient: true };
+      return { ok: true, bytes: buf };
+    } catch (err) {
+      console.warn(`[fetchEmailAttachment] Failed to fetch ${u}:`, err);
+      return { ok: false, transient: true };
     }
-    return {
-      filename: name,
-      content: bytesToBase64(buf),
-      content_type: contentType,
-    };
-  } catch (err) {
-    console.warn(`[fetchEmailAttachment] Failed to fetch ${u}:`, err);
+  };
+
+  let result = await attempt();
+  if (!result.ok && result.transient) {
+    await new Promise((r) => setTimeout(r, 1500));
+    result = await attempt();
+  }
+  if (!result.ok) return null;
+
+  const buf = result.bytes;
+  if (buf.byteLength > MAX_BYTES) {
+    console.warn(`[fetchEmailAttachment] Skipping oversize attachment ${name} (${buf.byteLength} bytes)`);
     return null;
   }
+  // If a PDF was requested, verify the bytes actually start with %PDF-.
+  // Otherwise we'd be base64-encoding an HTML error/landing page and
+  // delivering it as a .pdf — which is exactly why Gmail showed a blank
+  // document. Reject so the caller surfaces a clear error.
+  if (contentType === "application/pdf") {
+    const head = buf.subarray(0, 5);
+    const isPdf = head[0] === 0x25 && head[1] === 0x50 && head[2] === 0x44 && head[3] === 0x46 && head[4] === 0x2d;
+    if (!isPdf) {
+      console.warn(`[fetchEmailAttachment] ${name} fetched but is not a PDF (first bytes: ${Array.from(head).join(",")}). Refusing to attach.`);
+      return null;
+    }
+  }
+  return {
+    filename: name,
+    content: bytesToBase64(buf),
+    content_type: contentType,
+  };
 }
