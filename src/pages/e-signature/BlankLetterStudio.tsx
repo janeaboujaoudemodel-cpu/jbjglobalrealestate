@@ -26,7 +26,12 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { renderHtmlToPdfBlob, allocateDocNumber } from "@/hooks/useEsignTemplates";
+import { renderHtmlToPdfBlob, allocateDocNumber, useEsignTemplates, useCreateEnvelopeFromTemplate } from "@/hooks/useEsignTemplates";
+import {
+  DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem,
+  DropdownMenuLabel, DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
+import { FileText, ChevronDown } from "lucide-react";
 import { buildBlankLetterHtml, BLANK_LETTER_TEMPLATE_KEY, type BlankLetterValues } from "@/templates/jbjBlankLetter";
 import {
   useOwnerSignatureAssets,
