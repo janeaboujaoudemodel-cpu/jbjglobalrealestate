@@ -10,7 +10,7 @@
  *   • Responsive two-pane layout (single column under lg)
  *   • Wrapping footer that never overflows the dialog
  */
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -43,6 +43,28 @@ const TEST_RECIPIENT = "infoo.jane@gmail.com";
 const DEFAULT_CC = "infoo.jane@gmail.com";
 const DISPLAY_FROM = "JBJ Global Real Estate <noreply@jbj.ae>";
 const DISPLAY_REPLY_TO = "contact@jbj.ae";
+
+/** Canonical short body the owner approved. Used when the saved template is
+ *  empty or matches a known legacy preset that we want to retire. */
+const NEW_DEFAULT_BODY_HTML =
+  `<p>Dear {{client_name}},</p>` +
+  `<p>Please find the PDF attached to this email. Once you have reviewed it, kindly sign it using DocuSign at your earliest convenience and return it by replying to this email or this ticket with the signed copy attached.</p>` +
+  `<p>Thank you,</p>`;
+
+/** Phrases from the old template that must be scrubbed when hydrating from
+ *  any saved body (DB template default OR envelope.email_message). They are
+ *  matched case-insensitively, with flexible whitespace, against the
+ *  PLAIN-TEXT projection of the body — and the matching paragraphs are
+ *  stripped from the HTML. */
+const LEGACY_BODY_FRAGMENTS: RegExp[] = [
+  /attached is your[\s\S]*?prepared by jbj global real estate\.?/i,
+  /kindly review and digitally sign[\s\S]*?secure link below[\s\S]*?\./i,
+  /once signed,?\s*a fully executed copy will be returned to you automatically\.?/i,
+  /also available via the secure download button below\.?/i,
+  /thank you for your continued trust\.?/i,
+  /please find attached the signed pdf\.?/i,
+  /signature pending[^<\n]*/i,
+];
 
 function normalizeSubject(value: string, fallbackDoc = "Document") {
   const raw = String(value || "").trim();
@@ -138,6 +160,27 @@ function stripInlineSignature(text: string): string {
   return out.replace(/\s+$/g, "");
 }
 
+/** Walk the HTML's block elements and drop any whose plain-text content
+ *  matches a legacy fragment. If everything ends up empty, return the canonical
+ *  NEW_DEFAULT_BODY_HTML so the editor never starts blank. */
+function scrubLegacyBody(html: string): string {
+  if (!html) return NEW_DEFAULT_BODY_HTML;
+  let out = html;
+  for (const re of LEGACY_BODY_FRAGMENTS) {
+    // Strip matching text wherever it appears (inside <p>, raw, etc.).
+    out = out.replace(re, "");
+  }
+  // Remove now-empty paragraph/div wrappers left behind.
+  out = out
+    .replace(/<p[^>]*>(?:\s|&nbsp;|<br\s*\/?>)*<\/p>/gi, "")
+    .replace(/<div[^>]*>(?:\s|&nbsp;|<br\s*\/?>)*<\/div>/gi, "")
+    .replace(/(<br\s*\/?>\s*){3,}/gi, "<br/><br/>")
+    .trim();
+  const plain = out.replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").trim();
+  if (!plain) return NEW_DEFAULT_BODY_HTML;
+  return out;
+}
+
 export function SendViaEmailDialog({
   open,
   onOpenChange,
@@ -195,8 +238,19 @@ export function SendViaEmailDialog({
     setSelectedSigId(def?.id || "");
   }, [signatures, selectedSigId]);
 
+  // Hydrate ONCE per open transition. Without this gate the parent's prop
+  // identity changes (each render produces fresh `defaultBody`/`attachmentName`
+  // strings) re-fired this effect on every keystroke and overwrote the body
+  // mid-typing — making the Message field appear unresponsive.
+  const hydratedRef = useRef(false);
   useEffect(() => {
-    if (!open) return;
+    if (!open) {
+      hydratedRef.current = false;
+      return;
+    }
+    if (hydratedRef.current) return;
+    hydratedRef.current = true;
+
     setTos(recipientEmail ? [recipientEmail] : []);
     setCcs([DEFAULT_CC]);
     setSubject(normalizeSubject(defaultSubject, attachmentName || "Document"));
@@ -204,13 +258,15 @@ export function SendViaEmailDialog({
     setExtraAttachments([]);
     setAutoAttachmentRemoved(false);
     setBodyHtml(
-      stripSignature(
-        legacyBodyToHtml(stripInlineSignature(defaultBody), {
-          clientName: recipientName || "Client",
-          docTitle: defaultSubject || "Document",
-          senderName,
-          senderTitle,
-        }),
+      scrubLegacyBody(
+        stripSignature(
+          legacyBodyToHtml(stripInlineSignature(defaultBody), {
+            clientName: recipientName || "Client",
+            docTitle: defaultSubject || "Document",
+            senderName,
+            senderTitle,
+          }),
+        ),
       ),
     );
     (async () => {
@@ -221,7 +277,7 @@ export function SendViaEmailDialog({
         .maybeSingle();
       if (!data || !open) return;
       if (data.subject) setSubject(normalizeSubject(data.subject, attachmentName || "Document"));
-      if (data.body_html) setBodyHtml(stripSignature(data.body_html));
+      if (data.body_html) setBodyHtml(scrubLegacyBody(stripSignature(data.body_html)));
       if (data.signature_preset_id) setSelectedSigId(data.signature_preset_id);
       if (Array.isArray(data.default_to_emails) && data.default_to_emails.length) setTos(dedupeEmails(data.default_to_emails));
       if (Array.isArray(data.default_cc_emails)) setCcs(data.default_cc_emails.length ? dedupeEmails(data.default_cc_emails) : [DEFAULT_CC]);
@@ -233,14 +289,14 @@ export function SendViaEmailDialog({
           const draft = JSON.parse(raw) as { subject?: string; bodyHtml?: string; ts?: number };
           if (draft && (draft.subject || draft.bodyHtml)) {
             if (draft.subject) setSubject(draft.subject);
-            if (draft.bodyHtml != null) setBodyHtml(stripSignature(draft.bodyHtml));
+            if (draft.bodyHtml != null) setBodyHtml(scrubLegacyBody(stripSignature(draft.bodyHtml)));
             if (draft.ts) setDraftSavedAt(draft.ts);
           }
         }
       } catch { /* ignore corrupt draft */ }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, recipientEmail, recipientName, defaultSubject, defaultBody, templateKey, attachmentName]);
+  }, [open]);
 
   // Auto-save subject + body on every keystroke (debounced) to localStorage,
   // scoped per envelope. Cleared on successful send or explicit discard.
