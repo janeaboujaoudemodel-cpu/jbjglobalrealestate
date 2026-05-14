@@ -146,7 +146,6 @@ Deno.serve(async (req) => {
         voice_id: conv?.tts?.voice_id ?? "",
         llm: agent?.prompt?.llm ?? "",
         warning: resolved.warning,
-        raw: data,
       });
     }
 
