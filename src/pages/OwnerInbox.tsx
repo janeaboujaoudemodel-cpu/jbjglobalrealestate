@@ -42,6 +42,9 @@ import useOwnerInbox, {
 } from "@/hooks/useOwnerInbox";
 import { formatDistanceToNow } from "date-fns";
 import OwnerInboxThread from "@/components/owner-inbox/OwnerInboxThread";
+import InboxAICommandPanel from "@/components/owner-inbox/InboxAICommandPanel";
+import InboxBulkActionsBar from "@/components/owner-inbox/InboxBulkActionsBar";
+import { Checkbox } from "@/components/ui/checkbox";
 import { CATEGORY_META, clientCategorize } from "@/hooks/useCommAITriage";
 import useCommAITriage from "@/hooks/useCommAITriage";
 
