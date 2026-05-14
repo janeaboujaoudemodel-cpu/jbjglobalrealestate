@@ -70,6 +70,74 @@ export default function VoiceAgentControlPanel() {
     return { total, completed, totalSec, unique, avg };
   }, [logs]);
 
+  // Live agent config (prompt/voice/language/first message)
+  const qc = useQueryClient();
+  const { data: agent, isLoading: loadingAgent, error: agentError } = useQuery<AgentConfig>({
+    queryKey: ["elevenlabs_agent_config"],
+    queryFn: async () => {
+      const { data, error } = await supabase.functions.invoke("elevenlabs-agent", { method: "GET" });
+      if (error) throw error;
+      if ((data as { error?: string })?.error) throw new Error((data as { error: string }).error);
+      return data as AgentConfig;
+    },
+  });
+
+  const [draft, setDraft] = useState<AgentConfig | null>(null);
+  useEffect(() => { if (agent && !draft) setDraft(agent); }, [agent, draft]);
+
+  const saveMutation = useMutation({
+    mutationFn: async (payload: Partial<AgentConfig>) => {
+      const { data, error } = await supabase.functions.invoke("elevenlabs-agent", {
+        method: "POST",
+        body: payload,
+      });
+      if (error) throw error;
+      if ((data as { error?: string })?.error) throw new Error((data as { error: string }).error);
+      return data;
+    },
+    onSuccess: () => {
+      toast.success("Agent updated in ElevenLabs");
+      qc.invalidateQueries({ queryKey: ["elevenlabs_agent_config"] });
+    },
+    onError: (e: Error) => toast.error(e.message || "Save failed"),
+  });
+
+  // Free text-mode tester (uses Lovable AI gateway, no ElevenLabs credits)
+  const [testMessages, setTestMessages] = useState<TestMessage[]>([]);
+  const [testInput, setTestInput] = useState("");
+  const [testing, setTesting] = useState(false);
+  const testEndRef = useRef<HTMLDivElement>(null);
+  useEffect(() => { testEndRef.current?.scrollIntoView({ behavior: "smooth" }); }, [testMessages, testing]);
+
+  const runTest = async () => {
+    const text = testInput.trim();
+    if (!text || !draft) return;
+    const next: TestMessage[] = [...testMessages, { role: "user", content: text }];
+    setTestMessages(next);
+    setTestInput("");
+    setTesting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("elevenlabs-agent-test-chat", {
+        body: { systemPrompt: draft.prompt, messages: next },
+      });
+      if (error) throw error;
+      const reply = (data as { reply?: string; error?: string })?.reply ?? "";
+      if ((data as { error?: string })?.error) throw new Error((data as { error: string }).error);
+      setTestMessages((m) => [...m, { role: "assistant", content: reply || "(no reply)" }]);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Test failed");
+    } finally {
+      setTesting(false);
+    }
+  };
+
+  const dirty = !!(agent && draft && (
+    draft.prompt !== agent.prompt ||
+    draft.first_message !== agent.first_message ||
+    draft.language !== agent.language ||
+    draft.voice_id !== agent.voice_id
+  ));
+
   return (
     <div className="min-h-screen bg-[#FDFBF7] px-6 py-8">
       <div className="max-w-6xl mx-auto space-y-6">
