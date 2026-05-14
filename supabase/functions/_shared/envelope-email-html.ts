@@ -54,18 +54,11 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
   const docNumber = args.docNumber ? escapeHtml(args.docNumber) : "";
   const year = args.year ?? new Date().getFullYear();
   const docusignUrl = (args.docusignUrl || "").trim();
-  const attachmentName = args.attachmentName ? escapeHtml(args.attachmentName) : "";
+  void args.attachmentName;
   void args.attachmentUrl;
 
   const ctaHref = docusignUrl || DOCUSIGN_WEB;
-
-  // Unique reference line so each send produces a distinct message body
-  // (prevents Gmail from clipping with the "..." / show trimmed content).
-  const sentAt = new Date().toISOString().replace("T", " ").slice(0, 16) + " UTC";
-  const refBits = [docNumber, attachmentName, sentAt].filter(Boolean).join(" · ");
-  const referenceLine = refBits
-    ? `<div style="font-family:Inter,Arial,sans-serif;font-size:10.5px;color:#1A1A1A;opacity:.55;letter-spacing:.04em;margin:0 0 14px;">Reference: ${refBits}</div>`
-    : "";
+  const referenceLine = "";
 
   const buttonStyle = (bg: string, fg: string) =>
     `display:block;width:100%;box-sizing:border-box;padding:16px 22px;font-family:Inter,Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:.22em;color:${fg};background:${bg};text-decoration:none;text-transform:uppercase;text-align:center;border:1px solid #B89555;border-radius:2px;`;
