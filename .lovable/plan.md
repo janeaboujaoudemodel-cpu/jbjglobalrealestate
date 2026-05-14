@@ -1,55 +1,117 @@
-## Goal
+## What I found
 
-Make `/owner/inbox` the only place email lives. Hostinger emails must actually appear, and the existing Gmail connection must feed the same Unified Inbox (no separate Gmail/Email Center page).
+The issue is not one single bug. The current Unified Inbox has several connected problems:
 
-## What's wrong today (verified)
-
-1. **Hostinger** — channel row exists, `sync_status = synced`, **5 threads, 0 messages**. The IMAP branch upserts messages with `ignoreDuplicates: true` and never surfaces insert errors, so messages silently fail to land. That's why "messaging are not reflecting".
-2. **Gmail** — the Google Mail connector is linked and 18 emails live in the standalone `email_inbox_items` table (used by the old `EmailCenter` page). There is **no `email_gmail` row in `owner_comm_channels`**, so the Unified Inbox Gmail tab is permanently empty even though Gmail is connected.
-3. **Two parallel email systems** — `EmailCenter` (uses `email_inbox_items` + `gmail-inbox-sync`) lives outside the inbox, while Unified Inbox uses `owner_comm_threads/messages` + `comm-inbound-sync`. The user wants only one.
+- The page tries to auto-sync Gmail and Hostinger on mount, which can make the UI look like it is blinking/reloading while long sync calls run.
+- Gmail data is now present in the unified tables, but most threads still have no AI category, no AI suggestion, and the category filters therefore look empty or wrong.
+- Hostinger has 5 thread rows but 0 message rows, so selecting Hostinger can show thread previews but no real conversation body.
+- The thread uniqueness is currently too broad: Gmail and Hostinger threads are grouped by user + channel type + contact only, not by the specific channel account. This can cause cross-channel bleed in the future and is part of why Gmail/Hostinger separation feels unreliable.
+- The detail panel is constrained to a fixed viewport-height block, so the user cannot scroll naturally to see the full Luxury Closet / AI Suggestions / Lead / Activity content.
+- The sidebar still shows a duplicate “Email Client” entry even though email should live only in “Messages / Inbox”.
+- The existing AI triage categories are too generic for this workflow. “The Luxury Closet - Price offer” was classified as Personal; SHEIN/Emirates NBD are not reliably classified into Marketing/Finance/Sales.
+- Bulk actions and “reflect back to Gmail” require Gmail modify scope and a server-side action function; the UI currently does not have that foundation.
 
 ## Plan
 
-### 1. Auto-provision a Gmail channel into Unified Inbox
+### 1. Stop the blinking and make sync explicit/status-driven
 
-- On Owner Inbox load, if the Google Mail connector is linked but no `owner_comm_channels` row of `channel_type = 'email_gmail'` exists for the owner, create one (identifier = Gmail address from Gmail `users/me/profile`, display_name = "Gmail").
-- New edge function `comm-gmail-autoconnect` (mirrors `comm-hostinger-autoconnect`) — idempotent insert.
-- Trigger it from `useCommChannels` once per session and from the Inbox "Sync inbox" button.
+- Remove the heavy automatic full inbox sync on page mount.
+- Keep lightweight channel loading only.
+- Make “Refresh / Sync inbox” run a bounded sync and show clear state: syncing, synced, failed.
+- Scope sync calls to the active channel when the user is on Gmail or Hostinger, instead of syncing everything every time.
+- Add per-channel sync error display using `last_error` so failures do not silently flicker.
 
-### 2. Fix Hostinger message persistence
+### 2. Fix channel isolation so Gmail content never appears under Hostinger
 
-- Stop using `ignoreDuplicates: true` on `owner_comm_messages` upsert; switch to a pre-check + plain insert and **log + propagate** any insert error to `last_error` on the channel.
-- Verify `owner_comm_messages` has a unique index on `(user_id, external_message_id)`; if missing, add it via migration so dedup is real.
-- After the fix, "Sync inbox" must populate the 5 existing Hostinger threads with their messages and add new ones.
+- Add a database migration to enforce thread uniqueness by `user_id + channel_id + contact_identifier` for channel-specific inboxes.
+- Update `comm-inbound-sync` so Gmail and Hostinger thread upserts use `channel_id` in the conflict key.
+- Backfill existing thread rows safely so each thread remains tied to its real channel.
+- Keep the existing message dedupe by `user_id + external_message_id`.
 
-### 3. Make Unified Inbox the single Gmail surface
+### 3. Fix Hostinger message persistence
 
-- Extend `comm-inbound-sync` Gmail branch to fetch a richer body snippet (already partial), so the message list looks the same as Hostinger.
-- One-time backfill: inside `comm-inbound-sync`, when a Gmail channel has `last_sync_at IS NULL`, also import existing rows from `email_inbox_items` (subject, snippet, from, received_at, gmail_message_id) into `owner_comm_threads/messages`, so the 18 historical emails immediately show up in `/owner/inbox`.
-- Keep `email_inbox_items` as the AI-classification store (used by recommendations), but **stop showing it as its own page**.
+- Update the Hostinger branch in `comm-inbound-sync` so each fetched Hostinger message creates a matching row in `owner_comm_messages`.
+- If only headers/previews are available from IMAP, save a usable message body from subject + sender + date instead of leaving threads empty.
+- If an insert fails, write the error to the Hostinger channel and show it in the UI.
+- Keep Hostinger separate from Gmail in tabs, counts, selected thread, and stats.
 
-### 4. Retire the standalone Gmail / Email Center page
+### 4. Make category filters actually useful
 
-- Redirect `/owner/crm/email-center` (and any sidebar/tile that links to it) to `/owner/inbox?channel=email_gmail`.
-- Remove the "Email Client" / "Email Center" entries from the Owner CRM sidebar so there is exactly one email surface.
+- Expand categories from the current small set into business-focused filters:
+  - All
+  - Sales / Offers
+  - Real Estate Leads
+  - Real Estate Ops
+  - Marketing
+  - Finance / Banking
+  - Developer / Documents
+  - Personal
+  - Spam / Promotions
+  - Other
+- Add deterministic pre-classification rules for obvious senders/subjects before AI runs:
+  - SHEIN / creator / campaign → Marketing
+  - Emirates NBD / banking / payment / tax → Finance
+  - buyer / price offer / sale / closet offer → Sales / Offers
+  - registration / MOU / license / Docusign / developer documents → Developer / Documents
+- Update the category chips and counts to use the filtered thread set for the selected channel.
+- Make stats cards reflect the current selected channel/category, not global totals.
 
-### 5. UX polish on `/owner/inbox`
+### 5. Repair AI triage and AI Suggestions panel
 
-- Show the connected Gmail address as the tab label (e.g. `janeaboujaoude@gmail.com`) instead of generic "Gmail", same treatment Hostinger already gets.
-- "Sync inbox" button now invokes `comm-gmail-autoconnect` → `comm-inbound-sync` in sequence and toasts the imported count per channel.
-- If a channel fails, surface `last_error` inline on the channel tab (red dot + tooltip) so "synchronize failed / reconnect" states stop flickering between tiles.
+- Update `comm-ai-triage` prompt/schema to include the new categories and stronger business rules.
+- Add a fallback rule-based category + suggested reply when the AI gateway returns blank/invalid output.
+- Auto-triage visible unprocessed threads in small batches after sync, instead of only triaging one opened thread.
+- In the thread detail, make the “AI Suggestions” tab show:
+  - category
+  - priority
+  - summary
+  - suggested reply
+  - next action
+  - buttons to use reply, create task, schedule meeting, save note
+- Remove the white blank state by showing a loading/error/empty state with a “Run AI triage” button.
 
-## Out of scope
+### 6. Fix scrolling and layout visibility
 
-- No design/restyling beyond the existing Unified Inbox.
-- No changes to outbound send pipeline, locked-send, or quotas.
-- No changes to AI classification / `email_inbox_items` schema (only consumed for backfill).
+- Replace the fixed `calc(100vh - 420px)` inbox grid height with a responsive layout that scrolls inside the page correctly.
+- Make the thread list and detail pane independently scrollable without trapping the whole page.
+- Ensure the detail pane header stays visible while the message body, tabs, and AI blocks can scroll.
+- Add horizontal overflow handling for channel/category chips and thread actions.
 
-## Files touched
+### 7. Remove duplicate Email Client navigation
 
-- `supabase/functions/comm-inbound-sync/index.ts` — fix message insert, add Gmail backfill from `email_inbox_items`.
-- `supabase/functions/comm-gmail-autoconnect/index.ts` — **new**, idempotent Gmail channel provisioning.
-- `src/pages/OwnerInbox.tsx` — call autoconnect on mount; richer "Sync inbox" handler; per-channel error chip; Gmail tab labelled by address.
-- `src/hooks/useCommChannels.ts` — invoke Gmail autoconnect alongside Hostinger.
-- `src/routes/OwnerRoutes.tsx` (+ CRM sidebar component) — redirect `/owner/crm/email-center` → `/owner/inbox?channel=email_gmail`, drop the duplicate menu item.
-- DB migration: ensure unique index on `owner_comm_messages(user_id, external_message_id)`.
+- Remove “Email Client” from the Owner sidebar.
+- Keep `/owner/email-client` redirecting to `/owner/inbox` so old links do not break.
+- Ensure CRM email links also point to `/owner/inbox` or `/owner/inbox?channel=email_gmail`.
+
+### 8. Add bulk-action foundation
+
+- Add selectable thread rows with:
+  - select all visible
+  - unselect all
+  - mark read/unread
+  - mark needs reply / waiting / follow-up
+  - create tasks from selected
+  - schedule calendar follow-up from selected
+- Implement database-side updates for local inbox state first.
+- For Gmail reflection, add a protected backend action that uses the Gmail connector to call Gmail modify endpoints when scope is available.
+- If Gmail modify scope is missing, show a reconnect-required message instead of pretending it worked.
+
+### 9. Wire calendar/task actions
+
+- Use the existing `owner_comm_tasks` and `owner_calendar_events` paths for local tasks/calendar.
+- Add selected-thread bulk actions that create tasks/calendar events with the thread source saved in metadata.
+- Keep Google Calendar sync as a second step only if the Google Calendar connector is linked and available; otherwise local website calendar still works.
+
+## Validation after implementation
+
+- Confirm `/owner/inbox?channel=email_gmail&channelId=...` loads without blinking or blank screen.
+- Confirm Gmail thread count/messages display from unified tables.
+- Confirm Hostinger tab only shows Hostinger threads and has message rows after sync.
+- Confirm category filters place examples correctly:
+  - SHEIN → Marketing
+  - Emirates NBD → Finance / Banking
+  - The Luxury Closet price offer → Sales / Offers
+- Confirm AI Suggestions is no longer blank and produces summary/reply/action.
+- Confirm scrolling works on the current 1133×891 viewport.
+- Confirm “Email Client” is gone from the sidebar.
+- Confirm bulk selection updates local inbox state; Gmail reflection shows success or reconnect-required status.

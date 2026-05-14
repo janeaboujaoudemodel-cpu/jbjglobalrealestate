@@ -304,7 +304,7 @@ Deno.serve(async (req) => {
                   last_message_at: lastMessageAt,
                   last_message_preview: m.subject,
                 },
-                { onConflict: "user_id,channel_type,contact_identifier" }
+                { onConflict: "user_id,channel_id,contact_identifier" }
               )
               .select("id, unread_count")
               .single();
@@ -444,7 +444,7 @@ Deno.serve(async (req) => {
               last_message_at: args.receivedAt,
               last_message_preview: args.subject,
             },
-            { onConflict: "user_id,channel_type,contact_identifier" }
+            { onConflict: "user_id,channel_id,contact_identifier" }
           )
           .select("id, unread_count")
           .single();

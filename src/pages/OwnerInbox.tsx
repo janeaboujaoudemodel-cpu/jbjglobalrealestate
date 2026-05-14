@@ -42,7 +42,7 @@ import useOwnerInbox, {
 } from "@/hooks/useOwnerInbox";
 import { formatDistanceToNow } from "date-fns";
 import OwnerInboxThread from "@/components/owner-inbox/OwnerInboxThread";
-import { CATEGORY_META } from "@/hooks/useCommAITriage";
+import { CATEGORY_META, clientCategorize } from "@/hooks/useCommAITriage";
 
 const channelIcons: Record<string, React.ReactNode> = {
   whatsapp: <MessageSquare className="h-4 w-4 text-green-500" />,
@@ -122,9 +122,10 @@ export default function OwnerInbox() {
     }
   }, [threads, selectedThread]);
 
-  // On mount: provision Gmail channel (if Google Mail connector linked) and
-  // pull any new messages into the unified inbox so Hostinger + Gmail show up
-  // without forcing the user to click "Sync inbox" first.
+  // No automatic full-inbox sync on mount — that was making the page flicker
+  // and re-render every time channels/threads invalidated. The user can click
+  // Refresh to pull new mail; we only run a one-shot Gmail autoconnect (cheap)
+  // to make sure the channel row exists.
   useEffect(() => {
     let cancelled = false;
     (async () => {
@@ -133,17 +134,12 @@ export default function OwnerInbox() {
       } catch (e) {
         console.warn("[inbox] gmail autoconnect skipped:", e);
       }
-      if (cancelled) return;
-      try {
-        await supabase.functions.invoke("comm-inbound-sync", { body: {} });
-      } catch (e) {
-        console.warn("[inbox] inbound sync failed on mount:", e);
-      }
       if (!cancelled) refetchThreads();
     })();
     return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
 
   const handleThreadSelect = (thread: CommThread) => {
     setSelectedThread(thread);
@@ -228,8 +224,13 @@ export default function OwnerInbox() {
                   variant="outline"
                   size="sm"
                   onClick={async () => {
+                    // Scope sync to the active channel when one is selected so
+                    // Refresh is fast and never times out.
+                    const body: { channel_id?: string } = filters.channelId && filters.channelId !== "all"
+                      ? { channel_id: filters.channelId }
+                      : {};
                     try { await supabase.functions.invoke("comm-gmail-autoconnect", { body: {} }); } catch { /* noop */ }
-                    try { await supabase.functions.invoke("comm-inbound-sync", { body: {} }); } catch { /* noop */ }
+                    try { await supabase.functions.invoke("comm-inbound-sync", { body }); } catch { /* noop */ }
                     refetchThreads();
                   }}
                   disabled={threadsLoading}
@@ -335,7 +336,7 @@ export default function OwnerInbox() {
           </div>
 
           {/* Main Content - Split View */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4" style={{ height: 'calc(100vh - 420px)', minHeight: '400px' }}>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 min-h-[600px]" style={{ height: 'min(calc(100vh - 360px), 900px)' }}>
             {/* Thread List */}
             <div className="lg:col-span-1 min-h-0 overflow-hidden">
               <Card className="border border-[#B89555]/20 bg-[#FDFBF7]/90 backdrop-blur-sm h-full overflow-hidden shadow-sm">
@@ -360,7 +361,7 @@ export default function OwnerInbox() {
                     </div>
                   ) : (
                     <div className="divide-y divide-gold/10">
-                      {threads.filter(t => categoryFilter === 'all' || t.ai_category === categoryFilter).map((thread) => (
+                      {threads.filter(t => categoryFilter === 'all' || clientCategorize(t) === categoryFilter).map((thread) => (
                         <ThreadListItem
                           key={thread.id}
                           thread={thread}
@@ -520,11 +521,14 @@ function ThreadListItem({
                 {status.icon}
                 <span className="ml-1">{status.label}</span>
               </Badge>
-              {thread.ai_category && CATEGORY_META[thread.ai_category] && (
-                <Badge variant="outline" className={`text-[10px] px-1.5 py-0.5 ${CATEGORY_META[thread.ai_category].color}`}>
-                  {CATEGORY_META[thread.ai_category].label}
-                </Badge>
-              )}
+              {(() => {
+                const cat = clientCategorize(thread);
+                return CATEGORY_META[cat] ? (
+                  <Badge variant="outline" className={`text-[10px] px-1.5 py-0.5 ${CATEGORY_META[cat].color}`}>
+                    {CATEGORY_META[cat].label}
+                  </Badge>
+                ) : null;
+              })()}
             </div>
             {thread.last_message_at && (
               <span className="text-[10px] text-[#1A1A1A]/70 shrink-0">
