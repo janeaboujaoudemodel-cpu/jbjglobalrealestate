@@ -1,83 +1,112 @@
 ## Goal
 
-Fix the PAA document so the **Exclusivity** choice (Exclusive / Non‑Exclusive) renders correctly, the AI Co‑Pilot is fast and its Apply actually shows up in the document preview, and Save & re‑render isn't slow or silently failing.
+Three things:
+1. Make **Approve & Send** (and the Send-for-Signature dialog) feel snappy.
+2. Make sure that once Approve & Send fires, the envelope/recipient correctly moves into "Pending Signature" on the dashboard immediately — not stuck at 0.
+3. Auto-detect when the client emails the signed copy back, mark the envelope/recipient as **signed** (with name + date/time), surface it in the Signed Contracts section, and stamp the generated PAA form with "Signed by {name} on {dd/mm/yyyy hh:mm}".
 
 ## Root causes
 
-1. **Chip matcher bug — both chips highlighted, wrong word printed.**
-   In `src/templates/jbjPropertyAdvertisingAgreement.ts` line 618 the matcher is:
-   ```ts
-   chipRow("exclusivity", "Appointment Type",
-     ["EXCLUSIVE", "NON EXCLUSIVE"],
-     (o, v) => v.toLowerCase().includes(o.toLowerCase().split(" ")[0]))
-   ```
-   For value `"NON EXCLUSIVE"`:
-   - option `"EXCLUSIVE"` → checks `"non exclusive".includes("exclusive")` → **true**
-   - option `"NON EXCLUSIVE"` → checks `"non exclusive".includes("non")` → **true**
+### 1) Slow Approve & Send
 
-   Both chips get the selected state, and in **final** render mode `options.find(...)` returns the **first** match (`"EXCLUSIVE"`) — so the doc prints "EXCLUSIVE" even when the field clearly says "NON EXCLUSIVE". This is exactly what the user is seeing.
+`supabase/functions/esign-send-for-signature/index.ts` runs everything sequentially per recipient:
+- `fetchEmailAttachment(attachment_url, ...)` downloads the PDF from storage **before** every Resend call (≈500‑2000 ms).
+- For each extra attachment another sequential fetch.
+- After each Resend call: per-recipient `update esign_recipients`, then `insert esign_audit_log` (each its own round trip).
+- Finally a second envelope `update` + a second `insert esign_audit_log`.
 
-2. **AI Co‑Pilot slow.**
-   `supabase/functions/paa-ai-copilot/index.ts` calls `google/gemini-2.5-pro`. Pro is the slowest/most expensive tier and overkill for short field‑edit confirmations.
+For a typical 1-recipient PAA send that's ~6‑8 sequential round trips. The dialog also `await`s a metadata `update esign_envelopes` and an `update esign_recipients` (for phone) **before** the send call.
 
-3. **AI Apply seems "not applied".**
-   `applyAIUpdates` sets `editing=true` and merges into `editValues`, and `previewHtml` reads `editValues` when editing. That's correct. The visible reason it looked wrong was bug #1 (any AI value containing "exclusive" still rendered "EXCLUSIVE"). Plus the copilot system prompt doesn't list `exclusivity` as a known key, so the AI sometimes invents values like `"non-exclusive"` / `"Non Exclusive"` that aren't normalized.
+### 2) "Pending" stays at 0 after sending
 
-4. **Save & re‑render slow.**
-   `handleSaveEdits` runs `regenerate` (PDF render) AND fires `paa-sync-listing` synchronously inside the same UI flow before showing success. The sync‑listing call is best‑effort and shouldn't block the toast / exit from edit mode.
+Dashboard `stats.pending` counts envelopes whose `status ∈ {sent, viewed, partially_signed}`. The edge function does set `status='sent'`, but:
+- `EnvelopeDetail.tsx` and `ESignatureDashboard.tsx` don't `refetch()` after Send-for-Signature dialog returns. The user only sees the new status after a hard reload.
+- If the edge function 500s mid-loop (any one Resend failure throws), the envelope status update at the bottom never runs and the recipient row is left as `draft`/`sent` partially. There's no transactional guarantee.
+
+### 3) Signed‑back never syncs
+
+There is **no** glue between the Gmail inbox classifier (`classify-jbj-inbox`) and the e‑signature tables. When the client replies "signed" with a PDF attached we tag the inbox thread `category=contracts, status=signed`, but we never:
+- Match the reply to an `esign_envelopes` row.
+- Update `esign_recipients.signed_at` / `status='signed'`.
+- Move the envelope to `completed`.
+- Save the returned signed PDF to `esign_envelope_files` so it appears in the Signed Contracts section / generated PAA form.
+
+That's why the doc still says "Pending — 0 signed" even after Omar replies.
 
 ## Fixes
 
-### 1. `src/templates/jbjPropertyAdvertisingAgreement.ts`
+### A. `supabase/functions/esign-send-for-signature/index.ts` — make it fast and resilient
 
-Replace the exclusivity chip row with a strict, mutually‑exclusive matcher that always prefers `"NON …"` when the value starts with `non`:
+1. Hoist the attachment fetches **out of the per-recipient loop** — fetch once, reuse for all recipients.
+2. Run the per-recipient block in parallel with `await Promise.all(recipients.map(...))`.
+3. Inside each recipient block, fire the recipient `update`, the audit-log `insert`, and the Resend POST **in parallel** (`Promise.allSettled`) — they don't depend on each other.
+4. After the loop, do the envelope `update` + final `audit_log insert` as a single `Promise.all`.
+5. If Resend fails for one recipient, mark **only that recipient** as `failed` and continue, then return 207-style `{ ok: true, failures: [...] }` instead of throwing 500. The envelope still flips to `sent` so the dashboard reflects reality.
+6. Return the new envelope row in the response so the client can update its cache without a refetch.
 
+### B. `src/components/e-signature/SendViaEmailDialog.tsx` and `SendForSignatureDialog.tsx`
+
+1. Drop the pre-send `await supabase.from("esign_envelopes").update({ metadata: ... })` — fold cc/bcc into the same edge-function payload (already supported); persist metadata server‑side in the same loop.
+2. Fire the optimistic UI immediately: close dialog + `toast.success("Sending…")`, then `await` the response and replace toast with success/failure. Users perceive ≤200 ms instead of 1.5–4 s.
+3. After the send promise resolves, call the parent `onSent?.()` which already invalidates `esign_envelopes` queries. Add `qc.invalidateQueries({ queryKey: ["esign_envelopes"] })` and `["esign_recipients", envelopeId]` to make the dashboard's **Pending Signature** counter update instantly.
+
+### C. New edge function `esign-sync-from-inbox` + classifier wiring
+
+Create `supabase/functions/esign-sync-from-inbox/index.ts`:
+
+Input (called from `classify-jbj-inbox` whenever it tags `category=contracts, status=signed`, or from a new "Mark as signed reply" button on the inbox thread):
 ```ts
-const isNonExclusive = (s: string) => /^\s*non[\s_-]*exclusive/i.test(s || "");
-${chipRow(
-  "exclusivity",
-  "Appointment Type",
-  ["EXCLUSIVE", "NON EXCLUSIVE"],
-  (o, v) => o === "NON EXCLUSIVE" ? isNonExclusive(v) : (!!v && !isNonExclusive(v) && /exclusive/i.test(v)),
-)}
+{ thread_id, message_id, from_email, sender_name, subject, attachments:[{name,url,content_type}], received_at }
 ```
 
-This guarantees:
-- `"NON EXCLUSIVE"`, `"non-exclusive"`, `"non_exclusive"`, `"Non Exclusive"` → only the **NON EXCLUSIVE** chip selected and the final render prints **NON EXCLUSIVE**.
-- `"EXCLUSIVE"`, `"exclusive"` → only the **EXCLUSIVE** chip.
-- Empty value → no chip selected (final render shows nothing, edit render shows both unselected).
+Logic:
+1. Find the most recent `esign_envelopes` row where `status in ('sent','viewed','partially_signed')` and any `esign_recipients.email = from_email`. Tiebreaker: subject/doc_number match.
+2. If found:
+   - Update the matching `esign_recipient`: `status='signed'`, `signed_at=received_at`, `metadata.signed_via='email_reply'`, `metadata.thread_id`, `metadata.signer_name=sender_name`.
+   - For each PDF attachment: copy to the `esign-signed` storage bucket and insert into `esign_envelope_files` with `kind='client_signed'`.
+   - If all recipients of role `client` are now signed → set envelope `status='completed'`, `completed_at=now()`. Otherwise `partially_signed`.
+   - Insert `esign_audit_log` `{action:'signed_by_email', actor_email:from_email, description:"Signed copy received via email reply", metadata:{thread_id}}`.
+3. Trigger `esign-complete-envelope` (existing) to render the final PDF with the countersignature stamp.
 
-Also normalize the value at write time in `handleSaveEdits` (`src/pages/e-signature/EnvelopeDetail.tsx`) so persisted data is always one of `"EXCLUSIVE"` / `"NON EXCLUSIVE"`:
+Wire-up:
+- Inside `classify-jbj-inbox/index.ts`, after the persist step, when `category==='contracts' && status==='signed' && attachments.length`, fire-and-forget `fetch(SUPABASE_URL+'/functions/v1/esign-sync-from-inbox', ...)` with the service-role internal token.
+- Also expose a manual "Link to envelope & mark signed" button on the inbox thread that calls the same function with a chosen `envelope_id` (covers fuzzy-match misses).
 
-```ts
-if (cleaned.exclusivity) {
-  cleaned.exclusivity = isNonExclusive(cleaned.exclusivity) ? "NON EXCLUSIVE" : "EXCLUSIVE";
-}
-```
+### D. PAA generated form — show "Signed by Omar on dd/mm/yyyy hh:mm"
 
-### 2. `supabase/functions/paa-ai-copilot/index.ts` — make it fast and exclusivity‑aware
+`src/pages/e-signature/EnvelopeDetail.tsx` already reads `clientRec?.signed_at` (line 866 / line 245) but the PAA template never receives the signed string. Two small touches:
 
-- Change model to `google/gemini-2.5-flash` (sub‑second responses, same JSON contract).
-- Add to the field key list and add a normalization rule:
-  > `exclusivity` must be exactly `"EXCLUSIVE"` or `"NON EXCLUSIVE"` (uppercase, space, no hyphen).
-- Trim `current_values` payload to the editable subset (drop signatures / PII) to keep prompt short.
+1. In `useAgreementSaver`/render path, pass `signed_by_client` and `signed_at_client` into the PAA HTML build (`buildPAAHtml`) tokens.
+2. In `src/templates/jbjPropertyAdvertisingAgreement.ts`, in the "Client signature" row, render the existing client signature block + below it: `Signed by {{client_signed_name}} on {{client_signed_at_human}} (received via email reply)` whenever those tokens are present. Falls back to the placeholder when not signed.
 
-### 3. `src/pages/e-signature/EnvelopeDetail.tsx` — snappier Save
+### E. Dashboard counters
 
-- Detach the `paa-sync-listing` call into a fire‑and‑forget (`void fetch(...)`), don't `await` it before `toast.success`/`setEditing(false)`/`refetch()`.
-- Keep the existing `regenerate.mutateAsync` await — that's the actual PDF and must finish before the preview swaps.
+`ESignatureDashboard.tsx`:
+- Subscribe to `esign_envelopes` realtime (`postgres_changes`) once on mount → invalidate the query. This guarantees Pending/Completed counters move within ~1 s of any send/sign event, no manual refresh.
 
-### 4. Sanity touches
+## Verification (end‑to‑end)
 
-- Ensure the field editor's select for `exclusivity` already uses the canonical `["EXCLUSIVE", "NON EXCLUSIVE"]` (it does — line 748).
-- No DB migration needed; values are stored in `template_field_values` JSON.
+1. Open `/owner/documents/forms/<id>` (current PAA), click **Send for Signature → Approve & Send**:
+   - Toast appears within ~300 ms; dialog closes.
+   - Dashboard "Pending Signature" goes from N → N+1 within ~1 s.
+   - Server log shows recipient row `status='sent', sent_at=now`, envelope `status='sent'`.
+2. Reply from `omar@…` to the sent thread with the signed PDF attached:
+   - Within one inbox‑sync cycle: classifier tags the thread, `esign-sync-from-inbox` runs.
+   - Envelope flips to `completed`, recipient row `status='signed', signed_at=…`.
+   - Dashboard "Pending Signature" decrements, "Completed" increments.
+   - Envelope detail shows green "Signed by Omar on 14/05/2026 17:42 (via email reply)"; signed PDF appears in **Signed Contracts** + the rendered PAA shows the same line under the client signature box.
+3. Negative path: Resend rate‑limits one recipient → that recipient gets `status='failed'`, others stay sent, envelope still `sent`, banner shows partial failure.
 
-## Verification
+## Files touched
 
-1. Open `/owner/documents/forms/<id>` (current envelope).
-2. In **Edit fields** set Exclusivity → **NON EXCLUSIVE** → Save & re‑render.
-   - Toast appears within ~2s.
-   - In the rendered doc only the **NON EXCLUSIVE** chip is selected; the final/print copy prints "NON EXCLUSIVE".
-3. Switch to **EXCLUSIVE** → Save → final copy prints "EXCLUSIVE".
-4. Open **AI Co‑Pilot**, type "make it non exclusive" → response returns within ~2s with `updates: { exclusivity: "NON EXCLUSIVE" }`. Click **Apply to document** → preview updates immediately in edit mode → Save → persisted.
-5. Click anywhere on the chip row in the preview → still routes to the field editor (existing behavior preserved).
+- `supabase/functions/esign-send-for-signature/index.ts` — parallelize, hoist attachments, partial-failure response.
+- `supabase/functions/esign-sync-from-inbox/index.ts` — **new** function.
+- `supabase/functions/classify-jbj-inbox/index.ts` — fire-and-forget call to the new function.
+- `src/components/e-signature/SendViaEmailDialog.tsx` — drop pre-send awaits, invalidate caches, optimistic toast.
+- `src/components/e-signature/SendForSignatureDialog.tsx` — same treatment for the legacy path.
+- `src/pages/e-signature/EnvelopeDetail.tsx` — pass signed-by tokens, realtime subscription on detail.
+- `src/pages/e-signature/ESignatureDashboard.tsx` — realtime subscription on `esign_envelopes`.
+- `src/templates/jbjPropertyAdvertisingAgreement.ts` — render "Signed by {name} on {datetime}" line when present.
+- `src/hooks/useEsignTemplates.ts` (or a small new `useEsignRealtime.ts`) — shared realtime subscription helper.
+
+No DB schema changes required; all needed columns (`signed_at`, `status`, `metadata`, `completed_at`, `esign_envelope_files`) already exist.
