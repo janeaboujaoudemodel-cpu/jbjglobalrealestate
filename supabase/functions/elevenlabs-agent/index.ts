@@ -29,6 +29,31 @@ function friendlyElevenLabsError(status: number, text: string): string {
   return `ElevenLabs ${status}: ${text}`;
 }
 
+async function resolveAgentId(key: string, configured: string): Promise<{ agentId: string; warning: string | null }> {
+  if (/^agent_[A-Za-z0-9_-]+$/.test(configured)) return { agentId: configured, warning: null };
+
+  const r = await fetch("https://api.elevenlabs.io/v1/convai/agents?page_size=100", {
+    headers: { "xi-api-key": key },
+  });
+  if (!r.ok) return { agentId: configured, warning: "Stored ElevenLabs agent ID is invalid and agents could not be auto-discovered." };
+
+  const data = await r.json().catch(() => ({}));
+  const agents = Array.isArray(data?.agents) ? data.agents : [];
+  const needle = configured.toLowerCase();
+  const preferred = agents.find((a: Record<string, unknown>) => String(a?.name ?? "").toLowerCase().includes("jbj"))
+    ?? agents.find((a: Record<string, unknown>) => String(a?.name ?? "").toLowerCase() === needle)
+    ?? agents[0];
+  const discovered = preferred?.agent_id ?? preferred?.agentId ?? preferred?.id;
+  if (typeof discovered === "string" && discovered) {
+    return {
+      agentId: discovered,
+      warning: "ELEVENLABS_AGENT_ID is not a valid agent ID, so the backend auto-selected the available ElevenLabs agent.",
+    };
+  }
+
+  return { agentId: configured, warning: "Stored ElevenLabs agent ID is invalid and no ElevenLabs agents were found." };
+}
+
 function getKey(): string | null {
   return (
     Deno.env.get("ELEVENLABS_API_KEY") ||
@@ -65,9 +90,10 @@ Deno.serve(async (req) => {
   if (!key) return json({ error: "ELEVENLABS_API_KEY not configured" }, 500);
   if (!agentId) return json({ error: "ELEVENLABS_AGENT_ID not configured" }, 500);
 
-  const base = `https://api.elevenlabs.io/v1/convai/agents/${agentId}`;
-
   try {
+    const resolved = await resolveAgentId(key, agentId);
+    const base = `https://api.elevenlabs.io/v1/convai/agents/${resolved.agentId}`;
+
     if (req.method === "GET") {
       let r = await fetch(base, { headers: { "xi-api-key": key } });
       let text = await r.text();
@@ -97,14 +123,14 @@ Deno.serve(async (req) => {
 
       if (!r.ok) {
         return json({
-          agent_id: agentId,
+          agent_id: resolved.agentId,
           name: "JBJ Voice Agent",
           prompt: DEFAULT_PROMPT,
           first_message: "Welcome to JBJ GLOBAL REAL ESTATE. How may I help you today?",
           language: "en",
           voice_id: Deno.env.get("ELEVENLABS_VOICE_ID") ?? "",
           llm: "",
-          warning: friendlyElevenLabsError(r.status, text),
+          warning: resolved.warning ?? friendlyElevenLabsError(r.status, text),
           upstream_status: r.status,
         });
       }
@@ -112,14 +138,14 @@ Deno.serve(async (req) => {
       const conv = data?.conversation_config ?? {};
       const agent = conv?.agent ?? {};
       return json({
-        agent_id: agentId,
+        agent_id: resolved.agentId,
         name: data?.name ?? "",
         prompt: agent?.prompt?.prompt ?? "",
         first_message: agent?.first_message ?? "",
         language: agent?.language ?? "en",
         voice_id: conv?.tts?.voice_id ?? "",
         llm: agent?.prompt?.llm ?? "",
-        warning: null,
+        warning: resolved.warning,
         raw: data,
       });
     }
