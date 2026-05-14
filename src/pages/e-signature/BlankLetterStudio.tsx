@@ -288,7 +288,7 @@ export default function BlankLetterStudio() {
         .single();
       if (envErr) throw envErr;
       toast.success("Letter saved to your library");
-      navigate(`/e-signature/${env.id}`);
+      navigate(`/owner/documents/forms/${env.id}`);
     } catch (e: any) {
       toast.error(e?.message || "Save failed");
     } finally {
