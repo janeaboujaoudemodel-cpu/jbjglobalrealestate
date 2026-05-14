@@ -392,13 +392,17 @@ export function SendViaEmailDialog({
       return;
     }
     setBusy("send");
+    // Optimistic UX — close the dialog immediately so the owner is not waiting on
+    // attachment fetch + Resend round-trips. The actual send completes in the
+    // background; success/failure is reported via toast and the dashboard
+    // counters update via realtime + onSent callback.
+    const sendingToast = toast.loading(`Sending to ${tos.length} recipient${tos.length > 1 ? "s" : ""}…`);
+    clearDraft();
+    onOpenChange(false);
     try {
       const session = await supabase.auth.getSession();
       const token = session.data.session?.access_token;
       const signedAttachmentUrl = autoAttachmentRemoved ? undefined : await resolveAttachmentUrl(attachmentUrl);
-      // NOTE: edits to subject/body are sent to the recipient as-is for THIS email
-      // only. They are NOT saved as the new standard template — use
-      // "Save as standard template" to persist for future sends.
       const res = await fetch(`${SUPABASE_URL}/functions/v1/esign-send-for-signature`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
@@ -418,11 +422,16 @@ export function SendViaEmailDialog({
       });
       const out = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(out.error || "Failed to send");
-      toast.success(`Sent to ${tos.length} recipient${tos.length > 1 ? "s" : ""}${cleanCcs.length ? ` · CC ${cleanCcs.length}` : ""}`);
-      clearDraft();
+      const failed = Array.isArray(out.failures) ? out.failures.length : 0;
+      toast.dismiss(sendingToast);
+      if (failed) {
+        toast.warning(`${out.message} — ${failed} failed`, { description: out.failures.map((f: any) => `${f.email}: ${f.error}`).join("\n") });
+      } else {
+        toast.success(`Sent to ${tos.length} recipient${tos.length > 1 ? "s" : ""}${cleanCcs.length ? ` · CC ${cleanCcs.length}` : ""}`);
+      }
       onSent?.();
-      onOpenChange(false);
     } catch (e: any) {
+      toast.dismiss(sendingToast);
       toast.error(e.message || "Failed to send");
     } finally {
       setBusy("");

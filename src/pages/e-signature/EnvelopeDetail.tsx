@@ -1383,7 +1383,7 @@ export default function EnvelopeDetail() {
         onOpenChange={setSendOpen}
         envelope={envelope}
         primaryRecipient={clientRec}
-        onSent={() => refetch()}
+        onSent={() => { refetch(); qc.invalidateQueries({ queryKey: ["esign-envelopes"] }); qc.invalidateQueries({ queryKey: ["esign_envelopes_hub"] }); }}
       />
 
       <ExportEnvelopeDialog
@@ -1437,7 +1437,7 @@ export default function EnvelopeDetail() {
           senderTitle={(envelope as any).sender_title || undefined}
           attachmentName={envelope.document_filename || undefined}
           attachmentUrl={envelope.document_url || undefined}
-          onSent={() => refetch()}
+          onSent={() => { refetch(); qc.invalidateQueries({ queryKey: ["esign-envelopes"] }); qc.invalidateQueries({ queryKey: ["esign_envelopes_hub"] }); }}
         />
       )}
     </div>
