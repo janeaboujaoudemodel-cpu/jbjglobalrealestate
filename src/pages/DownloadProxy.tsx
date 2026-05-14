@@ -10,7 +10,7 @@
  *   n  optional filename to suggest in the download dialog
  */
 import { useEffect, useState } from "react";
-import { Loader2, AlertTriangle, Download } from "lucide-react";
+import { Loader2, AlertTriangle, FileText } from "lucide-react";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 
 function decodeUrlParam(s: string | null): string {
@@ -74,19 +74,12 @@ export default function DownloadProxy() {
         )}
         {state === "ok" && (
           <>
-            <Download className="w-8 h-8 mx-auto mb-4 text-[#1A1A1A]" />
+            <FileText className="w-8 h-8 mx-auto mb-4 text-[#1A1A1A]" />
             <div className="text-base font-semibold text-[#1A1A1A]">Download started</div>
             <div className="text-xs text-[#1A1A1A]/60 mt-2">Check your downloads folder for <strong>{filename}</strong>.</div>
-            {target && (
-              <a
-                href={target}
-                target="_blank"
-                rel="noopener"
-                className="mt-5 inline-block text-[11px] tracking-[0.18em] uppercase text-[#B89555] underline"
-              >
-                Didn't start? Open directly
-              </a>
-            )}
+            <button type="button" onClick={triggerDownload} className="mt-5 inline-block text-[11px] tracking-[0.18em] uppercase text-[#B89555] underline">
+              Didn't start? Download again
+            </button>
           </>
         )}
         {state === "fallback" && (
@@ -98,9 +91,7 @@ export default function DownloadProxy() {
             </div>
             {target ? (
               <a
-                href={target}
-                target="_blank"
-                rel="noopener"
+                href={proxiedTarget || target}
                 download={filename}
                 className="inline-block px-6 py-3 bg-[#1A1A1A] text-[#FDFBF7] text-[12px] tracking-[0.22em] uppercase font-bold border border-[#B89555] no-underline"
               >
