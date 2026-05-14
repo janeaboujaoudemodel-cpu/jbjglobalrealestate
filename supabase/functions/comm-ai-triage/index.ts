@@ -163,12 +163,21 @@ No prose, no markdown, JSON only.`;
 
     const priority = ["low", "medium", "high", "urgent"].includes(parsed.priority) ? parsed.priority : "medium";
 
+    // For low-action categories, default to a "no reply needed" suggestion so
+    // the AI panel is never blank.
+    const noReplyCats = new Set(["marketing", "advertising", "campaign", "system", "business_linkedin", "spam"]);
+    const fallbackReply = noReplyCats.has(category)
+      ? "No reply needed — automated/marketing notification."
+      : "";
+
     const update = {
       ai_category: category,
       ai_priority: priority,
       ai_summary: (parsed.summary ?? thread.last_message_preview ?? "").toString().slice(0, 280),
-      ai_suggested_reply: (parsed.suggested_reply ?? "").toString().slice(0, 4000),
-      ai_next_step: parsed.next_step ?? null,
+      ai_suggested_reply: ((parsed.suggested_reply ?? fallbackReply) || fallbackReply).toString().slice(0, 4000),
+      ai_next_step: parsed.next_step ?? (noReplyCats.has(category)
+        ? { type: "none", title: null, due_in_hours: null, reasoning: "Automated/marketing — no action required." }
+        : null),
       ai_processed_at: new Date().toISOString(),
     };
 
