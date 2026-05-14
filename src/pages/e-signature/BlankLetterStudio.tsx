@@ -1,7 +1,17 @@
 /**
  * Blank Letter Studio — generate a JBJ letter with AI on a branded A4 sheet.
- * Header + footer match the PAA template; body is AI-generated and editable.
- * Stamp/Signature load from the user's saved owner_signature_assets.
+ *
+ * v3 (this revision):
+ *  • Body is a plain-text textarea (NOT HTML code). The user types it like
+ *    a normal letter; line breaks become paragraph breaks in the rendered
+ *    preview / PDF.
+ *  • Signer title defaults to "Founder & CEO".
+ *  • Date is always editable in its own field on the right.
+ *  • Saved signatures and stamps are shown as thumbnails — uploads land
+ *    instantly, with a "default" selector and delete control.
+ *  • Signature & stamp can be dragged on the live preview; X removes the
+ *    placement, "Reset placement" returns to the standard (signature
+ *    bottom-left over a line, stamp bottom-right).
  */
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -10,15 +20,23 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
-import { Sparkles, Download, Loader2, ArrowLeft, Stamp as StampIcon, PenTool, Calendar, Save } from "lucide-react";
+import {
+  Sparkles, Download, Loader2, ArrowLeft, Stamp as StampIcon, PenTool,
+  Calendar, Save, Trash2, RotateCcw, Star, X, FileSignature,
+} from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { renderHtmlToPdfBlob, allocateDocNumber } from "@/hooks/useEsignTemplates";
 import { buildBlankLetterHtml, BLANK_LETTER_TEMPLATE_KEY, type BlankLetterValues } from "@/templates/jbjBlankLetter";
-import { useOwnerSignatureAssets, useSaveSignatureAsset } from "@/hooks/useOwnerSignatureAssets";
+import {
+  useOwnerSignatureAssets,
+  useSaveSignatureAsset,
+  type OwnerSignatureAsset,
+} from "@/hooks/useOwnerSignatureAssets";
+import { useQueryClient } from "@tanstack/react-query";
 
 const PRESETS = [
-  { id: "offer", label: "Job Offer", prompt: "Write a job offer letter for [Name] for the position of [Title], salary AED [amount]/month, start date [date]." },
+  { id: "offer", label: "Job Offer", prompt: "Write a formal job offer letter for [Name] for the position of [Title], salary AED [amount]/month, start date [date], 6-month probation, 30 days annual leave." },
   { id: "warning", label: "Warning Letter", prompt: "Write a formal HR warning letter to [Name] regarding [issue]. Reference company policy and request corrective action within [N] days." },
   { id: "vat", label: "VAT Exemption", prompt: "Write a VAT exemption confirmation letter for [client/property] in accordance with UAE FTA guidance for [reason]." },
   { id: "noc", label: "NOC", prompt: "Write a No-Objection Certificate (NOC) authorising [Name] to [action] on behalf of JBJ Global Real Estate." },
@@ -29,29 +47,42 @@ const PRESETS = [
 
 export default function BlankLetterStudio() {
   const navigate = useNavigate();
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const qc = useQueryClient();
+  const sigInputRef = useRef<HTMLInputElement>(null);
   const stampInputRef = useRef<HTMLInputElement>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
 
   const [docNumber, setDocNumber] = useState("");
   const [prompt, setPrompt] = useState("");
   const [recipient, setRecipient] = useState("");
   const [subject, setSubject] = useState("");
-  const [bodyHtml, setBodyHtml] = useState("");
+  const [bodyText, setBodyText] = useState("");
   const [signerName, setSignerName] = useState("");
-  const [signerTitle, setSignerTitle] = useState("");
+  const [signerTitle, setSignerTitle] = useState("Founder & CEO");
   const [date, setDate] = useState("");
   const [generating, setGenerating] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const [saving, setSaving] = useState(false);
 
+  const [placedSig, setPlacedSig] = useState<{ x: number; y: number } | null>(null);
+  const [placedStamp, setPlacedStamp] = useState<{ x: number; y: number } | null>(null);
+  const [activeSigId, setActiveSigId] = useState<string | null>(null);
+  const [activeStampId, setActiveStampId] = useState<string | null>(null);
+
   const { data: signatures = [] } = useOwnerSignatureAssets("signature");
   const { data: stamps = [] } = useOwnerSignatureAssets("stamp");
   const saveAsset = useSaveSignatureAsset();
 
-  const defaultSignature = signatures.find((s) => s.is_default) || signatures[0];
-  const defaultStamp = stamps.find((s) => s.is_default) || stamps[0];
+  const activeSignature: OwnerSignatureAsset | undefined = useMemo(
+    () => signatures.find(s => s.id === activeSigId) || signatures.find(s => s.is_default) || signatures[0],
+    [signatures, activeSigId],
+  );
+  const activeStamp: OwnerSignatureAsset | undefined = useMemo(
+    () => stamps.find(s => s.id === activeStampId) || stamps.find(s => s.is_default) || stamps[0],
+    [stamps, activeStampId],
+  );
 
-  // Allocate a doc number on mount
+  // Allocate a doc number on mount + load owner name
   useEffect(() => {
     (async () => {
       try {
@@ -73,16 +104,20 @@ export default function BlankLetterStudio() {
     subject,
     date,
     recipient,
-    body_html: bodyHtml,
+    body_text: bodyText,
     signer_name: signerName,
     signer_title: signerTitle,
-  }), [docNumber, subject, date, recipient, bodyHtml, signerName, signerTitle]);
+    placed_signature_x: placedSig ? String(placedSig.x) : "",
+    placed_signature_y: placedSig ? String(placedSig.y) : "",
+    placed_stamp_x: placedStamp ? String(placedStamp.x) : "",
+    placed_stamp_y: placedStamp ? String(placedStamp.y) : "",
+  }), [docNumber, subject, date, recipient, bodyText, signerName, signerTitle, placedSig, placedStamp]);
 
   const previewHtml = useMemo(() => buildBlankLetterHtml(values, {
-    ownerSignatureUrl: defaultSignature?.image_url || null,
-    ownerStampUrl: defaultStamp?.image_url || null,
+    ownerSignatureUrl: activeSignature?.image_url || null,
+    ownerStampUrl: activeStamp?.image_url || null,
     renderMode: "edit",
-  }), [values, defaultSignature?.image_url, defaultStamp?.image_url]);
+  }), [values, activeSignature?.image_url, activeStamp?.image_url]);
 
   const handleGenerate = async () => {
     if (!prompt.trim()) { toast.error("Type what the letter should say"); return; }
@@ -96,8 +131,10 @@ export default function BlankLetterStudio() {
       const r: any = data;
       if (r?.subject) setSubject(r.subject);
       if (r?.recipient) setRecipient(r.recipient);
-      if (r?.body_html) setBodyHtml(r.body_html);
-      toast.success("Letter drafted — review and edit before saving");
+      if (r?.body_text) setBodyText(r.body_text);
+      if (r?.signer_title) setSignerTitle(r.signer_title);
+      if (r?.date && !date) setDate(r.date);
+      toast.success("Letter drafted — edit it like a normal text");
     } catch (e: any) {
       toast.error(e?.message || "AI generation failed");
     } finally {
@@ -105,50 +142,73 @@ export default function BlankLetterStudio() {
     }
   };
 
-  const handleUploadStamp = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUpload = async (kind: "signature" | "stamp", e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
     reader.onload = async () => {
       try {
         await saveAsset.mutateAsync({
-          kind: "stamp",
+          kind,
           image_data_url: String(reader.result),
           label: file.name,
-          makeDefault: true,
+          // First upload becomes default. Otherwise just save without overriding default.
+          makeDefault: (kind === "signature" ? signatures.length === 0 : stamps.length === 0),
         });
-      } catch {/* toast handled in hook */}
+      } catch {/* toast in hook */}
     };
     reader.readAsDataURL(file);
-    if (stampInputRef.current) stampInputRef.current.value = "";
+    if (kind === "signature" && sigInputRef.current) sigInputRef.current.value = "";
+    if (kind === "stamp" && stampInputRef.current) stampInputRef.current.value = "";
   };
 
-  const handleUploadSignature = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = async () => {
-      try {
-        await saveAsset.mutateAsync({
-          kind: "signature",
-          image_data_url: String(reader.result),
-          label: file.name,
-          makeDefault: true,
-        });
-      } catch {/* */}
-    };
-    reader.readAsDataURL(file);
-    if (fileInputRef.current) fileInputRef.current.value = "";
+  const setDefaultAsset = async (kind: "signature" | "stamp", id: string) => {
+    try {
+      await supabase.from("owner_signature_assets" as any).update({ is_default: false }).eq("kind", kind);
+      await supabase.from("owner_signature_assets" as any).update({ is_default: true }).eq("id", id);
+      qc.invalidateQueries({ queryKey: ["owner_signature_assets"] });
+      toast.success("Default updated");
+    } catch (e: any) { toast.error(e?.message || "Failed to update default"); }
+  };
+
+  const deleteAsset = async (id: string) => {
+    if (!confirm("Delete this asset?")) return;
+    try {
+      await supabase.from("owner_signature_assets" as any).delete().eq("id", id);
+      qc.invalidateQueries({ queryKey: ["owner_signature_assets"] });
+      toast.success("Deleted");
+    } catch (e: any) { toast.error(e?.message || "Failed to delete"); }
   };
 
   const handleInsertDate = () => {
-    const today = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
-    setBodyHtml((prev) => prev + `<p>${today}</p>`);
+    const today = new Date().toISOString().slice(0, 10);
+    setDate(today);
+  };
+
+  // ── Drag handling on the preview ─────────────────────────────────────
+  const startDrag = (kind: "sig" | "stamp", evt: React.MouseEvent) => {
+    evt.preventDefault();
+    const container = previewRef.current?.firstElementChild as HTMLElement | null;
+    if (!container) return;
+    const move = (e: MouseEvent) => {
+      const rect = container.getBoundingClientRect();
+      const xPct = ((e.clientX - rect.left) / rect.width) * 100;
+      const yPct = ((e.clientY - rect.top) / rect.height) * 100;
+      const clamped = { x: Math.max(0, Math.min(95, xPct)), y: Math.max(0, Math.min(95, yPct)) };
+      if (kind === "sig") setPlacedSig(clamped);
+      else setPlacedStamp(clamped);
+    };
+    const up = () => {
+      window.removeEventListener("mousemove", move);
+      window.removeEventListener("mouseup", up);
+    };
+    window.addEventListener("mousemove", move);
+    window.addEventListener("mouseup", up);
   };
 
   const buildFinalHtml = () => buildBlankLetterHtml(values, {
-    ownerSignatureUrl: defaultSignature?.image_url || null,
-    ownerStampUrl: defaultStamp?.image_url || null,
+    ownerSignatureUrl: activeSignature?.image_url || null,
+    ownerStampUrl: activeStamp?.image_url || null,
     renderMode: "final",
   });
 
@@ -174,7 +234,7 @@ export default function BlankLetterStudio() {
   };
 
   const handleSave = async () => {
-    if (!subject && !bodyHtml) { toast.error("Nothing to save yet"); return; }
+    if (!subject && !bodyText) { toast.error("Nothing to save yet"); return; }
     setSaving(true);
     try {
       const { data: userData } = await supabase.auth.getUser();
@@ -224,7 +284,7 @@ export default function BlankLetterStudio() {
   return (
     <div className="min-h-screen bg-[#FDFBF7] p-6">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-6 flex items-center justify-between flex-wrap gap-3">
           <div className="flex items-center gap-3">
             <Button variant="ghost" onClick={() => navigate("/e-signature")} className="text-[#1A1A1A]">
               <ArrowLeft className="w-4 h-4 mr-1.5" /> Back
@@ -235,6 +295,9 @@ export default function BlankLetterStudio() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <Button variant="outline" onClick={() => navigate("/owner/documents/forms")}>
+              <FileSignature className="w-4 h-4 mr-2" /> Forms & Agreements
+            </Button>
             <Button variant="outline" onClick={handleSave} disabled={saving}>
               {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
               Save
@@ -287,16 +350,25 @@ export default function BlankLetterStudio() {
                   <Input value={recipient} onChange={(e) => setRecipient(e.target.value)} placeholder="Mr. John Doe" />
                 </div>
                 <div>
-                  <Label className="text-xs uppercase tracking-wider text-[#1A1A1A]/70">Date</Label>
+                  <Label className="text-xs uppercase tracking-wider text-[#1A1A1A]/70">Date (editable)</Label>
                   <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
                 </div>
               </div>
               <div>
-                <Label className="text-xs uppercase tracking-wider text-[#1A1A1A]/70">Body (HTML)</Label>
-                <Textarea value={bodyHtml} onChange={(e) => setBodyHtml(e.target.value)} rows={10} className="text-sm font-mono" placeholder="<p>Dear …</p>" />
-                <Button size="sm" variant="outline" className="mt-2" onClick={handleInsertDate}>
-                  <Calendar className="w-3.5 h-3.5 mr-1.5" /> Insert today's date
-                </Button>
+                <div className="flex items-center justify-between mb-1">
+                  <Label className="text-xs uppercase tracking-wider text-[#1A1A1A]/70">Body</Label>
+                  <Button size="sm" variant="ghost" className="h-6 text-[10px]" onClick={handleInsertDate}>
+                    <Calendar className="w-3 h-3 mr-1" /> Set today's date
+                  </Button>
+                </div>
+                <Textarea
+                  value={bodyText}
+                  onChange={(e) => setBodyText(e.target.value)}
+                  rows={12}
+                  className="text-sm leading-relaxed"
+                  placeholder={`Dear Mr. Doe,\n\nWe are pleased to confirm…\n\nYours sincerely,`}
+                />
+                <p className="text-[10px] text-[#1A1A1A]/55 mt-1">Type normally — paragraph breaks are preserved. The signature line, name and stamp are added automatically.</p>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>
@@ -305,42 +377,149 @@ export default function BlankLetterStudio() {
                 </div>
                 <div>
                   <Label className="text-xs uppercase tracking-wider text-[#1A1A1A]/70">Title</Label>
-                  <Input value={signerTitle} onChange={(e) => setSignerTitle(e.target.value)} placeholder="CEO" />
+                  <Input value={signerTitle} onChange={(e) => setSignerTitle(e.target.value)} placeholder="Founder & CEO" />
                 </div>
               </div>
             </Card>
 
-            <Card className="p-4 bg-white border-[#EFE6D6] space-y-2">
-              <Label className="text-sm font-semibold text-[#1A1A1A]">Brand Assets</Label>
-              <div className="flex items-center gap-2">
-                <PenTool className="w-4 h-4 text-[#1A1A1A]/70" />
-                <span className="text-xs text-[#1A1A1A]/80 flex-1">
-                  Signature: {defaultSignature ? "✓ on file" : "none yet"}
-                </span>
-                <input ref={fileInputRef} type="file" accept="image/*" onChange={handleUploadSignature} className="hidden" />
-                <Button size="sm" variant="outline" onClick={() => fileInputRef.current?.click()}>Upload</Button>
+            <Card className="p-4 bg-white border-[#EFE6D6] space-y-3">
+              <div className="flex items-center justify-between">
+                <Label className="text-sm font-semibold text-[#1A1A1A] flex items-center gap-2">
+                  <PenTool className="w-4 h-4 text-[#B89555]" /> Signatures
+                </Label>
+                <input ref={sigInputRef} type="file" accept="image/*" onChange={(e) => handleUpload("signature", e)} className="hidden" />
+                <Button size="sm" variant="outline" onClick={() => sigInputRef.current?.click()}>Upload</Button>
               </div>
-              <div className="flex items-center gap-2">
-                <StampIcon className="w-4 h-4 text-[#1A1A1A]/70" />
-                <span className="text-xs text-[#1A1A1A]/80 flex-1">
-                  Stamp: {defaultStamp ? "✓ on file" : "none yet"}
-                </span>
-                <input ref={stampInputRef} type="file" accept="image/*" onChange={handleUploadStamp} className="hidden" />
+              {signatures.length === 0 ? (
+                <p className="text-xs text-[#1A1A1A]/60">No signatures yet — upload one and it will appear here and on the document.</p>
+              ) : (
+                <div className="grid grid-cols-3 gap-2">
+                  {signatures.map(s => {
+                    const isActive = (activeSignature?.id === s.id);
+                    return (
+                      <div key={s.id}
+                        onClick={() => setActiveSigId(s.id)}
+                        className={`relative cursor-pointer border-2 rounded p-1 bg-[#F7F2EA] ${isActive ? "border-[#B89555]" : "border-transparent hover:border-[#B89555]/40"}`}>
+                        <img src={s.image_url} alt={s.label || "Signature"} className="h-12 w-full object-contain" />
+                        <div className="absolute top-0.5 right-0.5 flex gap-0.5">
+                          <button onClick={(e) => { e.stopPropagation(); setDefaultAsset("signature", s.id); }}
+                            title="Set as default"
+                            className={`w-4 h-4 rounded-full flex items-center justify-center ${s.is_default ? "bg-[#B89555] text-white" : "bg-white/80 text-[#1A1A1A]/60"}`}>
+                            <Star className="w-2.5 h-2.5" />
+                          </button>
+                          <button onClick={(e) => { e.stopPropagation(); deleteAsset(s.id); }}
+                            title="Delete"
+                            className="w-4 h-4 rounded-full bg-red-500/90 text-white flex items-center justify-center">
+                            <Trash2 className="w-2.5 h-2.5" />
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              <div className="flex items-center justify-between pt-2 border-t border-[#EFE6D6]">
+                <Label className="text-sm font-semibold text-[#1A1A1A] flex items-center gap-2">
+                  <StampIcon className="w-4 h-4 text-[#B89555]" /> Stamps
+                </Label>
+                <input ref={stampInputRef} type="file" accept="image/*" onChange={(e) => handleUpload("stamp", e)} className="hidden" />
                 <Button size="sm" variant="outline" onClick={() => stampInputRef.current?.click()}>Upload</Button>
               </div>
-              <p className="text-[10px] text-[#1A1A1A]/60 pt-1">
-                Saved stamps and signatures appear automatically in the signature row of the letter.
-              </p>
+              {stamps.length === 0 ? (
+                <p className="text-xs text-[#1A1A1A]/60">No stamps yet.</p>
+              ) : (
+                <div className="grid grid-cols-3 gap-2">
+                  {stamps.map(s => {
+                    const isActive = (activeStamp?.id === s.id);
+                    return (
+                      <div key={s.id}
+                        onClick={() => setActiveStampId(s.id)}
+                        className={`relative cursor-pointer border-2 rounded p-1 bg-[#F7F2EA] ${isActive ? "border-[#B89555]" : "border-transparent hover:border-[#B89555]/40"}`}>
+                        <img src={s.image_url} alt={s.label || "Stamp"} className="h-12 w-full object-contain" />
+                        <div className="absolute top-0.5 right-0.5 flex gap-0.5">
+                          <button onClick={(e) => { e.stopPropagation(); setDefaultAsset("stamp", s.id); }}
+                            title="Set as default"
+                            className={`w-4 h-4 rounded-full flex items-center justify-center ${s.is_default ? "bg-[#B89555] text-white" : "bg-white/80 text-[#1A1A1A]/60"}`}>
+                            <Star className="w-2.5 h-2.5" />
+                          </button>
+                          <button onClick={(e) => { e.stopPropagation(); deleteAsset(s.id); }}
+                            title="Delete"
+                            className="w-4 h-4 rounded-full bg-red-500/90 text-white flex items-center justify-center">
+                            <Trash2 className="w-2.5 h-2.5" />
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              <div className="flex items-center justify-between pt-2 border-t border-[#EFE6D6]">
+                <span className="text-[10px] text-[#1A1A1A]/60">
+                  {placedSig || placedStamp ? "Custom placement active" : "Standard placement"}
+                </span>
+                <Button size="sm" variant="ghost" onClick={() => { setPlacedSig(null); setPlacedStamp(null); }}>
+                  <RotateCcw className="w-3 h-3 mr-1" /> Reset placement
+                </Button>
+              </div>
             </Card>
           </div>
 
           {/* Preview */}
           <Card className="p-3 bg-[#F7F2EA] border-[#EFE6D6] overflow-auto" style={{ maxHeight: "calc(100vh - 140px)" }}>
-            <div
-              className="bg-white shadow-lg mx-auto"
-              style={{ width: 794, minHeight: 1123 }}
-              dangerouslySetInnerHTML={{ __html: previewHtml }}
-            />
+            <div ref={previewRef} className="relative">
+              <div
+                className="bg-white shadow-lg mx-auto relative"
+                style={{ width: 794, minHeight: 1123 }}
+                dangerouslySetInnerHTML={{ __html: previewHtml }}
+              />
+              {/* Drag handles overlaid on top of the rendered preview */}
+              {activeSignature && placedSig && (
+                <div
+                  onMouseDown={(e) => startDrag("sig", e)}
+                  style={{ position: "absolute", left: `${placedSig.x}%`, top: `${placedSig.y}%`, width: 220, height: 88 }}
+                  className="cursor-move ring-2 ring-[#B89555]/60 ring-offset-1 rounded group"
+                >
+                  <button
+                    onClick={() => setPlacedSig(null)}
+                    className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center shadow"
+                    title="Remove signature placement"
+                  ><X className="w-3 h-3" /></button>
+                </div>
+              )}
+              {activeStamp && placedStamp && (
+                <div
+                  onMouseDown={(e) => startDrag("stamp", e)}
+                  style={{ position: "absolute", left: `${placedStamp.x}%`, top: `${placedStamp.y}%`, width: 130, height: 130 }}
+                  className="cursor-move ring-2 ring-[#B89555]/60 ring-offset-1 rounded group"
+                >
+                  <button
+                    onClick={() => setPlacedStamp(null)}
+                    className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center shadow"
+                    title="Remove stamp placement"
+                  ><X className="w-3 h-3" /></button>
+                </div>
+              )}
+              {/* Quick "drag onto page" buttons when there's no custom placement yet */}
+              {(activeSignature && !placedSig) || (activeStamp && !placedStamp) ? (
+                <div className="absolute top-2 right-2 flex flex-col gap-1.5 bg-white/90 backdrop-blur border border-[#B89555]/30 rounded-lg p-2 shadow">
+                  <p className="text-[9px] uppercase tracking-wider text-[#1A1A1A]/60">Custom placement</p>
+                  {activeSignature && !placedSig && (
+                    <Button size="sm" variant="outline" className="h-6 text-[10px]"
+                      onClick={() => setPlacedSig({ x: 8, y: 78 })}>
+                      <PenTool className="w-3 h-3 mr-1" /> Drag signature
+                    </Button>
+                  )}
+                  {activeStamp && !placedStamp && (
+                    <Button size="sm" variant="outline" className="h-6 text-[10px]"
+                      onClick={() => setPlacedStamp({ x: 70, y: 75 })}>
+                      <StampIcon className="w-3 h-3 mr-1" /> Drag stamp
+                    </Button>
+                  )}
+                </div>
+              ) : null}
+            </div>
           </Card>
         </div>
       </div>
