@@ -361,6 +361,7 @@ export function SendViaEmailDialog({
       const out = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(out.error || "Failed to send");
       toast.success(`Sent to ${tos.length} recipient${tos.length > 1 ? "s" : ""}${cleanCcs.length ? ` · CC ${cleanCcs.length}` : ""}`);
+      clearDraft();
       onSent?.();
       onOpenChange(false);
     } catch (e: any) {
