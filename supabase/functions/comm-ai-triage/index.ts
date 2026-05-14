@@ -9,12 +9,28 @@ const corsHeaders = {
 const CATEGORIES = [
   "real_estate_lead",
   "real_estate_ops",
+  "sales_offer",
   "marketing",
   "finance",
+  "developer_documents",
   "personal",
   "spam",
   "other",
 ] as const;
+
+// Deterministic fallback so obvious senders get categorized even if the AI
+// gateway returns blank/invalid output.
+function ruleBasedCategory(input: { from: string; subject: string }): string | null {
+  const hay = `${input.from} ${input.subject}`.toLowerCase();
+  if (/(shein|creator center|campaign|reversible|ruelala|farfetch|cobone|newsletter|unsubscribe|promo|sale\b|deal|coupon)/.test(hay)) return "marketing";
+  if (/(emiratesnbd|enbd|hsbc|adcb|fab\b|mashreq|payroll|invoice|tax\b|vat\b|payment|bank|statement|priorit\w*banking)/.test(hay)) return "finance";
+  if (/(price offer|buyer waiting|luxury closet|offer for your|sell your|resale)/.test(hay)) return "sales_offer";
+  if (/(registration|mou\b|trade license|docusign|envelope|developer|brochure|inventory|listing\b|broker)/.test(hay)) return "developer_documents";
+  if (/(github|uptime|monitor|alert|deploy|build failed|run failed|supabase|hostinger|verification code|otp)/.test(hay)) return "real_estate_ops";
+  if (/(spam|win a prize|unsubscribed|do not reply)/.test(hay)) return "spam";
+  return null;
+}
+
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
