@@ -110,7 +110,7 @@ Deno.serve(async (req) => {
       } else {
         const rawBody = interpolated_body
           ? interpolated_body
-          : (envelope.email_message || `Dear {{client_name}},\n\nPlease find your {{doc_title}} attached.\n\n{{sender_signature}}`);
+          : (envelope.email_message || `Dear {{client_name}},\n\nPlease find the attached PDF document for your electronic signature. Kindly review it carefully, sign it, and reply back to this same email with the signed copy attached.\n\nIf you prefer, you can also sign it directly in DocuSign using the button below.\n\n{{sender_signature}}`);
         finalBodyHtml = escapeHtml(interp(rawBody))
           .replace(/\n/g, "<br/>")
           .replace(SIG_SENTINEL, sigHtml);
