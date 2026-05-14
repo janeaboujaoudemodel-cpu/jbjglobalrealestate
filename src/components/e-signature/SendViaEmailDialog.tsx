@@ -66,6 +66,7 @@ const LEGACY_BODY_FRAGMENTS: RegExp[] = [
   /thank you for your continued trust\.?/i,
   /please find attached the signed pdf\.?/i,
   /signature pending[^<\n]*/i,
+  /please find the pdf attached to this email[\s\S]*?signed copy attached\.?/i,
 ];
 
 function normalizeSubject(value: string, fallbackDoc = "Document") {
