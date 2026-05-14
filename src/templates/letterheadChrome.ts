@@ -52,9 +52,8 @@ export function buildLetterheadHeader(opts: LetterheadHeaderOpts = {}): string {
   const reraLine = opts.reraPermit
     ? `<div style="font-size:10px;letter-spacing:.1em;color:${INK};opacity:.75;margin-top:3px;">RERA Permit · ${esc(opts.reraPermit)}</div>`
     : "";
-  const officeLine = TRADE_LICENSE_OFFICE
-    ? `<div style="font-size:9.5px;letter-spacing:.04em;color:${INK};opacity:.78;margin-top:4px;line-height:1.35;">${esc(TRADE_LICENSE_OFFICE)}</div>`
-    : "";
+  // Office line intentionally removed from header — shown only in footer per branding decision.
+  const officeLine = "";
   const contactStack = `
     <div style="font-size:9.5px;line-height:1.6;text-align:right;">
       <div style="margin-bottom:1px;"><a href="${telHref(COMPANY_CONTACT.phone)}" style="color:${INK};text-decoration:none;font-weight:600;">${esc(COMPANY_CONTACT.phone)}</a></div>
