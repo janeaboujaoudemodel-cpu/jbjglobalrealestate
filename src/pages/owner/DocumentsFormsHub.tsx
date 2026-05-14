@@ -615,36 +615,49 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
           {/* ASSETS */}
           <TabsContent value="assets" className="mt-4">
             <div className="grid md:grid-cols-2 gap-6">
-              <Card className="p-5 bg-[#F7F2EA] border-[#B89555]/30">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="font-semibold text-[#1A1A1A] flex items-center gap-2"><FileSignature className="w-4 h-4" /> Saved Signatures</div>
-                  <Button size="sm" variant="outline" onClick={() => navigate("/owner/documents/forms/signature-studio")}>Manage</Button>
-                </div>
-                <div className="grid grid-cols-3 gap-3">
-                  {signatures.map(s => (
-                    <div key={s.id} className="border border-[#B89555]/30 rounded p-2 bg-white">
-                      <img src={s.image_url} alt={s.label || "Signature"} className="h-16 w-full object-contain" />
-                      {s.is_default && <div className="text-[9px] text-center mt-1 text-[#1A1A1A]/70">DEFAULT</div>}
+              {(["signature","stamp"] as const).map((kind) => {
+                const list = kind === "signature" ? signatures : stamps;
+                const Icon = kind === "signature" ? FileSignature : Stamp;
+                const fileRef = kind === "signature" ? sigFileRef : stampFileRef;
+                const title = kind === "signature" ? "Saved Signatures" : "Saved Stamps";
+                return (
+                  <Card key={kind} className="p-5 bg-[#F7F2EA] border-[#B89555]/30">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="font-semibold text-[#1A1A1A] flex items-center gap-2"><Icon className="w-4 h-4" /> {title}</div>
+                      <div className="flex gap-2">
+                        <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(e) => handleAssetUpload(kind, e)} />
+                        <Button size="sm" variant="outline" onClick={() => fileRef.current?.click()}>
+                          <Upload className="w-3.5 h-3.5 mr-1" /> Upload
+                        </Button>
+                        <Button size="sm" variant="outline" onClick={() => setManageKind(kind)}>Manage</Button>
+                      </div>
                     </div>
-                  ))}
-                  {!signatures.length && <div className="text-xs text-[#1A1A1A]/60 col-span-3">No saved signatures.</div>}
-                </div>
-              </Card>
-              <Card className="p-5 bg-[#F7F2EA] border-[#B89555]/30">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="font-semibold text-[#1A1A1A] flex items-center gap-2"><Stamp className="w-4 h-4" /> Saved Stamps</div>
-                  <Button size="sm" variant="outline" onClick={() => navigate("/owner/documents/forms/signature-studio")}>Manage</Button>
-                </div>
-                <div className="grid grid-cols-3 gap-3">
-                  {stamps.map(s => (
-                    <div key={s.id} className="border border-[#B89555]/30 rounded p-2 bg-white">
-                      <img src={s.image_url} alt={s.label || "Stamp"} className="h-16 w-full object-contain" />
-                      {s.is_default && <div className="text-[9px] text-center mt-1 text-[#1A1A1A]/70">DEFAULT</div>}
+                    <div className="grid grid-cols-3 gap-3">
+                      {list.map((s: any) => (
+                        <div key={s.id} className="border border-[#B89555]/30 rounded p-2 bg-white relative group">
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <button className="absolute top-1 right-1 p-1 rounded hover:bg-[#F7F2EA] opacity-60 group-hover:opacity-100" aria-label="Asset actions">
+                                <MoreVertical className="w-3.5 h-3.5 text-[#1A1A1A]" />
+                              </button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="bg-white">
+                              <DropdownMenuItem onClick={() => setAssetDefault(kind, s.id)}><Star className="w-3.5 h-3.5 mr-2" /> Set as default</DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => renameAsset(s.id)}><Pencil className="w-3.5 h-3.5 mr-2" /> Rename</DropdownMenuItem>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem onClick={() => deleteAsset(s.id)} className="text-red-600 focus:text-red-700"><Trash2 className="w-3.5 h-3.5 mr-2" /> Delete</DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                          <img src={s.image_url} alt={s.label || title} className="h-16 w-full object-contain" />
+                          {s.is_default && <div className="text-[9px] text-center mt-1 text-[#1A1A1A]/70">DEFAULT</div>}
+                          {s.label && <div className="text-[10px] text-center mt-0.5 text-[#1A1A1A]/60 truncate">{s.label}</div>}
+                        </div>
+                      ))}
+                      {!list.length && <div className="text-xs text-[#1A1A1A]/60 col-span-3">No saved {kind}s yet. Click Upload to add one.</div>}
                     </div>
-                  ))}
-                  {!stamps.length && <div className="text-xs text-[#1A1A1A]/60 col-span-3">No saved stamps.</div>}
-                </div>
-              </Card>
+                  </Card>
+                );
+              })}
             </div>
           </TabsContent>
         </Tabs>
@@ -778,6 +791,106 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* + New Envelope — template picker */}
+      <Dialog open={newEnvelopeOpen} onOpenChange={setNewEnvelopeOpen}>
+        <DialogContent className="bg-[#FDFBF7] max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-[#1A1A1A]">New Envelope</DialogTitle>
+            <DialogDescription className="text-[#1A1A1A]/70">Pick a template, or upload your own document to sign.</DialogDescription>
+          </DialogHeader>
+          <div className="grid sm:grid-cols-3 gap-3 mt-2">
+            <button
+              type="button"
+              onClick={() => { setNewEnvelopeOpen(false); navigate("/owner/documents/forms/blank-letter"); }}
+              className="text-left p-4 rounded-lg border border-[#B89555]/40 bg-white hover:border-[#B89555] hover:bg-[#F7F2EA] transition"
+            >
+              <FileText className="w-5 h-5 text-[#B89555] mb-2" />
+              <div className="font-medium text-[#1A1A1A] text-sm">{standardLetterheadName}</div>
+              <div className="text-xs text-[#1A1A1A]/70 mt-1">Blank JBJ letterhead — write any letter on official stationery.</div>
+            </button>
+            {(["leasing","selling"] as const).map((catKey) => {
+              const tpl = templates.find(t => !isBlankLetterKey(t.key) && t.category === catKey);
+              if (!tpl) return null;
+              const label = catKey === "leasing" ? "JBJ PAA Leasing" : "JBJ PAA Selling";
+              const desc = catKey === "leasing"
+                ? "Property Advertising Agreement — leasing." 
+                : "Listing Authorisation — selling.";
+              return (
+                <button
+                  key={catKey}
+                  type="button"
+                  onClick={() => openTemplate(tpl)}
+                  className="text-left p-4 rounded-lg border border-[#B89555]/40 bg-white hover:border-[#B89555] hover:bg-[#F7F2EA] transition"
+                >
+                  <Scale className="w-5 h-5 text-[#B89555] mb-2" />
+                  <div className="font-medium text-[#1A1A1A] text-sm">{tpl.name || label}</div>
+                  <div className="text-xs text-[#1A1A1A]/70 mt-1">{desc}</div>
+                </button>
+              );
+            })}
+          </div>
+          <div className="border-t border-[#B89555]/20 mt-4 pt-3">
+            <button
+              type="button"
+              onClick={() => { setNewEnvelopeOpen(false); navigate("/e-signature/upload"); }}
+              className="w-full text-left p-3 rounded-lg border border-dashed border-[#B89555]/40 bg-[#FDFBF7] hover:border-[#B89555] hover:bg-[#F7F2EA] transition flex items-center gap-3"
+            >
+              <Upload className="w-4 h-4 text-[#1A1A1A]/70" />
+              <div className="flex-1">
+                <div className="text-sm font-medium text-[#1A1A1A]">Upload PDF / image to sign</div>
+                <div className="text-xs text-[#1A1A1A]/60">Use any external document — drag in fields, then send.</div>
+              </div>
+              <ExternalLink className="w-3.5 h-3.5 text-[#1A1A1A]/60" />
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Manage Sheet — full asset list with per-row actions */}
+      <Sheet open={!!manageKind} onOpenChange={(o) => !o && setManageKind(null)}>
+        <SheetContent side="right" className="bg-[#FDFBF7] w-full sm:max-w-md overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle className="text-[#1A1A1A]">
+              Manage {manageKind === "signature" ? "Signatures" : "Stamps"}
+            </SheetTitle>
+          </SheetHeader>
+          <div className="mt-4 space-y-2">
+            <Button
+              variant="gold"
+              size="sm"
+              onClick={() => (manageKind === "signature" ? sigFileRef : stampFileRef).current?.click()}
+            >
+              <Upload className="w-3.5 h-3.5 mr-2" /> Upload new
+            </Button>
+            <div className="space-y-2 mt-3">
+              {(manageKind === "signature" ? signatures : manageKind === "stamp" ? stamps : []).map((s: any) => (
+                <div key={s.id} className="flex items-center gap-3 p-2 rounded border border-[#B89555]/30 bg-white">
+                  <img src={s.image_url} alt={s.label || ""} className="h-12 w-20 object-contain bg-[#FDFBF7] rounded" />
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm text-[#1A1A1A] truncate">{s.label || "Untitled"}</div>
+                    {s.is_default && <div className="text-[10px] text-[#1A1A1A]/60">DEFAULT</div>}
+                  </div>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button size="sm" variant="ghost"><MoreVertical className="w-4 h-4" /></Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="bg-white">
+                      <DropdownMenuItem onClick={() => setAssetDefault(manageKind!, s.id)}><Star className="w-3.5 h-3.5 mr-2" /> Set as default</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => renameAsset(s.id)}><Pencil className="w-3.5 h-3.5 mr-2" /> Rename</DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={() => deleteAsset(s.id)} className="text-red-600 focus:text-red-700"><Trash2 className="w-3.5 h-3.5 mr-2" /> Delete</DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              ))}
+              {!((manageKind === "signature" ? signatures : stamps) || []).length && (
+                <div className="text-xs text-[#1A1A1A]/60 p-3">No {manageKind}s saved yet.</div>
+              )}
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }
