@@ -225,24 +225,16 @@ export function SendViaEmailDialog({
 
   const canSend = tos.length > 0 && tos.every(isValidEmail) && subject.trim().length > 0;
 
-  // base64url encoder for safely embedding the signed URL into a /d?u= param.
-  const b64url = (s: string): string => {
-    try {
-      const b64 = btoa(unescape(encodeURIComponent(s)));
-      return b64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-    } catch {
-      return encodeURIComponent(s);
-    }
-  };
-
-  // Wrap a signed Supabase URL into our branded /d?u=...&n=... landing page so
-  // the visible link in the email stays on jbj.ae (no ad-blocker block, no
-  // "From: mdafrewy...supabase.co" mobile blank-page experience).
+  // Wrap a signed storage URL into a branded, non-JavaScript download endpoint.
+  // The email button points directly to jbj.ae/api/download-file, so desktop
+  // blockers never see the raw backend storage/function host and the recipient
+  // does not need a SPA page to load before the PDF saves.
   const wrapAsBrandedDownload = (signedUrl: string, filename?: string): string => {
-    const origin = PUBLIC_DOMAIN;
-    const u = b64url(signedUrl);
-    const n = filename ? `&n=${encodeURIComponent(filename)}` : "";
-    return `${origin}/d?u=${u}${n}`;
+    const proxy = new URL("/api/download-file", PUBLIC_DOMAIN);
+    proxy.searchParams.set("url", signedUrl);
+    if (filename) proxy.searchParams.set("filename", filename);
+    proxy.searchParams.set("disposition", "attachment");
+    return proxy.toString();
   };
 
   // Convert a Supabase storage URL into a 7-day signed URL, then wrap it in
