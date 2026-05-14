@@ -564,7 +564,21 @@ export function SendViaEmailDialog({
 
             {/* Body (rich) */}
             <div className="space-y-1.5">
-              <Label className="text-[#1A1A1A] text-xs">Message</Label>
+              <div className="flex items-center justify-between gap-2">
+                <Label className="text-[#1A1A1A] text-xs">Message</Label>
+                {draftSavedAt && (
+                  <span className="text-[10px] text-[#1A1A1A]/50 flex items-center gap-1.5">
+                    Draft saved · {new Date(draftSavedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                    <button
+                      type="button"
+                      onClick={clearDraft}
+                      className="underline decoration-[#B89555]/60 underline-offset-2 hover:text-[#1A1A1A]"
+                    >
+                      Discard
+                    </button>
+                  </span>
+                )}
+              </div>
               <EmailBodyEditor
                 value={bodyHtml}
                 onChange={setBodyHtml}
