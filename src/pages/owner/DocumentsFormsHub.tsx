@@ -12,12 +12,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { FileText, Send, CheckCircle2, Clock, PenTool, Stamp, FileSignature, Plus, Loader2, ExternalLink, Upload, Scale, Trash2, RotateCcw, FileEdit } from "lucide-react";
+import { FileText, Send, CheckCircle2, Clock, PenTool, Stamp, FileSignature, Plus, Loader2, ExternalLink, Upload, Scale, Trash2, RotateCcw, FileEdit, Sparkles, Crown } from "lucide-react";
 import { toast } from "sonner";
 import { SmartFillDropzone } from "@/components/e-signature/SmartFillDropzone";
 
 type Cat = "all" | "leasing" | "selling";
-type Bucket = "templates" | "drafts" | "generated" | "sent" | "submitted" | "signed" | "deleted" | "assets";
+type Bucket = "templates" | "documents" | "esign" | "drafts" | "generated" | "sent" | "submitted" | "signed" | "deleted" | "assets";
 
 /** Single query for the entire hub — much faster than four parallel queries. */
 function useAllEnvelopes() {
@@ -91,7 +91,7 @@ function isCompleteEnoughToBeGenerated(e: any): boolean {
   return hasClientName && hasContact;
 }
 
-const VALID_TABS: Bucket[] = ["templates","drafts","generated","sent","submitted","signed","deleted","assets"];
+const VALID_TABS: Bucket[] = ["templates","documents","esign","drafts","generated","sent","submitted","signed","deleted","assets"];
 
 export default function DocumentsFormsHub() {
   const navigate = useNavigate();
