@@ -44,6 +44,28 @@ const DEFAULT_CC = "infoo.jane@gmail.com";
 const DISPLAY_FROM = "JBJ Global Real Estate <noreply@jbj.ae>";
 const DISPLAY_REPLY_TO = "contact@jbj.ae";
 
+/** Canonical short body the owner approved. Used when the saved template is
+ *  empty or matches a known legacy preset that we want to retire. */
+const NEW_DEFAULT_BODY_HTML =
+  `<p>Dear {{client_name}},</p>` +
+  `<p>Please find the PDF attached to this email. Once you have reviewed it, kindly sign it using DocuSign at your earliest convenience and return it by replying to this email or this ticket with the signed copy attached.</p>` +
+  `<p>Thank you,</p>`;
+
+/** Phrases from the old template that must be scrubbed when hydrating from
+ *  any saved body (DB template default OR envelope.email_message). They are
+ *  matched case-insensitively, with flexible whitespace, against the
+ *  PLAIN-TEXT projection of the body — and the matching paragraphs are
+ *  stripped from the HTML. */
+const LEGACY_BODY_FRAGMENTS: RegExp[] = [
+  /attached is your[\s\S]*?prepared by jbj global real estate\.?/i,
+  /kindly review and digitally sign[\s\S]*?secure link below[\s\S]*?\./i,
+  /once signed,?\s*a fully executed copy will be returned to you automatically\.?/i,
+  /also available via the secure download button below\.?/i,
+  /thank you for your continued trust\.?/i,
+  /please find attached the signed pdf\.?/i,
+  /signature pending[^<\n]*/i,
+];
+
 function normalizeSubject(value: string, fallbackDoc = "Document") {
   const raw = String(value || "").trim();
   const cleaned = raw
