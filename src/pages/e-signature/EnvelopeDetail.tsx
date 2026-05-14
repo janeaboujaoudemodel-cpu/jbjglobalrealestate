@@ -1441,12 +1441,15 @@ export default function EnvelopeDetail() {
 
         {/* Activity log */}
         <Card className="bg-[#F7F2EA] border-[#B89555]/30">
-          <CardHeader className="py-3">
-            <CardTitle className="text-sm text-[#1A1A1A] flex items-center gap-2">
-              <Shield className="w-4 h-4" /> Activity Log
+          <CardHeader className="py-3 cursor-pointer" onClick={() => setActivityOpen((v) => !v)}>
+            <CardTitle className="text-sm text-[#1A1A1A] flex items-center gap-2 justify-between">
+              <span className="flex items-center gap-2"><Shield className="w-4 h-4" /> Activity Log</span>
+              <Button type="button" variant="outline" size="sm" className="h-7 text-[11px] border-[#B89555]/40" onClick={(e) => { e.stopPropagation(); setActivityOpen((v) => !v); }}>
+                {activityOpen ? "Minimize" : "Expand"}
+              </Button>
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          {activityOpen && <CardContent>
             <div className="space-y-3">
               {auditLogs.map((log: any) => (
                 <div key={log.id} className="flex items-start gap-3">
@@ -1464,7 +1467,7 @@ export default function EnvelopeDetail() {
               ))}
               {!auditLogs.length && <p className="text-sm text-[#1A1A1A]/60 text-center py-4">No activity yet</p>}
             </div>
-          </CardContent>
+          </CardContent>}
         </Card>
       </div>
 
