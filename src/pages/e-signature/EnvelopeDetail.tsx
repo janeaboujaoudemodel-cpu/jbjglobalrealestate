@@ -32,14 +32,16 @@ import PAAListingDraftCard from "@/components/e-signature/PAAListingDraftCard";
 import PAAAICopilotDrawer from "@/components/e-signature/PAAAICopilotDrawer";
 import { Lock, Sparkles } from "lucide-react";
 
-type EnvelopeStatus = 'draft' | 'sent' | 'viewed' | 'partially_signed' | 'completed' | 'declined' | 'expired' | 'voided';
-type RecipientStatus = 'pending' | 'sent' | 'delivered' | 'viewed' | 'signed' | 'declined';
+type EnvelopeStatus = 'draft' | 'sent' | 'viewed' | 'partially_signed' | 'completed' | 'declined' | 'expired' | 'voided' | 'awaiting_signed_return' | 'pending_owner_review';
+type RecipientStatus = 'pending' | 'sent' | 'delivered' | 'viewed' | 'signed' | 'declined' | 'awaiting_signed_return';
 
 const statusConfig: Record<EnvelopeStatus, { label: string; color: string; icon: React.ReactNode }> = {
   draft: { label: "Draft", color: "bg-[#F7F2EA] text-[#1A1A1A]/80 border border-[#B89555]/40", icon: <FileSignature className="w-4 h-4" /> },
   sent: { label: "Sent", color: "bg-blue-50 text-blue-700 border border-blue-200", icon: <Send className="w-4 h-4" /> },
   viewed: { label: "Viewed", color: "bg-amber-50 text-amber-700 border border-amber-200", icon: <Eye className="w-4 h-4" /> },
   partially_signed: { label: "Partially Signed", color: "bg-orange-50 text-orange-700 border border-orange-200", icon: <Clock className="w-4 h-4" /> },
+  awaiting_signed_return: { label: "Submitted — Pending Review", color: "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]", icon: <Clock className="w-4 h-4" /> },
+  pending_owner_review: { label: "Pending Review", color: "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]", icon: <Clock className="w-4 h-4" /> },
   completed: { label: "Completed", color: "bg-emerald-50 text-emerald-700 border border-emerald-200", icon: <CheckCircle2 className="w-4 h-4" /> },
   declined: { label: "Declined", color: "bg-red-50 text-red-700 border border-red-200", icon: <XCircle className="w-4 h-4" /> },
   expired: { label: "Expired", color: "bg-[#F7F2EA] text-[#1A1A1A]/70 border border-[#B89555]/30", icon: <Clock className="w-4 h-4" /> },
@@ -51,6 +53,7 @@ const recipientStatusConfig: Record<RecipientStatus, { label: string; color: str
   sent: { label: "Sent", color: "bg-blue-50 text-blue-700 border border-blue-200" },
   delivered: { label: "Delivered", color: "bg-blue-50 text-blue-700 border border-blue-200" },
   viewed: { label: "Viewed", color: "bg-amber-50 text-amber-700 border border-amber-200" },
+  awaiting_signed_return: { label: "Submitted — Pending Review", color: "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]" },
   signed: { label: "Signed", color: "bg-emerald-50 text-emerald-700 border border-emerald-200" },
   declined: { label: "Declined", color: "bg-red-50 text-red-700 border border-red-200" },
 };

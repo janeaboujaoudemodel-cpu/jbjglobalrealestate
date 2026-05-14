@@ -17,7 +17,7 @@ import { toast } from "sonner";
 import { SmartFillDropzone } from "@/components/e-signature/SmartFillDropzone";
 
 type Cat = "all" | "leasing" | "selling";
-type Bucket = "templates" | "drafts" | "generated" | "sent" | "signed" | "deleted" | "assets";
+type Bucket = "templates" | "drafts" | "generated" | "sent" | "submitted" | "signed" | "deleted" | "assets";
 
 /** Single query for the entire hub — much faster than four parallel queries. */
 function useAllEnvelopes() {
@@ -27,7 +27,7 @@ function useAllEnvelopes() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("esign_envelopes")
-        .select("id,name,status,category,created_at,deleted_at,signed_document_url,document_url,document_filename,template_key,template_field_values,metadata,esign_recipients(name,email,phone,metadata)")
+        .select("id,name,status,category,created_at,deleted_at,signed_document_url,document_url,document_filename,template_key,template_field_values,metadata,esign_recipients(name,email,phone,metadata,status)")
         .order("created_at", { ascending: false });
       if (error) throw error;
       return data ?? [];
@@ -117,22 +117,24 @@ export default function DocumentsFormsHub() {
     const drafts: any[] = [];
     const generated: any[] = [];
     const sent: any[] = [];
+    const submitted: any[] = [];
     const signed: any[] = [];
     const deleted: any[] = [];
     for (const e of allEnvelopes) {
       if ((e as any).deleted_at) { deleted.push(e); continue; }
       const s = (e as any).status;
       const generatedReady = isCompleteEnoughToBeGenerated(e);
+      const recs: any[] = (e as any).esign_recipients || [];
+      const anyAwaitingReturn = recs.some((r) => r?.status === "awaiting_signed_return");
 
       if (s === "completed") signed.push(e);
+      else if (s === "awaiting_signed_return" || s === "pending_owner_review" || anyAwaitingReturn) submitted.push(e);
       else if (s === "sent" || s === "viewed" || s === "partially_signed") sent.push(e);
       else if (s === "draft" && !generatedReady) drafts.push(e);
 
-      // Generated bucket is purely "client-ready", independent of status —
-      // includes drafts, sent, partially-signed and completed envelopes.
       if (generatedReady) generated.push(e);
     }
-    return { drafts, generated, sent, signed, deleted };
+    return { drafts, generated, sent, submitted, signed, deleted };
   }, [allEnvelopes]);
 
   const handleUseTemplate = async () => {
