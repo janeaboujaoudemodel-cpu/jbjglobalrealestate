@@ -136,13 +136,13 @@ Deno.serve(async (req) => {
       // Upload signed PDF if we have bytes (one per envelope; idempotent on filename).
       let signedDocUrl: string | null = null;
       if (pdfBytes && pdfFilename) {
-        const path = `${env.id}/${Date.now()}-${pdfFilename.replace(/[^A-Za-z0-9._-]/g, "_")}`;
-        const up = await admin.storage.from("esign-signed").upload(path, pdfBytes, {
+        const path = `${env.id}/signed-replies/${Date.now()}-${pdfFilename.replace(/[^A-Za-z0-9._-]/g, "_")}`;
+        const up = await admin.storage.from("esign-documents").upload(path, pdfBytes, {
           contentType: "application/pdf",
           upsert: true,
         });
         if (!up.error) {
-          const { data: pub } = admin.storage.from("esign-signed").getPublicUrl(path);
+          const { data: pub } = admin.storage.from("esign-documents").getPublicUrl(path);
           signedDocUrl = pub.publicUrl;
           await admin.from("esign_signed_documents").insert({
             envelope_id: env.id,
