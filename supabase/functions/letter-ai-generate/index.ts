@@ -1,29 +1,46 @@
 // supabase/functions/letter-ai-generate/index.ts
 //
-// Lovable AI Gateway (google/gemini-3-flash-preview) — generates a JBJ
-// business letter from a free-form user prompt. Returns structured JSON:
-//   { subject: string, recipient: string, body_html: string }
-// body_html is a clean fragment of <p>/<ul>/<li>/<strong> tags, no scripts,
-// no markdown fences. The frontend renders it inside the BlankLetter
-// template body and lets the user edit further.
+// Lovable AI Gateway — generates a JBJ business / HR / legal letter from a
+// free-form owner prompt. Returns:
+//   {
+//     subject:     string,
+//     recipient:   string,
+//     body_text:   string   // plain text, paragraph breaks preserved
+//     signer_title?: string // suggested title (defaults to Founder & CEO)
+//     date?:       string   // ISO date if AI inferred one
+//   }
+//
+// The frontend renders body_text inside the JBJ letterhead template body
+// inside a normal multiline text area so the user can keep editing it as
+// regular typed text (not as code).
 
-const corsHeaders = { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type", "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE" };
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE",
+};
 
 const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
 
-const SYSTEM_PROMPT = `You are an executive correspondence assistant for JBJ GLOBAL REAL ESTATE LLC SOC, a Dubai-based real estate brokerage and business services group.
+const SYSTEM_PROMPT = `You are the senior in-house counsel and executive correspondence drafter for JBJ GLOBAL REAL ESTATE LLC SOC, a Dubai-based real estate brokerage. You draft on behalf of the Founder & CEO.
 
-Write professional, concise, UAE-business-letter-style correspondence on behalf of the company.
+Voice & quality:
+- Premium, contract-grade, UAE business standard. Concise but never abrupt.
+- Open with a salutation ("Dear <name>,") on its own paragraph.
+- Body: 2 to 5 short paragraphs separated by a blank line. Each paragraph is one idea.
+- Close with "Yours sincerely," (formal) or "Best regards," (semi-formal) on its own paragraph.
+- Do NOT type the signer name, title, company name, address, phone, email or website — the letterhead chrome already shows them.
+- Never invent prices, dates, AED amounts, RERA numbers, or legal clauses that the user did not supply. If the user left a placeholder like [Name] or [amount], keep it as a bracketed placeholder.
+- Never mention Lovable, AI, GPT, OpenAI, or any model.
 
-Output rules (STRICT):
-- Return ONLY a JSON object: { "subject": string, "recipient": string, "body_html": string }
-- "subject" is a short headline (max 80 chars), no trailing period
-- "recipient" is the addressee line (e.g. "Mr. John Doe" or "To Whom It May Concern"). If the user did not specify, use "To Whom It May Concern".
-- "body_html" is a clean HTML fragment using ONLY these tags: <p>, <ul>, <ol>, <li>, <strong>, <em>, <br>. NO <script>, NO inline styles, NO markdown fences, NO links to external sites.
-- Open with a salutation paragraph, then 2–4 body paragraphs, then a closing paragraph ("Yours sincerely," / "Best regards,") on its own <p>. Do NOT include the signer name or title (the template adds those automatically).
-- Use formal English. Never invent prices, dates, or legal terms not supplied in the user prompt.
-- Never reference Lovable, AI, ChatGPT, OpenAI, or any model provider.
-- Never include the company address, phone, or website (the template chrome already shows them).`;
+OUTPUT FORMAT — STRICT JSON ONLY (no markdown, no fences):
+{
+  "subject":     "<short headline, <=80 chars, no trailing period>",
+  "recipient":   "<addressee line e.g. 'Mr. John Doe' or 'To Whom It May Concern'>",
+  "body_text":   "<plain text with \\n\\n between paragraphs — NO HTML tags>",
+  "signer_title":"<usually 'Founder & CEO'>",
+  "date":        "<optional ISO yyyy-mm-dd if the prompt implied one>"
+}`;
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
@@ -31,7 +48,8 @@ Deno.serve(async (req) => {
   try {
     if (!LOVABLE_API_KEY) {
       return new Response(JSON.stringify({ error: "LOVABLE_API_KEY not configured" }), {
-        status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
@@ -43,36 +61,39 @@ Deno.serve(async (req) => {
 
     if (!userPrompt) {
       return new Response(JSON.stringify({ error: "prompt is required" }), {
-        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
     const userMessage = [
       `Tone: ${tone}.`,
       `Language: ${language}.`,
-      recipientHint ? `Recipient: ${recipientHint}.` : "",
-      `User request: ${userPrompt}`,
+      recipientHint ? `Recipient hint: ${recipientHint}.` : "",
+      `Owner request:`,
+      userPrompt,
     ].filter(Boolean).join("\n");
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Lovable-API-Key": LOVABLE_API_KEY,
+        Authorization: `Bearer ${LOVABLE_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
+        // Stronger reasoning model for contract-grade prose
+        model: "google/gemini-2.5-pro",
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
           { role: "user", content: userMessage },
         ],
         response_format: { type: "json_object" },
-        temperature: 0.4,
+        temperature: 0.35,
       }),
     });
 
     if (response.status === 429) {
-      return new Response(JSON.stringify({ error: "Rate limit exceeded — try again in a moment." }), {
+      return new Response(JSON.stringify({ error: "Rate limit — try again in a moment." }), {
         status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -83,7 +104,7 @@ Deno.serve(async (req) => {
     }
     if (!response.ok) {
       const t = await response.text().catch(() => "");
-      return new Response(JSON.stringify({ error: `AI gateway error ${response.status}: ${t.slice(0, 200)}` }), {
+      return new Response(JSON.stringify({ error: `AI gateway ${response.status}: ${t.slice(0, 200)}` }), {
         status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -93,21 +114,36 @@ Deno.serve(async (req) => {
     let parsed: any = {};
     try { parsed = JSON.parse(content); }
     catch {
-      // Best-effort: extract a JSON block from the model output
       const m = /\{[\s\S]*\}/.exec(content);
       if (m) try { parsed = JSON.parse(m[0]); } catch { /* ignore */ }
     }
 
-    const subject = String(parsed?.subject || "").slice(0, 200);
-    const recipient = String(parsed?.recipient || recipientHint || "To Whom It May Concern").slice(0, 200);
-    let body_html = String(parsed?.body_html || "").trim();
+    // Normalise: prefer body_text. If the model returned legacy body_html,
+    // strip tags down to clean plain text so the editor stays normal text.
+    const subject = String(parsed?.subject || "").slice(0, 200).trim();
+    const recipient = String(parsed?.recipient || recipientHint || "To Whom It May Concern").slice(0, 200).trim();
+    let body_text = String(parsed?.body_text || "").trim();
+    if (!body_text && parsed?.body_html) {
+      body_text = String(parsed.body_html)
+        .replace(/<\s*br\s*\/?\s*>/gi, "\n")
+        .replace(/<\/\s*p\s*>/gi, "\n\n")
+        .replace(/<[^>]+>/g, "")
+        .replace(/\n{3,}/g, "\n\n")
+        .trim();
+    }
+    // Strip stray markdown / fences
+    body_text = body_text
+      .replace(/^```(?:text|md|html)?\s*/i, "")
+      .replace(/```$/i, "")
+      .trim();
 
-    // Strip stray markdown fences just in case
-    body_html = body_html.replace(/^```html\s*/i, "").replace(/```$/, "").trim();
+    const signer_title = String(parsed?.signer_title || "Founder & CEO").slice(0, 80);
+    const date = typeof parsed?.date === "string" ? parsed.date.slice(0, 32) : "";
 
-    return new Response(JSON.stringify({ subject, recipient, body_html }), {
-      status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    return new Response(
+      JSON.stringify({ subject, recipient, body_text, signer_title, date }),
+      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+    );
   } catch (e: any) {
     return new Response(JSON.stringify({ error: e?.message || "Unknown error" }), {
       status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
