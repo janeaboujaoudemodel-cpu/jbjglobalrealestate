@@ -93,6 +93,10 @@ interface Props {
   docNumber?: string;
   senderName?: string;
   senderTitle?: string;
+  /** Called immediately before each send so the parent can persist edits and
+   *  regenerate the PDF. Must resolve to the freshest { url, filename } pair —
+   *  this is what gets attached to the email. */
+  onBeforeSend?: () => Promise<{ url?: string | null; filename?: string | null } | void>;
   onSent?: () => void;
 }
 
