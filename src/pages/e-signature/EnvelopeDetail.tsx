@@ -1154,23 +1154,23 @@ export default function EnvelopeDetail() {
                     && ["sent", "viewed", "partially_signed"].includes(envelope.status);
                   const isReminding = remindingId === recipient.id;
                   return (
-                    <div key={recipient.id} className="rounded-lg bg-white border border-[#B89555]/20 p-3">
-                      <div className="flex items-center justify-between gap-2">
-                        <div className="min-w-0">
+                    <div key={recipient.id} className="rounded-lg bg-white border border-[#B89555]/20 p-3 overflow-hidden">
+                      <div className="flex items-start justify-between gap-2 flex-wrap">
+                        <div className="min-w-0 flex-1">
                           <div className="font-medium text-[#1A1A1A] text-sm truncate">{recipient.name}</div>
                           <div className="text-xs text-[#1A1A1A]/70 truncate flex items-center gap-1">
-                            <Mail className="w-3 h-3" /> {recipient.email}
+                            <Mail className="w-3 h-3 shrink-0" /> <span className="truncate">{recipient.email}</span>
                           </div>
                           {recipient.phone && (
                             <div className="text-xs text-[#1A1A1A]/70 truncate flex items-center gap-1">
-                              <Phone className="w-3 h-3" /> {recipient.phone}
+                              <Phone className="w-3 h-3 shrink-0" /> <span className="truncate">{recipient.phone}</span>
                             </div>
                           )}
                           {recipient.signed_at && (
                             <div className="text-xs text-emerald-700 mt-1">✓ Signed {format(new Date(recipient.signed_at), "MMM d, h:mm a")}</div>
                           )}
                         </div>
-                        <Badge className={rConfig?.color}>{rConfig?.label}</Badge>
+                        <Badge className={`${rConfig?.color} shrink-0 whitespace-nowrap text-[10px]`}>{rConfig?.label}</Badge>
                       </div>
                       <div className="flex flex-wrap gap-1.5 mt-2">
                         {recipient.signing_token && (
