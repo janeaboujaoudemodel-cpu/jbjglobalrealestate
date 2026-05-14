@@ -42,6 +42,9 @@ import useOwnerInbox, {
 } from "@/hooks/useOwnerInbox";
 import { formatDistanceToNow } from "date-fns";
 import OwnerInboxThread from "@/components/owner-inbox/OwnerInboxThread";
+import InboxAICommandPanel from "@/components/owner-inbox/InboxAICommandPanel";
+import InboxBulkActionsBar from "@/components/owner-inbox/InboxBulkActionsBar";
+import { Checkbox } from "@/components/ui/checkbox";
 import { CATEGORY_META, clientCategorize } from "@/hooks/useCommAITriage";
 import useCommAITriage from "@/hooks/useCommAITriage";
 
@@ -92,6 +95,9 @@ export default function OwnerInbox() {
     unreadOnly: false,
   });
   const [selectedThread, setSelectedThread] = useState<CommThread | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [aiFilterIds, setAiFilterIds] = useState<Set<string> | null>(null);
+  const [aiFilterLabel, setAiFilterLabel] = useState<string>("");
   
   const {
     threads,
@@ -103,6 +109,7 @@ export default function OwnerInbox() {
     refetchThreads,
     updateThreadStatus,
     markAsRead,
+    bulkUpdateAsync,
     isUpdating,
   } = useOwnerInbox(filters);
   const { triage } = useCommAITriage();
@@ -381,6 +388,38 @@ export default function OwnerInbox() {
             <DeveloperActionsRail />
           </div>
 
+          {/* AI Command + AI filter chip */}
+          <div className="mb-3 flex items-center gap-2 flex-wrap">
+            <InboxAICommandPanel
+              threads={threads}
+              selectedIds={Array.from(selectedIds)}
+              onApplyFilter={(ids, label) => { setAiFilterIds(new Set(ids)); setAiFilterLabel(label); }}
+              onBulkMarkRead={async (ids) => { await bulkUpdateAsync({ threadIds: ids, patch: { unread_count: 0 } }); }}
+              onBulkSetStatus={async (ids, status) => { await bulkUpdateAsync({ threadIds: ids, patch: { status } }); }}
+            />
+            {aiFilterIds && (
+              <button
+                onClick={() => { setAiFilterIds(null); setAiFilterLabel(""); }}
+                className="text-xs px-2 py-1 rounded-full bg-[#EFE6D6] border border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/70"
+              >AI filter: {aiFilterLabel || `${aiFilterIds.size} matches`} · clear</button>
+            )}
+          </div>
+
+          {/* Bulk action toolbar (visible when threads selected) */}
+          <InboxBulkActionsBar
+            selectedCount={selectedIds.size}
+            onClear={() => setSelectedIds(new Set())}
+            onMarkRead={async () => {
+              await bulkUpdateAsync({ threadIds: Array.from(selectedIds), patch: { unread_count: 0 } });
+              setSelectedIds(new Set());
+            }}
+            onSetStatus={async (status) => {
+              await bulkUpdateAsync({ threadIds: Array.from(selectedIds), patch: { status } });
+              setSelectedIds(new Set());
+            }}
+            disabled={isUpdating}
+          />
+
           {/* Main Content - Split View */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 min-h-[600px]" style={{ height: 'min(calc(100vh - 360px), 900px)' }}>
             {/* Thread List */}
@@ -407,11 +446,22 @@ export default function OwnerInbox() {
                     </div>
                   ) : (
                     <div className="divide-y divide-gold/10">
-                      {threads.filter(t => categoryFilter === 'all' || clientCategorize(t) === categoryFilter).map((thread) => (
+                      {threads
+                        .filter(t => categoryFilter === 'all' || clientCategorize(t) === categoryFilter)
+                        .filter(t => !aiFilterIds || aiFilterIds.has(t.id))
+                        .map((thread) => (
                         <ThreadListItem
                           key={thread.id}
                           thread={thread}
                           isSelected={selectedThread?.id === thread.id}
+                          isChecked={selectedIds.has(thread.id)}
+                          onToggleCheck={() => {
+                            setSelectedIds(prev => {
+                              const next = new Set(prev);
+                              if (next.has(thread.id)) next.delete(thread.id); else next.add(thread.id);
+                              return next;
+                            });
+                          }}
                           onClick={() => handleThreadSelect(thread)}
                         />
                       ))}
@@ -511,13 +561,17 @@ function StatsCard({
 }
 
 // Thread List Item Component
-function ThreadListItem({ 
-  thread, 
-  isSelected, 
-  onClick 
-}: { 
-  thread: CommThread; 
-  isSelected: boolean; 
+function ThreadListItem({
+  thread,
+  isSelected,
+  isChecked,
+  onToggleCheck,
+  onClick,
+}: {
+  thread: CommThread;
+  isSelected: boolean;
+  isChecked?: boolean;
+  onToggleCheck?: () => void;
   onClick: () => void;
 }) {
   const status = statusConfig[thread.status];
@@ -528,10 +582,15 @@ function ThreadListItem({
       animate={{ opacity: 1 }}
       className={`p-3 cursor-pointer transition-all hover:bg-[#EFE6D6]/5 ${
         isSelected ? 'bg-[#EFE6D6]/10 border-l-4 border-l-gold' : ''
-      }`}
+      } ${isChecked ? 'bg-[#EFE6D6]/30' : ''}`}
       onClick={onClick}
     >
       <div className="flex items-start gap-3">
+        {onToggleCheck && (
+          <div onClick={(e) => { e.stopPropagation(); onToggleCheck(); }} className="pt-2">
+            <Checkbox checked={!!isChecked} className="h-4 w-4" />
+          </div>
+        )}
         <div className="relative">
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center border border-[#B89555]/20">
             {thread.contact_avatar_url ? (
