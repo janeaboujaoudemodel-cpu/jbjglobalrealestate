@@ -1,29 +1,22 @@
-## Plan
+I found two concrete causes to fix:
 
-1. **Fix why the uploaded PDF opens blank in Gmail**
-   - The current e-sign email flow sends the attachment using the branded `/d?...` download page URL instead of the raw PDF storage URL.
-   - Gmail/Drive previews that HTML page as if it were a PDF attachment, which explains the blank viewer in the screenshot.
-   - Change the send payload so real email attachments are fetched from the direct signed PDF URL, while any branded/download page link is kept only for UI if needed.
-   - Add a PDF sanity check in the attachment fetcher: if a `.pdf` does not start with `%PDF`, reject the send with a clear error instead of sending a blank/broken attachment.
-   - Use Resend’s expected attachment field name consistently (`content_type`) so Gmail receives correct MIME metadata.
+1. The branded email renderer is adding a `Reference: ... UTC` line above the message body. That is why the document reference/date/time appears twice. I will remove that line from both the in-app preview renderer and the delivered-email renderer.
 
-2. **Make the upload picker reusable across all owner email composers**
-   - Keep the existing e-sign attachment picker, but harden it so it stores the correct metadata (`contentType`) and can be reused outside e-sign.
-   - Show uploaded attachment count in the send preview/header wherever applicable.
+2. The main PDF attachment URL is being wrapped through `/d?u=...`, which is a branded HTML download page. The backend then fetches that HTML and sends it as if it were a PDF, causing Gmail to preview a blank/broken document. I will change the send flow so:
+   - The email body does not include a download/document button.
+   - The backend receives and fetches the direct signed storage URL for the real PDF, not the branded HTML wrapper.
+   - `fetchEmailAttachment` validates PDF magic bytes (`%PDF-`) whenever `application/pdf` is expected, so broken HTML can never be sent as a PDF again.
+   - Extra uploaded attachments keep their original MIME types and are fetched from valid storage URLs.
 
-3. **Add attachments to the universal branded email composer**
-   - Add the upload picker to `BrandedEmailComposer` (`Send a branded email`).
-   - Include uploaded files in test sends and live sends.
-   - Extend the locked-send flow to persist attachment metadata and send them through Gmail as true MIME attachments, while preserving the existing “preview = delivered” locked-send rule for the email body.
+Implementation files:
+- `src/components/e-signature/SendViaEmailDialog.tsx`
+- `src/lib/email/buildEnvelopeEmailHtml.ts`
+- `supabase/functions/_shared/envelope-email-html.ts`
+- `supabase/functions/_shared/fetchEmailAttachment.ts`
+- `supabase/functions/esign-send-test-email/index.ts`
+- `supabase/functions/esign-send-for-signature/index.ts`
 
-4. **Add attachments to CRM email sends where email is manually triggered**
-   - Extend developer registration and brokerage outreach send payloads to accept optional uploaded attachments.
-   - Wire the attachment picker into the CRM send/test dialogs that use these hooks, without changing existing templates or removing any functionality.
-
-5. **Add attachments to document/form email sends**
-   - Extend `documents-send` and `useSendDocument` so document emails can include extra uploaded files.
-   - Keep the signing link behavior unchanged.
-
-6. **Verify with a test send**
-   - Send a fresh test to `infoo.jane@gmail.com`.
-   - Confirm the PDF arrives as a real attachment, opens with visible PDF content, and any extra uploaded documents also open normally.
+Validation:
+- Deploy the two updated email functions.
+- Test the deployed send path with the current envelope payload shape.
+- Confirm logs no longer show attachment fetch failures and the code rejects non-PDF content instead of delivering broken files.

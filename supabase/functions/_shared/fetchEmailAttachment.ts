@@ -44,6 +44,18 @@ export async function fetchEmailAttachment(
       console.warn(`[fetchEmailAttachment] Skipping oversize attachment ${name} (${buf.byteLength} bytes)`);
       return null;
     }
+    // If a PDF was requested, verify the bytes actually start with %PDF-.
+    // Otherwise we'd be base64-encoding an HTML error/landing page and
+    // delivering it as a .pdf — which is exactly why Gmail showed a blank
+    // document. Reject so the caller surfaces a clear error.
+    if (contentType === "application/pdf") {
+      const head = buf.subarray(0, 5);
+      const isPdf = head[0] === 0x25 && head[1] === 0x50 && head[2] === 0x44 && head[3] === 0x46 && head[4] === 0x2d;
+      if (!isPdf) {
+        console.warn(`[fetchEmailAttachment] ${name} fetched but is not a PDF (first bytes: ${Array.from(head).join(",")}). Refusing to attach.`);
+        return null;
+      }
+    }
     return {
       filename: name,
       content: bytesToBase64(buf),
