@@ -129,6 +129,15 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
   const [showDetails, setShowDetails] = useState(false);
   const [includeJbjBlock, setIncludeJbjBlock] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [newEnvelopeOpen, setNewEnvelopeOpen] = useState(false);
+  const [manageKind, setManageKind] = useState<"signature" | "stamp" | null>(null);
+  const sigFileRef = useRef<HTMLInputElement>(null);
+  const stampFileRef = useRef<HTMLInputElement>(null);
+
+  // Hide DB blank-letter rows from the templates grid — the studio is opened by routing.
+  const isBlankLetterKey = (k: string) => k === "jbj-blank-letter" || k === "jbj-letterhead-blank";
+  const blankLetterTemplate = templates.find(t => isBlankLetterKey(t.key)) || null;
+  const standardLetterheadName = blankLetterTemplate?.name || "Standard JBJ Letterhead";
 
   // Bucket envelopes.
   // RULE: an envelope that has a client filled in is ALWAYS a "Forms Generated"
