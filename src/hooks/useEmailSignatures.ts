@@ -80,7 +80,8 @@ export function renderSignatureHtml(sig: EmailSignature): string {
   // SPA pages can show a browser-level "enable JavaScript" interstitial in
   // locked-down email clients. Keep all signature links email-native instead.
   const rawWebsite = sig.website ? sig.website.trim() : "";
-  const websiteHref = /\/careers\/?$/i.test(rawWebsite) ? "mailto:contact@jbj.ae" : rawWebsite;
+  const isJbjSpaShortcut = /^https?:\/\/(www\.)?jbj\.ae\/.+/i.test(rawWebsite.replace(/\/$/, ""));
+  const websiteHref = isJbjSpaShortcut ? "mailto:contact@jbj.ae" : rawWebsite;
   const websiteDisplay = websiteHref
     ? upperJbj(websiteHref.replace(/^mailto:/i, "").replace(/^https?:\/\//, ""))
     : "";
