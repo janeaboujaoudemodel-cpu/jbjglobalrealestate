@@ -91,11 +91,28 @@ function isCompleteEnoughToBeGenerated(e: any): boolean {
   return hasClientName && hasContact;
 }
 
+const VALID_TABS: Bucket[] = ["templates","drafts","generated","sent","submitted","signed","deleted","assets"];
+
 export default function DocumentsFormsHub() {
   const navigate = useNavigate();
   const qc = useQueryClient();
-  const [tab, setTab] = useState<Bucket>("templates");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialTab = (() => {
+    const t = searchParams.get("tab") as Bucket | null;
+    return t && VALID_TABS.includes(t) ? t : "templates";
+  })();
+  const [tab, setTab] = useState<Bucket>(initialTab);
   const [cat, setCat] = useState<Cat>("all");
+  // Keep ?tab= in sync with the active tab so legacy /e-signature?tab=... links land correctly.
+  useEffect(() => {
+    const current = searchParams.get("tab");
+    if (current !== tab) {
+      const next = new URLSearchParams(searchParams);
+      if (tab === "templates") next.delete("tab"); else next.set("tab", tab);
+      setSearchParams(next, { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tab]);
   const { data: templates = [], isLoading: tplLoading } = useEsignTemplates(cat);
   const { data: allEnvelopes = [], isLoading: envLoading, refetch } = useAllEnvelopes();
   const { data: signatures = [] } = useOwnerSignatureAssets("signature");
