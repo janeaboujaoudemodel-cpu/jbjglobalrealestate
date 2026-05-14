@@ -19,6 +19,20 @@ function sanitizeFilename(value: string) {
   return trimmed.replace(/[\u0000-\u001F\u007F]/g, "").replace(/[\\/]/g, "-");
 }
 
+function decodeBase64Url(value: string | null): string {
+  if (!value) return "";
+  try {
+    const padded = value.replace(/-/g, "+").replace(/_/g, "/").padEnd(value.length + ((4 - (value.length % 4)) % 4), "=");
+    return decodeURIComponent(escape(atob(padded)));
+  } catch {
+    try {
+      return decodeURIComponent(value);
+    } catch {
+      return value;
+    }
+  }
+}
+
 function parseStorageObjectPath(pathname: string): { visibility: string; bucket: string; objectPath: string } | null {
   const match = pathname.match(/\/storage\/v1\/object\/(public|sign|authenticated)\/([^/]+)\/(.+)$/i);
   if (!match) return null;
@@ -70,7 +84,7 @@ serve(async (req: Request): Promise<Response> => {
 
   try {
     const requestUrl = new URL(req.url);
-    const target = requestUrl.searchParams.get("url") || "";
+    const target = requestUrl.searchParams.get("url") || decodeBase64Url(requestUrl.searchParams.get("u"));
     const filenameParam = requestUrl.searchParams.get("filename") || undefined;
 
     if (!target) return json(400, { error: "Missing url" });
