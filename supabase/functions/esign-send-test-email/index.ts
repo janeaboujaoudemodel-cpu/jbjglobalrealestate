@@ -97,6 +97,22 @@ Deno.serve(async (req) => {
         .replace(SIG_SENTINEL, sigHtml);
     }
 
+    // Defensive: if the payload is double-escaped (`&lt;p&gt;…`) and contains
+    // no real tags, decode once so the recipient sees prose, not raw markup.
+    {
+      const hasRealTag = /<[a-z][\s\S]*?>/i.test(finalBodyHtml);
+      const hasEscapedTag = /&lt;\s*\/?\s*[a-z]/i.test(finalBodyHtml);
+      if (!hasRealTag && hasEscapedTag) {
+        finalBodyHtml = finalBodyHtml
+          .replace(/&nbsp;/gi, " ")
+          .replace(/&quot;/gi, '"')
+          .replace(/&#39;/gi, "'")
+          .replace(/&lt;/gi, "<")
+          .replace(/&gt;/gi, ">")
+          .replace(/&amp;/gi, "&");
+      }
+    }
+
     // Inject a tiny invisible per-send unique marker so Gmail does NOT
     // collapse the body as duplicate content under the "..." trim toggle.
     const uniqueMarker = `<span style="display:none;visibility:hidden;opacity:0;color:transparent;font-size:0;line-height:0;mso-hide:all;">[ref:${crypto.randomUUID()}]</span>`;
