@@ -97,9 +97,14 @@ Deno.serve(async (req) => {
         .replace(SIG_SENTINEL, sigHtml);
     }
 
+    // Inject a tiny invisible per-send unique marker so Gmail does NOT
+    // collapse the body as duplicate content under the "..." trim toggle.
+    const uniqueMarker = `<span style="display:none;visibility:hidden;opacity:0;color:transparent;font-size:0;line-height:0;mso-hide:all;">[ref:${crypto.randomUUID()}]</span>`;
+    const bodyHtmlWithMarker = uniqueMarker + finalBodyHtml;
+
     const emailHtml = buildEnvelopeEmailHtml({
       subject: finalSubject,
-      bodyHtml: finalBodyHtml,
+      bodyHtml: bodyHtmlWithMarker,
       signatureHtml: typeof signature_html === "string" && signature_html.trim() ? signature_html : sigHtml,
       docNumber,
       senderName,
@@ -108,6 +113,21 @@ Deno.serve(async (req) => {
       attachmentName: typeof attachment_name === "string" ? attachment_name : undefined,
       attachmentUrl: typeof attachment_url === "string" ? attachment_url : undefined,
     });
+
+    // Plain-text alternative — Gmail uses this for the inbox snippet and
+    // is far less likely to collapse multipart text+html messages behind "...".
+    const plainText = [
+      finalBodyHtml.replace(/<style[\s\S]*?<\/style>/gi, "")
+                   .replace(/<[^>]+>/g, " ")
+                   .replace(/\s+/g, " ")
+                   .trim(),
+      "",
+      typeof attachment_name === "string" && attachment_name
+        ? `Attached: ${attachment_name}`
+        : "",
+      "",
+      "— JBJ GLOBAL REAL ESTATE · contact@jbj.ae · www.jbj.ae",
+    ].filter(Boolean).join("\n");
 
     if (!resendApiKey) {
       return corsErrorResponse("Email provider not configured (RESEND_API_KEY missing)", 500, origin);
@@ -120,9 +140,6 @@ Deno.serve(async (req) => {
       attachmentNameStr,
       "application/pdf",
     );
-    // If the caller supplied an attachment URL but we couldn't fetch the PDF,
-    // refuse the send so the owner sees a clear error instead of receiving an
-    // email without the document.
     if (attachmentUrlStr && attachmentNameStr && !pdfAttachment) {
       return corsErrorResponse(
         `Could not attach ${attachmentNameStr} — the PDF could not be fetched from storage. Re-export the document and try again.`,
@@ -149,6 +166,8 @@ Deno.serve(async (req) => {
       reply_to: "contact@jbj.ae",
       subject: finalSubject,
       html: emailHtml,
+      text: plainText,
+      headers: { "X-Entity-Ref-ID": crypto.randomUUID() },
     };
     if (allAttachments.length) payload.attachments = allAttachments;
 
