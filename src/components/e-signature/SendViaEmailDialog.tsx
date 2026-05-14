@@ -199,6 +199,7 @@ export function SendViaEmailDialog({
   docNumber,
   senderName = "Jane Bou Jaoude",
   senderTitle = "Founder & CEO",
+  onBeforeSend,
   onSent,
 }: Props) {
   const [tos, setTos] = useState<string[]>([]);
