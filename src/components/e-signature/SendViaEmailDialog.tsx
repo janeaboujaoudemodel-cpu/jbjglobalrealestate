@@ -202,6 +202,7 @@ export function SendViaEmailDialog({
     setSubject(normalizeSubject(defaultSubject, attachmentName || "Document"));
     setDocusignUrl("");
     setExtraAttachments([]);
+    setAutoAttachmentRemoved(false);
     setBodyHtml(
       stripSignature(
         legacyBodyToHtml(stripInlineSignature(defaultBody), {
@@ -303,7 +304,7 @@ export function SendViaEmailDialog({
     try {
       const session = await supabase.auth.getSession();
       const token = session.data.session?.access_token;
-      const signedAttachmentUrl = await resolveAttachmentUrl(attachmentUrl);
+      const signedAttachmentUrl = autoAttachmentRemoved ? undefined : await resolveAttachmentUrl(attachmentUrl);
       const res = await fetch(`${SUPABASE_URL}/functions/v1/esign-send-test-email`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
@@ -313,7 +314,7 @@ export function SendViaEmailDialog({
           interpolated_body_html: bodyHtml,
           signature_html: selectedSigHtml,
           docusign_url: docusignUrl.trim() || undefined,
-          attachment_name: attachmentName,
+          attachment_name: autoAttachmentRemoved ? undefined : attachmentName,
           attachment_url: signedAttachmentUrl,
           extra_attachments: extraAttachments.map((a) => ({ name: a.name, url: a.url, content_type: a.contentType })),
           test_recipient: TEST_RECIPIENT,
@@ -338,7 +339,7 @@ export function SendViaEmailDialog({
     try {
       const session = await supabase.auth.getSession();
       const token = session.data.session?.access_token;
-      const signedAttachmentUrl = await resolveAttachmentUrl(attachmentUrl);
+      const signedAttachmentUrl = autoAttachmentRemoved ? undefined : await resolveAttachmentUrl(attachmentUrl);
       // NOTE: edits to subject/body are sent to the recipient as-is for THIS email
       // only. They are NOT saved as the new standard template — use
       // "Save as standard template" to persist for future sends.
@@ -354,7 +355,7 @@ export function SendViaEmailDialog({
           interpolated_body_html: bodyHtml,
           signature_html: selectedSigHtml,
           docusign_url: docusignUrl.trim() || undefined,
-          attachment_name: attachmentName,
+          attachment_name: autoAttachmentRemoved ? undefined : attachmentName,
           attachment_url: signedAttachmentUrl,
           extra_attachments: extraAttachments.map((a) => ({ name: a.name, url: a.url, content_type: a.contentType })),
         }),
@@ -450,11 +451,43 @@ export function SendViaEmailDialog({
               <div className="flex flex-wrap gap-x-2"><span className="opacity-60">From:</span><strong className="break-all">{DISPLAY_FROM}</strong></div>
               <div className="flex flex-wrap gap-x-2"><span className="opacity-60">Reply-To:</span><strong className="break-all">{DISPLAY_REPLY_TO}</strong></div>
               <div className="flex flex-wrap gap-x-2"><span className="opacity-60">Provider:</span>Resend</div>
-              {attachmentName && (
+              {attachmentName && !autoAttachmentRemoved && (
                 <div className="flex items-center gap-1.5 pt-1">
                   <FileText className="w-3.5 h-3.5 shrink-0" />
-                  <span className="opacity-60">Attachment:</span>
-                  <strong className="truncate">{attachmentName}</strong>
+                  <span className="opacity-60">Auto-attached:</span>
+                  <strong className="truncate flex-1">{attachmentName}</strong>
+                  {attachmentUrl && (
+                    <a
+                      href={attachmentUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="shrink-0 px-1.5 py-0.5 rounded hover:bg-[#EFE6D6] text-[#1A1A1A]/70"
+                      title="Preview attached PDF"
+                    >
+                      <Eye className="w-3.5 h-3.5" />
+                    </a>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setAutoAttachmentRemoved(true)}
+                    className="shrink-0 text-[10px] uppercase tracking-wider text-[#1A1A1A]/60 hover:text-[#1A1A1A] underline decoration-[#B89555]/60 underline-offset-2"
+                    title="Remove the auto-attached signed PDF from this send"
+                  >
+                    Remove
+                  </button>
+                </div>
+              )}
+              {attachmentName && autoAttachmentRemoved && (
+                <div className="flex items-center gap-1.5 pt-1">
+                  <FileText className="w-3.5 h-3.5 shrink-0 opacity-40" />
+                  <span className="opacity-60 line-through">{attachmentName}</span>
+                  <button
+                    type="button"
+                    onClick={() => setAutoAttachmentRemoved(false)}
+                    className="ml-auto text-[10px] uppercase tracking-wider text-[#B89555] hover:text-[#1A1A1A]"
+                  >
+                    Restore
+                  </button>
                 </div>
               )}
             </div>
@@ -610,8 +643,8 @@ export function SendViaEmailDialog({
                 signatureHtml={selectedSigHtml}
                 docNumber={docNumber}
                 docusignUrl={docusignUrl}
-                attachmentName={attachmentName}
-                attachmentUrl={attachmentUrl}
+                attachmentName={autoAttachmentRemoved ? undefined : attachmentName}
+                attachmentUrl={autoAttachmentRemoved ? undefined : attachmentUrl}
                 className="w-full h-full bg-[#FDFBF7]"
               />
             </div>
