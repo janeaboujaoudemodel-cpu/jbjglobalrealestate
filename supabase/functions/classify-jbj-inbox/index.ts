@@ -438,6 +438,27 @@ Deno.serve(async (req) => {
       });
       inserted++;
 
+      // If a signed contract reply landed with a PDF, sync it to e-signature
+      // (mark recipient signed, upload PDF, complete envelope when all signed).
+      if (category === "contracts" && status === "signed" && attachments.length > 0) {
+        try {
+          fetch(`${SUPABASE_URL}/functions/v1/esign-sync-from-inbox`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${SERVICE_ROLE}`,
+            },
+            body: JSON.stringify({
+              gmail_message_id: id,
+              gmail_thread_id: det.threadId,
+              from_email: email,
+              received_at: receivedAt,
+              attachments,
+            }),
+          }).catch(() => {});
+        } catch (_e) { /* fire-and-forget */ }
+      }
+
       // If REGISTERED reply detected and linked to a developer → update CRM
       if (status === "registered" && bestScore >= 0.5 && linkedDev) {
         await admin

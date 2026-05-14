@@ -337,6 +337,8 @@ export interface BuildPAAOptions {
   ownerSignatureUrl?: string | null;
   ownerStampUrl?: string | null;
   clientSignatureUrl?: string | null;
+  /** Attribution shown under the signature row, e.g. "Signed by Omar on …". */
+  clientSignedAttribution?: string | null;
   hiddenFields?: string[];
   /**
    * "edit"  → show every option chip (live preview / iframe)
@@ -654,6 +656,8 @@ export function buildPAAHtml(
       <div style="height:1px;background:${accent};opacity:.55;"></div>
     </div>
   </div>
+  ${opts.clientSignedAttribution ? `
+  <div style="margin-top:8px;font-size:11px;color:${ink};opacity:.75;font-style:italic;">${esc(opts.clientSignedAttribution)}</div>` : ""}
   </div>
 
   </div>
