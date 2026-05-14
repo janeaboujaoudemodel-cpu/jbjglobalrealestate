@@ -5,6 +5,21 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+async function resolveAgentId(key: string, configured: string): Promise<string> {
+  if (/^agent_[A-Za-z0-9_-]+$/.test(configured)) return configured;
+
+  const response = await fetch("https://api.elevenlabs.io/v1/convai/agents?page_size=100", {
+    headers: { "xi-api-key": key },
+  });
+  if (!response.ok) return configured;
+
+  const data = await response.json().catch(() => ({}));
+  const agents = Array.isArray(data?.agents) ? data.agents : [];
+  const preferred = agents.find((agent: Record<string, unknown>) => String(agent?.name ?? "").toLowerCase().includes("jbj")) ?? agents[0];
+  const discovered = preferred?.agent_id ?? preferred?.agentId ?? preferred?.id;
+  return typeof discovered === "string" && discovered ? discovered : configured;
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -40,8 +55,9 @@ serve(async (req) => {
     let data: any = null;
 
     for (const key of candidateKeys) {
+      const resolvedAgentId = await resolveAgentId(key, ELEVENLABS_AGENT_ID);
       const response = await fetch(
-        `https://api.elevenlabs.io/v1/convai/conversation/token?agent_id=${ELEVENLABS_AGENT_ID}`,
+        `https://api.elevenlabs.io/v1/convai/conversation/token?agent_id=${resolvedAgentId}`,
         { headers: { "xi-api-key": key } }
       );
 
