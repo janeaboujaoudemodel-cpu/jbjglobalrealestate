@@ -15,7 +15,7 @@ async function resolveAgentId(key: string, configured: string): Promise<string> 
 
   const data = await response.json().catch(() => ({}));
   const agents = Array.isArray(data?.agents) ? data.agents : [];
-  const preferred = agents.find((agent: Record<string, unknown>) => String(agent?.name ?? "").toLowerCase().includes("jbj")) ?? agents[0];
+  const preferred = agents.find((agent: Record<string, unknown>) => String(agent?.name ?? "").toLowerCase().includes("jessica")) ?? agents[0];
   const discovered = preferred?.agent_id ?? preferred?.agentId ?? preferred?.id;
   return typeof discovered === "string" && discovered ? discovered : configured;
 }
