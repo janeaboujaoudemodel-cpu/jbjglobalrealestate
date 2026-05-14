@@ -32,7 +32,7 @@ Deno.serve(async (req) => {
       return corsErrorResponse("Unauthorized", 401, origin);
     }
 
-    const { envelope_id, channels, cc_emails: ccOverride, bcc_emails: bccOverride, interpolated_subject, interpolated_body, interpolated_body_html, signature_html, additional_recipients, docusign_url, attachment_name, attachment_url } = await req.json();
+    const { envelope_id, channels, cc_emails: ccOverride, bcc_emails: bccOverride, interpolated_subject, interpolated_body, interpolated_body_html, signature_html, additional_recipients, docusign_url, attachment_name, attachment_url, extra_attachments } = await req.json();
     const channelList: string[] = Array.isArray(channels) && channels.length
       ? channels
       : ["email"];
@@ -175,6 +175,18 @@ Deno.serve(async (req) => {
               origin,
             );
           }
+          const allAttachments = pdfAttachment ? [pdfAttachment] : [];
+          if (Array.isArray(extra_attachments)) {
+            for (const e of extra_attachments) {
+              const a = await fetchEmailAttachment(
+                String(e?.url || ""),
+                String(e?.name || ""),
+                String(e?.content_type || "application/octet-stream"),
+              );
+              if (a) allAttachments.push(a);
+              else if (e?.url && e?.name) console.warn(`[esign-send-for-signature] skipped extra attachment ${e.name}`);
+            }
+          }
           const payload: Record<string, unknown> = {
             from: "JBJ Global Real Estate <noreply@jbj.ae>",
             to: allTos,
@@ -184,7 +196,7 @@ Deno.serve(async (req) => {
             subject: finalSubject,
             html: emailHtml,
           };
-          if (pdfAttachment) payload.attachments = [pdfAttachment];
+          if (allAttachments.length) payload.attachments = allAttachments;
           const res = await quotaGuardedFetch("https://api.resend.com/emails", {
             method: "POST",
             headers: { "Authorization": `Bearer ${resendApiKey}`, "Content-Type": "application/json" },

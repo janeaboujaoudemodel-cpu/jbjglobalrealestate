@@ -35,6 +35,7 @@ import { SUPABASE_URL, PUBLIC_DOMAIN } from "@/config/backend";
 import { EmailRecipientChips, isValidEmail } from "./EmailRecipientChips";
 import { EmailBodyEditor } from "./EmailBodyEditor";
 import { EmailPreviewIframe } from "./EmailPreviewIframe";
+import { EmailAttachmentsPicker, type EmailAttachment } from "./EmailAttachmentsPicker";
 import { buildSenderSignatureHtml, escapeHtml } from "@/lib/email/buildEnvelopeEmailHtml";
 import { useEmailSignatures, renderSignatureHtml, type EmailSignature } from "@/hooks/useEmailSignatures";
 
@@ -162,6 +163,7 @@ export function SendViaEmailDialog({
   const [savingField, setSavingField] = useState<"" | "recipients" | "subject" | "signature" | "body">("");
   const [selectedSigId, setSelectedSigId] = useState<string>("");
   const [draftSavedAt, setDraftSavedAt] = useState<number | null>(null);
+  const [extraAttachments, setExtraAttachments] = useState<EmailAttachment[]>([]);
   const draftKey = `jbj_esign_email_draft_${envelopeId || "__new__"}`;
 
   // Load all email signature presets so the owner can pick which one
@@ -198,6 +200,7 @@ export function SendViaEmailDialog({
     setCcs([DEFAULT_CC]);
     setSubject(normalizeSubject(defaultSubject, attachmentName || "Document"));
     setDocusignUrl("");
+    setExtraAttachments([]);
     setBodyHtml(
       stripSignature(
         legacyBodyToHtml(stripInlineSignature(defaultBody), {
@@ -329,6 +332,7 @@ export function SendViaEmailDialog({
           docusign_url: docusignUrl.trim() || undefined,
           attachment_name: attachmentName,
           attachment_url: signedAttachmentUrl,
+          extra_attachments: extraAttachments.map((a) => ({ name: a.name, url: a.url, content_type: a.contentType })),
           test_recipient: TEST_RECIPIENT,
         }),
       });
@@ -369,6 +373,7 @@ export function SendViaEmailDialog({
           docusign_url: docusignUrl.trim() || undefined,
           attachment_name: attachmentName,
           attachment_url: signedAttachmentUrl,
+          extra_attachments: extraAttachments.map((a) => ({ name: a.name, url: a.url, content_type: a.contentType })),
         }),
       });
       const out = await res.json().catch(() => ({}));
@@ -574,6 +579,13 @@ export function SendViaEmailDialog({
                 Empty is fine — the <strong>OPEN IN DOCUSIGN</strong> button always appears and opens the universal DocuSign entry. Paste a specific envelope URL to deep-link directly.
               </p>
             </div>
+
+            {/* Extra attachments */}
+            <EmailAttachmentsPicker
+              value={extraAttachments}
+              onChange={setExtraAttachments}
+              disabled={!!busy}
+            />
 
             {/* Body (rich) */}
             <div className="space-y-1.5">
