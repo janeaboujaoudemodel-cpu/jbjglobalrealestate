@@ -53,6 +53,9 @@ function normalizeSubject(value: string, fallbackDoc = "Document") {
   return `Signature Pending: ${cleaned || fallbackDoc}`;
 }
 
+const dedupeEmails = (emails: string[]) =>
+  Array.from(new Set(emails.map((e) => e.trim().toLowerCase()).filter(isValidEmail)));
+
 interface Props {
   open: boolean;
   onOpenChange: (v: boolean) => void;
@@ -200,8 +203,8 @@ export function SendViaEmailDialog({
       if (data.subject) setSubject(normalizeSubject(data.subject, attachmentName || "Document"));
       if (data.body_html) setBodyHtml(stripSignature(data.body_html));
       if (data.signature_preset_id) setSelectedSigId(data.signature_preset_id);
-      if (Array.isArray(data.default_to_emails) && data.default_to_emails.length) setTos(data.default_to_emails);
-      if (Array.isArray(data.default_cc_emails)) setCcs(data.default_cc_emails.length ? data.default_cc_emails : [DEFAULT_CC]);
+      if (Array.isArray(data.default_to_emails) && data.default_to_emails.length) setTos(dedupeEmails(data.default_to_emails));
+      if (Array.isArray(data.default_cc_emails)) setCcs(data.default_cc_emails.length ? dedupeEmails(data.default_cc_emails) : [DEFAULT_CC]);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, recipientEmail, recipientName, defaultSubject, defaultBody, templateKey, attachmentName]);
@@ -357,13 +360,13 @@ export function SendViaEmailDialog({
       const payload: Record<string, any> = {
         user_id: user.id,
         template_key: templateKey || "__global__",
-        subject: normalizeSubject(subject, attachmentName || "Document"),
+        subject: normalizeSubject(field === "subject" ? subject : "", attachmentName || "Document"),
         body: bodyHtml.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim() || " ",
         body_html: stripSignature(bodyHtml),
         approved_at: new Date().toISOString(),
       };
       if (field === "recipients") {
-        payload.default_to_emails = tos.filter(isValidEmail);
+        payload.default_to_emails = dedupeEmails(tos);
         payload.default_cc_emails = cleanCcs;
       }
       if (field === "signature") payload.signature_preset_id = selectedSigId || null;
