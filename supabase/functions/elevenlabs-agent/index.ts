@@ -118,19 +118,18 @@ Deno.serve(async (req) => {
       }
 
       if (!r.ok) {
-        return json({
-          agent_id: resolved.agentId,
-          name: "JBJ Voice Agent",
-          prompt: DEFAULT_PROMPT,
-          first_message: "Welcome to JBJ GLOBAL REAL ESTATE. How may I help you today?",
-          language: "en",
-          voice_id: Deno.env.get("ELEVENLABS_VOICE_ID") ?? "",
-          llm: "",
-          warning: resolved.warning ?? friendlyElevenLabsError(r.status, text),
-          upstream_status: r.status,
-        });
+        return fallbackAgentConfig(
+          resolved.agentId,
+          resolved.warning ?? friendlyElevenLabsError(r.status, text),
+          r.status,
+        );
       }
-      const data = JSON.parse(text);
+      let data: Record<string, unknown>;
+      try {
+        data = JSON.parse(text || "{}");
+      } catch {
+        return fallbackAgentConfig(resolved.agentId, "ElevenLabs returned an unreadable agent configuration.");
+      }
       const conv = data?.conversation_config ?? {};
       const agent = conv?.agent ?? {};
       return json({
@@ -172,12 +171,24 @@ Deno.serve(async (req) => {
         body: JSON.stringify(patch),
       });
       const text = await r.text();
-      if (!r.ok) return json({ error: friendlyElevenLabsError(r.status, text) }, isMissingKnowledgeDocument(r.status, text) ? 409 : 500);
+      if (!r.ok && isMissingKnowledgeDocument(r.status, text)) {
+        return json({
+          ok: false,
+          fallback: true,
+          error: friendlyElevenLabsError(r.status, text),
+          upstream_status: r.status,
+        });
+      }
+      if (!r.ok) return json({ error: friendlyElevenLabsError(r.status, text), upstream_status: r.status }, r.status >= 400 && r.status < 500 ? r.status : 502);
       return json({ ok: true, updated: JSON.parse(text || "{}") });
     }
 
     return json({ error: "Method not allowed" }, 405);
   } catch (e) {
-    return json({ error: e instanceof Error ? e.message : "Unknown error" }, 500);
+    console.error("elevenlabs-agent contained failure:", e);
+    return fallbackAgentConfig(
+      Deno.env.get("ELEVENLABS_AGENT_ID") ?? "",
+      e instanceof Error ? e.message : "ElevenLabs agent configuration is temporarily unavailable.",
+    );
   }
 });
