@@ -102,7 +102,8 @@ export const OwnerRoutes = () => (
     {/* /owner/properties was incorrectly pointing at the PropertyManagement service marketing page.
         Redirect to the canonical /properties listing so the full filter set is preserved. */}
     <Route path="properties" element={<Navigate to="/properties" replace />} />
-    <Route path="documents" element={<Documents />} />
+    <Route path="documents" element={<Navigate to="/owner/documents/forms" replace />} />
+    <Route path="documents/editor" element={<Documents />} />
     <Route path="documents/forms" element={<DocumentsFormsHub />} />
     <Route path="documents/forms/create" element={<OwnerCreateEnvelope />} />
     <Route path="documents/forms/signature-studio" element={<OwnerSignatureStudio />} />
