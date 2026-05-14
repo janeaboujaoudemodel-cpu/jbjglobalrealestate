@@ -170,7 +170,8 @@ No prose, no markdown, JSON only.`;
       ? "No reply needed — automated/marketing notification."
       : "";
 
-    const update = {
+    const noReplyCats2 = new Set(["marketing", "advertising", "campaign", "system", "business_linkedin", "spam"]);
+    const update: Record<string, unknown> = {
       ai_category: category,
       ai_priority: priority,
       ai_summary: (parsed.summary ?? thread.last_message_preview ?? "").toString().slice(0, 280),
@@ -180,6 +181,10 @@ No prose, no markdown, JSON only.`;
         : null),
       ai_processed_at: new Date().toISOString(),
     };
+    // Only promote thread to needs_reply for categories that actually need a human reply.
+    if (thread.status === "new" || thread.status === "needs_reply") {
+      update.status = noReplyCats2.has(category) ? "new" : "needs_reply";
+    }
 
     await admin.from("owner_comm_threads").update(update).eq("id", threadId);
 
