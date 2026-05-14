@@ -481,59 +481,71 @@ export default function BlankLetterStudio() {
             </Card>
           </div>
 
-          {/* Preview */}
-          <Card className="p-3 bg-[#F7F2EA] border-[#EFE6D6] overflow-auto" style={{ maxHeight: "calc(100vh - 140px)" }}>
-            <div ref={previewRef} className="relative">
-              <div
-                className="bg-white shadow-lg mx-auto relative"
-                style={{ width: 794, minHeight: 1123 }}
-                dangerouslySetInnerHTML={{ __html: previewHtml }}
-              />
-              {/* Drag handles overlaid on top of the rendered preview */}
-              {activeSignature && placedSig && (
+          {/* Preview — A4 page is the hero, auto-scaled to fit the viewport */}
+          <Card className="p-4 bg-[#F7F2EA] border-[#EFE6D6] flex items-start justify-center" style={{ minHeight: "calc(100vh - 140px)" }}>
+            <div
+              className="relative"
+              style={{
+                width: 794,
+                height: 1123,
+                transformOrigin: "top center",
+                // Scale so the 794×1123 A4 page always fits both width and height
+                // of the available preview area without scrollbars.
+                transform: "scale(min(calc((100vw - 520px) / 820), calc((100vh - 200px) / 1180)))",
+              }}
+            >
+              <div ref={previewRef} className="relative">
                 <div
-                  onMouseDown={(e) => startDrag("sig", e)}
-                  style={{ position: "absolute", left: `${placedSig.x}%`, top: `${placedSig.y}%`, width: 220, height: 88 }}
-                  className="cursor-move ring-2 ring-[#B89555]/60 ring-offset-1 rounded group"
-                >
-                  <button
-                    onClick={() => setPlacedSig(null)}
-                    className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center shadow"
-                    title="Remove signature placement"
-                  ><X className="w-3 h-3" /></button>
-                </div>
-              )}
-              {activeStamp && placedStamp && (
-                <div
-                  onMouseDown={(e) => startDrag("stamp", e)}
-                  style={{ position: "absolute", left: `${placedStamp.x}%`, top: `${placedStamp.y}%`, width: 130, height: 130 }}
-                  className="cursor-move ring-2 ring-[#B89555]/60 ring-offset-1 rounded group"
-                >
-                  <button
-                    onClick={() => setPlacedStamp(null)}
-                    className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center shadow"
-                    title="Remove stamp placement"
-                  ><X className="w-3 h-3" /></button>
-                </div>
-              )}
-              {/* Quick "drag onto page" buttons when there's no custom placement yet */}
-              {(activeSignature && !placedSig) || (activeStamp && !placedStamp) ? (
-                <div className="absolute top-2 right-2 flex flex-col gap-1.5 bg-white/90 backdrop-blur border border-[#B89555]/30 rounded-lg p-2 shadow">
-                  <p className="text-[9px] uppercase tracking-wider text-[#1A1A1A]/60">Custom placement</p>
-                  {activeSignature && !placedSig && (
-                    <Button size="sm" variant="outline" className="h-6 text-[10px]"
-                      onClick={() => setPlacedSig({ x: 8, y: 78 })}>
-                      <PenTool className="w-3 h-3 mr-1" /> Drag signature
-                    </Button>
-                  )}
-                  {activeStamp && !placedStamp && (
-                    <Button size="sm" variant="outline" className="h-6 text-[10px]"
-                      onClick={() => setPlacedStamp({ x: 70, y: 75 })}>
-                      <StampIcon className="w-3 h-3 mr-1" /> Drag stamp
-                    </Button>
-                  )}
-                </div>
-              ) : null}
+                  className="bg-white shadow-2xl mx-auto relative"
+                  style={{ width: 794, minHeight: 1123 }}
+                  dangerouslySetInnerHTML={{ __html: previewHtml }}
+                />
+                {/* Drag handles overlaid on top of the rendered preview */}
+                {activeSignature && placedSig && (
+                  <div
+                    onMouseDown={(e) => startDrag("sig", e)}
+                    style={{ position: "absolute", left: `${placedSig.x}%`, top: `${placedSig.y}%`, width: 220, height: 88 }}
+                    className="cursor-move ring-2 ring-[#B89555]/60 ring-offset-1 rounded group"
+                  >
+                    <button
+                      onClick={() => setPlacedSig(null)}
+                      className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center shadow"
+                      title="Remove signature placement"
+                    ><X className="w-3 h-3" /></button>
+                  </div>
+                )}
+                {activeStamp && placedStamp && (
+                  <div
+                    onMouseDown={(e) => startDrag("stamp", e)}
+                    style={{ position: "absolute", left: `${placedStamp.x}%`, top: `${placedStamp.y}%`, width: 130, height: 130 }}
+                    className="cursor-move ring-2 ring-[#B89555]/60 ring-offset-1 rounded group"
+                  >
+                    <button
+                      onClick={() => setPlacedStamp(null)}
+                      className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center shadow"
+                      title="Remove stamp placement"
+                    ><X className="w-3 h-3" /></button>
+                  </div>
+                )}
+                {/* Quick "drag onto page" buttons when there's no custom placement yet */}
+                {(activeSignature && !placedSig) || (activeStamp && !placedStamp) ? (
+                  <div className="absolute top-2 right-2 flex flex-col gap-1.5 bg-white/90 backdrop-blur border border-[#B89555]/30 rounded-lg p-2 shadow">
+                    <p className="text-[9px] uppercase tracking-wider text-[#1A1A1A]/60">Custom placement</p>
+                    {activeSignature && !placedSig && (
+                      <Button size="sm" variant="outline" className="h-6 text-[10px]"
+                        onClick={() => setPlacedSig({ x: 8, y: 78 })}>
+                        <PenTool className="w-3 h-3 mr-1" /> Drag signature
+                      </Button>
+                    )}
+                    {activeStamp && !placedStamp && (
+                      <Button size="sm" variant="outline" className="h-6 text-[10px]"
+                        onClick={() => setPlacedStamp({ x: 70, y: 75 })}>
+                        <StampIcon className="w-3 h-3 mr-1" /> Drag stamp
+                      </Button>
+                    )}
+                  </div>
+                ) : null}
+              </div>
             </div>
           </Card>
         </div>
