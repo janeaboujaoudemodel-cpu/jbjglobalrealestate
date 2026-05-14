@@ -276,14 +276,9 @@ export function SendViaEmailDialog({
       const session = await supabase.auth.getSession();
       const token = session.data.session?.access_token;
       const signedAttachmentUrl = await resolveAttachmentUrl(attachmentUrl);
-      // Persist edited subject/body to the envelope so re-opening the dialog
-      // shows the user's latest text instead of resetting to the original.
-      try {
-        await supabase
-          .from("esign_envelopes")
-          .update({ email_subject: subject, email_message: bodyHtml })
-          .eq("id", envelopeId);
-      } catch (e) { /* non-fatal */ }
+      // NOTE: edits to subject/body are sent to the recipient as-is for THIS email
+      // only. They are NOT saved as the new standard template — use
+      // "Save as standard template" to persist for future sends.
       const res = await fetch(`${SUPABASE_URL}/functions/v1/esign-send-for-signature`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
@@ -311,6 +306,25 @@ export function SendViaEmailDialog({
       setBusy("");
     }
   };
+
+  // Persist current subject + body as the envelope's standard template so
+  // future opens of the dialog start from this version. Does NOT send.
+  const saveAsTemplate = async () => {
+    setBusy("send");
+    try {
+      const { error } = await supabase
+        .from("esign_envelopes")
+        .update({ email_subject: subject, email_message: bodyHtml })
+        .eq("id", envelopeId);
+      if (error) throw error;
+      toast.success("Saved as the standard template for future emails");
+    } catch (e: any) {
+      toast.error(e.message || "Failed to save template");
+    } finally {
+      setBusy("");
+    }
+  };
+
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
