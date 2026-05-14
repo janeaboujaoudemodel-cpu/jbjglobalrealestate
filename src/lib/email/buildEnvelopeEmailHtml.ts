@@ -21,9 +21,21 @@ export interface BuildEnvelopeEmailArgs {
   senderTitle?: string;
   year?: number;
   docusignUrl?: string;
+  /** Used when docusignUrl is empty/invalid so the CTA never lands on the
+   *  generic DocuSign marketing homepage with no envelope context. */
+  fallbackSignUrl?: string;
   attachmentName?: string;
   /** When provided, the Download PDF CTA appears as Step 1. */
   attachmentUrl?: string;
+}
+
+function isValidHttpUrl(s: string): boolean {
+  try {
+    const u = new URL(s);
+    return u.protocol === "http:" || u.protocol === "https:";
+  } catch {
+    return false;
+  }
 }
 
 export function escapeHtml(s: string): string {
