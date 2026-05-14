@@ -224,8 +224,13 @@ export default function OwnerInbox() {
                   variant="outline"
                   size="sm"
                   onClick={async () => {
+                    // Scope sync to the active channel when one is selected so
+                    // Refresh is fast and never times out.
+                    const body: { channel_id?: string } = filters.channelId && filters.channelId !== "all"
+                      ? { channel_id: filters.channelId }
+                      : {};
                     try { await supabase.functions.invoke("comm-gmail-autoconnect", { body: {} }); } catch { /* noop */ }
-                    try { await supabase.functions.invoke("comm-inbound-sync", { body: {} }); } catch { /* noop */ }
+                    try { await supabase.functions.invoke("comm-inbound-sync", { body }); } catch { /* noop */ }
                     refetchThreads();
                   }}
                   disabled={threadsLoading}
