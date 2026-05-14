@@ -12,12 +12,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { FileText, Send, CheckCircle2, Clock, PenTool, Stamp, FileSignature, Plus, Loader2, ExternalLink, Upload, Scale, Trash2, RotateCcw, FileEdit } from "lucide-react";
+import { FileText, Send, CheckCircle2, Clock, PenTool, Stamp, FileSignature, Plus, Loader2, ExternalLink, Upload, Scale, Trash2, RotateCcw, FileEdit, Sparkles, Crown } from "lucide-react";
 import { toast } from "sonner";
 import { SmartFillDropzone } from "@/components/e-signature/SmartFillDropzone";
 
 type Cat = "all" | "leasing" | "selling";
-type Bucket = "templates" | "drafts" | "generated" | "sent" | "submitted" | "signed" | "deleted" | "assets";
+type Bucket = "templates" | "documents" | "esign" | "drafts" | "generated" | "sent" | "submitted" | "signed" | "deleted" | "assets";
 
 /** Single query for the entire hub — much faster than four parallel queries. */
 function useAllEnvelopes() {
@@ -91,7 +91,7 @@ function isCompleteEnoughToBeGenerated(e: any): boolean {
   return hasClientName && hasContact;
 }
 
-const VALID_TABS: Bucket[] = ["templates","drafts","generated","sent","submitted","signed","deleted","assets"];
+const VALID_TABS: Bucket[] = ["templates","documents","esign","drafts","generated","sent","submitted","signed","deleted","assets"];
 
 export default function DocumentsFormsHub() {
   const navigate = useNavigate();
@@ -343,9 +343,9 @@ export default function DocumentsFormsHub() {
       <div className="max-w-[1400px] mx-auto">
         <header className="mb-6 flex items-end justify-between gap-4">
           <div>
-            <div className="text-xs uppercase tracking-[0.18em] text-[#1A1A1A]/60">Documents</div>
-            <h1 className="text-2xl font-semibold text-[#1A1A1A]">Forms & Agreements</h1>
-            <p className="text-sm text-[#1A1A1A]/70 mt-1">JBJ leasing & selling templates · drafts · sent for signature · completed contracts</p>
+            <div className="text-xs uppercase tracking-[0.18em] text-[#1A1A1A]/60">Owner</div>
+            <h1 className="text-2xl font-semibold text-[#1A1A1A]">Documents & Forms</h1>
+            <p className="text-sm text-[#1A1A1A]/70 mt-1">Unified hub — templates, document editor, e-signature, agreements, signatures & stamps. All in one place.</p>
           </div>
           <Button variant="gold" onClick={() => navigate("/owner/documents/forms/create")}>
             <Plus className="w-4 h-4 mr-2" /> New Envelope
@@ -395,12 +395,14 @@ export default function DocumentsFormsHub() {
         <Tabs value={tab} onValueChange={(v) => { setTab(v as Bucket); setSelected(new Set()); }}>
           <TabsList className="bg-[#F7F2EA] border border-[#B89555]/30 flex-wrap h-auto">
             <TabsTrigger value="templates"><FileText className="w-4 h-4 mr-2" />Templates</TabsTrigger>
-            <TabsTrigger value="drafts"><FileEdit className="w-4 h-4 mr-2" />Draft Applications ({buckets.drafts.length})</TabsTrigger>
-            <TabsTrigger value="generated"><Clock className="w-4 h-4 mr-2" />Forms Generated ({buckets.generated.length})</TabsTrigger>
-            <TabsTrigger value="sent"><Send className="w-4 h-4 mr-2" />Pending Signature ({buckets.sent.length})</TabsTrigger>
-            <TabsTrigger value="submitted"><Clock className="w-4 h-4 mr-2" />Submitted — Pending Review ({buckets.submitted.length})</TabsTrigger>
+            <TabsTrigger value="documents"><FileEdit className="w-4 h-4 mr-2" />Document Editor</TabsTrigger>
+            <TabsTrigger value="esign"><FileSignature className="w-4 h-4 mr-2" />E-signature</TabsTrigger>
+            <TabsTrigger value="drafts"><FileEdit className="w-4 h-4 mr-2" />Drafts ({buckets.drafts.length})</TabsTrigger>
+            <TabsTrigger value="generated"><Clock className="w-4 h-4 mr-2" />Generated ({buckets.generated.length})</TabsTrigger>
+            <TabsTrigger value="sent"><Send className="w-4 h-4 mr-2" />Pending ({buckets.sent.length})</TabsTrigger>
+            <TabsTrigger value="submitted"><Clock className="w-4 h-4 mr-2" />Review ({buckets.submitted.length})</TabsTrigger>
             <TabsTrigger value="signed"><CheckCircle2 className="w-4 h-4 mr-2" />Signed ({buckets.signed.length})</TabsTrigger>
-            <TabsTrigger value="deleted"><Trash2 className="w-4 h-4 mr-2" />Recently Deleted ({buckets.deleted.length})</TabsTrigger>
+            <TabsTrigger value="deleted"><Trash2 className="w-4 h-4 mr-2" />Deleted ({buckets.deleted.length})</TabsTrigger>
             <TabsTrigger value="assets"><PenTool className="w-4 h-4 mr-2" />Stamps & Signatures</TabsTrigger>
           </TabsList>
 
@@ -415,6 +417,25 @@ export default function DocumentsFormsHub() {
             </div>
             {tplLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {/* Standard JBJ Letterhead — always first, opens the branded letter studio */}
+                <Card className="p-5 bg-[#F7F2EA] border-[#B89555]/30">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/60">JBJ Standard</div>
+                      <div className="font-semibold text-[#1A1A1A] mt-1">Standard JBJ Letterhead</div>
+                    </div>
+                    <span className="text-[9px] px-2 py-0.5 border border-[#B89555]/40 rounded text-[#1A1A1A]/70">SYSTEM</span>
+                  </div>
+                  <p className="text-xs text-[#1A1A1A]/70 mt-2">
+                    A4 branded letterhead — type your letter, drag your signature & stamp, edit the date, download PDF.
+                  </p>
+                  <div className="flex gap-2 mt-4">
+                    <Button size="sm" variant="gold" onClick={() => navigate("/owner/documents/forms/blank-letter")}>
+                      Open template
+                    </Button>
+                  </div>
+                </Card>
+
                 {filteredTemplates.map(t => (
                   <Card key={t.id} className="p-5 bg-[#F7F2EA] border-[#B89555]/30">
                     <div className="flex items-start justify-between gap-3">
@@ -434,11 +455,72 @@ export default function DocumentsFormsHub() {
                     </div>
                   </Card>
                 ))}
-                {!filteredTemplates.length && (
-                  <div className="text-sm text-[#1A1A1A]/60">No templates in this category yet.</div>
-                )}
               </div>
             )}
+          </TabsContent>
+
+          {/* DOCUMENT EDITOR */}
+          <TabsContent value="documents" className="mt-4">
+            <Card className="p-6 bg-[#F7F2EA] border-[#B89555]/30">
+              <div className="flex items-start gap-4">
+                <div className="shrink-0 w-12 h-12 rounded-lg bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center">
+                  <FileEdit className="w-6 h-6 text-[#1A1A1A]" />
+                </div>
+                <div className="flex-1">
+                  <div className="font-semibold text-[#1A1A1A]">Premium Document Editor</div>
+                  <p className="text-sm text-[#1A1A1A]/70 mt-1">
+                    Full-page rich editor with templates (Offer Letter, MOU, NOC, Tenancy, Invoice, Handover…),
+                    OCR scanner, find & replace, AI prompt edit, QR codes, gradients, stamp/signature insertion.
+                  </p>
+                  <div className="flex gap-2 mt-4 flex-wrap">
+                    <Button variant="gold" onClick={() => navigate("/owner/documents/editor")}>Open Document Editor</Button>
+                    <Button variant="outline" onClick={() => setTab("templates")}>Browse Standard Templates</Button>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </TabsContent>
+
+          {/* E-SIGNATURE */}
+          <TabsContent value="esign" className="mt-4">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <Card className="p-5 bg-[#F7F2EA] border-[#B89555]/30">
+                <div className="flex items-start gap-3">
+                  <Upload className="w-5 h-5 text-[#1A1A1A]" />
+                  <div>
+                    <div className="font-semibold text-[#1A1A1A] text-sm">Upload & Send for Signature</div>
+                    <div className="text-xs text-[#1A1A1A]/70 mt-1">Upload PDF/Word/photos — auto-converted to a signable envelope.</div>
+                    <Button size="sm" variant="gold" className="mt-3" onClick={() => navigate("/owner/documents/forms/create")}>Create Envelope</Button>
+                  </div>
+                </div>
+              </Card>
+              <Card className="p-5 bg-[#F7F2EA] border-[#B89555]/30">
+                <div className="flex items-start gap-3">
+                  <PenTool className="w-5 h-5 text-[#1A1A1A]" />
+                  <div>
+                    <div className="font-semibold text-[#1A1A1A] text-sm">Signature Studio</div>
+                    <div className="text-xs text-[#1A1A1A]/70 mt-1">Draw, upload or generate your owner signature, initials and stamp.</div>
+                    <Button size="sm" variant="gold" className="mt-3" onClick={() => navigate("/owner/documents/forms/signature-studio")}>Open Studio</Button>
+                  </div>
+                </div>
+              </Card>
+              <Card className="p-5 bg-[#F7F2EA] border-[#B89555]/30">
+                <div className="flex items-start gap-3">
+                  <Scale className="w-5 h-5 text-[#1A1A1A]" />
+                  <div>
+                    <div className="font-semibold text-[#1A1A1A] text-sm">AI Contract Review</div>
+                    <div className="text-xs text-[#1A1A1A]/70 mt-1">Lawyer-grade clause-by-clause analysis of any contract.</div>
+                    <Button size="sm" variant="gold" className="mt-3" onClick={() => navigate("/owner/documents/forms/contract-review")}>Open Review</Button>
+                  </div>
+                </div>
+              </Card>
+            </div>
+            <div className="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-3">
+              <Button variant="outline" onClick={() => setTab("sent")}>Pending Signature ({buckets.sent.length})</Button>
+              <Button variant="outline" onClick={() => setTab("submitted")}>Submitted — Review ({buckets.submitted.length})</Button>
+              <Button variant="outline" onClick={() => setTab("signed")}>Signed ({buckets.signed.length})</Button>
+              <Button variant="outline" onClick={() => setTab("assets")}>Stamps & Signatures</Button>
+            </div>
           </TabsContent>
 
           <TabsContent value="drafts" className="mt-4">
