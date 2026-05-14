@@ -227,7 +227,11 @@ export default function OwnerInbox() {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => refetchThreads()}
+                  onClick={async () => {
+                    try { await supabase.functions.invoke("comm-gmail-autoconnect", { body: {} }); } catch { /* noop */ }
+                    try { await supabase.functions.invoke("comm-inbound-sync", { body: {} }); } catch { /* noop */ }
+                    refetchThreads();
+                  }}
                   disabled={threadsLoading}
                   className="border-[#B89555]/30"
                 >
