@@ -104,6 +104,16 @@ Deno.serve(async (req) => {
   "suggested_reply": "concise professional reply in same language as thread, ready to send",
   "next_step": { "type": "task" | "meeting" | "note" | "none", "title": "...", "due_in_hours": number | null, "reasoning": "short why" }
 }
+Categorization rules:
+- real_estate_lead: prospective buyer/investor enquiring about properties, viewings, or pricing.
+- real_estate_ops: developer documents requests, listings, MOU, registration, brokerage operations, system alerts (GitHub/Supabase/uptime/verification codes).
+- sales_offer: someone offering to buy something the user owns (resale, luxury closet price offers, "buyer waiting").
+- marketing: newsletters, promos, campaigns, creator programs, sales notifications from retail brands (SHEIN, Cobone, Rue La La, Reversible, Farfetch, etc).
+- finance: banking, payments, invoices, tax, VAT, payroll (Emirates NBD, ENBD, HSBC, ADCB, FAB, Mashreq, etc).
+- developer_documents: developer registration, brochures, inventory, Docusign envelopes, contract signature requests.
+- personal: personal correspondence from individuals known to the user.
+- spam: clear spam.
+- other: anything that doesn't fit.
 No prose, no markdown, JSON only.`;
 
     const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -122,32 +132,35 @@ No prose, no markdown, JSON only.`;
       }),
     });
 
-    if (!aiRes.ok) {
-      const txt = await aiRes.text();
-      return new Response(JSON.stringify({ error: "AI gateway error", status: aiRes.status, detail: txt }), {
-        status: aiRes.status === 429 || aiRes.status === 402 ? aiRes.status : 502,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+    let parsed: any = {};
+    if (aiRes.ok) {
+      const aiJson = await aiRes.json();
+      const raw = aiJson.choices?.[0]?.message?.content ?? "{}";
+      try { parsed = JSON.parse(raw); } catch { parsed = {}; }
+    } else {
+      console.warn("[comm-ai-triage] gateway error", aiRes.status);
     }
 
-    const aiJson = await aiRes.json();
-    const raw = aiJson.choices?.[0]?.message?.content ?? "{}";
-    let parsed: any = {};
-    try { parsed = JSON.parse(raw); } catch { parsed = {}; }
+    // Deterministic fallback for obvious senders, applied when AI returned
+    // nothing useful or guessed "other"/"personal".
+    const fallbackCat = ruleBasedCategory({
+      from: `${thread.contact_name ?? ""} ${thread.contact_identifier ?? ""}`,
+      subject: thread.last_message_preview ?? "",
+    });
+    let category = CATEGORIES.includes(parsed.category) ? parsed.category : "other";
+    if ((category === "other" || category === "personal") && fallbackCat) category = fallbackCat;
 
-    const category = CATEGORIES.includes(parsed.category) ? parsed.category : "other";
     const priority = ["low", "medium", "high", "urgent"].includes(parsed.priority) ? parsed.priority : "medium";
 
     const update = {
       ai_category: category,
       ai_priority: priority,
-      ai_summary: (parsed.summary ?? "").toString().slice(0, 280),
+      ai_summary: (parsed.summary ?? thread.last_message_preview ?? "").toString().slice(0, 280),
       ai_suggested_reply: (parsed.suggested_reply ?? "").toString().slice(0, 4000),
       ai_next_step: parsed.next_step ?? null,
       ai_processed_at: new Date().toISOString(),
     };
 
-    await admin.from("owner_comm_threads").update(update).eq("id", threadId);
 
     return new Response(JSON.stringify({ ok: true, ...update }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
