@@ -337,6 +337,8 @@ export interface BuildPAAOptions {
   ownerSignatureUrl?: string | null;
   ownerStampUrl?: string | null;
   clientSignatureUrl?: string | null;
+  /** Attribution shown under the signature row, e.g. "Signed by Omar on …". */
+  clientSignedAttribution?: string | null;
   hiddenFields?: string[];
   /**
    * "edit"  → show every option chip (live preview / iframe)
