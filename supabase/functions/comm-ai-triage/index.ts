@@ -161,6 +161,8 @@ No prose, no markdown, JSON only.`;
       ai_processed_at: new Date().toISOString(),
     };
 
+    await admin.from("owner_comm_threads").update(update).eq("id", threadId);
+
 
     return new Response(JSON.stringify({ ok: true, ...update }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
