@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -11,8 +11,10 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { FileText, Send, CheckCircle2, Clock, PenTool, Stamp, FileSignature, Plus, Loader2, ExternalLink, Upload, Scale, Trash2, RotateCcw, FileEdit, Sparkles, Crown } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
+import { FileText, Send, CheckCircle2, Clock, PenTool, Stamp, FileSignature, Plus, Loader2, ExternalLink, Upload, Scale, Trash2, RotateCcw, FileEdit, Sparkles, Crown, MoreVertical, Star, Pencil, Archive } from "lucide-react";
 import { toast } from "sonner";
 import { SmartFillDropzone } from "@/components/e-signature/SmartFillDropzone";
 
@@ -127,6 +129,15 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
   const [showDetails, setShowDetails] = useState(false);
   const [includeJbjBlock, setIncludeJbjBlock] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [newEnvelopeOpen, setNewEnvelopeOpen] = useState(false);
+  const [manageKind, setManageKind] = useState<"signature" | "stamp" | null>(null);
+  const sigFileRef = useRef<HTMLInputElement>(null);
+  const stampFileRef = useRef<HTMLInputElement>(null);
+
+  // Hide DB blank-letter rows from the templates grid — the studio is opened by routing.
+  const isBlankLetterKey = (k: string) => k === "jbj-blank-letter" || k === "jbj-letterhead-blank";
+  const blankLetterTemplate = templates.find(t => isBlankLetterKey(t.key)) || null;
+  const standardLetterheadName = blankLetterTemplate?.name || "Standard JBJ Letterhead";
 
   // Bucket envelopes.
   // RULE: an envelope that has a client filled in is ALWAYS a "Forms Generated"
@@ -174,7 +185,70 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
     }
   };
 
-  const filteredTemplates = templates.filter(t => cat === "all" ? true : t.category === cat);
+  // Hide blank-letter rows from the grid (the Standard Letterhead opens its own studio).
+  const filteredTemplates = templates.filter(t => !isBlankLetterKey(t.key) && (cat === "all" ? true : t.category === cat));
+
+  // ── Asset management helpers (Manage dropdown / sheet) ─────────────
+  const handleAssetUpload = async (kind: "signature" | "stamp", e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async () => {
+      try {
+        const { data: userData } = await supabase.auth.getUser();
+        const userId = userData.user?.id;
+        if (!userId) throw new Error("Not signed in");
+        const blob = await (await fetch(String(reader.result))).blob();
+        const path = `${userId}/${kind}-${Date.now()}.png`;
+        const { error: upErr } = await supabase.storage
+          .from("owner-signature-assets")
+          .upload(path, blob, { contentType: "image/png", upsert: true });
+        if (upErr) throw upErr;
+        const { data: signed } = await supabase.storage
+          .from("owner-signature-assets")
+          .createSignedUrl(path, 60 * 60 * 24 * 365);
+        const existing = kind === "signature" ? signatures : stamps;
+        const { error: insErr } = await supabase.from("owner_signature_assets" as any).insert({
+          user_id: userId, kind, label: file.name, image_url: signed?.signedUrl,
+          storage_path: path, is_default: existing.length === 0,
+        });
+        if (insErr) throw insErr;
+        toast.success(`${kind === "signature" ? "Signature" : "Stamp"} uploaded`);
+        qc.invalidateQueries({ queryKey: ["owner_signature_assets"] });
+      } catch (err: any) { toast.error(err.message || "Upload failed"); }
+    };
+    reader.readAsDataURL(file);
+    if (e.target) e.target.value = "";
+  };
+  const setAssetDefault = async (kind: "signature" | "stamp", id: string) => {
+    await supabase.from("owner_signature_assets" as any).update({ is_default: false }).eq("kind", kind);
+    await supabase.from("owner_signature_assets" as any).update({ is_default: true }).eq("id", id);
+    qc.invalidateQueries({ queryKey: ["owner_signature_assets"] });
+    toast.success("Default updated");
+  };
+  const renameAsset = async (id: string) => {
+    const next = window.prompt("New label");
+    if (!next) return;
+    await supabase.from("owner_signature_assets" as any).update({ label: next }).eq("id", id);
+    qc.invalidateQueries({ queryKey: ["owner_signature_assets"] });
+  };
+  const deleteAsset = async (id: string) => {
+    if (!confirm("Delete this asset?")) return;
+    await supabase.from("owner_signature_assets" as any).delete().eq("id", id);
+    qc.invalidateQueries({ queryKey: ["owner_signature_assets"] });
+    toast.success("Deleted");
+  };
+
+  // Open the right surface for a chosen template (studio for blank, dialog for the rest).
+  const openTemplate = (t: EsignTemplate) => {
+    if (isBlankLetterKey(t.key)) {
+      navigate("/owner/documents/forms/blank-letter");
+      return;
+    }
+    setPicker(t);
+    setClient({ name: "", email: "", phone: "" });
+    setNewEnvelopeOpen(false);
+  };
 
   // Bulk actions on the visible bucket
   const visibleIds = (() => {
@@ -349,7 +423,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
             <h1 className="text-2xl font-semibold text-[#1A1A1A]">Documents & Forms</h1>
             <p className="text-sm text-[#1A1A1A]/70 mt-1">Unified hub — templates, document editor, e-signature, agreements, signatures & stamps. All in one place.</p>
           </div>
-          <Button variant="gold" onClick={() => navigate("/owner/documents/forms/create")}>
+          <Button variant="gold" onClick={() => setNewEnvelopeOpen(true)}>
             <Plus className="w-4 h-4 mr-2" /> New Envelope
           </Button>
         </header>
@@ -420,23 +494,25 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
             {tplLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {/* Standard JBJ Letterhead — always first, opens the branded letter studio */}
-                <Card className="p-5 bg-[#F7F2EA] border-[#B89555]/30">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/60">JBJ Standard</div>
-                      <div className="font-semibold text-[#1A1A1A] mt-1">Standard JBJ Letterhead</div>
+                {(cat === "all" || cat === "leasing" || cat === "selling") && (
+                  <Card className="p-5 bg-[#F7F2EA] border-[#B89555]/30">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/60">JBJ Standard</div>
+                        <div className="font-semibold text-[#1A1A1A] mt-1">{standardLetterheadName}</div>
+                      </div>
+                      <span className="text-[9px] px-2 py-0.5 border border-[#B89555]/40 rounded text-[#1A1A1A]/70">SYSTEM</span>
                     </div>
-                    <span className="text-[9px] px-2 py-0.5 border border-[#B89555]/40 rounded text-[#1A1A1A]/70">SYSTEM</span>
-                  </div>
-                  <p className="text-xs text-[#1A1A1A]/70 mt-2">
-                    A4 branded letterhead — type your letter, drag your signature & stamp, edit the date, download PDF.
-                  </p>
-                  <div className="flex gap-2 mt-4">
-                    <Button size="sm" variant="gold" onClick={() => navigate("/owner/documents/forms/blank-letter")}>
-                      Open template
-                    </Button>
-                  </div>
-                </Card>
+                    <p className="text-xs text-[#1A1A1A]/70 mt-2">
+                      Branded A4 letter — type, drag your signature & stamp, download PDF.
+                    </p>
+                    <div className="flex gap-2 mt-4">
+                      <Button size="sm" variant="gold" onClick={() => navigate("/owner/documents/forms/blank-letter")}>
+                        Use template
+                      </Button>
+                    </div>
+                  </Card>
+                )}
 
                 {filteredTemplates.map(t => (
                   <Card key={t.id} className="p-5 bg-[#F7F2EA] border-[#B89555]/30">
@@ -448,10 +524,10 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                       {t.is_system && <span className="text-[9px] px-2 py-0.5 border border-[#B89555]/40 rounded text-[#1A1A1A]/70">SYSTEM</span>}
                     </div>
                     <p className="text-xs text-[#1A1A1A]/70 mt-2">
-                      {Array.isArray(t.field_schema) ? t.field_schema.length : 0} pre-placed fields · client signs first, you countersign
+                      {(t as any).description || "Pre-built JBJ template — opens with your client details and brand."}
                     </p>
                     <div className="flex gap-2 mt-4">
-                      <Button size="sm" variant="gold" onClick={() => { setPicker(t); setClient({ name: "", email: "", phone: "" }); }}>
+                      <Button size="sm" variant="gold" onClick={() => openTemplate(t)}>
                         Use template
                       </Button>
                     </div>
@@ -483,39 +559,28 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
             </Card>
           </TabsContent>
 
-          {/* E-SIGNATURE */}
+          {/* E-SIGNATURE — three uniform cards */}
           <TabsContent value="esign" className="mt-4">
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Card className="p-5 bg-[#F7F2EA] border-[#B89555]/30">
-                <div className="flex items-start gap-3">
-                  <Upload className="w-5 h-5 text-[#1A1A1A]" />
-                  <div>
-                    <div className="font-semibold text-[#1A1A1A] text-sm">Upload & Send for Signature</div>
-                    <div className="text-xs text-[#1A1A1A]/70 mt-1">Upload PDF/Word/photos — auto-converted to a signable envelope.</div>
-                    <Button size="sm" variant="gold" className="mt-3" onClick={() => navigate("/owner/documents/forms/create")}>Create Envelope</Button>
-                  </div>
-                </div>
-              </Card>
-              <Card className="p-5 bg-[#F7F2EA] border-[#B89555]/30">
-                <div className="flex items-start gap-3">
-                  <PenTool className="w-5 h-5 text-[#1A1A1A]" />
-                  <div>
-                    <div className="font-semibold text-[#1A1A1A] text-sm">Signature Studio</div>
-                    <div className="text-xs text-[#1A1A1A]/70 mt-1">Draw, upload or generate your owner signature, initials and stamp.</div>
-                    <Button size="sm" variant="gold" className="mt-3" onClick={() => navigate("/owner/documents/forms/signature-studio")}>Open Studio</Button>
-                  </div>
-                </div>
-              </Card>
-              <Card className="p-5 bg-[#F7F2EA] border-[#B89555]/30">
-                <div className="flex items-start gap-3">
-                  <Scale className="w-5 h-5 text-[#1A1A1A]" />
-                  <div>
-                    <div className="font-semibold text-[#1A1A1A] text-sm">AI Contract Review</div>
-                    <div className="text-xs text-[#1A1A1A]/70 mt-1">Lawyer-grade clause-by-clause analysis of any contract.</div>
-                    <Button size="sm" variant="gold" className="mt-3" onClick={() => navigate("/owner/documents/forms/contract-review")}>Open Review</Button>
-                  </div>
-                </div>
-              </Card>
+            <div className="grid md:grid-cols-3 gap-4 items-stretch">
+              {[
+                { icon: Upload, title: "Upload & Send for Signature", desc: "Upload PDF/Word/photos — auto-converted to a signable envelope.", cta: "Create Envelope", onClick: () => navigate("/owner/documents/forms/create") },
+                { icon: PenTool, title: "Signature Studio", desc: "Draw, upload or generate your owner signature, initials and stamp.", cta: "Open Studio", onClick: () => navigate("/owner/documents/forms/signature-studio") },
+                { icon: Scale, title: "AI Contract Review", desc: "Lawyer-grade clause-by-clause analysis of any contract.", cta: "Open Review", onClick: () => navigate("/owner/documents/forms/contract-review") },
+              ].map((c) => {
+                const Icon = c.icon;
+                return (
+                  <Card key={c.title} className="p-5 bg-[#F7F2EA] border-[#B89555]/30 flex flex-col h-full">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-10 h-10 rounded-lg bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center">
+                        <Icon className="w-5 h-5 text-[#1A1A1A]" />
+                      </div>
+                      <div className="font-semibold text-[#1A1A1A] text-sm leading-tight">{c.title}</div>
+                    </div>
+                    <p className="text-xs text-[#1A1A1A]/70 flex-1">{c.desc}</p>
+                    <Button size="sm" variant="gold" className="mt-4 self-start" onClick={c.onClick}>{c.cta}</Button>
+                  </Card>
+                );
+              })}
             </div>
             <div className="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-3">
               <Button variant="outline" onClick={() => setTab("sent")}>Pending Signature ({buckets.sent.length})</Button>
