@@ -248,10 +248,14 @@ export default function EnvelopeDetail() {
       landlord_signature_name: baseVals.landlord_signature_name || signedClient.name || "",
       landlord_signature_date: baseVals.landlord_signature_date || signedDate,
     } : baseVals;
+    const signedVia = (signedClient as any)?.metadata?.signed_via;
+    const attribution = signedClient
+      ? `Signed by ${signedClient.name || "client"}${signedClient.signed_at ? ` on ${format(new Date(signedClient.signed_at), "MMM d, yyyy 'at' h:mm a")}` : ""}${signedVia === "email_reply" ? " (received via email reply)" : ""}.`
+      : null;
     return renderTemplateHtml(
       envelope.template_key,
       { ...vals, doc_number: vals.doc_number || docNumber },
-      { chrome, ownerSignatureUrl, ownerStampUrl, clientSignatureUrl: signedClient?.signature_data || null, hiddenFields, renderMode: editing ? "edit" : "final", category: (envelope.category as any) || "leasing" },
+      { chrome, ownerSignatureUrl, ownerStampUrl, clientSignatureUrl: signedClient?.signature_data || null, clientSignedAttribution: attribution, hiddenFields, renderMode: editing ? "edit" : "final", category: (envelope.category as any) || "leasing" },
     );
   }, [envelope?.template_key, envelope?.template_field_values, envelope?.esign_recipients, envelope?.category, editing, editValues, docNumber, chrome, ownerSignatureUrl, ownerStampUrl, hiddenFields]);
 
