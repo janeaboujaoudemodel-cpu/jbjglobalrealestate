@@ -216,7 +216,10 @@ export function SendViaEmailDialog({
   };
 
   const cleanCcs = useMemo(
-    () => Array.from(new Set(ccs.filter(isValidEmail).filter((c) => !tos.includes(c)))),
+    () => {
+      const cleanTos = dedupeEmails(tos);
+      return dedupeEmails(ccs).filter((c) => !cleanTos.includes(c));
+    },
     [ccs, tos],
   );
 
@@ -357,19 +360,24 @@ export function SendViaEmailDialog({
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Not signed in");
+      const { data: existing } = await (supabase as any)
+        .from("esign_email_template_defaults")
+        .select("subject, body, body_html, signature_preset_id, default_to_emails, default_cc_emails")
+        .eq("user_id", user.id)
+        .eq("template_key", templateKey || "__global__")
+        .maybeSingle();
+      const nextBody = bodyHtml.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim() || " ";
       const payload: Record<string, any> = {
         user_id: user.id,
         template_key: templateKey || "__global__",
-        subject: normalizeSubject(field === "subject" ? subject : "", attachmentName || "Document"),
-        body: bodyHtml.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim() || " ",
-        body_html: stripSignature(bodyHtml),
+        subject: field === "subject" ? normalizeSubject(subject, attachmentName || "Document") : (existing?.subject || normalizeSubject(defaultSubject, attachmentName || "Document")),
+        body: field === "body" ? nextBody : (existing?.body || nextBody),
+        body_html: field === "body" ? stripSignature(bodyHtml) : (existing?.body_html || stripSignature(bodyHtml)),
+        signature_preset_id: field === "signature" ? (selectedSigId || null) : (existing?.signature_preset_id || null),
+        default_to_emails: field === "recipients" ? dedupeEmails(tos) : (existing?.default_to_emails || []),
+        default_cc_emails: field === "recipients" ? cleanCcs : (existing?.default_cc_emails || [DEFAULT_CC]),
         approved_at: new Date().toISOString(),
       };
-      if (field === "recipients") {
-        payload.default_to_emails = dedupeEmails(tos);
-        payload.default_cc_emails = cleanCcs;
-      }
-      if (field === "signature") payload.signature_preset_id = selectedSigId || null;
       const { error } = await (supabase as any)
         .from("esign_email_template_defaults")
         .upsert(payload, { onConflict: "user_id,template_key" });
