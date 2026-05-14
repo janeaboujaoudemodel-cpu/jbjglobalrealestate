@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   ArrowLeft, Download, Bell, Clock, CheckCircle2, XCircle, Eye, Send, FileSignature, FileText,
   User, Mail, Phone, Calendar, Globe, Shield, Loader2, Link as LinkIcon, Printer,
-  ExternalLink, MessageCircle, Edit3, Save, X, Plus, Upload as UploadIcon,
+  ExternalLink, MessageCircle, Edit3, Save, X, Plus,
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
@@ -32,16 +32,14 @@ import PAAListingDraftCard from "@/components/e-signature/PAAListingDraftCard";
 import PAAAICopilotDrawer from "@/components/e-signature/PAAAICopilotDrawer";
 import { Lock, Sparkles } from "lucide-react";
 
-type EnvelopeStatus = 'draft' | 'sent' | 'viewed' | 'partially_signed' | 'completed' | 'declined' | 'expired' | 'voided' | 'awaiting_signed_return' | 'pending_owner_review';
-type RecipientStatus = 'pending' | 'sent' | 'delivered' | 'viewed' | 'signed' | 'declined' | 'awaiting_signed_return';
+type EnvelopeStatus = 'draft' | 'sent' | 'viewed' | 'partially_signed' | 'completed' | 'declined' | 'expired' | 'voided';
+type RecipientStatus = 'pending' | 'sent' | 'delivered' | 'viewed' | 'signed' | 'declined';
 
 const statusConfig: Record<EnvelopeStatus, { label: string; color: string; icon: React.ReactNode }> = {
   draft: { label: "Draft", color: "bg-[#F7F2EA] text-[#1A1A1A]/80 border border-[#B89555]/40", icon: <FileSignature className="w-4 h-4" /> },
   sent: { label: "Sent", color: "bg-blue-50 text-blue-700 border border-blue-200", icon: <Send className="w-4 h-4" /> },
   viewed: { label: "Viewed", color: "bg-amber-50 text-amber-700 border border-amber-200", icon: <Eye className="w-4 h-4" /> },
   partially_signed: { label: "Partially Signed", color: "bg-orange-50 text-orange-700 border border-orange-200", icon: <Clock className="w-4 h-4" /> },
-  awaiting_signed_return: { label: "Submitted — Pending Review", color: "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]", icon: <Clock className="w-4 h-4" /> },
-  pending_owner_review: { label: "Pending Review", color: "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]", icon: <Clock className="w-4 h-4" /> },
   completed: { label: "Completed", color: "bg-emerald-50 text-emerald-700 border border-emerald-200", icon: <CheckCircle2 className="w-4 h-4" /> },
   declined: { label: "Declined", color: "bg-red-50 text-red-700 border border-red-200", icon: <XCircle className="w-4 h-4" /> },
   expired: { label: "Expired", color: "bg-[#F7F2EA] text-[#1A1A1A]/70 border border-[#B89555]/30", icon: <Clock className="w-4 h-4" /> },
@@ -53,7 +51,6 @@ const recipientStatusConfig: Record<RecipientStatus, { label: string; color: str
   sent: { label: "Sent", color: "bg-blue-50 text-blue-700 border border-blue-200" },
   delivered: { label: "Delivered", color: "bg-blue-50 text-blue-700 border border-blue-200" },
   viewed: { label: "Viewed", color: "bg-amber-50 text-amber-700 border border-amber-200" },
-  awaiting_signed_return: { label: "Submitted — Pending Review", color: "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]" },
   signed: { label: "Signed", color: "bg-emerald-50 text-emerald-700 border border-emerald-200" },
   declined: { label: "Declined", color: "bg-red-50 text-red-700 border border-red-200" },
 };
@@ -76,72 +73,7 @@ export default function EnvelopeDetail() {
   const [sendOpen, setSendOpen] = useState(false);
   const [emailDialogOpen, setEmailDialogOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
-  const [activityOpen, setActivityOpen] = useState(false);
   const [hiddenFields, setHiddenFields] = useState<string[]>([]);
-  const [uploadingSigned, setUploadingSigned] = useState(false);
-  const signedUploadInputRef = useMemo(() => ({ current: null as HTMLInputElement | null }), []);
-
-  const handleUploadSignedPdf = async (file: File) => {
-    if (!envelope) return;
-    if (!file.type.includes("pdf") && !file.name.toLowerCase().endsWith(".pdf")) {
-      toast.error("Please choose a PDF file");
-      return;
-    }
-    if (file.size > 25 * 1024 * 1024) {
-      toast.error("File too large (max 25 MB)");
-      return;
-    }
-    setUploadingSigned(true);
-    try {
-      const path = `${envelope.id}/${Date.now()}-signed.pdf`;
-      const { error: upErr } = await supabase.storage
-        .from("signed-contracts")
-        .upload(path, file, { upsert: false, contentType: "application/pdf" });
-      if (upErr) throw upErr;
-
-      // Create a long-lived signed URL (1 year) for downstream display.
-      const { data: signedUrlData, error: urlErr } = await supabase.storage
-        .from("signed-contracts")
-        .createSignedUrl(path, 60 * 60 * 24 * 365);
-      if (urlErr) throw urlErr;
-      const signedUrl = signedUrlData?.signedUrl;
-      if (!signedUrl) throw new Error("Could not create signed URL");
-
-      const nowIso = new Date().toISOString();
-      const { error: updErr } = await supabase
-        .from("esign_envelopes")
-        .update({
-          signed_document_url: signedUrl,
-          status: "completed",
-          completed_at: nowIso,
-        })
-        .eq("id", envelope.id);
-      if (updErr) throw updErr;
-
-      // Insert a signed-document record so the existing "Signed" banner picks it up.
-      await supabase.from("esign_signed_documents").insert({
-        envelope_id: envelope.id,
-        document_url: signedUrl,
-        document_filename: file.name || `signed-${envelope.id}.pdf`,
-      } as any);
-
-      // Best-effort audit entry.
-      await supabase.from("esign_audit_log").insert({
-        envelope_id: envelope.id,
-        action: "manually_completed",
-        description: "Owner uploaded signed PDF",
-      } as any);
-
-      toast.success("Signed PDF uploaded — envelope marked Completed");
-      refetch();
-      qc.invalidateQueries({ queryKey: ["esign-envelopes"] });
-    } catch (err: any) {
-      console.error("upload signed pdf failed", err);
-      toast.error(err?.message || "Failed to upload signed PDF");
-    } finally {
-      setUploadingSigned(false);
-    }
-  };
   // Tracks fields that were just restored (un-hidden) so we can highlight them
   // in the editor and the live preview until the user dismisses or re-saves.
   const [recentlyRestoredFields, setRecentlyRestoredFields] = useState<string[]>([]);
@@ -165,13 +97,14 @@ export default function EnvelopeDetail() {
     enabled: !!id,
   });
 
-  // CRITICAL: Agreements only receive owner signature/stamp after completion.
-  // Standard letterhead is different: it is the owner's own letter, so saved
-  // stamp/signature assets must render while the draft is still being reviewed.
+  // CRITICAL: Never auto-stamp the JBJ owner signature/stamp onto an
+  // unsigned/draft document. They only render once the envelope is fully
+  // completed (i.e. the client has actually signed). Same rule applies to the
+  // landlord/client side — we never autofill the printed name or date; that
+  // must come exclusively from the recipient's own signing action.
   const isFullySigned = envelope?.status === "completed";
-  const isOwnerLetterhead = ["jbj-blank-letter", "jbj-letterhead-blank", "jbj-letterhead-leasing"].includes(String(envelope?.template_key || ""));
-  const ownerSignatureUrl = isFullySigned || isOwnerLetterhead ? ownerSignatureUrlRaw : null;
-  const ownerStampUrl = isFullySigned || isOwnerLetterhead ? ownerStampUrlRaw : null;
+  const ownerSignatureUrl = isFullySigned ? ownerSignatureUrlRaw : null;
+  const ownerStampUrl = isFullySigned ? ownerStampUrlRaw : null;
 
   // Hydrate edit + CC + chrome state when envelope loads
   useEffect(() => {
@@ -293,20 +226,9 @@ export default function EnvelopeDetail() {
     setEditValues((prev) => ({ ...prev, ...updates }));
   };
 
-  // Strip Unicode bidi-control characters that can flip an entire run of
-  // text RTL (LRM, RLM, LRE, RLE, PDF, LRO, RLO, LRI, RLI, FSI, PDI). OCR /
-  // smart-fill of uploaded contracts often injects these and they are
-  // invisible in field inputs but visibly mirror the rendered preview.
-  const stripBidi = (s: string) => (s || "").replace(/[\u200E\u200F\u202A-\u202E\u2066-\u2069]/g, "");
-  const sanitizeValues = (v: Record<string, any>): Record<string, string> => {
-    const out: Record<string, string> = {};
-    for (const k of Object.keys(v || {})) out[k] = stripBidi(String(v[k] ?? ""));
-    return out;
-  };
-
   const previewHtml = useMemo(() => {
     if (!envelope?.template_key) return null;
-    const baseVals = sanitizeValues(editing ? editValues : ((envelope.template_field_values as any) || {}));
+    const baseVals = editing ? editValues : ((envelope.template_field_values as any) || {});
     // Only render the captured signature pad image when the recipient has truly
     // signed. Once signed, mirror the signer name + signing date into the
     // rendered letterhead so preview, print, export, and download all match.
@@ -317,7 +239,7 @@ export default function EnvelopeDetail() {
     const signedDate = signedClient?.signed_at ? format(new Date(signedClient.signed_at), "dd/MM/yyyy") : "";
     const vals = signedClient ? {
       ...baseVals,
-      landlord_signature_name: baseVals.landlord_signature_name || stripBidi(signedClient.name || ""),
+      landlord_signature_name: baseVals.landlord_signature_name || signedClient.name || "",
       landlord_signature_date: baseVals.landlord_signature_date || signedDate,
     } : baseVals;
     return renderTemplateHtml(
@@ -431,22 +353,14 @@ export default function EnvelopeDetail() {
   const handleDownloadCurrentPdf = async (filename?: string | null) => {
     try {
       toast.loading("Preparing current PDF…", { id: "current-pdf" });
-      // Compose a filename that always includes both the document number AND
-      // the landlord/client name so downloaded PDFs are immediately
-      // identifiable in the Downloads folder.
-      const safe = (s?: string | null) => (s || "").replace(/[^a-zA-Z0-9_-]+/g, "-").replace(/^-+|-+$/g, "");
-      const vals = (editing ? editValues : ((envelope?.template_field_values as any) || {})) as Record<string, string>;
-      const landlord = safe(vals.landlord_name || clientRec?.name || "");
-      const composed = filename
-        || [safe(docNumber || envelope?.name || "JBJ-Document"), landlord].filter(Boolean).join("_") + ".pdf";
       const blob = await renderCurrentPreviewPdf();
       if (blob) {
-        savePdfBlob(blob, composed);
+        savePdfBlob(blob, filename || envelope?.document_filename || `${docNumber || "JBJ-Document"}.pdf`);
         toast.success("Current preview downloaded", { id: "current-pdf" });
         return;
       }
       if (envelope?.document_url) {
-        await handleDownload(bustUrl(envelope.document_url), composed);
+        await handleDownload(bustUrl(envelope.document_url), filename || envelope.document_filename);
         toast.success("PDF downloaded", { id: "current-pdf" });
         return;
       }
@@ -823,22 +737,8 @@ export default function EnvelopeDetail() {
     return (
       <div className="min-h-screen bg-[#FDFBF7] p-6">
         <div className="max-w-6xl mx-auto space-y-6">
-          <div className="flex items-center gap-3">
-            <Skeleton className="h-10 w-10 rounded-full" />
-            <Skeleton className="h-8 w-64" />
-            <Skeleton className="h-6 w-20" />
-          </div>
-          <Skeleton className="h-12 w-full" />
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <Skeleton className="lg:col-span-2 h-[600px] w-full" />
-            <div className="space-y-4">
-              <Skeleton className="h-40 w-full" />
-              <Skeleton className="h-40 w-full" />
-            </div>
-          </div>
-          <div className="flex items-center gap-2 text-[#1A1A1A]/60 text-sm justify-center pt-2">
-            <Loader2 className="w-4 h-4 animate-spin" /> Loading document…
-          </div>
+          <Skeleton className="h-12 w-48" />
+          <Skeleton className="h-[600px] w-full" />
         </div>
       </div>
     );
@@ -864,18 +764,21 @@ export default function EnvelopeDetail() {
   const clientRec = (envelope.esign_recipients || []).find((r: any) => r.metadata?.role === "client") || envelope.esign_recipients?.[0];
   const isDraft = envelope.status === "draft";
   const previewSrcDoc = previewHtml
-    ? `<!doctype html><html dir="ltr" lang="en"><head><meta charset="utf-8"><style>
-        html,body{margin:0;padding:0;background:#fff;direction:ltr !important;unicode-bidi:isolate !important;writing-mode:horizontal-tb !important;transform:none !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-        body *{writing-mode:horizontal-tb;}
-        body > div[style*="min-height:1123px"]{width:794px !important;min-height:1123px !important;height:1123px !important;margin:0 auto !important;box-sizing:border-box !important;overflow:hidden !important;}
-        body, html { overflow: hidden; }
+    ? `<!doctype html><html><head><meta charset="utf-8"><style>
+        html,body{margin:0;padding:0;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+        /* Preview-only: collapse the A4 min-height so there's no blank gap below the footer.
+           Export path uses a separate fixed-height container in renderHtmlToPdfBlob,
+           so the PDF stays pinned to A4. */
+        body > div[style*="min-height:1123px"]{min-height:auto !important;}
+        body > div[style*="min-height:1123px"] > div[style*="margin-top:auto"],
+        body > div[style*="min-height:1123px"] > div > div[style*="margin-top:auto"]{margin-top:18px !important;}
         [data-field-key]{position:relative;cursor:text;transition:background .15s,outline .15s;border-radius:4px;}
         [data-field-key]:hover{background:#FBF6EC;outline:1px dashed #B89555;outline-offset:2px;}
         [data-chip-key]{cursor:pointer;border-radius:999px;transition:background .15s;}
         [data-chip-key]:hover{background:#FBF6EC;}
         .jbj-x{position:absolute;top:-9px;right:-9px;width:18px;height:18px;border-radius:999px;background:#FDFBF7;border:1px solid #B89555;color:#1A1A1A;font-size:11px;line-height:16px;text-align:center;cursor:pointer;display:none;font-family:Inter,Arial,sans-serif;font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08);user-select:none;}
         [data-field-key]:hover > .jbj-x{display:block;}
-      </style></head><body dir="ltr">${previewHtml}<script>(function(){
+      </style></head><body>${previewHtml}<script>(function(){
         var EDITABLE=${editing ? "true" : "false"};
         // Inject hover X buttons on each editable field block.
         document.querySelectorAll('[data-field-key]').forEach(function(el){
@@ -909,7 +812,7 @@ export default function EnvelopeDetail() {
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] p-6">
-      <div className="w-full max-w-[1600px] mx-auto space-y-6">
+      <div className="max-w-6xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div className="flex items-start gap-3 min-w-0">
@@ -969,34 +872,6 @@ export default function EnvelopeDetail() {
                 <Send className="w-4 h-4 mr-2" />
                 Send for signature
               </Button>
-            )}
-            {envelope.status !== "completed" && envelope.status !== "voided" && (
-              <>
-                <input
-                  ref={(el) => { signedUploadInputRef.current = el; }}
-                  type="file"
-                  accept="application/pdf,.pdf"
-                  className="hidden"
-                  onChange={async (e) => {
-                    const f = e.target.files?.[0];
-                    e.currentTarget.value = "";
-                    if (f) await handleUploadSignedPdf(f);
-                  }}
-                />
-                <Button
-                  variant="outline"
-                  onClick={() => signedUploadInputRef.current?.click()}
-                  disabled={uploadingSigned}
-                  title="Upload the counter-signed PDF returned by the client"
-                >
-                  {uploadingSigned ? (
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  ) : (
-                    <UploadIcon className="w-4 h-4 mr-2" />
-                  )}
-                  Upload signed PDF
-                </Button>
-              </>
             )}
             <Button variant="outline" onClick={async () => {
               if (!(await ensureSavedBeforeDownload())) return;
@@ -1068,48 +943,9 @@ export default function EnvelopeDetail() {
           </CardContent>
         </Card>
 
-        <Card className="bg-[#F7F2EA] border-[#B89555]/30">
-          <CardContent className="p-3 flex items-center gap-2 flex-wrap">
-            <Button variant="outline" size="sm" onClick={() => setShowStudio((s) => !s)}>
-              {showStudio ? "Hide" : "Customize"} header &amp; footer
-            </Button>
-            {showStudio && (
-              <Button variant="gold" size="sm" onClick={handleSaveEdits} disabled={regenerate.isPending}>
-                {regenerate.isPending ? <Loader2 className="w-3.5 h-3.5 mr-1 animate-spin" /> : <Save className="w-3.5 h-3.5 mr-1" />}
-                Apply chrome &amp; re-render
-              </Button>
-            )}
-            <Button type="button" variant="outline" size="sm" className="ml-auto" onClick={() => setActivityOpen((v) => !v)}>
-              <Shield className="w-4 h-4 mr-2" /> {activityOpen ? "Hide" : "Activity log"}
-            </Button>
-          </CardContent>
-        </Card>
-        {showStudio && <TemplateChromeStudio value={chrome} onChange={setChrome} />}
-        {activityOpen && (
-          <Card className="bg-[#F7F2EA] border-[#B89555]/30">
-            <CardContent className="p-4 grid md:grid-cols-2 gap-3">
-              {auditLogs.map((log: any) => (
-                <div key={log.id} className="flex items-start gap-3 rounded-lg bg-white border border-[#B89555]/20 p-3">
-                  <div className="w-7 h-7 rounded-full bg-[#FDFBF7] border border-[#B89555]/30 flex items-center justify-center shrink-0">
-                    <Clock className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm text-[#1A1A1A]">{log.description}</p>
-                    <div className="flex items-center gap-3 text-xs text-[#1A1A1A]/60 mt-0.5 flex-wrap">
-                      <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{format(new Date(log.created_at), "MMM d, yyyy 'at' h:mm a")}</span>
-                      {log.ip_address && <span className="flex items-center gap-1"><Globe className="w-3 h-3" />{log.ip_address}</span>}
-                    </div>
-                  </div>
-                </div>
-              ))}
-              {!auditLogs.length && <p className="text-sm text-[#1A1A1A]/60 text-center py-4 md:col-span-2">No activity yet</p>}
-            </CardContent>
-          </Card>
-        )}
-
-        <div className="grid grid-cols-1 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Document preview */}
-          <Card className="bg-white border-[#B89555]/30 overflow-hidden">
+          <Card className="lg:col-span-2 bg-white border-[#B89555]/30 overflow-hidden">
             <CardHeader className="bg-[#F7F2EA] border-b border-[#B89555]/30 py-3">
               <CardTitle className="text-sm flex items-center gap-2 text-[#1A1A1A]">
                 <FileText className="w-4 h-4" /> {editing ? "Live preview (unsaved edits)" : "Document"}
@@ -1120,23 +956,196 @@ export default function EnvelopeDetail() {
                 <iframe
                   title="Document preview"
                   srcDoc={previewSrcDoc}
-                  className="w-full bg-white block"
-                  style={{ aspectRatio: "794 / 1123", height: "auto", minHeight: 0, border: 0, display: "block" }}
-                  scrolling="no"
+                  className="w-full bg-white"
+                  style={{ height: "min(1180px, calc(100vh - 200px))", border: 0 }}
+                  onLoad={(e) => {
+                    // Shrink iframe height to actual content so we don't get a
+                    // huge empty area beneath the footer.
+                    try {
+                      const f = e.currentTarget as HTMLIFrameElement;
+                      const doc = f.contentDocument;
+                      if (!doc) return;
+                      const h = Math.max(
+                        doc.documentElement.scrollHeight,
+                        doc.body.scrollHeight,
+                      );
+                      if (h > 200) f.style.height = `${h + 24}px`;
+                    } catch {}
+                  }}
                 />
               ) : envelope.document_url ? (
                 <iframe
                   title="Document PDF"
-                  src={`${maybeProxyStorageUrl(signedDoc?.document_url || envelope.document_url, { disposition: "inline", filename: signedDoc?.document_filename || envelope.document_filename })}${(signedDoc?.document_url || envelope.document_url).includes("?") ? "&" : "?"}v=${encodeURIComponent(envelope.updated_at || envelope.created_at || "")}#toolbar=0&navpanes=0&view=FitH`}
+                  src={`${maybeProxyStorageUrl(signedDoc?.document_url || envelope.document_url, { disposition: "inline", filename: signedDoc?.document_filename || envelope.document_filename })}${(signedDoc?.document_url || envelope.document_url).includes("?") ? "&" : "?"}v=${encodeURIComponent(envelope.updated_at || envelope.created_at || "")}`}
                   className="w-full bg-white"
-                  style={{ height: "1100px", border: 0, transform: "none", direction: "ltr" }}
+                  style={{ height: "1100px", border: 0 }}
                 />
               ) : (
                 <div className="p-12 text-center text-[#1A1A1A]/70">No document</div>
               )}
             </CardContent>
           </Card>
+
+          {/* Sidebar */}
+          <div className="space-y-6">
+            {/* Recipients + CCs */}
+            <Card className="bg-[#F7F2EA] border-[#B89555]/30">
+              <CardHeader className="py-3">
+                <CardTitle className="text-sm flex items-center gap-2 text-[#1A1A1A]">
+                  <User className="w-4 h-4" /> Recipients & CCs
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {(envelope.esign_recipients || []).map((recipient: any) => {
+                  const rConfig = recipientStatusConfig[recipient.status as RecipientStatus];
+                  const canRemind = ["pending", "sent", "delivered", "viewed"].includes(recipient.status)
+                    && ["sent", "viewed", "partially_signed"].includes(envelope.status);
+                  const isReminding = remindingId === recipient.id;
+                  return (
+                    <div key={recipient.id} className="rounded-lg bg-white border border-[#B89555]/20 p-3">
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="min-w-0">
+                          <div className="font-medium text-[#1A1A1A] text-sm truncate">{recipient.name}</div>
+                          <div className="text-xs text-[#1A1A1A]/70 truncate flex items-center gap-1">
+                            <Mail className="w-3 h-3" /> {recipient.email}
+                          </div>
+                          {recipient.phone && (
+                            <div className="text-xs text-[#1A1A1A]/70 truncate flex items-center gap-1">
+                              <Phone className="w-3 h-3" /> {recipient.phone}
+                            </div>
+                          )}
+                          {recipient.signed_at && (
+                            <div className="text-xs text-emerald-700 mt-1">✓ Signed {format(new Date(recipient.signed_at), "MMM d, h:mm a")}</div>
+                          )}
+                        </div>
+                        <Badge className={rConfig?.color}>{rConfig?.label}</Badge>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5 mt-2">
+                        {recipient.signing_token && (
+                          <>
+                            <Button size="sm" variant="outline" className="h-7 text-[11px]"
+                              onClick={async () => {
+                                const url = buildSigningUrl(recipient.signing_token);
+                                try { await navigator.clipboard.writeText(url); toast.success("Signing link copied"); }
+                                catch { window.prompt("Copy:", url); }
+                              }}>
+                              <LinkIcon className="w-3 h-3 mr-1" /> Copy link
+                            </Button>
+                            <Button size="sm" variant="outline" className="h-7 text-[11px]" onClick={() => handleWhatsApp(recipient)}>
+                              <MessageCircle className="w-3 h-3 mr-1" /> WhatsApp
+                            </Button>
+                            <Button size="sm" variant="outline" className="h-7 text-[11px]" onClick={() => handleQuickEmail(recipient)} disabled={!recipient.email}>
+                              <Mail className="w-3 h-3 mr-1" /> Email
+                            </Button>
+                          </>
+                        )}
+                        {canRemind && (
+                          <Button size="sm" variant="outline" className="h-7 text-[11px]" disabled={remindingId !== null} onClick={() => sendReminder(recipient.id)}>
+                            {isReminding ? <Loader2 className="w-3 h-3 animate-spin" /> : <Bell className="w-3 h-3 mr-1" />}
+                            Remind
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+
+                {/* CC manager */}
+                <div className="border-t border-[#B89555]/30 pt-3">
+                  <Label className="text-[10px] uppercase tracking-[0.16em] text-[#1A1A1A]/70">CC on send</Label>
+                  <div className="flex flex-wrap gap-1.5 mt-2">
+                    {ccs.map((e) => (
+                      <span key={e} className="inline-flex items-center gap-1 text-[11px] bg-white border border-[#B89555]/30 rounded px-2 py-0.5 text-[#1A1A1A]">
+                        {e}
+                        <button type="button" onClick={() => setCcs((prev) => prev.filter((x) => x !== e))} aria-label={`Remove ${e}`}>
+                          <X className="w-3 h-3" />
+                        </button>
+                      </span>
+                    ))}
+                    {!ccs.length && <span className="text-[11px] text-[#1A1A1A]/60">None</span>}
+                  </div>
+                  <div className="flex gap-2 mt-2">
+                    <Input value={ccInput} onChange={(e) => setCcInput(e.target.value)} placeholder="cc@example.com"
+                      onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addCc(); } }} className="h-8 text-xs" />
+                    <Button size="sm" variant="outline" onClick={() => addCc()}><Plus className="w-3 h-3" /></Button>
+                  </div>
+                  <Button size="sm" variant="ghost" className="text-[11px] mt-1 h-7 px-2"
+                    onClick={async () => {
+                      const { data } = await supabase.auth.getUser();
+                      if (data.user?.email) addCc(data.user.email);
+                    }}>
+                    + Add me as CC
+                  </Button>
+                  <Textarea value={bulkCcs} onChange={(e) => setBulkCcs(e.target.value)} placeholder="Bulk paste: emails separated by space, comma, semicolon or newline" className="mt-2 text-xs min-h-[60px]" />
+                  <Button size="sm" variant="outline" className="mt-1 h-7 text-[11px]" onClick={handleBulkCcs} disabled={!bulkCcs.trim()}>Add bulk</Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Signed doc */}
+            {signedDoc && (
+              <Card className="bg-[#F7F2EA] border-emerald-300/50">
+                <CardHeader className="py-3">
+                  <CardTitle className="text-sm flex items-center gap-2 text-[#1A1A1A]">
+                    <Shield className="w-4 h-4 text-emerald-600" /> Signed Document
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <Button size="sm" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+                    onClick={() => handleDownloadCurrentPdf(signedDoc.document_filename)}>
+                    <Download className="w-4 h-4 mr-2" /> Download Signed PDF
+                  </Button>
+                  <Button size="sm" variant="outline" className="w-full" onClick={() => setExportOpen(true)}>
+                    <Download className="w-4 h-4 mr-2" /> Export…
+                  </Button>
+                  {signedDoc.certificate_url && (
+                    <Button size="sm" variant="outline" className="w-full"
+                      onClick={() => handleDownload(signedDoc.certificate_url, `audit_${envelope.id}.pdf`)}>
+                      <Download className="w-4 h-4 mr-2" /> Audit Certificate
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Listing draft (auto-generated from PAA) */}
+            {envelope.template_key === "jbj-property-advertising-agreement" && (
+              <PAAListingDraftCard
+                envelopeId={envelope.id}
+                category={(envelope.category as any) || "leasing"}
+              />
+            )}
+
+            {/* Document Info */}
+            <Card className="bg-[#F7F2EA] border-[#B89555]/30">
+              <CardHeader className="py-3">
+                <CardTitle className="text-sm text-[#1A1A1A]">Details</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2 text-xs text-[#1A1A1A]/80">
+                {docNumber && <div className="flex justify-between"><span>Doc No.</span><span className="font-medium text-[#1A1A1A]">{docNumber}</span></div>}
+                <div className="flex justify-between"><span>File</span><span className="font-medium text-[#1A1A1A] truncate max-w-[180px]">{envelope.document_filename}</span></div>
+                <div className="flex justify-between"><span>Created</span><span>{format(new Date(envelope.created_at), "MMM d, yyyy")}</span></div>
+                {envelope.expires_at && <div className="flex justify-between"><span>Expires</span><span>{formatDistanceToNow(new Date(envelope.expires_at), { addSuffix: true })}</span></div>}
+                {envelope.completed_at && <div className="flex justify-between"><span>Completed</span><span>{format(new Date(envelope.completed_at), "MMM d, yyyy")}</span></div>}
+                <div className="flex justify-between"><span>Reminders</span><span>{envelope.reminders_sent || 0}</span></div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
+
+        {/* Header & footer studio (always available) */}
+        <div className="flex items-center justify-between gap-2">
+          <Button variant="outline" size="sm" onClick={() => setShowStudio((s) => !s)}>
+            {showStudio ? "Hide" : "Customize"} header &amp; footer
+          </Button>
+          {showStudio && (
+            <Button variant="gold" size="sm" onClick={handleSaveEdits} disabled={regenerate.isPending}>
+              {regenerate.isPending ? <Loader2 className="w-3.5 h-3.5 mr-1 animate-spin" /> : <Save className="w-3.5 h-3.5 mr-1" />}
+              Apply chrome &amp; re-render
+            </Button>
+          )}
+        </div>
+        {showStudio && <TemplateChromeStudio value={chrome} onChange={setChrome} />}
 
         {/* Edit Fields panel (full width below preview) */}
         {editing && envelope.template_key && (
@@ -1281,6 +1290,33 @@ export default function EnvelopeDetail() {
           </Card>
         )}
 
+        {/* Activity log */}
+        <Card className="bg-[#F7F2EA] border-[#B89555]/30">
+          <CardHeader className="py-3">
+            <CardTitle className="text-sm text-[#1A1A1A] flex items-center gap-2">
+              <Shield className="w-4 h-4" /> Activity Log
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {auditLogs.map((log: any) => (
+                <div key={log.id} className="flex items-start gap-3">
+                  <div className="w-7 h-7 rounded-full bg-white border border-[#B89555]/30 flex items-center justify-center shrink-0">
+                    <Clock className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm text-[#1A1A1A]">{log.description}</p>
+                    <div className="flex items-center gap-3 text-xs text-[#1A1A1A]/60 mt-0.5">
+                      <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{format(new Date(log.created_at), "MMM d, yyyy 'at' h:mm a")}</span>
+                      {log.ip_address && <span className="flex items-center gap-1"><Globe className="w-3 h-3" />{log.ip_address}</span>}
+                    </div>
+                  </div>
+                </div>
+              ))}
+              {!auditLogs.length && <p className="text-sm text-[#1A1A1A]/60 text-center py-4">No activity yet</p>}
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       <SendForSignatureDialog
@@ -1311,25 +1347,12 @@ export default function EnvelopeDetail() {
           envelopeId={envelope.id}
           recipientName={clientRec.name || "Client"}
           recipientEmail={clientRec.email || ""}
-          defaultSubject={
-            // Always normalize "Please sign…" / "Signature Required" → "Signature Pending"
-            // unless the owner has saved a fully-custom subject that doesn't match those patterns.
-            (() => {
-              const saved = (envelope.email_subject || "").trim();
-              const looksLegacy = !saved || /^please sign\b/i.test(saved) || /signature required/i.test(saved);
-              if (!looksLegacy) return saved;
-              const docTitle = envelope.template_key === "jbj-property-advertising-agreement"
-                ? "Property Advertising Agreement"
-                : (envelope.name || "Document");
-              return `Signature Pending — ${docTitle}${docNumber ? ` · ${docNumber}` : ""}`;
-            })()
-          }
-          defaultBody={envelope.email_message || `Dear {{client_name}},\n\nPlease find your ${envelope.name || "document"} attached for your review and electronic signature.\n\nKindly sign at your earliest convenience using the secure link below.\n\nThank you,\n{{sender_signature}}`}
+          defaultSubject={envelope.email_subject || `Please review — ${envelope.name || "Document"}${docNumber ? ` · ${docNumber}` : ""}`}
+          defaultBody={envelope.email_message || `Dear {{client_name}},\n\nPlease find your ${envelope.name || "document"} attached. A signing request will follow separately via DocuSign.\n\n{{sender_signature}}`}
           docNumber={docNumber || undefined}
           senderName={envelope.sender_name || undefined}
           senderTitle={(envelope as any).sender_title || undefined}
           attachmentName={envelope.document_filename || undefined}
-          attachmentUrl={envelope.document_url || undefined}
           onSent={() => refetch()}
         />
       )}
