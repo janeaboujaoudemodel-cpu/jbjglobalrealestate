@@ -165,14 +165,13 @@ export default function EnvelopeDetail() {
     enabled: !!id,
   });
 
-  // CRITICAL: Never auto-stamp the JBJ owner signature/stamp onto an
-  // unsigned/draft document. They only render once the envelope is fully
-  // completed (i.e. the client has actually signed). Same rule applies to the
-  // landlord/client side — we never autofill the printed name or date; that
-  // must come exclusively from the recipient's own signing action.
+  // CRITICAL: Agreements only receive owner signature/stamp after completion.
+  // Standard letterhead is different: it is the owner's own letter, so saved
+  // stamp/signature assets must render while the draft is still being reviewed.
   const isFullySigned = envelope?.status === "completed";
-  const ownerSignatureUrl = isFullySigned ? ownerSignatureUrlRaw : null;
-  const ownerStampUrl = isFullySigned ? ownerStampUrlRaw : null;
+  const isOwnerLetterhead = ["jbj-blank-letter", "jbj-letterhead-blank", "jbj-letterhead-leasing"].includes(String(envelope?.template_key || ""));
+  const ownerSignatureUrl = isFullySigned || isOwnerLetterhead ? ownerSignatureUrlRaw : null;
+  const ownerStampUrl = isFullySigned || isOwnerLetterhead ? ownerStampUrlRaw : null;
 
   // Hydrate edit + CC + chrome state when envelope loads
   useEffect(() => {
@@ -868,22 +867,9 @@ export default function EnvelopeDetail() {
     ? `<!doctype html><html dir="ltr" lang="en"><head><meta charset="utf-8"><style>
         html,body{margin:0;padding:0;background:#fff;direction:ltr !important;unicode-bidi:isolate !important;writing-mode:horizontal-tb !important;transform:none !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
         body *{writing-mode:horizontal-tb;}
-        /* Preview-only: collapse the A4 min-height so there's no blank gap below the footer.
-           Export path uses a separate fixed-height container in renderHtmlToPdfBlob,
-           so the PDF stays pinned to A4. */
-        body > div[style*="min-height:1123px"]{min-height:0 !important;height:auto !important;}
-        body > div[style*="min-height:1123px"] *[style*="margin-top:auto"]{margin-top:14px !important;}
-        /* Belt-and-suspenders: the footer container often uses flex:1 spacers above it.
-           Drop trailing empty spacers so no white strip remains under the footer. */
-        body > div > div[style*="flex:1"]:last-child{flex:0 0 auto !important;height:0 !important;min-height:0 !important;}
+        body > div[style*="min-height:1123px"]{width:794px !important;min-height:1123px !important;height:1123px !important;margin:0 auto !important;box-sizing:border-box !important;overflow:hidden !important;}
         body, html { overflow: hidden; }
         [data-field-key]{position:relative;cursor:text;transition:background .15s,outline .15s;border-radius:4px;}
-        [data-field-key]:hover{background:#FBF6EC;outline:1px dashed #B89555;outline-offset:2px;}
-        [data-chip-key]{cursor:pointer;border-radius:999px;transition:background .15s;}
-        [data-chip-key]:hover{background:#FBF6EC;}
-        .jbj-x{position:absolute;top:-9px;right:-9px;width:18px;height:18px;border-radius:999px;background:#FDFBF7;border:1px solid #B89555;color:#1A1A1A;font-size:11px;line-height:16px;text-align:center;cursor:pointer;display:none;font-family:Inter,Arial,sans-serif;font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08);user-select:none;}
-        [data-field-key]:hover > .jbj-x{display:block;}
-      </style></head><body dir="ltr">${previewHtml}<script>(function(){
         [data-field-key]:hover{background:#FBF6EC;outline:1px dashed #B89555;outline-offset:2px;}
         [data-chip-key]{cursor:pointer;border-radius:999px;transition:background .15s;}
         [data-chip-key]:hover{background:#FBF6EC;}
