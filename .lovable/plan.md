@@ -1,47 +1,46 @@
-I found the current breakage in the frontend layout/rendering code:
+## Goal
 
-- `BlankLetterStudio` still uses a left editor + right preview grid, so the A4 preview is squeezed off-screen instead of centered.
-- The preview scale uses CSS `scale(min(...))`, which is fragile and leaves the document clipped at this viewport.
-- Signature/stamp custom placement overlays are independent boxes on top of the preview and can overlap/break when uploaded or dragged.
-- `buildBlankLetterHtml` pins the signature/stamp near the bottom instead of placing them intelligently based on body length.
-- `EnvelopeDetail` top sections are expanded cards, not minimized accordions, and the edit panel has no clear minimize/collapse control or top/down navigation.
+When the owner clicks **Send to client** on a PAA (or any envelope), the generated PDF for that specific client (e.g. `JBJ-PAA-LEASING-0001.pdf`) must arrive in the recipient's inbox as a real **email attachment**, in addition to the existing "Download your document" button.
 
-Plan:
+Today the email already includes a styled Download button that links to the PDF in storage, but no file is actually attached to the message — so users see only the link, not a paperclip / file in the email.
 
-1. Rework `BlankLetterStudio` into a centered A4 workspace
-   - Make the A4 letter preview the central hero area.
-   - Move AI prompt, subject/body fields, and signature/stamp controls into a compact top/header frame around the preview instead of a left column that shrinks the page.
-   - Give the preview its own scrollable centered canvas so the page is always visible and horizontally centered.
-   - Replace the fragile CSS `scale(min(...))` with a stable React-calculated scale based on the preview container width/height.
+## Plan
 
-2. Fix stamp/signature controls in the letterhead studio
-   - Stop showing overlapping preview overlays by default.
-   - Keep uploaded signature/stamp assets in compact rows/cards in the header controls.
-   - Only show placement handles when the user explicitly enters custom placement mode.
-   - Clamp placement coordinates so handles cannot fall over the footer or outside the A4 page.
-   - Add reset behavior that returns to smart automatic placement.
+### 1. Attach the PDF in `esign-send-for-signature`
+File: `supabase/functions/esign-send-for-signature/index.ts`
 
-3. Make blank letter signature/stamp placement smart
-   - Update the blank letter template so the signature/stamp block sits immediately after the body when content is short.
-   - If content grows, allow the block to move lower naturally while keeping safe spacing above the footer.
-   - Remove the large forced blank body area that pushes the signature/stamp down near the footer for short letters.
-   - Keep final PDF rendering consistent with the visible preview.
+- After resolving `attachment_url` and `attachment_name` (already passed from the SendViaEmailDialog), fetch the PDF bytes server-side:
+  - `fetch(attachment_url)` → `arrayBuffer()` → base64.
+  - Cap at ~10 MB (Resend's hard limit is ~40 MB; 10 MB is safe and matches typical PAA size). If oversize or fetch fails, log and fall back to link-only (do not block the send).
+- Pass to Resend in the existing `POST https://api.resend.com/emails` body:
+  ```ts
+  attachments: [{
+    filename: attachment_name,        // e.g. "JBJ-PAA-LEASING-0001.pdf"
+    content: <base64 string>,
+    content_type: "application/pdf",
+  }]
+  ```
+- Keep the existing branded **Download your document** button in the email body unchanged — recipient gets the file two ways (paperclip + button), exactly what the user asked for.
 
-4. Minimize EnvelopeDetail control sections by default
-   - Convert Recipients & CCs, Details, Signed Document/Activity Log, and Listing Draft into compact collapsible sections above the document.
-   - Default them to collapsed/minimized so the document starts higher.
-   - Preserve all existing controls/content inside each section when expanded.
-   - Keep Activity Log and Listing Draft minimized by default, including for signed documents.
+### 2. Same change in the test-send path
+File: `supabase/functions/esign-send-test-email/index.ts`
 
-5. Fix Edit Fields panel behavior in EnvelopeDetail
-   - Keep `Edit fields` above the document, but make it a collapsible/minimizable panel with a visible minimize button.
-   - When `Edit fields` is clicked, open it and scroll/focus to the panel.
-   - Add `Go to Top` and `Go Down` buttons near the document/editor controls for fast navigation.
-   - Ensure fields remain editable and visible; do not remove PAA fields.
+- Same fetch-and-attach logic so the owner's "Send me a test" preview also arrives with the real PDF attached. This is what the user uses to verify before sending to the client.
 
-6. Verify the affected routes
-   - Check `/owner/documents/forms/blank-letter` at the current 1041×891 viewport for centered A4 preview and scrollability.
-   - Check `/owner/documents/forms/810df24a-145b-48f2-8e5a-f18e44e0c576` for minimized top panels, full-width document, edit panel collapse, and top/down buttons.
-   - Confirm the PAA template content remains routed to the approved PAA rendering and is not replaced by blank letterhead logic.
+### 3. No client-side changes needed
+- `SendViaEmailDialog` already forwards `attachment_url` (proxied/branded URL) and `attachment_name` (e.g. `JBJ-PAA-LEASING-0001.pdf`) to the edge function.
+- `EnvelopeDetail` already passes `envelope.document_filename` and `envelope.document_url` into the dialog.
+- The PAA editor stays locked; no template or UI rework.
 
-Important constraint: I will not delete or rewrite the approved PAA document content; this plan only fixes the layout, controls, preview visibility, and smart placement behavior.
+### 4. Quick verification
+
+- Click **Send to client** on the existing locked PAA envelope (Omar) → confirm:
+  - Recipient sees `JBJ-PAA-LEASING-0001.pdf` as a real attachment in Gmail.
+  - Existing Download button still works.
+  - Test inbox `infoo.jane@gmail.com` (CC'd by default) also receives the file as an attachment.
+- Edge function logs show no Resend errors and no oversize fallback for normal PAA-sized PDFs.
+
+### Out of scope
+
+- No changes to the PAA template, layout, or signing UI (PAA editor remains locked as agreed).
+- No marketing / bulk email logic — this is a 1:1 transactional send triggered by the owner.
