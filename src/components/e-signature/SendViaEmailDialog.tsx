@@ -771,7 +771,7 @@ export function SendViaEmailDialog({
                     </span>
                     {attachmentUrl && (
                       <a
-                        href={attachmentUrl}
+                        href={maybeProxyStorageUrl(attachmentUrl, { filename: attachmentName, disposition: 'inline' })}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="shrink-0 px-1.5 py-0.5 rounded hover:bg-[#EFE6D6] text-[#1A1A1A]/70 inline-flex items-center gap-1"
@@ -788,7 +788,7 @@ export function SendViaEmailDialog({
                     <span className="truncate flex-1">{a.name}<span className="ml-1.5 text-[10px] uppercase tracking-wider text-[#1A1A1A]/60">Uploaded</span></span>
                     {a.url && (
                       <a
-                        href={a.url}
+                        href={maybeProxyStorageUrl(a.url, { filename: a.name, disposition: 'inline' })}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="shrink-0 px-1.5 py-0.5 rounded hover:bg-[#EFE6D6] text-[#1A1A1A]/70 inline-flex items-center gap-1"

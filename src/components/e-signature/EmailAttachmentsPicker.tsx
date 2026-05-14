@@ -130,7 +130,7 @@ export function EmailAttachmentsPicker({ value, onChange, disabled }: Props) {
                 <span className="text-[10px] text-[#1A1A1A]/50 shrink-0">{a.size ? formatSize(a.size) : "PDF"}</span>
                 {a.url && (
                   <a
-                    href={a.url}
+                    href={maybeProxyStorageUrl(a.url, { filename: a.name, disposition: 'inline' })}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="shrink-0 p-0.5 hover:bg-[#EFE6D6] rounded"
