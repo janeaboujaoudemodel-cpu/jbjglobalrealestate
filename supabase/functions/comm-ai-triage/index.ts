@@ -10,9 +10,13 @@ const CATEGORIES = [
   "real_estate_lead",
   "real_estate_ops",
   "sales_offer",
+  "campaign",
+  "advertising",
   "marketing",
+  "business_linkedin",
   "finance",
   "developer_documents",
+  "system",
   "personal",
   "spam",
   "other",
@@ -22,12 +26,15 @@ const CATEGORIES = [
 // gateway returns blank/invalid output.
 function ruleBasedCategory(input: { from: string; subject: string }): string | null {
   const hay = `${input.from} ${input.subject}`.toLowerCase();
-  if (/(shein|creator center|campaign|reversible|ruelala|farfetch|cobone|newsletter|unsubscribe|promo|sale\b|deal|coupon)/.test(hay)) return "marketing";
+  if (/(shein.*creator|creator center|influencer|brand collab|campaign\b|sponsor|ugc|gifting|barter)/.test(hay)) return "campaign";
+  if (/(canon|nikon|sony|adidas|nike|samsung|new product|introducing the|launch|advertis|sponsored)/.test(hay)) return "advertising";
+  if (/(linkedin|new connection|profile view|posted|comment on your|endorsement)/.test(hay)) return "business_linkedin";
   if (/(emiratesnbd|enbd|hsbc|adcb|fab\b|mashreq|payroll|invoice|tax\b|vat\b|payment|bank|statement|priorit\w*banking)/.test(hay)) return "finance";
   if (/(price offer|buyer waiting|luxury closet|offer for your|sell your|resale)/.test(hay)) return "sales_offer";
   if (/(registration|mou\b|trade license|docusign|envelope|developer|brochure|inventory|listing\b|broker)/.test(hay)) return "developer_documents";
-  if (/(github|uptime|monitor|alert|deploy|build failed|run failed|supabase|hostinger|verification code|otp)/.test(hay)) return "real_estate_ops";
-  if (/(spam|win a prize|unsubscribed|do not reply)/.test(hay)) return "spam";
+  if (/(github|uptime|monitor|alert|deploy|build failed|run failed|supabase|hostinger|verification code|otp|search console|sc-noreply)/.test(hay)) return "system";
+  if (/(shein|ruelala|farfetch|cobone|reversible|shopstyle|newsletter|unsubscribe|promo|sale\b|deal|coupon|rotana|gitex|mmgtalent|job alert)/.test(hay)) return "marketing";
+  if (/(spam|win a prize|do not reply)/.test(hay)) return "spam";
   return null;
 }
 
@@ -101,17 +108,21 @@ Deno.serve(async (req) => {
   "category": one of ${JSON.stringify(CATEGORIES)},
   "priority": "low" | "medium" | "high" | "urgent",
   "summary": "<= 140 chars, neutral tone",
-  "suggested_reply": "concise professional reply in same language as thread, ready to send",
+  "suggested_reply": "concise professional reply in same language as thread, ready to send. If no reply is appropriate, use empty string.",
   "next_step": { "type": "task" | "meeting" | "note" | "none", "title": "...", "due_in_hours": number | null, "reasoning": "short why" }
 }
 Categorization rules:
 - real_estate_lead: prospective buyer/investor enquiring about properties, viewings, or pricing.
-- real_estate_ops: developer documents requests, listings, MOU, registration, brokerage operations, system alerts (GitHub/Supabase/uptime/verification codes).
+- real_estate_ops: brokerage operations, internal requests, contracts in progress.
 - sales_offer: someone offering to buy something the user owns (resale, luxury closet price offers, "buyer waiting").
-- marketing: newsletters, promos, campaigns, creator programs, sales notifications from retail brands (SHEIN, Cobone, Rue La La, Reversible, Farfetch, etc).
-- finance: banking, payments, invoices, tax, VAT, payroll (Emirates NBD, ENBD, HSBC, ADCB, FAB, Mashreq, etc).
+- campaign: influencer/creator collaborations, brand campaigns, sponsored content (SHEIN Creator Center, Reversible UGC, brand collabs).
+- advertising: product ads from brands the user does not own (Canon, Sony, Apple, Nike, Adidas, "Introducing the X", new product launches).
+- marketing: retail newsletters, promo emails, coupons, generic marketing (Cobone, Rue La La, Farfetch, ShopStyle, GITEX newsletter, MMG Talent job alerts).
+- business_linkedin: LinkedIn notifications, content engagement, profile views, professional network activity.
+- finance: banking, payments, invoices, tax, VAT, payroll (Emirates NBD, ENBD, HSBC, ADCB, FAB, Mashreq).
 - developer_documents: developer registration, brochures, inventory, Docusign envelopes, contract signature requests.
-- personal: personal correspondence from individuals known to the user.
+- system: system alerts, GitHub/Supabase/UptimeRobot, Google Search Console, Hostinger verification codes, OTPs, automated monitor alerts.
+- personal: personal correspondence from real individuals known to the user.
 - spam: clear spam.
 - other: anything that doesn't fit.
 No prose, no markdown, JSON only.`;
@@ -152,12 +163,21 @@ No prose, no markdown, JSON only.`;
 
     const priority = ["low", "medium", "high", "urgent"].includes(parsed.priority) ? parsed.priority : "medium";
 
+    // For low-action categories, default to a "no reply needed" suggestion so
+    // the AI panel is never blank.
+    const noReplyCats = new Set(["marketing", "advertising", "campaign", "system", "business_linkedin", "spam"]);
+    const fallbackReply = noReplyCats.has(category)
+      ? "No reply needed — automated/marketing notification."
+      : "";
+
     const update = {
       ai_category: category,
       ai_priority: priority,
       ai_summary: (parsed.summary ?? thread.last_message_preview ?? "").toString().slice(0, 280),
-      ai_suggested_reply: (parsed.suggested_reply ?? "").toString().slice(0, 4000),
-      ai_next_step: parsed.next_step ?? null,
+      ai_suggested_reply: ((parsed.suggested_reply ?? fallbackReply) || fallbackReply).toString().slice(0, 4000),
+      ai_next_step: parsed.next_step ?? (noReplyCats.has(category)
+        ? { type: "none", title: null, due_in_hours: null, reasoning: "Automated/marketing — no action required." }
+        : null),
       ai_processed_at: new Date().toISOString(),
     };
 
