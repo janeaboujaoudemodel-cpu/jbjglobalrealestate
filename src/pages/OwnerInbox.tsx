@@ -103,6 +103,24 @@ export default function OwnerInbox() {
     markAsRead,
     isUpdating,
   } = useOwnerInbox(filters);
+  const { triage } = useCommAITriage();
+
+  // Background batch triage: classify up to 8 unprocessed threads so category
+  // chips populate without manually opening each email.
+  useEffect(() => {
+    if (!threads.length) return;
+    const targets = threads.filter(t => !t.ai_processed_at).slice(0, 8);
+    if (!targets.length) return;
+    let cancelled = false;
+    (async () => {
+      for (const t of targets) {
+        if (cancelled) break;
+        try { await triage.mutateAsync({ threadId: t.id }); } catch { /* skip */ }
+      }
+    })();
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [threads.length]);
 
   // Compute per-channel unread counts
   const channelUnreadCounts: Record<string, number> = {};
