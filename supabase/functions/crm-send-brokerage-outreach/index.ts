@@ -515,7 +515,12 @@ serve(async (req: Request) => {
     // NOT subject/body content. Template signatures/links may legitimately mention
     // legacy addresses; what matters is that the email isn't *sent from/to* them.
     {
-      const haystack = `${replyTo}\n${cc.join(",")}\n${recipient}`.toLowerCase();
+      // Skip guard when recipient is an owner alias (self-test scenario).
+      const recipientLc = String(recipient || "").toLowerCase().trim();
+      const isOwnerSelfTest = OWNER_EMAILS.map((e) => e.toLowerCase()).includes(recipientLc);
+      const haystack = isOwnerSelfTest
+        ? `${replyTo}\n${cc.join(",")}`.toLowerCase()
+        : `${replyTo}\n${cc.join(",")}\n${recipient}`.toLowerCase();
       const hit = WORKFLOW_FORBIDDEN_ADDRESSES.find((a) => haystack.includes(a.toLowerCase()));
       if (hit) {
         return new Response(JSON.stringify({
