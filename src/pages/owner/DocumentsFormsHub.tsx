@@ -202,7 +202,7 @@ export default function DocumentsFormsHub() {
     refetch();
   };
 
-  const renderBucketCards = (rows: any[], emptyText: string, mode: "drafts" | "generated" | "sent" | "signed" | "deleted") => {
+  const renderBucketCards = (rows: any[], emptyText: string, mode: "drafts" | "generated" | "sent" | "submitted" | "signed" | "deleted") => {
     if (envLoading) return <div className="text-sm text-[#1A1A1A]/60 flex items-center gap-2"><Loader2 className="w-4 h-4 animate-spin" /> Loading…</div>;
     if (!rows.length) return <div className="text-sm text-[#1A1A1A]/60">{emptyText}</div>;
     return (
@@ -242,12 +242,14 @@ export default function DocumentsFormsHub() {
             const selectable = mode === "drafts" || mode === "generated" || mode === "deleted";
             const sLabel =
               mode === "signed" ? "Signed"
+              : mode === "submitted" ? "Submitted — Pending Review"
               : mode === "sent" ? "Pending Signature"
               : mode === "deleted" ? "Recently Deleted"
               : mode === "generated" ? "Forms Generated"
               : "Draft Application";
             const sCls =
               mode === "signed" ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+              : mode === "submitted" ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
               : mode === "sent" ? "bg-blue-50 text-blue-800 border-blue-200"
               : mode === "deleted" ? "bg-red-50 text-red-800 border-red-200"
               : mode === "generated" ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/60"
@@ -328,7 +330,7 @@ export default function DocumentsFormsHub() {
             <h1 className="text-2xl font-semibold text-[#1A1A1A]">Forms & Agreements</h1>
             <p className="text-sm text-[#1A1A1A]/70 mt-1">JBJ leasing & selling templates · drafts · sent for signature · completed contracts</p>
           </div>
-          <Button variant="gold" onClick={() => navigate("/e-signature/create")}>
+          <Button variant="gold" onClick={() => navigate("/owner/documents/forms/create")}>
             <Plus className="w-4 h-4 mr-2" /> New Envelope
           </Button>
         </header>
@@ -353,7 +355,7 @@ export default function DocumentsFormsHub() {
               </div>
             </div>
           </Card>
-          <Card className="p-4 bg-[#F7F2EA] border-[#B89555]/30 cursor-pointer hover:border-[#B89555]" onClick={() => navigate("/e-signature/create")}>
+          <Card className="p-4 bg-[#F7F2EA] border-[#B89555]/30 cursor-pointer hover:border-[#B89555]" onClick={() => navigate("/owner/documents/forms/create")}>
             <div className="flex items-start gap-3">
               <Upload className="w-5 h-5 text-[#B89555]" />
               <div>
@@ -362,7 +364,7 @@ export default function DocumentsFormsHub() {
               </div>
             </div>
           </Card>
-          <Card className="p-4 bg-[#F7F2EA] border-[#B89555]/30 cursor-pointer hover:border-[#B89555]" onClick={() => navigate("/e-signature/contract-review")}>
+          <Card className="p-4 bg-[#F7F2EA] border-[#B89555]/30 cursor-pointer hover:border-[#B89555]" onClick={() => navigate("/owner/documents/forms/contract-review")}>
             <div className="flex items-start gap-3">
               <Scale className="w-5 h-5 text-[#B89555]" />
               <div>
@@ -379,6 +381,7 @@ export default function DocumentsFormsHub() {
             <TabsTrigger value="drafts"><FileEdit className="w-4 h-4 mr-2" />Draft Applications ({buckets.drafts.length})</TabsTrigger>
             <TabsTrigger value="generated"><Clock className="w-4 h-4 mr-2" />Forms Generated ({buckets.generated.length})</TabsTrigger>
             <TabsTrigger value="sent"><Send className="w-4 h-4 mr-2" />Pending Signature ({buckets.sent.length})</TabsTrigger>
+            <TabsTrigger value="submitted"><Clock className="w-4 h-4 mr-2" />Submitted — Pending Review ({buckets.submitted.length})</TabsTrigger>
             <TabsTrigger value="signed"><CheckCircle2 className="w-4 h-4 mr-2" />Signed ({buckets.signed.length})</TabsTrigger>
             <TabsTrigger value="deleted"><Trash2 className="w-4 h-4 mr-2" />Recently Deleted ({buckets.deleted.length})</TabsTrigger>
             <TabsTrigger value="assets"><PenTool className="w-4 h-4 mr-2" />Stamps & Signatures</TabsTrigger>
@@ -430,6 +433,9 @@ export default function DocumentsFormsHub() {
           <TabsContent value="sent" className="mt-4">
             {renderBucketCards(buckets.sent, "Nothing awaiting signature.", "sent")}
           </TabsContent>
+          <TabsContent value="submitted" className="mt-4">
+            {renderBucketCards(buckets.submitted, "Nothing pending your review. When a client emails the signed copy back, it lands here.", "submitted")}
+          </TabsContent>
           <TabsContent value="signed" className="mt-4">
             {renderBucketCards(buckets.signed, "No signed contracts yet.", "signed")}
           </TabsContent>
@@ -446,7 +452,7 @@ export default function DocumentsFormsHub() {
               <Card className="p-5 bg-[#F7F2EA] border-[#B89555]/30">
                 <div className="flex items-center justify-between mb-3">
                   <div className="font-semibold text-[#1A1A1A] flex items-center gap-2"><FileSignature className="w-4 h-4" /> Saved Signatures</div>
-                  <Button size="sm" variant="outline" onClick={() => navigate("/e-signature/signature-studio")}>Manage</Button>
+                  <Button size="sm" variant="outline" onClick={() => navigate("/owner/documents/forms/signature-studio")}>Manage</Button>
                 </div>
                 <div className="grid grid-cols-3 gap-3">
                   {signatures.map(s => (
@@ -461,7 +467,7 @@ export default function DocumentsFormsHub() {
               <Card className="p-5 bg-[#F7F2EA] border-[#B89555]/30">
                 <div className="flex items-center justify-between mb-3">
                   <div className="font-semibold text-[#1A1A1A] flex items-center gap-2"><Stamp className="w-4 h-4" /> Saved Stamps</div>
-                  <Button size="sm" variant="outline" onClick={() => navigate("/e-signature/signature-studio")}>Manage</Button>
+                  <Button size="sm" variant="outline" onClick={() => navigate("/owner/documents/forms/signature-studio")}>Manage</Button>
                 </div>
                 <div className="grid grid-cols-3 gap-3">
                   {stamps.map(s => (
