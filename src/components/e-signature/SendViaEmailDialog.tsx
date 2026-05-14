@@ -160,6 +160,27 @@ function stripInlineSignature(text: string): string {
   return out.replace(/\s+$/g, "");
 }
 
+/** Walk the HTML's block elements and drop any whose plain-text content
+ *  matches a legacy fragment. If everything ends up empty, return the canonical
+ *  NEW_DEFAULT_BODY_HTML so the editor never starts blank. */
+function scrubLegacyBody(html: string): string {
+  if (!html) return NEW_DEFAULT_BODY_HTML;
+  let out = html;
+  for (const re of LEGACY_BODY_FRAGMENTS) {
+    // Strip matching text wherever it appears (inside <p>, raw, etc.).
+    out = out.replace(re, "");
+  }
+  // Remove now-empty paragraph/div wrappers left behind.
+  out = out
+    .replace(/<p[^>]*>(?:\s|&nbsp;|<br\s*\/?>)*<\/p>/gi, "")
+    .replace(/<div[^>]*>(?:\s|&nbsp;|<br\s*\/?>)*<\/div>/gi, "")
+    .replace(/(<br\s*\/?>\s*){3,}/gi, "<br/><br/>")
+    .trim();
+  const plain = out.replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").trim();
+  if (!plain) return NEW_DEFAULT_BODY_HTML;
+  return out;
+}
+
 export function SendViaEmailDialog({
   open,
   onOpenChange,
