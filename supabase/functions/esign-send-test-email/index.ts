@@ -38,6 +38,7 @@ Deno.serve(async (req) => {
       docusign_url,
       attachment_name,
       attachment_url,
+      extra_attachments,
       test_recipient,
     } = await req.json();
 
