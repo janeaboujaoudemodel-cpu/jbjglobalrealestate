@@ -656,6 +656,8 @@ export function buildPAAHtml(
       <div style="height:1px;background:${accent};opacity:.55;"></div>
     </div>
   </div>
+  ${opts.clientSignedAttribution ? `
+  <div style="margin-top:8px;font-size:11px;color:${ink};opacity:.75;font-style:italic;">${esc(opts.clientSignedAttribution)}</div>` : ""}
   </div>
 
   </div>
