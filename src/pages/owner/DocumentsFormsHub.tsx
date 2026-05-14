@@ -494,23 +494,25 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
             {tplLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {/* Standard JBJ Letterhead — always first, opens the branded letter studio */}
-                <Card className="p-5 bg-[#F7F2EA] border-[#B89555]/30">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/60">JBJ Standard</div>
-                      <div className="font-semibold text-[#1A1A1A] mt-1">Standard JBJ Letterhead</div>
+                {(cat === "all" || cat === "leasing" || cat === "selling") && (
+                  <Card className="p-5 bg-[#F7F2EA] border-[#B89555]/30">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/60">JBJ Standard</div>
+                        <div className="font-semibold text-[#1A1A1A] mt-1">{standardLetterheadName}</div>
+                      </div>
+                      <span className="text-[9px] px-2 py-0.5 border border-[#B89555]/40 rounded text-[#1A1A1A]/70">SYSTEM</span>
                     </div>
-                    <span className="text-[9px] px-2 py-0.5 border border-[#B89555]/40 rounded text-[#1A1A1A]/70">SYSTEM</span>
-                  </div>
-                  <p className="text-xs text-[#1A1A1A]/70 mt-2">
-                    A4 branded letterhead — type your letter, drag your signature & stamp, edit the date, download PDF.
-                  </p>
-                  <div className="flex gap-2 mt-4">
-                    <Button size="sm" variant="gold" onClick={() => navigate("/owner/documents/forms/blank-letter")}>
-                      Open template
-                    </Button>
-                  </div>
-                </Card>
+                    <p className="text-xs text-[#1A1A1A]/70 mt-2">
+                      Branded A4 letter — type, drag your signature & stamp, download PDF.
+                    </p>
+                    <div className="flex gap-2 mt-4">
+                      <Button size="sm" variant="gold" onClick={() => navigate("/owner/documents/forms/blank-letter")}>
+                        Use template
+                      </Button>
+                    </div>
+                  </Card>
+                )}
 
                 {filteredTemplates.map(t => (
                   <Card key={t.id} className="p-5 bg-[#F7F2EA] border-[#B89555]/30">
@@ -522,10 +524,10 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                       {t.is_system && <span className="text-[9px] px-2 py-0.5 border border-[#B89555]/40 rounded text-[#1A1A1A]/70">SYSTEM</span>}
                     </div>
                     <p className="text-xs text-[#1A1A1A]/70 mt-2">
-                      {Array.isArray(t.field_schema) ? t.field_schema.length : 0} pre-placed fields · client signs first, you countersign
+                      {(t as any).description || "Pre-built JBJ template — opens with your client details and brand."}
                     </p>
                     <div className="flex gap-2 mt-4">
-                      <Button size="sm" variant="gold" onClick={() => { setPicker(t); setClient({ name: "", email: "", phone: "" }); }}>
+                      <Button size="sm" variant="gold" onClick={() => openTemplate(t)}>
                         Use template
                       </Button>
                     </div>
