@@ -148,6 +148,7 @@ export function SendViaEmailDialog({
   const [bodyHtml, setBodyHtml] = useState("");
   const [docusignUrl, setDocusignUrl] = useState("");
   const [busy, setBusy] = useState<"" | "test" | "send">("");
+  const [savingField, setSavingField] = useState<"" | "recipients" | "subject" | "signature" | "body">("");
   const [selectedSigId, setSelectedSigId] = useState<string>("");
 
   // Load all email signature presets so the owner can pick which one
@@ -177,7 +178,7 @@ export function SendViaEmailDialog({
     if (!open) return;
     setTos(recipientEmail ? [recipientEmail] : []);
     setCcs([DEFAULT_CC]);
-    setSubject(defaultSubject);
+    setSubject(normalizeSubject(defaultSubject, attachmentName || "Document"));
     setDocusignUrl("");
     setBodyHtml(
       stripSignature(
@@ -189,8 +190,21 @@ export function SendViaEmailDialog({
         }),
       ),
     );
+    (async () => {
+      const { data } = await (supabase as any)
+        .from("esign_email_template_defaults")
+        .select("subject, body_html, signature_preset_id, default_to_emails, default_cc_emails")
+        .eq("template_key", templateKey || "__global__")
+        .maybeSingle();
+      if (!data || !open) return;
+      if (data.subject) setSubject(normalizeSubject(data.subject, attachmentName || "Document"));
+      if (data.body_html) setBodyHtml(stripSignature(data.body_html));
+      if (data.signature_preset_id) setSelectedSigId(data.signature_preset_id);
+      if (Array.isArray(data.default_to_emails) && data.default_to_emails.length) setTos(data.default_to_emails);
+      if (Array.isArray(data.default_cc_emails)) setCcs(data.default_cc_emails.length ? data.default_cc_emails : [DEFAULT_CC]);
+    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, recipientEmail, recipientName, defaultSubject, defaultBody]);
+  }, [open, recipientEmail, recipientName, defaultSubject, defaultBody, templateKey, attachmentName]);
 
   // Defensive cleanup — if any embedded signature slips into the body,
   // strip it. Real signature is rendered by the email template separately.
@@ -219,9 +233,7 @@ export function SendViaEmailDialog({
   // the visible link in the email stays on jbj.ae (no ad-blocker block, no
   // "From: mdafrewy...supabase.co" mobile blank-page experience).
   const wrapAsBrandedDownload = (signedUrl: string, filename?: string): string => {
-    const origin = (typeof window !== "undefined" && window.location?.origin)
-      ? window.location.origin
-      : "https://www.jbj.ae";
+    const origin = PUBLIC_DOMAIN;
     const u = b64url(signedUrl);
     const n = filename ? `&n=${encodeURIComponent(filename)}` : "";
     return `${origin}/d?u=${u}${n}`;
@@ -334,6 +346,37 @@ export function SendViaEmailDialog({
       toast.error(e.message || "Failed to save template");
     } finally {
       setBusy("");
+    }
+  };
+
+  const saveTemplateField = async (field: "recipients" | "subject" | "signature" | "body") => {
+    setSavingField(field);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Not signed in");
+      const payload: Record<string, any> = {
+        user_id: user.id,
+        template_key: templateKey || "__global__",
+        subject: normalizeSubject(subject, attachmentName || "Document"),
+        body: bodyHtml.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim() || " ",
+        body_html: stripSignature(bodyHtml),
+        approved_at: new Date().toISOString(),
+      };
+      if (field === "recipients") {
+        payload.default_to_emails = tos.filter(isValidEmail);
+        payload.default_cc_emails = cleanCcs;
+      }
+      if (field === "signature") payload.signature_preset_id = selectedSigId || null;
+      const { error } = await (supabase as any)
+        .from("esign_email_template_defaults")
+        .upsert(payload, { onConflict: "user_id,template_key" });
+      if (error) throw error;
+      if (field === "subject") setSubject(payload.subject);
+      toast.success(`${field === "recipients" ? "Recipients" : field === "subject" ? "Subject" : field === "signature" ? "Signature" : "Message"} saved for future PAA emails`);
+    } catch (e: any) {
+      toast.error(e.message || "Failed to save standard template");
+    } finally {
+      setSavingField("");
     }
   };
 
