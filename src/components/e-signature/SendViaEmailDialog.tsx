@@ -360,7 +360,7 @@ export function SendViaEmailDialog({
                 <select
                   value={selectedSigId}
                   onChange={(e) => setSelectedSigId(e.target.value)}
-                  className="flex-1 h-9 px-2 rounded-md border border-[#B89555]/40 bg-white text-sm text-[#1A1A1A]"
+                  className="flex-1 h-9 px-2 rounded-md border border-[#B89555]/40 bg-white text-sm text-[#1A1A1A] outline-none focus:border-[#B89555] focus:ring-2 focus:ring-[#B89555]/30 hover:border-[#B89555]/70 transition-colors"
                   aria-label="Select email signature"
                 >
                   {!signatures.length && <option value="">Loading signatures…</option>}

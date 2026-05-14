@@ -1082,20 +1082,46 @@ export default function EnvelopeDetail() {
                 <iframe
                   title="Document preview"
                   srcDoc={previewSrcDoc}
-                  className="w-full bg-white"
-                  style={{ height: "min(1180px, calc(100vh - 200px))", border: 0 }}
+                  className="w-full bg-white block"
+                  // Start at 0 so we don't paint a giant blank area before the
+                  // content loads. Final height is set precisely by onLoad +
+                  // ResizeObserver below.
+                  style={{ height: "600px", border: 0, display: "block" }}
                   onLoad={(e) => {
-                    // Shrink iframe height to actual content so we don't get a
-                    // huge empty area beneath the footer.
+                    const f = e.currentTarget as HTMLIFrameElement;
+                    const doc = f.contentDocument;
+                    if (!doc) return;
+                    const fit = () => {
+                      try {
+                        const h = Math.max(
+                          doc.documentElement.scrollHeight,
+                          doc.body.scrollHeight,
+                        );
+                        // No +24 padding — that produced the visible white strip
+                        // beneath the footer. Use exact content height.
+                        if (h > 100) f.style.height = `${h}px`;
+                      } catch {}
+                    };
+                    // First pass immediately, then again after fonts + images
+                    // settle to eliminate the "big blank then snap" flash.
+                    fit();
                     try {
-                      const f = e.currentTarget as HTMLIFrameElement;
-                      const doc = f.contentDocument;
-                      if (!doc) return;
-                      const h = Math.max(
-                        doc.documentElement.scrollHeight,
-                        doc.body.scrollHeight,
-                      );
-                      if (h > 200) f.style.height = `${h + 24}px`;
+                      (doc as any).fonts?.ready?.then(fit).catch(() => {});
+                    } catch {}
+                    const imgs = Array.from(doc.images || []);
+                    let pending = imgs.length;
+                    if (pending === 0) setTimeout(fit, 50);
+                    imgs.forEach((img) => {
+                      if (img.complete) { if (--pending === 0) fit(); return; }
+                      img.addEventListener("load", () => { if (--pending === 0) fit(); }, { once: true });
+                      img.addEventListener("error", () => { if (--pending === 0) fit(); }, { once: true });
+                    });
+                    try {
+                      const ro = new ResizeObserver(fit);
+                      ro.observe(doc.documentElement);
+                      ro.observe(doc.body);
+                      // Stop observing if the iframe goes away
+                      f.addEventListener("unload", () => ro.disconnect(), { once: true });
                     } catch {}
                   }}
                 />
@@ -1128,23 +1154,23 @@ export default function EnvelopeDetail() {
                     && ["sent", "viewed", "partially_signed"].includes(envelope.status);
                   const isReminding = remindingId === recipient.id;
                   return (
-                    <div key={recipient.id} className="rounded-lg bg-white border border-[#B89555]/20 p-3">
-                      <div className="flex items-center justify-between gap-2">
-                        <div className="min-w-0">
+                    <div key={recipient.id} className="rounded-lg bg-white border border-[#B89555]/20 p-3 overflow-hidden">
+                      <div className="flex items-start justify-between gap-2 flex-wrap">
+                        <div className="min-w-0 flex-1">
                           <div className="font-medium text-[#1A1A1A] text-sm truncate">{recipient.name}</div>
                           <div className="text-xs text-[#1A1A1A]/70 truncate flex items-center gap-1">
-                            <Mail className="w-3 h-3" /> {recipient.email}
+                            <Mail className="w-3 h-3 shrink-0" /> <span className="truncate">{recipient.email}</span>
                           </div>
                           {recipient.phone && (
                             <div className="text-xs text-[#1A1A1A]/70 truncate flex items-center gap-1">
-                              <Phone className="w-3 h-3" /> {recipient.phone}
+                              <Phone className="w-3 h-3 shrink-0" /> <span className="truncate">{recipient.phone}</span>
                             </div>
                           )}
                           {recipient.signed_at && (
                             <div className="text-xs text-emerald-700 mt-1">✓ Signed {format(new Date(recipient.signed_at), "MMM d, h:mm a")}</div>
                           )}
                         </div>
-                        <Badge className={rConfig?.color}>{rConfig?.label}</Badge>
+                        <Badge className={`${rConfig?.color} shrink-0 whitespace-nowrap text-[10px]`}>{rConfig?.label}</Badge>
                       </div>
                       <div className="flex flex-wrap gap-1.5 mt-2">
                         {recipient.signing_token && (
@@ -1473,8 +1499,13 @@ export default function EnvelopeDetail() {
           envelopeId={envelope.id}
           recipientName={clientRec.name || "Client"}
           recipientEmail={clientRec.email || ""}
-          defaultSubject={envelope.email_subject || `Please review — ${envelope.name || "Document"}${docNumber ? ` · ${docNumber}` : ""}`}
-          defaultBody={envelope.email_message || `Dear {{client_name}},\n\nPlease find your ${envelope.name || "document"} attached. A signing request will follow separately via DocuSign.\n\n{{sender_signature}}`}
+          defaultSubject={
+            envelope.email_subject ||
+            (envelope.template_key === "jbj-property-advertising-agreement"
+              ? `Property Advertising Agreement — Signature Required${docNumber ? ` · ${docNumber}` : ""}`
+              : `${envelope.name || "Document"} — Signature Required${docNumber ? ` · ${docNumber}` : ""}`)
+          }
+          defaultBody={envelope.email_message || `Dear {{client_name}},\n\nPlease find your ${envelope.name || "document"} attached for your review and electronic signature.\n\nKindly sign at your earliest convenience using the secure link below.\n\nThank you,\n{{sender_signature}}`}
           docNumber={docNumber || undefined}
           senderName={envelope.sender_name || undefined}
           senderTitle={(envelope as any).sender_title || undefined}
