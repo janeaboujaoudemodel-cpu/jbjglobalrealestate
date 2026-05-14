@@ -423,7 +423,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
             <h1 className="text-2xl font-semibold text-[#1A1A1A]">Documents & Forms</h1>
             <p className="text-sm text-[#1A1A1A]/70 mt-1">Unified hub — templates, document editor, e-signature, agreements, signatures & stamps. All in one place.</p>
           </div>
-          <Button variant="gold" onClick={() => navigate("/owner/documents/forms/create")}>
+          <Button variant="gold" onClick={() => setNewEnvelopeOpen(true)}>
             <Plus className="w-4 h-4 mr-2" /> New Envelope
           </Button>
         </header>
