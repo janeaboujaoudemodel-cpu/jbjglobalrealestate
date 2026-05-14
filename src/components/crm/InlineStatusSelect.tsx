@@ -93,9 +93,15 @@ export default function InlineStatusSelect({
                 <SelectItem
                   key={status.value}
                   value={status.value}
-                  className="pl-3 pr-3 py-1 focus:bg-[#B89555]/10 hover:bg-[#B89555]/10 cursor-pointer rounded-md"
+                  className="pl-3 pr-3 py-1.5 focus:bg-[#B89555]/10 hover:bg-[#B89555]/10 cursor-pointer rounded-md [&>span:first-child]:hidden"
                 >
-                  <LeadStatusBadge status={status.value} size="sm" showDot />
+                  <span className="flex items-center gap-2 text-[12px] font-semibold uppercase tracking-wide text-[#1A1A1A]">
+                    <span
+                      className="w-2 h-2 rounded-full flex-shrink-0"
+                      style={{ backgroundColor: status.dotColor }}
+                    />
+                    {status.label}
+                  </span>
                 </SelectItem>
               ))}
             </div>
