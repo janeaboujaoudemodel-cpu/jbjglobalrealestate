@@ -220,12 +220,15 @@ export default function OwnerInbox() {
     const idx = channelTabs.findIndex(t => t.value === 'email_gmail');
     const before = channelTabs.slice(0, idx);
     const after = channelTabs.slice(idx + 1);
-    const perAccount = gmailChannels.map(ch => ({
-      value: 'email_gmail' as const,
-      channelId: ch.id,
-      label: ch.identifier || ch.display_name || 'Gmail',
-      icon: <Mail className="h-4 w-4 text-red-500" />,
-    }));
+    const perAccount = gmailChannels.map(ch => {
+      const localPart = (ch.identifier || '').split('@')[0] || ch.display_name || 'account';
+      return {
+        value: 'email_gmail' as const,
+        channelId: ch.id,
+        label: `Gmail · ${localPart}`,
+        icon: <Mail className="h-4 w-4 text-red-500" />,
+      };
+    });
     return [...before, ...perAccount, ...after] as Array<{
       value: ChannelType | 'all';
       channelId?: string;
