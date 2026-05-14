@@ -168,12 +168,35 @@ function stripInlineSignature(text: string): string {
   return out.replace(/\s+$/g, "");
 }
 
+/** Decode at-most-twice for bodies persisted with double-encoded markup
+ *  (e.g. `&lt;p&gt;Dear Omar&lt;/p&gt;`). Without this the editor would
+ *  treat the literal `<p>` characters as plain text and re-escape them on
+ *  send, delivering raw HTML tags to the recipient. */
+function decodeIfDoubleEscaped(html: string): string {
+  let s = String(html || "");
+  for (let i = 0; i < 2; i++) {
+    // If the string contains real tags AND no escaped markers, we're done.
+    const hasRealTag = /<[a-z][\s\S]*?>/i.test(s);
+    const hasEscapedTag = /&lt;\s*\/?\s*[a-z]/i.test(s);
+    if (hasRealTag && !hasEscapedTag) break;
+    if (!hasEscapedTag) break;
+    s = s
+      .replace(/&nbsp;/gi, " ")
+      .replace(/&quot;/gi, '"')
+      .replace(/&#39;/gi, "'")
+      .replace(/&lt;/gi, "<")
+      .replace(/&gt;/gi, ">")
+      .replace(/&amp;/gi, "&");
+  }
+  return s;
+}
+
 /** Walk the HTML's block elements and drop any whose plain-text content
  *  matches a legacy fragment. If everything ends up empty, return the canonical
  *  NEW_DEFAULT_BODY_HTML so the editor never starts blank. */
 function scrubLegacyBody(html: string): string {
   if (!html) return NEW_DEFAULT_BODY_HTML;
-  let out = html;
+  let out = decodeIfDoubleEscaped(html);
   for (const re of LEGACY_BODY_FRAGMENTS) {
     // Strip matching text wherever it appears (inside <p>, raw, etc.).
     out = out.replace(re, "");
