@@ -18,14 +18,32 @@ export interface TriageResult {
 }
 
 export const CATEGORY_META: Record<string, { label: string; color: string }> = {
-  real_estate_lead: { label: "Real Estate Lead", color: "bg-emerald-500/10 text-emerald-700 border-emerald-500/30" },
-  real_estate_ops:  { label: "Real Estate Ops",  color: "bg-blue-500/10 text-blue-700 border-blue-500/30" },
-  marketing:        { label: "Marketing",        color: "bg-purple-500/10 text-purple-700 border-purple-500/30" },
-  finance:          { label: "Finance",          color: "bg-amber-500/10 text-amber-700 border-amber-500/30" },
-  personal:         { label: "Personal",         color: "bg-rose-500/10 text-rose-700 border-rose-500/30" },
-  spam:             { label: "Spam",             color: "bg-red-500/10 text-red-700 border-red-500/30" },
-  other:            { label: "Other",            color: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/30" },
+  real_estate_lead:    { label: "Real Estate Lead",    color: "bg-emerald-500/10 text-emerald-700 border-emerald-500/30" },
+  real_estate_ops:     { label: "Real Estate Ops",     color: "bg-blue-500/10 text-blue-700 border-blue-500/30" },
+  sales_offer:         { label: "Sales / Offers",      color: "bg-orange-500/10 text-orange-700 border-orange-500/30" },
+  marketing:           { label: "Marketing",           color: "bg-purple-500/10 text-purple-700 border-purple-500/30" },
+  finance:             { label: "Finance / Banking",   color: "bg-amber-500/10 text-amber-700 border-amber-500/30" },
+  developer_documents: { label: "Developer / Docs",    color: "bg-indigo-500/10 text-indigo-700 border-indigo-500/30" },
+  personal:            { label: "Personal",            color: "bg-rose-500/10 text-rose-700 border-rose-500/30" },
+  spam:                { label: "Spam",                color: "bg-red-500/10 text-red-700 border-red-500/30" },
+  other:               { label: "Other",               color: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/30" },
 };
+
+/**
+ * Client-side deterministic categorizer. Used to classify threads on the
+ * fly when AI triage hasn't run yet, so the category filter chips are
+ * actually useful (SHEIN → Marketing, Emirates NBD → Finance, etc).
+ */
+export function clientCategorize(thread: { contact_identifier?: string | null; contact_name?: string | null; last_message_preview?: string | null; ai_category?: string | null }): string {
+  if (thread.ai_category) return thread.ai_category;
+  const hay = `${thread.contact_identifier ?? ""} ${thread.contact_name ?? ""} ${thread.last_message_preview ?? ""}`.toLowerCase();
+  if (/(shein|creator center|campaign|reversible|ruelala|farfetch|cobone|newsletter|unsubscribe|promo|\bsale\b|\bdeal\b|coupon|rotana)/.test(hay)) return "marketing";
+  if (/(emiratesnbd|enbd|hsbc|adcb|\bfab\b|mashreq|payroll|invoice|\btax\b|\bvat\b|payment|\bbank\b|statement|priorit\w*banking|nbd)/.test(hay)) return "finance";
+  if (/(price offer|buyer waiting|luxury closet|offer for your|sell your|resale|reversible)/.test(hay)) return "sales_offer";
+  if (/(registration|\bmou\b|trade license|docusign|envelope|developer|brochure|inventory|\blisting\b|broker)/.test(hay)) return "developer_documents";
+  if (/(github|uptime|monitor|alert|deploy|build failed|run failed|supabase|hostinger|verification code|\botp\b)/.test(hay)) return "real_estate_ops";
+  return "other";
+}
 
 export default function useCommAITriage() {
   const qc = useQueryClient();
