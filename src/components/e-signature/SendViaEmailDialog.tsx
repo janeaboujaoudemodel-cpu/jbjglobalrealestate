@@ -229,9 +229,18 @@ export function SendViaEmailDialog({
   // The email button points directly to jbj.ae/api/download-file, so desktop
   // blockers never see the raw backend storage/function host and the recipient
   // does not need a SPA page to load before the PDF saves.
+  const b64url = (s: string): string => {
+    try {
+      const b64 = btoa(unescape(encodeURIComponent(s)));
+      return b64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+    } catch {
+      return encodeURIComponent(s);
+    }
+  };
+
   const wrapAsBrandedDownload = (signedUrl: string, filename?: string): string => {
     const proxy = new URL("/api/download-file", PUBLIC_DOMAIN);
-    proxy.searchParams.set("url", signedUrl);
+    proxy.searchParams.set("u", b64url(signedUrl));
     if (filename) proxy.searchParams.set("filename", filename);
     proxy.searchParams.set("disposition", "attachment");
     return proxy.toString();

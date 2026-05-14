@@ -9,13 +9,18 @@ interface ProxyOptions {
   disposition?: 'inline' | 'attachment';
 }
 
+function toBase64Url(input: string): string {
+  const b64 = btoa(unescape(encodeURIComponent(input)));
+  return b64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
 export function buildDownloadProxyUrl(originalUrl: string, options?: string | ProxyOptions) {
   // Support legacy string-only filename parameter
   const opts: ProxyOptions = typeof options === 'string' ? { filename: options } : (options || {});
 
   const origin = typeof window !== "undefined" ? window.location.origin : PUBLIC_DOMAIN;
   const proxy = new URL("/api/download-file", origin);
-  proxy.searchParams.set("url", originalUrl);
+  proxy.searchParams.set("u", toBase64Url(originalUrl));
   if (opts.filename) proxy.searchParams.set("filename", opts.filename);
   if (opts.disposition) proxy.searchParams.set("disposition", opts.disposition);
   return proxy.toString();
