@@ -95,6 +95,9 @@ export default function OwnerInbox() {
     unreadOnly: false,
   });
   const [selectedThread, setSelectedThread] = useState<CommThread | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [aiFilterIds, setAiFilterIds] = useState<Set<string> | null>(null);
+  const [aiFilterLabel, setAiFilterLabel] = useState<string>("");
   
   const {
     threads,
