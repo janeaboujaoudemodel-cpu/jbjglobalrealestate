@@ -98,6 +98,8 @@ export default function OwnerInbox() {
     channels,
     threadsLoading,
     stats,
+    visibleStats,
+    perChannelCounts,
     refetchThreads,
     updateThreadStatus,
     markAsRead,
@@ -122,14 +124,14 @@ export default function OwnerInbox() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [threads.length]);
 
-  // Compute per-channel unread counts
+  // Channel-tab badge helpers — derived from GLOBAL per-channel counts so
+  // they stay consistent whether or not the user has applied a status filter.
+  const totalUnreadAll = Object.values(perChannelCounts as Record<string, { unread: number }>)
+    .reduce((sum, v) => sum + (v?.unread || 0), 0);
   const channelUnreadCounts: Record<string, number> = {};
-  for (const t of threads) {
-    if (t.unread_count > 0) {
-      channelUnreadCounts[t.channel_type] = (channelUnreadCounts[t.channel_type] || 0) + t.unread_count;
-    }
+  for (const [k, v] of Object.entries(perChannelCounts as Record<string, { unread: number }>)) {
+    if (k.startsWith('type:')) channelUnreadCounts[k.slice(5)] = v.unread;
   }
-  const totalUnreadAll = Object.values(channelUnreadCounts).reduce((a, b) => a + b, 0);
 
   // Select first unread thread on load
   useEffect(() => {
