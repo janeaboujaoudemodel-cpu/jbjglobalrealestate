@@ -47,10 +47,10 @@ function normalizeSubject(value: string, fallbackDoc = "Document") {
   const raw = String(value || "").trim();
   const cleaned = raw
     .replace(/^please sign\s*[:—-]?\s*/i, "")
-    .replace(/^signature required\s*[:—-]?\s*/i, "")
-    .replace(/^signature pending\s*[.·—-]+\s*/i, "")
-    .replace(/^signature pending\s*:\s*/i, "");
-  return `Signature Pending: ${cleaned || fallbackDoc}`;
+    .replace(/^signature pending\s*[:.·—-]+\s*/i, "")
+    .replace(/^signature required\s*[:.·—-]+\s*/i, "")
+    .replace(/^signature required\s*:\s*/i, "");
+  return `Signature Required: ${cleaned || fallbackDoc}`;
 }
 
 const dedupeEmails = (emails: string[]) =>

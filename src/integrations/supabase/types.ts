@@ -34663,6 +34663,8 @@ export type Database = {
         | "declined"
         | "expired"
         | "voided"
+        | "awaiting_signed_return"
+        | "pending_owner_review"
       esign_field_type:
         | "signature"
         | "initials"
@@ -34677,6 +34679,7 @@ export type Database = {
         | "viewed"
         | "signed"
         | "declined"
+        | "awaiting_signed_return"
       event_approval_status: "draft" | "submitted" | "approved" | "rejected"
       hr_application_status: "pending" | "approved" | "rejected"
       hr_module_track: "company_knowledge" | "real_estate_basics"
@@ -35285,6 +35288,8 @@ export const Constants = {
         "declined",
         "expired",
         "voided",
+        "awaiting_signed_return",
+        "pending_owner_review",
       ],
       esign_field_type: [
         "signature",
@@ -35301,6 +35306,7 @@ export const Constants = {
         "viewed",
         "signed",
         "declined",
+        "awaiting_signed_return",
       ],
       event_approval_status: ["draft", "submitted", "approved", "rejected"],
       hr_application_status: ["pending", "approved", "rejected"],

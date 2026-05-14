@@ -32,14 +32,16 @@ import PAAListingDraftCard from "@/components/e-signature/PAAListingDraftCard";
 import PAAAICopilotDrawer from "@/components/e-signature/PAAAICopilotDrawer";
 import { Lock, Sparkles } from "lucide-react";
 
-type EnvelopeStatus = 'draft' | 'sent' | 'viewed' | 'partially_signed' | 'completed' | 'declined' | 'expired' | 'voided';
-type RecipientStatus = 'pending' | 'sent' | 'delivered' | 'viewed' | 'signed' | 'declined';
+type EnvelopeStatus = 'draft' | 'sent' | 'viewed' | 'partially_signed' | 'completed' | 'declined' | 'expired' | 'voided' | 'awaiting_signed_return' | 'pending_owner_review';
+type RecipientStatus = 'pending' | 'sent' | 'delivered' | 'viewed' | 'signed' | 'declined' | 'awaiting_signed_return';
 
 const statusConfig: Record<EnvelopeStatus, { label: string; color: string; icon: React.ReactNode }> = {
   draft: { label: "Draft", color: "bg-[#F7F2EA] text-[#1A1A1A]/80 border border-[#B89555]/40", icon: <FileSignature className="w-4 h-4" /> },
   sent: { label: "Sent", color: "bg-blue-50 text-blue-700 border border-blue-200", icon: <Send className="w-4 h-4" /> },
   viewed: { label: "Viewed", color: "bg-amber-50 text-amber-700 border border-amber-200", icon: <Eye className="w-4 h-4" /> },
   partially_signed: { label: "Partially Signed", color: "bg-orange-50 text-orange-700 border border-orange-200", icon: <Clock className="w-4 h-4" /> },
+  awaiting_signed_return: { label: "Submitted — Pending Review", color: "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]", icon: <Clock className="w-4 h-4" /> },
+  pending_owner_review: { label: "Pending Review", color: "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]", icon: <Clock className="w-4 h-4" /> },
   completed: { label: "Completed", color: "bg-emerald-50 text-emerald-700 border border-emerald-200", icon: <CheckCircle2 className="w-4 h-4" /> },
   declined: { label: "Declined", color: "bg-red-50 text-red-700 border border-red-200", icon: <XCircle className="w-4 h-4" /> },
   expired: { label: "Expired", color: "bg-[#F7F2EA] text-[#1A1A1A]/70 border border-[#B89555]/30", icon: <Clock className="w-4 h-4" /> },
@@ -51,6 +53,7 @@ const recipientStatusConfig: Record<RecipientStatus, { label: string; color: str
   sent: { label: "Sent", color: "bg-blue-50 text-blue-700 border border-blue-200" },
   delivered: { label: "Delivered", color: "bg-blue-50 text-blue-700 border border-blue-200" },
   viewed: { label: "Viewed", color: "bg-amber-50 text-amber-700 border border-amber-200" },
+  awaiting_signed_return: { label: "Submitted — Pending Review", color: "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]" },
   signed: { label: "Signed", color: "bg-emerald-50 text-emerald-700 border border-emerald-200" },
   declined: { label: "Declined", color: "bg-red-50 text-red-700 border border-red-200" },
 };
@@ -868,10 +871,19 @@ export default function EnvelopeDetail() {
         /* Preview-only: collapse the A4 min-height so there's no blank gap below the footer.
            Export path uses a separate fixed-height container in renderHtmlToPdfBlob,
            so the PDF stays pinned to A4. */
-        body > div[style*="min-height:1123px"]{min-height:auto !important;}
-        body > div[style*="min-height:1123px"] > div[style*="margin-top:auto"],
-        body > div[style*="min-height:1123px"] > div > div[style*="margin-top:auto"]{margin-top:18px !important;}
+        body > div[style*="min-height:1123px"]{min-height:0 !important;height:auto !important;}
+        body > div[style*="min-height:1123px"] *[style*="margin-top:auto"]{margin-top:14px !important;}
+        /* Belt-and-suspenders: the footer container often uses flex:1 spacers above it.
+           Drop trailing empty spacers so no white strip remains under the footer. */
+        body > div > div[style*="flex:1"]:last-child{flex:0 0 auto !important;height:0 !important;min-height:0 !important;}
+        body, html { overflow: hidden; }
         [data-field-key]{position:relative;cursor:text;transition:background .15s,outline .15s;border-radius:4px;}
+        [data-field-key]:hover{background:#FBF6EC;outline:1px dashed #B89555;outline-offset:2px;}
+        [data-chip-key]{cursor:pointer;border-radius:999px;transition:background .15s;}
+        [data-chip-key]:hover{background:#FBF6EC;}
+        .jbj-x{position:absolute;top:-9px;right:-9px;width:18px;height:18px;border-radius:999px;background:#FDFBF7;border:1px solid #B89555;color:#1A1A1A;font-size:11px;line-height:16px;text-align:center;cursor:pointer;display:none;font-family:Inter,Arial,sans-serif;font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08);user-select:none;}
+        [data-field-key]:hover > .jbj-x{display:block;}
+      </style></head><body dir="ltr">${previewHtml}<script>(function(){
         [data-field-key]:hover{background:#FBF6EC;outline:1px dashed #B89555;outline-offset:2px;}
         [data-chip-key]{cursor:pointer;border-radius:999px;transition:background .15s;}
         [data-chip-key]:hover{background:#FBF6EC;}
@@ -1085,42 +1097,7 @@ export default function EnvelopeDetail() {
                   srcDoc={previewSrcDoc}
                   className="w-full bg-white block"
                   style={{ aspectRatio: "794 / 1123", height: "auto", minHeight: 0, border: 0, display: "block" }}
-                  onLoad={(e) => {
-                    const f = e.currentTarget as HTMLIFrameElement;
-                    const doc = f.contentDocument;
-                    if (!doc) return;
-                    const fit = () => {
-                      try {
-                        const h = Math.max(
-                          doc.documentElement.scrollHeight,
-                          doc.body.scrollHeight,
-                        );
-                        const w = f.getBoundingClientRect().width || 794;
-                        if (h > 100) f.style.height = `${Math.round(w * 1123 / 794)}px`;
-                      } catch {}
-                    };
-                    // First pass immediately, then again after fonts + images
-                    // settle to eliminate the "big blank then snap" flash.
-                    fit();
-                    try {
-                      (doc as any).fonts?.ready?.then(fit).catch(() => {});
-                    } catch {}
-                    const imgs = Array.from(doc.images || []);
-                    let pending = imgs.length;
-                    if (pending === 0) setTimeout(fit, 50);
-                    imgs.forEach((img) => {
-                      if (img.complete) { if (--pending === 0) fit(); return; }
-                      img.addEventListener("load", () => { if (--pending === 0) fit(); }, { once: true });
-                      img.addEventListener("error", () => { if (--pending === 0) fit(); }, { once: true });
-                    });
-                    try {
-                      const ro = new ResizeObserver(fit);
-                      ro.observe(doc.documentElement);
-                      ro.observe(doc.body);
-                      // Stop observing if the iframe goes away
-                      f.addEventListener("unload", () => ro.disconnect(), { once: true });
-                    } catch {}
-                  }}
+                  scrolling="no"
                 />
               ) : envelope.document_url ? (
                 <iframe

@@ -1,67 +1,77 @@
-## Fresh diagnosis
+## Audit result
 
-The remaining bugs are coming from four separate places:
+**Already mostly completed**
+- Download PDF generation itself is separate from the preview and should not be touched.
+- Test email HTML is premium and mostly correct.
+- Signature email display is already forced to `contact@jbj.ae` in rendered signatures.
+- Save buttons exist for recipient, subject, and signature fields.
+- Forms & Agreements already lists Templates, Draft Applications, Forms Generated, Pending Signature, Signed, Recently Deleted, and Assets.
 
-1. **Signature picker still blue** because the native `<select>` option highlight is browser/OS-controlled. Styling the select border is not enough; the dropdown options can still render blue.
-2. **Duplicated JBJ Front Desk / Help Desk / Support** because duplicate system rows already exist in the database.
-3. **Email was changed to `frontdesk@jbj.ae`** in the signature preset data. You want the original emails retained, so this must be restored instead of altered.
-4. **Download still blocked on desktop** because the email link currently opens `/d?u=...`, but that page still fetches the underlying storage URL from the browser. Desktop blockers can still block that fetch. The download needs to stream through the project’s existing `download-file` backend function instead.
+**Still pending / broken**
+- PAA preview iframe forces an A4 ratio, but the embedded HTML still carries min-height/footer auto-spacing from the PDF template, causing the temporary blank area and persistent white strip under the footer.
+- Email download CTA still includes a document glyph; the user wants no arrow/icon in the CTA.
+- The branded `/d` download landing page still fetches the backend storage proxy from the browser, so blocker tools can still show the backend/storage host. The fallback page also feels too blank/cheap.
+- Signature picker styling still lets Radix/theme blue focus/hover leak through.
+- Signature preset filtering intentionally hides Front Desk / Help Desk, and labels/rendering do not clearly present those as individual signatures.
+- Default PAA email subject currently normalizes to `Signature Pending:`; requested default is `Signature Required:` everywhere, including the card heading/body default.
+- “Client emailed signed copy back” is only a weak acknowledgement: the database status enum does not include `awaiting_signed_return`, so the current endpoint’s status update can fail silently. Forms & Agreements therefore cannot reliably show “Contract submitted / Pending application review.”
+- Inbound email attachment ingestion is not wired, so replying with an attachment will not automatically create a signed contract record.
+- Some small-screen buttons/chips can overflow because controls use fixed inline layouts and don’t enforce `min-w-0`, wrapping, or responsive text behavior consistently.
+- E-signature tools still navigate to standalone `/e-signature/*` routes from parts of Forms & Agreements; owner routes exist but some buttons still point outside the hub.
 
-## Phase 5 — Fix current email/signature/document send issues
+## Implementation plan
 
-### 1. Signature picker: remove native blue completely
-- Replace the native `<select>` in `SendViaEmailDialog` with a custom popover/listbox.
-- Style hover, active, selected, focus ring, and border with champagne/gold only.
-- Keep the same signature-selection behavior, but no browser-native blue option highlight.
+### 1) Fix only the PAA in-app preview layout
+- Update the preview-only iframe CSS in `EnvelopeDetail.tsx` so the root A4 template is treated as a single bounded page in preview.
+- Remove preview-only footer auto-spacing/min-height behavior without changing `renderHtmlToPdfBlob` or download/export behavior.
+- Keep the iframe A4-sized and stable to avoid the “blank then snaps smaller” effect.
 
-### 2. Signature duplicates + wrong email restoration
-- Add a database migration that:
-  - removes duplicate system signature rows, keeping one per signature name;
-  - restores the intended email values from the original system presets instead of the newly changed `frontdesk@jbj.ae` values;
-  - keeps Front Desk, Help Desk, and Support as **three separate signatures**, not one bundled signature.
-- Add a safe uniqueness guard so the same duplicate system rows cannot be inserted again.
+### 2) Make email download CTA icon-free and keep delivered/test emails consistent
+- Update both client and backend email renderers:
+  - `src/lib/email/buildEnvelopeEmailHtml.ts`
+  - `supabase/functions/_shared/envelope-email-html.ts`
+- Remove the glyph/icon from “Click here to download your document”.
+- Change default wording to `Signature Required:` and ensure the email card heading uses the same subject.
 
-### 3. Subject default: “Signature Pending”
-- Update the PAA/envelope default subject generation from `Please sign...` to `Signature Pending — ...`.
-- Apply it in:
-  - new envelopes created from templates;
-  - the send-via-email dialog fallback;
-  - test-send and real-send fallback logic.
-- Existing envelopes that still have `Please sign...` should be normalized when the dialog opens, unless the owner has manually typed a different custom subject.
+### 3) Harden branded download landing page without touching PDF generation
+- Keep `/d?u=...` as the branded link, but make the page premium and explicit: JBJ Global Real Estate LLC, document-ready message, filename, and a clear download button.
+- Avoid exposing the backend/storage URL as the visible primary action where possible.
+- Prefer a same-page, user-initiated blob download with a clear fallback that does not feel like a blank page.
+- Deploy/update the `download-file` function if needed so responses use proper `Content-Disposition`, filename, cache, and brand-safe headers.
 
-### 4. Per-email edit vs standard template save
-- Change `Approve & send` and `Send test` so edits apply to the **current email payload only** by default.
-- Add an explicit **Save as standard template** action in the dialog.
-- Only that explicit save updates `email_subject` / `email_message` on the envelope/template baseline for future opens.
-- This preserves your rule: unsaved preview edits affect only the current email, not future emails.
+### 4) Fix signature picker UX and individual presets
+- Force champagne/gold hover, selected, focus, and ring styles on the select trigger/items.
+- Stop hiding Front Desk / Help Desk presets.
+- Render each preset independently with its own title/role while keeping the displayed email fixed to `contact@jbj.ae`.
+- Make the field border/hover gold champagne, not blue.
 
-### 5. Download CTA: document icon + no desktop blocking
-- Add a premium inline document/file SVG mark to the email download CTA, with no arrow icon.
-- Change the branded `/d` landing page so it does **not** fetch the storage URL directly from the browser.
-- Route downloads through the existing `download-file` backend stream with `Content-Disposition: attachment`, keeping the visible experience branded as JBJ.
-- Upgrade `/d` page copy/design: “Your document is ready”, company name “JBJ GLOBAL REAL ESTATE L.L.C S.O.C”, primary Download button, and direct fallback only through the same proxy path.
+### 5) Add reliable “submitted signed copy / pending review” tracking
+- Add supported lifecycle values to the document status enums:
+  - `awaiting_signed_return`
+  - optionally `pending_owner_review` if needed for owner approval.
+- Update UI status maps and Forms & Agreements buckets to show a clear tab/label such as “Submitted / Pending Review”.
+- Fix `esign-mark-awaiting-return` so when the signer clicks “I emailed the signed copy back,” the owner backend reliably shows the application as submitted.
+- Add owner actions on the envelope detail page: approve uploaded/submitted signed contract or keep it pending.
 
-### 6. Redeploy changed backend functions
-- Because the delivered email HTML is rendered by backend functions, redeploy the changed email/download-related functions after code changes.
+### 6) Wire signed contract visibility inside Forms & Agreements
+- Surface submitted/returned contracts in Forms & Agreements, not as a separate e-signature-only workflow.
+- Keep “Open” inside `/owner/documents/forms/:id`.
+- Change Forms & Agreements quick actions/buttons that still go to `/e-signature/*` so they use `/owner/documents/forms/*` owner routes.
 
-## Phase 6 — Continue Forms & Agreements unification after the above bugs are fixed
+### 7) Address reply-with-attachment limitation safely
+- Audit existing inbound email/webhook code.
+- If current infrastructure exposes inbound attachments, connect them to the matching envelope and store the returned signed PDF for owner review.
+- If inbound attachments are not available in this project, keep the signer confirmation workflow reliable and show the pending review state, while leaving a clear upload path for the owner. Do not fake attachment ingestion.
 
-- Keep `/owner/documents/forms` as the current working route while stabilizing the send flow.
-- Then proceed with the Forms & Agreements hub unification:
-  - Templates
-  - My Documents
-  - E-Signature inline section
-  - Applications
-  - Archive
-- Do not remove existing E-Signature/Form features; consolidate them into one hub with redirects for old routes.
+### 8) Fix responsive overflow for the affected controls
+- Tighten `EmailRecipientChips`, dialog footer buttons, document action buttons, and Forms & Agreements tab/buttons with wrapping, `min-w-0`, `break-words`, and responsive text sizing.
+- Ensure labels like “Recipients & CCs” and button text stay inside their boxes on smaller widths.
 
-## Validation
-
-- Confirm the signature dropdown has no blue hover/selected state.
-- Confirm only one each appears: JBJ Front Desk, JBJ Help Desk, JBJ Support.
-- Confirm signature emails are restored and not changed to the unwanted new values.
+### 9) Deploy and validate
+- Deploy updated backend functions:
+  - `esign-send-test-email`
+  - `esign-send-for-signature`
+  - `download-file`
+  - `esign-mark-awaiting-return`
 - Send a test email to `infoo.jane@gmail.com`.
-- Confirm subject starts with `Signature Pending`.
-- Confirm email download CTA includes a document icon and no arrow.
-- Confirm clicking download on desktop goes through the branded `/d` page and does not expose/block the raw storage URL.
-- Confirm edits sent without “Save as standard template” do not persist as the default for future sends.
+- Validate: preview no blank strip, download page branded, CTA icon removed, default subject/card says `Signature Required:`, signature picker is gold/champagne, submitted return status appears in Forms & Agreements.
