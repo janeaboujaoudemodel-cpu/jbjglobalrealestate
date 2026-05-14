@@ -1138,20 +1138,6 @@ export default function EnvelopeDetail() {
           </Card>
         </div>
 
-        {/* Header & footer studio (always available) */}
-        <div className="flex items-center justify-between gap-2">
-          <Button variant="outline" size="sm" onClick={() => setShowStudio((s) => !s)}>
-            {showStudio ? "Hide" : "Customize"} header &amp; footer
-          </Button>
-          {showStudio && (
-            <Button variant="gold" size="sm" onClick={handleSaveEdits} disabled={regenerate.isPending}>
-              {regenerate.isPending ? <Loader2 className="w-3.5 h-3.5 mr-1 animate-spin" /> : <Save className="w-3.5 h-3.5 mr-1" />}
-              Apply chrome &amp; re-render
-            </Button>
-          )}
-        </div>
-        {showStudio && <TemplateChromeStudio value={chrome} onChange={setChrome} />}
-
         {/* Edit Fields panel (full width below preview) */}
         {editing && envelope.template_key && (
           <Card className="bg-[#F7F2EA] border-[#B89555]/30">
@@ -1295,36 +1281,6 @@ export default function EnvelopeDetail() {
           </Card>
         )}
 
-        {/* Activity log */}
-        <Card className="bg-[#F7F2EA] border-[#B89555]/30">
-          <CardHeader className="py-3 cursor-pointer" onClick={() => setActivityOpen((v) => !v)}>
-            <CardTitle className="text-sm text-[#1A1A1A] flex items-center gap-2 justify-between">
-              <span className="flex items-center gap-2"><Shield className="w-4 h-4" /> Activity Log</span>
-              <Button type="button" variant="outline" size="sm" className="h-7 text-[11px] border-[#B89555]/40" onClick={(e) => { e.stopPropagation(); setActivityOpen((v) => !v); }}>
-                {activityOpen ? "Minimize" : "Expand"}
-              </Button>
-            </CardTitle>
-          </CardHeader>
-          {activityOpen && <CardContent>
-            <div className="space-y-3">
-              {auditLogs.map((log: any) => (
-                <div key={log.id} className="flex items-start gap-3">
-                  <div className="w-7 h-7 rounded-full bg-white border border-[#B89555]/30 flex items-center justify-center shrink-0">
-                    <Clock className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm text-[#1A1A1A]">{log.description}</p>
-                    <div className="flex items-center gap-3 text-xs text-[#1A1A1A]/60 mt-0.5">
-                      <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{format(new Date(log.created_at), "MMM d, yyyy 'at' h:mm a")}</span>
-                      {log.ip_address && <span className="flex items-center gap-1"><Globe className="w-3 h-3" />{log.ip_address}</span>}
-                    </div>
-                  </div>
-                </div>
-              ))}
-              {!auditLogs.length && <p className="text-sm text-[#1A1A1A]/60 text-center py-4">No activity yet</p>}
-            </div>
-          </CardContent>}
-        </Card>
       </div>
 
       <SendForSignatureDialog
