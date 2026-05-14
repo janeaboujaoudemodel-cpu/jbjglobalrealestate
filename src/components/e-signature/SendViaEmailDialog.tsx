@@ -164,6 +164,7 @@ export function SendViaEmailDialog({
   const [selectedSigId, setSelectedSigId] = useState<string>("");
   const [draftSavedAt, setDraftSavedAt] = useState<number | null>(null);
   const [extraAttachments, setExtraAttachments] = useState<EmailAttachment[]>([]);
+  const [autoAttachmentRemoved, setAutoAttachmentRemoved] = useState(false);
   const draftKey = `jbj_esign_email_draft_${envelopeId || "__new__"}`;
 
   // Load all email signature presets so the owner can pick which one
