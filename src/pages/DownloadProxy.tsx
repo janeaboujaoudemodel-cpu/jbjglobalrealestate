@@ -12,6 +12,7 @@
 import { useEffect, useState } from "react";
 import { Loader2, AlertTriangle, FileText } from "lucide-react";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
+import { anonHeaders } from "@/config/backend";
 
 function decodeUrlParam(s: string | null): string {
   if (!s) return "";
@@ -39,7 +40,7 @@ export default function DownloadProxy() {
     if (!proxiedTarget) { setState("fallback"); return; }
     setState("loading");
     try {
-      const res = await fetch(proxiedTarget, { credentials: "omit" });
+      const res = await fetch(proxiedTarget, { credentials: "omit", headers: anonHeaders() });
       if (!res.ok) throw new Error(String(res.status));
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
