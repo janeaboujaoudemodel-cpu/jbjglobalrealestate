@@ -167,6 +167,9 @@ Deno.serve(async (req) => {
         senderName,
         senderTitle,
         docusignUrl: docusignUrlClean,
+        // If the DocuSign URL is missing/invalid, the renderer falls back to
+        // this owner-managed signing landing page (envelope context preserved).
+        fallbackSignUrl: signingUrl,
         attachmentName: typeof attachment_name === "string" ? attachment_name : undefined,
         attachmentUrl: typeof attachment_url === "string" ? attachment_url : undefined,
       });
