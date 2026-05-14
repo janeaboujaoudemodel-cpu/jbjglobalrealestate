@@ -446,11 +446,22 @@ export default function OwnerInbox() {
                     </div>
                   ) : (
                     <div className="divide-y divide-gold/10">
-                      {threads.filter(t => categoryFilter === 'all' || clientCategorize(t) === categoryFilter).map((thread) => (
+                      {threads
+                        .filter(t => categoryFilter === 'all' || clientCategorize(t) === categoryFilter)
+                        .filter(t => !aiFilterIds || aiFilterIds.has(t.id))
+                        .map((thread) => (
                         <ThreadListItem
                           key={thread.id}
                           thread={thread}
                           isSelected={selectedThread?.id === thread.id}
+                          isChecked={selectedIds.has(thread.id)}
+                          onToggleCheck={() => {
+                            setSelectedIds(prev => {
+                              const next = new Set(prev);
+                              if (next.has(thread.id)) next.delete(thread.id); else next.add(thread.id);
+                              return next;
+                            });
+                          }}
                           onClick={() => handleThreadSelect(thread)}
                         />
                       ))}
