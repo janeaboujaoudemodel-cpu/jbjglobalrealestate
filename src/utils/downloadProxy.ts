@@ -1,4 +1,4 @@
-import { SUPABASE_URL } from "@/config/backend";
+import { PUBLIC_DOMAIN } from "@/config/backend";
 /**
  * Build a backend download-proxy URL for storage files.
  * This avoids client-side blockers that target /storage/v1 URLs.
@@ -10,13 +10,11 @@ interface ProxyOptions {
 }
 
 export function buildDownloadProxyUrl(originalUrl: string, options?: string | ProxyOptions) {
-  const base = SUPABASE_URL;
-  if (!base) return originalUrl;
-
   // Support legacy string-only filename parameter
   const opts: ProxyOptions = typeof options === 'string' ? { filename: options } : (options || {});
 
-  const proxy = new URL(`${base}/functions/v1/download-file`);
+  const origin = typeof window !== "undefined" ? window.location.origin : PUBLIC_DOMAIN;
+  const proxy = new URL("/api/download-file", origin);
   proxy.searchParams.set("url", originalUrl);
   if (opts.filename) proxy.searchParams.set("filename", opts.filename);
   if (opts.disposition) proxy.searchParams.set("disposition", opts.disposition);
