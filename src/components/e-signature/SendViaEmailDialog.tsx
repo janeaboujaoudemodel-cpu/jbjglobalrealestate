@@ -277,42 +277,24 @@ export function SendViaEmailDialog({
 
   const canSend = tos.length > 0 && tos.every(isValidEmail) && subject.trim().length > 0;
 
-  // Wrap a signed storage URL into the branded /d page. That page fetches via
-  // same-domain /api/download-file with the public key, so email clients never
-  // expose or open the raw backend storage/function host directly.
-  const b64url = (s: string): string => {
-    try {
-      const b64 = btoa(unescape(encodeURIComponent(s)));
-      return b64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-    } catch {
-      return encodeURIComponent(s);
-    }
-  };
-
-  const wrapAsBrandedDownload = (signedUrl: string, filename?: string): string => {
-    const n = filename ? `&n=${encodeURIComponent(filename)}` : "";
-    return `${PUBLIC_DOMAIN}/d?u=${b64url(signedUrl)}${n}`;
-  };
-
-  // Convert a Supabase storage URL into a 7-day signed URL, then wrap it in
-  // the branded /d landing page. Public-bucket URLs and external URLs are
-  // wrapped too so the email always shows a jbj.ae link.
+  // Resolve the envelope's stored document URL into a DIRECT signed URL to
+  // the raw PDF bytes. The backend fetches this URL and base64-encodes it
+  // for Resend's `attachments` array — so it MUST point at the actual PDF,
+  // not at the branded /d landing page (which returns HTML and would be
+  // delivered as a broken .pdf that Gmail renders as a blank preview).
   const resolveAttachmentUrl = async (rawUrl?: string): Promise<string | undefined> => {
     if (!rawUrl) return undefined;
     const m = rawUrl.match(/\/storage\/v1\/object\/(?:public|sign|authenticated)\/([^/?]+)\/([^?]+)/);
-    let signed = rawUrl;
     if (m) {
       const bucket = m[1];
       let path = m[2];
       try { path = decodeURIComponent(path); } catch { /* keep raw */ }
       try {
-        const { data, error } = await supabase.storage.from(bucket).createSignedUrl(path, 60 * 60 * 24 * 7, {
-          download: attachmentName || true,
-        });
-        if (!error && data?.signedUrl) signed = data.signedUrl;
-      } catch { /* keep raw */ }
+        const { data, error } = await supabase.storage.from(bucket).createSignedUrl(path, 60 * 60 * 24 * 7);
+        if (!error && data?.signedUrl) return data.signedUrl;
+      } catch { /* fall through */ }
     }
-    return wrapAsBrandedDownload(signed, attachmentName);
+    return rawUrl;
   };
 
   const sendTest = async () => {
