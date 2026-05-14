@@ -119,19 +119,20 @@ export function buildBlankLetterHtml(
     ? `<img src="${esc(stampUrl)}" alt="Stamp" crossorigin="anonymous" style="position:absolute;left:${stX}%;top:${stY}%;width:130px;height:130px;object-fit:contain;mix-blend-mode:multiply;opacity:.9;pointer-events:none;" />`
     : "";
 
-  // Default signature row: signature line + Founder & CEO on left, stamp on right
+  // Smart-placement signature row: sits IMMEDIATELY after the body content.
+  // Short letter → block hugs the body. Long letter → flows naturally lower.
+  // No forced min-height pinning to footer, no dashed placeholder box.
+  const showStampSlot = !!stampUrl && !placedStamp;
   const sigBlock = `
-    <div style="margin-top:34px;display:flex;align-items:flex-end;justify-content:space-between;gap:32px;flex:0 0 auto;">
+    <div style="margin-top:28px;display:flex;align-items:flex-end;justify-content:space-between;gap:32px;flex:0 0 auto;page-break-inside:avoid;">
       <div style="flex:0 1 320px;min-width:220px;">
-        ${sigUrl && !placedSignature ? `<img src="${esc(sigUrl)}" alt="Signature" crossorigin="anonymous" style="max-height:64px;max-width:240px;object-fit:contain;display:block;margin-bottom:6px;" />` : `<div style="height:48px;"></div>`}
+        ${sigUrl && !placedSignature ? `<img src="${esc(sigUrl)}" alt="Signature" crossorigin="anonymous" style="max-height:64px;max-width:240px;object-fit:contain;display:block;margin-bottom:6px;" />` : `<div style="height:40px;"></div>`}
         <div style="border-top:1px solid ${INK};padding-top:6px;">
           <div style="font-size:12px;font-weight:700;color:${INK};letter-spacing:.02em;">${esc(signerName)}</div>
           <div style="font-size:10.5px;color:${INK};opacity:.78;letter-spacing:.06em;text-transform:uppercase;margin-top:2px;">${esc(signerTitle)}</div>
         </div>
       </div>
-      <div style="flex:0 0 auto;text-align:right;min-height:120px;display:flex;align-items:flex-end;justify-content:flex-end;">
-        ${stampUrl && !placedStamp ? `<img src="${esc(stampUrl)}" alt="Stamp" crossorigin="anonymous" style="width:128px;height:128px;object-fit:contain;mix-blend-mode:multiply;opacity:.9;" />` : `<div style="width:128px;height:128px;border:1px dashed ${GOLD};border-radius:6px;display:flex;align-items:center;justify-content:center;color:${INK};opacity:.35;font-size:9px;letter-spacing:.18em;text-transform:uppercase;">Stamp</div>`}
-      </div>
+      ${showStampSlot ? `<div style="flex:0 0 auto;text-align:right;"><img src="${esc(stampUrl)}" alt="Stamp" crossorigin="anonymous" style="width:128px;height:128px;object-fit:contain;mix-blend-mode:multiply;opacity:.9;" /></div>` : ""}
     </div>`;
 
   return `
