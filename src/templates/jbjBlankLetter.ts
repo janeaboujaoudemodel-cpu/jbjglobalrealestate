@@ -153,9 +153,9 @@ ${LETTERHEAD_PAGE_OPEN}
     ${subject ? `<div style="margin:6px 0 14px;"><span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.65;">Subject</span><div style="font-size:14px;font-weight:700;color:${INK};margin-top:2px;letter-spacing:.01em;">${esc(subject)}</div></div>` : ""}
 
     <div data-letter-body style="flex:0 0 auto;font-size:12px;line-height:1.65;color:${INK};">${bodyRendered}</div>
-    <div style="flex:1 1 auto;min-height:24px;"></div>
 
     ${sigBlock}
+    <div style="flex:1 1 auto;min-height:24px;"></div>
     ${placedSignature}
     ${placedStamp}
   </div>
