@@ -1,49 +1,47 @@
-I found the concrete breakage: the Omar envelope is stored with `template_key = jbj-letterhead-leasing`, so the app is rendering it as a blank letterhead instead of the approved PAA template. The uploaded PDF is the source of truth for the approved PAA layout.
+I found the current breakage in the frontend layout/rendering code:
+
+- `BlankLetterStudio` still uses a left editor + right preview grid, so the A4 preview is squeezed off-screen instead of centered.
+- The preview scale uses CSS `scale(min(...))`, which is fragile and leaves the document clipped at this viewport.
+- Signature/stamp custom placement overlays are independent boxes on top of the preview and can overlap/break when uploaded or dragged.
+- `buildBlankLetterHtml` pins the signature/stamp near the bottom instead of placing them intelligently based on body length.
+- `EnvelopeDetail` top sections are expanded cards, not minimized accordions, and the edit panel has no clear minimize/collapse control or top/down navigation.
 
 Plan:
 
-1. Restore the approved PAA leasing template
-   - Rebuild `JBJ PAA Leasing` HTML to match the uploaded approved PDF exactly:
-     - Header: JBJ monogram, legal company name, Port Saeed office line, doc number and contact stack.
-     - Title: `PROPERTY ADVERTISING AGREEMENT — LEASING`.
-     - Sections exactly as uploaded: `1. Landlord / Owner Details`, `3. Property Specs`, `4. Pricing & Lease Terms`, `7. Terms and Conditions`, `8. Landlord`.
-     - Same compact underline field layout, same one-page A4 proportions, same footer.
-   - Keep the existing editable field keys so every client can still have different values.
-   - Do not replace the PAA with blank-letterhead logic again.
+1. Rework `BlankLetterStudio` into a centered A4 workspace
+   - Make the A4 letter preview the central hero area.
+   - Move AI prompt, subject/body fields, and signature/stamp controls into a compact top/header frame around the preview instead of a left column that shrinks the page.
+   - Give the preview its own scrollable centered canvas so the page is always visible and horizontally centered.
+   - Replace the fragile CSS `scale(min(...))` with a stable React-calculated scale based on the preview container width/height.
 
-2. Repair the broken Omar envelope data
-   - Correct the existing envelope `810df24a-145b-48f2-8e5a-f18e44e0c576` from `jbj-letterhead-leasing` back to the real PAA template key.
-   - Re-render its current field values into the restored approved PAA HTML/PDF.
-   - Preserve current client data, recipients, status, document number, audit data, and signing links.
+2. Fix stamp/signature controls in the letterhead studio
+   - Stop showing overlapping preview overlays by default.
+   - Keep uploaded signature/stamp assets in compact rows/cards in the header controls.
+   - Only show placement handles when the user explicitly enters custom placement mode.
+   - Clamp placement coordinates so handles cannot fall over the footer or outside the A4 page.
+   - Add reset behavior that returns to smart automatic placement.
 
-3. Fix Edit Fields behavior
-   - Move the edit-fields panel above the document preview, directly under the action/header area.
-   - When `Edit fields` is clicked, open the fields immediately in the visible top area and focus/scroll to them.
-   - Keep every PAA field editable using the same field groups; no missing fields.
+3. Make blank letter signature/stamp placement smart
+   - Update the blank letter template so the signature/stamp block sits immediately after the body when content is short.
+   - If content grows, allow the block to move lower naturally while keeping safe spacing above the footer.
+   - Remove the large forced blank body area that pushes the signature/stamp down near the footer for short letters.
+   - Keep final PDF rendering consistent with the visible preview.
 
-4. Fix EnvelopeDetail layout and preview width
-   - Remove the right-side vertical rail layout.
-   - Put Recipients, CCs, Details, Customize header/footer, Signed document, Listing Draft, and Activity Log above the document in a full-width responsive control band.
-   - Make the document preview full width below those controls.
-   - Use an A4 iframe/preview wrapper with proper scrolling only when needed, not a clipped fixed-height blank panel.
+4. Minimize EnvelopeDetail control sections by default
+   - Convert Recipients & CCs, Details, Signed Document/Activity Log, and Listing Draft into compact collapsible sections above the document.
+   - Default them to collapsed/minimized so the document starts higher.
+   - Preserve all existing controls/content inside each section when expanded.
+   - Keep Activity Log and Listing Draft minimized by default, including for signed documents.
 
-5. Finish remaining Documents & Forms tasks
-   - New Envelope opens an in-page template picker, not upload/sign directly.
-   - Embed the document editor and e-sign tools as inline tabs/surfaces inside Documents & Forms instead of sending the user away to separate pages.
-   - Add full Manage dropdown actions for saved signatures/stamps: set default, replace image, rename, archive, delete, upload new.
+5. Fix Edit Fields panel behavior in EnvelopeDetail
+   - Keep `Edit fields` above the document, but make it a collapsible/minimizable panel with a visible minimize button.
+   - When `Edit fields` is clicked, open it and scroll/focus to the panel.
+   - Add `Go to Top` and `Go Down` buttons near the document/editor controls for fast navigation.
+   - Ensure fields remain editable and visible; do not remove PAA fields.
 
-6. Rework BlankLetterStudio layout
-   - Top toolbar: back, document number/date, save/send/download controls.
-   - Centered A4 preview scaled to fit the viewport.
-   - Move inputs/assets into a compact top toolbar or collapsible panels around the preview.
-   - Remove the old left/right split and avoid scroll-heavy layout.
+6. Verify the affected routes
+   - Check `/owner/documents/forms/blank-letter` at the current 1041×891 viewport for centered A4 preview and scrollability.
+   - Check `/owner/documents/forms/810df24a-145b-48f2-8e5a-f18e44e0c576` for minimized top panels, full-width document, edit panel collapse, and top/down buttons.
+   - Confirm the PAA template content remains routed to the approved PAA rendering and is not replaced by blank letterhead logic.
 
-7. Confirm AI model bump
-   - Verify `paa-ai-copilot` and `ai-contract-reviewer` remain on `google/gemini-2.5-pro`.
-   - If either regressed, update only the model identifier.
-
-8. QA before saying done
-   - Open `/owner/documents/forms/810df24a-145b-48f2-8e5a-f18e44e0c576` and compare the visible preview against the uploaded approved PDF.
-   - Click `Edit fields` and verify fields open immediately above the document.
-   - Verify the document is full-width with top control bands, not a vertical recipient/details rail.
-   - Verify New Envelope picker, asset Manage actions, BlankLetterStudio A4 fit, and inline editor/e-sign surfaces.
+Important constraint: I will not delete or rewrite the approved PAA document content; this plan only fixes the layout, controls, preview visibility, and smart placement behavior.

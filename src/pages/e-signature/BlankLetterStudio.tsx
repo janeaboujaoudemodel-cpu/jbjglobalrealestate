@@ -296,202 +296,246 @@ export default function BlankLetterStudio() {
     }
   };
 
+  // Auto-scale: measure available preview area and scale the 794×1123 A4 page to fit.
+  const previewBoxRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(0.7);
+  useEffect(() => {
+    const recompute = () => {
+      const el = previewBoxRef.current;
+      if (!el) return;
+      const w = el.clientWidth - 24;
+      const h = el.clientHeight - 24;
+      const s = Math.min(w / 794, h / 1123);
+      if (isFinite(s) && s > 0.2) setScale(Math.min(s, 1.2));
+    };
+    recompute();
+    const ro = new ResizeObserver(recompute);
+    if (previewBoxRef.current) ro.observe(previewBoxRef.current);
+    window.addEventListener("resize", recompute);
+    return () => { ro.disconnect(); window.removeEventListener("resize", recompute); };
+  }, []);
+
+  // Collapsible top control panels — closed by default so the A4 page is the hero.
+  const [openAI, setOpenAI] = useState(false);
+  const [openFields, setOpenFields] = useState(true);
+  const [openAssets, setOpenAssets] = useState(false);
+  const [placementMode, setPlacementMode] = useState(false);
+
+  const SectionToggle = ({ open, onToggle, label, icon: Icon }: any) => (
+    <button
+      onClick={onToggle}
+      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium border transition-colors ${
+        open ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]" : "bg-white border-[#EFE6D6] text-[#1A1A1A]/80 hover:border-[#B89555]/60"
+      }`}
+    >
+      <Icon className="w-3.5 h-3.5" />
+      {label}
+    </button>
+  );
+
   return (
-    <div className="min-h-screen bg-[#FDFBF7] p-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-6 flex items-center justify-between flex-wrap gap-3">
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" onClick={() => navigate("/owner/documents/forms")} className="text-[#1A1A1A]">
+    <div className="min-h-screen bg-[#FDFBF7]">
+      {/* Top toolbar — sticky so controls are always reachable */}
+      <div className="sticky top-0 z-30 bg-[#FDFBF7]/95 backdrop-blur border-b border-[#EFE6D6]">
+        <div className="max-w-[1400px] mx-auto px-4 py-3 flex items-center justify-between flex-wrap gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <Button variant="ghost" size="sm" onClick={() => navigate("/owner/documents/forms")} className="text-[#1A1A1A]">
               <ArrowLeft className="w-4 h-4 mr-1.5" /> Back
             </Button>
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight text-[#1A1A1A]">Standard JBJ Letterhead</h1>
-              <p className="text-sm text-[#1A1A1A]/70">Branded A4 letterhead · {docNumber}</p>
+            <div className="min-w-0">
+              <h1 className="text-base font-bold tracking-tight text-[#1A1A1A] truncate">Standard JBJ Letterhead</h1>
+              <p className="text-[11px] text-[#1A1A1A]/70 truncate">Branded A4 · {docNumber}</p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={() => navigate("/owner/documents/forms")}>
-              <FileSignature className="w-4 h-4 mr-2" /> Documents & Forms
-            </Button>
-            <Button variant="outline" onClick={handleSave} disabled={saving}>
-              {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
+          <div className="flex items-center gap-2 flex-wrap">
+            <SectionToggle open={openAI} onToggle={() => setOpenAI(v => !v)} label="AI Prompt" icon={Sparkles} />
+            <SectionToggle open={openFields} onToggle={() => setOpenFields(v => !v)} label="Fields" icon={FileSignature} />
+            <SectionToggle open={openAssets} onToggle={() => setOpenAssets(v => !v)} label="Signature & Stamp" icon={PenTool} />
+            <div className="w-px h-6 bg-[#EFE6D6] mx-1" />
+            <Button variant="outline" size="sm" onClick={handleSave} disabled={saving}>
+              {saving ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <Save className="w-3.5 h-3.5 mr-1.5" />}
               Save
             </Button>
-            <Button onClick={handleDownload} disabled={downloading} className="bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-white">
-              {downloading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Download className="w-4 h-4 mr-2" />}
+            <Button size="sm" onClick={handleDownload} disabled={downloading} className="bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-white">
+              {downloading ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <Download className="w-3.5 h-3.5 mr-1.5" />}
               Download PDF
             </Button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[420px_1fr] gap-6">
-          {/* Editor */}
-          <div className="space-y-4">
-            <Card className="p-4 bg-white border-[#EFE6D6]">
-              <div className="flex items-center gap-2 mb-2">
-                <Sparkles className="w-4 h-4 text-[#B89555]" />
-                <Label className="text-sm font-semibold text-[#1A1A1A]">AI Prompt</Label>
-              </div>
-              <div className="flex flex-wrap gap-1.5 mb-2">
+        {/* Collapsible AI prompt */}
+        {openAI && (
+          <div className="border-t border-[#EFE6D6] bg-white/60">
+            <div className="max-w-[1400px] mx-auto px-4 py-3 space-y-2">
+              <div className="flex flex-wrap gap-1.5">
                 {PRESETS.map((p) => (
-                  <button
-                    key={p.id}
-                    onClick={() => setPrompt(p.prompt)}
-                    className="text-[11px] px-2.5 py-1 rounded-full border border-[#EFE6D6] hover:border-[#B89555] text-[#1A1A1A] bg-[#FDFBF7]"
-                  >{p.label}</button>
+                  <button key={p.id} onClick={() => setPrompt(p.prompt)}
+                    className="text-[11px] px-2.5 py-1 rounded-full border border-[#EFE6D6] hover:border-[#B89555] text-[#1A1A1A] bg-[#FDFBF7]">
+                    {p.label}
+                  </button>
                 ))}
               </div>
-              <Textarea
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-                rows={4}
-                placeholder="e.g. Write a job offer letter for Jane Doe as Senior Broker, AED 18,000/month, start 1 June 2026."
-                className="text-sm resize-none"
-              />
-              <Button onClick={handleGenerate} disabled={generating} className="mt-2 w-full bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:opacity-90 text-white">
-                {generating ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Sparkles className="w-4 h-4 mr-2" />}
-                Generate with AI
-              </Button>
-            </Card>
-
-            <Card className="p-4 bg-white border-[#EFE6D6] space-y-3">
-              <div>
-                <Label className="text-xs uppercase tracking-wider text-[#1A1A1A]/70">Subject</Label>
-                <Input value={subject} onChange={(e) => setSubject(e.target.value)} placeholder="Letter subject" />
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <Label className="text-xs uppercase tracking-wider text-[#1A1A1A]/70">Recipient</Label>
-                  <Input value={recipient} onChange={(e) => setRecipient(e.target.value)} placeholder="Mr. John Doe" />
-                </div>
-                <div>
-                  <Label className="text-xs uppercase tracking-wider text-[#1A1A1A]/70">Date (editable)</Label>
-                  <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
-                </div>
-              </div>
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <Label className="text-xs uppercase tracking-wider text-[#1A1A1A]/70">Body</Label>
-                  <Button size="sm" variant="ghost" className="h-6 text-[10px]" onClick={handleInsertDate}>
-                    <Calendar className="w-3 h-3 mr-1" /> Set today's date
-                  </Button>
-                </div>
-                <Textarea
-                  value={bodyText}
-                  onChange={(e) => setBodyText(e.target.value)}
-                  rows={12}
-                  className="text-sm leading-relaxed"
-                  placeholder={`Dear Mr. Doe,\n\nWe are pleased to confirm…\n\nYours sincerely,`}
-                />
-                <p className="text-[10px] text-[#1A1A1A]/55 mt-1">Type normally — paragraph breaks are preserved. The signature line, name and stamp are added automatically.</p>
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <Label className="text-xs uppercase tracking-wider text-[#1A1A1A]/70">Signer Name</Label>
-                  <Input value={signerName} onChange={(e) => setSignerName(e.target.value)} />
-                </div>
-                <div>
-                  <Label className="text-xs uppercase tracking-wider text-[#1A1A1A]/70">Title</Label>
-                  <Input value={signerTitle} onChange={(e) => setSignerTitle(e.target.value)} placeholder="Founder & CEO" />
-                </div>
-              </div>
-            </Card>
-
-            <Card className="p-4 bg-white border-[#EFE6D6] space-y-3">
-              <div className="flex items-center justify-between">
-                <Label className="text-sm font-semibold text-[#1A1A1A] flex items-center gap-2">
-                  <PenTool className="w-4 h-4 text-[#B89555]" /> Signatures
-                </Label>
-                <input ref={sigInputRef} type="file" accept="image/*" onChange={(e) => handleUpload("signature", e)} className="hidden" />
-                <Button size="sm" variant="outline" onClick={() => sigInputRef.current?.click()}>Upload</Button>
-              </div>
-              {signatures.length === 0 ? (
-                <p className="text-xs text-[#1A1A1A]/60">No signatures yet — upload one and it will appear here and on the document.</p>
-              ) : (
-                <div className="grid grid-cols-3 gap-2">
-                  {signatures.map(s => {
-                    const isActive = (activeSignature?.id === s.id);
-                    return (
-                      <div key={s.id}
-                        onClick={() => setActiveSigId(s.id)}
-                        className={`relative cursor-pointer border-2 rounded p-1 bg-[#F7F2EA] ${isActive ? "border-[#B89555]" : "border-transparent hover:border-[#B89555]/40"}`}>
-                        <img src={s.image_url} alt={s.label || "Signature"} className="h-12 w-full object-contain" />
-                        <div className="absolute top-0.5 right-0.5 flex gap-0.5">
-                          <button onClick={(e) => { e.stopPropagation(); setDefaultAsset("signature", s.id); }}
-                            title="Set as default"
-                            className={`w-4 h-4 rounded-full flex items-center justify-center ${s.is_default ? "bg-[#B89555] text-white" : "bg-white/80 text-[#1A1A1A]/60"}`}>
-                            <Star className="w-2.5 h-2.5" />
-                          </button>
-                          <button onClick={(e) => { e.stopPropagation(); deleteAsset(s.id); }}
-                            title="Delete"
-                            className="w-4 h-4 rounded-full bg-red-500/90 text-white flex items-center justify-center">
-                            <Trash2 className="w-2.5 h-2.5" />
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-
-              <div className="flex items-center justify-between pt-2 border-t border-[#EFE6D6]">
-                <Label className="text-sm font-semibold text-[#1A1A1A] flex items-center gap-2">
-                  <StampIcon className="w-4 h-4 text-[#B89555]" /> Stamps
-                </Label>
-                <input ref={stampInputRef} type="file" accept="image/*" onChange={(e) => handleUpload("stamp", e)} className="hidden" />
-                <Button size="sm" variant="outline" onClick={() => stampInputRef.current?.click()}>Upload</Button>
-              </div>
-              {stamps.length === 0 ? (
-                <p className="text-xs text-[#1A1A1A]/60">No stamps yet.</p>
-              ) : (
-                <div className="grid grid-cols-3 gap-2">
-                  {stamps.map(s => {
-                    const isActive = (activeStamp?.id === s.id);
-                    return (
-                      <div key={s.id}
-                        onClick={() => setActiveStampId(s.id)}
-                        className={`relative cursor-pointer border-2 rounded p-1 bg-[#F7F2EA] ${isActive ? "border-[#B89555]" : "border-transparent hover:border-[#B89555]/40"}`}>
-                        <img src={s.image_url} alt={s.label || "Stamp"} className="h-12 w-full object-contain" />
-                        <div className="absolute top-0.5 right-0.5 flex gap-0.5">
-                          <button onClick={(e) => { e.stopPropagation(); setDefaultAsset("stamp", s.id); }}
-                            title="Set as default"
-                            className={`w-4 h-4 rounded-full flex items-center justify-center ${s.is_default ? "bg-[#B89555] text-white" : "bg-white/80 text-[#1A1A1A]/60"}`}>
-                            <Star className="w-2.5 h-2.5" />
-                          </button>
-                          <button onClick={(e) => { e.stopPropagation(); deleteAsset(s.id); }}
-                            title="Delete"
-                            className="w-4 h-4 rounded-full bg-red-500/90 text-white flex items-center justify-center">
-                            <Trash2 className="w-2.5 h-2.5" />
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-
-              <div className="flex items-center justify-between pt-2 border-t border-[#EFE6D6]">
-                <span className="text-[10px] text-[#1A1A1A]/60">
-                  {placedSig || placedStamp ? "Custom placement active" : "Standard placement"}
-                </span>
-                <Button size="sm" variant="ghost" onClick={() => { setPlacedSig(null); setPlacedStamp(null); }}>
-                  <RotateCcw className="w-3 h-3 mr-1" /> Reset placement
+              <div className="flex gap-2">
+                <Textarea value={prompt} onChange={(e) => setPrompt(e.target.value)} rows={2}
+                  placeholder="e.g. Write a job offer letter for Jane Doe as Senior Broker, AED 18,000/month, start 1 June 2026."
+                  className="text-sm resize-none flex-1" />
+                <Button onClick={handleGenerate} disabled={generating}
+                  className="self-stretch bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:opacity-90 text-white">
+                  {generating ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Sparkles className="w-4 h-4 mr-1.5" />}
+                  Generate
                 </Button>
               </div>
-            </Card>
+            </div>
           </div>
+        )}
 
-          {/* Preview — A4 page is the hero, auto-scaled to fit the viewport */}
-          <Card className="p-4 bg-[#F7F2EA] border-[#EFE6D6] flex items-start justify-center" style={{ minHeight: "calc(100vh - 140px)" }}>
+        {/* Collapsible field editor */}
+        {openFields && (
+          <div className="border-t border-[#EFE6D6] bg-white/60">
+            <div className="max-w-[1400px] mx-auto px-4 py-3 grid grid-cols-1 md:grid-cols-4 gap-3">
+              <div className="md:col-span-2">
+                <Label className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/70">Subject</Label>
+                <Input value={subject} onChange={(e) => setSubject(e.target.value)} placeholder="Letter subject" className="h-8 text-sm" />
+              </div>
+              <div>
+                <Label className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/70">Recipient</Label>
+                <Input value={recipient} onChange={(e) => setRecipient(e.target.value)} placeholder="Mr. John Doe" className="h-8 text-sm" />
+              </div>
+              <div>
+                <Label className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/70">Date</Label>
+                <div className="flex gap-1">
+                  <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="h-8 text-sm" />
+                  <Button size="sm" variant="ghost" className="h-8 px-2" onClick={handleInsertDate} title="Today">
+                    <Calendar className="w-3.5 h-3.5" />
+                  </Button>
+                </div>
+              </div>
+              <div className="md:col-span-4">
+                <Label className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/70">Body (plain text — line breaks preserved)</Label>
+                <Textarea value={bodyText} onChange={(e) => setBodyText(e.target.value)} rows={5} className="text-sm leading-relaxed"
+                  placeholder={`Dear Mr. Doe,\n\nWe are pleased to confirm…\n\nYours sincerely,`} />
+              </div>
+              <div className="md:col-span-2">
+                <Label className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/70">Signer Name</Label>
+                <Input value={signerName} onChange={(e) => setSignerName(e.target.value)} className="h-8 text-sm" />
+              </div>
+              <div className="md:col-span-2">
+                <Label className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/70">Title</Label>
+                <Input value={signerTitle} onChange={(e) => setSignerTitle(e.target.value)} placeholder="Founder & CEO" className="h-8 text-sm" />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Collapsible signature & stamp library */}
+        {openAssets && (
+          <div className="border-t border-[#EFE6D6] bg-white/60">
+            <div className="max-w-[1400px] mx-auto px-4 py-3 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <Label className="text-xs font-semibold text-[#1A1A1A] flex items-center gap-1.5">
+                    <PenTool className="w-3.5 h-3.5 text-[#B89555]" /> Signatures
+                  </Label>
+                  <input ref={sigInputRef} type="file" accept="image/*" onChange={(e) => handleUpload("signature", e)} className="hidden" />
+                  <Button size="sm" variant="outline" className="h-7" onClick={() => sigInputRef.current?.click()}>Upload</Button>
+                </div>
+                {signatures.length === 0 ? (
+                  <p className="text-[11px] text-[#1A1A1A]/60">No signatures yet — upload one.</p>
+                ) : (
+                  <div className="grid grid-cols-4 gap-2">
+                    {signatures.map(s => {
+                      const isActive = (activeSignature?.id === s.id);
+                      return (
+                        <div key={s.id} onClick={() => setActiveSigId(s.id)}
+                          className={`relative cursor-pointer border-2 rounded p-1 bg-[#F7F2EA] ${isActive ? "border-[#B89555]" : "border-transparent hover:border-[#B89555]/40"}`}>
+                          <img src={s.image_url} alt={s.label || "Signature"} className="h-10 w-full object-contain" />
+                          <div className="absolute top-0.5 right-0.5 flex gap-0.5">
+                            <button onClick={(e) => { e.stopPropagation(); setDefaultAsset("signature", s.id); }} title="Set as default"
+                              className={`w-4 h-4 rounded-full flex items-center justify-center ${s.is_default ? "bg-[#B89555] text-white" : "bg-white/80 text-[#1A1A1A]/60"}`}>
+                              <Star className="w-2.5 h-2.5" />
+                            </button>
+                            <button onClick={(e) => { e.stopPropagation(); deleteAsset(s.id); }} title="Delete"
+                              className="w-4 h-4 rounded-full bg-red-500/90 text-white flex items-center justify-center">
+                              <Trash2 className="w-2.5 h-2.5" />
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <Label className="text-xs font-semibold text-[#1A1A1A] flex items-center gap-1.5">
+                    <StampIcon className="w-3.5 h-3.5 text-[#B89555]" /> Stamps
+                  </Label>
+                  <input ref={stampInputRef} type="file" accept="image/*" onChange={(e) => handleUpload("stamp", e)} className="hidden" />
+                  <Button size="sm" variant="outline" className="h-7" onClick={() => stampInputRef.current?.click()}>Upload</Button>
+                </div>
+                {stamps.length === 0 ? (
+                  <p className="text-[11px] text-[#1A1A1A]/60">No stamps yet.</p>
+                ) : (
+                  <div className="grid grid-cols-4 gap-2">
+                    {stamps.map(s => {
+                      const isActive = (activeStamp?.id === s.id);
+                      return (
+                        <div key={s.id} onClick={() => setActiveStampId(s.id)}
+                          className={`relative cursor-pointer border-2 rounded p-1 bg-[#F7F2EA] ${isActive ? "border-[#B89555]" : "border-transparent hover:border-[#B89555]/40"}`}>
+                          <img src={s.image_url} alt={s.label || "Stamp"} className="h-10 w-full object-contain" />
+                          <div className="absolute top-0.5 right-0.5 flex gap-0.5">
+                            <button onClick={(e) => { e.stopPropagation(); setDefaultAsset("stamp", s.id); }} title="Set as default"
+                              className={`w-4 h-4 rounded-full flex items-center justify-center ${s.is_default ? "bg-[#B89555] text-white" : "bg-white/80 text-[#1A1A1A]/60"}`}>
+                              <Star className="w-2.5 h-2.5" />
+                            </button>
+                            <button onClick={(e) => { e.stopPropagation(); deleteAsset(s.id); }} title="Delete"
+                              className="w-4 h-4 rounded-full bg-red-500/90 text-white flex items-center justify-center">
+                              <Trash2 className="w-2.5 h-2.5" />
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+              <div className="md:col-span-2 flex items-center justify-between pt-2 border-t border-[#EFE6D6]">
+                <span className="text-[11px] text-[#1A1A1A]/70">
+                  {placementMode ? "Drag the signature/stamp on the page" : "Standard placement (auto: under the body, above footer)"}
+                </span>
+                <div className="flex gap-1">
+                  <Button size="sm" variant="outline" className="h-7 text-[11px]" onClick={() => setPlacementMode(v => !v)}>
+                    {placementMode ? "Done" : "Custom placement"}
+                  </Button>
+                  {(placedSig || placedStamp) && (
+                    <Button size="sm" variant="ghost" className="h-7 text-[11px]" onClick={() => { setPlacedSig(null); setPlacedStamp(null); setPlacementMode(false); }}>
+                      <RotateCcw className="w-3 h-3 mr-1" /> Reset
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* CENTERED A4 PREVIEW — the hero */}
+      <div ref={previewBoxRef} className="w-full" style={{ height: "calc(100vh - 88px)", overflow: "auto" }}>
+        <div className="w-full h-full flex items-start justify-center py-6">
+          <div
+            className="relative shrink-0"
+            style={{
+              width: 794 * scale,
+              height: 1123 * scale,
+            }}
+          >
             <div
-              className="relative"
+              className="relative origin-top-left"
               style={{
                 width: 794,
                 height: 1123,
-                transformOrigin: "top center",
-                // Scale so the 794×1123 A4 page always fits both width and height
-                // of the available preview area without scrollbars.
-                transform: "scale(min(calc((100vw - 520px) / 820), calc((100vh - 200px) / 1180)))",
+                transform: `scale(${scale})`,
+                transformOrigin: "top left",
               }}
             >
               <div ref={previewRef} className="relative">
@@ -500,54 +544,42 @@ export default function BlankLetterStudio() {
                   style={{ width: 794, minHeight: 1123 }}
                   dangerouslySetInnerHTML={{ __html: previewHtml }}
                 />
-                {/* Drag handles overlaid on top of the rendered preview */}
-                {activeSignature && placedSig && (
-                  <div
-                    onMouseDown={(e) => startDrag("sig", e)}
+                {placementMode && activeSignature && placedSig && (
+                  <div onMouseDown={(e) => startDrag("sig", e)}
                     style={{ position: "absolute", left: `${placedSig.x}%`, top: `${placedSig.y}%`, width: 220, height: 88 }}
-                    className="cursor-move ring-2 ring-[#B89555]/60 ring-offset-1 rounded group"
-                  >
-                    <button
-                      onClick={() => setPlacedSig(null)}
+                    className="cursor-move ring-2 ring-[#B89555]/60 ring-offset-1 rounded">
+                    <button onClick={() => setPlacedSig(null)}
                       className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center shadow"
-                      title="Remove signature placement"
-                    ><X className="w-3 h-3" /></button>
+                      title="Remove placement"><X className="w-3 h-3" /></button>
                   </div>
                 )}
-                {activeStamp && placedStamp && (
-                  <div
-                    onMouseDown={(e) => startDrag("stamp", e)}
+                {placementMode && activeStamp && placedStamp && (
+                  <div onMouseDown={(e) => startDrag("stamp", e)}
                     style={{ position: "absolute", left: `${placedStamp.x}%`, top: `${placedStamp.y}%`, width: 130, height: 130 }}
-                    className="cursor-move ring-2 ring-[#B89555]/60 ring-offset-1 rounded group"
-                  >
-                    <button
-                      onClick={() => setPlacedStamp(null)}
+                    className="cursor-move ring-2 ring-[#B89555]/60 ring-offset-1 rounded">
+                    <button onClick={() => setPlacedStamp(null)}
                       className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center shadow"
-                      title="Remove stamp placement"
-                    ><X className="w-3 h-3" /></button>
+                      title="Remove placement"><X className="w-3 h-3" /></button>
                   </div>
                 )}
-                {/* Quick "drag onto page" buttons when there's no custom placement yet */}
-                {(activeSignature && !placedSig) || (activeStamp && !placedStamp) ? (
-                  <div className="absolute top-2 right-2 flex flex-col gap-1.5 bg-white/90 backdrop-blur border border-[#B89555]/30 rounded-lg p-2 shadow">
-                    <p className="text-[9px] uppercase tracking-wider text-[#1A1A1A]/60">Custom placement</p>
+                {placementMode && (
+                  <div className="absolute top-2 right-2 flex flex-col gap-1.5 bg-white/95 backdrop-blur border border-[#B89555]/30 rounded-lg p-2 shadow">
+                    <p className="text-[9px] uppercase tracking-wider text-[#1A1A1A]/60">Place on page</p>
                     {activeSignature && !placedSig && (
-                      <Button size="sm" variant="outline" className="h-6 text-[10px]"
-                        onClick={() => setPlacedSig({ x: 8, y: 78 })}>
-                        <PenTool className="w-3 h-3 mr-1" /> Drag signature
+                      <Button size="sm" variant="outline" className="h-6 text-[10px]" onClick={() => setPlacedSig({ x: 8, y: 78 })}>
+                        <PenTool className="w-3 h-3 mr-1" /> Add signature
                       </Button>
                     )}
                     {activeStamp && !placedStamp && (
-                      <Button size="sm" variant="outline" className="h-6 text-[10px]"
-                        onClick={() => setPlacedStamp({ x: 70, y: 75 })}>
-                        <StampIcon className="w-3 h-3 mr-1" /> Drag stamp
+                      <Button size="sm" variant="outline" className="h-6 text-[10px]" onClick={() => setPlacedStamp({ x: 70, y: 75 })}>
+                        <StampIcon className="w-3 h-3 mr-1" /> Add stamp
                       </Button>
                     )}
                   </div>
-                ) : null}
+                )}
               </div>
             </div>
-          </Card>
+          </div>
         </div>
       </div>
     </div>
