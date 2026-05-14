@@ -129,9 +129,24 @@ Deno.serve(async (req) => {
       await admin.from("esign_audit_log").insert({
         envelope_id: env.id,
         recipient_id: r.id,
-        action: "signed_via_email_reply",
-        details: { gmail_message_id: body.gmail_message_id, from: body.from_email },
+        action: "signed",
+        description: `Signed via email reply from ${body.from_email}`,
+        actor_email: body.from_email,
+        actor_name: r.name,
+        metadata: { signed_via: "email_reply", gmail_message_id: body.gmail_message_id },
       }).then(() => {}).catch(() => {});
+
+      // Fire-and-forget thank-you email to the signer.
+      try {
+        fetch(`${SUPABASE_URL}/functions/v1/esign-send-signer-thanks`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${SERVICE_ROLE}`,
+          },
+          body: JSON.stringify({ envelope_id: env.id, recipient_id: r.id }),
+        }).catch(() => {});
+      } catch (_e) { /* best-effort */ }
 
       // Upload signed PDF if we have bytes (one per envelope; idempotent on filename).
       let signedDocUrl: string | null = null;

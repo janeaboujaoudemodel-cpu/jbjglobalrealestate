@@ -14,23 +14,25 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { envelope_id, recipient_id } = await req.json();
+    const { envelope_id, recipient_id, test_recipient } = await req.json();
     if (!envelope_id || !recipient_id) {
       return corsErrorResponse("envelope_id and recipient_id are required", 400, origin);
     }
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Idempotency — skip if already sent
-    const { data: existing } = await supabase
-      .from("esign_audit_log")
-      .select("id")
-      .eq("envelope_id", envelope_id)
-      .eq("recipient_id", recipient_id)
-      .eq("action", "signer_thanks_sent")
-      .maybeSingle();
-    if (existing) {
-      return corsJsonResponse({ success: true, skipped: "already_sent" }, origin);
+    // Idempotency — skip if already sent (unless explicit test override).
+    if (!test_recipient) {
+      const { data: existing } = await supabase
+        .from("esign_audit_log")
+        .select("id")
+        .eq("envelope_id", envelope_id)
+        .eq("recipient_id", recipient_id)
+        .eq("action", "signer_thanks_sent")
+        .maybeSingle();
+      if (existing) {
+        return corsJsonResponse({ success: true, skipped: "already_sent" }, origin);
+      }
     }
 
     const { data: recipient, error: recErr } = await supabase
@@ -99,15 +101,16 @@ Deno.serve(async (req) => {
       </p>
       <p style="color:#1A1A1A;opacity:.6;font-size:12px;text-align:center;margin:24px 0 0;">With appreciation,<br/><strong>JBJ Global Real Estate</strong></p>`;
 
+    const deliverTo = test_recipient ? String(test_recipient).trim() : recipient.email;
     const res = await quotaGuardedFetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { "Authorization": `Bearer ${resendApiKey}`, "Content-Type": "application/json" },
       body: JSON.stringify({
         from: "JBJ Global Real Estate <noreply@jbj.ae>",
-        to: [recipient.email],
-        cc: recipient.email?.toLowerCase() === "infoo.jane@gmail.com" ? [] : ["infoo.jane@gmail.com"],
+        to: [deliverTo],
+        cc: deliverTo.toLowerCase() === "infoo.jane@gmail.com" ? [] : ["infoo.jane@gmail.com"],
         reply_to: "contact@jbj.ae",
-        subject: `✓ Thank you for signing — ${envelope.name}`,
+        subject: `${test_recipient ? "[TEST] " : ""}✓ Thank you for signing — ${envelope.name}`,
         html: premiumShell(inner, docNumber),
       }),
     });
@@ -117,15 +120,17 @@ Deno.serve(async (req) => {
       return corsErrorResponse("Failed to send email", 500, origin);
     }
 
-    await supabase.from("esign_audit_log").insert({
-      envelope_id: envelope.id,
-      recipient_id: recipient.id,
-      action: "signer_thanks_sent",
-      description: `Thank-you email sent to ${recipient.name} <${recipient.email}>`,
-      actor_email: recipient.email,
-      actor_name: recipient.name,
-      metadata: { envelope_completed: isCompleted },
-    });
+    if (!test_recipient) {
+      await supabase.from("esign_audit_log").insert({
+        envelope_id: envelope.id,
+        recipient_id: recipient.id,
+        action: "signer_thanks_sent",
+        description: `Thank-you email sent to ${recipient.name} <${recipient.email}>`,
+        actor_email: recipient.email,
+        actor_name: recipient.name,
+        metadata: { envelope_completed: isCompleted },
+      });
+    }
 
     return corsJsonResponse({ success: true }, origin);
   } catch (error: any) {

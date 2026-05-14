@@ -93,6 +93,10 @@ interface Props {
   docNumber?: string;
   senderName?: string;
   senderTitle?: string;
+  /** Called immediately before each send so the parent can persist edits and
+   *  regenerate the PDF. Must resolve to the freshest { url, filename } pair —
+   *  this is what gets attached to the email. */
+  onBeforeSend?: () => Promise<{ url?: string | null; filename?: string | null } | void>;
   onSent?: () => void;
 }
 
@@ -195,6 +199,7 @@ export function SendViaEmailDialog({
   docNumber,
   senderName = "Jane Bou Jaoude",
   senderTitle = "Founder & CEO",
+  onBeforeSend,
   onSent,
 }: Props) {
   const [tos, setTos] = useState<string[]>([]);
@@ -355,12 +360,45 @@ export function SendViaEmailDialog({
     return rawUrl;
   };
 
+  /** Always pull the freshest envelope row right before sending so the
+   *  attachment URL/filename reflect the most recent regenerate — never the
+   *  stale value the dialog opened with. */
+  const fetchLatestAttachment = async (): Promise<{ url?: string; name?: string }> => {
+    try {
+      const { data } = await supabase
+        .from("esign_envelopes")
+        .select("document_url, document_filename")
+        .eq("id", envelopeId)
+        .maybeSingle();
+      if (data?.document_url) {
+        return { url: data.document_url as string, name: (data.document_filename as string) || attachmentName };
+      }
+    } catch { /* fall through */ }
+    return { url: attachmentUrl, name: attachmentName };
+  };
+
+  /** Combined sync step: parent regenerates if dirty, then we re-pull the
+   *  envelope so the attached PDF matches what is on screen byte-for-byte. */
+  const resolveFreshAttachment = async (): Promise<{ url?: string; name?: string }> => {
+    try {
+      const fromParent = onBeforeSend ? await onBeforeSend() : undefined;
+      if (fromParent && (fromParent as any).url) {
+        const v = fromParent as { url?: string; filename?: string };
+        return { url: v.url || undefined, name: v.filename || attachmentName };
+      }
+    } catch (e) {
+      console.warn("onBeforeSend failed; using DB attachment", e);
+    }
+    return await fetchLatestAttachment();
+  };
+
   const sendTest = async () => {
     setBusy("test");
     try {
       const session = await supabase.auth.getSession();
       const token = session.data.session?.access_token;
-      const signedAttachmentUrl = autoAttachmentRemoved ? undefined : await resolveAttachmentUrl(attachmentUrl);
+      const fresh = autoAttachmentRemoved ? { url: undefined, name: undefined } : await resolveFreshAttachment();
+      const signedAttachmentUrl = fresh.url ? await resolveAttachmentUrl(fresh.url) : undefined;
       const res = await fetch(`${SUPABASE_URL}/functions/v1/esign-send-test-email`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
@@ -370,7 +408,7 @@ export function SendViaEmailDialog({
           interpolated_body_html: bodyHtml,
           signature_html: selectedSigHtml,
           docusign_url: docusignUrl.trim() || undefined,
-          attachment_name: autoAttachmentRemoved ? undefined : attachmentName,
+          attachment_name: fresh.name,
           attachment_url: signedAttachmentUrl,
           extra_attachments: extraAttachments.map((a) => ({ name: a.name, url: a.url, content_type: a.contentType })),
           test_recipient: TEST_RECIPIENT,
@@ -378,7 +416,7 @@ export function SendViaEmailDialog({
       });
       const out = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(out.error || "Failed to send test");
-      toast.success(`Test sent to ${TEST_RECIPIENT}`);
+      toast.success(`Test sent to ${TEST_RECIPIENT}${fresh.name ? ` · ${fresh.name}` : ""}`);
     } catch (e: any) {
       toast.error(e.message || "Failed to send test");
     } finally {
@@ -392,17 +430,14 @@ export function SendViaEmailDialog({
       return;
     }
     setBusy("send");
-    // Optimistic UX — close the dialog immediately so the owner is not waiting on
-    // attachment fetch + Resend round-trips. The actual send completes in the
-    // background; success/failure is reported via toast and the dashboard
-    // counters update via realtime + onSent callback.
-    const sendingToast = toast.loading(`Sending to ${tos.length} recipient${tos.length > 1 ? "s" : ""}…`);
-    clearDraft();
-    onOpenChange(false);
+    const sendingToast = toast.loading(`Syncing latest document & sending to ${tos.length} recipient${tos.length > 1 ? "s" : ""}…`);
     try {
       const session = await supabase.auth.getSession();
       const token = session.data.session?.access_token;
-      const signedAttachmentUrl = autoAttachmentRemoved ? undefined : await resolveAttachmentUrl(attachmentUrl);
+      const fresh = autoAttachmentRemoved ? { url: undefined, name: undefined } : await resolveFreshAttachment();
+      const signedAttachmentUrl = fresh.url ? await resolveAttachmentUrl(fresh.url) : undefined;
+      clearDraft();
+      onOpenChange(false);
       const res = await fetch(`${SUPABASE_URL}/functions/v1/esign-send-for-signature`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
@@ -415,7 +450,7 @@ export function SendViaEmailDialog({
           interpolated_body_html: bodyHtml,
           signature_html: selectedSigHtml,
           docusign_url: docusignUrl.trim() || undefined,
-          attachment_name: autoAttachmentRemoved ? undefined : attachmentName,
+          attachment_name: fresh.name,
           attachment_url: signedAttachmentUrl,
           extra_attachments: extraAttachments.map((a) => ({ name: a.name, url: a.url, content_type: a.contentType })),
         }),
@@ -427,7 +462,7 @@ export function SendViaEmailDialog({
       if (failed) {
         toast.warning(`${out.message} — ${failed} failed`, { description: out.failures.map((f: any) => `${f.email}: ${f.error}`).join("\n") });
       } else {
-        toast.success(`Sent to ${tos.length} recipient${tos.length > 1 ? "s" : ""}${cleanCcs.length ? ` · CC ${cleanCcs.length}` : ""}`);
+        toast.success(`Sent to ${tos.length} recipient${tos.length > 1 ? "s" : ""}${cleanCcs.length ? ` · CC ${cleanCcs.length}` : ""} · attached ${fresh.name || "document"}`);
       }
       onSent?.();
     } catch (e: any) {
@@ -712,6 +747,64 @@ export function SendViaEmailDialog({
                 attachmentUrl={autoAttachmentRemoved ? undefined : attachmentUrl}
                 className="w-full h-full bg-[#FDFBF7]"
               />
+            </div>
+
+            {/* Attachments the recipient will receive — clickable so the owner
+                can open and verify the EXACT file before pressing send. */}
+            <div className="mt-3 rounded-md border border-[#B89555]/30 bg-[#FDFBF7] p-3">
+              <div className="flex items-center justify-between gap-2 mb-2">
+                <div className="text-[11px] font-semibold uppercase tracking-wider text-[#1A1A1A]">
+                  Attachments the client will receive · {(!autoAttachmentRemoved && attachmentName ? 1 : 0) + extraAttachments.length}
+                </div>
+                <span className="text-[10px] text-[#1A1A1A]/60">Click to preview each file</span>
+              </div>
+              <ul className="space-y-1.5">
+                {!autoAttachmentRemoved && attachmentName && (
+                  <li className="flex items-center gap-2 text-xs text-[#1A1A1A] bg-white border border-[#B89555]/30 rounded px-2 py-1.5">
+                    <FileText className="w-3.5 h-3.5 shrink-0 text-[#B89555]" />
+                    <span className="truncate flex-1">
+                      <strong>{attachmentName}</strong>
+                      <span className="ml-1.5 text-[10px] uppercase tracking-wider text-[#1A1A1A]/60">Standard PAA · auto-synced to latest</span>
+                    </span>
+                    {attachmentUrl && (
+                      <a
+                        href={attachmentUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="shrink-0 px-1.5 py-0.5 rounded hover:bg-[#EFE6D6] text-[#1A1A1A]/70 inline-flex items-center gap-1"
+                        title="Preview the standard PAA PDF"
+                      >
+                        <Eye className="w-3.5 h-3.5" /> Open
+                      </a>
+                    )}
+                  </li>
+                )}
+                {extraAttachments.map((a, i) => (
+                  <li key={`${a.name}-${i}`} className="flex items-center gap-2 text-xs text-[#1A1A1A] bg-white border border-[#B89555]/30 rounded px-2 py-1.5">
+                    <FileText className="w-3.5 h-3.5 shrink-0 text-[#1A1A1A]/60" />
+                    <span className="truncate flex-1">{a.name}<span className="ml-1.5 text-[10px] uppercase tracking-wider text-[#1A1A1A]/60">Uploaded</span></span>
+                    {a.url && (
+                      <a
+                        href={a.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="shrink-0 px-1.5 py-0.5 rounded hover:bg-[#EFE6D6] text-[#1A1A1A]/70 inline-flex items-center gap-1"
+                        title={`Preview ${a.name}`}
+                      >
+                        <Eye className="w-3.5 h-3.5" /> Open
+                      </a>
+                    )}
+                  </li>
+                ))}
+                {autoAttachmentRemoved && extraAttachments.length === 0 && (
+                  <li className="text-[11px] text-[#1A1A1A]/60 italic">
+                    No attachments — recipient will get the email body only. Restore the standard PDF above or upload a file.
+                  </li>
+                )}
+              </ul>
+              <p className="text-[10px] text-[#1A1A1A]/55 mt-2">
+                The standard PAA file is regenerated from the latest document state right before each send so the client always receives the up-to-date copy.
+              </p>
             </div>
           </div>
         </div>

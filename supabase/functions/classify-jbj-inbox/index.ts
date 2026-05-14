@@ -438,9 +438,20 @@ Deno.serve(async (req) => {
       });
       inserted++;
 
-      // If a signed contract reply landed with a PDF, sync it to e-signature
-      // (mark recipient signed, upload PDF, complete envelope when all signed).
-      if (category === "contracts" && status === "signed" && attachments.length > 0) {
+      // ALWAYS check: if sender matches a pending esign recipient AND there is
+      // a PDF attachment, treat the reply as a signed return regardless of how
+      // the subject was classified. The subject heuristic alone misses many
+      // real "here is the signed copy" replies.
+      const hasPdfAttachment = attachments.some((a) =>
+        /\.pdf$/i.test(a.filename || "") || /pdf/i.test((a as any).mimeType || ""),
+      );
+      const shouldSync =
+        hasPdfAttachment &&
+        (
+          (category === "contracts" && status === "signed") ||
+          true // sender-match check happens server-side in esign-sync-from-inbox
+        );
+      if (shouldSync) {
         try {
           fetch(`${SUPABASE_URL}/functions/v1/esign-sync-from-inbox`, {
             method: "POST",
