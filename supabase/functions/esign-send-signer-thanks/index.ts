@@ -14,23 +14,25 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { envelope_id, recipient_id } = await req.json();
+    const { envelope_id, recipient_id, test_recipient } = await req.json();
     if (!envelope_id || !recipient_id) {
       return corsErrorResponse("envelope_id and recipient_id are required", 400, origin);
     }
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Idempotency — skip if already sent
-    const { data: existing } = await supabase
-      .from("esign_audit_log")
-      .select("id")
-      .eq("envelope_id", envelope_id)
-      .eq("recipient_id", recipient_id)
-      .eq("action", "signer_thanks_sent")
-      .maybeSingle();
-    if (existing) {
-      return corsJsonResponse({ success: true, skipped: "already_sent" }, origin);
+    // Idempotency — skip if already sent (unless explicit test override).
+    if (!test_recipient) {
+      const { data: existing } = await supabase
+        .from("esign_audit_log")
+        .select("id")
+        .eq("envelope_id", envelope_id)
+        .eq("recipient_id", recipient_id)
+        .eq("action", "signer_thanks_sent")
+        .maybeSingle();
+      if (existing) {
+        return corsJsonResponse({ success: true, skipped: "already_sent" }, origin);
+      }
     }
 
     const { data: recipient, error: recErr } = await supabase
