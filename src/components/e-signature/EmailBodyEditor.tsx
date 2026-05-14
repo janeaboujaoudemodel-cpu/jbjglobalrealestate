@@ -26,8 +26,11 @@ export function EmailBodyEditor({ value, onChange, placeholder }: Props) {
   const ref = useRef<HTMLDivElement>(null);
 
   // Keep DOM in sync when the parent replaces the value (e.g. preset insert).
+  // CRITICAL: skip while the editor is focused — assigning innerHTML during
+  // typing wipes the caret and makes the field appear unresponsive.
   useEffect(() => {
     if (!ref.current) return;
+    if (document.activeElement === ref.current) return;
     if (ref.current.innerHTML !== value) {
       ref.current.innerHTML = value || "";
     }
