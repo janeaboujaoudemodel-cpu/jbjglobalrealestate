@@ -34,6 +34,7 @@ import {
   PenTool,
   Scale,
   Sparkles,
+  FileText,
   RotateCcw,
   X,
 } from "lucide-react";
