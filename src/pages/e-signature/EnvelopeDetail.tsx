@@ -73,6 +73,7 @@ export default function EnvelopeDetail() {
   const [sendOpen, setSendOpen] = useState(false);
   const [emailDialogOpen, setEmailDialogOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
+  const [activityOpen, setActivityOpen] = useState(false);
   const [hiddenFields, setHiddenFields] = useState<string[]>([]);
   const [uploadingSigned, setUploadingSigned] = useState(false);
   const signedUploadInputRef = useMemo(() => ({ current: null as HTMLInputElement | null }), []);
