@@ -561,13 +561,17 @@ function StatsCard({
 }
 
 // Thread List Item Component
-function ThreadListItem({ 
-  thread, 
-  isSelected, 
-  onClick 
-}: { 
-  thread: CommThread; 
-  isSelected: boolean; 
+function ThreadListItem({
+  thread,
+  isSelected,
+  isChecked,
+  onToggleCheck,
+  onClick,
+}: {
+  thread: CommThread;
+  isSelected: boolean;
+  isChecked?: boolean;
+  onToggleCheck?: () => void;
   onClick: () => void;
 }) {
   const status = statusConfig[thread.status];
@@ -578,10 +582,15 @@ function ThreadListItem({
       animate={{ opacity: 1 }}
       className={`p-3 cursor-pointer transition-all hover:bg-[#EFE6D6]/5 ${
         isSelected ? 'bg-[#EFE6D6]/10 border-l-4 border-l-gold' : ''
-      }`}
+      } ${isChecked ? 'bg-[#EFE6D6]/30' : ''}`}
       onClick={onClick}
     >
       <div className="flex items-start gap-3">
+        {onToggleCheck && (
+          <div onClick={(e) => { e.stopPropagation(); onToggleCheck(); }} className="pt-2">
+            <Checkbox checked={!!isChecked} className="h-4 w-4" />
+          </div>
+        )}
         <div className="relative">
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center border border-[#B89555]/20">
             {thread.contact_avatar_url ? (
