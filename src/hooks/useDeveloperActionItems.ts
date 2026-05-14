@@ -78,16 +78,33 @@ export function useSyncGmailInbox() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async () => {
-      const { data, error } = await supabase.functions.invoke("gmail-inbox-sync", {
-        body: {},
-      });
+      // 1. Make sure a Gmail row exists in owner_comm_channels so the
+      //    Unified Inbox can show it.
+      try {
+        await supabase.functions.invoke("comm-gmail-autoconnect", { body: {} });
+      } catch (e) {
+        console.warn("[sync] gmail autoconnect skipped:", e);
+      }
+
+      // 2. AI classification + email_inbox_items refresh.
+      const { data, error } = await supabase.functions.invoke("gmail-inbox-sync", { body: {} });
       if (error) throw error;
+
+      // 3. Unified Inbox pull (Gmail backfill + Hostinger IMAP).
+      try {
+        await supabase.functions.invoke("comm-inbound-sync", { body: {} });
+      } catch (e) {
+        console.warn("[sync] unified inbox sync failed:", e);
+      }
+
       return data as { synced: number; classified: number };
     },
     onSuccess: (data) => {
       toast.success(`Synced ${data.synced} new email(s) — ${data.classified} classified`);
       qc.invalidateQueries({ queryKey: ["developer_action_items"] });
       qc.invalidateQueries({ queryKey: ["owner_comm_threads"] });
+      qc.invalidateQueries({ queryKey: ["owner-inbox"] });
+      qc.invalidateQueries({ queryKey: ["comm-channels"] });
     },
     onError: (e: Error) => toast.error(`Inbox sync failed: ${e.message}`),
   });
