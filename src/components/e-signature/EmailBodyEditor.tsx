@@ -28,21 +28,36 @@ const SANITIZE = {
   ALLOWED_URI_REGEXP: /^(?:https?:|mailto:|tel:|#|\/)/i,
 };
 
+/** Decode HTML entities that might have been double-escaped by an upstream
+ *  writer (e.g. saved body containing literal `&lt;p&gt;Dear&lt;/p&gt;`).
+ *  Without this, htmlToText would leave them as visible `<p>` text and the
+ *  next textToHtml pass would re-escape them, delivering raw tags to the
+ *  recipient. We decode at most twice — anything beyond that is intentional. */
+function decodeEntitiesIfNeeded(input: string): string {
+  let s = String(input || "");
+  for (let i = 0; i < 2; i++) {
+    if (!/&(?:lt|gt|amp|quot|#39|nbsp);/i.test(s)) break;
+    s = s
+      .replace(/&nbsp;/gi, " ")
+      .replace(/&quot;/gi, '"')
+      .replace(/&#39;/gi, "'")
+      .replace(/&lt;/gi, "<")
+      .replace(/&gt;/gi, ">")
+      .replace(/&amp;/gi, "&");
+  }
+  return s;
+}
+
 /** HTML → plain text. Treats </p> and <br> as line breaks; strips tags. */
 function htmlToText(html: string): string {
   if (!html) return "";
-  return String(html)
-    .replace(/\r\n/g, "\n")
+  // Decode any encoded markup FIRST so we don't leave `<p>` as visible text.
+  const decoded = decodeEntitiesIfNeeded(String(html).replace(/\r\n/g, "\n"));
+  return decoded
     .replace(/<\s*br\s*\/?\s*>/gi, "\n")
     .replace(/<\/\s*p\s*>/gi, "\n\n")
     .replace(/<\s*p[^>]*>/gi, "")
     .replace(/<[^>]+>/g, "")
-    .replace(/&nbsp;/g, " ")
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
     .replace(/\n{3,}/g, "\n\n")
     .trim();
 }
