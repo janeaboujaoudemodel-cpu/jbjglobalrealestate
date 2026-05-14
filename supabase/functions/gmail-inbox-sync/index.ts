@@ -175,7 +175,7 @@ Deno.serve(async (req) => {
           last_message_preview: msg.snippet?.slice(0, 200) ?? "",
           last_message_at: ts,
           unread_count: 1,
-          status: "needs_reply",
+          status: "new",
         })
         .eq("id", threadId);
     } else {
@@ -188,7 +188,7 @@ Deno.serve(async (req) => {
           assistant_type: "company",
           contact_name: name || email,
           contact_identifier: email,
-          status: "needs_reply",
+          status: "new",
           unread_count: 1,
           last_message_preview: msg.snippet?.slice(0, 200) ?? "",
           last_message_at: ts,

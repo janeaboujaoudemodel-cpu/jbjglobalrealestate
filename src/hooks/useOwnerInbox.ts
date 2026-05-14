@@ -236,6 +236,8 @@ export function useOwnerInbox(filters: InboxFilters = {}) {
         },
         () => {
           refetchThreads();
+          queryClient.invalidateQueries({ queryKey: ['owner-inbox-global-stats'] });
+          queryClient.invalidateQueries({ queryKey: ['owner-inbox-per-channel-counts'] });
         }
       )
       .on(
@@ -247,6 +249,8 @@ export function useOwnerInbox(filters: InboxFilters = {}) {
         },
         () => {
           refetchThreads();
+          queryClient.invalidateQueries({ queryKey: ['owner-inbox-global-stats'] });
+          queryClient.invalidateQueries({ queryKey: ['owner-inbox-per-channel-counts'] });
         }
       )
       .subscribe();
@@ -256,8 +260,8 @@ export function useOwnerInbox(filters: InboxFilters = {}) {
     };
   }, [user?.id, refetchThreads]);
 
-  // Stats
-  const stats = {
+  // Visible stats (after all filters) — used for filtered-list summaries
+  const visibleStats = {
     total: threads.length,
     unread: threads.filter(t => t.unread_count > 0).length,
     needsReply: threads.filter(t => t.status === 'needs_reply').length,
@@ -265,12 +269,68 @@ export function useOwnerInbox(filters: InboxFilters = {}) {
     followUpDue: threads.filter(t => t.status === 'follow_up_due').length,
   };
 
+  // GLOBAL STATS — scoped to channel/channelId/assistant only (NOT status/unread/search).
+  // This is what the top stat cards and channel-tab badges use, so the numbers
+  // never silently change when the user clicks a stat-filter chip.
+  const { data: globalStats = visibleStats } = useQuery({
+    queryKey: ['owner-inbox-global-stats', filters.channel ?? 'all', filters.channelId ?? 'all', filters.assistant ?? 'all'],
+    queryFn: async () => {
+      if (!user?.id) return { total: 0, unread: 0, needsReply: 0, new: 0, followUpDue: 0 };
+      let q = supabase
+        .from('owner_comm_threads')
+        .select('status, unread_count');
+      if (filters.channel && filters.channel !== 'all') q = q.eq('channel_type', filters.channel);
+      if (filters.channelId && filters.channelId !== 'all') q = q.eq('channel_id', filters.channelId);
+      if (filters.assistant && filters.assistant !== 'all') q = q.eq('assistant_type', filters.assistant);
+      const { data, error } = await q.limit(2000);
+      if (error) throw error;
+      const rows = (data ?? []) as Array<{ status: ThreadStatus; unread_count: number }>;
+      return {
+        total: rows.length,
+        unread: rows.filter(r => (r.unread_count ?? 0) > 0).length,
+        needsReply: rows.filter(r => r.status === 'needs_reply').length,
+        new: rows.filter(r => r.status === 'new').length,
+        followUpDue: rows.filter(r => r.status === 'follow_up_due').length,
+      };
+    },
+    enabled: !!user?.id,
+    staleTime: 15000,
+  });
+
+  // Per-channel unread thread counts for the channel tabs (consistent with stats)
+  const { data: perChannelCounts = {} } = useQuery({
+    queryKey: ['owner-inbox-per-channel-counts'],
+    queryFn: async () => {
+      if (!user?.id) return {};
+      const { data, error } = await supabase
+        .from('owner_comm_threads')
+        .select('channel_type, channel_id, unread_count')
+        .limit(2000);
+      if (error) throw error;
+      const map: Record<string, { total: number; unread: number }> = {};
+      for (const r of (data ?? []) as Array<{ channel_type: string; channel_id: string | null; unread_count: number }>) {
+        const keyT = `type:${r.channel_type}`;
+        const keyI = r.channel_id ? `id:${r.channel_id}` : null;
+        for (const k of [keyT, keyI].filter(Boolean) as string[]) {
+          if (!map[k]) map[k] = { total: 0, unread: 0 };
+          map[k].total += 1;
+          if ((r.unread_count ?? 0) > 0) map[k].unread += 1;
+        }
+      }
+      return map;
+    },
+    enabled: !!user?.id,
+    staleTime: 15000,
+  });
+
   return {
     threads,
     channels,
     threadsLoading,
     threadsError,
-    stats,
+    stats: globalStats,
+    visibleStats,
+    perChannelCounts,
     channelIcons,
     refetchThreads,
     updateThreadStatus: updateThreadStatus.mutate,

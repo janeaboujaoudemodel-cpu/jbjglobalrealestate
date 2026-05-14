@@ -98,6 +98,8 @@ export default function OwnerInbox() {
     channels,
     threadsLoading,
     stats,
+    visibleStats,
+    perChannelCounts,
     refetchThreads,
     updateThreadStatus,
     markAsRead,
@@ -122,14 +124,14 @@ export default function OwnerInbox() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [threads.length]);
 
-  // Compute per-channel unread counts
+  // Channel-tab badge helpers — derived from GLOBAL per-channel counts so
+  // they stay consistent whether or not the user has applied a status filter.
+  const totalUnreadAll = Object.values(perChannelCounts as Record<string, { unread: number }>)
+    .reduce((sum, v) => sum + (v?.unread || 0), 0);
   const channelUnreadCounts: Record<string, number> = {};
-  for (const t of threads) {
-    if (t.unread_count > 0) {
-      channelUnreadCounts[t.channel_type] = (channelUnreadCounts[t.channel_type] || 0) + t.unread_count;
-    }
+  for (const [k, v] of Object.entries(perChannelCounts as Record<string, { unread: number }>)) {
+    if (k.startsWith('type:')) channelUnreadCounts[k.slice(5)] = v.unread;
   }
-  const totalUnreadAll = Object.values(channelUnreadCounts).reduce((a, b) => a + b, 0);
 
   // Select first unread thread on load
   useEffect(() => {
@@ -141,23 +143,38 @@ export default function OwnerInbox() {
     }
   }, [threads, selectedThread]);
 
-  // No automatic full-inbox sync on mount — that was making the page flicker
-  // and re-render every time channels/threads invalidated. The user can click
-  // Refresh to pull new mail; we only run a one-shot Gmail autoconnect (cheap)
-  // to make sure the channel row exists.
+  // One-shot Gmail autoconnect on mount, plus background polling every 60s
+  // for the active channel scope. Realtime postgres_changes also refetches
+  // immediately when new rows arrive — polling is the safety net.
   useEffect(() => {
     let cancelled = false;
+    const runSync = async (scopeChannelId?: string) => {
+      try {
+        const body: { channel_id?: string } = scopeChannelId && scopeChannelId !== 'all'
+          ? { channel_id: scopeChannelId }
+          : {};
+        await supabase.functions.invoke('comm-inbound-sync', { body });
+      } catch (e) {
+        console.warn('[inbox] background sync skipped:', e);
+      }
+    };
     (async () => {
       try {
-        await supabase.functions.invoke("comm-gmail-autoconnect", { body: {} });
+        await supabase.functions.invoke('comm-gmail-autoconnect', { body: {} });
       } catch (e) {
-        console.warn("[inbox] gmail autoconnect skipped:", e);
+        console.warn('[inbox] gmail autoconnect skipped:', e);
       }
-      if (!cancelled) refetchThreads();
+      if (cancelled) return;
+      // First sync ~1.5s after mount (don't block initial paint)
+      setTimeout(() => { if (!cancelled) runSync(filters.channelId); }, 1500);
+      refetchThreads();
     })();
-    return () => { cancelled = true; };
+    const poll = setInterval(() => {
+      if (!cancelled) runSync(filters.channelId);
+    }, 60_000);
+    return () => { cancelled = true; clearInterval(poll); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [filters.channelId]);
 
 
   const handleThreadSelect = (thread: CommThread) => {
@@ -203,12 +220,15 @@ export default function OwnerInbox() {
     const idx = channelTabs.findIndex(t => t.value === 'email_gmail');
     const before = channelTabs.slice(0, idx);
     const after = channelTabs.slice(idx + 1);
-    const perAccount = gmailChannels.map(ch => ({
-      value: 'email_gmail' as const,
-      channelId: ch.id,
-      label: ch.identifier || ch.display_name || 'Gmail',
-      icon: <Mail className="h-4 w-4 text-red-500" />,
-    }));
+    const perAccount = gmailChannels.map(ch => {
+      const localPart = (ch.identifier || '').split('@')[0] || ch.display_name || 'account';
+      return {
+        value: 'email_gmail' as const,
+        channelId: ch.id,
+        label: `Gmail · ${localPart}`,
+        icon: <Mail className="h-4 w-4 text-red-500" />,
+      };
+    });
     return [...before, ...perAccount, ...after] as Array<{
       value: ChannelType | 'all';
       channelId?: string;
@@ -280,30 +300,32 @@ export default function OwnerInbox() {
           </div>
 
           {/* Channel Tabs - Header Bar with Badges */}
-          <div className="flex items-center gap-1 mb-4 overflow-x-auto pb-1 border-b-2 border-[#B89555]/10">
+          <div className="flex items-center gap-1 mb-4 overflow-x-auto pb-1 border-b-2 border-[#B89555]/10 scrollbar-thin">
             {dynamicChannelTabs.map((tab) => {
               const tabChannelId = (tab as { channelId?: string }).channelId;
               const isActive = tabChannelId
                 ? filters.channelId === tabChannelId
                 : filters.channel === tab.value && (filters.channelId === 'all' || !filters.channelId);
               const unreadCount = tabChannelId
-                ? threads.filter(t => t.channel_id === tabChannelId).reduce((s, t) => s + (t.unread_count || 0), 0)
-                : tab.value === 'all' ? totalUnreadAll : (channelUnreadCounts[tab.value] || 0);
+                ? (perChannelCounts[`id:${tabChannelId}`]?.unread ?? 0)
+                : tab.value === 'all'
+                  ? totalUnreadAll
+                  : (channelUnreadCounts[tab.value] || 0);
               return (
                 <button
                   key={`${tab.value}-${tabChannelId ?? 'all'}`}
                   onClick={() => handleChannelTabClick(tab.value, tabChannelId ?? 'all')}
-                  className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all duration-200 border-b-2 -mb-[2px] rounded-t-lg ${
+                  className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all duration-200 border-b-2 -mb-[2px] rounded-t-lg flex-shrink-0 ${
                     isActive
-                      ? 'border-[#B89555] bg-[#EFE6D6]/10 text-foreground font-bold shadow-sm'
-                      : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                      ? 'border-[#B89555] bg-[#EFE6D6]/40 text-[#1A1A1A] font-bold shadow-sm'
+                      : 'border-transparent text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/20'
                   }`}
                 >
                   {tab.icon}
-                  <span className="max-w-[180px] truncate">{tab.label}</span>
+                  <span>{tab.label}</span>
                   {unreadCount > 0 && (
                     <span className={`ml-1 min-w-[20px] h-5 px-1.5 rounded-full text-xs font-bold flex items-center justify-center ${
-                      isActive ? 'bg-[#EFE6D6] text-[#1A1A1A]' : 'bg-muted text-muted-foreground'
+                      isActive ? 'bg-[#1A1A1A] text-[#FDFBF7]' : 'bg-[#EFE6D6] text-[#1A1A1A]'
                     }`}>
                       {unreadCount}
                     </span>
@@ -324,6 +346,11 @@ export default function OwnerInbox() {
                 className="pl-10 border-[#B89555]/30"
               />
             </div>
+            {(activeStatFilter !== 'none' || categoryFilter !== 'all') && (
+              <span className="text-xs text-[#1A1A1A]/60">
+                Showing {visibleStats.total} of {stats.total}
+              </span>
+            )}
           </div>
 
           {/* AI Category Filter */}
