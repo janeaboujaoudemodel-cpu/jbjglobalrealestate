@@ -1422,7 +1422,7 @@ export default function EnvelopeDetail() {
           recipientName={clientRec.name || "Client"}
           recipientEmail={clientRec.email || ""}
           defaultSubject={envelope.email_subject || `Please review — ${envelope.name || "Document"}${docNumber ? ` · ${docNumber}` : ""}`}
-          defaultBody={envelope.email_message || `Dear {{client_name}},\n\nPlease find the attached PDF document for your electronic signature. Kindly review it carefully, sign it, and reply back to this same email with the signed copy attached.\n\nIf you prefer, you can also sign it directly in DocuSign using the button below.\n\n{{sender_signature}}`}
+          defaultBody={envelope.email_message || `Dear {{client_name}},\n\nPlease find the PDF attached to this email. Once you have reviewed it, kindly sign it using DocuSign at your earliest convenience and return it by replying to this email or this ticket with the signed copy attached.\n\nThank you,`}
           docNumber={docNumber || undefined}
           senderName={envelope.sender_name || undefined}
           senderTitle={(envelope as any).sender_title || undefined}
