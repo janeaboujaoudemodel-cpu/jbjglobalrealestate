@@ -167,7 +167,10 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
         await supabase.from("esign_recipients").update({ phone: whatsapp }).eq("id", primaryRecipient.id);
       }
 
-      // Email send via edge function (uses persisted subject+body)
+      // Email send via edge function (uses persisted subject+body).
+      // Pass envelope.document_url/document_filename explicitly so this path
+      // mirrors SendViaEmailDialog and the recipient always receives the
+      // latest synced PDF, not an attachment-less email.
       if (channels.email) {
         const session = await supabase.auth.getSession();
         const token = session.data.session?.access_token;
@@ -183,6 +186,8 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
             interpolated_body: previewBody,
             interpolated_body_html: previewBodyHtml,
             docusign_url: docusignUrl.trim() || undefined,
+            attachment_name: envelope?.document_filename || undefined,
+            attachment_url: envelope?.document_url || undefined,
           }),
         });
         const out = await res.json().catch(() => ({}));
