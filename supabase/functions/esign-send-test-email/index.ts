@@ -169,22 +169,10 @@ Deno.serve(async (req) => {
       return corsErrorResponse("Email provider not configured (RESEND_API_KEY missing)", 500, origin);
     }
 
-    // LATEST-VERSION GUARANTEE (v3): always prefer envelope.document_url
-    // over the client-supplied attachment_url. The envelope row is the
-    // authoritative latest record after handleSaveEdits → regenerate.
-    const envelopeDocUrl = (envelope as any).document_url ? String((envelope as any).document_url) : "";
-    const envelopeDocName = (envelope as any).document_filename
-      ? String((envelope as any).document_filename)
-      : `${envelope.name || "Document"}.pdf`;
-    const clientDocUrl = typeof attachment_url === "string" ? attachment_url : "";
-    const clientDocName = typeof attachment_name === "string" ? attachment_name : "";
-    const attachmentUrlStr = envelopeDocUrl || clientDocUrl;
-    const attachmentNameStr = envelopeDocUrl ? envelopeDocName : (clientDocName || envelopeDocName);
-    if (envelopeDocUrl && clientDocUrl && envelopeDocUrl !== clientDocUrl) {
-      console.warn(
-        `[esign-send-test-email] client supplied stale attachment_url for envelope ${envelope.id}; using envelope.document_url instead`,
-      );
-    }
+    // Use the resolved envelope-authoritative attachment metadata computed
+    // earlier so the actual attached PDF matches the email shell text.
+    const attachmentUrlStr = resolvedAttachmentUrl;
+    const attachmentNameStr = resolvedAttachmentName;
     const pdfAttachment = attachmentUrlStr && attachmentNameStr
       ? await fetchEmailAttachment(attachmentUrlStr, attachmentNameStr, "application/pdf")
       : null;
