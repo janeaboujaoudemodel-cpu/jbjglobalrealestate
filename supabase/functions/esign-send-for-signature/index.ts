@@ -75,17 +75,29 @@ Deno.serve(async (req) => {
 
     const baseUrl = Deno.env.get("SITE_URL") || "https://jbj.ae";
 
-    // Hoist attachment fetches OUT of the per-recipient loop — same bytes for all.
-    let attachmentUrlStr = typeof attachment_url === "string" ? attachment_url : "";
-    let attachmentNameStr = typeof attachment_name === "string" ? attachment_name : "";
-    // Server-side fallback: if the client didn't send an attachment URL, pull
-    // the freshest one off the envelope so we never deliver an attachment-less
-    // email by accident.
-    if (!attachmentUrlStr && (envelope as any).document_url) {
-      attachmentUrlStr = String((envelope as any).document_url);
-      if (!attachmentNameStr) {
-        attachmentNameStr = String((envelope as any).document_filename || `${envelope.name || "Document"}.pdf`);
-      }
+    // LATEST-VERSION GUARANTEE (v3): the envelope row is the single source
+    // of truth for the most recent regenerated PDF. We ALWAYS prefer the
+    // envelope's document_url over any value the client passed in, so a
+    // stale dialog payload can never override the freshest saved document.
+    // The client-supplied attachment_url is only used if the envelope has
+    // no document_url at all (legacy uploads). This is what guarantees
+    // "edited from EXCLUSIVE → NON EXCLUSIVE → save → send" delivers the
+    // NON EXCLUSIVE PDF, not whatever URL the dialog opened with.
+    const envelopeDocUrl = (envelope as any).document_url ? String((envelope as any).document_url) : "";
+    const envelopeDocName = (envelope as any).document_filename
+      ? String((envelope as any).document_filename)
+      : `${envelope.name || "Document"}.pdf`;
+    const clientDocUrl = typeof attachment_url === "string" ? attachment_url : "";
+    const clientDocName = typeof attachment_name === "string" ? attachment_name : "";
+    let attachmentUrlStr = envelopeDocUrl || clientDocUrl;
+    let attachmentNameStr = envelopeDocUrl ? envelopeDocName : (clientDocName || envelopeDocName);
+    const attachmentVersionMismatch = Boolean(
+      envelopeDocUrl && clientDocUrl && envelopeDocUrl !== clientDocUrl,
+    );
+    if (attachmentVersionMismatch) {
+      console.warn(
+        `[esign-send-for-signature] client supplied stale attachment_url for envelope ${envelope.id}; using envelope.document_url instead`,
+      );
     }
     const [primaryAttachment, ...extras] = await Promise.all([
       attachmentUrlStr && attachmentNameStr
@@ -197,8 +209,8 @@ Deno.serve(async (req) => {
         // If the DocuSign URL is missing/invalid, the renderer falls back to
         // this owner-managed signing landing page (envelope context preserved).
         fallbackSignUrl: signingUrl,
-        attachmentName: typeof attachment_name === "string" ? attachment_name : undefined,
-        attachmentUrl: typeof attachment_url === "string" ? attachment_url : undefined,
+        attachmentName: attachmentNameStr || undefined,
+        attachmentUrl: attachmentUrlStr || undefined,
       });
 
       const plainText = [
@@ -207,9 +219,7 @@ Deno.serve(async (req) => {
                      .replace(/\s+/g, " ")
                      .trim(),
         "",
-        typeof attachment_name === "string" && attachment_name
-          ? `Attached: ${attachment_name}`
-          : "",
+        attachmentNameStr ? `Attached: ${attachmentNameStr}` : "",
         "",
         "— JBJ GLOBAL REAL ESTATE · contact@jbj.ae · www.jbj.ae",
       ].filter(Boolean).join("\n");
@@ -312,6 +322,16 @@ Deno.serve(async (req) => {
             actor_id: user.id,
             actor_email: user.email,
             actor_name: envelope.sender_name,
+            metadata: {
+              attachment_url: attachmentUrlStr || null,
+              attachment_name: attachmentNameStr || null,
+              attachment_version_id: attachmentUrlStr || null,
+              attachment_source_updated_at: (envelope as any).updated_at || null,
+              attachment_size_bytes: primaryAttachment ? (envelope as any).document_size_bytes || null : null,
+              attachment_content_type: primaryAttachment ? "application/pdf" : null,
+              client_supplied_attachment_url: clientDocUrl || null,
+              version_mismatch_corrected: attachmentVersionMismatch,
+            },
           }),
         );
       } else {

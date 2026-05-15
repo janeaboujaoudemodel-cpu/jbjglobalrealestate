@@ -1,104 +1,115 @@
 ## Audit findings
 
 ### Currently working
-- The main `/e-signature/:id` document preview renders the Omar PAA and opens the `Send via Email` dialog.
-- The current desktop dialog preview renders clean paragraphs for the Omar envelope: no visible `<p>`, `</p>`, `<br>`, `{{ }}`, JSON, or markdown in the iframe preview.
-- The auto-attachment row is visible in the dialog for `JBJ-PAA-LEASING-0001.pdf`.
-- The email shell/branding renderer is shared between client preview and backend send (`buildEnvelopeEmailHtml` / `_shared/envelope-email-html.ts`).
-- The Resend payload is using `html: emailHtml` and a separate text fallback, so the intended MIME path is HTML email.
-- The PDF generation hook uploads generated PDFs to `esign-documents` and stores `document_url` / `document_filename` on the envelope.
+- The core PAA document editor exists and saves field values into `esign_envelopes.template_field_values`.
+- `handleSaveEdits` regenerates a new PDF object after field edits and updates `document_url` / `document_filename`.
+- `SendViaEmailDialog` already has a branded email preview, DocuSign CTA, test send, final send, and attachment display.
+- Server send functions already reject non-PDF attachment bytes and fail clearly if a PDF cannot be fetched.
+- The affected real document record currently stores `template_field_values.exclusivity = NON EXCLUSIVE`.
 
-### Broken / risky logic found
-- **Raw HTML regression can still happen server-side** when the body contains a mix of real HTML and escaped HTML. Current backend guard only decodes when there are escaped tags and no real tags. A mixed payload like `<p>&lt;p&gt;Dear Omar&lt;/p&gt;</p>` can still deliver visible `<p>` text.
-- **Attachment synchronization is split across two dialogs.** `SendViaEmailDialog` has the stronger auto-attachment logic, but `SendForSignatureDialog` is still a duplicate send path and does not pass `attachment_name` / `attachment_url` to either test or live send.
-- **Test send attachment fallback is incomplete.** `esign-send-test-email` only attaches when the client sends `attachment_url` + `attachment_name`; unlike the live send, it does not pull the latest document from the envelope if the client payload is missing those fields.
-- **Preview can become stale after regeneration.** `onBeforeSend` re-pulls the fresh attachment before sending, but the visible attachment preview still uses the original `attachmentUrl` / `attachmentName` props from when the dialog opened.
-- **PDF preview UX is incomplete.** The dialog offers an “Open” link, but there is no inline PDF preview panel/state inside the email dialog, so “preview before send” is not a true email + attachment + PDF preview bundle.
-- **Desktop blocked-PDF issue is caused by opening/fetching raw storage URLs in some paths.** The download proxy exists, but the send/test payload can still depend on public storage URLs or stale signed URLs. Backend attachment fetch should resolve storage object paths itself instead of trusting client URL freshness.
+### Broken / risky
+- Opening the email preview does not force a fresh PDF sync. It hydrates from the `envelope.document_url` prop first, so preview can show an attachment before proving it matches the latest saved document state.
+- `resolveFreshAttachment` only regenerates through `onBeforeSend`; it is not run on preview open, and it silently falls back to DB attachment if regeneration fails.
+- `onBeforeSend` only saves/regenerates when the UI is dirty. If saved values changed but the stored PDF is older or stale, it can still use the old PDF URL.
+- There is no explicit PDF version marker stored with the attachment; audit history has send events but not the exact attachment URL/version/date that was sent.
+- The duplicate `SendForSignatureDialog` path still sends `envelope.document_url` directly and has no latest-version UI/status controls. It should not be expanded into another module.
+- Desktop preview links use preview-domain proxy URLs such as `/api/download-file` on `lovableproject.com` in development/preview. Chrome/ad blockers can block that whole preview host, which causes the `lovableproject.com is blocked` screen.
 
-### Duplicated components / flows
-- `SendForSignatureDialog.tsx` duplicates recipient chips, subject/body editor, DocuSign input, test send, live preview, send button, and template locking logic.
-- `SendViaEmailDialog.tsx` is the newer, stronger preview-first email workflow with attachment preview and auto-sync.
-- Client and backend email shell renderers are intentionally duplicated mirrors and must remain synchronized, but should share the same normalization rules.
+### Why desktop preview fails
+- The current Open button targets a new tab on the preview host (`id-preview...lovable.app` / `lovableproject.com`) or raw storage-derived URLs. In the user's environment Chrome blocks the Lovable preview domain when opened as a standalone file page.
+- This is a URL-delivery problem, not the PDF bytes themselves. The fix is to use a brand-domain download/open route for email-facing and owner preview links, and avoid iframe-only/open-new-preview-domain behavior.
 
-## Fix plan
+### What causes the stale/blocked PDF issue
+- Stale: preview/send trust `document_url` without a mandatory “render latest PDF from current saved state, mark version, verify version” handshake.
+- Blocked: Open links can route through the preview app host or raw storage URL instead of a stable JBJ-branded document route/proxy.
 
-### 1. Harden email body normalization everywhere
-Files:
-- `src/components/e-signature/EmailBodyEditor.tsx`
-- `src/components/e-signature/SendViaEmailDialog.tsx`
-- `supabase/functions/esign-send-for-signature/index.ts`
-- `supabase/functions/esign-send-test-email/index.ts`
+### Duplicated components
+- `SendViaEmailDialog`: canonical branded preview/send workflow.
+- `SendForSignatureDialog`: older duplicate send workflow with overlapping recipient/body/send logic and weaker attachment sync.
 
-Implement a single defensive rule in each path:
-- Decode escaped HTML markers even when real tags also exist.
-- Collapse legacy nested escaped paragraphs into real paragraphs.
-- Strip raw template tokens (`{{sender_signature}}`, `{{signing_link}}`) from delivered body content.
-- Sanitize allowed body tags only (`p`, `br`, bold/italic/underline, safe links).
-- Generate plain-text fallback from the final sanitized HTML, never from raw input.
+## Implementation plan
 
-This prevents any visible `<p>`, `</p>`, `<br>`, `<`, `>`, `{{ }}`, escaped HTML entities, or template syntax from reaching the client.
+### 1. Add a canonical “latest PDF sync” helper in the existing document page
+- In `EnvelopeDetail.tsx`, create one helper that always:
+  1. saves in-progress edits if dirty,
+  2. fetches the latest envelope row,
+  3. regenerates a new PDF from the latest saved `template_field_values` every time preview opens and every time send/test occurs,
+  4. writes version metadata into the envelope, including:
+     - `pdf_version_id` (UUID),
+     - `pdf_generated_at`,
+     - `pdf_source_updated_at`,
+     - `pdf_document_url`,
+     - `pdf_document_filename`,
+     - `pdf_status = latest`.
+- This does not rebuild the document system; it wraps the existing `useRegenerateEnvelopePdf` flow and enriches metadata.
 
-### 2. Make attachment sync authoritative from the envelope
-Files:
-- `src/components/e-signature/SendViaEmailDialog.tsx`
-- `supabase/functions/esign-send-for-signature/index.ts`
-- `supabase/functions/esign-send-test-email/index.ts`
+### 2. Make email preview attach the latest saved version immediately
+- When `SendViaEmailDialog` opens, call the sync helper before showing the attachment as “Latest”.
+- Add explicit attachment sync states: `syncing`, `latest`, `outdated`, `missing`, `failed`, `removed`.
+- If sync fails, show `Failed` and disable `Send test` / `Approve & send` until regenerated.
 
-Changes:
-- Store the freshly resolved attachment in dialog state after `onBeforeSend`, so the visible preview updates to the exact URL/name that will be sent.
-- Remove the silent “send without attachment” path unless the user explicitly clicks Remove.
-- In both live and test backend functions, if the client omits `attachment_url`, load the latest `esign_envelopes.document_url` / `document_filename` server-side.
-- Resolve storage object URLs server-side into fetchable bytes before calling Resend.
-- Fail loudly with a clear dialog toast if no PDF can be resolved, instead of sending an attachment-less email.
+### 3. Upgrade “Attachments the client will receive” inside `SendViaEmailDialog`
+- Keep the existing section; do not create a new module.
+- Add:
+  - file name,
+  - document type,
+  - generated/version date,
+  - latest synced status,
+  - Open/Preview button,
+  - X/remove button,
+  - “Regenerate latest PDF” button,
+  - “Attach latest saved version” button,
+  - status label: Latest / Outdated / Missing / Failed / Removed.
+- X/remove only removes the attachment from the current email draft; it will not delete the document or storage object.
+- Reattach/regenerate restores the latest saved version.
 
-### 3. Merge the duplicate send paths safely
-Files:
-- `src/pages/e-signature/EnvelopeDetail.tsx`
-- `src/components/e-signature/SendForSignatureDialog.tsx`
-- `src/components/e-signature/SendViaEmailDialog.tsx`
+### 4. Block stale sends with strict validation
+- Before `Send test` and `Approve & send`, run sync/validation again.
+- Compare the preview attachment’s `pdf_version_id` / `pdf_source_updated_at` with the latest envelope state.
+- If mismatched, missing, failed, or manually removed while no other attachment is intended, block sending with a clear error.
+- Send only the verified latest attachment URL/name/version.
 
-Changes:
-- Keep `SendViaEmailDialog` as the canonical email send workflow.
-- Make the “Send for signature” email action route through the same preview-first dialog or pass the exact same attachment fields if it remains available.
-- Do not delete the older dialog yet; de-risk by disabling its incomplete direct email path or converting it to hand off to the canonical workflow.
-- Preserve WhatsApp/copy-link behavior.
+### 5. Fix server send functions to reject stale attachment payloads
+- Update `esign-send-for-signature` and `esign-send-test-email` to accept attachment metadata from the dialog.
+- Server re-fetches the envelope and compares incoming attachment URL/version/source timestamp to envelope metadata.
+- If the client sends an old URL or old version, return HTTP 409 with “Attachment is outdated — regenerate latest PDF before sending.”
+- Server records the exact sent attachment metadata in `esign_audit_log.metadata`.
 
-### 4. Add real PDF preview inside the email dialog
-Files:
-- `src/components/e-signature/SendViaEmailDialog.tsx`
+### 6. Store exact email attachment history
+- No new duplicate email module.
+- Use `esign_audit_log.metadata` for sent/test-send events with:
+  - `attachment_url`,
+  - `attachment_name`,
+  - `attachment_version_id`,
+  - `attachment_generated_at`,
+  - `attachment_source_updated_at`,
+  - `attachment_size_bytes`,
+  - `attachment_content_type`.
+- This satisfies “email history records the exact PDF version sent” without adding a parallel email-history system.
 
-Changes:
-- Add a compact PDF preview drawer/inline panel using the existing download proxy URL with `disposition=inline`.
-- Show attachment status states: syncing, attached, previewable, missing/error.
-- Ensure the attachment preview URL is the same resolved URL used for send/test.
+### 7. Fix desktop/mobile PDF opening
+- Owner preview Open button should avoid blocked preview-domain tabs by using a brand-safe `/d` route on `https://jbj.ae` when a storage URL is available.
+- For in-app owner verification, open/download via the existing `download-file` proxy with correct headers:
+  - `Content-Type: application/pdf`,
+  - `Content-Disposition: inline` for preview,
+  - `Content-Disposition: attachment` for download,
+  - no iframe dependency.
+- Email-facing document links, if rendered, should use `https://jbj.ae/d?...` rather than raw storage or preview-host URLs.
 
-### 5. Keep email preview and sent email 1:1
-Files:
-- `src/lib/email/buildEnvelopeEmailHtml.ts`
-- `supabase/functions/_shared/envelope-email-html.ts`
+### 8. Keep email body clean
+- Preserve the existing HTML normalization safeguards.
+- Ensure final send/test functions continue stripping escaped `<p>`, `</p>`, `<br>`, merge tokens, and raw template syntax.
+- Do not change the branded email renderer except where needed for safe attachment metadata/display.
 
-Changes:
-- Keep both renderers synchronized.
-- Add a visible, premium “PDF attached” strip using the real attachment filename so the email body itself makes the attachment obvious without fake placeholders.
-- Preserve the DocuSign CTA and fallback signing URL behavior.
+### 9. Deprecate the duplicate send path safely
+- Do not delete `SendForSignatureDialog`.
+- Route its email send through the same latest-PDF sync/validation or disable its direct email send path in favor of the canonical `SendViaEmailDialog` for email.
+- Keep WhatsApp/copy-link behavior intact.
 
-### 6. Verify end-to-end after implementation
-I will test:
-- Desktop preview dialog: no raw HTML, attachment row visible, PDF preview opens.
-- Test email to `infoo.jane@gmail.com`: clean rendered HTML, PDF attached, DocuSign CTA present.
-- Live send payload path: synchronized latest `document_url` / filename sent.
-- Browser network: no failed PDF proxy requests.
-- Backend logs: no PDF fetch failures and no Resend attachment errors.
-
-## Expected final report after implementation
-I will provide:
-1. What is working.
-2. What was broken.
-3. Why desktop preview failed / was incomplete.
-4. What caused the blocked/missing PDF issue.
-5. Which components were duplicated.
-6. What was merged or routed into the canonical flow.
-7. What was optimized.
-8. Exact fixes implemented.
-9. Desktop screenshot proof from the tested preview flow, plus notes on email/PDF test results.
+## Testing plan after implementation
+- Desktop Chrome: open affected PAA, change/save `EXCLUSIVE` → `NON EXCLUSIVE`, open email preview, confirm attachment status `Latest` and preview opens.
+- Desktop Chrome blocked-domain check: Open/Preview must not land on a blocked `lovableproject.com` page.
+- Test email to `infoo.jane@gmail.com`: confirm clean branded HTML and latest PDF attachment only.
+- Final send validation: server rejects stale payloads if forced; normal send succeeds with latest PDF.
+- Mobile viewport check: attachment section remains usable, X/remove and regenerate buttons visible.
+- Audit log check: latest sent/test event includes exact attachment version metadata.

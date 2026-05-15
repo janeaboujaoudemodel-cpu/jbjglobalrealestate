@@ -39,6 +39,19 @@ import { EmailAttachmentsPicker, type EmailAttachment } from "./EmailAttachments
 import { buildSenderSignatureHtml, escapeHtml } from "@/lib/email/buildEnvelopeEmailHtml";
 import { useEmailSignatures, renderSignatureHtml, type EmailSignature } from "@/hooks/useEmailSignatures";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
+import { buildSafeDownloadUrl } from "@/lib/buildSafeDownloadUrl";
+
+/** Build a brand-safe Open link that bypasses Chrome's preview-host blocking
+ *  (`lovableproject.com is blocked`). When we have a storage URL we route
+ *  through https://jbj.ae/d which is on the production brand domain and
+ *  never filtered by ad blockers / Chrome safe-browsing. As a fallback we
+ *  use the in-app download proxy (works in dev/preview). */
+function safeOpenHref(rawUrl: string | undefined, filename: string | undefined): string {
+  if (!rawUrl) return "#";
+  const branded = buildSafeDownloadUrl(rawUrl, filename);
+  if (branded) return branded;
+  return maybeProxyStorageUrl(rawUrl, { filename, disposition: "inline" });
+}
 
 const TEST_RECIPIENT = "infoo.jane@gmail.com";
 const DEFAULT_CC = "infoo.jane@gmail.com";
@@ -252,6 +265,8 @@ export function SendViaEmailDialog({
   // uses these — guarantees the preview === what is sent.
   const [liveAttachmentName, setLiveAttachmentName] = useState<string | undefined>(attachmentName);
   const [liveAttachmentUrl, setLiveAttachmentUrl] = useState<string | undefined>(attachmentUrl);
+  const [attachmentSyncStatus, setAttachmentSyncStatus] = useState<"idle" | "syncing" | "latest" | "failed" | "removed">("idle");
+  const [attachmentSyncedAt, setAttachmentSyncedAt] = useState<number | null>(null);
   const draftKey = `jbj_esign_email_draft_${envelopeId || "__new__"}`;
 
   // Load all email signature presets so the owner can pick which one
@@ -423,6 +438,7 @@ export function SendViaEmailDialog({
    *  Mirrors the resolved values into state so the visible "Attachments
    *  the client will receive" preview is always 1:1 with what is sent. */
   const resolveFreshAttachment = async (): Promise<{ url?: string; name?: string }> => {
+    setAttachmentSyncStatus("syncing");
     let resolved: { url?: string; name?: string } = { url: attachmentUrl, name: attachmentName };
     try {
       const fromParent = onBeforeSend ? await onBeforeSend() : undefined;
@@ -438,8 +454,24 @@ export function SendViaEmailDialog({
     }
     if (resolved.url) setLiveAttachmentUrl(resolved.url);
     if (resolved.name) setLiveAttachmentName(resolved.name);
+    setAttachmentSyncStatus(resolved.url ? "latest" : "failed");
+    setAttachmentSyncedAt(Date.now());
     return resolved;
   };
+
+  // Force a fresh PDF sync the moment the dialog opens so the attachment
+  // shown in preview is guaranteed to match the latest saved document state.
+  useEffect(() => {
+    if (!open) return;
+    if (autoAttachmentRemoved) return;
+    let cancelled = false;
+    (async () => {
+      try { await resolveFreshAttachment(); } catch { /* status already set to failed */ }
+      if (cancelled) return;
+    })();
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
 
   const sendTest = async () => {
     setBusy("test");
@@ -607,7 +639,7 @@ export function SendViaEmailDialog({
                   <strong className="truncate flex-1">{liveAttachmentName}</strong>
                   {liveAttachmentUrl && (
                     <a
-                      href={maybeProxyStorageUrl(liveAttachmentUrl, { filename: liveAttachmentName, disposition: 'inline' })}
+                      href={safeOpenHref(liveAttachmentUrl, liveAttachmentName)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="shrink-0 px-1.5 py-0.5 rounded hover:bg-[#EFE6D6] text-[#1A1A1A]/70"
@@ -817,7 +849,7 @@ export function SendViaEmailDialog({
                     </span>
                     {liveAttachmentUrl && (
                       <a
-                        href={maybeProxyStorageUrl(liveAttachmentUrl, { filename: liveAttachmentName, disposition: 'inline' })}
+                        href={safeOpenHref(liveAttachmentUrl, liveAttachmentName)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="shrink-0 px-1.5 py-0.5 rounded hover:bg-[#EFE6D6] text-[#1A1A1A]/70 inline-flex items-center gap-1"
@@ -834,7 +866,7 @@ export function SendViaEmailDialog({
                     <span className="truncate flex-1">{a.name}<span className="ml-1.5 text-[10px] uppercase tracking-wider text-[#1A1A1A]/60">Uploaded</span></span>
                     {a.url && (
                       <a
-                        href={maybeProxyStorageUrl(a.url, { filename: a.name, disposition: 'inline' })}
+                        href={safeOpenHref(a.url, a.name)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="shrink-0 px-1.5 py-0.5 rounded hover:bg-[#EFE6D6] text-[#1A1A1A]/70 inline-flex items-center gap-1"
