@@ -231,6 +231,8 @@ export function SendForSignatureDialog({ open, onOpenChange, envelope, primaryRe
           interpolated_body: previewBody,
           interpolated_body_html: previewBodyHtml,
           docusign_url: docusignUrl.trim() || undefined,
+          attachment_name: envelope?.document_filename || undefined,
+          attachment_url: envelope?.document_url || undefined,
           test_recipient: "infoo.jane@gmail.com",
         }),
       });
