@@ -75,17 +75,29 @@ Deno.serve(async (req) => {
 
     const baseUrl = Deno.env.get("SITE_URL") || "https://jbj.ae";
 
-    // Hoist attachment fetches OUT of the per-recipient loop — same bytes for all.
-    let attachmentUrlStr = typeof attachment_url === "string" ? attachment_url : "";
-    let attachmentNameStr = typeof attachment_name === "string" ? attachment_name : "";
-    // Server-side fallback: if the client didn't send an attachment URL, pull
-    // the freshest one off the envelope so we never deliver an attachment-less
-    // email by accident.
-    if (!attachmentUrlStr && (envelope as any).document_url) {
-      attachmentUrlStr = String((envelope as any).document_url);
-      if (!attachmentNameStr) {
-        attachmentNameStr = String((envelope as any).document_filename || `${envelope.name || "Document"}.pdf`);
-      }
+    // LATEST-VERSION GUARANTEE (v3): the envelope row is the single source
+    // of truth for the most recent regenerated PDF. We ALWAYS prefer the
+    // envelope's document_url over any value the client passed in, so a
+    // stale dialog payload can never override the freshest saved document.
+    // The client-supplied attachment_url is only used if the envelope has
+    // no document_url at all (legacy uploads). This is what guarantees
+    // "edited from EXCLUSIVE → NON EXCLUSIVE → save → send" delivers the
+    // NON EXCLUSIVE PDF, not whatever URL the dialog opened with.
+    const envelopeDocUrl = (envelope as any).document_url ? String((envelope as any).document_url) : "";
+    const envelopeDocName = (envelope as any).document_filename
+      ? String((envelope as any).document_filename)
+      : `${envelope.name || "Document"}.pdf`;
+    const clientDocUrl = typeof attachment_url === "string" ? attachment_url : "";
+    const clientDocName = typeof attachment_name === "string" ? attachment_name : "";
+    let attachmentUrlStr = envelopeDocUrl || clientDocUrl;
+    let attachmentNameStr = envelopeDocUrl ? envelopeDocName : (clientDocName || envelopeDocName);
+    const attachmentVersionMismatch = Boolean(
+      envelopeDocUrl && clientDocUrl && envelopeDocUrl !== clientDocUrl,
+    );
+    if (attachmentVersionMismatch) {
+      console.warn(
+        `[esign-send-for-signature] client supplied stale attachment_url for envelope ${envelope.id}; using envelope.document_url instead`,
+      );
     }
     const [primaryAttachment, ...extras] = await Promise.all([
       attachmentUrlStr && attachmentNameStr
