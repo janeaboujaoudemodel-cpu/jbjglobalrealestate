@@ -322,6 +322,16 @@ Deno.serve(async (req) => {
             actor_id: user.id,
             actor_email: user.email,
             actor_name: envelope.sender_name,
+            metadata: {
+              attachment_url: attachmentUrlStr || null,
+              attachment_name: attachmentNameStr || null,
+              attachment_version_id: attachmentUrlStr || null,
+              attachment_source_updated_at: (envelope as any).updated_at || null,
+              attachment_size_bytes: primaryAttachment ? (envelope as any).document_size_bytes || null : null,
+              attachment_content_type: primaryAttachment ? "application/pdf" : null,
+              client_supplied_attachment_url: clientDocUrl || null,
+              version_mismatch_corrected: attachmentVersionMismatch,
+            },
           }),
         );
       } else {
