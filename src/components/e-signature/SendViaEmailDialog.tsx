@@ -39,6 +39,19 @@ import { EmailAttachmentsPicker, type EmailAttachment } from "./EmailAttachments
 import { buildSenderSignatureHtml, escapeHtml } from "@/lib/email/buildEnvelopeEmailHtml";
 import { useEmailSignatures, renderSignatureHtml, type EmailSignature } from "@/hooks/useEmailSignatures";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
+import { buildSafeDownloadUrl } from "@/lib/buildSafeDownloadUrl";
+
+/** Build a brand-safe Open link that bypasses Chrome's preview-host blocking
+ *  (`lovableproject.com is blocked`). When we have a storage URL we route
+ *  through https://jbj.ae/d which is on the production brand domain and
+ *  never filtered by ad blockers / Chrome safe-browsing. As a fallback we
+ *  use the in-app download proxy (works in dev/preview). */
+function safeOpenHref(rawUrl: string | undefined, filename: string | undefined): string {
+  if (!rawUrl) return "#";
+  const branded = buildSafeDownloadUrl(rawUrl, filename);
+  if (branded) return branded;
+  return maybeProxyStorageUrl(rawUrl, { filename, disposition: "inline" });
+}
 
 const TEST_RECIPIENT = "infoo.jane@gmail.com";
 const DEFAULT_CC = "infoo.jane@gmail.com";
