@@ -209,8 +209,8 @@ Deno.serve(async (req) => {
         // If the DocuSign URL is missing/invalid, the renderer falls back to
         // this owner-managed signing landing page (envelope context preserved).
         fallbackSignUrl: signingUrl,
-        attachmentName: typeof attachment_name === "string" ? attachment_name : undefined,
-        attachmentUrl: typeof attachment_url === "string" ? attachment_url : undefined,
+        attachmentName: attachmentNameStr || undefined,
+        attachmentUrl: attachmentUrlStr || undefined,
       });
 
       const plainText = [
@@ -219,9 +219,7 @@ Deno.serve(async (req) => {
                      .replace(/\s+/g, " ")
                      .trim(),
         "",
-        typeof attachment_name === "string" && attachment_name
-          ? `Attached: ${attachment_name}`
-          : "",
+        attachmentNameStr ? `Attached: ${attachmentNameStr}` : "",
         "",
         "— JBJ GLOBAL REAL ESTATE · contact@jbj.ae · www.jbj.ae",
       ].filter(Boolean).join("\n");
