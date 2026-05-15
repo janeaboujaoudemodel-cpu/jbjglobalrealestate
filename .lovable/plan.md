@@ -1,67 +1,104 @@
 ## Audit findings
 
-### 1. Why the email shows raw `<p>` / `</p>` text
-`EmailBodyEditor` is a textarea that round-trips between HTML and plain text on every keystroke:
+### Currently working
+- The main `/e-signature/:id` document preview renders the Omar PAA and opens the `Send via Email` dialog.
+- The current desktop dialog preview renders clean paragraphs for the Omar envelope: no visible `<p>`, `</p>`, `<br>`, `{{ }}`, JSON, or markdown in the iframe preview.
+- The auto-attachment row is visible in the dialog for `JBJ-PAA-LEASING-0001.pdf`.
+- The email shell/branding renderer is shared between client preview and backend send (`buildEnvelopeEmailHtml` / `_shared/envelope-email-html.ts`).
+- The Resend payload is using `html: emailHtml` and a separate text fallback, so the intended MIME path is HTML email.
+- The PDF generation hook uploads generated PDFs to `esign-documents` and stores `document_url` / `document_filename` on the envelope.
 
-- On hydrate it runs `htmlToText(value)` — this strips real tags **and decodes HTML entities** (`&lt;` → `<`).
-- On change it runs `textToHtml(text)` which **escapes `<` back to `&lt;`** and wraps in `<p>`.
+### Broken / risky logic found
+- **Raw HTML regression can still happen server-side** when the body contains a mix of real HTML and escaped HTML. Current backend guard only decodes when there are escaped tags and no real tags. A mixed payload like `<p>&lt;p&gt;Dear Omar&lt;/p&gt;</p>` can still deliver visible `<p>` text.
+- **Attachment synchronization is split across two dialogs.** `SendViaEmailDialog` has the stronger auto-attachment logic, but `SendForSignatureDialog` is still a duplicate send path and does not pass `attachment_name` / `attachment_url` to either test or live send.
+- **Test send attachment fallback is incomplete.** `esign-send-test-email` only attaches when the client sends `attachment_url` + `attachment_name`; unlike the live send, it does not pull the latest document from the envelope if the client payload is missing those fields.
+- **Preview can become stale after regeneration.** `onBeforeSend` re-pulls the fresh attachment before sending, but the visible attachment preview still uses the original `attachmentUrl` / `attachmentName` props from when the dialog opened.
+- **PDF preview UX is incomplete.** The dialog offers an “Open” link, but there is no inline PDF preview panel/state inside the email dialog, so “preview before send” is not a true email + attachment + PDF preview bundle.
+- **Desktop blocked-PDF issue is caused by opening/fetching raw storage URLs in some paths.** The download proxy exists, but the send/test payload can still depend on public storage URLs or stale signed URLs. Backend attachment fetch should resolve storage object paths itself instead of trusting client URL freshness.
 
-If a saved `envelope.email_message` / `esign_email_template_defaults.body_html` row contains *double-encoded* HTML (e.g. `&lt;p&gt;Dear Omar&lt;/p&gt;` — which a previous write path produced), the round-trip turns it into literal text `<p>Dear Omar</p>` in the textarea, then re-escapes it to `&lt;p&gt;Dear Omar&lt;/p&gt;` on send. The renderer injects `${bodyHtml}` raw into the email, which displays the visible `<p>` characters the user is seeing.
+### Duplicated components / flows
+- `SendForSignatureDialog.tsx` duplicates recipient chips, subject/body editor, DocuSign input, test send, live preview, send button, and template locking logic.
+- `SendViaEmailDialog.tsx` is the newer, stronger preview-first email workflow with attachment preview and auto-sync.
+- Client and backend email shell renderers are intentionally duplicated mirrors and must remain synchronized, but should share the same normalization rules.
 
-A second trigger: any content that lands in `bodyHtml` containing already-escaped angle brackets (e.g. legacy drafts in `localStorage`) hits the exact same path.
+## Fix plan
 
-### 2. Why the attachment disappeared
-`resolveFreshAttachment` calls the parent's `onBeforeSend` first; if that resolves with `{ url: undefined }` (parent is "clean", no regenerate needed) the code returns `{ url: undefined, name: attachmentName }` and the signed URL step is skipped. Combined with `autoAttachmentRemoved` defaulting to `false` but `attachmentUrl` being momentarily empty during template hydration, the dialog can fire `interpolated_body_html` send with `attachment_url: undefined`, and the edge function never falls back to the envelope's stored signed PDF.
-
-### 3. What is actually working (do NOT touch)
-- `buildEnvelopeEmailHtml` shell, branding, footer, CTA, IconTile, gold hairline.
-- `EmailPreviewIframe` — uses the same renderer as the edge function, byte-for-byte parity.
-- `download-file` proxy + `/api/download-file` rewrite — desktop preview links work.
-- DocuSign CTA fallback to `/sign/{token}` on jbj.ae.
-- Resend attachment fetch with retry + 15 MB cap + `%PDF-` validation.
-
----
-
-## Plan (surgical repair, no rebuild)
-
-### Step 1 — Stop the HTML-escape round-trip in the body editor
-File: `src/components/e-signature/EmailBodyEditor.tsx`
-
-- Add an input **normalizer** at hydrate time: if `value` contains `&lt;` / `&gt;` / `&amp;lt;`, decode once before `htmlToText` so the textarea shows clean prose, never raw `<p>` text.
-- Make `textToHtml` resilient: if the user pasted plain-looking text that *already contains* literal `<p>` / `<br>` markers (because they typed them, or pasted from a doc), treat them as text (current behavior is fine) — but never let the editor emit a string that round-trips into `&lt;p&gt;` when re-hydrated.
-- After `onChange`, also store the raw textarea text on a ref and prefer re-rendering from that text (not from `value`) while the textarea is focused — already done, just tighten the equality check so `value === textToHtml(currentText)` short-circuits.
-
-### Step 2 — One-shot DB cleanup of double-encoded bodies
-File: `src/components/e-signature/SendViaEmailDialog.tsx`
-
-- Extend `scrubLegacyBody` with a `decodeIfDoubleEscaped` pass: when the body's plain-text projection contains `&lt;` or visible `<p>` / `</p>` literals as text, run `DOMParser` decode once and re-sanitize.
-- Apply it to **both** hydration sources: `legacyBodyToHtml(defaultBody, …)` AND `data.body_html` from `esign_email_template_defaults` AND the `localStorage` draft.
-
-### Step 3 — Defensive escape detection in the edge functions
-Files: `supabase/functions/esign-send-for-signature/index.ts`, `supabase/functions/esign-send-test-email/index.ts`
-
-- Before injecting `interpolated_body_html` into `buildEnvelopeEmailHtml`, run a guard: if the string does **not** contain any real tag (`/<[a-z][^>]*>/i` → false) AND contains escaped markers (`&lt;`), decode once. This is a server-side safety net so a poisoned client payload can never deliver visible `<p>` to the recipient.
-
-### Step 4 — Guarantee the latest PDF is always attached
-File: `src/components/e-signature/SendViaEmailDialog.tsx`
-
-- In `resolveFreshAttachment`: when `onBeforeSend` returns `{ url: undefined }`, **always** fall through to `fetchLatestAttachment()` (which re-reads `esign_envelopes` for the freshest signed PDF) instead of returning early.
-- In the edge function, if `attachment_url` is empty, look up the envelope row server-side and resolve its current `signed_pdf_url` (or re-sign from storage path) before sending — never send an attachment-less email unless `autoAttachmentRemoved` was explicitly set.
-- Surface a hard error in the dialog if neither path produces a PDF, so the owner sees "No document attached" instead of silently sending nothing.
-
-### Step 5 — Verify end-to-end
-- Send three test emails to `infoo.jane@gmail.com` covering: (a) freshly-generated envelope, (b) envelope with poisoned legacy body, (c) envelope where parent skips regeneration.
-- Confirm in Gmail desktop: clean paragraphs (no visible `<p>`), PDF attachment present with correct filename, inline preview opens via `/api/download-file`, DocuSign CTA resolves correctly.
-
-### Files touched (no new modules)
+### 1. Harden email body normalization everywhere
+Files:
 - `src/components/e-signature/EmailBodyEditor.tsx`
 - `src/components/e-signature/SendViaEmailDialog.tsx`
 - `supabase/functions/esign-send-for-signature/index.ts`
 - `supabase/functions/esign-send-test-email/index.ts`
 
-### Out of scope (explicitly preserved)
-- Email shell / branding / footer / typography
-- DocuSign integration handshake
-- PDF generation pipeline
-- `esign-complete-envelope` and signer thank-you flow
-- Storage bucket layout and signed-URL TTLs (already standardized at 7 days)
+Implement a single defensive rule in each path:
+- Decode escaped HTML markers even when real tags also exist.
+- Collapse legacy nested escaped paragraphs into real paragraphs.
+- Strip raw template tokens (`{{sender_signature}}`, `{{signing_link}}`) from delivered body content.
+- Sanitize allowed body tags only (`p`, `br`, bold/italic/underline, safe links).
+- Generate plain-text fallback from the final sanitized HTML, never from raw input.
+
+This prevents any visible `<p>`, `</p>`, `<br>`, `<`, `>`, `{{ }}`, escaped HTML entities, or template syntax from reaching the client.
+
+### 2. Make attachment sync authoritative from the envelope
+Files:
+- `src/components/e-signature/SendViaEmailDialog.tsx`
+- `supabase/functions/esign-send-for-signature/index.ts`
+- `supabase/functions/esign-send-test-email/index.ts`
+
+Changes:
+- Store the freshly resolved attachment in dialog state after `onBeforeSend`, so the visible preview updates to the exact URL/name that will be sent.
+- Remove the silent “send without attachment” path unless the user explicitly clicks Remove.
+- In both live and test backend functions, if the client omits `attachment_url`, load the latest `esign_envelopes.document_url` / `document_filename` server-side.
+- Resolve storage object URLs server-side into fetchable bytes before calling Resend.
+- Fail loudly with a clear dialog toast if no PDF can be resolved, instead of sending an attachment-less email.
+
+### 3. Merge the duplicate send paths safely
+Files:
+- `src/pages/e-signature/EnvelopeDetail.tsx`
+- `src/components/e-signature/SendForSignatureDialog.tsx`
+- `src/components/e-signature/SendViaEmailDialog.tsx`
+
+Changes:
+- Keep `SendViaEmailDialog` as the canonical email send workflow.
+- Make the “Send for signature” email action route through the same preview-first dialog or pass the exact same attachment fields if it remains available.
+- Do not delete the older dialog yet; de-risk by disabling its incomplete direct email path or converting it to hand off to the canonical workflow.
+- Preserve WhatsApp/copy-link behavior.
+
+### 4. Add real PDF preview inside the email dialog
+Files:
+- `src/components/e-signature/SendViaEmailDialog.tsx`
+
+Changes:
+- Add a compact PDF preview drawer/inline panel using the existing download proxy URL with `disposition=inline`.
+- Show attachment status states: syncing, attached, previewable, missing/error.
+- Ensure the attachment preview URL is the same resolved URL used for send/test.
+
+### 5. Keep email preview and sent email 1:1
+Files:
+- `src/lib/email/buildEnvelopeEmailHtml.ts`
+- `supabase/functions/_shared/envelope-email-html.ts`
+
+Changes:
+- Keep both renderers synchronized.
+- Add a visible, premium “PDF attached” strip using the real attachment filename so the email body itself makes the attachment obvious without fake placeholders.
+- Preserve the DocuSign CTA and fallback signing URL behavior.
+
+### 6. Verify end-to-end after implementation
+I will test:
+- Desktop preview dialog: no raw HTML, attachment row visible, PDF preview opens.
+- Test email to `infoo.jane@gmail.com`: clean rendered HTML, PDF attached, DocuSign CTA present.
+- Live send payload path: synchronized latest `document_url` / filename sent.
+- Browser network: no failed PDF proxy requests.
+- Backend logs: no PDF fetch failures and no Resend attachment errors.
+
+## Expected final report after implementation
+I will provide:
+1. What is working.
+2. What was broken.
+3. Why desktop preview failed / was incomplete.
+4. What caused the blocked/missing PDF issue.
+5. Which components were duplicated.
+6. What was merged or routed into the canonical flow.
+7. What was optimized.
+8. Exact fixes implemented.
+9. Desktop screenshot proof from the tested preview flow, plus notes on email/PDF test results.

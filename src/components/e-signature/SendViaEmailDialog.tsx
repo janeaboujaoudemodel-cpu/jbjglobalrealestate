@@ -171,14 +171,16 @@ function stripInlineSignature(text: string): string {
 /** Decode at-most-twice for bodies persisted with double-encoded markup
  *  (e.g. `&lt;p&gt;Dear Omar&lt;/p&gt;`). Without this the editor would
  *  treat the literal `<p>` characters as plain text and re-escape them on
- *  send, delivering raw HTML tags to the recipient. */
+ *  send, delivering raw HTML tags to the recipient.
+ *
+ *  Hardened (v2): we now decode whenever escaped markers appear, even if
+ *  the surrounding string also contains real tags (e.g. mixed payloads
+ *  like `<p>&lt;p&gt;Dear Omar&lt;/p&gt;</p>`). Stop conditions: no more
+ *  escaped markers, or two passes done. */
 function decodeIfDoubleEscaped(html: string): string {
   let s = String(html || "");
   for (let i = 0; i < 2; i++) {
-    // If the string contains real tags AND no escaped markers, we're done.
-    const hasRealTag = /<[a-z][\s\S]*?>/i.test(s);
     const hasEscapedTag = /&lt;\s*\/?\s*[a-z]/i.test(s);
-    if (hasRealTag && !hasEscapedTag) break;
     if (!hasEscapedTag) break;
     s = s
       .replace(/&nbsp;/gi, " ")
@@ -188,7 +190,12 @@ function decodeIfDoubleEscaped(html: string): string {
       .replace(/&gt;/gi, ">")
       .replace(/&amp;/gi, "&");
   }
-  return s;
+  // Belt-and-braces: drop any leftover merge-tag tokens that should never
+  // reach the recipient (signature/signing-link tokens are rendered
+  // separately by the email shell, never inline).
+  return s
+    .replace(/\{\{\s*sender_signature\s*\}\}/gi, "")
+    .replace(/\{\{\s*signing_link\s*\}\}/gi, "");
 }
 
 /** Walk the HTML's block elements and drop any whose plain-text content
@@ -240,6 +247,11 @@ export function SendViaEmailDialog({
   const [draftSavedAt, setDraftSavedAt] = useState<number | null>(null);
   const [extraAttachments, setExtraAttachments] = useState<EmailAttachment[]>([]);
   const [autoAttachmentRemoved, setAutoAttachmentRemoved] = useState(false);
+  // Live mirror of the freshest attachment resolved by onBeforeSend / DB
+  // re-fetch. The visible "Attachments the client will receive" preview
+  // uses these — guarantees the preview === what is sent.
+  const [liveAttachmentName, setLiveAttachmentName] = useState<string | undefined>(attachmentName);
+  const [liveAttachmentUrl, setLiveAttachmentUrl] = useState<string | undefined>(attachmentUrl);
   const draftKey = `jbj_esign_email_draft_${envelopeId || "__new__"}`;
 
   // Load all email signature presets so the owner can pick which one
@@ -289,6 +301,8 @@ export function SendViaEmailDialog({
     setDocusignUrl("");
     setExtraAttachments([]);
     setAutoAttachmentRemoved(false);
+    setLiveAttachmentName(attachmentName);
+    setLiveAttachmentUrl(attachmentUrl);
     setBodyHtml(
       scrubLegacyBody(
         stripSignature(
@@ -405,18 +419,26 @@ export function SendViaEmailDialog({
   };
 
   /** Combined sync step: parent regenerates if dirty, then we re-pull the
-   *  envelope so the attached PDF matches what is on screen byte-for-byte. */
+   *  envelope so the attached PDF matches what is on screen byte-for-byte.
+   *  Mirrors the resolved values into state so the visible "Attachments
+   *  the client will receive" preview is always 1:1 with what is sent. */
   const resolveFreshAttachment = async (): Promise<{ url?: string; name?: string }> => {
+    let resolved: { url?: string; name?: string } = { url: attachmentUrl, name: attachmentName };
     try {
       const fromParent = onBeforeSend ? await onBeforeSend() : undefined;
       if (fromParent && (fromParent as any).url) {
         const v = fromParent as { url?: string; filename?: string };
-        return { url: v.url || undefined, name: v.filename || attachmentName };
+        resolved = { url: v.url || undefined, name: v.filename || attachmentName };
+      } else {
+        resolved = await fetchLatestAttachment();
       }
     } catch (e) {
       console.warn("onBeforeSend failed; using DB attachment", e);
+      resolved = await fetchLatestAttachment();
     }
-    return await fetchLatestAttachment();
+    if (resolved.url) setLiveAttachmentUrl(resolved.url);
+    if (resolved.name) setLiveAttachmentName(resolved.name);
+    return resolved;
   };
 
   const sendTest = async () => {
@@ -578,14 +600,14 @@ export function SendViaEmailDialog({
               <div className="flex flex-wrap gap-x-2"><span className="opacity-60">From:</span><strong className="break-all">{DISPLAY_FROM}</strong></div>
               <div className="flex flex-wrap gap-x-2"><span className="opacity-60">Reply-To:</span><strong className="break-all">{DISPLAY_REPLY_TO}</strong></div>
               <div className="flex flex-wrap gap-x-2"><span className="opacity-60">Provider:</span>Resend</div>
-              {attachmentName && !autoAttachmentRemoved && (
+              {liveAttachmentName && !autoAttachmentRemoved && (
                 <div className="flex items-center gap-1.5 pt-1">
                   <FileText className="w-3.5 h-3.5 shrink-0" />
                   <span className="opacity-60">Auto-attached:</span>
-                  <strong className="truncate flex-1">{attachmentName}</strong>
-                  {attachmentUrl && (
+                  <strong className="truncate flex-1">{liveAttachmentName}</strong>
+                  {liveAttachmentUrl && (
                     <a
-                      href={maybeProxyStorageUrl(attachmentUrl, { filename: attachmentName, disposition: 'inline' })}
+                      href={maybeProxyStorageUrl(liveAttachmentUrl, { filename: liveAttachmentName, disposition: 'inline' })}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="shrink-0 px-1.5 py-0.5 rounded hover:bg-[#EFE6D6] text-[#1A1A1A]/70"
@@ -604,10 +626,10 @@ export function SendViaEmailDialog({
                   </button>
                 </div>
               )}
-              {attachmentName && autoAttachmentRemoved && (
+              {liveAttachmentName && autoAttachmentRemoved && (
                 <div className="flex items-center gap-1.5 pt-1">
                   <FileText className="w-3.5 h-3.5 shrink-0 opacity-40" />
-                  <span className="opacity-60 line-through">{attachmentName}</span>
+                  <span className="opacity-60 line-through">{liveAttachmentName}</span>
                   <button
                     type="button"
                     onClick={() => setAutoAttachmentRemoved(false)}
@@ -770,8 +792,8 @@ export function SendViaEmailDialog({
                 signatureHtml={selectedSigHtml}
                 docNumber={docNumber}
                 docusignUrl={docusignUrl}
-                attachmentName={autoAttachmentRemoved ? undefined : attachmentName}
-                attachmentUrl={autoAttachmentRemoved ? undefined : attachmentUrl}
+                attachmentName={autoAttachmentRemoved ? undefined : liveAttachmentName}
+                attachmentUrl={autoAttachmentRemoved ? undefined : liveAttachmentUrl}
                 className="w-full h-full bg-[#FDFBF7]"
               />
             </div>
@@ -781,21 +803,21 @@ export function SendViaEmailDialog({
             <div className="mt-3 rounded-md border border-[#B89555]/30 bg-[#FDFBF7] p-3">
               <div className="flex items-center justify-between gap-2 mb-2">
                 <div className="text-[11px] font-semibold uppercase tracking-wider text-[#1A1A1A]">
-                  Attachments the client will receive · {(!autoAttachmentRemoved && attachmentName ? 1 : 0) + extraAttachments.length}
+                  Attachments the client will receive · {(!autoAttachmentRemoved && liveAttachmentName ? 1 : 0) + extraAttachments.length}
                 </div>
                 <span className="text-[10px] text-[#1A1A1A]/60">Click to preview each file</span>
               </div>
               <ul className="space-y-1.5">
-                {!autoAttachmentRemoved && attachmentName && (
+                {!autoAttachmentRemoved && liveAttachmentName && (
                   <li className="flex items-center gap-2 text-xs text-[#1A1A1A] bg-white border border-[#B89555]/30 rounded px-2 py-1.5">
                     <FileText className="w-3.5 h-3.5 shrink-0 text-[#B89555]" />
                     <span className="truncate flex-1">
-                      <strong>{attachmentName}</strong>
+                      <strong>{liveAttachmentName}</strong>
                       <span className="ml-1.5 text-[10px] uppercase tracking-wider text-[#1A1A1A]/60">Standard PAA · auto-synced to latest</span>
                     </span>
-                    {attachmentUrl && (
+                    {liveAttachmentUrl && (
                       <a
-                        href={maybeProxyStorageUrl(attachmentUrl, { filename: attachmentName, disposition: 'inline' })}
+                        href={maybeProxyStorageUrl(liveAttachmentUrl, { filename: liveAttachmentName, disposition: 'inline' })}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="shrink-0 px-1.5 py-0.5 rounded hover:bg-[#EFE6D6] text-[#1A1A1A]/70 inline-flex items-center gap-1"

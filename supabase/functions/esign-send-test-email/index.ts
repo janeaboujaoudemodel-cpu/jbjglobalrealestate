@@ -97,12 +97,11 @@ Deno.serve(async (req) => {
         .replace(SIG_SENTINEL, sigHtml);
     }
 
-    // Defensive: if the payload is double-escaped (`&lt;p&gt;…`) and contains
-    // no real tags, decode once so the recipient sees prose, not raw markup.
+    // Defensive (v2): decode escaped HTML markers whenever they appear,
+    // even if the body also contains real tags. Drop leftover merge tokens.
     {
-      const hasRealTag = /<[a-z][\s\S]*?>/i.test(finalBodyHtml);
-      const hasEscapedTag = /&lt;\s*\/?\s*[a-z]/i.test(finalBodyHtml);
-      if (!hasRealTag && hasEscapedTag) {
+      for (let pass = 0; pass < 2; pass++) {
+        if (!/&lt;\s*\/?\s*[a-z]/i.test(finalBodyHtml)) break;
         finalBodyHtml = finalBodyHtml
           .replace(/&nbsp;/gi, " ")
           .replace(/&quot;/gi, '"')
@@ -111,6 +110,9 @@ Deno.serve(async (req) => {
           .replace(/&gt;/gi, ">")
           .replace(/&amp;/gi, "&");
       }
+      finalBodyHtml = finalBodyHtml
+        .replace(/\{\{\s*sender_signature\s*\}\}/gi, "")
+        .replace(/\{\{\s*signing_link\s*\}\}/gi, "");
     }
 
     // Inject a tiny invisible per-send unique marker so Gmail does NOT
@@ -155,13 +157,20 @@ Deno.serve(async (req) => {
       return corsErrorResponse("Email provider not configured (RESEND_API_KEY missing)", 500, origin);
     }
 
-    const attachmentUrlStr = typeof attachment_url === "string" ? attachment_url : "";
-    const attachmentNameStr = typeof attachment_name === "string" ? attachment_name : "";
-    const pdfAttachment = await fetchEmailAttachment(
-      attachmentUrlStr,
-      attachmentNameStr,
-      "application/pdf",
-    );
+    // Server-side attachment fallback (parity with esign-send-for-signature):
+    // if the client omitted the attachment, pull the freshest one off the
+    // envelope so a test send is never silently attachment-less.
+    let attachmentUrlStr = typeof attachment_url === "string" ? attachment_url : "";
+    let attachmentNameStr = typeof attachment_name === "string" ? attachment_name : "";
+    if (!attachmentUrlStr && (envelope as any).document_url) {
+      attachmentUrlStr = String((envelope as any).document_url);
+      if (!attachmentNameStr) {
+        attachmentNameStr = String((envelope as any).document_filename || `${envelope.name || "Document"}.pdf`);
+      }
+    }
+    const pdfAttachment = attachmentUrlStr && attachmentNameStr
+      ? await fetchEmailAttachment(attachmentUrlStr, attachmentNameStr, "application/pdf")
+      : null;
     if (attachmentUrlStr && attachmentNameStr && !pdfAttachment) {
       return corsErrorResponse(
         `Could not attach ${attachmentNameStr} — the PDF could not be fetched from storage. Re-export the document and try again.`,

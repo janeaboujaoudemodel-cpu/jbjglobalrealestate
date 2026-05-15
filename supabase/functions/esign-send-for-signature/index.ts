@@ -165,11 +165,12 @@ Deno.serve(async (req) => {
           .replace(SIG_SENTINEL, sigHtml);
       }
 
-      // Defensive: if the payload is double-escaped (`&lt;p&gt;…`) and contains
-      // no real tags, decode once so the recipient sees prose, not raw markup.
-      const hasRealTag = /<[a-z][\s\S]*?>/i.test(finalBodyHtml);
-      const hasEscapedTag = /&lt;\s*\/?\s*[a-z]/i.test(finalBodyHtml);
-      if (!hasRealTag && hasEscapedTag) {
+      // Defensive (v2): decode escaped HTML markers whenever they appear,
+      // even if the body also contains real tags. This catches mixed payloads
+      // like `<p>&lt;p&gt;Dear Omar&lt;/p&gt;</p>`. Drop leftover merge tokens
+      // that must never reach the recipient.
+      for (let pass = 0; pass < 2; pass++) {
+        if (!/&lt;\s*\/?\s*[a-z]/i.test(finalBodyHtml)) break;
         finalBodyHtml = finalBodyHtml
           .replace(/&nbsp;/gi, " ")
           .replace(/&quot;/gi, '"')
@@ -178,6 +179,9 @@ Deno.serve(async (req) => {
           .replace(/&gt;/gi, ">")
           .replace(/&amp;/gi, "&");
       }
+      finalBodyHtml = finalBodyHtml
+        .replace(/\{\{\s*sender_signature\s*\}\}/gi, "")
+        .replace(/\{\{\s*signing_link\s*\}\}/gi, "");
 
       const uniqueMarker = `<span style="display:none;visibility:hidden;opacity:0;color:transparent;font-size:0;line-height:0;mso-hide:all;">[ref:${crypto.randomUUID()}]</span>`;
       const bodyHtmlWithMarker = uniqueMarker + finalBodyHtml;
