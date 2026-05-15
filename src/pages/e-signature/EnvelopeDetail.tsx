@@ -1442,13 +1442,35 @@ export default function EnvelopeDetail() {
           attachmentName={envelope.document_filename || undefined}
           attachmentUrl={envelope.document_url || undefined}
           onBeforeSend={async () => {
-            // Persist any in-progress edits first so the regenerated PDF
-            // matches what is currently visible (e.g. NON EXCLUSIVE).
-            if (dirty) { await ensureSavedBeforeDownload(); }
-            // Always re-pull the freshest envelope row.
+            // ALWAYS regenerate the PDF from the latest saved field values
+            // before sending. This guarantees that any edit (e.g.
+            // EXCLUSIVE → NON EXCLUSIVE) is reflected in the attached PDF
+            // even if the user did not click "Save & re-render" first or if
+            // the stored document_url is older than the current state.
+            try {
+              if (dirty) {
+                await ensureSavedBeforeDownload();
+              } else if (envelope?.template_key) {
+                await regenerate.mutateAsync({
+                  envelopeId: envelope.id,
+                  templateKey: envelope.template_key,
+                  values: { ...((envelope.template_field_values as any) || {}), doc_number: docNumber },
+                  chrome,
+                  ownerSignatureUrl,
+                  ownerStampUrl,
+                  hiddenFields,
+                  category: (envelope.category as any) || "leasing",
+                });
+                await refetch();
+              }
+            } catch (e) {
+              console.warn("onBeforeSend regenerate failed; will use existing document_url", e);
+            }
+            // Re-pull the freshest envelope row so the dialog reflects the
+            // newly uploaded storage object.
             const { data } = await supabase
               .from("esign_envelopes")
-              .select("document_url, document_filename")
+              .select("document_url, document_filename, updated_at")
               .eq("id", envelope.id)
               .maybeSingle();
             return {
