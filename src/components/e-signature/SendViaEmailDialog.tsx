@@ -600,14 +600,14 @@ export function SendViaEmailDialog({
               <div className="flex flex-wrap gap-x-2"><span className="opacity-60">From:</span><strong className="break-all">{DISPLAY_FROM}</strong></div>
               <div className="flex flex-wrap gap-x-2"><span className="opacity-60">Reply-To:</span><strong className="break-all">{DISPLAY_REPLY_TO}</strong></div>
               <div className="flex flex-wrap gap-x-2"><span className="opacity-60">Provider:</span>Resend</div>
-              {attachmentName && !autoAttachmentRemoved && (
+              {liveAttachmentName && !autoAttachmentRemoved && (
                 <div className="flex items-center gap-1.5 pt-1">
                   <FileText className="w-3.5 h-3.5 shrink-0" />
                   <span className="opacity-60">Auto-attached:</span>
-                  <strong className="truncate flex-1">{attachmentName}</strong>
-                  {attachmentUrl && (
+                  <strong className="truncate flex-1">{liveAttachmentName}</strong>
+                  {liveAttachmentUrl && (
                     <a
-                      href={maybeProxyStorageUrl(attachmentUrl, { filename: attachmentName, disposition: 'inline' })}
+                      href={maybeProxyStorageUrl(liveAttachmentUrl, { filename: liveAttachmentName, disposition: 'inline' })}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="shrink-0 px-1.5 py-0.5 rounded hover:bg-[#EFE6D6] text-[#1A1A1A]/70"
@@ -626,10 +626,10 @@ export function SendViaEmailDialog({
                   </button>
                 </div>
               )}
-              {attachmentName && autoAttachmentRemoved && (
+              {liveAttachmentName && autoAttachmentRemoved && (
                 <div className="flex items-center gap-1.5 pt-1">
                   <FileText className="w-3.5 h-3.5 shrink-0 opacity-40" />
-                  <span className="opacity-60 line-through">{attachmentName}</span>
+                  <span className="opacity-60 line-through">{liveAttachmentName}</span>
                   <button
                     type="button"
                     onClick={() => setAutoAttachmentRemoved(false)}
