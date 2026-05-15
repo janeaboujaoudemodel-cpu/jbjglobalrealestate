@@ -438,6 +438,7 @@ export function SendViaEmailDialog({
    *  Mirrors the resolved values into state so the visible "Attachments
    *  the client will receive" preview is always 1:1 with what is sent. */
   const resolveFreshAttachment = async (): Promise<{ url?: string; name?: string }> => {
+    setAttachmentSyncStatus("syncing");
     let resolved: { url?: string; name?: string } = { url: attachmentUrl, name: attachmentName };
     try {
       const fromParent = onBeforeSend ? await onBeforeSend() : undefined;
@@ -453,8 +454,24 @@ export function SendViaEmailDialog({
     }
     if (resolved.url) setLiveAttachmentUrl(resolved.url);
     if (resolved.name) setLiveAttachmentName(resolved.name);
+    setAttachmentSyncStatus(resolved.url ? "latest" : "failed");
+    setAttachmentSyncedAt(Date.now());
     return resolved;
   };
+
+  // Force a fresh PDF sync the moment the dialog opens so the attachment
+  // shown in preview is guaranteed to match the latest saved document state.
+  useEffect(() => {
+    if (!open) return;
+    if (autoAttachmentRemoved) return;
+    let cancelled = false;
+    (async () => {
+      try { await resolveFreshAttachment(); } catch { /* status already set to failed */ }
+      if (cancelled) return;
+    })();
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
 
   const sendTest = async () => {
     setBusy("test");
