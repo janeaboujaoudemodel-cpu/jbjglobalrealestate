@@ -226,7 +226,17 @@ Deno.serve(async (req) => {
         actor_id: user.id,
         actor_email: user.email,
         actor_name: envelope.sender_name,
-        metadata: { resend_id: resData?.id || null },
+        metadata: {
+          resend_id: resData?.id || null,
+          attachment_url: attachmentUrlStr || null,
+          attachment_name: attachmentNameStr || null,
+          attachment_version_id: attachmentUrlStr || null,
+          attachment_source_updated_at: (envelope as any).updated_at || null,
+          attachment_size_bytes: pdfAttachment ? (envelope as any).document_size_bytes || null : null,
+          attachment_content_type: pdfAttachment ? "application/pdf" : null,
+          client_supplied_attachment_url: clientDocUrlEarly || null,
+          version_mismatch_corrected: Boolean(envelopeDocUrlEarly && clientDocUrlEarly && envelopeDocUrlEarly !== clientDocUrlEarly),
+        },
       });
     } catch (_) { /* non-fatal */ }
 
