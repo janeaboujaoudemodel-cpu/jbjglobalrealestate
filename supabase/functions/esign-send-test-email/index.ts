@@ -97,12 +97,11 @@ Deno.serve(async (req) => {
         .replace(SIG_SENTINEL, sigHtml);
     }
 
-    // Defensive: if the payload is double-escaped (`&lt;p&gt;…`) and contains
-    // no real tags, decode once so the recipient sees prose, not raw markup.
+    // Defensive (v2): decode escaped HTML markers whenever they appear,
+    // even if the body also contains real tags. Drop leftover merge tokens.
     {
-      const hasRealTag = /<[a-z][\s\S]*?>/i.test(finalBodyHtml);
-      const hasEscapedTag = /&lt;\s*\/?\s*[a-z]/i.test(finalBodyHtml);
-      if (!hasRealTag && hasEscapedTag) {
+      for (let pass = 0; pass < 2; pass++) {
+        if (!/&lt;\s*\/?\s*[a-z]/i.test(finalBodyHtml)) break;
         finalBodyHtml = finalBodyHtml
           .replace(/&nbsp;/gi, " ")
           .replace(/&quot;/gi, '"')
@@ -111,6 +110,9 @@ Deno.serve(async (req) => {
           .replace(/&gt;/gi, ">")
           .replace(/&amp;/gi, "&");
       }
+      finalBodyHtml = finalBodyHtml
+        .replace(/\{\{\s*sender_signature\s*\}\}/gi, "")
+        .replace(/\{\{\s*signing_link\s*\}\}/gi, "");
     }
 
     // Inject a tiny invisible per-send unique marker so Gmail does NOT
