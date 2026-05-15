@@ -265,6 +265,8 @@ export function SendViaEmailDialog({
   // uses these — guarantees the preview === what is sent.
   const [liveAttachmentName, setLiveAttachmentName] = useState<string | undefined>(attachmentName);
   const [liveAttachmentUrl, setLiveAttachmentUrl] = useState<string | undefined>(attachmentUrl);
+  const [attachmentSyncStatus, setAttachmentSyncStatus] = useState<"idle" | "syncing" | "latest" | "failed" | "removed">("idle");
+  const [attachmentSyncedAt, setAttachmentSyncedAt] = useState<number | null>(null);
   const draftKey = `jbj_esign_email_draft_${envelopeId || "__new__"}`;
 
   // Load all email signature presets so the owner can pick which one
