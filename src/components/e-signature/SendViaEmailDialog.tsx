@@ -639,7 +639,7 @@ export function SendViaEmailDialog({
                   <strong className="truncate flex-1">{liveAttachmentName}</strong>
                   {liveAttachmentUrl && (
                     <a
-                      href={maybeProxyStorageUrl(liveAttachmentUrl, { filename: liveAttachmentName, disposition: 'inline' })}
+                      href={safeOpenHref(liveAttachmentUrl, liveAttachmentName)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="shrink-0 px-1.5 py-0.5 rounded hover:bg-[#EFE6D6] text-[#1A1A1A]/70"
@@ -849,7 +849,7 @@ export function SendViaEmailDialog({
                     </span>
                     {liveAttachmentUrl && (
                       <a
-                        href={maybeProxyStorageUrl(liveAttachmentUrl, { filename: liveAttachmentName, disposition: 'inline' })}
+                        href={safeOpenHref(liveAttachmentUrl, liveAttachmentName)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="shrink-0 px-1.5 py-0.5 rounded hover:bg-[#EFE6D6] text-[#1A1A1A]/70 inline-flex items-center gap-1"
@@ -866,7 +866,7 @@ export function SendViaEmailDialog({
                     <span className="truncate flex-1">{a.name}<span className="ml-1.5 text-[10px] uppercase tracking-wider text-[#1A1A1A]/60">Uploaded</span></span>
                     {a.url && (
                       <a
-                        href={maybeProxyStorageUrl(a.url, { filename: a.name, disposition: 'inline' })}
+                        href={safeOpenHref(a.url, a.name)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="shrink-0 px-1.5 py-0.5 rounded hover:bg-[#EFE6D6] text-[#1A1A1A]/70 inline-flex items-center gap-1"
