@@ -419,18 +419,26 @@ export function SendViaEmailDialog({
   };
 
   /** Combined sync step: parent regenerates if dirty, then we re-pull the
-   *  envelope so the attached PDF matches what is on screen byte-for-byte. */
+   *  envelope so the attached PDF matches what is on screen byte-for-byte.
+   *  Mirrors the resolved values into state so the visible "Attachments
+   *  the client will receive" preview is always 1:1 with what is sent. */
   const resolveFreshAttachment = async (): Promise<{ url?: string; name?: string }> => {
+    let resolved: { url?: string; name?: string } = { url: attachmentUrl, name: attachmentName };
     try {
       const fromParent = onBeforeSend ? await onBeforeSend() : undefined;
       if (fromParent && (fromParent as any).url) {
         const v = fromParent as { url?: string; filename?: string };
-        return { url: v.url || undefined, name: v.filename || attachmentName };
+        resolved = { url: v.url || undefined, name: v.filename || attachmentName };
+      } else {
+        resolved = await fetchLatestAttachment();
       }
     } catch (e) {
       console.warn("onBeforeSend failed; using DB attachment", e);
+      resolved = await fetchLatestAttachment();
     }
-    return await fetchLatestAttachment();
+    if (resolved.url) setLiveAttachmentUrl(resolved.url);
+    if (resolved.name) setLiveAttachmentName(resolved.name);
+    return resolved;
   };
 
   const sendTest = async () => {
