@@ -125,6 +125,20 @@ Deno.serve(async (req) => {
       ? `${baseUrl}/sign/${primary.signing_token}`
       : `${baseUrl}/sign/${envelope.id}`;
 
+    // Resolve envelope-authoritative attachment metadata FIRST so the email
+    // shell, plain-text alt, and the actual attached PDF all reference the
+    // exact same latest filename/URL.
+    const envelopeDocUrlEarly = (envelope as any).document_url ? String((envelope as any).document_url) : "";
+    const envelopeDocNameEarly = (envelope as any).document_filename
+      ? String((envelope as any).document_filename)
+      : `${envelope.name || "Document"}.pdf`;
+    const clientDocUrlEarly = typeof attachment_url === "string" ? attachment_url : "";
+    const clientDocNameEarly = typeof attachment_name === "string" ? attachment_name : "";
+    const resolvedAttachmentUrl = envelopeDocUrlEarly || clientDocUrlEarly;
+    const resolvedAttachmentName = envelopeDocUrlEarly
+      ? envelopeDocNameEarly
+      : (clientDocNameEarly || envelopeDocNameEarly);
+
     const emailHtml = buildEnvelopeEmailHtml({
       subject: finalSubject,
       bodyHtml: bodyHtmlWithMarker,
@@ -134,8 +148,8 @@ Deno.serve(async (req) => {
       senderTitle,
       docusignUrl: typeof docusign_url === "string" ? docusign_url.trim() : "",
       fallbackSignUrl,
-      attachmentName: typeof attachment_name === "string" ? attachment_name : undefined,
-      attachmentUrl: typeof attachment_url === "string" ? attachment_url : undefined,
+      attachmentName: resolvedAttachmentName || undefined,
+      attachmentUrl: resolvedAttachmentUrl || undefined,
     });
 
     // Plain-text alternative — Gmail uses this for the inbox snippet and
@@ -146,9 +160,7 @@ Deno.serve(async (req) => {
                    .replace(/\s+/g, " ")
                    .trim(),
       "",
-      typeof attachment_name === "string" && attachment_name
-        ? `Attached: ${attachment_name}`
-        : "",
+      resolvedAttachmentName ? `Attached: ${resolvedAttachmentName}` : "",
       "",
       "— JBJ GLOBAL REAL ESTATE · contact@jbj.ae · www.jbj.ae",
     ].filter(Boolean).join("\n");
