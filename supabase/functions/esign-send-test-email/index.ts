@@ -157,16 +157,21 @@ Deno.serve(async (req) => {
       return corsErrorResponse("Email provider not configured (RESEND_API_KEY missing)", 500, origin);
     }
 
-    // Server-side attachment fallback (parity with esign-send-for-signature):
-    // if the client omitted the attachment, pull the freshest one off the
-    // envelope so a test send is never silently attachment-less.
-    let attachmentUrlStr = typeof attachment_url === "string" ? attachment_url : "";
-    let attachmentNameStr = typeof attachment_name === "string" ? attachment_name : "";
-    if (!attachmentUrlStr && (envelope as any).document_url) {
-      attachmentUrlStr = String((envelope as any).document_url);
-      if (!attachmentNameStr) {
-        attachmentNameStr = String((envelope as any).document_filename || `${envelope.name || "Document"}.pdf`);
-      }
+    // LATEST-VERSION GUARANTEE (v3): always prefer envelope.document_url
+    // over the client-supplied attachment_url. The envelope row is the
+    // authoritative latest record after handleSaveEdits → regenerate.
+    const envelopeDocUrl = (envelope as any).document_url ? String((envelope as any).document_url) : "";
+    const envelopeDocName = (envelope as any).document_filename
+      ? String((envelope as any).document_filename)
+      : `${envelope.name || "Document"}.pdf`;
+    const clientDocUrl = typeof attachment_url === "string" ? attachment_url : "";
+    const clientDocName = typeof attachment_name === "string" ? attachment_name : "";
+    const attachmentUrlStr = envelopeDocUrl || clientDocUrl;
+    const attachmentNameStr = envelopeDocUrl ? envelopeDocName : (clientDocName || envelopeDocName);
+    if (envelopeDocUrl && clientDocUrl && envelopeDocUrl !== clientDocUrl) {
+      console.warn(
+        `[esign-send-test-email] client supplied stale attachment_url for envelope ${envelope.id}; using envelope.document_url instead`,
+      );
     }
     const pdfAttachment = attachmentUrlStr && attachmentNameStr
       ? await fetchEmailAttachment(attachmentUrlStr, attachmentNameStr, "application/pdf")
