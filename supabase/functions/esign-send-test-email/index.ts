@@ -157,13 +157,20 @@ Deno.serve(async (req) => {
       return corsErrorResponse("Email provider not configured (RESEND_API_KEY missing)", 500, origin);
     }
 
-    const attachmentUrlStr = typeof attachment_url === "string" ? attachment_url : "";
-    const attachmentNameStr = typeof attachment_name === "string" ? attachment_name : "";
-    const pdfAttachment = await fetchEmailAttachment(
-      attachmentUrlStr,
-      attachmentNameStr,
-      "application/pdf",
-    );
+    // Server-side attachment fallback (parity with esign-send-for-signature):
+    // if the client omitted the attachment, pull the freshest one off the
+    // envelope so a test send is never silently attachment-less.
+    let attachmentUrlStr = typeof attachment_url === "string" ? attachment_url : "";
+    let attachmentNameStr = typeof attachment_name === "string" ? attachment_name : "";
+    if (!attachmentUrlStr && (envelope as any).document_url) {
+      attachmentUrlStr = String((envelope as any).document_url);
+      if (!attachmentNameStr) {
+        attachmentNameStr = String((envelope as any).document_filename || `${envelope.name || "Document"}.pdf`);
+      }
+    }
+    const pdfAttachment = attachmentUrlStr && attachmentNameStr
+      ? await fetchEmailAttachment(attachmentUrlStr, attachmentNameStr, "application/pdf")
+      : null;
     if (attachmentUrlStr && attachmentNameStr && !pdfAttachment) {
       return corsErrorResponse(
         `Could not attach ${attachmentNameStr} — the PDF could not be fetched from storage. Re-export the document and try again.`,
