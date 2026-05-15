@@ -171,14 +171,16 @@ function stripInlineSignature(text: string): string {
 /** Decode at-most-twice for bodies persisted with double-encoded markup
  *  (e.g. `&lt;p&gt;Dear Omar&lt;/p&gt;`). Without this the editor would
  *  treat the literal `<p>` characters as plain text and re-escape them on
- *  send, delivering raw HTML tags to the recipient. */
+ *  send, delivering raw HTML tags to the recipient.
+ *
+ *  Hardened (v2): we now decode whenever escaped markers appear, even if
+ *  the surrounding string also contains real tags (e.g. mixed payloads
+ *  like `<p>&lt;p&gt;Dear Omar&lt;/p&gt;</p>`). Stop conditions: no more
+ *  escaped markers, or two passes done. */
 function decodeIfDoubleEscaped(html: string): string {
   let s = String(html || "");
   for (let i = 0; i < 2; i++) {
-    // If the string contains real tags AND no escaped markers, we're done.
-    const hasRealTag = /<[a-z][\s\S]*?>/i.test(s);
     const hasEscapedTag = /&lt;\s*\/?\s*[a-z]/i.test(s);
-    if (hasRealTag && !hasEscapedTag) break;
     if (!hasEscapedTag) break;
     s = s
       .replace(/&nbsp;/gi, " ")
@@ -188,7 +190,12 @@ function decodeIfDoubleEscaped(html: string): string {
       .replace(/&gt;/gi, ">")
       .replace(/&amp;/gi, "&");
   }
-  return s;
+  // Belt-and-braces: drop any leftover merge-tag tokens that should never
+  // reach the recipient (signature/signing-link tokens are rendered
+  // separately by the email shell, never inline).
+  return s
+    .replace(/\{\{\s*sender_signature\s*\}\}/gi, "")
+    .replace(/\{\{\s*signing_link\s*\}\}/gi, "");
 }
 
 /** Walk the HTML's block elements and drop any whose plain-text content
