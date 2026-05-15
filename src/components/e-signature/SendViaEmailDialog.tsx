@@ -301,6 +301,8 @@ export function SendViaEmailDialog({
     setDocusignUrl("");
     setExtraAttachments([]);
     setAutoAttachmentRemoved(false);
+    setLiveAttachmentName(attachmentName);
+    setLiveAttachmentUrl(attachmentUrl);
     setBodyHtml(
       scrubLegacyBody(
         stripSignature(
