@@ -247,7 +247,12 @@ export function SendViaEmailDialog({
   const [draftSavedAt, setDraftSavedAt] = useState<number | null>(null);
   const [extraAttachments, setExtraAttachments] = useState<EmailAttachment[]>([]);
   const [autoAttachmentRemoved, setAutoAttachmentRemoved] = useState(false);
-  const draftKey = `jbj_esign_email_draft_${envelopeId || "__new__"}`;
+  // Live mirror of the freshest attachment resolved by onBeforeSend / DB
+  // re-fetch. The visible "Attachments the client will receive" preview
+  // uses these — guarantees the preview === what is sent. Falls back to
+  // the props the dialog was opened with.
+  const [liveAttachmentName, setLiveAttachmentName] = useState<string | undefined>(attachmentName);
+  const [liveAttachmentUrl, setLiveAttachmentUrl] = useState<string | undefined>(attachmentUrl);
 
   // Load all email signature presets so the owner can pick which one
   // appears at the bottom of the body. Signature is rendered SEPARATELY
