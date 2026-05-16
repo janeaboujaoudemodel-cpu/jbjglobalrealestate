@@ -335,6 +335,9 @@ export default function UnifiedCRM() {
     if (entity === "investors") {
       return <InvestorsDirectory ownerEmail={ownerEmail} vipOnly={view === "vip"} />;
     }
+    if (entity === "databases") {
+      return <DatabasesHub />;
+    }
     if (entity === "brokers") {
       // Dedicated lightweight Brokers Registry — no full CRMRelationships embed.
       return <BrokersRegistryPage />;
