@@ -18,7 +18,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useRef, useCallback } from "react";
 import {
   Users, Crown, Building2, UserCog, Network, Briefcase, BadgeCheck,
-  ChevronDown, BarChart3, Bell, ChevronLeft, ChevronRight,
+  ChevronDown, BarChart3, Bell, ChevronLeft, ChevronRight, Database,
 } from "lucide-react";
 
 /**
