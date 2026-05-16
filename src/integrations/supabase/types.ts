@@ -7892,6 +7892,7 @@ export type Database = {
           role_title: string | null
           seniority: string | null
           source: string | null
+          source_database_id: string | null
           source_history: Json
           source_id: string | null
           source_page: string | null
@@ -7991,6 +7992,7 @@ export type Database = {
           role_title?: string | null
           seniority?: string | null
           source?: string | null
+          source_database_id?: string | null
           source_history?: Json
           source_id?: string | null
           source_page?: string | null
@@ -8090,6 +8092,7 @@ export type Database = {
           role_title?: string | null
           seniority?: string | null
           source?: string | null
+          source_database_id?: string | null
           source_history?: Json
           source_id?: string | null
           source_page?: string | null
@@ -8144,6 +8147,13 @@ export type Database = {
             columns: ["list_id"]
             isOneToOne: false
             referencedRelation: "crm_lead_lists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_leads_source_database_id_fkey"
+            columns: ["source_database_id"]
+            isOneToOne: false
+            referencedRelation: "crm_source_databases"
             referencedColumns: ["id"]
           },
           {
@@ -8709,6 +8719,109 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      crm_source_database_rows: {
+        Row: {
+          created_at: string
+          id: string
+          merged_lead_id: string | null
+          raw: Json
+          row_index: number
+          source_database_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          merged_lead_id?: string | null
+          raw: Json
+          row_index: number
+          source_database_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          merged_lead_id?: string | null
+          raw?: Json
+          row_index?: number
+          source_database_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_source_database_rows_source_database_id_fkey"
+            columns: ["source_database_id"]
+            isOneToOne: false
+            referencedRelation: "crm_source_databases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crm_source_databases: {
+        Row: {
+          archived_at: string | null
+          column_headers: Json
+          created_at: string
+          file_size_bytes: number | null
+          file_storage_path: string | null
+          id: string
+          list_id: string | null
+          mime_type: string | null
+          name: string
+          notes: string | null
+          original_filename: string
+          owner_user_id: string
+          row_count: number
+          status: string
+          updated_at: string
+          uploaded_at: string
+          uploaded_by: string
+        }
+        Insert: {
+          archived_at?: string | null
+          column_headers?: Json
+          created_at?: string
+          file_size_bytes?: number | null
+          file_storage_path?: string | null
+          id?: string
+          list_id?: string | null
+          mime_type?: string | null
+          name: string
+          notes?: string | null
+          original_filename: string
+          owner_user_id: string
+          row_count?: number
+          status?: string
+          updated_at?: string
+          uploaded_at?: string
+          uploaded_by: string
+        }
+        Update: {
+          archived_at?: string | null
+          column_headers?: Json
+          created_at?: string
+          file_size_bytes?: number | null
+          file_storage_path?: string | null
+          id?: string
+          list_id?: string | null
+          mime_type?: string | null
+          name?: string
+          notes?: string | null
+          original_filename?: string
+          owner_user_id?: string
+          row_count?: number
+          status?: string
+          updated_at?: string
+          uploaded_at?: string
+          uploaded_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_source_databases_list_id_fkey"
+            columns: ["list_id"]
+            isOneToOne: false
+            referencedRelation: "crm_lead_lists"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       crm_tasks: {
         Row: {

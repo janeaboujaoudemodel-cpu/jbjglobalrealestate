@@ -18,7 +18,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useRef, useCallback } from "react";
 import {
   Users, Crown, Building2, UserCog, Network, Briefcase, BadgeCheck,
-  ChevronDown, BarChart3, Bell, ChevronLeft, ChevronRight,
+  ChevronDown, BarChart3, Bell, ChevronLeft, ChevronRight, Database,
 } from "lucide-react";
 
 /**
@@ -109,6 +109,7 @@ const AutomationRules     = lazy(() => import("@/components/crm/AutomationRules"
 const CRMEnhancedDashboard= lazy(() => import("@/components/crm/CRMEnhancedDashboard"));
 const InvestorsDirectory  = lazy(() => import("@/components/crm/InvestorsDirectory"));
 const BrokersImported     = lazy(() => import("@/components/crm/BrokersImported"));
+const DatabasesHub        = lazy(() => import("@/components/crm/DatabasesHub"));
 const CRMGlobalExportButton = lazy(() => import("@/components/crm/CRMGlobalExportButton"));
 const CRMSideRail = lazy(() => import("@/components/crm/CRMSideRail"));
 const CRMFloatingInsightsWidget = lazy(() => import("@/components/crm/CRMFloatingInsightsWidget"));
@@ -116,10 +117,11 @@ const CRMAINextActions = lazy(() => import("@/components/crm/CRMAINextActions"))
 
 type Entity =
   | "leads" | "investors" | "developers" | "sales-reps"
-  | "brokers" | "agencies" | "employees";
+  | "brokers" | "agencies" | "employees" | "databases";
 
 const ENTITIES: { id: Entity; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { id: "leads",       label: "Leads",              icon: Users },
+  { id: "databases",   label: "Databases",          icon: Database },
   { id: "investors",   label: "Investors",          icon: Crown },
   { id: "developers",  label: "Developers",         icon: Building2 },
   { id: "sales-reps",  label: "Dev Sales Reps",     icon: BadgeCheck },
@@ -146,6 +148,7 @@ const VIEWS: Record<Entity, ViewItem[]> = {
     { id: "campaigns",     label: "Campaigns",     group: "Pipeline" },
     { id: "automation",    label: "Automation",    group: "Pipeline" },
   ],
+  databases:  [{ id: "all", label: "All Databases" }],
   investors:  [{ id: "directory", label: "Directory" }, { id: "vip", label: "VIP" }],
   developers: [{ id: "registry",  label: "Registry"  }],
   "sales-reps": [{ id: "directory", label: "Directory" }],
@@ -331,6 +334,9 @@ export default function UnifiedCRM() {
     }
     if (entity === "investors") {
       return <InvestorsDirectory ownerEmail={ownerEmail} vipOnly={view === "vip"} />;
+    }
+    if (entity === "databases") {
+      return <DatabasesHub />;
     }
     if (entity === "brokers") {
       // Dedicated lightweight Brokers Registry — no full CRMRelationships embed.
