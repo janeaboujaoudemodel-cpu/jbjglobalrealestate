@@ -840,10 +840,36 @@ export function SendViaEmailDialog({
                 can open and verify the EXACT file before pressing send. */}
             <div className="mt-3 rounded-md border border-[#B89555]/30 bg-[#FDFBF7] p-3">
               <div className="flex items-center justify-between gap-2 mb-2">
-                <div className="text-[11px] font-semibold uppercase tracking-wider text-[#1A1A1A]">
+                <div className="text-[11px] font-semibold uppercase tracking-wider text-[#1A1A1A] flex items-center gap-2">
                   Attachments the client will receive · {(!autoAttachmentRemoved && liveAttachmentName ? 1 : 0) + extraAttachments.length}
+                  {!autoAttachmentRemoved && (
+                    <span
+                      className={
+                        "inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full border text-[9px] tracking-wider uppercase " +
+                        (attachmentSyncStatus === "latest"
+                          ? "border-emerald-500/40 text-emerald-700 bg-emerald-50"
+                          : attachmentSyncStatus === "syncing"
+                          ? "border-[#B89555]/50 text-[#B89555] bg-[#FDF8EE]"
+                          : attachmentSyncStatus === "failed"
+                          ? "border-red-500/40 text-red-700 bg-red-50"
+                          : "border-[#B89555]/40 text-[#1A1A1A]/60 bg-white")
+                      }
+                      title={attachmentSyncedAt ? `Last synced ${new Date(attachmentSyncedAt).toLocaleTimeString()}` : undefined}
+                    >
+                      {attachmentSyncStatus === "syncing" && <Loader2 className="w-2.5 h-2.5 animate-spin" />}
+                      {attachmentSyncStatus === "latest" ? "Latest" : attachmentSyncStatus === "syncing" ? "Syncing" : attachmentSyncStatus === "failed" ? "Failed" : "Idle"}
+                    </span>
+                  )}
                 </div>
-                <span className="text-[10px] text-[#1A1A1A]/60">Click to preview each file</span>
+                <button
+                  type="button"
+                  onClick={() => { resolveFreshAttachment().catch(() => {}); }}
+                  disabled={attachmentSyncStatus === "syncing"}
+                  className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/70 hover:text-[#1A1A1A] underline decoration-[#B89555]/60 underline-offset-2 disabled:opacity-50"
+                  title="Regenerate the latest PDF from current saved document state"
+                >
+                  {attachmentSyncStatus === "syncing" ? "Syncing…" : "Regenerate latest"}
+                </button>
               </div>
               <ul className="space-y-1.5">
                 {!autoAttachmentRemoved && liveAttachmentName && (
@@ -851,7 +877,9 @@ export function SendViaEmailDialog({
                     <FileText className="w-3.5 h-3.5 shrink-0 text-[#B89555]" />
                     <span className="truncate flex-1">
                       <strong>{liveAttachmentName}</strong>
-                      <span className="ml-1.5 text-[10px] uppercase tracking-wider text-[#1A1A1A]/60">Standard PAA · auto-synced to latest</span>
+                      <span className="ml-1.5 text-[10px] uppercase tracking-wider text-[#1A1A1A]/60">
+                        Standard PAA{attachmentSyncedAt ? ` · synced ${new Date(attachmentSyncedAt).toLocaleTimeString()}` : ""}
+                      </span>
                     </span>
                     {liveAttachmentUrl && (
                       <a
@@ -864,6 +892,14 @@ export function SendViaEmailDialog({
                         <Eye className="w-3.5 h-3.5" /> Open
                       </a>
                     )}
+                    <button
+                      type="button"
+                      onClick={() => setAutoAttachmentRemoved(true)}
+                      className="shrink-0 px-1.5 py-0.5 rounded hover:bg-[#EFE6D6] text-[#1A1A1A]/60 text-[10px] uppercase tracking-wider"
+                      title="Remove the auto-attached PDF from this send"
+                    >
+                      Remove
+                    </button>
                   </li>
                 )}
                 {extraAttachments.map((a, i) => (
@@ -890,7 +926,9 @@ export function SendViaEmailDialog({
                 )}
               </ul>
               <p className="text-[10px] text-[#1A1A1A]/55 mt-2">
-                The standard PAA file is regenerated from the latest document state right before each send so the client always receives the up-to-date copy.
+                {attachmentSyncStatus === "failed"
+                  ? "Latest PDF sync failed — click Regenerate before sending. Send is disabled until sync succeeds."
+                  : "The standard PAA file is regenerated from the latest document state right before each send so the client always receives the up-to-date copy."}
               </p>
             </div>
           </div>
