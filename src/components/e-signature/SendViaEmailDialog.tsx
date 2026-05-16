@@ -394,7 +394,13 @@ export function SendViaEmailDialog({
     [ccs, tos],
   );
 
-  const canSend = tos.length > 0 && tos.every(isValidEmail) && subject.trim().length > 0;
+  const attachmentBlocking =
+    !autoAttachmentRemoved && (attachmentSyncStatus === "syncing" || attachmentSyncStatus === "failed");
+  const canSend =
+    tos.length > 0 &&
+    tos.every(isValidEmail) &&
+    subject.trim().length > 0 &&
+    !attachmentBlocking;
 
   // Resolve the envelope's stored document URL into a DIRECT signed URL to
   // the raw PDF bytes. The backend fetches this URL and base64-encodes it
