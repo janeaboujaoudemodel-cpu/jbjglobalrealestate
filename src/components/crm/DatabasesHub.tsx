@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Database, Download, Upload, FileSpreadsheet, RefreshCw, Loader2 } from "lucide-react";
 import UploadDatabaseDialog from "./UploadDatabaseDialog";
 import { toast } from "sonner";
-import { formatDate } from "@/utils/formatDate";
+import { formatDisplayDate as formatDate } from "@/utils/formatDate";
 
 type Row = {
   id: string;
