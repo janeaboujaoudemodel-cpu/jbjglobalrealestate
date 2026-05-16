@@ -117,7 +117,7 @@ const CRMAINextActions = lazy(() => import("@/components/crm/CRMAINextActions"))
 
 type Entity =
   | "leads" | "investors" | "developers" | "sales-reps"
-  | "brokers" | "agencies" | "employees";
+  | "brokers" | "agencies" | "employees" | "databases";
 
 const ENTITIES: { id: Entity; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { id: "leads",       label: "Leads",              icon: Users },
