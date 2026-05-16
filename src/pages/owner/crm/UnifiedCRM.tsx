@@ -121,6 +121,7 @@ type Entity =
 
 const ENTITIES: { id: Entity; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { id: "leads",       label: "Leads",              icon: Users },
+  { id: "databases",   label: "Databases",          icon: Database },
   { id: "investors",   label: "Investors",          icon: Crown },
   { id: "developers",  label: "Developers",         icon: Building2 },
   { id: "sales-reps",  label: "Dev Sales Reps",     icon: BadgeCheck },
@@ -147,6 +148,7 @@ const VIEWS: Record<Entity, ViewItem[]> = {
     { id: "campaigns",     label: "Campaigns",     group: "Pipeline" },
     { id: "automation",    label: "Automation",    group: "Pipeline" },
   ],
+  databases:  [{ id: "all", label: "All Databases" }],
   investors:  [{ id: "directory", label: "Directory" }, { id: "vip", label: "VIP" }],
   developers: [{ id: "registry",  label: "Registry"  }],
   "sales-reps": [{ id: "directory", label: "Directory" }],
