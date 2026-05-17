@@ -6581,6 +6581,56 @@ export type Database = {
         }
         Relationships: []
       }
+      crm_database_grants: {
+        Row: {
+          broker_user_id: string
+          created_at: string
+          expires_at: string | null
+          granted_at: string
+          granted_by: string
+          id: string
+          notes: string | null
+          permission_level: string
+          revoked_at: string | null
+          source_database_id: string
+          updated_at: string
+        }
+        Insert: {
+          broker_user_id: string
+          created_at?: string
+          expires_at?: string | null
+          granted_at?: string
+          granted_by: string
+          id?: string
+          notes?: string | null
+          permission_level?: string
+          revoked_at?: string | null
+          source_database_id: string
+          updated_at?: string
+        }
+        Update: {
+          broker_user_id?: string
+          created_at?: string
+          expires_at?: string | null
+          granted_at?: string
+          granted_by?: string
+          id?: string
+          notes?: string | null
+          permission_level?: string
+          revoked_at?: string | null
+          source_database_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_database_grants_source_database_id_fkey"
+            columns: ["source_database_id"]
+            isOneToOne: false
+            referencedRelation: "crm_source_databases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crm_developer_registry: {
         Row: {
           admin_name: string | null
@@ -8758,6 +8808,8 @@ export type Database = {
       crm_source_databases: {
         Row: {
           archived_at: string | null
+          broker_owner_user_id: string | null
+          broker_scope: string | null
           column_headers: Json
           created_at: string
           file_size_bytes: number | null
@@ -8777,6 +8829,8 @@ export type Database = {
         }
         Insert: {
           archived_at?: string | null
+          broker_owner_user_id?: string | null
+          broker_scope?: string | null
           column_headers?: Json
           created_at?: string
           file_size_bytes?: number | null
@@ -8796,6 +8850,8 @@ export type Database = {
         }
         Update: {
           archived_at?: string | null
+          broker_owner_user_id?: string | null
+          broker_scope?: string | null
           column_headers?: Json
           created_at?: string
           file_size_bytes?: number | null
@@ -34346,6 +34402,10 @@ export type Database = {
           recording_url: string
           transcript: string
         }[]
+      }
+      has_database_grant: {
+        Args: { _database_id: string; _min_level?: string; _user_id: string }
+        Returns: boolean
       }
       has_finance_access: { Args: { user_uuid: string }; Returns: boolean }
       has_finance_hr_access: { Args: { _user_id: string }; Returns: boolean }
