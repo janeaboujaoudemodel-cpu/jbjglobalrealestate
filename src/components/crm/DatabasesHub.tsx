@@ -143,6 +143,9 @@ export default function DatabasesHub() {
                 <span className="text-[11px] text-[#1A1A1A]/60 shrink-0 tabular-nums">
                   {formatDate(r.uploaded_at)}
                 </span>
+                <Button size="sm" variant="outline" onClick={() => setGrantTarget(r)} className="border-[#B89555]/40 text-[#1A1A1A]">
+                  <ShieldCheck className="h-3.5 w-3.5 mr-1" /> Give Broker Access
+                </Button>
                 <Button size="sm" variant="outline" onClick={() => download(r)} className="border-[#B89555]/40 text-[#1A1A1A]">
                   <Download className="h-3.5 w-3.5 mr-1" /> Download
                 </Button>
@@ -157,6 +160,16 @@ export default function DatabasesHub() {
         onOpenChange={setUploadOpen}
         onCreated={() => load()}
       />
+
+      {grantTarget && (
+        <GrantBrokerAccessDialog
+          open={!!grantTarget}
+          onOpenChange={(v) => !v && setGrantTarget(null)}
+          sourceDatabaseId={grantTarget.id}
+          sourceDatabaseName={grantTarget.name}
+          onGranted={() => load()}
+        />
+      )}
     </div>
   );
 }
