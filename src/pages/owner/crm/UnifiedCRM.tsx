@@ -266,6 +266,9 @@ export default function UnifiedCRM() {
   const ownerEmail = (user?.email || "").toLowerCase();
   const [params, setParams] = useSearchParams();
 
+  // Phase 3 — live sync from broker edits / audit log
+  useCRMLiveSync({ enabled: !!userId });
+
   // Legacy migration on mount
   useEffect(() => {
     if (params.get("entity")) return;
