@@ -13,6 +13,7 @@ import { Component, lazy, Suspense, useEffect, useMemo, useState, type ReactNode
 import { useSearchParams } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useCRMSectionCounts, type CRMCounts } from "@/hooks/useCRMSectionCounts";
+import { useCRMLiveSync } from "@/hooks/useCRMLiveSync";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useRef, useCallback } from "react";
