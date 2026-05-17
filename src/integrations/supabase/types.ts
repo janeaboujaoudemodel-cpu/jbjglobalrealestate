@@ -7905,6 +7905,7 @@ export type Database = {
           is_junk: boolean
           languages: string[] | null
           last_contacted_at: string | null
+          last_updated_by: string | null
           lead_intent: string | null
           lead_score_band: string | null
           lead_source_type: string | null
@@ -8005,6 +8006,7 @@ export type Database = {
           is_junk?: boolean
           languages?: string[] | null
           last_contacted_at?: string | null
+          last_updated_by?: string | null
           lead_intent?: string | null
           lead_score_band?: string | null
           lead_source_type?: string | null
@@ -8105,6 +8107,7 @@ export type Database = {
           is_junk?: boolean
           languages?: string[] | null
           last_contacted_at?: string | null
+          last_updated_by?: string | null
           lead_intent?: string | null
           lead_score_band?: string | null
           lead_source_type?: string | null
