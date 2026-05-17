@@ -13,6 +13,7 @@ import { Component, lazy, Suspense, useEffect, useMemo, useState, type ReactNode
 import { useSearchParams } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useCRMSectionCounts, type CRMCounts } from "@/hooks/useCRMSectionCounts";
+import { useCRMLiveSync } from "@/hooks/useCRMLiveSync";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useRef, useCallback } from "react";
@@ -264,6 +265,9 @@ export default function UnifiedCRM() {
   const userId = user?.id || "";
   const ownerEmail = (user?.email || "").toLowerCase();
   const [params, setParams] = useSearchParams();
+
+  // Phase 3 — live sync from broker edits / audit log
+  useCRMLiveSync({ enabled: !!userId });
 
   // Legacy migration on mount
   useEffect(() => {
