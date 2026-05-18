@@ -175,6 +175,15 @@ export default function DatabasesHub() {
           onGranted={() => load()}
         />
       )}
+
+      {manageTarget && (
+        <BrokerGrantsManagerDialog
+          open={!!manageTarget}
+          onOpenChange={(v) => !v && setManageTarget(null)}
+          sourceDatabaseId={manageTarget.id}
+          sourceDatabaseName={manageTarget.name}
+        />
+      )}
     </div>
   );
 }
