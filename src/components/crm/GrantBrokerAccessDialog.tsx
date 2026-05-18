@@ -140,6 +140,8 @@ export default function GrantBrokerAccessDialog({
 
     setBusy(true);
     try {
+      const statusFilter = statusFilterText
+        .split(",").map(s => s.trim()).filter(Boolean);
       const { data, error } = await supabase.functions.invoke("crm-grant-broker-access", {
         body: {
           source_database_id: sourceDatabaseId,
@@ -150,7 +152,14 @@ export default function GrantBrokerAccessDialog({
           expires_at: expiresAt ? expiresAt.toISOString() : null,
           notes: accessNotes.trim() || null,
           send_invite: sendInvite,
-          // New-broker intake — backend stores these on crm_brokers when creating
+          // Phase 3 — visibility rule
+          visibility_direction: direction,
+          date_window_mode: windowMode,
+          date_window_start: windowMode === "custom" || windowMode === "from_date"
+            ? (winStart ? winStart.toISOString() : null) : null,
+          date_window_end: windowMode === "custom"
+            ? (winEnd ? winEnd.toISOString() : null) : null,
+          status_filter: statusFilter.length ? statusFilter : null,
           new_broker_profile: tab === "new" ? {
             full_name: n_fullName.trim(),
             phone_e164: n_phone.trim() || null,
