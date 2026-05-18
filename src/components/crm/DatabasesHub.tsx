@@ -44,6 +44,7 @@ export default function DatabasesHub() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | Row["status"]>("all");
   const [grantTarget, setGrantTarget] = useState<Row | null>(null);
+  const [manageTarget, setManageTarget] = useState<Row | null>(null);
 
   const load = async () => {
     setLoading(true);
