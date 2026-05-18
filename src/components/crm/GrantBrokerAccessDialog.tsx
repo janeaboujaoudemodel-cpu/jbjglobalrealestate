@@ -105,6 +105,8 @@ export default function GrantBrokerAccessDialog({
       setNNationality(""); setNLanguages(""); setNRole(""); setNBrokerage(""); setNNotes("");
       setScope("external"); setPerm("view"); setExpiresAt(undefined);
       setAccessNotes(""); setSendInvite(true);
+      setDirection("broker_to_owner_only"); setWindowMode("all");
+      setWinStart(undefined); setWinEnd(undefined); setStatusFilterText("");
     }
   }, [open]);
 
