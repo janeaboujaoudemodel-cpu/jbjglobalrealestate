@@ -119,6 +119,35 @@ Deno.serve(async (req) => {
         .insert({ user_id: brokerUserId, role: "broker_member", is_active: true });
     }
 
+    // Phase 4 — ensure a crm_brokers directory row exists and is linked to this user
+    const { data: existingBroker } = await admin
+      .from("crm_brokers")
+      .select("id")
+      .or(`user_id.eq.${brokerUserId},email_lower.eq.${email}`)
+      .maybeSingle();
+    if (existingBroker) {
+      await admin
+        .from("crm_brokers")
+        .update({
+          user_id: brokerUserId,
+          email_lower: email,
+          full_name: body.broker_display_name ?? undefined,
+          broker_type: body.broker_scope === "internal" ? "both" : (undefined as any),
+          last_active_at: new Date().toISOString(),
+        })
+        .eq("id", existingBroker.id);
+    } else {
+      await admin.from("crm_brokers").insert({
+        user_id: brokerUserId,
+        owner_id: caller.id,
+        email_lower: email,
+        full_name: body.broker_display_name ?? email.split("@")[0],
+        broker_type: body.broker_scope === "internal" ? "both" : null,
+        employment_type: body.broker_scope === "internal" ? "full_time" : "contract",
+        join_date: new Date().toISOString().slice(0, 10),
+      });
+    }
+
     // Upsert grant
     const permission_level = body.permission_level === "edit" ? "edit" : "view";
     const { data: grant, error: grantErr } = await admin
