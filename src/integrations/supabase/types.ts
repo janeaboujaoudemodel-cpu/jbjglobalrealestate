@@ -6614,41 +6614,71 @@ export type Database = {
         Row: {
           broker_user_id: string
           created_at: string
+          date_window_end: string | null
+          date_window_mode: string
+          date_window_start: string | null
           expires_at: string | null
           granted_at: string
           granted_by: string
           id: string
+          lead_ids: string[] | null
           notes: string | null
           permission_level: string
+          restricted_at: string | null
+          revoke_reason: string | null
           revoked_at: string | null
           source_database_id: string
+          status_filter: string[] | null
+          suspend_reason: string | null
+          suspended_at: string | null
           updated_at: string
+          visibility_direction: string
         }
         Insert: {
           broker_user_id: string
           created_at?: string
+          date_window_end?: string | null
+          date_window_mode?: string
+          date_window_start?: string | null
           expires_at?: string | null
           granted_at?: string
           granted_by: string
           id?: string
+          lead_ids?: string[] | null
           notes?: string | null
           permission_level?: string
+          restricted_at?: string | null
+          revoke_reason?: string | null
           revoked_at?: string | null
           source_database_id: string
+          status_filter?: string[] | null
+          suspend_reason?: string | null
+          suspended_at?: string | null
           updated_at?: string
+          visibility_direction?: string
         }
         Update: {
           broker_user_id?: string
           created_at?: string
+          date_window_end?: string | null
+          date_window_mode?: string
+          date_window_start?: string | null
           expires_at?: string | null
           granted_at?: string
           granted_by?: string
           id?: string
+          lead_ids?: string[] | null
           notes?: string | null
           permission_level?: string
+          restricted_at?: string | null
+          revoke_reason?: string | null
           revoked_at?: string | null
           source_database_id?: string
+          status_filter?: string[] | null
+          suspend_reason?: string | null
+          suspended_at?: string | null
           updated_at?: string
+          visibility_direction?: string
         }
         Relationships: [
           {
@@ -34038,6 +34068,10 @@ export type Database = {
           p_user_id: string
         }
         Returns: number
+      }
+      broker_can_see_lead: {
+        Args: { _lead_id: string; _user_id: string }
+        Returns: boolean
       }
       bulk_assign_leads: {
         Args: {
