@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Database, Download, Upload, FileSpreadsheet, RefreshCw, Loader2, ShieldCheck } from "lucide-react";
 import UploadDatabaseDialog from "./UploadDatabaseDialog";
 import GrantBrokerAccessDialog from "./GrantBrokerAccessDialog";
+import BrokerGrantsManagerDialog from "./BrokerGrantsManagerDialog";
 import { toast } from "sonner";
 import { formatDisplayDate as formatDate } from "@/utils/formatDate";
 
