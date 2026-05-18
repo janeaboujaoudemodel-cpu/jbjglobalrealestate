@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Database, Download, Upload, FileSpreadsheet, RefreshCw, Loader2, ShieldCheck } from "lucide-react";
 import UploadDatabaseDialog from "./UploadDatabaseDialog";
 import GrantBrokerAccessDialog from "./GrantBrokerAccessDialog";
+import BrokerGrantsManagerDialog from "./BrokerGrantsManagerDialog";
 import { toast } from "sonner";
 import { formatDisplayDate as formatDate } from "@/utils/formatDate";
 
@@ -43,6 +44,7 @@ export default function DatabasesHub() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | Row["status"]>("all");
   const [grantTarget, setGrantTarget] = useState<Row | null>(null);
+  const [manageTarget, setManageTarget] = useState<Row | null>(null);
 
   const load = async () => {
     setLoading(true);
@@ -144,7 +146,10 @@ export default function DatabasesHub() {
                   {formatDate(r.uploaded_at)}
                 </span>
                 <Button size="sm" variant="outline" onClick={() => setGrantTarget(r)} className="border-[#B89555]/40 text-[#1A1A1A]">
-                  <ShieldCheck className="h-3.5 w-3.5 mr-1" /> Give Broker Access
+                  <ShieldCheck className="h-3.5 w-3.5 mr-1" /> Give Access
+                </Button>
+                <Button size="sm" variant="outline" onClick={() => setManageTarget(r)} className="border-[#B89555]/40 text-[#1A1A1A]">
+                  <ShieldCheck className="h-3.5 w-3.5 mr-1" /> Manage
                 </Button>
                 <Button size="sm" variant="outline" onClick={() => download(r)} className="border-[#B89555]/40 text-[#1A1A1A]">
                   <Download className="h-3.5 w-3.5 mr-1" /> Download
@@ -168,6 +173,15 @@ export default function DatabasesHub() {
           sourceDatabaseId={grantTarget.id}
           sourceDatabaseName={grantTarget.name}
           onGranted={() => load()}
+        />
+      )}
+
+      {manageTarget && (
+        <BrokerGrantsManagerDialog
+          open={!!manageTarget}
+          onOpenChange={(v) => !v && setManageTarget(null)}
+          sourceDatabaseId={manageTarget.id}
+          sourceDatabaseName={manageTarget.name}
         />
       )}
     </div>

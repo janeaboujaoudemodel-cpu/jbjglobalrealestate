@@ -31,6 +31,13 @@ type Body = {
   notes?: string | null;
   send_invite?: boolean;
   new_broker_profile?: NewBrokerProfile | null;
+  // Phase 3 — visibility rule
+  visibility_direction?: "broker_to_owner_only" | "bidirectional";
+  date_window_mode?: "all" | "today" | "last_7" | "last_30" | "custom" | "from_date";
+  date_window_start?: string | null;
+  date_window_end?: string | null;
+  lead_ids?: string[] | null;
+  status_filter?: string[] | null;
 };
 
 Deno.serve(async (req) => {
@@ -181,7 +188,7 @@ Deno.serve(async (req) => {
       }
     }
 
-    // Upsert grant
+    // Upsert grant (with Phase 3 visibility rule)
     const permission_level = body.permission_level === "edit" ? "edit" : "view";
     const { data: grant, error: grantErr } = await admin
       .from("crm_database_grants")
@@ -194,6 +201,14 @@ Deno.serve(async (req) => {
           expires_at: body.expires_at ?? null,
           notes: body.notes ?? null,
           revoked_at: null,
+          suspended_at: null,
+          suspend_reason: null,
+          visibility_direction: body.visibility_direction ?? "broker_to_owner_only",
+          date_window_mode: body.date_window_mode ?? "all",
+          date_window_start: body.date_window_start ?? null,
+          date_window_end: body.date_window_end ?? null,
+          lead_ids: body.lead_ids ?? null,
+          status_filter: body.status_filter ?? null,
         },
         { onConflict: "source_database_id,broker_user_id" },
       )
