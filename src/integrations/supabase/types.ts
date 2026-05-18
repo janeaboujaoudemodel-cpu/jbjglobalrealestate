@@ -24483,33 +24483,6 @@ export type Database = {
         }
         Relationships: []
       }
-      qa_phase3_results: {
-        Row: {
-          actual: boolean | null
-          expected: boolean
-          id: number
-          note: string | null
-          passed: boolean | null
-          scenario: string
-        }
-        Insert: {
-          actual?: boolean | null
-          expected: boolean
-          id?: number
-          note?: string | null
-          passed?: boolean | null
-          scenario: string
-        }
-        Update: {
-          actual?: boolean | null
-          expected?: boolean
-          id?: number
-          note?: string | null
-          passed?: boolean | null
-          scenario?: string
-        }
-        Relationships: []
-      }
       quiz_responses: {
         Row: {
           answers: Json

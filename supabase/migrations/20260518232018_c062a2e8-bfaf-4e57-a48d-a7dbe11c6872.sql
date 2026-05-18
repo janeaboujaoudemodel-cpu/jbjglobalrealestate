@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS public.qa_phase3_results;
