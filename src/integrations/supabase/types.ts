@@ -5129,6 +5129,51 @@ export type Database = {
         }
         Relationships: []
       }
+      crm_broker_blocked_devices: {
+        Row: {
+          blocked_at: string
+          blocked_by_user_id: string
+          broker_id: string | null
+          device_fingerprint: string
+          id: string
+          owner_id: string
+          reason: string | null
+        }
+        Insert: {
+          blocked_at?: string
+          blocked_by_user_id: string
+          broker_id?: string | null
+          device_fingerprint: string
+          id?: string
+          owner_id: string
+          reason?: string | null
+        }
+        Update: {
+          blocked_at?: string
+          blocked_by_user_id?: string
+          broker_id?: string | null
+          device_fingerprint?: string
+          id?: string
+          owner_id?: string
+          reason?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_broker_blocked_devices_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "crm_brokers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_broker_blocked_devices_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_broker_stats"
+            referencedColumns: ["broker_id"]
+          },
+        ]
+      }
       crm_broker_import_staging: {
         Row: {
           batch_id: string
@@ -5173,6 +5218,90 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      crm_broker_sessions: {
+        Row: {
+          broker_id: string
+          broker_user_id: string
+          city: string | null
+          country: string | null
+          created_at: string
+          device_fingerprint: string | null
+          device_label: string | null
+          expires_at: string | null
+          id: string
+          ip_address: string | null
+          is_suspicious: boolean
+          last_seen_at: string
+          metadata: Json
+          owner_id: string
+          revoke_reason: string | null
+          revoked_at: string | null
+          revoked_by_user_id: string | null
+          session_token_hash: string
+          started_at: string
+          user_agent: string | null
+        }
+        Insert: {
+          broker_id: string
+          broker_user_id: string
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          device_fingerprint?: string | null
+          device_label?: string | null
+          expires_at?: string | null
+          id?: string
+          ip_address?: string | null
+          is_suspicious?: boolean
+          last_seen_at?: string
+          metadata?: Json
+          owner_id: string
+          revoke_reason?: string | null
+          revoked_at?: string | null
+          revoked_by_user_id?: string | null
+          session_token_hash: string
+          started_at?: string
+          user_agent?: string | null
+        }
+        Update: {
+          broker_id?: string
+          broker_user_id?: string
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          device_fingerprint?: string | null
+          device_label?: string | null
+          expires_at?: string | null
+          id?: string
+          ip_address?: string | null
+          is_suspicious?: boolean
+          last_seen_at?: string
+          metadata?: Json
+          owner_id?: string
+          revoke_reason?: string | null
+          revoked_at?: string | null
+          revoked_by_user_id?: string | null
+          session_token_hash?: string
+          started_at?: string
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_broker_sessions_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "crm_brokers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_broker_sessions_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_broker_stats"
+            referencedColumns: ["broker_id"]
+          },
+        ]
       }
       crm_brokerage_actions: {
         Row: {
@@ -6097,9 +6226,13 @@ export type Database = {
       }
       crm_brokers: {
         Row: {
+          activated_at: string | null
           assigned_to: string | null
           bayut_url: string | null
           birthday: string | null
+          blocked_at: string | null
+          blocked_by_user_id: string | null
+          blocked_reason: string | null
           broker_type: string | null
           city: string | null
           closed_deals_count: number
@@ -6128,6 +6261,11 @@ export type Database = {
           imported_by: string | null
           inquiry_count: number
           instagram_url: string | null
+          invitation_sent_at: string | null
+          invitation_status: string
+          invitation_token_expires_at: string | null
+          invitation_token_hash: string | null
+          invited_by_user_id: string | null
           is_global_broker: boolean | null
           join_date: string | null
           joined_at: string | null
@@ -6137,10 +6275,15 @@ export type Database = {
           last_contact_at: string | null
           last_verified_at: string | null
           linkedin_url: string | null
+          must_reset_password: boolean
           nationality: string | null
           notes: string | null
           office_address: string | null
           original_filename: string | null
+          otp_attempts: number
+          otp_expires_at: string | null
+          otp_hash: string | null
+          otp_last_sent_at: string | null
           owner_id: string | null
           partnership_status: string | null
           personal_email: string | null
@@ -6165,9 +6308,13 @@ export type Database = {
           whatsapp: string | null
         }
         Insert: {
+          activated_at?: string | null
           assigned_to?: string | null
           bayut_url?: string | null
           birthday?: string | null
+          blocked_at?: string | null
+          blocked_by_user_id?: string | null
+          blocked_reason?: string | null
           broker_type?: string | null
           city?: string | null
           closed_deals_count?: number
@@ -6196,6 +6343,11 @@ export type Database = {
           imported_by?: string | null
           inquiry_count?: number
           instagram_url?: string | null
+          invitation_sent_at?: string | null
+          invitation_status?: string
+          invitation_token_expires_at?: string | null
+          invitation_token_hash?: string | null
+          invited_by_user_id?: string | null
           is_global_broker?: boolean | null
           join_date?: string | null
           joined_at?: string | null
@@ -6205,10 +6357,15 @@ export type Database = {
           last_contact_at?: string | null
           last_verified_at?: string | null
           linkedin_url?: string | null
+          must_reset_password?: boolean
           nationality?: string | null
           notes?: string | null
           office_address?: string | null
           original_filename?: string | null
+          otp_attempts?: number
+          otp_expires_at?: string | null
+          otp_hash?: string | null
+          otp_last_sent_at?: string | null
           owner_id?: string | null
           partnership_status?: string | null
           personal_email?: string | null
@@ -6233,9 +6390,13 @@ export type Database = {
           whatsapp?: string | null
         }
         Update: {
+          activated_at?: string | null
           assigned_to?: string | null
           bayut_url?: string | null
           birthday?: string | null
+          blocked_at?: string | null
+          blocked_by_user_id?: string | null
+          blocked_reason?: string | null
           broker_type?: string | null
           city?: string | null
           closed_deals_count?: number
@@ -6264,6 +6425,11 @@ export type Database = {
           imported_by?: string | null
           inquiry_count?: number
           instagram_url?: string | null
+          invitation_sent_at?: string | null
+          invitation_status?: string
+          invitation_token_expires_at?: string | null
+          invitation_token_hash?: string | null
+          invited_by_user_id?: string | null
           is_global_broker?: boolean | null
           join_date?: string | null
           joined_at?: string | null
@@ -6273,10 +6439,15 @@ export type Database = {
           last_contact_at?: string | null
           last_verified_at?: string | null
           linkedin_url?: string | null
+          must_reset_password?: boolean
           nationality?: string | null
           notes?: string | null
           office_address?: string | null
           original_filename?: string | null
+          otp_attempts?: number
+          otp_expires_at?: string | null
+          otp_hash?: string | null
+          otp_last_sent_at?: string | null
           owner_id?: string | null
           partnership_status?: string | null
           personal_email?: string | null
@@ -34198,6 +34369,22 @@ export type Database = {
       cleanup_rate_limit_records: { Args: never; Returns: number }
       cleanup_temp_video_files: { Args: never; Returns: undefined }
       crm_auto_purge_old_deleted: { Args: never; Returns: number }
+      crm_broker_block_device: {
+        Args: { _broker_id: string; _fingerprint: string; _reason?: string }
+        Returns: string
+      }
+      crm_broker_revoke_all_sessions: {
+        Args: { _broker_id: string; _reason?: string }
+        Returns: number
+      }
+      crm_broker_revoke_session: {
+        Args: { _reason?: string; _session_id: string }
+        Returns: boolean
+      }
+      crm_broker_unblock_device: {
+        Args: { _block_id: string }
+        Returns: boolean
+      }
       crm_detect_stale_leads: { Args: { p_days?: number }; Returns: number }
       crm_find_duplicates: {
         Args: { p_email?: string; p_phone?: string }
