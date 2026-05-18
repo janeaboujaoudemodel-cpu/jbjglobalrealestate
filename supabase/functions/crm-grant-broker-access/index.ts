@@ -10,6 +10,17 @@ const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!;
 
+type NewBrokerProfile = {
+  full_name?: string | null;
+  phone_e164?: string | null;
+  current_company?: string | null;
+  nationality?: string | null;
+  languages?: string[] | null;
+  role_title?: string | null;
+  current_brokerage_name?: string | null;
+  notes?: string | null;
+};
+
 type Body = {
   source_database_id: string;
   broker_email: string;
@@ -19,6 +30,7 @@ type Body = {
   expires_at?: string | null;
   notes?: string | null;
   send_invite?: boolean;
+  new_broker_profile?: NewBrokerProfile | null;
 };
 
 Deno.serve(async (req) => {
@@ -137,15 +149,36 @@ Deno.serve(async (req) => {
         })
         .eq("id", existingBroker.id);
     } else {
+      const np = body.new_broker_profile ?? {};
       await admin.from("crm_brokers").insert({
         user_id: brokerUserId,
         owner_id: caller.id,
         email_lower: email,
-        full_name: body.broker_display_name ?? email.split("@")[0],
+        full_name: np.full_name ?? body.broker_display_name ?? email.split("@")[0],
+        phone_e164: np.phone_e164 ?? null,
+        current_company: np.current_company ?? null,
+        nationality: np.nationality ?? null,
+        languages: np.languages?.length ? np.languages : null,
+        role_title: np.role_title ?? null,
+        notes: np.notes ?? null,
         broker_type: body.broker_scope === "internal" ? "both" : null,
         employment_type: body.broker_scope === "internal" ? "full_time" : "contract",
         join_date: new Date().toISOString().slice(0, 10),
       });
+    }
+
+    // Send branded invitation email (best-effort) when requested and broker was just created
+    if (created && body.send_invite !== false) {
+      try {
+        const { error: linkErr } = await admin.auth.admin.generateLink({
+          type: "recovery",
+          email,
+          options: { redirectTo: `${SUPABASE_URL.replace(/\.supabase\.co.*$/, ".lovable.app")}/reset-password` },
+        });
+        if (linkErr) console.warn("invite link generation failed:", linkErr.message);
+      } catch (e) {
+        console.warn("invite email best-effort failed:", e);
+      }
     }
 
     // Upsert grant
