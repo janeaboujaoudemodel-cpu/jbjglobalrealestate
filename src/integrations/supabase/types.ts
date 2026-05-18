@@ -2591,6 +2591,13 @@ export type Database = {
             referencedRelation: "crm_brokers"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "broker_company_history_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_broker_stats"
+            referencedColumns: ["broker_id"]
+          },
         ]
       }
       broker_contracts: {
@@ -5402,6 +5409,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "crm_brokerage_agents_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_broker_stats"
+            referencedColumns: ["broker_id"]
+          },
+          {
             foreignKeyName: "crm_brokerage_agents_brokerage_id_fkey"
             columns: ["brokerage_id"]
             isOneToOne: false
@@ -6098,8 +6112,10 @@ export type Database = {
           database_source: string | null
           date_of_birth: string | null
           department: string | null
+          driving_license: string | null
           email_lower: string | null
           emirate: string | null
+          employment_type: string | null
           event_source: string | null
           experience_years: number | null
           full_name: string | null
@@ -6113,6 +6129,7 @@ export type Database = {
           inquiry_count: number
           instagram_url: string | null
           is_global_broker: boolean | null
+          join_date: string | null
           joined_at: string | null
           labels: string[]
           languages: string[] | null
@@ -6141,7 +6158,9 @@ export type Database = {
           specialty: string[]
           updated_at: string | null
           upload_source: string | null
+          user_id: string | null
           verification_status: string | null
+          visa_status: string | null
           website: string | null
           whatsapp: string | null
         }
@@ -6161,8 +6180,10 @@ export type Database = {
           database_source?: string | null
           date_of_birth?: string | null
           department?: string | null
+          driving_license?: string | null
           email_lower?: string | null
           emirate?: string | null
+          employment_type?: string | null
           event_source?: string | null
           experience_years?: number | null
           full_name?: string | null
@@ -6176,6 +6197,7 @@ export type Database = {
           inquiry_count?: number
           instagram_url?: string | null
           is_global_broker?: boolean | null
+          join_date?: string | null
           joined_at?: string | null
           labels?: string[]
           languages?: string[] | null
@@ -6204,7 +6226,9 @@ export type Database = {
           specialty?: string[]
           updated_at?: string | null
           upload_source?: string | null
+          user_id?: string | null
           verification_status?: string | null
+          visa_status?: string | null
           website?: string | null
           whatsapp?: string | null
         }
@@ -6224,8 +6248,10 @@ export type Database = {
           database_source?: string | null
           date_of_birth?: string | null
           department?: string | null
+          driving_license?: string | null
           email_lower?: string | null
           emirate?: string | null
+          employment_type?: string | null
           event_source?: string | null
           experience_years?: number | null
           full_name?: string | null
@@ -6239,6 +6265,7 @@ export type Database = {
           inquiry_count?: number
           instagram_url?: string | null
           is_global_broker?: boolean | null
+          join_date?: string | null
           joined_at?: string | null
           labels?: string[]
           languages?: string[] | null
@@ -6267,7 +6294,9 @@ export type Database = {
           specialty?: string[]
           updated_at?: string | null
           upload_source?: string | null
+          user_id?: string | null
           verification_status?: string | null
+          visa_status?: string | null
           website?: string | null
           whatsapp?: string | null
         }
@@ -7788,6 +7817,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "crm_brokers"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_lead_sources_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_broker_stats"
+            referencedColumns: ["broker_id"]
           },
         ]
       }
@@ -33805,6 +33841,24 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      vw_crm_broker_stats: {
+        Row: {
+          broker_id: string | null
+          broker_type: string | null
+          broker_user_id: string | null
+          contacted: number | null
+          current_company: string | null
+          deals_closed: number | null
+          email_lower: string | null
+          employment_type: string | null
+          full_name: string | null
+          last_active_at: string | null
+          last_seen_at: string | null
+          leads_assigned: number | null
+          meetings: number | null
+        }
+        Relationships: []
       }
       vw_crm_contacts: {
         Row: {
