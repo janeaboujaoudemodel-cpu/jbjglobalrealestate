@@ -69,6 +69,13 @@ export default function GrantBrokerAccessDialog({
   const [accessNotes, setAccessNotes] = useState("");
   const [sendInvite, setSendInvite] = useState(true);
 
+  // --- Phase 3 visibility scope ---
+  const [direction, setDirection] = useState<"broker_to_owner_only" | "bidirectional">("broker_to_owner_only");
+  const [windowMode, setWindowMode] = useState<"all" | "today" | "last_7" | "last_30" | "custom" | "from_date">("all");
+  const [winStart, setWinStart] = useState<Date | undefined>();
+  const [winEnd, setWinEnd] = useState<Date | undefined>();
+  const [statusFilterText, setStatusFilterText] = useState("");
+
   // Load existing brokers
   useEffect(() => {
     if (!open) return;
