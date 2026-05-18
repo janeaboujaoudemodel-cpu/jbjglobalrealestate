@@ -1,0 +1,1 @@
+ALTER VIEW public.vw_crm_broker_stats SET (security_invoker = true);
