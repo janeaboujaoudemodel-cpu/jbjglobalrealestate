@@ -31,6 +31,13 @@ type Body = {
   notes?: string | null;
   send_invite?: boolean;
   new_broker_profile?: NewBrokerProfile | null;
+  // Phase 3 — visibility rule
+  visibility_direction?: "broker_to_owner_only" | "bidirectional";
+  date_window_mode?: "all" | "today" | "last_7" | "last_30" | "custom" | "from_date";
+  date_window_start?: string | null;
+  date_window_end?: string | null;
+  lead_ids?: string[] | null;
+  status_filter?: string[] | null;
 };
 
 Deno.serve(async (req) => {
