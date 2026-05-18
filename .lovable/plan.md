@@ -1,103 +1,139 @@
-## Audit Summary (what exists today)
+# JBJ CRM — Enterprise Broker Access & CRM Upgrade Plan
 
-- Unified CRM already lives at `/owner/crm` (`src/pages/owner/crm/UnifiedCRM.tsx`) and is backed by canonical `crm_*` tables — must not be duplicated (see memory: Unified Relational CRM Standard, Unified Owner CRM Hub).
-- `crm_lead_lists` (kind = leads/brokerages/developers) already groups uploaded leads under a name + `source_filename` + owner. `crm_leads.list_id` already references it. `useCRMLists` hook exists.
-- Existing import surfaces: `CRMImportModalV3.tsx`, `BulkUploadDialog.tsx`, `BrokerBulkUploadDialog.tsx`, plus tables `crm_imports`, `crm_import_batches`, `crm_import_batch_errors`, `crm_broker_import_staging`. These are the canonical pipes — Phase 1 extends them, does not replace them.
-- Broker access: `BrokerGuard`, `BrokerCRMAccessGate`, `useBrokerCRMTier`, `useAccessControl`, plus tables `crm_brokers`, `broker_profiles`, `hr_user_roles`, `crm_field_permissions`, `crm_lead_assignments`, `crm_lead_shares`, `crm_lead_access_logs`. Owner-only routes are governed by OwnerGuard (memory: Owner Restricted Routes).
-- Realtime infra is available via Supabase channels (already used elsewhere) — Phase 3 reuses it; no new transport.
-
-## Guardrails (apply to every phase)
-
-- No new CRM module, no new "leads" table, no second broker system. All work extends `crm_*` + existing hooks/components.
-- All access via RLS + `has_role` / owner-verification edge functions. Never trust client claims.
-- Follow champagne design tokens, IconTile, no gold fills, Inter only, single H1 per page.
-- Each phase ships with: implementation → migration (if any) → manual test script → screenshots → sign-off before next phase starts.
+This is a very large scope. I'll deliver it as an **audit-first, phased rollout** so nothing existing breaks. Each phase ships independently, is tested, then approved before the next begins.
 
 ---
 
-## Phase 1 — Database Upload System (extend, don't rebuild)
+## Phase 0 — Deep Audit (no code changes)
 
-Scope: add a first-class "Databases" surface inside `/owner/crm` that wraps the existing importer so every upload is stored as an immutable, downloadable source, optionally merged into `crm_leads`.
+Before any build, I produce a written audit covering:
 
-Backend (one migration):
-- New table `crm_source_databases` { id, owner_user_id, name, original_filename, file_storage_path, mime_type, row_count, column_headers jsonb (ordered, verbatim), uploaded_by, uploaded_at, status (separate|merged|both), notes, list_id fk → crm_lead_lists }.
-- New table `crm_source_database_rows` { id, source_database_id fk, row_index int, raw jsonb } — stores every original row verbatim (no renaming/coercion). Indexed by source_database_id, row_index.
-- Add `source_database_id uuid` + `source_row_index int` to `crm_leads` (nullable; already has `raw_import`, `import_batch_id` — reuse where possible, add only what's missing).
-- Storage bucket `crm-source-databases` (private) for the raw CSV/XLSX file.
-- RLS: owner/admin full; brokers can SELECT only databases granted via `crm_lead_assignments` (Phase 2).
+- All existing CRM tables (`crm_leads`, `crm_brokers`, `crm_source_databases`, `crm_database_grants`, `crm_audit_logs`, `crm_action_logs`, `crm_lead_assignments`, `deals`, `user_roles`, etc.)
+- Existing RLS policies, edge functions (`crm-grant-broker-access`, `requireOwnerAuth`), and auth flows
+- Existing UI: `UnifiedCRM`, `DatabasesHub`, `GrantBrokerAccessDialog`, calendars, commission system, agreements, email infra
+- Duplicates / overlaps to merge (per "Unified Relational CRM Standard" memory)
+- Gap list vs. Salesforce / Zoho / HubSpot / Bitrix24
 
-Frontend:
-- New `UploadDatabaseButton` + `UploadDatabaseDialog` mounted in `UnifiedCRM` toolbar.
-- Parser: CSV via `papaparse`, XLSX via `xlsx` (already a likely dep — verify, else add). Preserve header order in `column_headers`, store each row as `{ [header]: cellValue }` with original casing.
-- Post-parse dialog with three actions: **Save as Separate Database**, **Merge with CRM**, **Cancel**. Merge path reuses existing `CRMImportModalV3` mapping engine but injects `source_database_id` so the link is permanent.
-- New "Databases" sub-tab inside CRM (subheader section, per Unified Owner CRM Hub) listing all `crm_source_databases` with filters: Source Database, Upload Date, Uploaded By, Broker Owner, Merged/Separate. Each row → Download original file, Preview rows, Rename, Archive, Merge later.
-- Add lead-list filters in `CRMLeadsTableV2`: filter by `source_database_id`, show "Source Database" column.
-
-Test matrix (must pass before Phase 2):
-- 5 fixtures: pure CSV, XLSX multi-sheet, file with duplicate header names, file with empty cells, file with Arabic + emoji + commas in fields.
-- Large file (≥ 10k rows) — chunked insert.
-- Verify: `column_headers` order matches file; `crm_source_database_rows.raw` is byte-identical to source cell; merged leads carry `source_database_id`; original file re-downloadable and hash-matches upload.
-- Screenshots: upload dialog, post-upload choice modal, Databases tab list, filter by source, original file download.
+**Deliverable:** audit doc + concrete "reuse vs. build" map. You approve before Phase 1.
 
 ---
 
-## Phase 2 — Database Ownership & Broker Access
+## Phase 1 — Broker Account Architecture
 
-Backend:
-- Extend `crm_source_databases`: `broker_owner_user_id`, `broker_scope` enum(internal|external), `notes`.
-- New table `crm_database_grants` { id, source_database_id fk, broker_user_id fk, permissions jsonb (view, edit, add, export, assign, upload), granted_by, granted_at, revoked_at }.
-- Reuse `crm_field_permissions` for column-level masking; reuse `crm_lead_assignments` for lead-level assignment.
-- RLS update on `crm_leads`, `crm_source_database_rows`, `crm_source_databases`: broker sees row iff (a) `assigned_to_user_id = auth.uid()` OR (b) `created_by_user_id = auth.uid()` OR (c) lead's `source_database_id` ∈ active grants for that broker.
-- Edge function `crm-grant-broker-access`: creates/links auth user (existing pattern in `hr_*` flows), generates temp password, writes `broker_profiles`/`hr_user_roles` (role=broker_member), inserts `crm_database_grants`, optionally emails invite via existing Resend pipeline (respect Resend Quota Standard + Single-Agency Email Rule).
+- Formalize roles via existing `user_roles` + `app_role` (no role on profile table)
+- Owner = unrestricted (already enforced via `requireOwnerAuth`)
+- Extend `crm_brokers` with: status (`active|suspended|revoked`), suspended_at, suspended_by, last_login_at, device fingerprint ref
+- Owner actions: add / suspend / delete / restrict / revoke sessions
 
-Frontend:
-- "Give Broker Access" button on each database row → modal with name/email/role/scope/permissions checkboxes + generated password (copy-to-clipboard, never logged).
-- Broker-side CRM view: reuse existing `BrokerCRMAccessGate` + `useBrokerCRMTier`; hide Owner-only subheader sections (Relationships, Employees, Campaigns, Founder hubs) by gating on `isOwner`. No new route — same `/owner/crm` page renders broker-scoped data via RLS.
-- Permissions matrix UI in database detail drawer.
+## Phase 2 — Broker Access & Invitation
 
-Tests:
-- Create broker via modal → login as broker → verify only assigned databases + assigned/own leads visible; Owner sections return 403; export/edit/add buttons hidden when permission false.
-- Attempt direct REST call to other broker's lead → expect 0 rows (RLS proof).
+Rebuild `GrantBrokerAccessDialog` into two-mode wizard:
+
+- **Option A — Existing broker:** autocomplete from `crm_brokers` (currently broken — fix the load query + RLS)
+- **Option B — New broker:** full intake form (name, email, phone, company, nationality, languages, role, brokerage, notes)
+
+Invitation pipeline:
+- Edge function generates secure invite token + temp password
+- Branded auth email via Lovable Emails (`scaffold_auth_email_templates`)
+- Force password reset on first login (`/reset-password` page)
+- Optional 2FA (TOTP) toggle
+- Log every login to `crm_login_events`
+
+## Phase 3 — Asymmetric Visibility (CRITICAL)
+
+This is the core data-model change.
+
+- New table `crm_broker_visibility_rules` per (broker_id, database_id) with:
+  - `direction = 'owner_to_broker'` (broker→owner is always full)
+  - `date_window` (today / yesterday / 7d / 30d / custom range / from-date)
+  - `lead_ids[]`, `status_filter[]`, `field_mask[]` (notes, files, activities, status…)
+- RLS on `crm_leads` for brokers reads via a `SECURITY DEFINER` function `broker_can_see_lead(broker_id, lead_id, field)` that consults visibility rules
+- Broker writes → owner sees everything immediately (existing realtime sync already handles this)
+- Owner writes → invisible to broker until a rule includes them
+
+## Phase 4 — Multi-Database Hierarchy
+
+- Reuse `crm_database_grants` (already has broker_id + database_id)
+- Add UI: per-broker tree view (Broker → Databases → Leads)
+- Owner actions: move / copy-permission / assign-to-multiple / archive / disable / merge / track source
+
+## Phase 5 — Commission Splits + Agreements
+
+- New `crm_commission_splits` (deal_id, broker_id, percentage)
+- Validation trigger: sum ≤ 100
+- Auto-generate PDF agreement on JBJ letterhead (reuse `jbjListingAuthorisation.ts` + `letterheadChrome.ts`)
+- E-signature acknowledgment stored in `user_agreements` (existing standard)
+
+## Phase 6 — Security Hardening
+
+- `crm_login_events` (ip, user_agent, device_hash, geo, success)
+- `crm_active_sessions` with owner-revoke RPC
+- Failed-login alerts → owner notification + email
+- 2FA via Supabase TOTP
+- File access: storage RLS keyed to `crm_database_grants` (PDFs, PAA, contracts stay owner-locked by default)
+- Emergency "revoke all" button per broker
+
+## Phase 7 — CRM Feature Parity Upgrade
+
+Additive only (no UI removal — per "No Removal" policy):
+
+- Workflow automation builder (triggers → actions)
+- Smart reminders / cadences
+- AI lead summaries + duplicate detection (reuse Lovable AI Gateway `google/gemini-2.5-flash`)
+- Pipeline analytics, broker leaderboard, database health
+- Lead scoring (0–100) + auto-assignment rules
+
+## Phase 8 — UI/UX Fixes (champagne-gold only)
+
+Site-wide sweep enforcing existing standards (`Champagne-Gold Design Standard`, `No Gold Fills`, `White-on-Light Guard`):
+
+- Replace every `focus:ring-blue`, `border-blue`, `bg-blue` in CRM with cream `#EFE6D6` + ink + 1px gold hairline
+- Fix `shadcn` Calendar / DatePicker → custom champagne theme, click-to-type, expiration date support
+- Fix dropdown active/hover states across all CRM forms
+- Add CI script extension to `scripts/contrast/` to ban `blue-*` classes in `src/pages/owner/crm/**`
+
+## Phase 9 — Database Import Engine
+
+Audit & fix `UploadDatabaseDialog`:
+- Preserve ALL original columns (no silent drops)
+- Auto-detect column types
+- Confirmation dialog before any rename
+- Store upload source / date / owner (already present — verify)
+- Fix loading spinner stuck state
+
+## Phase 10 — QA & Acceptance
+
+For each phase, two-browser walkthrough (owner + broker), screenshots, and a checklist sign-off before moving on.
 
 ---
 
-## Phase 3 — Live CRM Synchronization
+## Technical Details
 
-- Add `last_updated_at` (already exists as `updated_at`) + `last_updated_by uuid` to `crm_leads`; trigger sets both on every UPDATE.
-- Insert into existing `crm_audit_logs` / `crm_action_logs` on every field change (jsonb diff). Brokers' edits already route through the same tables — confirm and add missing fields (status, stage, follow-up, deal_value).
-- Owner CRM subscribes via Supabase Realtime (`postgres_changes` on `crm_leads` + `crm_action_logs`) and patches the React Query cache (`queryClient.setQueryData`) — no full refetch.
-- Conflict handling: optimistic concurrency via `updated_at` check in update RPC; on mismatch, surface toast "Lead was just updated by X — refresh".
-- Broker performance widget: aggregate query over `crm_action_logs` per `broker_user_id` (leads assigned, contacted, meetings, deals closed, avg response time, last_active_at).
+**New tables:** `crm_broker_visibility_rules`, `crm_login_events`, `crm_active_sessions`, `crm_commission_splits`, `crm_broker_invitations`
 
-Tests: two browser sessions (owner + broker), edit stage from broker → owner row animates updated within 2s; simultaneous edits → conflict toast on loser; load test with 5k leads.
+**Extended tables:** `crm_brokers` (+ status, suspended_at, last_login_at, tfa_enabled)
 
----
+**New edge functions:** `crm-broker-invite`, `crm-broker-revoke-session`, `crm-broker-suspend`, `crm-visibility-evaluate`
 
-## Phase 4 — JBJ Broker Directory
+**New RPC:** `broker_can_see_lead(uuid, uuid, text) returns boolean` (SECURITY DEFINER)
 
-- Reuse `crm_brokers` + `broker_profiles` (do not create a new table). Add missing optional columns only if absent: nationality, languages[], visa_status, driving_license, specialty, employment_type (full|part), join_date, notes.
-- Auto-insert/update `crm_brokers` row inside the `crm-grant-broker-access` edge function.
-- "JBJ Brokers" sub-tab under CRM Employees section (already exists per Unified Owner CRM Hub) — extend it instead of adding a new page.
-- Stats dashboard powered by a single view `vw_crm_broker_stats` (deals closed, leads assigned, conversion rate, top performers).
-- Assign-Lead dropdown + CRM filters source from the same view → automatic sync.
+**Reused:** `requireOwnerAuth`, `useCRMLiveSync`, `crm_audit_logs`, `user_roles`, `has_role`, `user_agreements`, Lovable Emails, Lovable AI Gateway
+
+**Removed/duplicated:** nothing — per the "No Removal" + "Unified Relational CRM Standard" memories, everything merges into the canonical `crm_*` tables.
 
 ---
 
-## Phase 5 — QA & Cleanup
+## Recommendations Before Starting
 
-- Inventory and remove/redirect duplicates: any `BulkUploadDialog` / `BrokerBulkUploadDialog` / `CRMImportModalV3` paths that now overlap with the new flow are consolidated behind `UploadDatabaseDialog` (keep one mapping engine). Delete dead components only after grep confirms zero imports.
-- Confirm single source of truth: `crm_leads` (leads), `crm_brokers`+`broker_profiles` (brokers), `crm_source_databases` (uploads), `crm_database_grants` (access). Document in `mem://features/crm/unified-relational-crm-standard`.
-- Run end-to-end script (upload → save → merge → grant broker → broker login → broker edit → owner realtime update → filter by database → export → assign new leads → broker stats).
-- Deliverables: screenshots per phase, permissions matrix table, realtime video, RLS proof queries, updated memory file.
+1. **Phase 0 audit is mandatory** — without it I risk duplicating tables. ~1 hour of read-only exploration.
+2. **Phase 3 (asymmetric visibility) is the riskiest** — it rewrites broker RLS. I recommend doing it on a feature flag with a fallback to current behavior for 1 week.
+3. **Phases 1, 2, 8, 9 are quick wins** — can ship within the first iteration and unblock current UX pain (broker dropdown, blue states, upload spinner, datepicker).
+4. **Phases 5, 6, 7 are large** — each is its own multi-day effort. Confirm priority order.
 
-## Technical Notes
+## Question Before I Start
 
-- Libraries: `papaparse` (CSV), `xlsx` (SheetJS) — confirm presence in `package.json` before Phase 1 starts.
-- Storage: private bucket with signed-URL downloads through existing `download-file` edge proxy (avoids Chrome `lovableproject.com` blocks per prior fix).
-- All new RLS uses `has_role()` security-definer pattern (no recursive policies).
-- No edits to `auth/storage/realtime` schemas. No CHECK constraints with `now()` — use validation triggers.
-- Every migration is additive; no destructive drops in Phases 1–4. Cleanup deletions land only in Phase 5 after grep + tests.
+Do you want me to:
+- **(A)** Run Phase 0 audit now and post results before any code, or
+- **(B)** Start with the quick wins (Phases 8 + 9 + the broker dropdown bug in Phase 2) in parallel with the audit?
 
-## Phase Gate
-
-I will stop and request your sign-off (with screenshots) at the end of each phase before starting the next.
+Reply A or B (or reorder phases) and I'll begin.
