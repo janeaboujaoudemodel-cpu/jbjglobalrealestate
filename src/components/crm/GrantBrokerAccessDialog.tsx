@@ -334,6 +334,100 @@ export default function GrantBrokerAccessDialog({
             </div>
           </div>
 
+          {/* Phase 3 — Visibility scope */}
+          <div className="rounded-md border border-[#B89555]/30 bg-[#F7F2EA] p-3 space-y-3">
+            <div className="text-[11px] uppercase tracking-wide text-[#1A1A1A]/60 font-semibold">
+              Visibility scope
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label className="text-xs text-[#1A1A1A]/80">Direction</Label>
+                <select
+                  value={direction}
+                  onChange={(e) => setDirection(e.target.value as any)}
+                  className={selectCls}
+                >
+                  <option value="broker_to_owner_only">Broker → Owner only (default)</option>
+                  <option value="bidirectional">Bidirectional (broker sees owner edits)</option>
+                </select>
+              </div>
+              <div>
+                <Label className="text-xs text-[#1A1A1A]/80">Time window</Label>
+                <select
+                  value={windowMode}
+                  onChange={(e) => setWindowMode(e.target.value as any)}
+                  className={selectCls}
+                >
+                  <option value="all">All time</option>
+                  <option value="today">Today only</option>
+                  <option value="last_7">Last 7 days</option>
+                  <option value="last_30">Last 30 days</option>
+                  <option value="from_date">From a date → present</option>
+                  <option value="custom">Custom range</option>
+                </select>
+              </div>
+            </div>
+
+            {(windowMode === "custom" || windowMode === "from_date") && (
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label className="text-xs text-[#1A1A1A]/80">Start date</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="outline" className={cn(
+                        "w-full justify-start text-left font-normal h-9 bg-white border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]",
+                        !winStart && "text-[#1A1A1A]/50",
+                      )}>
+                        <CalendarIcon className="mr-2 h-3.5 w-3.5 text-[#1A1A1A]/60" />
+                        {winStart ? format(winStart, "PPP") : "Pick a start date"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent align="start" className="w-auto p-0 bg-[#FDFBF7] border-[#B89555]/30">
+                      <Calendar mode="single" selected={winStart} onSelect={setWinStart} initialFocus className="p-3 pointer-events-auto" />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+                {windowMode === "custom" && (
+                  <div>
+                    <Label className="text-xs text-[#1A1A1A]/80">End date</Label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button variant="outline" className={cn(
+                          "w-full justify-start text-left font-normal h-9 bg-white border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]",
+                          !winEnd && "text-[#1A1A1A]/50",
+                        )}>
+                          <CalendarIcon className="mr-2 h-3.5 w-3.5 text-[#1A1A1A]/60" />
+                          {winEnd ? format(winEnd, "PPP") : "Pick an end date"}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent align="start" className="w-auto p-0 bg-[#FDFBF7] border-[#B89555]/30">
+                        <Calendar mode="single" selected={winEnd} onSelect={setWinEnd} initialFocus className="p-3 pointer-events-auto" />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <div>
+              <Label className="text-xs text-[#1A1A1A]/80">Status filter (optional, comma-separated)</Label>
+              <Input
+                value={statusFilterText}
+                onChange={(e) => setStatusFilterText(e.target.value)}
+                placeholder="new, contacted, qualified"
+                className={inputCls}
+              />
+              <p className="text-[10px] text-[#1A1A1A]/50 mt-1">
+                Restrict broker visibility to leads in these pipeline stages only. Leave empty to allow all.
+              </p>
+            </div>
+
+            <p className="text-[10px] text-[#1A1A1A]/60 leading-relaxed">
+              Owner edits remain invisible to the broker unless this grant is set to bidirectional or you explicitly share individual leads.
+            </p>
+          </div>
+
+
           <div>
             <Label className="text-xs text-[#1A1A1A]/80">Expires (optional)</Label>
             <Popover>
