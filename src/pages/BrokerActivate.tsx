@@ -5,8 +5,20 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Loader2, ShieldCheck, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { anonHeaders, edgeFnUrl } from "@/config/backend";
 
-type Step = "verifying-token" | "invalid" | "expired" | "already_activated" | "blocked" | "otp" | "password" | "done";
+type Step = "verifying-token" | "invalid" | "expired" | "otp_expired" | "already_activated" | "blocked" | "otp" | "password" | "done";
+
+async function callBrokerFunction<T>(name: string, body: Record<string, unknown>): Promise<T> {
+  const res = await fetch(edgeFnUrl(name), {
+    method: "POST",
+    headers: anonHeaders(),
+    body: JSON.stringify(body),
+  });
+  const payload = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(payload?.error || `Request failed (${res.status})`);
+  return payload as T;
+}
 
 export default function BrokerActivate() {
   const [params] = useSearchParams();
@@ -38,6 +50,7 @@ export default function BrokerActivate() {
         setEmailMasked((data as any)?.email_masked ?? null);
         if (status === "ok") setStep("otp");
         else if (status === "expired") setStep("expired");
+        else if (status === "otp_expired") setStep("otp_expired");
         else if (status === "already_activated") setStep("already_activated");
         else if (status === "blocked") setStep("blocked");
         else setStep("invalid");
@@ -57,10 +70,8 @@ export default function BrokerActivate() {
     if (!token || otp.length < 6) return;
     setBusy(true); setError(null);
     try {
-      const { data, error } = await supabase.functions.invoke("crm-broker-verify-otp", {
-        body: { token, otp: otp.trim() },
-      });
-      if (error || !data?.ok) throw new Error(data?.error ?? error?.message ?? "Verification failed");
+      const data = await callBrokerFunction<any>("crm-broker-verify-otp", { token, otp: otp.trim() });
+      if (!data?.ok) throw new Error(data?.error ?? "Verification failed");
       setTicket(data.ticket);
       setEmail(data.broker?.email ?? null);
       setStep("password");
@@ -113,7 +124,8 @@ export default function BrokerActivate() {
               {step === "password" && "Create a private password for your account."}
               {step === "done" && "Your account is active. Redirecting to your CRM…"}
               {step === "invalid" && "This invitation link is not valid."}
-              {step === "expired" && "This invitation has expired."}
+      {step === "expired" && "This invitation has expired."}
+      {step === "otp_expired" && "This security code has expired."}
               {step === "already_activated" && "This account is already activated."}
               {step === "blocked" && "This account has been blocked."}
             </p>
@@ -182,11 +194,12 @@ export default function BrokerActivate() {
             </div>
           )}
 
-          {(step === "invalid" || step === "expired" || step === "already_activated" || step === "blocked") && (
+          {(step === "invalid" || step === "expired" || step === "otp_expired" || step === "already_activated" || step === "blocked") && (
             <div className="space-y-4">
               <div className="px-4 py-4 rounded-lg bg-[#F7F2EA] border border-[#B89555]/60 text-sm text-[#1A1A1A]/80">
                 {step === "invalid" && "We could not find this invitation. The link may have been mistyped, already used, or revoked."}
                 {step === "expired" && "Your invitation has expired. Please ask the JBJ owner to resend a fresh invitation."}
+                {step === "otp_expired" && "Your 6-digit security code has expired. Please ask the JBJ owner to resend the broker invitation."}
                 {step === "already_activated" && "This broker account is already active. Sign in to continue."}
                 {step === "blocked" && "This broker account has been blocked. Please contact JBJ to restore access."}
               </div>
