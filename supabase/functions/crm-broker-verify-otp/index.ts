@@ -69,6 +69,17 @@ Deno.serve(async (req) => {
     }
 
     if (!broker.otp_hash || !broker.otp_expires_at || new Date(broker.otp_expires_at).getTime() < now) {
+      // Mirror the token-expired branch: clear OTP fields and mark the invitation
+      // expired so the row's state matches what the user is seeing.
+      await admin
+        .from("crm_brokers")
+        .update({
+          invitation_status: "expired",
+          otp_hash: null,
+          otp_expires_at: null,
+          otp_attempts: 0,
+        })
+        .eq("id", broker.id);
       await logSecurity(admin, broker.id, broker.user_id, "broker_otp_expired", ip, ua);
       return json({ error: "Code expired. Ask the owner to resend a fresh invitation.", code: "otp_expired" }, 410);
     }

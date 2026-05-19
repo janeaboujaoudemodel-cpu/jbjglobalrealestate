@@ -45,6 +45,20 @@ type BrokerRow = {
   photo_url?: string | null;
   verification_status?: string | null;
   broker_type?: "sales" | "leasing" | "both" | null;
+  /** From vw_crm_broker_overview — overlay only, never duplicates a column */
+  invitation_status?: string | null;
+  blocked_at?: string | null;
+  activated_at?: string | null;
+  active_session_count?: number | null;
+};
+
+type OverviewRow = {
+  broker_id: string;
+  invitation_status: string | null;
+  activated_at: string | null;
+  blocked_at: string | null;
+  is_active_broker: boolean | null;
+  active_session_count: number | null;
 };
 
 export default function BrokersRegistry() {
@@ -142,36 +156,81 @@ export default function BrokersRegistry() {
     },
   });
 
+  // Broker-overview view: invitation status, blocked, active session count,
+  // last activity — single source of truth (vw_crm_broker_overview).
+  // Read-only overlay, merged into both registered + external rows by user_id /
+  // broker_id. Refreshes every 30s while page is open.
+  const { data: overview = [] } = useQuery({
+    queryKey: ["brokers-overview"],
+    queryFn: async () => {
+      const PAGE = 1000;
+      const out: OverviewRow[] = [];
+      for (let from = 0; from < 200_000; from += PAGE) {
+        const { data, error } = await (supabase as any)
+          .from("vw_crm_broker_overview")
+          .select("broker_id, invitation_status, activated_at, blocked_at, is_active_broker, active_session_count")
+          .range(from, from + PAGE - 1);
+        if (error) throw error;
+        const batch = (data || []) as OverviewRow[];
+        out.push(...batch);
+        if (batch.length < PAGE) break;
+      }
+      return out;
+    },
+    refetchInterval: 30_000,
+    staleTime: 15_000,
+  });
+
+  const overviewByBrokerId = useMemo(() => {
+    const m = new Map<string, OverviewRow>();
+    for (const o of overview as OverviewRow[]) m.set(o.broker_id, o);
+    return m;
+  }, [overview]);
+
   const allRows: BrokerRow[] = useMemo(() => {
-    const r: BrokerRow[] = registered.map((b: any) => ({
-      source: "registered",
-      id: b.id,
-      full_name: b.display_name || "Unnamed",
-      email: b.email,
-      phone: b.phone,
-      current_company: b.custom_label || null,
-      rera: null,
-      tier: b.current_tier,
-      last_active_at: b.updated_at,
-      user_id: b.user_id,
-      photo_url: b.photo_url,
-      verification_status: b.verification_status,
-    }));
-    const e: BrokerRow[] = external.map((b: any) => ({
-      source: "external",
-      id: b.id,
-      full_name: b.full_name,
-      email: b.email_lower,
-      phone: b.phone_e164,
-      current_company: b.current_company,
-      rera: b.rera_license,
-      tier: null,
-      last_active_at: b.last_active_at,
-      user_id: null,
-      broker_type: b.broker_type ?? null,
-    } as BrokerRow));
+    const r: BrokerRow[] = registered.map((b: any) => {
+      const ov = overviewByBrokerId.get(b.user_id) ?? null;
+      return {
+        source: "registered",
+        id: b.id,
+        full_name: b.display_name || "Unnamed",
+        email: b.email,
+        phone: b.phone,
+        current_company: b.custom_label || null,
+        rera: null,
+        tier: b.current_tier,
+        last_active_at: b.updated_at,
+        user_id: b.user_id,
+        photo_url: b.photo_url,
+        verification_status: b.verification_status,
+        invitation_status: ov?.invitation_status ?? null,
+        blocked_at: ov?.blocked_at ?? null,
+        activated_at: ov?.activated_at ?? null,
+        active_session_count: ov?.active_session_count ?? null,
+      };
+    });
+    const e: BrokerRow[] = external.map((b: any) => {
+      const ov = overviewByBrokerId.get(b.id) ?? null;
+      return {
+        source: "external",
+        id: b.id,
+        full_name: b.full_name,
+        email: b.email_lower,
+        phone: b.phone_e164,
+        current_company: b.current_company,
+        rera: b.rera_license,
+        tier: null,
+        last_active_at: ov?.activated_at ?? b.last_active_at,
+        user_id: null,
+        broker_type: b.broker_type ?? null,
+        invitation_status: ov?.invitation_status ?? b.invitation_status ?? null,
+        blocked_at: ov?.blocked_at ?? b.blocked_at ?? null,
+        activated_at: ov?.activated_at ?? b.activated_at ?? null,
+        active_session_count: ov?.active_session_count ?? null,
+      } as BrokerRow;
+    });
     return [...r, ...e];
-  }, [registered, external]);
+  }, [registered, external, overviewByBrokerId]);
 
   const companies = useMemo(() => {
     const set = new Set<string>();
@@ -425,12 +484,28 @@ export default function BrokersRegistry() {
                         <th className="text-left px-4 py-3 font-semibold">Type</th>
                         <th className="text-left px-4 py-3 font-semibold">RERA / Tier</th>
                         <th className="text-left px-4 py-3 font-semibold">Source</th>
+                        <th className="text-left px-4 py-3 font-semibold">Access</th>
                       </tr>
                     </thead>
                     <tbody>
                       {visible.map((r) => {
                         const raw = r.source === "external" ? externalById.get(r.id) : null;
                         const dbSource = raw?.database_source || raw?.upload_source || (r.source === "registered" ? "Registered" : "Manual");
+                        const inv = r.invitation_status;
+                        const invCls =
+                          r.blocked_at
+                            ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
+                            : inv === "activated"
+                              ? "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]"
+                              : inv === "otp_sent" || inv === "invited"
+                                ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
+                                : inv === "expired"
+                                  ? "bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/40"
+                                  : inv === "revoked"
+                                    ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
+                                    : "bg-[#F7F2EA] text-[#1A1A1A]/60 border-[#B89555]/30";
+                        const invLabel = r.blocked_at ? "Blocked" : inv ? inv.replace("_", " ") : "—";
+                        const sessions = r.active_session_count ?? 0;
                         return (
                           <tr key={`${r.source}:${r.id}`} className="border-t border-[#B89555]/15 hover:bg-[#FDFBF7] cursor-pointer" onClick={() => setOpenBroker(r)}>
                             <td className="px-4 py-3 text-[#1A1A1A] font-medium">{r.full_name}</td>
@@ -447,6 +522,18 @@ export default function BrokersRegistry() {
                               <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] capitalize">
                                 {dbSource}
                               </Badge>
+                            </td>
+                            <td className="px-4 py-3">
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold border capitalize ${invCls}`}>
+                                  {invLabel}
+                                </span>
+                                {sessions > 0 && (
+                                  <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555] tabular-nums">
+                                    {sessions} {sessions === 1 ? "session" : "sessions"}
+                                  </span>
+                                )}
+                              </div>
                             </td>
                           </tr>
                         );

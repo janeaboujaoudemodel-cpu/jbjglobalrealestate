@@ -10,7 +10,7 @@
  * Champagne / gold theme only — no blue anywhere.
  */
 import { useEffect, useState, Fragment } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -253,17 +253,20 @@ export default function BrokerGrantsManagerDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
+    <Sheet open={open} onOpenChange={onOpenChange}>
+      <SheetContent
+        side="right"
+        className="bg-[#FDFBF7] border-l border-[#B89555]/30 text-[#1A1A1A] sm:max-w-2xl w-full overflow-y-auto"
+      >
+        <SheetHeader>
+          <SheetTitle className="flex items-center gap-2 text-[#1A1A1A]">
             <ShieldCheck className="h-4 w-4 text-[#B89555]" /> Broker access — {sourceDatabaseName}
-          </DialogTitle>
-          <p className="text-xs text-[#1A1A1A]/60">
+          </SheetTitle>
+          <SheetDescription className="text-xs text-[#1A1A1A]/60">
             Manage who can see this database, resend invitations, block accounts, and
             terminate active sessions.
-          </p>
-        </DialogHeader>
+          </SheetDescription>
+        </SheetHeader>
 
         {loading ? (
           <div className="p-8 text-center text-sm text-[#1A1A1A]/70 flex items-center justify-center gap-2">
@@ -274,7 +277,7 @@ export default function BrokerGrantsManagerDialog({
             No brokers have been granted access to this database yet.
           </div>
         ) : (
-          <div className="divide-y divide-[#B89555]/15 max-h-[70vh] overflow-y-auto">
+          <div className="mt-4 divide-y divide-[#B89555]/15 max-h-[calc(100vh-9rem)] overflow-y-auto pr-1">
             {grants.map((g) => {
               const b = brokers[g.broker_user_id];
               const badge = stateBadge(g);
@@ -500,7 +503,7 @@ export default function BrokerGrantsManagerDialog({
             })}
           </div>
         )}
-      </DialogContent>
-    </Dialog>
+      </SheetContent>
+    </Sheet>
   );
 }
