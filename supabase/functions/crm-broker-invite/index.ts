@@ -18,7 +18,8 @@ interface Body {
   broker_email: string;
   broker_display_name?: string;
   broker_id?: string | null;
-  action?: "invite" | "resend" | "revoke";
+  action?: "invite" | "resend" | "revoke" | "block" | "unblock";
+  reason?: string | null;
 }
 
 Deno.serve(async (req) => {
