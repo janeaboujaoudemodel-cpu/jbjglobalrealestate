@@ -9,6 +9,20 @@ import { anonHeaders, edgeFnUrl } from "@/config/backend";
 
 type Step = "verifying-token" | "invalid" | "expired" | "otp_expired" | "already_activated" | "blocked" | "otp" | "password" | "done";
 
+const PASSWORD_SYMBOL_RE = /[!@#$%^&*()_+\-=\[\]{};':"|<>?,.\/`~]/;
+
+function cleanActivationError(message?: string): string {
+  const text = String(message ?? "").trim();
+  if (!text) return "We could not complete activation. Please try again.";
+  if (/password should contain at least one character of each/i.test(text)) {
+    return "Password must include uppercase, lowercase, number, and symbol characters.";
+  }
+  if (/edge function|non-2xx|supabase|json|internal|unexpected/i.test(text)) {
+    return "We could not complete activation. Please check the details and try again.";
+  }
+  return text;
+}
+
 async function callBrokerFunction<T>(name: string, body: Record<string, unknown>): Promise<T> {
   const res = await fetch(edgeFnUrl(name), {
     method: "POST",
@@ -62,7 +76,7 @@ export default function BrokerActivate() {
   }, [token]);
 
   const pwOk = useMemo(
-    () => password.length >= 10 && /[A-Z]/.test(password) && /[a-z]/.test(password) && /\d/.test(password),
+    () => password.length >= 10 && /[A-Z]/.test(password) && /[a-z]/.test(password) && /\d/.test(password) && PASSWORD_SYMBOL_RE.test(password),
     [password],
   );
 
@@ -76,7 +90,7 @@ export default function BrokerActivate() {
       setEmail(data.broker?.email ?? null);
       setStep("password");
     } catch (e: any) {
-      setError(e.message);
+      setError(cleanActivationError(e.message));
     } finally {
       setBusy(false);
     }
@@ -99,7 +113,7 @@ export default function BrokerActivate() {
       toast.success("Account activated");
       setTimeout(() => navigate("/broker/crm", { replace: true }), 1100);
     } catch (e: any) {
-      setError(e.message);
+      setError(cleanActivationError(e.message));
     } finally {
       setBusy(false);
     }
@@ -182,6 +196,7 @@ export default function BrokerActivate() {
                 <li>• 10+ characters</li>
                 <li>• Upper &amp; lower case letters</li>
                 <li>• At least one number</li>
+                <li>• At least one symbol</li>
               </ul>
               <Button onClick={setNewPassword} disabled={busy || !pwOk || password !== confirm} className="w-full">
                 <ShieldCheck className="h-4 w-4 mr-2" />
