@@ -108,6 +108,7 @@ export default function GrantBrokerAccessDialog({
     if (!open) {
       setTab("existing");
       setSelectedBroker(null);
+      setUnifiedSel(null);
       setSearch("");
       setNFullName(""); setNEmail(""); setNPhone(""); setNCompany("");
       setNNationality(""); setNLanguages(""); setNRole(""); setNBrokerage(""); setNNotes("");
