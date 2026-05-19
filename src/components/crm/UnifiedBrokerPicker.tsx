@@ -63,6 +63,7 @@ export function UnifiedBrokerPicker({
   const [query, setQuery] = useState("");
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const debRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
