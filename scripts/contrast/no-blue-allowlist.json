@@ -1,3 +1,25 @@
 {
-  "allow": []
+  "allow": [
+    "src/components/crm/AIPropertyCoach.tsx",
+    "src/components/crm/ActiveLeadBanner.tsx",
+    "src/components/crm/ActivityTimeline.tsx",
+    "src/components/crm/AdminTasksPanel.tsx",
+    "src/components/crm/AutomationRules.tsx",
+    "src/components/crm/BrokerInactivityMonitor.tsx",
+    "src/components/crm/BrokersImported.tsx",
+    "src/components/crm/BulkSendDialog.tsx",
+    "src/components/crm/BulkUploadDialog.tsx",
+    "src/components/crm/CRMAINextActions.tsx",
+    "src/components/crm/CRMAIToolsPanel.tsx",
+    "src/components/crm/CRMAssistantPanel.tsx",
+    "src/components/crm/CRMCommunicationPanel.tsx",
+    "src/components/crm/CRMDashboardCards.tsx",
+    "src/components/crm/CRMEnhancedDashboard.tsx",
+    "src/components/crm/CRMLeadModal.tsx",
+    "src/components/crm/CRMLeadsTableV2.tsx",
+    "src/components/crm/CRMToolsSidebar.tsx",
+    "src/components/crm/CVCenter.tsx",
+    "src/components/crm/CVDetailModal.tsx",
+    "src/components/crm/CVManagementCenter.tsx"
+  ]
 }
