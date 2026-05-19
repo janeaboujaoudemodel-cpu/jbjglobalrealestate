@@ -188,6 +188,16 @@ export function UnifiedBrokerPicker({
               <div className="px-3 py-6 flex items-center justify-center text-sm text-[#1A1A1A]/60">
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Searching…
               </div>
+            ) : error ? (
+              <div className="px-3 py-5 text-sm text-[#1A1A1A]">
+                <div className="flex items-start gap-2">
+                  <AlertTriangle className="w-4 h-4 text-[#B89555] mt-0.5 shrink-0" />
+                  <div>
+                    <div className="font-semibold">Search unavailable</div>
+                    <div className="text-[#1A1A1A]/70 mt-0.5">{error}</div>
+                  </div>
+                </div>
+              </div>
             ) : rows.length === 0 ? (
               <div className="px-3 py-4 text-sm text-[#1A1A1A]/60">No matches.</div>
             ) : (
