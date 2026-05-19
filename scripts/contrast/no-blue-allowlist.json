@@ -20,6 +20,8 @@
     "src/components/crm/CRMToolsSidebar.tsx",
     "src/components/crm/CVCenter.tsx",
     "src/components/crm/CVDetailModal.tsx",
-    "src/components/crm/CVManagementCenter.tsx"
+    "src/components/crm/CVManagementCenter.tsx",
+    "src/pages/broker/BrokerTraining.tsx",
+    "src/pages/owner/crm/EmailCenter.tsx"
   ]
 }
