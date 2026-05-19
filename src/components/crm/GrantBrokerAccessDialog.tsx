@@ -10,7 +10,9 @@ import { DatePopover } from "@/components/ui/date-popover";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Loader2, ShieldCheck, Search, UserPlus, Check } from "lucide-react";
+import { Loader2, ShieldCheck, Search, UserPlus, Check, Info, UserPlus2 } from "lucide-react";
+import { isFeatureEnabled } from "@/config/featureFlags";
+import { UnifiedBrokerPicker, type UnifiedBrokerSelection } from "@/components/crm/UnifiedBrokerPicker";
 
 interface Props {
   open: boolean;
