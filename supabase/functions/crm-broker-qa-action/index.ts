@@ -13,10 +13,13 @@ const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
 interface Body {
-  action: "reset_password" | "dump_state";
+  action: "reset_password" | "dump_state" | "revoke_session" | "revoke_all" | "block_device" | "unblock_device" | "block_broker" | "unblock_broker";
   broker_email?: string;
   broker_id?: string;
   password?: string;
+  session_id?: string;
+  device_fingerprint?: string;
+  reason?: string;
 }
 
 function j(b: unknown, s = 200) {
