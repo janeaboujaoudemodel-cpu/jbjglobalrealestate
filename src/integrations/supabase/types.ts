@@ -2595,7 +2595,21 @@ export type Database = {
             foreignKeyName: "broker_company_history_broker_id_fkey"
             columns: ["broker_id"]
             isOneToOne: false
+            referencedRelation: "vw_crm_broker_overview"
+            referencedColumns: ["broker_id"]
+          },
+          {
+            foreignKeyName: "broker_company_history_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
             referencedRelation: "vw_crm_broker_stats"
+            referencedColumns: ["broker_id"]
+          },
+          {
+            foreignKeyName: "broker_company_history_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_access"
             referencedColumns: ["broker_id"]
           },
         ]
@@ -5169,7 +5183,21 @@ export type Database = {
             foreignKeyName: "crm_broker_blocked_devices_broker_id_fkey"
             columns: ["broker_id"]
             isOneToOne: false
+            referencedRelation: "vw_crm_broker_overview"
+            referencedColumns: ["broker_id"]
+          },
+          {
+            foreignKeyName: "crm_broker_blocked_devices_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
             referencedRelation: "vw_crm_broker_stats"
+            referencedColumns: ["broker_id"]
+          },
+          {
+            foreignKeyName: "crm_broker_blocked_devices_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_access"
             referencedColumns: ["broker_id"]
           },
         ]
@@ -5298,7 +5326,21 @@ export type Database = {
             foreignKeyName: "crm_broker_sessions_broker_id_fkey"
             columns: ["broker_id"]
             isOneToOne: false
+            referencedRelation: "vw_crm_broker_overview"
+            referencedColumns: ["broker_id"]
+          },
+          {
+            foreignKeyName: "crm_broker_sessions_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
             referencedRelation: "vw_crm_broker_stats"
+            referencedColumns: ["broker_id"]
+          },
+          {
+            foreignKeyName: "crm_broker_sessions_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_access"
             referencedColumns: ["broker_id"]
           },
         ]
@@ -5541,7 +5583,21 @@ export type Database = {
             foreignKeyName: "crm_brokerage_agents_broker_id_fkey"
             columns: ["broker_id"]
             isOneToOne: false
+            referencedRelation: "vw_crm_broker_overview"
+            referencedColumns: ["broker_id"]
+          },
+          {
+            foreignKeyName: "crm_brokerage_agents_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
             referencedRelation: "vw_crm_broker_stats"
+            referencedColumns: ["broker_id"]
+          },
+          {
+            foreignKeyName: "crm_brokerage_agents_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_access"
             referencedColumns: ["broker_id"]
           },
           {
@@ -6266,6 +6322,7 @@ export type Database = {
           invitation_token_expires_at: string | null
           invitation_token_hash: string | null
           invited_by_user_id: string | null
+          is_active_broker: boolean
           is_global_broker: boolean | null
           join_date: string | null
           joined_at: string | null
@@ -6348,6 +6405,7 @@ export type Database = {
           invitation_token_expires_at?: string | null
           invitation_token_hash?: string | null
           invited_by_user_id?: string | null
+          is_active_broker?: boolean
           is_global_broker?: boolean | null
           join_date?: string | null
           joined_at?: string | null
@@ -6430,6 +6488,7 @@ export type Database = {
           invitation_token_expires_at?: string | null
           invitation_token_hash?: string | null
           invited_by_user_id?: string | null
+          is_active_broker?: boolean
           is_global_broker?: boolean | null
           join_date?: string | null
           joined_at?: string | null
@@ -6858,6 +6917,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "crm_source_databases"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_database_grants_source_database_id_fkey"
+            columns: ["source_database_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_access"
+            referencedColumns: ["database_id"]
           },
         ]
       }
@@ -8023,7 +8089,21 @@ export type Database = {
             foreignKeyName: "crm_lead_sources_broker_id_fkey"
             columns: ["broker_id"]
             isOneToOne: false
+            referencedRelation: "vw_crm_broker_overview"
+            referencedColumns: ["broker_id"]
+          },
+          {
+            foreignKeyName: "crm_lead_sources_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
             referencedRelation: "vw_crm_broker_stats"
+            referencedColumns: ["broker_id"]
+          },
+          {
+            foreignKeyName: "crm_lead_sources_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_access"
             referencedColumns: ["broker_id"]
           },
         ]
@@ -8445,6 +8525,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "crm_source_databases"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_leads_source_database_id_fkey"
+            columns: ["source_database_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_access"
+            referencedColumns: ["database_id"]
           },
           {
             foreignKeyName: "crm_leads_source_id_fkey"
@@ -9042,6 +9129,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "crm_source_databases"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_source_database_rows_source_database_id_fkey"
+            columns: ["source_database_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_access"
+            referencedColumns: ["database_id"]
           },
         ]
       }
@@ -34043,6 +34137,54 @@ export type Database = {
           },
         ]
       }
+      vw_crm_broker_overview: {
+        Row: {
+          activated_at: string | null
+          active_database_count: number | null
+          active_session_count: number | null
+          assigned_lead_count: number | null
+          blocked_at: string | null
+          broker_email: string | null
+          broker_id: string | null
+          broker_name: string | null
+          invitation_status: string | null
+          is_active_broker: boolean | null
+          last_active_at: string | null
+          owner_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          activated_at?: string | null
+          active_database_count?: never
+          active_session_count?: never
+          assigned_lead_count?: never
+          blocked_at?: string | null
+          broker_email?: string | null
+          broker_id?: string | null
+          broker_name?: never
+          invitation_status?: string | null
+          is_active_broker?: boolean | null
+          last_active_at?: string | null
+          owner_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          activated_at?: string | null
+          active_database_count?: never
+          active_session_count?: never
+          assigned_lead_count?: never
+          blocked_at?: string | null
+          broker_email?: string | null
+          broker_id?: string | null
+          broker_name?: never
+          invitation_status?: string | null
+          is_active_broker?: boolean | null
+          last_active_at?: string | null
+          owner_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       vw_crm_broker_stats: {
         Row: {
           broker_id: string | null
@@ -34086,6 +34228,36 @@ export type Database = {
           role_title: string | null
           seniority: string | null
           source: string | null
+        }
+        Relationships: []
+      }
+      vw_crm_database_access: {
+        Row: {
+          activated_at: string | null
+          blocked_at: string | null
+          broker_email: string | null
+          broker_id: string | null
+          broker_name: string | null
+          broker_user_id: string | null
+          database_id: string | null
+          database_name: string | null
+          database_owner_user_id: string | null
+          date_window_end: string | null
+          date_window_mode: string | null
+          date_window_start: string | null
+          expires_at: string | null
+          grant_id: string | null
+          granted_at: string | null
+          granted_by: string | null
+          invitation_status: string | null
+          last_active_at: string | null
+          lead_ids: string[] | null
+          permission_level: string | null
+          revoked_at: string | null
+          status: string | null
+          status_filter: string[] | null
+          suspended_at: string | null
+          visibility_direction: string | null
         }
         Relationships: []
       }
@@ -34242,6 +34414,10 @@ export type Database = {
       }
       broker_can_see_lead: {
         Args: { _lead_id: string; _user_id: string }
+        Returns: boolean
+      }
+      broker_has_database_access: {
+        Args: { _db: string; _user: string }
         Returns: boolean
       }
       bulk_assign_leads: {
@@ -34740,6 +34916,7 @@ export type Database = {
         Args: { _team_id: string; _user_id: string }
         Returns: boolean
       }
+      link_broker_entity_by_email: { Args: never; Returns: string }
       log_chat_message: {
         Args: {
           p_message: string

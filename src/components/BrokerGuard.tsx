@@ -47,7 +47,38 @@ const BrokerGuard = ({ children, showLoading = true }: BrokerGuardProps) => {
           return;
         }
 
-        // Check for active broker subscription (primary broker indicator)
+        // CRM-invited broker (crm_brokers.user_id link) — self-heal by email if needed
+        let { data: brokerRow } = await supabase
+          .from('crm_brokers')
+          .select('id, blocked_at, is_active_broker')
+          .eq('user_id', user.id)
+          .maybeSingle();
+
+        if (!brokerRow) {
+          // Try to link by email (idempotent)
+          await supabase.rpc('link_broker_entity_by_email' as any);
+          const retry = await supabase
+            .from('crm_brokers')
+            .select('id, blocked_at, is_active_broker')
+            .eq('user_id', user.id)
+            .maybeSingle();
+          brokerRow = retry.data as any;
+        }
+
+        if (brokerRow?.blocked_at) {
+          await supabase.auth.signOut();
+          setIsBroker(false);
+          setIsLoading(false);
+          return;
+        }
+
+        if (brokerRow?.is_active_broker) {
+          setIsBroker(true);
+          setIsLoading(false);
+          return;
+        }
+
+        // Fallback: legacy broker subscription
         const { data: subscriptionData } = await supabase
           .from('broker_subscriptions')
           .select('status')
@@ -55,7 +86,6 @@ const BrokerGuard = ({ children, showLoading = true }: BrokerGuardProps) => {
           .eq('status', 'active')
           .maybeSingle();
 
-        // User is a broker if they have an active subscription
         const hasBrokerRole = !!subscriptionData;
         setIsBroker(hasBrokerRole);
       } catch (err) {

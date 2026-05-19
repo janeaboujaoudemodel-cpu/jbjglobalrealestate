@@ -60,6 +60,20 @@ Deno.serve(async (req) => {
       })
       .eq("id", broker.id);
 
+    // Upsert a broker_profiles row so the portal/CRM surfaces work consistently
+    try {
+      await admin.from("broker_profiles").upsert(
+        {
+          user_id: broker.user_id,
+          email: broker.email_lower,
+          display_name: broker.email_lower?.split("@")[0] ?? "Broker",
+          is_active: true,
+          broker_type: "external",
+        },
+        { onConflict: "user_id" }
+      );
+    } catch (_) { /* profile is best-effort */ }
+
     await admin.from("crm_audit_logs").insert({
       actor_user_id: broker.user_id,
       action: "broker_activated",

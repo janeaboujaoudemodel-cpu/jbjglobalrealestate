@@ -39,6 +39,7 @@ function fmtBytes(n: number | null) {
 
 export default function DatabasesHub() {
   const [rows, setRows] = useState<Row[]>([]);
+  const [grantsByDb, setGrantsByDb] = useState<Record<string, { count: number; latest: string | null }>>({});
   const [loading, setLoading] = useState(true);
   const [uploadOpen, setUploadOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -55,6 +56,19 @@ export default function DatabasesHub() {
       .order("uploaded_at", { ascending: false });
     if (error) toast.error(error.message);
     setRows((data as any) || []);
+
+    // Grantee summary per database (active grants only)
+    const { data: grantsData } = await supabase
+      .from("vw_crm_database_access" as any)
+      .select("database_id, granted_at, status")
+      .eq("status", "active");
+    const summary: Record<string, { count: number; latest: string | null }> = {};
+    for (const g of (grantsData as any[]) || []) {
+      const s = summary[g.database_id] ||= { count: 0, latest: null };
+      s.count += 1;
+      if (!s.latest || g.granted_at > s.latest) s.latest = g.granted_at;
+    }
+    setGrantsByDb(summary);
     setLoading(false);
   };
 
@@ -139,6 +153,14 @@ export default function DatabasesHub() {
                     {r.original_filename} · {r.row_count.toLocaleString()} rows · {r.column_headers?.length || 0} cols · {fmtBytes(r.file_size_bytes)}
                   </div>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => setManageTarget(r)}
+                  className="px-2 py-0.5 rounded-full text-[10px] font-semibold border border-[#B89555]/40 bg-[#EFE6D6] text-[#1A1A1A] shrink-0 hover:bg-[#E7DCC7]"
+                  title="Manage broker access"
+                >
+                  {(grantsByDb[r.id]?.count ?? 0)} {(grantsByDb[r.id]?.count ?? 0) === 1 ? "broker" : "brokers"}
+                </button>
                 <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold border border-[#B89555]/30 bg-[#EFE6D6] text-[#1A1A1A] shrink-0">
                   {statusLabel[r.status]}
                 </span>
