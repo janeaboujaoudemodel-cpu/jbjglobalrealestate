@@ -124,7 +124,10 @@ Deno.serve(async (req) => {
       })
       .select("id")
       .single();
-    if (insErr) return json({ error: insErr.message }, 500);
+    if (insErr) {
+      console.error("crm-broker-session-track insert failed", insErr);
+      return json({ error: "Could not start your session. Please try signing in again." }, 500);
+    }
 
     await admin.from("crm_audit_logs").insert({
       actor_user_id: caller.id,
