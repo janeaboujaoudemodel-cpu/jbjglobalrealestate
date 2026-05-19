@@ -101,19 +101,20 @@ export default function DatabasesHub() {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="flex items-center gap-2 flex-1 min-w-[240px]">
+    <div className="crm-scope space-y-4 w-full min-w-0">
+      <CRMToolbar>
+        <div className="flex items-center gap-2 flex-1 min-w-[200px] basis-[280px]">
           <Input
             placeholder="Search databases…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]"
+            className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] min-w-0"
           />
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as any)}
-            className="h-9 rounded-md border border-[#B89555]/30 bg-[#FDFBF7] text-sm text-[#1A1A1A] px-2"
+            className="h-9 rounded-md border border-[#B89555]/30 bg-[#FDFBF7] text-sm text-[#1A1A1A] px-2 shrink-0"
+            aria-label="Status filter"
           >
             <option value="all">All statuses</option>
             <option value="separate">Separate</option>
@@ -121,13 +122,15 @@ export default function DatabasesHub() {
             <option value="both">Merged + Separate</option>
           </select>
         </div>
-        <Button variant="outline" onClick={load} className="border-[#B89555]/40 text-[#1A1A1A]">
-          <RefreshCw className="h-4 w-4 mr-2" /> Refresh
+        <Button variant="outline" onClick={load} className="border-[#B89555]/40 text-[#1A1A1A] shrink-0">
+          <RefreshCw className="h-4 w-4 lg:mr-2" />
+          <span className="toolbar-label hidden lg:inline">Refresh</span>
         </Button>
-        <Button onClick={() => setUploadOpen(true)} className="bg-[#EFE6D6] hover:bg-[#E7DCC7] text-[#1A1A1A] border border-[#B89555]">
-          <Upload className="h-4 w-4 mr-2" /> Upload Database
+        <Button onClick={() => setUploadOpen(true)} className="bg-[#EFE6D6] hover:bg-[#E7DCC7] text-[#1A1A1A] border border-[#B89555] shrink-0">
+          <Upload className="h-4 w-4 lg:mr-2" />
+          <span className="toolbar-label hidden lg:inline">Upload Database</span>
         </Button>
-      </div>
+      </CRMToolbar>
 
       <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] overflow-hidden">
         {loading ? (
@@ -146,37 +149,63 @@ export default function DatabasesHub() {
         ) : (
           <div className="divide-y divide-[#B89555]/15">
             {filtered.map((r) => (
-              <div key={r.id} className="px-4 py-3 flex items-center gap-3">
+              <div
+                key={r.id}
+                className="px-3 sm:px-4 py-3 flex flex-wrap items-center gap-x-3 gap-y-2 min-w-0"
+              >
                 <FileSpreadsheet className="h-5 w-5 text-[#1A1A1A]/60 shrink-0" />
-                <div className="flex-1 min-w-0">
+                <div className="flex-1 min-w-[180px] basis-[220px]">
                   <div className="text-sm font-medium text-[#1A1A1A] truncate">{r.name}</div>
                   <div className="text-[11px] text-[#1A1A1A]/60 truncate">
                     {r.original_filename} · {r.row_count.toLocaleString()} rows · {r.column_headers?.length || 0} cols · {fmtBytes(r.file_size_bytes)}
                   </div>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setManageTarget(r)}
-                  className="px-2 py-0.5 rounded-full text-[10px] font-semibold border border-[#B89555]/40 bg-[#EFE6D6] text-[#1A1A1A] shrink-0 hover:bg-[#E7DCC7]"
-                  title="Manage broker access"
-                >
-                  {(grantsByDb[r.id]?.count ?? 0)} {(grantsByDb[r.id]?.count ?? 0) === 1 ? "broker" : "brokers"}
-                </button>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold border border-[#B89555]/30 bg-[#EFE6D6] text-[#1A1A1A] shrink-0">
-                  {statusLabel[r.status]}
-                </span>
-                <span className="text-[11px] text-[#1A1A1A]/60 shrink-0 tabular-nums">
-                  {formatDate(r.uploaded_at)}
-                </span>
-                <Button size="sm" variant="outline" onClick={() => setGrantTarget(r)} className="border-[#B89555]/40 text-[#1A1A1A]">
-                  <ShieldCheck className="h-3.5 w-3.5 mr-1" /> Give Access
-                </Button>
-                <Button size="sm" variant="outline" onClick={() => setManageTarget(r)} className="border-[#B89555]/40 text-[#1A1A1A]">
-                  <ShieldCheck className="h-3.5 w-3.5 mr-1" /> Manage
-                </Button>
-                <Button size="sm" variant="outline" onClick={() => download(r)} className="border-[#B89555]/40 text-[#1A1A1A]">
-                  <Download className="h-3.5 w-3.5 mr-1" /> Download
-                </Button>
+                <div className="flex flex-wrap items-center gap-1.5 shrink-0 ml-auto">
+                  <button
+                    type="button"
+                    onClick={() => setManageTarget(r)}
+                    className="px-2 py-0.5 rounded-full text-[10px] font-semibold border border-[#B89555]/40 bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#E7DCC7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/40"
+                    title="Manage broker access"
+                  >
+                    {(grantsByDb[r.id]?.count ?? 0)} {(grantsByDb[r.id]?.count ?? 0) === 1 ? "broker" : "brokers"}
+                  </button>
+                  <span className="hidden sm:inline-flex px-2 py-0.5 rounded-full text-[10px] font-semibold border border-[#B89555]/30 bg-[#EFE6D6] text-[#1A1A1A]">
+                    {statusLabel[r.status]}
+                  </span>
+                  <span className="hidden md:inline text-[11px] text-[#1A1A1A]/60 tabular-nums">
+                    {formatDate(r.uploaded_at)}
+                  </span>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setGrantTarget(r)}
+                    className="border-[#B89555]/40 text-[#1A1A1A] h-8 px-2"
+                    title="Give Access"
+                  >
+                    <ShieldCheck className="h-3.5 w-3.5 lg:mr-1" />
+                    <span className="hidden lg:inline">Give Access</span>
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setManageTarget(r)}
+                    className="border-[#B89555]/40 text-[#1A1A1A] h-8 px-2"
+                    title="Manage"
+                  >
+                    <Settings2 className="h-3.5 w-3.5 lg:mr-1" />
+                    <span className="hidden lg:inline">Manage</span>
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => download(r)}
+                    className="border-[#B89555]/40 text-[#1A1A1A] h-8 px-2"
+                    title="Download"
+                  >
+                    <Download className="h-3.5 w-3.5 lg:mr-1" />
+                    <span className="hidden lg:inline">Download</span>
+                  </Button>
+                </div>
               </div>
             ))}
           </div>
