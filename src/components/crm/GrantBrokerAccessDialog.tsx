@@ -194,7 +194,18 @@ export default function GrantBrokerAccessDialog({
       onGranted?.();
       onOpenChange(false);
     } catch (e: any) {
-      toast.error(e?.message ?? "Could not grant access");
+      console.error("[GrantBrokerAccessDialog] grant failed", e);
+      const raw = String(e?.message ?? "");
+      // Surface only known user-actionable signals; mask everything else.
+      const friendly =
+        /already.*granted|duplicate|exists/i.test(raw)
+          ? "This broker already has access to that database."
+          : /not.*owner|permission|forbidden|unauthor/i.test(raw)
+          ? "You don't have permission to grant access here."
+          : /email/i.test(raw) && /invalid|format/i.test(raw)
+          ? "That email address looks invalid."
+          : "Could not grant access. Please try again.";
+      toast.error(friendly);
     } finally {
       setBusy(false);
     }
