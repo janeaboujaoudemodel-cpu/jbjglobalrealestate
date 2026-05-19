@@ -38,7 +38,14 @@ Tracked debt that must NOT block Batch 3 closure but should be normalized later.
 - [ ] Post-OTP `invitation_status` label rename (`otp_sent` → `otp_verified`).
 - [ ] `invitation_token_hash` column split (separate post-OTP ticket hash
       from original invite hash so refresh-after-OTP doesn't invalidate the
+      from original invite hash so refresh-after-OTP doesn't invalidate the
       link).
+- [ ] Add explicit `focus-visible:ring-2 ring-[#B89555]/40` to interactive
+      elements in `BrokerCombobox`, `UnifiedBrokerPicker`,
+      `BrokersRegistry` rows, `BrokerActivate` step buttons, and
+      `CRMToolbar` controls (today they rely on Radix/native rings — fine
+      while the global outline reset is in place, but should be made
+      explicit before any future outline change).
 
 ## Pass 5–7 (not started)
 
