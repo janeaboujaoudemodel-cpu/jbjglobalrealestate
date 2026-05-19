@@ -1,139 +1,82 @@
-# JBJ CRM — Enterprise Broker Access & CRM Upgrade Plan
+## Goal
 
-This is a very large scope. I'll deliver it as an **audit-first, phased rollout** so nothing existing breaks. Each phase ships independently, is tested, then approved before the next begins.
+Stop OTP/session QA. Fix the foundation so every invited broker is a real, queryable entity wired into the CRM, every uploaded database shows who has access, and the broker-side CRM workspace actually opens with strict scoping. No duplicate systems — extend `crm_brokers`, `crm_database_grants`, `crm_source_databases`, `crm_leads`.
 
----
+## Findings from the current schema
 
-## Phase 0 — Deep Audit (no code changes)
+- `crm_brokers` already has `user_id`, `invitation_status`, `otp_hash`, `activated_at`, `blocked_at`, `invited_by_user_id`. Good — invitations live here. No second table needed.
+- `crm_database_grants` already has `source_database_id`, `broker_user_id`, `permission_level`, `granted_by`, `granted_at`, `revoked_at`, `suspended_at`, `visibility_direction`, `date_window_*`, `lead_ids`, `status_filter`. Good — access logic lives here.
+- `crm_leads` has `assigned_broker_id`, `assigned_to_user_id`, `source_database_id`. Good — ownership lives here.
+- **Missing piece #1:** `BrokerActivate` redirects to `/broker/crm`, but **no such route exists**. Brokers land on a 404 after activation.
+- **Missing piece #2:** Owner's `DatabasesHub` lists databases but doesn't surface grantee summary (who/when/status) on the row.
+- **Missing piece #3:** No deterministic link from `auth.users.id` (broker login) → `crm_brokers` row when the broker first signs in. Activation sets `user_id`, but legacy/manually-created brokers can drift.
+- **Missing piece #4:** RLS on `crm_leads` / `crm_source_databases` / `crm_source_database_rows` for the broker role needs to be re-checked against `crm_database_grants` (active, not revoked, not suspended, within date window, lead_ids/status filter respected).
 
-Before any build, I produce a written audit covering:
+## Plan
 
-- All existing CRM tables (`crm_leads`, `crm_brokers`, `crm_source_databases`, `crm_database_grants`, `crm_audit_logs`, `crm_action_logs`, `crm_lead_assignments`, `deals`, `user_roles`, etc.)
-- Existing RLS policies, edge functions (`crm-grant-broker-access`, `requireOwnerAuth`), and auth flows
-- Existing UI: `UnifiedCRM`, `DatabasesHub`, `GrantBrokerAccessDialog`, calendars, commission system, agreements, email infra
-- Duplicates / overlaps to merge (per "Unified Relational CRM Standard" memory)
-- Gap list vs. Salesforce / Zoho / HubSpot / Bitrix24
+### 1. Schema repair (single additive migration)
+- Add `crm_brokers.is_active_broker boolean default false` (true once `activated_at IS NOT NULL AND blocked_at IS NULL`) + trigger to maintain it.
+- Add unique partial index `crm_brokers(user_id) WHERE user_id IS NOT NULL` to guarantee one broker entity per auth user.
+- Add view `vw_crm_database_access` =
+  `crm_source_databases` ⋈ `crm_database_grants` (not revoked) ⋈ `crm_brokers` (by `broker_user_id = user_id`)
+  exposing: `database_id, database_name, broker_id, broker_user_id, broker_name, broker_email, permission_level, granted_at, granted_by_name, status (active|suspended|expired|revoked), visibility_direction, date_window, lead_count_in_scope`.
+- Add view `vw_crm_broker_overview` per broker: assigned databases count, assigned leads count, last activity, invitation status, session count, blocked flag.
+- Helper SQL function `broker_has_database_access(_user uuid, _db uuid) returns boolean` (security definer, checks active grant, not suspended, not expired) — used in RLS.
+- RLS rewrite for broker role on:
+  - `crm_source_databases` SELECT: owner OR `broker_has_database_access(auth.uid(), id)`.
+  - `crm_source_database_rows` SELECT: same, via parent db.
+  - `crm_leads` SELECT/UPDATE: owner OR (`assigned_broker_id` mapped to broker whose `user_id = auth.uid()`) OR (lead's `source_database_id` granted to broker AND respects `lead_ids`/`status_filter`/`date_window`).
+  - Explicit DENY for broker role on `crm_developer_registry`, `crm_relationship_*`, other brokers' rows, owner-only tables.
 
-**Deliverable:** audit doc + concrete "reuse vs. build" map. You approve before Phase 1.
+### 2. Activation → real entity link
+- Patch `crm-broker-activate` edge function to (a) set `crm_brokers.user_id = auth.uid()`, `activated_at = now()`, `invitation_status='activated'`, `must_reset_password=false`; (b) upsert a minimal `broker_profiles` row keyed off `user_id` for portal compatibility; (c) write `crm_audit_logs`.
+- Add idempotent `link-broker-entity` RPC called on first sign-in by `BrokerGuard` to self-heal any broker whose `user_id` is null but `email_lower` matches `auth.email()`.
 
----
+### 3. Broker CRM workspace (fix the 404)
+- New route `/broker/crm` → `src/pages/broker/BrokerCRM.tsx`, wrapped in `BrokerGuard` (already exists).
+- Sections (broker-scoped only, no developer/relationships/other-brokers):
+  - **My Databases** — list from `vw_crm_database_access` filtered by `broker_user_id = auth.uid()`. Each row → opens scoped database viewer.
+  - **My Leads** — `crm_leads` filtered via RLS (assigned + granted databases, respecting window/status filters).
+  - **Activity** — read-only stream from `crm_audit_logs` scoped to broker's own actions.
+- Scoped database viewer at `/broker/crm/database/:id` reusing the existing leads grid component with `mode="broker"` (hides owner-only columns/actions, respects `crm_field_permissions`).
 
-## Phase 1 — Broker Account Architecture
+### 4. Owner-side visibility upgrade (no removals)
+- `DatabasesHub` row: append compact grantee badges — `N brokers · last granted Xd ago` — clickable to open existing `BrokerGrantsManagerDialog` (already wired).
+- `BrokerGrantsManagerDialog`: pull data from `vw_crm_database_access` so it always shows assigned date, granted_by name, status (active/suspended/expired/revoked), visibility direction, date window, lead scope. Keep existing resend/revoke/block/session controls.
+- New owner sub-section under `/owner/crm?entity=brokers` → **JBJ Brokers Registry** card per broker showing: profile, invitation status, assigned databases (from view), assigned leads count, latest updates, activity log, last seen, sessions, permissions. Reuses `BrokersRegistry.tsx`.
+- Cross-link: clicking a database row → opens dialog; clicking a broker → drills into their assigned databases + leads.
 
-- Formalize roles via existing `user_roles` + `app_role` (no role on profile table)
-- Owner = unrestricted (already enforced via `requireOwnerAuth`)
-- Extend `crm_brokers` with: status (`active|suspended|revoked`), suspended_at, suspended_by, last_login_at, device fingerprint ref
-- Owner actions: add / suspend / delete / restrict / revoke sessions
+### 5. Broker permission hardening (UI layer mirrors RLS)
+- `BrokerGuard` blocks `/owner/*`, `/admin/*`, `/internal/*`, `/jbj-*`, `/developer/*` for any session whose `crm_brokers.user_id = auth.uid()` and is not the owner email.
+- Sidebar/nav for broker role renders only: My Databases, My Leads, Activity, Profile.
 
-## Phase 2 — Broker Access & Invitation
+### 6. CRM synchronization
+- Trigger on `crm_leads` UPDATE: bump `last_active_at` on the assigned broker, write `crm_audit_logs` with diff. Already partially present — verify and extend so owner sees broker edits in realtime via the existing `useCRMLiveSync` channel.
+- Trigger on `crm_database_grants` insert/update/revoke: write `crm_audit_logs` + `crm_security_events` (audit only, no new table).
 
-Rebuild `GrantBrokerAccessDialog` into two-mode wizard:
+### 7. Verification before resuming OTP/session QA
+- Seed one `qa_` broker end-to-end: invite → activate → confirm `user_id` linked → confirm row appears in `vw_crm_database_access` after grant → confirm `/broker/crm` loads → confirm scoped database opens → confirm owner sees broker under database row and broker registry → confirm broker cannot hit `/owner/*` or other brokers' data (403).
+- Only after all checks pass: resume Batch 2 (OTP attempts, session revoke, device block, suspicious login).
 
-- **Option A — Existing broker:** autocomplete from `crm_brokers` (currently broken — fix the load query + RLS)
-- **Option B — New broker:** full intake form (name, email, phone, company, nationality, languages, role, brokerage, notes)
+## Technical section
 
-Invitation pipeline:
-- Edge function generates secure invite token + temp password
-- Branded auth email via Lovable Emails (`scaffold_auth_email_templates`)
-- Force password reset on first login (`/reset-password` page)
-- Optional 2FA (TOTP) toggle
-- Log every login to `crm_login_events`
+- Migration file: `supabase/migrations/<ts>_broker_foundation_repair.sql` (additive only, no drops).
+- Edge functions touched: `crm-broker-activate` (link user_id + profile upsert), no new functions.
+- New files:
+  - `src/pages/broker/BrokerCRM.tsx`
+  - `src/pages/broker/BrokerDatabaseView.tsx`
+  - `src/hooks/useBrokerScopedDatabases.ts` (queries `vw_crm_database_access`)
+  - `src/hooks/useBrokerScopedLeads.ts`
+- Modified:
+  - `src/routes/StandaloneRoutes.tsx` — add `/broker/crm` and `/broker/crm/database/:id` under `BrokerGuard`.
+  - `src/components/crm/DatabasesHub.tsx` — grantee summary badge per row.
+  - `src/components/crm/BrokerGrantsManagerDialog.tsx` — read from `vw_crm_database_access`.
+  - `src/components/BrokerGuard.tsx` — block owner/admin/developer routes for broker sessions.
+  - `src/pages/owner/crm/BrokersRegistry.tsx` — use `vw_crm_broker_overview`.
+  - `supabase/functions/crm-broker-activate/index.ts` — entity link + profile upsert.
+- No table dropped, no existing column changed in a breaking way, no new session/security table (reuses `crm_broker_sessions`, `crm_security_events`, `crm_audit_logs`).
+- Rollback: migration is additive (new view, new function, new column with default, new policies); revert by dropping view/function/column/policies in reverse order.
 
-## Phase 3 — Asymmetric Visibility (CRITICAL)
+## Out of scope (resume after foundation passes QA)
 
-This is the core data-model change.
-
-- New table `crm_broker_visibility_rules` per (broker_id, database_id) with:
-  - `direction = 'owner_to_broker'` (broker→owner is always full)
-  - `date_window` (today / yesterday / 7d / 30d / custom range / from-date)
-  - `lead_ids[]`, `status_filter[]`, `field_mask[]` (notes, files, activities, status…)
-- RLS on `crm_leads` for brokers reads via a `SECURITY DEFINER` function `broker_can_see_lead(broker_id, lead_id, field)` that consults visibility rules
-- Broker writes → owner sees everything immediately (existing realtime sync already handles this)
-- Owner writes → invisible to broker until a rule includes them
-
-## Phase 4 — Multi-Database Hierarchy
-
-- Reuse `crm_database_grants` (already has broker_id + database_id)
-- Add UI: per-broker tree view (Broker → Databases → Leads)
-- Owner actions: move / copy-permission / assign-to-multiple / archive / disable / merge / track source
-
-## Phase 5 — Commission Splits + Agreements
-
-- New `crm_commission_splits` (deal_id, broker_id, percentage)
-- Validation trigger: sum ≤ 100
-- Auto-generate PDF agreement on JBJ letterhead (reuse `jbjListingAuthorisation.ts` + `letterheadChrome.ts`)
-- E-signature acknowledgment stored in `user_agreements` (existing standard)
-
-## Phase 6 — Security Hardening
-
-- `crm_login_events` (ip, user_agent, device_hash, geo, success)
-- `crm_active_sessions` with owner-revoke RPC
-- Failed-login alerts → owner notification + email
-- 2FA via Supabase TOTP
-- File access: storage RLS keyed to `crm_database_grants` (PDFs, PAA, contracts stay owner-locked by default)
-- Emergency "revoke all" button per broker
-
-## Phase 7 — CRM Feature Parity Upgrade
-
-Additive only (no UI removal — per "No Removal" policy):
-
-- Workflow automation builder (triggers → actions)
-- Smart reminders / cadences
-- AI lead summaries + duplicate detection (reuse Lovable AI Gateway `google/gemini-2.5-flash`)
-- Pipeline analytics, broker leaderboard, database health
-- Lead scoring (0–100) + auto-assignment rules
-
-## Phase 8 — UI/UX Fixes (champagne-gold only)
-
-Site-wide sweep enforcing existing standards (`Champagne-Gold Design Standard`, `No Gold Fills`, `White-on-Light Guard`):
-
-- Replace every `focus:ring-blue`, `border-blue`, `bg-blue` in CRM with cream `#EFE6D6` + ink + 1px gold hairline
-- Fix `shadcn` Calendar / DatePicker → custom champagne theme, click-to-type, expiration date support
-- Fix dropdown active/hover states across all CRM forms
-- Add CI script extension to `scripts/contrast/` to ban `blue-*` classes in `src/pages/owner/crm/**`
-
-## Phase 9 — Database Import Engine
-
-Audit & fix `UploadDatabaseDialog`:
-- Preserve ALL original columns (no silent drops)
-- Auto-detect column types
-- Confirmation dialog before any rename
-- Store upload source / date / owner (already present — verify)
-- Fix loading spinner stuck state
-
-## Phase 10 — QA & Acceptance
-
-For each phase, two-browser walkthrough (owner + broker), screenshots, and a checklist sign-off before moving on.
-
----
-
-## Technical Details
-
-**New tables:** `crm_broker_visibility_rules`, `crm_login_events`, `crm_active_sessions`, `crm_commission_splits`, `crm_broker_invitations`
-
-**Extended tables:** `crm_brokers` (+ status, suspended_at, last_login_at, tfa_enabled)
-
-**New edge functions:** `crm-broker-invite`, `crm-broker-revoke-session`, `crm-broker-suspend`, `crm-visibility-evaluate`
-
-**New RPC:** `broker_can_see_lead(uuid, uuid, text) returns boolean` (SECURITY DEFINER)
-
-**Reused:** `requireOwnerAuth`, `useCRMLiveSync`, `crm_audit_logs`, `user_roles`, `has_role`, `user_agreements`, Lovable Emails, Lovable AI Gateway
-
-**Removed/duplicated:** nothing — per the "No Removal" + "Unified Relational CRM Standard" memories, everything merges into the canonical `crm_*` tables.
-
----
-
-## Recommendations Before Starting
-
-1. **Phase 0 audit is mandatory** — without it I risk duplicating tables. ~1 hour of read-only exploration.
-2. **Phase 3 (asymmetric visibility) is the riskiest** — it rewrites broker RLS. I recommend doing it on a feature flag with a fallback to current behavior for 1 week.
-3. **Phases 1, 2, 8, 9 are quick wins** — can ship within the first iteration and unblock current UX pain (broker dropdown, blue states, upload spinner, datepicker).
-4. **Phases 5, 6, 7 are large** — each is its own multi-day effort. Confirm priority order.
-
-## Question Before I Start
-
-Do you want me to:
-- **(A)** Run Phase 0 audit now and post results before any code, or
-- **(B)** Start with the quick wins (Phases 8 + 9 + the broker dropdown bug in Phase 2) in parallel with the audit?
-
-Reply A or B (or reorder phases) and I'll begin.
+- Resume OTP rate-limit testing, activation flow QA, session tracking, device block, suspicious login alerts, remote logout — exactly the Batch 2 items already drafted.
