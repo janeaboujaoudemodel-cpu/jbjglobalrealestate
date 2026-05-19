@@ -484,12 +484,28 @@ export default function BrokersRegistry() {
                         <th className="text-left px-4 py-3 font-semibold">Type</th>
                         <th className="text-left px-4 py-3 font-semibold">RERA / Tier</th>
                         <th className="text-left px-4 py-3 font-semibold">Source</th>
+                        <th className="text-left px-4 py-3 font-semibold">Access</th>
                       </tr>
                     </thead>
                     <tbody>
                       {visible.map((r) => {
                         const raw = r.source === "external" ? externalById.get(r.id) : null;
                         const dbSource = raw?.database_source || raw?.upload_source || (r.source === "registered" ? "Registered" : "Manual");
+                        const inv = r.invitation_status;
+                        const invCls =
+                          r.blocked_at
+                            ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
+                            : inv === "activated"
+                              ? "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]"
+                              : inv === "otp_sent" || inv === "invited"
+                                ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
+                                : inv === "expired"
+                                  ? "bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/40"
+                                  : inv === "revoked"
+                                    ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
+                                    : "bg-[#F7F2EA] text-[#1A1A1A]/60 border-[#B89555]/30";
+                        const invLabel = r.blocked_at ? "Blocked" : inv ? inv.replace("_", " ") : "—";
+                        const sessions = r.active_session_count ?? 0;
                         return (
                           <tr key={`${r.source}:${r.id}`} className="border-t border-[#B89555]/15 hover:bg-[#FDFBF7] cursor-pointer" onClick={() => setOpenBroker(r)}>
                             <td className="px-4 py-3 text-[#1A1A1A] font-medium">{r.full_name}</td>
@@ -506,6 +522,18 @@ export default function BrokersRegistry() {
                               <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] capitalize">
                                 {dbSource}
                               </Badge>
+                            </td>
+                            <td className="px-4 py-3">
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold border capitalize ${invCls}`}>
+                                  {invLabel}
+                                </span>
+                                {sessions > 0 && (
+                                  <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555] tabular-nums">
+                                    {sessions} {sessions === 1 ? "session" : "sessions"}
+                                  </span>
+                                )}
+                              </div>
                             </td>
                           </tr>
                         );
