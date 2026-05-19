@@ -96,7 +96,10 @@ export default function GrantBrokerAccessDialog({
       .limit(500)
       .then(({ data, error }) => {
         if (cancelled) return;
-        if (error) toast.error(`Could not load brokers: ${error.message}`);
+        if (error) {
+          console.error("[GrantBrokerAccessDialog] load brokers failed", error);
+          toast.error("Could not load brokers. Please try again.");
+        }
         setBrokers((data ?? []) as BrokerRow[]);
         setLoadingBrokers(false);
       });
