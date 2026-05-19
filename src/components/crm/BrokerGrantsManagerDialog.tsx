@@ -73,26 +73,25 @@ type SessionRow = {
   is_suspicious: boolean;
 };
 
+import { BrokerStatusBadge, deriveBrokerLifecycle } from "./BrokerStatusBadge";
+
 const stateBadge = (g: Grant) => {
-  if (g.revoked_at)   return { label: "Revoked",   cls: "bg-[#1A1A1A] text-white border-[#1A1A1A]" };
-  if (g.suspended_at) return { label: "Suspended", cls: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]" };
-  if (g.expires_at && new Date(g.expires_at) < new Date())
-    return { label: "Expired",   cls: "bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/40" };
-  return { label: "Active", cls: "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]" };
+  const state = deriveBrokerLifecycle({
+    revoked_at: g.revoked_at,
+    suspended_at: g.suspended_at,
+    expires_at: g.expires_at,
+  });
+  return { state };
 };
 
 const invitationBadge = (b?: BrokerInfo | null) => {
   if (!b) return null;
-  if (b.blocked_at) return { label: "Blocked",   cls: "bg-[#1A1A1A] text-white border-[#1A1A1A]" };
-  switch (b.invitation_status) {
-    case "activated":   return { label: "Activated",  cls: "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]" };
-    case "otp_sent":    return { label: "OTP sent",   cls: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]" };
-    case "invited":     return { label: "Invited",    cls: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/60" };
-    case "expired":     return { label: "Expired",    cls: "bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/40" };
-    case "revoked":     return { label: "Revoked",    cls: "bg-[#1A1A1A] text-white border-[#1A1A1A]" };
-    case "not_invited": return { label: "Not invited",cls: "bg-[#F7F2EA] text-[#1A1A1A]/60 border-[#B89555]/30" };
-    default:            return { label: b.invitation_status, cls: "bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/30" };
-  }
+  const state = deriveBrokerLifecycle({
+    blocked_at: b.blocked_at,
+    invitation_status: b.invitation_status,
+    activated_at: b.activated_at,
+  });
+  return { state };
 };
 
 const windowLabel = (g: Grant) => {
@@ -256,7 +255,7 @@ export default function BrokerGrantsManagerDialog({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         side="right"
-        className="bg-[#FDFBF7] border-l border-[#B89555]/30 text-[#1A1A1A] sm:max-w-2xl w-full overflow-y-auto"
+        className="crm-scope bg-[#FDFBF7] border-l border-[#B89555]/30 text-[#1A1A1A] sm:max-w-2xl w-full overflow-y-auto"
       >
         <SheetHeader>
           <SheetTitle className="flex items-center gap-2 text-[#1A1A1A]">
@@ -294,13 +293,9 @@ export default function BrokerGrantsManagerDialog({
                         <span className="text-sm font-medium text-[#1A1A1A] truncate">
                           {b?.full_name || b?.email_lower || g.broker_user_id.slice(0, 8)}
                         </span>
-                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold border ${badge.cls}`}>
-                          {badge.label}
-                        </span>
-                        {invBadge && (
-                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold border ${invBadge.cls}`}>
-                            {invBadge.label}
-                          </span>
+                        <BrokerStatusBadge state={badge.state} />
+                        {invBadge && invBadge.state !== badge.state && (
+                          <BrokerStatusBadge state={invBadge.state} />
                         )}
                         {b?.activated_at && (
                           <span className="text-[10px] text-[#1A1A1A]/55">
