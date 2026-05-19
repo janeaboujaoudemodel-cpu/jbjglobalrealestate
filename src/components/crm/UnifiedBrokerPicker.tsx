@@ -71,6 +71,7 @@ export function UnifiedBrokerPicker({
     if (debRef.current) window.clearTimeout(debRef.current);
     debRef.current = window.setTimeout(async () => {
       setLoading(true);
+      setError(null);
       try {
         const term = query.trim();
         const out: Row[] = [];
@@ -84,7 +85,8 @@ export function UnifiedBrokerPicker({
             .order("broker_name", { ascending: true })
             .limit(15);
           if (term) q = q.or(`broker_name.ilike.%${term}%,broker_email.ilike.%${term}%`);
-          const { data } = await q;
+          const { data, error: brokerErr } = await q;
+          if (brokerErr) throw brokerErr;
           (data ?? []).forEach((r: any) =>
             out.push({
               _key: `broker:${r.broker_id}`,
@@ -106,7 +108,8 @@ export function UnifiedBrokerPicker({
             .order("lead_name", { ascending: true })
             .limit(15);
           if (term) q = q.or(`lead_name.ilike.%${term}%,lead_email.ilike.%${term}%`);
-          const { data } = await q;
+          const { data, error: preErr } = await q;
+          if (preErr) throw preErr;
           (data ?? []).forEach((r: any) =>
             out.push({
               _key: `pre_invite:${r.lead_id}`,
@@ -121,7 +124,10 @@ export function UnifiedBrokerPicker({
 
         setRows(out);
       } catch {
+        const msg = "Unable to load results. Please check your connection and try again.";
+        setError(msg);
         setRows([]);
+        toast.error(msg);
       } finally {
         setLoading(false);
       }
