@@ -1,17 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
-import { format } from "date-fns";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { DatePopover } from "@/components/ui/date-popover";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Loader2, ShieldCheck, Search, UserPlus, CalendarIcon, Check } from "lucide-react";
+import { Loader2, ShieldCheck, Search, UserPlus, Check } from "lucide-react";
 
 interface Props {
   open: boolean;
@@ -190,12 +189,12 @@ export default function GrantBrokerAccessDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]">
+      <DialogContent className="crm-scope max-w-2xl w-[calc(100vw-2rem)] sm:w-auto max-h-[90vh] overflow-y-auto bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
             <ShieldCheck className="h-4 w-4 text-[#B89555]" /> Give Broker Access
           </DialogTitle>
-          <p className="text-xs text-[#1A1A1A]/60 mt-1 truncate">{sourceDatabaseName}</p>
+          <DialogDescription className="text-xs text-[#1A1A1A]/60 mt-1 truncate">{sourceDatabaseName}</DialogDescription>
         </DialogHeader>
 
         <Tabs value={tab} onValueChange={(v) => setTab(v as "existing" | "new")}>
@@ -271,8 +270,8 @@ export default function GrantBrokerAccessDialog({
 
           {/* ─────────── NEW BROKER ─────────── */}
           <TabsContent value="new" className="mt-3">
-            <div className="grid grid-cols-2 gap-3">
-              <div className="col-span-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="sm:col-span-2">
                 <Label className="text-xs text-[#1A1A1A]/80">Full name *</Label>
                 <Input value={n_fullName} onChange={(e) => setNFullName(e.target.value)} className={inputCls} />
               </div>
@@ -300,11 +299,11 @@ export default function GrantBrokerAccessDialog({
                 <Label className="text-xs text-[#1A1A1A]/80">Languages (comma-sep)</Label>
                 <Input value={n_languages} onChange={(e) => setNLanguages(e.target.value)} placeholder="English, Arabic" className={inputCls} />
               </div>
-              <div className="col-span-2">
+              <div className="sm:col-span-2">
                 <Label className="text-xs text-[#1A1A1A]/80">Role / position</Label>
                 <Input value={n_role} onChange={(e) => setNRole(e.target.value)} className={inputCls} />
               </div>
-              <div className="col-span-2">
+              <div className="sm:col-span-2">
                 <Label className="text-xs text-[#1A1A1A]/80">Notes</Label>
                 <Textarea rows={2} value={n_notes} onChange={(e) => setNNotes(e.target.value)} className={inputCls} />
               </div>
@@ -317,20 +316,30 @@ export default function GrantBrokerAccessDialog({
           <div className="text-[11px] uppercase tracking-wide text-[#1A1A1A]/60 font-semibold">
             Access settings
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <Label className="text-xs text-[#1A1A1A]/80">Scope</Label>
-              <select value={scope} onChange={(e) => setScope(e.target.value as any)} className={selectCls}>
-                <option value="external">External (Partner)</option>
-                <option value="internal">Internal (JBJ)</option>
-              </select>
+              <Select value={scope} onValueChange={(v) => setScope(v as any)}>
+                <SelectTrigger className="h-9 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="crm-scope bg-[#FDFBF7] border-[#B89555]/30">
+                  <SelectItem value="external">External (Partner)</SelectItem>
+                  <SelectItem value="internal">Internal (JBJ)</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <div>
               <Label className="text-xs text-[#1A1A1A]/80">Permission</Label>
-              <select value={perm} onChange={(e) => setPerm(e.target.value as any)} className={selectCls}>
-                <option value="view">View only</option>
-                <option value="edit">Edit</option>
-              </select>
+              <Select value={perm} onValueChange={(v) => setPerm(v as any)}>
+                <SelectTrigger className="h-9 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="crm-scope bg-[#FDFBF7] border-[#B89555]/30">
+                  <SelectItem value="view">View only</SelectItem>
+                  <SelectItem value="edit">Edit</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
@@ -339,71 +348,47 @@ export default function GrantBrokerAccessDialog({
             <div className="text-[11px] uppercase tracking-wide text-[#1A1A1A]/60 font-semibold">
               Visibility scope
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <Label className="text-xs text-[#1A1A1A]/80">Direction</Label>
-                <select
-                  value={direction}
-                  onChange={(e) => setDirection(e.target.value as any)}
-                  className={selectCls}
-                >
-                  <option value="broker_to_owner_only">Broker → Owner only (default)</option>
-                  <option value="bidirectional">Bidirectional (broker sees owner edits)</option>
-                </select>
+                <Select value={direction} onValueChange={(v) => setDirection(v as any)}>
+                  <SelectTrigger className="h-9 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="crm-scope bg-[#FDFBF7] border-[#B89555]/30">
+                    <SelectItem value="broker_to_owner_only">Broker → Owner only (default)</SelectItem>
+                    <SelectItem value="bidirectional">Bidirectional (broker sees owner edits)</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               <div>
                 <Label className="text-xs text-[#1A1A1A]/80">Time window</Label>
-                <select
-                  value={windowMode}
-                  onChange={(e) => setWindowMode(e.target.value as any)}
-                  className={selectCls}
-                >
-                  <option value="all">All time</option>
-                  <option value="today">Today only</option>
-                  <option value="last_7">Last 7 days</option>
-                  <option value="last_30">Last 30 days</option>
-                  <option value="from_date">From a date → present</option>
-                  <option value="custom">Custom range</option>
-                </select>
+                <Select value={windowMode} onValueChange={(v) => setWindowMode(v as any)}>
+                  <SelectTrigger className="h-9 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="crm-scope bg-[#FDFBF7] border-[#B89555]/30">
+                    <SelectItem value="all">All time</SelectItem>
+                    <SelectItem value="today">Today only</SelectItem>
+                    <SelectItem value="last_7">Last 7 days</SelectItem>
+                    <SelectItem value="last_30">Last 30 days</SelectItem>
+                    <SelectItem value="from_date">From a date → present</SelectItem>
+                    <SelectItem value="custom">Custom range</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
             {(windowMode === "custom" || windowMode === "from_date") && (
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <Label className="text-xs text-[#1A1A1A]/80">Start date</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button variant="outline" className={cn(
-                        "w-full justify-start text-left font-normal h-9 bg-white border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]",
-                        !winStart && "text-[#1A1A1A]/50",
-                      )}>
-                        <CalendarIcon className="mr-2 h-3.5 w-3.5 text-[#1A1A1A]/60" />
-                        {winStart ? format(winStart, "PPP") : "Pick a start date"}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent align="start" className="w-auto p-0 bg-[#FDFBF7] border-[#B89555]/30">
-                      <Calendar mode="single" selected={winStart} onSelect={setWinStart} initialFocus className="p-3 pointer-events-auto" />
-                    </PopoverContent>
-                  </Popover>
+                  <DatePopover value={winStart} onChange={setWinStart} placeholder="Pick a start date" />
                 </div>
                 {windowMode === "custom" && (
                   <div>
                     <Label className="text-xs text-[#1A1A1A]/80">End date</Label>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button variant="outline" className={cn(
-                          "w-full justify-start text-left font-normal h-9 bg-white border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]",
-                          !winEnd && "text-[#1A1A1A]/50",
-                        )}>
-                          <CalendarIcon className="mr-2 h-3.5 w-3.5 text-[#1A1A1A]/60" />
-                          {winEnd ? format(winEnd, "PPP") : "Pick an end date"}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent align="start" className="w-auto p-0 bg-[#FDFBF7] border-[#B89555]/30">
-                        <Calendar mode="single" selected={winEnd} onSelect={setWinEnd} initialFocus className="p-3 pointer-events-auto" />
-                      </PopoverContent>
-                    </Popover>
+                    <DatePopover value={winEnd} onChange={setWinEnd} placeholder="Pick an end date" />
                   </div>
                 )}
               </div>
@@ -430,45 +415,12 @@ export default function GrantBrokerAccessDialog({
 
           <div>
             <Label className="text-xs text-[#1A1A1A]/80">Expires (optional)</Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn(
-                    "w-full justify-start text-left font-normal h-9 bg-white border-[#B89555]/30 text-[#1A1A1A]",
-                    "hover:bg-[#F7F2EA] hover:border-[#B89555]/50",
-                    !expiresAt && "text-[#1A1A1A]/50",
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-3.5 w-3.5 text-[#1A1A1A]/60" />
-                  {expiresAt ? format(expiresAt, "PPP") : <span>No expiration — pick a date</span>}
-                  {expiresAt && (
-                    <span
-                      role="button"
-                      tabIndex={0}
-                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); setExpiresAt(undefined); }}
-                      onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); setExpiresAt(undefined); } }}
-                      className="ml-auto text-[10px] text-[#1A1A1A]/60 hover:text-[#1A1A1A] underline cursor-pointer"
-                    >
-                      clear
-                    </span>
-                  )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent
-                align="start"
-                className="w-auto p-0 bg-[#FDFBF7] border-[#B89555]/30"
-              >
-                <Calendar
-                  mode="single"
-                  selected={expiresAt}
-                  onSelect={setExpiresAt}
-                  disabled={(d) => d < new Date(new Date().setHours(0, 0, 0, 0))}
-                  initialFocus
-                  className={cn("p-3 pointer-events-auto")}
-                />
-              </PopoverContent>
-            </Popover>
+            <DatePopover
+              value={expiresAt}
+              onChange={setExpiresAt}
+              placeholder="No expiration — pick a date"
+              disablePast
+            />
           </div>
 
           <div>
@@ -481,17 +433,17 @@ export default function GrantBrokerAccessDialog({
               type="checkbox"
               checked={sendInvite}
               onChange={(e) => setSendInvite(e.target.checked)}
-              className="accent-[#B89555] h-3.5 w-3.5"
+              className="accent-[#1A1A1A] h-3.5 w-3.5"
             />
             Send branded invitation email with onboarding link
           </label>
         </div>
 
-        <DialogFooter className="mt-2">
+        <DialogFooter className="mt-2 flex-col sm:flex-row gap-2">
           <Button variant="outline" onClick={() => onOpenChange(false)}
-            className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#F7F2EA]">Cancel</Button>
+            className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#F7F2EA] w-full sm:w-auto">Cancel</Button>
           <Button onClick={submit} disabled={busy}
-            className="bg-[#EFE6D6] hover:bg-[#E7DCC7] text-[#1A1A1A] border border-[#B89555]">
+            className="bg-[#EFE6D6] hover:bg-[#E7DCC7] text-[#1A1A1A] border border-[#B89555] w-full sm:w-auto">
             {busy ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <ShieldCheck className="h-4 w-4 mr-2" />}
             Grant access
           </Button>

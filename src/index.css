@@ -4599,3 +4599,89 @@ button:hover [data-no-contrast-guard] svg[style*="#B89555"] {
   color: #1A1A1A !important;
   opacity: 1 !important;
 }
+
+/* ============================================================
+ * CRM-SCOPE NO-BLUE GUARD
+ * Wrap CRM/Broker surfaces with className="crm-scope" to force
+ * every Radix/native state to champagne-gold-ink. Overrides any
+ * accidental blue hover/focus/selected leaks from defaults.
+ * ============================================================ */
+.crm-scope :where(*:not(.preserve-color)) {
+  /* Native form accents */
+  accent-color: #B89555;
+}
+
+/* Native browser selection */
+.crm-scope :where(*)::selection {
+  background-color: #EFE6D6;
+  color: #1A1A1A;
+}
+
+/* Focus rings — gold hairline, never blue */
+.crm-scope :where(button, [role="button"], a, input, select, textarea, [tabindex]):focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(184, 149, 85, 0.35);
+  border-color: #B89555;
+}
+
+/* Radix Select / Command / Menu / Listbox highlighted item — no blue */
+.crm-scope [data-highlighted],
+.crm-scope [data-state="checked"],
+.crm-scope [role="option"][data-highlighted],
+.crm-scope [role="menuitem"][data-highlighted] {
+  background-color: #EFE6D6 !important;
+  color: #1A1A1A !important;
+}
+
+/* Radix Tabs active trigger */
+.crm-scope [role="tab"][data-state="active"] {
+  background-color: #EFE6D6 !important;
+  color: #1A1A1A !important;
+  border-color: #B89555 !important;
+}
+
+/* Native <select> / <option> hover (Chrome/Firefox) */
+.crm-scope select:focus,
+.crm-scope select option:checked,
+.crm-scope select option:hover {
+  background-color: #EFE6D6;
+  color: #1A1A1A;
+}
+
+/* Calendar (react-day-picker) — kill default blue selected/today */
+.crm-scope .rdp-day_selected,
+.crm-scope .rdp-day_selected:focus,
+.crm-scope .rdp-day_selected:hover,
+.crm-scope [aria-selected="true"].rdp-day,
+.crm-scope .rdp button[aria-selected="true"] {
+  background-color: #1A1A1A !important;
+  color: #FDFBF7 !important;
+  border-radius: 6px;
+}
+.crm-scope .rdp-day_today,
+.crm-scope .rdp button.rdp-day_today {
+  background-color: #EFE6D6 !important;
+  color: #1A1A1A !important;
+  font-weight: 600;
+}
+.crm-scope .rdp-day:hover:not([disabled]):not([aria-selected="true"]) {
+  background-color: #F7F2EA !important;
+  color: #1A1A1A !important;
+}
+
+/* Checkboxes / radios — gold accent */
+.crm-scope input[type="checkbox"],
+.crm-scope input[type="radio"] {
+  accent-color: #1A1A1A;
+}
+
+/* Switch / toggle Radix data-state */
+.crm-scope [data-state="checked"][role="switch"] {
+  background-color: #1A1A1A !important;
+}
+
+/* DatePopover trigger inside crm-scope: never use blue ring */
+.crm-scope button:focus-visible,
+.crm-scope [role="combobox"]:focus-visible {
+  --tw-ring-color: rgba(184, 149, 85, 0.4);
+}
