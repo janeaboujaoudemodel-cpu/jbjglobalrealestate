@@ -539,10 +539,13 @@ export default function GrantBrokerAccessDialog({
         <DialogFooter className="mt-2 flex-col sm:flex-row gap-2">
           <Button variant="outline" onClick={() => onOpenChange(false)}
             className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#F7F2EA] w-full sm:w-auto">Cancel</Button>
-          <Button onClick={submit} disabled={busy}
-            className="bg-[#EFE6D6] hover:bg-[#E7DCC7] text-[#1A1A1A] border border-[#B89555] w-full sm:w-auto">
+          <Button
+            onClick={submit}
+            disabled={busy || (unifiedEnabled && unifiedSel?.source === "pre_invite")}
+            className="bg-[#EFE6D6] hover:bg-[#E7DCC7] text-[#1A1A1A] border border-[#B89555] w-full sm:w-auto disabled:opacity-60"
+          >
             {busy ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <ShieldCheck className="h-4 w-4 mr-2" />}
-            Grant access
+            {unifiedEnabled && unifiedSel?.source === "pre_invite" ? "Invite required" : "Grant access"}
           </Button>
         </DialogFooter>
       </DialogContent>
