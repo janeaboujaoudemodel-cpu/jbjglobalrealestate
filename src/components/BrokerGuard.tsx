@@ -69,6 +69,11 @@ const BrokerGuard = ({ children, showLoading = true }: BrokerGuardProps) => {
     checkBrokerStatus();
   }, [user, authLoading]);
 
+  // Auto-track broker session (heartbeats + blocked-device enforcement)
+  useBrokerSessionTracking(isBroker && !isLoading && !!user);
+
+
+
   // Show loading state while checking auth or broker status
   if ((authLoading || isLoading) && showLoading) {
     return (
