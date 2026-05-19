@@ -16,11 +16,12 @@
  *   - public.vw_crm_broker_pre_invite_leads (source = "pre_invite")
  */
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ChevronDown, Loader2, UserCircle2, UserPlus2, Check } from "lucide-react";
+import { ChevronDown, Loader2, UserCircle2, UserPlus2, Check, AlertTriangle } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 export type UnifiedBrokerSelection =
   | {
@@ -62,6 +63,7 @@ export function UnifiedBrokerPicker({
   const [query, setQuery] = useState("");
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const debRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
@@ -69,6 +71,7 @@ export function UnifiedBrokerPicker({
     if (debRef.current) window.clearTimeout(debRef.current);
     debRef.current = window.setTimeout(async () => {
       setLoading(true);
+      setError(null);
       try {
         const term = query.trim();
         const out: Row[] = [];
@@ -82,7 +85,8 @@ export function UnifiedBrokerPicker({
             .order("broker_name", { ascending: true })
             .limit(15);
           if (term) q = q.or(`broker_name.ilike.%${term}%,broker_email.ilike.%${term}%`);
-          const { data } = await q;
+          const { data, error: brokerErr } = await q;
+          if (brokerErr) throw brokerErr;
           (data ?? []).forEach((r: any) =>
             out.push({
               _key: `broker:${r.broker_id}`,
@@ -104,7 +108,8 @@ export function UnifiedBrokerPicker({
             .order("lead_name", { ascending: true })
             .limit(15);
           if (term) q = q.or(`lead_name.ilike.%${term}%,lead_email.ilike.%${term}%`);
-          const { data } = await q;
+          const { data, error: preErr } = await q;
+          if (preErr) throw preErr;
           (data ?? []).forEach((r: any) =>
             out.push({
               _key: `pre_invite:${r.lead_id}`,
@@ -119,7 +124,10 @@ export function UnifiedBrokerPicker({
 
         setRows(out);
       } catch {
+        const msg = "Unable to load results. Please check your connection and try again.";
+        setError(msg);
         setRows([]);
+        toast.error(msg);
       } finally {
         setLoading(false);
       }
@@ -179,6 +187,16 @@ export function UnifiedBrokerPicker({
             {loading ? (
               <div className="px-3 py-6 flex items-center justify-center text-sm text-[#1A1A1A]/60">
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Searching…
+              </div>
+            ) : error ? (
+              <div className="px-3 py-5 text-sm text-[#1A1A1A]">
+                <div className="flex items-start gap-2">
+                  <AlertTriangle className="w-4 h-4 text-[#B89555] mt-0.5 shrink-0" />
+                  <div>
+                    <div className="font-semibold">Search unavailable</div>
+                    <div className="text-[#1A1A1A]/70 mt-0.5">{error}</div>
+                  </div>
+                </div>
               </div>
             ) : rows.length === 0 ? (
               <div className="px-3 py-4 text-sm text-[#1A1A1A]/60">No matches.</div>
