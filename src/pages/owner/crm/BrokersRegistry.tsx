@@ -45,6 +45,20 @@ type BrokerRow = {
   photo_url?: string | null;
   verification_status?: string | null;
   broker_type?: "sales" | "leasing" | "both" | null;
+  /** From vw_crm_broker_overview — overlay only, never duplicates a column */
+  invitation_status?: string | null;
+  blocked_at?: string | null;
+  activated_at?: string | null;
+  active_session_count?: number | null;
+};
+
+type OverviewRow = {
+  broker_id: string;
+  invitation_status: string | null;
+  activated_at: string | null;
+  blocked_at: string | null;
+  is_active_broker: boolean | null;
+  active_session_count: number | null;
 };
 
 export default function BrokersRegistry() {
