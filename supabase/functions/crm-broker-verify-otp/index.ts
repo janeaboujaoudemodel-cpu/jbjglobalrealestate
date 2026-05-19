@@ -17,8 +17,11 @@ interface Body {
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   try {
-    const body = (await req.json()) as Body;
-    if (!body.token || !body.otp) return json({ error: "token and otp required" }, 400);
+    const body = (await req.json().catch(() => ({}))) as Partial<Body>;
+    const token = (body.token || "").trim();
+    const otp = (body.otp || "").replace(/\D/g, "").trim();
+    if (!token || !otp) return json({ error: "token and otp required" }, 400);
+    if (!/^\d{6}$/.test(otp)) return json({ error: "Enter the 6-digit code from the invitation email." }, 400);
 
     const admin = createClient(SUPABASE_URL, SERVICE_KEY);
     const ip = clientIp(req);
@@ -40,7 +43,7 @@ Deno.serve(async (req) => {
       }
     }
 
-    const tokenHash = await sha256Hex(body.token);
+    const tokenHash = await sha256Hex(token);
 
     const { data: broker } = await admin
       .from("crm_brokers")
@@ -67,7 +70,7 @@ Deno.serve(async (req) => {
 
     if (!broker.otp_hash || !broker.otp_expires_at || new Date(broker.otp_expires_at).getTime() < now) {
       await logSecurity(admin, broker.id, broker.user_id, "broker_otp_expired", ip, ua);
-      return json({ error: "Code expired. Ask the owner to resend." }, 410);
+      return json({ error: "Code expired. Ask the owner to resend a fresh invitation.", code: "otp_expired" }, 410);
     }
 
     if ((broker.otp_attempts ?? 0) >= MAX_OTP_ATTEMPTS) {
@@ -76,7 +79,7 @@ Deno.serve(async (req) => {
       return json({ error: "Too many incorrect attempts. Invitation locked." }, 429);
     }
 
-    const otpHash = await sha256Hex(body.otp.trim());
+    const otpHash = await sha256Hex(otp);
     if (otpHash !== broker.otp_hash) {
       await admin
         .from("crm_brokers")
