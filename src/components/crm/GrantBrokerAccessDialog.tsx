@@ -225,6 +225,93 @@ export default function GrantBrokerAccessDialog({
 
           {/* ─────────── EXISTING BROKER ─────────── */}
           <TabsContent value="existing" className="space-y-3 mt-3">
+            {unifiedEnabled && (
+              <div className="rounded-md border border-[#B89555]/30 bg-[#FDFBF7] p-3 space-y-2">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="text-[11px] uppercase tracking-wide text-[#1A1A1A]/60 font-semibold">
+                    Unified broker picker
+                    <span className="ml-2 inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-semibold uppercase tracking-wider bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60">
+                      Beta · QA
+                    </span>
+                  </div>
+                </div>
+                <UnifiedBrokerPicker
+                  value={unifiedSel}
+                  onChange={(sel) => {
+                    setUnifiedSel(sel);
+                    if (sel?.source === "broker") {
+                      // Sync into the canonical selection used by submit().
+                      const match = brokers.find((b) => b.id === sel.broker_id);
+                      if (match) {
+                        setSelectedBroker(match);
+                      } else {
+                        // Fallback synthetic row — submit() resolves by email.
+                        setSelectedBroker({
+                          id: sel.broker_id,
+                          full_name: sel.name,
+                          email_lower: sel.email,
+                          current_company: sel.company,
+                          user_id: null,
+                          broker_type: null,
+                        });
+                      }
+                    } else {
+                      // Pre-invite or cleared — never silently grant.
+                      setSelectedBroker(null);
+                    }
+                  }}
+                  label="Broker (canonical or pre-invite lead)"
+                />
+                {unifiedSel?.source === "pre_invite" && (
+                  <div className="rounded-md border border-[#B89555]/40 bg-[#EFE6D6] p-3 text-[11px] text-[#1A1A1A] space-y-2">
+                    <div className="flex items-start gap-2">
+                      <Info className="h-3.5 w-3.5 mt-0.5 shrink-0" />
+                      <div>
+                        <div className="font-semibold">This broker does not yet have a broker account.</div>
+                        <div className="text-[#1A1A1A]/70 mt-0.5">
+                          Permissions, sessions and grants only resolve through canonical broker
+                          accounts. Choose an explicit next step — no automatic conversion will
+                          happen.
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        className="border-[#B89555]/60 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] h-7 text-[11px]"
+                        onClick={() => {
+                          setTab("new");
+                          setNFullName(unifiedSel.name ?? "");
+                          setNEmail(unifiedSel.email ?? "");
+                          setNCompany(unifiedSel.company ?? "");
+                          toast.info("Prefilled the New broker form — review and submit to invite.");
+                        }}
+                      >
+                        <UserPlus2 className="h-3 w-3 mr-1" /> Invite now
+                      </Button>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        className="border-[#B89555]/60 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] h-7 text-[11px]"
+                        onClick={() => {
+                          toast.success("Kept as pre-invite lead — assign later when ready.");
+                          setUnifiedSel(null);
+                        }}
+                      >
+                        Save for later
+                      </Button>
+                    </div>
+                  </div>
+                )}
+                <p className="text-[10px] text-[#1A1A1A]/55">
+                  Legacy list shown below for side-by-side QA. Both pickers write the same
+                  canonical broker — pre-invite leads are never granted access directly.
+                </p>
+              </div>
+            )}
             <Input
               autoFocus
               placeholder="Search by name, email or company…"
