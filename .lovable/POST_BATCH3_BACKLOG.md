@@ -23,6 +23,23 @@ Tracked debt that must NOT block Batch 3 closure but should be normalized later.
 - [ ] Retire legacy `BrokerCombobox` only after at least one full QA cycle
       with the unified picker on by default.
 
+## Session tracking hardening (queued — do NOT implement yet)
+
+- [ ] Add `UNIQUE(session_token_hash)` to `crm_broker_sessions` to harden
+      against any future token collision (current flow already updates by
+      hash; this is defence in depth).
+- [ ] GeoIP enrichment for `country` / `city` columns in
+      `crm-broker-session-track` (columns exist; never populated today).
+- [ ] Consider reducing the broker session heartbeat / forced-logout delay
+      below 90 s — only after measuring edge-function load impact.
+
+## Grant Broker Access (queued — found during QA audit)
+
+- [ ] Post-OTP `invitation_status` label rename (`otp_sent` → `otp_verified`).
+- [ ] `invitation_token_hash` column split (separate post-OTP ticket hash
+      from original invite hash so refresh-after-OTP doesn't invalidate the
+      link).
+
 ## Pass 5–7 (not started)
 
 - Rate-limit `crm-broker-invite-status`
