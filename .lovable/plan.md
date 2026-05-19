@@ -1,82 +1,108 @@
-## Goal
+# Broker Onboarding Repair — Full E2E Hardening
 
-Stop OTP/session QA. Fix the foundation so every invited broker is a real, queryable entity wired into the CRM, every uploaded database shows who has access, and the broker-side CRM workspace actually opens with strict scoping. No duplicate systems — extend `crm_brokers`, `crm_database_grants`, `crm_source_databases`, `crm_leads`.
+No new systems. All work extends `crm_brokers`, `crm_database_grants`, `vw_crm_database_access`, `vw_crm_broker_overview`, existing edge functions, and `BrokerGuard`.
 
-## Findings from the current schema
+## Step 1 — Fix activation routing (kills the 404)
 
-- `crm_brokers` already has `user_id`, `invitation_status`, `otp_hash`, `activated_at`, `blocked_at`, `invited_by_user_id`. Good — invitations live here. No second table needed.
-- `crm_database_grants` already has `source_database_id`, `broker_user_id`, `permission_level`, `granted_by`, `granted_at`, `revoked_at`, `suspended_at`, `visibility_direction`, `date_window_*`, `lead_ids`, `status_filter`. Good — access logic lives here.
-- `crm_leads` has `assigned_broker_id`, `assigned_to_user_id`, `source_database_id`. Good — ownership lives here.
-- **Missing piece #1:** `BrokerActivate` redirects to `/broker/crm`, but **no such route exists**. Brokers land on a 404 after activation.
-- **Missing piece #2:** Owner's `DatabasesHub` lists databases but doesn't surface grantee summary (who/when/status) on the row.
-- **Missing piece #3:** No deterministic link from `auth.users.id` (broker login) → `crm_brokers` row when the broker first signs in. Activation sets `user_id`, but legacy/manually-created brokers can drift.
-- **Missing piece #4:** RLS on `crm_leads` / `crm_source_databases` / `crm_source_database_rows` for the broker role needs to be re-checked against `crm_database_grants` (active, not revoked, not suspended, within date window, lead_ids/status filter respected).
+**Root cause hypotheses to verify before patching:**
+1. `/broker/activate` is in `StandaloneRoutes` but Standalone routes may not be mounted on the published domain (`jbj.ae`) — only on preview. Verify in `App.tsx` route tree.
+2. Published `_redirects` / SPA fallback may strip `?token=`.
+3. Route exists but `BrokerActivate` throws before render (missing token → blank → boundary).
 
-## Plan
+**Fixes:**
+- Promote `/broker/activate` out of any conditionally-mounted group; mount unconditionally at the top of the router so it is reachable on `jbj.ae`, `www.jbj.ae`, preview, and published.
+- Add explicit states to `BrokerActivate.tsx`:
+  - `loading` (initial)
+  - `verifying-token` (preflight `crm-broker-invite-status` call)
+  - `invalid` / `expired` / `already-activated` / `revoked` / `blocked` — each with branded copy + "Request new invitation" CTA that calls `crm-broker-invite` resend
+  - `otp` → `password` → `success`
+- New tiny edge function **`crm-broker-invite-status`** (read-only): given `token`, returns `{ status, email_masked, expires_at }` without leaking PII. Pure SELECT against `crm_brokers` by hashed token. No state change.
+- On success: `await refreshSession()` → `navigate('/broker/crm', { replace: true })`. Guard against landing back on `/auth`.
+- Update `crm-broker-invite` email link to use absolute production origin (`https://jbj.ae/broker/activate?token=...`) regardless of where the invite was generated.
 
-### 1. Schema repair (single additive migration)
-- Add `crm_brokers.is_active_broker boolean default false` (true once `activated_at IS NOT NULL AND blocked_at IS NULL`) + trigger to maintain it.
-- Add unique partial index `crm_brokers(user_id) WHERE user_id IS NOT NULL` to guarantee one broker entity per auth user.
-- Add view `vw_crm_database_access` =
-  `crm_source_databases` ⋈ `crm_database_grants` (not revoked) ⋈ `crm_brokers` (by `broker_user_id = user_id`)
-  exposing: `database_id, database_name, broker_id, broker_user_id, broker_name, broker_email, permission_level, granted_at, granted_by_name, status (active|suspended|expired|revoked), visibility_direction, date_window, lead_count_in_scope`.
-- Add view `vw_crm_broker_overview` per broker: assigned databases count, assigned leads count, last activity, invitation status, session count, blocked flag.
-- Helper SQL function `broker_has_database_access(_user uuid, _db uuid) returns boolean` (security definer, checks active grant, not suspended, not expired) — used in RLS.
-- RLS rewrite for broker role on:
-  - `crm_source_databases` SELECT: owner OR `broker_has_database_access(auth.uid(), id)`.
-  - `crm_source_database_rows` SELECT: same, via parent db.
-  - `crm_leads` SELECT/UPDATE: owner OR (`assigned_broker_id` mapped to broker whose `user_id = auth.uid()`) OR (lead's `source_database_id` granted to broker AND respects `lead_ids`/`status_filter`/`date_window`).
-  - Explicit DENY for broker role on `crm_developer_registry`, `crm_relationship_*`, other brokers' rows, owner-only tables.
+## Step 2 — Broker entity synchronization (single source of truth)
 
-### 2. Activation → real entity link
-- Patch `crm-broker-activate` edge function to (a) set `crm_brokers.user_id = auth.uid()`, `activated_at = now()`, `invitation_status='activated'`, `must_reset_password=false`; (b) upsert a minimal `broker_profiles` row keyed off `user_id` for portal compatibility; (c) write `crm_audit_logs`.
-- Add idempotent `link-broker-entity` RPC called on first sign-in by `BrokerGuard` to self-heal any broker whose `user_id` is null but `email_lower` matches `auth.email()`.
+Reuse `crm_brokers` + `vw_crm_broker_overview`. No new tables.
 
-### 3. Broker CRM workspace (fix the 404)
-- New route `/broker/crm` → `src/pages/broker/BrokerCRM.tsx`, wrapped in `BrokerGuard` (already exists).
-- Sections (broker-scoped only, no developer/relationships/other-brokers):
-  - **My Databases** — list from `vw_crm_database_access` filtered by `broker_user_id = auth.uid()`. Each row → opens scoped database viewer.
-  - **My Leads** — `crm_leads` filtered via RLS (assigned + granted databases, respecting window/status filters).
-  - **Activity** — read-only stream from `crm_audit_logs` scoped to broker's own actions.
-- Scoped database viewer at `/broker/crm/database/:id` reusing the existing leads grid component with `mode="broker"` (hides owner-only columns/actions, respects `crm_field_permissions`).
+- **Brokers Registry** (`BrokersRegistry.tsx`): read from `vw_crm_broker_overview` so every invited broker — `invited`, `otp_sent`, `activated`, `blocked` — appears immediately with status chip, assigned-databases count, last-seen.
+- **CRM lead-assignment dropdowns**: replace any local broker queries with one shared hook `useAllBrokersForAssignment()` that selects from `crm_brokers WHERE invitation_status IN ('activated') OR is_active_broker` plus pending invites (visually disabled).
+- **Owner BrokerGrantsManagerDialog**: already reads grants; add a "broker snapshot" header pulling from `vw_crm_broker_overview` so owner sees activation status inline.
+- Confirm `link_broker_entity_by_email()` runs on first broker login (already wired in `BrokerGuard`) — add the same call inside `crm-broker-activate` for belt-and-suspenders.
 
-### 4. Owner-side visibility upgrade (no removals)
-- `DatabasesHub` row: append compact grantee badges — `N brokers · last granted Xd ago` — clickable to open existing `BrokerGrantsManagerDialog` (already wired).
-- `BrokerGrantsManagerDialog`: pull data from `vw_crm_database_access` so it always shows assigned date, granted_by name, status (active/suspended/expired/revoked), visibility direction, date window, lead scope. Keep existing resend/revoke/block/session controls.
-- New owner sub-section under `/owner/crm?entity=brokers` → **JBJ Brokers Registry** card per broker showing: profile, invitation status, assigned databases (from view), assigned leads count, latest updates, activity log, last seen, sessions, permissions. Reuses `BrokersRegistry.tsx`.
-- Cross-link: clicking a database row → opens dialog; clicking a broker → drills into their assigned databases + leads.
+## Step 3 — Database access visibility & UX
 
-### 5. Broker permission hardening (UI layer mirrors RLS)
-- `BrokerGuard` blocks `/owner/*`, `/admin/*`, `/internal/*`, `/jbj-*`, `/developer/*` for any session whose `crm_brokers.user_id = auth.uid()` and is not the owner email.
-- Sidebar/nav for broker role renders only: My Databases, My Leads, Activity, Profile.
+Extend `DatabasesHub.tsx` only. No new module.
 
-### 6. CRM synchronization
-- Trigger on `crm_leads` UPDATE: bump `last_active_at` on the assigned broker, write `crm_audit_logs` with diff. Already partially present — verify and extend so owner sees broker edits in realtime via the existing `useCRMLiveSync` channel.
-- Trigger on `crm_database_grants` insert/update/revoke: write `crm_audit_logs` + `crm_security_events` (audit only, no new table).
+Per database row, expand a "Grantees" drawer (reads `vw_crm_database_access` filtered by `database_id`) showing:
+- broker name + status chip
+- `granted_by` (resolved via `profiles`)
+- `granted_at`, `expires_at`
+- `permission_level`, `visibility_direction`, date window
+- status (`active` / `suspended` / `revoked` / `expired`)
+- actions: **Suspend**, **Resume**, **Revoke**, **Edit scope** — all hitting existing `crm-broker-grant-*` functions (or add a single `crm-broker-grant-mutate` if missing)
 
-### 7. Verification before resuming OTP/session QA
-- Seed one `qa_` broker end-to-end: invite → activate → confirm `user_id` linked → confirm row appears in `vw_crm_database_access` after grant → confirm `/broker/crm` loads → confirm scoped database opens → confirm owner sees broker under database row and broker registry → confirm broker cannot hit `/owner/*` or other brokers' data (403).
-- Only after all checks pass: resume Batch 2 (OTP attempts, session revoke, device block, suspicious login).
+Broker side: confirm `/broker/crm/database/:id` opens correctly from the broker's database card click; fix the link target if it currently passes `grant_id` instead of `database_id`.
 
-## Technical section
+## Step 4 — Broker restrictions & owner visibility
 
-- Migration file: `supabase/migrations/<ts>_broker_foundation_repair.sql` (additive only, no drops).
-- Edge functions touched: `crm-broker-activate` (link user_id + profile upsert), no new functions.
-- New files:
-  - `src/pages/broker/BrokerCRM.tsx`
-  - `src/pages/broker/BrokerDatabaseView.tsx`
-  - `src/hooks/useBrokerScopedDatabases.ts` (queries `vw_crm_database_access`)
-  - `src/hooks/useBrokerScopedLeads.ts`
-- Modified:
-  - `src/routes/StandaloneRoutes.tsx` — add `/broker/crm` and `/broker/crm/database/:id` under `BrokerGuard`.
-  - `src/components/crm/DatabasesHub.tsx` — grantee summary badge per row.
-  - `src/components/crm/BrokerGrantsManagerDialog.tsx` — read from `vw_crm_database_access`.
-  - `src/components/BrokerGuard.tsx` — block owner/admin/developer routes for broker sessions.
-  - `src/pages/owner/crm/BrokersRegistry.tsx` — use `vw_crm_broker_overview`.
-  - `supabase/functions/crm-broker-activate/index.ts` — entity link + profile upsert.
-- No table dropped, no existing column changed in a breaking way, no new session/security table (reuses `crm_broker_sessions`, `crm_security_events`, `crm_audit_logs`).
-- Rollback: migration is additive (new view, new function, new column with default, new policies); revert by dropping view/function/column/policies in reverse order.
+In `BrokerGuard`, add a path blocklist applied when the user is a pure broker (not owner):
+```
+/owner, /admin, /internal, /jbj-*, /developer, /agency, /relationships, /hr, /finance
+```
+→ redirect to `/broker/crm`. Owner bypass remains via `verify-owner`.
 
-## Out of scope (resume after foundation passes QA)
+Add a tiny `useIsPureBroker()` helper so individual nav components can hide owner-only links instead of rendering then 403'ing.
 
-- Resume OTP rate-limit testing, activation flow QA, session tracking, device block, suspicious login alerts, remote logout — exactly the Batch 2 items already drafted.
+## Step 5 — Email UI/UX rebuild
+
+Rewrite `supabase/functions/_shared/brokerInviteEmail.ts`:
+- **One** rounded outer container (`border-radius: 16px`, hairline `#B89555` border, soft shadow). Remove the nested sharp card.
+- Premium header band: champagne `#F7F2EA` background, centered **JBJ monogram** (use existing public asset, embed as absolute URL `https://jbj.ae/...` — email clients block relative paths), wordmark "JBJ GLOBAL REAL ESTATE", thin gold hairline divider.
+- Body: ink `#1A1A1A` on white, generous 32px padding, OTP block in cream `#EFE6D6` with letter-spacing.
+- Single primary CTA "Activate broker access" → champagne fill, ink text, gold hairline border (per no-gold-fills rule). Plain-text fallback URL below.
+- Footer: muted ink, legal line, "JBJ Global Real Estate L.L.C S.O.C", no social icons in transactional invite.
+- Zero blue anywhere; verify via headless render diff.
+
+## Step 6 — True end-to-end QA (one pass, no stopping)
+
+Run as a single script, capture screenshots into `/mnt/documents/qa-batch2-v2/`:
+
+1. Owner creates fresh `qa_e2e_<ts>` broker in CRM
+2. Owner assigns a source database + 3 leads
+3. Owner clicks "Send invitation" → email lands in `infoo.jane@gmail.com`
+4. Capture email render (desktop + mobile widths)
+5. Click activation link → land on `/broker/activate` (no 404)
+6. Enter OTP → set password → auto sign-in → land on `/broker/crm`
+7. Broker sees ONLY assigned database + 3 leads
+8. Broker tries `/owner/crm` → redirected to `/broker/crm`
+9. Owner refreshes `DatabasesHub` → sees broker under Grantees with `active` status, granted_at, granted_by
+10. Owner refreshes Brokers Registry → broker shows `activated`, last-seen recent
+11. Confirm `crm_audit_logs` rows for: invite_sent, otp_verified, broker_activated, broker_login, grant_viewed
+12. Only after green: resume session/revoke/heartbeat/suspicious-login QA (Batch 2 tail)
+
+## Files to create / modify
+
+**New:**
+- `supabase/functions/crm-broker-invite-status/index.ts`
+
+**Modified:**
+- `src/pages/BrokerActivate.tsx` (state machine + preflight + branded error states)
+- `src/routes/StandaloneRoutes.tsx` or `src/App.tsx` (ensure activation route reachable on published domain)
+- `src/components/BrokerGuard.tsx` (path blocklist for pure brokers; expose `useIsPureBroker`)
+- `src/components/crm/DatabasesHub.tsx` (Grantees drawer)
+- `src/components/crm/BrokerGrantsManagerDialog.tsx` (snapshot header)
+- `src/components/crm/BrokersRegistry.tsx` (read from `vw_crm_broker_overview`)
+- `src/pages/broker/BrokerCRM.tsx` (fix database card → `/broker/crm/database/:database_id`)
+- `supabase/functions/_shared/brokerInviteEmail.ts` (full rebuild — unified container + monogram)
+- `supabase/functions/crm-broker-invite/index.ts` (use absolute prod origin for link)
+- `supabase/functions/crm-broker-activate/index.ts` (call `link_broker_entity_by_email` defensively)
+- New shared hook: `src/hooks/useAllBrokersForAssignment.ts`
+
+**No DB migration required** — all views/columns from the previous repair are sufficient. If `crm-broker-grant-mutate` doesn't exist, add it as a thin wrapper (one new edge function only if needed).
+
+## Out of scope (deferred to Batch 2 tail after green)
+Session heartbeat QA, revoke single/all, block device, suspicious-login alerts. All infra already exists; we only resume testing once the onboarding flow above is fully green.
+
+---
+
+**Approve to implement?** I will execute Steps 1–6 in a single pass and report back only after the full E2E run is green with screenshots.

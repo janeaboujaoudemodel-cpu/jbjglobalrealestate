@@ -4,6 +4,24 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useBrokerSessionTracking } from "@/hooks/useBrokerSessionTracking";
 
+/**
+ * Routes a pure broker (non-owner) is NEVER allowed to reach.
+ * Owners always bypass this list because verify-owner returns isOwner=true
+ * before this check runs.
+ */
+const BROKER_FORBIDDEN_PREFIXES = [
+  "/owner",
+  "/admin",
+  "/internal",
+  "/jbj-",
+  "/developer",
+  "/agency",
+  "/agencies",
+  "/relationships",
+  "/hr",
+  "/finance",
+];
+
 interface BrokerGuardProps {
   children: ReactNode;
   /** If true, shows loading spinner while checking auth. Default: true */
@@ -117,6 +135,18 @@ const BrokerGuard = ({ children, showLoading = true }: BrokerGuardProps) => {
   if (!user) {
     const redirectPath = encodeURIComponent(location.pathname + location.search);
     return <Navigate to={`/auth?redirect=${redirectPath}`} replace />;
+  }
+
+  // Pure-broker path guard: brokers hitting an owner/admin area get bounced
+  // to their workspace instead of an AccessDenied page.
+  // Note: this only fires for routes wrapped in BrokerGuard. Owner routes
+  // use OwnerGuard separately. The list is exported for cross-checking.
+  if (
+    user &&
+    isBroker &&
+    BROKER_FORBIDDEN_PREFIXES.some((p) => location.pathname.startsWith(p))
+  ) {
+    return <Navigate to="/broker/crm" replace />;
   }
 
   // AUTHENTICATED but NOT BROKER → AccessDenied

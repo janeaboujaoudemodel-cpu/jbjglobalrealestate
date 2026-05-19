@@ -74,6 +74,9 @@ Deno.serve(async (req) => {
       );
     } catch (_) { /* profile is best-effort */ }
 
+    // Defensive: re-link any orphan crm_brokers rows by email → user_id
+    try { await admin.rpc("link_broker_entity_by_email" as any); } catch (_) { /* best-effort */ }
+
     await admin.from("crm_audit_logs").insert({
       actor_user_id: broker.user_id,
       action: "broker_activated",
