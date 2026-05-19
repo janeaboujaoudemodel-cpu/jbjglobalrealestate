@@ -18,9 +18,18 @@ Deno.serve(async (req) => {
   try {
     const body = (await req.json()) as Body;
     if (!body.ticket || !body.password) return json({ error: "ticket and password required" }, 400);
-    if (body.password.length < 10) return json({ error: "Password must be at least 10 characters" }, 400);
-    if (!/[A-Z]/.test(body.password) || !/[a-z]/.test(body.password) || !/\d/.test(body.password)) {
-      return json({ error: "Password needs upper, lower and a number" }, 400);
+    {
+      const pw = body.password;
+      const symbolRe = /[!@#$%^&*()_+\-=\[\]{};':"|<>?,.\/`~]/;
+      if (
+        pw.length < 10 ||
+        !/[A-Z]/.test(pw) ||
+        !/[a-z]/.test(pw) ||
+        !/\d/.test(pw) ||
+        !symbolRe.test(pw)
+      ) {
+        return json({ error: "Password must be at least 10 characters and include uppercase, lowercase, number, and symbol characters." }, 400);
+      }
     }
 
     const admin = createClient(SUPABASE_URL, SERVICE_KEY);
