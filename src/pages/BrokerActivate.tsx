@@ -87,11 +87,14 @@ export default function BrokerActivate() {
     if (password !== confirm) { setError("Passwords do not match"); return; }
     setBusy(true); setError(null);
     try {
-      const { data, error } = await supabase.functions.invoke("crm-broker-activate", {
-        body: { ticket, password },
-      });
-      if (error || !data?.ok) throw new Error(data?.error ?? error?.message ?? "Activation failed");
-      if (email) await supabase.auth.signInWithPassword({ email, password });
+      const data = await callBrokerFunction<any>("crm-broker-activate", { ticket, password });
+      if (!data?.ok) throw new Error(data?.error ?? "Activation failed");
+      const loginEmail = email ?? data.email;
+      if (loginEmail) {
+        const { error: signInError } = await supabase.auth.signInWithPassword({ email: loginEmail, password });
+        if (signInError) throw new Error(signInError.message);
+        await supabase.auth.refreshSession();
+      }
       setStep("done");
       toast.success("Account activated");
       setTimeout(() => navigate("/broker/crm", { replace: true }), 1100);
