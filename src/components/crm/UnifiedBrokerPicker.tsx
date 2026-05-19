@@ -16,11 +16,12 @@
  *   - public.vw_crm_broker_pre_invite_leads (source = "pre_invite")
  */
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ChevronDown, Loader2, UserCircle2, UserPlus2, Check } from "lucide-react";
+import { ChevronDown, Loader2, UserCircle2, UserPlus2, Check, AlertTriangle } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 export type UnifiedBrokerSelection =
   | {
