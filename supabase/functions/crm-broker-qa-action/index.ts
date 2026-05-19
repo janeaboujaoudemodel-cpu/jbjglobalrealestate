@@ -64,6 +64,89 @@ Deno.serve(async (req) => {
       return j({ ok: true, broker: brokerRow, sessions, blocked_devices: devices, audit_logs: audits, security_events: events, overview });
     }
 
+    if (body.action === "revoke_session") {
+      if (!body.session_id) return j({ error: "session_id required" }, 400);
+      const { error } = await admin.from("crm_broker_sessions").update({
+        revoked_at: new Date().toISOString(), revoke_reason: body.reason ?? "qa revoke single",
+      }).eq("id", body.session_id).eq("broker_id", brokerRow.id);
+      if (error) return j({ error: error.message }, 500);
+      await admin.from("crm_audit_logs").insert({
+        actor_user_id: brokerRow.owner_id, action: "broker_session_revoked",
+        entity_type: "crm_broker_session", entity_id: body.session_id,
+        details: { broker_id: brokerRow.id, reason: body.reason ?? "qa revoke single" },
+      });
+      return j({ ok: true });
+    }
+
+    if (body.action === "revoke_all") {
+      const { data, error } = await admin.from("crm_broker_sessions").update({
+        revoked_at: new Date().toISOString(), revoke_reason: body.reason ?? "qa revoke all",
+      }).eq("broker_id", brokerRow.id).is("revoked_at", null).select("id");
+      if (error) return j({ error: error.message }, 500);
+      await admin.from("crm_audit_logs").insert({
+        actor_user_id: brokerRow.owner_id, action: "broker_sessions_revoked_all",
+        entity_type: "crm_broker", entity_id: brokerRow.id,
+        details: { count: data?.length ?? 0, reason: body.reason ?? "qa revoke all" },
+      });
+      return j({ ok: true, count: data?.length ?? 0 });
+    }
+
+    if (body.action === "block_device") {
+      if (!body.device_fingerprint) return j({ error: "device_fingerprint required" }, 400);
+      const { data, error } = await admin.from("crm_broker_blocked_devices").upsert({
+        owner_id: brokerRow.owner_id, broker_id: brokerRow.id,
+        device_fingerprint: body.device_fingerprint, reason: body.reason ?? "qa block",
+        blocked_by_user_id: brokerRow.owner_id,
+      }, { onConflict: "owner_id,broker_id,device_fingerprint" }).select("id").single();
+      if (error) return j({ error: error.message }, 500);
+      await admin.from("crm_broker_sessions").update({
+        revoked_at: new Date().toISOString(), revoke_reason: "device blocked",
+      }).eq("broker_id", brokerRow.id).eq("device_fingerprint", body.device_fingerprint).is("revoked_at", null);
+      await admin.from("crm_audit_logs").insert({
+        actor_user_id: brokerRow.owner_id, action: "broker_device_blocked",
+        entity_type: "crm_broker_blocked_device", entity_id: data.id,
+        details: { broker_id: brokerRow.id, fingerprint: body.device_fingerprint },
+      });
+      return j({ ok: true, block_id: data.id });
+    }
+
+    if (body.action === "unblock_device") {
+      if (!body.device_fingerprint) return j({ error: "device_fingerprint required" }, 400);
+      const { error } = await admin.from("crm_broker_blocked_devices").delete()
+        .eq("broker_id", brokerRow.id).eq("device_fingerprint", body.device_fingerprint);
+      if (error) return j({ error: error.message }, 500);
+      await admin.from("crm_audit_logs").insert({
+        actor_user_id: brokerRow.owner_id, action: "broker_device_unblocked",
+        entity_type: "crm_broker", entity_id: brokerRow.id,
+        details: { fingerprint: body.device_fingerprint },
+      });
+      return j({ ok: true });
+    }
+
+    if (body.action === "block_broker") {
+      const { error } = await admin.from("crm_brokers").update({
+        blocked_at: new Date().toISOString(), blocked_reason: body.reason ?? "qa block",
+      }).eq("id", brokerRow.id);
+      if (error) return j({ error: error.message }, 500);
+      await admin.from("crm_audit_logs").insert({
+        actor_user_id: brokerRow.owner_id, action: "broker_blocked",
+        entity_type: "crm_broker", entity_id: brokerRow.id, details: { reason: body.reason ?? "qa block" },
+      });
+      return j({ ok: true });
+    }
+
+    if (body.action === "unblock_broker") {
+      const { error } = await admin.from("crm_brokers").update({
+        blocked_at: null, blocked_reason: null,
+      }).eq("id", brokerRow.id);
+      if (error) return j({ error: error.message }, 500);
+      await admin.from("crm_audit_logs").insert({
+        actor_user_id: brokerRow.owner_id, action: "broker_unblocked",
+        entity_type: "crm_broker", entity_id: brokerRow.id, details: {},
+      });
+      return j({ ok: true });
+    }
+
     return j({ error: "unknown action" }, 400);
   } catch (e) {
     return j({ error: (e as Error).message }, 500);
