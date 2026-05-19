@@ -124,7 +124,10 @@ Deno.serve(async (req) => {
       })
       .select("id")
       .single();
-    if (insErr) return json({ error: insErr.message }, 500);
+    if (insErr) {
+      console.error("crm-broker-session-track insert failed", insErr);
+      return json({ error: "Could not start your session. Please try signing in again." }, 500);
+    }
 
     await admin.from("crm_audit_logs").insert({
       actor_user_id: caller.id,
@@ -145,7 +148,8 @@ Deno.serve(async (req) => {
 
     return json({ ok: true, session_token: sessionToken, session_id: ins.id, expires_at: expiresAt, suspicious });
   } catch (e) {
-    return json({ error: (e as Error).message }, 500);
+    console.error("crm-broker-session-track unexpected error", e);
+    return json({ error: "Session check failed. Please try again." }, 500);
   }
 });
 
