@@ -23,6 +23,23 @@ Deno.serve(async (req) => {
     const admin = createClient(SUPABASE_URL, SERVICE_KEY);
     const ip = clientIp(req);
     const ua = req.headers.get("user-agent") ?? null;
+
+    // IP throttle: reuse crm_security_events. >10 broker_otp_failed from same IP
+    // in the last 15 min = lockout. No new table/system created.
+    if (ip) {
+      const since = new Date(Date.now() - 15 * 60_000).toISOString();
+      const { count: ipFails } = await admin
+        .from("crm_security_events")
+        .select("id", { count: "exact", head: true })
+        .eq("event_type", "broker_otp_failed")
+        .eq("ip_address", ip)
+        .gte("created_at", since);
+      if ((ipFails ?? 0) >= 10) {
+        await logSecurity(admin, null, null, "broker_otp_ip_throttled", ip, ua);
+        return json({ error: "Too many attempts from this network. Try again later." }, 429);
+      }
+    }
+
     const tokenHash = await sha256Hex(body.token);
 
     const { data: broker } = await admin

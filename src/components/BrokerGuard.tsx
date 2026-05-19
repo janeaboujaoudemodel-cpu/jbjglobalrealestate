@@ -2,6 +2,7 @@ import { ReactNode, useState, useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { useBrokerSessionTracking } from "@/hooks/useBrokerSessionTracking";
 
 interface BrokerGuardProps {
   children: ReactNode;
@@ -67,6 +68,11 @@ const BrokerGuard = ({ children, showLoading = true }: BrokerGuardProps) => {
 
     checkBrokerStatus();
   }, [user, authLoading]);
+
+  // Auto-track broker session (heartbeats + blocked-device enforcement)
+  useBrokerSessionTracking(isBroker && !isLoading && !!user);
+
+
 
   // Show loading state while checking auth or broker status
   if ((authLoading || isLoading) && showLoading) {

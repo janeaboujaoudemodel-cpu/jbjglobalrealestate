@@ -1,15 +1,23 @@
 /**
- * BrokerGrantsManagerDialog
+ * BrokerGrantsManagerDialog — Batch 2 expanded
+ *
  * Lists all grants on a source database with owner controls:
  *   Restrict scope · Suspend · Revoke · Reactivate
- * Phase 3 — asymmetric visibility.
+ * Plus per-broker invitation + session controls:
+ *   Resend invite · Revoke invite · Block / Unblock account
+ *   Active sessions panel: revoke single, revoke all, block device
+ *
+ * Champagne / gold theme only — no blue anywhere.
  */
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Loader2, ShieldCheck, ShieldOff, Ban, RotateCcw, Clock } from "lucide-react";
+import {
+  Loader2, ShieldCheck, ShieldOff, Ban, RotateCcw, Clock,
+  Mail, MonitorSmartphone, AlertTriangle, ChevronDown, ChevronRight,
+} from "lucide-react";
 import { formatDisplayDate as fmt } from "@/utils/formatDate";
 
 interface Props {
@@ -37,7 +45,33 @@ type Grant = {
   restricted_at: string | null;
 };
 
-type BrokerInfo = { user_id: string; full_name: string | null; email_lower: string | null };
+type BrokerInfo = {
+  id: string;
+  user_id: string;
+  full_name: string | null;
+  email_lower: string | null;
+  invitation_status: string;
+  invitation_sent_at: string | null;
+  activated_at: string | null;
+  blocked_at: string | null;
+  blocked_reason: string | null;
+};
+
+type SessionRow = {
+  id: string;
+  device_fingerprint: string | null;
+  device_label: string | null;
+  ip_address: string | null;
+  country: string | null;
+  city: string | null;
+  user_agent: string | null;
+  started_at: string;
+  last_seen_at: string;
+  expires_at: string | null;
+  revoked_at: string | null;
+  revoke_reason: string | null;
+  is_suspicious: boolean;
+};
 
 const stateBadge = (g: Grant) => {
   if (g.revoked_at)   return { label: "Revoked",   cls: "bg-[#1A1A1A] text-white border-[#1A1A1A]" };
@@ -45,6 +79,20 @@ const stateBadge = (g: Grant) => {
   if (g.expires_at && new Date(g.expires_at) < new Date())
     return { label: "Expired",   cls: "bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/40" };
   return { label: "Active", cls: "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]" };
+};
+
+const invitationBadge = (b?: BrokerInfo | null) => {
+  if (!b) return null;
+  if (b.blocked_at) return { label: "Blocked",   cls: "bg-[#1A1A1A] text-white border-[#1A1A1A]" };
+  switch (b.invitation_status) {
+    case "activated":   return { label: "Activated",  cls: "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]" };
+    case "otp_sent":    return { label: "OTP sent",   cls: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]" };
+    case "invited":     return { label: "Invited",    cls: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/60" };
+    case "expired":     return { label: "Expired",    cls: "bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/40" };
+    case "revoked":     return { label: "Revoked",    cls: "bg-[#1A1A1A] text-white border-[#1A1A1A]" };
+    case "not_invited": return { label: "Not invited",cls: "bg-[#F7F2EA] text-[#1A1A1A]/60 border-[#B89555]/30" };
+    default:            return { label: b.invitation_status, cls: "bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/30" };
+  }
 };
 
 const windowLabel = (g: Grant) => {
@@ -58,6 +106,15 @@ const windowLabel = (g: Grant) => {
   }
 };
 
+const relTime = (iso?: string | null) => {
+  if (!iso) return "—";
+  const s = (Date.now() - new Date(iso).getTime()) / 1000;
+  if (s < 60) return `${Math.floor(s)}s ago`;
+  if (s < 3600) return `${Math.floor(s / 60)}m ago`;
+  if (s < 86400) return `${Math.floor(s / 3600)}h ago`;
+  return `${Math.floor(s / 86400)}d ago`;
+};
+
 export default function BrokerGrantsManagerDialog({
   open, onOpenChange, sourceDatabaseId, sourceDatabaseName,
 }: Props) {
@@ -65,6 +122,9 @@ export default function BrokerGrantsManagerDialog({
   const [brokers, setBrokers] = useState<Record<string, BrokerInfo>>({});
   const [loading, setLoading] = useState(true);
   const [actingId, setActingId] = useState<string | null>(null);
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const [sessions, setSessions] = useState<Record<string, SessionRow[]>>({});
+  const [sessionsLoading, setSessionsLoading] = useState<Record<string, boolean>>({});
 
   const load = async () => {
     setLoading(true);
@@ -81,10 +141,10 @@ export default function BrokerGrantsManagerDialog({
     if (ids.length) {
       const { data: bks } = await supabase
         .from("crm_brokers")
-        .select("user_id, full_name, email_lower")
+        .select("id, user_id, full_name, email_lower, invitation_status, invitation_sent_at, activated_at, blocked_at, blocked_reason")
         .in("user_id", ids);
       const map: Record<string, BrokerInfo> = {};
-      (bks ?? []).forEach((b: any) => { if (b.user_id) map[b.user_id] = b; });
+      (bks ?? []).forEach((b: any) => { if (b.user_id) map[b.user_id] = b as BrokerInfo; });
       setBrokers(map);
     }
     setLoading(false);
@@ -108,15 +168,100 @@ export default function BrokerGrantsManagerDialog({
     }
   };
 
+  const inviteAction = async (
+    b: BrokerInfo,
+    action: "resend" | "revoke" | "block" | "unblock",
+    reason?: string,
+  ) => {
+    setActingId(b.id);
+    try {
+      const { data, error } = await supabase.functions.invoke("crm-broker-invite", {
+        body: {
+          broker_id: b.id,
+          broker_email: b.email_lower ?? "",
+          action,
+          reason: reason ?? null,
+        },
+      });
+      if (error || (data as any)?.error) throw new Error(error?.message ?? (data as any)?.error);
+      toast.success(
+        action === "resend" ? "Invitation re-sent" :
+        action === "revoke" ? "Invitation revoked" :
+        action === "block"  ? "Broker account blocked" :
+        "Broker account unblocked",
+      );
+      await load();
+    } catch (e: any) {
+      toast.error(e?.message ?? `Could not ${action}`);
+    } finally {
+      setActingId(null);
+    }
+  };
+
+  const loadSessions = async (b: BrokerInfo) => {
+    setSessionsLoading(s => ({ ...s, [b.id]: true }));
+    const { data, error } = await supabase
+      .from("crm_broker_sessions")
+      .select("id, device_fingerprint, device_label, ip_address, country, city, user_agent, started_at, last_seen_at, expires_at, revoked_at, revoke_reason, is_suspicious")
+      .eq("broker_id", b.id)
+      .order("last_seen_at", { ascending: false })
+      .limit(50);
+    if (error) toast.error(error.message);
+    setSessions(s => ({ ...s, [b.id]: (data ?? []) as SessionRow[] }));
+    setSessionsLoading(s => ({ ...s, [b.id]: false }));
+  };
+
+  const toggleSessions = async (b: BrokerInfo) => {
+    const isOpen = !!expanded[b.id];
+    setExpanded(e => ({ ...e, [b.id]: !isOpen }));
+    if (!isOpen) await loadSessions(b);
+  };
+
+  const revokeSession = async (b: BrokerInfo, sessionId: string) => {
+    const reason = prompt("Revoke reason (optional):") ?? "";
+    const { error } = await supabase.rpc("crm_broker_revoke_session" as any, {
+      _session_id: sessionId,
+      _reason: reason || null,
+    } as any);
+    if (error) { toast.error(error.message); return; }
+    toast.success("Session revoked");
+    await loadSessions(b);
+  };
+
+  const revokeAllSessions = async (b: BrokerInfo) => {
+    if (!confirm(`Revoke ALL active sessions for ${b.full_name ?? b.email_lower}?`)) return;
+    const { error } = await supabase.rpc("crm_broker_revoke_all_sessions" as any, {
+      _broker_id: b.id,
+      _reason: "owner_revoke_all",
+    } as any);
+    if (error) { toast.error(error.message); return; }
+    toast.success("All sessions revoked");
+    await loadSessions(b);
+  };
+
+  const blockDevice = async (b: BrokerInfo, fp: string | null) => {
+    if (!fp) { toast.error("No device fingerprint on this session"); return; }
+    const reason = prompt("Block this device. Reason (optional):") ?? "";
+    const { error } = await supabase.rpc("crm_broker_block_device" as any, {
+      _broker_id: b.id,
+      _fingerprint: fp,
+      _reason: reason || null,
+    } as any);
+    if (error) { toast.error(error.message); return; }
+    toast.success("Device blocked. Future logins from it will be denied.");
+    await loadSessions(b);
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]">
+      <DialogContent className="max-w-4xl bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <ShieldCheck className="h-4 w-4 text-[#B89555]" /> Broker access — {sourceDatabaseName}
           </DialogTitle>
           <p className="text-xs text-[#1A1A1A]/60">
-            Manage who can see this database. Revoke instantly removes broker visibility.
+            Manage who can see this database, resend invitations, block accounts, and
+            terminate active sessions.
           </p>
         </DialogHeader>
 
@@ -129,75 +274,228 @@ export default function BrokerGrantsManagerDialog({
             No brokers have been granted access to this database yet.
           </div>
         ) : (
-          <div className="divide-y divide-[#B89555]/15 max-h-[60vh] overflow-y-auto">
+          <div className="divide-y divide-[#B89555]/15 max-h-[70vh] overflow-y-auto">
             {grants.map((g) => {
               const b = brokers[g.broker_user_id];
               const badge = stateBadge(g);
+              const invBadge = invitationBadge(b);
               const isRevoked = !!g.revoked_at;
               const isSuspended = !!g.suspended_at;
+              const isExpanded = b ? !!expanded[b.id] : false;
+              const broker = b!;
               return (
-                <div key={g.id} className="py-3 flex items-start gap-3">
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm font-medium text-[#1A1A1A] truncate">
-                      {b?.full_name || b?.email_lower || g.broker_user_id.slice(0, 8)}
+                <Fragment key={g.id}>
+                  <div className="py-3 flex items-start gap-3">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-sm font-medium text-[#1A1A1A] truncate">
+                          {b?.full_name || b?.email_lower || g.broker_user_id.slice(0, 8)}
+                        </span>
+                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold border ${badge.cls}`}>
+                          {badge.label}
+                        </span>
+                        {invBadge && (
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold border ${invBadge.cls}`}>
+                            {invBadge.label}
+                          </span>
+                        )}
+                        {b?.activated_at && (
+                          <span className="text-[10px] text-[#1A1A1A]/55">
+                            activated {fmt(b.activated_at)}
+                          </span>
+                        )}
+                      </div>
+                      <div className="text-[11px] text-[#1A1A1A]/60 truncate mt-0.5">
+                        {b?.email_lower ?? "no email"} · {g.permission_level === "edit" ? "Edit" : "View"} ·{" "}
+                        <Clock className="inline h-3 w-3 mb-0.5" /> {windowLabel(g)}
+                        {g.expires_at && <> · expires {fmt(g.expires_at)}</>}
+                      </div>
+                      <div className="text-[10px] text-[#1A1A1A]/50 mt-0.5">
+                        Direction: {g.visibility_direction === "bidirectional" ? "Bidirectional" : "Broker → Owner only"}
+                        {g.status_filter?.length ? ` · Statuses: ${g.status_filter.join(", ")}` : ""}
+                      </div>
+                      {b?.blocked_reason && (
+                        <div className="text-[10px] text-[#1A1A1A]/70 mt-0.5">
+                          Block reason: {b.blocked_reason}
+                        </div>
+                      )}
+                      {g.suspend_reason && <div className="text-[10px] text-[#1A1A1A]/70 mt-0.5">Suspend reason: {g.suspend_reason}</div>}
+                      {g.revoke_reason && <div className="text-[10px] text-[#1A1A1A]/70 mt-0.5">Revoke reason: {g.revoke_reason}</div>}
                     </div>
-                    <div className="text-[11px] text-[#1A1A1A]/60 truncate">
-                      {b?.email_lower ?? "no email"} · {g.permission_level === "edit" ? "Edit" : "View"} ·{" "}
-                      <Clock className="inline h-3 w-3 mb-0.5" /> {windowLabel(g)}
-                      {g.expires_at && <> · expires {fmt(g.expires_at)}</>}
+
+                    <div className="flex flex-wrap items-center gap-1.5 shrink-0 justify-end max-w-[55%]">
+                      {/* Grant-level actions */}
+                      {!isRevoked && !isSuspended && (
+                        <Button size="sm" variant="outline"
+                          className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#F7F2EA] h-7 px-2 text-[11px]"
+                          disabled={actingId === g.id}
+                          onClick={() => {
+                            const r = prompt("Suspend reason (optional):") ?? "";
+                            act(g, "suspend", r);
+                          }}>
+                          <ShieldOff className="h-3 w-3 mr-1" /> Suspend
+                        </Button>
+                      )}
+                      {isSuspended && !isRevoked && (
+                        <Button size="sm" variant="outline"
+                          className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#F7F2EA] h-7 px-2 text-[11px]"
+                          disabled={actingId === g.id}
+                          onClick={() => act(g, "unsuspend")}>
+                          <RotateCcw className="h-3 w-3 mr-1" /> Reactivate
+                        </Button>
+                      )}
+                      {!isRevoked && (
+                        <Button size="sm" variant="outline"
+                          className="border-[#1A1A1A] text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white h-7 px-2 text-[11px]"
+                          disabled={actingId === g.id}
+                          onClick={() => {
+                            if (!confirm(`Revoke ${b?.full_name ?? "this broker"}'s access? They will be locked out immediately.`)) return;
+                            const r = prompt("Revoke reason (optional):") ?? "";
+                            act(g, "revoke", r);
+                          }}>
+                          <Ban className="h-3 w-3 mr-1" /> Revoke
+                        </Button>
+                      )}
+                      {isRevoked && (
+                        <Button size="sm" variant="outline"
+                          className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#F7F2EA] h-7 px-2 text-[11px]"
+                          disabled={actingId === g.id}
+                          onClick={() => act(g, "unrevoke")}>
+                          <RotateCcw className="h-3 w-3 mr-1" /> Restore
+                        </Button>
+                      )}
+
+                      {/* Broker-level invitation + account actions */}
+                      {b && (
+                        <>
+                          <Button size="sm" variant="outline"
+                            className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#F7F2EA] h-7 px-2 text-[11px]"
+                            disabled={actingId === b.id || !b.email_lower}
+                            onClick={() => inviteAction(b, "resend")}>
+                            <Mail className="h-3 w-3 mr-1" /> Resend
+                          </Button>
+                          {b.invitation_status !== "revoked" && b.invitation_status !== "activated" && (
+                            <Button size="sm" variant="outline"
+                              className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#F7F2EA] h-7 px-2 text-[11px]"
+                              disabled={actingId === b.id}
+                              onClick={() => {
+                                if (!confirm("Revoke this invitation? The activation link will stop working.")) return;
+                                inviteAction(b, "revoke");
+                              }}>
+                              <Ban className="h-3 w-3 mr-1" /> Revoke invite
+                            </Button>
+                          )}
+                          {!b.blocked_at ? (
+                            <Button size="sm" variant="outline"
+                              className="border-[#1A1A1A] text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white h-7 px-2 text-[11px]"
+                              disabled={actingId === b.id}
+                              onClick={() => {
+                                if (!confirm("Block this broker account? All live sessions will be terminated.")) return;
+                                const r = prompt("Block reason (optional):") ?? "";
+                                inviteAction(b, "block", r);
+                              }}>
+                              <Ban className="h-3 w-3 mr-1" /> Block
+                            </Button>
+                          ) : (
+                            <Button size="sm" variant="outline"
+                              className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#F7F2EA] h-7 px-2 text-[11px]"
+                              disabled={actingId === b.id}
+                              onClick={() => inviteAction(b, "unblock")}>
+                              <RotateCcw className="h-3 w-3 mr-1" /> Unblock
+                            </Button>
+                          )}
+                          <Button size="sm" variant="outline"
+                            className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#F7F2EA] h-7 px-2 text-[11px]"
+                            onClick={() => toggleSessions(b)}>
+                            {isExpanded ? <ChevronDown className="h-3 w-3 mr-1" /> : <ChevronRight className="h-3 w-3 mr-1" />}
+                            <MonitorSmartphone className="h-3 w-3 mr-1" /> Sessions
+                          </Button>
+                        </>
+                      )}
                     </div>
-                    <div className="text-[10px] text-[#1A1A1A]/50 mt-0.5">
-                      Direction: {g.visibility_direction === "bidirectional" ? "Bidirectional" : "Broker → Owner only"}
-                      {g.status_filter?.length ? ` · Statuses: ${g.status_filter.join(", ")}` : ""}
-                    </div>
-                    {g.suspend_reason && <div className="text-[10px] text-[#1A1A1A]/70 mt-0.5">Suspend reason: {g.suspend_reason}</div>}
-                    {g.revoke_reason && <div className="text-[10px] text-[#1A1A1A]/70 mt-0.5">Revoke reason: {g.revoke_reason}</div>}
                   </div>
-                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold border shrink-0 ${badge.cls}`}>
-                    {badge.label}
-                  </span>
-                  <div className="flex items-center gap-1.5 shrink-0">
-                    {!isRevoked && !isSuspended && (
-                      <Button size="sm" variant="outline"
-                        className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#F7F2EA] h-7 px-2 text-[11px]"
-                        disabled={actingId === g.id}
-                        onClick={() => {
-                          const r = prompt("Suspend reason (optional):") ?? "";
-                          act(g, "suspend", r);
-                        }}>
-                        <ShieldOff className="h-3 w-3 mr-1" /> Suspend
-                      </Button>
-                    )}
-                    {isSuspended && !isRevoked && (
-                      <Button size="sm" variant="outline"
-                        className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#F7F2EA] h-7 px-2 text-[11px]"
-                        disabled={actingId === g.id}
-                        onClick={() => act(g, "unsuspend")}>
-                        <RotateCcw className="h-3 w-3 mr-1" /> Reactivate
-                      </Button>
-                    )}
-                    {!isRevoked && (
-                      <Button size="sm" variant="outline"
-                        className="border-[#1A1A1A] text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white h-7 px-2 text-[11px]"
-                        disabled={actingId === g.id}
-                        onClick={() => {
-                          if (!confirm(`Revoke ${b?.full_name ?? "this broker"}'s access? They will be locked out immediately.`)) return;
-                          const r = prompt("Revoke reason (optional):") ?? "";
-                          act(g, "revoke", r);
-                        }}>
-                        <Ban className="h-3 w-3 mr-1" /> Revoke
-                      </Button>
-                    )}
-                    {isRevoked && (
-                      <Button size="sm" variant="outline"
-                        className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#F7F2EA] h-7 px-2 text-[11px]"
-                        disabled={actingId === g.id}
-                        onClick={() => act(g, "unrevoke")}>
-                        <RotateCcw className="h-3 w-3 mr-1" /> Restore
-                      </Button>
-                    )}
-                  </div>
-                </div>
+
+                  {/* Sessions panel */}
+                  {isExpanded && broker && (
+                    <div className="pb-4 pl-3 pr-1">
+                      <div className="rounded-md border border-[#B89555]/25 bg-[#F7F2EA]/50 p-3">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="text-[11px] font-semibold text-[#1A1A1A] flex items-center gap-1.5">
+                            <MonitorSmartphone className="h-3.5 w-3.5 text-[#B89555]" />
+                            Active sessions
+                          </div>
+                          <Button size="sm" variant="outline"
+                            className="border-[#1A1A1A] text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white h-6 px-2 text-[10px]"
+                            onClick={() => revokeAllSessions(broker)}>
+                            Revoke all
+                          </Button>
+                        </div>
+
+                        {sessionsLoading[broker.id] ? (
+                          <div className="text-[11px] text-[#1A1A1A]/60 flex items-center gap-1.5">
+                            <Loader2 className="h-3 w-3 animate-spin" /> Loading sessions…
+                          </div>
+                        ) : !sessions[broker.id]?.length ? (
+                          <div className="text-[11px] text-[#1A1A1A]/55">No sessions on record.</div>
+                        ) : (
+                          <div className="divide-y divide-[#B89555]/10">
+                            {sessions[broker.id].map((s) => {
+                              const revoked = !!s.revoked_at;
+                              const expired = !!s.expires_at && new Date(s.expires_at) < new Date();
+                              const status = revoked ? "Revoked" : expired ? "Expired" : "Active";
+                              const statusCls = revoked
+                                ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
+                                : expired
+                                  ? "bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/40"
+                                  : "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]";
+                              return (
+                                <div key={s.id} className="py-2 flex items-center gap-2">
+                                  <div className="flex-1 min-w-0">
+                                    <div className="flex items-center gap-1.5 flex-wrap">
+                                      <span className="text-[11px] font-medium text-[#1A1A1A]">
+                                        {s.device_label ?? "Unknown device"}
+                                      </span>
+                                      <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-semibold border ${statusCls}`}>
+                                        {status}
+                                      </span>
+                                      {s.is_suspicious && (
+                                        <span className="px-1.5 py-0.5 rounded-full text-[9px] font-semibold border bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555] inline-flex items-center gap-1">
+                                          <AlertTriangle className="h-2.5 w-2.5" /> Suspicious
+                                        </span>
+                                      )}
+                                    </div>
+                                    <div className="text-[10px] text-[#1A1A1A]/60 truncate">
+                                      {s.ip_address ?? "—"}
+                                      {(s.city || s.country) && ` · ${[s.city, s.country].filter(Boolean).join(", ")}`}
+                                      {" · last seen "}{relTime(s.last_seen_at)}
+                                    </div>
+                                    {s.revoke_reason && (
+                                      <div className="text-[10px] text-[#1A1A1A]/55">Reason: {s.revoke_reason}</div>
+                                    )}
+                                  </div>
+                                  {!revoked && (
+                                    <>
+                                      <Button size="sm" variant="outline"
+                                        className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#F7F2EA] h-6 px-2 text-[10px]"
+                                        onClick={() => revokeSession(broker, s.id)}>
+                                        Revoke
+                                      </Button>
+                                      <Button size="sm" variant="outline"
+                                        className="border-[#1A1A1A] text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white h-6 px-2 text-[10px]"
+                                        onClick={() => blockDevice(broker, s.device_fingerprint)}>
+                                        Block device
+                                      </Button>
+                                    </>
+                                  )}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </Fragment>
               );
             })}
           </div>
