@@ -189,12 +189,12 @@ export default function GrantBrokerAccessDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]">
+      <DialogContent className="crm-scope max-w-2xl w-[calc(100vw-2rem)] sm:w-auto max-h-[90vh] overflow-y-auto bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
             <ShieldCheck className="h-4 w-4 text-[#B89555]" /> Give Broker Access
           </DialogTitle>
-          <p className="text-xs text-[#1A1A1A]/60 mt-1 truncate">{sourceDatabaseName}</p>
+          <DialogDescription className="text-xs text-[#1A1A1A]/60 mt-1 truncate">{sourceDatabaseName}</DialogDescription>
         </DialogHeader>
 
         <Tabs value={tab} onValueChange={(v) => setTab(v as "existing" | "new")}>
