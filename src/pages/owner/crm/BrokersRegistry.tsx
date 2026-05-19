@@ -156,36 +156,81 @@ export default function BrokersRegistry() {
     },
   });
 
+  // Broker-overview view: invitation status, blocked, active session count,
+  // last activity — single source of truth (vw_crm_broker_overview).
+  // Read-only overlay, merged into both registered + external rows by user_id /
+  // broker_id. Refreshes every 30s while page is open.
+  const { data: overview = [] } = useQuery({
+    queryKey: ["brokers-overview"],
+    queryFn: async () => {
+      const PAGE = 1000;
+      const out: OverviewRow[] = [];
+      for (let from = 0; from < 200_000; from += PAGE) {
+        const { data, error } = await (supabase as any)
+          .from("vw_crm_broker_overview")
+          .select("broker_id, invitation_status, activated_at, blocked_at, is_active_broker, active_session_count")
+          .range(from, from + PAGE - 1);
+        if (error) throw error;
+        const batch = (data || []) as OverviewRow[];
+        out.push(...batch);
+        if (batch.length < PAGE) break;
+      }
+      return out;
+    },
+    refetchInterval: 30_000,
+    staleTime: 15_000,
+  });
+
+  const overviewByBrokerId = useMemo(() => {
+    const m = new Map<string, OverviewRow>();
+    for (const o of overview as OverviewRow[]) m.set(o.broker_id, o);
+    return m;
+  }, [overview]);
+
   const allRows: BrokerRow[] = useMemo(() => {
-    const r: BrokerRow[] = registered.map((b: any) => ({
-      source: "registered",
-      id: b.id,
-      full_name: b.display_name || "Unnamed",
-      email: b.email,
-      phone: b.phone,
-      current_company: b.custom_label || null,
-      rera: null,
-      tier: b.current_tier,
-      last_active_at: b.updated_at,
-      user_id: b.user_id,
-      photo_url: b.photo_url,
-      verification_status: b.verification_status,
-    }));
-    const e: BrokerRow[] = external.map((b: any) => ({
-      source: "external",
-      id: b.id,
-      full_name: b.full_name,
-      email: b.email_lower,
-      phone: b.phone_e164,
-      current_company: b.current_company,
-      rera: b.rera_license,
-      tier: null,
-      last_active_at: b.last_active_at,
-      user_id: null,
-      broker_type: b.broker_type ?? null,
-    } as BrokerRow));
+    const r: BrokerRow[] = registered.map((b: any) => {
+      const ov = overviewByBrokerId.get(b.user_id) ?? null;
+      return {
+        source: "registered",
+        id: b.id,
+        full_name: b.display_name || "Unnamed",
+        email: b.email,
+        phone: b.phone,
+        current_company: b.custom_label || null,
+        rera: null,
+        tier: b.current_tier,
+        last_active_at: b.updated_at,
+        user_id: b.user_id,
+        photo_url: b.photo_url,
+        verification_status: b.verification_status,
+        invitation_status: ov?.invitation_status ?? null,
+        blocked_at: ov?.blocked_at ?? null,
+        activated_at: ov?.activated_at ?? null,
+        active_session_count: ov?.active_session_count ?? null,
+      };
+    });
+    const e: BrokerRow[] = external.map((b: any) => {
+      const ov = overviewByBrokerId.get(b.id) ?? null;
+      return {
+        source: "external",
+        id: b.id,
+        full_name: b.full_name,
+        email: b.email_lower,
+        phone: b.phone_e164,
+        current_company: b.current_company,
+        rera: b.rera_license,
+        tier: null,
+        last_active_at: ov?.activated_at ?? b.last_active_at,
+        user_id: null,
+        broker_type: b.broker_type ?? null,
+        invitation_status: ov?.invitation_status ?? b.invitation_status ?? null,
+        blocked_at: ov?.blocked_at ?? b.blocked_at ?? null,
+        activated_at: ov?.activated_at ?? b.activated_at ?? null,
+        active_session_count: ov?.active_session_count ?? null,
+      } as BrokerRow;
+    });
     return [...r, ...e];
-  }, [registered, external]);
+  }, [registered, external, overviewByBrokerId]);
 
   const companies = useMemo(() => {
     const set = new Set<string>();
