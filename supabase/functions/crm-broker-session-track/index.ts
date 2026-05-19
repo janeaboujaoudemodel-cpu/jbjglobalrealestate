@@ -55,10 +55,9 @@ Deno.serve(async (req) => {
         await admin.from("crm_security_events").insert({
           user_id: caller.id,
           event_type: "broker_blocked_device_attempt",
-          severity: "high",
           ip_address: ip,
           user_agent: ua,
-          metadata: { broker_id: broker.id, device_fingerprint: fingerprint },
+          details: { broker_id: broker.id, device_fingerprint: fingerprint },
         });
         return json({ error: "Device blocked" }, 403);
       }
@@ -120,16 +119,15 @@ Deno.serve(async (req) => {
       action: suspicious ? "broker_session_suspicious" : "broker_session_started",
       entity_type: "crm_broker_session",
       entity_id: ins.id,
-      metadata: { broker_id: broker.id, ip, user_agent: ua, device_fingerprint: fingerprint },
+      details: { broker_id: broker.id, ip, user_agent: ua, device_fingerprint: fingerprint },
     });
     if (suspicious) {
       await admin.from("crm_security_events").insert({
         user_id: caller.id,
         event_type: "broker_new_device_login",
-        severity: "medium",
         ip_address: ip,
         user_agent: ua,
-        metadata: { broker_id: broker.id, device_fingerprint: fingerprint },
+        details: { broker_id: broker.id, device_fingerprint: fingerprint },
       });
     }
 

@@ -65,7 +65,7 @@ Deno.serve(async (req) => {
       action: "broker_activated",
       entity_type: "crm_broker",
       entity_id: broker.id,
-      metadata: { ip, user_agent: ua, email: broker.email_lower },
+      details: { ip, user_agent: ua, email: broker.email_lower },
     });
 
     return json({ ok: true, email: broker.email_lower });

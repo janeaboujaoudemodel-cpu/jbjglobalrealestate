@@ -96,7 +96,7 @@ Deno.serve(async (req) => {
         action: "broker_invitation_revoked",
         entity_type: "crm_broker",
         entity_id: brokerId,
-        metadata: { email, ip, user_agent: ua },
+        details: { email, ip, user_agent: ua },
       });
       return json({ ok: true, action: "revoked" });
     }
@@ -130,7 +130,7 @@ Deno.serve(async (req) => {
         action: isBlock ? "broker_account_blocked" : "broker_account_unblocked",
         entity_type: "crm_broker",
         entity_id: brokerId,
-        metadata: { email, ip, user_agent: ua, reason: body.reason ?? null },
+        details: { email, ip, user_agent: ua, reason: body.reason ?? null },
       });
       return json({ ok: true, action: body.action });
     }
@@ -193,7 +193,7 @@ Deno.serve(async (req) => {
       action: body.action === "resend" ? "broker_invitation_resent" : "broker_invitation_sent",
       entity_type: "crm_broker",
       entity_id: brokerId,
-      metadata: { email, ip, user_agent: ua, email_ok: sent.ok, email_status: sent.status },
+      details: { email, ip, user_agent: ua, email_ok: sent.ok, email_status: sent.status },
     });
 
     if (!sent.ok) return json({ ok: false, error: sent.error ?? "Email send failed", quota: sent.quota }, 502);
