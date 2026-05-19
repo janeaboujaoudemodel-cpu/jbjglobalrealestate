@@ -52,6 +52,13 @@ export default function GrantBrokerAccessDialog({
   const [search, setSearch] = useState("");
   const [selectedBroker, setSelectedBroker] = useState<BrokerRow | null>(null);
 
+  // Pass 4 (controlled rollout) — unified picker behind `ff_unified_picker`.
+  // Surfaces canonical crm_brokers AND pre-invite crm_leads as distinct rows.
+  // Never collides identities; pre-invite selection blocks "Grant access"
+  // until the owner explicitly invites / converts the lead.
+  const unifiedEnabled = isFeatureEnabled("unifiedBrokerPicker");
+  const [unifiedSel, setUnifiedSel] = useState<UnifiedBrokerSelection | null>(null);
+
   // --- New broker state ---
   const [n_fullName, setNFullName] = useState("");
   const [n_email, setNEmail] = useState("");
