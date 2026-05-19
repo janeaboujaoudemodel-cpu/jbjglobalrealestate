@@ -76,13 +76,14 @@ export function useBrokerSessionTracking(enabled: boolean) {
           device_fingerprint: fp,
           device_label: getDeviceLabel(),
           existing_session_token: existing ?? null,
+          heartbeat: !!existing,
         },
       });
       if (cancelled) return;
       // 403 → blocked / revoked → sign out immediately
       const errMsg = (error as any)?.message || (data as any)?.error;
       const status = (error as any)?.context?.status;
-      if (status === 403 || /blocked|revoked|not a broker/i.test(String(errMsg ?? ""))) {
+      if (status === 403 || data?.force_signout || /blocked|revoked|not a broker/i.test(String(errMsg ?? ""))) {
         localStorage.removeItem(LS_TOKEN_KEY);
         await supabase.auth.signOut();
         window.location.href = "/auth";
