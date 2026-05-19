@@ -153,6 +153,14 @@ export default function DatabasesHub() {
                     {r.original_filename} · {r.row_count.toLocaleString()} rows · {r.column_headers?.length || 0} cols · {fmtBytes(r.file_size_bytes)}
                   </div>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => setManageTarget(r)}
+                  className="px-2 py-0.5 rounded-full text-[10px] font-semibold border border-[#B89555]/40 bg-[#EFE6D6] text-[#1A1A1A] shrink-0 hover:bg-[#E7DCC7]"
+                  title="Manage broker access"
+                >
+                  {(grantsByDb[r.id]?.count ?? 0)} {(grantsByDb[r.id]?.count ?? 0) === 1 ? "broker" : "brokers"}
+                </button>
                 <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold border border-[#B89555]/30 bg-[#EFE6D6] text-[#1A1A1A] shrink-0">
                   {statusLabel[r.status]}
                 </span>
