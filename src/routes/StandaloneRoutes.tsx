@@ -37,10 +37,12 @@ const PublicSignDocument = lazy(() => import("@/pages/PublicSignDocument"));
 const FooterPreviewPage = lazy(() => import("@/pages/dev/FooterPreviewPage"));
 const BookMeetingLanding = lazy(() => import("@/pages/BookMeetingLanding"));
 const DownloadProxy = lazy(() => import("@/pages/DownloadProxy"));
+const BrokerActivate = lazy(() => import("@/pages/BrokerActivate"));
 
 export const StandaloneRoutes = () => (
   <>
     <Route path="/auth" element={<RouteErrorBoundary routeName="Auth"><Auth /></RouteErrorBoundary>} />
+    <Route path="/broker/activate" element={<RouteErrorBoundary routeName="BrokerActivate"><BrokerActivate /></RouteErrorBoundary>} />
     <Route path="/welcome" element={<RouteErrorBoundary routeName="Welcome"><Welcome /></RouteErrorBoundary>} />
     <Route path="/403" element={<AccessDenied />} />
     <Route path="/coming-soon" element={<RouteErrorBoundary routeName="ComingSoon"><ComingSoon /></RouteErrorBoundary>} />
