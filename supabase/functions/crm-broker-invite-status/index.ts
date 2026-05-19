@@ -32,8 +32,12 @@ Deno.serve(async (req) => {
     if (broker.activated_at && broker.invitation_status === "activated") {
       return json({ status: "already_activated", email_masked: maskEmail(broker.email_lower) });
     }
-    if (!broker.invitation_token_expires_at || new Date(broker.invitation_token_expires_at).getTime() < Date.now()) {
+    const now = Date.now();
+    if (!broker.invitation_token_expires_at || new Date(broker.invitation_token_expires_at).getTime() < now) {
       return json({ status: "expired", email_masked: maskEmail(broker.email_lower) });
+    }
+    if (!broker.otp_expires_at || new Date(broker.otp_expires_at).getTime() < now) {
+      return json({ status: "otp_expired", email_masked: maskEmail(broker.email_lower) });
     }
 
     return json({
