@@ -148,7 +148,8 @@ Deno.serve(async (req) => {
 
     return json({ ok: true, session_token: sessionToken, session_id: ins.id, expires_at: expiresAt, suspicious });
   } catch (e) {
-    return json({ error: (e as Error).message }, 500);
+    console.error("crm-broker-session-track unexpected error", e);
+    return json({ error: "Session check failed. Please try again." }, 500);
   }
 });
 
