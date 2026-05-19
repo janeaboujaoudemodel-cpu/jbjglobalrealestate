@@ -137,6 +137,18 @@ const BrokerGuard = ({ children, showLoading = true }: BrokerGuardProps) => {
     return <Navigate to={`/auth?redirect=${redirectPath}`} replace />;
   }
 
+  // Pure-broker path guard: brokers hitting an owner/admin area get bounced
+  // to their workspace instead of an AccessDenied page.
+  // Note: this only fires for routes wrapped in BrokerGuard. Owner routes
+  // use OwnerGuard separately. The list is exported for cross-checking.
+  if (
+    user &&
+    isBroker &&
+    BROKER_FORBIDDEN_PREFIXES.some((p) => location.pathname.startsWith(p))
+  ) {
+    return <Navigate to="/broker/crm" replace />;
+  }
+
   // AUTHENTICATED but NOT BROKER → AccessDenied
   if (!isBroker) {
     return <Navigate to="/403" replace />;
