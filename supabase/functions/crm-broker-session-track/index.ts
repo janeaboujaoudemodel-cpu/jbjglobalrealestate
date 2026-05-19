@@ -14,6 +14,7 @@ interface Body {
   device_fingerprint?: string | null;
   device_label?: string | null;
   existing_session_token?: string | null;
+  heartbeat?: boolean;
 }
 
 Deno.serve(async (req) => {
@@ -72,13 +73,24 @@ Deno.serve(async (req) => {
         .eq("session_token_hash", existingHash)
         .eq("broker_user_id", caller.id)
         .maybeSingle();
-      if (row && !row.revoked_at) {
+      if (row?.revoked_at) {
+        await admin.from("crm_security_events").insert({
+          user_id: caller.id,
+          event_type: "broker_revoked_session_heartbeat",
+          ip_address: ip,
+          user_agent: ua,
+          details: { broker_id: broker.id, session_id: row.id },
+        });
+        return json({ error: "Session revoked", force_signout: true }, 403);
+      }
+      if (row) {
         await admin
           .from("crm_broker_sessions")
           .update({ last_seen_at: new Date().toISOString(), ip_address: ip, user_agent: ua })
           .eq("id", row.id);
         return json({ ok: true, session_token: body.existing_session_token, refreshed: true });
       }
+      if (body.heartbeat) return json({ error: "Session revoked", force_signout: true }, 403);
     }
 
     // Suspicious-login signal: first time we see this fingerprint
