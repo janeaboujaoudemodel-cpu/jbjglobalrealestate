@@ -4,6 +4,24 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useBrokerSessionTracking } from "@/hooks/useBrokerSessionTracking";
 
+/**
+ * Routes a pure broker (non-owner) is NEVER allowed to reach.
+ * Owners always bypass this list because verify-owner returns isOwner=true
+ * before this check runs.
+ */
+const BROKER_FORBIDDEN_PREFIXES = [
+  "/owner",
+  "/admin",
+  "/internal",
+  "/jbj-",
+  "/developer",
+  "/agency",
+  "/agencies",
+  "/relationships",
+  "/hr",
+  "/finance",
+];
+
 interface BrokerGuardProps {
   children: ReactNode;
   /** If true, shows loading spinner while checking auth. Default: true */
