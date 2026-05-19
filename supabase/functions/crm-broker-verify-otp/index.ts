@@ -108,7 +108,7 @@ Deno.serve(async (req) => {
       action: "broker_otp_verified",
       entity_type: "crm_broker",
       entity_id: broker.id,
-      metadata: { ip, user_agent: ua },
+      details: { ip, user_agent: ua },
     });
 
     return json({
@@ -134,10 +134,9 @@ async function logSecurity(
     await admin.from("crm_security_events").insert({
       user_id: userId,
       event_type: event,
-      severity: event.includes("lockout") || event.includes("blocked") ? "high" : "medium",
       ip_address: ip,
       user_agent: ua,
-      metadata: { broker_id: brokerId },
+      details: { broker_id: brokerId },
     });
   } catch { /* ignore */ }
 }
