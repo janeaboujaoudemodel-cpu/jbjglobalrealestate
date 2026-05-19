@@ -10,7 +10,9 @@ import { DatePopover } from "@/components/ui/date-popover";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Loader2, ShieldCheck, Search, UserPlus, Check } from "lucide-react";
+import { Loader2, ShieldCheck, Search, UserPlus, Check, Info, UserPlus2 } from "lucide-react";
+import { isFeatureEnabled } from "@/config/featureFlags";
+import { UnifiedBrokerPicker, type UnifiedBrokerSelection } from "@/components/crm/UnifiedBrokerPicker";
 
 interface Props {
   open: boolean;
@@ -49,6 +51,13 @@ export default function GrantBrokerAccessDialog({
   const [loadingBrokers, setLoadingBrokers] = useState(false);
   const [search, setSearch] = useState("");
   const [selectedBroker, setSelectedBroker] = useState<BrokerRow | null>(null);
+
+  // Pass 4 (controlled rollout) — unified picker behind `ff_unified_picker`.
+  // Surfaces canonical crm_brokers AND pre-invite crm_leads as distinct rows.
+  // Never collides identities; pre-invite selection blocks "Grant access"
+  // until the owner explicitly invites / converts the lead.
+  const unifiedEnabled = isFeatureEnabled("unifiedBrokerPicker");
+  const [unifiedSel, setUnifiedSel] = useState<UnifiedBrokerSelection | null>(null);
 
   // --- New broker state ---
   const [n_fullName, setNFullName] = useState("");
@@ -99,6 +108,7 @@ export default function GrantBrokerAccessDialog({
     if (!open) {
       setTab("existing");
       setSelectedBroker(null);
+      setUnifiedSel(null);
       setSearch("");
       setNFullName(""); setNEmail(""); setNPhone(""); setNCompany("");
       setNNationality(""); setNLanguages(""); setNRole(""); setNBrokerage(""); setNNotes("");
@@ -215,6 +225,93 @@ export default function GrantBrokerAccessDialog({
 
           {/* ─────────── EXISTING BROKER ─────────── */}
           <TabsContent value="existing" className="space-y-3 mt-3">
+            {unifiedEnabled && (
+              <div className="rounded-md border border-[#B89555]/30 bg-[#FDFBF7] p-3 space-y-2">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="text-[11px] uppercase tracking-wide text-[#1A1A1A]/60 font-semibold">
+                    Unified broker picker
+                    <span className="ml-2 inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-semibold uppercase tracking-wider bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60">
+                      Beta · QA
+                    </span>
+                  </div>
+                </div>
+                <UnifiedBrokerPicker
+                  value={unifiedSel}
+                  onChange={(sel) => {
+                    setUnifiedSel(sel);
+                    if (sel?.source === "broker") {
+                      // Sync into the canonical selection used by submit().
+                      const match = brokers.find((b) => b.id === sel.broker_id);
+                      if (match) {
+                        setSelectedBroker(match);
+                      } else {
+                        // Fallback synthetic row — submit() resolves by email.
+                        setSelectedBroker({
+                          id: sel.broker_id,
+                          full_name: sel.name,
+                          email_lower: sel.email,
+                          current_company: sel.company,
+                          user_id: null,
+                          broker_type: null,
+                        });
+                      }
+                    } else {
+                      // Pre-invite or cleared — never silently grant.
+                      setSelectedBroker(null);
+                    }
+                  }}
+                  label="Broker (canonical or pre-invite lead)"
+                />
+                {unifiedSel?.source === "pre_invite" && (
+                  <div className="rounded-md border border-[#B89555]/40 bg-[#EFE6D6] p-3 text-[11px] text-[#1A1A1A] space-y-2">
+                    <div className="flex items-start gap-2">
+                      <Info className="h-3.5 w-3.5 mt-0.5 shrink-0" />
+                      <div>
+                        <div className="font-semibold">This broker does not yet have a broker account.</div>
+                        <div className="text-[#1A1A1A]/70 mt-0.5">
+                          Permissions, sessions and grants only resolve through canonical broker
+                          accounts. Choose an explicit next step — no automatic conversion will
+                          happen.
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        className="border-[#B89555]/60 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] h-7 text-[11px]"
+                        onClick={() => {
+                          setTab("new");
+                          setNFullName(unifiedSel.name ?? "");
+                          setNEmail(unifiedSel.email ?? "");
+                          setNCompany(unifiedSel.company ?? "");
+                          toast.info("Prefilled the New broker form — review and submit to invite.");
+                        }}
+                      >
+                        <UserPlus2 className="h-3 w-3 mr-1" /> Invite now
+                      </Button>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        className="border-[#B89555]/60 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] h-7 text-[11px]"
+                        onClick={() => {
+                          toast.success("Kept as pre-invite lead — assign later when ready.");
+                          setUnifiedSel(null);
+                        }}
+                      >
+                        Save for later
+                      </Button>
+                    </div>
+                  </div>
+                )}
+                <p className="text-[10px] text-[#1A1A1A]/55">
+                  Legacy list shown below for side-by-side QA. Both pickers write the same
+                  canonical broker — pre-invite leads are never granted access directly.
+                </p>
+              </div>
+            )}
             <Input
               autoFocus
               placeholder="Search by name, email or company…"
@@ -442,10 +539,13 @@ export default function GrantBrokerAccessDialog({
         <DialogFooter className="mt-2 flex-col sm:flex-row gap-2">
           <Button variant="outline" onClick={() => onOpenChange(false)}
             className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#F7F2EA] w-full sm:w-auto">Cancel</Button>
-          <Button onClick={submit} disabled={busy}
-            className="bg-[#EFE6D6] hover:bg-[#E7DCC7] text-[#1A1A1A] border border-[#B89555] w-full sm:w-auto">
+          <Button
+            onClick={submit}
+            disabled={busy || (unifiedEnabled && unifiedSel?.source === "pre_invite")}
+            className="bg-[#EFE6D6] hover:bg-[#E7DCC7] text-[#1A1A1A] border border-[#B89555] w-full sm:w-auto disabled:opacity-60"
+          >
             {busy ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <ShieldCheck className="h-4 w-4 mr-2" />}
-            Grant access
+            {unifiedEnabled && unifiedSel?.source === "pre_invite" ? "Invite required" : "Grant access"}
           </Button>
         </DialogFooter>
       </DialogContent>
