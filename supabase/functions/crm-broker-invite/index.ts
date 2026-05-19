@@ -101,6 +101,41 @@ Deno.serve(async (req) => {
       return json({ ok: true, action: "revoked" });
     }
 
+    // BLOCK / UNBLOCK broker account (also revokes all live sessions on block)
+    if (body.action === "block" || body.action === "unblock") {
+      const isBlock = body.action === "block";
+      await admin
+        .from("crm_brokers")
+        .update({
+          blocked_at: isBlock ? new Date().toISOString() : null,
+          blocked_by_user_id: isBlock ? auth.userId : null,
+          blocked_reason: isBlock ? (body.reason ?? null) : null,
+        })
+        .eq("id", brokerId);
+
+      if (isBlock) {
+        await admin
+          .from("crm_broker_sessions")
+          .update({
+            revoked_at: new Date().toISOString(),
+            revoked_by_user_id: auth.userId,
+            revoke_reason: "broker_blocked",
+          })
+          .eq("broker_id", brokerId)
+          .is("revoked_at", null);
+      }
+
+      await admin.from("crm_audit_logs").insert({
+        actor_user_id: auth.userId,
+        action: isBlock ? "broker_account_blocked" : "broker_account_unblocked",
+        entity_type: "crm_broker",
+        entity_id: brokerId,
+        metadata: { email, ip, user_agent: ua, reason: body.reason ?? null },
+      });
+      return json({ ok: true, action: body.action });
+    }
+
+
     // INVITE / RESEND — issue fresh token + OTP
     const token = randomToken(32);
     const otp = randomOtp();
