@@ -1327,17 +1327,20 @@ export default function EnvelopeDetail() {
                 title="Document preview"
                 srcDoc={previewSrcDoc}
                 className="w-full bg-white"
-                style={{ height: "min(1180px, calc(100vh - 200px))", border: 0 }}
+                style={{ height: "640px", border: 0 }}
                 onLoad={(e) => {
                   try {
                     const f = e.currentTarget as HTMLIFrameElement;
                     const doc = f.contentDocument;
                     if (!doc) return;
-                    const h = Math.max(
-                      doc.documentElement.scrollHeight,
-                      doc.body.scrollHeight,
-                    );
-                    if (h > 200) f.style.height = `${h + 24}px`;
+                    // Measure ACTUAL content height (last child's bottom),
+                    // not body.scrollHeight which can include trailing margin.
+                    const body = doc.body;
+                    const last = body?.lastElementChild as HTMLElement | null;
+                    const measured = last
+                      ? Math.ceil(last.getBoundingClientRect().bottom + (body?.scrollTop || 0))
+                      : Math.max(doc.documentElement.scrollHeight, body?.scrollHeight || 0);
+                    if (measured > 200) f.style.height = `${measured + 4}px`;
                   } catch {}
                 }}
               />
