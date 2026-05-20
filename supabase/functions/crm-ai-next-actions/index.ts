@@ -151,20 +151,33 @@ Deno.serve(async (req) => {
 
   let aiOutput: z.infer<typeof SuggestionsOutput>;
   try {
-    const { output } = await generateText({
+    const { text } = await generateText({
       model,
-      output: Output.object({ schema: SuggestionsOutput }),
       system:
         "You are an executive CRM assistant for a luxury real-estate brokerage. " +
-        "Pick the 5 leads with the highest commercial upside RIGHT NOW and recommend ONE concrete next action per lead. " +
+        "Pick up to 5 leads with the highest commercial upside RIGHT NOW and recommend ONE concrete next action per lead. " +
         "Prefer VIP, hot/negotiation/viewing/offer_sent stages, fresh website leads under 3 days old, and stale follow-ups over 7 days. " +
-        "Reasons must be one short sentence (no fluff, no greetings).",
-      prompt:
-        "Return the top suggestions as JSON. Allowed actions: call, email, schedule, won, snooze. " +
-        "Leads:\n" +
-        JSON.stringify(compact),
+        "Reasons must be one short sentence (no fluff, no greetings). " +
+        'Respond ONLY with minified JSON in this exact shape: {"suggestions":[{"leadId":"<uuid from input>","reason":"<sentence>","action":"call|email|schedule|won|snooze","confidence":0.0-1.0}]} ' +
+        "Max 5 items. No markdown fences, no commentary.",
+      prompt: "Leads:\n" + JSON.stringify(compact) + "\n\nReturn JSON only.",
     });
-    aiOutput = output;
+
+    let cleaned = (text || "").trim()
+      .replace(/^```(?:json)?\s*/i, "")
+      .replace(/```\s*$/i, "")
+      .trim();
+    const s = cleaned.indexOf("{");
+    const e = cleaned.lastIndexOf("}");
+    if (s === -1 || e === -1) throw new Error("no JSON object in AI response");
+    cleaned = cleaned.slice(s, e + 1);
+
+    const parsed = JSON.parse(cleaned);
+    const validated = SuggestionsOutput.safeParse(parsed);
+    if (!validated.success) {
+      throw new Error("schema mismatch: " + JSON.stringify(validated.error.flatten()));
+    }
+    aiOutput = validated.data;
   } catch (e) {
     console.error("[crm-ai-next-actions] AI call failed", e);
     return json({ error: "ai_failed", message: String(e) }, 502);
