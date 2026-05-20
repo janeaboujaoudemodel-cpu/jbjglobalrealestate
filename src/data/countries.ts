@@ -1,186 +1,169 @@
-// Countries, nationalities, languages, and cities data with flag emojis
+// ISO countries with nationality (demonym), dial code, and emoji flag.
+// Used by NationalityPicker and PhoneInputWithCountry.
 
-export interface CountryData {
-  name: string;
-  code: string;
-  flag: string;
-  nationality: string;
-  cities: string[];
+export interface CountryEntry {
+  code: string;       // ISO-3166 alpha-2
+  name: string;       // Country name
+  nationality: string;// Demonym (e.g., "Emirati")
+  dial: string;       // e.g., "+971"
+  flag: string;       // emoji flag
 }
 
-export interface LanguageData {
-  code: string;
-  name: string;
-  flag: string;
+export const COUNTRIES: CountryEntry[] = [
+  { code: "AE", name: "United Arab Emirates", nationality: "Emirati", dial: "+971", flag: "🇦🇪" },
+  { code: "SA", name: "Saudi Arabia", nationality: "Saudi", dial: "+966", flag: "🇸🇦" },
+  { code: "QA", name: "Qatar", nationality: "Qatari", dial: "+974", flag: "🇶🇦" },
+  { code: "KW", name: "Kuwait", nationality: "Kuwaiti", dial: "+965", flag: "🇰🇼" },
+  { code: "BH", name: "Bahrain", nationality: "Bahraini", dial: "+973", flag: "🇧🇭" },
+  { code: "OM", name: "Oman", nationality: "Omani", dial: "+968", flag: "🇴🇲" },
+  { code: "JO", name: "Jordan", nationality: "Jordanian", dial: "+962", flag: "🇯🇴" },
+  { code: "LB", name: "Lebanon", nationality: "Lebanese", dial: "+961", flag: "🇱🇧" },
+  { code: "SY", name: "Syria", nationality: "Syrian", dial: "+963", flag: "🇸🇾" },
+  { code: "IQ", name: "Iraq", nationality: "Iraqi", dial: "+964", flag: "🇮🇶" },
+  { code: "YE", name: "Yemen", nationality: "Yemeni", dial: "+967", flag: "🇾🇪" },
+  { code: "PS", name: "Palestine", nationality: "Palestinian", dial: "+970", flag: "🇵🇸" },
+  { code: "IL", name: "Israel", nationality: "Israeli", dial: "+972", flag: "🇮🇱" },
+  { code: "EG", name: "Egypt", nationality: "Egyptian", dial: "+20", flag: "🇪🇬" },
+  { code: "MA", name: "Morocco", nationality: "Moroccan", dial: "+212", flag: "🇲🇦" },
+  { code: "DZ", name: "Algeria", nationality: "Algerian", dial: "+213", flag: "🇩🇿" },
+  { code: "TN", name: "Tunisia", nationality: "Tunisian", dial: "+216", flag: "🇹🇳" },
+  { code: "LY", name: "Libya", nationality: "Libyan", dial: "+218", flag: "🇱🇾" },
+  { code: "SD", name: "Sudan", nationality: "Sudanese", dial: "+249", flag: "🇸🇩" },
+  { code: "TR", name: "Turkey", nationality: "Turkish", dial: "+90", flag: "🇹🇷" },
+  { code: "IR", name: "Iran", nationality: "Iranian", dial: "+98", flag: "🇮🇷" },
+  { code: "PK", name: "Pakistan", nationality: "Pakistani", dial: "+92", flag: "🇵🇰" },
+  { code: "IN", name: "India", nationality: "Indian", dial: "+91", flag: "🇮🇳" },
+  { code: "BD", name: "Bangladesh", nationality: "Bangladeshi", dial: "+880", flag: "🇧🇩" },
+  { code: "LK", name: "Sri Lanka", nationality: "Sri Lankan", dial: "+94", flag: "🇱🇰" },
+  { code: "NP", name: "Nepal", nationality: "Nepali", dial: "+977", flag: "🇳🇵" },
+  { code: "AF", name: "Afghanistan", nationality: "Afghan", dial: "+93", flag: "🇦🇫" },
+  { code: "CN", name: "China", nationality: "Chinese", dial: "+86", flag: "🇨🇳" },
+  { code: "JP", name: "Japan", nationality: "Japanese", dial: "+81", flag: "🇯🇵" },
+  { code: "KR", name: "South Korea", nationality: "Korean", dial: "+82", flag: "🇰🇷" },
+  { code: "TH", name: "Thailand", nationality: "Thai", dial: "+66", flag: "🇹🇭" },
+  { code: "VN", name: "Vietnam", nationality: "Vietnamese", dial: "+84", flag: "🇻🇳" },
+  { code: "PH", name: "Philippines", nationality: "Filipino", dial: "+63", flag: "🇵🇭" },
+  { code: "ID", name: "Indonesia", nationality: "Indonesian", dial: "+62", flag: "🇮🇩" },
+  { code: "MY", name: "Malaysia", nationality: "Malaysian", dial: "+60", flag: "🇲🇾" },
+  { code: "SG", name: "Singapore", nationality: "Singaporean", dial: "+65", flag: "🇸🇬" },
+  { code: "HK", name: "Hong Kong", nationality: "Hong Konger", dial: "+852", flag: "🇭🇰" },
+  { code: "TW", name: "Taiwan", nationality: "Taiwanese", dial: "+886", flag: "🇹🇼" },
+  { code: "MM", name: "Myanmar", nationality: "Burmese", dial: "+95", flag: "🇲🇲" },
+  { code: "KH", name: "Cambodia", nationality: "Cambodian", dial: "+855", flag: "🇰🇭" },
+  { code: "LA", name: "Laos", nationality: "Lao", dial: "+856", flag: "🇱🇦" },
+  { code: "MN", name: "Mongolia", nationality: "Mongolian", dial: "+976", flag: "🇲🇳" },
+  { code: "KZ", name: "Kazakhstan", nationality: "Kazakh", dial: "+7", flag: "🇰🇿" },
+  { code: "UZ", name: "Uzbekistan", nationality: "Uzbek", dial: "+998", flag: "🇺🇿" },
+  { code: "TM", name: "Turkmenistan", nationality: "Turkmen", dial: "+993", flag: "🇹🇲" },
+  { code: "KG", name: "Kyrgyzstan", nationality: "Kyrgyz", dial: "+996", flag: "🇰🇬" },
+  { code: "TJ", name: "Tajikistan", nationality: "Tajik", dial: "+992", flag: "🇹🇯" },
+  { code: "AZ", name: "Azerbaijan", nationality: "Azerbaijani", dial: "+994", flag: "🇦🇿" },
+  { code: "AM", name: "Armenia", nationality: "Armenian", dial: "+374", flag: "🇦🇲" },
+  { code: "GE", name: "Georgia", nationality: "Georgian", dial: "+995", flag: "🇬🇪" },
+  { code: "RU", name: "Russia", nationality: "Russian", dial: "+7", flag: "🇷🇺" },
+  { code: "UA", name: "Ukraine", nationality: "Ukrainian", dial: "+380", flag: "🇺🇦" },
+  { code: "BY", name: "Belarus", nationality: "Belarusian", dial: "+375", flag: "🇧🇾" },
+  { code: "PL", name: "Poland", nationality: "Polish", dial: "+48", flag: "🇵🇱" },
+  { code: "CZ", name: "Czech Republic", nationality: "Czech", dial: "+420", flag: "🇨🇿" },
+  { code: "SK", name: "Slovakia", nationality: "Slovak", dial: "+421", flag: "🇸🇰" },
+  { code: "HU", name: "Hungary", nationality: "Hungarian", dial: "+36", flag: "🇭🇺" },
+  { code: "RO", name: "Romania", nationality: "Romanian", dial: "+40", flag: "🇷🇴" },
+  { code: "BG", name: "Bulgaria", nationality: "Bulgarian", dial: "+359", flag: "🇧🇬" },
+  { code: "GR", name: "Greece", nationality: "Greek", dial: "+30", flag: "🇬🇷" },
+  { code: "CY", name: "Cyprus", nationality: "Cypriot", dial: "+357", flag: "🇨🇾" },
+  { code: "MT", name: "Malta", nationality: "Maltese", dial: "+356", flag: "🇲🇹" },
+  { code: "IT", name: "Italy", nationality: "Italian", dial: "+39", flag: "🇮🇹" },
+  { code: "ES", name: "Spain", nationality: "Spanish", dial: "+34", flag: "🇪🇸" },
+  { code: "PT", name: "Portugal", nationality: "Portuguese", dial: "+351", flag: "🇵🇹" },
+  { code: "FR", name: "France", nationality: "French", dial: "+33", flag: "🇫🇷" },
+  { code: "DE", name: "Germany", nationality: "German", dial: "+49", flag: "🇩🇪" },
+  { code: "AT", name: "Austria", nationality: "Austrian", dial: "+43", flag: "🇦🇹" },
+  { code: "CH", name: "Switzerland", nationality: "Swiss", dial: "+41", flag: "🇨🇭" },
+  { code: "BE", name: "Belgium", nationality: "Belgian", dial: "+32", flag: "🇧🇪" },
+  { code: "NL", name: "Netherlands", nationality: "Dutch", dial: "+31", flag: "🇳🇱" },
+  { code: "LU", name: "Luxembourg", nationality: "Luxembourgish", dial: "+352", flag: "🇱🇺" },
+  { code: "GB", name: "United Kingdom", nationality: "British", dial: "+44", flag: "🇬🇧" },
+  { code: "IE", name: "Ireland", nationality: "Irish", dial: "+353", flag: "🇮🇪" },
+  { code: "DK", name: "Denmark", nationality: "Danish", dial: "+45", flag: "🇩🇰" },
+  { code: "SE", name: "Sweden", nationality: "Swedish", dial: "+46", flag: "🇸🇪" },
+  { code: "NO", name: "Norway", nationality: "Norwegian", dial: "+47", flag: "🇳🇴" },
+  { code: "FI", name: "Finland", nationality: "Finnish", dial: "+358", flag: "🇫🇮" },
+  { code: "IS", name: "Iceland", nationality: "Icelandic", dial: "+354", flag: "🇮🇸" },
+  { code: "EE", name: "Estonia", nationality: "Estonian", dial: "+372", flag: "🇪🇪" },
+  { code: "LV", name: "Latvia", nationality: "Latvian", dial: "+371", flag: "🇱🇻" },
+  { code: "LT", name: "Lithuania", nationality: "Lithuanian", dial: "+370", flag: "🇱🇹" },
+  { code: "HR", name: "Croatia", nationality: "Croatian", dial: "+385", flag: "🇭🇷" },
+  { code: "SI", name: "Slovenia", nationality: "Slovenian", dial: "+386", flag: "🇸🇮" },
+  { code: "RS", name: "Serbia", nationality: "Serbian", dial: "+381", flag: "🇷🇸" },
+  { code: "BA", name: "Bosnia and Herzegovina", nationality: "Bosnian", dial: "+387", flag: "🇧🇦" },
+  { code: "MK", name: "North Macedonia", nationality: "Macedonian", dial: "+389", flag: "🇲🇰" },
+  { code: "AL", name: "Albania", nationality: "Albanian", dial: "+355", flag: "🇦🇱" },
+  { code: "ME", name: "Montenegro", nationality: "Montenegrin", dial: "+382", flag: "🇲🇪" },
+  { code: "XK", name: "Kosovo", nationality: "Kosovar", dial: "+383", flag: "🇽🇰" },
+  { code: "MD", name: "Moldova", nationality: "Moldovan", dial: "+373", flag: "🇲🇩" },
+  { code: "US", name: "United States", nationality: "American", dial: "+1", flag: "🇺🇸" },
+  { code: "CA", name: "Canada", nationality: "Canadian", dial: "+1", flag: "🇨🇦" },
+  { code: "MX", name: "Mexico", nationality: "Mexican", dial: "+52", flag: "🇲🇽" },
+  { code: "BR", name: "Brazil", nationality: "Brazilian", dial: "+55", flag: "🇧🇷" },
+  { code: "AR", name: "Argentina", nationality: "Argentine", dial: "+54", flag: "🇦🇷" },
+  { code: "CL", name: "Chile", nationality: "Chilean", dial: "+56", flag: "🇨🇱" },
+  { code: "CO", name: "Colombia", nationality: "Colombian", dial: "+57", flag: "🇨🇴" },
+  { code: "PE", name: "Peru", nationality: "Peruvian", dial: "+51", flag: "🇵🇪" },
+  { code: "VE", name: "Venezuela", nationality: "Venezuelan", dial: "+58", flag: "🇻🇪" },
+  { code: "EC", name: "Ecuador", nationality: "Ecuadorian", dial: "+593", flag: "🇪🇨" },
+  { code: "UY", name: "Uruguay", nationality: "Uruguayan", dial: "+598", flag: "🇺🇾" },
+  { code: "PY", name: "Paraguay", nationality: "Paraguayan", dial: "+595", flag: "🇵🇾" },
+  { code: "BO", name: "Bolivia", nationality: "Bolivian", dial: "+591", flag: "🇧🇴" },
+  { code: "CR", name: "Costa Rica", nationality: "Costa Rican", dial: "+506", flag: "🇨🇷" },
+  { code: "PA", name: "Panama", nationality: "Panamanian", dial: "+507", flag: "🇵🇦" },
+  { code: "DO", name: "Dominican Republic", nationality: "Dominican", dial: "+1", flag: "🇩🇴" },
+  { code: "CU", name: "Cuba", nationality: "Cuban", dial: "+53", flag: "🇨🇺" },
+  { code: "JM", name: "Jamaica", nationality: "Jamaican", dial: "+1", flag: "🇯🇲" },
+  { code: "AU", name: "Australia", nationality: "Australian", dial: "+61", flag: "🇦🇺" },
+  { code: "NZ", name: "New Zealand", nationality: "New Zealander", dial: "+64", flag: "🇳🇿" },
+  { code: "FJ", name: "Fiji", nationality: "Fijian", dial: "+679", flag: "🇫🇯" },
+  { code: "ZA", name: "South Africa", nationality: "South African", dial: "+27", flag: "🇿🇦" },
+  { code: "NG", name: "Nigeria", nationality: "Nigerian", dial: "+234", flag: "🇳🇬" },
+  { code: "KE", name: "Kenya", nationality: "Kenyan", dial: "+254", flag: "🇰🇪" },
+  { code: "ET", name: "Ethiopia", nationality: "Ethiopian", dial: "+251", flag: "🇪🇹" },
+  { code: "GH", name: "Ghana", nationality: "Ghanaian", dial: "+233", flag: "🇬🇭" },
+  { code: "TZ", name: "Tanzania", nationality: "Tanzanian", dial: "+255", flag: "🇹🇿" },
+  { code: "UG", name: "Uganda", nationality: "Ugandan", dial: "+256", flag: "🇺🇬" },
+  { code: "RW", name: "Rwanda", nationality: "Rwandan", dial: "+250", flag: "🇷🇼" },
+  { code: "SN", name: "Senegal", nationality: "Senegalese", dial: "+221", flag: "🇸🇳" },
+  { code: "CI", name: "Côte d'Ivoire", nationality: "Ivorian", dial: "+225", flag: "🇨🇮" },
+  { code: "CM", name: "Cameroon", nationality: "Cameroonian", dial: "+237", flag: "🇨🇲" },
+  { code: "AO", name: "Angola", nationality: "Angolan", dial: "+244", flag: "🇦🇴" },
+  { code: "ZW", name: "Zimbabwe", nationality: "Zimbabwean", dial: "+263", flag: "🇿🇼" },
+  { code: "ZM", name: "Zambia", nationality: "Zambian", dial: "+260", flag: "🇿🇲" },
+  { code: "MZ", name: "Mozambique", nationality: "Mozambican", dial: "+258", flag: "🇲🇿" },
+  { code: "MU", name: "Mauritius", nationality: "Mauritian", dial: "+230", flag: "🇲🇺" },
+  { code: "SC", name: "Seychelles", nationality: "Seychellois", dial: "+248", flag: "🇸🇨" },
+];
+
+export const PRIORITY_COUNTRY_CODES = ["AE", "SA", "QA", "KW", "BH", "OM", "IN", "PK", "GB", "US"];
+
+export function findCountryByDial(dial: string): CountryEntry | undefined {
+  return COUNTRIES.find((c) => c.dial === dial);
 }
 
-export const COUNTRIES: CountryData[] = [
-  { name: "United Arab Emirates", code: "AE", flag: "🇦🇪", nationality: "Emirati", cities: ["Dubai", "Abu Dhabi", "Sharjah", "Ajman", "Ras Al Khaimah", "Fujairah", "Umm Al Quwain", "Al Ain"] },
-  { name: "United Kingdom", code: "GB", flag: "🇬🇧", nationality: "British", cities: ["London", "Manchester", "Birmingham", "Liverpool", "Edinburgh", "Glasgow", "Bristol", "Leeds"] },
-  { name: "United States", code: "US", flag: "🇺🇸", nationality: "American", cities: ["New York", "Los Angeles", "Chicago", "Houston", "Miami", "San Francisco", "Seattle", "Boston"] },
-  { name: "India", code: "IN", flag: "🇮🇳", nationality: "Indian", cities: ["Mumbai", "Delhi", "Bangalore", "Chennai", "Hyderabad", "Kolkata", "Pune", "Ahmedabad"] },
-  { name: "Pakistan", code: "PK", flag: "🇵🇰", nationality: "Pakistani", cities: ["Karachi", "Lahore", "Islamabad", "Rawalpindi", "Faisalabad", "Peshawar", "Multan"] },
-  { name: "Saudi Arabia", code: "SA", flag: "🇸🇦", nationality: "Saudi", cities: ["Riyadh", "Jeddah", "Makkah", "Madinah", "Dammam", "Khobar", "Dhahran"] },
-  { name: "Russia", code: "RU", flag: "🇷🇺", nationality: "Russian", cities: ["Moscow", "Saint Petersburg", "Kazan", "Sochi", "Novosibirsk", "Yekaterinburg"] },
-  { name: "China", code: "CN", flag: "🇨🇳", nationality: "Chinese", cities: ["Beijing", "Shanghai", "Guangzhou", "Shenzhen", "Chengdu", "Hangzhou", "Wuhan"] },
-  { name: "France", code: "FR", flag: "🇫🇷", nationality: "French", cities: ["Paris", "Lyon", "Marseille", "Nice", "Bordeaux", "Toulouse", "Strasbourg"] },
-  { name: "Germany", code: "DE", flag: "🇩🇪", nationality: "German", cities: ["Berlin", "Munich", "Frankfurt", "Hamburg", "Düsseldorf", "Cologne", "Stuttgart"] },
-  { name: "Italy", code: "IT", flag: "🇮🇹", nationality: "Italian", cities: ["Rome", "Milan", "Florence", "Naples", "Venice", "Turin", "Bologna"] },
-  { name: "Spain", code: "ES", flag: "🇪🇸", nationality: "Spanish", cities: ["Madrid", "Barcelona", "Valencia", "Seville", "Málaga", "Bilbao"] },
-  { name: "Canada", code: "CA", flag: "🇨🇦", nationality: "Canadian", cities: ["Toronto", "Vancouver", "Montreal", "Calgary", "Ottawa", "Edmonton"] },
-  { name: "Australia", code: "AU", flag: "🇦🇺", nationality: "Australian", cities: ["Sydney", "Melbourne", "Brisbane", "Perth", "Adelaide", "Gold Coast"] },
-  { name: "Japan", code: "JP", flag: "🇯🇵", nationality: "Japanese", cities: ["Tokyo", "Osaka", "Kyoto", "Yokohama", "Nagoya", "Sapporo"] },
-  { name: "South Korea", code: "KR", flag: "🇰🇷", nationality: "South Korean", cities: ["Seoul", "Busan", "Incheon", "Daegu", "Daejeon"] },
-  { name: "Egypt", code: "EG", flag: "🇪🇬", nationality: "Egyptian", cities: ["Cairo", "Alexandria", "Giza", "Sharm El Sheikh", "Hurghada", "Luxor"] },
-  { name: "Lebanon", code: "LB", flag: "🇱🇧", nationality: "Lebanese", cities: ["Beirut", "Tripoli", "Sidon", "Jounieh", "Baalbek"] },
-  { name: "Jordan", code: "JO", flag: "🇯🇴", nationality: "Jordanian", cities: ["Amman", "Aqaba", "Irbid", "Zarqa", "Jerash"] },
-  { name: "Iraq", code: "IQ", flag: "🇮🇶", nationality: "Iraqi", cities: ["Baghdad", "Erbil", "Basra", "Sulaymaniyah", "Mosul"] },
-  { name: "Kuwait", code: "KW", flag: "🇰🇼", nationality: "Kuwaiti", cities: ["Kuwait City", "Hawalli", "Salmiya", "Jahra"] },
-  { name: "Qatar", code: "QA", flag: "🇶🇦", nationality: "Qatari", cities: ["Doha", "Al Wakrah", "Al Khor", "Lusail"] },
-  { name: "Bahrain", code: "BH", flag: "🇧🇭", nationality: "Bahraini", cities: ["Manama", "Muharraq", "Riffa", "Hamad Town"] },
-  { name: "Oman", code: "OM", flag: "🇴🇲", nationality: "Omani", cities: ["Muscat", "Salalah", "Sohar", "Nizwa", "Sur"] },
-  { name: "Iran", code: "IR", flag: "🇮🇷", nationality: "Iranian", cities: ["Tehran", "Isfahan", "Shiraz", "Tabriz", "Mashhad"] },
-  { name: "Turkey", code: "TR", flag: "🇹🇷", nationality: "Turkish", cities: ["Istanbul", "Ankara", "Antalya", "Izmir", "Bursa"] },
-  { name: "Nigeria", code: "NG", flag: "🇳🇬", nationality: "Nigerian", cities: ["Lagos", "Abuja", "Port Harcourt", "Kano", "Ibadan"] },
-  { name: "South Africa", code: "ZA", flag: "🇿🇦", nationality: "South African", cities: ["Johannesburg", "Cape Town", "Durban", "Pretoria"] },
-  { name: "Kenya", code: "KE", flag: "🇰🇪", nationality: "Kenyan", cities: ["Nairobi", "Mombasa", "Kisumu", "Nakuru"] },
-  { name: "Brazil", code: "BR", flag: "🇧🇷", nationality: "Brazilian", cities: ["São Paulo", "Rio de Janeiro", "Brasília", "Salvador", "Belo Horizonte"] },
-  { name: "Mexico", code: "MX", flag: "🇲🇽", nationality: "Mexican", cities: ["Mexico City", "Guadalajara", "Monterrey", "Cancún", "Puebla"] },
-  { name: "Philippines", code: "PH", flag: "🇵🇭", nationality: "Filipino", cities: ["Manila", "Quezon City", "Cebu", "Davao", "Makati"] },
-  { name: "Bangladesh", code: "BD", flag: "🇧🇩", nationality: "Bangladeshi", cities: ["Dhaka", "Chittagong", "Sylhet", "Khulna"] },
-  { name: "Sri Lanka", code: "LK", flag: "🇱🇰", nationality: "Sri Lankan", cities: ["Colombo", "Kandy", "Galle", "Jaffna"] },
-  { name: "Nepal", code: "NP", flag: "🇳🇵", nationality: "Nepalese", cities: ["Kathmandu", "Pokhara", "Lalitpur", "Biratnagar"] },
-  { name: "Malaysia", code: "MY", flag: "🇲🇾", nationality: "Malaysian", cities: ["Kuala Lumpur", "Penang", "Johor Bahru", "Kota Kinabalu"] },
-  { name: "Singapore", code: "SG", flag: "🇸🇬", nationality: "Singaporean", cities: ["Singapore"] },
-  { name: "Indonesia", code: "ID", flag: "🇮🇩", nationality: "Indonesian", cities: ["Jakarta", "Bali", "Surabaya", "Bandung", "Medan"] },
-  { name: "Thailand", code: "TH", flag: "🇹🇭", nationality: "Thai", cities: ["Bangkok", "Chiang Mai", "Phuket", "Pattaya"] },
-  { name: "Vietnam", code: "VN", flag: "🇻🇳", nationality: "Vietnamese", cities: ["Ho Chi Minh City", "Hanoi", "Da Nang", "Nha Trang"] },
-  { name: "Morocco", code: "MA", flag: "🇲🇦", nationality: "Moroccan", cities: ["Casablanca", "Marrakech", "Rabat", "Tangier", "Fez"] },
-  { name: "Tunisia", code: "TN", flag: "🇹🇳", nationality: "Tunisian", cities: ["Tunis", "Sfax", "Sousse", "Hammamet"] },
-  { name: "Algeria", code: "DZ", flag: "🇩🇿", nationality: "Algerian", cities: ["Algiers", "Oran", "Constantine", "Annaba"] },
-  { name: "Syria", code: "SY", flag: "🇸🇾", nationality: "Syrian", cities: ["Damascus", "Aleppo", "Homs", "Latakia"] },
-  { name: "Palestine", code: "PS", flag: "🇵🇸", nationality: "Palestinian", cities: ["Jerusalem", "Ramallah", "Gaza", "Bethlehem", "Nablus"] },
-  { name: "Yemen", code: "YE", flag: "🇾🇪", nationality: "Yemeni", cities: ["Sana'a", "Aden", "Taiz", "Hodeidah"] },
-  { name: "Libya", code: "LY", flag: "🇱🇾", nationality: "Libyan", cities: ["Tripoli", "Benghazi", "Misrata"] },
-  { name: "Sudan", code: "SD", flag: "🇸🇩", nationality: "Sudanese", cities: ["Khartoum", "Omdurman", "Port Sudan"] },
-  { name: "Afghanistan", code: "AF", flag: "🇦🇫", nationality: "Afghan", cities: ["Kabul", "Herat", "Mazar-i-Sharif", "Kandahar"] },
-  { name: "Uzbekistan", code: "UZ", flag: "🇺🇿", nationality: "Uzbek", cities: ["Tashkent", "Samarkand", "Bukhara"] },
-  { name: "Kazakhstan", code: "KZ", flag: "🇰🇿", nationality: "Kazakh", cities: ["Almaty", "Astana", "Shymkent"] },
-  { name: "Ukraine", code: "UA", flag: "🇺🇦", nationality: "Ukrainian", cities: ["Kyiv", "Lviv", "Odesa", "Kharkiv"] },
-  { name: "Poland", code: "PL", flag: "🇵🇱", nationality: "Polish", cities: ["Warsaw", "Kraków", "Wrocław", "Gdańsk"] },
-  { name: "Netherlands", code: "NL", flag: "🇳🇱", nationality: "Dutch", cities: ["Amsterdam", "Rotterdam", "The Hague", "Utrecht"] },
-  { name: "Belgium", code: "BE", flag: "🇧🇪", nationality: "Belgian", cities: ["Brussels", "Antwerp", "Ghent", "Bruges"] },
-  { name: "Switzerland", code: "CH", flag: "🇨🇭", nationality: "Swiss", cities: ["Zurich", "Geneva", "Basel", "Bern", "Lausanne"] },
-  { name: "Austria", code: "AT", flag: "🇦🇹", nationality: "Austrian", cities: ["Vienna", "Salzburg", "Innsbruck", "Graz"] },
-  { name: "Sweden", code: "SE", flag: "🇸🇪", nationality: "Swedish", cities: ["Stockholm", "Gothenburg", "Malmö", "Uppsala"] },
-  { name: "Norway", code: "NO", flag: "🇳🇴", nationality: "Norwegian", cities: ["Oslo", "Bergen", "Trondheim", "Stavanger"] },
-  { name: "Denmark", code: "DK", flag: "🇩🇰", nationality: "Danish", cities: ["Copenhagen", "Aarhus", "Odense"] },
-  { name: "Finland", code: "FI", flag: "🇫🇮", nationality: "Finnish", cities: ["Helsinki", "Tampere", "Turku", "Espoo"] },
-  { name: "Portugal", code: "PT", flag: "🇵🇹", nationality: "Portuguese", cities: ["Lisbon", "Porto", "Faro", "Braga"] },
-  { name: "Greece", code: "GR", flag: "🇬🇷", nationality: "Greek", cities: ["Athens", "Thessaloniki", "Patras", "Heraklion"] },
-  { name: "Ireland", code: "IE", flag: "🇮🇪", nationality: "Irish", cities: ["Dublin", "Cork", "Galway", "Limerick"] },
-  { name: "New Zealand", code: "NZ", flag: "🇳🇿", nationality: "New Zealander", cities: ["Auckland", "Wellington", "Christchurch", "Queenstown"] },
-  { name: "Argentina", code: "AR", flag: "🇦🇷", nationality: "Argentine", cities: ["Buenos Aires", "Córdoba", "Rosario", "Mendoza"] },
-  { name: "Colombia", code: "CO", flag: "🇨🇴", nationality: "Colombian", cities: ["Bogotá", "Medellín", "Cali", "Cartagena"] },
-  { name: "Ghana", code: "GH", flag: "🇬🇭", nationality: "Ghanaian", cities: ["Accra", "Kumasi", "Tamale", "Tema"] },
-  { name: "Ethiopia", code: "ET", flag: "🇪🇹", nationality: "Ethiopian", cities: ["Addis Ababa", "Dire Dawa", "Mekelle"] },
-  { name: "Tanzania", code: "TZ", flag: "🇹🇿", nationality: "Tanzanian", cities: ["Dar es Salaam", "Dodoma", "Zanzibar", "Arusha"] },
-  { name: "Uganda", code: "UG", flag: "🇺🇬", nationality: "Ugandan", cities: ["Kampala", "Entebbe", "Jinja"] },
-  { name: "Rwanda", code: "RW", flag: "🇷🇼", nationality: "Rwandan", cities: ["Kigali", "Butare", "Gisenyi"] },
-  { name: "Mauritius", code: "MU", flag: "🇲🇺", nationality: "Mauritian", cities: ["Port Louis", "Curepipe", "Quatre Bornes"] },
-  { name: "Maldives", code: "MV", flag: "🇲🇻", nationality: "Maldivian", cities: ["Malé", "Addu City", "Fuvahmulah"] },
-  { name: "Georgia", code: "GE", flag: "🇬🇪", nationality: "Georgian", cities: ["Tbilisi", "Batumi", "Kutaisi"] },
-  { name: "Azerbaijan", code: "AZ", flag: "🇦🇿", nationality: "Azerbaijani", cities: ["Baku", "Ganja", "Sumqayit"] },
-  { name: "Armenia", code: "AM", flag: "🇦🇲", nationality: "Armenian", cities: ["Yerevan", "Gyumri", "Vanadzor"] },
-  { name: "Czech Republic", code: "CZ", flag: "🇨🇿", nationality: "Czech", cities: ["Prague", "Brno", "Ostrava"] },
-  { name: "Romania", code: "RO", flag: "🇷🇴", nationality: "Romanian", cities: ["Bucharest", "Cluj-Napoca", "Timișoara"] },
-  { name: "Hungary", code: "HU", flag: "🇭🇺", nationality: "Hungarian", cities: ["Budapest", "Debrecen", "Szeged"] },
-  { name: "Serbia", code: "RS", flag: "🇷🇸", nationality: "Serbian", cities: ["Belgrade", "Novi Sad", "Niš"] },
-  { name: "Croatia", code: "HR", flag: "🇭🇷", nationality: "Croatian", cities: ["Zagreb", "Split", "Dubrovnik", "Rijeka"] },
-  { name: "Bulgaria", code: "BG", flag: "🇧🇬", nationality: "Bulgarian", cities: ["Sofia", "Plovdiv", "Varna"] },
-  { name: "Somalia", code: "SO", flag: "🇸🇴", nationality: "Somali", cities: ["Mogadishu", "Hargeisa", "Kismayo"] },
-  { name: "Eritrea", code: "ER", flag: "🇪🇷", nationality: "Eritrean", cities: ["Asmara", "Keren", "Massawa"] },
-  { name: "Djibouti", code: "DJ", flag: "🇩🇯", nationality: "Djiboutian", cities: ["Djibouti City", "Ali Sabieh"] },
-  { name: "Comoros", code: "KM", flag: "🇰🇲", nationality: "Comorian", cities: ["Moroni", "Mutsamudu"] },
-  { name: "Seychelles", code: "SC", flag: "🇸🇨", nationality: "Seychellois", cities: ["Victoria", "Anse Royale"] },
-  { name: "Monaco", code: "MC", flag: "🇲🇨", nationality: "Monégasque", cities: ["Monaco", "Monte Carlo"] },
-  { name: "Luxembourg", code: "LU", flag: "🇱🇺", nationality: "Luxembourgish", cities: ["Luxembourg City", "Esch-sur-Alzette"] },
-];
+export function findCountryByCode(code: string): CountryEntry | undefined {
+  return COUNTRIES.find((c) => c.code === code.toUpperCase());
+}
 
-export const LANGUAGES_WITH_FLAGS: LanguageData[] = [
-  { code: "en", name: "English", flag: "🇬🇧" },
-  { code: "ar", name: "Arabic", flag: "🇸🇦" },
-  { code: "ru", name: "Russian", flag: "🇷🇺" },
-  { code: "zh", name: "Chinese", flag: "🇨🇳" },
-  { code: "hi", name: "Hindi", flag: "🇮🇳" },
-  { code: "fr", name: "French", flag: "🇫🇷" },
-  { code: "de", name: "German", flag: "🇩🇪" },
-  { code: "es", name: "Spanish", flag: "🇪🇸" },
-  { code: "fa", name: "Farsi", flag: "🇮🇷" },
-  { code: "pt", name: "Portuguese", flag: "🇵🇹" },
-  { code: "tr", name: "Turkish", flag: "🇹🇷" },
-  { code: "ur", name: "Urdu", flag: "🇵🇰" },
-  { code: "ja", name: "Japanese", flag: "🇯🇵" },
-  { code: "ko", name: "Korean", flag: "🇰🇷" },
-  { code: "it", name: "Italian", flag: "🇮🇹" },
-  { code: "nl", name: "Dutch", flag: "🇳🇱" },
-  { code: "pl", name: "Polish", flag: "🇵🇱" },
-  { code: "uk", name: "Ukrainian", flag: "🇺🇦" },
-  { code: "sv", name: "Swedish", flag: "🇸🇪" },
-  { code: "th", name: "Thai", flag: "🇹🇭" },
-  { code: "vi", name: "Vietnamese", flag: "🇻🇳" },
-  { code: "id", name: "Indonesian", flag: "🇮🇩" },
-  { code: "ms", name: "Malay", flag: "🇲🇾" },
-  { code: "tl", name: "Filipino", flag: "🇵🇭" },
-  { code: "bn", name: "Bengali", flag: "🇧🇩" },
-  { code: "sw", name: "Swahili", flag: "🇰🇪" },
-  { code: "am", name: "Amharic", flag: "🇪🇹" },
-  { code: "so", name: "Somali", flag: "🇸🇴" },
-  { code: "he", name: "Hebrew", flag: "🇮🇱" },
-  { code: "el", name: "Greek", flag: "🇬🇷" },
-  { code: "ro", name: "Romanian", flag: "🇷🇴" },
-  { code: "hu", name: "Hungarian", flag: "🇭🇺" },
-  { code: "cs", name: "Czech", flag: "🇨🇿" },
-];
+export function findCountryByNationality(nat: string): CountryEntry | undefined {
+  const n = nat.trim().toLowerCase();
+  return COUNTRIES.find((c) => c.nationality.toLowerCase() === n);
+}
 
-// Helper to get all nationalities sorted
-export const ALL_NATIONALITIES = COUNTRIES
-  .map(c => ({ nationality: c.nationality, flag: c.flag, country: c.name }))
-  .sort((a, b) => a.nationality.localeCompare(b.nationality));
-
-// Common aliases → ISO code mapping
-const COUNTRY_ALIASES: Record<string, string> = {
-  'uae': 'AE', 'emirates': 'AE', 'united arab emirates (uae)': 'AE',
-  'uk': 'GB', 'united kingdom (uk)': 'GB', 'great britain': 'GB', 'england': 'GB',
-  'usa': 'US', 'united states (usa)': 'US', 'america': 'US', 'united states of america': 'US',
-  'ksa': 'SA', 'saudi': 'SA',
-  'south korea': 'KR', 'korea': 'KR',
-};
-
-// Helper to get cities for a country (supports name, ISO code, and common aliases)
-export const getCitiesForCountry = (input: string): string[] => {
-  if (!input) return [];
-  const trimmed = input.trim();
-  const lower = trimmed.toLowerCase();
-
-  // 1. Exact name match (case-insensitive)
-  const byName = COUNTRIES.find(c => c.name.toLowerCase() === lower);
-  if (byName) return byName.cities;
-
-  // 2. ISO code match (case-insensitive)
-  const byCode = COUNTRIES.find(c => c.code.toLowerCase() === lower);
-  if (byCode) return byCode.cities;
-
-  // 3. Alias match
-  const aliasCode = COUNTRY_ALIASES[lower];
-  if (aliasCode) {
-    const byAlias = COUNTRIES.find(c => c.code === aliasCode);
-    if (byAlias) return byAlias.cities;
+/** Parse an E.164 phone string into { dial, national }. Greedy longest match. */
+export function splitE164(phone: string): { dial: string; national: string } {
+  const p = (phone || "").replace(/\s+/g, "");
+  if (!p.startsWith("+")) return { dial: "+971", national: p };
+  // Try longest dial first
+  const dials = Array.from(new Set(COUNTRIES.map((c) => c.dial))).sort((a, b) => b.length - a.length);
+  for (const d of dials) {
+    if (p.startsWith(d)) return { dial: d, national: p.slice(d.length) };
   }
-
-  // 4. Partial / contains match as last resort
-  const partial = COUNTRIES.find(c =>
-    c.name.toLowerCase().includes(lower) || lower.includes(c.name.toLowerCase())
-  );
-  return partial?.cities || [];
-};
+  return { dial: "+971", national: p };
+}
