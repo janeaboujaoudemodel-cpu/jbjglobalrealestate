@@ -281,10 +281,21 @@ export function SendViaEmailDialog({
     () => signatures.find((s) => s.id === selectedSigId),
     [signatures, selectedSigId],
   );
+  // Inline, per-send editable overrides for the chosen signature. They override
+  // the preset only for this email; the saved preset stays untouched unless the
+  // owner clicks "Save signature".
+  const [sigEdits, setSigEdits] = useState<Partial<EmailSignature>>({});
+  const [sigEditorOpen, setSigEditorOpen] = useState(false);
+  const effectiveSig: EmailSignature | undefined = useMemo(() => {
+    if (!selectedSig) return undefined;
+    return { ...selectedSig, ...sigEdits } as EmailSignature;
+  }, [selectedSig, sigEdits]);
   const selectedSigHtml = useMemo(
-    () => (selectedSig ? renderSignatureHtml(selectedSig) : fallbackSigHtml),
-    [selectedSig, fallbackSigHtml],
+    () => (effectiveSig ? renderSignatureHtml(effectiveSig) : fallbackSigHtml),
+    [effectiveSig, fallbackSigHtml],
   );
+  // Reset per-send edits whenever the picked preset changes.
+  useEffect(() => { setSigEdits({}); }, [selectedSigId]);
 
   useEffect(() => {
     if (selectedSigId || !signatures.length) return;
