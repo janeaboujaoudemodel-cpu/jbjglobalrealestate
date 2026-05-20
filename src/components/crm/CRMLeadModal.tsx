@@ -38,6 +38,7 @@ import { cn } from "@/lib/utils";
 import { COUNTRIES, LANGUAGES_WITH_FLAGS, ALL_NATIONALITIES, getCitiesForCountry } from "@/data/countries";
 import { BrokerCombobox } from "@/components/crm/BrokerCombobox";
 import { PIPELINE_STATUSES } from "@/components/crm/LeadStatusBadge";
+import PhoneInputWithCountry from "@/components/crm/pickers/PhoneInputWithCountry";
 
 interface CRMLeadModalProps {
   open: boolean;
