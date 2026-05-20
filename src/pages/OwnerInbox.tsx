@@ -155,14 +155,20 @@ export default function OwnerInbox() {
   // immediately when new rows arrive — polling is the safety net.
   useEffect(() => {
     let cancelled = false;
+    let inFlight = false;
     const runSync = async (scopeChannelId?: string) => {
+      if (inFlight) return;
+      inFlight = true;
       try {
         const body: { channel_id?: string } = scopeChannelId && scopeChannelId !== 'all'
           ? { channel_id: scopeChannelId }
           : {};
         await supabase.functions.invoke('comm-inbound-sync', { body });
+        if (!cancelled) refetchThreads();
       } catch (e) {
         console.warn('[inbox] background sync skipped:', e);
+      } finally {
+        inFlight = false;
       }
     };
     (async () => {
@@ -176,12 +182,26 @@ export default function OwnerInbox() {
       setTimeout(() => { if (!cancelled) runSync(filters.channelId); }, 1500);
       refetchThreads();
     })();
+    // Phase H — Gmail-modify reflection: 15s poll (was 60s)
     const poll = setInterval(() => {
-      if (!cancelled) runSync(filters.channelId);
-    }, 60_000);
-    return () => { cancelled = true; clearInterval(poll); };
+      if (!cancelled && document.visibilityState === 'visible') runSync(filters.channelId);
+    }, 15_000);
+    // Refresh on tab focus / network reconnect so Gmail changes reflect instantly
+    const onFocus = () => { if (!cancelled) runSync(filters.channelId); };
+    const onVisible = () => { if (!cancelled && document.visibilityState === 'visible') runSync(filters.channelId); };
+    window.addEventListener('focus', onFocus);
+    window.addEventListener('online', onFocus);
+    document.addEventListener('visibilitychange', onVisible);
+    return () => {
+      cancelled = true;
+      clearInterval(poll);
+      window.removeEventListener('focus', onFocus);
+      window.removeEventListener('online', onFocus);
+      document.removeEventListener('visibilitychange', onVisible);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters.channelId]);
+
 
 
   const handleThreadSelect = (thread: CommThread) => {
