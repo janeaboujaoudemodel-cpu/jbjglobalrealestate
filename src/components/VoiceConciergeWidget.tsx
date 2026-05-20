@@ -168,6 +168,8 @@ const VoiceConciergeWidget = () => {
     }
 
     setIsConnecting(true);
+    setWidgetStatus("initializing");
+    setStatusMessage("Initializing…");
     try {
       // Request microphone permission
       await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -187,16 +189,19 @@ const VoiceConciergeWidget = () => {
       }
 
       // Graceful fallback when the edge function returned a 200 with `fallback: true`
-      // (e.g. invalid/expired ElevenLabs API key). Log internally only — never expose
-      // infra/API-key errors to end users.
       if (data?.fallback || !data?.token) {
         console.warn("[VoiceConcierge] unavailable:", data?.error || "no token");
-        toast.info("Voice concierge is unavailable right now. Please try again shortly.");
+        setWidgetStatus("unavailable");
+        setStatusMessage("Unavailable");
+        if (!hasShownUnavailableToastRef.current) {
+          toast.info("Voice concierge is unavailable right now. Please try again shortly.");
+          hasShownUnavailableToastRef.current = true;
+        }
         return;
       }
 
       // Start the conversation with WebRTC
-      const session = await conversation.startSession({
+      const sessionResult = await conversation.startSession({
         conversationToken: data.token,
         connectionType: "webrtc",
       });
@@ -208,18 +213,29 @@ const VoiceConciergeWidget = () => {
       }
     } catch (error) {
       console.error("Failed to start conversation:", error);
-      // Never surface raw infra errors (API key, quota, etc.) to end users.
       const msg = error instanceof Error ? error.message : "";
       const isInfra = /api[\s_-]?key|elevenlabs|unauthor|quota|invalid|expired|token/i.test(msg);
-      toast.info(
-        isInfra
-          ? "Voice concierge is unavailable right now. Please try again shortly."
-          : "Couldn't start the call. Please try again."
-      );
+      setWidgetStatus("unavailable");
+      setStatusMessage("Unavailable");
+      if (!hasShownUnavailableToastRef.current) {
+        toast.info(
+          isInfra
+            ? "Voice concierge is unavailable right now. Please try again shortly."
+            : "Couldn't start the call. Please try again."
+        );
+        hasShownUnavailableToastRef.current = true;
+      }
     } finally {
       setIsConnecting(false);
     }
   }, [conversation, navigate, logCallStart]);
+
+  const retryConnection = useCallback(() => {
+    setWidgetStatus("idle");
+    setStatusMessage("");
+    hasShownUnavailableToastRef.current = false;
+    startConversation();
+  }, [startConversation]);
 
   const stopConversation = useCallback(async () => {
     // Log call end before stopping
