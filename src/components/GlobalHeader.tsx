@@ -1339,12 +1339,14 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 onClick={() => handleMegaMenuClick('search')}
                 className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-[#FDFBF7]/10"
                 aria-label="Search"
+                data-tour-target="search"
               >
                 <Search 
                   className={`w-5 h-5 transition-colors duration-300 text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] ${activeMegaMenu === 'search' ? '!text-[#1A1A1A]' : ''}`}
                   style={{ filter: isFullyTransparent ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' : 'none' }} 
                 />
               </button>
+
 
               {/* Divider */}
               <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-white/40' : 'via-gray-300'} to-transparent`} />
@@ -1355,6 +1357,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 onClick={() => handleMegaMenuClick('language')}
                 className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-[#FDFBF7]/10"
                 aria-label="Language"
+                data-tour-target="language"
               >
                 <Globe 
                   className={`w-5 h-5 transition-colors duration-300 text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] ${activeMegaMenu === 'language' ? '!text-[#1A1A1A]' : ''}`}
@@ -1383,6 +1386,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 onClick={() => handleMegaMenuClick('account')}
                 className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-[#FDFBF7]/10 relative"
                 aria-label={user ? t('nav.myAccount') : t('nav.signIn')}
+                data-tour-target="account"
               >
                 <User 
                   className={`w-5 h-5 transition-colors duration-300 text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] ${activeMegaMenu === 'account' ? '!text-[#1A1A1A]' : ''}`}

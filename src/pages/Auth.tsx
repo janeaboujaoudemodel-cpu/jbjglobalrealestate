@@ -417,29 +417,24 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
     );
   }
 
-  // ─── Already signed in ────────────────────────────────────
+  // ─── Already signed in → auto-redirect (no interstitial screen) ───
   if (user && mode !== "reset" && !isReactivationPreview) {
+    const returnTo = searchParams.get("returnTo") || "/";
+    // Fire a brief welcome toast once, then bounce the user straight to where they came from.
+    if (typeof window !== "undefined" && !(window as any).__jbjWelcomeBackShown) {
+      (window as any).__jbjWelcomeBackShown = true;
+      toast.success("Welcome back!");
+      setTimeout(() => { navigate(returnTo, { replace: true }); }, 50);
+    } else {
+      setTimeout(() => { navigate(returnTo, { replace: true }); }, 0);
+    }
     return (
-      <div ref={ref} className="min-h-screen flex items-center justify-center py-12 px-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
-        <div className="relative z-10 w-full max-w-md">
-          <div className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-[#B89555]/30 rounded-2xl p-10 shadow-sm">
-            <div className="flex justify-center mb-8"><JJLogoImage variant="light" size="md" /></div>
-            <div className="text-center mb-8">
-              <h1 className="text-[#1A1A1A] text-2xl font-semibold mb-3">You're Signed In</h1>
-              <p className="text-[#1A1A1A]/70 text-sm">Welcome back, <span className="text-[#1A1A1A] font-medium">{user.email}</span></p>
-            </div>
-            <div className="space-y-3">
-              <Button type="button" onClick={() => navigate("/my-dashboard")} className="w-full h-12 bg-gradient-to-r from-gold to-gold-dark hover:opacity-90 text-[#1A1A1A] font-semibold rounded-xl shadow-lg shadow-gold/20 transition-all duration-300 hover:shadow-gold/40 hover:scale-[1.02]">Go to My Dashboard</Button>
-              <Button type="button" onClick={() => navigate("/")} className="w-full h-12 bg-[#FDFBF7] border border-[#B89555]/30 hover:border-[#B89555]/50 text-[#1A1A1A] font-semibold rounded-xl transition-all duration-300 hover:bg-[#F7F2EA]">Go to Home</Button>
-              <Button type="button" variant="outline" onClick={async () => { try { await signOut(); toast.success("Signed out."); setEmail(""); setPassword(""); setConfirmPassword(""); setMode("signin"); } catch { toast.error("Could not sign out."); } }} className="w-full h-12 border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555]/50 rounded-xl transition-all duration-300">Sign Out</Button>
-            </div>
-          </div>
-          <p className="text-center text-[#1A1A1A]/70 text-xs mt-8">© {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p>
-        </div>
+      <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#B89555]" />
       </div>
     );
   }
+
 
   // ─── Post-signup "Check your email" screen ─────────────────
   if (mode === "verify-email") {
