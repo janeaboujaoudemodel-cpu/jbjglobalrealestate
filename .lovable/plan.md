@@ -1,76 +1,99 @@
+
 ## Goal
 
-Upgrade the "Add broker" form (and matching edit dialog) so Languages, Nationality, and Phone are real searchable dropdowns with country flags — instead of plain text inputs. Multiple languages can be selected. All dropdowns include a search bar.
+Four distinct improvements bundled into one plan. Each is independently shippable.
 
-## Where the change happens
+---
 
-Two surfaces in the CRM brokers section:
+### 1. ElevenLabs widget — visible status
 
-1. **`src/pages/owner/crm/BrokersRegistry.tsx`** — the "Add broker" dialog (Field rows for `phone`, `nationality`, `languages`).
-2. **`src/components/crm/IndividualBrokersTab.tsx`** — the edit dialog for an existing broker (same three fields).
+Today the widget swallows errors into a generic toast. Replace with an inline status pill on the widget itself.
 
-Nothing else is touched: no RLS, no schema, no sessions, no picker logic, no API contracts. Data still saves to the same columns (`phone_e164`, `nationality`, `languages[]`).
+States:
+- `Initializing…` — while requesting the conversation token / connecting
+- `Connected` — live call (green dot, mic icon)
+- `Unavailable` — token fetch failed, API key missing, quota exceeded, or `onError` fired. Shows a `Try again` button.
+- `Idle` — default (current "Speak with us" CTA)
 
-## New shared components
+Keep the existing silent console.warn for me. Only show the generic toast on first failure; subsequent retries update the pill in place.
 
-Three small, reusable pickers under `src/components/crm/pickers/`, all matching the champagne/cream theme and using the same searchable popover pattern already used by `BrokerCombobox`:
+Files: `src/components/VoiceConciergeWidget.tsx`.
 
-```text
-NationalityPicker        single-select  → flag + country name, search by name/code
-LanguageMultiPicker      multi-select   → flag + language name, chip display, search
-PhoneInputWithCountry    phone input    → country flag + dial code selector + number field
-```
+---
 
-All three:
-- Built on shadcn `Popover` + `Command` (search, keyboard nav, focus rings already correct).
-- Render the country flag as a Unicode emoji (no extra asset bundle, no network calls).
-- Champagne surface `#F7F2EA`, ink text `#1A1A1A`, gold hairline `#B89555/40` — no blue focus rings.
-- Mobile-friendly: full-width trigger, popover `max-h-72 overflow-y-auto`, 44px tap targets.
+### 2. Database folders assignable to a broker (drag & drop)
 
-## Data sources (bundled, no new deps)
+In `/owner/crm?entity=databases` the sidebar already lists "Databases" but has no folder concept and no broker assignment.
 
-- **Countries (for Nationality + phone dial code):** small static list in `src/data/countries.ts` — `{ code: "AE", name: "United Arab Emirates", nationality: "Emirati", dial: "+971", flag: "🇦🇪" }` for the ~250 ISO countries.
-- **Languages:** small static list in `src/data/languages.ts` — `{ code: "en", name: "English", flag: "🇬🇧" }` for ~80 common languages (flag = a representative country flag).
+Add:
+- **"+ New folder"** button in `CRMListSidebar` (horizontal bar + vertical rail).
+- Each folder shows the assigned broker's name + colored chip (e.g. "Jessica").
+- Folder row has an **Assign broker** action (popover with `BrokerCombobox` — existing search-enabled picker).
+- Each database (list) row in the main grid becomes draggable; dropping it on a folder reparents it.
+- Auto-tag every lead inside that database with `assigned_broker_id = folder.broker_id` (and apply to future uploads into the folder).
 
-Both files are plain TS arrays — no npm package needed, keeps bundle clean.
+Schema (migration):
+- New table `crm_database_folders` (name, color, assigned_broker_id, owner_user_id).
+- New column `crm_lead_lists.folder_id` (nullable, FK).
+- Trigger: when a lead is inserted with a `source_database_id` whose list belongs to a folder with `assigned_broker_id`, set `assigned_broker_id` on the lead if null.
+- RLS: owner full access; brokers can read folders where they are assigned.
 
-## Form wiring
+Files: `useCRMLists.ts` (extend), new `useCRMFolders.ts`, `CRMListSidebar.tsx`, `BrokersRegistry.tsx` / `UnifiedCRM.tsx` (drag handles), new `FolderAssignBrokerPopover.tsx`.
 
-In `BrokersRegistry.tsx` add-broker dialog (around lines 705–725) replace the three `<Field />` lines:
+---
 
-```text
-Before:                              After:
-<Field k="phone" .../>          →    <PhoneInputWithCountry value={form.phone} onChange={...} />
-<Field k="nationality" .../>    →    <NationalityPicker value={form.nationality} onChange={...} />
-<Field k="languages" .../>      →    <LanguageMultiPicker value={form.languages} onChange={...} />
-```
+### 3. CRM Leads page — inline "Add Lead" & "Add Broker"
 
-`form.languages` becomes `string[]` directly (drop the comma-split parsing at line 646). Phone returns the full E.164 string (`+971xxxxxxxxx`) so existing save logic at line 653 (`phone_e164: form.phone.trim()`) is unchanged.
+On `/owner/crm` (leads view) add a primary action group in the page header:
+- **+ Add Lead** → opens existing `CRMLeadModal` in create mode; includes an inline `BrokerCombobox` ("Assign to broker") with a "+ Add new broker" option that opens a quick `AddBrokerInlineDialog` (name, email, phone, languages, nationality — reuses the pickers built earlier). On save, broker is created in `crm_brokers` and immediately assigned to the lead.
+- **+ Add Broker** → opens `AddBrokerInlineDialog` directly.
 
-In `IndividualBrokersTab.tsx` edit dialog (lines 450, 456, 470) apply the same swap. `editing.languages` is already `string[]`, so the multi-picker plugs in directly.
+Files: `src/pages/owner/crm/UnifiedCRM.tsx` (header actions), new `src/components/crm/AddBrokerInlineDialog.tsx`, reuse `CRMLeadModal`.
 
-## Visual / UX
+---
 
-- Trigger button shows current selection: `🇦🇪 Emirati`, `🇬🇧 English ×  🇸🇦 Arabic ×`, `🇦🇪 +971 50 123 4567`.
-- Empty state: muted placeholder `Select nationality` / `Add languages` / `Phone number`.
-- Search input at top of popover, autofocus on open, instant filter on name + ISO code + dial code.
-- Multi-language: selected items become removable chips above the popover trigger; checkbox in popover list shows selection state.
-- All popovers respect the existing champagne autofill rule and the gold focus ring.
+### 4. New sidebar section: **Broker Accounts** (admin)
 
-## Out of scope (explicitly not touched)
+A dedicated owner-only area to provision and supervise broker CRM logins.
 
-RLS · grants · broker identity · sessions · invitations · password policy · unified picker default · column types · edge functions · other CRM forms (leads, brokerages, employees) — those stay on plain inputs until the user asks.
+Sidebar entry: under existing "CRM" group, add **Accounts** → `/owner/crm/accounts`.
 
-## Files changed
+Page sections:
+1. **Provision account** — form: email, full name, assigned databases/folders, permission level. On submit, edge function `provision-broker-account`:
+   - Calls `admin.createUser` with a random password
+   - Inserts row into `crm_brokers` linked to that auth user
+   - Sets `user_roles` row = `broker`
+   - Sets `must_change_password = true` flag
+   - Emails the broker a welcome message (Resend) with their temp password + login link
+2. **Login gate** — middleware that forces `/auth/change-password` when `must_change_password = true`. Once changed, flag is cleared.
+3. **Accounts table** — list every broker account with: last login, status (active/suspended), # leads, # calls, # edits last 7d, assigned folders. Row actions: suspend, reset password, revoke, view activity.
+4. **Activity timeline per broker** — drawer showing every audited action (lead added, lead edited, lead marked junk, call logged, login, export). Pulled from `crm_audit_log` (extend if needed).
+5. **Export** — per-broker CSV/XLSX export of all leads they own or touched.
 
-```text
-new   src/data/countries.ts
-new   src/data/languages.ts
-new   src/components/crm/pickers/NationalityPicker.tsx
-new   src/components/crm/pickers/LanguageMultiPicker.tsx
-new   src/components/crm/pickers/PhoneInputWithCountry.tsx
-edit  src/pages/owner/crm/BrokersRegistry.tsx     (3 field swaps in add-broker dialog)
-edit  src/components/crm/IndividualBrokersTab.tsx (3 field swaps in edit dialog)
-```
+Schema (migration):
+- `crm_brokers.auth_user_id` (uuid, FK auth.users) — if not present.
+- `crm_brokers.must_change_password` (bool, default false).
+- `crm_audit_log` table if missing: actor_user_id, entity_type, entity_id, action, before jsonb, after jsonb, created_at.
+- Trigger on `crm_leads` insert/update to write into `crm_audit_log` (delete already forbidden — they can only mark junk per existing rule).
+- RLS: brokers see their own audit rows; owner sees all.
 
-No migrations. No dependency installs.
+Edge functions:
+- `provision-broker-account` (admin createUser + email)
+- `reset-broker-password` (admin resetPasswordForEmail)
+- `suspend-broker-account` (ban_duration)
+
+Files: `src/pages/owner/crm/BrokerAccounts.tsx` (new), `src/components/crm/ProvisionBrokerDialog.tsx` (new), `src/components/crm/BrokerActivityDrawer.tsx` (new), `src/pages/auth/ChangePassword.tsx` (new), router entry, sidebar nav entry, three new edge functions.
+
+---
+
+## Order of execution
+
+1. ElevenLabs status pill (smallest, isolated)
+2. Add Lead / Add Broker inline on CRM page (frontend only)
+3. Database folders + broker assignment + drag-drop (migration + UI)
+4. Broker Accounts section (migration + edge functions + new page + force-password-change flow)
+
+## Out of scope
+
+- Call recording / dialer telemetry beyond what the existing audit log captures (calls counted only if already logged via existing channels).
+- Real-time presence ("see brokers live") — only "last seen" + activity log unless you confirm you want a presence feed too.
