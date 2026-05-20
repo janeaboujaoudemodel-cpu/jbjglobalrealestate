@@ -391,8 +391,8 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                     <Button size="sm" variant="gold" onClick={() => navigate(`/owner/documents/forms/${e.id}`)}>Open</Button>
                     {e.signed_document_url && (
                       <Button size="sm" variant="outline" asChild>
-                        <a href={e.signed_document_url} target="_blank" rel="noreferrer">
-                          <ExternalLink className="w-3 h-3 mr-1" /> Download
+                        <a href={brandedDownloadHref(e.signed_document_url, e.document_filename || `${e.name || "document"}.pdf`)} target="_blank" rel="noreferrer">
+                          <Download className="w-3 h-3 mr-1" /> Download document
                         </a>
                       </Button>
                     )}
