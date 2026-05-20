@@ -249,13 +249,13 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[10050] flex items-start md:items-center justify-center bg-[#1A1A1A]/70 backdrop-blur-md p-4 pt-24 md:pt-[104px]"
+        className="fixed inset-0 z-[10050] flex items-start sm:items-center justify-center bg-[#1A1A1A]/70 backdrop-blur-md px-4 pt-[104px] pb-6 sm:py-[104px] overflow-y-auto overscroll-contain"
       >
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="relative w-full max-w-lg bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto"
+          className="relative w-full max-w-lg my-auto bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl overflow-hidden shadow-2xl max-h-[calc(100dvh-7rem)] sm:max-h-[calc(100dvh-9rem)] overflow-y-auto overscroll-contain"
         >
           {/* Close button */}
           <button
