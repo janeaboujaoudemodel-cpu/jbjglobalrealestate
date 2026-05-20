@@ -381,6 +381,7 @@ const VoiceConciergeWidget = () => {
           </button>
         </div>
       )}
+      </div>
     </div>
   );
 };
