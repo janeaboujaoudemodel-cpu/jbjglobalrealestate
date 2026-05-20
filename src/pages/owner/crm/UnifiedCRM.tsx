@@ -612,6 +612,21 @@ export default function UnifiedCRM() {
       <Suspense fallback={null}>
         <CRMSideRail />
       </Suspense>
+
+      {/* Quick-create dialogs */}
+      {addLeadOpen && (
+        <CRMLeadModal
+          open={addLeadOpen}
+          onClose={() => setAddLeadOpen(false)}
+          onSuccess={() => { invalidateCRM(); setAddLeadOpen(false); }}
+          userId={userId}
+        />
+      )}
+      <AddBrokerInlineDialog
+        open={addBrokerOpen}
+        onClose={() => setAddBrokerOpen(false)}
+        onCreated={() => invalidateCRM()}
+      />
     </div>
   );
 }
