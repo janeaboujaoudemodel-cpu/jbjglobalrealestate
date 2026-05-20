@@ -49,6 +49,18 @@ export default function DatabasesHub() {
   const [statusFilter, setStatusFilter] = useState<"all" | Row["status"]>("all");
   const [grantTarget, setGrantTarget] = useState<Row | null>(null);
   const [manageTarget, setManageTarget] = useState<Row | null>(null);
+  const [openIds, setOpenIds] = useState<Set<string>>(new Set());
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setCurrentUserId(data.user?.id ?? null));
+  }, []);
+
+  const toggleOpen = (id: string) => {
+    const next = new Set(openIds);
+    next.has(id) ? next.delete(id) : next.add(id);
+    setOpenIds(next);
+  };
 
   const load = async () => {
     setLoading(true);
