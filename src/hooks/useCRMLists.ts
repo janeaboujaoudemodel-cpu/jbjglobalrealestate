@@ -18,6 +18,7 @@ export interface CRMList {
   description: string | null;
   color: string | null;
   archived_at: string | null;
+  folder_id: string | null;
   created_at: string;
 }
 

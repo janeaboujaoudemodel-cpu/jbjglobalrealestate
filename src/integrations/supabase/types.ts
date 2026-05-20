@@ -6896,6 +6896,68 @@ export type Database = {
         }
         Relationships: []
       }
+      crm_database_folders: {
+        Row: {
+          archived_at: string | null
+          assigned_broker_id: string | null
+          color: string | null
+          created_at: string
+          id: string
+          name: string
+          owner_user_id: string
+          updated_at: string
+        }
+        Insert: {
+          archived_at?: string | null
+          assigned_broker_id?: string | null
+          color?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          owner_user_id: string
+          updated_at?: string
+        }
+        Update: {
+          archived_at?: string | null
+          assigned_broker_id?: string | null
+          color?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          owner_user_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_database_folders_assigned_broker_id_fkey"
+            columns: ["assigned_broker_id"]
+            isOneToOne: false
+            referencedRelation: "crm_brokers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_database_folders_assigned_broker_id_fkey"
+            columns: ["assigned_broker_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_broker_overview"
+            referencedColumns: ["broker_id"]
+          },
+          {
+            foreignKeyName: "crm_database_folders_assigned_broker_id_fkey"
+            columns: ["assigned_broker_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_broker_stats"
+            referencedColumns: ["broker_id"]
+          },
+          {
+            foreignKeyName: "crm_database_folders_assigned_broker_id_fkey"
+            columns: ["assigned_broker_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_access"
+            referencedColumns: ["broker_id"]
+          },
+        ]
+      }
       crm_database_grants: {
         Row: {
           broker_user_id: string
@@ -7916,6 +7978,7 @@ export type Database = {
           color: string | null
           created_at: string
           description: string | null
+          folder_id: string | null
           id: string
           kind: string
           name: string
@@ -7928,6 +7991,7 @@ export type Database = {
           color?: string | null
           created_at?: string
           description?: string | null
+          folder_id?: string | null
           id?: string
           kind: string
           name: string
@@ -7940,6 +8004,7 @@ export type Database = {
           color?: string | null
           created_at?: string
           description?: string | null
+          folder_id?: string | null
           id?: string
           kind?: string
           name?: string
@@ -7947,7 +8012,15 @@ export type Database = {
           source_filename?: string | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "crm_lead_lists_folder_id_fkey"
+            columns: ["folder_id"]
+            isOneToOne: false
+            referencedRelation: "crm_database_folders"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       crm_lead_reports: {
         Row: {

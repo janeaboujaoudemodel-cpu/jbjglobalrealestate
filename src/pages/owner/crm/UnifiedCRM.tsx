@@ -21,7 +21,7 @@ import {
   Users, Crown, Building2, UserCog, Network, Briefcase, BadgeCheck,
   ChevronDown, BarChart3, Bell, ChevronLeft, ChevronRight, Database, Plus, UserPlus,
 } from "lucide-react";
-import { AddBrokerInlineDialog } from "@/components/crm/AddBrokerInlineDialog";
+import { AddBrokerSheet } from "@/pages/owner/crm/BrokersRegistry";
 import CRMLeadModal from "@/components/crm/CRMLeadModal";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -622,10 +622,10 @@ export default function UnifiedCRM() {
           userId={userId}
         />
       )}
-      <AddBrokerInlineDialog
+      <AddBrokerSheet
         open={addBrokerOpen}
-        onClose={() => setAddBrokerOpen(false)}
-        onCreated={() => invalidateCRM()}
+        onOpenChange={setAddBrokerOpen}
+        onAdded={() => invalidateCRM()}
       />
     </div>
   );
