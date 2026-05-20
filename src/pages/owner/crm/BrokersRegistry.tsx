@@ -627,7 +627,7 @@ function BrokerCompanyTimeline({ brokerId, brokerName, history, currentCompany }
   );
 }
 
-function AddBrokerSheet({ open, onOpenChange, onAdded }: { open: boolean; onOpenChange: (o: boolean) => void; onAdded: () => void }) {
+export function AddBrokerSheet({ open, onOpenChange, onAdded }: { open: boolean; onOpenChange: (o: boolean) => void; onAdded: () => void }) {
   const [saving, setSaving] = useState(false);
   const initial = {
     full_name: "", email: "", phone: "", whatsapp: "",
