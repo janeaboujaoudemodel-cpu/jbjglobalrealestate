@@ -2,13 +2,15 @@ import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Database, Download, Upload, FileSpreadsheet, RefreshCw, Loader2, ShieldCheck, Settings2 } from "lucide-react";
+import { Database, Download, Upload, FileSpreadsheet, RefreshCw, Loader2, ShieldCheck, Settings2, ChevronRight, ChevronDown } from "lucide-react";
 import UploadDatabaseDialog from "./UploadDatabaseDialog";
 import GrantBrokerAccessDialog from "./GrantBrokerAccessDialog";
 import BrokerGrantsManagerDialog from "./BrokerGrantsManagerDialog";
+import DatabaseRowsGrid from "./DatabaseRowsGrid";
 import { toast } from "sonner";
 import { formatDisplayDate as formatDate } from "@/utils/formatDate";
 import { CRMToolbar } from "@/components/ui/crm-toolbar";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 type Row = {
   id: string;
