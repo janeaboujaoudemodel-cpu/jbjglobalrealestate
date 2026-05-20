@@ -353,7 +353,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
             const sCls =
               mode === "signed" ? "bg-emerald-50 text-emerald-800 border-emerald-200"
               : mode === "submitted" ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
-              : mode === "sent" ? "bg-blue-50 text-blue-800 border-blue-200"
+              : mode === "sent" ? "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/60"
               : mode === "deleted" ? "bg-red-50 text-red-800 border-red-200"
               : mode === "generated" ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/60"
               : "bg-[#F7F2EA] text-[#1A1A1A]/80 border-[#B89555]/30";
@@ -395,6 +395,60 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                           <Download className="w-3 h-3 mr-1" /> Download document
                         </a>
                       </Button>
+                    )}
+                    {mode === "submitted" && (
+                      <>
+                        <Button
+                          size="sm"
+                          variant="gold"
+                          onClick={async () => {
+                            const { error } = await supabase
+                              .from("esign_envelopes")
+                              .update({
+                                status: "completed",
+                                completed_at: new Date().toISOString(),
+                                metadata: { ...(e.metadata || {}), owner_review: { decision: "approved", at: new Date().toISOString() } },
+                              })
+                              .eq("id", e.id);
+                            if (error) { toast.error(error.message); return; }
+                            // Fire-and-forget thank-you
+                            try {
+                              await supabase.functions.invoke("esign-send-signer-thanks", {
+                                body: { envelope_id: e.id, variant: "approved" },
+                              });
+                            } catch { /* best-effort */ }
+                            toast.success("Approved — client notified");
+                            refetch();
+                          }}
+                        >
+                          <CheckCircle2 className="w-3 h-3 mr-1" /> Approve
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={async () => {
+                            const reason = window.prompt("Reason for rejecting this signed document? (will be emailed to the client)");
+                            if (!reason || !reason.trim()) return;
+                            const { error } = await supabase
+                              .from("esign_envelopes")
+                              .update({
+                                status: "declined",
+                                metadata: { ...(e.metadata || {}), owner_review: { decision: "rejected", reason: reason.trim(), at: new Date().toISOString() } },
+                              })
+                              .eq("id", e.id);
+                            if (error) { toast.error(error.message); return; }
+                            try {
+                              await supabase.functions.invoke("esign-send-signer-thanks", {
+                                body: { envelope_id: e.id, variant: "rejected", rejection_reason: reason.trim() },
+                              });
+                            } catch { /* best-effort */ }
+                            toast.success("Marked as rejected — client notified");
+                            refetch();
+                          }}
+                        >
+                          <Trash2 className="w-3 h-3 mr-1" /> Reject
+                        </Button>
+                      </>
                     )}
                     {mode === "signed" && (
                       <Button
