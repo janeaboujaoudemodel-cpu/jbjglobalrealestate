@@ -444,6 +444,22 @@ export default function UnifiedCRM() {
             </p>
           </div>
           <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setAddLeadOpen(true)}
+              className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#1A1A1A] text-[#FDFBF7] border border-[#1A1A1A] hover:bg-[#1A1A1A]/90 transition-colors"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              Add Lead
+            </button>
+            <button
+              type="button"
+              onClick={() => setAddBrokerOpen(true)}
+              className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60 hover:bg-[#EFE6D6]/80 transition-colors"
+            >
+              <UserPlus className="h-3.5 w-3.5" />
+              Add Broker
+            </button>
             <Suspense fallback={null}>
               <CRMFloatingInsightsWidget
                 flaggedCount={counts.flagged}
