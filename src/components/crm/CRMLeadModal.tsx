@@ -263,19 +263,19 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
 
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <Label>Phone (E.164)</Label>
-                  <Input
+                  <Label>Phone</Label>
+                  <PhoneInputWithCountry
                     value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    placeholder="+971501234567"
+                    onChange={(v) => setFormData({ ...formData, phone: v })}
+                    placeholder="50 123 4567"
                   />
                 </div>
                 <div>
                   <Label>WhatsApp Number</Label>
-                  <Input
+                  <PhoneInputWithCountry
                     value={formData.whatsapp}
-                    onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-                    placeholder="+971501234567"
+                    onChange={(v) => setFormData({ ...formData, whatsapp: v })}
+                    placeholder="50 123 4567"
                   />
                 </div>
                 <div>
