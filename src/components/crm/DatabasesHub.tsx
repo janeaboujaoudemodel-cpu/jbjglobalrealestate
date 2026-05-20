@@ -124,17 +124,20 @@ export default function DatabasesHub() {
             onChange={(e) => setSearch(e.target.value)}
             className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] min-w-0"
           />
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value as any)}
-            className="h-9 rounded-md border border-[#B89555]/30 bg-[#FDFBF7] text-sm text-[#1A1A1A] px-2 shrink-0"
-            aria-label="Status filter"
-          >
-            <option value="all">All statuses</option>
-            <option value="separate">Separate</option>
-            <option value="merged">Merged</option>
-            <option value="both">Merged + Separate</option>
-          </select>
+          <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as any)}>
+            <SelectTrigger
+              aria-label="Status filter"
+              className="h-9 w-[180px] shrink-0 rounded-md border border-[#B89555]/30 bg-[#FDFBF7] text-sm text-[#1A1A1A] focus:ring-2 focus:ring-[#B89555]/40 focus:border-[#B89555]/60"
+            >
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]">
+              <SelectItem value="all" className="focus:bg-[#EFE6D6] focus:text-[#1A1A1A] data-[state=checked]:bg-[#EFE6D6]">All statuses</SelectItem>
+              <SelectItem value="separate" className="focus:bg-[#EFE6D6] focus:text-[#1A1A1A] data-[state=checked]:bg-[#EFE6D6]">Separate</SelectItem>
+              <SelectItem value="merged" className="focus:bg-[#EFE6D6] focus:text-[#1A1A1A] data-[state=checked]:bg-[#EFE6D6]">Merged</SelectItem>
+              <SelectItem value="both" className="focus:bg-[#EFE6D6] focus:text-[#1A1A1A] data-[state=checked]:bg-[#EFE6D6]">Merged + Separate</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         <Button variant="outline" onClick={load} className="border-[#B89555]/40 text-[#1A1A1A] shrink-0">
           <RefreshCw className="h-4 w-4 lg:mr-2" />
