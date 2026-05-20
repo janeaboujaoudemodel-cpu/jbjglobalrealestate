@@ -1,9 +1,28 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useConversation } from "@elevenlabs/react";
-import { Phone, PhoneOff, X, Mic, Volume2, LogIn } from "lucide-react";
+import { Phone, PhoneOff, X, Mic, Volume2, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import VoiceConciergeIntakeModal from "@/components/voice-concierge/VoiceConciergeIntakeModal";
+
+const LEAD_STORAGE_KEY = "voice_concierge_lead";
+const LEAD_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+
+function getStoredLeadId(): string | null {
+  try {
+    const raw = localStorage.getItem(LEAD_STORAGE_KEY);
+    if (!raw) return null;
+    const { id, at } = JSON.parse(raw);
+    if (!id || !at) return null;
+    if (Date.now() - at > LEAD_TTL_MS) {
+      localStorage.removeItem(LEAD_STORAGE_KEY);
+      return null;
+    }
+    return id;
+  } catch { return null; }
+}
+
 
 const STORAGE_KEY = "jj_voice_concierge_minimized_at";
 const RESTORE_AFTER_MS = 24 * 60 * 60 * 1000; // 24 hours
