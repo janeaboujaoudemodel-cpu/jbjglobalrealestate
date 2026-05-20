@@ -1,30 +1,20 @@
-import { useState } from "react";
+/**
+ * GuidedTour — Spotlight coachmark tour.
+ *
+ * Instead of a separate slideshow modal, this overlays a dimmed page with a
+ * cutout around real on-page icons (mobile menu, search, account, language…)
+ * and shows a tooltip arrow pointing at each one. The user sees exactly where
+ * the icon lives in the actual website.
+ *
+ * Steps are resolved by `data-tour-target="…"` selectors. If a step's element
+ * is missing on the current viewport (e.g. desktop-only icon on iPad), the
+ * step is skipped automatically.
+ */
+import { useState, useEffect, useLayoutEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { 
-  Heart, 
-  ListPlus, 
-  ArrowRight, 
-  ArrowLeft,
-  X, 
-  Trophy,
-  Compass,
-  Send,
-  TrendingUp,
-  Calculator,
-  Brain,
-  Menu,
-  Search,
-  User,
-  Globe,
-  Phone,
-  Map,
-  DollarSign,
-  ChevronRight,
-  Sparkles
-} from "lucide-react";
+import { ArrowRight, ArrowLeft, X, Compass, Sparkles } from "lucide-react";
 import { JJLogoImage } from "./JJLogoImage";
-import { Link } from "react-router-dom";
 
 const TOUR_COMPLETED_KEY = "jj_tour_completed";
 
@@ -33,512 +23,406 @@ interface GuidedTourProps {
   onClose: () => void;
 }
 
+type SpotlightStep = {
+  target: string;        // CSS selector — primary
+  fallbackTargets?: string[];
+  title: string;
+  description: string;
+  pulse?: boolean;
+};
+
+const SPOTLIGHT_STEPS: SpotlightStep[] = [
+  {
+    target: '[data-tour-target="mobile-menu"]',
+    fallbackTargets: ['[data-tour-target="header"] nav', 'header'],
+    title: "Main menu",
+    description: "Tap here to open the full navigation — Buy, Rent, Projects, Services, Areas and more.",
+    pulse: true,
+  },
+  {
+    target: '[data-tour-target="search"]',
+    fallbackTargets: ['[aria-label="Search"]', '[data-tour-target="mobile-menu"]'],
+    title: "Search",
+    description: "Search properties, projects, areas and tools instantly. On tablet/mobile, the search lives inside the main menu.",
+    pulse: true,
+  },
+  {
+    target: '[data-tour-target="account"]',
+    fallbackTargets: ['[aria-label="My Account"]', '[aria-label="Sign In"]', '[data-tour-target="mobile-menu"]'],
+    title: "Your account",
+    description: "Sign in, manage your profile, view favorites and access your dashboard.",
+    pulse: true,
+  },
+  {
+    target: '[data-tour-target="language"]',
+    fallbackTargets: ['[aria-label="Language"]', '[data-tour-target="mobile-menu"]'],
+    title: "Language",
+    description: "Switch the entire site between 16 languages — translations are live.",
+    pulse: true,
+  },
+];
+
+// ── Geometry helpers ──────────────────────────────────────────────────────
+type Rect = { top: number; left: number; width: number; height: number };
+
+function getRect(selector: string, fallbacks: string[] = []): { rect: Rect; el: HTMLElement } | null {
+  const tryOne = (sel: string): HTMLElement | null => {
+    try {
+      const list = document.querySelectorAll<HTMLElement>(sel);
+      for (const el of Array.from(list)) {
+        const r = el.getBoundingClientRect();
+        if (r.width > 0 && r.height > 0 && el.offsetParent !== null) return el;
+      }
+    } catch {/* invalid selector */}
+    return null;
+  };
+  const el = tryOne(selector) || fallbacks.map(tryOne).find(Boolean) || null;
+  if (!el) return null;
+  const r = el.getBoundingClientRect();
+  return { rect: { top: r.top, left: r.left, width: r.width, height: r.height }, el };
+}
+
 const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [showTour, setShowTour] = useState<'choice' | 'tour' | 'shortcuts' | null>('choice');
+  const [phase, setPhase] = useState<"welcome" | "spotlight" | "done">("welcome");
+  const [stepIdx, setStepIdx] = useState(0);
+  const [rect, setRect] = useState<Rect | null>(null);
+  const [vw, setVw] = useState(typeof window !== "undefined" ? window.innerWidth : 1024);
+  const [vh, setVh] = useState(typeof window !== "undefined" ? window.innerHeight : 768);
+  const rafRef = useRef<number | null>(null);
 
-  const handleTakeTour = () => {
-    setShowTour('tour');
-    setCurrentStep(0);
-  };
-
-  const handleExploreAlone = () => {
-    setShowTour('shortcuts');
-  };
-
-  const handleComplete = () => {
+  const handleComplete = useCallback(() => {
     localStorage.setItem(TOUR_COMPLETED_KEY, "true");
-    setShowTour(null);
+    setPhase("welcome");
+    setStepIdx(0);
     onClose();
-  };
+  }, [onClose]);
 
-  // Enhanced tour steps with navigation focus and direct links
-  const tourSteps = [
-    {
-      icon: Menu,
-      iconColor: "text-[#1A1A1A]",
-      iconBg: "from-gold/20 to-gold/10",
-      iconBorder: "border-[#B89555]/30",
-      title: "Navigation Menu",
-      description: "Find all pages in the header menu. Click on Buy, Rent, Projects, Services, or More to explore each section.",
-      link: null,
-      linkLabel: null
-    },
-    {
-      icon: Search,
-      iconColor: "text-blue-500",
-      iconBg: "from-blue-500/20 to-blue-600/10",
-      iconBorder: "border-blue-500/30",
-      title: "Quick Search",
-      description: "Click the search icon in the header to access services, shortcuts, and contact options instantly.",
-      link: null,
-      linkLabel: null
-    },
-    {
-      icon: User,
-      iconColor: "text-purple-500",
-      iconBg: "from-purple-500/20 to-purple-600/10",
-      iconBorder: "border-purple-500/30",
-      title: "Sign In & Account",
-      description: "Click the user icon to access your account, favorites, settings, and personalized dashboard.",
-      link: "/my-account",
-      linkLabel: "Go to My Account"
-    },
-    {
-      icon: Globe,
-      iconColor: "text-cyan-500",
-      iconBg: "from-cyan-500/20 to-cyan-600/10",
-      iconBorder: "border-cyan-500/30",
-      title: "Language Selection",
-      description: "Switch between English and Arabic using the language icon in the header. Perfect for your preferred reading experience.",
-      link: null,
-      linkLabel: null
-    },
-    {
-      icon: DollarSign,
-      iconColor: "text-emerald-500",
-      iconBg: "from-emerald-500/20 to-emerald-600/10",
-      iconBorder: "border-emerald-500/30",
-      title: "Currency Selection",
-      description: "Select your preferred currency (AED, USD, EUR, GBP) using the currency icon in the header.",
-      link: null,
-      linkLabel: null
-    },
-    {
-      icon: Heart,
-      iconColor: "text-red-500",
-      iconBg: "from-red-500/20 to-red-600/10",
-      iconBorder: "border-red-500/30",
-      title: "Save to Favorites",
-      description: "Tap the heart icon on any property to save it to your favorites collection.",
-      link: "/favorites",
-      linkLabel: "View Favorites"
-    },
-    {
-      icon: ListPlus,
-      iconColor: "text-[#1A1A1A]",
-      iconBg: "from-gold/20 to-gold/10",
-      iconBorder: "border-[#B89555]/30",
-      title: "Add to Shortlist",
-      description: "Move your top favorites to the shortlist for detailed comparison. Select up to 5 properties.",
-      link: "/favorites",
-      linkLabel: "Manage Shortlist"
-    },
-    {
-      icon: Trophy,
-      iconColor: "text-[#1A1A1A]",
-      iconBg: "from-gold/30 to-amber-500/10",
-      iconBorder: "border-[#B89555]/40",
-      title: "Assign Badges",
-      description: "In Favorites → Shortlist tab, click 'Add Badge' to rank: Gold (Top 1), Silver (Top 2), Bronze (Top 3).",
-      link: "/favorites",
-      linkLabel: "Assign Badges"
-    },
-    {
-      icon: Brain,
-      iconColor: "text-purple-500",
-      iconBg: "from-purple-500/20 to-purple-600/10",
-      iconBorder: "border-purple-500/30",
-      title: "AI Property Matchmaker",
-      description: "Our AI analyzes your shortlisted properties and provides detailed investment comparisons.",
-      link: "/quiz",
-      linkLabel: "Try AI Quiz"
-    },
-    {
-      icon: Calculator,
-      iconColor: "text-orange-500",
-      iconBg: "from-orange-500/20 to-orange-600/10",
-      iconBorder: "border-orange-500/30",
-      title: "Mortgage Calculator",
-      description: "Calculate your monthly payments and connect with mortgage advisors for personalized guidance.",
-      link: "/mortgage-calculator",
-      linkLabel: "Open Calculator"
-    },
-    {
-      icon: TrendingUp,
-      iconColor: "text-green-500",
-      iconBg: "from-green-500/20 to-green-600/10",
-      iconBorder: "border-green-500/30",
-      title: "Market Intelligence",
-      description: "Access real-time market data, area insights, and investment analytics for informed decisions.",
-      link: "/market-intelligence/overview",
-      linkLabel: "View Market Data"
-    },
-    {
-      icon: Map,
-      iconColor: "text-blue-500",
-      iconBg: "from-blue-500/20 to-blue-600/10",
-      iconBorder: "border-blue-500/30",
-      title: "Sitemap & Help",
-      description: "Find the complete sitemap in the footer or header 'More' menu for quick access to every page.",
-      link: "/sitemap",
-      linkLabel: "View Sitemap"
-    },
-    {
-      icon: Phone,
-      iconColor: "text-green-500",
-      iconBg: "from-green-500/20 to-green-600/10",
-      iconBorder: "border-green-500/30",
-      title: "Contact JBJ",
-      description: "Reach us via WhatsApp, phone, or email. Click the search icon for quick contact options.",
-      link: "/contact",
-      linkLabel: "Contact Us"
-    },
-    {
-      icon: Send,
-      iconColor: "text-[#1A1A1A]",
-      iconBg: "from-gold/20 to-gold/10",
-      iconBorder: "border-[#B89555]/30",
-      title: "Connect with JBJ",
-      description: "Submit your curated selection directly to our property consultants and book consultations.",
-      link: "/contact",
-      linkLabel: "Get in Touch"
-    }
-  ];
+  // ── Resolve current step target & keep rect synced on scroll/resize ──
+  useLayoutEffect(() => {
+    if (!isOpen || phase !== "spotlight") return;
+    const step = SPOTLIGHT_STEPS[stepIdx];
+    if (!step) return;
 
-  const shortcutItems = [
-    {
-      icon: Menu,
-      iconColor: "text-[#1A1A1A]",
-      title: "Header Menu",
-      description: "Buy, Rent, Projects, Services & More",
-      link: null
-    },
-    {
-      icon: Search,
-      iconColor: "text-blue-500",
-      title: "Quick Search",
-      description: "Services, shortcuts & contact in header",
-      link: null
-    },
-    {
-      icon: Heart,
-      iconColor: "text-red-500",
-      title: "Favorites & Shortlist",
-      description: "Save and compare up to 5 properties",
-      link: "/favorites"
-    },
-    {
-      icon: Brain,
-      iconColor: "text-purple-500",
-      title: "AI Property Matchmaker",
-      description: "Get AI-powered investment analysis",
-      link: "/quiz"
-    },
-    {
-      icon: Calculator,
-      iconColor: "text-orange-500",
-      title: "Mortgage Calculator",
-      description: "Calculate payments and connect with advisors",
-      link: "/mortgage-calculator"
-    },
-    {
-      icon: Map,
-      iconColor: "text-emerald-500",
-      title: "Sitemap",
-      description: "Find all pages in footer or More menu",
-      link: "/sitemap"
-    }
-  ];
+    let cancelled = false;
+    let attempts = 0;
+
+    const tick = () => {
+      if (cancelled) return;
+      const found = getRect(step.target, step.fallbackTargets);
+      if (found) {
+        setRect(found.rect);
+        // Ensure visible: scroll into view if off-screen
+        const r = found.rect;
+        if (r.top < 80 || r.top + r.height > window.innerHeight - 80) {
+          found.el.scrollIntoView({ behavior: "smooth", block: "center" });
+          // re-measure after scroll
+          setTimeout(() => {
+            const re = found.el.getBoundingClientRect();
+            if (!cancelled) setRect({ top: re.top, left: re.left, width: re.width, height: re.height });
+          }, 350);
+        }
+      } else if (attempts++ < 20) {
+        rafRef.current = requestAnimationFrame(tick);
+      } else {
+        // Element never appeared → auto-skip to next step
+        setStepIdx((i) => {
+          if (i + 1 >= SPOTLIGHT_STEPS.length) {
+            setPhase("done");
+            return i;
+          }
+          return i + 1;
+        });
+      }
+    };
+    rafRef.current = requestAnimationFrame(tick);
+
+    const onMove = () => {
+      const found = getRect(step.target, step.fallbackTargets);
+      if (found) setRect(found.rect);
+    };
+    const onResize = () => {
+      setVw(window.innerWidth);
+      setVh(window.innerHeight);
+      onMove();
+    };
+    window.addEventListener("scroll", onMove, true);
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      cancelled = true;
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      window.removeEventListener("scroll", onMove, true);
+      window.removeEventListener("resize", onResize);
+    };
+  }, [isOpen, phase, stepIdx]);
+
+  // ── ESC to close ─────────────────────────────────────────────────────
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") handleComplete();
+      if (e.key === "ArrowRight" && phase === "spotlight") next();
+      if (e.key === "ArrowLeft" && phase === "spotlight") prev();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, phase, stepIdx]);
 
   if (!isOpen) return null;
 
+  const next = () => {
+    if (stepIdx + 1 >= SPOTLIGHT_STEPS.length) setPhase("done");
+    else setStepIdx((i) => i + 1);
+  };
+  const prev = () => setStepIdx((i) => Math.max(0, i - 1));
+
+  const step = SPOTLIGHT_STEPS[stepIdx];
+
+  // Tooltip placement: prefer below the target; if no room, place above.
+  const TOOLTIP_W = Math.min(320, vw - 32);
+  const TOOLTIP_H_EST = 170;
+  const GAP = 14;
+
+  let tooltipLeft = 16;
+  let tooltipTop = 80;
+  let placement: "below" | "above" | "center" = "below";
+
+  if (phase === "spotlight" && rect) {
+    const centerX = rect.left + rect.width / 2;
+    tooltipLeft = Math.max(12, Math.min(vw - TOOLTIP_W - 12, centerX - TOOLTIP_W / 2));
+    const spaceBelow = vh - (rect.top + rect.height) - GAP;
+    const spaceAbove = rect.top - GAP;
+    if (spaceBelow >= TOOLTIP_H_EST) {
+      placement = "below";
+      tooltipTop = rect.top + rect.height + GAP;
+    } else if (spaceAbove >= TOOLTIP_H_EST) {
+      placement = "above";
+      tooltipTop = rect.top - TOOLTIP_H_EST - GAP;
+    } else {
+      placement = "center";
+      tooltipTop = Math.max(16, vh - TOOLTIP_H_EST - 16);
+    }
+  }
+
+  // SVG mask: full-screen black with circular cutout around the target
+  const cutout = phase === "spotlight" && rect
+    ? {
+        cx: rect.left + rect.width / 2,
+        cy: rect.top + rect.height / 2,
+        r: Math.max(rect.width, rect.height) / 2 + 12,
+      }
+    : null;
+
   return (
     <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[10050] flex items-start sm:items-center justify-center bg-[#1A1A1A]/70 backdrop-blur-md px-4 pt-[104px] pb-6 sm:py-[104px] overflow-y-auto overscroll-contain"
-      >
+      {/* ═══ WELCOME / DONE — centered compact card ═══════════════════ */}
+      {(phase === "welcome" || phase === "done") && (
         <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="relative w-full max-w-lg my-auto bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl overflow-hidden shadow-2xl max-h-[calc(100dvh-7rem)] sm:max-h-[calc(100dvh-9rem)] overflow-y-auto overscroll-contain"
+          key="welcome-card"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[10050] flex items-center justify-center bg-[#1A1A1A]/70 backdrop-blur-md px-4 py-6 overflow-y-auto overscroll-contain"
         >
-          {/* Close button */}
-          <button
-            onClick={handleComplete}
-            className="absolute top-4 right-4 z-20 p-2 rounded-full bg-[#F7F2EA] hover:bg-[#EFE6D6] transition-colors"
-            aria-label="Close tour"
+          <motion.div
+            initial={{ scale: 0.96, y: 12, opacity: 0 }}
+            animate={{ scale: 1, y: 0, opacity: 1 }}
+            exit={{ scale: 0.96, y: 8, opacity: 0 }}
+            className="relative w-full max-w-md my-auto bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl shadow-2xl overflow-hidden"
           >
-            <X className="w-4 h-4 text-[#1A1A1A]/70" />
-          </button>
+            <button
+              onClick={handleComplete}
+              className="absolute top-3 right-3 z-20 p-2 rounded-full bg-[#F7F2EA] hover:bg-[#EFE6D6] transition-colors"
+              aria-label="Close tour"
+            >
+              <X className="w-4 h-4 text-[#1A1A1A]/70" />
+            </button>
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
 
-          {/* Premium top accent */}
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
-          
-          {/* Ambient glow */}
-          <div 
-            className="absolute top-0 left-0 right-0 h-40 pointer-events-none"
-            style={{
-              background: `radial-gradient(ellipse at 50% -20%, hsl(40 32% 51% / 0.15) 0%, transparent 70%)`
-            }}
-          />
+            <div className="px-6 py-7 text-center">
+              <div className="flex justify-center mb-4 text-[#1A1A1A]">
+                <JJLogoImage variant="light" size="sm" />
+              </div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#EFE6D6] border border-[#B89555]/40 rounded-full mb-3">
+                <Sparkles className="w-3.5 h-3.5 text-[#1A1A1A]" />
+                <span className="text-[#1A1A1A] text-xs font-medium">
+                  {phase === "welcome" ? "Welcome Guide" : "You're all set"}
+                </span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-semibold text-[#1A1A1A] mb-2">
+                {phase === "welcome"
+                  ? "Welcome to JBJ Global Real Estate"
+                  : "Enjoy exploring the platform"}
+              </h2>
+              <p className="text-[#1A1A1A]/70 text-sm mb-5">
+                {phase === "welcome"
+                  ? "We'll highlight key icons right on the page so you know exactly where to tap."
+                  : "You can restart this tour anytime from the help menu."}
+              </p>
 
-          <div className="relative p-6 sm:p-8">
-            {/* CHOICE SCREEN */}
-            {showTour === 'choice' && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-center"
-              >
-                <div className="flex justify-center mb-6 text-[#1A1A1A]">
-                  <JJLogoImage variant="light" size="md" />
-                </div>
-
-                {/* Welcome badge */}
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#EFE6D6] border border-[#B89555]/40 rounded-full mb-4">
-                  <Sparkles className="w-3.5 h-3.5 !text-[#1A1A1A]" />
-                  <span className="!text-[#1A1A1A] text-xs font-medium">Welcome Guide</span>
-                </div>
-
-                <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-[#1A1A1A] mb-3">
-                  Welcome to JBJ Global Real Estate
-                </h2>
-                <p className="text-[#1A1A1A]/70 text-sm mb-8 max-w-sm mx-auto">
-                  Take a quick guided tour to learn how to navigate our platform, or explore on your own
-                </p>
-
-                <div className="space-y-3">
+              {phase === "welcome" ? (
+                <div className="space-y-2.5">
                   <Button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      handleTakeTour();
-                    }}
+                    onClick={() => { setStepIdx(0); setPhase("spotlight"); }}
                     type="button"
-                    className="w-full py-5 sm:py-6 bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A] font-semibold text-base shadow-xl rounded-xl group relative overflow-hidden border border-[#B89555]/20"
+                    className="w-full h-12 bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-[#FDFBF7] font-semibold rounded-xl group border border-[#B89555]/40"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-                    <Compass className="w-5 h-5 mr-3 relative z-10" />
-                    <span className="flex-1 text-left relative z-10">Take a Quick Tour</span>
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform relative z-10" />
+                    <Compass className="w-4 h-4 mr-2" />
+                    <span className="flex-1 text-left">Start the quick tour</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                   </Button>
-
-                  <Button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      handleExploreAlone();
-                    }}
-                    type="button"
-                    variant="secondary"
-                    className="w-full py-5 sm:py-6 rounded-xl group !text-[#1A1A1A]"
-                  >
-                    <span className="flex-1 text-left font-semibold !text-[#1A1A1A]">View Quick Shortcuts</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform !text-[#1A1A1A]" />
-                  </Button>
-
                   <Button
                     onClick={handleComplete}
                     type="button"
-                    variant="tertiary"
-                    className="w-full py-3 rounded-xl text-sm"
+                    variant="ghost"
+                    className="w-full h-10 rounded-xl text-sm text-[#1A1A1A]/70"
                   >
                     Skip for now
                   </Button>
                 </div>
-              </motion.div>
-            )}
+              ) : (
+                <Button
+                  onClick={handleComplete}
+                  type="button"
+                  className="w-full h-12 bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-[#FDFBF7] font-semibold rounded-xl border border-[#B89555]/40"
+                >
+                  Done
+                </Button>
+              )}
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
 
-            {/* TOUR STEPS */}
-            {showTour === 'tour' && (
-              <motion.div
-                key={currentStep}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                className="text-center"
-              >
-                {/* Progress bar */}
-                <div className="mb-6">
-                  <div className="h-1.5 bg-[#EFE6D6] rounded-full overflow-hidden">
-                    <motion.div 
-                      className="h-full bg-gradient-to-r from-gold to-gold/70 rounded-full"
-                      initial={{ width: 0 }}
-                      animate={{ width: `${((currentStep + 1) / tourSteps.length) * 100}%` }}
-                      transition={{ duration: 0.3 }}
-                    />
-                  </div>
-                  <div className="flex justify-between items-center mt-2">
-                    <span className="text-xs text-[#1A1A1A]/70">Step {currentStep + 1} of {tourSteps.length}</span>
-                    <div className="flex gap-1">
-                      {tourSteps.map((_, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => setCurrentStep(idx)}
-                          className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                            idx === currentStep 
-                              ? 'bg-[#EFE6D6] scale-125' 
-                              : idx < currentStep 
-                                ? 'bg-[#EFE6D6]/50 hover:bg-[#EFE6D6]/70' 
-                                : 'bg-[#EFE6D6] hover:bg-[#B89555]'
-                          }`}
-                          aria-label={`Go to step ${idx + 1}`}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Icon with arrow pointer */}
-                <div className="relative inline-flex mb-6">
-                  <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-br ${tourSteps[currentStep].iconBg} border-2 ${tourSteps[currentStep].iconBorder} flex items-center justify-center shadow-lg`}>
-                    {(() => {
-                      const Icon = tourSteps[currentStep].icon;
-                      return <Icon className={`w-10 h-10 sm:w-12 sm:h-12 ${tourSteps[currentStep].iconColor}`} />;
-                    })()}
-                  </div>
-                  {/* Animated arrow pointing to icon */}
-                  <motion.div 
-                    className="absolute -bottom-3 left-1/2 -translate-x-1/2"
-                    animate={{ y: [0, 5, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                  >
-                    <div className="w-4 h-4 bg-[#EFE6D6] rotate-45 shadow-lg" />
-                  </motion.div>
-                </div>
-
-                <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-[#1A1A1A] mb-3">
-                  {tourSteps[currentStep].title}
-                </h3>
-                <p className="text-[#1A1A1A]/70 text-sm mb-6 max-w-sm mx-auto leading-relaxed">
-                  {tourSteps[currentStep].description}
-                </p>
-
-                {/* Direct link button if available */}
-                {tourSteps[currentStep].link && (
-                  <Link
-                    to={tourSteps[currentStep].link}
-                    onClick={handleComplete}
-                    className="inline-flex items-center gap-2 px-4 py-2 mb-6 bg-[#EFE6D6]/10 hover:bg-[#EFE6D6]/20 border border-[#B89555]/30 rounded-lg text-[#1A1A1A] text-sm font-medium transition-all group"
-                  >
-                    {tourSteps[currentStep].linkLabel}
-                    <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                  </Link>
+      {/* ═══ SPOTLIGHT — dim page with cutout around real on-page icon ═ */}
+      {phase === "spotlight" && (
+        <motion.div
+          key="spotlight"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[10050] pointer-events-none"
+        >
+          {/* Dimmed backdrop with SVG cutout */}
+          <svg
+            className="absolute inset-0 w-full h-full pointer-events-auto"
+            onClick={handleComplete}
+            aria-hidden
+          >
+            <defs>
+              <mask id="jbj-tour-mask">
+                <rect width="100%" height="100%" fill="white" />
+                {cutout && (
+                  <circle cx={cutout.cx} cy={cutout.cy} r={cutout.r} fill="black" />
                 )}
+              </mask>
+            </defs>
+            <rect
+              width="100%"
+              height="100%"
+              fill="rgba(26,26,26,0.72)"
+              mask="url(#jbj-tour-mask)"
+              style={{ backdropFilter: "blur(2px)" } as any}
+            />
+          </svg>
 
-                {/* Navigation buttons */}
-                <div className="flex gap-3">
-                  {currentStep > 0 && (
-                    <Button
-                      onClick={() => setCurrentStep(currentStep - 1)}
-                      variant="outline"
-                      className="flex-1 py-4 sm:py-5 border-[#B89555]/30 bg-transparent text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-xl group"
-                    >
-                      <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-0.5 transition-transform" />
-                      Back
-                    </Button>
-                  )}
-                  <Button
-                    onClick={() => {
-                      if (currentStep < tourSteps.length - 1) {
-                        setCurrentStep(currentStep + 1);
-                      } else {
-                        handleComplete();
-                      }
-                    }}
-                    className="flex-1 py-4 sm:py-5 bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A] font-semibold rounded-xl group border border-[#B89555]/20"
-                  >
-                    {currentStep < tourSteps.length - 1 ? (
-                      <>
-                        Next
-                        <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                      </>
-                    ) : (
-                      <>
-                        Start Exploring
-                        <Sparkles className="w-4 h-4 ml-2" />
-                      </>
-                    )}
-                  </Button>
-                </div>
-              </motion.div>
-            )}
+          {/* Pulse ring around target */}
+          {cutout && step?.pulse && (
+            <motion.div
+              className="absolute rounded-full border-2 border-[#B89555] pointer-events-none"
+              style={{
+                left: cutout.cx - cutout.r,
+                top: cutout.cy - cutout.r,
+                width: cutout.r * 2,
+                height: cutout.r * 2,
+              }}
+              animate={{ scale: [1, 1.18, 1], opacity: [0.9, 0.3, 0.9] }}
+              transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+            />
+          )}
 
-            {/* SHORTCUTS OVERVIEW */}
-            {showTour === 'shortcuts' && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                <div className="text-center mb-6">
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full mb-3">
-                    <Sparkles className="w-3.5 h-3.5 text-[#1A1A1A]" />
-                    <span className="text-[#1A1A1A] text-xs font-medium">Quick Reference</span>
-                  </div>
-                  <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-[#1A1A1A] mb-2">
-                    Key Shortcuts
-                  </h3>
-                  <p className="text-[#1A1A1A]/70 text-sm">
-                    Here are the main features you'll use
-                  </p>
-                </div>
+          {/* Animated arrow pointing AT the icon */}
+          {rect && placement !== "center" && (
+            <motion.div
+              className="absolute pointer-events-none"
+              style={{
+                left: rect.left + rect.width / 2 - 12,
+                top: placement === "below" ? rect.top + rect.height + 2 : rect.top - 26,
+                color: "#B89555",
+              }}
+              animate={{ y: placement === "below" ? [0, 6, 0] : [0, -6, 0] }}
+              transition={{ duration: 1.2, repeat: Infinity }}
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                {placement === "below" ? (
+                  <path d="M12 3v15m0 0l-6-6m6 6l6-6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                ) : (
+                  <path d="M12 21V6m0 0l-6 6m6-6l6 6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                )}
+              </svg>
+            </motion.div>
+          )}
 
-                <div className="space-y-2.5 mb-6 max-h-[50vh] overflow-y-auto">
-                  {shortcutItems.map((item, idx) => (
-                    <motion.div
-                      key={idx}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: idx * 0.08 }}
-                    >
-                      {item.link ? (
-                        <Link
-                          to={item.link}
-                          onClick={handleComplete}
-                          className="flex items-center gap-3 p-3 bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl hover:border-[#B89555]/50 hover:bg-[#EFE6D6]/5 transition-all group"
-                        >
-                          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg bg-[#FDFBF7] border border-[#B89555]/30 shadow-sm flex items-center justify-center flex-shrink-0 group-hover:border-[#B89555]/30 transition-colors">
-                            <item.icon className={`w-5 h-5 ${item.iconColor}`} />
-                          </div>
-                          <div className="text-left min-w-0 flex-1">
-                            <p className="text-[#1A1A1A] text-sm font-medium group-hover:text-[#1A1A1A] transition-colors">{item.title}</p>
-                            <p className="text-[#1A1A1A]/70 text-xs truncate">{item.description}</p>
-                          </div>
-                          <ChevronRight className="w-4 h-4 text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] group-hover:translate-x-0.5 transition-all flex-shrink-0" />
-                        </Link>
-                      ) : (
-                        <div className="flex items-center gap-3 p-3 bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl">
-                          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg bg-[#FDFBF7] border border-[#B89555]/30 shadow-sm flex items-center justify-center flex-shrink-0">
-                            <item.icon className={`w-5 h-5 ${item.iconColor}`} />
-                          </div>
-                          <div className="text-left min-w-0 flex-1">
-                            <p className="text-[#1A1A1A] text-sm font-medium">{item.title}</p>
-                            <p className="text-[#1A1A1A]/70 text-xs truncate">{item.description}</p>
-                          </div>
-                        </div>
-                      )}
-                    </motion.div>
+          {/* Tooltip card */}
+          <motion.div
+            key={`tip-${stepIdx}`}
+            initial={{ opacity: 0, y: 8, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.2 }}
+            className="absolute pointer-events-auto bg-[#FDFBF7] border border-[#B89555]/40 rounded-2xl shadow-2xl"
+            style={{ left: tooltipLeft, top: tooltipTop, width: TOOLTIP_W }}
+          >
+            <div className="px-5 pt-4 pb-4">
+              {/* Progress */}
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-1.5">
+                  {SPOTLIGHT_STEPS.map((_, i) => (
+                    <span
+                      key={i}
+                      className={`h-1 rounded-full transition-all ${i === stepIdx ? "w-6 bg-[#1A1A1A]" : i < stepIdx ? "w-3 bg-[#1A1A1A]/40" : "w-3 bg-[#EFE6D6]"}`}
+                    />
                   ))}
                 </div>
+                <button
+                  onClick={handleComplete}
+                  className="p-1.5 rounded-full hover:bg-[#F7F2EA] transition-colors"
+                  aria-label="Close tour"
+                >
+                  <X className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
+                </button>
+              </div>
 
-                <div className="space-y-2">
-                  <Button
-                    onClick={handleComplete}
-                    className="w-full py-4 sm:py-5 bg-[#1A1A1A] hover:bg-[#1A1A1A] text-[#1A1A1A] font-semibold rounded-xl group border border-[#B89555]/20"
-                  >
-                    Start Exploring
-                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                  <button
-                    onClick={() => {
-                      setShowTour('tour');
-                      setCurrentStep(0);
-                    }}
-                    className="w-full py-2.5 text-[#1A1A1A]/70 hover:text-[#1A1A1A] text-sm transition-colors"
-                  >
-                    Take the full tour instead
-                  </button>
-                </div>
-              </motion.div>
-            )}
-          </div>
+              <h3 className="text-base font-semibold text-[#1A1A1A] mb-1.5">{step.title}</h3>
+              <p className="text-sm text-[#1A1A1A]/75 leading-relaxed mb-4">{step.description}</p>
+
+              <div className="flex items-center justify-between gap-2">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={prev}
+                  disabled={stepIdx === 0}
+                  className="h-9 px-3 text-[#1A1A1A]/70 disabled:opacity-40"
+                >
+                  <ArrowLeft className="w-4 h-4 mr-1" /> Back
+                </Button>
+                <span className="text-[11px] text-[#1A1A1A]/60 tabular-nums">
+                  {stepIdx + 1} / {SPOTLIGHT_STEPS.length}
+                </span>
+                <Button
+                  type="button"
+                  onClick={next}
+                  className="h-9 px-4 bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-[#FDFBF7] border border-[#B89555]/40"
+                >
+                  {stepIdx + 1 === SPOTLIGHT_STEPS.length ? "Finish" : "Next"}
+                  <ArrowRight className="w-4 h-4 ml-1" />
+                </Button>
+              </div>
+            </div>
+          </motion.div>
         </motion.div>
-      </motion.div>
+      )}
     </AnimatePresence>
   );
 };
