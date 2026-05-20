@@ -30,6 +30,10 @@ import {
   useSourceFilterContext,
   type SourceFilterValue,
 } from "@/components/crm/SourceFilterChips";
+import NationalityPicker from "@/components/crm/pickers/NationalityPicker";
+import LanguageMultiPicker from "@/components/crm/pickers/LanguageMultiPicker";
+import PhoneInputWithCountry from "@/components/crm/pickers/PhoneInputWithCountry";
+
 
 type BrokerRow = {
   source: "registered" | "external";
@@ -629,7 +633,7 @@ function AddBrokerSheet({ open, onOpenChange, onAdded }: { open: boolean; onOpen
     full_name: "", email: "", phone: "", whatsapp: "",
     personal_email: "", company_email: "", personal_phone: "", company_phone: "",
     current_company: "", current_brokerage_id: null as string | null,
-    rera_license: "", nationality: "", languages: "",
+    rera_license: "", nationality: "", languages: [] as string[],
     experience_years: "", broker_type: "" as "" | "sales" | "leasing" | "both",
     birthday: "", linkedin_url: "", bayut_url: "", pf_url: "", instagram_url: "",
     notes: "",
@@ -643,8 +647,7 @@ function AddBrokerSheet({ open, onOpenChange, onAdded }: { open: boolean; onOpen
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Not signed in");
-      const langs = form.languages
-        .split(",").map(s => s.trim()).filter(Boolean);
+      const langs = (form.languages || []).map((s) => s.trim()).filter(Boolean);
       const exp = form.experience_years.trim() ? Number(form.experience_years) : null;
       const payload: any = {
         owner_id: user.id,
