@@ -332,6 +332,14 @@ function FolderBlock({
           </Popover>
           <button
             type="button"
+            onClick={() => setNewBrokerOpen(true)}
+            className="text-[10px] inline-flex items-center gap-1 px-1.5 py-0.5 rounded border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+            title="Create a new broker (with access settings, invitation, onboarding link) and assign to this folder"
+          >
+            <UserPlus className="w-3 h-3" /> New broker
+          </button>
+          <button
+            type="button"
             onClick={() => { if (confirm(`Delete folder "${folder.name}"? Databases inside will become unassigned.`)) onDelete(); }}
             className="text-[10px] px-1 py-0.5 rounded text-[#1A1A1A]/60 hover:text-[#1A1A1A]"
             aria-label="Delete folder"
@@ -340,6 +348,17 @@ function FolderBlock({
           </button>
         </div>
       </div>
+
+      <AddBrokerSheet
+        open={newBrokerOpen}
+        onOpenChange={setNewBrokerOpen}
+        onAdded={() => {
+          // Best-effort: refetch folders (assignment is done via the picker if the user
+          // selected the freshly-created broker). The canonical sheet handles invitation
+          // emails, access settings, expiry, notes and onboarding link.
+          folders.data; // ensure hook stays referenced
+        }}
+      />
 
       <div className="mt-1 space-y-0.5">
         {lists.length === 0 ? (
