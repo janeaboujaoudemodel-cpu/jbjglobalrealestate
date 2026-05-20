@@ -177,9 +177,11 @@ const VoiceConciergeWidget = () => {
       }
 
       // Graceful fallback when the edge function returned a 200 with `fallback: true`
-      // (e.g. invalid/expired ElevenLabs API key) — show a friendly toast, don't crash.
+      // (e.g. invalid/expired ElevenLabs API key). Log internally only — never expose
+      // infra/API-key errors to end users.
       if (data?.fallback || !data?.token) {
-        toast.error(data?.error || "Voice concierge is temporarily unavailable.");
+        console.warn("[VoiceConcierge] unavailable:", data?.error || "no token");
+        toast.info("Voice concierge is unavailable right now. Please try again shortly.");
         return;
       }
 
@@ -196,10 +198,13 @@ const VoiceConciergeWidget = () => {
       }
     } catch (error) {
       console.error("Failed to start conversation:", error);
-      toast.error(
-        error instanceof Error 
-          ? error.message 
-          : "Failed to connect. Please try again."
+      // Never surface raw infra errors (API key, quota, etc.) to end users.
+      const msg = error instanceof Error ? error.message : "";
+      const isInfra = /api[\s_-]?key|elevenlabs|unauthor|quota|invalid|expired|token/i.test(msg);
+      toast.info(
+        isInfra
+          ? "Voice concierge is unavailable right now. Please try again shortly."
+          : "Couldn't start the call. Please try again."
       );
     } finally {
       setIsConnecting(false);
