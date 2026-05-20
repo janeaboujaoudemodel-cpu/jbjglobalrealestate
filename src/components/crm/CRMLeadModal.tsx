@@ -38,6 +38,7 @@ import { cn } from "@/lib/utils";
 import { COUNTRIES, LANGUAGES_WITH_FLAGS, ALL_NATIONALITIES, getCitiesForCountry } from "@/data/countries";
 import { BrokerCombobox } from "@/components/crm/BrokerCombobox";
 import { PIPELINE_STATUSES } from "@/components/crm/LeadStatusBadge";
+import PhoneInputWithCountry from "@/components/crm/pickers/PhoneInputWithCountry";
 
 interface CRMLeadModalProps {
   open: boolean;
@@ -262,19 +263,19 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
 
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <Label>Phone (E.164)</Label>
-                  <Input
+                  <Label>Phone</Label>
+                  <PhoneInputWithCountry
                     value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    placeholder="+971501234567"
+                    onChange={(v) => setFormData({ ...formData, phone: v })}
+                    placeholder="50 123 4567"
                   />
                 </div>
                 <div>
                   <Label>WhatsApp Number</Label>
-                  <Input
+                  <PhoneInputWithCountry
                     value={formData.whatsapp}
-                    onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-                    placeholder="+971501234567"
+                    onChange={(v) => setFormData({ ...formData, whatsapp: v })}
+                    placeholder="50 123 4567"
                   />
                 </div>
                 <div>
@@ -303,7 +304,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                     <PopoverContent className="w-[240px] p-0 z-[200] bg-[#FDFBF7] border border-[#1A1A1A]/15" align="start">
                       <Command>
                         <CommandInput placeholder="Search language..." className="text-[#1A1A1A]" />
-                        <CommandList>
+                        <CommandList className="max-h-72 overflow-y-auto overscroll-contain" onWheel={(e) => e.stopPropagation()} onTouchMove={(e) => e.stopPropagation()}>
                           <CommandEmpty>No language found.</CommandEmpty>
                           <CommandGroup>
                             {LANGUAGES_WITH_FLAGS.map((l) => (
@@ -341,7 +342,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                     <PopoverContent className="w-[240px] p-0 z-[200] bg-[#FDFBF7] border border-[#1A1A1A]/15" align="start">
                       <Command>
                         <CommandInput placeholder="Search nationality..." className="text-[#1A1A1A]" />
-                        <CommandList>
+                        <CommandList className="max-h-72 overflow-y-auto overscroll-contain" onWheel={(e) => e.stopPropagation()} onTouchMove={(e) => e.stopPropagation()}>
                           <CommandEmpty>No nationality found.</CommandEmpty>
                           <CommandGroup>
                             {ALL_NATIONALITIES.map((n) => (
@@ -379,7 +380,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                     <PopoverContent className="w-[240px] p-0 z-[200] bg-[#FDFBF7] border border-[#1A1A1A]/15" align="start">
                       <Command>
                         <CommandInput placeholder="Search country..." className="text-[#1A1A1A]" />
-                        <CommandList>
+                        <CommandList className="max-h-72 overflow-y-auto overscroll-contain" onWheel={(e) => e.stopPropagation()} onTouchMove={(e) => e.stopPropagation()}>
                           <CommandEmpty>No country found.</CommandEmpty>
                           <CommandGroup>
                             {COUNTRIES.map((c) => (
