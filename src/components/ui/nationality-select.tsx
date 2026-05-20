@@ -221,7 +221,7 @@ export const NationalitySelect: React.FC<NationalitySelectProps> = ({
           )}
         </SelectValue>
       </SelectTrigger>
-      <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 max-h-[300px] z-[9999]">
+      <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 max-h-[60vh] z-[9999]">
         {/* Fixed search header - NOT sticky */}
         <div className="p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-b border-[#B89555]/20">
           <div className="relative">
@@ -236,21 +236,19 @@ export const NationalitySelect: React.FC<NationalitySelectProps> = ({
             />
           </div>
         </div>
-        {/* Scrollable options area */}
-        <div className="max-h-[200px] overflow-y-auto">
-          {filteredNationalities.map(nat => (
-            <SelectItem 
-              key={nat.name} 
-              value={nat.name}
-              className="text-[#1A1A1A] hover:bg-[#EFE6D6]/20 focus:bg-[#EFE6D6]/20"
-            >
-              <span className="flex items-center gap-2">
-                <span className="text-lg">{nat.flag}</span>
-                <span>{nat.name}</span>
-              </span>
-            </SelectItem>
-          ))}
-        </div>
+        {/* Items render directly inside SelectContent so Radix's Viewport handles scroll */}
+        {filteredNationalities.map(nat => (
+          <SelectItem
+            key={nat.name}
+            value={nat.name}
+            className="text-[#1A1A1A] hover:bg-[#EFE6D6]/20 focus:bg-[#EFE6D6]/20"
+          >
+            <span className="flex items-center gap-2">
+              <span className="text-lg">{nat.flag}</span>
+              <span>{nat.name}</span>
+            </span>
+          </SelectItem>
+        ))}
       </SelectContent>
     </Select>
   );
