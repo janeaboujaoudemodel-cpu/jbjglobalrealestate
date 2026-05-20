@@ -69,7 +69,7 @@ const IconAuditDashboard = lazy(() => import("@/pages/owner/IconAuditDashboard")
 const IconSizePreview = lazy(() => import("@/pages/owner/IconSizePreview"));
 const VatCertificate = lazy(() => import("@/pages/owner/templates/VatCertificate"));
 const AdoptSignatureStudio = lazy(() => import("@/pages/owner/sign/AdoptSignatureStudio"));
-const ContractVault = lazy(() => import("@/pages/owner/contracts/ContractVault"));
+// ContractVault is now embedded inside DocumentsFormsHub's "Vault" tab; no direct route import needed.
 const OwnerRelationships = lazy(() => import("@/pages/owner/OwnerRelationships"));
 const OwnerRelationshipsRevenue = lazy(() => import("@/pages/owner/OwnerRelationshipsRevenue"));
 const OwnerMediaIngest = lazy(() => import("@/pages/owner/OwnerMediaIngest"));
