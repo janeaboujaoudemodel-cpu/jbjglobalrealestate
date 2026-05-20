@@ -167,3 +167,10 @@ export function splitE164(phone: string): { dial: string; national: string } {
   }
   return { dial: "+971", national: p };
 }
+
+// ─── Back-compat aliases ─────────────────────────────────────────
+// Older modules (CRMLeadModal, CRMRelationships) import these names.
+import { LANGUAGES } from "./languages";
+export const LANGUAGES_WITH_FLAGS = LANGUAGES;
+export const ALL_NATIONALITIES = COUNTRIES;
+export function getCitiesForCountry(_country?: string | null): string[] { return []; }
