@@ -268,6 +268,8 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
   const visibleIds = (() => {
     if (tab === "drafts") return buckets.drafts.map((e: any) => e.id);
     if (tab === "generated") return buckets.generated.map((e: any) => e.id);
+    if (tab === "sent") return buckets.sent.map((e: any) => e.id);
+    if (tab === "signed") return buckets.signed.map((e: any) => e.id);
     if (tab === "deleted") return buckets.deleted.map((e: any) => e.id);
     return [];
   })();
@@ -309,12 +311,50 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
     refetch();
   };
 
+  // Phase G: bulk Resend reminder on pending envelopes — sequential to respect
+  // the global Resend quota (2 req/s) and surface partial-failure detail.
+  const [bulkBusy, setBulkBusy] = useState(false);
+  const bulkResendReminder = async () => {
+    if (!selected.size) return;
+    const ids = Array.from(selected);
+    setBulkBusy(true);
+    let ok = 0; let fail = 0;
+    for (const envelope_id of ids) {
+      try {
+        const { error } = await supabase.functions.invoke("esign-send-reminder", { body: { envelope_id } });
+        if (error) fail++; else ok++;
+      } catch { fail++; }
+      // light pacing
+      await new Promise((r) => setTimeout(r, 550));
+    }
+    setBulkBusy(false);
+    setSelected(new Set());
+    refetch();
+    if (fail === 0) toast.success(`Reminder sent to ${ok} ${ok === 1 ? "signer" : "signers"}`);
+    else toast.warning(`${ok} sent · ${fail} failed`);
+  };
+
+  // Phase G: bulk Export PDFs — opens each signed document in a new tab via the
+  // branded /d proxy so jbj.ae is the visible host.
+  const bulkExportPdfs = () => {
+    if (!selected.size) return;
+    const rows = buckets.signed.filter((e: any) => selected.has(e.id) && e.signed_document_url);
+    if (!rows.length) { toast.info("None of the selected items have a signed PDF yet."); return; }
+    rows.forEach((e: any, i: number) => {
+      const href = brandedDownloadHref(e.signed_document_url, e.document_filename || `${e.name || "document"}.pdf`);
+      // Stagger window.open calls so popup blockers don't suppress later ones.
+      setTimeout(() => window.open(href, "_blank", "noopener,noreferrer"), i * 120);
+    });
+    toast.success(`Opening ${rows.length} signed PDF${rows.length === 1 ? "" : "s"}…`);
+  };
+
+
   const renderBucketCards = (rows: any[], emptyText: string, mode: "drafts" | "generated" | "sent" | "submitted" | "signed" | "deleted") => {
     if (envLoading) return <div className="text-sm text-[#1A1A1A]/60 flex items-center gap-2"><Loader2 className="w-4 h-4 animate-spin" /> Loading…</div>;
     if (!rows.length) return <div className="text-sm text-[#1A1A1A]/60">{emptyText}</div>;
     return (
       <>
-        {(mode === "drafts" || mode === "generated" || mode === "deleted") && rows.length > 0 && (
+        {(mode === "drafts" || mode === "generated" || mode === "deleted" || mode === "sent" || mode === "signed") && rows.length > 0 && (
           <div className="flex items-center gap-3 mb-3 p-2 rounded-md bg-white/60 border border-[#B89555]/20">
             <Checkbox
               checked={selected.size > 0 && selected.size === visibleIds.length}
@@ -324,7 +364,18 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
             <span className="text-xs text-[#1A1A1A]/70">
               {selected.size ? `${selected.size} selected` : `Select all (${rows.length})`}
             </span>
-            <div className="ml-auto flex gap-2">
+            <div className="ml-auto flex gap-2 flex-wrap">
+              {mode === "sent" && (
+                <Button size="sm" variant="gold" disabled={!selected.size || bulkBusy} onClick={bulkResendReminder}>
+                  {bulkBusy ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <Send className="w-3.5 h-3.5 mr-1.5" />}
+                  Resend reminder
+                </Button>
+              )}
+              {mode === "signed" && (
+                <Button size="sm" variant="gold" disabled={!selected.size} onClick={bulkExportPdfs}>
+                  <Download className="w-3.5 h-3.5 mr-1.5" /> Export PDFs
+                </Button>
+              )}
               {mode === "deleted" ? (
                 <Button size="sm" variant="outline" disabled={!selected.size} onClick={bulkRestore}>
                   <RotateCcw className="w-3.5 h-3.5 mr-1.5" /> Restore
@@ -346,7 +397,11 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
             const dn = docNumberOf(e);
             const kind = kindLabelOf(e);
             const { phone, email } = clientContactOf(e);
-            const selectable = mode === "drafts" || mode === "generated" || mode === "deleted";
+            const selectable = mode === "drafts" || mode === "generated" || mode === "deleted" || mode === "sent" || mode === "signed";
+            // Phase G: follow-up intelligence — flag pending envelopes that have
+            // been waiting on the signer for 3+ days so the owner can act.
+            const ageDays = Math.floor((Date.now() - new Date(e.created_at).getTime()) / (1000 * 60 * 60 * 24));
+            const needsFollowUp = mode === "sent" && ageDays >= 3;
             const sLabel =
               mode === "signed" ? "Signed"
               : mode === "submitted" ? "Submitted — Pending Review"
@@ -380,6 +435,11 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                       {dn && <span className="text-[10px] tracking-[0.16em] uppercase text-[#1A1A1A]/80 border border-[#B89555]/40 rounded px-2 py-0.5 bg-white/70">{dn}</span>}
                       {kind && <span className="text-[10px] tracking-[0.14em] uppercase text-[#1A1A1A] border border-[#B89555]/40 rounded px-2 py-0.5 bg-[#EFE6D6]">{kind}</span>}
                       <span className={`text-[10px] tracking-[0.14em] uppercase rounded px-2 py-0.5 border ${sCls}`}>{sLabel}</span>
+                      {needsFollowUp && (
+                        <span className="text-[10px] tracking-[0.14em] uppercase rounded px-2 py-0.5 border bg-amber-50 text-amber-800 border-amber-200">
+                          Follow up · {ageDays}d
+                        </span>
+                      )}
                     </div>
                     <div className="font-semibold text-[#1A1A1A] truncate">{cName}</div>
                     {property && <div className="text-xs text-[#1A1A1A]/80 truncate">{property}</div>}
