@@ -264,8 +264,42 @@ const VoiceConciergeWidget = () => {
     );
   }
 
+  const showStatusPill = widgetStatus === "initializing" || widgetStatus === "unavailable";
+  const pillTone =
+    widgetStatus === "unavailable"
+      ? "bg-[#FEE2E2] text-[#7F1D1D] border-red-300"
+      : "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40";
+
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2">
+      {/* Visible status pill */}
+      {showStatusPill && (
+        <div
+          className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-semibold shadow-md ${pillTone}`}
+          role="status"
+          aria-live="polite"
+        >
+          {widgetStatus === "initializing" && (
+            <span className="w-2 h-2 rounded-full bg-[#B89555] animate-pulse" />
+          )}
+          {widgetStatus === "unavailable" && (
+            <span className="w-2 h-2 rounded-full bg-red-500" />
+          )}
+          <span>{statusMessage || (widgetStatus === "initializing" ? "Initializing…" : "Unavailable")}</span>
+          {widgetStatus === "unavailable" && (
+            <button
+              type="button"
+              onClick={retryConnection}
+              className="ml-1 px-2 py-0.5 rounded-full bg-[#1A1A1A] text-white text-[10px] font-semibold hover:bg-[#1A1A1A]/85"
+            >
+              Try again
+            </button>
+          )}
+        </div>
+      )}
+
+      <div className="relative">
+
       {/* Pulse ring - only when not connected and not minimized */}
       {!isConnected && (
         <>
