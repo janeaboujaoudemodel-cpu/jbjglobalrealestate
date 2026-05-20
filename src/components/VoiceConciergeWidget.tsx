@@ -24,11 +24,16 @@ const getInitialMinimized = (): boolean => {
   }
 };
 
+type WidgetStatus = "idle" | "initializing" | "connected" | "unavailable";
+
 const VoiceConciergeWidget = () => {
   const [isMinimized, setIsMinimized] = useState(getInitialMinimized);
   const [isConnecting, setIsConnecting] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [currentCallLogId, setCurrentCallLogId] = useState<string | null>(null);
+  const [widgetStatus, setWidgetStatus] = useState<WidgetStatus>("idle");
+  const [statusMessage, setStatusMessage] = useState<string>("");
+  const hasShownUnavailableToastRef = useRef(false);
   const callStartTimeRef = useRef<Date | null>(null);
   const navigate = useNavigate();
 
