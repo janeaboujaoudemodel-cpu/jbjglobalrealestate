@@ -27,6 +27,9 @@ import {
   Plus, Search, User, Phone, Mail, MessageCircle, Trash2,
   UploadCloud, FileDown, Linkedin, Globe, ChevronLeft, ChevronRight, Download,
 } from "lucide-react";
+import NationalityPicker from "@/components/crm/pickers/NationalityPicker";
+import LanguageMultiPicker from "@/components/crm/pickers/LanguageMultiPicker";
+import PhoneInputWithCountry from "@/components/crm/pickers/PhoneInputWithCountry";
 
 type Row = {
   id: string;
@@ -447,13 +450,13 @@ export default function IndividualBrokersTab() {
               <div><Label>Department</Label><Input value={editing?.department || ""} onChange={(e) => setEditing({ ...editing, department: e.target.value })} /></div>
               <div><Label>Seniority</Label><Input value={editing?.seniority || ""} onChange={(e) => setEditing({ ...editing, seniority: e.target.value })} /></div>
               <div><Label>Broker type</Label><Input value={editing?.broker_type || ""} onChange={(e) => setEditing({ ...editing, broker_type: e.target.value })} /></div>
-              <div><Label>Personal phone</Label><Input value={editing?.personal_phone || ""} onChange={(e) => setEditing({ ...editing, personal_phone: e.target.value })} /></div>
-              <div><Label>Company phone</Label><Input value={editing?.company_phone || ""} onChange={(e) => setEditing({ ...editing, company_phone: e.target.value })} /></div>
-              <div><Label>WhatsApp</Label><Input value={editing?.whatsapp || ""} onChange={(e) => setEditing({ ...editing, whatsapp: e.target.value })} /></div>
+              <div><Label>Personal phone</Label><PhoneInputWithCountry value={editing?.personal_phone || ""} onChange={(v) => setEditing({ ...editing, personal_phone: v })} /></div>
+              <div><Label>Company phone</Label><PhoneInputWithCountry value={editing?.company_phone || ""} onChange={(v) => setEditing({ ...editing, company_phone: v })} /></div>
+              <div><Label>WhatsApp</Label><PhoneInputWithCountry value={editing?.whatsapp || ""} onChange={(v) => setEditing({ ...editing, whatsapp: v })} /></div>
               <div><Label>Personal email</Label><Input value={editing?.personal_email || ""} onChange={(e) => setEditing({ ...editing, personal_email: e.target.value })} /></div>
               <div><Label>Company email</Label><Input value={editing?.company_email || ""} onChange={(e) => setEditing({ ...editing, company_email: e.target.value })} /></div>
               <div><Label>RERA</Label><Input value={editing?.rera_license || ""} onChange={(e) => setEditing({ ...editing, rera_license: e.target.value })} /></div>
-              <div><Label>Nationality</Label><Input value={editing?.nationality || ""} onChange={(e) => setEditing({ ...editing, nationality: e.target.value })} /></div>
+              <div><Label>Nationality</Label><NationalityPicker value={editing?.nationality || ""} onChange={(v) => setEditing({ ...editing, nationality: v })} /></div>
               <div><Label>Country</Label><Input value={editing?.country || ""} onChange={(e) => setEditing({ ...editing, country: e.target.value })} /></div>
               <div><Label>City</Label><Input value={editing?.city || ""} onChange={(e) => setEditing({ ...editing, city: e.target.value })} /></div>
               <div><Label>Birthday</Label><Input type="date" value={editing?.birthday || editing?.date_of_birth || ""} onChange={(e) => setEditing({ ...editing, birthday: e.target.value, date_of_birth: e.target.value })} /></div>
@@ -466,8 +469,8 @@ export default function IndividualBrokersTab() {
             <div><Label>Specialty (comma-separated)</Label>
               <Input value={(editing?.specialty || []).join(", ")} onChange={(e) => setEditing({ ...editing, specialty: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })} placeholder="off-plan, secondary, leasing, sales" />
             </div>
-            <div><Label>Languages (comma-separated)</Label>
-              <Input value={(editing?.languages || []).join(", ")} onChange={(e) => setEditing({ ...editing, languages: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })} placeholder="English, Arabic, Russian" />
+            <div><Label>Languages</Label>
+              <LanguageMultiPicker value={editing?.languages || []} onChange={(v) => setEditing({ ...editing, languages: v })} />
             </div>
             <div><Label>Notes</Label>
               <Input value={editing?.notes || ""} onChange={(e) => setEditing({ ...editing, notes: e.target.value })} />

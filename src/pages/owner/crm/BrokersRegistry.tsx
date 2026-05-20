@@ -30,6 +30,10 @@ import {
   useSourceFilterContext,
   type SourceFilterValue,
 } from "@/components/crm/SourceFilterChips";
+import NationalityPicker from "@/components/crm/pickers/NationalityPicker";
+import LanguageMultiPicker from "@/components/crm/pickers/LanguageMultiPicker";
+import PhoneInputWithCountry from "@/components/crm/pickers/PhoneInputWithCountry";
+
 
 type BrokerRow = {
   source: "registered" | "external";
@@ -629,7 +633,7 @@ function AddBrokerSheet({ open, onOpenChange, onAdded }: { open: boolean; onOpen
     full_name: "", email: "", phone: "", whatsapp: "",
     personal_email: "", company_email: "", personal_phone: "", company_phone: "",
     current_company: "", current_brokerage_id: null as string | null,
-    rera_license: "", nationality: "", languages: "",
+    rera_license: "", nationality: "", languages: [] as string[],
     experience_years: "", broker_type: "" as "" | "sales" | "leasing" | "both",
     birthday: "", linkedin_url: "", bayut_url: "", pf_url: "", instagram_url: "",
     notes: "",
@@ -643,8 +647,7 @@ function AddBrokerSheet({ open, onOpenChange, onAdded }: { open: boolean; onOpen
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Not signed in");
-      const langs = form.languages
-        .split(",").map(s => s.trim()).filter(Boolean);
+      const langs = (form.languages || []).map((s) => s.trim()).filter(Boolean);
       const exp = form.experience_years.trim() ? Number(form.experience_years) : null;
       const payload: any = {
         owner_id: user.id,
@@ -708,17 +711,35 @@ function AddBrokerSheet({ open, onOpenChange, onAdded }: { open: boolean; onOpen
           <Field k="full_name" label="Full name *" />
           <div className="grid grid-cols-2 gap-3">
             <Field k="email" label="Primary email" />
-            <Field k="phone" label="Primary phone" />
+            <div>
+              <Label className="text-xs text-[#1A1A1A]/70">Primary phone</Label>
+              <div className="mt-1"><PhoneInputWithCountry value={form.phone} onChange={(v) => setForm((f) => ({ ...f, phone: v }))} /></div>
+            </div>
             <Field k="personal_email" label="Personal email" />
             <Field k="company_email" label="Company email" />
-            <Field k="personal_phone" label="Personal phone" />
-            <Field k="company_phone" label="Company phone" />
-            <Field k="whatsapp" label="WhatsApp" />
+            <div>
+              <Label className="text-xs text-[#1A1A1A]/70">Personal phone</Label>
+              <div className="mt-1"><PhoneInputWithCountry value={form.personal_phone} onChange={(v) => setForm((f) => ({ ...f, personal_phone: v }))} /></div>
+            </div>
+            <div>
+              <Label className="text-xs text-[#1A1A1A]/70">Company phone</Label>
+              <div className="mt-1"><PhoneInputWithCountry value={form.company_phone} onChange={(v) => setForm((f) => ({ ...f, company_phone: v }))} /></div>
+            </div>
+            <div>
+              <Label className="text-xs text-[#1A1A1A]/70">WhatsApp</Label>
+              <div className="mt-1"><PhoneInputWithCountry value={form.whatsapp} onChange={(v) => setForm((f) => ({ ...f, whatsapp: v }))} /></div>
+            </div>
             <Field k="birthday" label="Birthday" type="date" />
-            <Field k="nationality" label="Nationality" />
+            <div>
+              <Label className="text-xs text-[#1A1A1A]/70">Nationality</Label>
+              <div className="mt-1"><NationalityPicker value={form.nationality} onChange={(v) => setForm((f) => ({ ...f, nationality: v }))} /></div>
+            </div>
             <Field k="experience_years" label="Experience (years)" type="number" />
           </div>
-          <Field k="languages" label="Languages (comma-separated)" />
+          <div>
+            <Label className="text-xs text-[#1A1A1A]/70">Languages</Label>
+            <div className="mt-1"><LanguageMultiPicker value={form.languages} onChange={(v) => setForm((f) => ({ ...f, languages: v }))} /></div>
+          </div>
           <div>
             <Label className="text-xs text-[#1A1A1A]/70">Broker type</Label>
             <select
