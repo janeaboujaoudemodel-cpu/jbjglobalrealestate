@@ -268,6 +268,8 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
   const visibleIds = (() => {
     if (tab === "drafts") return buckets.drafts.map((e: any) => e.id);
     if (tab === "generated") return buckets.generated.map((e: any) => e.id);
+    if (tab === "sent") return buckets.sent.map((e: any) => e.id);
+    if (tab === "signed") return buckets.signed.map((e: any) => e.id);
     if (tab === "deleted") return buckets.deleted.map((e: any) => e.id);
     return [];
   })();
@@ -308,6 +310,44 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
     setSelected(new Set());
     refetch();
   };
+
+  // Phase G: bulk Resend reminder on pending envelopes — sequential to respect
+  // the global Resend quota (2 req/s) and surface partial-failure detail.
+  const [bulkBusy, setBulkBusy] = useState(false);
+  const bulkResendReminder = async () => {
+    if (!selected.size) return;
+    const ids = Array.from(selected);
+    setBulkBusy(true);
+    let ok = 0; let fail = 0;
+    for (const envelope_id of ids) {
+      try {
+        const { error } = await supabase.functions.invoke("esign-send-reminder", { body: { envelope_id } });
+        if (error) fail++; else ok++;
+      } catch { fail++; }
+      // light pacing
+      await new Promise((r) => setTimeout(r, 550));
+    }
+    setBulkBusy(false);
+    setSelected(new Set());
+    refetch();
+    if (fail === 0) toast.success(`Reminder sent to ${ok} ${ok === 1 ? "signer" : "signers"}`);
+    else toast.warning(`${ok} sent · ${fail} failed`);
+  };
+
+  // Phase G: bulk Export PDFs — opens each signed document in a new tab via the
+  // branded /d proxy so jbj.ae is the visible host.
+  const bulkExportPdfs = () => {
+    if (!selected.size) return;
+    const rows = buckets.signed.filter((e: any) => selected.has(e.id) && e.signed_document_url);
+    if (!rows.length) { toast.info("None of the selected items have a signed PDF yet."); return; }
+    rows.forEach((e: any, i: number) => {
+      const href = brandedDownloadHref(e.signed_document_url, e.document_filename || `${e.name || "document"}.pdf`);
+      // Stagger window.open calls so popup blockers don't suppress later ones.
+      setTimeout(() => window.open(href, "_blank", "noopener,noreferrer"), i * 120);
+    });
+    toast.success(`Opening ${rows.length} signed PDF${rows.length === 1 ? "" : "s"}…`);
+  };
+
 
   const renderBucketCards = (rows: any[], emptyText: string, mode: "drafts" | "generated" | "sent" | "submitted" | "signed" | "deleted") => {
     if (envLoading) return <div className="text-sm text-[#1A1A1A]/60 flex items-center gap-2"><Loader2 className="w-4 h-4 animate-spin" /> Loading…</div>;
