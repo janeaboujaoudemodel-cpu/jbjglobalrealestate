@@ -162,40 +162,24 @@ const VoiceConciergeWidget = () => {
     }
   };
 
-  const handleLoginRedirect = () => {
-    toast.info("Please log in to use the voice concierge");
-    navigate("/auth");
-  };
+  const openIntake = () => setIntakeOpen(true);
 
-  const startConversation = useCallback(async () => {
-    // Check authentication before proceeding
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
-      toast.error("Please log in to use the voice concierge");
-      navigate("/auth");
-      return;
-    }
-
+  const startConversation = useCallback(async (leadId: string) => {
     setIsConnecting(true);
     setWidgetStatus("initializing");
-    setStatusMessage("Initializing…");
+    setStatusMessage("Opening private line…");
     try {
-      // Request microphone permission
       await navigator.mediaDevices.getUserMedia({ audio: true });
 
-      // Get token from edge function (auth header passed automatically)
       const { data, error } = await supabase.functions.invoke(
-        "elevenlabs-conversation-token"
+        "elevenlabs-conversation-token",
+        { body: { lead_id: leadId } }
       );
 
       if (error) {
-        if (error.message?.includes("Authentication")) {
-          toast.error("Please log in to use the voice concierge");
-          navigate("/auth");
-          return;
-        }
         throw new Error(error.message || "Failed to get conversation token");
       }
+
 
       // Graceful fallback when the edge function returned a 200 with `fallback: true`
       if (data?.fallback || !data?.token) {
