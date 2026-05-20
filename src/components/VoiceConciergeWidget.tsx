@@ -111,11 +111,15 @@ const VoiceConciergeWidget = () => {
   const conversation = useConversation({
     onConnect: () => {
       console.log("Connected to JBJ Global Real Estate Concierge");
+      setWidgetStatus("connected");
+      setStatusMessage("");
+      hasShownUnavailableToastRef.current = false;
       toast.success("Connected to concierge");
     },
     onDisconnect: () => {
       console.log("Disconnected from concierge");
-      // Log call end when disconnected
+      setWidgetStatus("idle");
+      setStatusMessage("");
       if (currentCallLogId) {
         logCallEnd(currentCallLogId);
         setCurrentCallLogId(null);
@@ -126,7 +130,8 @@ const VoiceConciergeWidget = () => {
     },
     onError: (error) => {
       console.error("Concierge error:", error);
-      toast.error("Connection error. Please try again.");
+      setWidgetStatus("unavailable");
+      setStatusMessage("Connection error");
     },
   });
 
