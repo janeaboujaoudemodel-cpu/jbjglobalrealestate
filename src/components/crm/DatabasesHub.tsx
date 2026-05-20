@@ -165,66 +165,76 @@ export default function DatabasesHub() {
           </div>
         ) : (
           <div className="divide-y divide-[#B89555]/15">
-            {filtered.map((r) => (
-              <div
-                key={r.id}
-                className="px-3 sm:px-4 py-3 flex flex-wrap items-center gap-x-3 gap-y-2 min-w-0"
-              >
-                <FileSpreadsheet className="h-5 w-5 text-[#1A1A1A]/60 shrink-0" />
-                <div className="flex-1 min-w-[180px] basis-[220px]">
-                  <div className="text-sm font-medium text-[#1A1A1A] truncate">{r.name}</div>
-                  <div className="text-[11px] text-[#1A1A1A]/60 truncate">
-                    {r.original_filename} · {r.row_count.toLocaleString()} rows · {r.column_headers?.length || 0} cols · {fmtBytes(r.file_size_bytes)}
-                  </div>
-                </div>
-                <div className="flex flex-wrap items-center gap-1.5 shrink-0 ml-auto">
+            {filtered.map((r) => {
+              const isOpen = openIds.has(r.id);
+              return (
+              <div key={r.id} className="min-w-0">
+                <div className="px-3 sm:px-4 py-3 flex flex-wrap items-center gap-x-3 gap-y-2 min-w-0">
                   <button
                     type="button"
-                    onClick={() => setManageTarget(r)}
-                    className="px-2 py-0.5 rounded-full text-[10px] font-semibold border border-[#B89555]/40 bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#E7DCC7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/40"
-                    title="Manage broker access"
+                    onClick={() => toggleOpen(r.id)}
+                    className="shrink-0 h-7 w-7 inline-flex items-center justify-center rounded-md border border-[#B89555]/30 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                    aria-label={isOpen ? "Collapse" : "Expand"}
+                    aria-expanded={isOpen}
                   >
-                    {(grantsByDb[r.id]?.count ?? 0)} {(grantsByDb[r.id]?.count ?? 0) === 1 ? "broker" : "brokers"}
+                    {isOpen ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
                   </button>
-                  <span className="hidden sm:inline-flex px-2 py-0.5 rounded-full text-[10px] font-semibold border border-[#B89555]/30 bg-[#EFE6D6] text-[#1A1A1A]">
-                    {statusLabel[r.status]}
-                  </span>
-                  <span className="hidden md:inline text-[11px] text-[#1A1A1A]/60 tabular-nums">
-                    {formatDate(r.uploaded_at)}
-                  </span>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => setGrantTarget(r)}
-                    className="border-[#B89555]/40 text-[#1A1A1A] h-8 px-2"
-                    title="Give Access"
+                  <FileSpreadsheet className="h-5 w-5 text-[#1A1A1A]/60 shrink-0" />
+                  <button
+                    type="button"
+                    onClick={() => toggleOpen(r.id)}
+                    className="flex-1 min-w-[180px] basis-[220px] text-left"
                   >
-                    <ShieldCheck className="h-3.5 w-3.5 lg:mr-1" />
-                    <span className="hidden lg:inline">Give Access</span>
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => setManageTarget(r)}
-                    className="border-[#B89555]/40 text-[#1A1A1A] h-8 px-2"
-                    title="Manage"
-                  >
-                    <Settings2 className="h-3.5 w-3.5 lg:mr-1" />
-                    <span className="hidden lg:inline">Manage</span>
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => download(r)}
-                    className="border-[#B89555]/40 text-[#1A1A1A] h-8 px-2"
-                    title="Download"
-                  >
-                    <Download className="h-3.5 w-3.5 lg:mr-1" />
-                    <span className="hidden lg:inline">Download</span>
-                  </Button>
+                    <div className="text-sm font-medium text-[#1A1A1A] truncate">{r.name}</div>
+                    <div className="text-[11px] text-[#1A1A1A]/60 truncate">
+                      {r.original_filename} · {r.row_count.toLocaleString()} rows · {r.column_headers?.length || 0} cols · {fmtBytes(r.file_size_bytes)}
+                    </div>
+                  </button>
+                  <div className="flex flex-wrap items-center gap-1.5 shrink-0 ml-auto">
+                    <button
+                      type="button"
+                      onClick={() => setManageTarget(r)}
+                      className="px-2 py-0.5 rounded-full text-[10px] font-semibold border border-[#B89555]/40 bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#E7DCC7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/40"
+                      title="Manage broker access"
+                    >
+                      {(grantsByDb[r.id]?.count ?? 0)} {(grantsByDb[r.id]?.count ?? 0) === 1 ? "broker" : "brokers"}
+                    </button>
+                    <span className="hidden sm:inline-flex px-2 py-0.5 rounded-full text-[10px] font-semibold border border-[#B89555]/30 bg-[#EFE6D6] text-[#1A1A1A]">
+                      {statusLabel[r.status]}
+                    </span>
+                    <span className="hidden md:inline text-[11px] text-[#1A1A1A]/60 tabular-nums">
+                      {formatDate(r.uploaded_at)}
+                    </span>
+                    <Button
+                      size="sm" variant="outline" onClick={() => setGrantTarget(r)}
+                      className="border-[#B89555]/40 text-[#1A1A1A] h-8 px-2" title="Give Access"
+                    >
+                      <ShieldCheck className="h-3.5 w-3.5 lg:mr-1" />
+                      <span className="hidden lg:inline">Give Access</span>
+                    </Button>
+                    <Button
+                      size="sm" variant="outline" onClick={() => setManageTarget(r)}
+                      className="border-[#B89555]/40 text-[#1A1A1A] h-8 px-2" title="Manage"
+                    >
+                      <Settings2 className="h-3.5 w-3.5 lg:mr-1" />
+                      <span className="hidden lg:inline">Manage</span>
+                    </Button>
+                    <Button
+                      size="sm" variant="outline" onClick={() => download(r)}
+                      className="border-[#B89555]/40 text-[#1A1A1A] h-8 px-2" title="Download"
+                    >
+                      <Download className="h-3.5 w-3.5 lg:mr-1" />
+                      <span className="hidden lg:inline">Download</span>
+                    </Button>
+                  </div>
                 </div>
+                {isOpen && (
+                  <div className="px-3 sm:px-4 pb-3">
+                    <DatabaseRowsGrid databaseId={r.id} currentUserId={currentUserId} />
+                  </div>
+                )}
               </div>
-            ))}
+            );})}
           </div>
         )}
       </div>
