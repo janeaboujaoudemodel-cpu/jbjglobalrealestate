@@ -550,29 +550,146 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
           </div>
         </TabsContent>
 
-        <TabsContent value="ai" className="flex-1 m-0 p-4 data-[state=inactive]:hidden">
-          <div className="space-y-4">
-            <h4 className="font-medium text-[#1A1A1A] flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-[#1A1A1A]" />
-              Quick Templates
-            </h4>
-            <div className="grid gap-2">
-              {templates.slice(0, 5).map((template) => (
-                <Button
-                  key={template.id}
-                  variant="outline"
-                  className="justify-start h-auto py-2 px-3 border-[#B89555]/20 text-left"
-                  onClick={() => setReplyText(template.content)}
-                >
-                  <div>
-                    <p className="font-medium text-sm">{template.name}</p>
-                    <p className="text-xs text-[#1A1A1A]/70 truncate">{template.content.substring(0, 50)}...</p>
+        <TabsContent value="ai" className="flex-1 m-0 p-0 data-[state=inactive]:hidden">
+          <ScrollArea className="h-full">
+            <div className="p-4 space-y-3">
+              {/* AI Summary card with confidence chip */}
+              <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-3 shadow-sm">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <Brain className="h-4 w-4 text-[#1A1A1A]" />
+                    <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wide">Summary</span>
                   </div>
-                </Button>
-              ))}
+                  <div className="flex items-center gap-1.5">
+                    {thread.ai_category && (
+                      <Badge variant="outline" className="text-[10px] h-5 border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A]">
+                        {CATEGORY_META[thread.ai_category]?.label || thread.ai_category}
+                      </Badge>
+                    )}
+                    {typeof (thread as any).ai_confidence === "number" && (
+                      <Badge variant="outline" className="text-[10px] h-5 border-[#B89555]/40 bg-[#EFE6D6] text-[#1A1A1A]">
+                        {Math.round(((thread as any).ai_confidence as number) * 100)}% conf.
+                      </Badge>
+                    )}
+                    <Button size="sm" variant="ghost" className="h-6 text-[10px]"
+                      onClick={() => triage.mutate({ threadId: thread.id, force: true })}
+                      disabled={triage.isPending}>
+                      <Wand2 className="h-3 w-3 mr-1" /> {thread.ai_summary ? "Re-run" : "Analyze"}
+                    </Button>
+                  </div>
+                </div>
+                {thread.ai_summary ? (
+                  <p className="text-sm text-[#1A1A1A]/85 italic leading-relaxed">"{thread.ai_summary}"</p>
+                ) : (
+                  <p className="text-xs text-[#1A1A1A]/60 italic">
+                    {triage.isPending ? "Analyzing this conversation…" : "Click Analyze to generate a summary."}
+                  </p>
+                )}
+              </div>
+
+              {/* Suggested reply card */}
+              <div className="rounded-xl border border-[#B89555]/30 bg-[#F7F2EA] p-3 shadow-sm">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="h-4 w-4 text-[#1A1A1A]" />
+                    <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wide">Suggested reply</span>
+                  </div>
+                </div>
+                {thread.ai_suggested_reply ? (
+                  <>
+                    <p className="text-sm text-[#1A1A1A] whitespace-pre-wrap leading-relaxed">{thread.ai_suggested_reply}</p>
+                    <div className="flex flex-wrap gap-2 mt-3">
+                      <Button size="sm" variant="gold" className="h-8 text-xs"
+                        onClick={() => { sendMessage({ content: thread.ai_suggested_reply || "" }); toast.success("Reply sent"); }}>
+                        <Send className="h-3 w-3 mr-1" /> Use draft
+                      </Button>
+                      <Button size="sm" variant="outline" className="h-8 text-xs border-[#B89555]/40"
+                        onClick={() => { setReplyText(thread.ai_suggested_reply || ""); setActiveTab("conversation"); }}>
+                        <Edit3 className="h-3 w-3 mr-1" /> Edit & send
+                      </Button>
+                      <Button size="sm" variant="ghost" className="h-8 text-xs"
+                        onClick={() => { navigator.clipboard.writeText(thread.ai_suggested_reply || ""); toast.success("Copied"); }}>
+                        <Copy className="h-3 w-3 mr-1" /> Copy
+                      </Button>
+                    </div>
+                  </>
+                ) : (
+                  <p className="text-xs text-[#1A1A1A]/60 italic">
+                    {thread.ai_category && ["marketing","advertising","campaign","system","business_linkedin","spam"].includes(thread.ai_category)
+                      ? "No reply needed — automated/marketing notification."
+                      : "No suggested reply yet — run Analyze above to generate one."}
+                  </p>
+                )}
+              </div>
+
+              {/* Next-step card */}
+              {thread.ai_next_step?.title && (
+                <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-3 shadow-sm">
+                  <div className="flex items-center gap-2 mb-2">
+                    <CalendarPlus className="h-4 w-4 text-[#1A1A1A]" />
+                    <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wide">Recommended next step</span>
+                  </div>
+                  <p className="text-sm text-[#1A1A1A]">{thread.ai_next_step.title}</p>
+                  {thread.ai_next_step.reasoning && (
+                    <p className="text-[11px] text-[#1A1A1A]/70 mt-1">{thread.ai_next_step.reasoning}</p>
+                  )}
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    <Button size="sm" variant="outline" className="h-8 text-xs border-[#B89555]/40"
+                      onClick={() => createTask.mutate({
+                        thread,
+                        title: thread.ai_next_step?.title || `Follow up: ${thread.contact_name ?? thread.contact_identifier}`,
+                        dueInHours: thread.ai_next_step?.due_in_hours ?? 24,
+                      })}
+                      disabled={createTask.isPending}>
+                      <ListTodo className="h-3 w-3 mr-1" /> Create task
+                    </Button>
+                    <Button size="sm" variant="outline" className="h-8 text-xs border-[#B89555]/40"
+                      onClick={() => scheduleMeeting.mutate({
+                        thread,
+                        title: thread.ai_next_step?.title || `Meeting: ${thread.contact_name ?? thread.contact_identifier}`,
+                        startInHours: thread.ai_next_step?.due_in_hours ?? 24,
+                      })}
+                      disabled={scheduleMeeting.isPending}>
+                      <CalendarPlus className="h-3 w-3 mr-1" /> Schedule meeting
+                    </Button>
+                    <Button size="sm" variant="ghost" className="h-8 text-xs"
+                      onClick={() => saveNote.mutate({
+                        thread,
+                        content: thread.ai_summary || thread.ai_suggested_reply || "Note from AI triage",
+                      })}
+                      disabled={saveNote.isPending}>
+                      <NotebookPen className="h-3 w-3 mr-1" /> Save note
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {/* Quick templates card */}
+              {templates.length > 0 && (
+                <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-3 shadow-sm">
+                  <div className="flex items-center gap-2 mb-2">
+                    <FileText className="h-4 w-4 text-[#1A1A1A]" />
+                    <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wide">Quick templates</span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {templates.slice(0, 6).map((template) => (
+                      <button
+                        key={template.id}
+                        type="button"
+                        onClick={() => { setReplyText(template.content); setActiveTab("conversation"); toast.success("Template loaded into reply"); }}
+                        className="text-left rounded-lg border border-[#B89555]/25 bg-[#F7F2EA] hover:bg-[#EFE6D6] hover:border-[#B89555]/60 transition p-2.5 min-w-0"
+                      >
+                        <p className="font-medium text-xs text-[#1A1A1A] truncate">{template.name}</p>
+                        <p className="text-[11px] text-[#1A1A1A]/70 line-clamp-2 mt-0.5">{template.content}</p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
-          </div>
+          </ScrollArea>
         </TabsContent>
+
       </CardContent>
       </Tabs>
 
