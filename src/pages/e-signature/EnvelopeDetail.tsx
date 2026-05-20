@@ -832,8 +832,9 @@ export default function EnvelopeDetail() {
     : null;
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] p-6">
-      <div className="max-w-6xl mx-auto space-y-6">
+    <div className="min-h-screen bg-[#FDFBF7] p-4 md:p-6">
+      <div className="max-w-[1600px] mx-auto space-y-5">
+
         {/* Header */}
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div className="flex items-start gap-3 min-w-0">
