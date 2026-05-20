@@ -133,7 +133,11 @@ export function BrokerageCombobox({
               className="h-9 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]"
             />
           </div>
-          <div className="max-h-72 overflow-y-auto">
+          <div
+            className="max-h-72 overflow-y-auto overscroll-contain"
+            onWheel={(e) => e.stopPropagation()}
+            onTouchMove={(e) => e.stopPropagation()}
+          >
             {loading ? (
               <div className="px-3 py-6 flex items-center justify-center text-sm text-[#1A1A1A]/60">
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Searching…
