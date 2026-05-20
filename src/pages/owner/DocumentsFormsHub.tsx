@@ -108,7 +108,7 @@ const VALID_TABS: Bucket[] = ["templates","documents","esign","drafts","generate
 
 // Lazy-loaded so the Vault payload (developer combobox + signed-document query) only
 // loads when the owner opens the tab.
-const ContractVaultEmbedded = lazyComponent(() => import("@/pages/owner/contracts/ContractVault"));
+const ContractVaultEmbedded = lazy(() => import("@/pages/owner/contracts/ContractVault"));
 
 export default function DocumentsFormsHub({ initialTabOverride }: DocumentsFormsHubProps = {}) {
   const navigate = useNavigate();
