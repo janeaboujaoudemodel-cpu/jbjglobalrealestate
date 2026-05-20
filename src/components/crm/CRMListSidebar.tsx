@@ -270,7 +270,7 @@ function FolderBlock({
   const [brokerName, setBrokerName] = useState(folder.assigned_broker_name || "");
   const [brokerId, setBrokerId] = useState<string | null>(folder.assigned_broker_id);
   const [newBrokerOpen, setNewBrokerOpen] = useState(false);
-  const folders = useCRMFolders();
+  // folders hook reserved for future auto-assign after broker creation
 
   return (
     <div
