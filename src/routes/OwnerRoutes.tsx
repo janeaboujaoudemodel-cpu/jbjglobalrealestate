@@ -190,7 +190,11 @@ export const OwnerRoutes = () => (
     <Route path="templates/vat" element={<VatCertificate />} />
     <Route path="sign" element={<AdoptSignatureStudio />} />
     <Route path="sign/:envelopeId" element={<AdoptSignatureStudio />} />
-    <Route path="contracts" element={<ContractVault />} />
+    {/* Contract Vault is now a tab inside the unified Forms & Agreements hub.
+        Keep the legacy route as a redirect so existing bookmarks/links keep working. */}
+    <Route path="contracts" element={<OwnerVaultTab />} />
+    {/* Top-level alias matching the unified-hub branding ("Forms & Agreements"). */}
+    <Route path="forms" element={<Navigate to="/owner/documents/forms" replace />} />
     <Route path="relationships" element={<OwnerRelationships />} />
     <Route path="relationships/revenue" element={<OwnerRelationshipsRevenue />} />
     <Route path="media-ingest" element={<OwnerMediaIngest />} />
