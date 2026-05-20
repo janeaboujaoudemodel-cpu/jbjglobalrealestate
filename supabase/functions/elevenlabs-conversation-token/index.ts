@@ -51,11 +51,32 @@ serve(async (req) => {
   }
 
   try {
+    // Gate: require a valid voice_agent_leads.id (intake submission within 30 days)
+    let leadId: string | null = null;
+    try {
+      if (req.method === "POST") {
+        const body = await req.json().catch(() => ({}));
+        leadId = body?.lead_id ?? null;
+      } else {
+        const url = new URL(req.url);
+        leadId = url.searchParams.get("lead_id");
+      }
+    } catch { /* ignore */ }
+
+    const allowed = await verifyLead(leadId);
+    if (!allowed) {
+      return new Response(
+        JSON.stringify({ error: "Intake required before connecting", gate: "intake_required" }),
+        { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     // Try both possible keys: the manually-set one and the connector-managed one.
     const candidateKeys = [
       Deno.env.get("ELEVENLABS_API_KEY"),
       Deno.env.get("ELEVENLABS_API_KEY_1"),
     ].filter((k): k is string => !!k && k.length > 0);
+
 
     const ELEVENLABS_AGENT_ID = Deno.env.get("ELEVENLABS_AGENT_ID");
 
