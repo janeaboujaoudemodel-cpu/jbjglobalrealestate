@@ -219,13 +219,13 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     try { sessionStorage.setItem('jj_desktop_banner_dismissed', '1'); } catch {}
   }, []);
 
-  // Show on phones + tablets only — never on desktop (≥1280px)
+  // Show on phones + tablets only — never on desktop/laptop preview widths (≥1024px)
   const [isPhoneOrTablet, setIsPhoneOrTablet] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false;
-    return window.innerWidth < 1280;
+    return window.innerWidth < 1024;
   });
   useEffect(() => {
-    const onResize = () => setIsPhoneOrTablet(window.innerWidth < 1280);
+    const onResize = () => setIsPhoneOrTablet(window.innerWidth < 1024);
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);
