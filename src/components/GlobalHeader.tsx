@@ -1357,6 +1357,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 onClick={() => handleMegaMenuClick('language')}
                 className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-[#FDFBF7]/10"
                 aria-label="Language"
+                data-tour-target="language"
               >
                 <Globe 
                   className={`w-5 h-5 transition-colors duration-300 text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] ${activeMegaMenu === 'language' ? '!text-[#1A1A1A]' : ''}`}
