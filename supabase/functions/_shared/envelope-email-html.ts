@@ -60,9 +60,32 @@ export function buildSenderSignatureHtml(senderName: string, senderTitle: string
 </table>`;
 }
 
+export function normalizeEmailBodyHtml(input: string): string {
+  let s = String(input || "");
+  if (!s.trim()) return "";
+  for (let i = 0; i < 3; i++) {
+    if (!/&(?:amp|lt|gt|quot|#39|nbsp);/i.test(s)) break;
+    if (i > 0 && /<[a-z][\s\S]*?>/i.test(s)) break;
+    s = s
+      .replace(/&nbsp;/gi, " ")
+      .replace(/&quot;/gi, '"')
+      .replace(/&#39;/gi, "'")
+      .replace(/&lt;/gi, "<")
+      .replace(/&gt;/gi, ">")
+      .replace(/&amp;/gi, "&");
+  }
+  if (!/<[a-z][\s\S]*?>/i.test(s)) {
+    const escape = (t: string) =>
+      t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    const paras = s.replace(/\r\n/g, "\n").split(/\n{2,}/).map((p) => p.trim()).filter(Boolean);
+    return paras.map((p) => `<p>${escape(p).replace(/\n/g, "<br/>")}</p>`).join("");
+  }
+  return s;
+}
+
 export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
   const subject = upperJbj(escapeHtml(args.subject || ""));
-  const bodyHtml = args.bodyHtml || "";
+  const bodyHtml = normalizeEmailBodyHtml(args.bodyHtml || "");
   const signatureHtml = args.signatureHtml || "";
   const docNumber = args.docNumber ? escapeHtml(args.docNumber) : "";
   const year = args.year ?? new Date().getFullYear();
