@@ -83,6 +83,7 @@ const OwnerContractReview = lazy(() => import("@/pages/e-signature/ContractRevie
 
 const OwnerDocumentsTab = () => <DocumentsFormsHub initialTabOverride="documents" />;
 const OwnerEsignTab = () => <DocumentsFormsHub initialTabOverride="esign" />;
+const OwnerVaultTab = () => <DocumentsFormsHub initialTabOverride="vault" />;
 const LegacyOwnerEnvelopeDetail = () => {
   const { id } = useParams();
   return <Navigate to={`/owner/documents/forms/${id}`} replace />;
