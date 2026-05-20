@@ -8,10 +8,11 @@
  *   • Databases can be dragged onto a folder to move them
  */
 import { useMemo, useState } from "react";
-import { Folder, Inbox, Trash2, Archive, ChevronDown, FolderPlus, UserCircle2, Plus, Check, X } from "lucide-react";
+import { Folder, Inbox, Trash2, Archive, ChevronDown, FolderPlus, UserCircle2, Plus, Check, X, UserPlus } from "lucide-react";
 import { useCRMLists, type CRMListKind } from "@/hooks/useCRMLists";
 import { useCRMFolders, type CRMDatabaseFolder } from "@/hooks/useCRMFolders";
 import { BrokerCombobox } from "@/components/crm/BrokerCombobox";
+import { AddBrokerSheet } from "@/pages/owner/crm/BrokersRegistry";
 import {
   Popover,
   PopoverContent,
