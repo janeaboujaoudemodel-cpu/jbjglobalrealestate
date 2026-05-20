@@ -19,8 +19,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { useRef, useCallback } from "react";
 import {
   Users, Crown, Building2, UserCog, Network, Briefcase, BadgeCheck,
-  ChevronDown, BarChart3, Bell, ChevronLeft, ChevronRight, Database,
+  ChevronDown, BarChart3, Bell, ChevronLeft, ChevronRight, Database, Plus, UserPlus,
 } from "lucide-react";
+import { AddBrokerInlineDialog } from "@/components/crm/AddBrokerInlineDialog";
+import CRMLeadModal from "@/components/crm/CRMLeadModal";
+import { useQueryClient } from "@tanstack/react-query";
 
 /**
  * ScrollStrip — horizontal scroller with left/right arrow controls.
@@ -311,6 +314,16 @@ export default function UnifiedCRM() {
     catch { /* noop */ }
   }, [insightsOpen]);
 
+  // Quick-create dialogs
+  const qc = useQueryClient();
+  const [addLeadOpen, setAddLeadOpen] = useState(false);
+  const [addBrokerOpen, setAddBrokerOpen] = useState(false);
+  const invalidateCRM = () => {
+    qc.invalidateQueries({ queryKey: ["crm-leads"] });
+    qc.invalidateQueries({ queryKey: ["crm_brokers"] });
+    qc.invalidateQueries({ queryKey: ["crm-section-counts"] });
+  };
+
   const Body = useMemo(() => {
     if (entity === "leads") {
       switch (view) {
@@ -431,6 +444,22 @@ export default function UnifiedCRM() {
             </p>
           </div>
           <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setAddLeadOpen(true)}
+              className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#1A1A1A] text-[#FDFBF7] border border-[#1A1A1A] hover:bg-[#1A1A1A]/90 transition-colors"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              Add Lead
+            </button>
+            <button
+              type="button"
+              onClick={() => setAddBrokerOpen(true)}
+              className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60 hover:bg-[#EFE6D6]/80 transition-colors"
+            >
+              <UserPlus className="h-3.5 w-3.5" />
+              Add Broker
+            </button>
             <Suspense fallback={null}>
               <CRMFloatingInsightsWidget
                 flaggedCount={counts.flagged}
@@ -583,6 +612,21 @@ export default function UnifiedCRM() {
       <Suspense fallback={null}>
         <CRMSideRail />
       </Suspense>
+
+      {/* Quick-create dialogs */}
+      {addLeadOpen && (
+        <CRMLeadModal
+          open={addLeadOpen}
+          onClose={() => setAddLeadOpen(false)}
+          onSuccess={() => { invalidateCRM(); setAddLeadOpen(false); }}
+          userId={userId}
+        />
+      )}
+      <AddBrokerInlineDialog
+        open={addBrokerOpen}
+        onClose={() => setAddBrokerOpen(false)}
+        onCreated={() => invalidateCRM()}
+      />
     </div>
   );
 }
