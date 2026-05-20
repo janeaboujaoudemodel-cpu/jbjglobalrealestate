@@ -19,8 +19,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { useRef, useCallback } from "react";
 import {
   Users, Crown, Building2, UserCog, Network, Briefcase, BadgeCheck,
-  ChevronDown, BarChart3, Bell, ChevronLeft, ChevronRight, Database,
+  ChevronDown, BarChart3, Bell, ChevronLeft, ChevronRight, Database, Plus, UserPlus,
 } from "lucide-react";
+import { AddBrokerInlineDialog } from "@/components/crm/AddBrokerInlineDialog";
+import CRMLeadModal from "@/components/crm/CRMLeadModal";
+import { useQueryClient } from "@tanstack/react-query";
 
 /**
  * ScrollStrip — horizontal scroller with left/right arrow controls.
