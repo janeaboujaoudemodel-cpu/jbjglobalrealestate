@@ -353,7 +353,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
             const sCls =
               mode === "signed" ? "bg-emerald-50 text-emerald-800 border-emerald-200"
               : mode === "submitted" ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
-              : mode === "sent" ? "bg-blue-50 text-blue-800 border-blue-200"
+              : mode === "sent" ? "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/60"
               : mode === "deleted" ? "bg-red-50 text-red-800 border-red-200"
               : mode === "generated" ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/60"
               : "bg-[#F7F2EA] text-[#1A1A1A]/80 border-[#B89555]/30";
