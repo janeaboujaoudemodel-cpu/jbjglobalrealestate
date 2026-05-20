@@ -27,6 +27,7 @@ function brandedDownloadHref(rawUrl: string | undefined, filename?: string): str
 }
 import { toast } from "sonner";
 import { SmartFillDropzone } from "@/components/e-signature/SmartFillDropzone";
+import { AICommandPanel } from "@/components/owner/documents/AICommandPanel";
 
 type Cat = "all" | "leasing" | "selling";
 type Bucket = "templates" | "documents" | "esign" | "drafts" | "generated" | "sent" | "submitted" | "signed" | "vault" | "deleted" | "assets";
