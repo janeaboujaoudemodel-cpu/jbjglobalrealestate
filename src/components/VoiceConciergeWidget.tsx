@@ -24,11 +24,16 @@ const getInitialMinimized = (): boolean => {
   }
 };
 
+type WidgetStatus = "idle" | "initializing" | "connected" | "unavailable";
+
 const VoiceConciergeWidget = () => {
   const [isMinimized, setIsMinimized] = useState(getInitialMinimized);
   const [isConnecting, setIsConnecting] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [currentCallLogId, setCurrentCallLogId] = useState<string | null>(null);
+  const [widgetStatus, setWidgetStatus] = useState<WidgetStatus>("idle");
+  const [statusMessage, setStatusMessage] = useState<string>("");
+  const hasShownUnavailableToastRef = useRef(false);
   const callStartTimeRef = useRef<Date | null>(null);
   const navigate = useNavigate();
 
@@ -106,11 +111,15 @@ const VoiceConciergeWidget = () => {
   const conversation = useConversation({
     onConnect: () => {
       console.log("Connected to JBJ Global Real Estate Concierge");
+      setWidgetStatus("connected");
+      setStatusMessage("");
+      hasShownUnavailableToastRef.current = false;
       toast.success("Connected to concierge");
     },
     onDisconnect: () => {
       console.log("Disconnected from concierge");
-      // Log call end when disconnected
+      setWidgetStatus("idle");
+      setStatusMessage("");
       if (currentCallLogId) {
         logCallEnd(currentCallLogId);
         setCurrentCallLogId(null);
@@ -121,7 +130,8 @@ const VoiceConciergeWidget = () => {
     },
     onError: (error) => {
       console.error("Concierge error:", error);
-      toast.error("Connection error. Please try again.");
+      setWidgetStatus("unavailable");
+      setStatusMessage("Connection error");
     },
   });
 
@@ -158,6 +168,8 @@ const VoiceConciergeWidget = () => {
     }
 
     setIsConnecting(true);
+    setWidgetStatus("initializing");
+    setStatusMessage("Initializing…");
     try {
       // Request microphone permission
       await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -177,16 +189,19 @@ const VoiceConciergeWidget = () => {
       }
 
       // Graceful fallback when the edge function returned a 200 with `fallback: true`
-      // (e.g. invalid/expired ElevenLabs API key). Log internally only — never expose
-      // infra/API-key errors to end users.
       if (data?.fallback || !data?.token) {
         console.warn("[VoiceConcierge] unavailable:", data?.error || "no token");
-        toast.info("Voice concierge is unavailable right now. Please try again shortly.");
+        setWidgetStatus("unavailable");
+        setStatusMessage("Unavailable");
+        if (!hasShownUnavailableToastRef.current) {
+          toast.info("Voice concierge is unavailable right now. Please try again shortly.");
+          hasShownUnavailableToastRef.current = true;
+        }
         return;
       }
 
       // Start the conversation with WebRTC
-      const session = await conversation.startSession({
+      const sessionResult = await conversation.startSession({
         conversationToken: data.token,
         connectionType: "webrtc",
       });
@@ -198,18 +213,29 @@ const VoiceConciergeWidget = () => {
       }
     } catch (error) {
       console.error("Failed to start conversation:", error);
-      // Never surface raw infra errors (API key, quota, etc.) to end users.
       const msg = error instanceof Error ? error.message : "";
       const isInfra = /api[\s_-]?key|elevenlabs|unauthor|quota|invalid|expired|token/i.test(msg);
-      toast.info(
-        isInfra
-          ? "Voice concierge is unavailable right now. Please try again shortly."
-          : "Couldn't start the call. Please try again."
-      );
+      setWidgetStatus("unavailable");
+      setStatusMessage("Unavailable");
+      if (!hasShownUnavailableToastRef.current) {
+        toast.info(
+          isInfra
+            ? "Voice concierge is unavailable right now. Please try again shortly."
+            : "Couldn't start the call. Please try again."
+        );
+        hasShownUnavailableToastRef.current = true;
+      }
     } finally {
       setIsConnecting(false);
     }
   }, [conversation, navigate, logCallStart]);
+
+  const retryConnection = useCallback(() => {
+    setWidgetStatus("idle");
+    setStatusMessage("");
+    hasShownUnavailableToastRef.current = false;
+    startConversation();
+  }, [startConversation]);
 
   const stopConversation = useCallback(async () => {
     // Log call end before stopping
@@ -238,8 +264,42 @@ const VoiceConciergeWidget = () => {
     );
   }
 
+  const showStatusPill = widgetStatus === "initializing" || widgetStatus === "unavailable";
+  const pillTone =
+    widgetStatus === "unavailable"
+      ? "bg-[#FEE2E2] text-[#7F1D1D] border-red-300"
+      : "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40";
+
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2">
+      {/* Visible status pill */}
+      {showStatusPill && (
+        <div
+          className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-semibold shadow-md ${pillTone}`}
+          role="status"
+          aria-live="polite"
+        >
+          {widgetStatus === "initializing" && (
+            <span className="w-2 h-2 rounded-full bg-[#B89555] animate-pulse" />
+          )}
+          {widgetStatus === "unavailable" && (
+            <span className="w-2 h-2 rounded-full bg-red-500" />
+          )}
+          <span>{statusMessage || (widgetStatus === "initializing" ? "Initializing…" : "Unavailable")}</span>
+          {widgetStatus === "unavailable" && (
+            <button
+              type="button"
+              onClick={retryConnection}
+              className="ml-1 px-2 py-0.5 rounded-full bg-[#1A1A1A] text-white text-[10px] font-semibold hover:bg-[#1A1A1A]/85"
+            >
+              Try again
+            </button>
+          )}
+        </div>
+      )}
+
+      <div className="relative">
+
       {/* Pulse ring - only when not connected and not minimized */}
       {!isConnected && (
         <>
@@ -321,6 +381,7 @@ const VoiceConciergeWidget = () => {
           </button>
         </div>
       )}
+      </div>
     </div>
   );
 };
