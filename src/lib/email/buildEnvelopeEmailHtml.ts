@@ -149,7 +149,6 @@ export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
         <div style="height:1px;background:#B89555;line-height:1px;font-size:0;">&nbsp;</div>
       </td></tr>
       <tr><td class="jbj-body" style="background:#ffffff;border-left:1px solid #B89555;border-right:1px solid #B89555;padding:32px 32px 28px;">
-        <h2 style="margin:0 0 14px;color:#1A1A1A;font-size:20px;font-weight:700;line-height:1.3;">${subject}</h2>
         ${referenceLine}
         <div style="color:#1A1A1A;line-height:1.7;font-size:14px;">${bodyHtml}</div>
         ${ctaBlock}

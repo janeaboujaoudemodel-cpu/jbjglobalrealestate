@@ -14,7 +14,17 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
-import { FileText, Send, CheckCircle2, Clock, PenTool, Stamp, FileSignature, Plus, Loader2, ExternalLink, Upload, Scale, Trash2, RotateCcw, FileEdit, Sparkles, Crown, MoreVertical, Star, Pencil, Archive } from "lucide-react";
+import { FileText, Send, CheckCircle2, Clock, PenTool, Stamp, FileSignature, Plus, Loader2, ExternalLink, Upload, Scale, Trash2, RotateCcw, FileEdit, Sparkles, Crown, MoreVertical, Star, Pencil, Archive, Download } from "lucide-react";
+import { buildSafeDownloadUrl } from "@/lib/buildSafeDownloadUrl";
+import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
+
+/** Always route signed-PDF links through https://jbj.ae/d so they never expose
+ *  the *.supabase.co host (which Chrome/uBlock blocks on desktop and which
+ *  shows raw supabase.co in mobile save dialogs). */
+function brandedDownloadHref(rawUrl: string | undefined, filename?: string): string {
+  if (!rawUrl) return "#";
+  return buildSafeDownloadUrl(rawUrl, filename) || maybeProxyStorageUrl(rawUrl, { filename, disposition: "attachment" });
+}
 import { toast } from "sonner";
 import { SmartFillDropzone } from "@/components/e-signature/SmartFillDropzone";
 
@@ -381,8 +391,8 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                     <Button size="sm" variant="gold" onClick={() => navigate(`/owner/documents/forms/${e.id}`)}>Open</Button>
                     {e.signed_document_url && (
                       <Button size="sm" variant="outline" asChild>
-                        <a href={e.signed_document_url} target="_blank" rel="noreferrer">
-                          <ExternalLink className="w-3 h-3 mr-1" /> Download
+                        <a href={brandedDownloadHref(e.signed_document_url, e.document_filename || `${e.name || "document"}.pdf`)} target="_blank" rel="noreferrer">
+                          <Download className="w-3 h-3 mr-1" /> Download document
                         </a>
                       </Button>
                     )}
