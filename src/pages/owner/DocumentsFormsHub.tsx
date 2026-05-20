@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, lazy, Suspense } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -29,7 +29,7 @@ import { toast } from "sonner";
 import { SmartFillDropzone } from "@/components/e-signature/SmartFillDropzone";
 
 type Cat = "all" | "leasing" | "selling";
-type Bucket = "templates" | "documents" | "esign" | "drafts" | "generated" | "sent" | "submitted" | "signed" | "deleted" | "assets";
+type Bucket = "templates" | "documents" | "esign" | "drafts" | "generated" | "sent" | "submitted" | "signed" | "vault" | "deleted" | "assets";
 interface DocumentsFormsHubProps { initialTabOverride?: Bucket; }
 
 /** Single query for the entire hub — much faster than four parallel queries. */
@@ -104,7 +104,11 @@ function isCompleteEnoughToBeGenerated(e: any): boolean {
   return hasClientName && hasContact;
 }
 
-const VALID_TABS: Bucket[] = ["templates","documents","esign","drafts","generated","sent","submitted","signed","deleted","assets"];
+const VALID_TABS: Bucket[] = ["templates","documents","esign","drafts","generated","sent","submitted","signed","vault","deleted","assets"];
+
+// Lazy-loaded so the Vault payload (developer combobox + signed-document query) only
+// loads when the owner opens the tab.
+const ContractVaultEmbedded = lazy(() => import("@/pages/owner/contracts/ContractVault"));
 
 export default function DocumentsFormsHub({ initialTabOverride }: DocumentsFormsHubProps = {}) {
   const navigate = useNavigate();
@@ -542,6 +546,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
             <TabsTrigger value="sent"><Send className="w-4 h-4 mr-2" />Pending ({buckets.sent.length})</TabsTrigger>
             <TabsTrigger value="submitted"><Clock className="w-4 h-4 mr-2" />Review ({buckets.submitted.length})</TabsTrigger>
             <TabsTrigger value="signed"><CheckCircle2 className="w-4 h-4 mr-2" />Signed ({buckets.signed.length})</TabsTrigger>
+            <TabsTrigger value="vault"><Stamp className="w-4 h-4 mr-2" />Contract Vault</TabsTrigger>
             <TabsTrigger value="deleted"><Trash2 className="w-4 h-4 mr-2" />Deleted ({buckets.deleted.length})</TabsTrigger>
             <TabsTrigger value="assets"><PenTool className="w-4 h-4 mr-2" />Stamps & Signatures</TabsTrigger>
           </TabsList>
@@ -668,6 +673,11 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
           </TabsContent>
           <TabsContent value="signed" className="mt-4">
             {renderBucketCards(buckets.signed, "No signed contracts yet.", "signed")}
+          </TabsContent>
+          <TabsContent value="vault" className="mt-4">
+            <Suspense fallback={<div className="flex items-center gap-2 text-sm text-[#1A1A1A]/70"><Loader2 className="w-4 h-4 animate-spin" /> Loading Contract Vault…</div>}>
+              <ContractVaultEmbedded />
+            </Suspense>
           </TabsContent>
           <TabsContent value="deleted" className="mt-4">
             <div className="mb-3 p-3 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-xs">

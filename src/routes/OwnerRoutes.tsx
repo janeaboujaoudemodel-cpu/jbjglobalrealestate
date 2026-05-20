@@ -69,7 +69,7 @@ const IconAuditDashboard = lazy(() => import("@/pages/owner/IconAuditDashboard")
 const IconSizePreview = lazy(() => import("@/pages/owner/IconSizePreview"));
 const VatCertificate = lazy(() => import("@/pages/owner/templates/VatCertificate"));
 const AdoptSignatureStudio = lazy(() => import("@/pages/owner/sign/AdoptSignatureStudio"));
-const ContractVault = lazy(() => import("@/pages/owner/contracts/ContractVault"));
+// ContractVault is now embedded inside DocumentsFormsHub's "Vault" tab; no direct route import needed.
 const OwnerRelationships = lazy(() => import("@/pages/owner/OwnerRelationships"));
 const OwnerRelationshipsRevenue = lazy(() => import("@/pages/owner/OwnerRelationshipsRevenue"));
 const OwnerMediaIngest = lazy(() => import("@/pages/owner/OwnerMediaIngest"));
@@ -83,6 +83,7 @@ const OwnerContractReview = lazy(() => import("@/pages/e-signature/ContractRevie
 
 const OwnerDocumentsTab = () => <DocumentsFormsHub initialTabOverride="documents" />;
 const OwnerEsignTab = () => <DocumentsFormsHub initialTabOverride="esign" />;
+const OwnerVaultTab = () => <DocumentsFormsHub initialTabOverride="vault" />;
 const LegacyOwnerEnvelopeDetail = () => {
   const { id } = useParams();
   return <Navigate to={`/owner/documents/forms/${id}`} replace />;
@@ -189,7 +190,11 @@ export const OwnerRoutes = () => (
     <Route path="templates/vat" element={<VatCertificate />} />
     <Route path="sign" element={<AdoptSignatureStudio />} />
     <Route path="sign/:envelopeId" element={<AdoptSignatureStudio />} />
-    <Route path="contracts" element={<ContractVault />} />
+    {/* Contract Vault is now a tab inside the unified Forms & Agreements hub.
+        Keep the legacy route as a redirect so existing bookmarks/links keep working. */}
+    <Route path="contracts" element={<OwnerVaultTab />} />
+    {/* Top-level alias matching the unified-hub branding ("Forms & Agreements"). */}
+    <Route path="forms" element={<Navigate to="/owner/documents/forms" replace />} />
     <Route path="relationships" element={<OwnerRelationships />} />
     <Route path="relationships/revenue" element={<OwnerRelationshipsRevenue />} />
     <Route path="media-ingest" element={<OwnerMediaIngest />} />
