@@ -314,6 +314,16 @@ export default function UnifiedCRM() {
     catch { /* noop */ }
   }, [insightsOpen]);
 
+  // Quick-create dialogs
+  const qc = useQueryClient();
+  const [addLeadOpen, setAddLeadOpen] = useState(false);
+  const [addBrokerOpen, setAddBrokerOpen] = useState(false);
+  const invalidateCRM = () => {
+    qc.invalidateQueries({ queryKey: ["crm-leads"] });
+    qc.invalidateQueries({ queryKey: ["crm_brokers"] });
+    qc.invalidateQueries({ queryKey: ["crm-section-counts"] });
+  };
+
   const Body = useMemo(() => {
     if (entity === "leads") {
       switch (view) {
