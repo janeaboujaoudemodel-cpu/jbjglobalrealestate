@@ -29,7 +29,7 @@ import { toast } from "sonner";
 import { SmartFillDropzone } from "@/components/e-signature/SmartFillDropzone";
 
 type Cat = "all" | "leasing" | "selling";
-type Bucket = "templates" | "documents" | "esign" | "drafts" | "generated" | "sent" | "submitted" | "signed" | "deleted" | "assets";
+type Bucket = "templates" | "documents" | "esign" | "drafts" | "generated" | "sent" | "submitted" | "signed" | "vault" | "deleted" | "assets";
 interface DocumentsFormsHubProps { initialTabOverride?: Bucket; }
 
 /** Single query for the entire hub — much faster than four parallel queries. */
