@@ -59,21 +59,8 @@ const VoiceConciergeWidget = () => {
   const navigate = useNavigate();
 
 
-  // Check authentication status
-  useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setIsAuthenticated(!!session);
-    };
+  // (Auth no longer required to use the voice concierge; intake form is the gate.)
 
-    checkAuth();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      setIsAuthenticated(!!session);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
 
   // Log call start to database
   const logCallStart = useCallback(async (conversationId?: string) => {
