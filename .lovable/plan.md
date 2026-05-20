@@ -1,99 +1,45 @@
+# Plan — Wave 3 finish: scroll fixes + unified broker sheet in Databases
 
-## Goal
+## 1. Fix scroll in every picker dropdown
 
-Four distinct improvements bundled into one plan. Each is independently shippable.
+Root cause: shadcn `CommandList` and `SelectContent` need an explicit scrollable viewport. In several pickers the list renders all items but the wrapper has no working overflow inside the Radix portal (Popover/Select), so the wheel/touch scroll is swallowed.
 
----
+Files to fix (apply the same pattern everywhere):
 
-### 1. ElevenLabs widget — visible status
+- `src/components/crm/pickers/PhoneInputWithCountry.tsx` — country dial picker
+- `src/components/crm/pickers/NationalityPicker.tsx` — nationality
+- `src/components/crm/pickers/LanguageMultiPicker.tsx` — languages
+- `src/components/ui/phone-input-with-country.tsx` — legacy phone picker (still used elsewhere)
+- `src/components/ui/nationality-select.tsx` — legacy nationality select
+- `src/components/crm/BrokerageCombobox.tsx` — "Tap to search brokerage"
+- `src/components/crm/BrokerCombobox.tsx` — broker typeahead (defensive)
 
-Today the widget swallows errors into a generic toast. Replace with an inline status pill on the widget itself.
+Fix pattern:
+- For Command-based pickers: ensure `<CommandList class="max-h-72 overflow-y-auto overscroll-contain">` and that the surrounding `PopoverContent` does NOT set `overflow-hidden`. Add `onWheel={(e) => e.stopPropagation()}` on the list to prevent parent Sheet/Dialog from intercepting wheel events.
+- For Select-based pickers: replace inner `<div class="max-h-... overflow-y-auto">` wrappers (they fight Radix's Viewport). Let `SelectContent` handle scroll via Radix's built-in scroll buttons + give it `max-h-[60vh]`.
+- Make every popover portal-safe inside Sheet/Dialog by setting `PopoverContent` `side="bottom"`, `sideOffset={6}`, `collisionPadding={12}`.
 
-States:
-- `Initializing…` — while requesting the conversation token / connecting
-- `Connected` — live call (green dot, mic icon)
-- `Unavailable` — token fetch failed, API key missing, quota exceeded, or `onError` fired. Shows a `Try again` button.
-- `Idle` — default (current "Speak with us" CTA)
+## 2. Use canonical AddBrokerSheet inside Databases (folder assignment)
 
-Keep the existing silent console.warn for me. Only show the generic toast on first failure; subsequent retries update the pill in place.
+Currently `src/components/crm/CRMListSidebar.tsx` uses just `BrokerCombobox` to pick an existing broker for a folder. The user wants the **same full screen** as `Add Broker` from the CRM header — with **Access settings, Expires, Notes, Branded invitation email, Onboarding link**.
 
-Files: `src/components/VoiceConciergeWidget.tsx`.
+Changes in `src/components/crm/CRMListSidebar.tsx`:
+- Keep the inline `BrokerCombobox` for the fast "pick existing" path.
+- Add a secondary button on each folder card: **"+ New broker for this folder"** that opens the canonical `AddBrokerSheet` (imported from `@/pages/owner/crm/BrokersRegistry`).
+- Prefill the sheet's "folder context" via a new optional `defaultFolderId` prop on `AddBrokerSheet`; on successful create, auto-call `folders.updateFolder.mutate({ id: folderId, assigned_broker_id: newBroker.id })`.
+- Confirm `AddBrokerSheet` already exposes Access settings, Expires, Notes, Branded invitation, Onboarding link sections — if any are missing in that sheet, add them (they live in `BrokersRegistry.tsx`).
 
----
+## 3. Scope clarification (access settings)
 
-### 2. Database folders assignable to a broker (drag & drop)
+- Access settings, branded invitation email, onboarding link → **brokers only** (AddBrokerSheet).
+- `CRMLeadModal` (Add Lead) stays as-is — no access settings block.
 
-In `/owner/crm?entity=databases` the sidebar already lists "Databases" but has no folder concept and no broker assignment.
+## 4. Verification
 
-Add:
-- **"+ New folder"** button in `CRMListSidebar` (horizontal bar + vertical rail).
-- Each folder shows the assigned broker's name + colored chip (e.g. "Jessica").
-- Folder row has an **Assign broker** action (popover with `BrokerCombobox` — existing search-enabled picker).
-- Each database (list) row in the main grid becomes draggable; dropping it on a folder reparents it.
-- Auto-tag every lead inside that database with `assigned_broker_id = folder.broker_id` (and apply to future uploads into the folder).
-
-Schema (migration):
-- New table `crm_database_folders` (name, color, assigned_broker_id, owner_user_id).
-- New column `crm_lead_lists.folder_id` (nullable, FK).
-- Trigger: when a lead is inserted with a `source_database_id` whose list belongs to a folder with `assigned_broker_id`, set `assigned_broker_id` on the lead if null.
-- RLS: owner full access; brokers can read folders where they are assigned.
-
-Files: `useCRMLists.ts` (extend), new `useCRMFolders.ts`, `CRMListSidebar.tsx`, `BrokersRegistry.tsx` / `UnifiedCRM.tsx` (drag handles), new `FolderAssignBrokerPopover.tsx`.
-
----
-
-### 3. CRM Leads page — inline "Add Lead" & "Add Broker"
-
-On `/owner/crm` (leads view) add a primary action group in the page header:
-- **+ Add Lead** → opens existing `CRMLeadModal` in create mode; includes an inline `BrokerCombobox` ("Assign to broker") with a "+ Add new broker" option that opens a quick `AddBrokerInlineDialog` (name, email, phone, languages, nationality — reuses the pickers built earlier). On save, broker is created in `crm_brokers` and immediately assigned to the lead.
-- **+ Add Broker** → opens `AddBrokerInlineDialog` directly.
-
-Files: `src/pages/owner/crm/UnifiedCRM.tsx` (header actions), new `src/components/crm/AddBrokerInlineDialog.tsx`, reuse `CRMLeadModal`.
-
----
-
-### 4. New sidebar section: **Broker Accounts** (admin)
-
-A dedicated owner-only area to provision and supervise broker CRM logins.
-
-Sidebar entry: under existing "CRM" group, add **Accounts** → `/owner/crm/accounts`.
-
-Page sections:
-1. **Provision account** — form: email, full name, assigned databases/folders, permission level. On submit, edge function `provision-broker-account`:
-   - Calls `admin.createUser` with a random password
-   - Inserts row into `crm_brokers` linked to that auth user
-   - Sets `user_roles` row = `broker`
-   - Sets `must_change_password = true` flag
-   - Emails the broker a welcome message (Resend) with their temp password + login link
-2. **Login gate** — middleware that forces `/auth/change-password` when `must_change_password = true`. Once changed, flag is cleared.
-3. **Accounts table** — list every broker account with: last login, status (active/suspended), # leads, # calls, # edits last 7d, assigned folders. Row actions: suspend, reset password, revoke, view activity.
-4. **Activity timeline per broker** — drawer showing every audited action (lead added, lead edited, lead marked junk, call logged, login, export). Pulled from `crm_audit_log` (extend if needed).
-5. **Export** — per-broker CSV/XLSX export of all leads they own or touched.
-
-Schema (migration):
-- `crm_brokers.auth_user_id` (uuid, FK auth.users) — if not present.
-- `crm_brokers.must_change_password` (bool, default false).
-- `crm_audit_log` table if missing: actor_user_id, entity_type, entity_id, action, before jsonb, after jsonb, created_at.
-- Trigger on `crm_leads` insert/update to write into `crm_audit_log` (delete already forbidden — they can only mark junk per existing rule).
-- RLS: brokers see their own audit rows; owner sees all.
-
-Edge functions:
-- `provision-broker-account` (admin createUser + email)
-- `reset-broker-password` (admin resetPasswordForEmail)
-- `suspend-broker-account` (ban_duration)
-
-Files: `src/pages/owner/crm/BrokerAccounts.tsx` (new), `src/components/crm/ProvisionBrokerDialog.tsx` (new), `src/components/crm/BrokerActivityDrawer.tsx` (new), `src/pages/auth/ChangePassword.tsx` (new), router entry, sidebar nav entry, three new edge functions.
-
----
-
-## Order of execution
-
-1. ElevenLabs status pill (smallest, isolated)
-2. Add Lead / Add Broker inline on CRM page (frontend only)
-3. Database folders + broker assignment + drag-drop (migration + UI)
-4. Broker Accounts section (migration + edge functions + new page + force-password-change flow)
+- Open Add Lead → scroll country code list, nationality list, languages list ✓
+- Open Add Broker from CRM header → same scroll checks + brokerage search scroll ✓
+- Open Databases → folder → "+ New broker for this folder" → AddBrokerSheet opens with full Access/Expires/Notes/Invitation/Onboarding sections, and the created broker is auto-assigned to the folder ✓
 
 ## Out of scope
 
-- Call recording / dialer telemetry beyond what the existing audit log captures (calls counted only if already logged via existing channels).
-- Real-time presence ("see brokers live") — only "last seen" + activity log unless you confirm you want a presence feed too.
+No backend schema changes. No changes to lead form. Wave 4 (Broker Accounts admin: provisioning, force password change, audit timeline, suspend/reset, per-broker export) starts after this is approved.
