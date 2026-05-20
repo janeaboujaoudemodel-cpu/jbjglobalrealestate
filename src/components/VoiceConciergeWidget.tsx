@@ -387,12 +387,13 @@ const VoiceConciergeWidget = () => {
       </div>
 
       {showJoined && (
-        <div className="absolute bottom-full mb-3 right-0 flex items-center gap-2 px-3 py-2 rounded-full bg-[#1A1A1A] text-white text-xs font-medium shadow-xl border border-[#B89555]/40 whitespace-nowrap">
+        <div className="flex items-center gap-2 px-3 py-2 rounded-full bg-[#1A1A1A] text-white text-xs font-medium shadow-xl border border-[#B89555]/40 whitespace-nowrap">
           <Sparkles className="w-3.5 h-3.5 text-[#B89555]" />
           Your concierge has joined — premium line connected
           <span className="w-1.5 h-1.5 rounded-full bg-[#B89555] animate-pulse ml-1" />
         </div>
       )}
+
 
       <VoiceConciergeIntakeModal
         open={intakeOpen}
