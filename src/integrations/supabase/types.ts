@@ -248,6 +248,13 @@ export type Database = {
             referencedRelation: "vw_crm_broker_pre_invite_leads"
             referencedColumns: ["lead_id"]
           },
+          {
+            foreignKeyName: "admin_tasks_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_row_status"
+            referencedColumns: ["lead_id"]
+          },
         ]
       }
       ai_brokers: {
@@ -2515,6 +2522,13 @@ export type Database = {
             referencedRelation: "vw_crm_broker_pre_invite_leads"
             referencedColumns: ["lead_id"]
           },
+          {
+            foreignKeyName: "broker_call_logs_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_row_status"
+            referencedColumns: ["lead_id"]
+          },
         ]
       }
       broker_chat_logs: {
@@ -2578,6 +2592,13 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "vw_crm_broker_pre_invite_leads"
+            referencedColumns: ["lead_id"]
+          },
+          {
+            foreignKeyName: "broker_chat_logs_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_row_status"
             referencedColumns: ["lead_id"]
           },
         ]
@@ -2766,6 +2787,13 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "vw_crm_broker_pre_invite_leads"
+            referencedColumns: ["lead_id"]
+          },
+          {
+            foreignKeyName: "broker_conversations_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_row_status"
             referencedColumns: ["lead_id"]
           },
         ]
@@ -4961,6 +4989,13 @@ export type Database = {
             referencedRelation: "vw_crm_broker_pre_invite_leads"
             referencedColumns: ["lead_id"]
           },
+          {
+            foreignKeyName: "crm_activities_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_row_status"
+            referencedColumns: ["lead_id"]
+          },
         ]
       }
       crm_ai_drafts: {
@@ -5040,6 +5075,13 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "vw_crm_broker_pre_invite_leads"
+            referencedColumns: ["lead_id"]
+          },
+          {
+            foreignKeyName: "crm_ai_drafts_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_row_status"
             referencedColumns: ["lead_id"]
           },
         ]
@@ -6652,6 +6694,13 @@ export type Database = {
             referencedRelation: "vw_crm_broker_pre_invite_leads"
             referencedColumns: ["lead_id"]
           },
+          {
+            foreignKeyName: "crm_calls_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_row_status"
+            referencedColumns: ["lead_id"]
+          },
         ]
       }
       crm_campaign_recipients: {
@@ -6722,6 +6771,13 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "vw_crm_broker_pre_invite_leads"
+            referencedColumns: ["lead_id"]
+          },
+          {
+            foreignKeyName: "crm_campaign_recipients_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_row_status"
             referencedColumns: ["lead_id"]
           },
         ]
@@ -7551,6 +7607,13 @@ export type Database = {
             referencedRelation: "vw_crm_broker_pre_invite_leads"
             referencedColumns: ["lead_id"]
           },
+          {
+            foreignKeyName: "crm_documents_client_lead_id_fkey"
+            columns: ["client_lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_row_status"
+            referencedColumns: ["lead_id"]
+          },
         ]
       }
       crm_email_campaigns: {
@@ -7914,6 +7977,13 @@ export type Database = {
             referencedRelation: "vw_crm_broker_pre_invite_leads"
             referencedColumns: ["lead_id"]
           },
+          {
+            foreignKeyName: "crm_lead_access_logs_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_row_status"
+            referencedColumns: ["lead_id"]
+          },
         ]
       }
       crm_lead_assignments: {
@@ -7968,6 +8038,13 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "vw_crm_broker_pre_invite_leads"
+            referencedColumns: ["lead_id"]
+          },
+          {
+            foreignKeyName: "crm_lead_assignments_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_row_status"
             referencedColumns: ["lead_id"]
           },
         ]
@@ -8085,6 +8162,13 @@ export type Database = {
             referencedRelation: "vw_crm_broker_pre_invite_leads"
             referencedColumns: ["lead_id"]
           },
+          {
+            foreignKeyName: "crm_lead_reports_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_row_status"
+            referencedColumns: ["lead_id"]
+          },
         ]
       }
       crm_lead_shares: {
@@ -8147,6 +8231,13 @@ export type Database = {
             referencedRelation: "vw_crm_broker_pre_invite_leads"
             referencedColumns: ["lead_id"]
           },
+          {
+            foreignKeyName: "crm_lead_shares_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_row_status"
+            referencedColumns: ["lead_id"]
+          },
         ]
       }
       crm_lead_shortlists: {
@@ -8204,6 +8295,13 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "vw_crm_broker_pre_invite_leads"
+            referencedColumns: ["lead_id"]
+          },
+          {
+            foreignKeyName: "crm_lead_shortlists_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_row_status"
             referencedColumns: ["lead_id"]
           },
         ]
@@ -8346,6 +8444,13 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "vw_crm_broker_pre_invite_leads"
+            referencedColumns: ["lead_id"]
+          },
+          {
+            foreignKeyName: "crm_lead_state_per_user_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_row_status"
             referencedColumns: ["lead_id"]
           },
         ]
@@ -8698,6 +8803,13 @@ export type Database = {
             referencedColumns: ["lead_id"]
           },
           {
+            foreignKeyName: "crm_leads_duplicate_of_id_fkey"
+            columns: ["duplicate_of_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_row_status"
+            referencedColumns: ["lead_id"]
+          },
+          {
             foreignKeyName: "crm_leads_list_id_fkey"
             columns: ["list_id"]
             isOneToOne: false
@@ -8776,6 +8888,13 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "vw_crm_broker_pre_invite_leads"
+            referencedColumns: ["lead_id"]
+          },
+          {
+            foreignKeyName: "crm_notes_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_row_status"
             referencedColumns: ["lead_id"]
           },
         ]
@@ -9469,6 +9588,13 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "vw_crm_broker_pre_invite_leads"
+            referencedColumns: ["lead_id"]
+          },
+          {
+            foreignKeyName: "crm_tasks_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_row_status"
             referencedColumns: ["lead_id"]
           },
         ]
@@ -12289,6 +12415,13 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "vw_crm_broker_pre_invite_leads"
+            referencedColumns: ["lead_id"]
+          },
+          {
+            foreignKeyName: "docusign_envelopes_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_row_status"
             referencedColumns: ["lead_id"]
           },
         ]
@@ -22573,6 +22706,13 @@ export type Database = {
             referencedColumns: ["lead_id"]
           },
           {
+            foreignKeyName: "owner_comm_tasks_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_row_status"
+            referencedColumns: ["lead_id"]
+          },
+          {
             foreignKeyName: "owner_comm_tasks_thread_id_fkey"
             columns: ["thread_id"]
             isOneToOne: false
@@ -22739,6 +22879,13 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "vw_crm_broker_pre_invite_leads"
+            referencedColumns: ["lead_id"]
+          },
+          {
+            foreignKeyName: "owner_comm_threads_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_row_status"
             referencedColumns: ["lead_id"]
           },
         ]
@@ -31527,6 +31674,13 @@ export type Database = {
             referencedRelation: "vw_crm_broker_pre_invite_leads"
             referencedColumns: ["lead_id"]
           },
+          {
+            foreignKeyName: "vapi_call_logs_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_row_status"
+            referencedColumns: ["lead_id"]
+          },
         ]
       }
       video_editor_templates: {
@@ -34369,6 +34523,13 @@ export type Database = {
             referencedRelation: "vw_crm_broker_pre_invite_leads"
             referencedColumns: ["lead_id"]
           },
+          {
+            foreignKeyName: "vapi_call_logs_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_row_status"
+            referencedColumns: ["lead_id"]
+          },
         ]
       }
       vw_crm_broker_overview: {
@@ -34518,6 +34679,40 @@ export type Database = {
         }
         Relationships: []
       }
+      vw_crm_database_row_status: {
+        Row: {
+          assigned_to_user_id: string | null
+          email_lower: string | null
+          flagged: boolean | null
+          full_name: string | null
+          is_junk: boolean | null
+          lead_id: string | null
+          merged_lead_id: string | null
+          phone_e164: string | null
+          pipeline_stage: string | null
+          raw: Json | null
+          row_id: string | null
+          row_index: number | null
+          source_database_id: string | null
+          vip: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_source_database_rows_source_database_id_fkey"
+            columns: ["source_database_id"]
+            isOneToOne: false
+            referencedRelation: "crm_source_databases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_source_database_rows_source_database_id_fkey"
+            columns: ["source_database_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_access"
+            referencedColumns: ["database_id"]
+          },
+        ]
+      }
       vw_resale_with_source: {
         Row: {
           area_name: string | null
@@ -34640,6 +34835,9 @@ export type Database = {
         Args: { _envelope_id: string }
         Returns: boolean
       }
+      _extract_email_from_raw: { Args: { raw: Json }; Returns: string }
+      _extract_name_from_raw: { Args: { raw: Json }; Returns: string }
+      _extract_phone_from_raw: { Args: { raw: Json }; Returns: string }
       acquire_function_lock: {
         Args: { p_function_name: string; p_timeout_minutes?: number }
         Returns: boolean
@@ -34656,6 +34854,7 @@ export type Database = {
         Returns: string
       }
       anonymize_old_form_submissions: { Args: never; Returns: number }
+      assign_database_rows_to_me: { Args: { row_ids: string[] }; Returns: Json }
       auto_assign_lead_to_available_broker: {
         Args: { p_lead_id: string }
         Returns: string
@@ -35277,6 +35476,10 @@ export type Database = {
       seed_crm_developer_registry: {
         Args: { p_owner_id: string }
         Returns: number
+      }
+      set_database_rows_junk: {
+        Args: { junk: boolean; row_ids: string[] }
+        Returns: Json
       }
       set_founder_visibility: { Args: { p_enabled: boolean }; Returns: boolean }
       set_podcast_visibility: { Args: { p_enabled: boolean }; Returns: boolean }
