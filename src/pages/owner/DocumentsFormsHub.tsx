@@ -104,7 +104,11 @@ function isCompleteEnoughToBeGenerated(e: any): boolean {
   return hasClientName && hasContact;
 }
 
-const VALID_TABS: Bucket[] = ["templates","documents","esign","drafts","generated","sent","submitted","signed","deleted","assets"];
+const VALID_TABS: Bucket[] = ["templates","documents","esign","drafts","generated","sent","submitted","signed","vault","deleted","assets"];
+
+// Lazy-loaded so the Vault payload (developer combobox + signed-document query) only
+// loads when the owner opens the tab.
+const ContractVaultEmbedded = lazyComponent(() => import("@/pages/owner/contracts/ContractVault"));
 
 export default function DocumentsFormsHub({ initialTabOverride }: DocumentsFormsHubProps = {}) {
   const navigate = useNavigate();
