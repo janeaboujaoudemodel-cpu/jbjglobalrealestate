@@ -396,6 +396,60 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                         </a>
                       </Button>
                     )}
+                    {mode === "submitted" && (
+                      <>
+                        <Button
+                          size="sm"
+                          variant="gold"
+                          onClick={async () => {
+                            const { error } = await supabase
+                              .from("esign_envelopes")
+                              .update({
+                                status: "completed",
+                                completed_at: new Date().toISOString(),
+                                metadata: { ...(e.metadata || {}), owner_review: { decision: "approved", at: new Date().toISOString() } },
+                              })
+                              .eq("id", e.id);
+                            if (error) { toast.error(error.message); return; }
+                            // Fire-and-forget thank-you
+                            try {
+                              await supabase.functions.invoke("esign-send-signer-thanks", {
+                                body: { envelope_id: e.id, variant: "approved" },
+                              });
+                            } catch { /* best-effort */ }
+                            toast.success("Approved — client notified");
+                            refetch();
+                          }}
+                        >
+                          <CheckCircle2 className="w-3 h-3 mr-1" /> Approve
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={async () => {
+                            const reason = window.prompt("Reason for rejecting this signed document? (will be emailed to the client)");
+                            if (!reason || !reason.trim()) return;
+                            const { error } = await supabase
+                              .from("esign_envelopes")
+                              .update({
+                                status: "declined",
+                                metadata: { ...(e.metadata || {}), owner_review: { decision: "rejected", reason: reason.trim(), at: new Date().toISOString() } },
+                              })
+                              .eq("id", e.id);
+                            if (error) { toast.error(error.message); return; }
+                            try {
+                              await supabase.functions.invoke("esign-send-signer-thanks", {
+                                body: { envelope_id: e.id, variant: "rejected", rejection_reason: reason.trim() },
+                              });
+                            } catch { /* best-effort */ }
+                            toast.success("Marked as rejected — client notified");
+                            refetch();
+                          }}
+                        >
+                          <Trash2 className="w-3 h-3 mr-1" /> Reject
+                        </Button>
+                      </>
+                    )}
                     {mode === "signed" && (
                       <Button
                         size="sm"
