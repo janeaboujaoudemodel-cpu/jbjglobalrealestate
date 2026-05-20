@@ -1,9 +1,34 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
+
+const LEAD_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
+
+async function verifyLead(leadId: string | null): Promise<boolean> {
+  if (!leadId || !/^[0-9a-f-]{36}$/i.test(leadId)) return false;
+  try {
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    );
+    const { data } = await supabase
+      .from("voice_agent_leads")
+      .select("id, created_at")
+      .eq("id", leadId)
+      .maybeSingle();
+    if (!data) return false;
+    const age = Date.now() - new Date(data.created_at).getTime();
+    return age <= LEAD_TTL_MS;
+  } catch (e) {
+    console.warn("verifyLead failed", e);
+    return false;
+  }
+}
+
 
 async function resolveAgentId(key: string, configured: string): Promise<string> {
   if (/^agent_[A-Za-z0-9_-]+$/.test(configured)) return configured;
