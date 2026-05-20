@@ -674,6 +674,11 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
           <TabsContent value="signed" className="mt-4">
             {renderBucketCards(buckets.signed, "No signed contracts yet.", "signed")}
           </TabsContent>
+          <TabsContent value="vault" className="mt-4">
+            <Suspense fallback={<div className="flex items-center gap-2 text-sm text-[#1A1A1A]/70"><Loader2 className="w-4 h-4 animate-spin" /> Loading Contract Vault…</div>}>
+              <ContractVaultEmbedded />
+            </Suspense>
+          </TabsContent>
           <TabsContent value="deleted" className="mt-4">
             <div className="mb-3 p-3 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-xs">
               Items here are permanently removed after 30 days. You can restore them anytime.
