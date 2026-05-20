@@ -1,33 +1,110 @@
-I’ll fix this in the e-signature/PAA flow with these changes:
+# Voice Agent Lead-Gate Flow
 
-1. Email body must render as a real email, not visible HTML code
-- Harden the shared email renderer so `bodyHtml` is normalized before display.
-- Decode saved/double-escaped HTML like `&lt;p&gt;...&lt;/p&gt;` before it reaches the iframe preview or the delivered email.
-- Sanitize/allow only safe email tags so the preview and recipient email render formatted paragraphs, not raw tags.
-- Apply the same fix in both the browser preview renderer and the backend send renderer so preview = delivered email.
+Gate the ElevenLabs Voice Concierge behind a required intake form. Visitors cannot start a call until they submit name, email, country-code phone, nationality, and interest. After submit, the agent connects automatically with a premium "Your concierge has joined" cue.
 
-2. Signature section must be editable from the send dialog
-- Add an inline editable signature area below the signature picker.
-- When a signature is selected, show its fields in editable inputs: name line, title line, company line, address, phone, email, website.
-- Let you change wording immediately for this email preview.
-- Keep the selected preset as the base, but render the edited signature live without needing to edit the database preset first.
-- Keep the existing “Save signature” action so the chosen preset can still be saved as default for future PAA emails.
+## User Flow
 
-3. Executive Office signature wording
-- Replace “Office of the Founder” with a more premium institutional wording.
-- Recommended signature for PAA emails: `JBJ Executive Office` with title line `Executive Office` or `JBJ Executive Team`, because this is a formal document request and should feel institutional, not personal/founder-led.
-- I’ll use `JBJ Executive Office` as the name line and `Executive Office` as the title line, avoiding “Office of the Founder.”
+```text
+[Click Voice Widget]
+       ↓
+[Intake Modal — required]
+  Full Name
+  Email
+  Nationality (searchable country list)
+  Phone (country-code selector + number)
+  Interest: Investing | Partnering | Careers | Other
+     ├─ Investing → Plan (Off-plan) | Secondary
+     ├─ Partnering → free-text "Tell us about your proposal"
+     ├─ Careers → role/area free-text
+     └─ Other → free-text
+       ↓
+[Submit] → validate (zod) → save lead → mint ElevenLabs token
+       ↓
+[Connecting… spinner with luxury copy]
+       ↓
+[Agent joins] → toast + in-widget banner:
+   "Your concierge has joined — premium line connected"
+   + soft chime (existing SFX) + status pulse
+       ↓
+[Live call UI — mute / end]
+```
 
-4. PAA document preview cropped / not scrollable enough
-- Replace the auto-growing iframe behavior that creates a long vertical page and can crop the document.
-- Make the document preview a full-width, one-screen viewer with a fixed responsive height based on the viewport.
-- The iframe itself will be scrollable internally, so the whole PAA can be reviewed from header to footer without the page becoming endless.
-- Preserve edit-click behavior inside the document preview.
+Once a visitor has submitted in the current browser (or is signed in and has a lead on file), the form is skipped on future opens for 30 days. A small "Edit details" link lets them update it.
 
-5. Move all controls above the document and remove right-side/down-page feeling
-- Keep Recipients/CCs, Details, Activity Log, Listing Draft, and Header/Footer customization as a compact top control band above the document.
-- Surface the Header/Footer customize action as its own top control rather than burying it inside Details.
-- Keep the document below as the full-width primary focus.
+## Data Model
 
-6. Deployment requirement
-- Because the delivered email uses backend functions, after editing the email backend renderer/send functions I’ll redeploy the affected e-signature email functions so the fix applies to real sent emails, not only the local preview.
+New table `voice_agent_leads` (RLS: insert open to anon + auth; select restricted to owner/admin via `has_role`):
+
+| column | type |
+|---|---|
+| id | uuid pk |
+| user_id | uuid null (set when logged in) |
+| full_name | text |
+| email | text |
+| nationality | text |
+| phone_country_code | text |
+| phone_number | text |
+| interest | enum: investing / partnering / careers / other |
+| investment_type | enum: off_plan / secondary / null |
+| details | text null (partnering/careers/other free-text) |
+| consent_marketing | boolean |
+| created_at | timestamptz |
+| ip / user_agent | text (server-stamped) |
+
+Lead is also pushed into the unified CRM (`crm_leads` via existing `register-mode-lead` style pattern) tagged `source = voice_concierge`, mapped to category by interest (investor / partner / talent).
+
+## Components
+
+- `src/components/voice-concierge/VoiceConciergeIntakeModal.tsx` — luxury champagne modal with the staged form (interest drives conditional sub-questions). Inputs follow the Institutional Form Standard (ink on champagne).
+- `src/components/voice-concierge/CountryPhoneSelect.tsx` — country dial-code + flag selector (reuse country list already present in CRM if available).
+- Update `src/components/VoiceConciergeWidget.tsx`:
+  - Replace direct `startSession` path with `gate → token → start`.
+  - Add "Agent joined" banner + sonner toast on `onConnect`.
+  - Persist `voice_concierge_lead_id` in localStorage (30d) to skip re-asking.
+  - Add "Edit details" affordance.
+
+## Backend
+
+- Migration: create `voice_agent_leads` + RLS + indexes; extend `crm_leads` insert via existing helper. No CHECK constraints with `now()`; use triggers if needed.
+- New edge function `voice-concierge-register-lead` (verify_jwt=false, CORS, zod validation):
+  1. Validate payload.
+  2. Insert into `voice_agent_leads` (stamp IP/UA).
+  3. Upsert into `crm_leads` (dedupe by email).
+  4. Return `{ lead_id }`.
+- Reuse existing `elevenlabs-conversation-token` for the token. Add a server-side guard: only mint token if the request includes a valid `lead_id` issued in the last 30 days (look up `voice_agent_leads`). This prevents bypass by calling the token endpoint directly.
+
+## Premium "Agent Joined" Cue
+
+- On `useConversation.onConnect`:
+  - Sonner toast: "Your concierge has joined — premium line connected"
+  - In-widget gold-hairline banner with pulsing dot for 4s
+  - Play short existing SFX (or generate via `elevenlabs-sfx` once and cache)
+- On `onDisconnect`: "Call ended — thank you" toast + log to `voice_call_logs`.
+
+## End-to-End Test (manual + scripted)
+
+1. Open preview as anon → click widget → modal appears, Start button hidden until valid.
+2. Submit with: Jane Doe / infoo.jane@gmail.com / UAE / +971 50 123 4567 / Investing → Off-plan.
+3. Verify `voice_agent_leads` row + `crm_leads` row (psql read).
+4. Token edge function returns 200 with `lead_id`; returns 403 without it.
+5. Widget transitions: Connecting → Connected with "Agent joined" banner + toast.
+6. End call → `voice_call_logs` populated with duration.
+7. Reopen widget within 30 days → form skipped, direct connect.
+8. Repeat once per interest branch (Partnering / Careers / Other) to verify conditional fields.
+
+Automated: `supabase--curl_edge_functions` smoke tests for `voice-concierge-register-lead` (valid, missing email, invalid phone) and for token guard (with/without lead_id).
+
+## Files To Add / Edit
+
+- add: `supabase/migrations/<ts>_voice_agent_leads.sql`
+- add: `supabase/functions/voice-concierge-register-lead/index.ts`
+- edit: `supabase/functions/elevenlabs-conversation-token/index.ts` (lead_id guard)
+- add: `src/components/voice-concierge/VoiceConciergeIntakeModal.tsx`
+- add: `src/components/voice-concierge/CountryPhoneSelect.tsx`
+- edit: `src/components/VoiceConciergeWidget.tsx`
+
+## Out of Scope
+
+- No changes to the ElevenLabs agent prompt or voice.
+- No changes to other voice tools (Podcast, SFX, Voice Studio).
+- No removal of existing features (per No-Removal policy).

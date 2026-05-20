@@ -32499,6 +32499,66 @@ export type Database = {
         }
         Relationships: []
       }
+      voice_agent_leads: {
+        Row: {
+          consent_marketing: boolean
+          created_at: string
+          details: string | null
+          email: string
+          full_name: string
+          id: string
+          interest: Database["public"]["Enums"]["voice_lead_interest"]
+          investment_type:
+            | Database["public"]["Enums"]["voice_lead_investment_type"]
+            | null
+          ip: string | null
+          nationality: string
+          phone_country_code: string
+          phone_number: string
+          updated_at: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          consent_marketing?: boolean
+          created_at?: string
+          details?: string | null
+          email: string
+          full_name: string
+          id?: string
+          interest: Database["public"]["Enums"]["voice_lead_interest"]
+          investment_type?:
+            | Database["public"]["Enums"]["voice_lead_investment_type"]
+            | null
+          ip?: string | null
+          nationality: string
+          phone_country_code: string
+          phone_number: string
+          updated_at?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          consent_marketing?: boolean
+          created_at?: string
+          details?: string | null
+          email?: string
+          full_name?: string
+          id?: string
+          interest?: Database["public"]["Enums"]["voice_lead_interest"]
+          investment_type?:
+            | Database["public"]["Enums"]["voice_lead_investment_type"]
+            | null
+          ip?: string | null
+          nationality?: string
+          phone_country_code?: string
+          phone_number?: string
+          updated_at?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       voice_call_logs: {
         Row: {
           conversation_id: string | null
@@ -35999,6 +36059,8 @@ export type Database = {
         | "investor"
         | "owner"
         | "broker_partner"
+      voice_lead_interest: "investing" | "partnering" | "careers" | "other"
+      voice_lead_investment_type: "off_plan" | "secondary"
       warning_severity: "verbal" | "written" | "final" | "termination"
     }
     CompositeTypes: {
@@ -36653,6 +36715,8 @@ export const Constants = {
         "owner",
         "broker_partner",
       ],
+      voice_lead_interest: ["investing", "partnering", "careers", "other"],
+      voice_lead_investment_type: ["off_plan", "secondary"],
       warning_severity: ["verbal", "written", "final", "termination"],
     },
   },

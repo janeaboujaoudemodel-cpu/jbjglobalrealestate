@@ -1,9 +1,28 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useConversation } from "@elevenlabs/react";
-import { Phone, PhoneOff, X, Mic, Volume2, LogIn } from "lucide-react";
+import { Phone, PhoneOff, X, Mic, Volume2, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import VoiceConciergeIntakeModal from "@/components/voice-concierge/VoiceConciergeIntakeModal";
+
+const LEAD_STORAGE_KEY = "voice_concierge_lead";
+const LEAD_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+
+function getStoredLeadId(): string | null {
+  try {
+    const raw = localStorage.getItem(LEAD_STORAGE_KEY);
+    if (!raw) return null;
+    const { id, at } = JSON.parse(raw);
+    if (!id || !at) return null;
+    if (Date.now() - at > LEAD_TTL_MS) {
+      localStorage.removeItem(LEAD_STORAGE_KEY);
+      return null;
+    }
+    return id;
+  } catch { return null; }
+}
+
 
 const STORAGE_KEY = "jj_voice_concierge_minimized_at";
 const RESTORE_AFTER_MS = 24 * 60 * 60 * 1000; // 24 hours
@@ -29,29 +48,19 @@ type WidgetStatus = "idle" | "initializing" | "connected" | "unavailable";
 const VoiceConciergeWidget = () => {
   const [isMinimized, setIsMinimized] = useState(getInitialMinimized);
   const [isConnecting, setIsConnecting] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [currentCallLogId, setCurrentCallLogId] = useState<string | null>(null);
   const [widgetStatus, setWidgetStatus] = useState<WidgetStatus>("idle");
   const [statusMessage, setStatusMessage] = useState<string>("");
+  const [intakeOpen, setIntakeOpen] = useState(false);
+  const [showJoined, setShowJoined] = useState(false);
+  const leadIdRef = useRef<string | null>(getStoredLeadId());
   const hasShownUnavailableToastRef = useRef(false);
   const callStartTimeRef = useRef<Date | null>(null);
   const navigate = useNavigate();
 
-  // Check authentication status
-  useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setIsAuthenticated(!!session);
-    };
 
-    checkAuth();
+  // (Auth no longer required to use the voice concierge; intake form is the gate.)
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      setIsAuthenticated(!!session);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
 
   // Log call start to database
   const logCallStart = useCallback(async (conversationId?: string) => {
@@ -114,8 +123,11 @@ const VoiceConciergeWidget = () => {
       setWidgetStatus("connected");
       setStatusMessage("");
       hasShownUnavailableToastRef.current = false;
-      toast.success("Connected to concierge");
+      setShowJoined(true);
+      window.setTimeout(() => setShowJoined(false), 4500);
+      toast.success("Your concierge has joined — premium line connected");
     },
+
     onDisconnect: () => {
       console.log("Disconnected from concierge");
       setWidgetStatus("idle");
@@ -153,40 +165,24 @@ const VoiceConciergeWidget = () => {
     }
   };
 
-  const handleLoginRedirect = () => {
-    toast.info("Please log in to use the voice concierge");
-    navigate("/auth");
-  };
+  const openIntake = () => setIntakeOpen(true);
 
-  const startConversation = useCallback(async () => {
-    // Check authentication before proceeding
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
-      toast.error("Please log in to use the voice concierge");
-      navigate("/auth");
-      return;
-    }
-
+  const startConversation = useCallback(async (leadId: string) => {
     setIsConnecting(true);
     setWidgetStatus("initializing");
-    setStatusMessage("Initializing…");
+    setStatusMessage("Opening private line…");
     try {
-      // Request microphone permission
       await navigator.mediaDevices.getUserMedia({ audio: true });
 
-      // Get token from edge function (auth header passed automatically)
       const { data, error } = await supabase.functions.invoke(
-        "elevenlabs-conversation-token"
+        "elevenlabs-conversation-token",
+        { body: { lead_id: leadId } }
       );
 
       if (error) {
-        if (error.message?.includes("Authentication")) {
-          toast.error("Please log in to use the voice concierge");
-          navigate("/auth");
-          return;
-        }
         throw new Error(error.message || "Failed to get conversation token");
       }
+
 
       // Graceful fallback when the edge function returned a 200 with `fallback: true`
       if (data?.fallback || !data?.token) {
@@ -230,12 +226,29 @@ const VoiceConciergeWidget = () => {
     }
   }, [conversation, navigate, logCallStart]);
 
+  const handleStartClick = useCallback(() => {
+    const existing = leadIdRef.current ?? getStoredLeadId();
+    if (existing) {
+      leadIdRef.current = existing;
+      startConversation(existing);
+    } else {
+      openIntake();
+    }
+  }, [startConversation]);
+
+  const handleIntakeSuccess = useCallback((leadId: string) => {
+    leadIdRef.current = leadId;
+    setIntakeOpen(false);
+    startConversation(leadId);
+  }, [startConversation]);
+
   const retryConnection = useCallback(() => {
     setWidgetStatus("idle");
     setStatusMessage("");
     hasShownUnavailableToastRef.current = false;
-    startConversation();
-  }, [startConversation]);
+    handleStartClick();
+  }, [handleStartClick]);
+
 
   const stopConversation = useCallback(async () => {
     // Log call end before stopping
@@ -322,25 +335,15 @@ const VoiceConciergeWidget = () => {
         <X className="w-3.5 h-3.5" />
       </button>
       
-      {/* Main button - shows login prompt for unauthenticated users */}
-      {!isAuthenticated ? (
+      {/* Main button: opens intake form (gate) or connects directly if returning */}
+      {!isConnected ? (
         <button
-          onClick={handleLoginRedirect}
-          className="relative flex items-center gap-2 bg-[#EFE6D6] hover:bg-[#EFE6D6]-light text-[#1A1A1A]-foreground px-4 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
-          aria-label="Login to use voice concierge"
-        >
-          <LogIn className="w-5 h-5" />
-          <span className="font-medium text-sm">
-            Login to speak
-          </span>
-        </button>
-      ) : !isConnected ? (
-        <button
-          onClick={startConversation}
+          onClick={handleStartClick}
           disabled={isConnecting}
           className="relative flex items-center gap-2 bg-[#EFE6D6] hover:bg-[#EFE6D6]-light text-[#1A1A1A]-foreground px-4 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group disabled:opacity-70 disabled:cursor-not-allowed"
           aria-label="Start voice call with concierge"
         >
+
           {isConnecting ? (
             <>
               <div className="w-6 h-6 border-2 border-[#B89555]-foreground/30 border-t-gold-foreground rounded-full animate-spin" />
@@ -382,8 +385,24 @@ const VoiceConciergeWidget = () => {
         </div>
       )}
       </div>
+
+      {showJoined && (
+        <div className="flex items-center gap-2 px-3 py-2 rounded-full bg-[#1A1A1A] text-white text-xs font-medium shadow-xl border border-[#B89555]/40 whitespace-nowrap">
+          <Sparkles className="w-3.5 h-3.5 text-[#B89555]" />
+          Your concierge has joined — premium line connected
+          <span className="w-1.5 h-1.5 rounded-full bg-[#B89555] animate-pulse ml-1" />
+        </div>
+      )}
+
+
+      <VoiceConciergeIntakeModal
+        open={intakeOpen}
+        onOpenChange={setIntakeOpen}
+        onSuccess={handleIntakeSuccess}
+      />
     </div>
   );
 };
+
 
 export default VoiceConciergeWidget;
