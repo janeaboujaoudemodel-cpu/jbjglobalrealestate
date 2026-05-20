@@ -13,7 +13,9 @@ import {
 } from "@/components/ui/sheet";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
-import { Users, Search, Plus, Building2, BadgeCheck, Clock, Loader2, Download } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import { Users, Search, Plus, Building2, BadgeCheck, Clock, Loader2, Download, ShieldCheck, Eye, CalendarClock, Mail, Link as LinkIcon, StickyNote } from "lucide-react";
 import { toast } from "sonner";
 import { useCRMSectionCounts } from "@/hooks/useCRMSectionCounts";
 import { useEntityTotal } from "@/hooks/useEntityTotal";
@@ -637,6 +639,12 @@ export function AddBrokerSheet({ open, onOpenChange, onAdded }: { open: boolean;
     experience_years: "", broker_type: "" as "" | "sales" | "leasing" | "both",
     birthday: "", linkedin_url: "", bayut_url: "", pf_url: "", instagram_url: "",
     notes: "",
+    // Access / security
+    visibility_scope: "owners" as "private" | "team" | "owners",
+    access_expires_at: "",
+    send_branded_invitation: true,
+    send_onboarding_link: true,
+    access_notes: "",
   };
   const [form, setForm] = useState(initial);
   const reset = () => setForm(initial);
@@ -649,6 +657,16 @@ export function AddBrokerSheet({ open, onOpenChange, onAdded }: { open: boolean;
       if (!user) throw new Error("Not signed in");
       const langs = (form.languages || []).map((s) => s.trim()).filter(Boolean);
       const exp = form.experience_years.trim() ? Number(form.experience_years) : null;
+      const accessSettings = {
+        type: "access_settings",
+        visibility_scope: form.visibility_scope,
+        expires_at: form.access_expires_at || null,
+        send_branded_invitation: form.send_branded_invitation,
+        send_onboarding_link: form.send_onboarding_link,
+        notes: form.access_notes.trim() || null,
+        set_by: user.id,
+        set_at: new Date().toISOString(),
+      };
       const payload: any = {
         owner_id: user.id,
         full_name: form.full_name.trim(),
@@ -674,6 +692,7 @@ export function AddBrokerSheet({ open, onOpenChange, onAdded }: { open: boolean;
         notes: form.notes.trim() || null,
         upload_source: "manual",
         database_source: "manual",
+        source_history: [accessSettings],
       };
       const { error } = await (supabase as any).from("crm_brokers").insert(payload);
       if (error) throw error;
@@ -697,6 +716,16 @@ export function AddBrokerSheet({ open, onOpenChange, onAdded }: { open: boolean;
         onChange={(e) => setForm((f) => ({ ...f, [k]: e.target.value }))}
         className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] mt-1"
       />
+    </div>
+  );
+
+  const SectionHeader = ({ icon: Icon, title, hint }: { icon: any; title: string; hint?: string }) => (
+    <div className="flex items-center gap-2 mt-5 mb-2 pt-3 border-t border-[#B89555]/20">
+      <Icon className="w-4 h-4 text-[#B89555]" />
+      <div>
+        <div className="text-sm font-medium text-[#1A1A1A]">{title}</div>
+        {hint && <div className="text-[11px] text-[#1A1A1A]/60">{hint}</div>}
+      </div>
     </div>
   );
 
@@ -767,8 +796,84 @@ export function AddBrokerSheet({ open, onOpenChange, onAdded }: { open: boolean;
             <Field k="bayut_url" label="Bayut profile" />
             <Field k="pf_url" label="Property Finder profile" />
           </div>
-          <Field k="notes" label="Notes" />
-          <Button onClick={submit} disabled={saving} variant="gold" className="w-full">
+
+          {/* Access settings */}
+          <SectionHeader icon={ShieldCheck} title="Access settings" hint="Control who can see this broker and when access ends." />
+
+          <div>
+            <Label className="text-xs text-[#1A1A1A]/70 flex items-center gap-1.5"><Eye className="w-3.5 h-3.5" /> Visibility scope</Label>
+            <div className="mt-1.5 grid grid-cols-3 gap-2">
+              {([
+                { v: "private", label: "Just me" },
+                { v: "team", label: "Team" },
+                { v: "owners", label: "Owners" },
+              ] as const).map((opt) => {
+                const active = form.visibility_scope === opt.v;
+                return (
+                  <button
+                    type="button"
+                    key={opt.v}
+                    onClick={() => setForm((f) => ({ ...f, visibility_scope: opt.v }))}
+                    className={`h-9 rounded-md text-xs border transition ${active ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]" : "bg-[#FDFBF7] text-[#1A1A1A]/70 border-[#B89555]/30 hover:border-[#B89555]/60"}`}
+                  >
+                    {opt.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div>
+            <Label className="text-xs text-[#1A1A1A]/70 flex items-center gap-1.5"><CalendarClock className="w-3.5 h-3.5" /> Expires at</Label>
+            <Input
+              type="date"
+              value={form.access_expires_at}
+              onChange={(e) => setForm((f) => ({ ...f, access_expires_at: e.target.value }))}
+              className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] mt-1"
+            />
+            <div className="text-[11px] text-[#1A1A1A]/60 mt-1">Leave empty for no expiry.</div>
+          </div>
+
+          <div className="flex items-center justify-between rounded-md border border-[#B89555]/30 bg-[#FDFBF7] px-3 py-2">
+            <div className="flex items-center gap-2 text-sm text-[#1A1A1A]">
+              <Mail className="w-4 h-4 text-[#B89555]" /> Send branded invitation email
+            </div>
+            <Switch
+              checked={form.send_branded_invitation}
+              onCheckedChange={(v) => setForm((f) => ({ ...f, send_branded_invitation: v }))}
+            />
+          </div>
+
+          <div className="flex items-center justify-between rounded-md border border-[#B89555]/30 bg-[#FDFBF7] px-3 py-2">
+            <div className="flex items-center gap-2 text-sm text-[#1A1A1A]">
+              <LinkIcon className="w-4 h-4 text-[#B89555]" /> Generate onboarding link
+            </div>
+            <Switch
+              checked={form.send_onboarding_link}
+              onCheckedChange={(v) => setForm((f) => ({ ...f, send_onboarding_link: v }))}
+            />
+          </div>
+
+          <div>
+            <Label className="text-xs text-[#1A1A1A]/70 flex items-center gap-1.5"><StickyNote className="w-3.5 h-3.5" /> Access notes</Label>
+            <Textarea
+              value={form.access_notes}
+              onChange={(e) => setForm((f) => ({ ...f, access_notes: e.target.value }))}
+              placeholder="Internal access reasoning, restrictions, review dates…"
+              className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] mt-1 min-h-[72px]"
+            />
+          </div>
+
+          {/* General notes */}
+          <SectionHeader icon={StickyNote} title="Notes" hint="General notes visible on the broker record." />
+          <Textarea
+            value={form.notes}
+            onChange={(e) => setForm((f) => ({ ...f, notes: e.target.value }))}
+            placeholder="Anything relevant about this broker…"
+            className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] mt-1 min-h-[72px]"
+          />
+
+          <Button onClick={submit} disabled={saving} variant="gold" className="w-full mt-4">
             {saving ? (<><Loader2 className="w-4 h-4 mr-2 animate-spin" />Saving…</>) : "Add broker"}
           </Button>
         </div>
