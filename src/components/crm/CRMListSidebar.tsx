@@ -269,6 +269,8 @@ function FolderBlock({
   const [assignOpen, setAssignOpen] = useState(false);
   const [brokerName, setBrokerName] = useState(folder.assigned_broker_name || "");
   const [brokerId, setBrokerId] = useState<string | null>(folder.assigned_broker_id);
+  const [newBrokerOpen, setNewBrokerOpen] = useState(false);
+  const folders = useCRMFolders();
 
   return (
     <div
