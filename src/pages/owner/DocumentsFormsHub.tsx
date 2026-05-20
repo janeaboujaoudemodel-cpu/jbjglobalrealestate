@@ -1026,6 +1026,16 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
           </div>
         </SheetContent>
       </Sheet>
+
+      {/* Phase F — Docked AI command panel for bulk document actions */}
+      <AICommandPanel
+        buckets={buckets as any}
+        setTab={(t) => { setTab(t); setSelected(new Set()); }}
+        setSelected={setSelected}
+        runBulkResendReminder={bulkResendReminder}
+        runBulkExportPdfs={bulkExportPdfs}
+        brandedHref={brandedDownloadHref}
+      />
     </div>
   );
 }
