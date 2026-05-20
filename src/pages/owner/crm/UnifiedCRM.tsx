@@ -622,10 +622,10 @@ export default function UnifiedCRM() {
           userId={userId}
         />
       )}
-      <AddBrokerInlineDialog
+      <AddBrokerSheet
         open={addBrokerOpen}
-        onClose={() => setAddBrokerOpen(false)}
-        onCreated={() => invalidateCRM()}
+        onOpenChange={setAddBrokerOpen}
+        onAdded={() => invalidateCRM()}
       />
     </div>
   );
