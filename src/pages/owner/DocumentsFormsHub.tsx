@@ -354,7 +354,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
     if (!rows.length) return <div className="text-sm text-[#1A1A1A]/60">{emptyText}</div>;
     return (
       <>
-        {(mode === "drafts" || mode === "generated" || mode === "deleted") && rows.length > 0 && (
+        {(mode === "drafts" || mode === "generated" || mode === "deleted" || mode === "sent" || mode === "signed") && rows.length > 0 && (
           <div className="flex items-center gap-3 mb-3 p-2 rounded-md bg-white/60 border border-[#B89555]/20">
             <Checkbox
               checked={selected.size > 0 && selected.size === visibleIds.length}
@@ -364,7 +364,18 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
             <span className="text-xs text-[#1A1A1A]/70">
               {selected.size ? `${selected.size} selected` : `Select all (${rows.length})`}
             </span>
-            <div className="ml-auto flex gap-2">
+            <div className="ml-auto flex gap-2 flex-wrap">
+              {mode === "sent" && (
+                <Button size="sm" variant="gold" disabled={!selected.size || bulkBusy} onClick={bulkResendReminder}>
+                  {bulkBusy ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <Send className="w-3.5 h-3.5 mr-1.5" />}
+                  Resend reminder
+                </Button>
+              )}
+              {mode === "signed" && (
+                <Button size="sm" variant="gold" disabled={!selected.size} onClick={bulkExportPdfs}>
+                  <Download className="w-3.5 h-3.5 mr-1.5" /> Export PDFs
+                </Button>
+              )}
               {mode === "deleted" ? (
                 <Button size="sm" variant="outline" disabled={!selected.size} onClick={bulkRestore}>
                   <RotateCcw className="w-3.5 h-3.5 mr-1.5" /> Restore
@@ -386,7 +397,11 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
             const dn = docNumberOf(e);
             const kind = kindLabelOf(e);
             const { phone, email } = clientContactOf(e);
-            const selectable = mode === "drafts" || mode === "generated" || mode === "deleted";
+            const selectable = mode === "drafts" || mode === "generated" || mode === "deleted" || mode === "sent" || mode === "signed";
+            // Phase G: follow-up intelligence — flag pending envelopes that have
+            // been waiting on the signer for 3+ days so the owner can act.
+            const ageDays = Math.floor((Date.now() - new Date(e.created_at).getTime()) / (1000 * 60 * 60 * 24));
+            const needsFollowUp = mode === "sent" && ageDays >= 3;
             const sLabel =
               mode === "signed" ? "Signed"
               : mode === "submitted" ? "Submitted — Pending Review"
@@ -420,6 +435,11 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                       {dn && <span className="text-[10px] tracking-[0.16em] uppercase text-[#1A1A1A]/80 border border-[#B89555]/40 rounded px-2 py-0.5 bg-white/70">{dn}</span>}
                       {kind && <span className="text-[10px] tracking-[0.14em] uppercase text-[#1A1A1A] border border-[#B89555]/40 rounded px-2 py-0.5 bg-[#EFE6D6]">{kind}</span>}
                       <span className={`text-[10px] tracking-[0.14em] uppercase rounded px-2 py-0.5 border ${sCls}`}>{sLabel}</span>
+                      {needsFollowUp && (
+                        <span className="text-[10px] tracking-[0.14em] uppercase rounded px-2 py-0.5 border bg-amber-50 text-amber-800 border-amber-200">
+                          Follow up · {ageDays}d
+                        </span>
+                      )}
                     </div>
                     <div className="font-semibold text-[#1A1A1A] truncate">{cName}</div>
                     {property && <div className="text-xs text-[#1A1A1A]/80 truncate">{property}</div>}
