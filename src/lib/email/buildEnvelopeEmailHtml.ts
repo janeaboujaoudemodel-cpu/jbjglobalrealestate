@@ -66,9 +66,43 @@ export function buildSenderSignatureHtml(senderName: string, senderTitle: string
 </table>`;
 }
 
+/** Last-mile safety net: ensure the message body is always real, rendered
+ *  HTML — never visible "<p>" / "&lt;p&gt;" tag soup. Handles three states:
+ *   1) Already valid HTML  → returned as-is.
+ *   2) Double-escaped HTML (`&lt;p&gt;Dear&lt;/p&gt;` or even `&amp;lt;p&amp;gt;`)
+ *      → decoded up to 3 passes until real tags appear.
+ *   3) Plain text with newlines → wrapped in <p>…</p> with <br/> for single
+ *      newlines so paragraphs render naturally.
+ */
+export function normalizeEmailBodyHtml(input: string): string {
+  let s = String(input || "");
+  if (!s.trim()) return "";
+  // Decode up to 3 times to handle &amp;lt; → &lt; → <.
+  for (let i = 0; i < 3; i++) {
+    if (!/&(?:amp|lt|gt|quot|#39|nbsp);/i.test(s)) break;
+    if (i > 0 && /<[a-z][\s\S]*?>/i.test(s)) break;
+    s = s
+      .replace(/&nbsp;/gi, " ")
+      .replace(/&quot;/gi, '"')
+      .replace(/&#39;/gi, "'")
+      .replace(/&lt;/gi, "<")
+      .replace(/&gt;/gi, ">")
+      .replace(/&amp;/gi, "&");
+  }
+  // If after decoding there are still NO real tags, this is plain text →
+  // wrap in paragraphs so the email body never looks like one wall of text.
+  if (!/<[a-z][\s\S]*?>/i.test(s)) {
+    const escape = (t: string) =>
+      t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    const paras = s.replace(/\r\n/g, "\n").split(/\n{2,}/).map((p) => p.trim()).filter(Boolean);
+    return paras.map((p) => `<p>${escape(p).replace(/\n/g, "<br/>")}</p>`).join("");
+  }
+  return s;
+}
+
 export function buildEnvelopeEmailHtml(args: BuildEnvelopeEmailArgs): string {
   const subject = upperJbj(escapeHtml(args.subject || ""));
-  const bodyHtml = args.bodyHtml || "";
+  const bodyHtml = normalizeEmailBodyHtml(args.bodyHtml || "");
   const signatureHtml = args.signatureHtml || "";
   const docNumber = args.docNumber ? escapeHtml(args.docNumber) : "";
   const year = args.year ?? new Date().getFullYear();

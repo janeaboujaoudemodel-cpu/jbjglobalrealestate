@@ -832,8 +832,9 @@ export default function EnvelopeDetail() {
     : null;
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] p-6">
-      <div className="max-w-6xl mx-auto space-y-6">
+    <div className="min-h-screen bg-[#FDFBF7] p-4 md:p-6">
+      <div className="max-w-[1600px] mx-auto space-y-5">
+
         {/* Header */}
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div className="flex items-start gap-3 min-w-0">
@@ -1327,34 +1328,20 @@ export default function EnvelopeDetail() {
                 title="Document preview"
                 srcDoc={previewSrcDoc}
                 className="w-full bg-white"
-                style={{ height: "640px", border: 0 }}
-                onLoad={(e) => {
-                  try {
-                    const f = e.currentTarget as HTMLIFrameElement;
-                    const doc = f.contentDocument;
-                    if (!doc) return;
-                    // Measure ACTUAL content height (last child's bottom),
-                    // not body.scrollHeight which can include trailing margin.
-                    const body = doc.body;
-                    const last = body?.lastElementChild as HTMLElement | null;
-                    const measured = last
-                      ? Math.ceil(last.getBoundingClientRect().bottom + (body?.scrollTop || 0))
-                      : Math.max(doc.documentElement.scrollHeight, body?.scrollHeight || 0);
-                    if (measured > 200) f.style.height = `${measured + 4}px`;
-                  } catch {}
-                }}
+                style={{ height: "calc(100vh - 220px)", minHeight: "640px", border: 0 }}
               />
             ) : envelope.document_url ? (
               <iframe
                 title="Document PDF"
                 src={`${maybeProxyStorageUrl(signedDoc?.document_url || envelope.document_url, { disposition: "inline", filename: signedDoc?.document_filename || envelope.document_filename })}${(signedDoc?.document_url || envelope.document_url).includes("?") ? "&" : "?"}v=${encodeURIComponent(envelope.updated_at || envelope.created_at || "")}`}
                 className="w-full bg-white"
-                style={{ height: "1100px", border: 0 }}
+                style={{ height: "calc(100vh - 220px)", minHeight: "640px", border: 0 }}
               />
             ) : (
               <div className="p-12 text-center text-[#1A1A1A]/70">No document</div>
             )}
           </CardContent>
+
         </Card>
 
         {/* Full activity log (kept below for completeness — full audit trail) */}

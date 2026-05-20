@@ -281,10 +281,21 @@ export function SendViaEmailDialog({
     () => signatures.find((s) => s.id === selectedSigId),
     [signatures, selectedSigId],
   );
+  // Inline, per-send editable overrides for the chosen signature. They override
+  // the preset only for this email; the saved preset stays untouched unless the
+  // owner clicks "Save signature".
+  const [sigEdits, setSigEdits] = useState<Partial<EmailSignature>>({});
+  const [sigEditorOpen, setSigEditorOpen] = useState(false);
+  const effectiveSig: EmailSignature | undefined = useMemo(() => {
+    if (!selectedSig) return undefined;
+    return { ...selectedSig, ...sigEdits } as EmailSignature;
+  }, [selectedSig, sigEdits]);
   const selectedSigHtml = useMemo(
-    () => (selectedSig ? renderSignatureHtml(selectedSig) : fallbackSigHtml),
-    [selectedSig, fallbackSigHtml],
+    () => (effectiveSig ? renderSignatureHtml(effectiveSig) : fallbackSigHtml),
+    [effectiveSig, fallbackSigHtml],
   );
+  // Reset per-send edits whenever the picked preset changes.
+  useEffect(() => { setSigEdits({}); }, [selectedSigId]);
 
   useEffect(() => {
     if (selectedSigId || !signatures.length) return;
@@ -764,7 +775,61 @@ export function SendViaEmailDialog({
               <p className="text-[10px] text-[#1A1A1A]/60">
                 Pick which signature appears at the bottom of the body — the preview updates instantly.
               </p>
+              {effectiveSig && (
+                <div className="rounded-md border border-[#B89555]/30 bg-white">
+                  <button
+                    type="button"
+                    onClick={() => setSigEditorOpen((v) => !v)}
+                    className="w-full flex items-center justify-between gap-2 px-2.5 py-1.5 text-[11px] text-[#1A1A1A] hover:bg-[#FBF6EC]"
+                  >
+                    <span className="inline-flex items-center gap-1.5">
+                      <PenLine className="w-3 h-3 text-[#B89555]" />
+                      {sigEditorOpen ? "Hide signature editor" : "Edit signature for this email"}
+                    </span>
+                    <span className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/50">
+                      {Object.keys(sigEdits).length ? "Edited" : "Unchanged"}
+                    </span>
+                  </button>
+                  {sigEditorOpen && (
+                    <div className="px-2.5 pb-2.5 pt-1 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {([
+                        ["name_line", "Name line"],
+                        ["title_line", "Title line"],
+                        ["company_line", "Company line"],
+                        ["address_line", "Address"],
+                        ["phone", "Phone"],
+                        ["email", "Email"],
+                        ["website", "Website"],
+                      ] as const).map(([key, label]) => (
+                        <div key={key} className="space-y-1">
+                          <Label className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/60">{label}</Label>
+                          <Input
+                            value={(effectiveSig as any)[key] ?? ""}
+                            onChange={(e) => setSigEdits((prev) => ({ ...prev, [key]: e.target.value }))}
+                            className="h-8 text-xs bg-white"
+                          />
+                        </div>
+                      ))}
+                      <div className="sm:col-span-2 flex items-center justify-between pt-1">
+                        <p className="text-[10px] text-[#1A1A1A]/60">
+                          Edits apply only to this email. Click <strong>Save</strong> above to make them the default for future PAA emails.
+                        </p>
+                        {Object.keys(sigEdits).length > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => setSigEdits({})}
+                            className="text-[10px] uppercase tracking-wider text-[#B89555] hover:text-[#1A1A1A] underline decoration-[#B89555]/60 underline-offset-2"
+                          >
+                            Reset to preset
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
+
 
             {/* DocuSign URL (optional) */}
             <div className="space-y-1.5">
