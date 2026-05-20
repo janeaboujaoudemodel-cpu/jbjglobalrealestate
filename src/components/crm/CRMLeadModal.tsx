@@ -304,7 +304,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                     <PopoverContent className="w-[240px] p-0 z-[200] bg-[#FDFBF7] border border-[#1A1A1A]/15" align="start">
                       <Command>
                         <CommandInput placeholder="Search language..." className="text-[#1A1A1A]" />
-                        <CommandList>
+                        <CommandList className="max-h-72 overflow-y-auto overscroll-contain" onWheel={(e) => e.stopPropagation()} onTouchMove={(e) => e.stopPropagation()}>
                           <CommandEmpty>No language found.</CommandEmpty>
                           <CommandGroup>
                             {LANGUAGES_WITH_FLAGS.map((l) => (
@@ -342,7 +342,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                     <PopoverContent className="w-[240px] p-0 z-[200] bg-[#FDFBF7] border border-[#1A1A1A]/15" align="start">
                       <Command>
                         <CommandInput placeholder="Search nationality..." className="text-[#1A1A1A]" />
-                        <CommandList>
+                        <CommandList className="max-h-72 overflow-y-auto overscroll-contain" onWheel={(e) => e.stopPropagation()} onTouchMove={(e) => e.stopPropagation()}>
                           <CommandEmpty>No nationality found.</CommandEmpty>
                           <CommandGroup>
                             {ALL_NATIONALITIES.map((n) => (
@@ -380,7 +380,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                     <PopoverContent className="w-[240px] p-0 z-[200] bg-[#FDFBF7] border border-[#1A1A1A]/15" align="start">
                       <Command>
                         <CommandInput placeholder="Search country..." className="text-[#1A1A1A]" />
-                        <CommandList>
+                        <CommandList className="max-h-72 overflow-y-auto overscroll-contain" onWheel={(e) => e.stopPropagation()} onTouchMove={(e) => e.stopPropagation()}>
                           <CommandEmpty>No country found.</CommandEmpty>
                           <CommandGroup>
                             {COUNTRIES.map((c) => (
