@@ -223,12 +223,29 @@ const VoiceConciergeWidget = () => {
     }
   }, [conversation, navigate, logCallStart]);
 
+  const handleStartClick = useCallback(() => {
+    const existing = leadIdRef.current ?? getStoredLeadId();
+    if (existing) {
+      leadIdRef.current = existing;
+      startConversation(existing);
+    } else {
+      openIntake();
+    }
+  }, [startConversation]);
+
+  const handleIntakeSuccess = useCallback((leadId: string) => {
+    leadIdRef.current = leadId;
+    setIntakeOpen(false);
+    startConversation(leadId);
+  }, [startConversation]);
+
   const retryConnection = useCallback(() => {
     setWidgetStatus("idle");
     setStatusMessage("");
     hasShownUnavailableToastRef.current = false;
-    startConversation();
-  }, [startConversation]);
+    handleStartClick();
+  }, [handleStartClick]);
+
 
   const stopConversation = useCallback(async () => {
     // Log call end before stopping
