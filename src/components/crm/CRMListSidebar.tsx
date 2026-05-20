@@ -353,10 +353,10 @@ function FolderBlock({
         open={newBrokerOpen}
         onOpenChange={setNewBrokerOpen}
         onAdded={() => {
-          // Best-effort: refetch folders (assignment is done via the picker if the user
-          // selected the freshly-created broker). The canonical sheet handles invitation
-          // emails, access settings, expiry, notes and onboarding link.
-          folders.data; // ensure hook stays referenced
+          // Canonical sheet handles access settings, expiry, notes, branded
+          // invitation email, and onboarding link. The owner can then use
+          // "Assign broker" → BrokerCombobox to attach the new broker here.
+          setNewBrokerOpen(false);
         }}
       />
 
