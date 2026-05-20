@@ -332,25 +332,15 @@ const VoiceConciergeWidget = () => {
         <X className="w-3.5 h-3.5" />
       </button>
       
-      {/* Main button - shows login prompt for unauthenticated users */}
-      {!isAuthenticated ? (
+      {/* Main button: opens intake form (gate) or connects directly if returning */}
+      {!isConnected ? (
         <button
-          onClick={handleLoginRedirect}
-          className="relative flex items-center gap-2 bg-[#EFE6D6] hover:bg-[#EFE6D6]-light text-[#1A1A1A]-foreground px-4 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
-          aria-label="Login to use voice concierge"
-        >
-          <LogIn className="w-5 h-5" />
-          <span className="font-medium text-sm">
-            Login to speak
-          </span>
-        </button>
-      ) : !isConnected ? (
-        <button
-          onClick={startConversation}
+          onClick={handleStartClick}
           disabled={isConnecting}
           className="relative flex items-center gap-2 bg-[#EFE6D6] hover:bg-[#EFE6D6]-light text-[#1A1A1A]-foreground px-4 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group disabled:opacity-70 disabled:cursor-not-allowed"
           aria-label="Start voice call with concierge"
         >
+
           {isConnecting ? (
             <>
               <div className="w-6 h-6 border-2 border-[#B89555]-foreground/30 border-t-gold-foreground rounded-full animate-spin" />
