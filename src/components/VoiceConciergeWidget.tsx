@@ -123,8 +123,11 @@ const VoiceConciergeWidget = () => {
       setWidgetStatus("connected");
       setStatusMessage("");
       hasShownUnavailableToastRef.current = false;
-      toast.success("Connected to concierge");
+      setShowJoined(true);
+      window.setTimeout(() => setShowJoined(false), 4500);
+      toast.success("Your concierge has joined — premium line connected");
     },
+
     onDisconnect: () => {
       console.log("Disconnected from concierge");
       setWidgetStatus("idle");
