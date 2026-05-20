@@ -55,7 +55,11 @@ export default function PhoneInputWithCountry({
         <PopoverContent align="start" className="p-0 w-[280px] bg-[#FDFBF7] border-[#B89555]/40">
           <Command>
             <CommandInput placeholder="Search country or code…" className="text-[#1A1A1A]" />
-            <CommandList className="max-h-72">
+            <CommandList
+              className="max-h-72 overflow-y-auto overscroll-contain"
+              onWheel={(e) => e.stopPropagation()}
+              onTouchMove={(e) => e.stopPropagation()}
+            >
               <CommandEmpty>No match.</CommandEmpty>
               <CommandGroup>
                 {COUNTRIES.map((c) => (
