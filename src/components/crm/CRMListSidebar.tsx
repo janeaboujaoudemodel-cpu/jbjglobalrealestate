@@ -8,10 +8,11 @@
  *   • Databases can be dragged onto a folder to move them
  */
 import { useMemo, useState } from "react";
-import { Folder, Inbox, Trash2, Archive, ChevronDown, FolderPlus, UserCircle2, Plus, Check, X } from "lucide-react";
+import { Folder, Inbox, Trash2, Archive, ChevronDown, FolderPlus, UserCircle2, Plus, Check, X, UserPlus } from "lucide-react";
 import { useCRMLists, type CRMListKind } from "@/hooks/useCRMLists";
 import { useCRMFolders, type CRMDatabaseFolder } from "@/hooks/useCRMFolders";
 import { BrokerCombobox } from "@/components/crm/BrokerCombobox";
+import { AddBrokerSheet } from "@/pages/owner/crm/BrokersRegistry";
 import {
   Popover,
   PopoverContent,
@@ -268,6 +269,8 @@ function FolderBlock({
   const [assignOpen, setAssignOpen] = useState(false);
   const [brokerName, setBrokerName] = useState(folder.assigned_broker_name || "");
   const [brokerId, setBrokerId] = useState<string | null>(folder.assigned_broker_id);
+  const [newBrokerOpen, setNewBrokerOpen] = useState(false);
+  // folders hook reserved for future auto-assign after broker creation
 
   return (
     <div
@@ -329,6 +332,14 @@ function FolderBlock({
           </Popover>
           <button
             type="button"
+            onClick={() => setNewBrokerOpen(true)}
+            className="text-[10px] inline-flex items-center gap-1 px-1.5 py-0.5 rounded border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+            title="Create a new broker (with access settings, invitation, onboarding link) and assign to this folder"
+          >
+            <UserPlus className="w-3 h-3" /> New broker
+          </button>
+          <button
+            type="button"
             onClick={() => { if (confirm(`Delete folder "${folder.name}"? Databases inside will become unassigned.`)) onDelete(); }}
             className="text-[10px] px-1 py-0.5 rounded text-[#1A1A1A]/60 hover:text-[#1A1A1A]"
             aria-label="Delete folder"
@@ -337,6 +348,17 @@ function FolderBlock({
           </button>
         </div>
       </div>
+
+      <AddBrokerSheet
+        open={newBrokerOpen}
+        onOpenChange={setNewBrokerOpen}
+        onAdded={() => {
+          // Canonical sheet handles access settings, expiry, notes, branded
+          // invitation email, and onboarding link. The owner can then use
+          // "Assign broker" → BrokerCombobox to attach the new broker here.
+          setNewBrokerOpen(false);
+        }}
+      />
 
       <div className="mt-1 space-y-0.5">
         {lists.length === 0 ? (

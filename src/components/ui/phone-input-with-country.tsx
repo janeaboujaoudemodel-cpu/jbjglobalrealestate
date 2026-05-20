@@ -135,7 +135,7 @@ export const PhoneInputWithCountry: React.FC<PhoneInputWithCountryProps> = ({
             )}
           </SelectValue>
         </SelectTrigger>
-        <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 max-h-[300px] overflow-y-auto z-[9999]">
+        <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 max-h-[60vh] z-[9999]">
           {COUNTRY_CODES.map(country => (
             <SelectItem 
               key={country.code} 

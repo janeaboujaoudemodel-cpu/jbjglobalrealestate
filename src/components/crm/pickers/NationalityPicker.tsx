@@ -47,7 +47,11 @@ export default function NationalityPicker({ value, onChange, placeholder = "Sele
       >
         <Command>
           <CommandInput placeholder="Search nationality or country…" className="text-[#1A1A1A]" />
-          <CommandList className="max-h-72">
+          <CommandList
+            className="max-h-72 overflow-y-auto overscroll-contain"
+            onWheel={(e) => e.stopPropagation()}
+            onTouchMove={(e) => e.stopPropagation()}
+          >
             <CommandEmpty>No match.</CommandEmpty>
             <CommandGroup>
               {COUNTRIES.map((c) => {
