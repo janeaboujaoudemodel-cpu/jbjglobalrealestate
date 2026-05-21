@@ -36,7 +36,7 @@ const AIChatWidget = lazy(() => import("@/components/AIChatWidget"));
 const VoiceConciergeWidget = lazy(() => import("@/components/VoiceConciergeWidget"));
 import PageNavigation from "@/components/PageNavigation";
 const MarketingScripts = lazy(() => import("@/components/marketing/MarketingScripts"));
-const SecurityShield = lazy(() => import("@/components/SecurityShield"));
+import SecurityShield from "@/components/SecurityShield";
 const PopupLayer = lazy(() => import("@/components/PopupLayer"));
 const CommandPaletteRoot = lazy(() => import("@/components/ui/command-palette-root"));
 const GuidedTour = lazy(() => import("@/components/GuidedTour"));
