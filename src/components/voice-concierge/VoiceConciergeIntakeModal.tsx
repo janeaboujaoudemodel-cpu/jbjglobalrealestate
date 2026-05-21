@@ -100,11 +100,22 @@ export default function VoiceConciergeIntakeModal({ open, onOpenChange, onSucces
     () => LANGUAGES.map((l) => ({ value: l.name, label: `${flagEmoji(l.iso)}  ${l.name}` })),
     []
   );
-  const phoneOptions = useMemo(() => COUNTRIES.map((c) => c.name), []);
-  const selectedDialCode = useMemo(
-    () => COUNTRIES.find((c) => c.name === countryName)?.code ?? "+971",
+  const dialOptions = useMemo(
+    () =>
+      COUNTRIES.map((c) => ({
+        value: c.name,
+        label: `${flagEmoji(c.iso)}  ${c.code}  ${c.name}`,
+      })),
+    []
+  );
+  const selectedCountry = useMemo(
+    () => COUNTRIES.find((c) => c.name === countryName),
     [countryName]
   );
+  const selectedDialCode = selectedCountry?.code ?? "+971";
+  const selectedDialDisplay = selectedCountry
+    ? `${flagEmoji(selectedCountry.iso)}  ${selectedCountry.code}`
+    : "🇦🇪  +971";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
