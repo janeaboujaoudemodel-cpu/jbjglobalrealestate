@@ -210,21 +210,23 @@ export default function VoiceConciergeIntakeModal({ open, onOpenChange, onSucces
             <div>
               <Label>Phone</Label>
               <div className="flex gap-2">
-                <div className="w-48">
-                  <SearchableSelect
+                <div className="w-[132px] shrink-0">
+                  <DialCodePicker
                     value={countryName}
                     onChange={setCountryName}
-                    options={phoneOptions}
-                    placeholder="Country"
-                    searchPlaceholder="Search country…"
-                    priorityItem="United Arab Emirates"
-                    flagType="country"
+                    display={selectedDialDisplay}
+                    options={dialOptions}
                   />
                 </div>
-                <div className="flex items-center px-2 rounded-md bg-white border border-input text-sm text-[#1A1A1A]/80 min-w-[64px] justify-center">
-                  {selectedDialCode}
-                </div>
-                <Input required inputMode="tel" pattern="[0-9 ]{5,}" placeholder="50 123 4567" value={phone} onChange={(e) => setPhone(e.target.value)} className="bg-white flex-1" />
+                <Input
+                  required
+                  inputMode="tel"
+                  pattern="[0-9 ]{5,}"
+                  placeholder="50 123 4567"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  className="bg-white flex-1 min-w-0"
+                />
               </div>
             </div>
             <div>
