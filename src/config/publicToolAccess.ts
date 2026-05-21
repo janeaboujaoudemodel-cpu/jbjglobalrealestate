@@ -8,9 +8,9 @@ export const APPROVED_PUBLIC_TOOLS = [
   { id: "list-property-rent", label: "List Property for Rent", href: "/listing-portal?type=rent" },
 ] as const;
 
-export const APPROVED_PUBLIC_TOOL_IDS = new Set(APPROVED_PUBLIC_TOOLS.map((tool) => tool.id));
+export const APPROVED_PUBLIC_TOOL_IDS: ReadonlySet<string> = new Set(APPROVED_PUBLIC_TOOLS.map((tool) => tool.id));
 
-export const APPROVED_PUBLIC_TOOL_HREFS = new Set(APPROVED_PUBLIC_TOOLS.map((tool) => tool.href));
+export const APPROVED_PUBLIC_TOOL_HREFS: ReadonlySet<string> = new Set(APPROVED_PUBLIC_TOOLS.map((tool) => tool.href));
 
 export const isApprovedPublicToolId = (toolId: string) => APPROVED_PUBLIC_TOOL_IDS.has(toolId);
 
