@@ -189,357 +189,232 @@ export default function HorizontalUtilityBar() {
   return (
     <>
       <div
-        className={`fixed top-0 right-0 h-[88px] z-[9998] flex flex-col border-b border-[hsl(var(--gold)/0.25)] shadow-[0_1px_3px_hsl(var(--gold)/0.12)] bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] transition-all duration-300 [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px] left-[200px]`}
+        className={`fixed top-0 right-0 h-[88px] z-[9998] flex items-center border-b border-[hsl(var(--gold)/0.18)] shadow-[0_1px_3px_hsl(var(--gold)/0.08)] bg-gradient-to-r from-[#FDFBF7] via-[#F7F1E6] to-[#EFE6D6] transition-all duration-300 [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px] left-[200px] px-5 xl:px-7`}
       >
-        {/* ── ROW 1 (48px): Navigation controls ── */}
-        <div className="h-[48px] flex items-center shrink-0 relative">
-          {/* Left scroll arrow */}
-          <ScrollArrow direction="left" scrollRef={row1ScrollRef} />
-          <div
-            ref={row1ScrollRef}
-            className="flex-1 min-w-0 h-full flex items-center gap-3 xl:gap-4 px-3 sm:px-5 xl:px-6 pr-2 sm:pr-3 xl:pr-4 overflow-x-auto overflow-y-visible scrollbar-hide"
-            style={{ overscrollBehaviorX: 'contain', touchAction: 'pan-x' }}
-          >
+        {/* ── LEFT: Back + Search ── */}
+        <div className="flex items-center gap-3 shrink-0">
+          <GlobalBackButton />
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                onClick={() => setSearchOpen(true)}
+                className="h-9 flex items-center gap-2 px-3 rounded-full hover:bg-[hsl(var(--gold)/0.06)] transition-colors group focus:outline-none"
+                aria-label="Search ⌘K"
+              >
+                <Search className="w-[18px] h-[18px] text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] transition-colors" />
+                <kbd className="hidden sm:inline-flex items-center text-[10px] font-medium text-[#1A1A1A]/45 tracking-wide">⌘K</kbd>
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" sideOffset={8} className="text-xs">Search (⌘K)</TooltipContent>
+          </Tooltip>
+        </div>
 
-            {/* ── LEFT GROUP: Primary actions ── */}
-            <div className="flex items-center h-8 gap-1.5 xl:gap-2 shrink-0">
-
-              {/* Back Button */}
-              <div className={`${cellBase} ${cellHover} px-1`}>
-                <GlobalBackButton />
+        {/* ── RIGHT: Compact utility cluster ── */}
+        <div className="ml-auto flex items-center gap-1 sm:gap-2 shrink-0">
+          {/* Browse */}
+          <Popover>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <PopoverTrigger asChild>
+                  <button
+                    className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-[hsl(var(--gold)/0.08)] transition-colors focus:outline-none"
+                    aria-label="Browse"
+                  >
+                    <Compass className="w-[18px] h-[18px] text-[#1A1A1A]/75" />
+                  </button>
+                </PopoverTrigger>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" sideOffset={8} className="text-xs">Browse properties</TooltipContent>
+            </Tooltip>
+            <PopoverContent align="end" sideOffset={10} className="w-[640px] max-w-[92vw] p-0 z-[10100] border border-[#EFE6D6] bg-[#FDFBF7] shadow-xl rounded-xl">
+              <div className="px-5 pt-4 pb-3 border-b border-[#EFE6D6]">
+                <div className="text-[10px] font-semibold tracking-[0.18em] uppercase text-[#1A1A1A]/55">Browse Properties</div>
+                <div className="text-sm text-[#1A1A1A] mt-0.5">Pick a transaction, readiness, or category</div>
               </div>
-
-              {/* Search */}
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    onClick={() => setSearchOpen(true)}
-                    className={`${cellBase} ${cellHover}`}
-                    aria-label="Search ⌘K"
-                  >
-                    <Search className={iconClass} />
-                    <span className="text-[11px] text-[hsl(var(--foreground)/0.45)] font-medium hidden xl:inline">⌘K</span>
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom" sideOffset={8} className="max-w-[200px] whitespace-normal text-center text-[hsl(var(--gold))] text-xs z-[10100]">Search properties, developers, areas, and more (⌘K)</TooltipContent>
-              </Tooltip>
-
-              {/* Browse popover (Buy / Rent / Sell) */}
-              <Popover>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <PopoverTrigger asChild>
-                      <button className={`${cellBase} ${cellHover}`} aria-label="Browse">
-                        <Compass className={iconClass} />
-                        <span className={labelClass}>Browse</span>
-                        <ChevronDown className="w-3 h-3 text-[hsl(var(--gold)/0.6)] hidden xl:inline" />
-                      </button>
-                    </PopoverTrigger>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom" sideOffset={8} className="max-w-[220px] whitespace-normal text-center text-[hsl(var(--gold))] text-xs z-[10100]">Buy, rent, or sell properties</TooltipContent>
-                </Tooltip>
-                <PopoverContent align="start" sideOffset={10} className="w-[640px] max-w-[92vw] p-0 z-[10100] border border-border bg-background shadow-xl">
-                  <div className="px-5 pt-4 pb-3 border-b border-border">
-                    <div className="text-[10px] font-semibold tracking-[0.18em] uppercase text-muted-foreground">Browse Properties</div>
-                    <div className="text-sm text-foreground mt-0.5">Pick a transaction, readiness, or category</div>
+              <div className="grid grid-cols-3 gap-0">
+                <div className="p-4 border-r border-[#EFE6D6]">
+                  <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#1A1A1A]/55 mb-2">Transaction</div>
+                  <div className="space-y-0.5">
+                    <Link to="/properties?transactionType=buy" className="flex items-center gap-2.5 px-2.5 py-2 rounded-md hover:bg-[#F7F2EA] transition-colors"><Building2 className="w-4 h-4 text-[#1A1A1A]" /><span className="text-sm font-medium text-[#1A1A1A]">Buy</span></Link>
+                    <Link to="/properties?transactionType=rent" className="flex items-center gap-2.5 px-2.5 py-2 rounded-md hover:bg-[#F7F2EA] transition-colors"><Key className="w-4 h-4 text-[#1A1A1A]" /><span className="text-sm font-medium text-[#1A1A1A]">Rent</span></Link>
+                    <Link to="/listing-portal" className="flex items-center gap-2.5 px-2.5 py-2 rounded-md hover:bg-[#F7F2EA] transition-colors"><Tag className="w-4 h-4 text-[#1A1A1A]" /><span className="text-sm font-medium text-[#1A1A1A]">Sell / List</span></Link>
                   </div>
-                  <div className="grid grid-cols-3 gap-0">
-                    {/* Transaction */}
-                    <div className="p-4 border-r border-border">
-                      <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground mb-2">Transaction</div>
-                      <div className="space-y-0.5">
-                        <Link to="/properties?transactionType=buy" className="flex items-center gap-2.5 px-2.5 py-2 rounded-md hover:bg-muted transition-colors">
-                          <Building2 className="w-4 h-4 text-foreground" />
-                          <span className="text-sm font-medium text-foreground">Buy</span>
-                        </Link>
-                        <Link to="/properties?transactionType=rent" className="flex items-center gap-2.5 px-2.5 py-2 rounded-md hover:bg-muted transition-colors">
-                          <Key className="w-4 h-4 text-foreground" />
-                          <span className="text-sm font-medium text-foreground">Rent</span>
-                        </Link>
-                        <Link to="/listing-portal" className="flex items-center gap-2.5 px-2.5 py-2 rounded-md hover:bg-muted transition-colors">
-                          <Tag className="w-4 h-4 text-foreground" />
-                          <span className="text-sm font-medium text-foreground">Sell / List</span>
-                        </Link>
-                      </div>
-                    </div>
-
-                    {/* Readiness */}
-                    <div className="p-4 border-r border-border">
-                      <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground mb-2">Readiness</div>
-                      <div className="space-y-0.5">
-                        <Link to="/properties?completionStatus=ready" className="flex items-center gap-2.5 px-2.5 py-2 rounded-md hover:bg-muted transition-colors">
-                          <Home className="w-4 h-4 text-foreground" />
-                          <span className="text-sm font-medium text-foreground">Ready to move</span>
-                        </Link>
-                        <Link to="/properties?completionStatus=off-plan" className="flex items-center gap-2.5 px-2.5 py-2 rounded-md hover:bg-muted transition-colors">
-                          <Building2 className="w-4 h-4 text-foreground" />
-                          <span className="text-sm font-medium text-foreground">Off-plan</span>
-                        </Link>
-                        <Link to="/properties?status=new_launch" className="flex items-center gap-2.5 px-2.5 py-2 rounded-md hover:bg-muted transition-colors">
-                          <Sparkles className="w-4 h-4 text-foreground" />
-                          <span className="text-sm font-medium text-foreground">New launches</span>
-                        </Link>
-                        <Link to="/resale-properties" className="flex items-center gap-2.5 px-2.5 py-2 rounded-md hover:bg-muted transition-colors">
-                          <ArrowRight className="w-4 h-4 text-foreground" />
-                          <span className="text-sm font-medium text-foreground">Resale deals</span>
-                        </Link>
-                      </div>
-                    </div>
-
-                    {/* Category */}
-                    <div className="p-4">
-                      <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground mb-2">Category</div>
-                      <div className="grid grid-cols-1 gap-0.5">
-                        <Link to="/properties?type=apartment" className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md hover:bg-muted transition-colors">
-                          <Building2 className="w-3.5 h-3.5 text-foreground" /><span className="text-sm text-foreground">Apartments</span>
-                        </Link>
-                        <Link to="/properties?type=villa" className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md hover:bg-muted transition-colors">
-                          <Home className="w-3.5 h-3.5 text-foreground" /><span className="text-sm text-foreground">Villas</span>
-                        </Link>
-                        <Link to="/properties?type=townhouse" className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md hover:bg-muted transition-colors">
-                          <Castle className="w-3.5 h-3.5 text-foreground" /><span className="text-sm text-foreground">Townhouses</span>
-                        </Link>
-                        <Link to="/properties?type=penthouse" className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md hover:bg-muted transition-colors">
-                          <Building className="w-3.5 h-3.5 text-foreground" /><span className="text-sm text-foreground">Penthouses</span>
-                        </Link>
-                        <Link to="/properties?type=commercial" className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md hover:bg-muted transition-colors">
-                          <Briefcase className="w-3.5 h-3.5 text-foreground" /><span className="text-sm text-foreground">Commercial</span>
-                        </Link>
-                        <Link to="/properties?type=retail" className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md hover:bg-muted transition-colors">
-                          <Store className="w-3.5 h-3.5 text-foreground" /><span className="text-sm text-foreground">Retail</span>
-                        </Link>
-                        <Link to="/properties?type=office" className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md hover:bg-muted transition-colors">
-                          <Briefcase className="w-3.5 h-3.5 text-foreground" /><span className="text-sm text-foreground">Offices</span>
-                        </Link>
-                        <Link to="/properties?type=plot" className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md hover:bg-muted transition-colors">
-                          <Trees className="w-3.5 h-3.5 text-foreground" /><span className="text-sm text-foreground">Plots / Land</span>
-                        </Link>
-                      </div>
-                    </div>
+                </div>
+                <div className="p-4 border-r border-[#EFE6D6]">
+                  <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#1A1A1A]/55 mb-2">Readiness</div>
+                  <div className="space-y-0.5">
+                    <Link to="/properties?completionStatus=ready" className="flex items-center gap-2.5 px-2.5 py-2 rounded-md hover:bg-[#F7F2EA] transition-colors"><Home className="w-4 h-4 text-[#1A1A1A]" /><span className="text-sm font-medium text-[#1A1A1A]">Ready to move</span></Link>
+                    <Link to="/properties?completionStatus=off-plan" className="flex items-center gap-2.5 px-2.5 py-2 rounded-md hover:bg-[#F7F2EA] transition-colors"><Building2 className="w-4 h-4 text-[#1A1A1A]" /><span className="text-sm font-medium text-[#1A1A1A]">Off-plan</span></Link>
+                    <Link to="/properties?status=new_launch" className="flex items-center gap-2.5 px-2.5 py-2 rounded-md hover:bg-[#F7F2EA] transition-colors"><Sparkles className="w-4 h-4 text-[#1A1A1A]" /><span className="text-sm font-medium text-[#1A1A1A]">New launches</span></Link>
+                    <Link to="/resale-properties" className="flex items-center gap-2.5 px-2.5 py-2 rounded-md hover:bg-[#F7F2EA] transition-colors"><ArrowRight className="w-4 h-4 text-[#1A1A1A]" /><span className="text-sm font-medium text-[#1A1A1A]">Resale deals</span></Link>
                   </div>
-                  <div className="flex items-center justify-between px-5 py-3 border-t border-border bg-muted/40">
-                    <Link to="/properties" className="text-sm font-medium text-foreground hover:underline inline-flex items-center gap-1.5">
-                      See all properties <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
-                    <Link to="/properties/explore" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-                      Marketing overview
-                    </Link>
+                </div>
+                <div className="p-4">
+                  <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#1A1A1A]/55 mb-2">Category</div>
+                  <div className="grid grid-cols-1 gap-0.5">
+                    <Link to="/properties?type=apartment" className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md hover:bg-[#F7F2EA] transition-colors"><Building2 className="w-3.5 h-3.5 text-[#1A1A1A]" /><span className="text-sm text-[#1A1A1A]">Apartments</span></Link>
+                    <Link to="/properties?type=villa" className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md hover:bg-[#F7F2EA] transition-colors"><Home className="w-3.5 h-3.5 text-[#1A1A1A]" /><span className="text-sm text-[#1A1A1A]">Villas</span></Link>
+                    <Link to="/properties?type=townhouse" className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md hover:bg-[#F7F2EA] transition-colors"><Castle className="w-3.5 h-3.5 text-[#1A1A1A]" /><span className="text-sm text-[#1A1A1A]">Townhouses</span></Link>
+                    <Link to="/properties?type=penthouse" className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md hover:bg-[#F7F2EA] transition-colors"><Building className="w-3.5 h-3.5 text-[#1A1A1A]" /><span className="text-sm text-[#1A1A1A]">Penthouses</span></Link>
+                    <Link to="/properties?type=commercial" className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md hover:bg-[#F7F2EA] transition-colors"><Briefcase className="w-3.5 h-3.5 text-[#1A1A1A]" /><span className="text-sm text-[#1A1A1A]">Commercial</span></Link>
+                    <Link to="/properties?type=plot" className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md hover:bg-[#F7F2EA] transition-colors"><Trees className="w-3.5 h-3.5 text-[#1A1A1A]" /><span className="text-sm text-[#1A1A1A]">Plots / Land</span></Link>
                   </div>
-                </PopoverContent>
-              </Popover>
+                </div>
+              </div>
+              <div className="flex items-center justify-between px-5 py-3 border-t border-[#EFE6D6] bg-[#F7F2EA]/60 rounded-b-xl">
+                <Link to="/properties" className="text-sm font-medium text-[#1A1A1A] hover:underline inline-flex items-center gap-1.5">See all properties <ArrowRight className="w-3.5 h-3.5" /></Link>
+              </div>
+            </PopoverContent>
+          </Popover>
 
-              {/* Favorites */}
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link
-                    to="/favorites"
-                    className={`${cellBase} ${cellHover}`}
-                    aria-label="Favorites"
-                  >
-                    <Heart className="w-4 h-4 text-red-500 group-hover:text-red-600 group-hover:scale-105 transition-transform shrink-0" />
-                    <span className={labelClass}>Saved</span>
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent side="bottom" sideOffset={8} className="max-w-[200px] whitespace-normal text-center text-[hsl(var(--gold))] text-xs z-[10100]">View your saved and shortlisted properties</TooltipContent>
-              </Tooltip>
+          {/* Filter */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                onClick={() => setFilterOpen(true)}
+                className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-[hsl(var(--gold)/0.08)] transition-colors focus:outline-none"
+                aria-label="Filter"
+              >
+                <SlidersHorizontal className="w-[18px] h-[18px] text-[#1A1A1A]/75" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" sideOffset={8} className="text-xs">Advanced filters</TooltipContent>
+          </Tooltip>
 
-              {/* Filter */}
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    onClick={() => setFilterOpen(true)}
-                    className={`${cellBase} ${cellHover}`}
-                    aria-label="Advanced Property Filter"
-                  >
-                    <SlidersHorizontal className={iconClass} />
-                    <span className={labelClass}>Filter</span>
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom" sideOffset={8} className="max-w-[220px] whitespace-normal text-center text-[hsl(var(--gold))] text-xs z-[10100]">Open advanced property filters</TooltipContent>
-              </Tooltip>
-            </div>
-          </div>
-          {/* Right scroll arrow */}
-          <ScrollArrow direction="right" scrollRef={row1ScrollRef} />
+          {/* Saved */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link to="/favorites" className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-[hsl(var(--gold)/0.08)] transition-colors" aria-label="Favorites">
+                <Heart className="w-[18px] h-[18px] text-[#1A1A1A]/75" />
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" sideOffset={8} className="text-xs">Saved</TooltipContent>
+          </Tooltip>
 
-          {/* ── RIGHT GROUP: User shortcuts (always visible) ── */}
-          <div className="flex items-center h-8 gap-1.5 xl:gap-2 shrink-0 ml-auto border-l border-[hsl(var(--gold)/0.25)] pl-3 mr-3">
-            {/* CRM shortcut (owner/broker only) */}
-            {showCRM && (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link
-                    to="/owner/crm"
-                    className={`${cellBase} hover:bg-emerald-500/10`}
-                  >
-                    <BarChart3 className="w-4 h-4 text-emerald-600 group-hover:scale-105 transition-transform shrink-0" />
-                    <span className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wide hidden xl:inline whitespace-nowrap">CRM</span>
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent side="bottom" sideOffset={8} className="max-w-[200px] whitespace-normal text-center text-[hsl(var(--gold))] text-xs z-[10100]">Customer Relationship Management dashboard</TooltipContent>
-              </Tooltip>
-            )}
-
-            {/* Activity popover (Tasks / Alerts / Inbox) */}
-            {user && (
-              <Popover>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <PopoverTrigger asChild>
-                      <button className={`${cellBase} ${cellHover} relative`} aria-label="Activity">
-                        <Bell className={iconClass} />
-                        <span className={labelClass}>Activity</span>
-                        {activityCount > 0 && (
-                          <span className="absolute -top-1.5 -right-1 min-w-[18px] h-[18px] rounded-full bg-destructive text-white text-[9px] font-bold flex items-center justify-center px-1">
-                            {activityCount > 9 ? '9+' : activityCount}
-                          </span>
-                        )}
-                      </button>
-                    </PopoverTrigger>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom" sideOffset={8} className="max-w-[220px] whitespace-normal text-center text-[hsl(var(--gold))] text-xs z-[10100]">Tasks, notifications & inbox</TooltipContent>
-                </Tooltip>
-                <PopoverContent align="end" sideOffset={10} className="w-72 p-2 z-[10100]">
-                  <Tabs defaultValue="tasks" className="w-full">
-                    <TabsList className="grid w-full grid-cols-3 h-8">
-                      <TabsTrigger value="tasks" className="text-[11px]">
-                        Tasks{(alerts?.pendingTasks || 0) > 0 ? ` (${alerts!.pendingTasks})` : ''}
-                      </TabsTrigger>
-                      <TabsTrigger value="alerts" className="text-[11px]">
-                        Alerts{(alerts?.totalNotificationAlerts || 0) > 0 ? ` (${alerts!.totalNotificationAlerts})` : ''}
-                      </TabsTrigger>
-                      <TabsTrigger value="inbox" className="text-[11px]">Inbox</TabsTrigger>
-                    </TabsList>
-                    <TabsContent value="tasks" className="mt-2">
-                      <Link to="/my-dashboard#tasks" className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-[hsl(var(--gold)/0.1)] transition-colors">
-                        <ClipboardList className="w-4 h-4 text-[hsl(var(--gold))]" />
-                        <span className="text-sm font-medium">Open task list</span>
-                      </Link>
-                    </TabsContent>
-                    <TabsContent value="alerts" className="mt-2">
-                      <Link to="/my-dashboard#notifications" className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-[hsl(var(--gold)/0.1)] transition-colors">
-                        <Bell className="w-4 h-4 text-[hsl(var(--gold))]" />
-                        <span className="text-sm font-medium">View notifications</span>
-                      </Link>
-                    </TabsContent>
-                    <TabsContent value="inbox" className="mt-2">
-                      <Link to="/my-dashboard#inbox" className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-[hsl(var(--gold)/0.1)] transition-colors">
-                        <Inbox className="w-4 h-4 text-[hsl(var(--gold))]" />
-                        <span className="text-sm font-medium">Open inbox</span>
-                      </Link>
-                    </TabsContent>
-                  </Tabs>
-                </PopoverContent>
-              </Popover>
-            )}
-
-            {/* Display popover (Area Unit / Language / Currency) */}
+          {/* Activity (logged-in) */}
+          {user && (
             <Popover>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <PopoverTrigger asChild>
-                    <button className={`${cellBase} ${cellHover}`} aria-label="Display preferences">
-                      <SlidersVertical className={iconClass} />
-                      <span className={labelClass}>Display</span>
-                      <ChevronDown className="w-3 h-3 text-[hsl(var(--gold)/0.6)] hidden xl:inline" />
+                    <button className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-[hsl(var(--gold)/0.08)] transition-colors relative focus:outline-none" aria-label="Activity">
+                      <Bell className="w-[18px] h-[18px] text-[#1A1A1A]/75" />
+                      {activityCount > 0 && (
+                        <span className="absolute top-1 right-1 min-w-[16px] h-[16px] rounded-full bg-[#1A1A1A] text-white text-[9px] font-bold flex items-center justify-center px-1">
+                          {activityCount > 9 ? '9+' : activityCount}
+                        </span>
+                      )}
                     </button>
                   </PopoverTrigger>
                 </TooltipTrigger>
-                <TooltipContent side="bottom" sideOffset={8} className="max-w-[220px] whitespace-normal text-center text-[hsl(var(--gold))] text-xs z-[10100]">Area unit, language & currency</TooltipContent>
+                <TooltipContent side="bottom" sideOffset={8} className="text-xs">Tasks · Alerts · Inbox</TooltipContent>
               </Tooltip>
-              <PopoverContent align="end" sideOffset={10} className="w-64 p-3 z-[10100] space-y-3">
-                {/* Area Unit Toggle */}
-                <div className="space-y-1.5">
-                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">Area Unit</p>
-                  <button
-                    onClick={toggleAreaUnit}
-                    className="w-full h-8 flex items-center transition-all border border-[hsl(var(--gold)/0.3)] rounded-lg overflow-hidden"
-                    aria-label="Toggle area unit"
-                  >
-                    <span className={`flex-1 text-[11px] font-bold py-1.5 transition-all ${areaUnit === 'sqft' ? 'bg-[hsl(var(--gold)/0.18)] text-[hsl(var(--gold))]' : 'text-[#1A1A1A]/30 hover:text-[#1A1A1A]/50'}`}>
-                      ft²
-                    </span>
-                    <span className="w-px h-full bg-[hsl(var(--gold)/0.3)]" />
-                    <span className={`flex-1 text-[11px] font-bold py-1.5 transition-all ${areaUnit === 'sqm' ? 'bg-[hsl(var(--gold)/0.18)] text-[hsl(var(--gold))]' : 'text-[#1A1A1A]/30 hover:text-[#1A1A1A]/50'}`}>
-                      m²
-                    </span>
-                  </button>
-                </div>
-
-                {/* Language */}
-                <div className="space-y-1.5">
-                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">Language</p>
-                  <div className="flex items-center justify-between px-2 py-1 border border-[hsl(var(--gold)/0.3)] rounded-lg">
-                    <span className="text-xs text-foreground">{currentLang.flag} {currentLang.nativeName}</span>
-                    <LanguageSwitcher variant="icon-only" />
-                  </div>
-                </div>
-
-                {/* Currency */}
-                <div className="space-y-1.5">
-                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">Currency</p>
-                  <div className="flex items-center justify-between px-2 py-1 border border-[hsl(var(--gold)/0.3)] rounded-lg">
-                    <span className="text-xs text-foreground">{currency}</span>
-                    <CurrencySwitcher variant="icon-only" />
-                  </div>
-                </div>
+              <PopoverContent align="end" sideOffset={10} className="w-72 p-2 z-[10100] bg-[#FDFBF7] border border-[#EFE6D6] rounded-xl">
+                <Tabs defaultValue="tasks" className="w-full">
+                  <TabsList className="grid w-full grid-cols-3 h-8">
+                    <TabsTrigger value="tasks" className="text-[11px]">Tasks{(alerts?.pendingTasks || 0) > 0 ? ` (${alerts!.pendingTasks})` : ''}</TabsTrigger>
+                    <TabsTrigger value="alerts" className="text-[11px]">Alerts{(alerts?.totalNotificationAlerts || 0) > 0 ? ` (${alerts!.totalNotificationAlerts})` : ''}</TabsTrigger>
+                    <TabsTrigger value="inbox" className="text-[11px]">Inbox</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="tasks" className="mt-2">
+                    <Link to="/my-dashboard#tasks" className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-[#F7F2EA] transition-colors">
+                      <ClipboardList className="w-4 h-4 text-[#1A1A1A]/70" /><span className="text-sm font-medium text-[#1A1A1A]">Open task list</span>
+                    </Link>
+                  </TabsContent>
+                  <TabsContent value="alerts" className="mt-2">
+                    <Link to="/my-dashboard#notifications" className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-[#F7F2EA] transition-colors">
+                      <Bell className="w-4 h-4 text-[#1A1A1A]/70" /><span className="text-sm font-medium text-[#1A1A1A]">View notifications</span>
+                    </Link>
+                  </TabsContent>
+                  <TabsContent value="inbox" className="mt-2">
+                    <Link to="/my-dashboard#inbox" className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-[#F7F2EA] transition-colors">
+                      <Inbox className="w-4 h-4 text-[#1A1A1A]/70" /><span className="text-sm font-medium text-[#1A1A1A]">Open inbox</span>
+                    </Link>
+                  </TabsContent>
+                </Tabs>
               </PopoverContent>
             </Popover>
+          )}
 
-            {/* Dashboard */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  to="/my-dashboard"
-                  className={`${cellBase} ${cellHover}`}
-                  aria-label="Dashboard"
-                >
-                  <LayoutDashboard className={iconClass} />
-                  <span className={labelClass}>Dashboard</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="bottom" sideOffset={8} className="max-w-[200px] whitespace-normal text-center text-[hsl(var(--gold))] text-xs z-[10100]">Your personalized dashboard</TooltipContent>
-            </Tooltip>
-
-            {/* Mode Switcher */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div className={`${cellBase} px-1`}>
-                  <ModeSwitcher variant="header" showForUnselected />
-                </div>
-              </TooltipTrigger>
-              <TooltipContent side="bottom" sideOffset={8} className="max-w-[200px] whitespace-normal text-center text-[hsl(var(--gold))] text-xs z-[10100]">Select your mode based on your role</TooltipContent>
-            </Tooltip>
-
-            {/* Settings */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  to="/profile"
-                  className={`${cellBase} ${cellHover}`}
-                  aria-label="Settings"
-                >
-                  <Settings className={iconClass} />
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="bottom" sideOffset={8} className="max-w-[200px] whitespace-normal text-center text-[hsl(var(--gold))] text-xs z-[10100]">Manage your account, profile, and preferences</TooltipContent>
-            </Tooltip>
+          {/* Currency */}
+          <div className="hidden sm:flex items-center h-9 px-2 rounded-full hover:bg-[hsl(var(--gold)/0.06)] transition-colors">
+            <span className="text-[12px] font-medium text-[#1A1A1A] mr-1">{currency}</span>
+            <CurrencySwitcher variant="icon-only" />
           </div>
-        </div>
 
-        {/* ── ROW 2 (40px): Filter Shortcut Bar — shown on ALL pages including /map ── */}
-        <div className="h-[40px] shrink-0 px-3 flex items-center py-0.5">
-          <FilterShortcutBar
-            variant="light"
-            filters={globalFilters}
-            onFilterChange={handleGlobalFilterChange}
-          />
+          {/* Language */}
+          <div className="hidden md:flex items-center h-9 px-1 rounded-full hover:bg-[hsl(var(--gold)/0.06)] transition-colors">
+            <LanguageSwitcher variant="icon-only" />
+          </div>
+
+          {/* Sq ft / Sq m segmented toggle */}
+          <div className="hidden sm:inline-flex items-center h-7 rounded-full border border-[#1A1A1A]/15 overflow-hidden bg-white/40">
+            <button
+              onClick={() => { if (areaUnit !== 'sqft') toggleAreaUnit(); }}
+              className={`px-2.5 h-full text-[10.5px] font-semibold tracking-wide transition-colors ${areaUnit === 'sqft' ? 'bg-[#1A1A1A] text-white' : 'text-[#1A1A1A]/65 hover:text-[#1A1A1A]'}`}
+              aria-label="Square feet"
+            >sq ft</button>
+            <button
+              onClick={() => { if (areaUnit !== 'sqm') toggleAreaUnit(); }}
+              className={`px-2.5 h-full text-[10.5px] font-semibold tracking-wide transition-colors ${areaUnit === 'sqm' ? 'bg-[#1A1A1A] text-white' : 'text-[#1A1A1A]/65 hover:text-[#1A1A1A]'}`}
+              aria-label="Square meters"
+            >sq m</button>
+          </div>
+
+          {/* Divider */}
+          <span className="hidden sm:block w-px h-6 bg-[#1A1A1A]/10 mx-1" />
+
+          {/* CRM (owner/broker only) */}
+          {showCRM && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link to="/owner/crm" className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-[hsl(var(--gold)/0.08)] transition-colors" aria-label="CRM">
+                  <BarChart3 className="w-[18px] h-[18px] text-[#1A1A1A]/75" />
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" sideOffset={8} className="text-xs">CRM</TooltipContent>
+            </Tooltip>
+          )}
+
+          {/* Dashboard */}
+          {user && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link to="/my-dashboard" className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-[hsl(var(--gold)/0.08)] transition-colors" aria-label="Dashboard">
+                  <LayoutDashboard className="w-[18px] h-[18px] text-[#1A1A1A]/75" />
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" sideOffset={8} className="text-xs">Dashboard</TooltipContent>
+            </Tooltip>
+          )}
+
+          {/* Mode chip (kept as requested) */}
+          <ModeSwitcher variant="header" showForUnselected />
+
+          {/* Sign in / Profile */}
+          {user ? (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link to="/profile" className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-[hsl(var(--gold)/0.08)] transition-colors" aria-label="Profile">
+                  <Settings className="w-[18px] h-[18px] text-[#1A1A1A]/75" />
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" sideOffset={8} className="text-xs">Account</TooltipContent>
+            </Tooltip>
+          ) : (
+            <Link
+              to="/auth"
+              className="h-9 inline-flex items-center gap-1.5 px-3.5 rounded-full border border-[#1A1A1A]/20 hover:border-[#1A1A1A]/45 hover:bg-[#1A1A1A]/[0.04] transition-colors text-[12px] font-semibold tracking-wide text-[#1A1A1A] uppercase"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-[#1A1A1A]/60" />
+              Sign in
+            </Link>
+          )}
         </div>
       </div>
 
       <GlobalSearchModal isOpen={searchOpen} initialQuery="" onClose={() => setSearchOpen(false)} />
 
-      {/* Advanced Filter Panel — same dialog used in hero/properties */}
       <AdvancedFilterPanel
         open={filterOpen}
         onOpenChange={setFilterOpen}

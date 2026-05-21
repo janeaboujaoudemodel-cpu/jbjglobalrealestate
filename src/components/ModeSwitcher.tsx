@@ -40,54 +40,57 @@ type ModePalette = {
 //   Broker            -> blue
 //   Investor + Broker -> green
 //   Developer         -> purple
+// Classy champagne/ink palette — refined to feel premium instead of loud.
+// Each mode shares the brand champagne surface; only the accent rail + icon
+// tone shifts subtly so the dropdown reads cohesive and editorial.
 const MODE_CONFIG: Record<UserMode, ModePalette> = {
   investor: {
     label: 'Mode: Investor',
     shortLabel: 'I',
     icon: User,
     description: 'Browse properties, ROI tools, listings, guides & market insights',
-    base: '#F97316',
-    baseDark: '#C2410C',
-    rowFrom: '#FFF1E0',
-    rowTo: '#FFE0BF',
-    rowHover: '#FFD0A0',
-    dark: '#7C2D12',
+    base: '#B89555',      // champagne gold accent
+    baseDark: '#8A6E3D',
+    rowFrom: '#FDFBF7',
+    rowTo: '#F7F2EA',
+    rowHover: '#EFE6D6',
+    dark: '#1A1A1A',
   },
   broker: {
     label: 'Mode: Broker',
     shortLabel: 'B',
     icon: Briefcase,
     description: 'CRM, education hub, sell, listings, coordinate clients & close deals',
-    base: '#2563EB',
-    baseDark: '#1D4ED8',
-    rowFrom: '#E8F0FE',
-    rowTo: '#CFE0FB',
-    rowHover: '#BBD2F8',
-    dark: '#1E3A8A',
+    base: '#1A1A1A',      // ink accent
+    baseDark: '#0A0A0A',
+    rowFrom: '#FDFBF7',
+    rowTo: '#F7F2EA',
+    rowHover: '#EFE6D6',
+    dark: '#1A1A1A',
   },
   investor_broker: {
     label: 'Mode: Investor + Broker',
     shortLabel: 'I+B',
     icon: Users,
     description: 'Full investor + broker access: tools, CRM, listings, guides & insights',
-    base: '#16A34A',
-    baseDark: '#15803D',
-    rowFrom: '#E5F8EC',
-    rowTo: '#C7EFD3',
-    rowHover: '#B0E5C0',
-    dark: '#14532D',
+    base: '#6B5A3E',      // deep bronze
+    baseDark: '#4A3D27',
+    rowFrom: '#FDFBF7',
+    rowTo: '#F7F2EA',
+    rowHover: '#EFE6D6',
+    dark: '#1A1A1A',
   },
   developer: {
     label: 'Mode: Developer',
     shortLabel: 'D',
     icon: Building2,
     description: 'Submit projects, upload documents, manage launches & event calendar',
-    base: '#7C3AED',
-    baseDark: '#6D28D9',
-    rowFrom: '#F1ECFE',
-    rowTo: '#DDD0FB',
-    rowHover: '#CCB9F8',
-    dark: '#4C1D95',
+    base: '#3A2D1D',      // espresso
+    baseDark: '#1F1810',
+    rowFrom: '#FDFBF7',
+    rowTo: '#F7F2EA',
+    rowHover: '#EFE6D6',
+    dark: '#1A1A1A',
   },
 };
 
@@ -122,19 +125,17 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
   // upward + adds a soft glow ring. Unselected state uses a neutral
   // champagne chip with a gold hairline so it reads as a CTA.
   // ─────────────────────────────────────────────────────────────────
-  const triggerStyle: CSSProperties = isUnselected
-    ? {
-        backgroundImage: 'linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)',
-        borderColor: '#B89555',
-        color: '#1A1A1A',
-        boxShadow: '0 2px 8px rgba(184,149,85,0.25), inset 0 1px 0 rgba(255,255,255,0.6), 0 0 0 1px rgba(0,0,0,0.06)',
-      }
-    : {
-        backgroundImage: `linear-gradient(135deg, ${currentConfig.base} 0%, ${currentConfig.base}D9 100%)`,
-        borderColor: currentConfig.baseDark,
-        color: '#1A1A1A',
-        boxShadow: `0 2px 8px ${currentConfig.base}55, inset 0 1px 0 rgba(255,255,255,0.55), 0 0 0 1px rgba(0,0,0,0.12)`,
-      };
+  // Closed-trigger: uniform champagne chip with a gold hairline + thin
+  // accent rail on the leading edge in the active mode's tone. Same look
+  // whether selected or not — classy, consistent, no rainbow.
+  const triggerStyle: CSSProperties = {
+    backgroundImage: 'linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)',
+    borderColor: 'rgba(184,149,85,0.55)',
+    color: '#1A1A1A',
+    boxShadow: isUnselected
+      ? 'inset 0 1px 0 rgba(255,255,255,0.6), 0 1px 2px rgba(26,26,26,0.06)'
+      : `inset 3px 0 0 ${currentConfig.base}, inset 0 1px 0 rgba(255,255,255,0.6), 0 1px 2px rgba(26,26,26,0.06)`,
+  };
 
   if (variant === 'compact') {
     return (
@@ -324,8 +325,8 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                     <span
                       className="ml-2 inline-flex items-center justify-center px-2.5 h-[22px] min-w-[96px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap border"
                       style={{
-                        color: config.base,
-                        borderColor: config.base,
+                        color: '#1A1A1A',
+                        borderColor: 'rgba(26,26,26,0.25)',
                         backgroundColor: 'rgba(255,255,255,0.6)',
                       }}
                     >
