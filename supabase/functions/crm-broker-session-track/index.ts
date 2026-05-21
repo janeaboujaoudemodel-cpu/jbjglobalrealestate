@@ -156,12 +156,12 @@ Deno.serve(async (req) => {
       action: suspicious ? "broker_session_suspicious" : "broker_session_started",
       entity_type: "crm_broker_session",
       entity_id: ins.id,
-      details: { broker_id: broker.id, ip, user_agent: ua, device_fingerprint: fingerprint },
+      details: { broker_id: broker.id, ip, user_agent: ua, device_fingerprint: fingerprint, suspicious_reason: suspiciousReason },
     });
     if (suspicious) {
       await admin.from("crm_security_events").insert({
         user_id: caller.id,
-        event_type: "broker_new_device_login",
+        event_type: suspiciousReason === "impossible_travel" ? "broker_impossible_travel" : "broker_new_device_login",
         ip_address: ip,
         user_agent: ua,
         details: { broker_id: broker.id, device_fingerprint: fingerprint },
