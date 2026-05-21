@@ -16,7 +16,9 @@ export function renderBrokerInviteEmail(i: BrokerInviteEmailInput): {
   subject: string;
   html: string;
 } {
-  const subject = `${i.ownerName} invited you to JBJ Global Real Estate CRM`;
+  // Cleaner, less spam-pattern subject. Personalised + short = better Gmail inboxing.
+  const firstName = (i.brokerName || "there").split(/\s+/)[0];
+  const subject = `${firstName}, your JBJ broker access — code ${i.otp}`;
   const inner = `
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;margin:0 auto;background:#FFFFFF;border:1px solid #B89555;border-radius:18px;overflow:hidden;box-shadow:0 8px 28px rgba(26,26,26,0.06);font-family:'Inter','Helvetica Neue',Arial,sans-serif">
   <tr>
