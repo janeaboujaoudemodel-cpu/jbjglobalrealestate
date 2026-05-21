@@ -421,6 +421,14 @@ export default function BrokerGrantsManagerDialog({
                           <div className="text-[11px] font-semibold text-[#1A1A1A] flex items-center gap-1.5">
                             <MonitorSmartphone className="h-3.5 w-3.5 text-[#B89555]" />
                             Active sessions
+                            {(() => {
+                              const susCount = (sessions[broker.id] ?? []).filter(s => s.is_suspicious && !s.revoked_at).length;
+                              return susCount > 0 ? (
+                                <span className="ml-1 px-1.5 py-0.5 rounded-full text-[9px] font-semibold border bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555] inline-flex items-center gap-1">
+                                  <AlertTriangle className="h-2.5 w-2.5" /> {susCount} suspicious
+                                </span>
+                              ) : null;
+                            })()}
                           </div>
                           <Button size="sm" variant="outline"
                             className="border-[#1A1A1A] text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white h-6 px-2 text-[10px]"
@@ -428,6 +436,8 @@ export default function BrokerGrantsManagerDialog({
                             Revoke all
                           </Button>
                         </div>
+
+
 
                         {sessionsLoading[broker.id] ? (
                           <div className="text-[11px] text-[#1A1A1A]/60 flex items-center gap-1.5">
