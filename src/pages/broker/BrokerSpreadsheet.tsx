@@ -83,9 +83,10 @@ export default function BrokerSpreadsheet() {
 
   const update = useMutation({
     mutationFn: async (patch: { id: string; field: keyof Row; value: string | null }) => {
+      const dbField = patch.field === "status" ? "pipeline_stage" : patch.field;
       const { error } = await supabase
         .from("crm_leads")
-        .update({ [patch.field]: patch.value })
+        .update({ [dbField]: patch.value } as any)
         .eq("id", patch.id);
       if (error) throw error;
     },
