@@ -56,11 +56,13 @@ const VoiceConciergeWidget = () => {
   const [widgetStatus, setWidgetStatus] = useState<WidgetStatus>("idle");
   const [statusMessage, setStatusMessage] = useState<string>("");
   const [intakeOpen, setIntakeOpen] = useState(false);
+  const [choiceOpen, setChoiceOpen] = useState(false);
   const [showJoined, setShowJoined] = useState(false);
   const leadIdRef = useRef<string | null>(getStoredLeadId());
   const hasShownUnavailableToastRef = useRef(false);
   const callStartTimeRef = useRef<Date | null>(null);
   const navigate = useNavigate();
+
 
 
   // (Auth no longer required to use the voice concierge; intake form is the gate.)
