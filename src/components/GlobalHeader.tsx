@@ -709,7 +709,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
             <div className="flex flex-col shrink min-w-0 overflow-hidden">
               <span 
                 className={`font-bold text-xs sm:text-sm xl:text-base tracking-[0.12em] uppercase leading-tight transition-colors duration-300 truncate`}
-                style={isFullyTransparent ? {
+                style={!showSolidBackground ? {
                   color: '#FFFFFF',
                   textShadow: '0 2px 8px rgba(0,0,0,0.6)',
                 } : {
@@ -720,7 +720,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               </span>
               <span 
                 className="hidden sm:block text-[9px] sm:text-[9px] tracking-[0.25em] uppercase mt-1 transition-colors duration-300 truncate"
-                style={isFullyTransparent ? {
+                style={!showSolidBackground ? {
                   color: '#FFFFFF',
                   textShadow: '0 2px 8px rgba(0,0,0,0.6)',
                 } : {
