@@ -497,6 +497,8 @@ export default function IndividualBrokersTab() {
         }}
       />
 
+      <BrokerLifecycleActionCenter open={actionCenterOpen} onOpenChange={setActionCenterOpen} />
+
       <UnifiedCRMExportModal
         open={exportOpen}
         onOpenChange={setExportOpen}

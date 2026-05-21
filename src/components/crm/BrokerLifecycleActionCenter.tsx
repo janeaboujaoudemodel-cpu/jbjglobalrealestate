@@ -52,7 +52,7 @@ export default function BrokerLifecycleActionCenter({ open, onOpenChange }: Prop
     queryKey: ["lifecycle:suspicious-sessions"],
     enabled: open,
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("crm_broker_sessions")
         .select("id, broker_user_id, ip_address, country, city, suspicious_reason, last_seen_at")
         .eq("suspicious", true)
@@ -60,7 +60,7 @@ export default function BrokerLifecycleActionCenter({ open, onOpenChange }: Prop
         .order("last_seen_at", { ascending: false })
         .limit(25);
       if (error) throw error;
-      return data ?? [];
+      return (data ?? []) as any[];
     },
   });
 
