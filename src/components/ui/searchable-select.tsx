@@ -101,7 +101,7 @@ export function SearchableSelect({
       </PopoverTrigger>
       <PopoverContent
         className={cn(
-          "w-[var(--radix-popover-trigger-width)] p-0 bg-[#FDFBF7] border-[#B89555]/30 shadow-xl shadow-gold/10 z-[10060]",
+          "w-[var(--radix-popover-trigger-width)] p-0 bg-[#FDFBF7] border-[#B89555]/30 shadow-xl shadow-gold/10 z-[10210]",
           className
         )}
         align="start"

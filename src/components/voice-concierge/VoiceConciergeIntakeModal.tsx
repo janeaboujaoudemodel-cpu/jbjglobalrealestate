@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { SearchableSelect } from "@/components/ui/searchable-select";
+import DialCodePicker from "@/components/voice-concierge/DialCodePicker";
 import { SearchableMultiSelect, type MultiOption } from "@/components/ui/searchable-multiselect";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -20,15 +21,54 @@ const LANGUAGES = [
   { name: "Spanish", iso: "ES" },
   { name: "German", iso: "DE" },
   { name: "Italian", iso: "IT" },
-  { name: "Russian", iso: "RU" },
-  { name: "Chinese", iso: "CN" },
-  { name: "Hindi", iso: "IN" },
-  { name: "Urdu", iso: "PK" },
-  { name: "Turkish", iso: "TR" },
   { name: "Portuguese", iso: "PT" },
+  { name: "Dutch", iso: "NL" },
+  { name: "Russian", iso: "RU" },
+  { name: "Ukrainian", iso: "UA" },
+  { name: "Polish", iso: "PL" },
+  { name: "Czech", iso: "CZ" },
+  { name: "Greek", iso: "GR" },
+  { name: "Turkish", iso: "TR" },
+  { name: "Hebrew", iso: "IL" },
+  { name: "Persian", iso: "IR" },
+  { name: "Urdu", iso: "PK" },
+  { name: "Hindi", iso: "IN" },
+  { name: "Bengali", iso: "BD" },
+  { name: "Punjabi", iso: "IN" },
+  { name: "Tamil", iso: "IN" },
+  { name: "Telugu", iso: "IN" },
+  { name: "Malayalam", iso: "IN" },
+  { name: "Sinhala", iso: "LK" },
+  { name: "Nepali", iso: "NP" },
+  { name: "Thai", iso: "TH" },
+  { name: "Vietnamese", iso: "VN" },
+  { name: "Indonesian", iso: "ID" },
+  { name: "Malay", iso: "MY" },
+  { name: "Filipino", iso: "PH" },
+  { name: "Chinese", iso: "CN" },
+  { name: "Cantonese", iso: "HK" },
   { name: "Japanese", iso: "JP" },
   { name: "Korean", iso: "KR" },
-  { name: "Persian", iso: "IR" },
+  { name: "Swahili", iso: "KE" },
+  { name: "Amharic", iso: "ET" },
+  { name: "Hausa", iso: "NG" },
+  { name: "Yoruba", iso: "NG" },
+  { name: "Afrikaans", iso: "ZA" },
+  { name: "Romanian", iso: "RO" },
+  { name: "Hungarian", iso: "HU" },
+  { name: "Bulgarian", iso: "BG" },
+  { name: "Serbian", iso: "RS" },
+  { name: "Croatian", iso: "HR" },
+  { name: "Albanian", iso: "AL" },
+  { name: "Armenian", iso: "AM" },
+  { name: "Georgian", iso: "GE" },
+  { name: "Azerbaijani", iso: "AZ" },
+  { name: "Kazakh", iso: "KZ" },
+  { name: "Uzbek", iso: "UZ" },
+  { name: "Swedish", iso: "SE" },
+  { name: "Norwegian", iso: "NO" },
+  { name: "Danish", iso: "DK" },
+  { name: "Finnish", iso: "FI" },
 ];
 
 type Interest = "investing" | "partnering" | "careers" | "other";
@@ -61,11 +101,22 @@ export default function VoiceConciergeIntakeModal({ open, onOpenChange, onSucces
     () => LANGUAGES.map((l) => ({ value: l.name, label: `${flagEmoji(l.iso)}  ${l.name}` })),
     []
   );
-  const phoneOptions = useMemo(() => COUNTRIES.map((c) => c.name), []);
-  const selectedDialCode = useMemo(
-    () => COUNTRIES.find((c) => c.name === countryName)?.code ?? "+971",
+  const dialOptions = useMemo(
+    () =>
+      COUNTRIES.map((c) => ({
+        value: c.name,
+        label: `${flagEmoji(c.iso)}  ${c.code}  ${c.name}`,
+      })),
+    []
+  );
+  const selectedCountry = useMemo(
+    () => COUNTRIES.find((c) => c.name === countryName),
     [countryName]
   );
+  const selectedDialCode = selectedCountry?.code ?? "+971";
+  const selectedDialDisplay = selectedCountry
+    ? `${flagEmoji(selectedCountry.iso)}  ${selectedCountry.code}`
+    : "🇦🇪  +971";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -160,21 +211,23 @@ export default function VoiceConciergeIntakeModal({ open, onOpenChange, onSucces
             <div>
               <Label>Phone</Label>
               <div className="flex gap-2">
-                <div className="w-48">
-                  <SearchableSelect
+                <div className="w-[132px] shrink-0">
+                  <DialCodePicker
                     value={countryName}
                     onChange={setCountryName}
-                    options={phoneOptions}
-                    placeholder="Country"
-                    searchPlaceholder="Search country…"
-                    priorityItem="United Arab Emirates"
-                    flagType="country"
+                    display={selectedDialDisplay}
+                    options={dialOptions}
                   />
                 </div>
-                <div className="flex items-center px-2 rounded-md bg-white border border-input text-sm text-[#1A1A1A]/80 min-w-[64px] justify-center">
-                  {selectedDialCode}
-                </div>
-                <Input required inputMode="tel" pattern="[0-9 ]{5,}" placeholder="50 123 4567" value={phone} onChange={(e) => setPhone(e.target.value)} className="bg-white flex-1" />
+                <Input
+                  required
+                  inputMode="tel"
+                  pattern="[0-9 ]{5,}"
+                  placeholder="50 123 4567"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  className="bg-white flex-1 min-w-0"
+                />
               </div>
             </div>
             <div>

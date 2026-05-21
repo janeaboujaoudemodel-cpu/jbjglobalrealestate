@@ -634,6 +634,15 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       style={{ '--header-height': 'var(--responsive-header-height)' } as React.CSSProperties}
       data-tour-target="header"
     >
+      {/* Transparent-state top-fade mask — hides hero content from bleeding under the header on scroll */}
+      <div
+        className={`absolute inset-0 pointer-events-none transition-opacity duration-300 ${isFullyTransparent ? "opacity-100" : "opacity-0"}`}
+        style={{
+          background: 'linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.30) 55%, rgba(0,0,0,0) 100%)',
+        }}
+        aria-hidden="true"
+      />
+
       {/* Solid header background — champagne (creamy), not raw white */}
       <div 
         className={`absolute inset-0 transition-opacity duration-300 ${showSolidBackground ? "opacity-100" : "opacity-0"}`}
