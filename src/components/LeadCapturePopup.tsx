@@ -93,7 +93,7 @@ const LeadCapturePopup = () => {
       });
 
       toast.success("Welcome! You now have full access to all features.");
-      setIsOpen(false);
+      dismiss();
       markSubmitted();
     } catch {
       toast.error("Something went wrong. Please try again.");
@@ -104,7 +104,7 @@ const LeadCapturePopup = () => {
 
   return (
     <AnimatePresence>
-      {isOpen && (
+      {isVisible && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
