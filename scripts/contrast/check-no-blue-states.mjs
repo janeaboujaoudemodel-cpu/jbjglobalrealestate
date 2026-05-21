@@ -62,10 +62,10 @@ await walk(ROOT);
 
 if (hits.length) {
   console.error(`\n✗ Blue-state guard: ${hits.length} violation(s)\n`);
-  for (const h of hits) {
+  for (const h of hits.slice(0, 50)) {
     console.error(`  ${h.file}:${h.line}\n    ${h.text}`);
   }
-  if (false) console.error(`  …and ${hits.length - 50} more`);
+  if (hits.length > 50) console.error(`  …and ${hits.length - 50} more`);
   console.error(
     "\nReplace with champagne tokens: ring-[#B89555]/40, border-[#B89555]/30, bg-[#EFE6D6], text-[#1A1A1A]"
   );
