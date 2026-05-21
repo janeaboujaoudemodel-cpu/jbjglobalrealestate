@@ -116,7 +116,8 @@ export default function UploadDatabaseDialog({ open, onOpenChange, onCreated }: 
     }
   };
 
-  const persist = async (mode: "separate" | "merged"): Promise<string | null> => {
+  type PersistResult = { dbId: string; rowErrors: number; leadsInserted: number; leadsDuplicates: number; leadsErrors: number };
+  const persist = async (mode: "separate" | "merged"): Promise<PersistResult | null> => {
     if (!parsed || !file) return null;
     const { data: auth } = await supabase.auth.getUser();
     const uid = auth.user?.id;
@@ -153,8 +154,9 @@ export default function UploadDatabaseDialog({ open, onOpenChange, onCreated }: 
     if (insert.error) throw insert.error;
     const dbId = (insert.data as any).id as string;
 
-    // 3. Insert rows in chunks (verbatim)
+    // 3. Insert rows in chunks (verbatim). Capture per-chunk failures.
     const CHUNK = 500;
+    let rowErrors = 0;
     for (let i = 0; i < parsed.rows.length; i += CHUNK) {
       const chunk = parsed.rows.slice(i, i + CHUNK).map((raw, k) => ({
         source_database_id: dbId,
@@ -164,8 +166,15 @@ export default function UploadDatabaseDialog({ open, onOpenChange, onCreated }: 
       const { error: rowErr } = await supabase
         .from("crm_source_database_rows" as any)
         .insert(chunk);
-      if (rowErr) throw rowErr;
+      if (rowErr) {
+        console.error(`[UploadDatabase] chunk ${i}-${i + chunk.length} failed:`, rowErr.message);
+        rowErrors += chunk.length;
+      }
     }
+
+    let leadsInserted = 0;
+    let leadsDuplicates = 0;
+    let leadsErrors = 0;
 
     // 4. If merging, also create crm_leads rows linked to this source.
     if (mode === "merged") {
@@ -198,26 +207,63 @@ export default function UploadDatabaseDialog({ open, onOpenChange, onCreated }: 
         }))
         .filter((x) => x.full_name && String(x.full_name).trim().length);
 
-      for (let i = 0; i < leadsPayload.length; i += CHUNK) {
-        const chunk = leadsPayload.slice(i, i + CHUNK);
-        const { error: leadErr } = await supabase.from("crm_leads").insert(chunk as any);
-        if (leadErr) throw leadErr;
+      // Pre-dedup against existing leads by email (owner-scoped).
+      const incomingEmails = Array.from(
+        new Set(leadsPayload.map((l) => l.email_lower).filter(Boolean) as string[])
+      );
+      const dupSet = new Set<string>();
+      if (incomingEmails.length) {
+        for (let i = 0; i < incomingEmails.length; i += 500) {
+          const slice = incomingEmails.slice(i, i + 500);
+          const { data: dups } = await supabase
+            .from("crm_leads")
+            .select("email_lower")
+            .eq("owner_user_id", uid)
+            .in("email_lower", slice);
+          for (const d of dups ?? []) if (d.email_lower) dupSet.add(d.email_lower);
+        }
+      }
+
+      const filtered = leadsPayload.filter((l) => {
+        if (l.email_lower && dupSet.has(l.email_lower)) { leadsDuplicates++; return false; }
+        return true;
+      });
+
+      for (let i = 0; i < filtered.length; i += CHUNK) {
+        const chunk = filtered.slice(i, i + CHUNK);
+        const { error: leadErr, count } = await supabase
+          .from("crm_leads")
+          .insert(chunk as any, { count: "exact" });
+        if (leadErr) {
+          console.error(`[UploadDatabase] lead chunk ${i}-${i + chunk.length} failed:`, leadErr.message);
+          leadsErrors += chunk.length;
+        } else {
+          leadsInserted += count ?? chunk.length;
+        }
       }
     }
 
-    return dbId;
+    return { dbId, rowErrors, leadsInserted, leadsDuplicates, leadsErrors };
   };
 
   const handleChoice = async (mode: "separate" | "merged") => {
     setStage("saving");
     setError(null);
     try {
-      const id = await persist(mode);
-      if (id) {
-        toast.success(mode === "merged" ? "Merged into CRM" : "Saved as separate database");
-        onCreated?.(id, mode);
+      const res = await persist(mode);
+      if (res) {
+        const parts: string[] = [];
+        if (res.leadsInserted) parts.push(`${res.leadsInserted} leads added`);
+        if (res.leadsDuplicates) parts.push(`${res.leadsDuplicates} duplicates skipped`);
+        if (res.leadsErrors) parts.push(`${res.leadsErrors} lead errors`);
+        if (res.rowErrors) parts.push(`${res.rowErrors} row errors`);
+        const summary = parts.length ? parts.join(" · ") : "All rows preserved";
+        toast.success(mode === "merged" ? `Merged into CRM — ${summary}` : "Saved as separate database", {
+          description: mode === "separate" ? summary : undefined,
+        });
+        onCreated?.(res.dbId, mode);
         setStage("done");
-        setTimeout(() => handleClose(false), 800);
+        setTimeout(() => handleClose(false), 1200);
       }
     } catch (e: any) {
       console.error(e);

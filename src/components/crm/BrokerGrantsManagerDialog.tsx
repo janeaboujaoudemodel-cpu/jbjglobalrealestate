@@ -484,6 +484,36 @@ export default function BrokerGrantsManagerDialog({
                           </Button>
                         </div>
 
+                        {/* Broker analytics strip — Pass 10 */}
+                        {(() => {
+                          const acts = activity[broker.id] ?? [];
+                          const viewed = acts.filter(a => /view|read|open/i.test(a.action)).length;
+                          const edited = acts.filter(a => /edit|update|note|status/i.test(a.action)).length;
+                          const sessCount = (sessions[broker.id] ?? []).filter(s => !s.revoked_at).length;
+                          const last = acts[0]?.created_at;
+                          return (
+                            <div className="grid grid-cols-4 gap-2 mb-2 text-[10px] text-[#1A1A1A]">
+                              <div className="px-2 py-1 rounded border border-[#B89555]/25 bg-white/60">
+                                <div className="text-[#1A1A1A]/55 uppercase tracking-wide">Active</div>
+                                <div className="font-semibold">{sessCount}</div>
+                              </div>
+                              <div className="px-2 py-1 rounded border border-[#B89555]/25 bg-white/60">
+                                <div className="text-[#1A1A1A]/55 uppercase tracking-wide">Viewed</div>
+                                <div className="font-semibold">{viewed}</div>
+                              </div>
+                              <div className="px-2 py-1 rounded border border-[#B89555]/25 bg-white/60">
+                                <div className="text-[#1A1A1A]/55 uppercase tracking-wide">Edited</div>
+                                <div className="font-semibold">{edited}</div>
+                              </div>
+                              <div className="px-2 py-1 rounded border border-[#B89555]/25 bg-white/60">
+                                <div className="text-[#1A1A1A]/55 uppercase tracking-wide">Last</div>
+                                <div className="font-semibold">{last ? relTime(last) : "—"}</div>
+                              </div>
+                            </div>
+                          );
+                        })()}
+
+
 
 
                         {sessionsLoading[broker.id] ? (
