@@ -557,11 +557,11 @@ export default function BrokerGrantsManagerDialog({
                             {activity[broker.id].map((a) => (
                               <li key={a.id} className="text-[10.5px] text-[#1A1A1A]/80 flex items-start gap-2">
                                 <span className="font-mono text-[#1A1A1A]/55 shrink-0">{relTime(a.created_at)}</span>
-                                <span className="font-medium text-[#1A1A1A]">{a.action.replaceAll("_", " ")}</span>
+                                <span className="font-medium text-[#1A1A1A]">{a.action.split("_").join(" ")}</span>
                                 {a.ip_address && <span className="text-[#1A1A1A]/55">· {a.ip_address}</span>}
                                 {a.details?.suspicious_reason && (
                                   <span className="px-1 py-0.5 rounded text-[9px] font-semibold border bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]">
-                                    {String(a.details.suspicious_reason).replaceAll("_", " ")}
+                                    {String(a.details.suspicious_reason).split("_").join(" ")}
                                   </span>
                                 )}
                               </li>
