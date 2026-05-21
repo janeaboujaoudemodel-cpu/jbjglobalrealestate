@@ -449,6 +449,12 @@ export default function BrokerGrantsManagerDialog({
                             {isExpanded ? <ChevronDown className="h-3 w-3 mr-1" /> : <ChevronRight className="h-3 w-3 mr-1" />}
                             <MonitorSmartphone className="h-3 w-3 mr-1" /> Sessions
                           </Button>
+                          <Button size="sm" variant="outline"
+                            className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#F7F2EA] h-7 px-2 text-[11px]"
+                            disabled={!b.email_lower}
+                            onClick={() => setCommissionFor(b)}>
+                            <FileSignature className="h-3 w-3 mr-1" /> Commission
+                          </Button>
                         </>
                       )}
                     </div>
