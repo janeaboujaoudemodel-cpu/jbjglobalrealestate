@@ -15,6 +15,7 @@ import {
 import GlobalHeader from "@/components/GlobalHeader";
 import { useLanguage } from "@/contexts/LanguageContext";
 import Footer from "@/components/Footer";
+import SecurityShield from "@/components/SecurityShield";
 
 const GlobalVerticalNav = lazy(() => import("@/components/navigation/GlobalVerticalNav"));
 const HorizontalUtilityBar = lazy(() => import("@/components/navigation/HorizontalUtilityBar"));
@@ -36,7 +37,6 @@ const AIChatWidget = lazy(() => import("@/components/AIChatWidget"));
 const VoiceConciergeWidget = lazy(() => import("@/components/VoiceConciergeWidget"));
 import PageNavigation from "@/components/PageNavigation";
 const MarketingScripts = lazy(() => import("@/components/marketing/MarketingScripts"));
-import SecurityShield from "@/components/SecurityShield";
 const PopupLayer = lazy(() => import("@/components/PopupLayer"));
 const CommandPaletteRoot = lazy(() => import("@/components/ui/command-palette-root"));
 const GuidedTour = lazy(() => import("@/components/GuidedTour"));
