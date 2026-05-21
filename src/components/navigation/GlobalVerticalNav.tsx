@@ -31,6 +31,7 @@ import { useLanguage, getLanguageInfo } from "@/contexts/LanguageContext";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { prefetchAITool } from "@/utils/aiToolPrefetch";
+import { isApprovedPublicToolId, isApprovedPublicToolHref } from "@/config/publicToolAccess";
 
 /* ─── CURATED TOP ENTRIES (matching horizontal mega menus) ─── */
 const FEATURED_DEVELOPER_SLUGS = [
@@ -333,6 +334,16 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Alerts Demo", href: "/alerts-demo", icon: BellRing },
   { label: "Internal MI Dashboard", href: "/internal/market-intelligence/dashboard", icon: Database },
   { label: "AI Governance", href: "/governance/ai", icon: Shield },
+];
+
+const PUBLIC_TOOLS_WORKSPACE_ITEMS: NavItem[] = [
+  { label: "AI Home Finder", href: "/quiz", icon: Home, section: "TOOLS" },
+  { label: "Property Comparison", href: "/compare", icon: GitCompare },
+  { label: "Mortgage Calculator", href: "/mortgage-calculator", icon: Calculator },
+  { label: "Rental Index", href: "/rental-index", icon: TrendingUp },
+  { label: "Property Evaluator", href: "/property-evaluator", icon: BarChart3 },
+  { label: "List Property for Sale", href: "/listing-portal?type=sale", icon: ClipboardCheck },
+  { label: "List Property for Rent", href: "/listing-portal?type=rent", icon: Key },
 ];
 
 /* ─── MEGA MENU LINK SETS ─── */
