@@ -707,22 +707,28 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
             </div>
             {/* Premium Typography */}
             <div className="flex flex-col shrink min-w-0 overflow-hidden">
-              <span 
-                className={`font-bold text-xs sm:text-sm xl:text-base tracking-[0.12em] uppercase leading-tight transition-colors duration-300 truncate`}
+              <span
+                className={cn(
+                  "font-bold text-xs sm:text-sm xl:text-base tracking-[0.12em] uppercase leading-tight transition-colors duration-300 truncate",
+                  !showSolidBackground && "!text-white"
+                )}
                 style={!showSolidBackground ? {
                   color: '#FFFFFF',
-                  textShadow: '0 2px 8px rgba(0,0,0,0.6)',
+                  textShadow: '0 2px 10px rgba(0,0,0,0.85), 0 1px 2px rgba(0,0,0,0.6)',
                 } : {
                   color: '#111111',
                 }}
               >
                 JBJ Global Real Estate
               </span>
-              <span 
-                className="hidden sm:block text-[9px] sm:text-[9px] tracking-[0.25em] uppercase mt-1 transition-colors duration-300 truncate"
+              <span
+                className={cn(
+                  "hidden sm:block text-[9px] sm:text-[9px] tracking-[0.25em] uppercase mt-1 transition-colors duration-300 truncate",
+                  !showSolidBackground && "!text-white"
+                )}
                 style={!showSolidBackground ? {
                   color: '#FFFFFF',
-                  textShadow: '0 2px 8px rgba(0,0,0,0.6)',
+                  textShadow: '0 2px 10px rgba(0,0,0,0.85), 0 1px 2px rgba(0,0,0,0.6)',
                 } : {
                   color: 'rgba(26, 26, 26, 0.72)',
                 }}
