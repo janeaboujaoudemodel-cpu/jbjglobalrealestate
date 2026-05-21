@@ -566,24 +566,49 @@ import { SHORTCUT_GROUPS as CANONICAL_SHORTCUT_GROUPS, filterShortcutGroups } fr
 
 
 /* ─── SECTION KEYS ─── */
-const SECTION_KEYS = ["PROPERTIES", "TOOLS", "INSIGHTS", "GUIDES", "SERVICES", "PARTNERS", "BROKER & ACADEMY", "INVESTOR", "COMPANY", "LEGAL", "PRODUCTIVITY", "MY ACCOUNT", "BUSINESS SUITES", "ADMIN & OWNER"] as const;
+const SECTION_KEYS = [
+  "TOOLS & WORKSPACE",
+  "PROPERTIES",
+  "INSIGHTS & GUIDES",
+  "SERVICES",
+  "PARTNERS",
+  "BROKER & ACADEMY",
+  "INVESTOR",
+  "COMPANY & LEGAL",
+  "MY ACCOUNT",
+  "ADMIN & OWNER",
+] as const;
 type SectionKey = typeof SECTION_KEYS[number];
+
+/* ─── Map raw item.section values onto consolidated section keys ─── */
+const SECTION_ALIAS: Record<string, SectionKey> = {
+  "PROPERTIES": "PROPERTIES",
+  "TOOLS": "TOOLS & WORKSPACE",
+  "PRODUCTIVITY": "TOOLS & WORKSPACE",
+  "BUSINESS SUITES": "TOOLS & WORKSPACE",
+  "INSIGHTS": "INSIGHTS & GUIDES",
+  "GUIDES": "INSIGHTS & GUIDES",
+  "SERVICES": "SERVICES",
+  "PARTNERS": "PARTNERS",
+  "BROKER & ACADEMY": "BROKER & ACADEMY",
+  "INVESTOR": "INVESTOR",
+  "COMPANY": "COMPANY & LEGAL",
+  "LEGAL": "COMPANY & LEGAL",
+  "MY ACCOUNT": "MY ACCOUNT",
+  "ADMIN & OWNER": "ADMIN & OWNER",
+};
 
 /* ─── SECTION ICONS ─── */
 const SECTION_ICONS: Record<SectionKey, any> = {
+  "TOOLS & WORKSPACE": Sparkles,
   "PROPERTIES": Building2,
-  "TOOLS": Sparkles,
-  "INSIGHTS": Lightbulb,
-  "GUIDES": BookOpen,
+  "INSIGHTS & GUIDES": Lightbulb,
   "SERVICES": Briefcase,
   "PARTNERS": Handshake,
   "BROKER & ACADEMY": GraduationCap,
   "INVESTOR": TrendingUp,
-  "COMPANY": Users,
-  "LEGAL": Scale,
-  "PRODUCTIVITY": Cog,
+  "COMPANY & LEGAL": Users,
   "MY ACCOUNT": User,
-  "BUSINESS SUITES": Boxes,
   "ADMIN & OWNER": Crown,
 };
 
@@ -722,11 +747,11 @@ export default function GlobalVerticalNav() {
     return location.pathname === href;
   };
 
-  // Group nav items by section
+  // Group nav items by section (with consolidated aliases)
   const { highlightItems, sectionGroups } = useMemo(() => {
     const highlights: NavItem[] = [];
     const sections: Record<string, NavItem[]> = {};
-    let currentSection: string | null = null;
+    let currentSection: SectionKey | null = null;
 
     for (const item of NAV_ITEMS) {
       if (item.highlight) {
@@ -734,8 +759,11 @@ export default function GlobalVerticalNav() {
         continue;
       }
       if (item.section) {
-        currentSection = item.section;
-        if (!sections[currentSection]) sections[currentSection] = [];
+        const mapped = SECTION_ALIAS[item.section];
+        if (mapped) {
+          currentSection = mapped;
+          if (!sections[currentSection]) sections[currentSection] = [];
+        }
       }
       if (currentSection) {
         sections[currentSection].push(item);
@@ -1077,8 +1105,8 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 
   const renderNavContent = () => (
     <div className="flex flex-col h-full">
-      {/* ━━━ LOGO HEADER (88px) — restored, matches horizontal header height ━━━ */}
-      <div className="h-[88px] shrink-0 flex flex-row items-center justify-between px-2.5 bg-gradient-to-b from-[#F7F1E6] to-[#ECE2D2] border-b border-[#B89555]/40">
+      {/* ━━━ LOGO HEADER (88px) — clean, no collapse control ━━━ */}
+      <div className="h-[88px] shrink-0 flex flex-row items-center px-2.5 bg-gradient-to-b from-[#F7F1E6] to-[#ECE2D2] border-b border-[#B89555]/40">
         <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity ml-1">
           <img src={jbjMonogramLightBg} alt="JBJ" className="w-14 h-14 object-contain shrink-0" />
           <div className="flex flex-col mt-1">
@@ -1086,13 +1114,6 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             <span className="text-[9px] font-bold text-[#1A1A1A]/70 tracking-[0.16em] leading-tight mt-0.5 whitespace-nowrap">REAL ESTATE</span>
           </div>
         </Link>
-        <button
-          onClick={toggleCollapse}
-          className="shrink-0 ml-2 w-6 h-6 rounded-md bg-[#1A1A1A]/5 hover:bg-[#1A1A1A]/10 flex items-center justify-center transition-all border border-[#B89555]/40"
-          aria-label="Collapse navigation"
-        >
-          <ChevronLeft className="w-3 h-3 text-[#1A1A1A]" />
-        </button>
       </div>
 
       {/* ━━━ SCROLLABLE NAV ━━━ */}
@@ -1290,6 +1311,17 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               <span style={{ color: '#000000' }}>Sign In</span>
             </Link>
           )}
+
+          {/* Collapse — clean gold text button under Sign Out */}
+          <button
+            data-no-contrast-guard
+            onClick={toggleCollapse}
+            aria-label="Collapse navigation"
+            className="mt-1.5 flex items-center justify-center gap-1.5 w-full px-2 py-[5px] rounded-lg text-[10px] font-semibold tracking-[0.14em] uppercase transition-all bg-transparent border border-[#B89555]/40 hover:border-[#B89555] text-[#B89555] hover:bg-[#B89555]/[0.06]"
+          >
+            <ChevronLeft className="w-3 h-3" />
+            <span>Collapse</span>
+          </button>
         </div>
       </div>
     </div>
