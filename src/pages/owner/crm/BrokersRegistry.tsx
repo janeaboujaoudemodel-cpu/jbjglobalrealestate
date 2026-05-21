@@ -694,9 +694,37 @@ export function AddBrokerSheet({ open, onOpenChange, onAdded }: { open: boolean;
         database_source: "manual",
         source_history: [accessSettings],
       };
-      const { error } = await (supabase as any).from("crm_brokers").insert(payload);
+      const { data: inserted, error } = await (supabase as any)
+        .from("crm_brokers")
+        .insert(payload)
+        .select("id, email_lower")
+        .single();
       if (error) throw error;
       toast.success("Broker added");
+
+      // Fire the branded invitation if requested and we have an email
+      if (form.send_branded_invitation && inserted?.email_lower) {
+        try {
+          const { data: invRes, error: invErr } = await supabase.functions.invoke(
+            "crm-broker-invite",
+            {
+              body: {
+                broker_id: inserted.id,
+                broker_email: inserted.email_lower,
+                broker_display_name: form.full_name.trim(),
+                action: "invite",
+              },
+            },
+          );
+          if (invErr || (invRes as any)?.error) {
+            throw new Error(invErr?.message ?? (invRes as any)?.error ?? "Invite failed");
+          }
+          toast.success("Branded invitation email sent");
+        } catch (e: any) {
+          toast.error(`Broker created, but invitation failed: ${e?.message ?? "unknown error"}`);
+        }
+      }
+
       reset();
       onAdded();
       onOpenChange(false);
