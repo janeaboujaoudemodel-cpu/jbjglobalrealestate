@@ -33,6 +33,7 @@ const AuditorFeedbackButton = lazy(() => import("@/components/auditor/AuditorFee
 
 // Lazy-load non-critical components to reduce initial bundle
 const AIChatWidget = lazy(() => import("@/components/AIChatWidget"));
+const VoiceConciergeWidget = lazy(() => import("@/components/VoiceConciergeWidget"));
 import PageNavigation from "@/components/PageNavigation";
 const MarketingScripts = lazy(() => import("@/components/marketing/MarketingScripts"));
 const SecurityShield = lazy(() => import("@/components/SecurityShield"));
@@ -318,6 +319,11 @@ const MainLayout = ({ children }: MainLayoutProps) => {
             onMinimize={handleMinimizeChat}
             showAttentionPulse={showAttentionPulse && popupsReady}
           />
+        </Suspense>
+      )}
+      {!isBackOfficeRoute && (
+        <Suspense fallback={null}>
+          <VoiceConciergeWidget />
         </Suspense>
       )}
       {showLayoutDebug && layoutDebugSnapshot && (
