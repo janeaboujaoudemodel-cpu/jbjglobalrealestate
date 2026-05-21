@@ -261,8 +261,12 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     return () => window.removeEventListener("scroll", onScroll);
   }, [forceSolid]);
 
-  // When transparent (hero visible), use minimal styling - no fills on nav/icons
-  const isFullyTransparent = isTransparentRoute && !isSolid;
+  // When transparent (hero visible), use minimal styling - no fills on nav/icons.
+  // EXCEPTION: on mobile/tablet we always render the header solid (champagne
+  // background + dark text) so the brand wordmark and icons stay high-contrast
+  // — white-on-dark transparent treatment is desktop-only.
+  const showSolidBackground = isSolid || shouldUseMobileHeader;
+  const isFullyTransparent = isTransparentRoute && !showSolidBackground;
 
   const mobileHeaderIconButtonClassName =
     "inline-flex h-7 w-7 items-center justify-center p-0 bg-transparent border-0 rounded-none appearance-none transition-colors duration-300 focus:outline-none focus-visible:outline-none focus-visible:ring-0";
