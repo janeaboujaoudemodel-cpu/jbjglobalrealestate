@@ -97,9 +97,6 @@ const heroActions = [
   { label: "Explore AI Tools", icon: Brain, href: "/ai-hub" },
   { label: "Market Intelligence", icon: BarChart3, href: "/market-intelligence" },
   { label: "News", icon: Newspaper, href: "/news" },
-  // Two extras retained beyond the photo
-  { label: "Create Your CV", icon: FileText, href: "/toolkit/cv-builder" },
-  { label: "Submit Complaint", icon: MessageSquareWarning, href: "/ticket-hub" },
 ];
 
 // "I'm a..." mode selector pills — inline in hero per reference photo
@@ -372,15 +369,21 @@ const Index = () => {
               ))}
             </motion.div>
 
-            {/* Scroll indicator */}
+            {/* Book a Free Consultation CTA — replaces the old Explore arrow */}
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.2, duration: 0.5 }}
-              className="flex flex-col items-center gap-1"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.9, duration: 0.6 }}
+              className="flex justify-center pt-2"
             >
-              <span className="text-[9px] uppercase tracking-[0.2em] text-white/90">Explore</span>
-              <ChevronDown className="w-4 h-4 text-white/85 animate-bounce" />
+              <button
+                type="button"
+                onClick={() => setIsInquiryOpen(true)}
+                className="group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#EFE6D6] hover:bg-[#F7F2EA] border border-[#B89555] text-[#1A1A1A] text-sm font-semibold tracking-tight transition-all shadow-[0_8px_28px_-8px_rgba(0,0,0,0.55)] hover:shadow-[0_12px_32px_-6px_rgba(0,0,0,0.6)]"
+              >
+                <span>Book a Free Consultation</span>
+                <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={2.25} />
+              </button>
             </motion.div>
           </div>
         </motion.div>
