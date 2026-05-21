@@ -1399,7 +1399,7 @@ export default function EnvelopeDetail() {
           envelopeId={envelope.id}
           recipientName={clientRec.name || "Client"}
           recipientEmail={clientRec.email || ""}
-          defaultSubject={envelope.email_subject || `Please review — ${envelope.name || "Document"}${docNumber ? ` · ${docNumber}` : ""}`}
+          defaultSubject={envelope.email_subject || `Signature Required: ${docNumber || envelope.name || "Document"}`}
           defaultBody={envelope.email_message || `Dear {{client_name}},\n\nPlease find the attached PDF document for your review.\n\nOnce reviewed, kindly proceed with signing the document via DocuSign at your earliest convenience and return the signed copy by replying to this email.\n\nShould you require any clarification, please do not hesitate to contact me.\n\nThank you,`}
           docNumber={docNumber || undefined}
           senderName={envelope.sender_name || undefined}
