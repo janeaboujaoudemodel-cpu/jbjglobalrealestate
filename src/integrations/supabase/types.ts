@@ -835,18 +835,21 @@ export type Database = {
           tool_id: string
           updated_at: string
           updated_by: string | null
+          visibility: string
         }
         Insert: {
           is_public?: boolean
           tool_id: string
           updated_at?: string
           updated_by?: string | null
+          visibility?: string
         }
         Update: {
           is_public?: boolean
           tool_id?: string
           updated_at?: string
           updated_by?: string | null
+          visibility?: string
         }
         Relationships: []
       }
