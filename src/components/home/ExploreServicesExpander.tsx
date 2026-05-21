@@ -1,13 +1,22 @@
 /**
- * ExploreServicesExpander
- * A single click-to-expand header bar. Header shows an auto-rotating service title
- * (carousel). Clicking the bar expands a champagne panel below with the full grid
- * of services — the carousel keeps animating inside.
+ * ExploreServicesExpander — premium tabbed services card.
+ * Layout (matches founder photos exactly):
+ *   ┌ Card ───────────────────────────────────────────┐
+ *   │  Explore Our Services                            │
+ *   │  Premium real estate solutions tailored…         │
+ *   │  [ icon ] Buy   [ icon ] Rent   [ icon ] …       │  ← scrollable tabs
+ *   │  ┌──────── hero image of active service ───────┐ │
+ *   │  │  Title (white)                              │ │
+ *   │  │  description (white/90)                     │ │
+ *   │  │  [ Explore Now → ]                          │ │
+ *   │  └─────────────────────────────────────────────┘ │
+ *   └──────────────────────────────────────────────────┘
+ * Always-visible, no accordion. Active tab swaps the hero panel.
  */
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  ChevronDown, ArrowRight, Sparkles,
+  ArrowRight,
   Home, Tag, Key, Building2, Globe, Calculator, Plane,
   MessageCircle, Scale, Handshake, Wrench,
 } from "lucide-react";
@@ -18,123 +27,140 @@ type Service = {
   description: string;
   icon: React.ElementType;
   href: string;
+  image: string;
   available?: boolean;
 };
 
+// Premium Unsplash imagery — Dubai/real-estate context per service.
+const UNSPLASH = (id: string) =>
+  `https://images.unsplash.com/photo-${id}?w=1600&q=80&auto=format&fit=crop`;
+
 const services: Service[] = [
-  { id: "buy",      title: "Buy Property",           description: "Discover premium properties in Dubai's most sought-after locations.",   icon: Home,         href: "/properties?transaction=buy" },
-  { id: "sell",     title: "Sell Your Property",     description: "Maximize your property's value with expert selling services.",          icon: Tag,          href: "/listing-portal" },
-  { id: "rent",     title: "Rent a Property",        description: "Find your perfect rental home in Dubai's best neighborhoods.",         icon: Key,          href: "/properties?transaction=rent" },
-  { id: "list",     title: "List for Rent",          description: "Connect with qualified tenants through our network.",                   icon: Building2,    href: "/landlord-listing" },
-  { id: "visa",     title: "Golden Visa Advisory",   description: "10-year UAE residency through strategic real estate investment.",      icon: Globe,        href: "/guides/golden-visa-uae" },
-  { id: "manage",   title: "Property Management",    description: "Professional maintenance and management for landlords.",                icon: Building2,    href: "/services/property-management" },
-  { id: "mortgage", title: "Mortgage Inquiries",     description: "Calculate payments and connect with top mortgage providers.",          icon: Calculator,   href: "/mortgage-calculator" },
-  { id: "passport", title: "Passport & Schengen",    description: "Request introduction via independent licensed partners.",              icon: Plane,        href: "/services/citizenship" },
-  { id: "compare",  title: "Compare Properties",     description: "AI-powered side-by-side analysis of multiple projects.",               icon: Scale,        href: "/compare" },
-  { id: "eval",     title: "Property Evaluation",    description: "AI-powered valuation for accurate market assessments.",                icon: Calculator,   href: "/property-evaluator" },
-  { id: "partner",  title: "Partner Introduction",   description: "Connect with our network of trusted partners.",                        icon: Handshake,    href: "/partners" },
-  { id: "inquiry",  title: "General Inquiries",      description: "Get answers to all your real estate questions.",                       icon: MessageCircle,href: "/contact" },
-  { id: "facility", title: "Facility Management",    description: "Property maintenance for owners — coming soon.",                        icon: Wrench,       href: "/services/facility-management", available: false },
+  { id: "buy",      title: "Buy Property",         description: "Discover premium properties in Dubai's most sought-after locations with expert guidance.", icon: Home,         href: "/properties?transaction=buy",         image: UNSPLASH("1518684079-3c830dcef090") },
+  { id: "sell",     title: "Sell Your Property",   description: "Maximize your property's value with expert selling services and a global investor reach.",   icon: Tag,          href: "/listing-portal",                     image: UNSPLASH("1545324418-cc1a3fa10c00") },
+  { id: "rent",     title: "Rent a Property",      description: "Find your perfect rental home in Dubai's most desirable neighbourhoods.",                    icon: Key,          href: "/properties?transaction=rent",        image: UNSPLASH("1502672260266-1c1ef2d93688") },
+  { id: "list",     title: "List Your Property for Rent", description: "Connect with qualified tenants through our institutional network.",                  icon: Building2,    href: "/landlord-listing",                   image: UNSPLASH("1560448204-e02f11c3d0e2") },
+  { id: "visa",     title: "Golden Visa Advisory", description: "10-year UAE residency through strategic real estate investment, structured end-to-end.",     icon: Globe,        href: "/guides/golden-visa-uae",             image: UNSPLASH("1512453979798-5ea266f8880c") },
+  { id: "manage",   title: "Property Management",  description: "Professional maintenance and management for landlords across Dubai.",                        icon: Building2,    href: "/services/property-management",       image: UNSPLASH("1497366754035-f200968a6e72") },
+  { id: "mortgage", title: "Mortgage Inquiries",   description: "Calculate payments and get matched with top mortgage providers in the UAE.",                 icon: Calculator,   href: "/mortgage-calculator",                image: UNSPLASH("1554224155-6726b3ff858f") },
+  { id: "passport", title: "Passport & Schengen",  description: "Request an introduction via independent licensed partners.",                                  icon: Plane,        href: "/services/citizenship",               image: UNSPLASH("1530541930197-ff16ac917b0e") },
+  { id: "compare",  title: "Compare Properties",   description: "AI-powered side-by-side analysis of multiple projects with ROI insights.",                    icon: Scale,        href: "/compare",                             image: UNSPLASH("1551288049-bebda4e38f71") },
+  { id: "eval",     title: "Property Evaluation",  description: "AI-powered valuation for accurate, market-aligned price assessments.",                        icon: Calculator,   href: "/property-evaluator",                  image: UNSPLASH("1454165804606-c3d57bc86b40") },
+  { id: "partner",  title: "Partner Introduction", description: "Connect with our trusted network of advisors, lawyers and tax specialists.",                 icon: Handshake,    href: "/partners",                           image: UNSPLASH("1521791136064-7986c2920216") },
+  { id: "inquiry",  title: "General Inquiries",    description: "Speak to our concierge team for any real estate question — answered fast.",                  icon: MessageCircle,href: "/contact",                            image: UNSPLASH("1556761175-5973dc0f32e7") },
+  { id: "facility", title: "Facility Management",  description: "Building-grade maintenance for owners — launching soon.",                                     icon: Wrench,       href: "/services/facility-management",       image: UNSPLASH("1581094794329-c8112a89af12"), available: false },
 ];
 
 const ExploreServicesExpander = () => {
-  const [open, setOpen] = useState(false);
-  const [idx, setIdx] = useState(0);
-  const panelId = "explore-services-panel";
-  const headerRef = useRef<HTMLButtonElement>(null);
+  const [activeId, setActiveId] = useState<string>(services[0].id);
+  const tabsRef = useRef<HTMLDivElement>(null);
 
+  // Auto-rotate the active service every 4.5s for ambient motion.
   useEffect(() => {
-    const i = setInterval(() => setIdx((p) => (p + 1) % services.length), 2800);
+    const i = setInterval(() => {
+      setActiveId((cur) => {
+        const idx = services.findIndex((s) => s.id === cur);
+        return services[(idx + 1) % services.length].id;
+      });
+    }, 4500);
     return () => clearInterval(i);
   }, []);
 
+  // Preload hero images so swaps are instant.
   useEffect(() => {
-    const onEsc = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
-    if (open) window.addEventListener("keydown", onEsc);
-    return () => window.removeEventListener("keydown", onEsc);
-  }, [open]);
+    services.forEach((s) => {
+      const img = new Image();
+      img.src = s.image;
+    });
+  }, []);
 
-  const current = services[idx];
-  const HeadIcon = current.icon;
+  // Keep active tab visible in the horizontal scroller.
+  useEffect(() => {
+    const el = tabsRef.current?.querySelector<HTMLElement>(`[data-tab-id="${activeId}"]`);
+    el?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
+  }, [activeId]);
+
+  const active = services.find((s) => s.id === activeId) ?? services[0];
+  const ActiveIcon = active.icon;
 
   return (
-    <div className="rounded-2xl border border-[#B89555]/40 bg-[#FDFBF7] overflow-hidden shadow-[0_4px_24px_rgba(184,149,85,0.12)]">
-      <button
-        ref={headerRef}
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        aria-expanded={open}
-        aria-controls={panelId}
-        className="group w-full flex items-center justify-between gap-3 px-5 md:px-7 py-4 md:py-5 text-left transition-colors hover:bg-[#F7F2EA]"
-      >
-        <span className="flex items-center gap-3 md:gap-4 min-w-0">
-          <span className="inline-flex w-10 h-10 md:w-11 md:h-11 items-center justify-center rounded-xl bg-[#F7F2EA] border border-[#B89555]/40 shrink-0">
-            <Sparkles className="w-5 h-5 text-[#1A1A1A]" />
-          </span>
-          <span className="min-w-0">
-            <span className="block text-[11px] uppercase tracking-[0.2em] font-semibold text-[#1A1A1A]/60">
-              Explore Our Services
-            </span>
-            <span className="mt-0.5 flex items-center gap-2 text-base md:text-lg font-bold text-[#1A1A1A]">
-              <HeadIcon className="w-4 h-4 text-[#B89555] shrink-0" />
-              <span
-                key={current.id}
-                className="truncate animate-fade-in"
-              >
-                {current.title}
-              </span>
-            </span>
-          </span>
-        </span>
-        <span className="inline-flex items-center gap-2 shrink-0">
-          <span className="hidden sm:inline text-xs font-semibold text-[#1A1A1A]/70">
-            {open ? "Hide" : "View all"}
-          </span>
-          <ChevronDown
-            className={`w-5 h-5 text-[#1A1A1A] transition-transform duration-300 ${open ? "rotate-180" : ""}`}
-          />
-        </span>
-      </button>
+    <div className="rounded-2xl border border-[#B89555]/40 bg-[#FDFBF7] overflow-hidden shadow-[0_8px_28px_rgba(184,149,85,0.10)]">
+      {/* Header */}
+      <div className="px-5 md:px-7 pt-5 md:pt-6 pb-4">
+        <h2 className="text-xl md:text-2xl font-bold text-[#1A1A1A] tracking-tight">
+          Explore Our Services
+        </h2>
+        <p className="mt-1 text-sm text-[#1A1A1A]/70">
+          Premium real estate solutions tailored to your needs
+        </p>
+      </div>
 
+      {/* Tabs row — horizontally scrollable, never wraps vertically */}
       <div
-        id={panelId}
-        className="grid transition-[grid-template-rows] duration-500 ease-out"
-        style={{ gridTemplateRows: open ? "1fr" : "0fr" }}
+        ref={tabsRef}
+        className="flex items-stretch gap-1 px-3 md:px-4 overflow-x-auto no-scrollbar border-b border-[#B89555]/25"
+        role="tablist"
+        aria-label="Services"
       >
-        <div className="overflow-hidden">
-          <div className="border-t border-[#B89555]/25 bg-[#F7F2EA]/40 p-4 md:p-6">
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
-              {services.map((s) => {
-                const Icon = s.icon;
-                const isCurrent = s.id === current.id;
-                const inner = (
-                  <div
-                    className={`group h-full flex flex-col gap-2 rounded-xl border bg-white p-3.5 md:p-4 transition-all ${
-                      isCurrent
-                        ? "border-[#B89555] shadow-[0_6px_18px_rgba(184,149,85,0.18)]"
-                        : "border-[#B89555]/25 hover:border-[#B89555]/60 hover:shadow-[0_4px_14px_rgba(184,149,85,0.14)]"
-                    } ${s.available === false ? "opacity-60" : ""}`}
-                  >
-                    <span className="inline-flex w-9 h-9 items-center justify-center rounded-lg bg-[#F7F2EA] border border-[#B89555]/30">
-                      <Icon className="w-4.5 h-4.5 text-[#1A1A1A]" />
-                    </span>
-                    <span className="text-sm font-bold text-[#1A1A1A] leading-tight">{s.title}</span>
-                    <span className="text-[11px] text-[#1A1A1A]/70 leading-snug line-clamp-2">{s.description}</span>
-                    <span className="mt-auto pt-1 inline-flex items-center gap-1 text-[11px] font-semibold text-[#1A1A1A]">
-                      {s.available === false ? "Coming soon" : "Open"}
-                      {s.available !== false && (
-                        <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
-                      )}
-                    </span>
-                  </div>
-                );
-                return s.available === false ? (
-                  <div key={s.id} aria-disabled>{inner}</div>
-                ) : (
-                  <Link key={s.id} to={s.href} className="block h-full">{inner}</Link>
-                );
-              })}
-            </div>
+        {services.map((s) => {
+          const Icon = s.icon;
+          const isActive = s.id === activeId;
+          return (
+            <button
+              key={s.id}
+              data-tab-id={s.id}
+              role="tab"
+              aria-selected={isActive}
+              onClick={() => setActiveId(s.id)}
+              className={`shrink-0 inline-flex items-center gap-2 px-3.5 md:px-4 py-3 text-[13px] font-semibold whitespace-nowrap transition-colors border-b-2 -mb-px ${
+                isActive
+                  ? "text-[#1A1A1A] border-[#1A1A1A]"
+                  : "text-[#1A1A1A]/65 border-transparent hover:text-[#1A1A1A]"
+              } ${s.available === false ? "opacity-60" : ""}`}
+            >
+              <Icon className="w-4 h-4" />
+              <span>{s.title}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Hero panel */}
+      <div className="relative h-[260px] md:h-[320px] overflow-hidden">
+        <div
+          key={active.id}
+          className="absolute inset-0 bg-cover bg-center animate-fade-in"
+          style={{ backgroundImage: `url(${active.image})` }}
+        />
+        {/* Strong gradient for legibility */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/45 to-black/20" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+
+        <div className="relative h-full flex flex-col justify-end p-5 md:p-8 max-w-xl">
+          <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] font-semibold text-white/85 mb-2">
+            <ActiveIcon className="w-3.5 h-3.5" />
+            <span>JBJ Service</span>
+          </div>
+          <h3 className="text-white text-2xl md:text-3xl font-bold leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.55)]">
+            {active.title}
+          </h3>
+          <p className="mt-2 text-white/90 text-sm md:text-base leading-relaxed max-w-md drop-shadow-[0_1px_6px_rgba(0,0,0,0.5)]">
+            {active.description}
+          </p>
+          <div className="mt-4">
+            {active.available === false ? (
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 text-white border border-white/35 text-sm font-semibold backdrop-blur-sm">
+                Coming soon
+              </span>
+            ) : (
+              <Link
+                to={active.href}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-[#1A1A1A] font-semibold text-sm hover:bg-[#F7F2EA] transition-colors shadow-[0_6px_18px_rgba(0,0,0,0.25)]"
+              >
+                Explore Now
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            )}
           </div>
         </div>
       </div>
