@@ -642,7 +642,7 @@ export default function EnvelopeDetail() {
       setEditing(false);
       setRecentlyRestoredFields([]);
       await refetch();
-      qc.invalidateQueries({ queryKey: ["esign_envelopes_hub"] });
+      qc.invalidateQueries({ queryKey: ["esign_envelopes_hub_all"] });
     } catch (e: any) {
       console.error("Save failed", e);
       toast.error(e.message || "Failed to update");
@@ -1381,7 +1381,7 @@ export default function EnvelopeDetail() {
         onOpenChange={setSendOpen}
         envelope={envelope}
         primaryRecipient={clientRec}
-        onSent={() => { refetch(); qc.invalidateQueries({ queryKey: ["esign-envelopes"] }); qc.invalidateQueries({ queryKey: ["esign_envelopes_hub"] }); }}
+        onSent={() => { refetch(); qc.invalidateQueries({ queryKey: ["esign-envelopes"] }); qc.invalidateQueries({ queryKey: ["esign_envelopes_hub_all"] }); }}
       />
 
       <ExportEnvelopeDialog
@@ -1472,7 +1472,7 @@ export default function EnvelopeDetail() {
               filename: (data?.document_filename as string) || envelope.document_filename || null,
             };
           }}
-          onSent={() => { refetch(); qc.invalidateQueries({ queryKey: ["esign-envelopes"] }); qc.invalidateQueries({ queryKey: ["esign_envelopes_hub"] }); }}
+          onSent={() => { refetch(); qc.invalidateQueries({ queryKey: ["esign-envelopes"] }); qc.invalidateQueries({ queryKey: ["esign_envelopes_hub_all"] }); }}
         />
       )}
     </div>
