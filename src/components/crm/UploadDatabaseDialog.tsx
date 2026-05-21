@@ -251,12 +251,20 @@ export default function UploadDatabaseDialog({ open, onOpenChange, onCreated }: 
     setStage("saving");
     setError(null);
     try {
-      const id = await persist(mode);
-      if (id) {
-        toast.success(mode === "merged" ? "Merged into CRM" : "Saved as separate database");
-        onCreated?.(id, mode);
+      const res = await persist(mode);
+      if (res) {
+        const parts: string[] = [];
+        if (res.leadsInserted) parts.push(`${res.leadsInserted} leads added`);
+        if (res.leadsDuplicates) parts.push(`${res.leadsDuplicates} duplicates skipped`);
+        if (res.leadsErrors) parts.push(`${res.leadsErrors} lead errors`);
+        if (res.rowErrors) parts.push(`${res.rowErrors} row errors`);
+        const summary = parts.length ? parts.join(" · ") : "All rows preserved";
+        toast.success(mode === "merged" ? `Merged into CRM — ${summary}` : "Saved as separate database", {
+          description: mode === "separate" ? summary : undefined,
+        });
+        onCreated?.(res.dbId, mode);
         setStage("done");
-        setTimeout(() => handleClose(false), 800);
+        setTimeout(() => handleClose(false), 1200);
       }
     } catch (e: any) {
       console.error(e);
