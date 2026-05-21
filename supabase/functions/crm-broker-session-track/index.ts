@@ -93,15 +93,36 @@ Deno.serve(async (req) => {
       if (body.heartbeat) return json({ error: "Session revoked", force_signout: true }, 403);
     }
 
-    // Suspicious-login signal: first time we see this fingerprint
+    // Suspicious-login signals:
+    //   (a) first time we see this device fingerprint for this broker
+    //   (b) impossible-travel: a different IP appears within 10 min of any
+    //       active (non-revoked) session for this broker
     let suspicious = false;
+    let suspiciousReason: string | null = null;
     if (fingerprint) {
       const { count } = await admin
         .from("crm_broker_sessions")
         .select("id", { count: "exact", head: true })
         .eq("broker_id", broker.id)
         .eq("device_fingerprint", fingerprint);
-      suspicious = (count ?? 0) === 0;
+      if ((count ?? 0) === 0) {
+        suspicious = true;
+        suspiciousReason = "new_device";
+      }
+    }
+    if (!suspicious && ip) {
+      const tenMinAgo = new Date(Date.now() - 10 * 60_000).toISOString();
+      const { data: recent } = await admin
+        .from("crm_broker_sessions")
+        .select("ip_address")
+        .eq("broker_id", broker.id)
+        .is("revoked_at", null)
+        .gte("last_seen_at", tenMinAgo)
+        .limit(20);
+      if ((recent ?? []).some(r => r.ip_address && r.ip_address !== ip)) {
+        suspicious = true;
+        suspiciousReason = "impossible_travel";
+      }
     }
 
     const sessionToken = randomToken(32);
