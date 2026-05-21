@@ -110,7 +110,7 @@ const AIComparisonWidget = () => {
               <ArrowUpRight className="w-5 h-5 text-[#B89555] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </button>
           </Link>
-          <Link to="/compare?mode=manual" className="flex-1">
+          <Link to="/compare-manual" className="flex-1">
             <button
               className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 text-base font-semibold rounded-xl bg-[#F7F2EA] text-[#1A1A1A] border border-[#B89555]/40 hover:bg-[#EFE6D6] hover:-translate-y-0.5 transition-all duration-300"
             >
