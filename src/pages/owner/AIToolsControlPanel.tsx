@@ -36,6 +36,8 @@ const ALL_TOOLS: ToolDef[] = [
   { id: "property-comparison", title: "JBJ Property Comparison", description: "Compare properties side-by-side with AI insights.", link: "/compare", category: "property" },
   { id: "mortgage-calculator", title: "JBJ Mortgage Calculator", description: "Estimate monthly payments and financing options.", link: "/mortgage-calculator", category: "property" },
   { id: "rental-index", title: "JBJ Rental Index Evaluator", description: "AI-powered rental estimates with market trends.", link: "/rental-index", category: "property" },
+  { id: "list-property-sale", title: "List Your Property for Sale", description: "Submit a sale listing for review and publication.", link: "/listing-portal?type=sale", category: "property" },
+  { id: "list-property-rent", title: "List Your Property for Rent", description: "Submit a rental listing for review and publication.", link: "/listing-portal?type=rent", category: "property" },
   { id: "ai-property-analyzer", title: "JBJ AI Property Analyzer", description: "Deep market analysis with price trends.", link: "/ai-property-analyzer", category: "property" },
   { id: "ai-price-predictor", title: "JBJ AI Price Predictor", description: "AI-powered price predictions.", link: "/ai-price-predictor", category: "property" },
   { id: "ai-neighborhood-insights", title: "JBJ AI Neighborhood Insights", description: "Area analysis with livability scores.", link: "/ai-neighborhood-insights", category: "property" },
