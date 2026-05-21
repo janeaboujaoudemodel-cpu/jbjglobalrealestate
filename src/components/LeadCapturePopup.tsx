@@ -19,6 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useSmartPopupStrategy } from "@/hooks/useSmartPopupStrategy";
+import { usePopupVisibility } from "@/contexts/PopupCoordinatorContext";
 
 const NATIONALITIES = [
   "UAE", "India", "Pakistan", "United Kingdom", "Russia", "China",
