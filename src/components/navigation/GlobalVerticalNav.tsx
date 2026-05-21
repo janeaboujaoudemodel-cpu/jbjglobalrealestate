@@ -31,7 +31,6 @@ import { useLanguage, getLanguageInfo } from "@/contexts/LanguageContext";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { prefetchAITool } from "@/utils/aiToolPrefetch";
-import { isApprovedPublicToolId, isApprovedPublicToolHref } from "@/config/publicToolAccess";
 
 /* ─── CURATED TOP ENTRIES (matching horizontal mega menus) ─── */
 const FEATURED_DEVELOPER_SLUGS = [
@@ -762,13 +761,7 @@ export default function GlobalVerticalNav() {
     const sections: Record<string, NavItem[]> = {};
     let currentSection: SectionKey | null = null;
 
-    const curatedNavItems = NAV_ITEMS.filter((item) => {
-      const mapped = item.section ? SECTION_ALIAS[item.section] : currentSection;
-      if (mapped !== "TOOLS & WORKSPACE") return true;
-      return isApprovedPublicToolHref(item.href);
-    });
-
-    for (const item of curatedNavItems) {
+    for (const item of NAV_ITEMS) {
       if (item.highlight) {
         highlights.push(item);
         continue;
