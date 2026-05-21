@@ -637,7 +637,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     >
       {/* Solid header background — champagne (creamy), not raw white */}
       <div 
-        className={`absolute inset-0 transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`}
+        className={`absolute inset-0 transition-opacity duration-300 ${showSolidBackground ? "opacity-100" : "opacity-0"}`}
         style={{
           background: 'linear-gradient(90deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)',
         }}
@@ -645,7 +645,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       
       {/* Subtle ambient glow at top */}
       <div 
-        className={`absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-24 pointer-events-none transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`}
+        className={`absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-24 pointer-events-none transition-opacity duration-300 ${showSolidBackground ? "opacity-100" : "opacity-0"}`}
         style={{
           background: 'none',
         }}
@@ -653,8 +653,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       
       {/* Premium Bottom Border — gold hairline on champagne */}
       <div className="absolute bottom-0 left-0 right-0 h-[2px] z-10">
-        <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`} />
-        <div className={`absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-[#B89555]/40 to-transparent transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`} />
+        <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent transition-opacity duration-300 ${showSolidBackground ? "opacity-100" : "opacity-0"}`} />
+        <div className={`absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-[#B89555]/40 to-transparent transition-opacity duration-300 ${showSolidBackground ? "opacity-100" : "opacity-0"}`} />
       </div>
       
       {/* Gold divider when transparent - separates header from hero */}
@@ -662,11 +662,12 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       
       {/* Inner shadow for depth */}
       <div 
-        className={`absolute inset-0 pointer-events-none transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`}
+        className={`absolute inset-0 pointer-events-none transition-opacity duration-300 ${showSolidBackground ? "opacity-100" : "opacity-0"}`}
         style={{
           boxShadow: 'inset 0 -1px 0 rgba(0,0,0,0.05)'
         }}
       />
+      
       
       {/* HEADER CONTENT */}
       <div
