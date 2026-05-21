@@ -171,8 +171,10 @@ export default function AIToolsControlPanel() {
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [expandedTool, setExpandedTool] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  // Per-tool public visibility — stored in `ai_tool_visibility`
-  const [hiddenTools, setHiddenTools] = useState<Set<string>>(new Set());
+  // Per-tool three-state visibility — public | owner_only | hidden
+  type Vis = "public" | "owner_only" | "hidden";
+  const [visMap, setVisMap] = useState<Map<string, Vis>>(new Map());
+  const [selected, setSelected] = useState<Set<string>>(new Set());
 
   // Fetch all data
   const fetchData = useCallback(async () => {
@@ -181,42 +183,60 @@ export default function AIToolsControlPanel() {
       (supabase.from("ai_tool_versions") as any).select("*").order("created_at", { ascending: false }),
       (supabase.from("ai_tool_test_logs") as any).select("*").order("created_at", { ascending: false }),
       supabase.from("ai_recommendations").select("*").order("created_at", { ascending: false }),
-      (supabase.from("ai_tool_visibility") as any).select("tool_id, is_public"),
+      (supabase.from("ai_tool_visibility") as any).select("tool_id, is_public, visibility"),
     ]);
     if (vRes.data) setVersions(vRes.data as ToolVersion[]);
     if (tRes.data) setTestLogs(tRes.data as TestLog[]);
     if (rRes.data) setRecommendations(rRes.data as Recommendation[]);
     if (visRes.data) {
-      const next = new Set<string>();
-      for (const row of visRes.data as Array<{ tool_id: string; is_public: boolean }>) {
-        if (row.is_public === false) next.add(row.tool_id);
+      const next = new Map<string, Vis>();
+      for (const row of visRes.data as Array<{ tool_id: string; is_public: boolean; visibility?: Vis | null }>) {
+        const v: Vis = (row.visibility as Vis) ?? (row.is_public === false ? "hidden" : "public");
+        next.set(row.tool_id, v);
       }
-      setHiddenTools(next);
+      setVisMap(next);
     }
     setLoading(false);
   }, []);
 
   useEffect(() => { fetchData(); }, [fetchData]);
 
-  // Toggle a tool's public visibility
-  const toggleVisibility = useCallback(async (toolId: string, makePublic: boolean) => {
+  const getVis = useCallback((toolId: string): Vis => visMap.get(toolId) ?? "public", [visMap]);
+
+  // Set visibility for a single tool
+  const setVisibility = useCallback(async (toolId: string, vis: Vis) => {
     const { error } = await (supabase.from("ai_tool_visibility") as any).upsert({
       tool_id: toolId,
-      is_public: makePublic,
+      visibility: vis,
+      is_public: vis === "public",
       updated_by: user?.id ?? null,
       updated_at: new Date().toISOString(),
     }, { onConflict: "tool_id" });
-    if (error) {
-      toast.error("Failed to update visibility");
-      return;
-    }
-    setHiddenTools(prev => {
-      const next = new Set(prev);
-      if (makePublic) next.delete(toolId); else next.add(toolId);
-      return next;
-    });
-    toast.success(makePublic ? "Tool is now public" : "Tool hidden from public");
+    if (error) { toast.error("Failed to update visibility"); return; }
+    setVisMap(prev => { const n = new Map(prev); n.set(toolId, vis); return n; });
   }, [user?.id]);
+
+  // Bulk apply visibility to all selected tools
+  const bulkSetVisibility = useCallback(async (vis: Vis) => {
+    if (selected.size === 0) { toast.error("Select tools first"); return; }
+    const ids = Array.from(selected);
+    const rows = ids.map(toolId => ({
+      tool_id: toolId,
+      visibility: vis,
+      is_public: vis === "public",
+      updated_by: user?.id ?? null,
+      updated_at: new Date().toISOString(),
+    }));
+    const { error } = await (supabase.from("ai_tool_visibility") as any).upsert(rows, { onConflict: "tool_id" });
+    if (error) { toast.error("Bulk update failed"); return; }
+    setVisMap(prev => { const n = new Map(prev); ids.forEach(id => n.set(id, vis)); return n; });
+    toast.success(`${ids.length} tool${ids.length === 1 ? "" : "s"} set to ${vis.replace("_", " ")}`);
+  }, [selected, user?.id]);
+
+  const toggleSelect = useCallback((toolId: string) => {
+    setSelected(prev => { const n = new Set(prev); n.has(toolId) ? n.delete(toolId) : n.add(toolId); return n; });
+  }, []);
+
 
 
   // Get current status for a tool (latest version status, or "live" if no versions)
