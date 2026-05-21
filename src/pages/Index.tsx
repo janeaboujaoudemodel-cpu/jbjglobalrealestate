@@ -5,7 +5,9 @@ import { motion } from "framer-motion";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserRole } from "@/hooks/useUserRole";
-import { Sparkles, ArrowUpRight, Users, Building2, Brain, Briefcase, Home, FileText, UserCircle, ChevronDown, MessageSquareWarning } from "lucide-react";
+import { Sparkles, ArrowUpRight, Users, Building2, Brain, Briefcase, Home, FileText, UserCircle, ChevronDown, MessageSquareWarning, TrendingUp, Handshake, Search, BarChart3, Newspaper } from "lucide-react";
+import { useUserMode } from "@/hooks/useUserMode";
+
 import { Button } from "@/components/ui/button";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 
@@ -87,15 +89,26 @@ const staggerContainer = {
   }
 };
 
-// Quick-action CTA pills for hero overlay
+// Hero action pills — matches founder reference photo: single horizontal row
 const heroActions = [
-  { label: "Sell Your Property", icon: Building2, href: "/sell" },
+  { label: "Browse Properties", icon: Search, href: "/properties" },
   { label: "AI Home Finder", icon: Home, href: "/quiz" },
+  { label: "Sell Your Property", icon: Building2, href: "/sell" },
   { label: "Explore AI Tools", icon: Brain, href: "/ai-hub" },
+  { label: "Market Intelligence", icon: BarChart3, href: "/market-intelligence" },
+  { label: "News", icon: Newspaper, href: "/news" },
+  // Two extras retained beyond the photo
   { label: "Create Your CV", icon: FileText, href: "/toolkit/cv-builder" },
-  { label: "Update Profile", icon: UserCircle, href: "/profile" },
   { label: "Submit Complaint", icon: MessageSquareWarning, href: "/ticket-hub" },
 ];
+
+// "I'm a..." mode selector pills — inline in hero per reference photo
+const heroModes = [
+  { id: "investor" as const, label: "Investor", icon: TrendingUp },
+  { id: "broker" as const, label: "Broker", icon: Handshake },
+  { id: "developer" as const, label: "Developer", icon: Building2 },
+];
+
 
 // Three pillars
 const pillars = [
