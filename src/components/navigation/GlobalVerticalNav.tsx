@@ -1105,8 +1105,8 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 
   const renderNavContent = () => (
     <div className="flex flex-col h-full">
-      {/* ━━━ LOGO HEADER (88px) — restored, matches horizontal header height ━━━ */}
-      <div className="h-[88px] shrink-0 flex flex-row items-center justify-between px-2.5 bg-gradient-to-b from-[#F7F1E6] to-[#ECE2D2] border-b border-[#B89555]/40">
+      {/* ━━━ LOGO HEADER (88px) — clean, no collapse control ━━━ */}
+      <div className="h-[88px] shrink-0 flex flex-row items-center px-2.5 bg-gradient-to-b from-[#F7F1E6] to-[#ECE2D2] border-b border-[#B89555]/40">
         <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity ml-1">
           <img src={jbjMonogramLightBg} alt="JBJ" className="w-14 h-14 object-contain shrink-0" />
           <div className="flex flex-col mt-1">
@@ -1114,13 +1114,6 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             <span className="text-[9px] font-bold text-[#1A1A1A]/70 tracking-[0.16em] leading-tight mt-0.5 whitespace-nowrap">REAL ESTATE</span>
           </div>
         </Link>
-        <button
-          onClick={toggleCollapse}
-          className="shrink-0 ml-2 w-6 h-6 rounded-md bg-[#1A1A1A]/5 hover:bg-[#1A1A1A]/10 flex items-center justify-center transition-all border border-[#B89555]/40"
-          aria-label="Collapse navigation"
-        >
-          <ChevronLeft className="w-3 h-3 text-[#1A1A1A]" />
-        </button>
       </div>
 
       {/* ━━━ SCROLLABLE NAV ━━━ */}
