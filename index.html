@@ -44,25 +44,16 @@
     <meta name="geo.placename" content="Dubai" />
     <meta name="geo.position" content="25.2048;55.2708" />
     <meta name="ICBM" content="25.2048, 55.2708" />
-    <link rel="canonical" href="https://www.jbj.ae" />
-    <link rel="alternate" hreflang="en" href="https://www.jbj.ae" />
-    <link rel="alternate" hreflang="ar" href="https://www.jbj.ae?lang=ar" />
-    <link rel="alternate" hreflang="es" href="https://www.jbj.ae?lang=es" />
-    <link rel="alternate" hreflang="fr" href="https://www.jbj.ae?lang=fr" />
-    <link rel="alternate" hreflang="ru" href="https://www.jbj.ae?lang=ru" />
-    <link rel="alternate" hreflang="zh" href="https://www.jbj.ae?lang=zh" />
-    <link rel="alternate" hreflang="hi" href="https://www.jbj.ae?lang=hi" />
-    <link rel="alternate" hreflang="fa" href="https://www.jbj.ae?lang=fa" />
-    <link rel="alternate" hreflang="tr" href="https://www.jbj.ae?lang=tr" />
-    <link rel="alternate" hreflang="de" href="https://www.jbj.ae?lang=de" />
-    <link rel="alternate" hreflang="it" href="https://www.jbj.ae?lang=it" />
-    <link rel="alternate" hreflang="nl" href="https://www.jbj.ae?lang=nl" />
-    <link rel="alternate" hreflang="he" href="https://www.jbj.ae?lang=he" />
-    <link rel="alternate" hreflang="pl" href="https://www.jbj.ae?lang=pl" />
-    <link rel="alternate" hreflang="ja" href="https://www.jbj.ae?lang=ja" />
-    <link rel="alternate" hreflang="x-default" href="https://www.jbj.ae" />
+    <!--
+      Canonical, hreflang, og:url, and Organization/LocalBusiness JSON-LD are
+      now emitted at runtime to keep a single source of truth:
+        - CanonicalAndHreflang.tsx → per-route canonical + 16 hreflang + og:url
+        - GlobalSEO.tsx           → consolidated Organization graph + WebSite
+      The static OG tags below remain so JS-blind crawlers (LinkedIn, Slack,
+      Facebook) still get a valid social-card preview on the homepage.
+    -->
 
-    <!-- Open Graph -->
+    <!-- Open Graph (homepage fallback for JS-blind crawlers) -->
     <meta property="og:title" content="JBJ Global Real Estate | Dubai Property Brokerage" />
     <meta property="og:description" content="Dubai's premier real estate brokerage. Buy, sell, or rent luxury properties across UAE." />
     <meta property="og:image" content="https://www.jbj.ae/og-image.jpg" />
@@ -86,38 +77,6 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="theme-color" content="#FFFFFF" />
 
-    <!-- JSON-LD: Organization -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "RealEstateAgent",
-      "name": "JBJ Global Real Estate",
-      "url": "https://jbj.ae",
-      "logo": "https://jbj.ae/logo.png",
-      "image": "https://jbj.ae/og-image.jpg",
-      "description": "Dubai's premier property brokerage. Buy, sell, or rent luxury apartments, villas, penthouses across UAE.",
-      "telephone": "+971565911000",
-      "email": "contact@jbj.ae",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Dubai",
-        "addressRegion": "Dubai",
-        "addressCountry": "AE"
-      },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": "25.2048",
-        "longitude": "55.2708"
-      },
-      "areaServed": [
-        { "@type": "City", "name": "Dubai" },
-        { "@type": "City", "name": "Abu Dhabi" },
-        { "@type": "City", "name": "Sharjah" }
-      ],
-      "sameAs": [],
-      "openingHours": "Mo-Sa 09:00-18:00"
-    }
-    </script>
 
     <!-- JSON-LD: SiteNavigationElement -->
     <script type="application/ld+json">
