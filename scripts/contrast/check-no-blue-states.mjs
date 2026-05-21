@@ -45,7 +45,7 @@ async function walk(dir) {
 }
 
 async function scan(file) {
-  if (ALLOW_FILES.has(file)) return;
+  if (ALLOW_FILES.has(file) || ALLOW_LIST.has(file)) return;
   const text = await readFile(file, "utf8");
   const lines = text.split("\n");
   lines.forEach((line, i) => {
