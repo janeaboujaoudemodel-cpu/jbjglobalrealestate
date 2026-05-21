@@ -3409,6 +3409,251 @@ export type Database = {
           },
         ]
       }
+      broker_personal_calendar: {
+        Row: {
+          all_day: boolean
+          broker_user_id: string
+          color: string | null
+          created_at: string
+          description: string | null
+          ends_at: string
+          id: string
+          lead_id: string | null
+          location: string | null
+          starts_at: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          all_day?: boolean
+          broker_user_id: string
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          ends_at: string
+          id?: string
+          lead_id?: string | null
+          location?: string | null
+          starts_at: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          all_day?: boolean
+          broker_user_id?: string
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          ends_at?: string
+          id?: string
+          lead_id?: string | null
+          location?: string | null
+          starts_at?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broker_personal_calendar_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "broker_personal_calendar_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads_secure"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "broker_personal_calendar_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_vip_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "broker_personal_calendar_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_broker_pre_invite_leads"
+            referencedColumns: ["lead_id"]
+          },
+          {
+            foreignKeyName: "broker_personal_calendar_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_row_status"
+            referencedColumns: ["lead_id"]
+          },
+        ]
+      }
+      broker_personal_notes: {
+        Row: {
+          body: string
+          broker_user_id: string
+          created_at: string
+          database_id: string | null
+          id: string
+          lead_id: string | null
+          pinned: boolean
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          body?: string
+          broker_user_id: string
+          created_at?: string
+          database_id?: string | null
+          id?: string
+          lead_id?: string | null
+          pinned?: boolean
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          broker_user_id?: string
+          created_at?: string
+          database_id?: string | null
+          id?: string
+          lead_id?: string | null
+          pinned?: boolean
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broker_personal_notes_database_id_fkey"
+            columns: ["database_id"]
+            isOneToOne: false
+            referencedRelation: "crm_source_databases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "broker_personal_notes_database_id_fkey"
+            columns: ["database_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_access"
+            referencedColumns: ["database_id"]
+          },
+          {
+            foreignKeyName: "broker_personal_notes_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "broker_personal_notes_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads_secure"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "broker_personal_notes_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_vip_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "broker_personal_notes_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_broker_pre_invite_leads"
+            referencedColumns: ["lead_id"]
+          },
+          {
+            foreignKeyName: "broker_personal_notes_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_row_status"
+            referencedColumns: ["lead_id"]
+          },
+        ]
+      }
+      broker_personal_tasks: {
+        Row: {
+          broker_user_id: string
+          completed_at: string | null
+          created_at: string
+          description: string | null
+          due_at: string | null
+          id: string
+          lead_id: string | null
+          priority: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          broker_user_id: string
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          due_at?: string | null
+          id?: string
+          lead_id?: string | null
+          priority?: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          broker_user_id?: string
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          due_at?: string | null
+          id?: string
+          lead_id?: string | null
+          priority?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broker_personal_tasks_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "broker_personal_tasks_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads_secure"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "broker_personal_tasks_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_vip_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "broker_personal_tasks_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_broker_pre_invite_leads"
+            referencedColumns: ["lead_id"]
+          },
+          {
+            foreignKeyName: "broker_personal_tasks_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_row_status"
+            referencedColumns: ["lead_id"]
+          },
+        ]
+      }
       broker_points: {
         Row: {
           created_at: string | null
@@ -35573,6 +35818,7 @@ export type Database = {
         Returns: boolean
       }
       is_owner_or_admin: { Args: { _user_id: string }; Returns: boolean }
+      is_owner_user: { Args: never; Returns: boolean }
       is_partner_owner: { Args: { _partner_id: string }; Returns: boolean }
       is_sales_director: { Args: { _user_id: string }; Returns: boolean }
       is_team_admin: {

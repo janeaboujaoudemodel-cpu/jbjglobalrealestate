@@ -1,124 +1,92 @@
-# Plan — Finish Remaining Broker/CRM Tasks
+## What I found
 
-Audit confirms Phases 1–4 and 6 are already largely in place:
-- `crm_brokers`, `crm_database_grants` (with `visibility_direction`, `date_window_mode`, `lead_ids`, `status_filter`, `suspended_at`, `revoked_at`), `crm_broker_sessions`, `crm_broker_blocked_devices`, `crm_audit_logs`.
-- Edge functions: `crm-broker-invite`, `crm-broker-invite-status`, `crm-broker-activate`, `crm-broker-verify-otp`, `crm-broker-grant-manage`, `crm-broker-session-track`, `crm-grant-broker-access`.
-- Owner-side UI: `GrantBrokerAccessDialog`, `BrokerGrantsManagerDialog` (sessions, devices, suspicious-first sort, recent activity), `UnifiedBrokerPicker`.
-- Cron auto-expire of stale invites; impossible-travel + new-device detection.
+**1. The "two databases" issue is real data, not a bug.**
+Your test broker (`infoo.jane@gmail.com`) has **2 active grants** in `crm_database_grants`:
 
-What is genuinely missing maps to Phases 5, 7-partial, 8, 9, 10.
+| Granted | Database | Permission |
+|---|---|---|
+| May 19 | `al reef 1 (5) bed villas updated` | edit |
+| May 17 | `MAMSHA MERGED (1)` | edit |
 
----
+Neither has `revoked_at` set, so both correctly appear. The new grant did not auto-revoke the previous one — that's the gap to close.
 
-## Pass 8 — Commission Split & Agreement System (Phase 5)
-
-New tables:
-- `crm_broker_commission_agreements` — id, owner_id, broker_user_id, deal_ref (nullable text/uuid), splits jsonb (array of `{party, role, percent}`), agreement_html, agreement_pdf_path, status (`draft|sent|signed|void`), sent_at, signed_at, signature_payload jsonb, ip, user_agent, created_at.
-- `crm_broker_commission_signatures` — append-only signature events linked to agreement (party, name, email, signed_at, ip, ua, hash).
-RLS: owner full; broker read/sign only own agreement rows.
-
-Edge functions:
-- `crm-broker-commission-create` (owner): validates split totals = 100, renders JBJ-letterhead HTML via existing brand templates, stores draft, optionally emails broker via existing `sendViaResend`.
-- `crm-broker-commission-sign` (broker, JWT): records signature, locks agreement, writes `crm_audit_logs` + `crm_broker_commission_signatures`.
-
-UI:
-- `CommissionSplitDialog.tsx` (owner) — multi-row split editor with live % total guard, presets 50/50, 70/30, 20/20/60.
-- `BrokerAgreementSignPage.tsx` at `/broker/agreement/:id` — preview + click-to-sign with typed name + checkbox, calls sign function.
-- Tab inside `BrokerGrantsManagerDialog` → "Agreements" listing per broker.
-
-PDF: reuse existing `jsPDF` institutional letterhead utility (`institutional-pdf-reporting-standard`).
+**2. The broker workspace is a minimal 3-tab page.**
+Today `/broker/crm` shows only: My Databases · My Leads · Activity (empty). No calendar, no inbox, no tasks, no notes, no projects, and the database view is read-only (list of names, not editable cells).
 
 ---
 
-## Pass 9 — Broker Account Lifecycle (top-level) (gap in Phase 1/6)
+## Plan
 
-Today suspend/revoke is per-grant or per-device. Add account-level state.
+### A. Fix the "extra database" leak (owner-side)
 
-Migration:
-- Add `account_status text default 'active'` + `account_status_reason text` + `account_status_changed_at` to `crm_brokers`.
-- Trigger: when status flips to `suspended|deleted`, mark all `crm_database_grants.suspended_at = now()` and revoke all `crm_broker_sessions` for that broker.
+1. **One-database-at-a-time grant flow** — In `BrokerGrantsManagerDialog`, when you grant a new database, add a default-on checkbox **"Revoke all other databases for this broker"**. When ticked, the grant edge function sets `revoked_at = now()` on every other active grant for that broker in the same transaction.
+2. **Active grants chip on the picker** — Show a small badge next to the broker's name in the manager dialog: "2 active databases · click to review" so you can never lose track again.
+3. **Bulk-revoke action** — Add a "Revoke all other grants" button on each grant row so you can clean up `MAMSHA MERGED` for Jane in one click right now.
+4. Every revoke writes a `broker_grant_revoked` audit row (already wired).
 
-Edge function `crm-broker-account-state` (owner) — set active/suspended/deleted with audit + session revoke.
+### B. Build the full broker suite at `/broker/crm`
 
-UI: top-of-row "Suspend broker" / "Reactivate" / "Delete broker" in `BrokerGrantsManagerDialog` with confirm modal; status pill in `IndividualBrokersTab`.
+Replace the current 3-tab page with an L-shaped workspace (same 88px header + sidebar standard as the owner panel) and these sections:
 
----
+| Tab | Source | Behaviour |
+|---|---|---|
+| **Dashboard** | aggregated | KPIs: assigned DBs, leads in scope, open tasks, unread notes |
+| **Databases** | `vw_crm_database_access` | Each granted DB opens as an **Excel-style editable grid** (see C) |
+| **Leads** | `useBrokerScopedLeads` | Flat sortable/filterable table, status pill editor |
+| **Calendar** | new `broker_calendar_events` (broker_user_id scoped) | Month + agenda view, create/edit own events |
+| **Inbox** | reuse `email_inbox_items` filtered by `assigned_broker_user_id` | Read & reply, never sees owner's private threads |
+| **Tasks** | new `broker_tasks` (broker_user_id scoped) | Kanban: Todo / Doing / Done, due dates |
+| **Notes** | new `broker_notes` (broker_user_id scoped, optional `lead_id`) | Markdown notes, private to broker; owner sees all via RLS bypass |
+| **Projects** | `vw_projects_public` (read-only) | Full front-end project browser, same as visitor sees |
+| **Training** | existing `BrokerTraining` page | Linked from sidebar |
 
-## Pass 10 — CRM Feature Gap (Phase 7, broker-scoped)
+Front-end of the public site (`/`, `/projects`, etc.) stays fully open to brokers — they already pass `AuthRequiredRoute`. The only thing gated is the **CRM workspace**, which is broker-private.
 
-Scope to what's missing for the broker access story (full CRM parity is out of scope of "continue missing tasks"):
-- **Broker analytics tab** in grants dialog: leads viewed, leads edited, last activity, conversion %, derived from `crm_audit_logs` + `crm_leads.assigned_to`.
-- **Smart reminder**: cron `crm_broker_inactivity_check()` emails owner if a broker has zero sessions for 14d and grants are still active — surfaces in existing `BrokerInactivityMonitor`.
-- **Duplicate-lead detection during import**: re-use existing md5 fingerprint on `crm_leads` (Advanced Kanban memo) — wire warnings into `UploadDatabaseDialog`.
+### C. Excel-style editable database grid
 
-Skip (already shipped or not in user's "missing" set): AI summaries, kanban, automation rules, AI lead scoring — all already exist in `AILeadScoring.tsx`, `AutomationRules.tsx`, `CRMAINextActions.tsx`.
+`/broker/crm/database/:id` becomes a full spreadsheet:
 
----
+- TanStack Table + virtualised rows (handles 10k+ leads)
+- Inline cell edit (text, select for status, date picker, phone)
+- Column sort, multi-column filter, search box, frozen first column
+- Status dropdown is fully editable (writes through `crm_leads.status`)
+- Only fields exposed by `permission_level = 'edit'` are editable; otherwise read-only with a lock icon
+- Every cell save writes to `crm_lead_field_history` for audit
+- Bulk select → "Mark contacted / Add note / Export to CSV"
+- "Add Note" pinned button on every row → drops into `broker_notes` linked to that lead
 
-## Pass 11 — Champagne UI Sweep (Phase 8)
+### D. Privacy guarantees (RLS)
 
-Script-driven audit, not a manual rewrite:
-- Add `scripts/contrast/check-no-blue-states.mjs` — scans `src/**/*.{tsx,css}` for `blue-`, `ring-blue`, `focus:ring-blue`, `border-blue`, `bg-blue`, `data-[state=active]:bg-blue`, `accent-blue`, raw hex `#3b82f6|#2563eb|#1d4ed8|#60a5fa` etc.
-- Replace hits with semantic tokens from the Champagne-Gold standard: `ring-[#B89555]/40`, `border-[#B89555]/30`, `bg-[#EFE6D6]`, `data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-[#B89555]/40`.
-- Fix shadcn primitives once: `calendar.tsx`, `date-picker`, `popover`, `select`, `command`, `tabs`, `toggle`, `radio-group`, `checkbox`, `switch`, `input` focus rings.
-- Add CI guard so blue cannot regress.
+- `broker_notes`, `broker_tasks`, `broker_calendar_events`: row-level policies — `broker_user_id = auth.uid()` for the broker; owner sees all via `is_owner()`.
+- Brokers **never** read `crm_leads` they don't have a grant for; the existing `vw_crm_database_access` + RLS on `crm_leads` already enforces this — confirmed.
+- Owner's own CRM tables (`crm_audit_logs`, `crm_security_events`, all owner-only views) stay invisible to brokers.
 
-Datepicker UX: ensure `<Calendar />` selected day uses gold hairline + champagne fill, supports type-to-input via existing `Input` masked field in `GrantBrokerAccessDialog` expiration row.
+### E. Sidebar/nav
 
----
-
-## Pass 12 — Database Import Engine Hardening (Phase 9)
-
-`crm-broker-bulk-import` + `UploadDatabaseDialog` fixes:
-- Preserve every original column: write unmapped fields to `crm_leads.extra_fields jsonb` instead of dropping.
-- Block any rename without explicit user confirmation in the column-map step (already partial, enforce).
-- Stamp `upload_source`, `upload_filename`, `uploaded_by`, `uploaded_at` on every imported row + parent `crm_source_databases` row.
-- Show import progress + per-row error list (currently silently truncated on large files).
-- Dedup against md5 fingerprint, surface "X duplicates skipped" in result toast.
-
----
-
-## Pass 13 — QA Matrix (Phase 10)
-
-Deliver a backend-driven QA report (mailbox/Outlook screenshots remain user-side as established last turn):
-- Script `scripts/qa/broker-lifecycle.mjs` runs against preview backend with service role:
-  1. invite → assert row in `crm_broker_invitations` + `email_send_log` sent.
-  2. simulate activate via direct RPC → assert auth user + session.
-  3. session-track twice with different IPs within 10 min → assert `suspicious` flag.
-  4. revoke session → assert `revoked_at`.
-  5. block device → assert next session-track rejected.
-  6. suspend broker account → assert all grants suspended + sessions revoked.
-  7. commission agreement create → sign → assert status `signed` + audit row.
-  8. import sample CSV → assert all columns preserved in `extra_fields`.
-- Output a markdown report to `/mnt/documents/broker-qa-report.md` with pass/fail per step.
+Add a left rail inside `/broker/*` with: Dashboard · Databases · Leads · Calendar · Inbox · Tasks · Notes · Projects · Training · Settings. Matches the champagne L-shape used in `/owner`.
 
 ---
 
-## Technical Details
+## Technical notes (for reference)
 
-### Files to add
-- `supabase/migrations/<ts>_broker_commission_agreements.sql`
-- `supabase/migrations/<ts>_broker_account_state.sql`
-- `supabase/functions/crm-broker-commission-create/index.ts`
-- `supabase/functions/crm-broker-commission-sign/index.ts`
-- `supabase/functions/crm-broker-account-state/index.ts`
-- `src/components/crm/CommissionSplitDialog.tsx`
-- `src/pages/broker/BrokerAgreementSign.tsx` + route in `StandaloneRoutes.tsx`
-- `scripts/contrast/check-no-blue-states.mjs`
-- `scripts/qa/broker-lifecycle.mjs`
+- New tables via migration: `broker_calendar_events`, `broker_tasks`, `broker_notes` (each: `id`, `broker_user_id`, `created_at`, `updated_at`, plus domain fields; RLS by `auth.uid() = broker_user_id OR is_owner()`).
+- New edge function: `crm-broker-grant-replace` — atomic "grant DB X and revoke all others for this broker".
+- New hooks: `useBrokerNotes`, `useBrokerTasks`, `useBrokerCalendar`, `useBrokerInbox`.
+- New component: `BrokerSpreadsheet.tsx` (TanStack Table) reused on `/broker/crm/database/:id`.
+- New layout: `BrokerWorkspaceShell.tsx` with the L-shape rail (88px header, sidebar).
+- Routes: keep `/broker/crm` and `/broker/crm/database/:id`; add `/broker/crm/calendar`, `/inbox`, `/tasks`, `/notes`, `/projects`.
+- All wrapped in existing `BrokerGuard` — no change to auth model.
 
-### Files to edit
-- `src/components/crm/BrokerGrantsManagerDialog.tsx` (Agreements tab + Suspend/Delete + analytics strip)
-- `src/components/crm/IndividualBrokersTab.tsx` (status pill)
-- `src/components/crm/UploadDatabaseDialog.tsx` + `crm-broker-bulk-import` (preserve extras + dedup feedback)
-- `src/components/ui/calendar.tsx`, `tabs.tsx`, `select.tsx`, `command.tsx`, `popover.tsx`, `input.tsx`, `radio-group.tsx`, `switch.tsx`, `checkbox.tsx` (focus/active → champagne+gold)
+---
 
-### Constraints honored
-- No new tables that duplicate existing CRM (commission tables are net-new and not present).
-- Owner controls remain unrestricted via existing `requireOwnerAuth` middleware.
-- All new edge functions log to `crm_audit_logs`.
-- All new UI uses Champagne-Gold tokens; no blue, no gold fills.
-- "No Removal" — existing features (per-grant suspend, automation rules, AI scoring) untouched.
+## What I will NOT touch
 
-### Sequencing
-Run passes in order 8 → 9 → 10 → 11 → 12 → 13. Each pass ends with a typecheck + targeted backend smoke test; Pass 13 produces the final QA report.
+- Public front-end (brokers already have full access via `AuthRequiredRoute`)
+- Owner CRM at `/owner/crm` — unchanged
+- Existing grant data — I'll only add the bulk-revoke action; I won't auto-revoke Jane's `MAMSHA MERGED` grant without your one-click confirmation
+
+---
+
+## Quick win first?
+
+Before I build the full suite, do you want me to **revoke Jane's `MAMSHA MERGED` grant right now** so she only sees `al reef 1` on her next refresh? That's a 1-line data fix and lets you verify the scoping immediately while I build the rest.
