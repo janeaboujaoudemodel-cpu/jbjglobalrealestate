@@ -40,6 +40,7 @@ const DownloadProxy = lazy(() => import("@/pages/DownloadProxy"));
 const BrokerActivate = lazy(() => import("@/pages/BrokerActivate"));
 const BrokerCRM = lazy(() => import("@/pages/broker/BrokerCRM"));
 const BrokerDatabaseView = lazy(() => import("@/pages/broker/BrokerDatabaseView"));
+const BrokerAgreementSign = lazy(() => import("@/pages/broker/BrokerAgreementSign"));
 const BrokerGuard = lazy(() => import("@/components/BrokerGuard"));
 
 export const StandaloneRoutes = () => (
@@ -57,6 +58,13 @@ export const StandaloneRoutes = () => (
       <RouteErrorBoundary routeName="BrokerDatabaseView">
         <Suspense fallback={<PageLoader />}>
           <BrokerGuard><BrokerDatabaseView /></BrokerGuard>
+        </Suspense>
+      </RouteErrorBoundary>
+    } />
+    <Route path="/broker/agreement/:id" element={
+      <RouteErrorBoundary routeName="BrokerAgreementSign">
+        <Suspense fallback={<PageLoader />}>
+          <BrokerGuard><BrokerAgreementSign /></BrokerGuard>
         </Suspense>
       </RouteErrorBoundary>
     } />
