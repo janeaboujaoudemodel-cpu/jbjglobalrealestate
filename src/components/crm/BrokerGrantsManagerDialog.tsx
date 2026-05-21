@@ -17,8 +17,10 @@ import { toast } from "sonner";
 import {
   Loader2, ShieldCheck, ShieldOff, Ban, RotateCcw, Clock,
   Mail, MonitorSmartphone, AlertTriangle, ChevronDown, ChevronRight,
+  FileSignature,
 } from "lucide-react";
 import { formatDisplayDate as fmt } from "@/utils/formatDate";
+import CommissionSplitDialog from "./CommissionSplitDialog";
 
 interface Props {
   open: boolean;
