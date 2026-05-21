@@ -717,6 +717,38 @@ const Compare = () => {
                   </button>
                   <button
                     onClick={() => {
+                      import("@/utils/exportXlsx").then(({ exportPremiumXlsx }) => {
+                        const rows = (aiAnalysis.projectDetailsTable || []).map((row: any) => ({
+                          project: row.projectName,
+                          developer: row.developer,
+                          location: row.location,
+                          price_range: row.priceRange,
+                          price_per_sqft: row.pricePerSqft,
+                          bedrooms: row.bedrooms,
+                          size_range: row.sizeRange,
+                          handover: row.handover,
+                          payment_plan: row.paymentPlan,
+                          views: (row.views || []).join(", "),
+                          amenities: (row.keyAmenities || []).join(", "),
+                          usps: (row.uniqueSellingPoints || []).join(", "),
+                          investment_type: row.investmentType,
+                          target_buyer: row.targetBuyer,
+                        }));
+                        exportPremiumXlsx(rows, {
+                          filename: "JBJ-Property-Comparison",
+                          sheetName: "Comparison",
+                          title: "JBJ GLOBAL REAL ESTATE",
+                          subtitle: "AI Property Comparison",
+                        });
+                      });
+                    }}
+                    className="relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-[#F7F2EA] border-2 border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                  >
+                    <Download className="w-5 h-5" />
+                    Download Excel
+                  </button>
+                  <button
+                    onClick={() => {
                       const projectSummary = projects.map(p => `- ${p.name} | ${p.developer?.name || 'N/A'} | ${p.location || 'Dubai'} | ${p.price_from ? `AED ${(p.price_from/1000000).toFixed(1)}M` : 'Price on request'}`).join('\n');
                       const shareText = `JBJ GLOBAL REAL ESTATE\nAI Property Comparison Report\n\n${projectSummary}\n\nPrepared by JBJ Global Real Estate\n+971 54 716 7107 | www.JBJ.ae\n\nView: ${window.location.href}`;
                       const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
