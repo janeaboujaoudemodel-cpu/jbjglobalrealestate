@@ -238,7 +238,18 @@ const Index = () => {
           variants={staggerContainer}
         >
           <div className="w-full max-w-5xl mx-auto text-center pt-[max(12vh,88px)] sm:pt-[18vh] md:pt-[22vh] space-y-5 sm:space-y-7 md:space-y-8">
-            {/* Single merged premium tagline — replaces label + title combo. "Platform" → "Ecosystem". */}
+            {/* Eyebrow — small uppercase tagline above headline (matches founder reference photo) */}
+            <motion.p
+              variants={fadeInUp}
+              className="text-[10px] sm:text-[11px] md:text-xs font-semibold uppercase tracking-[0.32em] text-white/85"
+              style={{
+                textShadow: "0 1px 4px rgba(0,0,0,0.95), 0 2px 12px rgba(0,0,0,0.6)",
+              }}
+            >
+              Dubai's Trusted Real Estate Ecosystem
+            </motion.p>
+
+            {/* Headline — exact copy from reference photo */}
             <motion.h1
               variants={fadeInUp}
               className="font-bold tracking-tight leading-[1.08] text-balance w-full mx-auto"
@@ -252,8 +263,9 @@ const Index = () => {
                 textShadow: "0 2px 18px rgba(0,0,0,0.9), 0 0 2px rgba(0,0,0,0.95), 0 4px 30px rgba(0,0,0,0.55)",
               }}
             >
-              Your Trusted Gateway to Dubai's Real Estate Ecosystem
+              Your Gateway to Dubai's Finest Real Estate
             </motion.h1>
+
 
             {/* I'm a... mode selector pills — inline per founder reference */}
             <motion.div
