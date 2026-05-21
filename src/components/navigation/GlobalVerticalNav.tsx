@@ -1303,10 +1303,11 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             data-no-contrast-guard
             onClick={toggleCollapse}
             aria-label="Collapse navigation"
-            className="mt-2 flex items-center justify-center gap-1.5 w-full px-2 py-[6px] rounded-lg text-[10px] font-semibold tracking-[0.16em] uppercase bg-transparent border-0 text-[#B89555] hover:text-[#A68444] transition-colors"
+            className="mt-2 flex items-center justify-center gap-1.5 w-full px-2 py-[6px] rounded-lg text-[10px] font-semibold tracking-[0.16em] uppercase bg-transparent border-0 transition-colors"
+            style={{ color: '#B89555' }}
           >
-            <PanelLeftClose className="w-3.5 h-3.5" strokeWidth={1.75} />
-            <span>Collapse</span>
+            <PanelLeftClose className="w-3.5 h-3.5" strokeWidth={1.75} style={{ color: '#B89555' }} />
+            <span style={{ color: '#B89555' }}>Collapse</span>
           </button>
         </div>
       </div>
