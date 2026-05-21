@@ -854,7 +854,7 @@ export default function EnvelopeDetail() {
                 </Badge>
               </div>
               <p className="text-[#1A1A1A]/70 mt-1 text-sm">
-                {envelope.template_key === "jbj-property-advertising-agreement"
+                {PAA_TEMPLATE_KEYS.has(envelope.template_key || "")
                   ? "Property Advertising Agreement — Leasing"
                   : envelope.name}
                 {envelope.description ? ` · ${envelope.description}` : ""}
@@ -930,7 +930,7 @@ export default function EnvelopeDetail() {
               <MessageCircle className="w-4 h-4 mr-2" /> Share via WhatsApp
             </Button>
             <div className="ml-auto flex items-center gap-2 flex-wrap">
-              {envelope.template_key === "jbj-property-advertising-agreement" && (
+              {PAA_TEMPLATE_KEYS.has(envelope.template_key || "") && (
                 <PAAAICopilotDrawer
                   envelopeId={envelope.id}
                   currentValues={editing ? editValues : ((envelope.template_field_values as any) || {})}
@@ -1154,7 +1154,7 @@ export default function EnvelopeDetail() {
           )}
 
           {/* Listing draft (auto-generated from PAA) — minimized */}
-          {envelope.template_key === "jbj-property-advertising-agreement" && (
+          {PAA_TEMPLATE_KEYS.has(envelope.template_key || "") && (
             <Card className="bg-[#F7F2EA] border-[#B89555]/30">
               <button onClick={() => setOpenListing(v => !v)} className="w-full flex items-center justify-between px-4 py-2.5 text-left">
                 <span className="text-sm font-semibold text-[#1A1A1A]">Listing Draft</span>
