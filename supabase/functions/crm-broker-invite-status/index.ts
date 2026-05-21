@@ -1,10 +1,11 @@
 // Public, read-only preflight for the broker activation page.
 // Given a raw invitation token, returns the invitation status WITHOUT mutating
 // state, so the activation page can render branded error states instead of 404.
-// PII is masked.
+// PII is masked. Rate-limited (Pass 5): 30 req / 5 min per IP.
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
 import { sha256Hex } from "../_shared/brokerInviteCrypto.ts";
+import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -13,6 +14,15 @@ interface Body { token?: string }
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+
+  // Pass 5: ad-hoc rate limit — 30 requests / 5 min per IP.
+  const { response: rlResponse } = await enforceRateLimit(
+    req,
+    { functionName: "crm-broker-invite-status", maxRequests: 30, windowMinutes: 5, keyType: "ip" },
+    corsHeaders,
+  );
+  if (rlResponse) return rlResponse;
+
   try {
     const body = (await req.json().catch(() => ({}))) as Body;
     const token = (body.token || "").trim();

@@ -73,6 +73,15 @@ type SessionRow = {
   is_suspicious: boolean;
 };
 
+type ActivityRow = {
+  id: string;
+  action: string;
+  entity_type: string | null;
+  created_at: string;
+  ip_address: string | null;
+  details: Record<string, any> | null;
+};
+
 import { BrokerStatusBadge, deriveBrokerLifecycle } from "./BrokerStatusBadge";
 
 const stateBadge = (g: Grant) => {
@@ -124,6 +133,8 @@ export default function BrokerGrantsManagerDialog({
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const [sessions, setSessions] = useState<Record<string, SessionRow[]>>({});
   const [sessionsLoading, setSessionsLoading] = useState<Record<string, boolean>>({});
+  const [activity, setActivity] = useState<Record<string, ActivityRow[]>>({});
+  const [activityLoading, setActivityLoading] = useState<Record<string, boolean>>({});
 
   const load = async () => {
     setLoading(true);
@@ -206,15 +217,42 @@ export default function BrokerGrantsManagerDialog({
       .order("last_seen_at", { ascending: false })
       .limit(50);
     if (error) toast.error(error.message);
-    setSessions(s => ({ ...s, [b.id]: (data ?? []) as SessionRow[] }));
+    const sorted = ((data ?? []) as SessionRow[]).slice().sort((a, b) => {
+      // Suspicious-and-active first, then by last_seen desc
+      const aActive = !a.revoked_at, bActive = !b.revoked_at;
+      const aSus = !!a.is_suspicious && aActive, bSus = !!b.is_suspicious && bActive;
+      if (aSus !== bSus) return aSus ? -1 : 1;
+      const at = a.last_seen_at ? new Date(a.last_seen_at).getTime() : 0;
+      const bt = b.last_seen_at ? new Date(b.last_seen_at).getTime() : 0;
+      return bt - at;
+    });
+    setSessions(s => ({ ...s, [b.id]: sorted }));
     setSessionsLoading(s => ({ ...s, [b.id]: false }));
   };
 
   const toggleSessions = async (b: BrokerInfo) => {
     const isOpen = !!expanded[b.id];
     setExpanded(e => ({ ...e, [b.id]: !isOpen }));
-    if (!isOpen) await loadSessions(b);
+    if (!isOpen) {
+      await loadSessions(b);
+      await loadActivity(b);
+    }
   };
+
+  const loadActivity = async (b: BrokerInfo) => {
+    setActivityLoading(s => ({ ...s, [b.id]: true }));
+    // Pull anything where this broker's id appears in entity_id OR details.broker_id
+    const { data, error } = await supabase
+      .from("crm_audit_logs")
+      .select("id, action, entity_type, created_at, ip_address, details")
+      .or(`entity_id.eq.${b.id},details->>broker_id.eq.${b.id}`)
+      .order("created_at", { ascending: false })
+      .limit(25);
+    if (error) toast.error(error.message);
+    setActivity(s => ({ ...s, [b.id]: (data ?? []) as ActivityRow[] }));
+    setActivityLoading(s => ({ ...s, [b.id]: false }));
+  };
+
 
   const revokeSession = async (b: BrokerInfo, sessionId: string) => {
     const reason = prompt("Revoke reason (optional):") ?? "";
@@ -421,6 +459,14 @@ export default function BrokerGrantsManagerDialog({
                           <div className="text-[11px] font-semibold text-[#1A1A1A] flex items-center gap-1.5">
                             <MonitorSmartphone className="h-3.5 w-3.5 text-[#B89555]" />
                             Active sessions
+                            {(() => {
+                              const susCount = (sessions[broker.id] ?? []).filter(s => s.is_suspicious && !s.revoked_at).length;
+                              return susCount > 0 ? (
+                                <span className="ml-1 px-1.5 py-0.5 rounded-full text-[9px] font-semibold border bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555] inline-flex items-center gap-1">
+                                  <AlertTriangle className="h-2.5 w-2.5" /> {susCount} suspicious
+                                </span>
+                              ) : null;
+                            })()}
                           </div>
                           <Button size="sm" variant="outline"
                             className="border-[#1A1A1A] text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white h-6 px-2 text-[10px]"
@@ -428,6 +474,8 @@ export default function BrokerGrantsManagerDialog({
                             Revoke all
                           </Button>
                         </div>
+
+
 
                         {sessionsLoading[broker.id] ? (
                           <div className="text-[11px] text-[#1A1A1A]/60 flex items-center gap-1.5">
@@ -489,6 +537,36 @@ export default function BrokerGrantsManagerDialog({
                               );
                             })}
                           </div>
+                        )}
+                      </div>
+
+                      {/* Pass 7 — Recent lifecycle activity (grants + invites + sessions) */}
+                      <div className="rounded-md border border-[#B89555]/25 bg-[#F7F2EA]/50 p-3 mt-2">
+                        <div className="text-[11px] font-semibold text-[#1A1A1A] flex items-center gap-1.5 mb-2">
+                          <Clock className="h-3.5 w-3.5 text-[#B89555]" />
+                          Recent activity
+                        </div>
+                        {activityLoading[broker.id] ? (
+                          <div className="text-[11px] text-[#1A1A1A]/60 flex items-center gap-1.5">
+                            <Loader2 className="h-3 w-3 animate-spin" /> Loading activity…
+                          </div>
+                        ) : !activity[broker.id]?.length ? (
+                          <div className="text-[11px] text-[#1A1A1A]/55">No recorded activity.</div>
+                        ) : (
+                          <ul className="space-y-1.5">
+                            {activity[broker.id].map((a) => (
+                              <li key={a.id} className="text-[10.5px] text-[#1A1A1A]/80 flex items-start gap-2">
+                                <span className="font-mono text-[#1A1A1A]/55 shrink-0">{relTime(a.created_at)}</span>
+                                <span className="font-medium text-[#1A1A1A]">{a.action.split("_").join(" ")}</span>
+                                {a.ip_address && <span className="text-[#1A1A1A]/55">· {a.ip_address}</span>}
+                                {a.details?.suspicious_reason && (
+                                  <span className="px-1 py-0.5 rounded text-[9px] font-semibold border bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]">
+                                    {String(a.details.suspicious_reason).split("_").join(" ")}
+                                  </span>
+                                )}
+                              </li>
+                            ))}
+                          </ul>
                         )}
                       </div>
                     </div>
