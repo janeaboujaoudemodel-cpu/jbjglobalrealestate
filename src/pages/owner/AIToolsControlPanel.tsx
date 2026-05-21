@@ -13,8 +13,9 @@ import { Switch } from "@/components/ui/switch";
 import {
   ChevronDown, Copy, ExternalLink, Search, CheckCircle2, XCircle,
   RotateCcw, Play, Save, Clock, Shield, AlertTriangle, History,
-  Eye, EyeOff, Undo2, Rocket, FileText,
+  Eye, EyeOff, Undo2, Rocket, FileText, Globe, Lock,
 } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Link } from "react-router-dom";
 
 // ─── Tool Registry (mirrors AIHub.tsx) ───────────────────────────────────────
