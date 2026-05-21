@@ -54,12 +54,21 @@ export default function BrokerSpreadsheet() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("crm_leads")
-        .select("id, full_name, email_lower, phone_e164, status, source, source_database_id, updated_at")
+        .select("id, full_name, email_lower, phone_e164, pipeline_stage, source, source_database_id, updated_at")
         .eq("source_database_id", id!)
         .order("updated_at", { ascending: false })
         .limit(2000);
       if (error) throw error;
-      return (data ?? []) as Row[];
+      return ((data ?? []) as any[]).map((r) => ({
+        id: r.id,
+        full_name: r.full_name,
+        email_lower: r.email_lower,
+        phone_e164: r.phone_e164,
+        status: r.pipeline_stage,
+        source: r.source,
+        source_database_id: r.source_database_id,
+        updated_at: r.updated_at,
+      })) as Row[];
     },
   });
 
@@ -74,9 +83,10 @@ export default function BrokerSpreadsheet() {
 
   const update = useMutation({
     mutationFn: async (patch: { id: string; field: keyof Row; value: string | null }) => {
+      const dbField = patch.field === "status" ? "pipeline_stage" : patch.field;
       const { error } = await supabase
         .from("crm_leads")
-        .update({ [patch.field]: patch.value })
+        .update({ [dbField]: patch.value } as any)
         .eq("id", patch.id);
       if (error) throw error;
     },
