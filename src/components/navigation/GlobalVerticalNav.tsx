@@ -762,7 +762,13 @@ export default function GlobalVerticalNav() {
     const sections: Record<string, NavItem[]> = {};
     let currentSection: SectionKey | null = null;
 
-    for (const item of NAV_ITEMS) {
+    const curatedNavItems = NAV_ITEMS.filter((item) => {
+      const mapped = item.section ? SECTION_ALIAS[item.section] : currentSection;
+      if (mapped !== "TOOLS & WORKSPACE") return true;
+      return isApprovedPublicToolHref(item.href);
+    });
+
+    for (const item of curatedNavItems) {
       if (item.highlight) {
         highlights.push(item);
         continue;
@@ -778,6 +784,7 @@ export default function GlobalVerticalNav() {
         sections[currentSection].push(item);
       }
     }
+    sections["TOOLS & WORKSPACE"] = PUBLIC_TOOLS_WORKSPACE_ITEMS;
     return { highlightItems: highlights, sectionGroups: sections };
   }, []);
 
