@@ -142,6 +142,7 @@ Deno.serve(async (req) => {
         ip_address: ip,
         expires_at: expiresAt,
         is_suspicious: suspicious,
+        metadata: suspiciousReason ? { suspicious_reason: suspiciousReason } : {},
       })
       .select("id")
       .single();
