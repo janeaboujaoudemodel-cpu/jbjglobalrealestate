@@ -37,9 +37,9 @@ type RecipientStatus = 'pending' | 'sent' | 'delivered' | 'viewed' | 'signed' | 
 
 const statusConfig: Record<EnvelopeStatus, { label: string; color: string; icon: React.ReactNode }> = {
   draft: { label: "Draft", color: "bg-[#F7F2EA] text-[#1A1A1A]/80 border border-[#B89555]/40", icon: <FileSignature className="w-4 h-4" /> },
-  sent: { label: "Sent", color: "bg-blue-50 text-blue-700 border border-blue-200", icon: <Send className="w-4 h-4" /> },
-  viewed: { label: "Viewed", color: "bg-amber-50 text-amber-700 border border-amber-200", icon: <Eye className="w-4 h-4" /> },
-  partially_signed: { label: "Partially Signed", color: "bg-orange-50 text-orange-700 border border-orange-200", icon: <Clock className="w-4 h-4" /> },
+  sent: { label: "Pending Signature", color: "bg-blue-50 text-blue-700 border border-blue-200", icon: <Send className="w-4 h-4" /> },
+  viewed: { label: "Pending Signature · Viewed", color: "bg-amber-50 text-amber-700 border border-amber-200", icon: <Eye className="w-4 h-4" /> },
+  partially_signed: { label: "Pending Signature · Partial", color: "bg-orange-50 text-orange-700 border border-orange-200", icon: <Clock className="w-4 h-4" /> },
   completed: { label: "Completed", color: "bg-emerald-50 text-emerald-700 border border-emerald-200", icon: <CheckCircle2 className="w-4 h-4" /> },
   declined: { label: "Declined", color: "bg-red-50 text-red-700 border border-red-200", icon: <XCircle className="w-4 h-4" /> },
   expired: { label: "Expired", color: "bg-[#F7F2EA] text-[#1A1A1A]/70 border border-[#B89555]/30", icon: <Clock className="w-4 h-4" /> },
