@@ -391,20 +391,24 @@ const VoiceConciergeWidget = () => {
         <button
           onClick={handleLauncherClick}
           disabled={isConnecting}
-          className="relative flex items-center gap-2 bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-white pl-2 pr-3.5 py-1.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.03] border border-[#B89555]/50 disabled:opacity-70 disabled:cursor-not-allowed"
+          className="relative flex items-center gap-2 pl-2 pr-3.5 py-1.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.03] border border-[#B89555]/60 disabled:opacity-70 disabled:cursor-not-allowed text-[#1A1A1A] group"
+          style={{
+            background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)',
+            boxShadow: '0 6px 20px -8px rgba(184,149,85,0.55), 0 2px 6px rgba(0,0,0,0.15)',
+          }}
           aria-label="Free live call with our agent"
           aria-expanded={choiceOpen}
         >
-          <span className="flex items-center justify-center w-7 h-7 rounded-full bg-[#B89555]/15 border border-[#B89555]/40">
+          <span className="flex items-center justify-center w-7 h-7 rounded-full bg-[#FDFBF7] border border-[#B89555]/50">
             {isConnecting ? (
-              <span className="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+              <span className="w-3 h-3 border-2 border-[#1A1A1A]/30 border-t-[#1A1A1A] rounded-full animate-spin" />
             ) : (
-              <Phone className="w-3.5 h-3.5 text-[#B89555]" />
+              <Phone className="w-3.5 h-3.5 text-[#1A1A1A]" />
             )}
           </span>
           <span className="flex flex-col items-start leading-tight">
-            <span className="text-[10px] uppercase tracking-[0.14em] text-[#B89555]">Live · Free</span>
-            <span className="text-xs font-semibold">{isConnecting ? "Connecting…" : "Call our agent"}</span>
+            <span className="text-[10px] uppercase tracking-[0.14em] font-semibold text-[#8a6f2e]">Live · Free</span>
+            <span className="text-xs font-semibold text-[#1A1A1A]">{isConnecting ? "Connecting…" : "Call our agent"}</span>
           </span>
         </button>
 
