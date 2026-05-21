@@ -286,7 +286,8 @@ const VoiceConciergeWidget = () => {
     return (
       <button
         onClick={handleRestore}
-        className="fixed bottom-6 right-6 z-50 w-12 h-12 bg-[#EFE6D6] hover:bg-[#EFE6D6]-light text-[#1A1A1A]-foreground rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center"
+        className="fixed bottom-[148px] right-6 z-[10060] w-12 h-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center border border-[#B89555]/60 text-[#1A1A1A]"
+        style={{ background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)' }}
         aria-label="Show voice concierge"
       >
         <Phone className="w-5 h-5" />
@@ -301,7 +302,7 @@ const VoiceConciergeWidget = () => {
       : "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40";
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2">
+    <div className="fixed bottom-[148px] right-6 z-[10060] flex flex-col items-end gap-2">
       {/* Visible status pill */}
       {showStatusPill && (
         <div

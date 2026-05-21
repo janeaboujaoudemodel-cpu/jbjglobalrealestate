@@ -73,14 +73,13 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
   };
 
   const buttonBaseClass = cn(
-    "h-10 w-10 sm:h-12 sm:w-12 rounded-full",
-    "bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark",
-    "border-2 border-[#B89555]/70",
-    "shadow-lg transition-all duration-300",
-    "hover:border-[#B89555] hover:shadow-[0_6px_26px_hsl(var(--gold)_/_0.45)]",
-    "focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2",
+    "h-9 w-9 sm:h-10 sm:w-10",
+    "text-[#1A1A1A] hover:text-[#B89555]",
+    "transition-colors duration-200",
+    "focus:outline-none focus-visible:ring-1 focus-visible:ring-[#B89555]/60 rounded-sm",
     "flex items-center justify-center",
-    "pointer-events-auto select-none touch-manipulation cursor-pointer"
+    "pointer-events-auto select-none touch-manipulation cursor-pointer",
+    "drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]"
   );
 
   // Hide when chat is open, or when user hasn't scrolled far enough yet.
@@ -98,9 +97,8 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
       }}
       className={cn(
         "fixed z-[10049] flex flex-col gap-2 transform-gpu",
-        // Chat launcher sits at bottom-20 (80px) and is 56px tall → top edge at 136px.
-        // Arrow sits exactly above it with an 8px gap → bottom: 144px. Same horizontal anchor as chat button.
-        isChatMedium ? "bottom-[212px]" : "bottom-[144px]",
+        // Stacks above voice concierge pill (which sits at bottom-[148px] + ~52px).
+        isChatMedium ? "bottom-[280px]" : "bottom-[216px]",
         "pointer-events-auto",
         isRTL ? "left-4" : "right-6"
       )}
@@ -120,7 +118,7 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
         className={buttonBaseClass}
         aria-label="Scroll to top"
       >
-        <ArrowUp className="w-5 h-5 text-[#1A1A1A]" />
+        <ArrowUp className="w-5 h-5" strokeWidth={1.75} />
       </button>
     </div>
   );
