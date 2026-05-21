@@ -188,16 +188,40 @@ Deno.serve(async (req) => {
       tags: [{ name: "kind", value: "broker_invite" }],
     });
 
+    const resendMessageId =
+      (sent as any)?.data?.id ?? (sent as any)?.data?.data?.id ?? null;
+
     await admin.from("crm_audit_logs").insert({
       actor_user_id: auth.userId,
       action: body.action === "resend" ? "broker_invitation_resent" : "broker_invitation_sent",
       entity_type: "crm_broker",
       entity_id: brokerId,
-      details: { email, ip, user_agent: ua, email_ok: sent.ok, email_status: sent.status },
+      details: {
+        email,
+        ip,
+        user_agent: ua,
+        email_ok: sent.ok,
+        email_status: sent.status,
+        resend_message_id: resendMessageId,
+        resend_response: sent.data ?? null,
+        resend_error: sent.error ?? null,
+      },
+    });
+
+    // Also persist to email_send_log for delivery tracking
+    await admin.from("email_send_log").insert({
+      to_email: email,
+      kind: "broker_invite",
+      subject: tpl.subject,
+      template: "broker_invite_v1",
+      resend_message_id: resendMessageId,
+      status: sent.ok ? "accepted" : "failed",
+      error: sent.ok ? null : (sent.error ?? `status ${sent.status}`),
+      sent_on: new Date().toISOString().slice(0, 10),
     });
 
     if (!sent.ok) return json({ ok: false, error: sent.error ?? "Email send failed", quota: sent.quota }, 502);
-    return json({ ok: true, broker_id: brokerId, expires_at: tokenExp });
+    return json({ ok: true, broker_id: brokerId, expires_at: tokenExp, resend_message_id: resendMessageId });
   } catch (e) {
     return json({ error: (e as Error).message }, 500);
   }
