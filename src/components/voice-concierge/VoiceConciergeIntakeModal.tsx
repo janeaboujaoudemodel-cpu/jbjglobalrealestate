@@ -10,34 +10,25 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Phone, Loader2 } from "lucide-react";
+import { COUNTRIES, flagEmoji } from "@/lib/countries";
 
-const COUNTRIES = [
-  { name: "United Arab Emirates", code: "+971" },
-  { name: "Saudi Arabia", code: "+966" },
-  { name: "Qatar", code: "+974" },
-  { name: "Kuwait", code: "+965" },
-  { name: "Oman", code: "+968" },
-  { name: "Bahrain", code: "+973" },
-  { name: "United Kingdom", code: "+44" },
-  { name: "United States", code: "+1" },
-  { name: "India", code: "+91" },
-  { name: "Pakistan", code: "+92" },
-  { name: "Egypt", code: "+20" },
-  { name: "Jordan", code: "+962" },
-  { name: "Lebanon", code: "+961" },
-  { name: "Türkiye", code: "+90" },
-  { name: "France", code: "+33" },
-  { name: "Germany", code: "+49" },
-  { name: "Italy", code: "+39" },
-  { name: "Spain", code: "+34" },
-  { name: "Russia", code: "+7" },
-  { name: "China", code: "+86" },
-  { name: "Singapore", code: "+65" },
-  { name: "Hong Kong", code: "+852" },
-  { name: "Australia", code: "+61" },
-  { name: "Canada", code: "+1" },
-  { name: "South Africa", code: "+27" },
-  { name: "Nigeria", code: "+234" },
+const LANGUAGES = [
+  { name: "English", iso: "GB" },
+  { name: "Arabic", iso: "AE" },
+  { name: "French", iso: "FR" },
+  { name: "Spanish", iso: "ES" },
+  { name: "German", iso: "DE" },
+  { name: "Italian", iso: "IT" },
+  { name: "Russian", iso: "RU" },
+  { name: "Chinese", iso: "CN" },
+  { name: "Hindi", iso: "IN" },
+  { name: "Urdu", iso: "PK" },
+  { name: "Turkish", iso: "TR" },
+  { name: "Portuguese", iso: "PT" },
+  { name: "Japanese", iso: "JP" },
+  { name: "Korean", iso: "KR" },
+  { name: "Persian", iso: "IR" },
+  { name: "Other", iso: "" },
 ];
 
 type Interest = "investing" | "partnering" | "careers" | "other";
@@ -54,15 +45,20 @@ export default function VoiceConciergeIntakeModal({ open, onOpenChange, onSucces
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [nationality, setNationality] = useState("");
+  const [language, setLanguage] = useState("");
   const [countryCode, setCountryCode] = useState("+971");
   const [phone, setPhone] = useState("");
   const [interest, setInterest] = useState<Interest>("investing");
   const [invType, setInvType] = useState<InvType>("off_plan");
   const [details, setDetails] = useState("");
-  const [consent, setConsent] = useState(true);
+  const [consent, setConsent] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!consent) {
+      toast.error("Please agree to be contacted to continue.");
+      return;
+    }
     setSubmitting(true);
     try {
       const { data, error } = await supabase.functions.invoke("voice-concierge-register-lead", {
@@ -70,6 +66,7 @@ export default function VoiceConciergeIntakeModal({ open, onOpenChange, onSucces
           full_name: fullName,
           email,
           nationality,
+          language,
           phone_country_code: countryCode,
           phone_number: phone,
           interest,
@@ -123,7 +120,24 @@ export default function VoiceConciergeIntakeModal({ open, onOpenChange, onSucces
               <Select value={nationality} onValueChange={setNationality}>
                 <SelectTrigger className="bg-white"><SelectValue placeholder="Select country" /></SelectTrigger>
                 <SelectContent className="max-h-60">
-                  {COUNTRIES.map((c) => <SelectItem key={c.name} value={c.name}>{c.name}</SelectItem>)}
+                  {COUNTRIES.map((c) => (
+                    <SelectItem key={c.name} value={c.name}>
+                      <span className="mr-2">{flagEmoji(c.iso)}</span>{c.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="vc-lang">Language you speak</Label>
+              <Select value={language} onValueChange={setLanguage}>
+                <SelectTrigger className="bg-white"><SelectValue placeholder="Select language" /></SelectTrigger>
+                <SelectContent className="max-h-60">
+                  {LANGUAGES.map((l) => (
+                    <SelectItem key={l.name} value={l.name}>
+                      {l.iso && <span className="mr-2">{flagEmoji(l.iso)}</span>}{l.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -131,9 +145,13 @@ export default function VoiceConciergeIntakeModal({ open, onOpenChange, onSucces
               <Label>Phone</Label>
               <div className="flex gap-2">
                 <Select value={countryCode} onValueChange={setCountryCode}>
-                  <SelectTrigger className="w-32 bg-white"><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="w-40 bg-white"><SelectValue /></SelectTrigger>
                   <SelectContent className="max-h-60">
-                    {COUNTRIES.map((c) => <SelectItem key={c.name + c.code} value={c.code}>{c.code} {c.name}</SelectItem>)}
+                    {COUNTRIES.map((c) => (
+                      <SelectItem key={c.name + c.code} value={c.code}>
+                        <span className="mr-2">{flagEmoji(c.iso)}</span>{c.code} {c.name}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <Input required inputMode="tel" pattern="[0-9 ]{5,}" placeholder="50 123 4567" value={phone} onChange={(e) => setPhone(e.target.value)} className="bg-white flex-1" />
@@ -174,7 +192,7 @@ export default function VoiceConciergeIntakeModal({ open, onOpenChange, onSucces
             )}
 
             <label className="flex items-start gap-2 text-xs text-[#1A1A1A]/70">
-              <Checkbox checked={consent} onCheckedChange={(v) => setConsent(!!v)} className="mt-0.5" />
+              <Checkbox checked={consent} onCheckedChange={(v) => setConsent(!!v)} className="mt-0.5 bg-white border-[#B89555]/50 data-[state=checked]:bg-[#1A1A1A] data-[state=checked]:text-white" />
               <span>I agree to be contacted by JBJ GLOBAL REAL ESTATE about my enquiry.</span>
             </label>
           </div>
