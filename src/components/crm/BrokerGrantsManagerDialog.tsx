@@ -73,6 +73,15 @@ type SessionRow = {
   is_suspicious: boolean;
 };
 
+type ActivityRow = {
+  id: string;
+  action: string;
+  entity_type: string | null;
+  created_at: string;
+  ip_address: string | null;
+  details: Record<string, any> | null;
+};
+
 import { BrokerStatusBadge, deriveBrokerLifecycle } from "./BrokerStatusBadge";
 
 const stateBadge = (g: Grant) => {
