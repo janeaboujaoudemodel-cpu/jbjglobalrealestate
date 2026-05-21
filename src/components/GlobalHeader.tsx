@@ -261,8 +261,12 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     return () => window.removeEventListener("scroll", onScroll);
   }, [forceSolid]);
 
-  // When transparent (hero visible), use minimal styling - no fills on nav/icons
-  const isFullyTransparent = isTransparentRoute && !isSolid;
+  // When transparent (hero visible), use minimal styling - no fills on nav/icons.
+  // EXCEPTION: on mobile/tablet we always render the header solid (champagne
+  // background + dark text) so the brand wordmark and icons stay high-contrast
+  // — white-on-dark transparent treatment is desktop-only.
+  const showSolidBackground = isSolid || shouldUseMobileHeader;
+  const isFullyTransparent = isTransparentRoute && !showSolidBackground;
 
   const mobileHeaderIconButtonClassName =
     "inline-flex h-7 w-7 items-center justify-center p-0 bg-transparent border-0 rounded-none appearance-none transition-colors duration-300 focus:outline-none focus-visible:outline-none focus-visible:ring-0";
@@ -633,7 +637,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     >
       {/* Solid header background — champagne (creamy), not raw white */}
       <div 
-        className={`absolute inset-0 transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`}
+        className={`absolute inset-0 transition-opacity duration-300 ${showSolidBackground ? "opacity-100" : "opacity-0"}`}
         style={{
           background: 'linear-gradient(90deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)',
         }}
@@ -641,7 +645,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       
       {/* Subtle ambient glow at top */}
       <div 
-        className={`absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-24 pointer-events-none transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`}
+        className={`absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-24 pointer-events-none transition-opacity duration-300 ${showSolidBackground ? "opacity-100" : "opacity-0"}`}
         style={{
           background: 'none',
         }}
@@ -649,8 +653,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       
       {/* Premium Bottom Border — gold hairline on champagne */}
       <div className="absolute bottom-0 left-0 right-0 h-[2px] z-10">
-        <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`} />
-        <div className={`absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-[#B89555]/40 to-transparent transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`} />
+        <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent transition-opacity duration-300 ${showSolidBackground ? "opacity-100" : "opacity-0"}`} />
+        <div className={`absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-[#B89555]/40 to-transparent transition-opacity duration-300 ${showSolidBackground ? "opacity-100" : "opacity-0"}`} />
       </div>
       
       {/* Gold divider when transparent - separates header from hero */}
@@ -658,11 +662,12 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       
       {/* Inner shadow for depth */}
       <div 
-        className={`absolute inset-0 pointer-events-none transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`}
+        className={`absolute inset-0 pointer-events-none transition-opacity duration-300 ${showSolidBackground ? "opacity-100" : "opacity-0"}`}
         style={{
           boxShadow: 'inset 0 -1px 0 rgba(0,0,0,0.05)'
         }}
       />
+      
       
       {/* HEADER CONTENT */}
       <div
