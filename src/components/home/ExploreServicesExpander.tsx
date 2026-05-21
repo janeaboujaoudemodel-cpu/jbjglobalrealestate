@@ -138,19 +138,19 @@ const ExploreServicesExpander = () => {
           className="absolute inset-0 bg-cover bg-center animate-fade-in"
           style={{ backgroundImage: `url(${active.image})` }}
         />
-        {/* Strong gradient for legibility */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/45 to-black/20" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+        {/* Stronger gradient floor for crisp legibility, image still readable on the right */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/70 to-black/35" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
 
         <div className="relative h-full flex flex-col justify-end p-5 md:p-8 max-w-xl">
-          <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] font-semibold text-white/85 mb-2">
+          <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] font-bold text-white mb-2 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
             <ActiveIcon className="w-3.5 h-3.5" />
             <span>JBJ Service</span>
           </div>
-          <h3 className="text-white text-2xl md:text-3xl font-bold leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.55)]">
+          <h3 className="text-white text-2xl md:text-3xl font-extrabold leading-tight drop-shadow-[0_2px_14px_rgba(0,0,0,0.95)]">
             {active.title}
           </h3>
-          <p className="mt-2 text-white/90 text-sm md:text-base leading-relaxed max-w-md drop-shadow-[0_1px_6px_rgba(0,0,0,0.5)]">
+          <p className="mt-2 text-white text-sm md:text-base leading-relaxed max-w-md font-medium drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
             {active.description}
           </p>
           <div className="mt-4">
