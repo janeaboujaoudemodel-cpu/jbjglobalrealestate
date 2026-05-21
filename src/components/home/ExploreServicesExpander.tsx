@@ -74,10 +74,16 @@ const ExploreServicesExpander = () => {
     });
   }, []);
 
-  // Keep active tab visible in the horizontal scroller.
+  // Keep active tab visible in the horizontal scroller — adjust ONLY the
+  // tabs container's scrollLeft, never call scrollIntoView (which scrolls
+  // the whole page vertically and creates a "page jumps back up" bug).
   useEffect(() => {
-    const el = tabsRef.current?.querySelector<HTMLElement>(`[data-tab-id="${activeId}"]`);
-    el?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
+    const container = tabsRef.current;
+    if (!container) return;
+    const el = container.querySelector<HTMLElement>(`[data-tab-id="${activeId}"]`);
+    if (!el) return;
+    const target = el.offsetLeft - container.clientWidth / 2 + el.clientWidth / 2;
+    container.scrollTo({ left: Math.max(0, target), behavior: "smooth" });
   }, [activeId]);
 
   const active = services.find((s) => s.id === activeId) ?? services[0];
