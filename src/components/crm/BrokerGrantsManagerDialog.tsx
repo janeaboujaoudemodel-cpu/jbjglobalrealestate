@@ -580,6 +580,16 @@ export default function BrokerGrantsManagerDialog({
           </div>
         )}
       </SheetContent>
+      {commissionFor && (
+        <CommissionSplitDialog
+          open={!!commissionFor}
+          onOpenChange={(v) => !v && setCommissionFor(null)}
+          brokerId={commissionFor.id}
+          brokerUserId={commissionFor.user_id}
+          brokerEmail={commissionFor.email_lower ?? ""}
+          brokerName={commissionFor.full_name ?? undefined}
+        />
+      )}
     </Sheet>
   );
 }
