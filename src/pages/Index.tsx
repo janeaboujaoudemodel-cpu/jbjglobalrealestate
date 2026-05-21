@@ -124,6 +124,20 @@ const Index = () => {
   const { isBroker, hasSelectedRole } = useUserRole();
   const { mode: activeMode, setMode } = useUserMode();
 
+  // Auto-rotating spotlight across the I'm a... pills — visual hint only,
+  // does NOT mutate the user's actual mode. Stops once the user interacts.
+  const [spotlightIdx, setSpotlightIdx] = useState(0);
+  const [spotlightActive, setSpotlightActive] = useState(true);
+  useEffect(() => {
+    if (!spotlightActive) return;
+    const id = window.setInterval(() => {
+      setSpotlightIdx((i) => (i + 1) % heroModes.length);
+    }, 1600);
+    return () => window.clearInterval(id);
+  }, [spotlightActive]);
+
+
+
 
   // Preload only near-the-fold chunks during idle time
   useEffect(() => {
