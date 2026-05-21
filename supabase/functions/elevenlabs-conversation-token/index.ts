@@ -119,22 +119,31 @@ serve(async (req) => {
         response.status,
         lastErrorBody
       );
-      // Only try the next key on 401/403 (auth errors). Other failures = stop.
+      // Try the next key on auth/permission failures; otherwise stop.
       if (response.status !== 401 && response.status !== 403) break;
     }
 
     if (!data) {
+      const isMissingPermission = /missing_permissions|convai_write/i.test(lastErrorBody);
       const friendly =
-        lastStatus === 401 || lastStatus === 403
+        isMissingPermission
+          ? "The ElevenLabs API key is missing the 'convai_write' permission. Please generate a Conversational AI key and update ELEVENLABS_API_KEY."
+          : lastStatus === 401 || lastStatus === 403
           ? "Voice concierge is temporarily unavailable (API key invalid or expired). Please update ELEVENLABS_API_KEY."
           : lastStatus === 404
           ? "Voice agent not found. Check ELEVENLABS_AGENT_ID."
           : `ElevenLabs API error: ${lastStatus}`;
       return new Response(
-        JSON.stringify({ error: friendly, upstream_status: lastStatus, fallback: true }),
+        JSON.stringify({
+          error: friendly,
+          upstream_status: lastStatus,
+          reason: isMissingPermission ? "missing_convai_write" : "elevenlabs_error",
+          fallback: true,
+        }),
         { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
+
 
     return new Response(
       JSON.stringify({ token: data.token }),

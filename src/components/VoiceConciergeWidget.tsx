@@ -1,13 +1,17 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useConversation } from "@elevenlabs/react";
-import { Phone, PhoneOff, X, Mic, Volume2, Sparkles } from "lucide-react";
+import { Phone, PhoneOff, X, Mic, Volume2, Sparkles, MessageCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import VoiceConciergeIntakeModal from "@/components/voice-concierge/VoiceConciergeIntakeModal";
+import { COMPANY_NAP } from "@/config/companyNAP";
 
 const LEAD_STORAGE_KEY = "voice_concierge_lead";
 const LEAD_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+
+const WHATSAPP_URL = `https://wa.me/${COMPANY_NAP.phoneE164.replace(/[^0-9]/g, "")}?text=${encodeURIComponent("Hi JBJ — I'd like to speak with the concierge.")}`;
+
 
 function getStoredLeadId(): string | null {
   try {
@@ -52,11 +56,13 @@ const VoiceConciergeWidget = () => {
   const [widgetStatus, setWidgetStatus] = useState<WidgetStatus>("idle");
   const [statusMessage, setStatusMessage] = useState<string>("");
   const [intakeOpen, setIntakeOpen] = useState(false);
+  const [choiceOpen, setChoiceOpen] = useState(false);
   const [showJoined, setShowJoined] = useState(false);
   const leadIdRef = useRef<string | null>(getStoredLeadId());
   const hasShownUnavailableToastRef = useRef(false);
   const callStartTimeRef = useRef<Date | null>(null);
   const navigate = useNavigate();
+
 
 
   // (Auth no longer required to use the voice concierge; intake form is the gate.)
@@ -226,7 +232,12 @@ const VoiceConciergeWidget = () => {
     }
   }, [conversation, navigate, logCallStart]);
 
-  const handleStartClick = useCallback(() => {
+  const handleLauncherClick = useCallback(() => {
+    setChoiceOpen((v) => !v);
+  }, []);
+
+  const handleStartVoice = useCallback(() => {
+    setChoiceOpen(false);
     const existing = leadIdRef.current ?? getStoredLeadId();
     if (existing) {
       leadIdRef.current = existing;
@@ -236,18 +247,24 @@ const VoiceConciergeWidget = () => {
     }
   }, [startConversation]);
 
+  const handleOpenWhatsApp = useCallback(() => {
+    setChoiceOpen(false);
+    window.open(WHATSAPP_URL, "_blank", "noopener,noreferrer");
+  }, []);
+
   const handleIntakeSuccess = useCallback((leadId: string) => {
     leadIdRef.current = leadId;
     setIntakeOpen(false);
     startConversation(leadId);
   }, [startConversation]);
 
+
   const retryConnection = useCallback(() => {
     setWidgetStatus("idle");
     setStatusMessage("");
     hasShownUnavailableToastRef.current = false;
-    handleStartClick();
-  }, [handleStartClick]);
+    handleStartVoice();
+  }, [handleStartVoice]);
 
 
   const stopConversation = useCallback(async () => {
@@ -311,15 +328,49 @@ const VoiceConciergeWidget = () => {
         </div>
       )}
 
+      {/* Choice popover: voice or WhatsApp */}
+      {choiceOpen && !isConnected && (
+        <div className="w-64 rounded-xl border border-[#B89555]/40 bg-[#FDFBF7] shadow-2xl overflow-hidden text-[#1A1A1A]">
+          <div className="px-3 py-2 border-b border-[#B89555]/20 flex items-center justify-between">
+            <span className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/60">Concierge · Free</span>
+            <button onClick={() => setChoiceOpen(false)} aria-label="Close" className="text-[#1A1A1A]/50 hover:text-[#1A1A1A]">
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+          <button
+            onClick={handleStartVoice}
+            className="w-full flex items-center gap-3 px-3 py-3 hover:bg-[#EFE6D6]/60 transition-colors text-left"
+          >
+            <span className="flex items-center justify-center w-9 h-9 rounded-full bg-[#1A1A1A] text-white">
+              <Phone className="w-4 h-4" />
+            </span>
+            <span className="flex flex-col">
+              <span className="text-sm font-semibold">Live agent call</span>
+              <span className="text-[11px] text-[#1A1A1A]/60">Voice line, instant pickup</span>
+            </span>
+          </button>
+          <div className="h-px bg-[#B89555]/15" />
+          <a
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={handleOpenWhatsApp}
+            className="w-full flex items-center gap-3 px-3 py-3 hover:bg-[#EFE6D6]/60 transition-colors text-left"
+          >
+            <span className="flex items-center justify-center w-9 h-9 rounded-full bg-[#25D366] text-white">
+              <MessageCircle className="w-4 h-4" />
+            </span>
+            <span className="flex flex-col">
+              <span className="text-sm font-semibold">WhatsApp us</span>
+              <span className="text-[11px] text-[#1A1A1A]/60">{COMPANY_NAP.phoneDisplay}</span>
+            </span>
+          </a>
+        </div>
+      )}
+
       <div className="relative">
 
-      {/* Pulse ring - only when not connected and not minimized */}
-      {!isConnected && (
-        <>
-          <span className="absolute inset-0 rounded-full bg-[#EFE6D6]/40 animate-ping" />
-          <span className="absolute inset-0 rounded-full bg-[#EFE6D6]/20 animate-pulse" />
-        </>
-      )}
+
       
       {/* Speaking indicator ring */}
       {conversation.isSpeaking && (
@@ -335,31 +386,28 @@ const VoiceConciergeWidget = () => {
         <X className="w-3.5 h-3.5" />
       </button>
       
-      {/* Main button: opens intake form (gate) or connects directly if returning */}
+      {/* Main launcher: premium compact pill */}
       {!isConnected ? (
         <button
-          onClick={handleStartClick}
+          onClick={handleLauncherClick}
           disabled={isConnecting}
-          className="relative flex items-center gap-2 bg-[#EFE6D6] hover:bg-[#EFE6D6]-light text-[#1A1A1A]-foreground px-4 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group disabled:opacity-70 disabled:cursor-not-allowed"
-          aria-label="Start voice call with concierge"
+          className="relative flex items-center gap-2 bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-white pl-2 pr-3.5 py-1.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.03] border border-[#B89555]/50 disabled:opacity-70 disabled:cursor-not-allowed"
+          aria-label="Free live call with our agent"
+          aria-expanded={choiceOpen}
         >
-
-          {isConnecting ? (
-            <>
-              <div className="w-6 h-6 border-2 border-[#B89555]-foreground/30 border-t-gold-foreground rounded-full animate-spin" />
-              <span className="font-medium text-sm">
-                Connecting...
-              </span>
-            </>
-          ) : (
-            <>
-              <Phone className="w-6 h-6" />
-              <span className="font-medium text-sm">
-                Speak with us
-              </span>
-            </>
-          )}
+          <span className="flex items-center justify-center w-7 h-7 rounded-full bg-[#B89555]/15 border border-[#B89555]/40">
+            {isConnecting ? (
+              <span className="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+            ) : (
+              <Phone className="w-3.5 h-3.5 text-[#B89555]" />
+            )}
+          </span>
+          <span className="flex flex-col items-start leading-tight">
+            <span className="text-[10px] uppercase tracking-[0.14em] text-[#B89555]">Live · Free</span>
+            <span className="text-xs font-semibold">{isConnecting ? "Connecting…" : "Call our agent"}</span>
+          </span>
         </button>
+
       ) : (
         <div className="relative flex items-center gap-2 bg-[#EFE6D6] text-[#1A1A1A]-foreground pl-4 pr-2 py-2 rounded-full shadow-lg">
           {/* Status indicator */}
