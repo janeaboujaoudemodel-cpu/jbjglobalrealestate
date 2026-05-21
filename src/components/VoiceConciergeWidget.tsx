@@ -328,15 +328,49 @@ const VoiceConciergeWidget = () => {
         </div>
       )}
 
+      {/* Choice popover: voice or WhatsApp */}
+      {choiceOpen && !isConnected && (
+        <div className="w-64 rounded-xl border border-[#B89555]/40 bg-[#FDFBF7] shadow-2xl overflow-hidden text-[#1A1A1A]">
+          <div className="px-3 py-2 border-b border-[#B89555]/20 flex items-center justify-between">
+            <span className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/60">Concierge · Free</span>
+            <button onClick={() => setChoiceOpen(false)} aria-label="Close" className="text-[#1A1A1A]/50 hover:text-[#1A1A1A]">
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+          <button
+            onClick={handleStartVoice}
+            className="w-full flex items-center gap-3 px-3 py-3 hover:bg-[#EFE6D6]/60 transition-colors text-left"
+          >
+            <span className="flex items-center justify-center w-9 h-9 rounded-full bg-[#1A1A1A] text-white">
+              <Phone className="w-4 h-4" />
+            </span>
+            <span className="flex flex-col">
+              <span className="text-sm font-semibold">Live agent call</span>
+              <span className="text-[11px] text-[#1A1A1A]/60">Voice line, instant pickup</span>
+            </span>
+          </button>
+          <div className="h-px bg-[#B89555]/15" />
+          <a
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={handleOpenWhatsApp}
+            className="w-full flex items-center gap-3 px-3 py-3 hover:bg-[#EFE6D6]/60 transition-colors text-left"
+          >
+            <span className="flex items-center justify-center w-9 h-9 rounded-full bg-[#25D366] text-white">
+              <MessageCircle className="w-4 h-4" />
+            </span>
+            <span className="flex flex-col">
+              <span className="text-sm font-semibold">WhatsApp us</span>
+              <span className="text-[11px] text-[#1A1A1A]/60">{COMPANY_NAP.phoneDisplay}</span>
+            </span>
+          </a>
+        </div>
+      )}
+
       <div className="relative">
 
-      {/* Pulse ring - only when not connected and not minimized */}
-      {!isConnected && (
-        <>
-          <span className="absolute inset-0 rounded-full bg-[#EFE6D6]/40 animate-ping" />
-          <span className="absolute inset-0 rounded-full bg-[#EFE6D6]/20 animate-pulse" />
-        </>
-      )}
+
       
       {/* Speaking indicator ring */}
       {conversation.isSpeaking && (
