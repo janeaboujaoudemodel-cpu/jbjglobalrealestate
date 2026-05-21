@@ -81,7 +81,7 @@ export type TemplateKind = "leasing" | "selling" | "other";
 
 export function getTemplateKind(env: any): TemplateKind {
   const k = (env?.template_key || "").toString();
-  if (k === "jbj-property-advertising-agreement") return "leasing";
+  if (["jbj-property-advertising-agreement", "jbj-paa-leasing", "jbj-letterhead-leasing"].includes(k)) return "leasing";
   if (k === "jbj-listing-authorisation-selling") return "selling";
   return "other";
 }
