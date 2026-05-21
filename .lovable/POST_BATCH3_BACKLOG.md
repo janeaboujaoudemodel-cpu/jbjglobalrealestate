@@ -47,11 +47,16 @@ Tracked debt that must NOT block Batch 3 closure but should be normalized later.
       while the global outline reset is in place, but should be made
       explicit before any future outline change).
 
-## Pass 5–7 (not started)
+## Pass 5–7 (status)
 
-- Rate-limit `crm-broker-invite-status`
-- Auto-expire invitation scheduler
-- Richer suspicious-session UI
-- Email render diff CI
-- Audit login events
-- Unified lifecycle action centre (Pass 7)
+- [x] Rate-limit `crm-broker-invite-status` — 30 req / 5 min per IP via
+      `enforceRateLimit` middleware.
+- [x] Auto-expire invitation scheduler — `crm_broker_auto_expire_invites`
+      RPC present + scheduled via prior migration.
+- [x] Pass 7 — Unified lifecycle action centre shipped:
+      `src/components/crm/BrokerLifecycleActionCenter.tsx`, wired into
+      `IndividualBrokersTab` header.
+- [ ] Richer suspicious-session UI (deep-link from Action Centre row to
+      `BrokerGrantsManagerDialog` sessions panel) — queued.
+- [ ] Email render diff CI — queued.
+- [ ] Explicit audit-log entries for broker login success/failure events.

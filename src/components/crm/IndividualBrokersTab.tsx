@@ -20,12 +20,14 @@ import {
 import { Label } from "@/components/ui/label";
 import { ExcelGridView } from "@/components/crm/ExcelGridView";
 import BrokerBulkUploadDialog from "@/components/crm/BrokerBulkUploadDialog";
+import BrokerLifecycleActionCenter from "@/components/crm/BrokerLifecycleActionCenter";
 import { exportRowsToXlsx } from "@/utils/exportXlsx";
 import { UnifiedCRMExportModal } from "@/components/crm/UnifiedCRMExportModal";
 import { Link } from "react-router-dom";
 import {
   Plus, Search, User, Phone, Mail, MessageCircle, Trash2,
   UploadCloud, FileDown, Linkedin, Globe, ChevronLeft, ChevronRight, Download,
+  AlertTriangle,
 } from "lucide-react";
 import NationalityPicker from "@/components/crm/pickers/NationalityPicker";
 import LanguageMultiPicker from "@/components/crm/pickers/LanguageMultiPicker";
@@ -88,6 +90,7 @@ export default function IndividualBrokersTab() {
   const [page, setPage] = useState(0);
   const [open, setOpen] = useState(false);
   const [bulkOpen, setBulkOpen] = useState(false);
+  const [actionCenterOpen, setActionCenterOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
   const [editing, setEditing] = useState<Partial<Row> | null>(null);
 
@@ -303,6 +306,7 @@ export default function IndividualBrokersTab() {
         <Button variant="outline" onClick={exportExcel}><FileDown className="w-4 h-4 mr-2" /> Export page</Button>
         <Button variant="outline" onClick={() => setExportOpen(true)}><Download className="w-4 h-4 mr-2" /> Unified export</Button>
         <Button variant="outline" onClick={() => setBulkOpen(true)}><UploadCloud className="w-4 h-4 mr-2" /> Upload database</Button>
+        <Button variant="outline" onClick={() => setActionCenterOpen(true)}><AlertTriangle className="w-4 h-4 mr-2" /> Action Centre</Button>
         <Button variant="gold" onClick={openNew}><Plus className="w-4 h-4 mr-2" /> Add broker</Button>
       </div>
 
@@ -492,6 +496,8 @@ export default function IndividualBrokersTab() {
           qc.invalidateQueries({ queryKey: ["crm-brokers-count"] });
         }}
       />
+
+      <BrokerLifecycleActionCenter open={actionCenterOpen} onOpenChange={setActionCenterOpen} />
 
       <UnifiedCRMExportModal
         open={exportOpen}
