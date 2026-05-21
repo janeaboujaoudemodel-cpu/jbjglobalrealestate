@@ -124,6 +124,20 @@ const Index = () => {
   const { isBroker, hasSelectedRole } = useUserRole();
   const { mode: activeMode, setMode } = useUserMode();
 
+  // Auto-rotating spotlight across the I'm a... pills — visual hint only,
+  // does NOT mutate the user's actual mode. Stops once the user interacts.
+  const [spotlightIdx, setSpotlightIdx] = useState(0);
+  const [spotlightActive, setSpotlightActive] = useState(true);
+  useEffect(() => {
+    if (!spotlightActive) return;
+    const id = window.setInterval(() => {
+      setSpotlightIdx((i) => (i + 1) % heroModes.length);
+    }, 1600);
+    return () => window.clearInterval(id);
+  }, [spotlightActive]);
+
+
+
 
   // Preload only near-the-fold chunks during idle time
   useEffect(() => {
@@ -249,18 +263,22 @@ const Index = () => {
               <span className="text-[11px] sm:text-xs font-medium text-white/85 tracking-wide drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">
                 I'm a...
               </span>
-              {heroModes.map((m) => {
+              {heroModes.map((m, idx) => {
                 const Icon = m.icon;
                 const isActive = activeMode === m.id || (m.id === "investor" && activeMode === "investor_broker");
+                const isSpotlit = spotlightActive && !hasSelectedRole && spotlightIdx === idx;
                 return (
                   <button
                     key={m.id}
                     type="button"
-                    onClick={() => { void setMode(m.id); }}
-                    className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[12px] sm:text-[13px] font-semibold border transition-all ${
+                    onClick={() => { setSpotlightActive(false); void setMode(m.id); }}
+                    onMouseEnter={() => setSpotlightActive(false)}
+                    className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[12px] sm:text-[13px] font-semibold border transition-all duration-500 ${
                       isActive
                         ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555] shadow-[0_0_0_2px_rgba(184,149,85,0.35)]"
-                        : "bg-black/35 text-white border-white/40 hover:bg-black/55 hover:border-white/70 backdrop-blur-sm"
+                        : isSpotlit
+                        ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555] shadow-[0_0_0_3px_rgba(184,149,85,0.55),0_8px_24px_rgba(0,0,0,0.45)] scale-[1.06]"
+                        : "bg-black/35 text-white border-white/40 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] hover:border-[#B89555] backdrop-blur-sm"
                     }`}
                     aria-pressed={isActive}
                   >
@@ -269,6 +287,7 @@ const Index = () => {
                   </button>
                 );
               })}
+
             </motion.div>
 
             {/* Quick-action CTA pills — single horizontal wrap row matching reference photo */}
