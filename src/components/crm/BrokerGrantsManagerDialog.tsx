@@ -137,6 +137,7 @@ export default function BrokerGrantsManagerDialog({
   const [sessionsLoading, setSessionsLoading] = useState<Record<string, boolean>>({});
   const [activity, setActivity] = useState<Record<string, ActivityRow[]>>({});
   const [activityLoading, setActivityLoading] = useState<Record<string, boolean>>({});
+  const [commissionFor, setCommissionFor] = useState<BrokerInfo | null>(null);
 
   const load = async () => {
     setLoading(true);
