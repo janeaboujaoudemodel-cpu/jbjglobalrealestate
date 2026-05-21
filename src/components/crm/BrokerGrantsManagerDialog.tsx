@@ -233,8 +233,26 @@ export default function BrokerGrantsManagerDialog({
   const toggleSessions = async (b: BrokerInfo) => {
     const isOpen = !!expanded[b.id];
     setExpanded(e => ({ ...e, [b.id]: !isOpen }));
-    if (!isOpen) await loadSessions(b);
+    if (!isOpen) {
+      await loadSessions(b);
+      await loadActivity(b);
+    }
   };
+
+  const loadActivity = async (b: BrokerInfo) => {
+    setActivityLoading(s => ({ ...s, [b.id]: true }));
+    // Pull anything where this broker's id appears in entity_id OR details.broker_id
+    const { data, error } = await supabase
+      .from("crm_audit_logs")
+      .select("id, action, entity_type, created_at, ip_address, details")
+      .or(`entity_id.eq.${b.id},details->>broker_id.eq.${b.id}`)
+      .order("created_at", { ascending: false })
+      .limit(25);
+    if (error) toast.error(error.message);
+    setActivity(s => ({ ...s, [b.id]: (data ?? []) as ActivityRow[] }));
+    setActivityLoading(s => ({ ...s, [b.id]: false }));
+  };
+
 
   const revokeSession = async (b: BrokerInfo, sessionId: string) => {
     const reason = prompt("Revoke reason (optional):") ?? "";
