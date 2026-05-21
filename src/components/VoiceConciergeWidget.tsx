@@ -263,8 +263,8 @@ const VoiceConciergeWidget = () => {
     setWidgetStatus("idle");
     setStatusMessage("");
     hasShownUnavailableToastRef.current = false;
-    handleStartClick();
-  }, [handleStartClick]);
+    handleStartVoice();
+  }, [handleStartVoice]);
 
 
   const stopConversation = useCallback(async () => {
@@ -355,7 +355,7 @@ const VoiceConciergeWidget = () => {
       {/* Main button: opens intake form (gate) or connects directly if returning */}
       {!isConnected ? (
         <button
-          onClick={handleStartClick}
+          onClick={handleStartVoice}
           disabled={isConnecting}
           className="relative flex items-center gap-2 bg-[#EFE6D6] hover:bg-[#EFE6D6]-light text-[#1A1A1A]-foreground px-4 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group disabled:opacity-70 disabled:cursor-not-allowed"
           aria-label="Start voice call with concierge"
