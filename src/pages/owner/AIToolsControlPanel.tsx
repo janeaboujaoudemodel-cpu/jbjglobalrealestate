@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Link } from "react-router-dom";
+import { isApprovedPublicToolId } from "@/config/publicToolAccess";
 
 // ─── Tool Registry (mirrors AIHub.tsx) ───────────────────────────────────────
 type ToolCategory = "property" | "productivity" | "marketing" | "design" | "corporate";
@@ -203,7 +204,7 @@ export default function AIToolsControlPanel() {
 
   useEffect(() => { fetchData(); }, [fetchData]);
 
-  const getVis = useCallback((toolId: string): Vis => visMap.get(toolId) ?? "public", [visMap]);
+  const getVis = useCallback((toolId: string): Vis => visMap.get(toolId) ?? (isApprovedPublicToolId(toolId) ? "public" : "hidden"), [visMap]);
 
   // Set visibility for a single tool
   const setVisibility = useCallback(async (toolId: string, vis: Vis) => {
