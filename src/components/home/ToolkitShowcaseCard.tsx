@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import {
   Calculator, Layers, Home, TrendingUp, Palette,
   CreditCard, Wand2, ArrowRight, Sparkles, Crown,
+  PlusCircle, Key,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToolVisibility } from "@/hooks/useToolVisibility";
@@ -36,6 +37,8 @@ const royalTools: RoyalTool[] = [
   { id: "ai-home-finder",      name: "AI Home Finder",       description: "Find your perfect home with AI",   icon: Home,       href: "/quiz",                                     cta: "Find My Home",    tone: "purple"    },
   { id: "mortgage-calculator", name: "Mortgage Calculator",  description: "Calculate your monthly payments",  icon: Calculator, href: "/mortgage-calculator",                      cta: "Calculate Now",   tone: "gold"      },
   { id: "rental-index",        name: "Rental Index",         description: "Check current rental rates",       icon: TrendingUp, href: "/rental-index",                             cta: "Check Rates",     tone: "darkGreen" },
+  { id: "list-property-sale",  name: "List for Sale",        description: "Submit a property for sale",       icon: PlusCircle, href: "/listing-portal?type=sale",                 cta: "List for Sale",   tone: "amber"     },
+  { id: "list-property-rent",  name: "List for Rent",        description: "Submit a property for rent",       icon: Key,        href: "/listing-portal?type=rent",                 cta: "List for Rent",   tone: "ink"       },
   { id: "interior-design",     name: "AI Interior Design",   description: "Visualize your dream space",       icon: Palette,    href: "/interior-design-ai",                       cta: "Design Space",    tone: "pink"      },
   { id: "business-card",       name: "Business Card Maker",  description: "Design premium business cards",    icon: CreditCard, href: "/toolkit/corporate-suite/business-card",    cta: "Design Card",     tone: "ink"       },
   { id: "logo-creator",        name: "AI Logo Maker",        description: "Generate company logos with AI",   icon: Wand2,      href: "/toolkit/corporate-suite/logo-creator",     cta: "Create Logo",     tone: "amber"     },
