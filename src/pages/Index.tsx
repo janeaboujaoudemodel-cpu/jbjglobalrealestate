@@ -19,9 +19,9 @@ const chunkImports = {
   InquiryFormModal: () => import("@/components/InquiryFormModal"),
   BestIdeaAward: () => import("@/components/BestIdeaAward"),
   SupportTicketBox: () => import("@/components/SupportTicketBox"),
-  ExploreServicesCard: () => import("@/components/home/ExploreServicesCard"),
+  ExploreServicesCard: () => import("@/components/home/ExploreServicesExpander"),
   ToolkitShowcaseCard: () => import("@/components/home/ToolkitShowcaseCard").then(m => ({ default: m.ToolkitShowcaseCard })),
-  OverseasInvestorsBanner: () => import("@/components/home/OverseasInvestorsBanner"),
+  OverseasInvestorsBanner: () => import("@/components/home/OverseasInvestorsStrip"),
   TrustBar: () => import("@/components/home/TrustBar"),
   FeaturedListings: () => import("@/components/home/FeaturedListings"),
   ServicesGrid: () => import("@/components/home/ServicesGrid"),
@@ -337,20 +337,10 @@ const Index = () => {
         </Suspense>
       </div>
 
-      {/* DIVIDER between Developer Partners and Trust Bar */}
+      {/* TrustBar (RERA / 8-card grid) removed per founder request — component retained on disk */}
       <SectionDivider fullWidth />
 
-      {/* TRUST BAR (8 Cards) - 4x2 Grid
-          SPACING RULE: Sections wrapped between <SectionDivider /> use no
-          vertical padding. Sections with a distinct background (colored /
-          gradient / dark) use py-8 md:py-10 for internal breathing room. */}
-      <div id="trust-bar">
-        <Suspense fallback={<SectionLoader />}>
-          <TrustBar />
-        </Suspense>
-      </div>
 
-      <SectionDivider fullWidth />
 
       {/* FEATURED LISTINGS */}
       <div className="cv-auto">
