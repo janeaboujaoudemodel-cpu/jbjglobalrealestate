@@ -539,6 +539,36 @@ export default function BrokerGrantsManagerDialog({
                           </div>
                         )}
                       </div>
+
+                      {/* Pass 7 — Recent lifecycle activity (grants + invites + sessions) */}
+                      <div className="rounded-md border border-[#B89555]/25 bg-[#F7F2EA]/50 p-3 mt-2">
+                        <div className="text-[11px] font-semibold text-[#1A1A1A] flex items-center gap-1.5 mb-2">
+                          <Clock className="h-3.5 w-3.5 text-[#B89555]" />
+                          Recent activity
+                        </div>
+                        {activityLoading[broker.id] ? (
+                          <div className="text-[11px] text-[#1A1A1A]/60 flex items-center gap-1.5">
+                            <Loader2 className="h-3 w-3 animate-spin" /> Loading activity…
+                          </div>
+                        ) : !activity[broker.id]?.length ? (
+                          <div className="text-[11px] text-[#1A1A1A]/55">No recorded activity.</div>
+                        ) : (
+                          <ul className="space-y-1.5">
+                            {activity[broker.id].map((a) => (
+                              <li key={a.id} className="text-[10.5px] text-[#1A1A1A]/80 flex items-start gap-2">
+                                <span className="font-mono text-[#1A1A1A]/55 shrink-0">{relTime(a.created_at)}</span>
+                                <span className="font-medium text-[#1A1A1A]">{a.action.replaceAll("_", " ")}</span>
+                                {a.ip_address && <span className="text-[#1A1A1A]/55">· {a.ip_address}</span>}
+                                {a.details?.suspicious_reason && (
+                                  <span className="px-1 py-0.5 rounded text-[9px] font-semibold border bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]">
+                                    {String(a.details.suspicious_reason).replaceAll("_", " ")}
+                                  </span>
+                                )}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
                     </div>
                   )}
                 </Fragment>
