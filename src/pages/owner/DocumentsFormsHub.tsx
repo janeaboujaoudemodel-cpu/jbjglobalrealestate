@@ -84,7 +84,7 @@ function docNumberOf(e: any): string {
   return (e?.metadata as any)?.doc_number || (e?.template_field_values as any)?.doc_number || "";
 }
 function kindLabelOf(e: any): string {
-  if (e?.template_key === "jbj-property-advertising-agreement" || e?.template_key === "jbj-paa-leasing") return "Leasing";
+  if (["jbj-property-advertising-agreement", "jbj-paa-leasing", "jbj-letterhead-leasing"].includes(e?.template_key)) return "Leasing";
   if (e?.template_key === "jbj-listing-authorisation-selling") return "Selling";
   return e?.category ? String(e.category) : "";
 }
@@ -171,10 +171,11 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
       const generatedReady = isCompleteEnoughToBeGenerated(e);
       const recs: any[] = (e as any).esign_recipients || [];
       const anyAwaitingReturn = recs.some((r) => r?.status === "awaiting_signed_return");
+      const anyPendingSignature = recs.some((r) => ["sent", "delivered", "viewed"].includes(r?.status));
 
       if (s === "completed") signed.push(e);
       else if (s === "awaiting_signed_return" || s === "pending_owner_review" || anyAwaitingReturn) submitted.push(e);
-      else if (s === "sent" || s === "viewed" || s === "partially_signed") sent.push(e);
+      else if (s === "sent" || s === "viewed" || s === "partially_signed" || anyPendingSignature) sent.push(e);
       else if (s === "draft" && !generatedReady) drafts.push(e);
 
       if (generatedReady) generated.push(e);
