@@ -122,6 +122,8 @@ const Index = () => {
   const [videoLoaded, setVideoLoaded] = useState(false);
   const { t } = useLanguage();
   const { isBroker, hasSelectedRole } = useUserRole();
+  const { mode: activeMode, setMode } = useUserMode();
+
 
   // Preload only near-the-fold chunks during idle time
   useEffect(() => {
