@@ -115,16 +115,10 @@ export const SEOHead = ({
     setMetaTag('twitter:image', ogImage);
     setMetaTag('twitter:site', '@jbjglobalrealestate');
 
-    // Canonical URL
-    if (canonicalPath) {
-      let canonicalElement = document.querySelector('link[rel="canonical"]');
-      if (!canonicalElement) {
-        canonicalElement = document.createElement('link');
-        canonicalElement.setAttribute('rel', 'canonical');
-        document.head.appendChild(canonicalElement);
-      }
-      canonicalElement.setAttribute('href', `${BASE_URL}${canonicalPath}`);
-    }
+    // Canonical URL is owned by CanonicalAndHreflang.tsx (single source of
+    // truth) to avoid duplicate <link rel="canonical"> tags. canonicalPath
+    // is kept on the prop for backwards compatibility but no longer written.
+
 
     // FAQ structured data (JSON-LD FAQPage schema for Google rich snippets)
     const faqScriptId = 'jbj-faq-jsonld';
