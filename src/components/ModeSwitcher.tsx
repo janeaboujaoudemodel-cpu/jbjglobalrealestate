@@ -40,54 +40,57 @@ type ModePalette = {
 //   Broker            -> blue
 //   Investor + Broker -> green
 //   Developer         -> purple
+// Classy champagne/ink palette — refined to feel premium instead of loud.
+// Each mode shares the brand champagne surface; only the accent rail + icon
+// tone shifts subtly so the dropdown reads cohesive and editorial.
 const MODE_CONFIG: Record<UserMode, ModePalette> = {
   investor: {
     label: 'Mode: Investor',
     shortLabel: 'I',
     icon: User,
     description: 'Browse properties, ROI tools, listings, guides & market insights',
-    base: '#F97316',
-    baseDark: '#C2410C',
-    rowFrom: '#FFF1E0',
-    rowTo: '#FFE0BF',
-    rowHover: '#FFD0A0',
-    dark: '#7C2D12',
+    base: '#B89555',      // champagne gold accent
+    baseDark: '#8A6E3D',
+    rowFrom: '#FDFBF7',
+    rowTo: '#F7F2EA',
+    rowHover: '#EFE6D6',
+    dark: '#1A1A1A',
   },
   broker: {
     label: 'Mode: Broker',
     shortLabel: 'B',
     icon: Briefcase,
     description: 'CRM, education hub, sell, listings, coordinate clients & close deals',
-    base: '#2563EB',
-    baseDark: '#1D4ED8',
-    rowFrom: '#E8F0FE',
-    rowTo: '#CFE0FB',
-    rowHover: '#BBD2F8',
-    dark: '#1E3A8A',
+    base: '#1A1A1A',      // ink accent
+    baseDark: '#0A0A0A',
+    rowFrom: '#FDFBF7',
+    rowTo: '#F7F2EA',
+    rowHover: '#EFE6D6',
+    dark: '#1A1A1A',
   },
   investor_broker: {
     label: 'Mode: Investor + Broker',
     shortLabel: 'I+B',
     icon: Users,
     description: 'Full investor + broker access: tools, CRM, listings, guides & insights',
-    base: '#16A34A',
-    baseDark: '#15803D',
-    rowFrom: '#E5F8EC',
-    rowTo: '#C7EFD3',
-    rowHover: '#B0E5C0',
-    dark: '#14532D',
+    base: '#6B5A3E',      // deep bronze
+    baseDark: '#4A3D27',
+    rowFrom: '#FDFBF7',
+    rowTo: '#F7F2EA',
+    rowHover: '#EFE6D6',
+    dark: '#1A1A1A',
   },
   developer: {
     label: 'Mode: Developer',
     shortLabel: 'D',
     icon: Building2,
     description: 'Submit projects, upload documents, manage launches & event calendar',
-    base: '#7C3AED',
-    baseDark: '#6D28D9',
-    rowFrom: '#F1ECFE',
-    rowTo: '#DDD0FB',
-    rowHover: '#CCB9F8',
-    dark: '#4C1D95',
+    base: '#3A2D1D',      // espresso
+    baseDark: '#1F1810',
+    rowFrom: '#FDFBF7',
+    rowTo: '#F7F2EA',
+    rowHover: '#EFE6D6',
+    dark: '#1A1A1A',
   },
 };
 
