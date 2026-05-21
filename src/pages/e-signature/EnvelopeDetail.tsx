@@ -1346,35 +1346,6 @@ export default function EnvelopeDetail() {
 
         </Card>
 
-        {/* Full activity log (kept below for completeness — full audit trail) */}
-        {signedDoc && (
-          <Card className="bg-[#F7F2EA] border-[#B89555]/30">
-            <CardHeader className="py-3">
-              <CardTitle className="text-sm text-[#1A1A1A] flex items-center gap-2">
-                <Shield className="w-4 h-4" /> Activity Log
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {auditLogs.map((log: any) => (
-                  <div key={log.id} className="flex items-start gap-3">
-                    <div className="w-7 h-7 rounded-full bg-white border border-[#B89555]/30 flex items-center justify-center shrink-0">
-                      <Clock className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm text-[#1A1A1A]">{log.description}</p>
-                      <div className="flex items-center gap-3 text-xs text-[#1A1A1A]/60 mt-0.5">
-                        <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{format(new Date(log.created_at), "MMM d, yyyy 'at' h:mm a")}</span>
-                        {log.ip_address && <span className="flex items-center gap-1"><Globe className="w-3 h-3" />{log.ip_address}</span>}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-                {!auditLogs.length && <p className="text-sm text-[#1A1A1A]/60 text-center py-4">No activity yet</p>}
-              </div>
-            </CardContent>
-          </Card>
-        )}
       </div>
       <SendForSignatureDialog
         open={sendOpen}
