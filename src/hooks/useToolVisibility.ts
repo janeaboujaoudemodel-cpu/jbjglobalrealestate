@@ -1,31 +1,45 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
+export type ToolVisibility = "public" | "owner_only" | "hidden";
+
+interface VisibilityRow {
+  tool_id: string;
+  is_public: boolean;
+  visibility?: ToolVisibility | null;
+}
+
 /**
- * Centralized public-visibility gate for every JBJ AI tool.
+ * Centralized visibility gate for every JBJ AI tool.
  *
- * - Reads the `ai_tool_visibility` table (RLS: public SELECT).
- * - Subscribes to realtime updates so toggles in the admin AI Tools Control
- *   Panel propagate to the live site within ~1 second.
- * - Default policy: a tool is PUBLIC unless an explicit row says is_public=false.
+ * Three states (stored in `ai_tool_visibility.visibility`):
+ *   - "public":     visible to everyone
+ *   - "owner_only": visible only to owner/admin surfaces (admin panel always
+ *                   shows every tool regardless); hidden from public site
+ *   - "hidden":     fully hidden — wrapped out from every surface
  *
- * Use `isPublic(toolId)` everywhere a tool is rendered to non-admin users
- * (homepage showcase, /ai-hub, /toolkit hub, header mega-menu, footer, search
- * index). Admin/owner pages should bypass this filter and show every tool.
+ * Default policy: a tool is PUBLIC unless a row says otherwise.
+ *
+ * `isPublic(toolId)` returns true ONLY when visibility === "public", so the
+ * homepage / hub / mega-menu / search will hide both owner-only and hidden
+ * tools. Owner/admin pages bypass this hook and render the full registry.
  */
 export function useToolVisibility() {
-  const [hidden, setHidden] = useState<Set<string>>(new Set());
+  const [visibilityMap, setVisibilityMap] = useState<Map<string, ToolVisibility>>(new Map());
   const [loading, setLoading] = useState(true);
 
   const fetchVisibility = useCallback(async () => {
     const { data, error } = await (supabase.from("ai_tool_visibility") as any)
-      .select("tool_id, is_public");
+      .select("tool_id, is_public, visibility");
     if (!error && Array.isArray(data)) {
-      const next = new Set<string>();
-      for (const row of data as Array<{ tool_id: string; is_public: boolean }>) {
-        if (row.is_public === false) next.add(row.tool_id);
+      const next = new Map<string, ToolVisibility>();
+      for (const row of data as VisibilityRow[]) {
+        const v: ToolVisibility =
+          (row.visibility as ToolVisibility) ??
+          (row.is_public === false ? "hidden" : "public");
+        next.set(row.tool_id, v);
       }
-      setHidden(next);
+      setVisibilityMap(next);
     }
     setLoading(false);
   }, []);
@@ -45,13 +59,17 @@ export function useToolVisibility() {
     };
   }, [fetchVisibility]);
 
-  return useMemo(
-    () => ({
+  return useMemo(() => {
+    const getVisibility = (toolId: string): ToolVisibility =>
+      visibilityMap.get(toolId) ?? "public";
+    return {
       loading,
-      isHidden: (toolId: string) => hidden.has(toolId),
-      isPublic: (toolId: string) => !hidden.has(toolId),
-      hiddenIds: hidden,
-    }),
-    [hidden, loading],
-  );
+      getVisibility,
+      isPublic: (toolId: string) => getVisibility(toolId) === "public",
+      isHidden: (toolId: string) => getVisibility(toolId) !== "public",
+      isOwnerOnly: (toolId: string) => getVisibility(toolId) === "owner_only",
+      isFullyHidden: (toolId: string) => getVisibility(toolId) === "hidden",
+      visibilityMap,
+    };
+  }, [visibilityMap, loading]);
 }
