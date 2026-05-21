@@ -164,7 +164,7 @@ Deno.serve(async (req) => {
         event_type: suspiciousReason === "impossible_travel" ? "broker_impossible_travel" : "broker_new_device_login",
         ip_address: ip,
         user_agent: ua,
-        details: { broker_id: broker.id, device_fingerprint: fingerprint },
+        details: { broker_id: broker.id, device_fingerprint: fingerprint, suspicious_reason: suspiciousReason },
       });
     }
 
