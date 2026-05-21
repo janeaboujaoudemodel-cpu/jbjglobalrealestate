@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { SearchableSelect } from "@/components/ui/searchable-select";
+import { SearchableMultiSelect, type MultiOption } from "@/components/ui/searchable-multiselect";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Phone, Loader2 } from "lucide-react";
@@ -28,7 +29,6 @@ const LANGUAGES = [
   { name: "Japanese", iso: "JP" },
   { name: "Korean", iso: "KR" },
   { name: "Persian", iso: "IR" },
-  { name: "Other", iso: "" },
 ];
 
 type Interest = "investing" | "partnering" | "careers" | "other";
@@ -44,17 +44,39 @@ export default function VoiceConciergeIntakeModal({ open, onOpenChange, onSucces
   const [submitting, setSubmitting] = useState(false);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
-  const [nationality, setNationality] = useState("");
-  const [language, setLanguage] = useState("");
-  const [countryCode, setCountryCode] = useState("+971");
+  const [nationalities, setNationalities] = useState<string[]>([]);
+  const [languages, setLanguages] = useState<string[]>([]);
+  const [countryName, setCountryName] = useState<string>("United Arab Emirates");
   const [phone, setPhone] = useState("");
   const [interest, setInterest] = useState<Interest>("investing");
   const [invType, setInvType] = useState<InvType>("off_plan");
   const [details, setDetails] = useState("");
   const [consent, setConsent] = useState(false);
 
+  const nationalityOptions: MultiOption[] = useMemo(
+    () => COUNTRIES.map((c) => ({ value: c.name, label: `${flagEmoji(c.iso)}  ${c.name}` })),
+    []
+  );
+  const languageOptions: MultiOption[] = useMemo(
+    () => LANGUAGES.map((l) => ({ value: l.name, label: `${flagEmoji(l.iso)}  ${l.name}` })),
+    []
+  );
+  const phoneOptions = useMemo(() => COUNTRIES.map((c) => c.name), []);
+  const selectedDialCode = useMemo(
+    () => COUNTRIES.find((c) => c.name === countryName)?.code ?? "+971",
+    [countryName]
+  );
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (nationalities.length === 0) {
+      toast.error("Please select at least one nationality.");
+      return;
+    }
+    if (languages.length === 0) {
+      toast.error("Please select at least one language.");
+      return;
+    }
     if (!consent) {
       toast.error("Please agree to be contacted to continue.");
       return;
@@ -65,9 +87,9 @@ export default function VoiceConciergeIntakeModal({ open, onOpenChange, onSucces
         body: {
           full_name: fullName,
           email,
-          nationality,
-          language,
-          phone_country_code: countryCode,
+          nationality: nationalities.join(" | "),
+          language: languages.join(" | "),
+          phone_country_code: selectedDialCode,
           phone_number: phone,
           interest,
           investment_type: interest === "investing" ? invType : null,
@@ -116,44 +138,42 @@ export default function VoiceConciergeIntakeModal({ open, onOpenChange, onSucces
               <Input id="vc-email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="bg-white" />
             </div>
             <div>
-              <Label htmlFor="vc-nat">Nationality</Label>
-              <Select value={nationality} onValueChange={setNationality}>
-                <SelectTrigger className="bg-white"><SelectValue placeholder="Select country" /></SelectTrigger>
-                <SelectContent className="max-h-60">
-                  {COUNTRIES.map((c) => (
-                    <SelectItem key={c.name} value={c.name}>
-                      <span className="mr-2">{flagEmoji(c.iso)}</span>{c.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Label>Nationality (select one or more)</Label>
+              <SearchableMultiSelect
+                label="Select nationality"
+                placeholder="Search nationality…"
+                options={nationalityOptions}
+                selected={nationalities}
+                onChange={setNationalities}
+              />
             </div>
             <div>
-              <Label htmlFor="vc-lang">Language you speak</Label>
-              <Select value={language} onValueChange={setLanguage}>
-                <SelectTrigger className="bg-white"><SelectValue placeholder="Select language" /></SelectTrigger>
-                <SelectContent className="max-h-60">
-                  {LANGUAGES.map((l) => (
-                    <SelectItem key={l.name} value={l.name}>
-                      {l.iso && <span className="mr-2">{flagEmoji(l.iso)}</span>}{l.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Label>Languages you speak</Label>
+              <SearchableMultiSelect
+                label="Select languages"
+                placeholder="Search languages…"
+                options={languageOptions}
+                selected={languages}
+                onChange={setLanguages}
+              />
             </div>
             <div>
               <Label>Phone</Label>
               <div className="flex gap-2">
-                <Select value={countryCode} onValueChange={setCountryCode}>
-                  <SelectTrigger className="w-40 bg-white"><SelectValue /></SelectTrigger>
-                  <SelectContent className="max-h-60">
-                    {COUNTRIES.map((c) => (
-                      <SelectItem key={c.name + c.code} value={c.code}>
-                        <span className="mr-2">{flagEmoji(c.iso)}</span>{c.code} {c.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <div className="w-48">
+                  <SearchableSelect
+                    value={countryName}
+                    onChange={setCountryName}
+                    options={phoneOptions}
+                    placeholder="Country"
+                    searchPlaceholder="Search country…"
+                    priorityItem="United Arab Emirates"
+                    flagType="country"
+                  />
+                </div>
+                <div className="flex items-center px-2 rounded-md bg-white border border-input text-sm text-[#1A1A1A]/80 min-w-[64px] justify-center">
+                  {selectedDialCode}
+                </div>
                 <Input required inputMode="tel" pattern="[0-9 ]{5,}" placeholder="50 123 4567" value={phone} onChange={(e) => setPhone(e.target.value)} className="bg-white flex-1" />
               </div>
             </div>
@@ -191,8 +211,12 @@ export default function VoiceConciergeIntakeModal({ open, onOpenChange, onSucces
               </div>
             )}
 
-            <label className="flex items-start gap-2 text-xs text-[#1A1A1A]/70">
-              <Checkbox checked={consent} onCheckedChange={(v) => setConsent(!!v)} className="mt-0.5 bg-white border-[#B89555]/50 data-[state=checked]:bg-[#1A1A1A] data-[state=checked]:text-white" />
+            <label className="flex items-start gap-2 text-xs text-[#1A1A1A]/70 cursor-pointer">
+              <Checkbox
+                checked={consent}
+                onCheckedChange={(v) => setConsent(!!v)}
+                className="mt-0.5 h-4 w-4 bg-white border border-[#B89555]/60 data-[state=checked]:bg-[#EFE6D6] data-[state=checked]:text-[#1A1A1A] data-[state=checked]:border-[#B89555]"
+              />
               <span>I agree to be contacted by JBJ GLOBAL REAL ESTATE about my enquiry.</span>
             </label>
           </div>
