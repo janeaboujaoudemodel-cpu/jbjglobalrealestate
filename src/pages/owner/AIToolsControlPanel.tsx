@@ -423,6 +423,47 @@ export default function AIToolsControlPanel() {
         </div>
       </div>
 
+      {/* Bulk visibility toolbar */}
+      <div className="flex items-center gap-3 mb-3 px-3 py-2 rounded-lg bg-[#FDFBF7]/60 border border-[#1A1A1A]/30">
+        <Checkbox
+          checked={filtered.length > 0 && filtered.every(t => selected.has(t.id))}
+          onCheckedChange={(c) => {
+            setSelected(prev => {
+              const n = new Set(prev);
+              if (c) filtered.forEach(t => n.add(t.id));
+              else filtered.forEach(t => n.delete(t.id));
+              return n;
+            });
+          }}
+          aria-label="Select all visible tools"
+        />
+        <span className="text-xs text-white/80">
+          {selected.size > 0 ? `${selected.size} selected` : "Select all"}
+        </span>
+        <div className="ml-auto flex items-center gap-2">
+          <span className="text-[10px] uppercase tracking-wide text-white/60">Bulk:</span>
+          <Button size="sm" variant="outline" disabled={selected.size === 0}
+            onClick={() => bulkSetVisibility("public")}
+            className="h-7 text-xs border-emerald-500/50 text-emerald-300 hover:bg-emerald-500/10 gap-1">
+            <Globe className="w-3 h-3" /> Public
+          </Button>
+          <Button size="sm" variant="outline" disabled={selected.size === 0}
+            onClick={() => bulkSetVisibility("owner_only")}
+            className="h-7 text-xs border-amber-500/50 text-amber-300 hover:bg-amber-500/10 gap-1">
+            <Lock className="w-3 h-3" /> Owner only
+          </Button>
+          <Button size="sm" variant="outline" disabled={selected.size === 0}
+            onClick={() => bulkSetVisibility("hidden")}
+            className="h-7 text-xs border-red-500/50 text-red-300 hover:bg-red-500/10 gap-1">
+            <EyeOff className="w-3 h-3" /> Hide
+          </Button>
+          {selected.size > 0 && (
+            <Button size="sm" variant="ghost" onClick={() => setSelected(new Set())}
+              className="h-7 text-xs text-white/70 hover:text-white">Clear</Button>
+          )}
+        </div>
+      </div>
+
       {/* Tool List */}
       {loading ? (
         <div className="text-center py-20 text-white/90">Loading tools...</div>
@@ -435,6 +476,8 @@ export default function AIToolsControlPanel() {
             const toolTestLogs = testLogs.filter(t => t.tool_id === tool.id);
             const toolRecs = recommendations.filter(r => r.tool_id === tool.id || (!r.tool_id && r.status === "pending"));
             const isExpanded = expandedTool === tool.id;
+            const vis = getVis(tool.id);
+            const isSelected = selected.has(tool.id);
 
             return (
               <Collapsible key={tool.id} open={isExpanded} onOpenChange={() => setExpandedTool(isExpanded ? null : tool.id)}>
@@ -443,6 +486,13 @@ export default function AIToolsControlPanel() {
                     <CardHeader className="cursor-pointer py-4">
                       <div className="flex items-center justify-between gap-4">
                         <div className="flex items-center gap-3 flex-1 min-w-0">
+                          <div onClick={e => e.stopPropagation()}>
+                            <Checkbox
+                              checked={isSelected}
+                              onCheckedChange={() => toggleSelect(tool.id)}
+                              aria-label={`Select ${tool.title}`}
+                            />
+                          </div>
                           <ChevronDown className={`w-4 h-4 text-white/90 transition-transform shrink-0 ${isExpanded ? "rotate-180" : ""}`} />
                           <div className="min-w-0">
                             <CardTitle className="!text-base text-white truncate">{tool.title}</CardTitle>
@@ -450,32 +500,38 @@ export default function AIToolsControlPanel() {
                           </div>
                         </div>
                         <div className="flex items-center gap-2 shrink-0">
-                          {/* Public visibility toggle */}
-                          <div
-                            onClick={e => e.stopPropagation()}
-                            className={`flex items-center gap-1.5 px-2 py-1 rounded-md border ${
-                              hiddenTools.has(tool.id)
-                                ? "bg-red-500/10 border-red-500/40"
-                                : "bg-emerald-500/10 border-emerald-500/40"
-                            }`}
-                            title={hiddenTools.has(tool.id) ? "Hidden from public" : "Visible to public"}
-                          >
-                            {hiddenTools.has(tool.id)
-                              ? <EyeOff className="w-3.5 h-3.5 text-red-400" />
-                              : <Eye className="w-3.5 h-3.5 text-emerald-400" />}
-                            <Switch
-                              checked={!hiddenTools.has(tool.id)}
-                              onCheckedChange={(checked) => toggleVisibility(tool.id, checked)}
-                              aria-label={`Toggle public visibility for ${tool.title}`}
-                            />
-                            <span className="text-[10px] font-semibold uppercase tracking-wide text-white/80">
-                              {hiddenTools.has(tool.id) ? "Hidden" : "Public"}
-                            </span>
+                          {/* Three-state visibility segmented control */}
+                          <div onClick={e => e.stopPropagation()} className="inline-flex rounded-md border border-[#1A1A1A]/40 overflow-hidden">
+                            {(["public", "owner_only", "hidden"] as const).map((v) => {
+                              const active = vis === v;
+                              const meta = v === "public"
+                                ? { Icon: Globe, label: "Public", active: "bg-emerald-500/20 text-emerald-300" }
+                                : v === "owner_only"
+                                ? { Icon: Lock, label: "Owner", active: "bg-amber-500/20 text-amber-300" }
+                                : { Icon: EyeOff, label: "Hidden", active: "bg-red-500/20 text-red-300" };
+                              const Icon = meta.Icon;
+                              return (
+                                <button
+                                  key={v}
+                                  type="button"
+                                  onClick={() => setVisibility(tool.id, v)}
+                                  className={`px-2 py-1 text-[10px] font-semibold uppercase tracking-wide inline-flex items-center gap-1 transition-colors ${
+                                    active ? meta.active : "text-white/60 hover:text-white/90"
+                                  }`}
+                                  title={meta.label}
+                                  aria-pressed={active}
+                                >
+                                  <Icon className="w-3 h-3" />
+                                  <span>{meta.label}</span>
+                                </button>
+                              );
+                            })}
                           </div>
                           <Badge className="bg-[#F7F2EA] text-white/70 border-[#1A1A1A] text-[10px]">{CATEGORY_LABELS[tool.category]}</Badge>
                           <StatusBadge status={status} />
                         </div>
                       </div>
+
                       {/* Direct URL row */}
                       <div className="flex items-center gap-2 mt-2 ml-7" onClick={e => e.stopPropagation()}>
                         <code className="text-xs text-white/70 bg-[#F7F2EA]/80 px-2 py-1 rounded font-mono truncate max-w-[400px]">{fullUrl}</code>
