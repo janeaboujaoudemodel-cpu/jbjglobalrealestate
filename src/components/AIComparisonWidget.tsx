@@ -19,9 +19,9 @@ const fadeInUp = {
 
 const AIComparisonWidget = () => {
   const features = [
-    { icon: BarChart3, label: "Compare 2-5 Projects", description: "Side-by-side analysis" },
-    { icon: TrendingUp, label: "ROI Projections", description: "Investment returns" },
-    { icon: Calculator, label: "Mortgage Estimates", description: "Monthly payments" },
+    { icon: BarChart3, label: "Compare unlimited projects", description: "No 2-5 cap — add as many as you need" },
+    { icon: TrendingUp, label: "ROI projections", description: "Yield & investment returns" },
+    { icon: Calculator, label: "Excel & premium table", description: "Two export styles" },
   ];
 
   return (

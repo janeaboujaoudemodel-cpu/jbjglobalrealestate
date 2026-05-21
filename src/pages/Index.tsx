@@ -411,31 +411,31 @@ const Index = () => {
 
       <SectionDivider />
 
-      <section className="py-8 md:py-10">
+      <section className="py-6 md:py-8">
         <div className="jj-layer-2">
-          <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl md:rounded-3xl p-4 md:p-12 relative overflow-hidden">
+          <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-2xl p-4 md:p-8 relative overflow-hidden">
             <div className="relative z-10">
               <Suspense fallback={<SectionLoader />}>
                 <MortgageCalculator compact />
               </Suspense>
-              <p className="text-[#1A1A1A]/70 text-xs text-center mt-4">
+              <p className="text-[#1A1A1A]/60 text-[11px] text-center mt-4">
                 Estimates only. We connect you with independent licensed mortgage advisors for personalized guidance.
               </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4 mt-8 justify-center">
+
+              <div className="flex flex-col sm:flex-row gap-3 mt-6 justify-center">
                 <Link to="/mortgage-calculator">
-                  <Button size="lg" className="gap-2 px-8 py-5 text-base bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]">
-                    <Sparkles className="w-5 h-5" />
+                  <Button size="default" className="gap-2 px-6 py-4 text-sm bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]/90">
+                    <Sparkles className="w-4 h-4" />
                     <span className="whitespace-nowrap">{t('home.tryOurAi', 'Try Our AI')} {t('mortgage.calculator', 'Mortgage Calculator')}</span>
-                    <ArrowUpRight className="w-5 h-5" />
+                    <ArrowUpRight className="w-4 h-4" />
                   </Button>
                 </Link>
-                
+
                 <Link to="/partners/mortgage">
-                  <Button variant="outline" size="lg" className="gap-2 px-8 py-5 text-base border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#F7F2EA]">
-                    <Users className="w-5 h-5 text-[#1A1A1A]/70" />
+                  <Button variant="outline" size="default" className="gap-2 px-6 py-4 text-sm border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#F7F2EA]">
+                    <Users className="w-4 h-4 text-[#1A1A1A]/70" />
                     <span>{t('home.connectMortgagePartners', 'Connect With Mortgage Partners')}</span>
-                    <ArrowUpRight className="w-5 h-5" />
+                    <ArrowUpRight className="w-4 h-4" />
                   </Button>
                 </Link>
               </div>
@@ -443,6 +443,7 @@ const Index = () => {
           </div>
         </div>
       </section>
+
 
       <PodcastVisibilityGate>
         <SectionDivider fullWidth />
