@@ -90,6 +90,7 @@ export default function IndividualBrokersTab() {
   const [page, setPage] = useState(0);
   const [open, setOpen] = useState(false);
   const [bulkOpen, setBulkOpen] = useState(false);
+  const [actionCenterOpen, setActionCenterOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
   const [editing, setEditing] = useState<Partial<Row> | null>(null);
 
