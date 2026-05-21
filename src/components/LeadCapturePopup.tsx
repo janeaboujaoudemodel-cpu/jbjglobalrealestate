@@ -19,6 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useSmartPopupStrategy } from "@/hooks/useSmartPopupStrategy";
+import { usePopupVisibility } from "@/contexts/PopupCoordinatorContext";
 
 const NATIONALITIES = [
   "UAE", "India", "Pakistan", "United Kingdom", "Russia", "China",
@@ -43,8 +44,9 @@ const SERVICES = [
 
 const LeadCapturePopup = () => {
   const { shouldShow, headline, subtitle, markShown, markDismissed, markSubmitted } = useSmartPopupStrategy();
-  const [isOpen, setIsOpen] = useState(false);
+  const { requestToShow, dismiss, isVisible } = usePopupVisibility('lead-intent-modal');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [hasRequested, setHasRequested] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -56,16 +58,17 @@ const LeadCapturePopup = () => {
     service: "Buying",
   });
 
-  // Open popup when strategy says to show
+  // Request to show via coordinator when strategy says to show
   useEffect(() => {
-    if (shouldShow && !isOpen) {
-      setIsOpen(true);
+    if (shouldShow && !hasRequested) {
+      requestToShow();
       markShown();
+      setHasRequested(true);
     }
-  }, [shouldShow, isOpen, markShown]);
+  }, [shouldShow, hasRequested, requestToShow, markShown]);
 
   const handleDismiss = () => {
-    setIsOpen(false);
+    dismiss();
     markDismissed();
   };
 
@@ -90,7 +93,7 @@ const LeadCapturePopup = () => {
       });
 
       toast.success("Welcome! You now have full access to all features.");
-      setIsOpen(false);
+      dismiss();
       markSubmitted();
     } catch {
       toast.error("Something went wrong. Please try again.");
@@ -101,7 +104,7 @@ const LeadCapturePopup = () => {
 
   return (
     <AnimatePresence>
-      {isOpen && (
+      {isVisible && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
