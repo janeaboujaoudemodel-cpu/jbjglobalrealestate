@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { usePopupVisibility } from "@/contexts/PopupCoordinatorContext";
 
 const TOUR_COMPLETED_KEY = "jj_tour_completed";
 const TOUR_LAST_SHOWN_KEY = "jj_tour_last_shown";
@@ -9,7 +10,8 @@ const TOUR_LAST_SHOWN_KEY = "jj_tour_last_shown";
  * Provides functions to control tour visibility.
  */
 export function useOnboardingTour() {
-  const [showTour, setShowTour] = useState(false);
+  const { requestToShow, dismiss, isVisible } = usePopupVisibility('guided-tour');
+  const [tourRequested, setTourRequested] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
 
   useEffect(() => {
@@ -33,7 +35,8 @@ export function useOnboardingTour() {
     if (checkDevice() && !tourCompleted && lastShown !== today) {
       // Delay to let page load and render fully
       const timer = setTimeout(() => {
-        setShowTour(true);
+        setTourRequested(true);
+        requestToShow();
         localStorage.setItem(TOUR_LAST_SHOWN_KEY, today);
       }, 2500);
 
@@ -47,11 +50,12 @@ export function useOnboardingTour() {
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [requestToShow]);
 
   const completeTour = () => {
     localStorage.setItem(TOUR_COMPLETED_KEY, "true");
-    setShowTour(false);
+    setTourRequested(false);
+    dismiss();
   };
 
   const resetTour = () => {
@@ -60,11 +64,18 @@ export function useOnboardingTour() {
   };
 
   const startTour = () => {
-    setShowTour(true);
+    setTourRequested(true);
+    requestToShow();
+  };
+
+  const setShowTour = (next: boolean) => {
+    setTourRequested(next);
+    if (next) requestToShow();
+    else dismiss();
   };
 
   return { 
-    showTour, 
+    showTour: tourRequested && isVisible, 
     setShowTour, 
     completeTour, 
     resetTour, 
