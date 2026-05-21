@@ -1298,14 +1298,14 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             </Link>
           )}
 
-          {/* Collapse — clean gold text button under Sign Out */}
+          {/* Collapse — borderless gold text button with premium icon */}
           <button
             data-no-contrast-guard
             onClick={toggleCollapse}
             aria-label="Collapse navigation"
-            className="mt-1.5 flex items-center justify-center gap-1.5 w-full px-2 py-[5px] rounded-lg text-[10px] font-semibold tracking-[0.14em] uppercase transition-all bg-transparent border border-[#B89555]/40 hover:border-[#B89555] text-[#B89555] hover:bg-[#B89555]/[0.06]"
+            className="mt-2 flex items-center justify-center gap-1.5 w-full px-2 py-[6px] rounded-lg text-[10px] font-semibold tracking-[0.16em] uppercase bg-transparent border-0 text-[#B89555] hover:text-[#A68444] transition-colors"
           >
-            <ChevronLeft className="w-3 h-3" />
+            <PanelLeftClose className="w-3.5 h-3.5" strokeWidth={1.75} />
             <span>Collapse</span>
           </button>
         </div>
