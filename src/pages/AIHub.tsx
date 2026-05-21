@@ -191,6 +191,22 @@ const investorTools = [
     category: "property" as ToolCategory,
   },
   {
+    id: "list-property-sale",
+    title: "List Your Property for Sale",
+    description: "Submit a sale listing for review and publication.",
+    icon: ClipboardList,
+    link: "/listing-portal?type=sale",
+    category: "property" as ToolCategory,
+  },
+  {
+    id: "list-property-rent",
+    title: "List Your Property for Rent",
+    description: "Submit a rental listing for review and publication.",
+    icon: Home,
+    link: "/listing-portal?type=rent",
+    category: "property" as ToolCategory,
+  },
+  {
     id: "ai-property-analyzer",
     title: "JBJ AI Property Analyzer",
     description: "Deep market analysis with price trends and investment metrics.",
