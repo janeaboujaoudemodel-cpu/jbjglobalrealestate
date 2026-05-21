@@ -5286,6 +5286,136 @@ export type Database = {
           },
         ]
       }
+      crm_broker_commission_agreements: {
+        Row: {
+          agreement_html: string | null
+          agreement_pdf_path: string | null
+          broker_id: string | null
+          broker_user_id: string
+          created_at: string
+          deal_ref: string | null
+          id: string
+          owner_id: string
+          sent_at: string | null
+          signed_at: string | null
+          splits: Json
+          status: string
+          title: string
+          updated_at: string
+          void_reason: string | null
+        }
+        Insert: {
+          agreement_html?: string | null
+          agreement_pdf_path?: string | null
+          broker_id?: string | null
+          broker_user_id: string
+          created_at?: string
+          deal_ref?: string | null
+          id?: string
+          owner_id: string
+          sent_at?: string | null
+          signed_at?: string | null
+          splits?: Json
+          status?: string
+          title?: string
+          updated_at?: string
+          void_reason?: string | null
+        }
+        Update: {
+          agreement_html?: string | null
+          agreement_pdf_path?: string | null
+          broker_id?: string | null
+          broker_user_id?: string
+          created_at?: string
+          deal_ref?: string | null
+          id?: string
+          owner_id?: string
+          sent_at?: string | null
+          signed_at?: string | null
+          splits?: Json
+          status?: string
+          title?: string
+          updated_at?: string
+          void_reason?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_broker_commission_agreements_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "crm_brokers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_broker_commission_agreements_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_broker_overview"
+            referencedColumns: ["broker_id"]
+          },
+          {
+            foreignKeyName: "crm_broker_commission_agreements_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_broker_stats"
+            referencedColumns: ["broker_id"]
+          },
+          {
+            foreignKeyName: "crm_broker_commission_agreements_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_access"
+            referencedColumns: ["broker_id"]
+          },
+        ]
+      }
+      crm_broker_commission_signatures: {
+        Row: {
+          agreement_id: string
+          id: string
+          ip: string | null
+          party: string
+          signature_hash: string
+          signed_at: string
+          signer_email: string | null
+          signer_name: string
+          signer_user_id: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          agreement_id: string
+          id?: string
+          ip?: string | null
+          party: string
+          signature_hash: string
+          signed_at?: string
+          signer_email?: string | null
+          signer_name: string
+          signer_user_id?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          agreement_id?: string
+          id?: string
+          ip?: string | null
+          party?: string
+          signature_hash?: string
+          signed_at?: string
+          signer_email?: string | null
+          signer_name?: string
+          signer_user_id?: string | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_broker_commission_signatures_agreement_id_fkey"
+            columns: ["agreement_id"]
+            isOneToOne: false
+            referencedRelation: "crm_broker_commission_agreements"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crm_broker_import_staging: {
         Row: {
           batch_id: string
@@ -6366,8 +6496,13 @@ export type Database = {
       }
       crm_brokers: {
         Row: {
+          account_status: string
+          account_status_changed_at: string | null
+          account_status_changed_by: string | null
+          account_status_reason: string | null
           activated_at: string | null
           assigned_to: string | null
+          auth_user_id: string | null
           bayut_url: string | null
           birthday: string | null
           blocked_at: string | null
@@ -6449,8 +6584,13 @@ export type Database = {
           whatsapp: string | null
         }
         Insert: {
+          account_status?: string
+          account_status_changed_at?: string | null
+          account_status_changed_by?: string | null
+          account_status_reason?: string | null
           activated_at?: string | null
           assigned_to?: string | null
+          auth_user_id?: string | null
           bayut_url?: string | null
           birthday?: string | null
           blocked_at?: string | null
@@ -6532,8 +6672,13 @@ export type Database = {
           whatsapp?: string | null
         }
         Update: {
+          account_status?: string
+          account_status_changed_at?: string | null
+          account_status_changed_by?: string | null
+          account_status_reason?: string | null
           activated_at?: string | null
           assigned_to?: string | null
+          auth_user_id?: string | null
           bayut_url?: string | null
           birthday?: string | null
           blocked_at?: string | null
