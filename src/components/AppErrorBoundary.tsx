@@ -130,12 +130,12 @@ class AppErrorBoundary extends React.Component<
                 <RefreshCcw size={20} color="#1a1a1a" />
               </div>
               <h1 style={{ fontSize: "1.25rem", fontWeight: 600, margin: 0, color: "#1a1a1a" }}>
-                We're getting things ready
+                Connection issue
               </h1>
             </div>
 
             <p style={{ color: "#555", fontSize: "0.875rem", marginBottom: "1.5rem", lineHeight: 1.6 }}>
-              The page is taking a moment to load. Please check your internet connection and try refreshing, or return to the homepage.
+              We couldn't reach a resource. Please check your connection and refresh.
             </p>
 
             <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
