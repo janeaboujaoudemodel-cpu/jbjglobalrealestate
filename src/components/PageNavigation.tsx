@@ -97,9 +97,8 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
       }}
       className={cn(
         "fixed z-[10049] flex flex-col gap-2 transform-gpu",
-        // Chat launcher sits at bottom-20 (80px) and is 56px tall → top edge at 136px.
-        // Arrow sits exactly above it with an 8px gap → bottom: 144px. Same horizontal anchor as chat button.
-        isChatMedium ? "bottom-[212px]" : "bottom-[144px]",
+        // Stacks above voice concierge pill (which sits at bottom-[148px] + ~52px).
+        isChatMedium ? "bottom-[280px]" : "bottom-[216px]",
         "pointer-events-auto",
         isRTL ? "left-4" : "right-6"
       )}
