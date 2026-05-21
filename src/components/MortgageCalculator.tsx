@@ -202,51 +202,58 @@ const MortgageCalculator = ({
           </div>
         </div>
 
-        {/* Results Cards */}
+        {/* Results — Champagne-Gold Premium (replaces dark tile) */}
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
-          {/* Monthly Payment - Featured */}
-          <div className="col-span-2 sm:col-span-3 rounded-xl p-5 text-center shadow-md" style={{ background: '#111111', border: '1px solid #333' }}>
-            <p style={{ color: '#d4d4d4' }} className="text-xs mb-1 uppercase tracking-wider">Estimated Monthly Payment</p>
-            <p style={{ color: '#ffffff' }} className="font-bold text-2xl sm:text-3xl md:text-4xl">
+          {/* Monthly Payment — Featured */}
+          <div
+            className="col-span-2 sm:col-span-3 rounded-xl p-4 sm:p-5 text-center"
+            style={{
+              background: "linear-gradient(135deg, #FDFBF7 0%, #F7F1E6 50%, #ECE2D2 100%)",
+              border: "1px solid rgba(184,149,85,0.55)",
+              boxShadow:
+                "0 6px 20px rgba(184,149,85,0.18), inset 0 1px 0 rgba(255,255,255,0.9)",
+            }}
+          >
+            <p className="text-[10px] sm:text-xs mb-1 uppercase tracking-[0.18em] text-[#1A1A1A]/60 font-semibold">
+              Estimated Monthly Payment
+            </p>
+            <p key={Math.round(calculations.monthlyPayment)} className="font-bold text-2xl sm:text-3xl md:text-4xl text-[#1A1A1A] tabular-nums">
               {formatCurrency(calculations.monthlyPayment)}
             </p>
-            <p style={{ color: '#a3a3a3' }} className="text-xs mt-1">per month for {loanTermYears} years</p>
+            <p className="text-[10px] sm:text-xs mt-1 text-[#1A1A1A]/60">
+              per month for {loanTermYears} years
+            </p>
           </div>
 
           {/* Down Payment */}
-          <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl p-4 text-center shadow-sm">
-            <p className="text-[#1A1A1A]/70 text-[10px] sm:text-xs mb-1 uppercase tracking-wider">Down Payment</p>
-            <p className="text-[#1A1A1A] font-bold text-lg sm:text-xl">
-              {downPaymentPercent}%
-            </p>
-            <p className="text-[#1A1A1A]/70 font-semibold text-[10px] sm:text-xs mt-1">
+          <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl p-3 sm:p-4 text-center shadow-sm">
+            <p className="text-[#1A1A1A]/60 text-[10px] sm:text-xs mb-1 uppercase tracking-wider">Down Payment</p>
+            <p className="text-[#1A1A1A] font-bold text-base sm:text-lg">{downPaymentPercent}%</p>
+            <p className="text-[#1A1A1A]/70 font-semibold text-[10px] sm:text-xs mt-0.5 tabular-nums">
               {formatCurrency(calculations.downPayment)}
             </p>
           </div>
 
           {/* Loan Amount */}
-          <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl p-4 text-center shadow-sm">
-            <p className="text-[#1A1A1A]/70 text-[10px] sm:text-xs mb-1 uppercase tracking-wider">Loan Amount</p>
-            <p className="text-[#1A1A1A] font-bold text-lg sm:text-xl">
-              {100 - downPaymentPercent}%
-            </p>
-            <p className="text-[#1A1A1A]/70 font-semibold text-[10px] sm:text-xs mt-1">
+          <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl p-3 sm:p-4 text-center shadow-sm">
+            <p className="text-[#1A1A1A]/60 text-[10px] sm:text-xs mb-1 uppercase tracking-wider">Loan Amount</p>
+            <p className="text-[#1A1A1A] font-bold text-base sm:text-lg">{100 - downPaymentPercent}%</p>
+            <p className="text-[#1A1A1A]/70 font-semibold text-[10px] sm:text-xs mt-0.5 tabular-nums">
               {formatCurrency(calculations.loanAmount)}
             </p>
           </div>
 
           {/* Total Cost */}
-          <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl p-4 text-center shadow-sm">
-            <p className="text-[#1A1A1A]/70 text-[10px] sm:text-xs mb-1 uppercase tracking-wider">Total Cost</p>
-            <p className="text-[#1A1A1A] font-bold text-lg sm:text-xl">
-              {formatCurrency(calculations.totalPayment)}
-            </p>
-            <p className="text-[#1A1A1A]/70 text-[10px] mt-0.5">Interest: {formatCurrency(calculations.totalInterest)}</p>
+          <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl p-3 sm:p-4 text-center shadow-sm">
+            <p className="text-[#1A1A1A]/60 text-[10px] sm:text-xs mb-1 uppercase tracking-wider">Total Cost</p>
+            <p className="text-[#1A1A1A] font-bold text-base sm:text-lg tabular-nums">{formatCurrency(calculations.totalPayment)}</p>
+            <p className="text-[#1A1A1A]/60 text-[10px] mt-0.5 tabular-nums">Interest: {formatCurrency(calculations.totalInterest)}</p>
           </div>
         </div>
       </div>
     );
   }
+
 
   return (
     <div className="bg-card border border-border rounded-2xl overflow-hidden shadow-lg">
