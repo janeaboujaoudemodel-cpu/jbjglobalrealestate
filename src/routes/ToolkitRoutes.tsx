@@ -60,27 +60,27 @@ export const ToolkitRoutes = () => (
     <Route path="/toolkit" element={<Navigate to="/ai-hub" replace />} />
     <Route path="/royal-tools" element={<Navigate to="/toolkit" replace />} />
 
-    {/* Scan & Sign */}
-    <Route path="/toolkit/scan-sign" element={<L><ScanSignToolkitPage /></L>} />
+    {/* Hidden/broken toolkit tools are fully wrapped out from public access */}
+    <Route path="/toolkit/scan-sign" element={<Navigate to="/ai-hub" replace />} />
     <Route path="/toolkit/e-sign" element={<Navigate to="/e-signature" replace />} />
 
     {/* Stamp Generator */}
-    <Route path="/toolkit/stamp-generator" element={<L><StampGeneratorLanding /></L>} />
-    <Route path="/toolkit/stamp-generator/projects" element={<L><StampProjectsDashboard /></L>} />
-    <Route path="/toolkit/stamp-generator/new" element={<L><StampProjectWizard /></L>} />
-    <Route path="/toolkit/stamp-generator/:projectId/generate" element={<L><StampGeneratorMain /></L>} />
-    <Route path="/toolkit/stamp-generator/:projectId/export/:designId" element={<L><StampExportPage /></L>} />
-    <Route path="/toolkit/stamp-generator/:projectId/gallery" element={<L><StampGalleryPage /></L>} />
-    <Route path="/toolkit/stamp-generator/history" element={<L><StampHistoryDashboard /></L>} />
+    <Route path="/toolkit/stamp-generator" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/toolkit/stamp-generator/projects" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/toolkit/stamp-generator/new" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/toolkit/stamp-generator/:projectId/generate" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/toolkit/stamp-generator/:projectId/export/:designId" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/toolkit/stamp-generator/:projectId/gallery" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/toolkit/stamp-generator/history" element={<Navigate to="/ai-hub" replace />} />
 
     {/* Corporate Suite */}
-    <Route path="/toolkit/corporate-suite" element={<L><CorporateSuite /></L>} />
-    <Route path="/toolkit/corporate-suite/business-card" element={<L><BusinessCardDesigner /></L>} />
-    <Route path="/toolkit/corporate-suite/cv-resume" element={<L><CVResumeBuilder /></L>} />
-    <Route path="/toolkit/corporate-suite/cover-letter" element={<L><CoverLetterGenerator /></L>} />
-    <Route path="/toolkit/corporate-suite/landing-page" element={<L><LandingPageBuilder /></L>} />
-    <Route path="/toolkit/corporate-suite/logo-creator" element={<L><LogoCreator /></L>} />
-    <Route path="/toolkit/corporate-suite/company-profile" element={<L><CompanyProfileBuilder /></L>} />
+    <Route path="/toolkit/corporate-suite" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/toolkit/corporate-suite/business-card" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/toolkit/corporate-suite/cv-resume" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/toolkit/corporate-suite/cover-letter" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/toolkit/corporate-suite/landing-page" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/toolkit/corporate-suite/logo-creator" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/toolkit/corporate-suite/company-profile" element={<Navigate to="/ai-hub" replace />} />
 
     {/* Creative Suite - Owner only */}
     <Route path="/studio" element={<OwnerGuard><L><Studio /></L></OwnerGuard>} />
