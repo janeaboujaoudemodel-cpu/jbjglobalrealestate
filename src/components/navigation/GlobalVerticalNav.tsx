@@ -779,19 +779,10 @@ export default function GlobalVerticalNav() {
   // Accordion toggle — only one section open at a time (instant open/close, no forced scroll)
   const toggleSection = (section: SectionKey, e?: React.MouseEvent) => {
     e?.stopPropagation();
-    const opening = openSection !== section;
     setOpenSection(prev => prev === section ? null : section);
-    if (opening) {
-      const items = sectionGroups[section];
-      const firstMega = items?.find(item => item.megaMenu);
-      if (firstMega?.megaMenu) {
-        setActiveMegaMenu(firstMega.megaMenu);
-      }
-      // Do NOT auto-scroll — keep the nav stable so content doesn't jump
-    } else {
-      // When closing, also close any active mega menu from that section
-      setActiveMegaMenu(null);
-    }
+    // Always close any active mega menu — sections should only expand vertically inline,
+    // never open the full-screen mega drop-down overlay.
+    setActiveMegaMenu(null);
   };
 
   // Check if a section contains the active mega menu
