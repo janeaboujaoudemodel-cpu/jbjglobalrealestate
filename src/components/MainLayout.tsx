@@ -12,7 +12,7 @@ import {
 } from "@/lib/serviceLayoutGuard";
 import GlobalHeader from "@/components/GlobalHeader";
 import { useLanguage } from "@/contexts/LanguageContext";
-import Footer from "@/components/Footer";
+import Footer from "@/components/home/MinimalFooter";
 import SecurityShield from "@/components/SecurityShield";
 
 const GlobalVerticalNav = lazy(() => import("@/components/navigation/GlobalVerticalNav"));
@@ -261,7 +261,6 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         </main>
       </GlobalContactGating>
       <div data-chrome="footer" className={!isBackOfficeRoute ? "[body.jj-vertical-nav-active_&]:md:pl-[200px] [body.jj-vertical-nav-collapsed_&]:md:pl-[48px]" : ""}>
-        {!isBackOfficeRoute && !isToolkitGeneratorRoute && <CombinedContactNewsletter />}
         {!isBackOfficeRoute && !isToolkitGeneratorRoute && <Footer />}
       </div>
       {popupsReady && (
