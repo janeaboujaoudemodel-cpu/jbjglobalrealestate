@@ -202,54 +202,50 @@ const MortgageCalculator = ({
           </div>
         </div>
 
-        {/* Results — Champagne-Gold Premium (replaces dark tile) */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
-          {/* Monthly Payment — Featured */}
+        {/* Results — single premium row at md+: Monthly | Down | Loan | Total */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 items-stretch">
+          {/* Monthly Payment — featured */}
           <div
-            className="col-span-2 sm:col-span-3 rounded-xl p-4 sm:p-5 text-center"
+            className="col-span-2 md:col-span-1 rounded-xl p-4 text-center flex flex-col justify-center"
             style={{
               background: "linear-gradient(135deg, #FDFBF7 0%, #F7F1E6 50%, #ECE2D2 100%)",
               border: "1px solid rgba(184,149,85,0.55)",
-              boxShadow:
-                "0 6px 20px rgba(184,149,85,0.18), inset 0 1px 0 rgba(255,255,255,0.9)",
+              boxShadow: "0 6px 20px rgba(184,149,85,0.18), inset 0 1px 0 rgba(255,255,255,0.9)",
             }}
           >
-            <p className="text-[10px] sm:text-xs mb-1 uppercase tracking-[0.18em] text-[#1A1A1A]/60 font-semibold">
-              Estimated Monthly Payment
+            <p className="text-[10px] mb-1 uppercase tracking-[0.18em] text-[#1A1A1A]/60 font-semibold">
+              Monthly Payment
             </p>
-            <p key={Math.round(calculations.monthlyPayment)} className="font-bold text-2xl sm:text-3xl md:text-4xl text-[#1A1A1A] tabular-nums">
+            <p className="font-bold text-xl md:text-2xl text-[#1A1A1A] tabular-nums leading-tight">
               {formatCurrency(calculations.monthlyPayment)}
             </p>
-            <p className="text-[10px] sm:text-xs mt-1 text-[#1A1A1A]/60">
-              per month for {loanTermYears} years
+            <p className="text-[10px] mt-0.5 text-[#1A1A1A]/60">
+              for {loanTermYears} years
             </p>
           </div>
 
           {/* Down Payment */}
-          <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl p-3 sm:p-4 text-center shadow-sm">
-            <p className="text-[#1A1A1A]/60 text-[10px] sm:text-xs mb-1 uppercase tracking-wider">Down Payment</p>
-            <p className="text-[#1A1A1A] font-bold text-base sm:text-lg">{downPaymentPercent}%</p>
-            <p className="text-[#1A1A1A]/70 font-semibold text-[10px] sm:text-xs mt-0.5 tabular-nums">
-              {formatCurrency(calculations.downPayment)}
-            </p>
+          <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl p-4 text-center shadow-sm flex flex-col justify-center">
+            <p className="text-[#1A1A1A]/60 text-[10px] mb-1 uppercase tracking-wider">Down Payment</p>
+            <p className="text-[#1A1A1A] font-bold text-base md:text-lg tabular-nums">{formatCurrency(calculations.downPayment)}</p>
+            <p className="text-[#1A1A1A]/60 text-[10px] mt-0.5">{downPaymentPercent}% of price</p>
           </div>
 
           {/* Loan Amount */}
-          <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl p-3 sm:p-4 text-center shadow-sm">
-            <p className="text-[#1A1A1A]/60 text-[10px] sm:text-xs mb-1 uppercase tracking-wider">Loan Amount</p>
-            <p className="text-[#1A1A1A] font-bold text-base sm:text-lg">{100 - downPaymentPercent}%</p>
-            <p className="text-[#1A1A1A]/70 font-semibold text-[10px] sm:text-xs mt-0.5 tabular-nums">
-              {formatCurrency(calculations.loanAmount)}
-            </p>
+          <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl p-4 text-center shadow-sm flex flex-col justify-center">
+            <p className="text-[#1A1A1A]/60 text-[10px] mb-1 uppercase tracking-wider">Loan Amount</p>
+            <p className="text-[#1A1A1A] font-bold text-base md:text-lg tabular-nums">{formatCurrency(calculations.loanAmount)}</p>
+            <p className="text-[#1A1A1A]/60 text-[10px] mt-0.5">{100 - downPaymentPercent}% financed</p>
           </div>
 
           {/* Total Cost */}
-          <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl p-3 sm:p-4 text-center shadow-sm">
-            <p className="text-[#1A1A1A]/60 text-[10px] sm:text-xs mb-1 uppercase tracking-wider">Total Cost</p>
-            <p className="text-[#1A1A1A] font-bold text-base sm:text-lg tabular-nums">{formatCurrency(calculations.totalPayment)}</p>
-            <p className="text-[#1A1A1A]/60 text-[10px] mt-0.5 tabular-nums">Interest: {formatCurrency(calculations.totalInterest)}</p>
+          <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl p-4 text-center shadow-sm flex flex-col justify-center">
+            <p className="text-[#1A1A1A]/60 text-[10px] mb-1 uppercase tracking-wider">Total Cost</p>
+            <p className="text-[#1A1A1A] font-bold text-base md:text-lg tabular-nums">{formatCurrency(calculations.totalPayment)}</p>
+            <p className="text-[#1A1A1A]/60 text-[10px] mt-0.5 tabular-nums">Interest {formatCurrency(calculations.totalInterest)}</p>
           </div>
         </div>
+
       </div>
     );
   }
