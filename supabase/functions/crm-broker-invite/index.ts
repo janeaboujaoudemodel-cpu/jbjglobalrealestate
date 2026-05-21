@@ -147,6 +147,7 @@ Deno.serve(async (req) => {
     await admin
       .from("crm_brokers")
       .update({
+        user_id: brokerUserId, // backfill if row was created without it
         invitation_status: "otp_sent",
         invitation_token_hash: tokenHash,
         invitation_token_expires_at: tokenExp,
@@ -159,6 +160,7 @@ Deno.serve(async (req) => {
         must_reset_password: true,
       })
       .eq("id", brokerId);
+
 
     const { data: brokerRow } = await admin
       .from("crm_brokers")
