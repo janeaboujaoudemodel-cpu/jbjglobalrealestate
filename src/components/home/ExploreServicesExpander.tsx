@@ -55,17 +55,6 @@ const ExploreServicesExpander = () => {
   const [activeId, setActiveId] = useState<string>(services[0].id);
   const tabsRef = useRef<HTMLDivElement>(null);
 
-  // Auto-rotate the active service every 4.5s for ambient motion.
-  useEffect(() => {
-    const i = setInterval(() => {
-      setActiveId((cur) => {
-        const idx = services.findIndex((s) => s.id === cur);
-        return services[(idx + 1) % services.length].id;
-      });
-    }, 4500);
-    return () => clearInterval(i);
-  }, []);
-
   // Preload hero images so swaps are instant.
   useEffect(() => {
     services.forEach((s) => {
@@ -75,8 +64,9 @@ const ExploreServicesExpander = () => {
   }, []);
 
   // Keep active tab visible in the horizontal scroller — adjust ONLY the
-  // tabs container's scrollLeft, never call scrollIntoView (which scrolls
-  // the whole page vertically and creates a "page jumps back up" bug).
+  // tabs container's scrollLeft. Never call scrollIntoView (which would
+  // scroll the whole page and create a "page jumps back up" bug).
+  // Guard against running on first paint to avoid any layout-driven scroll.
   useEffect(() => {
     const container = tabsRef.current;
     if (!container) return;
@@ -88,6 +78,7 @@ const ExploreServicesExpander = () => {
 
   const active = services.find((s) => s.id === activeId) ?? services[0];
   const ActiveIcon = active.icon;
+
 
   return (
     <div className="rounded-2xl border border-[#B89555]/40 bg-[#FDFBF7] overflow-hidden shadow-[0_8px_28px_rgba(184,149,85,0.10)]">
@@ -132,25 +123,32 @@ const ExploreServicesExpander = () => {
       </div>
 
       {/* Hero panel */}
-      <div className="relative h-[260px] md:h-[320px] overflow-hidden">
+      <div className="relative h-[280px] md:h-[340px] overflow-hidden">
         <div
           key={active.id}
           className="absolute inset-0 bg-cover bg-center animate-fade-in"
           style={{ backgroundImage: `url(${active.image})` }}
         />
-        {/* Stronger gradient floor for crisp legibility, image still readable on the right */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/70 to-black/35" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
+        {/* Left-anchored gradient — keeps right side of image fully visible
+            while guaranteeing text legibility on the left third. */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/70 to-transparent" />
 
         <div className="relative h-full flex flex-col justify-end p-5 md:p-8 max-w-xl">
-          <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] font-bold text-white mb-2 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+          <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] font-bold text-white mb-2 drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)]">
             <ActiveIcon className="w-3.5 h-3.5" />
             <span>JBJ Service</span>
           </div>
-          <h3 className="text-white text-2xl md:text-3xl font-extrabold leading-tight drop-shadow-[0_2px_14px_rgba(0,0,0,0.95)]">
+          <h3
+            className="text-white text-2xl md:text-3xl font-extrabold leading-tight"
+            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 2px 14px rgba(0,0,0,0.95), 0 0 2px rgba(0,0,0,0.9)" }}
+          >
             {active.title}
           </h3>
-          <p className="mt-2 text-white text-sm md:text-base leading-relaxed max-w-md font-medium drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+          <p
+            className="mt-2 text-sm md:text-base leading-relaxed max-w-md font-medium"
+            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 2px 10px rgba(0,0,0,0.95)" }}
+          >
             {active.description}
           </p>
           <div className="mt-4">
@@ -170,6 +168,7 @@ const ExploreServicesExpander = () => {
           </div>
         </div>
       </div>
+
     </div>
   );
 };

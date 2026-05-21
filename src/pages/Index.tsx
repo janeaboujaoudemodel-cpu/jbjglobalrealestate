@@ -5,7 +5,9 @@ import { motion } from "framer-motion";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserRole } from "@/hooks/useUserRole";
-import { Sparkles, ArrowUpRight, Users, Building2, Brain, Briefcase, Home, FileText, UserCircle, ChevronDown, MessageSquareWarning } from "lucide-react";
+import { Sparkles, ArrowUpRight, Users, Building2, Brain, Briefcase, Home, FileText, UserCircle, ChevronDown, MessageSquareWarning, TrendingUp, Handshake, Search, BarChart3, Newspaper } from "lucide-react";
+import { useUserMode } from "@/hooks/useUserMode";
+
 import { Button } from "@/components/ui/button";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 
@@ -87,15 +89,26 @@ const staggerContainer = {
   }
 };
 
-// Quick-action CTA pills for hero overlay
+// Hero action pills — matches founder reference photo: single horizontal row
 const heroActions = [
-  { label: "Sell Your Property", icon: Building2, href: "/sell" },
+  { label: "Browse Properties", icon: Search, href: "/properties" },
   { label: "AI Home Finder", icon: Home, href: "/quiz" },
+  { label: "Sell Your Property", icon: Building2, href: "/sell" },
   { label: "Explore AI Tools", icon: Brain, href: "/ai-hub" },
+  { label: "Market Intelligence", icon: BarChart3, href: "/market-intelligence" },
+  { label: "News", icon: Newspaper, href: "/news" },
+  // Two extras retained beyond the photo
   { label: "Create Your CV", icon: FileText, href: "/toolkit/cv-builder" },
-  { label: "Update Profile", icon: UserCircle, href: "/profile" },
   { label: "Submit Complaint", icon: MessageSquareWarning, href: "/ticket-hub" },
 ];
+
+// "I'm a..." mode selector pills — inline in hero per reference photo
+const heroModes = [
+  { id: "investor" as const, label: "Investor", icon: TrendingUp },
+  { id: "broker" as const, label: "Broker", icon: Handshake },
+  { id: "developer" as const, label: "Developer", icon: Building2 },
+];
+
 
 // Three pillars
 const pillars = [
@@ -109,6 +122,8 @@ const Index = () => {
   const [videoLoaded, setVideoLoaded] = useState(false);
   const { t } = useLanguage();
   const { isBroker, hasSelectedRole } = useUserRole();
+  const { mode: activeMode, setMode } = useUserMode();
+
 
   // Preload only near-the-fold chunks during idle time
   useEffect(() => {
@@ -226,31 +241,60 @@ const Index = () => {
               Your Trusted Gateway to Dubai's Real Estate Ecosystem
             </motion.h1>
 
-            {/* Quick-action CTA pills — uniform 6-tile grid: 2×3 mobile, 3×2 tablet, 1×6 desktop. */}
+            {/* I'm a... mode selector pills — inline per founder reference */}
             <motion.div
               variants={fadeInUp}
-              className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 max-w-md sm:max-w-3xl lg:max-w-5xl mx-auto"
+              className="flex items-center justify-center flex-wrap gap-2 sm:gap-3"
+            >
+              <span className="text-[11px] sm:text-xs font-medium text-white/85 tracking-wide drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">
+                I'm a...
+              </span>
+              {heroModes.map((m) => {
+                const Icon = m.icon;
+                const isActive = activeMode === m.id || (m.id === "investor" && activeMode === "investor_broker");
+                return (
+                  <button
+                    key={m.id}
+                    type="button"
+                    onClick={() => { void setMode(m.id); }}
+                    className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[12px] sm:text-[13px] font-semibold border transition-all ${
+                      isActive
+                        ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555] shadow-[0_0_0_2px_rgba(184,149,85,0.35)]"
+                        : "bg-black/35 text-white border-white/40 hover:bg-black/55 hover:border-white/70 backdrop-blur-sm"
+                    }`}
+                    aria-pressed={isActive}
+                  >
+                    <Icon className="w-3.5 h-3.5" strokeWidth={2.25} />
+                    <span>{m.label}</span>
+                  </button>
+                );
+              })}
+            </motion.div>
+
+            {/* Quick-action CTA pills — single horizontal wrap row matching reference photo */}
+            <motion.div
+              variants={fadeInUp}
+              className="flex items-center justify-center flex-wrap gap-2 max-w-5xl mx-auto"
             >
               {heroActions.map((action) => (
                 <Link
                   key={action.label}
                   to={action.href}
                   data-no-contrast-guard
-                  className="jj-hero-action-card group flex flex-col items-center justify-center gap-1.5 px-3 py-3 rounded-2xl border text-[11px] sm:text-xs font-semibold tracking-tight transition-all duration-300 min-h-[76px]"
+                  className="jj-hero-action-card group inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-full border text-[11px] sm:text-[12px] font-semibold tracking-tight transition-all duration-300"
                 >
                   <action.icon
                     aria-hidden="true"
-                    className="jj-hero-action-icon w-5 h-5 flex-shrink-0 transition-colors duration-300"
+                    className="jj-hero-action-icon w-3.5 h-3.5 flex-shrink-0 transition-colors duration-300"
                     strokeWidth={2.25}
                   />
-                  <span
-                    className="jj-hero-action-label whitespace-normal break-words leading-[1.15] text-center line-clamp-2"
-                  >
+                  <span className="jj-hero-action-label whitespace-nowrap">
                     {action.label}
                   </span>
                 </Link>
               ))}
             </motion.div>
+
 
             {/* Three pillar badges — solid near-black surface (no backdrop-blur) + drop-shadows for guaranteed legibility on busy hero photo */}
             <motion.div
