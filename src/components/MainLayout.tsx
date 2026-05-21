@@ -1,6 +1,4 @@
-import { useEffect, useState, lazy, Suspense, useCallback } from "react";
-import { toast } from "sonner";
-import { Monitor, X } from "lucide-react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { useLocation } from "react-router-dom";
 import {
   hasTransparentHeader,
@@ -208,44 +206,6 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       window.removeEventListener('resize', syncSnapshot);
     };
   }, [showLayoutDebug, location.pathname]);
-
-  // Mobile desktop recommendation banner
-  const [showDesktopBanner, setShowDesktopBanner] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return !sessionStorage.getItem('jj_desktop_banner_dismissed');
-  });
-
-  const dismissDesktopBanner = useCallback(() => {
-    setShowDesktopBanner(false);
-    try { sessionStorage.setItem('jj_desktop_banner_dismissed', '1'); } catch {}
-  }, []);
-
-  // Show on phones + tablets only — never on desktop/laptop preview widths (≥1024px)
-  const [isPhoneOrTablet, setIsPhoneOrTablet] = useState<boolean>(() => {
-    if (typeof window === 'undefined') return false;
-    return window.innerWidth < 1024;
-  });
-  useEffect(() => {
-    const onResize = () => setIsPhoneOrTablet(window.innerWidth < 1024);
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
-
-  useEffect(() => {
-    if (isPhoneOrTablet && showDesktopBanner) {
-      toast("For the best experience on our full portal, use a desktop browser.", {
-        icon: <Monitor className="w-4 h-4" style={{ color: 'hsl(var(--gold))' }} />,
-        duration: 8000,
-        style: {
-          background: 'linear-gradient(to right, hsl(var(--pearl-1)), hsl(var(--pearl-3)))',
-          border: '1px solid hsl(var(--gold) / 0.3)',
-          color: 'hsl(0 0% 0% / 0.8)',
-        },
-        className: 'text-xs',
-      });
-      dismissDesktopBanner();
-    }
-  }, [isPhoneOrTablet, showDesktopBanner, dismissDesktopBanner]);
 
   return (
     <div className="min-h-screen bg-background md:bg-[#FDFBF7]">
