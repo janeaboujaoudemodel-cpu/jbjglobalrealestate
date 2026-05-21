@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
   ArrowLeft, Download, Bell, Clock, CheckCircle2, XCircle, Eye, Send, FileSignature, FileText,
-  User, Mail, Phone, Calendar, Globe, Shield, Loader2, Link as LinkIcon, Printer,
+  User, Mail, Phone, Shield, Loader2, Link as LinkIcon, Printer,
   ExternalLink, MessageCircle, Edit3, Save, X, Plus, ChevronDown, ChevronUp, ArrowUp, ArrowDown, Minimize2,
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
@@ -37,9 +37,9 @@ type RecipientStatus = 'pending' | 'sent' | 'delivered' | 'viewed' | 'signed' | 
 
 const statusConfig: Record<EnvelopeStatus, { label: string; color: string; icon: React.ReactNode }> = {
   draft: { label: "Draft", color: "bg-[#F7F2EA] text-[#1A1A1A]/80 border border-[#B89555]/40", icon: <FileSignature className="w-4 h-4" /> },
-  sent: { label: "Sent", color: "bg-blue-50 text-blue-700 border border-blue-200", icon: <Send className="w-4 h-4" /> },
-  viewed: { label: "Viewed", color: "bg-amber-50 text-amber-700 border border-amber-200", icon: <Eye className="w-4 h-4" /> },
-  partially_signed: { label: "Partially Signed", color: "bg-orange-50 text-orange-700 border border-orange-200", icon: <Clock className="w-4 h-4" /> },
+  sent: { label: "Pending Signature", color: "bg-blue-50 text-blue-700 border border-blue-200", icon: <Send className="w-4 h-4" /> },
+  viewed: { label: "Pending Signature · Viewed", color: "bg-amber-50 text-amber-700 border border-amber-200", icon: <Eye className="w-4 h-4" /> },
+  partially_signed: { label: "Pending Signature · Partial", color: "bg-orange-50 text-orange-700 border border-orange-200", icon: <Clock className="w-4 h-4" /> },
   completed: { label: "Completed", color: "bg-emerald-50 text-emerald-700 border border-emerald-200", icon: <CheckCircle2 className="w-4 h-4" /> },
   declined: { label: "Declined", color: "bg-red-50 text-red-700 border border-red-200", icon: <XCircle className="w-4 h-4" /> },
   expired: { label: "Expired", color: "bg-[#F7F2EA] text-[#1A1A1A]/70 border border-[#B89555]/30", icon: <Clock className="w-4 h-4" /> },
@@ -54,6 +54,8 @@ const recipientStatusConfig: Record<RecipientStatus, { label: string; color: str
   signed: { label: "Signed", color: "bg-emerald-50 text-emerald-700 border border-emerald-200" },
   declined: { label: "Declined", color: "bg-red-50 text-red-700 border border-red-200" },
 };
+
+const PAA_TEMPLATE_KEYS = new Set(["jbj-property-advertising-agreement", "jbj-paa-leasing", "jbj-letterhead-leasing"]);
 
 const isValidEmail = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.trim());
 
@@ -121,7 +123,7 @@ export default function EnvelopeDetail() {
       // Tenanted as a sensible default (owner already supplied this for the
       // Burj Khalifa unit). Stays fully editable in the inline form.
       const isPaaLeasing =
-        envelope.template_key === "jbj-property-advertising-agreement" &&
+        PAA_TEMPLATE_KEYS.has(envelope.template_key || "") &&
         ((envelope.category as any) || "leasing") === "leasing";
       if (isPaaLeasing && !next.status_vacant_tenanted && !next.vacating_date) {
         next.status_vacant_tenanted = "Tenanted";
@@ -137,7 +139,7 @@ export default function EnvelopeDetail() {
 
   // Auto re-render PDF if stored layout_version is older than the current template version
   useEffect(() => {
-    if (!envelope || !envelope.template_key || envelope.template_key !== "jbj-property-advertising-agreement") return;
+    if (!envelope || !envelope.template_key || !PAA_TEMPLATE_KEYS.has(envelope.template_key)) return;
     const meta = (envelope.metadata as any) || {};
     const stored = Number(meta.layout_version || 0);
     if (stored < PAA_LAYOUT_VERSION && envelope.status === "draft" && !regenerate.isPending) {
@@ -640,7 +642,7 @@ export default function EnvelopeDetail() {
       setEditing(false);
       setRecentlyRestoredFields([]);
       await refetch();
-      qc.invalidateQueries({ queryKey: ["esign_envelopes_hub"] });
+      qc.invalidateQueries({ queryKey: ["esign_envelopes_hub_all"] });
     } catch (e: any) {
       console.error("Save failed", e);
       toast.error(e.message || "Failed to update");
@@ -832,8 +834,8 @@ export default function EnvelopeDetail() {
     : null;
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] p-4 md:p-6">
-      <div className="max-w-[1600px] mx-auto space-y-5">
+    <div className="min-h-screen bg-[#FDFBF7] p-3 md:p-4">
+      <div className="w-full max-w-none mx-auto space-y-4">
 
         {/* Header */}
         <div className="flex items-start justify-between gap-4 flex-wrap">
@@ -852,7 +854,7 @@ export default function EnvelopeDetail() {
                 </Badge>
               </div>
               <p className="text-[#1A1A1A]/70 mt-1 text-sm">
-                {envelope.template_key === "jbj-property-advertising-agreement"
+                {PAA_TEMPLATE_KEYS.has(envelope.template_key || "")
                   ? "Property Advertising Agreement — Leasing"
                   : envelope.name}
                 {envelope.description ? ` · ${envelope.description}` : ""}
@@ -928,7 +930,7 @@ export default function EnvelopeDetail() {
               <MessageCircle className="w-4 h-4 mr-2" /> Share via WhatsApp
             </Button>
             <div className="ml-auto flex items-center gap-2 flex-wrap">
-              {envelope.template_key === "jbj-property-advertising-agreement" && (
+              {PAA_TEMPLATE_KEYS.has(envelope.template_key || "") && (
                 <PAAAICopilotDrawer
                   envelopeId={envelope.id}
                   currentValues={editing ? editValues : ((envelope.template_field_values as any) || {})}
@@ -1152,7 +1154,7 @@ export default function EnvelopeDetail() {
           )}
 
           {/* Listing draft (auto-generated from PAA) — minimized */}
-          {envelope.template_key === "jbj-property-advertising-agreement" && (
+          {PAA_TEMPLATE_KEYS.has(envelope.template_key || "") && (
             <Card className="bg-[#F7F2EA] border-[#B89555]/30">
               <button onClick={() => setOpenListing(v => !v)} className="w-full flex items-center justify-between px-4 py-2.5 text-left">
                 <span className="text-sm font-semibold text-[#1A1A1A]">Listing Draft</span>
@@ -1328,14 +1330,14 @@ export default function EnvelopeDetail() {
                 title="Document preview"
                 srcDoc={previewSrcDoc}
                 className="w-full bg-white"
-                style={{ height: "calc(100vh - 220px)", minHeight: "640px", border: 0 }}
+                style={{ height: "calc(100vh - 190px)", minHeight: "720px", border: 0 }}
               />
             ) : envelope.document_url ? (
               <iframe
                 title="Document PDF"
                 src={`${maybeProxyStorageUrl(signedDoc?.document_url || envelope.document_url, { disposition: "inline", filename: signedDoc?.document_filename || envelope.document_filename })}${(signedDoc?.document_url || envelope.document_url).includes("?") ? "&" : "?"}v=${encodeURIComponent(envelope.updated_at || envelope.created_at || "")}`}
                 className="w-full bg-white"
-                style={{ height: "calc(100vh - 220px)", minHeight: "640px", border: 0 }}
+                style={{ height: "calc(100vh - 190px)", minHeight: "720px", border: 0 }}
               />
             ) : (
               <div className="p-12 text-center text-[#1A1A1A]/70">No document</div>
@@ -1344,42 +1346,13 @@ export default function EnvelopeDetail() {
 
         </Card>
 
-        {/* Full activity log (kept below for completeness — full audit trail) */}
-        {signedDoc && (
-          <Card className="bg-[#F7F2EA] border-[#B89555]/30">
-            <CardHeader className="py-3">
-              <CardTitle className="text-sm text-[#1A1A1A] flex items-center gap-2">
-                <Shield className="w-4 h-4" /> Activity Log
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {auditLogs.map((log: any) => (
-                  <div key={log.id} className="flex items-start gap-3">
-                    <div className="w-7 h-7 rounded-full bg-white border border-[#B89555]/30 flex items-center justify-center shrink-0">
-                      <Clock className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm text-[#1A1A1A]">{log.description}</p>
-                      <div className="flex items-center gap-3 text-xs text-[#1A1A1A]/60 mt-0.5">
-                        <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{format(new Date(log.created_at), "MMM d, yyyy 'at' h:mm a")}</span>
-                        {log.ip_address && <span className="flex items-center gap-1"><Globe className="w-3 h-3" />{log.ip_address}</span>}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-                {!auditLogs.length && <p className="text-sm text-[#1A1A1A]/60 text-center py-4">No activity yet</p>}
-              </div>
-            </CardContent>
-          </Card>
-        )}
       </div>
       <SendForSignatureDialog
         open={sendOpen}
         onOpenChange={setSendOpen}
         envelope={envelope}
         primaryRecipient={clientRec}
-        onSent={() => { refetch(); qc.invalidateQueries({ queryKey: ["esign-envelopes"] }); qc.invalidateQueries({ queryKey: ["esign_envelopes_hub"] }); }}
+        onSent={() => { refetch(); qc.invalidateQueries({ queryKey: ["esign-envelopes"] }); qc.invalidateQueries({ queryKey: ["esign_envelopes_hub_all"] }); }}
       />
 
       <ExportEnvelopeDialog
@@ -1470,7 +1443,7 @@ export default function EnvelopeDetail() {
               filename: (data?.document_filename as string) || envelope.document_filename || null,
             };
           }}
-          onSent={() => { refetch(); qc.invalidateQueries({ queryKey: ["esign-envelopes"] }); qc.invalidateQueries({ queryKey: ["esign_envelopes_hub"] }); }}
+          onSent={() => { refetch(); qc.invalidateQueries({ queryKey: ["esign-envelopes"] }); qc.invalidateQueries({ queryKey: ["esign_envelopes_hub_all"] }); }}
         />
       )}
     </div>
