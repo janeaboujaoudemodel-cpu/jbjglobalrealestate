@@ -55,6 +55,8 @@ const recipientStatusConfig: Record<RecipientStatus, { label: string; color: str
   declined: { label: "Declined", color: "bg-red-50 text-red-700 border border-red-200" },
 };
 
+const PAA_TEMPLATE_KEYS = new Set(["jbj-property-advertising-agreement", "jbj-paa-leasing", "jbj-letterhead-leasing"]);
+
 const isValidEmail = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.trim());
 
 export default function EnvelopeDetail() {
@@ -121,7 +123,7 @@ export default function EnvelopeDetail() {
       // Tenanted as a sensible default (owner already supplied this for the
       // Burj Khalifa unit). Stays fully editable in the inline form.
       const isPaaLeasing =
-        envelope.template_key === "jbj-property-advertising-agreement" &&
+        PAA_TEMPLATE_KEYS.has(envelope.template_key || "") &&
         ((envelope.category as any) || "leasing") === "leasing";
       if (isPaaLeasing && !next.status_vacant_tenanted && !next.vacating_date) {
         next.status_vacant_tenanted = "Tenanted";
@@ -137,7 +139,7 @@ export default function EnvelopeDetail() {
 
   // Auto re-render PDF if stored layout_version is older than the current template version
   useEffect(() => {
-    if (!envelope || !envelope.template_key || envelope.template_key !== "jbj-property-advertising-agreement") return;
+    if (!envelope || !envelope.template_key || !PAA_TEMPLATE_KEYS.has(envelope.template_key)) return;
     const meta = (envelope.metadata as any) || {};
     const stored = Number(meta.layout_version || 0);
     if (stored < PAA_LAYOUT_VERSION && envelope.status === "draft" && !regenerate.isPending) {
