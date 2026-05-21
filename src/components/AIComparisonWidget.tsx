@@ -99,31 +99,26 @@ const AIComparisonWidget = () => {
           ))}
         </div>
 
-        {/* CTA - Premium 3D Champagne Button */}
-        <Link to="/compare">
-          <button 
-            className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50 hover:scale-[1.02] transform active:scale-95 group w-full md:w-auto hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
-            style={{
-              boxShadow: `
-                0 10px 30px rgba(200,167,102,0.4),
-                0 6px 15px rgba(0,0,0,0.2),
-                inset 0 2px 4px rgba(255,255,255,0.9),
-                inset 0 -2px 4px rgba(200,167,102,0.2),
-                0 0 20px rgba(200,167,102,0.3)
-              `,
-            }}
-          >
-            <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-            <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
-            <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
-            <span className="relative flex items-center justify-center gap-2">
-              <BarChart3 className="w-5 h-5 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
-              <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">Start</span>
-              <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">Comparing</span>
-              <ArrowUpRight className="w-5 h-5 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
-            </span>
-          </button>
-        </Link>
+        {/* Dual CTAs — Pick from listings or enter manually */}
+        <div className="flex flex-col sm:flex-row gap-3">
+          <Link to="/properties?compareMode=1" className="flex-1">
+            <button
+              className="w-full relative inline-flex items-center justify-center gap-2 px-6 py-4 text-base font-bold rounded-xl bg-[#1A1A1A] text-[#FDFBF7] border border-[#B89555]/60 hover:bg-[#2a2a2a] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] active:scale-[0.98] transition-all duration-300 group"
+            >
+              <BarChart3 className="w-5 h-5 text-[#B89555]" />
+              <span>Start exploring</span>
+              <ArrowUpRight className="w-5 h-5 text-[#B89555] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            </button>
+          </Link>
+          <Link to="/compare?mode=manual" className="flex-1">
+            <button
+              className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 text-base font-semibold rounded-xl bg-[#F7F2EA] text-[#1A1A1A] border border-[#B89555]/40 hover:bg-[#EFE6D6] hover:-translate-y-0.5 transition-all duration-300"
+            >
+              <Building2 className="w-5 h-5 text-[#1A1A1A]/70" />
+              <span>Enter manually</span>
+            </button>
+          </Link>
+        </div>
       </div>
     </motion.div>
   );
