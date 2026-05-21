@@ -35,31 +35,31 @@ const VoiceAgentSettings = lazy(() => import("@/pages/VoiceAgentSettings"));
 
 export const AIToolRoutes = () => (
   <>
-    <Route path="/ai-property-analyzer" element={<AIPropertyAnalyzerPage />} />
-    <Route path="/ai-lead-qualification" element={<BrokerGuard><AILeadQualificationPage /></BrokerGuard>} />
-    <Route path="/ai-price-predictor" element={<AIPricePredictorPage />} />
-    <Route path="/ai-neighborhood-insights" element={<AINeighborhoodInsightsPage />} />
-    <Route path="/ai-roi-calculator" element={<AIROICalculatorPage />} />
-    <Route path="/ai-competitor-analysis" element={<AICompetitorAnalysisPage />} />
-    <Route path="/ai-market-report" element={<AIMarketReportPage />} />
-    <Route path="/ai-objection-handler" element={<BrokerGuard><AIObjectionHandlerPage /></BrokerGuard>} />
-    <Route path="/ai-followup-scheduler" element={<BrokerGuard><AIFollowupSchedulerPage /></BrokerGuard>} />
+    <Route path="/ai-property-analyzer" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/ai-lead-qualification" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/ai-price-predictor" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/ai-neighborhood-insights" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/ai-roi-calculator" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/ai-competitor-analysis" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/ai-market-report" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/ai-objection-handler" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/ai-followup-scheduler" element={<Navigate to="/ai-hub" replace />} />
     <Route path="/ai-follow-up-scheduler" element={<Navigate to="/ai-followup-scheduler" replace />} />
-    <Route path="/ai-meeting-summarizer" element={<BrokerGuard><AIMeetingSummarizerPage /></BrokerGuard>} />
-    <Route path="/ai-translation-hub" element={<AITranslationHubPage />} />
+    <Route path="/ai-meeting-summarizer" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/ai-translation-hub" element={<Navigate to="/ai-hub" replace />} />
     <Route path="/ai-video-tour-script" element={<Navigate to="/toolkit/video-suite" replace />} />
-    <Route path="/ai-contract-reviewer" element={<BrokerGuard><AIContractReviewerPage /></BrokerGuard>} />
-    <Route path="/ai-document-generator" element={<AIDocumentGeneratorPage />} />
-    <Route path="/ai-call-summarizer" element={<BrokerGuard><AICallSummarizerPage /></BrokerGuard>} />
-    <Route path="/ai-client-matcher" element={<BrokerGuard><AIClientMatcherPage /></BrokerGuard>} />
-    <Route path="/ai-email-generator" element={<AIEmailGeneratorPage />} />
-    <Route path="/ai-social-media" element={<AISocialMediaPage />} />
-    <Route path="/ai-investment-report" element={<AIInvestmentReportPage />} />
-    <Route path="/ai-description-writer" element={<AIDescriptionWriterPage />} />
-    <Route path="/ai-calendar" element={<AICalendar />} />
-    <Route path="/ai-budget-planner" element={<AIFinancialAdvisor />} />
+    <Route path="/ai-contract-reviewer" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/ai-document-generator" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/ai-call-summarizer" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/ai-client-matcher" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/ai-email-generator" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/ai-social-media" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/ai-investment-report" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/ai-description-writer" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/ai-calendar" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/ai-budget-planner" element={<Navigate to="/ai-hub" replace />} />
     <Route path="/ai-financial-advisor" element={<Navigate to="/ai-budget-planner" replace />} />
-    <Route path="/ai-personal-shopper" element={<AIPersonalShopper />} />
+    <Route path="/ai-personal-shopper" element={<Navigate to="/ai-hub" replace />} />
     <Route path="/ai-home-finder" element={<Navigate to="/quiz" replace />} />
     <Route path="/tools-guide" element={<Navigate to="/ai-hub" replace />} />
     <Route path="/my-ai-history" element={<MyAIHistory />} />
