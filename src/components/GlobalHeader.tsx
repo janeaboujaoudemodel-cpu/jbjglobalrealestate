@@ -746,11 +746,15 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               <button
                 type="button"
                 className={cn(
-                  "inline-flex h-10 w-10 items-center justify-center border-0 appearance-none transition-all duration-300 focus:outline-none group shrink-0 rounded-full",
-                  isFullyTransparent
-                    ? "bg-[#FDFBF7]/90 shadow-md"
-                    : "bg-transparent"
+                  "inline-flex h-10 w-10 items-center justify-center appearance-none transition-all duration-300 focus:outline-none group shrink-0 rounded-full"
                 )}
+                style={{
+                  background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)',
+                  border: '1px solid rgba(184,149,85,0.6)',
+                  boxShadow: isFullyTransparent
+                    ? '0 4px 14px rgba(0,0,0,0.35), 0 0 0 1px rgba(184,149,85,0.25)'
+                    : '0 2px 6px rgba(184,149,85,0.25)',
+                }}
                 aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
                 data-tour-target="mobile-menu"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
