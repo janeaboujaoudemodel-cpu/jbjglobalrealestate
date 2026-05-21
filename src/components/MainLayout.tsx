@@ -220,13 +220,13 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           <CommandPaletteRoot />
         </Suspense>
       )}
-      {/* Phone (<768): horizontal header | Tablet/Desktop (md 768px+): L-shape vertical sidebar + utility bar */}
-      <div data-chrome="header" className="md:hidden">
+      {/* Compact phone (<640): mobile header | Tablet/desktop (sm 640px+): reference L-shape sidebar + utility bar */}
+      <div data-chrome="header" className="sm:hidden">
         <GlobalHeader forceSolid={needsHeaderSpacing} />
       </div>
       {!isBackOfficeRoute && (
         <>
-          <div data-chrome="sidebar" className="hidden md:block fixed left-0 top-0 h-screen z-[9997]">
+          <div data-chrome="sidebar" className="hidden sm:block fixed left-0 top-0 h-screen z-[9997]">
             <Suspense fallback={
               <div
                 aria-hidden="true"
@@ -236,7 +236,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
               <GlobalVerticalNav />
             </Suspense>
           </div>
-          <div data-chrome="utility-bar" className="hidden md:block">
+          <div data-chrome="utility-bar" className="hidden sm:block">
             <Suspense fallback={
               <div
                 aria-hidden="true"
@@ -249,7 +249,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         </>
       )}
       <GlobalContactGating>
-        <main className={`w-full max-w-full overflow-x-hidden bg-background transition-all duration-300 ${!isBackOfficeRoute ? "[body.jj-vertical-nav-active_&]:md:pl-[200px] [body.jj-vertical-nav-collapsed_&]:md:pl-[48px]" : ""} ${needsHeaderSpacing ? "pt-24 sm:pt-28 md:pt-[88px]" : "md:pt-[88px] pt-0"}`}>
+        <main className={`w-full max-w-full overflow-x-hidden bg-background transition-all duration-300 ${!isBackOfficeRoute ? "[body.jj-vertical-nav-active_&]:sm:pl-[200px] [body.jj-vertical-nav-collapsed_&]:sm:pl-[48px]" : ""} ${needsHeaderSpacing ? "pt-24 sm:pt-[88px]" : "sm:pt-[88px] pt-0"}`}>
           {layoutGuardTriggered && isServiceRoute && (
             <div role="alert" className="mx-auto mt-4 w-full max-w-6xl px-4 sm:px-6 lg:px-8">
               <div className="rounded-lg border border-destructive/30 bg-background/95 px-4 py-3 text-sm text-foreground shadow-sm backdrop-blur">
@@ -260,7 +260,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           {children}
         </main>
       </GlobalContactGating>
-      <div data-chrome="footer" className={!isBackOfficeRoute ? "[body.jj-vertical-nav-active_&]:md:pl-[200px] [body.jj-vertical-nav-collapsed_&]:md:pl-[48px]" : ""}>
+      <div data-chrome="footer" className={!isBackOfficeRoute ? "[body.jj-vertical-nav-active_&]:sm:pl-[200px] [body.jj-vertical-nav-collapsed_&]:sm:pl-[48px]" : ""}>
         {!isBackOfficeRoute && !isToolkitGeneratorRoute && <Footer />}
       </div>
       {popupsReady && (
