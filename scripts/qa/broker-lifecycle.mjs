@@ -61,18 +61,18 @@ async function run() {
   const { data: invAudit } = await sb
     .from("crm_audit_logs")
     .select("id, action, created_at")
-    .eq("action", "broker_invite_sent")
+    .eq("action", "broker_invitation_sent")
     .order("created_at", { ascending: false })
     .limit(1);
-  row("recent broker_invite_sent in audit log", !!invAudit?.length,
+  row("recent broker_invitation_sent in audit log", !!invAudit?.length,
       invAudit?.[0]?.created_at ?? "no recent invites");
 
   // Suspicious-flag plumbing
-  const { data: sus } = await sb
+  const { data: sus, error: susErr } = await sb
     .from("crm_broker_sessions")
-    .select("id, suspicious, suspicious_reason")
+    .select("id, is_suspicious")
     .limit(1);
-  row("crm_broker_sessions exposes suspicious flag", !!sus, "");
+  row("crm_broker_sessions exposes is_suspicious flag", !susErr, susErr?.message ?? "");
 
   // Auto-expire cron
   const { data: jobs, error: jErr } = await sb.rpc("crm_broker_auto_expire_invites").select?.() ?? { data: null, error: null };
