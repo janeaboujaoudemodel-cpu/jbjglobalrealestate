@@ -566,24 +566,49 @@ import { SHORTCUT_GROUPS as CANONICAL_SHORTCUT_GROUPS, filterShortcutGroups } fr
 
 
 /* ─── SECTION KEYS ─── */
-const SECTION_KEYS = ["PROPERTIES", "TOOLS", "INSIGHTS", "GUIDES", "SERVICES", "PARTNERS", "BROKER & ACADEMY", "INVESTOR", "COMPANY", "LEGAL", "PRODUCTIVITY", "MY ACCOUNT", "BUSINESS SUITES", "ADMIN & OWNER"] as const;
+const SECTION_KEYS = [
+  "TOOLS & WORKSPACE",
+  "PROPERTIES",
+  "INSIGHTS & GUIDES",
+  "SERVICES",
+  "PARTNERS",
+  "BROKER & ACADEMY",
+  "INVESTOR",
+  "COMPANY & LEGAL",
+  "MY ACCOUNT",
+  "ADMIN & OWNER",
+] as const;
 type SectionKey = typeof SECTION_KEYS[number];
+
+/* ─── Map raw item.section values onto consolidated section keys ─── */
+const SECTION_ALIAS: Record<string, SectionKey> = {
+  "PROPERTIES": "PROPERTIES",
+  "TOOLS": "TOOLS & WORKSPACE",
+  "PRODUCTIVITY": "TOOLS & WORKSPACE",
+  "BUSINESS SUITES": "TOOLS & WORKSPACE",
+  "INSIGHTS": "INSIGHTS & GUIDES",
+  "GUIDES": "INSIGHTS & GUIDES",
+  "SERVICES": "SERVICES",
+  "PARTNERS": "PARTNERS",
+  "BROKER & ACADEMY": "BROKER & ACADEMY",
+  "INVESTOR": "INVESTOR",
+  "COMPANY": "COMPANY & LEGAL",
+  "LEGAL": "COMPANY & LEGAL",
+  "MY ACCOUNT": "MY ACCOUNT",
+  "ADMIN & OWNER": "ADMIN & OWNER",
+};
 
 /* ─── SECTION ICONS ─── */
 const SECTION_ICONS: Record<SectionKey, any> = {
+  "TOOLS & WORKSPACE": Sparkles,
   "PROPERTIES": Building2,
-  "TOOLS": Sparkles,
-  "INSIGHTS": Lightbulb,
-  "GUIDES": BookOpen,
+  "INSIGHTS & GUIDES": Lightbulb,
   "SERVICES": Briefcase,
   "PARTNERS": Handshake,
   "BROKER & ACADEMY": GraduationCap,
   "INVESTOR": TrendingUp,
-  "COMPANY": Users,
-  "LEGAL": Scale,
-  "PRODUCTIVITY": Cog,
+  "COMPANY & LEGAL": Users,
   "MY ACCOUNT": User,
-  "BUSINESS SUITES": Boxes,
   "ADMIN & OWNER": Crown,
 };
 
