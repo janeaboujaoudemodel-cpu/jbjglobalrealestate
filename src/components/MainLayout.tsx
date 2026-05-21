@@ -321,6 +321,11 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           />
         </Suspense>
       )}
+      {!isBackOfficeRoute && (
+        <Suspense fallback={null}>
+          <VoiceConciergeWidget />
+        </Suspense>
+      )}
       {showLayoutDebug && layoutDebugSnapshot && (
         <div
           data-testid="layout-debug-overlay"
