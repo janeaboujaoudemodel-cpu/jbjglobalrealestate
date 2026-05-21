@@ -834,8 +834,8 @@ export default function EnvelopeDetail() {
     : null;
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] p-4 md:p-6">
-      <div className="max-w-[1600px] mx-auto space-y-5">
+    <div className="min-h-screen bg-[#FDFBF7] p-3 md:p-4">
+      <div className="w-full max-w-none mx-auto space-y-4">
 
         {/* Header */}
         <div className="flex items-start justify-between gap-4 flex-wrap">
@@ -1330,14 +1330,14 @@ export default function EnvelopeDetail() {
                 title="Document preview"
                 srcDoc={previewSrcDoc}
                 className="w-full bg-white"
-                style={{ height: "calc(100vh - 220px)", minHeight: "640px", border: 0 }}
+                style={{ height: "calc(100vh - 190px)", minHeight: "720px", border: 0 }}
               />
             ) : envelope.document_url ? (
               <iframe
                 title="Document PDF"
                 src={`${maybeProxyStorageUrl(signedDoc?.document_url || envelope.document_url, { disposition: "inline", filename: signedDoc?.document_filename || envelope.document_filename })}${(signedDoc?.document_url || envelope.document_url).includes("?") ? "&" : "?"}v=${encodeURIComponent(envelope.updated_at || envelope.created_at || "")}`}
                 className="w-full bg-white"
-                style={{ height: "calc(100vh - 220px)", minHeight: "640px", border: 0 }}
+                style={{ height: "calc(100vh - 190px)", minHeight: "720px", border: 0 }}
               />
             ) : (
               <div className="p-12 text-center text-[#1A1A1A]/70">No document</div>
