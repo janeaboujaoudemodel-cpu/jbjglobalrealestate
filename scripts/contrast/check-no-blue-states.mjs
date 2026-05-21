@@ -5,10 +5,15 @@
  * Champagne-Gold standard requires gold/champagne/ink only for state surfaces.
  */
 import { readdir, readFile, stat } from "node:fs/promises";
+import { existsSync, readFileSync } from "node:fs";
 import { join, extname } from "node:path";
 
 const ROOT = "src";
 const EXT = new Set([".ts", ".tsx", ".js", ".jsx", ".css"]);
+const ALLOW_PATH = "scripts/contrast/no-blue-allowlist.json";
+const ALLOW_LIST = existsSync(ALLOW_PATH)
+  ? new Set((JSON.parse(readFileSync(ALLOW_PATH, "utf8")).allow ?? []))
+  : new Set();
 
 // Blue tokens that affect interactive states. We deliberately ignore
 // semantic data-viz blue ("text-data-blue", "--data-blue") which is allowed.
