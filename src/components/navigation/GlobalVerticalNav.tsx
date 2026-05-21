@@ -747,11 +747,11 @@ export default function GlobalVerticalNav() {
     return location.pathname === href;
   };
 
-  // Group nav items by section
+  // Group nav items by section (with consolidated aliases)
   const { highlightItems, sectionGroups } = useMemo(() => {
     const highlights: NavItem[] = [];
     const sections: Record<string, NavItem[]> = {};
-    let currentSection: string | null = null;
+    let currentSection: SectionKey | null = null;
 
     for (const item of NAV_ITEMS) {
       if (item.highlight) {
@@ -759,8 +759,11 @@ export default function GlobalVerticalNav() {
         continue;
       }
       if (item.section) {
-        currentSection = item.section;
-        if (!sections[currentSection]) sections[currentSection] = [];
+        const mapped = SECTION_ALIAS[item.section];
+        if (mapped) {
+          currentSection = mapped;
+          if (!sections[currentSection]) sections[currentSection] = [];
+        }
       }
       if (currentSection) {
         sections[currentSection].push(item);
