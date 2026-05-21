@@ -9,6 +9,47 @@ import { installWhatsAppGuard } from "@/utils/whatsappGuard";
 // guarantees no callsite can ship an unnormalized phone number.
 installWhatsAppGuard();
 
+// ---------------------------------------------------------------------------
+// Global diagnostics + chunk-error auto-recovery (added with user approval).
+// Logs the exact failing module so we can find the root cause, and silently
+// reloads once when Vite reports a preload error (stale chunk after deploy).
+// ---------------------------------------------------------------------------
+if (typeof window !== "undefined") {
+  window.addEventListener("error", (e) => {
+    const msg = e?.message || "";
+    const src = (e?.filename as string) || "";
+    if (msg || src) {
+      // eslint-disable-next-line no-console
+      console.warn("[boot-diag] window.error", { msg, src, lineno: e.lineno, colno: e.colno });
+    }
+  });
+
+  window.addEventListener("unhandledrejection", (e) => {
+    const reason: any = (e as any)?.reason;
+    const msg = reason?.message || String(reason || "");
+    // eslint-disable-next-line no-console
+    console.warn("[boot-diag] unhandledrejection", { msg, stack: reason?.stack });
+  });
+
+  // Vite emits this when a dynamic import fails (chunk hash changed mid-session).
+  // Auto-reload once per minute so users never see the error card for stale bundles.
+  window.addEventListener("vite:preloadError", (event: Event) => {
+    // eslint-disable-next-line no-console
+    console.warn("[boot-diag] vite:preloadError — reloading once", event);
+    try {
+      const k = "jbj_chunk_reload_at";
+      const last = Number(sessionStorage.getItem(k) || 0);
+      if (Date.now() - last > 60_000) {
+        sessionStorage.setItem(k, String(Date.now()));
+        event.preventDefault();
+        window.location.reload();
+      }
+    } catch {
+      window.location.reload();
+    }
+  });
+}
+
 // Declare the global flag type
 declare global {
   interface Window {

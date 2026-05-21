@@ -28,24 +28,40 @@ class AppErrorBoundary extends React.Component<
     // eslint-disable-next-line no-console
     console.error("AppErrorBoundary caught error:", error, info);
 
-    // Always silently auto-retry up to 3 times before showing any visible
-    // fallback. This prevents transient render errors (chunk loads, route
-    // transitions, hydration hiccups, lazy Suspense throws) from ever
-    // flashing the "We're getting things ready" card.
-    if (this.state.retryCount < 3) {
+    const msg = error instanceof Error ? error.message : "";
+    const looksLikeChunk =
+      msg.includes("module") ||
+      msg.includes("import") ||
+      msg.includes("chunk") ||
+      msg.includes("Loading") ||
+      msg.includes("Failed to fetch") ||
+      msg.includes("dynamically imported") ||
+      msg.includes("Importing a module");
+
+    // Non-chunk render errors: silently remount forever. Never show the
+    // visible fallback card for transient render hiccups (Suspense throws,
+    // hydration mismatches, race conditions on route transitions).
+    if (!looksLikeChunk) {
       this.setState((prev) => ({ hasError: false, retryCount: prev.retryCount + 1 }));
-      const msg = error instanceof Error ? error.message : "";
-      const looksLikeChunk =
-        msg.includes("module") ||
-        msg.includes("import") ||
-        msg.includes("chunk") ||
-        msg.includes("Loading") ||
-        msg.includes("Failed to fetch") ||
-        msg.includes("dynamically imported") ||
-        msg.includes("Importing a module");
-      // Hard-reload only for chunk/network errors; otherwise just remount.
-      if (looksLikeChunk) {
-        setTimeout(() => window.location.reload(), 2500);
+      return;
+    }
+
+    // Chunk/network errors: silently retry up to 6 times. If we suspect a
+    // stale bundle (deploy mid-session), do a one-shot hard reload after
+    // the first failure so the user picks up the new chunk hashes.
+    if (this.state.retryCount < 6) {
+      this.setState((prev) => ({ hasError: false, retryCount: prev.retryCount + 1 }));
+      if (this.state.retryCount === 0) {
+        try {
+          const k = "jbj_chunk_reload_at";
+          const last = Number(sessionStorage.getItem(k) || 0);
+          if (Date.now() - last > 60_000) {
+            sessionStorage.setItem(k, String(Date.now()));
+            setTimeout(() => window.location.reload(), 600);
+          }
+        } catch {
+          setTimeout(() => window.location.reload(), 600);
+        }
       }
     }
   }
@@ -73,7 +89,7 @@ class AppErrorBoundary extends React.Component<
     if (this.state.hasError) {
       // While retries remain, render nothing instead of the visible card so
       // users never see the fallback flash for transient errors.
-      if (this.state.retryCount < 3) {
+      if (this.state.retryCount < 6) {
         return null;
       }
       return (
@@ -114,12 +130,12 @@ class AppErrorBoundary extends React.Component<
                 <RefreshCcw size={20} color="#1a1a1a" />
               </div>
               <h1 style={{ fontSize: "1.25rem", fontWeight: 600, margin: 0, color: "#1a1a1a" }}>
-                We're getting things ready
+                Connection issue
               </h1>
             </div>
 
             <p style={{ color: "#555", fontSize: "0.875rem", marginBottom: "1.5rem", lineHeight: 1.6 }}>
-              The page is taking a moment to load. Please check your internet connection and try refreshing, or return to the homepage.
+              We couldn't reach a resource. Please check your connection and refresh.
             </p>
 
             <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
