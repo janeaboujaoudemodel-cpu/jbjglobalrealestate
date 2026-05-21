@@ -73,8 +73,8 @@ const AreasWeCover = () => {
                 </div>
               )}
 
-              {/* High-contrast gradient — guarantees white caption legibility */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
+              {/* High-contrast gradient — stronger floor for legibility */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/55 to-black/10" />
 
               {/* Badges — cream + ink + thin gold border (No-Gold-Fills rule) */}
               <div className="absolute top-3 right-3 flex flex-col gap-1.5 items-end">
@@ -94,16 +94,16 @@ const AreasWeCover = () => {
 
               <div className="absolute bottom-0 left-0 right-0 p-4">
                 {area.propertyCount != null && area.propertyCount > 0 && (
-                  <span className="inline-block mb-2 px-2.5 py-0.5 rounded-full bg-white/15 text-white text-[10px] font-semibold tracking-wide border border-white/30 backdrop-blur-sm">
-                    {area.propertyCount} Projects
+                  <span className="inline-flex items-center gap-1 mb-2 px-2.5 py-1 rounded-full bg-[#EFE6D6] text-[#1A1A1A] text-[10px] font-bold tracking-wide border border-[#B89555]/60 shadow-sm">
+                    {area.propertyCount} {area.propertyCount === 1 ? "Project" : "Projects"}
                   </span>
                 )}
-                <h3 className="text-white font-bold text-base md:text-lg leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
+                <h3 className="text-white font-extrabold text-lg md:text-xl leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.75)]">
                   {area.name}
                 </h3>
-                <span className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-white/90 group-hover:text-white">
+                <span className="mt-2 inline-flex items-center gap-1.5 text-[12px] font-bold text-white drop-shadow-[0_1px_6px_rgba(0,0,0,0.7)] group-hover:gap-2 transition-all">
                   Explore area
-                  <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
+                  <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
                 </span>
               </div>
             </Link>
