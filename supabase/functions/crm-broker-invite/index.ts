@@ -144,9 +144,19 @@ Deno.serve(async (req) => {
     const tokenExp = new Date(Date.now() + TOKEN_TTL_MIN * 60_000).toISOString();
     const otpExp = new Date(Date.now() + OTP_TTL_MIN * 60_000).toISOString();
 
+    // Detach user_id from any other (stale/revoked) crm_brokers rows so the
+    // unique(user_id) constraint doesn't silently block backfill below.
+    await admin
+      .from("crm_brokers")
+      .update({ user_id: null })
+      .eq("user_id", brokerUserId)
+      .neq("id", brokerId);
+
+
     await admin
       .from("crm_brokers")
       .update({
+        user_id: brokerUserId, // backfill if row was created without it
         invitation_status: "otp_sent",
         invitation_token_hash: tokenHash,
         invitation_token_expires_at: tokenExp,
@@ -159,6 +169,7 @@ Deno.serve(async (req) => {
         must_reset_password: true,
       })
       .eq("id", brokerId);
+
 
     const { data: brokerRow } = await admin
       .from("crm_brokers")
