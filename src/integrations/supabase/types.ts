@@ -35061,6 +35061,12 @@ export type Database = {
       cleanup_rate_limit_records: { Args: never; Returns: number }
       cleanup_temp_video_files: { Args: never; Returns: undefined }
       crm_auto_purge_old_deleted: { Args: never; Returns: number }
+      crm_broker_auto_expire_invites: {
+        Args: never
+        Returns: {
+          expired_count: number
+        }[]
+      }
       crm_broker_block_device: {
         Args: { _broker_id: string; _fingerprint: string; _reason?: string }
         Returns: string
