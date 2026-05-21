@@ -11,6 +11,7 @@ import {
   Home, DollarSign, Lightbulb, AreaChart, Bot, Presentation, Table2, Video as VideoIcon
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { isApprovedPublicToolId } from "@/config/publicToolAccess";
 
 export type ToolStatus = 'active' | 'coming-soon' | 'beta';
 export type ToolCategory = 'media' | 'ai-property' | 'ai-sales' | 'ai-reports' | 'ai-communication' | 'ai-content' | 'productivity' | 'creative';
@@ -442,7 +443,7 @@ export const productivityTools: ToolDefinition[] = [
 ];
 
 // ============ AGGREGATED EXPORTS ============
-export const allTools: ToolDefinition[] = [
+export const registryTools: ToolDefinition[] = [
   ...mediaTools,
   ...creativeTools,
   ...aiPropertyTools,
@@ -452,6 +453,8 @@ export const allTools: ToolDefinition[] = [
   ...aiContentTools,
   ...productivityTools,
 ];
+
+export const allTools: ToolDefinition[] = registryTools.filter((tool) => isApprovedPublicToolId(tool.id));
 
 export const activeTools = allTools.filter(t => t.status === 'active');
 export const comingSoonTools = allTools.filter(t => t.status === 'coming-soon');
