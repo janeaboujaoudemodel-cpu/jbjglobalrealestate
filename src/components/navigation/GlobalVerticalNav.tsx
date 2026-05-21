@@ -335,6 +335,16 @@ const NAV_ITEMS: NavItem[] = [
   { label: "AI Governance", href: "/governance/ai", icon: Shield },
 ];
 
+const PUBLIC_TOOLS_WORKSPACE_ITEMS: NavItem[] = [
+  { label: "AI Home Finder", href: "/quiz", icon: Home, section: "TOOLS" },
+  { label: "Property Comparison", href: "/compare", icon: GitCompare },
+  { label: "Mortgage Calculator", href: "/mortgage-calculator", icon: Calculator },
+  { label: "Rental Index", href: "/rental-index", icon: TrendingUp },
+  { label: "Property Evaluator", href: "/property-evaluator", icon: BarChart3 },
+  { label: "List Property for Sale", href: "/listing-portal?type=sale", icon: ClipboardCheck },
+  { label: "List Property for Rent", href: "/listing-portal?type=rent", icon: Key },
+];
+
 /* ─── MEGA MENU LINK SETS ─── */
 const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; icon: any }>> = {
   buy: [
@@ -714,10 +724,8 @@ export default function GlobalVerticalNav() {
   const handleNavClick = useCallback((megaMenu?: MegaMenuKey, e?: React.MouseEvent) => {
     if (megaMenu) {
       e?.preventDefault();
-      setActiveMegaMenu(prev => prev === megaMenu ? null : megaMenu);
-    } else {
-      setActiveMegaMenu(null);
     }
+    setActiveMegaMenu(null);
   }, []);
 
   const closeMegaMenu = useCallback(() => setActiveMegaMenu(null), []);
@@ -769,6 +777,7 @@ export default function GlobalVerticalNav() {
         sections[currentSection].push(item);
       }
     }
+    sections["TOOLS & WORKSPACE"] = PUBLIC_TOOLS_WORKSPACE_ITEMS;
     return { highlightItems: highlights, sectionGroups: sections };
   }, []);
 
@@ -1409,12 +1418,14 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 
             {/* Expand button */}
             <button
+              data-no-contrast-guard
               onClick={toggleCollapse}
-              className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6] flex items-center justify-center hover:from-[#ECE2D2] hover:to-[#C9B896] transition-all shadow-md shadow-black/10 ring-1 ring-black/10 mt-1 mb-1"
+              className="w-8 h-8 rounded-lg flex items-center justify-center transition-all mt-1 mb-1 border-0 bg-transparent hover:bg-[#EFE6D6]/20"
+              style={{ color: '#B89555' }}
               aria-label="Expand navigation"
               title="Expand navigation"
             >
-              <ChevronRight className="w-4 h-4 text-[#1A1A1A]/50" />
+              <PanelLeftClose className="w-4 h-4 rotate-180" strokeWidth={1.75} style={{ color: '#B89555' }} />
             </button>
           </div>
         </div>

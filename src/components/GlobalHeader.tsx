@@ -11,7 +11,7 @@ import {
   Phone, Building2, Newspaper, ClipboardCheck, FileText,
   Sparkles, Search, Users, BookOpen, ChevronDown, Briefcase, UserCircle, FolderOpen, Monitor,
   GraduationCap, BarChart3, MapPin, Award, UserPlus, Globe, HelpCircle,
-  Lightbulb, Target, Calendar, Shield, Palette, Cpu, Wrench, Layers, LayoutDashboard, Calculator, Key, Headphones, CalendarClock, Stamp
+  Lightbulb, Target, Calendar, Shield, Palette, Cpu, Wrench, Layers, LayoutDashboard, Calculator, Key, Headphones, CalendarClock, Stamp, TrendingUp
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -506,45 +506,15 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     { href: "/listing-portal", label: "List Your Property", icon: ClipboardCheck },
   ];
 
-  // Mobile menu - Creative Toolkit (complete list)
+  // Mobile menu - only approved public tools
   const mobileToolkitLinks = [
-    { href: "/ai-hub", label: "AI Tools Hub", icon: Sparkles },
-    // Creative Suite
-    { href: "/toolkit/stamp-generator", label: "Stamp Generator", icon: Stamp },
-    { href: "/toolkit/ai-video-studio", label: "AI Video Studio", icon: Building2 },
-    { href: "/toolkit/video-resize-pack", label: "Video Resize Pack", icon: Building2 },
-    { href: "/toolkit/voice-studio", label: "Voice Studio", icon: Cpu },
-    { href: "/toolkit/voice-studio-pro", label: "Voice Studio Pro", icon: Cpu },
-    { href: "/toolkit/captions-translate", label: "Captions & Translate", icon: Globe },
-    { href: "/toolkit/background-ai", label: "Background Remover", icon: Sparkles },
-    { href: "/toolkit/beauty-filters", label: "Beauty Filters", icon: Palette },
-    { href: "/toolkit/image-resize", label: "Image Resizer", icon: Layers },
-    // Documents
-    { href: "/toolkit/pdf-from-photos", label: "Photo to PDF", icon: FileText },
-    { href: "/toolkit/pdf-editor", label: "PDF Editor", icon: FileText },
-    { href: "/toolkit/scan-sign", label: "Scan & Sign", icon: ClipboardCheck },
-    // Suites
-    { href: "/toolkit/video-suite", label: "Video Suite", icon: Building2 },
-    { href: "/toolkit/voice-suite", label: "Voice Suite", icon: Cpu },
-    { href: "/toolkit/photo-suite", label: "Photo Suite", icon: Palette },
-    { href: "/toolkit/pdf-suite", label: "PDF Suite", icon: FileText },
-    { href: "/toolkit/property-suite", label: "Property Suite", icon: Building2 },
-    { href: "/toolkit/corporate-suite", label: "Corporate Suite", icon: Briefcase },
-    // Corporate Tools
-    { href: "/toolkit/corporate-suite/business-card", label: "Business Card Designer", icon: Briefcase },
-    { href: "/toolkit/corporate-suite/cv-resume", label: "CV & Resume Builder", icon: FileText },
-    { href: "/toolkit/corporate-suite/cover-letter", label: "Cover Letter Generator", icon: FileText },
-    { href: "/toolkit/corporate-suite/landing-page", label: "Landing Page Builder", icon: LayoutDashboard },
-    { href: "/toolkit/corporate-suite/logo-creator", label: "Logo Creator", icon: Palette },
-    { href: "/toolkit/corporate-suite/company-profile", label: "Company Profile Builder", icon: Building2 },
-    // Business Suite
-    { href: "/suites", label: "Suites Hub", icon: Layers },
-    { href: "/business-suite/all", label: "All Business Tools", icon: Wrench },
-    { href: "/business-suite/real-estate", label: "Real Estate Suite", icon: Building2 },
-    { href: "/business-suite/creative", label: "Creative Suite", icon: Palette },
-    { href: "/business-suite/productivity", label: "Productivity Suite", icon: Target },
-    // E-Signature
-    { href: "/e-signature", label: "E-Signature", icon: ClipboardCheck },
+    { href: "/quiz", label: "AI Home Finder", icon: Sparkles },
+    { href: "/compare", label: "Property Comparison", icon: ClipboardCheck },
+    { href: "/mortgage-calculator", label: "Mortgage Calculator", icon: Calculator },
+    { href: "/rental-index", label: "Rental Index", icon: TrendingUp },
+    { href: "/property-evaluator", label: "Property Evaluator", icon: BarChart3 },
+    { href: "/listing-portal?type=sale", label: "List Property for Sale", icon: ClipboardCheck },
+    { href: "/listing-portal?type=rent", label: "List Property for Rent", icon: Key },
   ];
 
   // Mobile menu - Legal & Trust

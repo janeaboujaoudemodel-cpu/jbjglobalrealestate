@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { isApprovedPublicToolId } from "@/config/publicToolAccess";
 
 export type ToolVisibility = "public" | "owner_only" | "hidden";
 
@@ -18,7 +19,7 @@ interface VisibilityRow {
  *                   shows every tool regardless); hidden from public site
  *   - "hidden":     fully hidden — wrapped out from every surface
  *
- * Default policy: a tool is PUBLIC unless a row says otherwise.
+ * Default policy: a tool is HIDDEN unless it is in the approved public list.
  *
  * `isPublic(toolId)` returns true ONLY when visibility === "public", so the
  * homepage / hub / mega-menu / search will hide both owner-only and hidden
@@ -61,7 +62,7 @@ export function useToolVisibility() {
 
   return useMemo(() => {
     const getVisibility = (toolId: string): ToolVisibility =>
-      visibilityMap.get(toolId) ?? "public";
+      visibilityMap.get(toolId) ?? (isApprovedPublicToolId(toolId) ? "public" : "hidden");
     return {
       loading,
       getVisibility,

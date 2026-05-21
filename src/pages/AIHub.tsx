@@ -10,6 +10,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { SEOHead } from "@/components/SEOHead";
 import { SectionDivider } from "@/components/ui/section-divider";
 import { useToolVisibility } from "@/hooks/useToolVisibility";
+import { isApprovedPublicToolId } from "@/config/publicToolAccess";
 import { 
   ArrowUpRight, 
   Sparkles, 
@@ -187,6 +188,22 @@ const investorTools = [
     description: "AI-powered rental estimates with market trends.",
     icon: Layers,
     link: "/rental-index",
+    category: "property" as ToolCategory,
+  },
+  {
+    id: "list-property-sale",
+    title: "List Your Property for Sale",
+    description: "Submit a sale listing for review and publication.",
+    icon: ClipboardList,
+    link: "/listing-portal?type=sale",
+    category: "property" as ToolCategory,
+  },
+  {
+    id: "list-property-rent",
+    title: "List Your Property for Rent",
+    description: "Submit a rental listing for review and publication.",
+    icon: Home,
+    link: "/listing-portal?type=rent",
     category: "property" as ToolCategory,
   },
   {
@@ -521,7 +538,7 @@ const AIHub = () => {
 
   // Combine all tools, then drop anything hidden by the admin
   const allTools = [...investorTools, ...productivityTools, ...mediaAndCreativeTools, ...aiSalesTools, ...aiReportTools, ...aiCommTools, ...aiContentTools]
-    .filter(tool => visibility.isPublic(tool.id));
+    .filter(tool => isApprovedPublicToolId(tool.id) && visibility.isPublic(tool.id));
 
   // Filter tools by search and category
   const filteredTools = allTools.filter(tool => {

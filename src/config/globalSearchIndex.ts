@@ -95,15 +95,8 @@ const toolsFromRegistry: SearchItem[] = allTools
     category: 'tool' as const,
   }));
 
-// Additional tool aliases for better search
-const toolAliases: SearchItem[] = [
-  { id: 'graphic-designer', label: 'Graphic Designer', route: '/jbj-design-studio', keywords: ['graphic', 'designer', 'brochure', 'marketing pack', 'flyer', 'poster'], description: 'Create marketing materials', icon: PenTool, access: 'public', category: 'tool' },
-  { id: 'interior-design', label: 'AI Interior Design', route: '/interior-design-ai', keywords: ['interior', 'design', 'room', 'decor', 'staging', 'furniture'], description: 'AI interior design tool', icon: Palette, access: 'public', category: 'tool' },
-  { id: 'property-measurement', label: 'Property Measurement', route: '/property-measurement', keywords: ['measurement', 'size', 'sqft', 'square feet', 'area', 'dimensions'], description: 'Measure property sizes', icon: Ruler, access: 'public', category: 'tool' },
-  { id: 'video-studio', label: 'Video Studio', route: '/toolkit/ai-video-studio', keywords: ['video', 'editor', 'captions', 'subtitles', 'edit video'], description: 'Professional video editor', icon: Video, access: 'public', category: 'tool' },
-  { id: 'voice-studio', label: 'Voice Studio', route: '/toolkit/voice-studio', keywords: ['voice', 'audio', 'tts', 'text to speech', 'voiceover'], description: 'AI voice generation', icon: Mic, access: 'public', category: 'tool' },
-  { id: 'voice-studio-pro', label: 'Voice Studio Pro', route: '/toolkit/voice-studio-pro', keywords: ['voice', 'clone', 'cloning', 'tts', 'text to speech', 'multilingual', 'arabic', 'languages', 'elevenlabs', 'narration'], description: 'Voice cloning + multi-language TTS', icon: Mic, access: 'public', category: 'tool' },
-];
+// Broken or hidden tools must not appear through aliases.
+const toolAliases: SearchItem[] = [];
 
 // Broker-specific routes
 const brokerRoutes: SearchItem[] = [
