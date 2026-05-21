@@ -1221,13 +1221,11 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                             onMouseEnter={() => prefetchAITool(item.href)}
                             onFocus={() => prefetchAITool(item.href)}
                             onClick={(e) => {
-                              if (hasMega) {
-                                handleNavClick(item.megaMenu, e);
-                              } else {
-                                handleNavClick(undefined);
-                                if (sectionKey === 'MY ACCOUNT') {
-                                  setOpenSection(null);
-                                }
+                              // Never open the full-screen mega drop-down overlay from inside
+                              // an expanded section — just navigate.
+                              handleNavClick(undefined);
+                              if (sectionKey === 'MY ACCOUNT') {
+                                setOpenSection(null);
                               }
                             }}
                             className={`group flex items-center gap-2 px-2.5 py-[6px] rounded-lg text-[12px] font-medium transition-all duration-150 ${getItemStyle(item, sectionKey)}`}
@@ -1236,9 +1234,6 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                               <Icon className={`w-3 h-3 ${getIconStyle(item, sectionKey)}`} />
                             </span>
                             <span className="flex-1">{item.label}</span>
-                            {hasMega && (
-                              <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-[#1A1A1A]" : "text-[#1A1A1A]/20"}`} />
-                            )}
                           </Link>
                         );
                       })}
