@@ -118,7 +118,7 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
         className={buttonBaseClass}
         aria-label="Scroll to top"
       >
-        <ArrowUp className="w-5 h-5 text-[#1A1A1A]" />
+        <ArrowUp className="w-5 h-5" strokeWidth={1.75} />
       </button>
     </div>
   );
