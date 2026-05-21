@@ -116,7 +116,8 @@ export default function UploadDatabaseDialog({ open, onOpenChange, onCreated }: 
     }
   };
 
-  const persist = async (mode: "separate" | "merged"): Promise<string | null> => {
+  type PersistResult = { dbId: string; rowErrors: number; leadsInserted: number; leadsDuplicates: number; leadsErrors: number };
+  const persist = async (mode: "separate" | "merged"): Promise<PersistResult | null> => {
     if (!parsed || !file) return null;
     const { data: auth } = await supabase.auth.getUser();
     const uid = auth.user?.id;
