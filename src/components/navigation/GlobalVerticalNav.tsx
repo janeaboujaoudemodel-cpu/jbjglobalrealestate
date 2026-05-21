@@ -2,7 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Building2, BarChart3, BookOpen, Briefcase, Users, Home, Tag, Key, PlusCircle,
   Building, Layers, Cpu, Heart, GitCompare, Calculator, Headphones, MapPin,
-  Lightbulb, ChevronRight, ChevronLeft, ChevronDown, Search, User, Settings, Castle, FileText,
+  Lightbulb, ChevronRight, ChevronLeft, ChevronDown, PanelLeftClose, Search, User, Settings, Castle, FileText,
   DollarSign, TrendingUp, ClipboardCheck, Shield, Sparkles, Bot, Video, Image,
   Mic, Stamp, CreditCard, Palette, Pen, Award, Globe, Brain, MessageSquare,
   Phone, Languages, FileSearch, FilePlus, UserCheck, CalendarClock, Mail,
@@ -779,19 +779,10 @@ export default function GlobalVerticalNav() {
   // Accordion toggle — only one section open at a time (instant open/close, no forced scroll)
   const toggleSection = (section: SectionKey, e?: React.MouseEvent) => {
     e?.stopPropagation();
-    const opening = openSection !== section;
     setOpenSection(prev => prev === section ? null : section);
-    if (opening) {
-      const items = sectionGroups[section];
-      const firstMega = items?.find(item => item.megaMenu);
-      if (firstMega?.megaMenu) {
-        setActiveMegaMenu(firstMega.megaMenu);
-      }
-      // Do NOT auto-scroll — keep the nav stable so content doesn't jump
-    } else {
-      // When closing, also close any active mega menu from that section
-      setActiveMegaMenu(null);
-    }
+    // Always close any active mega menu — sections should only expand vertically inline,
+    // never open the full-screen mega drop-down overlay.
+    setActiveMegaMenu(null);
   };
 
   // Check if a section contains the active mega menu
@@ -1230,13 +1221,11 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                             onMouseEnter={() => prefetchAITool(item.href)}
                             onFocus={() => prefetchAITool(item.href)}
                             onClick={(e) => {
-                              if (hasMega) {
-                                handleNavClick(item.megaMenu, e);
-                              } else {
-                                handleNavClick(undefined);
-                                if (sectionKey === 'MY ACCOUNT') {
-                                  setOpenSection(null);
-                                }
+                              // Never open the full-screen mega drop-down overlay from inside
+                              // an expanded section — just navigate.
+                              handleNavClick(undefined);
+                              if (sectionKey === 'MY ACCOUNT') {
+                                setOpenSection(null);
                               }
                             }}
                             className={`group flex items-center gap-2 px-2.5 py-[6px] rounded-lg text-[12px] font-medium transition-all duration-150 ${getItemStyle(item, sectionKey)}`}
@@ -1245,9 +1234,6 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                               <Icon className={`w-3 h-3 ${getIconStyle(item, sectionKey)}`} />
                             </span>
                             <span className="flex-1">{item.label}</span>
-                            {hasMega && (
-                              <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-[#1A1A1A]" : "text-[#1A1A1A]/20"}`} />
-                            )}
                           </Link>
                         );
                       })}
@@ -1312,14 +1298,14 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             </Link>
           )}
 
-          {/* Collapse — clean gold text button under Sign Out */}
+          {/* Collapse — borderless gold text button with premium icon */}
           <button
             data-no-contrast-guard
             onClick={toggleCollapse}
             aria-label="Collapse navigation"
-            className="mt-1.5 flex items-center justify-center gap-1.5 w-full px-2 py-[5px] rounded-lg text-[10px] font-semibold tracking-[0.14em] uppercase transition-all bg-transparent border border-[#B89555]/40 hover:border-[#B89555] text-[#B89555] hover:bg-[#B89555]/[0.06]"
+            className="mt-2 flex items-center justify-center gap-1.5 w-full px-2 py-[6px] rounded-lg text-[10px] font-semibold tracking-[0.16em] uppercase bg-transparent border-0 text-[#B89555] hover:text-[#A68444] transition-colors"
           >
-            <ChevronLeft className="w-3 h-3" />
+            <PanelLeftClose className="w-3.5 h-3.5" strokeWidth={1.75} />
             <span>Collapse</span>
           </button>
         </div>
