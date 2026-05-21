@@ -1,0 +1,1 @@
+DELETE FROM crm_brokers WHERE email_lower='infoo.jane@gmail.com' AND full_name='Jane QA Test';
