@@ -93,11 +93,7 @@ const AreasWeCover = () => {
               </div>
 
               <div className="absolute bottom-0 left-0 right-0 p-4">
-                {area.propertyCount != null && area.propertyCount > 0 && (
-                  <span className="inline-flex items-center gap-1 mb-2 px-2.5 py-1 rounded-full bg-[#EFE6D6] text-[#1A1A1A] text-[10px] font-bold tracking-wide border border-[#B89555]/60 shadow-sm">
-                    {area.propertyCount} {area.propertyCount === 1 ? "Project" : "Projects"}
-                  </span>
-                )}
+
                 <h3 className="text-white font-extrabold text-lg md:text-xl leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.75)]">
                   {area.name}
                 </h3>

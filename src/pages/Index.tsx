@@ -454,19 +454,13 @@ const Index = () => {
         </div>
       </PodcastVisibilityGate>
 
-      <SectionDivider fullWidth />
-
       <div className="cv-auto">
         <Suspense fallback={<SectionLoader />}>
           <AreasWeCover />
         </Suspense>
       </div>
 
-      <SectionDivider fullWidth />
 
-
-      {/* Final divider closes rhythm before footer */}
-      <SectionDivider fullWidth />
 
       <Suspense fallback={null}>
         <InquiryFormModal 
