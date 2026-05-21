@@ -325,8 +325,8 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                     <span
                       className="ml-2 inline-flex items-center justify-center px-2.5 h-[22px] min-w-[96px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap border"
                       style={{
-                        color: config.base,
-                        borderColor: config.base,
+                        color: '#1A1A1A',
+                        borderColor: 'rgba(26,26,26,0.25)',
                         backgroundColor: 'rgba(255,255,255,0.6)',
                       }}
                     >
