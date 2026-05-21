@@ -204,7 +204,6 @@ export default function UploadDatabaseDialog({ open, onOpenChange, onCreated }: 
           raw_import: r,
           source_database_id: dbId,
           source_row_index: i,
-          upload_filename: file.name,
         }))
         .filter((x) => x.full_name && String(x.full_name).trim().length);
 
