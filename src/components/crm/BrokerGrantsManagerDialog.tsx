@@ -206,7 +206,16 @@ export default function BrokerGrantsManagerDialog({
       .order("last_seen_at", { ascending: false })
       .limit(50);
     if (error) toast.error(error.message);
-    setSessions(s => ({ ...s, [b.id]: (data ?? []) as SessionRow[] }));
+    const sorted = ((data ?? []) as SessionRow[]).slice().sort((a, b) => {
+      // Suspicious-and-active first, then by last_seen desc
+      const aActive = !a.revoked_at, bActive = !b.revoked_at;
+      const aSus = !!a.is_suspicious && aActive, bSus = !!b.is_suspicious && bActive;
+      if (aSus !== bSus) return aSus ? -1 : 1;
+      const at = a.last_seen_at ? new Date(a.last_seen_at).getTime() : 0;
+      const bt = b.last_seen_at ? new Date(b.last_seen_at).getTime() : 0;
+      return bt - at;
+    });
+    setSessions(s => ({ ...s, [b.id]: sorted }));
     setSessionsLoading(s => ({ ...s, [b.id]: false }));
   };
 
