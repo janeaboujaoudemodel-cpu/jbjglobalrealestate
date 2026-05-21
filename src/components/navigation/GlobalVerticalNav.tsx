@@ -1303,7 +1303,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
         style={{ willChange: 'transform, opacity' }}
       >
       {collapsed ? (
-      <div className="hidden lg:flex w-[48px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative">
+      <div className="hidden sm:flex w-[48px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative">
           {/* Logo header (88px) — collapsed: just icon */}
           <div className="h-[88px] w-full shrink-0 flex items-center justify-center bg-gradient-to-b from-[#F7F1E6] to-[#ECE2D2] border-b border-[#B89555]/40">
             <Link to="/">
@@ -1400,7 +1400,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           </div>
         </div>
       ) : (
-        <div className="hidden lg:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-r border-[#B89555]/40 h-full relative overscroll-contain">
+        <div className="hidden sm:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-r border-[#B89555]/40 h-full relative overscroll-contain">
           {renderNavContent()}
         </div>
       )}
