@@ -125,19 +125,17 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
   // upward + adds a soft glow ring. Unselected state uses a neutral
   // champagne chip with a gold hairline so it reads as a CTA.
   // ─────────────────────────────────────────────────────────────────
-  const triggerStyle: CSSProperties = isUnselected
-    ? {
-        backgroundImage: 'linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)',
-        borderColor: '#B89555',
-        color: '#1A1A1A',
-        boxShadow: '0 2px 8px rgba(184,149,85,0.25), inset 0 1px 0 rgba(255,255,255,0.6), 0 0 0 1px rgba(0,0,0,0.06)',
-      }
-    : {
-        backgroundImage: `linear-gradient(135deg, ${currentConfig.base} 0%, ${currentConfig.base}D9 100%)`,
-        borderColor: currentConfig.baseDark,
-        color: '#1A1A1A',
-        boxShadow: `0 2px 8px ${currentConfig.base}55, inset 0 1px 0 rgba(255,255,255,0.55), 0 0 0 1px rgba(0,0,0,0.12)`,
-      };
+  // Closed-trigger: uniform champagne chip with a gold hairline + thin
+  // accent rail on the leading edge in the active mode's tone. Same look
+  // whether selected or not — classy, consistent, no rainbow.
+  const triggerStyle: CSSProperties = {
+    backgroundImage: 'linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)',
+    borderColor: 'rgba(184,149,85,0.55)',
+    color: '#1A1A1A',
+    boxShadow: isUnselected
+      ? 'inset 0 1px 0 rgba(255,255,255,0.6), 0 1px 2px rgba(26,26,26,0.06)'
+      : `inset 3px 0 0 ${currentConfig.base}, inset 0 1px 0 rgba(255,255,255,0.6), 0 1px 2px rgba(26,26,26,0.06)`,
+  };
 
   if (variant === 'compact') {
     return (
