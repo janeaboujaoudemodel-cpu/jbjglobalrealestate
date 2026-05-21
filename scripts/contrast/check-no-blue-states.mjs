@@ -23,13 +23,13 @@ const PATTERNS = [
   /#(?:3b82f6|2563eb|1d4ed8|60a5fa|93c5fd|1e40af|1e3a8a)\b/i,
 ];
 
-const ALLOW_FILES = new Set<string>([
+const ALLOW_FILES = new Set([
   // Allowlist for data-viz primitives if needed
 ]);
 
-let hits: Array<{ file: string; line: number; text: string; pattern: string }> = [];
+let hits = [];
 
-async function walk(dir: string) {
+async function walk(dir) {
   const entries = await readdir(dir);
   for (const e of entries) {
     const p = join(dir, e);
@@ -39,7 +39,7 @@ async function walk(dir: string) {
   }
 }
 
-async function scan(file: string) {
+async function scan(file) {
   if (ALLOW_FILES.has(file)) return;
   const text = await readFile(file, "utf8");
   const lines = text.split("\n");
