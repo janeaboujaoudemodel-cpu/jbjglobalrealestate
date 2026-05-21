@@ -5,6 +5,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToolVisibility } from "@/hooks/useToolVisibility";
+import { isApprovedPublicToolId } from "@/config/publicToolAccess";
 
 type ToolTone = "blue" | "emerald" | "gold" | "purple" | "darkGreen" | "pink" | "ink" | "amber";
 
@@ -42,7 +43,7 @@ const royalTools: RoyalTool[] = [
 
 export function ToolkitShowcaseCard() {
   const visibility = useToolVisibility();
-  const tools = royalTools.filter(t => visibility.isPublic(t.id));
+  const tools = royalTools.filter(t => isApprovedPublicToolId(t.id) && visibility.isPublic(t.id));
 
   return (
     <section className="bg-[#FDFBF7] py-10 md:py-14">
