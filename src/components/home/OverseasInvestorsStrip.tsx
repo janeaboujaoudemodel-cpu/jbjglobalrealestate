@@ -1,7 +1,7 @@
 /**
- * OverseasInvestorsStrip — single-line champagne band used on the homepage.
- * Replaces the tall OverseasInvestorsBanner on `/` per founder request.
- * The full banner remains available on /overseas-investors via the original component.
+ * OverseasInvestorsStrip — slim institutional band on the homepage.
+ * - No pill chrome: content sits directly in the section box.
+ * - Always horizontal (never stacks vertically), shrinks gracefully on compressed screens.
  */
 import { Link } from "react-router-dom";
 import { Globe, ArrowRight } from "lucide-react";
@@ -20,27 +20,33 @@ const OverseasInvestorsStrip = () => {
         <Link
           to="/overseas-investors"
           aria-label="Invest in Dubai from anywhere in the world — learn more"
-          className="group flex items-center justify-between gap-3 md:gap-6 rounded-full border border-[#B89555]/35 bg-[#F7F2EA] px-4 md:px-6 py-2.5 md:py-3 transition-colors hover:bg-[#EFE6D6]"
+          className="group flex flex-nowrap items-center justify-between gap-3 sm:gap-4 md:gap-6 border-y border-[#B89555]/25 px-2 sm:px-3 py-2.5 md:py-3 transition-colors hover:bg-[#F7F2EA]/60"
         >
-          <span className="flex items-center gap-2.5 min-w-0">
-            <span className="inline-flex w-7 h-7 items-center justify-center rounded-full border border-[#B89555]/40 bg-white shrink-0">
-              <Globe className="w-3.5 h-3.5 text-[#1A1A1A]" />
-            </span>
-            <span className="text-[12px] md:text-sm font-semibold text-[#1A1A1A] truncate">
+          {/* Left: globe + headline */}
+          <span className="flex items-center gap-2 sm:gap-2.5 min-w-0 shrink">
+            <Globe className="w-4 h-4 text-[#1A1A1A] shrink-0" />
+            <span className="text-[11px] sm:text-[12px] md:text-sm font-semibold text-[#1A1A1A] truncate">
               Invest in Dubai from anywhere in the world
             </span>
           </span>
 
-          <span className="hidden md:flex items-center gap-5">
-            {microStats.map((s) => (
-              <span key={s.l} className="flex items-baseline gap-1.5">
-                <span className="text-sm font-bold text-[#1A1A1A] tabular-nums">{s.v}</span>
-                <span className="text-[10px] uppercase tracking-[0.16em] text-[#1A1A1A]/60">{s.l}</span>
+          {/* Center micro-stats — drop progressively as the viewport shrinks, never wrap */}
+          <span className="flex items-center gap-3 md:gap-5 shrink min-w-0 overflow-hidden">
+            {microStats.map((s, i) => (
+              <span
+                key={s.l}
+                className={`flex items-baseline gap-1 sm:gap-1.5 whitespace-nowrap ${
+                  i === 0 ? "" : i === 1 ? "hidden xs:flex sm:flex" : i === 2 ? "hidden sm:flex" : "hidden md:flex"
+                }`}
+              >
+                <span className="text-xs sm:text-sm font-bold text-[#1A1A1A] tabular-nums">{s.v}</span>
+                <span className="text-[9px] sm:text-[10px] uppercase tracking-[0.14em] text-[#1A1A1A]/65">{s.l}</span>
               </span>
             ))}
           </span>
 
-          <span className="inline-flex items-center gap-1 text-[11px] md:text-xs font-semibold text-[#1A1A1A] shrink-0">
+          {/* Right: CTA */}
+          <span className="inline-flex items-center gap-1 text-[11px] sm:text-xs font-semibold text-[#1A1A1A] shrink-0 whitespace-nowrap">
             <span className="hidden sm:inline">Learn more</span>
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
           </span>
