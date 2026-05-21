@@ -15,7 +15,9 @@ import { buildSenderSignatureHtml, escapeHtml } from "@/lib/email/buildEnvelopeE
 
 const isValidEmail = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.trim());
 
-const DEFAULT_SUBJECT = "Signature Pending: {{doc_title}} · {{doc_number}}";
+// Reference number lives in the subject ONCE — no doc title repetition,
+// no "Reference: …" sub-line in the body. Keep it lean.
+const DEFAULT_SUBJECT = "Signature Required: {{doc_number}}";
 // {{sender_signature}} is the signature block at the bottom of the email — it is
 // always YOUR brand (Jane Bou Jaoude · JBJ GLOBAL REAL ESTATE), never the client.
 const DEFAULT_BODY = `Dear {{client_name}},
