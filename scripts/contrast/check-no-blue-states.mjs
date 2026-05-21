@@ -5,10 +5,15 @@
  * Champagne-Gold standard requires gold/champagne/ink only for state surfaces.
  */
 import { readdir, readFile, stat } from "node:fs/promises";
+import { existsSync, readFileSync } from "node:fs";
 import { join, extname } from "node:path";
 
 const ROOT = "src";
 const EXT = new Set([".ts", ".tsx", ".js", ".jsx", ".css"]);
+const ALLOW_PATH = "scripts/contrast/no-blue-allowlist.json";
+const ALLOW_LIST = existsSync(ALLOW_PATH)
+  ? new Set((JSON.parse(readFileSync(ALLOW_PATH, "utf8")).allow ?? []))
+  : new Set();
 
 // Blue tokens that affect interactive states. We deliberately ignore
 // semantic data-viz blue ("text-data-blue", "--data-blue") which is allowed.
@@ -23,13 +28,13 @@ const PATTERNS = [
   /#(?:3b82f6|2563eb|1d4ed8|60a5fa|93c5fd|1e40af|1e3a8a)\b/i,
 ];
 
-const ALLOW_FILES = new Set<string>([
+const ALLOW_FILES = new Set([
   // Allowlist for data-viz primitives if needed
 ]);
 
-let hits: Array<{ file: string; line: number; text: string; pattern: string }> = [];
+let hits = [];
 
-async function walk(dir: string) {
+async function walk(dir) {
   const entries = await readdir(dir);
   for (const e of entries) {
     const p = join(dir, e);
@@ -39,8 +44,8 @@ async function walk(dir: string) {
   }
 }
 
-async function scan(file: string) {
-  if (ALLOW_FILES.has(file)) return;
+async function scan(file) {
+  if (ALLOW_FILES.has(file) || ALLOW_LIST.has(file)) return;
   const text = await readFile(file, "utf8");
   const lines = text.split("\n");
   lines.forEach((line, i) => {

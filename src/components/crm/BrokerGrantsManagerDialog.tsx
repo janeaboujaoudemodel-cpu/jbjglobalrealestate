@@ -17,8 +17,10 @@ import { toast } from "sonner";
 import {
   Loader2, ShieldCheck, ShieldOff, Ban, RotateCcw, Clock,
   Mail, MonitorSmartphone, AlertTriangle, ChevronDown, ChevronRight,
+  FileSignature,
 } from "lucide-react";
 import { formatDisplayDate as fmt } from "@/utils/formatDate";
+import CommissionSplitDialog from "./CommissionSplitDialog";
 
 interface Props {
   open: boolean;
@@ -135,6 +137,7 @@ export default function BrokerGrantsManagerDialog({
   const [sessionsLoading, setSessionsLoading] = useState<Record<string, boolean>>({});
   const [activity, setActivity] = useState<Record<string, ActivityRow[]>>({});
   const [activityLoading, setActivityLoading] = useState<Record<string, boolean>>({});
+  const [commissionFor, setCommissionFor] = useState<BrokerInfo | null>(null);
 
   const load = async () => {
     setLoading(true);
@@ -446,6 +449,12 @@ export default function BrokerGrantsManagerDialog({
                             {isExpanded ? <ChevronDown className="h-3 w-3 mr-1" /> : <ChevronRight className="h-3 w-3 mr-1" />}
                             <MonitorSmartphone className="h-3 w-3 mr-1" /> Sessions
                           </Button>
+                          <Button size="sm" variant="outline"
+                            className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#F7F2EA] h-7 px-2 text-[11px]"
+                            disabled={!b.email_lower}
+                            onClick={() => setCommissionFor(b)}>
+                            <FileSignature className="h-3 w-3 mr-1" /> Commission
+                          </Button>
                         </>
                       )}
                     </div>
@@ -577,6 +586,16 @@ export default function BrokerGrantsManagerDialog({
           </div>
         )}
       </SheetContent>
+      {commissionFor && (
+        <CommissionSplitDialog
+          open={!!commissionFor}
+          onOpenChange={(v) => !v && setCommissionFor(null)}
+          brokerId={commissionFor.id}
+          brokerUserId={commissionFor.user_id}
+          brokerEmail={commissionFor.email_lower ?? ""}
+          brokerName={commissionFor.full_name ?? undefined}
+        />
+      )}
     </Sheet>
   );
 }
