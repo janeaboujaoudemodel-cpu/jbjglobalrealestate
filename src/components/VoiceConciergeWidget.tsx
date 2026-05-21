@@ -232,7 +232,12 @@ const VoiceConciergeWidget = () => {
     }
   }, [conversation, navigate, logCallStart]);
 
-  const handleStartClick = useCallback(() => {
+  const handleLauncherClick = useCallback(() => {
+    setChoiceOpen((v) => !v);
+  }, []);
+
+  const handleStartVoice = useCallback(() => {
+    setChoiceOpen(false);
     const existing = leadIdRef.current ?? getStoredLeadId();
     if (existing) {
       leadIdRef.current = existing;
@@ -242,11 +247,17 @@ const VoiceConciergeWidget = () => {
     }
   }, [startConversation]);
 
+  const handleOpenWhatsApp = useCallback(() => {
+    setChoiceOpen(false);
+    window.open(WHATSAPP_URL, "_blank", "noopener,noreferrer");
+  }, []);
+
   const handleIntakeSuccess = useCallback((leadId: string) => {
     leadIdRef.current = leadId;
     setIntakeOpen(false);
     startConversation(leadId);
   }, [startConversation]);
+
 
   const retryConnection = useCallback(() => {
     setWidgetStatus("idle");
