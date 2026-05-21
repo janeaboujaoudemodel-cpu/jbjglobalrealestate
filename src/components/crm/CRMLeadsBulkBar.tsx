@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Copy, MessageSquare, Mail, RefreshCw, Trash2, UserPlus, X, Sparkles, GitMerge } from "lucide-react";
 import { PIPELINE_STATUSES } from "./LeadStatusBadge";
 import MergeContactsDialog from "./MergeContactsDialog";
+import { BulkActionBar, BulkActionItem } from "@/components/ui/bulk-action-bar";
 
 interface BrokerOption {
   user_id: string;
@@ -332,26 +333,28 @@ export default function CRMLeadsBulkBar({
   if (count === 0) return null;
 
   return (
-    <div className="sticky top-0 z-40">
-      <div className="rounded-xl border-2 border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_4px_20px_rgba(200,167,102,0.18)] px-4 py-3 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <div className="flex items-center gap-3">
-          <span className="text-sm font-bold text-[#1A1A1A]">
-            {count} selected
-          </span>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={onClear}
-            className="h-8 px-2 text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
-            disabled={busy}
-          >
-            <X className="h-4 w-4 mr-1" />
-            Clear
-          </Button>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2">
+    <div>
+      <BulkActionBar
+        lead={
+          <>
+            <span className="text-sm font-bold text-[#1A1A1A] whitespace-nowrap">
+              {count} selected
+            </span>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={onClear}
+              className="h-8 px-2 text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/40 whitespace-nowrap"
+              disabled={busy}
+            >
+              <X className="h-4 w-4 mr-1" />
+              Clear
+            </Button>
+          </>
+        }
+      >
+        <BulkActionItem>
           <Button
             type="button"
             variant="destructive"
@@ -367,13 +370,15 @@ export default function CRMLeadsBulkBar({
             )}
             Delete
           </Button>
+        </BulkActionItem>
 
-          {isOwner && (
-            <>
+        {isOwner && (
+          <>
+            <BulkActionItem>
               <select
                 value={assigneeId}
                 onChange={(e) => setAssigneeId(e.target.value)}
-                className="h-9 rounded-lg border-2 border-[#B89555]/40 bg-[#FDFBF7] px-3 text-sm font-semibold text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-[#B89555]"
+                className="h-9 rounded-lg border border-[#B89555]/40 bg-[#FDFBF7] px-3 text-sm font-semibold text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-[#B89555] max-w-[180px]"
                 disabled={busy}
               >
                 <option value="" className="text-[#1A1A1A]">Assign broker…</option>
@@ -387,7 +392,9 @@ export default function CRMLeadsBulkBar({
                   </option>
                 ))}
               </select>
+            </BulkActionItem>
 
+            <BulkActionItem>
               <Button
                 type="button"
                 variant="secondary"
@@ -397,15 +404,17 @@ export default function CRMLeadsBulkBar({
                 className="font-semibold"
               >
                 <UserPlus className="h-4 w-4 mr-2" />
-                Assign Broker
+                Assign
               </Button>
-            </>
-          )}
+            </BulkActionItem>
+          </>
+        )}
 
+        <BulkActionItem>
           <select
             value={nextStatus}
             onChange={(e) => setNextStatus(e.target.value)}
-            className="h-9 rounded-lg border-2 border-[#B89555]/40 bg-[#FDFBF7] px-3 text-sm font-semibold text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-[#B89555]"
+            className="h-9 rounded-lg border border-[#B89555]/40 bg-[#FDFBF7] px-3 text-sm font-semibold text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-[#B89555] max-w-[180px]"
             disabled={busy}
           >
             <option value="" className="text-[#1A1A1A]">Change status…</option>
@@ -415,7 +424,9 @@ export default function CRMLeadsBulkBar({
               </option>
             ))}
           </select>
+        </BulkActionItem>
 
+        <BulkActionItem>
           <Button
             type="button"
             variant="secondary"
@@ -424,9 +435,11 @@ export default function CRMLeadsBulkBar({
             disabled={busy || !nextStatus}
             className="font-semibold"
           >
-            Apply Status
+            Apply
           </Button>
+        </BulkActionItem>
 
+        <BulkActionItem>
           <Button
             type="button"
             variant="secondary"
@@ -438,7 +451,9 @@ export default function CRMLeadsBulkBar({
             <Copy className="h-4 w-4 mr-2" />
             Duplicate
           </Button>
+        </BulkActionItem>
 
+        <BulkActionItem>
           <Button
             type="button"
             variant="secondary"
@@ -451,7 +466,9 @@ export default function CRMLeadsBulkBar({
             <GitMerge className="h-4 w-4 mr-2" />
             Merge ({count})
           </Button>
+        </BulkActionItem>
 
+        <BulkActionItem>
           <Button
             type="button"
             variant="secondary"
@@ -461,10 +478,10 @@ export default function CRMLeadsBulkBar({
             className="font-semibold"
           >
             <Sparkles className="h-4 w-4 mr-2" />
-            Bulk Message
+            Message
           </Button>
-        </div>
-      </div>
+        </BulkActionItem>
+      </BulkActionBar>
 
       {showBroadcast && (
         <div className="mt-2 rounded-xl border-2 border-[#B89555]/40 bg-[#FDFBF7] p-4 space-y-3 shadow-md">
