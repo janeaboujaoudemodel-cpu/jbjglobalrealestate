@@ -8,7 +8,7 @@ import {
   Calculator, Brain, Palette, Scale, BarChart3, Users, Mail, FileSignature,
   Camera, Ruler, Calendar, PenTool, Building2, TrendingUp, Globe, Target,
   MessageSquare, Layers, Map, ClipboardList, Shield, Briefcase, ScanLine,
-  Home, DollarSign, Lightbulb, AreaChart, Bot, Presentation, Table2, Video as VideoIcon
+  Home, DollarSign, Lightbulb, AreaChart, Bot, Presentation, Table2, Key, Video as VideoIcon
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { isApprovedPublicToolId } from "@/config/publicToolAccess";
