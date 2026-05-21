@@ -1,101 +1,79 @@
-## Goal
+## Batch 1 — Deploy + Server-Side QA Harness
 
-Two surgical UI passes, no backend/routing changes:
+### Step 1: Deploy `crm-broker-grant-manage`
+Deploy the edge function so all grant lifecycle actions (create / suspend / reactivate / revoke / restore) are live and writing audit rows.
 
-1. **Horizontal header** (`src/components/navigation/HorizontalUtilityBar.tsx`) — keep only Search, Filter, Sq ft/Sq m, Currency (AED + flag, no $ icon), Mode selector, and a new round **User Avatar** that opens a dropdown holding everything else.
-2. **Homepage hero** (`src/pages/Index.tsx`) — match the layout of `https://jbj-global.replit.app/` for everything above the three pillar cards. The three pillar cards stay exactly as they are; the small "Explore ↓" indicator under them is removed.
+### Step 2: Build a SQL QA harness (single migration, idempotent, test-schema isolated)
+Create `qa_batch1` schema with a `run_qa_batch1()` function that:
 
----
+1. Seeds 2 test brokers (`brokerA`, `brokerB`) + 1 owner context
+2. Seeds 2 databases (`dbX`, `dbY`) and ~10 leads across both, owner-created
+3. Seeds 2 broker-created leads (one per broker)
+4. Calls `crm-broker-grant-manage` end-to-end (via `pg_net` → edge URL) for each lifecycle action
+5. Asserts each invariant and returns a `(check, expected, actual, pass)` result table
 
-## 1. Horizontal Header
+### Invariants asserted
 
-### Keep (in this left→right order)
-- **Left cluster:** Search button (with ⌘K kbd) only — opens `GlobalSearchModal`.
-- **Right cluster (in order):**
-  1. Filter icon button (opens `AdvancedFilterPanel`).
-  2. Sq ft / Sq m toggle (existing segmented pill).
-  3. **Currency chip** — AED only label with the 🇦🇪 flag; clicking it opens the existing `CurrencySwitcher` dropdown (full currency list inside). Remove the standalone `DollarSign` icon button. Trigger style: flag + `AED` + tiny chevron, gold hairline border, champagne hover. The dropdown itself (the menu content) is untouched — only the trigger changes.
-  4. `ModeSwitcher` (Investor / Broker / Developer chip).
-  5. **NEW: `UserAvatarMenu`** (see spec below). When signed-out, this slot shows the existing `Sign in` pill instead.
+| # | Check | Method |
+|---|---|---|
+| 1 | Owner sees all leads | `SELECT count(*) FROM crm_leads` as owner JWT == total |
+| 2 | Broker sees only assigned dbs | `vw_crm_database_access` filtered by `broker_user_id` |
+| 3 | Owner-created leads hidden by default | brokerA query before grant → 0 of dbX leads |
+| 4 | Grant makes them visible | after grant → matches `lead_ids` / window / status filters |
+| 5 | Broker-created leads visible to owner | owner query returns brokerA's lead |
+| 6 | Suspend hides leads live | status=suspended → broker sees 0 |
+| 7 | Reactivate restores visibility | status=active → broker sees N again |
+| 8 | Revoke + restore round-trip | terminal state + restore creates new grant row |
+| 9 | Date window enforced | leads outside window excluded |
+| 10 | Status filter enforced | leads not in `status_filter` excluded |
+| 11 | `lead_ids` subset enforced | only listed leads visible |
+| 12 | Audit row per action | `crm_audit_logs` count == actions performed |
+| 13 | Broker isolation | brokerB cannot see brokerA's grants/leads |
 
-### Remove from header (move into avatar dropdown when signed-in)
-- `GlobalBackButton`
-- Browse (Compass) popover
-- Saved / Favorites
-- Activity (Bell) popover
-- CRM shortcut
-- Dashboard shortcut (if present)
-- Tasks / Inbox / Notes / Alerts shortcuts
-- The standalone `DollarSign` currency icon
+### Step 3: Run + capture proof
+Execute `SELECT * FROM qa_batch1.run_qa_batch1()` and paste the full pass/fail table into the chat. Capture owner-side UI screenshots of the Grant Manager (create / suspend / revoke / restore states) via the preview browser.
 
-### New component: `src/components/navigation/UserAvatarMenu.tsx`
+### Step 4: Gap report
+If any assertion fails, list the gap with the exact RLS predicate or function path responsible. Do not advance until all 13 pass.
 
-Round 36px button positioned at the far-right of the header (after `ModeSwitcher`).
-
-**Visual spec (mother-of-pearl + gold):**
-- Outer ring: 1.5px solid `hsl(var(--gold))` with soft glow `0 0 0 1px rgba(184,149,85,0.35), 0 4px 14px -4px rgba(184,149,85,0.45)`.
-- Inner fill: radial mother-of-pearl gradient
-  `radial-gradient(120% 120% at 30% 25%, #FFFDF8 0%, #F5ECDC 38%, #E8D8B8 70%, #D9C291 100%)`
-  with a subtle conic shimmer overlay at 8% opacity.
-- Initials: bold Inter, `#1A1A1A`, 12px, tracking -0.01em, centered. Two letters max, derived from `displayName` (e.g. "Jane B." → "JB"). Reuse the `getInitials` helper from `UserAvatarPremium.tsx`. Photo from `crm_users_profile.photo_url` is **not** used here — initials only, per founder spec.
-
-**Dropdown (Radix `DropdownMenu`), aligned end, 280px wide, champagne surface:**
-- Header row: initials avatar (40px) + display name + email muted.
-- Sections (each with a small uppercase label):
-  - **Workspace:** Dashboard, CRM (only if `showCRM`), Inbox, Tasks, Notes, Alerts (with the existing `activityCount` badge).
-  - **Browse:** Browse Properties, Saved, Filters (re-open the panel).
-  - **Account:** Settings, Change password (links to `/settings#security` — no new logic, just navigation), Email preferences.
-  - **Sign out** at bottom in muted ink.
-- Each row: 36px tall, `lucide` icon + label, ink text, hover `#F7F2EA`.
-
-No new routes, no auth changes — every entry links to a route that already exists in `src/App.tsx`/`StandaloneRoutes`. Items that need a route the project doesn't have are skipped silently.
-
-### Currency trigger change in `CurrencySwitcher.tsx`
-Add a new `variant="flag"` that renders the trigger as: 🇦🇪 + `AED` + `ChevronDown`. Used by the header. Existing `default` / `mobile` / `icon-only` variants stay untouched so no other surface regresses. The dropdown content (full currency list) is unchanged.
+### Step 5: Cleanup
+`DROP SCHEMA qa_batch1 CASCADE` after proof captured — no test data left in prod tables (test rows are tagged with `source='qa_batch1'` and deleted).
 
 ---
 
-## 2. Homepage Hero — match replit reference
+## Batch 2 — Branded Broker Onboarding (only after Batch 1 green)
 
-Reference (from screenshot of `https://jbj-global.replit.app/`):
+### 2.1 Branded invitation email
+- New edge function `crm-broker-invite-send` (champagne/gold template, JBJ wordmark, single CTA)
+- Generates one-time 8-char activation token (`crm_broker_invites` table: `token_hash`, `broker_id`, `expires_at`, `consumed_at`)
+- Sends via Resend, respects single-agency rule + Resend quota guard
 
-```text
-                DUBAI'S TRUSTED REAL ESTATE ECOSYSTEM        ← eyebrow
-                Your Gateway to Dubai's
-                Finest Real Estate                            ← H1, two lines
-        I'm a…  [Investor]  [Broker]  [Developer]            ← inline pills
-   [Browse Properties] [AI Home Finder] [Sell Your Property]
-   [Explore AI Tools]  [Market Intelligence] [News]          ← action pills (single wrap row)
+### 2.2 OTP verification
+- 6-digit code, 10-min TTL, stored hashed in `crm_broker_otps`
+- Edge function `crm-broker-otp-verify` with rate limit (5/min/IP)
 
-   ┌─ For Investors ─┬─ For Brokers ─┬─ For Developers ─┐    ← 3 pillar cards (UNTOUCHED)
-   │ 2,400+ Off-Plan │ AI Tools,     │ Submit Projects   │
-   └─────────────────┴───────────────┴───────────────────┘
+### 2.3 Activation page `/broker/activate?token=...`
+- Verifies token → prompts OTP → on success creates `auth.users` row (admin API) + links to `crm_brokers.user_id`
+- Forces password set (min 12 chars, HIBP check on)
 
-            [ Book a Free Consultation  ↗ ]                  ← single CTA, replaces "Explore ↓"
-```
+### 2.4 First-login password reset enforcement
+- `crm_brokers.must_reset_password` flag set true on activation
+- `BrokerGuard` redirects to `/broker/password-reset` while flag is true
 
-### Changes in `src/pages/Index.tsx` (hero block ~lines 240–386)
-
-- **Eyebrow + H1** — already match the reference, keep.
-- **I'm a… pills + auto-rotating spotlight** — keep as-is.
-- **Action pills row** — trim from 8 to the 6 shown in the reference: `Browse Properties`, `AI Home Finder`, `Sell Your Property`, `Explore AI Tools`, `Market Intelligence`, `News`. Drop `Create Your CV` and `Submit Complaint` (those stay reachable elsewhere on the page).
-- **Three pillar cards** — completely untouched (markup, styling, dividers, icons, copy).
-- **Remove the "Explore ↓" scroll indicator** (the `motion.div` at ~lines 376–384).
-- **Add a single CTA below the three cards**: a centered "Book a Free Consultation" pill button (reuse `PremiumHeroButton` already imported) that opens the existing `InquiryFormModal` via `setIsInquiryOpen(true)`. Same chip styling as the reference (champagne fill on dark, gold hairline, ink text, small `ArrowUpRight` icon).
-
-Nothing below the hero (`CategorySelectorSection`, `DeveloperPartnersMarquee`, `FeaturedListings`, etc.) is touched.
+### 2.5 Session / device tracking
+- New table `crm_broker_sessions` (`broker_id`, `device_fingerprint`, `ip`, `user_agent`, `last_seen`, `revoked_at`)
+- Extend existing `useBrokerSessionTracking` hook to upsert on heartbeat
+- Owner UI: "Active sessions" panel per broker with revoke button → edge fn `crm-broker-session-revoke` (signs out by deleting refresh tokens via admin API)
 
 ---
 
 ## Files touched
 
-- `src/components/navigation/HorizontalUtilityBar.tsx` — strip clusters, swap currency trigger, mount `UserAvatarMenu`.
-- `src/components/navigation/UserAvatarMenu.tsx` — **new** file (avatar circle + dropdown).
-- `src/components/CurrencySwitcher.tsx` — add `variant="flag"` trigger only.
-- `src/pages/Index.tsx` — trim action pills, remove Explore indicator, add Book-a-Consultation CTA.
+**Batch 1:** 1 migration (QA harness), deploy `crm-broker-grant-manage`. Zero app code changes.
 
-## Out of scope
-
-- No changes to vertical sidebar, mobile bottom nav, or any other route.
-- No backend, RLS, or auth changes — avatar uses existing `useAuth` + `crm_users_profile`.
-- No restyle of the three pillar cards or anything below the hero.
+**Batch 2 (preview):**
+- Migrations: `crm_broker_invites`, `crm_broker_otps`, `crm_broker_sessions`, `must_reset_password` column
+- Edge functions: `crm-broker-invite-send`, `crm-broker-otp-verify`, `crm-broker-activate`, `crm-broker-session-revoke`
+- Pages: `/broker/activate`, `/broker/password-reset`
+- Owner panel: sessions table in existing broker detail view
+- `BrokerGuard.tsx`: password-reset gate
