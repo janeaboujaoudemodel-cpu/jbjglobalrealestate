@@ -236,36 +236,15 @@ const Index = () => {
                   key={action.label}
                   to={action.href}
                   data-no-contrast-guard
-                  className="jj-hero-glass-card group flex flex-col items-center justify-center gap-1.5 px-3 py-3 rounded-2xl border border-white/30 hover:border-[#B89555] text-[11px] sm:text-xs font-semibold tracking-tight transition-all duration-300 min-h-[76px]"
-                  style={{
-                    background: 'rgba(20,20,20,0.45)',
-                    backdropFilter: 'blur(14px) saturate(140%)',
-                    WebkitBackdropFilter: 'blur(14px) saturate(140%)',
-                    color: '#FDFBF7',
-                    textShadow: '0 1px 4px rgba(0,0,0,0.85)',
-                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.12), 0 8px 24px rgba(0,0,0,0.35)',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = 'rgba(30,30,30,0.65)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = 'rgba(20,20,20,0.45)';
-                  }}
+                  className="jj-hero-action-card group flex flex-col items-center justify-center gap-1.5 px-3 py-3 rounded-2xl border text-[11px] sm:text-xs font-semibold tracking-tight transition-all duration-300 min-h-[76px]"
                 >
                   <action.icon
                     aria-hidden="true"
-                    className="w-5 h-5 flex-shrink-0 transition-colors duration-300"
+                    className="jj-hero-action-icon w-5 h-5 flex-shrink-0 transition-colors duration-300"
                     strokeWidth={2.25}
-                    style={{
-                      color: '#E9C97A',
-                      stroke: '#E9C97A',
-                      opacity: 1,
-                      filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.7))',
-                    }}
                   />
                   <span
-                    className="whitespace-normal break-words leading-[1.15] text-center line-clamp-2"
-                    style={{ color: '#FDFBF7' }}
+                    className="jj-hero-action-label whitespace-normal break-words leading-[1.15] text-center line-clamp-2"
                   >
                     {action.label}
                   </span>
