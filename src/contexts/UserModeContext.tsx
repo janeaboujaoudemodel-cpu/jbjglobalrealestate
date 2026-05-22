@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useRef, ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useQueryClient } from "@tanstack/react-query";
 
 const MODE_KEY = "jj_user_mode";
 const MODE_SELECTED_KEY = "jj_mode_selected";
@@ -46,6 +47,7 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
     return localStorage.getItem(MODE_SELECTED_KEY) === 'true';
   });
   const { user } = useAuth();
+  const queryClient = useQueryClient();
   const lastSyncedUserId = useRef<string | null>(null);
 
   // Silent background reconcile — only runs once per real user-id change
@@ -161,8 +163,29 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
       } catch (err) {
         console.warn('[UserMode] source tracking failed (non-fatal):', err);
       }
+
+      // Mirror mode -> role so legacy role-gated views stay consistent.
+      // Developer is mode-only (no role table change).
+      if (newMode !== 'developer') {
+        try {
+          const roleMirror = newMode === 'broker' ? 'broker_partner' : 'investor';
+          await supabase
+            .from('user_role_selections')
+            .upsert({
+              user_id: user.id,
+              selected_role: roleMirror as any,
+              confirmed_accurate: true,
+            }, { onConflict: 'user_id' });
+          try { localStorage.setItem('jj_role_selected', roleMirror); } catch {}
+        } catch (err) {
+          console.warn('[UserMode] role mirror failed (non-fatal):', err);
+        }
+      }
     }
-  }, [user?.id]);
+
+    // Invalidate role / dashboard caches so the page re-skins without reload.
+    try { queryClient.invalidateQueries(); } catch {}
+  }, [user?.id, queryClient]);
 
   return (
     <UserModeContext.Provider

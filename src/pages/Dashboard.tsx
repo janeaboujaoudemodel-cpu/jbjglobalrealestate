@@ -1,82 +1,53 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { lazy, Suspense } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { useUserRole } from "@/hooks/useUserRole";
+import { useUserModeContext } from "@/contexts/UserModeContext";
+import { useOwnerVerification } from "@/hooks/useOwnerVerification";
 import VisitorDashboard from "@/components/dashboard/VisitorDashboard";
-import StandardUserDashboard from "@/components/dashboard/StandardUserDashboard";
 import { Loader2 } from "lucide-react";
 
-/**
- * Dashboard Router
- * 
- * Logic:
- * - Visitor (not logged in) → VisitorDashboard
- * - Logged in + no role → StandardUserDashboard (with role selection)
- * - Logged in + investor → redirect to /investor-dashboard
- * - Logged in + owner → redirect to /owner-dashboard
- * - Logged in + broker_partner → redirect to /broker-partner-dashboard
- * - Logged in + internal roles (admin assignment) → redirect to respective dashboards
- */
+// Mode-driven dashboard router (LOCKED RULE).
+// Visitor (no auth)         -> VisitorDashboard
+// Owner verified            -> Owner cockpit (handled by /owner; we just redirect target)
+// Authenticated by mode:
+//   investor   -> InvestorDashboard
+//   broker     -> BrokerDashboard
+//   developer  -> DeveloperDashboard
+// Role is no longer used to pick the view; it is only used for permissions.
+const InvestorDashboard  = lazy(() => import("@/pages/InvestorDashboard"));
+const BrokerDashboard    = lazy(() => import("@/pages/BrokerDashboard"));
+const DeveloperDashboard = lazy(() => import("@/pages/DeveloperDashboard"));
+
+const Spinner = () => (
+  <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center">
+    <Loader2 className="w-8 h-8 text-[#B89555] animate-spin" />
+  </div>
+);
+
 const Dashboard = () => {
-  const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
-  const { role, isLoading: roleLoading, hasSelectedRole } = useUserRole();
+  const { mode, isLoading: modeLoading } = useUserModeContext();
+  const { isOwner } = useOwnerVerification();
 
-  useEffect(() => {
-    // Wait for both auth and role to load
-    if (authLoading || roleLoading) return;
+  if (authLoading || modeLoading) return <Spinner />;
+  if (!user) return <VisitorDashboard />;
 
-    // If user has selected a role, redirect to appropriate dashboard
-    if (user && hasSelectedRole && role) {
-      switch (role) {
-        case 'investor':
-          navigate('/investor-dashboard', { replace: true });
-          break;
-        case 'owner':
-          navigate('/owner', { replace: true });
-          break;
-        case 'broker_partner':
-          navigate('/broker-partner-dashboard', { replace: true });
-          break;
-        case 'broker':
-          // Legacy broker role - redirect to broker partner
-          navigate('/broker-partner-dashboard', { replace: true });
-          break;
-        case 'visitor':
-          // Stay on dashboard, show explorer content
-          break;
-        default:
-          // Unknown role - stay on dashboard
-          break;
-      }
+  // Owner cockpit lives at /owner; if owner lands on /dashboard, route them there.
+  if (isOwner) {
+    if (typeof window !== "undefined" && window.location.pathname === "/dashboard") {
+      window.location.replace("/owner");
     }
-  }, [user, role, hasSelectedRole, authLoading, roleLoading, navigate]);
-
-  // Show loading state
-  if (authLoading || roleLoading) {
-    return (
-      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-[#1A1A1A] animate-spin" />
-      </div>
-    );
+    return <Spinner />;
   }
 
-  // Not logged in → Visitor Dashboard
-  if (!user) {
-    return <VisitorDashboard />;
-  }
+  const View =
+    mode === "broker"    ? BrokerDashboard :
+    mode === "developer" ? DeveloperDashboard :
+                           InvestorDashboard;
 
-  // Logged in but no role selected → Standard User Dashboard with role selection
-  if (!hasSelectedRole || !role || role === 'visitor') {
-    return <StandardUserDashboard />;
-  }
-
-  // If we reach here, user has a role but hasn't been redirected yet
-  // Show loading while redirect happens
   return (
-    <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
-      <Loader2 className="w-8 h-8 text-[#1A1A1A] animate-spin" />
-    </div>
+    <Suspense fallback={<Spinner />}>
+      <View />
+    </Suspense>
   );
 };
 

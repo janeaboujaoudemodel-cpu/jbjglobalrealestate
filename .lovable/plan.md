@@ -1,99 +1,129 @@
 ## Goal
 
-One profile per user, no matter where they pick their role (mode picker, homepage "I am a…" card, or Join Our Community modal). Each pick is logged with a clear **source label** so you can see in the backend exactly where every lead came from, plus a live **counter per source**.
+When the user switches Mode (Investor / Broker / Developer), the **entire dashboard view** — header, quick actions, hubs, education, careers — re-skins instantly. No more "switched to investor but still seeing Broker Education". Shared modules stay shared; mode-only modules appear only in the right mode. Lock this as a permanent project rule.
 
----
+## Root cause (what's broken today)
 
-## Part 1 — Fix the Join Our Community modal (visual)
+- `src/pages/Dashboard.tsx` routes by **role** (`useUserRole` → `user_role_selections`).
+- The header Mode picker writes to **mode** (`UserModeContext` → `user_preferences.selected_mode`).
+- These two stores never sync, so switching mode doesn't change the dashboard. `QuickActions` reads `role` (with a small `isDeveloperMode` override) → Broker Education still shows after switching to Investor.
 
-File: `src/components/InquiryFormModal.tsx`
+## Fix — Mode is the single source of truth
 
-- Constrain `DialogContent` properly: remove `overflow-visible` + inline `style={{overflow:'visible'}}` that lets the form bleed outside the card.
-- Move scroll to the inner content (`overflow-y-auto`), keep dialog `overflow-hidden` with `rounded-2xl` so nothing escapes the rounded corners.
-- Cap height at `max-h-[90vh]` and use `flex flex-col` so header is fixed, body scrolls inside.
-- Standardize all pickers (Nationality, Language, Preferred Contact, Phone country) to use the existing `SearchableSelect` / `PhoneInput` styling per the Champagne-Gold standard — champagne surface, gold hairline border, ink text, no gold fills. Phone country picker shows flag + dial code in a unified pill (already supported by `PhoneInput` — just make sure the trigger height matches other inputs).
+### 1. Unified Mode → View contract (LOCKED rule)
 
----
-
-## Part 2 — Source label taxonomy (this is what you'll see in the backend)
-
-Every role selection writes `signup_source` (machine code) + `signup_source_label` (human label) to the profile/lead and increments a counter row.
-
-| Where the user picked their role | `signup_source` (code) | Label shown in your backend |
-|---|---|---|
-| Mode picker (header chip / one-time greeter) | `mode_picker` | **Mode Picker (Header)** |
-| Homepage "I am a…" card (investor / broker / developer) | `homepage_role_card` | **Homepage Role Card** |
-| Join Our Community modal — "I am a Buyer" | `join_community_buyer` | **Join Our Community — Buyer** |
-| Join Our Community modal — "I am a Broker" | `join_community_broker` | **Join Our Community — Broker** |
-| Join Our Community modal — "I am a Visitor" | `join_community_visitor` | **Join Our Community — Visitor** |
-| Property inquiry modal (when opened from a listing) | `property_inquiry` | **Property Inquiry — {Property Name}** |
-| Footer / generic "Contact us" CTA | `footer_cta` | **Footer CTA** |
-| Auth signup (no role picked yet) | `auth_signup` | **Auth Signup** |
-
-Each row also stores: `page_path` (e.g. `/projects/emaar-beachfront`), `referrer`, `picked_role` (investor / broker / developer / buyer / visitor), `picked_at` timestamp.
-
----
-
-## Part 3 — Backend: one profile, no duplicates
-
-New table **`signup_source_events`** (append-only log — one row per pick):
-- `user_id` (nullable for anonymous picks) · `email` (nullable) · `signup_source` · `signup_source_label` · `picked_role` · `page_path` · `referrer` · `created_at`
-- RLS: insert via edge function only; admin/owner can read.
-
-Extend **`profiles`** with:
-- `first_signup_source` (set once, never overwritten — your "true origin")
-- `last_signup_source` (updated every time they re-pick)
-- `signup_source_label` (human label of first source)
-- `picked_role` (current selected role)
-
-New materialized counter view **`vw_signup_source_counts`**:
-- `signup_source`, `signup_source_label`, `total_picks`, `unique_users`, `last_picked_at`
-- Auto-refreshed via trigger on `signup_source_events`.
-
-New edge function **`register-role-pick`** (replaces / wraps `register-mode-lead`):
-- Input: `{ source, role, email?, fullName?, pagePath?, referrer? }`
-- Logic:
-  1. Insert into `signup_source_events` (always — that's how counters grow).
-  2. If user is authenticated → `upsert` into `profiles` by `user_id`. Set `first_signup_source` only if null. Always update `last_signup_source`, `picked_role`.
-  3. If anonymous but `email` provided → upsert `crm_leads` by email (same dedupe rule).
-  4. Never creates a 2nd profile/lead for the same `user_id` or `email`.
-
----
-
-## Part 4 — Wire all 3 entry points to the new function
-
-| Entry point | File | Change |
-|---|---|---|
-| Mode picker | `src/components/mode/*` (greeter + header chip) | On select → `invoke('register-role-pick', { source: 'mode_picker', role })`. Stop showing greeter once `profiles.picked_role` exists. |
-| Homepage role card | `src/pages/Index.tsx` (or wherever the "I am a…" card lives) | On click → same call with `source: 'homepage_role_card'`. |
-| Join Our Community modal | `src/components/InquiryFormModal.tsx` | On submit → call `register-role-pick` with `source: 'join_community_{role}'` BEFORE the existing `capture-lead` (which keeps doing the full lead capture). |
-
-The "stop showing 3 times" fix: the mode greeter already checks session storage; we additionally check `profiles.picked_role` server-side so even on a new device the user isn't re-prompted.
-
----
-
-## Part 5 — Owner-side insights (so you can see the numbers)
-
-Small panel added to `/owner/crm` → Leads section header:
-
-```
-Lead Sources (last 30 days)
-──────────────────────────────────────────
-Mode Picker (Header)              112
-Homepage Role Card                  47
-Join Our Community — Buyer          88
-Join Our Community — Broker         15
-Join Our Community — Visitor         9
-Property Inquiry                    34
-Footer CTA                           6
+```text
+Mode = { investor | broker | developer }   ← chosen in header / picker / role card
+View = everything visible on /dashboard and inside dashboard tiles
+Rule: View is derived from Mode. Role is only used for permissions (RLS, owner, etc.).
 ```
 
-Powered by `vw_signup_source_counts`. Each row clickable → filters the lead list to that source.
+Save to `mem://features/dashboard/mode-driven-view-standard.md` and add a one-liner to `mem://index.md` Core:
+> Dashboard view (header, quick actions, hubs, education, careers, sidebar tiles) is derived from `useUserModeContext().mode`, never from role. Shared tiles render in all modes; mode-only tiles render in their mode only.
 
----
+### 2. Shared vs mode-only matrix
 
-## Scope confirmation
+| Tile / Module | Investor | Broker | Developer |
+|---|:--:|:--:|:--:|
+| Browse Properties | ✓ | ✓ | ✓ |
+| List Your Property | ✓ | ✓ | ✓ |
+| AI Tools | ✓ | ✓ | ✓ |
+| Distribution Services | ✓ | ✓ | ✓ |
+| Insights & Guides | ✓ | ✓ | ✓ |
+| Books | ✓ | ✓ | ✓ |
+| Company & LinkedIn | ✓ | ✓ | ✓ |
+| Tools & Workspace | ✓ | ✓ | ✓ |
+| Resale Properties | ✓ | ✓ | ✓ |
+| **Careers** | — | ✓ | ✓ |
+| **Broker Education** | — | ✓ | — |
+| **Investor Services / Portfolio / Market Reports** | ✓ | — | — |
+| **Developer Hub / Submit Project / Agreements** | — | — | ✓ |
 
-This plan covers: modal layout fix, picker standardization, new table + view + edge function, profile dedupe, wiring of all 3 entry points, and the counter panel.
+### 3. Dashboard router (`src/pages/Dashboard.tsx`)
 
-Approve and I'll ship it in this order: (1) migration, (2) edge function, (3) wire the 3 entry points, (4) modal/picker fixes, (5) counter panel.
+- Replace role switch with **mode** switch.
+- Unauthenticated → `VisitorDashboard` (unchanged).
+- Authenticated:
+  - `mode === 'investor'` → render new `InvestorDashboard` (premium tier, see §4).
+  - `mode === 'broker'`   → render `BrokerDashboard`.
+  - `mode === 'developer'` → render `DeveloperDashboard` (new shell wrapping `DeveloperPortal` overview tiles).
+  - Owner verified always wins (Owner cockpit unchanged).
+
+### 4. Premium Investor Dashboard
+
+Rebuild `src/pages/InvestorDashboard.tsx` to match the institutional tone the user asked for:
+- Champagne header card (full-width, edge-to-edge — same pattern as the recently fixed Broker header) with display name, initials (JB-style), verified badge, mode chip.
+- KPI strip: Watchlist • Shortlist • Viewings booked • Reports unlocked.
+- "Your Investment Pipeline" (saved searches → matched listings).
+- Shared tiles grid (Browse, AI Tools, Distribution, Insights, Books, Company/LinkedIn, Tools, Resale, List Property).
+- Premium picks rail (curated by advisor).
+- No Broker Education, no Careers, no broker register-deal tiles.
+
+### 5. Broker Dashboard
+
+Keep current premium header. Quick Actions = broker-only (Register Deal, Site Check-In, Broker Education, Resources, Schedule Visit) + the shared 9-tile grid + Careers tile.
+
+### 6. Developer Dashboard
+
+New thin wrapper that reuses `DeveloperPortal` overview but in dashboard chrome:
+- Submit Project, My Projects, Briefing, Events, Agreements (mode-only)
+- Shared tiles grid
+- Careers tile
+
+### 7. QuickActions rewrite (`src/components/dashboard/QuickActions.tsx`)
+
+- Drop `getActionsForRole(...)`. New `getActionsForMode(mode)` returning `{ modeOnly: [], shared: [] }`.
+- Render two grouped sections: "For [Mode]" then "Tools available to everyone".
+- Owner verified still short-circuits to `ownerActions`.
+
+### 8. Sync Mode ↔ supporting state
+
+In `UserModeContext.setMode`:
+- Already writes `user_preferences.selected_mode` + calls `register-mode-lead`.
+- Additionally call `register-role-pick` with `source: 'mode_picker'` (already wired) so CRM lead + `signup_source_events` stay accurate.
+- Mirror mode → `user_role_selections.selected_role` so legacy role-gated screens (broker resources, investor services) keep working — `investor`→`investor`, `broker`→`broker_partner` (unless already `broker_jbj`), `developer`→leave role untouched (developer is mode-only, no role table change).
+- Invalidate `useUserRole` + react-query caches so the page re-skins instantly without reload.
+
+### 9. Vertical sidebar tiles
+
+`GlobalVerticalNav` already groups Dashboard / Profile / Settings. Filter the Dashboard group's tile list by mode using the same matrix in §2 (e.g. `Broker Education` only shown when `mode === 'broker'`, `Careers` hidden in investor mode).
+
+### 10. Edge functions
+
+- `register-mode-lead`: extend payload to also accept `role_mirror` and upsert `user_role_selections` server-side (avoids client race).
+- `register-role-pick`: no change, already canonical for source tracking.
+- Re-test both with `supabase--curl_edge_functions` for each of the 3 modes.
+
+### 11. End-to-end smoke
+
+Manual matrix to verify after build:
+1. Switch mode investor → broker → developer from header chip → dashboard re-skins, no reload.
+2. Switch from "I am a Buyer/Broker/Visitor" homepage card → same.
+3. Switch from forced picker → same.
+4. Investor mode shows no Broker Education / no Careers; Broker mode shows both; Developer mode shows Careers + Developer tiles only.
+5. `signup_source_events` and `user_preferences` rows in DB match each switch.
+6. Refresh page in each mode → view persists (mode is read from DB).
+
+### 12. SEO + sitemap pass
+
+- Update `<SEOHead>` title + description for `/investor-dashboard`, `/broker-dashboard`, `/developer-dashboard` (new), and `/dashboard` (mode-aware fallback).
+- Add the 3 dashboard URLs to `scripts/generate-sitemap.ts` entries.
+- Trigger `seo--trigger_scan` after deploy and address any new findings.
+
+## Files touched
+
+- `src/pages/Dashboard.tsx` (mode router)
+- `src/pages/InvestorDashboard.tsx` (premium rebuild)
+- `src/pages/BrokerDashboard.tsx` (mode-filter Quick Actions)
+- New `src/pages/DeveloperDashboard.tsx`
+- `src/components/dashboard/QuickActions.tsx` (mode-driven)
+- `src/contexts/UserModeContext.tsx` (mirror to role, cache invalidation)
+- `src/components/navigation/GlobalVerticalNav.tsx` (mode-filter tiles)
+- `supabase/functions/register-mode-lead/index.ts` (optional role mirror)
+- `scripts/generate-sitemap.ts`
+- `mem://features/dashboard/mode-driven-view-standard.md` + `mem://index.md`
+
+## Out of scope (won't touch)
+
+- Owner cockpit, CRM, listing admin, RLS policies, auth.
+- Existing role table semantics (kept for permissions only).
