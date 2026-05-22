@@ -4880,3 +4880,77 @@ button:hover [data-no-contrast-guard] svg[style*="#B89555"] {
   stroke: #1A1A1A !important;
 }
 
+/* ============================================================
+ * NO-GRAY-SURFACES RULE — LOCKED GLOBAL
+ * Eliminates every gray section divider, hairline, and gray
+ * loading skeleton site-wide. Champagne canvas flows
+ * uninterrupted; gold only as 1px hairline when explicitly
+ * opted-in via [data-gold-hairline].
+ * See mem://constraints/no-gray-surfaces
+ * ============================================================ */
+
+/* 1. Kill all native + role separators (gray <hr>, dividers).
+ *    Opt back in with [data-gold-hairline] for the rare case
+ *    a designer truly wants a 1px champagne accent. */
+hr:not([data-gold-hairline]),
+[role="separator"]:not([data-gold-hairline]):not([data-orientation="vertical"]),
+[data-divider]:not([data-gold-hairline]),
+[data-section-divider]:not([data-gold-hairline]),
+[data-adaptive-hairline]:not([data-gold-hairline]) {
+  display: none !important;
+  border: 0 !important;
+  background: transparent !important;
+  height: 0 !important;
+}
+
+hr[data-gold-hairline],
+[data-gold-hairline] {
+  border: 0 !important;
+  height: 1px !important;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(184, 149, 85, 0) 8%,
+    rgba(184, 149, 85, 0.35) 50%,
+    rgba(184, 149, 85, 0) 92%,
+    transparent 100%
+  ) !important;
+}
+
+/* 2. Tailwind `divide-*` utilities — soften gray internal dividers to champagne. */
+[class*="divide-gray"] > :not([hidden]) ~ :not([hidden]),
+[class*="divide-neutral"] > :not([hidden]) ~ :not([hidden]),
+[class*="divide-slate"] > :not([hidden]) ~ :not([hidden]),
+[class*="divide-zinc"] > :not([hidden]) ~ :not([hidden]),
+[class*="divide-stone"] > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgba(184, 149, 85, 0.22) !important;
+}
+
+/* 3. Repaint gray loading skeletons to champagne shimmer.
+ *    Covers shadcn <Skeleton>, .animate-pulse and bg-muted on light. */
+.skeleton,
+[data-skeleton],
+[data-slot="skeleton"],
+.animate-pulse:where(.bg-muted, .bg-muted\/50, [class*="bg-gray-"], [class*="bg-neutral-"], [class*="bg-slate-"], [class*="bg-zinc-"], [class*="bg-stone-"]) {
+  background-color: #F7F2EA !important;
+  background-image: linear-gradient(
+    90deg,
+    #F7F2EA 0%,
+    #EFE6D6 50%,
+    #F7F2EA 100%
+  ) !important;
+}
+
+/* 4. Gray surface backgrounds → champagne (light-mode only).
+ *    Dark sections opt out via [data-surface="dark"]. */
+:where(
+  .bg-gray-50, .bg-gray-100,
+  .bg-neutral-50, .bg-neutral-100,
+  .bg-slate-50, .bg-slate-100,
+  .bg-zinc-50, .bg-zinc-100,
+  .bg-stone-50, .bg-stone-100
+):not([data-surface="dark"]):not([data-no-contrast-guard]) {
+  background-color: #F7F2EA !important;
+}
+
+
