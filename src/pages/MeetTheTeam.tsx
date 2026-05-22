@@ -307,11 +307,12 @@ const MeetTheTeam: React.FC = () => {
     <>
 
       <SEOHead
-        title="Meet Our Team | JBJ Global Real Estate"
-        description="Meet the exceptional professionals behind JBJ Global Real Estate. Our diverse team of experts is dedicated to delivering premium real estate services in Dubai and the UAE."
-        keywords="JBJ team, real estate professionals Dubai, luxury property experts, JBJ Global Real Estate staff"
+        title="Meet the Team | JBJ Global Real Estate"
+        description="Meet the team behind JBJ Global Real Estate — the professionals delivering premium real estate services across Dubai and the UAE."
+        keywords="JBJ team, meet the team, real estate professionals Dubai, luxury property experts, JBJ Global Real Estate staff"
         canonicalPath="/team"
       />
+
 
         <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
           {isOwner && (
