@@ -82,34 +82,37 @@ export function SearchableSelect({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild disabled={disabled}>
         <Button
+          type="button"
           variant="outline"
           role="combobox"
           aria-expanded={open}
           className={cn(
-            "w-full justify-between h-12 rounded-lg",
+            "w-full justify-between h-12 rounded-lg min-w-0",
             !triggerClassName && "bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#FDFBF7] hover:border-[#B89555]/60 hover:text-[#1A1A1A]",
             !value && "text-[#1A1A1A]/70",
             triggerClassName
           )}
         >
-          <span className="truncate flex items-center gap-2">
-            {selectedFlag && <span className="text-xl leading-none">{selectedFlag}</span>}
-            {value || placeholder}
+          <span className="truncate flex items-center gap-2 min-w-0 flex-1">
+            {selectedFlag && <span className="text-xl leading-none shrink-0">{selectedFlag}</span>}
+            <span className="truncate">{value || placeholder}</span>
           </span>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 text-[#1A1A1A]/70" />
         </Button>
       </PopoverTrigger>
       <PopoverContent
         className={cn(
-          "w-[var(--radix-popover-trigger-width)] p-0 bg-[#FDFBF7] border-[#B89555]/30 shadow-xl shadow-gold/10 z-[10210]",
+          "w-[var(--radix-popover-trigger-width)] min-w-[260px] p-0 bg-[#FDFBF7] border-[#B89555]/30 shadow-xl shadow-gold/10 z-[10210]",
           className
         )}
         align="start"
         side="bottom"
         sideOffset={6}
-        avoidCollisions={false}
+        avoidCollisions={true}
+        collisionPadding={12}
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
+
         <div className="p-2 border-b border-[#B89555]/20">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/70" />
