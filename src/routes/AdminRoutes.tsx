@@ -76,6 +76,10 @@ const LegacyEnvelopeRedirect = () => {
   const { id } = useParams();
   return <Navigate to={`/owner/documents/forms/${id}`} replace />;
 };
+const DeveloperProfileSlugRedirect = () => {
+  const { slug } = useParams();
+  return <Navigate to={`/developer-hub-admin/profile/${slug}`} replace />;
+};
 const Automations = lazy(() => import("@/pages/Automations"));
 const AlertsDemo = lazy(() => import("@/pages/AlertsDemo"));
 const ExclusiveDocuments = lazy(() => import("@/pages/owner/ExclusiveDocuments"));
