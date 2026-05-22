@@ -336,6 +336,12 @@
     <priority>0.78</priority>
   </url>
   <url>
+    <loc>https://www.jbj.ae/developer/aldar</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.78</priority>
+  </url>
+  <url>
     <loc>https://www.jbj.ae/developer/developed-by-dubai-properties</loc>
     <lastmod>2026-05-22</lastmod>
     <changefreq>weekly</changefreq>
@@ -756,6 +762,12 @@
     <priority>0.78</priority>
   </url>
   <url>
+    <loc>https://www.jbj.ae/developer/aldar-properties</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.78</priority>
+  </url>
+  <url>
     <loc>https://www.jbj.ae/developer/developed-by-object-1</loc>
     <lastmod>2026-05-22</lastmod>
     <changefreq>weekly</changefreq>
@@ -787,12 +799,6 @@
   </url>
   <url>
     <loc>https://www.jbj.ae/developer/damac-properties</loc>
-    <lastmod>2026-05-22</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.78</priority>
-  </url>
-  <url>
-    <loc>https://www.jbj.ae/developer/aldar-properties</loc>
     <lastmod>2026-05-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
@@ -1447,12 +1453,6 @@
   </url>
   <url>
     <loc>https://www.jbj.ae/developer/hse-realty</loc>
-    <lastmod>2026-05-22</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.78</priority>
-  </url>
-  <url>
-    <loc>https://www.jbj.ae/developer/aldar</loc>
     <lastmod>2026-05-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
