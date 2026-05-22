@@ -259,7 +259,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           {children}
         </main>
       </GlobalContactGating>
-      <div data-chrome="footer" className={!isBackOfficeRoute ? "[body.jj-vertical-nav-active_&]:sm:pl-[200px] [body.jj-vertical-nav-collapsed_&]:sm:pl-[48px]" : ""}>
+      <div data-chrome="footer" className="[body.jj-vertical-nav-active_&]:sm:pl-[200px] [body.jj-vertical-nav-collapsed_&]:sm:pl-[48px]">
         {!isBackOfficeRoute && !isToolkitGeneratorRoute && <Footer />}
       </div>
       {popupsReady && (
