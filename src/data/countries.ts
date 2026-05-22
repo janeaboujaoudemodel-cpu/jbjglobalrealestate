@@ -141,6 +141,16 @@ export const COUNTRIES: CountryEntry[] = [
   { code: "SC", name: "Seychelles", nationality: "Seychellois", dial: "+248", flag: "🇸🇨" },
 ];
 
+// Convert ISO-2 country code (e.g. "AE") to the corresponding regional-indicator flag emoji.
+export function flagEmoji(iso: string): string {
+  if (!iso || iso.length !== 2) return "";
+  const base = 0x1f1e6;
+  const A = "A".charCodeAt(0);
+  const up = iso.toUpperCase();
+  return String.fromCodePoint(base + (up.charCodeAt(0) - A)) +
+    String.fromCodePoint(base + (up.charCodeAt(1) - A));
+}
+
 export const PRIORITY_COUNTRY_CODES = ["AE", "SA", "QA", "KW", "BH", "OM", "IN", "PK", "GB", "US"];
 
 export function findCountryByDial(dial: string): CountryEntry | undefined {
