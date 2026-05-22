@@ -2243,6 +2243,39 @@ export type Database = {
           },
         ]
       }
+      broker_2fa_secrets: {
+        Row: {
+          broker_user_id: string
+          created_at: string
+          enabled: boolean
+          enrolled_at: string | null
+          last_verified_at: string | null
+          recovery_codes_hash: string[] | null
+          secret: string
+          updated_at: string
+        }
+        Insert: {
+          broker_user_id: string
+          created_at?: string
+          enabled?: boolean
+          enrolled_at?: string | null
+          last_verified_at?: string | null
+          recovery_codes_hash?: string[] | null
+          secret: string
+          updated_at?: string
+        }
+        Update: {
+          broker_user_id?: string
+          created_at?: string
+          enabled?: boolean
+          enrolled_at?: string | null
+          last_verified_at?: string | null
+          recovery_codes_hash?: string[] | null
+          secret?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       broker_access_requests: {
         Row: {
           admin_notes: string | null
@@ -7424,12 +7457,16 @@ export type Database = {
           restricted_at: string | null
           revoke_reason: string | null
           revoked_at: string | null
+          scope: Json
           source_database_id: string
           status_filter: string[] | null
           suspend_reason: string | null
           suspended_at: string | null
           updated_at: string
           visibility_direction: string
+          visible_activities: boolean
+          visible_files: boolean
+          visible_notes: boolean
         }
         Insert: {
           broker_user_id: string
@@ -7447,12 +7484,16 @@ export type Database = {
           restricted_at?: string | null
           revoke_reason?: string | null
           revoked_at?: string | null
+          scope?: Json
           source_database_id: string
           status_filter?: string[] | null
           suspend_reason?: string | null
           suspended_at?: string | null
           updated_at?: string
           visibility_direction?: string
+          visible_activities?: boolean
+          visible_files?: boolean
+          visible_notes?: boolean
         }
         Update: {
           broker_user_id?: string
@@ -7470,12 +7511,16 @@ export type Database = {
           restricted_at?: string | null
           revoke_reason?: string | null
           revoked_at?: string | null
+          scope?: Json
           source_database_id?: string
           status_filter?: string[] | null
           suspend_reason?: string | null
           suspended_at?: string | null
           updated_at?: string
           visibility_direction?: string
+          visible_activities?: boolean
+          visible_files?: boolean
+          visible_notes?: boolean
         }
         Relationships: [
           {
@@ -8152,6 +8197,42 @@ export type Database = {
         }
         Relationships: []
       }
+      crm_file_grants: {
+        Row: {
+          broker_user_id: string
+          bucket: string
+          expires_at: string | null
+          file_path: string
+          granted_at: string
+          granted_by: string
+          id: string
+          notes: string | null
+          revoked_at: string | null
+        }
+        Insert: {
+          broker_user_id: string
+          bucket?: string
+          expires_at?: string | null
+          file_path: string
+          granted_at?: string
+          granted_by: string
+          id?: string
+          notes?: string | null
+          revoked_at?: string | null
+        }
+        Update: {
+          broker_user_id?: string
+          bucket?: string
+          expires_at?: string | null
+          file_path?: string
+          granted_at?: string
+          granted_by?: string
+          id?: string
+          notes?: string | null
+          revoked_at?: string | null
+        }
+        Relationships: []
+      }
       crm_import_batch_errors: {
         Row: {
           attempted_at: string
@@ -8492,6 +8573,94 @@ export type Database = {
           },
         ]
       }
+      crm_lead_publish_queue: {
+        Row: {
+          broker_user_id: string
+          created_at: string
+          discard_reason: string | null
+          discarded_at: string | null
+          edited_by: string
+          field_diff: Json
+          id: string
+          lead_id: string
+          note: string | null
+          published_at: string | null
+          published_by: string | null
+          share_id: string | null
+        }
+        Insert: {
+          broker_user_id: string
+          created_at?: string
+          discard_reason?: string | null
+          discarded_at?: string | null
+          edited_by: string
+          field_diff?: Json
+          id?: string
+          lead_id: string
+          note?: string | null
+          published_at?: string | null
+          published_by?: string | null
+          share_id?: string | null
+        }
+        Update: {
+          broker_user_id?: string
+          created_at?: string
+          discard_reason?: string | null
+          discarded_at?: string | null
+          edited_by?: string
+          field_diff?: Json
+          id?: string
+          lead_id?: string
+          note?: string | null
+          published_at?: string | null
+          published_by?: string | null
+          share_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_lead_publish_queue_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_lead_publish_queue_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads_secure"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_lead_publish_queue_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_vip_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_lead_publish_queue_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_broker_pre_invite_leads"
+            referencedColumns: ["lead_id"]
+          },
+          {
+            foreignKeyName: "crm_lead_publish_queue_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_row_status"
+            referencedColumns: ["lead_id"]
+          },
+          {
+            foreignKeyName: "crm_lead_publish_queue_share_id_fkey"
+            columns: ["share_id"]
+            isOneToOne: false
+            referencedRelation: "crm_lead_shares"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crm_lead_reports: {
         Row: {
           created_at: string | null
@@ -8571,6 +8740,7 @@ export type Database = {
           id: string
           lead_id: string
           permission_level: string
+          publish_mode: string
           revoked_at: string | null
           shared_by: string
           shared_with: string
@@ -8581,6 +8751,7 @@ export type Database = {
           id?: string
           lead_id: string
           permission_level?: string
+          publish_mode?: string
           revoked_at?: string | null
           shared_by: string
           shared_with: string
@@ -8591,6 +8762,7 @@ export type Database = {
           id?: string
           lead_id?: string
           permission_level?: string
+          publish_mode?: string
           revoked_at?: string | null
           shared_by?: string
           shared_with?: string
