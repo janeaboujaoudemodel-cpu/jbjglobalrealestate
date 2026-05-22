@@ -82,34 +82,37 @@ export function SearchableSelect({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild disabled={disabled}>
         <Button
+          type="button"
           variant="outline"
           role="combobox"
           aria-expanded={open}
           className={cn(
-            "w-full justify-between h-12 rounded-lg",
+            "w-full justify-between h-12 rounded-lg min-w-0",
             !triggerClassName && "bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#FDFBF7] hover:border-[#B89555]/60 hover:text-[#1A1A1A]",
             !value && "text-[#1A1A1A]/70",
             triggerClassName
           )}
         >
-          <span className="truncate flex items-center gap-2">
-            {selectedFlag && <span className="text-xl leading-none">{selectedFlag}</span>}
-            {value || placeholder}
+          <span className="truncate flex items-center gap-2 min-w-0 flex-1">
+            {selectedFlag && <span className="text-xl leading-none shrink-0">{selectedFlag}</span>}
+            <span className="truncate">{value || placeholder}</span>
           </span>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 text-[#1A1A1A]/70" />
         </Button>
       </PopoverTrigger>
       <PopoverContent
         className={cn(
-          "w-[var(--radix-popover-trigger-width)] p-0 bg-[#FDFBF7] border-[#B89555]/30 shadow-xl shadow-gold/10 z-[10210]",
+          "w-[var(--radix-popover-trigger-width)] min-w-[260px] p-0 bg-[#FDFBF7] border-[#B89555]/30 shadow-xl shadow-gold/10 z-[10210]",
           className
         )}
         align="start"
         side="bottom"
         sideOffset={6}
-        avoidCollisions={false}
+        avoidCollisions={true}
+        collisionPadding={12}
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
+
         <div className="p-2 border-b border-[#B89555]/20">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/70" />
@@ -141,34 +144,34 @@ export function SearchableSelect({
           ) : (
             filteredOptions.map((option) => {
               const flag = getFlag(option);
+              const isSelected = value === option;
               return (
                 <button
                   key={option}
+                  type="button"
                   onClick={() => {
                     onChange(option);
                     setOpen(false);
                   }}
                   className={cn(
-                    "w-full flex items-center gap-3 px-3 py-3.5 text-base rounded-md transition-colors text-left min-h-[48px]",
-                    value === option
-                      ? "bg-[#EFE6D6]/10 text-[#1A1A1A]"
-                      : "text-[#1A1A1A] hover:bg-[#EFE6D6]/5"
+                    "w-full flex items-center gap-3 px-3 py-3 text-base rounded-md transition-colors text-left min-h-[44px]",
+                    isSelected
+                      ? "bg-[#EFE6D6] text-[#1A1A1A]"
+                      : "text-[#1A1A1A] hover:bg-[#EFE6D6]/60"
                   )}
                 >
-                  <Check
-                    className={cn(
-                      "h-4 w-4 shrink-0",
-                      value === option ? "opacity-100 text-[#1A1A1A]" : "opacity-0"
-                    )}
-                  />
+                  <span className="w-4 h-4 shrink-0 flex items-center justify-center">
+                    {isSelected && <Check className="h-4 w-4 text-[#1A1A1A]" strokeWidth={2.5} />}
+                  </span>
                   {flag && <span className="text-xl leading-none shrink-0">{flag}</span>}
-                  <span className="truncate text-sm sm:text-base">{option}</span>
+                  <span className="truncate text-sm sm:text-base flex-1 min-w-0">{option}</span>
                   {option === priorityItem && (
-                    <span className="ml-auto text-xs text-[#1A1A1A]/70">Default</span>
+                    <span className="ml-auto text-[10px] uppercase tracking-wider text-[#1A1A1A]/70 whitespace-nowrap shrink-0">Default</span>
                   )}
                 </button>
               );
             })
+
           )}
         </div>
       </PopoverContent>
