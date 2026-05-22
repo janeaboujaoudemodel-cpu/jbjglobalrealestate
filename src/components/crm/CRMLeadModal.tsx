@@ -599,8 +599,8 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
 
               {/* Tier (Standard / VIP) and Pool (Pool / Non-pool) — independent */}
               <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <Label className="flex items-center gap-1.5">
+                <div className="space-y-1.5">
+                  <Label className="flex items-center gap-1.5 mb-0">
                     <Crown className="h-3.5 w-3.5 text-amber-500" />
                     Tier
                   </Label>
@@ -611,7 +611,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                         type="button"
                         onClick={() => setFormData({ ...formData, tier: t })}
                         className={cn(
-                          "flex-1 px-3 py-2 text-xs font-bold uppercase tracking-wide transition-colors",
+                          "flex-1 px-3 py-2.5 text-xs font-bold uppercase tracking-wide transition-colors",
                           formData.tier === t
                             ? t === 'vip'
                               ? "bg-amber-400/25 text-amber-900 border-r border-[#B89555]/40"
@@ -624,8 +624,8 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                     ))}
                   </div>
                 </div>
-                <div>
-                  <Label className="flex items-center gap-1.5">
+                <div className="space-y-1.5">
+                  <Label className="flex items-center gap-1.5 mb-0">
                     <Users2 className="h-3.5 w-3.5 text-blue-500" />
                     Pool
                   </Label>
@@ -636,7 +636,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                         type="button"
                         onClick={() => setFormData({ ...formData, pool: p })}
                         className={cn(
-                          "flex-1 px-3 py-2 text-xs font-bold uppercase tracking-wide transition-colors",
+                          "flex-1 px-3 py-2.5 text-xs font-bold uppercase tracking-wide transition-colors",
                           formData.pool === p
                             ? p === 'pool'
                               ? "bg-blue-500/15 text-blue-800 border-r border-[#B89555]/40"
@@ -650,6 +650,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                   </div>
                 </div>
               </div>
+
 
               <div className="grid grid-cols-3 gap-3">
                 <div>
