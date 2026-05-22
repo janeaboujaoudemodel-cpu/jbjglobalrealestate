@@ -50,6 +50,14 @@ export default function CategorySelectorSection() {
   const { setMode } = useUserModeContext();
 
   const handleSelect = async (cat: Category) => {
+    // Track source regardless of auth state so anonymous picks still appear in counters
+    try {
+      const { registerRolePick, SIGNUP_SOURCES } = await import('@/lib/signupSources');
+      await registerRolePick({ source: SIGNUP_SOURCES.HOMEPAGE_ROLE_CARD, role: cat });
+    } catch {
+      /* non-blocking */
+    }
+
     if (!user) {
       navigate(`/auth?returnTo=${encodeURIComponent(`/welcome?preselect=${cat}`)}&preselect=${cat}`);
       return;

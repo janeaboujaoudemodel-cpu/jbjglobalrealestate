@@ -93,6 +93,7 @@ function ScrollStrip({ children, ariaLabel }: { children: React.ReactNode; ariaL
 
 // --- Lazy section content -------------------------------------------------
 const CRMLeadsTableV2     = lazy(() => import("@/components/crm/CRMLeadsTableV2"));
+const LeadSourcesPanel    = lazy(() => import("@/components/owner/LeadSourcesPanel"));
 const FlaggedLeadsView    = lazy(() => import("@/components/crm/FlaggedLeadsView"));
 const RecentlyDeletedLeads= lazy(() => import("@/components/crm/RecentlyDeletedLeads"));
 const CRMRelationships    = lazy(() => import("@/pages/CRMRelationships"));
@@ -335,7 +336,12 @@ export default function UnifiedCRM() {
             <CRMEnhancedDashboard userId={userId} hasOwnerAccess />
           </div>
         );
-        case "all":           return <CRMLeadsTableV2 userId={userId} filterType="all" onRefresh={() => {}} isOwner />;
+        case "all":           return (
+          <div className="space-y-6">
+            <LeadSourcesPanel />
+            <CRMLeadsTableV2 userId={userId} filterType="all" onRefresh={() => {}} isOwner />
+          </div>
+        );
         case "shared":        return <SharedWithBrokersView />;
         case "flagged":       return <FlaggedLeadsView userId={userId} onRefresh={() => {}} />;
         case "vip":           return <CRMLeadsTableV2 userId={userId} filterType="vip" onRefresh={() => {}} isOwner />;

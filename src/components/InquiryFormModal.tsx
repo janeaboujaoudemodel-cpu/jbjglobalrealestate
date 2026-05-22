@@ -170,6 +170,25 @@ const InquiryFormModal = ({
         : source === 'popup_main' ? 'Main Page Pop-up'
         : source.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 
+      // Source tracking — labels this lead by where they came from (Join Our Community / Property Inquiry / etc.)
+      try {
+        const { registerRolePick, SIGNUP_SOURCES } = await import('@/lib/signupSources');
+        const signupSource = propertyName
+          ? SIGNUP_SOURCES.PROPERTY_INQUIRY
+          : data.role === 'buyer'   ? SIGNUP_SOURCES.JOIN_COMMUNITY_BUYER
+          : data.role === 'broker'  ? SIGNUP_SOURCES.JOIN_COMMUNITY_BROKER
+          : SIGNUP_SOURCES.JOIN_COMMUNITY_VISITOR;
+        await registerRolePick({
+          source: signupSource,
+          role: data.role,
+          email: normalizedEmail,
+          fullName: data.fullName,
+          propertyName,
+        });
+      } catch (srcErr) {
+        console.warn('[Inquiry] source tracking failed (non-fatal):', srcErr);
+      }
+
       // Call backend edge function to capture lead with detailed source tracking
       const { data: captureResult, error: captureError } = await supabase.functions.invoke('capture-lead', {
         body: {
@@ -314,8 +333,7 @@ const InquiryFormModal = ({
         }}
       >
         <DialogContent 
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 text-[#1A1A1A] max-w-lg p-0 max-h-[90vh] shadow-2xl shadow-gold/20 overflow-visible"
-          style={{ overflow: 'visible' }}
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 text-[#1A1A1A] max-w-lg w-[95vw] p-0 max-h-[90vh] shadow-2xl shadow-gold/20 overflow-hidden rounded-2xl flex flex-col"
           dir={isRTL ? 'rtl' : 'ltr'}
           onInteractOutside={(e) => {
             // Prevent closing when interacting with popovers (SearchableSelect dropdowns)
@@ -331,7 +349,7 @@ const InquiryFormModal = ({
             }
           }}
         >
-          {/* Premium top gradient glow */}
+          {/* Premium top gradient glow (clipped to card) */}
           <div
             className="absolute top-0 left-0 right-0 h-32 pointer-events-none"
             style={{
@@ -343,7 +361,7 @@ const InquiryFormModal = ({
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
 
           {isSuccess ? (
-            <div className="relative px-8 py-16 text-center max-h-[90vh] overflow-y-auto">
+            <div className="relative px-8 py-16 text-center flex-1 overflow-y-auto">
               <button
                 type="button"
                 onClick={() => {
@@ -381,7 +399,7 @@ const InquiryFormModal = ({
               </Button>
             </div>
           ) : (
-            <div className="relative px-6 pt-8 pb-6 max-h-[90vh] overflow-y-auto">
+            <div className="relative px-6 pt-8 pb-6 flex-1 overflow-y-auto">
               <DialogHeader className="mb-6">
                 {/* Premium Icon */}
                 <div className="text-center mb-4">

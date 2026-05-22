@@ -153,6 +153,14 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
         // Non-blocking: never let CRM sync break the UI selection.
         console.warn('[UserMode] register-mode-lead failed (non-fatal):', err);
       }
+
+      // Source tracking — labels every pick as "Mode Picker (Header)" for insights
+      try {
+        const { registerRolePick, SIGNUP_SOURCES } = await import('@/lib/signupSources');
+        await registerRolePick({ source: SIGNUP_SOURCES.MODE_PICKER, role: newMode });
+      } catch (err) {
+        console.warn('[UserMode] source tracking failed (non-fatal):', err);
+      }
     }
   }, [user?.id]);
 
