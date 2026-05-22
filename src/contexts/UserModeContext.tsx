@@ -50,6 +50,24 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
   const queryClient = useQueryClient();
   const lastSyncedUserId = useRef<string | null>(null);
 
+  // Cross-tab sync — listen for mode changes from other tabs/windows.
+  // `storage` events only fire in OTHER tabs (never the one that wrote),
+  // so this can never feedback-loop into itself.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const onStorage = (e: StorageEvent) => {
+      if (e.key !== MODE_KEY || e.newValue === e.oldValue) return;
+      const next = normalizeMode(e.newValue);
+      setModeState((prev) => (prev === next ? prev : next));
+      const selected = localStorage.getItem(MODE_SELECTED_KEY) === 'true';
+      setHasMadeInitialSelection(selected);
+      console.info('[UserMode] Synced from another tab:', next);
+      try { queryClient.invalidateQueries(); } catch {}
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, [queryClient]);
+
   // Silent background reconcile — only runs once per real user-id change
   // (TOKEN_REFRESHED churn won't re-fire it). Never toggles isLoading.
   useEffect(() => {
@@ -57,6 +75,7 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
     if (userId === lastSyncedUserId.current) return;
     lastSyncedUserId.current = userId;
     if (!userId) return;
+
 
     const reconcile = async () => {
       const storedMode = localStorage.getItem(MODE_KEY);
