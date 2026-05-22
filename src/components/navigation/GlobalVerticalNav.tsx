@@ -1180,7 +1180,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 e.currentTarget.style.transform = 'none';
               }}
             >
-              <Headphones className="w-3.5 h-3.5" strokeWidth={2} style={{ color: 'inherit' }} />
+              <Headphones className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#B89555' }} />
               <span style={{ color: 'inherit' }}>Contact</span>
             </Link>
             <Link
@@ -1199,7 +1199,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 e.currentTarget.style.transform = 'none';
               }}
             >
-              <Ticket className="w-3.5 h-3.5" strokeWidth={2} style={{ color: 'inherit' }} />
+              <Ticket className="w-3.5 h-3.5" strokeWidth={2} style={{ color: '#B89555' }} />
               <span style={{ color: 'inherit' }}>Support</span>
             </Link>
           </div>
