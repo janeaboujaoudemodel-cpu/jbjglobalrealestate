@@ -11274,6 +11274,75 @@ export type Database = {
         }
         Relationships: []
       }
+      developer_applications: {
+        Row: {
+          about_developer: string | null
+          admin_notes: string | null
+          applicant_email: string | null
+          applicant_name: string | null
+          applicant_phone: string | null
+          applicant_user_id: string
+          attachments: Json
+          brochure_urls: Json
+          created_at: string
+          current_projects: Json
+          developer_id: string
+          drive_link: string | null
+          id: string
+          logo_url: string | null
+          past_projects: Json
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          upcoming_projects: Json
+          updated_at: string
+        }
+        Insert: {
+          about_developer?: string | null
+          admin_notes?: string | null
+          applicant_email?: string | null
+          applicant_name?: string | null
+          applicant_phone?: string | null
+          applicant_user_id: string
+          attachments?: Json
+          brochure_urls?: Json
+          created_at?: string
+          current_projects?: Json
+          developer_id: string
+          drive_link?: string | null
+          id?: string
+          logo_url?: string | null
+          past_projects?: Json
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          upcoming_projects?: Json
+          updated_at?: string
+        }
+        Update: {
+          about_developer?: string | null
+          admin_notes?: string | null
+          applicant_email?: string | null
+          applicant_name?: string | null
+          applicant_phone?: string | null
+          applicant_user_id?: string
+          attachments?: Json
+          brochure_urls?: Json
+          created_at?: string
+          current_projects?: Json
+          developer_id?: string
+          drive_link?: string | null
+          id?: string
+          logo_url?: string | null
+          past_projects?: Json
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          upcoming_projects?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
       developer_contacts: {
         Row: {
           created_at: string
