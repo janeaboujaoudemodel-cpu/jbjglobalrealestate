@@ -11351,6 +11351,50 @@ export type Database = {
           },
         ]
       }
+      developer_audit_log: {
+        Row: {
+          action: string
+          actor_id: string | null
+          actor_role: string | null
+          after_value: Json | null
+          before_value: Json | null
+          created_at: string
+          developer_id: string
+          field: string | null
+          id: string
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          actor_role?: string | null
+          after_value?: Json | null
+          before_value?: Json | null
+          created_at?: string
+          developer_id: string
+          field?: string | null
+          id?: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          actor_role?: string | null
+          after_value?: Json | null
+          before_value?: Json | null
+          created_at?: string
+          developer_id?: string
+          field?: string | null
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "developer_audit_log_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       developer_contacts: {
         Row: {
           created_at: string
@@ -11606,6 +11650,62 @@ export type Database = {
           uploaded_files?: Json | null
         }
         Relationships: []
+      }
+      developer_media: {
+        Row: {
+          caption: string | null
+          created_at: string
+          developer_id: string
+          display_order: number
+          file_size_bytes: number | null
+          id: string
+          kind: string
+          mime_type: string | null
+          storage_path: string | null
+          updated_at: string
+          uploaded_by: string | null
+          uploaded_by_role: string | null
+          url: string
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          developer_id: string
+          display_order?: number
+          file_size_bytes?: number | null
+          id?: string
+          kind: string
+          mime_type?: string | null
+          storage_path?: string | null
+          updated_at?: string
+          uploaded_by?: string | null
+          uploaded_by_role?: string | null
+          url: string
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          developer_id?: string
+          display_order?: number
+          file_size_bytes?: number | null
+          id?: string
+          kind?: string
+          mime_type?: string | null
+          storage_path?: string | null
+          updated_at?: string
+          uploaded_by?: string | null
+          uploaded_by_role?: string | null
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "developer_media_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       developer_messages: {
         Row: {
@@ -12732,8 +12832,10 @@ export type Database = {
           approved_by: string | null
           ceo_name: string | null
           completed_projects: number | null
+          confirmation_source: string | null
           created_at: string
           description: string | null
+          description_languages: string[] | null
           enrichment_source: string | null
           expected_completion_year: number | null
           feature_image_url: string | null
@@ -12745,6 +12847,8 @@ export type Database = {
           instagram_url: string | null
           is_hidden: boolean | null
           last_auto_publish_at: string | null
+          last_confirmed_at: string | null
+          last_confirmed_by: string | null
           last_enriched_at: string | null
           license_number: string | null
           linkedin_url: string | null
@@ -12785,8 +12889,10 @@ export type Database = {
           approved_by?: string | null
           ceo_name?: string | null
           completed_projects?: number | null
+          confirmation_source?: string | null
           created_at?: string
           description?: string | null
+          description_languages?: string[] | null
           enrichment_source?: string | null
           expected_completion_year?: number | null
           feature_image_url?: string | null
@@ -12798,6 +12904,8 @@ export type Database = {
           instagram_url?: string | null
           is_hidden?: boolean | null
           last_auto_publish_at?: string | null
+          last_confirmed_at?: string | null
+          last_confirmed_by?: string | null
           last_enriched_at?: string | null
           license_number?: string | null
           linkedin_url?: string | null
@@ -12838,8 +12946,10 @@ export type Database = {
           approved_by?: string | null
           ceo_name?: string | null
           completed_projects?: number | null
+          confirmation_source?: string | null
           created_at?: string
           description?: string | null
+          description_languages?: string[] | null
           enrichment_source?: string | null
           expected_completion_year?: number | null
           feature_image_url?: string | null
@@ -12851,6 +12961,8 @@ export type Database = {
           instagram_url?: string | null
           is_hidden?: boolean | null
           last_auto_publish_at?: string | null
+          last_confirmed_at?: string | null
+          last_confirmed_by?: string | null
           last_enriched_at?: string | null
           license_number?: string | null
           linkedin_url?: string | null
@@ -36441,6 +36553,10 @@ export type Database = {
       }
       has_database_grant: {
         Args: { _database_id: string; _min_level?: string; _user_id: string }
+        Returns: boolean
+      }
+      has_developer_edit_access: {
+        Args: { _developer_id: string }
         Returns: boolean
       }
       has_finance_access: { Args: { user_uuid: string }; Returns: boolean }

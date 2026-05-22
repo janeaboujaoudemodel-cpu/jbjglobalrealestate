@@ -1,71 +1,87 @@
-## What you'll see
+## Move Developer Hub out of Listings → Admin Developer Portal
 
-1. The **"Shared w/ Brokers"** tab in `/owner/crm?entity=leads` is **removed completely**. It will no longer appear in the side nav.
-2. On every row of the main Leads table, a new **shield icon** (🛡 "Access") appears next to the existing action icons (WhatsApp / Call / Email / Delete).
-3. Clicking it opens an **Access dialog** for that specific lead. The dialog shows:
-   - The lead's name + a privacy banner ("Sensitive data — every action is logged").
-   - **Every broker who can currently see this lead**, grouped by HOW they got access:
-     - **Direct share** — they were individually granted this lead.
-     - **Database grant — "{database name}"** — they got access because the lead lives in a database/folder you shared with them. If the lead is visible through multiple databases, **each one is listed separately** with the database name.
-   - For each broker row: their name, the date access started, expiry (if any), and current status (Active / Suspended).
-4. For each row, two buttons: **Suspend** and **Restore** (whichever is relevant). Both open a **typed confirmation** ("type `SUSPEND` to confirm") before anything happens — no accidental clicks.
-5. After confirmation, the change is applied **server-side via a SECURITY DEFINER RPC** (`crm_owner_set_access_status`) that:
-   - Verifies `auth.email() = OWNER_EMAIL` before touching anything (defense in depth on top of RLS).
-   - Sets `revoked_at`/`suspended_at` on `crm_lead_shares` for direct shares, or `suspended_at`/`revoke_reason` on `crm_database_grants` for database grants.
-   - Writes one immutable row to `crm_audit_logs` + `crm_security_events` with the lead_id, broker_id, source (share / grant), old/new status, reason.
-6. Live brokers lose access **immediately** — existing RLS on `crm_lead_shares` and `crm_database_grants` already checks `revoked_at IS NULL` / `suspended_at IS NULL`, so no further code changes are needed for the read side.
+Right now `/admin/developers` lives inside the Listings area and only shows an overview/projects table. You want it to become the **single source of truth for every developer**, with full CRUD over their identity, content, media, projects, and registered sales reps — and to give each sales rep the same editing surface (gated to their developer).
 
-## Security guarantees (the bit you asked me to be careful about)
+---
 
-- **No client-side trust**: the dialog only DISPLAYS state; every mutation goes through one RPC that re-checks owner identity. A compromised browser cannot suspend / restore on someone else's behalf.
-- **RLS untouched**: we don't loosen any existing policies. The new RPC is the only new write path and it's locked to the owner email.
-- **No PII leak**: broker names come from `crm_brokers` (already-public-to-owner). Their auth emails are not shown — same rule as the rest of the app.
-- **Audit-first**: every Suspend / Restore writes to `crm_audit_logs` with before/after JSON and to `crm_security_events` (the same table already used by the existing `LeadSharingPanel`). You can review the full history later in Security Console.
-- **Idempotent**: re-suspending an already-suspended grant is a no-op (no duplicate audit rows for the same state).
-- **Hard cap**: the RPC refuses to act on more than 1 grant per call → prevents a "suspend everyone" mass-mistake from one bad click.
+### 1. Navigation / Placement
 
-## Files
+- Remove "Developers" from the Listings admin nav.
+- Add a top-level **Developer Portal** entry in the Owner sidebar (under CORE, after Owner Panel/Overview).
+  - Owner sees: all developers + all registered sales reps + roles + analytics.
+  - Sales rep sees: only the developer they are registered under (same edit UI).
+- Existing `/admin/developers` route stays, but the page is rebuilt as the new portal hub.
 
-- **Edit** `src/pages/owner/crm/UnifiedCRM.tsx` — remove the `"shared"` entry from `VIEWS.leads`, the lazy import, and the `case "shared"` branch. If someone hits `?view=shared`, fall through to `"all"`.
-- **Delete** `src/components/crm/SharedWithBrokersView.tsx` (no other refs).
-- **New** `src/components/crm/LeadAccessDialog.tsx` — the per-lead access panel + typed-confirm modal.
-- **Edit** `src/components/crm/CRMLeadsTableV2.tsx` — add the shield icon in the per-row action group; wires up `LeadAccessDialog`.
-- **New migration** — adds:
-  - View `vw_lead_access_audit(lead_id, broker_id, broker_name, source, source_label, permission_level, started_at, expires_at, status, source_row_id)` (security_invoker, owner-only via RLS-equivalent guard inside the function).
-  - RPC `crm_owner_list_access(p_lead_id uuid) returns setof vw_lead_access_audit` — owner-only.
-  - RPC `crm_owner_set_access_status(p_source text, p_source_row_id uuid, p_action text, p_reason text)` — owner-only, single-row, audited.
+---
 
-## Technical detail (database)
+### 2. Developer Hub list page (`/admin/developers`)
 
-```text
-crm_owner_list_access(lead_id)
-  → UNION ALL of:
-      crm_lead_shares WHERE lead_id = $1 AND revoked_at IS NULL
-        → source = 'direct_share'
-      crm_database_grants g
-        JOIN crm_database_folders f ON f.id = g.source_database_id
-        WHERE g.revoked_at IS NULL
-          AND EXISTS (
-            SELECT 1 FROM crm_leads l
-            WHERE l.id = $1
-              AND l.source_database_id = g.source_database_id
-          )
-        → source = 'database_grant', source_label = f.name
-  → broker_name resolved via crm_brokers.user_id = shared_with / broker_user_id
+Replace the current "DeveloperOverviewTab" with a real directory:
 
-crm_owner_set_access_status(source, source_row_id, action, reason)
-  - GUARD: IF auth.email() <> OWNER_EMAIL THEN RAISE 'not_owner';
-  - action IN ('suspend','restore','revoke')
-  - source='direct_share' → update crm_lead_shares SET revoked_at=... WHERE id=source_row_id
-  - source='database_grant' → update crm_database_grants SET suspended_at=... WHERE id=source_row_id
-  - INSERT into crm_audit_logs + crm_security_events
-```
+- Searchable, filterable table of all developers.
+- Columns: Logo · Developer · # Projects · # Sales reps · Last updated · Status (Confirmed / Needs review) · Actions.
+- Row click → `/admin/developers/:slug` (full profile).
+- "+ Add Developer" button (owner only).
+- Secondary tab: **Sales Representatives** — list of every registered rep across all developers (name, languages, developer, role, last activity, contact).
 
-## Acceptance
+---
 
-- "Shared w/ Brokers" is gone from the nav and the route. Old bookmarks redirect to "All Leads".
-- Clicking the shield on any lead opens the dialog and correctly enumerates direct shares + database grants (including the same lead appearing under multiple databases).
-- Suspend requires typing `SUSPEND` to confirm; clicking outside the dialog cancels.
-- After Suspend, the affected broker's CRM no longer shows that lead on next refresh (verified by RLS).
-- Every Suspend / Restore appears in `crm_audit_logs` with before/after JSON.
-- Non-owner accounts calling the RPC directly get `permission denied: not_owner`.
+### 3. Developer profile page (`/admin/developers/:slug`)
+
+Full editable profile, single page with sub-tabs:
+
+1. **Overview** — logo (placeholder if missing, click to upload), legal name, trading name, founded, HQ, website, description (rich text), languages, social links.
+   - "Description must match the developer's official website" notice.
+   - **Confirmation block** at the bottom: checkbox "I confirm this information matches the developer's official website" + signature line (user name + timestamp). Stored as a confirmation record; shows "Last confirmed by X on …".
+2. **Projects** — every project by this developer, clickable → project edit page. Inline edit of name, status, handover, units. "+ Add Project".
+3. **Media** — drag-drop uploader for photos, videos, brochures, floor plans, maps, any files. Reordering, captions, type tagging. No size category limits beyond storage policy.
+4. **Contacts** — developer's own contact details (HQ phone, email, address, map pin) + list of sales representatives registered under this developer with their full profile (photo, languages, role, phone, email, WhatsApp, bio). Owner can invite/suspend reps from here.
+5. **Files & Brochures** — same uploader scoped to documents (PDF/DOC/XLS).
+6. **Activity** — audit log of every edit (who, what, when, before/after).
+
+All edits autosave + show "Saved · pending confirmation" until the Overview confirmation checkbox is re-signed.
+
+---
+
+### 4. Sales Representative editing surface
+
+- Reps registered under a developer get the **same edit UI** for that developer only.
+- Route: same `/admin/developers/:slug` — guard checks `is_owner OR rep.developer_id = developer.id`.
+- Every save by a rep flags the developer as "Pending owner review" until the owner re-confirms (or rep re-confirms with the "matches official website" checkbox).
+
+---
+
+### 5. Data model (Supabase)
+
+New / extended tables:
+
+- `developer_profiles` — extend existing developers table with: `description_rich`, `languages text[]`, `hq_address`, `hq_map`, `social_links jsonb`, `last_confirmed_by`, `last_confirmed_at`, `confirmation_source` (owner/rep).
+- `developer_media` — `developer_id, kind (photo|video|brochure|file|map), url, caption, display_order, uploaded_by`.
+- `developer_sales_reps` — `developer_id, user_id, role, phone, whatsapp, languages text[], bio, photo_url, status (active|suspended|pending)`.
+- `developer_audit_log` — `developer_id, actor_id, action, diff jsonb, created_at`.
+- Storage bucket `developer-assets` (public read, owner+rep write via RLS).
+
+RLS:
+- Owner: full access.
+- Rep: read/write only rows where `developer_id` matches their `developer_sales_reps.developer_id` and `status = 'active'`.
+- Public: read only published, non-sensitive fields (no contacts) — respects existing Contact Gating Standard.
+
+---
+
+### 6. Out of scope for this pass
+
+- Sales-rep self-registration flow (already exists in Developer Portal registration standard — we only consume it here).
+- Auto-logo scraping (already shipped via `auto-find-developer-logos`).
+- Public-facing developer pages (untouched; this is admin-side only).
+
+---
+
+### Files to create / edit (high level)
+
+- New: `src/pages/admin/developers/DeveloperPortalHub.tsx`, `DeveloperProfilePage.tsx`, tabs (`OverviewTab`, `ProjectsTab`, `MediaTab`, `ContactsTab`, `FilesTab`, `ActivityTab`), `DeveloperConfirmationBlock.tsx`, `SalesRepsDirectory.tsx`.
+- Edit: `src/pages/AdminDevelopers.tsx` (becomes a thin router into the hub), `src/components/owner-dashboard/OwnerSidebarNav.tsx` (add Developer Portal entry), routes.
+- Remove from Listings nav: the "Developers" link.
+- Migration: tables, RLS, storage bucket, triggers for audit log + auto-clear confirmation on edit.
+- Guard: `useDeveloperEditAccess(developerId)` hook.
+
+Approve and I'll build it.

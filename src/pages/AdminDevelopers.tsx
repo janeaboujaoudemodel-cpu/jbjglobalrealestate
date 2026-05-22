@@ -397,12 +397,8 @@ const AdminDevelopers = () => {
         </div>
 
         {/* Tabs */}
-        <Tabs defaultValue="overview" className="space-y-6">
+        <Tabs defaultValue="dubai" className="space-y-6">
           <TabsList className="bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border-2 border-[#B89555]/30">
-            <TabsTrigger value="overview" className="data-[state=active]:bg-[#FDFBF7] data-[state=active]:shadow-md flex items-center gap-1.5">
-              <BarChart3 className="w-4 h-4" />
-              Overview
-            </TabsTrigger>
             <TabsTrigger value="dubai" className="data-[state=active]:bg-[#FDFBF7] data-[state=active]:shadow-md">
               Dubai ({dubaiDevelopers.length})
             </TabsTrigger>
@@ -415,9 +411,6 @@ const AdminDevelopers = () => {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="overview">
-            <DeveloperOverviewTab />
-          </TabsContent>
 
           <TabsContent value="dubai" className="space-y-4">
             {dubaiDevelopers.map(dev => (
@@ -623,7 +616,9 @@ const DeveloperCard = ({ developer, reps, onEdit, onDelete, onAddRep, onEditRep,
               )}
             </div>
             <div>
-              <CardTitle className="text-foreground text-lg">{developer.name}</CardTitle>
+              <a href={`/admin/developers/profile/${developer.slug}`} className="hover:underline">
+                <CardTitle className="text-foreground text-lg cursor-pointer">{developer.name}</CardTitle>
+              </a>
               <div className="flex items-center gap-2 mt-1">
                 <Badge variant="secondary" className="bg-[#EFE6D6]/10 text-[#1A1A1A] border border-[#B89555]/20 text-xs">
                   {developer.location_emirate}
