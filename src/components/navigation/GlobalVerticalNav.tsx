@@ -1051,7 +1051,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           </button>
 
           <div className={`overflow-hidden transition-all duration-300 ease-out ${shortcutsExpanded ? 'max-h-[3000px] opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
-            <div className="space-y-2">
+            <div className="space-y-1">
               {filterShortcutGroups(CANONICAL_SHORTCUT_GROUPS, {
                 isAuthenticated: !!session,
                 isOwner,
@@ -1059,33 +1059,24 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 isInvestor,
                 isDeveloperMode,
                 mode,
-              }).map((group) => (
-                <div key={group.label} className={`border border-[#B89555]/25 border-l-4 ${group.colorBorder} rounded-xl bg-[#FDFBF7]/70 p-2`}>
-                  <p className={`text-[10px] uppercase tracking-wider font-bold ${group.colorText} px-2 pb-1.5`}>
-                    {group.label}
-                  </p>
-                  <div className="space-y-1">
-                    {group.items.map((link) => {
-                      const Icon = link.icon;
-                      const linkActive = isRouteActive(link.href);
-                      return (
-                        <Link
-                          key={link.href + link.label}
-                          to={link.href}
-                          className={`flex items-center gap-2 px-2.5 py-2 rounded-lg text-[12px] font-medium transition-all border ${
-                            linkActive
-                              ? "bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] font-bold border-[#B89555] shadow-sm"
-                              : "bg-[#FDFBF7]/80 border-[#B89555]/25 text-[#1A1A1A]/85 hover:bg-[#EFE6D6]/15 hover:border-[#B89555]/60"
-                          }`}
-                        >
-                          <Icon className="w-3.5 h-3.5 flex-shrink-0 text-[#1A1A1A]" />
-                          <span className="flex-1 truncate">{link.label}</span>
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
+              }).flatMap((group) => group.items).map((link) => {
+                const Icon = link.icon;
+                const linkActive = isRouteActive(link.href);
+                return (
+                  <Link
+                    key={link.href + link.label}
+                    to={link.href}
+                    className={`flex items-center gap-2 px-2.5 py-2 rounded-lg text-[12px] font-medium transition-all border ${
+                      linkActive
+                        ? "bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] font-bold border-[#B89555] shadow-sm"
+                        : "bg-[#FDFBF7]/80 border-[#B89555]/25 text-[#1A1A1A]/85 hover:bg-[#EFE6D6]/15 hover:border-[#B89555]/60"
+                    }`}
+                  >
+                    <Icon className="w-3.5 h-3.5 flex-shrink-0 text-[#1A1A1A]" />
+                    <span className="flex-1 truncate">{link.label}</span>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </div>
