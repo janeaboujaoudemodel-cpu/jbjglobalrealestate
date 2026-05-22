@@ -196,11 +196,16 @@ export default function BrokerDashboard() {
   // Treat as Active unless explicitly flagged false
   const isActive = profile?.is_active !== false;
 
-  // Premium tile classes (shared by Quick Actions + Broker Hub)
+  // Premium tile classes — shared champagne glow + 3D lift on hover
+  const tileGlow3D =
+    "transition-all duration-300 ease-out will-change-transform " +
+    "hover:-translate-y-1.5 hover:scale-[1.02] " +
+    "hover:shadow-[0_18px_44px_-12px_rgba(184,149,85,0.55),0_8px_22px_-10px_rgba(26,26,26,0.25),0_0_0_1px_rgba(184,149,85,0.55)] " +
+    "hover:[transform:perspective(900px)_rotateX(2deg)_translateY(-6px)_scale(1.02)]";
   const tileCardCls =
-    "h-full bg-[#EFE6D6] border-2 border-[#B89555]/60 hover:border-[#B89555] hover:bg-[#F7F2EA] hover:shadow-[0_6px_20px_-8px_rgba(184,149,85,0.45)] transition-all cursor-pointer group";
+    `h-full bg-[#EFE6D6] border-2 border-[#B89555]/60 hover:border-[#B89555] hover:bg-[#F7F2EA] cursor-pointer group ${tileGlow3D}`;
   const tileIconWrapCls =
-    "bg-[#F7F2EA] border-2 border-[#B89555]/60 rounded-xl flex items-center justify-center group-hover:border-[#B89555] group-hover:bg-[#FDFBF7] transition-colors";
+    "bg-[#F7F2EA] border-2 border-[#B89555]/60 rounded-xl flex items-center justify-center group-hover:border-[#B89555] group-hover:bg-[#FDFBF7] group-hover:scale-110 transition-all duration-300";
 
   return (
     <div className="min-h-screen bg-background">
@@ -313,7 +318,7 @@ export default function BrokerDashboard() {
           </h3>
           <div className={`grid grid-cols-2 ${isInternalBroker ? 'md:grid-cols-3 lg:grid-cols-6' : 'md:grid-cols-4'} gap-4`}>
             {performanceBlocks.map((block, index) => (
-              <Card key={index} className="relative overflow-hidden bg-[#EFE6D6] border-2 border-[#B89555]/60 hover:border-[#B89555] hover:shadow-[0_6px_20px_-8px_rgba(184,149,85,0.45)] transition-all">
+              <Card key={index} className={`relative overflow-hidden bg-[#EFE6D6] border-2 border-[#B89555]/60 hover:border-[#B89555] ${tileGlow3D}`}>
                 <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-transparent via-[#B89555] to-transparent" />
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between mb-3">
@@ -338,7 +343,8 @@ export default function BrokerDashboard() {
             <CheckSquare className="w-5 h-5 text-[hsl(var(--gold))]" strokeWidth={2.5} />
             Tasks & Reminders
           </h3>
-          <Card className="bg-[#EFE6D6] border-2 border-[#B89555]/60">
+          <Card className={`bg-[#EFE6D6] border-2 border-[#B89555]/60 hover:border-[#B89555] ${tileGlow3D}`}>
+
             <CardContent className="p-6">
               <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                 <div className="text-center md:text-left">
@@ -386,7 +392,7 @@ export default function BrokerDashboard() {
             <Bell className="w-5 h-5 text-[hsl(var(--gold))]" strokeWidth={2.5} />
             Notifications
           </h3>
-          <Card className="bg-[#EFE6D6] border-2 border-[#B89555]/60">
+          <Card className={`bg-[#EFE6D6] border-2 border-[#B89555]/60 hover:border-[#B89555] ${tileGlow3D}`}>
             <CardContent className="p-6">
               <div className="text-center py-8">
                 <Bell className="w-10 h-10 text-[#1A1A1A]/50 mx-auto mb-3" strokeWidth={2} />
