@@ -165,11 +165,24 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
   const hasDbResults = dbDevelopers.length > 0 || dbProjects.length > 0 || dbAreas.length > 0;
   const totalResults = results.length + dbDevelopers.length + dbProjects.length + dbAreas.length;
 
+  // Nearest-match fallback — always returns something so the user never sees an empty screen.
+  const nearest = totalResults === 0 && query.trim().length >= 2
+    ? nearestSearchItems(query, {
+        isOwner,
+        hasCRMAccess: hasCRMAccess || false,
+        hasListingAdminAccess: hasListingAdminAccess || false,
+        isBroker,
+        isAuthenticated: !!user,
+        limit: 6,
+      }).filter(item => item.icon && typeof item.icon === 'function')
+    : [];
+
   useEffect(() => {
     if (isOpen) {
       const q = (initialQuery || "").trim();
       setQuery(q);
       setRecentSearches(getRecentSearches());
+      setShortcuts(getSearchShortcuts());
       setTimeout(() => inputRef.current?.focus(), 100);
     }
   }, [isOpen, initialQuery]);
@@ -191,6 +204,18 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
   const handleClearRecent = () => {
     clearRecentSearches();
     setRecentSearches([]);
+  };
+
+  const handleTogglePin = (e: React.MouseEvent, search: string) => {
+    e.stopPropagation();
+    toggleSearchShortcut(search);
+    setShortcuts(getSearchShortcuts());
+  };
+
+  const handleRemoveShortcut = (e: React.MouseEvent, search: string) => {
+    e.stopPropagation();
+    removeSearchShortcut(search);
+    setShortcuts(getSearchShortcuts());
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
