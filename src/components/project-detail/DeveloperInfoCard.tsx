@@ -107,17 +107,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                 {developer.parent_company && (
                   <span className="text-[#1A1A1A]/70">Part of {developer.parent_company}</span>
                 )}
-                {developer.website_url && (
-                  <a
-                    href={developer.website_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1 text-[#1A1A1A] hover:underline"
-                  >
-                    <Globe className="w-3.5 h-3.5" />
-                    Website
-                  </a>
-                )}
+                {/* Developer website intentionally hidden from public — JBJ closes all deals. */}
               </div>
 
               {/* Developer Stats */}
