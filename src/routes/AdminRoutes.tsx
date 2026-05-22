@@ -101,7 +101,7 @@ export const AdminRoutes = () => (
     <Route path="/admin/intelligence" element={<OwnerGuard><AdminIntelligence /></OwnerGuard>} />
     {/* Legacy /admin/developers/* → redirect to new Developer Hub */}
     <Route path="/admin/developers" element={<Navigate to="/developer-hub-admin/directory" replace />} />
-    <Route path="/admin/developers/profile/:slug" element={<LegacyDeveloperProfileRedirect />} />
+    <Route path="/admin/developers/profile/:slug" element={<DeveloperProfileSlugRedirect />} />
     <Route path="/admin/developers/missing-logos" element={<Navigate to="/developer-hub-admin/missing-logos" replace />} />
 
     {/* New Owner Developer Hub */}
