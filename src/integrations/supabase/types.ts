@@ -11531,28 +11531,49 @@ export type Database = {
       }
       developer_enrichment_log: {
         Row: {
+          after_jsonb: Json
+          applied_at: string | null
+          applied_by: string | null
+          before_jsonb: Json
           created_at: string
           developer_id: string
+          error: string | null
           fields_filled: Json
           id: string
           model: string | null
+          source_url: string | null
           source_urls: Json
+          status: Database["public"]["Enums"]["developer_enrichment_status"]
         }
         Insert: {
+          after_jsonb?: Json
+          applied_at?: string | null
+          applied_by?: string | null
+          before_jsonb?: Json
           created_at?: string
           developer_id: string
+          error?: string | null
           fields_filled?: Json
           id?: string
           model?: string | null
+          source_url?: string | null
           source_urls?: Json
+          status?: Database["public"]["Enums"]["developer_enrichment_status"]
         }
         Update: {
+          after_jsonb?: Json
+          applied_at?: string | null
+          applied_by?: string | null
+          before_jsonb?: Json
           created_at?: string
           developer_id?: string
+          error?: string | null
           fields_filled?: Json
           id?: string
           model?: string | null
+          source_url?: string | null
           source_urls?: Json
+          status?: Database["public"]["Enums"]["developer_enrichment_status"]
         }
         Relationships: [
           {
@@ -12522,6 +12543,47 @@ export type Database = {
             columns: ["developer_id"]
             isOneToOne: false
             referencedRelation: "uae_developers_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      developer_scraped_projects: {
+        Row: {
+          developer_id: string
+          id: string
+          image_url: string | null
+          name: string
+          project_status: string
+          scraped_at: string
+          source_url: string | null
+          url: string | null
+        }
+        Insert: {
+          developer_id: string
+          id?: string
+          image_url?: string | null
+          name: string
+          project_status?: string
+          scraped_at?: string
+          source_url?: string | null
+          url?: string | null
+        }
+        Update: {
+          developer_id?: string
+          id?: string
+          image_url?: string | null
+          name?: string
+          project_status?: string
+          scraped_at?: string
+          source_url?: string | null
+          url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "developer_scraped_projects_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developers"
             referencedColumns: ["id"]
           },
         ]
@@ -36971,6 +37033,12 @@ export type Database = {
         | "awaiting_owner"
         | "done"
         | "dismissed"
+      developer_enrichment_status:
+        | "staged"
+        | "approved"
+        | "rejected"
+        | "applied"
+        | "failed"
       developer_request_type:
         | "docs_library"
         | "vat_certificate"
@@ -37596,6 +37664,13 @@ export const Constants = {
         "awaiting_owner",
         "done",
         "dismissed",
+      ],
+      developer_enrichment_status: [
+        "staged",
+        "approved",
+        "rejected",
+        "applied",
+        "failed",
       ],
       developer_request_type: [
         "docs_library",
