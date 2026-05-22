@@ -18,6 +18,7 @@ const InquiryManagementHub = lazy(() => import("@/pages/admin/InquiryManagementH
 const AdminOnboarding = lazy(() => import("@/pages/AdminOnboarding"));
 const AdminRoleManagement = lazy(() => import("@/pages/AdminRoleManagement"));
 const AdminDevelopers = lazy(() => import("@/pages/AdminDevelopers"));
+const MissingLogosQueue = lazy(() => import("@/pages/admin/MissingLogosQueue"));
 const AdminTrainingGuide = lazy(() => import("@/pages/AdminTrainingGuide"));
 const MarketingHub = lazy(() => import("@/pages/admin/MarketingHub"));
 const AdminCategories = lazy(() => import("@/pages/AdminCategories"));
