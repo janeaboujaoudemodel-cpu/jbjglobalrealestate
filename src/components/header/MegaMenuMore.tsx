@@ -18,7 +18,7 @@ interface MegaMenuMoreProps {
 }
 
 const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onClose }, ref) => {
-  const { isBrokerMode } = useUserModeContext();
+  const { isBrokerMode, isDeveloperMode } = useUserModeContext();
   const { isFounderVisible } = useFounderVisibility();
 
   const servicesLinks = [
