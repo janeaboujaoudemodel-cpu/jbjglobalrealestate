@@ -317,53 +317,92 @@ function fmt(v: unknown): string {
   return JSON.stringify(v);
 }
 
-function DiffTable({ before, after }: { before: Record<string, unknown>; after: Record<string, unknown> }) {
-  const visibleFields = FIELDS.filter((f) => {
-    const a = fmt(after?.[f]);
-    const b = fmt(before?.[f]);
-    return a !== "" || b !== "";
-  });
+const FIELD_LABELS: Record<typeof FIELDS[number], string> = {
+  description: "Description",
+  logo_url: "Logo",
+  website_url: "Website (owner-only)",
+  founded_year: "Founded",
+  headquarters: "Headquarters",
+  ceo_name: "CEO",
+  specialization: "Specialization",
+  notable_projects: "Notable projects",
+};
 
-  if (visibleFields.length === 0) {
-    return <p className="text-xs text-[#1A1A1A]/50 mt-3 italic">No changes proposed.</p>;
+function DiffTable({ before, after }: { before: Record<string, unknown>; after: Record<string, unknown> }) {
+  const rows = FIELDS.map((f) => {
+    const b = fmt(before?.[f]);
+    const a = fmt(after?.[f]);
+    return { f, b, a, changed: a !== b, has: a !== "" || b !== "" };
+  }).filter((r) => r.has);
+
+  if (rows.length === 0) {
+    return <p className="text-xs text-[#1A1A1A]/50 mt-4 italic">No changes proposed.</p>;
   }
 
+  const renderCell = (f: typeof FIELDS[number], v: string, side: "before" | "after", changed: boolean) => {
+    if (!v) {
+      return <span className="italic text-[#1A1A1A]/40 text-xs">{side === "before" ? "Not set yet" : "—"}</span>;
+    }
+    if (f === "logo_url") {
+      return (
+        <div className="inline-flex items-center justify-center h-10 px-2 rounded bg-[#FDFBF7] border border-[#B89555]/30">
+          <img src={v} alt="" className="h-7 max-w-[160px] object-contain" />
+        </div>
+      );
+    }
+    return (
+      <p className={`text-[13px] leading-relaxed break-words whitespace-pre-wrap ${
+        side === "after" && changed ? "text-[#1A1A1A] font-medium" : "text-[#1A1A1A]/80"
+      }`}>{v}</p>
+    );
+  };
+
   return (
-    <div className="mt-3 overflow-hidden rounded border border-[#B89555]/30">
-      <div className="grid grid-cols-[120px,1fr,16px,1fr] bg-[#EFE6D6] text-[10px] uppercase tracking-wide text-[#1A1A1A]/70">
-        <div className="px-3 py-2 border-r border-[#B89555]/30">Field</div>
-        <div className="px-3 py-2 border-r border-[#B89555]/30">Before (live)</div>
-        <div className="border-r border-[#B89555]/30" />
-        <div className="px-3 py-2">After (proposed)</div>
+    <div className="mt-4 rounded-lg border border-[#B89555]/30 bg-[#FDFBF7] overflow-hidden">
+      {/* Header */}
+      <div className="grid grid-cols-[180px,1fr,1fr] bg-[#EFE6D6]/60 border-b border-[#B89555]/30">
+        <div className="px-4 py-2.5 text-[11px] uppercase tracking-[0.12em] font-semibold text-[#1A1A1A]/70 border-r border-[#B89555]/20">
+          Field
+        </div>
+        <div className="px-4 py-2.5 text-[11px] uppercase tracking-[0.12em] font-semibold text-[#1A1A1A]/70 border-r border-[#B89555]/20 flex items-center gap-2">
+          Current (live)
+        </div>
+        <div className="px-4 py-2.5 text-[11px] uppercase tracking-[0.12em] font-semibold text-[#1A1A1A] flex items-center gap-2">
+          Proposed
+        </div>
       </div>
-      {visibleFields.map((f, i) => {
-        const b = fmt(before?.[f]);
-        const a = fmt(after?.[f]);
-        const changed = a !== b;
-        return (
-          <div
-            key={f}
-            className={`grid grid-cols-[120px,1fr,16px,1fr] text-xs items-stretch ${
-              i % 2 === 0 ? "bg-[#FDFBF7]" : "bg-[#F7F2EA]"
-            }`}
-          >
-            <div className="px-3 py-2 border-r border-[#B89555]/20 font-medium text-[#1A1A1A]/70 break-words self-start">{f}</div>
-            <div className="px-3 py-2 border-r border-[#B89555]/20 text-[#1A1A1A]/70 break-words whitespace-pre-wrap self-start">
-              {f === "logo_url" && b ? (
-                <img src={b} alt="" className="h-8 max-w-[140px] object-contain bg-[#FDFBF7] rounded border border-[#B89555]/20 p-1" />
-              ) : b ? b : <span className="italic text-[#1A1A1A]/40">—</span>}
-            </div>
-            <div className="flex items-center justify-center border-r border-[#B89555]/20 text-[#B89555]">
-              {changed && <ArrowRight className="size-3" />}
-            </div>
-            <div className={`px-3 py-2 break-words whitespace-pre-wrap self-start ${changed ? "bg-[#B89555]/10 text-[#1A1A1A] font-medium" : "text-[#1A1A1A]/70"}`}>
-              {f === "logo_url" && a ? (
-                <img src={a} alt="" className="h-8 max-w-[140px] object-contain bg-[#FDFBF7] rounded border border-[#B89555]/20 p-1" />
-              ) : a ? a : <span className="italic text-[#1A1A1A]/40">—</span>}
-            </div>
+
+      {rows.map((r, i) => (
+        <div
+          key={r.f}
+          className={`grid grid-cols-[180px,1fr,1fr] ${
+            i !== 0 ? "border-t border-[#B89555]/15" : ""
+          } ${r.changed ? "bg-[#B89555]/[0.04]" : ""}`}
+        >
+          {/* Label cell */}
+          <div className="px-4 py-3.5 border-r border-[#B89555]/15 flex flex-col gap-1.5">
+            <span className="text-[13px] font-medium text-[#1A1A1A]">{FIELD_LABELS[r.f]}</span>
+            <span className={`inline-flex items-center self-start text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded ${
+              r.changed
+                ? (r.b ? "bg-[#B89555]/15 text-[#1A1A1A] border border-[#B89555]/40" : "bg-emerald-50 text-emerald-800 border border-emerald-200")
+                : "bg-[#EFE6D6]/60 text-[#1A1A1A]/60 border border-[#B89555]/20"
+            }`}>
+              {r.changed ? (r.b ? "Updated" : "New") : "Unchanged"}
+            </span>
           </div>
-        );
-      })}
+          {/* Before */}
+          <div className="px-4 py-3.5 border-r border-[#B89555]/15 self-start">
+            {renderCell(r.f, r.b, "before", r.changed)}
+          </div>
+          {/* After */}
+          <div className="px-4 py-3.5 self-start relative">
+            {r.changed && (
+              <ArrowRight className="absolute -left-[9px] top-4 size-[14px] text-[#B89555] bg-[#FDFBF7] rounded-full" />
+            )}
+            {renderCell(r.f, r.a, "after", r.changed)}
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

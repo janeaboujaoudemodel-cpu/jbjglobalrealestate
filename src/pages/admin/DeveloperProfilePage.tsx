@@ -32,6 +32,8 @@ interface Developer {
   parent_company: string | null;
   office_phone: string | null;
   whatsapp: string | null;
+  whatsapp_group_url: string | null;
+  telegram_group_url: string | null;
   admin_email: string | null;
   office_address: string | null;
   google_maps_url: string | null;
@@ -172,6 +174,8 @@ export default function DeveloperProfilePage() {
         parent_company: form.parent_company ?? null,
         office_phone: form.office_phone ?? null,
         whatsapp: form.whatsapp ?? null,
+        whatsapp_group_url: form.whatsapp_group_url ?? null,
+        telegram_group_url: form.telegram_group_url ?? null,
         admin_email: form.admin_email ?? null,
         office_address: form.office_address ?? null,
         google_maps_url: form.google_maps_url ?? null,
@@ -357,13 +361,27 @@ export default function DeveloperProfilePage() {
               <div className="flex items-center gap-3 mt-1 text-sm text-[#1A1A1A]/70 flex-wrap">
                 {developer.headquarters && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{developer.headquarters}</span>}
                 {developer.website_url && (
-                  <a href={developer.website_url} target="_blank" rel="noreferrer" className="flex items-center gap-1 underline">
-                    <Globe className="w-3 h-3" /> {developer.website_url.replace(/^https?:\/\//, "")}
-                  </a>
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#EFE6D6] border border-[#B89555]/40 text-[11px] font-medium text-[#1A1A1A]">
+                    <ShieldCheck className="w-3 h-3" /> Owner-only
+                    <a href={developer.website_url} target="_blank" rel="noreferrer" className="ml-1 inline-flex items-center gap-1 underline">
+                      <Globe className="w-3 h-3" /> {developer.website_url.replace(/^https?:\/\//, "")}
+                    </a>
+                  </span>
                 )}
                 <span>{projects.length} projects · {reps.length} sales reps</span>
               </div>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Privacy banner: everything below is owner-only */}
+        <Card className="border border-[#B89555]/30 bg-[#FDFBF7]">
+          <CardContent className="py-3 flex items-start gap-3">
+            <ShieldCheck className="w-4 h-4 text-[#1A1A1A] mt-0.5 shrink-0" />
+            <p className="text-xs text-[#1A1A1A]/80">
+              <span className="font-semibold text-[#1A1A1A]">Internal only.</span> Website, email, phone, address and social/community links are
+              <span className="font-semibold"> never shown publicly</span>. They exist so JBJ can reach the developer directly — clients must always close through us.
+            </p>
           </CardContent>
         </Card>
 
@@ -420,6 +438,27 @@ export default function DeveloperProfilePage() {
                   </Field>
                   <Field label="Instagram">
                     <Input disabled={!canEdit} value={form.instagram_url ?? ""} onChange={(e) => setForm((f) => ({ ...f, instagram_url: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
+                  </Field>
+                  <Field label="Office phone">
+                    <Input disabled={!canEdit} value={form.office_phone ?? ""} onChange={(e) => setForm((f) => ({ ...f, office_phone: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" placeholder="+971 …" />
+                  </Field>
+                  <Field label="WhatsApp (direct)">
+                    <Input disabled={!canEdit} value={form.whatsapp ?? ""} onChange={(e) => setForm((f) => ({ ...f, whatsapp: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" placeholder="+971 …" />
+                  </Field>
+                  <Field label="Admin email">
+                    <Input disabled={!canEdit} value={form.admin_email ?? ""} onChange={(e) => setForm((f) => ({ ...f, admin_email: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" placeholder="contact@developer.ae" />
+                  </Field>
+                  <Field label="Office address">
+                    <Input disabled={!canEdit} value={form.office_address ?? ""} onChange={(e) => setForm((f) => ({ ...f, office_address: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" placeholder="Building, floor, area" />
+                  </Field>
+                  <Field label="Google Maps link">
+                    <Input disabled={!canEdit} value={form.google_maps_url ?? ""} onChange={(e) => setForm((f) => ({ ...f, google_maps_url: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" placeholder="https://maps.google.com/…" />
+                  </Field>
+                  <Field label="WhatsApp Group invite">
+                    <Input disabled={!canEdit} value={form.whatsapp_group_url ?? ""} onChange={(e) => setForm((f) => ({ ...f, whatsapp_group_url: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" placeholder="https://chat.whatsapp.com/…" />
+                  </Field>
+                  <Field label="Telegram Group / Channel">
+                    <Input disabled={!canEdit} value={form.telegram_group_url ?? ""} onChange={(e) => setForm((f) => ({ ...f, telegram_group_url: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" placeholder="https://t.me/…" />
                   </Field>
                 </div>
                 <Field label="Notable projects (free text)">

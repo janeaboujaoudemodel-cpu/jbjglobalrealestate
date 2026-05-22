@@ -12971,12 +12971,14 @@ export type Database = {
           registration_status: string | null
           slug: string
           specialization: string | null
+          telegram_group_url: string | null
           total_units_delivered: number | null
           trust_level: Database["public"]["Enums"]["developer_trust_level"]
           upcoming_units: number | null
           updated_at: string
           website_url: string | null
           whatsapp: string | null
+          whatsapp_group_url: string | null
         }
         Insert: {
           admin_email?: string | null
@@ -13028,12 +13030,14 @@ export type Database = {
           registration_status?: string | null
           slug: string
           specialization?: string | null
+          telegram_group_url?: string | null
           total_units_delivered?: number | null
           trust_level?: Database["public"]["Enums"]["developer_trust_level"]
           upcoming_units?: number | null
           updated_at?: string
           website_url?: string | null
           whatsapp?: string | null
+          whatsapp_group_url?: string | null
         }
         Update: {
           admin_email?: string | null
@@ -13085,12 +13089,14 @@ export type Database = {
           registration_status?: string | null
           slug?: string
           specialization?: string | null
+          telegram_group_url?: string | null
           total_units_delivered?: number | null
           trust_level?: Database["public"]["Enums"]["developer_trust_level"]
           upcoming_units?: number | null
           updated_at?: string
           website_url?: string | null
           whatsapp?: string | null
+          whatsapp_group_url?: string | null
         }
         Relationships: []
       }
