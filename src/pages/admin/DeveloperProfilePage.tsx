@@ -1,0 +1,703 @@
+import { useState, useEffect, useMemo, useRef } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import {
+  ArrowLeft, Building2, Globe, MapPin, Phone, Mail, Upload,
+  Image as ImageIcon, FileText, Video, Map as MapIcon, Trash2,
+  CheckCircle2, AlertTriangle, Pencil, Plus, ExternalLink, Languages,
+  ShieldCheck, History
+} from "lucide-react";
+import { toast } from "sonner";
+import { format } from "date-fns";
+
+interface Developer {
+  id: string;
+  name: string;
+  slug: string;
+  logo_url: string | null;
+  description: string | null;
+  website_url: string | null;
+  headquarters: string | null;
+  founded_year: number | null;
+  ceo_name: string | null;
+  parent_company: string | null;
+  office_phone: string | null;
+  whatsapp: string | null;
+  admin_email: string | null;
+  office_address: string | null;
+  google_maps_url: string | null;
+  instagram_url: string | null;
+  linkedin_url: string | null;
+  notable_projects: string | null;
+  specialization: string | null;
+  last_confirmed_by: string | null;
+  last_confirmed_at: string | null;
+  confirmation_source: string | null;
+  description_languages: string[] | null;
+}
+
+const MEDIA_KINDS = [
+  { k: "photo", label: "Photos", icon: ImageIcon, accept: "image/*" },
+  { k: "video", label: "Videos", icon: Video, accept: "video/*" },
+  { k: "brochure", label: "Brochures", icon: FileText, accept: ".pdf,application/pdf" },
+  { k: "floorplan", label: "Floor Plans", icon: FileText, accept: "image/*,.pdf" },
+  { k: "map", label: "Maps", icon: MapIcon, accept: "image/*,.pdf" },
+  { k: "file", label: "Other Files", icon: FileText, accept: "*/*" },
+] as const;
+
+export default function DeveloperProfilePage() {
+  const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const qc = useQueryClient();
+
+  /* ---------- Load developer ---------- */
+  const { data: developer, isLoading } = useQuery({
+    queryKey: ["dev-profile", slug],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("developers")
+        .select("*")
+        .eq("slug", slug!)
+        .maybeSingle();
+      if (error) throw error;
+      return data as unknown as Developer | null;
+    },
+    enabled: !!slug,
+  });
+
+  /* ---------- Access check ---------- */
+  const { data: canEdit = false } = useQuery({
+    queryKey: ["dev-edit-access", developer?.id],
+    queryFn: async () => {
+      if (!developer?.id) return false;
+      const { data } = await supabase.rpc("has_developer_edit_access" as any, {
+        _developer_id: developer.id,
+      });
+      return !!data;
+    },
+    enabled: !!developer?.id,
+  });
+
+  /* ---------- Projects ---------- */
+  const { data: projects = [] } = useQuery({
+    queryKey: ["dev-projects", developer?.id, developer?.name],
+    queryFn: async () => {
+      if (!developer) return [];
+      const { data } = await supabase
+        .from("projects")
+        .select("id, name, slug, status, handover_quarter, total_units, cover_image_url, updated_at, is_published")
+        .or(`developer_id.eq.${developer.id},developer_name.eq.${developer.name}`)
+        .order("updated_at", { ascending: false });
+      return data || [];
+    },
+    enabled: !!developer,
+  });
+
+  /* ---------- Sales reps ---------- */
+  const { data: reps = [] } = useQuery({
+    queryKey: ["dev-reps", developer?.id, developer?.name],
+    queryFn: async () => {
+      if (!developer) return [];
+      const { data } = await supabase
+        .from("developer_representatives")
+        .select("id, user_id, full_name, position, email, phone, whatsapp_number, languages, nationality, status, role, last_active_at")
+        .or(`developer_id.eq.${developer.id},current_developer_id.eq.${developer.id},developer_name.eq.${developer.name}`)
+        .order("full_name");
+      return data || [];
+    },
+    enabled: !!developer,
+  });
+
+  /* ---------- Media ---------- */
+  const { data: media = [] } = useQuery({
+    queryKey: ["dev-media", developer?.id],
+    queryFn: async () => {
+      if (!developer) return [];
+      const { data } = await supabase
+        .from("developer_media" as any)
+        .select("*")
+        .eq("developer_id", developer.id)
+        .order("display_order");
+      return (data as any[]) || [];
+    },
+    enabled: !!developer && canEdit,
+  });
+
+  /* ---------- Audit log ---------- */
+  const { data: audit = [] } = useQuery({
+    queryKey: ["dev-audit", developer?.id],
+    queryFn: async () => {
+      if (!developer) return [];
+      const { data } = await supabase
+        .from("developer_audit_log" as any)
+        .select("*")
+        .eq("developer_id", developer.id)
+        .order("created_at", { ascending: false })
+        .limit(100);
+      return (data as any[]) || [];
+    },
+    enabled: !!developer && canEdit,
+  });
+
+  /* ---------- Edit form state ---------- */
+  const [form, setForm] = useState<Partial<Developer>>({});
+  useEffect(() => {
+    if (developer) setForm(developer);
+  }, [developer]);
+
+  const dirty = useMemo(() => {
+    if (!developer) return false;
+    return JSON.stringify(form) !== JSON.stringify(developer);
+  }, [form, developer]);
+
+  const saveMutation = useMutation({
+    mutationFn: async () => {
+      if (!developer) return;
+      const payload: any = {
+        description: form.description ?? null,
+        website_url: form.website_url ?? null,
+        headquarters: form.headquarters ?? null,
+        founded_year: form.founded_year ?? null,
+        ceo_name: form.ceo_name ?? null,
+        parent_company: form.parent_company ?? null,
+        office_phone: form.office_phone ?? null,
+        whatsapp: form.whatsapp ?? null,
+        admin_email: form.admin_email ?? null,
+        office_address: form.office_address ?? null,
+        google_maps_url: form.google_maps_url ?? null,
+        instagram_url: form.instagram_url ?? null,
+        linkedin_url: form.linkedin_url ?? null,
+        notable_projects: form.notable_projects ?? null,
+        specialization: form.specialization ?? null,
+        description_languages: form.description_languages ?? [],
+      };
+      const { error } = await supabase.from("developers").update(payload).eq("id", developer.id);
+      if (error) throw error;
+      // audit
+      await supabase.from("developer_audit_log" as any).insert({
+        developer_id: developer.id,
+        actor_id: user?.id,
+        action: "profile_update",
+        after_value: payload,
+      });
+    },
+    onSuccess: () => {
+      toast.success("Profile saved · please re-confirm");
+      qc.invalidateQueries({ queryKey: ["dev-profile", slug] });
+      qc.invalidateQueries({ queryKey: ["dev-audit", developer?.id] });
+    },
+    onError: (e: any) => toast.error(e.message || "Save failed"),
+  });
+
+  /* ---------- Logo upload ---------- */
+  const logoInputRef = useRef<HTMLInputElement>(null);
+  const uploadLogo = async (file: File) => {
+    if (!developer) return;
+    const ext = file.name.split(".").pop() || "png";
+    const path = `${developer.id}/logo-${Date.now()}.${ext}`;
+    const { error: upErr } = await supabase.storage
+      .from("developer-assets")
+      .upload(path, file, { upsert: true, contentType: file.type });
+    if (upErr) return toast.error(upErr.message);
+    const { data: pub } = supabase.storage.from("developer-assets").getPublicUrl(path);
+    const { error } = await supabase
+      .from("developers")
+      .update({ logo_url: pub.publicUrl })
+      .eq("id", developer.id);
+    if (error) return toast.error(error.message);
+    toast.success("Logo updated");
+    qc.invalidateQueries({ queryKey: ["dev-profile", slug] });
+  };
+
+  /* ---------- Media upload ---------- */
+  const uploadMedia = async (file: File, kind: string) => {
+    if (!developer) return;
+    const ext = file.name.split(".").pop() || "bin";
+    const path = `${developer.id}/${kind}/${Date.now()}-${file.name.replace(/[^\w.-]/g, "_")}`;
+    const { error: upErr } = await supabase.storage
+      .from("developer-assets")
+      .upload(path, file, { contentType: file.type });
+    if (upErr) return toast.error(upErr.message);
+    const { data: pub } = supabase.storage.from("developer-assets").getPublicUrl(path);
+    const { error } = await supabase.from("developer_media" as any).insert({
+      developer_id: developer.id,
+      kind,
+      url: pub.publicUrl,
+      storage_path: path,
+      mime_type: file.type,
+      file_size_bytes: file.size,
+      caption: file.name,
+      uploaded_by: user?.id,
+    });
+    if (error) return toast.error(error.message);
+    toast.success(`${kind} uploaded`);
+    qc.invalidateQueries({ queryKey: ["dev-media", developer.id] });
+  };
+
+  const deleteMedia = async (m: any) => {
+    if (!confirm("Delete this file?")) return;
+    if (m.storage_path) await supabase.storage.from("developer-assets").remove([m.storage_path]);
+    await supabase.from("developer_media" as any).delete().eq("id", m.id);
+    qc.invalidateQueries({ queryKey: ["dev-media", developer?.id] });
+  };
+
+  /* ---------- Confirmation ---------- */
+  const [confirmChecked, setConfirmChecked] = useState(false);
+  const confirmMutation = useMutation({
+    mutationFn: async () => {
+      if (!developer || !user) return;
+      // Detect if owner via RPC fallback: assume canEdit and write a source label
+      const isOwner = (user.email || "").length > 0 && (user as any).user_metadata?.role === "owner";
+      const source = isOwner ? "owner" : "sales_rep";
+      const { error } = await supabase
+        .from("developers")
+        .update({
+          last_confirmed_by: user.id,
+          last_confirmed_at: new Date().toISOString(),
+          confirmation_source: source,
+        } as any)
+        .eq("id", developer.id);
+      if (error) throw error;
+      await supabase.from("developer_audit_log" as any).insert({
+        developer_id: developer.id,
+        actor_id: user.id,
+        actor_role: source,
+        action: "confirmation_signed",
+      });
+    },
+    onSuccess: () => {
+      toast.success("Information confirmed");
+      setConfirmChecked(false);
+      qc.invalidateQueries({ queryKey: ["dev-profile", slug] });
+      qc.invalidateQueries({ queryKey: ["dev-audit", developer?.id] });
+    },
+  });
+
+  if (isLoading) {
+    return <div className="p-12 text-center">Loading…</div>;
+  }
+  if (!developer) {
+    return (
+      <div className="p-12 text-center">
+        <p className="text-[#1A1A1A]">Developer not found.</p>
+        <Button onClick={() => navigate("/admin/developers")} className="mt-4">Back</Button>
+      </div>
+    );
+  }
+
+  const confirmed = !!developer.last_confirmed_at;
+
+  return (
+    <div className="min-h-screen bg-[#FDFBF7]">
+      <div className="max-w-6xl mx-auto p-6 pt-[100px] space-y-6">
+        {/* Header */}
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <Button variant="ghost" size="sm" onClick={() => navigate("/admin/developers")}>
+              <ArrowLeft className="w-4 h-4 mr-1" /> Developer Portal
+            </Button>
+          </div>
+          <div className="flex items-center gap-2">
+            {confirmed ? (
+              <Badge className="bg-emerald-50 text-emerald-800 border border-emerald-200">
+                <CheckCircle2 className="w-3 h-3 mr-1" /> Confirmed {format(new Date(developer.last_confirmed_at!), "MMM d, yyyy")}
+              </Badge>
+            ) : (
+              <Badge className="bg-amber-50 text-amber-900 border border-amber-200">
+                <AlertTriangle className="w-3 h-3 mr-1" /> Pending confirmation
+              </Badge>
+            )}
+            {!canEdit && <Badge variant="outline">Read only</Badge>}
+          </div>
+        </div>
+
+        {/* Identity card */}
+        <Card className="border border-[#B89555]/30 bg-[#F7F2EA]">
+          <CardContent className="p-6 flex items-center gap-5">
+            <button
+              type="button"
+              disabled={!canEdit}
+              onClick={() => logoInputRef.current?.click()}
+              className="w-24 h-24 rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] flex items-center justify-center overflow-hidden group relative shrink-0"
+              title={canEdit ? "Click to upload logo" : "Logo"}
+            >
+              {developer.logo_url ? (
+                <img src={developer.logo_url} alt={developer.name} className="w-full h-full object-contain p-2" />
+              ) : (
+                <div className="text-center text-xs text-[#1A1A1A]/60">
+                  <Building2 className="w-8 h-8 mx-auto mb-1" />
+                  Upload logo
+                </div>
+              )}
+              {canEdit && (
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
+                  <Upload className="w-6 h-6 text-white" />
+                </div>
+              )}
+            </button>
+            <input
+              ref={logoInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => e.target.files?.[0] && uploadLogo(e.target.files[0])}
+            />
+            <div className="flex-1 min-w-0">
+              <h1 className="text-2xl font-semibold text-[#1A1A1A]">{developer.name}</h1>
+              <div className="flex items-center gap-3 mt-1 text-sm text-[#1A1A1A]/70 flex-wrap">
+                {developer.headquarters && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{developer.headquarters}</span>}
+                {developer.website_url && (
+                  <a href={developer.website_url} target="_blank" rel="noreferrer" className="flex items-center gap-1 underline">
+                    <Globe className="w-3 h-3" /> {developer.website_url.replace(/^https?:\/\//, "")}
+                  </a>
+                )}
+                <span>{projects.length} projects · {reps.length} sales reps</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Tabs defaultValue="overview">
+          <TabsList className="bg-[#F7F2EA] border border-[#B89555]/30">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="projects">Projects ({projects.length})</TabsTrigger>
+            <TabsTrigger value="media">Media</TabsTrigger>
+            <TabsTrigger value="contacts">Contacts & Reps ({reps.length})</TabsTrigger>
+            <TabsTrigger value="files">Files & Brochures</TabsTrigger>
+            <TabsTrigger value="activity">Activity</TabsTrigger>
+          </TabsList>
+
+          {/* OVERVIEW */}
+          <TabsContent value="overview" className="space-y-4">
+            <Card className="border border-[#B89555]/30 bg-[#F7F2EA]">
+              <CardHeader>
+                <CardTitle className="text-base text-[#1A1A1A]">Developer information</CardTitle>
+                <p className="text-xs text-[#1A1A1A]/60">
+                  The description must match the developer's official website verbatim — do not paraphrase.
+                </p>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Field label="Description (as per the developer's official website)">
+                  <Textarea
+                    rows={8}
+                    disabled={!canEdit}
+                    value={form.description ?? ""}
+                    onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
+                    className="bg-[#FDFBF7] border-[#B89555]/30"
+                  />
+                </Field>
+                <div className="grid grid-cols-2 gap-4">
+                  <Field label="Website URL">
+                    <Input disabled={!canEdit} value={form.website_url ?? ""} onChange={(e) => setForm((f) => ({ ...f, website_url: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
+                  </Field>
+                  <Field label="Headquarters">
+                    <Input disabled={!canEdit} value={form.headquarters ?? ""} onChange={(e) => setForm((f) => ({ ...f, headquarters: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
+                  </Field>
+                  <Field label="Founded year">
+                    <Input type="number" disabled={!canEdit} value={form.founded_year ?? ""} onChange={(e) => setForm((f) => ({ ...f, founded_year: e.target.value ? parseInt(e.target.value) : null }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
+                  </Field>
+                  <Field label="CEO">
+                    <Input disabled={!canEdit} value={form.ceo_name ?? ""} onChange={(e) => setForm((f) => ({ ...f, ceo_name: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
+                  </Field>
+                  <Field label="Parent company">
+                    <Input disabled={!canEdit} value={form.parent_company ?? ""} onChange={(e) => setForm((f) => ({ ...f, parent_company: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
+                  </Field>
+                  <Field label="Specialization">
+                    <Input disabled={!canEdit} value={form.specialization ?? ""} onChange={(e) => setForm((f) => ({ ...f, specialization: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
+                  </Field>
+                  <Field label="LinkedIn">
+                    <Input disabled={!canEdit} value={form.linkedin_url ?? ""} onChange={(e) => setForm((f) => ({ ...f, linkedin_url: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
+                  </Field>
+                  <Field label="Instagram">
+                    <Input disabled={!canEdit} value={form.instagram_url ?? ""} onChange={(e) => setForm((f) => ({ ...f, instagram_url: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
+                  </Field>
+                </div>
+                <Field label="Notable projects (free text)">
+                  <Textarea rows={3} disabled={!canEdit} value={form.notable_projects ?? ""} onChange={(e) => setForm((f) => ({ ...f, notable_projects: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
+                </Field>
+
+                {canEdit && (
+                  <div className="flex justify-end gap-2 pt-2">
+                    <Button variant="outline" onClick={() => setForm(developer)} disabled={!dirty}>Reset</Button>
+                    <Button onClick={() => saveMutation.mutate()} disabled={!dirty || saveMutation.isPending} className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 hover:bg-[#EFE6D6]/80">
+                      {saveMutation.isPending ? "Saving…" : "Save changes"}
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Confirmation block */}
+            <Card className="border border-[#B89555]/30 bg-[#F7F2EA]">
+              <CardHeader>
+                <CardTitle className="text-base flex items-center gap-2 text-[#1A1A1A]">
+                  <ShieldCheck className="w-4 h-4" /> Confirmation
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {confirmed ? (
+                  <p className="text-sm text-[#1A1A1A]/80">
+                    Last confirmed by <strong>{developer.last_confirmed_by ?? "—"}</strong> ({developer.confirmation_source ?? "—"}) on{" "}
+                    {format(new Date(developer.last_confirmed_at!), "PPpp")}.
+                  </p>
+                ) : (
+                  <p className="text-sm text-amber-800">This profile has unconfirmed edits. Please verify with the developer and sign below.</p>
+                )}
+                {canEdit && (
+                  <div className="flex items-start gap-3 pt-1">
+                    <input
+                      id="confirm-check"
+                      type="checkbox"
+                      checked={confirmChecked}
+                      onChange={(e) => setConfirmChecked(e.target.checked)}
+                      className="mt-1"
+                    />
+                    <label htmlFor="confirm-check" className="text-sm text-[#1A1A1A] flex-1">
+                      I confirm that the description, website, logo and headquarters above match the developer's official website,
+                      and I have verified this information directly with the developer.
+                    </label>
+                    <Button
+                      disabled={!confirmChecked || confirmMutation.isPending}
+                      onClick={() => confirmMutation.mutate()}
+                      className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                    >
+                      I agree & confirm
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* PROJECTS */}
+          <TabsContent value="projects" className="space-y-3">
+            {projects.length === 0 ? (
+              <Card className="border border-[#B89555]/30 bg-[#F7F2EA] p-6 text-center text-[#1A1A1A]/70">No projects yet.</Card>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {projects.map((p) => (
+                  <Link
+                    key={p.id}
+                    to={`/projects/${p.slug}`}
+                    className="block p-4 rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] hover:bg-[#EFE6D6] transition"
+                  >
+                    <div className="flex items-center gap-3">
+                      {p.cover_image_url ? (
+                        <img src={p.cover_image_url} alt="" className="w-14 h-14 rounded object-cover" />
+                      ) : (
+                        <div className="w-14 h-14 rounded bg-[#EFE6D6] flex items-center justify-center">
+                          <Building2 className="w-6 h-6 text-[#1A1A1A]/60" />
+                        </div>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium text-[#1A1A1A] truncate">{p.name}</div>
+                        <div className="text-xs text-[#1A1A1A]/60">
+                          {p.status || "—"} · {p.handover_quarter || "TBD"} · {p.total_units ?? "—"} units
+                        </div>
+                      </div>
+                      <ExternalLink className="w-4 h-4 text-[#1A1A1A]/50" />
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </TabsContent>
+
+          {/* MEDIA */}
+          <TabsContent value="media" className="space-y-6">
+            {MEDIA_KINDS.filter((k) => ["photo", "video", "floorplan", "map"].includes(k.k)).map((k) => (
+              <MediaSection
+                key={k.k}
+                kind={k.k}
+                label={k.label}
+                accept={k.accept}
+                items={media.filter((m) => m.kind === k.k)}
+                canEdit={canEdit}
+                onUpload={(f) => uploadMedia(f, k.k)}
+                onDelete={deleteMedia}
+              />
+            ))}
+          </TabsContent>
+
+          {/* CONTACTS */}
+          <TabsContent value="contacts" className="space-y-4">
+            <Card className="border border-[#B89555]/30 bg-[#F7F2EA]">
+              <CardHeader><CardTitle className="text-base text-[#1A1A1A]">Developer contact</CardTitle></CardHeader>
+              <CardContent className="grid grid-cols-2 gap-4">
+                <Field label="Office phone">
+                  <Input disabled={!canEdit} value={form.office_phone ?? ""} onChange={(e) => setForm((f) => ({ ...f, office_phone: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
+                </Field>
+                <Field label="WhatsApp">
+                  <Input disabled={!canEdit} value={form.whatsapp ?? ""} onChange={(e) => setForm((f) => ({ ...f, whatsapp: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
+                </Field>
+                <Field label="Email">
+                  <Input disabled={!canEdit} value={form.admin_email ?? ""} onChange={(e) => setForm((f) => ({ ...f, admin_email: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
+                </Field>
+                <Field label="Google Maps URL">
+                  <Input disabled={!canEdit} value={form.google_maps_url ?? ""} onChange={(e) => setForm((f) => ({ ...f, google_maps_url: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
+                </Field>
+                <div className="col-span-2">
+                  <Field label="Office address">
+                    <Textarea rows={2} disabled={!canEdit} value={form.office_address ?? ""} onChange={(e) => setForm((f) => ({ ...f, office_address: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
+                  </Field>
+                </div>
+                {canEdit && dirty && (
+                  <div className="col-span-2 flex justify-end">
+                    <Button onClick={() => saveMutation.mutate()} className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 hover:bg-[#EFE6D6]/80">Save</Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            <Card className="border border-[#B89555]/30 bg-[#F7F2EA]">
+              <CardHeader><CardTitle className="text-base text-[#1A1A1A]">Registered sales representatives</CardTitle></CardHeader>
+              <CardContent className="space-y-2">
+                {reps.length === 0 && <p className="text-sm text-[#1A1A1A]/60">No representatives registered for this developer yet.</p>}
+                {reps.map((r: any) => (
+                  <div key={r.id} className="p-3 rounded-lg border border-[#B89555]/20 bg-[#FDFBF7] flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-[#EFE6D6] flex items-center justify-center text-[#1A1A1A] font-medium">
+                      {(r.full_name || "?").charAt(0)}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-medium text-[#1A1A1A]">{r.full_name}</span>
+                        {r.role && <Badge variant="outline" className="text-xs">{r.role}</Badge>}
+                        {r.status && <Badge className={`text-xs ${r.status === 'active' || r.status === 'approved' ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-amber-50 text-amber-900 border-amber-200'}`}>{r.status}</Badge>}
+                      </div>
+                      <div className="text-xs text-[#1A1A1A]/60 flex items-center gap-3 flex-wrap mt-0.5">
+                        {r.position && <span>{r.position}</span>}
+                        {r.languages?.length > 0 && <span className="flex items-center gap-1"><Languages className="w-3 h-3" />{r.languages.join(", ")}</span>}
+                        {r.nationality && <span>{r.nationality}</span>}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      {r.phone && <a className="p-2 rounded bg-blue-50 text-blue-700" href={`tel:${r.phone}`}><Phone className="w-3.5 h-3.5" /></a>}
+                      {r.email && <a className="p-2 rounded bg-purple-50 text-purple-700" href={`mailto:${r.email}`}><Mail className="w-3.5 h-3.5" /></a>}
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* FILES */}
+          <TabsContent value="files" className="space-y-6">
+            {MEDIA_KINDS.filter((k) => ["brochure", "file"].includes(k.k)).map((k) => (
+              <MediaSection
+                key={k.k}
+                kind={k.k}
+                label={k.label}
+                accept={k.accept}
+                items={media.filter((m) => m.kind === k.k)}
+                canEdit={canEdit}
+                onUpload={(f) => uploadMedia(f, k.k)}
+                onDelete={deleteMedia}
+              />
+            ))}
+          </TabsContent>
+
+          {/* ACTIVITY */}
+          <TabsContent value="activity">
+            <Card className="border border-[#B89555]/30 bg-[#F7F2EA]">
+              <CardHeader><CardTitle className="text-base flex items-center gap-2 text-[#1A1A1A]"><History className="w-4 h-4" /> Recent activity</CardTitle></CardHeader>
+              <CardContent className="space-y-1.5">
+                {audit.length === 0 && <p className="text-sm text-[#1A1A1A]/60">No activity yet.</p>}
+                {audit.map((a) => (
+                  <div key={a.id} className="text-sm text-[#1A1A1A]/80 flex items-center justify-between border-b border-[#B89555]/15 py-1.5">
+                    <span>
+                      <strong>{a.action}</strong>{a.field ? ` · ${a.field}` : ""}
+                    </span>
+                    <span className="text-xs text-[#1A1A1A]/50">
+                      {format(new Date(a.created_at), "MMM d, yyyy HH:mm")}
+                    </span>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
+  );
+}
+
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <Label className="text-[#1A1A1A] text-xs uppercase tracking-wider">{label}</Label>
+      <div className="mt-1">{children}</div>
+    </div>
+  );
+}
+
+function MediaSection({
+  kind, label, accept, items, canEdit, onUpload, onDelete,
+}: {
+  kind: string; label: string; accept: string; items: any[]; canEdit: boolean;
+  onUpload: (f: File) => void; onDelete: (m: any) => void;
+}) {
+  const ref = useRef<HTMLInputElement>(null);
+  return (
+    <Card className="border border-[#B89555]/30 bg-[#F7F2EA]">
+      <CardHeader className="flex flex-row items-center justify-between">
+        <CardTitle className="text-base text-[#1A1A1A]">{label}</CardTitle>
+        {canEdit && (
+          <Button size="sm" variant="outline" onClick={() => ref.current?.click()} className="border-[#B89555]/40">
+            <Plus className="w-3.5 h-3.5 mr-1" /> Upload
+          </Button>
+        )}
+        <input
+          ref={ref}
+          type="file"
+          accept={accept}
+          multiple
+          className="hidden"
+          onChange={(e) => {
+            Array.from(e.target.files || []).forEach(onUpload);
+            if (ref.current) ref.current.value = "";
+          }}
+        />
+      </CardHeader>
+      <CardContent>
+        {items.length === 0 ? (
+          <p className="text-sm text-[#1A1A1A]/60">No {label.toLowerCase()} uploaded.</p>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {items.map((m) => (
+              <div key={m.id} className="relative group border border-[#B89555]/20 rounded-lg overflow-hidden bg-[#FDFBF7]">
+                {kind === "photo" || kind === "floorplan" || kind === "map" ? (
+                  <img src={m.url} alt={m.caption || ""} className="w-full h-28 object-cover" />
+                ) : kind === "video" ? (
+                  <video src={m.url} className="w-full h-28 object-cover" />
+                ) : (
+                  <a href={m.url} target="_blank" rel="noreferrer" className="flex flex-col items-center justify-center h-28 text-[#1A1A1A]/70">
+                    <FileText className="w-8 h-8" />
+                    <span className="text-xs mt-1 px-2 truncate w-full text-center">{m.caption || "Open"}</span>
+                  </a>
+                )}
+                {canEdit && (
+                  <button
+                    onClick={() => onDelete(m)}
+                    className="absolute top-1 right-1 p-1 rounded bg-black/60 text-white opacity-0 group-hover:opacity-100 transition"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
