@@ -1,120 +1,130 @@
 
-# Developer Portal Rebuild — End-to-End
+# Developer Partnership Panel + Scoped Sales-Rep Access
 
-Premium champagne+gold redesign, real sales-rep upload flow, **one-time approval → every future edit auto-publishes**, and a full cleanup pass on broken/fake project data already in the database.
+You're right — today's panel toggles a flag on every developer with no application behind it. We'll rebuild it as a proper application workflow + scoped representative system.
 
----
+## 1. Concepts (what changes mentally)
 
-## 1. Data cleanup (run first, before any UI work)
+- A developer in the directory is just a brand card. It should NOT show "pending / approve" on its own.
+- A **Developer Application** is what a sales rep submits to claim the right to represent a developer. Only applications get "Approve / Reject".
+- A **Developer Representative** is a user the owner authorizes to manage ONE developer's content. They can be:
+  - created automatically when an application is approved, OR
+  - added manually by the owner.
+- A representative gets exactly two things: normal public-site access (as any user), plus the Developer Portal scoped to their assigned developer only. No CRM, no leads, no other developers, no owner backend.
 
-Audit found **1,316 projects** with missing cover, missing price, or pre-2024 handover out of 2,504 published. Plus reelly.io legacy junk (Screenshots, "1080x1080", etc.).
+## 2. New panel: `/owner/developer-partnerships`
 
-Two-pass migration:
+Rename `DeveloperTrustPanel` → `DeveloperPartnershipPanel`. Three tabs:
 
-**Pass A — Unpublish suspect rows** (`is_published = false`) when ANY of:
-- `cover_image_url` is null OR matches forbidden patterns (`screenshot`, `whatsapp`, `convert.io`, `frame+N`, `1080x1080`, project photo paths used as cover)
-- `price_from` is null OR `< 100,000`
-- `handover_date` is null OR in the past AND `construction_status != 'completed'`
-- `name` contains obvious junk markers ("test", "untitled", "draft", `%d0%`)
+**Tab A — Applications**
+List of `developer_applications` rows (status = pending). Each card shows: applicant name/email, requested developer (with logo), uploaded brochures, description, Google Drive link, list of past/current/upcoming projects they entered, attached company docs. Actions: **Approve & Authorize**, **Request changes**, **Reject**. Approve opens a confirm dialog: "Authorize {user} to represent {developer}?" — on confirm: creates `developer_representatives` row, sets `developers.has_active_rep = true`, sends the rep a welcome email.
 
-**Pass B — Soft-delete** (new `deleted_at timestamptz` column, RLS hides it) when **2+** red flags are present (e.g. no price AND no valid image AND pre-2024 handover). Recoverable from Owner panel.
+**Tab B — Representatives**
+Grouped by developer (developer logo + name on the left, like the user requested). Per rep: name, email, assigned developer, status (active / suspended), last activity. Actions: **Suspend**, **Reassign**, **Remove**, **Add new rep manually** (opens form: pick developer → enter email + name → "Send invite"). Manual invite sends the same broker-style "set your password" email; on first login they land in the Developer Portal scoped to that one developer.
 
-Add `projects.data_quality_flags jsonb` so the owner sees exactly why each was flagged. Add a "Restore" button in the Owner panel for soft-deleted rows.
+**Tab C — Soft-deleted projects** (keep existing restore UI, unchanged)
 
-Same cleanup applied to `project_images` (drop forbidden URLs) and `project_documents` (drop placeholder/fake brochures already covered by the Brochure Section Logic standard).
+Developers list everywhere else loses the pending/approve chips. Instead a small badge: "Represented by {N}" or "Unrepresented".
 
-## 2. Developer onboarding & approval (the trust model)
+## 3. Database
 
-```text
-Sales-rep signs up (/register/developer)
-        │
-        ▼
-Submits company profile + logo + description + first project pack
-        │
-        ▼
-Status: pending_review  ─── Owner reviews ONCE ───▶ status: approved + trust_level: auto_publish
-        │
-        ▼
-From now on: every edit, every new project, every file → publishes LIVE instantly
-                                                            (no further approval)
+New migration — no destructive changes:
+
+```sql
+-- Applications submitted by sales reps
+create table public.developer_applications (
+  id uuid primary key default gen_random_uuid(),
+  applicant_user_id uuid not null,
+  developer_id uuid not null references public.developers(id),
+  status text not null default 'pending', -- pending | approved | rejected | changes_requested
+  applicant_name text,
+  applicant_email text,
+  applicant_phone text,
+  about_developer text,
+  drive_link text,
+  brochure_urls jsonb default '[]',
+  logo_url text,
+  past_projects jsonb default '[]',
+  current_projects jsonb default '[]',
+  upcoming_projects jsonb default '[]',
+  attachments jsonb default '[]',
+  admin_notes text,
+  reviewed_by uuid,
+  reviewed_at timestamptz,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+-- Authorized representatives (scoped portal access)
+create table public.developer_representatives (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null,
+  developer_id uuid not null references public.developers(id),
+  status text not null default 'active', -- active | suspended | removed
+  authorized_by uuid,
+  authorized_at timestamptz not null default now(),
+  application_id uuid references public.developer_applications(id),
+  unique (user_id, developer_id)
+);
+
+-- Helper: is the current user the rep for this developer?
+create or replace function public.is_developer_rep(_user uuid, _dev uuid)
+returns boolean language sql stable security definer set search_path = public
+as $$ select exists (select 1 from public.developer_representatives
+  where user_id = _user and developer_id = _dev and status = 'active') $$;
 ```
 
-Schema changes on `developers`:
-- `trust_level enum('pending','auto_publish','suspended')` default `pending`
-- `approved_at`, `approved_by`, `last_auto_publish_at`
+RLS:
+- `developer_applications`: applicant can insert/select own rows; owner role can select/update all.
+- `developer_representatives`: rep can select own row; owner role full access.
+- `projects`, `project_images`, `project_documents`, `project_brochures`: ADD policy allowing UPDATE/INSERT when `is_developer_rep(auth.uid(), developer_id)`. Existing public-read and owner policies stay intact. No cross-developer edits possible.
+- Remove the "trust_level auto-publish writes anything" branch from the existing `developer-auto-publish` edge function and replace it with: rep submits → writes scoped to their `developer_id` only → publishes when application is approved AND rep is active.
 
-Edge function `developer-auto-publish` (replaces draft-first flow for trusted devs):
-- Validates owner of submission == approved sales-rep for that developer
-- If `trust_level = 'auto_publish'`: writes straight into `projects` + `project_images` + `project_documents`, sets `is_published = true`, bumps `source_updated_at`
-- If `trust_level = 'pending'`: routes to existing `developer_project_submissions` review queue
-- Always logs to `developer_activity_log` with diff payload
-- Owner can hit "Suspend trust" → flips back to draft-first
+(Keep `developers.trust_level` column for back-compat but stop reading it in the UI.)
 
-This keeps the Owner's one-click approval as the single trust gate the user described, while satisfying the existing "Project Submission" standard by keeping the draft pipeline alive for un-trusted reps.
+## 4. Invitation flow (mirrors broker onboarding)
 
-## 3. Sales-rep upload UI (premium champagne+gold)
+- New edge function `invite-developer-rep` (owner-only). Input: `{ developer_id, email, name }`. Steps:
+  1. Validate caller is owner via `requireOwnerAuth`.
+  2. Create auth user via admin API with a random password.
+  3. Insert `developer_representatives` row (status=active).
+  4. Send password-set email using the existing Lovable auth email pipeline (`recovery` template, branded same as broker invite).
+- On first login the rep is routed by `DeveloperHubRoutes` guard:
+  - If they have a `developer_representatives` row → allow `/developer-hub`, force scope to their `developer_id`.
+  - All `/owner/*`, `/admin/*`, `/crm/*` routes blocked by existing `OwnerGuard`/`AdminGuard` (already block non-owner users — verified).
 
-Single shell at `/developer-hub` (already exists, gets full redesign), using locked palette `#FDFBF7 / #F7F2EA / #EFE6D6 / #B89555 / ink #1A1A1A`, Inter only, 1px gold hairlines, cream raised surfaces, `<IconTile tone="gold">`, no gold fills.
+## 5. Developer Hub scoping
 
-Sections (sidebar nav):
-1. **Company Profile** — logo (uses locked `developerLogo.ts` allow-list), description, website, languages, nationality
-2. **Projects** — list + "Add project" wizard:
-   - Step 1 Basics: name, location, type, handover, price range, unit types
-   - Step 2 Media: cover, gallery, floor plans (drag-drop, 50MB/file, 200MB/session — already enforced by `developerFileValidation.ts`)
-   - Step 3 Brochure & documents
-   - Step 4 Review & **Publish** (button text changes based on `trust_level`: "Submit for approval" vs "Publish live")
-3. **Edits to live projects** — inline editor on each card, "Save & publish" autosaves and pushes live
-4. **Launches & events** — existing flow, restyled
-5. **Activity** — read-only log of what auto-published, with rollback
+- `DeveloperHubShell` reads the rep's `developer_id`. All project lists, editors, media uploads, brochure uploads, live editor, wizard — all filter by that single `developer_id`.
+- "Switch developer" UI removed for reps (owner can impersonate via existing tooling).
+- Sidebar shows the developer logo + name at the top so the rep always sees who they represent.
 
-Every form input follows Institutional Form Standard (ink on champagne). No raw white. No purple (purple reserved for AI). Status badges use semantic palette (Emerald=live, Amber=pending, Red=suspended).
+## 6. UI polish on existing developer lists
 
-## 4. Public website reflection
+- Wherever developers are listed (admin directory, partnership panel Tab B), render the developer logo (`logo_url_processed || logo_url`) in a 40×40 champagne-padded tile next to the name. Uses existing `developerLogo.ts` util.
 
-Already wired: public `/developers/:slug` and `/projects/:slug` read from `projects` + `developers` with `is_published=true` and `deleted_at IS NULL`. After cleanup migration + auto-publish edge function, edits show up immediately because:
-- React Query keys for `['projects', slug]` and `['developer', slug]` invalidated by Supabase Realtime subscription on `projects` table (already enabled per realtime memory)
-- Add realtime channel for `developers` so logo/description changes propagate without refresh
+## 7. E2E + unit coverage
 
-## 5. End-to-end tests
+- Vitest: `is_developer_rep` permission helper; application status transitions.
+- Playwright: owner approves application → rep receives invite → sets password → lands in scoped Developer Hub → can edit their developer's project → cannot load another developer's edit URL (gets 403).
 
-Playwright spec `tests/developer-portal-e2e.spec.ts`:
-1. Sign up as new sales-rep → submit company → submit project → assert `status=pending_review`
-2. Owner approves → assert `trust_level=auto_publish`
-3. Sales-rep edits project price → assert public `/projects/:slug` shows new price within 5s (realtime)
-4. Sales-rep uploads new brochure → assert it appears on public page
-5. Sales-rep creates 2nd project → assert it's published live with no owner action
-6. Owner clicks Suspend → assert next edit returns to draft queue
-
-Vitest unit tests for the auto-publish edge function (trust gating, validation, RLS bypass via service role only when owner already approved).
-
-## 6. Files touched
+## 8. Files
 
 **New**
-- `supabase/migrations/<ts>_developer_trust_and_cleanup.sql` — trust_level + soft-delete + data cleanup
-- `supabase/functions/developer-auto-publish/index.ts`
-- `src/pages/developer-hub/DeveloperProjectWizard.tsx`
-- `src/pages/developer-hub/DeveloperLiveEditor.tsx`
-- `src/pages/owner/DeveloperTrustPanel.tsx` (approve / suspend / restore)
-- `src/hooks/useDeveloperAutoPublish.ts`
-- `tests/developer-portal-e2e.spec.ts`
-- `mem://features/developer-portal/auto-publish-trust-standard.md`
+- `supabase/migrations/<ts>_developer_partnerships.sql`
+- `supabase/functions/invite-developer-rep/index.ts`
+- `src/pages/owner/DeveloperPartnershipPanel.tsx` (replaces DeveloperTrustPanel; old route redirects)
+- `src/components/developer-partnerships/ApplicationCard.tsx`
+- `src/components/developer-partnerships/RepresentativeRow.tsx`
+- `src/components/developer-partnerships/AddRepDialog.tsx`
+- `src/hooks/useDeveloperRepScope.ts`
+- `mem://features/developer-portal/partnership-and-rep-scoping-standard.md`
 
 **Edited**
-- `src/pages/developer-hub/DeveloperHubShell.tsx` — full champagne restyle, IconTile, hairlines
-- `src/pages/developer-hub/DeveloperHubOverview.tsx`
-- `src/pages/developer-hub/DeveloperCompanyRegistration.tsx`
-- `src/pages/DeveloperPortal.tsx` — strip legacy chrome, route to new wizard
-- `src/components/developer-portal/*` — restyle, remove gold fills, fix contrast
-- `src/routes/DeveloperHubRoutes.tsx` — add wizard + live editor routes
-- Memory index
+- `src/routes/OwnerRoutes.tsx` — add `/owner/developer-partnerships`, redirect old `/owner/developer-trust`.
+- `src/routes/DeveloperHubRoutes.tsx` — enforce rep scope guard.
+- `src/pages/developer-hub/DeveloperHubShell.tsx` + sidebar — header logo + scope filter.
+- `supabase/functions/developer-auto-publish/index.ts` — gate by `developer_representatives` instead of `trust_level`.
+- Remove pending/approve chips from any directory views that currently read `trust_level`.
 
----
-
-## Technical notes
-
-- Soft-delete column added with index `WHERE deleted_at IS NULL` for query speed
-- All cleanup wrapped in single transaction with `SAVEPOINT` per batch
-- Auto-publish edge function uses `requireOwnerAuth` only for suspend/restore; sales-rep auth checked via session JWT + developer_sales_reps mapping
-- Realtime publication already covers `projects`; migration adds `developers`
-- No new secrets needed
-- Champagne palette already in `index.css` tokens — no token changes, only component-level cleanup
+No existing developer projects, applications, or auth users are deleted — purely additive plus a UI swap.
