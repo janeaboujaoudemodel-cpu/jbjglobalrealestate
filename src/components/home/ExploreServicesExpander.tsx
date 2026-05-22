@@ -31,24 +31,22 @@ type Service = {
   available?: boolean;
 };
 
-// Premium Unsplash imagery — Dubai/real-estate context per service.
-const UNSPLASH = (id: string) =>
-  `https://images.unsplash.com/photo-${id}?w=1600&q=80&auto=format&fit=crop`;
-
+// Premium owned imagery — served from public/services/ for consistency across
+// the homepage cards and this expander (single source of truth).
 const services: Service[] = [
-  { id: "buy",      title: "Buy Property",         description: "Discover premium properties in Dubai's most sought-after locations with expert guidance.", icon: Home,         href: "/properties?transaction=buy",         image: UNSPLASH("1518684079-3c830dcef090") },
-  { id: "sell",     title: "Sell Your Property",   description: "Maximize your property's value with expert selling services and a global investor reach.",   icon: Tag,          href: "/listing-portal",                     image: UNSPLASH("1545324418-cc1a3fa10c00") },
-  { id: "rent",     title: "Rent a Property",      description: "Find your perfect rental home in Dubai's most desirable neighbourhoods.",                    icon: Key,          href: "/properties?transaction=rent",        image: UNSPLASH("1502672260266-1c1ef2d93688") },
-  { id: "list",     title: "List Your Property for Rent", description: "Connect with qualified tenants through our institutional network.",                  icon: Building2,    href: "/landlord-listing",                   image: UNSPLASH("1560448204-e02f11c3d0e2") },
-  { id: "visa",     title: "Golden Visa Advisory", description: "10-year UAE residency through strategic real estate investment, structured end-to-end.",     icon: Globe,        href: "/guides/golden-visa-uae",             image: UNSPLASH("1512453979798-5ea266f8880c") },
-  { id: "manage",   title: "Property Management",  description: "Professional maintenance and management for landlords across Dubai.",                        icon: Building2,    href: "/services/property-management",       image: UNSPLASH("1497366754035-f200968a6e72") },
-  { id: "mortgage", title: "Mortgage Inquiries",   description: "Calculate payments and get matched with top mortgage providers in the UAE.",                 icon: Calculator,   href: "/mortgage-calculator",                image: UNSPLASH("1554224155-6726b3ff858f") },
-  { id: "passport", title: "Passport & Schengen",  description: "Request an introduction via independent licensed partners.",                                  icon: Plane,        href: "/services/citizenship",               image: UNSPLASH("1530541930197-ff16ac917b0e") },
-  { id: "compare",  title: "Compare Properties",   description: "AI-powered side-by-side analysis of multiple projects with ROI insights.",                    icon: Scale,        href: "/compare",                             image: UNSPLASH("1551288049-bebda4e38f71") },
-  { id: "eval",     title: "Property Evaluation",  description: "AI-powered valuation for accurate, market-aligned price assessments.",                        icon: Calculator,   href: "/property-evaluator",                  image: UNSPLASH("1454165804606-c3d57bc86b40") },
-  { id: "partner",  title: "Partner Introduction", description: "Connect with our trusted network of advisors, lawyers and tax specialists.",                 icon: Handshake,    href: "/partners",                           image: UNSPLASH("1521791136064-7986c2920216") },
-  { id: "inquiry",  title: "General Inquiries",    description: "Speak to our concierge team for any real estate question — answered fast.",                  icon: MessageCircle,href: "/contact",                            image: UNSPLASH("1556761175-5973dc0f32e7") },
-  { id: "facility", title: "Facility Management",  description: "Building-grade maintenance for owners — launching soon.",                                     icon: Wrench,       href: "/services/facility-management",       image: UNSPLASH("1581094794329-c8112a89af12"), available: false },
+  { id: "buy",      title: "Buy Property",         description: "Discover premium properties in Dubai's most sought-after locations with expert guidance.", icon: Home,         href: "/properties?transaction=buy",         image: "/services/buy-property-bg.jpg" },
+  { id: "sell",     title: "Sell Your Property",   description: "Maximize your property's value with expert selling services and a global investor reach.",   icon: Tag,          href: "/listing-portal",                     image: "/services/sell-property-bg.jpg" },
+  { id: "rent",     title: "Rent a Property",      description: "Find your perfect rental home in Dubai's most desirable neighbourhoods.",                    icon: Key,          href: "/properties?transaction=rent",        image: "/services/rent-property-bg.jpg" },
+  { id: "list",     title: "List Your Property for Rent", description: "Connect with qualified tenants through our institutional network.",                  icon: Building2,    href: "/landlord-listing",                   image: "/services/list-rental-bg.jpg" },
+  { id: "visa",     title: "Golden Visa Advisory", description: "10-year UAE residency through strategic real estate investment, structured end-to-end.",     icon: Globe,        href: "/guides/golden-visa-uae",             image: "/services/golden-visa-bg.jpg" },
+  { id: "manage",   title: "Property Management",  description: "Professional maintenance and management for landlords across Dubai.",                        icon: Building2,    href: "/services/property-management",       image: "/services/property-management-bg.jpg" },
+  { id: "mortgage", title: "Mortgage Inquiries",   description: "Calculate payments and get matched with top mortgage providers in the UAE.",                 icon: Calculator,   href: "/mortgage-calculator",                image: "/services/mortgage-bg.jpg" },
+  { id: "passport", title: "Passport & Schengen",  description: "Request an introduction via independent licensed partners.",                                  icon: Plane,        href: "/services/citizenship",               image: "/services/passport-visa-bg.jpg" },
+  { id: "compare",  title: "Compare Properties",   description: "AI-powered side-by-side analysis of multiple projects with ROI insights.",                    icon: Scale,        href: "/compare",                             image: "/services/compare-properties-bg.jpg" },
+  { id: "eval",     title: "Property Evaluation",  description: "AI-powered valuation for accurate, market-aligned price assessments.",                        icon: Calculator,   href: "/property-evaluator",                  image: "/services/property-evaluation-bg.jpg" },
+  { id: "partner",  title: "Partner Introduction", description: "Connect with our trusted network of advisors, lawyers and tax specialists.",                 icon: Handshake,    href: "/partners",                           image: "/services/partner-introduction-bg.jpg" },
+  { id: "inquiry",  title: "General Inquiries",    description: "Speak to our concierge team for any real estate question — answered fast.",                  icon: MessageCircle,href: "/contact",                            image: "/services/general-inquiries-bg.jpg" },
+  { id: "facility", title: "Facility Management",  description: "Building-grade maintenance for owners — launching soon.",                                     icon: Wrench,       href: "/services/facility-management",       image: "/services/facility-management-bg.jpg", available: false },
 ];
 
 const ExploreServicesExpander = () => {
