@@ -175,8 +175,13 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
 
   const statusLabel = getStatusLabel();
   const saleStatusBadge = getSaleStatusBadge(project.status_label);
-  const hasDevLogo = !!getDeveloperLogoUrl(project.developer);
-  const badgePosition = hasDevLogo ? 'top-14 left-3' : 'top-3 left-3';
+  const devLogoUrl = getDeveloperLogoUrl(project.developer);
+  const devName = (project.developer as any)?.name as string | undefined;
+  // ALWAYS show a developer mark when we have either a logo OR a name,
+  // so the client can identify who built the project on every card.
+  const hasDevMark = !!devLogoUrl || !!devName;
+  const hasDevLogo = !!devLogoUrl;
+  const badgePosition = hasDevMark ? 'top-14 left-3' : 'top-3 left-3';
 
   return (
     <div
