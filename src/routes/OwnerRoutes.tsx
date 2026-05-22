@@ -144,6 +144,12 @@ export const OwnerRoutes = () => (
     <Route path="admin/leads" element={<AdminLeads />} />
     <Route path="marketing-hub" element={<MarketingHub />} />
     <Route path="analytics" element={<JBJAnalyticsDashboard />} />
+    <Route path="users" element={
+      <Suspense fallback={<PageLoader />}>
+        {React.createElement(React.lazy(() => import("@/pages/owner/OwnerUsers")))}
+      </Suspense>
+    } />
+
     <Route path="research-users" element={
       <Suspense fallback={<PageLoader />}>
         {React.createElement(React.lazy(() => import("@/components/admin/ResearchUsersPanel")))}
