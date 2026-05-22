@@ -12,7 +12,7 @@ import { SearchableMultiSelect, type MultiOption } from "@/components/ui/searcha
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Phone, Loader2 } from "lucide-react";
-import { COUNTRIES, flagEmoji } from "@/lib/countries";
+import { COUNTRIES, flagEmoji } from "@/data/countries";
 
 const LANGUAGES = [
   { name: "English", iso: "GB" },
@@ -94,7 +94,7 @@ export default function VoiceConciergeIntakeModal({ open, onOpenChange, onSucces
   const [consent, setConsent] = useState(false);
 
   const nationalityOptions: MultiOption[] = useMemo(
-    () => COUNTRIES.map((c) => ({ value: c.name, label: `${flagEmoji(c.iso)}  ${c.name}` })),
+    () => COUNTRIES.map((c) => ({ value: c.name, label: `${flagEmoji(c.code)}  ${c.name}` })),
     []
   );
   const languageOptions: MultiOption[] = useMemo(
@@ -105,7 +105,7 @@ export default function VoiceConciergeIntakeModal({ open, onOpenChange, onSucces
     () =>
       COUNTRIES.map((c) => ({
         value: c.name,
-        label: `${flagEmoji(c.iso)}  ${c.code}  ${c.name}`,
+        label: `${flagEmoji(c.code)}  ${c.dial}  ${c.name}`,
       })),
     []
   );
@@ -113,9 +113,9 @@ export default function VoiceConciergeIntakeModal({ open, onOpenChange, onSucces
     () => COUNTRIES.find((c) => c.name === countryName),
     [countryName]
   );
-  const selectedDialCode = selectedCountry?.code ?? "+971";
+  const selectedDialCode = selectedCountry?.dial ?? "+971";
   const selectedDialDisplay = selectedCountry
-    ? `${flagEmoji(selectedCountry.iso)}  ${selectedCountry.code}`
+    ? `${flagEmoji(selectedCountry.code)}  ${selectedCountry.dial}`
     : "🇦🇪  +971";
 
   const handleSubmit = async (e: React.FormEvent) => {
