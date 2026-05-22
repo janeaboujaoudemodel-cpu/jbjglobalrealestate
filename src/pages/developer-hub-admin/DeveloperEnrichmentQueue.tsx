@@ -122,6 +122,15 @@ export default function DeveloperEnrichmentQueue() {
               onChange={(e) => setSearch(e.target.value)}
               className="h-9 w-64"
             />
+            <Button
+              variant="gold"
+              size="sm"
+              disabled={rebuildAllBroken.isPending}
+              onClick={() => rebuildAllBroken.mutate(25)}
+            >
+              <Zap className="size-3 mr-1" />
+              {rebuildAllBroken.isPending ? "Running…" : "Rebuild 25 broken"}
+            </Button>
             <Button asChild variant="outline">
               <a href="/developer-hub-admin/directory">Pick from directory →</a>
             </Button>
