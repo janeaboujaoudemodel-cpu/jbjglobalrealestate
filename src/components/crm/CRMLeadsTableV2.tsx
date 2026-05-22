@@ -90,6 +90,7 @@ export default function CRMLeadsTableV2({
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [assignLeadIds, setAssignLeadIds] = useState<string[]>([]);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [accessLead, setAccessLead] = useState<Lead | null>(null);
   const [leadToDelete, setLeadToDelete] = useState<Lead | null>(null);
   const [agreementLead, setAgreementLead] = useState<Lead | null>(null);
 
