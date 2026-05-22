@@ -283,8 +283,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </>
           )}
 
-          {/* Top-Left: Property Type Label (if no developer logo) — solid ink badge */}
-          {project.property_type_label && !getDeveloperLogoUrl(project.developer) && (
+          {/* Top-Left: Property Type Label (if no developer mark) — solid ink badge */}
+          {project.property_type_label && !hasDevMark && (
             <div className="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider bg-[#1A1A1A] text-[#FDFBF7] border border-[#B89555] shadow-md">
               {project.property_type_label}
             </div>
