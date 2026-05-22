@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { PasswordInput } from '@/components/ui/password-input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
@@ -300,12 +301,12 @@ const IntegrationWizard: React.FC<IntegrationWizardProps> = ({
                     </div>
                     <div className="space-y-2">
                       <Label className="text-white">VAPI API Key</Label>
-                      <Input
-                        type="password"
+                      <PasswordInput
                         placeholder="Enter your VAPI API key"
                         value={apiKey}
                         onChange={(e) => setApiKey(e.target.value)}
                         className="bg-[#1A1A1A] border-[#1A1A1A] text-white"
+                        visibilityLabel="VAPI API key"
                       />
                     </div>
                   </div>
