@@ -317,8 +317,6 @@ export const PublicRoutes = () => (
     <Route path="/news/:id" element={<NewsDetail />} />
     <Route path="/team" element={<MeetTheTeam />} />
     <Route path="/meet-the-team" element={<Navigate to="/team" replace />} />
-    <Route path="/brokers" element={<Navigate to="/team" replace />} />
-    <Route path="/our-brokers" element={<Navigate to="/team" replace />} />
 
     <Route path="/reviews" element={<Reviews />} />
     <Route path="/thank-you" element={<ThankYou />} />
