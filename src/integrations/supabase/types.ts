@@ -2680,6 +2680,13 @@ export type Database = {
             foreignKeyName: "broker_company_history_broker_id_fkey"
             columns: ["broker_id"]
             isOneToOne: false
+            referencedRelation: "vw_crm_broker_profile"
+            referencedColumns: ["broker_id"]
+          },
+          {
+            foreignKeyName: "broker_company_history_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
             referencedRelation: "vw_crm_broker_stats"
             referencedColumns: ["broker_id"]
           },
@@ -5508,6 +5515,42 @@ export type Database = {
         }
         Relationships: []
       }
+      crm_broker_activity_log: {
+        Row: {
+          action: string
+          broker_id: string
+          broker_user_id: string | null
+          id: string
+          ip_address: string | null
+          lead_id: string | null
+          meta: Json
+          occurred_at: string
+          user_agent: string | null
+        }
+        Insert: {
+          action: string
+          broker_id: string
+          broker_user_id?: string | null
+          id?: string
+          ip_address?: string | null
+          lead_id?: string | null
+          meta?: Json
+          occurred_at?: string
+          user_agent?: string | null
+        }
+        Update: {
+          action?: string
+          broker_id?: string
+          broker_user_id?: string | null
+          id?: string
+          ip_address?: string | null
+          lead_id?: string | null
+          meta?: Json
+          occurred_at?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       crm_broker_blocked_devices: {
         Row: {
           blocked_at: string
@@ -5549,6 +5592,13 @@ export type Database = {
             columns: ["broker_id"]
             isOneToOne: false
             referencedRelation: "vw_crm_broker_overview"
+            referencedColumns: ["broker_id"]
+          },
+          {
+            foreignKeyName: "crm_broker_blocked_devices_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_broker_profile"
             referencedColumns: ["broker_id"]
           },
           {
@@ -5632,6 +5682,13 @@ export type Database = {
             columns: ["broker_id"]
             isOneToOne: false
             referencedRelation: "vw_crm_broker_overview"
+            referencedColumns: ["broker_id"]
+          },
+          {
+            foreignKeyName: "crm_broker_commission_agreements_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_broker_profile"
             referencedColumns: ["broker_id"]
           },
           {
@@ -5822,6 +5879,13 @@ export type Database = {
             columns: ["broker_id"]
             isOneToOne: false
             referencedRelation: "vw_crm_broker_overview"
+            referencedColumns: ["broker_id"]
+          },
+          {
+            foreignKeyName: "crm_broker_sessions_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_broker_profile"
             referencedColumns: ["broker_id"]
           },
           {
@@ -6079,6 +6143,13 @@ export type Database = {
             columns: ["broker_id"]
             isOneToOne: false
             referencedRelation: "vw_crm_broker_overview"
+            referencedColumns: ["broker_id"]
+          },
+          {
+            foreignKeyName: "crm_brokerage_agents_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_broker_profile"
             referencedColumns: ["broker_id"]
           },
           {
@@ -7422,6 +7493,13 @@ export type Database = {
             columns: ["assigned_broker_id"]
             isOneToOne: false
             referencedRelation: "vw_crm_broker_overview"
+            referencedColumns: ["broker_id"]
+          },
+          {
+            foreignKeyName: "crm_database_folders_assigned_broker_id_fkey"
+            columns: ["assigned_broker_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_broker_profile"
             referencedColumns: ["broker_id"]
           },
           {
@@ -8924,6 +9002,13 @@ export type Database = {
             columns: ["broker_id"]
             isOneToOne: false
             referencedRelation: "vw_crm_broker_overview"
+            referencedColumns: ["broker_id"]
+          },
+          {
+            foreignKeyName: "crm_lead_sources_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_broker_profile"
             referencedColumns: ["broker_id"]
           },
           {
@@ -35228,6 +35313,39 @@ export type Database = {
         }
         Relationships: []
       }
+      vw_crm_broker_profile: {
+        Row: {
+          activity_count: number | null
+          broker_id: string | null
+          broker_user_id: string | null
+          email: string | null
+          full_name: string | null
+          last_active_at: string | null
+          last_activity_at: string | null
+          leads_shared: number | null
+        }
+        Insert: {
+          activity_count?: never
+          broker_id?: string | null
+          broker_user_id?: string | null
+          email?: never
+          full_name?: string | null
+          last_active_at?: string | null
+          last_activity_at?: never
+          leads_shared?: never
+        }
+        Update: {
+          activity_count?: never
+          broker_id?: string | null
+          broker_user_id?: string | null
+          email?: never
+          full_name?: string | null
+          last_active_at?: string | null
+          last_activity_at?: never
+          leads_shared?: never
+        }
+        Relationships: []
+      }
       vw_crm_broker_stats: {
         Row: {
           broker_id: string | null
@@ -35636,6 +35754,10 @@ export type Database = {
         Args: { _broker_id: string; _fingerprint: string; _reason?: string }
         Returns: string
       }
+      crm_broker_profile_bundle: {
+        Args: { p_broker_id: string }
+        Returns: Json
+      }
       crm_broker_revoke_all_sessions: {
         Args: { _broker_id: string; _reason?: string }
         Returns: number
@@ -35665,6 +35787,10 @@ export type Database = {
       }
       crm_hard_delete_leads: { Args: { p_lead_ids: string[] }; Returns: Json }
       crm_publish_lead_diffs: { Args: { _ids: string[] }; Returns: number }
+      crm_publish_lead_diffs_for_lead: {
+        Args: { p_lead_id: string }
+        Returns: number
+      }
       crm_purge_deleted_leads: { Args: never; Returns: Json }
       crm_restore_leads: { Args: { p_lead_ids: string[] }; Returns: Json }
       crm_segment_resolve: {
@@ -35701,7 +35827,118 @@ export type Database = {
           isSetofReturn: true
         }
       }
+      crm_set_context: { Args: { p_ctx: string }; Returns: undefined }
       crm_soft_delete_leads: { Args: { p_lead_ids: string[] }; Returns: Json }
+      crm_update_lead_as_shared: {
+        Args: { p_id: string; p_patch: Json }
+        Returns: {
+          age_range: string | null
+          ai_score: number | null
+          ai_score_updated_at: string | null
+          assigned_ai_employee_id: string | null
+          assigned_broker_id: string | null
+          assigned_to_user_id: string | null
+          auto_detected_type: boolean | null
+          bedroom_requirement: string | null
+          birthday: string | null
+          budget_currency: string | null
+          budget_max: number | null
+          budget_min: number | null
+          buying_purpose: string | null
+          company_name: string | null
+          contact_type: Database["public"]["Enums"]["crm_contact_type"] | null
+          country_of_residence: string | null
+          created_at: string
+          created_by_user_id: string | null
+          current_location_city: string | null
+          current_location_country: string | null
+          database_source: string | null
+          deleted_at: string | null
+          department: string | null
+          detection_keywords: string[] | null
+          documents: Json
+          duplicate_hash: string | null
+          duplicate_of_id: string | null
+          email_encrypted: string | null
+          email_lower: string | null
+          email_normalized: string | null
+          event_source: string | null
+          flag_reasons: string[] | null
+          flagged: boolean | null
+          full_name: string
+          gender: string | null
+          id: string
+          import_approval_status:
+            | Database["public"]["Enums"]["crm_import_approval_status"]
+            | null
+          import_batch_id: string | null
+          imported_at: string | null
+          internal_comments: string | null
+          is_duplicate: boolean | null
+          is_global_broker: boolean | null
+          is_investor: boolean
+          is_junk: boolean
+          languages: string[] | null
+          last_contacted_at: string | null
+          last_updated_by: string | null
+          lead_intent: string | null
+          lead_score_band: string | null
+          lead_source_type: string | null
+          lead_type: string | null
+          list_id: string | null
+          nationality: string | null
+          next_followup_at: string | null
+          notes: string | null
+          notes_encrypted: string | null
+          original_filename: string | null
+          owner_type: Database["public"]["Enums"]["crm_lead_owner_type"]
+          owner_user_id: string | null
+          partner_service_type: string | null
+          phone_e164: string | null
+          phone_encrypted: string | null
+          phone_normalized: string | null
+          phone_raw: string | null
+          pipeline_stage: string | null
+          position_type: string | null
+          preferred_language: string | null
+          preferred_location: string | null
+          preferred_project: string | null
+          priority: string | null
+          priority_score: number | null
+          property_type: string | null
+          raw_import: Json | null
+          region: string | null
+          rental_budget_max: number | null
+          rental_budget_min: number | null
+          rental_lease_duration: string | null
+          rental_move_in_timeline: string | null
+          rental_preferred_areas: string[] | null
+          rental_property_type: string | null
+          rental_renter_type: string | null
+          role_title: string | null
+          seniority: string | null
+          source: string | null
+          source_database_id: string | null
+          source_history: Json
+          source_id: string | null
+          source_page: string | null
+          source_row_index: number | null
+          stale_since: string | null
+          tags: string[] | null
+          updated_at: string
+          upload_source: string | null
+          vip: boolean | null
+          vip_tagged_at: string | null
+          vip_tagged_by: string | null
+          whatsapp_e164: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "crm_leads"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       decrypt_bank_field: {
         Args: { encrypted_data: string; salt_id: string }
         Returns: string
