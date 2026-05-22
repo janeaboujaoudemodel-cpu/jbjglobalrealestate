@@ -1,92 +1,58 @@
-## What I found
 
-**1. The "two databases" issue is real data, not a bug.**
-Your test broker (`infoo.jane@gmail.com`) has **2 active grants** in `crm_database_grants`:
+## Add Lead / Client modal — fix + upgrade
 
-| Granted | Database | Permission |
-|---|---|---|
-| May 19 | `al reef 1 (5) bed villas updated` | edit |
-| May 17 | `MAMSHA MERGED (1)` | edit |
+Scope: `src/components/crm/CRMLeadModal.tsx` only. No business logic / schema changes.
 
-Neither has `revoked_at` set, so both correctly appear. The new grant did not auto-revoke the previous one — that's the gap to close.
+### Root cause of the dropdown bugs
 
-**2. The broker workspace is a minimal 3-tab page.**
-Today `/broker/crm` shows only: My Databases · My Leads · Activity (empty). No calendar, no inbox, no tasks, no notes, no projects, and the database view is read-only (list of names, not editable cells).
+The Dialog renders at `z-index: 10050` (per `src/config/z-index.ts`), but every `SelectContent` and `PopoverContent` inside this modal is forced to `z-[200]` — so the menus open **behind** the dialog overlay/content and look unresponsive. This explains:
 
----
+- Lead Type dropdown invisible
+- Status / "New" dropdown not opening
+- Nationality / Preferred Language appearing slow or not opening (first click lands behind dialog, second click finally registers)
 
-## Plan
+Other portaled menus on the page work because they use the default `z-[10200]` from `popover.tsx` / `select.tsx`.
 
-### A. Fix the "extra database" leak (owner-side)
+### Fixes
 
-1. **One-database-at-a-time grant flow** — In `BrokerGrantsManagerDialog`, when you grant a new database, add a default-on checkbox **"Revoke all other databases for this broker"**. When ticked, the grant edge function sets `revoked_at = now()` on every other active grant for that broker in the same transaction.
-2. **Active grants chip on the picker** — Show a small badge next to the broker's name in the manager dialog: "2 active databases · click to review" so you can never lose track again.
-3. **Bulk-revoke action** — Add a "Revoke all other grants" button on each grant row so you can clean up `MAMSHA MERGED` for Jane in one click right now.
-4. Every revoke writes a `broker_grant_revoked` audit row (already wired).
+1. Z-index — remove every hardcoded `z-[200]` in this file. Let `SelectContent` / `PopoverContent` use their default portal z-index so they render above the dialog. Applies to: Lead Type, Currency, Property Type, Bedrooms, Buying Purpose, Lead Source, Status, Priority, Lead Score, Preferred Language, Nationality, Country of Residence.
 
-### B. Build the full broker suite at `/broker/crm`
+2. Tier / Pool spacing — `<Label>` sits flush against the segmented control. Add `mb-1.5` to those two Labels (and Crown/Users2 icon row) and `mt-1` on the segmented wrapper so they match the rest of the form's label/field rhythm.
 
-Replace the current 3-tab page with an L-shaped workspace (same 88px header + sidebar standard as the owner panel) and these sections:
+3. Exit/Cancel bug — `<Dialog onOpenChange={onClose}>` calls `onClose()` with no boolean, and `setFormData(initial)` only runs after a successful submit. So when the user cancels (Esc, overlay click, X, Cancel) the next open shows stale data and any half-typed required state can throw on re-validate. Fix:
+   - Wrap close in a single `handleClose()` that resets `formData`, all `*Open` popover flags, and `loading`.
+   - Use `onOpenChange={(o) => { if (!o) handleClose(); }}` and point the Cancel button at `handleClose`.
 
-| Tab | Source | Behaviour |
-|---|---|---|
-| **Dashboard** | aggregated | KPIs: assigned DBs, leads in scope, open tasks, unread notes |
-| **Databases** | `vw_crm_database_access` | Each granted DB opens as an **Excel-style editable grid** (see C) |
-| **Leads** | `useBrokerScopedLeads` | Flat sortable/filterable table, status pill editor |
-| **Calendar** | new `broker_calendar_events` (broker_user_id scoped) | Month + agenda view, create/edit own events |
-| **Inbox** | reuse `email_inbox_items` filtered by `assigned_broker_user_id` | Read & reply, never sees owner's private threads |
-| **Tasks** | new `broker_tasks` (broker_user_id scoped) | Kanban: Todo / Doing / Done, due dates |
-| **Notes** | new `broker_notes` (broker_user_id scoped, optional `lead_id`) | Markdown notes, private to broker; owner sees all via RLS bypass |
-| **Projects** | `vw_projects_public` (read-only) | Full front-end project browser, same as visitor sees |
-| **Training** | existing `BrokerTraining` page | Linked from sidebar |
+4. Nationality / Language perceived slowness — once z-index is fixed the first click opens them. Additionally:
+   - Add `position="popper"`, `sideOffset={6}`, and `align="start"` to both `PopoverContent` so they anchor to the trigger instantly without collision recalculation.
+   - Memoise the `LANGUAGES_WITH_FLAGS` / `ALL_NATIONALITIES` arrays (already module-level — confirm no per-render rebuild) and pass a stable `value` string to `CommandItem`.
 
-Front-end of the public site (`/`, `/projects`, etc.) stays fully open to brokers — they already pass `AuthRequiredRoute`. The only thing gated is the **CRM workspace**, which is broker-private.
+### Deep upgrade (visual + UX, no schema changes)
 
-### C. Excel-style editable database grid
+- Promote the existing modal to a `max-w-4xl` layout with a sticky header and sticky footer (Cancel / Create Lead) so the action bar is always reachable on small laptops.
+- Add a thin gold hairline divider under the tab bar (matches Champagne-Gold standard).
+- Convert the two segmented controls (Tier, Pool) to share one reusable inline `SegmentedToggle` block with consistent `rounded-lg`, `h-10`, `gap-0`, and proper active-state ring (cream `#EFE6D6` + ink + 1px gold hairline, per design memory).
+- Required-field affordance: show a small red dot next to `Lead Name *`, and on submit, scroll the first invalid tab into view and switch to it (currently a missing name on the Contact tab is silent if the user is on Pipeline).
+- Lead Source / Status: render the colored dot in the trigger, not just inside the menu, so the selected pipeline category is visible at a glance.
+- Phone / WhatsApp: add a "Same as phone" link under WhatsApp that copies the phone value.
+- Email: add a lightweight `type="email"` + pattern hint and inline duplicate-warning placeholder (no backend call — just the slot, so a future check can plug in).
+- Tags: replace the comma-separated input with a chip input (Enter / comma to add, X to remove). Stored value still serialised as a comma-separated string for the existing insert payload — zero schema impact.
+- Tab indicator: add a small count badge per tab showing filled-vs-required (e.g. Contact 2/3) to guide the user before submit.
+- Keyboard: add `Cmd/Ctrl+Enter` to submit from anywhere in the form.
 
-`/broker/crm/database/:id` becomes a full spreadsheet:
+### Out of scope (call out, do not implement now)
 
-- TanStack Table + virtualised rows (handles 10k+ leads)
-- Inline cell edit (text, select for status, date picker, phone)
-- Column sort, multi-column filter, search box, frozen first column
-- Status dropdown is fully editable (writes through `crm_leads.status`)
-- Only fields exposed by `permission_level = 'edit'` are editable; otherwise read-only with a lock icon
-- Every cell save writes to `crm_lead_field_history` for audit
-- Bulk select → "Mark contacted / Add note / Export to CSV"
-- "Add Note" pinned button on every row → drops into `broker_notes` linked to that lead
+- New DB columns, RLS changes, or new lead fields beyond what `formData` already carries.
+- Changes to `BrokerCombobox`, `PhoneInputWithCountry`, or the unified picker.
+- Any change to other CRM modals/screens.
 
-### D. Privacy guarantees (RLS)
+### Files touched
 
-- `broker_notes`, `broker_tasks`, `broker_calendar_events`: row-level policies — `broker_user_id = auth.uid()` for the broker; owner sees all via `is_owner()`.
-- Brokers **never** read `crm_leads` they don't have a grant for; the existing `vw_crm_database_access` + RLS on `crm_leads` already enforces this — confirmed.
-- Owner's own CRM tables (`crm_audit_logs`, `crm_security_events`, all owner-only views) stay invisible to brokers.
+- `src/components/crm/CRMLeadModal.tsx` (only)
 
-### E. Sidebar/nav
+### Verification
 
-Add a left rail inside `/broker/*` with: Dashboard · Databases · Leads · Calendar · Inbox · Tasks · Notes · Projects · Training · Settings. Matches the champagne L-shape used in `/owner`.
-
----
-
-## Technical notes (for reference)
-
-- New tables via migration: `broker_calendar_events`, `broker_tasks`, `broker_notes` (each: `id`, `broker_user_id`, `created_at`, `updated_at`, plus domain fields; RLS by `auth.uid() = broker_user_id OR is_owner()`).
-- New edge function: `crm-broker-grant-replace` — atomic "grant DB X and revoke all others for this broker".
-- New hooks: `useBrokerNotes`, `useBrokerTasks`, `useBrokerCalendar`, `useBrokerInbox`.
-- New component: `BrokerSpreadsheet.tsx` (TanStack Table) reused on `/broker/crm/database/:id`.
-- New layout: `BrokerWorkspaceShell.tsx` with the L-shape rail (88px header, sidebar).
-- Routes: keep `/broker/crm` and `/broker/crm/database/:id`; add `/broker/crm/calendar`, `/inbox`, `/tasks`, `/notes`, `/projects`.
-- All wrapped in existing `BrokerGuard` — no change to auth model.
-
----
-
-## What I will NOT touch
-
-- Public front-end (brokers already have full access via `AuthRequiredRoute`)
-- Owner CRM at `/owner/crm` — unchanged
-- Existing grant data — I'll only add the bulk-revoke action; I won't auto-revoke Jane's `MAMSHA MERGED` grant without your one-click confirmation
-
----
-
-## Quick win first?
-
-Before I build the full suite, do you want me to **revoke Jane's `MAMSHA MERGED` grant right now** so she only sees `al reef 1` on her next refresh? That's a 1-line data fix and lets you verify the scoping immediately while I build the rest.
+- Open `/owner/crm` → Add Lead → confirm every dropdown opens above the dialog on first click.
+- Tab through Contact / Requirements / Pipeline / Notes; confirm Tier & Pool labels have breathing room.
+- Open modal, type a name, press Esc, reopen → form is empty.
+- Submit with missing Lead Name from the Pipeline tab → auto-switches to Contact and focuses the field.
