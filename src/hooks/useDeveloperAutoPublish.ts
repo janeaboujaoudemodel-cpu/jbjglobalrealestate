@@ -1,0 +1,46 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+
+export interface AutoPublishPayload {
+  developer_id: string;
+  project_id?: string | null;
+  patch: Record<string, unknown>;
+  images?: Array<{ image_url: string; alt_text?: string; display_order?: number }>;
+  documents?: Array<{ file_url: string; file_name: string; document_type?: string }>;
+  developer_patch?: { description?: string; logo_url?: string; website?: string };
+}
+
+interface AutoPublishResponse {
+  status: "published" | "queued_for_review";
+  project_id?: string;
+  submission_id?: string;
+}
+
+/**
+ * Trust-gated submit. Returns 'published' (live) or 'queued_for_review'.
+ * After one-time owner approval (trust_level=auto_publish), every call publishes live.
+ */
+export function useDeveloperAutoPublish() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (payload: AutoPublishPayload): Promise<AutoPublishResponse> => {
+      const { data, error } = await supabase.functions.invoke("developer-auto-publish", {
+        body: payload,
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(String(data.error));
+      return data as AutoPublishResponse;
+    },
+    onSuccess: (data) => {
+      if (data.status === "published") {
+        toast.success("Published live");
+      } else {
+        toast.info("Submitted for owner review");
+      }
+      qc.invalidateQueries({ queryKey: ["developer-projects"] });
+      qc.invalidateQueries({ queryKey: ["projects"] });
+    },
+    onError: (e: Error) => toast.error(`Publish failed: ${e.message}`),
+  });
+}

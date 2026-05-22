@@ -1,6 +1,5 @@
 /**
- * Developer Hub routes — dedicated shell with sidebar
- * Auth-required: all routes require login
+ * Developer Hub routes — premium champagne shell with full project lifecycle
  */
 import React, { lazy, Suspense } from "react";
 import { Route, Navigate } from "react-router-dom";
@@ -13,6 +12,8 @@ const DeveloperCompanyRegistration = lazy(() => import("@/pages/developer-hub/De
 const DeveloperLaunchEvents = lazy(() => import("@/pages/developer-hub/DeveloperLaunchEvents"));
 const DeveloperCRM = lazy(() => import("@/pages/developer-hub/DeveloperCRM"));
 const DeveloperReports = lazy(() => import("@/pages/developer-hub/DeveloperReports"));
+const DeveloperLiveEditor = lazy(() => import("@/pages/developer-hub/DeveloperLiveEditor"));
+const DeveloperProjectWizard = lazy(() => import("@/pages/developer-hub/DeveloperProjectWizard"));
 
 export const DeveloperHubRoutes = () => (
   <Route
@@ -27,12 +28,14 @@ export const DeveloperHubRoutes = () => (
   >
     <Route index element={<DeveloperHubOverview />} />
     <Route path="company-registration" element={<DeveloperCompanyRegistration />} />
-    <Route path="projects" element={<Navigate to="/developer-portal?tab=projects" replace />} />
+    <Route path="projects" element={<DeveloperLiveEditor />} />
+    <Route path="new-project" element={<DeveloperProjectWizard />} />
     <Route path="marketing-materials" element={<Navigate to="/developer-portal?tab=marketing" replace />} />
     <Route path="events" element={<DeveloperLaunchEvents />} />
     <Route path="agreements" element={<Navigate to="/e-signature" replace />} />
     <Route path="tasks" element={<Navigate to="/developer-portal?tab=tasks" replace />} />
     <Route path="crm" element={<DeveloperCRM />} />
     <Route path="reports" element={<DeveloperReports />} />
+    <Route path="activity" element={<DeveloperReports />} />
   </Route>
 );

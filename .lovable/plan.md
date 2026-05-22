@@ -1,66 +1,120 @@
-## Goal
 
-Every first-time visitor sees a non-dismissable picker with exactly three categories — **Investor**, **Broker**, **Developer** — and the rest of the site re-skins itself to that single choice. The legacy combined "Investor + Broker" mode is removed everywhere.
+# Developer Portal Rebuild — End-to-End
 
-## Recommendation on timing
-
-Show the picker **immediately on first visit, before login**. The choice is saved to `localStorage` so the homepage / nav re-skins right away, and it is auto-synced to the account on the user's next login (existing `register-mode-lead` edge function already handles this). This gives the strongest personalization signal without a login wall, and matches your request ("when user opens, immediately ask").
-
-This supersedes the current `mem://features/auth/login-first-mode-and-crm-categorization` rule, which I'll update.
+Premium champagne+gold redesign, real sales-rep upload flow, **one-time approval → every future edit auto-publishes**, and a full cleanup pass on broken/fake project data already in the database.
 
 ---
 
-## 1. Forced 3-category picker on first visit
+## 1. Data cleanup (run first, before any UI work)
 
-Rework `src/components/ModeSelectionModal.tsx`:
+Audit found **1,316 projects** with missing cover, missing price, or pre-2024 handover out of 2,504 published. Plus reelly.io legacy junk (Screenshots, "1080x1080", etc.).
 
-- Open automatically when `localStorage.jj_mode_selected !== 'true'` — for both anonymous and logged-in users.
-- Non-dismissable: no X button, no outside-click close, no Esc, no backdrop dismissal.
-- Exactly three cards: **Investor**, **Broker**, **Developer**. Remove the "Visitor / Partnership" option.
-- Persist locally on selection (`jj_user_mode` + `jj_mode_selected=true`); if logged in, also upsert `user_preferences.selected_mode` and call `register-mode-lead` edge function (already exists).
-- A subtle "You can change this anytime from your profile menu" line, but no skip link.
+Two-pass migration:
 
-Wire it through `PopupCoordinatorContext` so it overrides other popups on first paint.
+**Pass A — Unpublish suspect rows** (`is_published = false`) when ANY of:
+- `cover_image_url` is null OR matches forbidden patterns (`screenshot`, `whatsapp`, `convert.io`, `frame+N`, `1080x1080`, project photo paths used as cover)
+- `price_from` is null OR `< 100,000`
+- `handover_date` is null OR in the past AND `construction_status != 'completed'`
+- `name` contains obvious junk markers ("test", "untitled", "draft", `%d0%`)
 
-## 2. Remove the combined `investor_broker` mode site-wide
+**Pass B — Soft-delete** (new `deleted_at timestamptz` column, RLS hides it) when **2+** red flags are present (e.g. no price AND no valid image AND pre-2024 handover). Recoverable from Owner panel.
 
-Drop the 4th mode from the type union and every consumer:
+Add `projects.data_quality_flags jsonb` so the owner sees exactly why each was flagged. Add a "Restore" button in the Owner panel for soft-deleted rows.
 
-- `src/contexts/UserModeContext.tsx` and `src/hooks/useUserMode.ts`: `UserMode = 'investor' | 'broker' | 'developer'`. Delete `isCombinedMode`. `normalizeMode` collapses any legacy `investor_broker` to `broker` (broker is the more privileged surface).
-- `src/components/ModeSwitcher.tsx`, `src/pages/ModeHub.tsx`, `src/pages/MyDashboard*.tsx`, `src/components/dashboard/ProfileSummaryCard.tsx`, `src/components/dashboard/BadgesLevelCard.tsx`, `src/components/profile/GoldenIDCard.tsx`, `src/components/navigation/UserAvatarMenu.tsx`, `src/components/header/MegaMenuAccount.tsx`, `src/components/home/CategorySelectorSection.tsx`, `src/components/tier/TierProgressCard.tsx`, `src/hooks/useTierProgress.ts`, `src/pages/Auth.tsx`, `src/pages/Index.tsx`, `src/components/__tests__/ModeSwitcher.colors.test.tsx`: remove combined-mode branches; everywhere it appeared as a UI option, drop it.
-- One-shot DB normalization migration: `UPDATE user_preferences SET selected_mode='broker' WHERE selected_mode='investor_broker'`.
+Same cleanup applied to `project_images` (drop forbidden URLs) and `project_documents` (drop placeholder/fake brochures already covered by the Brochure Section Logic standard).
 
-## 3. Mode-aware global navigation
+## 2. Developer onboarding & approval (the trust model)
 
-Make navigation react to the single selected mode:
+```text
+Sales-rep signs up (/register/developer)
+        │
+        ▼
+Submits company profile + logo + description + first project pack
+        │
+        ▼
+Status: pending_review  ─── Owner reviews ONCE ───▶ status: approved + trust_level: auto_publish
+        │
+        ▼
+From now on: every edit, every new project, every file → publishes LIVE instantly
+                                                            (no further approval)
+```
 
-- **Investor mode**: nav shows Properties, Market Intelligence, Investor Dashboard, Guides. Hide broker-only and developer-only links.
-- **Broker mode**: nav shows Broker Toolkit / Broker CRM / Broker Education / **Careers**. Hide developer portal entry.
-- **Developer mode**: nav shows Developer Hub / Developer Reports / **Careers — Developer Representative**. Hide broker tools.
+Schema changes on `developers`:
+- `trust_level enum('pending','auto_publish','suspended')` default `pending`
+- `approved_at`, `approved_by`, `last_auto_publish_at`
 
-Touchpoints: the global header (`src/components/header/*`, `MegaMenuAccount.tsx`), `OwnerSidebarNav` stays admin-only and untouched. Homepage hero CTAs in `src/pages/Index.tsx` swap target route based on `mode`.
+Edge function `developer-auto-publish` (replaces draft-first flow for trusted devs):
+- Validates owner of submission == approved sales-rep for that developer
+- If `trust_level = 'auto_publish'`: writes straight into `projects` + `project_images` + `project_documents`, sets `is_published = true`, bumps `source_updated_at`
+- If `trust_level = 'pending'`: routes to existing `developer_project_submissions` review queue
+- Always logs to `developer_activity_log` with diff payload
+- Owner can hit "Suspend trust" → flips back to draft-first
 
-## 4. Careers — Developer Representative
+This keeps the Owner's one-click approval as the single trust gate the user described, while satisfying the existing "Project Submission" standard by keeping the draft pipeline alive for un-trusted reps.
 
-- New page `src/pages/CareersDeveloperRep.tsx` (mirrors the existing broker careers page styling — champagne, ink, gold hairline) describing the developer-rep role + apply CTA pointing to the existing lead form.
-- Route `/careers/developer-representative` registered in `src/routes/PublicRoutes.tsx`.
-- Header link added when `isDeveloperMode === true`; also surfaced as a card on the developer-hub overview.
+## 3. Sales-rep upload UI (premium champagne+gold)
 
-## 5. Memory / standards updates
+Single shell at `/developer-hub` (already exists, gets full redesign), using locked palette `#FDFBF7 / #F7F2EA / #EFE6D6 / #B89555 / ink #1A1A1A`, Inter only, 1px gold hairlines, cream raised surfaces, `<IconTile tone="gold">`, no gold fills.
 
-- Update `mem://architecture/auth/forced-category-selection-standard` → now applies to anonymous users too, three options only.
-- Update `mem://features/auth/login-first-mode-and-crm-categorization` → mode pick happens pre-login; CRM lead created on first login sync.
-- Add a one-liner to Core index: "Mode = investor | broker | developer (no combined mode). Picker is forced on first visit."
+Sections (sidebar nav):
+1. **Company Profile** — logo (uses locked `developerLogo.ts` allow-list), description, website, languages, nationality
+2. **Projects** — list + "Add project" wizard:
+   - Step 1 Basics: name, location, type, handover, price range, unit types
+   - Step 2 Media: cover, gallery, floor plans (drag-drop, 50MB/file, 200MB/session — already enforced by `developerFileValidation.ts`)
+   - Step 3 Brochure & documents
+   - Step 4 Review & **Publish** (button text changes based on `trust_level`: "Submit for approval" vs "Publish live")
+3. **Edits to live projects** — inline editor on each card, "Save & publish" autosaves and pushes live
+4. **Launches & events** — existing flow, restyled
+5. **Activity** — read-only log of what auto-published, with rollback
 
-## Out of scope
+Every form input follows Institutional Form Standard (ink on champagne). No raw white. No purple (purple reserved for AI). Status badges use semantic palette (Emerald=live, Amber=pending, Red=suspended).
 
-- Owner / admin role surfaces (separate `useUserRole`), CRM internals, and the `/owner/users` analytics hub built last turn — all untouched.
-- Visual redesign of the picker — keeps current champagne+gold styling.
-- Re-skin of every deep page; this plan covers nav + homepage + dashboard entrypoints. Page-level mode gating beyond that can follow in a second pass.
+## 4. Public website reflection
 
-## Technical details
+Already wired: public `/developers/:slug` and `/projects/:slug` read from `projects` + `developers` with `is_published=true` and `deleted_at IS NULL`. After cleanup migration + auto-publish edge function, edits show up immediately because:
+- React Query keys for `['projects', slug]` and `['developer', slug]` invalidated by Supabase Realtime subscription on `projects` table (already enabled per realtime memory)
+- Add realtime channel for `developers` so logo/description changes propagate without refresh
 
-- DB migration: single `UPDATE` on `user_preferences`. No schema change (column stays `text`).
-- Type change `UserMode` is breaking — TS compile will surface every remaining reference; sweep with `rg "investor_broker|isCombinedMode"`.
-- `PopupCoordinatorContext` priority: mode-selection-modal must outrank cookie banner and any marketing popups on first paint.
-- E2E sanity: (a) fresh incognito → picker appears, can't dismiss, selecting Broker re-skins nav; (b) login after selection → `user_preferences` upserted and `crm_leads` row created via `register-mode-lead`; (c) existing `investor_broker` user logs in → silently migrated to `broker`.
+## 5. End-to-end tests
+
+Playwright spec `tests/developer-portal-e2e.spec.ts`:
+1. Sign up as new sales-rep → submit company → submit project → assert `status=pending_review`
+2. Owner approves → assert `trust_level=auto_publish`
+3. Sales-rep edits project price → assert public `/projects/:slug` shows new price within 5s (realtime)
+4. Sales-rep uploads new brochure → assert it appears on public page
+5. Sales-rep creates 2nd project → assert it's published live with no owner action
+6. Owner clicks Suspend → assert next edit returns to draft queue
+
+Vitest unit tests for the auto-publish edge function (trust gating, validation, RLS bypass via service role only when owner already approved).
+
+## 6. Files touched
+
+**New**
+- `supabase/migrations/<ts>_developer_trust_and_cleanup.sql` — trust_level + soft-delete + data cleanup
+- `supabase/functions/developer-auto-publish/index.ts`
+- `src/pages/developer-hub/DeveloperProjectWizard.tsx`
+- `src/pages/developer-hub/DeveloperLiveEditor.tsx`
+- `src/pages/owner/DeveloperTrustPanel.tsx` (approve / suspend / restore)
+- `src/hooks/useDeveloperAutoPublish.ts`
+- `tests/developer-portal-e2e.spec.ts`
+- `mem://features/developer-portal/auto-publish-trust-standard.md`
+
+**Edited**
+- `src/pages/developer-hub/DeveloperHubShell.tsx` — full champagne restyle, IconTile, hairlines
+- `src/pages/developer-hub/DeveloperHubOverview.tsx`
+- `src/pages/developer-hub/DeveloperCompanyRegistration.tsx`
+- `src/pages/DeveloperPortal.tsx` — strip legacy chrome, route to new wizard
+- `src/components/developer-portal/*` — restyle, remove gold fills, fix contrast
+- `src/routes/DeveloperHubRoutes.tsx` — add wizard + live editor routes
+- Memory index
+
+---
+
+## Technical notes
+
+- Soft-delete column added with index `WHERE deleted_at IS NULL` for query speed
+- All cleanup wrapped in single transaction with `SAVEPOINT` per batch
+- Auto-publish edge function uses `requireOwnerAuth` only for suspend/restore; sales-rep auth checked via session JWT + developer_sales_reps mapping
+- Realtime publication already covers `projects`; migration adds `developers`
+- No new secrets needed
+- Champagne palette already in `index.css` tokens — no token changes, only component-level cleanup

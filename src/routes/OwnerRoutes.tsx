@@ -56,6 +56,7 @@ const AIToolsControlPanel = lazy(() => import("@/pages/owner/AIToolsControlPanel
 const EncryptionAuditDashboard = lazy(() => import("@/pages/owner/EncryptionAuditDashboard"));
 const GlobalAuditDashboard = lazy(() => import("@/pages/owner/GlobalAuditDashboard"));
 const DeveloperModerationQueue = lazy(() => import("@/pages/owner/DeveloperModerationQueue"));
+const DeveloperTrustPanel = lazy(() => import("@/pages/owner/DeveloperTrustPanel"));
 const APISecurityDashboard = lazy(() => import("@/pages/owner/APISecurityDashboard"));
 const IncidentReadinessPanel = lazy(() => import("@/pages/owner/IncidentReadinessPanel"));
 const ZeroTrustAuditPanel = lazy(() => import("@/pages/owner/ZeroTrustAuditPanel"));
@@ -182,6 +183,7 @@ export const OwnerRoutes = () => (
     <Route path="encryption-audit" element={<EncryptionAuditDashboard />} />
     <Route path="global-audit" element={<GlobalAuditDashboard />} />
     <Route path="developer-moderation" element={<DeveloperModerationQueue />} />
+    <Route path="developer-trust" element={<DeveloperTrustPanel />} />
     <Route path="api-security" element={<APISecurityDashboard />} />
     <Route path="incident-readiness" element={<IncidentReadinessPanel />} />
     <Route path="zero-trust-audit" element={<ZeroTrustAuditPanel />} />

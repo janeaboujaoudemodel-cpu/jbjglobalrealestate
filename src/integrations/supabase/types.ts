@@ -12619,6 +12619,8 @@ export type Database = {
       developers: {
         Row: {
           admin_email: string | null
+          approved_at: string | null
+          approved_by: string | null
           ceo_name: string | null
           completed_projects: number | null
           created_at: string
@@ -12632,6 +12634,7 @@ export type Database = {
           id: string
           instagram_url: string | null
           is_hidden: boolean | null
+          last_auto_publish_at: string | null
           last_enriched_at: string | null
           license_number: string | null
           linkedin_url: string | null
@@ -12657,6 +12660,7 @@ export type Database = {
           slug: string
           specialization: string | null
           total_units_delivered: number | null
+          trust_level: Database["public"]["Enums"]["developer_trust_level"]
           upcoming_units: number | null
           updated_at: string
           website_url: string | null
@@ -12664,6 +12668,8 @@ export type Database = {
         }
         Insert: {
           admin_email?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
           ceo_name?: string | null
           completed_projects?: number | null
           created_at?: string
@@ -12677,6 +12683,7 @@ export type Database = {
           id?: string
           instagram_url?: string | null
           is_hidden?: boolean | null
+          last_auto_publish_at?: string | null
           last_enriched_at?: string | null
           license_number?: string | null
           linkedin_url?: string | null
@@ -12702,6 +12709,7 @@ export type Database = {
           slug: string
           specialization?: string | null
           total_units_delivered?: number | null
+          trust_level?: Database["public"]["Enums"]["developer_trust_level"]
           upcoming_units?: number | null
           updated_at?: string
           website_url?: string | null
@@ -12709,6 +12717,8 @@ export type Database = {
         }
         Update: {
           admin_email?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
           ceo_name?: string | null
           completed_projects?: number | null
           created_at?: string
@@ -12722,6 +12732,7 @@ export type Database = {
           id?: string
           instagram_url?: string | null
           is_hidden?: boolean | null
+          last_auto_publish_at?: string | null
           last_enriched_at?: string | null
           license_number?: string | null
           linkedin_url?: string | null
@@ -12747,6 +12758,7 @@ export type Database = {
           slug?: string
           specialization?: string | null
           total_units_delivered?: number | null
+          trust_level?: Database["public"]["Enums"]["developer_trust_level"]
           upcoming_units?: number | null
           updated_at?: string
           website_url?: string | null
@@ -25405,6 +25417,8 @@ export type Database = {
           construction_status: string | null
           cover_image_url: string | null
           created_at: string
+          data_quality_flags: Json
+          deleted_at: string | null
           description: string | null
           detail_fetched_at: string | null
           developer_id: string | null
@@ -25498,6 +25512,8 @@ export type Database = {
           construction_status?: string | null
           cover_image_url?: string | null
           created_at?: string
+          data_quality_flags?: Json
+          deleted_at?: string | null
           description?: string | null
           detail_fetched_at?: string | null
           developer_id?: string | null
@@ -25591,6 +25607,8 @@ export type Database = {
           construction_status?: string | null
           cover_image_url?: string | null
           created_at?: string
+          data_quality_flags?: Json
+          deleted_at?: string | null
           description?: string | null
           detail_fetched_at?: string | null
           developer_id?: string | null
@@ -36107,6 +36125,10 @@ export type Database = {
           show_masked: boolean
         }[]
       }
+      get_developer_trust_level: {
+        Args: { _developer_id: string }
+        Returns: Database["public"]["Enums"]["developer_trust_level"]
+      }
       get_document_by_token: {
         Args: { p_token: string }
         Returns: {
@@ -36625,6 +36647,7 @@ export type Database = {
         | "registration"
         | "contract_signature"
         | "other"
+      developer_trust_level: "pending" | "auto_publish" | "suspended"
       esign_audit_action:
         | "created"
         | "sent"
@@ -37251,6 +37274,7 @@ export const Constants = {
         "contract_signature",
         "other",
       ],
+      developer_trust_level: ["pending", "auto_publish", "suspended"],
       esign_audit_action: [
         "created",
         "sent",
