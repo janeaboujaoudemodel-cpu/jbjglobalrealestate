@@ -546,8 +546,11 @@ const MeetTheTeam: React.FC = () => {
                           onReadMore={handleReadMore}
                           isInternalUser={isInternalUser}
                           onDirectClick={handleDirectClick}
+                          isOwner={isOwner}
+                          hidden={isOwner && (!visibility.isMemberVisible(member.id) || (visibility.isAiHidden && member.isAI))}
                         />
                       ))}
+
                     </div>
                   </div>
                 </motion.div>
