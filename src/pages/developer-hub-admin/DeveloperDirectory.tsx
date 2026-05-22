@@ -1,13 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useState, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { Sparkles, ExternalLink, ImageOff } from "lucide-react";
+import { Sparkles, ExternalLink, ImageOff, Zap, CheckSquare, Square } from "lucide-react";
 
 interface Row {
   id: string;
@@ -21,8 +22,11 @@ interface Row {
 
 export default function DeveloperDirectory() {
   const qc = useQueryClient();
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [onlyBroken, setOnlyBroken] = useState(false);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [brokenImgs, setBrokenImgs] = useState<Set<string>>(new Set());
 
   const { data, isLoading } = useQuery({
     queryKey: ["dev-hub-directory", search, onlyBroken],
@@ -30,6 +34,7 @@ export default function DeveloperDirectory() {
       let q = supabase
         .from("developers")
         .select("id, name, slug, logo_url, website_url, description, last_enriched_at")
+        .eq("is_hidden", false)
         .order("name")
         .limit(300);
       if (search.trim()) q = q.ilike("name", `%${search.trim()}%`);
@@ -40,20 +45,51 @@ export default function DeveloperDirectory() {
     },
   });
 
+  const rows = data ?? [];
+  const allSelected = rows.length > 0 && rows.every((r) => selected.has(r.id));
+  const someSelected = selected.size > 0 && !allSelected;
+
+  function toggleOne(id: string) {
+    setSelected((s) => {
+      const next = new Set(s);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  }
+  function toggleAll() {
+    setSelected((s) => {
+      if (rows.every((r) => s.has(r.id))) return new Set();
+      return new Set(rows.map((r) => r.id));
+    });
+  }
+  function clearSelection() {
+    setSelected(new Set());
+  }
+
   const rebuild = useMutation({
-    mutationFn: async (developerId: string) => {
-      const { data, error } = await supabase.functions.invoke("developer-site-rebuild", {
-        body: { developer_id: developerId, preview: true },
-      });
-      if (error) throw error;
-      return data;
+    mutationFn: async (developerIds: string[]) => {
+      let done = 0;
+      for (let i = 0; i < developerIds.length; i += 5) {
+        const slice = developerIds.slice(i, i + 5);
+        const { error } = await supabase.functions.invoke("developer-site-rebuild", {
+          body: { developer_ids: slice, preview: true },
+        });
+        if (error) throw error;
+        done += slice.length;
+      }
+      return { count: done };
     },
-    onSuccess: () => {
-      toast.success("Scrape staged — review in Site Rebuild queue");
+    onSuccess: (r) => {
+      toast.success(`Staged ${r.count} for review`, {
+        action: { label: "Open queue", onClick: () => navigate("/developer-hub-admin/enrichment") },
+      });
+      clearSelection();
       qc.invalidateQueries({ queryKey: ["dev-enrichment-logs"] });
     },
     onError: (e: Error) => toast.error(e.message),
   });
+
+  const selectedList = useMemo(() => Array.from(selected), [selected]);
 
   return (
     <div className="space-y-4">
@@ -71,53 +107,95 @@ export default function DeveloperDirectory() {
         >
           {onlyBroken ? "Showing broken only" : "Show broken only"}
         </Button>
+
+        <Button size="sm" variant="outline" onClick={toggleAll}>
+          {allSelected ? <CheckSquare className="size-4 mr-1" /> : <Square className="size-4 mr-1" />}
+          {allSelected ? "Unselect all" : "Select all"}
+        </Button>
+
+        {selected.size > 0 && (
+          <>
+            <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">
+              {selected.size} selected
+            </Badge>
+            <Button
+              size="sm"
+              variant="gold"
+              disabled={rebuild.isPending}
+              onClick={() => rebuild.mutate(selectedList.slice(0, 25))}
+            >
+              <Zap className="size-3 mr-1" />
+              {rebuild.isPending ? "Rebuilding…" : `Rebuild ${Math.min(selected.size, 25)} selected`}
+            </Button>
+            <Button size="sm" variant="outline" onClick={clearSelection}>Clear</Button>
+          </>
+        )}
+
         <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] ml-auto">
-          {data?.length ?? 0} shown
+          {rows.length} shown
         </Badge>
       </Card>
 
       {isLoading && <p className="text-sm text-[#1A1A1A]/70">Loading…</p>}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-        {data?.map((d) => (
-          <Card key={d.id} className="p-4 bg-[#F7F2EA] border border-[#B89555]/30">
-            <div className="flex items-start gap-3">
-              <div className="size-14 shrink-0 rounded border border-[#B89555]/30 bg-[#FDFBF7] p-1 flex items-center justify-center overflow-hidden">
-                {d.logo_url ? (
-                  <img src={d.logo_url} alt={d.name} className="max-w-full max-h-full object-contain" />
-                ) : (
-                  <ImageOff className="size-6 text-[#1A1A1A]/40" />
-                )}
+        {rows.map((d) => {
+          const isSel = selected.has(d.id);
+          const logoOk = d.logo_url && !brokenImgs.has(d.id);
+          return (
+            <Card
+              key={d.id}
+              className={`p-4 bg-[#F7F2EA] border ${isSel ? "border-[#B89555] ring-1 ring-[#B89555]" : "border-[#B89555]/30"}`}
+            >
+              <div className="flex items-start gap-3">
+                <Checkbox
+                  checked={isSel}
+                  onCheckedChange={() => toggleOne(d.id)}
+                  className="mt-1"
+                  aria-label={`Select ${d.name}`}
+                />
+                <div className="size-14 shrink-0 rounded border border-[#B89555]/30 bg-[#FDFBF7] p-1 flex items-center justify-center overflow-hidden">
+                  {logoOk ? (
+                    <img
+                      src={d.logo_url!}
+                      alt={d.name}
+                      className="max-w-full max-h-full object-contain"
+                      onError={() => setBrokenImgs((s) => new Set(s).add(d.id))}
+                    />
+                  ) : (
+                    <ImageOff className="size-6 text-[#1A1A1A]/40" />
+                  )}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="font-semibold text-[#1A1A1A] truncate">{d.name}</p>
+                  <p className="text-xs text-[#1A1A1A]/60 truncate">{d.slug}</p>
+                  {d.website_url && (
+                    <a href={d.website_url} target="_blank" rel="noreferrer" className="text-xs text-[#1A1A1A]/70 underline flex items-center gap-1 mt-1">
+                      <ExternalLink className="size-3" />
+                      {(() => { try { return new URL(d.website_url).hostname; } catch { return d.website_url; } })()}
+                    </a>
+                  )}
+                </div>
               </div>
-              <div className="min-w-0 flex-1">
-                <p className="font-semibold text-[#1A1A1A] truncate">{d.name}</p>
-                <p className="text-xs text-[#1A1A1A]/60 truncate">{d.slug}</p>
-                {d.website_url && (
-                  <a href={d.website_url} target="_blank" rel="noreferrer" className="text-xs text-[#1A1A1A]/70 underline flex items-center gap-1 mt-1">
-                    <ExternalLink className="size-3" />
-                    {(() => { try { return new URL(d.website_url).hostname; } catch { return d.website_url; } })()}
-                  </a>
-                )}
+              <p className="text-xs text-[#1A1A1A]/75 mt-2 line-clamp-2">
+                {d.description ?? <span className="italic text-[#1A1A1A]/40">No description</span>}
+              </p>
+              <div className="mt-3 flex gap-2">
+                <Button
+                  size="sm"
+                  variant="gold"
+                  onClick={() => rebuild.mutate([d.id])}
+                  disabled={rebuild.isPending}
+                >
+                  <Sparkles className="size-3 mr-1" /> Rebuild from site
+                </Button>
+                <Button asChild size="sm" variant="outline">
+                  <Link to={`/developer-hub-admin/profile/${d.slug}`}>Profile</Link>
+                </Button>
               </div>
-            </div>
-            <p className="text-xs text-[#1A1A1A]/75 mt-2 line-clamp-2">
-              {d.description ?? <span className="italic text-[#1A1A1A]/40">No description</span>}
-            </p>
-            <div className="mt-3 flex gap-2">
-              <Button
-                size="sm"
-                variant="gold"
-                onClick={() => rebuild.mutate(d.id)}
-                disabled={rebuild.isPending}
-              >
-                <Sparkles className="size-3 mr-1" /> Rebuild from site
-              </Button>
-              <Button asChild size="sm" variant="outline">
-                <Link to={`/developer-hub-admin/profile/${d.slug}`}>Profile</Link>
-              </Button>
-            </div>
-          </Card>
-        ))}
+            </Card>
+          );
+        })}
       </div>
     </div>
   );
