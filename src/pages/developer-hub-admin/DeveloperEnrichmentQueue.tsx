@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Sparkles, Check, X, RefreshCw } from "lucide-react";
+import { Sparkles, Check, X, RefreshCw, Zap } from "lucide-react";
 
 interface LogRow {
   id: string;
