@@ -40,7 +40,7 @@ const QUICK_ACTIONS: QuickAction[] = [
   { label: "Automations", description: "CRM automation rules", icon: Zap, path: "/owner/automations", color: "text-yellow-600" },
   { label: "Analytics", description: "Business analytics dashboard", icon: BarChart3, path: "/owner/analytics", color: "text-cyan-600" },
   { label: "Marketing", description: "Marketing hub & campaigns", icon: Megaphone, path: "/owner/marketing-hub", color: "text-rose-600" },
-  { label: "Brokers", description: "Broker management", icon: Users, path: "/brokers", color: "text-indigo-600" },
+  
   { label: "Employee Hub", description: "Team & HR management", icon: Building2, path: "/employee-hub", color: "text-teal-600" },
   { label: "Leads Inbox", description: "All CRM leads inbox", icon: FileText, path: "/owner/crm/leads", color: "text-orange-600" },
   { label: "CRM Chat", description: "Client communications", icon: MessageSquare, path: "/owner/crm", color: "text-violet-600" },
