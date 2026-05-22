@@ -174,6 +174,8 @@ export default function DeveloperProfilePage() {
         parent_company: form.parent_company ?? null,
         office_phone: form.office_phone ?? null,
         whatsapp: form.whatsapp ?? null,
+        whatsapp_group_url: form.whatsapp_group_url ?? null,
+        telegram_group_url: form.telegram_group_url ?? null,
         admin_email: form.admin_email ?? null,
         office_address: form.office_address ?? null,
         google_maps_url: form.google_maps_url ?? null,
