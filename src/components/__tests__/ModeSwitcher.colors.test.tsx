@@ -51,12 +51,7 @@ const PALETTE: Record<
     rowFrom: "#E8F0FE",
     dark: "#1E3A8A",
   },
-  investor_broker: {
-    label: "Mode: Investor + Broker",
-    base: "#16A34A",
-    rowFrom: "#E5F8EC",
-    dark: "#14532D",
-  },
+  // investor_broker mode removed — strictly 3 categories.
   developer: {
     label: "Mode: Developer",
     base: "#7C3AED",
