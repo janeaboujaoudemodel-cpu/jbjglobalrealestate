@@ -9,7 +9,6 @@ export interface BrokerInviteEmailInput {
   ownerName: string;
   activationUrl: string;
   otp: string;
-  expiresInMinutes: number;
 }
 
 export function renderBrokerInviteEmail(i: BrokerInviteEmailInput): {
@@ -38,7 +37,7 @@ export function renderBrokerInviteEmail(i: BrokerInviteEmailInput): {
   <tr>
     <td align="center" style="padding:26px 44px 8px">
       <div style="display:inline-block;padding:20px 38px;background:#EFE6D6;border:1px solid #B89555;border-radius:12px;font-size:30px;letter-spacing:.6em;font-weight:600;color:#1A1A1A">${i.otp}</div>
-      <div style="font-size:11px;color:#1A1A1A;opacity:.65;margin-top:12px;letter-spacing:.2em;text-transform:uppercase">Expires in ${i.expiresInMinutes} minutes</div>
+      <div style="font-size:11px;color:#1A1A1A;opacity:.65;margin-top:12px;letter-spacing:.2em;text-transform:uppercase">Valid until access is used, resent, revoked, or blocked</div>
     </td>
   </tr>
   <tr>
@@ -50,7 +49,7 @@ export function renderBrokerInviteEmail(i: BrokerInviteEmailInput): {
   <tr>
     <td style="padding:22px 44px 8px">
       <div style="height:1px;background:rgba(184,149,85,0.45);margin:0 0 16px"></div>
-      <p style="margin:0;font-size:12px;line-height:1.7;color:#1A1A1A;opacity:.7">For your security, this passcode and link can only be used once. If you did not expect this invitation, you can safely ignore this email — no account will be created without your action.</p>
+      <p style="margin:0;font-size:12px;line-height:1.7;color:#1A1A1A;opacity:.7">For your security, this passcode and link remain active until the account is activated, the owner resends access, or access is revoked/blocked. If you did not expect this invitation, you can safely ignore this email — no account will be created without your action.</p>
     </td>
   </tr>
   <tr>
