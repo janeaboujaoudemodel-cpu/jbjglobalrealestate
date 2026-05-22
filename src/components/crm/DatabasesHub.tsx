@@ -7,6 +7,7 @@ import UploadDatabaseDialog from "./UploadDatabaseDialog";
 import GrantBrokerAccessDialog from "./GrantBrokerAccessDialog";
 import BrokerGrantsManagerDialog from "./BrokerGrantsManagerDialog";
 import DatabaseRowsGrid from "./DatabaseRowsGrid";
+import LeadPublishQueue from "./LeadPublishQueue";
 import { toast } from "sonner";
 import { formatDisplayDate as formatDate } from "@/utils/formatDate";
 import { CRMToolbar } from "@/components/ui/crm-toolbar";
