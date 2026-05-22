@@ -4412,6 +4412,16 @@ a[class*="bg-red-"]:hover {
   color: #1A1A1A !important;
 }
 
+[data-surface="champagne"] nav button[data-sidebar-collapse-control],
+[data-surface="champagne"] nav button[data-sidebar-collapse-control] *,
+[data-surface="champagne"] nav button[data-sidebar-collapse-control]:hover,
+[data-surface="champagne"] nav button[data-sidebar-collapse-control]:hover * {
+  color: #B89555 !important;
+  stroke: #B89555 !important;
+  background-color: transparent !important;
+  border: 0 !important;
+}
+
 /* ============================================================
  * GOLD-FILL DEBRAND (site-wide, front + back)
  * Dominant gold fills are removed everywhere. Gold survives only

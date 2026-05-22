@@ -1285,10 +1285,11 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           {/* Collapse — borderless gold text button with premium icon */}
           <button
             data-no-contrast-guard
+            data-sidebar-collapse-control
             onClick={toggleCollapse}
             aria-label="Collapse navigation"
-            className="mt-2 flex items-center justify-center gap-1.5 w-full px-2 py-[6px] rounded-lg text-[10px] font-semibold tracking-[0.16em] uppercase bg-transparent border-0 transition-colors"
-            style={{ color: '#B89555' }}
+            className="jbj-sidebar-collapse-control mt-2 flex items-center justify-center gap-1.5 w-full px-2 py-[6px] rounded-lg text-[10px] font-semibold tracking-[0.16em] uppercase bg-transparent border-0 transition-colors"
+            style={{ color: '#B89555', backgroundColor: 'transparent', border: '0' }}
           >
             <PanelLeftClose className="w-3.5 h-3.5" strokeWidth={1.75} style={{ color: '#B89555' }} />
             <span style={{ color: '#B89555' }}>Collapse</span>
