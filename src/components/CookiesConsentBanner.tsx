@@ -51,6 +51,15 @@ const CookiesConsentBanner = () => {
     }
   }, [requestToShow]);
 
+  // Flag the body while the banner is on screen so other floating
+  // widgets (chat bubble, voice concierge) can move out of the way on mobile.
+  useEffect(() => {
+    if (shouldShow && isVisible) {
+      document.body.setAttribute('data-cookie-banner-open', '1');
+      return () => document.body.removeAttribute('data-cookie-banner-open');
+    }
+  }, [shouldShow, isVisible]);
+
   const saveConsent = async (status: ConsentStatus, prefs?: CookiePreferences) => {
     const finalPrefs = prefs || preferences;
     const consentData = {
@@ -131,12 +140,19 @@ const CookiesConsentBanner = () => {
                     <p className="text-[#1A1A1A]/90 text-xs sm:text-sm leading-relaxed mb-3">
                       We use cookies to enhance your experience. Essential cookies are required for the website to function.
                     </p>
-                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                    <div className="grid grid-cols-1 sm:flex sm:flex-row gap-2 sm:gap-3">
                       <Button
                         onClick={handleAcceptAll}
                         className="bg-[#EFE6D6] text-[#1A1A1A] font-semibold hover:brightness-110 transition-all border border-[#B89555]/60 shadow-md px-4 sm:px-6 text-sm whitespace-nowrap"
                       >
                         Accept All
+                      </Button>
+                      <Button
+                        onClick={handleRejectNonEssential}
+                        variant="outline"
+                        className="bg-[#FDFBF7] text-[#1A1A1A] font-semibold border border-[#1A1A1A]/30 hover:bg-[#EFE6D6] hover:border-[#1A1A1A]/50 transition-all shadow-sm px-4 sm:px-6 text-sm whitespace-nowrap"
+                      >
+                        Reject All
                       </Button>
                       <Button
                         onClick={() => setShowPreferences(true)}

@@ -4115,6 +4115,16 @@ a[class*="bg-red-"]:hover {
   background-color: #0A0A0A !important;
 }
 
+/* While cookie banner is on screen, hide overlapping floating launchers on
+   small screens so the banner buttons and page content remain tappable. */
+@media (max-width: 767px) {
+  body[data-cookie-banner-open="1"] [data-floating-launcher],
+  body[data-cookie-banner-open="1"] [data-chrome="voice-concierge"],
+  body[data-chrome="cookie-banner"] ~ * [data-floating-launcher] {
+    display: none !important;
+  }
+}
+
 /* =====================================================================
    ARBITRARY-VALUE INK ALPHA GUARD — rest + hover
    ---------------------------------------------------------------------
