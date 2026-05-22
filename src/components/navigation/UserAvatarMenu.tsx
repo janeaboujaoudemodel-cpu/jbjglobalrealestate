@@ -216,6 +216,9 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
 
         {/* Dashboard — direct link to user's role/mode-aware dashboard */}
         <Row to={dashboardHref} icon={LayoutDashboard} label="Dashboard" badge={activityCount} />
+        <Row to="/profile" icon={User} label="My Profile" />
+        <Row to="/profile?tab=settings" icon={Settings} label="Settings" />
+
 
         <DropdownMenuSeparator className="bg-[#EFE6D6] my-1" />
         <DropdownMenuItem
