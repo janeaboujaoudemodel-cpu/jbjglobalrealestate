@@ -73,8 +73,8 @@ const AreasWeCover = () => {
                 </div>
               )}
 
-              {/* High-contrast gradient — stronger floor for legibility */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/55 to-black/10" />
+              {/* Soft top gradient so badges read clearly */}
+              <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/55 to-transparent pointer-events-none" />
 
               {/* Badges — cream + ink + thin gold border (No-Gold-Fills rule) */}
               <div className="absolute top-3 right-3 flex flex-col gap-1.5 items-end">
@@ -92,15 +92,22 @@ const AreasWeCover = () => {
                 )}
               </div>
 
-              <div className="absolute bottom-0 left-0 right-0 p-4">
-
-                <h3 className="text-white font-extrabold text-lg md:text-xl leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.75)]">
-                  {area.name}
-                </h3>
-                <span className="mt-2 inline-flex items-center gap-1.5 text-[12px] font-bold text-white drop-shadow-[0_1px_6px_rgba(0,0,0,0.7)] group-hover:gap-2 transition-all">
-                  Explore area
-                  <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
-                </span>
+              {/* Solid ink caption bar — maximum legibility for area name + count */}
+              <div className="absolute bottom-0 left-0 right-0 bg-[#1A1A1A]/92 backdrop-blur-[2px] border-t border-[#B89555]/40 px-4 py-3">
+                <div className="flex items-end justify-between gap-3">
+                  <div className="min-w-0">
+                    <h3 className="text-[#FDFBF7] font-extrabold text-lg md:text-xl leading-tight tracking-tight truncate">
+                      {area.name}
+                    </h3>
+                    <p className="mt-0.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#B89555]">
+                      {(area.propertyCount ?? 0).toLocaleString()} {(area.propertyCount ?? 0) === 1 ? "project" : "projects"} available
+                    </p>
+                  </div>
+                  <span className="shrink-0 inline-flex items-center gap-1.5 text-[12px] font-bold text-[#FDFBF7] group-hover:gap-2 transition-all">
+                    Explore
+                    <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+                  </span>
+                </div>
               </div>
             </Link>
           ))}
