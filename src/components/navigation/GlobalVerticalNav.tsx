@@ -1031,55 +1031,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
         className="flex-1 overflow-y-auto jj-scrollbar-gold jj-scrollbar-always-visible overscroll-contain min-h-0"
         style={{ scrollbarGutter: "stable" }}
       >
-        {/* ── My Shortcuts — inline accordion (expands within sidebar, no popout) ── */}
-        <div className="px-2.5 pt-3 pb-1.5">
-          <button
-            type="button"
-            onClick={() => setShortcutsExpanded((v) => !v)}
-            aria-expanded={shortcutsExpanded}
-            className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12px] font-bold w-full transition-all duration-200 ${
-              shortcutsExpanded
-                ? "bg-gradient-to-r from-gold/25 to-gold/15 text-[#1A1A1A] border border-[#B89555]/50 shadow-md shadow-gold/10"
-                : "text-[#1A1A1A] hover:text-[#1A1A1A] border border-dashed border-[#B89555]/40 hover:border-[#B89555]/60 bg-[#EFE6D6]/[0.06] hover:bg-[#EFE6D6]/[0.10]"
-            }`}
-          >
-            <div className={`w-6 h-6 rounded-lg flex items-center justify-center ${shortcutsExpanded ? 'bg-[#EFE6D6]/20' : 'bg-[#EFE6D6]/10'}`}>
-              <Zap className="w-3.5 h-3.5 text-[#1A1A1A]" />
-            </div>
-            <span className="flex-1 text-left tracking-wide">My Shortcuts</span>
-            <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${shortcutsExpanded ? "rotate-0 text-[#1A1A1A]" : "-rotate-90 text-[#1A1A1A]/70"}`} />
-          </button>
+        {/* My Shortcuts removed — items reorganized into MY ACCOUNT section */}
 
-          <div className={`overflow-hidden transition-all duration-300 ease-out ${shortcutsExpanded ? 'max-h-[3000px] opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
-            <div className="space-y-1">
-              {filterShortcutGroups(CANONICAL_SHORTCUT_GROUPS, {
-                isAuthenticated: !!session,
-                isOwner,
-                isBroker,
-                isInvestor,
-                isDeveloperMode,
-                mode,
-              }).flatMap((group) => group.items).map((link) => {
-                const Icon = link.icon;
-                const linkActive = isRouteActive(link.href);
-                return (
-                  <Link
-                    key={link.href + link.label}
-                    to={link.href}
-                    className={`flex items-center gap-2 px-3 py-1.5 text-[12px] tracking-wide transition-colors ${
-                      linkActive
-                        ? "text-[#B89555] font-semibold"
-                        : "text-[#B89555]/90 font-medium hover:text-[#B89555]"
-                    }`}
-                  >
-                    <Icon className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#B89555' }} />
-                    <span className="flex-1 truncate">{link.label}</span>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        </div>
+
 
 
         {/* ── Highlighted Hubs — color-coded pills ── */}
