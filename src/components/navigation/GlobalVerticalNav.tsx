@@ -1340,16 +1340,22 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               <div className="w-5 h-[1px] bg-gradient-to-r from-gold/10 via-gold/50 to-gold/10 mb-0.5" />
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Link to="/contact" className="w-7 h-7 rounded-lg flex items-center justify-center text-[#DC2626] border border-[#DC2626]/40 bg-[#DC2626]/[0.06] hover:text-white hover:bg-[#DC2626] hover:border-[#DC2626] transition-all">
-                    <Headphones className="w-3.5 h-3.5" strokeWidth={2.5} />
+                  <Link
+                    to="/contact"
+                    className="w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70"
+                  >
+                    <Headphones className="w-3.5 h-3.5 text-[hsl(var(--gold))]" strokeWidth={2} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Contact Us</TooltipContent>
               </Tooltip>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Link to="/ticket-hub" className="w-7 h-7 rounded-lg flex items-center justify-center text-[#DC2626] border border-[#DC2626]/40 bg-[#DC2626]/[0.06] hover:text-white hover:bg-[#DC2626] hover:border-[#DC2626] transition-all">
-                    <Ticket className="w-3.5 h-3.5" strokeWidth={2.5} />
+                  <Link
+                    to="/ticket-hub"
+                    className="w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70"
+                  >
+                    <Ticket className="w-3.5 h-3.5 text-[hsl(var(--gold))]" strokeWidth={2} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Support</TooltipContent>
@@ -1357,8 +1363,11 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               {session ? (
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <button onClick={() => { supabase.auth.signOut(); }} className="w-7 h-7 rounded-lg flex items-center justify-center text-red-400 hover:text-white hover:bg-red-500 transition-all">
-                      <LogOut className="w-3.5 h-3.5" />
+                    <button
+                      onClick={() => { supabase.auth.signOut(); }}
+                      className="w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border text-[#DC2626] border-[#DC2626]/45 bg-[#DC2626]/[0.06] hover:text-white hover:bg-[#DC2626] hover:border-[#DC2626]"
+                    >
+                      <LogOut className="w-3.5 h-3.5" strokeWidth={2.25} />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Sign Out</TooltipContent>
@@ -1378,8 +1387,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             {/* Expand button — bare gold icon, no box/border */}
             <button
               data-no-contrast-guard
+              data-sidebar-collapse-control
               onClick={toggleCollapse}
-              className="group flex items-center justify-center transition-all duration-200 mt-1 mb-1 p-1 bg-transparent"
+              className="jbj-sidebar-collapse-control group flex items-center justify-center transition-all duration-200 mt-1 mb-1 p-1 bg-transparent"
               style={{ color: '#B89555', background: 'transparent', border: 'none', boxShadow: 'none' }}
               aria-label="Expand navigation"
               title="Expand navigation"
