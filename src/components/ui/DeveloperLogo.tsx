@@ -75,9 +75,12 @@ export function DeveloperLogo({
     return (
       <div
         className={cn(
-          // Wide 4:3 box so wordmark logos (Emaar, Aldar, Meraas) read fully.
-          // No background, no border — the logo sits cleanly on the photo.
+          // Premium champagne plate with rounded corners + 1px gold hairline.
+          // Wide 4:3 inner box so wordmark logos (Emaar, Aldar, Meraas) read fully.
           "h-12 w-16 inline-flex items-center justify-center overflow-hidden",
+          "rounded-xl bg-[#FDFBF7]/95 backdrop-blur-sm",
+          "border border-[#B89555]/45 px-1.5 py-1",
+          "shadow-[0_2px_10px_rgba(0,0,0,0.18)]",
           className,
         )}
       >
@@ -89,7 +92,7 @@ export function DeveloperLogo({
             setError(true);
             onError?.();
           }}
-          className="block h-full w-full object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]"
+          className="block max-h-full max-w-full w-auto h-auto object-contain"
         />
       </div>
     );
