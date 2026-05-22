@@ -1,75 +1,49 @@
-# Restructure "My Shortcuts" in the vertical sidebar
+## Problem
 
-Single source of truth: `src/config/shortcutsConfig.ts` (consumed by `GlobalVerticalNav`, `GlobalHeader`, `GlobalSearchModal` — so this change is automatically global across desktop, tablet, and mobile).
+On `/broker-dashboard` (and a few other routes like `/admin/*`, `/listing-admin`), the L-shaped frame disappears on desktop — no left sidebar, no top utility bar. Only the bare page content renders.
 
-## New group structure
+## Root cause
 
-Replace the current 10 groups with these (in order):
+`src/config/mainLayoutRoutes.ts` classifies these as "back-office" routes:
 
-### 1. Quick Access — everyone (authenticated)
-- My Tasks → `/my-dashboard#tasks`
-- Notifications (merged with Alerts) → `/my-dashboard#notifications`
-- Inbox → `/owner/inbox` for owner, otherwise `/my-dashboard#inbox`
-- My Calendar → `/ai-calendar`
-- Books → `/education-hub`
-- Favorites → `/favorites`
-- Shortlisted → `/favorites?tab=shortlist`
-- Saved Filters → `/favorites?tab=saved-filters`
-- Compare → `/compare`
-- Activity Log → `/my-dashboard#activity`
-- AI Home Finder → `/quiz`
+```text
+BACK_OFFICE_PREFIXES = ["/admin", "/listing-admin", "/broker-dashboard"]
+```
 
-Removes the duplicate "Quick Access" group entirely (no more Properties / Mortgage Calculator / Search duplicates — those stay in the main mega-menu / header).
+Then `src/components/MainLayout.tsx` wraps the sidebar + utility-bar in `!isBackOfficeRoute && (...)`:
 
-### 2. CRM — owner + broker only
-- CRM Dashboard → `/crm`
+```text
+{!isBackOfficeRoute && (
+  <>
+    <div data-chrome="sidebar"> <GlobalVerticalNav /> </div>
+    <div data-chrome="utility-bar"> <HorizontalUtilityBar /> </div>
+  </>
+)}
+```
 
-(Remove Leads Inbox, CRM Tasks, CRM Calendar, CRM Notes, CRM Reminders, Agency Activity, Employees, Customer Happiness — all already exist inside the CRM page.)
+On desktop the only "header" is the utility bar (the mobile `<GlobalHeader>` is `sm:hidden`). So those routes end up with zero chrome on desktop.
 
-### 3. My Dashboard — single entry, role-aware
-One item labeled **My Dashboard** that routes by mode:
-- owner → `/owner`
-- broker → `/broker-dashboard`
-- investor → `/investor-dashboard`
-- developer → `/developer-portal`
-- default → `/my-dashboard`
+The owner back-office at `/owner/*` and the developer hub at `/developer-portal/*` are different — they live in their own dedicated route shells (`OwnerRoutes`, `DeveloperHubRoutes`) outside `MainLayoutWrapper` and bring their own chrome. The user wants those left as-is ("back end shows as it is currently").
 
-(Replaces the entire "Dashboards" group with its 4 items.)
+## Fix
 
-### 4. Owner Command Center — owner only
-Kept as-is (it is the owner's admin hub, not in scope of the cleanup).
+Make the L-shaped frame (vertical sidebar + horizontal utility bar) unconditional for every route mounted under `MainLayoutWrapper`. No more "back-office" exception for chrome.
 
-### 5. Settings — everyone (authenticated)
-- Settings → `/profile?tab=settings`
+### Edits
 
-(Replaces the "Account" group. My Profile, Favorites, Shortlist, Compare, Support Tickets are reachable from inside Settings / already in Quick Access.)
+**`src/components/MainLayout.tsx`**
+1. Remove the `!isBackOfficeRoute && (...)` wrapper around the sidebar + utility-bar blocks. Always render `<GlobalVerticalNav />` and `<HorizontalUtilityBar />`.
+2. In the `<main>` padding-left classes, drop the `!isBackOfficeRoute ? ... : ""` ternary and always apply the `[body.jj-vertical-nav-active_&]:sm:pl-[200px] [body.jj-vertical-nav-collapsed_&]:sm:pl-[48px]` padding so content never slides under the sidebar.
+3. Same change for the footer wrapper's padding-left.
+4. Leave the existing "hide footer on back-office routes" behaviour alone (user only asked about header + sidebar).
 
-## Removed entirely
-- "My Tasks" group label (renamed/merged into Quick Access)
-- Old public "Quick Access" duplicate group
-- "AI & Tools" group (all 15 items)
-- "Dashboards" group (replaced by single My Dashboard)
-- "Listings" group
-- "Productivity" group
-- "Creative & Marketing" group
-- "Account" group (replaced by Settings-only)
+### Not touched
 
-## Technical changes
+- `OwnerRoutes` / `DeveloperHubRoutes` keep their dedicated shells — user explicitly wants the back end "as it currently is".
+- `BACK_OFFICE_PREFIXES` stays (still used for footer suppression and `needsHeaderSpacing` logic) — only its effect on chrome visibility is removed.
+- Mobile header path (`sm:hidden`) is unchanged; it was already always rendered.
+- `StandaloneRoutes` (auth, signing pages, digital card, etc.) stay shell-less by design — they're not under `MainLayoutWrapper` at all and the user's request scoped to "front end" pages with the L-frame.
 
-**File: `src/config/shortcutsConfig.ts`**
-- Rewrite `SHORTCUT_GROUPS` to the 5 groups above.
-- Add a small helper `getDashboardHref(mode)` exported alongside, OR resolve the dashboard href inline inside `filterShortcutGroups` by accepting a `mode` opt and rewriting the My Dashboard item's `href`.
-- Extend `filterShortcutGroups` signature with `mode?: 'owner'|'broker'|'investor'|'developer'|null` so the My Dashboard item href is rewritten per role. Also rewrite the Inbox item href for owner.
+## Verification
 
-**File: `src/components/navigation/GlobalVerticalNav.tsx`**
-- Pass `mode` into the existing `filterShortcutGroups(...)` call (mode is already available via `useUserModeContext`). No UI/markup changes needed — the accordion renders whatever `SHORTCUT_GROUPS` contains, so the result is automatically responsive on mobile, tablet, and desktop.
-
-**Files: `src/components/navigation/GlobalHeader.tsx` and `src/components/search/GlobalSearchModal.tsx` (if they call `filterShortcutGroups`)**
-- Pass the same `mode` arg through so all three surfaces stay in sync.
-
-No other files, no schema, no backend. This is purely the shortcuts config + the call sites that consume it.
-
-## Out of scope
-- Mega-menu items (Buy/Sell/Rent/Developers/etc.) — untouched
-- Owner Command Center contents — untouched
-- Sidebar collapse / gold styling — already handled in previous turn
+After the change, load `/broker-dashboard` on desktop — the gold-bordered vertical sidebar and top utility bar should both render, identical to `/properties` or `/`. Spot-check `/admin/*` and `/listing-admin` too.
