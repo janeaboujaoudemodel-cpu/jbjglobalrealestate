@@ -292,15 +292,15 @@ const Index = () => {
             </motion.div>
 
 
-            {/* Three pillar badges — solid near-black surface (no backdrop-blur) + drop-shadows for guaranteed legibility on busy hero photo */}
+            {/* Three pillar badges — HIDDEN on mobile (<640px), compact on tablet, full size on desktop */}
             <motion.div
               variants={fadeInUp}
-              className="grid grid-cols-3 max-w-3xl mx-auto border border-[#B89555]/40 overflow-hidden rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] bg-[#0A0A0A]"
+              className="hidden sm:grid grid-cols-3 max-w-xl md:max-w-2xl lg:max-w-3xl mx-auto border border-[#B89555]/40 overflow-hidden rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] bg-[#0A0A0A]"
             >
               {pillars.map((pillar, idx) => (
                 <div
                   key={pillar.title}
-                  className="relative bg-[#0A0A0A] p-4 sm:p-5 text-center"
+                  className="relative bg-[#0A0A0A] p-2.5 sm:p-3 md:p-4 lg:p-5 text-center"
                 >
                   {/* Premium divider — gold gradient hairline + center diamond, between cards only */}
                   {idx > 0 && (
@@ -318,17 +318,17 @@ const Index = () => {
                     </div>
                   )}
                   <pillar.icon
-                    className="w-6 h-6 sm:w-7 sm:h-7 text-[#1A1A1A] mx-auto mb-2"
+                    className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 text-[#1A1A1A] mx-auto mb-1.5 md:mb-2"
                     style={{ filter: "drop-shadow(0 1px 3px rgba(0,0,0,0.9))" }}
                   />
                   <h3
-                    className="text-[13px] sm:text-sm font-bold mb-1"
+                    className="text-[11px] sm:text-[12px] md:text-[13px] lg:text-sm font-bold mb-0.5 md:mb-1 leading-tight"
                     style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 1px 3px rgba(0,0,0,0.95)" }}
                   >
                     {pillar.title}
                   </h3>
                   <p
-                    className="text-[11px] sm:text-xs leading-tight"
+                    className="text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs leading-tight"
                     style={{ color: "rgba(255,255,255,0.92)", WebkitTextFillColor: "rgba(255,255,255,0.92)", textShadow: "0 1px 3px rgba(0,0,0,0.95)" }}
                   >
                     {pillar.desc}
@@ -336,6 +336,7 @@ const Index = () => {
                 </div>
               ))}
             </motion.div>
+
 
             {/* Book a Free Consultation CTA — replaces the old Explore arrow */}
             <motion.div
