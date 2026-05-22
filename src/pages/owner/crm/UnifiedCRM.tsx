@@ -93,6 +93,7 @@ function ScrollStrip({ children, ariaLabel }: { children: React.ReactNode; ariaL
 
 // --- Lazy section content -------------------------------------------------
 const CRMLeadsTableV2     = lazy(() => import("@/components/crm/CRMLeadsTableV2"));
+const LeadSourcesPanel    = lazy(() => import("@/components/owner/LeadSourcesPanel"));
 const FlaggedLeadsView    = lazy(() => import("@/components/crm/FlaggedLeadsView"));
 const RecentlyDeletedLeads= lazy(() => import("@/components/crm/RecentlyDeletedLeads"));
 const CRMRelationships    = lazy(() => import("@/pages/CRMRelationships"));
