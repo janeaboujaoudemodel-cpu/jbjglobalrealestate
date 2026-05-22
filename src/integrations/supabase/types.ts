@@ -35754,6 +35754,10 @@ export type Database = {
         Args: { _broker_id: string; _fingerprint: string; _reason?: string }
         Returns: string
       }
+      crm_broker_profile_bundle: {
+        Args: { p_broker_id: string }
+        Returns: Json
+      }
       crm_broker_revoke_all_sessions: {
         Args: { _broker_id: string; _reason?: string }
         Returns: number
@@ -35825,6 +35829,116 @@ export type Database = {
       }
       crm_set_context: { Args: { p_ctx: string }; Returns: undefined }
       crm_soft_delete_leads: { Args: { p_lead_ids: string[] }; Returns: Json }
+      crm_update_lead_as_shared: {
+        Args: { p_id: string; p_patch: Json }
+        Returns: {
+          age_range: string | null
+          ai_score: number | null
+          ai_score_updated_at: string | null
+          assigned_ai_employee_id: string | null
+          assigned_broker_id: string | null
+          assigned_to_user_id: string | null
+          auto_detected_type: boolean | null
+          bedroom_requirement: string | null
+          birthday: string | null
+          budget_currency: string | null
+          budget_max: number | null
+          budget_min: number | null
+          buying_purpose: string | null
+          company_name: string | null
+          contact_type: Database["public"]["Enums"]["crm_contact_type"] | null
+          country_of_residence: string | null
+          created_at: string
+          created_by_user_id: string | null
+          current_location_city: string | null
+          current_location_country: string | null
+          database_source: string | null
+          deleted_at: string | null
+          department: string | null
+          detection_keywords: string[] | null
+          documents: Json
+          duplicate_hash: string | null
+          duplicate_of_id: string | null
+          email_encrypted: string | null
+          email_lower: string | null
+          email_normalized: string | null
+          event_source: string | null
+          flag_reasons: string[] | null
+          flagged: boolean | null
+          full_name: string
+          gender: string | null
+          id: string
+          import_approval_status:
+            | Database["public"]["Enums"]["crm_import_approval_status"]
+            | null
+          import_batch_id: string | null
+          imported_at: string | null
+          internal_comments: string | null
+          is_duplicate: boolean | null
+          is_global_broker: boolean | null
+          is_investor: boolean
+          is_junk: boolean
+          languages: string[] | null
+          last_contacted_at: string | null
+          last_updated_by: string | null
+          lead_intent: string | null
+          lead_score_band: string | null
+          lead_source_type: string | null
+          lead_type: string | null
+          list_id: string | null
+          nationality: string | null
+          next_followup_at: string | null
+          notes: string | null
+          notes_encrypted: string | null
+          original_filename: string | null
+          owner_type: Database["public"]["Enums"]["crm_lead_owner_type"]
+          owner_user_id: string | null
+          partner_service_type: string | null
+          phone_e164: string | null
+          phone_encrypted: string | null
+          phone_normalized: string | null
+          phone_raw: string | null
+          pipeline_stage: string | null
+          position_type: string | null
+          preferred_language: string | null
+          preferred_location: string | null
+          preferred_project: string | null
+          priority: string | null
+          priority_score: number | null
+          property_type: string | null
+          raw_import: Json | null
+          region: string | null
+          rental_budget_max: number | null
+          rental_budget_min: number | null
+          rental_lease_duration: string | null
+          rental_move_in_timeline: string | null
+          rental_preferred_areas: string[] | null
+          rental_property_type: string | null
+          rental_renter_type: string | null
+          role_title: string | null
+          seniority: string | null
+          source: string | null
+          source_database_id: string | null
+          source_history: Json
+          source_id: string | null
+          source_page: string | null
+          source_row_index: number | null
+          stale_since: string | null
+          tags: string[] | null
+          updated_at: string
+          upload_source: string | null
+          vip: boolean | null
+          vip_tagged_at: string | null
+          vip_tagged_by: string | null
+          whatsapp_e164: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "crm_leads"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       decrypt_bank_field: {
         Args: { encrypted_data: string; salt_id: string }
         Returns: string
