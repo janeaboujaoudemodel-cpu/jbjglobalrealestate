@@ -1079,7 +1079,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
         </div>
 
         {/* ── Section Nav — refined accordion with editorial headers ── */}
-        <div className="py-1.5 px-2.5 space-y-0.5">
+        <div className="py-1.5 px-2.5 flex-1 flex flex-col justify-between gap-1 pb-3">
           {SECTION_KEYS.map((sectionKey, sectionIdx) => {
             if (sectionKey === 'ADMIN & OWNER' && (!isOwner || isDeveloperMode)) return null;
             if (sectionKey === 'BROKER & ACADEMY' && !isBroker && !isOwner) return null;
