@@ -32,6 +32,8 @@ interface Developer {
   parent_company: string | null;
   office_phone: string | null;
   whatsapp: string | null;
+  whatsapp_group_url: string | null;
+  telegram_group_url: string | null;
   admin_email: string | null;
   office_address: string | null;
   google_maps_url: string | null;
