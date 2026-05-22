@@ -47,7 +47,14 @@ const CATEGORIES: Array<{
 export default function CategorySelectorSection() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { setMode } = useUserModeContext();
+  const { setMode, hasMadeInitialSelection } = useUserModeContext();
+
+  // Once a user is registered (logged in) AND has picked a category that is wired
+  // to their account, suppress this section entirely — they've already chosen.
+  if (user && hasMadeInitialSelection) {
+    return null;
+  }
+
 
   const handleSelect = async (cat: Category) => {
     // Track source regardless of auth state so anonymous picks still appear in counters
