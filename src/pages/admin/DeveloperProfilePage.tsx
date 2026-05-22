@@ -361,13 +361,27 @@ export default function DeveloperProfilePage() {
               <div className="flex items-center gap-3 mt-1 text-sm text-[#1A1A1A]/70 flex-wrap">
                 {developer.headquarters && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{developer.headquarters}</span>}
                 {developer.website_url && (
-                  <a href={developer.website_url} target="_blank" rel="noreferrer" className="flex items-center gap-1 underline">
-                    <Globe className="w-3 h-3" /> {developer.website_url.replace(/^https?:\/\//, "")}
-                  </a>
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#EFE6D6] border border-[#B89555]/40 text-[11px] font-medium text-[#1A1A1A]">
+                    <ShieldCheck className="w-3 h-3" /> Owner-only
+                    <a href={developer.website_url} target="_blank" rel="noreferrer" className="ml-1 inline-flex items-center gap-1 underline">
+                      <Globe className="w-3 h-3" /> {developer.website_url.replace(/^https?:\/\//, "")}
+                    </a>
+                  </span>
                 )}
                 <span>{projects.length} projects · {reps.length} sales reps</span>
               </div>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Privacy banner: everything below is owner-only */}
+        <Card className="border border-[#B89555]/30 bg-[#FDFBF7]">
+          <CardContent className="py-3 flex items-start gap-3">
+            <ShieldCheck className="w-4 h-4 text-[#1A1A1A] mt-0.5 shrink-0" />
+            <p className="text-xs text-[#1A1A1A]/80">
+              <span className="font-semibold text-[#1A1A1A]">Internal only.</span> Website, email, phone, address and social/community links are
+              <span className="font-semibold"> never shown publicly</span>. They exist so JBJ can reach the developer directly — clients must always close through us.
+            </p>
           </CardContent>
         </Card>
 
