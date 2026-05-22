@@ -1037,7 +1037,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 
       {/* ━━━ SCROLLABLE NAV ━━━ */}
       <nav
-        className="flex-1 overflow-y-auto jj-scrollbar-gold jj-scrollbar-always-visible overscroll-contain min-h-0"
+        className="flex-1 overflow-y-auto jj-scrollbar-gold jj-scrollbar-always-visible overscroll-contain min-h-0 flex flex-col"
         style={{ scrollbarGutter: "stable" }}
       >
         {/* My Shortcuts removed — items reorganized into MY ACCOUNT section */}
