@@ -108,6 +108,10 @@ export const AdminRoutes = () => (
     <Route path="/admin/developers/profile/:slug" element={<DeveloperProfileSlugRedirect />} />
     <Route path="/admin/developers/missing-logos" element={<Navigate to="/developer-hub-admin/missing-logos" replace />} />
 
+    {/* Short alias → Developer Hub */}
+    <Route path="/dev-hub" element={<Navigate to="/developer-hub-admin" replace />} />
+    <Route path="/dev-hub/*" element={<Navigate to="/developer-hub-admin" replace />} />
+
     {/* New Owner Developer Hub */}
     <Route path="/developer-hub-admin" element={<OwnerGuard><Suspense fallback={<PageLoader />}><DeveloperHubAdminShell /></Suspense></OwnerGuard>}>
       <Route index element={<Suspense fallback={<PageLoader />}><DeveloperHubAdminOverview /></Suspense>} />
