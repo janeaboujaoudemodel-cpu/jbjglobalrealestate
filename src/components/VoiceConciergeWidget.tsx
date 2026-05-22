@@ -3,7 +3,6 @@ import { useConversation } from "@elevenlabs/react";
 import { Phone, PhoneOff, X, Mic, Volume2, Sparkles, MessageCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
 import VoiceConciergeIntakeModal from "@/components/voice-concierge/VoiceConciergeIntakeModal";
 import { COMPANY_NAP } from "@/config/companyNAP";
 
@@ -47,7 +46,7 @@ const getInitialMinimized = (): boolean => {
   }
 };
 
-type WidgetStatus = "idle" | "initializing" | "connected" | "unavailable";
+type WidgetStatus = "idle" | "initializing" | "connected";
 
 const VoiceConciergeWidget = () => {
   const [isMinimized, setIsMinimized] = useState(getInitialMinimized);
@@ -61,7 +60,6 @@ const VoiceConciergeWidget = () => {
   const leadIdRef = useRef<string | null>(getStoredLeadId());
   const hasShownUnavailableToastRef = useRef(false);
   const callStartTimeRef = useRef<Date | null>(null);
-  const navigate = useNavigate();
 
 
 
@@ -148,8 +146,8 @@ const VoiceConciergeWidget = () => {
     },
     onError: (error) => {
       console.error("Concierge error:", error);
-      setWidgetStatus("unavailable");
-      setStatusMessage("Connection error");
+      setWidgetStatus("idle");
+      setStatusMessage("");
     },
   });
 
@@ -190,23 +188,16 @@ const VoiceConciergeWidget = () => {
       }
 
 
-      // Graceful fallback when the edge function returned a 200 with `fallback: true`
-      if (data?.fallback || !data?.token) {
-        console.warn("[VoiceConcierge] unavailable:", data?.error || "no token");
-        setWidgetStatus("unavailable");
-        setStatusMessage("Unavailable");
-        if (!hasShownUnavailableToastRef.current) {
-          toast.info("Voice concierge is unavailable right now. Please try again shortly.");
-          hasShownUnavailableToastRef.current = true;
-        }
-        return;
+      if (!data?.token && !data?.agentId) {
+        throw new Error(data?.error || "Failed to prepare voice concierge");
       }
 
       // Start the conversation with WebRTC
-      const sessionResult = await conversation.startSession({
-        conversationToken: data.token,
-        connectionType: "webrtc",
-      });
+      await conversation.startSession(
+        data?.token
+          ? { conversationToken: data.token, connectionType: "webrtc" }
+          : { agentId: data.agentId, connectionType: "webrtc" }
+      );
 
       // Log the call start
       const callLogId = await logCallStart(data.conversationId);
@@ -215,22 +206,16 @@ const VoiceConciergeWidget = () => {
       }
     } catch (error) {
       console.error("Failed to start conversation:", error);
-      const msg = error instanceof Error ? error.message : "";
-      const isInfra = /api[\s_-]?key|elevenlabs|unauthor|quota|invalid|expired|token/i.test(msg);
-      setWidgetStatus("unavailable");
-      setStatusMessage("Unavailable");
+      setWidgetStatus("idle");
+      setStatusMessage("");
       if (!hasShownUnavailableToastRef.current) {
-        toast.info(
-          isInfra
-            ? "Voice concierge is unavailable right now. Please try again shortly."
-            : "Couldn't start the call. Please try again."
-        );
+        toast.info("Couldn't start the call. Please try again.");
         hasShownUnavailableToastRef.current = true;
       }
     } finally {
       setIsConnecting(false);
     }
-  }, [conversation, navigate, logCallStart]);
+  }, [conversation, logCallStart]);
 
   const handleLauncherClick = useCallback(() => {
     setChoiceOpen((v) => !v);
@@ -257,14 +242,6 @@ const VoiceConciergeWidget = () => {
     setIntakeOpen(false);
     startConversation(leadId);
   }, [startConversation]);
-
-
-  const retryConnection = useCallback(() => {
-    setWidgetStatus("idle");
-    setStatusMessage("");
-    hasShownUnavailableToastRef.current = false;
-    handleStartVoice();
-  }, [handleStartVoice]);
 
 
   const stopConversation = useCallback(async () => {
@@ -295,11 +272,8 @@ const VoiceConciergeWidget = () => {
     );
   }
 
-  const showStatusPill = widgetStatus === "initializing" || widgetStatus === "unavailable";
-  const pillTone =
-    widgetStatus === "unavailable"
-      ? "bg-[#FEE2E2] text-[#7F1D1D] border-red-300"
-      : "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40";
+  const showStatusPill = widgetStatus === "initializing";
+  const pillTone = "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40";
 
   return (
     <div className="fixed bottom-[148px] right-6 z-[10060] flex flex-col items-end gap-2">
@@ -313,19 +287,7 @@ const VoiceConciergeWidget = () => {
           {widgetStatus === "initializing" && (
             <span className="w-2 h-2 rounded-full bg-[#B89555] animate-pulse" />
           )}
-          {widgetStatus === "unavailable" && (
-            <span className="w-2 h-2 rounded-full bg-red-500" />
-          )}
-          <span>{statusMessage || (widgetStatus === "initializing" ? "Initializing…" : "Unavailable")}</span>
-          {widgetStatus === "unavailable" && (
-            <button
-              type="button"
-              onClick={retryConnection}
-              className="ml-1 px-2 py-0.5 rounded-full bg-[#1A1A1A] text-white text-[10px] font-semibold hover:bg-[#1A1A1A]/85"
-            >
-              Try again
-            </button>
-          )}
+          <span>{statusMessage || "Initializing…"}</span>
         </div>
       )}
 
