@@ -1097,19 +1097,25 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 <div id={`nav-section-${sectionKey.replace(/\s+/g, '-').toLowerCase()}`}>
                   <button
                     onClick={(e) => toggleSection(sectionKey, e)}
+                    data-no-contrast-guard
+                    style={{ color: '#B89555' }}
                     className={`w-full flex items-center gap-2 px-2.5 py-[7px] rounded-xl text-[10px] uppercase tracking-[0.18em] font-bold transition-all duration-200 group ${
                       sectionHighlighted
-                        ? "text-[hsl(var(--gold))] bg-[#EFE6D6]/[0.18]"
-                        : "text-[hsl(var(--gold))] hover:text-[hsl(var(--gold))] hover:bg-[#EFE6D6]/[0.10]"
+                        ? "bg-[#EFE6D6]/[0.25]"
+                        : "hover:bg-[#EFE6D6]/[0.12]"
                     }`}
                   >
                     <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors border ${sectionHighlighted ? 'bg-[hsl(var(--gold))]/20 border-[hsl(var(--gold))]/70' : 'bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/40 group-hover:bg-[hsl(var(--gold))]/15 group-hover:border-[hsl(var(--gold))]/65'}`}>
-                      <SectionIcon className="w-3 h-3 text-[hsl(var(--gold))]" />
+                      <SectionIcon className="w-3 h-3" style={{ color: '#B89555' }} />
                     </div>
-                    <span className="flex-1 text-left relative after:content-[''] after:absolute after:bottom-[-2px] after:left-0 after:h-[1.5px] after:bg-[#B89555] after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-5">{sectionKey}</span>
-                    <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'} ${sectionHighlighted ? 'text-[hsl(var(--gold))]' : 'text-[hsl(var(--gold))]/70'}`} />
+                    <span
+                      data-no-contrast-guard
+                      style={{ color: '#B89555' }}
+                      className="flex-1 text-left relative inline-block after:content-[''] after:absolute after:bottom-[-3px] after:left-0 after:h-[1.5px] after:bg-[#B89555] after:rounded-full after:transition-all after:duration-300 after:w-full after:opacity-70 group-hover:after:opacity-100"
+                    >{sectionKey}</span>
+                    <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} style={{ color: '#B89555' }} />
                     {!isOpen && hasActiveChild && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#EFE6D6] animate-pulse" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#B89555] animate-pulse" />
                     )}
                   </button>
 
@@ -1161,10 +1167,18 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             <Link
               to="/contact"
               data-no-contrast-guard
-              className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all px-1 py-1.5 rounded-lg border"
-              style={{ color: '#1A1A1A', borderColor: 'rgba(184,149,85,0.40)', backgroundColor: '#FDFBF7' }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#EFE6D6'; e.currentTarget.style.borderColor = '#B89555'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FDFBF7'; e.currentTarget.style.borderColor = 'rgba(184,149,85,0.40)'; }}
+              className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1.5 rounded-lg border-2 will-change-transform"
+              style={{ color: '#1A1A1A', borderColor: '#B89555', backgroundColor: '#EFE6D6' }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#F7F2EA';
+                e.currentTarget.style.boxShadow = '0 10px 24px -10px rgba(184,149,85,0.65), 0 0 0 1px rgba(184,149,85,0.55)';
+                e.currentTarget.style.transform = 'perspective(700px) rotateX(2deg) translateY(-3px) scale(1.03)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#EFE6D6';
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.transform = 'none';
+              }}
             >
               <Headphones className="w-3.5 h-3.5" strokeWidth={2} style={{ color: 'inherit' }} />
               <span style={{ color: 'inherit' }}>Contact</span>
@@ -1172,10 +1186,18 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             <Link
               to="/ticket-hub"
               data-no-contrast-guard
-              className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all px-1 py-1.5 rounded-lg border"
-              style={{ color: '#1A1A1A', borderColor: 'rgba(184,149,85,0.40)', backgroundColor: '#FDFBF7' }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#EFE6D6'; e.currentTarget.style.borderColor = '#B89555'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FDFBF7'; e.currentTarget.style.borderColor = 'rgba(184,149,85,0.40)'; }}
+              className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all duration-200 px-1 py-1.5 rounded-lg border-2 will-change-transform"
+              style={{ color: '#1A1A1A', borderColor: '#B89555', backgroundColor: '#EFE6D6' }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#F7F2EA';
+                e.currentTarget.style.boxShadow = '0 10px 24px -10px rgba(184,149,85,0.65), 0 0 0 1px rgba(184,149,85,0.55)';
+                e.currentTarget.style.transform = 'perspective(700px) rotateX(2deg) translateY(-3px) scale(1.03)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#EFE6D6';
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.transform = 'none';
+              }}
             >
               <Ticket className="w-3.5 h-3.5" strokeWidth={2} style={{ color: 'inherit' }} />
               <span style={{ color: 'inherit' }}>Support</span>
@@ -1205,22 +1227,34 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             </Link>
           )}
 
-          {/* Collapse — premium champagne pill with gold hairline */}
+          {/* Collapse — gold pill, glow + 3D lift on hover */}
           <button
             data-no-contrast-guard
             data-sidebar-collapse-control
             onClick={toggleCollapse}
             aria-label="Collapse navigation"
-            className="jbj-sidebar-collapse-control group mt-2 flex items-center justify-center gap-2 w-full px-3 py-[7px] text-[10px] font-semibold tracking-[0.18em] uppercase transition-all duration-200"
+            className="jbj-sidebar-collapse-control group mt-2 flex items-center justify-center gap-2 w-full px-3 py-[7px] rounded-lg text-[10px] font-extrabold tracking-[0.22em] uppercase transition-all duration-200 will-change-transform"
             style={{
               color: '#B89555',
               background: 'transparent',
-              border: 'none',
+              border: '1px solid rgba(184,149,85,0.35)',
               boxShadow: 'none',
             }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'linear-gradient(135deg, rgba(247,242,234,0.9), rgba(239,230,214,0.9))';
+              e.currentTarget.style.borderColor = '#B89555';
+              e.currentTarget.style.boxShadow = '0 10px 24px -10px rgba(184,149,85,0.7), 0 0 0 1px rgba(184,149,85,0.55), 0 0 12px rgba(184,149,85,0.35)';
+              e.currentTarget.style.transform = 'perspective(700px) rotateX(2deg) translateY(-2px) scale(1.02)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'transparent';
+              e.currentTarget.style.borderColor = 'rgba(184,149,85,0.35)';
+              e.currentTarget.style.boxShadow = 'none';
+              e.currentTarget.style.transform = 'none';
+            }}
           >
-            <PanelLeftClose className="w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" strokeWidth={1.75} style={{ color: '#B89555' }} />
-            <span style={{ color: '#B89555' }}>Collapse</span>
+            <PanelLeftClose className="w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" strokeWidth={2} style={{ color: '#B89555' }} />
+            <span data-no-contrast-guard style={{ color: '#B89555' }}>Collapse</span>
           </button>
 
 

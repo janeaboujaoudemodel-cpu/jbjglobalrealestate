@@ -288,9 +288,9 @@ export default function BrokerDashboard() {
 
         {/* SECTION 2: Quick Actions */}
         <motion.div variants={fadeInUp}>
-          <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+          <h3 className="text-xl font-semibold text-foreground mb-5 flex items-center gap-2">
             <LayoutDashboard className="w-5 h-5 text-[hsl(var(--gold))]" strokeWidth={2.5} />
-            Quick Actions
+            <span className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-1.5 after:h-[2px] after:w-full after:bg-gradient-to-r after:from-[#B89555] after:via-[#B89555] after:to-[#B89555]/40 after:rounded-full">Quick Actions</span>
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {filteredActions.map((action, index) => (
@@ -315,9 +315,9 @@ export default function BrokerDashboard() {
 
         {/* SECTION 3: Performance Overview */}
         <motion.div variants={fadeInUp}>
-          <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+          <h3 className="text-xl font-semibold text-foreground mb-5 flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-[hsl(var(--gold))]" strokeWidth={2.5} />
-            Performance Overview
+            <span className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-1.5 after:h-[2px] after:w-full after:bg-gradient-to-r after:from-[#B89555] after:via-[#B89555] after:to-[#B89555]/40 after:rounded-full">Performance Overview</span>
           </h3>
           <div className={`grid grid-cols-2 ${isInternalBroker ? 'md:grid-cols-3 lg:grid-cols-6' : 'md:grid-cols-4'} gap-4`}>
             {performanceBlocks.map((block, index) => (
@@ -342,14 +342,14 @@ export default function BrokerDashboard() {
 
         {/* SECTION 4: Tasks & Reminders */}
         <motion.div variants={fadeInUp}>
-          <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+          <h3 className="text-xl font-semibold text-foreground mb-5 flex items-center gap-2">
             <CheckSquare className="w-5 h-5 text-[hsl(var(--gold))]" strokeWidth={2.5} />
-            Tasks & Reminders
+            <span className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-1.5 after:h-[2px] after:w-full after:bg-gradient-to-r after:from-[#B89555] after:via-[#B89555] after:to-[#B89555]/40 after:rounded-full">Tasks &amp; Reminders</span>
           </h3>
           <Card className={`bg-[#EFE6D6] border-2 border-[#B89555]/60 hover:border-[#B89555] ${tileGlow3D}`}>
 
-            <CardContent className="p-6">
-              <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <CardContent className="p-5 md:p-6">
+              <div className="flex flex-col gap-5">
                 <div className="text-center md:text-left">
                   <p className="text-[#1A1A1A]/80 mb-2">
                     Access your tasks, notes, reminders, and internal JBJ messages — all in one place.
@@ -358,31 +358,23 @@ export default function BrokerDashboard() {
                     Reminders can be delivered in-platform, via email, or WhatsApp (if enabled).
                   </p>
                 </div>
-                <div className="flex flex-wrap gap-2 justify-center">
-                  <Link to="/crm-notes">
-                    <Button variant="outline" size="sm" className="border-2 border-[#B89555]/60 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#FDFBF7] hover:border-[#B89555]">
-                      <FileText className="w-4 h-4 mr-2" strokeWidth={2.5} />
-                      View Notes
-                    </Button>
-                  </Link>
-                  <Link to="/crm-reminders">
-                    <Button variant="outline" size="sm" className="border-2 border-[#B89555]/60 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#FDFBF7] hover:border-[#B89555]">
-                      <Bell className="w-4 h-4 mr-2" strokeWidth={2.5} />
-                      Reminders
-                    </Button>
-                  </Link>
-                  <Link to="/inbox">
-                    <Button variant="outline" size="sm" className="border-2 border-[#B89555]/60 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#FDFBF7] hover:border-[#B89555]">
-                      <Mail className="w-4 h-4 mr-2" strokeWidth={2.5} />
-                      My Inbox
-                    </Button>
-                  </Link>
-                  <Link to="/crm-calendar">
-                    <Button variant="outline" size="sm" className="border-2 border-[#B89555]/60 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#FDFBF7] hover:border-[#B89555]">
-                      <Calendar className="w-4 h-4 mr-2" strokeWidth={2.5} />
-                      Calendar
-                    </Button>
-                  </Link>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {[
+                    { to: "/crm-notes", icon: FileText, label: "View Notes" },
+                    { to: "/crm-reminders", icon: Bell, label: "Reminders" },
+                    { to: "/inbox", icon: Mail, label: "My Inbox" },
+                    { to: "/crm-calendar", icon: Calendar, label: "Calendar" },
+                  ].map(({ to, icon: BtnIcon, label }) => (
+                    <Link key={to} to={to} className="w-full">
+                      <Button
+                        variant="outline"
+                        className="w-full h-11 justify-center border-2 border-[#B89555]/60 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#FDFBF7] hover:border-[#B89555] hover:shadow-[0_8px_22px_-10px_rgba(184,149,85,0.55)] transition-all"
+                      >
+                        <BtnIcon className="w-4 h-4 mr-2" strokeWidth={2.5} />
+                        <span className="truncate">{label}</span>
+                      </Button>
+                    </Link>
+                  ))}
                 </div>
               </div>
             </CardContent>
@@ -391,9 +383,9 @@ export default function BrokerDashboard() {
 
         {/* SECTION 5: Notifications */}
         <motion.div variants={fadeInUp}>
-          <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+          <h3 className="text-xl font-semibold text-foreground mb-5 flex items-center gap-2">
             <Bell className="w-5 h-5 text-[hsl(var(--gold))]" strokeWidth={2.5} />
-            Notifications
+            <span className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-1.5 after:h-[2px] after:w-full after:bg-gradient-to-r after:from-[#B89555] after:via-[#B89555] after:to-[#B89555]/40 after:rounded-full">Notifications</span>
           </h3>
           <Card className={`bg-[#EFE6D6] border-2 border-[#B89555]/60 hover:border-[#B89555] ${tileGlow3D}`}>
             <CardContent className="p-6">
@@ -410,9 +402,9 @@ export default function BrokerDashboard() {
 
         {/* Broker Hub Links */}
         <motion.div variants={fadeInUp}>
-          <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+          <h3 className="text-xl font-semibold text-foreground mb-5 flex items-center gap-2">
             <Briefcase className="w-5 h-5 text-[hsl(var(--gold))]" strokeWidth={2.5} />
-            Broker Hub
+            <span className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-1.5 after:h-[2px] after:w-full after:bg-gradient-to-r after:from-[#B89555] after:via-[#B89555] after:to-[#B89555]/40 after:rounded-full">Broker Hub</span>
           </h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             {brokerHubLinks.map((link, index) => (
