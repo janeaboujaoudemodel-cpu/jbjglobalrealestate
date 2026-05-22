@@ -4,8 +4,8 @@ import { useAuth } from "@/contexts/AuthContext";
 
 const MODE_KEY = "jj_user_mode";
 
-// Expanded to 3 modes: investor, broker, or both
-export type UserMode = 'investor' | 'broker' | 'investor_broker' | 'developer';
+// Strictly 3 categories. Legacy 'investor_broker' normalized to 'broker'.
+export type UserMode = 'investor' | 'broker' | 'developer';
 
 interface UserModeHook {
   mode: UserMode;
@@ -13,14 +13,13 @@ interface UserModeHook {
   setMode: (mode: UserMode) => Promise<void>;
   isInvestorMode: boolean;
   isBrokerMode: boolean;
+  /** @deprecated Combined mode removed. Always false. */
   isCombinedMode: boolean;
   isDeveloperMode: boolean;
 }
 
-// Map legacy 'client' value to 'investor'
 const normalizeMode = (value: string | null): UserMode => {
-  if (value === 'broker') return 'broker';
-  if (value === 'investor_broker') return 'investor_broker';
+  if (value === 'broker' || value === 'investor_broker') return 'broker';
   if (value === 'developer') return 'developer';
   return 'investor';
 };
