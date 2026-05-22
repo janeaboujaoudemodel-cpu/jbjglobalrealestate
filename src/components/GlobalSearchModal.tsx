@@ -602,14 +602,46 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                       </div>
                     </div>
 
-                    {/* Recent Searches */}
+                    {/* Your Pinned Shortcuts */}
+                    {shortcuts.length > 0 && (
+                      <div>
+                        <p className="text-sm font-bold text-[#1A1A1A]/70 mb-3 px-1 uppercase tracking-wider flex items-center gap-1.5">
+                          <Pin className="w-3.5 h-3.5" /> Your Shortcuts
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {shortcuts.map((search, i) => (
+                            <div
+                              key={`sc-${i}`}
+                              className="group/sc flex items-center gap-1 pl-3 pr-1 py-1 rounded-xl bg-gradient-to-r from-[#EFE6D6] to-[#F7F2EA] border border-[#B89555]/40 hover:border-[#B89555] transition-all"
+                            >
+                              <button
+                                onClick={() => handleRecentSearchClick(search)}
+                                className="flex items-center gap-2 text-sm font-semibold text-[#1A1A1A]"
+                              >
+                                <Star className="w-3.5 h-3.5 text-[#B89555] fill-[#B89555]" />
+                                {search}
+                              </button>
+                              <button
+                                onClick={(e) => handleRemoveShortcut(e, search)}
+                                aria-label={`Remove shortcut ${search}`}
+                                className="ml-1 p-1 rounded-full opacity-60 hover:opacity-100 hover:bg-[#1A1A1A]/10"
+                              >
+                                <X className="w-3 h-3 text-[#1A1A1A]" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Recent Searches (auto-clears after 7 days) */}
                     {recentSearches.length > 0 && (
                       <div>
                         <div className="flex items-center justify-between mb-3 px-1">
                           <p className="text-sm font-bold text-[#1A1A1A]/70 uppercase tracking-wider">
-                            Recent Searches
+                            Recent Searches <span className="text-[10px] font-normal normal-case text-[#1A1A1A]/50">(saved for 7 days)</span>
                           </p>
-                          <button 
+                          <button
                             onClick={handleClearRecent}
                             className="flex items-center gap-1 text-xs text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors"
                           >
@@ -618,16 +650,31 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                           </button>
                         </div>
                         <div className="flex flex-wrap gap-2">
-                          {recentSearches.map((search, i) => (
-                            <button
-                              key={i}
-                              onClick={() => handleRecentSearchClick(search)}
-                              className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#FDFBF7]/50 border border-[#B89555]/10 hover:bg-[#FDFBF7] hover:border-[#B89555]/30 transition-all"
-                            >
-                              <Clock className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
-                              <span className="text-sm font-medium text-[#1A1A1A]">{search}</span>
-                            </button>
-                          ))}
+                          {recentSearches.map((search, i) => {
+                            const pinned = isShortcutPinned(search);
+                            return (
+                              <div
+                                key={i}
+                                className="group/r flex items-center gap-1 pl-3 pr-1 py-1.5 rounded-xl bg-[#FDFBF7]/70 border border-[#B89555]/15 hover:border-[#B89555]/45 transition-all"
+                              >
+                                <button
+                                  onClick={() => handleRecentSearchClick(search)}
+                                  className="flex items-center gap-2 text-sm font-medium text-[#1A1A1A]"
+                                >
+                                  <Clock className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
+                                  {search}
+                                </button>
+                                <button
+                                  onClick={(e) => handleTogglePin(e, search)}
+                                  aria-label={pinned ? "Unpin shortcut" : "Pin as shortcut"}
+                                  title={pinned ? "Unpin shortcut" : "Pin as shortcut"}
+                                  className="ml-1 p-1 rounded-full opacity-60 hover:opacity-100 hover:bg-[#1A1A1A]/10"
+                                >
+                                  <Star className={`w-3.5 h-3.5 ${pinned ? "text-[#B89555] fill-[#B89555]" : "text-[#1A1A1A]/60"}`} />
+                                </button>
+                              </div>
+                            );
+                          })}
                         </div>
                       </div>
                     )}
