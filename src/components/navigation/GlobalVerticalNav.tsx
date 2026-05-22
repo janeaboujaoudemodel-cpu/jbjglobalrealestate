@@ -1264,17 +1264,18 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             data-sidebar-collapse-control
             onClick={toggleCollapse}
             aria-label="Collapse navigation"
-            className="jbj-sidebar-collapse-control group mt-2 flex items-center justify-center gap-2 w-full px-3 py-[7px] rounded-lg text-[10px] font-semibold tracking-[0.18em] uppercase transition-all duration-200 hover:shadow-[0_2px_10px_-2px_rgba(184,149,85,0.45)]"
+            className="jbj-sidebar-collapse-control group mt-2 flex items-center justify-center gap-2 w-full px-3 py-[7px] text-[10px] font-semibold tracking-[0.18em] uppercase transition-all duration-200"
             style={{
-              color: '#8A6A2E',
-              background: 'linear-gradient(180deg, #FBF4E2 0%, #EFE2C3 100%)',
-              border: '1px solid rgba(184,149,85,0.55)',
-              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.55), 0 1px 2px rgba(184,149,85,0.12)',
+              color: '#B89555',
+              background: 'transparent',
+              border: 'none',
+              boxShadow: 'none',
             }}
           >
-            <PanelLeftClose className="w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" strokeWidth={1.75} style={{ color: '#8A6A2E' }} />
-            <span style={{ color: '#8A6A2E' }}>Collapse</span>
+            <PanelLeftClose className="w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" strokeWidth={1.75} style={{ color: '#B89555' }} />
+            <span style={{ color: '#B89555' }}>Collapse</span>
           </button>
+
 
         </div>
       </div>
