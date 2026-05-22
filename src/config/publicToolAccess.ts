@@ -6,6 +6,7 @@ export const APPROVED_PUBLIC_TOOLS = [
   { id: "property-evaluator", label: "Property Evaluator", href: "/property-evaluator" },
   { id: "list-property-sale", label: "List Property for Sale", href: "/listing-portal?type=sale" },
   { id: "list-property-rent", label: "List Property for Rent", href: "/listing-portal?type=rent" },
+  { id: "interior-design", label: "AI Interior Design", href: "/interior-design-ai" },
 ] as const;
 
 export const APPROVED_PUBLIC_TOOL_IDS: ReadonlySet<string> = new Set(APPROVED_PUBLIC_TOOLS.map((tool) => tool.id));

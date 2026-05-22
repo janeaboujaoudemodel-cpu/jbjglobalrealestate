@@ -73,8 +73,7 @@ export function ToolkitShowcaseCard() {
           {/* Tools Grid */}
           <div className="p-6 md:p-8">
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              {tools.map((tool, index) => {
-                const tone = TONE_STYLES[tool.tone];
+              {tools.slice(0, 8).map((tool, index) => {
                 const Icon = tool.icon;
                 return (
                   <div
@@ -83,10 +82,10 @@ export function ToolkitShowcaseCard() {
                     style={{ animationDelay: `${index * 50}ms` }}
                   >
                     <Link to={tool.href} className="group block h-full">
-                      <div className={`h-full flex flex-col bg-[#F7F2EA] rounded-xl border border-[#B89555]/30 ring-2 ring-transparent ${tone.ring} p-5 transition-all duration-300 hover:shadow-lg hover:-translate-y-1`}>
-                        {/* Icon — per-tool tone */}
-                        <div className={`w-12 h-12 rounded-xl ${tone.bg} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                          <Icon className={`w-6 h-6 ${tone.icon}`} />
+                      <div className="h-full flex flex-col bg-[#F7F2EA] rounded-xl border border-[#B89555]/30 hover:border-[#B89555]/70 p-5 transition-all duration-300 hover:shadow-[0_12px_36px_-12px_rgba(184,149,85,0.35)] hover:-translate-y-1">
+                        {/* Icon — unified champagne/gold */}
+                        <div className="w-12 h-12 rounded-xl bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                          <Icon className="w-6 h-6 text-[#B89555]" strokeWidth={2.25} />
                         </div>
 
                         {/* Title */}
@@ -99,10 +98,13 @@ export function ToolkitShowcaseCard() {
                           {tool.description}
                         </p>
 
-                        {/* CTA */}
-                        <Button size="sm" className="mt-auto w-full justify-center bg-[#1A1A1A] hover:bg-[#2a2a2a] text-white font-semibold border-0 text-[10px] sm:text-sm px-1.5 sm:px-3 whitespace-nowrap overflow-hidden">
+                        {/* CTA — premium champagne */}
+                        <Button
+                          size="sm"
+                          className="mt-auto w-full justify-center bg-[#FDFBF7] hover:bg-[#EFE6D6] text-[#1A1A1A] font-bold border border-[#B89555]/60 hover:border-[#B89555] text-[10px] sm:text-sm px-1.5 sm:px-3 whitespace-nowrap overflow-hidden shadow-none hover:shadow-[0_6px_20px_-8px_rgba(184,149,85,0.45)] transition-all"
+                        >
                           <span className="truncate">{tool.cta}</span>
-                          <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 ml-1 sm:ml-2 flex-shrink-0" />
+                          <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 ml-1 sm:ml-2 flex-shrink-0 text-[#B89555]" strokeWidth={2.5} />
                         </Button>
                       </div>
                     </Link>
@@ -111,16 +113,16 @@ export function ToolkitShowcaseCard() {
               })}
             </div>
 
-            {/* Explore All Tools CTA */}
+            {/* Explore All Tools CTA — premium champagne */}
             <div className="mt-8 text-center">
               <Link to="/ai-hub">
                 <Button
                   size="lg"
-                  className="gap-3 px-10 py-6 text-base font-bold bg-[#1A1A1A] hover:bg-[#2a2a2a] text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                  className="gap-3 px-10 py-6 text-base font-bold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:from-[#F7F2EA] hover:to-[#EFE6D6] text-[#1A1A1A] rounded-xl border border-[#B89555]/70 hover:border-[#B89555] shadow-[0_10px_32px_-12px_rgba(184,149,85,0.4)] hover:shadow-[0_14px_44px_-10px_rgba(184,149,85,0.55)] hover:scale-[1.02] transition-all duration-300"
                 >
                   <Crown className="w-5 h-5 text-[#B89555]" />
                   Explore All Our Tools Now
-                  <ArrowRight className="w-5 h-5" />
+                  <ArrowRight className="w-5 h-5 text-[#B89555]" strokeWidth={2.5} />
                 </Button>
               </Link>
             </div>
