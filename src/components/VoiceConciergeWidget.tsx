@@ -47,7 +47,7 @@ const getInitialMinimized = (): boolean => {
   }
 };
 
-type WidgetStatus = "idle" | "initializing" | "connected" | "unavailable";
+type WidgetStatus = "idle" | "initializing" | "connected";
 
 const VoiceConciergeWidget = () => {
   const [isMinimized, setIsMinimized] = useState(getInitialMinimized);
@@ -148,8 +148,8 @@ const VoiceConciergeWidget = () => {
     },
     onError: (error) => {
       console.error("Concierge error:", error);
-      setWidgetStatus("unavailable");
-      setStatusMessage("Connection error");
+      setWidgetStatus("idle");
+      setStatusMessage("");
     },
   });
 
