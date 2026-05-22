@@ -115,7 +115,7 @@ const DeveloperTrustPanel = () => {
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] pt-[88px] px-4 md:px-8 pb-12">
-      <SEOHead title="Developer Trust Panel — Owner" description="Approve developers, suspend trust, restore soft-deleted projects." noindex />
+      <SEOHead title="Developer Trust Panel — Owner" description="Approve developers, suspend trust, restore soft-deleted projects." noIndex />
       <div className="max-w-6xl mx-auto space-y-8">
         <div>
           <h1 className="text-3xl font-semibold text-[#1A1A1A] tracking-tight">Developer Trust Panel</h1>
