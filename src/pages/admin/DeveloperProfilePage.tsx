@@ -439,6 +439,27 @@ export default function DeveloperProfilePage() {
                   <Field label="Instagram">
                     <Input disabled={!canEdit} value={form.instagram_url ?? ""} onChange={(e) => setForm((f) => ({ ...f, instagram_url: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
                   </Field>
+                  <Field label="Office phone">
+                    <Input disabled={!canEdit} value={form.office_phone ?? ""} onChange={(e) => setForm((f) => ({ ...f, office_phone: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" placeholder="+971 …" />
+                  </Field>
+                  <Field label="WhatsApp (direct)">
+                    <Input disabled={!canEdit} value={form.whatsapp ?? ""} onChange={(e) => setForm((f) => ({ ...f, whatsapp: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" placeholder="+971 …" />
+                  </Field>
+                  <Field label="Admin email">
+                    <Input disabled={!canEdit} value={form.admin_email ?? ""} onChange={(e) => setForm((f) => ({ ...f, admin_email: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" placeholder="contact@developer.ae" />
+                  </Field>
+                  <Field label="Office address">
+                    <Input disabled={!canEdit} value={form.office_address ?? ""} onChange={(e) => setForm((f) => ({ ...f, office_address: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" placeholder="Building, floor, area" />
+                  </Field>
+                  <Field label="Google Maps link">
+                    <Input disabled={!canEdit} value={form.google_maps_url ?? ""} onChange={(e) => setForm((f) => ({ ...f, google_maps_url: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" placeholder="https://maps.google.com/…" />
+                  </Field>
+                  <Field label="WhatsApp Group invite">
+                    <Input disabled={!canEdit} value={form.whatsapp_group_url ?? ""} onChange={(e) => setForm((f) => ({ ...f, whatsapp_group_url: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" placeholder="https://chat.whatsapp.com/…" />
+                  </Field>
+                  <Field label="Telegram Group / Channel">
+                    <Input disabled={!canEdit} value={form.telegram_group_url ?? ""} onChange={(e) => setForm((f) => ({ ...f, telegram_group_url: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" placeholder="https://t.me/…" />
+                  </Field>
                 </div>
                 <Field label="Notable projects (free text)">
                   <Textarea rows={3} disabled={!canEdit} value={form.notable_projects ?? ""} onChange={(e) => setForm((f) => ({ ...f, notable_projects: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
