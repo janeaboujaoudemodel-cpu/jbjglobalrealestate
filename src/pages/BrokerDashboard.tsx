@@ -343,7 +343,8 @@ export default function BrokerDashboard() {
             <CheckSquare className="w-5 h-5 text-[hsl(var(--gold))]" strokeWidth={2.5} />
             Tasks & Reminders
           </h3>
-          <Card className="bg-[#EFE6D6] border-2 border-[#B89555]/60">
+          <Card className={`bg-[#EFE6D6] border-2 border-[#B89555]/60 hover:border-[#B89555] ${tileGlow3D}`}>
+
             <CardContent className="p-6">
               <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                 <div className="text-center md:text-left">
