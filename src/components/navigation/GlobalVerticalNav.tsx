@@ -1131,14 +1131,6 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 
             return (
               <React.Fragment key={sectionKey}>
-                {sectionIdx > 0 && (
-                  <div className="flex items-center gap-2 px-3 my-1">
-                    <div className="flex-1 h-[1px] bg-gradient-to-r from-gold/15 to-transparent" />
-                    <div className="w-1 h-1 rounded-full bg-[#EFE6D6]/20" />
-                    <div className="flex-1 h-[1px] bg-gradient-to-l from-gold/15 to-transparent" />
-                  </div>
-                )}
-
                 <div id={`nav-section-${sectionKey.replace(/\s+/g, '-').toLowerCase()}`}>
                   <button
                     onClick={(e) => toggleSection(sectionKey, e)}
