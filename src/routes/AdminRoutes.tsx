@@ -94,6 +94,7 @@ export const AdminRoutes = () => (
     <Route path="/admin/roles" element={<OwnerGuard><AdminRoleManagement /></OwnerGuard>} />
     <Route path="/admin/intelligence" element={<OwnerGuard><AdminIntelligence /></OwnerGuard>} />
     <Route path="/admin/developers" element={<OwnerGuard><AdminDevelopers /></OwnerGuard>} />
+    <Route path="/admin/developers/missing-logos" element={<OwnerGuard><Suspense fallback={<PageLoader />}><MissingLogosQueue /></Suspense></OwnerGuard>} />
     <Route path="/admin/categories" element={<OwnerGuard><AdminCategories /></OwnerGuard>} />
     <Route path="/admin/marketing-hub" element={<OwnerGuard><MarketingHub /></OwnerGuard>} />
     <Route path="/admin/reelly-import-test" element={<OwnerGuard><ListingAdminGuard><ReellyImportTest /></ListingAdminGuard></OwnerGuard>} />
