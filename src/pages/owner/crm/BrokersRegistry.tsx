@@ -15,7 +15,8 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { Users, Search, Plus, Building2, BadgeCheck, Clock, Loader2, Download, ShieldCheck, Eye, CalendarClock, Mail, Link as LinkIcon, StickyNote } from "lucide-react";
+import { Users, Search, Plus, Building2, BadgeCheck, Clock, Loader2, Download, ShieldCheck, Eye, CalendarClock, Mail, Link as LinkIcon, StickyNote, ExternalLink } from "lucide-react";
+import { Link as RouterLink } from "react-router-dom";
 import { toast } from "sonner";
 import { useCRMSectionCounts } from "@/hooks/useCRMSectionCounts";
 import { useEntityTotal } from "@/hooks/useEntityTotal";
@@ -538,6 +539,16 @@ export default function BrokersRegistry() {
                                   <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555] tabular-nums">
                                     {sessions} {sessions === 1 ? "session" : "sessions"}
                                   </span>
+                                )}
+                                {r.source === "registered" && r.user_id && (
+                                  <RouterLink
+                                    to={`/owner/crm/brokers/${r.user_id}`}
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="ml-1 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border border-[#B89555] text-[#1A1A1A] bg-[#FDFBF7] hover:bg-[#EFE6D6] transition-colors"
+                                    title="Open broker profile, activity & shared leads"
+                                  >
+                                    Profile <ExternalLink className="h-2.5 w-2.5" />
+                                  </RouterLink>
                                 )}
                               </div>
                             </td>
