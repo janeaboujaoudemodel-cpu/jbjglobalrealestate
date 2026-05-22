@@ -14,6 +14,7 @@ const CollapsedChatButton = forwardRef<HTMLDivElement, CollapsedChatButtonProps>
   return (
     <div
       ref={ref}
+      data-floating-launcher="chat"
       className={`fixed bottom-20 ${isRTL ? 'left-4' : 'right-6'} z-[10050]`}
     >
       <div className="relative">
