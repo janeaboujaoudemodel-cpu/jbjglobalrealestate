@@ -255,7 +255,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                 backgroundImage: isHovered
                   ? `linear-gradient(135deg, ${config.rowTo} 0%, ${config.rowHover} 100%)`
                   : `linear-gradient(135deg, ${config.rowFrom} 0%, ${config.rowTo} 100%)`,
-                borderColor: isActive ? config.base : 'rgba(184,149,85,0.25)',
+                borderColor: config.base,
                 color: config.dark,
                 // Thin 1px outer ring when active, plus the 3px inset left rail
                 // in the mode tone. Keeps the card clearly active without a
