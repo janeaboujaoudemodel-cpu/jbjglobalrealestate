@@ -215,15 +215,47 @@ export default function BrokerDashboard() {
           <div className="w-full bg-gradient-to-r from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] border-y-2 border-[#B89555]/40">
             <div className="px-6 md:px-10 py-8">
               <div className="flex flex-col md:flex-row items-center gap-6">
-                <Avatar className="w-24 h-24 border-2 border-[#B89555] shadow-[0_4px_18px_-6px_rgba(184,149,85,0.45)]">
-                  <AvatarImage src={profile?.photo_url || undefined} />
-                  <AvatarFallback className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] text-[#B89555] text-2xl font-semibold tracking-wide">
-                    {getInitials()}
-                  </AvatarFallback>
-                </Avatar>
+                {/* Avatar — matches header mother-of-pearl gold gradient identity */}
+                <div
+                  className="relative h-24 w-24 rounded-full flex items-center justify-center shrink-0 overflow-hidden"
+                  style={{
+                    border: "1.5px solid hsl(var(--gold))",
+                    boxShadow:
+                      "0 0 0 1px rgba(184,149,85,0.35), 0 8px 24px -8px rgba(184,149,85,0.55)",
+                    background:
+                      "radial-gradient(120% 120% at 30% 25%, #FFFDF8 0%, #F5ECDC 38%, #E8D8B8 70%, #D9C291 100%)",
+                  }}
+                >
+                  {profile?.photo_url ? (
+                    <img
+                      src={profile.photo_url}
+                      alt={displayName}
+                      className="absolute inset-0 w-full h-full object-cover rounded-full"
+                    />
+                  ) : (
+                    <>
+                      <span
+                        aria-hidden="true"
+                        className="absolute inset-0 pointer-events-none"
+                        style={{
+                          background:
+                            "conic-gradient(from 210deg at 50% 50%, rgba(255,255,255,0.35), rgba(255,255,255,0) 25%, rgba(184,149,85,0.18) 55%, rgba(255,255,255,0.3) 80%, rgba(255,255,255,0) 100%)",
+                          opacity: 0.5,
+                          mixBlendMode: "soft-light",
+                        }}
+                      />
+                      <span
+                        className="relative text-2xl font-bold text-[#1A1A1A] tracking-[-0.01em]"
+                        style={{ textShadow: "0 1px 0 rgba(255,255,255,0.5)" }}
+                      >
+                        {getInitials()}
+                      </span>
+                    </>
+                  )}
+                </div>
                 <div className="text-center md:text-left flex-1">
                   <h2 className="text-2xl font-semibold text-[#1A1A1A] mb-1">
-                    {profile?.display_name || user?.email || 'Broker'}
+                    {displayName}
                   </h2>
                   <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-2">
                     <Badge className="bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/60 hover:bg-[#FDFBF7]">
