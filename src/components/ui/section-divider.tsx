@@ -4,30 +4,36 @@ type SectionDividerProps = {
   className?: string;
   fullWidth?: boolean;
   bg?: string;
-  variant?: "default" | "champagne";
+  variant?: "default" | "champagne" | "ornament" | "none";
 };
 
 /**
- * Premium section divider — tight editorial spacing (24-32px),
- * 1px center-faded champagne hairline with a tiny gold dot ornament.
- * One token, used site-wide.
+ * Premium section divider — editorial restraint.
+ *
+ * Default: a single centered gold diamond ornament with tight vertical
+ * breathing room. No full-width hairline (which read as a cheap gray
+ * line on champagne). Sections now visually connect cleanly.
+ *
+ * variant="none" renders nothing — useful where two sections should
+ * truly butt together with no ornament at all.
  */
-export function SectionDivider({ className, fullWidth = false }: SectionDividerProps) {
+export function SectionDivider({ className, variant = "ornament" }: SectionDividerProps) {
+  if (variant === "none") return null;
+
   return (
-    <div className={cn("py-4 md:py-6", className)} aria-hidden="true">
-      <div className={cn(
-        "mx-auto",
-        fullWidth ? "max-w-[1600px] px-6 md:px-12 lg:px-16" : "max-w-5xl px-8"
-      )}>
-        <div
-          className="h-px w-full"
-          style={{
-            background:
-              "linear-gradient(90deg, transparent 0%, rgba(184,149,85,0.35) 50%, transparent 100%)"
-          }}
-        />
-      </div>
+    <div
+      className={cn("flex items-center justify-center py-3 md:py-4", className)}
+      aria-hidden="true"
+      data-no-contrast-guard
+    >
+      <span
+        className="inline-block w-[5px] h-[5px] rotate-45"
+        style={{
+          background: "transparent",
+          border: "1px solid #B89555",
+          boxShadow: "0 0 0 1px rgba(184,149,85,0.18)",
+        }}
+      />
     </div>
   );
 }
-
