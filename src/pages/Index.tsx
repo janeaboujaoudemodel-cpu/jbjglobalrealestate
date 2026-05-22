@@ -99,14 +99,6 @@ const heroActions = [
   { label: "News", icon: Newspaper, href: "/news" },
 ];
 
-// "I'm a..." mode selector pills — inline in hero per reference photo
-const heroModes = [
-  { id: "investor" as const, label: "Investor", icon: TrendingUp },
-  { id: "broker" as const, label: "Broker", icon: Handshake },
-  { id: "developer" as const, label: "Developer", icon: Building2 },
-];
-
-
 // Three pillars
 const pillars = [
   { icon: Building2, title: "Premium Marketplace", desc: "2,400+ Off-Plan & Resale Properties" },
@@ -118,20 +110,8 @@ const Index = () => {
   const [isInquiryOpen, setIsInquiryOpen] = useState(false);
   const [videoLoaded, setVideoLoaded] = useState(false);
   const { t } = useLanguage();
-  const { isBroker, hasSelectedRole } = useUserRole();
-  const { mode: activeMode, setMode } = useUserMode();
+  const { isBroker } = useUserRole();
 
-  // Auto-rotating spotlight across the I'm a... pills — visual hint only,
-  // does NOT mutate the user's actual mode. Stops once the user interacts.
-  const [spotlightIdx, setSpotlightIdx] = useState(0);
-  const [spotlightActive, setSpotlightActive] = useState(true);
-  useEffect(() => {
-    if (!spotlightActive) return;
-    const id = window.setInterval(() => {
-      setSpotlightIdx((i) => (i + 1) % heroModes.length);
-    }, 1600);
-    return () => window.clearInterval(id);
-  }, [spotlightActive]);
 
 
 
