@@ -238,11 +238,14 @@ const MeetTheTeam: React.FC = () => {
         const isOwnerRole = Boolean(adminResult.data) || Boolean(ownerResult.data);
         const hasHrRole = hrRole?.is_active;
 
+        setIsOwner(isOwnerRole);
         setIsInternalUser(isOwnerRole || hasHrRole);
       } catch (error) {
         console.error("Error checking internal user status:", error);
         setIsInternalUser(false);
+        setIsOwner(false);
       }
+
     };
 
     checkInternalUser();
