@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
   LayoutDashboard, BarChart3, Inbox, ClipboardList, StickyNote, Bell,
   Heart, SlidersHorizontal, Settings, LogOut, ChevronRight, User,
@@ -35,6 +35,36 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
   const { mode } = useUserMode();
   const { data: alerts } = useUserAlerts();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const dashboardHref = isOwner
+    ? "/owner"
+    : mode === "broker"
+    ? "/broker-dashboard"
+    : mode === "investor"
+    ? "/investor-dashboard"
+    : mode === "developer"
+    ? "/developer-portal"
+    : "/my-dashboard";
+
+  const roleLabel = isOwner
+    ? "Owner"
+    : mode === "broker"
+    ? "Broker"
+    : mode === "investor"
+    ? "Investor"
+    : mode === "developer"
+    ? "Developer"
+    : null;
+
+  const currentFull = location.pathname + location.search + location.hash;
+  const isRowActive = (to?: string) => {
+    if (!to) return false;
+    // exact match on path+hash; for query/hash variants just check startsWith on the path part
+    const [toPath] = to.split(/[?#]/);
+    if (to.includes("#") || to.includes("?")) return currentFull === to || currentFull.startsWith(to);
+    return location.pathname === toPath;
+  };
 
   const { data: crmProfile } = useQuery({
     queryKey: ["crm-profile-name", user?.id],
@@ -80,10 +110,16 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
     badge?: number;
     onClick?: () => void;
   }) => {
+    const active = isRowActive(to);
     const inner = (
       <span className="flex items-center gap-2.5 w-full">
-        <Icon className="w-4 h-4 text-[#1A1A1A]/70 shrink-0" strokeWidth={1.75} />
-        <span className="text-sm font-medium text-[#1A1A1A] flex-1">{label}</span>
+        <Icon
+          className={`w-4 h-4 shrink-0 ${active ? "text-[#1A1A1A]" : "text-[#1A1A1A]/70"}`}
+          strokeWidth={active ? 2 : 1.75}
+        />
+        <span className={`text-sm flex-1 ${active ? "font-semibold text-[#1A1A1A]" : "font-medium text-[#1A1A1A]"}`}>
+          {label}
+        </span>
         {badge && badge > 0 ? (
           <span className="min-w-[18px] h-[18px] px-1 rounded-full bg-[#1A1A1A] text-white text-[10px] font-bold flex items-center justify-center">
             {badge > 9 ? "9+" : badge}
@@ -95,7 +131,9 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
       <DropdownMenuItem
         asChild={!!to}
         onSelect={onClick ? () => onClick() : undefined}
-        className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 focus:bg-[#F7F2EA] data-[highlighted]:bg-[#F7F2EA]"
+        className={`cursor-pointer rounded-md px-2.5 py-2 my-0.5 focus:bg-[#F7F2EA] data-[highlighted]:bg-[#F7F2EA] ${
+          active ? "bg-[#F7F2EA] border border-[#B89555]/30" : ""
+        }`}
       >
         {to ? <Link to={to}>{inner}</Link> : inner}
       </DropdownMenuItem>
@@ -166,12 +204,25 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
           <div className="min-w-0 flex-1">
             <div className="text-sm font-semibold text-[#1A1A1A] truncate">{displayName}</div>
             <div className="text-[11px] text-[#1A1A1A]/55 truncate">{user.email}</div>
+            {roleLabel && (
+              <span className="inline-flex items-center mt-1 px-1.5 py-[1px] rounded-full text-[10px] font-semibold uppercase tracking-[0.08em] text-[#1A1A1A] bg-[#EFE6D6] border border-[#B89555]/40">
+                {roleLabel}
+              </span>
+            )}
           </div>
         </div>
         <DropdownMenuSeparator className="bg-[#EFE6D6] my-1" />
 
+        {/* Dashboard — click parent goes to dashboard home; hovering opens submenu */}
         <DropdownMenuSub>
-          <DropdownMenuSubTrigger className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 focus:bg-[#F7F2EA] data-[highlighted]:bg-[#F7F2EA] data-[state=open]:bg-[#F7F2EA]">
+          <DropdownMenuSubTrigger
+            onClick={(e) => {
+              // allow direct navigation to dashboard home on click
+              e.preventDefault();
+              navigate(dashboardHref);
+            }}
+            className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 focus:bg-[#F7F2EA] data-[highlighted]:bg-[#F7F2EA] data-[state=open]:bg-[#F7F2EA]"
+          >
             <span className="flex items-center gap-2.5 w-full">
               <LayoutDashboard className="w-4 h-4 text-[#1A1A1A]/70 shrink-0" strokeWidth={1.75} />
               <span className="text-sm font-medium text-[#1A1A1A] flex-1">Dashboard</span>
