@@ -17,6 +17,22 @@ function parseRgb(input: string): [number, number, number] | null {
   return [Number(m[1]), Number(m[2]), Number(m[3])];
 }
 
+function averageGradientRgb(input: string): string | null {
+  const matches = [...input.matchAll(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/gi)];
+  if (!matches.length) return null;
+  const totals = matches.reduce(
+    (acc, m) => {
+      acc[0] += Number(m[1]);
+      acc[1] += Number(m[2]);
+      acc[2] += Number(m[3]);
+      return acc;
+    },
+    [0, 0, 0],
+  );
+  const count = matches.length;
+  return `rgb(${Math.round(totals[0] / count)}, ${Math.round(totals[1] / count)}, ${Math.round(totals[2] / count)})`;
+}
+
 function relLuminance([r, g, b]: [number, number, number]): number {
   const norm = [r, g, b].map((v) => {
     const x = v / 255;
@@ -44,7 +60,9 @@ function effectiveBgColor(el: Element): string {
     }
     const bgImage = style.backgroundImage;
     if (bgImage && bgImage !== "none") {
-      // Unknown gradient/image surface — bail out of guarding rather than guessing.
+      const average = averageGradientRgb(bgImage);
+      if (average) return average;
+      // Unknown image surface — bail out of guarding rather than guessing.
       return "__unknown__";
     }
     cur = cur.parentElement;
