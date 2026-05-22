@@ -1,108 +1,51 @@
-# CRM Restructure — Private vs Shared Workspaces + Broker Profile Hub
+# Merge /brokers into /team + Owner-managed Visibility Controls
 
-## What changes for you (the owner)
+## What you'll see
 
-You will have two clearly separated workspaces inside the CRM, plus a per-broker profile view:
+1. `/brokers` and `/our-brokers` will redirect to `/team`. The Brokers directory is removed as a standalone page — its contents are merged into the existing "Meet the Team" page as a new **Brokers** section, without breaking the existing department layout.
+2. A new owner-only **Team Visibility** control bar appears at the top of `/team` (only visible when you are signed in as owner). It contains:
+   - **Page master switch** — when OFF, the entire `/team` page is hidden from the public (visitors get a 404, no redirect). Owner still sees it.
+   - **Hide all AI personas** toggle — one click hides every team member where `isAI = true`.
+   - **Per-member eye toggle** — each card shows a small eye icon (owner-only) to hide/show that individual member from the public page. AI personas have the same toggle so you can re-enable any specific persona if you want.
+3. Defaults applied on first save:
+   - Page master = **visible**.
+   - "Hide all AI personas" = **ON**, so only real humans + activated brokers show.
+   - Roy Davy is removed/hidden (see "Roy" below).
+4. The new **Brokers** section on `/team` is sourced from real activated brokers in `crm_brokers` (the CRM table — same source as the admin Broker Registry). It currently shows only Jane (the single active broker). All the 128 sample/demo brokers from `src/config/brokers-data.ts` are NOT shown on `/team` — they were placeholders.
 
-1. **My Leads (Private)** — the existing CRM you already use. Anything you edit here stays private. Even if the lead has been shared with a broker, your edits do NOT reach the broker. This is your private workspace for notes, status changes, internal scoring, etc.
-2. **Shared with Brokers** — a new section listing only leads that have an active broker share. Edits made HERE go live to the assigned broker immediately. This is where you collaborate.
-3. **Brokers → Profile** — clicking any broker opens their full profile: every lead they own or were given, every status change, every note, every call/whatsapp/email log, every action they have taken. Read-only audit for you.
+## Backend (Lovable Cloud)
 
-The broker always sees what they see today: only the fields/rows the share grants them, and only the version that was published to them from the Shared workspace.
+New table `public.team_visibility`:
+- `member_id` text — primary key. Special keys: `__page__` for the master page switch and `__hide_ai__` for the bulk AI toggle. All other keys are team-member ids (e.g. `david-thornton`) or broker uuids prefixed `broker:<uuid>`.
+- `is_visible` boolean — default true.
+- `updated_by` uuid, `updated_at` timestamptz.
 
-## How it works under the hood
+RLS:
+- Public can `SELECT` (so the page can honor visibility for visitors).
+- Only owner/admin (via existing `has_role`) can `INSERT/UPDATE/DELETE`.
 
-```text
-crm_leads (one row per lead — single source of truth)
-    │
-    ├── owner-private view: src/pages/owner/crm/Leads.tsx (existing, untouched)
-    │       writes go straight to crm_leads
-    │       trigger does NOT enqueue (privacy = on)
-    │
-    ├── shared workspace:  src/pages/owner/crm/SharedWithBrokers.tsx (NEW)
-    │       lists leads JOIN crm_lead_shares WHERE active = true
-    │       writes go straight to crm_leads AND immediately publish
-    │       (auto-fan-out to all broker shares for that lead)
-    │
-    └── broker view: existing BrokerCRM, reads through crm_lead_shares
-            sees only fields allowed by visible_* grants
-            sees only diffs that were published
-```
+## Frontend changes
 
-The plumbing from the previous phase (`crm_lead_publish_queue`, `crm_capture_owner_lead_edit` trigger, `crm_publish_lead_diffs` RPC) is reused — we just change WHO triggers publication:
+- `src/pages/MeetTheTeam.tsx`
+  - Load `team_visibility` once at mount.
+  - If `__page__` = false and viewer is NOT owner → return `<NotFound />`.
+  - Filter departments: apply per-member visibility + `__hide_ai__` flag.
+  - Add new "Brokers" department block (after Sales) pulling from `crm_brokers` for activated brokers only.
+  - Owner-only `TeamVisibilityBar` component pinned at the top.
+  - Owner-only eye toggle button on each `TeamMemberCard` and broker card.
 
-- Edit from `/owner/crm/leads` (private) → trigger captures diff but `auto_publish = false`. Diff sits in queue, hidden, never delivered. Effectively private.
-- Edit from `/owner/crm/shared-with-brokers` → same write, but the page calls `crm_publish_lead_diffs(lead_id)` right after the mutation succeeds. Diff is delivered instantly.
+- `src/routes/PublicRoutes.tsx`
+  - `/brokers` → `<Navigate to="/team" replace />`.
+  - Keep `/team` route.
 
-To know which view an edit came from, we add a request-scoped flag (`x-crm-context: 'private' | 'shared'`) that the page passes when calling the update RPC. The trigger reads it from `current_setting('crm.context', true)` and decides whether to enqueue, auto-publish, or skip.
+- `src/components/team/TeamVisibilityBar.tsx` (new) — three controls + live counts.
+- `src/hooks/useTeamVisibility.ts` (new) — fetch + mutate visibility map, cached, owner-write.
 
-## Broker Profile Hub
+## "Roy" / "Roy Davy"
 
-New route `/owner/crm/brokers/:brokerId` showing:
+Roy is not in `src/config/team-members.ts` or `brokers-data.ts`. He is presumably a row in `crm_brokers`. The owner can hide him from `/team` with the new eye toggle. If you want him fully removed from the CRM, say so and I'll add a "Mark inactive" action on the BrokersRegistry too.
 
-- Header: avatar, name, email, status (active/suspended), date granted access, 2FA status, last login, last IP.
-- Tabs:
-  - **Leads** — every `crm_lead_shares` row + every lead the broker created themselves (`crm_leads.created_by = brokerId`). Inline status, stage, last activity.
-  - **Activity** — chronological feed from `crm_broker_activity_log` (calls, whatsapps, emails, status changes, file opens, exports).
-  - **Performance** — count by stage, conversion %, response time, won/lost.
-  - **Access** — which databases they can see, which fields, which files. Edit/revoke inline.
-  - **Sessions** — active sessions + Revoke All kill switch (reuses Phase 6 SecurityCenter primitives).
+## Out of scope (won't change unless you ask)
 
-Reachable from the existing Brokers list at `/owner/crm/brokers` by clicking any row.
-
-## Database changes
-
-```sql
--- 1. Per-edit context flag (no schema change — just a session GUC the trigger reads)
---    Set by the client per request: SELECT set_config('crm.context','shared', true);
-
--- 2. Auto-publish helper used by the Shared workspace page
-CREATE OR REPLACE FUNCTION public.crm_publish_lead_diffs_for_lead(p_lead_id uuid)
-RETURNS int LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
-DECLARE n int;
-BEGIN
-  UPDATE crm_lead_publish_queue
-     SET published_at = now()
-   WHERE lead_id = p_lead_id AND published_at IS NULL;
-  GET DIAGNOSTICS n = ROW_COUNT;
-  RETURN n;
-END $$;
-
--- 3. Update existing trigger crm_capture_owner_lead_edit:
---    - Read GUC crm.context (default 'private')
---    - If 'private'  → do NOT insert into queue (privacy preserved)
---    - If 'shared'   → insert into queue AND set published_at = now() (live)
-
--- 4. Broker activity audit (already partly exists as crm_broker_activity_log;
---    ensure it captures: lead_create, lead_edit, status_change, call, whatsapp,
---    email, file_open, export, login, ip)
-
--- 5. View vw_crm_broker_profile aggregating per-broker counts for the hub
-CREATE OR REPLACE VIEW public.vw_crm_broker_profile AS
-SELECT b.id AS broker_id, b.full_name, b.email,
-       (SELECT count(*) FROM crm_lead_shares s WHERE s.shared_with = b.id AND s.active) AS leads_shared,
-       (SELECT count(*) FROM crm_leads l WHERE l.created_by = b.id) AS leads_created,
-       (SELECT max(occurred_at) FROM crm_broker_activity_log a WHERE a.broker_id = b.id) AS last_activity_at
-  FROM crm_brokers b;
-```
-
-RLS: only the owner (Jane) can read `vw_crm_broker_profile` and `crm_broker_activity_log`. Brokers see nothing change.
-
-## UI work
-
-| File | Action |
-|------|--------|
-| `src/pages/owner/crm/Leads.tsx` (or current `LeadsPage`) | Wrap update calls so they `set_config('crm.context','private')` first. No visual change. |
-| `src/pages/owner/crm/SharedWithBrokers.tsx` | NEW. Same lead table component, filtered to shares-only. Updates set context = `'shared'`. Top banner: "Edits here go live to brokers". |
-| `src/components/crm/SidebarNav.tsx` | Add "Shared with Brokers" item between "Leads" and "Pipeline". |
-| `src/pages/owner/crm/BrokerProfile.tsx` | NEW. The 5-tab hub. |
-| `src/pages/owner/crm/Brokers.tsx` | Each row now links to `/owner/crm/brokers/:id`. |
-| Remove the `LeadPublishQueue` panel from `DatabasesHub` — no longer needed since publishing is contextual and automatic in the Shared workspace. |
-
-## Risk callouts
-
-- **R1**: Existing in-flight queued diffs (from the previous phase) will never be auto-published under the new model. Confirm I should bulk-publish them once on migration, or discard them all.
-- **R2**: Brokers who currently see live owner edits will stop seeing them unless the owner switches to the Shared workspace to edit. This is the desired privacy behavior but is a behavior change.
-- **R3**: The `crm.context` GUC is per-transaction. Any owner edit that bypasses the page (CLI, future webhook, etc.) will default to `'private'` — safer default.
-
-Reply approve to proceed. Phase order will be: (1) DB trigger + helper + view, (2) Shared workspace page + sidebar entry, (3) Broker Profile hub, (4) wire context flag everywhere, (5) cleanup of old LeadPublishQueue UI.
+- The internal `/owner/crm` brokers registry stays as-is — its admin filters already control activation/status.
+- The 128 demo brokers in `brokers-data.ts` are no longer rendered anywhere public; the file itself stays in case other internal screens reference it.
