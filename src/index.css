@@ -4392,23 +4392,25 @@ a[class*="bg-red-"]:hover {
   line-height: 1;
 }
 .payment-plan-square .payment-plan-eyebrow {
-  font-size: 9px !important;
-  font-weight: 600 !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
   letter-spacing: 0.18em !important;
   text-transform: uppercase !important;
-  color: #B89555 !important;
+  color: #E8C77A !important;
 }
 .payment-plan-square .payment-plan-value {
-  font-size: 12px !important;
-  font-weight: 700 !important;
-  color: #FDFBF7 !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  color: #FFFFFF !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4) !important;
 }
 .payment-plan-square svg,
 .payment-plan-square svg * {
-  color: #B89555 !important;
-  stroke: #B89555 !important;
+  color: #E8C77A !important;
+  stroke: #E8C77A !important;
   fill: none !important;
 }
+
 
 
 /* ─── Mode chip — floating-lift hover (no colour change) ─────────────────

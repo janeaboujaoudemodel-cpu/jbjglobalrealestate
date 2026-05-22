@@ -303,13 +303,15 @@ const ReellyProjectCard = ({
                   <span className="handover-label">Handover </span>
                   <span>{derived || HANDOVER_FALLBACK}</span>
                 </p>
-                {percentages.length > 0 && (
-                  <span data-no-contrast-guard className="payment-plan-square allow-white" aria-label={`Payment plan ${percentages.join('/')}`}>
-                    <CreditCard className="w-3 h-3" aria-hidden="true" />
-                    <span className="payment-plan-eyebrow">Plan</span>
-                    <span className="payment-plan-value">{percentages.join('/')}</span>
-                  </span>
-                )}
+                <span
+                  data-no-contrast-guard
+                  className="payment-plan-square allow-white"
+                  aria-label={percentages.length > 0 ? `Payment plan ${percentages.join('/')}` : 'Payment plan not applicable'}
+                >
+                  <CreditCard className="w-3 h-3" aria-hidden="true" />
+                  <span className="payment-plan-eyebrow">Plan</span>
+                  <span className="payment-plan-value">{percentages.length > 0 ? percentages.join('/') : 'N/A'}</span>
+                </span>
               </div>
             );
           })()}
