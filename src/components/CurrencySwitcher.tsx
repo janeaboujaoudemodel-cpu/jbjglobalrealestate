@@ -133,7 +133,7 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
             </DropdownMenuItem>
           ))}
         </div>
-        <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
+        
       </DropdownMenuContent>
     </DropdownMenu>
   );
