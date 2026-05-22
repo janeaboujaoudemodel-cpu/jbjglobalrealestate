@@ -383,7 +383,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
                   .filter((p: any) => typeof p === 'number');
                 if (percentages.length === 0) return null;
                 return (
-                  <span className="payment-plan-square" aria-label={`Payment plan ${percentages.join('/')}`}>
+                  <span data-no-contrast-guard className="payment-plan-square allow-white" aria-label={`Payment plan ${percentages.join('/')}`}>
                     <CreditCard className="w-3 h-3" aria-hidden="true" />
                     <span className="payment-plan-eyebrow">Plan</span>
                     <span className="payment-plan-value">{percentages.join('/')}</span>
