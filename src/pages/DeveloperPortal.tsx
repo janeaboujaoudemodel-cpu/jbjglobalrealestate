@@ -899,22 +899,6 @@ const DeveloperPortal = () => {
     <>
       <SEOHead title="Developer Portal | JBJ Global Real Estate" description="Submit projects, briefings, and marketing materials to JBJ Global." />
       <div className="min-h-screen bg-gradient-to-b from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)]">
-        {/* Hero */}
-        <div className="relative py-16 md:py-24 bg-gradient-to-br from-[hsl(38,35%,18%)] via-[hsl(36,30%,14%)] to-[hsl(34,25%,10%)] overflow-hidden">
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0icmdiYSgyNTUsMjE1LDE1MCwwLjA1KSIvPjwvc3ZnPg==')] opacity-50" />
-          <div className="container mx-auto px-4 relative z-10 text-center max-w-3xl">
-            <Badge className="mb-4 bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30 text-sm">
-              Developer Portal
-            </Badge>
-            <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[#F7F1E6]">
-              Developer Portal
-            </h1>
-            <p className="text-lg md:text-xl text-[#D4B896]">
-              Submit projects, request briefings, upload documents, and manage launches — all in one place.
-            </p>
-          </div>
-        </div>
-
         {/* Owner Mode Banner */}
         {isOwner && !isDeveloperMode && (
           <div className="container mx-auto px-4 py-4 max-w-4xl">

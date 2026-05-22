@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import VideoBackground from "@/components/VideoBackground";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
@@ -28,8 +27,6 @@ import {
   FolderOpen,
   HelpCircle,
 } from "lucide-react";
-import brokerDashboardHeroVideo from "@/assets/videos/broker-dashboard-hero.mp4";
-
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
@@ -164,52 +161,6 @@ export default function BrokerDashboard() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero Section with Video */}
-      <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
-        <VideoBackground 
-          src={brokerDashboardHeroVideo} 
-          poster="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80" 
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40" />
-        
-        <motion.div 
-          className="container mx-auto px-4 relative z-10"
-          initial="hidden"
-          animate="visible"
-          variants={staggerContainer}
-        >
-          <div className="max-w-4xl mx-auto text-center">
-            <motion.div 
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6"
-              style={{
-                background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(200,167,102,0.08) 100%)',
-                backdropFilter: 'blur(20px)',
-                border: '1.5px solid rgba(200,167,102,0.6)',
-              }}
-              variants={fadeInUp}
-            >
-              <span className="w-2 h-2 bg-[#EFE6D6] rounded-full animate-pulse" />
-              <span className="text-[#1A1A1A] font-semibold text-xs uppercase tracking-widest">Broker Dashboard</span>
-            </motion.div>
-            
-            <motion.h1 
-              className="text-4xl md:text-5xl font-light text-white mb-4 leading-tight"
-              variants={fadeInUp}
-            >
-              Your Professional <span className="text-[#1A1A1A]">Control Center</span>
-            </motion.h1>
-            
-            <motion.p 
-              className="text-lg text-white/85 font-light max-w-2xl mx-auto"
-              variants={fadeInUp}
-            >
-              Manage your brokerage activity, track performance, and access operational tools.
-            </motion.p>
-          </div>
-        </motion.div>
-      </section>
-
       {/* Dashboard Content */}
       <div className="container mx-auto px-4 py-12">
         <motion.div
