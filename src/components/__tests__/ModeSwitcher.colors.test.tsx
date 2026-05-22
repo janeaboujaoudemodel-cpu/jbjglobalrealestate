@@ -160,13 +160,13 @@ describe("ModeSwitcher color regression", () => {
         seenBackgrounds.push(norm(row.style.backgroundImage));
       });
 
-      // GUARDS the original "all four cards look the same" regression:
-      // every row must have a unique background.
+      // GUARDS the "all rows look the same" regression: every row must have
+      // a unique background. 3 categories now (investor_broker removed).
       const unique = new Set(seenBackgrounds);
       expect(
         unique.size,
         `Each mode row must have a unique background, got: ${seenBackgrounds.join(" | ")}`,
-      ).toBe(4);
+      ).toBe(3);
     });
   });
 
