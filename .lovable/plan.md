@@ -1,87 +1,89 @@
-## Move Developer Hub out of Listings → Admin Developer Portal
 
-Right now `/admin/developers` lives inside the Listings area and only shows an overview/projects table. You want it to become the **single source of truth for every developer**, with full CRUD over their identity, content, media, projects, and registered sales reps — and to give each sales rep the same editing surface (gated to their developer).
+# Plan: Developer Data Rebuild + Owner Developer Hub
 
----
+## What I found (important — affects approach)
 
-### 1. Navigation / Placement
+- **633 developers** in DB, **394 missing logos**, **34 duplicate names** (e.g. `Binghatti` exists at slugs `binghatti` AND `developed-by-binghatti`; same for Samana).
+- **Cross-wired descriptions** (the bug you saw):
+  - `Binghatti` (both rows) → description text is actually about **Al Habtoor Group**
+  - `Samana Developers` (slug `samana-developers`) → description text is about **Binghatti**
+  - This is a row-level data corruption from a past import, not a UI bug.
+- **`/developer-hub` already exists** but it's the *public developer onboarding portal* (company registration, project wizard, launch events, CRM for the developer themselves). It is **not** an owner control surface and should not be repurposed. The content in `/admin/developers` (overview, briefings, deal close, missing-logos queue, profile editor) is owner-only and belongs on a new route.
 
-- Remove "Developers" from the Listings admin nav.
-- Add a top-level **Developer Portal** entry in the Owner sidebar (under CORE, after Owner Panel/Overview).
-  - Owner sees: all developers + all registered sales reps + roles + analytics.
-  - Sales rep sees: only the developer they are registered under (same edit UI).
-- Existing `/admin/developers` route stays, but the page is rebuilt as the new portal hub.
+## Scope
 
----
+### Part A — Data integrity fix (Binghatti/Samana + duplicates)
 
-### 2. Developer Hub list page (`/admin/developers`)
+1. Merge duplicate developer rows by canonical name. Keep the slug with the most relationships (projects, logo, website); migrate FKs from the duplicate to the canonical row; soft-delete the duplicate.
+2. Null out the 5 cross-wired descriptions on `binghatti`, `developed-by-binghatti`, `samana-developers` so they re-fetch fresh in Part B (never silently keep wrong text).
 
-Replace the current "DeveloperOverviewTab" with a real directory:
+### Part B — Full rebuild from official sites (Firecrawl + AI)
 
-- Searchable, filterable table of all developers.
-- Columns: Logo · Developer · # Projects · # Sales reps · Last updated · Status (Confirmed / Needs review) · Actions.
-- Row click → `/admin/developers/:slug` (full profile).
-- "+ Add Developer" button (owner only).
-- Secondary tab: **Sales Representatives** — list of every registered rep across all developers (name, languages, developer, role, last activity, contact).
+New edge function `enrich-developer-from-official-site` (owner-only, `requireOwnerAuth`):
 
----
+- Input: `developer_id` (single) or `batch` (max 25/run to respect Firecrawl credits).
+- Pipeline per developer:
+  1. If `website_url` missing → Firecrawl **search** for `"<name>" Dubai developer official site` to find it.
+  2. Firecrawl **scrape** homepage with formats `['markdown','branding','summary','links']` → extracts logo URL, primary brand color, summary, internal links.
+  3. AI gateway (`google/gemini-3-flash-preview`) extracts structured `{ description, founded_year, hq, specialties[] }` from markdown.
+  4. Firecrawl **map** `<site>/projects` (or detected projects subpage) → top 10 project names + URLs.
+  5. Download logo → re-host in `developer-logos` storage bucket (champagne padding via sharp-style transform on read is already handled by existing logo standard).
+  6. **Replace** `description`, `logo_url`, `website_url`, `founded_year`, `hq_location`, `specialties`. Upsert scraped projects into new `developer_scraped_projects` table — **never** touches existing published `projects` rows (no deletes, per project standard).
+  7. Write before/after JSON to new `developer_enrichment_log` table for audit + rollback.
 
-### 3. Developer profile page (`/admin/developers/:slug`)
+- New owner-only `/developer-hub-admin/enrichment` page (see Part C) drives this with batch progress, per-developer Preview → Approve → Apply workflow (so you stay in control rather than blind overwrite).
 
-Full editable profile, single page with sub-tabs:
+### Part C — Owner Developer Control Hub (new route)
 
-1. **Overview** — logo (placeholder if missing, click to upload), legal name, trading name, founded, HQ, website, description (rich text), languages, social links.
-   - "Description must match the developer's official website" notice.
-   - **Confirmation block** at the bottom: checkbox "I confirm this information matches the developer's official website" + signature line (user name + timestamp). Stored as a confirmation record; shows "Last confirmed by X on …".
-2. **Projects** — every project by this developer, clickable → project edit page. Inline edit of name, status, handover, units. "+ Add Project".
-3. **Media** — drag-drop uploader for photos, videos, brochures, floor plans, maps, any files. Reordering, captions, type tagging. No size category limits beyond storage policy.
-4. **Contacts** — developer's own contact details (HQ phone, email, address, map pin) + list of sales representatives registered under this developer with their full profile (photo, languages, role, phone, email, WhatsApp, bio). Owner can invite/suspend reps from here.
-5. **Files & Brochures** — same uploader scoped to documents (PDF/DOC/XLS).
-6. **Activity** — audit log of every edit (who, what, when, before/after).
+Because `/developer-hub` is taken by the public dev portal, I'll add **`/developer-hub-admin`** (OwnerGuard, not under `/admin`). It will host everything currently at `/admin/developers/*`, expanded:
 
-All edits autosave + show "Saved · pending confirmation" until the Overview confirmation checkbox is re-signed.
+```
+/developer-hub-admin                  → Overview (KPIs: total devs, missing logos, enrichment status, recent briefings, deals closed)
+/developer-hub-admin/directory        → searchable list (= current AdminDevelopers)
+/developer-hub-admin/profile/:slug    → full editor (= DeveloperProfilePage)
+/developer-hub-admin/missing-logos    → queue (= MissingLogosQueue)
+/developer-hub-admin/enrichment       → Firecrawl rebuild queue + before/after diff approval
+/developer-hub-admin/briefings        → briefing requests inbox + replies
+/developer-hub-admin/deals            → deal-close pipeline
+/developer-hub-admin/calendar         → events + meeting bookings (Google Calendar connector already linked)
+/developer-hub-admin/projects         → all developer-submitted projects, approval queue
+```
 
----
+`/admin/developers/*` routes become 301-style `<Navigate>` redirects so existing links keep working. Sidebar entry "Developers" in the owner nav repoints to `/developer-hub-admin`.
 
-### 4. Sales Representative editing surface
+### Part D — Broken logo sweep (immediate quick win, runs before Part B)
 
-- Reps registered under a developer get the **same edit UI** for that developer only.
-- Route: same `/admin/developers/:slug` — guard checks `is_owner OR rep.developer_id = developer.id`.
-- Every save by a rep flags the developer as "Pending owner review" until the owner re-confirms (or rep re-confirms with the "matches official website" checkbox).
+While Part B is the proper fix, I'll also run a one-shot logo-only pass for the **most-referenced** developers first (Binghatti, Samana, Aldar, Emaar, Damac, Sobha, Nakheel, Meraas, Dubai Properties, Select Group, Ellington, Danube, Azizi, Tiger, Deyaar — ~20 top names) so the public site stops showing missing logos within minutes, not hours.
 
----
+## What I will NOT do
 
-### 5. Data model (Supabase)
+- Will not delete any developer row, project row, or media. (Duplicate merges soft-delete only, with restore path.)
+- Will not touch the public `/developer-hub` portal used by developers themselves.
+- Will not auto-apply scraped descriptions in bulk without your approval — Part B writes to a staging table and the enrichment UI shows before/after diffs for one-click approve per developer (or "Approve all on this page").
+- Will not change `/admin/developers` URLs to break — they'll redirect.
 
-New / extended tables:
+## Technical details
 
-- `developer_profiles` — extend existing developers table with: `description_rich`, `languages text[]`, `hq_address`, `hq_map`, `social_links jsonb`, `last_confirmed_by`, `last_confirmed_at`, `confirmation_source` (owner/rep).
-- `developer_media` — `developer_id, kind (photo|video|brochure|file|map), url, caption, display_order, uploaded_by`.
-- `developer_sales_reps` — `developer_id, user_id, role, phone, whatsapp, languages text[], bio, photo_url, status (active|suspended|pending)`.
-- `developer_audit_log` — `developer_id, actor_id, action, diff jsonb, created_at`.
-- Storage bucket `developer-assets` (public read, owner+rep write via RLS).
+- New tables (migration):
+  - `developer_scraped_projects (id, developer_id, name, url, image_url, status, scraped_at)`
+  - `developer_enrichment_log (id, developer_id, before_jsonb, after_jsonb, source_url, status enum staged|approved|rejected|applied, created_at, applied_at, applied_by)`
+  - RLS: owner-only.
+- New storage bucket: `developer-logos` (public read, owner write).
+- New edge functions (CORS + `requireOwnerAuth` + Zod input validation):
+  - `enrich-developer-from-official-site`
+  - `apply-developer-enrichment` (moves staged log → live row, after owner approval)
+  - `merge-duplicate-developers`
+- Firecrawl: uses linked `Firecrawl` connection (`std_01kfn6wppgfvfa3d05hympc604`); secret already in env. Rate-limited to 1 req/sec, max 25/run.
+- AI extraction: Lovable AI Gateway, no extra key needed.
+- Existing `IconTile`, `DeveloperLogo` champagne-padded container, and design tokens reused — no visual standard changes.
 
-RLS:
-- Owner: full access.
-- Rep: read/write only rows where `developer_id` matches their `developer_sales_reps.developer_id` and `status = 'active'`.
-- Public: read only published, non-sensitive fields (no contacts) — respects existing Contact Gating Standard.
+## Execution order
 
----
+1. Migration: new tables + bucket + indexes (one approval).
+2. Quick logo sweep edge function + run for top 20 devs (Part D) → immediate visible fix.
+3. Cross-wire bug nulls + duplicate-merge migration (Part A).
+4. Enrichment edge functions + staging UI at `/developer-hub-admin/enrichment` (Part B).
+5. Owner Developer Hub shell + move all `/admin/developers/*` content + redirects + calendar/briefings/deals tabs (Part C).
+6. Sidebar nav update.
 
-### 6. Out of scope for this pass
-
-- Sales-rep self-registration flow (already exists in Developer Portal registration standard — we only consume it here).
-- Auto-logo scraping (already shipped via `auto-find-developer-logos`).
-- Public-facing developer pages (untouched; this is admin-side only).
-
----
-
-### Files to create / edit (high level)
-
-- New: `src/pages/admin/developers/DeveloperPortalHub.tsx`, `DeveloperProfilePage.tsx`, tabs (`OverviewTab`, `ProjectsTab`, `MediaTab`, `ContactsTab`, `FilesTab`, `ActivityTab`), `DeveloperConfirmationBlock.tsx`, `SalesRepsDirectory.tsx`.
-- Edit: `src/pages/AdminDevelopers.tsx` (becomes a thin router into the hub), `src/components/owner-dashboard/OwnerSidebarNav.tsx` (add Developer Portal entry), routes.
-- Remove from Listings nav: the "Developers" link.
-- Migration: tables, RLS, storage bucket, triggers for audit log + auto-clear confirmation on edit.
-- Guard: `useDeveloperEditAccess(developerId)` hook.
-
-Approve and I'll build it.
+Estimated: ~15 file changes, 1 migration, 3 edge functions. Roughly one large turn for scaffolding + your approval needed for each batch enrichment run.
