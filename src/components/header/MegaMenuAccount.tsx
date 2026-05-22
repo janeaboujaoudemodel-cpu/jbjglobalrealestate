@@ -277,11 +277,10 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
     });
   }, [isOwner, hasCRMAccess, hasListingAdminAccess, isDeveloperMode, t]);
 
-  // Get mode label for display
   const getModeLabel = () => {
     switch (mode) {
       case 'broker': return t('account.modeBroker', 'Broker');
-      case 'investor_broker': return t('account.modeInvestorBroker', 'Investor + Broker');
+      case 'developer': return t('account.modeDeveloper', 'Developer');
       default: return t('account.modeInvestor', 'Investor');
     }
   };
