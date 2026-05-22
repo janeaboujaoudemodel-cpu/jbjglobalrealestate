@@ -362,20 +362,19 @@ const Index = () => {
               <button
                 type="button"
                 onClick={() => setIsInquiryOpen(true)}
-                className="group inline-flex items-center gap-3 px-10 py-4 rounded-full
-                  bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]
-                  hover:from-[#FFFFFF] hover:via-[#FDFBF7] hover:to-[#F7F2EA]
-                  border border-[#B89555]/80 hover:border-[#B89555]
-                  text-[#1A1A1A] text-[15px] font-bold tracking-wide
-                  transition-all duration-300 ease-out
-                  shadow-[0_12px_44px_-10px_rgba(0,0,0,0.35)]
-                  hover:shadow-[0_16px_56px_-8px_rgba(0,0,0,0.45)]
-                  hover:scale-[1.02]"
+                className="group inline-flex h-12 sm:h-14 items-center justify-center gap-3 rounded-[999px]
+                  border border-gold/80 bg-champagne-light px-7 sm:px-9
+                  text-[15px] font-medium tracking-normal text-foreground
+                  shadow-[0_10px_28px_-18px_hsl(var(--foreground)/0.45),inset_0_1px_0_hsl(var(--background)/0.9)]
+                  transition-[background-color,border-color,box-shadow,transform] duration-300 ease-out
+                  hover:-translate-y-0.5 hover:border-gold hover:bg-champagne
+                  hover:text-foreground hover:shadow-[0_14px_34px_-18px_hsl(var(--foreground)/0.55),inset_0_1px_0_hsl(var(--background)/0.8)]
+                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/55 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
                 <span>Book a Free Consultation</span>
                 <ArrowUpRight
-                  className="w-5 h-5 text-[#1A1A1A] transition-transform duration-300 ease-out group-hover:translate-x-1 group-hover:-translate-y-1"
-                  strokeWidth={3}
+                  className="h-4 w-4 text-current transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  strokeWidth={2.25}
                 />
               </button>
             </motion.div>
