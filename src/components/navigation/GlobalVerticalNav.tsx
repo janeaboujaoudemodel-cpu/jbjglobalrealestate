@@ -605,7 +605,7 @@ export default function GlobalVerticalNav() {
   const location = useLocation();
   const { session } = useAuth();
   const { role, isBroker, isInvestor, isOwner } = useUserRole();
-  const { isDeveloperMode } = useUserModeContext();
+  const { isDeveloperMode, mode } = useUserModeContext();
   const [activeMegaMenu, setActiveMegaMenu] = useState<MegaMenuKey | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -1058,6 +1058,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 isBroker,
                 isInvestor,
                 isDeveloperMode,
+                mode,
               }).map((group) => (
                 <div key={group.label} className={`border border-[#B89555]/25 border-l-4 ${group.colorBorder} rounded-xl bg-[#FDFBF7]/70 p-2`}>
                   <p className={`text-[10px] uppercase tracking-wider font-bold ${group.colorText} px-2 pb-1.5`}>
