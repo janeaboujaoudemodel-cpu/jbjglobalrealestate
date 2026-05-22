@@ -1,51 +1,37 @@
-# Merge /brokers into /team + Owner-managed Visibility Controls
+# Fix cookies banner + mobile overlay chaos
 
-## What you'll see
+Two issues from the mobile screenshots on `/index`:
 
-1. `/brokers` and `/our-brokers` will redirect to `/team`. The Brokers directory is removed as a standalone page — its contents are merged into the existing "Meet the Team" page as a new **Brokers** section, without breaking the existing department layout.
-2. A new owner-only **Team Visibility** control bar appears at the top of `/team` (only visible when you are signed in as owner). It contains:
-   - **Page master switch** — when OFF, the entire `/team` page is hidden from the public (visitors get a 404, no redirect). Owner still sees it.
-   - **Hide all AI personas** toggle — one click hides every team member where `isAI = true`.
-   - **Per-member eye toggle** — each card shows a small eye icon (owner-only) to hide/show that individual member from the public page. AI personas have the same toggle so you can re-enable any specific persona if you want.
-3. Defaults applied on first save:
-   - Page master = **visible**.
-   - "Hide all AI personas" = **ON**, so only real humans + activated brokers show.
-   - Roy Davy is removed/hidden (see "Roy" below).
-4. The new **Brokers** section on `/team` is sourced from real activated brokers in `crm_brokers` (the CRM table — same source as the admin Broker Registry). It currently shows only Jane (the single active broker). All the 128 sample/demo brokers from `src/config/brokers-data.ts` are NOT shown on `/team` — they were placeholders.
+1. **Cookies banner is missing a "Reject All" button.** Only "Accept All" and "Manage Preferences" are shown — GDPR/UX best practice (and what the user is asking for) requires a one-tap reject.
+2. **Floating widgets stack on top of content on mobile.** The "Call our agent" pill, chat bubble, and notification badge sit directly over the cookies banner buttons and over the mode card's "Continue" arrow. Layout looks broken at 390–440px widths.
 
-## Backend (Lovable Cloud)
+## What to change
 
-New table `public.team_visibility`:
-- `member_id` text — primary key. Special keys: `__page__` for the master page switch and `__hide_ai__` for the bulk AI toggle. All other keys are team-member ids (e.g. `david-thornton`) or broker uuids prefixed `broker:<uuid>`.
-- `is_visible` boolean — default true.
-- `updated_by` uuid, `updated_at` timestamptz.
+### 1. CookiesConsentBanner.tsx
+- Add a third button: **Reject All** → calls existing `handleRejectNonEssential` (already wired to save `essential` status with analytics/marketing off).
+- Order on mobile (stacked) and desktop (row): Accept All · Reject All · Manage Preferences.
+- Style Reject All as a neutral outline button (cream surface, ink border) so it reads as a real choice, not a trap.
 
-RLS:
-- Public can `SELECT` (so the page can honor visibility for visitors).
-- Only owner/admin (via existing `has_role`) can `INSERT/UPDATE/DELETE`.
+### 2. Mobile floating-widget collision
+The cookie banner is fixed at `bottom: 0` and is the highest-priority popup. While it's visible, the floating widgets below must move out of the way (or hide). Plan:
+- Add a `body[data-cookie-banner="open"]` flag toggled by `CookiesConsentBanner` while visible.
+- Update the floating launchers (Call-agent pill, support chat bubble, notification badge) to either:
+  - shift their `bottom` offset up by the banner height on mobile (`< 640px`), OR
+  - hide entirely on mobile while the banner is open.
+  
+  Hiding is cleaner — they reappear the moment the user accepts/rejects.
+- Also bump the cookie banner's own `bottom` padding so its buttons are never under the iOS home-indicator / browser chrome (already partially handled via `env(safe-area-inset-bottom)`, verify it's enough at 390×844).
 
-## Frontend changes
+### 3. Mode card "Continue" affordance
+On the investor card the floating chat bubble overlaps the "Continue" arrow. Once the floating widgets are hidden behind the cookie gate (step 2), this resolves automatically. No layout change needed to the card itself.
 
-- `src/pages/MeetTheTeam.tsx`
-  - Load `team_visibility` once at mount.
-  - If `__page__` = false and viewer is NOT owner → return `<NotFound />`.
-  - Filter departments: apply per-member visibility + `__hide_ai__` flag.
-  - Add new "Brokers" department block (after Sales) pulling from `crm_brokers` for activated brokers only.
-  - Owner-only `TeamVisibilityBar` component pinned at the top.
-  - Owner-only eye toggle button on each `TeamMemberCard` and broker card.
+## Files to touch
 
-- `src/routes/PublicRoutes.tsx`
-  - `/brokers` → `<Navigate to="/team" replace />`.
-  - Keep `/team` route.
+- `src/components/CookiesConsentBanner.tsx` — add Reject All button, set/clear `body[data-cookie-banner]` flag.
+- The floating widget components (call-agent pill, support chat bubble, unread badge) — find them and add a `hidden when data-cookie-banner=open` rule, scoped to mobile. I will locate the exact components during implementation (likely `LiveAgentCallPill`, `SupportWidget`/`UnifiedSupportEcosystem`, and the notification badge).
 
-- `src/components/team/TeamVisibilityBar.tsx` (new) — three controls + live counts.
-- `src/hooks/useTeamVisibility.ts` (new) — fetch + mutate visibility map, cached, owner-write.
+## Out of scope
 
-## "Roy" / "Roy Davy"
-
-Roy is not in `src/config/team-members.ts` or `brokers-data.ts`. He is presumably a row in `crm_brokers`. The owner can hide him from `/team` with the new eye toggle. If you want him fully removed from the CRM, say so and I'll add a "Mark inactive" action on the BrokersRegistry too.
-
-## Out of scope (won't change unless you ask)
-
-- The internal `/owner/crm` brokers registry stays as-is — its admin filters already control activation/status.
-- The 128 demo brokers in `brokers-data.ts` are no longer rendered anywhere public; the file itself stays in case other internal screens reference it.
+- No changes to the mode-selection cards, header, or page content.
+- No changes to popup priority logic in `PopupCoordinatorContext`.
+- No business-logic changes; consent persistence stays identical.
