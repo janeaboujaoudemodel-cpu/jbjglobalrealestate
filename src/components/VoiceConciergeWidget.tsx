@@ -3,7 +3,6 @@ import { useConversation } from "@elevenlabs/react";
 import { Phone, PhoneOff, X, Mic, Volume2, Sparkles, MessageCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
 import VoiceConciergeIntakeModal from "@/components/voice-concierge/VoiceConciergeIntakeModal";
 import { COMPANY_NAP } from "@/config/companyNAP";
 
@@ -61,7 +60,6 @@ const VoiceConciergeWidget = () => {
   const leadIdRef = useRef<string | null>(getStoredLeadId());
   const hasShownUnavailableToastRef = useRef(false);
   const callStartTimeRef = useRef<Date | null>(null);
-  const navigate = useNavigate();
 
 
 
@@ -217,7 +215,7 @@ const VoiceConciergeWidget = () => {
     } finally {
       setIsConnecting(false);
     }
-  }, [conversation, navigate, logCallStart]);
+  }, [conversation, logCallStart]);
 
   const handleLauncherClick = useCallback(() => {
     setChoiceOpen((v) => !v);
@@ -244,14 +242,6 @@ const VoiceConciergeWidget = () => {
     setIntakeOpen(false);
     startConversation(leadId);
   }, [startConversation]);
-
-
-  const retryConnection = useCallback(() => {
-    setWidgetStatus("idle");
-    setStatusMessage("");
-    hasShownUnavailableToastRef.current = false;
-    handleStartVoice();
-  }, [handleStartVoice]);
 
 
   const stopConversation = useCallback(async () => {
