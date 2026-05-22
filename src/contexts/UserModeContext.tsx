@@ -5,8 +5,9 @@ import { useAuth } from "@/contexts/AuthContext";
 const MODE_KEY = "jj_user_mode";
 const MODE_SELECTED_KEY = "jj_mode_selected";
 
-// Expanded to 3 modes: investor, broker, or both
-export type UserMode = 'investor' | 'broker' | 'investor_broker' | 'developer';
+// Strictly 3 categories. Legacy 'investor_broker' rows are normalized to 'broker'
+// (broker is the more privileged surface, so existing combined users keep access).
+export type UserMode = 'investor' | 'broker' | 'developer';
 
 interface UserModeContextType {
   mode: UserMode;
@@ -14,6 +15,7 @@ interface UserModeContextType {
   setMode: (mode: UserMode) => Promise<void>;
   isInvestorMode: boolean;
   isBrokerMode: boolean;
+  /** @deprecated Combined mode removed. Always false — kept for back-compat. */
   isCombinedMode: boolean;
   isDeveloperMode: boolean;
   hasMadeInitialSelection: boolean;
@@ -21,10 +23,9 @@ interface UserModeContextType {
 
 const UserModeContext = createContext<UserModeContextType | undefined>(undefined);
 
-// Map legacy 'client' value to 'investor'
+// Map legacy values: 'client' -> 'investor', 'investor_broker' -> 'broker'.
 const normalizeMode = (value: string | null): UserMode => {
-  if (value === 'broker') return 'broker';
-  if (value === 'investor_broker') return 'investor_broker';
+  if (value === 'broker' || value === 'investor_broker') return 'broker';
   if (value === 'developer') return 'developer';
   return 'investor';
 };
