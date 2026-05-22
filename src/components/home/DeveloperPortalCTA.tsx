@@ -152,19 +152,24 @@ const DeveloperPortalCTA = () => {
 
 
   return (
-    <section className="py-12 md:py-16 bg-[#FDFBF7]">
+    <section className="py-8 md:py-10 bg-[#FDFBF7]">
       <div className="container mx-auto px-4">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-1 text-center">
-            Developer Center
-          </h2>
-          <p className="text-[#1A1A1A]/70 text-sm mb-8 text-center">
-            {showShortcuts
-              ? "Your developer tools and shortcuts are ready."
-              : showCongrats
-              ? "Your application has been reviewed."
-              : "Join our network — submit projects, connect with brokers, and grow your business."}
-          </p>
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-end justify-between mb-3">
+            <div>
+              <h2 className="text-lg md:text-xl font-bold text-[#1A1A1A] leading-tight">
+                Developer Center
+              </h2>
+              <p className="text-[#1A1A1A]/70 text-xs mt-0.5">
+                {showShortcuts
+                  ? "Your developer tools and shortcuts."
+                  : showCongrats
+                  ? "Your application has been reviewed."
+                  : "Submit projects, connect with brokers, and grow your business."}
+              </p>
+            </div>
+          </div>
+
 
           {showCongrats && (
             <div className="max-w-md mx-auto text-center">
