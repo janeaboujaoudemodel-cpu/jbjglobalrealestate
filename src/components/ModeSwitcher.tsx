@@ -57,6 +57,7 @@ const MODE_CONFIG: Record<UserMode, ModePalette> = {
     rowTo: '#F7F2EA',
     rowHover: '#EFE6D6',
     dark: '#1A1A1A',
+    onBase: '#1A1A1A',    // ink on gold for legibility
   },
   broker: {
     label: 'Mode: Broker',
@@ -69,6 +70,7 @@ const MODE_CONFIG: Record<UserMode, ModePalette> = {
     rowTo: '#F7F2EA',
     rowHover: '#EFE6D6',
     dark: '#1A1A1A',
+    onBase: '#FFFFFF',
   },
   // 'investor_broker' removed — strictly 3 categories now.
   developer: {
@@ -82,6 +84,7 @@ const MODE_CONFIG: Record<UserMode, ModePalette> = {
     rowTo: '#F7F2EA',
     rowHover: '#EFE6D6',
     dark: '#1A1A1A',
+    onBase: '#FFFFFF',
   },
 };
 
