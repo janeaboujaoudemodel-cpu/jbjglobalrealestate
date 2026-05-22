@@ -60,27 +60,11 @@ function useInvestorRegistration() {
 }
 
 
-const devBenefits = [
-  { icon: Upload, label: "Submit projects & brochures" },
-  { icon: PartyPopper, label: "Submit launch events" },
-  { icon: Handshake, label: "Close more deals with brokers" },
-  { icon: Users, label: "Direct connection with sales managers" },
-  { icon: MessageSquare, label: "Briefings & meetings scheduling" },
-  { icon: Briefcase, label: "Get publication with our broker network" },
-  { icon: Rocket, label: "Promote projects to broker community" },
-  { icon: Megaphone, label: "Receive broker exposure" },
-];
+// devBenefits / investorBenefits grids removed: unregistered users no longer
+// see *any* portal pitch — the section is rendered empty until they actually
+// register for that category. The Complete Your Profile prompt + the homepage
+// CategorySelectorSection handle the onboarding nudge instead.
 
-const investorBenefits = [
-  { icon: TrendingUp, label: "Access exclusive off-plan opportunities" },
-  { icon: BarChart3, label: "AI-powered market intelligence" },
-  { icon: Calculator, label: "ROI calculators & investment tools" },
-  { icon: Home, label: "Browse 2,400+ verified properties" },
-  { icon: Search, label: "AI Home Finder for personalized matches" },
-  { icon: PieChart, label: "Portfolio tracking & analytics" },
-  { icon: Briefcase, label: "Connect with licensed advisors" },
-  { icon: CheckCircle2, label: "Investor education & guides" },
-];
 
 const shortcuts = [
   { label: "Submit Project", desc: "Upload brochures & renders", icon: Upload, href: "/developer-portal?tab=submit" },
