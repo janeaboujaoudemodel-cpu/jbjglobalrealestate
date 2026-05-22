@@ -123,6 +123,7 @@ export default function GrantBrokerAccessDialog({
       setAccessNotes(""); setSendInvite(true);
       setDirection("broker_to_owner_only"); setWindowMode("all");
       setWinStart(undefined); setWinEnd(undefined); setStatusFilterText("");
+      setVisibleNotes(false); setVisibleFiles(false); setVisibleActivities(false);
     }
   }, [open]);
 
