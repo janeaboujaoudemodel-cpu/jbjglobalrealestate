@@ -37,15 +37,16 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const dashboardHref = isOwner
-    ? "/owner"
-    : mode === "broker"
-    ? "/broker-dashboard"
-    : mode === "investor"
-    ? "/investor-dashboard"
-    : mode === "developer"
-    ? "/developer-portal"
-    : "/my-dashboard";
+  const dashboardHref =
+    mode === "broker"
+      ? "/broker-dashboard"
+      : mode === "investor"
+      ? "/investor-dashboard"
+      : mode === "developer"
+      ? "/developer-portal"
+      : isOwner
+      ? "/owner"
+      : "/my-dashboard";
 
   const roleLabel = isOwner
     ? "Owner"
