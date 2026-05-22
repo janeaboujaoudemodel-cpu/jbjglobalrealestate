@@ -852,80 +852,11 @@ export default function GlobalVerticalNav() {
     const sidebarWidth = '200px';
     const title = MEGA_MENU_TITLES[activeMegaMenu] || activeMegaMenu;
 
-    // Color-coded shortcuts view
+    // Shortcuts now render inline (accordion) inside the sidebar — never as a popout panel.
     if (activeMegaMenu === 'shortcuts') {
-      return (
-        <>
-          <div
-            className="fixed inset-0 z-[9999] bg-[#1A1A1A]/30 backdrop-blur-sm"
-            style={{ left: sidebarWidth }}
-            onClick={closeMegaMenu}
-          />
-          <div
-            className="fixed z-[10000] flex items-start justify-start pointer-events-none"
-style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
-          >
-            <div
-              className="pointer-events-auto relative flex flex-col w-[min(560px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl border border-[#B89555]/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[calc(100vh-100px)]"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-gold to-gold-dark" aria-hidden />
-              <div className="flex-shrink-0 flex items-center justify-between px-5 py-3.5 border-b border-[#B89555]/40 bg-gradient-to-r from-[#EADBB6] to-[#D8C7A6]">
-                <div className="flex items-center gap-2.5">
-                  <span className="w-7 h-7 rounded-lg bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-sm">
-                    <Zap className="w-3.5 h-3.5 text-white" />
-                  </span>
-                  <h3 className="text-sm font-bold text-[#1A1A1A] tracking-tight">{title}</h3>
-                </div>
-                <button
-                  onClick={closeMegaMenu}
-                  className="w-6 h-6 rounded-full bg-[#FDFBF7] border border-[hsl(var(--gold))]/70 flex items-center justify-center hover:bg-[hsl(var(--gold))]/10 transition-colors shadow-sm"
-                >
-                  <X className="w-3 h-3 text-[#1A1A1A]" />
-                </button>
-              </div>
-              <div className="flex-1 min-h-0 overflow-y-auto jj-scrollbar-gold p-3 pb-6 space-y-3">
-                {filterShortcutGroups(CANONICAL_SHORTCUT_GROUPS, {
-                  isAuthenticated: !!session,
-                  isOwner,
-                  isBroker,
-                  isInvestor,
-                  isDeveloperMode,
-                }).map((group) => (
-                  <div key={group.label} className={`border border-[#B89555]/25 border-l-4 ${group.colorBorder} rounded-xl bg-[#FDFBF7]/70 p-2`}>
-                    <p className={`text-[10px] uppercase tracking-wider font-bold ${group.colorText} px-2 pb-1.5`}>
-                      {group.label}
-                    </p>
-                    <div className="grid grid-cols-2 gap-1.5">
-                      {group.items.map((link) => {
-                        const Icon = link.icon;
-                        const linkActive = isRouteActive(link.href);
-                        return (
-                          <Link
-                            key={link.href + link.label}
-                            to={link.href}
-                            onClick={closeMegaMenu}
-                            className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all border ${
-                              linkActive
-                                ? "bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] font-bold border-[#B89555] shadow-sm"
-                                : "bg-[#FDFBF7]/80 border-[#B89555]/25 text-[#1A1A1A]/85 hover:bg-[#EFE6D6]/15 hover:border-[#B89555]/60"
-                            }`}
-                          >
-                            <Icon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]'}`} />
-                            <span className="flex-1">{link.label}</span>
-                            <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/70'}`} />
-                          </Link>
-                        );
-                      })}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </>
-      );
+      return null;
     }
+
 
     // Rich flyouts for developers and areas
     if (activeMegaMenu === 'developers' || activeMegaMenu === 'areas') {
