@@ -1103,7 +1103,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 <span className={`w-6 h-6 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}>
                   <Icon className={`w-3.5 h-3.5 ${getIconStyle(item)}`} />
                 </span>
-                <span className="flex-1">{item.label}</span>
+                <span className="flex-1 relative after:content-[''] after:absolute after:bottom-[-2px] after:left-0 after:h-[1.5px] after:bg-[#B89555] after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-full">{item.label}</span>
                 {hasMega && (
                   <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-[#1A1A1A]" : "text-[#1A1A1A]/25"}`} />
                 )}
