@@ -1,14 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, X, ArrowRight, Building2, Sparkles, Users, FileText, LayoutDashboard, Briefcase, Scale, Palette, Calculator, Map, BookOpen, Phone, Home, Heart, Award, Newspaper, Video, HelpCircle, Key, GraduationCap, Clock, Trash2 } from "lucide-react";
+import { Search, X, ArrowRight, Building2, Sparkles, Users, FileText, LayoutDashboard, Briefcase, Scale, Palette, Calculator, Map, BookOpen, Phone, Home, Heart, Award, Newspaper, Video, HelpCircle, Key, GraduationCap, Clock, Trash2, Star, Pin } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { searchItems } from "@/config/globalSearchIndex";
+import { searchItems, nearestSearchItems } from "@/config/globalSearchIndex";
 import type { SearchItem } from "@/config/globalSearchIndex";
 import { SafeImage } from "@/components/SafeImage";
+import { getRecentSearches, saveRecentSearch, clearRecentSearches, getSearchShortcuts, toggleSearchShortcut, isShortcutPinned, removeSearchShortcut } from "@/lib/searchHistory";
 
 interface GlobalSearchModalProps {
   isOpen: boolean;
@@ -40,27 +41,7 @@ const POPULAR_PAGES = [
   { label: "AI Home Finder", route: "/quiz", icon: Sparkles },
 ];
 
-const RECENT_QUERIES_KEY = "jbj_recent_queries";
-const MAX_RECENT_SEARCHES = 5;
-
-const getRecentSearches = (): string[] => {
-  try {
-    const stored = localStorage.getItem(RECENT_QUERIES_KEY);
-    return stored ? JSON.parse(stored) : [];
-  } catch { return []; }
-};
-
-const saveRecentSearch = (query: string) => {
-  const trimmed = query.trim();
-  if (!trimmed || trimmed.length < 2) return;
-  const existing = getRecentSearches().filter(s => s.toLowerCase() !== trimmed.toLowerCase());
-  const updated = [trimmed, ...existing].slice(0, MAX_RECENT_SEARCHES);
-  localStorage.setItem(RECENT_QUERIES_KEY, JSON.stringify(updated));
-};
-
-const clearRecentSearches = () => {
-  localStorage.removeItem(RECENT_QUERIES_KEY);
-};
+// Recent searches & pinned shortcuts now live in src/lib/searchHistory.ts (7-day TTL)
 
 // Debounce hook
 function useDebouncedValue(value: string, delay: number) {
