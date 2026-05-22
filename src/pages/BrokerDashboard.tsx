@@ -392,7 +392,7 @@ export default function BrokerDashboard() {
             <Bell className="w-5 h-5 text-[hsl(var(--gold))]" strokeWidth={2.5} />
             Notifications
           </h3>
-          <Card className="bg-[#EFE6D6] border-2 border-[#B89555]/60">
+          <Card className={`bg-[#EFE6D6] border-2 border-[#B89555]/60 hover:border-[#B89555] ${tileGlow3D}`}>
             <CardContent className="p-6">
               <div className="text-center py-8">
                 <Bell className="w-10 h-10 text-[#1A1A1A]/50 mx-auto mb-3" strokeWidth={2} />
