@@ -240,7 +240,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Press Kit", href: "/press-kit", icon: Newspaper },
   { label: "Company Profile", href: "/company-profile", icon: Building },
   { label: "Philanthropy", href: "/philanthropy", icon: Heart },
-  { label: "Our Brokers", href: "/brokers", icon: Users },
+  
   { label: "Reviews", href: "/reviews", icon: Star },
   { label: "Career Portal", href: "/join", icon: GraduationCap },
   { label: "Partner Governance", href: "/governance/partners", icon: Shield },

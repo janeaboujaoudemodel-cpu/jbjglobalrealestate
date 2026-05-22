@@ -457,7 +457,6 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     // About & Company
     { href: "/about", label: "About Us", icon: Building2 },
     { href: "/team", label: "Meet the Team", icon: Users },
-    { href: "/brokers", label: "Our Brokers", icon: Users },
     { href: "/join", label: "Careers", icon: Briefcase },
     { href: "/awards", label: "Our Awards", icon: Award },
     { href: "/contact", label: "Contact Us", icon: Phone },

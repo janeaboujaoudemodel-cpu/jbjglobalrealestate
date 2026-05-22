@@ -107,7 +107,7 @@ const Philanthropy = lazy(() => import("@/pages/Philanthropy"));
 const News = lazy(() => import("@/pages/News"));
 const NewsDetail = lazy(() => import("@/pages/NewsDetail"));
 const MeetTheTeam = lazy(() => import("@/pages/MeetTheTeam"));
-const OurBrokers = lazy(() => import("@/pages/OurBrokers"));
+
 const Reviews = lazy(() => import("@/pages/Reviews"));
 const ThankYou = lazy(() => import("@/pages/ThankYou"));
 
@@ -317,8 +317,6 @@ export const PublicRoutes = () => (
     <Route path="/news/:id" element={<NewsDetail />} />
     <Route path="/team" element={<MeetTheTeam />} />
     <Route path="/meet-the-team" element={<Navigate to="/team" replace />} />
-    <Route path="/brokers" element={<Navigate to="/team" replace />} />
-    <Route path="/our-brokers" element={<Navigate to="/team" replace />} />
 
     <Route path="/reviews" element={<Reviews />} />
     <Route path="/thank-you" element={<ThankYou />} />
