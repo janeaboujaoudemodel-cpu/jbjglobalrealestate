@@ -234,7 +234,7 @@ const Index = () => {
           animate="visible"
           variants={staggerContainer}
         >
-          <div className="w-full max-w-5xl mx-auto text-center pt-[max(12vh,88px)] sm:pt-[18vh] md:pt-[22vh] space-y-5 sm:space-y-7 md:space-y-8">
+          <div className="w-full max-w-5xl mx-auto text-center pt-[max(6vh,72px)] sm:pt-[10vh] md:pt-[16vh] pb-[max(2vh,16px)] space-y-3 sm:space-y-5 md:space-y-7">
             {/* Eyebrow — small uppercase tagline above headline (matches founder reference photo) */}
             <motion.p
               variants={fadeInUp}
@@ -327,7 +327,7 @@ const Index = () => {
             {/* Three pillar badges — solid near-black surface (no backdrop-blur) + drop-shadows for guaranteed legibility on busy hero photo */}
             <motion.div
               variants={fadeInUp}
-              className="grid grid-cols-3 max-w-3xl mx-auto mb-8 border border-[#B89555]/40 overflow-hidden rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] bg-[#0A0A0A]"
+              className="grid grid-cols-3 max-w-3xl mx-auto border border-[#B89555]/40 overflow-hidden rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] bg-[#0A0A0A]"
             >
               {pillars.map((pillar, idx) => (
                 <div
