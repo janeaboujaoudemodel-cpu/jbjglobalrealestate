@@ -40,21 +40,32 @@ const MODE_OPTIONS: ModeOption[] = [
 
 export const ModeSelectionModal = () => {
   const { setMode, hasMadeInitialSelection } = useUserModeContext();
-  const { isVisible, requestToShow, dismiss } = usePopupVisibility('mode-selection-modal');
+  const { isVisible, requestToShow, dismiss: rawDismiss } = usePopupVisibility('mode-selection-modal');
   const { user } = useAuth();
   const [selectedMode, setSelectedMode] = useState<UserMode | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Forced on first visit — for both anonymous and logged-in users.
-  // Selection is saved to localStorage immediately and synced to the
-  // account on next login via register-mode-lead.
+  // First-visit greeter: shown once per session if the user hasn't picked a
+  // category yet. Fully dismissable — browsing is free. The mode picker stays
+  // available in the header so users can choose later at any time.
+  const DISMISS_KEY = 'jj_mode_modal_dismissed';
+
+  const dismiss = () => {
+    try { sessionStorage.setItem(DISMISS_KEY, '1'); } catch {}
+    rawDismiss();
+  };
+
   useEffect(() => {
-    if (!hasMadeInitialSelection) {
-      requestToShow();
-    }
+    if (hasMadeInitialSelection) return;
+    try {
+      if (sessionStorage.getItem(DISMISS_KEY) === '1') return;
+    } catch {}
+    requestToShow();
   }, [hasMadeInitialSelection, requestToShow]);
 
   if (hasMadeInitialSelection) return null;
+
+
 
   const handleSelectMode = async () => {
     if (!selectedMode) return;
