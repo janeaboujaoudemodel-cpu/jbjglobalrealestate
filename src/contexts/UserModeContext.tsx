@@ -68,70 +68,52 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
     return () => window.removeEventListener('storage', onStorage);
   }, [queryClient]);
 
-  // Silent background reconcile — only runs once per real user-id change
-  // (TOKEN_REFRESHED churn won't re-fire it). Never toggles isLoading.
+  // Silent background reconcile — READ-ONLY on auth events.
+  //
+  // HARDENING RULE: the database mode column is mutated ONLY from `setMode`
+  // (i.e. an explicit user pick in the mode switcher). Auth events
+  // (sign-in / sign-out / token refresh / first session) must never write to
+  // `user_preferences.selected_mode`. They may only *read* the row to seed
+  // local state when this device has no mode at all.
   useEffect(() => {
     const userId = user?.id ?? null;
     if (userId === lastSyncedUserId.current) return;
     lastSyncedUserId.current = userId;
     if (!userId) return;
 
-
     const reconcile = async () => {
       const storedMode = localStorage.getItem(MODE_KEY);
-      const storedSelection = localStorage.getItem(MODE_SELECTED_KEY);
+
+      // Fast path: this device already has a mode. Do NOT touch the DB at all
+      // on auth events — that's what the hardening rule forbids.
+      if (storedMode) return;
 
       try {
-        const { data, error } = await supabase
+        const { data } = await supabase
           .from('user_preferences')
           .select('selected_mode')
           .eq('user_id', userId)
           .maybeSingle();
 
         if (data?.selected_mode) {
-          // Only adopt DB mode if localStorage has NO mode at all (first visit / cleared)
-          if (!storedMode) {
-            const dbMode = normalizeMode(data.selected_mode);
-            console.info('[UserMode] Adopting DB mode (no local mode set):', dbMode);
-            setModeState(dbMode);
-            localStorage.setItem(MODE_KEY, dbMode);
-            setHasMadeInitialSelection(true);
-            localStorage.setItem(MODE_SELECTED_KEY, 'true');
-          } else if (storedSelection === 'true') {
-            // User has an explicit local selection — push it to DB to keep in sync
-            const localMode = normalizeMode(storedMode);
-            if (data.selected_mode !== localMode) {
-              await supabase
-                .from('user_preferences')
-                .upsert({
-                  user_id: userId,
-                  selected_mode: localMode,
-                  updated_at: new Date().toISOString()
-                }, { onConflict: 'user_id' });
-            }
-          }
-        } else if (!error && storedSelection === 'true' && storedMode) {
-          // First write to DB only when the user has EXPLICITLY chosen a mode.
-          const currentMode = normalizeMode(storedMode);
-          await supabase
-            .from('user_preferences')
-            .insert({
-              user_id: userId,
-              selected_mode: currentMode
-            });
-          try {
-            await supabase.functions.invoke('register-mode-lead', { body: { mode: currentMode } });
-          } catch (e) {
-            console.warn('[UserMode] register-mode-lead (first sync) failed', e);
-          }
+          const dbMode = normalizeMode(data.selected_mode);
+          console.info('[UserMode] Adopting DB mode (no local mode set):', dbMode);
+          setModeState(dbMode);
+          localStorage.setItem(MODE_KEY, dbMode);
+          setHasMadeInitialSelection(true);
+          localStorage.setItem(MODE_SELECTED_KEY, 'true');
         }
+        // No DB row + no local mode: leave the default 'investor' in memory
+        // but DO NOT write to the DB. The DB is only seeded by an explicit
+        // user pick via setMode().
       } catch (err) {
-        console.error('Error reconciling user mode:', err);
+        console.error('Error reading user mode from DB:', err);
       }
     };
 
     reconcile();
   }, [user?.id]);
+
 
   const setMode = useCallback(async (newMode: UserMode) => {
     console.info('[UserMode] setMode by user:', newMode);
