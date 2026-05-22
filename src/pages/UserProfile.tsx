@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -622,12 +623,13 @@ const UserProfile = () => {
                         <Lock className="h-4 w-4 text-[#1A1A1A]" />
                         New Password
                       </Label>
-                      <Input
+                      <PasswordInput
                         id="newPassword"
-                        type="password"
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
                         placeholder="Enter new password"
+                        autoComplete="new-password"
+                        visibilityLabel="new password"
                       />
                     </div>
                     <div className="space-y-2">
@@ -635,12 +637,13 @@ const UserProfile = () => {
                         <Lock className="h-4 w-4 text-[#1A1A1A]" />
                         Confirm New Password
                       </Label>
-                      <Input
+                      <PasswordInput
                         id="confirmPassword"
-                        type="password"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         placeholder="Confirm new password"
+                        autoComplete="new-password"
+                        visibilityLabel="confirmed password"
                       />
                     </div>
                   </div>

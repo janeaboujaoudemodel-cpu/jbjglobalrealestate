@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { toast } from "sonner";
 import { Loader2, ShieldCheck, AlertTriangle, CheckCircle2 } from "lucide-react";
 import { anonHeaders, edgeFnUrl } from "@/config/backend";
@@ -58,11 +59,12 @@ export default function BrokerActivate() {
         return;
       }
       try {
-        const { data } = await supabase.functions.invoke("crm-broker-invite-status", { body: { token } });
+        const data = await callBrokerFunction<any>("crm-broker-invite-status", { token });
         if (cancelled) return;
-        const status = (data as any)?.status ?? "invalid";
-        setEmailMasked((data as any)?.email_masked ?? null);
+        const status = data?.status ?? "invalid";
+        setEmailMasked(data?.email_masked ?? null);
         if (status === "ok") setStep("otp");
+        else if (status === "verified") { setTicket(token); setStep("password"); }
         else if (status === "expired") setStep("expired");
         else if (status === "otp_expired") setStep("otp_expired");
         else if (status === "already_activated") setStep("already_activated");
@@ -81,7 +83,8 @@ export default function BrokerActivate() {
   );
 
   async function verifyOtp() {
-    if (!token || otp.length < 6) return;
+    if (!token) { setError("Activation token is missing from this link."); return; }
+    if (otp.length < 6) { setError("Enter the full 6-digit code from the invitation email."); return; }
     setBusy(true); setError(null);
     try {
       const data = await callBrokerFunction<any>("crm-broker-verify-otp", { token, otp: otp.trim() });
@@ -97,7 +100,8 @@ export default function BrokerActivate() {
   }
 
   async function setNewPassword() {
-    if (!ticket || !pwOk) return;
+    if (!ticket) { setError("Please verify the invitation code first."); return; }
+    if (!pwOk) { setError("Password must include 10+ characters, uppercase, lowercase, number, and symbol characters."); return; }
     if (password !== confirm) { setError("Passwords do not match"); return; }
     setBusy(true); setError(null);
     try {
@@ -124,7 +128,7 @@ export default function BrokerActivate() {
       <div className="w-full max-w-md bg-white border border-[#B89555] rounded-2xl shadow-[0_8px_28px_rgba(26,26,26,0.06)] overflow-hidden">
         {/* Header */}
         <div className="bg-[#F7F2EA] border-b border-[#B89555]/45 px-8 py-7 text-center">
-          <img src="/jbj-monogram-dark-on-light.png" alt="JBJ" className="h-12 w-12 mx-auto mb-3" />
+          <img src="/jbj-monogram-dark-on-light.png" alt="JBJ" className="h-20 w-20 mx-auto mb-4 object-contain" />
           <div className="text-[11px] tracking-[0.32em] uppercase text-[#1A1A1A]">JBJ Global Real Estate</div>
           <div className="h-px w-10 bg-[#B89555] mx-auto mt-3" />
         </div>
@@ -182,24 +186,24 @@ export default function BrokerActivate() {
                 onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
                 className="text-center tracking-[0.5em] text-lg font-semibold"
               />
-              <Button onClick={verifyOtp} disabled={busy || otp.length < 6} className="w-full">
-                {busy ? "Verifying…" : "Verify code"}
+              <Button onClick={verifyOtp} disabled={busy} className="w-full">
+                {busy ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Verifying…</> : "Verify code"}
               </Button>
             </div>
           )}
 
           {step === "password" && (
             <div className="space-y-3">
-              <Input type="password" placeholder="New password" value={password} onChange={(e) => setPassword(e.target.value)} />
-              <Input type="password" placeholder="Confirm password" value={confirm} onChange={(e) => setConfirm(e.target.value)} />
+              <PasswordInput placeholder="New password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="new-password" visibilityLabel="new password" />
+              <PasswordInput placeholder="Confirm password" value={confirm} onChange={(e) => setConfirm(e.target.value)} autoComplete="new-password" visibilityLabel="confirmed password" />
               <ul className="text-[11px] text-[#1A1A1A]/70 space-y-1 pl-2">
                 <li>• 10+ characters</li>
                 <li>• Upper &amp; lower case letters</li>
                 <li>• At least one number</li>
                 <li>• At least one symbol</li>
               </ul>
-              <Button onClick={setNewPassword} disabled={busy || !pwOk || password !== confirm} className="w-full">
-                <ShieldCheck className="h-4 w-4 mr-2" />
+              <Button onClick={setNewPassword} disabled={busy} className="w-full">
+                {busy ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <ShieldCheck className="h-4 w-4 mr-2" />}
                 {busy ? "Activating…" : "Set password & enter CRM"}
               </Button>
             </div>
@@ -209,6 +213,7 @@ export default function BrokerActivate() {
             <div className="py-6 text-center">
               <CheckCircle2 className="h-10 w-10 mx-auto text-[#1A1A1A]" />
               <div className="mt-3 text-sm text-[#1A1A1A]/70">Redirecting to your broker CRM…</div>
+              <Button onClick={() => navigate("/broker/crm", { replace: true })} className="mt-4 w-full">Enter CRM</Button>
             </div>
           )}
 

@@ -11,8 +11,7 @@ import { sha256Hex, randomToken, randomOtp, clientIp } from "../_shared/brokerIn
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const PUBLIC_BASE = "https://jbj.ae";
-const TOKEN_TTL_MIN = 60 * 24 * 3; // 3 days
-const OTP_TTL_MIN = 15;
+const TOKEN_TTL_MIN = 60 * 24 * 365 * 10; // used for legacy reporting only; revoke/block controls invalidation
 
 interface Body {
   broker_email: string;
@@ -142,7 +141,7 @@ Deno.serve(async (req) => {
     const tokenHash = await sha256Hex(token);
     const otpHash = await sha256Hex(otp);
     const tokenExp = new Date(Date.now() + TOKEN_TTL_MIN * 60_000).toISOString();
-    const otpExp = new Date(Date.now() + OTP_TTL_MIN * 60_000).toISOString();
+    const otpExp = null;
 
     // Detach user_id from any other (stale/revoked) crm_brokers rows so the
     // unique(user_id) constraint doesn't silently block backfill below.
@@ -166,6 +165,7 @@ Deno.serve(async (req) => {
         otp_expires_at: otpExp,
         otp_attempts: 0,
         otp_last_sent_at: new Date().toISOString(),
+        activation_verified_at: null,
         must_reset_password: true,
       })
       .eq("id", brokerId);
@@ -188,7 +188,6 @@ Deno.serve(async (req) => {
       ownerName: ownerRow?.email ?? "JBJ Global Real Estate",
       activationUrl,
       otp,
-      expiresInMinutes: OTP_TTL_MIN,
     });
 
     const sent = await sendViaResend({

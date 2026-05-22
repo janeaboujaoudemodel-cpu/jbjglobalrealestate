@@ -2,12 +2,11 @@
 // activation ticket the broker can exchange for a password set in crm-broker-activate.
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
-import { sha256Hex, randomToken, clientIp } from "../_shared/brokerInviteCrypto.ts";
+import { sha256Hex, clientIp } from "../_shared/brokerInviteCrypto.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-const MAX_OTP_ATTEMPTS = 5;
-const TICKET_TTL_MIN = 10;
+const MAX_OTP_ATTEMPTS = 10;
 
 interface Body {
   token: string;
@@ -47,7 +46,7 @@ Deno.serve(async (req) => {
 
     const { data: broker } = await admin
       .from("crm_brokers")
-      .select("id, user_id, owner_id, email_lower, full_name, invitation_status, invitation_token_expires_at, otp_hash, otp_expires_at, otp_attempts, blocked_at")
+      .select("id, user_id, owner_id, email_lower, full_name, invitation_status, otp_hash, otp_attempts, blocked_at, activation_verified_at")
       .eq("invitation_token_hash", tokenHash)
       .maybeSingle();
 
@@ -61,33 +60,22 @@ Deno.serve(async (req) => {
       return json({ error: "Account is blocked. Contact the owner." }, 403);
     }
 
-    const now = Date.now();
-    if (!broker.invitation_token_expires_at || new Date(broker.invitation_token_expires_at).getTime() < now) {
-      await admin.from("crm_brokers").update({ invitation_status: "expired" }).eq("id", broker.id);
-      await logSecurity(admin, broker.id, broker.user_id, "broker_invitation_expired", ip, ua);
-      return json({ error: "Invitation expired. Ask the owner to resend." }, 410);
+    if (broker.activation_verified_at) {
+      return json({
+        ok: true,
+        ticket: token,
+        broker: { email: broker.email_lower, name: broker.full_name },
+      });
     }
 
-    if (!broker.otp_hash || !broker.otp_expires_at || new Date(broker.otp_expires_at).getTime() < now) {
-      // Mirror the token-expired branch: clear OTP fields and mark the invitation
-      // expired so the row's state matches what the user is seeing.
-      await admin
-        .from("crm_brokers")
-        .update({
-          invitation_status: "expired",
-          otp_hash: null,
-          otp_expires_at: null,
-          otp_attempts: 0,
-        })
-        .eq("id", broker.id);
-      await logSecurity(admin, broker.id, broker.user_id, "broker_otp_expired", ip, ua);
-      return json({ error: "Code expired. Ask the owner to resend a fresh invitation.", code: "otp_expired" }, 410);
+    if (!broker.otp_hash) {
+      await logSecurity(admin, broker.id, broker.user_id, "broker_otp_missing", ip, ua);
+      return json({ error: "This invitation needs a fresh security code. Please ask the owner to resend access." }, 400);
     }
 
     if ((broker.otp_attempts ?? 0) >= MAX_OTP_ATTEMPTS) {
-      await admin.from("crm_brokers").update({ invitation_status: "revoked", otp_hash: null }).eq("id", broker.id);
       await logSecurity(admin, broker.id, broker.user_id, "broker_otp_lockout", ip, ua);
-      return json({ error: "Too many incorrect attempts. Invitation locked." }, 429);
+      return json({ error: "Too many incorrect attempts. Please ask the owner to resend the code." }, 429);
     }
 
     const otpHash = await sha256Hex(otp);
@@ -100,20 +88,14 @@ Deno.serve(async (req) => {
       return json({ error: "Incorrect code", attempts_left: MAX_OTP_ATTEMPTS - (broker.otp_attempts ?? 0) - 1 }, 400);
     }
 
-    // Issue activation ticket (single-use, short-lived)
-    const ticket = randomToken(32);
-    const ticketHash = await sha256Hex(ticket);
-    const ticketExp = new Date(now + TICKET_TTL_MIN * 60_000).toISOString();
-
     await admin
       .from("crm_brokers")
       .update({
         invitation_status: "otp_sent",
         otp_hash: null,
         otp_attempts: 0,
-        // reuse invitation_token_hash as one-shot activation ticket
-        invitation_token_hash: ticketHash,
-        invitation_token_expires_at: ticketExp,
+        otp_expires_at: null,
+        activation_verified_at: new Date().toISOString(),
       })
       .eq("id", broker.id);
 
@@ -127,8 +109,7 @@ Deno.serve(async (req) => {
 
     return json({
       ok: true,
-      ticket,
-      expires_at: ticketExp,
+      ticket: token,
       broker: { email: broker.email_lower, name: broker.full_name },
     });
   } catch (e) {

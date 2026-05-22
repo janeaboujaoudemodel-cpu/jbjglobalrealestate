@@ -11,7 +11,7 @@ import {
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { ShieldAlert, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -75,13 +75,13 @@ export default function CRMReAuthModal({ open, onOpenChange, actionLabel, onSucc
         </AlertDialogHeader>
 
         <div className="py-4">
-          <Input
-            type="password"
+          <PasswordInput
             placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleReAuth()}
             className="border-[#B89555]/30 focus:border-[#B89555]"
+            autoComplete="current-password"
             autoFocus
           />
         </div>
