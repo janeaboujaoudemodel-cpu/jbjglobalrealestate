@@ -37,15 +37,16 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const dashboardHref = isOwner
-    ? "/owner"
-    : mode === "broker"
-    ? "/broker-dashboard"
-    : mode === "investor"
-    ? "/investor-dashboard"
-    : mode === "developer"
-    ? "/developer-portal"
-    : "/my-dashboard";
+  const dashboardHref =
+    mode === "broker"
+      ? "/broker-dashboard"
+      : mode === "investor"
+      ? "/investor-dashboard"
+      : mode === "developer"
+      ? "/developer-portal"
+      : isOwner
+      ? "/owner"
+      : "/my-dashboard";
 
   const roleLabel = isOwner
     ? "Owner"
@@ -213,50 +214,8 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
         </div>
         <DropdownMenuSeparator className="bg-[#EFE6D6] my-1" />
 
-        {/* Dashboard — click parent goes to dashboard home; hovering opens submenu */}
-        <DropdownMenuSub>
-          <DropdownMenuSubTrigger
-            onClick={(e) => {
-              // allow direct navigation to dashboard home on click
-              e.preventDefault();
-              navigate(dashboardHref);
-            }}
-            className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 focus:bg-[#F7F2EA] data-[highlighted]:bg-[#F7F2EA] data-[state=open]:bg-[#F7F2EA]"
-          >
-            <span className="flex items-center gap-2.5 w-full">
-              <LayoutDashboard className="w-4 h-4 text-[#1A1A1A]/70 shrink-0" strokeWidth={1.75} />
-              <span className="text-sm font-medium text-[#1A1A1A] flex-1">Dashboard</span>
-              {activityCount > 0 && (
-                <span className="min-w-[18px] h-[18px] px-1 rounded-full bg-[#1A1A1A] text-white text-[10px] font-bold flex items-center justify-center">
-                  {activityCount > 9 ? "9+" : activityCount}
-                </span>
-              )}
-            </span>
-          </DropdownMenuSubTrigger>
-          <DropdownMenuSubContent
-            sideOffset={8}
-            className="z-[10100] w-[240px] p-2 rounded-xl border border-[#EFE6D6] bg-[#FDFBF7] shadow-2xl"
-          >
-            {showCRM && <Row to="/owner/crm" icon={BarChart3} label="CRM" />}
-            <Row to="/my-dashboard#inbox" icon={Inbox} label="Inbox" />
-            <Row to="/my-dashboard#tasks" icon={ClipboardList} label="Tasks" badge={pendingTasks} />
-            <Row to="/my-dashboard#notes" icon={StickyNote} label="Notes" />
-            <Row
-              to="/my-dashboard#notifications"
-              icon={Bell}
-              label="Alerts"
-              badge={alerts?.totalNotificationAlerts || 0}
-            />
-            <DropdownMenuSeparator className="bg-[#EFE6D6] my-1" />
-            <Row to="/favorites" icon={Heart} label="Saved" />
-            {onOpenFilters && (
-              <Row icon={SlidersHorizontal} label="Filters" onClick={onOpenFilters} />
-            )}
-            <DropdownMenuSeparator className="bg-[#EFE6D6] my-1" />
-            <Row to="/profile" icon={User} label="My Profile" />
-            <Row to="/profile?tab=settings" icon={Settings} label="Settings" />
-          </DropdownMenuSubContent>
-        </DropdownMenuSub>
+        {/* Dashboard — direct link to user's role/mode-aware dashboard */}
+        <Row to={dashboardHref} icon={LayoutDashboard} label="Dashboard" badge={activityCount} />
 
         <DropdownMenuSeparator className="bg-[#EFE6D6] my-1" />
         <DropdownMenuItem
