@@ -31,6 +31,12 @@ import CEOLeadershipShowcase from "@/components/CEOLeadershipShowcase";
 import DepartmentInfoSection from "@/components/DepartmentInfoSection";
 import { companySummary } from "@/config/department-metadata";
 import TeamHeroCollage from "@/components/TeamHeroCollage";
+import { useTeamVisibility } from "@/hooks/useTeamVisibility";
+import TeamVisibilityBar from "@/components/team/TeamVisibilityBar";
+import VisibilityToggleButton from "@/components/team/VisibilityToggleButton";
+import BrokersTeamSection from "@/components/team/BrokersTeamSection";
+import NotFound from "@/pages/NotFound";
+
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
