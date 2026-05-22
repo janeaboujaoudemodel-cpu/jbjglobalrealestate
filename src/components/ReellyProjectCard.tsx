@@ -160,16 +160,33 @@ const ReellyProjectCard = ({
        <Link to={`/project/${project.slug}`} className="flex-1 flex flex-col">
          {/* Image with Carousel */}
           <div className="aspect-[16/10] overflow-hidden relative">
-            {/* Developer Logo Overlay - Top Left */}
-            {getDeveloperLogoUrl((project as any).developer) && (
-              <div className="absolute top-3 left-3 z-20">
-                <DeveloperLogo
-                  src={getDeveloperLogoUrl((project as any).developer)}
-                  alt={project.developer_name || "Developer"}
-                  variant="bare"
-                />
-              </div>
-            )}
+            {/* Developer mark overlay (logo if available, else name plate) */}
+            {(() => {
+              const devLogoUrl = getDeveloperLogoUrl((project as any).developer);
+              const devName =
+                (project as any).developer?.name ||
+                project.developer_name ||
+                null;
+              const hasMark = !!devLogoUrl || !!devName;
+              if (!hasMark) return null;
+              return (
+                <div className="absolute top-3 left-3 z-20">
+                  {devLogoUrl ? (
+                    <DeveloperLogo
+                      src={devLogoUrl}
+                      alt={devName || "Developer"}
+                      variant="bare"
+                    />
+                  ) : (
+                    <DeveloperLogo
+                      variant="nameplate"
+                      name={devName}
+                      alt={devName || "Developer"}
+                    />
+                  )}
+                </div>
+              );
+            })()}
 
              <VerifiedMedia
                src={images[currentImageIndex]?.image_url || project.thumbnail || project.gallery?.[0] || null}
@@ -222,21 +239,27 @@ const ReellyProjectCard = ({
              </>
            )}
            
-            {/* Top-Left: Sale Status Badge - offset below dev logo if present */}
-              {saleStatusBadge && !project.sale_status?.toLowerCase().includes('sold') && !project.status_label?.toLowerCase().includes('sold') && (
-                <div className={`absolute ${getDeveloperLogoUrl((project as any).developer) ? 'top-[60px]' : 'top-3'} left-3 z-10 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${saleStatusBadge.className}`}>
-                  {saleStatusBadge.label}
-                </div>
-              )}
-
-              {/* Sold Out Badge - dedicated red badge top-left */}
-              {(project.sale_status?.toLowerCase().includes('sold') || project.status_label?.toLowerCase().includes('sold')) && (
-                <div className={`absolute ${getDeveloperLogoUrl((project as any).developer) ? 'top-[60px]' : 'top-3'} left-3 z-10`}>
-                  <div className="bg-red-600 text-white px-2.5 py-1 rounded-full text-xs font-bold uppercase shadow-lg border border-red-400">
-                    Sold Out
-                  </div>
-                </div>
-              )}
+            {/* Top-Left: Sale Status Badge - offset below dev mark (logo or nameplate) if present */}
+              {(() => {
+                const hasMark = !!getDeveloperLogoUrl((project as any).developer) || !!((project as any).developer?.name || project.developer_name);
+                const offset = hasMark ? 'top-[60px]' : 'top-3';
+                return (
+                  <>
+                    {saleStatusBadge && !project.sale_status?.toLowerCase().includes('sold') && !project.status_label?.toLowerCase().includes('sold') && (
+                      <div className={`absolute ${offset} left-3 z-10 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${saleStatusBadge.className}`}>
+                        {saleStatusBadge.label}
+                      </div>
+                    )}
+                    {(project.sale_status?.toLowerCase().includes('sold') || project.status_label?.toLowerCase().includes('sold')) && (
+                      <div className={`absolute ${offset} left-3 z-10`}>
+                        <div className="bg-red-600 text-white px-2.5 py-1 rounded-full text-xs font-bold uppercase shadow-lg border border-red-400">
+                          Sold Out
+                        </div>
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
            
            {/* Bottom-Right: Premium price label — square, transparent core, orange border */}
            {project.price_from ? (

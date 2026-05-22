@@ -1,60 +1,105 @@
-# No-Photo → No-Publish Rule
 
-A photoless project must never appear on the public site. Today this is enforced only by an admin button (`Approve` disabled when missing). It needs to be a hard rule at every layer, plus the existing data needs to be cleaned and surfaced for your review.
+## Problem
 
-## Scope (verified against live DB)
+Right now `ProjectCard` and `ReellyProjectCard` only render the developer logo overlay when `developers.logo_url` exists. **396 of 633 developers** in the database have no `logo_url`, so their cards render **nothing** — the client cannot see who built the project.
 
-- `projects` table (1,373 published) — already 0 published with truly no image, but the **rule is not locked**, so the next bulk import can re-publish photoless rows.
-- `resale_listings` / `rental_listings` — currently empty, but same rule will apply preventively via a shared check.
-- "Has a photo" means **any one of**: `cover_image_url`, `card_image_url`, or at least 1 row in `project_images` for that project.
+We will:
+
+1. Guarantee attribution on every card with a branded **developer name plate** fallback.
+2. Add an **admin "Missing Logos" queue** under /admin so you can review and upload real logos.
+3. Add an **automated logo enrichment** edge function that uses Firecrawl (already configured) to find each developer's official logo from their website / search results, save it to the `developer-logos` storage bucket, and write it back to `developers.logo_url` — pending your approval.
+
+The locked rules in `src/utils/developerLogo.ts` (no project photos, screenshots, WhatsApp images, etc. as logos) stay enforced — auto-enriched candidates go through the same allow-list and queue.
+
+---
 
 ## What changes
 
-### 1. Database — hard lock (migration)
+### 1. UI — name-plate fallback (frontend only)
 
-- Add `public.project_has_photo(project_id uuid)` SECURITY DEFINER function returning true when cover/card url is non-empty OR a `project_images` row exists.
-- Add `BEFORE INSERT OR UPDATE` trigger on `projects` that, whenever `is_published` is being set to `true`, calls `project_has_photo()` and `RAISE EXCEPTION 'Cannot publish: project has no photo'` if false.
-- Add the same check as a `BEFORE INSERT` trigger on `project_images` deletions: when the last image is deleted from a currently-published project, auto-flip `is_published=false` and write a row to `project_audit_logs` with action `auto_unpublished_no_photo`.
-- Mirror trigger on `resale_listings`/`rental_listings`: block `status='active'` when `images` is null or empty.
+Add a third variant `nameplate` to `src/components/ui/DeveloperLogo.tsx`:
 
-### 2. Data backfill (same migration, single transaction)
+- Champagne tile (`#FDFBF7`) with a 1px gold hairline (`#B89555` / 45%) — matches `bare` variant dimensions (h-12 w-16) so layout doesn't shift.
+- Renders the developer's **name** as a clean Inter wordmark, auto-fitted (1 line, `text-[10px]` to `text-xs`, tracking-tight, ink `#1A1A1A`).
+- Drop-shadow so it reads cleanly on top of card photos.
 
-- `UPDATE projects SET is_published = false WHERE is_published = true AND NOT project_has_photo(id)` — currently 0 rows, but executed defensively.
-- For the 70 unpublished imageless projects: leave `is_published=false`, mark them in a new column `needs_photo boolean GENERATED ALWAYS AS (NOT project_has_photo(id)) STORED` — or, simpler, just rely on the existing media-status logic in the admin UI. **Recommendation: skip the generated column**, the admin tab in step 4 derives it live so we don't fight Postgres immutability.
-- Insert one `project_audit_logs` row per backfilled project with reason `backfill_no_photo_lock` so you have an audit trail.
+Update `ProjectCard.tsx` and `ReellyProjectCard.tsx`:
 
-### 3. Frontend — defense in depth
+- Replace `getDeveloperLogoUrl(...) && <DeveloperLogo .../>` with **always-render** logic:
+  - If a valid `logo_url` exists → render `<DeveloperLogo variant="bare" />` (current behaviour).
+  - Else if developer **name** is known → render `<DeveloperLogo variant="nameplate" name={...} />`.
+  - Else → render nothing (no developer in DB at all — a true edge case).
+- Fix the existing `top-[60px]` badge offsets to use the new "logo present" check (logo OR nameplate).
+- No other card content moves; the strict "No Removal" policy is honoured.
 
-In `src/hooks/useProjects.ts`, every query that already filters `is_published=true` (lines 214, 291, 314, 391, 406, 421) also adds:
+### 2. Admin — "Missing Logos" queue
 
-```ts
-.or('cover_image_url.not.is.null,card_image_url.not.is.null')
+New tab in `/admin/developers` (or a new sibling route `/admin/developers/missing-logos`):
+
+- Lists all developers where `logo_url IS NULL OR logo_url = ''` (currently 396 rows), sorted by # of published projects DESC so the highest-impact gaps are fixed first.
+- Each row shows: developer name, slug, project count, last enrichment status, and three actions:
+  - **Upload logo** (file input → uploads to `developer-logos` storage bucket → writes URL to `developers.logo_url`, status `approved`).
+  - **Auto-find logo** (invokes the new edge function for just this developer; shows candidate previews; you pick one to approve).
+  - **Mark as no logo available** (sets a `logo_status = 'unavailable'` flag so the row stops appearing in the queue but cards still get the nameplate fallback).
+- Bulk action: "Auto-find logos for next 25" — runs the enrichment edge function in a batch.
+
+### 3. Database — pending-logo workflow
+
+New columns on `developers` (migration):
+
+- `logo_status` text default `'missing'` — values: `missing | pending_review | approved | unavailable`.
+- `logo_candidates` jsonb — array of `{ url, source, fetched_at }` proposed by the enrichment function. Owner picks one in the admin UI to promote to `logo_url`.
+- `logo_last_attempt_at` timestamptz — so the queue can show "tried 2h ago".
+
+Migration also backfills `logo_status = 'approved'` for the 237 developers that already have a valid `logo_url`.
+
+RLS: read/write restricted to owner/admin (matches existing `developers` policies).
+
+### 4. Edge function — `auto-find-developer-logos`
+
+New function modelled on the existing `auto-find-developer-images`:
+
+1. Pulls `batch_size` developers where `logo_status IN ('missing','pending_review')` ordered by published-project count.
+2. For each:
+   - Firecrawl **search** for `"{dev name} Dubai developer official site"` → take top 3 result URLs.
+   - Firecrawl **scrape** with `formats: ['branding','links']` on the most likely official site (filter out aggregators like reidin / propertyfinder / bayut).
+   - Collect candidate URLs in this priority order:
+     1. `branding.logo` (Firecrawl's brand extractor).
+     2. `branding.images.logo` / `branding.images.favicon`.
+     3. Any `<link rel="icon">` from `links` that looks like a real logo (skip 16×16 favicons).
+3. Run every candidate through `isValidDeveloperLogoUrl()` (existing allow-list) — anything matching the forbidden patterns (screenshots, project photos, WhatsApp, etc.) is dropped.
+4. Download surviving candidates, re-upload them to the `developer-logos` Supabase storage bucket (so we own the asset), and store the public URLs in `developers.logo_candidates`.
+5. Set `logo_status = 'pending_review'` and `logo_last_attempt_at = now()`. **Does NOT auto-promote** — owner approval in the admin UI is required (matches the "No Photo → No Publish" pattern of human gating).
+
+The function uses `requireOwnerAuth` and is callable from the admin UI only.
+
+### 5. Cron (optional, owner-gated toggle)
+
+A `pg_cron` job that runs `auto-find-developer-logos` with `batch_size = 25` every 6 hours, until the queue is empty. Disabled by default; you enable it from the admin queue with a single toggle.
+
+---
+
+## Files to add / change
+
+```text
+src/components/ui/DeveloperLogo.tsx           (add `nameplate` variant)
+src/components/ProjectCard.tsx                (always-render developer mark)
+src/components/ReellyProjectCard.tsx          (same)
+src/pages/admin/MissingLogosQueue.tsx         (new — admin queue UI)
+src/routes/AdminRoutes.tsx                    (register /admin/developers/missing-logos)
+src/pages/AdminDevelopers.tsx                 (add "Missing Logos (396)" tab link)
+supabase/functions/auto-find-developer-logos/index.ts   (new)
+supabase/migrations/<ts>_developer_logo_workflow.sql    (new columns + RLS + backfill)
 ```
 
-Plus a client-side `hasPhoto(p)` guard right before returning the list, so any race-condition row that lacks both URLs is hidden even if the DB trigger somehow accepted it (belt + braces). Gallery-only projects stay visible because their cover/card is hydrated by the existing media-management flow.
+No existing feature is removed — the locked `developerLogo.ts` allow-list and `DeveloperLogo` rules continue to govern what counts as a valid logo.
 
-### 4. Admin panel — "Needs Photo" review queue
+---
 
-In `src/pages/admin/ListingsApproval.tsx`:
+## Out of scope (explicit)
 
-- Add a third tab `Needs Photo` alongside `Pending` / `Approved`, defaulting to the count badge.
-- Query loads all projects (published OR not) where media-status === `missing`, ordered by `updated_at DESC`, limit 500.
-- Each row shows the existing `MediaStatusBadge` + an `Add Photos` button that deep-links to `/listing-admin?project=<id>&tab=media` so you can paste/upload.
-- `Approve` button stays disabled for missing-media rows (already implemented).
-- Add a top-of-page banner: `N listings hidden from the public site because they have no photo. Review below.`
+- No change to project cover/photo logic.
+- No change to the existing Building2 fallback used in CRM/admin tiles.
+- No public-facing "submit your logo" form — only owner/admin can promote a logo to `logo_url`.
 
-### 5. Memory + docs
-
-- Append a new constraint memory `mem://constraints/no-photo-no-publish-rule` summarizing the trigger, the frontend guard, and the admin tab.
-- Update the existing `mem://features/properties/search-integrity-standard` note to clarify: search still does not filter by photo presence, because the publish gate now guarantees every published row has one.
-
-## Out of scope
-
-- Validating that the URL actually resolves to an image (broken CDN links). That's a separate health-check job.
-- Touching the `developer_project_submissions` draft flow — drafts are never public, so the gate only fires at the moment a submission is promoted into `projects`.
-
-## Technical notes
-
-- Trigger fires on every UPDATE; cheap because `project_has_photo` is a single index lookup on `(project_id)`.
-- `project_images` should have an index on `project_id` — verify and add if missing.
-- The frontend `.or(...)` filter is compatible with PostgREST and won't change pagination counts because counts are recomputed against the filtered set.
+Approve this plan and I'll start with the migration, then ship the UI nameplate, then the admin queue + edge function in that order so the cards stop looking blank immediately while the backfill catches up.

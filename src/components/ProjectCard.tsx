@@ -175,8 +175,13 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
 
   const statusLabel = getStatusLabel();
   const saleStatusBadge = getSaleStatusBadge(project.status_label);
-  const hasDevLogo = !!getDeveloperLogoUrl(project.developer);
-  const badgePosition = hasDevLogo ? 'top-14 left-3' : 'top-3 left-3';
+  const devLogoUrl = getDeveloperLogoUrl(project.developer);
+  const devName = (project.developer as any)?.name as string | undefined;
+  // ALWAYS show a developer mark when we have either a logo OR a name,
+  // so the client can identify who built the project on every card.
+  const hasDevMark = !!devLogoUrl || !!devName;
+  const hasDevLogo = !!devLogoUrl;
+  const badgePosition = hasDevMark ? 'top-14 left-3' : 'top-3 left-3';
 
   return (
     <div
@@ -206,13 +211,22 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         {/* Image with Carousel — 16:10 landscape */}
         <div className="aspect-[16/10] overflow-hidden relative" data-surface="ink">
           {/* Developer Logo Overlay - Top Left */}
-          {getDeveloperLogoUrl(project.developer) && (
+          {/* Developer mark overlay (logo if available, else name plate) */}
+          {hasDevMark && (
             <div className="absolute top-3 left-3 z-20">
-              <DeveloperLogo
-                src={getDeveloperLogoUrl(project.developer)}
-                alt={project.developer?.name || "Developer"}
-                variant="bare"
-              />
+              {hasDevLogo ? (
+                <DeveloperLogo
+                  src={devLogoUrl}
+                  alt={devName || "Developer"}
+                  variant="bare"
+                />
+              ) : (
+                <DeveloperLogo
+                  variant="nameplate"
+                  name={devName}
+                  alt={devName || "Developer"}
+                />
+              )}
             </div>
           )}
 
@@ -269,8 +283,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </>
           )}
 
-          {/* Top-Left: Property Type Label (if no developer logo) — solid ink badge */}
-          {project.property_type_label && !getDeveloperLogoUrl(project.developer) && (
+          {/* Top-Left: Property Type Label (if no developer mark) — solid ink badge */}
+          {project.property_type_label && !hasDevMark && (
             <div className="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider bg-[#1A1A1A] text-[#FDFBF7] border border-[#B89555] shadow-md">
               {project.property_type_label}
             </div>
