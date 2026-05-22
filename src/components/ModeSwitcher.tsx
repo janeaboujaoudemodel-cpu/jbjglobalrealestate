@@ -33,6 +33,8 @@ type ModePalette = {
   rowTo: string;    // row card gradient end (slightly deeper tint)
   rowHover: string; // row hover background
   dark: string;     // text color on light surfaces
+  /** Foreground color used on top of `base` (icon badge fill + Selected pill). */
+  onBase: string;
 };
 
 // Per-mode palette (locked):
