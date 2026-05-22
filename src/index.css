@@ -4780,3 +4780,44 @@ button:hover [data-no-contrast-guard] svg[style*="#B89555"] {
 .crm-scope [role="combobox"]:focus-visible {
   --tw-ring-color: rgba(184, 149, 85, 0.4);
 }
+
+/* ============================================================
+ * UNIVERSAL SVG ICON CONTRAST GUARD (2026-05-22)
+ * Any svg/icon with white/champagne stroke or fill sitting on a
+ * light/champagne/gold/bright background is auto-flipped to ink.
+ * Opt out per-element with [data-no-contrast-guard] or .allow-white.
+ * ============================================================ */
+:root:not(.dark) :is(
+  .bg-\[\#FDFBF7\], .bg-\[\#F7F2EA\], .bg-\[\#EFE6D6\],
+  [class~="bg-[#FDFBF7]"], [class~="bg-[#F7F2EA]"], [class~="bg-[#EFE6D6]"],
+  [class~="bg-[#B89555]"], .bg-\[\#B89555\], .bg-\[\#A68444\],
+  [class*="from-gold"], [class*="to-gold"], [class*="via-gold"],
+  [class*="from-[#B89555]"], [class*="to-[#B89555]"],
+  [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#EFE6D6]"],
+  .bg-white, [class~="bg-white"],
+  [data-surface="page"], [data-surface="champagne"], [data-surface="gold"]
+):not([data-no-contrast-guard]):not([data-surface="dark"]) :is(
+  svg.text-white, svg[class*="text-white/"],
+  svg.text-\[\#FDFBF7\], svg.text-\[\#F7F2EA\], svg.text-\[\#EFE6D6\]
+):not(.allow-white):not([data-no-contrast-guard]):not([data-no-contrast-guard] *) {
+  color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+
+/* Catch icons that have no explicit text color and inherit white from
+   a parent (e.g., buttons that set text-white on the wrapper). When the
+   parent surface is light/gold/champagne, force the svg to ink. */
+:root:not(.dark) :is(
+  .bg-\[\#FDFBF7\], .bg-\[\#F7F2EA\], .bg-\[\#EFE6D6\],
+  [class~="bg-[#B89555]"], .bg-\[\#B89555\], .bg-\[\#A68444\],
+  [class*="from-gold"], [class*="to-gold"], [class*="via-gold"]
+):not([data-no-contrast-guard]):not([data-surface="dark"]) > svg:not([data-no-contrast-guard]):not(.allow-white),
+:root:not(.dark) :is(
+  .bg-\[\#FDFBF7\], .bg-\[\#F7F2EA\], .bg-\[\#EFE6D6\],
+  [class~="bg-[#B89555]"], .bg-\[\#B89555\], .bg-\[\#A68444\],
+  [class*="from-gold"], [class*="to-gold"], [class*="via-gold"]
+):not([data-no-contrast-guard]):not([data-surface="dark"]) :is(.text-white, [class*="text-white/"]):not(.allow-white):not([data-no-contrast-guard]) svg {
+  color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+
