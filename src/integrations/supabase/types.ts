@@ -36552,6 +36552,7 @@ export type Database = {
       mask_iban: { Args: { iban: string }; Returns: string }
       mask_phone: { Args: { phone: string }; Returns: string }
       next_doc_number: { Args: { _template_key: string }; Returns: string }
+      project_has_photo: { Args: { _project_id: string }; Returns: boolean }
       purge_deleted_esign_envelopes: { Args: never; Returns: Json }
       redact_expired_vapi_recordings: { Args: never; Returns: number }
       redact_sensitive_transcript: {

@@ -60,7 +60,7 @@ const ListingsApproval = () => {
   const [projects, setProjects] = useState<ProjectRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [tab, setTab] = useState<"pending" | "approved">("pending");
+  const [tab, setTab] = useState<"needs-photo" | "pending" | "approved">("needs-photo");
 
   const load = async () => {
     setLoading(true);
@@ -105,8 +105,9 @@ const ListingsApproval = () => {
     });
   }, [projects, search]);
 
+  const needsPhoto = filtered.filter((p) => getMediaStatus(p) === "missing");
   const approved = filtered.filter((p) => p.is_published);
-  const pending = filtered.filter((p) => !p.is_published);
+  const pending = filtered.filter((p) => !p.is_published && getMediaStatus(p) !== "missing");
 
   const approve = async (p: ProjectRow) => {
     const status = getMediaStatus(p);
@@ -226,8 +227,23 @@ const ListingsApproval = () => {
           </Button>
         </div>
 
+        {needsPhoto.length > 0 && (
+          <Card
+            data-surface="champagne"
+            className="mb-4 p-4 border border-red-600/40 flex items-start gap-3"
+          >
+            <ImageOff className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+            <div className="text-sm text-[#1A1A1A]">
+              <strong>{needsPhoto.length}</strong> listing{needsPhoto.length === 1 ? "" : "s"} hidden from the public site because {needsPhoto.length === 1 ? "it has" : "they have"} no photo. Review them in the <em>Needs Photo</em> tab and add media before approval.
+            </div>
+          </Card>
+        )}
+
         <Tabs value={tab} onValueChange={(v) => setTab(v as any)}>
           <TabsList>
+            <TabsTrigger value="needs-photo" className="gap-2">
+              <ImageOff className="h-4 w-4" /> Needs Photo ({needsPhoto.length})
+            </TabsTrigger>
             <TabsTrigger value="pending" className="gap-2">
               <Clock className="h-4 w-4" /> Pending Approval ({pending.length})
             </TabsTrigger>
@@ -235,6 +251,16 @@ const ListingsApproval = () => {
               <CheckCircle2 className="h-4 w-4" /> Approved ({approved.length})
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="needs-photo" className="mt-4 space-y-3">
+            {needsPhoto.length === 0 ? (
+              <Card data-surface="champagne" className="p-8 text-center text-[#1A1A1A]/70">
+                {loading ? "Loading…" : "All listings have at least one photo. 🎉"}
+              </Card>
+            ) : (
+              needsPhoto.map(renderRow)
+            )}
+          </TabsContent>
 
           <TabsContent value="pending" className="mt-4 space-y-3">
             {pending.length === 0 ? (
