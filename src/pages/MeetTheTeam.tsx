@@ -56,7 +56,10 @@ interface TeamMemberCardProps {
   onReadMore: (member: TeamMember) => void;
   isInternalUser?: boolean;
   onDirectClick?: (member: TeamMember) => void;
+  isOwner?: boolean;
+  hidden?: boolean;
 }
+
 
 const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: TeamMemberCardProps) => {
   // Get reporting manager info
