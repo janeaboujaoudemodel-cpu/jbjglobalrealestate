@@ -139,6 +139,7 @@ type ViewItem = { id: string; label: string; group?: string };
 const VIEWS: Record<Entity, ViewItem[]> = {
   leads: [
     { id: "all",           label: "All Leads",     group: "People" },
+    { id: "shared",        label: "Shared w/ Brokers", group: "People" },
     { id: "overview",      label: "Dashboard",     group: "People" },
     { id: "flagged",       label: "Flagged",       group: "People" },
     { id: "vip",           label: "VIP",           group: "People" },
