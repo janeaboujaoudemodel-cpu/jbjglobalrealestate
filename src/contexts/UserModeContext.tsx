@@ -114,74 +114,95 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
     reconcile();
   }, [user?.id]);
 
+  // Tripwire: any DB write to mode-related tables MUST happen while
+  // `explicitWriteRef.current === true`. Only `setMode` opens that window
+  // (inside try/finally so it always closes). The auth reconcile effect
+  // above never sets it — so if a future refactor accidentally triggers a
+  // write from sign-in/sign-out/token-refresh, it throws in dev and logs
+  // an error in production instead of silently corrupting the mode.
+  const explicitWriteRef = useRef(false);
+  const assertExplicitWrite = (label: string) => {
+    if (!explicitWriteRef.current) {
+      const msg = `[UserMode] BLOCKED non-explicit DB write attempt: ${label}`;
+      if (import.meta.env.DEV) throw new Error(msg);
+      console.error(msg);
+      return false;
+    }
+    return true;
+  };
 
   const setMode = useCallback(async (newMode: UserMode) => {
     console.info('[UserMode] setMode by user:', newMode);
-    // Optimistic update
+    // Optimistic update — local only, no DB.
     setModeState(newMode);
     localStorage.setItem(MODE_KEY, newMode);
-    
+
     // Mark as explicitly selected
     setHasMadeInitialSelection(true);
     localStorage.setItem(MODE_SELECTED_KEY, 'true');
 
-    // Persist to database if logged in
-    if (user?.id) {
-      try {
-        const { error } = await supabase
-          .from('user_preferences')
-          .upsert({
-            user_id: user.id,
-            selected_mode: newMode,
-            updated_at: new Date().toISOString()
-          }, {
-            onConflict: 'user_id'
-          });
-
-        if (error) {
-          console.error('Error saving user mode:', error);
-        }
-      } catch (err) {
-        console.error('Error saving user mode:', err);
-      }
-
-      // Auto-register the user as a categorized CRM lead.
-      // Idempotent on the server (upserts the user's self-registration lead),
-      // so calling it on every mode change keeps contact_type in sync.
-      try {
-        await supabase.functions.invoke('register-mode-lead', {
-          body: { mode: newMode },
-        });
-      } catch (err) {
-        // Non-blocking: never let CRM sync break the UI selection.
-        console.warn('[UserMode] register-mode-lead failed (non-fatal):', err);
-      }
-
-      // Source tracking — labels every pick as "Mode Picker (Header)" for insights
-      try {
-        const { registerRolePick, SIGNUP_SOURCES } = await import('@/lib/signupSources');
-        await registerRolePick({ source: SIGNUP_SOURCES.MODE_PICKER, role: newMode });
-      } catch (err) {
-        console.warn('[UserMode] source tracking failed (non-fatal):', err);
-      }
-
-      // Mirror mode -> role so legacy role-gated views stay consistent.
-      // Developer is mode-only (no role table change).
-      if (newMode !== 'developer') {
+    // Open the explicit-write window. Closed in `finally` so a thrown
+    // error can never leak the permission to subsequent code paths.
+    explicitWriteRef.current = true;
+    try {
+      if (user?.id) {
         try {
-          const roleMirror = newMode === 'broker' ? 'broker_partner' : 'investor';
-          await supabase
-            .from('user_role_selections')
+          if (!assertExplicitWrite('user_preferences.upsert')) throw new Error('blocked');
+          const { error } = await supabase
+            .from('user_preferences')
             .upsert({
               user_id: user.id,
-              selected_role: roleMirror as any,
-              confirmed_accurate: true,
+              selected_mode: newMode,
+              updated_at: new Date().toISOString()
             }, { onConflict: 'user_id' });
-          try { localStorage.setItem('jj_role_selected', roleMirror); } catch {}
+          if (error) console.error('Error saving user mode:', error);
         } catch (err) {
-          console.warn('[UserMode] role mirror failed (non-fatal):', err);
+          console.error('Error saving user mode:', err);
+        }
+
+        // Auto-register the user as a categorized CRM lead.
+        try {
+          if (assertExplicitWrite('register-mode-lead')) {
+            await supabase.functions.invoke('register-mode-lead', {
+              body: { mode: newMode },
+            });
+          }
+        } catch (err) {
+          console.warn('[UserMode] register-mode-lead failed (non-fatal):', err);
+        }
+
+        // Source tracking — labels every pick as "Mode Picker (Header)".
+        try {
+          if (assertExplicitWrite('signupSources.registerRolePick')) {
+            const { registerRolePick, SIGNUP_SOURCES } = await import('@/lib/signupSources');
+            await registerRolePick({ source: SIGNUP_SOURCES.MODE_PICKER, role: newMode });
+          }
+        } catch (err) {
+          console.warn('[UserMode] source tracking failed (non-fatal):', err);
+        }
+
+        // Mirror mode -> role so legacy role-gated views stay consistent.
+        if (newMode !== 'developer') {
+          try {
+            if (assertExplicitWrite('user_role_selections.upsert')) {
+              const roleMirror = newMode === 'broker' ? 'broker_partner' : 'investor';
+              await supabase
+                .from('user_role_selections')
+                .upsert({
+                  user_id: user.id,
+                  selected_role: roleMirror as any,
+                  confirmed_accurate: true,
+                }, { onConflict: 'user_id' });
+              try { localStorage.setItem('jj_role_selected', roleMirror); } catch {}
+            }
+          } catch (err) {
+            console.warn('[UserMode] role mirror failed (non-fatal):', err);
+          }
         }
       }
+    } finally {
+      // ALWAYS close the window, even on throw.
+      explicitWriteRef.current = false;
     }
 
     // Invalidate role / dashboard caches so the page re-skins without reload.
