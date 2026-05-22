@@ -355,24 +355,28 @@ const VoiceConciergeWidget = () => {
         <button
           onClick={handleLauncherClick}
           disabled={isConnecting}
-          className="relative flex items-center gap-2 pl-2 pr-3.5 py-1.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.03] border border-[#B89555]/60 disabled:opacity-70 disabled:cursor-not-allowed text-[#1A1A1A] group"
-          style={{
-            background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)',
-            boxShadow: '0 6px 20px -8px rgba(184,149,85,0.55), 0 2px 6px rgba(0,0,0,0.15)',
-          }}
+          className="relative flex items-center gap-0 sm:gap-2.5 p-2.5 sm:pl-2 sm:pr-4 sm:py-1.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] bg-[#1A1A1A] border border-[#B89555]/45 hover:border-[#B89555]/70 disabled:opacity-70 disabled:cursor-not-allowed group"
           aria-label="Free live call with our agent"
           aria-expanded={choiceOpen}
         >
-          <span className="flex items-center justify-center w-7 h-7 rounded-full bg-[#FDFBF7] border border-[#B89555]/50">
+          <span className="relative flex items-center justify-center w-7 h-7 rounded-full bg-[#B89555]/15 border border-[#B89555]/50">
             {isConnecting ? (
-              <span className="w-3 h-3 border-2 border-[#1A1A1A]/30 border-t-[#1A1A1A] rounded-full animate-spin" />
+              <span className="w-3 h-3 border-2 border-[#B89555]/30 border-t-[#B89555] rounded-full animate-spin" />
             ) : (
-              <Phone className="w-3.5 h-3.5 text-[#1A1A1A]" />
+              <Phone className="w-3.5 h-3.5 text-[#B89555]" />
             )}
+            {/* live dot — visible on mobile as a badge on the icon-only FAB */}
+            <span className="sm:hidden absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-[#1A1A1A]" />
           </span>
-          <span className="flex flex-col items-start leading-tight">
-            <span className="text-[10px] uppercase tracking-[0.14em] font-semibold text-[#8a6f2e]">Live · Free</span>
-            <span className="text-xs font-semibold text-[#1A1A1A]">{isConnecting ? "Connecting…" : "Call our agent"}</span>
+          <span className="hidden sm:inline-flex items-center gap-2 leading-none">
+            <span className="relative flex items-center justify-center w-2 h-2">
+              <span className="absolute inset-0 rounded-full bg-emerald-500/50 animate-ping" />
+              <span className="relative w-1.5 h-1.5 rounded-full bg-emerald-500" />
+            </span>
+            <span className="text-[13px] font-semibold tracking-tight text-[#FDFBF7]">
+              {isConnecting ? "Connecting…" : "Call our agent"}
+            </span>
+            <span className="text-[10px] font-medium tracking-[0.14em] uppercase text-[#B89555]">Free</span>
           </span>
         </button>
 
