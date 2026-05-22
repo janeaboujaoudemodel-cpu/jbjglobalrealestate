@@ -107,7 +107,7 @@ const Philanthropy = lazy(() => import("@/pages/Philanthropy"));
 const News = lazy(() => import("@/pages/News"));
 const NewsDetail = lazy(() => import("@/pages/NewsDetail"));
 const MeetTheTeam = lazy(() => import("@/pages/MeetTheTeam"));
-const OurBrokers = lazy(() => import("@/pages/OurBrokers"));
+
 const Reviews = lazy(() => import("@/pages/Reviews"));
 const ThankYou = lazy(() => import("@/pages/ThankYou"));
 
