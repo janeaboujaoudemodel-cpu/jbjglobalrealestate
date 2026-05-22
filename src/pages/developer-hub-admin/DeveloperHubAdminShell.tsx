@@ -42,7 +42,7 @@ export default function DeveloperHubAdminShell() {
                 }`
               }
             >
-              <IconTile icon={item.icon} tone="gold" size="xs" />
+              <IconTile icon={item.icon} tone="gold" size="sm" />
               <span>{item.label}</span>
             </NavLink>
           ))}
