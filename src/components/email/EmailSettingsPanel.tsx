@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
@@ -160,12 +161,12 @@ const EmailSettingsPanel = ({ onClose }: EmailSettingsPanelProps) => {
               <div className="flex gap-2">
                 <div className="relative flex-1">
                   <Key className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50" />
-                  <Input
-                    type="password"
+                  <PasswordInput
                     placeholder="re_xxxxxxxxxxxx"
                     value={personalApiKey}
                     onChange={(e) => setPersonalApiKey(e.target.value)}
                     className="pl-9"
+                    visibilityLabel="API key"
                   />
                 </div>
                 <Button
