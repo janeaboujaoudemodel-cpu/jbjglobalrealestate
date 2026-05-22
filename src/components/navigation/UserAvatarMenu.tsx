@@ -110,10 +110,16 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
     badge?: number;
     onClick?: () => void;
   }) => {
+    const active = isRowActive(to);
     const inner = (
       <span className="flex items-center gap-2.5 w-full">
-        <Icon className="w-4 h-4 text-[#1A1A1A]/70 shrink-0" strokeWidth={1.75} />
-        <span className="text-sm font-medium text-[#1A1A1A] flex-1">{label}</span>
+        <Icon
+          className={`w-4 h-4 shrink-0 ${active ? "text-[#1A1A1A]" : "text-[#1A1A1A]/70"}`}
+          strokeWidth={active ? 2 : 1.75}
+        />
+        <span className={`text-sm flex-1 ${active ? "font-semibold text-[#1A1A1A]" : "font-medium text-[#1A1A1A]"}`}>
+          {label}
+        </span>
         {badge && badge > 0 ? (
           <span className="min-w-[18px] h-[18px] px-1 rounded-full bg-[#1A1A1A] text-white text-[10px] font-bold flex items-center justify-center">
             {badge > 9 ? "9+" : badge}
@@ -125,7 +131,9 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
       <DropdownMenuItem
         asChild={!!to}
         onSelect={onClick ? () => onClick() : undefined}
-        className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 focus:bg-[#F7F2EA] data-[highlighted]:bg-[#F7F2EA]"
+        className={`cursor-pointer rounded-md px-2.5 py-2 my-0.5 focus:bg-[#F7F2EA] data-[highlighted]:bg-[#F7F2EA] ${
+          active ? "bg-[#F7F2EA] border border-[#B89555]/30" : ""
+        }`}
       >
         {to ? <Link to={to}>{inner}</Link> : inner}
       </DropdownMenuItem>
