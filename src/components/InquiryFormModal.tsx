@@ -333,8 +333,7 @@ const InquiryFormModal = ({
         }}
       >
         <DialogContent 
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 text-[#1A1A1A] max-w-lg p-0 max-h-[90vh] shadow-2xl shadow-gold/20 overflow-visible"
-          style={{ overflow: 'visible' }}
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 text-[#1A1A1A] max-w-lg w-[95vw] p-0 max-h-[90vh] shadow-2xl shadow-gold/20 overflow-hidden rounded-2xl flex flex-col"
           dir={isRTL ? 'rtl' : 'ltr'}
           onInteractOutside={(e) => {
             // Prevent closing when interacting with popovers (SearchableSelect dropdowns)
@@ -350,7 +349,7 @@ const InquiryFormModal = ({
             }
           }}
         >
-          {/* Premium top gradient glow */}
+          {/* Premium top gradient glow (clipped to card) */}
           <div
             className="absolute top-0 left-0 right-0 h-32 pointer-events-none"
             style={{
