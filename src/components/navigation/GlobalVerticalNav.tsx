@@ -1374,17 +1374,23 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               )}
             </div>
 
-            {/* Expand button */}
+            {/* Expand button — premium champagne tile with gold hairline */}
             <button
               data-no-contrast-guard
               onClick={toggleCollapse}
-              className="w-8 h-8 rounded-lg flex items-center justify-center transition-all mt-1 mb-1 border-0 bg-transparent hover:bg-[#EFE6D6]/20"
-              style={{ color: '#B89555' }}
+              className="group w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-200 mt-1 mb-1 hover:shadow-[0_2px_10px_-2px_rgba(184,149,85,0.5)]"
+              style={{
+                color: '#8A6A2E',
+                background: 'linear-gradient(180deg, #FBF4E2 0%, #EFE2C3 100%)',
+                border: '1px solid rgba(184,149,85,0.55)',
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.55), 0 1px 2px rgba(184,149,85,0.12)',
+              }}
               aria-label="Expand navigation"
               title="Expand navigation"
             >
-              <PanelLeftClose className="w-4 h-4 rotate-180" strokeWidth={1.75} style={{ color: '#B89555' }} />
+              <PanelLeftClose className="w-4 h-4 rotate-180 transition-transform duration-200 group-hover:translate-x-0.5" strokeWidth={1.75} style={{ color: '#8A6A2E' }} />
             </button>
+
           </div>
         </div>
       ) : (
