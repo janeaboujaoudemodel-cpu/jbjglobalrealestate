@@ -38,6 +38,10 @@ type Body = {
   date_window_end?: string | null;
   lead_ids?: string[] | null;
   status_filter?: string[] | null;
+  // Phase 3 visibility flags
+  visible_notes?: boolean;
+  visible_files?: boolean;
+  visible_activities?: boolean;
 };
 
 Deno.serve(async (req) => {
