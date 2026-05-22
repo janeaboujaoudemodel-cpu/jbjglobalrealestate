@@ -126,6 +126,12 @@ const Index = () => {
   const [videoLoaded, setVideoLoaded] = useState(false);
   const { t } = useLanguage();
   const { isBroker } = useUserRole();
+  const { mode, hasMadeInitialSelection } = useUserModeContext();
+  const heroActions = useMemo(() => {
+    if (!hasMadeInitialSelection) return baseHeroActions;
+    const extras = modeHeroActions[mode] ?? [];
+    return [...baseHeroActions, ...extras];
+  }, [mode, hasMadeInitialSelection]);
 
 
 
