@@ -83,6 +83,10 @@ export default function GrantBrokerAccessDialog({
   const [winStart, setWinStart] = useState<Date | undefined>();
   const [winEnd, setWinEnd] = useState<Date | undefined>();
   const [statusFilterText, setStatusFilterText] = useState("");
+  const [visibleNotes, setVisibleNotes] = useState(false);
+  const [visibleFiles, setVisibleFiles] = useState(false);
+  const [visibleActivities, setVisibleActivities] = useState(false);
+
 
   // Load existing brokers
   useEffect(() => {
