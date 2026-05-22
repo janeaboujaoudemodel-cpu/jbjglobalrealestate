@@ -291,8 +291,21 @@ const MeetTheTeam: React.FC = () => {
     "Customer Happiness",
   ];
 
+  // Page-level visibility gate: if owner hid the page, render 404 for everyone except the owner.
+  if (visibility.loaded && !visibility.isPageVisible && !isOwner) {
+    return <NotFound />;
+  }
+
+  // Compute counts for the owner visibility bar
+  const allMembers = allTeamMembers;
+  const aiCount = allMembers.filter((m) => m.isAI).length;
+  const hiddenCount = allMembers.filter(
+    (m) => !visibility.isMemberVisible(m.id) || (visibility.isAiHidden && m.isAI)
+  ).length;
+
   return (
     <>
+
       <SEOHead
         title="Meet Our Team | JBJ Global Real Estate"
         description="Meet the exceptional professionals behind JBJ Global Real Estate. Our diverse team of experts is dedicated to delivering premium real estate services in Dubai and the UAE."
