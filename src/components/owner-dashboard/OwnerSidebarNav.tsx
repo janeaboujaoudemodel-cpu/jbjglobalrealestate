@@ -55,6 +55,7 @@ const NAV_SECTIONS: NavSection[] = [
   {
     label: "CORE",
     items: [
+      { label: "Owner Panel", icon: Crown, path: "/admin" },
       { label: "Overview", icon: LayoutDashboard, path: "/owner" },
       {
         label: "CRM",
