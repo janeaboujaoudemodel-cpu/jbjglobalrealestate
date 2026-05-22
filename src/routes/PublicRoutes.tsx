@@ -5,6 +5,7 @@
 import { lazy } from "react";
 import { Route, Navigate } from "react-router-dom";
 import { RedirectWithParams } from "@/components/RedirectWithParams";
+import { RedirectWithSearch } from "@/routes/RedirectWithSearch";
 import AuthRequiredRoute from "@/components/AuthRequiredRoute";
 
 // ── Property & Listing Pages ──
