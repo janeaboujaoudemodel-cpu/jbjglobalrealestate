@@ -95,7 +95,7 @@ export default function DeveloperProfilePage() {
       if (!developer) return [];
       const { data } = await supabase
         .from("projects")
-        .select("id, name, slug, status, handover_quarter, total_units, cover_image_url, updated_at, is_published")
+        .select("id, name, slug, status, handover_date, total_units, cover_image_url, updated_at, is_published")
         .or(`developer_id.eq.${developer.id},developer_name.eq.${developer.name}`)
         .order("updated_at", { ascending: false });
       return data || [];
