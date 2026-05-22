@@ -116,26 +116,6 @@ export default function InvestorDashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,28%,94%)] to-[hsl(36,22%,88%)]">
-      {/* Hero Header */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,hsl(36,40%,20%)_0%,transparent_60%)]" />
-        <div className="relative max-w-6xl mx-auto px-4 py-10 md:py-14">
-          <div className="flex items-center gap-5">
-            <Avatar className="w-16 h-16 border-2 border-[hsl(36,40%,70%)]/30">
-              <AvatarImage src={profile?.avatar_url} />
-              <AvatarFallback className="bg-[hsl(36,40%,70%)]/20 text-[hsl(36,40%,70%)] text-xl font-bold">
-                {displayName[0]?.toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-[#F7F1E6] tracking-tight">Investor Portal</h1>
-              <p className="text-[#D4B896]/60 text-sm">Welcome back, {displayName}</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Tabs */}
       <div className="max-w-6xl mx-auto px-4 py-6">
         <Tabs value={activeTab} onValueChange={setActiveTab}>

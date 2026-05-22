@@ -278,28 +278,6 @@ export default function BrokerPortal() {
       <SEOHead title="Broker Portal | JBJ Global Real Estate" description="Your dedicated broker portal — access CRM, listings, AI tools, training academy, and performance dashboard." />
 
       <div className="min-h-screen bg-gradient-to-b from-[hsl(40,33%,98%)] to-[hsl(36,25%,88%)]">
-        {/* Hero */}
-        <section className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,hsl(36,40%,20%)_0%,transparent_60%)]" />
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-            <motion.div initial="hidden" animate="visible" variants={fadeInUp}>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[hsl(36,40%,70%)]/30 to-[hsl(36,40%,70%)]/10 flex items-center justify-center border border-[hsl(36,40%,70%)]/30">
-                  <GraduationCap className="w-6 h-6 text-[hsl(36,40%,70%)]" />
-                </div>
-                <div>
-                  <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">Broker Portal</h1>
-                  <p className="text-[hsl(36,40%,70%)]/70 text-sm">JBJ Global Real Estate — Partner Hub</p>
-                </div>
-              </div>
-              <div className="bg-[#1A1A1A]/30 backdrop-blur-sm rounded-2xl border border-[hsl(36,40%,70%)]/20 p-6 md:p-8">
-                <BrokerProfileHero />
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
         {/* Tabbed Content */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
