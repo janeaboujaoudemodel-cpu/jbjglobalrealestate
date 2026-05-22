@@ -12042,6 +12042,9 @@ export type Database = {
       developer_representatives: {
         Row: {
           activity_score: number | null
+          application_id: string | null
+          authorized_at: string | null
+          authorized_by: string | null
           auto_approve_uploads: boolean | null
           city: string | null
           company_email: string | null
@@ -12053,6 +12056,7 @@ export type Database = {
           database_source: string | null
           date_of_join: string | null
           department: string | null
+          developer_id: string | null
           developer_name: string
           email: string
           email_normalized: string | null
@@ -12071,6 +12075,7 @@ export type Database = {
           labels: string[]
           languages: string[] | null
           last_active_at: string | null
+          last_activity_at: string | null
           leave_end_date: string | null
           leave_start_date: string | null
           linkedin_url: string | null
@@ -12096,6 +12101,7 @@ export type Database = {
           source_batch_ids: string[]
           source_history: Json
           status: string
+          suspended_at: string | null
           total_briefings_hosted: number | null
           total_updates_submitted: number | null
           trade_license_url: string | null
@@ -12112,6 +12118,9 @@ export type Database = {
         }
         Insert: {
           activity_score?: number | null
+          application_id?: string | null
+          authorized_at?: string | null
+          authorized_by?: string | null
           auto_approve_uploads?: boolean | null
           city?: string | null
           company_email?: string | null
@@ -12123,6 +12132,7 @@ export type Database = {
           database_source?: string | null
           date_of_join?: string | null
           department?: string | null
+          developer_id?: string | null
           developer_name: string
           email: string
           email_normalized?: string | null
@@ -12141,6 +12151,7 @@ export type Database = {
           labels?: string[]
           languages?: string[] | null
           last_active_at?: string | null
+          last_activity_at?: string | null
           leave_end_date?: string | null
           leave_start_date?: string | null
           linkedin_url?: string | null
@@ -12166,6 +12177,7 @@ export type Database = {
           source_batch_ids?: string[]
           source_history?: Json
           status?: string
+          suspended_at?: string | null
           total_briefings_hosted?: number | null
           total_updates_submitted?: number | null
           trade_license_url?: string | null
@@ -12182,6 +12194,9 @@ export type Database = {
         }
         Update: {
           activity_score?: number | null
+          application_id?: string | null
+          authorized_at?: string | null
+          authorized_by?: string | null
           auto_approve_uploads?: boolean | null
           city?: string | null
           company_email?: string | null
@@ -12193,6 +12208,7 @@ export type Database = {
           database_source?: string | null
           date_of_join?: string | null
           department?: string | null
+          developer_id?: string | null
           developer_name?: string
           email?: string
           email_normalized?: string | null
@@ -12211,6 +12227,7 @@ export type Database = {
           labels?: string[]
           languages?: string[] | null
           last_active_at?: string | null
+          last_activity_at?: string | null
           leave_end_date?: string | null
           leave_start_date?: string | null
           linkedin_url?: string | null
@@ -12236,6 +12253,7 @@ export type Database = {
           source_batch_ids?: string[]
           source_history?: Json
           status?: string
+          suspended_at?: string | null
           total_briefings_hosted?: number | null
           total_updates_submitted?: number | null
           trade_license_url?: string | null
@@ -12256,6 +12274,20 @@ export type Database = {
             columns: ["current_developer_id"]
             isOneToOne: false
             referencedRelation: "crm_developer_registry"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "devreps_application_fk"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "developer_applications"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "devreps_developer_fk"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developers"
             referencedColumns: ["id"]
           },
         ]
@@ -12707,6 +12739,7 @@ export type Database = {
           feature_image_url: string | null
           founded_year: number | null
           google_maps_url: string | null
+          has_active_rep: boolean
           headquarters: string | null
           id: string
           instagram_url: string | null
@@ -12756,6 +12789,7 @@ export type Database = {
           feature_image_url?: string | null
           founded_year?: number | null
           google_maps_url?: string | null
+          has_active_rep?: boolean
           headquarters?: string | null
           id?: string
           instagram_url?: string | null
@@ -12805,6 +12839,7 @@ export type Database = {
           feature_image_url?: string | null
           founded_year?: number | null
           google_maps_url?: string | null
+          has_active_rep?: boolean
           headquarters?: string | null
           id?: string
           instagram_url?: string | null
@@ -36334,6 +36369,10 @@ export type Database = {
       is_authorized_staff: { Args: never; Returns: boolean }
       is_crm_admin: { Args: { _user_id: string }; Returns: boolean }
       is_crm_owner: { Args: { check_user_id: string }; Returns: boolean }
+      is_developer_rep: {
+        Args: { _dev: string; _user: string }
+        Returns: boolean
+      }
       is_email_domain_blocked: {
         Args: { email_address: string }
         Returns: boolean
