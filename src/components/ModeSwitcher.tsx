@@ -35,6 +35,7 @@ type ModePalette = {
   dark: string;     // text color on light surfaces
   /** Foreground color used on top of `base` (icon badge fill + Selected pill). */
   onBase: string;
+  surface: 'gold' | 'ink' | 'espresso';
 };
 
 // Per-mode palette (locked):
@@ -58,6 +59,7 @@ const MODE_CONFIG: Record<UserMode, ModePalette> = {
     rowHover: '#EFE6D6',
     dark: '#1A1A1A',
     onBase: '#1A1A1A',    // ink on gold for legibility
+    surface: 'gold',
   },
   broker: {
     label: 'Mode: Broker',
@@ -71,6 +73,7 @@ const MODE_CONFIG: Record<UserMode, ModePalette> = {
     rowHover: '#EFE6D6',
     dark: '#1A1A1A',
     onBase: '#FFFFFF',
+    surface: 'ink',
   },
   // 'investor_broker' removed — strictly 3 categories now.
   developer: {
@@ -85,6 +88,7 @@ const MODE_CONFIG: Record<UserMode, ModePalette> = {
     rowHover: '#EFE6D6',
     dark: '#1A1A1A',
     onBase: '#FFFFFF',
+    surface: 'espresso',
   },
 };
 
@@ -289,15 +293,19 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                       the global white-icon contrast guard since the badge is dark. */}
                   <div
                     data-no-contrast-guard
-                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 allow-white"
+                    data-mode-icon-tile={config.surface}
+                    className="mode-switcher-icon-tile w-10 h-10 rounded-xl flex items-center justify-center shrink-0 allow-white"
                     style={{
+                      '--mode-base': config.base,
+                      '--mode-base-dark': config.baseDark,
+                      '--mode-on-base': config.onBase,
                       backgroundImage: `linear-gradient(135deg, ${config.base} 0%, ${config.baseDark} 100%)`,
                       boxShadow: `0 0 0 1px ${config.base}, 0 2px 6px rgba(0,0,0,0.18)`,
-                    }}
+                    } as CSSProperties}
                   >
                     <Icon
                       data-no-contrast-guard
-                      className="w-[18px] h-[18px] allow-white"
+                      className="mode-switcher-icon w-[18px] h-[18px] allow-white"
                       style={{ color: config.onBase, stroke: config.onBase }}
                       strokeWidth={2}
                     />
@@ -319,12 +327,19 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                   {isActive ? (
                     <span
                       data-no-contrast-guard
-                      className="ml-2 inline-flex items-center justify-center gap-1 px-2.5 h-[22px] min-w-[96px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap allow-white"
-                      style={{ backgroundColor: config.base, color: config.onBase, borderColor: config.base }}
+                      data-mode-selected-pill={config.surface}
+                      className="mode-switcher-selected-pill ml-2 inline-flex items-center justify-center gap-1 px-2.5 h-[22px] min-w-[96px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap allow-white"
+                      style={{
+                        '--mode-base': config.base,
+                        '--mode-on-base': config.onBase,
+                        backgroundColor: config.base,
+                        color: config.onBase,
+                        borderColor: config.base,
+                      } as CSSProperties}
                     >
                       <Check
                         data-no-contrast-guard
-                        className="w-3 h-3 shrink-0 allow-white"
+                        className="mode-switcher-selected-icon w-3 h-3 shrink-0 allow-white"
                         style={{ color: config.onBase, stroke: config.onBase }}
                       />
                       Selected
