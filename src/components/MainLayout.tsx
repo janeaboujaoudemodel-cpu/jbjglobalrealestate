@@ -15,8 +15,10 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import Footer from "@/components/home/MinimalFooter";
 import SecurityShield from "@/components/SecurityShield";
 
-const GlobalVerticalNav = lazy(() => import("@/components/navigation/GlobalVerticalNav"));
-const HorizontalUtilityBar = lazy(() => import("@/components/navigation/HorizontalUtilityBar"));
+// Eager-load shell chrome so the sidebar + utility bar paint in the same frame as the page —
+// prevents the visible "page → sidebar → header" stagger on first load.
+import GlobalVerticalNav from "@/components/navigation/GlobalVerticalNav";
+import HorizontalUtilityBar from "@/components/navigation/HorizontalUtilityBar";
 // GlobalFilterBar is now embedded inside HorizontalUtilityBar
 import CombinedContactNewsletter from "@/components/CombinedContactNewsletter";
 import AuditorReadOnlyBanner from "@/components/AuditorReadOnlyBanner";
