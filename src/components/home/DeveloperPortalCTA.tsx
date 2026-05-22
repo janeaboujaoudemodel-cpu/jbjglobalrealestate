@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Upload, FolderOpen, PartyPopper, ListChecks, Briefcase, FileSignature, UserCheck, CheckCircle2, Clock, XCircle, ArrowRight, Handshake, Users, MessageSquare, Rocket, Megaphone, LayoutDashboard, CalendarCheck, TrendingUp, BarChart3, Calculator, Home, Search, PieChart } from "lucide-react";
+import { Upload, FolderOpen, PartyPopper, ListChecks, Briefcase, FileSignature, UserCheck, CheckCircle2, Clock, XCircle, ArrowRight, Handshake, Users, MessageSquare, Rocket, Megaphone, LayoutDashboard, CalendarCheck, TrendingUp, BarChart3, Calculator, Home, Search, PieChart, GraduationCap, MapPin, Brain, Target, BookOpen, FileText, Star, Zap, Headphones } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -26,6 +26,39 @@ function useDevRegistration() {
     staleTime: 60000,
   });
 }
+
+function useBrokerRegistration() {
+  const { user } = useAuth();
+  return useQuery({
+    queryKey: ["broker-registration-exists", user?.id],
+    queryFn: async () => {
+      const { count } = await supabase
+        .from("broker_profiles")
+        .select("id", { count: "exact", head: true })
+        .eq("user_id", user!.id);
+      return (count ?? 0) > 0;
+    },
+    enabled: !!user?.id,
+    staleTime: 60000,
+  });
+}
+
+function useInvestorRegistration() {
+  const { user } = useAuth();
+  return useQuery({
+    queryKey: ["investor-registration-exists", user?.id],
+    queryFn: async () => {
+      const { count } = await supabase
+        .from("investor_intake")
+        .select("id", { count: "exact", head: true })
+        .eq("user_id", user!.id);
+      return (count ?? 0) > 0;
+    },
+    enabled: !!user?.id,
+    staleTime: 60000,
+  });
+}
+
 
 const devBenefits = [
   { icon: Upload, label: "Submit projects & brochures" },
