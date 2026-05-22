@@ -268,29 +268,42 @@ const Index = () => {
             {/* "I'm a..." mode pill row removed — CategorySelectorSection below ("Tell us who you are — Get started in 30s") is the single funnel for category selection. No duplication. */}
 
 
-            {/* Quick-action CTA pills — single horizontal wrap row matching reference photo */}
+            {/* Quick-action CTA pills — premium single-row on mobile (scroll-snap), wraps on desktop */}
             <motion.div
               variants={fadeInUp}
-              className="flex items-center justify-center flex-wrap gap-2 max-w-5xl mx-auto"
+              className="w-full max-w-5xl mx-auto"
             >
-              {heroActions.map((action) => (
-                <Link
-                  key={action.label}
-                  to={action.href}
-                  data-no-contrast-guard
-                  className="jj-hero-action-card group inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-full border text-[11px] sm:text-[12px] font-semibold tracking-tight transition-all duration-300"
-                >
-                  <action.icon
-                    aria-hidden="true"
-                    className="jj-hero-action-icon w-3.5 h-3.5 flex-shrink-0 transition-colors duration-300"
-                    strokeWidth={2.25}
-                  />
-                  <span className="jj-hero-action-label whitespace-nowrap">
-                    {action.label}
-                  </span>
-                </Link>
-              ))}
+              <div
+                className="
+                  flex items-center gap-1.5 sm:gap-2
+                  flex-nowrap sm:flex-wrap
+                  justify-start sm:justify-center
+                  overflow-x-auto sm:overflow-visible
+                  px-3 sm:px-0 -mx-3 sm:mx-0
+                  snap-x snap-mandatory sm:snap-none
+                  [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden
+                "
+              >
+                {heroActions.map((action) => (
+                  <Link
+                    key={action.label}
+                    to={action.href}
+                    data-no-contrast-guard
+                    className="jj-hero-action-card group inline-flex items-center justify-center gap-1.5 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-full border text-[10.5px] sm:text-[12px] font-semibold tracking-tight transition-all duration-300 flex-shrink-0 snap-start"
+                  >
+                    <action.icon
+                      aria-hidden="true"
+                      className="jj-hero-action-icon w-3 h-3 sm:w-3.5 sm:h-3.5 flex-shrink-0 transition-colors duration-300"
+                      strokeWidth={2.25}
+                    />
+                    <span className="jj-hero-action-label whitespace-nowrap">
+                      {action.label}
+                    </span>
+                  </Link>
+                ))}
+              </div>
             </motion.div>
+
 
 
             {/* Three pillar badges — HIDDEN on mobile (<640px), compact on tablet, full size on desktop */}
