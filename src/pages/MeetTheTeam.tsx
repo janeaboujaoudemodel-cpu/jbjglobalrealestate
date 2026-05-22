@@ -31,6 +31,12 @@ import CEOLeadershipShowcase from "@/components/CEOLeadershipShowcase";
 import DepartmentInfoSection from "@/components/DepartmentInfoSection";
 import { companySummary } from "@/config/department-metadata";
 import TeamHeroCollage from "@/components/TeamHeroCollage";
+import { useTeamVisibility } from "@/hooks/useTeamVisibility";
+import TeamVisibilityBar from "@/components/team/TeamVisibilityBar";
+import VisibilityToggleButton from "@/components/team/VisibilityToggleButton";
+import BrokersTeamSection from "@/components/team/BrokersTeamSection";
+import NotFound from "@/pages/NotFound";
+
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -50,9 +56,12 @@ interface TeamMemberCardProps {
   onReadMore: (member: TeamMember) => void;
   isInternalUser?: boolean;
   onDirectClick?: (member: TeamMember) => void;
+  isOwner?: boolean;
+  hidden?: boolean;
 }
 
-const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: TeamMemberCardProps) => {
+
+const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick, isOwner, hidden }: TeamMemberCardProps) => {
   // Get reporting manager info
   const reportsToMember = member.reportsTo ? getTeamMemberById(member.reportsTo) : null;
 
@@ -69,10 +78,14 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
 
   return (
     <motion.div variants={fadeInUp} className="min-w-[280px]">
-      <Card 
-        className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] shadow-[0_0_20px_rgba(200,167,102,0.2)] hover:shadow-[0_0_25px_rgba(200,167,102,0.35),0_22px_60px_rgba(0,0,0,0.45)] hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300 overflow-hidden group h-full ${isInternalUser ? 'cursor-pointer' : ''}`}
+      <Card
+        className={`relative bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] shadow-[0_0_20px_rgba(200,167,102,0.2)] hover:shadow-[0_0_25px_rgba(200,167,102,0.35),0_22px_60px_rgba(0,0,0,0.45)] hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300 overflow-hidden group h-full ${isInternalUser ? 'cursor-pointer' : ''} ${hidden ? 'opacity-50 ring-2 ring-dashed ring-[#B89555]/60' : ''}`}
         onClick={handleCardClick}
       >
+        {isOwner && (
+          <VisibilityToggleButton memberId={member.id} label={member.name} />
+        )}
+
         <CardContent className="p-0">
           {/* Photo */}
           <div className="relative overflow-hidden">
@@ -179,15 +192,25 @@ const MeetTheTeam: React.FC = () => {
   const [detailMember, setDetailMember] = useState<TeamMember | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [isInternalUser, setIsInternalUser] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
   const salesHierarchy = useSalesHierarchy();
+  const visibility = useTeamVisibility();
 
   const isFounderMember = (member: TeamMember) =>
     member.id === "jane-bou-jaoude" ||
     member.name === "Jane Bou Jaoude" ||
     /founder/i.test(member.role);
 
-  const filterFounder = (members: TeamMember[]) =>
-    isFounderVisible ? members : members.filter((m) => !isFounderMember(m));
+  const applyVisibility = (members: TeamMember[]) => {
+    let list = isFounderVisible ? members : members.filter((m) => !isFounderMember(m));
+    if (!isOwner) {
+      if (visibility.isAiHidden) list = list.filter((m) => !m.isAI);
+      list = list.filter((m) => visibility.isMemberVisible(m.id));
+    }
+    return list;
+  };
+  const filterFounder = applyVisibility;
+
 
   // Check if user is an internal employee (has hr_user_roles or admin/owner)
   useEffect(() => {
@@ -215,11 +238,14 @@ const MeetTheTeam: React.FC = () => {
         const isOwnerRole = Boolean(adminResult.data) || Boolean(ownerResult.data);
         const hasHrRole = hrRole?.is_active;
 
+        setIsOwner(isOwnerRole);
         setIsInternalUser(isOwnerRole || hasHrRole);
       } catch (error) {
         console.error("Error checking internal user status:", error);
         setIsInternalUser(false);
+        setIsOwner(false);
       }
+
     };
 
     checkInternalUser();
@@ -265,8 +291,21 @@ const MeetTheTeam: React.FC = () => {
     "Customer Happiness",
   ];
 
+  // Page-level visibility gate: if owner hid the page, render 404 for everyone except the owner.
+  if (visibility.loaded && !visibility.isPageVisible && !isOwner) {
+    return <NotFound />;
+  }
+
+  // Compute counts for the owner visibility bar
+  const allMembers = allTeamMembers;
+  const aiCount = allMembers.filter((m) => m.isAI).length;
+  const hiddenCount = allMembers.filter(
+    (m) => !visibility.isMemberVisible(m.id) || (visibility.isAiHidden && m.isAI)
+  ).length;
+
   return (
     <>
+
       <SEOHead
         title="Meet Our Team | JBJ Global Real Estate"
         description="Meet the exceptional professionals behind JBJ Global Real Estate. Our diverse team of experts is dedicated to delivering premium real estate services in Dubai and the UAE."
@@ -275,6 +314,14 @@ const MeetTheTeam: React.FC = () => {
       />
 
         <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+          {isOwner && (
+            <TeamVisibilityBar
+              totalMembers={allMembers.length}
+              hiddenMembers={hiddenCount}
+              aiCount={aiCount}
+            />
+          )}
+
           {/* Hero Section with Premium Animated Team Collage */}
           <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
           {/* Background Video */}
@@ -438,9 +485,12 @@ const MeetTheTeam: React.FC = () => {
                                     onReadMore={handleReadMore}
                                     isInternalUser={isInternalUser}
                                     onDirectClick={handleDirectClick}
+                                    isOwner={isOwner}
+                                    hidden={isOwner && (!visibility.isMemberVisible(member.id) || (visibility.isAiHidden && member.isAI))}
                                   />
                                 ))}
                               </div>
+
                             </div>
                           );
                         })}
@@ -496,15 +546,23 @@ const MeetTheTeam: React.FC = () => {
                           onReadMore={handleReadMore}
                           isInternalUser={isInternalUser}
                           onDirectClick={handleDirectClick}
+                          isOwner={isOwner}
+                          hidden={isOwner && (!visibility.isMemberVisible(member.id) || (visibility.isAiHidden && member.isAI))}
                         />
                       ))}
+
                     </div>
                   </div>
                 </motion.div>
               );
             })}
+
+            {/* Brokers section — sourced from real activated brokers in CRM */}
+            <BrokersTeamSection isOwner={isOwner} />
           </div>
         </section>
+
+
 
         {/* CTA Section - 3-Layer System: Black > Active Champagne > Pearl */}
         <section className="py-16 sm:py-20 bg-[#1A1A1A]">

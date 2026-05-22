@@ -29800,6 +29800,27 @@ export type Database = {
           },
         ]
       }
+      team_visibility: {
+        Row: {
+          is_visible: boolean
+          member_id: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          is_visible?: boolean
+          member_id: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          is_visible?: boolean
+          member_id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       teams: {
         Row: {
           created_at: string
