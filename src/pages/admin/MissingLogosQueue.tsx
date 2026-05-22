@@ -58,6 +58,8 @@ export default function MissingLogosQueue() {
   const [search, setSearch] = useState("");
   const [busyId, setBusyId] = useState<string | null>(null);
   const [bulkBusy, setBulkBusy] = useState(false);
+  const [runAll, setRunAll] = useState(false);
+  const [runAllProgress, setRunAllProgress] = useState<{ approved: number; unavailable: number; remaining: number } | null>(null);
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["missing-developer-logos", tab, search],
