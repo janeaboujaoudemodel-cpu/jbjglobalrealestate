@@ -68,18 +68,7 @@ const MODE_CONFIG: Record<UserMode, ModePalette> = {
     rowHover: '#EFE6D6',
     dark: '#1A1A1A',
   },
-  investor_broker: {
-    label: 'Mode: Investor + Broker',
-    shortLabel: 'I+B',
-    icon: Users,
-    description: 'Full investor + broker access: tools, CRM, listings, guides & insights',
-    base: '#6B5A3E',      // deep bronze
-    baseDark: '#4A3D27',
-    rowFrom: '#FDFBF7',
-    rowTo: '#F7F2EA',
-    rowHover: '#EFE6D6',
-    dark: '#1A1A1A',
-  },
+  // 'investor_broker' removed — strictly 3 categories now.
   developer: {
     label: 'Mode: Developer',
     shortLabel: 'D',

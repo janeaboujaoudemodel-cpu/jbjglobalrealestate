@@ -1,128 +1,66 @@
-# Homepage hero cleanup + role-gated actions + Users analytics hub
+## Goal
 
-Three connected changes:
+Every first-time visitor sees a non-dismissable picker with exactly three categories — **Investor**, **Broker**, **Developer** — and the rest of the site re-skins itself to that single choice. The legacy combined "Investor + Broker" mode is removed everywhere.
 
-1. Clean the homepage hero (mobile especially).
-2. Make every "big action" on the site require a logged-in user **with a chosen mode** (Investor / Broker / Developer), Reelly-style.
-3. Build an Owner → **Users** page that shows everyone segmented by category, with full activity insights.
+## Recommendation on timing
 
----
+Show the picker **immediately on first visit, before login**. The choice is saved to `localStorage` so the homepage / nav re-skins right away, and it is auto-synced to the account on the user's next login (existing `register-mode-lead` edge function already handles this). This gives the strongest personalization signal without a login wall, and matches your request ("when user opens, immediately ask").
 
-## 1. Homepage hero changes (`src/pages/Index.tsx`)
-
-**Remove completely (all devices):**
-- The inline "I'm a… Investor / Broker / Developer" pill row (lines ~267–300) and its spotlight rotation state. The dedicated `CategorySelectorSection` ("Tell us who you are — Get started in 30 seconds") already does this job, so removing the pills eliminates duplication.
-
-**Three pillar cards** (Premium Marketplace / AI-Powered Tools / Brokerage Services):
-- **Mobile (< 640px):** hidden entirely.
-- **Tablet (640–1024px):** shown, compact — smaller padding, smaller icons, smaller text, tighter grid.
-- **Desktop (≥ 1024px):** shown at current size, slightly refined.
-
-Implemented with Tailwind responsive classes (`hidden sm:grid`, responsive `p-*`, `text-*`, `gap-*`, `max-w-*`) — no JS breakpoint logic.
-
-Everything else in the hero (headline, eyebrow, quick-action pills, "Book a Free Consultation") stays.
+This supersedes the current `mem://features/auth/login-first-mode-and-crm-categorization` rule, which I'll update.
 
 ---
 
-## 2. Role/mode gating for "big actions" (Reelly-style)
+## 1. Forced 3-category picker on first visit
 
-**Concept:** browsing is free; any meaningful action funnels the user through the existing `CategorySelectorSection` so we capture their category before they can proceed.
+Rework `src/components/ModeSelectionModal.tsx`:
 
-**Definition of "big action":** Save / Favorite, Contact agent, Request brochure, Book viewing, Export data, Submit a listing, Open broker/developer tools, Start a deal, Sign documents, Download reports.
+- Open automatically when `localStorage.jj_mode_selected !== 'true'` — for both anonymous and logged-in users.
+- Non-dismissable: no X button, no outside-click close, no Esc, no backdrop dismissal.
+- Exactly three cards: **Investor**, **Broker**, **Developer**. Remove the "Visitor / Partnership" option.
+- Persist locally on selection (`jj_user_mode` + `jj_mode_selected=true`); if logged in, also upsert `user_preferences.selected_mode` and call `register-mode-lead` edge function (already exists).
+- A subtle "You can change this anytime from your profile menu" line, but no skip link.
 
-**How:**
-- Extend the existing `ActionGateContext` / `ActionGateModal` to be a single source of truth: `requireUserAndMode(action, callback)`.
-  - If not signed in → redirect to `/auth?next=…`.
-  - If signed in but no mode set → scroll to / open `CategorySelectorSection` on `/` and pause the action; resume after mode is chosen.
-  - If signed in **with** mode → run the action.
-- Sweep the codebase and wrap all "big action" buttons (favorite, contact, export, etc.) with this gate. The favorite + contact paths already use `ActionGateModal`, so this is mostly extending coverage, not rewriting.
-- No duplication: the modal/section is reused, not re-created.
+Wire it through `PopupCoordinatorContext` so it overrides other popups on first paint.
 
-The category chosen in `CategorySelectorSection` is persisted to the user profile (`profiles.mode` or equivalent — wired through `UserModeContext`, which already exists) and to a new normalized field used by the Users page (see §3).
+## 2. Remove the combined `investor_broker` mode site-wide
 
----
+Drop the 4th mode from the type union and every consumer:
 
-## 3. New "Users" hub for the Owner
+- `src/contexts/UserModeContext.tsx` and `src/hooks/useUserMode.ts`: `UserMode = 'investor' | 'broker' | 'developer'`. Delete `isCombinedMode`. `normalizeMode` collapses any legacy `investor_broker` to `broker` (broker is the more privileged surface).
+- `src/components/ModeSwitcher.tsx`, `src/pages/ModeHub.tsx`, `src/pages/MyDashboard*.tsx`, `src/components/dashboard/ProfileSummaryCard.tsx`, `src/components/dashboard/BadgesLevelCard.tsx`, `src/components/profile/GoldenIDCard.tsx`, `src/components/navigation/UserAvatarMenu.tsx`, `src/components/header/MegaMenuAccount.tsx`, `src/components/home/CategorySelectorSection.tsx`, `src/components/tier/TierProgressCard.tsx`, `src/hooks/useTierProgress.ts`, `src/pages/Auth.tsx`, `src/pages/Index.tsx`, `src/components/__tests__/ModeSwitcher.colors.test.tsx`: remove combined-mode branches; everywhere it appeared as a UI option, drop it.
+- One-shot DB normalization migration: `UPDATE user_preferences SET selected_mode='broker' WHERE selected_mode='investor_broker'`.
 
-**Route:** `/owner/users` (added to `OwnerSidebarNav` between "Research Users" and the next item, labelled **Users**).
+## 3. Mode-aware global navigation
 
-**Top of page — segment summary cards:**
-```text
-┌──────────────┬──────────────┬──────────────┬──────────────┐
-│ Investors    │ Brokers      │ Developers   │ Unassigned   │
-│   1,284      │    312       │     47       │     96       │
-└──────────────┴──────────────┴──────────────┴──────────────┘
-```
-Clicking a card filters the table below.
+Make navigation react to the single selected mode:
 
-**Users table** — columns:
-- Name + avatar
-- Email (masked unless owner clicks "reveal" — respects existing privacy rule)
-- Category badge (Investor / Broker / Developer / Unassigned)
-- Registered on
-- Last seen
-- Total sessions
-- Total time on site
-- Days active (last 30d)
-- Country / device
+- **Investor mode**: nav shows Properties, Market Intelligence, Investor Dashboard, Guides. Hide broker-only and developer-only links.
+- **Broker mode**: nav shows Broker Toolkit / Broker CRM / Broker Education / **Careers**. Hide developer portal entry.
+- **Developer mode**: nav shows Developer Hub / Developer Reports / **Careers — Developer Representative**. Hide broker tools.
 
-Row → opens a **User Detail drawer**:
-- Profile (name, email, phone, country, registered date, source)
-- Category history (if they changed mode)
-- **Activity timeline**: every session with start, end, duration, device, IP-country, pages visited
-- **Insights panel**:
-  - Sessions per day (sparkline, last 90d)
-  - Hours per day average
-  - Most-visited pages
-  - Last 50 events (favorites, searches, contact submits, downloads, etc.)
-  - Engagement score
+Touchpoints: the global header (`src/components/header/*`, `MegaMenuAccount.tsx`), `OwnerSidebarNav` stays admin-only and untouched. Homepage hero CTAs in `src/pages/Index.tsx` swap target route based on `mode`.
 
-**Data sources (already exist — no new tables needed):**
-- `user_sessions` + `user_activity_sessions` — session start/end, device, IP
-- `user_daily_activity` — per-day aggregate (visits, minutes)
-- `user_events` — granular events (clicks, page views, action gate triggers)
-- `user_activity_log` — auditable actions
-- `profiles` — identity + chosen mode
+## 4. Careers — Developer Representative
 
-The Users page reads via a Supabase **edge function** (`owner-users-analytics`) protected by `requireOwnerAuth`, which:
-- joins the tables above,
-- returns paginated rows + per-user aggregates,
-- supports filter by category, search by name/email, sort by last seen / sessions / minutes.
+- New page `src/pages/CareersDeveloperRep.tsx` (mirrors the existing broker careers page styling — champagne, ink, gold hairline) describing the developer-rep role + apply CTA pointing to the existing lead form.
+- Route `/careers/developer-representative` registered in `src/routes/PublicRoutes.tsx`.
+- Header link added when `isDeveloperMode === true`; also surfaced as a card on the developer-hub overview.
 
-A second edge function (`owner-user-detail`) returns the full timeline + insights for a single user.
+## 5. Memory / standards updates
 
-**Tracking gap fill (if needed):** if any of the "big actions" aren't already pushed into `user_events`, a thin client helper `trackUserEvent(type, payload)` is added and called from the same wrappers used in §2. No duplicate trackers — `GlobalVisitorTracking` keeps owning anonymous visitor analytics; this adds **authenticated-user** events on top.
+- Update `mem://architecture/auth/forced-category-selection-standard` → now applies to anonymous users too, three options only.
+- Update `mem://features/auth/login-first-mode-and-crm-categorization` → mode pick happens pre-login; CRM lead created on first login sync.
+- Add a one-liner to Core index: "Mode = investor | broker | developer (no combined mode). Picker is forced on first visit."
 
-**Always wired live:** the page uses Supabase realtime on `user_sessions` so counts update as users come online.
+## Out of scope
 
----
+- Owner / admin role surfaces (separate `useUserRole`), CRM internals, and the `/owner/users` analytics hub built last turn — all untouched.
+- Visual redesign of the picker — keeps current champagne+gold styling.
+- Re-skin of every deep page; this plan covers nav + homepage + dashboard entrypoints. Page-level mode gating beyond that can follow in a second pass.
 
-## E2E / verification
+## Technical details
 
-After implementation:
-- Deploy the two edge functions.
-- Hit each endpoint with `curl_edge_functions` as owner and as non-owner (must 403).
-- Run an E2E pass:
-  1. Sign in as investor → favorite a property → verify event lands in `user_events` and shows in `/owner/users` detail drawer.
-  2. Sign in as broker → open broker toolkit → verify category badge is "Broker" and session is recorded.
-  3. Sign in as developer → submit a project → same checks.
-  4. Anonymous user clicks "Contact agent" → confirms gate → after mode chosen, action resumes and is logged.
-- Confirm the homepage hero on **mobile** has no pillar cards and no "I'm a…" pills, on **tablet** has the compact pillar cards, on **desktop** has the full-size cards.
-
----
-
-## Out of scope (kept as-is)
-
-- `CategorySelectorSection` content/design — only its role as the single funnel changes.
-- All other homepage sections (Developer Partners, Featured Listings, Resale, etc.).
-- Public anonymous browsing of properties, the team page, guides, news, etc.
-- The cookie banner and floating-widget fixes from earlier prompts.
-
----
-
-## Technical notes (for reference)
-
-- Files most touched: `src/pages/Index.tsx`, `src/contexts/ActionGateContext.tsx`, `src/components/ActionGateModal.tsx`, `src/components/owner-dashboard/OwnerSidebarNav.tsx`, new `src/pages/owner/OwnerUsers.tsx` + drawer, new `supabase/functions/owner-users-analytics/index.ts` and `supabase/functions/owner-user-detail/index.ts`.
-- No new DB tables; only a possible view (`vw_owner_users_overview`) for the summary cards.
-- RLS unchanged; both edge functions enforce `requireOwnerAuth`.
-- Tracking helper added to `src/lib/userEvents.ts` (one canonical helper, no duplicates).
+- DB migration: single `UPDATE` on `user_preferences`. No schema change (column stays `text`).
+- Type change `UserMode` is breaking — TS compile will surface every remaining reference; sweep with `rg "investor_broker|isCombinedMode"`.
+- `PopupCoordinatorContext` priority: mode-selection-modal must outrank cookie banner and any marketing popups on first paint.
+- E2E sanity: (a) fresh incognito → picker appears, can't dismiss, selecting Broker re-skins nav; (b) login after selection → `user_preferences` upserted and `crm_leads` row created via `register-mode-lead`; (c) existing `investor_broker` user logs in → silently migrated to `broker`.

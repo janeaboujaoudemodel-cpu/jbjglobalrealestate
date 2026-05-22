@@ -61,7 +61,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
     "User";
   const initials = getInitials(displayName);
 
-  const showCRM = isOwner || mode === "broker" || mode === "investor_broker";
+  const showCRM = isOwner || mode === "broker";
   const pendingTasks = alerts?.pendingTasks || 0;
   const activityCount = pendingTasks + (alerts?.totalNotificationAlerts || 0);
 

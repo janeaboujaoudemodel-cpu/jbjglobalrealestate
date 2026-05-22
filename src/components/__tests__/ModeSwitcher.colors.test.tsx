@@ -16,9 +16,9 @@ vi.mock("@/contexts/UserModeContext", async () => {
       mode: currentMode,
       isLoading: false,
       setMode: setModeMock,
-      isInvestorMode: currentMode === "investor" || currentMode === "investor_broker",
-      isBrokerMode: currentMode === "broker" || currentMode === "investor_broker",
-      isCombinedMode: currentMode === "investor_broker",
+      isInvestorMode: currentMode === "investor",
+      isBrokerMode: currentMode === "broker",
+      isCombinedMode: false,
       isDeveloperMode: currentMode === "developer",
       hasMadeInitialSelection: true,
     }),
@@ -51,12 +51,7 @@ const PALETTE: Record<
     rowFrom: "#E8F0FE",
     dark: "#1E3A8A",
   },
-  investor_broker: {
-    label: "Mode: Investor + Broker",
-    base: "#16A34A",
-    rowFrom: "#E5F8EC",
-    dark: "#14532D",
-  },
+  // investor_broker mode removed — strictly 3 categories.
   developer: {
     label: "Mode: Developer",
     base: "#7C3AED",
@@ -110,7 +105,7 @@ describe("ModeSwitcher color regression", () => {
       .forEach((n) => n.remove());
   });
 
-  const modes: UserMode[] = ["investor", "broker", "investor_broker", "developer"];
+  const modes: UserMode[] = ["investor", "broker", "developer"];
 
   modes.forEach((activeMode) => {
     it(`closed trigger reflects the active mode color (${activeMode})`, () => {
@@ -165,13 +160,13 @@ describe("ModeSwitcher color regression", () => {
         seenBackgrounds.push(norm(row.style.backgroundImage));
       });
 
-      // GUARDS the original "all four cards look the same" regression:
-      // every row must have a unique background.
+      // GUARDS the "all rows look the same" regression: every row must have
+      // a unique background. 3 categories now (investor_broker removed).
       const unique = new Set(seenBackgrounds);
       expect(
         unique.size,
         `Each mode row must have a unique background, got: ${seenBackgrounds.join(" | ")}`,
-      ).toBe(4);
+      ).toBe(3);
     });
   });
 

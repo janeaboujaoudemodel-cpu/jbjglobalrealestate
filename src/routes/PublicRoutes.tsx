@@ -144,6 +144,7 @@ const ClientPortal = lazy(() => import("@/pages/client/ClientPortal"));
 const MyTickets = lazy(() => import("@/pages/client/MyTickets"));
 const ReopenTicket = lazy(() => import("@/pages/ReopenTicket"));
 const JoinApplication = lazy(() => import("@/pages/JoinApplication"));
+const CareersDeveloperRep = lazy(() => import("@/pages/CareersDeveloperRep"));
 const Onboarding = lazy(() => import("@/pages/Onboarding"));
 const OnboardingModule = lazy(() => import("@/pages/OnboardingModule"));
 const VerifyCertificate = lazy(() => import("@/pages/VerifyCertificate"));
@@ -367,6 +368,7 @@ export const PublicRoutes = () => (
     <Route path="/join" element={<JoinApplication />} />
     <Route path="/careers" element={<JoinApplication />} />
     <Route path="/careers/apply" element={<JoinApplication />} />
+    <Route path="/careers/developer-representative" element={<CareersDeveloperRep />} />
     <Route path="/onboarding" element={<AuthRequiredRoute><Onboarding /></AuthRequiredRoute>} />
     <Route path="/onboarding/module/:moduleId" element={<AuthRequiredRoute><OnboardingModule /></AuthRequiredRoute>} />
     <Route path="/verify-certificate/:token" element={<VerifyCertificate />} />

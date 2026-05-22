@@ -18,7 +18,7 @@ interface MegaMenuMoreProps {
 }
 
 const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onClose }, ref) => {
-  const { isBrokerMode } = useUserModeContext();
+  const { isBrokerMode, isDeveloperMode } = useUserModeContext();
   const { isFounderVisible } = useFounderVisibility();
 
   const servicesLinks = [
@@ -74,6 +74,10 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
     { label: 'Meet the Team', href: '/team', icon: Users },
     { label: 'Contact Us', href: '/contact', icon: Phone },
     { label: 'Careers', href: '/join', icon: Briefcase },
+    // Developer mode → surface the dedicated Developer Representative track
+    ...(isDeveloperMode
+      ? [{ label: 'Careers — Developer Rep', href: '/careers/developer-representative', icon: Building2 }]
+      : []),
     { label: 'Press & Media', href: '/press-kit', icon: FileText },
   ];
 
