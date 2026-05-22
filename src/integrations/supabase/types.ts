@@ -35664,6 +35664,7 @@ export type Database = {
         Returns: Json
       }
       crm_hard_delete_leads: { Args: { p_lead_ids: string[] }; Returns: Json }
+      crm_publish_lead_diffs: { Args: { _ids: string[] }; Returns: number }
       crm_purge_deleted_leads: { Args: never; Returns: Json }
       crm_restore_leads: { Args: { p_lead_ids: string[] }; Returns: Json }
       crm_segment_resolve: {
