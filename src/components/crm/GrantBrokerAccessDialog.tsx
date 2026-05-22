@@ -529,10 +529,31 @@ export default function GrantBrokerAccessDialog({
             <p className="text-[10px] text-[#1A1A1A]/60 leading-relaxed">
               Owner edits remain invisible to the broker unless this grant is set to bidirectional or you explicitly share individual leads.
             </p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+              {[
+                { k: "notes", label: "Allow notes", val: visibleNotes, set: setVisibleNotes },
+                { k: "files", label: "Allow files", val: visibleFiles, set: setVisibleFiles },
+                { k: "act",   label: "Allow activity log", val: visibleActivities, set: setVisibleActivities },
+              ].map(({ k, label, val, set }) => (
+                <label key={k} className="flex items-center gap-2 text-[11px] text-[#1A1A1A]/80 cursor-pointer select-none rounded-md border border-[#B89555]/30 bg-[#FDFBF7] px-2 py-1.5">
+                  <input
+                    type="checkbox"
+                    checked={val}
+                    onChange={(e) => set(e.target.checked)}
+                    className="accent-[#1A1A1A] h-3.5 w-3.5"
+                  />
+                  {label}
+                </label>
+              ))}
+            </div>
+
+            <p className="text-[10px] text-[#1A1A1A]/60 leading-relaxed">
+              Owner edits remain invisible to the broker unless this grant is set to bidirectional or you explicitly share individual leads. Notes, files and activity are owner-locked by default — tick to share.
+            </p>
           </div>
 
 
-          <div>
+
             <Label className="text-xs text-[#1A1A1A]/80">Expires (optional)</Label>
             <DatePopover
               value={expiresAt}
