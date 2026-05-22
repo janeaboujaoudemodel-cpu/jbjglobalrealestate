@@ -11341,7 +11341,15 @@ export type Database = {
           upcoming_projects?: Json
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "developer_applications_developer_fk"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       developer_contacts: {
         Row: {
