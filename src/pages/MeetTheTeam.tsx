@@ -372,7 +372,8 @@ const MeetTheTeam: React.FC = () => {
                   variants={fadeInUp}
                 >
                   <span className="text-white">Meet the </span>
-                  <span className="text-[#1A1A1A]">Experts</span>
+                  <span className="text-[#1A1A1A]">Team</span>
+
                 </motion.h1>
 
                 <motion.p
