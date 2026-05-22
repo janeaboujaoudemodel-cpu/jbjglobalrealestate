@@ -213,6 +213,9 @@ Deno.serve(async (req) => {
           date_window_end: body.date_window_end ?? null,
           lead_ids: body.lead_ids ?? null,
           status_filter: body.status_filter ?? null,
+          visible_notes: body.visible_notes === true,
+          visible_files: body.visible_files === true,
+          visible_activities: body.visible_activities === true,
         },
         { onConflict: "source_database_id,broker_user_id" },
       )
