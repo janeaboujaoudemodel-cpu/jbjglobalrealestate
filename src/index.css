@@ -4355,9 +4355,12 @@ a[class*="bg-red-"]:hover {
 }
 
 
-/* Handover line — label is solid ink black; date stays orange to match the price pill identity. */
+/* Handover line — label is solid ink black; date renders in premium brand gold across ALL cards. */
+.handover-orange,
+.handover-orange * {
+  color: #B89555 !important;
+}
 .handover-orange {
-  color: hsl(var(--price-orange)) !important;
   font-weight: 600;
   letter-spacing: -0.005em;
 }
@@ -4365,6 +4368,7 @@ a[class*="bg-red-"]:hover {
   color: #1A1A1A !important;
   font-weight: 700;
 }
+
 
 /* Premium square payment-plan badge — ink fill, gold hairline.
    Self-protects against every contrast guard so the cream label/icon
