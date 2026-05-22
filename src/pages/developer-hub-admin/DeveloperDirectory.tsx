@@ -186,17 +186,19 @@ export default function DeveloperDirectory() {
               <p className="text-xs text-[#1A1A1A]/75 mt-2 line-clamp-2">
                 {d.description ?? <span className="italic text-[#1A1A1A]/40">No description</span>}
               </p>
-              <div className="mt-3 flex gap-2">
+              <div className="mt-3 flex gap-2 flex-wrap">
+                <Button asChild size="sm" variant="gold">
+                  <Link to={`/developer-hub-admin/profile/${d.slug}`}>
+                    <ExternalLink className="size-3 mr-1" /> Open profile
+                  </Link>
+                </Button>
                 <Button
                   size="sm"
-                  variant="gold"
+                  variant="outline"
                   onClick={() => rebuild.mutate([d.id])}
                   disabled={rebuild.isPending}
                 >
                   <Sparkles className="size-3 mr-1" /> Rebuild from site
-                </Button>
-                <Button asChild size="sm" variant="outline">
-                  <Link to={`/developer-hub-admin/profile/${d.slug}`}>Profile</Link>
                 </Button>
               </div>
             </Card>
