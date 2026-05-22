@@ -241,13 +241,17 @@ export default function RecommendedProjects({
 
                   {/* Divider + Price + Handover — always pinned to bottom */}
                   <div className="border-t border-[#B89555]/20 pt-3 mt-3 flex items-center justify-between gap-2">
-                    {/* Price — orange */}
-                    <p className="text-orange-500 font-bold text-sm">
-                      {project.price_from
-                        ? `From ${formatPrice(project.price_from)}`
-                        : "Price on request"
-                      }
-                    </p>
+                    {/* Price — premium pill (matches FeaturedListings / ProjectCard / ReellyProjectCard) */}
+                    {project.price_from ? (
+                      <div className="price-pill-premium" data-price-badge data-no-contrast-guard>
+                        <span className="price-pill-eyebrow">From</span>
+                        <span className="price-pill-value">{formatPrice(project.price_from)}</span>
+                      </div>
+                    ) : (
+                      <div className="price-pill-premium" data-price-badge data-no-contrast-guard>
+                        <span className="price-pill-value">Price on request</span>
+                      </div>
+                    )}
 
                     {/* Payment Plan Badge */}
                     {paymentLabel && (
