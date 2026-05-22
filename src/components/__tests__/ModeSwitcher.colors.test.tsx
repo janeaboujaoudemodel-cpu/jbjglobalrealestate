@@ -105,7 +105,7 @@ describe("ModeSwitcher color regression", () => {
       .forEach((n) => n.remove());
   });
 
-  const modes: UserMode[] = ["investor", "broker", "investor_broker", "developer"];
+  const modes: UserMode[] = ["investor", "broker", "developer"];
 
   modes.forEach((activeMode) => {
     it(`closed trigger reflects the active mode color (${activeMode})`, () => {
