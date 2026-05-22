@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { TrendingUp, Briefcase, Building2, ArrowRight, CheckCircle2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserModeContext } from "@/contexts/UserModeContext";
+import { useIsRegistered } from "@/hooks/useIsRegistered";
 import { toast } from "sonner";
 
 type Category = "investor" | "broker" | "developer";
