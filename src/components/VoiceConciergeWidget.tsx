@@ -258,20 +258,41 @@ const VoiceConciergeWidget = () => {
   // Render immediately — don't wait for auth check (prevents blank/invisible widget).
   // The button itself swaps to "Login to speak" once we know the user isn't authenticated.
 
-  // Minimized state - small phone icon button (no pulse, no text)
+  // Shared mother-of-pearl surface (used by launcher + minimized FAB + popover icons).
+  // Iridescent champagne with pearl-white highlight, inset rim for 3D, gold halo on hover.
+  const pearlBg =
+    "radial-gradient(ellipse at 28% 18%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 55%)," +
+    "radial-gradient(ellipse at 78% 82%, rgba(184,149,85,0.22) 0%, rgba(184,149,85,0) 60%)," +
+    "linear-gradient(135deg, #FDFBF7 0%, #F5EBD9 38%, #E8D9BC 68%, #F2E6CE 100%)";
+  const pearlShadow =
+    "inset 0 1px 0 rgba(255,255,255,0.95)," +
+    "inset 0 -1px 0 rgba(184,149,85,0.20)," +
+    "0 10px 28px -12px rgba(26,26,26,0.32)," +
+    "0 2px 6px -2px rgba(184,149,85,0.22)";
+  const pearlShadowHover =
+    "inset 0 1px 0 rgba(255,255,255,0.98)," +
+    "inset 0 -1px 0 rgba(184,149,85,0.28)," +
+    "0 0 0 1px rgba(184,149,85,0.55)," +
+    "0 16px 40px -10px rgba(184,149,85,0.45)," +
+    "0 4px 10px -2px rgba(26,26,26,0.25)";
+
+  // Minimized state - small phone icon button (mother-of-pearl, lowered to corner)
   if (isMinimized) {
     return (
       <button
         onClick={handleRestore}
         data-floating-launcher="voice-concierge"
-        className="fixed bottom-[148px] right-6 z-[10060] w-12 h-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center border border-[#B89555]/60 text-[#1A1A1A]"
-        style={{ background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)' }}
+        className="group fixed bottom-6 right-6 z-[10060] w-12 h-12 rounded-full flex items-center justify-center border border-[#B89555]/60 text-[#1A1A1A] transition-all duration-300 hover:scale-[1.06]"
+        style={{ background: pearlBg, boxShadow: pearlShadow }}
+        onMouseEnter={(e) => { e.currentTarget.style.boxShadow = pearlShadowHover; }}
+        onMouseLeave={(e) => { e.currentTarget.style.boxShadow = pearlShadow; }}
         aria-label="Show voice concierge"
       >
-        <Phone className="w-5 h-5" />
+        <Phone className="w-[18px] h-[18px] text-[#1A1A1A]" strokeWidth={2} />
       </button>
     );
   }
+
 
   const showStatusPill = widgetStatus === "initializing";
   const pillTone = "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40";
