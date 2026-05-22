@@ -7,6 +7,7 @@ import { Route, Navigate } from "react-router-dom";
 import { RedirectWithParams } from "@/components/RedirectWithParams";
 import { RedirectWithSearch } from "@/routes/RedirectWithSearch";
 import AuthRequiredRoute from "@/components/AuthRequiredRoute";
+import ModeRequiredRoute from "@/components/ModeRequiredRoute";
 
 // ── Property & Listing Pages ──
 const Index = lazy(() => import("@/pages/Index"));
@@ -368,7 +369,7 @@ export const PublicRoutes = () => (
     <Route path="/join" element={<JoinApplication />} />
     <Route path="/careers" element={<JoinApplication />} />
     <Route path="/careers/apply" element={<JoinApplication />} />
-    <Route path="/careers/developer-representative" element={<CareersDeveloperRep />} />
+    <Route path="/careers/developer-representative" element={<ModeRequiredRoute modes={['developer']}><CareersDeveloperRep /></ModeRequiredRoute>} />
     <Route path="/onboarding" element={<AuthRequiredRoute><Onboarding /></AuthRequiredRoute>} />
     <Route path="/onboarding/module/:moduleId" element={<AuthRequiredRoute><OnboardingModule /></AuthRequiredRoute>} />
     <Route path="/verify-certificate/:token" element={<VerifyCertificate />} />
@@ -385,21 +386,21 @@ export const PublicRoutes = () => (
     <Route path="/document-studio" element={<AuthRequiredRoute><DocumentStudio /></AuthRequiredRoute>} />
 
     {/* ── Broker Pages (Tier 2 — login required) ── */}
-    <Route path="/broker-toolkit" element={<AuthRequiredRoute><BrokerToolkit /></AuthRequiredRoute>} />
+    <Route path="/broker-toolkit" element={<AuthRequiredRoute><ModeRequiredRoute modes={['broker']}><BrokerToolkit /></ModeRequiredRoute></AuthRequiredRoute>} />
     <Route path="/broker-toolkit/dashboard" element={<Navigate to="/broker-dashboard" replace />} />
-    <Route path="/broker-dashboard" element={<AuthRequiredRoute><BrokerDashboard /></AuthRequiredRoute>} />
-    <Route path="/broker-resources" element={<AuthRequiredRoute><BrokerResources /></AuthRequiredRoute>} />
-    <Route path="/broker/training" element={<AuthRequiredRoute><BrokerTraining /></AuthRequiredRoute>} />
-    <Route path="/ai-broker-workspace" element={<AuthRequiredRoute><AIBrokerWorkspace /></AuthRequiredRoute>} />
+    <Route path="/broker-dashboard" element={<AuthRequiredRoute><ModeRequiredRoute modes={['broker']}><BrokerDashboard /></ModeRequiredRoute></AuthRequiredRoute>} />
+    <Route path="/broker-resources" element={<AuthRequiredRoute><ModeRequiredRoute modes={['broker']}><BrokerResources /></ModeRequiredRoute></AuthRequiredRoute>} />
+    <Route path="/broker/training" element={<AuthRequiredRoute><ModeRequiredRoute modes={['broker']}><BrokerTraining /></ModeRequiredRoute></AuthRequiredRoute>} />
+    <Route path="/ai-broker-workspace" element={<AuthRequiredRoute><ModeRequiredRoute modes={['broker']}><AIBrokerWorkspace /></ModeRequiredRoute></AuthRequiredRoute>} />
     <Route path="/ai-hub" element={<AuthRequiredRoute><AIHub /></AuthRequiredRoute>} />
     <Route path="/assistant-hub" element={<Navigate to="/ai-hub" replace />} />
     <Route path="/interior-design-ai" element={<AuthRequiredRoute><InteriorDesignAI /></AuthRequiredRoute>} />
     <Route path="/interior-design-studio" element={<Navigate to="/interior-design-ai" replace />} />
-    <Route path="/investor-hub" element={<AuthRequiredRoute><InvestorHub /></AuthRequiredRoute>} />
-    <Route path="/broker-hub" element={<AuthRequiredRoute><BrokerHub /></AuthRequiredRoute>} />
+    <Route path="/investor-hub" element={<AuthRequiredRoute><ModeRequiredRoute modes={['investor']}><InvestorHub /></ModeRequiredRoute></AuthRequiredRoute>} />
+    <Route path="/broker-hub" element={<AuthRequiredRoute><ModeRequiredRoute modes={['broker']}><BrokerHub /></ModeRequiredRoute></AuthRequiredRoute>} />
     <Route path="/jbj-academy" element={<AuthRequiredRoute><JBJAcademy /></AuthRequiredRoute>} />
     <Route path="/academy/graduates" element={<AcademyGraduates />} />
-    <Route path="/broker-portal" element={<AuthRequiredRoute><BrokerPortal /></AuthRequiredRoute>} />
+    <Route path="/broker-portal" element={<AuthRequiredRoute><ModeRequiredRoute modes={['broker']}><BrokerPortal /></ModeRequiredRoute></AuthRequiredRoute>} />
     <Route path="/document-scanner" element={<AuthRequiredRoute><ScanSignDocuments /></AuthRequiredRoute>} />
     <Route path="/scan-sign" element={<Navigate to="/document-scanner" replace />} />
     <Route path="/scan-sign-documents" element={<Navigate to="/document-scanner" replace />} />
