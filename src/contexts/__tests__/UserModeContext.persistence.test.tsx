@@ -109,16 +109,16 @@ describe("UserModeContext — persistence regression suite", () => {
     localStorage.setItem(MODE_KEY, "broker");
     localStorage.setItem(MODE_SELECTED_KEY, "true");
 
-    const { UserModeProvider } = await loadModule();
-    renderWithProvider(UserModeProvider);
+    const mod = await loadModule();
+    renderWithProvider(mod);
 
     // No flicker: the very first render must already show 'broker'.
     expect(screen.getByTestId("mode").textContent).toBe("broker");
   });
 
   it("refresh: defaults to 'investor' only when nothing was ever chosen", async () => {
-    const { UserModeProvider } = await loadModule();
-    renderWithProvider(UserModeProvider);
+    const mod = await loadModule();
+    renderWithProvider(mod);
     expect(screen.getByTestId("mode").textContent).toBe("investor");
   });
 
@@ -130,8 +130,8 @@ describe("UserModeContext — persistence regression suite", () => {
     h.dbRow = { selected_mode: "investor" };
     h.currentUser = { id: "user-1" };
 
-    const { UserModeProvider } = await loadModule();
-    renderWithProvider(UserModeProvider);
+    const mod = await loadModule();
+    renderWithProvider(mod);
 
     // Wait for the reconcile effect to flush.
     await waitFor(() => expect(h.upserts.length).toBeGreaterThan(0));
@@ -147,8 +147,8 @@ describe("UserModeContext — persistence regression suite", () => {
     h.dbRow = { selected_mode: "developer" };
     h.currentUser = { id: "user-2" };
 
-    const { UserModeProvider } = await loadModule();
-    renderWithProvider(UserModeProvider);
+    const mod = await loadModule();
+    renderWithProvider(mod);
 
     await waitFor(() =>
       expect(screen.getByTestId("mode").textContent).toBe("developer")
@@ -167,7 +167,7 @@ describe("UserModeContext — persistence regression suite", () => {
     // Initial render: signed OUT.
     h.currentUser = null;
     const mod = await loadModule();
-    const { rerender, unmount } = renderWithProvider(mod.UserModeProvider);
+    const { rerender, unmount } = renderWithProvider(mod);
     expect(screen.getByTestId("mode").textContent).toBe("broker");
     unmount();
 
@@ -175,7 +175,7 @@ describe("UserModeContext — persistence regression suite", () => {
     h.currentUser = { id: "user-3" };
     vi.resetModules();
     const mod2 = await loadModule();
-    renderWithProvider(mod2.UserModeProvider);
+    renderWithProvider(mod2);
 
     // Mode is still broker — sign-in did not override the user's choice.
     expect(screen.getByTestId("mode").textContent).toBe("broker");
@@ -189,8 +189,8 @@ describe("UserModeContext — persistence regression suite", () => {
     localStorage.setItem(MODE_KEY, "investor");
     localStorage.setItem(MODE_SELECTED_KEY, "true");
 
-    const { UserModeProvider } = await loadModule();
-    renderWithProvider(UserModeProvider);
+    const mod = await loadModule();
+    renderWithProvider(mod);
     expect(screen.getByTestId("mode").textContent).toBe("investor");
 
     // Simulate another tab writing 'developer' and emitting a storage event.
@@ -215,8 +215,8 @@ describe("UserModeContext — persistence regression suite", () => {
     localStorage.setItem(MODE_KEY, "broker");
     localStorage.setItem(MODE_SELECTED_KEY, "true");
 
-    const { UserModeProvider } = await loadModule();
-    renderWithProvider(UserModeProvider);
+    const mod = await loadModule();
+    renderWithProvider(mod);
 
     act(() => {
       window.dispatchEvent(
