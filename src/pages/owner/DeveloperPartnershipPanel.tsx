@@ -267,7 +267,7 @@ const DeveloperPartnershipPanel = () => {
 
   return (
     <div className="min-h-screen bg-[#FDFBF7]">
-      <SEOHead title="Developer Partnerships" description="Manage developer applications and authorized representatives" noindex />
+      <SEOHead title="Developer Partnerships" description="Manage developer applications and authorized representatives" noIndex />
       <div className="max-w-7xl mx-auto p-6 lg:p-8">
         <header className="mb-6">
           <h1 className="text-2xl md:text-3xl font-semibold text-[#1A1A1A] tracking-tight">
