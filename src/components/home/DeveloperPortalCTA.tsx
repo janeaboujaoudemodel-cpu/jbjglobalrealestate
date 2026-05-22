@@ -101,52 +101,75 @@ const DeveloperPortalCTA = () => {
   const showCongrats = isApproved && !hasSeenApproval;
   const showShortcuts = isApproved && hasSeenApproval;
 
+  // Single-line premium shortcut row — used for every portal category
+  const ShortcutRow = ({ items }: { items: { label: string; desc: string; icon: any; href: string }[] }) => (
+    <div className="relative -mx-4 px-4">
+      <div
+        className="flex gap-2.5 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-thin"
+        style={{ scrollbarWidth: 'thin' }}
+      >
+        {items.map((action) => (
+          <Link
+            key={action.label}
+            to={action.href}
+            className="group snap-start shrink-0 inline-flex items-center gap-2.5 pl-2.5 pr-4 py-2 rounded-full border border-[#B89555]/35 bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#B89555]/60 transition-all shadow-[0_1px_0_rgba(184,149,85,0.08)] hover:shadow-[0_4px_14px_-6px_rgba(184,149,85,0.35)]"
+            title={action.desc}
+          >
+            <span className="jj-icon-keep w-8 h-8 rounded-full bg-[#1A1A1A] flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
+              <action.icon className="w-4 h-4 text-white" style={{ color: '#fff' }} />
+            </span>
+            <span className="text-[#1A1A1A] text-[13px] font-semibold whitespace-nowrap leading-tight">
+              {action.label}
+            </span>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+
   // Investor mode — show investor opportunities instead
   if (isInvestorMode && !isDeveloperMode) {
     return (
-      <section className="py-12 md:py-16 bg-[#FDFBF7]">
+      <section className="py-8 md:py-10 bg-[#FDFBF7]">
         <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-1 text-center">
-              Investor Opportunities
-            </h2>
-            <p className="text-[#1A1A1A]/70 text-sm mb-8 text-center">
-              Explore tools, insights, and exclusive access designed for smart investors.
-            </p>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {investorShortcuts.map((action) => (
-                <Link key={action.label} to={action.href}>
-                  <div className="group flex flex-col items-center gap-2 p-5 rounded-xl border border-[#B89555]/30 hover:border-[#B89555]/30 bg-[#FDFBF7] hover:bg-[#F7F2EA] transition-all duration-300 cursor-pointer min-h-[120px] justify-center shadow-sm hover:shadow-md">
-                    <div className="jj-icon-keep w-11 h-11 rounded-xl bg-[#1A1A1A] flex items-center justify-center group-hover:scale-110 group-hover:bg-[#1A1A1A] transition-all">
-                      <action.icon className="w-5 h-5 text-white" style={{ color: '#fff' }} />
-                    </div>
-                    <span className="text-[#1A1A1A] text-xs md:text-sm font-semibold text-center leading-tight">{action.label}</span>
-                    <span className="text-[#1A1A1A]/70 text-[10px] text-center leading-tight">{action.desc}</span>
-                  </div>
-                </Link>
-              ))}
+          <div className="max-w-6xl mx-auto">
+            <div className="flex items-end justify-between mb-3">
+              <div>
+                <h2 className="text-lg md:text-xl font-bold text-[#1A1A1A] leading-tight">
+                  Investor Opportunities
+                </h2>
+                <p className="text-[#1A1A1A]/70 text-xs mt-0.5">
+                  Tools, insights & exclusive access for smart investors.
+                </p>
+              </div>
             </div>
+            <ShortcutRow items={investorShortcuts} />
           </div>
         </div>
       </section>
     );
   }
 
+
   return (
-    <section className="py-12 md:py-16 bg-[#FDFBF7]">
+    <section className="py-8 md:py-10 bg-[#FDFBF7]">
       <div className="container mx-auto px-4">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-1 text-center">
-            Developer Center
-          </h2>
-          <p className="text-[#1A1A1A]/70 text-sm mb-8 text-center">
-            {showShortcuts
-              ? "Your developer tools and shortcuts are ready."
-              : showCongrats
-              ? "Your application has been reviewed."
-              : "Join our network — submit projects, connect with brokers, and grow your business."}
-          </p>
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-end justify-between mb-3">
+            <div>
+              <h2 className="text-lg md:text-xl font-bold text-[#1A1A1A] leading-tight">
+                Developer Center
+              </h2>
+              <p className="text-[#1A1A1A]/70 text-xs mt-0.5">
+                {showShortcuts
+                  ? "Your developer tools and shortcuts."
+                  : showCongrats
+                  ? "Your application has been reviewed."
+                  : "Submit projects, connect with brokers, and grow your business."}
+              </p>
+            </div>
+          </div>
+
 
           {showCongrats && (
             <div className="max-w-md mx-auto text-center">
@@ -170,21 +193,8 @@ const DeveloperPortalCTA = () => {
             </div>
           )}
 
-          {showShortcuts && (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {shortcuts.map((action) => (
-                <Link key={action.label} to={action.href}>
-                  <div className="group flex flex-col items-center gap-2 p-5 rounded-xl border border-[#B89555]/30 hover:border-[#B89555]/30 bg-[#FDFBF7] hover:bg-[#F7F2EA] transition-all duration-300 cursor-pointer min-h-[120px] justify-center shadow-sm hover:shadow-md">
-                    <div className="jj-icon-keep w-11 h-11 rounded-xl bg-[#1A1A1A] flex items-center justify-center group-hover:scale-110 group-hover:bg-[#1A1A1A] transition-all">
-                      <action.icon className="w-5 h-5 text-white" style={{ color: '#fff' }} />
-                    </div>
-                    <span className="text-[#1A1A1A] text-xs md:text-sm font-semibold text-center leading-tight">{action.label}</span>
-                    <span className="text-[#1A1A1A]/70 text-[10px] text-center leading-tight">{action.desc}</span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          )}
+          {showShortcuts && <ShortcutRow items={shortcuts} />}
+
 
           {isPending && (
             <div className="max-w-md mx-auto text-center">
