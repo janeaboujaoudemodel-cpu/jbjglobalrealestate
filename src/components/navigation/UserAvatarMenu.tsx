@@ -2,11 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard, BarChart3, Inbox, ClipboardList, StickyNote, Bell,
-  Compass, Heart, SlidersHorizontal, Settings, KeyRound, Mail, LogOut,
+  Heart, SlidersHorizontal, Settings, LogOut, ChevronRight,
 } from "lucide-react";
 import {
   DropdownMenu, DropdownMenuTrigger, DropdownMenuContent,
-  DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel,
+  DropdownMenuItem, DropdownMenuSeparator,
+  DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuSubContent,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserMode } from "@/hooks/useUserMode";
