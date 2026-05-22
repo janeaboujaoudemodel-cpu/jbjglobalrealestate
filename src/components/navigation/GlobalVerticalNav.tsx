@@ -1215,9 +1215,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               to="/contact"
               data-no-contrast-guard
               className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all px-1 py-1.5 rounded-lg border"
-              style={{ color: '#1A1A1A', borderColor: 'rgba(220,38,38,0.45)', backgroundColor: '#FDFBF7' }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#DC2626'; e.currentTarget.style.color = '#FFFFFF'; e.currentTarget.style.borderColor = '#DC2626'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FDFBF7'; e.currentTarget.style.color = '#1A1A1A'; e.currentTarget.style.borderColor = 'rgba(220,38,38,0.45)'; }}
+              style={{ color: '#1A1A1A', borderColor: 'rgba(184,149,85,0.40)', backgroundColor: '#FDFBF7' }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#EFE6D6'; e.currentTarget.style.borderColor = '#B89555'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FDFBF7'; e.currentTarget.style.borderColor = 'rgba(184,149,85,0.40)'; }}
             >
               <Headphones className="w-3.5 h-3.5" strokeWidth={2} style={{ color: 'inherit' }} />
               <span style={{ color: 'inherit' }}>Contact</span>
@@ -1226,9 +1226,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               to="/ticket-hub"
               data-no-contrast-guard
               className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all px-1 py-1.5 rounded-lg border"
-              style={{ color: '#1A1A1A', borderColor: 'rgba(220,38,38,0.45)', backgroundColor: '#FDFBF7' }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#DC2626'; e.currentTarget.style.color = '#FFFFFF'; e.currentTarget.style.borderColor = '#DC2626'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FDFBF7'; e.currentTarget.style.color = '#1A1A1A'; e.currentTarget.style.borderColor = 'rgba(220,38,38,0.45)'; }}
+              style={{ color: '#1A1A1A', borderColor: 'rgba(184,149,85,0.40)', backgroundColor: '#FDFBF7' }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#EFE6D6'; e.currentTarget.style.borderColor = '#B89555'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FDFBF7'; e.currentTarget.style.borderColor = 'rgba(184,149,85,0.40)'; }}
             >
               <Ticket className="w-3.5 h-3.5" strokeWidth={2} style={{ color: 'inherit' }} />
               <span style={{ color: 'inherit' }}>Support</span>
