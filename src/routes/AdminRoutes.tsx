@@ -18,6 +18,7 @@ const InquiryManagementHub = lazy(() => import("@/pages/admin/InquiryManagementH
 const AdminOnboarding = lazy(() => import("@/pages/AdminOnboarding"));
 const AdminRoleManagement = lazy(() => import("@/pages/AdminRoleManagement"));
 const AdminDevelopers = lazy(() => import("@/pages/AdminDevelopers"));
+const DeveloperProfilePage = lazy(() => import("@/pages/admin/DeveloperProfilePage"));
 const MissingLogosQueue = lazy(() => import("@/pages/admin/MissingLogosQueue"));
 const AdminTrainingGuide = lazy(() => import("@/pages/AdminTrainingGuide"));
 const MarketingHub = lazy(() => import("@/pages/admin/MarketingHub"));
@@ -94,6 +95,7 @@ export const AdminRoutes = () => (
     <Route path="/admin/roles" element={<OwnerGuard><AdminRoleManagement /></OwnerGuard>} />
     <Route path="/admin/intelligence" element={<OwnerGuard><AdminIntelligence /></OwnerGuard>} />
     <Route path="/admin/developers" element={<OwnerGuard><AdminDevelopers /></OwnerGuard>} />
+    <Route path="/admin/developers/profile/:slug" element={<OwnerGuard><Suspense fallback={<PageLoader />}><DeveloperProfilePage /></Suspense></OwnerGuard>} />
     <Route path="/admin/developers/missing-logos" element={<OwnerGuard><Suspense fallback={<PageLoader />}><MissingLogosQueue /></Suspense></OwnerGuard>} />
     <Route path="/admin/categories" element={<OwnerGuard><AdminCategories /></OwnerGuard>} />
     <Route path="/admin/marketing-hub" element={<OwnerGuard><MarketingHub /></OwnerGuard>} />
