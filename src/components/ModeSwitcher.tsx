@@ -291,11 +291,16 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                     data-no-contrast-guard
                     className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 allow-white"
                     style={{
-                      backgroundImage: 'linear-gradient(135deg, #1A1A1A 0%, #0A0A0A 100%)',
-                      boxShadow: '0 0 0 1px #B89555, 0 2px 6px rgba(0,0,0,0.22)',
+                      backgroundImage: `linear-gradient(135deg, ${config.base} 0%, ${config.baseDark} 100%)`,
+                      boxShadow: `0 0 0 1px ${config.base}, 0 2px 6px rgba(0,0,0,0.18)`,
                     }}
                   >
-                    <Icon data-no-contrast-guard className="w-[18px] h-[18px] allow-white" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} strokeWidth={2} />
+                    <Icon
+                      data-no-contrast-guard
+                      className="w-[18px] h-[18px] allow-white"
+                      style={{ color: config.onBase, stroke: config.onBase }}
+                      strokeWidth={2}
+                    />
                   </div>
 
 
@@ -313,10 +318,15 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
 
                   {isActive ? (
                     <span
-                      className="ml-2 inline-flex items-center justify-center gap-1 px-2.5 h-[22px] min-w-[96px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap"
-                      style={{ backgroundColor: config.base, color: '#FFFFFF' }}
+                      data-no-contrast-guard
+                      className="ml-2 inline-flex items-center justify-center gap-1 px-2.5 h-[22px] min-w-[96px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap allow-white"
+                      style={{ backgroundColor: config.base, color: config.onBase, borderColor: config.base }}
                     >
-                      <Check className="w-3 h-3 shrink-0" style={{ color: '#FFFFFF' }} />
+                      <Check
+                        data-no-contrast-guard
+                        className="w-3 h-3 shrink-0 allow-white"
+                        style={{ color: config.onBase, stroke: config.onBase }}
+                      />
                       Selected
                     </span>
                   ) : (
