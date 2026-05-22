@@ -70,8 +70,8 @@ function BookMarqueeStrip({ books }: { books: BookData[] }) {
 export default function HomepageBookMarquee() {
   return (
     <section className="bg-[#FDFBF7] py-10 md:py-14">
+      {/* Header — padded */}
       <div className="px-4 md:px-6 lg:px-8">
-        {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-[#F7F2EA] border border-[#B89555]/30 flex items-center justify-center">
@@ -92,11 +92,13 @@ export default function HomepageBookMarquee() {
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
+      </div>
 
-        {/* Walking books strip */}
-        <BookMarqueeStrip books={allBooks} />
+      {/* Walking books strip — full bleed edge-to-edge */}
+      <BookMarqueeStrip books={allBooks} />
 
-        {/* Mobile link */}
+      {/* Mobile link */}
+      <div className="px-4 md:px-6 lg:px-8">
         <div className="mt-4 sm:hidden text-center">
           <Link
             to="/guides"
@@ -110,3 +112,4 @@ export default function HomepageBookMarquee() {
     </section>
   );
 }
+
