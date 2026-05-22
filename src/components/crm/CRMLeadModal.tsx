@@ -112,16 +112,49 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
     pool: "nonpool" as "pool" | "nonpool",
   };
   const [formData, setFormData] = useState(initial);
+  const [activeTab, setActiveTab] = useState<"contact" | "requirements" | "pipeline" | "notes">("contact");
   const [nationalityOpen, setNationalityOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
   const [countryOpen, setCountryOpen] = useState(false);
   const [residenceOpen, setResidenceOpen] = useState(false);
   const [cityOpen, setCityOpen] = useState(false);
+  const [tagDraft, setTagDraft] = useState("");
+
+  const tagList = useMemo(
+    () => formData.tags.split(",").map((t) => t.trim()).filter(Boolean),
+    [formData.tags],
+  );
+  const addTag = (raw: string) => {
+    const v = raw.trim().replace(/,$/, "");
+    if (!v) return;
+    if (tagList.some((t) => t.toLowerCase() === v.toLowerCase())) return;
+    setFormData({ ...formData, tags: [...tagList, v].join(", ") });
+  };
+  const removeTag = (t: string) => {
+    setFormData({
+      ...formData,
+      tags: tagList.filter((x) => x.toLowerCase() !== t.toLowerCase()).join(", "),
+    });
+  };
+
+  const handleClose = () => {
+    setFormData(initial);
+    setActiveTab("contact");
+    setNationalityOpen(false);
+    setLanguageOpen(false);
+    setCountryOpen(false);
+    setResidenceOpen(false);
+    setCityOpen(false);
+    setTagDraft("");
+    setLoading(false);
+    onClose();
+  };
 
   const cities = useMemo(
     () => getCitiesForCountry(formData.current_location_country),
     [formData.current_location_country],
   );
+
 
   const normalizePhone = (phone: string): string | null => {
     if (!phone) return null;
@@ -209,8 +242,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
 
       toast.success("Lead created");
       onSuccess();
-      onClose();
-      setFormData(initial);
+      handleClose();
     } catch (err: any) {
       console.error("Failed to create lead:", err);
       toast.error(err.message || "Failed to create lead");
@@ -219,24 +251,36 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
     }
   };
 
+  const submitWithValidation = (e: React.FormEvent) => {
+    if (!formData.full_name.trim()) {
+      e.preventDefault();
+      setActiveTab("contact");
+      toast.error("Lead Name is required");
+      return;
+    }
+    handleSubmit(e);
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-3xl max-h-[92vh] overflow-y-auto bg-[#FDFBF7] border border-[#1A1A1A]/10">
-        <DialogHeader className="pt-2">
-          <DialogTitle className="text-[#1A1A1A]">Add Lead / Client</DialogTitle>
+    <Dialog open={open} onOpenChange={(o) => { if (!o) handleClose(); }}>
+      <DialogContent className="sm:max-w-4xl max-h-[92vh] overflow-y-auto bg-[#FDFBF7] border border-[#1A1A1A]/10 p-0">
+        <DialogHeader className="px-6 pt-5 pb-3 border-b border-[#B89555]/20">
+          <DialogTitle className="text-[#1A1A1A] text-lg">Add Lead / Client</DialogTitle>
           <DialogDescription className="text-[#1A1A1A]/70">
             One unified record &mdash; works for buyers, investors, sellers, tenants, landlords, brokers and clients.
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Tabs defaultValue="contact">
+        <form onSubmit={submitWithValidation} className="space-y-4 px-6 pb-4 pt-4">
+          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as typeof activeTab)}>
             <TabsList className="bg-[#F7F2EA] p-1 rounded-lg">
               <TabsTrigger value="contact">Contact</TabsTrigger>
               <TabsTrigger value="requirements">Requirements</TabsTrigger>
               <TabsTrigger value="pipeline">Pipeline</TabsTrigger>
               <TabsTrigger value="notes">Notes</TabsTrigger>
             </TabsList>
+
+
 
             {/* CONTACT */}
             <TabsContent value="contact" className="space-y-3 pt-3">
@@ -254,7 +298,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                   <Label>Lead Type</Label>
                   <Select value={formData.lead_type} onValueChange={(v) => setFormData({ ...formData, lead_type: v })}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent className="bg-[#FDFBF7] z-[200]">
+                    <SelectContent className="bg-[#FDFBF7]">
                       {LEAD_TYPES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
                     </SelectContent>
                   </Select>
@@ -301,7 +345,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                         <ChevronsUpDown className="ml-1 h-3.5 w-3.5 shrink-0 opacity-50" />
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-[240px] p-0 z-[200] bg-[#FDFBF7] border border-[#1A1A1A]/15" align="start">
+                    <PopoverContent className="w-[260px] p-0 bg-[#FDFBF7] border border-[#1A1A1A]/15" align="start" side="bottom" sideOffset={6} avoidCollisions={false}>
                       <Command>
                         <CommandInput placeholder="Search language..." className="text-[#1A1A1A]" />
                         <CommandList className="max-h-72 overflow-y-auto overscroll-contain" onWheel={(e) => e.stopPropagation()} onTouchMove={(e) => e.stopPropagation()}>
@@ -339,7 +383,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                         <ChevronsUpDown className="ml-1 h-3.5 w-3.5 shrink-0 opacity-50" />
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-[240px] p-0 z-[200] bg-[#FDFBF7] border border-[#1A1A1A]/15" align="start">
+                    <PopoverContent className="w-[260px] p-0 bg-[#FDFBF7] border border-[#1A1A1A]/15" align="start" side="bottom" sideOffset={6} avoidCollisions={false}>
                       <Command>
                         <CommandInput placeholder="Search nationality..." className="text-[#1A1A1A]" />
                         <CommandList className="max-h-72 overflow-y-auto overscroll-contain" onWheel={(e) => e.stopPropagation()} onTouchMove={(e) => e.stopPropagation()}>
@@ -377,7 +421,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                         <ChevronsUpDown className="ml-1 h-3.5 w-3.5 shrink-0 opacity-50" />
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-[240px] p-0 z-[200] bg-[#FDFBF7] border border-[#1A1A1A]/15" align="start">
+                    <PopoverContent className="w-[260px] p-0 bg-[#FDFBF7] border border-[#1A1A1A]/15" align="start" side="bottom" sideOffset={6} avoidCollisions={false}>
                       <Command>
                         <CommandInput placeholder="Search country..." className="text-[#1A1A1A]" />
                         <CommandList className="max-h-72 overflow-y-auto overscroll-contain" onWheel={(e) => e.stopPropagation()} onTouchMove={(e) => e.stopPropagation()}>
@@ -432,7 +476,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                   <Label>Currency</Label>
                   <Select value={formData.budget_currency} onValueChange={(v) => setFormData({ ...formData, budget_currency: v })}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent className="bg-[#FDFBF7] z-[200]">
+                    <SelectContent className="bg-[#FDFBF7]">
                       {["AED", "USD", "EUR", "GBP", "SAR"].map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
                     </SelectContent>
                   </Select>
@@ -463,7 +507,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                   <Label>Property Type</Label>
                   <Select value={formData.property_type} onValueChange={(v) => setFormData({ ...formData, property_type: v })}>
                     <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
-                    <SelectContent className="bg-[#FDFBF7] z-[200]">
+                    <SelectContent className="bg-[#FDFBF7]">
                       {PROPERTY_TYPES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
                     </SelectContent>
                   </Select>
@@ -472,7 +516,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                   <Label>Bedrooms</Label>
                   <Select value={formData.bedroom_requirement} onValueChange={(v) => setFormData({ ...formData, bedroom_requirement: v })}>
                     <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
-                    <SelectContent className="bg-[#FDFBF7] z-[200]">
+                    <SelectContent className="bg-[#FDFBF7]">
                       {BEDROOMS.map((b) => <SelectItem key={b} value={b}>{b}</SelectItem>)}
                     </SelectContent>
                   </Select>
@@ -481,7 +525,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                   <Label>Buying Purpose</Label>
                   <Select value={formData.buying_purpose} onValueChange={(v) => setFormData({ ...formData, buying_purpose: v })}>
                     <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
-                    <SelectContent className="bg-[#FDFBF7] z-[200]">
+                    <SelectContent className="bg-[#FDFBF7]">
                       {BUYING_PURPOSE.map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}
                     </SelectContent>
                   </Select>
@@ -496,7 +540,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                   <Label>Lead Source</Label>
                   <Select value={formData.source} onValueChange={(v) => setFormData({ ...formData, source: v })}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent className="bg-[#FDFBF7] z-[200] max-h-80">
+                    <SelectContent className="bg-[#FDFBF7] max-h-80">
                       {LEAD_SOURCES.map((s) => (
                         <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
                       ))}
@@ -513,7 +557,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                       align="start"
                       sideOffset={6}
                       avoidCollisions={false}
-                      className="bg-[#FDFBF7] z-[200] max-h-96 border border-[#B89555]/30 rounded-xl"
+                      className="bg-[#FDFBF7] max-h-96 border border-[#B89555]/30 rounded-xl"
                     >
                       {(['positive','neutral','negative'] as const).map((cat) => {
                         const items = PIPELINE_STATUSES.filter(s => s.category === cat);
@@ -555,8 +599,8 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
 
               {/* Tier (Standard / VIP) and Pool (Pool / Non-pool) — independent */}
               <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <Label className="flex items-center gap-1.5">
+                <div className="space-y-1.5">
+                  <Label className="flex items-center gap-1.5 mb-0">
                     <Crown className="h-3.5 w-3.5 text-amber-500" />
                     Tier
                   </Label>
@@ -567,7 +611,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                         type="button"
                         onClick={() => setFormData({ ...formData, tier: t })}
                         className={cn(
-                          "flex-1 px-3 py-2 text-xs font-bold uppercase tracking-wide transition-colors",
+                          "flex-1 px-3 py-2.5 text-xs font-bold uppercase tracking-wide transition-colors",
                           formData.tier === t
                             ? t === 'vip'
                               ? "bg-amber-400/25 text-amber-900 border-r border-[#B89555]/40"
@@ -580,8 +624,8 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                     ))}
                   </div>
                 </div>
-                <div>
-                  <Label className="flex items-center gap-1.5">
+                <div className="space-y-1.5">
+                  <Label className="flex items-center gap-1.5 mb-0">
                     <Users2 className="h-3.5 w-3.5 text-blue-500" />
                     Pool
                   </Label>
@@ -592,7 +636,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                         type="button"
                         onClick={() => setFormData({ ...formData, pool: p })}
                         className={cn(
-                          "flex-1 px-3 py-2 text-xs font-bold uppercase tracking-wide transition-colors",
+                          "flex-1 px-3 py-2.5 text-xs font-bold uppercase tracking-wide transition-colors",
                           formData.pool === p
                             ? p === 'pool'
                               ? "bg-blue-500/15 text-blue-800 border-r border-[#B89555]/40"
@@ -607,12 +651,13 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                 </div>
               </div>
 
+
               <div className="grid grid-cols-3 gap-3">
                 <div>
                   <Label>Priority</Label>
                   <Select value={formData.priority} onValueChange={(v) => setFormData({ ...formData, priority: v })}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent className="bg-[#FDFBF7] z-[200]">
+                    <SelectContent className="bg-[#FDFBF7]">
                       {PRIORITY.map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}
                     </SelectContent>
                   </Select>
@@ -621,7 +666,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                   <Label>Lead Score</Label>
                   <Select value={formData.lead_score_band} onValueChange={(v) => setFormData({ ...formData, lead_score_band: v })}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent className="bg-[#FDFBF7] z-[200]">
+                    <SelectContent className="bg-[#FDFBF7]">
                       {SCORE_BAND.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
                     </SelectContent>
                   </Select>
@@ -637,13 +682,33 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
               </div>
 
               <div>
-                <Label>Tags (comma-separated)</Label>
-                <Input
-                  value={formData.tags}
-                  onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
-                  placeholder="investor, premium, urgent"
-                />
+                <Label>Tags</Label>
+                <div className="flex flex-wrap gap-1.5 items-center min-h-[40px] rounded-md border border-[#1A1A1A]/15 bg-[#FDFBF7] px-2 py-1.5 focus-within:border-[#B89555]/60 focus-within:ring-2 focus-within:ring-[#B89555]/20">
+                  {tagList.map((t) => (
+                    <span key={t} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#EFE6D6] border border-[#B89555]/40 text-xs text-[#1A1A1A]">
+                      {t}
+                      <button type="button" onClick={() => removeTag(t)} aria-label={`Remove ${t}`} className="rounded-full hover:bg-[#FDFBF7] px-1 leading-none">×</button>
+                    </span>
+                  ))}
+                  <input
+                    value={tagDraft}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      if (v.endsWith(",")) { addTag(v); setTagDraft(""); }
+                      else setTagDraft(v);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") { e.preventDefault(); addTag(tagDraft); setTagDraft(""); }
+                      else if (e.key === "Backspace" && !tagDraft && tagList.length) { removeTag(tagList[tagList.length - 1]); }
+                    }}
+                    onBlur={() => { if (tagDraft.trim()) { addTag(tagDraft); setTagDraft(""); } }}
+                    placeholder={tagList.length ? "" : "investor, premium, urgent…"}
+                    className="flex-1 min-w-[120px] bg-transparent outline-none text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 py-1"
+                  />
+                </div>
+                <p className="text-[11px] text-[#1A1A1A]/60 mt-1">Press Enter or comma to add</p>
               </div>
+
             </TabsContent>
 
             {/* NOTES */}
@@ -672,14 +737,15 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
             </TabsContent>
           </Tabs>
 
-          <div className="flex gap-3 pt-2 border-t border-[#1A1A1A]/10">
-            <Button type="button" variant="outline" onClick={onClose} className="flex-1">
+          <div className="sticky bottom-0 -mx-6 px-6 pt-3 pb-3 mt-2 bg-[#FDFBF7]/95 backdrop-blur supports-[backdrop-filter]:bg-[#FDFBF7]/85 border-t border-[#B89555]/20 flex gap-3">
+            <Button type="button" variant="outline" onClick={handleClose} className="flex-1">
               Cancel
             </Button>
             <Button type="submit" disabled={loading} className="flex-1">
               {loading ? "Creating..." : "Create Lead"}
             </Button>
           </div>
+
         </form>
       </DialogContent>
     </Dialog>
