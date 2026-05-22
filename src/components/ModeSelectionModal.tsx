@@ -176,9 +176,17 @@ export const ModeSelectionModal = () => {
               </>
             )}
           </Button>
+          <button
+            type="button"
+            onClick={() => dismiss()}
+            className="w-full mt-2 h-10 text-[13px] font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/40 rounded-lg transition-colors"
+          >
+            Skip for now — just let me explore
+          </button>
           {!user && (
             <p className="text-center text-[#1A1A1A]/60 text-[11px] mt-3">
-              You'll be able to register or sign in after making your selection.
+              You can browse properties freely. Sign-in is only needed when you
+              save, contact, or use a tool.
             </p>
           )}
         </div>
