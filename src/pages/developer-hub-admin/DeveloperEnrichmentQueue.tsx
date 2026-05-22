@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Sparkles, Check, X, RefreshCw } from "lucide-react";
+import { Sparkles, Check, X, RefreshCw, Zap } from "lucide-react";
 
 interface LogRow {
   id: string;
@@ -60,6 +60,37 @@ export default function DeveloperEnrichmentQueue() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const rebuildAllBroken = useMutation({
+    mutationFn: async (limit: number) => {
+      const { data: broken, error: e1 } = await supabase
+        .from("developers")
+        .select("id")
+        .or("logo_url.is.null,logo_url.eq.,description.is.null")
+        .eq("is_hidden", false)
+        .order("rank", { ascending: false, nullsFirst: false })
+        .limit(limit);
+      if (e1) throw e1;
+      const ids = (broken ?? []).map((d) => d.id);
+      if (!ids.length) return { count: 0 };
+      // batch 5 at a time to respect Firecrawl rate
+      let done = 0;
+      for (let i = 0; i < ids.length; i += 5) {
+        const slice = ids.slice(i, i + 5);
+        const { error } = await supabase.functions.invoke("developer-site-rebuild", {
+          body: { developer_ids: slice, preview: true },
+        });
+        if (error) throw error;
+        done += slice.length;
+      }
+      return { count: done };
+    },
+    onSuccess: (r) => {
+      toast.success(`Staged ${r.count} developer(s) for review`);
+      qc.invalidateQueries({ queryKey: ["dev-enrichment-logs"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   const decide = useMutation({
     mutationFn: async ({ log_id, action }: { log_id: string; action: "approve" | "reject" }) => {
       const { data, error } = await supabase.functions.invoke("apply-developer-enrichment", {
@@ -91,6 +122,15 @@ export default function DeveloperEnrichmentQueue() {
               onChange={(e) => setSearch(e.target.value)}
               className="h-9 w-64"
             />
+            <Button
+              variant="gold"
+              size="sm"
+              disabled={rebuildAllBroken.isPending}
+              onClick={() => rebuildAllBroken.mutate(25)}
+            >
+              <Zap className="size-3 mr-1" />
+              {rebuildAllBroken.isPending ? "Running…" : "Rebuild 25 broken"}
+            </Button>
             <Button asChild variant="outline">
               <a href="/developer-hub-admin/directory">Pick from directory →</a>
             </Button>

@@ -11728,6 +11728,39 @@ export type Database = {
           },
         ]
       }
+      developer_merge_log: {
+        Row: {
+          canonical_name: string
+          created_at: string
+          duplicate_id: string
+          duplicate_slug: string | null
+          duplicate_snapshot: Json
+          id: string
+          keep_id: string
+          projects_repointed: number
+        }
+        Insert: {
+          canonical_name: string
+          created_at?: string
+          duplicate_id: string
+          duplicate_slug?: string | null
+          duplicate_snapshot: Json
+          id?: string
+          keep_id: string
+          projects_repointed?: number
+        }
+        Update: {
+          canonical_name?: string
+          created_at?: string
+          duplicate_id?: string
+          duplicate_slug?: string | null
+          duplicate_snapshot?: Json
+          id?: string
+          keep_id?: string
+          projects_repointed?: number
+        }
+        Relationships: []
+      }
       developer_messages: {
         Row: {
           attachments: Json | null
