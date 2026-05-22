@@ -35,6 +35,36 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
   const { mode } = useUserMode();
   const { data: alerts } = useUserAlerts();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const dashboardHref = isOwner
+    ? "/owner"
+    : mode === "broker"
+    ? "/broker-dashboard"
+    : mode === "investor"
+    ? "/investor-dashboard"
+    : mode === "developer"
+    ? "/developer-portal"
+    : "/my-dashboard";
+
+  const roleLabel = isOwner
+    ? "Owner"
+    : mode === "broker"
+    ? "Broker"
+    : mode === "investor"
+    ? "Investor"
+    : mode === "developer"
+    ? "Developer"
+    : null;
+
+  const currentFull = location.pathname + location.search + location.hash;
+  const isRowActive = (to?: string) => {
+    if (!to) return false;
+    // exact match on path+hash; for query/hash variants just check startsWith on the path part
+    const [toPath] = to.split(/[?#]/);
+    if (to.includes("#") || to.includes("?")) return currentFull === to || currentFull.startsWith(to);
+    return location.pathname === toPath;
+  };
 
   const { data: crmProfile } = useQuery({
     queryKey: ["crm-profile-name", user?.id],
