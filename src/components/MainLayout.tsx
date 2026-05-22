@@ -305,6 +305,11 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           onClose={() => { completeTour(); setShowTour(false); }}
         />
       </Suspense>
+      {!isBackOfficeRoute && (
+        <Suspense fallback={null}>
+          <CompleteProfilePrompt />
+        </Suspense>
+      )}
     </div>
   );
 };
