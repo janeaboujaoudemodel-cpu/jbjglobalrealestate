@@ -347,16 +347,29 @@ export default function MissingLogosQueue() {
             Refresh
           </Button>
           {tab === "needs_logo" && (
-            <Button
-              variant="gold"
-              onClick={() => autoFind(visibleIds)}
-              disabled={bulkBusy || visibleIds.length === 0}
-            >
-              <Sparkles className="w-4 h-4 mr-2" />
-              {bulkBusy
-                ? "Auto-finding…"
-                : `Auto-find next ${visibleIds.length}`}
-            </Button>
+            <>
+              <Button
+                variant="gold"
+                onClick={() => autoFind(visibleIds)}
+                disabled={bulkBusy || runAll || visibleIds.length === 0}
+              >
+                <Sparkles className="w-4 h-4 mr-2" />
+                {bulkBusy
+                  ? "Auto-finding…"
+                  : `Auto-find next ${visibleIds.length}`}
+              </Button>
+              <Button
+                variant="outline"
+                onClick={runUntilDone}
+                disabled={runAll || bulkBusy}
+                className="border-[#B89555]/60 text-[#1A1A1A]"
+              >
+                <Sparkles className="w-4 h-4 mr-2" />
+                {runAll
+                  ? `Running… ${runAllProgress?.approved ?? 0} approved · ${runAllProgress?.remaining ?? "?"} left`
+                  : "Run continuously"}
+              </Button>
+            </>
           )}
         </div>
 
