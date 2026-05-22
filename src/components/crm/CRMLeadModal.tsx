@@ -112,16 +112,49 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
     pool: "nonpool" as "pool" | "nonpool",
   };
   const [formData, setFormData] = useState(initial);
+  const [activeTab, setActiveTab] = useState<"contact" | "requirements" | "pipeline" | "notes">("contact");
   const [nationalityOpen, setNationalityOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
   const [countryOpen, setCountryOpen] = useState(false);
   const [residenceOpen, setResidenceOpen] = useState(false);
   const [cityOpen, setCityOpen] = useState(false);
+  const [tagDraft, setTagDraft] = useState("");
+
+  const tagList = useMemo(
+    () => formData.tags.split(",").map((t) => t.trim()).filter(Boolean),
+    [formData.tags],
+  );
+  const addTag = (raw: string) => {
+    const v = raw.trim().replace(/,$/, "");
+    if (!v) return;
+    if (tagList.some((t) => t.toLowerCase() === v.toLowerCase())) return;
+    setFormData({ ...formData, tags: [...tagList, v].join(", ") });
+  };
+  const removeTag = (t: string) => {
+    setFormData({
+      ...formData,
+      tags: tagList.filter((x) => x.toLowerCase() !== t.toLowerCase()).join(", "),
+    });
+  };
+
+  const handleClose = () => {
+    setFormData(initial);
+    setActiveTab("contact");
+    setNationalityOpen(false);
+    setLanguageOpen(false);
+    setCountryOpen(false);
+    setResidenceOpen(false);
+    setCityOpen(false);
+    setTagDraft("");
+    setLoading(false);
+    onClose();
+  };
 
   const cities = useMemo(
     () => getCitiesForCountry(formData.current_location_country),
     [formData.current_location_country],
   );
+
 
   const normalizePhone = (phone: string): string | null => {
     if (!phone) return null;
