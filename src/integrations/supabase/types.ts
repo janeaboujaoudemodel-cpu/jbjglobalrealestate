@@ -6853,6 +6853,7 @@ export type Database = {
           account_status_changed_by: string | null
           account_status_reason: string | null
           activated_at: string | null
+          activation_verified_at: string | null
           assigned_to: string | null
           auth_user_id: string | null
           bayut_url: string | null
@@ -6941,6 +6942,7 @@ export type Database = {
           account_status_changed_by?: string | null
           account_status_reason?: string | null
           activated_at?: string | null
+          activation_verified_at?: string | null
           assigned_to?: string | null
           auth_user_id?: string | null
           bayut_url?: string | null
@@ -7029,6 +7031,7 @@ export type Database = {
           account_status_changed_by?: string | null
           account_status_reason?: string | null
           activated_at?: string | null
+          activation_verified_at?: string | null
           assigned_to?: string | null
           auth_user_id?: string | null
           bayut_url?: string | null
