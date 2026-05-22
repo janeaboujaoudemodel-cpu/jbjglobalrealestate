@@ -1,21 +1,17 @@
-## What's wrong
+## Change
 
-`.price-pill-premium` has no fixed/min width, so "From AED 10.7M" is wider than "From AED 2.4M" — pills look inconsistent across the grid. They also read as horizontally long because of the side-by-side `From | value` layout with generous padding and a baseline-aligned eyebrow.
+In `src/components/ui/developer-link.tsx`, restyle the developer name itself to canonical brand gold (`#B89555`) and give it a clear hover affordance everywhere it appears:
 
-## Fix (CSS-only, single source)
+- Default: `text-[#B89555]` (the same gold token used for hairlines/borders site-wide), `font-semibold`, `underline underline-offset-4 decoration-[#B89555]/50`.
+- Hover/focus: `text-[#8E6E36]` (darker gold for AA contrast on champagne), `decoration-[#B89555]` (full-strength underline), subtle `cursor-pointer` (Link already provides), small `transition-colors duration-150`.
+- "by " prefix stays ink (`#1A1A1A`) so the brand wordmark reads as the gold accent on a champagne card.
+- Same treatment in the no-slug branch (gold styled text, no Link), so unlinked names still read as the brand mark — but without hover state.
 
-Edit `src/index.css` → `.price-pill-premium` block:
-
-- Stack eyebrow over value (column layout) instead of inline → instantly half the horizontal footprint.
-- Set `min-width: 92px`, `justify-content: center`, `text-align: center` so every pill is the same width regardless of digits, but still grows for very long values (e.g. AED 125M).
-- Tighten padding to `4px 10px` and reduce gap to `2px` between eyebrow and value.
-- Eyebrow → `9px` uppercase tracked; value → `13px / 0.875rem`, tabular-nums (already on), `font-weight: 800`.
-- Keep the orange ink, hairline border, scrim, blur, and shadow exactly as-is — no visual identity change.
-
-That single block governs all three call sites (`FeaturedListings.tsx`, `ProjectCard.tsx`, `ReellyProjectCard.tsx`) — no component edits needed; the change propagates everywhere the pill is rendered (home featured, properties grid, all project listings).
+Because `DeveloperLink` is the single source used by `ProjectCard`, `ReellyProjectCard`, `FeaturedListings`, and every other consumer, the change propagates everywhere automatically — no component-level edits needed.
 
 ## Technical notes
 
-- Files touched: `src/index.css` only.
-- No markup, no component, no schema change.
-- Tabular-nums already present, so equal-width digits + fixed `min-width` guarantees identical pill size for typical AED 1M–999M range.
+- One file edited: `src/components/ui/developer-link.tsx`.
+- Brand gold `#B89555` is the project's canonical accent token. It is NOT one of the banned "muddy" faded-gold hexes (`#5A4A2E`, `#3A2D1D`, `#6B5A3E`, `#7A6747`, `#8A7556`), so CI `check-faded-gold` will pass.
+- The "no gold fills" rule is preserved: gold is used only as text color + 1px underline, never as a background fill.
+- Click behavior (`stopPropagation`, link to `/developer/:slug`) stays identical.
