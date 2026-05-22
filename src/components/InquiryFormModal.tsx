@@ -727,7 +727,7 @@ const InquiryFormModal = ({
                       </>
                     ) : (
                       <>
-                        <Crown className="w-5 h-5" />
+                        <Crown className="w-5 h-5 text-[#1A1A1A]" strokeWidth={2.5} />
                         <span>{!skipVerification && !emailVerified ? 'Verify & Submit' : t('inquiry.submit')}</span>
                       </>
                     )}
