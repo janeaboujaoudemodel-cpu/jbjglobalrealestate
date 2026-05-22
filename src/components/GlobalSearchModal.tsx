@@ -341,7 +341,33 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                 </div>
               )}
               {totalResults === 0 && (
-                <p className="text-sm text-[#1A1A1A]/70 text-center py-4">No results found for "{query}"</p>
+                nearest.length > 0 ? (
+                  <div>
+                    <div className="px-1 py-2 mb-2 rounded-lg bg-[#FDFBF7] border border-[#B89555]/30">
+                      <p className="text-xs font-semibold text-[#1A1A1A]">No exact match for "{query}"</p>
+                      <p className="text-[11px] text-[#1A1A1A]/70 mt-0.5">Here are the closest results we could find.</p>
+                    </div>
+                    <div className="space-y-0.5">
+                      {nearest.map((item, idx) => (
+                        <button
+                          key={`${item.id}-near-${idx}`}
+                          onClick={() => handleSelect(item.route)}
+                          className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-[#1A1A1A]/5 transition-all text-left"
+                        >
+                          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30 text-[#1A1A1A]">
+                            {item.icon && <item.icon className="w-4 h-4" />}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-[#1A1A1A] truncate">{item.label}</p>
+                          </div>
+                          <ArrowRight className="w-3 h-3 text-[#1A1A1A]/70" />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-sm text-[#1A1A1A]/70 text-center py-4">No results found for "{query}"</p>
+                )
               )}
             </div>
           ) : (
@@ -494,10 +520,41 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                     )}
 
                     {totalResults === 0 && (
-                      <div className="p-8 text-center">
-                        <p className="text-[#1A1A1A]/70">No results found for "{query}"</p>
-                        <p className="text-sm text-[#1A1A1A]/70 mt-1">Try a different search term</p>
-                      </div>
+                      nearest.length > 0 ? (
+                        <div>
+                          <div className="p-4 rounded-xl bg-[#FDFBF7] border border-[#B89555]/40 mb-3 text-center">
+                            <p className="text-sm font-semibold text-[#1A1A1A]">We couldn't find an exact match for "{query}"</p>
+                            <p className="text-xs text-[#1A1A1A]/70 mt-1">
+                              Here are the closest results across our website. Need help? <button onClick={() => handleSelect('/contact')} className="underline font-medium hover:text-[#B89555]">Contact support</button>.
+                            </p>
+                          </div>
+                          <div className="space-y-1">
+                            {nearest.map((item, idx) => (
+                              <button
+                                key={`${item.id}-near-${idx}`}
+                                onClick={() => handleSelect(item.route)}
+                                className="w-full flex items-center gap-4 p-3 rounded-xl hover:bg-[#EFE6D6]/40 transition-all text-left"
+                              >
+                                <div className="w-11 h-11 rounded-lg flex items-center justify-center border bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]">
+                                  {item.icon && <item.icon className="w-5 h-5" />}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <p className="font-semibold text-[#1A1A1A] truncate">{item.label}</p>
+                                  <p className="text-[#1A1A1A]/70 text-sm truncate">{item.description}</p>
+                                </div>
+                                <ArrowRight className="w-5 h-5 text-[#1A1A1A]/70 flex-shrink-0" />
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="p-8 text-center">
+                          <p className="text-[#1A1A1A]/70">No results found for "{query}"</p>
+                          <p className="text-sm text-[#1A1A1A]/70 mt-1">
+                            Try fewer words, or <button onClick={() => handleSelect('/contact')} className="underline font-medium hover:text-[#B89555]">contact support</button>.
+                          </p>
+                        </div>
+                      )
                     )}
                   </div>
                 ) : (
