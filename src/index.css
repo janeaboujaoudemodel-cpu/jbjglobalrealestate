@@ -601,6 +601,31 @@ All colors MUST be HSL.
   [data-surface="dark"] [data-mode-switcher-panel="true"] * {
     color: revert !important;
   }
+  [data-mode-switcher-panel="true"] .mode-switcher-icon-tile {
+    background-color: var(--mode-base) !important;
+    background-image: linear-gradient(135deg, var(--mode-base) 0%, var(--mode-base-dark) 100%) !important;
+    color: var(--mode-on-base) !important;
+  }
+  [data-mode-switcher-panel="true"] .mode-switcher-icon,
+  [data-mode-switcher-panel="true"] .mode-switcher-selected-icon {
+    color: var(--mode-on-base) !important;
+    stroke: var(--mode-on-base) !important;
+  }
+  [data-mode-switcher-panel="true"] .mode-switcher-selected-pill {
+    background-color: var(--mode-base) !important;
+    color: var(--mode-on-base) !important;
+    border: 1px solid var(--mode-base) !important;
+  }
+  [data-mode-switcher-panel="true"] [data-mode-icon-tile="gold"],
+  [data-mode-switcher-panel="true"] [data-mode-selected-pill="gold"] {
+    color: #1A1A1A !important;
+  }
+  [data-mode-switcher-panel="true"] [data-mode-icon-tile="ink"],
+  [data-mode-switcher-panel="true"] [data-mode-icon-tile="espresso"],
+  [data-mode-switcher-panel="true"] [data-mode-selected-pill="ink"],
+  [data-mode-switcher-panel="true"] [data-mode-selected-pill="espresso"] {
+    color: #FFFFFF !important;
+  }
 
   /* ----------------------------------------------------------
    * DEFENSIVE CONTRAST FLOORS (no data-surface required)

@@ -421,6 +421,8 @@ export const UI_CONTRAST_LOCK = Object.freeze({
 
   RULES: Object.freeze([
     'All button text MUST be white on dark/black backgrounds, black on light backgrounds',
+    'Same-tone active states are forbidden globally: black text/icon on black, white text/icon on champagne/gold/light, or gold/champagne text on gold/champagne must be fixed before shipping',
+    'Mode icon tiles and Selected pills MUST use the matching mode surface with explicit inverse foreground: Investor gold + ink, Broker ink + white, Developer espresso + white',
     'No gold, champagne, or low-contrast text inside buttons or CTAs',
     'text-[#1A1A1A]/70 is the absolute minimum contrast on light surfaces (4.6:1)',
     'text-[#1A1A1A]/70 is auto-bumped to text-[#1A1A1A]/70 on light surfaces via global CSS',

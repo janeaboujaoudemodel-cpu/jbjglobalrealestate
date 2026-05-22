@@ -37,26 +37,35 @@ vi.mock("sonner", () => ({
 
 const PALETTE: Record<
   UserMode,
-  { label: string; base: string; rowFrom: string; dark: string }
+  { label: string; base: string; baseDark: string; rowFrom: string; dark: string; onBase: string; surface: string }
 > = {
   investor: {
     label: "Mode: Investor",
-    base: "#F97316",       // orange chip + accent
-    rowFrom: "#FFF1E0",    // row gradient start (clearly tinted, not white)
-    dark: "#7C2D12",       // text on tinted card
+    base: "#B89555",
+    baseDark: "#8A6E3D",
+    rowFrom: "#FDFBF7",
+    dark: "#1A1A1A",
+    onBase: "#1A1A1A",
+    surface: "gold",
   },
   broker: {
     label: "Mode: Broker",
-    base: "#2563EB",
-    rowFrom: "#E8F0FE",
-    dark: "#1E3A8A",
+    base: "#1A1A1A",
+    baseDark: "#0A0A0A",
+    rowFrom: "#FDFBF7",
+    dark: "#1A1A1A",
+    onBase: "#FFFFFF",
+    surface: "ink",
   },
   // investor_broker mode removed — strictly 3 categories.
   developer: {
     label: "Mode: Developer",
-    base: "#7C3AED",
-    rowFrom: "#F1ECFE",
-    dark: "#4C1D95",
+    base: "#3A2D1D",
+    baseDark: "#1F1810",
+    rowFrom: "#FDFBF7",
+    dark: "#1A1A1A",
+    onBase: "#FFFFFF",
+    surface: "espresso",
   },
 };
 
@@ -115,11 +124,10 @@ describe("ModeSwitcher color regression", () => {
       const { base } = PALETTE[activeMode];
       const trigger = getTrigger();
 
-      // The trigger is a SOLID mode-color chip — the gradient must contain
-      // the active mode's base hex. White text/icon for high contrast.
+      // The trigger is a champagne chip with the active mode color in the inset rail.
       expect(
-        containsHex(trigger.style.backgroundImage, base),
-        `${activeMode} trigger gradient should contain ${base}, got ${trigger.style.backgroundImage}`,
+        containsHex(trigger.style.boxShadow, base),
+        `${activeMode} trigger rail should contain ${base}, got ${trigger.style.boxShadow}`,
       ).toBe(true);
       // Champagne/no-gold-fills standard: trigger text is ink (#1A1A1A), not white.
       expect(
@@ -132,8 +140,6 @@ describe("ModeSwitcher color regression", () => {
       currentMode = activeMode;
       render(<ModeSwitcher variant="header" />);
       openDropdown();
-
-      const seenBackgrounds: string[] = [];
 
       (Object.keys(PALETTE) as UserMode[]).forEach((modeKey) => {
         const p = PALETTE[modeKey];
@@ -157,16 +163,22 @@ describe("ModeSwitcher color regression", () => {
           `${p.label} row text should be ${p.dark}, got ${row.style.color}`,
         ).toBe(true);
 
-        seenBackgrounds.push(norm(row.style.backgroundImage));
-      });
+        const iconTile = row.querySelector<HTMLElement>(".mode-switcher-icon-tile");
+        expect(iconTile, `${p.label} should render a mode icon tile`).toBeTruthy();
+        expect(iconTile?.dataset.modeIconTile).toBe(p.surface);
+        expect(
+          containsHex(iconTile?.style.backgroundImage ?? "", p.base),
+          `${p.label} icon tile must use its own mode fill ${p.base}, got ${iconTile?.style.backgroundImage}`,
+        ).toBe(true);
 
-      // GUARDS the "all rows look the same" regression: every row must have
-      // a unique background. 3 categories now (investor_broker removed).
-      const unique = new Set(seenBackgrounds);
-      expect(
-        unique.size,
-        `Each mode row must have a unique background, got: ${seenBackgrounds.join(" | ")}`,
-      ).toBe(3);
+        if (modeKey === activeMode) {
+          const selected = row.querySelector<HTMLElement>(".mode-switcher-selected-pill");
+          expect(selected, `${p.label} active row should render Selected pill`).toBeTruthy();
+          expect(selected?.dataset.modeSelectedPill).toBe(p.surface);
+          expect(containsHex(selected?.style.backgroundColor ?? "", p.base)).toBe(true);
+          expect(containsHex(selected?.style.color ?? "", p.onBase)).toBe(true);
+        }
+      });
     });
   });
 
@@ -222,6 +234,7 @@ describe("ModeSwitcher color regression", () => {
       const trigger = getTrigger();
       const snapshot = {
         bgImage: trigger.style.backgroundImage,
+        shadow: trigger.style.boxShadow,
         border: trigger.style.borderColor,
         color: trigger.style.color,
       };
@@ -232,8 +245,8 @@ describe("ModeSwitcher color regression", () => {
     const reference = styles[0].snapshot;
     const { base } = PALETTE.broker;
 
-    // Reference reflects the active broker palette.
-    expect(containsHex(reference.bgImage, base)).toBe(true);
+    // Reference reflects the active broker palette in the rail, not a blacked-out chip.
+    expect(containsHex(reference.shadow, base)).toBe(true);
     expect(
       norm(reference.color) === "#1a1a1a" || norm(reference.color) === "rgb(26,26,26)",
     ).toBe(true);
