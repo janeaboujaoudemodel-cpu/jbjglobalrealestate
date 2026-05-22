@@ -159,188 +159,221 @@ export default function BrokerDashboard() {
     },
   ];
 
+  // Build 2-letter initials (e.g., "Jane Boujaoude" -> "JB")
+  const getInitials = () => {
+    const source = profile?.display_name || user?.email?.split('@')[0] || 'Broker';
+    const parts = source.replace(/[._-]+/g, ' ').trim().split(/\s+/).filter(Boolean);
+    if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+    return source.slice(0, 2).toUpperCase();
+  };
+
+  // Treat as Active unless explicitly flagged false
+  const isActive = profile?.is_active !== false;
+
+  // Premium tile classes (shared by Quick Actions + Broker Hub)
+  const tileCardCls =
+    "h-full bg-[#EFE6D6] border-2 border-[#B89555]/60 hover:border-[#B89555] hover:bg-[#F7F2EA] hover:shadow-[0_6px_20px_-8px_rgba(184,149,85,0.45)] transition-all cursor-pointer group";
+  const tileIconWrapCls =
+    "bg-[#F7F2EA] border-2 border-[#B89555]/60 rounded-xl flex items-center justify-center group-hover:border-[#B89555] group-hover:bg-[#FDFBF7] transition-colors";
+
   return (
     <div className="min-h-screen bg-background">
-      {/* Dashboard Content */}
-      <div className="container mx-auto px-4 py-12">
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={staggerContainer}
-          className="space-y-10"
-        >
-          {/* SECTION 1: Dashboard Header - Profile */}
-          <motion.div variants={fadeInUp}>
-            <Card className="bg-gradient-to-br from-zinc-900/90 via-zinc-900/80 to-black border border-[#B89555]/20">
-              <CardContent className="p-8">
-                <div className="flex flex-col md:flex-row items-center gap-6">
-                  <Avatar className="w-24 h-24 border-2 border-[#B89555]/30">
-                    <AvatarImage src={profile?.photo_url || undefined} />
-                    <AvatarFallback className="bg-[#EFE6D6]/20 text-[#1A1A1A] text-2xl">
-                      {profile?.display_name?.charAt(0) || user?.email?.charAt(0)?.toUpperCase() || 'B'}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="text-center md:text-left">
-                    <h2 className="text-2xl font-semibold text-white mb-1">
-                      {profile?.display_name || user?.email || 'Broker'}
-                    </h2>
-                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-2">
-                      <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30">
-                        {isInternalBroker ? 'JBJ Internal Broker' : 'JBJ Partner Broker'}
-                      </Badge>
-                      <Badge className={profile?.is_active ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' : 'bg-amber-500/20 text-amber-300 border-amber-500/30'}>
-                        {profile?.is_active ? 'Active' : 'Pending'}
-                      </Badge>
-                    </div>
-                    {profile?.title && (
-                      <p className="text-white/70 text-sm">{profile.title}</p>
-                    )}
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={staggerContainer}
+        className="w-full space-y-10 pb-12"
+      >
+        {/* SECTION 1: Dashboard Header - Profile (edge-to-edge, premium champagne) */}
+        <motion.div variants={fadeInUp}>
+          <div className="w-full bg-gradient-to-r from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] border-y-2 border-[#B89555]/40">
+            <div className="px-6 md:px-10 py-8">
+              <div className="flex flex-col md:flex-row items-center gap-6">
+                <Avatar className="w-24 h-24 border-2 border-[#B89555] shadow-[0_4px_18px_-6px_rgba(184,149,85,0.45)]">
+                  <AvatarImage src={profile?.photo_url || undefined} />
+                  <AvatarFallback className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] text-[#B89555] text-2xl font-semibold tracking-wide">
+                    {getInitials()}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="text-center md:text-left flex-1">
+                  <h2 className="text-2xl font-semibold text-[#1A1A1A] mb-1">
+                    {profile?.display_name || user?.email || 'Broker'}
+                  </h2>
+                  <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-2">
+                    <Badge className="bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/60 hover:bg-[#FDFBF7]">
+                      {isInternalBroker ? 'JBJ Internal Broker' : 'JBJ Partner Broker'}
+                    </Badge>
+                    <Badge className={isActive
+                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-600/40 hover:bg-emerald-50'
+                      : 'bg-amber-50 text-amber-700 border border-amber-600/40 hover:bg-amber-50'}>
+                      {isActive ? 'Active' : 'Pending'}
+                    </Badge>
                   </div>
+                  {profile?.title && (
+                    <p className="text-[#1A1A1A]/70 text-sm">{profile.title}</p>
+                  )}
                 </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          {/* SECTION 2: Quick Actions */}
-          <motion.div variants={fadeInUp}>
-            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <LayoutDashboard className="w-5 h-5 text-[#1A1A1A]" />
-              Quick Actions
-            </h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-              {filteredActions.map((action, index) => (
-                <Link key={index} to={action.href}>
-                  <Card className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 hover:border-[#B89555] transition-all cursor-pointer group">
-                    <CardContent className="p-4 text-center">
-                      <div className="w-12 h-12 bg-[#1A1A1A] border border-[#B89555]/30 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-[#EFE6D6]/10 transition-colors">
-                        <action.icon className="w-6 h-6 text-[#1A1A1A]" />
-                      </div>
-                      <h4 className="text-sm font-semibold text-foreground mb-1 group-hover:text-[#1A1A1A] transition-colors">
-                        {action.title}
-                      </h4>
-                      <p className="text-xs text-muted-foreground line-clamp-2">
-                        {action.description}
-                      </p>
-                    </CardContent>
-                  </Card>
-                </Link>
-              ))}
+              </div>
             </div>
-          </motion.div>
+          </div>
+        </motion.div>
 
-          {/* SECTION 3: Performance Overview */}
-          <motion.div variants={fadeInUp}>
-            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-[#1A1A1A]" />
-              Performance Overview
-            </h3>
-            <div className={`grid grid-cols-2 ${isInternalBroker ? 'md:grid-cols-3 lg:grid-cols-6' : 'md:grid-cols-4'} gap-4`}>
-              {performanceBlocks.map((block, index) => (
-                <Card key={index} className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30">
+        <div className="px-6 md:px-10 space-y-10">
+
+        {/* SECTION 2: Quick Actions */}
+        <motion.div variants={fadeInUp}>
+          <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+            <LayoutDashboard className="w-5 h-5 text-[hsl(var(--gold))]" strokeWidth={2.5} />
+            Quick Actions
+          </h3>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {filteredActions.map((action, index) => (
+              <Link key={index} to={action.href}>
+                <Card className={tileCardCls}>
                   <CardContent className="p-4 text-center">
-                    <block.icon className="w-6 h-6 text-[#1A1A1A] mx-auto mb-2" />
-                    <p className="text-2xl font-bold text-foreground">{block.value}</p>
-                    <p className="text-xs text-muted-foreground">{block.label}</p>
+                    <div className={`w-12 h-12 mx-auto mb-3 ${tileIconWrapCls}`}>
+                      <action.icon className="w-6 h-6 text-[#1A1A1A]" strokeWidth={2.5} />
+                    </div>
+                    <h4 className="text-sm font-semibold text-[#1A1A1A] mb-1">
+                      {action.title}
+                    </h4>
+                    <p className="text-xs text-[#1A1A1A]/70 line-clamp-2">
+                      {action.description}
+                    </p>
                   </CardContent>
                 </Card>
-              ))}
-            </div>
-          </motion.div>
+              </Link>
+            ))}
+          </div>
+        </motion.div>
 
-          {/* SECTION 4: Tasks & Reminders */}
-          <motion.div variants={fadeInUp}>
-            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <CheckSquare className="w-5 h-5 text-[#1A1A1A]" />
-              Tasks & Reminders
-            </h3>
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30">
-              <CardContent className="p-6">
-                <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                  <div className="text-center md:text-left">
-                    <p className="text-muted-foreground mb-2">
-                      Access your tasks, notes, and reminders from the Notes & Calendar system.
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      Reminders can be delivered in-platform, via email, or WhatsApp (if enabled).
-                    </p>
+        {/* SECTION 3: Performance Overview */}
+        <motion.div variants={fadeInUp}>
+          <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+            <TrendingUp className="w-5 h-5 text-[hsl(var(--gold))]" strokeWidth={2.5} />
+            Performance Overview
+          </h3>
+          <div className={`grid grid-cols-2 ${isInternalBroker ? 'md:grid-cols-3 lg:grid-cols-6' : 'md:grid-cols-4'} gap-4`}>
+            {performanceBlocks.map((block, index) => (
+              <Card key={index} className="relative overflow-hidden bg-[#EFE6D6] border-2 border-[#B89555]/60 hover:border-[#B89555] hover:shadow-[0_6px_20px_-8px_rgba(184,149,85,0.45)] transition-all">
+                <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-transparent via-[#B89555] to-transparent" />
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="w-10 h-10 rounded-lg bg-[#F7F2EA] border-2 border-[#B89555]/60 flex items-center justify-center">
+                      <block.icon className="w-5 h-5 text-[#1A1A1A]" strokeWidth={2.5} />
+                    </div>
+                    <span className="text-[10px] uppercase tracking-wider font-semibold text-[#B89555]">
+                      Live
+                    </span>
                   </div>
-                  <div className="flex flex-wrap gap-2">
-                    <Link to="/crm-notes">
-                      <Button variant="secondary" size="sm">
-                        <FileText className="w-4 h-4 mr-2" />
-                        View Notes
-                      </Button>
-                    </Link>
-                    <Link to="/crm-reminders">
-                      <Button variant="secondary" size="sm">
-                        <Bell className="w-4 h-4 mr-2" />
-                        Reminders
-                      </Button>
-                    </Link>
-                    <Link to="/crm-calendar">
-                      <Button variant="secondary" size="sm">
-                        <Calendar className="w-4 h-4 mr-2" />
-                        Calendar
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
+                  <p className="text-2xl font-bold text-[#1A1A1A] leading-tight">{block.value}</p>
+                  <p className="text-xs text-[#1A1A1A]/70 mt-1">{block.label}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </motion.div>
 
-          {/* SECTION 5: Notifications */}
-          <motion.div variants={fadeInUp}>
-            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <Bell className="w-5 h-5 text-[#1A1A1A]" />
-              Notifications
-            </h3>
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30">
-              <CardContent className="p-6">
-                <div className="text-center py-8">
-                  <Bell className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
-                  <p className="text-muted-foreground">No new notifications</p>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Approval updates, listing status, and education progress will appear here.
+        {/* SECTION 4: Tasks & Reminders */}
+        <motion.div variants={fadeInUp}>
+          <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+            <CheckSquare className="w-5 h-5 text-[hsl(var(--gold))]" strokeWidth={2.5} />
+            Tasks & Reminders
+          </h3>
+          <Card className="bg-[#EFE6D6] border-2 border-[#B89555]/60">
+            <CardContent className="p-6">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div className="text-center md:text-left">
+                  <p className="text-[#1A1A1A]/80 mb-2">
+                    Access your tasks, notes, reminders, and internal JBJ messages — all in one place.
+                  </p>
+                  <p className="text-sm text-[#1A1A1A]/60">
+                    Reminders can be delivered in-platform, via email, or WhatsApp (if enabled).
                   </p>
                 </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          {/* Broker Hub Links */}
-          <motion.div variants={fadeInUp}>
-            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <Briefcase className="w-5 h-5 text-[#1A1A1A]" />
-              Broker Hub
-            </h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {brokerHubLinks.map((link, index) => (
-                <Link key={index} to={link.href}>
-                  <Card className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 hover:border-[#B89555] transition-all cursor-pointer group">
-                    <CardContent className="p-5">
-                      <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 bg-[#1A1A1A] border border-[#B89555]/30 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-[#EFE6D6]/10 transition-colors">
-                          <link.icon className="w-5 h-5 text-[#1A1A1A]" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="font-semibold text-foreground group-hover:text-[#1A1A1A] transition-colors">
-                            {link.title}
-                          </h4>
-                          <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
-                            {link.description}
-                          </p>
-                        </div>
-                        <ArrowRight className="w-4 h-4 text-[#1A1A1A] opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1" />
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-              ))}
-            </div>
-          </motion.div>
+                <div className="flex flex-wrap gap-2 justify-center">
+                  <Link to="/crm-notes">
+                    <Button variant="outline" size="sm" className="border-2 border-[#B89555]/60 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#FDFBF7] hover:border-[#B89555]">
+                      <FileText className="w-4 h-4 mr-2" strokeWidth={2.5} />
+                      View Notes
+                    </Button>
+                  </Link>
+                  <Link to="/crm-reminders">
+                    <Button variant="outline" size="sm" className="border-2 border-[#B89555]/60 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#FDFBF7] hover:border-[#B89555]">
+                      <Bell className="w-4 h-4 mr-2" strokeWidth={2.5} />
+                      Reminders
+                    </Button>
+                  </Link>
+                  <Link to="/inbox">
+                    <Button variant="outline" size="sm" className="border-2 border-[#B89555]/60 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#FDFBF7] hover:border-[#B89555]">
+                      <Mail className="w-4 h-4 mr-2" strokeWidth={2.5} />
+                      My Inbox
+                    </Button>
+                  </Link>
+                  <Link to="/crm-calendar">
+                    <Button variant="outline" size="sm" className="border-2 border-[#B89555]/60 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#FDFBF7] hover:border-[#B89555]">
+                      <Calendar className="w-4 h-4 mr-2" strokeWidth={2.5} />
+                      Calendar
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </motion.div>
-      </div>
+
+        {/* SECTION 5: Notifications */}
+        <motion.div variants={fadeInUp}>
+          <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+            <Bell className="w-5 h-5 text-[hsl(var(--gold))]" strokeWidth={2.5} />
+            Notifications
+          </h3>
+          <Card className="bg-[#EFE6D6] border-2 border-[#B89555]/60">
+            <CardContent className="p-6">
+              <div className="text-center py-8">
+                <Bell className="w-10 h-10 text-[#1A1A1A]/50 mx-auto mb-3" strokeWidth={2} />
+                <p className="text-[#1A1A1A]/80">No new notifications</p>
+                <p className="text-sm text-[#1A1A1A]/60 mt-1">
+                  Approval updates, listing status, and education progress will appear here.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        {/* Broker Hub Links */}
+        <motion.div variants={fadeInUp}>
+          <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+            <Briefcase className="w-5 h-5 text-[hsl(var(--gold))]" strokeWidth={2.5} />
+            Broker Hub
+          </h3>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {brokerHubLinks.map((link, index) => (
+              <Link key={index} to={link.href}>
+                <Card className={tileCardCls}>
+                  <CardContent className="p-5">
+                    <div className="flex items-start gap-3">
+                      <div className={`w-10 h-10 flex-shrink-0 ${tileIconWrapCls}`}>
+                        <link.icon className="w-5 h-5 text-[#1A1A1A]" strokeWidth={2.5} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-semibold text-[#1A1A1A]">
+                          {link.title}
+                        </h4>
+                        <p className="text-xs text-[#1A1A1A]/70 mt-1 line-clamp-2">
+                          {link.description}
+                        </p>
+                      </div>
+                      <ArrowRight className="w-4 h-4 text-[#B89555] opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1" strokeWidth={2.5} />
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </motion.div>
+        </div>
+      </motion.div>
     </div>
   );
 }
