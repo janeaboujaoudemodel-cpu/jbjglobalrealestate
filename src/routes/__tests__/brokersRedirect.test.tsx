@@ -10,12 +10,12 @@
  */
 import { describe, it, expect } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
-import { MemoryRouter, Routes, Route } from "react-router-dom";
+import { MemoryRouter, Routes, Route, useLocation } from "react-router-dom";
 import { RedirectWithSearch } from "@/routes/RedirectWithSearch";
 
 function TeamProbe() {
-  // Surfaces the location so the test can assert on path + search + hash.
-  const url = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+  const loc = useLocation();
+  const url = `${loc.pathname}${loc.search}${loc.hash}`;
   return <div data-testid="team-url">{url}</div>;
 }
 
