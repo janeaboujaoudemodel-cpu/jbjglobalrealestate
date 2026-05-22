@@ -204,12 +204,25 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
           <div className="min-w-0 flex-1">
             <div className="text-sm font-semibold text-[#1A1A1A] truncate">{displayName}</div>
             <div className="text-[11px] text-[#1A1A1A]/55 truncate">{user.email}</div>
+            {roleLabel && (
+              <span className="inline-flex items-center mt-1 px-1.5 py-[1px] rounded-full text-[10px] font-semibold uppercase tracking-[0.08em] text-[#1A1A1A] bg-[#EFE6D6] border border-[#B89555]/40">
+                {roleLabel}
+              </span>
+            )}
           </div>
         </div>
         <DropdownMenuSeparator className="bg-[#EFE6D6] my-1" />
 
+        {/* Dashboard — click parent goes to dashboard home; hovering opens submenu */}
         <DropdownMenuSub>
-          <DropdownMenuSubTrigger className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 focus:bg-[#F7F2EA] data-[highlighted]:bg-[#F7F2EA] data-[state=open]:bg-[#F7F2EA]">
+          <DropdownMenuSubTrigger
+            onClick={(e) => {
+              // allow direct navigation to dashboard home on click
+              e.preventDefault();
+              navigate(dashboardHref);
+            }}
+            className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 focus:bg-[#F7F2EA] data-[highlighted]:bg-[#F7F2EA] data-[state=open]:bg-[#F7F2EA]"
+          >
             <span className="flex items-center gap-2.5 w-full">
               <LayoutDashboard className="w-4 h-4 text-[#1A1A1A]/70 shrink-0" strokeWidth={1.75} />
               <span className="text-sm font-medium text-[#1A1A1A] flex-1">Dashboard</span>
