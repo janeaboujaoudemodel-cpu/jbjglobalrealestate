@@ -211,13 +211,22 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         {/* Image with Carousel — 16:10 landscape */}
         <div className="aspect-[16/10] overflow-hidden relative" data-surface="ink">
           {/* Developer Logo Overlay - Top Left */}
-          {getDeveloperLogoUrl(project.developer) && (
+          {/* Developer mark overlay (logo if available, else name plate) */}
+          {hasDevMark && (
             <div className="absolute top-3 left-3 z-20">
-              <DeveloperLogo
-                src={getDeveloperLogoUrl(project.developer)}
-                alt={project.developer?.name || "Developer"}
-                variant="bare"
-              />
+              {hasDevLogo ? (
+                <DeveloperLogo
+                  src={devLogoUrl}
+                  alt={devName || "Developer"}
+                  variant="bare"
+                />
+              ) : (
+                <DeveloperLogo
+                  variant="nameplate"
+                  name={devName}
+                  alt={devName || "Developer"}
+                />
+              )}
             </div>
           )}
 
