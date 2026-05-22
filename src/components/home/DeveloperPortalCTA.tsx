@@ -120,13 +120,18 @@ const brokerShortcuts = [
 
 const DeveloperPortalCTA = () => {
   const { user } = useAuth();
-  const { data: status, isLoading } = useDevRegistration();
-  const { isDeveloperMode, isInvestorMode, isBrokerMode } = useUserModeContext();
+  const { isLoading: isModeLoading, isDeveloperMode, isInvestorMode, isBrokerMode } = useUserModeContext();
 
+  // Per-category registration probes. Only the probe matching the active mode
+  // actually fires (others are disabled below).
+  const devReg = useDevRegistration();
+  const brokerReg = useBrokerRegistration();
+  const investorReg = useInvestorRegistration();
+
+  const status = devReg.data ?? null;
   const isApproved = status === "approved";
   const isPending = status === "pending" || status === "under_review";
   const isRejected = status === "rejected";
-  const isUnregistered = !status && !isLoading;
 
   const storageKey = user ? `dev-approval-seen-${user.id}` : null;
   const [hasSeenApproval, setHasSeenApproval] = useState(true);
@@ -174,8 +179,21 @@ const DeveloperPortalCTA = () => {
     </div>
   );
 
-  // Investor mode — show investor opportunities instead
-  if (isInvestorMode && !isDeveloperMode) {
+  // ─────────────────────────────────────────────────────────────────────
+  // STRICT GATING — render nothing until we know exactly what to show.
+  // The section is empty until:
+  //   • the user is signed in
+  //   • mode is loaded
+  //   • the per-category registration probe for the active mode resolved
+  //   • the user has actually registered for that category
+  // No "Developer Center" leaks when the user is browsing in broker mode.
+  // ─────────────────────────────────────────────────────────────────────
+  if (!user || isModeLoading) return null;
+
+  // INVESTOR
+  if (isInvestorMode) {
+    if (investorReg.isLoading) return null;
+    if (!investorReg.data) return null;
     return (
       <section className="py-8 md:py-10 bg-[#FDFBF7]">
         <div className="container mx-auto px-4">
@@ -183,7 +201,7 @@ const DeveloperPortalCTA = () => {
             <div className="flex items-end justify-between mb-3">
               <div>
                 <h2 className="text-lg md:text-xl font-bold text-[#1A1A1A] leading-tight">
-                  Investor Opportunities
+                  Investor Portal
                 </h2>
                 <p className="text-[#1A1A1A]/70 text-xs mt-0.5">
                   Tools, insights & exclusive access for smart investors.
@@ -197,6 +215,35 @@ const DeveloperPortalCTA = () => {
     );
   }
 
+  // BROKER
+  if (isBrokerMode) {
+    if (brokerReg.isLoading) return null;
+    if (!brokerReg.data) return null;
+    return (
+      <section className="py-8 md:py-10 bg-[#FDFBF7]">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="flex items-end justify-between mb-3">
+              <div>
+                <h2 className="text-lg md:text-xl font-bold text-[#1A1A1A] leading-tight">
+                  Broker Portal
+                </h2>
+                <p className="text-[#1A1A1A]/70 text-xs mt-0.5">
+                  Your dashboard, CRM, academy and AI sales tools.
+                </p>
+              </div>
+            </div>
+            <ShortcutRow items={brokerShortcuts} />
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // DEVELOPER — must be in developer mode AND have a registration row
+  if (!isDeveloperMode) return null;
+  if (devReg.isLoading) return null;
+  if (!status) return null; // no developer_registrations row — render nothing
 
   return (
     <section className="py-8 md:py-10 bg-[#FDFBF7]">
@@ -270,30 +317,6 @@ const DeveloperPortalCTA = () => {
                 <Link to="/contact">
                   <Button variant="secondary" className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#F7F2EA]">
                     Contact Support
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          )}
-
-          {(isUnregistered || (!user && !isLoading)) && (
-            <div className="max-w-2xl mx-auto">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
-                {devBenefits.map((b, i) => (
-                  <div key={i} className="flex items-center gap-3 p-3 rounded-lg bg-[#F7F2EA] border border-[#B89555]/30">
-                    <div className="w-8 h-8 rounded-full bg-[#F7F2EA] border border-[#B89555]/30 flex items-center justify-center shrink-0">
-                      <CheckCircle2 className="w-4 h-4 text-[#1A1A1A]" />
-                    </div>
-                    <span className="text-[#1A1A1A] text-sm">{b.label}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="text-center">
-                <Link to={user ? "/developer-hub" : "/auth?redirect=/developer-hub"}>
-                  <Button className="bg-[#1A1A1A] text-white font-bold px-8 py-3 text-sm hover:bg-[#1A1A1A] transition-all">
-                    <UserCheck className="w-4 h-4 mr-2" />
-                    Register Now as Developer or Sales Representative
-                    <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </Link>
               </div>
