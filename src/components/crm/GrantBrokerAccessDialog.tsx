@@ -526,9 +526,6 @@ export default function GrantBrokerAccessDialog({
               </p>
             </div>
 
-            <p className="text-[10px] text-[#1A1A1A]/60 leading-relaxed">
-              Owner edits remain invisible to the broker unless this grant is set to bidirectional or you explicitly share individual leads.
-            </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
               {[
                 { k: "notes", label: "Allow notes", val: visibleNotes, set: setVisibleNotes },
@@ -553,8 +550,9 @@ export default function GrantBrokerAccessDialog({
           </div>
 
 
-
+          <div>
             <Label className="text-xs text-[#1A1A1A]/80">Expires (optional)</Label>
+
             <DatePopover
               value={expiresAt}
               onChange={setExpiresAt}
