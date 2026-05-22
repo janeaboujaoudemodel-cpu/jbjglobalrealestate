@@ -1143,7 +1143,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors border ${sectionHighlighted ? 'bg-[hsl(var(--gold))]/20 border-[hsl(var(--gold))]/70' : 'bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/40 group-hover:bg-[hsl(var(--gold))]/15 group-hover:border-[hsl(var(--gold))]/65'}`}>
                       <SectionIcon className="w-3 h-3 text-[hsl(var(--gold))]" />
                     </div>
-                    <span className="flex-1 text-left">{sectionKey}</span>
+                    <span className="flex-1 text-left relative after:content-[''] after:absolute after:bottom-[-2px] after:left-0 after:h-[1.5px] after:bg-[#B89555] after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-full">{sectionKey}</span>
                     <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'} ${sectionHighlighted ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/70'}`} />
                     {!isOpen && hasActiveChild && (
                       <span className="w-1.5 h-1.5 rounded-full bg-[#EFE6D6] animate-pulse" />
