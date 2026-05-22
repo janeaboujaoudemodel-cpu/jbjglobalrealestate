@@ -224,32 +224,31 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       <div data-chrome="header" className="sm:hidden">
         <GlobalHeader forceSolid={needsHeaderSpacing} />
       </div>
-      {!isBackOfficeRoute && (
-        <>
-          <div data-chrome="sidebar" className="hidden sm:block fixed left-0 top-0 h-screen z-[9997]">
-            <Suspense fallback={
-              <div
-                aria-hidden="true"
-                className="h-screen bg-gradient-to-b from-[#F7F1E6] to-[#ECE2D2] border-r border-[hsl(var(--gold)/0.25)] [body.jj-vertical-nav-active_&]:w-[200px] [body.jj-vertical-nav-collapsed_&]:w-[48px] w-[200px]"
-              />
-            }>
-              <GlobalVerticalNav />
-            </Suspense>
-          </div>
-          <div data-chrome="utility-bar" className="hidden sm:block">
-            <Suspense fallback={
-              <div
-                aria-hidden="true"
-                className="fixed top-0 right-0 h-[88px] z-[9998] bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-b border-[hsl(var(--gold)/0.25)] shadow-[0_1px_3px_hsl(var(--gold)/0.12)] [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px] left-[200px]"
-              />
-            }>
-              <HorizontalUtilityBar />
-            </Suspense>
-          </div>
-        </>
-      )}
+      <>
+        <div data-chrome="sidebar" className="hidden sm:block fixed left-0 top-0 h-screen z-[9997]">
+          <Suspense fallback={
+            <div
+              aria-hidden="true"
+              className="h-screen bg-gradient-to-b from-[#F7F1E6] to-[#ECE2D2] border-r border-[hsl(var(--gold)/0.25)] [body.jj-vertical-nav-active_&]:w-[200px] [body.jj-vertical-nav-collapsed_&]:w-[48px] w-[200px]"
+            />
+          }>
+            <GlobalVerticalNav />
+          </Suspense>
+        </div>
+        <div data-chrome="utility-bar" className="hidden sm:block">
+          <Suspense fallback={
+            <div
+              aria-hidden="true"
+              className="fixed top-0 right-0 h-[88px] z-[9998] bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-b border-[hsl(var(--gold)/0.25)] shadow-[0_1px_3px_hsl(var(--gold)/0.12)] [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px] left-[200px]"
+            />
+          }>
+            <HorizontalUtilityBar />
+          </Suspense>
+        </div>
+      </>
       <GlobalContactGating>
-        <main className={`w-full max-w-full overflow-x-hidden bg-background transition-all duration-300 ${!isBackOfficeRoute ? "[body.jj-vertical-nav-active_&]:sm:pl-[200px] [body.jj-vertical-nav-collapsed_&]:sm:pl-[48px]" : ""} ${needsHeaderSpacing ? "pt-24 sm:pt-[88px]" : "sm:pt-[88px] pt-0"}`}>
+        <main className={`w-full max-w-full overflow-x-hidden bg-background transition-all duration-300 [body.jj-vertical-nav-active_&]:sm:pl-[200px] [body.jj-vertical-nav-collapsed_&]:sm:pl-[48px] ${needsHeaderSpacing ? "pt-24 sm:pt-[88px]" : "sm:pt-[88px] pt-0"}`}>
+
           {layoutGuardTriggered && isServiceRoute && (
             <div role="alert" className="mx-auto mt-4 w-full max-w-6xl px-4 sm:px-6 lg:px-8">
               <div className="rounded-lg border border-destructive/30 bg-background/95 px-4 py-3 text-sm text-foreground shadow-sm backdrop-blur">
