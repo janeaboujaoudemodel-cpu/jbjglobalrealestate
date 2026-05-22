@@ -53,21 +53,21 @@ export function ToolkitShowcaseCard() {
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="rounded-2xl overflow-hidden border border-[#B89555]/30 bg-[#F7F2EA]">
           {/* Header - Premium Banner */}
-          <div className="bg-[#EFE6D6] p-6 md:p-8 border-b border-[#B89555]/30">
-            <div className="flex flex-col items-center text-center gap-3">
+          <div className="bg-[#EFE6D6] px-6 md:px-8 pt-8 md:pt-10 pb-8 md:pb-10 border-b border-[#B89555]/30">
+            <div className="flex flex-col items-center text-center gap-4 max-w-2xl mx-auto">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FDFBF7] border border-[#B89555]/40 text-[#1A1A1A] text-xs font-semibold uppercase tracking-[0.2em]">
                 <Sparkles className="w-3 h-3 text-[#B89555]" />
                 Free Professional Tools
               </div>
+
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#1A1A1A] tracking-tight">
+                JBJ Royal Tools Hub
+              </h2>
+
+              <p className="text-sm md:text-base text-[#1A1A1A]/75 leading-relaxed">
+                Powerful real estate tools for property valuation, comparison, mortgage calculation, and AI-powered enhancements — all completely free to use.
+              </p>
             </div>
-
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#1A1A1A] mb-2">
-              JBJ Royal Tools Hub
-            </h2>
-
-            <p className="text-sm text-[#1A1A1A]/75 md:text-base max-w-2xl">
-              Powerful real estate tools for property valuation, comparison, mortgage calculation, and AI-powered enhancements — all completely free to use.
-            </p>
           </div>
 
           {/* Tools Grid */}
@@ -118,10 +118,10 @@ export function ToolkitShowcaseCard() {
               <Link to="/ai-hub">
                 <Button
                   size="lg"
-                  className="gap-3 px-10 py-6 text-base font-bold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:from-[#F7F2EA] hover:to-[#EFE6D6] text-[#1A1A1A] rounded-xl border border-[#B89555]/70 hover:border-[#B89555] shadow-[0_10px_32px_-12px_rgba(184,149,85,0.4)] hover:shadow-[0_14px_44px_-10px_rgba(184,149,85,0.55)] hover:scale-[1.02] transition-all duration-300"
+                  className="gap-3 px-10 py-6 text-base font-bold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:from-[#F7F2EA] hover:to-[#EFE6D6] !text-[#1A1A1A] [&]:text-[#1A1A1A] rounded-xl border border-[#B89555]/70 hover:border-[#B89555] shadow-[0_10px_32px_-12px_rgba(184,149,85,0.4)] hover:shadow-[0_14px_44px_-10px_rgba(184,149,85,0.55)] hover:scale-[1.02] transition-all duration-300"
                 >
                   <Crown className="w-5 h-5 text-[#B89555]" />
-                  Explore All Our Tools Now
+                  <span className="text-[#1A1A1A]">Explore All Our Tools Now</span>
                   <ArrowRight className="w-5 h-5 text-[#B89555]" strokeWidth={2.5} />
                 </Button>
               </Link>

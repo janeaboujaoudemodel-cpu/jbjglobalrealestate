@@ -1,0 +1,1 @@
+UPDATE public.ai_tool_visibility SET visibility = 'public', is_public = true WHERE tool_id = 'interior-design';
