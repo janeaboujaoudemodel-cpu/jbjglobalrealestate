@@ -60,6 +60,37 @@ export default function DeveloperEnrichmentQueue() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const rebuildAllBroken = useMutation({
+    mutationFn: async (limit: number) => {
+      const { data: broken, error: e1 } = await supabase
+        .from("developers")
+        .select("id")
+        .or("logo_url.is.null,logo_url.eq.,description.is.null")
+        .eq("is_hidden", false)
+        .order("rank", { ascending: false, nullsFirst: false })
+        .limit(limit);
+      if (e1) throw e1;
+      const ids = (broken ?? []).map((d) => d.id);
+      if (!ids.length) return { count: 0 };
+      // batch 5 at a time to respect Firecrawl rate
+      let done = 0;
+      for (let i = 0; i < ids.length; i += 5) {
+        const slice = ids.slice(i, i + 5);
+        const { error } = await supabase.functions.invoke("developer-site-rebuild", {
+          body: { developer_ids: slice, preview: true },
+        });
+        if (error) throw error;
+        done += slice.length;
+      }
+      return { count: done };
+    },
+    onSuccess: (r) => {
+      toast.success(`Staged ${r.count} developer(s) for review`);
+      qc.invalidateQueries({ queryKey: ["dev-enrichment-logs"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   const decide = useMutation({
     mutationFn: async ({ log_id, action }: { log_id: string; action: "approve" | "reject" }) => {
       const { data, error } = await supabase.functions.invoke("apply-developer-enrichment", {
