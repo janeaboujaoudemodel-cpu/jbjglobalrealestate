@@ -132,15 +132,29 @@ export default function HorizontalUtilityBar() {
           </Tooltip>
 
           {/* Sq ft / Sq m */}
-          <div className="hidden sm:inline-flex items-center h-7 rounded-full border border-[#1A1A1A]/15 overflow-hidden bg-white/40">
+          <div
+            data-no-contrast-guard
+            data-surface="light"
+            className="hidden sm:inline-flex items-center h-7 rounded-full border border-[#1A1A1A]/15 overflow-hidden bg-white/60"
+          >
             <button
+              data-no-contrast-guard
               onClick={() => { if (areaUnit !== 'sqft') toggleAreaUnit(); }}
-              className={`px-2.5 h-full text-[10.5px] font-semibold tracking-wide transition-colors ${areaUnit === 'sqft' ? 'bg-[#1A1A1A] text-white' : 'text-[#1A1A1A]/65 hover:text-[#1A1A1A]'}`}
+              style={{
+                backgroundColor: areaUnit === 'sqft' ? '#1A1A1A' : 'transparent',
+                color: areaUnit === 'sqft' ? '#FFFFFF' : '#1A1A1A',
+              }}
+              className="px-2.5 h-full text-[10.5px] font-semibold tracking-wide transition-colors"
               aria-label="Square feet"
             >sq ft</button>
             <button
+              data-no-contrast-guard
               onClick={() => { if (areaUnit !== 'sqm') toggleAreaUnit(); }}
-              className={`px-2.5 h-full text-[10.5px] font-semibold tracking-wide transition-colors ${areaUnit === 'sqm' ? 'bg-[#1A1A1A] text-white' : 'text-[#1A1A1A]/65 hover:text-[#1A1A1A]'}`}
+              style={{
+                backgroundColor: areaUnit === 'sqm' ? '#1A1A1A' : 'transparent',
+                color: areaUnit === 'sqm' ? '#FFFFFF' : '#1A1A1A',
+              }}
+              className="px-2.5 h-full text-[10.5px] font-semibold tracking-wide transition-colors"
               aria-label="Square meters"
             >sq m</button>
           </div>

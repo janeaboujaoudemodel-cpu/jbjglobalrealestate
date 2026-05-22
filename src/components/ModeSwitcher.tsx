@@ -257,14 +257,14 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                 backgroundImage: isHovered
                   ? `linear-gradient(135deg, ${config.rowTo} 0%, ${config.rowHover} 100%)`
                   : `linear-gradient(135deg, ${config.rowFrom} 0%, ${config.rowTo} 100%)`,
-                borderColor: config.base,
+                borderColor: isActive ? config.base : 'rgba(184,149,85,0.25)',
                 color: config.dark,
-                // 4px inset left accent bar + (when active) a single solid
-                // outer ring in the mode color (no white gap) so the border
-                // hugs the card edge cleanly.
+                // Thin 1px outer ring when active, plus the 3px inset left rail
+                // in the mode tone. Keeps the card clearly active without a
+                // chunky black box around it.
                 boxShadow: isActive
-                  ? `inset 4px 0 0 ${config.base}, 0 0 0 3px ${config.base}`
-                  : `inset 4px 0 0 ${config.base}`,
+                  ? `inset 3px 0 0 ${config.base}, 0 0 0 1px ${config.base}`
+                  : `inset 3px 0 0 ${config.base}`,
                 transform: 'none',
               };
 
@@ -290,12 +290,13 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                     "focus:outline-none",
                   )}
                 >
-                  {/* Saturated icon badge with halo */}
+                  {/* Uniform ink icon badge — white icon always reads crisp.
+                      Mode identity is carried by the left rail + active ring. */}
                   <div
                     className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
                     style={{
-                      backgroundImage: `linear-gradient(135deg, ${config.base} 0%, ${config.baseDark} 100%)`,
-                      boxShadow: `0 0 0 4px ${config.base}22, 0 2px 6px ${config.base}55`,
+                      backgroundImage: 'linear-gradient(135deg, #1A1A1A 0%, #0A0A0A 100%)',
+                      boxShadow: `0 0 0 3px ${config.base}22, 0 2px 6px rgba(0,0,0,0.18)`,
                     }}
                   >
                     <Icon className="w-[18px] h-[18px]" style={{ color: '#FFFFFF' }} />
