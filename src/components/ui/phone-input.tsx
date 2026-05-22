@@ -524,12 +524,17 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
     const popoverStyles = isLight
       ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50"
       : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50";
-    const commandStyles = isLight
-      ? "bg-transparent"
-      : "bg-transparent";
-    const commandInputStyles = isLight
-      ? "text-[#1A1A1A] border-[#B89555]/40"
-      : "text-[#1A1A1A] border-[#B89555]/40";
+    // Make the cmdk search row full-bleed (no inner px gutter) so the input visually fills
+    // the popover edge-to-edge instead of leaving a champagne strip on the right.
+    const commandStyles =
+      "bg-transparent " +
+      "[&_[cmdk-input-wrapper]]:px-4 [&_[cmdk-input-wrapper]]:py-1 " +
+      "[&_[cmdk-input-wrapper]]:border-b [&_[cmdk-input-wrapper]]:border-[#B89555]/40 " +
+      "[&_[cmdk-input-wrapper]]:bg-[#FDFBF7]/70 " +
+      "[&_[cmdk-input-wrapper]_svg]:text-[#1A1A1A]/60";
+    const commandInputStyles =
+      "w-full bg-transparent text-[#1A1A1A] placeholder:text-[#1A1A1A]/60 border-0";
+
     const commandItemStyles = isLight
       ? "text-[#1A1A1A] hover:bg-[#EFE6D6]/20 data-[selected=true]:bg-[#EFE6D6]/30 data-[selected=true]:text-[#1A1A1A]"
       : "text-[#1A1A1A] hover:bg-[#EFE6D6]/20 data-[selected=true]:bg-[#EFE6D6]/30 data-[selected=true]:text-[#1A1A1A]";
