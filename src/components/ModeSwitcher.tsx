@@ -279,17 +279,20 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                     "focus:outline-none",
                   )}
                 >
-                  {/* Uniform ink icon badge — white icon always reads crisp.
-                      Mode identity is carried by the left rail + active ring. */}
+                  {/* Uniform ink icon badge with champagne-gold hairline ring.
+                      Icon stays crisp white on both default and hover; opt-out of
+                      the global white-icon contrast guard since the badge is dark. */}
                   <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                    data-no-contrast-guard
+                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 allow-white"
                     style={{
                       backgroundImage: 'linear-gradient(135deg, #1A1A1A 0%, #0A0A0A 100%)',
-                      boxShadow: `0 0 0 3px ${config.base}22, 0 2px 6px rgba(0,0,0,0.18)`,
+                      boxShadow: '0 0 0 1px #B89555, 0 2px 6px rgba(0,0,0,0.22)',
                     }}
                   >
-                    <Icon className="w-[18px] h-[18px]" style={{ color: '#FFFFFF' }} />
+                    <Icon data-no-contrast-guard className="w-[18px] h-[18px] allow-white" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} strokeWidth={2} />
                   </div>
+
 
                   <div className="flex-1 min-w-0">
                     <p className="text-[13px] font-bold leading-tight" style={{ color: config.dark }}>
