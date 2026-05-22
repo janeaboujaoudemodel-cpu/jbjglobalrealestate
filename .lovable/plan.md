@@ -1,54 +1,44 @@
-## Objective
-Restyle the JBJ Royal Tools Hub section on the homepage so all tool cards and CTA buttons use a unified premium champagne-gold aesthetic (no black fills), and ensure exactly 8 tools render in a 4-per-row, 2-row grid.
+## What's broken
 
-## Current State
-- `ToolkitShowcaseCard.tsx` renders tool cards with per-tool colorful icon tones (blue, emerald, purple, etc.) and black CTA buttons (`bg-[#1A1A1A]` / white text).
-- The "Explore All" button is also black.
-- `APPROVED_PUBLIC_TOOLS` contains 7 tool IDs, so only 7 tools display publicly after filtering.
-- Grid uses `grid-cols-2 sm:grid-cols-3 lg:grid-cols-4` which on large screens gives 4 per row, but with 7 items the last row is incomplete.
+You're seeing a fake/generic building image on a project card instead of the real developer logo. Two root causes:
 
-## Changes Required
+1. **Database has wrong values in `developers.logo_url`** for many developers — some rows still hold project screenshots, WhatsApp images, IG post images, or `snapedit_*.jpeg` URLs that slip past our forbidden-pattern filter (e.g. Ellington, Modon, Kamdar, Hayaat in current data). The `bare` overlay then dutifully renders them as if they were logos.
+2. **The `bare` overlay on project cards has no rounded corners** — it's a hard 4:3 box with only a drop-shadow, which is what looks "buggy" sitting on the photo.
 
-### 1. Expand approved public tools to 8
-- Add `interior-design` to `APPROVED_PUBLIC_TOOLS` in `src/config/publicToolAccess.ts` so 8 tools pass the filter.
-- Ensure the `royalTools` array in `ToolkitShowcaseCard.tsx` already contains the matching 8 entries (it does).
+We curated 13 official local logos in `public/developers/logos/` and locked them in a previous migration, but the rest of the catalog (≈600 developers) was never repointed to clean URLs, and the verified/locked flags weren't set for them.
 
-### 2. Unify tool card icon styling to champagne-gold premium
-- Replace the per-tool `TONE_STYLES` colorful circles with a single premium champagne palette:
-  - Icon container background: `bg-[#EFE6D6]` (raised surface)
-  - Icon color: `text-[#B89555]` (gold accent) 
-  - Hover ring: `group-hover:ring-[#B89555]/40`
-- Remove the `tone` property mapping from the card rendering loop.
+## Plan
 
-### 3. Premium CTA buttons inside cards
-- Replace black button with champagne premium:
-  - Background: `bg-[#FDFBF7]` (page surface)
-  - Text: `text-[#1A1A1A] font-bold`
-  - Border: `border border-[#B89555]/60`
-  - Hover: `hover:bg-[#EFE6D6] hover:border-[#B89555]` with slight lift shadow
-  - Keep arrow icon; arrow color should be `text-[#B89555]`
+### 1. Database — restore + harden developer logos (migration)
 
-### 4. Premium "Explore All Our Tools Now" button
-- Replace black button with premium champagne:
-  - Background: `bg-[#FDFBF7]` or `bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]`
-  - Border: `border border-[#B89555]/60`
-  - Text: `text-[#1A1A1A] font-bold`
-  - Crown icon: keep gold color
-  - Hover: lift + intensified gold border + subtle shadow
+- **Re-run the junk purge with a wider net.** Null out any `logo_url` (where `logo_locked=false`) that matches the current forbidden patterns plus the newly-observed ones: `snapedit`, `reelly-backend.s3.*_n_[hash]\.webp` (Instagram post mirrors), `*_feature_*.webp`, `tilal_*`, `/vault/.../[a-z0-9]+\.jpe?g`, generic `/[0-9]+x[0-9]+/`. Mark those rows `logo_verified=false`.
+- **Repoint the 13 curated top-tier developers** (emaar, damac, nakheel, sobha, meraas, aldar, ellington, binghatti, select-group, danube, majid-al-futtaim, dubai-properties, omniyat) to their local `/developers/logos/<slug>-logo.webp` (or `.png`) asset and set `logo_verified=true`, `logo_locked=true`, `logo_source='curated_official'`. This guarantees those always render correctly.
+- **Promote `logo_url_processed` to `logo_url`** for the 10 rows where canonical is empty but processed exists.
+- Leave every other developer with `logo_url=NULL` rather than a fake image — the UI already handles null cleanly (no overlay rendered on the photo).
 
-### 5. Card container refinement
-- Keep current card background `bg-[#F7F2EA]` and border `border-[#B89555]/30`
-- Add `hover:border-[#B89555]/60` for stronger hover border
-- Ensure the grid stays `grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4` so on desktop = 4 columns = exactly 2 rows for 8 items
+### 2. Resolver — tighten the allow-list
 
-## Files to Edit
-1. `src/config/publicToolAccess.ts` — add interior-design to approved list
-2. `src/components/home/ToolkitShowcaseCard.tsx` — restyle cards, buttons, icons, and tone mapping
+In `src/utils/developerLogo.ts`, extend `FORBIDDEN_LOGO_PATTERNS` with the same patterns used in the migration so any future bad URL is rejected at render time even if it sneaks back into the DB.
 
-## Acceptance Criteria
-- Exactly 8 tools display on the homepage in the Royal Tools Hub
-- Desktop shows 4 tools per row (2 complete rows)
-- No black-filled buttons anywhere in the section
-- All icon circles use unified champagne/gold tones
-- All CTA buttons use champagne surface + gold border + ink text
-- Hover states are cohesive and premium (no white-on-white or black-on-black contrast issues)
+### 3. UI — round + polish the overlay on project photos
+
+In `src/components/ui/DeveloperLogo.tsx`, `variant="bare"`:
+- Add `rounded-xl` corners, a subtle translucent champagne plate behind the logo (`bg-[#FDFBF7]/92 backdrop-blur-sm`), 1px gold hairline `border border-[#B89555]/40`, and tighter padding so wordmarks still read fully.
+- Keep `object-contain` and the soft shadow for legibility.
+- Keep the null-when-invalid behavior — never render the Building2 icon over a public listing photo.
+
+No structural changes to `ProjectCard.tsx` / `ReellyProjectCard.tsx` / `FeaturedListings.tsx` — they already pass the canonical URL through the resolver.
+
+### 4. QA pass
+
+After migration + UI change, sample 8–10 random project cards (top-tier devs + mid-tier + ones now without logos) and confirm:
+- Top-tier devs show their real wordmark on a rounded champagne plate.
+- Devs with no clean logo show no overlay at all (clean photo).
+- No project photo is ever used as a logo.
+
+## Technical notes
+
+- Migration is data + constraints only; no schema change.
+- `logo_locked` trigger from `20260424144138` already protects curated rows from sync-job overwrites.
+- The `bare` variant change is CSS-only inside `DeveloperLogo.tsx`; all call sites stay identical.
+- Files touched: 1 new migration, `src/utils/developerLogo.ts`, `src/components/ui/DeveloperLogo.tsx`.
