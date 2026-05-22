@@ -277,7 +277,7 @@ const VoiceConciergeWidget = () => {
   const pillTone = "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40";
 
   return (
-    <div className="fixed bottom-[148px] right-6 z-[10060] flex flex-col items-end gap-2">
+    <div data-floating-launcher="voice-concierge" className="fixed bottom-[148px] right-6 z-[10060] flex flex-col items-end gap-2">
       {/* Visible status pill */}
       {showStatusPill && (
         <div
