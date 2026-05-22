@@ -12749,8 +12749,11 @@ export type Database = {
           license_number: string | null
           linkedin_url: string | null
           logo_bg_color: string | null
+          logo_candidates: Json
+          logo_last_attempt_at: string | null
           logo_locked: boolean
           logo_source: string | null
+          logo_status: string
           logo_url: string | null
           logo_url_dark: string | null
           logo_url_processed: string | null
@@ -12799,8 +12802,11 @@ export type Database = {
           license_number?: string | null
           linkedin_url?: string | null
           logo_bg_color?: string | null
+          logo_candidates?: Json
+          logo_last_attempt_at?: string | null
           logo_locked?: boolean
           logo_source?: string | null
+          logo_status?: string
           logo_url?: string | null
           logo_url_dark?: string | null
           logo_url_processed?: string | null
@@ -12849,8 +12855,11 @@ export type Database = {
           license_number?: string | null
           linkedin_url?: string | null
           logo_bg_color?: string | null
+          logo_candidates?: Json
+          logo_last_attempt_at?: string | null
           logo_locked?: boolean
           logo_source?: string | null
+          logo_status?: string
           logo_url?: string | null
           logo_url_dark?: string | null
           logo_url_processed?: string | null
