@@ -35,18 +35,18 @@ Deno.serve(async (req) => {
     const admin = createClient(SUPABASE_URL, SERVICE_KEY);
     const ip = clientIp(req);
     const ua = req.headers.get("user-agent") ?? null;
-    const ticketHash = await sha256Hex(body.ticket);
+    const tokenHash = await sha256Hex(body.ticket);
 
     const { data: broker } = await admin
       .from("crm_brokers")
-      .select("id, user_id, owner_id, email_lower, invitation_token_expires_at, blocked_at")
-      .eq("invitation_token_hash", ticketHash)
+      .select("id, user_id, owner_id, email_lower, blocked_at, activation_verified_at")
+      .eq("invitation_token_hash", tokenHash)
       .maybeSingle();
 
-    if (!broker) return json({ error: "Invalid or used activation link" }, 400);
+    if (!broker) return json({ error: "Invalid or revoked activation link" }, 400);
     if (broker.blocked_at) return json({ error: "Account blocked" }, 403);
-    if (!broker.invitation_token_expires_at || new Date(broker.invitation_token_expires_at).getTime() < Date.now()) {
-      return json({ error: "Activation ticket expired" }, 410);
+    if (!broker.activation_verified_at) {
+      return json({ error: "Verify the invitation code before setting a password." }, 400);
     }
     if (!broker.user_id) return json({ error: "Broker not linked to an auth user" }, 500);
 
@@ -64,6 +64,7 @@ Deno.serve(async (req) => {
         must_reset_password: false,
         invitation_token_hash: null,
         invitation_token_expires_at: null,
+        activation_verified_at: null,
         otp_hash: null,
         otp_expires_at: null,
       })
