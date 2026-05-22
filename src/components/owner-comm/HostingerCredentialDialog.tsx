@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
@@ -166,9 +167,8 @@ export default function HostingerCredentialDialog() {
 
           <div className="space-y-2">
             <Label htmlFor="h-password">App password or email password</Label>
-            <Input
+            <PasswordInput
               id="h-password"
-              type="password"
               placeholder="••••••••"
               value={form.password}
               onFocus={() => {
@@ -176,6 +176,7 @@ export default function HostingerCredentialDialog() {
               }}
               onChange={(e) => update("password", e.target.value)}
               className="border-[#B89555]/30 bg-[#F7F2EA]"
+              visibilityLabel="email password"
             />
             <p className="text-xs text-[#1A1A1A]/50">
               For security, use an app-specific password if Hostinger supports it.
