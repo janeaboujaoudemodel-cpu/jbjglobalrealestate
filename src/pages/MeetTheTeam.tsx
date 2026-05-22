@@ -61,7 +61,7 @@ interface TeamMemberCardProps {
 }
 
 
-const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: TeamMemberCardProps) => {
+const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick, isOwner, hidden }: TeamMemberCardProps) => {
   // Get reporting manager info
   const reportsToMember = member.reportsTo ? getTeamMemberById(member.reportsTo) : null;
 
@@ -78,10 +78,14 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
 
   return (
     <motion.div variants={fadeInUp} className="min-w-[280px]">
-      <Card 
-        className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] shadow-[0_0_20px_rgba(200,167,102,0.2)] hover:shadow-[0_0_25px_rgba(200,167,102,0.35),0_22px_60px_rgba(0,0,0,0.45)] hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300 overflow-hidden group h-full ${isInternalUser ? 'cursor-pointer' : ''}`}
+      <Card
+        className={`relative bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] shadow-[0_0_20px_rgba(200,167,102,0.2)] hover:shadow-[0_0_25px_rgba(200,167,102,0.35),0_22px_60px_rgba(0,0,0,0.45)] hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300 overflow-hidden group h-full ${isInternalUser ? 'cursor-pointer' : ''} ${hidden ? 'opacity-50 ring-2 ring-dashed ring-[#B89555]/60' : ''}`}
         onClick={handleCardClick}
       >
+        {isOwner && (
+          <VisibilityToggleButton memberId={member.id} label={member.name} />
+        )}
+
         <CardContent className="p-0">
           {/* Photo */}
           <div className="relative overflow-hidden">
