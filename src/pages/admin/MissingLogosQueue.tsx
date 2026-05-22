@@ -58,6 +58,8 @@ export default function MissingLogosQueue() {
   const [search, setSearch] = useState("");
   const [busyId, setBusyId] = useState<string | null>(null);
   const [bulkBusy, setBulkBusy] = useState(false);
+  const [runAll, setRunAll] = useState(false);
+  const [runAllProgress, setRunAllProgress] = useState<{ approved: number; unavailable: number; remaining: number } | null>(null);
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["missing-developer-logos", tab, search],
@@ -230,6 +232,44 @@ export default function MissingLogosQueue() {
     }
   }
 
+  async function runUntilDone() {
+    setRunAll(true);
+    setRunAllProgress({ approved: 0, unavailable: 0, remaining: 0 });
+    let approvedTotal = 0;
+    let unavailableTotal = 0;
+    try {
+      // Hard cap to prevent infinite loops if anything goes wrong
+      for (let i = 0; i < 40; i++) {
+        const { data: res, error } = await supabase.functions.invoke(
+          "auto-find-developer-logos",
+          { body: { batch_size: 10 } },
+        );
+        if (error) throw error;
+        approvedTotal += res?.approved ?? 0;
+        unavailableTotal += res?.unavailable ?? 0;
+        const remaining = res?.still_missing ?? 0;
+        setRunAllProgress({ approved: approvedTotal, unavailable: unavailableTotal, remaining });
+        queryClient.invalidateQueries({ queryKey: ["missing-developer-logos"] });
+        queryClient.invalidateQueries({ queryKey: ["missing-developer-logos-counts"] });
+        if (!res?.processed || remaining === 0) break;
+        // small breather between batches
+        await new Promise((r) => setTimeout(r, 1500));
+      }
+      toast({
+        title: "Auto-find run finished",
+        description: `Approved ${approvedTotal} • Marked unavailable ${unavailableTotal}.`,
+      });
+    } catch (e: any) {
+      toast({
+        title: "Run stopped",
+        description: e?.message ?? "Unknown error",
+        variant: "destructive",
+      });
+    } finally {
+      setRunAll(false);
+    }
+  }
+
   const rows = data ?? [];
   const visibleIds = rows.slice(0, 25).map((r) => r.id);
 
@@ -307,16 +347,29 @@ export default function MissingLogosQueue() {
             Refresh
           </Button>
           {tab === "needs_logo" && (
-            <Button
-              variant="gold"
-              onClick={() => autoFind(visibleIds)}
-              disabled={bulkBusy || visibleIds.length === 0}
-            >
-              <Sparkles className="w-4 h-4 mr-2" />
-              {bulkBusy
-                ? "Auto-finding…"
-                : `Auto-find next ${visibleIds.length}`}
-            </Button>
+            <>
+              <Button
+                variant="gold"
+                onClick={() => autoFind(visibleIds)}
+                disabled={bulkBusy || runAll || visibleIds.length === 0}
+              >
+                <Sparkles className="w-4 h-4 mr-2" />
+                {bulkBusy
+                  ? "Auto-finding…"
+                  : `Auto-find next ${visibleIds.length}`}
+              </Button>
+              <Button
+                variant="outline"
+                onClick={runUntilDone}
+                disabled={runAll || bulkBusy}
+                className="border-[#B89555]/60 text-[#1A1A1A]"
+              >
+                <Sparkles className="w-4 h-4 mr-2" />
+                {runAll
+                  ? `Running… ${runAllProgress?.approved ?? 0} approved · ${runAllProgress?.remaining ?? "?"} left`
+                  : "Run continuously"}
+              </Button>
+            </>
           )}
         </div>
 

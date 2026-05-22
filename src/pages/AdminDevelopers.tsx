@@ -35,7 +35,8 @@ import {
   Download,
   FileText,
   BarChart3,
-  Calendar
+  Calendar,
+  ImageOff
 } from "lucide-react";
 import { toast } from "sonner";
 import { ProvidentSyncButton } from "@/components/admin/ProvidentSyncButton";
@@ -290,17 +291,27 @@ const AdminDevelopers = () => {
               <p className="text-sm text-muted-foreground">Manage developers and sales representatives</p>
             </div>
           </div>
-          <Button
-            onClick={() => {
-              setEditingDev(null);
-              setDevForm({ name: "", slug: "", location_city: "Dubai", location_emirate: "Dubai", description: "", website_url: "" });
-              setIsDevDialogOpen(true);
-            }}
-            className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Add Developer
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              onClick={() => navigate("/admin/developers/missing-logos")}
+              className="border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6]/40"
+            >
+              <ImageOff className="w-4 h-4 mr-2" />
+              Missing Logos
+            </Button>
+            <Button
+              onClick={() => {
+                setEditingDev(null);
+                setDevForm({ name: "", slug: "", location_city: "Dubai", location_emirate: "Dubai", description: "", website_url: "" });
+                setIsDevDialogOpen(true);
+              }}
+              className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A]"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add Developer
+            </Button>
+          </div>
         </div>
       </div>
 
