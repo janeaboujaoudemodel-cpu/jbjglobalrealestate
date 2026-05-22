@@ -125,6 +125,20 @@ serve(async (req) => {
 
     if (!data) {
       const isMissingPermission = /missing_permissions|convai_write/i.test(lastErrorBody);
+      const publicAgentId = Deno.env.get("ELEVENLABS_AGENT_ID") ?? "";
+
+      if (isMissingPermission && /^agent_[A-Za-z0-9_-]+$/.test(publicAgentId)) {
+        console.warn("ElevenLabs key lacks convai_write; returning public agent fallback instead of unavailable state.");
+        return new Response(
+          JSON.stringify({
+            agentId: publicAgentId,
+            tokenless: true,
+            warning: "Using public ElevenLabs agent fallback while the backend key is missing convai_write.",
+          }),
+          { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
       const friendly =
         isMissingPermission
           ? "The ElevenLabs API key is missing the 'convai_write' permission. Please generate a Conversational AI key and update ELEVENLABS_API_KEY."
