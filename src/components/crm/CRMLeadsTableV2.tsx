@@ -866,6 +866,17 @@ export default function CRMLeadsTableV2({
                           >
                             <FileSignature className="h-4 w-4" />
                           </button>
+                          {isOwner && (
+                            <button
+                              type="button"
+                              onClick={() => setAccessLead(lead)}
+                              title="Manage broker access"
+                              aria-label="Manage broker access"
+                              className="h-9 w-9 inline-flex items-center justify-center text-[#1A1A1A] hover:bg-[#EFE6D6] transition-colors"
+                            >
+                              <Shield className="h-4 w-4" />
+                            </button>
+                          )}
                           <button
                             type="button"
                             onClick={() => openDeleteDialog(lead)}
