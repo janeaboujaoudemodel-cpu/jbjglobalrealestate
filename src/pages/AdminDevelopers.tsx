@@ -35,7 +35,8 @@ import {
   Download,
   FileText,
   BarChart3,
-  Calendar
+  Calendar,
+  ImageOff
 } from "lucide-react";
 import { toast } from "sonner";
 import { ProvidentSyncButton } from "@/components/admin/ProvidentSyncButton";
