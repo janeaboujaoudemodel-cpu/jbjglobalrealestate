@@ -33,7 +33,7 @@ Deno.serve(async (req) => {
 
     const { data: broker } = await admin
       .from("crm_brokers")
-      .select("id, email_lower, invitation_status, invitation_token_expires_at, otp_expires_at, blocked_at, activated_at")
+      .select("id, email_lower, invitation_status, invitation_token_expires_at, otp_expires_at, blocked_at, activated_at, activation_verified_at")
       .eq("invitation_token_hash", tokenHash)
       .maybeSingle();
 
@@ -42,12 +42,12 @@ Deno.serve(async (req) => {
     if (broker.activated_at && broker.invitation_status === "activated") {
       return json({ status: "already_activated", email_masked: maskEmail(broker.email_lower) });
     }
-    const now = Date.now();
-    if (!broker.invitation_token_expires_at || new Date(broker.invitation_token_expires_at).getTime() < now) {
-      return json({ status: "expired", email_masked: maskEmail(broker.email_lower) });
-    }
-    if (!broker.otp_expires_at || new Date(broker.otp_expires_at).getTime() < now) {
-      return json({ status: "otp_expired", email_masked: maskEmail(broker.email_lower) });
+    if (broker.activation_verified_at) {
+      return json({
+        status: "verified",
+        email_masked: maskEmail(broker.email_lower),
+        verified_at: broker.activation_verified_at,
+      });
     }
 
     return json({
