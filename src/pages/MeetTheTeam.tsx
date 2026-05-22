@@ -192,15 +192,25 @@ const MeetTheTeam: React.FC = () => {
   const [detailMember, setDetailMember] = useState<TeamMember | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [isInternalUser, setIsInternalUser] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
   const salesHierarchy = useSalesHierarchy();
+  const visibility = useTeamVisibility();
 
   const isFounderMember = (member: TeamMember) =>
     member.id === "jane-bou-jaoude" ||
     member.name === "Jane Bou Jaoude" ||
     /founder/i.test(member.role);
 
-  const filterFounder = (members: TeamMember[]) =>
-    isFounderVisible ? members : members.filter((m) => !isFounderMember(m));
+  const applyVisibility = (members: TeamMember[]) => {
+    let list = isFounderVisible ? members : members.filter((m) => !isFounderMember(m));
+    if (!isOwner) {
+      if (visibility.isAiHidden) list = list.filter((m) => !m.isAI);
+      list = list.filter((m) => visibility.isMemberVisible(m.id));
+    }
+    return list;
+  };
+  const filterFounder = applyVisibility;
+
 
   // Check if user is an internal employee (has hr_user_roles or admin/owner)
   useEffect(() => {
