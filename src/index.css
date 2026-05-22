@@ -4364,6 +4364,10 @@ a[class*="bg-red-"]:hover {
   letter-spacing: -0.01em !important;
   color: hsl(var(--price-orange)) !important;
   margin: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  max-width: 100% !important;
 }
 
 /* Handover line — label is solid ink black; date stays orange to match the price pill identity. */
