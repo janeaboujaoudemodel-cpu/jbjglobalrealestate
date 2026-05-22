@@ -361,7 +361,7 @@ const InquiryFormModal = ({
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
 
           {isSuccess ? (
-            <div className="relative px-8 py-16 text-center max-h-[90vh] overflow-y-auto">
+            <div className="relative px-8 py-16 text-center flex-1 overflow-y-auto">
               <button
                 type="button"
                 onClick={() => {
@@ -399,7 +399,7 @@ const InquiryFormModal = ({
               </Button>
             </div>
           ) : (
-            <div className="relative px-6 pt-8 pb-6 max-h-[90vh] overflow-y-auto">
+            <div className="relative px-6 pt-8 pb-6 flex-1 overflow-y-auto">
               <DialogHeader className="mb-6">
                 {/* Premium Icon */}
                 <div className="text-center mb-4">
