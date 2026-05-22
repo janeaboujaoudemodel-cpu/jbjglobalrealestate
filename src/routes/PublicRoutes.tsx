@@ -144,6 +144,7 @@ const ClientPortal = lazy(() => import("@/pages/client/ClientPortal"));
 const MyTickets = lazy(() => import("@/pages/client/MyTickets"));
 const ReopenTicket = lazy(() => import("@/pages/ReopenTicket"));
 const JoinApplication = lazy(() => import("@/pages/JoinApplication"));
+const CareersDeveloperRep = lazy(() => import("@/pages/CareersDeveloperRep"));
 const Onboarding = lazy(() => import("@/pages/Onboarding"));
 const OnboardingModule = lazy(() => import("@/pages/OnboardingModule"));
 const VerifyCertificate = lazy(() => import("@/pages/VerifyCertificate"));
