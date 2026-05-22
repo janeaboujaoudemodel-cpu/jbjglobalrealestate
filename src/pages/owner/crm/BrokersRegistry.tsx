@@ -540,6 +540,16 @@ export default function BrokersRegistry() {
                                     {sessions} {sessions === 1 ? "session" : "sessions"}
                                   </span>
                                 )}
+                                {r.source === "registered" && r.user_id && (
+                                  <RouterLink
+                                    to={`/owner/crm/brokers/${r.user_id}`}
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="ml-1 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border border-[#B89555] text-[#1A1A1A] bg-[#FDFBF7] hover:bg-[#EFE6D6] transition-colors"
+                                    title="Open broker profile, activity & shared leads"
+                                  >
+                                    Profile <ExternalLink className="h-2.5 w-2.5" />
+                                  </RouterLink>
+                                )}
                               </div>
                             </td>
                           </tr>
