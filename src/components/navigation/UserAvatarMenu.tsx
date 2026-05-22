@@ -102,11 +102,6 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
     );
   };
 
-  const Section = ({ label }: { label: string }) => (
-    <DropdownMenuLabel className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#1A1A1A]/55 px-2.5 pt-2 pb-1">
-      {label}
-    </DropdownMenuLabel>
-  );
 
   return (
     <DropdownMenu>
