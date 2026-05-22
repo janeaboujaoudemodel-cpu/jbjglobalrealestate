@@ -264,40 +264,8 @@ const Index = () => {
             </motion.h1>
 
 
-            {/* I'm a... mode selector pills — inline per founder reference */}
-            <motion.div
-              variants={fadeInUp}
-              className="flex items-center justify-center flex-wrap gap-2 sm:gap-3"
-            >
-              <span className="text-[11px] sm:text-xs font-medium text-white/85 tracking-wide drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">
-                I'm a...
-              </span>
-              {heroModes.map((m, idx) => {
-                const Icon = m.icon;
-                const isActive = activeMode === m.id || (m.id === "investor" && activeMode === "investor_broker");
-                const isSpotlit = spotlightActive && !hasSelectedRole && spotlightIdx === idx;
-                return (
-                  <button
-                    key={m.id}
-                    type="button"
-                    onClick={() => { setSpotlightActive(false); void setMode(m.id); }}
-                    onMouseEnter={() => setSpotlightActive(false)}
-                    className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[12px] sm:text-[13px] font-semibold border transition-all duration-500 ${
-                      isActive
-                        ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555] shadow-[0_0_0_2px_rgba(184,149,85,0.35)]"
-                        : isSpotlit
-                        ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555] shadow-[0_0_0_3px_rgba(184,149,85,0.55),0_8px_24px_rgba(0,0,0,0.45)] scale-[1.06]"
-                        : "bg-black/35 text-white border-white/40 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] hover:border-[#B89555] backdrop-blur-sm"
-                    }`}
-                    aria-pressed={isActive}
-                  >
-                    <Icon className="w-3.5 h-3.5" strokeWidth={2.25} />
-                    <span>{m.label}</span>
-                  </button>
-                );
-              })}
+            {/* "I'm a..." mode pill row removed — CategorySelectorSection below ("Tell us who you are — Get started in 30s") is the single funnel for category selection. No duplication. */}
 
-            </motion.div>
 
             {/* Quick-action CTA pills — single horizontal wrap row matching reference photo */}
             <motion.div
