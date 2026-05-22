@@ -557,8 +557,8 @@ const MeetTheTeam: React.FC = () => {
               );
             })}
 
-            {/* Brokers section — sourced from real activated brokers in CRM */}
-            <BrokersTeamSection isOwner={isOwner} />
+            {/* Brokers — merged into team, but only shown to owner until real employee-brokers exist */}
+            {isOwner && <BrokersTeamSection isOwner={isOwner} />}
           </div>
         </section>
 
