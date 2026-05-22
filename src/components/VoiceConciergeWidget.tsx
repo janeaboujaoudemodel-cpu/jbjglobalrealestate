@@ -298,7 +298,7 @@ const VoiceConciergeWidget = () => {
   const pillTone = "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40";
 
   return (
-    <div data-floating-launcher="voice-concierge" className="fixed bottom-[148px] right-6 z-[10060] flex flex-col items-end gap-2">
+    <div data-floating-launcher="voice-concierge" className="fixed bottom-6 right-6 z-[10060] flex flex-col items-end gap-2">
       {/* Visible status pill */}
       {showStatusPill && (
         <div
@@ -315,23 +315,29 @@ const VoiceConciergeWidget = () => {
 
       {/* Choice popover: voice or WhatsApp */}
       {choiceOpen && !isConnected && (
-        <div className="w-64 rounded-xl border border-[#B89555]/40 bg-[#FDFBF7] shadow-2xl overflow-hidden text-[#1A1A1A]">
+        <div
+          className="w-64 rounded-2xl border border-[#B89555]/45 overflow-hidden text-[#1A1A1A]"
+          style={{ background: pearlBg, boxShadow: pearlShadow }}
+        >
           <div className="px-3 py-2 border-b border-[#B89555]/20 flex items-center justify-between">
-            <span className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/60">Concierge · Free</span>
+            <span className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/65">Concierge · Complimentary</span>
             <button onClick={() => setChoiceOpen(false)} aria-label="Close" className="text-[#1A1A1A]/50 hover:text-[#1A1A1A]">
               <X className="w-3.5 h-3.5" />
             </button>
           </div>
           <button
             onClick={handleStartVoice}
-            className="w-full flex items-center gap-3 px-3 py-3 hover:bg-[#EFE6D6]/60 transition-colors text-left"
+            className="w-full flex items-center gap-3 px-3 py-3 hover:bg-white/40 transition-colors text-left"
           >
-            <span className="flex items-center justify-center w-9 h-9 rounded-full bg-[#1A1A1A] text-white">
-              <Phone className="w-4 h-4" />
+            <span
+              className="flex items-center justify-center w-9 h-9 rounded-full border border-[#B89555]/55 text-[#1A1A1A]"
+              style={{ background: pearlBg, boxShadow: "inset 0 1px 0 rgba(255,255,255,0.9), inset 0 -1px 0 rgba(184,149,85,0.18)" }}
+            >
+              <Phone className="w-4 h-4" strokeWidth={2} />
             </span>
             <span className="flex flex-col">
               <span className="text-sm font-semibold">Live agent call</span>
-              <span className="text-[11px] text-[#1A1A1A]/60">Voice line, instant pickup</span>
+              <span className="text-[11px] text-[#1A1A1A]/65">Voice line, instant pickup</span>
             </span>
           </button>
           <div className="h-px bg-[#B89555]/15" />
@@ -340,14 +346,17 @@ const VoiceConciergeWidget = () => {
             target="_blank"
             rel="noopener noreferrer"
             onClick={handleOpenWhatsApp}
-            className="w-full flex items-center gap-3 px-3 py-3 hover:bg-[#EFE6D6]/60 transition-colors text-left"
+            className="w-full flex items-center gap-3 px-3 py-3 hover:bg-white/40 transition-colors text-left"
           >
-            <span className="flex items-center justify-center w-9 h-9 rounded-full bg-[#25D366] text-white">
-              <MessageCircle className="w-4 h-4" />
+            <span
+              className="flex items-center justify-center w-9 h-9 rounded-full border border-[#B89555]/55 text-[#1A1A1A]"
+              style={{ background: pearlBg, boxShadow: "inset 0 1px 0 rgba(255,255,255,0.9), inset 0 -1px 0 rgba(184,149,85,0.18)" }}
+            >
+              <MessageCircle className="w-4 h-4" strokeWidth={2} />
             </span>
             <span className="flex flex-col">
               <span className="text-sm font-semibold">WhatsApp us</span>
-              <span className="text-[11px] text-[#1A1A1A]/60">{COMPANY_NAP.phoneDisplay}</span>
+              <span className="text-[11px] text-[#1A1A1A]/65">{COMPANY_NAP.phoneDisplay}</span>
             </span>
           </a>
         </div>
@@ -356,12 +365,11 @@ const VoiceConciergeWidget = () => {
       <div className="relative">
 
 
-      
       {/* Speaking indicator ring */}
       {conversation.isSpeaking && (
         <span className="absolute inset-0 rounded-full bg-[#EFE6D6]/60 animate-pulse" />
       )}
-      
+
       {/* Close/minimize button - clicking X turns it into phone icon */}
       <button
         onClick={handleMinimize}
@@ -370,39 +378,41 @@ const VoiceConciergeWidget = () => {
       >
         <X className="w-3.5 h-3.5" />
       </button>
-      
-      {/* Main launcher: premium compact pill */}
+
+      {/* Main launcher: mother-of-pearl premium pill — no "Free" text (kept in popover header) */}
       {!isConnected ? (
         <button
           onClick={handleLauncherClick}
           disabled={isConnecting}
-          className="relative flex items-center gap-0 sm:gap-2.5 p-2.5 sm:pl-2 sm:pr-4 sm:py-1.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] bg-[#1A1A1A] border border-[#B89555]/45 hover:border-[#B89555]/70 disabled:opacity-70 disabled:cursor-not-allowed group"
-          aria-label="Free live call with our agent"
+          className="group relative flex items-center gap-2.5 pl-2 pr-4 py-1.5 rounded-full border border-[#B89555]/55 text-[#1A1A1A] disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-300 hover:-translate-y-0.5"
+          style={{ background: pearlBg, boxShadow: pearlShadow }}
+          onMouseEnter={(e) => { if (!isConnecting) e.currentTarget.style.boxShadow = pearlShadowHover; }}
+          onMouseLeave={(e) => { e.currentTarget.style.boxShadow = pearlShadow; }}
+          aria-label="Complimentary live call with our agent"
           aria-expanded={choiceOpen}
         >
-          <span className="relative flex items-center justify-center w-7 h-7 rounded-full bg-[#B89555]/15 border border-[#B89555]/50">
+          <span
+            className="relative flex items-center justify-center w-7 h-7 rounded-full border border-[#B89555]/55"
+            style={{ background: pearlBg, boxShadow: "inset 0 1px 0 rgba(255,255,255,0.95), inset 0 -1px 0 rgba(184,149,85,0.18)" }}
+          >
             {isConnecting ? (
-              <span className="w-3 h-3 border-2 border-[#B89555]/30 border-t-[#B89555] rounded-full animate-spin" />
+              <span className="w-3 h-3 border-2 border-[#1A1A1A]/20 border-t-[#1A1A1A] rounded-full animate-spin" />
             ) : (
-              <Phone className="w-3.5 h-3.5 text-[#B89555]" />
+              <Phone className="w-3.5 h-3.5 text-[#1A1A1A]" strokeWidth={2.1} />
             )}
-            {/* live dot — visible on mobile as a badge on the icon-only FAB */}
-            <span className="sm:hidden absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-[#1A1A1A]" />
+            {/* live dot — quiet pearl-edge badge */}
+            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white" />
           </span>
-          <span className="hidden sm:inline-flex items-center gap-2 leading-none">
-            <span className="relative flex items-center justify-center w-2 h-2">
-              <span className="absolute inset-0 rounded-full bg-emerald-500/50 animate-ping" />
-              <span className="relative w-1.5 h-1.5 rounded-full bg-emerald-500" />
+          <span className="inline-flex items-center leading-none">
+            <span className="text-[13px] font-semibold tracking-tight text-[#1A1A1A]">
+              {isConnecting ? "Connecting…" : "Speak to concierge"}
             </span>
-            <span className="text-[13px] font-semibold tracking-tight text-[#FDFBF7]">
-              {isConnecting ? "Connecting…" : "Call our agent"}
-            </span>
-            <span className="text-[10px] font-medium tracking-[0.14em] uppercase text-[#B89555]">Free</span>
           </span>
         </button>
 
       ) : (
-        <div className="relative flex items-center gap-2 bg-[#EFE6D6] text-[#1A1A1A]-foreground pl-4 pr-2 py-2 rounded-full shadow-lg">
+        <div className="relative flex items-center gap-2 text-[#1A1A1A] pl-4 pr-2 py-2 rounded-full border border-[#B89555]/55"
+             style={{ background: pearlBg, boxShadow: pearlShadow }}>
           {/* Status indicator */}
           <div className="flex items-center gap-2">
             {conversation.isSpeaking ? (
@@ -414,7 +424,7 @@ const VoiceConciergeWidget = () => {
               {conversation.isSpeaking ? "Speaking..." : "Listening..."}
             </span>
           </div>
-          
+
           {/* End call button */}
           <button
             onClick={stopConversation}
