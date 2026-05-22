@@ -84,7 +84,6 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
   const navigationLinks = [
     { href: '/about', label: 'About Us', icon: Building2 },
     { href: '/team', label: 'Meet the Team', icon: Users },
-    { href: '/brokers', label: 'Our Brokers', icon: Users },
     { href: '/areas', label: 'Area Guides', icon: MapPin },
     { href: '/guides', label: 'Guides Library', icon: GraduationCap },
     { href: '/market-intelligence', label: 'Market Intelligence', icon: FileText },
