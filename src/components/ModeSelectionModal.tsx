@@ -86,26 +86,39 @@ export const ModeSelectionModal = () => {
   };
 
   return (
-    <Dialog open={isVisible} onOpenChange={() => { /* non-dismissable */ }}>
+    <Dialog open={isVisible} onOpenChange={(open) => { if (!open) dismiss(); }}>
       <DialogContent
         className={cn(
           'w-[calc(100vw-2rem)] max-w-lg sm:max-w-xl p-0 overflow-hidden border-2 border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]',
-          // Hide built-in X close button — selection is required
           '[&>button]:hidden'
         )}
-        onPointerDownOutside={(e) => e.preventDefault()}
-        onEscapeKeyDown={(e) => e.preventDefault()}
-        onInteractOutside={(e) => e.preventDefault()}
       >
+        <button
+          type="button"
+          onClick={() => dismiss()}
+          aria-label="Skip and explore first"
+          className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full flex items-center justify-center text-[#1A1A1A]/60 hover:text-[#1A1A1A] hover:bg-[#EFE6D6] transition-colors"
+        >
+          <X className="w-4 h-4" />
+        </button>
         <DialogHeader className="p-6 pb-4 border-b border-[#B89555]/20">
           <DialogTitle className="text-xl sm:text-2xl font-bold text-center text-[#1A1A1A]">
             Welcome to JBJ Global Real Estate
           </DialogTitle>
           <p className="text-center text-[#1A1A1A]/70 text-sm mt-2">
-            Tell us who you are so we can tailor the platform to you.
-            You can change this anytime.
+            Tell us who you are so we can tailor the platform — the home page,
+            tools, and recommendations all adapt to your category.
           </p>
+          <div className="mt-3 flex items-start gap-2 rounded-lg border border-[#B89555]/25 bg-[#FDFBF7]/70 p-3 text-left">
+            <Sparkles className="w-4 h-4 text-[#B89555] mt-0.5 shrink-0" />
+            <p className="text-[12px] leading-relaxed text-[#1A1A1A]/75">
+              Browsing properties is always free — no login required. You can
+              also skip this for now and change your category anytime from the
+              mode picker in the header.
+            </p>
+          </div>
         </DialogHeader>
+
 
         <div className="p-6 space-y-3">
           {MODE_OPTIONS.map((option) => {
