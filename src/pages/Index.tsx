@@ -361,10 +361,21 @@ const Index = () => {
               <button
                 type="button"
                 onClick={() => setIsInquiryOpen(true)}
-                className="group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#EFE6D6] hover:bg-[#F7F2EA] border border-[#B89555] text-[#1A1A1A] text-sm font-semibold tracking-tight transition-all shadow-[0_8px_28px_-8px_rgba(0,0,0,0.55)] hover:shadow-[0_12px_32px_-6px_rgba(0,0,0,0.6)]"
+                className="group inline-flex items-center gap-3 px-10 py-4 rounded-full
+                  bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]
+                  hover:from-[#FFFFFF] hover:via-[#FDFBF7] hover:to-[#F7F2EA]
+                  border border-[#B89555]/80 hover:border-[#B89555]
+                  text-[#1A1A1A] text-[15px] font-bold tracking-wide
+                  transition-all duration-300 ease-out
+                  shadow-[0_12px_44px_-10px_rgba(0,0,0,0.35)]
+                  hover:shadow-[0_16px_56px_-8px_rgba(0,0,0,0.45)]
+                  hover:scale-[1.02]"
               >
                 <span>Book a Free Consultation</span>
-                <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={2.25} />
+                <ArrowUpRight
+                  className="w-5 h-5 text-[#1A1A1A] transition-transform duration-300 ease-out group-hover:translate-x-1 group-hover:-translate-y-1"
+                  strokeWidth={3}
+                />
               </button>
             </motion.div>
           </div>
