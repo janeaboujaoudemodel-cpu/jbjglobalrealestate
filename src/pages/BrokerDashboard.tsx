@@ -348,8 +348,8 @@ export default function BrokerDashboard() {
           </h3>
           <Card className={`bg-[#EFE6D6] border-2 border-[#B89555]/60 hover:border-[#B89555] ${tileGlow3D}`}>
 
-            <CardContent className="p-6">
-              <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <CardContent className="p-5 md:p-6">
+              <div className="flex flex-col gap-5">
                 <div className="text-center md:text-left">
                   <p className="text-[#1A1A1A]/80 mb-2">
                     Access your tasks, notes, reminders, and internal JBJ messages — all in one place.
@@ -358,31 +358,23 @@ export default function BrokerDashboard() {
                     Reminders can be delivered in-platform, via email, or WhatsApp (if enabled).
                   </p>
                 </div>
-                <div className="flex flex-wrap gap-2 justify-center">
-                  <Link to="/crm-notes">
-                    <Button variant="outline" size="sm" className="border-2 border-[#B89555]/60 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#FDFBF7] hover:border-[#B89555]">
-                      <FileText className="w-4 h-4 mr-2" strokeWidth={2.5} />
-                      View Notes
-                    </Button>
-                  </Link>
-                  <Link to="/crm-reminders">
-                    <Button variant="outline" size="sm" className="border-2 border-[#B89555]/60 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#FDFBF7] hover:border-[#B89555]">
-                      <Bell className="w-4 h-4 mr-2" strokeWidth={2.5} />
-                      Reminders
-                    </Button>
-                  </Link>
-                  <Link to="/inbox">
-                    <Button variant="outline" size="sm" className="border-2 border-[#B89555]/60 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#FDFBF7] hover:border-[#B89555]">
-                      <Mail className="w-4 h-4 mr-2" strokeWidth={2.5} />
-                      My Inbox
-                    </Button>
-                  </Link>
-                  <Link to="/crm-calendar">
-                    <Button variant="outline" size="sm" className="border-2 border-[#B89555]/60 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#FDFBF7] hover:border-[#B89555]">
-                      <Calendar className="w-4 h-4 mr-2" strokeWidth={2.5} />
-                      Calendar
-                    </Button>
-                  </Link>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {[
+                    { to: "/crm-notes", icon: FileText, label: "View Notes" },
+                    { to: "/crm-reminders", icon: Bell, label: "Reminders" },
+                    { to: "/inbox", icon: Mail, label: "My Inbox" },
+                    { to: "/crm-calendar", icon: Calendar, label: "Calendar" },
+                  ].map(({ to, icon: BtnIcon, label }) => (
+                    <Link key={to} to={to} className="w-full">
+                      <Button
+                        variant="outline"
+                        className="w-full h-11 justify-center border-2 border-[#B89555]/60 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#FDFBF7] hover:border-[#B89555] hover:shadow-[0_8px_22px_-10px_rgba(184,149,85,0.55)] transition-all"
+                      >
+                        <BtnIcon className="w-4 h-4 mr-2" strokeWidth={2.5} />
+                        <span className="truncate">{label}</span>
+                      </Button>
+                    </Link>
+                  ))}
                 </div>
               </div>
             </CardContent>
