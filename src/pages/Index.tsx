@@ -274,7 +274,7 @@ const Index = () => {
             >
               <div
                 className="
-                  flex items-center gap-1.5 sm:gap-2
+                  hidden md:flex items-center gap-1.5 sm:gap-2
                   flex-nowrap sm:flex-wrap
                   justify-start sm:justify-center
                   overflow-x-auto sm:overflow-visible
