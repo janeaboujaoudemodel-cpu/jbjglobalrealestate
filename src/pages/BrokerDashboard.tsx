@@ -196,11 +196,16 @@ export default function BrokerDashboard() {
   // Treat as Active unless explicitly flagged false
   const isActive = profile?.is_active !== false;
 
-  // Premium tile classes (shared by Quick Actions + Broker Hub)
+  // Premium tile classes — shared champagne glow + 3D lift on hover
+  const tileGlow3D =
+    "transition-all duration-300 ease-out will-change-transform " +
+    "hover:-translate-y-1.5 hover:scale-[1.02] " +
+    "hover:shadow-[0_18px_44px_-12px_rgba(184,149,85,0.55),0_8px_22px_-10px_rgba(26,26,26,0.25),0_0_0_1px_rgba(184,149,85,0.55)] " +
+    "hover:[transform:perspective(900px)_rotateX(2deg)_translateY(-6px)_scale(1.02)]";
   const tileCardCls =
-    "h-full bg-[#EFE6D6] border-2 border-[#B89555]/60 hover:border-[#B89555] hover:bg-[#F7F2EA] hover:shadow-[0_6px_20px_-8px_rgba(184,149,85,0.45)] transition-all cursor-pointer group";
+    `h-full bg-[#EFE6D6] border-2 border-[#B89555]/60 hover:border-[#B89555] hover:bg-[#F7F2EA] cursor-pointer group ${tileGlow3D}`;
   const tileIconWrapCls =
-    "bg-[#F7F2EA] border-2 border-[#B89555]/60 rounded-xl flex items-center justify-center group-hover:border-[#B89555] group-hover:bg-[#FDFBF7] transition-colors";
+    "bg-[#F7F2EA] border-2 border-[#B89555]/60 rounded-xl flex items-center justify-center group-hover:border-[#B89555] group-hover:bg-[#FDFBF7] group-hover:scale-110 transition-all duration-300";
 
   return (
     <div className="min-h-screen bg-background">
