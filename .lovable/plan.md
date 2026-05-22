@@ -1,146 +1,108 @@
-# JBJ CRM — Broker Access, Permissions & CRM Upgrade
+# CRM Restructure — Private vs Shared Workspaces + Broker Profile Hub
 
-A pragmatic, audit-first plan covering the 10 phases in the brief. No duplication, no deletion, no blue accents. All work merges into the existing `crm_*` / `crm_brokers` ecosystem already in place (138 related tables found in audit — most of what you need already exists; the gaps are wiring, UX, and permission semantics).
+## What changes for you (the owner)
 
----
+You will have two clearly separated workspaces inside the CRM, plus a per-broker profile view:
 
-## Audit Snapshot (what already exists, what is missing)
+1. **My Leads (Private)** — the existing CRM you already use. Anything you edit here stays private. Even if the lead has been shared with a broker, your edits do NOT reach the broker. This is your private workspace for notes, status changes, internal scoring, etc.
+2. **Shared with Brokers** — a new section listing only leads that have an active broker share. Edits made HERE go live to the assigned broker immediately. This is where you collaborate.
+3. **Brokers → Profile** — clicking any broker opens their full profile: every lead they own or were given, every status change, every note, every call/whatsapp/email log, every action they have taken. Read-only audit for you.
 
-Already in DB / code (must be REUSED, not recreated):
+The broker always sees what they see today: only the fields/rows the share grants them, and only the version that was published to them from the Shared workspace.
 
-- Brokers: `crm_brokers`, `broker_profiles`, `crm_brokerages`, `crm_brokerage_agents`, `jbj_brokers` (legacy)
-- Access / invites: `broker_access_requests`, `crm_database_grants`, `vw_crm_database_access`, `crm_broker_sessions`, `crm_broker_blocked_devices`
-- Leads & visibility: `crm_leads`, `crm_lead_shares`, `crm_lead_assignments`, `crm_lead_access_logs`, `crm_field_permissions`, `crm_lead_state_per_user`
-- Commission: `crm_broker_commission_agreements`, `crm_broker_commission_signatures`, `commission_rates`, `referral_commissions`
-- Security: `crm_audit_logs`, `crm_security_events`, `crm_action_logs`, `user_sessions`
-- Import: `crm_imports`, `crm_import_batches`, `crm_broker_import_staging`, `crm_source_databases`, `crm_source_database_rows`
-- Unified Broker Picker + `vw_crm_broker_overview` (per memory)
-- Edge fns: `account-lifecycle`, broker invite/grant pipeline already partially scaffolded
-
-Confirmed gaps (this plan fills them):
-
-1. "Give Broker Access" dialog doesn't load existing brokers, no real invite send, no OTP/first-login reset.
-2. Owner→Broker propagation is automatic — needs an explicit **manual publish/visibility gate**.
-3. No clean date-window / scope filter UI for grants ("today / 7d / from April / custom").
-4. No grouped multi-database hierarchy per broker (Jessica → DB A/B/C/D) with move/duplicate/archive.
-5. Commission split UI exists in DB but no agreement generator with letterhead + e-sign.
-6. Session/device/2FA visible to owner but no one-click revoke + emergency kill switch.
-7. Residual blue focus/hover/datepicker rings on shadcn defaults.
-8. Database import preview drops/renames columns silently.
-
----
-
-## Phased Plan
-
-### Phase 1 — Owner Master Role (guardrail, not a new role)
-- Confirm `has_role(uid,'owner')` short-circuits every RLS policy on `crm_*` tables. Add missing `OR has_role(auth.uid(),'owner')` clauses where absent.
-- Add `OwnerOverrideBanner` shown only to owner inside broker-scoped views ("Viewing as Owner — full access").
-- No new role table.
-
-### Phase 2 — Broker Access & Invitation (fix "Give Broker Access")
-- Rebuild `GiveBrokerAccessDialog` as a 3-step wizard backed by the existing Unified Broker Picker:
-  1. **Pick broker** — searches `crm_brokers` + `vw_crm_broker_pre_invite_leads` (existing). "Create new" inline form writes to `crm_brokers` with `status='invited'`.
-  2. **Scope** — databases, leads, modules, date window, expiry (writes to `crm_database_grants` + new `crm_grant_scope` JSONB column).
-  3. **Send** — calls existing/extended edge fn `crm-broker-invite` which: generates signed invite token, temp password, sends branded email via Lovable Emails (transactional template `broker-invite`), logs to `crm_audit_logs`.
-- First-login flow on `/broker/activate`: force password reset, optional TOTP enroll (`broker_2fa_secrets` new table), then land in `BrokerDashboard`.
-
-### Phase 3 — Visibility Gate (the critical change)
-- New column `crm_lead_shares.publish_mode` = `'auto' | 'manual'`. Default for owner→broker shares becomes `'manual'`.
-- New table `crm_lead_publish_queue (share_id, lead_id, field_diff jsonb, created_at, published_at)` — every owner edit on a shared lead writes a pending diff instead of being visible.
-- Owner UI: `LeadPublishQueue` panel with bulk "Publish to broker" + filters: Today / Yesterday / 7d / 30d / Custom range / From {date} / Selected leads / Selected statuses / Selected DBs / Entire DB.
-- Broker→Owner stays fully transparent (already the case — just confirm no filter strips broker edits from owner views).
-- Add explicit grant fields: `visible_notes`, `visible_files`, `visible_statuses`, `visible_activities` (boolean flags on `crm_database_grants`).
-
-### Phase 4 — Multi-Database Hierarchy per Broker
-- Reuse `crm_database_grants` + `crm_source_databases`. Add `crm_broker_database_groups` view grouping grants by broker.
-- New `BrokerDatabasesTree` UI under each broker profile: list of attached DBs with actions Move / Duplicate-permission-only / Archive / Disable / Merge / Reassign. All actions write audit rows; "duplicate" only copies the grant, never the source DB.
-
-### Phase 5 — Commission Splits & Agreements
-- Extend `crm_broker_commission_agreements`: `splits jsonb` (array of {broker_id,pct}), `template_id`, `pdf_url`, `signed_at`.
-- New edge fn `generate-commission-agreement` → renders JBJ letterhead PDF (reuse existing `institutional-pdf-reporting-standard` jsPDF pipeline) → uploads to storage → creates row in `crm_broker_commission_signatures` with signature token → broker signs in-app (canvas) → PDF re-stamped + locked.
-
-### Phase 6 — Security & Cybersecurity
-- Owner `SecurityCenter` page aggregating existing `crm_broker_sessions`, `crm_broker_blocked_devices`, `crm_security_events`, `user_sessions`. Actions: Revoke session, Block device, Suspend broker, **Emergency Revoke All** (rotates broker JWT version → forces global logout via existing `requireOwnerAuth` middleware).
-- Login alerts: edge fn `broker-login-notify` on `auth.sign_in` webhook → email + audit row + impossible-travel check (reuse `authentication-hardening-and-anomaly-detection` memory).
-- 2FA optional via `broker_2fa_secrets` (TOTP) — required for accessing exports.
-- File security: storage RLS already owner-locked; add `crm_file_grants` for explicit per-broker file unlocks.
-
-### Phase 7 — CRM Feature Gap (no UI break)
-Add only what's missing vs. Salesforce/Zoho/HubSpot:
-- Automation rules UI on top of existing `crm_automation_rules`.
-- Smart reminders (cron edge fn `crm-reminder-tick`).
-- Lead scoring column + `ai-lead-qualification` wired into list view.
-- Duplicate detection (md5 already in `advanced-kanban-and-ai-intelligence`).
-- Auto-assignment using `broker_assignment_rules`.
-- Analytics tab reusing `vw_crm_broker_stats` + `broker_daily_stats`.
-
-### Phase 8 — UI/UX Pass (kill all blue)
-- Global override in `src/index.css`: redefine `--ring`, `--accent`, `--primary` focus/hover for inputs, selects, datepickers, command menus, calendar day cells → champagne `#EFE6D6` bg + ink text + 1px gold hairline (matches Champagne-Gold memory & No-Gold-Fills rule).
-- Patch shadcn primitives: `calendar.tsx`, `select.tsx`, `command.tsx`, `popover.tsx`, `input.tsx`, `button.tsx` variant `outline`.
-- Datepicker UX: clickable input + typeable + popover calendar + expiration helper ("In 7d / 30d / 90d / Custom").
-
-### Phase 9 — Database Import Engine
-- Rewrite `DatabaseImportWizard`:
-  - Step 1: Drop file → parse via `papaparse`/`xlsx` (already vendored).
-  - Step 2: **Preserve every column verbatim** — show detected schema, allow optional mapping but never auto-rename. Renames require explicit confirm.
-  - Step 3: Write raw rows to `crm_source_database_rows` (JSONB `raw`) + normalized fields where mapped. Store `source_file`, `uploaded_by`, `uploaded_at`, `row_count`, checksum.
-  - Step 4: Background enrichment job (`ai-bulk-enrich`) marks rows ready; broker visibility still gated by Phase 3.
-
-### Phase 10 — QA Matrix
-Manual + scripted checklist run end-to-end before sign-off:
-- Invite new broker → email received → activate → reset password → enroll 2FA → login.
-- Owner edits lead → broker does NOT see until Publish.
-- Broker edits lead → owner sees instantly.
-- Date-window filter (From April → today) publishes correct subset.
-- Move DB between brokers, duplicate grant, archive, merge.
-- Commission agreement: generate → sign → PDF locked.
-- Revoke session → broker logged out within 30s.
-- Import 5 sample sheets (CSV/XLSX, messy headers) → all columns preserved.
-- Zero blue pixels (visual regression on Login, CRM list, Lead detail, Calendar, Date picker, Select dropdown).
-
----
-
-## Technical Details (engineering reference)
-
-New DB objects (single migration, additive only):
+## How it works under the hood
 
 ```text
-ALTER TABLE crm_lead_shares ADD COLUMN publish_mode text DEFAULT 'manual';
-ALTER TABLE crm_database_grants ADD COLUMN scope jsonb DEFAULT '{}'::jsonb,
-  ADD COLUMN visible_notes bool DEFAULT false,
-  ADD COLUMN visible_files bool DEFAULT false,
-  ADD COLUMN visible_statuses text[] DEFAULT '{}',
-  ADD COLUMN visible_activities bool DEFAULT false,
-  ADD COLUMN date_window jsonb,  -- {mode:'range'|'preset', from, to, preset}
-  ADD COLUMN expires_at timestamptz;
-CREATE TABLE crm_lead_publish_queue (...);
-CREATE TABLE broker_2fa_secrets (broker_id uuid pk, secret text, enabled bool, ...);
-CREATE TABLE crm_file_grants (file_id, broker_id, granted_by, expires_at);
-ALTER TABLE crm_broker_commission_agreements ADD COLUMN splits jsonb, pdf_url text, signed_at timestamptz;
+crm_leads (one row per lead — single source of truth)
+    │
+    ├── owner-private view: src/pages/owner/crm/Leads.tsx (existing, untouched)
+    │       writes go straight to crm_leads
+    │       trigger does NOT enqueue (privacy = on)
+    │
+    ├── shared workspace:  src/pages/owner/crm/SharedWithBrokers.tsx (NEW)
+    │       lists leads JOIN crm_lead_shares WHERE active = true
+    │       writes go straight to crm_leads AND immediately publish
+    │       (auto-fan-out to all broker shares for that lead)
+    │
+    └── broker view: existing BrokerCRM, reads through crm_lead_shares
+            sees only fields allowed by visible_* grants
+            sees only diffs that were published
 ```
 
-New / extended edge fns:
-- `crm-broker-invite` (extend), `broker-login-notify`, `generate-commission-agreement`, `crm-reminder-tick`, `crm-publish-diffs`.
+The plumbing from the previous phase (`crm_lead_publish_queue`, `crm_capture_owner_lead_edit` trigger, `crm_publish_lead_diffs` RPC) is reused — we just change WHO triggers publication:
 
-New / refactored frontend:
-- `GiveBrokerAccessDialog` (rewrite, wizard)
-- `LeadPublishQueue`, `BrokerDatabasesTree`, `SecurityCenter`, `CommissionAgreementBuilder`, `DatabaseImportWizard`
-- Global `index.css` champagne ring/hover overrides + 6 shadcn primitive patches.
+- Edit from `/owner/crm/leads` (private) → trigger captures diff but `auto_publish = false`. Diff sits in queue, hidden, never delivered. Effectively private.
+- Edit from `/owner/crm/shared-with-brokers` → same write, but the page calls `crm_publish_lead_diffs(lead_id)` right after the mutation succeeds. Diff is delivered instantly.
 
-Order of execution:
-1. Audit-only PR confirming reuse map (no code changes) — 0.5d
-2. Migration + RLS additions (Phase 1+3+4+5+6) — 1d
-3. Edge fn pipeline + emails — 1d
-4. Frontend wizards & panels — 2-3d
-5. UI champagne sweep + datepicker — 0.5d
-6. Import engine rewrite — 1d
-7. QA matrix run-through — 0.5d
+To know which view an edit came from, we add a request-scoped flag (`x-crm-context: 'private' | 'shared'`) that the page passes when calling the update RPC. The trigger reads it from `current_setting('crm.context', true)` and decides whether to enqueue, auto-publish, or skip.
 
-Risk callouts (need your decision before I start):
-- **R1:** Switching default `publish_mode` to `'manual'` will instantly hide previously-auto-shared owner edits from brokers until you publish. Confirm.
-- **R2:** Enforcing TOTP for exports may lock out current brokers without phones. Confirm "optional but required for exports" is OK.
-- **R3:** Champagne ring override touches shadcn primitives globally — will affect non-CRM pages too (intended per memory).
+## Broker Profile Hub
 
----
+New route `/owner/crm/brokers/:brokerId` showing:
 
-Approve to proceed, or tell me which phases to drop/reorder.
+- Header: avatar, name, email, status (active/suspended), date granted access, 2FA status, last login, last IP.
+- Tabs:
+  - **Leads** — every `crm_lead_shares` row + every lead the broker created themselves (`crm_leads.created_by = brokerId`). Inline status, stage, last activity.
+  - **Activity** — chronological feed from `crm_broker_activity_log` (calls, whatsapps, emails, status changes, file opens, exports).
+  - **Performance** — count by stage, conversion %, response time, won/lost.
+  - **Access** — which databases they can see, which fields, which files. Edit/revoke inline.
+  - **Sessions** — active sessions + Revoke All kill switch (reuses Phase 6 SecurityCenter primitives).
+
+Reachable from the existing Brokers list at `/owner/crm/brokers` by clicking any row.
+
+## Database changes
+
+```sql
+-- 1. Per-edit context flag (no schema change — just a session GUC the trigger reads)
+--    Set by the client per request: SELECT set_config('crm.context','shared', true);
+
+-- 2. Auto-publish helper used by the Shared workspace page
+CREATE OR REPLACE FUNCTION public.crm_publish_lead_diffs_for_lead(p_lead_id uuid)
+RETURNS int LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
+DECLARE n int;
+BEGIN
+  UPDATE crm_lead_publish_queue
+     SET published_at = now()
+   WHERE lead_id = p_lead_id AND published_at IS NULL;
+  GET DIAGNOSTICS n = ROW_COUNT;
+  RETURN n;
+END $$;
+
+-- 3. Update existing trigger crm_capture_owner_lead_edit:
+--    - Read GUC crm.context (default 'private')
+--    - If 'private'  → do NOT insert into queue (privacy preserved)
+--    - If 'shared'   → insert into queue AND set published_at = now() (live)
+
+-- 4. Broker activity audit (already partly exists as crm_broker_activity_log;
+--    ensure it captures: lead_create, lead_edit, status_change, call, whatsapp,
+--    email, file_open, export, login, ip)
+
+-- 5. View vw_crm_broker_profile aggregating per-broker counts for the hub
+CREATE OR REPLACE VIEW public.vw_crm_broker_profile AS
+SELECT b.id AS broker_id, b.full_name, b.email,
+       (SELECT count(*) FROM crm_lead_shares s WHERE s.shared_with = b.id AND s.active) AS leads_shared,
+       (SELECT count(*) FROM crm_leads l WHERE l.created_by = b.id) AS leads_created,
+       (SELECT max(occurred_at) FROM crm_broker_activity_log a WHERE a.broker_id = b.id) AS last_activity_at
+  FROM crm_brokers b;
+```
+
+RLS: only the owner (Jane) can read `vw_crm_broker_profile` and `crm_broker_activity_log`. Brokers see nothing change.
+
+## UI work
+
+| File | Action |
+|------|--------|
+| `src/pages/owner/crm/Leads.tsx` (or current `LeadsPage`) | Wrap update calls so they `set_config('crm.context','private')` first. No visual change. |
+| `src/pages/owner/crm/SharedWithBrokers.tsx` | NEW. Same lead table component, filtered to shares-only. Updates set context = `'shared'`. Top banner: "Edits here go live to brokers". |
+| `src/components/crm/SidebarNav.tsx` | Add "Shared with Brokers" item between "Leads" and "Pipeline". |
+| `src/pages/owner/crm/BrokerProfile.tsx` | NEW. The 5-tab hub. |
+| `src/pages/owner/crm/Brokers.tsx` | Each row now links to `/owner/crm/brokers/:id`. |
+| Remove the `LeadPublishQueue` panel from `DatabasesHub` — no longer needed since publishing is contextual and automatic in the Shared workspace. |
+
+## Risk callouts
+
+- **R1**: Existing in-flight queued diffs (from the previous phase) will never be auto-published under the new model. Confirm I should bulk-publish them once on migration, or discard them all.
+- **R2**: Brokers who currently see live owner edits will stop seeing them unless the owner switches to the Shared workspace to edit. This is the desired privacy behavior but is a behavior change.
+- **R3**: The `crm.context` GUC is per-transaction. Any owner edit that bypasses the page (CLI, future webhook, etc.) will default to `'private'` — safer default.
+
+Reply approve to proceed. Phase order will be: (1) DB trigger + helper + view, (2) Shared workspace page + sidebar entry, (3) Broker Profile hub, (4) wire context flag everywhere, (5) cleanup of old LeadPublishQueue UI.
