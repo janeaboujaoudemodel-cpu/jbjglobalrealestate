@@ -51,6 +51,15 @@ const CookiesConsentBanner = () => {
     }
   }, [requestToShow]);
 
+  // Flag the body while the banner is on screen so other floating
+  // widgets (chat bubble, voice concierge) can move out of the way on mobile.
+  useEffect(() => {
+    if (shouldShow && isVisible) {
+      document.body.setAttribute('data-cookie-banner-open', '1');
+      return () => document.body.removeAttribute('data-cookie-banner-open');
+    }
+  }, [shouldShow, isVisible]);
+
   const saveConsent = async (status: ConsentStatus, prefs?: CookiePreferences) => {
     const finalPrefs = prefs || preferences;
     const consentData = {
