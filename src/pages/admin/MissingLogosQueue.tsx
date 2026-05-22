@@ -232,6 +232,44 @@ export default function MissingLogosQueue() {
     }
   }
 
+  async function runUntilDone() {
+    setRunAll(true);
+    setRunAllProgress({ approved: 0, unavailable: 0, remaining: 0 });
+    let approvedTotal = 0;
+    let unavailableTotal = 0;
+    try {
+      // Hard cap to prevent infinite loops if anything goes wrong
+      for (let i = 0; i < 40; i++) {
+        const { data: res, error } = await supabase.functions.invoke(
+          "auto-find-developer-logos",
+          { body: { batch_size: 10 } },
+        );
+        if (error) throw error;
+        approvedTotal += res?.approved ?? 0;
+        unavailableTotal += res?.unavailable ?? 0;
+        const remaining = res?.still_missing ?? 0;
+        setRunAllProgress({ approved: approvedTotal, unavailable: unavailableTotal, remaining });
+        queryClient.invalidateQueries({ queryKey: ["missing-developer-logos"] });
+        queryClient.invalidateQueries({ queryKey: ["missing-developer-logos-counts"] });
+        if (!res?.processed || remaining === 0) break;
+        // small breather between batches
+        await new Promise((r) => setTimeout(r, 1500));
+      }
+      toast({
+        title: "Auto-find run finished",
+        description: `Approved ${approvedTotal} • Marked unavailable ${unavailableTotal}.`,
+      });
+    } catch (e: any) {
+      toast({
+        title: "Run stopped",
+        description: e?.message ?? "Unknown error",
+        variant: "destructive",
+      });
+    } finally {
+      setRunAll(false);
+    }
+  }
+
   const rows = data ?? [];
   const visibleIds = rows.slice(0, 25).map((r) => r.id);
 
