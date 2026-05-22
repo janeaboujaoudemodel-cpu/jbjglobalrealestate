@@ -110,7 +110,6 @@ const modeHeroActions: Record<'investor' | 'broker' | 'developer', { label: stri
   ],
   developer: [
     { label: "Developer Portal", icon: Building2, href: "/developer-portal" },
-    { label: "Submit Project", icon: Upload, href: "/developers/join" },
   ],
 };
 
