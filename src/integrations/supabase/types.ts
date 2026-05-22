@@ -25033,16 +25033,21 @@ export type Database = {
           first_deal_verified: boolean | null
           first_deal_verified_at: string | null
           first_name: string | null
+          first_signup_source: string | null
           full_name: string | null
           id: string
           is_verified: boolean
           last_login_at: string | null
           last_name: string | null
+          last_signup_source: string | null
           login_streak: number | null
           marketing_consent: boolean | null
           mode_default: string | null
           phone_number: string | null
           phone_verified: boolean | null
+          picked_role: string | null
+          picked_role_at: string | null
+          signup_source_label: string | null
           tier_updated_at: string | null
           total_login_days: number | null
           updated_at: string
@@ -25061,16 +25066,21 @@ export type Database = {
           first_deal_verified?: boolean | null
           first_deal_verified_at?: string | null
           first_name?: string | null
+          first_signup_source?: string | null
           full_name?: string | null
           id: string
           is_verified?: boolean
           last_login_at?: string | null
           last_name?: string | null
+          last_signup_source?: string | null
           login_streak?: number | null
           marketing_consent?: boolean | null
           mode_default?: string | null
           phone_number?: string | null
           phone_verified?: boolean | null
+          picked_role?: string | null
+          picked_role_at?: string | null
+          signup_source_label?: string | null
           tier_updated_at?: string | null
           total_login_days?: number | null
           updated_at?: string
@@ -25089,16 +25099,21 @@ export type Database = {
           first_deal_verified?: boolean | null
           first_deal_verified_at?: string | null
           first_name?: string | null
+          first_signup_source?: string | null
           full_name?: string | null
           id?: string
           is_verified?: boolean
           last_login_at?: string | null
           last_name?: string | null
+          last_signup_source?: string | null
           login_streak?: number | null
           marketing_consent?: boolean | null
           mode_default?: string | null
           phone_number?: string | null
           phone_verified?: boolean | null
+          picked_role?: string | null
+          picked_role_at?: string | null
+          signup_source_label?: string | null
           tier_updated_at?: string | null
           total_login_days?: number | null
           updated_at?: string
@@ -28329,6 +28344,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      signup_source_events: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          page_path: string | null
+          picked_role: string | null
+          referrer: string | null
+          signup_source: string
+          signup_source_label: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          page_path?: string | null
+          picked_role?: string | null
+          referrer?: string | null
+          signup_source: string
+          signup_source_label: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          page_path?: string | null
+          picked_role?: string | null
+          referrer?: string | null
+          signup_source?: string
+          signup_source_label?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
       site_settings: {
         Row: {
@@ -35715,6 +35769,18 @@ export type Database = {
           status?: string | null
           title?: string | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      vw_signup_source_counts: {
+        Row: {
+          last_picked_at: string | null
+          picks_last_30d: number | null
+          picks_last_7d: number | null
+          signup_source: string | null
+          signup_source_label: string | null
+          total_picks: number | null
+          unique_users: number | null
         }
         Relationships: []
       }
