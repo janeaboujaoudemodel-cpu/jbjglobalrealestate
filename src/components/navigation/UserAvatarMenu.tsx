@@ -2,11 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard, BarChart3, Inbox, ClipboardList, StickyNote, Bell,
-  Compass, Heart, SlidersHorizontal, Settings, KeyRound, Mail, LogOut,
+  Heart, SlidersHorizontal, Settings, LogOut, ChevronRight,
 } from "lucide-react";
 import {
   DropdownMenu, DropdownMenuTrigger, DropdownMenuContent,
-  DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel,
+  DropdownMenuItem, DropdownMenuSeparator,
+  DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuSubContent,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserMode } from "@/hooks/useUserMode";
@@ -101,11 +102,6 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
     );
   };
 
-  const Section = ({ label }: { label: string }) => (
-    <DropdownMenuLabel className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#1A1A1A]/55 px-2.5 pt-2 pb-1">
-      {label}
-    </DropdownMenuLabel>
-  );
 
   return (
     <DropdownMenu>
@@ -174,32 +170,40 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
         </div>
         <DropdownMenuSeparator className="bg-[#EFE6D6] my-1" />
 
-        <Section label="Workspace" />
-        <Row to="/my-dashboard" icon={LayoutDashboard} label="Dashboard" />
-        {showCRM && <Row to="/owner/crm" icon={BarChart3} label="CRM" />}
-        <Row to="/my-dashboard#inbox" icon={Inbox} label="Inbox" />
-        <Row to="/my-dashboard#tasks" icon={ClipboardList} label="Tasks" badge={pendingTasks} />
-        <Row to="/my-dashboard#notes" icon={StickyNote} label="Notes" />
-        <Row
-          to="/my-dashboard#notifications"
-          icon={Bell}
-          label="Alerts"
-          badge={alerts?.totalNotificationAlerts || 0}
-        />
-
-        <DropdownMenuSeparator className="bg-[#EFE6D6] my-1" />
-        <Section label="Browse" />
-        <Row to="/properties" icon={Compass} label="Browse Properties" />
-        <Row to="/favorites" icon={Heart} label="Saved" />
-        {onOpenFilters && (
-          <Row icon={SlidersHorizontal} label="Filters" onClick={onOpenFilters} />
-        )}
-
-        <DropdownMenuSeparator className="bg-[#EFE6D6] my-1" />
-        <Section label="Account" />
-        <Row to="/profile" icon={Settings} label="Settings" />
-        <Row to="/profile#security" icon={KeyRound} label="Change password" />
-        <Row to="/email-preferences" icon={Mail} label="Email preferences" />
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 focus:bg-[#F7F2EA] data-[highlighted]:bg-[#F7F2EA] data-[state=open]:bg-[#F7F2EA]">
+            <span className="flex items-center gap-2.5 w-full">
+              <LayoutDashboard className="w-4 h-4 text-[#1A1A1A]/70 shrink-0" strokeWidth={1.75} />
+              <span className="text-sm font-medium text-[#1A1A1A] flex-1">Dashboard</span>
+              {activityCount > 0 && (
+                <span className="min-w-[18px] h-[18px] px-1 rounded-full bg-[#1A1A1A] text-white text-[10px] font-bold flex items-center justify-center">
+                  {activityCount > 9 ? "9+" : activityCount}
+                </span>
+              )}
+            </span>
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent
+            sideOffset={8}
+            className="z-[10100] w-[240px] p-2 rounded-xl border border-[#EFE6D6] bg-[#FDFBF7] shadow-2xl"
+          >
+            {showCRM && <Row to="/owner/crm" icon={BarChart3} label="CRM" />}
+            <Row to="/my-dashboard#inbox" icon={Inbox} label="Inbox" />
+            <Row to="/my-dashboard#tasks" icon={ClipboardList} label="Tasks" badge={pendingTasks} />
+            <Row to="/my-dashboard#notes" icon={StickyNote} label="Notes" />
+            <Row
+              to="/my-dashboard#notifications"
+              icon={Bell}
+              label="Alerts"
+              badge={alerts?.totalNotificationAlerts || 0}
+            />
+            <Row to="/favorites" icon={Heart} label="Saved" />
+            {onOpenFilters && (
+              <Row icon={SlidersHorizontal} label="Filters" onClick={onOpenFilters} />
+            )}
+            <DropdownMenuSeparator className="bg-[#EFE6D6] my-1" />
+            <Row to="/profile" icon={Settings} label="Settings" />
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
 
         <DropdownMenuSeparator className="bg-[#EFE6D6] my-1" />
         <DropdownMenuItem
