@@ -91,15 +91,28 @@ const staggerContainer = {
   }
 };
 
-// Hero action pills — matches founder reference photo: single horizontal row
-const heroActions = [
+// Hero action pills — base set (mode-specific actions are merged in component)
+const baseHeroActions = [
   { label: "Browse Properties", icon: Search, href: "/properties" },
   { label: "AI Home Finder", icon: Home, href: "/quiz" },
-  { label: "Sell Your Property", icon: Building2, href: "/sell" },
-  { label: "Explore AI Tools", icon: Brain, href: "/ai-hub" },
   { label: "Market Intelligence", icon: BarChart3, href: "/market-intelligence" },
   { label: "News", icon: Newspaper, href: "/news" },
 ];
+
+const modeHeroActions: Record<'investor' | 'broker' | 'developer', { label: string; icon: typeof Search; href: string }[]> = {
+  investor: [
+    { label: "Investor Dashboard", icon: LayoutDashboard, href: "/investor-dashboard" },
+    { label: "Sell Your Property", icon: Tag, href: "/sell" },
+  ],
+  broker: [
+    { label: "Broker Toolkit", icon: Briefcase, href: "/broker-toolkit" },
+    { label: "Careers", icon: GraduationCap, href: "/careers" },
+  ],
+  developer: [
+    { label: "Developer Portal", icon: Building2, href: "/developer-portal" },
+    { label: "Submit Project", icon: Upload, href: "/developers/join" },
+  ],
+};
 
 // Three pillars
 const pillars = [
