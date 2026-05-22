@@ -240,6 +240,10 @@ export default function DatabasesHub() {
         )}
       </div>
 
+      <div className="mt-4">
+        <LeadPublishQueue />
+      </div>
+
       <UploadDatabaseDialog
         open={uploadOpen}
         onOpenChange={setUploadOpen}
