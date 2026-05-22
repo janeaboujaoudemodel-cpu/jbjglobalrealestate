@@ -556,8 +556,13 @@ const MeetTheTeam: React.FC = () => {
                 </motion.div>
               );
             })}
+
+            {/* Brokers section — sourced from real activated brokers in CRM */}
+            <BrokersTeamSection isOwner={isOwner} />
           </div>
         </section>
+
+
 
         {/* CTA Section - 3-Layer System: Black > Active Champagne > Pearl */}
         <section className="py-16 sm:py-20 bg-[#1A1A1A]">
