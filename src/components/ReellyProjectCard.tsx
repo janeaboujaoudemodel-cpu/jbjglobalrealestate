@@ -160,16 +160,33 @@ const ReellyProjectCard = ({
        <Link to={`/project/${project.slug}`} className="flex-1 flex flex-col">
          {/* Image with Carousel */}
           <div className="aspect-[16/10] overflow-hidden relative">
-            {/* Developer Logo Overlay - Top Left */}
-            {getDeveloperLogoUrl((project as any).developer) && (
-              <div className="absolute top-3 left-3 z-20">
-                <DeveloperLogo
-                  src={getDeveloperLogoUrl((project as any).developer)}
-                  alt={project.developer_name || "Developer"}
-                  variant="bare"
-                />
-              </div>
-            )}
+            {/* Developer mark overlay (logo if available, else name plate) */}
+            {(() => {
+              const devLogoUrl = getDeveloperLogoUrl((project as any).developer);
+              const devName =
+                (project as any).developer?.name ||
+                project.developer_name ||
+                null;
+              const hasMark = !!devLogoUrl || !!devName;
+              if (!hasMark) return null;
+              return (
+                <div className="absolute top-3 left-3 z-20">
+                  {devLogoUrl ? (
+                    <DeveloperLogo
+                      src={devLogoUrl}
+                      alt={devName || "Developer"}
+                      variant="bare"
+                    />
+                  ) : (
+                    <DeveloperLogo
+                      variant="nameplate"
+                      name={devName}
+                      alt={devName || "Developer"}
+                    />
+                  )}
+                </div>
+              );
+            })()}
 
              <VerifiedMedia
                src={images[currentImageIndex]?.image_url || project.thumbnail || project.gallery?.[0] || null}
