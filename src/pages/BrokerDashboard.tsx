@@ -161,12 +161,36 @@ export default function BrokerDashboard() {
     },
   ];
 
-  // Build 2-letter initials (e.g., "Jane Boujaoude" -> "JB")
+  // Match header avatar identity: prefer CRM display_name, then user_metadata.full_name
+  const { data: crmProfile } = useQuery({
+    queryKey: ["crm-profile-name", user?.id],
+    queryFn: async () => {
+      if (!user?.id) return null;
+      const { data } = await supabase
+        .from("crm_users_profile")
+        .select("display_name")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      return data;
+    },
+    enabled: !!user?.id,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const meta = (user?.user_metadata ?? {}) as Record<string, unknown>;
+  const displayName =
+    (crmProfile as any)?.display_name ||
+    profile?.display_name ||
+    (typeof meta.full_name === "string" ? (meta.full_name as string) : null) ||
+    (typeof meta.name === "string" ? (meta.name as string) : null) ||
+    user?.email?.split("@")[0] ||
+    "Broker";
+
+  // Build 2-letter initials (e.g., "Jane Boujaoude" -> "JB") — matches header avatar
   const getInitials = () => {
-    const source = profile?.display_name || user?.email?.split('@')[0] || 'Broker';
-    const parts = source.replace(/[._-]+/g, ' ').trim().split(/\s+/).filter(Boolean);
+    const parts = displayName.replace(/[._-]+/g, " ").trim().split(/\s+/).filter(Boolean);
     if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
-    return source.slice(0, 2).toUpperCase();
+    return displayName.slice(0, 2).toUpperCase();
   };
 
   // Treat as Active unless explicitly flagged false
