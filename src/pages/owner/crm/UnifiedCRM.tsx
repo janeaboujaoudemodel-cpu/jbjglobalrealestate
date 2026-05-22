@@ -118,6 +118,7 @@ const CRMGlobalExportButton = lazy(() => import("@/components/crm/CRMGlobalExpor
 const CRMSideRail = lazy(() => import("@/components/crm/CRMSideRail"));
 const CRMFloatingInsightsWidget = lazy(() => import("@/components/crm/CRMFloatingInsightsWidget"));
 const CRMAINextActions = lazy(() => import("@/components/crm/CRMAINextActions"));
+const SharedWithBrokersView = lazy(() => import("@/components/crm/SharedWithBrokersView"));
 
 type Entity =
   | "leads" | "investors" | "developers" | "sales-reps"
