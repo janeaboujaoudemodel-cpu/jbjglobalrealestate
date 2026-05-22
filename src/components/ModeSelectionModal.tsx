@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { User, Briefcase, ArrowRight, CheckCircle2, Building2 } from 'lucide-react';
+import { User, Briefcase, ArrowRight, CheckCircle2, Building2, Sparkles, X } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { useUserModeContext, UserMode } from '@/contexts/UserModeContext';
