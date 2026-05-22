@@ -196,12 +196,14 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
               label="Alerts"
               badge={alerts?.totalNotificationAlerts || 0}
             />
+            <DropdownMenuSeparator className="bg-[#EFE6D6] my-1" />
             <Row to="/favorites" icon={Heart} label="Saved" />
             {onOpenFilters && (
               <Row icon={SlidersHorizontal} label="Filters" onClick={onOpenFilters} />
             )}
             <DropdownMenuSeparator className="bg-[#EFE6D6] my-1" />
-            <Row to="/profile" icon={Settings} label="Settings" />
+            <Row to="/profile" icon={User} label="My Profile" />
+            <Row to="/profile?tab=settings" icon={Settings} label="Settings" />
           </DropdownMenuSubContent>
         </DropdownMenuSub>
 
