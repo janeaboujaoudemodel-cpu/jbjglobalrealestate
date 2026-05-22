@@ -105,8 +105,9 @@ const ListingsApproval = () => {
     });
   }, [projects, search]);
 
+  const needsPhoto = filtered.filter((p) => getMediaStatus(p) === "missing");
   const approved = filtered.filter((p) => p.is_published);
-  const pending = filtered.filter((p) => !p.is_published);
+  const pending = filtered.filter((p) => !p.is_published && getMediaStatus(p) !== "missing");
 
   const approve = async (p: ProjectRow) => {
     const status = getMediaStatus(p);
