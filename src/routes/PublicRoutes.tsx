@@ -369,7 +369,7 @@ export const PublicRoutes = () => (
     <Route path="/join" element={<JoinApplication />} />
     <Route path="/careers" element={<JoinApplication />} />
     <Route path="/careers/apply" element={<JoinApplication />} />
-    <Route path="/careers/developer-representative" element={<CareersDeveloperRep />} />
+    <Route path="/careers/developer-representative" element={<ModeRequiredRoute modes={['developer']}><CareersDeveloperRep /></ModeRequiredRoute>} />
     <Route path="/onboarding" element={<AuthRequiredRoute><Onboarding /></AuthRequiredRoute>} />
     <Route path="/onboarding/module/:moduleId" element={<AuthRequiredRoute><OnboardingModule /></AuthRequiredRoute>} />
     <Route path="/verify-certificate/:token" element={<VerifyCertificate />} />
