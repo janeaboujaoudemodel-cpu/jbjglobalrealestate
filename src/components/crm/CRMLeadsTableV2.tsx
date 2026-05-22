@@ -917,6 +917,13 @@ export default function CRMLeadsTableV2({
         onClose={() => setAgreementLead(null)}
         lead={agreementLead}
       />
+
+      <LeadAccessDialog
+        open={!!accessLead}
+        onOpenChange={(o) => { if (!o) setAccessLead(null); }}
+        leadId={accessLead?.id || ""}
+        leadName={accessLead?.full_name}
+      />
     </div>
   );
 }
