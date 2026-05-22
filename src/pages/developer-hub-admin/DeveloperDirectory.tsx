@@ -93,6 +93,12 @@ export default function DeveloperDirectory() {
 
   return (
     <div className="space-y-4">
+      <Card className="p-4 bg-[#FDFBF7] border border-[#B89555]/30">
+        <p className="text-sm text-[#1A1A1A]/80">
+          <span className="font-semibold text-[#1A1A1A]">Directory</span> = the live developer list. Click <span className="font-semibold">Open profile</span> for full details (projects, media, sales reps, activity), or <span className="font-semibold">Rebuild from site</span> to scrape their website — every scrape stages in <a href="/developer-hub-admin/enrichment" className="underline">Site Rebuild</a> for your approval before going live.
+        </p>
+      </Card>
+
       <Card className="p-4 bg-[#F7F2EA] border border-[#B89555]/30 flex items-center gap-3 flex-wrap">
         <Input
           placeholder="Search developer…"
