@@ -7,6 +7,7 @@ import { Route, Navigate } from "react-router-dom";
 import { RedirectWithParams } from "@/components/RedirectWithParams";
 import { RedirectWithSearch } from "@/routes/RedirectWithSearch";
 import AuthRequiredRoute from "@/components/AuthRequiredRoute";
+import ModeRequiredRoute from "@/components/ModeRequiredRoute";
 
 // ── Property & Listing Pages ──
 const Index = lazy(() => import("@/pages/Index"));
