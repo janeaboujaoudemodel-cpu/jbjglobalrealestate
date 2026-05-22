@@ -82,6 +82,23 @@ body {
   filter: drop-shadow(0 1px 2px hsl(0 0% 0% / 0.7));
 }
 
+/* Sidebar collapse / expand control — force GOLD on text + icon
+   in both expanded and collapsed sidebar states. Beats every later
+   contrast guard via maximum specificity + !important. */
+[data-sidebar-collapse-control],
+[data-sidebar-collapse-control] *,
+.jbj-sidebar-collapse-control,
+.jbj-sidebar-collapse-control * {
+  color: #B89555 !important;
+}
+[data-sidebar-collapse-control] svg,
+[data-sidebar-collapse-control] svg *,
+.jbj-sidebar-collapse-control svg,
+.jbj-sidebar-collapse-control svg * {
+  color: #B89555 !important;
+  stroke: #B89555 !important;
+}
+
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
 All colors MUST be HSL.
 */
