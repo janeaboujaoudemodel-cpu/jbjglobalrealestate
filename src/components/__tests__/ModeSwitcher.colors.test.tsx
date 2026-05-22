@@ -234,6 +234,7 @@ describe("ModeSwitcher color regression", () => {
       const trigger = getTrigger();
       const snapshot = {
         bgImage: trigger.style.backgroundImage,
+        shadow: trigger.style.boxShadow,
         border: trigger.style.borderColor,
         color: trigger.style.color,
       };
@@ -245,7 +246,7 @@ describe("ModeSwitcher color regression", () => {
     const { base } = PALETTE.broker;
 
     // Reference reflects the active broker palette in the rail, not a blacked-out chip.
-    expect(containsHex(triggerBoxShadow(), base)).toBe(true);
+    expect(containsHex(reference.shadow, base)).toBe(true);
     expect(
       norm(reference.color) === "#1a1a1a" || norm(reference.color) === "rgb(26,26,26)",
     ).toBe(true);
