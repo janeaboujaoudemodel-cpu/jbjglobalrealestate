@@ -737,14 +737,15 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
             </TabsContent>
           </Tabs>
 
-          <div className="flex gap-3 pt-2 border-t border-[#1A1A1A]/10">
-            <Button type="button" variant="outline" onClick={onClose} className="flex-1">
+          <div className="sticky bottom-0 -mx-6 px-6 pt-3 pb-3 mt-2 bg-[#FDFBF7]/95 backdrop-blur supports-[backdrop-filter]:bg-[#FDFBF7]/85 border-t border-[#B89555]/20 flex gap-3">
+            <Button type="button" variant="outline" onClick={handleClose} className="flex-1">
               Cancel
             </Button>
             <Button type="submit" disabled={loading} className="flex-1">
               {loading ? "Creating..." : "Create Lead"}
             </Button>
           </div>
+
         </form>
       </DialogContent>
     </Dialog>
