@@ -47,10 +47,11 @@ export function useTeamVisibility() {
     }
   }, [load]);
 
-  // Defaults: hidden if explicit false, otherwise visible
+  // Per-member: visible unless explicit false
   const isMemberVisible = (memberId: string) => map[memberId] !== false;
-  const isPageVisible = map[PAGE_KEY] !== false;
-  const isAiHidden = map[HIDE_AI_KEY] === false; // we stored `false` to mean "AI hidden" (see seed); see below
+  // Page master: HIDDEN by default — owner must explicitly opt in to publish /team
+  const isPageVisible = map[PAGE_KEY] === true;
+  const isAiHidden = map[HIDE_AI_KEY] === false;
 
   return {
     map,
