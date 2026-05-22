@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/contexts/AuthContext";
 import { useBrokerProfile } from "@/hooks/useBrokerProfile";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -159,12 +161,36 @@ export default function BrokerDashboard() {
     },
   ];
 
-  // Build 2-letter initials (e.g., "Jane Boujaoude" -> "JB")
+  // Match header avatar identity: prefer CRM display_name, then user_metadata.full_name
+  const { data: crmProfile } = useQuery({
+    queryKey: ["crm-profile-name", user?.id],
+    queryFn: async () => {
+      if (!user?.id) return null;
+      const { data } = await supabase
+        .from("crm_users_profile")
+        .select("display_name")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      return data;
+    },
+    enabled: !!user?.id,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const meta = (user?.user_metadata ?? {}) as Record<string, unknown>;
+  const displayName =
+    (crmProfile as any)?.display_name ||
+    profile?.display_name ||
+    (typeof meta.full_name === "string" ? (meta.full_name as string) : null) ||
+    (typeof meta.name === "string" ? (meta.name as string) : null) ||
+    user?.email?.split("@")[0] ||
+    "Broker";
+
+  // Build 2-letter initials (e.g., "Jane Boujaoude" -> "JB") — matches header avatar
   const getInitials = () => {
-    const source = profile?.display_name || user?.email?.split('@')[0] || 'Broker';
-    const parts = source.replace(/[._-]+/g, ' ').trim().split(/\s+/).filter(Boolean);
+    const parts = displayName.replace(/[._-]+/g, " ").trim().split(/\s+/).filter(Boolean);
     if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
-    return source.slice(0, 2).toUpperCase();
+    return displayName.slice(0, 2).toUpperCase();
   };
 
   // Treat as Active unless explicitly flagged false
@@ -189,15 +215,47 @@ export default function BrokerDashboard() {
           <div className="w-full bg-gradient-to-r from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] border-y-2 border-[#B89555]/40">
             <div className="px-6 md:px-10 py-8">
               <div className="flex flex-col md:flex-row items-center gap-6">
-                <Avatar className="w-24 h-24 border-2 border-[#B89555] shadow-[0_4px_18px_-6px_rgba(184,149,85,0.45)]">
-                  <AvatarImage src={profile?.photo_url || undefined} />
-                  <AvatarFallback className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] text-[#B89555] text-2xl font-semibold tracking-wide">
-                    {getInitials()}
-                  </AvatarFallback>
-                </Avatar>
+                {/* Avatar — matches header mother-of-pearl gold gradient identity */}
+                <div
+                  className="relative h-24 w-24 rounded-full flex items-center justify-center shrink-0 overflow-hidden"
+                  style={{
+                    border: "1.5px solid hsl(var(--gold))",
+                    boxShadow:
+                      "0 0 0 1px rgba(184,149,85,0.35), 0 8px 24px -8px rgba(184,149,85,0.55)",
+                    background:
+                      "radial-gradient(120% 120% at 30% 25%, #FFFDF8 0%, #F5ECDC 38%, #E8D8B8 70%, #D9C291 100%)",
+                  }}
+                >
+                  {profile?.photo_url ? (
+                    <img
+                      src={profile.photo_url}
+                      alt={displayName}
+                      className="absolute inset-0 w-full h-full object-cover rounded-full"
+                    />
+                  ) : (
+                    <>
+                      <span
+                        aria-hidden="true"
+                        className="absolute inset-0 pointer-events-none"
+                        style={{
+                          background:
+                            "conic-gradient(from 210deg at 50% 50%, rgba(255,255,255,0.35), rgba(255,255,255,0) 25%, rgba(184,149,85,0.18) 55%, rgba(255,255,255,0.3) 80%, rgba(255,255,255,0) 100%)",
+                          opacity: 0.5,
+                          mixBlendMode: "soft-light",
+                        }}
+                      />
+                      <span
+                        className="relative text-2xl font-bold text-[#1A1A1A] tracking-[-0.01em]"
+                        style={{ textShadow: "0 1px 0 rgba(255,255,255,0.5)" }}
+                      >
+                        {getInitials()}
+                      </span>
+                    </>
+                  )}
+                </div>
                 <div className="text-center md:text-left flex-1">
                   <h2 className="text-2xl font-semibold text-[#1A1A1A] mb-1">
-                    {profile?.display_name || user?.email || 'Broker'}
+                    {displayName}
                   </h2>
                   <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-2">
                     <Badge className="bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/60 hover:bg-[#FDFBF7]">
