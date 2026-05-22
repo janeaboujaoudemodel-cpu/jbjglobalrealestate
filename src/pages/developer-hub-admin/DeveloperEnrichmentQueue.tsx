@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { Sparkles, Check, X, RefreshCw, Zap, CheckSquare, Square } from "lucide-react";
+import { Sparkles, Check, X, RefreshCw, Zap, CheckSquare, Square, ArrowRight } from "lucide-react";
 
 interface LogRow {
   id: string;
@@ -155,6 +155,17 @@ export default function DeveloperEnrichmentQueue() {
 
   return (
     <div className="space-y-4">
+      {/* Explainer: Directory vs Site Rebuild */}
+      <Card className="p-4 bg-[#FDFBF7] border border-[#B89555]/30">
+        <div className="flex items-start gap-3">
+          <Sparkles className="size-4 text-[#1A1A1A] mt-0.5 shrink-0" />
+          <div className="text-sm text-[#1A1A1A]/80 space-y-1">
+            <p><span className="font-semibold text-[#1A1A1A]">Site Rebuild</span> = approval queue. Every scrape lands here first as a draft. Nothing reaches the public site until you click <span className="font-semibold">Apply</span>.</p>
+            <p><span className="font-semibold text-[#1A1A1A]">Directory</span> = the live list of developers — where you pick who to (re-)scrape. The "Rebuild 25 broken" button below does both in one click.</p>
+          </div>
+        </div>
+      </Card>
+
       <Card className="p-4 bg-[#F7F2EA] border border-[#B89555]/30">
         <div className="flex items-center gap-3 flex-wrap">
           <Sparkles className="size-4 text-[#1A1A1A]" />
@@ -216,10 +227,6 @@ export default function DeveloperEnrichmentQueue() {
             )}
           </div>
         )}
-
-        <p className="text-xs text-[#1A1A1A]/70 mt-2">
-          Scrapes the developer's official site (logo, description, projects, social), stages the result here, and only writes to the live record after you approve. Existing locked logos are preserved.
-        </p>
       </Card>
 
       {isLoading && <p className="text-sm text-[#1A1A1A]/70">Loading…</p>}
@@ -255,6 +262,9 @@ export default function DeveloperEnrichmentQueue() {
                       {new Date(log.created_at).toLocaleString()} · status: <span className="font-medium">{log.status}</span>
                       {log.source_url && (
                         <> · source: <a href={log.source_url} target="_blank" rel="noreferrer" className="underline">{(() => { try { return new URL(log.source_url!).hostname; } catch { return log.source_url; } })()}</a></>
+                      )}
+                      {log.developers?.slug && (
+                        <> · <a href={`/developer-hub-admin/profile/${log.developers.slug}`} className="underline">Open full profile</a></>
                       )}
                     </p>
                     {log.error && <p className="text-xs text-red-600 mt-1">{log.error}</p>}
@@ -292,16 +302,7 @@ export default function DeveloperEnrichmentQueue() {
                 </div>
               </div>
 
-              <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div>
-                  <p className="text-xs uppercase tracking-wide text-[#1A1A1A]/60 mb-1">Before</p>
-                  <DiffBlock value={log.before_jsonb} />
-                </div>
-                <div>
-                  <p className="text-xs uppercase tracking-wide text-[#1A1A1A]/60 mb-1">After (proposed)</p>
-                  <DiffBlock value={log.after_jsonb} highlight />
-                </div>
-              </div>
+              <DiffTable before={log.before_jsonb} after={log.after_jsonb} />
             </Card>
           );
         })}
@@ -310,24 +311,56 @@ export default function DeveloperEnrichmentQueue() {
   );
 }
 
-function DiffBlock({ value, highlight }: { value: Record<string, unknown>; highlight?: boolean }) {
+function fmt(v: unknown): string {
+  if (v === undefined || v === null) return "";
+  if (typeof v === "string") return v;
+  return JSON.stringify(v);
+}
+
+function DiffTable({ before, after }: { before: Record<string, unknown>; after: Record<string, unknown> }) {
+  const visibleFields = FIELDS.filter((f) => {
+    const a = fmt(after?.[f]);
+    const b = fmt(before?.[f]);
+    return a !== "" || b !== "";
+  });
+
+  if (visibleFields.length === 0) {
+    return <p className="text-xs text-[#1A1A1A]/50 mt-3 italic">No changes proposed.</p>;
+  }
+
   return (
-    <div className={`rounded border p-3 text-xs space-y-1 ${highlight ? "border-[#B89555] bg-[#FDFBF7]" : "border-[#B89555]/30 bg-[#FDFBF7]"}`}>
-      {FIELDS.map((f) => {
-        const v = value?.[f];
-        if (v === undefined || v === null || v === "") return null;
-        if (f === "logo_url" && typeof v === "string") {
-          return (
-            <div key={f} className="flex items-center gap-2">
-              <span className="text-[#1A1A1A]/60 w-24 shrink-0">{f}</span>
-              <img src={v} alt="" className="h-8 max-w-[120px] object-contain bg-[#F7F2EA] rounded border border-[#B89555]/20 p-1" />
-            </div>
-          );
-        }
+    <div className="mt-3 overflow-hidden rounded border border-[#B89555]/30">
+      <div className="grid grid-cols-[120px,1fr,16px,1fr] bg-[#EFE6D6] text-[10px] uppercase tracking-wide text-[#1A1A1A]/70">
+        <div className="px-3 py-2 border-r border-[#B89555]/30">Field</div>
+        <div className="px-3 py-2 border-r border-[#B89555]/30">Before (live)</div>
+        <div className="border-r border-[#B89555]/30" />
+        <div className="px-3 py-2">After (proposed)</div>
+      </div>
+      {visibleFields.map((f, i) => {
+        const b = fmt(before?.[f]);
+        const a = fmt(after?.[f]);
+        const changed = a !== b;
         return (
-          <div key={f} className="flex gap-2">
-            <span className="text-[#1A1A1A]/60 w-24 shrink-0">{f}</span>
-            <span className="text-[#1A1A1A] break-words">{String(v)}</span>
+          <div
+            key={f}
+            className={`grid grid-cols-[120px,1fr,16px,1fr] text-xs items-stretch ${
+              i % 2 === 0 ? "bg-[#FDFBF7]" : "bg-[#F7F2EA]"
+            }`}
+          >
+            <div className="px-3 py-2 border-r border-[#B89555]/20 font-medium text-[#1A1A1A]/70 break-words self-start">{f}</div>
+            <div className="px-3 py-2 border-r border-[#B89555]/20 text-[#1A1A1A]/70 break-words whitespace-pre-wrap self-start">
+              {f === "logo_url" && b ? (
+                <img src={b} alt="" className="h-8 max-w-[140px] object-contain bg-[#FDFBF7] rounded border border-[#B89555]/20 p-1" />
+              ) : b ? b : <span className="italic text-[#1A1A1A]/40">—</span>}
+            </div>
+            <div className="flex items-center justify-center border-r border-[#B89555]/20 text-[#B89555]">
+              {changed && <ArrowRight className="size-3" />}
+            </div>
+            <div className={`px-3 py-2 break-words whitespace-pre-wrap self-start ${changed ? "bg-[#B89555]/10 text-[#1A1A1A] font-medium" : "text-[#1A1A1A]/70"}`}>
+              {f === "logo_url" && a ? (
+                <img src={a} alt="" className="h-8 max-w-[140px] object-contain bg-[#FDFBF7] rounded border border-[#B89555]/20 p-1" />
+              ) : a ? a : <span className="italic text-[#1A1A1A]/40">—</span>}
+            </div>
           </div>
         );
       })}
