@@ -12,7 +12,7 @@
  * Public project cards render the developer NAME as a nameplate fallback,
  * so attribution is always shown even before a logo is approved.
  */
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -269,6 +269,19 @@ export default function MissingLogosQueue() {
       setRunAll(false);
     }
   }
+
+  // Auto-start the continuous sweep on mount so the owner doesn't have to
+  // click a button. Runs once per page visit, only on the "Needs Logo" tab.
+  const autoStartedRef = useRef(false);
+  useEffect(() => {
+    if (autoStartedRef.current) return;
+    if (tab !== "needs_logo") return;
+    if (isLoading) return;
+    if ((counts.data?.needs_logo ?? 0) === 0) return;
+    autoStartedRef.current = true;
+    runUntilDone();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tab, isLoading, counts.data?.needs_logo]);
 
   const rows = data ?? [];
   const visibleIds = rows.slice(0, 25).map((r) => r.id);
