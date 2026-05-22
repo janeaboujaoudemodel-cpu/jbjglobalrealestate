@@ -104,6 +104,20 @@ const investorShortcuts = [
   { label: "Education Hub", desc: "Guides & resources", icon: CheckCircle2, href: "/education-hub" },
 ];
 
+const brokerShortcuts = [
+  { label: "Broker Dashboard", desc: "Performance metrics & analytics", icon: LayoutDashboard, href: "/broker-dashboard" },
+  { label: "CRM", desc: "Lead management & pipeline", icon: Briefcase, href: "/crm" },
+  { label: "Listing Portal", desc: "Submit & manage listings", icon: ListChecks, href: "/listing-portal" },
+  { label: "JBJ Academy", desc: "Education & certifications", icon: GraduationCap, href: "/jbj-academy" },
+  { label: "AI Assistant", desc: "AI-powered sales & support", icon: Brain, href: "/ai-hub" },
+  { label: "Objection Handler", desc: "AI objection scripts", icon: Target, href: "/ai-objection-handler" },
+  { label: "Royal Tools", desc: "Stamp, E-Sign, Logo & more", icon: Zap, href: "/broker-toolkit" },
+  { label: "Market Intelligence", desc: "Market data & insights", icon: TrendingUp, href: "/market-intelligence" },
+  { label: "Broker Resources", desc: "Templates & materials", icon: Star, href: "/broker-resources" },
+  { label: "Support Hub", desc: "Submit tickets & get help", icon: Headphones, href: "/ticket-hub" },
+];
+
+
 const DeveloperPortalCTA = () => {
   const { user } = useAuth();
   const { data: status, isLoading } = useDevRegistration();
