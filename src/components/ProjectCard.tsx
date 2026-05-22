@@ -391,16 +391,19 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
 
               {(() => {
                 const breakdown = (project as any).payment_breakdown;
-                if (!breakdown || !Array.isArray(breakdown) || breakdown.length === 0) return null;
-                const percentages = breakdown
-                  .map((b: any) => b.percentage)
-                  .filter((p: any) => typeof p === 'number');
-                if (percentages.length === 0) return null;
+                const percentages = Array.isArray(breakdown)
+                  ? breakdown.map((b: any) => b.percentage).filter((p: any) => typeof p === 'number')
+                  : [];
+                const hasPlan = percentages.length > 0;
                 return (
-                  <span data-no-contrast-guard className="payment-plan-square allow-white" aria-label={`Payment plan ${percentages.join('/')}`}>
+                  <span
+                    data-no-contrast-guard
+                    className="payment-plan-square allow-white"
+                    aria-label={hasPlan ? `Payment plan ${percentages.join('/')}` : 'Payment plan not applicable'}
+                  >
                     <CreditCard className="w-3 h-3" aria-hidden="true" />
                     <span className="payment-plan-eyebrow">Plan</span>
-                    <span className="payment-plan-value">{percentages.join('/')}</span>
+                    <span className="payment-plan-value">{hasPlan ? percentages.join('/') : 'N/A'}</span>
                   </span>
                 );
               })()}
