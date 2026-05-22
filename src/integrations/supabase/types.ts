@@ -36015,6 +36015,30 @@ export type Database = {
         Returns: Json
       }
       crm_hard_delete_leads: { Args: { p_lead_ids: string[] }; Returns: Json }
+      crm_owner_list_access: {
+        Args: { p_lead_id: string }
+        Returns: {
+          broker_id: string
+          broker_name: string
+          broker_user_id: string
+          expires_at: string
+          permission_level: string
+          source: string
+          source_label: string
+          source_row_id: string
+          started_at: string
+          status: string
+        }[]
+      }
+      crm_owner_set_access_status: {
+        Args: {
+          p_action: string
+          p_reason?: string
+          p_source: string
+          p_source_row_id: string
+        }
+        Returns: Json
+      }
       crm_publish_lead_diffs: { Args: { _ids: string[] }; Returns: number }
       crm_publish_lead_diffs_for_lead: {
         Args: { p_lead_id: string }

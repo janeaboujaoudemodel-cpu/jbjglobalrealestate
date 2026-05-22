@@ -14,7 +14,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { toast } from "sonner";
-import { FileSignature, Mail, MessageSquare, PhoneCall, Trash2, Flame, Star, CheckCircle2, XCircle, Clock, Ban, Crown } from "lucide-react";
+import { FileSignature, Mail, MessageSquare, PhoneCall, Trash2, Flame, Star, CheckCircle2, XCircle, Clock, Ban, Crown, Shield } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -30,6 +30,7 @@ import CRMLeadsBulkBar from "./CRMLeadsBulkBar";
 import LeadAssignModal from "./LeadAssignModal";
 import DeleteLeadDialog from "./DeleteLeadDialog";
 import SendAgreementDialog from "./SendAgreementDialog";
+import LeadAccessDialog from "./LeadAccessDialog";
 import { isRealCRMLead } from "@/utils/crmFakeDataGuard";
 import LeadQuickActions from "./LeadQuickActions";
 import { BrokerCombobox } from "./BrokerCombobox";
@@ -89,6 +90,7 @@ export default function CRMLeadsTableV2({
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [assignLeadIds, setAssignLeadIds] = useState<string[]>([]);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [accessLead, setAccessLead] = useState<Lead | null>(null);
   const [leadToDelete, setLeadToDelete] = useState<Lead | null>(null);
   const [agreementLead, setAgreementLead] = useState<Lead | null>(null);
 
@@ -864,6 +866,17 @@ export default function CRMLeadsTableV2({
                           >
                             <FileSignature className="h-4 w-4" />
                           </button>
+                          {isOwner && (
+                            <button
+                              type="button"
+                              onClick={() => setAccessLead(lead)}
+                              title="Manage broker access"
+                              aria-label="Manage broker access"
+                              className="h-9 w-9 inline-flex items-center justify-center text-[#1A1A1A] hover:bg-[#EFE6D6] transition-colors"
+                            >
+                              <Shield className="h-4 w-4" />
+                            </button>
+                          )}
                           <button
                             type="button"
                             onClick={() => openDeleteDialog(lead)}
@@ -903,6 +916,13 @@ export default function CRMLeadsTableV2({
         open={!!agreementLead}
         onClose={() => setAgreementLead(null)}
         lead={agreementLead}
+      />
+
+      <LeadAccessDialog
+        open={!!accessLead}
+        onOpenChange={(o) => { if (!o) setAccessLead(null); }}
+        leadId={accessLead?.id || ""}
+        leadName={accessLead?.full_name}
       />
     </div>
   );
