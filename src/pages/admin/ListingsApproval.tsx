@@ -60,7 +60,7 @@ const ListingsApproval = () => {
   const [projects, setProjects] = useState<ProjectRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [tab, setTab] = useState<"pending" | "approved">("pending");
+  const [tab, setTab] = useState<"needs-photo" | "pending" | "approved">("needs-photo");
 
   const load = async () => {
     setLoading(true);
