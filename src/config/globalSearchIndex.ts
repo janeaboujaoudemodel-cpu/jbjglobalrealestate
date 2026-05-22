@@ -119,88 +119,103 @@ export const allSearchItems: SearchItem[] = [
 // Search scoring function
 export function scoreSearchResult(item: SearchItem, query: string): number {
   const q = query.toLowerCase().trim();
+  if (!q) return 0;
   const label = item.label.toLowerCase();
-  const keywords = item.keywords.join(' ').toLowerCase();
-  
-  // Exact label match = highest score
+  const keywordsText = item.keywords.join(' ').toLowerCase();
+  const descText = item.description.toLowerCase();
+
+  // Strong direct matches
   if (label === q) return 100;
-  
-  // Label starts with query
   if (label.startsWith(q)) return 80;
-  
-  // Label contains query as word
-  if (label.includes(q)) return 60;
-  
-  // Exact keyword match
   if (item.keywords.some(k => k.toLowerCase() === q)) return 70;
-  
-  // Keyword starts with query
+  if (label.includes(q)) return 60;
   if (item.keywords.some(k => k.toLowerCase().startsWith(q))) return 50;
-  
-  // Keyword contains query
-  if (keywords.includes(q)) return 30;
-  
-  // Description contains query
-  if (item.description.toLowerCase().includes(q)) return 20;
-  
-  return 0;
+  if (keywordsText.includes(q)) return 30;
+  if (descText.includes(q)) return 20;
+
+  // Token-level fuzzy fallback — every token that appears anywhere adds points,
+  // so multi-word or partial queries (e.g. "marina 2 bed", "emaar beachfront sqft")
+  // always surface the nearest items instead of an empty screen.
+  const tokens = q.split(/\s+/).filter(t => t.length >= 2);
+  if (!tokens.length) return 0;
+  const haystack = `${label} ${keywordsText} ${descText}`;
+  let fuzzy = 0;
+  for (const t of tokens) {
+    if (label.includes(t)) fuzzy += 8;
+    else if (haystack.includes(t)) fuzzy += 4;
+    else if (t.length >= 4 && haystack.includes(t.slice(0, Math.max(3, t.length - 1)))) fuzzy += 2;
+  }
+  return fuzzy;
 }
 
-// Filter and rank search results
-export function searchItems(
-  query: string,
-  options: {
-    isOwner?: boolean;
-    hasCRMAccess?: boolean;
-    hasListingAdminAccess?: boolean;
-    isBroker?: boolean;
-    isAuthenticated?: boolean;
-    limit?: number;
-  } = {}
-): SearchItem[] {
-  const { 
-    isOwner = false, 
-    hasCRMAccess = false, 
+export interface SearchItemsOptions {
+  isOwner?: boolean;
+  hasCRMAccess?: boolean;
+  hasListingAdminAccess?: boolean;
+  isBroker?: boolean;
+  isAuthenticated?: boolean;
+  limit?: number;
+}
+
+function accessibleFor(item: SearchItem, o: SearchItemsOptions): boolean {
+  const {
+    isOwner = false,
+    hasCRMAccess = false,
     hasListingAdminAccess = false,
     isBroker = false,
     isAuthenticated = false,
-    limit = 10 
-  } = options;
-  
-  // Filter by access
-  const accessibleItems = allSearchItems.filter(item => {
-    switch (item.access) {
-      case 'public':
-        return true;
-      case 'authenticated':
-        return isAuthenticated;
-      case 'owner':
-        return isOwner;
-      case 'crm':
-        return isOwner || hasCRMAccess;
-      case 'listing-admin':
-        return isOwner || hasListingAdminAccess;
-      case 'broker':
-        return isOwner || isBroker || hasCRMAccess;
-      default:
-        return false;
-    }
-  });
-  
-  // If no query, return top public items
+  } = o;
+  switch (item.access) {
+    case 'public': return true;
+    case 'authenticated': return isAuthenticated;
+    case 'owner': return isOwner;
+    case 'crm': return isOwner || hasCRMAccess;
+    case 'listing-admin': return isOwner || hasListingAdminAccess;
+    case 'broker': return isOwner || isBroker || hasCRMAccess;
+    default: return false;
+  }
+}
+
+// Filter and rank search results
+export function searchItems(query: string, options: SearchItemsOptions = {}): SearchItem[] {
+  const { limit = 10 } = options;
+  const accessibleItems = allSearchItems.filter(item => accessibleFor(item, options));
+
   if (!query.trim()) {
     return accessibleItems
       .filter(item => item.category === 'page' || item.category === 'tool')
       .slice(0, limit);
   }
-  
-  // Score and rank
+
   const scored = accessibleItems
     .map(item => ({ item, score: scoreSearchResult(item, query) }))
     .filter(({ score }) => score > 0)
     .sort((a, b) => b.score - a.score);
-  
+
   return scored.slice(0, limit).map(({ item }) => item);
+}
+
+/**
+ * Always returns the nearest N items, even when no token matches.
+ * Used to render the "We couldn't find an exact match, but here's the closest" panel.
+ */
+export function nearestSearchItems(query: string, options: SearchItemsOptions = {}): SearchItem[] {
+  const { limit = 6 } = options;
+  const accessibleItems = allSearchItems.filter(item => accessibleFor(item, options));
+  const q = query.trim();
+  if (!q) return accessibleItems.slice(0, limit);
+
+  const scored = accessibleItems
+    .map(item => ({ item, score: scoreSearchResult(item, q) }))
+    .sort((a, b) => b.score - a.score);
+
+  // Always return something — fall back to popular pages if every score is 0.
+  const positive = scored.filter(s => s.score > 0).slice(0, limit).map(s => s.item);
+  if (positive.length >= 3) return positive;
+  const filler = accessibleItems
+    .filter(i => (i.category === 'page' || i.category === 'tool') && !positive.includes(i))
+    .slice(0, limit - positive.length);
+  return [...positive, ...filler];
 }
 
 export default allSearchItems;

@@ -104,14 +104,13 @@ export default function HorizontalUtilityBar() {
             <TooltipTrigger asChild>
               <button
                 onClick={() => setSearchOpen(true)}
-                className="h-9 flex items-center gap-2 px-3 rounded-full hover:bg-[hsl(var(--gold)/0.06)] transition-colors group focus:outline-none"
-                aria-label="Search ⌘K"
+                className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-[hsl(var(--gold)/0.08)] transition-colors group focus:outline-none"
+                aria-label="Search"
               >
-                <Search className="w-[18px] h-[18px] text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] transition-colors" />
-                <kbd className="hidden sm:inline-flex items-center text-[10px] font-medium text-[#1A1A1A]/45 tracking-wide">⌘K</kbd>
+                <Search className="w-[18px] h-[18px] text-[#1A1A1A]/75 group-hover:text-[#1A1A1A] transition-colors" />
               </button>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-xs">Search (⌘K)</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-xs">Search anything</TooltipContent>
           </Tooltip>
         </div>
 

@@ -53,6 +53,22 @@ export default function BrokerDashboard() {
     }
   }, [user, authLoading, navigate]);
 
+  // Hooks must always run in the same order — keep this useQuery above any early return.
+  const { data: crmProfile } = useQuery({
+    queryKey: ["crm-profile-name", user?.id],
+    queryFn: async () => {
+      if (!user?.id) return null;
+      const { data } = await supabase
+        .from("crm_users_profile")
+        .select("display_name")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      return data;
+    },
+    enabled: !!user?.id,
+    staleTime: 5 * 60 * 1000,
+  });
+
   if (authLoading || profileLoading) {
     return (
       <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
@@ -161,21 +177,8 @@ export default function BrokerDashboard() {
     },
   ];
 
-  // Match header avatar identity: prefer CRM display_name, then user_metadata.full_name
-  const { data: crmProfile } = useQuery({
-    queryKey: ["crm-profile-name", user?.id],
-    queryFn: async () => {
-      if (!user?.id) return null;
-      const { data } = await supabase
-        .from("crm_users_profile")
-        .select("display_name")
-        .eq("user_id", user.id)
-        .maybeSingle();
-      return data;
-    },
-    enabled: !!user?.id,
-    staleTime: 5 * 60 * 1000,
-  });
+  // Match header avatar identity: crmProfile fetched above (before early return) to keep hook order stable.
+
 
   const meta = (user?.user_metadata ?? {}) as Record<string, unknown>;
   const displayName =

@@ -1,14 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, X, ArrowRight, Building2, Sparkles, Users, FileText, LayoutDashboard, Briefcase, Scale, Palette, Calculator, Map, BookOpen, Phone, Home, Heart, Award, Newspaper, Video, HelpCircle, Key, GraduationCap, Clock, Trash2 } from "lucide-react";
+import { Search, X, ArrowRight, Building2, Sparkles, Users, FileText, LayoutDashboard, Briefcase, Scale, Palette, Calculator, Map, BookOpen, Phone, Home, Heart, Award, Newspaper, Video, HelpCircle, Key, GraduationCap, Clock, Trash2, Star, Pin } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { searchItems } from "@/config/globalSearchIndex";
+import { searchItems, nearestSearchItems } from "@/config/globalSearchIndex";
 import type { SearchItem } from "@/config/globalSearchIndex";
 import { SafeImage } from "@/components/SafeImage";
+import { getRecentSearches, saveRecentSearch, clearRecentSearches, getSearchShortcuts, toggleSearchShortcut, isShortcutPinned, removeSearchShortcut } from "@/lib/searchHistory";
 
 interface GlobalSearchModalProps {
   isOpen: boolean;
@@ -40,27 +41,7 @@ const POPULAR_PAGES = [
   { label: "AI Home Finder", route: "/quiz", icon: Sparkles },
 ];
 
-const RECENT_QUERIES_KEY = "jbj_recent_queries";
-const MAX_RECENT_SEARCHES = 5;
-
-const getRecentSearches = (): string[] => {
-  try {
-    const stored = localStorage.getItem(RECENT_QUERIES_KEY);
-    return stored ? JSON.parse(stored) : [];
-  } catch { return []; }
-};
-
-const saveRecentSearch = (query: string) => {
-  const trimmed = query.trim();
-  if (!trimmed || trimmed.length < 2) return;
-  const existing = getRecentSearches().filter(s => s.toLowerCase() !== trimmed.toLowerCase());
-  const updated = [trimmed, ...existing].slice(0, MAX_RECENT_SEARCHES);
-  localStorage.setItem(RECENT_QUERIES_KEY, JSON.stringify(updated));
-};
-
-const clearRecentSearches = () => {
-  localStorage.removeItem(RECENT_QUERIES_KEY);
-};
+// Recent searches & pinned shortcuts now live in src/lib/searchHistory.ts (7-day TTL)
 
 // Debounce hook
 function useDebouncedValue(value: string, delay: number) {
@@ -81,7 +62,8 @@ interface DbResult {
 
 const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = false }: GlobalSearchModalProps) => {
   const [query, setQuery] = useState("");
-  const [recentSearches, setRecentSearches] = useState<string[]>(getRecentSearches());
+  const [recentSearches, setRecentSearches] = useState<string[]>(() => getRecentSearches());
+  const [shortcuts, setShortcuts] = useState<string[]>(() => getSearchShortcuts());
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const { user, isOwner } = useAuth();
@@ -183,11 +165,24 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
   const hasDbResults = dbDevelopers.length > 0 || dbProjects.length > 0 || dbAreas.length > 0;
   const totalResults = results.length + dbDevelopers.length + dbProjects.length + dbAreas.length;
 
+  // Nearest-match fallback — always returns something so the user never sees an empty screen.
+  const nearest = totalResults === 0 && query.trim().length >= 2
+    ? nearestSearchItems(query, {
+        isOwner,
+        hasCRMAccess: hasCRMAccess || false,
+        hasListingAdminAccess: hasListingAdminAccess || false,
+        isBroker,
+        isAuthenticated: !!user,
+        limit: 6,
+      }).filter(item => item.icon && typeof item.icon === 'function')
+    : [];
+
   useEffect(() => {
     if (isOpen) {
       const q = (initialQuery || "").trim();
       setQuery(q);
       setRecentSearches(getRecentSearches());
+      setShortcuts(getSearchShortcuts());
       setTimeout(() => inputRef.current?.focus(), 100);
     }
   }, [isOpen, initialQuery]);
@@ -209,6 +204,18 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
   const handleClearRecent = () => {
     clearRecentSearches();
     setRecentSearches([]);
+  };
+
+  const handleTogglePin = (e: React.MouseEvent, search: string) => {
+    e.stopPropagation();
+    toggleSearchShortcut(search);
+    setShortcuts(getSearchShortcuts());
+  };
+
+  const handleRemoveShortcut = (e: React.MouseEvent, search: string) => {
+    e.stopPropagation();
+    removeSearchShortcut(search);
+    setShortcuts(getSearchShortcuts());
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -334,7 +341,33 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                 </div>
               )}
               {totalResults === 0 && (
-                <p className="text-sm text-[#1A1A1A]/70 text-center py-4">No results found for "{query}"</p>
+                nearest.length > 0 ? (
+                  <div>
+                    <div className="px-1 py-2 mb-2 rounded-lg bg-[#FDFBF7] border border-[#B89555]/30">
+                      <p className="text-xs font-semibold text-[#1A1A1A]">No exact match for "{query}"</p>
+                      <p className="text-[11px] text-[#1A1A1A]/70 mt-0.5">Here are the closest results we could find.</p>
+                    </div>
+                    <div className="space-y-0.5">
+                      {nearest.map((item, idx) => (
+                        <button
+                          key={`${item.id}-near-${idx}`}
+                          onClick={() => handleSelect(item.route)}
+                          className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-[#1A1A1A]/5 transition-all text-left"
+                        >
+                          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30 text-[#1A1A1A]">
+                            {item.icon && <item.icon className="w-4 h-4" />}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-[#1A1A1A] truncate">{item.label}</p>
+                          </div>
+                          <ArrowRight className="w-3 h-3 text-[#1A1A1A]/70" />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-sm text-[#1A1A1A]/70 text-center py-4">No results found for "{query}"</p>
+                )
               )}
             </div>
           ) : (
@@ -420,7 +453,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="fixed left-1/2 -translate-x-1/2 [body.jj-vertical-nav-active_&]:lg:left-[calc(50%+100px)] [body.jj-vertical-nav-collapsed_&]:lg:left-[calc(50%+24px)] w-full max-w-3xl z-[10001] px-6 sm:px-8 top-[56px] sm:top-[56px]"
+            className="fixed left-1/2 -translate-x-1/2 [body.jj-vertical-nav-active_&]:lg:left-[calc(50%+100px)] [body.jj-vertical-nav-collapsed_&]:lg:left-[calc(50%+24px)] w-full max-w-3xl z-[10001] px-3 sm:px-6 lg:px-8 top-[12px] sm:top-[56px]"
             style={{ maxHeight: 'calc(100dvh - 80px)' }}
           >
             <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl shadow-2xl overflow-hidden flex flex-col" style={{ maxHeight: 'calc(100dvh - 96px)' }}>
@@ -487,10 +520,41 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                     )}
 
                     {totalResults === 0 && (
-                      <div className="p-8 text-center">
-                        <p className="text-[#1A1A1A]/70">No results found for "{query}"</p>
-                        <p className="text-sm text-[#1A1A1A]/70 mt-1">Try a different search term</p>
-                      </div>
+                      nearest.length > 0 ? (
+                        <div>
+                          <div className="p-4 rounded-xl bg-[#FDFBF7] border border-[#B89555]/40 mb-3 text-center">
+                            <p className="text-sm font-semibold text-[#1A1A1A]">We couldn't find an exact match for "{query}"</p>
+                            <p className="text-xs text-[#1A1A1A]/70 mt-1">
+                              Here are the closest results across our website. Need help? <button onClick={() => handleSelect('/contact')} className="underline font-medium hover:text-[#B89555]">Contact support</button>.
+                            </p>
+                          </div>
+                          <div className="space-y-1">
+                            {nearest.map((item, idx) => (
+                              <button
+                                key={`${item.id}-near-${idx}`}
+                                onClick={() => handleSelect(item.route)}
+                                className="w-full flex items-center gap-4 p-3 rounded-xl hover:bg-[#EFE6D6]/40 transition-all text-left"
+                              >
+                                <div className="w-11 h-11 rounded-lg flex items-center justify-center border bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]">
+                                  {item.icon && <item.icon className="w-5 h-5" />}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <p className="font-semibold text-[#1A1A1A] truncate">{item.label}</p>
+                                  <p className="text-[#1A1A1A]/70 text-sm truncate">{item.description}</p>
+                                </div>
+                                <ArrowRight className="w-5 h-5 text-[#1A1A1A]/70 flex-shrink-0" />
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="p-8 text-center">
+                          <p className="text-[#1A1A1A]/70">No results found for "{query}"</p>
+                          <p className="text-sm text-[#1A1A1A]/70 mt-1">
+                            Try fewer words, or <button onClick={() => handleSelect('/contact')} className="underline font-medium hover:text-[#B89555]">contact support</button>.
+                          </p>
+                        </div>
+                      )
                     )}
                   </div>
                 ) : (
@@ -538,14 +602,46 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                       </div>
                     </div>
 
-                    {/* Recent Searches */}
+                    {/* Your Pinned Shortcuts */}
+                    {shortcuts.length > 0 && (
+                      <div>
+                        <p className="text-sm font-bold text-[#1A1A1A]/70 mb-3 px-1 uppercase tracking-wider flex items-center gap-1.5">
+                          <Pin className="w-3.5 h-3.5" /> Your Shortcuts
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {shortcuts.map((search, i) => (
+                            <div
+                              key={`sc-${i}`}
+                              className="group/sc flex items-center gap-1 pl-3 pr-1 py-1 rounded-xl bg-gradient-to-r from-[#EFE6D6] to-[#F7F2EA] border border-[#B89555]/40 hover:border-[#B89555] transition-all"
+                            >
+                              <button
+                                onClick={() => handleRecentSearchClick(search)}
+                                className="flex items-center gap-2 text-sm font-semibold text-[#1A1A1A]"
+                              >
+                                <Star className="w-3.5 h-3.5 text-[#B89555] fill-[#B89555]" />
+                                {search}
+                              </button>
+                              <button
+                                onClick={(e) => handleRemoveShortcut(e, search)}
+                                aria-label={`Remove shortcut ${search}`}
+                                className="ml-1 p-1 rounded-full opacity-60 hover:opacity-100 hover:bg-[#1A1A1A]/10"
+                              >
+                                <X className="w-3 h-3 text-[#1A1A1A]" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Recent Searches (auto-clears after 7 days) */}
                     {recentSearches.length > 0 && (
                       <div>
                         <div className="flex items-center justify-between mb-3 px-1">
                           <p className="text-sm font-bold text-[#1A1A1A]/70 uppercase tracking-wider">
-                            Recent Searches
+                            Recent Searches <span className="text-[10px] font-normal normal-case text-[#1A1A1A]/50">(saved for 7 days)</span>
                           </p>
-                          <button 
+                          <button
                             onClick={handleClearRecent}
                             className="flex items-center gap-1 text-xs text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors"
                           >
@@ -554,16 +650,31 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                           </button>
                         </div>
                         <div className="flex flex-wrap gap-2">
-                          {recentSearches.map((search, i) => (
-                            <button
-                              key={i}
-                              onClick={() => handleRecentSearchClick(search)}
-                              className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#FDFBF7]/50 border border-[#B89555]/10 hover:bg-[#FDFBF7] hover:border-[#B89555]/30 transition-all"
-                            >
-                              <Clock className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
-                              <span className="text-sm font-medium text-[#1A1A1A]">{search}</span>
-                            </button>
-                          ))}
+                          {recentSearches.map((search, i) => {
+                            const pinned = isShortcutPinned(search);
+                            return (
+                              <div
+                                key={i}
+                                className="group/r flex items-center gap-1 pl-3 pr-1 py-1.5 rounded-xl bg-[#FDFBF7]/70 border border-[#B89555]/15 hover:border-[#B89555]/45 transition-all"
+                              >
+                                <button
+                                  onClick={() => handleRecentSearchClick(search)}
+                                  className="flex items-center gap-2 text-sm font-medium text-[#1A1A1A]"
+                                >
+                                  <Clock className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
+                                  {search}
+                                </button>
+                                <button
+                                  onClick={(e) => handleTogglePin(e, search)}
+                                  aria-label={pinned ? "Unpin shortcut" : "Pin as shortcut"}
+                                  title={pinned ? "Unpin shortcut" : "Pin as shortcut"}
+                                  className="ml-1 p-1 rounded-full opacity-60 hover:opacity-100 hover:bg-[#1A1A1A]/10"
+                                >
+                                  <Star className={`w-3.5 h-3.5 ${pinned ? "text-[#B89555] fill-[#B89555]" : "text-[#1A1A1A]/60"}`} />
+                                </button>
+                              </div>
+                            );
+                          })}
                         </div>
                       </div>
                     )}
