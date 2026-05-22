@@ -177,6 +177,9 @@ export default function GrantBrokerAccessDialog({
           date_window_end: windowMode === "custom"
             ? (winEnd ? winEnd.toISOString() : null) : null,
           status_filter: statusFilter.length ? statusFilter : null,
+          visible_notes: visibleNotes,
+          visible_files: visibleFiles,
+          visible_activities: visibleActivities,
           new_broker_profile: tab === "new" ? {
             full_name: n_fullName.trim(),
             phone_e164: n_phone.trim() || null,
