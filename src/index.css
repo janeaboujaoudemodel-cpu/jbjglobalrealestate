@@ -4311,21 +4311,21 @@ a[class*="bg-red-"]:hover {
   align-items: baseline !important;
   justify-content: center !important;
   text-align: center !important;
-  gap: 5px !important;
+  gap: 6px !important;
   width: auto !important;
   max-width: none !important;
   min-width: 0 !important;
   min-height: 0 !important;
-  border-radius: 9999px;
-  padding: 4px 9px !important;
-  background: rgba(0, 0, 0, 0.42);
+  border-radius: 6px !important;
+  padding: 5px 10px !important;
+  background: rgba(0, 0, 0, 0.68);
   -webkit-backdrop-filter: blur(8px) saturate(140%);
   backdrop-filter: blur(8px) saturate(140%);
-  border: 1px solid hsl(var(--price-orange) / 0.85);
+  border: 1px solid hsl(var(--price-orange) / 0.9);
   box-shadow:
-    0 4px 12px hsl(0 0% 0% / 0.28),
-    inset 0 0 0 1px hsl(var(--price-orange) / 0.12);
-  color: hsl(var(--price-orange));
+    0 6px 16px hsl(0 0% 0% / 0.38),
+    inset 0 0 0 1px hsl(var(--price-orange) / 0.18);
+  color: #FFFFFF;
   white-space: nowrap !important;
   font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
   overflow: visible !important;
@@ -4337,21 +4337,23 @@ a[class*="bg-red-"]:hover {
   text-transform: uppercase !important;
   letter-spacing: 0.14em !important;
   line-height: 1 !important;
-  color: hsl(var(--price-orange)) !important;
+  color: #FFFFFF !important;
   opacity: 0.85 !important;
   margin: 0 !important;
 }
 .price-pill-premium .price-pill-value {
   font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
-  font-weight: 700 !important;
-  font-size: 12px !important;
+  font-weight: 800 !important;
+  font-size: 13px !important;
   line-height: 1 !important;
   font-variant-numeric: tabular-nums !important;
   letter-spacing: -0.005em !important;
-  color: hsl(var(--price-orange)) !important;
+  color: #FFFFFF !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
   margin: 0 !important;
   white-space: nowrap !important;
 }
+
 
 /* Handover line — label is solid ink black; date stays orange to match the price pill identity. */
 .handover-orange {
