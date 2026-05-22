@@ -699,9 +699,13 @@ export default function GlobalVerticalNav() {
   const handleNavClick = useCallback((megaMenu?: MegaMenuKey, e?: React.MouseEvent) => {
     if (megaMenu) {
       e?.preventDefault();
+      setActiveMegaMenu((prev) => (prev === megaMenu ? null : megaMenu));
+      return;
     }
     setActiveMegaMenu(null);
   }, []);
+
+  const [shortcutsExpanded, setShortcutsExpanded] = useState(false);
 
   const closeMegaMenu = useCallback(() => setActiveMegaMenu(null), []);
 
