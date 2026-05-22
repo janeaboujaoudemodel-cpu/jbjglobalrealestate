@@ -27,13 +27,21 @@ const FORBIDDEN_LOGO_PATTERNS: RegExp[] = [
   /logodix\.com/i,
   /%d[01][0-9a-f]%/i, // URL-encoded cyrillic (Russian screenshots)
   /\/projects\/\d+\/images\//i, // project photo paths
+  /snapedit/i,
+  /_n_[a-f0-9]{16,}\.(jpg|jpeg|png|webp)/i, // Instagram post mirrors
+  /_feature_[a-f0-9]{6,}\.(jpg|jpeg|png|webp)/i, // mis-tagged project feature images
+  /\/x\/16x16\//i, // favicon-size CDN paths
+  /\/x\/[0-9]{2,3}x[0-9]{2,3}\//i, // tiny thumbnail CDN paths (project covers, not logos)
+  /habtoor_polo/i,
+  /tilal_/i,
 ];
 
 function isAllowedLogoUrl(url: unknown): url is string {
   if (typeof url !== "string") return false;
   const trimmed = url.trim();
   if (!trimmed) return false;
-  if (!/^https?:\/\//i.test(trimmed)) return false;
+  // Allow site-relative paths for curated local assets (e.g. /developers/logos/emaar-logo.webp)
+  if (!/^(https?:\/\/|\/)/i.test(trimmed)) return false;
   return !FORBIDDEN_LOGO_PATTERNS.some((pat) => pat.test(trimmed));
 }
 
