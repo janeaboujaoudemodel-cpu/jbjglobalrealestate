@@ -37,21 +37,27 @@ export function useBrokerProfile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const userId = user?.id;
+
   useEffect(() => {
-    if (!user) {
+    if (!userId) {
       setProfile(null);
       setLoading(false);
       return;
     }
+
+    let cancelled = false;
+    setLoading(true);
 
     const fetchProfile = async () => {
       try {
         const { data, error: fetchError } = await supabase
           .from("broker_profiles")
           .select("*")
-          .eq("user_id", user.id)
+          .eq("user_id", userId)
           .maybeSingle();
 
+        if (cancelled) return;
         if (fetchError) throw fetchError;
 
         if (data) {
@@ -80,15 +86,21 @@ export function useBrokerProfile() {
           setProfile(null);
         }
       } catch (err) {
+        if (cancelled) return;
         console.error("Error fetching broker profile:", err);
         setError("Failed to load broker profile");
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
 
     fetchProfile();
-  }, [user]);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [userId]);
+
 
   const isInternalBroker = profile?.broker_type === 'internal';
   const isExternalBroker = profile?.broker_type === 'external';

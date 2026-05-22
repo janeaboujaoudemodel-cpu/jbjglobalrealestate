@@ -218,7 +218,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Broker Resources", href: "/broker-resources", icon: FolderOpen },
   { label: "Broker Training", href: "/broker/training", icon: GraduationCap },
   { label: "Broker Hub", href: "/broker-hub", icon: Compass },
-  { label: "Broker Dashboard", href: "/broker-dashboard", icon: LayoutDashboard },
+  // Note: "Broker Dashboard" removed from this section — it's the user's personal dashboard, not a broker-only tool.
   { label: "JBJ Academy", href: "/jbj-academy", icon: GraduationCap },
   { label: "Academy Graduates", href: "/academy/graduates", icon: Award },
   { label: "AI Broker Workspace", href: "/ai-broker-workspace", icon: Bot },
