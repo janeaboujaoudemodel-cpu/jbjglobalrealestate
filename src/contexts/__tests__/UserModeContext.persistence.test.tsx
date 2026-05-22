@@ -130,14 +130,16 @@ describe("UserModeContext — persistence regression suite", () => {
     const mod = await loadModule();
     renderWithProvider(mod);
 
-    // Wait for the reconcile effect to flush.
-    await waitFor(() => expect(h.upserts.length).toBeGreaterThan(0));
+    // Give the reconcile effect a chance to run.
+    await new Promise((r) => setTimeout(r, 20));
 
     // Local choice wins.
     expect(screen.getByTestId("mode").textContent).toBe("broker");
     expect(localStorage.getItem(MODE_KEY)).toBe("broker");
-    // And the divergence was pushed UP to the DB, not the other way around.
-    expect(h.upserts[0]).toMatchObject({ user_id: "user-1", selected_mode: "broker" });
+    // HARDENING: auth events must NEVER write to the DB. Only an explicit
+    // setMode() pick is allowed to mutate user_preferences.selected_mode.
+    expect(h.upserts).toHaveLength(0);
+    expect(h.inserts).toHaveLength(0);
   });
 
   it("sign-in (first time, no local mode): adopts the DB mode without churn", async () => {
