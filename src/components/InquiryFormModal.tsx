@@ -170,6 +170,25 @@ const InquiryFormModal = ({
         : source === 'popup_main' ? 'Main Page Pop-up'
         : source.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 
+      // Source tracking — labels this lead by where they came from (Join Our Community / Property Inquiry / etc.)
+      try {
+        const { registerRolePick, SIGNUP_SOURCES } = await import('@/lib/signupSources');
+        const signupSource = propertyName
+          ? SIGNUP_SOURCES.PROPERTY_INQUIRY
+          : data.role === 'buyer'   ? SIGNUP_SOURCES.JOIN_COMMUNITY_BUYER
+          : data.role === 'broker'  ? SIGNUP_SOURCES.JOIN_COMMUNITY_BROKER
+          : SIGNUP_SOURCES.JOIN_COMMUNITY_VISITOR;
+        await registerRolePick({
+          source: signupSource,
+          role: data.role,
+          email: normalizedEmail,
+          fullName: data.fullName,
+          propertyName,
+        });
+      } catch (srcErr) {
+        console.warn('[Inquiry] source tracking failed (non-fatal):', srcErr);
+      }
+
       // Call backend edge function to capture lead with detailed source tracking
       const { data: captureResult, error: captureError } = await supabase.functions.invoke('capture-lead', {
         body: {
