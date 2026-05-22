@@ -20,6 +20,11 @@ const AdminRoleManagement = lazy(() => import("@/pages/AdminRoleManagement"));
 const AdminDevelopers = lazy(() => import("@/pages/AdminDevelopers"));
 const DeveloperProfilePage = lazy(() => import("@/pages/admin/DeveloperProfilePage"));
 const MissingLogosQueue = lazy(() => import("@/pages/admin/MissingLogosQueue"));
+const DeveloperHubAdminShell = lazy(() => import("@/pages/developer-hub-admin/DeveloperHubAdminShell"));
+const DeveloperHubAdminOverview = lazy(() => import("@/pages/developer-hub-admin/DeveloperHubAdminOverview"));
+const DeveloperDirectory = lazy(() => import("@/pages/developer-hub-admin/DeveloperDirectory"));
+const DeveloperEnrichmentQueue = lazy(() => import("@/pages/developer-hub-admin/DeveloperEnrichmentQueue"));
+const DeveloperHubAdminPlaceholder = lazy(() => import("@/pages/developer-hub-admin/DeveloperHubAdminPlaceholder"));
 const AdminTrainingGuide = lazy(() => import("@/pages/AdminTrainingGuide"));
 const MarketingHub = lazy(() => import("@/pages/admin/MarketingHub"));
 const AdminCategories = lazy(() => import("@/pages/AdminCategories"));
@@ -94,9 +99,27 @@ export const AdminRoutes = () => (
     <Route path="/admin/onboarding" element={<OwnerGuard><AdminOnboarding /></OwnerGuard>} />
     <Route path="/admin/roles" element={<OwnerGuard><AdminRoleManagement /></OwnerGuard>} />
     <Route path="/admin/intelligence" element={<OwnerGuard><AdminIntelligence /></OwnerGuard>} />
-    <Route path="/admin/developers" element={<OwnerGuard><AdminDevelopers /></OwnerGuard>} />
-    <Route path="/admin/developers/profile/:slug" element={<OwnerGuard><Suspense fallback={<PageLoader />}><DeveloperProfilePage /></Suspense></OwnerGuard>} />
-    <Route path="/admin/developers/missing-logos" element={<OwnerGuard><Suspense fallback={<PageLoader />}><MissingLogosQueue /></Suspense></OwnerGuard>} />
+    {/* Legacy /admin/developers/* → redirect to new Developer Hub */}
+    <Route path="/admin/developers" element={<Navigate to="/developer-hub-admin/directory" replace />} />
+    <Route path="/admin/developers/profile/:slug" element={<LegacyDeveloperProfileRedirect />} />
+    <Route path="/admin/developers/missing-logos" element={<Navigate to="/developer-hub-admin/missing-logos" replace />} />
+
+    {/* New Owner Developer Hub */}
+    <Route path="/developer-hub-admin" element={<OwnerGuard><Suspense fallback={<PageLoader />}><DeveloperHubAdminShell /></Suspense></OwnerGuard>}>
+      <Route index element={<Suspense fallback={<PageLoader />}><DeveloperHubAdminOverview /></Suspense>} />
+      <Route path="directory" element={<Suspense fallback={<PageLoader />}><DeveloperDirectory /></Suspense>} />
+      <Route path="profile/:slug" element={<Suspense fallback={<PageLoader />}><DeveloperProfilePage /></Suspense>} />
+      <Route path="missing-logos" element={<Suspense fallback={<PageLoader />}><MissingLogosQueue /></Suspense>} />
+      <Route path="enrichment" element={<Suspense fallback={<PageLoader />}><DeveloperEnrichmentQueue /></Suspense>} />
+      <Route path="briefings" element={<Suspense fallback={<PageLoader />}><DeveloperHubAdminPlaceholder title="Briefings Inbox" body="Open the legacy Admin Developers page for the briefings tab — full UI moves here next iteration." /></Suspense>} />
+      <Route path="deals" element={<Suspense fallback={<PageLoader />}><DeveloperHubAdminPlaceholder title="Deals Pipeline" body="Deal-close pipeline UI will be wired into this slot next iteration." /></Suspense>} />
+      <Route path="calendar" element={<Suspense fallback={<PageLoader />}><DeveloperHubAdminPlaceholder title="Calendar" body="Google Calendar feed for developer launch events lands here next iteration." /></Suspense>} />
+      <Route path="projects" element={<Suspense fallback={<PageLoader />}><DeveloperHubAdminPlaceholder title="Projects" body="All developer-submitted projects with approval status." /></Suspense>} />
+      <Route path="approval" element={<Suspense fallback={<PageLoader />}><DeveloperHubAdminPlaceholder title="Approval Queue" body="Pending project + registration approvals." /></Suspense>} />
+    </Route>
+
+    {/* Owner-only legacy admin developer tools still reachable */}
+    <Route path="/admin/developers-legacy" element={<OwnerGuard><AdminDevelopers /></OwnerGuard>} />
     <Route path="/admin/categories" element={<OwnerGuard><AdminCategories /></OwnerGuard>} />
     <Route path="/admin/marketing-hub" element={<OwnerGuard><MarketingHub /></OwnerGuard>} />
     <Route path="/admin/reelly-import-test" element={<OwnerGuard><ListingAdminGuard><ReellyImportTest /></ListingAdminGuard></OwnerGuard>} />
