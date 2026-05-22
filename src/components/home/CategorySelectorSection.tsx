@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { TrendingUp, Briefcase, Building2, ArrowRight, CheckCircle2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserModeContext } from "@/contexts/UserModeContext";
+import { useIsRegistered } from "@/hooks/useIsRegistered";
 import { toast } from "sonner";
 
 type Category = "investor" | "broker" | "developer";
@@ -47,13 +48,17 @@ const CATEGORIES: Array<{
 export default function CategorySelectorSection() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { setMode, hasMadeInitialSelection } = useUserModeContext();
+  const { setMode } = useUserModeContext();
+  const { data: isRegistered } = useIsRegistered();
 
-  // Once a user is registered (logged in) AND has picked a category that is wired
-  // to their account, suppress this section entirely — they've already chosen.
-  if (user && hasMadeInitialSelection) {
+  // "Mode" = lightweight browse preference (can flip any time from the header).
+  // "Registered" = a real category profile (investor_intake / broker_profiles /
+  // developer_registrations) with the user's details. Only suppress this
+  // section when the user is *registered* — mode alone is not enough.
+  if (user && isRegistered) {
     return null;
   }
+
 
 
   const handleSelect = async (cat: Category) => {
@@ -89,13 +94,14 @@ export default function CategorySelectorSection() {
             Get started in 30 seconds
           </p>
           <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A] tracking-tight">
-            Tell us who you are
+            Choose your category
           </h2>
           <p className="mt-3 text-[#1A1A1A]/70 max-w-2xl mx-auto">
             Pick your category to unlock the right tools, dashboards, and a tailored
             registration flow.
           </p>
         </div>
+
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch">
           {CATEGORIES.map((cat, i) => {

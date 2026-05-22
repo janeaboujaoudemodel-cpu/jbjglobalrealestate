@@ -40,6 +40,7 @@ const MarketingScripts = lazy(() => import("@/components/marketing/MarketingScri
 const PopupLayer = lazy(() => import("@/components/PopupLayer"));
 const CommandPaletteRoot = lazy(() => import("@/components/ui/command-palette-root"));
 const GuidedTour = lazy(() => import("@/components/GuidedTour"));
+const CompleteProfilePrompt = lazy(() => import("@/components/CompleteProfilePrompt"));
 
 const CHAT_DAILY_KEY = "jj_chat_daily_shown";
 const SCROLL_DELAY_MS = 1500;
@@ -304,6 +305,11 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           onClose={() => { completeTour(); setShowTour(false); }}
         />
       </Suspense>
+      {!isBackOfficeRoute && (
+        <Suspense fallback={null}>
+          <CompleteProfilePrompt />
+        </Suspense>
+      )}
     </div>
   );
 };
