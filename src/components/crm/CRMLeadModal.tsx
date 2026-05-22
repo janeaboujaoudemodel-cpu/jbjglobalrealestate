@@ -345,7 +345,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                         <ChevronsUpDown className="ml-1 h-3.5 w-3.5 shrink-0 opacity-50" />
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-[240px] p-0 bg-[#FDFBF7] border border-[#1A1A1A]/15" align="start">
+                    <PopoverContent className="w-[260px] p-0 bg-[#FDFBF7] border border-[#1A1A1A]/15" align="start" side="bottom" sideOffset={6} avoidCollisions={false}>
                       <Command>
                         <CommandInput placeholder="Search language..." className="text-[#1A1A1A]" />
                         <CommandList className="max-h-72 overflow-y-auto overscroll-contain" onWheel={(e) => e.stopPropagation()} onTouchMove={(e) => e.stopPropagation()}>
@@ -383,7 +383,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                         <ChevronsUpDown className="ml-1 h-3.5 w-3.5 shrink-0 opacity-50" />
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-[240px] p-0 bg-[#FDFBF7] border border-[#1A1A1A]/15" align="start">
+                    <PopoverContent className="w-[260px] p-0 bg-[#FDFBF7] border border-[#1A1A1A]/15" align="start" side="bottom" sideOffset={6} avoidCollisions={false}>
                       <Command>
                         <CommandInput placeholder="Search nationality..." className="text-[#1A1A1A]" />
                         <CommandList className="max-h-72 overflow-y-auto overscroll-contain" onWheel={(e) => e.stopPropagation()} onTouchMove={(e) => e.stopPropagation()}>
@@ -421,7 +421,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                         <ChevronsUpDown className="ml-1 h-3.5 w-3.5 shrink-0 opacity-50" />
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-[240px] p-0 bg-[#FDFBF7] border border-[#1A1A1A]/15" align="start">
+                    <PopoverContent className="w-[260px] p-0 bg-[#FDFBF7] border border-[#1A1A1A]/15" align="start" side="bottom" sideOffset={6} avoidCollisions={false}>
                       <Command>
                         <CommandInput placeholder="Search country..." className="text-[#1A1A1A]" />
                         <CommandList className="max-h-72 overflow-y-auto overscroll-contain" onWheel={(e) => e.stopPropagation()} onTouchMove={(e) => e.stopPropagation()}>
