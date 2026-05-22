@@ -4282,10 +4282,14 @@ a[class*="bg-red-"]:hover {
    ============================================================ */
 .price-pill-premium {
   display: inline-flex;
-  align-items: baseline;
-  gap: 0.375rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 2px;
+  min-width: 92px;
   border-radius: 0.375rem; /* rounded-md — square corners, not full pill */
-  padding: 0.375rem 0.625rem;
+  padding: 4px 10px;
   background: rgba(0, 0, 0, 0.32); /* subtle dark scrim for AA over photos */
   -webkit-backdrop-filter: blur(6px) saturate(140%);
   backdrop-filter: blur(6px) saturate(140%);
@@ -4297,17 +4301,18 @@ a[class*="bg-red-"]:hover {
   white-space: nowrap;
 }
 .price-pill-premium .price-pill-eyebrow {
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.14em;
+  line-height: 1;
   color: hsl(var(--price-orange));
   opacity: 0.92;
 }
 .price-pill-premium .price-pill-value {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   font-weight: 800;
-  font-size: 0.875rem;
+  font-size: 13px;
   line-height: 1;
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.01em;
