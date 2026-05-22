@@ -103,11 +103,10 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
       <DropdownMenuContent 
         align="end" 
         sideOffset={12}
-        className="z-[9999] min-w-[280px] rounded-xl shadow-2xl p-0 border-2 border-[#B89555]/40"
-        style={{ background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)' }}
+        className="z-[9999] min-w-[280px] rounded-xl shadow-2xl p-0 border border-[#B89555]/30 overflow-hidden"
+        style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F1E6 100%)' }}
       >
-        <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
-        <div className="px-4 py-3 border-b border-[#B89555]/20">
+        <div className="px-4 py-3">
           <p className="text-xs font-semibold text-[#1A1A1A]/60 uppercase tracking-wider">Select Currency</p>
         </div>
         <div className="p-2 max-h-80 overflow-y-auto">
