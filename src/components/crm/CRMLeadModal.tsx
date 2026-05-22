@@ -254,7 +254,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                   <Label>Lead Type</Label>
                   <Select value={formData.lead_type} onValueChange={(v) => setFormData({ ...formData, lead_type: v })}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent className="bg-[#FDFBF7] z-[200]">
+                    <SelectContent className="bg-[#FDFBF7]">
                       {LEAD_TYPES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
                     </SelectContent>
                   </Select>
@@ -301,7 +301,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                         <ChevronsUpDown className="ml-1 h-3.5 w-3.5 shrink-0 opacity-50" />
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-[240px] p-0 z-[200] bg-[#FDFBF7] border border-[#1A1A1A]/15" align="start">
+                    <PopoverContent className="w-[240px] p-0 bg-[#FDFBF7] border border-[#1A1A1A]/15" align="start">
                       <Command>
                         <CommandInput placeholder="Search language..." className="text-[#1A1A1A]" />
                         <CommandList className="max-h-72 overflow-y-auto overscroll-contain" onWheel={(e) => e.stopPropagation()} onTouchMove={(e) => e.stopPropagation()}>
@@ -339,7 +339,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                         <ChevronsUpDown className="ml-1 h-3.5 w-3.5 shrink-0 opacity-50" />
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-[240px] p-0 z-[200] bg-[#FDFBF7] border border-[#1A1A1A]/15" align="start">
+                    <PopoverContent className="w-[240px] p-0 bg-[#FDFBF7] border border-[#1A1A1A]/15" align="start">
                       <Command>
                         <CommandInput placeholder="Search nationality..." className="text-[#1A1A1A]" />
                         <CommandList className="max-h-72 overflow-y-auto overscroll-contain" onWheel={(e) => e.stopPropagation()} onTouchMove={(e) => e.stopPropagation()}>
@@ -377,7 +377,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                         <ChevronsUpDown className="ml-1 h-3.5 w-3.5 shrink-0 opacity-50" />
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-[240px] p-0 z-[200] bg-[#FDFBF7] border border-[#1A1A1A]/15" align="start">
+                    <PopoverContent className="w-[240px] p-0 bg-[#FDFBF7] border border-[#1A1A1A]/15" align="start">
                       <Command>
                         <CommandInput placeholder="Search country..." className="text-[#1A1A1A]" />
                         <CommandList className="max-h-72 overflow-y-auto overscroll-contain" onWheel={(e) => e.stopPropagation()} onTouchMove={(e) => e.stopPropagation()}>
@@ -432,7 +432,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                   <Label>Currency</Label>
                   <Select value={formData.budget_currency} onValueChange={(v) => setFormData({ ...formData, budget_currency: v })}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent className="bg-[#FDFBF7] z-[200]">
+                    <SelectContent className="bg-[#FDFBF7]">
                       {["AED", "USD", "EUR", "GBP", "SAR"].map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
                     </SelectContent>
                   </Select>
@@ -463,7 +463,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                   <Label>Property Type</Label>
                   <Select value={formData.property_type} onValueChange={(v) => setFormData({ ...formData, property_type: v })}>
                     <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
-                    <SelectContent className="bg-[#FDFBF7] z-[200]">
+                    <SelectContent className="bg-[#FDFBF7]">
                       {PROPERTY_TYPES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
                     </SelectContent>
                   </Select>
@@ -472,7 +472,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                   <Label>Bedrooms</Label>
                   <Select value={formData.bedroom_requirement} onValueChange={(v) => setFormData({ ...formData, bedroom_requirement: v })}>
                     <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
-                    <SelectContent className="bg-[#FDFBF7] z-[200]">
+                    <SelectContent className="bg-[#FDFBF7]">
                       {BEDROOMS.map((b) => <SelectItem key={b} value={b}>{b}</SelectItem>)}
                     </SelectContent>
                   </Select>
@@ -481,7 +481,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                   <Label>Buying Purpose</Label>
                   <Select value={formData.buying_purpose} onValueChange={(v) => setFormData({ ...formData, buying_purpose: v })}>
                     <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
-                    <SelectContent className="bg-[#FDFBF7] z-[200]">
+                    <SelectContent className="bg-[#FDFBF7]">
                       {BUYING_PURPOSE.map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}
                     </SelectContent>
                   </Select>
@@ -496,7 +496,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                   <Label>Lead Source</Label>
                   <Select value={formData.source} onValueChange={(v) => setFormData({ ...formData, source: v })}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent className="bg-[#FDFBF7] z-[200] max-h-80">
+                    <SelectContent className="bg-[#FDFBF7] max-h-80">
                       {LEAD_SOURCES.map((s) => (
                         <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
                       ))}
@@ -513,7 +513,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                       align="start"
                       sideOffset={6}
                       avoidCollisions={false}
-                      className="bg-[#FDFBF7] z-[200] max-h-96 border border-[#B89555]/30 rounded-xl"
+                      className="bg-[#FDFBF7] max-h-96 border border-[#B89555]/30 rounded-xl"
                     >
                       {(['positive','neutral','negative'] as const).map((cat) => {
                         const items = PIPELINE_STATUSES.filter(s => s.category === cat);
@@ -612,7 +612,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                   <Label>Priority</Label>
                   <Select value={formData.priority} onValueChange={(v) => setFormData({ ...formData, priority: v })}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent className="bg-[#FDFBF7] z-[200]">
+                    <SelectContent className="bg-[#FDFBF7]">
                       {PRIORITY.map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}
                     </SelectContent>
                   </Select>
@@ -621,7 +621,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                   <Label>Lead Score</Label>
                   <Select value={formData.lead_score_band} onValueChange={(v) => setFormData({ ...formData, lead_score_band: v })}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent className="bg-[#FDFBF7] z-[200]">
+                    <SelectContent className="bg-[#FDFBF7]">
                       {SCORE_BAND.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
                     </SelectContent>
                   </Select>
