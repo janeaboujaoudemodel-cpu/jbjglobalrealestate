@@ -1103,7 +1103,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 <span className={`w-6 h-6 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}>
                   <Icon className={`w-3.5 h-3.5 ${getIconStyle(item)}`} />
                 </span>
-                <span className="flex-1">{item.label}</span>
+                <span className="flex-1 relative after:content-[''] after:absolute after:bottom-[-2px] after:left-0 after:h-[1.5px] after:bg-[#B89555] after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-full">{item.label}</span>
                 {hasMega && (
                   <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-[#1A1A1A]" : "text-[#1A1A1A]/25"}`} />
                 )}
@@ -1131,14 +1131,6 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 
             return (
               <React.Fragment key={sectionKey}>
-                {sectionIdx > 0 && (
-                  <div className="flex items-center gap-2 px-3 my-1">
-                    <div className="flex-1 h-[1px] bg-gradient-to-r from-gold/15 to-transparent" />
-                    <div className="w-1 h-1 rounded-full bg-[#EFE6D6]/20" />
-                    <div className="flex-1 h-[1px] bg-gradient-to-l from-gold/15 to-transparent" />
-                  </div>
-                )}
-
                 <div id={`nav-section-${sectionKey.replace(/\s+/g, '-').toLowerCase()}`}>
                   <button
                     onClick={(e) => toggleSection(sectionKey, e)}
@@ -1151,7 +1143,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors border ${sectionHighlighted ? 'bg-[hsl(var(--gold))]/20 border-[hsl(var(--gold))]/70' : 'bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/40 group-hover:bg-[hsl(var(--gold))]/15 group-hover:border-[hsl(var(--gold))]/65'}`}>
                       <SectionIcon className="w-3 h-3 text-[hsl(var(--gold))]" />
                     </div>
-                    <span className="flex-1 text-left">{sectionKey}</span>
+                    <span className="flex-1 text-left relative after:content-[''] after:absolute after:bottom-[-2px] after:left-0 after:h-[1.5px] after:bg-[#B89555] after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-full">{sectionKey}</span>
                     <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'} ${sectionHighlighted ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/70'}`} />
                     {!isOpen && hasActiveChild && (
                       <span className="w-1.5 h-1.5 rounded-full bg-[#EFE6D6] animate-pulse" />
@@ -1185,7 +1177,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                             <span className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}>
                               <Icon className={`w-3 h-3 ${getIconStyle(item, sectionKey)}`} />
                             </span>
-                            <span className="flex-1">{item.label}</span>
+                            <span className="flex-1 relative after:content-[''] after:absolute after:bottom-[-2px] after:left-0 after:h-[1.5px] after:bg-[#B89555] after:rounded-full after:transition-all after:duration-300 after:w-0 group-hover:after:w-full">{item.label}</span>
                           </Link>
                         );
                       })}
