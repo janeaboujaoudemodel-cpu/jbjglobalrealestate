@@ -94,13 +94,14 @@ export default function CategorySelectorSection() {
             Get started in 30 seconds
           </p>
           <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A] tracking-tight">
-            Tell us who you are
+            Choose your category
           </h2>
           <p className="mt-3 text-[#1A1A1A]/70 max-w-2xl mx-auto">
             Pick your category to unlock the right tools, dashboards, and a tailored
             registration flow.
           </p>
         </div>
+
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch">
           {CATEGORIES.map((cat, i) => {
