@@ -30,6 +30,7 @@ import CRMLeadsBulkBar from "./CRMLeadsBulkBar";
 import LeadAssignModal from "./LeadAssignModal";
 import DeleteLeadDialog from "./DeleteLeadDialog";
 import SendAgreementDialog from "./SendAgreementDialog";
+import LeadAccessDialog from "./LeadAccessDialog";
 import { isRealCRMLead } from "@/utils/crmFakeDataGuard";
 import LeadQuickActions from "./LeadQuickActions";
 import { BrokerCombobox } from "./BrokerCombobox";
