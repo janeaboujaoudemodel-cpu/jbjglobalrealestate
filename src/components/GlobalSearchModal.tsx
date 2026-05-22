@@ -62,7 +62,8 @@ interface DbResult {
 
 const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = false }: GlobalSearchModalProps) => {
   const [query, setQuery] = useState("");
-  const [recentSearches, setRecentSearches] = useState<string[]>(getRecentSearches());
+  const [recentSearches, setRecentSearches] = useState<string[]>(() => getRecentSearches());
+  const [shortcuts, setShortcuts] = useState<string[]>(() => getSearchShortcuts());
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const { user, isOwner } = useAuth();
