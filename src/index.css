@@ -4312,6 +4312,8 @@ a[class*="bg-red-"]:hover {
   justify-content: center !important;
   text-align: center !important;
   gap: 3px !important;
+  width: 96px !important;
+  max-width: 96px !important;
   min-width: 96px !important;
   min-height: 40px !important;
   border-radius: 0.375rem;
@@ -4326,6 +4328,21 @@ a[class*="bg-red-"]:hover {
   color: hsl(var(--price-orange));
   white-space: nowrap;
   font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+  overflow: hidden !important;
+}
+@media (min-width: 768px) {
+  .price-pill-premium {
+    width: 100px !important;
+    max-width: 100px !important;
+    min-width: 100px !important;
+  }
+}
+@media (min-width: 1024px) {
+  .price-pill-premium {
+    width: 104px !important;
+    max-width: 104px !important;
+    min-width: 104px !important;
+  }
 }
 .price-pill-premium .price-pill-eyebrow {
   font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
