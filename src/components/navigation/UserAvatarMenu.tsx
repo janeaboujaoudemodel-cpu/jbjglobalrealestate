@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard, BarChart3, Inbox, ClipboardList, StickyNote, Bell,
-  Heart, SlidersHorizontal, Settings, LogOut, ChevronRight,
+  Heart, SlidersHorizontal, Settings, LogOut, ChevronRight, User,
 } from "lucide-react";
 import {
   DropdownMenu, DropdownMenuTrigger, DropdownMenuContent,
