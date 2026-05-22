@@ -5,6 +5,7 @@
 import { lazy } from "react";
 import { Route, Navigate } from "react-router-dom";
 import { RedirectWithParams } from "@/components/RedirectWithParams";
+import { RedirectWithSearch } from "@/routes/RedirectWithSearch";
 import AuthRequiredRoute from "@/components/AuthRequiredRoute";
 
 // ── Property & Listing Pages ──
@@ -316,7 +317,10 @@ export const PublicRoutes = () => (
     <Route path="/news" element={<News />} />
     <Route path="/news/:id" element={<NewsDetail />} />
     <Route path="/team" element={<MeetTheTeam />} />
-    <Route path="/meet-the-team" element={<Navigate to="/team" replace />} />
+    <Route path="/meet-the-team" element={<RedirectWithSearch to="/team" />} />
+    {/* Brokers page merged into /team — preserve query (?dept=…) and hash for deep links */}
+    <Route path="/brokers" element={<RedirectWithSearch to="/team" />} />
+    <Route path="/our-brokers" element={<RedirectWithSearch to="/team" />} />
 
     <Route path="/reviews" element={<Reviews />} />
     <Route path="/thank-you" element={<ThankYou />} />
