@@ -605,7 +605,7 @@ export default function GlobalVerticalNav() {
   const location = useLocation();
   const { session } = useAuth();
   const { role, isBroker, isInvestor, isOwner } = useUserRole();
-  const { isDeveloperMode } = useUserModeContext();
+  const { isDeveloperMode, mode } = useUserModeContext();
   const [activeMegaMenu, setActiveMegaMenu] = useState<MegaMenuKey | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
