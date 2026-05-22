@@ -1,11 +1,21 @@
-import { useState, useEffect, useCallback } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/contexts/AuthContext";
+/**
+ * useUserMode — thin compatibility shim over UserModeContext.
+ *
+ * Historical note: this hook used to keep its OWN copy of the mode and
+ * silently overwrote the user's local selection with whatever was in
+ * the `user_preferences` table every time the auth user changed. That
+ * caused the mode to flip on refresh / sign-out + sign-in, which
+ * violates the locked rule: "the mode must never change unless the
+ * user explicitly changes it".
+ *
+ * It now delegates to the single source of truth — UserModeContext —
+ * so every consumer (legacy and new) sees the exact same value and
+ * persistence rules.
+ */
+import { useUserModeContext } from "@/contexts/UserModeContext";
+import type { UserMode } from "@/contexts/UserModeContext";
 
-const MODE_KEY = "jj_user_mode";
-
-// Strictly 3 categories. Legacy 'investor_broker' normalized to 'broker'.
-export type UserMode = 'investor' | 'broker' | 'developer';
+export type { UserMode };
 
 interface UserModeHook {
   mode: UserMode;
@@ -18,99 +28,15 @@ interface UserModeHook {
   isDeveloperMode: boolean;
 }
 
-const normalizeMode = (value: string | null): UserMode => {
-  if (value === 'broker' || value === 'investor_broker') return 'broker';
-  if (value === 'developer') return 'developer';
-  return 'investor';
-};
-
 export const useUserMode = (): UserModeHook => {
-  const [mode, setModeState] = useState<UserMode>(() => {
-    const stored = localStorage.getItem(MODE_KEY);
-    return normalizeMode(stored);
-  });
-  const [isLoading, setIsLoading] = useState(true);
-  const { user } = useAuth();
-
-  // Load mode from database on mount and when user changes
-  useEffect(() => {
-    const loadMode = async () => {
-      setIsLoading(true);
-      
-      // First check localStorage
-      const storedMode = localStorage.getItem(MODE_KEY);
-      if (storedMode) {
-        setModeState(normalizeMode(storedMode));
-      }
-
-      // If logged in, sync with database
-      if (user?.id) {
-        try {
-          const { data, error } = await supabase
-            .from('user_preferences')
-            .select('selected_mode')
-            .eq('user_id', user.id)
-            .maybeSingle();
-
-          if (data?.selected_mode) {
-            const dbMode = normalizeMode(data.selected_mode);
-            setModeState(dbMode);
-            localStorage.setItem(MODE_KEY, dbMode);
-          } else if (!error) {
-            // No preferences record yet, create one with current mode
-            const currentMode = normalizeMode(storedMode);
-            await supabase
-              .from('user_preferences')
-              .insert({
-                user_id: user.id,
-                selected_mode: currentMode
-              });
-          }
-        } catch (err) {
-          console.error('Error loading user mode:', err);
-        }
-      }
-
-      setIsLoading(false);
-    };
-
-    loadMode();
-  }, [user?.id]);
-
-  const setMode = useCallback(async (newMode: UserMode) => {
-    // Optimistic update
-    setModeState(newMode);
-    localStorage.setItem(MODE_KEY, newMode);
-
-    // Persist to database if logged in
-    if (user?.id) {
-      try {
-        const { error } = await supabase
-          .from('user_preferences')
-          .upsert({
-            user_id: user.id,
-            selected_mode: newMode,
-            updated_at: new Date().toISOString()
-          }, {
-            onConflict: 'user_id'
-          });
-
-        if (error) {
-          console.error('Error saving user mode:', error);
-        }
-      } catch (err) {
-        console.error('Error saving user mode:', err);
-      }
-    }
-  }, [user?.id]);
-
+  const ctx = useUserModeContext();
   return {
-    mode,
-    isLoading,
-    setMode,
-    isInvestorMode: mode === 'investor',
-    isBrokerMode: mode === 'broker',
+    mode: ctx.mode,
+    isLoading: ctx.isLoading,
+    setMode: ctx.setMode,
+    isInvestorMode: ctx.isInvestorMode,
+    isBrokerMode: ctx.isBrokerMode,
     isCombinedMode: false,
-    isDeveloperMode: mode === 'developer',
+    isDeveloperMode: ctx.isDeveloperMode,
   };
 };
