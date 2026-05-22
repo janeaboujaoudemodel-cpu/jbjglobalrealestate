@@ -336,6 +336,7 @@ export default function UnifiedCRM() {
           </div>
         );
         case "all":           return <CRMLeadsTableV2 userId={userId} filterType="all" onRefresh={() => {}} isOwner />;
+        case "shared":        return <SharedWithBrokersView />;
         case "flagged":       return <FlaggedLeadsView userId={userId} onRefresh={() => {}} />;
         case "vip":           return <CRMLeadsTableV2 userId={userId} filterType="vip" onRefresh={() => {}} isOwner />;
         case "management":    return <RecentlyDeletedLeads userId={userId} onRefresh={() => {}} isOwner />;
