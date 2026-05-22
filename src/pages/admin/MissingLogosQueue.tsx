@@ -12,7 +12,7 @@
  * Public project cards render the developer NAME as a nameplate fallback,
  * so attribution is always shown even before a logo is approved.
  */
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
