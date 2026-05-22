@@ -453,7 +453,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="fixed left-1/2 -translate-x-1/2 [body.jj-vertical-nav-active_&]:lg:left-[calc(50%+100px)] [body.jj-vertical-nav-collapsed_&]:lg:left-[calc(50%+24px)] w-full max-w-3xl z-[10001] px-6 sm:px-8 top-[56px] sm:top-[56px]"
+            className="fixed left-1/2 -translate-x-1/2 [body.jj-vertical-nav-active_&]:lg:left-[calc(50%+100px)] [body.jj-vertical-nav-collapsed_&]:lg:left-[calc(50%+24px)] w-full max-w-3xl z-[10001] px-3 sm:px-6 lg:px-8 top-[12px] sm:top-[56px]"
             style={{ maxHeight: 'calc(100dvh - 80px)' }}
           >
             <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl shadow-2xl overflow-hidden flex flex-col" style={{ maxHeight: 'calc(100dvh - 96px)' }}>
