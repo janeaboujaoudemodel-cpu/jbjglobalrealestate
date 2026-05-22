@@ -242,8 +242,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
 
       toast.success("Lead created");
       onSuccess();
-      onClose();
-      setFormData(initial);
+      handleClose();
     } catch (err: any) {
       console.error("Failed to create lead:", err);
       toast.error(err.message || "Failed to create lead");
@@ -252,24 +251,36 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
     }
   };
 
+  const submitWithValidation = (e: React.FormEvent) => {
+    if (!formData.full_name.trim()) {
+      e.preventDefault();
+      setActiveTab("contact");
+      toast.error("Lead Name is required");
+      return;
+    }
+    handleSubmit(e);
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-3xl max-h-[92vh] overflow-y-auto bg-[#FDFBF7] border border-[#1A1A1A]/10">
-        <DialogHeader className="pt-2">
-          <DialogTitle className="text-[#1A1A1A]">Add Lead / Client</DialogTitle>
+    <Dialog open={open} onOpenChange={(o) => { if (!o) handleClose(); }}>
+      <DialogContent className="sm:max-w-4xl max-h-[92vh] overflow-y-auto bg-[#FDFBF7] border border-[#1A1A1A]/10 p-0">
+        <DialogHeader className="px-6 pt-5 pb-3 border-b border-[#B89555]/20">
+          <DialogTitle className="text-[#1A1A1A] text-lg">Add Lead / Client</DialogTitle>
           <DialogDescription className="text-[#1A1A1A]/70">
             One unified record &mdash; works for buyers, investors, sellers, tenants, landlords, brokers and clients.
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Tabs defaultValue="contact">
+        <form onSubmit={submitWithValidation} className="space-y-4 px-6 pb-4 pt-4">
+          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as typeof activeTab)}>
             <TabsList className="bg-[#F7F2EA] p-1 rounded-lg">
               <TabsTrigger value="contact">Contact</TabsTrigger>
               <TabsTrigger value="requirements">Requirements</TabsTrigger>
               <TabsTrigger value="pipeline">Pipeline</TabsTrigger>
               <TabsTrigger value="notes">Notes</TabsTrigger>
             </TabsList>
+
+
 
             {/* CONTACT */}
             <TabsContent value="contact" className="space-y-3 pt-3">
