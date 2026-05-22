@@ -74,18 +74,20 @@ async function loadModule() {
   return await import("@/contexts/UserModeContext");
 }
 
-function renderWithProvider(Provider: React.ComponentType<{ children: React.ReactNode }>) {
+function renderWithProvider(mod: {
+  UserModeProvider: React.ComponentType<{ children: React.ReactNode }>;
+  useUserModeContext: () => { mode: string };
+}) {
   const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   function Probe() {
-    const { useUserModeContext } = require("@/contexts/UserModeContext");
-    const ctx = useUserModeContext();
+    const ctx = mod.useUserModeContext();
     return <div data-testid="mode">{ctx.mode}</div>;
   }
   return render(
     <QueryClientProvider client={qc}>
-      <Provider>
+      <mod.UserModeProvider>
         <Probe />
-      </Provider>
+      </mod.UserModeProvider>
     </QueryClientProvider>
   );
 }
