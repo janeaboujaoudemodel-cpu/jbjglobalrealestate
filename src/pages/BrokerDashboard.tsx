@@ -318,7 +318,7 @@ export default function BrokerDashboard() {
           </h3>
           <div className={`grid grid-cols-2 ${isInternalBroker ? 'md:grid-cols-3 lg:grid-cols-6' : 'md:grid-cols-4'} gap-4`}>
             {performanceBlocks.map((block, index) => (
-              <Card key={index} className="relative overflow-hidden bg-[#EFE6D6] border-2 border-[#B89555]/60 hover:border-[#B89555] hover:shadow-[0_6px_20px_-8px_rgba(184,149,85,0.45)] transition-all">
+              <Card key={index} className={`relative overflow-hidden bg-[#EFE6D6] border-2 border-[#B89555]/60 hover:border-[#B89555] ${tileGlow3D}`}>
                 <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-transparent via-[#B89555] to-transparent" />
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between mb-3">
