@@ -108,9 +108,9 @@ export const useUserMode = (): UserModeHook => {
     mode,
     isLoading,
     setMode,
-    isInvestorMode: mode === 'investor' || mode === 'investor_broker',
-    isBrokerMode: mode === 'broker' || mode === 'investor_broker',
-    isCombinedMode: mode === 'investor_broker',
+    isInvestorMode: mode === 'investor',
+    isBrokerMode: mode === 'broker',
+    isCombinedMode: false,
     isDeveloperMode: mode === 'developer',
   };
 };
