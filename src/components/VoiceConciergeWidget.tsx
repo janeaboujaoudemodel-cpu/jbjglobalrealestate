@@ -297,19 +297,7 @@ const VoiceConciergeWidget = () => {
           {widgetStatus === "initializing" && (
             <span className="w-2 h-2 rounded-full bg-[#B89555] animate-pulse" />
           )}
-          {widgetStatus === "unavailable" && (
-            <span className="w-2 h-2 rounded-full bg-red-500" />
-          )}
-          <span>{statusMessage || (widgetStatus === "initializing" ? "Initializing…" : "Unavailable")}</span>
-          {widgetStatus === "unavailable" && (
-            <button
-              type="button"
-              onClick={retryConnection}
-              className="ml-1 px-2 py-0.5 rounded-full bg-[#1A1A1A] text-white text-[10px] font-semibold hover:bg-[#1A1A1A]/85"
-            >
-              Try again
-            </button>
-          )}
+          <span>{statusMessage || "Initializing…"}</span>
         </div>
       )}
 
