@@ -1066,13 +1066,13 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   <Link
                     key={link.href + link.label}
                     to={link.href}
-                    className={`flex items-center gap-2 px-2.5 py-2 rounded-lg text-[12px] font-medium transition-all border ${
+                    className={`flex items-center gap-2 px-3 py-1.5 text-[12px] tracking-wide transition-colors ${
                       linkActive
-                        ? "bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] font-bold border-[#B89555] shadow-sm"
-                        : "bg-[#FDFBF7]/80 border-[#B89555]/25 text-[#1A1A1A]/85 hover:bg-[#EFE6D6]/15 hover:border-[#B89555]/60"
+                        ? "text-[#B89555] font-semibold"
+                        : "text-[#B89555]/90 font-medium hover:text-[#B89555]"
                     }`}
                   >
-                    <Icon className="w-3.5 h-3.5 flex-shrink-0 text-[#1A1A1A]" />
+                    <Icon className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#B89555' }} />
                     <span className="flex-1 truncate">{link.label}</span>
                   </Link>
                 );
