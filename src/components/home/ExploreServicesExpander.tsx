@@ -107,11 +107,11 @@ const ExploreServicesExpander = () => {
               role="tab"
               aria-selected={isActive}
               onClick={() => setActiveId(s.id)}
-              className={`shrink-0 inline-flex items-center gap-2 px-3.5 md:px-4 py-3 text-[13px] font-semibold whitespace-nowrap transition-colors border-b-2 -mb-px ${
+              className={`shrink-0 inline-flex items-center gap-2 px-3.5 md:px-4 py-3 text-[13px] font-semibold whitespace-nowrap transition-colors border-b-2 -mb-px text-[#1A1A1A] ${
                 isActive
-                  ? "text-[#1A1A1A] border-[#1A1A1A]"
-                  : "text-[#1A1A1A]/65 border-transparent hover:text-[#1A1A1A]"
-              } ${s.available === false ? "opacity-60" : ""}`}
+                  ? "border-[#1A1A1A]"
+                  : "border-transparent hover:border-[#B89555]"
+              } ${s.available === false ? "opacity-80" : ""}`}
             >
               <Icon className="w-4 h-4" />
               <span>{s.title}</span>
