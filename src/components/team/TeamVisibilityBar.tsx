@@ -55,7 +55,7 @@ const TeamVisibilityBar: React.FC<Props> = ({ totalMembers, hiddenMembers, aiCou
               <div>
                 <p className="text-sm font-semibold text-[#1A1A1A]">Show the entire /team page</p>
                 <p className="text-xs text-[#1A1A1A]/60">
-                  Off = visitors get 404. You (owner) can still see it.
+                  Hidden by default — visitors get 404. Turn on to publish publicly. You (owner) always see it.
                 </p>
               </div>
             </div>
