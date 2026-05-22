@@ -35,7 +35,7 @@ export const DeveloperLink = React.forwardRef<HTMLSpanElement, DeveloperLinkProp
     return (
       <span ref={ref} className={cn("text-muted-foreground", className)}>
         {showPrefix && <span className="text-[#1A1A1A]">by </span>}
-        <span className="font-semibold text-[#1A1A1A] underline underline-offset-4 decoration-gold/60">
+        <span className="font-semibold text-[#B89555] underline underline-offset-4 decoration-[#B89555]/50">
           {name}
         </span>
       </span>
@@ -45,10 +45,10 @@ export const DeveloperLink = React.forwardRef<HTMLSpanElement, DeveloperLinkProp
   return (
     <span ref={ref} className={cn("text-muted-foreground", className)}>
       {showPrefix && <span className="text-[#1A1A1A]">by </span>}
-      <Link 
+      <Link
         to={`/developer/${slug}`}
         onClick={handleClick}
-        className="font-semibold text-[#1A1A1A] underline underline-offset-4 decoration-gold/60 hover:decoration-gold hover:text-[#1A1A1A] transition-all"
+        className="font-semibold text-[#B89555] underline underline-offset-4 decoration-[#B89555]/50 cursor-pointer transition-colors duration-150 hover:text-[#8E6E36] hover:decoration-[#B89555] focus-visible:text-[#8E6E36] focus-visible:decoration-[#B89555] focus-visible:outline-none"
       >
         {name}
       </Link>
