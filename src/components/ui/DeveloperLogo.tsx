@@ -17,6 +17,12 @@ interface DeveloperLogoProps {
    */
   renderFallback?: boolean;
   /**
+   * Developer name. Used by the `nameplate` variant (and as a last-resort
+   * label for the `bare` variant when the image fails to load) so the
+   * client always knows which developer built the project.
+   */
+  name?: string | null;
+  /**
    * Visual variant.
    *  - "tile" (default): champagne tile with gold hairline, used in
    *    developer directories, area chips, dev detail cards.
@@ -27,8 +33,12 @@ interface DeveloperLogoProps {
    *    used on the developer directory and per-developer header tiles.
    *    Logo renders `object-contain` with generous padding so wordmark
    *    and colored marks always read fully without cropping.
+   *  - "nameplate": champagne plate matching `bare` dimensions that
+   *    renders the developer name as an Inter wordmark. Used on project
+   *    cards as the public-safe fallback when no valid logo image is
+   *    available, so the developer is ALWAYS identifiable.
    */
-  variant?: "tile" | "bare" | "card";
+  variant?: "tile" | "bare" | "card" | "nameplate";
 }
 
 /**
@@ -50,11 +60,52 @@ export function DeveloperLogo({
   loading = "lazy",
   onError,
   renderFallback = false,
+  name,
   variant = "tile",
 }: DeveloperLogoProps) {
   const [error, setError] = useState(false);
 
   const valid = isValidDeveloperLogoUrl(src) && !error;
+
+  // ── Nameplate variant — champagne plate with developer NAME wordmark ──
+  // Used as the public-safe fallback on project cards when no logo image
+  // exists, so the developer is always attributable. Matches `bare`
+  // dimensions to keep card layouts stable.
+  if (variant === "nameplate") {
+    const label = (name || alt || "Developer").trim();
+    // Auto-fit text size by character length so longer names still read.
+    const sizeClass =
+      label.length <= 8
+        ? "text-[11px]"
+        : label.length <= 14
+        ? "text-[10px]"
+        : "text-[9px]";
+    return (
+      <div
+        className={cn(
+          "h-12 w-16 inline-flex items-center justify-center overflow-hidden",
+          "rounded-xl bg-[#FDFBF7]/95 backdrop-blur-sm",
+          "border border-[#B89555]/45 px-1.5 py-1",
+          "shadow-[0_2px_10px_rgba(0,0,0,0.18)]",
+          className,
+        )}
+        aria-label={label}
+        data-developer-nameplate
+      >
+        <span
+          className={cn(
+            "font-semibold tracking-tight leading-tight text-center text-[#1A1A1A]",
+            "line-clamp-2 break-words",
+            sizeClass,
+          )}
+        >
+          {label}
+        </span>
+      </div>
+    );
+  }
+
+
 
   if (variant === "bare") {
     if (!valid) {
