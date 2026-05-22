@@ -682,13 +682,33 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
               </div>
 
               <div>
-                <Label>Tags (comma-separated)</Label>
-                <Input
-                  value={formData.tags}
-                  onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
-                  placeholder="investor, premium, urgent"
-                />
+                <Label>Tags</Label>
+                <div className="flex flex-wrap gap-1.5 items-center min-h-[40px] rounded-md border border-[#1A1A1A]/15 bg-[#FDFBF7] px-2 py-1.5 focus-within:border-[#B89555]/60 focus-within:ring-2 focus-within:ring-[#B89555]/20">
+                  {tagList.map((t) => (
+                    <span key={t} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#EFE6D6] border border-[#B89555]/40 text-xs text-[#1A1A1A]">
+                      {t}
+                      <button type="button" onClick={() => removeTag(t)} aria-label={`Remove ${t}`} className="rounded-full hover:bg-[#FDFBF7] px-1 leading-none">×</button>
+                    </span>
+                  ))}
+                  <input
+                    value={tagDraft}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      if (v.endsWith(",")) { addTag(v); setTagDraft(""); }
+                      else setTagDraft(v);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") { e.preventDefault(); addTag(tagDraft); setTagDraft(""); }
+                      else if (e.key === "Backspace" && !tagDraft && tagList.length) { removeTag(tagList[tagList.length - 1]); }
+                    }}
+                    onBlur={() => { if (tagDraft.trim()) { addTag(tagDraft); setTagDraft(""); } }}
+                    placeholder={tagList.length ? "" : "investor, premium, urgent…"}
+                    className="flex-1 min-w-[120px] bg-transparent outline-none text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 py-1"
+                  />
+                </div>
+                <p className="text-[11px] text-[#1A1A1A]/60 mt-1">Press Enter or comma to add</p>
               </div>
+
             </TabsContent>
 
             {/* NOTES */}
