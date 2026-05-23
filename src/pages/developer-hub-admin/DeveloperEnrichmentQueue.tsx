@@ -21,7 +21,12 @@ interface LogRow {
   developers: { name: string; slug: string } | null;
 }
 
-const FIELDS = ["description", "logo_url", "website_url", "founded_year", "headquarters", "ceo_name", "specialization", "notable_projects"] as const;
+const FIELDS = [
+  "description", "logo_url", "founded_year", "headquarters", "ceo_name",
+  "specialization", "notable_projects", "completed_projects", "total_units_delivered",
+  "instagram_url", "linkedin_url", "office_phone", "whatsapp",
+  "office_address", "google_maps_url", "website_url",
+] as const;
 
 export default function DeveloperEnrichmentQueue() {
   const qc = useQueryClient();
@@ -320,26 +325,54 @@ function fmt(v: unknown): string {
 const FIELD_LABELS: Record<typeof FIELDS[number], string> = {
   description: "Description",
   logo_url: "Logo",
-  website_url: "Website (owner-only)",
   founded_year: "Founded",
   headquarters: "Headquarters",
   ceo_name: "CEO",
   specialization: "Specialization",
   notable_projects: "Notable projects",
+  completed_projects: "Completed projects",
+  total_units_delivered: "Units delivered",
+  instagram_url: "Instagram",
+  linkedin_url: "LinkedIn",
+  office_phone: "Office phone",
+  whatsapp: "WhatsApp",
+  office_address: "Office address",
+  google_maps_url: "Google Maps",
+  website_url: "Website (owner-only)",
 };
+
+function linkFor(f: typeof FIELDS[number], v: string): string | null {
+  if (!v) return null;
+  if (f === "office_phone") return `tel:${v.replace(/\s+/g, "")}`;
+  if (f === "whatsapp") {
+    const d = v.replace(/[^\d+]/g, "").replace(/^\+/, "");
+    return `https://wa.me/${d}`;
+  }
+  if (f === "instagram_url" || f === "linkedin_url" || f === "google_maps_url" || f === "website_url") {
+    return /^https?:\/\//.test(v) ? v : `https://${v}`;
+  }
+  return null;
+}
 
 function DiffTable({ before, after }: { before: Record<string, unknown>; after: Record<string, unknown> }) {
   const rows = FIELDS.map((f) => {
     const b = fmt(before?.[f]);
-    const a = fmt(after?.[f]);
-    return { f, b, a, changed: a !== b, has: a !== "" || b !== "" };
+    const aRaw = after?.[f];
+    const aProposed = aRaw !== undefined && aRaw !== null && aRaw !== "";
+    const a = fmt(aRaw);
+    const displayAfter = aProposed ? a : b;
+    const changed = aProposed && a !== b;
+    const confirmed = aProposed && a === b;
+    const isNew = aProposed && !b;
+    const kept = !aProposed && !!b;
+    return { f, b, a: displayAfter, aProposed, changed, confirmed, isNew, kept, has: !!b || aProposed };
   }).filter((r) => r.has);
 
   if (rows.length === 0) {
     return <p className="text-xs text-[#1A1A1A]/50 mt-4 italic">No changes proposed.</p>;
   }
 
-  const renderCell = (f: typeof FIELDS[number], v: string, side: "before" | "after", changed: boolean) => {
+  const renderCell = (f: typeof FIELDS[number], v: string, side: "before" | "after", isProposed: boolean) => {
     if (!v) {
       return <span className="italic text-[#1A1A1A]/40 text-xs">{side === "before" ? "Not set yet" : "—"}</span>;
     }
@@ -350,59 +383,61 @@ function DiffTable({ before, after }: { before: Record<string, unknown>; after: 
         </div>
       );
     }
-    return (
-      <p className={`text-[13px] leading-relaxed break-words whitespace-pre-wrap ${
-        side === "after" && changed ? "text-[#1A1A1A] font-medium" : "text-[#1A1A1A]/80"
-      }`}>{v}</p>
-    );
+    const href = linkFor(f, v);
+    const className = `text-[13px] leading-relaxed break-words whitespace-pre-wrap ${
+      side === "after" && isProposed ? "text-[#1A1A1A] font-medium" : "text-[#1A1A1A]/80"
+    }`;
+    if (href) {
+      return (
+        <a href={href} target="_blank" rel="noreferrer" className={`${className} underline decoration-[#B89555]/50 hover:decoration-[#B89555]`}>
+          {v}
+        </a>
+      );
+    }
+    return <p className={className}>{v}</p>;
+  };
+
+  const badge = (r: typeof rows[number]) => {
+    if (r.isNew) return { label: "New", cls: "bg-emerald-50 text-emerald-800 border border-emerald-200" };
+    if (r.changed) return { label: "Updated", cls: "bg-[#B89555]/15 text-[#1A1A1A] border border-[#B89555]/40" };
+    if (r.confirmed) return { label: "Confirmed", cls: "bg-[#EFE6D6]/60 text-[#1A1A1A]/70 border border-[#B89555]/20" };
+    if (r.kept) return { label: "Kept", cls: "bg-[#FDFBF7] text-[#1A1A1A]/60 border border-[#B89555]/20 italic" };
+    return { label: "Unchanged", cls: "bg-[#EFE6D6]/60 text-[#1A1A1A]/60 border border-[#B89555]/20" };
   };
 
   return (
     <div className="mt-4 rounded-lg border border-[#B89555]/30 bg-[#FDFBF7] overflow-hidden">
-      {/* Header */}
       <div className="grid grid-cols-[180px,1fr,1fr] bg-[#EFE6D6]/60 border-b border-[#B89555]/30">
-        <div className="px-4 py-2.5 text-[11px] uppercase tracking-[0.12em] font-semibold text-[#1A1A1A]/70 border-r border-[#B89555]/20">
-          Field
-        </div>
-        <div className="px-4 py-2.5 text-[11px] uppercase tracking-[0.12em] font-semibold text-[#1A1A1A]/70 border-r border-[#B89555]/20 flex items-center gap-2">
-          Current (live)
-        </div>
-        <div className="px-4 py-2.5 text-[11px] uppercase tracking-[0.12em] font-semibold text-[#1A1A1A] flex items-center gap-2">
-          Proposed
-        </div>
+        <div className="px-4 py-2.5 text-[11px] uppercase tracking-[0.12em] font-semibold text-[#1A1A1A]/70 border-r border-[#B89555]/20">Field</div>
+        <div className="px-4 py-2.5 text-[11px] uppercase tracking-[0.12em] font-semibold text-[#1A1A1A]/70 border-r border-[#B89555]/20">Current (live)</div>
+        <div className="px-4 py-2.5 text-[11px] uppercase tracking-[0.12em] font-semibold text-[#1A1A1A]">Proposed</div>
       </div>
 
-      {rows.map((r, i) => (
-        <div
-          key={r.f}
-          className={`grid grid-cols-[180px,1fr,1fr] ${
-            i !== 0 ? "border-t border-[#B89555]/15" : ""
-          } ${r.changed ? "bg-[#B89555]/[0.04]" : ""}`}
-        >
-          {/* Label cell */}
-          <div className="px-4 py-3.5 border-r border-[#B89555]/15 flex flex-col gap-1.5">
-            <span className="text-[13px] font-medium text-[#1A1A1A]">{FIELD_LABELS[r.f]}</span>
-            <span className={`inline-flex items-center self-start text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded ${
-              r.changed
-                ? (r.b ? "bg-[#B89555]/15 text-[#1A1A1A] border border-[#B89555]/40" : "bg-emerald-50 text-emerald-800 border border-emerald-200")
-                : "bg-[#EFE6D6]/60 text-[#1A1A1A]/60 border border-[#B89555]/20"
-            }`}>
-              {r.changed ? (r.b ? "Updated" : "New") : "Unchanged"}
-            </span>
+      {rows.map((r, i) => {
+        const b = badge(r);
+        return (
+          <div
+            key={r.f}
+            className={`grid grid-cols-[180px,1fr,1fr] ${i !== 0 ? "border-t border-[#B89555]/15" : ""} ${r.changed || r.isNew ? "bg-[#B89555]/[0.04]" : ""}`}
+          >
+            <div className="px-4 py-3.5 border-r border-[#B89555]/15 flex flex-col gap-1.5">
+              <span className="text-[13px] font-medium text-[#1A1A1A]">{FIELD_LABELS[r.f]}</span>
+              <span className={`inline-flex items-center self-start text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded ${b.cls}`}>
+                {b.label}
+              </span>
+            </div>
+            <div className="px-4 py-3.5 border-r border-[#B89555]/15 self-start">
+              {renderCell(r.f, r.b, "before", false)}
+            </div>
+            <div className="px-4 py-3.5 self-start relative">
+              {(r.changed || r.isNew) && (
+                <ArrowRight className="absolute -left-[9px] top-4 size-[14px] text-[#B89555] bg-[#FDFBF7] rounded-full" />
+              )}
+              {renderCell(r.f, r.a, "after", r.aProposed)}
+            </div>
           </div>
-          {/* Before */}
-          <div className="px-4 py-3.5 border-r border-[#B89555]/15 self-start">
-            {renderCell(r.f, r.b, "before", r.changed)}
-          </div>
-          {/* After */}
-          <div className="px-4 py-3.5 self-start relative">
-            {r.changed && (
-              <ArrowRight className="absolute -left-[9px] top-4 size-[14px] text-[#B89555] bg-[#FDFBF7] rounded-full" />
-            )}
-            {renderCell(r.f, r.a, "after", r.changed)}
-          </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

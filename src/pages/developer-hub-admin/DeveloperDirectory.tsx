@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { Sparkles, ExternalLink, ImageOff, Zap, CheckSquare, Square } from "lucide-react";
+import { Sparkles, ExternalLink, ImageOff, Zap, CheckSquare, Square, ShieldCheck } from "lucide-react";
+import { DeveloperVisibilitySheet } from "./DeveloperVisibilitySheet";
 
 interface Row {
   id: string;
@@ -20,6 +21,8 @@ interface Row {
   last_enriched_at: string | null;
 }
 
+const PAGE_SIZE = 60;
+
 export default function DeveloperDirectory() {
   const qc = useQueryClient();
   const navigate = useNavigate();
@@ -27,27 +30,44 @@ export default function DeveloperDirectory() {
   const [onlyBroken, setOnlyBroken] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [brokenImgs, setBrokenImgs] = useState<Set<string>>(new Set());
+  const [page, setPage] = useState(0);
+  const [accumulated, setAccumulated] = useState<Row[]>([]);
+  const [visOpen, setVisOpen] = useState(false);
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["dev-hub-directory", search, onlyBroken],
+  // Reset pagination when filters change
+  useEffect(() => { setPage(0); setAccumulated([]); }, [search, onlyBroken]);
+
+  const { data, isLoading, isFetching } = useQuery({
+    queryKey: ["dev-hub-directory", search, onlyBroken, page],
     queryFn: async () => {
+      const from = page * PAGE_SIZE;
+      const to = from + PAGE_SIZE - 1;
       let q = supabase
         .from("developers")
-        .select("id, name, slug, logo_url, website_url, description, last_enriched_at")
+        .select("id, name, slug, logo_url, website_url, description, last_enriched_at", { count: "exact" })
         .eq("is_hidden", false)
         .order("name")
-        .limit(300);
+        .range(from, to);
       if (search.trim()) q = q.ilike("name", `%${search.trim()}%`);
       if (onlyBroken) q = q.or("logo_url.is.null,logo_url.eq.,description.is.null");
-      const { data, error } = await q;
+      const { data, error, count } = await q;
       if (error) throw error;
-      return data as Row[];
+      return { rows: data as Row[], total: count ?? 0 };
     },
   });
 
-  const rows = data ?? [];
+  useEffect(() => {
+    if (!data) return;
+    setAccumulated((prev) => {
+      if (page === 0) return data.rows;
+      const seen = new Set(prev.map((r) => r.id));
+      return [...prev, ...data.rows.filter((r) => !seen.has(r.id))];
+    });
+  }, [data, page]);
+
+  const rows = accumulated;
+  const total = data?.total ?? rows.length;
   const allSelected = rows.length > 0 && rows.every((r) => selected.has(r.id));
-  const someSelected = selected.size > 0 && !allSelected;
 
   function toggleOne(id: string) {
     setSelected((s) => {
@@ -62,9 +82,7 @@ export default function DeveloperDirectory() {
       return new Set(rows.map((r) => r.id));
     });
   }
-  function clearSelection() {
-    setSelected(new Set());
-  }
+  function clearSelection() { setSelected(new Set()); }
 
   const rebuild = useMutation({
     mutationFn: async (developerIds: string[]) => {
@@ -90,12 +108,13 @@ export default function DeveloperDirectory() {
   });
 
   const selectedList = useMemo(() => Array.from(selected), [selected]);
+  const canLoadMore = rows.length < total;
 
   return (
     <div className="space-y-4">
       <Card className="p-4 bg-[#FDFBF7] border border-[#B89555]/30">
         <p className="text-sm text-[#1A1A1A]/80">
-          <span className="font-semibold text-[#1A1A1A]">Directory</span> = the live developer list. Click <span className="font-semibold">Open profile</span> for full details (projects, media, sales reps, activity), or <span className="font-semibold">Rebuild from site</span> to scrape their website — every scrape stages in <a href="/developer-hub-admin/enrichment" className="underline">Site Rebuild</a> for your approval before going live.
+          <span className="font-semibold text-[#1A1A1A]">Directory</span> = the live developer list. Click <span className="font-semibold">Open profile</span> for full details (projects, media, sales reps, activity), or <span className="font-semibold">Rebuild from site</span> to scrape their website — every scrape stages in <a href="/developer-hub-admin/enrichment" className="underline">Site Rebuild</a> for your approval before going live. Use <span className="font-semibold">Visibility access</span> to publish or hide contact fields in bulk.
         </p>
       </Card>
 
@@ -116,7 +135,11 @@ export default function DeveloperDirectory() {
 
         <Button size="sm" variant="outline" onClick={toggleAll}>
           {allSelected ? <CheckSquare className="size-4 mr-1" /> : <Square className="size-4 mr-1" />}
-          {allSelected ? "Unselect all" : "Select all"}
+          {allSelected ? "Unselect all" : "Select all loaded"}
+        </Button>
+
+        <Button size="sm" variant="outline" onClick={() => setVisOpen(true)}>
+          <ShieldCheck className="size-4 mr-1" /> Visibility access
         </Button>
 
         {selected.size > 0 && (
@@ -138,11 +161,11 @@ export default function DeveloperDirectory() {
         )}
 
         <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] ml-auto">
-          {rows.length} shown
+          {rows.length} of {total} shown
         </Badge>
       </Card>
 
-      {isLoading && <p className="text-sm text-[#1A1A1A]/70">Loading…</p>}
+      {isLoading && page === 0 && <p className="text-sm text-[#1A1A1A]/70">Loading…</p>}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
         {rows.map((d) => {
@@ -205,6 +228,25 @@ export default function DeveloperDirectory() {
           );
         })}
       </div>
+
+      {canLoadMore && (
+        <div className="flex justify-center py-4">
+          <Button
+            variant="outline"
+            disabled={isFetching}
+            onClick={() => setPage((p) => p + 1)}
+          >
+            {isFetching ? "Loading…" : `Load ${Math.min(PAGE_SIZE, total - rows.length)} more`}
+          </Button>
+        </div>
+      )}
+
+      <DeveloperVisibilitySheet
+        open={visOpen}
+        onOpenChange={setVisOpen}
+        selectedIds={selectedList}
+        totalVisible={total}
+      />
     </div>
   );
 }
