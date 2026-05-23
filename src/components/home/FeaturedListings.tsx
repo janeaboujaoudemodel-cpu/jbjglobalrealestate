@@ -154,7 +154,8 @@ const prefetchProjectDetail = () => {
 
 const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedProject; formatPrice: (price: number | null | undefined) => string; index?: number }) => {
   const isAboveFold = index < 4;
-  const imageUrl = project.cover_image_url || project.images?.[0]?.image_url;
+  const initialUrl = project.cover_image_url || project.images?.[0]?.image_url || null;
+  const [imgUrl, setImgUrl] = useState<string | null>(initialUrl);
   const devName = project.developer_name || '';
   // LOCKED: canonical developer logo only. No hardcoded overrides, no monograms.
   const logoUrl = getDeveloperLogoUrl(project.developer);
@@ -165,18 +166,23 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
         <div className="flex flex-col h-full bg-[#FDFBF7] rounded-xl overflow-hidden border border-[#B89555]/30 hover:border-[#B89555]/50 transition-all duration-300 ease-out hover:shadow-xl hover:-translate-y-1.5">
           {/* Image */}
           <div className="relative aspect-[4/3] overflow-hidden bg-[#F7F2EA]">
-            {imageUrl ? (
+            {imgUrl ? (
               <img
-                src={imageUrl}
+                src={imgUrl}
                 alt={project.name}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 loading={isAboveFold ? "eager" : "lazy"}
                 fetchPriority={isAboveFold ? "high" : undefined}
-                onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                onError={() => {
+                  // Try gallery fallback first; otherwise show champagne placeholder.
+                  const fallback = project.images?.find(i => i.image_url && i.image_url !== imgUrl)?.image_url;
+                  setImgUrl(fallback || null);
+                }}
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center">
-                <Building2 className="w-10 h-10 text-[#1A1A1A]/70" />
+              <div className="w-full h-full flex flex-col items-center justify-center gap-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+                <Building2 className="w-10 h-10 text-[#1A1A1A]/40" />
+                <span className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/50">Photo coming soon</span>
               </div>
             )}
 
