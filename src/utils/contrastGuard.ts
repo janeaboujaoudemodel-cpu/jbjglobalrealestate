@@ -94,6 +94,27 @@ function fixIfLowContrast(el: HTMLElement, minRatio: number) {
   }
 }
 
+function fixWhiteOnBright(el: HTMLElement) {
+  if (el.closest("[data-no-contrast-guard], [data-surface='dark'], .allow-white")) return;
+  if (el.closest(".bg-black, [class~='bg-[#1A1A1A]'], [class*='bg-gray-9'], [class*='bg-neutral-9'], [class*='bg-zinc-9']")) return;
+  const cs = window.getComputedStyle(el);
+  if (cs.visibility === "hidden" || cs.display === "none" || cs.opacity === "0") return;
+  const fg = parseRgb(cs.color);
+  const bgStr = effectiveBgColor(el);
+  if (bgStr === "__unknown__") return;
+  const bg = parseRgb(bgStr);
+  if (!fg || !bg) return;
+  const isWhiteForeground = fg[0] > 235 && fg[1] > 235 && fg[2] > 235;
+  const isBrightSurface = relLuminance(bg) > 0.52;
+  if (isWhiteForeground && isBrightSurface) {
+    el.classList.add(CONTRAST_FIX_CLASS);
+    el.style.setProperty("color", "#1A1A1A", "important");
+    if (el instanceof SVGElement) {
+      el.style.setProperty("stroke", "currentColor", "important");
+    }
+  }
+}
+
 let scheduled = false;
 let lastRun = 0;
 const MIN_INTERVAL_MS = 250; // throttle: max 4 scans/sec
@@ -113,9 +134,13 @@ function scan() {
       interactives.forEach((el) => fixIfLowContrast(el, 2.5));
       // Text-bearing nodes — body-text floor (tolerant 3.5; AA is 4.5)
       const textNodes = document.querySelectorAll<HTMLElement>(
-        "h1, h2, h3, h4, h5, h6, p, li, blockquote, dt, dd, [data-card], .card"
+        "h1, h2, h3, h4, h5, h6, p, li, blockquote, dt, dd, span, small, strong, em, [data-card], .card"
       );
       textNodes.forEach((el) => fixIfLowContrast(el, 3.5));
+      const whiteForegroundNodes = document.querySelectorAll<HTMLElement>(
+        ".text-white, [class*='text-white/'], svg.text-white, svg[class*='text-white/']"
+      );
+      whiteForegroundNodes.forEach(fixWhiteOnBright);
     });
   };
   if (wait > 0) setTimeout(run, wait);
