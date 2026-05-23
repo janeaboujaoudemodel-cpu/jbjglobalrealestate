@@ -401,26 +401,29 @@ const Index = () => {
         </Suspense>
       </div>
 
-      <SectionDivider fullWidth />
+      {/* Premium gold edge-to-edge divider — Featured/Resale → Invest in Dubai */}
+      <SectionDividerGoldFullBleed size="md" spacing="md" />
 
 
-      {/* OVERSEAS INVESTORS */}
+      {/* OVERSEAS INVESTORS — Invest in Dubai */}
       <div className="cv-auto">
         <Suspense fallback={<SectionLoader />}>
           <OverseasInvestorsBanner />
         </Suspense>
       </div>
 
-      <SectionDivider fullWidth />
+      {/* Premium gold edge-to-edge divider — Invest in Dubai → Explore Our Guides */}
+      <SectionDividerGoldFullBleed size="md" spacing="md" />
 
-      {/* EXPLORE OUR GUIDES & REPORTS */}
-      <div className="cv-auto">
+      {/* EXPLORE OUR GUIDES & REPORTS — wrapped in gold-bordered premium card */}
+      <PremiumSectionCard padding="none" wrapperClassName="cv-auto py-6 md:py-10">
         <Suspense fallback={<SectionLoader />}>
           <HomepageBookMarquee />
         </Suspense>
-      </div>
+      </PremiumSectionCard>
 
-      <SectionDivider fullWidth />
+      {/* Premium gold edge-to-edge divider — Guides → Explore Our Services */}
+      <SectionDividerGoldFullBleed size="md" spacing="md" />
 
       {/* EXPLORE OUR SERVICES */}
       <section>
@@ -431,7 +434,8 @@ const Index = () => {
         </div>
       </section>
 
-      <SectionDivider fullWidth />
+      {/* Premium gold edge-to-edge divider — Services → Royal Tools Hub */}
+      <SectionDividerGoldFullBleed size="md" spacing="md" />
 
       {/* TOOLKIT SHOWCASE CARD */}
       <div className="cv-auto">
@@ -440,7 +444,8 @@ const Index = () => {
         </Suspense>
       </div>
 
-      <SectionDivider fullWidth />
+      {/* Premium gold edge-to-edge divider — Tools → AI Comparison */}
+      <SectionDividerGoldFullBleed size="md" spacing="md" />
 
 
       {/* AI COMPARISON & ANALYZER PREVIEW */}
