@@ -99,7 +99,7 @@ export default function DeveloperDirectory() {
     },
     onSuccess: (r) => {
       toast.success(`Staged ${r.count} for review`, {
-        action: { label: "Open queue", onClick: () => navigate("/developer-hub-admin/enrichment") },
+        action: { label: "Open queue", onClick: () => navigate("/developers-portal/enrichment") },
       });
       clearSelection();
       qc.invalidateQueries({ queryKey: ["dev-enrichment-logs"] });
@@ -114,7 +114,7 @@ export default function DeveloperDirectory() {
     <div className="space-y-4">
       <Card className="p-4 bg-[#FDFBF7] border border-[#B89555]/30">
         <p className="text-sm text-[#1A1A1A]/80">
-          <span className="font-semibold text-[#1A1A1A]">Directory</span> = the live developer list. Click <span className="font-semibold">Open profile</span> for full details (projects, media, sales reps, activity), or <span className="font-semibold">Rebuild from site</span> to scrape their website — every scrape stages in <a href="/developer-hub-admin/enrichment" className="underline">Site Rebuild</a> for your approval before going live. Use <span className="font-semibold">Visibility access</span> to publish or hide contact fields in bulk.
+          <span className="font-semibold text-[#1A1A1A]">Directory</span> = the live developer list. Click <span className="font-semibold">Open profile</span> for full details (projects, media, sales reps, activity), or <span className="font-semibold">Rebuild from site</span> to scrape their website — every scrape stages in <a href="/developers-portal/enrichment" className="underline">Site Rebuild</a> for your approval before going live. Use <span className="font-semibold">Visibility access</span> to publish or hide contact fields in bulk.
         </p>
       </Card>
 
@@ -211,7 +211,7 @@ export default function DeveloperDirectory() {
               </p>
               <div className="mt-3 flex gap-2 flex-wrap">
                 <Button asChild size="sm" variant="gold">
-                  <Link to={`/developer-hub-admin/profile/${d.slug}`}>
+                  <Link to={`/developers-portal/developers/${d.slug}`}>
                     <ExternalLink className="size-3 mr-1" /> Open profile
                   </Link>
                 </Button>

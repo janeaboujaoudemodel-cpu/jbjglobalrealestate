@@ -41,6 +41,7 @@ import { AIToolRoutes } from "@/routes/AIToolRoutes";
 import { AdminRoutes } from "@/routes/AdminRoutes";
 import { ToolkitRoutes } from "@/routes/ToolkitRoutes";
 import { DeveloperHubRoutes } from "@/routes/DeveloperHubRoutes";
+import { DevelopersPortalRoutes } from "@/routes/DevelopersPortalRoutes";
 
 // ── QueryClient ──
 const queryClient = new QueryClient({
@@ -127,8 +128,12 @@ const App = () => {
                 {OwnerRoutes()}
               </Route>
 
-              {/* ── Developer Hub (dedicated shell) ── */}
+              {/* ── Developers Portal (standalone shell) — REPLACES /developer-hub + /developer-hub-admin ── */}
+              {DevelopersPortalRoutes()}
+
+              {/* ── Legacy Developer Hub (kept for backward compatibility; portal redirects win when both match) ── */}
               {DeveloperHubRoutes()}
+              
               
               {/* ── Main Layout Routes (header + footer shell) ── */}
               <Route element={<MainLayoutWrapper />}>

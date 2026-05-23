@@ -80,6 +80,10 @@ const DeveloperProfileSlugRedirect = () => {
   const { slug } = useParams();
   return <Navigate to={`/developer-hub-admin/profile/${slug}`} replace />;
 };
+const DeveloperProfileSlugPortalRedirect = () => {
+  const { slug } = useParams();
+  return <Navigate to={`/developers-portal/developers/${slug}`} replace />;
+};
 const Automations = lazy(() => import("@/pages/Automations"));
 const AlertsDemo = lazy(() => import("@/pages/AlertsDemo"));
 const ExclusiveDocuments = lazy(() => import("@/pages/owner/ExclusiveDocuments"));
@@ -112,19 +116,18 @@ export const AdminRoutes = () => (
     <Route path="/dev-hub" element={<Navigate to="/developer-hub-admin" replace />} />
     <Route path="/dev-hub/*" element={<Navigate to="/developer-hub-admin" replace />} />
 
-    {/* New Owner Developer Hub */}
-    <Route path="/developer-hub-admin" element={<OwnerGuard><Suspense fallback={<PageLoader />}><DeveloperHubAdminShell /></Suspense></OwnerGuard>}>
-      <Route index element={<Suspense fallback={<PageLoader />}><DeveloperHubAdminOverview /></Suspense>} />
-      <Route path="directory" element={<Suspense fallback={<PageLoader />}><DeveloperDirectory /></Suspense>} />
-      <Route path="profile/:slug" element={<Suspense fallback={<PageLoader />}><DeveloperProfilePage /></Suspense>} />
-      <Route path="missing-logos" element={<Suspense fallback={<PageLoader />}><MissingLogosQueue /></Suspense>} />
-      <Route path="enrichment" element={<Suspense fallback={<PageLoader />}><DeveloperEnrichmentQueue /></Suspense>} />
-      <Route path="briefings" element={<Suspense fallback={<PageLoader />}><DeveloperHubAdminPlaceholder title="Briefings Inbox" body="Open the legacy Admin Developers page for the briefings tab — full UI moves here next iteration." /></Suspense>} />
-      <Route path="deals" element={<Suspense fallback={<PageLoader />}><DeveloperHubAdminPlaceholder title="Deals Pipeline" body="Deal-close pipeline UI will be wired into this slot next iteration." /></Suspense>} />
-      <Route path="calendar" element={<Suspense fallback={<PageLoader />}><DeveloperHubAdminPlaceholder title="Calendar" body="Google Calendar feed for developer launch events lands here next iteration." /></Suspense>} />
-      <Route path="projects" element={<Suspense fallback={<PageLoader />}><DeveloperHubAdminPlaceholder title="Projects" body="All developer-submitted projects with approval status." /></Suspense>} />
-      <Route path="approval" element={<Suspense fallback={<PageLoader />}><DeveloperHubAdminPlaceholder title="Approval Queue" body="Pending project + registration approvals." /></Suspense>} />
-    </Route>
+    {/* Owner Developer Hub — REPLACED by /developers-portal (handled in DevelopersPortalRoutes) */}
+    <Route path="/developer-hub-admin" element={<Navigate to="/developers-portal" replace />} />
+    <Route path="/developer-hub-admin/directory" element={<Navigate to="/developers-portal/directory" replace />} />
+    <Route path="/developer-hub-admin/missing-logos" element={<Navigate to="/developers-portal/missing-logos" replace />} />
+    <Route path="/developer-hub-admin/enrichment" element={<Navigate to="/developers-portal/enrichment" replace />} />
+    <Route path="/developer-hub-admin/briefings" element={<Navigate to="/developers-portal/briefings" replace />} />
+    <Route path="/developer-hub-admin/deals" element={<Navigate to="/developers-portal/deals" replace />} />
+    <Route path="/developer-hub-admin/calendar" element={<Navigate to="/developers-portal/calendar" replace />} />
+    <Route path="/developer-hub-admin/projects" element={<Navigate to="/developers-portal/projects" replace />} />
+    <Route path="/developer-hub-admin/approval" element={<Navigate to="/developers-portal/access-requests" replace />} />
+    <Route path="/developer-hub-admin/profile/:slug" element={<DeveloperProfileSlugPortalRedirect />} />
+    <Route path="/developer-hub-admin/*" element={<Navigate to="/developers-portal" replace />} />
 
     {/* Owner-only legacy admin developer tools still reachable */}
     <Route path="/admin/developers-legacy" element={<OwnerGuard><AdminDevelopers /></OwnerGuard>} />

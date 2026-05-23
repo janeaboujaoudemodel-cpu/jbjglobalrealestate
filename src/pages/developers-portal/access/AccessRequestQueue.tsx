@@ -72,7 +72,12 @@ function ApplicationsList() {
   });
 
   if (isLoading) return <p className="text-sm text-[#1A1A1A]/60">Loading…</p>;
-  if (rows.length === 0) return <Card className="p-6 text-center text-[#1A1A1A]/70 bg-[#F7F2EA] border border-[#B89555]/30">No rep applications yet.</Card>;
+  if (rows.length === 0) return (
+    <Card className="p-8 text-center text-[#1A1A1A]/70 bg-[#F7F2EA] border border-[#B89555]/30">
+      <p className="font-semibold text-[#1A1A1A] mb-1">No sales rep applications yet</p>
+      <p className="text-sm">When someone submits the public form at <code className="bg-[#EFE6D6] px-1 rounded">/developers-portal/reps/apply</code>, their request appears here for approval.</p>
+    </Card>
+  );
 
   return (
     <div className="space-y-3">
@@ -142,7 +147,12 @@ function BrokerAccessList() {
   });
 
   if (isLoading) return <p className="text-sm text-[#1A1A1A]/60">Loading…</p>;
-  if (rows.length === 0) return <Card className="p-6 text-center text-[#1A1A1A]/70 bg-[#F7F2EA] border border-[#B89555]/30">No broker access requests yet.</Card>;
+  if (rows.length === 0) return (
+    <Card className="p-8 text-center text-[#1A1A1A]/70 bg-[#F7F2EA] border border-[#B89555]/30">
+      <p className="font-semibold text-[#1A1A1A] mb-1">No broker access requests yet</p>
+      <p className="text-sm">Brokers can request access from any developer page via the "Request access to sales rep" button.</p>
+    </Card>
+  );
 
   return (
     <div className="space-y-3">

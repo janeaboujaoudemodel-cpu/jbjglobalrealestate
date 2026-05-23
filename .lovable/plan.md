@@ -1,164 +1,76 @@
-## Goal
+## Immediate repair plan: Developers Portal + developer data consistency
 
-Build one isolated **Developers Portal** that replaces both `/developer-hub-admin` (owner) and `/developer-hub` (developer self-service), adds a **Sales Representatives** sub-system, and exposes a **broker access-request** flow for rep details. Public `/developers` listing stays as-is (untouched, SEO preserved).
+### Confirmed issues from audit
+- The new `DevelopersPortalRoutes` file exists but is not mounted in `App.tsx`, so `/developers-portal` is not actually reachable.
+- Old `/developer-hub-admin` routes still render the old admin shell instead of redirecting into the standalone portal.
+- Approval actions call two missing backend functions: `portal-approve-rep-application` and `portal-decide-access-request`.
+- The portal uses `developer_sales_reps`, but the current database has `0` sales reps there, so rep pages and approvals appear empty.
+- The public developer page already has projects and map, but the requested broker rep-access CTA is not mounted there yet.
+- Developer information is split between `developers`, `crm_developer_registry`, and old `uae_developers`/rep tables. The public website uses `developers`, while some new portal tables incorrectly reference `uae_developers`.
+- Developer logos are present in many places, but not consistently rendered next to every developer name.
+- The enrichment queue has real staged entries, but the Before/Proposed UI hides empty proposed fields and can make rows look broken or empty instead of showing a clear “No proposed change / keep current” state.
 
----
+## What I will fix
 
-## URL structure
+### 1. Make the standalone portal real and replace both old hubs
+- Mount `DevelopersPortalRoutes()` in `App.tsx` outside the main site shell so it has its own dedicated environment.
+- Replace `/developer-hub` and `/developer-hub-admin` entry points with redirects to the new portal structure.
+- Update old internal links in developer directory/enrichment/profile pages so they point to `/developers-portal/...` instead of `/developer-hub-admin/...`.
+- Keep public `/developers` and `/developer/:slug` intact for clients.
 
-```text
-/developers-portal                       → new portal shell (auth required)
-  /                                      → Overview (KPIs)
-  /directory                             → All developers (Registered / Pending / Not Registered / Active / Inactive)
-  /developers/:slug                      → Developer profile (full edit)
-       ├─ overview / description / logo
-       ├─ projects (previous / current / upcoming)
-       ├─ media gallery
-       ├─ brochures & documents
-       ├─ contacts & social links
-       └─ sales reps tab
-  /reps                                  → All sales reps (filter by Emirate / language / developer / status)
-  /reps/:id                              → Rep profile + availability calendar
-  /reps/by-emirate                       → Grouped view + per-Emirate counts
-  /projects                              → All projects across developers (approve / edit / status)
-  /briefings                             → existing briefings hub
-  /deals                                 → existing deals
-  /calendar                              → portal-wide calendar
-  /access-requests                       → broker → rep access requests (owner approval queue)
-  /enrichment                            → site rebuild / scraping (kept)
-  /missing-logos                         → kept
-  /settings                              → portal-only settings (roles, permissions)
+### 2. Wire approval queues end-to-end
+- Add backend functions:
+  - `portal-approve-rep-application`
+  - `portal-decide-access-request`
+- These will validate the signed-in owner/admin server-side, update request/application statuses, create/link rep records when approving, and audit decisions.
+- Improve queue screens so they show:
+  - pending rep applications
+  - broker rep-access requests
+  - clear empty states only when data is truly empty
+  - visible developer identity with logo where possible
 
-# Redirects (no broken links)
-/developer-hub-admin/*  → /developers-portal/*   (preserve sub-path)
-/developer-hub/*        → /developers-portal/*   (preserve sub-path; role gates the views)
-/admin/developers*      → /developers-portal/directory
-```
+### 3. Correct the canonical developer data flow
+- Treat `developers` as the canonical public/project developer table for portal profile data, project pages, project cards, maps, CRM registry display, and developer directory.
+- Add a safe migration to align the new portal access/application tables with canonical `developers` where needed, without exposing private contact fields publicly.
+- Keep admin override access: owner can always edit developer profile, media, reps, projects, status, and logos.
 
-Public `/developers` and `/developer/:slug` remain unchanged.
+### 4. Show developer logo next to developer name everywhere practical
+- Reuse the existing locked `DeveloperLogo` component.
+- Update key surfaces:
+  - public `/developer/:slug` header/section name treatment
+  - project cards where developer name appears under payment plan
+  - developer map popup/header where possible
+  - CRM Relationship Hub developer registry cards/rows
+  - portal directory/profile/queue rows
+  - admin/backend developer rows
+- If no valid logo exists, internal/admin surfaces show the approved Building2 fallback; public listing surfaces use the safe nameplate fallback where appropriate.
 
----
+### 5. Enrich developer section on public developer pages
+- Add a dedicated developer identity block using the same canonical data: logo, description, headquarters, founded year, website/public-safe links, project count, and “View all projects” CTA.
+- The CTA will open `/properties?developer=<slug>` and work with the existing property filter logic.
+- Keep the existing projects grid and developer projects map, but ensure the developer identity data is consistent with the portal/admin source.
 
-## Roles & access model
+### 6. Fix rough/empty enrichment cards
+- Rework `DeveloperEnrichmentQueue` diff cards so every tracked field renders a stable row:
+  - Current value
+  - Proposed value
+  - status: New / Updated / Confirmed / No proposed change
+- Empty proposed fields will not look broken; they will clearly say “No proposed change” and show what will be kept.
+- Add logo/name in the card header and stronger visual hierarchy for before/proposed comparisons.
 
-Three portal roles enforced via `user_roles` + `has_role()`:
+### 7. Verify with real data and route checks
+- Use database reads to confirm counts after wiring.
+- Check routes and UI states for:
+  - `/developers-portal`
+  - `/developers-portal/directory`
+  - `/developers-portal/access-requests`
+  - `/developers-portal/enrichment`
+  - `/developer/:slug`
+  - relationship hub developer registry
+- Check that staged enrichment rows currently in the database are visible and actionable.
+- Check that missing approvals are not a UI wiring issue versus truly no records.
 
-| Role              | Can see                                              | Can edit                                                                 |
-| ----------------- | ---------------------------------------------------- | ------------------------------------------------------------------------ |
-| `portal_owner`    | Everything                                           | Everything — override on any developer / rep / project                   |
-| `portal_developer`| Their company + reps + assigned projects             | Own logo/description/media/brochures/projects/contacts                   |
-| `portal_rep`      | Own profile, own calendar, projects assigned to them | Own profile, languages, photo, calendar, assigned projects (media/status)|
-
-Brokers (existing `broker` role) get **no portal login** — they request access to a rep via a public page, owner approves.
-
----
-
-## Sales Rep self-serve signup
-
-1. Public page `/developers-portal/reps/apply` (linked from `/careers/developer-representative`).
-2. Form writes to `developer_rep_applications` (status `pending`).
-3. Owner sees them in `/developers-portal/access-requests` → **Approve** creates `auth.users`, grants `portal_rep` role, links to `developer_sales_reps` row, sends magic-link email via Resend (subject to existing Resend quota standard).
-4. Rep logs in → lands on `/developers-portal/reps/me`.
-
----
-
-## Broker access-request flow (replaces direct booking)
-
-- Investors: see only the public `/developer/:slug` page — rep contact info stays hidden (per existing Contact Gating Standard).
-- Brokers: on `/developer/:slug` see a **"Request access to sales rep"** button. Submits to `developer_rep_access_requests` (broker_id, developer_id, requested_rep_id nullable, reason).
-- Owner approves in `/developers-portal/access-requests` → broker unlocks rep contact + availability; broker can then book a meeting from the rep card.
-- Only `portal_owner` and approved `broker` can book a slot; investors never.
-
----
-
-## Database changes (migration)
-
-New tables:
-
-- `developer_rep_applications` — self-serve signup queue (status, languages, nationality, position, emirates, requested_developer_id, applied_at).
-- `developer_rep_access_requests` — broker→rep gated requests (broker_id, developer_id, rep_id, status, decided_by, decided_at, reason).
-- `developer_rep_availability` — rep-owned slots (rep_id, starts_at, ends_at, is_blocked, recurrence_rule).
-- `developer_rep_bookings` — confirmed meetings (rep_id, requester_id, requester_role `owner|broker`, starts_at, ends_at, status, source).
-- `developer_portal_audit` — every owner override + role change.
-
-Extend existing:
-
-- `developer_sales_reps`: add `languages text[]`, `nationality`, `position`, `assigned_emirates text[]`, `availability_status` (`available|busy|off`), `auth_user_id uuid` link.
-- `developers`: add `registration_status` enum (`registered|pending|not_registered|inactive`).
-
-RLS: every table protected by `has_role(auth.uid(),'portal_owner')` OR ownership predicate (`rep.auth_user_id = auth.uid()` etc). No table without RLS.
-
-Seed `app_role` enum with `portal_owner`, `portal_developer`, `portal_rep` if missing.
-
----
-
-## Components & files
-
-```text
-src/routes/DevelopersPortalRoutes.tsx          (new — replaces DeveloperHubRoutes)
-src/pages/developers-portal/
-  PortalShell.tsx                              (single shell, role-aware sidebar)
-  PortalOverview.tsx
-  DeveloperDirectory.tsx                       (extends existing /developer-hub-admin/DeveloperDirectory)
-  DeveloperProfileEditor.tsx                   (tabs: profile/projects/media/brochures/contacts/reps)
-  reps/RepDirectory.tsx
-  reps/RepByEmirate.tsx
-  reps/RepProfileEditor.tsx                    (rep-owned editor + owner override)
-  reps/RepAvailabilityCalendar.tsx
-  reps/RepApplicationPublic.tsx                (public /reps/apply)
-  access/AccessRequestQueue.tsx                (owner)
-  access/BrokerRequestAccessButton.tsx         (used inside public /developer/:slug)
-  projects/ProjectsTable.tsx                   (cross-developer)
-src/components/developers-portal/
-  PortalSidebarNav.tsx                         (role-filtered nav items)
-  RegistrationStatusBadge.tsx
-  RepAvailabilityBadge.tsx
-src/hooks/
-  usePortalRole.ts                             (returns 'owner'|'developer'|'rep'|null)
-  useRepAvailability.ts
-  useAccessRequests.ts
-supabase/functions/
-  portal-approve-rep-application/              (creates user, grants role, emails magic link)
-  portal-decide-access-request/                (owner approve/deny → notify broker)
-  portal-book-rep-slot/                        (owner+broker only, validates availability)
-```
-
-Existing files removed (legacy shells):
-- `src/pages/developer-hub-admin/DeveloperHubAdminShell.tsx` → contents folded into `PortalShell.tsx`
-- `src/pages/developer-hub/DeveloperHubShell.tsx` → same
-- `src/routes/DeveloperHubRoutes.tsx` → replaced by `DevelopersPortalRoutes.tsx`
-- All other `developer-hub*` page files are reused/moved under `developers-portal/` (no feature loss — per the No-Removal policy).
-
----
-
-## Public-side touch-points (minimal)
-
-- `/developer/:slug`: add `BrokerRequestAccessButton` (only visible to brokers). Reps section continues to hide contact details for everyone except approved brokers + owner.
-- Footer / nav: replace links to `/developer-hub` with `/developers-portal`.
-
----
-
-## Memory updates
-
-After build, write new memory `mem://features/developer-portal/standalone-developers-portal-standard` covering:
-- Single portal URL, role split, broker access-request flow, redirect map.
-- Mark `mem://features/developer-portal/unified-portal-architecture` as superseded.
-
----
-
-## Out of scope (call out)
-
-- Investor-facing rep booking widget — explicitly **not** built (investors never book reps).
-- Mobile app — portal is responsive web only, in line with existing shells.
-- Public `/developers` redesign — untouched in this pass.
-
----
-
-## Phasing
-
-1. **DB migration + RLS + roles** (one supabase migration call).
-2. **Portal shell + Overview + Directory** wired to existing data (no feature regression).
-3. **Developer profile editor tabs** (logo / description / projects / media / brochures / contacts / social).
-4. **Sales rep layer**: tables, public application page, owner approval edge function, rep self-serve editor + calendar.
-5. **Broker access-request flow** + edge functions + public button.
-6. **Redirects + nav rewrite + memory update + QA pass** (role matrix smoke test on owner / developer / rep / broker / investor).
+## Technical notes
+- I will not edit generated backend client/type files.
+- Any schema/RLS changes will be done through a migration.
+- Private rep contact details stay gated: brokers request access; investors do not see rep details or booking.
